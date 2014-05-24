@@ -1,0 +1,332 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>multimap.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_structs_multimap.js.html">multimap.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A collection similar to
+<a name="line17"></a> * {@code goog.labs.structs.Map}, but also allows associating multiple
+<a name="line18"></a> * values with a single key.
+<a name="line19"></a> *
+<a name="line20"></a> * This implementation ensures that you can use any string keys.
+<a name="line21"></a> *
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.labs.structs.Multimap&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.array&#39;);
+<a name="line27"></a>goog.require(&#39;goog.labs.object&#39;);
+<a name="line28"></a>goog.require(&#39;goog.labs.structs.Map&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Creates a new multimap.
+<a name="line34"></a> * @constructor
+<a name="line35"></a> * @struct
+<a name="line36"></a> * @final
+<a name="line37"></a> */
+<a name="line38"></a>goog.labs.structs.Multimap = function() {
+<a name="line39"></a>  this.clear();
+<a name="line40"></a>};
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * The backing map.
+<a name="line45"></a> * @type {!goog.labs.structs.Map}
+<a name="line46"></a> * @private
+<a name="line47"></a> */
+<a name="line48"></a>goog.labs.structs.Multimap.prototype.map_;
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * @type {number}
+<a name="line53"></a> * @private
+<a name="line54"></a> */
+<a name="line55"></a>goog.labs.structs.Multimap.prototype.count_ = 0;
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>/**
+<a name="line59"></a> * Clears the multimap.
+<a name="line60"></a> */
+<a name="line61"></a>goog.labs.structs.Multimap.prototype.clear = function() {
+<a name="line62"></a>  this.count_ = 0;
+<a name="line63"></a>  this.map_ = new goog.labs.structs.Map();
+<a name="line64"></a>};
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * Clones this multimap.
+<a name="line69"></a> * @return {!goog.labs.structs.Multimap} A multimap that contains all
+<a name="line70"></a> *     the mapping this multimap has.
+<a name="line71"></a> */
+<a name="line72"></a>goog.labs.structs.Multimap.prototype.clone = function() {
+<a name="line73"></a>  var map = new goog.labs.structs.Multimap();
+<a name="line74"></a>  map.addAllFromMultimap(this);
+<a name="line75"></a>  return map;
+<a name="line76"></a>};
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Adds the given (key, value) pair to the map. The (key, value) pair
+<a name="line81"></a> * is guaranteed to be added.
+<a name="line82"></a> * @param {string} key The key to add.
+<a name="line83"></a> * @param {*} value The value to add.
+<a name="line84"></a> */
+<a name="line85"></a>goog.labs.structs.Multimap.prototype.add = function(key, value) {
+<a name="line86"></a>  var values = this.map_.get(key);
+<a name="line87"></a>  if (!values) {
+<a name="line88"></a>    this.map_.set(key, (values = []));
+<a name="line89"></a>  }
+<a name="line90"></a>
+<a name="line91"></a>  values.push(value);
+<a name="line92"></a>  this.count_++;
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Stores a collection of values to the given key. Does not replace
+<a name="line98"></a> * existing (key, value) pairs.
+<a name="line99"></a> * @param {string} key The key to add.
+<a name="line100"></a> * @param {!Array.&lt;*&gt;} values The values to add.
+<a name="line101"></a> */
+<a name="line102"></a>goog.labs.structs.Multimap.prototype.addAllValues = function(key, values) {
+<a name="line103"></a>  goog.array.forEach(values, function(v) {
+<a name="line104"></a>    this.add(key, v);
+<a name="line105"></a>  }, this);
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Adds the contents of the given map/multimap to this multimap.
+<a name="line111"></a> * @param {!(goog.labs.structs.Map|goog.labs.structs.Multimap)} map The
+<a name="line112"></a> *     map to add.
+<a name="line113"></a> */
+<a name="line114"></a>goog.labs.structs.Multimap.prototype.addAllFromMultimap = function(map) {
+<a name="line115"></a>  goog.array.forEach(map.getEntries(), function(entry) {
+<a name="line116"></a>    this.add(entry[0], entry[1]);
+<a name="line117"></a>  }, this);
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Replaces all the values for the given key with the given values.
+<a name="line123"></a> * @param {string} key The key whose values are to be replaced.
+<a name="line124"></a> * @param {!Array.&lt;*&gt;} values The new values. If empty, this is
+<a name="line125"></a> *     equivalent to {@code removaAll(key)}.
+<a name="line126"></a> */
+<a name="line127"></a>goog.labs.structs.Multimap.prototype.replaceValues = function(key, values) {
+<a name="line128"></a>  this.removeAll(key);
+<a name="line129"></a>  this.addAllValues(key, values);
+<a name="line130"></a>};
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Gets the values correspond to the given key.
+<a name="line135"></a> * @param {string} key The key to retrieve.
+<a name="line136"></a> * @return {!Array.&lt;*&gt;} An array of values corresponding to the given
+<a name="line137"></a> *     key. May be empty. Note that the ordering of values are not
+<a name="line138"></a> *     guaranteed to be consistent.
+<a name="line139"></a> */
+<a name="line140"></a>goog.labs.structs.Multimap.prototype.get = function(key) {
+<a name="line141"></a>  var values = /** @type {Array.&lt;*&gt;} */ (this.map_.get(key));
+<a name="line142"></a>  return values ? goog.array.clone(values) : [];
+<a name="line143"></a>};
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>/**
+<a name="line147"></a> * Removes a single occurrence of (key, value) pair.
+<a name="line148"></a> * @param {string} key The key to remove.
+<a name="line149"></a> * @param {*} value The value to remove.
+<a name="line150"></a> * @return {boolean} Whether any matching (key, value) pair is removed.
+<a name="line151"></a> */
+<a name="line152"></a>goog.labs.structs.Multimap.prototype.remove = function(key, value) {
+<a name="line153"></a>  var values = /** @type {Array.&lt;*&gt;} */ (this.map_.get(key));
+<a name="line154"></a>  if (!values) {
+<a name="line155"></a>    return false;
+<a name="line156"></a>  }
+<a name="line157"></a>
+<a name="line158"></a>  var removed = goog.array.removeIf(values, function(v) {
+<a name="line159"></a>    return goog.labs.object.is(value, v);
+<a name="line160"></a>  });
+<a name="line161"></a>
+<a name="line162"></a>  if (removed) {
+<a name="line163"></a>    this.count_--;
+<a name="line164"></a>    if (values.length == 0) {
+<a name="line165"></a>      this.map_.remove(key);
+<a name="line166"></a>    }
+<a name="line167"></a>  }
+<a name="line168"></a>  return removed;
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Removes all values corresponding to the given key.
+<a name="line174"></a> * @param {string} key The key whose values are to be removed.
+<a name="line175"></a> * @return {boolean} Whether any value is removed.
+<a name="line176"></a> */
+<a name="line177"></a>goog.labs.structs.Multimap.prototype.removeAll = function(key) {
+<a name="line178"></a>  // We have to first retrieve the values from the backing map because
+<a name="line179"></a>  // we need to keep track of count (and correctly calculates the
+<a name="line180"></a>  // return value). values may be undefined.
+<a name="line181"></a>  var values = this.map_.get(key);
+<a name="line182"></a>  if (this.map_.remove(key)) {
+<a name="line183"></a>    this.count_ -= values.length;
+<a name="line184"></a>    return true;
+<a name="line185"></a>  }
+<a name="line186"></a>
+<a name="line187"></a>  return false;
+<a name="line188"></a>};
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * @return {boolean} Whether the multimap is empty.
+<a name="line193"></a> */
+<a name="line194"></a>goog.labs.structs.Multimap.prototype.isEmpty = function() {
+<a name="line195"></a>  return !this.count_;
+<a name="line196"></a>};
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * @return {number} The count of (key, value) pairs in the map.
+<a name="line201"></a> */
+<a name="line202"></a>goog.labs.structs.Multimap.prototype.getCount = function() {
+<a name="line203"></a>  return this.count_;
+<a name="line204"></a>};
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * @param {string} key The key to check.
+<a name="line209"></a> * @param {*} value The value to check.
+<a name="line210"></a> * @return {boolean} Whether the (key, value) pair exists in the multimap.
+<a name="line211"></a> */
+<a name="line212"></a>goog.labs.structs.Multimap.prototype.containsEntry = function(key, value) {
+<a name="line213"></a>  var values = /** @type {Array.&lt;*&gt;} */ (this.map_.get(key));
+<a name="line214"></a>  if (!values) {
+<a name="line215"></a>    return false;
+<a name="line216"></a>  }
+<a name="line217"></a>
+<a name="line218"></a>  var index = goog.array.findIndex(values, function(v) {
+<a name="line219"></a>    return goog.labs.object.is(v, value);
+<a name="line220"></a>  });
+<a name="line221"></a>  return index &gt;= 0;
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * @param {string} key The key to check.
+<a name="line227"></a> * @return {boolean} Whether the multimap contains at least one (key,
+<a name="line228"></a> *     value) pair with the given key.
+<a name="line229"></a> */
+<a name="line230"></a>goog.labs.structs.Multimap.prototype.containsKey = function(key) {
+<a name="line231"></a>  return this.map_.containsKey(key);
+<a name="line232"></a>};
+<a name="line233"></a>
+<a name="line234"></a>
+<a name="line235"></a>/**
+<a name="line236"></a> * @param {*} value The value to check.
+<a name="line237"></a> * @return {boolean} Whether the multimap contains at least one (key,
+<a name="line238"></a> *     value) pair with the given value.
+<a name="line239"></a> */
+<a name="line240"></a>goog.labs.structs.Multimap.prototype.containsValue = function(value) {
+<a name="line241"></a>  return goog.array.some(this.map_.getValues(),
+<a name="line242"></a>      function(values) {
+<a name="line243"></a>        return goog.array.some(/** @type {Array} */ (values), function(v) {
+<a name="line244"></a>          return goog.labs.object.is(v, value);
+<a name="line245"></a>        });
+<a name="line246"></a>      });
+<a name="line247"></a>};
+<a name="line248"></a>
+<a name="line249"></a>
+<a name="line250"></a>/**
+<a name="line251"></a> * @return {!Array.&lt;string&gt;} An array of unique keys.
+<a name="line252"></a> */
+<a name="line253"></a>goog.labs.structs.Multimap.prototype.getKeys = function() {
+<a name="line254"></a>  return this.map_.getKeys();
+<a name="line255"></a>};
+<a name="line256"></a>
+<a name="line257"></a>
+<a name="line258"></a>/**
+<a name="line259"></a> * @return {!Array.&lt;*&gt;} An array of values. There may be duplicates.
+<a name="line260"></a> */
+<a name="line261"></a>goog.labs.structs.Multimap.prototype.getValues = function() {
+<a name="line262"></a>  return goog.array.flatten(this.map_.getValues());
+<a name="line263"></a>};
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * @return {!Array.&lt;!Array&gt;} An array of entries. Each entry is of the
+<a name="line268"></a> *     form [key, value].
+<a name="line269"></a> */
+<a name="line270"></a>goog.labs.structs.Multimap.prototype.getEntries = function() {
+<a name="line271"></a>  var keys = this.getKeys();
+<a name="line272"></a>  var entries = [];
+<a name="line273"></a>  for (var i = 0; i &lt; keys.length; i++) {
+<a name="line274"></a>    var key = keys[i];
+<a name="line275"></a>    var values = this.get(key);
+<a name="line276"></a>    for (var j = 0; j &lt; values.length; j++) {
+<a name="line277"></a>      entries.push([key, values[j]]);
+<a name="line278"></a>    }
+<a name="line279"></a>  }
+<a name="line280"></a>  return entries;
+<a name="line281"></a>};
+</pre>
+
+
+</body>
+</html>

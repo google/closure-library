@@ -1,0 +1,274 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>containerscroller.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_containerscroller.js.html">containerscroller.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Scroll behavior that can be added onto a container.
+<a name="line17"></a> * @author gboyer@google.com (Garry Boyer)
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.ui.ContainerScroller&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line23"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line24"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line25"></a>goog.require(&#39;goog.style&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.Container&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Plug-on scrolling behavior for a container.
+<a name="line33"></a> *
+<a name="line34"></a> * Use this to style containers, such as pop-up menus, to be scrolling, and
+<a name="line35"></a> * automatically keep the highlighted element visible.
+<a name="line36"></a> *
+<a name="line37"></a> * To use this, first style your container with the desired overflow
+<a name="line38"></a> * properties and height to achieve vertical scrolling.  Also, the scrolling
+<a name="line39"></a> * div should have no vertical padding, for two reasons: it is difficult to
+<a name="line40"></a> * compensate for, and is generally not what you want due to the strange way
+<a name="line41"></a> * CSS handles padding on the scrolling dimension.
+<a name="line42"></a> *
+<a name="line43"></a> * The container must already be rendered before this may be constructed.
+<a name="line44"></a> *
+<a name="line45"></a> * @param {!goog.ui.Container} container The container to attach behavior to.
+<a name="line46"></a> * @constructor
+<a name="line47"></a> * @extends {goog.Disposable}
+<a name="line48"></a> * @final
+<a name="line49"></a> */
+<a name="line50"></a>goog.ui.ContainerScroller = function(container) {
+<a name="line51"></a>  goog.Disposable.call(this);
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * The container that we are bestowing scroll behavior on.
+<a name="line55"></a>   * @type {!goog.ui.Container}
+<a name="line56"></a>   * @private
+<a name="line57"></a>   */
+<a name="line58"></a>  this.container_ = container;
+<a name="line59"></a>
+<a name="line60"></a>  /**
+<a name="line61"></a>   * Event handler for this object.
+<a name="line62"></a>   * @type {!goog.events.EventHandler.&lt;!goog.ui.ContainerScroller&gt;}
+<a name="line63"></a>   * @private
+<a name="line64"></a>   */
+<a name="line65"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line66"></a>
+<a name="line67"></a>  this.eventHandler_.listen(container, goog.ui.Component.EventType.HIGHLIGHT,
+<a name="line68"></a>      this.onHighlight_);
+<a name="line69"></a>  this.eventHandler_.listen(container, goog.ui.Component.EventType.ENTER,
+<a name="line70"></a>      this.onEnter_);
+<a name="line71"></a>  this.eventHandler_.listen(container, goog.ui.Container.EventType.AFTER_SHOW,
+<a name="line72"></a>      this.onAfterShow_);
+<a name="line73"></a>  this.eventHandler_.listen(container, goog.ui.Component.EventType.HIDE,
+<a name="line74"></a>      this.onHide_);
+<a name="line75"></a>
+<a name="line76"></a>  // TODO(gboyer): Allow a ContainerScroller to be attached with a Container
+<a name="line77"></a>  // before the container is rendered.
+<a name="line78"></a>
+<a name="line79"></a>  this.doScrolling_(true);
+<a name="line80"></a>};
+<a name="line81"></a>goog.inherits(goog.ui.ContainerScroller, goog.Disposable);
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * The last target the user hovered over.
+<a name="line86"></a> *
+<a name="line87"></a> * @see #onEnter_
+<a name="line88"></a> * @type {goog.ui.Component}
+<a name="line89"></a> * @private
+<a name="line90"></a> */
+<a name="line91"></a>goog.ui.ContainerScroller.prototype.lastEnterTarget_ = null;
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * The scrollTop of the container before it was hidden.
+<a name="line96"></a> * Used to restore the scroll position when the container is shown again.
+<a name="line97"></a> * @type {?number}
+<a name="line98"></a> * @private
+<a name="line99"></a> */
+<a name="line100"></a>goog.ui.ContainerScroller.prototype.scrollTopBeforeHide_ = null;
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Whether we are disabling the default handler for hovering.
+<a name="line105"></a> *
+<a name="line106"></a> * @see #onEnter_
+<a name="line107"></a> * @see #temporarilyDisableHover_
+<a name="line108"></a> * @type {boolean}
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.ui.ContainerScroller.prototype.disableHover_ = false;
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * Handles hover events on the container&#39;s children.
+<a name="line116"></a> *
+<a name="line117"></a> * Helps enforce two constraints: scrolling should not cause mouse highlights,
+<a name="line118"></a> * and mouse highlights should not cause scrolling.
+<a name="line119"></a> *
+<a name="line120"></a> * @param {goog.events.Event} e The container&#39;s ENTER event.
+<a name="line121"></a> * @private
+<a name="line122"></a> */
+<a name="line123"></a>goog.ui.ContainerScroller.prototype.onEnter_ = function(e) {
+<a name="line124"></a>  if (this.disableHover_) {
+<a name="line125"></a>    // The container was scrolled recently.  Since the mouse may be over the
+<a name="line126"></a>    // container, stop the default action of the ENTER event from causing
+<a name="line127"></a>    // highlights.
+<a name="line128"></a>    e.preventDefault();
+<a name="line129"></a>  } else {
+<a name="line130"></a>    // The mouse is moving and causing hover events.  Stop the resulting
+<a name="line131"></a>    // highlight (if it happens) from causing a scroll.
+<a name="line132"></a>    this.lastEnterTarget_ = /** @type {goog.ui.Component} */ (e.target);
+<a name="line133"></a>  }
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Handles highlight events on the container&#39;s children.
+<a name="line139"></a> * @param {goog.events.Event} e The container&#39;s highlight event.
+<a name="line140"></a> * @private
+<a name="line141"></a> */
+<a name="line142"></a>goog.ui.ContainerScroller.prototype.onHighlight_ = function(e) {
+<a name="line143"></a>  this.doScrolling_();
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * Handles AFTER_SHOW events on the container. Makes the container
+<a name="line149"></a> * scroll to the previously scrolled position (if there was one),
+<a name="line150"></a> * then adjust it to make the highlighted element be in view (if there is one).
+<a name="line151"></a> * If there was no previous scroll position, then center the highlighted
+<a name="line152"></a> * element (if there is one).
+<a name="line153"></a> * @param {goog.events.Event} e The container&#39;s AFTER_SHOW event.
+<a name="line154"></a> * @private
+<a name="line155"></a> */
+<a name="line156"></a>goog.ui.ContainerScroller.prototype.onAfterShow_ = function(e) {
+<a name="line157"></a>  if (this.scrollTopBeforeHide_ != null) {
+<a name="line158"></a>    this.container_.getElement().scrollTop = this.scrollTopBeforeHide_;
+<a name="line159"></a>    // Make sure the highlighted item is still visible, in case the list
+<a name="line160"></a>    // or its hilighted item has changed.
+<a name="line161"></a>    this.doScrolling_(false);
+<a name="line162"></a>  } else {
+<a name="line163"></a>    this.doScrolling_(true);
+<a name="line164"></a>  }
+<a name="line165"></a>};
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * Handles hide events on the container. Clears out the last enter target,
+<a name="line170"></a> * since it is no longer applicable, and remembers the scroll position of
+<a name="line171"></a> * the menu so that it can be restored when the menu is reopened.
+<a name="line172"></a> * @param {goog.events.Event} e The container&#39;s hide event.
+<a name="line173"></a> * @private
+<a name="line174"></a> */
+<a name="line175"></a>goog.ui.ContainerScroller.prototype.onHide_ = function(e) {
+<a name="line176"></a>  if (e.target == this.container_) {
+<a name="line177"></a>    this.lastEnterTarget_ = null;
+<a name="line178"></a>    this.scrollTopBeforeHide_ = this.container_.getElement().scrollTop;
+<a name="line179"></a>  }
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Centers the currently highlighted item, if this is scrollable.
+<a name="line185"></a> * @param {boolean=} opt_center Whether to center the highlighted element
+<a name="line186"></a> *     rather than simply ensure it is in view.  Useful for the first
+<a name="line187"></a> *     render.
+<a name="line188"></a> * @private
+<a name="line189"></a> */
+<a name="line190"></a>goog.ui.ContainerScroller.prototype.doScrolling_ = function(opt_center) {
+<a name="line191"></a>  var highlighted = this.container_.getHighlighted();
+<a name="line192"></a>
+<a name="line193"></a>  // Only scroll if we&#39;re visible and there is a highlighted item.
+<a name="line194"></a>  if (this.container_.isVisible() &amp;&amp; highlighted &amp;&amp;
+<a name="line195"></a>      highlighted != this.lastEnterTarget_) {
+<a name="line196"></a>    var element = this.container_.getElement();
+<a name="line197"></a>    goog.style.scrollIntoContainerView(highlighted.getElement(), element,
+<a name="line198"></a>        opt_center);
+<a name="line199"></a>    this.temporarilyDisableHover_();
+<a name="line200"></a>    this.lastEnterTarget_ = null;
+<a name="line201"></a>  }
+<a name="line202"></a>};
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * Temporarily disables hover events from changing highlight.
+<a name="line207"></a> * @see #onEnter_
+<a name="line208"></a> * @private
+<a name="line209"></a> */
+<a name="line210"></a>goog.ui.ContainerScroller.prototype.temporarilyDisableHover_ = function() {
+<a name="line211"></a>  this.disableHover_ = true;
+<a name="line212"></a>  goog.Timer.callOnce(function() {
+<a name="line213"></a>    this.disableHover_ = false;
+<a name="line214"></a>  }, 0, this);
+<a name="line215"></a>};
+<a name="line216"></a>
+<a name="line217"></a>
+<a name="line218"></a>/** @override */
+<a name="line219"></a>goog.ui.ContainerScroller.prototype.disposeInternal = function() {
+<a name="line220"></a>  goog.ui.ContainerScroller.superClass_.disposeInternal.call(this);
+<a name="line221"></a>  this.eventHandler_.dispose();
+<a name="line222"></a>  this.lastEnterTarget_ = null;
+<a name="line223"></a>};
+</pre>
+
+
+</body>
+</html>

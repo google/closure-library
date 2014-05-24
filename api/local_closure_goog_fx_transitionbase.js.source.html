@@ -1,0 +1,288 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>transitionbase.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_fx_transitionbase.js.html">transitionbase.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview An abstract base class for transitions. This is a simple
+<a name="line17"></a> * interface that allows for playing, pausing and stopping an animation. It adds
+<a name="line18"></a> * a simple event model, and animation status.
+<a name="line19"></a> */
+<a name="line20"></a>goog.provide(&#39;goog.fx.TransitionBase&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.fx.TransitionBase.State&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line24"></a>goog.require(&#39;goog.fx.Transition&#39;);  // Unreferenced: interface
+<a name="line25"></a>goog.require(&#39;goog.fx.Transition.EventType&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Constructor for a transition object.
+<a name="line31"></a> *
+<a name="line32"></a> * @constructor
+<a name="line33"></a> * @implements {goog.fx.Transition}
+<a name="line34"></a> * @extends {goog.events.EventTarget}
+<a name="line35"></a> */
+<a name="line36"></a>goog.fx.TransitionBase = function() {
+<a name="line37"></a>  goog.fx.TransitionBase.base(this, &#39;constructor&#39;);
+<a name="line38"></a>
+<a name="line39"></a>  /**
+<a name="line40"></a>   * The internal state of the animation.
+<a name="line41"></a>   * @type {goog.fx.TransitionBase.State}
+<a name="line42"></a>   * @private
+<a name="line43"></a>   */
+<a name="line44"></a>  this.state_ = goog.fx.TransitionBase.State.STOPPED;
+<a name="line45"></a>
+<a name="line46"></a>  /**
+<a name="line47"></a>   * Timestamp for when the animation was started.
+<a name="line48"></a>   * @type {?number}
+<a name="line49"></a>   * @protected
+<a name="line50"></a>   */
+<a name="line51"></a>  this.startTime = null;
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * Timestamp for when the animation finished or was stopped.
+<a name="line55"></a>   * @type {?number}
+<a name="line56"></a>   * @protected
+<a name="line57"></a>   */
+<a name="line58"></a>  this.endTime = null;
+<a name="line59"></a>};
+<a name="line60"></a>goog.inherits(goog.fx.TransitionBase, goog.events.EventTarget);
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Enum for the possible states of an animation.
+<a name="line65"></a> * @enum {number}
+<a name="line66"></a> */
+<a name="line67"></a>goog.fx.TransitionBase.State = {
+<a name="line68"></a>  STOPPED: 0,
+<a name="line69"></a>  PAUSED: -1,
+<a name="line70"></a>  PLAYING: 1
+<a name="line71"></a>};
+<a name="line72"></a>
+<a name="line73"></a>
+<a name="line74"></a>/**
+<a name="line75"></a> * Plays the animation.
+<a name="line76"></a> *
+<a name="line77"></a> * @param {boolean=} opt_restart Optional parameter to restart the animation.
+<a name="line78"></a> * @return {boolean} True iff the animation was started.
+<a name="line79"></a> * @override
+<a name="line80"></a> */
+<a name="line81"></a>goog.fx.TransitionBase.prototype.play = goog.abstractMethod;
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Stops the animation.
+<a name="line86"></a> *
+<a name="line87"></a> * @param {boolean=} opt_gotoEnd Optional boolean parameter to go the the end of
+<a name="line88"></a> *     the animation.
+<a name="line89"></a> * @override
+<a name="line90"></a> */
+<a name="line91"></a>goog.fx.TransitionBase.prototype.stop = goog.abstractMethod;
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Pauses the animation.
+<a name="line96"></a> */
+<a name="line97"></a>goog.fx.TransitionBase.prototype.pause = goog.abstractMethod;
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Returns the current state of the animation.
+<a name="line102"></a> * @return {goog.fx.TransitionBase.State} State of the animation.
+<a name="line103"></a> */
+<a name="line104"></a>goog.fx.TransitionBase.prototype.getStateInternal = function() {
+<a name="line105"></a>  return this.state_;
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Sets the current state of the animation to playing.
+<a name="line111"></a> * @protected
+<a name="line112"></a> */
+<a name="line113"></a>goog.fx.TransitionBase.prototype.setStatePlaying = function() {
+<a name="line114"></a>  this.state_ = goog.fx.TransitionBase.State.PLAYING;
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * Sets the current state of the animation to paused.
+<a name="line120"></a> * @protected
+<a name="line121"></a> */
+<a name="line122"></a>goog.fx.TransitionBase.prototype.setStatePaused = function() {
+<a name="line123"></a>  this.state_ = goog.fx.TransitionBase.State.PAUSED;
+<a name="line124"></a>};
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Sets the current state of the animation to stopped.
+<a name="line129"></a> * @protected
+<a name="line130"></a> */
+<a name="line131"></a>goog.fx.TransitionBase.prototype.setStateStopped = function() {
+<a name="line132"></a>  this.state_ = goog.fx.TransitionBase.State.STOPPED;
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * @return {boolean} True iff the current state of the animation is playing.
+<a name="line138"></a> */
+<a name="line139"></a>goog.fx.TransitionBase.prototype.isPlaying = function() {
+<a name="line140"></a>  return this.state_ == goog.fx.TransitionBase.State.PLAYING;
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * @return {boolean} True iff the current state of the animation is paused.
+<a name="line146"></a> */
+<a name="line147"></a>goog.fx.TransitionBase.prototype.isPaused = function() {
+<a name="line148"></a>  return this.state_ == goog.fx.TransitionBase.State.PAUSED;
+<a name="line149"></a>};
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * @return {boolean} True iff the current state of the animation is stopped.
+<a name="line154"></a> */
+<a name="line155"></a>goog.fx.TransitionBase.prototype.isStopped = function() {
+<a name="line156"></a>  return this.state_ == goog.fx.TransitionBase.State.STOPPED;
+<a name="line157"></a>};
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Dispatches the BEGIN event. Sub classes should override this instead
+<a name="line162"></a> * of listening to the event, and call this instead of dispatching the event.
+<a name="line163"></a> * @protected
+<a name="line164"></a> */
+<a name="line165"></a>goog.fx.TransitionBase.prototype.onBegin = function() {
+<a name="line166"></a>  this.dispatchAnimationEvent(goog.fx.Transition.EventType.BEGIN);
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Dispatches the END event. Sub classes should override this instead
+<a name="line172"></a> * of listening to the event, and call this instead of dispatching the event.
+<a name="line173"></a> * @protected
+<a name="line174"></a> */
+<a name="line175"></a>goog.fx.TransitionBase.prototype.onEnd = function() {
+<a name="line176"></a>  this.dispatchAnimationEvent(goog.fx.Transition.EventType.END);
+<a name="line177"></a>};
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * Dispatches the FINISH event. Sub classes should override this instead
+<a name="line182"></a> * of listening to the event, and call this instead of dispatching the event.
+<a name="line183"></a> * @protected
+<a name="line184"></a> */
+<a name="line185"></a>goog.fx.TransitionBase.prototype.onFinish = function() {
+<a name="line186"></a>  this.dispatchAnimationEvent(goog.fx.Transition.EventType.FINISH);
+<a name="line187"></a>};
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * Dispatches the PAUSE event. Sub classes should override this instead
+<a name="line192"></a> * of listening to the event, and call this instead of dispatching the event.
+<a name="line193"></a> * @protected
+<a name="line194"></a> */
+<a name="line195"></a>goog.fx.TransitionBase.prototype.onPause = function() {
+<a name="line196"></a>  this.dispatchAnimationEvent(goog.fx.Transition.EventType.PAUSE);
+<a name="line197"></a>};
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Dispatches the PLAY event. Sub classes should override this instead
+<a name="line202"></a> * of listening to the event, and call this instead of dispatching the event.
+<a name="line203"></a> * @protected
+<a name="line204"></a> */
+<a name="line205"></a>goog.fx.TransitionBase.prototype.onPlay = function() {
+<a name="line206"></a>  this.dispatchAnimationEvent(goog.fx.Transition.EventType.PLAY);
+<a name="line207"></a>};
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * Dispatches the RESUME event. Sub classes should override this instead
+<a name="line212"></a> * of listening to the event, and call this instead of dispatching the event.
+<a name="line213"></a> * @protected
+<a name="line214"></a> */
+<a name="line215"></a>goog.fx.TransitionBase.prototype.onResume = function() {
+<a name="line216"></a>  this.dispatchAnimationEvent(goog.fx.Transition.EventType.RESUME);
+<a name="line217"></a>};
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * Dispatches the STOP event. Sub classes should override this instead
+<a name="line222"></a> * of listening to the event, and call this instead of dispatching the event.
+<a name="line223"></a> * @protected
+<a name="line224"></a> */
+<a name="line225"></a>goog.fx.TransitionBase.prototype.onStop = function() {
+<a name="line226"></a>  this.dispatchAnimationEvent(goog.fx.Transition.EventType.STOP);
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Dispatches an event object for the current animation.
+<a name="line232"></a> * @param {string} type Event type that will be dispatched.
+<a name="line233"></a> * @protected
+<a name="line234"></a> */
+<a name="line235"></a>goog.fx.TransitionBase.prototype.dispatchAnimationEvent = function(type) {
+<a name="line236"></a>  this.dispatchEvent(type);
+<a name="line237"></a>};
+</pre>
+
+
+</body>
+</html>

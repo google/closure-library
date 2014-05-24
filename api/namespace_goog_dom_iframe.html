@@ -1,0 +1,528 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iframe (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">dom.iframe</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.iframe.createBlank"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.iframe.</span><span class="entryName">createBlank<span class="args">(<span class="arg">domHelper</span>,&nbsp;<span class="arg">opt_styles</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">HTMLIFrameElement</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a completely blank iframe element.
+
+The iframe will not caused mixed-content warnings for IE6 under HTTPS.
+The iframe will also have no borders or padding, so that the styled width
+and height will be the actual width and height of the iframe.
+
+This function currently only attempts to create a blank iframe.  There
+are no guarantees to the contents of the iframe or whether it is rendered
+in quirks mode.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">domHelper</span>
+        : <span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span>
+        <div class="entryOverview">The dom helper to use.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_styles</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">CSS styles for the iframe.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">HTMLIFrameElement</span>&nbsp;
+            A completely blank iframe.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_iframe.js.source.html#line95">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.iframe.createWithContent"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.iframe.</span><span class="entryName">createWithContent<span class="args">(<span class="arg">parentElement</span>,&nbsp;<span class="arg">opt_headContents</span>,&nbsp;<span class="arg">opt_bodyContents</span>,&nbsp;<span class="arg">opt_styles</span>,&nbsp;<span class="arg">opt_quirks</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">HTMLIFrameElement</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a same-domain iframe containing preloaded content.
+
+This is primarily useful for DOM sandboxing.  One use case is to embed
+a trusted Javascript app with potentially conflicting CSS styles.  The
+second case is to reduce the cost of layout passes by the browser -- for
+example, you can perform sandbox sizing of characters in an iframe while
+manipulating a heavy DOM in the main window.  The iframe and parent frame
+can access each others' properties and functions without restriction.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parentElement</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The parent element in which to append the
+    iframe.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_headContents</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">Contents to go into the iframe's head.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_bodyContents</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">Contents to go into the iframe's body.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_styles</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">CSS styles for the iframe itself, before adding
+    to the parent element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_quirks</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">Whether to use quirks mode (false by default).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">HTMLIFrameElement</span>&nbsp;
+            An iframe that has the specified contents.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_iframe.js.source.html#line144">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.iframe.writeContent"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.iframe.</span><span class="entryName">writeContent<span class="args">(<span class="arg">iframe</span>,&nbsp;<span class="arg">content</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Writes the contents of a blank iframe that has already been inserted
+into the document.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iframe</span>
+        : <span>!</span><span class="type">HTMLIFrameElement</span>
+        <div class="entryOverview">An iframe with no contents, such as
+    one created by goog.dom.iframe.createBlank, but already appended to
+    a parent document.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">content</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">Content to write to the iframe, from doctype to
+    the HTML close tag.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_iframe.js.source.html#line115">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.dom.iframe.BLANK_SOURCE"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.iframe.</span><span class="entryName">BLANK_SOURCE</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Safe source for a blank iframe.
+
+Intentionally not about:blank, which gives mixed content warnings in IE6
+over HTTPS.
+
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_iframe.js.source.html#line36">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.dom.iframe.BLANK_SOURCE_NEW_FRAME"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.iframe.</span><span class="entryName">BLANK_SOURCE_NEW_FRAME</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Safe source for a new blank iframe that may not cause a new load of the
+iframe. This is different from <code> goog.dom.iframe.BLANK_SOURCE</code> in that
+it will allow an iframe to be loaded synchronously in more browsers, notably
+Gecko, following the javascript protocol spec.
+
+NOTE: This should not be used to replace the source of an existing iframe.
+The new src value will be ignored, per the spec.
+
+Due to cross-browser differences, the load is not guaranteed  to be
+synchronous. If code depends on the load of the iframe,
+then <code> goog.net.IframeLoadMonitor</code> or a similar technique should be
+used.
+
+According to
+<a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/webappapis.html#javascript-protocol">http://www.whatwg.org/specs/web-apps/current-work/multipage/webappapis.html#javascript-protocol</a>
+the 'javascript:""' URL should trigger a new load of the iframe, which may be
+asynchronous. A void src, such as 'javascript:undefined', does not change
+the browsing context document's, and thus should not trigger another load.
+
+Intentionally not about:blank, which also triggers a load.
+
+NOTE: 'javascript:' URL handling spec compliance varies per browser. IE
+throws an error with 'javascript:undefined'. Webkit browsers will reload the
+iframe when setting this source on an existing iframe.
+
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_iframe.js.source.html#line67">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.dom.iframe.STYLES_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.iframe.</span><span class="entryName">STYLES_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Styles to help ensure an undecorated iframe.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_iframe.js.source.html#line77">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package dom</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="dom.iframe"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

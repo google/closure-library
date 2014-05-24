@@ -1,0 +1,467 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>dialog.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">dialog.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="http://closure-library.googlecode.com/git/closure/goog/demos/dialog.html">Demo</a></li>
+            <li><a href="local_closure_goog_ui_dialog.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/ui/dialog.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/ui/dialog.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Dialog.html">
+          goog.ui.Dialog</a><br/>
+        <div class="class-details">Class for showing simple dialog boxes.
+The Html structure of the dialog box is:
+<pre class="lang-js prettyprint">
+ Element         Function                Class-name, modal-dialog = default
+----------------------------------------------------------------------------
+- iframe         Iframe mask              modal-dialog-bg
+- div            Background mask          modal-dialog-bg
+- div            Dialog area              modal-dialog
+    - div        Title bar                modal-dialog-title
+       - span                             modal-dialog-title-text
+         - text  Title text               N/A
+       - span                             modal-dialog-title-close
+         - ??    Close box                N/A
+    - div        Content area             modal-dialog-content
+       - ??      User specified content   N/A
+    - div        Button area              modal-dialog-buttons
+       - button                           N/A
+       - button
+       - ...
+</pre></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Dialog_ButtonSet.html">
+          goog.ui.Dialog.ButtonSet</a><br/>
+        <div class="class-details">A button set defines the behaviour of a set of buttons that the dialog can
+show.  Uses the <code> goog.structs.Map</code> interface.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_Dialog_Event.html">
+          goog.ui.Dialog.Event</a><br/>
+        <div class="class-details">Dialog event class.
+</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.createContinueSaveCancel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">createContinueSaveCancel<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new ButtonSet with 'Continue', 'Save', and 'Cancel' (default)
+buttons.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The created ButtonSet.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1566">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.createOk"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">createOk<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new ButtonSet with a single 'OK' button, which is also set with
+cancel button semantics so that pressing escape will close the dialog.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The created ButtonSet.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1521">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.createOkCancel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">createOkCancel<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new ButtonSet with 'OK' (default) and 'Cancel' buttons.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The created ButtonSet.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1531">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.createYesNo"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">createYesNo<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new ButtonSet with 'Yes' (default) and 'No' buttons.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The created ButtonSet.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1542">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.createYesNoCancel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">createYesNoCancel<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new ButtonSet with 'Yes', 'No' (default), and 'Cancel' buttons.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The created ButtonSet.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1553">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+  <h2>Global Variables</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="function%87"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">function%87</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1575">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory ui</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/ui/dialog.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

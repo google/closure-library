@@ -1,0 +1,156 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iframeloadmonitor_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_iframeloadmonitor_test.js.html">iframeloadmonitor_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.IframeLoadMonitorTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.IframeLoadMonitorTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events&#39;);
+<a name="line20"></a>goog.require(&#39;goog.net.IframeLoadMonitor&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var TEST_FRAME_SRCS = [&#39;iframeloadmonitor_test_frame.html&#39;,
+<a name="line25"></a>  &#39;iframeloadmonitor_test_frame2.html&#39;,
+<a name="line26"></a>  &#39;iframeloadmonitor_test_frame3.html&#39;];
+<a name="line27"></a>
+<a name="line28"></a>// Create a new test case.
+<a name="line29"></a>var iframeLoaderTestCase = new goog.testing.AsyncTestCase(document.title);
+<a name="line30"></a>iframeLoaderTestCase.stepTimeout = 4 * 1000;
+<a name="line31"></a>
+<a name="line32"></a>// Array holding all iframe load monitors.
+<a name="line33"></a>iframeLoaderTestCase.iframeLoadMonitors_ = [];
+<a name="line34"></a>
+<a name="line35"></a>// How many single frames finished loading
+<a name="line36"></a>iframeLoaderTestCase.singleComplete_ = 0;
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Sets up the test environment, adds tests and sets up the worker pools.
+<a name="line41"></a> * @this {goog.testing.AsyncTestCase}
+<a name="line42"></a> */
+<a name="line43"></a>iframeLoaderTestCase.setUpPage = function() {
+<a name="line44"></a>  this.log(&#39;Setting tests up&#39;);
+<a name="line45"></a>  iframeLoaderTestCase.waitForAsync(&#39;loading iframes&#39;);
+<a name="line46"></a>
+<a name="line47"></a>  var dom = goog.dom.getDomHelper();
+<a name="line48"></a>
+<a name="line49"></a>  // Load single frame
+<a name="line50"></a>  var frame = dom.createDom(&#39;iframe&#39;);
+<a name="line51"></a>  this.iframeLoadMonitors_.push(new goog.net.IframeLoadMonitor(frame));
+<a name="line52"></a>  goog.events.listen(this.iframeLoadMonitors_[0],
+<a name="line53"></a>      goog.net.IframeLoadMonitor.LOAD_EVENT, this);
+<a name="line54"></a>  var frameParent = dom.getElement(&#39;frame_parent&#39;);
+<a name="line55"></a>  dom.appendChild(frameParent, frame);
+<a name="line56"></a>  this.log(&#39;Loading frame at: &#39; + TEST_FRAME_SRCS[0]);
+<a name="line57"></a>  frame.src = TEST_FRAME_SRCS[0];
+<a name="line58"></a>
+<a name="line59"></a>  // Load single frame with content check
+<a name="line60"></a>  var frame1 = dom.createDom(&#39;iframe&#39;);
+<a name="line61"></a>  this.iframeLoadMonitors_.push(new goog.net.IframeLoadMonitor(frame1, true));
+<a name="line62"></a>  goog.events.listen(this.iframeLoadMonitors_[1],
+<a name="line63"></a>      goog.net.IframeLoadMonitor.LOAD_EVENT, this);
+<a name="line64"></a>  var frameParent = dom.getElement(&#39;frame_parent&#39;);
+<a name="line65"></a>  dom.appendChild(frameParent, frame1);
+<a name="line66"></a>  this.log(&#39;Loading frame with content check at: &#39; + TEST_FRAME_SRCS[0]);
+<a name="line67"></a>  frame1.src = TEST_FRAME_SRCS[0];
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Handles any events fired
+<a name="line73"></a> * @this {goog.testing.AsyncTestCase}
+<a name="line74"></a> */
+<a name="line75"></a>iframeLoaderTestCase.handleEvent = function(e) {
+<a name="line76"></a>  this.log(&#39;handleEvent, type: &#39; + e.type);
+<a name="line77"></a>  if (e.type == goog.net.IframeLoadMonitor.LOAD_EVENT) {
+<a name="line78"></a>    this.singleComplete_++;
+<a name="line79"></a>    this.callbacksComplete();
+<a name="line80"></a>  }
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Checks if all the load callbacks are done
+<a name="line86"></a> * @this {goog.testing.AsyncTestCase}
+<a name="line87"></a> */
+<a name="line88"></a>iframeLoaderTestCase.callbacksComplete = function() {
+<a name="line89"></a>  if (this.singleComplete_ == 2) {
+<a name="line90"></a>    iframeLoaderTestCase.continueTesting();
+<a name="line91"></a>  }
+<a name="line92"></a>};
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/** Tests the results. */
+<a name="line96"></a>iframeLoaderTestCase.addNewTest(&#39;testResults&#39;, function() {
+<a name="line97"></a>  this.log(&#39;getting test results&#39;);
+<a name="line98"></a>  for (var i = 0; i &lt; this.iframeLoadMonitors_.length; i++) {
+<a name="line99"></a>    assertTrue(this.iframeLoadMonitors_[i].isLoaded());
+<a name="line100"></a>  }
+<a name="line101"></a>});
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/** Standalone Closure Test Runner. */
+<a name="line105"></a>G_testRunner.initialize(iframeLoaderTestCase);
+</pre>
+
+
+</body>
+</html>

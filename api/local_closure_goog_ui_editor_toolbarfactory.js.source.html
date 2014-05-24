@@ -1,0 +1,490 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>toolbarfactory.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_editor_toolbarfactory.js.html">toolbarfactory.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Generic factory functions for creating the building blocks for
+<a name="line17"></a> * an editor toolbar.
+<a name="line18"></a> *
+<a name="line19"></a> * @author attila@google.com (Attila Bodis)
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.editor.ToolbarFactory&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line27"></a>goog.require(&#39;goog.string&#39;);
+<a name="line28"></a>goog.require(&#39;goog.string.Unicode&#39;);
+<a name="line29"></a>goog.require(&#39;goog.style&#39;);
+<a name="line30"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.Container&#39;);
+<a name="line32"></a>goog.require(&#39;goog.ui.Option&#39;);
+<a name="line33"></a>goog.require(&#39;goog.ui.Toolbar&#39;);
+<a name="line34"></a>goog.require(&#39;goog.ui.ToolbarButton&#39;);
+<a name="line35"></a>goog.require(&#39;goog.ui.ToolbarColorMenuButton&#39;);
+<a name="line36"></a>goog.require(&#39;goog.ui.ToolbarMenuButton&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.ToolbarRenderer&#39;);
+<a name="line38"></a>goog.require(&#39;goog.ui.ToolbarSelect&#39;);
+<a name="line39"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * Takes a font spec (e.g. &quot;Arial, Helvetica, sans-serif&quot;) and returns the
+<a name="line44"></a> * primary font name, normalized to lowercase (e.g. &quot;arial&quot;).
+<a name="line45"></a> * @param {string} fontSpec Font specification.
+<a name="line46"></a> * @return {string} The primary font name, in lowercase.
+<a name="line47"></a> */
+<a name="line48"></a>goog.ui.editor.ToolbarFactory.getPrimaryFont = function(fontSpec) {
+<a name="line49"></a>  var i = fontSpec.indexOf(&#39;,&#39;);
+<a name="line50"></a>  var fontName = (i != -1 ? fontSpec.substring(0, i) : fontSpec).toLowerCase();
+<a name="line51"></a>  // Strip leading/trailing quotes from the font name (bug 1050118).
+<a name="line52"></a>  return goog.string.stripQuotes(fontName, &#39;&quot;\&#39;&#39;);
+<a name="line53"></a>};
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * Bulk-adds fonts to the given font menu button.  The argument must be an
+<a name="line58"></a> * array of font descriptor objects, each of which must have the following
+<a name="line59"></a> * attributes:
+<a name="line60"></a> * &lt;ul&gt;
+<a name="line61"></a> *   &lt;li&gt;{@code caption} - Caption to show in the font menu (e.g. &#39;Tahoma&#39;)
+<a name="line62"></a> *   &lt;li&gt;{@code value} - Value for the corresponding &#39;font-family&#39; CSS style
+<a name="line63"></a> *       (e.g. &#39;Tahoma, Arial, sans-serif&#39;)
+<a name="line64"></a> * &lt;/ul&gt;
+<a name="line65"></a> * @param {!goog.ui.Select} button Font menu button.
+<a name="line66"></a> * @param {!Array.&lt;{caption: string, value: string}&gt;} fonts Array of
+<a name="line67"></a> *     font descriptors.
+<a name="line68"></a> */
+<a name="line69"></a>goog.ui.editor.ToolbarFactory.addFonts = function(button, fonts) {
+<a name="line70"></a>  goog.array.forEach(fonts, function(font) {
+<a name="line71"></a>    goog.ui.editor.ToolbarFactory.addFont(button, font.caption, font.value);
+<a name="line72"></a>  });
+<a name="line73"></a>};
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * Adds a menu item to the given font menu button.  The first font listed in
+<a name="line78"></a> * the {@code value} argument is considered the font ID, so adding two items
+<a name="line79"></a> * whose CSS style starts with the same font may lead to unpredictable results.
+<a name="line80"></a> * @param {!goog.ui.Select} button Font menu button.
+<a name="line81"></a> * @param {string} caption Caption to show for the font menu.
+<a name="line82"></a> * @param {string} value Value for the corresponding &#39;font-family&#39; CSS style.
+<a name="line83"></a> */
+<a name="line84"></a>goog.ui.editor.ToolbarFactory.addFont = function(button, caption, value) {
+<a name="line85"></a>  // The font ID is the first font listed in the CSS style, normalized to
+<a name="line86"></a>  // lowercase.
+<a name="line87"></a>  var id = goog.ui.editor.ToolbarFactory.getPrimaryFont(value);
+<a name="line88"></a>
+<a name="line89"></a>  // Construct the option, and add it to the button.
+<a name="line90"></a>  var option = new goog.ui.Option(caption, value, button.getDomHelper());
+<a name="line91"></a>  option.setId(id);
+<a name="line92"></a>  button.addItem(option);
+<a name="line93"></a>
+<a name="line94"></a>  // Captions are shown in their own font.
+<a name="line95"></a>  option.getContentElement().style.fontFamily = value;
+<a name="line96"></a>};
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Bulk-adds font sizes to the given font size menu button.  The argument must
+<a name="line101"></a> * be an array of font size descriptor objects, each of which must have the
+<a name="line102"></a> * following attributes:
+<a name="line103"></a> * &lt;ul&gt;
+<a name="line104"></a> *   &lt;li&gt;{@code caption} - Caption to show in the font size menu (e.g. &#39;Huge&#39;)
+<a name="line105"></a> *   &lt;li&gt;{@code value} - Value for the corresponding HTML font size (e.g. 6)
+<a name="line106"></a> * &lt;/ul&gt;
+<a name="line107"></a> * @param {!goog.ui.Select} button Font size menu button.
+<a name="line108"></a> * @param {!Array.&lt;{caption: string, value:number}&gt;} sizes Array of font
+<a name="line109"></a> *     size descriptors.
+<a name="line110"></a> */
+<a name="line111"></a>goog.ui.editor.ToolbarFactory.addFontSizes = function(button, sizes) {
+<a name="line112"></a>  goog.array.forEach(sizes, function(size) {
+<a name="line113"></a>    goog.ui.editor.ToolbarFactory.addFontSize(button, size.caption, size.value);
+<a name="line114"></a>  });
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * Adds a menu item to the given font size menu button.  The {@code value}
+<a name="line120"></a> * argument must be a legacy HTML font size in the 0-7 range.
+<a name="line121"></a> * @param {!goog.ui.Select} button Font size menu button.
+<a name="line122"></a> * @param {string} caption Caption to show in the font size menu.
+<a name="line123"></a> * @param {number} value Value for the corresponding HTML font size.
+<a name="line124"></a> */
+<a name="line125"></a>goog.ui.editor.ToolbarFactory.addFontSize = function(button, caption, value) {
+<a name="line126"></a>  // Construct the option, and add it to the button.
+<a name="line127"></a>  var option = new goog.ui.Option(caption, value, button.getDomHelper());
+<a name="line128"></a>  button.addItem(option);
+<a name="line129"></a>
+<a name="line130"></a>  // Adjust the font size of the menu item and the height of the checkbox
+<a name="line131"></a>  // element after they&#39;ve been rendered by addItem().  Captions are shown in
+<a name="line132"></a>  // the corresponding font size, and lining up the checkbox is tricky.
+<a name="line133"></a>  var content = option.getContentElement();
+<a name="line134"></a>  content.style.fontSize =
+<a name="line135"></a>      goog.ui.editor.ToolbarFactory.getPxFromLegacySize(value) + &#39;px&#39;;
+<a name="line136"></a>  content.firstChild.style.height = &#39;1.1em&#39;;
+<a name="line137"></a>};
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * Converts a legacy font size specification into an equivalent pixel size.
+<a name="line142"></a> * For example, {@code &amp;lt;font size=&quot;6&quot;&amp;gt;} is {@code font-size: 32px;}, etc.
+<a name="line143"></a> * @param {number} fontSize Legacy font size spec in the 0-7 range.
+<a name="line144"></a> * @return {number} Equivalent pixel size.
+<a name="line145"></a> */
+<a name="line146"></a>goog.ui.editor.ToolbarFactory.getPxFromLegacySize = function(fontSize) {
+<a name="line147"></a>  return goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_[fontSize] || 10;
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Converts a pixel font size specification into an equivalent legacy size.
+<a name="line153"></a> * For example, {@code font-size: 32px;} is {@code &amp;lt;font size=&quot;6&quot;&amp;gt;}, etc.
+<a name="line154"></a> * If the given pixel size doesn&#39;t exactly match one of the legacy sizes, -1 is
+<a name="line155"></a> * returned.
+<a name="line156"></a> * @param {number} px Pixel font size.
+<a name="line157"></a> * @return {number} Equivalent legacy size spec in the 0-7 range, or -1 if none
+<a name="line158"></a> *     exists.
+<a name="line159"></a> */
+<a name="line160"></a>goog.ui.editor.ToolbarFactory.getLegacySizeFromPx = function(px) {
+<a name="line161"></a>  // Use lastIndexOf to get the largest legacy size matching the pixel size
+<a name="line162"></a>  // (most notably returning 1 instead of 0 for 10px).
+<a name="line163"></a>  return goog.array.lastIndexOf(
+<a name="line164"></a>      goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_, px);
+<a name="line165"></a>};
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * Map of legacy font sizes (0-7) to equivalent pixel sizes.
+<a name="line170"></a> * @type {!Array.&lt;number&gt;}
+<a name="line171"></a> * @private
+<a name="line172"></a> */
+<a name="line173"></a>goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_ =
+<a name="line174"></a>    [10, 10, 13, 16, 18, 24, 32, 48];
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * Bulk-adds format options to the given &quot;Format block&quot; menu button.  The
+<a name="line179"></a> * argument must be an array of format option descriptor objects, each of
+<a name="line180"></a> * which must have the following attributes:
+<a name="line181"></a> * &lt;ul&gt;
+<a name="line182"></a> *   &lt;li&gt;{@code caption} - Caption to show in the menu (e.g. &#39;Minor heading&#39;)
+<a name="line183"></a> *   &lt;li&gt;{@code command} - Corresponding {@link goog.dom.TagName} (e.g.
+<a name="line184"></a> *       &#39;H4&#39;)
+<a name="line185"></a> * &lt;/ul&gt;
+<a name="line186"></a> * @param {!goog.ui.Select} button &quot;Format block&quot; menu button.
+<a name="line187"></a> * @param {!Array.&lt;{caption: string, command: goog.dom.TagName}&gt;} formats Array
+<a name="line188"></a> *     of format option descriptors.
+<a name="line189"></a> */
+<a name="line190"></a>goog.ui.editor.ToolbarFactory.addFormatOptions = function(button, formats) {
+<a name="line191"></a>  goog.array.forEach(formats, function(format) {
+<a name="line192"></a>    goog.ui.editor.ToolbarFactory.addFormatOption(button, format.caption,
+<a name="line193"></a>        format.command);
+<a name="line194"></a>  });
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Adds a menu item to the given &quot;Format block&quot; menu button.
+<a name="line200"></a> * @param {!goog.ui.Select} button &quot;Format block&quot; menu button.
+<a name="line201"></a> * @param {string} caption Caption to show in the menu.
+<a name="line202"></a> * @param {goog.dom.TagName} tag Corresponding block format tag.
+<a name="line203"></a> */
+<a name="line204"></a>goog.ui.editor.ToolbarFactory.addFormatOption = function(button, caption, tag) {
+<a name="line205"></a>  // Construct the option, and add it to the button.
+<a name="line206"></a>  // TODO(attila): Create boring but functional menu item for now...
+<a name="line207"></a>  var buttonDom = button.getDomHelper();
+<a name="line208"></a>  var option = new goog.ui.Option(buttonDom.createDom(goog.dom.TagName.DIV,
+<a name="line209"></a>      null, caption), tag, buttonDom);
+<a name="line210"></a>  option.setId(tag);
+<a name="line211"></a>  button.addItem(option);
+<a name="line212"></a>};
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * Creates a {@link goog.ui.Toolbar} containing the specified set of
+<a name="line217"></a> * toolbar buttons, and renders it into the given parent element.  Each
+<a name="line218"></a> * item in the {@code items} array must a {@link goog.ui.Control}.
+<a name="line219"></a> * @param {!Array.&lt;goog.ui.Control&gt;} items Toolbar items; each must
+<a name="line220"></a> *     be a {@link goog.ui.Control}.
+<a name="line221"></a> * @param {!Element} elem Toolbar parent element.
+<a name="line222"></a> * @param {boolean=} opt_isRightToLeft Whether the editor chrome is
+<a name="line223"></a> *     right-to-left; defaults to the directionality of the toolbar parent
+<a name="line224"></a> *     element.
+<a name="line225"></a> * @return {!goog.ui.Toolbar} Editor toolbar, rendered into the given parent
+<a name="line226"></a> *     element.
+<a name="line227"></a> */
+<a name="line228"></a>goog.ui.editor.ToolbarFactory.makeToolbar = function(items, elem,
+<a name="line229"></a>    opt_isRightToLeft) {
+<a name="line230"></a>  var domHelper = goog.dom.getDomHelper(elem);
+<a name="line231"></a>
+<a name="line232"></a>  // Create an empty horizontal toolbar using the default renderer.
+<a name="line233"></a>  var toolbar = new goog.ui.Toolbar(goog.ui.ToolbarRenderer.getInstance(),
+<a name="line234"></a>      goog.ui.Container.Orientation.HORIZONTAL, domHelper);
+<a name="line235"></a>
+<a name="line236"></a>  // Optimization:  Explicitly test for the directionality of the parent
+<a name="line237"></a>  // element here, so we can set it for both the toolbar and its children,
+<a name="line238"></a>  // saving a lot of expensive calls to goog.style.isRightToLeft() during
+<a name="line239"></a>  // rendering.
+<a name="line240"></a>  var isRightToLeft = opt_isRightToLeft || goog.style.isRightToLeft(elem);
+<a name="line241"></a>  toolbar.setRightToLeft(isRightToLeft);
+<a name="line242"></a>
+<a name="line243"></a>  // Optimization:  Set the toolbar to non-focusable before it is rendered,
+<a name="line244"></a>  // to avoid creating unnecessary keyboard event handler objects.
+<a name="line245"></a>  toolbar.setFocusable(false);
+<a name="line246"></a>
+<a name="line247"></a>  for (var i = 0, button; button = items[i]; i++) {
+<a name="line248"></a>    // Optimization:  Set the button to non-focusable before it is rendered,
+<a name="line249"></a>    // to avoid creating unnecessary keyboard event handler objects.  Also set
+<a name="line250"></a>    // the directionality of the button explicitly, to avoid expensive calls
+<a name="line251"></a>    // to goog.style.isRightToLeft() during rendering.
+<a name="line252"></a>    button.setSupportedState(goog.ui.Component.State.FOCUSED, false);
+<a name="line253"></a>    button.setRightToLeft(isRightToLeft);
+<a name="line254"></a>    toolbar.addChild(button, true);
+<a name="line255"></a>  }
+<a name="line256"></a>
+<a name="line257"></a>  toolbar.render(elem);
+<a name="line258"></a>  return toolbar;
+<a name="line259"></a>};
+<a name="line260"></a>
+<a name="line261"></a>
+<a name="line262"></a>/**
+<a name="line263"></a> * Creates a toolbar button with the given ID, tooltip, and caption.  Applies
+<a name="line264"></a> * any custom CSS class names to the button&#39;s caption element.
+<a name="line265"></a> * @param {string} id Button ID; must equal a {@link goog.editor.Command} for
+<a name="line266"></a> *     built-in buttons, anything else for custom buttons.
+<a name="line267"></a> * @param {string} tooltip Tooltip to be shown on hover.
+<a name="line268"></a> * @param {goog.ui.ControlContent} caption Button caption.
+<a name="line269"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
+<a name="line270"></a> *     element.
+<a name="line271"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Button renderer; defaults to
+<a name="line272"></a> *     {@link goog.ui.ToolbarButtonRenderer} if unspecified.
+<a name="line273"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
+<a name="line274"></a> *     creation; defaults to the current document if unspecified.
+<a name="line275"></a> * @return {!goog.ui.Button} A toolbar button.
+<a name="line276"></a> */
+<a name="line277"></a>goog.ui.editor.ToolbarFactory.makeButton = function(id, tooltip, caption,
+<a name="line278"></a>    opt_classNames, opt_renderer, opt_domHelper) {
+<a name="line279"></a>  var button = new goog.ui.ToolbarButton(
+<a name="line280"></a>      goog.ui.editor.ToolbarFactory.createContent_(caption, opt_classNames,
+<a name="line281"></a>          opt_domHelper),
+<a name="line282"></a>      opt_renderer,
+<a name="line283"></a>      opt_domHelper);
+<a name="line284"></a>  button.setId(id);
+<a name="line285"></a>  button.setTooltip(tooltip);
+<a name="line286"></a>  return button;
+<a name="line287"></a>};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * Creates a toggle button with the given ID, tooltip, and caption. Applies
+<a name="line292"></a> * any custom CSS class names to the button&#39;s caption element. The button
+<a name="line293"></a> * returned has checkbox-like toggle semantics.
+<a name="line294"></a> * @param {string} id Button ID; must equal a {@link goog.editor.Command} for
+<a name="line295"></a> *     built-in buttons, anything else for custom buttons.
+<a name="line296"></a> * @param {string} tooltip Tooltip to be shown on hover.
+<a name="line297"></a> * @param {goog.ui.ControlContent} caption Button caption.
+<a name="line298"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
+<a name="line299"></a> *     element.
+<a name="line300"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Button renderer; defaults to
+<a name="line301"></a> *     {@link goog.ui.ToolbarButtonRenderer} if unspecified.
+<a name="line302"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
+<a name="line303"></a> *     creation; defaults to the current document if unspecified.
+<a name="line304"></a> * @return {!goog.ui.Button} A toggle button.
+<a name="line305"></a> */
+<a name="line306"></a>goog.ui.editor.ToolbarFactory.makeToggleButton = function(id, tooltip, caption,
+<a name="line307"></a>    opt_classNames, opt_renderer, opt_domHelper) {
+<a name="line308"></a>  var button = goog.ui.editor.ToolbarFactory.makeButton(id, tooltip, caption,
+<a name="line309"></a>      opt_classNames, opt_renderer, opt_domHelper);
+<a name="line310"></a>  button.setSupportedState(goog.ui.Component.State.CHECKED, true);
+<a name="line311"></a>  return button;
+<a name="line312"></a>};
+<a name="line313"></a>
+<a name="line314"></a>
+<a name="line315"></a>/**
+<a name="line316"></a> * Creates a menu button with the given ID, tooltip, and caption. Applies
+<a name="line317"></a> * any custom CSS class names to the button&#39;s caption element.  The button
+<a name="line318"></a> * returned doesn&#39;t have an actual menu attached; use {@link
+<a name="line319"></a> * goog.ui.MenuButton#setMenu} to attach a {@link goog.ui.Menu} to the
+<a name="line320"></a> * button.
+<a name="line321"></a> * @param {string} id Button ID; must equal a {@link goog.editor.Command} for
+<a name="line322"></a> *     built-in buttons, anything else for custom buttons.
+<a name="line323"></a> * @param {string} tooltip Tooltip to be shown on hover.
+<a name="line324"></a> * @param {goog.ui.ControlContent} caption Button caption.
+<a name="line325"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
+<a name="line326"></a> *     element.
+<a name="line327"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Button renderer; defaults to
+<a name="line328"></a> *     {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
+<a name="line329"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
+<a name="line330"></a> *     creation; defaults to the current document if unspecified.
+<a name="line331"></a> * @return {!goog.ui.MenuButton} A menu button.
+<a name="line332"></a> */
+<a name="line333"></a>goog.ui.editor.ToolbarFactory.makeMenuButton = function(id, tooltip, caption,
+<a name="line334"></a>    opt_classNames, opt_renderer, opt_domHelper) {
+<a name="line335"></a>  var button = new goog.ui.ToolbarMenuButton(
+<a name="line336"></a>      goog.ui.editor.ToolbarFactory.createContent_(caption, opt_classNames,
+<a name="line337"></a>          opt_domHelper),
+<a name="line338"></a>      null,
+<a name="line339"></a>      opt_renderer,
+<a name="line340"></a>      opt_domHelper);
+<a name="line341"></a>  button.setId(id);
+<a name="line342"></a>  button.setTooltip(tooltip);
+<a name="line343"></a>  return button;
+<a name="line344"></a>};
+<a name="line345"></a>
+<a name="line346"></a>
+<a name="line347"></a>/**
+<a name="line348"></a> * Creates a select button with the given ID, tooltip, and caption. Applies
+<a name="line349"></a> * any custom CSS class names to the button&#39;s root element.  The button
+<a name="line350"></a> * returned doesn&#39;t have an actual menu attached; use {@link
+<a name="line351"></a> * goog.ui.Select#setMenu} to attach a {@link goog.ui.Menu} containing
+<a name="line352"></a> * {@link goog.ui.Option}s to the select button.
+<a name="line353"></a> * @param {string} id Button ID; must equal a {@link goog.editor.Command} for
+<a name="line354"></a> *     built-in buttons, anything else for custom buttons.
+<a name="line355"></a> * @param {string} tooltip Tooltip to be shown on hover.
+<a name="line356"></a> * @param {goog.ui.ControlContent} caption Button caption; used as the
+<a name="line357"></a> *     default caption when nothing is selected.
+<a name="line358"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the button&#39;s
+<a name="line359"></a> *     root element.
+<a name="line360"></a> * @param {goog.ui.MenuButtonRenderer=} opt_renderer Button renderer;
+<a name="line361"></a> *     defaults to {@link goog.ui.ToolbarMenuButtonRenderer} if unspecified.
+<a name="line362"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
+<a name="line363"></a> *     creation; defaults to the current document if unspecified.
+<a name="line364"></a> * @return {!goog.ui.Select} A select button.
+<a name="line365"></a> */
+<a name="line366"></a>goog.ui.editor.ToolbarFactory.makeSelectButton = function(id, tooltip, caption,
+<a name="line367"></a>    opt_classNames, opt_renderer, opt_domHelper) {
+<a name="line368"></a>  var button = new goog.ui.ToolbarSelect(null, null,
+<a name="line369"></a>      opt_renderer,
+<a name="line370"></a>      opt_domHelper);
+<a name="line371"></a>  if (opt_classNames) {
+<a name="line372"></a>    // Unlike the other button types, for goog.ui.Select buttons we apply the
+<a name="line373"></a>    // extra class names to the root element, because for select buttons the
+<a name="line374"></a>    // caption isn&#39;t stable (as it changes each time the selection changes).
+<a name="line375"></a>    goog.array.forEach(opt_classNames.split(/\s+/), button.addClassName,
+<a name="line376"></a>        button);
+<a name="line377"></a>  }
+<a name="line378"></a>  button.addClassName(goog.getCssName(&#39;goog-toolbar-select&#39;));
+<a name="line379"></a>  button.setDefaultCaption(caption);
+<a name="line380"></a>  button.setId(id);
+<a name="line381"></a>  button.setTooltip(tooltip);
+<a name="line382"></a>  return button;
+<a name="line383"></a>};
+<a name="line384"></a>
+<a name="line385"></a>
+<a name="line386"></a>/**
+<a name="line387"></a> * Creates a color menu button with the given ID, tooltip, and caption.
+<a name="line388"></a> * Applies any custom CSS class names to the button&#39;s caption element.  The
+<a name="line389"></a> * button is created with a default color menu containing standard color
+<a name="line390"></a> * palettes.
+<a name="line391"></a> * @param {string} id Button ID; must equal a {@link goog.editor.Command} for
+<a name="line392"></a> *     built-in toolbar buttons, but can be anything else for custom buttons.
+<a name="line393"></a> * @param {string} tooltip Tooltip to be shown on hover.
+<a name="line394"></a> * @param {goog.ui.ControlContent} caption Button caption.
+<a name="line395"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the caption
+<a name="line396"></a> *     element.
+<a name="line397"></a> * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Button renderer;
+<a name="line398"></a> *     defaults to {@link goog.ui.ToolbarColorMenuButtonRenderer}
+<a name="line399"></a> *     if unspecified.
+<a name="line400"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
+<a name="line401"></a> *     creation; defaults to the current document if unspecified.
+<a name="line402"></a> * @return {!goog.ui.ColorMenuButton} A color menu button.
+<a name="line403"></a> */
+<a name="line404"></a>goog.ui.editor.ToolbarFactory.makeColorMenuButton = function(id, tooltip,
+<a name="line405"></a>    caption, opt_classNames, opt_renderer, opt_domHelper) {
+<a name="line406"></a>  var button = new goog.ui.ToolbarColorMenuButton(
+<a name="line407"></a>      goog.ui.editor.ToolbarFactory.createContent_(caption, opt_classNames,
+<a name="line408"></a>          opt_domHelper),
+<a name="line409"></a>      null,
+<a name="line410"></a>      opt_renderer,
+<a name="line411"></a>      opt_domHelper);
+<a name="line412"></a>  button.setId(id);
+<a name="line413"></a>  button.setTooltip(tooltip);
+<a name="line414"></a>  return button;
+<a name="line415"></a>};
+<a name="line416"></a>
+<a name="line417"></a>
+<a name="line418"></a>/**
+<a name="line419"></a> * Creates a new DIV that wraps a button caption, optionally applying CSS
+<a name="line420"></a> * class names to it.  Used as a helper function in button factory methods.
+<a name="line421"></a> * @param {goog.ui.ControlContent} caption Button caption.
+<a name="line422"></a> * @param {string=} opt_classNames CSS class name(s) to apply to the DIV that
+<a name="line423"></a> *     wraps the caption (if any).
+<a name="line424"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for DOM
+<a name="line425"></a> *     creation; defaults to the current document if unspecified.
+<a name="line426"></a> * @return {!Element} DIV that wraps the caption.
+<a name="line427"></a> * @private
+<a name="line428"></a> */
+<a name="line429"></a>goog.ui.editor.ToolbarFactory.createContent_ = function(caption, opt_classNames,
+<a name="line430"></a>    opt_domHelper) {
+<a name="line431"></a>  // FF2 doesn&#39;t like empty DIVs, especially when rendered right-to-left.
+<a name="line432"></a>  if ((!caption || caption == &#39;&#39;) &amp;&amp; goog.userAgent.GECKO &amp;&amp;
+<a name="line433"></a>      !goog.userAgent.isVersionOrHigher(&#39;1.9a&#39;)) {
+<a name="line434"></a>    caption = goog.string.Unicode.NBSP;
+<a name="line435"></a>  }
+<a name="line436"></a>  return (opt_domHelper || goog.dom.getDomHelper()).createDom(
+<a name="line437"></a>      goog.dom.TagName.DIV,
+<a name="line438"></a>      opt_classNames ? {&#39;class&#39; : opt_classNames} : null, caption);
+<a name="line439"></a>};
+</pre>
+
+
+</body>
+</html>

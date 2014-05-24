@@ -1,0 +1,696 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>jsloader.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">jsloader.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_net_jsloader.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/net/jsloader.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/net/jsloader.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_net_jsloader_Error.html">
+          goog.net.jsloader.Error</a><br/>
+        <div class="class-details">A jsloader error.
+
+</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.jsloader.cancel_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.jsloader.</span><span class="entryName">cancel_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Cancels a given request.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_jsloader.js.source.html#line292">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.jsloader.cleanup_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.jsloader.</span><span class="entryName">cleanup_<span class="args">(<span class="arg">scriptNode</span>,&nbsp;<span class="arg">removeScriptNode</span>,&nbsp;<span class="arg">opt_timeout</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes the script node and the timeout.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">scriptNode</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to be cleaned up.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">removeScriptNode</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">If true completely remove the script node.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_timeout</span>
+        : <span>?</span><span class="type">number=</span>
+        <div class="entryOverview">The timeout handler to cleanup.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_jsloader.js.source.html#line311">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.jsloader.getScriptParentElement_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.jsloader.</span><span class="entryName">getScriptParentElement_<span class="args">(<span class="arg">doc</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the DOM element under which we should add new script elements.
+How? Take the first head element, and if not found take doc.documentElement,
+which always exists.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">doc</span>
+        : <span>!</span><span class="type">HTMLDocument</span>
+        <div class="entryOverview">The relevant document.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>&nbsp;
+            The script parent element.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_jsloader.js.source.html#line277">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.jsloader.load"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.jsloader.</span><span class="entryName">load<span class="args">(<span class="arg">uri</span>,&nbsp;<span class="arg">opt_options</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Loads and evaluates a JavaScript file.
+When the script loads, a user callback is called.
+It is the client's responsibility to verify that the script ran successfully.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">uri</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The URI of the JavaScript.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_options</span>
+        : <span class="type">goog.net.jsloader.Options=</span>
+        <div class="entryOverview">Optional parameters. See
+    goog.net.jsloader.Options documentation for details.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>&nbsp;
+            The deferred result, that may be used to add
+    callbacks and/or cancel the transmission.
+    The error callback will be called with a single goog.net.jsloader.Error
+    parameter.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_jsloader.js.source.html#line140">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.jsloader.loadAndVerify"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.jsloader.</span><span class="entryName">loadAndVerify<span class="args">(<span class="arg">uri</span>,&nbsp;<span class="arg">verificationObjName</span>,&nbsp;<span class="arg">options</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Loads a JavaScript file and verifies it was evaluated successfully, using a
+verification object.
+The verification object is set by the loaded JavaScript at the end of the
+script.
+We verify this object was set and return its value in the success callback.
+If the object is not defined we trigger an error callback.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">uri</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The URI of the JavaScript.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">verificationObjName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the verification object that
+    the loaded script should set.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">options</span>
+        : <span class="type">goog.net.jsloader.Options</span>
+        <div class="entryOverview">Optional parameters. See
+    goog.net.jsloader.Options documentation for details.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>&nbsp;
+            The deferred result, that may be used to add
+    callbacks and/or cancel the transmission.
+    The success callback will be called with a single parameter containing
+    the value of the verification object.
+    The error callback will be called with a single goog.net.jsloader.Error
+    parameter.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_jsloader.js.source.html#line219">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.jsloader.loadMany"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.jsloader.</span><span class="entryName">loadMany<span class="args">(<span class="arg">uris</span>,&nbsp;<span class="arg">opt_options</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Loads and evaluates the JavaScript files at the specified URIs, guaranteeing
+the order of script loads.
+
+Because we have to load the scripts in serial (load script 1, exec script 1,
+load script 2, exec script 2, and so on), this will be slower than doing
+the network fetches in parallel.
+
+If you need to load a large number of scripts but dependency order doesn't
+matter, you should just call goog.net.jsloader.load N times.
+
+If you need to load a large number of scripts on the same domain,
+you may want to use goog.module.ModuleLoader.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">uris</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&gt;
+        <div class="entryOverview">The URIs to load.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_options</span>
+        : <span class="type">goog.net.jsloader.Options=</span>
+        <div class="entryOverview">Optional parameters. See
+    goog.net.jsloader.options documentation for details.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_jsloader.js.source.html#line95">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.jsloader.load&script.onerror"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.jsloader.load&script.</span><span class="entryName">onerror<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_jsloader.js.source.html#line177">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.jsloader.load&script.onreadystatechange"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.jsloader.load&script.</span><span class="entryName">onreadystatechange<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_jsloader.js.source.html#line166">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.jsloader.loadMany&popAndLoadNextScript"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.jsloader.</span><span class="entryName">loadMany&popAndLoadNextScript<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_jsloader.js.source.html#line116">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory net</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/net/jsloader.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

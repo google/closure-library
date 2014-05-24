@@ -1,0 +1,869 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tweakui.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_tweak_tweakui.js.html">tweakui.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A UI for editing tweak settings / clicking tweak actions.
+<a name="line17"></a> *
+<a name="line18"></a> * @author agrieve@google.com (Andrew Grieve)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.tweak.EntriesPanel&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.tweak.TweakUi&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.DomHelper&#39;);
+<a name="line27"></a>goog.require(&#39;goog.object&#39;);
+<a name="line28"></a>goog.require(&#39;goog.style&#39;);
+<a name="line29"></a>goog.require(&#39;goog.tweak&#39;);
+<a name="line30"></a>goog.require(&#39;goog.ui.Zippy&#39;);
+<a name="line31"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * A UI for editing tweak settings / clicking tweak actions.
+<a name="line37"></a> * @param {!goog.tweak.Registry} registry The registry to render.
+<a name="line38"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DomHelper to render with.
+<a name="line39"></a> * @constructor
+<a name="line40"></a> * @final
+<a name="line41"></a> */
+<a name="line42"></a>goog.tweak.TweakUi = function(registry, opt_domHelper) {
+<a name="line43"></a>  /**
+<a name="line44"></a>   * The registry to create a UI from.
+<a name="line45"></a>   * @type {!goog.tweak.Registry}
+<a name="line46"></a>   * @private
+<a name="line47"></a>   */
+<a name="line48"></a>  this.registry_ = registry;
+<a name="line49"></a>
+<a name="line50"></a>  /**
+<a name="line51"></a>   * The element to display when the UI is visible.
+<a name="line52"></a>   * @type {goog.tweak.EntriesPanel|undefined}
+<a name="line53"></a>   * @private
+<a name="line54"></a>   */
+<a name="line55"></a>  this.entriesPanel_;
+<a name="line56"></a>
+<a name="line57"></a>  /**
+<a name="line58"></a>   * The DomHelper to render with.
+<a name="line59"></a>   * @type {!goog.dom.DomHelper}
+<a name="line60"></a>   * @private
+<a name="line61"></a>   */
+<a name="line62"></a>  this.domHelper_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line63"></a>
+<a name="line64"></a>  // Listen for newly registered entries (happens with lazy-loaded modules).
+<a name="line65"></a>  registry.addOnRegisterListener(goog.bind(this.onNewRegisteredEntry_, this));
+<a name="line66"></a>};
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * The CSS class name unique to the root tweak panel div.
+<a name="line71"></a> * @type {string}
+<a name="line72"></a> * @private
+<a name="line73"></a> */
+<a name="line74"></a>goog.tweak.TweakUi.ROOT_PANEL_CLASS_ = goog.getCssName(&#39;goog-tweak-root&#39;);
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * The CSS class name unique to the tweak entry div.
+<a name="line79"></a> * @type {string}
+<a name="line80"></a> * @private
+<a name="line81"></a> */
+<a name="line82"></a>goog.tweak.TweakUi.ENTRY_CSS_CLASS_ = goog.getCssName(&#39;goog-tweak-entry&#39;);
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * The CSS classes for each tweak entry div.
+<a name="line87"></a> * @type {string}
+<a name="line88"></a> * @private
+<a name="line89"></a> */
+<a name="line90"></a>goog.tweak.TweakUi.ENTRY_CSS_CLASSES_ = goog.tweak.TweakUi.ENTRY_CSS_CLASS_ +
+<a name="line91"></a>    &#39; &#39; + goog.getCssName(&#39;goog-inline-block&#39;);
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * The CSS classes for each namespace tweak entry div.
+<a name="line96"></a> * @type {string}
+<a name="line97"></a> * @private
+<a name="line98"></a> */
+<a name="line99"></a>goog.tweak.TweakUi.ENTRY_GROUP_CSS_CLASSES_ =
+<a name="line100"></a>    goog.tweak.TweakUi.ENTRY_CSS_CLASS_;
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Marker that the style sheet has already been installed.
+<a name="line105"></a> * @type {string}
+<a name="line106"></a> * @private
+<a name="line107"></a> */
+<a name="line108"></a>goog.tweak.TweakUi.STYLE_SHEET_INSTALLED_MARKER_ =
+<a name="line109"></a>    &#39;__closure_tweak_installed_&#39;;
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * CSS used by TweakUI.
+<a name="line114"></a> * @type {string}
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.tweak.TweakUi.CSS_STYLES_ = (function() {
+<a name="line118"></a>  var MOBILE = goog.userAgent.MOBILE;
+<a name="line119"></a>  var IE = goog.userAgent.IE;
+<a name="line120"></a>  var ENTRY_CLASS = &#39;.&#39; + goog.tweak.TweakUi.ENTRY_CSS_CLASS_;
+<a name="line121"></a>  var ROOT_PANEL_CLASS = &#39;.&#39; + goog.tweak.TweakUi.ROOT_PANEL_CLASS_;
+<a name="line122"></a>  var GOOG_INLINE_BLOCK_CLASS = &#39;.&#39; + goog.getCssName(&#39;goog-inline-block&#39;);
+<a name="line123"></a>  var ret = ROOT_PANEL_CLASS + &#39;{background:#ffc; padding:0 4px}&#39;;
+<a name="line124"></a>  // Make this work even if the user hasn&#39;t included common.css.
+<a name="line125"></a>  if (!IE) {
+<a name="line126"></a>    ret += GOOG_INLINE_BLOCK_CLASS + &#39;{display:inline-block}&#39;;
+<a name="line127"></a>  }
+<a name="line128"></a>  // Space things out vertically for touch UIs.
+<a name="line129"></a>  if (MOBILE) {
+<a name="line130"></a>    ret += ROOT_PANEL_CLASS + &#39;,&#39; + ROOT_PANEL_CLASS + &#39; fieldset{&#39; +
+<a name="line131"></a>        &#39;line-height:2em;&#39; + &#39;}&#39;;
+<a name="line132"></a>  }
+<a name="line133"></a>  return ret;
+<a name="line134"></a>})();
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Creates a TweakUi if tweaks are enabled.
+<a name="line139"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DomHelper to render with.
+<a name="line140"></a> * @return {!Element|undefined} The root UI element or undefined if tweaks are
+<a name="line141"></a> *     not enabled.
+<a name="line142"></a> */
+<a name="line143"></a>goog.tweak.TweakUi.create = function(opt_domHelper) {
+<a name="line144"></a>  var registry = goog.tweak.getRegistry();
+<a name="line145"></a>  if (registry) {
+<a name="line146"></a>    var ui = new goog.tweak.TweakUi(registry, opt_domHelper);
+<a name="line147"></a>    ui.render();
+<a name="line148"></a>    return ui.getRootElement();
+<a name="line149"></a>  }
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * Creates a TweakUi inside of a show/hide link.
+<a name="line155"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DomHelper to render with.
+<a name="line156"></a> * @return {!Element|undefined} The root UI element or undefined if tweaks are
+<a name="line157"></a> *     not enabled.
+<a name="line158"></a> */
+<a name="line159"></a>goog.tweak.TweakUi.createCollapsible = function(opt_domHelper) {
+<a name="line160"></a>  var registry = goog.tweak.getRegistry();
+<a name="line161"></a>  if (registry) {
+<a name="line162"></a>    var dh = opt_domHelper || goog.dom.getDomHelper();
+<a name="line163"></a>
+<a name="line164"></a>    // The following strings are for internal debugging only.  No translation
+<a name="line165"></a>    // necessary.  Do NOT wrap goog.getMsg() around these strings.
+<a name="line166"></a>    var showLink = dh.createDom(&#39;a&#39;, {href: &#39;javascript:;&#39;}, &#39;Show Tweaks&#39;);
+<a name="line167"></a>    var hideLink = dh.createDom(&#39;a&#39;, {href: &#39;javascript:;&#39;}, &#39;Hide Tweaks&#39;);
+<a name="line168"></a>    var ret = dh.createDom(&#39;div&#39;, null, showLink);
+<a name="line169"></a>
+<a name="line170"></a>    var lazyCreate = function() {
+<a name="line171"></a>      // Lazily render the UI.
+<a name="line172"></a>      var ui = new goog.tweak.TweakUi(
+<a name="line173"></a>          /** @type {!goog.tweak.Registry} */ (registry), dh);
+<a name="line174"></a>      ui.render();
+<a name="line175"></a>      // Put the hide link on the same line as the &quot;Show Descriptions&quot; link.
+<a name="line176"></a>      // Set the style lazily because we can.
+<a name="line177"></a>      hideLink.style.marginRight = &#39;10px&#39;;
+<a name="line178"></a>      var tweakElem = ui.getRootElement();
+<a name="line179"></a>      tweakElem.insertBefore(hideLink, tweakElem.firstChild);
+<a name="line180"></a>      ret.appendChild(tweakElem);
+<a name="line181"></a>      return tweakElem;
+<a name="line182"></a>    };
+<a name="line183"></a>    new goog.ui.Zippy(showLink, lazyCreate, false /* expanded */, hideLink);
+<a name="line184"></a>    return ret;
+<a name="line185"></a>  }
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Compares the given entries. Orders alphabetically and groups buttons and
+<a name="line191"></a> * expandable groups.
+<a name="line192"></a> * @param {goog.tweak.BaseEntry} a The first entry to compare.
+<a name="line193"></a> * @param {goog.tweak.BaseEntry} b The second entry to compare.
+<a name="line194"></a> * @return {number} Refer to goog.array.defaultCompare.
+<a name="line195"></a> * @private
+<a name="line196"></a> */
+<a name="line197"></a>goog.tweak.TweakUi.entryCompare_ = function(a, b) {
+<a name="line198"></a>  return (
+<a name="line199"></a>      goog.array.defaultCompare(a instanceof goog.tweak.NamespaceEntry_,
+<a name="line200"></a>          b instanceof goog.tweak.NamespaceEntry_) ||
+<a name="line201"></a>      goog.array.defaultCompare(a instanceof goog.tweak.BooleanGroup,
+<a name="line202"></a>          b instanceof goog.tweak.BooleanGroup) ||
+<a name="line203"></a>      goog.array.defaultCompare(a instanceof goog.tweak.ButtonAction,
+<a name="line204"></a>          b instanceof goog.tweak.ButtonAction) ||
+<a name="line205"></a>      goog.array.defaultCompare(a.label, b.label) ||
+<a name="line206"></a>      goog.array.defaultCompare(a.getId(), b.getId()));
+<a name="line207"></a>};
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * @param {!goog.tweak.BaseEntry} entry The entry.
+<a name="line212"></a> * @return {boolean} Returns whether the given entry contains sub-entries.
+<a name="line213"></a> * @private
+<a name="line214"></a> */
+<a name="line215"></a>goog.tweak.TweakUi.isGroupEntry_ = function(entry) {
+<a name="line216"></a>  return entry instanceof goog.tweak.NamespaceEntry_ ||
+<a name="line217"></a>      entry instanceof goog.tweak.BooleanGroup;
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Returns the list of entries from the given boolean group.
+<a name="line223"></a> * @param {!goog.tweak.BooleanGroup} group The group to get the entries from.
+<a name="line224"></a> * @return {!Array.&lt;!goog.tweak.BaseEntry&gt;} The sorted entries.
+<a name="line225"></a> * @private
+<a name="line226"></a> */
+<a name="line227"></a>goog.tweak.TweakUi.extractBooleanGroupEntries_ = function(group) {
+<a name="line228"></a>  var ret = goog.object.getValues(group.getChildEntries());
+<a name="line229"></a>  ret.sort(goog.tweak.TweakUi.entryCompare_);
+<a name="line230"></a>  return ret;
+<a name="line231"></a>};
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>/**
+<a name="line235"></a> * @param {!goog.tweak.BaseEntry} entry The entry.
+<a name="line236"></a> * @return {string} Returns the namespace for the entry, or &#39;&#39; if it is not
+<a name="line237"></a> *     namespaced.
+<a name="line238"></a> * @private
+<a name="line239"></a> */
+<a name="line240"></a>goog.tweak.TweakUi.extractNamespace_ = function(entry) {
+<a name="line241"></a>  var namespaceMatch = /.+(?=\.)/.exec(entry.getId());
+<a name="line242"></a>  return namespaceMatch ? namespaceMatch[0] : &#39;&#39;;
+<a name="line243"></a>};
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/**
+<a name="line247"></a> * @param {!goog.tweak.BaseEntry} entry The entry.
+<a name="line248"></a> * @return {string} Returns the part of the label after the last period, unless
+<a name="line249"></a> *     the label has been explicly set (it is different from the ID).
+<a name="line250"></a> * @private
+<a name="line251"></a> */
+<a name="line252"></a>goog.tweak.TweakUi.getNamespacedLabel_ = function(entry) {
+<a name="line253"></a>  var label = entry.label;
+<a name="line254"></a>  if (label == entry.getId()) {
+<a name="line255"></a>    label = label.substr(label.lastIndexOf(&#39;.&#39;) + 1);
+<a name="line256"></a>  }
+<a name="line257"></a>  return label;
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * @return {!Element} The root element. Must not be called before render().
+<a name="line263"></a> */
+<a name="line264"></a>goog.tweak.TweakUi.prototype.getRootElement = function() {
+<a name="line265"></a>  goog.asserts.assert(this.entriesPanel_,
+<a name="line266"></a>      &#39;TweakUi.getRootElement called before render().&#39;);
+<a name="line267"></a>  return this.entriesPanel_.getRootElement();
+<a name="line268"></a>};
+<a name="line269"></a>
+<a name="line270"></a>
+<a name="line271"></a>/**
+<a name="line272"></a> * Reloads the page with query parameters set by the UI.
+<a name="line273"></a> * @private
+<a name="line274"></a> */
+<a name="line275"></a>goog.tweak.TweakUi.prototype.restartWithAppliedTweaks_ = function() {
+<a name="line276"></a>  var queryString = this.registry_.makeUrlQuery();
+<a name="line277"></a>  var wnd = this.domHelper_.getWindow();
+<a name="line278"></a>  if (queryString != wnd.location.search) {
+<a name="line279"></a>    wnd.location.search = queryString;
+<a name="line280"></a>  } else {
+<a name="line281"></a>    wnd.location.reload();
+<a name="line282"></a>  }
+<a name="line283"></a>};
+<a name="line284"></a>
+<a name="line285"></a>
+<a name="line286"></a>/**
+<a name="line287"></a> * Installs the required CSS styles.
+<a name="line288"></a> * @private
+<a name="line289"></a> */
+<a name="line290"></a>goog.tweak.TweakUi.prototype.installStyles_ = function() {
+<a name="line291"></a>  // Use an marker to install the styles only once per document.
+<a name="line292"></a>  // Styles are injected via JS instead of in a separate style sheet so that
+<a name="line293"></a>  // they are automatically excluded when tweaks are stripped out.
+<a name="line294"></a>  var doc = this.domHelper_.getDocument();
+<a name="line295"></a>  if (!(goog.tweak.TweakUi.STYLE_SHEET_INSTALLED_MARKER_ in doc)) {
+<a name="line296"></a>    goog.style.installStyles(
+<a name="line297"></a>        goog.tweak.TweakUi.CSS_STYLES_, doc);
+<a name="line298"></a>    doc[goog.tweak.TweakUi.STYLE_SHEET_INSTALLED_MARKER_] = true;
+<a name="line299"></a>  }
+<a name="line300"></a>};
+<a name="line301"></a>
+<a name="line302"></a>
+<a name="line303"></a>/**
+<a name="line304"></a> * Creates the element to display when the UI is visible.
+<a name="line305"></a> * @return {!Element} The root element.
+<a name="line306"></a> */
+<a name="line307"></a>goog.tweak.TweakUi.prototype.render = function() {
+<a name="line308"></a>  this.installStyles_();
+<a name="line309"></a>  var dh = this.domHelper_;
+<a name="line310"></a>  // The submit button
+<a name="line311"></a>  var submitButton = dh.createDom(&#39;button&#39;, {style: &#39;font-weight:bold&#39;},
+<a name="line312"></a>      &#39;Apply Tweaks&#39;);
+<a name="line313"></a>  submitButton.onclick = goog.bind(this.restartWithAppliedTweaks_, this);
+<a name="line314"></a>
+<a name="line315"></a>  var rootPanel = new goog.tweak.EntriesPanel([], dh);
+<a name="line316"></a>  var rootPanelDiv = rootPanel.render(submitButton);
+<a name="line317"></a>  rootPanelDiv.className += &#39; &#39; + goog.tweak.TweakUi.ROOT_PANEL_CLASS_;
+<a name="line318"></a>  this.entriesPanel_ = rootPanel;
+<a name="line319"></a>
+<a name="line320"></a>  var entries = this.registry_.extractEntries(true /* excludeChildEntries */,
+<a name="line321"></a>      false /* excludeNonSettings */);
+<a name="line322"></a>  for (var i = 0, entry; entry = entries[i]; i++) {
+<a name="line323"></a>    this.insertEntry_(entry);
+<a name="line324"></a>  }
+<a name="line325"></a>
+<a name="line326"></a>  return rootPanelDiv;
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Updates the UI with the given entry.
+<a name="line332"></a> * @param {!goog.tweak.BaseEntry} entry The newly registered entry.
+<a name="line333"></a> * @private
+<a name="line334"></a> */
+<a name="line335"></a>goog.tweak.TweakUi.prototype.onNewRegisteredEntry_ = function(entry) {
+<a name="line336"></a>  if (this.entriesPanel_) {
+<a name="line337"></a>    this.insertEntry_(entry);
+<a name="line338"></a>  }
+<a name="line339"></a>};
+<a name="line340"></a>
+<a name="line341"></a>
+<a name="line342"></a>/**
+<a name="line343"></a> * Updates the UI with the given entry.
+<a name="line344"></a> * @param {!goog.tweak.BaseEntry} entry The newly registered entry.
+<a name="line345"></a> * @private
+<a name="line346"></a> */
+<a name="line347"></a>goog.tweak.TweakUi.prototype.insertEntry_ = function(entry) {
+<a name="line348"></a>  var panel = this.entriesPanel_;
+<a name="line349"></a>  var namespace = goog.tweak.TweakUi.extractNamespace_(entry);
+<a name="line350"></a>
+<a name="line351"></a>  if (namespace) {
+<a name="line352"></a>    // Find the NamespaceEntry that the entry belongs to.
+<a name="line353"></a>    var namespaceEntryId = goog.tweak.NamespaceEntry_.ID_PREFIX + namespace;
+<a name="line354"></a>    var nsPanel = panel.childPanels[namespaceEntryId];
+<a name="line355"></a>    if (nsPanel) {
+<a name="line356"></a>      panel = nsPanel;
+<a name="line357"></a>    } else {
+<a name="line358"></a>      entry = new goog.tweak.NamespaceEntry_(namespace, [entry]);
+<a name="line359"></a>    }
+<a name="line360"></a>  }
+<a name="line361"></a>  if (entry instanceof goog.tweak.BooleanInGroupSetting) {
+<a name="line362"></a>    var group = entry.getGroup();
+<a name="line363"></a>    // BooleanGroup entries are always registered before their
+<a name="line364"></a>    // BooleanInGroupSettings.
+<a name="line365"></a>    panel = panel.childPanels[group.getId()];
+<a name="line366"></a>  }
+<a name="line367"></a>  goog.asserts.assert(panel, &#39;Missing panel for entry %s&#39;, entry.getId());
+<a name="line368"></a>  panel.insertEntry(entry);
+<a name="line369"></a>};
+<a name="line370"></a>
+<a name="line371"></a>
+<a name="line372"></a>
+<a name="line373"></a>/**
+<a name="line374"></a> * The body of the tweaks UI and also used for BooleanGroup.
+<a name="line375"></a> * @param {!Array.&lt;!goog.tweak.BaseEntry&gt;} entries The entries to show in the
+<a name="line376"></a> *     panel.
+<a name="line377"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DomHelper to render with.
+<a name="line378"></a> * @constructor
+<a name="line379"></a> * @final
+<a name="line380"></a> */
+<a name="line381"></a>goog.tweak.EntriesPanel = function(entries, opt_domHelper) {
+<a name="line382"></a>  /**
+<a name="line383"></a>   * The entries to show in the panel.
+<a name="line384"></a>   * @type {!Array.&lt;!goog.tweak.BaseEntry&gt;} entries
+<a name="line385"></a>   * @private
+<a name="line386"></a>   */
+<a name="line387"></a>  this.entries_ = entries;
+<a name="line388"></a>
+<a name="line389"></a>  var self = this;
+<a name="line390"></a>  /**
+<a name="line391"></a>   * The bound onclick handler for the help question marks.
+<a name="line392"></a>   * @this {Element}
+<a name="line393"></a>   * @private
+<a name="line394"></a>   */
+<a name="line395"></a>  this.boundHelpOnClickHandler_ = function() {
+<a name="line396"></a>    self.onHelpClick_(this.parentNode);
+<a name="line397"></a>  };
+<a name="line398"></a>
+<a name="line399"></a>  /**
+<a name="line400"></a>   * The element that contains the UI.
+<a name="line401"></a>   * @type {Element}
+<a name="line402"></a>   * @private
+<a name="line403"></a>   */
+<a name="line404"></a>  this.rootElem_;
+<a name="line405"></a>
+<a name="line406"></a>  /**
+<a name="line407"></a>   * The element that contains all of the settings and the endElement.
+<a name="line408"></a>   * @type {Element}
+<a name="line409"></a>   * @private
+<a name="line410"></a>   */
+<a name="line411"></a>  this.mainPanel_;
+<a name="line412"></a>
+<a name="line413"></a>  /**
+<a name="line414"></a>   * Flips between true/false each time the &quot;Toggle Descriptions&quot; link is
+<a name="line415"></a>   * clicked.
+<a name="line416"></a>   * @type {boolean}
+<a name="line417"></a>   * @private
+<a name="line418"></a>   */
+<a name="line419"></a>  this.showAllDescriptionsState_;
+<a name="line420"></a>
+<a name="line421"></a>  /**
+<a name="line422"></a>   * The DomHelper to render with.
+<a name="line423"></a>   * @type {!goog.dom.DomHelper}
+<a name="line424"></a>   * @private
+<a name="line425"></a>   */
+<a name="line426"></a>  this.domHelper_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line427"></a>
+<a name="line428"></a>  /**
+<a name="line429"></a>   * Map of tweak ID -&gt; EntriesPanel for child panels (BooleanGroups).
+<a name="line430"></a>   * @type {!Object.&lt;!goog.tweak.EntriesPanel&gt;}
+<a name="line431"></a>   */
+<a name="line432"></a>  this.childPanels = {};
+<a name="line433"></a>};
+<a name="line434"></a>
+<a name="line435"></a>
+<a name="line436"></a>/**
+<a name="line437"></a> * @return {!Element} Returns the expanded element. Must not be called before
+<a name="line438"></a> *     render().
+<a name="line439"></a> */
+<a name="line440"></a>goog.tweak.EntriesPanel.prototype.getRootElement = function() {
+<a name="line441"></a>  goog.asserts.assert(this.rootElem_,
+<a name="line442"></a>      &#39;EntriesPanel.getRootElement called before render().&#39;);
+<a name="line443"></a>  return /** @type {!Element} */ (this.rootElem_);
+<a name="line444"></a>};
+<a name="line445"></a>
+<a name="line446"></a>
+<a name="line447"></a>/**
+<a name="line448"></a> * Creates and returns the expanded element.
+<a name="line449"></a> * The markup looks like:
+<a name="line450"></a> * &lt;div&gt;
+<a name="line451"></a> *   &lt;a&gt;Show Descriptions&lt;/a&gt;
+<a name="line452"></a> *   &lt;div&gt;
+<a name="line453"></a> *      ...
+<a name="line454"></a> *      {endElement}
+<a name="line455"></a> *   &lt;/div&gt;
+<a name="line456"></a> * &lt;/div&gt;
+<a name="line457"></a> * @param {Element|DocumentFragment=} opt_endElement Element to insert after all
+<a name="line458"></a> *     tweak entries.
+<a name="line459"></a> * @return {!Element} The root element for the panel.
+<a name="line460"></a> */
+<a name="line461"></a>goog.tweak.EntriesPanel.prototype.render = function(opt_endElement) {
+<a name="line462"></a>  var dh = this.domHelper_;
+<a name="line463"></a>  var entries = this.entries_;
+<a name="line464"></a>  var ret = dh.createDom(&#39;div&#39;);
+<a name="line465"></a>
+<a name="line466"></a>  var showAllDescriptionsLink = dh.createDom(&#39;a&#39;, {
+<a name="line467"></a>    href: &#39;javascript:;&#39;,
+<a name="line468"></a>    onclick: goog.bind(this.toggleAllDescriptions, this)
+<a name="line469"></a>  }, &#39;Toggle all Descriptions&#39;);
+<a name="line470"></a>  ret.appendChild(showAllDescriptionsLink);
+<a name="line471"></a>
+<a name="line472"></a>  // Add all of the entries.
+<a name="line473"></a>  var mainPanel = dh.createElement(&#39;div&#39;);
+<a name="line474"></a>  this.mainPanel_ = mainPanel;
+<a name="line475"></a>  for (var i = 0, entry; entry = entries[i]; i++) {
+<a name="line476"></a>    mainPanel.appendChild(this.createEntryElem_(entry));
+<a name="line477"></a>  }
+<a name="line478"></a>
+<a name="line479"></a>  if (opt_endElement) {
+<a name="line480"></a>    mainPanel.appendChild(opt_endElement);
+<a name="line481"></a>  }
+<a name="line482"></a>  ret.appendChild(mainPanel);
+<a name="line483"></a>  this.rootElem_ = ret;
+<a name="line484"></a>  return /** @type {!Element} */ (ret);
+<a name="line485"></a>};
+<a name="line486"></a>
+<a name="line487"></a>
+<a name="line488"></a>/**
+<a name="line489"></a> * Inserts the given entry into the panel.
+<a name="line490"></a> * @param {!goog.tweak.BaseEntry} entry The entry to insert.
+<a name="line491"></a> */
+<a name="line492"></a>goog.tweak.EntriesPanel.prototype.insertEntry = function(entry) {
+<a name="line493"></a>  var insertIndex = -goog.array.binarySearch(this.entries_, entry,
+<a name="line494"></a>      goog.tweak.TweakUi.entryCompare_) - 1;
+<a name="line495"></a>  goog.asserts.assert(insertIndex &gt;= 0, &#39;insertEntry failed for %s&#39;,
+<a name="line496"></a>      entry.getId());
+<a name="line497"></a>  goog.array.insertAt(this.entries_, entry, insertIndex);
+<a name="line498"></a>  this.mainPanel_.insertBefore(
+<a name="line499"></a>      this.createEntryElem_(entry),
+<a name="line500"></a>      // IE doesn&#39;t like &#39;undefined&#39; here.
+<a name="line501"></a>      this.mainPanel_.childNodes[insertIndex] || null);
+<a name="line502"></a>};
+<a name="line503"></a>
+<a name="line504"></a>
+<a name="line505"></a>/**
+<a name="line506"></a> * Creates and returns a form element for the given entry.
+<a name="line507"></a> * @param {!goog.tweak.BaseEntry} entry The entry.
+<a name="line508"></a> * @return {!Element} The root DOM element for the entry.
+<a name="line509"></a> * @private
+<a name="line510"></a> */
+<a name="line511"></a>goog.tweak.EntriesPanel.prototype.createEntryElem_ = function(entry) {
+<a name="line512"></a>  var dh = this.domHelper_;
+<a name="line513"></a>  var isGroupEntry = goog.tweak.TweakUi.isGroupEntry_(entry);
+<a name="line514"></a>  var classes = isGroupEntry ? goog.tweak.TweakUi.ENTRY_GROUP_CSS_CLASSES_ :
+<a name="line515"></a>      goog.tweak.TweakUi.ENTRY_CSS_CLASSES_;
+<a name="line516"></a>  // Containers should not use label tags or else all descendent inputs will be
+<a name="line517"></a>  // connected on desktop browsers.
+<a name="line518"></a>  var containerNodeName = isGroupEntry ? &#39;span&#39; : &#39;label&#39;;
+<a name="line519"></a>  var ret = dh.createDom(&#39;div&#39;, classes,
+<a name="line520"></a>      dh.createDom(containerNodeName, {
+<a name="line521"></a>        // Make the hover text the description.
+<a name="line522"></a>        title: entry.description,
+<a name="line523"></a>        style: &#39;color:&#39; + (entry.isRestartRequired() ? &#39;&#39; : &#39;blue&#39;)
+<a name="line524"></a>      }, this.createTweakEntryDom_(entry)),
+<a name="line525"></a>      // Add the expandable help question mark.
+<a name="line526"></a>      this.createHelpElem_(entry));
+<a name="line527"></a>  return ret;
+<a name="line528"></a>};
+<a name="line529"></a>
+<a name="line530"></a>
+<a name="line531"></a>/**
+<a name="line532"></a> * Click handler for the help link.
+<a name="line533"></a> * @param {Node} entryDiv The div that contains the tweak.
+<a name="line534"></a> * @private
+<a name="line535"></a> */
+<a name="line536"></a>goog.tweak.EntriesPanel.prototype.onHelpClick_ = function(entryDiv) {
+<a name="line537"></a>  this.showDescription_(entryDiv, !entryDiv.style.display);
+<a name="line538"></a>};
+<a name="line539"></a>
+<a name="line540"></a>
+<a name="line541"></a>/**
+<a name="line542"></a> * Twiddle the DOM so that the entry within the given span is shown/hidden.
+<a name="line543"></a> * @param {Node} entryDiv The div that contains the tweak.
+<a name="line544"></a> * @param {boolean} show True to show, false to hide.
+<a name="line545"></a> * @private
+<a name="line546"></a> */
+<a name="line547"></a>goog.tweak.EntriesPanel.prototype.showDescription_ =
+<a name="line548"></a>    function(entryDiv, show) {
+<a name="line549"></a>  var descriptionElem = entryDiv.lastChild.lastChild;
+<a name="line550"></a>  goog.style.setElementShown(/** @type {Element} */ (descriptionElem), show);
+<a name="line551"></a>  entryDiv.style.display = show ? &#39;block&#39; : &#39;&#39;;
+<a name="line552"></a>};
+<a name="line553"></a>
+<a name="line554"></a>
+<a name="line555"></a>/**
+<a name="line556"></a> * Creates and returns a help element for the given entry.
+<a name="line557"></a> * @param {goog.tweak.BaseEntry} entry The entry.
+<a name="line558"></a> * @return {!Element} The root element of the created DOM.
+<a name="line559"></a> * @private
+<a name="line560"></a> */
+<a name="line561"></a>goog.tweak.EntriesPanel.prototype.createHelpElem_ = function(entry) {
+<a name="line562"></a>  // The markup looks like:
+<a name="line563"></a>  // &lt;span onclick=...&gt;&lt;b&gt;?&lt;/b&gt;&lt;span&gt;{description}&lt;/span&gt;&lt;/span&gt;
+<a name="line564"></a>  var ret = this.domHelper_.createElement(&#39;span&#39;);
+<a name="line565"></a>  ret.innerHTML = &#39;&lt;b style=&quot;padding:0 1em 0 .5em&quot;&gt;?&lt;/b&gt;&#39; +
+<a name="line566"></a>      &#39;&lt;span style=&quot;display:none;color:#666&quot;&gt;&lt;/span&gt;&#39;;
+<a name="line567"></a>  ret.onclick = this.boundHelpOnClickHandler_;
+<a name="line568"></a>  var descriptionElem = ret.lastChild;
+<a name="line569"></a>  goog.dom.setTextContent(/** @type {Element} */ (descriptionElem),
+<a name="line570"></a>      entry.description);
+<a name="line571"></a>  if (!entry.isRestartRequired()) {
+<a name="line572"></a>    descriptionElem.innerHTML +=
+<a name="line573"></a>        &#39; &lt;span style=&quot;color:blue&quot;&gt;(no restart required)&lt;/span&gt;&#39;;
+<a name="line574"></a>  }
+<a name="line575"></a>  return ret;
+<a name="line576"></a>};
+<a name="line577"></a>
+<a name="line578"></a>
+<a name="line579"></a>/**
+<a name="line580"></a> * Show all entry descriptions (has the same effect as clicking on all ?&#39;s).
+<a name="line581"></a> */
+<a name="line582"></a>goog.tweak.EntriesPanel.prototype.toggleAllDescriptions = function() {
+<a name="line583"></a>  var show = !this.showAllDescriptionsState_;
+<a name="line584"></a>  this.showAllDescriptionsState_ = show;
+<a name="line585"></a>  var entryDivs = this.domHelper_.getElementsByTagNameAndClass(&#39;div&#39;,
+<a name="line586"></a>      goog.tweak.TweakUi.ENTRY_CSS_CLASS_, this.rootElem_);
+<a name="line587"></a>  for (var i = 0, div; div = entryDivs[i]; i++) {
+<a name="line588"></a>    this.showDescription_(div, show);
+<a name="line589"></a>  }
+<a name="line590"></a>};
+<a name="line591"></a>
+<a name="line592"></a>
+<a name="line593"></a>/**
+<a name="line594"></a> * Creates the DOM element to control the given enum setting.
+<a name="line595"></a> * @param {!goog.tweak.StringSetting|!goog.tweak.NumericSetting} tweak The
+<a name="line596"></a> *     setting.
+<a name="line597"></a> * @param {string} label The label for the entry.
+<a name="line598"></a> * @param {!Function} onchangeFunc onchange event handler.
+<a name="line599"></a> * @return {!DocumentFragment} The DOM element.
+<a name="line600"></a> * @private
+<a name="line601"></a> */
+<a name="line602"></a>goog.tweak.EntriesPanel.prototype.createComboBoxDom_ =
+<a name="line603"></a>    function(tweak, label, onchangeFunc) {
+<a name="line604"></a>  // The markup looks like:
+<a name="line605"></a>  // Label: &lt;select&gt;&lt;option&gt;&lt;/option&gt;&lt;/select&gt;
+<a name="line606"></a>  var dh = this.domHelper_;
+<a name="line607"></a>  var ret = dh.getDocument().createDocumentFragment();
+<a name="line608"></a>  ret.appendChild(dh.createTextNode(label + &#39;: &#39;));
+<a name="line609"></a>  var selectElem = dh.createElement(&#39;select&#39;);
+<a name="line610"></a>  var values = tweak.getValidValues();
+<a name="line611"></a>  for (var i = 0, il = values.length; i &lt; il; ++i) {
+<a name="line612"></a>    var optionElem = dh.createElement(&#39;option&#39;);
+<a name="line613"></a>    optionElem.text = String(values[i]);
+<a name="line614"></a>    // Setting the option tag&#39;s value is required for selectElem.value to work
+<a name="line615"></a>    // properly.
+<a name="line616"></a>    optionElem.value = String(values[i]);
+<a name="line617"></a>    selectElem.appendChild(optionElem);
+<a name="line618"></a>  }
+<a name="line619"></a>  ret.appendChild(selectElem);
+<a name="line620"></a>
+<a name="line621"></a>  // Set the value and add a callback.
+<a name="line622"></a>  selectElem.value = tweak.getNewValue();
+<a name="line623"></a>  selectElem.onchange = onchangeFunc;
+<a name="line624"></a>  tweak.addCallback(function() {
+<a name="line625"></a>    selectElem.value = tweak.getNewValue();
+<a name="line626"></a>  });
+<a name="line627"></a>  return ret;
+<a name="line628"></a>};
+<a name="line629"></a>
+<a name="line630"></a>
+<a name="line631"></a>/**
+<a name="line632"></a> * Creates the DOM element to control the given boolean setting.
+<a name="line633"></a> * @param {!goog.tweak.BooleanSetting} tweak The setting.
+<a name="line634"></a> * @param {string} label The label for the entry.
+<a name="line635"></a> * @return {!DocumentFragment} The DOM elements.
+<a name="line636"></a> * @private
+<a name="line637"></a> */
+<a name="line638"></a>goog.tweak.EntriesPanel.prototype.createBooleanSettingDom_ =
+<a name="line639"></a>    function(tweak, label) {
+<a name="line640"></a>  var dh = this.domHelper_;
+<a name="line641"></a>  var ret = dh.getDocument().createDocumentFragment();
+<a name="line642"></a>  var checkbox = dh.createDom(&#39;input&#39;, {type: &#39;checkbox&#39;});
+<a name="line643"></a>  ret.appendChild(checkbox);
+<a name="line644"></a>  ret.appendChild(dh.createTextNode(label));
+<a name="line645"></a>
+<a name="line646"></a>  // Needed on IE6 to ensure the textbox doesn&#39;t get cleared
+<a name="line647"></a>  // when added to the DOM.
+<a name="line648"></a>  checkbox.defaultChecked = tweak.getNewValue();
+<a name="line649"></a>
+<a name="line650"></a>  checkbox.checked = tweak.getNewValue();
+<a name="line651"></a>  checkbox.onchange = function() {
+<a name="line652"></a>    tweak.setValue(checkbox.checked);
+<a name="line653"></a>  };
+<a name="line654"></a>  tweak.addCallback(function() {
+<a name="line655"></a>    checkbox.checked = tweak.getNewValue();
+<a name="line656"></a>  });
+<a name="line657"></a>  return ret;
+<a name="line658"></a>};
+<a name="line659"></a>
+<a name="line660"></a>
+<a name="line661"></a>/**
+<a name="line662"></a> * Creates the DOM for a BooleanGroup or NamespaceEntry.
+<a name="line663"></a> * @param {!goog.tweak.BooleanGroup|!goog.tweak.NamespaceEntry_} entry The
+<a name="line664"></a> *     entry.
+<a name="line665"></a> * @param {string} label The label for the entry.
+<a name="line666"></a> * @param {!Array.&lt;goog.tweak.BaseEntry&gt;} childEntries The child entries.
+<a name="line667"></a> * @return {!DocumentFragment} The DOM element.
+<a name="line668"></a> * @private
+<a name="line669"></a> */
+<a name="line670"></a>goog.tweak.EntriesPanel.prototype.createSubPanelDom_ = function(entry, label,
+<a name="line671"></a>    childEntries) {
+<a name="line672"></a>  var dh = this.domHelper_;
+<a name="line673"></a>  var toggleLink = dh.createDom(&#39;a&#39;, {href: &#39;javascript:;&#39;},
+<a name="line674"></a>      label + &#39; \xBB&#39;);
+<a name="line675"></a>  var toggleLink2 = dh.createDom(&#39;a&#39;, {href: &#39;javascript:;&#39;},
+<a name="line676"></a>      &#39;\xAB &#39; + label);
+<a name="line677"></a>  toggleLink2.style.marginRight = &#39;10px&#39;;
+<a name="line678"></a>
+<a name="line679"></a>  var innerUi = new goog.tweak.EntriesPanel(childEntries, dh);
+<a name="line680"></a>  this.childPanels[entry.getId()] = innerUi;
+<a name="line681"></a>
+<a name="line682"></a>  var elem = innerUi.render();
+<a name="line683"></a>  // Move the toggle descriptions link into the legend.
+<a name="line684"></a>  var descriptionsLink = elem.firstChild;
+<a name="line685"></a>  var childrenElem = dh.createDom(&#39;fieldset&#39;,
+<a name="line686"></a>      goog.getCssName(&#39;goog-inline-block&#39;),
+<a name="line687"></a>      dh.createDom(&#39;legend&#39;, null, toggleLink2, descriptionsLink),
+<a name="line688"></a>      elem);
+<a name="line689"></a>
+<a name="line690"></a>  new goog.ui.Zippy(toggleLink, childrenElem, false /* expanded */,
+<a name="line691"></a>      toggleLink2);
+<a name="line692"></a>
+<a name="line693"></a>  var ret = dh.getDocument().createDocumentFragment();
+<a name="line694"></a>  ret.appendChild(toggleLink);
+<a name="line695"></a>  ret.appendChild(childrenElem);
+<a name="line696"></a>  return ret;
+<a name="line697"></a>};
+<a name="line698"></a>
+<a name="line699"></a>
+<a name="line700"></a>/**
+<a name="line701"></a> * Creates the DOM element to control the given string setting.
+<a name="line702"></a> * @param {!goog.tweak.StringSetting|!goog.tweak.NumericSetting} tweak The
+<a name="line703"></a> *     setting.
+<a name="line704"></a> * @param {string} label The label for the entry.
+<a name="line705"></a> * @param {!Function} onchangeFunc onchange event handler.
+<a name="line706"></a> * @return {!DocumentFragment} The DOM element.
+<a name="line707"></a> * @private
+<a name="line708"></a> */
+<a name="line709"></a>goog.tweak.EntriesPanel.prototype.createTextBoxDom_ =
+<a name="line710"></a>    function(tweak, label, onchangeFunc) {
+<a name="line711"></a>  var dh = this.domHelper_;
+<a name="line712"></a>  var ret = dh.getDocument().createDocumentFragment();
+<a name="line713"></a>  ret.appendChild(dh.createTextNode(label + &#39;: &#39;));
+<a name="line714"></a>  var textBox = dh.createDom(&#39;input&#39;, {
+<a name="line715"></a>    value: tweak.getNewValue(),
+<a name="line716"></a>    // TODO(agrieve): Make size configurable or autogrow.
+<a name="line717"></a>    size: 5,
+<a name="line718"></a>    onblur: onchangeFunc
+<a name="line719"></a>  });
+<a name="line720"></a>  ret.appendChild(textBox);
+<a name="line721"></a>  tweak.addCallback(function() {
+<a name="line722"></a>    textBox.value = tweak.getNewValue();
+<a name="line723"></a>  });
+<a name="line724"></a>  return ret;
+<a name="line725"></a>};
+<a name="line726"></a>
+<a name="line727"></a>
+<a name="line728"></a>/**
+<a name="line729"></a> * Creates the DOM element to control the given button action.
+<a name="line730"></a> * @param {!goog.tweak.ButtonAction} tweak The action.
+<a name="line731"></a> * @param {string} label The label for the entry.
+<a name="line732"></a> * @return {!Element} The DOM element.
+<a name="line733"></a> * @private
+<a name="line734"></a> */
+<a name="line735"></a>goog.tweak.EntriesPanel.prototype.createButtonActionDom_ =
+<a name="line736"></a>    function(tweak, label) {
+<a name="line737"></a>  return this.domHelper_.createDom(&#39;button&#39;, {
+<a name="line738"></a>    onclick: goog.bind(tweak.fireCallbacks, tweak)
+<a name="line739"></a>  }, label);
+<a name="line740"></a>};
+<a name="line741"></a>
+<a name="line742"></a>
+<a name="line743"></a>/**
+<a name="line744"></a> * Creates the DOM element to control the given entry.
+<a name="line745"></a> * @param {!goog.tweak.BaseEntry} entry The entry.
+<a name="line746"></a> * @return {!Element|!DocumentFragment} The DOM element.
+<a name="line747"></a> * @private
+<a name="line748"></a> */
+<a name="line749"></a>goog.tweak.EntriesPanel.prototype.createTweakEntryDom_ = function(entry) {
+<a name="line750"></a>  var label = goog.tweak.TweakUi.getNamespacedLabel_(entry);
+<a name="line751"></a>  if (entry instanceof goog.tweak.BooleanSetting) {
+<a name="line752"></a>    return this.createBooleanSettingDom_(entry, label);
+<a name="line753"></a>  } else if (entry instanceof goog.tweak.BooleanGroup) {
+<a name="line754"></a>    var childEntries = goog.tweak.TweakUi.extractBooleanGroupEntries_(entry);
+<a name="line755"></a>    return this.createSubPanelDom_(entry, label, childEntries);
+<a name="line756"></a>  } else if (entry instanceof goog.tweak.StringSetting) {
+<a name="line757"></a>    /** @this {Element} */
+<a name="line758"></a>    var setValueFunc = function() {
+<a name="line759"></a>      entry.setValue(this.value);
+<a name="line760"></a>    };
+<a name="line761"></a>    return entry.getValidValues() ?
+<a name="line762"></a>        this.createComboBoxDom_(entry, label, setValueFunc) :
+<a name="line763"></a>        this.createTextBoxDom_(entry, label, setValueFunc);
+<a name="line764"></a>  } else if (entry instanceof goog.tweak.NumericSetting) {
+<a name="line765"></a>    setValueFunc = function() {
+<a name="line766"></a>      // Reset the value if it&#39;s not a number.
+<a name="line767"></a>      if (isNaN(this.value)) {
+<a name="line768"></a>        this.value = entry.getNewValue();
+<a name="line769"></a>      } else {
+<a name="line770"></a>        entry.setValue(+this.value);
+<a name="line771"></a>      }
+<a name="line772"></a>    };
+<a name="line773"></a>    return entry.getValidValues() ?
+<a name="line774"></a>        this.createComboBoxDom_(entry, label, setValueFunc) :
+<a name="line775"></a>        this.createTextBoxDom_(entry, label, setValueFunc);
+<a name="line776"></a>  } else if (entry instanceof goog.tweak.NamespaceEntry_) {
+<a name="line777"></a>    return this.createSubPanelDom_(entry, entry.label, entry.entries);
+<a name="line778"></a>  }
+<a name="line779"></a>  goog.asserts.assertInstanceof(entry, goog.tweak.ButtonAction,
+<a name="line780"></a>      &#39;invalid entry: %s&#39;, entry);
+<a name="line781"></a>  return this.createButtonActionDom_(
+<a name="line782"></a>      /** @type {!goog.tweak.ButtonAction} */ (entry), label);
+<a name="line783"></a>};
+<a name="line784"></a>
+<a name="line785"></a>
+<a name="line786"></a>
+<a name="line787"></a>/**
+<a name="line788"></a> * Entries used to represent the collapsible namespace links. These entries are
+<a name="line789"></a> * never registered with the TweakRegistry, but are contained within the
+<a name="line790"></a> * collection of entries within TweakPanels.
+<a name="line791"></a> * @param {string} namespace The namespace for the entry.
+<a name="line792"></a> * @param {!Array.&lt;!goog.tweak.BaseEntry&gt;} entries Entries within the namespace.
+<a name="line793"></a> * @constructor
+<a name="line794"></a> * @extends {goog.tweak.BaseEntry}
+<a name="line795"></a> * @private
+<a name="line796"></a> */
+<a name="line797"></a>goog.tweak.NamespaceEntry_ = function(namespace, entries) {
+<a name="line798"></a>  goog.tweak.BaseEntry.call(this,
+<a name="line799"></a>      goog.tweak.NamespaceEntry_.ID_PREFIX + namespace,
+<a name="line800"></a>      &#39;Tweaks within the &#39; + namespace + &#39; namespace.&#39;);
+<a name="line801"></a>
+<a name="line802"></a>  /**
+<a name="line803"></a>   * Entries within this namespace.
+<a name="line804"></a>   * @type {!Array.&lt;!goog.tweak.BaseEntry&gt;}
+<a name="line805"></a>   */
+<a name="line806"></a>  this.entries = entries;
+<a name="line807"></a>
+<a name="line808"></a>  this.label = namespace;
+<a name="line809"></a>};
+<a name="line810"></a>goog.inherits(goog.tweak.NamespaceEntry_, goog.tweak.BaseEntry);
+<a name="line811"></a>
+<a name="line812"></a>
+<a name="line813"></a>/**
+<a name="line814"></a> * Prefix for the IDs of namespace entries used to ensure that they do not
+<a name="line815"></a> * conflict with regular entries.
+<a name="line816"></a> * @type {string}
+<a name="line817"></a> */
+<a name="line818"></a>goog.tweak.NamespaceEntry_.ID_PREFIX = &#39;!&#39;;
+</pre>
+
+
+</body>
+</html>

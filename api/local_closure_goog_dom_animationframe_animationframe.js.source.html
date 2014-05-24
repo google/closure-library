@@ -1,0 +1,320 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>animationframe.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_animationframe_animationframe.js.html">animationframe.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2014 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview goog.dom.animationFrame permits work to be done in-sync with
+<a name="line17"></a> * the render refresh rate of the browser and to divide work up globally based
+<a name="line18"></a> * on whether the intent is not measure or to mutate the DOM. The latter avoids
+<a name="line19"></a> * repeated style recalculation which can be really slow.
+<a name="line20"></a> *
+<a name="line21"></a> * Goals of the API:
+<a name="line22"></a> * &lt;ul&gt;
+<a name="line23"></a> *   &lt;li&gt;Make it easy to schedule work for the next animation frame.
+<a name="line24"></a> *   &lt;li&gt;Make it easy to only do work once per animation frame, even if two
+<a name="line25"></a> *       events fire that trigger the same work.
+<a name="line26"></a> *   &lt;li&gt;Make it easy to do all work in two phases to avoid repeated style
+<a name="line27"></a> *       recalculation caused by interleaved reads and writes.
+<a name="line28"></a> *   &lt;li&gt; Avoid creating closures per schedule operation.
+<a name="line29"></a> * &lt;/ul&gt;
+<a name="line30"></a> *
+<a name="line31"></a> *
+<a name="line32"></a> * Programmatic:
+<a name="line33"></a> * &lt;pre&gt;
+<a name="line34"></a> * var animationTask = goog.dom.animationFrame.createTask({
+<a name="line35"></a> *     measure: function(state) {
+<a name="line36"></a> *       state.width = goog.style.getSize(elem).width;
+<a name="line37"></a> *       this.animationTask();
+<a name="line38"></a> *     },
+<a name="line39"></a> *     mutate: function(state) {
+<a name="line40"></a> *       goog.style.setWidth(elem, Math.floor(state.width / 2));
+<a name="line41"></a> *     }
+<a name="line42"></a> *   }, this);
+<a name="line43"></a> * });
+<a name="line44"></a> * &lt;/pre&gt;
+<a name="line45"></a> *
+<a name="line46"></a> * See also
+<a name="line47"></a> * https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame
+<a name="line48"></a> */
+<a name="line49"></a>
+<a name="line50"></a>goog.provide(&#39;goog.dom.animationFrame&#39;);
+<a name="line51"></a>goog.provide(&#39;goog.dom.animationFrame.Spec&#39;);
+<a name="line52"></a>goog.provide(&#39;goog.dom.animationFrame.State&#39;);
+<a name="line53"></a>
+<a name="line54"></a>goog.require(&#39;goog.dom.animationFrame.polyfill&#39;);
+<a name="line55"></a>
+<a name="line56"></a>// Install the polyfill.
+<a name="line57"></a>goog.dom.animationFrame.polyfill.install();
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * @typedef {{
+<a name="line62"></a> *   id: number,
+<a name="line63"></a> *   fn: !Function,
+<a name="line64"></a> *   context: (!Object|undefined)
+<a name="line65"></a> * }}
+<a name="line66"></a> * @private
+<a name="line67"></a> */
+<a name="line68"></a>goog.dom.animationFrame.Task_;
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * @typedef {{
+<a name="line73"></a> *   measureTask: goog.dom.animationFrame.Task_,
+<a name="line74"></a> *   mutateTask: goog.dom.animationFrame.Task_,
+<a name="line75"></a> *   state: (!Object|undefined),
+<a name="line76"></a> *   args: (!Array|undefined),
+<a name="line77"></a> *   isScheduled: boolean
+<a name="line78"></a> * }}
+<a name="line79"></a> * @private
+<a name="line80"></a> */
+<a name="line81"></a>goog.dom.animationFrame.TaskSet_;
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * @typedef {{
+<a name="line86"></a> *   measure: (!Function|undefined),
+<a name="line87"></a> *   mutate: (!Function|undefined)
+<a name="line88"></a> * }}
+<a name="line89"></a> */
+<a name="line90"></a>goog.dom.animationFrame.Spec;
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * A type to represent state. Users may add properties as desired.
+<a name="line96"></a> * @constructor
+<a name="line97"></a> * @final
+<a name="line98"></a> */
+<a name="line99"></a>goog.dom.animationFrame.State = function() {};
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Saves a set of tasks to be executed in the next requestAnimationFrame phase.
+<a name="line104"></a> * This list is initialized once before any event firing occurs. It is not
+<a name="line105"></a> * affected by the fired events or the requestAnimationFrame processing (unless
+<a name="line106"></a> * a new event is created during the processing).
+<a name="line107"></a> * @private {!Array.&lt;!Array.&lt;goog.dom.animationFrame.TaskSet_&gt;&gt;}
+<a name="line108"></a> */
+<a name="line109"></a>goog.dom.animationFrame.tasks_ = [[], []];
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Values are 0 or 1, for whether the first or second array should be used to
+<a name="line114"></a> * lookup or add tasks.
+<a name="line115"></a> * @private {number}
+<a name="line116"></a> */
+<a name="line117"></a>goog.dom.animationFrame.doubleBufferIndex_ = 0;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Whether we have already requested an animation frame that hasn&#39;t happened
+<a name="line122"></a> * yet.
+<a name="line123"></a> * @private {boolean}
+<a name="line124"></a> */
+<a name="line125"></a>goog.dom.animationFrame.requestedFrame_ = false;
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * Counter to generate IDs for tasks.
+<a name="line130"></a> * @private {number}
+<a name="line131"></a> */
+<a name="line132"></a>goog.dom.animationFrame.taskId_ = 0;
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Returns a function that schedules the two passed-in functions to be run upon
+<a name="line137"></a> * the next animation frame. Calling the function again during the same
+<a name="line138"></a> * animation frame does nothing.
+<a name="line139"></a> *
+<a name="line140"></a> * The function under the &quot;measure&quot; key will run first and together with all
+<a name="line141"></a> * other functions scheduled under this key and the function under &quot;mutate&quot; will
+<a name="line142"></a> * run after that.
+<a name="line143"></a> *
+<a name="line144"></a> * @param {!{
+<a name="line145"></a> *   measure: (function(this:THIS, !goog.dom.animationFrame.State)|undefined),
+<a name="line146"></a> *   mutate: (function(this:THIS, !goog.dom.animationFrame.State)|undefined)
+<a name="line147"></a> * }} spec
+<a name="line148"></a> * @param {THIS=} opt_context Context in which to run the function.
+<a name="line149"></a> * @return {function(...[?])}
+<a name="line150"></a> * @template THIS
+<a name="line151"></a> */
+<a name="line152"></a>goog.dom.animationFrame.createTask = function(spec, opt_context) {
+<a name="line153"></a>  var genericSpec = /** @type {!goog.dom.animationFrame.Spec} */ (spec);
+<a name="line154"></a>  var id = goog.dom.animationFrame.taskId_++;
+<a name="line155"></a>  var measureTask = {
+<a name="line156"></a>    id: id,
+<a name="line157"></a>    fn: spec.measure,
+<a name="line158"></a>    context: opt_context
+<a name="line159"></a>  };
+<a name="line160"></a>  var mutateTask = {
+<a name="line161"></a>    id: id,
+<a name="line162"></a>    fn: spec.mutate,
+<a name="line163"></a>    context: opt_context
+<a name="line164"></a>  };
+<a name="line165"></a>
+<a name="line166"></a>  var taskSet = {
+<a name="line167"></a>    measureTask: measureTask,
+<a name="line168"></a>    mutateTask: mutateTask,
+<a name="line169"></a>    state: {},
+<a name="line170"></a>    args: undefined,
+<a name="line171"></a>    isScheduled: false
+<a name="line172"></a>  };
+<a name="line173"></a>
+<a name="line174"></a>  return function() {
+<a name="line175"></a>    // Default the context to the one that was used to call the tasks scheduler
+<a name="line176"></a>    // (this function).
+<a name="line177"></a>    if (!opt_context) {
+<a name="line178"></a>      measureTask.context = this;
+<a name="line179"></a>      mutateTask.context = this;
+<a name="line180"></a>    }
+<a name="line181"></a>
+<a name="line182"></a>    // Save args and state.
+<a name="line183"></a>    if (arguments.length &gt; 0) {
+<a name="line184"></a>      // The state argument goes last. That is kinda horrible but compatible
+<a name="line185"></a>      // with {@see wiz.async.method}.
+<a name="line186"></a>      if (!taskSet.args) {
+<a name="line187"></a>        taskSet.args = [];
+<a name="line188"></a>      }
+<a name="line189"></a>      taskSet.args.length = 0;
+<a name="line190"></a>      taskSet.args.push.apply(taskSet.args, arguments);
+<a name="line191"></a>      taskSet.args.push(taskSet.state);
+<a name="line192"></a>    } else {
+<a name="line193"></a>      if (!taskSet.args || taskSet.args.length == 0) {
+<a name="line194"></a>        taskSet.args = [taskSet.state];
+<a name="line195"></a>      } else {
+<a name="line196"></a>        taskSet.args[0] = taskSet.state;
+<a name="line197"></a>        taskSet.args.length = 1;
+<a name="line198"></a>      }
+<a name="line199"></a>    }
+<a name="line200"></a>    if (!taskSet.isScheduled) {
+<a name="line201"></a>      taskSet.isScheduled = true;
+<a name="line202"></a>      var tasksArray = goog.dom.animationFrame.tasks_[
+<a name="line203"></a>          goog.dom.animationFrame.doubleBufferIndex_];
+<a name="line204"></a>      tasksArray.push(taskSet);
+<a name="line205"></a>    }
+<a name="line206"></a>    goog.dom.animationFrame.requestAnimationFrame_();
+<a name="line207"></a>  };
+<a name="line208"></a>};
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/**
+<a name="line212"></a> * Run scheduled tasks.
+<a name="line213"></a> * @private
+<a name="line214"></a> */
+<a name="line215"></a>goog.dom.animationFrame.runTasks_ = function() {
+<a name="line216"></a>  goog.dom.animationFrame.requestedFrame_ = false;
+<a name="line217"></a>  var tasksArray = goog.dom.animationFrame
+<a name="line218"></a>                       .tasks_[goog.dom.animationFrame.doubleBufferIndex_];
+<a name="line219"></a>  var taskLength = tasksArray.length;
+<a name="line220"></a>
+<a name="line221"></a>  // During the runTasks_, if there is a recursive call to queue up more
+<a name="line222"></a>  // task(s) for the next frame, we use double-buffering for that.
+<a name="line223"></a>  goog.dom.animationFrame.doubleBufferIndex_ =
+<a name="line224"></a>      (goog.dom.animationFrame.doubleBufferIndex_ + 1) % 2;
+<a name="line225"></a>
+<a name="line226"></a>  var task;
+<a name="line227"></a>
+<a name="line228"></a>  // Run all the measure tasks first.
+<a name="line229"></a>  for (var i = 0; i &lt; taskLength; ++i) {
+<a name="line230"></a>    task = tasksArray[i];
+<a name="line231"></a>    var measureTask = task.measureTask;
+<a name="line232"></a>    task.isScheduled = false;
+<a name="line233"></a>    if (measureTask.fn) {
+<a name="line234"></a>      // TODO (perumaal): Handle any exceptions thrown by the lambda.
+<a name="line235"></a>      measureTask.fn.apply(measureTask.context, task.args);
+<a name="line236"></a>    }
+<a name="line237"></a>  }
+<a name="line238"></a>
+<a name="line239"></a>  // Run the mutate tasks next.
+<a name="line240"></a>  for (var i = 0; i &lt; taskLength; ++i) {
+<a name="line241"></a>    task = tasksArray[i];
+<a name="line242"></a>    var mutateTask = task.mutateTask;
+<a name="line243"></a>    task.isScheduled = false;
+<a name="line244"></a>    if (mutateTask.fn) {
+<a name="line245"></a>      // TODO (perumaal): Handle any exceptions thrown by the lambda.
+<a name="line246"></a>      mutateTask.fn.apply(mutateTask.context, task.args);
+<a name="line247"></a>    }
+<a name="line248"></a>
+<a name="line249"></a>    // Clear state for next vsync.
+<a name="line250"></a>    task.state = {};
+<a name="line251"></a>  }
+<a name="line252"></a>
+<a name="line253"></a>  // Clear the tasks array as we have finished processing all the tasks.
+<a name="line254"></a>  tasksArray.length = 0;
+<a name="line255"></a>};
+<a name="line256"></a>
+<a name="line257"></a>
+<a name="line258"></a>/**
+<a name="line259"></a> * Request {@see goog.dom.animationFrame.runTasks_} to be called upon the
+<a name="line260"></a> * next animation frame if we haven&#39;t done so already.
+<a name="line261"></a> * @private
+<a name="line262"></a> */
+<a name="line263"></a>goog.dom.animationFrame.requestAnimationFrame_ = function() {
+<a name="line264"></a>  if (goog.dom.animationFrame.requestedFrame_) {
+<a name="line265"></a>    return;
+<a name="line266"></a>  }
+<a name="line267"></a>  goog.dom.animationFrame.requestedFrame_ = true;
+<a name="line268"></a>  window.requestAnimationFrame(goog.dom.animationFrame.runTasks_);
+<a name="line269"></a>};
+</pre>
+
+
+</body>
+</html>

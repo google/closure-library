@@ -1,0 +1,1399 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>crypt (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">crypt</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Aes.html">
+          goog.crypt.Aes</a><br/>
+        <div class="class-details">Implementation of AES in JavaScript.
+See <a href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">http://en.wikipedia.org/wiki/Advanced_Encryption_Standard</a>
+
+WARNING: This is ECB mode only. If you are encrypting something
+longer than 16 bytes, or encrypting more than one value with the same key
+(so basically, always) you need to use this with a block cipher mode of
+operation.  See goog.crypt.Cbc.
+
+See <a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation</a> for more
+information.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Arc4.html">
+          goog.crypt.Arc4</a><br/>
+        <div class="class-details">ARC4 streamcipher implementation.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_BlobHasher.html">
+          goog.crypt.BlobHasher</a><br/>
+        <div class="class-details">Construct the hash computer.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="interface_goog_crypt_BlockCipher.html">
+          goog.crypt.BlockCipher</a><br/>
+        <div class="class-details">Interface definition for a block cipher.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Cbc.html">
+          goog.crypt.Cbc</a><br/>
+        <div class="class-details">Implements the CBC mode for block ciphers. See
+<a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation
+#Cipher-block_chaining_.28CBC.29">http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation
+#Cipher-block_chaining_.28CBC.29</a>
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Hash.html">
+          goog.crypt.Hash</a><br/>
+        <div class="class-details">Create a cryptographic hash instance.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Hmac.html">
+          goog.crypt.Hmac</a><br/>
+        <div class="class-details"><span class='nodesc'>No description.</span></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_JpegEncoder.html">
+          goog.crypt.JpegEncoder</a><br/>
+        <div class="class-details">Initializes the JpegEncoder.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Md5.html">
+          goog.crypt.Md5</a><br/>
+        <div class="class-details">MD5 cryptographic hash constructor.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Sha1.html">
+          goog.crypt.Sha1</a><br/>
+        <div class="class-details">SHA-1 cryptographic hash constructor.
+
+The properties declared here are discussed in the above algorithm document.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Sha2.html">
+          goog.crypt.Sha2</a><br/>
+        <div class="class-details">SHA-2 cryptographic hash constructor.
+This constructor should not be used directly to create the object. Rather,
+one should use the constructor of the sub-classes.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Sha224.html">
+          goog.crypt.Sha224</a><br/>
+        <div class="class-details">SHA-224 cryptographic hash constructor.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Sha256.html">
+          goog.crypt.Sha256</a><br/>
+        <div class="class-details">SHA-256 cryptographic hash constructor.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Sha2_64bit.html">
+          goog.crypt.Sha2_64bit</a><br/>
+        <div class="class-details">Constructs a SHA-2 64-bit cryptographic hash.
+This class should not be used. Rather, one should use one of its
+subclasses.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Sha384.html">
+          goog.crypt.Sha384</a><br/>
+        <div class="class-details">Constructs a SHA-384 cryptographic hash.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Sha512.html">
+          goog.crypt.Sha512</a><br/>
+        <div class="class-details">Constructs a SHA-512 cryptographic hash.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_crypt_Sha512_256.html">
+          goog.crypt.Sha512_256</a><br/>
+        <div class="class-details">Constructs a SHA-512/256 cryptographic hash.
+
+</div>
+ </div>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.crypt.byteArrayToHex"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">byteArrayToHex<span class="args">(<span class="arg">array</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Turns an array of numbers into the hex string given by the concatenation of
+the hex values to which the numbers correspond.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">array</span>
+        : <span class="type">Uint8Array</span><span>&nbsp;|&nbsp;</span><span class="type">Int8Array</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+        <div class="entryOverview">Array of numbers
+    representing characters.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            Hex string.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_crypt.js.source.html#line80">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.crypt.byteArrayToString"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">byteArrayToString<span class="args">(<span class="arg">bytes</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Turns an array of numbers into the string given by the concatenation of the
+characters to which the numbers correspond.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">bytes</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>
+        <div class="entryOverview">Array of numbers representing characters.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            Stringification of the array.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_crypt.js.source.html#line52">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.crypt.hexToByteArray"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">hexToByteArray<span class="args">(<span class="arg">hexString</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Converts a hex string into an integer array.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">hexString</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">Hex string of 16-bit integers (two characters
+    per integer).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;&nbsp;
+            Array of {0,255} integers for the given string.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_crypt.js.source.html#line94">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.crypt.stringToByteArray"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">stringToByteArray<span class="args">(<span class="arg">str</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Turns a string into an array of bytes; a "byte" being a JS number in the
+range 0-255.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">str</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">String value to arrify.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;&nbsp;
+            Array of numbers corresponding to the
+    UCS character codes of each character in str.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_crypt.js.source.html#line32">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.crypt.stringToUtf8ByteArray"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">stringToUtf8ByteArray<span class="args">(<span class="arg">str</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Converts a JS string to a UTF-8 "byte" array.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">str</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">16-bit unicode string.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;&nbsp;
+            UTF-8 byte array.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_crypt.js.source.html#line110">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.crypt.utf8ByteArrayToString"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">utf8ByteArrayToString<span class="args">(<span class="arg">bytes</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Converts a UTF-8 byte array to JavaScript's 16-bit Unicode.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">bytes</span>
+        : <span class="type">Uint8Array</span><span>&nbsp;|&nbsp;</span><span class="type">Int8Array</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+        <div class="entryOverview">UTF-8 byte array.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            16-bit Unicode string.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_crypt.js.source.html#line136">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.crypt.xorByteArray"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">xorByteArray<span class="args">(<span class="arg">bytes1</span>,&nbsp;<span class="arg">bytes2</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       XOR two byte arrays.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">bytes1</span>
+        : <span>!</span><span class="type">ArrayBufferView</span><span>&nbsp;|&nbsp;</span><span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+        <div class="entryOverview">Byte array 1.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">bytes2</span>
+        : <span>!</span><span class="type">ArrayBufferView</span><span>&nbsp;|&nbsp;</span><span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+        <div class="entryOverview">Byte array 2.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;&nbsp;
+            Resulting XOR of the two byte arrays.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_crypt.js.source.html#line163">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.AesTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">AesTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_aes_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.Arc4Test"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">Arc4Test</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_arc4_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.BlobHasherTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">BlobHasherTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_blobhasher_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.CbcTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">CbcTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_cbc_test.js.source.html#line22">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.HmacTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">HmacTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_hmac_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.Md5Test"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">Md5Test</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_md5_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.Sha1Test"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">Sha1Test</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_sha1_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.Sha224Test"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">Sha224Test</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_sha224_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.Sha256Test"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">Sha256Test</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_sha256_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.Sha2_64bit_test"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">Sha2_64bit_test</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_sha2_64bit_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.base64"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">base64</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_base64.js.source.html#line23">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.base64Test"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">base64Test</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_base64_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.baseN"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">baseN</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_basen.js.source.html#line27">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.baseNTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">baseNTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_basen_test.js.source.html#line19">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.byteArrayToStringPerf"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">byteArrayToStringPerf</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_bytestring_perf.js.source.html#line21">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.hash32"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">hash32</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_hash32.js.source.html#line22">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.hash32Test"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">hash32Test</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_hash32_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.hashTester"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">hashTester</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_hashtester.js.source.html#line20">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.pbkdf2"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">pbkdf2</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_pbkdf2.js.source.html#line29">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.crypt.pbkdf2Test"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.crypt.</span><span class="entryName">pbkdf2Test</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_crypt_pbkdf2_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package crypt</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="crypt"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

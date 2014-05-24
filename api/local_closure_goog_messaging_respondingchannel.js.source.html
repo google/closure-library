@@ -1,0 +1,287 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>respondingchannel.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_messaging_respondingchannel.js.html">respondingchannel.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of goog.messaging.RespondingChannel, which wraps a
+<a name="line17"></a> * MessageChannel and allows the user to get the response from the services.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.messaging.RespondingChannel&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line25"></a>goog.require(&#39;goog.log&#39;);
+<a name="line26"></a>goog.require(&#39;goog.messaging.MessageChannel&#39;); // interface
+<a name="line27"></a>goog.require(&#39;goog.messaging.MultiChannel&#39;);
+<a name="line28"></a>goog.require(&#39;goog.messaging.MultiChannel.VirtualChannel&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Creates a new RespondingChannel wrapping a single MessageChannel.
+<a name="line34"></a> * @param {goog.messaging.MessageChannel} messageChannel The messageChannel to
+<a name="line35"></a> *     to wrap and allow for responses. This channel must not have any existing
+<a name="line36"></a> *     services registered. All service registration must be done through the
+<a name="line37"></a> *     {@link RespondingChannel#registerService} api instead. The other end of
+<a name="line38"></a> *     channel must also be a RespondingChannel.
+<a name="line39"></a> * @constructor
+<a name="line40"></a> * @extends {goog.Disposable}
+<a name="line41"></a> */
+<a name="line42"></a>goog.messaging.RespondingChannel = function(messageChannel) {
+<a name="line43"></a>  goog.messaging.RespondingChannel.base(this, &#39;constructor&#39;);
+<a name="line44"></a>
+<a name="line45"></a>  /**
+<a name="line46"></a>   * The message channel wrapped in a MultiChannel so we can send private and
+<a name="line47"></a>   * public messages on it.
+<a name="line48"></a>   * @type {goog.messaging.MultiChannel}
+<a name="line49"></a>   * @private
+<a name="line50"></a>   */
+<a name="line51"></a>  this.messageChannel_ = new goog.messaging.MultiChannel(messageChannel);
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * Map of invocation signatures to function callbacks. These are used to keep
+<a name="line55"></a>   * track of the asyncronous service invocations so the result of a service
+<a name="line56"></a>   * call can be passed back to a callback in the calling frame.
+<a name="line57"></a>   * @type {Object.&lt;number, function(Object)&gt;}
+<a name="line58"></a>   * @private
+<a name="line59"></a>   */
+<a name="line60"></a>  this.sigCallbackMap_ = {};
+<a name="line61"></a>
+<a name="line62"></a>  /**
+<a name="line63"></a>   * The virtual channel to send private messages on.
+<a name="line64"></a>   * @type {goog.messaging.MultiChannel.VirtualChannel}
+<a name="line65"></a>   * @private
+<a name="line66"></a>   */
+<a name="line67"></a>  this.privateChannel_ = this.messageChannel_.createVirtualChannel(
+<a name="line68"></a>      goog.messaging.RespondingChannel.PRIVATE_CHANNEL_);
+<a name="line69"></a>
+<a name="line70"></a>  /**
+<a name="line71"></a>   * The virtual channel to send public messages on.
+<a name="line72"></a>   * @type {goog.messaging.MultiChannel.VirtualChannel}
+<a name="line73"></a>   * @private
+<a name="line74"></a>   */
+<a name="line75"></a>  this.publicChannel_ = this.messageChannel_.createVirtualChannel(
+<a name="line76"></a>      goog.messaging.RespondingChannel.PUBLIC_CHANNEL_);
+<a name="line77"></a>
+<a name="line78"></a>  this.privateChannel_.registerService(
+<a name="line79"></a>      goog.messaging.RespondingChannel.CALLBACK_SERVICE_,
+<a name="line80"></a>      goog.bind(this.callbackServiceHandler_, this),
+<a name="line81"></a>      true);
+<a name="line82"></a>};
+<a name="line83"></a>goog.inherits(goog.messaging.RespondingChannel, goog.Disposable);
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * The name of the method invocation callback service (used internally).
+<a name="line88"></a> * @type {string}
+<a name="line89"></a> * @const
+<a name="line90"></a> * @private
+<a name="line91"></a> */
+<a name="line92"></a>goog.messaging.RespondingChannel.CALLBACK_SERVICE_ = &#39;mics&#39;;
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * The name of the channel to send private control messages on.
+<a name="line97"></a> * @type {string}
+<a name="line98"></a> * @const
+<a name="line99"></a> * @private
+<a name="line100"></a> */
+<a name="line101"></a>goog.messaging.RespondingChannel.PRIVATE_CHANNEL_ = &#39;private&#39;;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * The name of the channel to send public messages on.
+<a name="line106"></a> * @type {string}
+<a name="line107"></a> * @const
+<a name="line108"></a> * @private
+<a name="line109"></a> */
+<a name="line110"></a>goog.messaging.RespondingChannel.PUBLIC_CHANNEL_ = &#39;public&#39;;
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * The next signature index to save the callback against.
+<a name="line115"></a> * @type {number}
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.messaging.RespondingChannel.prototype.nextSignatureIndex_ = 0;
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Logger object for goog.messaging.RespondingChannel.
+<a name="line123"></a> * @type {goog.log.Logger}
+<a name="line124"></a> * @private
+<a name="line125"></a> */
+<a name="line126"></a>goog.messaging.RespondingChannel.prototype.logger_ =
+<a name="line127"></a>    goog.log.getLogger(&#39;goog.messaging.RespondingChannel&#39;);
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Gets a random number to use for method invocation results.
+<a name="line132"></a> * @return {number} A unique random signature.
+<a name="line133"></a> * @private
+<a name="line134"></a> */
+<a name="line135"></a>goog.messaging.RespondingChannel.prototype.getNextSignature_ = function() {
+<a name="line136"></a>  return this.nextSignatureIndex_++;
+<a name="line137"></a>};
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/** @override */
+<a name="line141"></a>goog.messaging.RespondingChannel.prototype.disposeInternal = function() {
+<a name="line142"></a>  goog.dispose(this.messageChannel_);
+<a name="line143"></a>  delete this.messageChannel_;
+<a name="line144"></a>  // Note: this.publicChannel_ and this.privateChannel_ get disposed by
+<a name="line145"></a>  //     this.messageChannel_
+<a name="line146"></a>  delete this.publicChannel_;
+<a name="line147"></a>  delete this.privateChannel_;
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Sends a message over the channel.
+<a name="line153"></a> * @param {string} serviceName The name of the service this message should be
+<a name="line154"></a> *     delivered to.
+<a name="line155"></a> * @param {string|!Object} payload The value of the message. If this is an
+<a name="line156"></a> *     Object, it is serialized to a string before sending if necessary.
+<a name="line157"></a> * @param {function(?Object)} callback The callback invoked with
+<a name="line158"></a> *     the result of the service call.
+<a name="line159"></a> */
+<a name="line160"></a>goog.messaging.RespondingChannel.prototype.send = function(
+<a name="line161"></a>    serviceName,
+<a name="line162"></a>    payload,
+<a name="line163"></a>    callback) {
+<a name="line164"></a>
+<a name="line165"></a>  var signature = this.getNextSignature_();
+<a name="line166"></a>  this.sigCallbackMap_[signature] = callback;
+<a name="line167"></a>
+<a name="line168"></a>  var message = {};
+<a name="line169"></a>  message[&#39;signature&#39;] = signature;
+<a name="line170"></a>  message[&#39;data&#39;] = payload;
+<a name="line171"></a>
+<a name="line172"></a>  this.publicChannel_.send(serviceName, message);
+<a name="line173"></a>};
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Receives the results of the peer&#39;s service results.
+<a name="line178"></a> * @param {!Object|string} message The results from the remote service
+<a name="line179"></a> *     invocation.
+<a name="line180"></a> * @private
+<a name="line181"></a> */
+<a name="line182"></a>goog.messaging.RespondingChannel.prototype.callbackServiceHandler_ = function(
+<a name="line183"></a>    message) {
+<a name="line184"></a>
+<a name="line185"></a>  var signature = message[&#39;signature&#39;];
+<a name="line186"></a>  var result = message[&#39;data&#39;];
+<a name="line187"></a>
+<a name="line188"></a>  if (signature in this.sigCallbackMap_) {
+<a name="line189"></a>    var callback = /** @type {function(Object)} */ (this.sigCallbackMap_[
+<a name="line190"></a>        signature]);
+<a name="line191"></a>    callback(result);
+<a name="line192"></a>    delete this.sigCallbackMap_[signature];
+<a name="line193"></a>  } else {
+<a name="line194"></a>    goog.log.warning(this.logger_, &#39;Received signature is invalid&#39;);
+<a name="line195"></a>  }
+<a name="line196"></a>};
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * Registers a service to be called when a message is received.
+<a name="line201"></a> * @param {string} serviceName The name of the service.
+<a name="line202"></a> * @param {function(!Object)} callback The callback to process the
+<a name="line203"></a> *     incoming messages. Passed the payload.
+<a name="line204"></a> */
+<a name="line205"></a>goog.messaging.RespondingChannel.prototype.registerService = function(
+<a name="line206"></a>    serviceName, callback) {
+<a name="line207"></a>  this.publicChannel_.registerService(
+<a name="line208"></a>      serviceName,
+<a name="line209"></a>      goog.bind(this.callbackProxy_, this, callback),
+<a name="line210"></a>      true);
+<a name="line211"></a>};
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/**
+<a name="line215"></a> * A intermediary proxy for service callbacks to be invoked and return their
+<a name="line216"></a> * their results to the remote caller&#39;s callback.
+<a name="line217"></a> * @param {function((string|!Object))} callback The callback to process the
+<a name="line218"></a> *     incoming messages. Passed the payload.
+<a name="line219"></a> * @param {!Object|string} message The message containing the signature and
+<a name="line220"></a> *     the data to invoke the service callback with.
+<a name="line221"></a> * @private
+<a name="line222"></a> */
+<a name="line223"></a>goog.messaging.RespondingChannel.prototype.callbackProxy_ = function(
+<a name="line224"></a>    callback, message) {
+<a name="line225"></a>
+<a name="line226"></a>  var resultMessage = {};
+<a name="line227"></a>  resultMessage[&#39;data&#39;] = callback(message[&#39;data&#39;]);
+<a name="line228"></a>  resultMessage[&#39;signature&#39;] = message[&#39;signature&#39;];
+<a name="line229"></a>  // The callback invoked above may have disposed the channel so check if it
+<a name="line230"></a>  // exists.
+<a name="line231"></a>  if (this.privateChannel_) {
+<a name="line232"></a>    this.privateChannel_.send(
+<a name="line233"></a>        goog.messaging.RespondingChannel.CALLBACK_SERVICE_,
+<a name="line234"></a>        resultMessage);
+<a name="line235"></a>  }
+<a name="line236"></a>};
+</pre>
+
+
+</body>
+</html>

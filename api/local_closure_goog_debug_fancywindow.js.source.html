@@ -1,0 +1,425 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>fancywindow.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_debug_fancywindow.js.html">fancywindow.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the FancyWindow class. Please minimize
+<a name="line17"></a> * dependencies this file has on other closure classes as any dependency it
+<a name="line18"></a> * takes won&#39;t be able to use the logging infrastructure.
+<a name="line19"></a> *
+<a name="line20"></a> * This is a pretty hacky implementation, aimed at making debugging of large
+<a name="line21"></a> * applications more manageable.
+<a name="line22"></a> *
+<a name="line23"></a> * @see ../demos/debug.html
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.debug.FancyWindow&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.array&#39;);
+<a name="line30"></a>goog.require(&#39;goog.debug.DebugWindow&#39;);
+<a name="line31"></a>goog.require(&#39;goog.debug.LogManager&#39;);
+<a name="line32"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line33"></a>goog.require(&#39;goog.dom.DomHelper&#39;);
+<a name="line34"></a>goog.require(&#39;goog.dom.safe&#39;);
+<a name="line35"></a>goog.require(&#39;goog.html.SafeHtml&#39;);
+<a name="line36"></a>goog.require(&#39;goog.object&#39;);
+<a name="line37"></a>goog.require(&#39;goog.string&#39;);
+<a name="line38"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * Provides a Fancy extension to the DebugWindow class.  Allows filtering based
+<a name="line44"></a> * on loggers and levels.
+<a name="line45"></a> *
+<a name="line46"></a> * @param {string=} opt_identifier Idenitifier for this logging class.
+<a name="line47"></a> * @param {string=} opt_prefix Prefix pre-pended to messages.
+<a name="line48"></a> * @constructor
+<a name="line49"></a> * @extends {goog.debug.DebugWindow}
+<a name="line50"></a> */
+<a name="line51"></a>goog.debug.FancyWindow = function(opt_identifier, opt_prefix) {
+<a name="line52"></a>  this.readOptionsFromLocalStorage_();
+<a name="line53"></a>  goog.debug.FancyWindow.base(this, &#39;constructor&#39;, opt_identifier, opt_prefix);
+<a name="line54"></a>};
+<a name="line55"></a>goog.inherits(goog.debug.FancyWindow, goog.debug.DebugWindow);
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>/**
+<a name="line59"></a> * Constant indicating if we are able to use localStorage to persist filters
+<a name="line60"></a> * @type {boolean}
+<a name="line61"></a> */
+<a name="line62"></a>goog.debug.FancyWindow.HAS_LOCAL_STORE = (function() {
+<a name="line63"></a>  /** @preserveTry */
+<a name="line64"></a>  try {
+<a name="line65"></a>    return !!window[&#39;localStorage&#39;].getItem;
+<a name="line66"></a>  } catch (e) {}
+<a name="line67"></a>  return false;
+<a name="line68"></a>})();
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Constant defining the prefix to use when storing log levels
+<a name="line73"></a> * @type {string}
+<a name="line74"></a> */
+<a name="line75"></a>goog.debug.FancyWindow.LOCAL_STORE_PREFIX = &#39;fancywindow.sel.&#39;;
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/** @override */
+<a name="line79"></a>goog.debug.FancyWindow.prototype.writeBufferToLog = function() {
+<a name="line80"></a>  this.lastCall = goog.now();
+<a name="line81"></a>  if (this.hasActiveWindow()) {
+<a name="line82"></a>    var logel = this.dh_.getElement(&#39;log&#39;);
+<a name="line83"></a>
+<a name="line84"></a>    // Work out if scrolling is needed before we add the content
+<a name="line85"></a>    var scroll =
+<a name="line86"></a>        logel.scrollHeight - (logel.scrollTop + logel.offsetHeight) &lt;= 100;
+<a name="line87"></a>
+<a name="line88"></a>    for (var i = 0; i &lt; this.outputBuffer.length; i++) {
+<a name="line89"></a>      var div = this.dh_.createDom(&#39;div&#39;, &#39;logmsg&#39;);
+<a name="line90"></a>      div.innerHTML = this.outputBuffer[i];
+<a name="line91"></a>      logel.appendChild(div);
+<a name="line92"></a>    }
+<a name="line93"></a>    this.outputBuffer.length = 0;
+<a name="line94"></a>    this.resizeStuff_();
+<a name="line95"></a>
+<a name="line96"></a>    if (scroll) {
+<a name="line97"></a>      logel.scrollTop = logel.scrollHeight;
+<a name="line98"></a>    }
+<a name="line99"></a>  }
+<a name="line100"></a>};
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/** @override */
+<a name="line104"></a>goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
+<a name="line105"></a>  if (!this.hasActiveWindow()) {
+<a name="line106"></a>    return;
+<a name="line107"></a>  }
+<a name="line108"></a>
+<a name="line109"></a>  var doc = this.win.document;
+<a name="line110"></a>  doc.open();
+<a name="line111"></a>  doc.write(this.getHtml_());
+<a name="line112"></a>  doc.close();
+<a name="line113"></a>
+<a name="line114"></a>  (goog.userAgent.IE ? doc.body : this.win).onresize =
+<a name="line115"></a>      goog.bind(this.resizeStuff_, this);
+<a name="line116"></a>
+<a name="line117"></a>  // Create a dom helper for the logging window
+<a name="line118"></a>  this.dh_ = new goog.dom.DomHelper(doc);
+<a name="line119"></a>
+<a name="line120"></a>  // Don&#39;t use events system to reduce dependencies
+<a name="line121"></a>  this.dh_.getElement(&#39;openbutton&#39;).onclick =
+<a name="line122"></a>      goog.bind(this.openOptions_, this);
+<a name="line123"></a>  this.dh_.getElement(&#39;closebutton&#39;).onclick =
+<a name="line124"></a>      goog.bind(this.closeOptions_, this);
+<a name="line125"></a>  this.dh_.getElement(&#39;clearbutton&#39;).onclick =
+<a name="line126"></a>      goog.bind(this.clear, this);
+<a name="line127"></a>  this.dh_.getElement(&#39;exitbutton&#39;).onclick =
+<a name="line128"></a>      goog.bind(this.exit_, this);
+<a name="line129"></a>
+<a name="line130"></a>  this.writeSavedMessages();
+<a name="line131"></a>};
+<a name="line132"></a>
+<a name="line133"></a>
+<a name="line134"></a>/**
+<a name="line135"></a> * Show the options menu.
+<a name="line136"></a> * @return {boolean} false.
+<a name="line137"></a> * @private
+<a name="line138"></a> */
+<a name="line139"></a>goog.debug.FancyWindow.prototype.openOptions_ = function() {
+<a name="line140"></a>  var el = this.dh_.getElement(&#39;optionsarea&#39;);
+<a name="line141"></a>  goog.dom.safe.setInnerHtml(el, goog.html.SafeHtml.EMPTY);
+<a name="line142"></a>
+<a name="line143"></a>  var loggers = goog.debug.FancyWindow.getLoggers_();
+<a name="line144"></a>  var dh = this.dh_;
+<a name="line145"></a>  for (var i = 0; i &lt; loggers.length; i++) {
+<a name="line146"></a>    var logger = loggers[i];
+<a name="line147"></a>    var curlevel = logger.getLevel() ? logger.getLevel().name : &#39;INHERIT&#39;;
+<a name="line148"></a>    var div = dh.createDom(&#39;div&#39;, {},
+<a name="line149"></a>        this.getDropDown_(&#39;sel&#39; + logger.getName(), curlevel),
+<a name="line150"></a>        dh.createDom(&#39;span&#39;, {}, logger.getName() || &#39;(root)&#39;));
+<a name="line151"></a>    el.appendChild(div);
+<a name="line152"></a>  }
+<a name="line153"></a>
+<a name="line154"></a>  this.dh_.getElement(&#39;options&#39;).style.display = &#39;block&#39;;
+<a name="line155"></a>  return false;
+<a name="line156"></a>};
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * Make a drop down for the log levels.
+<a name="line161"></a> * @param {string} id Logger id.
+<a name="line162"></a> * @param {string} selected What log level is currently selected.
+<a name="line163"></a> * @return {Element} The newly created &#39;select&#39; DOM element.
+<a name="line164"></a> * @private
+<a name="line165"></a> */
+<a name="line166"></a>goog.debug.FancyWindow.prototype.getDropDown_ = function(id, selected) {
+<a name="line167"></a>  var dh = this.dh_;
+<a name="line168"></a>  var sel = dh.createDom(&#39;select&#39;, {&#39;id&#39;: id});
+<a name="line169"></a>  var levels = goog.debug.Logger.Level.PREDEFINED_LEVELS;
+<a name="line170"></a>  for (var i = 0; i &lt; levels.length; i++) {
+<a name="line171"></a>    var level = levels[i];
+<a name="line172"></a>    var option = dh.createDom(&#39;option&#39;, {}, level.name);
+<a name="line173"></a>    if (selected == level.name) {
+<a name="line174"></a>      option.selected = true;
+<a name="line175"></a>    }
+<a name="line176"></a>    sel.appendChild(option);
+<a name="line177"></a>  }
+<a name="line178"></a>  sel.appendChild(dh.createDom(&#39;option&#39;,
+<a name="line179"></a>      {&#39;selected&#39;: selected == &#39;INHERIT&#39;}, &#39;INHERIT&#39;));
+<a name="line180"></a>  return sel;
+<a name="line181"></a>};
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * Close the options menu.
+<a name="line186"></a> * @return {boolean} The value false.
+<a name="line187"></a> * @private
+<a name="line188"></a> */
+<a name="line189"></a>goog.debug.FancyWindow.prototype.closeOptions_ = function() {
+<a name="line190"></a>  this.dh_.getElement(&#39;options&#39;).style.display = &#39;none&#39;;
+<a name="line191"></a>  var loggers = goog.debug.FancyWindow.getLoggers_();
+<a name="line192"></a>  var dh = this.dh_;
+<a name="line193"></a>  for (var i = 0; i &lt; loggers.length; i++) {
+<a name="line194"></a>    var logger = loggers[i];
+<a name="line195"></a>    var sel = dh.getElement(&#39;sel&#39; + logger.getName());
+<a name="line196"></a>    var level = sel.options[sel.selectedIndex].text;
+<a name="line197"></a>    if (level == &#39;INHERIT&#39;) {
+<a name="line198"></a>      logger.setLevel(null);
+<a name="line199"></a>    } else {
+<a name="line200"></a>      logger.setLevel(goog.debug.Logger.Level.getPredefinedLevel(level));
+<a name="line201"></a>    }
+<a name="line202"></a>  }
+<a name="line203"></a>  this.writeOptionsToLocalStorage_();
+<a name="line204"></a>  return false;
+<a name="line205"></a>};
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * Resizes the log elements
+<a name="line210"></a> * @private
+<a name="line211"></a> */
+<a name="line212"></a>goog.debug.FancyWindow.prototype.resizeStuff_ = function() {
+<a name="line213"></a>  var dh = this.dh_;
+<a name="line214"></a>  var logel = dh.getElement(&#39;log&#39;);
+<a name="line215"></a>  var headel = dh.getElement(&#39;head&#39;);
+<a name="line216"></a>  logel.style.top = headel.offsetHeight + &#39;px&#39;;
+<a name="line217"></a>  logel.style.height = (dh.getDocument().body.offsetHeight -
+<a name="line218"></a>      headel.offsetHeight - (goog.userAgent.IE ? 4 : 0)) + &#39;px&#39;;
+<a name="line219"></a>};
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * Handles the user clicking the exit button, disabled the debug window and
+<a name="line224"></a> * closes the popup.
+<a name="line225"></a> * @param {Event} e Event object.
+<a name="line226"></a> * @private
+<a name="line227"></a> */
+<a name="line228"></a>goog.debug.FancyWindow.prototype.exit_ = function(e) {
+<a name="line229"></a>  this.setEnabled(false);
+<a name="line230"></a>  if (this.win) {
+<a name="line231"></a>    this.win.close();
+<a name="line232"></a>  }
+<a name="line233"></a>};
+<a name="line234"></a>
+<a name="line235"></a>
+<a name="line236"></a>/** @override */
+<a name="line237"></a>goog.debug.FancyWindow.prototype.getStyleRules = function() {
+<a name="line238"></a>  return goog.debug.FancyWindow.base(this, &#39;getStyleRules&#39;) +
+<a name="line239"></a>      &#39;html,body{height:100%;width:100%;margin:0px;padding:0px;&#39; +
+<a name="line240"></a>      &#39;background-color:#FFF;overflow:hidden}&#39; +
+<a name="line241"></a>      &#39;*{}&#39; +
+<a name="line242"></a>      &#39;.logmsg{border-bottom:1px solid #CCC;padding:2px;font:90% monospace}&#39; +
+<a name="line243"></a>      &#39;#head{position:absolute;width:100%;font:x-small arial;&#39; +
+<a name="line244"></a>      &#39;border-bottom:2px solid #999;background-color:#EEE;}&#39; +
+<a name="line245"></a>      &#39;#head p{margin:0px 5px;}&#39; +
+<a name="line246"></a>      &#39;#log{position:absolute;width:100%;background-color:#FFF;}&#39; +
+<a name="line247"></a>      &#39;#options{position:absolute;right:0px;width:50%;height:100%;&#39; +
+<a name="line248"></a>      &#39;border-left:1px solid #999;background-color:#DDD;display:none;&#39; +
+<a name="line249"></a>      &#39;padding-left: 5px;font:normal small arial;overflow:auto;}&#39; +
+<a name="line250"></a>      &#39;#openbutton,#closebutton{text-decoration:underline;color:#00F;cursor:&#39; +
+<a name="line251"></a>      &#39;pointer;position:absolute;top:0px;right:5px;font:x-small arial;}&#39; +
+<a name="line252"></a>      &#39;#clearbutton{text-decoration:underline;color:#00F;cursor:&#39; +
+<a name="line253"></a>      &#39;pointer;position:absolute;top:0px;right:80px;font:x-small arial;}&#39; +
+<a name="line254"></a>      &#39;#exitbutton{text-decoration:underline;color:#00F;cursor:&#39; +
+<a name="line255"></a>      &#39;pointer;position:absolute;top:0px;right:50px;font:x-small arial;}&#39; +
+<a name="line256"></a>      &#39;select{font:x-small arial;margin-right:10px;}&#39; +
+<a name="line257"></a>      &#39;hr{border:0;height:5px;background-color:#8c8;color:#8c8;}&#39;;
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * Return the default HTML for the debug window
+<a name="line263"></a> * @return {string} Html.
+<a name="line264"></a> * @private
+<a name="line265"></a> */
+<a name="line266"></a>goog.debug.FancyWindow.prototype.getHtml_ = function() {
+<a name="line267"></a>  return &#39;&#39; +
+<a name="line268"></a>      &#39;&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;&#39; +
+<a name="line269"></a>      &#39;&quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;&#39; +
+<a name="line270"></a>      &#39;&lt;html&gt;&lt;head&gt;&lt;title&gt;Logging: &#39; + this.identifier + &#39;&lt;/title&gt;&#39; +
+<a name="line271"></a>      &#39;&lt;style&gt;&#39; + this.getStyleRules() + &#39;&lt;/style&gt;&#39; +
+<a name="line272"></a>      &#39;&lt;/head&gt;&lt;body&gt;&#39; +
+<a name="line273"></a>      &#39;&lt;div id=&quot;log&quot; style=&quot;overflow:auto&quot;&gt;&lt;/div&gt;&#39; +
+<a name="line274"></a>      &#39;&lt;div id=&quot;head&quot;&gt;&#39; +
+<a name="line275"></a>      &#39;&lt;p&gt;&lt;b&gt;Logging: &#39; + this.identifier + &#39;&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&#39; +
+<a name="line276"></a>      this.welcomeMessage + &#39;&lt;/p&gt;&#39; +
+<a name="line277"></a>      &#39;&lt;span id=&quot;clearbutton&quot;&gt;clear&lt;/span&gt;&#39; +
+<a name="line278"></a>      &#39;&lt;span id=&quot;exitbutton&quot;&gt;exit&lt;/span&gt;&#39; +
+<a name="line279"></a>      &#39;&lt;span id=&quot;openbutton&quot;&gt;options&lt;/span&gt;&#39; +
+<a name="line280"></a>      &#39;&lt;/div&gt;&#39; +
+<a name="line281"></a>      &#39;&lt;div id=&quot;options&quot;&gt;&#39; +
+<a name="line282"></a>      &#39;&lt;big&gt;&lt;b&gt;Options:&lt;/b&gt;&lt;/big&gt;&#39; +
+<a name="line283"></a>      &#39;&lt;div id=&quot;optionsarea&quot;&gt;&lt;/div&gt;&#39; +
+<a name="line284"></a>      &#39;&lt;span id=&quot;closebutton&quot;&gt;save and close&lt;/span&gt;&#39; +
+<a name="line285"></a>      &#39;&lt;/div&gt;&#39; +
+<a name="line286"></a>      &#39;&lt;/body&gt;&lt;/html&gt;&#39;;
+<a name="line287"></a>};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * Write logger levels to localStorage if possible.
+<a name="line292"></a> * @private
+<a name="line293"></a> */
+<a name="line294"></a>goog.debug.FancyWindow.prototype.writeOptionsToLocalStorage_ = function() {
+<a name="line295"></a>  if (!goog.debug.FancyWindow.HAS_LOCAL_STORE) {
+<a name="line296"></a>    return;
+<a name="line297"></a>  }
+<a name="line298"></a>  var loggers = goog.debug.FancyWindow.getLoggers_();
+<a name="line299"></a>  var storedKeys = goog.debug.FancyWindow.getStoredKeys_();
+<a name="line300"></a>  for (var i = 0; i &lt; loggers.length; i++) {
+<a name="line301"></a>    var key = goog.debug.FancyWindow.LOCAL_STORE_PREFIX + loggers[i].getName();
+<a name="line302"></a>    var level = loggers[i].getLevel();
+<a name="line303"></a>    if (key in storedKeys) {
+<a name="line304"></a>      if (!level) {
+<a name="line305"></a>        window.localStorage.removeItem(key);
+<a name="line306"></a>      } else if (window.localStorage.getItem(key) != level.name) {
+<a name="line307"></a>        window.localStorage.setItem(key, level.name);
+<a name="line308"></a>      }
+<a name="line309"></a>    } else if (level) {
+<a name="line310"></a>      window.localStorage.setItem(key, level.name);
+<a name="line311"></a>    }
+<a name="line312"></a>  }
+<a name="line313"></a>};
+<a name="line314"></a>
+<a name="line315"></a>
+<a name="line316"></a>/**
+<a name="line317"></a> * Sync logger levels with any values stored in localStorage.
+<a name="line318"></a> * @private
+<a name="line319"></a> */
+<a name="line320"></a>goog.debug.FancyWindow.prototype.readOptionsFromLocalStorage_ = function() {
+<a name="line321"></a>  if (!goog.debug.FancyWindow.HAS_LOCAL_STORE) {
+<a name="line322"></a>    return;
+<a name="line323"></a>  }
+<a name="line324"></a>  var storedKeys = goog.debug.FancyWindow.getStoredKeys_();
+<a name="line325"></a>  for (var key in storedKeys) {
+<a name="line326"></a>    var loggerName = key.replace(goog.debug.FancyWindow.LOCAL_STORE_PREFIX, &#39;&#39;);
+<a name="line327"></a>    var logger = goog.debug.LogManager.getLogger(loggerName);
+<a name="line328"></a>    var curLevel = logger.getLevel();
+<a name="line329"></a>    var storedLevel = window.localStorage.getItem(key).toString();
+<a name="line330"></a>    if (!curLevel || curLevel.toString() != storedLevel) {
+<a name="line331"></a>      logger.setLevel(goog.debug.Logger.Level.getPredefinedLevel(storedLevel));
+<a name="line332"></a>    }
+<a name="line333"></a>  }
+<a name="line334"></a>};
+<a name="line335"></a>
+<a name="line336"></a>
+<a name="line337"></a>/**
+<a name="line338"></a> * Helper function to create a list of locally stored keys. Used to avoid
+<a name="line339"></a> * expensive localStorage.getItem() calls.
+<a name="line340"></a> * @return {!Object} List of keys.
+<a name="line341"></a> * @private
+<a name="line342"></a> */
+<a name="line343"></a>goog.debug.FancyWindow.getStoredKeys_ = function() {
+<a name="line344"></a>  var storedKeys = {};
+<a name="line345"></a>  for (var i = 0, len = window.localStorage.length; i &lt; len; i++) {
+<a name="line346"></a>    var key = window.localStorage.key(i);
+<a name="line347"></a>    if (key != null &amp;&amp; goog.string.startsWith(
+<a name="line348"></a>        key, goog.debug.FancyWindow.LOCAL_STORE_PREFIX)) {
+<a name="line349"></a>      storedKeys[key] = true;
+<a name="line350"></a>    }
+<a name="line351"></a>  }
+<a name="line352"></a>  return storedKeys;
+<a name="line353"></a>};
+<a name="line354"></a>
+<a name="line355"></a>
+<a name="line356"></a>/**
+<a name="line357"></a> * Gets a sorted array of all the loggers registered.
+<a name="line358"></a> * @return {!Array.&lt;!goog.debug.Logger&gt;} Array of logger instances.
+<a name="line359"></a> * @private
+<a name="line360"></a> */
+<a name="line361"></a>goog.debug.FancyWindow.getLoggers_ = function() {
+<a name="line362"></a>  var loggers = goog.object.getValues(goog.debug.LogManager.getLoggers());
+<a name="line363"></a>
+<a name="line364"></a>  /**
+<a name="line365"></a>   * @param {!goog.debug.Logger} a
+<a name="line366"></a>   * @param {!goog.debug.Logger} b
+<a name="line367"></a>   * @return {number}
+<a name="line368"></a>   */
+<a name="line369"></a>  var loggerSort = function(a, b) {
+<a name="line370"></a>    return goog.array.defaultCompare(a.getName(), b.getName());
+<a name="line371"></a>  };
+<a name="line372"></a>  goog.array.sort(loggers, loggerSort);
+<a name="line373"></a>  return loggers;
+<a name="line374"></a>};
+</pre>
+
+
+</body>
+</html>

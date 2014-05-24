@@ -1,0 +1,683 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>flashobject.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_media_flashobject.js.html">flashobject.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Wrapper on a Flash object embedded in the HTML page.
+<a name="line17"></a> * This class contains routines for writing the HTML to create the Flash object
+<a name="line18"></a> * using a goog.ui.Component approach. Tested on Firefox 1.5, 2 and 3, IE6, 7,
+<a name="line19"></a> * Konqueror, Chrome and Safari.
+<a name="line20"></a> *
+<a name="line21"></a> * Based on http://go/flashobject.js
+<a name="line22"></a> *
+<a name="line23"></a> * Based on the following compatibility test suite:
+<a name="line24"></a> * http://www.bobbyvandersluis.com/flashembed/testsuite/
+<a name="line25"></a> *
+<a name="line26"></a> * TODO(user): take a look at swfobject, and maybe use it instead of the current
+<a name="line27"></a> * flash embedding method.
+<a name="line28"></a> *
+<a name="line29"></a> * Examples of usage:
+<a name="line30"></a> *
+<a name="line31"></a> * &lt;pre&gt;
+<a name="line32"></a> *   var flash = new goog.ui.media.FlashObject(&#39;http://hostname/flash.swf&#39;);
+<a name="line33"></a> *   flash.setFlashVar(&#39;myvar&#39;, &#39;foo&#39;);
+<a name="line34"></a> *   flash.render(goog.dom.getElement(&#39;parent&#39;));
+<a name="line35"></a> * &lt;/pre&gt;
+<a name="line36"></a> *
+<a name="line37"></a> * TODO(user, jessan): create a goog.ui.media.BrowserInterfaceFlashObject that
+<a name="line38"></a> * subclasses goog.ui.media.FlashObject to provide all the goodness of
+<a name="line39"></a> * http://go/browserinterface.as
+<a name="line40"></a> *
+<a name="line41"></a> */
+<a name="line42"></a>
+<a name="line43"></a>goog.provide(&#39;goog.ui.media.FlashObject&#39;);
+<a name="line44"></a>goog.provide(&#39;goog.ui.media.FlashObject.ScriptAccessLevel&#39;);
+<a name="line45"></a>goog.provide(&#39;goog.ui.media.FlashObject.Wmodes&#39;);
+<a name="line46"></a>
+<a name="line47"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line48"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line49"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line50"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line51"></a>goog.require(&#39;goog.log&#39;);
+<a name="line52"></a>goog.require(&#39;goog.object&#39;);
+<a name="line53"></a>goog.require(&#39;goog.string&#39;);
+<a name="line54"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line55"></a>goog.require(&#39;goog.style&#39;);
+<a name="line56"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line57"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line58"></a>goog.require(&#39;goog.userAgent.flash&#39;);
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * A very simple flash wrapper, that allows you to create flash object
+<a name="line64"></a> * programmatically, instead of embedding your own HTML. It extends
+<a name="line65"></a> * {@link goog.ui.Component}, which makes it very easy to be embedded on the
+<a name="line66"></a> * page.
+<a name="line67"></a> *
+<a name="line68"></a> * @param {string} flashUrl The flash SWF URL.
+<a name="line69"></a> * @param {goog.dom.DomHelper=} opt_domHelper An optional DomHelper.
+<a name="line70"></a> * @extends {goog.ui.Component}
+<a name="line71"></a> * @constructor
+<a name="line72"></a> */
+<a name="line73"></a>goog.ui.media.FlashObject = function(flashUrl, opt_domHelper) {
+<a name="line74"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line75"></a>
+<a name="line76"></a>  /**
+<a name="line77"></a>   * The URL of the flash movie to be embedded.
+<a name="line78"></a>   *
+<a name="line79"></a>   * @type {string}
+<a name="line80"></a>   * @private
+<a name="line81"></a>   */
+<a name="line82"></a>  this.flashUrl_ = flashUrl;
+<a name="line83"></a>
+<a name="line84"></a>  /**
+<a name="line85"></a>   * An event handler used to handle events consistently between browsers.
+<a name="line86"></a>   * @type {goog.events.EventHandler.&lt;!goog.ui.media.FlashObject&gt;}
+<a name="line87"></a>   * @private
+<a name="line88"></a>   */
+<a name="line89"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line90"></a>
+<a name="line91"></a>  /**
+<a name="line92"></a>   * A map of variables to be passed to the flash movie.
+<a name="line93"></a>   *
+<a name="line94"></a>   * @type {goog.structs.Map}
+<a name="line95"></a>   * @private
+<a name="line96"></a>   */
+<a name="line97"></a>  this.flashVars_ = new goog.structs.Map();
+<a name="line98"></a>};
+<a name="line99"></a>goog.inherits(goog.ui.media.FlashObject, goog.ui.Component);
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Different states of loaded-ness in which the SWF itself can be
+<a name="line104"></a> *
+<a name="line105"></a> * Talked about at:
+<a name="line106"></a> * http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_12059&amp;sliceId=1
+<a name="line107"></a> *
+<a name="line108"></a> * @enum {number}
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.ui.media.FlashObject.SwfReadyStates_ = {
+<a name="line112"></a>  LOADING: 0,
+<a name="line113"></a>  UNINITIALIZED: 1,
+<a name="line114"></a>  LOADED: 2,
+<a name="line115"></a>  INTERACTIVE: 3,
+<a name="line116"></a>  COMPLETE: 4
+<a name="line117"></a>};
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * The different modes for displaying a SWF. Note that different wmodes
+<a name="line122"></a> * can result in different bugs in different browsers and also that
+<a name="line123"></a> * both OPAQUE and TRANSPARENT will result in a performance hit.
+<a name="line124"></a> *
+<a name="line125"></a> * @enum {string}
+<a name="line126"></a> */
+<a name="line127"></a>goog.ui.media.FlashObject.Wmodes = {
+<a name="line128"></a>  /**
+<a name="line129"></a>   * Allows for z-ordering of the SWF.
+<a name="line130"></a>   */
+<a name="line131"></a>  OPAQUE: &#39;opaque&#39;,
+<a name="line132"></a>
+<a name="line133"></a>  /**
+<a name="line134"></a>   * Allows for z-ordering of the SWF and plays the SWF with a transparent BG.
+<a name="line135"></a>   */
+<a name="line136"></a>  TRANSPARENT: &#39;transparent&#39;,
+<a name="line137"></a>
+<a name="line138"></a>  /**
+<a name="line139"></a>   * The default wmode. Does not allow for z-ordering of the SWF.
+<a name="line140"></a>   */
+<a name="line141"></a>  WINDOW: &#39;window&#39;
+<a name="line142"></a>};
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * The different levels of allowScriptAccess.
+<a name="line147"></a> *
+<a name="line148"></a> * Talked about at:
+<a name="line149"></a> * http://kb2.adobe.com/cps/164/tn_16494.html
+<a name="line150"></a> *
+<a name="line151"></a> * @enum {string}
+<a name="line152"></a> */
+<a name="line153"></a>goog.ui.media.FlashObject.ScriptAccessLevel = {
+<a name="line154"></a>  /*
+<a name="line155"></a>   * The flash object can always communicate with its container page.
+<a name="line156"></a>   */
+<a name="line157"></a>  ALWAYS: &#39;always&#39;,
+<a name="line158"></a>
+<a name="line159"></a>  /*
+<a name="line160"></a>   * The flash object can only communicate with its container page if they are
+<a name="line161"></a>   * hosted in the same domain.
+<a name="line162"></a>   */
+<a name="line163"></a>  SAME_DOMAIN: &#39;sameDomain&#39;,
+<a name="line164"></a>
+<a name="line165"></a>  /*
+<a name="line166"></a>   * The flash can not communicate with its container page.
+<a name="line167"></a>   */
+<a name="line168"></a>  NEVER: &#39;never&#39;
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * The component CSS namespace.
+<a name="line174"></a> *
+<a name="line175"></a> * @type {string}
+<a name="line176"></a> */
+<a name="line177"></a>goog.ui.media.FlashObject.CSS_CLASS = goog.getCssName(&#39;goog-ui-media-flash&#39;);
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * The flash object CSS class.
+<a name="line182"></a> *
+<a name="line183"></a> * @type {string}
+<a name="line184"></a> */
+<a name="line185"></a>goog.ui.media.FlashObject.FLASH_CSS_CLASS =
+<a name="line186"></a>    goog.getCssName(&#39;goog-ui-media-flash-object&#39;);
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Template for the object tag for IE prior to version 11.
+<a name="line191"></a> *
+<a name="line192"></a> * @private {string}
+<a name="line193"></a> * @const
+<a name="line194"></a> */
+<a name="line195"></a>goog.ui.media.FlashObject.IE_HTML_ =
+<a name="line196"></a>    &#39;&lt;object classid=&quot;clsid:d27cdb6e-ae6d-11cf-96b8-444553540000&quot;&#39; +
+<a name="line197"></a>    &#39; id=&quot;%s&quot;&#39; +
+<a name="line198"></a>    &#39; name=&quot;%s&quot;&#39; +
+<a name="line199"></a>    &#39; class=&quot;%s&quot;&#39; +
+<a name="line200"></a>    &#39;&gt;&#39; +
+<a name="line201"></a>    &#39;&lt;param name=&quot;movie&quot; value=&quot;%s&quot;/&gt;&#39; +
+<a name="line202"></a>    &#39;&lt;param name=&quot;quality&quot; value=&quot;high&quot;/&gt;&#39; +
+<a name="line203"></a>    &#39;&lt;param name=&quot;FlashVars&quot; value=&quot;%s&quot;/&gt;&#39; +
+<a name="line204"></a>    &#39;&lt;param name=&quot;bgcolor&quot; value=&quot;%s&quot;/&gt;&#39; +
+<a name="line205"></a>    &#39;&lt;param name=&quot;AllowScriptAccess&quot; value=&quot;%s&quot;/&gt;&#39; +
+<a name="line206"></a>    &#39;&lt;param name=&quot;allowFullScreen&quot; value=&quot;true&quot;/&gt;&#39; +
+<a name="line207"></a>    &#39;&lt;param name=&quot;SeamlessTabbing&quot; value=&quot;false&quot;/&gt;&#39; +
+<a name="line208"></a>    &#39;%s&#39; +
+<a name="line209"></a>    &#39;&lt;/object&gt;&#39;;
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Template for the wmode param for IE prior to version 11.
+<a name="line214"></a> *
+<a name="line215"></a> * @private {string}
+<a name="line216"></a> * @const
+<a name="line217"></a> */
+<a name="line218"></a>goog.ui.media.FlashObject.IE_WMODE_PARAMS_ = &#39;&lt;param name=&quot;wmode&quot; value=&quot;%s&quot;/&gt;&#39;;
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Embed tag template for most browsers.
+<a name="line223"></a> *
+<a name="line224"></a> * @private {string}
+<a name="line225"></a> * @const
+<a name="line226"></a> */
+<a name="line227"></a>goog.ui.media.FlashObject.EMBED_HTML_ =
+<a name="line228"></a>    &#39;&lt;embed quality=&quot;high&quot;&#39; +
+<a name="line229"></a>    &#39; id=&quot;%s&quot;&#39; +
+<a name="line230"></a>    &#39; name=&quot;%s&quot;&#39; +
+<a name="line231"></a>    &#39; class=&quot;%s&quot;&#39; +
+<a name="line232"></a>    &#39; src=&quot;%s&quot;&#39; +
+<a name="line233"></a>    &#39; FlashVars=&quot;%s&quot;&#39; +
+<a name="line234"></a>    &#39; bgcolor=&quot;%s&quot;&#39; +
+<a name="line235"></a>    &#39; AllowScriptAccess=&quot;%s&quot;&#39; +
+<a name="line236"></a>    &#39; allowFullScreen=&quot;true&quot;&#39; +
+<a name="line237"></a>    &#39; SeamlessTabbing=&quot;false&quot;&#39; +
+<a name="line238"></a>    &#39; type=&quot;application/x-shockwave-flash&quot;&#39; +
+<a name="line239"></a>    &#39; pluginspage=&quot;http://www.macromedia.com/go/getflashplayer&quot;&#39; +
+<a name="line240"></a>    &#39; %s&gt;&#39; +
+<a name="line241"></a>    &#39;&lt;/embed&gt;&#39;;
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Template for the wmode param for most browsers.
+<a name="line246"></a> *
+<a name="line247"></a> * @private {string}
+<a name="line248"></a> * @const
+<a name="line249"></a> */
+<a name="line250"></a>goog.ui.media.FlashObject.WMODE_PARAMS_ = &#39;wmode=%s&#39;;
+<a name="line251"></a>
+<a name="line252"></a>
+<a name="line253"></a>/**
+<a name="line254"></a> * A logger used for debugging.
+<a name="line255"></a> *
+<a name="line256"></a> * @type {goog.log.Logger}
+<a name="line257"></a> * @private
+<a name="line258"></a> */
+<a name="line259"></a>goog.ui.media.FlashObject.prototype.logger_ =
+<a name="line260"></a>    goog.log.getLogger(&#39;goog.ui.media.FlashObject&#39;);
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * The wmode for the SWF.
+<a name="line265"></a> *
+<a name="line266"></a> * @type {goog.ui.media.FlashObject.Wmodes}
+<a name="line267"></a> * @private
+<a name="line268"></a> */
+<a name="line269"></a>goog.ui.media.FlashObject.prototype.wmode_ =
+<a name="line270"></a>    goog.ui.media.FlashObject.Wmodes.WINDOW;
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * The minimum required flash version.
+<a name="line275"></a> *
+<a name="line276"></a> * @type {?string}
+<a name="line277"></a> * @private
+<a name="line278"></a> */
+<a name="line279"></a>goog.ui.media.FlashObject.prototype.requiredVersion_;
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>/**
+<a name="line283"></a> * The flash movie width.
+<a name="line284"></a> *
+<a name="line285"></a> * @type {string}
+<a name="line286"></a> * @private
+<a name="line287"></a> */
+<a name="line288"></a>goog.ui.media.FlashObject.prototype.width_;
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * The flash movie height.
+<a name="line293"></a> *
+<a name="line294"></a> * @type {string}
+<a name="line295"></a> * @private
+<a name="line296"></a> */
+<a name="line297"></a>goog.ui.media.FlashObject.prototype.height_;
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * The flash movie background color.
+<a name="line302"></a> *
+<a name="line303"></a> * @type {string}
+<a name="line304"></a> * @private
+<a name="line305"></a> */
+<a name="line306"></a>goog.ui.media.FlashObject.prototype.backgroundColor_ = &#39;#000000&#39;;
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>/**
+<a name="line310"></a> * The flash movie allowScriptAccess setting.
+<a name="line311"></a> *
+<a name="line312"></a> * @type {string}
+<a name="line313"></a> * @private
+<a name="line314"></a> */
+<a name="line315"></a>goog.ui.media.FlashObject.prototype.allowScriptAccess_ =
+<a name="line316"></a>    goog.ui.media.FlashObject.ScriptAccessLevel.SAME_DOMAIN;
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/**
+<a name="line320"></a> * Sets the flash movie Wmode.
+<a name="line321"></a> *
+<a name="line322"></a> * @param {goog.ui.media.FlashObject.Wmodes} wmode the flash movie Wmode.
+<a name="line323"></a> * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
+<a name="line324"></a> */
+<a name="line325"></a>goog.ui.media.FlashObject.prototype.setWmode = function(wmode) {
+<a name="line326"></a>  this.wmode_ = wmode;
+<a name="line327"></a>  return this;
+<a name="line328"></a>};
+<a name="line329"></a>
+<a name="line330"></a>
+<a name="line331"></a>/**
+<a name="line332"></a> * @return {string} Returns the flash movie wmode.
+<a name="line333"></a> */
+<a name="line334"></a>goog.ui.media.FlashObject.prototype.getWmode = function() {
+<a name="line335"></a>  return this.wmode_;
+<a name="line336"></a>};
+<a name="line337"></a>
+<a name="line338"></a>
+<a name="line339"></a>/**
+<a name="line340"></a> * Adds flash variables.
+<a name="line341"></a> *
+<a name="line342"></a> * @param {goog.structs.Map|Object} map A key-value map of variables.
+<a name="line343"></a> * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
+<a name="line344"></a> */
+<a name="line345"></a>goog.ui.media.FlashObject.prototype.addFlashVars = function(map) {
+<a name="line346"></a>  this.flashVars_.addAll(map);
+<a name="line347"></a>  return this;
+<a name="line348"></a>};
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>/**
+<a name="line352"></a> * Sets a flash variable.
+<a name="line353"></a> *
+<a name="line354"></a> * @param {string} key The name of the flash variable.
+<a name="line355"></a> * @param {string} value The value of the flash variable.
+<a name="line356"></a> * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
+<a name="line357"></a> */
+<a name="line358"></a>goog.ui.media.FlashObject.prototype.setFlashVar = function(key, value) {
+<a name="line359"></a>  this.flashVars_.set(key, value);
+<a name="line360"></a>  return this;
+<a name="line361"></a>};
+<a name="line362"></a>
+<a name="line363"></a>
+<a name="line364"></a>/**
+<a name="line365"></a> * Sets flash variables. You can either pass a Map of key-&gt;value pairs or you
+<a name="line366"></a> * can pass a key, value pair to set a specific variable.
+<a name="line367"></a> *
+<a name="line368"></a> * TODO(user, martino): Get rid of this method.
+<a name="line369"></a> *
+<a name="line370"></a> * @deprecated Use {@link #addFlashVars} or {@link #setFlashVar} instead.
+<a name="line371"></a> * @param {goog.structs.Map|Object|string} flashVar A map of variables (given
+<a name="line372"></a> *    as a goog.structs.Map or an Object literal) or a key to the optional
+<a name="line373"></a> *    {@code opt_value}.
+<a name="line374"></a> * @param {string=} opt_value The optional value for the flashVar key.
+<a name="line375"></a> * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
+<a name="line376"></a> */
+<a name="line377"></a>goog.ui.media.FlashObject.prototype.setFlashVars = function(flashVar,
+<a name="line378"></a>                                                            opt_value) {
+<a name="line379"></a>  if (flashVar instanceof goog.structs.Map ||
+<a name="line380"></a>      goog.typeOf(flashVar) == &#39;object&#39;) {
+<a name="line381"></a>    this.addFlashVars(/**@type {!goog.structs.Map|!Object}*/(flashVar));
+<a name="line382"></a>  } else {
+<a name="line383"></a>    goog.asserts.assert(goog.isString(flashVar) &amp;&amp; goog.isDef(opt_value),
+<a name="line384"></a>        &#39;Invalid argument(s)&#39;);
+<a name="line385"></a>    this.setFlashVar(/**@type {string}*/(flashVar),
+<a name="line386"></a>                     /**@type {string}*/(opt_value));
+<a name="line387"></a>  }
+<a name="line388"></a>  return this;
+<a name="line389"></a>};
+<a name="line390"></a>
+<a name="line391"></a>
+<a name="line392"></a>/**
+<a name="line393"></a> * @return {goog.structs.Map} The current flash variables.
+<a name="line394"></a> */
+<a name="line395"></a>goog.ui.media.FlashObject.prototype.getFlashVars = function() {
+<a name="line396"></a>  return this.flashVars_;
+<a name="line397"></a>};
+<a name="line398"></a>
+<a name="line399"></a>
+<a name="line400"></a>/**
+<a name="line401"></a> * Sets the background color of the movie.
+<a name="line402"></a> *
+<a name="line403"></a> * @param {string} color The new color to be set.
+<a name="line404"></a> * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
+<a name="line405"></a> */
+<a name="line406"></a>goog.ui.media.FlashObject.prototype.setBackgroundColor = function(color) {
+<a name="line407"></a>  this.backgroundColor_ = color;
+<a name="line408"></a>  return this;
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>/**
+<a name="line413"></a> * @return {string} The background color of the movie.
+<a name="line414"></a> */
+<a name="line415"></a>goog.ui.media.FlashObject.prototype.getBackgroundColor = function() {
+<a name="line416"></a>  return this.backgroundColor_;
+<a name="line417"></a>};
+<a name="line418"></a>
+<a name="line419"></a>
+<a name="line420"></a>/**
+<a name="line421"></a> * Sets the allowScriptAccess setting of the movie.
+<a name="line422"></a> *
+<a name="line423"></a> * @param {string} value The new value to be set.
+<a name="line424"></a> * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
+<a name="line425"></a> */
+<a name="line426"></a>goog.ui.media.FlashObject.prototype.setAllowScriptAccess = function(value) {
+<a name="line427"></a>  this.allowScriptAccess_ = value;
+<a name="line428"></a>  return this;
+<a name="line429"></a>};
+<a name="line430"></a>
+<a name="line431"></a>
+<a name="line432"></a>/**
+<a name="line433"></a> * @return {string} The allowScriptAccess setting color of the movie.
+<a name="line434"></a> */
+<a name="line435"></a>goog.ui.media.FlashObject.prototype.getAllowScriptAccess = function() {
+<a name="line436"></a>  return this.allowScriptAccess_;
+<a name="line437"></a>};
+<a name="line438"></a>
+<a name="line439"></a>
+<a name="line440"></a>/**
+<a name="line441"></a> * Sets the width and height of the movie.
+<a name="line442"></a> *
+<a name="line443"></a> * @param {number|string} width The width of the movie.
+<a name="line444"></a> * @param {number|string} height The height of the movie.
+<a name="line445"></a> * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
+<a name="line446"></a> */
+<a name="line447"></a>goog.ui.media.FlashObject.prototype.setSize = function(width, height) {
+<a name="line448"></a>  this.width_ = goog.isString(width) ? width : Math.round(width) + &#39;px&#39;;
+<a name="line449"></a>  this.height_ = goog.isString(height) ? height : Math.round(height) + &#39;px&#39;;
+<a name="line450"></a>  if (this.getElement()) {
+<a name="line451"></a>    goog.style.setSize(this.getFlashElement(), this.width_, this.height_);
+<a name="line452"></a>  }
+<a name="line453"></a>  return this;
+<a name="line454"></a>};
+<a name="line455"></a>
+<a name="line456"></a>
+<a name="line457"></a>/**
+<a name="line458"></a> * @return {?string} The flash required version.
+<a name="line459"></a> */
+<a name="line460"></a>goog.ui.media.FlashObject.prototype.getRequiredVersion = function() {
+<a name="line461"></a>  return this.requiredVersion_;
+<a name="line462"></a>};
+<a name="line463"></a>
+<a name="line464"></a>
+<a name="line465"></a>/**
+<a name="line466"></a> * Sets the minimum flash required version.
+<a name="line467"></a> *
+<a name="line468"></a> * @param {?string} version The minimum required version for this movie to work,
+<a name="line469"></a> *     or null if you want to unset it.
+<a name="line470"></a> * @return {!goog.ui.media.FlashObject} The flash object instance for chaining.
+<a name="line471"></a> */
+<a name="line472"></a>goog.ui.media.FlashObject.prototype.setRequiredVersion = function(version) {
+<a name="line473"></a>  this.requiredVersion_ = version;
+<a name="line474"></a>  return this;
+<a name="line475"></a>};
+<a name="line476"></a>
+<a name="line477"></a>
+<a name="line478"></a>/**
+<a name="line479"></a> * Returns whether this SWF has a minimum required flash version.
+<a name="line480"></a> *
+<a name="line481"></a> * @return {boolean} Whether a required version was set or not.
+<a name="line482"></a> */
+<a name="line483"></a>goog.ui.media.FlashObject.prototype.hasRequiredVersion = function() {
+<a name="line484"></a>  return this.requiredVersion_ != null;
+<a name="line485"></a>};
+<a name="line486"></a>
+<a name="line487"></a>
+<a name="line488"></a>/**
+<a name="line489"></a> * Writes the Flash embedding {@code HTMLObjectElement} to this components root
+<a name="line490"></a> * element and adds listeners for all events to handle them consistently.
+<a name="line491"></a> * @override
+<a name="line492"></a> */
+<a name="line493"></a>goog.ui.media.FlashObject.prototype.enterDocument = function() {
+<a name="line494"></a>  goog.ui.media.FlashObject.superClass_.enterDocument.call(this);
+<a name="line495"></a>
+<a name="line496"></a>  // The SWF tag must be written after this component&#39;s element is appended to
+<a name="line497"></a>  // the DOM. Otherwise Flash&#39;s ExternalInterface is broken in IE.
+<a name="line498"></a>  this.getElement().innerHTML = this.generateSwfTag_();
+<a name="line499"></a>  if (this.width_ &amp;&amp; this.height_) {
+<a name="line500"></a>    this.setSize(this.width_, this.height_);
+<a name="line501"></a>  }
+<a name="line502"></a>
+<a name="line503"></a>  // Sinks all the events on the bubble phase.
+<a name="line504"></a>  //
+<a name="line505"></a>  // Flash plugins propagates events from/to the plugin to the browser
+<a name="line506"></a>  // inconsistently:
+<a name="line507"></a>  //
+<a name="line508"></a>  // 1) FF2 + linux: the flash plugin will stop the propagation of all events
+<a name="line509"></a>  // from the plugin to the browser.
+<a name="line510"></a>  // 2) FF3 + mac: the flash plugin will propagate events on the &lt;embed&gt; object
+<a name="line511"></a>  // but that will get propagated to its parents.
+<a name="line512"></a>  // 3) Safari 3.1.1 + mac: the flash plugin will propagate the event to the
+<a name="line513"></a>  // &lt;object&gt; tag that event will propagate to its parents.
+<a name="line514"></a>  // 4) IE7 + windows: the flash plugin  will eat all events, not propagating
+<a name="line515"></a>  // anything to the javascript.
+<a name="line516"></a>  // 5) Chrome + windows: the flash plugin will eat all events, not propagating
+<a name="line517"></a>  // anything to the javascript.
+<a name="line518"></a>  //
+<a name="line519"></a>  // To overcome this inconsistency, all events from/to the plugin are sinked,
+<a name="line520"></a>  // since you can&#39;t assume that the events will be propagated.
+<a name="line521"></a>  //
+<a name="line522"></a>  // NOTE(user): we only sink events on the bubbling phase, since there are no
+<a name="line523"></a>  // inexpensive/scalable way to stop events on the capturing phase unless we
+<a name="line524"></a>  // added an event listener on the document for each flash object.
+<a name="line525"></a>  this.eventHandler_.listen(
+<a name="line526"></a>      this.getElement(),
+<a name="line527"></a>      goog.object.getValues(goog.events.EventType),
+<a name="line528"></a>      goog.events.Event.stopPropagation);
+<a name="line529"></a>};
+<a name="line530"></a>
+<a name="line531"></a>
+<a name="line532"></a>/**
+<a name="line533"></a> * Creates the DOM structure.
+<a name="line534"></a> *
+<a name="line535"></a> * @override
+<a name="line536"></a> */
+<a name="line537"></a>goog.ui.media.FlashObject.prototype.createDom = function() {
+<a name="line538"></a>  if (this.hasRequiredVersion() &amp;&amp;
+<a name="line539"></a>      !goog.userAgent.flash.isVersion(
+<a name="line540"></a>          /** @type {string} */ (this.getRequiredVersion()))) {
+<a name="line541"></a>    goog.log.warning(this.logger_, &#39;Required flash version not found:&#39; +
+<a name="line542"></a>        this.getRequiredVersion());
+<a name="line543"></a>    throw Error(goog.ui.Component.Error.NOT_SUPPORTED);
+<a name="line544"></a>  }
+<a name="line545"></a>
+<a name="line546"></a>  var element = this.getDomHelper().createElement(&#39;div&#39;);
+<a name="line547"></a>  element.className = goog.ui.media.FlashObject.CSS_CLASS;
+<a name="line548"></a>  this.setElementInternal(element);
+<a name="line549"></a>};
+<a name="line550"></a>
+<a name="line551"></a>
+<a name="line552"></a>/**
+<a name="line553"></a> * Writes the HTML to embed the flash object.
+<a name="line554"></a> *
+<a name="line555"></a> * @return {string} Browser appropriate HTML to add the SWF to the DOM.
+<a name="line556"></a> * @private
+<a name="line557"></a> */
+<a name="line558"></a>goog.ui.media.FlashObject.prototype.generateSwfTag_ = function() {
+<a name="line559"></a>  var template = goog.ui.media.FlashObject.EMBED_HTML_;
+<a name="line560"></a>  var params = goog.ui.media.FlashObject.WMODE_PARAMS_;
+<a name="line561"></a>
+<a name="line562"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isDocumentModeOrHigher(11)) {
+<a name="line563"></a>    template = goog.ui.media.FlashObject.IE_HTML_;
+<a name="line564"></a>    params = goog.ui.media.FlashObject.IE_WMODE_PARAMS_;
+<a name="line565"></a>  }
+<a name="line566"></a>  params = goog.string.subs(params, this.wmode_);
+<a name="line567"></a>
+<a name="line568"></a>  var keys = this.flashVars_.getKeys();
+<a name="line569"></a>  var values = this.flashVars_.getValues();
+<a name="line570"></a>
+<a name="line571"></a>  var flashVars = [];
+<a name="line572"></a>  for (var i = 0; i &lt; keys.length; i++) {
+<a name="line573"></a>    var key = goog.string.urlEncode(keys[i]);
+<a name="line574"></a>    var value = goog.string.urlEncode(values[i]);
+<a name="line575"></a>    flashVars.push(key + &#39;=&#39; + value);
+<a name="line576"></a>  }
+<a name="line577"></a>
+<a name="line578"></a>  // TODO(user): find a more efficient way to build the HTML.
+<a name="line579"></a>  return goog.string.subs(
+<a name="line580"></a>      template,
+<a name="line581"></a>      this.getId(),
+<a name="line582"></a>      this.getId(),
+<a name="line583"></a>      goog.ui.media.FlashObject.FLASH_CSS_CLASS,
+<a name="line584"></a>      goog.string.htmlEscape(this.flashUrl_),
+<a name="line585"></a>      goog.string.htmlEscape(flashVars.join(&#39;&amp;&#39;)),
+<a name="line586"></a>      this.backgroundColor_,
+<a name="line587"></a>      this.allowScriptAccess_,
+<a name="line588"></a>      params);
+<a name="line589"></a>};
+<a name="line590"></a>
+<a name="line591"></a>
+<a name="line592"></a>/**
+<a name="line593"></a> * @return {HTMLObjectElement} The flash element or null if the element can&#39;t
+<a name="line594"></a> *     be found.
+<a name="line595"></a> */
+<a name="line596"></a>goog.ui.media.FlashObject.prototype.getFlashElement = function() {
+<a name="line597"></a>  return /** @type {HTMLObjectElement} */(this.getElement() ?
+<a name="line598"></a>      this.getElement().firstChild : null);
+<a name="line599"></a>};
+<a name="line600"></a>
+<a name="line601"></a>
+<a name="line602"></a>/** @override */
+<a name="line603"></a>goog.ui.media.FlashObject.prototype.disposeInternal = function() {
+<a name="line604"></a>  goog.ui.media.FlashObject.superClass_.disposeInternal.call(this);
+<a name="line605"></a>  this.flashVars_ = null;
+<a name="line606"></a>
+<a name="line607"></a>  this.eventHandler_.dispose();
+<a name="line608"></a>  this.eventHandler_ = null;
+<a name="line609"></a>};
+<a name="line610"></a>
+<a name="line611"></a>
+<a name="line612"></a>/**
+<a name="line613"></a> * @return {boolean} whether the SWF has finished loading or not.
+<a name="line614"></a> */
+<a name="line615"></a>goog.ui.media.FlashObject.prototype.isLoaded = function() {
+<a name="line616"></a>  if (!this.isInDocument() || !this.getElement()) {
+<a name="line617"></a>    return false;
+<a name="line618"></a>  }
+<a name="line619"></a>
+<a name="line620"></a>  if (this.getFlashElement().readyState &amp;&amp;
+<a name="line621"></a>      this.getFlashElement().readyState ==
+<a name="line622"></a>          goog.ui.media.FlashObject.SwfReadyStates_.COMPLETE) {
+<a name="line623"></a>    return true;
+<a name="line624"></a>  }
+<a name="line625"></a>
+<a name="line626"></a>  if (this.getFlashElement().PercentLoaded &amp;&amp;
+<a name="line627"></a>      this.getFlashElement().PercentLoaded() == 100) {
+<a name="line628"></a>    return true;
+<a name="line629"></a>  }
+<a name="line630"></a>
+<a name="line631"></a>  return false;
+<a name="line632"></a>};
+</pre>
+
+
+</body>
+</html>

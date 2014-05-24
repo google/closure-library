@@ -1,0 +1,198 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>fs.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_fs_fs.js.html">fs.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Mock implementations of the Closure HTML5 FileSystem wrapper
+<a name="line17"></a> * classes. These implementations are designed to be usable in any browser, so
+<a name="line18"></a> * they use none of the native FileSystem-related objects.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.testing.fs&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line25"></a>goog.require(&#39;goog.array&#39;);
+<a name="line26"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line27"></a>goog.require(&#39;goog.fs&#39;);
+<a name="line28"></a>goog.require(&#39;goog.testing.fs.Blob&#39;);
+<a name="line29"></a>goog.require(&#39;goog.testing.fs.FileSystem&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Get a filesystem object. Since these are mocks, there&#39;s no difference between
+<a name="line34"></a> * temporary and persistent filesystems.
+<a name="line35"></a> *
+<a name="line36"></a> * @param {number} size Ignored.
+<a name="line37"></a> * @return {!goog.async.Deferred} The deferred
+<a name="line38"></a> *     {@link goog.testing.fs.FileSystem}.
+<a name="line39"></a> */
+<a name="line40"></a>goog.testing.fs.getTemporary = function(size) {
+<a name="line41"></a>  var d = new goog.async.Deferred();
+<a name="line42"></a>  goog.Timer.callOnce(
+<a name="line43"></a>      goog.bind(d.callback, d, new goog.testing.fs.FileSystem()));
+<a name="line44"></a>  return d;
+<a name="line45"></a>};
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * Get a filesystem object. Since these are mocks, there&#39;s no difference between
+<a name="line50"></a> * temporary and persistent filesystems.
+<a name="line51"></a> *
+<a name="line52"></a> * @param {number} size Ignored.
+<a name="line53"></a> * @return {!goog.async.Deferred} The deferred
+<a name="line54"></a> *     {@link goog.testing.fs.FileSystem}.
+<a name="line55"></a> */
+<a name="line56"></a>goog.testing.fs.getPersistent = function(size) {
+<a name="line57"></a>  return goog.testing.fs.getTemporary(size);
+<a name="line58"></a>};
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * Which object URLs have been granted for fake blobs.
+<a name="line63"></a> * @type {!Object.&lt;boolean&gt;}
+<a name="line64"></a> * @private
+<a name="line65"></a> */
+<a name="line66"></a>goog.testing.fs.objectUrls_ = {};
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * Create a fake object URL for a given fake blob. This can be used as a real
+<a name="line71"></a> * URL, and it can be created and revoked normally.
+<a name="line72"></a> *
+<a name="line73"></a> * @param {!goog.testing.fs.Blob} blob The blob for which to create the URL.
+<a name="line74"></a> * @return {string} The URL.
+<a name="line75"></a> */
+<a name="line76"></a>goog.testing.fs.createObjectUrl = function(blob) {
+<a name="line77"></a>  var url = blob.toDataUrl();
+<a name="line78"></a>  goog.testing.fs.objectUrls_[url] = true;
+<a name="line79"></a>  return url;
+<a name="line80"></a>};
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Remove a URL that was created for a fake blob.
+<a name="line85"></a> *
+<a name="line86"></a> * @param {string} url The URL to revoke.
+<a name="line87"></a> */
+<a name="line88"></a>goog.testing.fs.revokeObjectUrl = function(url) {
+<a name="line89"></a>  delete goog.testing.fs.objectUrls_[url];
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Return whether or not a URL has been granted for the given blob.
+<a name="line95"></a> *
+<a name="line96"></a> * @param {!goog.testing.fs.Blob} blob The blob to check.
+<a name="line97"></a> * @return {boolean} Whether a URL has been granted.
+<a name="line98"></a> */
+<a name="line99"></a>goog.testing.fs.isObjectUrlGranted = function(blob) {
+<a name="line100"></a>  return (blob.toDataUrl()) in goog.testing.fs.objectUrls_;
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Concatenates one or more values together and converts them to a fake blob.
+<a name="line106"></a> *
+<a name="line107"></a> * @param {...(string|!goog.testing.fs.Blob)} var_args The values that will make
+<a name="line108"></a> *     up the resulting blob.
+<a name="line109"></a> * @return {!goog.testing.fs.Blob} The blob.
+<a name="line110"></a> */
+<a name="line111"></a>goog.testing.fs.getBlob = function(var_args) {
+<a name="line112"></a>  return new goog.testing.fs.Blob(goog.array.map(arguments, String).join(&#39;&#39;));
+<a name="line113"></a>};
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Returns the string value of a fake blob.
+<a name="line118"></a> *
+<a name="line119"></a> * @param {!goog.testing.fs.Blob} blob The blob to convert to a string.
+<a name="line120"></a> * @param {string=} opt_encoding Ignored.
+<a name="line121"></a> * @return {!goog.async.Deferred} The deferred string value of the blob.
+<a name="line122"></a> */
+<a name="line123"></a>goog.testing.fs.blobToString = function(blob, opt_encoding) {
+<a name="line124"></a>  var d = new goog.async.Deferred();
+<a name="line125"></a>  goog.Timer.callOnce(goog.bind(d.callback, d, blob.toString()));
+<a name="line126"></a>  return d;
+<a name="line127"></a>};
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Installs goog.testing.fs in place of the standard goog.fs. After calling
+<a name="line132"></a> * this, code that uses goog.fs should work without issue using goog.testing.fs.
+<a name="line133"></a> *
+<a name="line134"></a> * @param {!goog.testing.PropertyReplacer} stubs The property replacer for
+<a name="line135"></a> *     stubbing out the original goog.fs functions.
+<a name="line136"></a> */
+<a name="line137"></a>goog.testing.fs.install = function(stubs) {
+<a name="line138"></a>  // Prevent warnings that goog.fs may get optimized away. It&#39;s true this is
+<a name="line139"></a>  // unsafe in compiled code, but it&#39;s only meant for tests.
+<a name="line140"></a>  var fs = goog.getObjectByName(&#39;goog.fs&#39;);
+<a name="line141"></a>  stubs.replace(fs, &#39;getTemporary&#39;, goog.testing.fs.getTemporary);
+<a name="line142"></a>  stubs.replace(fs, &#39;getPersistent&#39;, goog.testing.fs.getPersistent);
+<a name="line143"></a>  stubs.replace(fs, &#39;createObjectUrl&#39;, goog.testing.fs.createObjectUrl);
+<a name="line144"></a>  stubs.replace(fs, &#39;revokeObjectUrl&#39;, goog.testing.fs.revokeObjectUrl);
+<a name="line145"></a>  stubs.replace(fs, &#39;getBlob&#39;, goog.testing.fs.getBlob);
+<a name="line146"></a>  stubs.replace(fs, &#39;blobToString&#39;, goog.testing.fs.blobToString);
+<a name="line147"></a>};
+</pre>
+
+
+</body>
+</html>

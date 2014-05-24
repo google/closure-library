@@ -1,0 +1,389 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>sha2.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_crypt_sha2.js.html">sha2.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Base class for SHA-2 cryptographic hash.
+<a name="line17"></a> *
+<a name="line18"></a> * Variable names follow the notation in FIPS PUB 180-3:
+<a name="line19"></a> * http://csrc.nist.gov/publications/fips/fips180-3/fips180-3_final.pdf.
+<a name="line20"></a> *
+<a name="line21"></a> * Some code similar to SHA1 are borrowed from sha1.js written by mschilder@.
+<a name="line22"></a> *
+<a name="line23"></a> */
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.crypt.Sha2&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.array&#39;);
+<a name="line28"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line29"></a>goog.require(&#39;goog.crypt.Hash&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * SHA-2 cryptographic hash constructor.
+<a name="line35"></a> * This constructor should not be used directly to create the object. Rather,
+<a name="line36"></a> * one should use the constructor of the sub-classes.
+<a name="line37"></a> * @param {number} numHashBlocks The size of output in 16-byte blocks.
+<a name="line38"></a> * @param {Array.&lt;number&gt;} initHashBlocks The hash-specific initialization
+<a name="line39"></a> * @constructor
+<a name="line40"></a> * @extends {goog.crypt.Hash}
+<a name="line41"></a> * @struct
+<a name="line42"></a> */
+<a name="line43"></a>goog.crypt.Sha2 = function(numHashBlocks, initHashBlocks) {
+<a name="line44"></a>  goog.crypt.Sha2.base(this, &#39;constructor&#39;);
+<a name="line45"></a>
+<a name="line46"></a>  this.blockSize = goog.crypt.Sha2.BLOCKSIZE_;
+<a name="line47"></a>
+<a name="line48"></a>  /**
+<a name="line49"></a>   * A chunk holding the currently processed message bytes. Once the chunk has
+<a name="line50"></a>   * 64 bytes, we feed it into computeChunk_ function and reset this.chunk_.
+<a name="line51"></a>   * @private {!Array.&lt;number&gt;|Uint8Array}
+<a name="line52"></a>   */
+<a name="line53"></a>  this.chunk_ = goog.global[&#39;Uint8Array&#39;] ?
+<a name="line54"></a>      new Uint8Array(this.blockSize) : new Array(this.blockSize);
+<a name="line55"></a>
+<a name="line56"></a>  /**
+<a name="line57"></a>   * Current number of bytes in this.chunk_.
+<a name="line58"></a>   * @private {number}
+<a name="line59"></a>   */
+<a name="line60"></a>  this.inChunk_ = 0;
+<a name="line61"></a>
+<a name="line62"></a>  /**
+<a name="line63"></a>   * Total number of bytes in currently processed message.
+<a name="line64"></a>   * @private {number}
+<a name="line65"></a>   */
+<a name="line66"></a>  this.total_ = 0;
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>  /**
+<a name="line70"></a>   * Holds the previous values of accumulated hash a-h in the computeChunk_
+<a name="line71"></a>   * function.
+<a name="line72"></a>   * @private {!Array.&lt;number&gt;|Int32Array}
+<a name="line73"></a>   */
+<a name="line74"></a>  this.hash_ = [];
+<a name="line75"></a>
+<a name="line76"></a>  /**
+<a name="line77"></a>   * The number of output hash blocks (each block is 4 bytes long).
+<a name="line78"></a>   * @private {number}
+<a name="line79"></a>   */
+<a name="line80"></a>  this.numHashBlocks_ = numHashBlocks;
+<a name="line81"></a>
+<a name="line82"></a>  /**
+<a name="line83"></a>   * @private {Array.&lt;number&gt;} initHashBlocks
+<a name="line84"></a>   */
+<a name="line85"></a>  this.initHashBlocks_ = initHashBlocks;
+<a name="line86"></a>
+<a name="line87"></a>  /**
+<a name="line88"></a>   * Temporary array used in chunk computation.  Allocate here as a
+<a name="line89"></a>   * member rather than as a local within computeChunk_() as a
+<a name="line90"></a>   * performance optimization to reduce the number of allocations and
+<a name="line91"></a>   * reduce garbage collection.
+<a name="line92"></a>   * @private {!Int32Array|!Array.&lt;number&gt;}
+<a name="line93"></a>   */
+<a name="line94"></a>  this.w_ = goog.global[&#39;Int32Array&#39;] ? new Int32Array(64) : new Array(64);
+<a name="line95"></a>
+<a name="line96"></a>  if (!goog.isDef(goog.crypt.Sha2.Kx_)) {
+<a name="line97"></a>    // This is the first time this constructor has been called.
+<a name="line98"></a>    if (goog.global[&#39;Int32Array&#39;]) {
+<a name="line99"></a>      // Typed arrays exist
+<a name="line100"></a>      goog.crypt.Sha2.Kx_ = new Int32Array(goog.crypt.Sha2.K_);
+<a name="line101"></a>    } else {
+<a name="line102"></a>      // Typed arrays do not exist
+<a name="line103"></a>      goog.crypt.Sha2.Kx_ = goog.crypt.Sha2.K_;
+<a name="line104"></a>    }
+<a name="line105"></a>  }
+<a name="line106"></a>
+<a name="line107"></a>  this.reset();
+<a name="line108"></a>};
+<a name="line109"></a>goog.inherits(goog.crypt.Sha2, goog.crypt.Hash);
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * The block size
+<a name="line114"></a> * @private &lt;number&gt;
+<a name="line115"></a> */
+<a name="line116"></a>goog.crypt.Sha2.BLOCKSIZE_ = 512 / 8;
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Contains data needed to pad messages less than BLOCK_SIZE_ bytes.
+<a name="line121"></a> * @private {!Array.&lt;number&gt;}
+<a name="line122"></a> */
+<a name="line123"></a>goog.crypt.Sha2.PADDING_ = goog.array.concat(128,
+<a name="line124"></a>    goog.array.repeat(0, goog.crypt.Sha2.BLOCKSIZE_ - 1));
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/** @override */
+<a name="line128"></a>goog.crypt.Sha2.prototype.reset = function() {
+<a name="line129"></a>  this.inChunk_ = 0;
+<a name="line130"></a>  this.total_ = 0;
+<a name="line131"></a>  this.hash_ = goog.global[&#39;Int32Array&#39;] ?
+<a name="line132"></a>      new Int32Array(this.initHashBlocks_) :
+<a name="line133"></a>      goog.array.clone(this.initHashBlocks_);
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Helper function to compute the hashes for a given 512-bit message chunk.
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.crypt.Sha2.prototype.computeChunk_ = function() {
+<a name="line142"></a>  var chunk = this.chunk_;
+<a name="line143"></a>  goog.asserts.assert(chunk.length == this.blockSize);
+<a name="line144"></a>  var rounds = 64;
+<a name="line145"></a>
+<a name="line146"></a>  // Divide the chunk into 16 32-bit-words.
+<a name="line147"></a>  var w = this.w_;
+<a name="line148"></a>  var index = 0;
+<a name="line149"></a>  var offset = 0;
+<a name="line150"></a>  while (offset &lt; chunk.length) {
+<a name="line151"></a>    w[index++] = (chunk[offset] &lt;&lt; 24) |
+<a name="line152"></a>                 (chunk[offset + 1] &lt;&lt; 16) |
+<a name="line153"></a>                 (chunk[offset + 2] &lt;&lt; 8) |
+<a name="line154"></a>                 (chunk[offset + 3]);
+<a name="line155"></a>    offset = index * 4;
+<a name="line156"></a>  }
+<a name="line157"></a>
+<a name="line158"></a>  // Extend the w[] array to be the number of rounds.
+<a name="line159"></a>  for (var i = 16; i &lt; rounds; i++) {
+<a name="line160"></a>    var w_15 = w[i - 15] | 0;
+<a name="line161"></a>    var s0 = ((w_15 &gt;&gt;&gt; 7) | (w_15 &lt;&lt; 25)) ^
+<a name="line162"></a>             ((w_15 &gt;&gt;&gt; 18) | (w_15 &lt;&lt; 14)) ^
+<a name="line163"></a>             (w_15 &gt;&gt;&gt; 3);
+<a name="line164"></a>    var w_2 = w[i - 2] | 0;
+<a name="line165"></a>    var s1 = ((w_2 &gt;&gt;&gt; 17) | (w_2 &lt;&lt; 15)) ^
+<a name="line166"></a>             ((w_2 &gt;&gt;&gt; 19) | (w_2 &lt;&lt; 13)) ^
+<a name="line167"></a>             (w_2 &gt;&gt;&gt; 10);
+<a name="line168"></a>
+<a name="line169"></a>    // As a performance optimization, construct the sum a pair at a time
+<a name="line170"></a>    // with casting to integer (bitwise OR) to eliminate unnecessary
+<a name="line171"></a>    // double&lt;-&gt;integer conversions.
+<a name="line172"></a>    var partialSum1 = ((w[i - 16] | 0) + s0) | 0;
+<a name="line173"></a>    var partialSum2 = ((w[i - 7] | 0) + s1) | 0;
+<a name="line174"></a>    w[i] = (partialSum1 + partialSum2) | 0;
+<a name="line175"></a>  }
+<a name="line176"></a>
+<a name="line177"></a>  var a = this.hash_[0] | 0;
+<a name="line178"></a>  var b = this.hash_[1] | 0;
+<a name="line179"></a>  var c = this.hash_[2] | 0;
+<a name="line180"></a>  var d = this.hash_[3] | 0;
+<a name="line181"></a>  var e = this.hash_[4] | 0;
+<a name="line182"></a>  var f = this.hash_[5] | 0;
+<a name="line183"></a>  var g = this.hash_[6] | 0;
+<a name="line184"></a>  var h = this.hash_[7] | 0;
+<a name="line185"></a>  for (var i = 0; i &lt; rounds; i++) {
+<a name="line186"></a>    var S0 = ((a &gt;&gt;&gt; 2) | (a &lt;&lt; 30)) ^
+<a name="line187"></a>             ((a &gt;&gt;&gt; 13) | (a &lt;&lt; 19)) ^
+<a name="line188"></a>             ((a &gt;&gt;&gt; 22) | (a &lt;&lt; 10));
+<a name="line189"></a>    var maj = ((a &amp; b) ^ (a &amp; c) ^ (b &amp; c));
+<a name="line190"></a>    var t2 = (S0 + maj) | 0;
+<a name="line191"></a>    var S1 = ((e &gt;&gt;&gt; 6) | (e &lt;&lt; 26)) ^
+<a name="line192"></a>             ((e &gt;&gt;&gt; 11) | (e &lt;&lt; 21)) ^
+<a name="line193"></a>             ((e &gt;&gt;&gt; 25) | (e &lt;&lt; 7));
+<a name="line194"></a>    var ch = ((e &amp; f) ^ ((~ e) &amp; g));
+<a name="line195"></a>
+<a name="line196"></a>    // As a performance optimization, construct the sum a pair at a time
+<a name="line197"></a>    // with casting to integer (bitwise OR) to eliminate unnecessary
+<a name="line198"></a>    // double&lt;-&gt;integer conversions.
+<a name="line199"></a>    var partialSum1 = (h + S1) | 0;
+<a name="line200"></a>    var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
+<a name="line201"></a>    var partialSum3 = (partialSum2 + (w[i] | 0)) | 0;
+<a name="line202"></a>    var t1 = (partialSum1 + partialSum3) | 0;
+<a name="line203"></a>
+<a name="line204"></a>    h = g;
+<a name="line205"></a>    g = f;
+<a name="line206"></a>    f = e;
+<a name="line207"></a>    e = (d + t1) | 0;
+<a name="line208"></a>    d = c;
+<a name="line209"></a>    c = b;
+<a name="line210"></a>    b = a;
+<a name="line211"></a>    a = (t1 + t2) | 0;
+<a name="line212"></a>  }
+<a name="line213"></a>
+<a name="line214"></a>  this.hash_[0] = (this.hash_[0] + a) | 0;
+<a name="line215"></a>  this.hash_[1] = (this.hash_[1] + b) | 0;
+<a name="line216"></a>  this.hash_[2] = (this.hash_[2] + c) | 0;
+<a name="line217"></a>  this.hash_[3] = (this.hash_[3] + d) | 0;
+<a name="line218"></a>  this.hash_[4] = (this.hash_[4] + e) | 0;
+<a name="line219"></a>  this.hash_[5] = (this.hash_[5] + f) | 0;
+<a name="line220"></a>  this.hash_[6] = (this.hash_[6] + g) | 0;
+<a name="line221"></a>  this.hash_[7] = (this.hash_[7] + h) | 0;
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/** @override */
+<a name="line226"></a>goog.crypt.Sha2.prototype.update = function(message, opt_length) {
+<a name="line227"></a>  if (!goog.isDef(opt_length)) {
+<a name="line228"></a>    opt_length = message.length;
+<a name="line229"></a>  }
+<a name="line230"></a>  // Process the message from left to right up to |opt_length| bytes.
+<a name="line231"></a>  // When we get a 512-bit chunk, compute the hash of it and reset
+<a name="line232"></a>  // this.chunk_. The message might not be multiple of 512 bits so we
+<a name="line233"></a>  // might end up with a chunk that is less than 512 bits. We store
+<a name="line234"></a>  // such partial chunk in this.chunk_ and it will be filled up later
+<a name="line235"></a>  // in digest().
+<a name="line236"></a>  var n = 0;
+<a name="line237"></a>  var inChunk = this.inChunk_;
+<a name="line238"></a>
+<a name="line239"></a>  // The input message could be either byte array of string.
+<a name="line240"></a>  if (goog.isString(message)) {
+<a name="line241"></a>    while (n &lt; opt_length) {
+<a name="line242"></a>      this.chunk_[inChunk++] = message.charCodeAt(n++);
+<a name="line243"></a>      if (inChunk == this.blockSize) {
+<a name="line244"></a>        this.computeChunk_();
+<a name="line245"></a>        inChunk = 0;
+<a name="line246"></a>      }
+<a name="line247"></a>    }
+<a name="line248"></a>  } else if (goog.isArray(message)) {
+<a name="line249"></a>    while (n &lt; opt_length) {
+<a name="line250"></a>      var b = message[n++];
+<a name="line251"></a>      if (!(&#39;number&#39; == typeof b &amp;&amp; 0 &lt;= b &amp;&amp; 255 &gt;= b &amp;&amp; b == (b | 0))) {
+<a name="line252"></a>        throw Error(&#39;message must be a byte array&#39;);
+<a name="line253"></a>      }
+<a name="line254"></a>      this.chunk_[inChunk++] = b;
+<a name="line255"></a>      if (inChunk == this.blockSize) {
+<a name="line256"></a>        this.computeChunk_();
+<a name="line257"></a>        inChunk = 0;
+<a name="line258"></a>      }
+<a name="line259"></a>    }
+<a name="line260"></a>  } else {
+<a name="line261"></a>    throw Error(&#39;message must be string or array&#39;);
+<a name="line262"></a>  }
+<a name="line263"></a>
+<a name="line264"></a>  // Record the current bytes in chunk to support partial update.
+<a name="line265"></a>  this.inChunk_ = inChunk;
+<a name="line266"></a>
+<a name="line267"></a>  // Record total message bytes we have processed so far.
+<a name="line268"></a>  this.total_ += opt_length;
+<a name="line269"></a>};
+<a name="line270"></a>
+<a name="line271"></a>
+<a name="line272"></a>/** @override */
+<a name="line273"></a>goog.crypt.Sha2.prototype.digest = function() {
+<a name="line274"></a>  var digest = [];
+<a name="line275"></a>  var totalBits = this.total_ * 8;
+<a name="line276"></a>
+<a name="line277"></a>  // Append pad 0x80 0x00*.
+<a name="line278"></a>  if (this.inChunk_ &lt; 56) {
+<a name="line279"></a>    this.update(goog.crypt.Sha2.PADDING_, 56 - this.inChunk_);
+<a name="line280"></a>  } else {
+<a name="line281"></a>    this.update(goog.crypt.Sha2.PADDING_,
+<a name="line282"></a>        this.blockSize - (this.inChunk_ - 56));
+<a name="line283"></a>  }
+<a name="line284"></a>
+<a name="line285"></a>  // Append # bits in the 64-bit big-endian format.
+<a name="line286"></a>  for (var i = 63; i &gt;= 56; i--) {
+<a name="line287"></a>    this.chunk_[i] = totalBits &amp; 255;
+<a name="line288"></a>    totalBits /= 256; // Don&#39;t use bit-shifting here!
+<a name="line289"></a>  }
+<a name="line290"></a>  this.computeChunk_();
+<a name="line291"></a>
+<a name="line292"></a>  // Finally, output the result digest.
+<a name="line293"></a>  var n = 0;
+<a name="line294"></a>  for (var i = 0; i &lt; this.numHashBlocks_; i++) {
+<a name="line295"></a>    for (var j = 24; j &gt;= 0; j -= 8) {
+<a name="line296"></a>      digest[n++] = ((this.hash_[i] &gt;&gt; j) &amp; 255);
+<a name="line297"></a>    }
+<a name="line298"></a>  }
+<a name="line299"></a>  return digest;
+<a name="line300"></a>};
+<a name="line301"></a>
+<a name="line302"></a>
+<a name="line303"></a>/**
+<a name="line304"></a> * Constants used in SHA-2.
+<a name="line305"></a> * @const
+<a name="line306"></a> * @private {!Array.&lt;number&gt;}
+<a name="line307"></a> */
+<a name="line308"></a>goog.crypt.Sha2.K_ = [
+<a name="line309"></a>  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
+<a name="line310"></a>  0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+<a name="line311"></a>  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
+<a name="line312"></a>  0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+<a name="line313"></a>  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc,
+<a name="line314"></a>  0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+<a name="line315"></a>  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,
+<a name="line316"></a>  0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+<a name="line317"></a>  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
+<a name="line318"></a>  0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+<a name="line319"></a>  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3,
+<a name="line320"></a>  0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+<a name="line321"></a>  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5,
+<a name="line322"></a>  0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+<a name="line323"></a>  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+<a name="line324"></a>  0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+<a name="line325"></a>];
+<a name="line326"></a>
+<a name="line327"></a>
+<a name="line328"></a>/**
+<a name="line329"></a> * Sha2.K as an Int32Array if this JS supports typed arrays; otherwise,
+<a name="line330"></a> * the same array as Sha2.K.
+<a name="line331"></a> *
+<a name="line332"></a> * The compiler cannot remove an Int32Array, even if it is not needed
+<a name="line333"></a> * (There are certain cases where creating an Int32Array is not
+<a name="line334"></a> * side-effect free).  Instead, the first time we construct a Sha2
+<a name="line335"></a> * instance, we convert or assign Sha2.K as appropriate.
+<a name="line336"></a> * @private {!undefined|Array.&lt;number&gt;|Int32Array}
+<a name="line337"></a> */
+<a name="line338"></a>goog.crypt.Sha2.Kx_;
+</pre>
+
+
+</body>
+</html>

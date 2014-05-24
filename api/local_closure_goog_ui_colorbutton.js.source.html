@@ -1,0 +1,109 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>colorbutton.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_colorbutton.js.html">colorbutton.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A color button rendered via
+<a name="line17"></a> * {@link goog.ui.ColorButtonRenderer}.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.ColorButton&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.ui.Button&#39;);
+<a name="line24"></a>goog.require(&#39;goog.ui.ColorButtonRenderer&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * A color button control.  Identical to {@link goog.ui.Button}, except it
+<a name="line31"></a> * defaults its renderer to {@link goog.ui.ColorButtonRenderer}.
+<a name="line32"></a> * This button displays a particular color and is clickable.
+<a name="line33"></a> * It is primarily useful with {@link goog.ui.ColorSplitBehavior} to cache the
+<a name="line34"></a> * last selected color.
+<a name="line35"></a> *
+<a name="line36"></a> * @param {goog.ui.ControlContent} content Text caption or existing DOM
+<a name="line37"></a> *    structure to display as the button&#39;s caption.
+<a name="line38"></a> * @param {goog.ui.ButtonRenderer=} opt_renderer Optional renderer used to
+<a name="line39"></a> *    render or decorate the button; defaults to
+<a name="line40"></a> *    {@link goog.ui.ColorButtonRenderer}.
+<a name="line41"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
+<a name="line42"></a> *    document interaction.
+<a name="line43"></a> * @constructor
+<a name="line44"></a> * @extends {goog.ui.Button}
+<a name="line45"></a> * @final
+<a name="line46"></a> */
+<a name="line47"></a>goog.ui.ColorButton = function(content, opt_renderer, opt_domHelper) {
+<a name="line48"></a>  goog.ui.Button.call(this, content, opt_renderer ||
+<a name="line49"></a>      goog.ui.ColorButtonRenderer.getInstance(), opt_domHelper);
+<a name="line50"></a>};
+<a name="line51"></a>goog.inherits(goog.ui.ColorButton, goog.ui.Button);
+<a name="line52"></a>
+<a name="line53"></a>// Register a decorator factory function for goog.ui.ColorButtons.
+<a name="line54"></a>goog.ui.registry.setDecoratorByClassName(goog.ui.ColorButtonRenderer.CSS_CLASS,
+<a name="line55"></a>    function() {
+<a name="line56"></a>      // ColorButton defaults to using ColorButtonRenderer.
+<a name="line57"></a>      return new goog.ui.ColorButton(null);
+<a name="line58"></a>    });
+</pre>
+
+
+</body>
+</html>

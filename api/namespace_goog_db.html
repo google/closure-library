@@ -1,0 +1,496 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>db (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">db</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_db_Cursor.html">
+          goog.db.Cursor</a><br/>
+        <div class="class-details">Creates a new IDBCursor wrapper object. Should not be created directly,
+access cursor through object store.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_db_Error.html">
+          goog.db.Error</a><br/>
+        <div class="class-details">A database error. Since the stack trace can be unhelpful in an asynchronous
+context, the error provides a message about where it was produced.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_db_Index.html">
+          goog.db.Index</a><br/>
+        <div class="class-details">Creates an IDBIndex wrapper object. Indexes are associated with object
+stores and provide methods for looking up objects based on their non-key
+properties. Should not be created directly, access through the object store
+it belongs to.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_db_IndexedDb.html">
+          goog.db.IndexedDb</a><br/>
+        <div class="class-details">Creates an IDBDatabase wrapper object. The database object has methods for
+setting the version to change the structure of the database and for creating
+transactions to get or modify the stored records. Should not be created
+directly, call <code> goog.db.openDatabase</code> to set up the connection.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_db_KeyRange.html">
+          goog.db.KeyRange</a><br/>
+        <div class="class-details">Creates a new IDBKeyRange wrapper object. Should not be created directly,
+instead use one of the static factory methods. For example:
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_db_ObjectStore.html">
+          goog.db.ObjectStore</a><br/>
+        <div class="class-details">Creates an IDBObjectStore wrapper object. Object stores have methods for
+storing and retrieving records, and are accessed through a transaction
+object. They also have methods for creating indexes associated with the
+object store. They can only be created when setting the version of the
+database. Should not be created directly, access object stores through
+transactions.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_db_Transaction.html">
+          goog.db.Transaction</a><br/>
+        <div class="class-details">Creates a new transaction. Transactions contain methods for accessing object
+stores and are created from the database object. Should not be created
+directly, open a database and call createTransaction on it.
+</div>
+ </div>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.db.deleteDatabase"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.db.</span><span class="entryName">deleteDatabase<span class="args">(<span class="arg">name</span>,&nbsp;<span class="arg">opt_onBlocked</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Deletes a database once all open connections have been closed.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">name</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the database to delete.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_onBlocked</span>
+        : <span class="type">goog.db.BlockedCallback=</span>
+        <div class="entryOverview">Called if there are active
+    connections to the database.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>&nbsp;
+            A deferred object that will fire once the
+    database is deleted.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_db_db.js.source.html#line165">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.db.openDatabase"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.db.</span><span class="entryName">openDatabase<span class="args">(<span class="arg">name</span>,&nbsp;<span class="arg">opt_version</span>,&nbsp;<span class="arg">opt_onUpgradeNeeded</span>,&nbsp;<span class="arg">opt_onBlocked</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Opens a database connection and wraps it.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">name</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the database to open.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_version</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">The expected version of the database. If this is
+    larger than the actual version, opt_onUpgradeNeeded will be called
+    (possibly after opt_onBlocked; see <code> goog.db.BlockedCallback</code>). If
+    this is passed, opt_onUpgradeNeeded must be passed as well.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_onUpgradeNeeded</span>
+        : <span class="type">goog.db.UpgradeNeededCallback=</span>
+        <div class="entryOverview">Called if
+    opt_version is greater than the old version of the database. If
+    opt_version is passed, this must be passed as well.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_onBlocked</span>
+        : <span class="type">goog.db.BlockedCallback=</span>
+        <div class="entryOverview">Called if there are active
+    connections to the database.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>&nbsp;
+            The deferred database object.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_db_db.js.source.html#line119">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.db.BlockedCallback"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.db.</span><span class="entryName">BlockedCallback</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       A callback that's called if a blocked event is received. When a database is
+supposed to be deleted or upgraded (i.e. versionchange), and there are open
+connections to this database, a block event will be fired to prevent the
+operations from going through until all such open connections are closed.
+This callback can be used to notify users that they should close other tabs
+that have open connections, or to close the connections manually. Databases
+can also listen for the <code> goog.db.IndexedDb.EventType.VERSION_CHANGE</code>
+event to automatically close themselves when they're blocking such
+operations.
+
+This is passed a VersionChangeEvent that has the version of the database
+before it was deleted, and "null" as the new version.
+
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_db_db.js.source.html#line79">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.db.UpgradeNeededCallback"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.db.</span><span class="entryName">UpgradeNeededCallback</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       A callback that's called when opening a database whose internal version is
+lower than the version passed to <code> goog.db.openDatabase</code>.
+
+This callback is passed three arguments: a VersionChangeEvent with both the
+old version and the new version of the database; the database that's being
+opened, for which you can create and delete object stores; and the version
+change transaction, with which you can abort the version change.
+
+Note that the transaction is not active, which means that it can't be used to
+make changes to the database. However, since there is a transaction running,
+you can't create another one via <code> goog.db.IndexedDb.createTransaction</code>.
+This means that it's not possible to manipulate the database other than
+creating or removing object stores in this callback.
+
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_db_db.js.source.html#line101">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.db.indexedDb_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.db.</span><span class="entryName">indexedDb_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The IndexedDB factory object.
+
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_db_db.js.source.html#line59">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package db</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="db"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

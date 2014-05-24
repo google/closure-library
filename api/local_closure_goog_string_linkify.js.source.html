@@ -1,0 +1,301 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>linkify.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_string_linkify.js.html">linkify.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utility function for linkifying text.
+<a name="line17"></a> * @author bolinfest@google.com (Michael Bolin)
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.string.linkify&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.string&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Takes a string of plain text and linkifies URLs and email addresses. For a
+<a name="line27"></a> * URL (unless opt_attributes is specified), the target of the link will be
+<a name="line28"></a> * _blank and it will have a rel=nofollow attribute applied to it so that links
+<a name="line29"></a> * created by linkify will not be of interest to search engines.
+<a name="line30"></a> * @param {string} text Plain text.
+<a name="line31"></a> * @param {Object.&lt;string, string&gt;=} opt_attributes Attributes to add to all
+<a name="line32"></a> *      links created. Default are rel=nofollow and target=blank. To clear those
+<a name="line33"></a> *      default attributes set rel=&#39;&#39; and target=&#39;_blank&#39;.
+<a name="line34"></a> * @return {string} HTML Linkified HTML text.
+<a name="line35"></a> */
+<a name="line36"></a>goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
+<a name="line37"></a>  // This shortcut makes linkifyPlainText ~10x faster if text doesn&#39;t contain
+<a name="line38"></a>  // URLs or email addresses and adds insignificant performance penalty if it
+<a name="line39"></a>  // does.
+<a name="line40"></a>  if (text.indexOf(&#39;@&#39;) == -1 &amp;&amp;
+<a name="line41"></a>      text.indexOf(&#39;://&#39;) == -1 &amp;&amp;
+<a name="line42"></a>      text.indexOf(&#39;www.&#39;) == -1 &amp;&amp;
+<a name="line43"></a>      text.indexOf(&#39;Www.&#39;) == -1 &amp;&amp;
+<a name="line44"></a>      text.indexOf(&#39;WWW.&#39;) == -1) {
+<a name="line45"></a>    return goog.string.htmlEscape(text);
+<a name="line46"></a>  }
+<a name="line47"></a>
+<a name="line48"></a>  var attributesMap = opt_attributes || {};
+<a name="line49"></a>  // Set default options.
+<a name="line50"></a>  if (!(&#39;rel&#39; in attributesMap)) {
+<a name="line51"></a>    attributesMap[&#39;rel&#39;] = &#39;nofollow&#39;;
+<a name="line52"></a>  }
+<a name="line53"></a>  if (!(&#39;target&#39; in attributesMap)) {
+<a name="line54"></a>    attributesMap[&#39;target&#39;] = &#39;_blank&#39;;
+<a name="line55"></a>  }
+<a name="line56"></a>  // Creates attributes string from options.
+<a name="line57"></a>  var attributesArray = [];
+<a name="line58"></a>  for (var key in attributesMap) {
+<a name="line59"></a>    if (attributesMap.hasOwnProperty(key) &amp;&amp; attributesMap[key]) {
+<a name="line60"></a>      attributesArray.push(
+<a name="line61"></a>          goog.string.htmlEscape(key), &#39;=&quot;&#39;,
+<a name="line62"></a>          goog.string.htmlEscape(attributesMap[key]), &#39;&quot; &#39;);
+<a name="line63"></a>    }
+<a name="line64"></a>  }
+<a name="line65"></a>  var attributes = attributesArray.join(&#39;&#39;);
+<a name="line66"></a>
+<a name="line67"></a>  return text.replace(
+<a name="line68"></a>      goog.string.linkify.FIND_LINKS_RE_,
+<a name="line69"></a>      function(part, before, original, email, protocol) {
+<a name="line70"></a>        var output = [goog.string.htmlEscape(before)];
+<a name="line71"></a>        if (!original) {
+<a name="line72"></a>          return output[0];
+<a name="line73"></a>        }
+<a name="line74"></a>        output.push(&#39;&lt;a &#39;, attributes, &#39;href=&quot;&#39;);
+<a name="line75"></a>        /** @type {string} */
+<a name="line76"></a>        var linkText;
+<a name="line77"></a>        /** @type {string} */
+<a name="line78"></a>        var afterLink;
+<a name="line79"></a>        if (email) {
+<a name="line80"></a>          output.push(&#39;mailto:&#39;);
+<a name="line81"></a>          linkText = email;
+<a name="line82"></a>          afterLink = &#39;&#39;;
+<a name="line83"></a>        } else {
+<a name="line84"></a>          // This is a full url link.
+<a name="line85"></a>          if (!protocol) {
+<a name="line86"></a>            output.push(&#39;http://&#39;);
+<a name="line87"></a>          }
+<a name="line88"></a>          var splitEndingPunctuation =
+<a name="line89"></a>              original.match(goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_);
+<a name="line90"></a>          // An open paren in the link will often be matched with a close paren
+<a name="line91"></a>          // at the end, so skip cutting off ending punctuation if there&#39;s an
+<a name="line92"></a>          // open paren. For example:
+<a name="line93"></a>          // http://en.wikipedia.org/wiki/Titanic_(1997_film)
+<a name="line94"></a>          if (splitEndingPunctuation &amp;&amp; !goog.string.contains(original, &#39;(&#39;)) {
+<a name="line95"></a>            linkText = splitEndingPunctuation[1];
+<a name="line96"></a>            afterLink = splitEndingPunctuation[2];
+<a name="line97"></a>          } else {
+<a name="line98"></a>            linkText = original;
+<a name="line99"></a>            afterLink = &#39;&#39;;
+<a name="line100"></a>          }
+<a name="line101"></a>        }
+<a name="line102"></a>        linkText = goog.string.htmlEscape(linkText);
+<a name="line103"></a>        afterLink = goog.string.htmlEscape(afterLink);
+<a name="line104"></a>        output.push(linkText, &#39;&quot;&gt;&#39;, linkText, &#39;&lt;/a&gt;&#39;, afterLink);
+<a name="line105"></a>        return output.join(&#39;&#39;);
+<a name="line106"></a>      });
+<a name="line107"></a>};
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Gets the first URI in text.
+<a name="line112"></a> * @param {string} text Plain text.
+<a name="line113"></a> * @return {string} The first URL, or an empty string if not found.
+<a name="line114"></a> */
+<a name="line115"></a>goog.string.linkify.findFirstUrl = function(text) {
+<a name="line116"></a>  var link = text.match(goog.string.linkify.URL_);
+<a name="line117"></a>  return link != null ? link[0] : &#39;&#39;;
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Gets the first email address in text.
+<a name="line123"></a> * @param {string} text Plain text.
+<a name="line124"></a> * @return {string} The first email address, or an empty string if not found.
+<a name="line125"></a> */
+<a name="line126"></a>goog.string.linkify.findFirstEmail = function(text) {
+<a name="line127"></a>  var email = text.match(goog.string.linkify.EMAIL_);
+<a name="line128"></a>  return email != null ? email[0] : &#39;&#39;;
+<a name="line129"></a>};
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * If a series of these characters is at the end of a url, it will be considered
+<a name="line134"></a> * punctuation and not part of the url.
+<a name="line135"></a> * @type {string}
+<a name="line136"></a> * @const
+<a name="line137"></a> * @private
+<a name="line138"></a> */
+<a name="line139"></a>goog.string.linkify.ENDING_PUNCTUATION_CHARS_ = &#39;:;,\\.?&gt;\\]\\)!&#39;;
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * @type {!RegExp}
+<a name="line144"></a> * @const
+<a name="line145"></a> * @private
+<a name="line146"></a> */
+<a name="line147"></a>goog.string.linkify.ENDS_WITH_PUNCTUATION_RE_ = new RegExp(
+<a name="line148"></a>    &#39;^(.*?)([&#39; + goog.string.linkify.ENDING_PUNCTUATION_CHARS_ + &#39;]+)$&#39;);
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Set of characters to be put into a regex character set (&quot;[...]&quot;), used to
+<a name="line153"></a> * match against a url hostname and everything after it. It includes
+<a name="line154"></a> * &quot;#-@&quot;, which represents the characters &quot;#$%&amp;&#39;()*+,-./0123456789:;&lt;=&gt;?@&quot;.
+<a name="line155"></a> * @type {string}
+<a name="line156"></a> * @const
+<a name="line157"></a> * @private
+<a name="line158"></a> */
+<a name="line159"></a>goog.string.linkify.ACCEPTABLE_URL_CHARS_ = &#39;\\w~#-@!\\[\\]&#39;;
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>/**
+<a name="line163"></a> * List of all protocols patterns recognized in urls (mailto is handled in email
+<a name="line164"></a> * matching).
+<a name="line165"></a> * @type {!Array.&lt;string&gt;}
+<a name="line166"></a> * @const
+<a name="line167"></a> * @private
+<a name="line168"></a> */
+<a name="line169"></a>goog.string.linkify.RECOGNIZED_PROTOCOLS_ = [&#39;https?&#39;, &#39;ftp&#39;];
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Regular expression pattern that matches the beginning of an url.
+<a name="line174"></a> * Contains a catching group to capture the scheme.
+<a name="line175"></a> * @type {string}
+<a name="line176"></a> * @const
+<a name="line177"></a> * @private
+<a name="line178"></a> */
+<a name="line179"></a>goog.string.linkify.PROTOCOL_START_ =
+<a name="line180"></a>    &#39;(&#39; + goog.string.linkify.RECOGNIZED_PROTOCOLS_.join(&#39;|&#39;) + &#39;)://&#39;;
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Regular expression pattern that matches the beginning of a typical
+<a name="line185"></a> * http url without the http:// scheme.
+<a name="line186"></a> * @type {string}
+<a name="line187"></a> * @const
+<a name="line188"></a> * @private
+<a name="line189"></a> */
+<a name="line190"></a>goog.string.linkify.WWW_START_ = &#39;www\\.&#39;;
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Regular expression pattern that matches an url.
+<a name="line195"></a> * @type {string}
+<a name="line196"></a> * @const
+<a name="line197"></a> * @private
+<a name="line198"></a> */
+<a name="line199"></a>goog.string.linkify.URL_ =
+<a name="line200"></a>    &#39;(?:&#39; + goog.string.linkify.PROTOCOL_START_ + &#39;|&#39; +
+<a name="line201"></a>    goog.string.linkify.WWW_START_ + &#39;)\\w[&#39; +
+<a name="line202"></a>    goog.string.linkify.ACCEPTABLE_URL_CHARS_ + &#39;]*&#39;;
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * Regular expression pattern that matches a top level domain.
+<a name="line207"></a> * @type {string}
+<a name="line208"></a> * @const
+<a name="line209"></a> * @private
+<a name="line210"></a> */
+<a name="line211"></a>goog.string.linkify.TOP_LEVEL_DOMAIN_ =
+<a name="line212"></a>    &#39;(?:com|org|net|edu|gov&#39; +
+<a name="line213"></a>    // from http://www.iana.org/gtld/gtld.htm
+<a name="line214"></a>    &#39;|aero|biz|cat|coop|info|int|jobs|mobi|museum|name|pro|travel&#39; +
+<a name="line215"></a>    &#39;|arpa|asia|xxx&#39; +
+<a name="line216"></a>    // a two letter country code
+<a name="line217"></a>    &#39;|[a-z][a-z])\\b&#39;;
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * Regular expression pattern that matches an email.
+<a name="line222"></a> * Contains a catching group to capture the email without the optional &quot;mailto:&quot;
+<a name="line223"></a> * prefix.
+<a name="line224"></a> * @type {string}
+<a name="line225"></a> * @const
+<a name="line226"></a> * @private
+<a name="line227"></a> */
+<a name="line228"></a>goog.string.linkify.EMAIL_ =
+<a name="line229"></a>    &#39;(?:mailto:)?([\\w.+-]+@[A-Za-z0-9.-]+\\.&#39; +
+<a name="line230"></a>    goog.string.linkify.TOP_LEVEL_DOMAIN_ + &#39;)&#39;;
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Regular expression to match all the links (url or email) in a string.
+<a name="line235"></a> * First match is text before first link, might be empty string.
+<a name="line236"></a> * Second match is the original text that should be replaced by a link.
+<a name="line237"></a> * Third match is the email address in the case of an email.
+<a name="line238"></a> * Fourth match is the scheme of the url if specified.
+<a name="line239"></a> * @type {!RegExp}
+<a name="line240"></a> * @const
+<a name="line241"></a> * @private
+<a name="line242"></a> */
+<a name="line243"></a>goog.string.linkify.FIND_LINKS_RE_ = new RegExp(
+<a name="line244"></a>    // Match everything including newlines.
+<a name="line245"></a>    &#39;([\\S\\s]*?)(&#39; +
+<a name="line246"></a>    // Match email after a word break.
+<a name="line247"></a>    &#39;\\b&#39; + goog.string.linkify.EMAIL_ + &#39;|&#39; +
+<a name="line248"></a>    // Match url after a workd break.
+<a name="line249"></a>    &#39;\\b&#39; + goog.string.linkify.URL_ + &#39;|$)&#39;,
+<a name="line250"></a>    &#39;gi&#39;);
+</pre>
+
+
+</body>
+</html>

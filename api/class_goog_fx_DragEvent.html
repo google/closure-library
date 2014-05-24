@@ -1,0 +1,1011 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>DragEvent (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">fx.DragEvent</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          <a href="class_goog_events_Event.html">
+          goog.events.Event
+</a>
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Object representing a drag event
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="http://closure-library.googlecode.com/git/closure/goog/demos/drag.html">Demo</a></li>
+            <li><a href="local_closure_goog_fx_dragger.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/fx/dragger.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></td><td></td></tr>
+  <tr><td>goog.fx.DragEvent</td><td><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+</table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.fx.DragEvent(<span><span class="arg">type</span>,&nbsp;<span class="arg">dragobj</span>,&nbsp;<span class="arg">clientX</span>,&nbsp;<span class="arg">clientY</span>,&nbsp;<span class="arg">browserEvent</span>,&nbsp;<span class="arg">opt_actX</span>,&nbsp;<span class="arg">opt_actY</span>,&nbsp;<span class="arg">opt_dragCanceled</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">type</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">Event type.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">dragobj</span>
+        : <span class="type"><a href="class_goog_fx_Dragger.html">goog.fx.Dragger</a></span>
+        <div class="entryOverview">Drag object initiating event.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">clientX</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">X-coordinate relative to the viewport.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">clientY</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Y-coordinate relative to the viewport.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">browserEvent</span>
+        : <span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span>
+        <div class="entryOverview">The closure object
+  representing the browser event that caused this drag event.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_actX</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">Optional actual x for drag if it has been limited.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_actY</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">Optional actual y for drag if it has been limited.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_dragCanceled</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">Whether the drag has been canceled.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_events_Event.html">
+              goog.events.Event
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td class="deprecated">
+    <a name="goog.events.Event.prototype.dispose"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dispose<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class="deprecatedMessage">Events don't need to be disposed.</span>
+       For backwards compatibility (goog.events.Event used to inherit
+goog.Disposable).
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line118">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td class="deprecated">
+    <a name="goog.events.Event.prototype.disposeInternal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposeInternal<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class="deprecatedMessage">Events don't need to be disposed.</span>
+       For backwards compatibility (goog.events.Event used to inherit
+goog.Disposable).
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line109">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.events.Event.prototype.preventDefault"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">preventDefault<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Prevents the default action, for example a link redirecting to a url.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line133">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.events.Event.prototype.stopPropagation"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">stopPropagation<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Stops event propagation.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line125">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_fx_DragEvent.html">
+              goog.fx.DragEvent
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragEvent.prototype.browserEvent"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">browserEvent</span>
+        : <span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The closure object representing the browser event that caused this drag
+event.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_dragger.js.source.html#line808">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragEvent.prototype.clientX"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">clientX</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       X-coordinate relative to the viewport
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_dragger.js.source.html#line795">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragEvent.prototype.clientY"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">clientY</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Y-coordinate relative to the viewport
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_dragger.js.source.html#line801">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragEvent.prototype.constructor"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">constructor</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_dragger.js.source.html#line787">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragEvent.prototype.dragCanceled"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dragCanceled</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether drag was canceled with this event. Used to differentiate between
+a legitimate drag END that can result in an action and a drag END which is
+a result of a drag cancelation. For now it can happen 1) with drag END
+event on FireFox when user drags the mouse out of the window, 2) with
+drag END event on IE7 which is generated on MOUSEMOVE event when user
+moves the mouse into the document after the mouse button has been
+released, 3) when TOUCHCANCEL is raised instead of TOUCHEND (on touch
+events).
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_dragger.js.source.html#line839">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragEvent.prototype.dragger"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dragger</span>
+        : <span class="type"><a href="class_goog_fx_Dragger.html">goog.fx.Dragger</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       Reference to the drag object for this event
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_dragger.js.source.html#line826">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragEvent.prototype.left"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">left</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The real x-position of the drag if it has been limited
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_dragger.js.source.html#line814">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragEvent.prototype.top"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">top</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The real y-position of the drag if it has been limited
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_dragger.js.source.html#line820">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_events_Event.html">
+              goog.events.Event
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.currentTarget"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">currentTarget</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Object that had the listener attached.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line72">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.defaultPrevented"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">defaultPrevented</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether the default action has been prevented.
+This is a property to match the W3C specification at
+<code> <a href="http://www.w3.org/TR/DOM-Level-3-Events/
+#events-event-type-defaultPrevented">http://www.w3.org/TR/DOM-Level-3-Events/
+#events-event-type-defaultPrevented</a></code>.
+Must be treated as read-only outside the class.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line91">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.propagationStopped_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">propagationStopped_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether to cancel the event in internal capture/bubble processing for IE.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line81">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.returnValue_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">returnValue_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Return value for in internal capture/bubble processing for IE.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line100">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.target"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">target</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Target of the event.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line66">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.type"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">type</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Event type.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line60">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+<h2>Static Properties</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragEvent.superClass_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.fx.DragEvent.</span><span class="entryName">superClass_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_dragger.js.source.html#line787">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package fx</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="fx.DragEvent"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

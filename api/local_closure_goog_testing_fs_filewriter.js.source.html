@@ -1,0 +1,319 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>filewriter.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_fs_filewriter.js.html">filewriter.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Mock FileWriter object.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.testing.fs.FileWriter&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line23"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line24"></a>goog.require(&#39;goog.fs.Error&#39;);
+<a name="line25"></a>goog.require(&#39;goog.fs.FileSaver&#39;);
+<a name="line26"></a>goog.require(&#39;goog.string&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.fs.ProgressEvent&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * A mock FileWriter object. This emits the same events as
+<a name="line33"></a> * {@link goog.fs.FileSaver} and {@link goog.fs.FileWriter}.
+<a name="line34"></a> *
+<a name="line35"></a> * @param {!goog.testing.fs.FileEntry} fileEntry The file entry to write to.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @extends {goog.events.EventTarget}
+<a name="line38"></a> * @final
+<a name="line39"></a> */
+<a name="line40"></a>goog.testing.fs.FileWriter = function(fileEntry) {
+<a name="line41"></a>  goog.testing.fs.FileWriter.base(this, &#39;constructor&#39;);
+<a name="line42"></a>
+<a name="line43"></a>  /**
+<a name="line44"></a>   * The file entry to which to write.
+<a name="line45"></a>   * @type {!goog.testing.fs.FileEntry}
+<a name="line46"></a>   * @private
+<a name="line47"></a>   */
+<a name="line48"></a>  this.fileEntry_ = fileEntry;
+<a name="line49"></a>
+<a name="line50"></a>  /**
+<a name="line51"></a>   * The file blob to write to.
+<a name="line52"></a>   * @type {!goog.testing.fs.File}
+<a name="line53"></a>   * @private
+<a name="line54"></a>   */
+<a name="line55"></a>  this.file_ = fileEntry.fileSync();
+<a name="line56"></a>
+<a name="line57"></a>  /**
+<a name="line58"></a>   * The current state of the writer.
+<a name="line59"></a>   * @type {goog.fs.FileSaver.ReadyState}
+<a name="line60"></a>   * @private
+<a name="line61"></a>   */
+<a name="line62"></a>  this.readyState_ = goog.fs.FileSaver.ReadyState.INIT;
+<a name="line63"></a>};
+<a name="line64"></a>goog.inherits(goog.testing.fs.FileWriter, goog.events.EventTarget);
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * The most recent error experienced by this writer.
+<a name="line69"></a> * @type {goog.fs.Error}
+<a name="line70"></a> * @private
+<a name="line71"></a> */
+<a name="line72"></a>goog.testing.fs.FileWriter.prototype.error_;
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Whether the current operation has been aborted.
+<a name="line77"></a> * @type {boolean}
+<a name="line78"></a> * @private
+<a name="line79"></a> */
+<a name="line80"></a>goog.testing.fs.FileWriter.prototype.aborted_ = false;
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * The current position in the file.
+<a name="line85"></a> * @type {number}
+<a name="line86"></a> * @private
+<a name="line87"></a> */
+<a name="line88"></a>goog.testing.fs.FileWriter.prototype.position_ = 0;
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * @see {goog.fs.FileSaver#getReadyState}
+<a name="line93"></a> * @return {goog.fs.FileSaver.ReadyState} The ready state.
+<a name="line94"></a> */
+<a name="line95"></a>goog.testing.fs.FileWriter.prototype.getReadyState = function() {
+<a name="line96"></a>  return this.readyState_;
+<a name="line97"></a>};
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * @see {goog.fs.FileSaver#getError}
+<a name="line102"></a> * @return {goog.fs.Error} The error.
+<a name="line103"></a> */
+<a name="line104"></a>goog.testing.fs.FileWriter.prototype.getError = function() {
+<a name="line105"></a>  return this.error_;
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * @see {goog.fs.FileWriter#getPosition}
+<a name="line111"></a> * @return {number} The position.
+<a name="line112"></a> */
+<a name="line113"></a>goog.testing.fs.FileWriter.prototype.getPosition = function() {
+<a name="line114"></a>  return this.position_;
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * @see {goog.fs.FileWriter#getLength}
+<a name="line120"></a> * @return {number} The length.
+<a name="line121"></a> */
+<a name="line122"></a>goog.testing.fs.FileWriter.prototype.getLength = function() {
+<a name="line123"></a>  return this.file_.size;
+<a name="line124"></a>};
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * @see {goog.fs.FileSaver#abort}
+<a name="line129"></a> */
+<a name="line130"></a>goog.testing.fs.FileWriter.prototype.abort = function() {
+<a name="line131"></a>  if (this.readyState_ != goog.fs.FileSaver.ReadyState.WRITING) {
+<a name="line132"></a>    var msg = &#39;aborting save of &#39; + this.fileEntry_.getFullPath();
+<a name="line133"></a>    throw new goog.fs.Error(
+<a name="line134"></a>        /** @type {!FileError} */ ({&#39;name&#39;: &#39;InvalidStateError&#39;}),
+<a name="line135"></a>        msg);
+<a name="line136"></a>  }
+<a name="line137"></a>
+<a name="line138"></a>  this.aborted_ = true;
+<a name="line139"></a>};
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * @see {goog.fs.FileWriter#write}
+<a name="line144"></a> * @param {!goog.testing.fs.Blob} blob The blob to write.
+<a name="line145"></a> */
+<a name="line146"></a>goog.testing.fs.FileWriter.prototype.write = function(blob) {
+<a name="line147"></a>  if (this.readyState_ == goog.fs.FileSaver.ReadyState.WRITING) {
+<a name="line148"></a>    var msg = &#39;writing to &#39; + this.fileEntry_.getFullPath();
+<a name="line149"></a>    throw new goog.fs.Error(
+<a name="line150"></a>        /** @type {!FileError} */ ({&#39;name&#39;: &#39;InvalidStateError&#39;}),
+<a name="line151"></a>        msg);
+<a name="line152"></a>  }
+<a name="line153"></a>
+<a name="line154"></a>  this.readyState_ = goog.fs.FileSaver.ReadyState.WRITING;
+<a name="line155"></a>  goog.Timer.callOnce(function() {
+<a name="line156"></a>    if (this.aborted_) {
+<a name="line157"></a>      this.abort_(blob.size);
+<a name="line158"></a>      return;
+<a name="line159"></a>    }
+<a name="line160"></a>
+<a name="line161"></a>    this.progressEvent_(goog.fs.FileSaver.EventType.WRITE_START, 0, blob.size);
+<a name="line162"></a>    var fileString = this.file_.toString();
+<a name="line163"></a>    this.file_.setDataInternal(
+<a name="line164"></a>        fileString.substring(0, this.position_) + blob.toString() +
+<a name="line165"></a>        fileString.substring(this.position_ + blob.size, fileString.length));
+<a name="line166"></a>    this.position_ += blob.size;
+<a name="line167"></a>
+<a name="line168"></a>    this.progressEvent_(
+<a name="line169"></a>        goog.fs.FileSaver.EventType.WRITE, blob.size, blob.size);
+<a name="line170"></a>    this.readyState_ = goog.fs.FileSaver.ReadyState.DONE;
+<a name="line171"></a>    this.progressEvent_(
+<a name="line172"></a>        goog.fs.FileSaver.EventType.WRITE_END, blob.size, blob.size);
+<a name="line173"></a>  }, 0, this);
+<a name="line174"></a>};
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * @see {goog.fs.FileWriter#truncate}
+<a name="line179"></a> * @param {number} size The size to truncate to.
+<a name="line180"></a> */
+<a name="line181"></a>goog.testing.fs.FileWriter.prototype.truncate = function(size) {
+<a name="line182"></a>  if (this.readyState_ == goog.fs.FileSaver.ReadyState.WRITING) {
+<a name="line183"></a>    var msg = &#39;truncating &#39; + this.fileEntry_.getFullPath();
+<a name="line184"></a>    throw new goog.fs.Error(
+<a name="line185"></a>        /** @type {!FileError} */ ({&#39;name&#39;: &#39;InvalidStateError&#39;}),
+<a name="line186"></a>        msg);
+<a name="line187"></a>  }
+<a name="line188"></a>
+<a name="line189"></a>  this.readyState_ = goog.fs.FileSaver.ReadyState.WRITING;
+<a name="line190"></a>  goog.Timer.callOnce(function() {
+<a name="line191"></a>    if (this.aborted_) {
+<a name="line192"></a>      this.abort_(size);
+<a name="line193"></a>      return;
+<a name="line194"></a>    }
+<a name="line195"></a>
+<a name="line196"></a>    this.progressEvent_(goog.fs.FileSaver.EventType.WRITE_START, 0, size);
+<a name="line197"></a>
+<a name="line198"></a>    var fileString = this.file_.toString();
+<a name="line199"></a>    if (size &gt; fileString.length) {
+<a name="line200"></a>      this.file_.setDataInternal(
+<a name="line201"></a>          fileString + goog.string.repeat(&#39;\0&#39;, size - fileString.length));
+<a name="line202"></a>    } else {
+<a name="line203"></a>      this.file_.setDataInternal(fileString.substring(0, size));
+<a name="line204"></a>    }
+<a name="line205"></a>    this.position_ = Math.min(this.position_, size);
+<a name="line206"></a>
+<a name="line207"></a>    this.progressEvent_(goog.fs.FileSaver.EventType.WRITE, size, size);
+<a name="line208"></a>    this.readyState_ = goog.fs.FileSaver.ReadyState.DONE;
+<a name="line209"></a>    this.progressEvent_(goog.fs.FileSaver.EventType.WRITE_END, size, size);
+<a name="line210"></a>  }, 0, this);
+<a name="line211"></a>};
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/**
+<a name="line215"></a> * @see {goog.fs.FileWriter#seek}
+<a name="line216"></a> * @param {number} offset The offset to seek to.
+<a name="line217"></a> */
+<a name="line218"></a>goog.testing.fs.FileWriter.prototype.seek = function(offset) {
+<a name="line219"></a>  if (this.readyState_ == goog.fs.FileSaver.ReadyState.WRITING) {
+<a name="line220"></a>    var msg = &#39;truncating &#39; + this.fileEntry_.getFullPath();
+<a name="line221"></a>    throw new goog.fs.Error(
+<a name="line222"></a>        /** @type {!FileError} */ ({name: &#39;InvalidStateError&#39;}),
+<a name="line223"></a>        msg);
+<a name="line224"></a>  }
+<a name="line225"></a>
+<a name="line226"></a>  if (offset &lt; 0) {
+<a name="line227"></a>    this.position_ = Math.max(0, this.file_.size + offset);
+<a name="line228"></a>  } else {
+<a name="line229"></a>    this.position_ = Math.min(offset, this.file_.size);
+<a name="line230"></a>  }
+<a name="line231"></a>};
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>/**
+<a name="line235"></a> * Abort the current action and emit appropriate events.
+<a name="line236"></a> *
+<a name="line237"></a> * @param {number} total The total data that was to be processed, in bytes.
+<a name="line238"></a> * @private
+<a name="line239"></a> */
+<a name="line240"></a>goog.testing.fs.FileWriter.prototype.abort_ = function(total) {
+<a name="line241"></a>  this.error_ = new goog.fs.Error(
+<a name="line242"></a>      /** @type {!FileError} */ ({&#39;name&#39;: &#39;AbortError&#39;}),
+<a name="line243"></a>      &#39;saving &#39; + this.fileEntry_.getFullPath());
+<a name="line244"></a>  this.progressEvent_(goog.fs.FileSaver.EventType.ERROR, 0, total);
+<a name="line245"></a>  this.progressEvent_(goog.fs.FileSaver.EventType.ABORT, 0, total);
+<a name="line246"></a>  this.readyState_ = goog.fs.FileSaver.ReadyState.DONE;
+<a name="line247"></a>  this.progressEvent_(goog.fs.FileSaver.EventType.WRITE_END, 0, total);
+<a name="line248"></a>  this.aborted_ = false;
+<a name="line249"></a>};
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * Dispatch a progress event.
+<a name="line254"></a> *
+<a name="line255"></a> * @param {goog.fs.FileSaver.EventType} type The type of the event.
+<a name="line256"></a> * @param {number} loaded The number of bytes processed.
+<a name="line257"></a> * @param {number} total The total data that was to be processed, in bytes.
+<a name="line258"></a> * @private
+<a name="line259"></a> */
+<a name="line260"></a>goog.testing.fs.FileWriter.prototype.progressEvent_ = function(
+<a name="line261"></a>    type, loaded, total) {
+<a name="line262"></a>  // On write, update the last modified date to the current (real or mock) time.
+<a name="line263"></a>  if (type == goog.fs.FileSaver.EventType.WRITE) {
+<a name="line264"></a>    this.file_.lastModifiedDate = new Date(goog.now());
+<a name="line265"></a>  }
+<a name="line266"></a>
+<a name="line267"></a>  this.dispatchEvent(new goog.testing.fs.ProgressEvent(type, loaded, total));
+<a name="line268"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,1596 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>date.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">date.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_date_date.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/date/date.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/date/date.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_date_Date.html">
+          goog.date.Date</a><br/>
+        <div class="class-details">Class representing a date. Defaults to current date if none is specified.
+
+Implements most methods of the native js Date object (except the time related
+ones, ) and can be used interchangeably with it just
+as if goog.date.Date was a synonym of Date. To make this more transparent,
+Closure APIs should accept goog.date.DateLike instead of the real Date
+object.
+
+To allow goog.date.Date objects to be passed as arguments to methods
+expecting Date objects this class is marked as extending the built in Date
+object even though that's not strictly true.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_date_DateTime.html">
+          goog.date.DateTime</a><br/>
+        <div class="class-details">Class representing a date and time. Defaults to current date and time if none
+is specified.
+
+Implements most methods of the native js Date object and can be used
+interchangeably with it just as if goog.date.DateTime was a subclass of Date.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_date_Interval.html">
+          goog.date.Interval</a><br/>
+        <div class="class-details">Class representing a date/time interval. Used for date calculations.
+<pre class="lang-js prettyprint">
+new goog.date.Interval(0, 1) // One month
+new goog.date.Interval(0, 0, 3, 1) // Three days and one hour
+new goog.date.Interval(goog.date.Interval.DAYS, 1) // One day
+</pre></div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.Date.compare"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.Date.</span><span class="entryName">compare<span class="args">(<span class="arg">date1</span>,&nbsp;<span class="arg">date2</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Compares two dates.  May be used as a sorting function.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">date1</span>
+        : <span>!</span><span class="type">goog.date.DateLike</span>
+        <div class="entryOverview">Date to compare.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">date2</span>
+        : <span>!</span><span class="type">goog.date.DateLike</span>
+        <div class="entryOverview">Date to compare.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            Comparison result. 0 if dates are the same, less than 0 if
+    date1 is earlier than date2, greater than 0 if date1 is later than date2.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line1302">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.formatMonthAndYear"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">formatMonthAndYear<span class="args">(<span class="arg">monthName</span>,&nbsp;<span class="arg">yearNum</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Formats a month/year string.
+Example: "January 2008"
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">monthName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The month name to use in the result.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">yearNum</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The numeric year to use in the result.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            A formatted month/year string.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line78">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.fromIsoString"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">fromIsoString<span class="args">(<span class="arg">formatted</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a DateTime from a datetime string expressed in ISO 8601 format.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">formatted</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A date or datetime expressed in ISO 8601 format.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span>&nbsp;
+            Parsed date or null if parse fails.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line297">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.Interval.fromIsoString"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.Interval.</span><span class="entryName">fromIsoString<span class="args">(<span class="arg">duration</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_date_Interval.html">goog.date.Interval</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Parses an XML Schema duration (ISO 8601 extended).
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">duration</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">An XML schema duration in textual format.
+    Recurring durations and weeks are not supported.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_date_Interval.html">goog.date.Interval</a></span>&nbsp;
+            The duration as a goog.date.Interval or null
+    if the parse fails.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line507">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.DateTime.fromRfc822String"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.DateTime.</span><span class="entryName">fromRfc822String<span class="args">(<span class="arg">formatted</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a DateTime from a datetime string expressed in RFC 822 format.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">formatted</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A date or datetime expressed in RFC 822 format.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span>&nbsp;
+            Parsed date or null if parse fails.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line1357">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.DateTime.fromTimestamp"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.DateTime.</span><span class="entryName">fromTimestamp<span class="args">(<span class="arg">timestamp</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">timestamp</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Number of milliseconds since Epoch.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span>&nbsp;
+            <span class='nodesc'>No description.</span>
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line1344">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.getNumberOfDaysInMonth"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">getNumberOfDaysInMonth<span class="args">(<span class="arg">year</span>,&nbsp;<span class="arg">month</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the number of days for a given month.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">year</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Year part of date.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">month</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Month part of date.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The number of days for the given month.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line170">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.getWeekNumber"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">getWeekNumber<span class="args">(<span class="arg">year</span>,&nbsp;<span class="arg">month</span>,&nbsp;<span class="arg">date</span>,&nbsp;<span class="arg">opt_weekDay</span>,&nbsp;<span class="arg">opt_firstDayOfWeek</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Static function for week number calculation. ISO 8601 implementation.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">year</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Year part of date.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">month</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Month part of date (0-11).</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">date</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Day part of date (1-31).</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_weekDay</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">Cut off weekday, defaults to Thursday.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_firstDayOfWeek</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">First day of the week, defaults to
+    Monday.
+    Monday=0, Sunday=6.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The week number (1-53).
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line234">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.isLeapYear"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">isLeapYear<span class="args">(<span class="arg">year</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns whether the given year is a leap year.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">year</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Year part of date.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the given year is a leap year.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line141">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.isLongIsoYear"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">isLongIsoYear<span class="args">(<span class="arg">year</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns whether the given year is a long ISO year.
+See <code> <a href="http://www.phys.uu.nl/~vgent/calendar/isocalendar_text3.htm">http://www.phys.uu.nl/~vgent/calendar/isocalendar_text3.htm</a></code>.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">year</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Full year part of date.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the given year is a long ISO year.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line154">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.isSameDay"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">isSameDay<span class="args">(<span class="arg">date</span>,&nbsp;<span class="arg">opt_now</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns true if the 2 dates are in the same day.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">date</span>
+        : <span class="type">goog.date.DateLike</span>
+        <div class="entryOverview">The time to check.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_now</span>
+        : <span class="type">goog.date.DateLike=</span>
+        <div class="entryOverview">The current time.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the dates are on the same day.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line190">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.isSameMonth"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">isSameMonth<span class="args">(<span class="arg">date</span>,&nbsp;<span class="arg">opt_now</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns true if the 2 dates are in the same month.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">date</span>
+        : <span class="type">goog.date.DateLike</span>
+        <div class="entryOverview">The time to check.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_now</span>
+        : <span class="type">goog.date.DateLike=</span>
+        <div class="entryOverview">The current time.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the dates are in the same calendar month.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line203">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.isSameYear"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">isSameYear<span class="args">(<span class="arg">date</span>,&nbsp;<span class="arg">opt_now</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns true if the 2 dates are in the same year.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">date</span>
+        : <span class="type">goog.date.DateLike</span>
+        <div class="entryOverview">The time to check.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_now</span>
+        : <span class="type">goog.date.DateLike=</span>
+        <div class="entryOverview">The current time.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the dates are in the same calendar year.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line216">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.max"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">max<span class="args">(<span class="arg">date1</span>,&nbsp;<span class="arg">date2</span>)</span>
+        </span>
+        &#8658; <span>!</span>(<span class="type">T</span><span>&nbsp;|&nbsp;</span><span class="type">S</span>)
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">date1</span>
+        : <span>!</span><span class="type">T</span>
+        <div class="entryOverview">A datelike object.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">date2</span>
+        : <span>!</span><span class="type">S</span>
+        <div class="entryOverview">Another datelike object.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span>(<span class="type">T</span><span>&nbsp;|&nbsp;</span><span class="type">S</span>)&nbsp;
+            The later of them in time.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line286">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.min"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">min<span class="args">(<span class="arg">date1</span>,&nbsp;<span class="arg">date2</span>)</span>
+        </span>
+        &#8658; <span>!</span>(<span class="type">T</span><span>&nbsp;|&nbsp;</span><span class="type">S</span>)
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">date1</span>
+        : <span>!</span><span class="type">T</span>
+        <div class="entryOverview">A datelike object.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">date2</span>
+        : <span>!</span><span class="type">S</span>
+        <div class="entryOverview">Another datelike object.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span>(<span class="type">T</span><span>&nbsp;|&nbsp;</span><span class="type">S</span>)&nbsp;
+            The earlier of them in time.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line275">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.setDateFromIso8601Week_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">setDateFromIso8601Week_<span class="args">(<span class="arg">d</span>,&nbsp;<span class="arg">week</span>,&nbsp;<span class="arg">dayOfWeek</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets date fields based on an ISO 8601 week string.
+See <code> <a href="http://en.wikipedia.org/wiki/ISO_week_date">http://en.wikipedia.org/wiki/ISO_week_date</a></code>, "Relation with the
+Gregorian Calendar".  The first week of a new ISO year is the week with the
+majority of its days in the new Gregorian year.  I.e., ISO Week 1's Thursday
+is in that year.  ISO weeks always start on Monday. So ISO Week 1 can
+contain a few days from the previous Gregorian year.  And ISO weeks always
+end on Sunday, so the last ISO week (Week 52 or 53) can have a few days from
+the following Gregorian year.
+Example: '1997-W01' lasts from 1996-12-30 to 1997-01-05.  January 1, 1997 is
+a Wednesday. So W01's Monday is Dec.30, 1996, and Sunday is January 5, 1997.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">d</span>
+        : <span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span>
+        <div class="entryOverview">Object whose fields will be set.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">week</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">ISO week number.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">dayOfWeek</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">ISO day of week.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line383">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.setIso8601DateOnly_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">setIso8601DateOnly_<span class="args">(<span class="arg">d</span>,&nbsp;<span class="arg">formatted</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets date fields based on an ISO 8601 format string.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">d</span>
+        : <span>!</span><span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span>
+        <div class="entryOverview">Object whose fields will be set.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">formatted</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A date expressed in ISO 8601 format.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the parsing succeeded.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line328">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.setIso8601DateTime"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">setIso8601DateTime<span class="args">(<span class="arg">dateTime</span>,&nbsp;<span class="arg">formatted</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Parses a datetime string expressed in ISO 8601 format. Overwrites the date
+and optionally the time part of the given object with the parsed values.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">dateTime</span>
+        : <span>!</span><span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span>
+        <div class="entryOverview">Object whose fields will be set.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">formatted</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A date or datetime expressed in ISO 8601 format.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the parsing succeeded.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line311">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.date.setIso8601TimeOnly_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.date.</span><span class="entryName">setIso8601TimeOnly_<span class="args">(<span class="arg">d</span>,&nbsp;<span class="arg">formatted</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets time fields based on an ISO 8601 format string.
+Note: only time fields, not date fields.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">d</span>
+        : <span>!</span><span class="type"><a href="class_goog_date_DateTime.html">goog.date.DateTime</a></span>
+        <div class="entryOverview">Object whose fields will be set.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">formatted</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A time expressed in ISO 8601 format.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the parsing succeeded.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_date_date.js.source.html#line423">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory date</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/date/date.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

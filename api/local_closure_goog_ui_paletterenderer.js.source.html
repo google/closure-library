@@ -1,0 +1,428 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>paletterenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_paletterenderer.js.html">paletterenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Renderer for {@link goog.ui.Palette}s.
+<a name="line17"></a> *
+<a name="line18"></a> * @author attila@google.com (Attila Bodis)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.PaletteRenderer&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.a11y.aria&#39;);
+<a name="line24"></a>goog.require(&#39;goog.a11y.aria.Role&#39;);
+<a name="line25"></a>goog.require(&#39;goog.a11y.aria.State&#39;);
+<a name="line26"></a>goog.require(&#39;goog.array&#39;);
+<a name="line27"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.NodeIterator&#39;);
+<a name="line30"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line31"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line32"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line33"></a>goog.require(&#39;goog.iter&#39;);
+<a name="line34"></a>goog.require(&#39;goog.style&#39;);
+<a name="line35"></a>goog.require(&#39;goog.ui.ControlRenderer&#39;);
+<a name="line36"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Default renderer for {@link goog.ui.Palette}s.  Renders the palette as an
+<a name="line42"></a> * HTML table wrapped in a DIV, with one palette item per cell:
+<a name="line43"></a> *
+<a name="line44"></a> *    &lt;div class=&quot;goog-palette&quot;&gt;
+<a name="line45"></a> *      &lt;table class=&quot;goog-palette-table&quot;&gt;
+<a name="line46"></a> *        &lt;tbody class=&quot;goog-palette-body&quot;&gt;
+<a name="line47"></a> *          &lt;tr class=&quot;goog-palette-row&quot;&gt;
+<a name="line48"></a> *            &lt;td class=&quot;goog-palette-cell&quot;&gt;...Item 0...&lt;/td&gt;
+<a name="line49"></a> *            &lt;td class=&quot;goog-palette-cell&quot;&gt;...Item 1...&lt;/td&gt;
+<a name="line50"></a> *            ...
+<a name="line51"></a> *          &lt;/tr&gt;
+<a name="line52"></a> *          &lt;tr class=&quot;goog-palette-row&quot;&gt;
+<a name="line53"></a> *            ...
+<a name="line54"></a> *          &lt;/tr&gt;
+<a name="line55"></a> *        &lt;/tbody&gt;
+<a name="line56"></a> *      &lt;/table&gt;
+<a name="line57"></a> *    &lt;/div&gt;
+<a name="line58"></a> *
+<a name="line59"></a> * @constructor
+<a name="line60"></a> * @extends {goog.ui.ControlRenderer}
+<a name="line61"></a> */
+<a name="line62"></a>goog.ui.PaletteRenderer = function() {
+<a name="line63"></a>  goog.ui.ControlRenderer.call(this);
+<a name="line64"></a>};
+<a name="line65"></a>goog.inherits(goog.ui.PaletteRenderer, goog.ui.ControlRenderer);
+<a name="line66"></a>goog.addSingletonGetter(goog.ui.PaletteRenderer);
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * Globally unique ID sequence for cells rendered by this renderer class.
+<a name="line71"></a> * @type {number}
+<a name="line72"></a> * @private
+<a name="line73"></a> */
+<a name="line74"></a>goog.ui.PaletteRenderer.cellId_ = 0;
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line79"></a> * by this renderer.
+<a name="line80"></a> * @type {string}
+<a name="line81"></a> */
+<a name="line82"></a>goog.ui.PaletteRenderer.CSS_CLASS = goog.getCssName(&#39;goog-palette&#39;);
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Returns the palette items arranged in a table wrapped in a DIV, with the
+<a name="line87"></a> * renderer&#39;s own CSS class and additional state-specific classes applied to
+<a name="line88"></a> * it.
+<a name="line89"></a> * @param {goog.ui.Control} palette goog.ui.Palette to render.
+<a name="line90"></a> * @return {!Element} Root element for the palette.
+<a name="line91"></a> * @override
+<a name="line92"></a> */
+<a name="line93"></a>goog.ui.PaletteRenderer.prototype.createDom = function(palette) {
+<a name="line94"></a>  var classNames = this.getClassNames(palette);
+<a name="line95"></a>  var element = palette.getDomHelper().createDom(
+<a name="line96"></a>      goog.dom.TagName.DIV, classNames ? classNames.join(&#39; &#39;) : null,
+<a name="line97"></a>      this.createGrid(/** @type {Array.&lt;Node&gt;} */(palette.getContent()),
+<a name="line98"></a>          palette.getSize(), palette.getDomHelper()));
+<a name="line99"></a>  goog.a11y.aria.setRole(element, goog.a11y.aria.Role.GRID);
+<a name="line100"></a>  return element;
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Returns the given items in a table with {@code size.width} columns and
+<a name="line106"></a> * {@code size.height} rows.  If the table is too big, empty cells will be
+<a name="line107"></a> * created as needed.  If the table is too small, the items that don&#39;t fit
+<a name="line108"></a> * will not be rendered.
+<a name="line109"></a> * @param {Array.&lt;Node&gt;} items Palette items.
+<a name="line110"></a> * @param {goog.math.Size} size Palette size (columns x rows); both dimensions
+<a name="line111"></a> *     must be specified as numbers.
+<a name="line112"></a> * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
+<a name="line113"></a> * @return {Element} Palette table element.
+<a name="line114"></a> */
+<a name="line115"></a>goog.ui.PaletteRenderer.prototype.createGrid = function(items, size, dom) {
+<a name="line116"></a>  var rows = [];
+<a name="line117"></a>  for (var row = 0, index = 0; row &lt; size.height; row++) {
+<a name="line118"></a>    var cells = [];
+<a name="line119"></a>    for (var column = 0; column &lt; size.width; column++) {
+<a name="line120"></a>      var item = items &amp;&amp; items[index++];
+<a name="line121"></a>      cells.push(this.createCell(item, dom));
+<a name="line122"></a>    }
+<a name="line123"></a>    rows.push(this.createRow(cells, dom));
+<a name="line124"></a>  }
+<a name="line125"></a>
+<a name="line126"></a>  return this.createTable(rows, dom);
+<a name="line127"></a>};
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Returns a table element (or equivalent) that wraps the given rows.
+<a name="line132"></a> * @param {Array.&lt;Element&gt;} rows Array of row elements.
+<a name="line133"></a> * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
+<a name="line134"></a> * @return {!Element} Palette table element.
+<a name="line135"></a> */
+<a name="line136"></a>goog.ui.PaletteRenderer.prototype.createTable = function(rows, dom) {
+<a name="line137"></a>  var table = dom.createDom(goog.dom.TagName.TABLE,
+<a name="line138"></a>      goog.getCssName(this.getCssClass(), &#39;table&#39;),
+<a name="line139"></a>      dom.createDom(goog.dom.TagName.TBODY,
+<a name="line140"></a>          goog.getCssName(this.getCssClass(), &#39;body&#39;), rows));
+<a name="line141"></a>  table.cellSpacing = 0;
+<a name="line142"></a>  table.cellPadding = 0;
+<a name="line143"></a>  return table;
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * Returns a table row element (or equivalent) that wraps the given cells.
+<a name="line149"></a> * @param {Array.&lt;Element&gt;} cells Array of cell elements.
+<a name="line150"></a> * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
+<a name="line151"></a> * @return {!Element} Row element.
+<a name="line152"></a> */
+<a name="line153"></a>goog.ui.PaletteRenderer.prototype.createRow = function(cells, dom) {
+<a name="line154"></a>  var row = dom.createDom(goog.dom.TagName.TR,
+<a name="line155"></a>      goog.getCssName(this.getCssClass(), &#39;row&#39;), cells);
+<a name="line156"></a>  goog.a11y.aria.setRole(row, goog.a11y.aria.Role.ROW);
+<a name="line157"></a>  return row;
+<a name="line158"></a>};
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Returns a table cell element (or equivalent) that wraps the given palette
+<a name="line163"></a> * item (which must be a DOM node).
+<a name="line164"></a> * @param {Node|string} node Palette item.
+<a name="line165"></a> * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
+<a name="line166"></a> * @return {!Element} Cell element.
+<a name="line167"></a> */
+<a name="line168"></a>goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
+<a name="line169"></a>  var cell = dom.createDom(goog.dom.TagName.TD, {
+<a name="line170"></a>    &#39;class&#39;: goog.getCssName(this.getCssClass(), &#39;cell&#39;),
+<a name="line171"></a>    // Cells must have an ID, for accessibility, so we generate one here.
+<a name="line172"></a>    &#39;id&#39;: goog.getCssName(this.getCssClass(), &#39;cell-&#39;) +
+<a name="line173"></a>        goog.ui.PaletteRenderer.cellId_++
+<a name="line174"></a>  }, node);
+<a name="line175"></a>  goog.a11y.aria.setRole(cell, goog.a11y.aria.Role.GRIDCELL);
+<a name="line176"></a>  // Initialize to an unselected state.
+<a name="line177"></a>  goog.a11y.aria.setState(cell, goog.a11y.aria.State.SELECTED, false);
+<a name="line178"></a>
+<a name="line179"></a>  if (!goog.dom.getTextContent(cell) &amp;&amp; !goog.a11y.aria.getLabel(cell)) {
+<a name="line180"></a>    var ariaLabelForCell = this.findAriaLabelForCell_(cell);
+<a name="line181"></a>    if (ariaLabelForCell) {
+<a name="line182"></a>      goog.a11y.aria.setLabel(cell, ariaLabelForCell);
+<a name="line183"></a>    }
+<a name="line184"></a>  }
+<a name="line185"></a>  return cell;
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Descends the DOM and tries to find an aria label for a grid cell
+<a name="line191"></a> * from the first child with a label or title.
+<a name="line192"></a> * @param {!Element} cell The cell.
+<a name="line193"></a> * @return {string} The label to use.
+<a name="line194"></a> * @private
+<a name="line195"></a> */
+<a name="line196"></a>goog.ui.PaletteRenderer.prototype.findAriaLabelForCell_ = function(cell) {
+<a name="line197"></a>  var iter = new goog.dom.NodeIterator(cell);
+<a name="line198"></a>  var label = &#39;&#39;;
+<a name="line199"></a>  var node;
+<a name="line200"></a>  while (!label &amp;&amp; (node = goog.iter.nextOrValue(iter, null))) {
+<a name="line201"></a>    if (node.nodeType == goog.dom.NodeType.ELEMENT) {
+<a name="line202"></a>      label = goog.a11y.aria.getLabel(/** @type {!Element} */ (node)) ||
+<a name="line203"></a>          node.title;
+<a name="line204"></a>    }
+<a name="line205"></a>  }
+<a name="line206"></a>  return label;
+<a name="line207"></a>};
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * Overrides {@link goog.ui.ControlRenderer#canDecorate} to always return false.
+<a name="line212"></a> * @param {Element} element Ignored.
+<a name="line213"></a> * @return {boolean} False, since palettes don&#39;t support the decorate flow (for
+<a name="line214"></a> *     now).
+<a name="line215"></a> * @override
+<a name="line216"></a> */
+<a name="line217"></a>goog.ui.PaletteRenderer.prototype.canDecorate = function(element) {
+<a name="line218"></a>  return false;
+<a name="line219"></a>};
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * Overrides {@link goog.ui.ControlRenderer#decorate} to be a no-op, since
+<a name="line224"></a> * palettes don&#39;t support the decorate flow (for now).
+<a name="line225"></a> * @param {goog.ui.Control} palette Ignored.
+<a name="line226"></a> * @param {Element} element Ignored.
+<a name="line227"></a> * @return {null} Always null.
+<a name="line228"></a> * @override
+<a name="line229"></a> */
+<a name="line230"></a>goog.ui.PaletteRenderer.prototype.decorate = function(palette, element) {
+<a name="line231"></a>  return null;
+<a name="line232"></a>};
+<a name="line233"></a>
+<a name="line234"></a>
+<a name="line235"></a>/**
+<a name="line236"></a> * Overrides {@link goog.ui.ControlRenderer#setContent} for palettes.  Locates
+<a name="line237"></a> * the HTML table representing the palette grid, and replaces the contents of
+<a name="line238"></a> * each cell with a new element from the array of nodes passed as the second
+<a name="line239"></a> * argument.  If the new content has too many items the table will have more
+<a name="line240"></a> * rows added to fit, if there are less items than the table has cells, then the
+<a name="line241"></a> * left over cells will be empty.
+<a name="line242"></a> * @param {Element} element Root element of the palette control.
+<a name="line243"></a> * @param {goog.ui.ControlContent} content Array of items to replace existing
+<a name="line244"></a> *     palette items.
+<a name="line245"></a> * @override
+<a name="line246"></a> */
+<a name="line247"></a>goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
+<a name="line248"></a>  var items = /** @type {Array.&lt;Node&gt;} */ (content);
+<a name="line249"></a>  if (element) {
+<a name="line250"></a>    var tbody = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.TBODY,
+<a name="line251"></a>        goog.getCssName(this.getCssClass(), &#39;body&#39;), element)[0];
+<a name="line252"></a>    if (tbody) {
+<a name="line253"></a>      var index = 0;
+<a name="line254"></a>      goog.array.forEach(tbody.rows, function(row) {
+<a name="line255"></a>        goog.array.forEach(row.cells, function(cell) {
+<a name="line256"></a>          goog.dom.removeChildren(cell);
+<a name="line257"></a>          if (items) {
+<a name="line258"></a>            var item = items[index++];
+<a name="line259"></a>            if (item) {
+<a name="line260"></a>              goog.dom.appendChild(cell, item);
+<a name="line261"></a>            }
+<a name="line262"></a>          }
+<a name="line263"></a>        });
+<a name="line264"></a>      });
+<a name="line265"></a>
+<a name="line266"></a>      // Make space for any additional items.
+<a name="line267"></a>      if (index &lt; items.length) {
+<a name="line268"></a>        var cells = [];
+<a name="line269"></a>        var dom = goog.dom.getDomHelper(element);
+<a name="line270"></a>        var width = tbody.rows[0].cells.length;
+<a name="line271"></a>        while (index &lt; items.length) {
+<a name="line272"></a>          var item = items[index++];
+<a name="line273"></a>          cells.push(this.createCell(item, dom));
+<a name="line274"></a>          if (cells.length == width) {
+<a name="line275"></a>            var row = this.createRow(cells, dom);
+<a name="line276"></a>            goog.dom.appendChild(tbody, row);
+<a name="line277"></a>            cells.length = 0;
+<a name="line278"></a>          }
+<a name="line279"></a>        }
+<a name="line280"></a>        if (cells.length &gt; 0) {
+<a name="line281"></a>          while (cells.length &lt; width) {
+<a name="line282"></a>            cells.push(this.createCell(&#39;&#39;, dom));
+<a name="line283"></a>          }
+<a name="line284"></a>          var row = this.createRow(cells, dom);
+<a name="line285"></a>          goog.dom.appendChild(tbody, row);
+<a name="line286"></a>        }
+<a name="line287"></a>      }
+<a name="line288"></a>    }
+<a name="line289"></a>    // Make sure the new contents are still unselectable.
+<a name="line290"></a>    goog.style.setUnselectable(element, true, goog.userAgent.GECKO);
+<a name="line291"></a>  }
+<a name="line292"></a>};
+<a name="line293"></a>
+<a name="line294"></a>
+<a name="line295"></a>/**
+<a name="line296"></a> * Returns the item corresponding to the given node, or null if the node is
+<a name="line297"></a> * neither a palette cell nor part of a palette item.
+<a name="line298"></a> * @param {goog.ui.Palette} palette Palette in which to look for the item.
+<a name="line299"></a> * @param {Node} node Node to look for.
+<a name="line300"></a> * @return {Node} The corresponding palette item (null if not found).
+<a name="line301"></a> */
+<a name="line302"></a>goog.ui.PaletteRenderer.prototype.getContainingItem = function(palette, node) {
+<a name="line303"></a>  var root = palette.getElement();
+<a name="line304"></a>  while (node &amp;&amp; node.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp; node != root) {
+<a name="line305"></a>    if (node.tagName == goog.dom.TagName.TD &amp;&amp; goog.dom.classlist.contains(
+<a name="line306"></a>        /** @type {!Element} */ (node),
+<a name="line307"></a>        goog.getCssName(this.getCssClass(), &#39;cell&#39;))) {
+<a name="line308"></a>      return node.firstChild;
+<a name="line309"></a>    }
+<a name="line310"></a>    node = node.parentNode;
+<a name="line311"></a>  }
+<a name="line312"></a>
+<a name="line313"></a>  return null;
+<a name="line314"></a>};
+<a name="line315"></a>
+<a name="line316"></a>
+<a name="line317"></a>/**
+<a name="line318"></a> * Updates the highlight styling of the palette cell containing the given node
+<a name="line319"></a> * based on the value of the Boolean argument.
+<a name="line320"></a> * @param {goog.ui.Palette} palette Palette containing the item.
+<a name="line321"></a> * @param {Node} node Item whose cell is to be highlighted or un-highlighted.
+<a name="line322"></a> * @param {boolean} highlight If true, the cell is highlighted; otherwise it is
+<a name="line323"></a> *     un-highlighted.
+<a name="line324"></a> */
+<a name="line325"></a>goog.ui.PaletteRenderer.prototype.highlightCell = function(palette,
+<a name="line326"></a>                                                           node,
+<a name="line327"></a>                                                           highlight) {
+<a name="line328"></a>  if (node) {
+<a name="line329"></a>    var cell = this.getCellForItem(node);
+<a name="line330"></a>    goog.asserts.assert(cell);
+<a name="line331"></a>    goog.dom.classlist.enable(cell,
+<a name="line332"></a>        goog.getCssName(this.getCssClass(), &#39;cell-hover&#39;), highlight);
+<a name="line333"></a>    // See http://www.w3.org/TR/2006/WD-aria-state-20061220/#activedescendent
+<a name="line334"></a>    // for an explanation of the activedescendent.
+<a name="line335"></a>    goog.a11y.aria.setState(palette.getElementStrict(),
+<a name="line336"></a>        goog.a11y.aria.State.ACTIVEDESCENDANT, cell.id);
+<a name="line337"></a>  }
+<a name="line338"></a>};
+<a name="line339"></a>
+<a name="line340"></a>
+<a name="line341"></a>/**
+<a name="line342"></a> * @param {Node} node Item whose cell is to be returned.
+<a name="line343"></a> * @return {Element} The grid cell for the palette item.
+<a name="line344"></a> */
+<a name="line345"></a>goog.ui.PaletteRenderer.prototype.getCellForItem = function(node) {
+<a name="line346"></a>  return /** @type {Element} */ (node ? node.parentNode : null);
+<a name="line347"></a>};
+<a name="line348"></a>
+<a name="line349"></a>
+<a name="line350"></a>/**
+<a name="line351"></a> * Updates the selection styling of the palette cell containing the given node
+<a name="line352"></a> * based on the value of the Boolean argument.
+<a name="line353"></a> * @param {goog.ui.Palette} palette Palette containing the item.
+<a name="line354"></a> * @param {Node} node Item whose cell is to be selected or deselected.
+<a name="line355"></a> * @param {boolean} select If true, the cell is selected; otherwise it is
+<a name="line356"></a> *     deselected.
+<a name="line357"></a> */
+<a name="line358"></a>goog.ui.PaletteRenderer.prototype.selectCell = function(palette, node, select) {
+<a name="line359"></a>  if (node) {
+<a name="line360"></a>    var cell = /** @type {!Element} */ (node.parentNode);
+<a name="line361"></a>    goog.dom.classlist.enable(cell,
+<a name="line362"></a>        goog.getCssName(this.getCssClass(), &#39;cell-selected&#39;),
+<a name="line363"></a>        select);
+<a name="line364"></a>    goog.a11y.aria.setState(cell, goog.a11y.aria.State.SELECTED, select);
+<a name="line365"></a>  }
+<a name="line366"></a>};
+<a name="line367"></a>
+<a name="line368"></a>
+<a name="line369"></a>/**
+<a name="line370"></a> * Returns the CSS class to be applied to the root element of components
+<a name="line371"></a> * rendered using this renderer.
+<a name="line372"></a> * @return {string} Renderer-specific CSS class.
+<a name="line373"></a> * @override
+<a name="line374"></a> */
+<a name="line375"></a>goog.ui.PaletteRenderer.prototype.getCssClass = function() {
+<a name="line376"></a>  return goog.ui.PaletteRenderer.CSS_CLASS;
+<a name="line377"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>indexeddb.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_db_indexeddb.js.html">indexeddb.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Wrapper for an IndexedDB database.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.db.IndexedDb&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line24"></a>goog.require(&#39;goog.db.Error&#39;);
+<a name="line25"></a>goog.require(&#39;goog.db.ObjectStore&#39;);
+<a name="line26"></a>goog.require(&#39;goog.db.Transaction&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Creates an IDBDatabase wrapper object. The database object has methods for
+<a name="line35"></a> * setting the version to change the structure of the database and for creating
+<a name="line36"></a> * transactions to get or modify the stored records. Should not be created
+<a name="line37"></a> * directly, call {@link goog.db.openDatabase} to set up the connection.
+<a name="line38"></a> *
+<a name="line39"></a> * @param {!IDBDatabase} db Underlying IndexedDB database object.
+<a name="line40"></a> * @constructor
+<a name="line41"></a> * @extends {goog.events.EventTarget}
+<a name="line42"></a> * @final
+<a name="line43"></a> */
+<a name="line44"></a>goog.db.IndexedDb = function(db) {
+<a name="line45"></a>  goog.db.IndexedDb.base(this, &#39;constructor&#39;);
+<a name="line46"></a>
+<a name="line47"></a>  /**
+<a name="line48"></a>   * Underlying IndexedDB database object.
+<a name="line49"></a>   *
+<a name="line50"></a>   * @type {!IDBDatabase}
+<a name="line51"></a>   * @private
+<a name="line52"></a>   */
+<a name="line53"></a>  this.db_ = db;
+<a name="line54"></a>
+<a name="line55"></a>  /**
+<a name="line56"></a>   * Internal event handler that listens to IDBDatabase events.
+<a name="line57"></a>   * @type {!goog.events.EventHandler.&lt;!goog.db.IndexedDb&gt;}
+<a name="line58"></a>   * @private
+<a name="line59"></a>   */
+<a name="line60"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line61"></a>
+<a name="line62"></a>  this.eventHandler_.listen(
+<a name="line63"></a>      this.db_,
+<a name="line64"></a>      goog.db.IndexedDb.EventType.ABORT,
+<a name="line65"></a>      goog.bind(
+<a name="line66"></a>          this.dispatchEvent,
+<a name="line67"></a>          this,
+<a name="line68"></a>          goog.db.IndexedDb.EventType.ABORT));
+<a name="line69"></a>  this.eventHandler_.listen(
+<a name="line70"></a>      this.db_,
+<a name="line71"></a>      goog.db.IndexedDb.EventType.ERROR,
+<a name="line72"></a>      this.dispatchError_);
+<a name="line73"></a>  this.eventHandler_.listen(
+<a name="line74"></a>      this.db_,
+<a name="line75"></a>      goog.db.IndexedDb.EventType.VERSION_CHANGE,
+<a name="line76"></a>      this.dispatchVersionChange_);
+<a name="line77"></a>  this.eventHandler_.listen(
+<a name="line78"></a>      this.db_,
+<a name="line79"></a>      goog.db.IndexedDb.EventType.CLOSE,
+<a name="line80"></a>      goog.bind(
+<a name="line81"></a>          this.dispatchEvent,
+<a name="line82"></a>          this,
+<a name="line83"></a>          goog.db.IndexedDb.EventType.CLOSE));
+<a name="line84"></a>};
+<a name="line85"></a>goog.inherits(goog.db.IndexedDb, goog.events.EventTarget);
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * True iff the database connection is open.
+<a name="line90"></a> *
+<a name="line91"></a> * @type {boolean}
+<a name="line92"></a> * @private
+<a name="line93"></a> */
+<a name="line94"></a>goog.db.IndexedDb.prototype.open_ = true;
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Dispatches a wrapped error event based on the given event.
+<a name="line99"></a> *
+<a name="line100"></a> * @param {Event} ev The error event given to the underlying IDBDatabase.
+<a name="line101"></a> * @private
+<a name="line102"></a> */
+<a name="line103"></a>goog.db.IndexedDb.prototype.dispatchError_ = function(ev) {
+<a name="line104"></a>  this.dispatchEvent({
+<a name="line105"></a>    type: goog.db.IndexedDb.EventType.ERROR,
+<a name="line106"></a>    errorCode: /** @type {IDBRequest} */ (ev.target).errorCode
+<a name="line107"></a>  });
+<a name="line108"></a>};
+<a name="line109"></a>
+<a name="line110"></a>
+<a name="line111"></a>/**
+<a name="line112"></a> * Dispatches a wrapped version change event based on the given event.
+<a name="line113"></a> *
+<a name="line114"></a> * @param {Event} ev The version change event given to the underlying
+<a name="line115"></a> *     IDBDatabase.
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.db.IndexedDb.prototype.dispatchVersionChange_ = function(ev) {
+<a name="line119"></a>  this.dispatchEvent(new goog.db.IndexedDb.VersionChangeEvent(
+<a name="line120"></a>      ev.oldVersion, ev.newVersion));
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Closes the database connection. Metadata queries can still be made after this
+<a name="line126"></a> * method is called, but otherwise this wrapper should not be used further.
+<a name="line127"></a> */
+<a name="line128"></a>goog.db.IndexedDb.prototype.close = function() {
+<a name="line129"></a>  if (this.open_) {
+<a name="line130"></a>    this.db_.close();
+<a name="line131"></a>    this.open_ = false;
+<a name="line132"></a>  }
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * @return {boolean} Whether a connection is open and the database can be used.
+<a name="line138"></a> */
+<a name="line139"></a>goog.db.IndexedDb.prototype.isOpen = function() {
+<a name="line140"></a>  return this.open_;
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * @return {string} The name of this database.
+<a name="line146"></a> */
+<a name="line147"></a>goog.db.IndexedDb.prototype.getName = function() {
+<a name="line148"></a>  return this.db_.name;
+<a name="line149"></a>};
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * @return {string} The current database version.
+<a name="line154"></a> */
+<a name="line155"></a>goog.db.IndexedDb.prototype.getVersion = function() {
+<a name="line156"></a>  return this.db_.version;
+<a name="line157"></a>};
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * @return {DOMStringList} List of object stores in this database.
+<a name="line162"></a> */
+<a name="line163"></a>goog.db.IndexedDb.prototype.getObjectStoreNames = function() {
+<a name="line164"></a>  return this.db_.objectStoreNames;
+<a name="line165"></a>};
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * Creates an object store in this database. Can only be called inside a
+<a name="line170"></a> * {@link goog.db.UpgradeNeededCallback} or the callback for the Deferred
+<a name="line171"></a> * returned from #setVersion.
+<a name="line172"></a> *
+<a name="line173"></a> * @param {string} name Name for the new object store.
+<a name="line174"></a> * @param {Object=} opt_params Options object. The available options are:
+<a name="line175"></a> *     keyPath, which is a string and determines what object attribute
+<a name="line176"></a> *     to use as the key when storing objects in this object store; and
+<a name="line177"></a> *     autoIncrement, which is a boolean, which defaults to false and determines
+<a name="line178"></a> *     whether the object store should automatically generate keys for stored
+<a name="line179"></a> *     objects. If keyPath is not provided and autoIncrement is false, then all
+<a name="line180"></a> *     insert operations must provide a key as a parameter.
+<a name="line181"></a> * @return {!goog.db.ObjectStore} The newly created object store.
+<a name="line182"></a> * @throws {goog.db.Error} If there&#39;s a problem creating the object store.
+<a name="line183"></a> */
+<a name="line184"></a>goog.db.IndexedDb.prototype.createObjectStore = function(name, opt_params) {
+<a name="line185"></a>  try {
+<a name="line186"></a>    return new goog.db.ObjectStore(this.db_.createObjectStore(
+<a name="line187"></a>        name, opt_params));
+<a name="line188"></a>  } catch (ex) {
+<a name="line189"></a>    throw goog.db.Error.fromException(ex, &#39;creating object store &#39; + name);
+<a name="line190"></a>  }
+<a name="line191"></a>};
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>/**
+<a name="line195"></a> * Deletes an object store. Can only be called inside a
+<a name="line196"></a> * {@link goog.db.UpgradeNeededCallback} or the callback for the Deferred
+<a name="line197"></a> * returned from #setVersion.
+<a name="line198"></a> *
+<a name="line199"></a> * @param {string} name Name of the object store to delete.
+<a name="line200"></a> * @throws {goog.db.Error} If there&#39;s a problem deleting the object store.
+<a name="line201"></a> */
+<a name="line202"></a>goog.db.IndexedDb.prototype.deleteObjectStore = function(name) {
+<a name="line203"></a>  try {
+<a name="line204"></a>    this.db_.deleteObjectStore(name);
+<a name="line205"></a>  } catch (ex) {
+<a name="line206"></a>    throw goog.db.Error.fromException(ex, &#39;deleting object store &#39; + name);
+<a name="line207"></a>  }
+<a name="line208"></a>};
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/**
+<a name="line212"></a> * Updates the version of the database and returns a Deferred transaction.
+<a name="line213"></a> * The database&#39;s structure can be changed inside this Deferred&#39;s callback, but
+<a name="line214"></a> * nowhere else. This means adding or deleting object stores, and adding or
+<a name="line215"></a> * deleting indexes. The version change will not succeed unless there are no
+<a name="line216"></a> * other connections active for this database anywhere. A new database
+<a name="line217"></a> * connection should be opened after the version change is finished to pick
+<a name="line218"></a> * up changes.
+<a name="line219"></a> *
+<a name="line220"></a> * This is deprecated, and only supported on Chrome prior to version 25. New
+<a name="line221"></a> * applications should use the version parameter to {@link goog.db.openDatabase}
+<a name="line222"></a> * instead.
+<a name="line223"></a> *
+<a name="line224"></a> * @param {string} version The new version of the database.
+<a name="line225"></a> * @return {!goog.async.Deferred} The deferred transaction for changing the
+<a name="line226"></a> *     version.
+<a name="line227"></a> */
+<a name="line228"></a>goog.db.IndexedDb.prototype.setVersion = function(version) {
+<a name="line229"></a>  var self = this;
+<a name="line230"></a>  var d = new goog.async.Deferred();
+<a name="line231"></a>  var request = this.db_.setVersion(version);
+<a name="line232"></a>  request.onsuccess = function(ev) {
+<a name="line233"></a>    // the transaction is in the result field (the transaction field is null
+<a name="line234"></a>    // for version change requests)
+<a name="line235"></a>    d.callback(new goog.db.Transaction(ev.target.result, self));
+<a name="line236"></a>  };
+<a name="line237"></a>  request.onerror = function(ev) {
+<a name="line238"></a>    // If a version change is blocked, onerror and onblocked may both fire.
+<a name="line239"></a>    // Check d.hasFired() to avoid an AlreadyCalledError.
+<a name="line240"></a>    if (!d.hasFired()) {
+<a name="line241"></a>      d.errback(goog.db.Error.fromRequest(ev.target, &#39;setting version&#39;));
+<a name="line242"></a>    }
+<a name="line243"></a>  };
+<a name="line244"></a>  request.onblocked = function(ev) {
+<a name="line245"></a>    // If a version change is blocked, onerror and onblocked may both fire.
+<a name="line246"></a>    // Check d.hasFired() to avoid an AlreadyCalledError.
+<a name="line247"></a>    if (!d.hasFired()) {
+<a name="line248"></a>      d.errback(new goog.db.Error.VersionChangeBlockedError());
+<a name="line249"></a>    }
+<a name="line250"></a>  };
+<a name="line251"></a>  return d;
+<a name="line252"></a>};
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * Creates a new transaction.
+<a name="line257"></a> *
+<a name="line258"></a> * @param {!Array.&lt;string&gt;} storeNames A list of strings that contains the
+<a name="line259"></a> *     transaction&#39;s scope, the object stores that this transaction can operate
+<a name="line260"></a> *     on.
+<a name="line261"></a> * @param {goog.db.Transaction.TransactionMode=} opt_mode The mode of the
+<a name="line262"></a> *     transaction. If not present, the default is READ_ONLY. For VERSION_CHANGE
+<a name="line263"></a> *     transactions call {@link goog.db.IndexedDB#setVersion} instead.
+<a name="line264"></a> * @return {!goog.db.Transaction} The wrapper for the newly created transaction.
+<a name="line265"></a> * @throws {goog.db.Error} If there&#39;s a problem creating the transaction.
+<a name="line266"></a> */
+<a name="line267"></a>goog.db.IndexedDb.prototype.createTransaction = function(storeNames, opt_mode) {
+<a name="line268"></a>  try {
+<a name="line269"></a>    // IndexedDB on Chrome 22+ requires that opt_mode not be passed rather than
+<a name="line270"></a>    // be explicitly passed as undefined.
+<a name="line271"></a>    var transaction = opt_mode ?
+<a name="line272"></a>        this.db_.transaction(storeNames, opt_mode) :
+<a name="line273"></a>        this.db_.transaction(storeNames);
+<a name="line274"></a>    return new goog.db.Transaction(transaction, this);
+<a name="line275"></a>  } catch (ex) {
+<a name="line276"></a>    throw goog.db.Error.fromException(ex, &#39;creating transaction&#39;);
+<a name="line277"></a>  }
+<a name="line278"></a>};
+<a name="line279"></a>
+<a name="line280"></a>
+<a name="line281"></a>/** @override */
+<a name="line282"></a>goog.db.IndexedDb.prototype.disposeInternal = function() {
+<a name="line283"></a>  goog.db.IndexedDb.base(this, &#39;disposeInternal&#39;);
+<a name="line284"></a>  this.eventHandler_.dispose();
+<a name="line285"></a>};
+<a name="line286"></a>
+<a name="line287"></a>
+<a name="line288"></a>/**
+<a name="line289"></a> * Event types fired by a database.
+<a name="line290"></a> *
+<a name="line291"></a> * @enum {string} The event types for the web socket.
+<a name="line292"></a> */
+<a name="line293"></a>goog.db.IndexedDb.EventType = {
+<a name="line294"></a>
+<a name="line295"></a>  /**
+<a name="line296"></a>   * Fired when a transaction is aborted and the event bubbles to its database.
+<a name="line297"></a>   */
+<a name="line298"></a>  ABORT: &#39;abort&#39;,
+<a name="line299"></a>
+<a name="line300"></a>  /**
+<a name="line301"></a>   * Fired when the database connection is forcibly closed by the browser,
+<a name="line302"></a>   * without an explicit call to IDBDatabase#close. This behavior is not in the
+<a name="line303"></a>   * spec yet but will be added since it is necessary, see
+<a name="line304"></a>   * https://www.w3.org/Bugs/Public/show_bug.cgi?id=22540.
+<a name="line305"></a>   */
+<a name="line306"></a>  CLOSE: &#39;close&#39;,
+<a name="line307"></a>
+<a name="line308"></a>  /**
+<a name="line309"></a>   * Fired when a transaction has an error.
+<a name="line310"></a>   */
+<a name="line311"></a>  ERROR: &#39;error&#39;,
+<a name="line312"></a>
+<a name="line313"></a>  /**
+<a name="line314"></a>   * Fired when someone (possibly in another window) is attempting to modify the
+<a name="line315"></a>   * structure of the database. Since a change can only be made when there are
+<a name="line316"></a>   * no active database connections, this usually means that the database should
+<a name="line317"></a>   * be closed so that the other client can make its changes.
+<a name="line318"></a>   */
+<a name="line319"></a>  VERSION_CHANGE: &#39;versionchange&#39;
+<a name="line320"></a>};
+<a name="line321"></a>
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Event representing a (possibly attempted) change in the database structure.
+<a name="line326"></a> *
+<a name="line327"></a> * At time of writing, no Chrome versions support oldVersion or newVersion. See
+<a name="line328"></a> * http://crbug.com/153122.
+<a name="line329"></a> *
+<a name="line330"></a> * @param {number} oldVersion The previous version of the database.
+<a name="line331"></a> * @param {number} newVersion The version the database is being or has been
+<a name="line332"></a> *     updated to.
+<a name="line333"></a> * @constructor
+<a name="line334"></a> * @extends {goog.events.Event}
+<a name="line335"></a> * @final
+<a name="line336"></a> */
+<a name="line337"></a>goog.db.IndexedDb.VersionChangeEvent = function(oldVersion, newVersion) {
+<a name="line338"></a>  goog.db.IndexedDb.VersionChangeEvent.base(
+<a name="line339"></a>      this, &#39;constructor&#39;, goog.db.IndexedDb.EventType.VERSION_CHANGE);
+<a name="line340"></a>
+<a name="line341"></a>  /**
+<a name="line342"></a>   * The previous version of the database.
+<a name="line343"></a>   * @type {number}
+<a name="line344"></a>   */
+<a name="line345"></a>  this.oldVersion = oldVersion;
+<a name="line346"></a>
+<a name="line347"></a>  /**
+<a name="line348"></a>   * The version the database is being or has been updated to.
+<a name="line349"></a>   * @type {number}
+<a name="line350"></a>   */
+<a name="line351"></a>  this.newVersion = newVersion;
+<a name="line352"></a>};
+<a name="line353"></a>goog.inherits(goog.db.IndexedDb.VersionChangeEvent, goog.events.Event);
+</pre>
+
+
+</body>
+</html>

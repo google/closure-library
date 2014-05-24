@@ -1,0 +1,958 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>promise.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">promise.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_promise_promise.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/promise/promise.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/promise/promise.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_Promise.html">
+          goog.Promise</a><br/>
+        <div class="class-details">Promises provide a result that may be resolved asynchronously. A Promise may
+be resolved by being fulfilled or rejected with a value, which will be known
+as the fulfillment value or the rejection reason. Whether fulfilled or
+rejected, the Promise result is immutable once it is set.
+
+Promises may represent results of any type, including undefined. Rejection
+reasons are typically Errors, but may also be of any type. Closure Promises
+allow for optional type annotations that enforce that fulfillment values are
+of the appropriate types at compile time.
+
+The result of a Promise is accessible by calling <code> then</code> and registering
+<code> onFulfilled</code> and <code> onRejected</code> callbacks. Once the Promise
+resolves, the relevant callbacks are invoked with the fulfillment value or
+rejection reason as argument. Callbacks are always invoked in the order they
+were registered, even when additional <code> then</code> calls are made from inside
+another callback. A callback is always run asynchronously sometime after the
+scope containing the registering <code> then</code> invocation has returned.
+
+If a Promise is resolved with another Promise, the first Promise will block
+until the second is resolved, and then assumes the same result as the second
+Promise. This allows Promises to depend on the results of other Promises,
+linking together multiple asynchronous operations.
+
+This implementation is compatible with the Promises/A+ specification and
+passes that specification's conformance test suite. A Closure Promise may be
+resolved with a Promise instance (or sufficiently compatible Promise-like
+object) created by other Promise implementations. From the specification,
+Promise-like objects are known as "Thenables".
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_Promise_CancellationError.html">
+          goog.Promise.CancellationError</a><br/>
+        <div class="class-details">Error used as a rejection reason for canceled Promises.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_Promise_Resolver_.html">
+          goog.Promise.Resolver_</a><br/>
+        <div class="class-details">Internal implementation of the resolver interface.
+
+</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.addUnhandledRejection_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">addUnhandledRejection_<span class="args">(<span class="arg">promise</span>,&nbsp;<span class="arg">reason</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Marks this rejected Promise as unhandled. If no <code> onRejected</code> callback
+is called for this Promise before the <code> UNHANDLED_REJECTION_DELAY</code>
+expires, the reason will be passed to the unhandled rejection handler. The
+handler typically rethrows the rejection reason so that it becomes visible in
+the developer console.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">promise</span>
+        : <span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>
+        <div class="entryOverview">The rejected Promise.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">reason</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The Promise rejection reason.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line899">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.all"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">all<span class="args">(<span class="arg">promises</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">TYPE</span>&gt;&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">promises</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span>!</span>(<span class="type"><a href="interface_goog_Thenable.html">goog.Thenable</a></span>.&lt;<span class="type">TYPE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">Thenable</span>)&gt;
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">TYPE</span>&gt;&gt;&nbsp;
+            A Promise that receives a list of
+    every fulfilled value once every input Promise (or Promise-like) is
+    successfully fulfilled, or is rejected by the first rejection result.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line270">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.firstFulfilled"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">firstFulfilled<span class="args">(<span class="arg">promises</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>.&lt;<span class="type">TYPE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">promises</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span>!</span>(<span class="type"><a href="interface_goog_Thenable.html">goog.Thenable</a></span>.&lt;<span class="type">TYPE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">Thenable</span>)&gt;
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>.&lt;<span class="type">TYPE</span>&gt;&nbsp;
+            A Promise that receives the value of the first
+    input to be fulfilled, or is rejected with a list of every rejection
+    reason if all inputs are rejected.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line306">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.handleRejection_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">handleRejection_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       A method that is invoked with the rejection reasons for Promises that are
+rejected but have no <code> onRejected</code> callbacks registered yet.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line924">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.all&function%0&onFulfill"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">all&function%0&onFulfill<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line280">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.firstFulfilled&function%0&onFulfill"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">firstFulfilled&function%0&onFulfill<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line316">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.all&function%0&onReject"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">all&function%0&onReject<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line288">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.firstFulfilled&function%0&onReject"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">firstFulfilled&function%0&onReject<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line320">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.race"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">race<span class="args">(<span class="arg">promises</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>.&lt;<span class="type">TYPE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">promises</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span>!</span>(<span class="type"><a href="interface_goog_Thenable.html">goog.Thenable</a></span>.&lt;<span class="type">TYPE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">Thenable</span>)&gt;
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>.&lt;<span class="type">TYPE</span>&gt;&nbsp;
+            A Promise that receives the result of the
+    first Promise (or Promise-like) input to complete.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line251">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.reject"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">reject<span class="args">(<span class="arg">opt_reason</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_reason</span>
+        : <span class="type">*=</span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>&nbsp;
+            A new Promise that is immediately rejected with the
+    given reason.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line238">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.withResolver&reject"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">withResolver&reject<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line342">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.resolve"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">resolve<span class="args">(<span class="arg">opt_value</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>.&lt;<span class="type">TYPE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_value</span>
+        : (<span class="type">TYPE</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="interface_goog_Thenable.html">goog.Thenable</a></span>.&lt;<span class="type">TYPE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">Thenable)=</span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_Promise.html">goog.Promise</a></span>.&lt;<span class="type">TYPE</span>&gt;&nbsp;
+            A new Promise that is immediately resolved
+    with the given value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line226">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.withResolver&resolve"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">withResolver&resolve<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line342">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.setUnhandledRejectionHandler"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">setUnhandledRejectionHandler<span class="args">(<span class="arg">handler</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets a handler that will be called with reasons from unhandled rejected
+Promises. If the rejected Promise (or one of its descendants) has an
+<code> onRejected</code> callback registered, the rejection will be considered
+handled, and the rejection handler will not be called.
+
+By default, unhandled rejections are rethrown so that the error may be
+captured by the developer console or a <code> window.onerror</code> handler.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">handler</span>
+        : <span class="type">function(*</span>)
+        <div class="entryOverview">A function that will be called with reasons from
+    rejected Promises. Defaults to <code> goog.async.throwException</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line939">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.Promise.withResolver"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.Promise.</span><span class="entryName">withResolver<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_promise_Resolver.html">goog.promise.Resolver</a></span>.&lt;<span class="type">TYPE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_promise_Resolver.html">goog.promise.Resolver</a></span>.&lt;<span class="type">TYPE</span>&gt;&nbsp;
+            Resolver wrapping the promise and its
+    resolve / reject functions. Resolving or rejecting the resolver
+    resolves or rejects the promise.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_promise_promise.js.source.html#line341">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory promise</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/promise/promise.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

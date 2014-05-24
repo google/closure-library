@@ -1,0 +1,3214 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>ButtonSet (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">ui.Dialog.ButtonSet</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          <a href="class_goog_structs_Map.html">
+          goog.structs.Map
+</a>
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    A button set defines the behaviour of a set of buttons that the dialog can
+show.  Uses the <code> goog.structs.Map</code> interface.
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="http://closure-library.googlecode.com/git/closure/goog/demos/dialog.html">Demo</a></li>
+            <li><a href="local_closure_goog_ui_dialog.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/ui/dialog.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span></td><td></td></tr>
+  <tr><td>goog.ui.Dialog.ButtonSet</td><td><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+</table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.ui.Dialog.ButtonSet(<span><span class="arg">opt_domHelper</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <span class="type">goog.dom.DomHelper=</span>
+        <div class="entryOverview">Optional DOM helper; see <code>
+   goog.ui.Component</code> for semantics.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_ui_Dialog_ButtonSet.html">
+              goog.ui.Dialog.ButtonSet
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.addButton"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addButton<span class="args">(<span class="arg"></span>,&nbsp;<span class="arg">opt_isDefault</span>,&nbsp;<span class="arg">opt_isCancel</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds a button (an object with a key and caption) to this button set. Buttons
+will be displayed in the order they are added.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName"></span>
+        : <span>!</span><span class="type">{key: string, caption: string</span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_isDefault</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">Whether this button is the default button.
+    Dialog will dispatch for this button if enter is pressed.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_isCancel</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">Whether this button has the same behavior as
+    cancel. If escape is pressed this button will fire.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The button set, to make it easy to chain
+    "addButton" calls and build new ButtonSets.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1231">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.attachToElement"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">attachToElement<span class="args">(<span class="arg">el</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Attaches the button set to an element, rendering it inside.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">el</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">Container.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1241">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.decorate"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">decorate<span class="args">(<span class="arg">element</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Decorates the given element by adding any <code> button</code> elements found
+among its descendants to the button set.  The first button found is assumed
+to be the default and will receive focus when the button set is rendered.
+If a button with a name of <code> goog.ui.Dialog.DefaultButtonKeys.CANCEL</code>
+is found, it is assumed to have "Cancel" semantics.
+TODO(attila):  ButtonSet should be a goog.ui.Component.  Really.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">element</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The element to decorate; should contain buttons.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1275">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.getAllButtons"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getAllButtons<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type">NodeList</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns all the HTML Button elements in the button set container.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">NodeList</span>&nbsp;
+            A live NodeList of the buttons.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1376">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.getButton"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getButton<span class="args">(<span class="arg">key</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the HTML Button element.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The button to return.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>&nbsp;
+            The button, if found else null.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1361">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.getCancel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getCancel<span class="args">()</span>
+        </span>
+        &#8658; <span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the cancel button.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The cancel button.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1351">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.getDefault"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getDefault<span class="args">()</span>
+        </span>
+        &#8658; <span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the default button.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The default button.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1333">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.getDomHelper"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getDomHelper<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the dom helper that is being used on this component.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span>&nbsp;
+            The dom helper used on this component.
+TODO(user): Remove after refactoring to goog.ui.Component.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1315">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.getElement"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getElement<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the component's element.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>&nbsp;
+            The element for the component.
+TODO(user): Remove after refactoring to goog.ui.Component.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1305">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.render"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">render<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Renders the button set inside its container element.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1250">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.set"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">set<span class="args">(<span class="arg">key</span>,&nbsp;<span class="arg">caption</span>,&nbsp;<span class="arg">opt_isDefault</span>,&nbsp;<span class="arg">opt_isCancel</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds a button to the button set.  Buttons will be displayed in the order they
+are added.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">Key used to identify the button in events.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">caption</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">A string caption or a DOM node that can be
+    appended to a button element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_isDefault</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">Whether this button is the default button,
+    Dialog will dispatch for this button if enter is pressed.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_isCancel</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">Whether this button has the same behaviour as
+   cancel.  If escape is pressed this button will fire.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The button set, to make it easy to chain
+   "set" calls and build new ButtonSets.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1204">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.setAllButtonsEnabled"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setAllButtonsEnabled<span class="args">(<span class="arg">enabled</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Enables or disables all of the buttons in this set.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">enabled</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">True to enable; false to disable.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1399">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.setButtonEnabled"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setButtonEnabled<span class="args">(<span class="arg">key</span>,&nbsp;<span class="arg">enabled</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Enables or disables a button in this set by key. If the button is not found,
+does nothing.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The button to enable or disable.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">enabled</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">True to enable; false to disable.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1387">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.setCancel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setCancel<span class="args">(<span class="arg">key</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the cancel button.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The cancel button.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1342">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.prototype.setDefault"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setDefault<span class="args">(<span class="arg">key</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the default button.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The default button.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1324">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_structs_Map.html">
+              goog.structs.Map
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.__iterator__"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">__iterator__<span class="args">(<span class="arg">opt_keys</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns an iterator that iterates over the values or the keys in the map.
+This throws an exception if the map was mutated since the iterator was
+created.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_keys</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">True to iterate over the keys. False to iterate
+    over the values.  The default value is false.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>&nbsp;
+            An iterator over the values or keys in the map.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line423">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.addAll"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addAll<span class="args">(<span class="arg">map</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds multiple key-value pairs from another goog.structs.Map or Object.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">map</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">Object containing the data to add.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line318">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.cleanupKeysArray_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">cleanupKeysArray_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Cleans up the temp keys array by removing entries that are no longer in the
+map.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line243">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.clear"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">clear<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes all key-value pairs from the map.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line206">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.clone"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">clone<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Clones a map and returns a new map.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span>&nbsp;
+            A new map with the same key-value pairs.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line355">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.containsKey"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">containsKey<span class="args">(<span class="arg">key</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Whether the map contains the given key.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The key to check for.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the map contains the key.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line133">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.containsValue"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">containsValue<span class="args">(<span class="arg">val</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Whether the map contains the given value. This is O(n).
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">val</span>
+        : <span class="type">V</span>
+        <div class="entryOverview">The value to check for.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the map contains the value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line143">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.equals"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">equals<span class="args">(<span class="arg">otherMap</span>,&nbsp;<span class="arg">opt_equalityFn</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Whether this map is equal to the argument map.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">otherMap</span>
+        : <span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span>
+        <div class="entryOverview">The map against which to test equality.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_equalityFn</span>
+        : <span class="type">function(V, V): boolean=</span>
+        <div class="entryOverview">Optional equality function
+    to test equality of values. If not specified, this will test whether
+    the values contained in each map are identical objects.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the maps are equal.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line162">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.forEach"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">forEach<span class="args">(<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Calls the given function on each entry in the map.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">function(this:T, V, K, goog.structs.Map</span>.&lt;<span class="type">K</span>,<span class="type">V</span>&gt;)
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">T=</span>
+        <div class="entryOverview">The value of "this" inside f.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line341">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.get"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">get<span class="args">(<span class="arg">key</span>,&nbsp;<span class="arg">opt_val</span>)</span>
+        </span>
+        &#8658; <span class="type">V</span><span>&nbsp;|&nbsp;</span><span class="type">DEFAULT</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the value for the given key.  If the key is not found and the default
+value is not given this will return <code> undefined</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The key to get the value for.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_val</span>
+        : <span class="type">DEFAULT=</span>
+        <div class="entryOverview">The value to return if no item is found for the
+    given key, defaults to undefined.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">V</span><span>&nbsp;|&nbsp;</span><span class="type">DEFAULT</span>&nbsp;
+            The value for the given key.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line289">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.getCount"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getCount<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The number of key-value pairs in the map.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line97">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.getKeyIterator"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getKeyIterator<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns an iterator that iterates over the keys in the map.  Removal of keys
+while iterating might have undesired side effects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>&nbsp;
+            An iterator over the keys in the map.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line400">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.getKeys"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getKeys<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the keys of the map.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&gt;&nbsp;
+            Array of string values.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line122">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.getValueIterator"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getValueIterator<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns an iterator that iterates over the values in the map.  Removal of
+keys while iterating might have undesired side effects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>&nbsp;
+            An iterator over the values in the map.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line410">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.getValues"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getValues<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">V</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the values of the map.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">V</span>&gt;&nbsp;
+            The values in the map.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line106">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.isEmpty"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isEmpty<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the map is empty.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line198">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.remove"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">remove<span class="args">(<span class="arg">key</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes a key-value pair based on the key. This is O(logN) amortized due to
+updating the keys array whenever the count becomes half the size of the keys
+in the keys array.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The key to remove.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether object was removed.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line221">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.set"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">set<span class="args">(<span class="arg">key</span>,&nbsp;<span class="arg">value</span>)</span>
+        </span>
+        &#8658; <span class="type">*</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds a key-value pair to the map.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The key.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type">V</span>
+        <div class="entryOverview">The value to add.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">*</span>&nbsp;
+            Some subclasses return a value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line303">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.toObject"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">toObject<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>&nbsp;
+            Object representation of the map.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line384">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Map.prototype.transpose"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">transpose<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a new map in which all the keys and values are interchanged
+(keys become values and values become keys). If multiple keys map to the
+same value, the chosen transposed value is implementation-dependent.
+
+It acts very similarly to {goog.object.transpose(Object)}.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span>&nbsp;
+            The transposed map.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line369">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_ui_Dialog_ButtonSet.html">
+              goog.ui.Dialog.ButtonSet
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.prototype.cancelButton_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">cancelButton_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The button whose action is associated with the escape key and the X button
+on the dialog.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1186">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.prototype.class_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">class_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       A CSS className for this component.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1161">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.prototype.constructor"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">constructor</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1148">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.prototype.defaultButton_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">defaultButton_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The button that has default focus (references key in buttons_ map).
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1169">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.prototype.dom_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dom_</span>
+        : <span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1150">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.prototype.element_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">element_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Optional container the button set should be rendered into.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1177">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_structs_Map.html">
+              goog.structs.Map
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.Map.prototype.count_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">count_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The number of key value pairs in the map.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line71">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.Map.prototype.keys_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">keys_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       An array of keys. This is necessary for two reasons:
+  1. Iterating the keys using for (var key in this.map_) allocates an
+     object for every key in IE which is really bad for IE6 GC perf.
+  2. Without a side data structure, we would need to escape all the keys
+     as that would be the only way we could tell during iteration if the
+     key was an internal key or a property of the object.
+
+This array can contain deleted keys so it's necessary to check the map
+as well to see if the key is still in the map (this doesn't require a
+memory allocation in IE).
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line65">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.Map.prototype.map_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">map_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Underlying JS object used to implement the map.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line50">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.Map.prototype.version_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">version_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Version used to detect changes while iterating.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_map.js.source.html#line77">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Static Methods</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.createContinueSaveCancel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">createContinueSaveCancel<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new ButtonSet with 'Continue', 'Save', and 'Cancel' (default)
+buttons.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The created ButtonSet.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1566">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.createOk"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">createOk<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new ButtonSet with a single 'OK' button, which is also set with
+cancel button semantics so that pressing escape will close the dialog.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The created ButtonSet.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1521">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.createOkCancel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">createOkCancel<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new ButtonSet with 'OK' (default) and 'Cancel' buttons.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The created ButtonSet.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1531">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.createYesNo"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">createYesNo<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new ButtonSet with 'Yes' (default) and 'No' buttons.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The created ButtonSet.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1542">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.Dialog.ButtonSet.createYesNoCancel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">createYesNoCancel<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new ButtonSet with 'Yes', 'No' (default), and 'Cancel' buttons.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>&nbsp;
+            The created ButtonSet.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1553">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+<h2>Static Properties</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.CONTINUE_SAVE_CANCEL"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">CONTINUE_SAVE_CANCEL</span>
+        : <span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1592">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.OK"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">OK</span>
+        : <span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1578">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.OK_CANCEL"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">OK_CANCEL</span>
+        : <span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1581">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.YES_NO"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">YES_NO</span>
+        : <span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1585">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.YES_NO_CANCEL"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">YES_NO_CANCEL</span>
+        : <span class="type"><a href="class_goog_ui_Dialog_ButtonSet.html">goog.ui.Dialog.ButtonSet</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1588">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.superClass_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">superClass_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1148">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ui.Dialog.ButtonSet.DefaultButtons"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.Dialog.ButtonSet.</span><span class="entryName">DefaultButtons</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The standard buttons (keys associated with captions).
+
+     </div>
+
+     <div class="entryDetails">
+       <div class="detailsSection">
+          <b>Constants:</b>
+          <table class="horiz-rule">
+            <tbody>
+              <tr><td>
+                <span class="entryName">
+                  CANCEL
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  CONTINUE
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  NO
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  OK
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  SAVE
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  YES
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_dialog.js.source.html#line1488">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package ui.Dialog</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="ui.Dialog.ButtonSet"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

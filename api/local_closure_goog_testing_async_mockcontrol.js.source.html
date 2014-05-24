@@ -1,0 +1,226 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mockcontrol.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_async_mockcontrol.js.html">mockcontrol.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A wrapper for MockControl that provides mocks and assertions
+<a name="line17"></a> * for testing asynchronous code. All assertions will only be verified when
+<a name="line18"></a> * $verifyAll is called on the wrapped MockControl.
+<a name="line19"></a> *
+<a name="line20"></a> * This class is meant primarily for testing code that exposes asynchronous APIs
+<a name="line21"></a> * without being truly asynchronous (using asynchronous primitives like browser
+<a name="line22"></a> * events or timeouts). This is often the case when true asynchronous
+<a name="line23"></a> * depedencies have been mocked out. This means that it doesn&#39;t rely on
+<a name="line24"></a> * AsyncTestCase or DeferredTestCase, although it can be used with those as
+<a name="line25"></a> * well.
+<a name="line26"></a> *
+<a name="line27"></a> * Example usage:
+<a name="line28"></a> *
+<a name="line29"></a> * &lt;pre&gt;
+<a name="line30"></a> * var mockControl = new goog.testing.MockControl();
+<a name="line31"></a> * var asyncMockControl = new goog.testing.async.MockControl(mockControl);
+<a name="line32"></a> *
+<a name="line33"></a> * myAsyncObject.onSuccess(asyncMockControl.asyncAssertEquals(
+<a name="line34"></a> *     &#39;callback should run and pass the correct value&#39;,
+<a name="line35"></a> *     &#39;http://someurl.com&#39;);
+<a name="line36"></a> * asyncMockControl.assertDeferredEquals(
+<a name="line37"></a> *     &#39;deferred object should be resolved with the correct value&#39;,
+<a name="line38"></a> *     &#39;http://someurl.com&#39;,
+<a name="line39"></a> *     myAsyncObject.getDeferredUrl());
+<a name="line40"></a> * asyncMockControl.run();
+<a name="line41"></a> * mockControl.$verifyAll();
+<a name="line42"></a> * &lt;/pre&gt;
+<a name="line43"></a> *
+<a name="line44"></a> */
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>goog.provide(&#39;goog.testing.async.MockControl&#39;);
+<a name="line48"></a>
+<a name="line49"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line50"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line51"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line52"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line53"></a>goog.require(&#39;goog.testing.mockmatchers.IgnoreArgument&#39;);
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Provides asynchronous mocks and assertions controlled by a parent
+<a name="line59"></a> * MockControl.
+<a name="line60"></a> *
+<a name="line61"></a> * @param {goog.testing.MockControl} mockControl The parent MockControl.
+<a name="line62"></a> * @constructor
+<a name="line63"></a> * @final
+<a name="line64"></a> */
+<a name="line65"></a>goog.testing.async.MockControl = function(mockControl) {
+<a name="line66"></a>  /**
+<a name="line67"></a>   * The parent MockControl.
+<a name="line68"></a>   * @type {goog.testing.MockControl}
+<a name="line69"></a>   * @private
+<a name="line70"></a>   */
+<a name="line71"></a>  this.mockControl_ = mockControl;
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Returns a function that will assert that it will be called, and run the given
+<a name="line77"></a> * callback when it is.
+<a name="line78"></a> *
+<a name="line79"></a> * @param {string} name The name of the callback mock.
+<a name="line80"></a> * @param {function(...[*]) : *} callback The wrapped callback. This will be
+<a name="line81"></a> *     called when the returned function is called.
+<a name="line82"></a> * @param {Object=} opt_selfObj The object which this should point to when the
+<a name="line83"></a> *     callback is run.
+<a name="line84"></a> * @return {!Function} The mock callback.
+<a name="line85"></a> * @suppress {missingProperties} Mocks do not fit in the type system well.
+<a name="line86"></a> */
+<a name="line87"></a>goog.testing.async.MockControl.prototype.createCallbackMock = function(
+<a name="line88"></a>    name, callback, opt_selfObj) {
+<a name="line89"></a>  goog.asserts.assert(
+<a name="line90"></a>      goog.isString(name),
+<a name="line91"></a>      &#39;name parameter &#39; + goog.debug.deepExpose(name) + &#39; should be a string&#39;);
+<a name="line92"></a>
+<a name="line93"></a>  var ignored = new goog.testing.mockmatchers.IgnoreArgument();
+<a name="line94"></a>
+<a name="line95"></a>  // Use everyone&#39;s favorite &quot;double-cast&quot; trick to subvert the type system.
+<a name="line96"></a>  var obj = /** @type {Object} */ (this.mockControl_.createFunctionMock(name));
+<a name="line97"></a>  var fn = /** @type {Function} */ (obj);
+<a name="line98"></a>
+<a name="line99"></a>  fn(ignored).$does(function(args) {
+<a name="line100"></a>    if (opt_selfObj) {
+<a name="line101"></a>      callback = goog.bind(callback, opt_selfObj);
+<a name="line102"></a>    }
+<a name="line103"></a>    return callback.apply(this, args);
+<a name="line104"></a>  });
+<a name="line105"></a>  fn.$replay();
+<a name="line106"></a>  return function() { return fn(arguments); };
+<a name="line107"></a>};
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Returns a function that will assert that its arguments are equal to the
+<a name="line112"></a> * arguments given to asyncAssertEquals. In addition, the function also asserts
+<a name="line113"></a> * that it will be called.
+<a name="line114"></a> *
+<a name="line115"></a> * @param {string} message A message to print if the arguments are wrong.
+<a name="line116"></a> * @param {...*} var_args The arguments to assert.
+<a name="line117"></a> * @return {function(...[*]) : void} The mock callback.
+<a name="line118"></a> */
+<a name="line119"></a>goog.testing.async.MockControl.prototype.asyncAssertEquals = function(
+<a name="line120"></a>    message, var_args) {
+<a name="line121"></a>  var expectedArgs = Array.prototype.slice.call(arguments, 1);
+<a name="line122"></a>  return this.createCallbackMock(&#39;asyncAssertEquals&#39;, function() {
+<a name="line123"></a>    assertObjectEquals(
+<a name="line124"></a>        message, expectedArgs, Array.prototype.slice.call(arguments));
+<a name="line125"></a>  });
+<a name="line126"></a>};
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * Asserts that a deferred object will have an error and call its errback
+<a name="line131"></a> * function.
+<a name="line132"></a> * @param {goog.async.Deferred} deferred The deferred object.
+<a name="line133"></a> * @param {function() : void} fn A function wrapping the code in which the error
+<a name="line134"></a> *     will occur.
+<a name="line135"></a> */
+<a name="line136"></a>goog.testing.async.MockControl.prototype.assertDeferredError = function(
+<a name="line137"></a>    deferred, fn) {
+<a name="line138"></a>  deferred.addErrback(this.createCallbackMock(
+<a name="line139"></a>      &#39;assertDeferredError&#39;, function() {}));
+<a name="line140"></a>  goog.testing.asserts.callWithoutLogging(fn);
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Asserts that a deferred object will call its callback with the given value.
+<a name="line146"></a> *
+<a name="line147"></a> * @param {string} message A message to print if the arguments are wrong.
+<a name="line148"></a> * @param {goog.async.Deferred|*} expected The expected value. If this is a
+<a name="line149"></a> *     deferred object, then the expected value is the deferred value.
+<a name="line150"></a> * @param {goog.async.Deferred|*} actual The actual value. If this is a deferred
+<a name="line151"></a> *     object, then the actual value is the deferred value. Either this or
+<a name="line152"></a> *     &#39;expected&#39; must be deferred.
+<a name="line153"></a> */
+<a name="line154"></a>goog.testing.async.MockControl.prototype.assertDeferredEquals = function(
+<a name="line155"></a>    message, expected, actual) {
+<a name="line156"></a>  if (expected instanceof goog.async.Deferred &amp;&amp;
+<a name="line157"></a>      actual instanceof goog.async.Deferred) {
+<a name="line158"></a>    // Assert that the first deferred is resolved.
+<a name="line159"></a>    expected.addCallback(this.createCallbackMock(
+<a name="line160"></a>        &#39;assertDeferredEquals&#39;, function(exp) {
+<a name="line161"></a>          // Assert that the second deferred is resolved, and that the value is
+<a name="line162"></a>          // as expected.
+<a name="line163"></a>          actual.addCallback(this.asyncAssertEquals(message, exp));
+<a name="line164"></a>        }, this));
+<a name="line165"></a>  } else if (expected instanceof goog.async.Deferred) {
+<a name="line166"></a>    expected.addCallback(this.createCallbackMock(
+<a name="line167"></a>        &#39;assertDeferredEquals&#39;, function(exp) {
+<a name="line168"></a>          assertObjectEquals(message, exp, actual);
+<a name="line169"></a>        }));
+<a name="line170"></a>  } else if (actual instanceof goog.async.Deferred) {
+<a name="line171"></a>    actual.addCallback(this.asyncAssertEquals(message, expected));
+<a name="line172"></a>  } else {
+<a name="line173"></a>    throw Error(&#39;Either expected or actual must be deferred&#39;);
+<a name="line174"></a>  }
+<a name="line175"></a>};
+</pre>
+
+
+</body>
+</html>

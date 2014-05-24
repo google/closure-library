@@ -1,0 +1,1003 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>Entry (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">fs.Entry</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    The interface for entries in the filesystem.
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_fs_entry.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/fs/entry.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td>goog.fs.Entry</td><td></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+      <tr><td><span class="type"><a href="interface_goog_fs_DirectoryEntry.html">goog.fs.DirectoryEntry</a></span></td><td>goog.fs.Entry</td></tr>
+      <tr><td><span class="type"><a href="interface_goog_fs_FileEntry.html">goog.fs.FileEntry</a></span></td><td>goog.fs.Entry</td></tr>
+  </table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.fs.Entry(<span></span>)
+  </div>
+
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="interface_goog_fs_Entry.html">
+              goog.fs.Entry
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.copyTo"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">copyTo<span class="args">(<span class="arg">parent</span>,&nbsp;<span class="arg">opt_newName</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Copy this entry to a new location.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <span>!</span><span class="type"><a href="interface_goog_fs_DirectoryEntry.html">goog.fs.DirectoryEntry</a></span>
+        <div class="entryOverview">The new parent directory.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_newName</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">The name of the new entry. If omitted, the new
+    entry has the same name as the original.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>&nbsp;
+            The deferred <code> goog.fs.FileEntry</code> or
+    <code> goog.fs.DirectoryEntry</code> for the new entry. If an error occurs, the
+    errback is called with a <code> goog.fs.Error</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line108">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.getFileSystem"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getFileSystem<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_fs_FileSystem.html">goog.fs.FileSystem</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_fs_FileSystem.html">goog.fs.FileSystem</a></span>&nbsp;
+            The filesystem backing this entry.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line64">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.getFullPath"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getFullPath<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The full path to this entry.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line58">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.getLastModified"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getLastModified<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Retrieves the last modified date for this entry.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>&nbsp;
+            The deferred Date for this entry. If an error
+    occurs, the errback is called with a <code> goog.fs.Error</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line73">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.getMetadata"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getMetadata<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Retrieves the metadata for this entry.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>&nbsp;
+            The deferred Metadata for this entry. If an
+    error occurs, the errback is called with a <code> goog.fs.Error</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line82">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.getName"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getName<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The name of this entry.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line52">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.getParent"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getParent<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the parent directory.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>&nbsp;
+            The deferred <code> goog.fs.DirectoryEntry</code>.
+    If an error occurs, the errback is called with a <code> goog.fs.Error</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line156">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.isDirectory"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isDirectory<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether or not this entry is a directory.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line46">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.isFile"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isFile<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether or not this entry is a file.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line40">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.moveTo"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">moveTo<span class="args">(<span class="arg">parent</span>,&nbsp;<span class="arg">opt_newName</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Move this entry to a new location.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <span>!</span><span class="type"><a href="interface_goog_fs_DirectoryEntry.html">goog.fs.DirectoryEntry</a></span>
+        <div class="entryOverview">The new parent directory.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_newName</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">The new name of the entry. If omitted, the entry
+    retains its original name.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>&nbsp;
+            The deferred <code> goog.fs.FileEntry</code> or
+    <code> goog.fs.DirectoryEntry</code> for the new entry. If an error occurs, the
+    errback is called with a <code> goog.fs.Error</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line95">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.remove"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">remove<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Remove this entry.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_async_Deferred.html">goog.async.Deferred</a></span>&nbsp;
+            A deferred object. If the removal succeeds,
+    the callback is called with true. If an error occurs, the errback is
+    called a <code> goog.fs.Error</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line147">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td class="deprecated">
+    <a name="goog.fs.Entry.prototype.toUri"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">toUri<span class="args">(<span class="arg">opt_mimeType</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class="deprecatedMessage">Use <code> #toUrl</code> instead.</span>
+       Get the URI for this file.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_mimeType</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">The MIME type that will be served for the URI.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The URI.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line137">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.toUrl"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">toUrl<span class="args">(<span class="arg">opt_mimeType</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Get the URL for this file.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_mimeType</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">The MIME type that will be served for the URL.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The URL.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line127">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.fs.Entry.prototype.wrapEntry"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">wrapEntry<span class="args">(<span class="arg">entry</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_fs_Entry.html">goog.fs.Entry</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Wrap an HTML5 entry object in an appropriate subclass instance.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entry</span>
+        : <span>!</span><span class="type">Entry</span>
+        <div class="entryOverview">The underlying Entry object.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_fs_Entry.html">goog.fs.Entry</a></span>&nbsp;
+            The appropriate subclass wrapper.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fs_entry.js.source.html#line118">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package fs</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="fs.Entry"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

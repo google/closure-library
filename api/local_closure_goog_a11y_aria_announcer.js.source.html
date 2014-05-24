@@ -1,0 +1,162 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>announcer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_a11y_aria_announcer.js.html">announcer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Announcer that allows messages to be spoken by assistive
+<a name="line18"></a> * technologies.
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.a11y.aria.Announcer&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line24"></a>goog.require(&#39;goog.a11y.aria&#39;);
+<a name="line25"></a>goog.require(&#39;goog.a11y.aria.LivePriority&#39;);
+<a name="line26"></a>goog.require(&#39;goog.a11y.aria.State&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line28"></a>goog.require(&#39;goog.object&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Class that allows messages to be spoken by assistive technologies that the
+<a name="line34"></a> * user may have active.
+<a name="line35"></a> *
+<a name="line36"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper.
+<a name="line37"></a> * @constructor
+<a name="line38"></a> * @extends {goog.Disposable}
+<a name="line39"></a> * @final
+<a name="line40"></a> */
+<a name="line41"></a>goog.a11y.aria.Announcer = function(opt_domHelper) {
+<a name="line42"></a>  goog.a11y.aria.Announcer.base(this, &#39;constructor&#39;);
+<a name="line43"></a>
+<a name="line44"></a>  /**
+<a name="line45"></a>   * @type {goog.dom.DomHelper}
+<a name="line46"></a>   * @private
+<a name="line47"></a>   */
+<a name="line48"></a>  this.domHelper_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line49"></a>
+<a name="line50"></a>  /**
+<a name="line51"></a>   * Map of priority to live region elements to use for communicating updates.
+<a name="line52"></a>   * Elements are created on demand.
+<a name="line53"></a>   * @type {Object.&lt;goog.a11y.aria.LivePriority, !Element&gt;}
+<a name="line54"></a>   * @private
+<a name="line55"></a>   */
+<a name="line56"></a>  this.liveRegions_ = {};
+<a name="line57"></a>};
+<a name="line58"></a>goog.inherits(goog.a11y.aria.Announcer, goog.Disposable);
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/** @override */
+<a name="line62"></a>goog.a11y.aria.Announcer.prototype.disposeInternal = function() {
+<a name="line63"></a>  goog.object.forEach(
+<a name="line64"></a>      this.liveRegions_, this.domHelper_.removeNode, this.domHelper_);
+<a name="line65"></a>  this.liveRegions_ = null;
+<a name="line66"></a>  this.domHelper_ = null;
+<a name="line67"></a>  goog.a11y.aria.Announcer.base(this, &#39;disposeInternal&#39;);
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Announce a message to be read by any assistive technologies the user may
+<a name="line73"></a> * have active.
+<a name="line74"></a> * @param {string} message The message to announce to screen readers.
+<a name="line75"></a> * @param {goog.a11y.aria.LivePriority=} opt_priority The priority of the
+<a name="line76"></a> *     message. Defaults to POLITE.
+<a name="line77"></a> */
+<a name="line78"></a>goog.a11y.aria.Announcer.prototype.say = function(message, opt_priority) {
+<a name="line79"></a>  goog.dom.setTextContent(this.getLiveRegion_(
+<a name="line80"></a>      opt_priority || goog.a11y.aria.LivePriority.POLITE), message);
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Returns an aria-live region that can be used to communicate announcements.
+<a name="line86"></a> * @param {!goog.a11y.aria.LivePriority} priority The required priority.
+<a name="line87"></a> * @return {!Element} A live region of the requested priority.
+<a name="line88"></a> * @private
+<a name="line89"></a> */
+<a name="line90"></a>goog.a11y.aria.Announcer.prototype.getLiveRegion_ = function(priority) {
+<a name="line91"></a>  var liveRegion = this.liveRegions_[priority];
+<a name="line92"></a>  if (liveRegion) {
+<a name="line93"></a>    // Make sure the live region is not aria-hidden.
+<a name="line94"></a>    goog.a11y.aria.removeState(liveRegion, goog.a11y.aria.State.HIDDEN);
+<a name="line95"></a>    return liveRegion;
+<a name="line96"></a>  }
+<a name="line97"></a>  liveRegion = this.domHelper_.createElement(&#39;div&#39;);
+<a name="line98"></a>  // Note that IE has a habit of declaring things that aren&#39;t display:none as
+<a name="line99"></a>  // invisible to third-party tools like JAWs, so we can&#39;t just use height:0.
+<a name="line100"></a>  liveRegion.style.position = &#39;absolute&#39;;
+<a name="line101"></a>  liveRegion.style.top = &#39;-1000px&#39;;
+<a name="line102"></a>  liveRegion.style.height = &#39;1px&#39;;
+<a name="line103"></a>  liveRegion.style.overflow = &#39;hidden&#39;;
+<a name="line104"></a>  goog.a11y.aria.setState(liveRegion, goog.a11y.aria.State.LIVE,
+<a name="line105"></a>      priority);
+<a name="line106"></a>  goog.a11y.aria.setState(liveRegion, goog.a11y.aria.State.ATOMIC,
+<a name="line107"></a>      &#39;true&#39;);
+<a name="line108"></a>  this.domHelper_.getDocument().body.appendChild(liveRegion);
+<a name="line109"></a>  this.liveRegions_[priority] = liveRegion;
+<a name="line110"></a>  return liveRegion;
+<a name="line111"></a>};
+</pre>
+
+
+</body>
+</html>

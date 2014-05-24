@@ -1,0 +1,1013 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>element.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_graphics_ext_element.js.html">element.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A thicker wrapper around the DOM element returned from
+<a name="line17"></a> * the different draw methods of the graphics implementation, and
+<a name="line18"></a> * all interfaces that the various element types support.
+<a name="line19"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.graphics.ext.Element&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line25"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line26"></a>goog.require(&#39;goog.graphics.ext.coordinates&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Base class for a wrapper around the goog.graphics wrapper that enables
+<a name="line32"></a> * more advanced functionality.
+<a name="line33"></a> * @param {goog.graphics.ext.Group?} group Parent for this element.
+<a name="line34"></a> * @param {goog.graphics.Element} wrapper The thin wrapper to wrap.
+<a name="line35"></a> * @constructor
+<a name="line36"></a> * @extends {goog.events.EventTarget}
+<a name="line37"></a> */
+<a name="line38"></a>goog.graphics.ext.Element = function(group, wrapper) {
+<a name="line39"></a>  goog.events.EventTarget.call(this);
+<a name="line40"></a>  this.wrapper_ = wrapper;
+<a name="line41"></a>  this.graphics_ = group ? group.getGraphics() : this;
+<a name="line42"></a>
+<a name="line43"></a>  this.xPosition_ = new goog.graphics.ext.Element.Position_(this, true);
+<a name="line44"></a>  this.yPosition_ = new goog.graphics.ext.Element.Position_(this, false);
+<a name="line45"></a>
+<a name="line46"></a>  // Handle parent / child relationships.
+<a name="line47"></a>  if (group) {
+<a name="line48"></a>    this.parent_ = group;
+<a name="line49"></a>    this.parent_.addChild(this);
+<a name="line50"></a>  }
+<a name="line51"></a>};
+<a name="line52"></a>goog.inherits(goog.graphics.ext.Element, goog.events.EventTarget);
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * The graphics object that contains this element.
+<a name="line57"></a> * @type {goog.graphics.ext.Graphics|goog.graphics.ext.Element}
+<a name="line58"></a> * @private
+<a name="line59"></a> */
+<a name="line60"></a>goog.graphics.ext.Element.prototype.graphics_;
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * The goog.graphics wrapper this class wraps.
+<a name="line65"></a> * @type {goog.graphics.Element}
+<a name="line66"></a> * @private
+<a name="line67"></a> */
+<a name="line68"></a>goog.graphics.ext.Element.prototype.wrapper_;
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * The group or surface containing this element.
+<a name="line73"></a> * @type {goog.graphics.ext.Group|undefined}
+<a name="line74"></a> * @private
+<a name="line75"></a> */
+<a name="line76"></a>goog.graphics.ext.Element.prototype.parent_;
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Whether or not computation of this element&#39;s position or size depends on its
+<a name="line81"></a> * parent&#39;s size.
+<a name="line82"></a> * @type {boolean}
+<a name="line83"></a> * @private
+<a name="line84"></a> */
+<a name="line85"></a>goog.graphics.ext.Element.prototype.parentDependent_ = false;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Whether the element has pending transformations.
+<a name="line90"></a> * @type {boolean}
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.graphics.ext.Element.prototype.needsTransform_ = false;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * The current angle of rotation, expressed in degrees.
+<a name="line98"></a> * @type {number}
+<a name="line99"></a> * @private
+<a name="line100"></a> */
+<a name="line101"></a>goog.graphics.ext.Element.prototype.rotation_ = 0;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Object representing the x position and size of the element.
+<a name="line106"></a> * @type {goog.graphics.ext.Element.Position_}
+<a name="line107"></a> * @private
+<a name="line108"></a> */
+<a name="line109"></a>goog.graphics.ext.Element.prototype.xPosition_;
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Object representing the y position and size of the element.
+<a name="line114"></a> * @type {goog.graphics.ext.Element.Position_}
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.graphics.ext.Element.prototype.yPosition_;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/** @return {goog.graphics.Element} The underlying thin wrapper. */
+<a name="line121"></a>goog.graphics.ext.Element.prototype.getWrapper = function() {
+<a name="line122"></a>  return this.wrapper_;
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * @return {goog.graphics.ext.Element|goog.graphics.ext.Graphics} The graphics
+<a name="line128"></a> *     surface the element is a part of.
+<a name="line129"></a> */
+<a name="line130"></a>goog.graphics.ext.Element.prototype.getGraphics = function() {
+<a name="line131"></a>  return this.graphics_;
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Returns the graphics implementation.
+<a name="line137"></a> * @return {goog.graphics.AbstractGraphics} The underlying graphics
+<a name="line138"></a> *     implementation drawing this element&#39;s wrapper.
+<a name="line139"></a> * @protected
+<a name="line140"></a> */
+<a name="line141"></a>goog.graphics.ext.Element.prototype.getGraphicsImplementation = function() {
+<a name="line142"></a>  return this.graphics_.getImplementation();
+<a name="line143"></a>};
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>/**
+<a name="line147"></a> * @return {goog.graphics.ext.Group|undefined} The parent of this element.
+<a name="line148"></a> */
+<a name="line149"></a>goog.graphics.ext.Element.prototype.getParent = function() {
+<a name="line150"></a>  return this.parent_;
+<a name="line151"></a>};
+<a name="line152"></a>
+<a name="line153"></a>
+<a name="line154"></a>// GENERAL POSITIONING
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Internal convenience method for setting position - either as a left/top,
+<a name="line159"></a> * center/middle, or right/bottom value.  Only one should be specified.
+<a name="line160"></a> * @param {goog.graphics.ext.Element.Position_} position The position object to
+<a name="line161"></a> *     set the value on.
+<a name="line162"></a> * @param {number|string} value The value of the coordinate.
+<a name="line163"></a> * @param {goog.graphics.ext.Element.PositionType_} type The type of the
+<a name="line164"></a> *     coordinate.
+<a name="line165"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line166"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line167"></a> *     pending but not yet performed.
+<a name="line168"></a> * @private
+<a name="line169"></a> */
+<a name="line170"></a>goog.graphics.ext.Element.prototype.setPosition_ = function(position, value,
+<a name="line171"></a>    type, opt_chain) {
+<a name="line172"></a>  position.setPosition(value, type);
+<a name="line173"></a>  this.computeIsParentDependent_(position);
+<a name="line174"></a>
+<a name="line175"></a>  this.needsTransform_ = true;
+<a name="line176"></a>  if (!opt_chain) {
+<a name="line177"></a>    this.transform();
+<a name="line178"></a>  }
+<a name="line179"></a>};
+<a name="line180"></a>
+<a name="line181"></a>
+<a name="line182"></a>/**
+<a name="line183"></a> * Sets the width/height of the element.
+<a name="line184"></a> * @param {goog.graphics.ext.Element.Position_} position The position object to
+<a name="line185"></a> *     set the value on.
+<a name="line186"></a> * @param {string|number} size The new width/height value.
+<a name="line187"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line188"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line189"></a> *     pending but not yet performed.
+<a name="line190"></a> * @private
+<a name="line191"></a> */
+<a name="line192"></a>goog.graphics.ext.Element.prototype.setSize_ = function(position, size,
+<a name="line193"></a>    opt_chain) {
+<a name="line194"></a>  if (position.setSize(size)) {
+<a name="line195"></a>    this.needsTransform_ = true;
+<a name="line196"></a>
+<a name="line197"></a>    this.computeIsParentDependent_(position);
+<a name="line198"></a>
+<a name="line199"></a>    if (!opt_chain) {
+<a name="line200"></a>      this.reset();
+<a name="line201"></a>    }
+<a name="line202"></a>  } else if (!opt_chain &amp;&amp; this.isPendingTransform()) {
+<a name="line203"></a>    this.reset();
+<a name="line204"></a>  }
+<a name="line205"></a>};
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * Sets the minimum width/height of the element.
+<a name="line210"></a> * @param {goog.graphics.ext.Element.Position_} position The position object to
+<a name="line211"></a> *     set the value on.
+<a name="line212"></a> * @param {string|number} minSize The minimum width/height of the element.
+<a name="line213"></a> * @private
+<a name="line214"></a> */
+<a name="line215"></a>goog.graphics.ext.Element.prototype.setMinSize_ = function(position, minSize) {
+<a name="line216"></a>  position.setMinSize(minSize);
+<a name="line217"></a>  this.needsTransform_ = true;
+<a name="line218"></a>  this.computeIsParentDependent_(position);
+<a name="line219"></a>};
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>// HORIZONTAL POSITIONING
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * @return {number} The distance from the left edge of this element to the left
+<a name="line227"></a> *     edge of its parent, specified in units of the parent&#39;s coordinate system.
+<a name="line228"></a> */
+<a name="line229"></a>goog.graphics.ext.Element.prototype.getLeft = function() {
+<a name="line230"></a>  return this.xPosition_.getStart();
+<a name="line231"></a>};
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>/**
+<a name="line235"></a> * Sets the left coordinate of the element.  Overwrites any previous value of
+<a name="line236"></a> * left, center, or right for this element.
+<a name="line237"></a> * @param {string|number} left The left coordinate.
+<a name="line238"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line239"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line240"></a> *     pending but not yet performed.
+<a name="line241"></a> */
+<a name="line242"></a>goog.graphics.ext.Element.prototype.setLeft = function(left, opt_chain) {
+<a name="line243"></a>  this.setPosition_(this.xPosition_,
+<a name="line244"></a>      left,
+<a name="line245"></a>      goog.graphics.ext.Element.PositionType_.START,
+<a name="line246"></a>      opt_chain);
+<a name="line247"></a>};
+<a name="line248"></a>
+<a name="line249"></a>
+<a name="line250"></a>/**
+<a name="line251"></a> * @return {number} The right coordinate of the element, in units of the
+<a name="line252"></a> *     parent&#39;s coordinate system.
+<a name="line253"></a> */
+<a name="line254"></a>goog.graphics.ext.Element.prototype.getRight = function() {
+<a name="line255"></a>  return this.xPosition_.getEnd();
+<a name="line256"></a>};
+<a name="line257"></a>
+<a name="line258"></a>
+<a name="line259"></a>/**
+<a name="line260"></a> * Sets the right coordinate of the element.  Overwrites any previous value of
+<a name="line261"></a> * left, center, or right for this element.
+<a name="line262"></a> * @param {string|number} right The right coordinate.
+<a name="line263"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line264"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line265"></a> *     pending but not yet performed.
+<a name="line266"></a> */
+<a name="line267"></a>goog.graphics.ext.Element.prototype.setRight = function(right, opt_chain) {
+<a name="line268"></a>  this.setPosition_(this.xPosition_,
+<a name="line269"></a>      right,
+<a name="line270"></a>      goog.graphics.ext.Element.PositionType_.END,
+<a name="line271"></a>      opt_chain);
+<a name="line272"></a>};
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * @return {number} The center coordinate of the element, in units of the
+<a name="line277"></a> * parent&#39;s coordinate system.
+<a name="line278"></a> */
+<a name="line279"></a>goog.graphics.ext.Element.prototype.getCenter = function() {
+<a name="line280"></a>  return this.xPosition_.getMiddle();
+<a name="line281"></a>};
+<a name="line282"></a>
+<a name="line283"></a>
+<a name="line284"></a>/**
+<a name="line285"></a> * Sets the center coordinate of the element.  Overwrites any previous value of
+<a name="line286"></a> * left, center, or right for this element.
+<a name="line287"></a> * @param {string|number} center The center coordinate.
+<a name="line288"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line289"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line290"></a> *     pending but not yet performed.
+<a name="line291"></a> */
+<a name="line292"></a>goog.graphics.ext.Element.prototype.setCenter = function(center, opt_chain) {
+<a name="line293"></a>  this.setPosition_(this.xPosition_,
+<a name="line294"></a>      center,
+<a name="line295"></a>      goog.graphics.ext.Element.PositionType_.MIDDLE,
+<a name="line296"></a>      opt_chain);
+<a name="line297"></a>};
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>// VERTICAL POSITIONING
+<a name="line301"></a>
+<a name="line302"></a>
+<a name="line303"></a>/**
+<a name="line304"></a> * @return {number} The distance from the top edge of this element to the top
+<a name="line305"></a> *     edge of its parent, specified in units of the parent&#39;s coordinate system.
+<a name="line306"></a> */
+<a name="line307"></a>goog.graphics.ext.Element.prototype.getTop = function() {
+<a name="line308"></a>  return this.yPosition_.getStart();
+<a name="line309"></a>};
+<a name="line310"></a>
+<a name="line311"></a>
+<a name="line312"></a>/**
+<a name="line313"></a> * Sets the top coordinate of the element.  Overwrites any previous value of
+<a name="line314"></a> * top, middle, or bottom for this element.
+<a name="line315"></a> * @param {string|number} top The top coordinate.
+<a name="line316"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line317"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line318"></a> *     pending but not yet performed.
+<a name="line319"></a> */
+<a name="line320"></a>goog.graphics.ext.Element.prototype.setTop = function(top, opt_chain) {
+<a name="line321"></a>  this.setPosition_(this.yPosition_,
+<a name="line322"></a>      top,
+<a name="line323"></a>      goog.graphics.ext.Element.PositionType_.START,
+<a name="line324"></a>      opt_chain);
+<a name="line325"></a>};
+<a name="line326"></a>
+<a name="line327"></a>
+<a name="line328"></a>/**
+<a name="line329"></a> * @return {number} The bottom coordinate of the element, in units of the
+<a name="line330"></a> *     parent&#39;s coordinate system.
+<a name="line331"></a> */
+<a name="line332"></a>goog.graphics.ext.Element.prototype.getBottom = function() {
+<a name="line333"></a>  return this.yPosition_.getEnd();
+<a name="line334"></a>};
+<a name="line335"></a>
+<a name="line336"></a>
+<a name="line337"></a>/**
+<a name="line338"></a> * Sets the bottom coordinate of the element.  Overwrites any previous value of
+<a name="line339"></a> * top, middle, or bottom for this element.
+<a name="line340"></a> * @param {string|number} bottom The bottom coordinate.
+<a name="line341"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line342"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line343"></a> *     pending but not yet performed.
+<a name="line344"></a> */
+<a name="line345"></a>goog.graphics.ext.Element.prototype.setBottom = function(bottom, opt_chain) {
+<a name="line346"></a>  this.setPosition_(this.yPosition_,
+<a name="line347"></a>      bottom,
+<a name="line348"></a>      goog.graphics.ext.Element.PositionType_.END,
+<a name="line349"></a>      opt_chain);
+<a name="line350"></a>};
+<a name="line351"></a>
+<a name="line352"></a>
+<a name="line353"></a>/**
+<a name="line354"></a> * @return {number} The middle coordinate of the element, in units of the
+<a name="line355"></a> *     parent&#39;s coordinate system.
+<a name="line356"></a> */
+<a name="line357"></a>goog.graphics.ext.Element.prototype.getMiddle = function() {
+<a name="line358"></a>  return this.yPosition_.getMiddle();
+<a name="line359"></a>};
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * Sets the middle coordinate of the element.  Overwrites any previous value of
+<a name="line364"></a> * top, middle, or bottom for this element
+<a name="line365"></a> * @param {string|number} middle The middle coordinate.
+<a name="line366"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line367"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line368"></a> *     pending but not yet performed.
+<a name="line369"></a> */
+<a name="line370"></a>goog.graphics.ext.Element.prototype.setMiddle = function(middle, opt_chain) {
+<a name="line371"></a>  this.setPosition_(this.yPosition_,
+<a name="line372"></a>      middle,
+<a name="line373"></a>      goog.graphics.ext.Element.PositionType_.MIDDLE,
+<a name="line374"></a>      opt_chain);
+<a name="line375"></a>};
+<a name="line376"></a>
+<a name="line377"></a>
+<a name="line378"></a>// DIMENSIONS
+<a name="line379"></a>
+<a name="line380"></a>
+<a name="line381"></a>/**
+<a name="line382"></a> * @return {number} The width of the element, in units of the parent&#39;s
+<a name="line383"></a> *     coordinate system.
+<a name="line384"></a> */
+<a name="line385"></a>goog.graphics.ext.Element.prototype.getWidth = function() {
+<a name="line386"></a>  return this.xPosition_.getSize();
+<a name="line387"></a>};
+<a name="line388"></a>
+<a name="line389"></a>
+<a name="line390"></a>/**
+<a name="line391"></a> * Sets the width of the element.
+<a name="line392"></a> * @param {string|number} width The new width value.
+<a name="line393"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line394"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line395"></a> *     pending but not yet performed.
+<a name="line396"></a> */
+<a name="line397"></a>goog.graphics.ext.Element.prototype.setWidth = function(width, opt_chain) {
+<a name="line398"></a>  this.setSize_(this.xPosition_, width, opt_chain);
+<a name="line399"></a>};
+<a name="line400"></a>
+<a name="line401"></a>
+<a name="line402"></a>/**
+<a name="line403"></a> * @return {number} The minimum width of the element, in units of the parent&#39;s
+<a name="line404"></a> *     coordinate system.
+<a name="line405"></a> */
+<a name="line406"></a>goog.graphics.ext.Element.prototype.getMinWidth = function() {
+<a name="line407"></a>  return this.xPosition_.getMinSize();
+<a name="line408"></a>};
+<a name="line409"></a>
+<a name="line410"></a>
+<a name="line411"></a>/**
+<a name="line412"></a> * Sets the minimum width of the element.
+<a name="line413"></a> * @param {string|number} minWidth The minimum width of the element.
+<a name="line414"></a> */
+<a name="line415"></a>goog.graphics.ext.Element.prototype.setMinWidth = function(minWidth) {
+<a name="line416"></a>  this.setMinSize_(this.xPosition_, minWidth);
+<a name="line417"></a>};
+<a name="line418"></a>
+<a name="line419"></a>
+<a name="line420"></a>/**
+<a name="line421"></a> * @return {number} The height of the element, in units of the parent&#39;s
+<a name="line422"></a> *     coordinate system.
+<a name="line423"></a> */
+<a name="line424"></a>goog.graphics.ext.Element.prototype.getHeight = function() {
+<a name="line425"></a>  return this.yPosition_.getSize();
+<a name="line426"></a>};
+<a name="line427"></a>
+<a name="line428"></a>
+<a name="line429"></a>/**
+<a name="line430"></a> * Sets the height of the element.
+<a name="line431"></a> * @param {string|number} height The new height value.
+<a name="line432"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line433"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line434"></a> *     pending but not yet performed.
+<a name="line435"></a> */
+<a name="line436"></a>goog.graphics.ext.Element.prototype.setHeight = function(height, opt_chain) {
+<a name="line437"></a>  this.setSize_(this.yPosition_, height, opt_chain);
+<a name="line438"></a>};
+<a name="line439"></a>
+<a name="line440"></a>
+<a name="line441"></a>/**
+<a name="line442"></a> * @return {number} The minimum height of the element, in units of the parent&#39;s
+<a name="line443"></a> *     coordinate system.
+<a name="line444"></a> */
+<a name="line445"></a>goog.graphics.ext.Element.prototype.getMinHeight = function() {
+<a name="line446"></a>  return this.yPosition_.getMinSize();
+<a name="line447"></a>};
+<a name="line448"></a>
+<a name="line449"></a>
+<a name="line450"></a>/**
+<a name="line451"></a> * Sets the minimum height of the element.
+<a name="line452"></a> * @param {string|number} minHeight The minimum height of the element.
+<a name="line453"></a> */
+<a name="line454"></a>goog.graphics.ext.Element.prototype.setMinHeight = function(minHeight) {
+<a name="line455"></a>  this.setMinSize_(this.yPosition_, minHeight);
+<a name="line456"></a>};
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>// BOUNDS SHORTCUTS
+<a name="line460"></a>
+<a name="line461"></a>
+<a name="line462"></a>/**
+<a name="line463"></a> * Shortcut for setting the left and top position.
+<a name="line464"></a> * @param {string|number} left The left coordinate.
+<a name="line465"></a> * @param {string|number} top The top coordinate.
+<a name="line466"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line467"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line468"></a> *     pending but not yet performed.
+<a name="line469"></a> */
+<a name="line470"></a>goog.graphics.ext.Element.prototype.setPosition = function(left, top,
+<a name="line471"></a>                                                           opt_chain) {
+<a name="line472"></a>  this.setLeft(left, true);
+<a name="line473"></a>  this.setTop(top, opt_chain);
+<a name="line474"></a>};
+<a name="line475"></a>
+<a name="line476"></a>
+<a name="line477"></a>/**
+<a name="line478"></a> * Shortcut for setting the width and height.
+<a name="line479"></a> * @param {string|number} width The new width value.
+<a name="line480"></a> * @param {string|number} height The new height value.
+<a name="line481"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line482"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line483"></a> *     pending but not yet performed.
+<a name="line484"></a> */
+<a name="line485"></a>goog.graphics.ext.Element.prototype.setSize = function(width, height,
+<a name="line486"></a>                                                       opt_chain) {
+<a name="line487"></a>  this.setWidth(width, true);
+<a name="line488"></a>  this.setHeight(height, opt_chain);
+<a name="line489"></a>};
+<a name="line490"></a>
+<a name="line491"></a>
+<a name="line492"></a>/**
+<a name="line493"></a> * Shortcut for setting the left, top, width, and height.
+<a name="line494"></a> * @param {string|number} left The left coordinate.
+<a name="line495"></a> * @param {string|number} top The top coordinate.
+<a name="line496"></a> * @param {string|number} width The new width value.
+<a name="line497"></a> * @param {string|number} height The new height value.
+<a name="line498"></a> * @param {boolean=} opt_chain Optional flag to specify this function is part
+<a name="line499"></a> *     of a chain of calls and therefore transformations should be set as
+<a name="line500"></a> *     pending but not yet performed.
+<a name="line501"></a> */
+<a name="line502"></a>goog.graphics.ext.Element.prototype.setBounds = function(left, top, width,
+<a name="line503"></a>                                                         height, opt_chain) {
+<a name="line504"></a>  this.setLeft(left, true);
+<a name="line505"></a>  this.setTop(top, true);
+<a name="line506"></a>  this.setWidth(width, true);
+<a name="line507"></a>  this.setHeight(height, opt_chain);
+<a name="line508"></a>};
+<a name="line509"></a>
+<a name="line510"></a>
+<a name="line511"></a>// MAXIMUM BOUNDS
+<a name="line512"></a>
+<a name="line513"></a>
+<a name="line514"></a>/**
+<a name="line515"></a> * @return {number} An estimate of the maximum x extent this element would have
+<a name="line516"></a> *     in a parent of no width.
+<a name="line517"></a> */
+<a name="line518"></a>goog.graphics.ext.Element.prototype.getMaxX = function() {
+<a name="line519"></a>  return this.xPosition_.getMaxPosition();
+<a name="line520"></a>};
+<a name="line521"></a>
+<a name="line522"></a>
+<a name="line523"></a>/**
+<a name="line524"></a> * @return {number} An estimate of the maximum y extent this element would have
+<a name="line525"></a> *     in a parent of no height.
+<a name="line526"></a> */
+<a name="line527"></a>goog.graphics.ext.Element.prototype.getMaxY = function() {
+<a name="line528"></a>  return this.yPosition_.getMaxPosition();
+<a name="line529"></a>};
+<a name="line530"></a>
+<a name="line531"></a>
+<a name="line532"></a>// RESET
+<a name="line533"></a>
+<a name="line534"></a>
+<a name="line535"></a>/**
+<a name="line536"></a> * Reset the element.  This is called when the element changes size, or when
+<a name="line537"></a> * the coordinate system changes in a way that would affect pixel based
+<a name="line538"></a> * rendering
+<a name="line539"></a> */
+<a name="line540"></a>goog.graphics.ext.Element.prototype.reset = function() {
+<a name="line541"></a>  this.xPosition_.resetCache();
+<a name="line542"></a>  this.yPosition_.resetCache();
+<a name="line543"></a>
+<a name="line544"></a>  this.redraw();
+<a name="line545"></a>
+<a name="line546"></a>  this.needsTransform_ = true;
+<a name="line547"></a>  this.transform();
+<a name="line548"></a>};
+<a name="line549"></a>
+<a name="line550"></a>
+<a name="line551"></a>/**
+<a name="line552"></a> * Overridable function for subclass specific reset.
+<a name="line553"></a> * @protected
+<a name="line554"></a> */
+<a name="line555"></a>goog.graphics.ext.Element.prototype.redraw = goog.nullFunction;
+<a name="line556"></a>
+<a name="line557"></a>
+<a name="line558"></a>// PARENT DEPENDENCY
+<a name="line559"></a>
+<a name="line560"></a>
+<a name="line561"></a>/**
+<a name="line562"></a> * Computes whether the element is still parent dependent.
+<a name="line563"></a> * @param {goog.graphics.ext.Element.Position_} position The recently changed
+<a name="line564"></a> *     position object.
+<a name="line565"></a> * @private
+<a name="line566"></a> */
+<a name="line567"></a>goog.graphics.ext.Element.prototype.computeIsParentDependent_ = function(
+<a name="line568"></a>    position) {
+<a name="line569"></a>  this.parentDependent_ = position.isParentDependent() ||
+<a name="line570"></a>      this.xPosition_.isParentDependent() ||
+<a name="line571"></a>      this.yPosition_.isParentDependent() ||
+<a name="line572"></a>      this.checkParentDependent();
+<a name="line573"></a>};
+<a name="line574"></a>
+<a name="line575"></a>
+<a name="line576"></a>/**
+<a name="line577"></a> * Returns whether this element&#39;s bounds depend on its parents.
+<a name="line578"></a> *
+<a name="line579"></a> * This function should be treated as if it has package scope.
+<a name="line580"></a> * @return {boolean} Whether this element&#39;s bounds depend on its parents.
+<a name="line581"></a> */
+<a name="line582"></a>goog.graphics.ext.Element.prototype.isParentDependent = function() {
+<a name="line583"></a>  return this.parentDependent_;
+<a name="line584"></a>};
+<a name="line585"></a>
+<a name="line586"></a>
+<a name="line587"></a>/**
+<a name="line588"></a> * Overridable function for subclass specific parent dependency.
+<a name="line589"></a> * @return {boolean} Whether this shape&#39;s bounds depends on its parent&#39;s.
+<a name="line590"></a> * @protected
+<a name="line591"></a> */
+<a name="line592"></a>goog.graphics.ext.Element.prototype.checkParentDependent =
+<a name="line593"></a>    goog.functions.FALSE;
+<a name="line594"></a>
+<a name="line595"></a>
+<a name="line596"></a>// ROTATION
+<a name="line597"></a>
+<a name="line598"></a>
+<a name="line599"></a>/**
+<a name="line600"></a> * Set the rotation of this element.
+<a name="line601"></a> * @param {number} angle The angle of rotation, in degrees.
+<a name="line602"></a> */
+<a name="line603"></a>goog.graphics.ext.Element.prototype.setRotation = function(angle) {
+<a name="line604"></a>  if (this.rotation_ != angle) {
+<a name="line605"></a>    this.rotation_ = angle;
+<a name="line606"></a>
+<a name="line607"></a>    this.needsTransform_ = true;
+<a name="line608"></a>    this.transform();
+<a name="line609"></a>  }
+<a name="line610"></a>};
+<a name="line611"></a>
+<a name="line612"></a>
+<a name="line613"></a>/**
+<a name="line614"></a> * @return {number} The angle of rotation of this element, in degrees.
+<a name="line615"></a> */
+<a name="line616"></a>goog.graphics.ext.Element.prototype.getRotation = function() {
+<a name="line617"></a>  return this.rotation_;
+<a name="line618"></a>};
+<a name="line619"></a>
+<a name="line620"></a>
+<a name="line621"></a>// TRANSFORMS
+<a name="line622"></a>
+<a name="line623"></a>
+<a name="line624"></a>/**
+<a name="line625"></a> * Called by the parent when the parent has transformed.
+<a name="line626"></a> *
+<a name="line627"></a> * Should be treated as package scope.
+<a name="line628"></a> */
+<a name="line629"></a>goog.graphics.ext.Element.prototype.parentTransform = function() {
+<a name="line630"></a>  this.needsTransform_ = this.needsTransform_ || this.parentDependent_;
+<a name="line631"></a>};
+<a name="line632"></a>
+<a name="line633"></a>
+<a name="line634"></a>/**
+<a name="line635"></a> * @return {boolean} Whether this element has pending transforms.
+<a name="line636"></a> */
+<a name="line637"></a>goog.graphics.ext.Element.prototype.isPendingTransform = function() {
+<a name="line638"></a>  return this.needsTransform_;
+<a name="line639"></a>};
+<a name="line640"></a>
+<a name="line641"></a>
+<a name="line642"></a>/**
+<a name="line643"></a> * Performs a pending transform.
+<a name="line644"></a> * @protected
+<a name="line645"></a> */
+<a name="line646"></a>goog.graphics.ext.Element.prototype.transform = function() {
+<a name="line647"></a>  if (this.isPendingTransform()) {
+<a name="line648"></a>    this.needsTransform_ = false;
+<a name="line649"></a>
+<a name="line650"></a>    this.wrapper_.setTransformation(
+<a name="line651"></a>        this.getLeft(),
+<a name="line652"></a>        this.getTop(),
+<a name="line653"></a>        this.rotation_,
+<a name="line654"></a>        (this.getWidth() || 1) / 2,
+<a name="line655"></a>        (this.getHeight() || 1) / 2);
+<a name="line656"></a>
+<a name="line657"></a>    // TODO(robbyw): this._fireEvent(&#39;transform&#39;, [ this ]);
+<a name="line658"></a>  }
+<a name="line659"></a>};
+<a name="line660"></a>
+<a name="line661"></a>
+<a name="line662"></a>// PIXEL SCALE
+<a name="line663"></a>
+<a name="line664"></a>
+<a name="line665"></a>/**
+<a name="line666"></a> * @return {number} Returns the number of pixels per unit in the x direction.
+<a name="line667"></a> */
+<a name="line668"></a>goog.graphics.ext.Element.prototype.getPixelScaleX = function() {
+<a name="line669"></a>  return this.getGraphics().getPixelScaleX();
+<a name="line670"></a>};
+<a name="line671"></a>
+<a name="line672"></a>
+<a name="line673"></a>/**
+<a name="line674"></a> * @return {number} Returns the number of pixels per unit in the y direction.
+<a name="line675"></a> */
+<a name="line676"></a>goog.graphics.ext.Element.prototype.getPixelScaleY = function() {
+<a name="line677"></a>  return this.getGraphics().getPixelScaleY();
+<a name="line678"></a>};
+<a name="line679"></a>
+<a name="line680"></a>
+<a name="line681"></a>// EVENT HANDLING
+<a name="line682"></a>
+<a name="line683"></a>
+<a name="line684"></a>/** @override */
+<a name="line685"></a>goog.graphics.ext.Element.prototype.disposeInternal = function() {
+<a name="line686"></a>  goog.graphics.ext.Element.superClass_.disposeInternal.call();
+<a name="line687"></a>  this.wrapper_.dispose();
+<a name="line688"></a>};
+<a name="line689"></a>
+<a name="line690"></a>
+<a name="line691"></a>// INTERNAL POSITION OBJECT
+<a name="line692"></a>
+<a name="line693"></a>
+<a name="line694"></a>/**
+<a name="line695"></a> * Position specification types.  Start corresponds to left/top, middle to
+<a name="line696"></a> * center/middle, and end to right/bottom.
+<a name="line697"></a> * @enum {number}
+<a name="line698"></a> * @private
+<a name="line699"></a> */
+<a name="line700"></a>goog.graphics.ext.Element.PositionType_ = {
+<a name="line701"></a>  START: 0,
+<a name="line702"></a>  MIDDLE: 1,
+<a name="line703"></a>  END: 2
+<a name="line704"></a>};
+<a name="line705"></a>
+<a name="line706"></a>
+<a name="line707"></a>
+<a name="line708"></a>/**
+<a name="line709"></a> * Manages a position and size, either horizontal or vertical.
+<a name="line710"></a> * @param {goog.graphics.ext.Element} element The element the position applies
+<a name="line711"></a> *     to.
+<a name="line712"></a> * @param {boolean} horizontal Whether the position is horizontal or vertical.
+<a name="line713"></a> * @constructor
+<a name="line714"></a> * @private
+<a name="line715"></a> */
+<a name="line716"></a>goog.graphics.ext.Element.Position_ = function(element, horizontal) {
+<a name="line717"></a>  this.element_ = element;
+<a name="line718"></a>  this.horizontal_ = horizontal;
+<a name="line719"></a>};
+<a name="line720"></a>
+<a name="line721"></a>
+<a name="line722"></a>/**
+<a name="line723"></a> * @return {!Object} The coordinate value computation cache.
+<a name="line724"></a> * @private
+<a name="line725"></a> */
+<a name="line726"></a>goog.graphics.ext.Element.Position_.prototype.getCoordinateCache_ = function() {
+<a name="line727"></a>  return this.coordinateCache_ || (this.coordinateCache_ = {});
+<a name="line728"></a>};
+<a name="line729"></a>
+<a name="line730"></a>
+<a name="line731"></a>/**
+<a name="line732"></a> * @return {number} The size of the parent&#39;s coordinate space.
+<a name="line733"></a> * @private
+<a name="line734"></a> */
+<a name="line735"></a>goog.graphics.ext.Element.Position_.prototype.getParentSize_ = function() {
+<a name="line736"></a>  var parent = this.element_.getParent();
+<a name="line737"></a>  return this.horizontal_ ?
+<a name="line738"></a>      parent.getCoordinateWidth() :
+<a name="line739"></a>      parent.getCoordinateHeight();
+<a name="line740"></a>};
+<a name="line741"></a>
+<a name="line742"></a>
+<a name="line743"></a>/**
+<a name="line744"></a> * @return {number} The minimum width/height of the element.
+<a name="line745"></a> */
+<a name="line746"></a>goog.graphics.ext.Element.Position_.prototype.getMinSize = function() {
+<a name="line747"></a>  return this.getValue_(this.minSize_);
+<a name="line748"></a>};
+<a name="line749"></a>
+<a name="line750"></a>
+<a name="line751"></a>/**
+<a name="line752"></a> * Sets the minimum width/height of the element.
+<a name="line753"></a> * @param {string|number} minSize The minimum width/height of the element.
+<a name="line754"></a> */
+<a name="line755"></a>goog.graphics.ext.Element.Position_.prototype.setMinSize = function(minSize) {
+<a name="line756"></a>  this.minSize_ = minSize;
+<a name="line757"></a>  this.resetCache();
+<a name="line758"></a>};
+<a name="line759"></a>
+<a name="line760"></a>
+<a name="line761"></a>/**
+<a name="line762"></a> * @return {number} The width/height of the element.
+<a name="line763"></a> */
+<a name="line764"></a>goog.graphics.ext.Element.Position_.prototype.getSize = function() {
+<a name="line765"></a>  return Math.max(this.getValue_(this.size_), this.getMinSize());
+<a name="line766"></a>};
+<a name="line767"></a>
+<a name="line768"></a>
+<a name="line769"></a>/**
+<a name="line770"></a> * Sets the width/height of the element.
+<a name="line771"></a> * @param {string|number} size The width/height of the element.
+<a name="line772"></a> * @return {boolean} Whether the value was changed.
+<a name="line773"></a> */
+<a name="line774"></a>goog.graphics.ext.Element.Position_.prototype.setSize = function(size) {
+<a name="line775"></a>  if (size != this.size_) {
+<a name="line776"></a>    this.size_ = size;
+<a name="line777"></a>    this.resetCache();
+<a name="line778"></a>    return true;
+<a name="line779"></a>  }
+<a name="line780"></a>  return false;
+<a name="line781"></a>};
+<a name="line782"></a>
+<a name="line783"></a>
+<a name="line784"></a>/**
+<a name="line785"></a> * Converts the given x coordinate to a number value in units.
+<a name="line786"></a> * @param {string|number} v The coordinate to retrieve the value for.
+<a name="line787"></a> * @param {boolean=} opt_forMaximum Whether we are computing the largest value
+<a name="line788"></a> *     this coordinate would be in a parent of no size.
+<a name="line789"></a> * @return {number} The correct number of coordinate space units.
+<a name="line790"></a> * @private
+<a name="line791"></a> */
+<a name="line792"></a>goog.graphics.ext.Element.Position_.prototype.getValue_ = function(v,
+<a name="line793"></a>    opt_forMaximum) {
+<a name="line794"></a>  if (!goog.graphics.ext.coordinates.isSpecial(v)) {
+<a name="line795"></a>    return parseFloat(String(v));
+<a name="line796"></a>  }
+<a name="line797"></a>
+<a name="line798"></a>  var cache = this.getCoordinateCache_();
+<a name="line799"></a>  var scale = this.horizontal_ ?
+<a name="line800"></a>      this.element_.getPixelScaleX() :
+<a name="line801"></a>      this.element_.getPixelScaleY();
+<a name="line802"></a>
+<a name="line803"></a>  var containerSize;
+<a name="line804"></a>  if (opt_forMaximum) {
+<a name="line805"></a>    containerSize = goog.graphics.ext.coordinates.computeValue(
+<a name="line806"></a>        this.size_ || 0, 0, scale);
+<a name="line807"></a>  } else {
+<a name="line808"></a>    var parent = this.element_.getParent();
+<a name="line809"></a>    containerSize = this.horizontal_ ? parent.getWidth() : parent.getHeight();
+<a name="line810"></a>  }
+<a name="line811"></a>
+<a name="line812"></a>  return goog.graphics.ext.coordinates.getValue(v, opt_forMaximum,
+<a name="line813"></a>      containerSize, scale, cache);
+<a name="line814"></a>};
+<a name="line815"></a>
+<a name="line816"></a>
+<a name="line817"></a>/**
+<a name="line818"></a> * @return {number} The distance from the left/top edge of this element to the
+<a name="line819"></a> *     left/top edge of its parent, specified in units of the parent&#39;s
+<a name="line820"></a> *     coordinate system.
+<a name="line821"></a> */
+<a name="line822"></a>goog.graphics.ext.Element.Position_.prototype.getStart = function() {
+<a name="line823"></a>  if (this.cachedValue_ == null) {
+<a name="line824"></a>    var value = this.getValue_(this.distance_);
+<a name="line825"></a>    if (this.distanceType_ == goog.graphics.ext.Element.PositionType_.START) {
+<a name="line826"></a>      this.cachedValue_ = value;
+<a name="line827"></a>    } else if (this.distanceType_ ==
+<a name="line828"></a>               goog.graphics.ext.Element.PositionType_.MIDDLE) {
+<a name="line829"></a>      this.cachedValue_ = value + (this.getParentSize_() - this.getSize()) / 2;
+<a name="line830"></a>    } else {
+<a name="line831"></a>      this.cachedValue_ = this.getParentSize_() - value - this.getSize();
+<a name="line832"></a>    }
+<a name="line833"></a>  }
+<a name="line834"></a>
+<a name="line835"></a>  return this.cachedValue_;
+<a name="line836"></a>};
+<a name="line837"></a>
+<a name="line838"></a>
+<a name="line839"></a>/**
+<a name="line840"></a> * @return {number} The middle coordinate of the element, in units of the
+<a name="line841"></a> *     parent&#39;s coordinate system.
+<a name="line842"></a> */
+<a name="line843"></a>goog.graphics.ext.Element.Position_.prototype.getMiddle = function() {
+<a name="line844"></a>  return this.distanceType_ == goog.graphics.ext.Element.PositionType_.MIDDLE ?
+<a name="line845"></a>      this.getValue_(this.distance_) :
+<a name="line846"></a>      (this.getParentSize_() - this.getSize()) / 2 - this.getStart();
+<a name="line847"></a>};
+<a name="line848"></a>
+<a name="line849"></a>
+<a name="line850"></a>/**
+<a name="line851"></a> * @return {number} The end coordinate of the element, in units of the
+<a name="line852"></a> *     parent&#39;s coordinate system.
+<a name="line853"></a> */
+<a name="line854"></a>goog.graphics.ext.Element.Position_.prototype.getEnd = function() {
+<a name="line855"></a>  return this.distanceType_ == goog.graphics.ext.Element.PositionType_.END ?
+<a name="line856"></a>      this.getValue_(this.distance_) :
+<a name="line857"></a>      this.getParentSize_() - this.getStart() - this.getSize();
+<a name="line858"></a>};
+<a name="line859"></a>
+<a name="line860"></a>
+<a name="line861"></a>/**
+<a name="line862"></a> * Sets the position, either as a left/top, center/middle, or right/bottom
+<a name="line863"></a> * value.
+<a name="line864"></a> * @param {number|string} value The value of the coordinate.
+<a name="line865"></a> * @param {goog.graphics.ext.Element.PositionType_} type The type of the
+<a name="line866"></a> *     coordinate.
+<a name="line867"></a> */
+<a name="line868"></a>goog.graphics.ext.Element.Position_.prototype.setPosition = function(value,
+<a name="line869"></a>    type) {
+<a name="line870"></a>  this.distance_ = value;
+<a name="line871"></a>  this.distanceType_ = type;
+<a name="line872"></a>
+<a name="line873"></a>  // Clear cached value.
+<a name="line874"></a>  this.cachedValue_ = null;
+<a name="line875"></a>};
+<a name="line876"></a>
+<a name="line877"></a>
+<a name="line878"></a>/**
+<a name="line879"></a> * @return {number} An estimate of the maximum x/y extent this element would
+<a name="line880"></a> *     have in a parent of no width/height.
+<a name="line881"></a> */
+<a name="line882"></a>goog.graphics.ext.Element.Position_.prototype.getMaxPosition = function() {
+<a name="line883"></a>  // TODO(robbyw): Handle transformed or rotated coordinates
+<a name="line884"></a>  // TODO(robbyw): Handle pixel based sizes?
+<a name="line885"></a>
+<a name="line886"></a>  return this.getValue_(this.distance_ || 0) + (
+<a name="line887"></a>      goog.graphics.ext.coordinates.isSpecial(this.size_) ? 0 : this.getSize());
+<a name="line888"></a>};
+<a name="line889"></a>
+<a name="line890"></a>
+<a name="line891"></a>/**
+<a name="line892"></a> * Resets the caches of position values and coordinate values.
+<a name="line893"></a> */
+<a name="line894"></a>goog.graphics.ext.Element.Position_.prototype.resetCache = function() {
+<a name="line895"></a>  this.coordinateCache_ = null;
+<a name="line896"></a>  this.cachedValue_ = null;
+<a name="line897"></a>};
+<a name="line898"></a>
+<a name="line899"></a>
+<a name="line900"></a>/**
+<a name="line901"></a> * @return {boolean} Whether the size or position of this element depends on
+<a name="line902"></a> *     the size of the parent element.
+<a name="line903"></a> */
+<a name="line904"></a>goog.graphics.ext.Element.Position_.prototype.isParentDependent = function() {
+<a name="line905"></a>  return this.distanceType_ != goog.graphics.ext.Element.PositionType_.START ||
+<a name="line906"></a>      goog.graphics.ext.coordinates.isSpecial(this.size_) ||
+<a name="line907"></a>      goog.graphics.ext.coordinates.isSpecial(this.minSize_) ||
+<a name="line908"></a>      goog.graphics.ext.coordinates.isSpecial(this.distance_);
+<a name="line909"></a>};
+<a name="line910"></a>
+<a name="line911"></a>
+<a name="line912"></a>/**
+<a name="line913"></a> * The lazy loaded distance from the parent&#39;s top/left edge to this element&#39;s
+<a name="line914"></a> * top/left edge expressed in the parent&#39;s coordinate system.  We cache this
+<a name="line915"></a> * because it is most freqeuently requested by the element and it is easy to
+<a name="line916"></a> * compute middle and end values from it.
+<a name="line917"></a> * @type {?number}
+<a name="line918"></a> * @private
+<a name="line919"></a> */
+<a name="line920"></a>goog.graphics.ext.Element.Position_.prototype.cachedValue_ = null;
+<a name="line921"></a>
+<a name="line922"></a>
+<a name="line923"></a>/**
+<a name="line924"></a> * A cache of computed x coordinates.
+<a name="line925"></a> * @type {Object}
+<a name="line926"></a> * @private
+<a name="line927"></a> */
+<a name="line928"></a>goog.graphics.ext.Element.Position_.prototype.coordinateCache_ = null;
+<a name="line929"></a>
+<a name="line930"></a>
+<a name="line931"></a>/**
+<a name="line932"></a> * The minimum width/height of this element, as specified by the caller.
+<a name="line933"></a> * @type {string|number}
+<a name="line934"></a> * @private
+<a name="line935"></a> */
+<a name="line936"></a>goog.graphics.ext.Element.Position_.prototype.minSize_ = 0;
+<a name="line937"></a>
+<a name="line938"></a>
+<a name="line939"></a>/**
+<a name="line940"></a> * The width/height of this object, as specified by the caller.
+<a name="line941"></a> * @type {string|number}
+<a name="line942"></a> * @private
+<a name="line943"></a> */
+<a name="line944"></a>goog.graphics.ext.Element.Position_.prototype.size_ = 0;
+<a name="line945"></a>
+<a name="line946"></a>
+<a name="line947"></a>/**
+<a name="line948"></a> * The coordinate of this object, as specified by the caller.  The type of
+<a name="line949"></a> * coordinate is specified by distanceType_.
+<a name="line950"></a> * @type {string|number}
+<a name="line951"></a> * @private
+<a name="line952"></a> */
+<a name="line953"></a>goog.graphics.ext.Element.Position_.prototype.distance_ = 0;
+<a name="line954"></a>
+<a name="line955"></a>
+<a name="line956"></a>/**
+<a name="line957"></a> * The coordinate type specified by distance_.
+<a name="line958"></a> * @type {goog.graphics.ext.Element.PositionType_}
+<a name="line959"></a> * @private
+<a name="line960"></a> */
+<a name="line961"></a>goog.graphics.ext.Element.Position_.prototype.distanceType_ =
+<a name="line962"></a>    goog.graphics.ext.Element.PositionType_.START;
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>expectedfailures_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_expectedfailures_test.js.html">expectedfailures_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.ExpectedFailuresTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.ExpectedFailuresTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.ExpectedFailures&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.JsUnitException&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var count, expectedFailures, lastLevel, lastMessage;
+<a name="line24"></a>
+<a name="line25"></a>// Stub out the logger.
+<a name="line26"></a>goog.testing.ExpectedFailures.prototype.logger_.log = function(level,
+<a name="line27"></a>    message) {
+<a name="line28"></a>  lastLevel = level;
+<a name="line29"></a>  lastMessage = message;
+<a name="line30"></a>  count++;
+<a name="line31"></a>};
+<a name="line32"></a>
+<a name="line33"></a>function setUp() {
+<a name="line34"></a>  expectedFailures = new goog.testing.ExpectedFailures();
+<a name="line35"></a>  count = 0;
+<a name="line36"></a>  lastLevel = lastMessage = &#39;&#39;;
+<a name="line37"></a>}
+<a name="line38"></a>
+<a name="line39"></a>// Individual test methods.
+<a name="line40"></a>
+<a name="line41"></a>function testNoExpectedFailure() {
+<a name="line42"></a>  expectedFailures.handleTearDown();
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>function testPreventExpectedFailure() {
+<a name="line46"></a>  expectedFailures.expectFailureFor(true);
+<a name="line47"></a>
+<a name="line48"></a>  expectedFailures.handleException(new goog.testing.JsUnitException(&#39;&#39;, &#39;&#39;));
+<a name="line49"></a>  assertEquals(&#39;Should have logged a message&#39;, 1, count);
+<a name="line50"></a>  assertEquals(&#39;Should have logged an info message&#39;,
+<a name="line51"></a>      goog.debug.Logger.Level.INFO, lastLevel);
+<a name="line52"></a>  assertContains(&#39;Should log a suppression message&#39;,
+<a name="line53"></a>      &#39;Suppressing test failure&#39;, lastMessage);
+<a name="line54"></a>
+<a name="line55"></a>  expectedFailures.handleTearDown();
+<a name="line56"></a>  assertEquals(&#39;Should not have logged another message&#39;, 1, count);
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>function testDoNotPreventException() {
+<a name="line60"></a>  var ex = &#39;exception&#39;;
+<a name="line61"></a>  expectedFailures.expectFailureFor(false);
+<a name="line62"></a>  var e = assertThrows(&#39;Should have rethrown exception&#39;, function() {
+<a name="line63"></a>    expectedFailures.handleException(ex);
+<a name="line64"></a>  });
+<a name="line65"></a>  assertEquals(&#39;Should rethrow same exception&#39;, ex, e);
+<a name="line66"></a>}
+<a name="line67"></a>
+<a name="line68"></a>function testExpectedFailureDidNotOccur() {
+<a name="line69"></a>  expectedFailures.expectFailureFor(true);
+<a name="line70"></a>
+<a name="line71"></a>  expectedFailures.handleTearDown();
+<a name="line72"></a>  assertEquals(&#39;Should have logged a message&#39;, 1, count);
+<a name="line73"></a>  assertEquals(&#39;Should have logged a warning&#39;,
+<a name="line74"></a>      goog.debug.Logger.Level.WARNING, lastLevel);
+<a name="line75"></a>  assertContains(&#39;Should log a suppression message&#39;,
+<a name="line76"></a>      &#39;Expected a test failure&#39;, lastMessage);
+<a name="line77"></a>}
+<a name="line78"></a>
+<a name="line79"></a>function testRun() {
+<a name="line80"></a>  expectedFailures.expectFailureFor(true);
+<a name="line81"></a>
+<a name="line82"></a>  expectedFailures.run(function() {
+<a name="line83"></a>    fail(&#39;Expected failure&#39;);
+<a name="line84"></a>  });
+<a name="line85"></a>
+<a name="line86"></a>  assertEquals(&#39;Should have logged a message&#39;, 1, count);
+<a name="line87"></a>  assertEquals(&#39;Should have logged an info message&#39;,
+<a name="line88"></a>      goog.debug.Logger.Level.INFO, lastLevel);
+<a name="line89"></a>  assertContains(&#39;Should log a suppression message&#39;,
+<a name="line90"></a>      &#39;Suppressing test failure&#39;, lastMessage);
+<a name="line91"></a>
+<a name="line92"></a>  expectedFailures.handleTearDown();
+<a name="line93"></a>  assertEquals(&#39;Should not have logged another message&#39;, 1, count);
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>function testRunStrict() {
+<a name="line97"></a>  expectedFailures.expectFailureFor(true);
+<a name="line98"></a>
+<a name="line99"></a>  var ex = assertThrows(function() {
+<a name="line100"></a>    expectedFailures.run(function() {
+<a name="line101"></a>      // Doesn&#39;t fail!
+<a name="line102"></a>    });
+<a name="line103"></a>  });
+<a name="line104"></a>  assertContains(
+<a name="line105"></a>      &quot;Expected a test failure in &#39;testRunStrict&#39; but the test passed.&quot;,
+<a name="line106"></a>      ex.message);
+<a name="line107"></a>}
+<a name="line108"></a>
+<a name="line109"></a>function testRunLenient() {
+<a name="line110"></a>  expectedFailures.expectFailureFor(true);
+<a name="line111"></a>
+<a name="line112"></a>  expectedFailures.run(function() {
+<a name="line113"></a>    // Doesn&#39;t fail!
+<a name="line114"></a>  }, true);
+<a name="line115"></a>  expectedFailures.handleTearDown();
+<a name="line116"></a>  assertEquals(&#39;Should have logged a message&#39;, 1, count);
+<a name="line117"></a>  assertEquals(&#39;Should have logged a warning&#39;,
+<a name="line118"></a>      goog.debug.Logger.Level.WARNING, lastLevel);
+<a name="line119"></a>  assertContains(&#39;Should log a suppression message&#39;,
+<a name="line120"></a>      &#39;Expected a test failure&#39;, lastMessage);
+<a name="line121"></a>}
+</pre>
+
+
+</body>
+</html>

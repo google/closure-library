@@ -1,0 +1,126 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>wire.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_net_webchannel_wire.js.html">wire.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Interface and shared data structures for implementing
+<a name="line17"></a> * different wire protocol versions.
+<a name="line18"></a> * @visibility {//closure/goog/bin/sizetests:__pkg__}
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.labs.net.webChannel.Wire&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * The interface class.
+<a name="line28"></a> *
+<a name="line29"></a> * @interface
+<a name="line30"></a> */
+<a name="line31"></a>goog.labs.net.webChannel.Wire = function() {};
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>goog.scope(function() {
+<a name="line35"></a>var Wire = goog.labs.net.webChannel.Wire;
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>/**
+<a name="line39"></a> * The latest protocol version that this class supports. We request this version
+<a name="line40"></a> * from the server when opening the connection. Should match
+<a name="line41"></a> * LATEST_CHANNEL_VERSION on the server code.
+<a name="line42"></a> * @type {number}
+<a name="line43"></a> */
+<a name="line44"></a>Wire.LATEST_CHANNEL_VERSION = 8;
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * Simple container class for a (mapId, map) pair.
+<a name="line50"></a> * @param {number} mapId The id for this map.
+<a name="line51"></a> * @param {!Object|!goog.structs.Map} map The map itself.
+<a name="line52"></a> * @param {!Object=} opt_context The context associated with the map.
+<a name="line53"></a> * @constructor
+<a name="line54"></a> * @struct
+<a name="line55"></a> */
+<a name="line56"></a>Wire.QueuedMap = function(mapId, map, opt_context) {
+<a name="line57"></a>  /**
+<a name="line58"></a>   * The id for this map.
+<a name="line59"></a>   * @type {number}
+<a name="line60"></a>   */
+<a name="line61"></a>  this.mapId = mapId;
+<a name="line62"></a>
+<a name="line63"></a>  /**
+<a name="line64"></a>   * The map itself.
+<a name="line65"></a>   * @type {!Object|!goog.structs.Map}
+<a name="line66"></a>   */
+<a name="line67"></a>  this.map = map;
+<a name="line68"></a>
+<a name="line69"></a>  /**
+<a name="line70"></a>   * The context for the map.
+<a name="line71"></a>   * @type {Object}
+<a name="line72"></a>   */
+<a name="line73"></a>  this.context = opt_context || null;
+<a name="line74"></a>};
+<a name="line75"></a>});  // goog.scope
+</pre>
+
+
+</body>
+</html>

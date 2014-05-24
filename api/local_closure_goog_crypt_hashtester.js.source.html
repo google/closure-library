@@ -1,0 +1,294 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>hashtester.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_crypt_hashtester.js.html">hashtester.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Unit tests for the abstract cryptographic hash interface.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.crypt.hashTester&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.array&#39;);
+<a name="line23"></a>goog.require(&#39;goog.crypt&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.PerformanceTable&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.PseudoRandom&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line27"></a>goog.setTestOnly(&#39;hashTester&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Runs basic tests.
+<a name="line32"></a> *
+<a name="line33"></a> * @param {!goog.crypt.Hash} hash A hash instance.
+<a name="line34"></a> */
+<a name="line35"></a>goog.crypt.hashTester.runBasicTests = function(hash) {
+<a name="line36"></a>  // Compute first hash.
+<a name="line37"></a>  hash.update([97, 158]);
+<a name="line38"></a>  var golden1 = hash.digest();
+<a name="line39"></a>
+<a name="line40"></a>  // Compute second hash.
+<a name="line41"></a>  hash.reset();
+<a name="line42"></a>  hash.update(&#39;aB&#39;);
+<a name="line43"></a>  var golden2 = hash.digest();
+<a name="line44"></a>  assertTrue(&#39;Two different inputs resulted in a hash collision&#39;,
+<a name="line45"></a>      !!goog.testing.asserts.findDifferences(golden1, golden2));
+<a name="line46"></a>
+<a name="line47"></a>  // Empty hash.
+<a name="line48"></a>  hash.reset();
+<a name="line49"></a>  var empty = hash.digest();
+<a name="line50"></a>  assertTrue(&#39;Empty hash collided with a non-trivial one&#39;,
+<a name="line51"></a>      !!goog.testing.asserts.findDifferences(golden1, empty) &amp;&amp;
+<a name="line52"></a>      !!goog.testing.asserts.findDifferences(golden2, empty));
+<a name="line53"></a>
+<a name="line54"></a>  // Zero-length array update.
+<a name="line55"></a>  hash.reset();
+<a name="line56"></a>  hash.update([]);
+<a name="line57"></a>  assertArrayEquals(&#39;Updating with an empty array did not give an empty hash&#39;,
+<a name="line58"></a>      empty, hash.digest());
+<a name="line59"></a>
+<a name="line60"></a>  // Zero-length string update.
+<a name="line61"></a>  hash.reset();
+<a name="line62"></a>  hash.update(&#39;&#39;);
+<a name="line63"></a>  assertArrayEquals(&#39;Updating with an empty string did not give an empty hash&#39;,
+<a name="line64"></a>      empty, hash.digest());
+<a name="line65"></a>
+<a name="line66"></a>  // Recompute the first hash.
+<a name="line67"></a>  hash.reset();
+<a name="line68"></a>  hash.update([97, 158]);
+<a name="line69"></a>  assertArrayEquals(&#39;The reset did not produce the initial state&#39;,
+<a name="line70"></a>      golden1, hash.digest());
+<a name="line71"></a>
+<a name="line72"></a>  // Check for a trivial collision.
+<a name="line73"></a>  hash.reset();
+<a name="line74"></a>  hash.update([158, 97]);
+<a name="line75"></a>  assertTrue(&#39;Swapping bytes resulted in a hash collision&#39;,
+<a name="line76"></a>      !!goog.testing.asserts.findDifferences(golden1, hash.digest()));
+<a name="line77"></a>
+<a name="line78"></a>  // Compare array and string input.
+<a name="line79"></a>  hash.reset();
+<a name="line80"></a>  hash.update([97, 66]);
+<a name="line81"></a>  assertArrayEquals(&#39;String and array inputs should give the same result&#39;,
+<a name="line82"></a>      golden2, hash.digest());
+<a name="line83"></a>
+<a name="line84"></a>  // Compute in parts.
+<a name="line85"></a>  hash.reset();
+<a name="line86"></a>  hash.update(&#39;a&#39;);
+<a name="line87"></a>  hash.update([158]);
+<a name="line88"></a>  assertArrayEquals(&#39;Partial updates resulted in a different hash&#39;,
+<a name="line89"></a>      golden1, hash.digest());
+<a name="line90"></a>
+<a name="line91"></a>  // Test update with specified length.
+<a name="line92"></a>  hash.reset();
+<a name="line93"></a>  hash.update(&#39;aB&#39;, 0);
+<a name="line94"></a>  hash.update([97, 158, 32], 2);
+<a name="line95"></a>  assertArrayEquals(&#39;Updating with an explicit buffer length did not work&#39;,
+<a name="line96"></a>      golden1, hash.digest());
+<a name="line97"></a>};
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Runs block tests.
+<a name="line102"></a> *
+<a name="line103"></a> * @param {!goog.crypt.Hash} hash A hash instance.
+<a name="line104"></a> * @param {number} blockBytes Size of the hash block.
+<a name="line105"></a> */
+<a name="line106"></a>goog.crypt.hashTester.runBlockTests = function(hash, blockBytes) {
+<a name="line107"></a>  // Compute a message which is 1 byte shorter than hash block size.
+<a name="line108"></a>  var chars = &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&#39;;
+<a name="line109"></a>  var message = &#39;&#39;;
+<a name="line110"></a>  for (var i = 0; i &lt; blockBytes - 1; i++) {
+<a name="line111"></a>    message += chars.charAt(i % chars.length);
+<a name="line112"></a>  }
+<a name="line113"></a>
+<a name="line114"></a>  // Compute golden hash for 1 block + 2 bytes.
+<a name="line115"></a>  hash.update(message + &#39;123&#39;);
+<a name="line116"></a>  var golden1 = hash.digest();
+<a name="line117"></a>
+<a name="line118"></a>  // Compute golden hash for 2 blocks + 1 byte.
+<a name="line119"></a>  hash.reset();
+<a name="line120"></a>  hash.update(message + message + &#39;123&#39;);
+<a name="line121"></a>  var golden2 = hash.digest();
+<a name="line122"></a>
+<a name="line123"></a>  // Almost fill a block, then overflow.
+<a name="line124"></a>  hash.reset();
+<a name="line125"></a>  hash.update(message);
+<a name="line126"></a>  hash.update(&#39;123&#39;);
+<a name="line127"></a>  assertArrayEquals(golden1, hash.digest());
+<a name="line128"></a>
+<a name="line129"></a>  // Fill a block.
+<a name="line130"></a>  hash.reset();
+<a name="line131"></a>  hash.update(message + &#39;1&#39;);
+<a name="line132"></a>  hash.update(&#39;23&#39;);
+<a name="line133"></a>  assertArrayEquals(golden1, hash.digest());
+<a name="line134"></a>
+<a name="line135"></a>  // Overflow a block.
+<a name="line136"></a>  hash.reset();
+<a name="line137"></a>  hash.update(message + &#39;12&#39;);
+<a name="line138"></a>  hash.update(&#39;3&#39;);
+<a name="line139"></a>  assertArrayEquals(golden1, hash.digest());
+<a name="line140"></a>
+<a name="line141"></a>  // Test single overflow with an array.
+<a name="line142"></a>  hash.reset();
+<a name="line143"></a>  hash.update(goog.crypt.stringToByteArray(message + &#39;123&#39;));
+<a name="line144"></a>  assertArrayEquals(golden1, hash.digest());
+<a name="line145"></a>
+<a name="line146"></a>  // Almost fill a block, then overflow this and the next block.
+<a name="line147"></a>  hash.reset();
+<a name="line148"></a>  hash.update(message);
+<a name="line149"></a>  hash.update(message + &#39;123&#39;);
+<a name="line150"></a>  assertArrayEquals(golden2, hash.digest());
+<a name="line151"></a>
+<a name="line152"></a>  // Fill two blocks.
+<a name="line153"></a>  hash.reset();
+<a name="line154"></a>  hash.update(message + message + &#39;12&#39;);
+<a name="line155"></a>  hash.update(&#39;3&#39;);
+<a name="line156"></a>  assertArrayEquals(golden2, hash.digest());
+<a name="line157"></a>
+<a name="line158"></a>  // Test double overflow with an array.
+<a name="line159"></a>  hash.reset();
+<a name="line160"></a>  hash.update(goog.crypt.stringToByteArray(message));
+<a name="line161"></a>  hash.update(goog.crypt.stringToByteArray(message + &#39;123&#39;));
+<a name="line162"></a>  assertArrayEquals(golden2, hash.digest());
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Runs performance tests.
+<a name="line168"></a> *
+<a name="line169"></a> * @param {function():!goog.crypt.Hash} hashFactory A hash factory.
+<a name="line170"></a> * @param {string} hashName Name of the hashing function.
+<a name="line171"></a> */
+<a name="line172"></a>goog.crypt.hashTester.runPerfTests = function(hashFactory, hashName) {
+<a name="line173"></a>  var body = goog.dom.getDocument().body;
+<a name="line174"></a>  var perfTable = goog.dom.createElement(&#39;div&#39;);
+<a name="line175"></a>  goog.dom.appendChild(body, perfTable);
+<a name="line176"></a>
+<a name="line177"></a>  var table = new goog.testing.PerformanceTable(perfTable);
+<a name="line178"></a>
+<a name="line179"></a>  function runPerfTest(byteLength, updateCount) {
+<a name="line180"></a>    var label = (hashName + &#39;: &#39; + updateCount + &#39; update(s) of &#39; + byteLength +
+<a name="line181"></a>        &#39; bytes&#39;);
+<a name="line182"></a>
+<a name="line183"></a>    function run(data, dataType) {
+<a name="line184"></a>      table.run(function() {
+<a name="line185"></a>        var hash = hashFactory();
+<a name="line186"></a>        for (var i = 0; i &lt; updateCount; i++) {
+<a name="line187"></a>          hash.update(data, byteLength);
+<a name="line188"></a>        }
+<a name="line189"></a>        var digest = hash.digest();
+<a name="line190"></a>      }, label + &#39; (&#39; + dataType + &#39;)&#39;);
+<a name="line191"></a>    }
+<a name="line192"></a>
+<a name="line193"></a>    var byteArray = goog.crypt.hashTester.createRandomByteArray_(byteLength);
+<a name="line194"></a>    var byteString = goog.crypt.hashTester.createByteString_(byteArray);
+<a name="line195"></a>
+<a name="line196"></a>    run(byteArray, &#39;byte array&#39;);
+<a name="line197"></a>    run(byteString, &#39;byte string&#39;);
+<a name="line198"></a>  }
+<a name="line199"></a>
+<a name="line200"></a>  var MESSAGE_LENGTH_LONG = 10000000;  // 10 Mbytes
+<a name="line201"></a>  var MESSAGE_LENGTH_SHORT = 10;       // 10 bytes
+<a name="line202"></a>  var MESSAGE_COUNT_SHORT = MESSAGE_LENGTH_LONG / MESSAGE_LENGTH_SHORT;
+<a name="line203"></a>
+<a name="line204"></a>  runPerfTest(MESSAGE_LENGTH_LONG, 1);
+<a name="line205"></a>  runPerfTest(MESSAGE_LENGTH_SHORT, MESSAGE_COUNT_SHORT);
+<a name="line206"></a>};
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Creates and returns a random byte array.
+<a name="line211"></a> *
+<a name="line212"></a> * @param {number} length Length of the byte array.
+<a name="line213"></a> * @return {!Array.&lt;number&gt;} An array of bytes.
+<a name="line214"></a> * @private
+<a name="line215"></a> */
+<a name="line216"></a>goog.crypt.hashTester.createRandomByteArray_ = function(length) {
+<a name="line217"></a>  var random = new goog.testing.PseudoRandom(0);
+<a name="line218"></a>  var bytes = [];
+<a name="line219"></a>
+<a name="line220"></a>  for (var i = 0; i &lt; length; ++i) {
+<a name="line221"></a>    // Generates an integer from 0 to 255.
+<a name="line222"></a>    var b = Math.floor(random.random() * 0x100);
+<a name="line223"></a>    bytes.push(b);
+<a name="line224"></a>  }
+<a name="line225"></a>
+<a name="line226"></a>  return bytes;
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Creates a string from an array of bytes.
+<a name="line232"></a> *
+<a name="line233"></a> * @param {!Array.&lt;number&gt;} bytes An array of bytes.
+<a name="line234"></a> * @return {string} The string encoded by the bytes.
+<a name="line235"></a> * @private
+<a name="line236"></a> */
+<a name="line237"></a>goog.crypt.hashTester.createByteString_ = function(bytes) {
+<a name="line238"></a>  var str = &#39;&#39;;
+<a name="line239"></a>  goog.array.forEach(bytes, function(b) {
+<a name="line240"></a>    str += String.fromCharCode(b);
+<a name="line241"></a>  });
+<a name="line242"></a>  return str;
+<a name="line243"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>nativemessagingtransport_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_xpc_nativemessagingtransport_test.js.html">nativemessagingtransport_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.xpc.NativeMessagingTransportTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.xpc.NativeMessagingTransportTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events&#39;);
+<a name="line20"></a>goog.require(&#39;goog.net.xpc&#39;);
+<a name="line21"></a>goog.require(&#39;goog.net.xpc.CfgFields&#39;);
+<a name="line22"></a>goog.require(&#39;goog.net.xpc.CrossPageChannel&#39;);
+<a name="line23"></a>goog.require(&#39;goog.net.xpc.CrossPageChannelRole&#39;);
+<a name="line24"></a>goog.require(&#39;goog.net.xpc.NativeMessagingTransport&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line26"></a>
+<a name="line27"></a>// This test only tests the native messaing transport protocol version 2.
+<a name="line28"></a>// Testing of previous versions and of backward/forward compatibility is done
+<a name="line29"></a>// in crosspagechannel_test.html.
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>function tearDown() {
+<a name="line33"></a>  goog.net.xpc.NativeMessagingTransport.activeCount_ = {};
+<a name="line34"></a>  goog.events.removeAll(window.postMessage ? window : document, &#39;message&#39;);
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>function testConstructor() {
+<a name="line39"></a>  var xpc = getTestChannel();
+<a name="line40"></a>
+<a name="line41"></a>  var t = new goog.net.xpc.NativeMessagingTransport(xpc, &#39;http://g.com:80&#39;,
+<a name="line42"></a>      undefined /* opt_domHelper */, false /* opt_oneSidedHandshake */,
+<a name="line43"></a>      2 /* opt_protocolVersion */);
+<a name="line44"></a>  assertEquals(&#39;http://g.com:80&#39;, t.peerHostname_);
+<a name="line45"></a>
+<a name="line46"></a>  var t = new goog.net.xpc.NativeMessagingTransport(xpc,
+<a name="line47"></a>      null /* peerHostName */, undefined /* opt_domHelper */,
+<a name="line48"></a>      false /* opt_oneSidedHandshake */, 2 /* opt_protocolVersion */);
+<a name="line49"></a>  assertEquals(&#39;*&#39;, t.peerHostname_);
+<a name="line50"></a>  t.dispose();
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>function testConstructorDom() {
+<a name="line55"></a>  var xpc = getTestChannel();
+<a name="line56"></a>
+<a name="line57"></a>  var t = new goog.net.xpc.NativeMessagingTransport(
+<a name="line58"></a>      xpc, &#39;http://g.com:80&#39;, goog.dom.getDomHelper(),
+<a name="line59"></a>      false /* opt_oneSidedHandshake */, 2 /* opt_protocolVersion */);
+<a name="line60"></a>  assertEquals(&#39;http://g.com:80&#39;, t.peerHostname_);
+<a name="line61"></a>
+<a name="line62"></a>  var t = new goog.net.xpc.NativeMessagingTransport(xpc,
+<a name="line63"></a>      null /* peerHostName */, false /* opt_oneSidedHandshake */,
+<a name="line64"></a>      2 /* opt_protocolVersion */);
+<a name="line65"></a>  assertEquals(&#39;*&#39;, t.peerHostname_);
+<a name="line66"></a>  t.dispose();
+<a name="line67"></a>}
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>function testDispose() {
+<a name="line71"></a>  var xpc = getTestChannel();
+<a name="line72"></a>  var listenedObj = window.postMessage ? window : document;
+<a name="line73"></a>
+<a name="line74"></a>  var t0 = new goog.net.xpc.NativeMessagingTransport(xpc,
+<a name="line75"></a>      null /* peerHostName */, false /* opt_oneSidedHandshake */,
+<a name="line76"></a>      2 /* opt_protocolVersion */);
+<a name="line77"></a>  assertEquals(0, goog.events.removeAll(listenedObj, &#39;message&#39;));
+<a name="line78"></a>  t0.dispose();
+<a name="line79"></a>  assertEquals(0, goog.events.removeAll(listenedObj, &#39;message&#39;));
+<a name="line80"></a>
+<a name="line81"></a>  var t1 = new goog.net.xpc.NativeMessagingTransport(xpc,
+<a name="line82"></a>      null /* peerHostName */, false /* opt_oneSidedHandshake */,
+<a name="line83"></a>      2 /* opt_protocolVersion */);
+<a name="line84"></a>  t1.connect();
+<a name="line85"></a>  t1.dispose();
+<a name="line86"></a>  assertEquals(0, goog.events.removeAll(listenedObj, &#39;message&#39;));
+<a name="line87"></a>
+<a name="line88"></a>  var t2 = new goog.net.xpc.NativeMessagingTransport(xpc,
+<a name="line89"></a>      null /* peerHostName */, false /* opt_oneSidedHandshake */,
+<a name="line90"></a>      2 /* opt_protocolVersion */);
+<a name="line91"></a>  var t3 = new goog.net.xpc.NativeMessagingTransport(xpc,
+<a name="line92"></a>      null /* peerHostName */, false /* opt_oneSidedHandshake */,
+<a name="line93"></a>      2 /* opt_protocolVersion */);
+<a name="line94"></a>  t2.connect();
+<a name="line95"></a>  t3.connect();
+<a name="line96"></a>  t2.dispose();
+<a name="line97"></a>  assertEquals(1, goog.events.removeAll(listenedObj, &#39;message&#39;));
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>function testDisposeWithDom() {
+<a name="line102"></a>  var xpc = getTestChannel(goog.dom.getDomHelper());
+<a name="line103"></a>  var listenedObj = window.postMessage ? window : document;
+<a name="line104"></a>
+<a name="line105"></a>  var t0 = new goog.net.xpc.NativeMessagingTransport(xpc,
+<a name="line106"></a>      null /* peerHostName */, false /* opt_oneSidedHandshake */,
+<a name="line107"></a>      2 /* opt_protocolVersion */);
+<a name="line108"></a>  assertEquals(0, goog.events.removeAll(listenedObj, &#39;message&#39;));
+<a name="line109"></a>  t0.dispose();
+<a name="line110"></a>  assertEquals(0, goog.events.removeAll(listenedObj, &#39;message&#39;));
+<a name="line111"></a>
+<a name="line112"></a>  var t1 = new goog.net.xpc.NativeMessagingTransport(xpc,
+<a name="line113"></a>      null /* peerHostName */, false /* opt_oneSidedHandshake */,
+<a name="line114"></a>      2 /* opt_protocolVersion */);
+<a name="line115"></a>  t1.connect();
+<a name="line116"></a>  t1.dispose();
+<a name="line117"></a>  assertEquals(0, goog.events.removeAll(listenedObj, &#39;message&#39;));
+<a name="line118"></a>
+<a name="line119"></a>  var t2 = new goog.net.xpc.NativeMessagingTransport(xpc,
+<a name="line120"></a>      null /* peerHostName */, false /* opt_oneSidedHandshake */,
+<a name="line121"></a>      2 /* opt_protocolVersion */);
+<a name="line122"></a>  var t3 = new goog.net.xpc.NativeMessagingTransport(xpc,
+<a name="line123"></a>      null /* peerHostName */, false /* opt_oneSidedHandshake */,
+<a name="line124"></a>      2 /* opt_protocolVersion */);
+<a name="line125"></a>  t2.connect();
+<a name="line126"></a>  t3.connect();
+<a name="line127"></a>  t2.dispose();
+<a name="line128"></a>  assertEquals(1, goog.events.removeAll(listenedObj, &#39;message&#39;));
+<a name="line129"></a>}
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>function testBogusMessages() {
+<a name="line133"></a>  var e = createMockEvent(&#39;bogus_message&#39;);
+<a name="line134"></a>  assertFalse(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
+<a name="line135"></a>
+<a name="line136"></a>  e = createMockEvent(&#39;bogus|message&#39;);
+<a name="line137"></a>  assertFalse(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
+<a name="line138"></a>
+<a name="line139"></a>  e = createMockEvent(&#39;bogus|message:data&#39;);
+<a name="line140"></a>  assertFalse(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
+<a name="line141"></a>}
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>function testSendingMessagesToUnconnectedInnerPeer() {
+<a name="line145"></a>  var xpc = getTestChannel();
+<a name="line146"></a>
+<a name="line147"></a>  var serviceResult, payloadResult;
+<a name="line148"></a>  xpc.xpcDeliver = function(service, payload) {
+<a name="line149"></a>    serviceResult = service;
+<a name="line150"></a>    payloadResult = payload;
+<a name="line151"></a>  };
+<a name="line152"></a>
+<a name="line153"></a>  // Construct an unconnected inner peer.
+<a name="line154"></a>  xpc.getRole = function() {
+<a name="line155"></a>    return goog.net.xpc.CrossPageChannelRole.INNER;
+<a name="line156"></a>  };
+<a name="line157"></a>  xpc.isConnected = function() {
+<a name="line158"></a>    return false;
+<a name="line159"></a>  };
+<a name="line160"></a>  var t = new goog.net.xpc.NativeMessagingTransport(xpc, &#39;http://g.com&#39;,
+<a name="line161"></a>      false /* opt_oneSidedHandshake */, 2 /* opt_protocolVersion */);
+<a name="line162"></a>
+<a name="line163"></a>  // Test a valid message.
+<a name="line164"></a>  var e = createMockEvent(&#39;test_channel|test_service:test_payload&#39;);
+<a name="line165"></a>  assertTrue(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
+<a name="line166"></a>  assertEquals(&#39;test_service&#39;, serviceResult);
+<a name="line167"></a>  assertEquals(&#39;test_payload&#39;, payloadResult);
+<a name="line168"></a>  assertEquals(&#39;Ensure channel name has not been changed.&#39;,
+<a name="line169"></a>               &#39;test_channel&#39;,
+<a name="line170"></a>               t.channel_.name);
+<a name="line171"></a>
+<a name="line172"></a>  // Test updating a stale inner peer.
+<a name="line173"></a>  var e = createMockEvent(&#39;new_channel|tp:SETUP&#39;);
+<a name="line174"></a>  assertTrue(goog.net.xpc.NativeMessagingTransport.messageReceived_(e));
+<a name="line175"></a>  assertEquals(&#39;tp&#39;, serviceResult);
+<a name="line176"></a>  assertEquals(&#39;SETUP&#39;, payloadResult);
+<a name="line177"></a>  assertEquals(&#39;Ensure channel name has been updated.&#39;,
+<a name="line178"></a>               &#39;new_channel&#39;,
+<a name="line179"></a>               t.channel_.name);
+<a name="line180"></a>  t.dispose();
+<a name="line181"></a>}
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>function testSignalConnected_innerFrame() {
+<a name="line185"></a>  checkSignalConnected(false /* oneSidedHandshake */,
+<a name="line186"></a>      true /* innerFrame */);
+<a name="line187"></a>}
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>function testSignalConnected_outerFrame() {
+<a name="line191"></a>  checkSignalConnected(false /* oneSidedHandshake */,
+<a name="line192"></a>      false /* innerFrame */);
+<a name="line193"></a>}
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>function testSignalConnected_singleSided_innerFrame() {
+<a name="line197"></a>  checkSignalConnected(true /* oneSidedHandshake */,
+<a name="line198"></a>      true /* innerFrame */);
+<a name="line199"></a>}
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>function testSignalConnected_singleSided_outerFrame() {
+<a name="line203"></a>  checkSignalConnected(true /* oneSidedHandshake */,
+<a name="line204"></a>      false /* innerFrame */);
+<a name="line205"></a>}
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>function checkSignalConnected(oneSidedHandshake, innerFrame,
+<a name="line209"></a>    peerProtocolVersion, protocolVersion) {
+<a name="line210"></a>  var xpc = getTestChannel();
+<a name="line211"></a>  var connected = false;
+<a name="line212"></a>  xpc.notifyConnected = function() {
+<a name="line213"></a>    if (connected) {
+<a name="line214"></a>      fail();
+<a name="line215"></a>    } else {
+<a name="line216"></a>      connected = true;
+<a name="line217"></a>    }
+<a name="line218"></a>  };
+<a name="line219"></a>  xpc.getRole = function() {
+<a name="line220"></a>    return innerFrame ? goog.net.xpc.CrossPageChannelRole.INNER :
+<a name="line221"></a>        goog.net.xpc.CrossPageChannelRole.OUTER;
+<a name="line222"></a>  };
+<a name="line223"></a>  xpc.isConnected = function() {
+<a name="line224"></a>    return false;
+<a name="line225"></a>  };
+<a name="line226"></a>
+<a name="line227"></a>  var transport = new goog.net.xpc.NativeMessagingTransport(xpc, &#39;http://g.com&#39;,
+<a name="line228"></a>      undefined /* opt_domHelper */,
+<a name="line229"></a>      oneSidedHandshake /* opt_oneSidedHandshake */,
+<a name="line230"></a>      2 /* protocolVerion */);
+<a name="line231"></a>  var sentPayloads = [];
+<a name="line232"></a>  transport.send = function(service, payload) {
+<a name="line233"></a>    assertEquals(goog.net.xpc.TRANSPORT_SERVICE_, service);
+<a name="line234"></a>    sentPayloads.push(payload);
+<a name="line235"></a>  };
+<a name="line236"></a>  function assertSent(payloads) {
+<a name="line237"></a>    assertArrayEquals(payloads, sentPayloads);
+<a name="line238"></a>    sentPayloads = [];
+<a name="line239"></a>  }
+<a name="line240"></a>  var endpointId = transport.endpointId_;
+<a name="line241"></a>  var peerEndpointId1 = &#39;abc123&#39;;
+<a name="line242"></a>  var peerEndpointId2 = &#39;def234&#39;;
+<a name="line243"></a>
+<a name="line244"></a>  assertFalse(connected);
+<a name="line245"></a>  if (!oneSidedHandshake || innerFrame) {
+<a name="line246"></a>    transport.transportServiceHandler(goog.net.xpc.SETUP_NTPV2 + &#39;,&#39; +
+<a name="line247"></a>        peerEndpointId1);
+<a name="line248"></a>    transport.transportServiceHandler(goog.net.xpc.SETUP);
+<a name="line249"></a>    assertSent([goog.net.xpc.SETUP_ACK_NTPV2]);
+<a name="line250"></a>    assertFalse(connected);
+<a name="line251"></a>    transport.transportServiceHandler(goog.net.xpc.SETUP_ACK_NTPV2);
+<a name="line252"></a>    assertSent([]);
+<a name="line253"></a>    assertTrue(connected);
+<a name="line254"></a>  } else {
+<a name="line255"></a>    transport.transportServiceHandler(goog.net.xpc.SETUP_ACK_NTPV2);
+<a name="line256"></a>    assertSent([]);
+<a name="line257"></a>    assertFalse(connected);
+<a name="line258"></a>    transport.transportServiceHandler(goog.net.xpc.SETUP_NTPV2 + &#39;,&#39; +
+<a name="line259"></a>        peerEndpointId1);
+<a name="line260"></a>    transport.transportServiceHandler(goog.net.xpc.SETUP);
+<a name="line261"></a>    assertSent([goog.net.xpc.SETUP_ACK_NTPV2]);
+<a name="line262"></a>    assertTrue(connected);
+<a name="line263"></a>  }
+<a name="line264"></a>
+<a name="line265"></a>  // Verify that additional transport service traffic doesn&#39;t cause duplicate
+<a name="line266"></a>  // notifications.
+<a name="line267"></a>  transport.transportServiceHandler(goog.net.xpc.SETUP_NTPV2 + &#39;,&#39; +
+<a name="line268"></a>      peerEndpointId1);
+<a name="line269"></a>  transport.transportServiceHandler(goog.net.xpc.SETUP);
+<a name="line270"></a>  assertSent([goog.net.xpc.SETUP_ACK_NTPV2]);
+<a name="line271"></a>  transport.transportServiceHandler(goog.net.xpc.SETUP_ACK_NTPV2);
+<a name="line272"></a>  assertSent([]);
+<a name="line273"></a>
+<a name="line274"></a>  // Simulate a reconnection by sending a SETUP message from a frame with a
+<a name="line275"></a>  // different endpoint id.  No further connection callbacks should fire, but
+<a name="line276"></a>  // a new SETUP message should be triggered.
+<a name="line277"></a>  transport.transportServiceHandler(goog.net.xpc.SETUP_NTPV2 + &#39;,&#39; +
+<a name="line278"></a>      peerEndpointId2);
+<a name="line279"></a>  transport.transportServiceHandler(goog.net.xpc.SETUP);
+<a name="line280"></a>  assertSent([goog.net.xpc.SETUP_ACK_NTPV2, goog.net.xpc.SETUP_NTPV2 + &#39;,&#39; +
+<a name="line281"></a>        endpointId]);
+<a name="line282"></a>  transport.transportServiceHandler(goog.net.xpc.SETUP_ACK_NTPV2);
+<a name="line283"></a>  assertSent([]);
+<a name="line284"></a>}
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>function createMockEvent(data) {
+<a name="line288"></a>  var event = {};
+<a name="line289"></a>  event.getBrowserEvent = function() { return {data: data} };
+<a name="line290"></a>  return event;
+<a name="line291"></a>}
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>function getTestChannel(opt_domHelper) {
+<a name="line295"></a>  var cfg = {};
+<a name="line296"></a>  cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = &#39;test_channel&#39;;
+<a name="line297"></a>  return new goog.net.xpc.CrossPageChannel(cfg, opt_domHelper,
+<a name="line298"></a>      undefined /* opt_domHelper */, false /* opt_oneSidedHandshake */,
+<a name="line299"></a>      2 /* opt_protocolVersion */);
+<a name="line300"></a>}
+</pre>
+
+
+</body>
+</html>

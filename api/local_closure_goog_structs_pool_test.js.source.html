@@ -1,0 +1,336 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>pool_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_structs_pool_test.js.html">pool_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.structs.PoolTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.structs.PoolTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.structs.Pool&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>// Implementation of the Pool class with isObjectDead() always returning TRUE,
+<a name="line23"></a>// so that the the Pool will not reuse any objects.
+<a name="line24"></a>function NoObjectReusePool(opt_min, opt_max) {
+<a name="line25"></a>  goog.structs.Pool.call(this, opt_min, opt_max);
+<a name="line26"></a>}
+<a name="line27"></a>goog.inherits(NoObjectReusePool, goog.structs.Pool);
+<a name="line28"></a>
+<a name="line29"></a>NoObjectReusePool.prototype.objectCanBeReused = function(obj) {
+<a name="line30"></a>  return false;
+<a name="line31"></a>};
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>function testExceedMax1() {
+<a name="line35"></a>  var p = new goog.structs.Pool(0, 3);
+<a name="line36"></a>  var obj1 = p.getObject();
+<a name="line37"></a>  var obj2 = p.getObject();
+<a name="line38"></a>  var obj3 = p.getObject();
+<a name="line39"></a>  var obj4 = p.getObject();
+<a name="line40"></a>  var obj5 = p.getObject();
+<a name="line41"></a>
+<a name="line42"></a>  assertNotUndefined(obj1);
+<a name="line43"></a>  assertNotUndefined(obj2);
+<a name="line44"></a>  assertNotUndefined(obj3);
+<a name="line45"></a>  assertUndefined(obj4);
+<a name="line46"></a>  assertUndefined(obj5);
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>function testExceedMax2() {
+<a name="line51"></a>  var p = new goog.structs.Pool(0, 1);
+<a name="line52"></a>  var obj1 = p.getObject();
+<a name="line53"></a>  var obj2 = p.getObject();
+<a name="line54"></a>  var obj3 = p.getObject();
+<a name="line55"></a>  var obj4 = p.getObject();
+<a name="line56"></a>  var obj5 = p.getObject();
+<a name="line57"></a>
+<a name="line58"></a>  assertNotUndefined(obj1);
+<a name="line59"></a>  assertUndefined(obj2);
+<a name="line60"></a>  assertUndefined(obj3);
+<a name="line61"></a>  assertUndefined(obj4);
+<a name="line62"></a>  assertUndefined(obj5);
+<a name="line63"></a>}
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>function testExceedMax3() {
+<a name="line67"></a>  var p = new goog.structs.Pool(); // default: 10
+<a name="line68"></a>  var objs = [];
+<a name="line69"></a>
+<a name="line70"></a>  for (var i = 0; i &lt; 12; i++) {
+<a name="line71"></a>    objs[i] = p.getObject();
+<a name="line72"></a>  }
+<a name="line73"></a>
+<a name="line74"></a>  for (var i = 0; i &lt; 10; i++) {
+<a name="line75"></a>    assertNotNull(&#39;First 10 should be not null&#39;, objs[i]);
+<a name="line76"></a>  }
+<a name="line77"></a>
+<a name="line78"></a>  assertUndefined(objs[10]);
+<a name="line79"></a>  assertUndefined(objs[11]);
+<a name="line80"></a>}
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>function testReleaseAndGet1() {
+<a name="line84"></a>  var p = new goog.structs.Pool(0, 10);
+<a name="line85"></a>  var o = p.getObject();
+<a name="line86"></a>  assertEquals(1, p.getCount());
+<a name="line87"></a>  assertEquals(1, p.getInUseCount());
+<a name="line88"></a>  assertEquals(0, p.getFreeCount());
+<a name="line89"></a>  assertTrue(&#39;Result should be true&#39;, p.releaseObject(o));
+<a name="line90"></a>  assertEquals(1, p.getCount());
+<a name="line91"></a>  assertEquals(0, p.getInUseCount());
+<a name="line92"></a>  assertEquals(1, p.getFreeCount());
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>function testReleaseAndGet2() {
+<a name="line97"></a>  var p = new NoObjectReusePool(0, 10);
+<a name="line98"></a>  var o = p.getObject();
+<a name="line99"></a>  assertEquals(1, p.getCount());
+<a name="line100"></a>  assertEquals(1, p.getInUseCount());
+<a name="line101"></a>  assertEquals(0, p.getFreeCount());
+<a name="line102"></a>  assertTrue(&#39;Result should be true&#39;, p.releaseObject(o));
+<a name="line103"></a>  assertEquals(0, p.getCount());
+<a name="line104"></a>  assertEquals(0, p.getInUseCount());
+<a name="line105"></a>  assertEquals(0, p.getFreeCount());
+<a name="line106"></a>}
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>function testReleaseAndGet3() {
+<a name="line110"></a>  var p = new goog.structs.Pool(0, 10);
+<a name="line111"></a>  var o1 = p.getObject();
+<a name="line112"></a>  var o2 = p.getObject();
+<a name="line113"></a>  var o3 = p.getObject();
+<a name="line114"></a>  var o4 = {};
+<a name="line115"></a>  assertEquals(3, p.getCount());
+<a name="line116"></a>  assertEquals(3, p.getInUseCount());
+<a name="line117"></a>  assertEquals(0, p.getFreeCount());
+<a name="line118"></a>  assertTrue(&#39;Result should be true&#39;, p.releaseObject(o1));
+<a name="line119"></a>  assertTrue(&#39;Result should be true&#39;, p.releaseObject(o2));
+<a name="line120"></a>  assertFalse(&#39;Result should be false&#39;, p.releaseObject(o4));
+<a name="line121"></a>  assertEquals(3, p.getCount());
+<a name="line122"></a>  assertEquals(1, p.getInUseCount());
+<a name="line123"></a>  assertEquals(2, p.getFreeCount());
+<a name="line124"></a>}
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>function testReleaseAndGet4() {
+<a name="line128"></a>  var p = new NoObjectReusePool(0, 10);
+<a name="line129"></a>  var o1 = p.getObject();
+<a name="line130"></a>  var o2 = p.getObject();
+<a name="line131"></a>  var o3 = p.getObject();
+<a name="line132"></a>  var o4 = {};
+<a name="line133"></a>  assertEquals(3, p.getCount());
+<a name="line134"></a>  assertEquals(3, p.getInUseCount());
+<a name="line135"></a>  assertEquals(0, p.getFreeCount());
+<a name="line136"></a>  assertTrue(&#39;Result should be true&#39;, p.releaseObject(o1));
+<a name="line137"></a>  assertTrue(&#39;Result should be true&#39;, p.releaseObject(o2));
+<a name="line138"></a>  assertFalse(&#39;Result should be false&#39;, p.releaseObject(o4));
+<a name="line139"></a>  assertEquals(1, p.getCount());
+<a name="line140"></a>  assertEquals(1, p.getInUseCount());
+<a name="line141"></a>  assertEquals(0, p.getFreeCount());
+<a name="line142"></a>}
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>function testIsInPool1() {
+<a name="line146"></a>  var p = new goog.structs.Pool();
+<a name="line147"></a>  var o1 = p.getObject();
+<a name="line148"></a>  var o2 = p.getObject();
+<a name="line149"></a>  var o3 = p.getObject();
+<a name="line150"></a>  var o4 = {};
+<a name="line151"></a>  var o5 = {};
+<a name="line152"></a>  var o6 = o1;
+<a name="line153"></a>
+<a name="line154"></a>  assertTrue(p.contains(o1));
+<a name="line155"></a>  assertTrue(p.contains(o2));
+<a name="line156"></a>  assertTrue(p.contains(o3));
+<a name="line157"></a>  assertFalse(p.contains(o4));
+<a name="line158"></a>  assertFalse(p.contains(o5));
+<a name="line159"></a>  assertTrue(p.contains(o6));
+<a name="line160"></a>}
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>function testSetMin1() {
+<a name="line164"></a>  var p = new goog.structs.Pool(0, 10);
+<a name="line165"></a>
+<a name="line166"></a>  assertEquals(0, p.getCount());
+<a name="line167"></a>  assertEquals(0, p.getInUseCount());
+<a name="line168"></a>  assertEquals(0, p.getFreeCount());
+<a name="line169"></a>
+<a name="line170"></a>  p.setMinimumCount(10);
+<a name="line171"></a>
+<a name="line172"></a>  assertEquals(10, p.getCount());
+<a name="line173"></a>  assertEquals(0, p.getInUseCount());
+<a name="line174"></a>  assertEquals(10, p.getFreeCount());
+<a name="line175"></a>}
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>function testSetMin2() {
+<a name="line179"></a>  var p = new goog.structs.Pool(0, 10);
+<a name="line180"></a>
+<a name="line181"></a>  assertEquals(0, p.getCount());
+<a name="line182"></a>  assertEquals(0, p.getInUseCount());
+<a name="line183"></a>  assertEquals(0, p.getFreeCount());
+<a name="line184"></a>
+<a name="line185"></a>  var o1 = p.getObject();
+<a name="line186"></a>
+<a name="line187"></a>  assertEquals(1, p.getCount());
+<a name="line188"></a>  assertEquals(1, p.getInUseCount());
+<a name="line189"></a>  assertEquals(0, p.getFreeCount());
+<a name="line190"></a>
+<a name="line191"></a>  p.setMinimumCount(10);
+<a name="line192"></a>
+<a name="line193"></a>  assertEquals(10, p.getCount());
+<a name="line194"></a>  assertEquals(1, p.getInUseCount());
+<a name="line195"></a>  assertEquals(9, p.getFreeCount());
+<a name="line196"></a>}
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>function testSetMax1() {
+<a name="line200"></a>  var p = new goog.structs.Pool(0, 10);
+<a name="line201"></a>
+<a name="line202"></a>  assertEquals(0, p.getCount());
+<a name="line203"></a>  assertEquals(0, p.getInUseCount());
+<a name="line204"></a>  assertEquals(0, p.getFreeCount());
+<a name="line205"></a>
+<a name="line206"></a>  var o1 = p.getObject();
+<a name="line207"></a>  var o2 = p.getObject();
+<a name="line208"></a>  var o3 = p.getObject();
+<a name="line209"></a>  var o4 = p.getObject();
+<a name="line210"></a>  var o5 = p.getObject();
+<a name="line211"></a>
+<a name="line212"></a>  assertEquals(5, p.getCount());
+<a name="line213"></a>  assertEquals(5, p.getInUseCount());
+<a name="line214"></a>  assertEquals(0, p.getFreeCount());
+<a name="line215"></a>
+<a name="line216"></a>  assertTrue(&#39;Result should be true&#39;, p.releaseObject(o5));
+<a name="line217"></a>
+<a name="line218"></a>  assertEquals(5, p.getCount());
+<a name="line219"></a>  assertEquals(4, p.getInUseCount());
+<a name="line220"></a>  assertEquals(1, p.getFreeCount());
+<a name="line221"></a>
+<a name="line222"></a>  p.setMaximumCount(4);
+<a name="line223"></a>
+<a name="line224"></a>  assertEquals(4, p.getCount());
+<a name="line225"></a>  assertEquals(4, p.getInUseCount());
+<a name="line226"></a>  assertEquals(0, p.getFreeCount());
+<a name="line227"></a>}
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>function testInvalidMinMax1() {
+<a name="line231"></a>  var p = new goog.structs.Pool(0, 10);
+<a name="line232"></a>
+<a name="line233"></a>  assertEquals(0, p.getCount());
+<a name="line234"></a>  assertEquals(0, p.getInUseCount());
+<a name="line235"></a>  assertEquals(0, p.getFreeCount());
+<a name="line236"></a>
+<a name="line237"></a>  assertThrows(function() {
+<a name="line238"></a>    p.setMinimumCount(11);
+<a name="line239"></a>  });
+<a name="line240"></a>}
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>function testInvalidMinMax2() {
+<a name="line244"></a>  var p = new goog.structs.Pool(5, 10);
+<a name="line245"></a>
+<a name="line246"></a>  assertEquals(5, p.getCount());
+<a name="line247"></a>  assertEquals(0, p.getInUseCount());
+<a name="line248"></a>  assertEquals(5, p.getFreeCount());
+<a name="line249"></a>
+<a name="line250"></a>  assertThrows(function() {
+<a name="line251"></a>    p.setMaximumCount(4);
+<a name="line252"></a>  });
+<a name="line253"></a>}
+<a name="line254"></a>
+<a name="line255"></a>
+<a name="line256"></a>function testInvalidMinMax3() {
+<a name="line257"></a>  assertThrows(function() {
+<a name="line258"></a>    new goog.structs.Pool(10, 1);
+<a name="line259"></a>  });
+<a name="line260"></a>}
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>function testRateLimiting() {
+<a name="line264"></a>  var clock = new goog.testing.MockClock();
+<a name="line265"></a>  clock.install();
+<a name="line266"></a>
+<a name="line267"></a>  var p = new goog.structs.Pool(0, 3);
+<a name="line268"></a>  p.setDelay(100);
+<a name="line269"></a>
+<a name="line270"></a>  assertNotUndefined(p.getObject());
+<a name="line271"></a>  assertUndefined(p.getObject());
+<a name="line272"></a>
+<a name="line273"></a>  clock.tick(100);
+<a name="line274"></a>  assertNotUndefined(p.getObject());
+<a name="line275"></a>  assertUndefined(p.getObject());
+<a name="line276"></a>
+<a name="line277"></a>  clock.tick(100);
+<a name="line278"></a>  assertNotUndefined(p.getObject());
+<a name="line279"></a>  assertUndefined(p.getObject());
+<a name="line280"></a>
+<a name="line281"></a>  clock.tick(100);
+<a name="line282"></a>  assertUndefined(p.getObject());
+<a name="line283"></a>
+<a name="line284"></a>  goog.dispose(clock);
+<a name="line285"></a>}
+</pre>
+
+
+</body>
+</html>

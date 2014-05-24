@@ -1,0 +1,139 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>processor_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_json_processor_test.js.html">processor_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.json.processorTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.json.processorTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.json.EvalJsonProcessor&#39;);
+<a name="line19"></a>goog.require(&#39;goog.json.NativeJsonProcessor&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var SUPPORTS_NATIVE_JSON = false;
+<a name="line24"></a>
+<a name="line25"></a>function setUpPage() {
+<a name="line26"></a>  SUPPORTS_NATIVE_JSON = goog.global[&#39;JSON&#39;] &amp;&amp;
+<a name="line27"></a>      !(goog.userAgent.GECKO &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;5.0&#39;));
+<a name="line28"></a>}
+<a name="line29"></a>
+<a name="line30"></a>var REPLACER = function(k, v) {
+<a name="line31"></a>  return !!k ? v + &#39;d&#39; : v;
+<a name="line32"></a>};
+<a name="line33"></a>
+<a name="line34"></a>var REVIVER = function(k, v) {
+<a name="line35"></a>  return !!k ? v.substring(0, v.length - 1) : v;
+<a name="line36"></a>};
+<a name="line37"></a>
+<a name="line38"></a>// Just sanity check parsing and stringifying.
+<a name="line39"></a>// Thorough tests are in json_test.html.
+<a name="line40"></a>
+<a name="line41"></a>function testJsParser() {
+<a name="line42"></a>  var json = &#39;{&quot;a&quot;:1,&quot;b&quot;:{&quot;c&quot;:2}}&#39;;
+<a name="line43"></a>  runParsingTest(new goog.json.EvalJsonProcessor(), json, json);
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>function testNativeParser() {
+<a name="line47"></a>  if (!SUPPORTS_NATIVE_JSON) {
+<a name="line48"></a>    return;
+<a name="line49"></a>  }
+<a name="line50"></a>  var json = &#39;{&quot;a&quot;:1,&quot;b&quot;:{&quot;c&quot;:2}}&#39;;
+<a name="line51"></a>  runParsingTest(new goog.json.NativeJsonProcessor(), json, json);
+<a name="line52"></a>}
+<a name="line53"></a>
+<a name="line54"></a>function testJsParser_withReplacer() {
+<a name="line55"></a>  runParsingTest(new goog.json.EvalJsonProcessor(REPLACER),
+<a name="line56"></a>      &#39;{&quot;a&quot;:&quot;foo&quot;,&quot;b&quot;:&quot;goo&quot;}&#39;, &#39;{&quot;a&quot;:&quot;food&quot;,&quot;b&quot;:&quot;good&quot;}&#39;);
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>function testNativeParser_withReplacer() {
+<a name="line60"></a>  if (!SUPPORTS_NATIVE_JSON) {
+<a name="line61"></a>    return;
+<a name="line62"></a>  }
+<a name="line63"></a>  runParsingTest(new goog.json.NativeJsonProcessor(REPLACER),
+<a name="line64"></a>      &#39;{&quot;a&quot;:&quot;foo&quot;,&quot;b&quot;:&quot;goo&quot;}&#39;, &#39;{&quot;a&quot;:&quot;food&quot;,&quot;b&quot;:&quot;good&quot;}&#39;);
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>function testNativeParser_withReviver() {
+<a name="line68"></a>  if (!SUPPORTS_NATIVE_JSON) {
+<a name="line69"></a>    return;
+<a name="line70"></a>  }
+<a name="line71"></a>  var json = &#39;{&quot;a&quot;:&quot;fod&quot;,&quot;b&quot;:&quot;god&quot;}&#39;;
+<a name="line72"></a>  runParsingTest(new goog.json.NativeJsonProcessor(REPLACER, REVIVER),
+<a name="line73"></a>      json, json);
+<a name="line74"></a>}
+<a name="line75"></a>
+<a name="line76"></a>function testUnsafeJsParser() {
+<a name="line77"></a>  var json = &#39;{&quot;a&quot;:1,&quot;b&quot;:{&quot;c&quot;:2}}&#39;;
+<a name="line78"></a>  runParsingTest(new goog.json.EvalJsonProcessor(null, true), json, json);
+<a name="line79"></a>}
+<a name="line80"></a>
+<a name="line81"></a>function testUnsafeJsParser_withReplacer() {
+<a name="line82"></a>  runParsingTest(new goog.json.EvalJsonProcessor(REPLACER, true),
+<a name="line83"></a>      &#39;{&quot;a&quot;:&quot;foo&quot;,&quot;b&quot;:&quot;goo&quot;}&#39;, &#39;{&quot;a&quot;:&quot;food&quot;,&quot;b&quot;:&quot;good&quot;}&#39;);
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>function runParsingTest(parser, input, expected) {
+<a name="line87"></a>  assertEquals(expected, parser.stringify(parser.parse(input)));
+<a name="line88"></a>}
+</pre>
+
+
+</body>
+</html>

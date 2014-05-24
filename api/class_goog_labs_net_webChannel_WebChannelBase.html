@@ -1,0 +1,5904 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>WebChannelBase (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">labs.net.webChannel.WebChannelBase</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    This WebChannel implementation is branched off goog.net.BrowserChannel
+for now. Ongoing changes to goog.net.BrowserChannel will be back
+ported to this implementation as needed.
+
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/labs/net/webchannel/webchannelbase.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td>goog.labs.net.webChannel.WebChannelBase</td><td></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+</table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.labs.net.webChannel.WebChannelBase(<span><span class="arg">opt_options</span>,&nbsp;<span class="arg">opt_clientVersion</span>,&nbsp;<span class="arg">opt_conn</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_options</span>
+        : <span>!</span><span class="type">goog.net.WebChannel.Options=</span>
+        <div class="entryOverview">Configuration for the
+       WebChannel instance.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_clientVersion</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">An application-specific version number
+       that is sent to the server when connected.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_conn</span>
+        : <span>!</span><span class="type">ConnectionState=</span>
+        <div class="entryOverview">Previously determined connection
+       conditions.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_labs_net_webChannel_WebChannelBase.html">
+              goog.labs.net.webChannel.WebChannelBase
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.addAdditionalParams_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addAdditionalParams_<span class="args">(<span class="arg">uri</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds the additional parameters from the handler to the given URI.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">uri</span>
+        : <span>!</span><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span>
+        <div class="entryOverview">The URI to add the parameters to.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1098">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.cancelRequests_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">cancelRequests_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Cancels all outstanding requests.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line612">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.clearDeadBackchannelTimer_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">clearDeadBackchannelTimer_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Clears the timer that indicates that our backchannel is no longer able to
+successfully receive data from the server.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1450">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.connect"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">connect<span class="args">(<span class="arg">testPath</span>,&nbsp;<span class="arg">channelPath</span>,&nbsp;<span class="arg">opt_extraParams</span>,&nbsp;<span class="arg">opt_oldSessionId</span>,&nbsp;<span class="arg">opt_oldArrayId</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Starts the channel. This initiates connections to the server.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">testPath</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The path for the test connection.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">channelPath</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The path for the channel connection.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_extraParams</span>
+        : <span>!</span><span class="type">Object=</span>
+        <div class="entryOverview">Extra parameter keys and values to add to
+    the requests.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_oldSessionId</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">Session ID from a previous session.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_oldArrayId</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">The last array ID from a previous session.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line522">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.connectChannel_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">connectChannel_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Starts the regular channel which is run after the test channel is complete.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line599">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.connectTest_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">connectTest_<span class="args">(<span class="arg">testPath</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Starts the test channel to determine network conditions.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">testPath</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The relative PATH for the test connection.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line584">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.correctHostPrefix"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">correctHostPrefix<span class="args">(<span class="arg">serverHostPrefix</span>)</span>
+        </span>
+        &#8658; <span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Decides which host prefix should be used, if any.  If there is a handler,
+allows the handler to validate a host prefix provided by the server, and
+optionally override it.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">serverHostPrefix</span>
+        : <span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The host prefix provided by the server.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The host prefix to actually use, if any. Will return null
+    if the use of host prefixes was disabled via setAllowHostPrefix().
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1418">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.createDataUri"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createDataUri<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1796">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.createXhrIo"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createXhrIo<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1839">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.dequeueOutgoingMaps_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dequeueOutgoingMaps_<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the request text from the outgoing maps and resets it.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The encoded request text created from all the currently
+                 queued outgoing maps.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1117">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.disconnect"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disconnect<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Disconnects and closes the channel.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line544">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.ensureBackChannel_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">ensureBackChannel_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Ensures there is a backchannel request for receiving data from the server.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1145">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.ensureForwardChannel_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">ensureForwardChannel_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Ensures that a forward channel request is scheduled.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line924">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.ensureInState_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">ensureInState_<span class="args">(<span class="arg">var_args</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Helper to ensure the channel is in the expected state.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">var_args</span>
+        : <span class="type">...number</span>
+        <div class="entryOverview">The channel must be in one of the indicated
+    states.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1660">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getAllowChunkedMode"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getAllowChunkedMode<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns whether chunked mode is allowed. In certain debugging situations,
+it's useful for the application to have a way to disable chunked mode for a
+user.
+
+@return {boolean} Whether chunked mode is allowed.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line749">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getAllowHostPrefix"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getAllowHostPrefix<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns whether the channel allows the use of a subdomain. There may be
+cases where this isn't allowed.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether a host prefix is allowed.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line713">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getBackChannelMaxRetries"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getBackChannelMaxRetries<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The max number of back-channel retries, which is a constant.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line856">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getBackChannelUri"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getBackChannelUri<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1785">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getChannelDebug"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getChannelDebug<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type">WebChannelDebug</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the logger.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">WebChannelDebug</span>&nbsp;
+            The channel debug object.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line497">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getConnectionState"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getConnectionState<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1777">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getExtraHeaders"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getExtraHeaders<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the extra HTTP headers to add to all the requests sent to the server.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>&nbsp;
+            The HTTP headers, or null.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line644">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getForwardChannelMaxRetries"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getForwardChannelMaxRetries<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The max number of forward-channel retries, which will be 0
+in fail-fast mode.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line829">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getForwardChannelRequestPool"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getForwardChannelRequestPool<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type">ForwardChannelRequestPool</span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">ForwardChannelRequestPool</span>&nbsp;
+            The forward channel request pool.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line479">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getForwardChannelUri"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getForwardChannelUri<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1767">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getHandler"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getHandler<span class="args">()</span>
+        </span>
+        &#8658; <span class="type">WebChannelBase.Handler</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the handler used for channel callback events.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">WebChannelBase.Handler</span>&nbsp;
+            The handler.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line694">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getLastArrayId"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getLastArrayId<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The last array id received.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line891">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getLastStatusCode"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getLastStatusCode<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Return the last status code received for a request.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The last status code received for a request.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line883">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getOutstandingRequests_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getOutstandingRequests_<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the number of outstanding requests.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The number of outstanding requests to the server.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line910">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getRetryTime_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getRetryTime_<span class="args">(<span class="arg">retryCount</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">retryCount</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Number of retries so far.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            Time in ms before firing next retry request.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1567">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getSessionId"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getSessionId<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the session id of the channel. Only available after the
+channel has been opened.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            Session ID.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line573">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getState"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getState<span class="args">()</span>
+        </span>
+        &#8658; <span class="type">WebChannelBase.State</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the channel state.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">WebChannelBase.State</span>&nbsp;
+            The current state of the channel.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line874">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.getWireCodec"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getWireCodec<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>&nbsp;
+            The codec object, to be used for the test channel.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line487">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.handleBackchannelMissing_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">handleBackchannelMissing_<span class="args">(<span class="arg">forwardReq</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Handles a POST response from the server telling us that it has detected that
+we have no hanging GET connection.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">forwardReq</span>
+        : <span>!</span><span class="type">ChannelRequest</span>
+        <div class="entryOverview">The forward channel request that
+triggers this function call.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1367">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.handlePostResponse_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">handlePostResponse_<span class="args">(<span class="arg">responseValues</span>,&nbsp;<span class="arg">forwardReq</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Handles a POST response from the server.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">responseValues</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>
+        <div class="entryOverview">The key value pairs in the POST response.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">forwardReq</span>
+        : <span>!</span><span class="type">ChannelRequest</span>
+        <div class="entryOverview">The forward channel request that
+triggers this function call.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1334">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.hasOutstandingRequests"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">hasOutstandingRequests<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns whether there are outstanding requests servicing the channel.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            true if there are outstanding requests.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line900">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.isActive"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isActive<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1852">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.isBuffered"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isBuffered<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns whether the channel is buffered or not. This state is valid for
+querying only after the test connection has completed. This may be
+queried in the WebChannelBase.okToMakeRequest() callback.
+A channel may be buffered if the test connection determines that
+a chunked response could not be sent down within a suitable time.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the channel is buffered.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line737">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.isClosed"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isClosed<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line865">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.makeForwardChannelRequest_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">makeForwardChannelRequest_<span class="args">(<span class="arg">opt_retryRequest</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Makes a forward channel request using XMLHTTP.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_retryRequest</span>
+        : <span>!</span><span class="type">ChannelRequest=</span>
+        <div class="entryOverview">A failed request to retry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1059">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.maybeRetryBackChannel_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">maybeRetryBackChannel_<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Schedules a back-channel retry, unless the max retries has been reached.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            true iff a retry was scheduled.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1168">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.maybeRetryForwardChannel_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">maybeRetryForwardChannel_<span class="args">(<span class="arg">request</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Schedules a forward-channel retry for the specified request, unless the max
+retries has been reached.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">request</span>
+        : <span class="type">ChannelRequest</span>
+        <div class="entryOverview">The failed request to retry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            true iff a retry was scheduled.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line948">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.okToMakeRequest_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">okToMakeRequest_<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Gives the handler a chance to return an error code and stop channel
+execution. A handler might want to do this to check that the user is still
+logged in, for example.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            If it's OK to make a request.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1244">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.onBackChannelDead_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onBackChannelDead_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Handles the timer that indicates that our backchannel is no longer able to
+successfully receive data from the server.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1434">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.onClose_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onClose_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Called when the channel has been closed. It notifiers the handler of the
+event, and reports any pending or undelivered maps.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1741">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.onError_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onError_<span class="args">(<span class="arg">error</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Called when we've determined the final error for a channel. It closes the
+notifiers the handler of the error and closes the channel.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">error</span>
+        : <span class="type">WebChannelBase.Error</span>
+        <div class="entryOverview">The error code for the failure.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1725">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.onInput_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onInput_<span class="args">(<span class="arg">respArray</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Processes the data returned by the server.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">respArray</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>&gt;
+        <div class="entryOverview">The response array returned by the server.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1597">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.onRequestComplete"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onRequestComplete<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1479">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.onRequestData"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onRequestData<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1292">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.onStartBackChannelTimer_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onStartBackChannelTimer_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Timer callback for ensureBackChannel_.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1194">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.onStartForwardChannelTimer_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onStartForwardChannelTimer_<span class="args">(<span class="arg">opt_retryRequest</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Timer callback for ensureForwardChannel
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_retryRequest</span>
+        : <span class="type">ChannelRequest=</span>
+        <div class="entryOverview">A failed request
+to retry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line977">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.onSuccess_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onSuccess_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Called when messages have been successfully sent from the queue.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1711">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.open_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">open_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Establishes a new channel session with the the server.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1031">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.requeuePendingMaps_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">requeuePendingMaps_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Requeues unacknowledged sent arrays for retransmission in the next forward
+channel request.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1135">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.sendMap"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">sendMap<span class="args">(<span class="arg">map</span>,&nbsp;<span class="arg">opt_context</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sends a request to the server. The format of the request is a Map data
+structure of key/value pairs. These maps are then encoded in a format
+suitable for the wire and then reconstituted as a Map data structure that
+the server can process.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">map</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span>!</span><span class="type"><a href="class_goog_structs_Map.html">goog.structs.Map</a></span>
+        <div class="entryOverview">The map to send.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_context</span>
+        : <span>!</span><span class="type">Object=</span>
+        <div class="entryOverview">The context associated with the map.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line772">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setAllowChunkedMode"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setAllowChunkedMode<span class="args">(<span class="arg">allowChunkedMode</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets whether chunked mode is allowed. In certain debugging situations, it's
+useful for the application to have a way to disable chunked mode for a user.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">allowChunkedMode</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">Whether chunked mode is allowed.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line759">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setAllowHostPrefix"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setAllowHostPrefix<span class="args">(<span class="arg">allowHostPrefix</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets whether the channel allows the use of a subdomain. There may be cases
+where this isn't allowed, for example, logging in with troutboard where
+using a subdomain causes Apache to force the user to authenticate twice.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">allowHostPrefix</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">Whether a host prefix is allowed.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line724">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setChannelDebug"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setChannelDebug<span class="args">(<span class="arg">channelDebug</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the logger.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">channelDebug</span>
+        : <span>!</span><span class="type">WebChannelDebug</span>
+        <div class="entryOverview">The channel debug object.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line507">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setExtraHeaders"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setExtraHeaders<span class="args">(<span class="arg">extraHeaders</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets extra HTTP headers to add to all the requests sent to the server.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">extraHeaders</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">The HTTP headers, or null.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line654">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setFailFast"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setFailFast<span class="args">(<span class="arg">failFast</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       When set to true, this changes the behavior of the forward channel so it
+will not retry requests; it will fail after one network failure, and if
+there was already one network failure, the request will fail immediately.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">failFast</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">Whether or not to fail fast.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line801">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setForwardChannelMaxRetries"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setForwardChannelMaxRetries<span class="args">(<span class="arg">retries</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the maximum number of attempts to connect to the server for forward
+channel requests.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">retries</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The maximum number of attempts.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line839">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setForwardChannelRequestTimeout"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setForwardChannelRequestTimeout<span class="args">(<span class="arg">timeoutMs</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the timeout for a forward channel request.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">timeoutMs</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The timeout in milliseconds.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line848">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setHandler"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setHandler<span class="args">(<span class="arg">handler</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the handler used for channel callback events.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">handler</span>
+        : <span class="type">WebChannelBase.Handler</span>
+        <div class="entryOverview">The handler to set.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line703">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setReadyStateChangeThrottle"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setReadyStateChangeThrottle<span class="args">(<span class="arg">throttle</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the throttle for handling onreadystatechange events for the request.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">throttle</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The throttle in ms.  A value of zero indicates
+    no throttle.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line665">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setRetryDelay"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setRetryDelay<span class="args">(<span class="arg">baseDelayMs</span>,&nbsp;<span class="arg">delaySeedMs</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">baseDelayMs</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The base part of the retry delay, in ms.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">delaySeedMs</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">A random delay between 0 and this is added to
+    the base part.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1586">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.setSupportsCrossDomainXhrs"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setSupportsCrossDomainXhrs<span class="args">(<span class="arg">supportCrossDomain</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets whether cross origin requests are supported for the channel.
+
+Setting this allows the creation of requests to secondary domains and
+sends XHRs with the CORS withCredentials bit set to true.
+
+In order for cross-origin requests to work, the server will also need to set
+CORS response headers as per:
+<a href="https://developer.mozilla.org/en-US/docs/HTTP_access_control">https://developer.mozilla.org/en-US/docs/HTTP_access_control</a>
+
+See <code> goog.net.XhrIo#setWithCredentials</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">supportCrossDomain</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">Whether cross domain XHRs are supported.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line683">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.shouldRetryBackChannel_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">shouldRetryBackChannel_<span class="args">(<span class="arg">outstandingBytes</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Determines whether we should start the process of retrying a possibly
+dead backchannel.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">outstandingBytes</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The number of bytes for which the server has
+    not yet received acknowledgement.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether to start the backchannel retry timer.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1399">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.shouldUseSecondaryDomains"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">shouldUseSecondaryDomains<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1860">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.signalError_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">signalError_<span class="args">(<span class="arg">error</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Signals an error has occurred.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">error</span>
+        : <span class="type">WebChannelBase.Error</span>
+        <div class="entryOverview">The error code for the failure.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1671">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.startBackChannel_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">startBackChannel_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Begins a new back channel operation to the server.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1204">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.startForwardChannel_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">startForwardChannel_<span class="args">(<span class="arg">opt_retryRequest</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Begins a new forward channel operation to the server.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_retryRequest</span>
+        : <span class="type">ChannelRequest=</span>
+        <div class="entryOverview">A failed request to retry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line989">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.testConnectionFailure"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">testConnectionFailure<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1281">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.testConnectionFinished"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">testConnectionFinished<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1261">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.prototype.testNetworkCallback_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">testNetworkCallback_<span class="args">(<span class="arg">networkUp</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Callback for netUtils.testNetwork during error handling.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">networkUp</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">Whether the network is up.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1693">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_labs_net_webChannel_WebChannelBase.html">
+              goog.labs.net.webChannel.WebChannelBase
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.ConnState_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">ConnState_</span>
+        : <span class="type"><a href="class_goog_labs_net_webChannel_ConnectionState.html">goog.labs.net.webChannel.ConnectionState</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       Previous connectivity test results.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line107">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.allowChunkedMode_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">allowChunkedMode_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether chunked mode is allowed. In certain debugging situations, it's
+useful to disable this.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line222">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.allowHostPrefix_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">allowHostPrefix_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether we allow the use of a subdomain in IE for the backchannel requests.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line157">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.backChannelAttemptId_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">backChannelAttemptId_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The attempt id for the current back channel request. Starts at 1 and
+increments for each reconnect. The server uses this to log if our
+connection is flaky or not.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line262">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.backChannelRequest_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">backChannelRequest_</span>
+        : <span class="type"><a href="class_goog_labs_net_webChannel_ChannelRequest.html">goog.labs.net.webChannel.ChannelRequest</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The ChannelRequest object for the backchannel.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line125">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.backChannelRetryCount_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">backChannelRetryCount_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Number of times in a row that we have retried the current back channel
+request and received no data.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line254">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.backChannelTimerId_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">backChannelTimerId_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Timer identifier for asynchronously making a back channel request.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line195">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.backChannelUri_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">backChannelUri_</span>
+        : <span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The absolute URI for the backchannel request.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line144">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.baseRetryDelayMs_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">baseRetryDelayMs_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The base part of the time before firing next retry request. Default is 5
+seconds. Note that a random delay is added (see <code> retryDelaySeedMs_</code>)
+for all retries, and linear backoff is applied to the sum for subsequent
+retries.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line271">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.channelDebug_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">channelDebug_</span>
+        : <span class="type"><a href="class_goog_labs_net_webChannel_WebChannelDebug.html">goog.labs.net.webChannel.WebChannelDebug</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The channel debug used for logging
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line101">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.channelVersion_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">channelVersion_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The channel version that we negotiated with the server for this session.
+Starts out as the version we request, and then is changed to the negotiated
+version after the initial open.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line346">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.clientVersion_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">clientVersion_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The application specific version that is passed to the server.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line81">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.connectionTest_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">connectionTest_</span>
+        : <span class="type"><a href="class_goog_labs_net_webChannel_BaseTestChannel.html">goog.labs.net.webChannel.BaseTestChannel</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The TestChannel object which encapsulates the logic for determining
+interesting network conditions about the client.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line209">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.deadBackChannelTimerId_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">deadBackChannelTimerId_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Timer identifier for the timer that waits for us to retry the backchannel
+in the case where it is dead and no longer receiving data.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line202">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.extraHeaders_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">extraHeaders_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Extra HTTP headers to add to all the requests sent to the server.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line113">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.extraParams_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">extraParams_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Extra parameters to add to all the requests sent to the server.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line119">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.failFast_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">failFast_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether to fail forward-channel requests after one try or a few tries.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line177">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.forwardChannelMaxRetries_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">forwardChannelMaxRetries_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Maximum number of attempts to connect to the server for forward channel
+requests. Defaults to 2.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line285">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.forwardChannelRequestPool_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">forwardChannelRequestPool_</span>
+        : <span class="type"><a href="class_goog_labs_net_webChannel_ForwardChannelRequestPool.html">goog.labs.net.webChannel.ForwardChannelRequestPool</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The current ChannelRequest pool for the forward channel.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line327">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.forwardChannelRequestTimeoutMs_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">forwardChannelRequestTimeoutMs_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The timeout in milliseconds for a forward channel request. Defaults to 20
+seconds. Note that part of this timeout can be randomized.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line292">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.forwardChannelRetryCount_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">forwardChannelRetryCount_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Number of times we have retried the current forward channel request.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line247">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.forwardChannelTimerId_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">forwardChannelTimerId_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Timer identifier for asynchronously making a forward channel request.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line189">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.forwardChannelUri_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">forwardChannelUri_</span>
+        : <span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The absolute URI for the forwardchannel request.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line138">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.handler_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">handler_</span>
+        : <span class="type"><a href="class_goog_labs_net_webChannel_WebChannelBase_Handler.html">goog.labs.net.webChannel.WebChannelBase.Handler</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The handler that receive callbacks for state changes and data.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line183">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.hostPrefix_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">hostPrefix_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       A subdomain prefix for using a subdomain in IE for the backchannel
+requests.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line151">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.lastArrayId_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">lastArrayId_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The array identifier of the last array received from the server for the
+backchannel request.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line229">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.lastPostResponseArrayId_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">lastPostResponseArrayId_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The array id of the last array sent by the server that we know about.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line235">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.lastStatusCode_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">lastStatusCode_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The last status code received.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line241">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.nextMapId_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">nextMapId_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The id to use for the next outgoing map. This identifier uniquely
+identifies a sent map.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line171">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.nextRid_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">nextRid_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The next id to use for the RID (request identifier) parameter. This
+identifier uniquely identifies the forward channel request.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line164">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.outgoingMaps_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">outgoingMaps_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       An array of queued maps that need to be sent to the server.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line87">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.path_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">path_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The relative path (in the context of the the page hosting the browser
+channel) for making requests to the server.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line132">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.pendingMaps_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">pendingMaps_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       An array of dequeued maps that we have either received a non-successful
+response for, or no response at all, and which therefore may or may not
+have been received by the server.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line95">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.readyStateChangeThrottleMs_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">readyStateChangeThrottleMs_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       A throttle time in ms for readystatechange events for the backchannel.
+Useful for throttling when ready state is INTERACTIVE (partial data).
+
+This throttle is useful if the server sends large data chunks down the
+backchannel.  It prevents examining XHR partial data on every readystate
+change event.  This is useful because large chunks can trigger hundreds
+of readystatechange events, each of which takes ~5ms or so to handle,
+in turn making the UI unresponsive for a significant period.
+
+If set to zero no throttle is used.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line307">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.retryDelaySeedMs_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">retryDelaySeedMs_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       A random time between 0 and this number of MS is added to the
+<code> baseRetryDelayMs_</code>. Default is 10 seconds.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line278">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.sid_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">sid_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The current session id.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line321">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.state_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">state_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The current state of the WebChannel.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line372">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.supportsCrossDomainXhrs_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">supportsCrossDomainXhrs_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether cross origin requests are supported for the channel.
+
+See <code> goog.net.XhrIo#setWithCredentials</code>.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line315">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.useChunked_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">useChunked_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether the client's network conditions can support chunked responses.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line215">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.prototype.wireCodec_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">wireCodec_</span>
+        : <span class="type"><a href="class_goog_labs_net_webChannel_WireV8.html">goog.labs.net.webChannel.WireV8</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The V8 codec.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line334">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Static Methods</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.net.webChannel.WebChannelBase.isFatalError_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">isFatalError_<span class="args">(<span class="arg">error</span>,&nbsp;<span class="arg">statusCode</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns whether or not the given error/status combination is fatal or not.
+On fatal errors we immediately close the session rather than retrying the
+failed request.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">error</span>
+        : <span>?</span><span class="type">ChannelRequest.Error</span>
+        <div class="entryOverview">The error code for the
+failed request.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">statusCode</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The last HTTP status code.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether or not the error is fatal.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1468">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+<h2>Static Properties</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.BACK_CHANNEL_MAX_RETRIES"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">BACK_CHANNEL_MAX_RETRIES</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Maximum number of attempts to connect to the server for back channel
+requests.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line387">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.FORWARD_CHANNEL_RETRY_TIMEOUT"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">FORWARD_CHANNEL_RETRY_TIMEOUT</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The timeout in milliseconds for a forward channel request.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line379">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.INACTIVE_CHANNEL_RETRY_FACTOR"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">INACTIVE_CHANNEL_RETRY_FACTOR</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       When retrying for an inactive channel, we will multiply the total delay by
+this number.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line404">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.LogSaver"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">LogSaver</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       A LogSaver that can be used to accumulate all the debug logs so they
+can be sent to the server when a problem is detected.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line1870">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.MAX_MAPS_PER_REQUEST_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">MAX_MAPS_PER_REQUEST_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The maximum number of maps that can be sent in one POST. Should match
+MAX_MAPS_PER_REQUEST on the server code.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line462">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.OUTSTANDING_DATA_BACKCHANNEL_RETRY_CUTOFF"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">OUTSTANDING_DATA_BACKCHANNEL_RETRY_CUTOFF</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       A guess at a cutoff at which to no longer assume the backchannel is dead
+when we are slow to receive data. Number in bytes.
+
+Assumption: The worst bandwidth we work on is 50 kilobits/sec
+50kbits/sec * (1 byte / 8 bits) * 6 sec dead backchannel timeout
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line473">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">RTT_ESTIMATE</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       A number in MS of how long we guess the maxmium amount of time a round trip
+to the server should take. In the future this could be substituted with a
+real measurement of the RTT.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line396">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.ChannelType_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">ChannelType_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Internal enum type for the two channel types.
+
+     </div>
+
+     <div class="entryDetails">
+       <div class="detailsSection">
+          <b>Constants:</b>
+          <table class="horiz-rule">
+            <tbody>
+              <tr><td>
+                <span class="entryName">
+                  BACK_CHANNEL
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  FORWARD_CHANNEL
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line449">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.Error"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">Error</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Enum type for identifying an error.
+
+     </div>
+
+     <div class="entryDetails">
+       <div class="detailsSection">
+          <b>Constants:</b>
+          <table class="horiz-rule">
+            <tbody>
+              <tr><td>
+                <span class="entryName">
+                  ACTIVE_X_BLOCKED
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  BAD_DATA
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  BAD_RESPONSE
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  LOGGED_OUT
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  NETWORK
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  NO_DATA
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  OK
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  REQUEST_FAILED
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  STOP
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  UNKNOWN_SESSION_ID
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line411">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.net.webChannel.WebChannelBase.State"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.net.webChannel.WebChannelBase.</span><span class="entryName">State</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Enum type for the channel state machine.
+
+     </div>
+
+     <div class="entryDetails">
+       <div class="detailsSection">
+          <b>Constants:</b>
+          <table class="horiz-rule">
+            <tbody>
+              <tr><td>
+                <span class="entryName">
+                  CLOSED
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  INIT
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  OPENED
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  OPENING
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.source.html#line353">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package labs.net.webChannel</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="labs.net.webChannel.WebChannelBase"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

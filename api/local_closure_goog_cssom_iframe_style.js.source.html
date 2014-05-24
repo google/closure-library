@@ -1,0 +1,1075 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>style.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_cssom_iframe_style.js.html">style.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>// All Rights Reserved.
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Provides utility routines for copying modified
+<a name="line18"></a> * {@code CSSRule} objects from the parent document into iframes so that any
+<a name="line19"></a> * content in the iframe will be styled as if it was inline in the parent
+<a name="line20"></a> * document.
+<a name="line21"></a> *
+<a name="line22"></a> * &lt;p&gt;
+<a name="line23"></a> * For example, you might have this CSS rule:
+<a name="line24"></a> *
+<a name="line25"></a> * #content .highlighted { background-color: yellow; }
+<a name="line26"></a> *
+<a name="line27"></a> * And this DOM structure:
+<a name="line28"></a> *
+<a name="line29"></a> * &lt;div id=&quot;content&quot;&gt;
+<a name="line30"></a> *   &lt;iframe /&gt;
+<a name="line31"></a> * &lt;/div&gt;
+<a name="line32"></a> *
+<a name="line33"></a> * Then inside the iframe you have:
+<a name="line34"></a> *
+<a name="line35"></a> * &lt;body&gt;
+<a name="line36"></a> * &lt;div class=&quot;highlighted&quot;&gt;
+<a name="line37"></a> * &lt;/body&gt;
+<a name="line38"></a> *
+<a name="line39"></a> * If you copied the CSS rule directly into the iframe, it wouldn&#39;t match the
+<a name="line40"></a> * .highlighted div. So we rewrite the original stylesheets based on the
+<a name="line41"></a> * context where the iframe is going to be inserted. In this case the CSS
+<a name="line42"></a> * selector would be rewritten to:
+<a name="line43"></a> *
+<a name="line44"></a> * body .highlighted { background-color: yellow; }
+<a name="line45"></a> * &lt;/p&gt;
+<a name="line46"></a> *
+<a name="line47"></a> */
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>goog.provide(&#39;goog.cssom.iframe.style&#39;);
+<a name="line51"></a>
+<a name="line52"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line53"></a>goog.require(&#39;goog.cssom&#39;);
+<a name="line54"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line55"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line56"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line57"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line58"></a>goog.require(&#39;goog.string&#39;);
+<a name="line59"></a>goog.require(&#39;goog.style&#39;);
+<a name="line60"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Regexp that matches &quot;a&quot;, &quot;a:link&quot;, &quot;a:visited&quot;, etc.
+<a name="line65"></a> * @type {RegExp}
+<a name="line66"></a> * @private
+<a name="line67"></a> */
+<a name="line68"></a>goog.cssom.iframe.style.selectorPartAnchorRegex_ =
+<a name="line69"></a>    /a(:(link|visited|active|hover))?/;
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Delimiter between selectors (h1, h2)
+<a name="line74"></a> * @type {string}
+<a name="line75"></a> * @private
+<a name="line76"></a> */
+<a name="line77"></a>goog.cssom.iframe.style.SELECTOR_DELIMITER_ = &#39;,&#39;;
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * Delimiter between selector parts (.main h1)
+<a name="line82"></a> * @type {string}
+<a name="line83"></a> * @private
+<a name="line84"></a> */
+<a name="line85"></a>goog.cssom.iframe.style.SELECTOR_PART_DELIMITER_ = &#39; &#39;;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Delimiter marking the start of a css rules section ( h1 { )
+<a name="line90"></a> * @type {string}
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.cssom.iframe.style.DECLARATION_START_DELIMITER_ = &#39;{&#39;;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Delimiter marking the end of a css rules section ( } )
+<a name="line98"></a> * @type {string}
+<a name="line99"></a> * @private
+<a name="line100"></a> */
+<a name="line101"></a>goog.cssom.iframe.style.DECLARATION_END_DELIMITER_ = &#39;}\n&#39;;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Class representing a CSS rule set. A rule set is something like this:
+<a name="line107"></a> * h1, h2 { font-family: Arial; color: red; }
+<a name="line108"></a> * @constructor
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.cssom.iframe.style.CssRuleSet_ = function() {
+<a name="line112"></a>  /**
+<a name="line113"></a>   * Text of the declarations inside the rule set.
+<a name="line114"></a>   * For example: &#39;font-family: Arial; color: red;&#39;
+<a name="line115"></a>   * @type {string}
+<a name="line116"></a>   */
+<a name="line117"></a>  this.declarationText = &#39;&#39;;
+<a name="line118"></a>
+<a name="line119"></a>  /**
+<a name="line120"></a>   * Array of CssSelector objects, one for each selector.
+<a name="line121"></a>   * Example: [h1, h2]
+<a name="line122"></a>   * @type {Array.&lt;goog.cssom.iframe.style.CssSelector_&gt;}
+<a name="line123"></a>   */
+<a name="line124"></a>  this.selectors = [];
+<a name="line125"></a>};
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * Initializes the rule set from a {@code CSSRule}.
+<a name="line130"></a> *
+<a name="line131"></a> * @param {CSSRule} cssRule The {@code CSSRule} to initialize from.
+<a name="line132"></a> * @return {boolean} True if initialization succeeded. We only support
+<a name="line133"></a> *     {@code CSSStyleRule} and {@code CSSFontFaceRule} objects.
+<a name="line134"></a> */
+<a name="line135"></a>goog.cssom.iframe.style.CssRuleSet_.prototype.initializeFromCssRule =
+<a name="line136"></a>    function(cssRule) {
+<a name="line137"></a>  var ruleStyle = cssRule.style; // Cache object for performance.
+<a name="line138"></a>  if (!ruleStyle) {
+<a name="line139"></a>    return false;
+<a name="line140"></a>  }
+<a name="line141"></a>  var selector;
+<a name="line142"></a>  var declarations = &#39;&#39;;
+<a name="line143"></a>  if (ruleStyle &amp;&amp;
+<a name="line144"></a>      (selector = cssRule.selectorText) &amp;&amp;
+<a name="line145"></a>      (declarations = ruleStyle.cssText)) {
+<a name="line146"></a>    // IE get confused about cssText context if a stylesheet uses the
+<a name="line147"></a>    // mid-pass hack, and it ends up with an open comment (/*) but no
+<a name="line148"></a>    // closing comment. This will effectively comment out large parts
+<a name="line149"></a>    // of generated stylesheets later. This errs on the safe side by
+<a name="line150"></a>    // always tacking on an empty comment to force comments to be closed
+<a name="line151"></a>    // We used to check for a troublesome open comment using a regular
+<a name="line152"></a>    // expression, but it&#39;s faster not to check and always do this.
+<a name="line153"></a>    if (goog.userAgent.IE) {
+<a name="line154"></a>      declarations += &#39;/* */&#39;;
+<a name="line155"></a>    }
+<a name="line156"></a>  } else if (cssRule.cssText) {
+<a name="line157"></a>    var cssSelectorMatch = /([^\{]+)\{/;
+<a name="line158"></a>    var endTagMatch = /\}[^\}]*$/g;
+<a name="line159"></a>    // cssRule.cssText contains both selector and declarations:
+<a name="line160"></a>    // parse them out.
+<a name="line161"></a>    selector = cssSelectorMatch.exec(cssRule.cssText)[1];
+<a name="line162"></a>    // Remove selector, {, and trailing }.
+<a name="line163"></a>    declarations = cssRule.cssText.replace(cssSelectorMatch, &#39;&#39;).replace(
+<a name="line164"></a>        endTagMatch, &#39;&#39;);
+<a name="line165"></a>  }
+<a name="line166"></a>  if (selector) {
+<a name="line167"></a>    this.setSelectorsFromString(selector);
+<a name="line168"></a>    this.declarationText = declarations;
+<a name="line169"></a>    return true;
+<a name="line170"></a>  }
+<a name="line171"></a>  return false;
+<a name="line172"></a>};
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * Parses a selectors string (which may contain multiple comma-delimited
+<a name="line177"></a> * selectors) and loads the results into this.selectors.
+<a name="line178"></a> * @param {string} selectorsString String containing selectors.
+<a name="line179"></a> */
+<a name="line180"></a>goog.cssom.iframe.style.CssRuleSet_.prototype.setSelectorsFromString =
+<a name="line181"></a>    function(selectorsString) {
+<a name="line182"></a>  this.selectors = [];
+<a name="line183"></a>  var selectors = selectorsString.split(/,\s*/gm);
+<a name="line184"></a>  for (var i = 0; i &lt; selectors.length; i++) {
+<a name="line185"></a>    var selector = selectors[i];
+<a name="line186"></a>    if (selector.length &gt; 0) {
+<a name="line187"></a>      this.selectors.push(new goog.cssom.iframe.style.CssSelector_(selector));
+<a name="line188"></a>    }
+<a name="line189"></a>  }
+<a name="line190"></a>};
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Make a copy of this ruleset.
+<a name="line195"></a> * @return {!goog.cssom.iframe.style.CssRuleSet_} A new CssRuleSet containing
+<a name="line196"></a> *     the same data as this one.
+<a name="line197"></a> */
+<a name="line198"></a>goog.cssom.iframe.style.CssRuleSet_.prototype.clone = function() {
+<a name="line199"></a>  var newRuleSet = new goog.cssom.iframe.style.CssRuleSet_();
+<a name="line200"></a>  newRuleSet.selectors = this.selectors.concat();
+<a name="line201"></a>  newRuleSet.declarationText = this.declarationText;
+<a name="line202"></a>  return newRuleSet;
+<a name="line203"></a>};
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Set the declaration text with properties from a given object.
+<a name="line208"></a> * @param {Object} sourceObject Object whose properties and values should
+<a name="line209"></a> *     be used to generate the declaration text.
+<a name="line210"></a> * @param {boolean=} opt_important Whether !important should be added to each
+<a name="line211"></a> *     declaration.
+<a name="line212"></a> */
+<a name="line213"></a>goog.cssom.iframe.style.CssRuleSet_.prototype.setDeclarationTextFromObject =
+<a name="line214"></a>    function(sourceObject, opt_important) {
+<a name="line215"></a>  var stringParts = [];
+<a name="line216"></a>  // TODO(user): for ... in is costly in IE6 (extra garbage collection).
+<a name="line217"></a>  for (var prop in sourceObject) {
+<a name="line218"></a>    var value = sourceObject[prop];
+<a name="line219"></a>    if (value) {
+<a name="line220"></a>      stringParts.push(prop,
+<a name="line221"></a>                       &#39;:&#39;,
+<a name="line222"></a>                       value, (opt_important ? &#39; !important&#39; : &#39;&#39;),
+<a name="line223"></a>                       &#39;;&#39;);
+<a name="line224"></a>    }
+<a name="line225"></a>  }
+<a name="line226"></a>  this.declarationText = stringParts.join(&#39;&#39;);
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Serializes this CssRuleSet_ into an array as a series of strings.
+<a name="line232"></a> * The array can then be join()-ed to get a string representation
+<a name="line233"></a> * of this ruleset.
+<a name="line234"></a> * @param {Array.&lt;string&gt;} array The array to which to append strings.
+<a name="line235"></a> */
+<a name="line236"></a>goog.cssom.iframe.style.CssRuleSet_.prototype.writeToArray = function(array) {
+<a name="line237"></a>  var selectorCount = this.selectors.length;
+<a name="line238"></a>  var matchesAnchorTag = false;
+<a name="line239"></a>  for (var i = 0; i &lt; selectorCount; i++) {
+<a name="line240"></a>    var selectorParts = this.selectors[i].parts;
+<a name="line241"></a>    var partCount = selectorParts.length;
+<a name="line242"></a>    for (var j = 0; j &lt; partCount; j++) {
+<a name="line243"></a>      array.push(selectorParts[j].inputString_,
+<a name="line244"></a>                 goog.cssom.iframe.style.SELECTOR_PART_DELIMITER_);
+<a name="line245"></a>    }
+<a name="line246"></a>    if (i &lt; (selectorCount - 1)) {
+<a name="line247"></a>      array.push(goog.cssom.iframe.style.SELECTOR_DELIMITER_);
+<a name="line248"></a>    }
+<a name="line249"></a>    if (goog.userAgent.GECKO &amp;&amp;
+<a name="line250"></a>        !goog.userAgent.isVersionOrHigher(&#39;1.9a&#39;)) {
+<a name="line251"></a>      // In Gecko pre-1.9 (Firefox 2 and lower) we need to add !important
+<a name="line252"></a>      // to rulesets that match &quot;A&quot; tags, otherwise Gecko&#39;s built-in
+<a name="line253"></a>      // stylesheet will take precedence when designMode is on.
+<a name="line254"></a>      matchesAnchorTag = matchesAnchorTag ||
+<a name="line255"></a>          goog.cssom.iframe.style.selectorPartAnchorRegex_.test(
+<a name="line256"></a>              selectorParts[partCount - 1].inputString_);
+<a name="line257"></a>    }
+<a name="line258"></a>  }
+<a name="line259"></a>  var declarationText = this.declarationText;
+<a name="line260"></a>  if (matchesAnchorTag) {
+<a name="line261"></a>    declarationText = goog.cssom.iframe.style.makeColorRuleImportant_(
+<a name="line262"></a>        declarationText);
+<a name="line263"></a>  }
+<a name="line264"></a>  array.push(goog.cssom.iframe.style.DECLARATION_START_DELIMITER_,
+<a name="line265"></a>             declarationText,
+<a name="line266"></a>             goog.cssom.iframe.style.DECLARATION_END_DELIMITER_);
+<a name="line267"></a>};
+<a name="line268"></a>
+<a name="line269"></a>
+<a name="line270"></a>/**
+<a name="line271"></a> * Regexp that matches &quot;color: value;&quot;.
+<a name="line272"></a> * @type {RegExp}
+<a name="line273"></a> * @private
+<a name="line274"></a> */
+<a name="line275"></a>goog.cssom.iframe.style.colorImportantReplaceRegex_ =
+<a name="line276"></a>    /(^|;|{)\s*color:([^;]+);/g;
+<a name="line277"></a>
+<a name="line278"></a>
+<a name="line279"></a>/**
+<a name="line280"></a> * Adds !important to a css color: rule
+<a name="line281"></a> * @param {string} cssText Text of the CSS rule(s) to modify.
+<a name="line282"></a> * @return {string} Text with !important added to the color: rule if found.
+<a name="line283"></a> * @private
+<a name="line284"></a> */
+<a name="line285"></a>goog.cssom.iframe.style.makeColorRuleImportant_ = function(cssText) {
+<a name="line286"></a>  // Replace to insert a &quot;! important&quot; string.
+<a name="line287"></a>  return cssText.replace(goog.cssom.iframe.style.colorImportantReplaceRegex_,
+<a name="line288"></a>                         &#39;$1 color: $2 ! important; &#39;);
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>
+<a name="line293"></a>/**
+<a name="line294"></a> * Represents a single CSS selector, as described in
+<a name="line295"></a> * http://www.w3.org/TR/REC-CSS2/selector.html
+<a name="line296"></a> * Currently UNSUPPORTED are the following selector features:
+<a name="line297"></a> * &lt;ul&gt;
+<a name="line298"></a> *   &lt;li&gt;pseudo-classes (:hover)
+<a name="line299"></a> *   &lt;li&gt;child selectors (div &gt; h1)
+<a name="line300"></a> *   &lt;li&gt;adjacent sibling selectors (div + h1)
+<a name="line301"></a> *   &lt;li&gt;attribute selectors (input[type=submit])
+<a name="line302"></a> * &lt;/ul&gt;
+<a name="line303"></a> * @param {string=} opt_selectorString String containing selectors to parse.
+<a name="line304"></a> * @constructor
+<a name="line305"></a> * @private
+<a name="line306"></a> */
+<a name="line307"></a>goog.cssom.iframe.style.CssSelector_ = function(opt_selectorString) {
+<a name="line308"></a>  /**
+<a name="line309"></a>   * Array of CssSelectorPart objects representing the parts of this selector
+<a name="line310"></a>   * Example: for the selector &#39;body h1&#39; the parts would be [body, h1].
+<a name="line311"></a>   * @type {Array.&lt;goog.cssom.iframe.style.CssSelectorPart_&gt;}
+<a name="line312"></a>   * @private
+<a name="line313"></a>   */
+<a name="line314"></a>  this.parts_ = [];
+<a name="line315"></a>
+<a name="line316"></a>  /**
+<a name="line317"></a>   * Object to track ancestry matches to speed up repeatedly testing this
+<a name="line318"></a>   * CssSelector against the same NodeAncestry object.
+<a name="line319"></a>   * @type {Object}
+<a name="line320"></a>   * @private
+<a name="line321"></a>   */
+<a name="line322"></a>  this.ancestryMatchCache_ = {};
+<a name="line323"></a>  if (opt_selectorString) {
+<a name="line324"></a>    this.setPartsFromString_(opt_selectorString);
+<a name="line325"></a>  }
+<a name="line326"></a>};
+<a name="line327"></a>
+<a name="line328"></a>
+<a name="line329"></a>/**
+<a name="line330"></a> * Parses a selector string into individual parts.
+<a name="line331"></a> * @param {string} selectorString A string containing a CSS selector.
+<a name="line332"></a> * @private
+<a name="line333"></a> */
+<a name="line334"></a>goog.cssom.iframe.style.CssSelector_.prototype.setPartsFromString_ =
+<a name="line335"></a>    function(selectorString) {
+<a name="line336"></a>  var parts = [];
+<a name="line337"></a>  var selectorPartStrings = selectorString.split(/\s+/gm);
+<a name="line338"></a>  for (var i = 0; i &lt; selectorPartStrings.length; i++) {
+<a name="line339"></a>    if (!selectorPartStrings[i]) {
+<a name="line340"></a>      continue; // Skip empty strings.
+<a name="line341"></a>    }
+<a name="line342"></a>    var part = new goog.cssom.iframe.style.CssSelectorPart_(
+<a name="line343"></a>        selectorPartStrings[i]);
+<a name="line344"></a>    parts.push(part);
+<a name="line345"></a>  }
+<a name="line346"></a>  this.parts = parts;
+<a name="line347"></a>};
+<a name="line348"></a>
+<a name="line349"></a>
+<a name="line350"></a>/**
+<a name="line351"></a> * Tests to see what part of a DOM element hierarchy would be matched by
+<a name="line352"></a> * this selector, and returns the indexes of the matching element and matching
+<a name="line353"></a> * selector part.
+<a name="line354"></a> * &lt;p&gt;
+<a name="line355"></a> * For example, given this hierarchy:
+<a name="line356"></a> *   document &gt; html &gt; body &gt; div.content &gt; div.sidebar &gt; p
+<a name="line357"></a> * and this CSS selector:
+<a name="line358"></a> *   body div.sidebar h1
+<a name="line359"></a> * This would return {elementIndex: 4, selectorPartIndex: 1},
+<a name="line360"></a> * indicating that the element at index 4 matched
+<a name="line361"></a> * the css selector at index 1.
+<a name="line362"></a> * &lt;/p&gt;
+<a name="line363"></a> * @param {goog.cssom.iframe.style.NodeAncestry_} elementAncestry Object
+<a name="line364"></a> *     representing an element and its ancestors.
+<a name="line365"></a> * @return {Object} Object with the properties elementIndex and
+<a name="line366"></a> *     selectorPartIndex, or null if there was no match.
+<a name="line367"></a> */
+<a name="line368"></a>goog.cssom.iframe.style.CssSelector_.prototype.matchElementAncestry =
+<a name="line369"></a>    function(elementAncestry) {
+<a name="line370"></a>
+<a name="line371"></a>  var ancestryUid = elementAncestry.uid;
+<a name="line372"></a>  if (this.ancestryMatchCache_[ancestryUid]) {
+<a name="line373"></a>    return this.ancestryMatchCache_[ancestryUid];
+<a name="line374"></a>  }
+<a name="line375"></a>
+<a name="line376"></a>  // Walk through the selector parts and see how far down the element hierarchy
+<a name="line377"></a>  // we can go while matching the selector parts.
+<a name="line378"></a>  var elementIndex = 0;
+<a name="line379"></a>  var match = null;
+<a name="line380"></a>  var selectorPart = null;
+<a name="line381"></a>  var lastSelectorPart = null;
+<a name="line382"></a>  var ancestorNodes = elementAncestry.nodes;
+<a name="line383"></a>  var ancestorNodeCount = ancestorNodes.length;
+<a name="line384"></a>
+<a name="line385"></a>  for (var i = 0; i &lt;= this.parts.length; i++) {
+<a name="line386"></a>    selectorPart = this.parts[i];
+<a name="line387"></a>    while (elementIndex &lt; ancestorNodeCount) {
+<a name="line388"></a>      var currentElementInfo = ancestorNodes[elementIndex];
+<a name="line389"></a>      if (selectorPart &amp;&amp;
+<a name="line390"></a>          selectorPart.testElement(currentElementInfo)) {
+<a name="line391"></a>        match = {
+<a name="line392"></a>          elementIndex: elementIndex,
+<a name="line393"></a>          selectorPartIndex: i
+<a name="line394"></a>        };
+<a name="line395"></a>        elementIndex++;
+<a name="line396"></a>        break;
+<a name="line397"></a>      } else if (lastSelectorPart &amp;&amp;
+<a name="line398"></a>                 lastSelectorPart.testElement(currentElementInfo)) {
+<a name="line399"></a>        match = {
+<a name="line400"></a>          elementIndex: elementIndex,
+<a name="line401"></a>          selectorPartIndex: i - 1
+<a name="line402"></a>        };
+<a name="line403"></a>      }
+<a name="line404"></a>      elementIndex++;
+<a name="line405"></a>    }
+<a name="line406"></a>    lastSelectorPart = selectorPart;
+<a name="line407"></a>  }
+<a name="line408"></a>  this.ancestryMatchCache_[ancestryUid] = match;
+<a name="line409"></a>  return match;
+<a name="line410"></a>};
+<a name="line411"></a>
+<a name="line412"></a>
+<a name="line413"></a>
+<a name="line414"></a>/**
+<a name="line415"></a> * Represents one part of a CSS Selector. For example in the selector
+<a name="line416"></a> * &#39;body #foo .bar&#39;, body, #foo, and .bar would be considered selector parts.
+<a name="line417"></a> * In the official CSS spec these are called &quot;simple selectors&quot;.
+<a name="line418"></a> * @param {string} selectorPartString A string containing the selector part
+<a name="line419"></a> *     in css format.
+<a name="line420"></a> * @constructor
+<a name="line421"></a> * @private
+<a name="line422"></a> */
+<a name="line423"></a>goog.cssom.iframe.style.CssSelectorPart_ = function(selectorPartString) {
+<a name="line424"></a>  // Only one CssSelectorPart instance should exist for a given string.
+<a name="line425"></a>  var cacheEntry = goog.cssom.iframe.style.CssSelectorPart_.instances_[
+<a name="line426"></a>      selectorPartString];
+<a name="line427"></a>  if (cacheEntry) {
+<a name="line428"></a>    return cacheEntry;
+<a name="line429"></a>  }
+<a name="line430"></a>
+<a name="line431"></a>  // Optimization to avoid the more-expensive lookahead.
+<a name="line432"></a>  var identifiers;
+<a name="line433"></a>  if (selectorPartString.match(/[#\.]/)) {
+<a name="line434"></a>    // Lookahead regexp, won&#39;t work on IE 5.0.
+<a name="line435"></a>    identifiers = selectorPartString.split(/(?=[#\.])/);
+<a name="line436"></a>  } else {
+<a name="line437"></a>    identifiers = [selectorPartString];
+<a name="line438"></a>  }
+<a name="line439"></a>  var properties = {};
+<a name="line440"></a>  for (var i = 0; i &lt; identifiers.length; i++) {
+<a name="line441"></a>    var identifier = identifiers[i];
+<a name="line442"></a>    if (identifier.charAt(0) == &#39;.&#39;) {
+<a name="line443"></a>      properties.className = identifier.substring(1, identifier.length);
+<a name="line444"></a>    } else if (identifier.charAt(0) == &#39;#&#39;) {
+<a name="line445"></a>      properties.id = identifier.substring(1, identifier.length);
+<a name="line446"></a>    } else {
+<a name="line447"></a>      properties.tagName = identifier.toUpperCase();
+<a name="line448"></a>    }
+<a name="line449"></a>  }
+<a name="line450"></a>  this.inputString_ = selectorPartString;
+<a name="line451"></a>  this.matchProperties_ = properties;
+<a name="line452"></a>  this.testedElements_ = {};
+<a name="line453"></a>  goog.cssom.iframe.style.CssSelectorPart_.instances_[selectorPartString] =
+<a name="line454"></a>      this;
+<a name="line455"></a>};
+<a name="line456"></a>
+<a name="line457"></a>
+<a name="line458"></a>/**
+<a name="line459"></a> * Cache of existing CssSelectorPart_ instances.
+<a name="line460"></a> * @type {Object}
+<a name="line461"></a> * @private
+<a name="line462"></a> */
+<a name="line463"></a>goog.cssom.iframe.style.CssSelectorPart_.instances_ = {};
+<a name="line464"></a>
+<a name="line465"></a>
+<a name="line466"></a>/**
+<a name="line467"></a> * Test whether an element matches this selector part, considered in isolation.
+<a name="line468"></a> * @param {Object} elementInfo Element properties to test.
+<a name="line469"></a> * @return {boolean} Whether the element matched.
+<a name="line470"></a> */
+<a name="line471"></a>goog.cssom.iframe.style.CssSelectorPart_.prototype.testElement =
+<a name="line472"></a>    function(elementInfo) {
+<a name="line473"></a>
+<a name="line474"></a>  var elementUid = elementInfo.uid;
+<a name="line475"></a>  var cachedMatch = this.testedElements_[elementUid];
+<a name="line476"></a>  if (typeof cachedMatch != &#39;undefined&#39;) {
+<a name="line477"></a>    return cachedMatch;
+<a name="line478"></a>  }
+<a name="line479"></a>
+<a name="line480"></a>  var matchProperties = this.matchProperties_;
+<a name="line481"></a>  var testTag = matchProperties.tagName;
+<a name="line482"></a>  var testClass = matchProperties.className;
+<a name="line483"></a>  var testId = matchProperties.id;
+<a name="line484"></a>
+<a name="line485"></a>  var matched = true;
+<a name="line486"></a>  if (testTag &amp;&amp; testTag != &#39;*&#39; &amp;&amp; testTag != elementInfo.nodeName) {
+<a name="line487"></a>    matched = false;
+<a name="line488"></a>  } else if (testId &amp;&amp; testId != elementInfo.id) {
+<a name="line489"></a>    matched = false;
+<a name="line490"></a>  } else if (testClass &amp;&amp;
+<a name="line491"></a>             !elementInfo.classNames[testClass]) {
+<a name="line492"></a>    matched = false;
+<a name="line493"></a>  }
+<a name="line494"></a>
+<a name="line495"></a>  this.testedElements_[elementUid] = matched;
+<a name="line496"></a>  return matched;
+<a name="line497"></a>};
+<a name="line498"></a>
+<a name="line499"></a>
+<a name="line500"></a>
+<a name="line501"></a>/**
+<a name="line502"></a> * Represents an element and all its parent/ancestor nodes.
+<a name="line503"></a> * This class exists as an optimization so we run tests on an element
+<a name="line504"></a> * hierarchy multiple times without walking the dom each time.
+<a name="line505"></a> * @param {Element} el The DOM element whose ancestry should be stored.
+<a name="line506"></a> * @constructor
+<a name="line507"></a> * @private
+<a name="line508"></a> */
+<a name="line509"></a>goog.cssom.iframe.style.NodeAncestry_ = function(el) {
+<a name="line510"></a>  var node = el;
+<a name="line511"></a>  var nodeUid = goog.getUid(node);
+<a name="line512"></a>
+<a name="line513"></a>  // Return an existing object from the cache if one exits for this node.
+<a name="line514"></a>  var ancestry = goog.cssom.iframe.style.NodeAncestry_.instances_[nodeUid];
+<a name="line515"></a>  if (ancestry) {
+<a name="line516"></a>    return ancestry;
+<a name="line517"></a>  }
+<a name="line518"></a>
+<a name="line519"></a>  var nodes = [];
+<a name="line520"></a>  do {
+<a name="line521"></a>    var nodeInfo = {
+<a name="line522"></a>      id: node.id,
+<a name="line523"></a>      nodeName: node.nodeName
+<a name="line524"></a>    };
+<a name="line525"></a>    nodeInfo.uid = goog.getUid(nodeInfo);
+<a name="line526"></a>    var className = node.className;
+<a name="line527"></a>    var classNamesLookup = {};
+<a name="line528"></a>    if (className) {
+<a name="line529"></a>      var classNames = goog.dom.classlist.get(goog.asserts.assertElement(node));
+<a name="line530"></a>      for (var i = 0; i &lt; classNames.length; i++) {
+<a name="line531"></a>        classNamesLookup[classNames[i]] = 1;
+<a name="line532"></a>      }
+<a name="line533"></a>    }
+<a name="line534"></a>    nodeInfo.classNames = classNamesLookup;
+<a name="line535"></a>    nodes.unshift(nodeInfo);
+<a name="line536"></a>  } while (node = node.parentNode);
+<a name="line537"></a>
+<a name="line538"></a>  /**
+<a name="line539"></a>   * Array of nodes in order of hierarchy from the top of the document
+<a name="line540"></a>   * to the node passed to the constructor
+<a name="line541"></a>   * @type {Array.&lt;Node&gt;}
+<a name="line542"></a>   */
+<a name="line543"></a>  this.nodes = nodes;
+<a name="line544"></a>
+<a name="line545"></a>  this.uid = goog.getUid(this);
+<a name="line546"></a>  goog.cssom.iframe.style.NodeAncestry_.instances_[nodeUid] = this;
+<a name="line547"></a>};
+<a name="line548"></a>
+<a name="line549"></a>
+<a name="line550"></a>/**
+<a name="line551"></a> * Object for caching existing NodeAncestry instances.
+<a name="line552"></a> * @private
+<a name="line553"></a> */
+<a name="line554"></a>goog.cssom.iframe.style.NodeAncestry_.instances_ = {};
+<a name="line555"></a>
+<a name="line556"></a>
+<a name="line557"></a>/**
+<a name="line558"></a> * Throw away all cached dom information. Call this if you&#39;ve modified
+<a name="line559"></a> * the structure or class/id attributes of your document and you want
+<a name="line560"></a> * to recalculate the currently applied CSS rules.
+<a name="line561"></a> */
+<a name="line562"></a>goog.cssom.iframe.style.resetDomCache = function() {
+<a name="line563"></a>  goog.cssom.iframe.style.NodeAncestry_.instances_ = {};
+<a name="line564"></a>};
+<a name="line565"></a>
+<a name="line566"></a>
+<a name="line567"></a>/**
+<a name="line568"></a> * Inspects a document and returns all active rule sets
+<a name="line569"></a> * @param {Document} doc The document from which to read CSS rules.
+<a name="line570"></a> * @return {!Array.&lt;goog.cssom.iframe.style.CssRuleSet_&gt;} An array of CssRuleSet
+<a name="line571"></a> *     objects representing all the active rule sets in the document.
+<a name="line572"></a> * @private
+<a name="line573"></a> */
+<a name="line574"></a>goog.cssom.iframe.style.getRuleSetsFromDocument_ = function(doc) {
+<a name="line575"></a>  var ruleSets = [];
+<a name="line576"></a>  var styleSheets = goog.cssom.getAllCssStyleSheets(doc.styleSheets);
+<a name="line577"></a>  for (var i = 0, styleSheet; styleSheet = styleSheets[i]; i++) {
+<a name="line578"></a>    var domRuleSets = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
+<a name="line579"></a>    if (domRuleSets &amp;&amp; domRuleSets.length) {
+<a name="line580"></a>      for (var j = 0, n = domRuleSets.length; j &lt; n; j++) {
+<a name="line581"></a>        var ruleSet = new goog.cssom.iframe.style.CssRuleSet_();
+<a name="line582"></a>        if (ruleSet.initializeFromCssRule(domRuleSets[j])) {
+<a name="line583"></a>          ruleSets.push(ruleSet);
+<a name="line584"></a>        }
+<a name="line585"></a>      }
+<a name="line586"></a>    }
+<a name="line587"></a>  }
+<a name="line588"></a>  return ruleSets;
+<a name="line589"></a>};
+<a name="line590"></a>
+<a name="line591"></a>
+<a name="line592"></a>/**
+<a name="line593"></a> * Static object to cache rulesets read from documents. Inspecting all
+<a name="line594"></a> * active css rules is an expensive operation, so its best to only do
+<a name="line595"></a> * it once and then cache the results.
+<a name="line596"></a> * @type {Object}
+<a name="line597"></a> * @private
+<a name="line598"></a> */
+<a name="line599"></a>goog.cssom.iframe.style.ruleSetCache_ = {};
+<a name="line600"></a>
+<a name="line601"></a>
+<a name="line602"></a>/**
+<a name="line603"></a> * Cache of ruleset objects keyed by document unique ID.
+<a name="line604"></a> * @type {Object}
+<a name="line605"></a> * @private
+<a name="line606"></a> */
+<a name="line607"></a>goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_ = {};
+<a name="line608"></a>
+<a name="line609"></a>
+<a name="line610"></a>/**
+<a name="line611"></a> * Loads ruleset definitions from a document. If the cache already
+<a name="line612"></a> * has rulesets for this document the cached version will be replaced.
+<a name="line613"></a> * @param {Document} doc The document from which to load rulesets.
+<a name="line614"></a> */
+<a name="line615"></a>goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument = function(doc) {
+<a name="line616"></a>  var docUid = goog.getUid(doc);
+<a name="line617"></a>  goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_[docUid] =
+<a name="line618"></a>      goog.cssom.iframe.style.getRuleSetsFromDocument_(doc);
+<a name="line619"></a>};
+<a name="line620"></a>
+<a name="line621"></a>
+<a name="line622"></a>/**
+<a name="line623"></a> * Retrieves the array of css rulesets for this document. A cached
+<a name="line624"></a> * version will be used when possible.
+<a name="line625"></a> * @param {Document} doc The document for which to get rulesets.
+<a name="line626"></a> * @return {!Array.&lt;goog.cssom.iframe.style.CssRuleSet_&gt;} An array of CssRuleSet
+<a name="line627"></a> *     objects representing the css rule sets in the supplied document.
+<a name="line628"></a> */
+<a name="line629"></a>goog.cssom.iframe.style.ruleSetCache_.getRuleSetsForDocument = function(doc) {
+<a name="line630"></a>  var docUid = goog.getUid(doc);
+<a name="line631"></a>  var cache = goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_;
+<a name="line632"></a>  if (!cache[docUid]) {
+<a name="line633"></a>    goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument(doc);
+<a name="line634"></a>  }
+<a name="line635"></a>  // Build a cloned copy of rulesets array, so if object in the returned array
+<a name="line636"></a>  // get modified future calls will still return the original unmodified
+<a name="line637"></a>  // versions.
+<a name="line638"></a>  var ruleSets = cache[docUid];
+<a name="line639"></a>  var ruleSetsCopy = [];
+<a name="line640"></a>  for (var i = 0; i &lt; ruleSets.length; i++) {
+<a name="line641"></a>    ruleSetsCopy.push(ruleSets[i].clone());
+<a name="line642"></a>  }
+<a name="line643"></a>  return ruleSetsCopy;
+<a name="line644"></a>};
+<a name="line645"></a>
+<a name="line646"></a>
+<a name="line647"></a>/**
+<a name="line648"></a> * Array of CSS properties that are inherited by child nodes, according to
+<a name="line649"></a> * the CSS 2.1 spec. Properties that may be set to relative values, such
+<a name="line650"></a> * as font-size, and line-height, are omitted.
+<a name="line651"></a> * @type {Array.&lt;string&gt;}
+<a name="line652"></a> * @private
+<a name="line653"></a> */
+<a name="line654"></a>goog.cssom.iframe.style.inheritedProperties_ = [
+<a name="line655"></a>  &#39;color&#39;,
+<a name="line656"></a>  &#39;visibility&#39;,
+<a name="line657"></a>  &#39;quotes&#39;,
+<a name="line658"></a>  &#39;list-style-type&#39;,
+<a name="line659"></a>  &#39;list-style-image&#39;,
+<a name="line660"></a>  &#39;list-style-position&#39;,
+<a name="line661"></a>  &#39;list-style&#39;,
+<a name="line662"></a>  &#39;page-break-inside&#39;,
+<a name="line663"></a>  &#39;orphans&#39;,
+<a name="line664"></a>  &#39;widows&#39;,
+<a name="line665"></a>  &#39;font-family&#39;,
+<a name="line666"></a>  &#39;font-style&#39;,
+<a name="line667"></a>  &#39;font-variant&#39;,
+<a name="line668"></a>  &#39;font-weight&#39;,
+<a name="line669"></a>  &#39;text-indent&#39;,
+<a name="line670"></a>  &#39;text-align&#39;,
+<a name="line671"></a>  &#39;text-transform&#39;,
+<a name="line672"></a>  &#39;white-space&#39;,
+<a name="line673"></a>  &#39;caption-side&#39;,
+<a name="line674"></a>  &#39;border-collapse&#39;,
+<a name="line675"></a>  &#39;border-spacing&#39;,
+<a name="line676"></a>  &#39;empty-cells&#39;,
+<a name="line677"></a>  &#39;cursor&#39;
+<a name="line678"></a>];
+<a name="line679"></a>
+<a name="line680"></a>
+<a name="line681"></a>/**
+<a name="line682"></a> * Array of CSS 2.1 properties that directly effect text nodes.
+<a name="line683"></a> * @type {Array.&lt;string&gt;}
+<a name="line684"></a> * @private
+<a name="line685"></a> */
+<a name="line686"></a>goog.cssom.iframe.style.textProperties_ = [
+<a name="line687"></a>  &#39;font-family&#39;,
+<a name="line688"></a>  &#39;font-size&#39;,
+<a name="line689"></a>  &#39;font-weight&#39;,
+<a name="line690"></a>  &#39;font-variant&#39;,
+<a name="line691"></a>  &#39;font-style&#39;,
+<a name="line692"></a>  &#39;color&#39;,
+<a name="line693"></a>  &#39;text-align&#39;,
+<a name="line694"></a>  &#39;text-decoration&#39;,
+<a name="line695"></a>  &#39;text-indent&#39;,
+<a name="line696"></a>  &#39;text-transform&#39;,
+<a name="line697"></a>  &#39;letter-spacing&#39;,
+<a name="line698"></a>  &#39;white-space&#39;,
+<a name="line699"></a>  &#39;word-spacing&#39;
+<a name="line700"></a>];
+<a name="line701"></a>
+<a name="line702"></a>
+<a name="line703"></a>/**
+<a name="line704"></a> * Reads the current css rules from element&#39;s document, and returns them
+<a name="line705"></a> * rewriting selectors so that any rules that formerly applied to element will
+<a name="line706"></a> * be applied to doc.body. This makes it possible to replace a block in a page
+<a name="line707"></a> * with an iframe and preserve the css styling of the contents.
+<a name="line708"></a> *
+<a name="line709"></a> * @param {Element} element The element for which context should be calculated.
+<a name="line710"></a> * @param {boolean=} opt_forceRuleSetCacheUpdate Flag to force the internal
+<a name="line711"></a> *     cache of rulesets to refresh itself before we read the same.
+<a name="line712"></a> * @param {boolean=} opt_copyBackgroundContext Flag indicating that if the
+<a name="line713"></a> *     {@code element} has a transparent background, background rules
+<a name="line714"></a> *     from the nearest ancestor element(s) that have background-color
+<a name="line715"></a> *     and/or background-image set should be copied.
+<a name="line716"></a> * @return {string} String containing all CSS rules present in the original
+<a name="line717"></a> *     document, with modified selectors.
+<a name="line718"></a> * @see goog.cssom.iframe.style.getBackgroundContext.
+<a name="line719"></a> */
+<a name="line720"></a>goog.cssom.iframe.style.getElementContext = function(
+<a name="line721"></a>    element,
+<a name="line722"></a>    opt_forceRuleSetCacheUpdate,
+<a name="line723"></a>    opt_copyBackgroundContext) {
+<a name="line724"></a>  var sourceDocument = element.ownerDocument;
+<a name="line725"></a>  if (opt_forceRuleSetCacheUpdate) {
+<a name="line726"></a>    goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument(
+<a name="line727"></a>        sourceDocument);
+<a name="line728"></a>  }
+<a name="line729"></a>  var ruleSets = goog.cssom.iframe.style.ruleSetCache_.
+<a name="line730"></a>      getRuleSetsForDocument(sourceDocument);
+<a name="line731"></a>
+<a name="line732"></a>  var elementAncestry = new goog.cssom.iframe.style.NodeAncestry_(element);
+<a name="line733"></a>  var bodySelectorPart = new goog.cssom.iframe.style.CssSelectorPart_(&#39;body&#39;);
+<a name="line734"></a>
+<a name="line735"></a>  for (var i = 0; i &lt; ruleSets.length; i++) {
+<a name="line736"></a>    var ruleSet = ruleSets[i];
+<a name="line737"></a>    var selectors = ruleSet.selectors;
+<a name="line738"></a>    // Cache selectors.length since we may be adding rules in the loop.
+<a name="line739"></a>    var ruleCount = selectors.length;
+<a name="line740"></a>    for (var j = 0; j &lt; ruleCount; j++) {
+<a name="line741"></a>      var selector = selectors[j];
+<a name="line742"></a>      // Test whether all or part of this selector would match
+<a name="line743"></a>      // this element or one of its ancestors
+<a name="line744"></a>      var match = selector.matchElementAncestry(elementAncestry);
+<a name="line745"></a>      if (match) {
+<a name="line746"></a>        var ruleIndex = match.selectorPartIndex;
+<a name="line747"></a>        var selectorParts = selector.parts;
+<a name="line748"></a>        var lastSelectorPartIndex = selectorParts.length - 1;
+<a name="line749"></a>        var selectorCopy;
+<a name="line750"></a>        if (match.elementIndex == elementAncestry.nodes.length - 1 ||
+<a name="line751"></a>            ruleIndex &lt; lastSelectorPartIndex) {
+<a name="line752"></a>          // Either the first part(s) of the selector matched this element,
+<a name="line753"></a>          // or the first part(s) of the selector matched a parent element
+<a name="line754"></a>          // and there are more parts of the selector that could target
+<a name="line755"></a>          // children of this element.
+<a name="line756"></a>          // So we inject a new selector, replacing the part that matched this
+<a name="line757"></a>          // element with &#39;body&#39; so it will continue to match.
+<a name="line758"></a>          var selectorPartsCopy = selectorParts.concat();
+<a name="line759"></a>          selectorPartsCopy.splice(0,
+<a name="line760"></a>                                   ruleIndex + 1,
+<a name="line761"></a>                                   bodySelectorPart);
+<a name="line762"></a>          selectorCopy = new goog.cssom.iframe.style.CssSelector_();
+<a name="line763"></a>          selectorCopy.parts = selectorPartsCopy;
+<a name="line764"></a>          selectors.push(selectorCopy);
+<a name="line765"></a>        } else if (ruleIndex &gt; 0 &amp;&amp; ruleIndex == lastSelectorPartIndex) {
+<a name="line766"></a>          // The rule didn&#39;t match this element, but the entire rule did
+<a name="line767"></a>          // match an ancestor element. In this case we want to copy
+<a name="line768"></a>          // just the last part of the rule, to give it a chance to be applied
+<a name="line769"></a>          // to additional matching elements inside this element.
+<a name="line770"></a>          // Example DOM structure: body &gt; div.funky &gt; ul &gt; li#editme
+<a name="line771"></a>          // Example CSS selector: .funky ul
+<a name="line772"></a>          // New CSS selector: body ul
+<a name="line773"></a>          selectorCopy = new goog.cssom.iframe.style.CssSelector_();
+<a name="line774"></a>          selectorCopy.parts = [
+<a name="line775"></a>            bodySelectorPart,
+<a name="line776"></a>            selectorParts[lastSelectorPartIndex]
+<a name="line777"></a>          ];
+<a name="line778"></a>          selectors.push(selectorCopy);
+<a name="line779"></a>        }
+<a name="line780"></a>      }
+<a name="line781"></a>    }
+<a name="line782"></a>  }
+<a name="line783"></a>
+<a name="line784"></a>  // Insert a new ruleset, setting the current inheritable styles of this
+<a name="line785"></a>  // element as the defaults for everything under in the frame.
+<a name="line786"></a>  var defaultPropertiesRuleSet = new goog.cssom.iframe.style.CssRuleSet_();
+<a name="line787"></a>  var declarationParts = [];
+<a name="line788"></a>  var computedStyle = goog.cssom.iframe.style.getComputedStyleObject_(element);
+<a name="line789"></a>
+<a name="line790"></a>  // Copy inheritable styles so they are applied to everything under HTML.
+<a name="line791"></a>  var htmlSelector = new goog.cssom.iframe.style.CssSelector_();
+<a name="line792"></a>  htmlSelector.parts = [new goog.cssom.iframe.style.CssSelectorPart_(&#39;html&#39;)];
+<a name="line793"></a>  defaultPropertiesRuleSet.selectors = [htmlSelector];
+<a name="line794"></a>  var defaultProperties = {};
+<a name="line795"></a>  for (var i = 0, prop;
+<a name="line796"></a>       prop = goog.cssom.iframe.style.inheritedProperties_[i];
+<a name="line797"></a>       i++) {
+<a name="line798"></a>    defaultProperties[prop] = computedStyle[goog.string.toCamelCase(prop)];
+<a name="line799"></a>  }
+<a name="line800"></a>  defaultPropertiesRuleSet.setDeclarationTextFromObject(defaultProperties);
+<a name="line801"></a>  ruleSets.push(defaultPropertiesRuleSet);
+<a name="line802"></a>
+<a name="line803"></a>  var bodyRuleSet = new goog.cssom.iframe.style.CssRuleSet_();
+<a name="line804"></a>  var bodySelector = new goog.cssom.iframe.style.CssSelector_();
+<a name="line805"></a>  bodySelector.parts = [new goog.cssom.iframe.style.CssSelectorPart_(&#39;body&#39;)];
+<a name="line806"></a>  // Core set of sane property values for BODY, to prevent copied
+<a name="line807"></a>  // styles from completely breaking the display.
+<a name="line808"></a>  var bodyProperties = {
+<a name="line809"></a>    position: &#39;relative&#39;,
+<a name="line810"></a>    top: &#39;0&#39;,
+<a name="line811"></a>    left: &#39;0&#39;,
+<a name="line812"></a>    right: &#39;auto&#39;, // Override any existing right value so &#39;left&#39; works.
+<a name="line813"></a>    display: &#39;block&#39;,
+<a name="line814"></a>    visibility: &#39;visible&#39;
+<a name="line815"></a>  };
+<a name="line816"></a>  // Text formatting property values, to keep text nodes directly under BODY
+<a name="line817"></a>  // looking right.
+<a name="line818"></a>  for (i = 0; prop = goog.cssom.iframe.style.textProperties_[i]; i++) {
+<a name="line819"></a>    bodyProperties[prop] = computedStyle[goog.string.toCamelCase(prop)];
+<a name="line820"></a>  }
+<a name="line821"></a>  if (opt_copyBackgroundContext &amp;&amp;
+<a name="line822"></a>      goog.cssom.iframe.style.isTransparentValue_(
+<a name="line823"></a>          computedStyle[&#39;backgroundColor&#39;])) {
+<a name="line824"></a>    // opt_useAncestorBackgroundRules means that, if the original element
+<a name="line825"></a>    // has a transparent backgorund, background properties rules should be
+<a name="line826"></a>    // added to explicitly make the body have the same background appearance
+<a name="line827"></a>    // as in the original element, even if its positioned somewhere else
+<a name="line828"></a>    // in the DOM.
+<a name="line829"></a>    var bgProperties =
+<a name="line830"></a>        goog.cssom.iframe.style.getBackgroundContext(element);
+<a name="line831"></a>    bodyProperties[&#39;background-color&#39;] = bgProperties[&#39;backgroundColor&#39;];
+<a name="line832"></a>    var elementBgImage = computedStyle[&#39;backgroundImage&#39;];
+<a name="line833"></a>    if (!elementBgImage || elementBgImage == &#39;none&#39;) {
+<a name="line834"></a>      bodyProperties[&#39;background-image&#39;] = bgProperties[&#39;backgroundImage&#39;];
+<a name="line835"></a>      bodyProperties[&#39;background-repeat&#39;] = bgProperties[&#39;backgroundRepeat&#39;];
+<a name="line836"></a>      bodyProperties[&#39;background-position&#39;] =
+<a name="line837"></a>          bgProperties[&#39;backgroundPosition&#39;];
+<a name="line838"></a>    }
+<a name="line839"></a>  }
+<a name="line840"></a>
+<a name="line841"></a>  bodyRuleSet.setDeclarationTextFromObject(bodyProperties, true);
+<a name="line842"></a>  bodyRuleSet.selectors = [bodySelector];
+<a name="line843"></a>  ruleSets.push(bodyRuleSet);
+<a name="line844"></a>
+<a name="line845"></a>  // Write outputTextParts to doc.
+<a name="line846"></a>  var ruleSetStrings = [];
+<a name="line847"></a>  ruleCount = ruleSets.length;
+<a name="line848"></a>  for (i = 0; i &lt; ruleCount; i++) {
+<a name="line849"></a>    ruleSets[i].writeToArray(ruleSetStrings);
+<a name="line850"></a>  }
+<a name="line851"></a>  return ruleSetStrings.join(&#39;&#39;);
+<a name="line852"></a>};
+<a name="line853"></a>
+<a name="line854"></a>
+<a name="line855"></a>/**
+<a name="line856"></a> * Tests whether a value is equivalent to &#39;transparent&#39;.
+<a name="line857"></a> * @param {string} colorValue The value to test.
+<a name="line858"></a> * @return {boolean} Whether the value is transparent.
+<a name="line859"></a> * @private
+<a name="line860"></a> */
+<a name="line861"></a>goog.cssom.iframe.style.isTransparentValue_ = function(colorValue) {
+<a name="line862"></a>  return colorValue == &#39;transparent&#39; || colorValue == &#39;rgba(0, 0, 0, 0)&#39;;
+<a name="line863"></a>};
+<a name="line864"></a>
+<a name="line865"></a>
+<a name="line866"></a>/**
+<a name="line867"></a> * Returns an object containing the set of computedStyle/currentStyle
+<a name="line868"></a> * values for the given element. Note that this should be used with
+<a name="line869"></a> * caution as it ignores the fact that currentStyle and computedStyle
+<a name="line870"></a> * are not the same for certain properties.
+<a name="line871"></a> *
+<a name="line872"></a> * @param {Element} element The element whose computed style to return.
+<a name="line873"></a> * @return {Object} Object containing style properties and values.
+<a name="line874"></a> * @private
+<a name="line875"></a> */
+<a name="line876"></a>goog.cssom.iframe.style.getComputedStyleObject_ = function(element) {
+<a name="line877"></a>  // Return an object containing the element&#39;s computedStyle/currentStyle.
+<a name="line878"></a>  // The resulting object can be re-used to read multiple properties, which
+<a name="line879"></a>  // is faster than calling goog.style.getComputedStyle every time.
+<a name="line880"></a>  return element.currentStyle ||
+<a name="line881"></a>      goog.dom.getOwnerDocument(element).defaultView.getComputedStyle(
+<a name="line882"></a>          element, &#39;&#39;) || {};
+<a name="line883"></a>};
+<a name="line884"></a>
+<a name="line885"></a>
+<a name="line886"></a>/**
+<a name="line887"></a> * RegExp that splits a value like &quot;10px&quot; or &quot;-1em&quot; into parts.
+<a name="line888"></a> * @private
+<a name="line889"></a> * @type {RegExp}
+<a name="line890"></a> */
+<a name="line891"></a>goog.cssom.iframe.style.valueWithUnitsRegEx_ = /^(-?)([0-9]+)([a-z]*|%)/;
+<a name="line892"></a>
+<a name="line893"></a>
+<a name="line894"></a>/**
+<a name="line895"></a> * Given an object containing a set of styles, returns a two-element array
+<a name="line896"></a> * containing the values of background-position-x and background-position-y.
+<a name="line897"></a> * @param {Object} styleObject Object from which to read style properties.
+<a name="line898"></a> * @return {Array.&lt;string&gt;} The background-position values in the order [x, y].
+<a name="line899"></a> * @private
+<a name="line900"></a> */
+<a name="line901"></a>goog.cssom.iframe.style.getBackgroundXYValues_ = function(styleObject) {
+<a name="line902"></a>  // Gecko only has backgroundPosition, containing both values.
+<a name="line903"></a>  // IE has only backgroundPositionX/backgroundPositionY.
+<a name="line904"></a>  // WebKit has both.
+<a name="line905"></a>  if (styleObject[&#39;backgroundPositionY&#39;]) {
+<a name="line906"></a>    return [styleObject[&#39;backgroundPositionX&#39;],
+<a name="line907"></a>            styleObject[&#39;backgroundPositionY&#39;]];
+<a name="line908"></a>  } else {
+<a name="line909"></a>    return (styleObject[&#39;backgroundPosition&#39;] || &#39;0 0&#39;).split(&#39; &#39;);
+<a name="line910"></a>  }
+<a name="line911"></a>};
+<a name="line912"></a>
+<a name="line913"></a>
+<a name="line914"></a>/**
+<a name="line915"></a> * Generates a set of CSS properties that can be used to make another
+<a name="line916"></a> * element&#39;s background look like the background of a given element.
+<a name="line917"></a> * This is useful when you want to copy the CSS context of an element,
+<a name="line918"></a> * but the element&#39;s background is transparent. In the original context
+<a name="line919"></a> * you would see the ancestor&#39;s backround color/image showing through,
+<a name="line920"></a> * but in the new context there might be a something different underneath.
+<a name="line921"></a> * Note that this assumes the element you&#39;re copying context from has a
+<a name="line922"></a> * fairly standard positioning/layout - it assumes that when the element
+<a name="line923"></a> * has a transparent background what you&#39;re going to see through it is its
+<a name="line924"></a> * ancestors.
+<a name="line925"></a> * @param {Element} element The element from which to copy background styles.
+<a name="line926"></a> * @return {!Object} Object containing background* properties.
+<a name="line927"></a> */
+<a name="line928"></a>goog.cssom.iframe.style.getBackgroundContext = function(element) {
+<a name="line929"></a>  var propertyValues = {
+<a name="line930"></a>    &#39;backgroundImage&#39;: &#39;none&#39;
+<a name="line931"></a>  };
+<a name="line932"></a>  var ancestor = element;
+<a name="line933"></a>  var currentIframeWindow;
+<a name="line934"></a>  // Walk up the DOM tree to find the ancestor nodes whose backgrounds
+<a name="line935"></a>  // may be visible underneath this element. Background-image and
+<a name="line936"></a>  // background-color don&#39;t have to come from the same node, but as soon
+<a name="line937"></a>  // an element with background-color is found there&#39;s no need to continue
+<a name="line938"></a>  // because backgrounds farther up the chain won&#39;t be visible.
+<a name="line939"></a>  // (This implementation is not sophisticated enough to handle opacity,
+<a name="line940"></a>  // or multple layered partially-transparent background images.)
+<a name="line941"></a>  while ((ancestor = ancestor.parentNode) &amp;&amp;
+<a name="line942"></a>         ancestor.nodeType == goog.dom.NodeType.ELEMENT) {
+<a name="line943"></a>    var computedStyle = goog.cssom.iframe.style.getComputedStyleObject_(
+<a name="line944"></a>        /** @type {Element} */ (ancestor));
+<a name="line945"></a>    // Copy background color if a non-transparent value is found.
+<a name="line946"></a>    var backgroundColorValue = computedStyle[&#39;backgroundColor&#39;];
+<a name="line947"></a>    if (!goog.cssom.iframe.style.isTransparentValue_(backgroundColorValue)) {
+<a name="line948"></a>      propertyValues[&#39;backgroundColor&#39;] = backgroundColorValue;
+<a name="line949"></a>    }
+<a name="line950"></a>    // If a background image value is found, copy background-image,
+<a name="line951"></a>    // background-repeat, and background-position.
+<a name="line952"></a>    if (computedStyle[&#39;backgroundImage&#39;] &amp;&amp;
+<a name="line953"></a>        computedStyle[&#39;backgroundImage&#39;] != &#39;none&#39;) {
+<a name="line954"></a>      propertyValues[&#39;backgroundImage&#39;] = computedStyle[&#39;backgroundImage&#39;];
+<a name="line955"></a>      propertyValues[&#39;backgroundRepeat&#39;] = computedStyle[&#39;backgroundRepeat&#39;];
+<a name="line956"></a>      // Calculate the offset between the original element and the element
+<a name="line957"></a>      // providing the background image, so the background position can be
+<a name="line958"></a>      // adjusted.
+<a name="line959"></a>      var relativePosition;
+<a name="line960"></a>      if (currentIframeWindow) {
+<a name="line961"></a>        relativePosition = goog.style.getFramedPageOffset(
+<a name="line962"></a>            element, currentIframeWindow);
+<a name="line963"></a>        var frameElement = currentIframeWindow.frameElement;
+<a name="line964"></a>        var iframeRelativePosition = goog.style.getRelativePosition(
+<a name="line965"></a>            /** @type {Element} */ (frameElement),
+<a name="line966"></a>            /** @type {Element} */ (ancestor));
+<a name="line967"></a>        var iframeBorders = goog.style.getBorderBox(frameElement);
+<a name="line968"></a>        relativePosition.x += iframeRelativePosition.x + iframeBorders.left;
+<a name="line969"></a>        relativePosition.y += iframeRelativePosition.y + iframeBorders.top;
+<a name="line970"></a>      } else {
+<a name="line971"></a>        relativePosition = goog.style.getRelativePosition(
+<a name="line972"></a>            element, /** @type {Element} */ (ancestor));
+<a name="line973"></a>      }
+<a name="line974"></a>      var backgroundXYValues = goog.cssom.iframe.style.getBackgroundXYValues_(
+<a name="line975"></a>          computedStyle);
+<a name="line976"></a>      // Parse background-repeat-* values in the form &quot;10px&quot;, and adjust them.
+<a name="line977"></a>      for (var i = 0; i &lt; 2; i++) {
+<a name="line978"></a>        var positionValue = backgroundXYValues[i];
+<a name="line979"></a>        var coordinate = i == 0 ? &#39;X&#39; : &#39;Y&#39;;
+<a name="line980"></a>        var positionProperty = &#39;backgroundPosition&#39; + coordinate;
+<a name="line981"></a>        // relative position to its ancestor.
+<a name="line982"></a>        var positionValueParts =
+<a name="line983"></a>            goog.cssom.iframe.style.valueWithUnitsRegEx_.exec(positionValue);
+<a name="line984"></a>        if (positionValueParts) {
+<a name="line985"></a>          var value = parseInt(
+<a name="line986"></a>              positionValueParts[1] + positionValueParts[2], 10);
+<a name="line987"></a>          var units = positionValueParts[3];
+<a name="line988"></a>          // This only attempts to handle pixel values for now (plus
+<a name="line989"></a>          // &#39;0anything&#39;, which is equivalent to 0px).
+<a name="line990"></a>          // TODO(user) Convert non-pixel values to pixels when possible.
+<a name="line991"></a>          if (value == 0 || units == &#39;px&#39;) {
+<a name="line992"></a>            value -= (coordinate == &#39;X&#39; ?
+<a name="line993"></a>                      relativePosition.x : relativePosition.y);
+<a name="line994"></a>          }
+<a name="line995"></a>          positionValue = value + units;
+<a name="line996"></a>        }
+<a name="line997"></a>        propertyValues[positionProperty] = positionValue;
+<a name="line998"></a>      }
+<a name="line999"></a>      propertyValues[&#39;backgroundPosition&#39;] =
+<a name="line1000"></a>          propertyValues[&#39;backgroundPositionX&#39;] + &#39; &#39; +
+<a name="line1001"></a>          propertyValues[&#39;backgroundPositionY&#39;];
+<a name="line1002"></a>    }
+<a name="line1003"></a>    if (propertyValues[&#39;backgroundColor&#39;]) {
+<a name="line1004"></a>      break;
+<a name="line1005"></a>    }
+<a name="line1006"></a>    if (ancestor.tagName == goog.dom.TagName.HTML) {
+<a name="line1007"></a>      try {
+<a name="line1008"></a>        currentIframeWindow = goog.dom.getWindow(
+<a name="line1009"></a>            /** @type {Document} */ (ancestor.parentNode));
+<a name="line1010"></a>        // This could theoretically throw a security exception if the parent
+<a name="line1011"></a>        // iframe is in a different domain.
+<a name="line1012"></a>        ancestor = currentIframeWindow.frameElement;
+<a name="line1013"></a>        if (!ancestor) {
+<a name="line1014"></a>          // Loop has reached the top level window.
+<a name="line1015"></a>          break;
+<a name="line1016"></a>        }
+<a name="line1017"></a>      } catch (e) {
+<a name="line1018"></a>        // We don&#39;t have permission to go up to the parent window, stop here.
+<a name="line1019"></a>        break;
+<a name="line1020"></a>      }
+<a name="line1021"></a>    }
+<a name="line1022"></a>  }
+<a name="line1023"></a>  return propertyValues;
+<a name="line1024"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>eventobserver_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_events_eventobserver_test.js.html">eventobserver_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.events.EventObserverTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.events.EventObserverTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.events.EventObserver&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line24"></a>
+<a name="line25"></a>// Return an event&#39;s type
+<a name="line26"></a>function getEventType(e) {
+<a name="line27"></a>  return e.type;
+<a name="line28"></a>}
+<a name="line29"></a>
+<a name="line30"></a>function testGetEvents() {
+<a name="line31"></a>  var observer = new goog.testing.events.EventObserver();
+<a name="line32"></a>  var target = new goog.events.EventTarget();
+<a name="line33"></a>  goog.events.listen(target, [&#39;foo&#39;, &#39;bar&#39;, &#39;baz&#39;], observer);
+<a name="line34"></a>
+<a name="line35"></a>  var eventTypes = [
+<a name="line36"></a>    &#39;bar&#39;, &#39;baz&#39;, &#39;foo&#39;, &#39;qux&#39;, &#39;quux&#39;, &#39;corge&#39;, &#39;foo&#39;, &#39;baz&#39;];
+<a name="line37"></a>  goog.array.forEach(eventTypes, goog.bind(target.dispatchEvent, target));
+<a name="line38"></a>
+<a name="line39"></a>  var replayEvents = observer.getEvents();
+<a name="line40"></a>
+<a name="line41"></a>  assertArrayEquals(&#39;Only the listened-for event types should be remembered&#39;,
+<a name="line42"></a>      [&#39;bar&#39;, &#39;baz&#39;, &#39;foo&#39;, &#39;foo&#39;, &#39;baz&#39;],
+<a name="line43"></a>      goog.array.map(observer.getEvents(), getEventType));
+<a name="line44"></a>
+<a name="line45"></a>  assertArrayEquals([&#39;bar&#39;],
+<a name="line46"></a>      goog.array.map(observer.getEvents(&#39;bar&#39;), getEventType));
+<a name="line47"></a>  assertArrayEquals([&#39;baz&#39;, &#39;baz&#39;],
+<a name="line48"></a>      goog.array.map(observer.getEvents(&#39;baz&#39;), getEventType));
+<a name="line49"></a>  assertArrayEquals([&#39;foo&#39;, &#39;foo&#39;],
+<a name="line50"></a>      goog.array.map(observer.getEvents(&#39;foo&#39;), getEventType));
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>function testHandleEvent() {
+<a name="line54"></a>  var events = [
+<a name="line55"></a>    new goog.events.Event(&#39;foo&#39;),
+<a name="line56"></a>    new goog.events.Event(&#39;bar&#39;),
+<a name="line57"></a>    new goog.events.Event(&#39;baz&#39;)
+<a name="line58"></a>  ];
+<a name="line59"></a>
+<a name="line60"></a>  var observer = new goog.testing.events.EventObserver();
+<a name="line61"></a>  goog.array.forEach(events, goog.bind(observer.handleEvent, observer));
+<a name="line62"></a>
+<a name="line63"></a>  assertArrayEquals(events, observer.getEvents());
+<a name="line64"></a>  assertArrayEquals([events[0]], observer.getEvents(&#39;foo&#39;));
+<a name="line65"></a>  assertArrayEquals([events[1]], observer.getEvents(&#39;bar&#39;));
+<a name="line66"></a>  assertArrayEquals([events[2]], observer.getEvents(&#39;baz&#39;));
+<a name="line67"></a>}
+</pre>
+
+
+</body>
+</html>

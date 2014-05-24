@@ -1,0 +1,631 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mockclassfactory.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_mockclassfactory.js.html">mockclassfactory.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This file defines a factory that can be used to mock and
+<a name="line17"></a> * replace an entire class.  This allows for mocks to be used effectively with
+<a name="line18"></a> * &quot;new&quot; instead of having to inject all instances.  Essentially, a given class
+<a name="line19"></a> * is replaced with a proxy to either a loose or strict mock.  Proxies locate
+<a name="line20"></a> * the appropriate mock based on constructor arguments.
+<a name="line21"></a> *
+<a name="line22"></a> * The usage is:
+<a name="line23"></a> * &lt;ul&gt;
+<a name="line24"></a> *   &lt;li&gt;Create a mock with one of the provided methods with a specifc set of
+<a name="line25"></a> *       constructor arguments
+<a name="line26"></a> *   &lt;li&gt;Set expectations by calling methods on the mock object
+<a name="line27"></a> *   &lt;li&gt;Call $replay() on the mock object
+<a name="line28"></a> *   &lt;li&gt;Instantiate the object as normal
+<a name="line29"></a> *   &lt;li&gt;Call $verify() to make sure that expectations were met
+<a name="line30"></a> *   &lt;li&gt;Call reset on the factory to revert all classes back to their original
+<a name="line31"></a> *       state
+<a name="line32"></a> * &lt;/ul&gt;
+<a name="line33"></a> *
+<a name="line34"></a> * For examples, please see the unit test.
+<a name="line35"></a> *
+<a name="line36"></a> */
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>goog.provide(&#39;goog.testing.MockClassFactory&#39;);
+<a name="line40"></a>goog.provide(&#39;goog.testing.MockClassRecord&#39;);
+<a name="line41"></a>
+<a name="line42"></a>goog.require(&#39;goog.array&#39;);
+<a name="line43"></a>goog.require(&#39;goog.object&#39;);
+<a name="line44"></a>goog.require(&#39;goog.testing.LooseMock&#39;);
+<a name="line45"></a>goog.require(&#39;goog.testing.StrictMock&#39;);
+<a name="line46"></a>goog.require(&#39;goog.testing.TestCase&#39;);
+<a name="line47"></a>goog.require(&#39;goog.testing.mockmatchers&#39;);
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * A record that represents all the data associated with a mock replacement of
+<a name="line53"></a> * a given class.
+<a name="line54"></a> * @param {Object} namespace The namespace in which the mocked class resides.
+<a name="line55"></a> * @param {string} className The name of the class within the namespace.
+<a name="line56"></a> * @param {Function} originalClass The original class implementation before it
+<a name="line57"></a> *     was replaced by a proxy.
+<a name="line58"></a> * @param {Function} proxy The proxy that replaced the original class.
+<a name="line59"></a> * @constructor
+<a name="line60"></a> * @final
+<a name="line61"></a> */
+<a name="line62"></a>goog.testing.MockClassRecord = function(namespace, className, originalClass,
+<a name="line63"></a>    proxy) {
+<a name="line64"></a>  /**
+<a name="line65"></a>   * A standard closure namespace (e.g. goog.foo.bar) that contains the mock
+<a name="line66"></a>   * class referenced by this MockClassRecord.
+<a name="line67"></a>   * @type {Object}
+<a name="line68"></a>   * @private
+<a name="line69"></a>   */
+<a name="line70"></a>  this.namespace_ = namespace;
+<a name="line71"></a>
+<a name="line72"></a>  /**
+<a name="line73"></a>   * The name of the class within the provided namespace.
+<a name="line74"></a>   * @type {string}
+<a name="line75"></a>   * @private
+<a name="line76"></a>   */
+<a name="line77"></a>  this.className_ = className;
+<a name="line78"></a>
+<a name="line79"></a>  /**
+<a name="line80"></a>   * The original class implementation.
+<a name="line81"></a>   * @type {Function}
+<a name="line82"></a>   * @private
+<a name="line83"></a>   */
+<a name="line84"></a>  this.originalClass_ = originalClass;
+<a name="line85"></a>
+<a name="line86"></a>  /**
+<a name="line87"></a>   * The proxy being used as a replacement for the original class.
+<a name="line88"></a>   * @type {Function}
+<a name="line89"></a>   * @private
+<a name="line90"></a>   */
+<a name="line91"></a>  this.proxy_ = proxy;
+<a name="line92"></a>
+<a name="line93"></a>  /**
+<a name="line94"></a>   * A mocks that will be constructed by their argument list.  The entries are
+<a name="line95"></a>   * objects with the format {&#39;args&#39;: args, &#39;mock&#39;: mock}.
+<a name="line96"></a>   * @type {Array.&lt;Object&gt;}
+<a name="line97"></a>   * @private
+<a name="line98"></a>   */
+<a name="line99"></a>  this.instancesByArgs_ = [];
+<a name="line100"></a>};
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * A mock associated with the static functions for a given class.
+<a name="line105"></a> * @type {goog.testing.StrictMock|goog.testing.LooseMock|null}
+<a name="line106"></a> * @private
+<a name="line107"></a> */
+<a name="line108"></a>goog.testing.MockClassRecord.prototype.staticMock_ = null;
+<a name="line109"></a>
+<a name="line110"></a>
+<a name="line111"></a>/**
+<a name="line112"></a> * A getter for this record&#39;s namespace.
+<a name="line113"></a> * @return {Object} The namespace.
+<a name="line114"></a> */
+<a name="line115"></a>goog.testing.MockClassRecord.prototype.getNamespace = function() {
+<a name="line116"></a>  return this.namespace_;
+<a name="line117"></a>};
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * A getter for this record&#39;s class name.
+<a name="line122"></a> * @return {string} The name of the class referenced by this record.
+<a name="line123"></a> */
+<a name="line124"></a>goog.testing.MockClassRecord.prototype.getClassName = function() {
+<a name="line125"></a>  return this.className_;
+<a name="line126"></a>};
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * A getter for the original class.
+<a name="line131"></a> * @return {Function} The original class implementation before mocking.
+<a name="line132"></a> */
+<a name="line133"></a>goog.testing.MockClassRecord.prototype.getOriginalClass = function() {
+<a name="line134"></a>  return this.originalClass_;
+<a name="line135"></a>};
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/**
+<a name="line139"></a> * A getter for the proxy being used as a replacement for the original class.
+<a name="line140"></a> * @return {Function} The proxy.
+<a name="line141"></a> */
+<a name="line142"></a>goog.testing.MockClassRecord.prototype.getProxy = function() {
+<a name="line143"></a>  return this.proxy_;
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * A getter for the static mock.
+<a name="line149"></a> * @return {goog.testing.StrictMock|goog.testing.LooseMock|null} The static
+<a name="line150"></a> *     mock associated with this record.
+<a name="line151"></a> */
+<a name="line152"></a>goog.testing.MockClassRecord.prototype.getStaticMock = function() {
+<a name="line153"></a>  return this.staticMock_;
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * A setter for the static mock.
+<a name="line159"></a> * @param {goog.testing.StrictMock|goog.testing.LooseMock} staticMock A mock to
+<a name="line160"></a> *     associate with the static functions for the referenced class.
+<a name="line161"></a> */
+<a name="line162"></a>goog.testing.MockClassRecord.prototype.setStaticMock = function(staticMock) {
+<a name="line163"></a>  this.staticMock_ = staticMock;
+<a name="line164"></a>};
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Adds a new mock instance mapping.  The mapping connects a set of function
+<a name="line169"></a> * arguments to a specific mock instance.
+<a name="line170"></a> * @param {Array} args An array of function arguments.
+<a name="line171"></a> * @param {goog.testing.StrictMock|goog.testing.LooseMock} mock A mock
+<a name="line172"></a> *     associated with the supplied arguments.
+<a name="line173"></a> */
+<a name="line174"></a>goog.testing.MockClassRecord.prototype.addMockInstance = function(args, mock) {
+<a name="line175"></a>  this.instancesByArgs_.push({args: args, mock: mock});
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Finds the mock corresponding to a given argument set.  Throws an error if
+<a name="line181"></a> * there is no appropriate match found.
+<a name="line182"></a> * @param {Array} args An array of function arguments.
+<a name="line183"></a> * @return {goog.testing.StrictMock|goog.testing.LooseMock|null} The mock
+<a name="line184"></a> *     corresponding to a given argument set.
+<a name="line185"></a> */
+<a name="line186"></a>goog.testing.MockClassRecord.prototype.findMockInstance = function(args) {
+<a name="line187"></a>  for (var i = 0; i &lt; this.instancesByArgs_.length; i++) {
+<a name="line188"></a>    var instanceArgs = this.instancesByArgs_[i].args;
+<a name="line189"></a>    if (goog.testing.mockmatchers.flexibleArrayMatcher(instanceArgs, args)) {
+<a name="line190"></a>      return this.instancesByArgs_[i].mock;
+<a name="line191"></a>    }
+<a name="line192"></a>  }
+<a name="line193"></a>
+<a name="line194"></a>  return null;
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Resets this record by reverting all the mocked classes back to the original
+<a name="line200"></a> * implementation and clearing out the mock instance list.
+<a name="line201"></a> */
+<a name="line202"></a>goog.testing.MockClassRecord.prototype.reset = function() {
+<a name="line203"></a>  this.namespace_[this.className_] = this.originalClass_;
+<a name="line204"></a>  this.instancesByArgs_ = [];
+<a name="line205"></a>};
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * A factory used to create new mock class instances.  It is able to generate
+<a name="line211"></a> * both static and loose mocks.  The MockClassFactory is a singleton since it
+<a name="line212"></a> * tracks the classes that have been mocked internally.
+<a name="line213"></a> * @constructor
+<a name="line214"></a> * @final
+<a name="line215"></a> */
+<a name="line216"></a>goog.testing.MockClassFactory = function() {
+<a name="line217"></a>  if (goog.testing.MockClassFactory.instance_) {
+<a name="line218"></a>    return goog.testing.MockClassFactory.instance_;
+<a name="line219"></a>  }
+<a name="line220"></a>
+<a name="line221"></a>  /**
+<a name="line222"></a>   * A map from class name -&gt; goog.testing.MockClassRecord.
+<a name="line223"></a>   * @type {Object}
+<a name="line224"></a>   * @private
+<a name="line225"></a>   */
+<a name="line226"></a>  this.mockClassRecords_ = {};
+<a name="line227"></a>
+<a name="line228"></a>  goog.testing.MockClassFactory.instance_ = this;
+<a name="line229"></a>};
+<a name="line230"></a>
+<a name="line231"></a>
+<a name="line232"></a>/**
+<a name="line233"></a> * A singleton instance of the MockClassFactory.
+<a name="line234"></a> * @type {goog.testing.MockClassFactory?}
+<a name="line235"></a> * @private
+<a name="line236"></a> */
+<a name="line237"></a>goog.testing.MockClassFactory.instance_ = null;
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * The names of the fields that are defined on Object.prototype.
+<a name="line242"></a> * @type {Array.&lt;string&gt;}
+<a name="line243"></a> * @private
+<a name="line244"></a> */
+<a name="line245"></a>goog.testing.MockClassFactory.PROTOTYPE_FIELDS_ = [
+<a name="line246"></a>  &#39;constructor&#39;,
+<a name="line247"></a>  &#39;hasOwnProperty&#39;,
+<a name="line248"></a>  &#39;isPrototypeOf&#39;,
+<a name="line249"></a>  &#39;propertyIsEnumerable&#39;,
+<a name="line250"></a>  &#39;toLocaleString&#39;,
+<a name="line251"></a>  &#39;toString&#39;,
+<a name="line252"></a>  &#39;valueOf&#39;
+<a name="line253"></a>];
+<a name="line254"></a>
+<a name="line255"></a>
+<a name="line256"></a>/**
+<a name="line257"></a> * Iterates through a namespace to find the name of a given class.  This is done
+<a name="line258"></a> * solely to support compilation since string identifiers would break down.
+<a name="line259"></a> * Tests usually aren&#39;t compiled, but the functionality is supported.
+<a name="line260"></a> * @param {Object} namespace A javascript namespace (e.g. goog.testing).
+<a name="line261"></a> * @param {Function} classToMock The class whose name should be returned.
+<a name="line262"></a> * @return {string} The name of the class.
+<a name="line263"></a> * @private
+<a name="line264"></a> */
+<a name="line265"></a>goog.testing.MockClassFactory.prototype.getClassName_ = function(namespace,
+<a name="line266"></a>    classToMock) {
+<a name="line267"></a>  if (namespace === goog.global) {
+<a name="line268"></a>    namespace = goog.testing.TestCase.getGlobals();
+<a name="line269"></a>  }
+<a name="line270"></a>  for (var prop in namespace) {
+<a name="line271"></a>    if (namespace[prop] === classToMock) {
+<a name="line272"></a>      return prop;
+<a name="line273"></a>    }
+<a name="line274"></a>  }
+<a name="line275"></a>
+<a name="line276"></a>  throw Error(&#39;Class is not a part of the given namespace&#39;);
+<a name="line277"></a>};
+<a name="line278"></a>
+<a name="line279"></a>
+<a name="line280"></a>/**
+<a name="line281"></a> * Returns whether or not a given class has been mocked.
+<a name="line282"></a> * @param {string} className The name of the class.
+<a name="line283"></a> * @return {boolean} Whether or not the given class name has a MockClassRecord.
+<a name="line284"></a> * @private
+<a name="line285"></a> */
+<a name="line286"></a>goog.testing.MockClassFactory.prototype.classHasMock_ = function(className) {
+<a name="line287"></a>  return !!this.mockClassRecords_[className];
+<a name="line288"></a>};
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * Returns a proxy constructor closure.  Since this is a constructor, &quot;this&quot;
+<a name="line293"></a> * refers to the local scope of the constructed object thus bind cannot be
+<a name="line294"></a> * used.
+<a name="line295"></a> * @param {string} className The name of the class.
+<a name="line296"></a> * @param {Function} mockFinder A bound function that returns the mock
+<a name="line297"></a> *     associated with a class given the constructor&#39;s argument list.
+<a name="line298"></a> * @return {!Function} A proxy constructor.
+<a name="line299"></a> * @private
+<a name="line300"></a> */
+<a name="line301"></a>goog.testing.MockClassFactory.prototype.getProxyCtor_ = function(className,
+<a name="line302"></a>    mockFinder) {
+<a name="line303"></a>  return function() {
+<a name="line304"></a>    this.$mock_ = mockFinder(className, arguments);
+<a name="line305"></a>    if (!this.$mock_) {
+<a name="line306"></a>      // The &quot;arguments&quot; variable is not a proper Array so it must be converted.
+<a name="line307"></a>      var args = Array.prototype.slice.call(arguments, 0);
+<a name="line308"></a>      throw Error(&#39;No mock found for &#39; + className + &#39; with arguments &#39; +
+<a name="line309"></a>          args.join(&#39;, &#39;));
+<a name="line310"></a>    }
+<a name="line311"></a>  };
+<a name="line312"></a>};
+<a name="line313"></a>
+<a name="line314"></a>
+<a name="line315"></a>/**
+<a name="line316"></a> * Returns a proxy function for a mock class instance.  This function cannot
+<a name="line317"></a> * be used with bind since &quot;this&quot; must refer to the scope of the proxy
+<a name="line318"></a> * constructor.
+<a name="line319"></a> * @param {string} fnName The name of the function that should be proxied.
+<a name="line320"></a> * @return {!Function} A proxy function.
+<a name="line321"></a> * @private
+<a name="line322"></a> */
+<a name="line323"></a>goog.testing.MockClassFactory.prototype.getProxyFunction_ = function(fnName) {
+<a name="line324"></a>  return function() {
+<a name="line325"></a>    return this.$mock_[fnName].apply(this.$mock_, arguments);
+<a name="line326"></a>  };
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Find a mock instance for a given class name and argument list.
+<a name="line332"></a> * @param {string} className The name of the class.
+<a name="line333"></a> * @param {Array} args The argument list to match.
+<a name="line334"></a> * @return {goog.testing.StrictMock|goog.testing.LooseMock} The mock found for
+<a name="line335"></a> *     the given argument list.
+<a name="line336"></a> * @private
+<a name="line337"></a> */
+<a name="line338"></a>goog.testing.MockClassFactory.prototype.findMockInstance_ = function(className,
+<a name="line339"></a>    args) {
+<a name="line340"></a>  return this.mockClassRecords_[className].findMockInstance(args);
+<a name="line341"></a>};
+<a name="line342"></a>
+<a name="line343"></a>
+<a name="line344"></a>/**
+<a name="line345"></a> * Create a proxy class.  A proxy will pass functions to the mock for a class.
+<a name="line346"></a> * The proxy class only covers prototype methods.  A static mock is not build
+<a name="line347"></a> * simultaneously since it might be strict or loose.  The proxy class inherits
+<a name="line348"></a> * from the target class in order to preserve instanceof checks.
+<a name="line349"></a> * @param {Object} namespace A javascript namespace (e.g. goog.testing).
+<a name="line350"></a> * @param {Function} classToMock The class that will be proxied.
+<a name="line351"></a> * @param {string} className The name of the class.
+<a name="line352"></a> * @return {!Function} The proxy for provided class.
+<a name="line353"></a> * @private
+<a name="line354"></a> */
+<a name="line355"></a>goog.testing.MockClassFactory.prototype.createProxy_ = function(namespace,
+<a name="line356"></a>    classToMock, className) {
+<a name="line357"></a>  var proxy = this.getProxyCtor_(className,
+<a name="line358"></a>      goog.bind(this.findMockInstance_, this));
+<a name="line359"></a>  var protoToProxy = classToMock.prototype;
+<a name="line360"></a>  goog.inherits(proxy, classToMock);
+<a name="line361"></a>
+<a name="line362"></a>  for (var prop in protoToProxy) {
+<a name="line363"></a>    if (goog.isFunction(protoToProxy[prop])) {
+<a name="line364"></a>      proxy.prototype[prop] = this.getProxyFunction_(prop);
+<a name="line365"></a>    }
+<a name="line366"></a>  }
+<a name="line367"></a>
+<a name="line368"></a>  // For IE the for-in-loop does not contain any properties that are not
+<a name="line369"></a>  // enumerable on the prototype object (for example isPrototypeOf from
+<a name="line370"></a>  // Object.prototype) and it will also not include &#39;replace&#39; on objects that
+<a name="line371"></a>  // extend String and change &#39;replace&#39; (not that it is common for anyone to
+<a name="line372"></a>  // extend anything except Object).
+<a name="line373"></a>  // TODO (arv): Implement goog.object.getIterator and replace this loop.
+<a name="line374"></a>
+<a name="line375"></a>  goog.array.forEach(goog.testing.MockClassFactory.PROTOTYPE_FIELDS_,
+<a name="line376"></a>      function(field) {
+<a name="line377"></a>        if (Object.prototype.hasOwnProperty.call(protoToProxy, field)) {
+<a name="line378"></a>          proxy.prototype[field] = this.getProxyFunction_(field);
+<a name="line379"></a>        }
+<a name="line380"></a>      }, this);
+<a name="line381"></a>
+<a name="line382"></a>  this.mockClassRecords_[className] = new goog.testing.MockClassRecord(
+<a name="line383"></a>      namespace, className, classToMock, proxy);
+<a name="line384"></a>  namespace[className] = proxy;
+<a name="line385"></a>  return proxy;
+<a name="line386"></a>};
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/**
+<a name="line390"></a> * Gets either a loose or strict mock for a given class based on a set of
+<a name="line391"></a> * arguments.
+<a name="line392"></a> * @param {Object} namespace A javascript namespace (e.g. goog.testing).
+<a name="line393"></a> * @param {Function} classToMock The class that will be mocked.
+<a name="line394"></a> * @param {boolean} isStrict Whether or not the mock should be strict.
+<a name="line395"></a> * @param {goog.array.ArrayLike} ctorArgs The arguments associated with this
+<a name="line396"></a> *     instance&#39;s constructor.
+<a name="line397"></a> * @return {!goog.testing.StrictMock|!goog.testing.LooseMock} The mock created
+<a name="line398"></a> *     for the provided class.
+<a name="line399"></a> * @private
+<a name="line400"></a> */
+<a name="line401"></a>goog.testing.MockClassFactory.prototype.getMockClass_ =
+<a name="line402"></a>    function(namespace, classToMock, isStrict, ctorArgs) {
+<a name="line403"></a>  var className = this.getClassName_(namespace, classToMock);
+<a name="line404"></a>
+<a name="line405"></a>  // The namespace and classToMock variables should be removed from the
+<a name="line406"></a>  // passed in argument stack.
+<a name="line407"></a>  ctorArgs = goog.array.slice(ctorArgs, 2);
+<a name="line408"></a>
+<a name="line409"></a>  if (goog.isFunction(classToMock)) {
+<a name="line410"></a>    var mock = isStrict ? new goog.testing.StrictMock(classToMock) :
+<a name="line411"></a>        new goog.testing.LooseMock(classToMock);
+<a name="line412"></a>
+<a name="line413"></a>    if (!this.classHasMock_(className)) {
+<a name="line414"></a>      this.createProxy_(namespace, classToMock, className);
+<a name="line415"></a>    } else {
+<a name="line416"></a>      var instance = this.findMockInstance_(className, ctorArgs);
+<a name="line417"></a>      if (instance) {
+<a name="line418"></a>        throw Error(&#39;Mock instance already created for &#39; + className +
+<a name="line419"></a>            &#39; with arguments &#39; + ctorArgs.join(&#39;, &#39;));
+<a name="line420"></a>      }
+<a name="line421"></a>    }
+<a name="line422"></a>    this.mockClassRecords_[className].addMockInstance(ctorArgs, mock);
+<a name="line423"></a>
+<a name="line424"></a>    return mock;
+<a name="line425"></a>  } else {
+<a name="line426"></a>    throw Error(&#39;Cannot create a mock class for &#39; + className +
+<a name="line427"></a>        &#39; of type &#39; + typeof classToMock);
+<a name="line428"></a>  }
+<a name="line429"></a>};
+<a name="line430"></a>
+<a name="line431"></a>
+<a name="line432"></a>/**
+<a name="line433"></a> * Gets a strict mock for a given class.
+<a name="line434"></a> * @param {Object} namespace A javascript namespace (e.g. goog.testing).
+<a name="line435"></a> * @param {Function} classToMock The class that will be mocked.
+<a name="line436"></a> * @param {...*} var_args The arguments associated with this instance&#39;s
+<a name="line437"></a> *     constructor.
+<a name="line438"></a> * @return {goog.testing.StrictMock} The mock created for the provided class.
+<a name="line439"></a> */
+<a name="line440"></a>goog.testing.MockClassFactory.prototype.getStrictMockClass =
+<a name="line441"></a>    function(namespace, classToMock, var_args) {
+<a name="line442"></a>  return /** @type {goog.testing.StrictMock} */ (this.getMockClass_(namespace,
+<a name="line443"></a>      classToMock, true, arguments));
+<a name="line444"></a>};
+<a name="line445"></a>
+<a name="line446"></a>
+<a name="line447"></a>/**
+<a name="line448"></a> * Gets a loose mock for a given class.
+<a name="line449"></a> * @param {Object} namespace A javascript namespace (e.g. goog.testing).
+<a name="line450"></a> * @param {Function} classToMock The class that will be mocked.
+<a name="line451"></a> * @param {...*} var_args The arguments associated with this instance&#39;s
+<a name="line452"></a> *     constructor.
+<a name="line453"></a> * @return {goog.testing.LooseMock} The mock created for the provided class.
+<a name="line454"></a> */
+<a name="line455"></a>goog.testing.MockClassFactory.prototype.getLooseMockClass =
+<a name="line456"></a>    function(namespace, classToMock, var_args) {
+<a name="line457"></a>  return /** @type {goog.testing.LooseMock} */ (this.getMockClass_(namespace,
+<a name="line458"></a>      classToMock, false, arguments));
+<a name="line459"></a>};
+<a name="line460"></a>
+<a name="line461"></a>
+<a name="line462"></a>/**
+<a name="line463"></a> * Creates either a loose or strict mock for the static functions of a given
+<a name="line464"></a> * class.
+<a name="line465"></a> * @param {Function} classToMock The class whose static functions will be
+<a name="line466"></a> *     mocked.  This should be the original class and not the proxy.
+<a name="line467"></a> * @param {string} className The name of the class.
+<a name="line468"></a> * @param {Function} proxy The proxy that will replace the original class.
+<a name="line469"></a> * @param {boolean} isStrict Whether or not the mock should be strict.
+<a name="line470"></a> * @return {!goog.testing.StrictMock|!goog.testing.LooseMock} The mock created
+<a name="line471"></a> *     for the static functions of the provided class.
+<a name="line472"></a> * @private
+<a name="line473"></a> */
+<a name="line474"></a>goog.testing.MockClassFactory.prototype.createStaticMock_ =
+<a name="line475"></a>    function(classToMock, className, proxy, isStrict) {
+<a name="line476"></a>  var mock = isStrict ? new goog.testing.StrictMock(classToMock, true) :
+<a name="line477"></a>      new goog.testing.LooseMock(classToMock, false, true);
+<a name="line478"></a>
+<a name="line479"></a>  for (var prop in classToMock) {
+<a name="line480"></a>    if (goog.isFunction(classToMock[prop])) {
+<a name="line481"></a>      proxy[prop] = goog.bind(mock.$mockMethod, mock, prop);
+<a name="line482"></a>    } else if (classToMock[prop] !== classToMock.prototype) {
+<a name="line483"></a>      proxy[prop] = classToMock[prop];
+<a name="line484"></a>    }
+<a name="line485"></a>  }
+<a name="line486"></a>
+<a name="line487"></a>  this.mockClassRecords_[className].setStaticMock(mock);
+<a name="line488"></a>  return mock;
+<a name="line489"></a>};
+<a name="line490"></a>
+<a name="line491"></a>
+<a name="line492"></a>/**
+<a name="line493"></a> * Gets either a loose or strict mock for the static functions of a given class.
+<a name="line494"></a> * @param {Object} namespace A javascript namespace (e.g. goog.testing).
+<a name="line495"></a> * @param {Function} classToMock The class whose static functions will be
+<a name="line496"></a> *     mocked.  This should be the original class and not the proxy.
+<a name="line497"></a> * @param {boolean} isStrict Whether or not the mock should be strict.
+<a name="line498"></a> * @return {goog.testing.StrictMock|goog.testing.LooseMock} The mock created
+<a name="line499"></a> *     for the static functions of the provided class.
+<a name="line500"></a> * @private
+<a name="line501"></a> */
+<a name="line502"></a>goog.testing.MockClassFactory.prototype.getStaticMock_ = function(namespace,
+<a name="line503"></a>    classToMock, isStrict) {
+<a name="line504"></a>  var className = this.getClassName_(namespace, classToMock);
+<a name="line505"></a>
+<a name="line506"></a>  if (goog.isFunction(classToMock)) {
+<a name="line507"></a>    if (!this.classHasMock_(className)) {
+<a name="line508"></a>      var proxy = this.createProxy_(namespace, classToMock, className);
+<a name="line509"></a>      var mock = this.createStaticMock_(classToMock, className, proxy,
+<a name="line510"></a>          isStrict);
+<a name="line511"></a>      return mock;
+<a name="line512"></a>    }
+<a name="line513"></a>
+<a name="line514"></a>    if (!this.mockClassRecords_[className].getStaticMock()) {
+<a name="line515"></a>      var proxy = this.mockClassRecords_[className].getProxy();
+<a name="line516"></a>      var originalClass = this.mockClassRecords_[className].getOriginalClass();
+<a name="line517"></a>      var mock = this.createStaticMock_(originalClass, className, proxy,
+<a name="line518"></a>          isStrict);
+<a name="line519"></a>      return mock;
+<a name="line520"></a>    } else {
+<a name="line521"></a>      var mock = this.mockClassRecords_[className].getStaticMock();
+<a name="line522"></a>      var mockIsStrict = mock instanceof goog.testing.StrictMock;
+<a name="line523"></a>
+<a name="line524"></a>      if (mockIsStrict != isStrict) {
+<a name="line525"></a>        var mockType = mock instanceof goog.testing.StrictMock ? &#39;strict&#39; :
+<a name="line526"></a>            &#39;loose&#39;;
+<a name="line527"></a>        var requestedType = isStrict ? &#39;strict&#39; : &#39;loose&#39;;
+<a name="line528"></a>        throw Error(&#39;Requested a &#39; + requestedType + &#39; static mock, but a &#39; +
+<a name="line529"></a>            mockType + &#39; mock already exists.&#39;);
+<a name="line530"></a>      }
+<a name="line531"></a>
+<a name="line532"></a>      return mock;
+<a name="line533"></a>    }
+<a name="line534"></a>  } else {
+<a name="line535"></a>    throw Error(&#39;Cannot create a mock for the static functions of &#39; +
+<a name="line536"></a>        className + &#39; of type &#39; + typeof classToMock);
+<a name="line537"></a>  }
+<a name="line538"></a>};
+<a name="line539"></a>
+<a name="line540"></a>
+<a name="line541"></a>/**
+<a name="line542"></a> * Gets a strict mock for the static functions of a given class.
+<a name="line543"></a> * @param {Object} namespace A javascript namespace (e.g. goog.testing).
+<a name="line544"></a> * @param {Function} classToMock The class whose static functions will be
+<a name="line545"></a> *     mocked.  This should be the original class and not the proxy.
+<a name="line546"></a> * @return {goog.testing.StrictMock} The mock created for the static functions
+<a name="line547"></a> *     of the provided class.
+<a name="line548"></a> */
+<a name="line549"></a>goog.testing.MockClassFactory.prototype.getStrictStaticMock =
+<a name="line550"></a>    function(namespace, classToMock) {
+<a name="line551"></a>  return /** @type {goog.testing.StrictMock} */ (this.getStaticMock_(namespace,
+<a name="line552"></a>      classToMock, true));
+<a name="line553"></a>};
+<a name="line554"></a>
+<a name="line555"></a>
+<a name="line556"></a>/**
+<a name="line557"></a> * Gets a loose mock for the static functions of a given class.
+<a name="line558"></a> * @param {Object} namespace A javascript namespace (e.g. goog.testing).
+<a name="line559"></a> * @param {Function} classToMock The class whose static functions will be
+<a name="line560"></a> *     mocked.  This should be the original class and not the proxy.
+<a name="line561"></a> * @return {goog.testing.LooseMock} The mock created for the static functions
+<a name="line562"></a> *     of the provided class.
+<a name="line563"></a> */
+<a name="line564"></a>goog.testing.MockClassFactory.prototype.getLooseStaticMock =
+<a name="line565"></a>    function(namespace, classToMock) {
+<a name="line566"></a>  return /** @type {goog.testing.LooseMock} */ (this.getStaticMock_(namespace,
+<a name="line567"></a>      classToMock, false));
+<a name="line568"></a>};
+<a name="line569"></a>
+<a name="line570"></a>
+<a name="line571"></a>/**
+<a name="line572"></a> * Resests the factory by reverting all mocked classes to their original
+<a name="line573"></a> * implementations and removing all MockClassRecords.
+<a name="line574"></a> */
+<a name="line575"></a>goog.testing.MockClassFactory.prototype.reset = function() {
+<a name="line576"></a>  goog.object.forEach(this.mockClassRecords_, function(record) {
+<a name="line577"></a>    record.reset();
+<a name="line578"></a>  });
+<a name="line579"></a>  this.mockClassRecords_ = {};
+<a name="line580"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>directoryentry_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_fs_directoryentry_test.js.html">directoryentry_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.fs.DirectoryEntryTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.fs.DirectoryEntryTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.fs.DirectoryEntry&#39;);
+<a name="line20"></a>goog.require(&#39;goog.fs.Error&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.fs.FileSystem&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line25"></a>
+<a name="line26"></a>var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+<a name="line27"></a>var fs, dir, mockClock;
+<a name="line28"></a>
+<a name="line29"></a>function setUp() {
+<a name="line30"></a>  mockClock = new goog.testing.MockClock(true);
+<a name="line31"></a>
+<a name="line32"></a>  fs = new goog.testing.fs.FileSystem();
+<a name="line33"></a>  dir = fs.getRoot().createDirectorySync(&#39;foo&#39;);
+<a name="line34"></a>  dir.createDirectorySync(&#39;subdir&#39;).createFileSync(&#39;subfile&#39;);
+<a name="line35"></a>  dir.createFileSync(&#39;file&#39;);
+<a name="line36"></a>}
+<a name="line37"></a>
+<a name="line38"></a>function tearDown() {
+<a name="line39"></a>  mockClock.uninstall();
+<a name="line40"></a>}
+<a name="line41"></a>
+<a name="line42"></a>function testIsFile() {
+<a name="line43"></a>  assertFalse(dir.isFile());
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>function testIsDirectory() {
+<a name="line47"></a>  assertTrue(dir.isDirectory());
+<a name="line48"></a>}
+<a name="line49"></a>
+<a name="line50"></a>function testRemoveWithChildren() {
+<a name="line51"></a>  dir.getFileSync(&#39;bar&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line52"></a>  expectError(dir.remove(), goog.fs.Error.ErrorCode.INVALID_MODIFICATION);
+<a name="line53"></a>}
+<a name="line54"></a>
+<a name="line55"></a>function testRemoveWithoutChildren() {
+<a name="line56"></a>  var emptyDir = dir.getDirectorySync(
+<a name="line57"></a>      &#39;empty&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line58"></a>  emptyDir.remove().
+<a name="line59"></a>      addCallback(function() {
+<a name="line60"></a>        assertTrue(emptyDir.deleted);
+<a name="line61"></a>        assertFalse(fs.getRoot().hasChild(&#39;empty&#39;));
+<a name="line62"></a>      }).
+<a name="line63"></a>      addBoth(continueTesting);
+<a name="line64"></a>  waitForAsync(&#39;waiting for file removal&#39;);
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>function testRemoveRootRecursively() {
+<a name="line68"></a>  var root = fs.getRoot();
+<a name="line69"></a>  root.removeRecursively().addCallback(function() {
+<a name="line70"></a>    assertTrue(dir.deleted);
+<a name="line71"></a>    assertFalse(fs.getRoot().deleted);
+<a name="line72"></a>  })
+<a name="line73"></a>  .addBoth(continueTesting);
+<a name="line74"></a>  waitForAsync(&#39;waiting for testRemoveRoot&#39;);
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>function testGetFile() {
+<a name="line78"></a>  // Advance the clock by an arbitrary but known amount.
+<a name="line79"></a>  mockClock.tick(41);
+<a name="line80"></a>  dir.getFile(&#39;file&#39;).
+<a name="line81"></a>      addCallback(function(file) {
+<a name="line82"></a>        assertEquals(dir.getFileSync(&#39;file&#39;), file);
+<a name="line83"></a>        assertEquals(&#39;file&#39;, file.getName());
+<a name="line84"></a>        assertEquals(&#39;/foo/file&#39;, file.getFullPath());
+<a name="line85"></a>        assertTrue(file.isFile());
+<a name="line86"></a>
+<a name="line87"></a>        return dir.getLastModified();
+<a name="line88"></a>      }).
+<a name="line89"></a>      addCallback(function(date) {
+<a name="line90"></a>        assertEquals(&#39;Reading a file should not update the modification date.&#39;,
+<a name="line91"></a>            0, date.getTime());
+<a name="line92"></a>        return dir.getMetadata();
+<a name="line93"></a>      }).
+<a name="line94"></a>      addCallback(function(metadata) {
+<a name="line95"></a>        assertEquals(&#39;Reading a file should not update the metadata.&#39;,
+<a name="line96"></a>            0, metadata.modificationTime.getTime());
+<a name="line97"></a>      }).
+<a name="line98"></a>      addBoth(continueTesting);
+<a name="line99"></a>  waitForAsync(&#39;waiting for file&#39;);
+<a name="line100"></a>}
+<a name="line101"></a>
+<a name="line102"></a>function testGetFileFromSubdir() {
+<a name="line103"></a>  dir.getFile(&#39;subdir/subfile&#39;).addCallback(function(file) {
+<a name="line104"></a>    assertEquals(dir.getDirectorySync(&#39;subdir&#39;).getFileSync(&#39;subfile&#39;), file);
+<a name="line105"></a>    assertEquals(&#39;subfile&#39;, file.getName());
+<a name="line106"></a>    assertEquals(&#39;/foo/subdir/subfile&#39;, file.getFullPath());
+<a name="line107"></a>    assertTrue(file.isFile());
+<a name="line108"></a>  }).
+<a name="line109"></a>      addBoth(continueTesting);
+<a name="line110"></a>  waitForAsync(&#39;waiting for file&#39;);
+<a name="line111"></a>}
+<a name="line112"></a>
+<a name="line113"></a>function testGetAbsolutePaths() {
+<a name="line114"></a>  fs.getRoot().getFile(&#39;/foo/subdir/subfile&#39;).
+<a name="line115"></a>      addCallback(function(subfile) {
+<a name="line116"></a>        assertEquals(&#39;/foo/subdir/subfile&#39;, subfile.getFullPath());
+<a name="line117"></a>        return fs.getRoot().getDirectory(&#39;//foo////&#39;);
+<a name="line118"></a>      }).
+<a name="line119"></a>      addCallback(function(foo) {
+<a name="line120"></a>        assertEquals(&#39;/foo&#39;, foo.getFullPath());
+<a name="line121"></a>        return foo.getDirectory(&#39;/&#39;);
+<a name="line122"></a>      }).
+<a name="line123"></a>      addCallback(function(root) {
+<a name="line124"></a>        assertEquals(&#39;/&#39;, root.getFullPath());
+<a name="line125"></a>        return root.getDirectory(&#39;/////&#39;);
+<a name="line126"></a>      }).
+<a name="line127"></a>      addCallback(function(root) {
+<a name="line128"></a>        assertEquals(&#39;/&#39;, root.getFullPath());
+<a name="line129"></a>      }).
+<a name="line130"></a>      addBoth(continueTesting);
+<a name="line131"></a>  waitForAsync(&#39;testGetAbsolutePaths&#39;);
+<a name="line132"></a>}
+<a name="line133"></a>
+<a name="line134"></a>function testCreateFile() {
+<a name="line135"></a>  mockClock.tick(43);
+<a name="line136"></a>  dir.getLastModified().
+<a name="line137"></a>      addCallback(function(date) { assertEquals(0, date.getTime()); }).
+<a name="line138"></a>      addCallback(function() {
+<a name="line139"></a>        return dir.getFile(&#39;bar&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line140"></a>      }).
+<a name="line141"></a>      addCallback(function(file) {
+<a name="line142"></a>        mockClock.tick();
+<a name="line143"></a>        assertEquals(&#39;bar&#39;, file.getName());
+<a name="line144"></a>        assertEquals(&#39;/foo/bar&#39;, file.getFullPath());
+<a name="line145"></a>        assertEquals(dir, file.parent);
+<a name="line146"></a>        assertTrue(file.isFile());
+<a name="line147"></a>
+<a name="line148"></a>        return dir.getLastModified();
+<a name="line149"></a>      }).
+<a name="line150"></a>      addCallback(function(date) {
+<a name="line151"></a>        assertEquals(43, date.getTime());
+<a name="line152"></a>        return dir.getMetadata();
+<a name="line153"></a>      }).
+<a name="line154"></a>      addCallback(function(metadata) {
+<a name="line155"></a>        assertEquals(43, metadata.modificationTime.getTime());
+<a name="line156"></a>      }).
+<a name="line157"></a>      addBoth(continueTesting);
+<a name="line158"></a>  waitForAsync(&#39;waiting for file creation&#39;);
+<a name="line159"></a>}
+<a name="line160"></a>
+<a name="line161"></a>function testCreateFileThatAlreadyExists() {
+<a name="line162"></a>  mockClock.tick(47);
+<a name="line163"></a>  var existingFile = dir.getFileSync(&#39;file&#39;);
+<a name="line164"></a>  dir.getFile(&#39;file&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line165"></a>      addCallback(function(file) {
+<a name="line166"></a>        mockClock.tick();
+<a name="line167"></a>        assertEquals(&#39;file&#39;, file.getName());
+<a name="line168"></a>        assertEquals(&#39;/foo/file&#39;, file.getFullPath());
+<a name="line169"></a>        assertEquals(dir, file.parent);
+<a name="line170"></a>        assertEquals(existingFile, file);
+<a name="line171"></a>        assertTrue(file.isFile());
+<a name="line172"></a>
+<a name="line173"></a>        return dir.getLastModified();
+<a name="line174"></a>      }).
+<a name="line175"></a>      addCallback(function(date) {
+<a name="line176"></a>        assertEquals(47, date.getTime());
+<a name="line177"></a>        return dir.getMetadata();
+<a name="line178"></a>      }).
+<a name="line179"></a>      addCallback(function(metadata) {
+<a name="line180"></a>        assertEquals(47, metadata.modificationTime.getTime());
+<a name="line181"></a>      }).
+<a name="line182"></a>      addBoth(continueTesting);
+<a name="line183"></a>  waitForAsync(&#39;waiting for file creation&#39;);
+<a name="line184"></a>}
+<a name="line185"></a>
+<a name="line186"></a>function testCreateFileInSubdir() {
+<a name="line187"></a>  dir.getFile(&#39;subdir/bar&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line188"></a>      addCallback(function(file) {
+<a name="line189"></a>        assertEquals(&#39;bar&#39;, file.getName());
+<a name="line190"></a>        assertEquals(&#39;/foo/subdir/bar&#39;, file.getFullPath());
+<a name="line191"></a>        assertEquals(dir.getDirectorySync(&#39;subdir&#39;), file.parent);
+<a name="line192"></a>        assertTrue(file.isFile());
+<a name="line193"></a>      }).
+<a name="line194"></a>      addBoth(continueTesting);
+<a name="line195"></a>  waitForAsync(&#39;waiting for file creation&#39;);
+<a name="line196"></a>}
+<a name="line197"></a>
+<a name="line198"></a>function testCreateFileExclusive() {
+<a name="line199"></a>  dir.getFile(&#39;bar&#39;, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE).
+<a name="line200"></a>      addCallback(function(file) {
+<a name="line201"></a>        assertEquals(&#39;bar&#39;, file.getName());
+<a name="line202"></a>        assertEquals(&#39;/foo/bar&#39;, file.getFullPath());
+<a name="line203"></a>        assertEquals(dir, file.parent);
+<a name="line204"></a>        assertTrue(file.isFile());
+<a name="line205"></a>      }).
+<a name="line206"></a>      addBoth(continueTesting);
+<a name="line207"></a>  waitForAsync(&#39;waiting for file creation&#39;);
+<a name="line208"></a>}
+<a name="line209"></a>
+<a name="line210"></a>function testGetNonExistentFile() {
+<a name="line211"></a>  expectError(dir.getFile(&#39;bar&#39;), goog.fs.Error.ErrorCode.NOT_FOUND);
+<a name="line212"></a>}
+<a name="line213"></a>
+<a name="line214"></a>function testGetNonExistentFileInSubdir() {
+<a name="line215"></a>  expectError(dir.getFile(&#39;subdir/bar&#39;), goog.fs.Error.ErrorCode.NOT_FOUND);
+<a name="line216"></a>}
+<a name="line217"></a>
+<a name="line218"></a>function testGetFileInNonExistentSubdir() {
+<a name="line219"></a>  expectError(dir.getFile(&#39;bar/subfile&#39;), goog.fs.Error.ErrorCode.NOT_FOUND);
+<a name="line220"></a>}
+<a name="line221"></a>
+<a name="line222"></a>function testGetFileThatsActuallyADirectory() {
+<a name="line223"></a>  expectError(dir.getFile(&#39;subdir&#39;), goog.fs.Error.ErrorCode.TYPE_MISMATCH);
+<a name="line224"></a>}
+<a name="line225"></a>
+<a name="line226"></a>function testCreateFileInNonExistentSubdir() {
+<a name="line227"></a>  expectError(
+<a name="line228"></a>      dir.getFile(&#39;bar/newfile&#39;, goog.fs.DirectoryEntry.Behavior.CREATE),
+<a name="line229"></a>      goog.fs.Error.ErrorCode.NOT_FOUND);
+<a name="line230"></a>}
+<a name="line231"></a>
+<a name="line232"></a>function testCreateFileThatsActuallyADirectory() {
+<a name="line233"></a>  expectError(
+<a name="line234"></a>      dir.getFile(&#39;subdir&#39;, goog.fs.DirectoryEntry.Behavior.CREATE),
+<a name="line235"></a>      goog.fs.Error.ErrorCode.TYPE_MISMATCH);
+<a name="line236"></a>}
+<a name="line237"></a>
+<a name="line238"></a>function testCreateExclusiveExistingFile() {
+<a name="line239"></a>  expectError(
+<a name="line240"></a>      dir.getFile(&#39;file&#39;, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE),
+<a name="line241"></a>      goog.fs.Error.ErrorCode.INVALID_MODIFICATION);
+<a name="line242"></a>}
+<a name="line243"></a>
+<a name="line244"></a>function testListEmptyDirectory() {
+<a name="line245"></a>  var emptyDir = fs.getRoot().
+<a name="line246"></a>      getDirectorySync(&#39;empty&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line247"></a>
+<a name="line248"></a>  emptyDir.listDirectory().
+<a name="line249"></a>      addCallback(function(entryList) {
+<a name="line250"></a>        assertSameElements([], entryList);
+<a name="line251"></a>      }).
+<a name="line252"></a>      addBoth(continueTesting);
+<a name="line253"></a>  waitForAsync(&#39;testListEmptyDirectory&#39;);
+<a name="line254"></a>}
+<a name="line255"></a>
+<a name="line256"></a>function testListDirectory() {
+<a name="line257"></a>  var root = fs.getRoot();
+<a name="line258"></a>  root.getDirectorySync(&#39;dir1&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line259"></a>  root.getDirectorySync(&#39;dir2&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line260"></a>  root.getFileSync(&#39;file1&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line261"></a>  root.getFileSync(&#39;file2&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line262"></a>
+<a name="line263"></a>  fs.getRoot().listDirectory().
+<a name="line264"></a>      addCallback(function(entryList) {
+<a name="line265"></a>        assertSameElements([
+<a name="line266"></a>          &#39;dir1&#39;,
+<a name="line267"></a>          &#39;dir2&#39;,
+<a name="line268"></a>          &#39;file1&#39;,
+<a name="line269"></a>          &#39;file2&#39;,
+<a name="line270"></a>          &#39;foo&#39;
+<a name="line271"></a>        ],
+<a name="line272"></a>        goog.array.map(entryList, function(entry) {
+<a name="line273"></a>          return entry.getName();
+<a name="line274"></a>        }));
+<a name="line275"></a>      }).
+<a name="line276"></a>      addBoth(continueTesting);
+<a name="line277"></a>  waitForAsync(&#39;testListDirectory&#39;);
+<a name="line278"></a>}
+<a name="line279"></a>
+<a name="line280"></a>function testCreatePath() {
+<a name="line281"></a>  dir.createPath(&#39;baz/bat&#39;).
+<a name="line282"></a>      addCallback(function(batDir) {
+<a name="line283"></a>        assertEquals(&#39;/foo/baz/bat&#39;, batDir.getFullPath());
+<a name="line284"></a>        return batDir.createPath(&#39;../zazzle&#39;);
+<a name="line285"></a>      }).
+<a name="line286"></a>      addCallback(function(zazzleDir) {
+<a name="line287"></a>        assertEquals(&#39;/foo/baz/zazzle&#39;, zazzleDir.getFullPath());
+<a name="line288"></a>        return zazzleDir.createPath(&#39;/elements/actinides/neptunium/&#39;);
+<a name="line289"></a>      }).
+<a name="line290"></a>      addCallback(function(elDir) {
+<a name="line291"></a>        assertEquals(&#39;/elements/actinides/neptunium&#39;, elDir.getFullPath());
+<a name="line292"></a>      }).
+<a name="line293"></a>      addBoth(continueTesting);
+<a name="line294"></a>  waitForAsync(&#39;testCreatePath&#39;);
+<a name="line295"></a>}
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>function continueTesting(result) {
+<a name="line299"></a>  asyncTestCase.continueTesting();
+<a name="line300"></a>  if (result instanceof Error) {
+<a name="line301"></a>    throw result;
+<a name="line302"></a>  }
+<a name="line303"></a>  mockClock.tick();
+<a name="line304"></a>}
+<a name="line305"></a>
+<a name="line306"></a>function expectError(deferred, code) {
+<a name="line307"></a>  deferred.
+<a name="line308"></a>      addCallback(function() { fail(&#39;Expected an error&#39;); }).
+<a name="line309"></a>      addErrback(function(err) {
+<a name="line310"></a>        assertEquals(code, err.code);
+<a name="line311"></a>        asyncTestCase.continueTesting();
+<a name="line312"></a>      });
+<a name="line313"></a>  waitForAsync(&#39;waiting for error&#39;);
+<a name="line314"></a>}
+<a name="line315"></a>
+<a name="line316"></a>function waitForAsync(msg) {
+<a name="line317"></a>  asyncTestCase.waitForAsync(msg);
+<a name="line318"></a>  mockClock.tick();
+<a name="line319"></a>}
+</pre>
+
+
+</body>
+</html>

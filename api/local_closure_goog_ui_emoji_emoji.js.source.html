@@ -1,0 +1,124 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>emoji.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_emoji_emoji.js.html">emoji.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Emoji implementation.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.ui.emoji.Emoji&#39;);
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>/**
+<a name="line25"></a> * Creates an emoji.
+<a name="line26"></a> *
+<a name="line27"></a> * A simple wrapper for an emoji.
+<a name="line28"></a> *
+<a name="line29"></a> * @param {string} url URL pointing to the source image for the emoji.
+<a name="line30"></a> * @param {string} id The id of the emoji, e.g., &#39;std.1&#39;.
+<a name="line31"></a> * @constructor
+<a name="line32"></a> * @final
+<a name="line33"></a> */
+<a name="line34"></a>goog.ui.emoji.Emoji = function(url, id) {
+<a name="line35"></a>  /**
+<a name="line36"></a>   * The URL pointing to the source image for the emoji
+<a name="line37"></a>   *
+<a name="line38"></a>   * @type {string}
+<a name="line39"></a>   * @private
+<a name="line40"></a>   */
+<a name="line41"></a>  this.url_ = url;
+<a name="line42"></a>
+<a name="line43"></a>  /**
+<a name="line44"></a>   * The id of the emoji
+<a name="line45"></a>   *
+<a name="line46"></a>   * @type {string}
+<a name="line47"></a>   * @private
+<a name="line48"></a>   */
+<a name="line49"></a>  this.id_ = id;
+<a name="line50"></a>};
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * The name of the goomoji attribute, used for emoji image elements.
+<a name="line55"></a> * @type {string}
+<a name="line56"></a> */
+<a name="line57"></a>goog.ui.emoji.Emoji.ATTRIBUTE = &#39;goomoji&#39;;
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * @return {string} The URL for this emoji.
+<a name="line62"></a> */
+<a name="line63"></a>goog.ui.emoji.Emoji.prototype.getUrl = function() {
+<a name="line64"></a>  return this.url_;
+<a name="line65"></a>};
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * @return {string} The id of this emoji.
+<a name="line70"></a> */
+<a name="line71"></a>goog.ui.emoji.Emoji.prototype.getId = function() {
+<a name="line72"></a>  return this.id_;
+<a name="line73"></a>};
+</pre>
+
+
+</body>
+</html>

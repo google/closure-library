@@ -1,0 +1,286 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>bulkloader_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_bulkloader_test.js.html">bulkloader_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.BulkLoaderTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.BulkLoaderTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line20"></a>goog.require(&#39;goog.net.BulkLoader&#39;);
+<a name="line21"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Test interval between sending uri requests to the server.
+<a name="line28"></a> */
+<a name="line29"></a>var DELAY_INTERVAL_BETWEEN_URI_REQUESTS = 5;
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Test interval before a response is received for a URI request.
+<a name="line34"></a> */
+<a name="line35"></a>var DELAY_INTERVAL_FOR_URI_LOAD = 15;
+<a name="line36"></a>
+<a name="line37"></a>var clock;
+<a name="line38"></a>var loadSuccess, loadError;
+<a name="line39"></a>var successResponseTexts;
+<a name="line40"></a>
+<a name="line41"></a>function setUpPage() {
+<a name="line42"></a>  clock = new goog.testing.MockClock(true);
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>function tearDownPage() {
+<a name="line46"></a>  clock.dispose();
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>function setUp() {
+<a name="line50"></a>  loadSuccess = false;
+<a name="line51"></a>  loadError = false;
+<a name="line52"></a>  successResponseTexts = [];
+<a name="line53"></a>}
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * Gets the successful bulkloader for the specified uris with some
+<a name="line58"></a> * modifications for testability.
+<a name="line59"></a> * &lt;ul&gt;
+<a name="line60"></a> *   &lt;li&gt; Added onSuccess methods to simulate success while loading uris.
+<a name="line61"></a> *   &lt;li&gt; The send function of the XhrManager used by the bulkloader
+<a name="line62"></a> *        calls the onSuccess function after a specified time interval.
+<a name="line63"></a> * &lt;/ul&gt;
+<a name="line64"></a> * @param {Array.&lt;string&gt;} uris The URIs.
+<a name="line65"></a> */
+<a name="line66"></a>function getSuccessfulBulkLoader(uris) {
+<a name="line67"></a>  var bulkLoader = new goog.net.BulkLoader(uris);
+<a name="line68"></a>  bulkLoader.load = function() {
+<a name="line69"></a>    var uris = this.helper_.getUris();
+<a name="line70"></a>    for (var i = 0; i &lt; uris.length; i++) {
+<a name="line71"></a>      // This clock tick simulates a delay for processing every URI.
+<a name="line72"></a>      clock.tick(DELAY_INTERVAL_BETWEEN_URI_REQUESTS);
+<a name="line73"></a>      // This timeout determines how many ticks after the send request
+<a name="line74"></a>      // all the URIs will complete loading. This delays the load of
+<a name="line75"></a>      // the first uri and every subsequent uri by 15 ticks.
+<a name="line76"></a>      setTimeout(goog.bind(this.onSuccess, this, i, uris[i]),
+<a name="line77"></a>          DELAY_INTERVAL_FOR_URI_LOAD);
+<a name="line78"></a>    }
+<a name="line79"></a>  };
+<a name="line80"></a>
+<a name="line81"></a>  bulkLoader.onSuccess = function(id, uri) {
+<a name="line82"></a>    var xhrIo = {
+<a name="line83"></a>      getResponseText: function() {return uri;},
+<a name="line84"></a>      isSuccess: function() {return true;},
+<a name="line85"></a>      dispose: function() {}
+<a name="line86"></a>    };
+<a name="line87"></a>    this.handleEvent_(id, new goog.events.Event(
+<a name="line88"></a>        goog.net.EventType.COMPLETE, xhrIo));
+<a name="line89"></a>  };
+<a name="line90"></a>
+<a name="line91"></a>  var eventHandler = new goog.events.EventHandler();
+<a name="line92"></a>  eventHandler.listen(bulkLoader,
+<a name="line93"></a>      goog.net.EventType.SUCCESS,
+<a name="line94"></a>      handleSuccess);
+<a name="line95"></a>  eventHandler.listen(bulkLoader,
+<a name="line96"></a>      goog.net.EventType.ERROR,
+<a name="line97"></a>      handleError);
+<a name="line98"></a>
+<a name="line99"></a>  return bulkLoader;
+<a name="line100"></a>}
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Gets the non-successful bulkloader for the specified uris with some
+<a name="line105"></a> * modifications for testability.
+<a name="line106"></a> * &lt;ul&gt;
+<a name="line107"></a> *   &lt;li&gt; Added onSuccess and onError methods to simulate success and error
+<a name="line108"></a> *        while loading uris.
+<a name="line109"></a> *   &lt;li&gt; The send function of the XhrManager used by the bulkloader
+<a name="line110"></a> *        calls the onSuccess or onError function after a specified time
+<a name="line111"></a> *        interval.
+<a name="line112"></a> * &lt;/ul&gt;
+<a name="line113"></a> * @param {Array.&lt;string&gt;} uris The URIs.
+<a name="line114"></a> */
+<a name="line115"></a>function getNonSuccessfulBulkLoader(uris) {
+<a name="line116"></a>  var bulkLoader = new goog.net.BulkLoader(uris);
+<a name="line117"></a>  bulkLoader.load = function() {
+<a name="line118"></a>    var uris = this.helper_.getUris();
+<a name="line119"></a>    for (var i = 0; i &lt; uris.length; i++) {
+<a name="line120"></a>      // This clock tick simulates a delay for processing every URI.
+<a name="line121"></a>      clock.tick(DELAY_INTERVAL_BETWEEN_URI_REQUESTS);
+<a name="line122"></a>
+<a name="line123"></a>      // This timeout determines how many ticks after the send request
+<a name="line124"></a>      // all the URIs will complete loading in error. This delays the load
+<a name="line125"></a>      // of the first uri and every subsequent uri by 15 ticks. The URI
+<a name="line126"></a>      // with id == 2 is in error.
+<a name="line127"></a>      if (i != 2) {
+<a name="line128"></a>        setTimeout(goog.bind(this.onSuccess, this, i, uris[i]),
+<a name="line129"></a>            DELAY_INTERVAL_FOR_URI_LOAD);
+<a name="line130"></a>      } else {
+<a name="line131"></a>        setTimeout(goog.bind(this.onError, this, i, uris[i]),
+<a name="line132"></a>            DELAY_INTERVAL_FOR_URI_LOAD);
+<a name="line133"></a>      }
+<a name="line134"></a>    }
+<a name="line135"></a>  };
+<a name="line136"></a>
+<a name="line137"></a>  bulkLoader.onSuccess = function(id, uri) {
+<a name="line138"></a>    var xhrIo = {
+<a name="line139"></a>      getResponseText: function() {return uri;},
+<a name="line140"></a>      isSuccess: function() {return true;},
+<a name="line141"></a>      dispose: function() {}
+<a name="line142"></a>    };
+<a name="line143"></a>    this.handleEvent_(id, new goog.events.Event(
+<a name="line144"></a>        goog.net.EventType.COMPLETE, xhrIo));
+<a name="line145"></a>  };
+<a name="line146"></a>
+<a name="line147"></a>  bulkLoader.onError = function(id) {
+<a name="line148"></a>    var xhrIo = {
+<a name="line149"></a>      getResponseText: function() {return null;},
+<a name="line150"></a>      isSuccess: function() {return false;},
+<a name="line151"></a>      dispose: function() {}
+<a name="line152"></a>    };
+<a name="line153"></a>    this.handleEvent_(id, new goog.events.Event(
+<a name="line154"></a>        goog.net.EventType.ERROR, xhrIo));
+<a name="line155"></a>  };
+<a name="line156"></a>
+<a name="line157"></a>  var eventHandler = new goog.events.EventHandler();
+<a name="line158"></a>  eventHandler.listen(bulkLoader,
+<a name="line159"></a>      goog.net.EventType.SUCCESS,
+<a name="line160"></a>      handleSuccess);
+<a name="line161"></a>  eventHandler.listen(bulkLoader,
+<a name="line162"></a>      goog.net.EventType.ERROR,
+<a name="line163"></a>      handleError);
+<a name="line164"></a>
+<a name="line165"></a>  return bulkLoader;
+<a name="line166"></a>}
+<a name="line167"></a>
+<a name="line168"></a>function handleSuccess(e) {
+<a name="line169"></a>  loadSuccess = true;
+<a name="line170"></a>  successResponseTexts = e.target.getResponseTexts();
+<a name="line171"></a>}
+<a name="line172"></a>
+<a name="line173"></a>function handleError(e) {
+<a name="line174"></a>  loadError = true;
+<a name="line175"></a>}
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * Test successful loading of URIs using the bulkloader.
+<a name="line180"></a> */
+<a name="line181"></a>function testBulkLoaderLoadSuccess() {
+<a name="line182"></a>  var uris = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;];
+<a name="line183"></a>  var bulkLoader = getSuccessfulBulkLoader(uris);
+<a name="line184"></a>  assertArrayEquals(uris, bulkLoader.getRequestUris());
+<a name="line185"></a>
+<a name="line186"></a>  bulkLoader.load();
+<a name="line187"></a>
+<a name="line188"></a>  clock.tick(2);
+<a name="line189"></a>  assertFalse(
+<a name="line190"></a>      &#39;The bulk loader is not yet loaded (after 2 ticks)&#39;, loadSuccess);
+<a name="line191"></a>
+<a name="line192"></a>  clock.tick(3);
+<a name="line193"></a>  assertFalse(
+<a name="line194"></a>      &#39;The bulk loader is not yet loaded (after 5 ticks)&#39;, loadSuccess);
+<a name="line195"></a>
+<a name="line196"></a>  clock.tick(5);
+<a name="line197"></a>  assertFalse(
+<a name="line198"></a>      &#39;The bulk loader is not yet loaded (after 10 ticks)&#39;, loadSuccess);
+<a name="line199"></a>
+<a name="line200"></a>  clock.tick(5);
+<a name="line201"></a>  assertTrue(&#39;The bulk loader is loaded (after 15 ticks)&#39;, loadSuccess);
+<a name="line202"></a>
+<a name="line203"></a>  assertArrayEquals(&#39;Ensure that the response texts are present&#39;,
+<a name="line204"></a>      successResponseTexts, uris);
+<a name="line205"></a>}
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * Test error loading URIs using the bulkloader.
+<a name="line210"></a> */
+<a name="line211"></a>function testBulkLoaderLoadError() {
+<a name="line212"></a>  var uris = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;];
+<a name="line213"></a>  var bulkLoader = getNonSuccessfulBulkLoader(uris);
+<a name="line214"></a>
+<a name="line215"></a>  bulkLoader.load();
+<a name="line216"></a>
+<a name="line217"></a>  clock.tick(2);
+<a name="line218"></a>  assertFalse(
+<a name="line219"></a>      &#39;The bulk loader is not yet loaded (after 2 ticks)&#39;, loadError);
+<a name="line220"></a>
+<a name="line221"></a>  clock.tick(3);
+<a name="line222"></a>  assertFalse(
+<a name="line223"></a>      &#39;The bulk loader is not yet loaded (after 5 ticks)&#39;, loadError);
+<a name="line224"></a>
+<a name="line225"></a>  clock.tick(5);
+<a name="line226"></a>  assertFalse(
+<a name="line227"></a>      &#39;The bulk loader is not yet loaded (after 10 ticks)&#39;, loadError);
+<a name="line228"></a>
+<a name="line229"></a>  clock.tick(5);
+<a name="line230"></a>  assertFalse(
+<a name="line231"></a>      &#39;The bulk loader is not loaded successfully (after 15 ticks)&#39;,
+<a name="line232"></a>      loadSuccess);
+<a name="line233"></a>  assertTrue(
+<a name="line234"></a>      &#39;The bulk loader is loaded in error (after 15 ticks)&#39;, loadError);
+<a name="line235"></a>}
+</pre>
+
+
+</body>
+</html>

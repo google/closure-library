@@ -1,0 +1,361 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>flickr.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_media_flickr.js.html">flickr.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview provides a reusable FlickrSet photo UI component given a public
+<a name="line18"></a> * FlickrSetModel.
+<a name="line19"></a> *
+<a name="line20"></a> * goog.ui.media.FlickrSet is actually a {@link goog.ui.ControlRenderer}, a
+<a name="line21"></a> * stateless class - that could/should be used as a Singleton with the static
+<a name="line22"></a> * method {@code goog.ui.media.FlickrSet.getInstance} -, that knows how to
+<a name="line23"></a> * render Flickr sets. It is designed to be used with a {@link goog.ui.Control},
+<a name="line24"></a> * which will actually control the media renderer and provide the
+<a name="line25"></a> * {@link goog.ui.Component} base. This design guarantees that all different
+<a name="line26"></a> * types of medias will behave alike but will look different.
+<a name="line27"></a> *
+<a name="line28"></a> * goog.ui.media.FlickrSet expects a {@code goog.ui.media.FlickrSetModel} on
+<a name="line29"></a> * {@code goog.ui.Control.getModel} as data models, and renders a flash object
+<a name="line30"></a> * that will show the contents of that set.
+<a name="line31"></a> *
+<a name="line32"></a> * Example of usage:
+<a name="line33"></a> *
+<a name="line34"></a> * &lt;pre&gt;
+<a name="line35"></a> *   var flickrSet = goog.ui.media.FlickrSetModel.newInstance(flickrSetUrl);
+<a name="line36"></a> *   goog.ui.media.FlickrSet.newControl(flickrSet).render();
+<a name="line37"></a> * &lt;/pre&gt;
+<a name="line38"></a> *
+<a name="line39"></a> * FlickrSet medias currently support the following states:
+<a name="line40"></a> *
+<a name="line41"></a> * &lt;ul&gt;
+<a name="line42"></a> *   &lt;li&gt; {@link goog.ui.Component.State.DISABLED}: shows &#39;flash not available&#39;
+<a name="line43"></a> *   &lt;li&gt; {@link goog.ui.Component.State.HOVER}: mouse cursor is over the video
+<a name="line44"></a> *   &lt;li&gt; {@link goog.ui.Component.State.SELECTED}: flash video is shown
+<a name="line45"></a> * &lt;/ul&gt;
+<a name="line46"></a> *
+<a name="line47"></a> * Which can be accessed by
+<a name="line48"></a> * &lt;pre&gt;
+<a name="line49"></a> *   video.setEnabled(true);
+<a name="line50"></a> *   video.setHighlighted(true);
+<a name="line51"></a> *   video.setSelected(true);
+<a name="line52"></a> * &lt;/pre&gt;
+<a name="line53"></a> *
+<a name="line54"></a> *
+<a name="line55"></a> * @supported IE6, FF2+, Safari. Requires flash to actually work.
+<a name="line56"></a> *
+<a name="line57"></a> * TODO(user): Support non flash users. Maybe show a link to the Flick set,
+<a name="line58"></a> * or fetch the data and rendering it using javascript (instead of a broken
+<a name="line59"></a> * &#39;You need to install flash&#39; message).
+<a name="line60"></a> */
+<a name="line61"></a>
+<a name="line62"></a>goog.provide(&#39;goog.ui.media.FlickrSet&#39;);
+<a name="line63"></a>goog.provide(&#39;goog.ui.media.FlickrSetModel&#39;);
+<a name="line64"></a>
+<a name="line65"></a>goog.require(&#39;goog.ui.media.FlashObject&#39;);
+<a name="line66"></a>goog.require(&#39;goog.ui.media.Media&#39;);
+<a name="line67"></a>goog.require(&#39;goog.ui.media.MediaModel&#39;);
+<a name="line68"></a>goog.require(&#39;goog.ui.media.MediaRenderer&#39;);
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Subclasses a goog.ui.media.MediaRenderer to provide a FlickrSet specific
+<a name="line74"></a> * media renderer.
+<a name="line75"></a> *
+<a name="line76"></a> * This class knows how to parse FlickrSet URLs, and render the DOM structure
+<a name="line77"></a> * of flickr set players. This class is meant to be used as a singleton static
+<a name="line78"></a> * stateless class, that takes {@code goog.ui.media.Media} instances and renders
+<a name="line79"></a> * it. It expects {@code goog.ui.media.Media.getModel} to return a well formed,
+<a name="line80"></a> * previously constructed, set id {@see goog.ui.media.FlickrSet.parseUrl},
+<a name="line81"></a> * which is the data model this renderer will use to construct the DOM
+<a name="line82"></a> * structure. {@see goog.ui.media.FlickrSet.newControl} for a example of
+<a name="line83"></a> * constructing a control with this renderer.
+<a name="line84"></a> *
+<a name="line85"></a> * This design is patterned after
+<a name="line86"></a> * http://go/closure_control_subclassing
+<a name="line87"></a> *
+<a name="line88"></a> * It uses {@link goog.ui.media.FlashObject} to embed the flash object.
+<a name="line89"></a> *
+<a name="line90"></a> * @constructor
+<a name="line91"></a> * @extends {goog.ui.media.MediaRenderer}
+<a name="line92"></a> * @final
+<a name="line93"></a> */
+<a name="line94"></a>goog.ui.media.FlickrSet = function() {
+<a name="line95"></a>  goog.ui.media.MediaRenderer.call(this);
+<a name="line96"></a>};
+<a name="line97"></a>goog.inherits(goog.ui.media.FlickrSet, goog.ui.media.MediaRenderer);
+<a name="line98"></a>goog.addSingletonGetter(goog.ui.media.FlickrSet);
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line103"></a> * by this renderer.
+<a name="line104"></a> *
+<a name="line105"></a> * @type {string}
+<a name="line106"></a> */
+<a name="line107"></a>goog.ui.media.FlickrSet.CSS_CLASS = goog.getCssName(&#39;goog-ui-media-flickrset&#39;);
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Flash player URL. Uses Flickr&#39;s flash player by default.
+<a name="line112"></a> *
+<a name="line113"></a> * @type {string}
+<a name="line114"></a> * @private
+<a name="line115"></a> */
+<a name="line116"></a>goog.ui.media.FlickrSet.flashUrl_ =
+<a name="line117"></a>    &#39;http://www.flickr.com/apps/slideshow/show.swf?v=63961&#39;;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * A static convenient method to construct a goog.ui.media.Media control out of
+<a name="line122"></a> * a FlickrSet URL. It extracts the set id information on the URL, sets it
+<a name="line123"></a> * as the data model goog.ui.media.FlickrSet renderer uses, sets the states
+<a name="line124"></a> * supported by the renderer, and returns a Control that binds everything
+<a name="line125"></a> * together. This is what you should be using for constructing FlickrSet videos,
+<a name="line126"></a> * except if you need more fine control over the configuration.
+<a name="line127"></a> *
+<a name="line128"></a> * @param {goog.ui.media.FlickrSetModel} dataModel The Flickr Set data model.
+<a name="line129"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
+<a name="line130"></a> *     document interaction.
+<a name="line131"></a> * @return {!goog.ui.media.Media} A Control binded to the FlickrSet renderer.
+<a name="line132"></a> * @throws exception in case {@code flickrSetUrl} is an invalid flickr set URL.
+<a name="line133"></a> * TODO(user): use {@link goog.ui.media.MediaModel} once it is checked in.
+<a name="line134"></a> */
+<a name="line135"></a>goog.ui.media.FlickrSet.newControl = function(dataModel, opt_domHelper) {
+<a name="line136"></a>  var control = new goog.ui.media.Media(
+<a name="line137"></a>      dataModel, goog.ui.media.FlickrSet.getInstance(), opt_domHelper);
+<a name="line138"></a>  control.setSelected(true);
+<a name="line139"></a>  return control;
+<a name="line140"></a>};
+<a name="line141"></a>
+<a name="line142"></a>
+<a name="line143"></a>/**
+<a name="line144"></a> * A static method that sets which flash URL this class should use. Use this if
+<a name="line145"></a> * you want to host your own flash flickr player.
+<a name="line146"></a> *
+<a name="line147"></a> * @param {string} flashUrl The URL of the flash flickr player.
+<a name="line148"></a> */
+<a name="line149"></a>goog.ui.media.FlickrSet.setFlashUrl = function(flashUrl) {
+<a name="line150"></a>  goog.ui.media.FlickrSet.flashUrl_ = flashUrl;
+<a name="line151"></a>};
+<a name="line152"></a>
+<a name="line153"></a>
+<a name="line154"></a>/**
+<a name="line155"></a> * Creates the initial DOM structure of the flickr set, which is basically a
+<a name="line156"></a> * the flash object pointing to a flickr set player.
+<a name="line157"></a> *
+<a name="line158"></a> * @param {goog.ui.Control} c The media control.
+<a name="line159"></a> * @return {!Element} The DOM structure that represents this control.
+<a name="line160"></a> * @override
+<a name="line161"></a> */
+<a name="line162"></a>goog.ui.media.FlickrSet.prototype.createDom = function(c) {
+<a name="line163"></a>  var control = /** @type {goog.ui.media.Media} */ (c);
+<a name="line164"></a>  var div = goog.ui.media.FlickrSet.superClass_.createDom.call(this, control);
+<a name="line165"></a>
+<a name="line166"></a>  var model =
+<a name="line167"></a>      /** @type {goog.ui.media.FlickrSetModel} */ (control.getDataModel());
+<a name="line168"></a>
+<a name="line169"></a>  // TODO(user): find out what is the policy about hosting this SWF. figure out
+<a name="line170"></a>  // if it works over https.
+<a name="line171"></a>  var flash = new goog.ui.media.FlashObject(
+<a name="line172"></a>      model.getPlayer().getUrl() || &#39;&#39;,
+<a name="line173"></a>      control.getDomHelper());
+<a name="line174"></a>  flash.addFlashVars(model.getPlayer().getVars());
+<a name="line175"></a>  flash.render(div);
+<a name="line176"></a>
+<a name="line177"></a>  return div;
+<a name="line178"></a>};
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Returns the CSS class to be applied to the root element of components
+<a name="line183"></a> * rendered using this renderer.
+<a name="line184"></a> * @return {string} Renderer-specific CSS class.
+<a name="line185"></a> * @override
+<a name="line186"></a> */
+<a name="line187"></a>goog.ui.media.FlickrSet.prototype.getCssClass = function() {
+<a name="line188"></a>  return goog.ui.media.FlickrSet.CSS_CLASS;
+<a name="line189"></a>};
+<a name="line190"></a>
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * The {@code goog.ui.media.FlickrAlbum} media data model. It stores a required
+<a name="line195"></a> * {@code userId} and {@code setId} fields, sets the flickr Set URL, and
+<a name="line196"></a> * allows a few optional parameters.
+<a name="line197"></a> *
+<a name="line198"></a> * @param {string} userId The flickr userId associated with this set.
+<a name="line199"></a> * @param {string} setId The flickr setId associated with this set.
+<a name="line200"></a> * @param {string=} opt_caption An optional caption of the flickr set.
+<a name="line201"></a> * @param {string=} opt_description An optional description of the flickr set.
+<a name="line202"></a> * @constructor
+<a name="line203"></a> * @extends {goog.ui.media.MediaModel}
+<a name="line204"></a> * @final
+<a name="line205"></a> */
+<a name="line206"></a>goog.ui.media.FlickrSetModel = function(userId,
+<a name="line207"></a>                                        setId,
+<a name="line208"></a>                                        opt_caption,
+<a name="line209"></a>                                        opt_description) {
+<a name="line210"></a>  goog.ui.media.MediaModel.call(
+<a name="line211"></a>      this,
+<a name="line212"></a>      goog.ui.media.FlickrSetModel.buildUrl(userId, setId),
+<a name="line213"></a>      opt_caption,
+<a name="line214"></a>      opt_description,
+<a name="line215"></a>      goog.ui.media.MediaModel.MimeType.FLASH);
+<a name="line216"></a>
+<a name="line217"></a>  /**
+<a name="line218"></a>   * The Flickr user id.
+<a name="line219"></a>   * @type {string}
+<a name="line220"></a>   * @private
+<a name="line221"></a>   */
+<a name="line222"></a>  this.userId_ = userId;
+<a name="line223"></a>
+<a name="line224"></a>  /**
+<a name="line225"></a>   * The Flickr set id.
+<a name="line226"></a>   * @type {string}
+<a name="line227"></a>   * @private
+<a name="line228"></a>   */
+<a name="line229"></a>  this.setId_ = setId;
+<a name="line230"></a>
+<a name="line231"></a>  var flashVars = {
+<a name="line232"></a>    &#39;offsite&#39;: &#39;true&#39;,
+<a name="line233"></a>    &#39;lang&#39;: &#39;en&#39;,
+<a name="line234"></a>    &#39;page_show_url&#39;: &#39;/photos/&#39; + userId + &#39;/sets/&#39; + setId + &#39;/show/&#39;,
+<a name="line235"></a>    &#39;page_show_back_url&#39;: &#39;/photos/&#39; + userId + &#39;/sets/&#39; + setId,
+<a name="line236"></a>    &#39;set_id&#39;: setId
+<a name="line237"></a>  };
+<a name="line238"></a>
+<a name="line239"></a>  var player = new goog.ui.media.MediaModel.Player(
+<a name="line240"></a>      goog.ui.media.FlickrSet.flashUrl_, flashVars);
+<a name="line241"></a>
+<a name="line242"></a>  this.setPlayer(player);
+<a name="line243"></a>};
+<a name="line244"></a>goog.inherits(goog.ui.media.FlickrSetModel, goog.ui.media.MediaModel);
+<a name="line245"></a>
+<a name="line246"></a>
+<a name="line247"></a>/**
+<a name="line248"></a> * Regular expression used to extract the username and set id out of the flickr
+<a name="line249"></a> * URLs.
+<a name="line250"></a> *
+<a name="line251"></a> * Copied from http://go/markdownlite.js and {@link FlickrExtractor.xml}.
+<a name="line252"></a> *
+<a name="line253"></a> * @type {RegExp}
+<a name="line254"></a> * @private
+<a name="line255"></a> * @const
+<a name="line256"></a> */
+<a name="line257"></a>goog.ui.media.FlickrSetModel.MATCHER_ =
+<a name="line258"></a>    /(?:http:\/\/)?(?:www\.)?flickr\.com\/(?:photos\/([\d\w@\-]+)\/sets\/(\d+))\/?/i;
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * Takes a {@code flickrSetUrl} and extracts the flickr username and set id.
+<a name="line263"></a> *
+<a name="line264"></a> * @param {string} flickrSetUrl A Flickr set URL.
+<a name="line265"></a> * @param {string=} opt_caption An optional caption of the flickr set.
+<a name="line266"></a> * @param {string=} opt_description An optional description of the flickr set.
+<a name="line267"></a> * @return {!goog.ui.media.FlickrSetModel} The data model that represents the
+<a name="line268"></a> *     Flickr set.
+<a name="line269"></a> * @throws exception in case the parsing fails
+<a name="line270"></a> */
+<a name="line271"></a>goog.ui.media.FlickrSetModel.newInstance = function(flickrSetUrl,
+<a name="line272"></a>                                                    opt_caption,
+<a name="line273"></a>                                                    opt_description) {
+<a name="line274"></a>  if (goog.ui.media.FlickrSetModel.MATCHER_.test(flickrSetUrl)) {
+<a name="line275"></a>    var data = goog.ui.media.FlickrSetModel.MATCHER_.exec(flickrSetUrl);
+<a name="line276"></a>    return new goog.ui.media.FlickrSetModel(
+<a name="line277"></a>        data[1], data[2], opt_caption, opt_description);
+<a name="line278"></a>  }
+<a name="line279"></a>  throw Error(&#39;failed to parse flickr url: &#39; + flickrSetUrl);
+<a name="line280"></a>};
+<a name="line281"></a>
+<a name="line282"></a>
+<a name="line283"></a>/**
+<a name="line284"></a> * Takes a flickr username and set id and returns an URL.
+<a name="line285"></a> *
+<a name="line286"></a> * @param {string} userId The owner of the set.
+<a name="line287"></a> * @param {string} setId The set id.
+<a name="line288"></a> * @return {string} The URL of the set.
+<a name="line289"></a> */
+<a name="line290"></a>goog.ui.media.FlickrSetModel.buildUrl = function(userId, setId) {
+<a name="line291"></a>  return &#39;http://flickr.com/photos/&#39; + userId + &#39;/sets/&#39; + setId;
+<a name="line292"></a>};
+<a name="line293"></a>
+<a name="line294"></a>
+<a name="line295"></a>/**
+<a name="line296"></a> * Gets the Flickr user id.
+<a name="line297"></a> * @return {string} The Flickr user id.
+<a name="line298"></a> */
+<a name="line299"></a>goog.ui.media.FlickrSetModel.prototype.getUserId = function() {
+<a name="line300"></a>  return this.userId_;
+<a name="line301"></a>};
+<a name="line302"></a>
+<a name="line303"></a>
+<a name="line304"></a>/**
+<a name="line305"></a> * Gets the Flickr set id.
+<a name="line306"></a> * @return {string} The Flickr set id.
+<a name="line307"></a> */
+<a name="line308"></a>goog.ui.media.FlickrSetModel.prototype.getSetId = function() {
+<a name="line309"></a>  return this.setId_;
+<a name="line310"></a>};
+</pre>
+
+
+</body>
+</html>

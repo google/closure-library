@@ -1,0 +1,100 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mechanismfactory_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_storage_mechanism_mechanismfactory_test.js.html">mechanismfactory_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.storage.mechanism.mechanismfactoryTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.storage.mechanism.mechanismfactoryTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.storage.mechanism.mechanismfactory&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>function setUp() {
+<a name="line22"></a>  mechanism = goog.storage.mechanism.mechanismfactory.create(&#39;test&#39;);
+<a name="line23"></a>  mechanism_shared = goog.storage.mechanism.mechanismfactory.create(&#39;test&#39;);
+<a name="line24"></a>  mechanism_separate = goog.storage.mechanism.mechanismfactory.create(&#39;test2&#39;);
+<a name="line25"></a>}
+<a name="line26"></a>
+<a name="line27"></a>function tearDown() {
+<a name="line28"></a>  if (!!mechanism) {
+<a name="line29"></a>    mechanism.clear();
+<a name="line30"></a>    mechanism = null;
+<a name="line31"></a>  }
+<a name="line32"></a>  if (!!mechanism_shared) {
+<a name="line33"></a>    mechanism_shared.clear();
+<a name="line34"></a>    mechanism_shared = null;
+<a name="line35"></a>  }
+<a name="line36"></a>  if (!!mechanism_separate) {
+<a name="line37"></a>    mechanism_separate.clear();
+<a name="line38"></a>    mechanism_separate = null;
+<a name="line39"></a>  }
+<a name="line40"></a>}
+<a name="line41"></a>
+<a name="line42"></a>function testAvailability() {
+<a name="line43"></a>  var probe = goog.storage.mechanism.mechanismfactory.create();
+<a name="line44"></a>  if (!!probe) {
+<a name="line45"></a>    assertNotNull(mechanism);
+<a name="line46"></a>    assertNotNull(mechanism_shared);
+<a name="line47"></a>    assertNotNull(mechanism_separate);
+<a name="line48"></a>  }
+<a name="line49"></a>}
+</pre>
+
+
+</body>
+</html>

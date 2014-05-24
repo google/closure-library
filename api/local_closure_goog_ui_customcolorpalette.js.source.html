@@ -1,0 +1,191 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>customcolorpalette.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_customcolorpalette.js.html">customcolorpalette.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A color palette with a button for adding additional colors
+<a name="line17"></a> * manually.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.CustomColorPalette&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.color&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.ColorPalette&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * A custom color palette is a grid of color swatches and a button that allows
+<a name="line33"></a> * the user to add additional colors to the palette
+<a name="line34"></a> *
+<a name="line35"></a> * @param {Array.&lt;string&gt;} initColors Array of initial colors to populate the
+<a name="line36"></a> *     palette with.
+<a name="line37"></a> * @param {goog.ui.PaletteRenderer=} opt_renderer Renderer used to render or
+<a name="line38"></a> *     decorate the palette; defaults to {@link goog.ui.PaletteRenderer}.
+<a name="line39"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
+<a name="line40"></a> *     document interaction.
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @extends {goog.ui.ColorPalette}
+<a name="line43"></a> * @final
+<a name="line44"></a> */
+<a name="line45"></a>goog.ui.CustomColorPalette = function(initColors, opt_renderer, opt_domHelper) {
+<a name="line46"></a>  goog.ui.ColorPalette.call(this, initColors, opt_renderer, opt_domHelper);
+<a name="line47"></a>  this.setSupportedState(goog.ui.Component.State.OPENED, true);
+<a name="line48"></a>};
+<a name="line49"></a>goog.inherits(goog.ui.CustomColorPalette, goog.ui.ColorPalette);
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>/**
+<a name="line53"></a> * Returns an array of DOM nodes for each color, and an additional cell with a
+<a name="line54"></a> * &#39;+&#39;.
+<a name="line55"></a> * @return {!Array.&lt;Node&gt;} Array of div elements.
+<a name="line56"></a> * @override
+<a name="line57"></a> */
+<a name="line58"></a>goog.ui.CustomColorPalette.prototype.createColorNodes = function() {
+<a name="line59"></a>  /** @desc Hover caption for the button that allows the user to add a color. */
+<a name="line60"></a>  var MSG_CLOSURE_CUSTOM_COLOR_BUTTON = goog.getMsg(&#39;Add a color&#39;);
+<a name="line61"></a>
+<a name="line62"></a>  var nl = goog.ui.CustomColorPalette.base(this, &#39;createColorNodes&#39;);
+<a name="line63"></a>  nl.push(goog.dom.createDom(&#39;div&#39;, {
+<a name="line64"></a>    &#39;class&#39;: goog.getCssName(&#39;goog-palette-customcolor&#39;),
+<a name="line65"></a>    &#39;title&#39;: MSG_CLOSURE_CUSTOM_COLOR_BUTTON
+<a name="line66"></a>  }, &#39;+&#39;));
+<a name="line67"></a>  return nl;
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * @override
+<a name="line73"></a> * @param {goog.events.Event} e Mouse or key event that triggered the action.
+<a name="line74"></a> * @return {boolean} True if the action was allowed to proceed, false otherwise.
+<a name="line75"></a> */
+<a name="line76"></a>goog.ui.CustomColorPalette.prototype.performActionInternal = function(e) {
+<a name="line77"></a>  var item = /** @type {Element} */ (this.getHighlightedItem());
+<a name="line78"></a>  if (item) {
+<a name="line79"></a>    if (goog.dom.classlist.contains(
+<a name="line80"></a>        item, goog.getCssName(&#39;goog-palette-customcolor&#39;))) {
+<a name="line81"></a>      // User activated the special &quot;add custom color&quot; swatch.
+<a name="line82"></a>      this.promptForCustomColor();
+<a name="line83"></a>    } else {
+<a name="line84"></a>      // User activated a normal color swatch.
+<a name="line85"></a>      this.setSelectedItem(item);
+<a name="line86"></a>      return this.dispatchEvent(goog.ui.Component.EventType.ACTION);
+<a name="line87"></a>    }
+<a name="line88"></a>  }
+<a name="line89"></a>  return false;
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Prompts the user to enter a custom color.  Currently uses a window.prompt
+<a name="line95"></a> * but could be updated to use a dialog box with a WheelColorPalette.
+<a name="line96"></a> */
+<a name="line97"></a>goog.ui.CustomColorPalette.prototype.promptForCustomColor = function() {
+<a name="line98"></a>  /** @desc Default custom color dialog. */
+<a name="line99"></a>  var MSG_CLOSURE_CUSTOM_COLOR_PROMPT = goog.getMsg(
+<a name="line100"></a>      &#39;Input custom color, i.e. pink, #F00, #D015FF or rgb(100, 50, 25)&#39;);
+<a name="line101"></a>
+<a name="line102"></a>  // A CustomColorPalette is considered &quot;open&quot; while the color selection prompt
+<a name="line103"></a>  // is open.  Enabling state transition events for the OPENED state and
+<a name="line104"></a>  // listening for OPEN events allows clients to save the selection before
+<a name="line105"></a>  // it is destroyed (see e.g. bug 1064701).
+<a name="line106"></a>  var response = null;
+<a name="line107"></a>  this.setOpen(true);
+<a name="line108"></a>  if (this.isOpen()) {
+<a name="line109"></a>    // The OPEN event wasn&#39;t canceled; prompt for custom color.
+<a name="line110"></a>    response = window.prompt(MSG_CLOSURE_CUSTOM_COLOR_PROMPT, &#39;#FFFFFF&#39;);
+<a name="line111"></a>    this.setOpen(false);
+<a name="line112"></a>  }
+<a name="line113"></a>
+<a name="line114"></a>  if (!response) {
+<a name="line115"></a>    // The user hit cancel
+<a name="line116"></a>    return;
+<a name="line117"></a>  }
+<a name="line118"></a>
+<a name="line119"></a>  var color;
+<a name="line120"></a>  /** @preserveTry */
+<a name="line121"></a>  try {
+<a name="line122"></a>    color = goog.color.parse(response).hex;
+<a name="line123"></a>  } catch (er) {
+<a name="line124"></a>    /** @desc Alert message sent when the input string is not a valid color. */
+<a name="line125"></a>    var MSG_CLOSURE_CUSTOM_COLOR_INVALID_INPUT = goog.getMsg(
+<a name="line126"></a>        &#39;ERROR: &quot;{$color}&quot; is not a valid color.&#39;, {&#39;color&#39;: response});
+<a name="line127"></a>    alert(MSG_CLOSURE_CUSTOM_COLOR_INVALID_INPUT);
+<a name="line128"></a>    return;
+<a name="line129"></a>  }
+<a name="line130"></a>
+<a name="line131"></a>  // TODO(user): This is relatively inefficient.  Consider adding
+<a name="line132"></a>  // functionality to palette to add individual items after render time.
+<a name="line133"></a>  var colors = this.getColors();
+<a name="line134"></a>  colors.push(color);
+<a name="line135"></a>  this.setColors(colors);
+<a name="line136"></a>
+<a name="line137"></a>  // Set the selected color to the new color and notify listeners of the action.
+<a name="line138"></a>  this.setSelectedColor(color);
+<a name="line139"></a>  this.dispatchEvent(goog.ui.Component.EventType.ACTION);
+<a name="line140"></a>};
+</pre>
+
+
+</body>
+</html>

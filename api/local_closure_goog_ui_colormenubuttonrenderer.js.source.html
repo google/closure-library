@@ -1,0 +1,198 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>colormenubuttonrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_colormenubuttonrenderer.js.html">colormenubuttonrenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Renderer for {@link goog.ui.ColorMenuButton}s.
+<a name="line17"></a> *
+<a name="line18"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line19"></a> * @author attila@google.com (Attila Bodis)
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.ColorMenuButtonRenderer&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line25"></a>goog.require(&#39;goog.color&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.MenuButtonRenderer&#39;);
+<a name="line28"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Renderer for {@link goog.ui.ColorMenuButton}s.
+<a name="line34"></a> * @constructor
+<a name="line35"></a> * @extends {goog.ui.MenuButtonRenderer}
+<a name="line36"></a> */
+<a name="line37"></a>goog.ui.ColorMenuButtonRenderer = function() {
+<a name="line38"></a>  goog.ui.MenuButtonRenderer.call(this);
+<a name="line39"></a>};
+<a name="line40"></a>goog.inherits(goog.ui.ColorMenuButtonRenderer, goog.ui.MenuButtonRenderer);
+<a name="line41"></a>goog.addSingletonGetter(goog.ui.ColorMenuButtonRenderer);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line46"></a> * by this renderer.
+<a name="line47"></a> * @type {string}
+<a name="line48"></a> */
+<a name="line49"></a>goog.ui.ColorMenuButtonRenderer.CSS_CLASS =
+<a name="line50"></a>    goog.getCssName(&#39;goog-color-menu-button&#39;);
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Overrides the superclass implementation by wrapping the caption text or DOM
+<a name="line55"></a> * structure in a color indicator element.  Creates the following DOM structure:
+<a name="line56"></a> *   &lt;div class=&quot;goog-inline-block goog-menu-button-caption&quot;&gt;
+<a name="line57"></a> *     &lt;div class=&quot;goog-color-menu-button-indicator&quot;&gt;
+<a name="line58"></a> *       Contents...
+<a name="line59"></a> *     &lt;/div&gt;
+<a name="line60"></a> *   &lt;/div&gt;
+<a name="line61"></a> * The &#39;goog-color-menu-button-indicator&#39; style should be defined to have a
+<a name="line62"></a> * bottom border of nonzero width and a default color that blends into its
+<a name="line63"></a> * background.
+<a name="line64"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure.
+<a name="line65"></a> * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
+<a name="line66"></a> * @return {Element} Caption element.
+<a name="line67"></a> * @override
+<a name="line68"></a> */
+<a name="line69"></a>goog.ui.ColorMenuButtonRenderer.prototype.createCaption = function(content,
+<a name="line70"></a>    dom) {
+<a name="line71"></a>  return goog.ui.ColorMenuButtonRenderer.superClass_.createCaption.call(this,
+<a name="line72"></a>      goog.ui.ColorMenuButtonRenderer.wrapCaption(content, dom), dom);
+<a name="line73"></a>};
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * Wrap a caption in a div with the color-menu-button-indicator CSS class.
+<a name="line78"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure.
+<a name="line79"></a> * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
+<a name="line80"></a> * @return {Element} Caption element.
+<a name="line81"></a> */
+<a name="line82"></a>goog.ui.ColorMenuButtonRenderer.wrapCaption = function(content, dom) {
+<a name="line83"></a>  return dom.createDom(&#39;div&#39;,
+<a name="line84"></a>      goog.getCssName(goog.ui.ColorMenuButtonRenderer.CSS_CLASS, &#39;indicator&#39;),
+<a name="line85"></a>      content);
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Takes a color menu button control&#39;s root element and a value object
+<a name="line91"></a> * (which is assumed to be a color), and updates the button&#39;s DOM to reflect
+<a name="line92"></a> * the new color.  Overrides {@link goog.ui.ButtonRenderer#setValue}.
+<a name="line93"></a> * @param {Element} element The button control&#39;s root element (if rendered).
+<a name="line94"></a> * @param {*} value New value; assumed to be a color spec string.
+<a name="line95"></a> * @override
+<a name="line96"></a> */
+<a name="line97"></a>goog.ui.ColorMenuButtonRenderer.prototype.setValue = function(element, value) {
+<a name="line98"></a>  if (element) {
+<a name="line99"></a>    goog.ui.ColorMenuButtonRenderer.setCaptionValue(
+<a name="line100"></a>        this.getContentElement(element), value);
+<a name="line101"></a>  }
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Takes a control&#39;s content element and a value object (which is assumed
+<a name="line107"></a> * to be a color), and updates its DOM to reflect the new color.
+<a name="line108"></a> * @param {Element} caption A content element of a control.
+<a name="line109"></a> * @param {*} value New value; assumed to be a color spec string.
+<a name="line110"></a> */
+<a name="line111"></a>goog.ui.ColorMenuButtonRenderer.setCaptionValue = function(caption, value) {
+<a name="line112"></a>  // Assume that the caption&#39;s first child is the indicator.
+<a name="line113"></a>  if (caption &amp;&amp; caption.firstChild) {
+<a name="line114"></a>    // Normalize the value to a hex color spec or null (otherwise setting
+<a name="line115"></a>    // borderBottomColor will cause a JS error on IE).
+<a name="line116"></a>    var hexColor;
+<a name="line117"></a>
+<a name="line118"></a>    var strValue = /** @type {string} */ (value);
+<a name="line119"></a>    hexColor = strValue &amp;&amp; goog.color.isValidColor(strValue) ?
+<a name="line120"></a>        goog.color.parse(strValue).hex :
+<a name="line121"></a>        null;
+<a name="line122"></a>
+<a name="line123"></a>    // Stupid IE6/7 doesn&#39;t do transparent borders.
+<a name="line124"></a>    // TODO(attila): Add user-agent version check when IE8 comes out...
+<a name="line125"></a>    caption.firstChild.style.borderBottomColor = hexColor ||
+<a name="line126"></a>        (goog.userAgent.IE ? &#39;&#39; : &#39;transparent&#39;);
+<a name="line127"></a>  }
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Initializes the button&#39;s DOM when it enters the document.  Overrides the
+<a name="line133"></a> * superclass implementation by making sure the button&#39;s color indicator is
+<a name="line134"></a> * initialized.
+<a name="line135"></a> * @param {goog.ui.Control} button goog.ui.ColorMenuButton whose DOM is to be
+<a name="line136"></a> *     initialized as it enters the document.
+<a name="line137"></a> * @override
+<a name="line138"></a> */
+<a name="line139"></a>goog.ui.ColorMenuButtonRenderer.prototype.initializeDom = function(button) {
+<a name="line140"></a>  var buttonElement = button.getElement();
+<a name="line141"></a>  goog.asserts.assert(buttonElement);
+<a name="line142"></a>  this.setValue(buttonElement, button.getValue());
+<a name="line143"></a>  goog.dom.classlist.add(buttonElement,
+<a name="line144"></a>      goog.ui.ColorMenuButtonRenderer.CSS_CLASS);
+<a name="line145"></a>  goog.ui.ColorMenuButtonRenderer.superClass_.initializeDom.call(this,
+<a name="line146"></a>      button);
+<a name="line147"></a>};
+</pre>
+
+
+</body>
+</html>

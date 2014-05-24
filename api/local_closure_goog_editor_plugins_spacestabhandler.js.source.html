@@ -1,0 +1,143 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>spacestabhandler.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_plugins_spacestabhandler.js.html">spacestabhandler.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Editor plugin to handle tab keys not in lists to add 4 spaces.
+<a name="line17"></a> *
+<a name="line18"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.editor.plugins.SpacesTabHandler&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line25"></a>goog.require(&#39;goog.editor.plugins.AbstractTabHandler&#39;);
+<a name="line26"></a>goog.require(&#39;goog.editor.range&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Plugin to handle tab keys when not in lists to add 4 spaces.
+<a name="line32"></a> * @constructor
+<a name="line33"></a> * @extends {goog.editor.plugins.AbstractTabHandler}
+<a name="line34"></a> * @final
+<a name="line35"></a> */
+<a name="line36"></a>goog.editor.plugins.SpacesTabHandler = function() {
+<a name="line37"></a>  goog.editor.plugins.AbstractTabHandler.call(this);
+<a name="line38"></a>};
+<a name="line39"></a>goog.inherits(goog.editor.plugins.SpacesTabHandler,
+<a name="line40"></a>    goog.editor.plugins.AbstractTabHandler);
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/** @override */
+<a name="line44"></a>goog.editor.plugins.SpacesTabHandler.prototype.getTrogClassId = function() {
+<a name="line45"></a>  return &#39;SpacesTabHandler&#39;;
+<a name="line46"></a>};
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>/** @override */
+<a name="line50"></a>goog.editor.plugins.SpacesTabHandler.prototype.handleTabKey = function(e) {
+<a name="line51"></a>  var dh = this.getFieldDomHelper();
+<a name="line52"></a>  var range = this.getFieldObject().getRange();
+<a name="line53"></a>  if (!goog.editor.range.intersectsTag(range, goog.dom.TagName.LI)) {
+<a name="line54"></a>    // In the shift + tab case we don&#39;t want to insert spaces, but we don&#39;t
+<a name="line55"></a>    // want focus to move either so skip the spacing logic and just prevent
+<a name="line56"></a>    // default.
+<a name="line57"></a>    if (!e.shiftKey) {
+<a name="line58"></a>      // Not in a list but we want to insert 4 spaces.
+<a name="line59"></a>
+<a name="line60"></a>      // Stop change events while we make multiple field changes.
+<a name="line61"></a>      this.getFieldObject().stopChangeEvents(true, true);
+<a name="line62"></a>
+<a name="line63"></a>      // Inserting nodes below completely messes up the selection, doing the
+<a name="line64"></a>      // deletion here before it&#39;s messed up. Only delete if text is selected,
+<a name="line65"></a>      // otherwise we would remove the character to the right of the cursor.
+<a name="line66"></a>      if (!range.isCollapsed()) {
+<a name="line67"></a>        dh.getDocument().execCommand(&#39;delete&#39;, false, null);
+<a name="line68"></a>        // Safari 3 has some DOM exceptions if we don&#39;t reget the range here,
+<a name="line69"></a>        // doing it all the time just to be safe.
+<a name="line70"></a>        range = this.getFieldObject().getRange();
+<a name="line71"></a>      }
+<a name="line72"></a>
+<a name="line73"></a>      // Emulate tab by removing selection and inserting 4 spaces
+<a name="line74"></a>      // Two breaking spaces in a row can be collapsed by the browser into one
+<a name="line75"></a>      // space. Inserting the string below because it is guaranteed to never
+<a name="line76"></a>      // collapse to less than four spaces, regardless of what is adjacent to
+<a name="line77"></a>      // the inserted spaces. This might make line wrapping slightly
+<a name="line78"></a>      // sub-optimal around a grouping of non-breaking spaces.
+<a name="line79"></a>      var elem = dh.createDom(&#39;span&#39;, null, &#39;\u00a0\u00a0 \u00a0&#39;);
+<a name="line80"></a>      elem = range.insertNode(elem, false);
+<a name="line81"></a>
+<a name="line82"></a>      this.getFieldObject().dispatchChange();
+<a name="line83"></a>      goog.editor.range.placeCursorNextTo(elem, false);
+<a name="line84"></a>      this.getFieldObject().dispatchSelectionChangeEvent();
+<a name="line85"></a>    }
+<a name="line86"></a>
+<a name="line87"></a>    e.preventDefault();
+<a name="line88"></a>    return true;
+<a name="line89"></a>  }
+<a name="line90"></a>
+<a name="line91"></a>  return false;
+<a name="line92"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>cursor.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_db_cursor.js.html">cursor.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Wrapper for a IndexedDB cursor.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.db.Cursor&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line24"></a>goog.require(&#39;goog.db.Error&#39;);
+<a name="line25"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Creates a new IDBCursor wrapper object. Should not be created directly,
+<a name="line32"></a> * access cursor through object store.
+<a name="line33"></a> * @see goog.db.ObjectStore#openCursor
+<a name="line34"></a> *
+<a name="line35"></a> * @constructor
+<a name="line36"></a> * @extends {goog.events.EventTarget}
+<a name="line37"></a> * @final
+<a name="line38"></a> */
+<a name="line39"></a>goog.db.Cursor = function() {
+<a name="line40"></a>  goog.db.Cursor.base(this, &#39;constructor&#39;);
+<a name="line41"></a>};
+<a name="line42"></a>goog.inherits(goog.db.Cursor, goog.events.EventTarget);
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * Underlying IndexedDB cursor object.
+<a name="line47"></a> *
+<a name="line48"></a> * @type {IDBCursor}
+<a name="line49"></a> * @private
+<a name="line50"></a> */
+<a name="line51"></a>goog.db.Cursor.prototype.cursor_ = null;
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Advances the cursor to the next position along its direction. When new data
+<a name="line56"></a> * is available, the NEW_DATA event will be fired. If the cursor has reached the
+<a name="line57"></a> * end of the range it will fire the COMPLETE event. If opt_key is specified it
+<a name="line58"></a> * will advance to the key it matches in its direction.
+<a name="line59"></a> *
+<a name="line60"></a> * This wraps the native #continue method on the underlying object.
+<a name="line61"></a> *
+<a name="line62"></a> * @param {IDBKeyType=} opt_key The optional key to advance to.
+<a name="line63"></a> */
+<a name="line64"></a>goog.db.Cursor.prototype.next = function(opt_key) {
+<a name="line65"></a>  if (opt_key) {
+<a name="line66"></a>    this.cursor_[&#39;continue&#39;](opt_key);
+<a name="line67"></a>  } else {
+<a name="line68"></a>    this.cursor_[&#39;continue&#39;]();
+<a name="line69"></a>  }
+<a name="line70"></a>};
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * Updates the value at the current position of the cursor in the object store.
+<a name="line75"></a> * If the cursor points to a value that has just been deleted, a new value is
+<a name="line76"></a> * created.
+<a name="line77"></a> *
+<a name="line78"></a> * @param {*} value The value to be stored.
+<a name="line79"></a> * @return {!goog.async.Deferred} The resulting deferred request.
+<a name="line80"></a> */
+<a name="line81"></a>goog.db.Cursor.prototype.update = function(value) {
+<a name="line82"></a>  var msg = &#39;updating via cursor with value &#39;;
+<a name="line83"></a>  var d = new goog.async.Deferred();
+<a name="line84"></a>  var request;
+<a name="line85"></a>
+<a name="line86"></a>  try {
+<a name="line87"></a>    request = this.cursor_.update(value);
+<a name="line88"></a>  } catch (err) {
+<a name="line89"></a>    msg += goog.debug.deepExpose(value);
+<a name="line90"></a>    d.errback(goog.db.Error.fromException(err, msg));
+<a name="line91"></a>    return d;
+<a name="line92"></a>  }
+<a name="line93"></a>  request.onsuccess = function(ev) {
+<a name="line94"></a>    d.callback();
+<a name="line95"></a>  };
+<a name="line96"></a>  request.onerror = function(ev) {
+<a name="line97"></a>    msg += goog.debug.deepExpose(value);
+<a name="line98"></a>    d.errback(goog.db.Error.fromRequest(ev.target, msg));
+<a name="line99"></a>  };
+<a name="line100"></a>  return d;
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Deletes the value at the cursor&#39;s position, without changing the cursor&#39;s
+<a name="line106"></a> * position. Once the value is deleted, the cursor&#39;s value is set to null.
+<a name="line107"></a> *
+<a name="line108"></a> * @return {!goog.async.Deferred} The resulting deferred request.
+<a name="line109"></a> */
+<a name="line110"></a>goog.db.Cursor.prototype.remove = function() {
+<a name="line111"></a>  var msg = &#39;deleting via cursor&#39;;
+<a name="line112"></a>  var d = new goog.async.Deferred();
+<a name="line113"></a>  var request;
+<a name="line114"></a>
+<a name="line115"></a>  try {
+<a name="line116"></a>    request = this.cursor_[&#39;delete&#39;]();
+<a name="line117"></a>  } catch (err) {
+<a name="line118"></a>    d.errback(goog.db.Error.fromException(err, msg));
+<a name="line119"></a>    return d;
+<a name="line120"></a>  }
+<a name="line121"></a>  request.onsuccess = function(ev) {
+<a name="line122"></a>    d.callback();
+<a name="line123"></a>  };
+<a name="line124"></a>  request.onerror = function(ev) {
+<a name="line125"></a>    d.errback(goog.db.Error.fromRequest(ev.target, msg));
+<a name="line126"></a>  };
+<a name="line127"></a>  return d;
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * @return {*} The value for the value at the cursor&#39;s position. Undefined
+<a name="line133"></a> *     if no current value, or null if value has just been deleted.
+<a name="line134"></a> */
+<a name="line135"></a>goog.db.Cursor.prototype.getValue = function() {
+<a name="line136"></a>  return this.cursor_[&#39;value&#39;];
+<a name="line137"></a>};
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * @return {IDBKeyType} The key for the value at the cursor&#39;s position. If
+<a name="line142"></a> *     the cursor is outside its range, this is undefined.
+<a name="line143"></a> */
+<a name="line144"></a>goog.db.Cursor.prototype.getKey = function() {
+<a name="line145"></a>  return this.cursor_.key;
+<a name="line146"></a>};
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/**
+<a name="line150"></a> * Opens a value cursor from IDBObjectStore or IDBIndex over the specified key
+<a name="line151"></a> * range. Returns a cursor object which is able to iterate over the given range.
+<a name="line152"></a> * @param {!(IDBObjectStore|IDBIndex)} source Data source to open cursor.
+<a name="line153"></a> * @param {!goog.db.KeyRange=} opt_range The key range. If undefined iterates
+<a name="line154"></a> *     over the whole data source.
+<a name="line155"></a> * @param {!goog.db.Cursor.Direction=} opt_direction The direction. If undefined
+<a name="line156"></a> *     moves in a forward direction with duplicates.
+<a name="line157"></a> * @return {!goog.db.Cursor} The cursor.
+<a name="line158"></a> * @throws {goog.db.Error} If there was a problem opening the cursor.
+<a name="line159"></a> */
+<a name="line160"></a>goog.db.Cursor.openCursor = function(source, opt_range, opt_direction) {
+<a name="line161"></a>  var cursor = new goog.db.Cursor();
+<a name="line162"></a>  var request;
+<a name="line163"></a>
+<a name="line164"></a>  try {
+<a name="line165"></a>    var range = opt_range ? opt_range.range() : null;
+<a name="line166"></a>    if (opt_direction) {
+<a name="line167"></a>      request = source.openCursor(range, opt_direction);
+<a name="line168"></a>    } else {
+<a name="line169"></a>      request = source.openCursor(range);
+<a name="line170"></a>    }
+<a name="line171"></a>  } catch (ex) {
+<a name="line172"></a>    cursor.dispose();
+<a name="line173"></a>    throw goog.db.Error.fromException(ex, source.name);
+<a name="line174"></a>  }
+<a name="line175"></a>  request.onsuccess = function(e) {
+<a name="line176"></a>    cursor.cursor_ = e.target.result || null;
+<a name="line177"></a>    if (cursor.cursor_) {
+<a name="line178"></a>      cursor.dispatchEvent(goog.db.Cursor.EventType.NEW_DATA);
+<a name="line179"></a>    } else {
+<a name="line180"></a>      cursor.dispatchEvent(goog.db.Cursor.EventType.COMPLETE);
+<a name="line181"></a>    }
+<a name="line182"></a>  };
+<a name="line183"></a>  request.onerror = function(e) {
+<a name="line184"></a>    cursor.dispatchEvent(goog.db.Cursor.EventType.ERROR);
+<a name="line185"></a>  };
+<a name="line186"></a>  return cursor;
+<a name="line187"></a>};
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * Possible cursor directions.
+<a name="line192"></a> * @see http://www.w3.org/TR/IndexedDB/#idl-def-IDBCursor
+<a name="line193"></a> *
+<a name="line194"></a> * @enum {string}
+<a name="line195"></a> */
+<a name="line196"></a>goog.db.Cursor.Direction = {
+<a name="line197"></a>  NEXT: &#39;next&#39;,
+<a name="line198"></a>  NEXT_NO_DUPLICATE: &#39;nextunique&#39;,
+<a name="line199"></a>  PREV: &#39;prev&#39;,
+<a name="line200"></a>  PREV_NO_DUPLICATE: &#39;prevunique&#39;
+<a name="line201"></a>};
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Event types that the cursor can dispatch. COMPLETE events are dispatched when
+<a name="line206"></a> * a cursor is depleted of values, a NEW_DATA event if there is new data
+<a name="line207"></a> * available, and ERROR if an error occurred.
+<a name="line208"></a> *
+<a name="line209"></a> * @enum {string}
+<a name="line210"></a> */
+<a name="line211"></a>goog.db.Cursor.EventType = {
+<a name="line212"></a>  COMPLETE: &#39;c&#39;,
+<a name="line213"></a>  ERROR: &#39;e&#39;,
+<a name="line214"></a>  NEW_DATA: &#39;n&#39;
+<a name="line215"></a>};
+</pre>
+
+
+</body>
+</html>

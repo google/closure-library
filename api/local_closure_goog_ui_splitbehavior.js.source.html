@@ -1,0 +1,392 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>splitbehavior.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_splitbehavior.js.html">splitbehavior.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Behavior for combining two controls.
+<a name="line17"></a> *
+<a name="line18"></a> * @see ../demos/split.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.SplitBehavior&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.ui.SplitBehavior.DefaultHandlers&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line25"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dispose&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.ButtonSide&#39;);
+<a name="line32"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line33"></a>goog.require(&#39;goog.ui.decorate&#39;);
+<a name="line34"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>/**
+<a name="line39"></a> * Creates a behavior for combining two controls. The behavior is triggered
+<a name="line40"></a> * by a given event type which applies the behavior handler.
+<a name="line41"></a> * Can be used to also render or decorate  the controls.
+<a name="line42"></a> * For a usage example see {@link goog.ui.ColorSplitBehavior}
+<a name="line43"></a> *
+<a name="line44"></a> * @param {goog.ui.Control} first A ui control.
+<a name="line45"></a> * @param {goog.ui.Control} second A ui control.
+<a name="line46"></a> * @param {function(goog.ui.Control,Event)=} opt_behaviorHandler A handler
+<a name="line47"></a> *     to apply for the behavior.
+<a name="line48"></a> * @param {string=} opt_eventType The event type triggering the
+<a name="line49"></a> *     handler.
+<a name="line50"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
+<a name="line51"></a> *     document interaction.
+<a name="line52"></a> * @constructor
+<a name="line53"></a> * @extends {goog.Disposable}
+<a name="line54"></a> */
+<a name="line55"></a>goog.ui.SplitBehavior = function(first, second, opt_behaviorHandler,
+<a name="line56"></a>    opt_eventType, opt_domHelper) {
+<a name="line57"></a>  goog.Disposable.call(this);
+<a name="line58"></a>
+<a name="line59"></a>  /**
+<a name="line60"></a>   * @type {goog.ui.Control}
+<a name="line61"></a>   * @private
+<a name="line62"></a>   */
+<a name="line63"></a>  this.first_ = first;
+<a name="line64"></a>
+<a name="line65"></a>  /**
+<a name="line66"></a>   * @type {goog.ui.Control}
+<a name="line67"></a>   * @private
+<a name="line68"></a>   */
+<a name="line69"></a>  this.second_ = second;
+<a name="line70"></a>
+<a name="line71"></a>  /**
+<a name="line72"></a>   * Handler for this behavior.
+<a name="line73"></a>   * @type {function(goog.ui.Control,Event)}
+<a name="line74"></a>   * @private
+<a name="line75"></a>   */
+<a name="line76"></a>  this.behaviorHandler_ = opt_behaviorHandler ||
+<a name="line77"></a>                          goog.ui.SplitBehavior.DefaultHandlers.CAPTION;
+<a name="line78"></a>
+<a name="line79"></a>  /**
+<a name="line80"></a>   * Event type triggering the behavior.
+<a name="line81"></a>   * @type {string}
+<a name="line82"></a>   * @private
+<a name="line83"></a>   */
+<a name="line84"></a>  this.eventType_ = opt_eventType || goog.ui.Component.EventType.ACTION;
+<a name="line85"></a>
+<a name="line86"></a>  /**
+<a name="line87"></a>   * @type {goog.dom.DomHelper}
+<a name="line88"></a>   * @private
+<a name="line89"></a>   */
+<a name="line90"></a>  this.dom_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line91"></a>
+<a name="line92"></a>  /**
+<a name="line93"></a>   * True iff the behavior is active.
+<a name="line94"></a>   * @type {boolean}
+<a name="line95"></a>   * @private
+<a name="line96"></a>   */
+<a name="line97"></a>  this.isActive_ = false;
+<a name="line98"></a>
+<a name="line99"></a>  /**
+<a name="line100"></a>   * Event handler.
+<a name="line101"></a>   * @type {goog.events.EventHandler}
+<a name="line102"></a>   * @private
+<a name="line103"></a>   */
+<a name="line104"></a>  this.eventHandler_ = new goog.events.EventHandler();
+<a name="line105"></a>
+<a name="line106"></a>  /**
+<a name="line107"></a>   * Whether to dispose the first control when dispose is called.
+<a name="line108"></a>   * @type {boolean}
+<a name="line109"></a>   * @private
+<a name="line110"></a>   */
+<a name="line111"></a>  this.disposeFirst_ = true;
+<a name="line112"></a>
+<a name="line113"></a>  /**
+<a name="line114"></a>   * Whether to dispose the second control when dispose is called.
+<a name="line115"></a>   * @type {boolean}
+<a name="line116"></a>   * @private
+<a name="line117"></a>   */
+<a name="line118"></a>  this.disposeSecond_ = true;
+<a name="line119"></a>};
+<a name="line120"></a>goog.inherits(goog.ui.SplitBehavior, goog.Disposable);
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Css class for elements rendered by this behavior.
+<a name="line125"></a> * @type {string}
+<a name="line126"></a> */
+<a name="line127"></a>goog.ui.SplitBehavior.CSS_CLASS = goog.getCssName(&#39;goog-split-behavior&#39;);
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * An emum of split behavior handlers.
+<a name="line132"></a> * @enum {function(goog.ui.Control,Event)}
+<a name="line133"></a> */
+<a name="line134"></a>goog.ui.SplitBehavior.DefaultHandlers = {
+<a name="line135"></a>  NONE: goog.nullFunction,
+<a name="line136"></a>  CAPTION: function(targetControl, e) {
+<a name="line137"></a>    var item = /** @type {goog.ui.MenuItem} */ (e.target);
+<a name="line138"></a>    var value = (/** @type {string} */((item &amp;&amp; item.getValue()) || &#39;&#39;));
+<a name="line139"></a>    var button = /** @type {goog.ui.Button} */ (targetControl);
+<a name="line140"></a>    button.setCaption &amp;&amp; button.setCaption(value);
+<a name="line141"></a>    button.setValue &amp;&amp; button.setValue(value);
+<a name="line142"></a>  },
+<a name="line143"></a>  VALUE: function(targetControl, e) {
+<a name="line144"></a>    var item = /** @type {goog.ui.MenuItem} */ (e.target);
+<a name="line145"></a>    var value = (/** @type {string} */(item &amp;&amp; item.getValue()) || &#39;&#39;);
+<a name="line146"></a>    var button = /** @type {goog.ui.Button} */ (targetControl);
+<a name="line147"></a>    button.setValue &amp;&amp; button.setValue(value);
+<a name="line148"></a>  }
+<a name="line149"></a>};
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * The element containing the controls.
+<a name="line154"></a> * @type {Element}
+<a name="line155"></a> * @private
+<a name="line156"></a> */
+<a name="line157"></a>goog.ui.SplitBehavior.prototype.element_ = null;
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * @return {Element} The element containing the controls.
+<a name="line162"></a> */
+<a name="line163"></a>goog.ui.SplitBehavior.prototype.getElement = function() {
+<a name="line164"></a>  return this.element_;
+<a name="line165"></a>};
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * @return {function(goog.ui.Control,Event)} The behavior handler.
+<a name="line170"></a> */
+<a name="line171"></a>goog.ui.SplitBehavior.prototype.getBehaviorHandler = function() {
+<a name="line172"></a>  return this.behaviorHandler_;
+<a name="line173"></a>};
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * @return {string} The behavior event type.
+<a name="line178"></a> */
+<a name="line179"></a>goog.ui.SplitBehavior.prototype.getEventType = function() {
+<a name="line180"></a>  return this.eventType_;
+<a name="line181"></a>};
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * Sets the disposeControls flags.
+<a name="line186"></a> * @param {boolean} disposeFirst Whether to dispose the first control
+<a name="line187"></a> *     when dispose is called.
+<a name="line188"></a> * @param {boolean} disposeSecond Whether to dispose the second control
+<a name="line189"></a> *     when dispose is called.
+<a name="line190"></a> */
+<a name="line191"></a>goog.ui.SplitBehavior.prototype.setDisposeControls = function(disposeFirst,
+<a name="line192"></a>    disposeSecond) {
+<a name="line193"></a>  this.disposeFirst_ = !!disposeFirst;
+<a name="line194"></a>  this.disposeSecond_ = !!disposeSecond;
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Sets the behavior handler.
+<a name="line200"></a> * @param {function(goog.ui.Control,Event)} behaviorHandler The behavior
+<a name="line201"></a> *     handler.
+<a name="line202"></a> */
+<a name="line203"></a>goog.ui.SplitBehavior.prototype.setHandler = function(behaviorHandler) {
+<a name="line204"></a>  this.behaviorHandler_ = behaviorHandler;
+<a name="line205"></a>  if (this.isActive_) {
+<a name="line206"></a>    this.setActive(false);
+<a name="line207"></a>    this.setActive(true);
+<a name="line208"></a>  }
+<a name="line209"></a>};
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Sets the behavior event type.
+<a name="line214"></a> * @param {string} eventType The behavior event type.
+<a name="line215"></a> */
+<a name="line216"></a>goog.ui.SplitBehavior.prototype.setEventType = function(eventType) {
+<a name="line217"></a>  this.eventType_ = eventType;
+<a name="line218"></a>  if (this.isActive_) {
+<a name="line219"></a>    this.setActive(false);
+<a name="line220"></a>    this.setActive(true);
+<a name="line221"></a>  }
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * Decorates an element and returns the behavior.
+<a name="line227"></a> * @param {Element} element An element to decorate.
+<a name="line228"></a> * @param {boolean=} opt_activate Whether to activate the behavior
+<a name="line229"></a> *     (default=true).
+<a name="line230"></a> * @return {!goog.ui.SplitBehavior} A split behavior.
+<a name="line231"></a> */
+<a name="line232"></a>goog.ui.SplitBehavior.prototype.decorate = function(element, opt_activate) {
+<a name="line233"></a>  if (this.first_ || this.second_) {
+<a name="line234"></a>    throw Error(&#39;Cannot decorate controls are already set&#39;);
+<a name="line235"></a>  }
+<a name="line236"></a>  this.decorateChildren_(element);
+<a name="line237"></a>  var activate = goog.isDefAndNotNull(opt_activate) ? !!opt_activate : true;
+<a name="line238"></a>  this.element_ = element;
+<a name="line239"></a>  this.setActive(activate);
+<a name="line240"></a>  return this;
+<a name="line241"></a>};
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Renders an element and returns the behavior.
+<a name="line246"></a> * @param {Element} element An element to decorate.
+<a name="line247"></a> * @param {boolean=} opt_activate Whether to activate the behavior
+<a name="line248"></a> *     (default=true).
+<a name="line249"></a> * @return {!goog.ui.SplitBehavior} A split behavior.
+<a name="line250"></a> */
+<a name="line251"></a>goog.ui.SplitBehavior.prototype.render = function(element, opt_activate) {
+<a name="line252"></a>  goog.asserts.assert(element);
+<a name="line253"></a>  goog.dom.classlist.add(element, goog.ui.SplitBehavior.CSS_CLASS);
+<a name="line254"></a>  this.first_.render(element);
+<a name="line255"></a>  this.second_.render(element);
+<a name="line256"></a>  this.collapseSides_(this.first_, this.second_);
+<a name="line257"></a>  var activate = goog.isDefAndNotNull(opt_activate) ? !!opt_activate : true;
+<a name="line258"></a>  this.element_ = element;
+<a name="line259"></a>  this.setActive(activate);
+<a name="line260"></a>  return this;
+<a name="line261"></a>};
+<a name="line262"></a>
+<a name="line263"></a>
+<a name="line264"></a>/**
+<a name="line265"></a> * Activate or deactivate the behavior.
+<a name="line266"></a> * @param {boolean} activate Whether to activate or deactivate the behavior.
+<a name="line267"></a> */
+<a name="line268"></a>goog.ui.SplitBehavior.prototype.setActive = function(activate) {
+<a name="line269"></a>  if (this.isActive_ == activate) {
+<a name="line270"></a>    return;
+<a name="line271"></a>  }
+<a name="line272"></a>  this.isActive_ = activate;
+<a name="line273"></a>  if (activate) {
+<a name="line274"></a>    this.eventHandler_.listen(this.second_, this.eventType_,
+<a name="line275"></a>        goog.bind(this.behaviorHandler_, this, this.first_));
+<a name="line276"></a>    // TODO(user): should we call the handler here to sync between
+<a name="line277"></a>    // first_ and second_.
+<a name="line278"></a>  } else {
+<a name="line279"></a>    this.eventHandler_.removeAll();
+<a name="line280"></a>  }
+<a name="line281"></a>};
+<a name="line282"></a>
+<a name="line283"></a>
+<a name="line284"></a>/** @override */
+<a name="line285"></a>goog.ui.SplitBehavior.prototype.disposeInternal = function() {
+<a name="line286"></a>  this.setActive(false);
+<a name="line287"></a>  goog.dispose(this.eventHandler_);
+<a name="line288"></a>  if (this.disposeFirst_) {
+<a name="line289"></a>    goog.dispose(this.first_);
+<a name="line290"></a>  }
+<a name="line291"></a>  if (this.disposeSecond_) {
+<a name="line292"></a>    goog.dispose(this.second_);
+<a name="line293"></a>  }
+<a name="line294"></a>  goog.ui.SplitBehavior.superClass_.disposeInternal.call(this);
+<a name="line295"></a>};
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>/**
+<a name="line299"></a> * Decorates two child nodes of the given element.
+<a name="line300"></a> * @param {Element} element An element to render two of it&#39;s child nodes.
+<a name="line301"></a> * @private
+<a name="line302"></a> */
+<a name="line303"></a>goog.ui.SplitBehavior.prototype.decorateChildren_ = function(
+<a name="line304"></a>    element) {
+<a name="line305"></a>  var childNodes = element.childNodes;
+<a name="line306"></a>  var len = childNodes.length;
+<a name="line307"></a>  var finished = false;
+<a name="line308"></a>  for (var i = 0; i &lt; len &amp;&amp; !finished; i++) {
+<a name="line309"></a>    var child = childNodes[i];
+<a name="line310"></a>    if (child.nodeType == goog.dom.NodeType.ELEMENT) {
+<a name="line311"></a>      if (!this.first_) {
+<a name="line312"></a>        this.first_ = /** @type {goog.ui.Control} */ (goog.ui.decorate(child));
+<a name="line313"></a>      } else if (!this.second_) {
+<a name="line314"></a>        this.second_ = /** @type {goog.ui.Control} */ (goog.ui.decorate(child));
+<a name="line315"></a>        finished = true;
+<a name="line316"></a>      }
+<a name="line317"></a>    }
+<a name="line318"></a>  }
+<a name="line319"></a>};
+<a name="line320"></a>
+<a name="line321"></a>
+<a name="line322"></a>/**
+<a name="line323"></a> * Collapse the the controls together.
+<a name="line324"></a> * @param {goog.ui.Control} first The first element.
+<a name="line325"></a> * @param {goog.ui.Control} second The second element.
+<a name="line326"></a> * @private
+<a name="line327"></a> */
+<a name="line328"></a>goog.ui.SplitBehavior.prototype.collapseSides_ = function(first, second) {
+<a name="line329"></a>  if (goog.isFunction(first.setCollapsed) &amp;&amp;
+<a name="line330"></a>      goog.isFunction(second.setCollapsed)) {
+<a name="line331"></a>    first.setCollapsed(goog.ui.ButtonSide.END);
+<a name="line332"></a>    second.setCollapsed(goog.ui.ButtonSide.START);
+<a name="line333"></a>  }
+<a name="line334"></a>};
+<a name="line335"></a>
+<a name="line336"></a>
+<a name="line337"></a>// Register a decorator factory function for goog.ui.Buttons.
+<a name="line338"></a>goog.ui.registry.setDecoratorByClassName(goog.ui.SplitBehavior.CSS_CLASS,
+<a name="line339"></a>    function() {
+<a name="line340"></a>      return new goog.ui.SplitBehavior(null, null);
+<a name="line341"></a>    });
+</pre>
+
+
+</body>
+</html>

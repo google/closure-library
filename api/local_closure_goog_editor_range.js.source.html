@@ -1,0 +1,684 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>range.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_range.js.html">range.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilties for working with ranges.
+<a name="line17"></a> *
+<a name="line18"></a> * @author nicksantos@google.com (Nick Santos)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.editor.range&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.editor.range.Point&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.Range&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom.RangeEndpoint&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.SavedCaretRange&#39;);
+<a name="line30"></a>goog.require(&#39;goog.editor.node&#39;);
+<a name="line31"></a>goog.require(&#39;goog.editor.style&#39;);
+<a name="line32"></a>goog.require(&#39;goog.iter&#39;);
+<a name="line33"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/**
+<a name="line37"></a> * Given a range and an element, create a narrower range that is limited to the
+<a name="line38"></a> * boundaries of the element. If the range starts (or ends) outside the
+<a name="line39"></a> * element, the narrowed range&#39;s start point (or end point) will be the
+<a name="line40"></a> * leftmost (or rightmost) leaf of the element.
+<a name="line41"></a> * @param {goog.dom.AbstractRange} range The range.
+<a name="line42"></a> * @param {Element} el The element to limit the range to.
+<a name="line43"></a> * @return {goog.dom.AbstractRange} A new narrowed range, or null if the
+<a name="line44"></a> *     element does not contain any part of the given range.
+<a name="line45"></a> */
+<a name="line46"></a>goog.editor.range.narrow = function(range, el) {
+<a name="line47"></a>  var startContainer = range.getStartNode();
+<a name="line48"></a>  var endContainer = range.getEndNode();
+<a name="line49"></a>
+<a name="line50"></a>  if (startContainer &amp;&amp; endContainer) {
+<a name="line51"></a>    var isElement = function(node) {
+<a name="line52"></a>      return node == el;
+<a name="line53"></a>    };
+<a name="line54"></a>    var hasStart = goog.dom.getAncestor(startContainer, isElement, true);
+<a name="line55"></a>    var hasEnd = goog.dom.getAncestor(endContainer, isElement, true);
+<a name="line56"></a>
+<a name="line57"></a>    if (hasStart &amp;&amp; hasEnd) {
+<a name="line58"></a>      // The range is contained entirely within this element.
+<a name="line59"></a>      return range.clone();
+<a name="line60"></a>    } else if (hasStart) {
+<a name="line61"></a>      // The range starts inside the element, but ends outside it.
+<a name="line62"></a>      var leaf = goog.editor.node.getRightMostLeaf(el);
+<a name="line63"></a>      return goog.dom.Range.createFromNodes(
+<a name="line64"></a>          range.getStartNode(), range.getStartOffset(),
+<a name="line65"></a>          leaf, goog.editor.node.getLength(leaf));
+<a name="line66"></a>    } else if (hasEnd) {
+<a name="line67"></a>      // The range starts outside the element, but ends inside it.
+<a name="line68"></a>      return goog.dom.Range.createFromNodes(
+<a name="line69"></a>          goog.editor.node.getLeftMostLeaf(el), 0,
+<a name="line70"></a>          range.getEndNode(), range.getEndOffset());
+<a name="line71"></a>    }
+<a name="line72"></a>  }
+<a name="line73"></a>
+<a name="line74"></a>  // The selection starts and ends outside the element.
+<a name="line75"></a>  return null;
+<a name="line76"></a>};
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Given a range, expand the range to include outer tags if the full contents of
+<a name="line81"></a> * those tags are entirely selected.  This essentially changes the dom position,
+<a name="line82"></a> * but not the visible position of the range.
+<a name="line83"></a> * Ex. &lt;li&gt;foo&lt;/li&gt; if &quot;foo&quot; is selected, instead of returning start and end
+<a name="line84"></a> * nodes as the foo text node, return the li.
+<a name="line85"></a> * @param {goog.dom.AbstractRange} range The range.
+<a name="line86"></a> * @param {Node=} opt_stopNode Optional node to stop expanding past.
+<a name="line87"></a> * @return {!goog.dom.AbstractRange} The expanded range.
+<a name="line88"></a> */
+<a name="line89"></a>goog.editor.range.expand = function(range, opt_stopNode) {
+<a name="line90"></a>  // Expand the start out to the common container.
+<a name="line91"></a>  var expandedRange = goog.editor.range.expandEndPointToContainer_(
+<a name="line92"></a>      range, goog.dom.RangeEndpoint.START, opt_stopNode);
+<a name="line93"></a>  // Expand the end out to the common container.
+<a name="line94"></a>  expandedRange = goog.editor.range.expandEndPointToContainer_(
+<a name="line95"></a>      expandedRange, goog.dom.RangeEndpoint.END, opt_stopNode);
+<a name="line96"></a>
+<a name="line97"></a>  var startNode = expandedRange.getStartNode();
+<a name="line98"></a>  var endNode = expandedRange.getEndNode();
+<a name="line99"></a>  var startOffset = expandedRange.getStartOffset();
+<a name="line100"></a>  var endOffset = expandedRange.getEndOffset();
+<a name="line101"></a>
+<a name="line102"></a>  // If we have reached a common container, now expand out.
+<a name="line103"></a>  if (startNode == endNode) {
+<a name="line104"></a>    while (endNode != opt_stopNode &amp;&amp;
+<a name="line105"></a>           startOffset == 0 &amp;&amp;
+<a name="line106"></a>           endOffset == goog.editor.node.getLength(endNode)) {
+<a name="line107"></a>      // Select the parent instead.
+<a name="line108"></a>      var parentNode = endNode.parentNode;
+<a name="line109"></a>      startOffset = goog.array.indexOf(parentNode.childNodes, endNode);
+<a name="line110"></a>      endOffset = startOffset + 1;
+<a name="line111"></a>      endNode = parentNode;
+<a name="line112"></a>    }
+<a name="line113"></a>    startNode = endNode;
+<a name="line114"></a>  }
+<a name="line115"></a>
+<a name="line116"></a>  return goog.dom.Range.createFromNodes(startNode, startOffset,
+<a name="line117"></a>      endNode, endOffset);
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Given a range, expands the start or end points as far out towards the
+<a name="line123"></a> * range&#39;s common container (or stopNode, if provided) as possible, while
+<a name="line124"></a> * perserving the same visible position.
+<a name="line125"></a> *
+<a name="line126"></a> * @param {goog.dom.AbstractRange} range The range to expand.
+<a name="line127"></a> * @param {goog.dom.RangeEndpoint} endpoint The endpoint to expand.
+<a name="line128"></a> * @param {Node=} opt_stopNode Optional node to stop expanding past.
+<a name="line129"></a> * @return {!goog.dom.AbstractRange} The expanded range.
+<a name="line130"></a> * @private
+<a name="line131"></a> */
+<a name="line132"></a>goog.editor.range.expandEndPointToContainer_ = function(range, endpoint,
+<a name="line133"></a>                                                        opt_stopNode) {
+<a name="line134"></a>  var expandStart = endpoint == goog.dom.RangeEndpoint.START;
+<a name="line135"></a>  var node = expandStart ? range.getStartNode() : range.getEndNode();
+<a name="line136"></a>  var offset = expandStart ? range.getStartOffset() : range.getEndOffset();
+<a name="line137"></a>  var container = range.getContainerElement();
+<a name="line138"></a>
+<a name="line139"></a>  // Expand the node out until we reach the container or the stop node.
+<a name="line140"></a>  while (node != container &amp;&amp; node != opt_stopNode) {
+<a name="line141"></a>    // It is only valid to expand the start if we are at the start of a node
+<a name="line142"></a>    // (offset 0) or expand the end if we are at the end of a node
+<a name="line143"></a>    // (offset length).
+<a name="line144"></a>    if (expandStart &amp;&amp; offset != 0 ||
+<a name="line145"></a>        !expandStart &amp;&amp; offset != goog.editor.node.getLength(node)) {
+<a name="line146"></a>      break;
+<a name="line147"></a>    }
+<a name="line148"></a>
+<a name="line149"></a>    var parentNode = node.parentNode;
+<a name="line150"></a>    var index = goog.array.indexOf(parentNode.childNodes, node);
+<a name="line151"></a>    offset = expandStart ? index : index + 1;
+<a name="line152"></a>    node = parentNode;
+<a name="line153"></a>  }
+<a name="line154"></a>
+<a name="line155"></a>  return goog.dom.Range.createFromNodes(
+<a name="line156"></a>      expandStart ? node : range.getStartNode(),
+<a name="line157"></a>      expandStart ? offset : range.getStartOffset(),
+<a name="line158"></a>      expandStart ? range.getEndNode() : node,
+<a name="line159"></a>      expandStart ? range.getEndOffset() : offset);
+<a name="line160"></a>};
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * Cause the window&#39;s selection to be the start of this node.
+<a name="line165"></a> * @param {Node} node The node to select the start of.
+<a name="line166"></a> */
+<a name="line167"></a>goog.editor.range.selectNodeStart = function(node) {
+<a name="line168"></a>  goog.dom.Range.createCaret(goog.editor.node.getLeftMostLeaf(node), 0).
+<a name="line169"></a>      select();
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Position the cursor immediately to the left or right of &quot;node&quot;.
+<a name="line175"></a> * In Firefox, the selection parent is outside of &quot;node&quot;, so the cursor can
+<a name="line176"></a> * effectively be moved to the end of a link node, without being considered
+<a name="line177"></a> * inside of it.
+<a name="line178"></a> * Note: This does not always work in WebKit. In particular, if you try to
+<a name="line179"></a> * place a cursor to the right of a link, typing still puts you in the link.
+<a name="line180"></a> * Bug: http://bugs.webkit.org/show_bug.cgi?id=17697
+<a name="line181"></a> * @param {Node} node The node to position the cursor relative to.
+<a name="line182"></a> * @param {boolean} toLeft True to place it to the left, false to the right.
+<a name="line183"></a> * @return {!goog.dom.AbstractRange} The newly selected range.
+<a name="line184"></a> */
+<a name="line185"></a>goog.editor.range.placeCursorNextTo = function(node, toLeft) {
+<a name="line186"></a>  var parent = node.parentNode;
+<a name="line187"></a>  var offset = goog.array.indexOf(parent.childNodes, node) +
+<a name="line188"></a>      (toLeft ? 0 : 1);
+<a name="line189"></a>  var point = goog.editor.range.Point.createDeepestPoint(
+<a name="line190"></a>      parent, offset, toLeft, true);
+<a name="line191"></a>  var range = goog.dom.Range.createCaret(point.node, point.offset);
+<a name="line192"></a>  range.select();
+<a name="line193"></a>  return range;
+<a name="line194"></a>};
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * Normalizes the node, preserving the selection of the document.
+<a name="line199"></a> *
+<a name="line200"></a> * May also normalize things outside the node, if it is more efficient to do so.
+<a name="line201"></a> *
+<a name="line202"></a> * @param {Node} node The node to normalize.
+<a name="line203"></a> */
+<a name="line204"></a>goog.editor.range.selectionPreservingNormalize = function(node) {
+<a name="line205"></a>  var doc = goog.dom.getOwnerDocument(node);
+<a name="line206"></a>  var selection = goog.dom.Range.createFromWindow(goog.dom.getWindow(doc));
+<a name="line207"></a>  var normalizedRange =
+<a name="line208"></a>      goog.editor.range.rangePreservingNormalize(node, selection);
+<a name="line209"></a>  if (normalizedRange) {
+<a name="line210"></a>    normalizedRange.select();
+<a name="line211"></a>  }
+<a name="line212"></a>};
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * Manually normalizes the node in IE, since native normalize in IE causes
+<a name="line217"></a> * transient problems.
+<a name="line218"></a> * @param {Node} node The node to normalize.
+<a name="line219"></a> * @private
+<a name="line220"></a> */
+<a name="line221"></a>goog.editor.range.normalizeNodeIe_ = function(node) {
+<a name="line222"></a>  var lastText = null;
+<a name="line223"></a>  var child = node.firstChild;
+<a name="line224"></a>  while (child) {
+<a name="line225"></a>    var next = child.nextSibling;
+<a name="line226"></a>    if (child.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line227"></a>      if (child.nodeValue == &#39;&#39;) {
+<a name="line228"></a>        node.removeChild(child);
+<a name="line229"></a>      } else if (lastText) {
+<a name="line230"></a>        lastText.nodeValue += child.nodeValue;
+<a name="line231"></a>        node.removeChild(child);
+<a name="line232"></a>      } else {
+<a name="line233"></a>        lastText = child;
+<a name="line234"></a>      }
+<a name="line235"></a>    } else {
+<a name="line236"></a>      goog.editor.range.normalizeNodeIe_(child);
+<a name="line237"></a>      lastText = null;
+<a name="line238"></a>    }
+<a name="line239"></a>    child = next;
+<a name="line240"></a>  }
+<a name="line241"></a>};
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Normalizes the given node.
+<a name="line246"></a> * @param {Node} node The node to normalize.
+<a name="line247"></a> */
+<a name="line248"></a>goog.editor.range.normalizeNode = function(node) {
+<a name="line249"></a>  if (goog.userAgent.IE) {
+<a name="line250"></a>    goog.editor.range.normalizeNodeIe_(node);
+<a name="line251"></a>  } else {
+<a name="line252"></a>    node.normalize();
+<a name="line253"></a>  }
+<a name="line254"></a>};
+<a name="line255"></a>
+<a name="line256"></a>
+<a name="line257"></a>/**
+<a name="line258"></a> * Normalizes the node, preserving a range of the document.
+<a name="line259"></a> *
+<a name="line260"></a> * May also normalize things outside the node, if it is more efficient to do so.
+<a name="line261"></a> *
+<a name="line262"></a> * @param {Node} node The node to normalize.
+<a name="line263"></a> * @param {goog.dom.AbstractRange?} range The range to normalize.
+<a name="line264"></a> * @return {goog.dom.AbstractRange?} The range, adjusted for normalization.
+<a name="line265"></a> */
+<a name="line266"></a>goog.editor.range.rangePreservingNormalize = function(node, range) {
+<a name="line267"></a>  if (range) {
+<a name="line268"></a>    var rangeFactory = goog.editor.range.normalize(range);
+<a name="line269"></a>    // WebKit has broken selection affinity, so carets tend to jump out of the
+<a name="line270"></a>    // beginning of inline elements. This means that if we&#39;re doing the
+<a name="line271"></a>    // normalize as the result of a range that will later become the selection,
+<a name="line272"></a>    // we might not normalize something in the range after it is read back from
+<a name="line273"></a>    // the selection. We can&#39;t just normalize the parentNode here because WebKit
+<a name="line274"></a>    // can move the selection range out of multiple inline parents.
+<a name="line275"></a>    var container = goog.editor.style.getContainer(range.getContainerElement());
+<a name="line276"></a>  }
+<a name="line277"></a>
+<a name="line278"></a>  if (container) {
+<a name="line279"></a>    goog.editor.range.normalizeNode(
+<a name="line280"></a>        goog.dom.findCommonAncestor(container, node));
+<a name="line281"></a>  } else if (node) {
+<a name="line282"></a>    goog.editor.range.normalizeNode(node);
+<a name="line283"></a>  }
+<a name="line284"></a>
+<a name="line285"></a>  if (rangeFactory) {
+<a name="line286"></a>    return rangeFactory();
+<a name="line287"></a>  } else {
+<a name="line288"></a>    return null;
+<a name="line289"></a>  }
+<a name="line290"></a>};
+<a name="line291"></a>
+<a name="line292"></a>
+<a name="line293"></a>/**
+<a name="line294"></a> * Get the deepest point in the DOM that&#39;s equivalent to the endpoint of the
+<a name="line295"></a> * given range.
+<a name="line296"></a> *
+<a name="line297"></a> * @param {goog.dom.AbstractRange} range A range.
+<a name="line298"></a> * @param {boolean} atStart True for the start point, false for the end point.
+<a name="line299"></a> * @return {!goog.editor.range.Point} The end point, expressed as a node
+<a name="line300"></a> *    and an offset.
+<a name="line301"></a> */
+<a name="line302"></a>goog.editor.range.getDeepEndPoint = function(range, atStart) {
+<a name="line303"></a>  return atStart ?
+<a name="line304"></a>      goog.editor.range.Point.createDeepestPoint(
+<a name="line305"></a>          range.getStartNode(), range.getStartOffset()) :
+<a name="line306"></a>      goog.editor.range.Point.createDeepestPoint(
+<a name="line307"></a>          range.getEndNode(), range.getEndOffset());
+<a name="line308"></a>};
+<a name="line309"></a>
+<a name="line310"></a>
+<a name="line311"></a>/**
+<a name="line312"></a> * Given a range in the current DOM, create a factory for a range that
+<a name="line313"></a> * represents the same selection in a normalized DOM. The factory function
+<a name="line314"></a> * should be invoked after the DOM is normalized.
+<a name="line315"></a> *
+<a name="line316"></a> * All browsers do a bad job preserving ranges across DOM normalization.
+<a name="line317"></a> * The issue is best described in this 5-year-old bug report:
+<a name="line318"></a> * https://bugzilla.mozilla.org/show_bug.cgi?id=191864
+<a name="line319"></a> * For most applications, this isn&#39;t a problem. The browsers do a good job
+<a name="line320"></a> * handling un-normalized text, so there&#39;s usually no reason to normalize.
+<a name="line321"></a> *
+<a name="line322"></a> * The exception to this rule is the rich text editing commands
+<a name="line323"></a> * execCommand and queryCommandValue, which will fail often if there are
+<a name="line324"></a> * un-normalized text nodes.
+<a name="line325"></a> *
+<a name="line326"></a> * The factory function creates new ranges so that we can normalize the DOM
+<a name="line327"></a> * without problems. It must be created before any normalization happens,
+<a name="line328"></a> * and invoked after normalization happens.
+<a name="line329"></a> *
+<a name="line330"></a> * @param {goog.dom.AbstractRange} range The range to normalize. It may
+<a name="line331"></a> *    become invalid after body.normalize() is called.
+<a name="line332"></a> * @return {function(): goog.dom.AbstractRange} A factory for a normalized
+<a name="line333"></a> *    range. Should be called after body.normalize() is called.
+<a name="line334"></a> */
+<a name="line335"></a>goog.editor.range.normalize = function(range) {
+<a name="line336"></a>  var isReversed = range.isReversed();
+<a name="line337"></a>  var anchorPoint = goog.editor.range.normalizePoint_(
+<a name="line338"></a>      goog.editor.range.getDeepEndPoint(range, !isReversed));
+<a name="line339"></a>  var anchorParent = anchorPoint.getParentPoint();
+<a name="line340"></a>  var anchorPreviousSibling = anchorPoint.node.previousSibling;
+<a name="line341"></a>  if (anchorPoint.node.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line342"></a>    anchorPoint.node = null;
+<a name="line343"></a>  }
+<a name="line344"></a>
+<a name="line345"></a>  var focusPoint = goog.editor.range.normalizePoint_(
+<a name="line346"></a>      goog.editor.range.getDeepEndPoint(range, isReversed));
+<a name="line347"></a>  var focusParent = focusPoint.getParentPoint();
+<a name="line348"></a>  var focusPreviousSibling = focusPoint.node.previousSibling;
+<a name="line349"></a>  if (focusPoint.node.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line350"></a>    focusPoint.node = null;
+<a name="line351"></a>  }
+<a name="line352"></a>
+<a name="line353"></a>  /** @return {goog.dom.AbstractRange} The normalized range. */
+<a name="line354"></a>  return function() {
+<a name="line355"></a>    if (!anchorPoint.node &amp;&amp; anchorPreviousSibling) {
+<a name="line356"></a>      // If anchorPoint.node was previously an empty text node with no siblings,
+<a name="line357"></a>      // anchorPreviousSibling may not have a nextSibling since that node will
+<a name="line358"></a>      // no longer exist.  Do our best and point to the end of the previous
+<a name="line359"></a>      // element.
+<a name="line360"></a>      anchorPoint.node = anchorPreviousSibling.nextSibling;
+<a name="line361"></a>      if (!anchorPoint.node) {
+<a name="line362"></a>        anchorPoint = goog.editor.range.Point.getPointAtEndOfNode(
+<a name="line363"></a>            anchorPreviousSibling);
+<a name="line364"></a>      }
+<a name="line365"></a>    }
+<a name="line366"></a>
+<a name="line367"></a>    if (!focusPoint.node &amp;&amp; focusPreviousSibling) {
+<a name="line368"></a>      // If focusPoint.node was previously an empty text node with no siblings,
+<a name="line369"></a>      // focusPreviousSibling may not have a nextSibling since that node will no
+<a name="line370"></a>      // longer exist.  Do our best and point to the end of the previous
+<a name="line371"></a>      // element.
+<a name="line372"></a>      focusPoint.node = focusPreviousSibling.nextSibling;
+<a name="line373"></a>      if (!focusPoint.node) {
+<a name="line374"></a>        focusPoint = goog.editor.range.Point.getPointAtEndOfNode(
+<a name="line375"></a>            focusPreviousSibling);
+<a name="line376"></a>      }
+<a name="line377"></a>    }
+<a name="line378"></a>
+<a name="line379"></a>    return goog.dom.Range.createFromNodes(
+<a name="line380"></a>        anchorPoint.node || anchorParent.node.firstChild || anchorParent.node,
+<a name="line381"></a>        anchorPoint.offset,
+<a name="line382"></a>        focusPoint.node || focusParent.node.firstChild || focusParent.node,
+<a name="line383"></a>        focusPoint.offset);
+<a name="line384"></a>  };
+<a name="line385"></a>};
+<a name="line386"></a>
+<a name="line387"></a>
+<a name="line388"></a>/**
+<a name="line389"></a> * Given a point in the current DOM, adjust it to represent the same point in
+<a name="line390"></a> * a normalized DOM.
+<a name="line391"></a> *
+<a name="line392"></a> * See the comments on goog.editor.range.normalize for more context.
+<a name="line393"></a> *
+<a name="line394"></a> * @param {goog.editor.range.Point} point A point in the document.
+<a name="line395"></a> * @return {!goog.editor.range.Point} The same point, for easy chaining.
+<a name="line396"></a> * @private
+<a name="line397"></a> */
+<a name="line398"></a>goog.editor.range.normalizePoint_ = function(point) {
+<a name="line399"></a>  var previous;
+<a name="line400"></a>  if (point.node.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line401"></a>    // If the cursor position is in a text node,
+<a name="line402"></a>    // look at all the previous text siblings of the text node,
+<a name="line403"></a>    // and set the offset relative to the earliest text sibling.
+<a name="line404"></a>    for (var current = point.node.previousSibling;
+<a name="line405"></a>         current &amp;&amp; current.nodeType == goog.dom.NodeType.TEXT;
+<a name="line406"></a>         current = current.previousSibling) {
+<a name="line407"></a>      point.offset += goog.editor.node.getLength(current);
+<a name="line408"></a>    }
+<a name="line409"></a>
+<a name="line410"></a>    previous = current;
+<a name="line411"></a>  } else {
+<a name="line412"></a>    previous = point.node.previousSibling;
+<a name="line413"></a>  }
+<a name="line414"></a>
+<a name="line415"></a>  var parent = point.node.parentNode;
+<a name="line416"></a>  point.node = previous ? previous.nextSibling : parent.firstChild;
+<a name="line417"></a>  return point;
+<a name="line418"></a>};
+<a name="line419"></a>
+<a name="line420"></a>
+<a name="line421"></a>/**
+<a name="line422"></a> * Checks if a range is completely inside an editable region.
+<a name="line423"></a> * @param {goog.dom.AbstractRange} range The range to test.
+<a name="line424"></a> * @return {boolean} Whether the range is completely inside an editable region.
+<a name="line425"></a> */
+<a name="line426"></a>goog.editor.range.isEditable = function(range) {
+<a name="line427"></a>  var rangeContainer = range.getContainerElement();
+<a name="line428"></a>
+<a name="line429"></a>  // Closure&#39;s implementation of getContainerElement() is a little too
+<a name="line430"></a>  // smart in IE when exactly one element is contained in the range.
+<a name="line431"></a>  // It assumes that there&#39;s a user whose intent was actually to select
+<a name="line432"></a>  // all that element&#39;s children, so it returns the element itself as its
+<a name="line433"></a>  // own containing element.
+<a name="line434"></a>  // This little sanity check detects this condition so we can account for it.
+<a name="line435"></a>  var rangeContainerIsOutsideRange =
+<a name="line436"></a>      range.getStartNode() != rangeContainer.parentElement;
+<a name="line437"></a>
+<a name="line438"></a>  return (rangeContainerIsOutsideRange &amp;&amp;
+<a name="line439"></a>          goog.editor.node.isEditableContainer(rangeContainer)) ||
+<a name="line440"></a>      goog.editor.node.isEditable(rangeContainer);
+<a name="line441"></a>};
+<a name="line442"></a>
+<a name="line443"></a>
+<a name="line444"></a>/**
+<a name="line445"></a> * Returns whether the given range intersects with any instance of the given
+<a name="line446"></a> * tag.
+<a name="line447"></a> * @param {goog.dom.AbstractRange} range The range to check.
+<a name="line448"></a> * @param {goog.dom.TagName} tagName The name of the tag.
+<a name="line449"></a> * @return {boolean} Whether the given range intersects with any instance of
+<a name="line450"></a> *     the given tag.
+<a name="line451"></a> */
+<a name="line452"></a>goog.editor.range.intersectsTag = function(range, tagName) {
+<a name="line453"></a>  if (goog.dom.getAncestorByTagNameAndClass(range.getContainerElement(),
+<a name="line454"></a>                                            tagName)) {
+<a name="line455"></a>    return true;
+<a name="line456"></a>  }
+<a name="line457"></a>
+<a name="line458"></a>  return goog.iter.some(range, function(node) {
+<a name="line459"></a>    return node.tagName == tagName;
+<a name="line460"></a>  });
+<a name="line461"></a>};
+<a name="line462"></a>
+<a name="line463"></a>
+<a name="line464"></a>
+<a name="line465"></a>/**
+<a name="line466"></a> * One endpoint of a range, represented as a Node and and offset.
+<a name="line467"></a> * @param {Node} node The node containing the point.
+<a name="line468"></a> * @param {number} offset The offset of the point into the node.
+<a name="line469"></a> * @constructor
+<a name="line470"></a> * @final
+<a name="line471"></a> */
+<a name="line472"></a>goog.editor.range.Point = function(node, offset) {
+<a name="line473"></a>  /**
+<a name="line474"></a>   * The node containing the point.
+<a name="line475"></a>   * @type {Node}
+<a name="line476"></a>   */
+<a name="line477"></a>  this.node = node;
+<a name="line478"></a>
+<a name="line479"></a>  /**
+<a name="line480"></a>   * The offset of the point into the node.
+<a name="line481"></a>   * @type {number}
+<a name="line482"></a>   */
+<a name="line483"></a>  this.offset = offset;
+<a name="line484"></a>};
+<a name="line485"></a>
+<a name="line486"></a>
+<a name="line487"></a>/**
+<a name="line488"></a> * Gets the point of this point&#39;s node in the DOM.
+<a name="line489"></a> * @return {!goog.editor.range.Point} The node&#39;s point.
+<a name="line490"></a> */
+<a name="line491"></a>goog.editor.range.Point.prototype.getParentPoint = function() {
+<a name="line492"></a>  var parent = this.node.parentNode;
+<a name="line493"></a>  return new goog.editor.range.Point(
+<a name="line494"></a>      parent, goog.array.indexOf(parent.childNodes, this.node));
+<a name="line495"></a>};
+<a name="line496"></a>
+<a name="line497"></a>
+<a name="line498"></a>/**
+<a name="line499"></a> * Construct the deepest possible point in the DOM that&#39;s equivalent
+<a name="line500"></a> * to the given point, expressed as a node and an offset.
+<a name="line501"></a> * @param {Node} node The node containing the point.
+<a name="line502"></a> * @param {number} offset The offset of the point from the node.
+<a name="line503"></a> * @param {boolean=} opt_trendLeft Notice that a (node, offset) pair may be
+<a name="line504"></a> *     equivalent to more than one descendent (node, offset) pair in the DOM.
+<a name="line505"></a> *     By default, we trend rightward. If this parameter is true, then we
+<a name="line506"></a> *     trend leftward. The tendency to fall rightward by default is for
+<a name="line507"></a> *     consistency with other range APIs (like placeCursorNextTo).
+<a name="line508"></a> * @param {boolean=} opt_stopOnChildlessElement If true, and we encounter
+<a name="line509"></a> *     a Node which is an Element that cannot have children, we return a Point
+<a name="line510"></a> *     based on its parent rather than that Node itself.
+<a name="line511"></a> * @return {!goog.editor.range.Point} A new point.
+<a name="line512"></a> */
+<a name="line513"></a>goog.editor.range.Point.createDeepestPoint =
+<a name="line514"></a>    function(node, offset, opt_trendLeft, opt_stopOnChildlessElement) {
+<a name="line515"></a>  while (node.nodeType == goog.dom.NodeType.ELEMENT) {
+<a name="line516"></a>    var child = node.childNodes[offset];
+<a name="line517"></a>    if (!child &amp;&amp; !node.lastChild) {
+<a name="line518"></a>      break;
+<a name="line519"></a>    } else if (child) {
+<a name="line520"></a>      var prevSibling = child.previousSibling;
+<a name="line521"></a>      if (opt_trendLeft &amp;&amp; prevSibling) {
+<a name="line522"></a>        if (opt_stopOnChildlessElement &amp;&amp;
+<a name="line523"></a>            goog.editor.range.Point.isTerminalElement_(prevSibling)) {
+<a name="line524"></a>          break;
+<a name="line525"></a>        }
+<a name="line526"></a>        node = prevSibling;
+<a name="line527"></a>        offset = goog.editor.node.getLength(node);
+<a name="line528"></a>      } else {
+<a name="line529"></a>        if (opt_stopOnChildlessElement &amp;&amp;
+<a name="line530"></a>            goog.editor.range.Point.isTerminalElement_(child)) {
+<a name="line531"></a>          break;
+<a name="line532"></a>        }
+<a name="line533"></a>        node = child;
+<a name="line534"></a>        offset = 0;
+<a name="line535"></a>      }
+<a name="line536"></a>    } else {
+<a name="line537"></a>      if (opt_stopOnChildlessElement &amp;&amp;
+<a name="line538"></a>          goog.editor.range.Point.isTerminalElement_(node.lastChild)) {
+<a name="line539"></a>        break;
+<a name="line540"></a>      }
+<a name="line541"></a>      node = node.lastChild;
+<a name="line542"></a>      offset = goog.editor.node.getLength(node);
+<a name="line543"></a>    }
+<a name="line544"></a>  }
+<a name="line545"></a>
+<a name="line546"></a>  return new goog.editor.range.Point(node, offset);
+<a name="line547"></a>};
+<a name="line548"></a>
+<a name="line549"></a>
+<a name="line550"></a>/**
+<a name="line551"></a> * Return true if the specified node is an Element that is not expected to have
+<a name="line552"></a> * children. The createDeepestPoint() method should not traverse into
+<a name="line553"></a> * such elements.
+<a name="line554"></a> * @param {Node} node .
+<a name="line555"></a> * @return {boolean} True if the node is an Element that does not contain
+<a name="line556"></a> *     child nodes (e.g. BR, IMG).
+<a name="line557"></a> * @private
+<a name="line558"></a> */
+<a name="line559"></a>goog.editor.range.Point.isTerminalElement_ = function(node) {
+<a name="line560"></a>  return (node.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp;
+<a name="line561"></a>          !goog.dom.canHaveChildren(node));
+<a name="line562"></a>};
+<a name="line563"></a>
+<a name="line564"></a>
+<a name="line565"></a>/**
+<a name="line566"></a> * Construct a point at the very end of the given node.
+<a name="line567"></a> * @param {Node} node The node to create a point for.
+<a name="line568"></a> * @return {!goog.editor.range.Point} A new point.
+<a name="line569"></a> */
+<a name="line570"></a>goog.editor.range.Point.getPointAtEndOfNode = function(node) {
+<a name="line571"></a>  return new goog.editor.range.Point(node, goog.editor.node.getLength(node));
+<a name="line572"></a>};
+<a name="line573"></a>
+<a name="line574"></a>
+<a name="line575"></a>/**
+<a name="line576"></a> * Saves the range by inserting carets into the HTML.
+<a name="line577"></a> *
+<a name="line578"></a> * Unlike the regular saveUsingCarets, this SavedRange normalizes text nodes.
+<a name="line579"></a> * Browsers have other bugs where they don&#39;t handle split text nodes in
+<a name="line580"></a> * contentEditable regions right.
+<a name="line581"></a> *
+<a name="line582"></a> * @param {goog.dom.AbstractRange} range The abstract range object.
+<a name="line583"></a> * @return {!goog.dom.SavedCaretRange} A saved caret range that normalizes
+<a name="line584"></a> *     text nodes.
+<a name="line585"></a> */
+<a name="line586"></a>goog.editor.range.saveUsingNormalizedCarets = function(range) {
+<a name="line587"></a>  return new goog.editor.range.NormalizedCaretRange_(range);
+<a name="line588"></a>};
+<a name="line589"></a>
+<a name="line590"></a>
+<a name="line591"></a>
+<a name="line592"></a>/**
+<a name="line593"></a> * Saves the range using carets, but normalizes text nodes when carets
+<a name="line594"></a> * are removed.
+<a name="line595"></a> * @see goog.editor.range.saveUsingNormalizedCarets
+<a name="line596"></a> * @param {goog.dom.AbstractRange} range The range being saved.
+<a name="line597"></a> * @constructor
+<a name="line598"></a> * @extends {goog.dom.SavedCaretRange}
+<a name="line599"></a> * @private
+<a name="line600"></a> */
+<a name="line601"></a>goog.editor.range.NormalizedCaretRange_ = function(range) {
+<a name="line602"></a>  goog.dom.SavedCaretRange.call(this, range);
+<a name="line603"></a>};
+<a name="line604"></a>goog.inherits(goog.editor.range.NormalizedCaretRange_,
+<a name="line605"></a>    goog.dom.SavedCaretRange);
+<a name="line606"></a>
+<a name="line607"></a>
+<a name="line608"></a>/**
+<a name="line609"></a> * Normalizes text nodes whenever carets are removed from the document.
+<a name="line610"></a> * @param {goog.dom.AbstractRange=} opt_range A range whose offsets have already
+<a name="line611"></a> *     been adjusted for caret removal; it will be adjusted and returned if it
+<a name="line612"></a> *     is also affected by post-removal operations, such as text node
+<a name="line613"></a> *     normalization.
+<a name="line614"></a> * @return {goog.dom.AbstractRange|undefined} The adjusted range, if opt_range
+<a name="line615"></a> *     was provided.
+<a name="line616"></a> * @override
+<a name="line617"></a> */
+<a name="line618"></a>goog.editor.range.NormalizedCaretRange_.prototype.removeCarets =
+<a name="line619"></a>    function(opt_range) {
+<a name="line620"></a>  var startCaret = this.getCaret(true);
+<a name="line621"></a>  var endCaret = this.getCaret(false);
+<a name="line622"></a>  var node = startCaret &amp;&amp; endCaret ?
+<a name="line623"></a>      goog.dom.findCommonAncestor(startCaret, endCaret) :
+<a name="line624"></a>      startCaret || endCaret;
+<a name="line625"></a>
+<a name="line626"></a>  goog.editor.range.NormalizedCaretRange_.superClass_.removeCarets.call(this);
+<a name="line627"></a>
+<a name="line628"></a>  if (opt_range) {
+<a name="line629"></a>    return goog.editor.range.rangePreservingNormalize(node, opt_range);
+<a name="line630"></a>  } else if (node) {
+<a name="line631"></a>    goog.editor.range.selectionPreservingNormalize(node);
+<a name="line632"></a>  }
+<a name="line633"></a>};
+</pre>
+
+
+</body>
+</html>

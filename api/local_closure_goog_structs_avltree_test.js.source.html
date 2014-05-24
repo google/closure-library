@@ -1,0 +1,414 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>avltree_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_structs_avltree_test.js.html">avltree_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.structs.AvlTreeTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.structs.AvlTreeTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.structs.AvlTree&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>/**
+<a name="line24"></a> * This test verifies that we can insert strings into the AvlTree and have
+<a name="line25"></a> * them be stored and sorted correctly by the default comparator.
+<a name="line26"></a> */
+<a name="line27"></a>function testInsertsWithDefaultComparator() {
+<a name="line28"></a>  var tree = new goog.structs.AvlTree();
+<a name="line29"></a>  var values = [&#39;bill&#39;, &#39;blake&#39;, &#39;elliot&#39;, &#39;jacob&#39;, &#39;john&#39;, &#39;myles&#39;, &#39;ted&#39;];
+<a name="line30"></a>
+<a name="line31"></a>  // Insert strings into tree out of order
+<a name="line32"></a>  tree.add(values[4]);
+<a name="line33"></a>  tree.add(values[3]);
+<a name="line34"></a>  tree.add(values[0]);
+<a name="line35"></a>  tree.add(values[6]);
+<a name="line36"></a>  tree.add(values[5]);
+<a name="line37"></a>  tree.add(values[1]);
+<a name="line38"></a>  tree.add(values[2]);
+<a name="line39"></a>
+<a name="line40"></a>  // Verify strings are stored in sorted order
+<a name="line41"></a>  var i = 0;
+<a name="line42"></a>  tree.inOrderTraverse(function(value) {
+<a name="line43"></a>    assertEquals(values[i], value);
+<a name="line44"></a>    i += 1;
+<a name="line45"></a>  });
+<a name="line46"></a>  assertEquals(i, values.length);
+<a name="line47"></a>
+<a name="line48"></a>  // Verify that no nodes are visited if the start value is larger than all
+<a name="line49"></a>  // values
+<a name="line50"></a>  tree.inOrderTraverse(function(value) {
+<a name="line51"></a>    fail();
+<a name="line52"></a>  }, &#39;zed&#39;);
+<a name="line53"></a>
+<a name="line54"></a>  // Verify strings are stored in sorted order
+<a name="line55"></a>  i = values.length;
+<a name="line56"></a>  tree.reverseOrderTraverse(function(value) {
+<a name="line57"></a>    i--;
+<a name="line58"></a>    assertEquals(values[i], value);
+<a name="line59"></a>  });
+<a name="line60"></a>  assertEquals(i, 0);
+<a name="line61"></a>
+<a name="line62"></a>  // Verify that no nodes are visited if the start value is smaller than all
+<a name="line63"></a>  // values
+<a name="line64"></a>  tree.reverseOrderTraverse(function(value) {
+<a name="line65"></a>    fail();
+<a name="line66"></a>  }, &#39;aardvark&#39;);
+<a name="line67"></a>}
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * This test verifies that we can insert strings into and remove strings from
+<a name="line72"></a> * the AvlTree and have the only the non-removed values be stored and sorted
+<a name="line73"></a> * correctly by the default comparator.
+<a name="line74"></a> */
+<a name="line75"></a>function testRemovesWithDefaultComparator() {
+<a name="line76"></a>  var tree = new goog.structs.AvlTree();
+<a name="line77"></a>  var values = [&#39;bill&#39;, &#39;blake&#39;, &#39;elliot&#39;, &#39;jacob&#39;, &#39;john&#39;, &#39;myles&#39;, &#39;ted&#39;];
+<a name="line78"></a>
+<a name="line79"></a>  // Insert strings into tree out of order
+<a name="line80"></a>  tree.add(&#39;frodo&#39;);
+<a name="line81"></a>  tree.add(values[4]);
+<a name="line82"></a>  tree.add(values[3]);
+<a name="line83"></a>  tree.add(values[0]);
+<a name="line84"></a>  tree.add(values[6]);
+<a name="line85"></a>  tree.add(&#39;samwise&#39;);
+<a name="line86"></a>  tree.add(values[5]);
+<a name="line87"></a>  tree.add(values[1]);
+<a name="line88"></a>  tree.add(values[2]);
+<a name="line89"></a>  tree.add(&#39;pippin&#39;);
+<a name="line90"></a>
+<a name="line91"></a>  // Remove strings from tree
+<a name="line92"></a>  assertEquals(tree.remove(&#39;samwise&#39;), &#39;samwise&#39;);
+<a name="line93"></a>  assertEquals(tree.remove(&#39;pippin&#39;), &#39;pippin&#39;);
+<a name="line94"></a>  assertEquals(tree.remove(&#39;frodo&#39;), &#39;frodo&#39;);
+<a name="line95"></a>  assertEquals(tree.remove(&#39;merry&#39;), null);
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>  // Verify strings are stored in sorted order
+<a name="line99"></a>  var i = 0;
+<a name="line100"></a>  tree.inOrderTraverse(function(value) {
+<a name="line101"></a>    assertEquals(values[i], value);
+<a name="line102"></a>    i += 1;
+<a name="line103"></a>  });
+<a name="line104"></a>  assertEquals(i, values.length);
+<a name="line105"></a>}
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * This test verifies that we can insert values into and remove values from
+<a name="line110"></a> * the AvlTree and have them be stored and sorted correctly by a custom
+<a name="line111"></a> * comparator.
+<a name="line112"></a> */
+<a name="line113"></a>function testInsertsAndRemovesWithCustomComparator() {
+<a name="line114"></a>  var tree = new goog.structs.AvlTree(function(a, b) {
+<a name="line115"></a>    return a - b;
+<a name="line116"></a>  });
+<a name="line117"></a>
+<a name="line118"></a>  var NUM_TO_INSERT = 37;
+<a name="line119"></a>  var valuesToRemove = [1, 0, 6, 7, 36];
+<a name="line120"></a>
+<a name="line121"></a>  // Insert ints into tree out of order
+<a name="line122"></a>  var values = [];
+<a name="line123"></a>  for (var i = 0; i &lt; NUM_TO_INSERT; i += 1) {
+<a name="line124"></a>    tree.add(i);
+<a name="line125"></a>    values.push(i);
+<a name="line126"></a>  }
+<a name="line127"></a>
+<a name="line128"></a>  for (var i = 0; i &lt; valuesToRemove.length; i += 1) {
+<a name="line129"></a>    assertEquals(tree.remove(valuesToRemove[i]), valuesToRemove[i]);
+<a name="line130"></a>    goog.array.remove(values, valuesToRemove[i]);
+<a name="line131"></a>  }
+<a name="line132"></a>  assertEquals(tree.remove(-1), null);
+<a name="line133"></a>  assertEquals(tree.remove(37), null);
+<a name="line134"></a>
+<a name="line135"></a>  // Verify strings are stored in sorted order
+<a name="line136"></a>  var i = 0;
+<a name="line137"></a>  tree.inOrderTraverse(function(value) {
+<a name="line138"></a>    assertEquals(values[i], value);
+<a name="line139"></a>    i += 1;
+<a name="line140"></a>  });
+<a name="line141"></a>  assertEquals(i, values.length);
+<a name="line142"></a>}
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * This test verifies that we can insert values into and remove values from
+<a name="line147"></a> * the AvlTree and have it maintain the AVL-Tree upperbound on its height.
+<a name="line148"></a> */
+<a name="line149"></a>function testAvlTreeHeight() {
+<a name="line150"></a>  var tree = new goog.structs.AvlTree(function(a, b) {
+<a name="line151"></a>    return a - b;
+<a name="line152"></a>  });
+<a name="line153"></a>
+<a name="line154"></a>  var NUM_TO_INSERT = 2000;
+<a name="line155"></a>  var NUM_TO_REMOVE = 500;
+<a name="line156"></a>
+<a name="line157"></a>  // Insert ints into tree out of order
+<a name="line158"></a>  for (var i = 0; i &lt; NUM_TO_INSERT; i += 1) {
+<a name="line159"></a>    tree.add(i);
+<a name="line160"></a>  }
+<a name="line161"></a>
+<a name="line162"></a>  // Remove valuse
+<a name="line163"></a>  for (var i = 0; i &lt; NUM_TO_REMOVE; i += 1) {
+<a name="line164"></a>    tree.remove(i);
+<a name="line165"></a>  }
+<a name="line166"></a>
+<a name="line167"></a>  assertTrue(tree.getHeight() &lt;= 1.4405 *
+<a name="line168"></a>      (Math.log(NUM_TO_INSERT - NUM_TO_REMOVE + 2) / Math.log(2)) - 1.3277);
+<a name="line169"></a>}
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * This test verifies that we can insert values into and remove values from
+<a name="line174"></a> * the AvlTree and have its contains method correctly determine the values it
+<a name="line175"></a> * is contains.
+<a name="line176"></a> */
+<a name="line177"></a>function testAvlTreeContains() {
+<a name="line178"></a>  var tree = new goog.structs.AvlTree();
+<a name="line179"></a>  var values = [&#39;bill&#39;, &#39;blake&#39;, &#39;elliot&#39;, &#39;jacob&#39;, &#39;john&#39;, &#39;myles&#39;, &#39;ted&#39;];
+<a name="line180"></a>
+<a name="line181"></a>  // Insert strings into tree out of order
+<a name="line182"></a>  tree.add(&#39;frodo&#39;);
+<a name="line183"></a>  tree.add(values[4]);
+<a name="line184"></a>  tree.add(values[3]);
+<a name="line185"></a>  tree.add(values[0]);
+<a name="line186"></a>  tree.add(values[6]);
+<a name="line187"></a>  tree.add(&#39;samwise&#39;);
+<a name="line188"></a>  tree.add(values[5]);
+<a name="line189"></a>  tree.add(values[1]);
+<a name="line190"></a>  tree.add(values[2]);
+<a name="line191"></a>  tree.add(&#39;pippin&#39;);
+<a name="line192"></a>
+<a name="line193"></a>  // Remove strings from tree
+<a name="line194"></a>  assertEquals(tree.remove(&#39;samwise&#39;), &#39;samwise&#39;);
+<a name="line195"></a>  assertEquals(tree.remove(&#39;pippin&#39;), &#39;pippin&#39;);
+<a name="line196"></a>  assertEquals(tree.remove(&#39;frodo&#39;), &#39;frodo&#39;);
+<a name="line197"></a>
+<a name="line198"></a>  for (var i = 0; i &lt; values.length; i += 1) {
+<a name="line199"></a>    assertTrue(tree.contains(values[i]));
+<a name="line200"></a>  }
+<a name="line201"></a>  assertFalse(tree.contains(&#39;samwise&#39;));
+<a name="line202"></a>  assertFalse(tree.contains(&#39;pippin&#39;));
+<a name="line203"></a>  assertFalse(tree.contains(&#39;frodo&#39;));
+<a name="line204"></a>}
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * This test verifies that we can insert values into and remove values from
+<a name="line209"></a> * the AvlTree and have its indexOf method correctly determine the in-order
+<a name="line210"></a> * index of the values it contains.
+<a name="line211"></a> */
+<a name="line212"></a>function testAvlTreeIndexOf() {
+<a name="line213"></a>  var tree = new goog.structs.AvlTree();
+<a name="line214"></a>  var values = [&#39;bill&#39;, &#39;blake&#39;, &#39;elliot&#39;, &#39;jacob&#39;, &#39;john&#39;, &#39;myles&#39;, &#39;ted&#39;];
+<a name="line215"></a>
+<a name="line216"></a>  // Insert strings into tree out of order
+<a name="line217"></a>  tree.add(&#39;frodo&#39;);
+<a name="line218"></a>  tree.add(values[4]);
+<a name="line219"></a>  tree.add(values[3]);
+<a name="line220"></a>  tree.add(values[0]);
+<a name="line221"></a>  tree.add(values[6]);
+<a name="line222"></a>  tree.add(&#39;samwise&#39;);
+<a name="line223"></a>  tree.add(values[5]);
+<a name="line224"></a>  tree.add(values[1]);
+<a name="line225"></a>  tree.add(values[2]);
+<a name="line226"></a>  tree.add(&#39;pippin&#39;);
+<a name="line227"></a>
+<a name="line228"></a>  // Remove strings from tree
+<a name="line229"></a>  assertEquals(&#39;samwise&#39;, tree.remove(&#39;samwise&#39;));
+<a name="line230"></a>  assertEquals(&#39;pippin&#39;, tree.remove(&#39;pippin&#39;));
+<a name="line231"></a>  assertEquals(&#39;frodo&#39;, tree.remove(&#39;frodo&#39;));
+<a name="line232"></a>
+<a name="line233"></a>  for (var i = 0; i &lt; values.length; i += 1) {
+<a name="line234"></a>    assertEquals(i, tree.indexOf(values[i]));
+<a name="line235"></a>  }
+<a name="line236"></a>  assertEquals(-1, tree.indexOf(&#39;samwise&#39;));
+<a name="line237"></a>  assertEquals(-1, tree.indexOf(&#39;pippin&#39;));
+<a name="line238"></a>  assertEquals(-1, tree.indexOf(&#39;frodo&#39;));
+<a name="line239"></a>}
+<a name="line240"></a>
+<a name="line241"></a>
+<a name="line242"></a>/**
+<a name="line243"></a> * This test verifies that we can insert values into and remove values from
+<a name="line244"></a> * the AvlTree and have its minValue and maxValue routines return the correct
+<a name="line245"></a> * min and max values contained by the tree.
+<a name="line246"></a> */
+<a name="line247"></a>function testMinAndMaxValues() {
+<a name="line248"></a>  var tree = new goog.structs.AvlTree(function(a, b) {
+<a name="line249"></a>    return a - b;
+<a name="line250"></a>  });
+<a name="line251"></a>
+<a name="line252"></a>  var NUM_TO_INSERT = 2000;
+<a name="line253"></a>  var NUM_TO_REMOVE = 500;
+<a name="line254"></a>
+<a name="line255"></a>  // Insert ints into tree out of order
+<a name="line256"></a>  for (var i = 0; i &lt; NUM_TO_INSERT; i += 1) {
+<a name="line257"></a>    tree.add(i);
+<a name="line258"></a>  }
+<a name="line259"></a>
+<a name="line260"></a>  // Remove valuse
+<a name="line261"></a>  for (var i = 0; i &lt; NUM_TO_REMOVE; i += 1) {
+<a name="line262"></a>    tree.remove(i);
+<a name="line263"></a>  }
+<a name="line264"></a>
+<a name="line265"></a>  assertEquals(tree.getMinimum(), NUM_TO_REMOVE);
+<a name="line266"></a>  assertEquals(tree.getMaximum(), NUM_TO_INSERT - 1);
+<a name="line267"></a>}
+<a name="line268"></a>
+<a name="line269"></a>
+<a name="line270"></a>/**
+<a name="line271"></a> * This test verifies that we can insert values into and remove values from
+<a name="line272"></a> * the AvlTree and traverse the tree in reverse order using the
+<a name="line273"></a> * reverseOrderTraverse routine.
+<a name="line274"></a> */
+<a name="line275"></a>function testReverseOrderTraverse() {
+<a name="line276"></a>  var tree = new goog.structs.AvlTree(function(a, b) {
+<a name="line277"></a>    return a - b;
+<a name="line278"></a>  });
+<a name="line279"></a>
+<a name="line280"></a>  var NUM_TO_INSERT = 2000;
+<a name="line281"></a>  var NUM_TO_REMOVE = 500;
+<a name="line282"></a>
+<a name="line283"></a>  // Insert ints into tree out of order
+<a name="line284"></a>  for (var i = 0; i &lt; NUM_TO_INSERT; i += 1) {
+<a name="line285"></a>    tree.add(i);
+<a name="line286"></a>  }
+<a name="line287"></a>
+<a name="line288"></a>  // Remove valuse
+<a name="line289"></a>  for (var i = 0; i &lt; NUM_TO_REMOVE; i += 1) {
+<a name="line290"></a>    tree.remove(i);
+<a name="line291"></a>  }
+<a name="line292"></a>
+<a name="line293"></a>  var i = NUM_TO_INSERT - 1;
+<a name="line294"></a>  tree.reverseOrderTraverse(function(value) {
+<a name="line295"></a>    assertEquals(value, i);
+<a name="line296"></a>    i -= 1;
+<a name="line297"></a>  });
+<a name="line298"></a>  assertEquals(i, NUM_TO_REMOVE - 1);
+<a name="line299"></a>}
+<a name="line300"></a>
+<a name="line301"></a>
+<a name="line302"></a>/**
+<a name="line303"></a> * Verifies correct behavior of getCount(). See http://b/4347755
+<a name="line304"></a> */
+<a name="line305"></a>function testGetCountBehavior() {
+<a name="line306"></a>  var tree = new goog.structs.AvlTree();
+<a name="line307"></a>  tree.add(1);
+<a name="line308"></a>  tree.remove(1);
+<a name="line309"></a>  assertEquals(0, tree.getCount());
+<a name="line310"></a>
+<a name="line311"></a>  var values = [&#39;bill&#39;, &#39;blake&#39;, &#39;elliot&#39;, &#39;jacob&#39;, &#39;john&#39;, &#39;myles&#39;, &#39;ted&#39;];
+<a name="line312"></a>
+<a name="line313"></a>  // Insert strings into tree out of order
+<a name="line314"></a>  tree.add(&#39;frodo&#39;);
+<a name="line315"></a>  tree.add(values[4]);
+<a name="line316"></a>  tree.add(values[3]);
+<a name="line317"></a>  tree.add(values[0]);
+<a name="line318"></a>  tree.add(values[6]);
+<a name="line319"></a>  tree.add(&#39;samwise&#39;);
+<a name="line320"></a>  tree.add(values[5]);
+<a name="line321"></a>  tree.add(values[1]);
+<a name="line322"></a>  tree.add(values[2]);
+<a name="line323"></a>  tree.add(&#39;pippin&#39;);
+<a name="line324"></a>  assertEquals(10, tree.getCount());
+<a name="line325"></a>  assertEquals(
+<a name="line326"></a>      tree.root_.left.count + tree.root_.right.count + 1, tree.getCount());
+<a name="line327"></a>
+<a name="line328"></a>  // Remove strings from tree
+<a name="line329"></a>  assertEquals(&#39;samwise&#39;, tree.remove(&#39;samwise&#39;));
+<a name="line330"></a>  assertEquals(&#39;pippin&#39;, tree.remove(&#39;pippin&#39;));
+<a name="line331"></a>  assertEquals(&#39;frodo&#39;, tree.remove(&#39;frodo&#39;));
+<a name="line332"></a>  assertEquals(null, tree.remove(&#39;merry&#39;));
+<a name="line333"></a>  assertEquals(7, tree.getCount());
+<a name="line334"></a>
+<a name="line335"></a>  assertEquals(
+<a name="line336"></a>      tree.root_.left.count + tree.root_.right.count + 1, tree.getCount());
+<a name="line337"></a>}
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * This test verifies that getKthOrder gets the correct value.
+<a name="line342"></a> */
+<a name="line343"></a>function testGetKthOrder() {
+<a name="line344"></a>  var tree = new goog.structs.AvlTree(function(a, b) {
+<a name="line345"></a>    return a - b;
+<a name="line346"></a>  });
+<a name="line347"></a>
+<a name="line348"></a>  var NUM_TO_INSERT = 2000;
+<a name="line349"></a>  var NUM_TO_REMOVE = 500;
+<a name="line350"></a>
+<a name="line351"></a>  // Insert ints into tree out of order
+<a name="line352"></a>  for (var i = 0; i &lt; NUM_TO_INSERT; i += 1) {
+<a name="line353"></a>    tree.add(i);
+<a name="line354"></a>  }
+<a name="line355"></a>
+<a name="line356"></a>  // Remove values.
+<a name="line357"></a>  for (var i = 0; i &lt; NUM_TO_REMOVE; i += 1) {
+<a name="line358"></a>    tree.remove(i);
+<a name="line359"></a>  }
+<a name="line360"></a>  for (var k = 0; k &lt; tree.getCount(); ++k) {
+<a name="line361"></a>    assertEquals(NUM_TO_REMOVE + k, tree.getKthValue(k));
+<a name="line362"></a>  }
+<a name="line363"></a>}
+</pre>
+
+
+</body>
+</html>

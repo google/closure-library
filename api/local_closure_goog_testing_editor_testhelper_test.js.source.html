@@ -1,0 +1,226 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>testhelper_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_editor_testhelper_test.js.html">testhelper_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.editor.TestHelperTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.editor.TestHelperTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line20"></a>goog.require(&#39;goog.editor.node&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.editor.TestHelper&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line24"></a>
+<a name="line25"></a>var root;
+<a name="line26"></a>var helper;
+<a name="line27"></a>
+<a name="line28"></a>function setUp() {
+<a name="line29"></a>  root = goog.dom.getElement(&#39;root&#39;);
+<a name="line30"></a>  goog.dom.removeChildren(root);
+<a name="line31"></a>  helper = new goog.testing.editor.TestHelper(root);
+<a name="line32"></a>}
+<a name="line33"></a>
+<a name="line34"></a>function tearDown() {
+<a name="line35"></a>  helper.dispose();
+<a name="line36"></a>}
+<a name="line37"></a>
+<a name="line38"></a>function testSetRoot() {
+<a name="line39"></a>  helper.setRoot(goog.dom.getElement(&#39;root2&#39;));
+<a name="line40"></a>  helper.assertHtmlMatches(&#39;Root 2&#39;);
+<a name="line41"></a>}
+<a name="line42"></a>
+<a name="line43"></a>function testSetupEditableElement() {
+<a name="line44"></a>  helper.setUpEditableElement();
+<a name="line45"></a>  assertTrue(goog.editor.node.isEditableContainer(root));
+<a name="line46"></a>}
+<a name="line47"></a>
+<a name="line48"></a>function testTearDownEditableElement() {
+<a name="line49"></a>  helper.setUpEditableElement();
+<a name="line50"></a>  assertTrue(goog.editor.node.isEditableContainer(root));
+<a name="line51"></a>
+<a name="line52"></a>  helper.tearDownEditableElement();
+<a name="line53"></a>  assertFalse(goog.editor.node.isEditableContainer(root));
+<a name="line54"></a>}
+<a name="line55"></a>
+<a name="line56"></a>function testFindNode() {
+<a name="line57"></a>  // Test the easiest case.
+<a name="line58"></a>  root.innerHTML = &#39;a&lt;br&gt;b&#39;;
+<a name="line59"></a>  assertEquals(helper.findTextNode(&#39;a&#39;), root.firstChild);
+<a name="line60"></a>  assertEquals(helper.findTextNode(&#39;b&#39;), root.lastChild);
+<a name="line61"></a>  assertNull(helper.findTextNode(&#39;c&#39;));
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>function testFindNodeDuplicate() {
+<a name="line65"></a>  // Test duplicate.
+<a name="line66"></a>  root.innerHTML = &#39;c&lt;br&gt;c&#39;;
+<a name="line67"></a>  assertEquals(&#39;Should return first duplicate&#39;, helper.findTextNode(&#39;c&#39;),
+<a name="line68"></a>      root.firstChild);
+<a name="line69"></a>}
+<a name="line70"></a>
+<a name="line71"></a>function findNodeWithHierarchy() {
+<a name="line72"></a>  // Test a more complicated hierarchy.
+<a name="line73"></a>  root.innerHTML = &#39;&lt;div&gt;a&lt;p&gt;b&lt;span&gt;c&lt;/span&gt;d&lt;/p&gt;e&lt;/div&gt;&#39;;
+<a name="line74"></a>  assertEquals(goog.dom.TagName.DIV,
+<a name="line75"></a>      helper.findTextNode(&#39;a&#39;).parentNode.tagName);
+<a name="line76"></a>  assertEquals(goog.dom.TagName.P,
+<a name="line77"></a>      helper.findTextNode(&#39;b&#39;).parentNode.tagName);
+<a name="line78"></a>  assertEquals(goog.dom.TagName.SPAN,
+<a name="line79"></a>      helper.findTextNode(&#39;c&#39;).parentNode.tagName);
+<a name="line80"></a>  assertEquals(goog.dom.TagName.P,
+<a name="line81"></a>      helper.findTextNode(&#39;d&#39;).parentNode.tagName);
+<a name="line82"></a>  assertEquals(goog.dom.TagName.DIV,
+<a name="line83"></a>      helper.findTextNode(&#39;e&#39;).parentNode.tagName);
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>function setUpAssertHtmlMatches() {
+<a name="line87"></a>  var tag1, tag2;
+<a name="line88"></a>  if (goog.userAgent.IE) {
+<a name="line89"></a>    tag1 = goog.dom.TagName.DIV;
+<a name="line90"></a>  } else if (goog.userAgent.WEBKIT) {
+<a name="line91"></a>    tag1 = goog.dom.TagName.P;
+<a name="line92"></a>    tag2 = goog.dom.TagName.BR;
+<a name="line93"></a>  } else if (goog.userAgent.GECKO) {
+<a name="line94"></a>    tag1 = goog.dom.TagName.SPAN;
+<a name="line95"></a>    tag2 = goog.dom.TagName.BR;
+<a name="line96"></a>  }
+<a name="line97"></a>
+<a name="line98"></a>  var parent = goog.dom.createDom(goog.dom.TagName.DIV);
+<a name="line99"></a>  root.appendChild(parent);
+<a name="line100"></a>  parent.style.fontSize = &#39;2em&#39;;
+<a name="line101"></a>  parent.style.display = &#39;none&#39;;
+<a name="line102"></a>  if (goog.userAgent.IE || goog.userAgent.GECKO) {
+<a name="line103"></a>    parent.appendChild(goog.dom.createTextNode(&#39;NonWebKitText&#39;));
+<a name="line104"></a>  }
+<a name="line105"></a>
+<a name="line106"></a>  if (tag1) {
+<a name="line107"></a>    var e1 = goog.dom.createDom(tag1);
+<a name="line108"></a>    parent.appendChild(e1);
+<a name="line109"></a>    parent = e1;
+<a name="line110"></a>  }
+<a name="line111"></a>  if (tag2) {
+<a name="line112"></a>    parent.appendChild(goog.dom.createDom(tag2));
+<a name="line113"></a>  }
+<a name="line114"></a>  parent.appendChild(goog.dom.createTextNode(&#39;Text&#39;));
+<a name="line115"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line116"></a>    root.firstChild.appendChild(goog.dom.createTextNode(&#39;WebKitText&#39;));
+<a name="line117"></a>  }
+<a name="line118"></a>}
+<a name="line119"></a>
+<a name="line120"></a>function testAssertHtmlMatches() {
+<a name="line121"></a>  setUpAssertHtmlMatches();
+<a name="line122"></a>
+<a name="line123"></a>  helper.assertHtmlMatches(&#39;&lt;div style=&quot;display: none; font-size: 2em&quot;&gt;&#39; +
+<a name="line124"></a>      &#39;[[IE GECKO]]NonWebKitText&lt;div class=&quot;IE&quot;&gt;&lt;p class=&quot;WEBKIT&quot;&gt;&#39; +
+<a name="line125"></a>      &#39;&lt;span class=&quot;GECKO&quot;&gt;&lt;br class=&quot;GECKO WEBKIT&quot;&gt;Text&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&#39; +
+<a name="line126"></a>      &#39;&lt;/div&gt;[[WEBKIT]]WebKitText&#39;);
+<a name="line127"></a>}
+<a name="line128"></a>
+<a name="line129"></a>function testAssertHtmlMismatchText() {
+<a name="line130"></a>  setUpAssertHtmlMatches();
+<a name="line131"></a>
+<a name="line132"></a>  var e = assertThrows(&#39;Should fail due to mismatched text&#39;, function() {
+<a name="line133"></a>    helper.assertHtmlMatches(&#39;&lt;div style=&quot;display: none; font-size: 2em&quot;&gt;&#39; +
+<a name="line134"></a>        &#39;[[IE GECKO]]NonWebKitText&lt;div class=&quot;IE&quot;&gt;&lt;p class=&quot;WEBKIT&quot;&gt;&#39; +
+<a name="line135"></a>        &#39;&lt;span class=&quot;GECKO&quot;&gt;&lt;br class=&quot;GECKO WEBKIT&quot;&gt;Bad&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&#39; +
+<a name="line136"></a>        &#39;&lt;/div&gt;[[WEBKIT]]Extra&#39;);
+<a name="line137"></a>  });
+<a name="line138"></a>  assertContains(&#39;Text should match&#39;, e.message);
+<a name="line139"></a>}
+<a name="line140"></a>
+<a name="line141"></a>function testAssertHtmlMismatchTag() {
+<a name="line142"></a>  setUpAssertHtmlMatches();
+<a name="line143"></a>
+<a name="line144"></a>  var e = assertThrows(&#39;Should fail due to mismatched tag&#39;, function() {
+<a name="line145"></a>    helper.assertHtmlMatches(&#39;&lt;span style=&quot;display: none; font-size: 2em&quot;&gt;&#39; +
+<a name="line146"></a>        &#39;[[IE GECKO]]NonWebKitText&lt;div class=&quot;IE&quot;&gt;&lt;p class=&quot;WEBKIT&quot;&gt;&#39; +
+<a name="line147"></a>        &#39;&lt;span class=&quot;GECKO&quot;&gt;&lt;br class=&quot;GECKO WEBKIT&quot;&gt;Text&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&#39; +
+<a name="line148"></a>        &#39;&lt;/span&gt;[[WEBKIT]]Extra&#39;);
+<a name="line149"></a>  });
+<a name="line150"></a>  assertContains(&#39;Tag names should match&#39;, e.message);
+<a name="line151"></a>}
+<a name="line152"></a>
+<a name="line153"></a>function testAssertHtmlMismatchStyle() {
+<a name="line154"></a>  setUpAssertHtmlMatches();
+<a name="line155"></a>
+<a name="line156"></a>  var e = assertThrows(&#39;Should fail due to mismatched style&#39;, function() {
+<a name="line157"></a>    helper.assertHtmlMatches(&#39;&lt;div style=&quot;display: none; font-size: 3em&quot;&gt;&#39; +
+<a name="line158"></a>        &#39;[[IE GECKO]]NonWebKitText&lt;div class=&quot;IE&quot;&gt;&lt;p class=&quot;WEBKIT&quot;&gt;&#39; +
+<a name="line159"></a>        &#39;&lt;span class=&quot;GECKO&quot;&gt;&lt;br class=&quot;GECKO WEBKIT&quot;&gt;Text&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&#39; +
+<a name="line160"></a>        &#39;&lt;/div&gt;[[WEBKIT]]Extra&#39;);
+<a name="line161"></a>  });
+<a name="line162"></a>  assertContains(&#39;Should have same styles&#39;, e.message);
+<a name="line163"></a>}
+<a name="line164"></a>
+<a name="line165"></a>function testAssertHtmlMismatchOptionalText() {
+<a name="line166"></a>  setUpAssertHtmlMatches();
+<a name="line167"></a>
+<a name="line168"></a>  var e = assertThrows(&#39;Should fail due to mismatched style&#39;, function() {
+<a name="line169"></a>    helper.assertHtmlMatches(&#39;&lt;div style=&quot;display: none; font-size: 2em&quot;&gt;&#39; +
+<a name="line170"></a>        &#39;[[IE GECKO]]Bad&lt;div class=&quot;IE&quot;&gt;&lt;p class=&quot;WEBKIT&quot;&gt;&#39; +
+<a name="line171"></a>        &#39;&lt;span class=&quot;GECKO&quot;&gt;&lt;br class=&quot;GECKO WEBKIT&quot;&gt;Text&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&#39; +
+<a name="line172"></a>        &#39;&lt;/div&gt;[[WEBKIT]]Bad&#39;);
+<a name="line173"></a>  });
+<a name="line174"></a>  assertContains(&#39;Text should match&#39;, e.message);
+<a name="line175"></a>}
+</pre>
+
+
+</body>
+</html>

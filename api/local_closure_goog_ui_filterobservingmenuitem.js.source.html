@@ -1,0 +1,148 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>filterobservingmenuitem.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_filterobservingmenuitem.js.html">filterobservingmenuitem.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Menu item observing the filter text in a
+<a name="line17"></a> * {@link goog.ui.FilteredMenu}. The observer method is called when the filter
+<a name="line18"></a> * text changes and allows the menu item to update its content and state based
+<a name="line19"></a> * on the filter.
+<a name="line20"></a> *
+<a name="line21"></a> * @author eae@google.com (Emil A Eklund)
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.ui.FilterObservingMenuItem&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.ui.FilterObservingMenuItemRenderer&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.MenuItem&#39;);
+<a name="line28"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Class representing a filter observing menu item.
+<a name="line34"></a> *
+<a name="line35"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure to
+<a name="line36"></a> *     display as the content of the item (use to add icons or styling to
+<a name="line37"></a> *     menus).
+<a name="line38"></a> * @param {*=} opt_model Data/model associated with the menu item.
+<a name="line39"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper used for
+<a name="line40"></a> *     document interactions.
+<a name="line41"></a> * @param {goog.ui.MenuItemRenderer=} opt_renderer Optional renderer.
+<a name="line42"></a> * @constructor
+<a name="line43"></a> * @extends {goog.ui.MenuItem}
+<a name="line44"></a> */
+<a name="line45"></a>goog.ui.FilterObservingMenuItem = function(content, opt_model, opt_domHelper,
+<a name="line46"></a>                                           opt_renderer) {
+<a name="line47"></a>  goog.ui.MenuItem.call(this, content, opt_model, opt_domHelper,
+<a name="line48"></a>      opt_renderer || new goog.ui.FilterObservingMenuItemRenderer());
+<a name="line49"></a>};
+<a name="line50"></a>goog.inherits(goog.ui.FilterObservingMenuItem, goog.ui.MenuItem);
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Function called when the filter text changes.
+<a name="line55"></a> * @type {Function} function(goog.ui.FilterObservingMenuItem, string)
+<a name="line56"></a> * @private
+<a name="line57"></a> */
+<a name="line58"></a>goog.ui.FilterObservingMenuItem.prototype.observer_ = null;
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/** @override */
+<a name="line62"></a>goog.ui.FilterObservingMenuItem.prototype.enterDocument = function() {
+<a name="line63"></a>  goog.ui.FilterObservingMenuItem.superClass_.enterDocument.call(this);
+<a name="line64"></a>  this.callObserver();
+<a name="line65"></a>};
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * Sets the observer functions.
+<a name="line70"></a> * @param {Function} f function(goog.ui.FilterObservingMenuItem, string).
+<a name="line71"></a> */
+<a name="line72"></a>goog.ui.FilterObservingMenuItem.prototype.setObserver = function(f) {
+<a name="line73"></a>  this.observer_ = f;
+<a name="line74"></a>  this.callObserver();
+<a name="line75"></a>};
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Calls the observer function if one has been specified.
+<a name="line80"></a> * @param {?string=} opt_str Filter string.
+<a name="line81"></a> */
+<a name="line82"></a>goog.ui.FilterObservingMenuItem.prototype.callObserver = function(opt_str) {
+<a name="line83"></a>  if (this.observer_) {
+<a name="line84"></a>    this.observer_(this, opt_str || &#39;&#39;);
+<a name="line85"></a>  }
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>// Register a decorator factory function for
+<a name="line90"></a>// goog.ui.FilterObservingMenuItemRenderer.
+<a name="line91"></a>goog.ui.registry.setDecoratorByClassName(
+<a name="line92"></a>    goog.ui.FilterObservingMenuItemRenderer.CSS_CLASS,
+<a name="line93"></a>    function() {
+<a name="line94"></a>      // FilterObservingMenuItem defaults to using
+<a name="line95"></a>      // FilterObservingMenuItemRenderer.
+<a name="line96"></a>      return new goog.ui.FilterObservingMenuItem(null);
+<a name="line97"></a>    });
+</pre>
+
+
+</body>
+</html>

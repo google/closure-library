@@ -1,0 +1,260 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>emojipaletterenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_emoji_emojipaletterenderer.js.html">emojipaletterenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Emoji Palette renderer implementation.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.ui.emoji.EmojiPaletteRenderer&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.a11y.aria&#39;);
+<a name="line23"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line26"></a>goog.require(&#39;goog.style&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.PaletteRenderer&#39;);
+<a name="line28"></a>goog.require(&#39;goog.ui.emoji.Emoji&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Renders an emoji palette.
+<a name="line34"></a> *
+<a name="line35"></a> * @param {?string} defaultImgUrl Url of the img that should be used to fill up
+<a name="line36"></a> *     the cells in the emoji table, to prevent jittering. Will be stretched
+<a name="line37"></a> *     to the emoji cell size. A good image is a transparent dot.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @extends {goog.ui.PaletteRenderer}
+<a name="line40"></a> */
+<a name="line41"></a>goog.ui.emoji.EmojiPaletteRenderer = function(defaultImgUrl) {
+<a name="line42"></a>  goog.ui.PaletteRenderer.call(this);
+<a name="line43"></a>
+<a name="line44"></a>  this.defaultImgUrl_ = defaultImgUrl;
+<a name="line45"></a>};
+<a name="line46"></a>goog.inherits(goog.ui.emoji.EmojiPaletteRenderer, goog.ui.PaletteRenderer);
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>/**
+<a name="line50"></a> * Globally unique ID sequence for cells rendered by this renderer class.
+<a name="line51"></a> * @type {number}
+<a name="line52"></a> * @private
+<a name="line53"></a> */
+<a name="line54"></a>goog.ui.emoji.EmojiPaletteRenderer.cellId_ = 0;
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Url of the img that should be used for cells in the emoji palette that are
+<a name="line59"></a> * not filled with emoji, i.e., after all the emoji have already been placed
+<a name="line60"></a> * on a page.
+<a name="line61"></a> *
+<a name="line62"></a> * @type {?string}
+<a name="line63"></a> * @private
+<a name="line64"></a> */
+<a name="line65"></a>goog.ui.emoji.EmojiPaletteRenderer.prototype.defaultImgUrl_ = null;
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/** @override */
+<a name="line69"></a>goog.ui.emoji.EmojiPaletteRenderer.getCssClass = function() {
+<a name="line70"></a>  return goog.getCssName(&#39;goog-ui-emojipalette&#39;);
+<a name="line71"></a>};
+<a name="line72"></a>
+<a name="line73"></a>
+<a name="line74"></a>/**
+<a name="line75"></a> * Creates a palette item from the given emoji data.
+<a name="line76"></a> *
+<a name="line77"></a> * @param {goog.dom.DomHelper} dom DOM helper for constructing DOM elements.
+<a name="line78"></a> * @param {string} id Goomoji id for the emoji.
+<a name="line79"></a> * @param {goog.ui.emoji.SpriteInfo} spriteInfo Spriting info for the emoji.
+<a name="line80"></a> * @param {string} displayUrl URL of the image served for this cell, whether
+<a name="line81"></a> *     an individual emoji image or a sprite.
+<a name="line82"></a> * @return {HTMLDivElement} The palette item for this emoji.
+<a name="line83"></a> */
+<a name="line84"></a>goog.ui.emoji.EmojiPaletteRenderer.prototype.createPaletteItem =
+<a name="line85"></a>    function(dom, id, spriteInfo, displayUrl) {
+<a name="line86"></a>  var el;
+<a name="line87"></a>
+<a name="line88"></a>  if (spriteInfo) {
+<a name="line89"></a>    var cssClass = spriteInfo.getCssClass();
+<a name="line90"></a>    if (cssClass) {
+<a name="line91"></a>      el = dom.createDom(&#39;div&#39;, cssClass);
+<a name="line92"></a>    } else {
+<a name="line93"></a>      el = this.buildElementFromSpriteMetadata(dom, spriteInfo, displayUrl);
+<a name="line94"></a>    }
+<a name="line95"></a>  } else {
+<a name="line96"></a>    el = dom.createDom(&#39;img&#39;, {&#39;src&#39;: displayUrl});
+<a name="line97"></a>  }
+<a name="line98"></a>
+<a name="line99"></a>  var outerdiv =
+<a name="line100"></a>      dom.createDom(&#39;div&#39;, goog.getCssName(&#39;goog-palette-cell-wrapper&#39;), el);
+<a name="line101"></a>  outerdiv.setAttribute(goog.ui.emoji.Emoji.ATTRIBUTE, id);
+<a name="line102"></a>  return /** @type {HTMLDivElement} */ (outerdiv);
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Modifies a palette item containing an animated emoji, in response to the
+<a name="line108"></a> * animated emoji being successfully downloaded.
+<a name="line109"></a> *
+<a name="line110"></a> * @param {Element} item The palette item to update.
+<a name="line111"></a> * @param {Image} animatedImg An Image object containing the animated emoji.
+<a name="line112"></a> */
+<a name="line113"></a>goog.ui.emoji.EmojiPaletteRenderer.prototype.updateAnimatedPaletteItem =
+<a name="line114"></a>    function(item, animatedImg) {
+<a name="line115"></a>  // An animated emoji is one that had sprite info for a static version and is
+<a name="line116"></a>  // now being updated. See createPaletteItem for the structure of the palette
+<a name="line117"></a>  // items we&#39;re modifying.
+<a name="line118"></a>
+<a name="line119"></a>  var inner = /** @type {Element} */ (item.firstChild);
+<a name="line120"></a>  goog.asserts.assert(inner);
+<a name="line121"></a>  // The first case is a palette item with a CSS class representing the sprite,
+<a name="line122"></a>  // and an animated emoji.
+<a name="line123"></a>  var classes = goog.dom.classlist.get(inner);
+<a name="line124"></a>  if (classes &amp;&amp; classes.length == 1) {
+<a name="line125"></a>    inner.className = &#39;&#39;;
+<a name="line126"></a>  }
+<a name="line127"></a>
+<a name="line128"></a>  goog.style.setStyle(inner, {
+<a name="line129"></a>    &#39;width&#39;: animatedImg.width,
+<a name="line130"></a>    &#39;height&#39;: animatedImg.height,
+<a name="line131"></a>    &#39;background-image&#39;: &#39;url(&#39; + animatedImg.src + &#39;)&#39;,
+<a name="line132"></a>    &#39;background-position&#39;: &#39;0 0&#39;
+<a name="line133"></a>  });
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Builds the inner contents of a palette item out of sprite metadata.
+<a name="line139"></a> *
+<a name="line140"></a> * @param {goog.dom.DomHelper} dom DOM helper for constructing DOM elements.
+<a name="line141"></a> * @param {goog.ui.emoji.SpriteInfo} spriteInfo The metadata to create the css
+<a name="line142"></a> *     for the sprite.
+<a name="line143"></a> * @param {string} displayUrl The URL of the image for this cell.
+<a name="line144"></a> * @return {HTMLDivElement} The inner element for a palette item.
+<a name="line145"></a> */
+<a name="line146"></a>goog.ui.emoji.EmojiPaletteRenderer.prototype.buildElementFromSpriteMetadata =
+<a name="line147"></a>    function(dom, spriteInfo, displayUrl) {
+<a name="line148"></a>  var width = spriteInfo.getWidthCssValue();
+<a name="line149"></a>  var height = spriteInfo.getHeightCssValue();
+<a name="line150"></a>  var x = spriteInfo.getXOffsetCssValue();
+<a name="line151"></a>  var y = spriteInfo.getYOffsetCssValue();
+<a name="line152"></a>
+<a name="line153"></a>  var el = dom.createDom(&#39;div&#39;);
+<a name="line154"></a>  goog.style.setStyle(el, {
+<a name="line155"></a>    &#39;width&#39;: width,
+<a name="line156"></a>    &#39;height&#39;: height,
+<a name="line157"></a>    &#39;background-image&#39;: &#39;url(&#39; + displayUrl + &#39;)&#39;,
+<a name="line158"></a>    &#39;background-repeat&#39;: &#39;no-repeat&#39;,
+<a name="line159"></a>    &#39;background-position&#39;: x + &#39; &#39; + y
+<a name="line160"></a>  });
+<a name="line161"></a>
+<a name="line162"></a>  return /** @type {HTMLDivElement} */ (el);
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/** @override */
+<a name="line167"></a>goog.ui.emoji.EmojiPaletteRenderer.prototype.createCell = function(node, dom) {
+<a name="line168"></a>  // Create a cell with  the default img if we&#39;re out of items, in order to
+<a name="line169"></a>  // prevent jitter in the table. If there&#39;s no default img url, just create an
+<a name="line170"></a>  // empty div, to prevent trying to fetch a null url.
+<a name="line171"></a>  if (!node) {
+<a name="line172"></a>    var elem = this.defaultImgUrl_ ?
+<a name="line173"></a>               dom.createDom(&#39;img&#39;, {&#39;src&#39;: this.defaultImgUrl_}) :
+<a name="line174"></a>               dom.createDom(&#39;div&#39;);
+<a name="line175"></a>    node = dom.createDom(&#39;div&#39;, goog.getCssName(&#39;goog-palette-cell-wrapper&#39;),
+<a name="line176"></a>                         elem);
+<a name="line177"></a>  }
+<a name="line178"></a>
+<a name="line179"></a>  var cell = dom.createDom(&#39;td&#39;, {
+<a name="line180"></a>    &#39;class&#39;: goog.getCssName(this.getCssClass(), &#39;cell&#39;),
+<a name="line181"></a>    // Cells must have an ID, for accessibility, so we generate one here.
+<a name="line182"></a>    &#39;id&#39;: this.getCssClass() + &#39;-cell-&#39; +
+<a name="line183"></a>        goog.ui.emoji.EmojiPaletteRenderer.cellId_++
+<a name="line184"></a>  }, node);
+<a name="line185"></a>  goog.a11y.aria.setRole(cell, &#39;gridcell&#39;);
+<a name="line186"></a>  return cell;
+<a name="line187"></a>};
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * Returns the item corresponding to the given node, or null if the node is
+<a name="line192"></a> * neither a palette cell nor part of a palette item.
+<a name="line193"></a> * @param {goog.ui.Palette} palette Palette in which to look for the item.
+<a name="line194"></a> * @param {Node} node Node to look for.
+<a name="line195"></a> * @return {Node} The corresponding palette item (null if not found).
+<a name="line196"></a> * @override
+<a name="line197"></a> */
+<a name="line198"></a>goog.ui.emoji.EmojiPaletteRenderer.prototype.getContainingItem =
+<a name="line199"></a>    function(palette, node) {
+<a name="line200"></a>  var root = palette.getElement();
+<a name="line201"></a>  while (node &amp;&amp; node.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp; node != root) {
+<a name="line202"></a>    if (node.tagName == &#39;TD&#39;) {
+<a name="line203"></a>      return node.firstChild;
+<a name="line204"></a>    }
+<a name="line205"></a>    node = node.parentNode;
+<a name="line206"></a>  }
+<a name="line207"></a>
+<a name="line208"></a>  return null;
+<a name="line209"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>pattern (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">dom.pattern</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_AbstractPattern.html">
+          goog.dom.pattern.AbstractPattern</a><br/>
+        <div class="class-details">Base pattern class for DOM matching.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_AllChildren.html">
+          goog.dom.pattern.AllChildren</a><br/>
+        <div class="class-details">Pattern object that matches any nodes at or below the current tree depth.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_ChildMatches.html">
+          goog.dom.pattern.ChildMatches</a><br/>
+        <div class="class-details">Pattern object that matches any nodes at or below the current tree depth.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_EndTag.html">
+          goog.dom.pattern.EndTag</a><br/>
+        <div class="class-details">Pattern object that matches a closing tag.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_FullTag.html">
+          goog.dom.pattern.FullTag</a><br/>
+        <div class="class-details">Pattern object that matches a full tag including all its children.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_Matcher.html">
+          goog.dom.pattern.Matcher</a><br/>
+        <div class="class-details">Given a set of patterns and a root node, this class tests the patterns in
+parallel.
+
+It is not (yet) a smart matcher - it doesn't do any advanced backtracking.
+Given the pattern <code>DIV, SPAN</code> the matcher will not match
+<code>DIV, DIV, SPAN</code> because it starts matching at the first
+<code>DIV</code>, fails to match <code>SPAN</code> at the second, and never
+backtracks to try again.
+
+It is also possible to have a set of complex patterns that when matched in
+parallel will miss some possible matches.  Running multiple times will catch
+all matches eventually.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_NodeType.html">
+          goog.dom.pattern.NodeType</a><br/>
+        <div class="class-details">Pattern object that matches any node of the given type.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_Repeat.html">
+          goog.dom.pattern.Repeat</a><br/>
+        <div class="class-details">Pattern object that matches a repetition of another pattern.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_Sequence.html">
+          goog.dom.pattern.Sequence</a><br/>
+        <div class="class-details">Pattern object that matches a sequence of other patterns.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_StartTag.html">
+          goog.dom.pattern.StartTag</a><br/>
+        <div class="class-details">Pattern object that matches an opening tag.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_Tag.html">
+          goog.dom.pattern.Tag</a><br/>
+        <div class="class-details">Pattern object that matches an tag.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_pattern_Text.html">
+          goog.dom.pattern.Text</a><br/>
+        <div class="class-details">Pattern object that matches text by exact matching or regular expressions.
+
+</div>
+ </div>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.dom.pattern.MatchType"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.pattern.</span><span class="entryName">MatchType</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       When matched to a token, a pattern may return any of the following statuses:
+ <ol><li><code>NO_MATCH</code> - The pattern does not match.  This is the only
+     value that evaluates to <code>false</code> in a boolean context.
+   <li><code>MATCHING</code> - The token is part of an incomplete match.
+   <li><code>MATCH</code> - The token completes a match.
+   <li><code>BACKTRACK_MATCH</code> - The token does not match, but indicates
+     the end of a repetitive match.  For instance, in regular expressions,
+     the pattern <code>/a+/</code> would match <code>'aaaaaaaab'</code>.
+     Every <code>'a'</code> token would give a status of
+     <code>MATCHING</code> while the <code>'b'</code> token would give a
+     status of <code>BACKTRACK_MATCH</code>.
+ </li></li></li></li></ol>
+     </div>
+
+     <div class="entryDetails">
+       <div class="detailsSection">
+          <b>Constants:</b>
+          <table class="horiz-rule">
+            <tbody>
+              <tr><td>
+                <span class="entryName">
+                  BACKTRACK_MATCH
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  MATCH
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  MATCHING
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  NO_MATCH
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_pattern_pattern.js.source.html#line88">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.pattern.matchStringOrRegex"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.pattern.</span><span class="entryName">matchStringOrRegex<span class="args">(<span class="arg">obj</span>,&nbsp;<span class="arg">str</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Utility function to match a string against either a string or a regular
+expression.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">obj</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/RegExp">RegExp</a></span>
+        <div class="entryOverview">Either a string or a regular expression.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">str</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The string to match.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the strings are equal, or if the string matches
+    the regular expression.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_pattern_pattern.js.source.html#line42">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.pattern.matchStringOrRegexMap"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.pattern.</span><span class="entryName">matchStringOrRegexMap<span class="args">(<span class="arg">elem</span>,&nbsp;<span class="arg">index</span>,&nbsp;<span class="arg">orig</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Utility function to match a DOM attribute against either a string or a
+regular expression.  Conforms to the interface spec for
+<code> goog.object#every</code>.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">elem</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/RegExp">RegExp</a></span>
+        <div class="entryOverview">Either a string or a regular expression.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">index</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The attribute name to match.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">orig</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">The original map of matches to test.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the strings are equal, or if the attribute matches
+    the regular expression.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_pattern_pattern.js.source.html#line65">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.dom.pattern.BREAKING_TEXTNODE_RE"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.pattern.</span><span class="entryName">BREAKING_TEXTNODE_RE</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Regular expression for breaking text nodes.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_pattern_pattern.js.source.html#line30">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.dom.pattern.callback"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.pattern.</span><span class="entryName">callback</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_pattern_callback_counter.js.source.html#line21">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.dom.pattern.matcherTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.pattern.</span><span class="entryName">matcherTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_pattern_matcher_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package dom</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="dom.pattern"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

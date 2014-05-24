@@ -1,0 +1,607 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>resultutil.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_result_resultutil.js.html">resultutil.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This file provides primitives and tools (wait, transform,
+<a name="line17"></a> *     chain, combine) that make it easier to work with Results. This section
+<a name="line18"></a> *     gives an overview of their functionality along with some examples and the
+<a name="line19"></a> *     actual definitions have detailed descriptions next to them.
+<a name="line20"></a> *
+<a name="line21"></a> *
+<a name="line22"></a> * NOTE: goog.result is soft deprecated - we expect to replace this and
+<a name="line23"></a> * goog.async.Deferred with a wrapper around W3C Promises:
+<a name="line24"></a> * http://dom.spec.whatwg.org/#promises.
+<a name="line25"></a> */
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.result&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.array&#39;);
+<a name="line30"></a>goog.require(&#39;goog.result.DependentResult&#39;);
+<a name="line31"></a>goog.require(&#39;goog.result.Result&#39;);
+<a name="line32"></a>goog.require(&#39;goog.result.SimpleResult&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Returns a successful result containing the provided value.
+<a name="line37"></a> *
+<a name="line38"></a> * Example:
+<a name="line39"></a> * &lt;pre&gt;
+<a name="line40"></a> *
+<a name="line41"></a> * var value = &#39;some-value&#39;;
+<a name="line42"></a> * var result = goog.result.immediateResult(value);
+<a name="line43"></a> * assertEquals(goog.result.Result.State.SUCCESS, result.getState());
+<a name="line44"></a> * assertEquals(value, result.getValue());
+<a name="line45"></a> *
+<a name="line46"></a> * &lt;/pre&gt;
+<a name="line47"></a> *
+<a name="line48"></a> * @param {*} value The value of the result.
+<a name="line49"></a> * @return {!goog.result.Result} A Result object that has already been resolved
+<a name="line50"></a> *     to the supplied value.
+<a name="line51"></a> */
+<a name="line52"></a>goog.result.successfulResult = function(value) {
+<a name="line53"></a>  var result = new goog.result.SimpleResult();
+<a name="line54"></a>  result.setValue(value);
+<a name="line55"></a>  return result;
+<a name="line56"></a>};
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Returns a failed result with the optional error slug set.
+<a name="line61"></a> *
+<a name="line62"></a> * Example:
+<a name="line63"></a> * &lt;pre&gt;
+<a name="line64"></a> *
+<a name="line65"></a> * var error = new Error(&#39;something-failed&#39;);
+<a name="line66"></a> * var result = goog.result.failedResult(error);
+<a name="line67"></a> * assertEquals(goog.result.Result.State.ERROR, result.getState());
+<a name="line68"></a> * assertEquals(error, result.getError());
+<a name="line69"></a> *
+<a name="line70"></a> * &lt;/pre&gt;
+<a name="line71"></a> *
+<a name="line72"></a> * @param {*=} opt_error The error to which the result should resolve.
+<a name="line73"></a> * @return {!goog.result.Result} A Result object that has already been resolved
+<a name="line74"></a> *     to the supplied Error.
+<a name="line75"></a> */
+<a name="line76"></a>goog.result.failedResult = function(opt_error) {
+<a name="line77"></a>  var result = new goog.result.SimpleResult();
+<a name="line78"></a>  result.setError(opt_error);
+<a name="line79"></a>  return result;
+<a name="line80"></a>};
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Returns a canceled result.
+<a name="line85"></a> * The result will be resolved to an error of type CancelError.
+<a name="line86"></a> *
+<a name="line87"></a> * Example:
+<a name="line88"></a> * &lt;pre&gt;
+<a name="line89"></a> *
+<a name="line90"></a> * var result = goog.result.canceledResult();
+<a name="line91"></a> * assertEquals(goog.result.Result.State.ERROR, result.getState());
+<a name="line92"></a> * var error = result.getError();
+<a name="line93"></a> * assertTrue(error instanceof goog.result.Result.CancelError);
+<a name="line94"></a> *
+<a name="line95"></a> * &lt;/pre&gt;
+<a name="line96"></a> *
+<a name="line97"></a> * @return {!goog.result.Result} A canceled Result.
+<a name="line98"></a> */
+<a name="line99"></a>goog.result.canceledResult = function() {
+<a name="line100"></a>  var result = new goog.result.SimpleResult();
+<a name="line101"></a>  result.cancel();
+<a name="line102"></a>  return result;
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Calls the handler on resolution of the result (success or failure).
+<a name="line108"></a> * The handler is passed the result object as the only parameter. The call will
+<a name="line109"></a> * be immediate if the result is no longer pending.
+<a name="line110"></a> *
+<a name="line111"></a> * Example:
+<a name="line112"></a> * &lt;pre&gt;
+<a name="line113"></a> *
+<a name="line114"></a> * var result = xhr.get(&#39;testdata/xhr_test_text.data&#39;);
+<a name="line115"></a> *
+<a name="line116"></a> * // Wait for the result to be resolved and alert it&#39;s state.
+<a name="line117"></a> * goog.result.wait(result, function(result) {
+<a name="line118"></a> *   alert(&#39;State: &#39; + result.getState());
+<a name="line119"></a> * });
+<a name="line120"></a> * &lt;/pre&gt;
+<a name="line121"></a> *
+<a name="line122"></a> * @param {!goog.result.Result} result The result to install the handlers.
+<a name="line123"></a> * @param {function(this:T, !goog.result.Result)} handler The handler to be
+<a name="line124"></a> *     called. The handler is passed the result object as the only parameter.
+<a name="line125"></a> * @param {!T=} opt_scope Optional scope for the handler.
+<a name="line126"></a> * @template T
+<a name="line127"></a> */
+<a name="line128"></a>goog.result.wait = function(result, handler, opt_scope) {
+<a name="line129"></a>  result.wait(handler, opt_scope);
+<a name="line130"></a>};
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Calls the handler if the result succeeds. The result object is the only
+<a name="line135"></a> * parameter passed to the handler. The call will be immediate if the result
+<a name="line136"></a> * has already succeeded.
+<a name="line137"></a> *
+<a name="line138"></a> * Example:
+<a name="line139"></a> * &lt;pre&gt;
+<a name="line140"></a> *
+<a name="line141"></a> * var result = xhr.get(&#39;testdata/xhr_test_text.data&#39;);
+<a name="line142"></a> *
+<a name="line143"></a> * // attach a success handler.
+<a name="line144"></a> * goog.result.waitOnSuccess(result, function(resultValue, result) {
+<a name="line145"></a> *   var datavalue = result.getvalue();
+<a name="line146"></a> *   alert(&#39;value: &#39; + datavalue + &#39; == &#39; + resultValue);
+<a name="line147"></a> * });
+<a name="line148"></a> * &lt;/pre&gt;
+<a name="line149"></a> *
+<a name="line150"></a> * @param {!goog.result.Result} result The result to install the handlers.
+<a name="line151"></a> * @param {function(this:T, ?, !goog.result.Result)} handler The handler to be
+<a name="line152"></a> *     called. The handler is passed the result value and the result as
+<a name="line153"></a> *     parameters.
+<a name="line154"></a> * @param {!T=} opt_scope Optional scope for the handler.
+<a name="line155"></a> * @template T
+<a name="line156"></a> */
+<a name="line157"></a>goog.result.waitOnSuccess = function(result, handler, opt_scope) {
+<a name="line158"></a>  goog.result.wait(result, function(res) {
+<a name="line159"></a>    if (res.getState() == goog.result.Result.State.SUCCESS) {
+<a name="line160"></a>      // &#39;this&#39; refers to opt_scope
+<a name="line161"></a>      handler.call(this, res.getValue(), res);
+<a name="line162"></a>    }
+<a name="line163"></a>  }, opt_scope);
+<a name="line164"></a>};
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Calls the handler if the result action errors. The result object is passed as
+<a name="line169"></a> * the only parameter to the handler. The call will be immediate if the result
+<a name="line170"></a> * object has already resolved to an error.
+<a name="line171"></a> *
+<a name="line172"></a> * Example:
+<a name="line173"></a> *
+<a name="line174"></a> * &lt;pre&gt;
+<a name="line175"></a> *
+<a name="line176"></a> * var result = xhr.get(&#39;testdata/xhr_test_text.data&#39;);
+<a name="line177"></a> *
+<a name="line178"></a> * // Attach a failure handler.
+<a name="line179"></a> * goog.result.waitOnError(result, function(error) {
+<a name="line180"></a> *  // Failed asynchronous call!
+<a name="line181"></a> * });
+<a name="line182"></a> * &lt;/pre&gt;
+<a name="line183"></a> *
+<a name="line184"></a> * @param {!goog.result.Result} result The result to install the handlers.
+<a name="line185"></a> * @param {function(this:T, ?, !goog.result.Result)} handler The handler to be
+<a name="line186"></a> *     called. The handler is passed the error and the result object as
+<a name="line187"></a> *     parameters.
+<a name="line188"></a> * @param {!T=} opt_scope Optional scope for the handler.
+<a name="line189"></a> * @template T
+<a name="line190"></a> */
+<a name="line191"></a>goog.result.waitOnError = function(result, handler, opt_scope) {
+<a name="line192"></a>  goog.result.wait(result, function(res) {
+<a name="line193"></a>    if (res.getState() == goog.result.Result.State.ERROR) {
+<a name="line194"></a>      // &#39;this&#39; refers to opt_scope
+<a name="line195"></a>      handler.call(this, res.getError(), res);
+<a name="line196"></a>    }
+<a name="line197"></a>  }, opt_scope);
+<a name="line198"></a>};
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * Given a result and a transform function, returns a new result whose value,
+<a name="line203"></a> * on success, will be the value of the given result after having been passed
+<a name="line204"></a> * through the transform function.
+<a name="line205"></a> *
+<a name="line206"></a> * If the given result is an error, the returned result is also an error and the
+<a name="line207"></a> * transform will not be called.
+<a name="line208"></a> *
+<a name="line209"></a> * Example:
+<a name="line210"></a> * &lt;pre&gt;
+<a name="line211"></a> *
+<a name="line212"></a> * var result = xhr.getJson(&#39;testdata/xhr_test_json.data&#39;);
+<a name="line213"></a> *
+<a name="line214"></a> * // Transform contents of returned data using &#39;processJson&#39; and create a
+<a name="line215"></a> * // transformed result to use returned JSON.
+<a name="line216"></a> * var transformedResult = goog.result.transform(result, processJson);
+<a name="line217"></a> *
+<a name="line218"></a> * // Attach success and failure handlers to the tranformed result.
+<a name="line219"></a> * goog.result.waitOnSuccess(transformedResult, function(resultValue, result) {
+<a name="line220"></a> *   var jsonData = resultValue;
+<a name="line221"></a> *   assertEquals(&#39;ok&#39;, jsonData[&#39;stat&#39;]);
+<a name="line222"></a> * });
+<a name="line223"></a> *
+<a name="line224"></a> * goog.result.waitOnError(transformedResult, function(error) {
+<a name="line225"></a> *   // Failed getJson call
+<a name="line226"></a> * });
+<a name="line227"></a> * &lt;/pre&gt;
+<a name="line228"></a> *
+<a name="line229"></a> * @param {!goog.result.Result} result The result whose value will be
+<a name="line230"></a> *     transformed.
+<a name="line231"></a> * @param {function(?):?} transformer The transformer
+<a name="line232"></a> *     function. The return value of this function will become the value of the
+<a name="line233"></a> *     returned result.
+<a name="line234"></a> *
+<a name="line235"></a> * @return {!goog.result.DependentResult} A new Result whose eventual value will
+<a name="line236"></a> *     be the returned value of the transformer function.
+<a name="line237"></a> */
+<a name="line238"></a>goog.result.transform = function(result, transformer) {
+<a name="line239"></a>  var returnedResult = new goog.result.DependentResultImpl_([result]);
+<a name="line240"></a>
+<a name="line241"></a>  goog.result.wait(result, function(res) {
+<a name="line242"></a>    if (res.getState() == goog.result.Result.State.SUCCESS) {
+<a name="line243"></a>      returnedResult.setValue(transformer(res.getValue()));
+<a name="line244"></a>    } else {
+<a name="line245"></a>      returnedResult.setError(res.getError());
+<a name="line246"></a>    }
+<a name="line247"></a>  });
+<a name="line248"></a>
+<a name="line249"></a>  return returnedResult;
+<a name="line250"></a>};
+<a name="line251"></a>
+<a name="line252"></a>
+<a name="line253"></a>/**
+<a name="line254"></a> * The chain function aids in chaining of asynchronous Results. This provides a
+<a name="line255"></a> * convenience for use cases where asynchronous operations must happen serially
+<a name="line256"></a> * i.e. subsequent asynchronous operations are dependent on data returned by
+<a name="line257"></a> * prior asynchronous operations.
+<a name="line258"></a> *
+<a name="line259"></a> * It accepts a result and an action callback as arguments and returns a
+<a name="line260"></a> * result. The action callback is called when the first result succeeds and is
+<a name="line261"></a> * supposed to return a second result. The returned result is resolved when one
+<a name="line262"></a> * of both of the results resolve (depending on their success or failure.) The
+<a name="line263"></a> * state and value of the returned result in the various cases is documented
+<a name="line264"></a> * below:
+<a name="line265"></a> * &lt;pre&gt;
+<a name="line266"></a> *
+<a name="line267"></a> * First Result State:    Second Result State:    Returned Result State:
+<a name="line268"></a> * SUCCESS                SUCCESS                 SUCCESS
+<a name="line269"></a> * SUCCESS                ERROR                   ERROR
+<a name="line270"></a> * ERROR                  Not created             ERROR
+<a name="line271"></a> * &lt;/pre&gt;
+<a name="line272"></a> *
+<a name="line273"></a> * The value of the returned result, in the case both results succeed, is the
+<a name="line274"></a> * value of the second result (the result returned by the action callback.)
+<a name="line275"></a> *
+<a name="line276"></a> * Example:
+<a name="line277"></a> * &lt;pre&gt;
+<a name="line278"></a> *
+<a name="line279"></a> * var testDataResult = xhr.get(&#39;testdata/xhr_test_text.data&#39;);
+<a name="line280"></a> *
+<a name="line281"></a> * // Chain this result to perform another asynchronous operation when this
+<a name="line282"></a> * // Result is resolved.
+<a name="line283"></a> * var chainedResult = goog.result.chain(testDataResult,
+<a name="line284"></a> *     function(testDataResult) {
+<a name="line285"></a> *
+<a name="line286"></a> *       // The result value of testDataResult is the URL for JSON data.
+<a name="line287"></a> *       var jsonDataUrl = testDataResult.getValue();
+<a name="line288"></a> *
+<a name="line289"></a> *       // Create a new Result object when the original result is resolved.
+<a name="line290"></a> *       var jsonResult = xhr.getJson(jsonDataUrl);
+<a name="line291"></a> *
+<a name="line292"></a> *       // Return the newly created Result.
+<a name="line293"></a> *       return jsonResult;
+<a name="line294"></a> *     });
+<a name="line295"></a> *
+<a name="line296"></a> * // The chained result resolves to success when both results resolve to
+<a name="line297"></a> * // success.
+<a name="line298"></a> * goog.result.waitOnSuccess(chainedResult, function(resultValue, result) {
+<a name="line299"></a> *
+<a name="line300"></a> *   // At this point, both results have succeeded and we can use the JSON
+<a name="line301"></a> *   // data returned by the second asynchronous call.
+<a name="line302"></a> *   var jsonData = resultValue;
+<a name="line303"></a> *   assertEquals(&#39;ok&#39;, jsonData[&#39;stat&#39;]);
+<a name="line304"></a> * });
+<a name="line305"></a> *
+<a name="line306"></a> * // Attach the error handler to be called when either Result fails.
+<a name="line307"></a> * goog.result.waitOnError(chainedResult, function(result) {
+<a name="line308"></a> *   alert(&#39;chained result failed!&#39;);
+<a name="line309"></a> * });
+<a name="line310"></a> * &lt;/pre&gt;
+<a name="line311"></a> *
+<a name="line312"></a> * @param {!goog.result.Result} result The result to chain.
+<a name="line313"></a> * @param {function(this:T, !goog.result.Result):!goog.result.Result}
+<a name="line314"></a> *     actionCallback The callback called when the result is resolved. This
+<a name="line315"></a> *     callback must return a Result.
+<a name="line316"></a> * @param {T=} opt_scope Optional scope for the action callback.
+<a name="line317"></a> * @return {!goog.result.DependentResult} A result that is resolved when both
+<a name="line318"></a> *     the given Result and the Result returned by the actionCallback have
+<a name="line319"></a> *     resolved.
+<a name="line320"></a> * @template T
+<a name="line321"></a> */
+<a name="line322"></a>goog.result.chain = function(result, actionCallback, opt_scope) {
+<a name="line323"></a>  var dependentResult = new goog.result.DependentResultImpl_([result]);
+<a name="line324"></a>
+<a name="line325"></a>  // Wait for the first action.
+<a name="line326"></a>  goog.result.wait(result, function(result) {
+<a name="line327"></a>    if (result.getState() == goog.result.Result.State.SUCCESS) {
+<a name="line328"></a>
+<a name="line329"></a>      // The first action succeeded. Chain the contingent action.
+<a name="line330"></a>      var contingentResult = actionCallback.call(opt_scope, result);
+<a name="line331"></a>      dependentResult.addParentResult(contingentResult);
+<a name="line332"></a>      goog.result.wait(contingentResult, function(contingentResult) {
+<a name="line333"></a>
+<a name="line334"></a>        // The contingent action completed. Set the dependent result based on
+<a name="line335"></a>        // the contingent action&#39;s outcome.
+<a name="line336"></a>        if (contingentResult.getState() ==
+<a name="line337"></a>            goog.result.Result.State.SUCCESS) {
+<a name="line338"></a>          dependentResult.setValue(contingentResult.getValue());
+<a name="line339"></a>        } else {
+<a name="line340"></a>          dependentResult.setError(contingentResult.getError());
+<a name="line341"></a>        }
+<a name="line342"></a>      });
+<a name="line343"></a>    } else {
+<a name="line344"></a>      // First action failed, the dependent result should also fail.
+<a name="line345"></a>      dependentResult.setError(result.getError());
+<a name="line346"></a>    }
+<a name="line347"></a>  });
+<a name="line348"></a>
+<a name="line349"></a>  return dependentResult;
+<a name="line350"></a>};
+<a name="line351"></a>
+<a name="line352"></a>
+<a name="line353"></a>/**
+<a name="line354"></a> * Returns a result that waits on all given results to resolve. Once all have
+<a name="line355"></a> * resolved, the returned result will succeed (and never error).
+<a name="line356"></a> *
+<a name="line357"></a> * Example:
+<a name="line358"></a> * &lt;pre&gt;
+<a name="line359"></a> *
+<a name="line360"></a> * var result1 = xhr.get(&#39;testdata/xhr_test_text.data&#39;);
+<a name="line361"></a> *
+<a name="line362"></a> * // Get a second independent Result.
+<a name="line363"></a> * var result2 = xhr.getJson(&#39;testdata/xhr_test_json.data&#39;);
+<a name="line364"></a> *
+<a name="line365"></a> * // Create a Result that resolves when both prior results resolve.
+<a name="line366"></a> * var combinedResult = goog.result.combine(result1, result2);
+<a name="line367"></a> *
+<a name="line368"></a> * // Process data after resolution of both results.
+<a name="line369"></a> * goog.result.waitOnSuccess(combinedResult, function(results) {
+<a name="line370"></a> *   goog.array.forEach(results, function(result) {
+<a name="line371"></a> *       alert(result.getState());
+<a name="line372"></a> *   });
+<a name="line373"></a> * });
+<a name="line374"></a> * &lt;/pre&gt;
+<a name="line375"></a> *
+<a name="line376"></a> * @param {...!goog.result.Result} var_args The results to wait on.
+<a name="line377"></a> *
+<a name="line378"></a> * @return {!goog.result.DependentResult} A new Result whose eventual value will
+<a name="line379"></a> *     be the resolved given Result objects.
+<a name="line380"></a> */
+<a name="line381"></a>goog.result.combine = function(var_args) {
+<a name="line382"></a>  /** @type {!Array.&lt;!goog.result.Result&gt;} */
+<a name="line383"></a>  var results = goog.array.clone(arguments);
+<a name="line384"></a>  var combinedResult = new goog.result.DependentResultImpl_(results);
+<a name="line385"></a>
+<a name="line386"></a>  var isResolved = function(res) {
+<a name="line387"></a>    return res.getState() != goog.result.Result.State.PENDING;
+<a name="line388"></a>  };
+<a name="line389"></a>
+<a name="line390"></a>  var checkResults = function() {
+<a name="line391"></a>    if (combinedResult.getState() == goog.result.Result.State.PENDING &amp;&amp;
+<a name="line392"></a>        goog.array.every(results, isResolved)) {
+<a name="line393"></a>      combinedResult.setValue(results);
+<a name="line394"></a>    }
+<a name="line395"></a>  };
+<a name="line396"></a>
+<a name="line397"></a>  goog.array.forEach(results, function(result) {
+<a name="line398"></a>    goog.result.wait(result, checkResults);
+<a name="line399"></a>  });
+<a name="line400"></a>
+<a name="line401"></a>  return combinedResult;
+<a name="line402"></a>};
+<a name="line403"></a>
+<a name="line404"></a>
+<a name="line405"></a>/**
+<a name="line406"></a> * Returns a result that waits on all given results to resolve. Once all have
+<a name="line407"></a> * resolved, the returned result will succeed if and only if all given results
+<a name="line408"></a> * succeeded. Otherwise it will error.
+<a name="line409"></a> *
+<a name="line410"></a> * Example:
+<a name="line411"></a> * &lt;pre&gt;
+<a name="line412"></a> *
+<a name="line413"></a> * var result1 = xhr.get(&#39;testdata/xhr_test_text.data&#39;);
+<a name="line414"></a> *
+<a name="line415"></a> * // Get a second independent Result.
+<a name="line416"></a> * var result2 = xhr.getJson(&#39;testdata/xhr_test_json.data&#39;);
+<a name="line417"></a> *
+<a name="line418"></a> * // Create a Result that resolves when both prior results resolve.
+<a name="line419"></a> * var combinedResult = goog.result.combineOnSuccess(result1, result2);
+<a name="line420"></a> *
+<a name="line421"></a> * // Process data after successful resolution of both results.
+<a name="line422"></a> * goog.result.waitOnSuccess(combinedResult, function(results) {
+<a name="line423"></a> *   var textData = results[0].getValue();
+<a name="line424"></a> *   var jsonData = results[1].getValue();
+<a name="line425"></a> *   assertEquals(&#39;Just some data.&#39;, textData);
+<a name="line426"></a> *   assertEquals(&#39;ok&#39;, jsonData[&#39;stat&#39;]);
+<a name="line427"></a> * });
+<a name="line428"></a> *
+<a name="line429"></a> * // Handle errors when either or both results failed.
+<a name="line430"></a> * goog.result.waitOnError(combinedResult, function(combined) {
+<a name="line431"></a> *   var results = combined.getError();
+<a name="line432"></a> *
+<a name="line433"></a> *   if (results[0].getState() == goog.result.Result.State.ERROR) {
+<a name="line434"></a> *     alert(&#39;result1 failed&#39;);
+<a name="line435"></a> *   }
+<a name="line436"></a> *
+<a name="line437"></a> *   if (results[1].getState() == goog.result.Result.State.ERROR) {
+<a name="line438"></a> *     alert(&#39;result2 failed&#39;);
+<a name="line439"></a> *   }
+<a name="line440"></a> * });
+<a name="line441"></a> * &lt;/pre&gt;
+<a name="line442"></a> *
+<a name="line443"></a> * @param {...!goog.result.Result} var_args The results to wait on.
+<a name="line444"></a> *
+<a name="line445"></a> * @return {!goog.result.DependentResult} A new Result whose eventual value will
+<a name="line446"></a> *     be an array of values of the given Result objects.
+<a name="line447"></a> */
+<a name="line448"></a>goog.result.combineOnSuccess = function(var_args) {
+<a name="line449"></a>  var results = goog.array.clone(arguments);
+<a name="line450"></a>  var combinedResult = new goog.result.DependentResultImpl_(results);
+<a name="line451"></a>
+<a name="line452"></a>  var resolvedSuccessfully = function(res) {
+<a name="line453"></a>    return res.getState() == goog.result.Result.State.SUCCESS;
+<a name="line454"></a>  };
+<a name="line455"></a>
+<a name="line456"></a>  goog.result.wait(
+<a name="line457"></a>      goog.result.combine.apply(goog.result.combine, results),
+<a name="line458"></a>      // The combined result never ERRORs
+<a name="line459"></a>      function(res) {
+<a name="line460"></a>        var results = /** @type {Array.&lt;!goog.result.Result&gt;} */ (
+<a name="line461"></a>            res.getValue());
+<a name="line462"></a>        if (goog.array.every(results, resolvedSuccessfully)) {
+<a name="line463"></a>          combinedResult.setValue(results);
+<a name="line464"></a>        } else {
+<a name="line465"></a>          combinedResult.setError(results);
+<a name="line466"></a>        }
+<a name="line467"></a>      });
+<a name="line468"></a>
+<a name="line469"></a>  return combinedResult;
+<a name="line470"></a>};
+<a name="line471"></a>
+<a name="line472"></a>
+<a name="line473"></a>/**
+<a name="line474"></a> * Given a DependentResult, cancels the Results it depends on (that is, the
+<a name="line475"></a> * results returned by getParentResults). This function does not recurse,
+<a name="line476"></a> * so e.g. parents of parents are not canceled; only the immediate parents of
+<a name="line477"></a> * the given Result are canceled.
+<a name="line478"></a> *
+<a name="line479"></a> * Example using @see goog.result.combine:
+<a name="line480"></a> * &lt;pre&gt;
+<a name="line481"></a> * var result1 = xhr.get(&#39;testdata/xhr_test_text.data&#39;);
+<a name="line482"></a> *
+<a name="line483"></a> * // Get a second independent Result.
+<a name="line484"></a> * var result2 = xhr.getJson(&#39;testdata/xhr_test_json.data&#39;);
+<a name="line485"></a> *
+<a name="line486"></a> * // Create a Result that resolves when both prior results resolve.
+<a name="line487"></a> * var combinedResult = goog.result.combineOnSuccess(result1, result2);
+<a name="line488"></a> *
+<a name="line489"></a> * combinedResult.wait(function() {
+<a name="line490"></a> *   if (combinedResult.isCanceled()) {
+<a name="line491"></a> *     goog.result.cancelParentResults(combinedResult);
+<a name="line492"></a> *   }
+<a name="line493"></a> * });
+<a name="line494"></a> *
+<a name="line495"></a> * // Now, canceling combinedResult will cancel both result1 and result2.
+<a name="line496"></a> * combinedResult.cancel();
+<a name="line497"></a> * &lt;/pre&gt;
+<a name="line498"></a> * @param {!goog.result.DependentResult} dependentResult A Result that is
+<a name="line499"></a> *     dependent on the values of other Results (for example the Result of a
+<a name="line500"></a> *     goog.result.combine, goog.result.chain, or goog.result.transform call).
+<a name="line501"></a> * @return {boolean} True if any results were successfully canceled; otherwise
+<a name="line502"></a> *     false.
+<a name="line503"></a> * TODO(user): Implement a recursive version of this that cancels all
+<a name="line504"></a> * ancestor results.
+<a name="line505"></a> */
+<a name="line506"></a>goog.result.cancelParentResults = function(dependentResult) {
+<a name="line507"></a>  var anyCanceled = false;
+<a name="line508"></a>  var results = dependentResult.getParentResults();
+<a name="line509"></a>  for (var n = 0; n &lt; results.length; n++) {
+<a name="line510"></a>    anyCanceled |= results[n].cancel();
+<a name="line511"></a>  }
+<a name="line512"></a>  return !!anyCanceled;
+<a name="line513"></a>};
+<a name="line514"></a>
+<a name="line515"></a>
+<a name="line516"></a>
+<a name="line517"></a>/**
+<a name="line518"></a> * A DependentResult represents a Result whose eventual value depends on the
+<a name="line519"></a> * value of one or more other Results. For example, the Result returned by
+<a name="line520"></a> * @see goog.result.chain or @see goog.result.combine is dependent on the
+<a name="line521"></a> * Results given as arguments.
+<a name="line522"></a> *
+<a name="line523"></a> * @param {!Array.&lt;!goog.result.Result&gt;} parentResults A list of Results that
+<a name="line524"></a> *     will affect the eventual value of this Result.
+<a name="line525"></a> * @constructor
+<a name="line526"></a> * @implements {goog.result.DependentResult}
+<a name="line527"></a> * @extends {goog.result.SimpleResult}
+<a name="line528"></a> * @private
+<a name="line529"></a> */
+<a name="line530"></a>goog.result.DependentResultImpl_ = function(parentResults) {
+<a name="line531"></a>  goog.result.DependentResultImpl_.base(this, &#39;constructor&#39;);
+<a name="line532"></a>  /**
+<a name="line533"></a>   * A list of Results that will affect the eventual value of this Result.
+<a name="line534"></a>   * @type {!Array.&lt;!goog.result.Result&gt;}
+<a name="line535"></a>   * @private
+<a name="line536"></a>   */
+<a name="line537"></a>  this.parentResults_ = parentResults;
+<a name="line538"></a>};
+<a name="line539"></a>goog.inherits(goog.result.DependentResultImpl_, goog.result.SimpleResult);
+<a name="line540"></a>
+<a name="line541"></a>
+<a name="line542"></a>/**
+<a name="line543"></a> * Adds a Result to the list of Results that affect this one.
+<a name="line544"></a> * @param {!goog.result.Result} parentResult A result whose value affects the
+<a name="line545"></a> *     value of this Result.
+<a name="line546"></a> */
+<a name="line547"></a>goog.result.DependentResultImpl_.prototype.addParentResult = function(
+<a name="line548"></a>    parentResult) {
+<a name="line549"></a>  this.parentResults_.push(parentResult);
+<a name="line550"></a>};
+<a name="line551"></a>
+<a name="line552"></a>
+<a name="line553"></a>/** @override */
+<a name="line554"></a>goog.result.DependentResultImpl_.prototype.getParentResults = function() {
+<a name="line555"></a>  return this.parentResults_;
+<a name="line556"></a>};
+</pre>
+
+
+</body>
+</html>

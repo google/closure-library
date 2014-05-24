@@ -1,0 +1,1063 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>DragListGroupEvent (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">fx.DragListGroupEvent</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          <a href="class_goog_events_Event.html">
+          goog.events.Event
+</a>
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    The event object dispatched by DragListGroup.
+The fields draggerElCenter, hoverList, and hoverNextItem are only available
+for the BEFOREDRAGMOVE and DRAGMOVE events.
+
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="http://closure-library.googlecode.com/git/closure/goog/demos/draglistgroup.html">Demo</a></li>
+            <li><a href="local_closure_goog_fx_draglistgroup.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/fx/draglistgroup.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></td><td></td></tr>
+  <tr><td>goog.fx.DragListGroupEvent</td><td><span class="type"><a href="class_goog_events_Event.html">goog.events.Event</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+</table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.fx.DragListGroupEvent(<span><span class="arg">type</span>,&nbsp;<span class="arg">dragListGroup</span>,&nbsp;<span class="arg">event</span>,&nbsp;<span class="arg">currDragItem</span>,&nbsp;<span class="arg">draggerEl</span>,&nbsp;<span class="arg">dragger</span>,&nbsp;<span class="arg">opt_draggerElCenter</span>,&nbsp;<span class="arg">opt_hoverList</span>,&nbsp;<span class="arg">opt_hoverNextItem</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">type</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The event type string.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">dragListGroup</span>
+        : <span class="type"><a href="class_goog_fx_DragListGroup.html">goog.fx.DragListGroup</a></span>
+        <div class="entryOverview">A reference to the associated
+    DragListGroup object.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">event</span>
+        : <span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_fx_DragEvent.html">goog.fx.DragEvent</a></span>
+        <div class="entryOverview">The event fired
+    by the browser or fired by the dragger.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">currDragItem</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The current drag item being moved.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">draggerEl</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The clone of the current drag item that's actually
+    being dragged around.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">dragger</span>
+        : <span class="type"><a href="class_goog_fx_Dragger.html">goog.fx.Dragger</a></span>
+        <div class="entryOverview">The dragger object.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_draggerElCenter</span>
+        : <span class="type">goog.math.Coordinate=</span>
+        <div class="entryOverview">The current center
+    position of the draggerEl.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_hoverList</span>
+        : <span class="type">Element=</span>
+        <div class="entryOverview">The current drag list that's being hovered
+    over, or null if the center of draggerEl is outside of any drag lists.
+    If not null and the drag action ends right now, then currDragItem will
+    end up in this list.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_hoverNextItem</span>
+        : <span class="type">Element=</span>
+        <div class="entryOverview">The current next item in the hoverList
+    that the draggerEl is hovering over. (I.e. If the drag action ends
+    right now, then this item would become the next item after the new
+    location of currDragItem.) May be null if not applicable or if
+    currDragItem would be added to the end of hoverList.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_events_Event.html">
+              goog.events.Event
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td class="deprecated">
+    <a name="goog.events.Event.prototype.dispose"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dispose<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class="deprecatedMessage">Events don't need to be disposed.</span>
+       For backwards compatibility (goog.events.Event used to inherit
+goog.Disposable).
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line118">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td class="deprecated">
+    <a name="goog.events.Event.prototype.disposeInternal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">disposeInternal<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class="deprecatedMessage">Events don't need to be disposed.</span>
+       For backwards compatibility (goog.events.Event used to inherit
+goog.Disposable).
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line109">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.events.Event.prototype.preventDefault"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">preventDefault<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Prevents the default action, for example a link redirecting to a url.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line133">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.events.Event.prototype.stopPropagation"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">stopPropagation<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Stops event propagation.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line125">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_fx_DragListGroupEvent.html">
+              goog.fx.DragListGroupEvent
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragListGroupEvent.prototype.constructor"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">constructor</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_draglistgroup.js.source.html#line1254">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragListGroupEvent.prototype.currDragItem"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">currDragItem</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The current drag item being move.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_draglistgroup.js.source.html#line1275">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragListGroupEvent.prototype.dragListGroup"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dragListGroup</span>
+        : <span class="type"><a href="class_goog_fx_DragListGroup.html">goog.fx.DragListGroup</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       A reference to the associated DragListGroup object.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_draglistgroup.js.source.html#line1263">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragListGroupEvent.prototype.dragger"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">dragger</span>
+        : <span class="type"><a href="class_goog_fx_Dragger.html">goog.fx.Dragger</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The dragger object.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_draglistgroup.js.source.html#line1287">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragListGroupEvent.prototype.draggerEl"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">draggerEl</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The clone of the current drag item that's actually being dragged around.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_draglistgroup.js.source.html#line1281">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragListGroupEvent.prototype.draggerElCenter"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">draggerElCenter</span>
+        : <span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The current center position of the draggerEl.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_draglistgroup.js.source.html#line1293">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragListGroupEvent.prototype.event"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">event</span>
+        : <span class="type"><a href="class_goog_events_BrowserEvent.html">goog.events.BrowserEvent</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The event fired by the browser or fired by the dragger.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_draglistgroup.js.source.html#line1269">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragListGroupEvent.prototype.hoverList"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">hoverList</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The current drag list that's being hovered over, or null if the center of
+draggerEl is outside of any drag lists. (I.e. If not null and the drag
+action ends right now, then currDragItem will end up in this list.)
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_draglistgroup.js.source.html#line1301">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragListGroupEvent.prototype.hoverNextItem"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">hoverNextItem</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The current next item in the hoverList that the draggerEl is hovering over.
+(I.e. If the drag action ends right now, then this item would become the
+next item after the new location of currDragItem.) May be null if not
+applicable or if currDragItem would be added to the end of hoverList.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_draglistgroup.js.source.html#line1310">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_events_Event.html">
+              goog.events.Event
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.currentTarget"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">currentTarget</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Object that had the listener attached.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line72">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.defaultPrevented"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">defaultPrevented</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether the default action has been prevented.
+This is a property to match the W3C specification at
+<code> <a href="http://www.w3.org/TR/DOM-Level-3-Events/
+#events-event-type-defaultPrevented">http://www.w3.org/TR/DOM-Level-3-Events/
+#events-event-type-defaultPrevented</a></code>.
+Must be treated as read-only outside the class.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line91">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.propagationStopped_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">propagationStopped_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether to cancel the event in internal capture/bubble processing for IE.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line81">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.returnValue_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">returnValue_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Return value for in internal capture/bubble processing for IE.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line100">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.target"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">target</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Target of the event.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line66">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.events.Event.prototype.type"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">type</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Event type.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_events_event.js.source.html#line60">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+<h2>Static Properties</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.fx.DragListGroupEvent.superClass_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.fx.DragListGroupEvent.</span><span class="entryName">superClass_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_fx_draglistgroup.js.source.html#line1254">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package fx</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="fx.DragListGroupEvent"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

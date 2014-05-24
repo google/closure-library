@@ -1,0 +1,355 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>multichannel.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_messaging_multichannel.js.html">multichannel.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of goog.messaging.MultiChannel, which uses a
+<a name="line17"></a> * single underlying MessageChannel to carry several independent virtual message
+<a name="line18"></a> * channels.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.messaging.MultiChannel&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.messaging.MultiChannel.VirtualChannel&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line28"></a>goog.require(&#39;goog.log&#39;);
+<a name="line29"></a>goog.require(&#39;goog.messaging.MessageChannel&#39;); // interface
+<a name="line30"></a>goog.require(&#39;goog.object&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Creates a new MultiChannel wrapping a single MessageChannel. The
+<a name="line36"></a> * underlying channel shouldn&#39;t have any other listeners registered, but it
+<a name="line37"></a> * should be connected.
+<a name="line38"></a> *
+<a name="line39"></a> * Note that the other side of the channel should also be connected to a
+<a name="line40"></a> * MultiChannel with the same number of virtual channels.
+<a name="line41"></a> *
+<a name="line42"></a> * @param {goog.messaging.MessageChannel} underlyingChannel The underlying
+<a name="line43"></a> *     channel to use as transport for the virtual channels.
+<a name="line44"></a> * @constructor
+<a name="line45"></a> * @extends {goog.Disposable}
+<a name="line46"></a> * @final
+<a name="line47"></a> */
+<a name="line48"></a>goog.messaging.MultiChannel = function(underlyingChannel) {
+<a name="line49"></a>  goog.messaging.MultiChannel.base(this, &#39;constructor&#39;);
+<a name="line50"></a>
+<a name="line51"></a>  /**
+<a name="line52"></a>   * The underlying channel across which all requests are sent.
+<a name="line53"></a>   * @type {goog.messaging.MessageChannel}
+<a name="line54"></a>   * @private
+<a name="line55"></a>   */
+<a name="line56"></a>  this.underlyingChannel_ = underlyingChannel;
+<a name="line57"></a>
+<a name="line58"></a>  /**
+<a name="line59"></a>   * All the virtual channels that are registered for this MultiChannel.
+<a name="line60"></a>   * These are null if they&#39;ve been disposed.
+<a name="line61"></a>   * @type {Object.&lt;?goog.messaging.MultiChannel.VirtualChannel&gt;}
+<a name="line62"></a>   * @private
+<a name="line63"></a>   */
+<a name="line64"></a>  this.virtualChannels_ = {};
+<a name="line65"></a>
+<a name="line66"></a>  this.underlyingChannel_.registerDefaultService(
+<a name="line67"></a>      goog.bind(this.handleDefault_, this));
+<a name="line68"></a>};
+<a name="line69"></a>goog.inherits(goog.messaging.MultiChannel, goog.Disposable);
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Logger object for goog.messaging.MultiChannel.
+<a name="line74"></a> * @type {goog.log.Logger}
+<a name="line75"></a> * @private
+<a name="line76"></a> */
+<a name="line77"></a>goog.messaging.MultiChannel.prototype.logger_ =
+<a name="line78"></a>    goog.log.getLogger(&#39;goog.messaging.MultiChannel&#39;);
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Creates a new virtual channel that will communicate across the underlying
+<a name="line83"></a> * channel.
+<a name="line84"></a> * @param {string} name The name of the virtual channel. Must be unique for this
+<a name="line85"></a> *     MultiChannel. Cannot contain colons.
+<a name="line86"></a> * @return {!goog.messaging.MultiChannel.VirtualChannel} The new virtual
+<a name="line87"></a> *     channel.
+<a name="line88"></a> */
+<a name="line89"></a>goog.messaging.MultiChannel.prototype.createVirtualChannel = function(name) {
+<a name="line90"></a>  if (name.indexOf(&#39;:&#39;) != -1) {
+<a name="line91"></a>    throw Error(
+<a name="line92"></a>        &#39;Virtual channel name &quot;&#39; + name + &#39;&quot; should not contain colons&#39;);
+<a name="line93"></a>  }
+<a name="line94"></a>
+<a name="line95"></a>  if (name in this.virtualChannels_) {
+<a name="line96"></a>    throw Error(&#39;Virtual channel &quot;&#39; + name + &#39;&quot; was already created for &#39; +
+<a name="line97"></a>                &#39;this multichannel.&#39;);
+<a name="line98"></a>  }
+<a name="line99"></a>
+<a name="line100"></a>  var channel =
+<a name="line101"></a>      new goog.messaging.MultiChannel.VirtualChannel(this, name);
+<a name="line102"></a>  this.virtualChannels_[name] = channel;
+<a name="line103"></a>  return channel;
+<a name="line104"></a>};
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Handles the default service for the underlying channel. This dispatches any
+<a name="line109"></a> * unrecognized services to the appropriate virtual channel.
+<a name="line110"></a> *
+<a name="line111"></a> * @param {string} serviceName The name of the service being called.
+<a name="line112"></a> * @param {string|!Object} payload The message payload.
+<a name="line113"></a> * @private
+<a name="line114"></a> */
+<a name="line115"></a>goog.messaging.MultiChannel.prototype.handleDefault_ = function(
+<a name="line116"></a>    serviceName, payload) {
+<a name="line117"></a>  var match = serviceName.match(/^([^:]*):(.*)/);
+<a name="line118"></a>  if (!match) {
+<a name="line119"></a>    goog.log.warning(this.logger_,
+<a name="line120"></a>        &#39;Invalid service name &quot;&#39; + serviceName + &#39;&quot;: no &#39; +
+<a name="line121"></a>        &#39;virtual channel specified&#39;);
+<a name="line122"></a>    return;
+<a name="line123"></a>  }
+<a name="line124"></a>
+<a name="line125"></a>  var channelName = match[1];
+<a name="line126"></a>  serviceName = match[2];
+<a name="line127"></a>  if (!(channelName in this.virtualChannels_)) {
+<a name="line128"></a>    goog.log.warning(this.logger_,
+<a name="line129"></a>        &#39;Virtual channel &quot;&#39; + channelName + &#39; does not &#39; +
+<a name="line130"></a>        &#39;exist, but a message was received for it: &quot;&#39; + serviceName + &#39;&quot;&#39;);
+<a name="line131"></a>    return;
+<a name="line132"></a>  }
+<a name="line133"></a>
+<a name="line134"></a>  var virtualChannel = this.virtualChannels_[channelName];
+<a name="line135"></a>  if (!virtualChannel) {
+<a name="line136"></a>    goog.log.warning(this.logger_,
+<a name="line137"></a>        &#39;Virtual channel &quot;&#39; + channelName + &#39; has been &#39; +
+<a name="line138"></a>        &#39;disposed, but a message was received for it: &quot;&#39; + serviceName + &#39;&quot;&#39;);
+<a name="line139"></a>    return;
+<a name="line140"></a>  }
+<a name="line141"></a>
+<a name="line142"></a>  if (!virtualChannel.defaultService_) {
+<a name="line143"></a>    goog.log.warning(this.logger_,
+<a name="line144"></a>        &#39;Service &quot;&#39; + serviceName + &#39;&quot; is not registered &#39; +
+<a name="line145"></a>        &#39;on virtual channel &quot;&#39; + channelName + &#39;&quot;&#39;);
+<a name="line146"></a>    return;
+<a name="line147"></a>  }
+<a name="line148"></a>
+<a name="line149"></a>  virtualChannel.defaultService_(serviceName, payload);
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/** @override */
+<a name="line154"></a>goog.messaging.MultiChannel.prototype.disposeInternal = function() {
+<a name="line155"></a>  goog.object.forEach(this.virtualChannels_, function(channel) {
+<a name="line156"></a>    goog.dispose(channel);
+<a name="line157"></a>  });
+<a name="line158"></a>  goog.dispose(this.underlyingChannel_);
+<a name="line159"></a>  delete this.virtualChannels_;
+<a name="line160"></a>  delete this.underlyingChannel_;
+<a name="line161"></a>};
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * A message channel that proxies its messages over another underlying channel.
+<a name="line167"></a> *
+<a name="line168"></a> * @param {goog.messaging.MultiChannel} parent The MultiChannel
+<a name="line169"></a> *     which created this channel, and which contains the underlying
+<a name="line170"></a> *     MessageChannel that&#39;s used as the transport.
+<a name="line171"></a> * @param {string} name The name of this virtual channel. Unique among the
+<a name="line172"></a> *     virtual channels in parent.
+<a name="line173"></a> * @constructor
+<a name="line174"></a> * @implements {goog.messaging.MessageChannel}
+<a name="line175"></a> * @extends {goog.Disposable}
+<a name="line176"></a> * @final
+<a name="line177"></a> */
+<a name="line178"></a>goog.messaging.MultiChannel.VirtualChannel = function(parent, name) {
+<a name="line179"></a>  goog.messaging.MultiChannel.VirtualChannel.base(this, &#39;constructor&#39;);
+<a name="line180"></a>
+<a name="line181"></a>  /**
+<a name="line182"></a>   * The MultiChannel containing the underlying transport channel.
+<a name="line183"></a>   * @type {goog.messaging.MultiChannel}
+<a name="line184"></a>   * @private
+<a name="line185"></a>   */
+<a name="line186"></a>  this.parent_ = parent;
+<a name="line187"></a>
+<a name="line188"></a>  /**
+<a name="line189"></a>   * The name of this virtual channel.
+<a name="line190"></a>   * @type {string}
+<a name="line191"></a>   * @private
+<a name="line192"></a>   */
+<a name="line193"></a>  this.name_ = name;
+<a name="line194"></a>};
+<a name="line195"></a>goog.inherits(goog.messaging.MultiChannel.VirtualChannel,
+<a name="line196"></a>              goog.Disposable);
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * The default service to run if no other services match.
+<a name="line201"></a> * @type {?function(string, (string|!Object))}
+<a name="line202"></a> * @private
+<a name="line203"></a> */
+<a name="line204"></a>goog.messaging.MultiChannel.VirtualChannel.prototype.defaultService_;
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * Logger object for goog.messaging.MultiChannel.VirtualChannel.
+<a name="line209"></a> * @type {goog.log.Logger}
+<a name="line210"></a> * @private
+<a name="line211"></a> */
+<a name="line212"></a>goog.messaging.MultiChannel.VirtualChannel.prototype.logger_ =
+<a name="line213"></a>    goog.log.getLogger(
+<a name="line214"></a>        &#39;goog.messaging.MultiChannel.VirtualChannel&#39;);
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * This is a no-op, since the underlying channel is expected to already be
+<a name="line219"></a> * initialized when it&#39;s passed in.
+<a name="line220"></a> *
+<a name="line221"></a> * @override
+<a name="line222"></a> */
+<a name="line223"></a>goog.messaging.MultiChannel.VirtualChannel.prototype.connect =
+<a name="line224"></a>    function(opt_connectCb) {
+<a name="line225"></a>  if (opt_connectCb) {
+<a name="line226"></a>    opt_connectCb();
+<a name="line227"></a>  }
+<a name="line228"></a>};
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * This always returns true, since the underlying channel is expected to already
+<a name="line233"></a> * be initialized when it&#39;s passed in.
+<a name="line234"></a> *
+<a name="line235"></a> * @override
+<a name="line236"></a> */
+<a name="line237"></a>goog.messaging.MultiChannel.VirtualChannel.prototype.isConnected =
+<a name="line238"></a>    function() {
+<a name="line239"></a>  return true;
+<a name="line240"></a>};
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * @override
+<a name="line245"></a> */
+<a name="line246"></a>goog.messaging.MultiChannel.VirtualChannel.prototype.registerService =
+<a name="line247"></a>    function(serviceName, callback, opt_objectPayload) {
+<a name="line248"></a>  this.parent_.underlyingChannel_.registerService(
+<a name="line249"></a>      this.name_ + &#39;:&#39; + serviceName,
+<a name="line250"></a>      goog.bind(this.doCallback_, this, callback),
+<a name="line251"></a>      opt_objectPayload);
+<a name="line252"></a>};
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * @override
+<a name="line257"></a> */
+<a name="line258"></a>goog.messaging.MultiChannel.VirtualChannel.prototype.
+<a name="line259"></a>    registerDefaultService = function(callback) {
+<a name="line260"></a>  this.defaultService_ = goog.bind(this.doCallback_, this, callback);
+<a name="line261"></a>};
+<a name="line262"></a>
+<a name="line263"></a>
+<a name="line264"></a>/**
+<a name="line265"></a> * @override
+<a name="line266"></a> */
+<a name="line267"></a>goog.messaging.MultiChannel.VirtualChannel.prototype.send =
+<a name="line268"></a>    function(serviceName, payload) {
+<a name="line269"></a>  if (this.isDisposed()) {
+<a name="line270"></a>    throw Error(&#39;#send called for disposed VirtualChannel.&#39;);
+<a name="line271"></a>  }
+<a name="line272"></a>
+<a name="line273"></a>  this.parent_.underlyingChannel_.send(this.name_ + &#39;:&#39; + serviceName,
+<a name="line274"></a>                                       payload);
+<a name="line275"></a>};
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a>/**
+<a name="line279"></a> * Wraps a callback with a function that will log a warning and abort if it&#39;s
+<a name="line280"></a> * called when this channel is disposed.
+<a name="line281"></a> *
+<a name="line282"></a> * @param {function()} callback The callback to wrap.
+<a name="line283"></a> * @param {...*} var_args Other arguments, passed to the callback.
+<a name="line284"></a> * @private
+<a name="line285"></a> */
+<a name="line286"></a>goog.messaging.MultiChannel.VirtualChannel.prototype.doCallback_ =
+<a name="line287"></a>    function(callback, var_args) {
+<a name="line288"></a>  if (this.isDisposed()) {
+<a name="line289"></a>    goog.log.warning(this.logger_,
+<a name="line290"></a>        &#39;Virtual channel &quot;&#39; + this.name_ + &#39;&quot; received &#39; +
+<a name="line291"></a>        &#39; a message after being disposed.&#39;);
+<a name="line292"></a>    return;
+<a name="line293"></a>  }
+<a name="line294"></a>
+<a name="line295"></a>  callback.apply({}, Array.prototype.slice.call(arguments, 1));
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/** @override */
+<a name="line300"></a>goog.messaging.MultiChannel.VirtualChannel.prototype.disposeInternal =
+<a name="line301"></a>    function() {
+<a name="line302"></a>  this.parent_.virtualChannels_[this.name_] = null;
+<a name="line303"></a>  this.parent_ = null;
+<a name="line304"></a>};
+</pre>
+
+
+</body>
+</html>

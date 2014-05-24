@@ -1,0 +1,256 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>htmlprettyprinter_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_format_htmlprettyprinter_test.js.html">htmlprettyprinter_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.format.HtmlPrettyPrinterTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.format.HtmlPrettyPrinterTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.format.HtmlPrettyPrinter&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>var COMPLEX_HTML = &#39;&lt;!DOCTYPE root-element [SYSTEM OR PUBLIC FPI] &quot;uri&quot; [&#39; +
+<a name="line23"></a>    &#39;&lt;!-- internal declarations --&gt;]&gt;&#39; +
+<a name="line24"></a>    &#39;&lt;html&gt;&lt;head&gt;&lt;title&gt;My HTML&lt;/title&gt;&lt;!-- my comment --&gt;&lt;/head&gt;&#39; +
+<a name="line25"></a>    &#39;&lt;body&gt;&lt;h1&gt;My Header&lt;/h1&gt;My text.&lt;br&gt;&lt;b&gt;My bold text.&lt;/b&gt;&lt;hr&gt;&#39; +
+<a name="line26"></a>    &#39;&lt;pre&gt;My\npreformatted &lt;br&gt; HTML.&lt;/pre&gt;5 &lt; 10&lt;/body&gt;&#39; +
+<a name="line27"></a>    &#39;&lt;/html&gt;&#39;;
+<a name="line28"></a>var mockClock;
+<a name="line29"></a>var mockClockTicks;
+<a name="line30"></a>
+<a name="line31"></a>function setUp() {
+<a name="line32"></a>  mockClockTicks = 0;
+<a name="line33"></a>  mockClock = new goog.testing.MockClock();
+<a name="line34"></a>  mockClock.getCurrentTime = function() {
+<a name="line35"></a>    return mockClockTicks++;
+<a name="line36"></a>  };
+<a name="line37"></a>  mockClock.install();
+<a name="line38"></a>}
+<a name="line39"></a>
+<a name="line40"></a>function tearDown() {
+<a name="line41"></a>  if (mockClock) {
+<a name="line42"></a>    mockClock.uninstall();
+<a name="line43"></a>  }
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>function testSimpleHtml() {
+<a name="line47"></a>  var actual = goog.format.HtmlPrettyPrinter.format(&#39;&lt;br&gt;&lt;b&gt;bold&lt;/b&gt;&#39;);
+<a name="line48"></a>  assertEquals(&#39;&lt;br&gt;\n&lt;b&gt;bold&lt;/b&gt;\n&#39;, actual);
+<a name="line49"></a>  assertEquals(actual, goog.format.HtmlPrettyPrinter.format(actual));
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>function testSimpleHtmlMixedCase() {
+<a name="line53"></a>  var actual = goog.format.HtmlPrettyPrinter.format(&#39;&lt;BR&gt;&lt;b&gt;bold&lt;/b&gt;&#39;);
+<a name="line54"></a>  assertEquals(&#39;&lt;BR&gt;\n&lt;b&gt;bold&lt;/b&gt;\n&#39;, actual);
+<a name="line55"></a>  assertEquals(actual, goog.format.HtmlPrettyPrinter.format(actual));
+<a name="line56"></a>}
+<a name="line57"></a>
+<a name="line58"></a>function testComplexHtml() {
+<a name="line59"></a>  var actual = goog.format.HtmlPrettyPrinter.format(COMPLEX_HTML);
+<a name="line60"></a>  var expected = &#39;&lt;!DOCTYPE root-element [SYSTEM OR PUBLIC FPI] &quot;uri&quot; [&#39; +
+<a name="line61"></a>      &#39;&lt;!-- internal declarations --&gt;]&gt;\n&#39; +
+<a name="line62"></a>      &#39;&lt;html&gt;\n&#39; +
+<a name="line63"></a>      &#39;&lt;head&gt;\n&#39; +
+<a name="line64"></a>      &#39;&lt;title&gt;My HTML&lt;/title&gt;\n&#39; +
+<a name="line65"></a>      &#39;&lt;!-- my comment --&gt;&#39; +
+<a name="line66"></a>      &#39;&lt;/head&gt;\n&#39; +
+<a name="line67"></a>      &#39;&lt;body&gt;\n&#39; +
+<a name="line68"></a>      &#39;&lt;h1&gt;My Header&lt;/h1&gt;\n&#39; +
+<a name="line69"></a>      &#39;My text.&lt;br&gt;\n&#39; +
+<a name="line70"></a>      &#39;&lt;b&gt;My bold text.&lt;/b&gt;\n&#39; +
+<a name="line71"></a>      &#39;&lt;hr&gt;\n&#39; +
+<a name="line72"></a>      &#39;&lt;pre&gt;My\npreformatted &lt;br&gt; HTML.&lt;/pre&gt;\n&#39; +
+<a name="line73"></a>      &#39;5 &lt; 10&#39; +
+<a name="line74"></a>      &#39;&lt;/body&gt;\n&#39; +
+<a name="line75"></a>      &#39;&lt;/html&gt;\n&#39;;
+<a name="line76"></a>  assertEquals(expected, actual);
+<a name="line77"></a>  assertEquals(actual, goog.format.HtmlPrettyPrinter.format(actual));
+<a name="line78"></a>}
+<a name="line79"></a>
+<a name="line80"></a>function testTimeout() {
+<a name="line81"></a>  var pp = new goog.format.HtmlPrettyPrinter(3);
+<a name="line82"></a>  var actual = pp.format(COMPLEX_HTML);
+<a name="line83"></a>  var expected = &#39;&lt;!DOCTYPE root-element [SYSTEM OR PUBLIC FPI] &quot;uri&quot; [&#39; +
+<a name="line84"></a>      &#39;&lt;!-- internal declarations --&gt;]&gt;\n&#39; +
+<a name="line85"></a>      &#39;&lt;html&gt;\n&#39; +
+<a name="line86"></a>      &#39;&lt;head&gt;&lt;title&gt;My HTML&lt;/title&gt;&lt;!-- my comment --&gt;&lt;/head&gt;&#39; +
+<a name="line87"></a>      &#39;&lt;body&gt;&lt;h1&gt;My Header&lt;/h1&gt;My text.&lt;br&gt;&lt;b&gt;My bold text.&lt;/b&gt;&lt;hr&gt;&#39; +
+<a name="line88"></a>      &#39;&lt;pre&gt;My\npreformatted &lt;br&gt; HTML.&lt;/pre&gt;5 &lt; 10&lt;/body&gt;&#39; +
+<a name="line89"></a>      &#39;&lt;/html&gt;\n&#39;;
+<a name="line90"></a>  assertEquals(expected, actual);
+<a name="line91"></a>}
+<a name="line92"></a>
+<a name="line93"></a>function testKeepLeadingIndent() {
+<a name="line94"></a>  var original = &#39; &lt;b&gt;Bold&lt;/b&gt; &lt;i&gt;Ital&lt;/i&gt; &#39;;
+<a name="line95"></a>  var expected = &#39; &lt;b&gt;Bold&lt;/b&gt; &lt;i&gt;Ital&lt;/i&gt;\n&#39;;
+<a name="line96"></a>  assertEquals(expected, goog.format.HtmlPrettyPrinter.format(original));
+<a name="line97"></a>}
+<a name="line98"></a>
+<a name="line99"></a>function testTrimLeadingLineBreaks() {
+<a name="line100"></a>  var original = &#39;\n \t\r\n  \n &lt;b&gt;Bold&lt;/b&gt; &lt;i&gt;Ital&lt;/i&gt; &#39;;
+<a name="line101"></a>  var expected = &#39; &lt;b&gt;Bold&lt;/b&gt; &lt;i&gt;Ital&lt;/i&gt;\n&#39;;
+<a name="line102"></a>  assertEquals(expected, goog.format.HtmlPrettyPrinter.format(original));
+<a name="line103"></a>}
+<a name="line104"></a>
+<a name="line105"></a>function testExtraLines() {
+<a name="line106"></a>  var original = &#39;&lt;br&gt;\ntombrat&#39;;
+<a name="line107"></a>  assertEquals(original + &#39;\n&#39;, goog.format.HtmlPrettyPrinter.format(original));
+<a name="line108"></a>}
+<a name="line109"></a>
+<a name="line110"></a>function testCrlf() {
+<a name="line111"></a>  var original = &#39;&lt;br&gt;\r\none\r\ntwo&lt;br&gt;&#39;;
+<a name="line112"></a>  assertEquals(original + &#39;\n&#39;, goog.format.HtmlPrettyPrinter.format(original));
+<a name="line113"></a>}
+<a name="line114"></a>
+<a name="line115"></a>function testEndInLineBreak() {
+<a name="line116"></a>  assertEquals(&#39;foo\n&#39;, goog.format.HtmlPrettyPrinter.format(&#39;foo&#39;));
+<a name="line117"></a>  assertEquals(&#39;foo\n&#39;, goog.format.HtmlPrettyPrinter.format(&#39;foo\n&#39;));
+<a name="line118"></a>  assertEquals(&#39;foo\n&#39;, goog.format.HtmlPrettyPrinter.format(&#39;foo\n\n&#39;));
+<a name="line119"></a>  assertEquals(&#39;foo&lt;br&gt;\n&#39;, goog.format.HtmlPrettyPrinter.format(&#39;foo&lt;br&gt;&#39;));
+<a name="line120"></a>  assertEquals(&#39;foo&lt;br&gt;\n&#39;, goog.format.HtmlPrettyPrinter.format(&#39;foo&lt;br&gt;\n&#39;));
+<a name="line121"></a>}
+<a name="line122"></a>
+<a name="line123"></a>function testTable() {
+<a name="line124"></a>  var original = &#39;&lt;table&gt;&#39; +
+<a name="line125"></a>      &#39;&lt;tr&gt;&lt;td&gt;one.one&lt;/td&gt;&lt;td&gt;one.two&lt;/td&gt;&lt;/tr&gt;&#39; +
+<a name="line126"></a>      &#39;&lt;tr&gt;&lt;td&gt;two.one&lt;/td&gt;&lt;td&gt;two.two&lt;/td&gt;&lt;/tr&gt;&#39; +
+<a name="line127"></a>      &#39;&lt;/table&gt;&#39;;
+<a name="line128"></a>  var expected = &#39;&lt;table&gt;\n&#39; +
+<a name="line129"></a>      &#39;&lt;tr&gt;\n&lt;td&gt;one.one&lt;/td&gt;\n&lt;td&gt;one.two&lt;/td&gt;\n&lt;/tr&gt;\n&#39; +
+<a name="line130"></a>      &#39;&lt;tr&gt;\n&lt;td&gt;two.one&lt;/td&gt;\n&lt;td&gt;two.two&lt;/td&gt;\n&lt;/tr&gt;\n&#39; +
+<a name="line131"></a>      &#39;&lt;/table&gt;\n&#39;;
+<a name="line132"></a>  assertEquals(expected, goog.format.HtmlPrettyPrinter.format(original));
+<a name="line133"></a>}
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * We have a sanity check in HtmlPrettyPrinter to make sure the regex index
+<a name="line138"></a> * advances after every match. We should never hit this, but we include it on
+<a name="line139"></a> * the chance there is some corner case where the pattern would match but not
+<a name="line140"></a> * process a new token. It&#39;s not generally a good idea to break the
+<a name="line141"></a> * implementation to test behavior, but this is the easiest way to mimic a
+<a name="line142"></a> * bad internal state.
+<a name="line143"></a> */
+<a name="line144"></a>function testRegexMakesProgress() {
+<a name="line145"></a>  var original = goog.format.HtmlPrettyPrinter.TOKEN_REGEX_;
+<a name="line146"></a>
+<a name="line147"></a>  try {
+<a name="line148"></a>    // This regex matches \B, an index between 2 word characters, so the regex
+<a name="line149"></a>    // index does not advance when matching this.
+<a name="line150"></a>    goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ =
+<a name="line151"></a>        /(?:\B|&lt;!--.*?--&gt;|&lt;!.*?&gt;|&lt;(\/?)(\w+)[^&gt;]*&gt;|[^&lt;]+|&lt;)/g;
+<a name="line152"></a>
+<a name="line153"></a>    // It would work on this string.
+<a name="line154"></a>    assertEquals(&#39;f o o\n&#39;, goog.format.HtmlPrettyPrinter.format(&#39;f o o&#39;));
+<a name="line155"></a>
+<a name="line156"></a>    // But not this one.
+<a name="line157"></a>    var ex = assertThrows(&#39;should have failed for invalid regex - endless loop&#39;,
+<a name="line158"></a>        goog.partial(goog.format.HtmlPrettyPrinter.format, COMPLEX_HTML));
+<a name="line159"></a>    assertEquals(&#39;Regex failed to make progress through source html.&#39;,
+<a name="line160"></a>        ex.message);
+<a name="line161"></a>  } finally {
+<a name="line162"></a>    goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ = original;
+<a name="line163"></a>  }
+<a name="line164"></a>}
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * FF3.0 doesn&#39;t like \n between &lt;/li&gt; and &lt;/ul&gt;. See bug 1520665.
+<a name="line169"></a> */
+<a name="line170"></a>function testLists() {
+<a name="line171"></a>  var original = &#39;&lt;ul&gt;&lt;li&gt;one&lt;/li&gt;&lt;ul&gt;&lt;li&gt;two&lt;/li&gt;&lt;/UL&gt;&lt;li&gt;three&lt;/li&gt;&lt;/ul&gt;&#39;;
+<a name="line172"></a>  var expected =
+<a name="line173"></a>      &#39;&lt;ul&gt;&lt;li&gt;one&lt;/li&gt;\n&lt;ul&gt;&lt;li&gt;two&lt;/li&gt;&lt;/UL&gt;\n&lt;li&gt;three&lt;/li&gt;&lt;/ul&gt;\n&#39;;
+<a name="line174"></a>  assertEquals(expected, goog.format.HtmlPrettyPrinter.format(original));
+<a name="line175"></a>}
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * We have a sanity check in HtmlPrettyPrinter to make sure the regex fully
+<a name="line180"></a> * tokenizes the string. We should never hit this, but we include it on the
+<a name="line181"></a> * chance there is some corner case where the pattern would miss a section of
+<a name="line182"></a> * original string. It&#39;s not generally a good idea to break the
+<a name="line183"></a> * implementation to test behavior, but this is the easiest way to mimic a
+<a name="line184"></a> * bad internal state.
+<a name="line185"></a> */
+<a name="line186"></a>function testAvoidDataLoss() {
+<a name="line187"></a>  var original = goog.format.HtmlPrettyPrinter.TOKEN_REGEX_;
+<a name="line188"></a>
+<a name="line189"></a>  try {
+<a name="line190"></a>    // This regex does not match stranded &#39;&lt;&#39; characters, so does not fully
+<a name="line191"></a>    // tokenize the string.
+<a name="line192"></a>    goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ =
+<a name="line193"></a>        /(?:&lt;!--.*?--&gt;|&lt;!.*?&gt;|&lt;(\/?)(\w+)[^&gt;]*&gt;|[^&lt;]+)/g;
+<a name="line194"></a>
+<a name="line195"></a>    // It would work on this string.
+<a name="line196"></a>    assertEquals(&#39;foo\n&#39;, goog.format.HtmlPrettyPrinter.format(&#39;foo&#39;));
+<a name="line197"></a>
+<a name="line198"></a>    // But not this one.
+<a name="line199"></a>    var ex = assertThrows(&#39;should have failed for invalid regex - data loss&#39;,
+<a name="line200"></a>        goog.partial(goog.format.HtmlPrettyPrinter.format, COMPLEX_HTML));
+<a name="line201"></a>    assertEquals(&#39;Lost data pretty printing html.&#39;, ex.message);
+<a name="line202"></a>  } finally {
+<a name="line203"></a>    goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ = original;
+<a name="line204"></a>  }
+<a name="line205"></a>}
+</pre>
+
+
+</body>
+</html>

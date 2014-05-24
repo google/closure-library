@@ -1,0 +1,173 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>utils_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_html_utils_test.js.html">utils_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Unit tests for goog.html.util.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.html.UtilsTest&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.array&#39;);
+<a name="line22"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line23"></a>goog.require(&#39;goog.html.utils&#39;);
+<a name="line24"></a>goog.require(&#39;goog.object&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.setTestOnly(&#39;goog.html.UtilsTest&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>var FAILURE_MESSAGE = &#39;Failed to strip all HTML.&#39;;
+<a name="line31"></a>var STRIP = &#39;Hello world!&#39;;
+<a name="line32"></a>var result;
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>function tearDown() {
+<a name="line36"></a>  result = null;
+<a name="line37"></a>}
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>function testStripAllHtmlTagsSingle() {
+<a name="line41"></a>  goog.object.forEach(goog.dom.TagName, function(tag) {
+<a name="line42"></a>    result = goog.html.utils.stripHtmlTags(makeHtml_(tag, STRIP));
+<a name="line43"></a>    assertEquals(FAILURE_MESSAGE, STRIP, result);
+<a name="line44"></a>  });
+<a name="line45"></a>}
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>function testStripAllHtmlTagsAttribute() {
+<a name="line49"></a>  goog.object.forEach(goog.dom.TagName, function(tag) {
+<a name="line50"></a>    result = goog.html.utils.stripHtmlTags(makeHtml_(tag, STRIP, 1, 0, &#39;a&#39;));
+<a name="line51"></a>    assertEquals(FAILURE_MESSAGE, STRIP, result);
+<a name="line52"></a>  });
+<a name="line53"></a>}
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>function testStripAllHtmlTagsDouble() {
+<a name="line57"></a>  var tag1 = goog.dom.TagName.B;
+<a name="line58"></a>  var tag2 = goog.dom.TagName.DIV;
+<a name="line59"></a>  result = goog.html.utils.stripHtmlTags(makeHtml_(tag1, STRIP, 2));
+<a name="line60"></a>  assertEquals(FAILURE_MESSAGE, STRIP + STRIP, result);
+<a name="line61"></a>  result = goog.html.utils.stripHtmlTags(makeHtml_(tag2, STRIP, 2));
+<a name="line62"></a>  assertEquals(FAILURE_MESSAGE, STRIP + &#39; &#39; + STRIP, result);
+<a name="line63"></a>}
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>function testComplex() {
+<a name="line67"></a>  var html = &#39;&lt;h1 id=\&quot;life\&quot;&gt;Life at Google&lt;/h1&gt;&#39; +
+<a name="line68"></a>      &#39;&lt;p&gt;Read and interact with the information below to learn about &#39; +
+<a name="line69"></a>      &#39;life at &lt;u&gt;Google&lt;/u&gt;.&lt;/p&gt;&#39; +
+<a name="line70"></a>      &#39;&lt;h2 id=\&quot;food\&quot;&gt;Food at Google&lt;/h2&gt;&#39; +
+<a name="line71"></a>      &#39;&lt;p&gt;Google has &lt;em&gt;the best food in the world&lt;/em&gt;.&lt;/p&gt;&#39; +
+<a name="line72"></a>      &#39;&lt;h2 id=\&quot;transportation\&quot;&gt;Transportation at Google&lt;/h2&gt;&#39; +
+<a name="line73"></a>      &#39;&lt;p&gt;Google provides &lt;i&gt;free transportation&lt;/i&gt;.&lt;/p&gt;&#39; +
+<a name="line74"></a>      // Some text with symbols to make sure that it does not get stripped
+<a name="line75"></a>      &#39;&lt;3i&gt;&lt;x&gt;\n-10&lt;x&lt;10 3cat &lt; 3dog &amp;amp;&amp;lt;&amp;gt;&amp;quot;&#39;;
+<a name="line76"></a>  result = goog.html.utils.stripHtmlTags(html);
+<a name="line77"></a>  var expected = &#39;Life at Google &#39; +
+<a name="line78"></a>      &#39;Read and interact with the information below to learn about &#39; +
+<a name="line79"></a>      &#39;life at Google. &#39; +
+<a name="line80"></a>      &#39;Food at Google &#39; +
+<a name="line81"></a>      &#39;Google has the best food in the world. &#39; +
+<a name="line82"></a>      &#39;Transportation at Google &#39; +
+<a name="line83"></a>      &#39;Google provides free transportation. &#39; +
+<a name="line84"></a>      &#39;-10&lt;x&lt;10 3cat &lt; 3dog &amp;&lt;&gt;\&quot;&#39;;
+<a name="line85"></a>  assertEquals(FAILURE_MESSAGE, expected, result);
+<a name="line86"></a>}
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>function testInteresting() {
+<a name="line90"></a>  result = goog.html.utils.stripHtmlTags(
+<a name="line91"></a>      &#39;&lt;img/src=&quot;bogus&quot;onerror=alert(13) style=&quot;display:none&quot;&gt;&#39;);
+<a name="line92"></a>  assertEquals(FAILURE_MESSAGE, &#39;&#39;, result);
+<a name="line93"></a>  result = goog.html.utils.stripHtmlTags(
+<a name="line94"></a>      &#39;&lt;img o\&#39;reilly blob src=bogus onerror=alert(1337)&gt;&#39;);
+<a name="line95"></a>  assertEquals(FAILURE_MESSAGE, &#39;&#39;, result);
+<a name="line96"></a>}
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Constructs the HTML of an element from the given tag and content.
+<a name="line101"></a> * @param {goog.dom.TagName} tag The HTML tagName for the element.
+<a name="line102"></a> * @param {string} content The content.
+<a name="line103"></a> * @param {number=} opt_copies Optional number of copies to make.
+<a name="line104"></a> * @param {number=} opt_tabIndex Optional tabIndex to give the element.
+<a name="line105"></a> * @param {string=} opt_id Optional id to give the element.
+<a name="line106"></a> * @return {string} The HTML of an element from the given tag and content.
+<a name="line107"></a> */
+<a name="line108"></a>function makeHtml_(tag, content, opt_copies, opt_tabIndex, opt_id) {
+<a name="line109"></a>  var html = [&#39;&lt;&#39; + tag, &#39;&gt;&#39; + content + &#39;&lt;/&#39; + tag + &#39;&gt;&#39;];
+<a name="line110"></a>  if (goog.isNumber(opt_tabIndex)) {
+<a name="line111"></a>    goog.array.insertAt(html, &#39; tabIndex=\&quot;&#39; + opt_tabIndex + &#39;\&quot;&#39;, 1);
+<a name="line112"></a>  }
+<a name="line113"></a>  if (goog.isString(opt_id)) {
+<a name="line114"></a>    goog.array.insertAt(html, &#39; id=\&quot;&#39; + opt_id + &#39;\&quot;&#39;, 1);
+<a name="line115"></a>  }
+<a name="line116"></a>  html = html.join(&#39;&#39;);
+<a name="line117"></a>  var array = [];
+<a name="line118"></a>  for (var i = 0, length = opt_copies || 1; i &lt; length; i++) {
+<a name="line119"></a>    array[i] = html;
+<a name="line120"></a>  }
+<a name="line121"></a>  return array.join(&#39;&#39;);
+<a name="line122"></a>}
+</pre>
+
+
+</body>
+</html>

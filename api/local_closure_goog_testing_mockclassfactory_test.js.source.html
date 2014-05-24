@@ -1,0 +1,289 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mockclassfactory_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_mockclassfactory_test.js.html">mockclassfactory_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.setTestOnly(&#39;goog.testing.MockClassFactoryTest&#39;);
+<a name="line16"></a>goog.require(&#39;goog.testing&#39;);
+<a name="line17"></a>goog.require(&#39;goog.testing.MockClassFactory&#39;);
+<a name="line18"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line19"></a>goog.provide(&#39;fake.BaseClass&#39;);
+<a name="line20"></a>goog.provide(&#39;fake.ChildClass&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.testing.MockClassFactoryTest&#39;);
+<a name="line22"></a>
+<a name="line23"></a>// Classes that will be mocked.  A base class and child class are used to
+<a name="line24"></a>// test inheritance.
+<a name="line25"></a>fake.BaseClass = function(a) {
+<a name="line26"></a>  fail(&#39;real object should never be called&#39;);
+<a name="line27"></a>};
+<a name="line28"></a>
+<a name="line29"></a>fake.BaseClass.prototype.foo = function() {
+<a name="line30"></a>  fail(&#39;real object should never be called&#39;);
+<a name="line31"></a>};
+<a name="line32"></a>
+<a name="line33"></a>fake.BaseClass.prototype.toString = function() {return &#39;foo&#39;;};
+<a name="line34"></a>
+<a name="line35"></a>fake.BaseClass.prototype.toLocaleString = function() {return &#39;bar&#39;;};
+<a name="line36"></a>
+<a name="line37"></a>fake.ChildClass = function(a) {
+<a name="line38"></a>  fail(&#39;real object should never be called&#39;);
+<a name="line39"></a>};
+<a name="line40"></a>goog.inherits(fake.ChildClass, fake.BaseClass);
+<a name="line41"></a>
+<a name="line42"></a>fake.ChildClass.staticFoo = function() {
+<a name="line43"></a>  fail(&#39;real object should never be called&#39;);
+<a name="line44"></a>};
+<a name="line45"></a>
+<a name="line46"></a>fake.ChildClass.prototype.bar = function() {
+<a name="line47"></a>  fail(&#39;real object should never be called&#39;);
+<a name="line48"></a>};
+<a name="line49"></a>
+<a name="line50"></a>fake.ChildClass.staticProperty = &#39;staticPropertyOnClass&#39;;
+<a name="line51"></a>
+<a name="line52"></a>function TopLevelBaseClass() {
+<a name="line53"></a>}
+<a name="line54"></a>
+<a name="line55"></a>var mockClassFactory = new goog.testing.MockClassFactory();
+<a name="line56"></a>var matchers = goog.testing.mockmatchers;
+<a name="line57"></a>
+<a name="line58"></a>function tearDown() {
+<a name="line59"></a>  mockClassFactory.reset();
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>function testGetStrictMockClass() {
+<a name="line63"></a>  var mock1 = mockClassFactory.getStrictMockClass(fake, fake.BaseClass, 1);
+<a name="line64"></a>  mock1.foo();
+<a name="line65"></a>  mock1.$replay();
+<a name="line66"></a>
+<a name="line67"></a>  var mock2 = mockClassFactory.getStrictMockClass(fake, fake.BaseClass, 2);
+<a name="line68"></a>  mock2.foo();
+<a name="line69"></a>  mock2.$replay();
+<a name="line70"></a>
+<a name="line71"></a>  var mock3 = mockClassFactory.getStrictMockClass(fake, fake.ChildClass, 3);
+<a name="line72"></a>  mock3.foo();
+<a name="line73"></a>  mock3.bar();
+<a name="line74"></a>  mock3.$replay();
+<a name="line75"></a>
+<a name="line76"></a>  var instance1 = new fake.BaseClass(1);
+<a name="line77"></a>  instance1.foo();
+<a name="line78"></a>  mock1.$verify();
+<a name="line79"></a>
+<a name="line80"></a>  var instance2 = new fake.BaseClass(2);
+<a name="line81"></a>  instance2.foo();
+<a name="line82"></a>  mock2.$verify();
+<a name="line83"></a>
+<a name="line84"></a>  var instance3 = new fake.ChildClass(3);
+<a name="line85"></a>  instance3.foo();
+<a name="line86"></a>  instance3.bar();
+<a name="line87"></a>  mock3.$verify();
+<a name="line88"></a>
+<a name="line89"></a>  assertThrows(function() {new fake.BaseClass(-1)});
+<a name="line90"></a>  assertTrue(instance1 instanceof fake.BaseClass);
+<a name="line91"></a>  assertTrue(instance2 instanceof fake.BaseClass);
+<a name="line92"></a>  assertTrue(instance3 instanceof fake.ChildClass);
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>function testGetStrictMockClassCreatesAllProxies() {
+<a name="line96"></a>  var mock1 = mockClassFactory.getStrictMockClass(fake, fake.BaseClass, 1);
+<a name="line97"></a>  // toString(), toLocaleString() and others are treaded specially in
+<a name="line98"></a>  // createProxy_().
+<a name="line99"></a>  mock1.toString();
+<a name="line100"></a>  mock1.toLocaleString();
+<a name="line101"></a>  mock1.$replay();
+<a name="line102"></a>
+<a name="line103"></a>  var instance1 = new fake.BaseClass(1);
+<a name="line104"></a>  instance1.toString();
+<a name="line105"></a>  instance1.toLocaleString();
+<a name="line106"></a>  mock1.$verify();
+<a name="line107"></a>}
+<a name="line108"></a>
+<a name="line109"></a>function testGetLooseMockClass() {
+<a name="line110"></a>  var mock1 = mockClassFactory.getLooseMockClass(fake, fake.BaseClass, 1);
+<a name="line111"></a>  mock1.foo().$anyTimes().$returns(3);
+<a name="line112"></a>  mock1.$replay();
+<a name="line113"></a>
+<a name="line114"></a>  var mock2 = mockClassFactory.getLooseMockClass(fake, fake.BaseClass, 2);
+<a name="line115"></a>  mock2.foo().$times(3);
+<a name="line116"></a>  mock2.$replay();
+<a name="line117"></a>
+<a name="line118"></a>  var mock3 = mockClassFactory.getLooseMockClass(fake, fake.ChildClass, 3);
+<a name="line119"></a>  mock3.foo().$atLeastOnce().$returns(5);
+<a name="line120"></a>  mock3.bar().$atLeastOnce();
+<a name="line121"></a>  mock3.$replay();
+<a name="line122"></a>
+<a name="line123"></a>  var instance1 = new fake.BaseClass(1);
+<a name="line124"></a>  assertEquals(3, instance1.foo());
+<a name="line125"></a>  assertEquals(3, instance1.foo());
+<a name="line126"></a>  assertEquals(3, instance1.foo());
+<a name="line127"></a>  assertEquals(3, instance1.foo());
+<a name="line128"></a>  assertEquals(3, instance1.foo());
+<a name="line129"></a>  mock1.$verify();
+<a name="line130"></a>
+<a name="line131"></a>  var instance2 = new fake.BaseClass(2);
+<a name="line132"></a>  instance2.foo();
+<a name="line133"></a>  instance2.foo();
+<a name="line134"></a>  instance2.foo();
+<a name="line135"></a>  mock2.$verify();
+<a name="line136"></a>
+<a name="line137"></a>  var instance3 = new fake.ChildClass(3);
+<a name="line138"></a>  assertEquals(5, instance3.foo());
+<a name="line139"></a>  assertEquals(5, instance3.foo());
+<a name="line140"></a>  instance3.bar();
+<a name="line141"></a>  mock3.$verify();
+<a name="line142"></a>
+<a name="line143"></a>  assertThrows(function() {new fake.BaseClass(-1)});
+<a name="line144"></a>  assertTrue(instance1 instanceof fake.BaseClass);
+<a name="line145"></a>  assertTrue(instance2 instanceof fake.BaseClass);
+<a name="line146"></a>  assertTrue(instance3 instanceof fake.ChildClass);
+<a name="line147"></a>}
+<a name="line148"></a>
+<a name="line149"></a>function testGetStrictStaticMock() {
+<a name="line150"></a>  var staticMock = mockClassFactory.getStrictStaticMock(fake,
+<a name="line151"></a>      fake.ChildClass);
+<a name="line152"></a>  var mock = mockClassFactory.getStrictMockClass(fake, fake.ChildClass, 1);
+<a name="line153"></a>
+<a name="line154"></a>  mock.foo();
+<a name="line155"></a>  mock.bar();
+<a name="line156"></a>  staticMock.staticFoo();
+<a name="line157"></a>  mock.$replay();
+<a name="line158"></a>  staticMock.$replay();
+<a name="line159"></a>
+<a name="line160"></a>  var instance = new fake.ChildClass(1);
+<a name="line161"></a>  instance.foo();
+<a name="line162"></a>  instance.bar();
+<a name="line163"></a>  fake.ChildClass.staticFoo();
+<a name="line164"></a>  mock.$verify();
+<a name="line165"></a>  staticMock.$verify();
+<a name="line166"></a>
+<a name="line167"></a>  assertTrue(instance instanceof fake.BaseClass);
+<a name="line168"></a>  assertTrue(instance instanceof fake.ChildClass);
+<a name="line169"></a>  assertThrows(function() {
+<a name="line170"></a>    mockClassFactory.getLooseStaticMock(fake, fake.ChildClass);
+<a name="line171"></a>  });
+<a name="line172"></a>}
+<a name="line173"></a>
+<a name="line174"></a>function testGetStrictStaticMockKeepsStaticProperties() {
+<a name="line175"></a>  var OriginalChildClass = fake.ChildClass;
+<a name="line176"></a>  var staticMock = mockClassFactory.getStrictStaticMock(fake,
+<a name="line177"></a>      fake.ChildClass);
+<a name="line178"></a>  assertEquals(OriginalChildClass.staticProperty,
+<a name="line179"></a>      fake.ChildClass.staticProperty);
+<a name="line180"></a>}
+<a name="line181"></a>
+<a name="line182"></a>function testGetLooseStaticMockKeepsStaticProperties() {
+<a name="line183"></a>  var OriginalChildClass = fake.ChildClass;
+<a name="line184"></a>  var staticMock = mockClassFactory.getLooseStaticMock(fake,
+<a name="line185"></a>      fake.ChildClass);
+<a name="line186"></a>  assertEquals(OriginalChildClass.staticProperty,
+<a name="line187"></a>      fake.ChildClass.staticProperty);
+<a name="line188"></a>}
+<a name="line189"></a>
+<a name="line190"></a>function testGetLooseStaticMock() {
+<a name="line191"></a>  var staticMock = mockClassFactory.getLooseStaticMock(fake,
+<a name="line192"></a>      fake.ChildClass);
+<a name="line193"></a>  var mock = mockClassFactory.getStrictMockClass(fake, fake.ChildClass, 1);
+<a name="line194"></a>
+<a name="line195"></a>  mock.foo();
+<a name="line196"></a>  mock.bar();
+<a name="line197"></a>  staticMock.staticFoo().$atLeastOnce();
+<a name="line198"></a>  mock.$replay();
+<a name="line199"></a>  staticMock.$replay();
+<a name="line200"></a>
+<a name="line201"></a>  var instance = new fake.ChildClass(1);
+<a name="line202"></a>  instance.foo();
+<a name="line203"></a>  instance.bar();
+<a name="line204"></a>  fake.ChildClass.staticFoo();
+<a name="line205"></a>  fake.ChildClass.staticFoo();
+<a name="line206"></a>  mock.$verify();
+<a name="line207"></a>  staticMock.$verify();
+<a name="line208"></a>
+<a name="line209"></a>  assertTrue(instance instanceof fake.BaseClass);
+<a name="line210"></a>  assertTrue(instance instanceof fake.ChildClass);
+<a name="line211"></a>  assertThrows(function() {
+<a name="line212"></a>    mockClassFactory.getStrictStaticMock(fake, fake.ChildClass);
+<a name="line213"></a>  });
+<a name="line214"></a>}
+<a name="line215"></a>
+<a name="line216"></a>function testFlexibleClassMockInstantiation() {
+<a name="line217"></a>  // This mock should be returned for all instances created with a number
+<a name="line218"></a>  // as the first argument.
+<a name="line219"></a>  var mock = mockClassFactory.getStrictMockClass(fake, fake.ChildClass,
+<a name="line220"></a>      matchers.isNumber);
+<a name="line221"></a>  mock.foo(); // Will be called by the first mock instance.
+<a name="line222"></a>  mock.foo(); // Will be called by the second mock instance.
+<a name="line223"></a>  mock.$replay();
+<a name="line224"></a>
+<a name="line225"></a>  var instance1 = new fake.ChildClass(1);
+<a name="line226"></a>  var instance2 = new fake.ChildClass(2);
+<a name="line227"></a>  instance1.foo();
+<a name="line228"></a>  instance2.foo();
+<a name="line229"></a>  assertThrows(function() {
+<a name="line230"></a>    new fake.ChildClass(&#39;foo&#39;);
+<a name="line231"></a>  });
+<a name="line232"></a>  mock.$verify();
+<a name="line233"></a>}
+<a name="line234"></a>
+<a name="line235"></a>function testMockTopLevelClass() {
+<a name="line236"></a>  var mock = mockClassFactory.getStrictMockClass(goog.global,
+<a name="line237"></a>      goog.global.TopLevelBaseClass);
+<a name="line238"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>benchmark.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_benchmark.js.html">benchmark.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.benchmark&#39;);
+<a name="line16"></a>
+<a name="line17"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line18"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.PerformanceTable&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.PerformanceTimer&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.TestCase&#39;);
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>/**
+<a name="line25"></a> * Run the benchmarks.
+<a name="line26"></a> * @private
+<a name="line27"></a> */
+<a name="line28"></a>goog.testing.benchmark.run_ = function() {
+<a name="line29"></a>  // Parse the &#39;times&#39; query parameter if it&#39;s set.
+<a name="line30"></a>  var times = 200;
+<a name="line31"></a>  var search = window.location.search;
+<a name="line32"></a>  var timesMatch = search.match(/(?:\?|&amp;)times=([^?&amp;]+)/i);
+<a name="line33"></a>  if (timesMatch) {
+<a name="line34"></a>    times = Number(timesMatch[1]);
+<a name="line35"></a>  }
+<a name="line36"></a>
+<a name="line37"></a>  var prefix = &#39;benchmark&#39;;
+<a name="line38"></a>
+<a name="line39"></a>  // First, get the functions.
+<a name="line40"></a>  var testSource = goog.testing.TestCase.getGlobals(prefix);
+<a name="line41"></a>
+<a name="line42"></a>  var benchmarks = {};
+<a name="line43"></a>  var names = [];
+<a name="line44"></a>
+<a name="line45"></a>  for (var name in testSource) {
+<a name="line46"></a>    try {
+<a name="line47"></a>      var ref = testSource[name];
+<a name="line48"></a>    } catch (ex) {
+<a name="line49"></a>      // NOTE(brenneman): When running tests from a file:// URL on Firefox 3.5
+<a name="line50"></a>      // for Windows, any reference to window.sessionStorage raises
+<a name="line51"></a>      // an &quot;Operation is not supported&quot; exception. Ignore any exceptions raised
+<a name="line52"></a>      // by simply accessing global properties.
+<a name="line53"></a>    }
+<a name="line54"></a>
+<a name="line55"></a>    if ((new RegExp(&#39;^&#39; + prefix)).test(name) &amp;&amp; goog.isFunction(ref)) {
+<a name="line56"></a>      benchmarks[name] = ref;
+<a name="line57"></a>      names.push(name);
+<a name="line58"></a>    }
+<a name="line59"></a>  }
+<a name="line60"></a>
+<a name="line61"></a>  document.body.appendChild(
+<a name="line62"></a>      goog.dom.createTextNode(
+<a name="line63"></a>          &#39;Running &#39; + names.length + &#39; benchmarks &#39; + times + &#39; times each.&#39;));
+<a name="line64"></a>  document.body.appendChild(goog.dom.createElement(goog.dom.TagName.BR));
+<a name="line65"></a>
+<a name="line66"></a>  names.sort();
+<a name="line67"></a>
+<a name="line68"></a>  // Build a table and timer.
+<a name="line69"></a>  var performanceTimer = new goog.testing.PerformanceTimer(times);
+<a name="line70"></a>  performanceTimer.setDiscardOutliers(true);
+<a name="line71"></a>
+<a name="line72"></a>  var performanceTable = new goog.testing.PerformanceTable(document.body,
+<a name="line73"></a>      performanceTimer, 2);
+<a name="line74"></a>
+<a name="line75"></a>  // Next, run the benchmarks.
+<a name="line76"></a>  for (var i = 0; i &lt; names.length; i++) {
+<a name="line77"></a>    performanceTable.run(benchmarks[names[i]], names[i]);
+<a name="line78"></a>  }
+<a name="line79"></a>};
+<a name="line80"></a>
+<a name="line81"></a>
+<a name="line82"></a>/**
+<a name="line83"></a> * Onload handler that runs the benchmarks.
+<a name="line84"></a> * @param {Event} e The event object.
+<a name="line85"></a> */
+<a name="line86"></a>window.onload = function(e) {
+<a name="line87"></a>  goog.testing.benchmark.run_();
+<a name="line88"></a>};
+</pre>
+
+
+</body>
+</html>

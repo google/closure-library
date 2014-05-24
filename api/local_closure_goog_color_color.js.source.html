@@ -1,0 +1,827 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>color.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_color_color.js.html">color.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities related to color and color conversion.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.color&#39;);
+<a name="line20"></a>goog.provide(&#39;goog.color.Hsl&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.color.Hsv&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.color.Rgb&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.color.names&#39;);
+<a name="line25"></a>goog.require(&#39;goog.math&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * RGB color representation. An array containing three elements [r, g, b],
+<a name="line30"></a> * each an integer in [0, 255], representing the red, green, and blue components
+<a name="line31"></a> * of the color respectively.
+<a name="line32"></a> * @typedef {Array.&lt;number&gt;}
+<a name="line33"></a> */
+<a name="line34"></a>goog.color.Rgb;
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * HSV color representation. An array containing three elements [h, s, v]:
+<a name="line39"></a> * h (hue) must be an integer in [0, 360], cyclic.
+<a name="line40"></a> * s (saturation) must be a number in [0, 1].
+<a name="line41"></a> * v (value/brightness) must be an integer in [0, 255].
+<a name="line42"></a> * @typedef {Array.&lt;number&gt;}
+<a name="line43"></a> */
+<a name="line44"></a>goog.color.Hsv;
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * HSL color representation. An array containing three elements [h, s, l]:
+<a name="line49"></a> * h (hue) must be an integer in [0, 360], cyclic.
+<a name="line50"></a> * s (saturation) must be a number in [0, 1].
+<a name="line51"></a> * l (lightness) must be a number in [0, 1].
+<a name="line52"></a> * @typedef {Array.&lt;number&gt;}
+<a name="line53"></a> */
+<a name="line54"></a>goog.color.Hsl;
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Parses a color out of a string.
+<a name="line59"></a> * @param {string} str Color in some format.
+<a name="line60"></a> * @return {{hex: string, type: string}} &#39;hex&#39; is a string containing a hex
+<a name="line61"></a> *     representation of the color, &#39;type&#39; is a string containing the type
+<a name="line62"></a> *     of color format passed in (&#39;hex&#39;, &#39;rgb&#39;, &#39;named&#39;).
+<a name="line63"></a> */
+<a name="line64"></a>goog.color.parse = function(str) {
+<a name="line65"></a>  var result = {};
+<a name="line66"></a>  str = String(str);
+<a name="line67"></a>
+<a name="line68"></a>  var maybeHex = goog.color.prependHashIfNecessaryHelper(str);
+<a name="line69"></a>  if (goog.color.isValidHexColor_(maybeHex)) {
+<a name="line70"></a>    result.hex = goog.color.normalizeHex(maybeHex);
+<a name="line71"></a>    result.type = &#39;hex&#39;;
+<a name="line72"></a>    return result;
+<a name="line73"></a>  } else {
+<a name="line74"></a>    var rgb = goog.color.isValidRgbColor_(str);
+<a name="line75"></a>    if (rgb.length) {
+<a name="line76"></a>      result.hex = goog.color.rgbArrayToHex(rgb);
+<a name="line77"></a>      result.type = &#39;rgb&#39;;
+<a name="line78"></a>      return result;
+<a name="line79"></a>    } else if (goog.color.names) {
+<a name="line80"></a>      var hex = goog.color.names[str.toLowerCase()];
+<a name="line81"></a>      if (hex) {
+<a name="line82"></a>        result.hex = hex;
+<a name="line83"></a>        result.type = &#39;named&#39;;
+<a name="line84"></a>        return result;
+<a name="line85"></a>      }
+<a name="line86"></a>    }
+<a name="line87"></a>  }
+<a name="line88"></a>  throw Error(str + &#39; is not a valid color string&#39;);
+<a name="line89"></a>};
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * Determines if the given string can be parsed as a color.
+<a name="line94"></a> *     {@see goog.color.parse}.
+<a name="line95"></a> * @param {string} str Potential color string.
+<a name="line96"></a> * @return {boolean} True if str is in a format that can be parsed to a color.
+<a name="line97"></a> */
+<a name="line98"></a>goog.color.isValidColor = function(str) {
+<a name="line99"></a>  var maybeHex = goog.color.prependHashIfNecessaryHelper(str);
+<a name="line100"></a>  return !!(goog.color.isValidHexColor_(maybeHex) ||
+<a name="line101"></a>            goog.color.isValidRgbColor_(str).length ||
+<a name="line102"></a>            goog.color.names &amp;&amp; goog.color.names[str.toLowerCase()]);
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Parses red, green, blue components out of a valid rgb color string.
+<a name="line108"></a> * Throws Error if the color string is invalid.
+<a name="line109"></a> * @param {string} str RGB representation of a color.
+<a name="line110"></a> *    {@see goog.color.isValidRgbColor_}.
+<a name="line111"></a> * @return {!goog.color.Rgb} rgb representation of the color.
+<a name="line112"></a> */
+<a name="line113"></a>goog.color.parseRgb = function(str) {
+<a name="line114"></a>  var rgb = goog.color.isValidRgbColor_(str);
+<a name="line115"></a>  if (!rgb.length) {
+<a name="line116"></a>    throw Error(str + &#39; is not a valid RGB color&#39;);
+<a name="line117"></a>  }
+<a name="line118"></a>  return rgb;
+<a name="line119"></a>};
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Converts a hex representation of a color to RGB.
+<a name="line124"></a> * @param {string} hexColor Color to convert.
+<a name="line125"></a> * @return {string} string of the form &#39;rgb(R,G,B)&#39; which can be used in
+<a name="line126"></a> *    styles.
+<a name="line127"></a> */
+<a name="line128"></a>goog.color.hexToRgbStyle = function(hexColor) {
+<a name="line129"></a>  return goog.color.rgbStyle_(goog.color.hexToRgb(hexColor));
+<a name="line130"></a>};
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Regular expression for extracting the digits in a hex color triplet.
+<a name="line135"></a> * @type {RegExp}
+<a name="line136"></a> * @private
+<a name="line137"></a> */
+<a name="line138"></a>goog.color.hexTripletRe_ = /#(.)(.)(.)/;
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * Normalize an hex representation of a color
+<a name="line143"></a> * @param {string} hexColor an hex color string.
+<a name="line144"></a> * @return {string} hex color in the format &#39;#rrggbb&#39; with all lowercase
+<a name="line145"></a> *     literals.
+<a name="line146"></a> */
+<a name="line147"></a>goog.color.normalizeHex = function(hexColor) {
+<a name="line148"></a>  if (!goog.color.isValidHexColor_(hexColor)) {
+<a name="line149"></a>    throw Error(&quot;&#39;&quot; + hexColor + &quot;&#39; is not a valid hex color&quot;);
+<a name="line150"></a>  }
+<a name="line151"></a>  if (hexColor.length == 4) { // of the form #RGB
+<a name="line152"></a>    hexColor = hexColor.replace(goog.color.hexTripletRe_, &#39;#$1$1$2$2$3$3&#39;);
+<a name="line153"></a>  }
+<a name="line154"></a>  return hexColor.toLowerCase();
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * Converts a hex representation of a color to RGB.
+<a name="line160"></a> * @param {string} hexColor Color to convert.
+<a name="line161"></a> * @return {!goog.color.Rgb} rgb representation of the color.
+<a name="line162"></a> */
+<a name="line163"></a>goog.color.hexToRgb = function(hexColor) {
+<a name="line164"></a>  hexColor = goog.color.normalizeHex(hexColor);
+<a name="line165"></a>  var r = parseInt(hexColor.substr(1, 2), 16);
+<a name="line166"></a>  var g = parseInt(hexColor.substr(3, 2), 16);
+<a name="line167"></a>  var b = parseInt(hexColor.substr(5, 2), 16);
+<a name="line168"></a>
+<a name="line169"></a>  return [r, g, b];
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Converts a color from RGB to hex representation.
+<a name="line175"></a> * @param {number} r Amount of red, int between 0 and 255.
+<a name="line176"></a> * @param {number} g Amount of green, int between 0 and 255.
+<a name="line177"></a> * @param {number} b Amount of blue, int between 0 and 255.
+<a name="line178"></a> * @return {string} hex representation of the color.
+<a name="line179"></a> */
+<a name="line180"></a>goog.color.rgbToHex = function(r, g, b) {
+<a name="line181"></a>  r = Number(r);
+<a name="line182"></a>  g = Number(g);
+<a name="line183"></a>  b = Number(b);
+<a name="line184"></a>  if (isNaN(r) || r &lt; 0 || r &gt; 255 ||
+<a name="line185"></a>      isNaN(g) || g &lt; 0 || g &gt; 255 ||
+<a name="line186"></a>      isNaN(b) || b &lt; 0 || b &gt; 255) {
+<a name="line187"></a>    throw Error(&#39;&quot;(&#39; + r + &#39;,&#39; + g + &#39;,&#39; + b + &#39;&quot;) is not a valid RGB color&#39;);
+<a name="line188"></a>  }
+<a name="line189"></a>  var hexR = goog.color.prependZeroIfNecessaryHelper(r.toString(16));
+<a name="line190"></a>  var hexG = goog.color.prependZeroIfNecessaryHelper(g.toString(16));
+<a name="line191"></a>  var hexB = goog.color.prependZeroIfNecessaryHelper(b.toString(16));
+<a name="line192"></a>  return &#39;#&#39; + hexR + hexG + hexB;
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Converts a color from RGB to hex representation.
+<a name="line198"></a> * @param {goog.color.Rgb} rgb rgb representation of the color.
+<a name="line199"></a> * @return {string} hex representation of the color.
+<a name="line200"></a> */
+<a name="line201"></a>goog.color.rgbArrayToHex = function(rgb) {
+<a name="line202"></a>  return goog.color.rgbToHex(rgb[0], rgb[1], rgb[2]);
+<a name="line203"></a>};
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Converts a color from RGB color space to HSL color space.
+<a name="line208"></a> * Modified from {@link http://en.wikipedia.org/wiki/HLS_color_space}.
+<a name="line209"></a> * @param {number} r Value of red, in [0, 255].
+<a name="line210"></a> * @param {number} g Value of green, in [0, 255].
+<a name="line211"></a> * @param {number} b Value of blue, in [0, 255].
+<a name="line212"></a> * @return {!goog.color.Hsl} hsl representation of the color.
+<a name="line213"></a> */
+<a name="line214"></a>goog.color.rgbToHsl = function(r, g, b) {
+<a name="line215"></a>  // First must normalize r, g, b to be between 0 and 1.
+<a name="line216"></a>  var normR = r / 255;
+<a name="line217"></a>  var normG = g / 255;
+<a name="line218"></a>  var normB = b / 255;
+<a name="line219"></a>  var max = Math.max(normR, normG, normB);
+<a name="line220"></a>  var min = Math.min(normR, normG, normB);
+<a name="line221"></a>  var h = 0;
+<a name="line222"></a>  var s = 0;
+<a name="line223"></a>
+<a name="line224"></a>  // Luminosity is the average of the max and min rgb color intensities.
+<a name="line225"></a>  var l = 0.5 * (max + min);
+<a name="line226"></a>
+<a name="line227"></a>  // The hue and saturation are dependent on which color intensity is the max.
+<a name="line228"></a>  // If max and min are equal, the color is gray and h and s should be 0.
+<a name="line229"></a>  if (max != min) {
+<a name="line230"></a>    if (max == normR) {
+<a name="line231"></a>      h = 60 * (normG - normB) / (max - min);
+<a name="line232"></a>    } else if (max == normG) {
+<a name="line233"></a>      h = 60 * (normB - normR) / (max - min) + 120;
+<a name="line234"></a>    } else if (max == normB) {
+<a name="line235"></a>      h = 60 * (normR - normG) / (max - min) + 240;
+<a name="line236"></a>    }
+<a name="line237"></a>
+<a name="line238"></a>    if (0 &lt; l &amp;&amp; l &lt;= 0.5) {
+<a name="line239"></a>      s = (max - min) / (2 * l);
+<a name="line240"></a>    } else {
+<a name="line241"></a>      s = (max - min) / (2 - 2 * l);
+<a name="line242"></a>    }
+<a name="line243"></a>  }
+<a name="line244"></a>
+<a name="line245"></a>  // Make sure the hue falls between 0 and 360.
+<a name="line246"></a>  return [Math.round(h + 360) % 360, s, l];
+<a name="line247"></a>};
+<a name="line248"></a>
+<a name="line249"></a>
+<a name="line250"></a>/**
+<a name="line251"></a> * Converts a color from RGB color space to HSL color space.
+<a name="line252"></a> * @param {goog.color.Rgb} rgb rgb representation of the color.
+<a name="line253"></a> * @return {!goog.color.Hsl} hsl representation of the color.
+<a name="line254"></a> */
+<a name="line255"></a>goog.color.rgbArrayToHsl = function(rgb) {
+<a name="line256"></a>  return goog.color.rgbToHsl(rgb[0], rgb[1], rgb[2]);
+<a name="line257"></a>};
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/**
+<a name="line261"></a> * Helper for hslToRgb.
+<a name="line262"></a> * @param {number} v1 Helper variable 1.
+<a name="line263"></a> * @param {number} v2 Helper variable 2.
+<a name="line264"></a> * @param {number} vH Helper variable 3.
+<a name="line265"></a> * @return {number} Appropriate RGB value, given the above.
+<a name="line266"></a> * @private
+<a name="line267"></a> */
+<a name="line268"></a>goog.color.hueToRgb_ = function(v1, v2, vH) {
+<a name="line269"></a>  if (vH &lt; 0) {
+<a name="line270"></a>    vH += 1;
+<a name="line271"></a>  } else if (vH &gt; 1) {
+<a name="line272"></a>    vH -= 1;
+<a name="line273"></a>  }
+<a name="line274"></a>  if ((6 * vH) &lt; 1) {
+<a name="line275"></a>    return (v1 + (v2 - v1) * 6 * vH);
+<a name="line276"></a>  } else if (2 * vH &lt; 1) {
+<a name="line277"></a>    return v2;
+<a name="line278"></a>  } else if (3 * vH &lt; 2) {
+<a name="line279"></a>    return (v1 + (v2 - v1) * ((2 / 3) - vH) * 6);
+<a name="line280"></a>  }
+<a name="line281"></a>  return v1;
+<a name="line282"></a>};
+<a name="line283"></a>
+<a name="line284"></a>
+<a name="line285"></a>/**
+<a name="line286"></a> * Converts a color from HSL color space to RGB color space.
+<a name="line287"></a> * Modified from {@link http://www.easyrgb.com/math.html}
+<a name="line288"></a> * @param {number} h Hue, in [0, 360].
+<a name="line289"></a> * @param {number} s Saturation, in [0, 1].
+<a name="line290"></a> * @param {number} l Luminosity, in [0, 1].
+<a name="line291"></a> * @return {!goog.color.Rgb} rgb representation of the color.
+<a name="line292"></a> */
+<a name="line293"></a>goog.color.hslToRgb = function(h, s, l) {
+<a name="line294"></a>  var r = 0;
+<a name="line295"></a>  var g = 0;
+<a name="line296"></a>  var b = 0;
+<a name="line297"></a>  var normH = h / 360; // normalize h to fall in [0, 1]
+<a name="line298"></a>
+<a name="line299"></a>  if (s == 0) {
+<a name="line300"></a>    r = g = b = l * 255;
+<a name="line301"></a>  } else {
+<a name="line302"></a>    var temp1 = 0;
+<a name="line303"></a>    var temp2 = 0;
+<a name="line304"></a>    if (l &lt; 0.5) {
+<a name="line305"></a>      temp2 = l * (1 + s);
+<a name="line306"></a>    } else {
+<a name="line307"></a>      temp2 = l + s - (s * l);
+<a name="line308"></a>    }
+<a name="line309"></a>    temp1 = 2 * l - temp2;
+<a name="line310"></a>    r = 255 * goog.color.hueToRgb_(temp1, temp2, normH + (1 / 3));
+<a name="line311"></a>    g = 255 * goog.color.hueToRgb_(temp1, temp2, normH);
+<a name="line312"></a>    b = 255 * goog.color.hueToRgb_(temp1, temp2, normH - (1 / 3));
+<a name="line313"></a>  }
+<a name="line314"></a>
+<a name="line315"></a>  return [Math.round(r), Math.round(g), Math.round(b)];
+<a name="line316"></a>};
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/**
+<a name="line320"></a> * Converts a color from HSL color space to RGB color space.
+<a name="line321"></a> * @param {goog.color.Hsl} hsl hsl representation of the color.
+<a name="line322"></a> * @return {!goog.color.Rgb} rgb representation of the color.
+<a name="line323"></a> */
+<a name="line324"></a>goog.color.hslArrayToRgb = function(hsl) {
+<a name="line325"></a>  return goog.color.hslToRgb(hsl[0], hsl[1], hsl[2]);
+<a name="line326"></a>};
+<a name="line327"></a>
+<a name="line328"></a>
+<a name="line329"></a>/**
+<a name="line330"></a> * Helper for isValidHexColor_.
+<a name="line331"></a> * @type {RegExp}
+<a name="line332"></a> * @private
+<a name="line333"></a> */
+<a name="line334"></a>goog.color.validHexColorRe_ = /^#(?:[0-9a-f]{3}){1,2}$/i;
+<a name="line335"></a>
+<a name="line336"></a>
+<a name="line337"></a>/**
+<a name="line338"></a> * Checks if a string is a valid hex color.  We expect strings of the format
+<a name="line339"></a> * #RRGGBB (ex: #1b3d5f) or #RGB (ex: #3CA == #33CCAA).
+<a name="line340"></a> * @param {string} str String to check.
+<a name="line341"></a> * @return {boolean} Whether the string is a valid hex color.
+<a name="line342"></a> * @private
+<a name="line343"></a> */
+<a name="line344"></a>goog.color.isValidHexColor_ = function(str) {
+<a name="line345"></a>  return goog.color.validHexColorRe_.test(str);
+<a name="line346"></a>};
+<a name="line347"></a>
+<a name="line348"></a>
+<a name="line349"></a>/**
+<a name="line350"></a> * Helper for isNormalizedHexColor_.
+<a name="line351"></a> * @type {RegExp}
+<a name="line352"></a> * @private
+<a name="line353"></a> */
+<a name="line354"></a>goog.color.normalizedHexColorRe_ = /^#[0-9a-f]{6}$/;
+<a name="line355"></a>
+<a name="line356"></a>
+<a name="line357"></a>/**
+<a name="line358"></a> * Checks if a string is a normalized hex color.
+<a name="line359"></a> * We expect strings of the format #RRGGBB (ex: #1b3d5f)
+<a name="line360"></a> * using only lowercase letters.
+<a name="line361"></a> * @param {string} str String to check.
+<a name="line362"></a> * @return {boolean} Whether the string is a normalized hex color.
+<a name="line363"></a> * @private
+<a name="line364"></a> */
+<a name="line365"></a>goog.color.isNormalizedHexColor_ = function(str) {
+<a name="line366"></a>  return goog.color.normalizedHexColorRe_.test(str);
+<a name="line367"></a>};
+<a name="line368"></a>
+<a name="line369"></a>
+<a name="line370"></a>/**
+<a name="line371"></a> * Regular expression for matching and capturing RGB style strings. Helper for
+<a name="line372"></a> * isValidRgbColor_.
+<a name="line373"></a> * @type {RegExp}
+<a name="line374"></a> * @private
+<a name="line375"></a> */
+<a name="line376"></a>goog.color.rgbColorRe_ =
+<a name="line377"></a>    /^(?:rgb)?\((0|[1-9]\d{0,2}),\s?(0|[1-9]\d{0,2}),\s?(0|[1-9]\d{0,2})\)$/i;
+<a name="line378"></a>
+<a name="line379"></a>
+<a name="line380"></a>/**
+<a name="line381"></a> * Checks if a string is a valid rgb color.  We expect strings of the format
+<a name="line382"></a> * &#39;(r, g, b)&#39;, or &#39;rgb(r, g, b)&#39;, where each color component is an int in
+<a name="line383"></a> * [0, 255].
+<a name="line384"></a> * @param {string} str String to check.
+<a name="line385"></a> * @return {!goog.color.Rgb} the rgb representation of the color if it is
+<a name="line386"></a> *     a valid color, or the empty array otherwise.
+<a name="line387"></a> * @private
+<a name="line388"></a> */
+<a name="line389"></a>goog.color.isValidRgbColor_ = function(str) {
+<a name="line390"></a>  // Each component is separate (rather than using a repeater) so we can
+<a name="line391"></a>  // capture the match. Also, we explicitly set each component to be either 0,
+<a name="line392"></a>  // or start with a non-zero, to prevent octal numbers from slipping through.
+<a name="line393"></a>  var regExpResultArray = str.match(goog.color.rgbColorRe_);
+<a name="line394"></a>  if (regExpResultArray) {
+<a name="line395"></a>    var r = Number(regExpResultArray[1]);
+<a name="line396"></a>    var g = Number(regExpResultArray[2]);
+<a name="line397"></a>    var b = Number(regExpResultArray[3]);
+<a name="line398"></a>    if (r &gt;= 0 &amp;&amp; r &lt;= 255 &amp;&amp;
+<a name="line399"></a>        g &gt;= 0 &amp;&amp; g &lt;= 255 &amp;&amp;
+<a name="line400"></a>        b &gt;= 0 &amp;&amp; b &lt;= 255) {
+<a name="line401"></a>      return [r, g, b];
+<a name="line402"></a>    }
+<a name="line403"></a>  }
+<a name="line404"></a>  return [];
+<a name="line405"></a>};
+<a name="line406"></a>
+<a name="line407"></a>
+<a name="line408"></a>/**
+<a name="line409"></a> * Takes a hex value and prepends a zero if it&#39;s a single digit.
+<a name="line410"></a> * Small helper method for use by goog.color and friends.
+<a name="line411"></a> * @param {string} hex Hex value to prepend if single digit.
+<a name="line412"></a> * @return {string} hex value prepended with zero if it was single digit,
+<a name="line413"></a> *     otherwise the same value that was passed in.
+<a name="line414"></a> */
+<a name="line415"></a>goog.color.prependZeroIfNecessaryHelper = function(hex) {
+<a name="line416"></a>  return hex.length == 1 ? &#39;0&#39; + hex : hex;
+<a name="line417"></a>};
+<a name="line418"></a>
+<a name="line419"></a>
+<a name="line420"></a>/**
+<a name="line421"></a> * Takes a string a prepends a &#39;#&#39; sign if one doesn&#39;t exist.
+<a name="line422"></a> * Small helper method for use by goog.color and friends.
+<a name="line423"></a> * @param {string} str String to check.
+<a name="line424"></a> * @return {string} The value passed in, prepended with a &#39;#&#39; if it didn&#39;t
+<a name="line425"></a> *     already have one.
+<a name="line426"></a> */
+<a name="line427"></a>goog.color.prependHashIfNecessaryHelper = function(str) {
+<a name="line428"></a>  return str.charAt(0) == &#39;#&#39; ? str : &#39;#&#39; + str;
+<a name="line429"></a>};
+<a name="line430"></a>
+<a name="line431"></a>
+<a name="line432"></a>/**
+<a name="line433"></a> * Takes an array of [r, g, b] and converts it into a string appropriate for
+<a name="line434"></a> * CSS styles.
+<a name="line435"></a> * @param {goog.color.Rgb} rgb rgb representation of the color.
+<a name="line436"></a> * @return {string} string of the form &#39;rgb(r,g,b)&#39;.
+<a name="line437"></a> * @private
+<a name="line438"></a> */
+<a name="line439"></a>goog.color.rgbStyle_ = function(rgb) {
+<a name="line440"></a>  return &#39;rgb(&#39; + rgb.join(&#39;,&#39;) + &#39;)&#39;;
+<a name="line441"></a>};
+<a name="line442"></a>
+<a name="line443"></a>
+<a name="line444"></a>/**
+<a name="line445"></a> * Converts an HSV triplet to an RGB array.  V is brightness because b is
+<a name="line446"></a> *   reserved for blue in RGB.
+<a name="line447"></a> * @param {number} h Hue value in [0, 360].
+<a name="line448"></a> * @param {number} s Saturation value in [0, 1].
+<a name="line449"></a> * @param {number} brightness brightness in [0, 255].
+<a name="line450"></a> * @return {!goog.color.Rgb} rgb representation of the color.
+<a name="line451"></a> */
+<a name="line452"></a>goog.color.hsvToRgb = function(h, s, brightness) {
+<a name="line453"></a>  var red = 0;
+<a name="line454"></a>  var green = 0;
+<a name="line455"></a>  var blue = 0;
+<a name="line456"></a>  if (s == 0) {
+<a name="line457"></a>    red = brightness;
+<a name="line458"></a>    green = brightness;
+<a name="line459"></a>    blue = brightness;
+<a name="line460"></a>  } else {
+<a name="line461"></a>    var sextant = Math.floor(h / 60);
+<a name="line462"></a>    var remainder = (h / 60) - sextant;
+<a name="line463"></a>    var val1 = brightness * (1 - s);
+<a name="line464"></a>    var val2 = brightness * (1 - (s * remainder));
+<a name="line465"></a>    var val3 = brightness * (1 - (s * (1 - remainder)));
+<a name="line466"></a>    switch (sextant) {
+<a name="line467"></a>      case 1:
+<a name="line468"></a>        red = val2;
+<a name="line469"></a>        green = brightness;
+<a name="line470"></a>        blue = val1;
+<a name="line471"></a>        break;
+<a name="line472"></a>      case 2:
+<a name="line473"></a>        red = val1;
+<a name="line474"></a>        green = brightness;
+<a name="line475"></a>        blue = val3;
+<a name="line476"></a>        break;
+<a name="line477"></a>      case 3:
+<a name="line478"></a>        red = val1;
+<a name="line479"></a>        green = val2;
+<a name="line480"></a>        blue = brightness;
+<a name="line481"></a>        break;
+<a name="line482"></a>      case 4:
+<a name="line483"></a>        red = val3;
+<a name="line484"></a>        green = val1;
+<a name="line485"></a>        blue = brightness;
+<a name="line486"></a>        break;
+<a name="line487"></a>      case 5:
+<a name="line488"></a>        red = brightness;
+<a name="line489"></a>        green = val1;
+<a name="line490"></a>        blue = val2;
+<a name="line491"></a>        break;
+<a name="line492"></a>      case 6:
+<a name="line493"></a>      case 0:
+<a name="line494"></a>        red = brightness;
+<a name="line495"></a>        green = val3;
+<a name="line496"></a>        blue = val1;
+<a name="line497"></a>        break;
+<a name="line498"></a>    }
+<a name="line499"></a>  }
+<a name="line500"></a>
+<a name="line501"></a>  return [Math.floor(red), Math.floor(green), Math.floor(blue)];
+<a name="line502"></a>};
+<a name="line503"></a>
+<a name="line504"></a>
+<a name="line505"></a>/**
+<a name="line506"></a> * Converts from RGB values to an array of HSV values.
+<a name="line507"></a> * @param {number} red Red value in [0, 255].
+<a name="line508"></a> * @param {number} green Green value in [0, 255].
+<a name="line509"></a> * @param {number} blue Blue value in [0, 255].
+<a name="line510"></a> * @return {!goog.color.Hsv} hsv representation of the color.
+<a name="line511"></a> */
+<a name="line512"></a>goog.color.rgbToHsv = function(red, green, blue) {
+<a name="line513"></a>
+<a name="line514"></a>  var max = Math.max(Math.max(red, green), blue);
+<a name="line515"></a>  var min = Math.min(Math.min(red, green), blue);
+<a name="line516"></a>  var hue;
+<a name="line517"></a>  var saturation;
+<a name="line518"></a>  var value = max;
+<a name="line519"></a>  if (min == max) {
+<a name="line520"></a>    hue = 0;
+<a name="line521"></a>    saturation = 0;
+<a name="line522"></a>  } else {
+<a name="line523"></a>    var delta = (max - min);
+<a name="line524"></a>    saturation = delta / max;
+<a name="line525"></a>
+<a name="line526"></a>    if (red == max) {
+<a name="line527"></a>      hue = (green - blue) / delta;
+<a name="line528"></a>    } else if (green == max) {
+<a name="line529"></a>      hue = 2 + ((blue - red) / delta);
+<a name="line530"></a>    } else {
+<a name="line531"></a>      hue = 4 + ((red - green) / delta);
+<a name="line532"></a>    }
+<a name="line533"></a>    hue *= 60;
+<a name="line534"></a>    if (hue &lt; 0) {
+<a name="line535"></a>      hue += 360;
+<a name="line536"></a>    }
+<a name="line537"></a>    if (hue &gt; 360) {
+<a name="line538"></a>      hue -= 360;
+<a name="line539"></a>    }
+<a name="line540"></a>  }
+<a name="line541"></a>
+<a name="line542"></a>  return [hue, saturation, value];
+<a name="line543"></a>};
+<a name="line544"></a>
+<a name="line545"></a>
+<a name="line546"></a>/**
+<a name="line547"></a> * Converts from an array of RGB values to an array of HSV values.
+<a name="line548"></a> * @param {goog.color.Rgb} rgb rgb representation of the color.
+<a name="line549"></a> * @return {!goog.color.Hsv} hsv representation of the color.
+<a name="line550"></a> */
+<a name="line551"></a>goog.color.rgbArrayToHsv = function(rgb) {
+<a name="line552"></a>  return goog.color.rgbToHsv(rgb[0], rgb[1], rgb[2]);
+<a name="line553"></a>};
+<a name="line554"></a>
+<a name="line555"></a>
+<a name="line556"></a>/**
+<a name="line557"></a> * Converts an HSV triplet to an RGB array.
+<a name="line558"></a> * @param {goog.color.Hsv} hsv hsv representation of the color.
+<a name="line559"></a> * @return {!goog.color.Rgb} rgb representation of the color.
+<a name="line560"></a> */
+<a name="line561"></a>goog.color.hsvArrayToRgb = function(hsv) {
+<a name="line562"></a>  return goog.color.hsvToRgb(hsv[0], hsv[1], hsv[2]);
+<a name="line563"></a>};
+<a name="line564"></a>
+<a name="line565"></a>
+<a name="line566"></a>/**
+<a name="line567"></a> * Converts a hex representation of a color to HSL.
+<a name="line568"></a> * @param {string} hex Color to convert.
+<a name="line569"></a> * @return {!goog.color.Hsv} hsv representation of the color.
+<a name="line570"></a> */
+<a name="line571"></a>goog.color.hexToHsl = function(hex) {
+<a name="line572"></a>  var rgb = goog.color.hexToRgb(hex);
+<a name="line573"></a>  return goog.color.rgbToHsl(rgb[0], rgb[1], rgb[2]);
+<a name="line574"></a>};
+<a name="line575"></a>
+<a name="line576"></a>
+<a name="line577"></a>/**
+<a name="line578"></a> * Converts from h,s,l values to a hex string
+<a name="line579"></a> * @param {number} h Hue, in [0, 360].
+<a name="line580"></a> * @param {number} s Saturation, in [0, 1].
+<a name="line581"></a> * @param {number} l Luminosity, in [0, 1].
+<a name="line582"></a> * @return {string} hex representation of the color.
+<a name="line583"></a> */
+<a name="line584"></a>goog.color.hslToHex = function(h, s, l) {
+<a name="line585"></a>  return goog.color.rgbArrayToHex(goog.color.hslToRgb(h, s, l));
+<a name="line586"></a>};
+<a name="line587"></a>
+<a name="line588"></a>
+<a name="line589"></a>/**
+<a name="line590"></a> * Converts from an hsl array to a hex string
+<a name="line591"></a> * @param {goog.color.Hsl} hsl hsl representation of the color.
+<a name="line592"></a> * @return {string} hex representation of the color.
+<a name="line593"></a> */
+<a name="line594"></a>goog.color.hslArrayToHex = function(hsl) {
+<a name="line595"></a>  return goog.color.rgbArrayToHex(goog.color.hslToRgb(hsl[0], hsl[1], hsl[2]));
+<a name="line596"></a>};
+<a name="line597"></a>
+<a name="line598"></a>
+<a name="line599"></a>/**
+<a name="line600"></a> * Converts a hex representation of a color to HSV
+<a name="line601"></a> * @param {string} hex Color to convert.
+<a name="line602"></a> * @return {!goog.color.Hsv} hsv representation of the color.
+<a name="line603"></a> */
+<a name="line604"></a>goog.color.hexToHsv = function(hex) {
+<a name="line605"></a>  return goog.color.rgbArrayToHsv(goog.color.hexToRgb(hex));
+<a name="line606"></a>};
+<a name="line607"></a>
+<a name="line608"></a>
+<a name="line609"></a>/**
+<a name="line610"></a> * Converts from h,s,v values to a hex string
+<a name="line611"></a> * @param {number} h Hue, in [0, 360].
+<a name="line612"></a> * @param {number} s Saturation, in [0, 1].
+<a name="line613"></a> * @param {number} v Value, in [0, 255].
+<a name="line614"></a> * @return {string} hex representation of the color.
+<a name="line615"></a> */
+<a name="line616"></a>goog.color.hsvToHex = function(h, s, v) {
+<a name="line617"></a>  return goog.color.rgbArrayToHex(goog.color.hsvToRgb(h, s, v));
+<a name="line618"></a>};
+<a name="line619"></a>
+<a name="line620"></a>
+<a name="line621"></a>/**
+<a name="line622"></a> * Converts from an HSV array to a hex string
+<a name="line623"></a> * @param {goog.color.Hsv} hsv hsv representation of the color.
+<a name="line624"></a> * @return {string} hex representation of the color.
+<a name="line625"></a> */
+<a name="line626"></a>goog.color.hsvArrayToHex = function(hsv) {
+<a name="line627"></a>  return goog.color.hsvToHex(hsv[0], hsv[1], hsv[2]);
+<a name="line628"></a>};
+<a name="line629"></a>
+<a name="line630"></a>
+<a name="line631"></a>/**
+<a name="line632"></a> * Calculates the Euclidean distance between two color vectors on an HSL sphere.
+<a name="line633"></a> * A demo of the sphere can be found at:
+<a name="line634"></a> * http://en.wikipedia.org/wiki/HSL_color_space
+<a name="line635"></a> * In short, a vector for color (H, S, L) in this system can be expressed as
+<a name="line636"></a> * (S*L&#39;*cos(2*PI*H), S*L&#39;*sin(2*PI*H), L), where L&#39; = abs(L - 0.5), and we
+<a name="line637"></a> * simply calculate the 1-2 distance using these coordinates
+<a name="line638"></a> * @param {goog.color.Hsl} hsl1 First color in hsl representation.
+<a name="line639"></a> * @param {goog.color.Hsl} hsl2 Second color in hsl representation.
+<a name="line640"></a> * @return {number} Distance between the two colors, in the range [0, 1].
+<a name="line641"></a> */
+<a name="line642"></a>goog.color.hslDistance = function(hsl1, hsl2) {
+<a name="line643"></a>  var sl1, sl2;
+<a name="line644"></a>  if (hsl1[2] &lt;= 0.5) {
+<a name="line645"></a>    sl1 = hsl1[1] * hsl1[2];
+<a name="line646"></a>  } else {
+<a name="line647"></a>    sl1 = hsl1[1] * (1.0 - hsl1[2]);
+<a name="line648"></a>  }
+<a name="line649"></a>
+<a name="line650"></a>  if (hsl2[2] &lt;= 0.5) {
+<a name="line651"></a>    sl2 = hsl2[1] * hsl2[2];
+<a name="line652"></a>  } else {
+<a name="line653"></a>    sl2 = hsl2[1] * (1.0 - hsl2[2]);
+<a name="line654"></a>  }
+<a name="line655"></a>
+<a name="line656"></a>  var h1 = hsl1[0] / 360.0;
+<a name="line657"></a>  var h2 = hsl2[0] / 360.0;
+<a name="line658"></a>  var dh = (h1 - h2) * 2.0 * Math.PI;
+<a name="line659"></a>  return (hsl1[2] - hsl2[2]) * (hsl1[2] - hsl2[2]) +
+<a name="line660"></a>      sl1 * sl1 + sl2 * sl2 - 2 * sl1 * sl2 * Math.cos(dh);
+<a name="line661"></a>};
+<a name="line662"></a>
+<a name="line663"></a>
+<a name="line664"></a>/**
+<a name="line665"></a> * Blend two colors together, using the specified factor to indicate the weight
+<a name="line666"></a> * given to the first color
+<a name="line667"></a> * @param {goog.color.Rgb} rgb1 First color represented in rgb.
+<a name="line668"></a> * @param {goog.color.Rgb} rgb2 Second color represented in rgb.
+<a name="line669"></a> * @param {number} factor The weight to be given to rgb1 over rgb2. Values
+<a name="line670"></a> *     should be in the range [0, 1]. If less than 0, factor will be set to 0.
+<a name="line671"></a> *     If greater than 1, factor will be set to 1.
+<a name="line672"></a> * @return {!goog.color.Rgb} Combined color represented in rgb.
+<a name="line673"></a> */
+<a name="line674"></a>goog.color.blend = function(rgb1, rgb2, factor) {
+<a name="line675"></a>  factor = goog.math.clamp(factor, 0, 1);
+<a name="line676"></a>
+<a name="line677"></a>  return [
+<a name="line678"></a>    Math.round(factor * rgb1[0] + (1.0 - factor) * rgb2[0]),
+<a name="line679"></a>    Math.round(factor * rgb1[1] + (1.0 - factor) * rgb2[1]),
+<a name="line680"></a>    Math.round(factor * rgb1[2] + (1.0 - factor) * rgb2[2])
+<a name="line681"></a>  ];
+<a name="line682"></a>};
+<a name="line683"></a>
+<a name="line684"></a>
+<a name="line685"></a>/**
+<a name="line686"></a> * Adds black to the specified color, darkening it
+<a name="line687"></a> * @param {goog.color.Rgb} rgb rgb representation of the color.
+<a name="line688"></a> * @param {number} factor Number in the range [0, 1]. 0 will do nothing, while
+<a name="line689"></a> *     1 will return black. If less than 0, factor will be set to 0. If greater
+<a name="line690"></a> *     than 1, factor will be set to 1.
+<a name="line691"></a> * @return {!goog.color.Rgb} Combined rgb color.
+<a name="line692"></a> */
+<a name="line693"></a>goog.color.darken = function(rgb, factor) {
+<a name="line694"></a>  var black = [0, 0, 0];
+<a name="line695"></a>  return goog.color.blend(black, rgb, factor);
+<a name="line696"></a>};
+<a name="line697"></a>
+<a name="line698"></a>
+<a name="line699"></a>/**
+<a name="line700"></a> * Adds white to the specified color, lightening it
+<a name="line701"></a> * @param {goog.color.Rgb} rgb rgb representation of the color.
+<a name="line702"></a> * @param {number} factor Number in the range [0, 1].  0 will do nothing, while
+<a name="line703"></a> *     1 will return white. If less than 0, factor will be set to 0. If greater
+<a name="line704"></a> *     than 1, factor will be set to 1.
+<a name="line705"></a> * @return {!goog.color.Rgb} Combined rgb color.
+<a name="line706"></a> */
+<a name="line707"></a>goog.color.lighten = function(rgb, factor) {
+<a name="line708"></a>  var white = [255, 255, 255];
+<a name="line709"></a>  return goog.color.blend(white, rgb, factor);
+<a name="line710"></a>};
+<a name="line711"></a>
+<a name="line712"></a>
+<a name="line713"></a>/**
+<a name="line714"></a> * Find the &quot;best&quot; (highest-contrast) of the suggested colors for the prime
+<a name="line715"></a> * color. Uses W3C formula for judging readability and visual accessibility:
+<a name="line716"></a> * http://www.w3.org/TR/AERT#color-contrast
+<a name="line717"></a> * @param {goog.color.Rgb} prime Color represented as a rgb array.
+<a name="line718"></a> * @param {Array.&lt;goog.color.Rgb&gt;} suggestions Array of colors,
+<a name="line719"></a> *     each representing a rgb array.
+<a name="line720"></a> * @return {!goog.color.Rgb} Highest-contrast color represented by an array..
+<a name="line721"></a> */
+<a name="line722"></a>goog.color.highContrast = function(prime, suggestions) {
+<a name="line723"></a>  var suggestionsWithDiff = [];
+<a name="line724"></a>  for (var i = 0; i &lt; suggestions.length; i++) {
+<a name="line725"></a>    suggestionsWithDiff.push({
+<a name="line726"></a>      color: suggestions[i],
+<a name="line727"></a>      diff: goog.color.yiqBrightnessDiff_(suggestions[i], prime) +
+<a name="line728"></a>          goog.color.colorDiff_(suggestions[i], prime)
+<a name="line729"></a>    });
+<a name="line730"></a>  }
+<a name="line731"></a>  suggestionsWithDiff.sort(function(a, b) {
+<a name="line732"></a>    return b.diff - a.diff;
+<a name="line733"></a>  });
+<a name="line734"></a>  return suggestionsWithDiff[0].color;
+<a name="line735"></a>};
+<a name="line736"></a>
+<a name="line737"></a>
+<a name="line738"></a>/**
+<a name="line739"></a> * Calculate brightness of a color according to YIQ formula (brightness is Y).
+<a name="line740"></a> * More info on YIQ here: http://en.wikipedia.org/wiki/YIQ. Helper method for
+<a name="line741"></a> * goog.color.highContrast()
+<a name="line742"></a> * @param {goog.color.Rgb} rgb Color represented by a rgb array.
+<a name="line743"></a> * @return {number} brightness (Y).
+<a name="line744"></a> * @private
+<a name="line745"></a> */
+<a name="line746"></a>goog.color.yiqBrightness_ = function(rgb) {
+<a name="line747"></a>  return Math.round((rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000);
+<a name="line748"></a>};
+<a name="line749"></a>
+<a name="line750"></a>
+<a name="line751"></a>/**
+<a name="line752"></a> * Calculate difference in brightness of two colors. Helper method for
+<a name="line753"></a> * goog.color.highContrast()
+<a name="line754"></a> * @param {goog.color.Rgb} rgb1 Color represented by a rgb array.
+<a name="line755"></a> * @param {goog.color.Rgb} rgb2 Color represented by a rgb array.
+<a name="line756"></a> * @return {number} Brightness difference.
+<a name="line757"></a> * @private
+<a name="line758"></a> */
+<a name="line759"></a>goog.color.yiqBrightnessDiff_ = function(rgb1, rgb2) {
+<a name="line760"></a>  return Math.abs(goog.color.yiqBrightness_(rgb1) -
+<a name="line761"></a>                  goog.color.yiqBrightness_(rgb2));
+<a name="line762"></a>};
+<a name="line763"></a>
+<a name="line764"></a>
+<a name="line765"></a>/**
+<a name="line766"></a> * Calculate color difference between two colors. Helper method for
+<a name="line767"></a> * goog.color.highContrast()
+<a name="line768"></a> * @param {goog.color.Rgb} rgb1 Color represented by a rgb array.
+<a name="line769"></a> * @param {goog.color.Rgb} rgb2 Color represented by a rgb array.
+<a name="line770"></a> * @return {number} Color difference.
+<a name="line771"></a> * @private
+<a name="line772"></a> */
+<a name="line773"></a>goog.color.colorDiff_ = function(rgb1, rgb2) {
+<a name="line774"></a>  return Math.abs(rgb1[0] - rgb2[0]) + Math.abs(rgb1[1] - rgb2[1]) +
+<a name="line775"></a>      Math.abs(rgb1[2] - rgb2[2]);
+<a name="line776"></a>};
+</pre>
+
+
+</body>
+</html>

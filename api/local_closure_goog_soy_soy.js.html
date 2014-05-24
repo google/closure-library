@@ -1,0 +1,565 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>soy.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">soy.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_soy_soy.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/soy/soy.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/soy/soy.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.soy.assertFirstTagValid_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.soy.</span><span class="entryName">assertFirstTagValid_<span class="args">(<span class="arg">html</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Checks that the rendered HTML does not start with an invalid tag that would
+likely cause unexpected output from renderAsElement or renderAsFragment.
+See <code> <a href="http://www.w3.org/TR/html5/semantics.html#semantics">http://www.w3.org/TR/html5/semantics.html#semantics</a></code> for reference
+as to which HTML elements can be parents of each other.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">html</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The output of a template.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_soy_soy.js.source.html#line191">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.soy.ensureTemplateOutputHtml_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.soy.</span><span class="entryName">ensureTemplateOutputHtml_<span class="args">(<span class="arg">templateResult</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Ensures the result is "safe" to insert as HTML.
+
+Note if the template has non-strict autoescape, the guarantees here are very
+weak. It is recommended applications switch to requiring strict
+autoescaping over time by tweaking goog.soy.REQUIRE_STRICT_AUTOESCAPE.
+
+In the case the argument is a SanitizedContent object, it either must
+already be of kind HTML, or if it is kind="text", the output will be HTML
+escaped.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">templateResult</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The template result.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The assumed-safe HTML output string.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_soy_soy.js.source.html#line149">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.soy.renderAsElement"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.soy.</span><span class="entryName">renderAsElement<span class="args">(<span class="arg">template</span>,&nbsp;<span class="arg">opt_templateData</span>,&nbsp;<span class="arg">opt_injectedData</span>,&nbsp;<span class="arg">opt_domHelper</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Renders a Soy template into a single node. If the rendered
+HTML string represents a single node, then that node is returned. Otherwise,
+a DIV element is returned containing the rendered nodes.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">template</span>
+        : <span class="type">null</span><span>&nbsp;|&nbsp;</span><span class="type">function(ARG_TYPES, null=, Object</span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>,<span class="type"> *>=):</span>&gt;
+        <div class="entryOverview">The Soy template defining the element's content.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_templateData</span>
+        : <span class="type">ARG_TYPES=</span>
+        <div class="entryOverview">The data for the template.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_injectedData</span>
+        : <span class="type">Object=</span>
+        <div class="entryOverview">The injected data for the template.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <span class="type">goog.dom.DomHelper=</span>
+        <div class="entryOverview">The DOM helper used to
+    create DOM nodes; defaults to <code> goog.dom.getDomHelper</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>&nbsp;
+            Rendered template contents, wrapped in a parent DIV
+    element if necessary.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_soy_soy.js.source.html#line109">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.soy.renderAsFragment"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.soy.</span><span class="entryName">renderAsFragment<span class="args">(<span class="arg">template</span>,&nbsp;<span class="arg">opt_templateData</span>,&nbsp;<span class="arg">opt_injectedData</span>,&nbsp;<span class="arg">opt_domHelper</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Renders a Soy template into a single node or a document
+fragment. If the rendered HTML string represents a single node, then that
+node is returned (note that this is *not* a fragment, despite them name of
+the method). Otherwise a document fragment is returned containing the
+rendered nodes.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">template</span>
+        : <span class="type">null</span><span>&nbsp;|&nbsp;</span><span class="type">function(ARG_TYPES, null=, Object</span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>,<span class="type"> *>=):</span>&gt;
+        <div class="entryOverview">The Soy template defining the element's content.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_templateData</span>
+        : <span class="type">ARG_TYPES=</span>
+        <div class="entryOverview">The data for the template.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_injectedData</span>
+        : <span class="type">Object=</span>
+        <div class="entryOverview">The injected data for the template.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <span class="type">goog.dom.DomHelper=</span>
+        <div class="entryOverview">The DOM helper used to
+    create DOM nodes; defaults to <code> goog.dom.getDomHelper</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The resulting node or document fragment.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_soy_soy.js.source.html#line81">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.soy.renderElement"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.soy.</span><span class="entryName">renderElement<span class="args">(<span class="arg">element</span>,&nbsp;<span class="arg">template</span>,&nbsp;<span class="arg">opt_templateData</span>,&nbsp;<span class="arg">opt_injectedData</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Renders a Soy template and then set the output string as
+the innerHTML of an element. It is recommended to use this helper function
+instead of directly setting innerHTML in your hand-written code, so that it
+will be easier to audit the code for cross-site scripting vulnerabilities.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">element</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The element whose content we are rendering into.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">template</span>
+        : <span class="type">null</span><span>&nbsp;|&nbsp;</span><span class="type">function(ARG_TYPES, null=, Object</span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>,<span class="type"> *>=):</span>&gt;
+        <div class="entryOverview">The Soy template defining the element's content.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_templateData</span>
+        : <span class="type">ARG_TYPES=</span>
+        <div class="entryOverview">The data for the template.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_injectedData</span>
+        : <span class="type">Object=</span>
+        <div class="entryOverview">The injected data for the template.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_soy_soy.js.source.html#line55">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory soy</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/soy/soy.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

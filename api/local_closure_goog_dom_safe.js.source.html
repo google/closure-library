@@ -1,0 +1,176 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>safe.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_safe.js.html">safe.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Type-safe wrappers for unsafe DOM APIs.
+<a name="line17"></a> *
+<a name="line18"></a> * This file provides type-safe wrappers for DOM APIs that can result in
+<a name="line19"></a> * cross-site scripting (XSS) vulnerabilities, if the API is supplied with
+<a name="line20"></a> * untrusted (attacker-controlled) input.  Instead of plain strings, the type
+<a name="line21"></a> * safe wrappers consume values of types from the goog.html package whose
+<a name="line22"></a> * contract promises that values are safe to use in the corresponding context.
+<a name="line23"></a> *
+<a name="line24"></a> * Hence, a program that exclusively uses the wrappers in this file (i.e., whose
+<a name="line25"></a> * only reference to security-sensitive raw DOM APIs are in this file) is
+<a name="line26"></a> * guaranteed to be free of XSS due to incorrect use of such DOM APIs (modulo
+<a name="line27"></a> * correctness of code that produces values of the respective goog.html types,
+<a name="line28"></a> * and absent code that violates type safety).
+<a name="line29"></a> *
+<a name="line30"></a> * For example, assigning to an element&#39;s .innerHTML property a string that is
+<a name="line31"></a> * derived (even partially) from untrusted input typically results in an XSS
+<a name="line32"></a> * vulnerability. The type-safe wrapper goog.html.setInnerHtml consumes a value
+<a name="line33"></a> * of type goog.html.SafeHtml, whose contract states that using its values in a
+<a name="line34"></a> * HTML context will not result in XSS. Hence a program that is free of direct
+<a name="line35"></a> * assignments to any element&#39;s innerHTML property (with the exception of the
+<a name="line36"></a> * assignment to .innerHTML in this file) is guaranteed to be free of XSS due to
+<a name="line37"></a> * assignment of untrusted strings to the innerHTML property.
+<a name="line38"></a> */
+<a name="line39"></a>
+<a name="line40"></a>goog.provide(&#39;goog.dom.safe&#39;);
+<a name="line41"></a>
+<a name="line42"></a>goog.require(&#39;goog.html.SafeHtml&#39;);
+<a name="line43"></a>goog.require(&#39;goog.html.SafeUrl&#39;);
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Assigns known-safe HTML to an element&#39;s innerHTML property.
+<a name="line48"></a> * @param {!Element} elem The element whose innerHTML is to be assigned to.
+<a name="line49"></a> * @param {!goog.html.SafeHtml} html The known-safe HTML to assign.
+<a name="line50"></a> */
+<a name="line51"></a>goog.dom.safe.setInnerHtml = function(elem, html) {
+<a name="line52"></a>  elem.innerHTML = goog.html.SafeHtml.unwrap(html);
+<a name="line53"></a>};
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * Writes known-safe HTML to a document.
+<a name="line58"></a> * @param {!Document} doc The document to be written to.
+<a name="line59"></a> * @param {!goog.html.SafeHtml} html The known-safe HTML to assign.
+<a name="line60"></a> */
+<a name="line61"></a>goog.dom.safe.documentWrite = function(doc, html) {
+<a name="line62"></a>  doc.write(goog.html.SafeHtml.unwrap(html));
+<a name="line63"></a>};
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * Safely assigns a URL to an anchor element&#39;s href property.
+<a name="line68"></a> *
+<a name="line69"></a> * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
+<a name="line70"></a> * anchor&#39;s href property.  If url is of type string however, it is first
+<a name="line71"></a> * sanitized using goog.html.SafeUrl.sanitize.
+<a name="line72"></a> *
+<a name="line73"></a> * Example usage:
+<a name="line74"></a> *   goog.dom.safe.setAnchorHref(anchorEl, url);
+<a name="line75"></a> * which is a safe alternative to
+<a name="line76"></a> *   anchorEl.href = url;
+<a name="line77"></a> * The latter can result in XSS vulnerabilities if url is a
+<a name="line78"></a> * user-/attacker-controlled value.
+<a name="line79"></a> *
+<a name="line80"></a> * @param {!HTMLAnchorElement} anchor The anchor element whose href property
+<a name="line81"></a> *     is to be assigned to.
+<a name="line82"></a> * @param {string|!goog.html.SafeUrl} url The URL to assign.
+<a name="line83"></a> * @see goog.html.SafeUrl#sanitize
+<a name="line84"></a> */
+<a name="line85"></a>goog.dom.safe.setAnchorHref = function(anchor, url) {
+<a name="line86"></a>  /** @type {!goog.html.SafeUrl} */
+<a name="line87"></a>  var safeUrl;
+<a name="line88"></a>  if (url instanceof goog.html.SafeUrl) {
+<a name="line89"></a>    safeUrl = url;
+<a name="line90"></a>  } else {
+<a name="line91"></a>    safeUrl = goog.html.SafeUrl.sanitize(url);
+<a name="line92"></a>  }
+<a name="line93"></a>  anchor.href = goog.html.SafeUrl.unwrap(safeUrl);
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Safely assigns a URL to a Location object&#39;s href property.
+<a name="line99"></a> *
+<a name="line100"></a> * If url is of type goog.html.SafeUrl, its value is unwrapped and assigned to
+<a name="line101"></a> * loc&#39;s href property.  If url is of type string however, it is first sanitized
+<a name="line102"></a> * using goog.html.SafeUrl.sanitize.
+<a name="line103"></a> *
+<a name="line104"></a> * Example usage:
+<a name="line105"></a> *   goog.dom.safe.setLocationHref(document.location, redirectUrl);
+<a name="line106"></a> * which is a safe alternative to
+<a name="line107"></a> *   document.location.href = redirectUrl;
+<a name="line108"></a> * The latter can result in XSS vulnerabilities if redirectUrl is a
+<a name="line109"></a> * user-/attacker-controlled value.
+<a name="line110"></a> *
+<a name="line111"></a> * @param {!Location} loc The Location object whose href property is to be
+<a name="line112"></a> *     assigned to.
+<a name="line113"></a> * @param {string|!goog.html.SafeUrl} url The URL to assign.
+<a name="line114"></a> * @see goog.html.SafeUrl#sanitize
+<a name="line115"></a> */
+<a name="line116"></a>goog.dom.safe.setLocationHref = function(loc, url) {
+<a name="line117"></a>  /** @type {!goog.html.SafeUrl} */
+<a name="line118"></a>  var safeUrl;
+<a name="line119"></a>  if (url instanceof goog.html.SafeUrl) {
+<a name="line120"></a>    safeUrl = url;
+<a name="line121"></a>  } else {
+<a name="line122"></a>    safeUrl = goog.html.SafeUrl.sanitize(url);
+<a name="line123"></a>  }
+<a name="line124"></a>  loc.href = goog.html.SafeUrl.unwrap(safeUrl);
+<a name="line125"></a>};
+</pre>
+
+
+</body>
+</html>

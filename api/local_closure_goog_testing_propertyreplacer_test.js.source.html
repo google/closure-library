@@ -1,0 +1,415 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>propertyreplacer_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_propertyreplacer_test.js.html">propertyreplacer_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.PropertyReplacerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.PropertyReplacerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>// Test PropertyReplacer with JavaScript objects.
+<a name="line23"></a>function testSetJsProperties() {
+<a name="line24"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line25"></a>  var x = {a: 1, b: undefined};
+<a name="line26"></a>
+<a name="line27"></a>  // Setting simple values.
+<a name="line28"></a>  stubs.set(x, &#39;num&#39;, 1);
+<a name="line29"></a>  assertEquals(&#39;x.num = 1&#39;, 1, x.num);
+<a name="line30"></a>  stubs.set(x, &#39;undef&#39;, undefined);
+<a name="line31"></a>  assertTrue(&#39;x.undef = undefined&#39;, &#39;undef&#39; in x &amp;&amp; x.undef === undefined);
+<a name="line32"></a>  stubs.set(x, &#39;null&#39;, null);
+<a name="line33"></a>  assertTrue(&#39;x[&quot;null&quot;] = null&#39;, x[&#39;null&#39;] === null);
+<a name="line34"></a>
+<a name="line35"></a>  // Setting a simple value that existed originally.
+<a name="line36"></a>  stubs.set(x, &#39;b&#39;, null);
+<a name="line37"></a>  assertTrue(&#39;x.b = null&#39;, x.b === null);
+<a name="line38"></a>
+<a name="line39"></a>  // Setting a complex value.
+<a name="line40"></a>  stubs.set(x, &#39;obj&#39;, {});
+<a name="line41"></a>  assertEquals(&#39;x.obj = {}&#39;, &#39;object&#39;, typeof x.obj);
+<a name="line42"></a>  stubs.set(x.obj, &#39;num&#39;, 2);
+<a name="line43"></a>  assertEquals(&#39;x.obj.num = 2&#39;, 2, x.obj.num);
+<a name="line44"></a>
+<a name="line45"></a>  // Overwriting a leaf.
+<a name="line46"></a>  stubs.set(x.obj, &#39;num&#39;, 3);
+<a name="line47"></a>  assertEquals(&#39;x.obj.num = 3&#39;, 3, x.obj.num);
+<a name="line48"></a>
+<a name="line49"></a>  // Overwriting a non-leaf.
+<a name="line50"></a>  stubs.set(x, &#39;obj&#39;, {});
+<a name="line51"></a>  assertFalse(&#39;x.obj = {} again&#39;, &#39;num&#39; in x.obj);
+<a name="line52"></a>
+<a name="line53"></a>  // Setting a function.
+<a name="line54"></a>  stubs.set(x, &#39;func&#39;, function(n) { return n + 1; });
+<a name="line55"></a>  assertEquals(&#39;x.func = lambda n: n+1&#39;, 11, x.func(10));
+<a name="line56"></a>
+<a name="line57"></a>  // Setting a constructor and a prototype method.
+<a name="line58"></a>  stubs.set(x, &#39;Class&#39;, function(num) { this.num = num; });
+<a name="line59"></a>  stubs.set(x.Class.prototype, &#39;triple&#39;, function() { return this.num * 3; });
+<a name="line60"></a>  assertEquals(&#39;prototype method&#39;, 12, (new x.Class(4)).triple());
+<a name="line61"></a>
+<a name="line62"></a>  // Cleaning up with UnsetAll() twice. The second run should have no effect.
+<a name="line63"></a>  for (var i = 0; i &lt; 2; i++) {
+<a name="line64"></a>    stubs.reset();
+<a name="line65"></a>    assertEquals(&#39;x.a preserved&#39;, 1, x.a);
+<a name="line66"></a>    assertTrue(&#39;x.b reset&#39;, &#39;b&#39; in x &amp;&amp; x.b === undefined);
+<a name="line67"></a>    assertFalse(&#39;x.num removed&#39;, &#39;num&#39; in x);
+<a name="line68"></a>    assertFalse(&#39;x.undef removed&#39;, &#39;undef&#39; in x);
+<a name="line69"></a>    assertFalse(&#39;x[&quot;null&quot;] removed&#39;, &#39;null&#39; in x);
+<a name="line70"></a>    assertFalse(&#39;x.obj removed&#39;, &#39;obj&#39; in x);
+<a name="line71"></a>    assertFalse(&#39;x.func removed&#39;, &#39;func&#39; in x);
+<a name="line72"></a>    assertFalse(&#39;x.Class removed&#39;, &#39;Class&#39; in x);
+<a name="line73"></a>  }
+<a name="line74"></a>}
+<a name="line75"></a>
+<a name="line76"></a>// Test removing JavaScript object properties.
+<a name="line77"></a>function testRemoveJsProperties() {
+<a name="line78"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line79"></a>  var orig = {&#39;a&#39;: 1, &#39;b&#39;: undefined};
+<a name="line80"></a>  var x = {&#39;a&#39;: 1, &#39;b&#39;: undefined};
+<a name="line81"></a>
+<a name="line82"></a>  stubs.remove(x, &#39;a&#39;);
+<a name="line83"></a>  assertFalse(&#39;x.a removed&#39;, &#39;a&#39; in x);
+<a name="line84"></a>  assertTrue(&#39;x.b not removed&#39;, &#39;b&#39; in x);
+<a name="line85"></a>  stubs.reset();
+<a name="line86"></a>  assertObjectEquals(&#39;x.a reset&#39;, x, orig);
+<a name="line87"></a>
+<a name="line88"></a>  stubs.remove(x, &#39;b&#39;);
+<a name="line89"></a>  assertFalse(&#39;x.b removed&#39;, &#39;b&#39; in x);
+<a name="line90"></a>  stubs.reset();
+<a name="line91"></a>  assertObjectEquals(&#39;x.b reset&#39;, x, orig);
+<a name="line92"></a>
+<a name="line93"></a>  stubs.set(x, &#39;c&#39;, 2);
+<a name="line94"></a>  stubs.remove(x, &#39;c&#39;);
+<a name="line95"></a>  assertObjectEquals(&#39;x.c added then removed&#39;, x, orig);
+<a name="line96"></a>  stubs.reset();
+<a name="line97"></a>  assertObjectEquals(&#39;x.c reset&#39;, x, orig);
+<a name="line98"></a>
+<a name="line99"></a>  stubs.remove(x, &#39;b&#39;);
+<a name="line100"></a>  stubs.set(x, &#39;b&#39;, undefined);
+<a name="line101"></a>  assertObjectEquals(&#39;x.b removed then added&#39;, x, orig);
+<a name="line102"></a>  stubs.reset();
+<a name="line103"></a>  assertObjectEquals(&#39;x.b reset&#39;, x, orig);
+<a name="line104"></a>
+<a name="line105"></a>  stubs.remove(x, &#39;d&#39;);
+<a name="line106"></a>  assertObjectEquals(&#39;removing non-existing key&#39;, x, orig);
+<a name="line107"></a>  stubs.reset();
+<a name="line108"></a>  assertObjectEquals(&#39;reset removing non-existing key&#39;, x, orig);
+<a name="line109"></a>}
+<a name="line110"></a>
+<a name="line111"></a>// Test PropertyReplacer with prototype chain.
+<a name="line112"></a>function testPrototype() {
+<a name="line113"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line114"></a>
+<a name="line115"></a>  // Simple inheritance.
+<a name="line116"></a>  var a = {a: 0};
+<a name="line117"></a>  function B() {};
+<a name="line118"></a>  B.prototype = a;
+<a name="line119"></a>  var b = new B();
+<a name="line120"></a>
+<a name="line121"></a>  stubs.set(a, 0, 1);
+<a name="line122"></a>  stubs.set(b, 0, 2);
+<a name="line123"></a>  stubs.reset();
+<a name="line124"></a>  assertEquals(&#39;a.a == 0&#39;, 0, a[&#39;a&#39;]);
+<a name="line125"></a>  assertEquals(&#39;b.a == 0&#39;, 0, b[&#39;a&#39;]);
+<a name="line126"></a>
+<a name="line127"></a>  // Inheritance with goog.inherits.
+<a name="line128"></a>  var c = {a: 0};
+<a name="line129"></a>  function C() {};
+<a name="line130"></a>  C.prototype = c;
+<a name="line131"></a>  function D() {};
+<a name="line132"></a>  goog.inherits(D, C);
+<a name="line133"></a>  var d = new D();
+<a name="line134"></a>
+<a name="line135"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line136"></a>  stubs.set(c, &#39;a&#39;, 1);
+<a name="line137"></a>  stubs.set(d, &#39;a&#39;, 2);
+<a name="line138"></a>  stubs.reset();
+<a name="line139"></a>  assertEquals(&#39;c.a == 0&#39;, 0, c[&#39;a&#39;]);
+<a name="line140"></a>  assertEquals(&#39;d.a == 0&#39;, 0, d[&#39;a&#39;]);
+<a name="line141"></a>
+<a name="line142"></a>  // Setting prototype fields.
+<a name="line143"></a>  stubs.set(B.prototype, &#39;c&#39;, &#39;z&#39;);
+<a name="line144"></a>  assertEquals(&#39;b.c==&quot;z&quot;&#39;, &#39;z&#39;, b.c);
+<a name="line145"></a>  stubs.reset();
+<a name="line146"></a>  assertFalse(&#39;b.c deleted&#39;, &#39;c&#39; in b);
+<a name="line147"></a>
+<a name="line148"></a>  // Setting Object.prototype&#39;s fields.
+<a name="line149"></a>  stubs.set(Object.prototype, &#39;one&#39;, 1);
+<a name="line150"></a>  assertEquals(&#39;b.one==1&#39;, 1, b.one);
+<a name="line151"></a>  stubs.reset();
+<a name="line152"></a>  assertFalse(&#39;b.one deleted&#39;, &#39;one&#39; in b);
+<a name="line153"></a>
+<a name="line154"></a>  stubs.set(Object.prototype, &#39;two&#39;, 2);
+<a name="line155"></a>  stubs.remove(b, &#39;two&#39;);
+<a name="line156"></a>  assertEquals(&#39;b.two==2&#39;, 2, b.two);
+<a name="line157"></a>  stubs.remove(Object.prototype, &#39;two&#39;);
+<a name="line158"></a>  assertFalse(&#39;b.two deleted&#39;, &#39;two&#39; in b);
+<a name="line159"></a>  stubs.reset();
+<a name="line160"></a>  assertFalse(&#39;Object prototype reset&#39;, &#39;two&#39; in b);
+<a name="line161"></a>}
+<a name="line162"></a>
+<a name="line163"></a>// Test replacing function properties.
+<a name="line164"></a>function testFunctionProperties() {
+<a name="line165"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line166"></a>  stubs.set(Array, &#39;x&#39;, 1);
+<a name="line167"></a>  assertEquals(&#39;Array.x==1&#39;, 1, Array.x);
+<a name="line168"></a>  stubs.reset();
+<a name="line169"></a>  assertFalse(&#39;Array.x deleted&#39;, &#39;x&#39; in Array);
+<a name="line170"></a>
+<a name="line171"></a>  stubs.set(Math.random, &#39;x&#39;, 1);
+<a name="line172"></a>  assertEquals(&#39;Math.random.x==1&#39;, 1, Math.random.x);
+<a name="line173"></a>  stubs.reset();
+<a name="line174"></a>  assertFalse(&#39;Math.random.x deleted&#39;, &#39;x&#39; in Math.random);
+<a name="line175"></a>}
+<a name="line176"></a>
+<a name="line177"></a>// Test the hasKey_ private method.
+<a name="line178"></a>function testHasKey() {
+<a name="line179"></a>  f = goog.testing.PropertyReplacer.hasKey_;
+<a name="line180"></a>
+<a name="line181"></a>  assertFalse(&#39;{}.a&#39;, f({}, &#39;a&#39;));
+<a name="line182"></a>  assertTrue(&#39;{a:0}.a&#39;, f({a: 0}, &#39;a&#39;));
+<a name="line183"></a>
+<a name="line184"></a>  function C() {};
+<a name="line185"></a>  C.prototype.a = 0;
+<a name="line186"></a>  assertFalse(&#39;C.prototype.a set, is C.a own?&#39;, f(C, &#39;a&#39;));
+<a name="line187"></a>  assertTrue(&#39;C.prototype.a&#39;, f(C.prototype, &#39;a&#39;));
+<a name="line188"></a>  assertFalse(&#39;C.a not set&#39;, f(C, &#39;a&#39;));
+<a name="line189"></a>  C.a = 0;
+<a name="line190"></a>  assertTrue(&#39;C.a set&#39;, f(C, &#39;a&#39;));
+<a name="line191"></a>
+<a name="line192"></a>  var c = new C();
+<a name="line193"></a>  assertFalse(&#39;C().a, inherited&#39;, f(c, &#39;a&#39;));
+<a name="line194"></a>  c.a = 0;
+<a name="line195"></a>  assertTrue(&#39;C().a, own&#39;, f(c, &#39;a&#39;));
+<a name="line196"></a>
+<a name="line197"></a>  assertFalse(&#39;window, invalid key&#39;, f(window, &#39;no such key&#39;));
+<a name="line198"></a>  assertTrue(&#39;window, global variable&#39;, f(window, &#39;goog&#39;));
+<a name="line199"></a>  assertTrue(&#39;window, build-in key&#39;, f(window, &#39;location&#39;));
+<a name="line200"></a>
+<a name="line201"></a>  assertFalse(&#39;document, invalid key&#39;, f(document, &#39;no such key&#39;));
+<a name="line202"></a>  assertTrue(&#39;document.body&#39;, f(document, &#39;body&#39;));
+<a name="line203"></a>
+<a name="line204"></a>  var div = document.createElement(&#39;div&#39;);
+<a name="line205"></a>  assertFalse(&#39;div, invalid key&#39;, f(div, &#39;no such key&#39;));
+<a name="line206"></a>  assertTrue(&#39;div.className&#39;, f(div, &#39;className&#39;));
+<a name="line207"></a>  div[&#39;a&#39;] = 0;
+<a name="line208"></a>  assertTrue(&#39;div, key added by JS&#39;, f(div, &#39;a&#39;));
+<a name="line209"></a>
+<a name="line210"></a>  assertFalse(&#39;Date().getTime&#39;, f(new Date(), &#39;getTime&#39;));
+<a name="line211"></a>  assertTrue(&#39;Date.prototype.getTime&#39;, f(Date.prototype, &#39;getTime&#39;));
+<a name="line212"></a>
+<a name="line213"></a>  assertFalse(&#39;Math, invalid key&#39;, f(Math, &#39;no such key&#39;));
+<a name="line214"></a>  assertTrue(&#39;Math.random&#39;, f(Math, &#39;random&#39;));
+<a name="line215"></a>
+<a name="line216"></a>  function Parent() {};
+<a name="line217"></a>  Parent.prototype.a = 0;
+<a name="line218"></a>  function Child() {};
+<a name="line219"></a>  goog.inherits(Child, Parent);
+<a name="line220"></a>  assertFalse(&#39;goog.inherits, parent prototype&#39;, f(new Child, &#39;a&#39;));
+<a name="line221"></a>  Child.prototype.a = 1;
+<a name="line222"></a>  assertFalse(&#39;goog.inherits, child prototype&#39;, f(new Child, &#39;a&#39;));
+<a name="line223"></a>
+<a name="line224"></a>  function OverwrittenProto() {};
+<a name="line225"></a>  OverwrittenProto.prototype = {a: 0};
+<a name="line226"></a>  assertFalse(f(new OverwrittenProto, &#39;a&#39;));
+<a name="line227"></a>}
+<a name="line228"></a>
+<a name="line229"></a>// Test PropertyReplacer with DOM objects&#39; built in attributes.
+<a name="line230"></a>function testDomBuiltInAttributes() {
+<a name="line231"></a>  var div = document.createElement(&#39;div&#39;);
+<a name="line232"></a>  div.id = &#39;old-id&#39;;
+<a name="line233"></a>
+<a name="line234"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line235"></a>  stubs.set(div, &#39;id&#39;, &#39;new-id&#39;);
+<a name="line236"></a>  stubs.set(div, &#39;className&#39;, &#39;test-class&#39;);
+<a name="line237"></a>  assertEquals(&#39;div.id == &quot;new-id&quot;&#39;, &#39;new-id&#39;, div.id);
+<a name="line238"></a>  assertEquals(&#39;div.className == &quot;test-class&quot;&#39;, &#39;test-class&#39;, div.className);
+<a name="line239"></a>
+<a name="line240"></a>  stubs.remove(div, &#39;className&#39;);
+<a name="line241"></a>  // &#39;&#39; in Firefox, undefined in Chrome.
+<a name="line242"></a>  assertEvaluatesToFalse(&#39;div.className is empty&#39;, div.className);
+<a name="line243"></a>
+<a name="line244"></a>  stubs.reset();
+<a name="line245"></a>  assertEquals(&#39;div.id == &quot;old-id&quot;&#39;, &#39;old-id&#39;, div.id);
+<a name="line246"></a>  assertEquals(&#39;div.name == &quot;&quot;&#39;, &#39;&#39;, div.className);
+<a name="line247"></a>}
+<a name="line248"></a>
+<a name="line249"></a>// Test PropertyReplacer with DOM objects&#39; custom attributes.
+<a name="line250"></a>function testDomCustomAttributes() {
+<a name="line251"></a>  var div = document.createElement(&#39;div&#39;);
+<a name="line252"></a>  div.attr1 = &#39;old&#39;;
+<a name="line253"></a>
+<a name="line254"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line255"></a>  stubs.set(div, &#39;attr1&#39;, &#39;new&#39;);
+<a name="line256"></a>  stubs.set(div, &#39;attr2&#39;, &#39;new&#39;);
+<a name="line257"></a>  assertEquals(&#39;div.attr1 == &quot;new&quot;&#39;, &#39;new&#39;, div.attr1);
+<a name="line258"></a>  assertEquals(&#39;div.attr2 == &quot;new&quot;&#39;, &#39;new&#39;, div.attr2);
+<a name="line259"></a>
+<a name="line260"></a>  stubs.set(div, &#39;attr3&#39;, &#39;new&#39;);
+<a name="line261"></a>  stubs.remove(div, &#39;attr3&#39;);
+<a name="line262"></a>  assertEquals(&#39;div.attr3 == undefined&#39;, undefined, div.attr3);
+<a name="line263"></a>
+<a name="line264"></a>  stubs.reset();
+<a name="line265"></a>  assertEquals(&#39;div.attr1 == &quot;old&quot;&#39;, &#39;old&#39;, div.attr1);
+<a name="line266"></a>  assertEquals(&#39;div.attr2 == undefined&#39;, undefined, div.attr2);
+<a name="line267"></a>}
+<a name="line268"></a>
+<a name="line269"></a>// Test PropertyReplacer overriding Math.random.
+<a name="line270"></a>function testMathRandom() {
+<a name="line271"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line272"></a>  stubs.set(Math, &#39;random&#39;, function() { return -1; });
+<a name="line273"></a>  assertEquals(&#39;mocked Math.random&#39;, -1, Math.random());
+<a name="line274"></a>
+<a name="line275"></a>  stubs.reset();
+<a name="line276"></a>  assertNotEquals(&#39;original Math.random&#39;, -1, Math.random());
+<a name="line277"></a>}
+<a name="line278"></a>
+<a name="line279"></a>// Tests the replace method of PropertyReplacer.
+<a name="line280"></a>function testReplace() {
+<a name="line281"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line282"></a>  function C() {
+<a name="line283"></a>    this.a = 1;
+<a name="line284"></a>  };
+<a name="line285"></a>  C.prototype.b = 1;
+<a name="line286"></a>  C.prototype.toString = function() {
+<a name="line287"></a>    return &#39;obj&#39;;
+<a name="line288"></a>  };
+<a name="line289"></a>  var obj = new C();
+<a name="line290"></a>
+<a name="line291"></a>  stubs.replace(obj, &#39;a&#39;, 2);
+<a name="line292"></a>  assertEquals(&#39;successfully replaced the own property of an object&#39;, 2, obj.a);
+<a name="line293"></a>
+<a name="line294"></a>  stubs.replace(obj, &#39;b&#39;, 2);
+<a name="line295"></a>  assertEquals(&#39;successfully replaced the property in the prototype&#39;, 2, obj.b);
+<a name="line296"></a>
+<a name="line297"></a>  var error = assertThrows(&#39;cannot replace missing key&#39;,
+<a name="line298"></a>      goog.bind(stubs.replace, stubs, obj, &#39;unknown&#39;, 1));
+<a name="line299"></a>  // Using assertContains instead of assertEquals because Opera 10.0 adds
+<a name="line300"></a>  // the stack trace to the error message.
+<a name="line301"></a>  assertEquals(&#39;error message for missing key&#39;,
+<a name="line302"></a>      &#39;Cannot replace missing property &quot;unknown&quot; in obj&#39;, error.message);
+<a name="line303"></a>  assertFalse(&#39;object not touched&#39;, &#39;unknown&#39; in obj);
+<a name="line304"></a>
+<a name="line305"></a>  var error = assertThrows(&#39;cannot change value type&#39;,
+<a name="line306"></a>      goog.bind(stubs.replace, stubs, obj, &#39;a&#39;, &#39;3&#39;));
+<a name="line307"></a>  assertContains(&#39;error message for type mismatch&#39;,
+<a name="line308"></a>      &#39;Cannot replace property &quot;a&quot; in obj with a value of different type&#39;,
+<a name="line309"></a>      error.message);
+<a name="line310"></a>}
+<a name="line311"></a>
+<a name="line312"></a>// Tests altering complete namespace paths.
+<a name="line313"></a>function testSetPath() {
+<a name="line314"></a>  goog.global.a = {b: {}};
+<a name="line315"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line316"></a>
+<a name="line317"></a>  stubs.setPath(&#39;a.b.c.d&#39;, 1);
+<a name="line318"></a>  assertObjectEquals(&#39;a.b.c.d=1&#39;, {b: {c: {d: 1}}}, goog.global.a);
+<a name="line319"></a>  stubs.setPath(&#39;a.b.e&#39;, 2);
+<a name="line320"></a>  assertObjectEquals(&#39;a.b.e=2&#39;, {b: {c: {d: 1}, e: 2}}, goog.global.a);
+<a name="line321"></a>  stubs.setPath(&#39;a.f&#39;, 3);
+<a name="line322"></a>  assertObjectEquals(&#39;a.f=3&#39;, {b: {c: {d: 1}, e: 2}, f: 3}, goog.global.a);
+<a name="line323"></a>  stubs.setPath(&#39;a.f.g&#39;, 4);
+<a name="line324"></a>  assertObjectEquals(&#39;a.f.g=4&#39;, {b: {c: {d: 1}, e: 2}, f: {g: 4}},
+<a name="line325"></a>                     goog.global.a);
+<a name="line326"></a>  stubs.setPath(&#39;a&#39;, 5);
+<a name="line327"></a>  assertEquals(&#39;a=5&#39;, 5, goog.global.a);
+<a name="line328"></a>
+<a name="line329"></a>  stubs.setPath(&#39;x.y.z&#39;, 5);
+<a name="line330"></a>  assertObjectEquals(&#39;x.y.z=5&#39;, {y: {z: 5}}, goog.global.x);
+<a name="line331"></a>
+<a name="line332"></a>  stubs.reset();
+<a name="line333"></a>  assertObjectEquals(&#39;a.* reset&#39;, {b: {}}, goog.global.a);
+<a name="line334"></a>  // NOTE: it&#39;s impossible to delete global variables in Internet Explorer,
+<a name="line335"></a>  // so (&#39;x&#39; in goog.global) would be true.
+<a name="line336"></a>  assertUndefined(&#39;x.* reset&#39;, goog.global.x);
+<a name="line337"></a>}
+<a name="line338"></a>
+<a name="line339"></a>// Tests altering paths with functions in them.
+<a name="line340"></a>function testSetPathWithFunction() {
+<a name="line341"></a>  var f = function() {};
+<a name="line342"></a>  goog.global.a = {b: f};
+<a name="line343"></a>  var stubs = new goog.testing.PropertyReplacer();
+<a name="line344"></a>
+<a name="line345"></a>  stubs.setPath(&#39;a.b.c&#39;, 1);
+<a name="line346"></a>  assertEquals(&#39;a.b.c=1, f kept&#39;, f, goog.global.a.b);
+<a name="line347"></a>  assertEquals(&#39;a.b.c=1, c set&#39;, 1, goog.global.a.b.c);
+<a name="line348"></a>
+<a name="line349"></a>  stubs.setPath(&#39;a.b.prototype.d&#39;, 2);
+<a name="line350"></a>  assertEquals(&#39;a.b.prototype.d=2, b kept&#39;, f, goog.global.a.b);
+<a name="line351"></a>  assertEquals(&#39;a.b.prototype.d=2, c kept&#39;, 1, goog.global.a.b.c);
+<a name="line352"></a>  assertFalse(&#39;a.b.prototype.d=2, a.b.d not set&#39;, &#39;d&#39; in goog.global.a.b);
+<a name="line353"></a>  assertTrue(&#39;a.b.prototype.d=2, proto set&#39;, &#39;d&#39; in goog.global.a.b.prototype);
+<a name="line354"></a>  assertEquals(&#39;a.b.prototype.d=2, d set&#39;, 2, new goog.global.a.b().d);
+<a name="line355"></a>
+<a name="line356"></a>  var invalidSetPath = function() {
+<a name="line357"></a>    stubs.setPath(&#39;a.prototype.e&#39;, 3);
+<a name="line358"></a>  };
+<a name="line359"></a>  assertThrows(&#39;setting the prototype of a non-function&#39;, invalidSetPath);
+<a name="line360"></a>
+<a name="line361"></a>  stubs.reset();
+<a name="line362"></a>  assertObjectEquals(&#39;a.b.c reset&#39;, {b: f}, goog.global.a);
+<a name="line363"></a>  assertObjectEquals(&#39;a.b.prototype reset&#39;, {}, goog.global.a.b.prototype);
+<a name="line364"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,3104 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>test.pb.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_proto2_test.pb.js.html">test.pb.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>// All other code copyright its respective owners(s).
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Generated Protocol Buffer code for file
+<a name="line18"></a> * closure/goog/proto2/test.proto.
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;proto2.TestAllTypes&#39;);
+<a name="line22"></a>goog.provide(&#39;proto2.TestAllTypes.NestedEnum&#39;);
+<a name="line23"></a>goog.provide(&#39;proto2.TestAllTypes.NestedMessage&#39;);
+<a name="line24"></a>goog.provide(&#39;proto2.TestAllTypes.OptionalGroup&#39;);
+<a name="line25"></a>goog.provide(&#39;proto2.TestAllTypes.RepeatedGroup&#39;);
+<a name="line26"></a>goog.provide(&#39;proto2.TestDefaultChild&#39;);
+<a name="line27"></a>goog.provide(&#39;proto2.TestDefaultParent&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.proto2.Message&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Message TestAllTypes.
+<a name="line35"></a> * @constructor
+<a name="line36"></a> * @extends {goog.proto2.Message}
+<a name="line37"></a> * @final
+<a name="line38"></a> */
+<a name="line39"></a>proto2.TestAllTypes = function() {
+<a name="line40"></a>  goog.proto2.Message.apply(this);
+<a name="line41"></a>};
+<a name="line42"></a>goog.inherits(proto2.TestAllTypes, goog.proto2.Message);
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * Overrides {@link goog.proto2.Message#clone} to specify its exact return type.
+<a name="line47"></a> * @return {!proto2.TestAllTypes} The cloned message.
+<a name="line48"></a> * @override
+<a name="line49"></a> */
+<a name="line50"></a>proto2.TestAllTypes.prototype.clone;
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Gets the value of the optional_int32 field.
+<a name="line55"></a> * @return {?number} The value.
+<a name="line56"></a> */
+<a name="line57"></a>proto2.TestAllTypes.prototype.getOptionalInt32 = function() {
+<a name="line58"></a>  return /** @type {?number} */ (this.get$Value(1));
+<a name="line59"></a>};
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Gets the value of the optional_int32 field or the default value if not set.
+<a name="line64"></a> * @return {number} The value.
+<a name="line65"></a> */
+<a name="line66"></a>proto2.TestAllTypes.prototype.getOptionalInt32OrDefault = function() {
+<a name="line67"></a>  return /** @type {number} */ (this.get$ValueOrDefault(1));
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Sets the value of the optional_int32 field.
+<a name="line73"></a> * @param {number} value The value.
+<a name="line74"></a> */
+<a name="line75"></a>proto2.TestAllTypes.prototype.setOptionalInt32 = function(value) {
+<a name="line76"></a>  this.set$Value(1, value);
+<a name="line77"></a>};
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * @return {boolean} Whether the optional_int32 field has a value.
+<a name="line82"></a> */
+<a name="line83"></a>proto2.TestAllTypes.prototype.hasOptionalInt32 = function() {
+<a name="line84"></a>  return this.has$Value(1);
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * @return {number} The number of values in the optional_int32 field.
+<a name="line90"></a> */
+<a name="line91"></a>proto2.TestAllTypes.prototype.optionalInt32Count = function() {
+<a name="line92"></a>  return this.count$Values(1);
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Clears the values in the optional_int32 field.
+<a name="line98"></a> */
+<a name="line99"></a>proto2.TestAllTypes.prototype.clearOptionalInt32 = function() {
+<a name="line100"></a>  this.clear$Field(1);
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Gets the value of the optional_int64 field.
+<a name="line106"></a> * @return {?string} The value.
+<a name="line107"></a> */
+<a name="line108"></a>proto2.TestAllTypes.prototype.getOptionalInt64 = function() {
+<a name="line109"></a>  return /** @type {?string} */ (this.get$Value(2));
+<a name="line110"></a>};
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Gets the value of the optional_int64 field or the default value if not set.
+<a name="line115"></a> * @return {string} The value.
+<a name="line116"></a> */
+<a name="line117"></a>proto2.TestAllTypes.prototype.getOptionalInt64OrDefault = function() {
+<a name="line118"></a>  return /** @type {string} */ (this.get$ValueOrDefault(2));
+<a name="line119"></a>};
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Sets the value of the optional_int64 field.
+<a name="line124"></a> * @param {string} value The value.
+<a name="line125"></a> */
+<a name="line126"></a>proto2.TestAllTypes.prototype.setOptionalInt64 = function(value) {
+<a name="line127"></a>  this.set$Value(2, value);
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * @return {boolean} Whether the optional_int64 field has a value.
+<a name="line133"></a> */
+<a name="line134"></a>proto2.TestAllTypes.prototype.hasOptionalInt64 = function() {
+<a name="line135"></a>  return this.has$Value(2);
+<a name="line136"></a>};
+<a name="line137"></a>
+<a name="line138"></a>
+<a name="line139"></a>/**
+<a name="line140"></a> * @return {number} The number of values in the optional_int64 field.
+<a name="line141"></a> */
+<a name="line142"></a>proto2.TestAllTypes.prototype.optionalInt64Count = function() {
+<a name="line143"></a>  return this.count$Values(2);
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * Clears the values in the optional_int64 field.
+<a name="line149"></a> */
+<a name="line150"></a>proto2.TestAllTypes.prototype.clearOptionalInt64 = function() {
+<a name="line151"></a>  this.clear$Field(2);
+<a name="line152"></a>};
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * Gets the value of the optional_uint32 field.
+<a name="line157"></a> * @return {?number} The value.
+<a name="line158"></a> */
+<a name="line159"></a>proto2.TestAllTypes.prototype.getOptionalUint32 = function() {
+<a name="line160"></a>  return /** @type {?number} */ (this.get$Value(3));
+<a name="line161"></a>};
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>/**
+<a name="line165"></a> * Gets the value of the optional_uint32 field or the default value if not set.
+<a name="line166"></a> * @return {number} The value.
+<a name="line167"></a> */
+<a name="line168"></a>proto2.TestAllTypes.prototype.getOptionalUint32OrDefault = function() {
+<a name="line169"></a>  return /** @type {number} */ (this.get$ValueOrDefault(3));
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Sets the value of the optional_uint32 field.
+<a name="line175"></a> * @param {number} value The value.
+<a name="line176"></a> */
+<a name="line177"></a>proto2.TestAllTypes.prototype.setOptionalUint32 = function(value) {
+<a name="line178"></a>  this.set$Value(3, value);
+<a name="line179"></a>};
+<a name="line180"></a>
+<a name="line181"></a>
+<a name="line182"></a>/**
+<a name="line183"></a> * @return {boolean} Whether the optional_uint32 field has a value.
+<a name="line184"></a> */
+<a name="line185"></a>proto2.TestAllTypes.prototype.hasOptionalUint32 = function() {
+<a name="line186"></a>  return this.has$Value(3);
+<a name="line187"></a>};
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * @return {number} The number of values in the optional_uint32 field.
+<a name="line192"></a> */
+<a name="line193"></a>proto2.TestAllTypes.prototype.optionalUint32Count = function() {
+<a name="line194"></a>  return this.count$Values(3);
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Clears the values in the optional_uint32 field.
+<a name="line200"></a> */
+<a name="line201"></a>proto2.TestAllTypes.prototype.clearOptionalUint32 = function() {
+<a name="line202"></a>  this.clear$Field(3);
+<a name="line203"></a>};
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Gets the value of the optional_uint64 field.
+<a name="line208"></a> * @return {?string} The value.
+<a name="line209"></a> */
+<a name="line210"></a>proto2.TestAllTypes.prototype.getOptionalUint64 = function() {
+<a name="line211"></a>  return /** @type {?string} */ (this.get$Value(4));
+<a name="line212"></a>};
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * Gets the value of the optional_uint64 field or the default value if not set.
+<a name="line217"></a> * @return {string} The value.
+<a name="line218"></a> */
+<a name="line219"></a>proto2.TestAllTypes.prototype.getOptionalUint64OrDefault = function() {
+<a name="line220"></a>  return /** @type {string} */ (this.get$ValueOrDefault(4));
+<a name="line221"></a>};
+<a name="line222"></a>
+<a name="line223"></a>
+<a name="line224"></a>/**
+<a name="line225"></a> * Sets the value of the optional_uint64 field.
+<a name="line226"></a> * @param {string} value The value.
+<a name="line227"></a> */
+<a name="line228"></a>proto2.TestAllTypes.prototype.setOptionalUint64 = function(value) {
+<a name="line229"></a>  this.set$Value(4, value);
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * @return {boolean} Whether the optional_uint64 field has a value.
+<a name="line235"></a> */
+<a name="line236"></a>proto2.TestAllTypes.prototype.hasOptionalUint64 = function() {
+<a name="line237"></a>  return this.has$Value(4);
+<a name="line238"></a>};
+<a name="line239"></a>
+<a name="line240"></a>
+<a name="line241"></a>/**
+<a name="line242"></a> * @return {number} The number of values in the optional_uint64 field.
+<a name="line243"></a> */
+<a name="line244"></a>proto2.TestAllTypes.prototype.optionalUint64Count = function() {
+<a name="line245"></a>  return this.count$Values(4);
+<a name="line246"></a>};
+<a name="line247"></a>
+<a name="line248"></a>
+<a name="line249"></a>/**
+<a name="line250"></a> * Clears the values in the optional_uint64 field.
+<a name="line251"></a> */
+<a name="line252"></a>proto2.TestAllTypes.prototype.clearOptionalUint64 = function() {
+<a name="line253"></a>  this.clear$Field(4);
+<a name="line254"></a>};
+<a name="line255"></a>
+<a name="line256"></a>
+<a name="line257"></a>/**
+<a name="line258"></a> * Gets the value of the optional_sint32 field.
+<a name="line259"></a> * @return {?number} The value.
+<a name="line260"></a> */
+<a name="line261"></a>proto2.TestAllTypes.prototype.getOptionalSint32 = function() {
+<a name="line262"></a>  return /** @type {?number} */ (this.get$Value(5));
+<a name="line263"></a>};
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * Gets the value of the optional_sint32 field or the default value if not set.
+<a name="line268"></a> * @return {number} The value.
+<a name="line269"></a> */
+<a name="line270"></a>proto2.TestAllTypes.prototype.getOptionalSint32OrDefault = function() {
+<a name="line271"></a>  return /** @type {number} */ (this.get$ValueOrDefault(5));
+<a name="line272"></a>};
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * Sets the value of the optional_sint32 field.
+<a name="line277"></a> * @param {number} value The value.
+<a name="line278"></a> */
+<a name="line279"></a>proto2.TestAllTypes.prototype.setOptionalSint32 = function(value) {
+<a name="line280"></a>  this.set$Value(5, value);
+<a name="line281"></a>};
+<a name="line282"></a>
+<a name="line283"></a>
+<a name="line284"></a>/**
+<a name="line285"></a> * @return {boolean} Whether the optional_sint32 field has a value.
+<a name="line286"></a> */
+<a name="line287"></a>proto2.TestAllTypes.prototype.hasOptionalSint32 = function() {
+<a name="line288"></a>  return this.has$Value(5);
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * @return {number} The number of values in the optional_sint32 field.
+<a name="line294"></a> */
+<a name="line295"></a>proto2.TestAllTypes.prototype.optionalSint32Count = function() {
+<a name="line296"></a>  return this.count$Values(5);
+<a name="line297"></a>};
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * Clears the values in the optional_sint32 field.
+<a name="line302"></a> */
+<a name="line303"></a>proto2.TestAllTypes.prototype.clearOptionalSint32 = function() {
+<a name="line304"></a>  this.clear$Field(5);
+<a name="line305"></a>};
+<a name="line306"></a>
+<a name="line307"></a>
+<a name="line308"></a>/**
+<a name="line309"></a> * Gets the value of the optional_sint64 field.
+<a name="line310"></a> * @return {?string} The value.
+<a name="line311"></a> */
+<a name="line312"></a>proto2.TestAllTypes.prototype.getOptionalSint64 = function() {
+<a name="line313"></a>  return /** @type {?string} */ (this.get$Value(6));
+<a name="line314"></a>};
+<a name="line315"></a>
+<a name="line316"></a>
+<a name="line317"></a>/**
+<a name="line318"></a> * Gets the value of the optional_sint64 field or the default value if not set.
+<a name="line319"></a> * @return {string} The value.
+<a name="line320"></a> */
+<a name="line321"></a>proto2.TestAllTypes.prototype.getOptionalSint64OrDefault = function() {
+<a name="line322"></a>  return /** @type {string} */ (this.get$ValueOrDefault(6));
+<a name="line323"></a>};
+<a name="line324"></a>
+<a name="line325"></a>
+<a name="line326"></a>/**
+<a name="line327"></a> * Sets the value of the optional_sint64 field.
+<a name="line328"></a> * @param {string} value The value.
+<a name="line329"></a> */
+<a name="line330"></a>proto2.TestAllTypes.prototype.setOptionalSint64 = function(value) {
+<a name="line331"></a>  this.set$Value(6, value);
+<a name="line332"></a>};
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * @return {boolean} Whether the optional_sint64 field has a value.
+<a name="line337"></a> */
+<a name="line338"></a>proto2.TestAllTypes.prototype.hasOptionalSint64 = function() {
+<a name="line339"></a>  return this.has$Value(6);
+<a name="line340"></a>};
+<a name="line341"></a>
+<a name="line342"></a>
+<a name="line343"></a>/**
+<a name="line344"></a> * @return {number} The number of values in the optional_sint64 field.
+<a name="line345"></a> */
+<a name="line346"></a>proto2.TestAllTypes.prototype.optionalSint64Count = function() {
+<a name="line347"></a>  return this.count$Values(6);
+<a name="line348"></a>};
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>/**
+<a name="line352"></a> * Clears the values in the optional_sint64 field.
+<a name="line353"></a> */
+<a name="line354"></a>proto2.TestAllTypes.prototype.clearOptionalSint64 = function() {
+<a name="line355"></a>  this.clear$Field(6);
+<a name="line356"></a>};
+<a name="line357"></a>
+<a name="line358"></a>
+<a name="line359"></a>/**
+<a name="line360"></a> * Gets the value of the optional_fixed32 field.
+<a name="line361"></a> * @return {?number} The value.
+<a name="line362"></a> */
+<a name="line363"></a>proto2.TestAllTypes.prototype.getOptionalFixed32 = function() {
+<a name="line364"></a>  return /** @type {?number} */ (this.get$Value(7));
+<a name="line365"></a>};
+<a name="line366"></a>
+<a name="line367"></a>
+<a name="line368"></a>/**
+<a name="line369"></a> * Gets the value of the optional_fixed32 field or the default value if not set.
+<a name="line370"></a> * @return {number} The value.
+<a name="line371"></a> */
+<a name="line372"></a>proto2.TestAllTypes.prototype.getOptionalFixed32OrDefault = function() {
+<a name="line373"></a>  return /** @type {number} */ (this.get$ValueOrDefault(7));
+<a name="line374"></a>};
+<a name="line375"></a>
+<a name="line376"></a>
+<a name="line377"></a>/**
+<a name="line378"></a> * Sets the value of the optional_fixed32 field.
+<a name="line379"></a> * @param {number} value The value.
+<a name="line380"></a> */
+<a name="line381"></a>proto2.TestAllTypes.prototype.setOptionalFixed32 = function(value) {
+<a name="line382"></a>  this.set$Value(7, value);
+<a name="line383"></a>};
+<a name="line384"></a>
+<a name="line385"></a>
+<a name="line386"></a>/**
+<a name="line387"></a> * @return {boolean} Whether the optional_fixed32 field has a value.
+<a name="line388"></a> */
+<a name="line389"></a>proto2.TestAllTypes.prototype.hasOptionalFixed32 = function() {
+<a name="line390"></a>  return this.has$Value(7);
+<a name="line391"></a>};
+<a name="line392"></a>
+<a name="line393"></a>
+<a name="line394"></a>/**
+<a name="line395"></a> * @return {number} The number of values in the optional_fixed32 field.
+<a name="line396"></a> */
+<a name="line397"></a>proto2.TestAllTypes.prototype.optionalFixed32Count = function() {
+<a name="line398"></a>  return this.count$Values(7);
+<a name="line399"></a>};
+<a name="line400"></a>
+<a name="line401"></a>
+<a name="line402"></a>/**
+<a name="line403"></a> * Clears the values in the optional_fixed32 field.
+<a name="line404"></a> */
+<a name="line405"></a>proto2.TestAllTypes.prototype.clearOptionalFixed32 = function() {
+<a name="line406"></a>  this.clear$Field(7);
+<a name="line407"></a>};
+<a name="line408"></a>
+<a name="line409"></a>
+<a name="line410"></a>/**
+<a name="line411"></a> * Gets the value of the optional_fixed64 field.
+<a name="line412"></a> * @return {?string} The value.
+<a name="line413"></a> */
+<a name="line414"></a>proto2.TestAllTypes.prototype.getOptionalFixed64 = function() {
+<a name="line415"></a>  return /** @type {?string} */ (this.get$Value(8));
+<a name="line416"></a>};
+<a name="line417"></a>
+<a name="line418"></a>
+<a name="line419"></a>/**
+<a name="line420"></a> * Gets the value of the optional_fixed64 field or the default value if not set.
+<a name="line421"></a> * @return {string} The value.
+<a name="line422"></a> */
+<a name="line423"></a>proto2.TestAllTypes.prototype.getOptionalFixed64OrDefault = function() {
+<a name="line424"></a>  return /** @type {string} */ (this.get$ValueOrDefault(8));
+<a name="line425"></a>};
+<a name="line426"></a>
+<a name="line427"></a>
+<a name="line428"></a>/**
+<a name="line429"></a> * Sets the value of the optional_fixed64 field.
+<a name="line430"></a> * @param {string} value The value.
+<a name="line431"></a> */
+<a name="line432"></a>proto2.TestAllTypes.prototype.setOptionalFixed64 = function(value) {
+<a name="line433"></a>  this.set$Value(8, value);
+<a name="line434"></a>};
+<a name="line435"></a>
+<a name="line436"></a>
+<a name="line437"></a>/**
+<a name="line438"></a> * @return {boolean} Whether the optional_fixed64 field has a value.
+<a name="line439"></a> */
+<a name="line440"></a>proto2.TestAllTypes.prototype.hasOptionalFixed64 = function() {
+<a name="line441"></a>  return this.has$Value(8);
+<a name="line442"></a>};
+<a name="line443"></a>
+<a name="line444"></a>
+<a name="line445"></a>/**
+<a name="line446"></a> * @return {number} The number of values in the optional_fixed64 field.
+<a name="line447"></a> */
+<a name="line448"></a>proto2.TestAllTypes.prototype.optionalFixed64Count = function() {
+<a name="line449"></a>  return this.count$Values(8);
+<a name="line450"></a>};
+<a name="line451"></a>
+<a name="line452"></a>
+<a name="line453"></a>/**
+<a name="line454"></a> * Clears the values in the optional_fixed64 field.
+<a name="line455"></a> */
+<a name="line456"></a>proto2.TestAllTypes.prototype.clearOptionalFixed64 = function() {
+<a name="line457"></a>  this.clear$Field(8);
+<a name="line458"></a>};
+<a name="line459"></a>
+<a name="line460"></a>
+<a name="line461"></a>/**
+<a name="line462"></a> * Gets the value of the optional_sfixed32 field.
+<a name="line463"></a> * @return {?number} The value.
+<a name="line464"></a> */
+<a name="line465"></a>proto2.TestAllTypes.prototype.getOptionalSfixed32 = function() {
+<a name="line466"></a>  return /** @type {?number} */ (this.get$Value(9));
+<a name="line467"></a>};
+<a name="line468"></a>
+<a name="line469"></a>
+<a name="line470"></a>/**
+<a name="line471"></a> * Gets the value of the optional_sfixed32 field or the default value if not set.
+<a name="line472"></a> * @return {number} The value.
+<a name="line473"></a> */
+<a name="line474"></a>proto2.TestAllTypes.prototype.getOptionalSfixed32OrDefault = function() {
+<a name="line475"></a>  return /** @type {number} */ (this.get$ValueOrDefault(9));
+<a name="line476"></a>};
+<a name="line477"></a>
+<a name="line478"></a>
+<a name="line479"></a>/**
+<a name="line480"></a> * Sets the value of the optional_sfixed32 field.
+<a name="line481"></a> * @param {number} value The value.
+<a name="line482"></a> */
+<a name="line483"></a>proto2.TestAllTypes.prototype.setOptionalSfixed32 = function(value) {
+<a name="line484"></a>  this.set$Value(9, value);
+<a name="line485"></a>};
+<a name="line486"></a>
+<a name="line487"></a>
+<a name="line488"></a>/**
+<a name="line489"></a> * @return {boolean} Whether the optional_sfixed32 field has a value.
+<a name="line490"></a> */
+<a name="line491"></a>proto2.TestAllTypes.prototype.hasOptionalSfixed32 = function() {
+<a name="line492"></a>  return this.has$Value(9);
+<a name="line493"></a>};
+<a name="line494"></a>
+<a name="line495"></a>
+<a name="line496"></a>/**
+<a name="line497"></a> * @return {number} The number of values in the optional_sfixed32 field.
+<a name="line498"></a> */
+<a name="line499"></a>proto2.TestAllTypes.prototype.optionalSfixed32Count = function() {
+<a name="line500"></a>  return this.count$Values(9);
+<a name="line501"></a>};
+<a name="line502"></a>
+<a name="line503"></a>
+<a name="line504"></a>/**
+<a name="line505"></a> * Clears the values in the optional_sfixed32 field.
+<a name="line506"></a> */
+<a name="line507"></a>proto2.TestAllTypes.prototype.clearOptionalSfixed32 = function() {
+<a name="line508"></a>  this.clear$Field(9);
+<a name="line509"></a>};
+<a name="line510"></a>
+<a name="line511"></a>
+<a name="line512"></a>/**
+<a name="line513"></a> * Gets the value of the optional_sfixed64 field.
+<a name="line514"></a> * @return {?string} The value.
+<a name="line515"></a> */
+<a name="line516"></a>proto2.TestAllTypes.prototype.getOptionalSfixed64 = function() {
+<a name="line517"></a>  return /** @type {?string} */ (this.get$Value(10));
+<a name="line518"></a>};
+<a name="line519"></a>
+<a name="line520"></a>
+<a name="line521"></a>/**
+<a name="line522"></a> * Gets the value of the optional_sfixed64 field or the default value if not set.
+<a name="line523"></a> * @return {string} The value.
+<a name="line524"></a> */
+<a name="line525"></a>proto2.TestAllTypes.prototype.getOptionalSfixed64OrDefault = function() {
+<a name="line526"></a>  return /** @type {string} */ (this.get$ValueOrDefault(10));
+<a name="line527"></a>};
+<a name="line528"></a>
+<a name="line529"></a>
+<a name="line530"></a>/**
+<a name="line531"></a> * Sets the value of the optional_sfixed64 field.
+<a name="line532"></a> * @param {string} value The value.
+<a name="line533"></a> */
+<a name="line534"></a>proto2.TestAllTypes.prototype.setOptionalSfixed64 = function(value) {
+<a name="line535"></a>  this.set$Value(10, value);
+<a name="line536"></a>};
+<a name="line537"></a>
+<a name="line538"></a>
+<a name="line539"></a>/**
+<a name="line540"></a> * @return {boolean} Whether the optional_sfixed64 field has a value.
+<a name="line541"></a> */
+<a name="line542"></a>proto2.TestAllTypes.prototype.hasOptionalSfixed64 = function() {
+<a name="line543"></a>  return this.has$Value(10);
+<a name="line544"></a>};
+<a name="line545"></a>
+<a name="line546"></a>
+<a name="line547"></a>/**
+<a name="line548"></a> * @return {number} The number of values in the optional_sfixed64 field.
+<a name="line549"></a> */
+<a name="line550"></a>proto2.TestAllTypes.prototype.optionalSfixed64Count = function() {
+<a name="line551"></a>  return this.count$Values(10);
+<a name="line552"></a>};
+<a name="line553"></a>
+<a name="line554"></a>
+<a name="line555"></a>/**
+<a name="line556"></a> * Clears the values in the optional_sfixed64 field.
+<a name="line557"></a> */
+<a name="line558"></a>proto2.TestAllTypes.prototype.clearOptionalSfixed64 = function() {
+<a name="line559"></a>  this.clear$Field(10);
+<a name="line560"></a>};
+<a name="line561"></a>
+<a name="line562"></a>
+<a name="line563"></a>/**
+<a name="line564"></a> * Gets the value of the optional_float field.
+<a name="line565"></a> * @return {?number} The value.
+<a name="line566"></a> */
+<a name="line567"></a>proto2.TestAllTypes.prototype.getOptionalFloat = function() {
+<a name="line568"></a>  return /** @type {?number} */ (this.get$Value(11));
+<a name="line569"></a>};
+<a name="line570"></a>
+<a name="line571"></a>
+<a name="line572"></a>/**
+<a name="line573"></a> * Gets the value of the optional_float field or the default value if not set.
+<a name="line574"></a> * @return {number} The value.
+<a name="line575"></a> */
+<a name="line576"></a>proto2.TestAllTypes.prototype.getOptionalFloatOrDefault = function() {
+<a name="line577"></a>  return /** @type {number} */ (this.get$ValueOrDefault(11));
+<a name="line578"></a>};
+<a name="line579"></a>
+<a name="line580"></a>
+<a name="line581"></a>/**
+<a name="line582"></a> * Sets the value of the optional_float field.
+<a name="line583"></a> * @param {number} value The value.
+<a name="line584"></a> */
+<a name="line585"></a>proto2.TestAllTypes.prototype.setOptionalFloat = function(value) {
+<a name="line586"></a>  this.set$Value(11, value);
+<a name="line587"></a>};
+<a name="line588"></a>
+<a name="line589"></a>
+<a name="line590"></a>/**
+<a name="line591"></a> * @return {boolean} Whether the optional_float field has a value.
+<a name="line592"></a> */
+<a name="line593"></a>proto2.TestAllTypes.prototype.hasOptionalFloat = function() {
+<a name="line594"></a>  return this.has$Value(11);
+<a name="line595"></a>};
+<a name="line596"></a>
+<a name="line597"></a>
+<a name="line598"></a>/**
+<a name="line599"></a> * @return {number} The number of values in the optional_float field.
+<a name="line600"></a> */
+<a name="line601"></a>proto2.TestAllTypes.prototype.optionalFloatCount = function() {
+<a name="line602"></a>  return this.count$Values(11);
+<a name="line603"></a>};
+<a name="line604"></a>
+<a name="line605"></a>
+<a name="line606"></a>/**
+<a name="line607"></a> * Clears the values in the optional_float field.
+<a name="line608"></a> */
+<a name="line609"></a>proto2.TestAllTypes.prototype.clearOptionalFloat = function() {
+<a name="line610"></a>  this.clear$Field(11);
+<a name="line611"></a>};
+<a name="line612"></a>
+<a name="line613"></a>
+<a name="line614"></a>/**
+<a name="line615"></a> * Gets the value of the optional_double field.
+<a name="line616"></a> * @return {?number} The value.
+<a name="line617"></a> */
+<a name="line618"></a>proto2.TestAllTypes.prototype.getOptionalDouble = function() {
+<a name="line619"></a>  return /** @type {?number} */ (this.get$Value(12));
+<a name="line620"></a>};
+<a name="line621"></a>
+<a name="line622"></a>
+<a name="line623"></a>/**
+<a name="line624"></a> * Gets the value of the optional_double field or the default value if not set.
+<a name="line625"></a> * @return {number} The value.
+<a name="line626"></a> */
+<a name="line627"></a>proto2.TestAllTypes.prototype.getOptionalDoubleOrDefault = function() {
+<a name="line628"></a>  return /** @type {number} */ (this.get$ValueOrDefault(12));
+<a name="line629"></a>};
+<a name="line630"></a>
+<a name="line631"></a>
+<a name="line632"></a>/**
+<a name="line633"></a> * Sets the value of the optional_double field.
+<a name="line634"></a> * @param {number} value The value.
+<a name="line635"></a> */
+<a name="line636"></a>proto2.TestAllTypes.prototype.setOptionalDouble = function(value) {
+<a name="line637"></a>  this.set$Value(12, value);
+<a name="line638"></a>};
+<a name="line639"></a>
+<a name="line640"></a>
+<a name="line641"></a>/**
+<a name="line642"></a> * @return {boolean} Whether the optional_double field has a value.
+<a name="line643"></a> */
+<a name="line644"></a>proto2.TestAllTypes.prototype.hasOptionalDouble = function() {
+<a name="line645"></a>  return this.has$Value(12);
+<a name="line646"></a>};
+<a name="line647"></a>
+<a name="line648"></a>
+<a name="line649"></a>/**
+<a name="line650"></a> * @return {number} The number of values in the optional_double field.
+<a name="line651"></a> */
+<a name="line652"></a>proto2.TestAllTypes.prototype.optionalDoubleCount = function() {
+<a name="line653"></a>  return this.count$Values(12);
+<a name="line654"></a>};
+<a name="line655"></a>
+<a name="line656"></a>
+<a name="line657"></a>/**
+<a name="line658"></a> * Clears the values in the optional_double field.
+<a name="line659"></a> */
+<a name="line660"></a>proto2.TestAllTypes.prototype.clearOptionalDouble = function() {
+<a name="line661"></a>  this.clear$Field(12);
+<a name="line662"></a>};
+<a name="line663"></a>
+<a name="line664"></a>
+<a name="line665"></a>/**
+<a name="line666"></a> * Gets the value of the optional_bool field.
+<a name="line667"></a> * @return {?boolean} The value.
+<a name="line668"></a> */
+<a name="line669"></a>proto2.TestAllTypes.prototype.getOptionalBool = function() {
+<a name="line670"></a>  return /** @type {?boolean} */ (this.get$Value(13));
+<a name="line671"></a>};
+<a name="line672"></a>
+<a name="line673"></a>
+<a name="line674"></a>/**
+<a name="line675"></a> * Gets the value of the optional_bool field or the default value if not set.
+<a name="line676"></a> * @return {boolean} The value.
+<a name="line677"></a> */
+<a name="line678"></a>proto2.TestAllTypes.prototype.getOptionalBoolOrDefault = function() {
+<a name="line679"></a>  return /** @type {boolean} */ (this.get$ValueOrDefault(13));
+<a name="line680"></a>};
+<a name="line681"></a>
+<a name="line682"></a>
+<a name="line683"></a>/**
+<a name="line684"></a> * Sets the value of the optional_bool field.
+<a name="line685"></a> * @param {boolean} value The value.
+<a name="line686"></a> */
+<a name="line687"></a>proto2.TestAllTypes.prototype.setOptionalBool = function(value) {
+<a name="line688"></a>  this.set$Value(13, value);
+<a name="line689"></a>};
+<a name="line690"></a>
+<a name="line691"></a>
+<a name="line692"></a>/**
+<a name="line693"></a> * @return {boolean} Whether the optional_bool field has a value.
+<a name="line694"></a> */
+<a name="line695"></a>proto2.TestAllTypes.prototype.hasOptionalBool = function() {
+<a name="line696"></a>  return this.has$Value(13);
+<a name="line697"></a>};
+<a name="line698"></a>
+<a name="line699"></a>
+<a name="line700"></a>/**
+<a name="line701"></a> * @return {number} The number of values in the optional_bool field.
+<a name="line702"></a> */
+<a name="line703"></a>proto2.TestAllTypes.prototype.optionalBoolCount = function() {
+<a name="line704"></a>  return this.count$Values(13);
+<a name="line705"></a>};
+<a name="line706"></a>
+<a name="line707"></a>
+<a name="line708"></a>/**
+<a name="line709"></a> * Clears the values in the optional_bool field.
+<a name="line710"></a> */
+<a name="line711"></a>proto2.TestAllTypes.prototype.clearOptionalBool = function() {
+<a name="line712"></a>  this.clear$Field(13);
+<a name="line713"></a>};
+<a name="line714"></a>
+<a name="line715"></a>
+<a name="line716"></a>/**
+<a name="line717"></a> * Gets the value of the optional_string field.
+<a name="line718"></a> * @return {?string} The value.
+<a name="line719"></a> */
+<a name="line720"></a>proto2.TestAllTypes.prototype.getOptionalString = function() {
+<a name="line721"></a>  return /** @type {?string} */ (this.get$Value(14));
+<a name="line722"></a>};
+<a name="line723"></a>
+<a name="line724"></a>
+<a name="line725"></a>/**
+<a name="line726"></a> * Gets the value of the optional_string field or the default value if not set.
+<a name="line727"></a> * @return {string} The value.
+<a name="line728"></a> */
+<a name="line729"></a>proto2.TestAllTypes.prototype.getOptionalStringOrDefault = function() {
+<a name="line730"></a>  return /** @type {string} */ (this.get$ValueOrDefault(14));
+<a name="line731"></a>};
+<a name="line732"></a>
+<a name="line733"></a>
+<a name="line734"></a>/**
+<a name="line735"></a> * Sets the value of the optional_string field.
+<a name="line736"></a> * @param {string} value The value.
+<a name="line737"></a> */
+<a name="line738"></a>proto2.TestAllTypes.prototype.setOptionalString = function(value) {
+<a name="line739"></a>  this.set$Value(14, value);
+<a name="line740"></a>};
+<a name="line741"></a>
+<a name="line742"></a>
+<a name="line743"></a>/**
+<a name="line744"></a> * @return {boolean} Whether the optional_string field has a value.
+<a name="line745"></a> */
+<a name="line746"></a>proto2.TestAllTypes.prototype.hasOptionalString = function() {
+<a name="line747"></a>  return this.has$Value(14);
+<a name="line748"></a>};
+<a name="line749"></a>
+<a name="line750"></a>
+<a name="line751"></a>/**
+<a name="line752"></a> * @return {number} The number of values in the optional_string field.
+<a name="line753"></a> */
+<a name="line754"></a>proto2.TestAllTypes.prototype.optionalStringCount = function() {
+<a name="line755"></a>  return this.count$Values(14);
+<a name="line756"></a>};
+<a name="line757"></a>
+<a name="line758"></a>
+<a name="line759"></a>/**
+<a name="line760"></a> * Clears the values in the optional_string field.
+<a name="line761"></a> */
+<a name="line762"></a>proto2.TestAllTypes.prototype.clearOptionalString = function() {
+<a name="line763"></a>  this.clear$Field(14);
+<a name="line764"></a>};
+<a name="line765"></a>
+<a name="line766"></a>
+<a name="line767"></a>/**
+<a name="line768"></a> * Gets the value of the optional_bytes field.
+<a name="line769"></a> * @return {?string} The value.
+<a name="line770"></a> */
+<a name="line771"></a>proto2.TestAllTypes.prototype.getOptionalBytes = function() {
+<a name="line772"></a>  return /** @type {?string} */ (this.get$Value(15));
+<a name="line773"></a>};
+<a name="line774"></a>
+<a name="line775"></a>
+<a name="line776"></a>/**
+<a name="line777"></a> * Gets the value of the optional_bytes field or the default value if not set.
+<a name="line778"></a> * @return {string} The value.
+<a name="line779"></a> */
+<a name="line780"></a>proto2.TestAllTypes.prototype.getOptionalBytesOrDefault = function() {
+<a name="line781"></a>  return /** @type {string} */ (this.get$ValueOrDefault(15));
+<a name="line782"></a>};
+<a name="line783"></a>
+<a name="line784"></a>
+<a name="line785"></a>/**
+<a name="line786"></a> * Sets the value of the optional_bytes field.
+<a name="line787"></a> * @param {string} value The value.
+<a name="line788"></a> */
+<a name="line789"></a>proto2.TestAllTypes.prototype.setOptionalBytes = function(value) {
+<a name="line790"></a>  this.set$Value(15, value);
+<a name="line791"></a>};
+<a name="line792"></a>
+<a name="line793"></a>
+<a name="line794"></a>/**
+<a name="line795"></a> * @return {boolean} Whether the optional_bytes field has a value.
+<a name="line796"></a> */
+<a name="line797"></a>proto2.TestAllTypes.prototype.hasOptionalBytes = function() {
+<a name="line798"></a>  return this.has$Value(15);
+<a name="line799"></a>};
+<a name="line800"></a>
+<a name="line801"></a>
+<a name="line802"></a>/**
+<a name="line803"></a> * @return {number} The number of values in the optional_bytes field.
+<a name="line804"></a> */
+<a name="line805"></a>proto2.TestAllTypes.prototype.optionalBytesCount = function() {
+<a name="line806"></a>  return this.count$Values(15);
+<a name="line807"></a>};
+<a name="line808"></a>
+<a name="line809"></a>
+<a name="line810"></a>/**
+<a name="line811"></a> * Clears the values in the optional_bytes field.
+<a name="line812"></a> */
+<a name="line813"></a>proto2.TestAllTypes.prototype.clearOptionalBytes = function() {
+<a name="line814"></a>  this.clear$Field(15);
+<a name="line815"></a>};
+<a name="line816"></a>
+<a name="line817"></a>
+<a name="line818"></a>/**
+<a name="line819"></a> * Gets the value of the optionalgroup field.
+<a name="line820"></a> * @return {proto2.TestAllTypes.OptionalGroup} The value.
+<a name="line821"></a> */
+<a name="line822"></a>proto2.TestAllTypes.prototype.getOptionalgroup = function() {
+<a name="line823"></a>  return /** @type {proto2.TestAllTypes.OptionalGroup} */ (this.get$Value(16));
+<a name="line824"></a>};
+<a name="line825"></a>
+<a name="line826"></a>
+<a name="line827"></a>/**
+<a name="line828"></a> * Gets the value of the optionalgroup field or the default value if not set.
+<a name="line829"></a> * @return {!proto2.TestAllTypes.OptionalGroup} The value.
+<a name="line830"></a> */
+<a name="line831"></a>proto2.TestAllTypes.prototype.getOptionalgroupOrDefault = function() {
+<a name="line832"></a>  return /** @type {!proto2.TestAllTypes.OptionalGroup} */ (this.get$ValueOrDefault(16));
+<a name="line833"></a>};
+<a name="line834"></a>
+<a name="line835"></a>
+<a name="line836"></a>/**
+<a name="line837"></a> * Sets the value of the optionalgroup field.
+<a name="line838"></a> * @param {!proto2.TestAllTypes.OptionalGroup} value The value.
+<a name="line839"></a> */
+<a name="line840"></a>proto2.TestAllTypes.prototype.setOptionalgroup = function(value) {
+<a name="line841"></a>  this.set$Value(16, value);
+<a name="line842"></a>};
+<a name="line843"></a>
+<a name="line844"></a>
+<a name="line845"></a>/**
+<a name="line846"></a> * @return {boolean} Whether the optionalgroup field has a value.
+<a name="line847"></a> */
+<a name="line848"></a>proto2.TestAllTypes.prototype.hasOptionalgroup = function() {
+<a name="line849"></a>  return this.has$Value(16);
+<a name="line850"></a>};
+<a name="line851"></a>
+<a name="line852"></a>
+<a name="line853"></a>/**
+<a name="line854"></a> * @return {number} The number of values in the optionalgroup field.
+<a name="line855"></a> */
+<a name="line856"></a>proto2.TestAllTypes.prototype.optionalgroupCount = function() {
+<a name="line857"></a>  return this.count$Values(16);
+<a name="line858"></a>};
+<a name="line859"></a>
+<a name="line860"></a>
+<a name="line861"></a>/**
+<a name="line862"></a> * Clears the values in the optionalgroup field.
+<a name="line863"></a> */
+<a name="line864"></a>proto2.TestAllTypes.prototype.clearOptionalgroup = function() {
+<a name="line865"></a>  this.clear$Field(16);
+<a name="line866"></a>};
+<a name="line867"></a>
+<a name="line868"></a>
+<a name="line869"></a>/**
+<a name="line870"></a> * Gets the value of the optional_nested_message field.
+<a name="line871"></a> * @return {proto2.TestAllTypes.NestedMessage} The value.
+<a name="line872"></a> */
+<a name="line873"></a>proto2.TestAllTypes.prototype.getOptionalNestedMessage = function() {
+<a name="line874"></a>  return /** @type {proto2.TestAllTypes.NestedMessage} */ (this.get$Value(18));
+<a name="line875"></a>};
+<a name="line876"></a>
+<a name="line877"></a>
+<a name="line878"></a>/**
+<a name="line879"></a> * Gets the value of the optional_nested_message field or the default value if not set.
+<a name="line880"></a> * @return {!proto2.TestAllTypes.NestedMessage} The value.
+<a name="line881"></a> */
+<a name="line882"></a>proto2.TestAllTypes.prototype.getOptionalNestedMessageOrDefault = function() {
+<a name="line883"></a>  return /** @type {!proto2.TestAllTypes.NestedMessage} */ (this.get$ValueOrDefault(18));
+<a name="line884"></a>};
+<a name="line885"></a>
+<a name="line886"></a>
+<a name="line887"></a>/**
+<a name="line888"></a> * Sets the value of the optional_nested_message field.
+<a name="line889"></a> * @param {!proto2.TestAllTypes.NestedMessage} value The value.
+<a name="line890"></a> */
+<a name="line891"></a>proto2.TestAllTypes.prototype.setOptionalNestedMessage = function(value) {
+<a name="line892"></a>  this.set$Value(18, value);
+<a name="line893"></a>};
+<a name="line894"></a>
+<a name="line895"></a>
+<a name="line896"></a>/**
+<a name="line897"></a> * @return {boolean} Whether the optional_nested_message field has a value.
+<a name="line898"></a> */
+<a name="line899"></a>proto2.TestAllTypes.prototype.hasOptionalNestedMessage = function() {
+<a name="line900"></a>  return this.has$Value(18);
+<a name="line901"></a>};
+<a name="line902"></a>
+<a name="line903"></a>
+<a name="line904"></a>/**
+<a name="line905"></a> * @return {number} The number of values in the optional_nested_message field.
+<a name="line906"></a> */
+<a name="line907"></a>proto2.TestAllTypes.prototype.optionalNestedMessageCount = function() {
+<a name="line908"></a>  return this.count$Values(18);
+<a name="line909"></a>};
+<a name="line910"></a>
+<a name="line911"></a>
+<a name="line912"></a>/**
+<a name="line913"></a> * Clears the values in the optional_nested_message field.
+<a name="line914"></a> */
+<a name="line915"></a>proto2.TestAllTypes.prototype.clearOptionalNestedMessage = function() {
+<a name="line916"></a>  this.clear$Field(18);
+<a name="line917"></a>};
+<a name="line918"></a>
+<a name="line919"></a>
+<a name="line920"></a>/**
+<a name="line921"></a> * Gets the value of the optional_nested_enum field.
+<a name="line922"></a> * @return {?proto2.TestAllTypes.NestedEnum} The value.
+<a name="line923"></a> */
+<a name="line924"></a>proto2.TestAllTypes.prototype.getOptionalNestedEnum = function() {
+<a name="line925"></a>  return /** @type {?proto2.TestAllTypes.NestedEnum} */ (this.get$Value(21));
+<a name="line926"></a>};
+<a name="line927"></a>
+<a name="line928"></a>
+<a name="line929"></a>/**
+<a name="line930"></a> * Gets the value of the optional_nested_enum field or the default value if not set.
+<a name="line931"></a> * @return {proto2.TestAllTypes.NestedEnum} The value.
+<a name="line932"></a> */
+<a name="line933"></a>proto2.TestAllTypes.prototype.getOptionalNestedEnumOrDefault = function() {
+<a name="line934"></a>  return /** @type {proto2.TestAllTypes.NestedEnum} */ (this.get$ValueOrDefault(21));
+<a name="line935"></a>};
+<a name="line936"></a>
+<a name="line937"></a>
+<a name="line938"></a>/**
+<a name="line939"></a> * Sets the value of the optional_nested_enum field.
+<a name="line940"></a> * @param {proto2.TestAllTypes.NestedEnum} value The value.
+<a name="line941"></a> */
+<a name="line942"></a>proto2.TestAllTypes.prototype.setOptionalNestedEnum = function(value) {
+<a name="line943"></a>  this.set$Value(21, value);
+<a name="line944"></a>};
+<a name="line945"></a>
+<a name="line946"></a>
+<a name="line947"></a>/**
+<a name="line948"></a> * @return {boolean} Whether the optional_nested_enum field has a value.
+<a name="line949"></a> */
+<a name="line950"></a>proto2.TestAllTypes.prototype.hasOptionalNestedEnum = function() {
+<a name="line951"></a>  return this.has$Value(21);
+<a name="line952"></a>};
+<a name="line953"></a>
+<a name="line954"></a>
+<a name="line955"></a>/**
+<a name="line956"></a> * @return {number} The number of values in the optional_nested_enum field.
+<a name="line957"></a> */
+<a name="line958"></a>proto2.TestAllTypes.prototype.optionalNestedEnumCount = function() {
+<a name="line959"></a>  return this.count$Values(21);
+<a name="line960"></a>};
+<a name="line961"></a>
+<a name="line962"></a>
+<a name="line963"></a>/**
+<a name="line964"></a> * Clears the values in the optional_nested_enum field.
+<a name="line965"></a> */
+<a name="line966"></a>proto2.TestAllTypes.prototype.clearOptionalNestedEnum = function() {
+<a name="line967"></a>  this.clear$Field(21);
+<a name="line968"></a>};
+<a name="line969"></a>
+<a name="line970"></a>
+<a name="line971"></a>/**
+<a name="line972"></a> * Gets the value of the optional_int64_number field.
+<a name="line973"></a> * @return {?number} The value.
+<a name="line974"></a> */
+<a name="line975"></a>proto2.TestAllTypes.prototype.getOptionalInt64Number = function() {
+<a name="line976"></a>  return /** @type {?number} */ (this.get$Value(50));
+<a name="line977"></a>};
+<a name="line978"></a>
+<a name="line979"></a>
+<a name="line980"></a>/**
+<a name="line981"></a> * Gets the value of the optional_int64_number field or the default value if not set.
+<a name="line982"></a> * @return {number} The value.
+<a name="line983"></a> */
+<a name="line984"></a>proto2.TestAllTypes.prototype.getOptionalInt64NumberOrDefault = function() {
+<a name="line985"></a>  return /** @type {number} */ (this.get$ValueOrDefault(50));
+<a name="line986"></a>};
+<a name="line987"></a>
+<a name="line988"></a>
+<a name="line989"></a>/**
+<a name="line990"></a> * Sets the value of the optional_int64_number field.
+<a name="line991"></a> * @param {number} value The value.
+<a name="line992"></a> */
+<a name="line993"></a>proto2.TestAllTypes.prototype.setOptionalInt64Number = function(value) {
+<a name="line994"></a>  this.set$Value(50, value);
+<a name="line995"></a>};
+<a name="line996"></a>
+<a name="line997"></a>
+<a name="line998"></a>/**
+<a name="line999"></a> * @return {boolean} Whether the optional_int64_number field has a value.
+<a name="line1000"></a> */
+<a name="line1001"></a>proto2.TestAllTypes.prototype.hasOptionalInt64Number = function() {
+<a name="line1002"></a>  return this.has$Value(50);
+<a name="line1003"></a>};
+<a name="line1004"></a>
+<a name="line1005"></a>
+<a name="line1006"></a>/**
+<a name="line1007"></a> * @return {number} The number of values in the optional_int64_number field.
+<a name="line1008"></a> */
+<a name="line1009"></a>proto2.TestAllTypes.prototype.optionalInt64NumberCount = function() {
+<a name="line1010"></a>  return this.count$Values(50);
+<a name="line1011"></a>};
+<a name="line1012"></a>
+<a name="line1013"></a>
+<a name="line1014"></a>/**
+<a name="line1015"></a> * Clears the values in the optional_int64_number field.
+<a name="line1016"></a> */
+<a name="line1017"></a>proto2.TestAllTypes.prototype.clearOptionalInt64Number = function() {
+<a name="line1018"></a>  this.clear$Field(50);
+<a name="line1019"></a>};
+<a name="line1020"></a>
+<a name="line1021"></a>
+<a name="line1022"></a>/**
+<a name="line1023"></a> * Gets the value of the optional_int64_string field.
+<a name="line1024"></a> * @return {?string} The value.
+<a name="line1025"></a> */
+<a name="line1026"></a>proto2.TestAllTypes.prototype.getOptionalInt64String = function() {
+<a name="line1027"></a>  return /** @type {?string} */ (this.get$Value(51));
+<a name="line1028"></a>};
+<a name="line1029"></a>
+<a name="line1030"></a>
+<a name="line1031"></a>/**
+<a name="line1032"></a> * Gets the value of the optional_int64_string field or the default value if not set.
+<a name="line1033"></a> * @return {string} The value.
+<a name="line1034"></a> */
+<a name="line1035"></a>proto2.TestAllTypes.prototype.getOptionalInt64StringOrDefault = function() {
+<a name="line1036"></a>  return /** @type {string} */ (this.get$ValueOrDefault(51));
+<a name="line1037"></a>};
+<a name="line1038"></a>
+<a name="line1039"></a>
+<a name="line1040"></a>/**
+<a name="line1041"></a> * Sets the value of the optional_int64_string field.
+<a name="line1042"></a> * @param {string} value The value.
+<a name="line1043"></a> */
+<a name="line1044"></a>proto2.TestAllTypes.prototype.setOptionalInt64String = function(value) {
+<a name="line1045"></a>  this.set$Value(51, value);
+<a name="line1046"></a>};
+<a name="line1047"></a>
+<a name="line1048"></a>
+<a name="line1049"></a>/**
+<a name="line1050"></a> * @return {boolean} Whether the optional_int64_string field has a value.
+<a name="line1051"></a> */
+<a name="line1052"></a>proto2.TestAllTypes.prototype.hasOptionalInt64String = function() {
+<a name="line1053"></a>  return this.has$Value(51);
+<a name="line1054"></a>};
+<a name="line1055"></a>
+<a name="line1056"></a>
+<a name="line1057"></a>/**
+<a name="line1058"></a> * @return {number} The number of values in the optional_int64_string field.
+<a name="line1059"></a> */
+<a name="line1060"></a>proto2.TestAllTypes.prototype.optionalInt64StringCount = function() {
+<a name="line1061"></a>  return this.count$Values(51);
+<a name="line1062"></a>};
+<a name="line1063"></a>
+<a name="line1064"></a>
+<a name="line1065"></a>/**
+<a name="line1066"></a> * Clears the values in the optional_int64_string field.
+<a name="line1067"></a> */
+<a name="line1068"></a>proto2.TestAllTypes.prototype.clearOptionalInt64String = function() {
+<a name="line1069"></a>  this.clear$Field(51);
+<a name="line1070"></a>};
+<a name="line1071"></a>
+<a name="line1072"></a>
+<a name="line1073"></a>/**
+<a name="line1074"></a> * Gets the value of the repeated_int32 field at the index given.
+<a name="line1075"></a> * @param {number} index The index to lookup.
+<a name="line1076"></a> * @return {?number} The value.
+<a name="line1077"></a> */
+<a name="line1078"></a>proto2.TestAllTypes.prototype.getRepeatedInt32 = function(index) {
+<a name="line1079"></a>  return /** @type {?number} */ (this.get$Value(31, index));
+<a name="line1080"></a>};
+<a name="line1081"></a>
+<a name="line1082"></a>
+<a name="line1083"></a>/**
+<a name="line1084"></a> * Gets the value of the repeated_int32 field at the index given or the default value if not set.
+<a name="line1085"></a> * @param {number} index The index to lookup.
+<a name="line1086"></a> * @return {number} The value.
+<a name="line1087"></a> */
+<a name="line1088"></a>proto2.TestAllTypes.prototype.getRepeatedInt32OrDefault = function(index) {
+<a name="line1089"></a>  return /** @type {number} */ (this.get$ValueOrDefault(31, index));
+<a name="line1090"></a>};
+<a name="line1091"></a>
+<a name="line1092"></a>
+<a name="line1093"></a>/**
+<a name="line1094"></a> * Adds a value to the repeated_int32 field.
+<a name="line1095"></a> * @param {number} value The value to add.
+<a name="line1096"></a> */
+<a name="line1097"></a>proto2.TestAllTypes.prototype.addRepeatedInt32 = function(value) {
+<a name="line1098"></a>  this.add$Value(31, value);
+<a name="line1099"></a>};
+<a name="line1100"></a>
+<a name="line1101"></a>
+<a name="line1102"></a>/**
+<a name="line1103"></a> * Returns the array of values in the repeated_int32 field.
+<a name="line1104"></a> * @return {!Array.&lt;number&gt;} The values in the field.
+<a name="line1105"></a> */
+<a name="line1106"></a>proto2.TestAllTypes.prototype.repeatedInt32Array = function() {
+<a name="line1107"></a>  return /** @type {!Array.&lt;number&gt;} */ (this.array$Values(31));
+<a name="line1108"></a>};
+<a name="line1109"></a>
+<a name="line1110"></a>
+<a name="line1111"></a>/**
+<a name="line1112"></a> * @return {boolean} Whether the repeated_int32 field has a value.
+<a name="line1113"></a> */
+<a name="line1114"></a>proto2.TestAllTypes.prototype.hasRepeatedInt32 = function() {
+<a name="line1115"></a>  return this.has$Value(31);
+<a name="line1116"></a>};
+<a name="line1117"></a>
+<a name="line1118"></a>
+<a name="line1119"></a>/**
+<a name="line1120"></a> * @return {number} The number of values in the repeated_int32 field.
+<a name="line1121"></a> */
+<a name="line1122"></a>proto2.TestAllTypes.prototype.repeatedInt32Count = function() {
+<a name="line1123"></a>  return this.count$Values(31);
+<a name="line1124"></a>};
+<a name="line1125"></a>
+<a name="line1126"></a>
+<a name="line1127"></a>/**
+<a name="line1128"></a> * Clears the values in the repeated_int32 field.
+<a name="line1129"></a> */
+<a name="line1130"></a>proto2.TestAllTypes.prototype.clearRepeatedInt32 = function() {
+<a name="line1131"></a>  this.clear$Field(31);
+<a name="line1132"></a>};
+<a name="line1133"></a>
+<a name="line1134"></a>
+<a name="line1135"></a>/**
+<a name="line1136"></a> * Gets the value of the repeated_int64 field at the index given.
+<a name="line1137"></a> * @param {number} index The index to lookup.
+<a name="line1138"></a> * @return {?string} The value.
+<a name="line1139"></a> */
+<a name="line1140"></a>proto2.TestAllTypes.prototype.getRepeatedInt64 = function(index) {
+<a name="line1141"></a>  return /** @type {?string} */ (this.get$Value(32, index));
+<a name="line1142"></a>};
+<a name="line1143"></a>
+<a name="line1144"></a>
+<a name="line1145"></a>/**
+<a name="line1146"></a> * Gets the value of the repeated_int64 field at the index given or the default value if not set.
+<a name="line1147"></a> * @param {number} index The index to lookup.
+<a name="line1148"></a> * @return {string} The value.
+<a name="line1149"></a> */
+<a name="line1150"></a>proto2.TestAllTypes.prototype.getRepeatedInt64OrDefault = function(index) {
+<a name="line1151"></a>  return /** @type {string} */ (this.get$ValueOrDefault(32, index));
+<a name="line1152"></a>};
+<a name="line1153"></a>
+<a name="line1154"></a>
+<a name="line1155"></a>/**
+<a name="line1156"></a> * Adds a value to the repeated_int64 field.
+<a name="line1157"></a> * @param {string} value The value to add.
+<a name="line1158"></a> */
+<a name="line1159"></a>proto2.TestAllTypes.prototype.addRepeatedInt64 = function(value) {
+<a name="line1160"></a>  this.add$Value(32, value);
+<a name="line1161"></a>};
+<a name="line1162"></a>
+<a name="line1163"></a>
+<a name="line1164"></a>/**
+<a name="line1165"></a> * Returns the array of values in the repeated_int64 field.
+<a name="line1166"></a> * @return {!Array.&lt;string&gt;} The values in the field.
+<a name="line1167"></a> */
+<a name="line1168"></a>proto2.TestAllTypes.prototype.repeatedInt64Array = function() {
+<a name="line1169"></a>  return /** @type {!Array.&lt;string&gt;} */ (this.array$Values(32));
+<a name="line1170"></a>};
+<a name="line1171"></a>
+<a name="line1172"></a>
+<a name="line1173"></a>/**
+<a name="line1174"></a> * @return {boolean} Whether the repeated_int64 field has a value.
+<a name="line1175"></a> */
+<a name="line1176"></a>proto2.TestAllTypes.prototype.hasRepeatedInt64 = function() {
+<a name="line1177"></a>  return this.has$Value(32);
+<a name="line1178"></a>};
+<a name="line1179"></a>
+<a name="line1180"></a>
+<a name="line1181"></a>/**
+<a name="line1182"></a> * @return {number} The number of values in the repeated_int64 field.
+<a name="line1183"></a> */
+<a name="line1184"></a>proto2.TestAllTypes.prototype.repeatedInt64Count = function() {
+<a name="line1185"></a>  return this.count$Values(32);
+<a name="line1186"></a>};
+<a name="line1187"></a>
+<a name="line1188"></a>
+<a name="line1189"></a>/**
+<a name="line1190"></a> * Clears the values in the repeated_int64 field.
+<a name="line1191"></a> */
+<a name="line1192"></a>proto2.TestAllTypes.prototype.clearRepeatedInt64 = function() {
+<a name="line1193"></a>  this.clear$Field(32);
+<a name="line1194"></a>};
+<a name="line1195"></a>
+<a name="line1196"></a>
+<a name="line1197"></a>/**
+<a name="line1198"></a> * Gets the value of the repeated_uint32 field at the index given.
+<a name="line1199"></a> * @param {number} index The index to lookup.
+<a name="line1200"></a> * @return {?number} The value.
+<a name="line1201"></a> */
+<a name="line1202"></a>proto2.TestAllTypes.prototype.getRepeatedUint32 = function(index) {
+<a name="line1203"></a>  return /** @type {?number} */ (this.get$Value(33, index));
+<a name="line1204"></a>};
+<a name="line1205"></a>
+<a name="line1206"></a>
+<a name="line1207"></a>/**
+<a name="line1208"></a> * Gets the value of the repeated_uint32 field at the index given or the default value if not set.
+<a name="line1209"></a> * @param {number} index The index to lookup.
+<a name="line1210"></a> * @return {number} The value.
+<a name="line1211"></a> */
+<a name="line1212"></a>proto2.TestAllTypes.prototype.getRepeatedUint32OrDefault = function(index) {
+<a name="line1213"></a>  return /** @type {number} */ (this.get$ValueOrDefault(33, index));
+<a name="line1214"></a>};
+<a name="line1215"></a>
+<a name="line1216"></a>
+<a name="line1217"></a>/**
+<a name="line1218"></a> * Adds a value to the repeated_uint32 field.
+<a name="line1219"></a> * @param {number} value The value to add.
+<a name="line1220"></a> */
+<a name="line1221"></a>proto2.TestAllTypes.prototype.addRepeatedUint32 = function(value) {
+<a name="line1222"></a>  this.add$Value(33, value);
+<a name="line1223"></a>};
+<a name="line1224"></a>
+<a name="line1225"></a>
+<a name="line1226"></a>/**
+<a name="line1227"></a> * Returns the array of values in the repeated_uint32 field.
+<a name="line1228"></a> * @return {!Array.&lt;number&gt;} The values in the field.
+<a name="line1229"></a> */
+<a name="line1230"></a>proto2.TestAllTypes.prototype.repeatedUint32Array = function() {
+<a name="line1231"></a>  return /** @type {!Array.&lt;number&gt;} */ (this.array$Values(33));
+<a name="line1232"></a>};
+<a name="line1233"></a>
+<a name="line1234"></a>
+<a name="line1235"></a>/**
+<a name="line1236"></a> * @return {boolean} Whether the repeated_uint32 field has a value.
+<a name="line1237"></a> */
+<a name="line1238"></a>proto2.TestAllTypes.prototype.hasRepeatedUint32 = function() {
+<a name="line1239"></a>  return this.has$Value(33);
+<a name="line1240"></a>};
+<a name="line1241"></a>
+<a name="line1242"></a>
+<a name="line1243"></a>/**
+<a name="line1244"></a> * @return {number} The number of values in the repeated_uint32 field.
+<a name="line1245"></a> */
+<a name="line1246"></a>proto2.TestAllTypes.prototype.repeatedUint32Count = function() {
+<a name="line1247"></a>  return this.count$Values(33);
+<a name="line1248"></a>};
+<a name="line1249"></a>
+<a name="line1250"></a>
+<a name="line1251"></a>/**
+<a name="line1252"></a> * Clears the values in the repeated_uint32 field.
+<a name="line1253"></a> */
+<a name="line1254"></a>proto2.TestAllTypes.prototype.clearRepeatedUint32 = function() {
+<a name="line1255"></a>  this.clear$Field(33);
+<a name="line1256"></a>};
+<a name="line1257"></a>
+<a name="line1258"></a>
+<a name="line1259"></a>/**
+<a name="line1260"></a> * Gets the value of the repeated_uint64 field at the index given.
+<a name="line1261"></a> * @param {number} index The index to lookup.
+<a name="line1262"></a> * @return {?string} The value.
+<a name="line1263"></a> */
+<a name="line1264"></a>proto2.TestAllTypes.prototype.getRepeatedUint64 = function(index) {
+<a name="line1265"></a>  return /** @type {?string} */ (this.get$Value(34, index));
+<a name="line1266"></a>};
+<a name="line1267"></a>
+<a name="line1268"></a>
+<a name="line1269"></a>/**
+<a name="line1270"></a> * Gets the value of the repeated_uint64 field at the index given or the default value if not set.
+<a name="line1271"></a> * @param {number} index The index to lookup.
+<a name="line1272"></a> * @return {string} The value.
+<a name="line1273"></a> */
+<a name="line1274"></a>proto2.TestAllTypes.prototype.getRepeatedUint64OrDefault = function(index) {
+<a name="line1275"></a>  return /** @type {string} */ (this.get$ValueOrDefault(34, index));
+<a name="line1276"></a>};
+<a name="line1277"></a>
+<a name="line1278"></a>
+<a name="line1279"></a>/**
+<a name="line1280"></a> * Adds a value to the repeated_uint64 field.
+<a name="line1281"></a> * @param {string} value The value to add.
+<a name="line1282"></a> */
+<a name="line1283"></a>proto2.TestAllTypes.prototype.addRepeatedUint64 = function(value) {
+<a name="line1284"></a>  this.add$Value(34, value);
+<a name="line1285"></a>};
+<a name="line1286"></a>
+<a name="line1287"></a>
+<a name="line1288"></a>/**
+<a name="line1289"></a> * Returns the array of values in the repeated_uint64 field.
+<a name="line1290"></a> * @return {!Array.&lt;string&gt;} The values in the field.
+<a name="line1291"></a> */
+<a name="line1292"></a>proto2.TestAllTypes.prototype.repeatedUint64Array = function() {
+<a name="line1293"></a>  return /** @type {!Array.&lt;string&gt;} */ (this.array$Values(34));
+<a name="line1294"></a>};
+<a name="line1295"></a>
+<a name="line1296"></a>
+<a name="line1297"></a>/**
+<a name="line1298"></a> * @return {boolean} Whether the repeated_uint64 field has a value.
+<a name="line1299"></a> */
+<a name="line1300"></a>proto2.TestAllTypes.prototype.hasRepeatedUint64 = function() {
+<a name="line1301"></a>  return this.has$Value(34);
+<a name="line1302"></a>};
+<a name="line1303"></a>
+<a name="line1304"></a>
+<a name="line1305"></a>/**
+<a name="line1306"></a> * @return {number} The number of values in the repeated_uint64 field.
+<a name="line1307"></a> */
+<a name="line1308"></a>proto2.TestAllTypes.prototype.repeatedUint64Count = function() {
+<a name="line1309"></a>  return this.count$Values(34);
+<a name="line1310"></a>};
+<a name="line1311"></a>
+<a name="line1312"></a>
+<a name="line1313"></a>/**
+<a name="line1314"></a> * Clears the values in the repeated_uint64 field.
+<a name="line1315"></a> */
+<a name="line1316"></a>proto2.TestAllTypes.prototype.clearRepeatedUint64 = function() {
+<a name="line1317"></a>  this.clear$Field(34);
+<a name="line1318"></a>};
+<a name="line1319"></a>
+<a name="line1320"></a>
+<a name="line1321"></a>/**
+<a name="line1322"></a> * Gets the value of the repeated_sint32 field at the index given.
+<a name="line1323"></a> * @param {number} index The index to lookup.
+<a name="line1324"></a> * @return {?number} The value.
+<a name="line1325"></a> */
+<a name="line1326"></a>proto2.TestAllTypes.prototype.getRepeatedSint32 = function(index) {
+<a name="line1327"></a>  return /** @type {?number} */ (this.get$Value(35, index));
+<a name="line1328"></a>};
+<a name="line1329"></a>
+<a name="line1330"></a>
+<a name="line1331"></a>/**
+<a name="line1332"></a> * Gets the value of the repeated_sint32 field at the index given or the default value if not set.
+<a name="line1333"></a> * @param {number} index The index to lookup.
+<a name="line1334"></a> * @return {number} The value.
+<a name="line1335"></a> */
+<a name="line1336"></a>proto2.TestAllTypes.prototype.getRepeatedSint32OrDefault = function(index) {
+<a name="line1337"></a>  return /** @type {number} */ (this.get$ValueOrDefault(35, index));
+<a name="line1338"></a>};
+<a name="line1339"></a>
+<a name="line1340"></a>
+<a name="line1341"></a>/**
+<a name="line1342"></a> * Adds a value to the repeated_sint32 field.
+<a name="line1343"></a> * @param {number} value The value to add.
+<a name="line1344"></a> */
+<a name="line1345"></a>proto2.TestAllTypes.prototype.addRepeatedSint32 = function(value) {
+<a name="line1346"></a>  this.add$Value(35, value);
+<a name="line1347"></a>};
+<a name="line1348"></a>
+<a name="line1349"></a>
+<a name="line1350"></a>/**
+<a name="line1351"></a> * Returns the array of values in the repeated_sint32 field.
+<a name="line1352"></a> * @return {!Array.&lt;number&gt;} The values in the field.
+<a name="line1353"></a> */
+<a name="line1354"></a>proto2.TestAllTypes.prototype.repeatedSint32Array = function() {
+<a name="line1355"></a>  return /** @type {!Array.&lt;number&gt;} */ (this.array$Values(35));
+<a name="line1356"></a>};
+<a name="line1357"></a>
+<a name="line1358"></a>
+<a name="line1359"></a>/**
+<a name="line1360"></a> * @return {boolean} Whether the repeated_sint32 field has a value.
+<a name="line1361"></a> */
+<a name="line1362"></a>proto2.TestAllTypes.prototype.hasRepeatedSint32 = function() {
+<a name="line1363"></a>  return this.has$Value(35);
+<a name="line1364"></a>};
+<a name="line1365"></a>
+<a name="line1366"></a>
+<a name="line1367"></a>/**
+<a name="line1368"></a> * @return {number} The number of values in the repeated_sint32 field.
+<a name="line1369"></a> */
+<a name="line1370"></a>proto2.TestAllTypes.prototype.repeatedSint32Count = function() {
+<a name="line1371"></a>  return this.count$Values(35);
+<a name="line1372"></a>};
+<a name="line1373"></a>
+<a name="line1374"></a>
+<a name="line1375"></a>/**
+<a name="line1376"></a> * Clears the values in the repeated_sint32 field.
+<a name="line1377"></a> */
+<a name="line1378"></a>proto2.TestAllTypes.prototype.clearRepeatedSint32 = function() {
+<a name="line1379"></a>  this.clear$Field(35);
+<a name="line1380"></a>};
+<a name="line1381"></a>
+<a name="line1382"></a>
+<a name="line1383"></a>/**
+<a name="line1384"></a> * Gets the value of the repeated_sint64 field at the index given.
+<a name="line1385"></a> * @param {number} index The index to lookup.
+<a name="line1386"></a> * @return {?string} The value.
+<a name="line1387"></a> */
+<a name="line1388"></a>proto2.TestAllTypes.prototype.getRepeatedSint64 = function(index) {
+<a name="line1389"></a>  return /** @type {?string} */ (this.get$Value(36, index));
+<a name="line1390"></a>};
+<a name="line1391"></a>
+<a name="line1392"></a>
+<a name="line1393"></a>/**
+<a name="line1394"></a> * Gets the value of the repeated_sint64 field at the index given or the default value if not set.
+<a name="line1395"></a> * @param {number} index The index to lookup.
+<a name="line1396"></a> * @return {string} The value.
+<a name="line1397"></a> */
+<a name="line1398"></a>proto2.TestAllTypes.prototype.getRepeatedSint64OrDefault = function(index) {
+<a name="line1399"></a>  return /** @type {string} */ (this.get$ValueOrDefault(36, index));
+<a name="line1400"></a>};
+<a name="line1401"></a>
+<a name="line1402"></a>
+<a name="line1403"></a>/**
+<a name="line1404"></a> * Adds a value to the repeated_sint64 field.
+<a name="line1405"></a> * @param {string} value The value to add.
+<a name="line1406"></a> */
+<a name="line1407"></a>proto2.TestAllTypes.prototype.addRepeatedSint64 = function(value) {
+<a name="line1408"></a>  this.add$Value(36, value);
+<a name="line1409"></a>};
+<a name="line1410"></a>
+<a name="line1411"></a>
+<a name="line1412"></a>/**
+<a name="line1413"></a> * Returns the array of values in the repeated_sint64 field.
+<a name="line1414"></a> * @return {!Array.&lt;string&gt;} The values in the field.
+<a name="line1415"></a> */
+<a name="line1416"></a>proto2.TestAllTypes.prototype.repeatedSint64Array = function() {
+<a name="line1417"></a>  return /** @type {!Array.&lt;string&gt;} */ (this.array$Values(36));
+<a name="line1418"></a>};
+<a name="line1419"></a>
+<a name="line1420"></a>
+<a name="line1421"></a>/**
+<a name="line1422"></a> * @return {boolean} Whether the repeated_sint64 field has a value.
+<a name="line1423"></a> */
+<a name="line1424"></a>proto2.TestAllTypes.prototype.hasRepeatedSint64 = function() {
+<a name="line1425"></a>  return this.has$Value(36);
+<a name="line1426"></a>};
+<a name="line1427"></a>
+<a name="line1428"></a>
+<a name="line1429"></a>/**
+<a name="line1430"></a> * @return {number} The number of values in the repeated_sint64 field.
+<a name="line1431"></a> */
+<a name="line1432"></a>proto2.TestAllTypes.prototype.repeatedSint64Count = function() {
+<a name="line1433"></a>  return this.count$Values(36);
+<a name="line1434"></a>};
+<a name="line1435"></a>
+<a name="line1436"></a>
+<a name="line1437"></a>/**
+<a name="line1438"></a> * Clears the values in the repeated_sint64 field.
+<a name="line1439"></a> */
+<a name="line1440"></a>proto2.TestAllTypes.prototype.clearRepeatedSint64 = function() {
+<a name="line1441"></a>  this.clear$Field(36);
+<a name="line1442"></a>};
+<a name="line1443"></a>
+<a name="line1444"></a>
+<a name="line1445"></a>/**
+<a name="line1446"></a> * Gets the value of the repeated_fixed32 field at the index given.
+<a name="line1447"></a> * @param {number} index The index to lookup.
+<a name="line1448"></a> * @return {?number} The value.
+<a name="line1449"></a> */
+<a name="line1450"></a>proto2.TestAllTypes.prototype.getRepeatedFixed32 = function(index) {
+<a name="line1451"></a>  return /** @type {?number} */ (this.get$Value(37, index));
+<a name="line1452"></a>};
+<a name="line1453"></a>
+<a name="line1454"></a>
+<a name="line1455"></a>/**
+<a name="line1456"></a> * Gets the value of the repeated_fixed32 field at the index given or the default value if not set.
+<a name="line1457"></a> * @param {number} index The index to lookup.
+<a name="line1458"></a> * @return {number} The value.
+<a name="line1459"></a> */
+<a name="line1460"></a>proto2.TestAllTypes.prototype.getRepeatedFixed32OrDefault = function(index) {
+<a name="line1461"></a>  return /** @type {number} */ (this.get$ValueOrDefault(37, index));
+<a name="line1462"></a>};
+<a name="line1463"></a>
+<a name="line1464"></a>
+<a name="line1465"></a>/**
+<a name="line1466"></a> * Adds a value to the repeated_fixed32 field.
+<a name="line1467"></a> * @param {number} value The value to add.
+<a name="line1468"></a> */
+<a name="line1469"></a>proto2.TestAllTypes.prototype.addRepeatedFixed32 = function(value) {
+<a name="line1470"></a>  this.add$Value(37, value);
+<a name="line1471"></a>};
+<a name="line1472"></a>
+<a name="line1473"></a>
+<a name="line1474"></a>/**
+<a name="line1475"></a> * Returns the array of values in the repeated_fixed32 field.
+<a name="line1476"></a> * @return {!Array.&lt;number&gt;} The values in the field.
+<a name="line1477"></a> */
+<a name="line1478"></a>proto2.TestAllTypes.prototype.repeatedFixed32Array = function() {
+<a name="line1479"></a>  return /** @type {!Array.&lt;number&gt;} */ (this.array$Values(37));
+<a name="line1480"></a>};
+<a name="line1481"></a>
+<a name="line1482"></a>
+<a name="line1483"></a>/**
+<a name="line1484"></a> * @return {boolean} Whether the repeated_fixed32 field has a value.
+<a name="line1485"></a> */
+<a name="line1486"></a>proto2.TestAllTypes.prototype.hasRepeatedFixed32 = function() {
+<a name="line1487"></a>  return this.has$Value(37);
+<a name="line1488"></a>};
+<a name="line1489"></a>
+<a name="line1490"></a>
+<a name="line1491"></a>/**
+<a name="line1492"></a> * @return {number} The number of values in the repeated_fixed32 field.
+<a name="line1493"></a> */
+<a name="line1494"></a>proto2.TestAllTypes.prototype.repeatedFixed32Count = function() {
+<a name="line1495"></a>  return this.count$Values(37);
+<a name="line1496"></a>};
+<a name="line1497"></a>
+<a name="line1498"></a>
+<a name="line1499"></a>/**
+<a name="line1500"></a> * Clears the values in the repeated_fixed32 field.
+<a name="line1501"></a> */
+<a name="line1502"></a>proto2.TestAllTypes.prototype.clearRepeatedFixed32 = function() {
+<a name="line1503"></a>  this.clear$Field(37);
+<a name="line1504"></a>};
+<a name="line1505"></a>
+<a name="line1506"></a>
+<a name="line1507"></a>/**
+<a name="line1508"></a> * Gets the value of the repeated_fixed64 field at the index given.
+<a name="line1509"></a> * @param {number} index The index to lookup.
+<a name="line1510"></a> * @return {?string} The value.
+<a name="line1511"></a> */
+<a name="line1512"></a>proto2.TestAllTypes.prototype.getRepeatedFixed64 = function(index) {
+<a name="line1513"></a>  return /** @type {?string} */ (this.get$Value(38, index));
+<a name="line1514"></a>};
+<a name="line1515"></a>
+<a name="line1516"></a>
+<a name="line1517"></a>/**
+<a name="line1518"></a> * Gets the value of the repeated_fixed64 field at the index given or the default value if not set.
+<a name="line1519"></a> * @param {number} index The index to lookup.
+<a name="line1520"></a> * @return {string} The value.
+<a name="line1521"></a> */
+<a name="line1522"></a>proto2.TestAllTypes.prototype.getRepeatedFixed64OrDefault = function(index) {
+<a name="line1523"></a>  return /** @type {string} */ (this.get$ValueOrDefault(38, index));
+<a name="line1524"></a>};
+<a name="line1525"></a>
+<a name="line1526"></a>
+<a name="line1527"></a>/**
+<a name="line1528"></a> * Adds a value to the repeated_fixed64 field.
+<a name="line1529"></a> * @param {string} value The value to add.
+<a name="line1530"></a> */
+<a name="line1531"></a>proto2.TestAllTypes.prototype.addRepeatedFixed64 = function(value) {
+<a name="line1532"></a>  this.add$Value(38, value);
+<a name="line1533"></a>};
+<a name="line1534"></a>
+<a name="line1535"></a>
+<a name="line1536"></a>/**
+<a name="line1537"></a> * Returns the array of values in the repeated_fixed64 field.
+<a name="line1538"></a> * @return {!Array.&lt;string&gt;} The values in the field.
+<a name="line1539"></a> */
+<a name="line1540"></a>proto2.TestAllTypes.prototype.repeatedFixed64Array = function() {
+<a name="line1541"></a>  return /** @type {!Array.&lt;string&gt;} */ (this.array$Values(38));
+<a name="line1542"></a>};
+<a name="line1543"></a>
+<a name="line1544"></a>
+<a name="line1545"></a>/**
+<a name="line1546"></a> * @return {boolean} Whether the repeated_fixed64 field has a value.
+<a name="line1547"></a> */
+<a name="line1548"></a>proto2.TestAllTypes.prototype.hasRepeatedFixed64 = function() {
+<a name="line1549"></a>  return this.has$Value(38);
+<a name="line1550"></a>};
+<a name="line1551"></a>
+<a name="line1552"></a>
+<a name="line1553"></a>/**
+<a name="line1554"></a> * @return {number} The number of values in the repeated_fixed64 field.
+<a name="line1555"></a> */
+<a name="line1556"></a>proto2.TestAllTypes.prototype.repeatedFixed64Count = function() {
+<a name="line1557"></a>  return this.count$Values(38);
+<a name="line1558"></a>};
+<a name="line1559"></a>
+<a name="line1560"></a>
+<a name="line1561"></a>/**
+<a name="line1562"></a> * Clears the values in the repeated_fixed64 field.
+<a name="line1563"></a> */
+<a name="line1564"></a>proto2.TestAllTypes.prototype.clearRepeatedFixed64 = function() {
+<a name="line1565"></a>  this.clear$Field(38);
+<a name="line1566"></a>};
+<a name="line1567"></a>
+<a name="line1568"></a>
+<a name="line1569"></a>/**
+<a name="line1570"></a> * Gets the value of the repeated_sfixed32 field at the index given.
+<a name="line1571"></a> * @param {number} index The index to lookup.
+<a name="line1572"></a> * @return {?number} The value.
+<a name="line1573"></a> */
+<a name="line1574"></a>proto2.TestAllTypes.prototype.getRepeatedSfixed32 = function(index) {
+<a name="line1575"></a>  return /** @type {?number} */ (this.get$Value(39, index));
+<a name="line1576"></a>};
+<a name="line1577"></a>
+<a name="line1578"></a>
+<a name="line1579"></a>/**
+<a name="line1580"></a> * Gets the value of the repeated_sfixed32 field at the index given or the default value if not set.
+<a name="line1581"></a> * @param {number} index The index to lookup.
+<a name="line1582"></a> * @return {number} The value.
+<a name="line1583"></a> */
+<a name="line1584"></a>proto2.TestAllTypes.prototype.getRepeatedSfixed32OrDefault = function(index) {
+<a name="line1585"></a>  return /** @type {number} */ (this.get$ValueOrDefault(39, index));
+<a name="line1586"></a>};
+<a name="line1587"></a>
+<a name="line1588"></a>
+<a name="line1589"></a>/**
+<a name="line1590"></a> * Adds a value to the repeated_sfixed32 field.
+<a name="line1591"></a> * @param {number} value The value to add.
+<a name="line1592"></a> */
+<a name="line1593"></a>proto2.TestAllTypes.prototype.addRepeatedSfixed32 = function(value) {
+<a name="line1594"></a>  this.add$Value(39, value);
+<a name="line1595"></a>};
+<a name="line1596"></a>
+<a name="line1597"></a>
+<a name="line1598"></a>/**
+<a name="line1599"></a> * Returns the array of values in the repeated_sfixed32 field.
+<a name="line1600"></a> * @return {!Array.&lt;number&gt;} The values in the field.
+<a name="line1601"></a> */
+<a name="line1602"></a>proto2.TestAllTypes.prototype.repeatedSfixed32Array = function() {
+<a name="line1603"></a>  return /** @type {!Array.&lt;number&gt;} */ (this.array$Values(39));
+<a name="line1604"></a>};
+<a name="line1605"></a>
+<a name="line1606"></a>
+<a name="line1607"></a>/**
+<a name="line1608"></a> * @return {boolean} Whether the repeated_sfixed32 field has a value.
+<a name="line1609"></a> */
+<a name="line1610"></a>proto2.TestAllTypes.prototype.hasRepeatedSfixed32 = function() {
+<a name="line1611"></a>  return this.has$Value(39);
+<a name="line1612"></a>};
+<a name="line1613"></a>
+<a name="line1614"></a>
+<a name="line1615"></a>/**
+<a name="line1616"></a> * @return {number} The number of values in the repeated_sfixed32 field.
+<a name="line1617"></a> */
+<a name="line1618"></a>proto2.TestAllTypes.prototype.repeatedSfixed32Count = function() {
+<a name="line1619"></a>  return this.count$Values(39);
+<a name="line1620"></a>};
+<a name="line1621"></a>
+<a name="line1622"></a>
+<a name="line1623"></a>/**
+<a name="line1624"></a> * Clears the values in the repeated_sfixed32 field.
+<a name="line1625"></a> */
+<a name="line1626"></a>proto2.TestAllTypes.prototype.clearRepeatedSfixed32 = function() {
+<a name="line1627"></a>  this.clear$Field(39);
+<a name="line1628"></a>};
+<a name="line1629"></a>
+<a name="line1630"></a>
+<a name="line1631"></a>/**
+<a name="line1632"></a> * Gets the value of the repeated_sfixed64 field at the index given.
+<a name="line1633"></a> * @param {number} index The index to lookup.
+<a name="line1634"></a> * @return {?string} The value.
+<a name="line1635"></a> */
+<a name="line1636"></a>proto2.TestAllTypes.prototype.getRepeatedSfixed64 = function(index) {
+<a name="line1637"></a>  return /** @type {?string} */ (this.get$Value(40, index));
+<a name="line1638"></a>};
+<a name="line1639"></a>
+<a name="line1640"></a>
+<a name="line1641"></a>/**
+<a name="line1642"></a> * Gets the value of the repeated_sfixed64 field at the index given or the default value if not set.
+<a name="line1643"></a> * @param {number} index The index to lookup.
+<a name="line1644"></a> * @return {string} The value.
+<a name="line1645"></a> */
+<a name="line1646"></a>proto2.TestAllTypes.prototype.getRepeatedSfixed64OrDefault = function(index) {
+<a name="line1647"></a>  return /** @type {string} */ (this.get$ValueOrDefault(40, index));
+<a name="line1648"></a>};
+<a name="line1649"></a>
+<a name="line1650"></a>
+<a name="line1651"></a>/**
+<a name="line1652"></a> * Adds a value to the repeated_sfixed64 field.
+<a name="line1653"></a> * @param {string} value The value to add.
+<a name="line1654"></a> */
+<a name="line1655"></a>proto2.TestAllTypes.prototype.addRepeatedSfixed64 = function(value) {
+<a name="line1656"></a>  this.add$Value(40, value);
+<a name="line1657"></a>};
+<a name="line1658"></a>
+<a name="line1659"></a>
+<a name="line1660"></a>/**
+<a name="line1661"></a> * Returns the array of values in the repeated_sfixed64 field.
+<a name="line1662"></a> * @return {!Array.&lt;string&gt;} The values in the field.
+<a name="line1663"></a> */
+<a name="line1664"></a>proto2.TestAllTypes.prototype.repeatedSfixed64Array = function() {
+<a name="line1665"></a>  return /** @type {!Array.&lt;string&gt;} */ (this.array$Values(40));
+<a name="line1666"></a>};
+<a name="line1667"></a>
+<a name="line1668"></a>
+<a name="line1669"></a>/**
+<a name="line1670"></a> * @return {boolean} Whether the repeated_sfixed64 field has a value.
+<a name="line1671"></a> */
+<a name="line1672"></a>proto2.TestAllTypes.prototype.hasRepeatedSfixed64 = function() {
+<a name="line1673"></a>  return this.has$Value(40);
+<a name="line1674"></a>};
+<a name="line1675"></a>
+<a name="line1676"></a>
+<a name="line1677"></a>/**
+<a name="line1678"></a> * @return {number} The number of values in the repeated_sfixed64 field.
+<a name="line1679"></a> */
+<a name="line1680"></a>proto2.TestAllTypes.prototype.repeatedSfixed64Count = function() {
+<a name="line1681"></a>  return this.count$Values(40);
+<a name="line1682"></a>};
+<a name="line1683"></a>
+<a name="line1684"></a>
+<a name="line1685"></a>/**
+<a name="line1686"></a> * Clears the values in the repeated_sfixed64 field.
+<a name="line1687"></a> */
+<a name="line1688"></a>proto2.TestAllTypes.prototype.clearRepeatedSfixed64 = function() {
+<a name="line1689"></a>  this.clear$Field(40);
+<a name="line1690"></a>};
+<a name="line1691"></a>
+<a name="line1692"></a>
+<a name="line1693"></a>/**
+<a name="line1694"></a> * Gets the value of the repeated_float field at the index given.
+<a name="line1695"></a> * @param {number} index The index to lookup.
+<a name="line1696"></a> * @return {?number} The value.
+<a name="line1697"></a> */
+<a name="line1698"></a>proto2.TestAllTypes.prototype.getRepeatedFloat = function(index) {
+<a name="line1699"></a>  return /** @type {?number} */ (this.get$Value(41, index));
+<a name="line1700"></a>};
+<a name="line1701"></a>
+<a name="line1702"></a>
+<a name="line1703"></a>/**
+<a name="line1704"></a> * Gets the value of the repeated_float field at the index given or the default value if not set.
+<a name="line1705"></a> * @param {number} index The index to lookup.
+<a name="line1706"></a> * @return {number} The value.
+<a name="line1707"></a> */
+<a name="line1708"></a>proto2.TestAllTypes.prototype.getRepeatedFloatOrDefault = function(index) {
+<a name="line1709"></a>  return /** @type {number} */ (this.get$ValueOrDefault(41, index));
+<a name="line1710"></a>};
+<a name="line1711"></a>
+<a name="line1712"></a>
+<a name="line1713"></a>/**
+<a name="line1714"></a> * Adds a value to the repeated_float field.
+<a name="line1715"></a> * @param {number} value The value to add.
+<a name="line1716"></a> */
+<a name="line1717"></a>proto2.TestAllTypes.prototype.addRepeatedFloat = function(value) {
+<a name="line1718"></a>  this.add$Value(41, value);
+<a name="line1719"></a>};
+<a name="line1720"></a>
+<a name="line1721"></a>
+<a name="line1722"></a>/**
+<a name="line1723"></a> * Returns the array of values in the repeated_float field.
+<a name="line1724"></a> * @return {!Array.&lt;number&gt;} The values in the field.
+<a name="line1725"></a> */
+<a name="line1726"></a>proto2.TestAllTypes.prototype.repeatedFloatArray = function() {
+<a name="line1727"></a>  return /** @type {!Array.&lt;number&gt;} */ (this.array$Values(41));
+<a name="line1728"></a>};
+<a name="line1729"></a>
+<a name="line1730"></a>
+<a name="line1731"></a>/**
+<a name="line1732"></a> * @return {boolean} Whether the repeated_float field has a value.
+<a name="line1733"></a> */
+<a name="line1734"></a>proto2.TestAllTypes.prototype.hasRepeatedFloat = function() {
+<a name="line1735"></a>  return this.has$Value(41);
+<a name="line1736"></a>};
+<a name="line1737"></a>
+<a name="line1738"></a>
+<a name="line1739"></a>/**
+<a name="line1740"></a> * @return {number} The number of values in the repeated_float field.
+<a name="line1741"></a> */
+<a name="line1742"></a>proto2.TestAllTypes.prototype.repeatedFloatCount = function() {
+<a name="line1743"></a>  return this.count$Values(41);
+<a name="line1744"></a>};
+<a name="line1745"></a>
+<a name="line1746"></a>
+<a name="line1747"></a>/**
+<a name="line1748"></a> * Clears the values in the repeated_float field.
+<a name="line1749"></a> */
+<a name="line1750"></a>proto2.TestAllTypes.prototype.clearRepeatedFloat = function() {
+<a name="line1751"></a>  this.clear$Field(41);
+<a name="line1752"></a>};
+<a name="line1753"></a>
+<a name="line1754"></a>
+<a name="line1755"></a>/**
+<a name="line1756"></a> * Gets the value of the repeated_double field at the index given.
+<a name="line1757"></a> * @param {number} index The index to lookup.
+<a name="line1758"></a> * @return {?number} The value.
+<a name="line1759"></a> */
+<a name="line1760"></a>proto2.TestAllTypes.prototype.getRepeatedDouble = function(index) {
+<a name="line1761"></a>  return /** @type {?number} */ (this.get$Value(42, index));
+<a name="line1762"></a>};
+<a name="line1763"></a>
+<a name="line1764"></a>
+<a name="line1765"></a>/**
+<a name="line1766"></a> * Gets the value of the repeated_double field at the index given or the default value if not set.
+<a name="line1767"></a> * @param {number} index The index to lookup.
+<a name="line1768"></a> * @return {number} The value.
+<a name="line1769"></a> */
+<a name="line1770"></a>proto2.TestAllTypes.prototype.getRepeatedDoubleOrDefault = function(index) {
+<a name="line1771"></a>  return /** @type {number} */ (this.get$ValueOrDefault(42, index));
+<a name="line1772"></a>};
+<a name="line1773"></a>
+<a name="line1774"></a>
+<a name="line1775"></a>/**
+<a name="line1776"></a> * Adds a value to the repeated_double field.
+<a name="line1777"></a> * @param {number} value The value to add.
+<a name="line1778"></a> */
+<a name="line1779"></a>proto2.TestAllTypes.prototype.addRepeatedDouble = function(value) {
+<a name="line1780"></a>  this.add$Value(42, value);
+<a name="line1781"></a>};
+<a name="line1782"></a>
+<a name="line1783"></a>
+<a name="line1784"></a>/**
+<a name="line1785"></a> * Returns the array of values in the repeated_double field.
+<a name="line1786"></a> * @return {!Array.&lt;number&gt;} The values in the field.
+<a name="line1787"></a> */
+<a name="line1788"></a>proto2.TestAllTypes.prototype.repeatedDoubleArray = function() {
+<a name="line1789"></a>  return /** @type {!Array.&lt;number&gt;} */ (this.array$Values(42));
+<a name="line1790"></a>};
+<a name="line1791"></a>
+<a name="line1792"></a>
+<a name="line1793"></a>/**
+<a name="line1794"></a> * @return {boolean} Whether the repeated_double field has a value.
+<a name="line1795"></a> */
+<a name="line1796"></a>proto2.TestAllTypes.prototype.hasRepeatedDouble = function() {
+<a name="line1797"></a>  return this.has$Value(42);
+<a name="line1798"></a>};
+<a name="line1799"></a>
+<a name="line1800"></a>
+<a name="line1801"></a>/**
+<a name="line1802"></a> * @return {number} The number of values in the repeated_double field.
+<a name="line1803"></a> */
+<a name="line1804"></a>proto2.TestAllTypes.prototype.repeatedDoubleCount = function() {
+<a name="line1805"></a>  return this.count$Values(42);
+<a name="line1806"></a>};
+<a name="line1807"></a>
+<a name="line1808"></a>
+<a name="line1809"></a>/**
+<a name="line1810"></a> * Clears the values in the repeated_double field.
+<a name="line1811"></a> */
+<a name="line1812"></a>proto2.TestAllTypes.prototype.clearRepeatedDouble = function() {
+<a name="line1813"></a>  this.clear$Field(42);
+<a name="line1814"></a>};
+<a name="line1815"></a>
+<a name="line1816"></a>
+<a name="line1817"></a>/**
+<a name="line1818"></a> * Gets the value of the repeated_bool field at the index given.
+<a name="line1819"></a> * @param {number} index The index to lookup.
+<a name="line1820"></a> * @return {?boolean} The value.
+<a name="line1821"></a> */
+<a name="line1822"></a>proto2.TestAllTypes.prototype.getRepeatedBool = function(index) {
+<a name="line1823"></a>  return /** @type {?boolean} */ (this.get$Value(43, index));
+<a name="line1824"></a>};
+<a name="line1825"></a>
+<a name="line1826"></a>
+<a name="line1827"></a>/**
+<a name="line1828"></a> * Gets the value of the repeated_bool field at the index given or the default value if not set.
+<a name="line1829"></a> * @param {number} index The index to lookup.
+<a name="line1830"></a> * @return {boolean} The value.
+<a name="line1831"></a> */
+<a name="line1832"></a>proto2.TestAllTypes.prototype.getRepeatedBoolOrDefault = function(index) {
+<a name="line1833"></a>  return /** @type {boolean} */ (this.get$ValueOrDefault(43, index));
+<a name="line1834"></a>};
+<a name="line1835"></a>
+<a name="line1836"></a>
+<a name="line1837"></a>/**
+<a name="line1838"></a> * Adds a value to the repeated_bool field.
+<a name="line1839"></a> * @param {boolean} value The value to add.
+<a name="line1840"></a> */
+<a name="line1841"></a>proto2.TestAllTypes.prototype.addRepeatedBool = function(value) {
+<a name="line1842"></a>  this.add$Value(43, value);
+<a name="line1843"></a>};
+<a name="line1844"></a>
+<a name="line1845"></a>
+<a name="line1846"></a>/**
+<a name="line1847"></a> * Returns the array of values in the repeated_bool field.
+<a name="line1848"></a> * @return {!Array.&lt;boolean&gt;} The values in the field.
+<a name="line1849"></a> */
+<a name="line1850"></a>proto2.TestAllTypes.prototype.repeatedBoolArray = function() {
+<a name="line1851"></a>  return /** @type {!Array.&lt;boolean&gt;} */ (this.array$Values(43));
+<a name="line1852"></a>};
+<a name="line1853"></a>
+<a name="line1854"></a>
+<a name="line1855"></a>/**
+<a name="line1856"></a> * @return {boolean} Whether the repeated_bool field has a value.
+<a name="line1857"></a> */
+<a name="line1858"></a>proto2.TestAllTypes.prototype.hasRepeatedBool = function() {
+<a name="line1859"></a>  return this.has$Value(43);
+<a name="line1860"></a>};
+<a name="line1861"></a>
+<a name="line1862"></a>
+<a name="line1863"></a>/**
+<a name="line1864"></a> * @return {number} The number of values in the repeated_bool field.
+<a name="line1865"></a> */
+<a name="line1866"></a>proto2.TestAllTypes.prototype.repeatedBoolCount = function() {
+<a name="line1867"></a>  return this.count$Values(43);
+<a name="line1868"></a>};
+<a name="line1869"></a>
+<a name="line1870"></a>
+<a name="line1871"></a>/**
+<a name="line1872"></a> * Clears the values in the repeated_bool field.
+<a name="line1873"></a> */
+<a name="line1874"></a>proto2.TestAllTypes.prototype.clearRepeatedBool = function() {
+<a name="line1875"></a>  this.clear$Field(43);
+<a name="line1876"></a>};
+<a name="line1877"></a>
+<a name="line1878"></a>
+<a name="line1879"></a>/**
+<a name="line1880"></a> * Gets the value of the repeated_string field at the index given.
+<a name="line1881"></a> * @param {number} index The index to lookup.
+<a name="line1882"></a> * @return {?string} The value.
+<a name="line1883"></a> */
+<a name="line1884"></a>proto2.TestAllTypes.prototype.getRepeatedString = function(index) {
+<a name="line1885"></a>  return /** @type {?string} */ (this.get$Value(44, index));
+<a name="line1886"></a>};
+<a name="line1887"></a>
+<a name="line1888"></a>
+<a name="line1889"></a>/**
+<a name="line1890"></a> * Gets the value of the repeated_string field at the index given or the default value if not set.
+<a name="line1891"></a> * @param {number} index The index to lookup.
+<a name="line1892"></a> * @return {string} The value.
+<a name="line1893"></a> */
+<a name="line1894"></a>proto2.TestAllTypes.prototype.getRepeatedStringOrDefault = function(index) {
+<a name="line1895"></a>  return /** @type {string} */ (this.get$ValueOrDefault(44, index));
+<a name="line1896"></a>};
+<a name="line1897"></a>
+<a name="line1898"></a>
+<a name="line1899"></a>/**
+<a name="line1900"></a> * Adds a value to the repeated_string field.
+<a name="line1901"></a> * @param {string} value The value to add.
+<a name="line1902"></a> */
+<a name="line1903"></a>proto2.TestAllTypes.prototype.addRepeatedString = function(value) {
+<a name="line1904"></a>  this.add$Value(44, value);
+<a name="line1905"></a>};
+<a name="line1906"></a>
+<a name="line1907"></a>
+<a name="line1908"></a>/**
+<a name="line1909"></a> * Returns the array of values in the repeated_string field.
+<a name="line1910"></a> * @return {!Array.&lt;string&gt;} The values in the field.
+<a name="line1911"></a> */
+<a name="line1912"></a>proto2.TestAllTypes.prototype.repeatedStringArray = function() {
+<a name="line1913"></a>  return /** @type {!Array.&lt;string&gt;} */ (this.array$Values(44));
+<a name="line1914"></a>};
+<a name="line1915"></a>
+<a name="line1916"></a>
+<a name="line1917"></a>/**
+<a name="line1918"></a> * @return {boolean} Whether the repeated_string field has a value.
+<a name="line1919"></a> */
+<a name="line1920"></a>proto2.TestAllTypes.prototype.hasRepeatedString = function() {
+<a name="line1921"></a>  return this.has$Value(44);
+<a name="line1922"></a>};
+<a name="line1923"></a>
+<a name="line1924"></a>
+<a name="line1925"></a>/**
+<a name="line1926"></a> * @return {number} The number of values in the repeated_string field.
+<a name="line1927"></a> */
+<a name="line1928"></a>proto2.TestAllTypes.prototype.repeatedStringCount = function() {
+<a name="line1929"></a>  return this.count$Values(44);
+<a name="line1930"></a>};
+<a name="line1931"></a>
+<a name="line1932"></a>
+<a name="line1933"></a>/**
+<a name="line1934"></a> * Clears the values in the repeated_string field.
+<a name="line1935"></a> */
+<a name="line1936"></a>proto2.TestAllTypes.prototype.clearRepeatedString = function() {
+<a name="line1937"></a>  this.clear$Field(44);
+<a name="line1938"></a>};
+<a name="line1939"></a>
+<a name="line1940"></a>
+<a name="line1941"></a>/**
+<a name="line1942"></a> * Gets the value of the repeated_bytes field at the index given.
+<a name="line1943"></a> * @param {number} index The index to lookup.
+<a name="line1944"></a> * @return {?string} The value.
+<a name="line1945"></a> */
+<a name="line1946"></a>proto2.TestAllTypes.prototype.getRepeatedBytes = function(index) {
+<a name="line1947"></a>  return /** @type {?string} */ (this.get$Value(45, index));
+<a name="line1948"></a>};
+<a name="line1949"></a>
+<a name="line1950"></a>
+<a name="line1951"></a>/**
+<a name="line1952"></a> * Gets the value of the repeated_bytes field at the index given or the default value if not set.
+<a name="line1953"></a> * @param {number} index The index to lookup.
+<a name="line1954"></a> * @return {string} The value.
+<a name="line1955"></a> */
+<a name="line1956"></a>proto2.TestAllTypes.prototype.getRepeatedBytesOrDefault = function(index) {
+<a name="line1957"></a>  return /** @type {string} */ (this.get$ValueOrDefault(45, index));
+<a name="line1958"></a>};
+<a name="line1959"></a>
+<a name="line1960"></a>
+<a name="line1961"></a>/**
+<a name="line1962"></a> * Adds a value to the repeated_bytes field.
+<a name="line1963"></a> * @param {string} value The value to add.
+<a name="line1964"></a> */
+<a name="line1965"></a>proto2.TestAllTypes.prototype.addRepeatedBytes = function(value) {
+<a name="line1966"></a>  this.add$Value(45, value);
+<a name="line1967"></a>};
+<a name="line1968"></a>
+<a name="line1969"></a>
+<a name="line1970"></a>/**
+<a name="line1971"></a> * Returns the array of values in the repeated_bytes field.
+<a name="line1972"></a> * @return {!Array.&lt;string&gt;} The values in the field.
+<a name="line1973"></a> */
+<a name="line1974"></a>proto2.TestAllTypes.prototype.repeatedBytesArray = function() {
+<a name="line1975"></a>  return /** @type {!Array.&lt;string&gt;} */ (this.array$Values(45));
+<a name="line1976"></a>};
+<a name="line1977"></a>
+<a name="line1978"></a>
+<a name="line1979"></a>/**
+<a name="line1980"></a> * @return {boolean} Whether the repeated_bytes field has a value.
+<a name="line1981"></a> */
+<a name="line1982"></a>proto2.TestAllTypes.prototype.hasRepeatedBytes = function() {
+<a name="line1983"></a>  return this.has$Value(45);
+<a name="line1984"></a>};
+<a name="line1985"></a>
+<a name="line1986"></a>
+<a name="line1987"></a>/**
+<a name="line1988"></a> * @return {number} The number of values in the repeated_bytes field.
+<a name="line1989"></a> */
+<a name="line1990"></a>proto2.TestAllTypes.prototype.repeatedBytesCount = function() {
+<a name="line1991"></a>  return this.count$Values(45);
+<a name="line1992"></a>};
+<a name="line1993"></a>
+<a name="line1994"></a>
+<a name="line1995"></a>/**
+<a name="line1996"></a> * Clears the values in the repeated_bytes field.
+<a name="line1997"></a> */
+<a name="line1998"></a>proto2.TestAllTypes.prototype.clearRepeatedBytes = function() {
+<a name="line1999"></a>  this.clear$Field(45);
+<a name="line2000"></a>};
+<a name="line2001"></a>
+<a name="line2002"></a>
+<a name="line2003"></a>/**
+<a name="line2004"></a> * Gets the value of the repeatedgroup field at the index given.
+<a name="line2005"></a> * @param {number} index The index to lookup.
+<a name="line2006"></a> * @return {proto2.TestAllTypes.RepeatedGroup} The value.
+<a name="line2007"></a> */
+<a name="line2008"></a>proto2.TestAllTypes.prototype.getRepeatedgroup = function(index) {
+<a name="line2009"></a>  return /** @type {proto2.TestAllTypes.RepeatedGroup} */ (this.get$Value(46, index));
+<a name="line2010"></a>};
+<a name="line2011"></a>
+<a name="line2012"></a>
+<a name="line2013"></a>/**
+<a name="line2014"></a> * Gets the value of the repeatedgroup field at the index given or the default value if not set.
+<a name="line2015"></a> * @param {number} index The index to lookup.
+<a name="line2016"></a> * @return {!proto2.TestAllTypes.RepeatedGroup} The value.
+<a name="line2017"></a> */
+<a name="line2018"></a>proto2.TestAllTypes.prototype.getRepeatedgroupOrDefault = function(index) {
+<a name="line2019"></a>  return /** @type {!proto2.TestAllTypes.RepeatedGroup} */ (this.get$ValueOrDefault(46, index));
+<a name="line2020"></a>};
+<a name="line2021"></a>
+<a name="line2022"></a>
+<a name="line2023"></a>/**
+<a name="line2024"></a> * Adds a value to the repeatedgroup field.
+<a name="line2025"></a> * @param {!proto2.TestAllTypes.RepeatedGroup} value The value to add.
+<a name="line2026"></a> */
+<a name="line2027"></a>proto2.TestAllTypes.prototype.addRepeatedgroup = function(value) {
+<a name="line2028"></a>  this.add$Value(46, value);
+<a name="line2029"></a>};
+<a name="line2030"></a>
+<a name="line2031"></a>
+<a name="line2032"></a>/**
+<a name="line2033"></a> * Returns the array of values in the repeatedgroup field.
+<a name="line2034"></a> * @return {!Array.&lt;!proto2.TestAllTypes.RepeatedGroup&gt;} The values in the field.
+<a name="line2035"></a> */
+<a name="line2036"></a>proto2.TestAllTypes.prototype.repeatedgroupArray = function() {
+<a name="line2037"></a>  return /** @type {!Array.&lt;!proto2.TestAllTypes.RepeatedGroup&gt;} */ (this.array$Values(46));
+<a name="line2038"></a>};
+<a name="line2039"></a>
+<a name="line2040"></a>
+<a name="line2041"></a>/**
+<a name="line2042"></a> * @return {boolean} Whether the repeatedgroup field has a value.
+<a name="line2043"></a> */
+<a name="line2044"></a>proto2.TestAllTypes.prototype.hasRepeatedgroup = function() {
+<a name="line2045"></a>  return this.has$Value(46);
+<a name="line2046"></a>};
+<a name="line2047"></a>
+<a name="line2048"></a>
+<a name="line2049"></a>/**
+<a name="line2050"></a> * @return {number} The number of values in the repeatedgroup field.
+<a name="line2051"></a> */
+<a name="line2052"></a>proto2.TestAllTypes.prototype.repeatedgroupCount = function() {
+<a name="line2053"></a>  return this.count$Values(46);
+<a name="line2054"></a>};
+<a name="line2055"></a>
+<a name="line2056"></a>
+<a name="line2057"></a>/**
+<a name="line2058"></a> * Clears the values in the repeatedgroup field.
+<a name="line2059"></a> */
+<a name="line2060"></a>proto2.TestAllTypes.prototype.clearRepeatedgroup = function() {
+<a name="line2061"></a>  this.clear$Field(46);
+<a name="line2062"></a>};
+<a name="line2063"></a>
+<a name="line2064"></a>
+<a name="line2065"></a>/**
+<a name="line2066"></a> * Gets the value of the repeated_nested_message field at the index given.
+<a name="line2067"></a> * @param {number} index The index to lookup.
+<a name="line2068"></a> * @return {proto2.TestAllTypes.NestedMessage} The value.
+<a name="line2069"></a> */
+<a name="line2070"></a>proto2.TestAllTypes.prototype.getRepeatedNestedMessage = function(index) {
+<a name="line2071"></a>  return /** @type {proto2.TestAllTypes.NestedMessage} */ (this.get$Value(48, index));
+<a name="line2072"></a>};
+<a name="line2073"></a>
+<a name="line2074"></a>
+<a name="line2075"></a>/**
+<a name="line2076"></a> * Gets the value of the repeated_nested_message field at the index given or the default value if not set.
+<a name="line2077"></a> * @param {number} index The index to lookup.
+<a name="line2078"></a> * @return {!proto2.TestAllTypes.NestedMessage} The value.
+<a name="line2079"></a> */
+<a name="line2080"></a>proto2.TestAllTypes.prototype.getRepeatedNestedMessageOrDefault = function(index) {
+<a name="line2081"></a>  return /** @type {!proto2.TestAllTypes.NestedMessage} */ (this.get$ValueOrDefault(48, index));
+<a name="line2082"></a>};
+<a name="line2083"></a>
+<a name="line2084"></a>
+<a name="line2085"></a>/**
+<a name="line2086"></a> * Adds a value to the repeated_nested_message field.
+<a name="line2087"></a> * @param {!proto2.TestAllTypes.NestedMessage} value The value to add.
+<a name="line2088"></a> */
+<a name="line2089"></a>proto2.TestAllTypes.prototype.addRepeatedNestedMessage = function(value) {
+<a name="line2090"></a>  this.add$Value(48, value);
+<a name="line2091"></a>};
+<a name="line2092"></a>
+<a name="line2093"></a>
+<a name="line2094"></a>/**
+<a name="line2095"></a> * Returns the array of values in the repeated_nested_message field.
+<a name="line2096"></a> * @return {!Array.&lt;!proto2.TestAllTypes.NestedMessage&gt;} The values in the field.
+<a name="line2097"></a> */
+<a name="line2098"></a>proto2.TestAllTypes.prototype.repeatedNestedMessageArray = function() {
+<a name="line2099"></a>  return /** @type {!Array.&lt;!proto2.TestAllTypes.NestedMessage&gt;} */ (this.array$Values(48));
+<a name="line2100"></a>};
+<a name="line2101"></a>
+<a name="line2102"></a>
+<a name="line2103"></a>/**
+<a name="line2104"></a> * @return {boolean} Whether the repeated_nested_message field has a value.
+<a name="line2105"></a> */
+<a name="line2106"></a>proto2.TestAllTypes.prototype.hasRepeatedNestedMessage = function() {
+<a name="line2107"></a>  return this.has$Value(48);
+<a name="line2108"></a>};
+<a name="line2109"></a>
+<a name="line2110"></a>
+<a name="line2111"></a>/**
+<a name="line2112"></a> * @return {number} The number of values in the repeated_nested_message field.
+<a name="line2113"></a> */
+<a name="line2114"></a>proto2.TestAllTypes.prototype.repeatedNestedMessageCount = function() {
+<a name="line2115"></a>  return this.count$Values(48);
+<a name="line2116"></a>};
+<a name="line2117"></a>
+<a name="line2118"></a>
+<a name="line2119"></a>/**
+<a name="line2120"></a> * Clears the values in the repeated_nested_message field.
+<a name="line2121"></a> */
+<a name="line2122"></a>proto2.TestAllTypes.prototype.clearRepeatedNestedMessage = function() {
+<a name="line2123"></a>  this.clear$Field(48);
+<a name="line2124"></a>};
+<a name="line2125"></a>
+<a name="line2126"></a>
+<a name="line2127"></a>/**
+<a name="line2128"></a> * Gets the value of the repeated_nested_enum field at the index given.
+<a name="line2129"></a> * @param {number} index The index to lookup.
+<a name="line2130"></a> * @return {?proto2.TestAllTypes.NestedEnum} The value.
+<a name="line2131"></a> */
+<a name="line2132"></a>proto2.TestAllTypes.prototype.getRepeatedNestedEnum = function(index) {
+<a name="line2133"></a>  return /** @type {?proto2.TestAllTypes.NestedEnum} */ (this.get$Value(49, index));
+<a name="line2134"></a>};
+<a name="line2135"></a>
+<a name="line2136"></a>
+<a name="line2137"></a>/**
+<a name="line2138"></a> * Gets the value of the repeated_nested_enum field at the index given or the default value if not set.
+<a name="line2139"></a> * @param {number} index The index to lookup.
+<a name="line2140"></a> * @return {proto2.TestAllTypes.NestedEnum} The value.
+<a name="line2141"></a> */
+<a name="line2142"></a>proto2.TestAllTypes.prototype.getRepeatedNestedEnumOrDefault = function(index) {
+<a name="line2143"></a>  return /** @type {proto2.TestAllTypes.NestedEnum} */ (this.get$ValueOrDefault(49, index));
+<a name="line2144"></a>};
+<a name="line2145"></a>
+<a name="line2146"></a>
+<a name="line2147"></a>/**
+<a name="line2148"></a> * Adds a value to the repeated_nested_enum field.
+<a name="line2149"></a> * @param {proto2.TestAllTypes.NestedEnum} value The value to add.
+<a name="line2150"></a> */
+<a name="line2151"></a>proto2.TestAllTypes.prototype.addRepeatedNestedEnum = function(value) {
+<a name="line2152"></a>  this.add$Value(49, value);
+<a name="line2153"></a>};
+<a name="line2154"></a>
+<a name="line2155"></a>
+<a name="line2156"></a>/**
+<a name="line2157"></a> * Returns the array of values in the repeated_nested_enum field.
+<a name="line2158"></a> * @return {!Array.&lt;proto2.TestAllTypes.NestedEnum&gt;} The values in the field.
+<a name="line2159"></a> */
+<a name="line2160"></a>proto2.TestAllTypes.prototype.repeatedNestedEnumArray = function() {
+<a name="line2161"></a>  return /** @type {!Array.&lt;proto2.TestAllTypes.NestedEnum&gt;} */ (this.array$Values(49));
+<a name="line2162"></a>};
+<a name="line2163"></a>
+<a name="line2164"></a>
+<a name="line2165"></a>/**
+<a name="line2166"></a> * @return {boolean} Whether the repeated_nested_enum field has a value.
+<a name="line2167"></a> */
+<a name="line2168"></a>proto2.TestAllTypes.prototype.hasRepeatedNestedEnum = function() {
+<a name="line2169"></a>  return this.has$Value(49);
+<a name="line2170"></a>};
+<a name="line2171"></a>
+<a name="line2172"></a>
+<a name="line2173"></a>/**
+<a name="line2174"></a> * @return {number} The number of values in the repeated_nested_enum field.
+<a name="line2175"></a> */
+<a name="line2176"></a>proto2.TestAllTypes.prototype.repeatedNestedEnumCount = function() {
+<a name="line2177"></a>  return this.count$Values(49);
+<a name="line2178"></a>};
+<a name="line2179"></a>
+<a name="line2180"></a>
+<a name="line2181"></a>/**
+<a name="line2182"></a> * Clears the values in the repeated_nested_enum field.
+<a name="line2183"></a> */
+<a name="line2184"></a>proto2.TestAllTypes.prototype.clearRepeatedNestedEnum = function() {
+<a name="line2185"></a>  this.clear$Field(49);
+<a name="line2186"></a>};
+<a name="line2187"></a>
+<a name="line2188"></a>
+<a name="line2189"></a>/**
+<a name="line2190"></a> * Gets the value of the repeated_int64_number field at the index given.
+<a name="line2191"></a> * @param {number} index The index to lookup.
+<a name="line2192"></a> * @return {?number} The value.
+<a name="line2193"></a> */
+<a name="line2194"></a>proto2.TestAllTypes.prototype.getRepeatedInt64Number = function(index) {
+<a name="line2195"></a>  return /** @type {?number} */ (this.get$Value(52, index));
+<a name="line2196"></a>};
+<a name="line2197"></a>
+<a name="line2198"></a>
+<a name="line2199"></a>/**
+<a name="line2200"></a> * Gets the value of the repeated_int64_number field at the index given or the default value if not set.
+<a name="line2201"></a> * @param {number} index The index to lookup.
+<a name="line2202"></a> * @return {number} The value.
+<a name="line2203"></a> */
+<a name="line2204"></a>proto2.TestAllTypes.prototype.getRepeatedInt64NumberOrDefault = function(index) {
+<a name="line2205"></a>  return /** @type {number} */ (this.get$ValueOrDefault(52, index));
+<a name="line2206"></a>};
+<a name="line2207"></a>
+<a name="line2208"></a>
+<a name="line2209"></a>/**
+<a name="line2210"></a> * Adds a value to the repeated_int64_number field.
+<a name="line2211"></a> * @param {number} value The value to add.
+<a name="line2212"></a> */
+<a name="line2213"></a>proto2.TestAllTypes.prototype.addRepeatedInt64Number = function(value) {
+<a name="line2214"></a>  this.add$Value(52, value);
+<a name="line2215"></a>};
+<a name="line2216"></a>
+<a name="line2217"></a>
+<a name="line2218"></a>/**
+<a name="line2219"></a> * Returns the array of values in the repeated_int64_number field.
+<a name="line2220"></a> * @return {!Array.&lt;number&gt;} The values in the field.
+<a name="line2221"></a> */
+<a name="line2222"></a>proto2.TestAllTypes.prototype.repeatedInt64NumberArray = function() {
+<a name="line2223"></a>  return /** @type {!Array.&lt;number&gt;} */ (this.array$Values(52));
+<a name="line2224"></a>};
+<a name="line2225"></a>
+<a name="line2226"></a>
+<a name="line2227"></a>/**
+<a name="line2228"></a> * @return {boolean} Whether the repeated_int64_number field has a value.
+<a name="line2229"></a> */
+<a name="line2230"></a>proto2.TestAllTypes.prototype.hasRepeatedInt64Number = function() {
+<a name="line2231"></a>  return this.has$Value(52);
+<a name="line2232"></a>};
+<a name="line2233"></a>
+<a name="line2234"></a>
+<a name="line2235"></a>/**
+<a name="line2236"></a> * @return {number} The number of values in the repeated_int64_number field.
+<a name="line2237"></a> */
+<a name="line2238"></a>proto2.TestAllTypes.prototype.repeatedInt64NumberCount = function() {
+<a name="line2239"></a>  return this.count$Values(52);
+<a name="line2240"></a>};
+<a name="line2241"></a>
+<a name="line2242"></a>
+<a name="line2243"></a>/**
+<a name="line2244"></a> * Clears the values in the repeated_int64_number field.
+<a name="line2245"></a> */
+<a name="line2246"></a>proto2.TestAllTypes.prototype.clearRepeatedInt64Number = function() {
+<a name="line2247"></a>  this.clear$Field(52);
+<a name="line2248"></a>};
+<a name="line2249"></a>
+<a name="line2250"></a>
+<a name="line2251"></a>/**
+<a name="line2252"></a> * Gets the value of the repeated_int64_string field at the index given.
+<a name="line2253"></a> * @param {number} index The index to lookup.
+<a name="line2254"></a> * @return {?string} The value.
+<a name="line2255"></a> */
+<a name="line2256"></a>proto2.TestAllTypes.prototype.getRepeatedInt64String = function(index) {
+<a name="line2257"></a>  return /** @type {?string} */ (this.get$Value(53, index));
+<a name="line2258"></a>};
+<a name="line2259"></a>
+<a name="line2260"></a>
+<a name="line2261"></a>/**
+<a name="line2262"></a> * Gets the value of the repeated_int64_string field at the index given or the default value if not set.
+<a name="line2263"></a> * @param {number} index The index to lookup.
+<a name="line2264"></a> * @return {string} The value.
+<a name="line2265"></a> */
+<a name="line2266"></a>proto2.TestAllTypes.prototype.getRepeatedInt64StringOrDefault = function(index) {
+<a name="line2267"></a>  return /** @type {string} */ (this.get$ValueOrDefault(53, index));
+<a name="line2268"></a>};
+<a name="line2269"></a>
+<a name="line2270"></a>
+<a name="line2271"></a>/**
+<a name="line2272"></a> * Adds a value to the repeated_int64_string field.
+<a name="line2273"></a> * @param {string} value The value to add.
+<a name="line2274"></a> */
+<a name="line2275"></a>proto2.TestAllTypes.prototype.addRepeatedInt64String = function(value) {
+<a name="line2276"></a>  this.add$Value(53, value);
+<a name="line2277"></a>};
+<a name="line2278"></a>
+<a name="line2279"></a>
+<a name="line2280"></a>/**
+<a name="line2281"></a> * Returns the array of values in the repeated_int64_string field.
+<a name="line2282"></a> * @return {!Array.&lt;string&gt;} The values in the field.
+<a name="line2283"></a> */
+<a name="line2284"></a>proto2.TestAllTypes.prototype.repeatedInt64StringArray = function() {
+<a name="line2285"></a>  return /** @type {!Array.&lt;string&gt;} */ (this.array$Values(53));
+<a name="line2286"></a>};
+<a name="line2287"></a>
+<a name="line2288"></a>
+<a name="line2289"></a>/**
+<a name="line2290"></a> * @return {boolean} Whether the repeated_int64_string field has a value.
+<a name="line2291"></a> */
+<a name="line2292"></a>proto2.TestAllTypes.prototype.hasRepeatedInt64String = function() {
+<a name="line2293"></a>  return this.has$Value(53);
+<a name="line2294"></a>};
+<a name="line2295"></a>
+<a name="line2296"></a>
+<a name="line2297"></a>/**
+<a name="line2298"></a> * @return {number} The number of values in the repeated_int64_string field.
+<a name="line2299"></a> */
+<a name="line2300"></a>proto2.TestAllTypes.prototype.repeatedInt64StringCount = function() {
+<a name="line2301"></a>  return this.count$Values(53);
+<a name="line2302"></a>};
+<a name="line2303"></a>
+<a name="line2304"></a>
+<a name="line2305"></a>/**
+<a name="line2306"></a> * Clears the values in the repeated_int64_string field.
+<a name="line2307"></a> */
+<a name="line2308"></a>proto2.TestAllTypes.prototype.clearRepeatedInt64String = function() {
+<a name="line2309"></a>  this.clear$Field(53);
+<a name="line2310"></a>};
+<a name="line2311"></a>
+<a name="line2312"></a>
+<a name="line2313"></a>/**
+<a name="line2314"></a> * Enumeration NestedEnum.
+<a name="line2315"></a> * @enum {number}
+<a name="line2316"></a> */
+<a name="line2317"></a>proto2.TestAllTypes.NestedEnum = {
+<a name="line2318"></a>  FOO: 0,
+<a name="line2319"></a>  BAR: 2,
+<a name="line2320"></a>  BAZ: 3
+<a name="line2321"></a>};
+<a name="line2322"></a>
+<a name="line2323"></a>
+<a name="line2324"></a>
+<a name="line2325"></a>/**
+<a name="line2326"></a> * Message NestedMessage.
+<a name="line2327"></a> * @constructor
+<a name="line2328"></a> * @extends {goog.proto2.Message}
+<a name="line2329"></a> * @final
+<a name="line2330"></a> */
+<a name="line2331"></a>proto2.TestAllTypes.NestedMessage = function() {
+<a name="line2332"></a>  goog.proto2.Message.apply(this);
+<a name="line2333"></a>};
+<a name="line2334"></a>goog.inherits(proto2.TestAllTypes.NestedMessage, goog.proto2.Message);
+<a name="line2335"></a>
+<a name="line2336"></a>
+<a name="line2337"></a>/**
+<a name="line2338"></a> * Overrides {@link goog.proto2.Message#clone} to specify its exact return type.
+<a name="line2339"></a> * @return {!proto2.TestAllTypes.NestedMessage} The cloned message.
+<a name="line2340"></a> * @override
+<a name="line2341"></a> */
+<a name="line2342"></a>proto2.TestAllTypes.NestedMessage.prototype.clone;
+<a name="line2343"></a>
+<a name="line2344"></a>
+<a name="line2345"></a>/**
+<a name="line2346"></a> * Gets the value of the b field.
+<a name="line2347"></a> * @return {?number} The value.
+<a name="line2348"></a> */
+<a name="line2349"></a>proto2.TestAllTypes.NestedMessage.prototype.getB = function() {
+<a name="line2350"></a>  return /** @type {?number} */ (this.get$Value(1));
+<a name="line2351"></a>};
+<a name="line2352"></a>
+<a name="line2353"></a>
+<a name="line2354"></a>/**
+<a name="line2355"></a> * Gets the value of the b field or the default value if not set.
+<a name="line2356"></a> * @return {number} The value.
+<a name="line2357"></a> */
+<a name="line2358"></a>proto2.TestAllTypes.NestedMessage.prototype.getBOrDefault = function() {
+<a name="line2359"></a>  return /** @type {number} */ (this.get$ValueOrDefault(1));
+<a name="line2360"></a>};
+<a name="line2361"></a>
+<a name="line2362"></a>
+<a name="line2363"></a>/**
+<a name="line2364"></a> * Sets the value of the b field.
+<a name="line2365"></a> * @param {number} value The value.
+<a name="line2366"></a> */
+<a name="line2367"></a>proto2.TestAllTypes.NestedMessage.prototype.setB = function(value) {
+<a name="line2368"></a>  this.set$Value(1, value);
+<a name="line2369"></a>};
+<a name="line2370"></a>
+<a name="line2371"></a>
+<a name="line2372"></a>/**
+<a name="line2373"></a> * @return {boolean} Whether the b field has a value.
+<a name="line2374"></a> */
+<a name="line2375"></a>proto2.TestAllTypes.NestedMessage.prototype.hasB = function() {
+<a name="line2376"></a>  return this.has$Value(1);
+<a name="line2377"></a>};
+<a name="line2378"></a>
+<a name="line2379"></a>
+<a name="line2380"></a>/**
+<a name="line2381"></a> * @return {number} The number of values in the b field.
+<a name="line2382"></a> */
+<a name="line2383"></a>proto2.TestAllTypes.NestedMessage.prototype.bCount = function() {
+<a name="line2384"></a>  return this.count$Values(1);
+<a name="line2385"></a>};
+<a name="line2386"></a>
+<a name="line2387"></a>
+<a name="line2388"></a>/**
+<a name="line2389"></a> * Clears the values in the b field.
+<a name="line2390"></a> */
+<a name="line2391"></a>proto2.TestAllTypes.NestedMessage.prototype.clearB = function() {
+<a name="line2392"></a>  this.clear$Field(1);
+<a name="line2393"></a>};
+<a name="line2394"></a>
+<a name="line2395"></a>
+<a name="line2396"></a>/**
+<a name="line2397"></a> * Gets the value of the c field.
+<a name="line2398"></a> * @return {?number} The value.
+<a name="line2399"></a> */
+<a name="line2400"></a>proto2.TestAllTypes.NestedMessage.prototype.getC = function() {
+<a name="line2401"></a>  return /** @type {?number} */ (this.get$Value(2));
+<a name="line2402"></a>};
+<a name="line2403"></a>
+<a name="line2404"></a>
+<a name="line2405"></a>/**
+<a name="line2406"></a> * Gets the value of the c field or the default value if not set.
+<a name="line2407"></a> * @return {number} The value.
+<a name="line2408"></a> */
+<a name="line2409"></a>proto2.TestAllTypes.NestedMessage.prototype.getCOrDefault = function() {
+<a name="line2410"></a>  return /** @type {number} */ (this.get$ValueOrDefault(2));
+<a name="line2411"></a>};
+<a name="line2412"></a>
+<a name="line2413"></a>
+<a name="line2414"></a>/**
+<a name="line2415"></a> * Sets the value of the c field.
+<a name="line2416"></a> * @param {number} value The value.
+<a name="line2417"></a> */
+<a name="line2418"></a>proto2.TestAllTypes.NestedMessage.prototype.setC = function(value) {
+<a name="line2419"></a>  this.set$Value(2, value);
+<a name="line2420"></a>};
+<a name="line2421"></a>
+<a name="line2422"></a>
+<a name="line2423"></a>/**
+<a name="line2424"></a> * @return {boolean} Whether the c field has a value.
+<a name="line2425"></a> */
+<a name="line2426"></a>proto2.TestAllTypes.NestedMessage.prototype.hasC = function() {
+<a name="line2427"></a>  return this.has$Value(2);
+<a name="line2428"></a>};
+<a name="line2429"></a>
+<a name="line2430"></a>
+<a name="line2431"></a>/**
+<a name="line2432"></a> * @return {number} The number of values in the c field.
+<a name="line2433"></a> */
+<a name="line2434"></a>proto2.TestAllTypes.NestedMessage.prototype.cCount = function() {
+<a name="line2435"></a>  return this.count$Values(2);
+<a name="line2436"></a>};
+<a name="line2437"></a>
+<a name="line2438"></a>
+<a name="line2439"></a>/**
+<a name="line2440"></a> * Clears the values in the c field.
+<a name="line2441"></a> */
+<a name="line2442"></a>proto2.TestAllTypes.NestedMessage.prototype.clearC = function() {
+<a name="line2443"></a>  this.clear$Field(2);
+<a name="line2444"></a>};
+<a name="line2445"></a>
+<a name="line2446"></a>
+<a name="line2447"></a>
+<a name="line2448"></a>/**
+<a name="line2449"></a> * Message OptionalGroup.
+<a name="line2450"></a> * @constructor
+<a name="line2451"></a> * @extends {goog.proto2.Message}
+<a name="line2452"></a> * @final
+<a name="line2453"></a> */
+<a name="line2454"></a>proto2.TestAllTypes.OptionalGroup = function() {
+<a name="line2455"></a>  goog.proto2.Message.apply(this);
+<a name="line2456"></a>};
+<a name="line2457"></a>goog.inherits(proto2.TestAllTypes.OptionalGroup, goog.proto2.Message);
+<a name="line2458"></a>
+<a name="line2459"></a>
+<a name="line2460"></a>/**
+<a name="line2461"></a> * Overrides {@link goog.proto2.Message#clone} to specify its exact return type.
+<a name="line2462"></a> * @return {!proto2.TestAllTypes.OptionalGroup} The cloned message.
+<a name="line2463"></a> * @override
+<a name="line2464"></a> */
+<a name="line2465"></a>proto2.TestAllTypes.OptionalGroup.prototype.clone;
+<a name="line2466"></a>
+<a name="line2467"></a>
+<a name="line2468"></a>/**
+<a name="line2469"></a> * Gets the value of the a field.
+<a name="line2470"></a> * @return {?number} The value.
+<a name="line2471"></a> */
+<a name="line2472"></a>proto2.TestAllTypes.OptionalGroup.prototype.getA = function() {
+<a name="line2473"></a>  return /** @type {?number} */ (this.get$Value(17));
+<a name="line2474"></a>};
+<a name="line2475"></a>
+<a name="line2476"></a>
+<a name="line2477"></a>/**
+<a name="line2478"></a> * Gets the value of the a field or the default value if not set.
+<a name="line2479"></a> * @return {number} The value.
+<a name="line2480"></a> */
+<a name="line2481"></a>proto2.TestAllTypes.OptionalGroup.prototype.getAOrDefault = function() {
+<a name="line2482"></a>  return /** @type {number} */ (this.get$ValueOrDefault(17));
+<a name="line2483"></a>};
+<a name="line2484"></a>
+<a name="line2485"></a>
+<a name="line2486"></a>/**
+<a name="line2487"></a> * Sets the value of the a field.
+<a name="line2488"></a> * @param {number} value The value.
+<a name="line2489"></a> */
+<a name="line2490"></a>proto2.TestAllTypes.OptionalGroup.prototype.setA = function(value) {
+<a name="line2491"></a>  this.set$Value(17, value);
+<a name="line2492"></a>};
+<a name="line2493"></a>
+<a name="line2494"></a>
+<a name="line2495"></a>/**
+<a name="line2496"></a> * @return {boolean} Whether the a field has a value.
+<a name="line2497"></a> */
+<a name="line2498"></a>proto2.TestAllTypes.OptionalGroup.prototype.hasA = function() {
+<a name="line2499"></a>  return this.has$Value(17);
+<a name="line2500"></a>};
+<a name="line2501"></a>
+<a name="line2502"></a>
+<a name="line2503"></a>/**
+<a name="line2504"></a> * @return {number} The number of values in the a field.
+<a name="line2505"></a> */
+<a name="line2506"></a>proto2.TestAllTypes.OptionalGroup.prototype.aCount = function() {
+<a name="line2507"></a>  return this.count$Values(17);
+<a name="line2508"></a>};
+<a name="line2509"></a>
+<a name="line2510"></a>
+<a name="line2511"></a>/**
+<a name="line2512"></a> * Clears the values in the a field.
+<a name="line2513"></a> */
+<a name="line2514"></a>proto2.TestAllTypes.OptionalGroup.prototype.clearA = function() {
+<a name="line2515"></a>  this.clear$Field(17);
+<a name="line2516"></a>};
+<a name="line2517"></a>
+<a name="line2518"></a>
+<a name="line2519"></a>
+<a name="line2520"></a>/**
+<a name="line2521"></a> * Message RepeatedGroup.
+<a name="line2522"></a> * @constructor
+<a name="line2523"></a> * @extends {goog.proto2.Message}
+<a name="line2524"></a> * @final
+<a name="line2525"></a> */
+<a name="line2526"></a>proto2.TestAllTypes.RepeatedGroup = function() {
+<a name="line2527"></a>  goog.proto2.Message.apply(this);
+<a name="line2528"></a>};
+<a name="line2529"></a>goog.inherits(proto2.TestAllTypes.RepeatedGroup, goog.proto2.Message);
+<a name="line2530"></a>
+<a name="line2531"></a>
+<a name="line2532"></a>/**
+<a name="line2533"></a> * Overrides {@link goog.proto2.Message#clone} to specify its exact return type.
+<a name="line2534"></a> * @return {!proto2.TestAllTypes.RepeatedGroup} The cloned message.
+<a name="line2535"></a> * @override
+<a name="line2536"></a> */
+<a name="line2537"></a>proto2.TestAllTypes.RepeatedGroup.prototype.clone;
+<a name="line2538"></a>
+<a name="line2539"></a>
+<a name="line2540"></a>/**
+<a name="line2541"></a> * Gets the value of the a field at the index given.
+<a name="line2542"></a> * @param {number} index The index to lookup.
+<a name="line2543"></a> * @return {?number} The value.
+<a name="line2544"></a> */
+<a name="line2545"></a>proto2.TestAllTypes.RepeatedGroup.prototype.getA = function(index) {
+<a name="line2546"></a>  return /** @type {?number} */ (this.get$Value(47, index));
+<a name="line2547"></a>};
+<a name="line2548"></a>
+<a name="line2549"></a>
+<a name="line2550"></a>/**
+<a name="line2551"></a> * Gets the value of the a field at the index given or the default value if not set.
+<a name="line2552"></a> * @param {number} index The index to lookup.
+<a name="line2553"></a> * @return {number} The value.
+<a name="line2554"></a> */
+<a name="line2555"></a>proto2.TestAllTypes.RepeatedGroup.prototype.getAOrDefault = function(index) {
+<a name="line2556"></a>  return /** @type {number} */ (this.get$ValueOrDefault(47, index));
+<a name="line2557"></a>};
+<a name="line2558"></a>
+<a name="line2559"></a>
+<a name="line2560"></a>/**
+<a name="line2561"></a> * Adds a value to the a field.
+<a name="line2562"></a> * @param {number} value The value to add.
+<a name="line2563"></a> */
+<a name="line2564"></a>proto2.TestAllTypes.RepeatedGroup.prototype.addA = function(value) {
+<a name="line2565"></a>  this.add$Value(47, value);
+<a name="line2566"></a>};
+<a name="line2567"></a>
+<a name="line2568"></a>
+<a name="line2569"></a>/**
+<a name="line2570"></a> * Returns the array of values in the a field.
+<a name="line2571"></a> * @return {!Array.&lt;number&gt;} The values in the field.
+<a name="line2572"></a> */
+<a name="line2573"></a>proto2.TestAllTypes.RepeatedGroup.prototype.aArray = function() {
+<a name="line2574"></a>  return /** @type {!Array.&lt;number&gt;} */ (this.array$Values(47));
+<a name="line2575"></a>};
+<a name="line2576"></a>
+<a name="line2577"></a>
+<a name="line2578"></a>/**
+<a name="line2579"></a> * @return {boolean} Whether the a field has a value.
+<a name="line2580"></a> */
+<a name="line2581"></a>proto2.TestAllTypes.RepeatedGroup.prototype.hasA = function() {
+<a name="line2582"></a>  return this.has$Value(47);
+<a name="line2583"></a>};
+<a name="line2584"></a>
+<a name="line2585"></a>
+<a name="line2586"></a>/**
+<a name="line2587"></a> * @return {number} The number of values in the a field.
+<a name="line2588"></a> */
+<a name="line2589"></a>proto2.TestAllTypes.RepeatedGroup.prototype.aCount = function() {
+<a name="line2590"></a>  return this.count$Values(47);
+<a name="line2591"></a>};
+<a name="line2592"></a>
+<a name="line2593"></a>
+<a name="line2594"></a>/**
+<a name="line2595"></a> * Clears the values in the a field.
+<a name="line2596"></a> */
+<a name="line2597"></a>proto2.TestAllTypes.RepeatedGroup.prototype.clearA = function() {
+<a name="line2598"></a>  this.clear$Field(47);
+<a name="line2599"></a>};
+<a name="line2600"></a>
+<a name="line2601"></a>
+<a name="line2602"></a>
+<a name="line2603"></a>/**
+<a name="line2604"></a> * Message TestDefaultParent.
+<a name="line2605"></a> * @constructor
+<a name="line2606"></a> * @extends {goog.proto2.Message}
+<a name="line2607"></a> * @final
+<a name="line2608"></a> */
+<a name="line2609"></a>proto2.TestDefaultParent = function() {
+<a name="line2610"></a>  goog.proto2.Message.apply(this);
+<a name="line2611"></a>};
+<a name="line2612"></a>goog.inherits(proto2.TestDefaultParent, goog.proto2.Message);
+<a name="line2613"></a>
+<a name="line2614"></a>
+<a name="line2615"></a>/**
+<a name="line2616"></a> * Overrides {@link goog.proto2.Message#clone} to specify its exact return type.
+<a name="line2617"></a> * @return {!proto2.TestDefaultParent} The cloned message.
+<a name="line2618"></a> * @override
+<a name="line2619"></a> */
+<a name="line2620"></a>proto2.TestDefaultParent.prototype.clone;
+<a name="line2621"></a>
+<a name="line2622"></a>
+<a name="line2623"></a>/**
+<a name="line2624"></a> * Gets the value of the child field.
+<a name="line2625"></a> * @return {proto2.TestDefaultChild} The value.
+<a name="line2626"></a> */
+<a name="line2627"></a>proto2.TestDefaultParent.prototype.getChild = function() {
+<a name="line2628"></a>  return /** @type {proto2.TestDefaultChild} */ (this.get$Value(1));
+<a name="line2629"></a>};
+<a name="line2630"></a>
+<a name="line2631"></a>
+<a name="line2632"></a>/**
+<a name="line2633"></a> * Gets the value of the child field or the default value if not set.
+<a name="line2634"></a> * @return {!proto2.TestDefaultChild} The value.
+<a name="line2635"></a> */
+<a name="line2636"></a>proto2.TestDefaultParent.prototype.getChildOrDefault = function() {
+<a name="line2637"></a>  return /** @type {!proto2.TestDefaultChild} */ (this.get$ValueOrDefault(1));
+<a name="line2638"></a>};
+<a name="line2639"></a>
+<a name="line2640"></a>
+<a name="line2641"></a>/**
+<a name="line2642"></a> * Sets the value of the child field.
+<a name="line2643"></a> * @param {!proto2.TestDefaultChild} value The value.
+<a name="line2644"></a> */
+<a name="line2645"></a>proto2.TestDefaultParent.prototype.setChild = function(value) {
+<a name="line2646"></a>  this.set$Value(1, value);
+<a name="line2647"></a>};
+<a name="line2648"></a>
+<a name="line2649"></a>
+<a name="line2650"></a>/**
+<a name="line2651"></a> * @return {boolean} Whether the child field has a value.
+<a name="line2652"></a> */
+<a name="line2653"></a>proto2.TestDefaultParent.prototype.hasChild = function() {
+<a name="line2654"></a>  return this.has$Value(1);
+<a name="line2655"></a>};
+<a name="line2656"></a>
+<a name="line2657"></a>
+<a name="line2658"></a>/**
+<a name="line2659"></a> * @return {number} The number of values in the child field.
+<a name="line2660"></a> */
+<a name="line2661"></a>proto2.TestDefaultParent.prototype.childCount = function() {
+<a name="line2662"></a>  return this.count$Values(1);
+<a name="line2663"></a>};
+<a name="line2664"></a>
+<a name="line2665"></a>
+<a name="line2666"></a>/**
+<a name="line2667"></a> * Clears the values in the child field.
+<a name="line2668"></a> */
+<a name="line2669"></a>proto2.TestDefaultParent.prototype.clearChild = function() {
+<a name="line2670"></a>  this.clear$Field(1);
+<a name="line2671"></a>};
+<a name="line2672"></a>
+<a name="line2673"></a>
+<a name="line2674"></a>
+<a name="line2675"></a>/**
+<a name="line2676"></a> * Message TestDefaultChild.
+<a name="line2677"></a> * @constructor
+<a name="line2678"></a> * @extends {goog.proto2.Message}
+<a name="line2679"></a> * @final
+<a name="line2680"></a> */
+<a name="line2681"></a>proto2.TestDefaultChild = function() {
+<a name="line2682"></a>  goog.proto2.Message.apply(this);
+<a name="line2683"></a>};
+<a name="line2684"></a>goog.inherits(proto2.TestDefaultChild, goog.proto2.Message);
+<a name="line2685"></a>
+<a name="line2686"></a>
+<a name="line2687"></a>/**
+<a name="line2688"></a> * Overrides {@link goog.proto2.Message#clone} to specify its exact return type.
+<a name="line2689"></a> * @return {!proto2.TestDefaultChild} The cloned message.
+<a name="line2690"></a> * @override
+<a name="line2691"></a> */
+<a name="line2692"></a>proto2.TestDefaultChild.prototype.clone;
+<a name="line2693"></a>
+<a name="line2694"></a>
+<a name="line2695"></a>/**
+<a name="line2696"></a> * Gets the value of the foo field.
+<a name="line2697"></a> * @return {?boolean} The value.
+<a name="line2698"></a> */
+<a name="line2699"></a>proto2.TestDefaultChild.prototype.getFoo = function() {
+<a name="line2700"></a>  return /** @type {?boolean} */ (this.get$Value(1));
+<a name="line2701"></a>};
+<a name="line2702"></a>
+<a name="line2703"></a>
+<a name="line2704"></a>/**
+<a name="line2705"></a> * Gets the value of the foo field or the default value if not set.
+<a name="line2706"></a> * @return {boolean} The value.
+<a name="line2707"></a> */
+<a name="line2708"></a>proto2.TestDefaultChild.prototype.getFooOrDefault = function() {
+<a name="line2709"></a>  return /** @type {boolean} */ (this.get$ValueOrDefault(1));
+<a name="line2710"></a>};
+<a name="line2711"></a>
+<a name="line2712"></a>
+<a name="line2713"></a>/**
+<a name="line2714"></a> * Sets the value of the foo field.
+<a name="line2715"></a> * @param {boolean} value The value.
+<a name="line2716"></a> */
+<a name="line2717"></a>proto2.TestDefaultChild.prototype.setFoo = function(value) {
+<a name="line2718"></a>  this.set$Value(1, value);
+<a name="line2719"></a>};
+<a name="line2720"></a>
+<a name="line2721"></a>
+<a name="line2722"></a>/**
+<a name="line2723"></a> * @return {boolean} Whether the foo field has a value.
+<a name="line2724"></a> */
+<a name="line2725"></a>proto2.TestDefaultChild.prototype.hasFoo = function() {
+<a name="line2726"></a>  return this.has$Value(1);
+<a name="line2727"></a>};
+<a name="line2728"></a>
+<a name="line2729"></a>
+<a name="line2730"></a>/**
+<a name="line2731"></a> * @return {number} The number of values in the foo field.
+<a name="line2732"></a> */
+<a name="line2733"></a>proto2.TestDefaultChild.prototype.fooCount = function() {
+<a name="line2734"></a>  return this.count$Values(1);
+<a name="line2735"></a>};
+<a name="line2736"></a>
+<a name="line2737"></a>
+<a name="line2738"></a>/**
+<a name="line2739"></a> * Clears the values in the foo field.
+<a name="line2740"></a> */
+<a name="line2741"></a>proto2.TestDefaultChild.prototype.clearFoo = function() {
+<a name="line2742"></a>  this.clear$Field(1);
+<a name="line2743"></a>};
+<a name="line2744"></a>
+<a name="line2745"></a>
+<a name="line2746"></a>goog.proto2.Message.set$Metadata(proto2.TestAllTypes, {
+<a name="line2747"></a>  0: {
+<a name="line2748"></a>    name: &#39;TestAllTypes&#39;,
+<a name="line2749"></a>    fullName: &#39;TestAllTypes&#39;
+<a name="line2750"></a>  },
+<a name="line2751"></a>  1: {
+<a name="line2752"></a>    name: &#39;optional_int32&#39;,
+<a name="line2753"></a>    fieldType: goog.proto2.Message.FieldType.INT32,
+<a name="line2754"></a>    type: Number
+<a name="line2755"></a>  },
+<a name="line2756"></a>  2: {
+<a name="line2757"></a>    name: &#39;optional_int64&#39;,
+<a name="line2758"></a>    fieldType: goog.proto2.Message.FieldType.INT64,
+<a name="line2759"></a>    defaultValue: &#39;1&#39;,
+<a name="line2760"></a>    type: String
+<a name="line2761"></a>  },
+<a name="line2762"></a>  3: {
+<a name="line2763"></a>    name: &#39;optional_uint32&#39;,
+<a name="line2764"></a>    fieldType: goog.proto2.Message.FieldType.UINT32,
+<a name="line2765"></a>    type: Number
+<a name="line2766"></a>  },
+<a name="line2767"></a>  4: {
+<a name="line2768"></a>    name: &#39;optional_uint64&#39;,
+<a name="line2769"></a>    fieldType: goog.proto2.Message.FieldType.UINT64,
+<a name="line2770"></a>    type: String
+<a name="line2771"></a>  },
+<a name="line2772"></a>  5: {
+<a name="line2773"></a>    name: &#39;optional_sint32&#39;,
+<a name="line2774"></a>    fieldType: goog.proto2.Message.FieldType.SINT32,
+<a name="line2775"></a>    type: Number
+<a name="line2776"></a>  },
+<a name="line2777"></a>  6: {
+<a name="line2778"></a>    name: &#39;optional_sint64&#39;,
+<a name="line2779"></a>    fieldType: goog.proto2.Message.FieldType.SINT64,
+<a name="line2780"></a>    type: String
+<a name="line2781"></a>  },
+<a name="line2782"></a>  7: {
+<a name="line2783"></a>    name: &#39;optional_fixed32&#39;,
+<a name="line2784"></a>    fieldType: goog.proto2.Message.FieldType.FIXED32,
+<a name="line2785"></a>    type: Number
+<a name="line2786"></a>  },
+<a name="line2787"></a>  8: {
+<a name="line2788"></a>    name: &#39;optional_fixed64&#39;,
+<a name="line2789"></a>    fieldType: goog.proto2.Message.FieldType.FIXED64,
+<a name="line2790"></a>    type: String
+<a name="line2791"></a>  },
+<a name="line2792"></a>  9: {
+<a name="line2793"></a>    name: &#39;optional_sfixed32&#39;,
+<a name="line2794"></a>    fieldType: goog.proto2.Message.FieldType.SFIXED32,
+<a name="line2795"></a>    type: Number
+<a name="line2796"></a>  },
+<a name="line2797"></a>  10: {
+<a name="line2798"></a>    name: &#39;optional_sfixed64&#39;,
+<a name="line2799"></a>    fieldType: goog.proto2.Message.FieldType.SFIXED64,
+<a name="line2800"></a>    type: String
+<a name="line2801"></a>  },
+<a name="line2802"></a>  11: {
+<a name="line2803"></a>    name: &#39;optional_float&#39;,
+<a name="line2804"></a>    fieldType: goog.proto2.Message.FieldType.FLOAT,
+<a name="line2805"></a>    defaultValue: 1.5,
+<a name="line2806"></a>    type: Number
+<a name="line2807"></a>  },
+<a name="line2808"></a>  12: {
+<a name="line2809"></a>    name: &#39;optional_double&#39;,
+<a name="line2810"></a>    fieldType: goog.proto2.Message.FieldType.DOUBLE,
+<a name="line2811"></a>    type: Number
+<a name="line2812"></a>  },
+<a name="line2813"></a>  13: {
+<a name="line2814"></a>    name: &#39;optional_bool&#39;,
+<a name="line2815"></a>    fieldType: goog.proto2.Message.FieldType.BOOL,
+<a name="line2816"></a>    type: Boolean
+<a name="line2817"></a>  },
+<a name="line2818"></a>  14: {
+<a name="line2819"></a>    name: &#39;optional_string&#39;,
+<a name="line2820"></a>    fieldType: goog.proto2.Message.FieldType.STRING,
+<a name="line2821"></a>    type: String
+<a name="line2822"></a>  },
+<a name="line2823"></a>  15: {
+<a name="line2824"></a>    name: &#39;optional_bytes&#39;,
+<a name="line2825"></a>    fieldType: goog.proto2.Message.FieldType.BYTES,
+<a name="line2826"></a>    defaultValue: &#39;moo&#39;,
+<a name="line2827"></a>    type: String
+<a name="line2828"></a>  },
+<a name="line2829"></a>  16: {
+<a name="line2830"></a>    name: &#39;optionalgroup&#39;,
+<a name="line2831"></a>    fieldType: goog.proto2.Message.FieldType.GROUP,
+<a name="line2832"></a>    type: proto2.TestAllTypes.OptionalGroup
+<a name="line2833"></a>  },
+<a name="line2834"></a>  18: {
+<a name="line2835"></a>    name: &#39;optional_nested_message&#39;,
+<a name="line2836"></a>    fieldType: goog.proto2.Message.FieldType.MESSAGE,
+<a name="line2837"></a>    type: proto2.TestAllTypes.NestedMessage
+<a name="line2838"></a>  },
+<a name="line2839"></a>  21: {
+<a name="line2840"></a>    name: &#39;optional_nested_enum&#39;,
+<a name="line2841"></a>    fieldType: goog.proto2.Message.FieldType.ENUM,
+<a name="line2842"></a>    defaultValue: proto2.TestAllTypes.NestedEnum.FOO,
+<a name="line2843"></a>    type: proto2.TestAllTypes.NestedEnum
+<a name="line2844"></a>  },
+<a name="line2845"></a>  50: {
+<a name="line2846"></a>    name: &#39;optional_int64_number&#39;,
+<a name="line2847"></a>    fieldType: goog.proto2.Message.FieldType.INT64,
+<a name="line2848"></a>    defaultValue: 1000000000000000001,
+<a name="line2849"></a>    type: Number
+<a name="line2850"></a>  },
+<a name="line2851"></a>  51: {
+<a name="line2852"></a>    name: &#39;optional_int64_string&#39;,
+<a name="line2853"></a>    fieldType: goog.proto2.Message.FieldType.INT64,
+<a name="line2854"></a>    defaultValue: &#39;1000000000000000001&#39;,
+<a name="line2855"></a>    type: String
+<a name="line2856"></a>  },
+<a name="line2857"></a>  31: {
+<a name="line2858"></a>    name: &#39;repeated_int32&#39;,
+<a name="line2859"></a>    repeated: true,
+<a name="line2860"></a>    fieldType: goog.proto2.Message.FieldType.INT32,
+<a name="line2861"></a>    type: Number
+<a name="line2862"></a>  },
+<a name="line2863"></a>  32: {
+<a name="line2864"></a>    name: &#39;repeated_int64&#39;,
+<a name="line2865"></a>    repeated: true,
+<a name="line2866"></a>    fieldType: goog.proto2.Message.FieldType.INT64,
+<a name="line2867"></a>    type: String
+<a name="line2868"></a>  },
+<a name="line2869"></a>  33: {
+<a name="line2870"></a>    name: &#39;repeated_uint32&#39;,
+<a name="line2871"></a>    repeated: true,
+<a name="line2872"></a>    fieldType: goog.proto2.Message.FieldType.UINT32,
+<a name="line2873"></a>    type: Number
+<a name="line2874"></a>  },
+<a name="line2875"></a>  34: {
+<a name="line2876"></a>    name: &#39;repeated_uint64&#39;,
+<a name="line2877"></a>    repeated: true,
+<a name="line2878"></a>    fieldType: goog.proto2.Message.FieldType.UINT64,
+<a name="line2879"></a>    type: String
+<a name="line2880"></a>  },
+<a name="line2881"></a>  35: {
+<a name="line2882"></a>    name: &#39;repeated_sint32&#39;,
+<a name="line2883"></a>    repeated: true,
+<a name="line2884"></a>    fieldType: goog.proto2.Message.FieldType.SINT32,
+<a name="line2885"></a>    type: Number
+<a name="line2886"></a>  },
+<a name="line2887"></a>  36: {
+<a name="line2888"></a>    name: &#39;repeated_sint64&#39;,
+<a name="line2889"></a>    repeated: true,
+<a name="line2890"></a>    fieldType: goog.proto2.Message.FieldType.SINT64,
+<a name="line2891"></a>    type: String
+<a name="line2892"></a>  },
+<a name="line2893"></a>  37: {
+<a name="line2894"></a>    name: &#39;repeated_fixed32&#39;,
+<a name="line2895"></a>    repeated: true,
+<a name="line2896"></a>    fieldType: goog.proto2.Message.FieldType.FIXED32,
+<a name="line2897"></a>    type: Number
+<a name="line2898"></a>  },
+<a name="line2899"></a>  38: {
+<a name="line2900"></a>    name: &#39;repeated_fixed64&#39;,
+<a name="line2901"></a>    repeated: true,
+<a name="line2902"></a>    fieldType: goog.proto2.Message.FieldType.FIXED64,
+<a name="line2903"></a>    type: String
+<a name="line2904"></a>  },
+<a name="line2905"></a>  39: {
+<a name="line2906"></a>    name: &#39;repeated_sfixed32&#39;,
+<a name="line2907"></a>    repeated: true,
+<a name="line2908"></a>    fieldType: goog.proto2.Message.FieldType.SFIXED32,
+<a name="line2909"></a>    type: Number
+<a name="line2910"></a>  },
+<a name="line2911"></a>  40: {
+<a name="line2912"></a>    name: &#39;repeated_sfixed64&#39;,
+<a name="line2913"></a>    repeated: true,
+<a name="line2914"></a>    fieldType: goog.proto2.Message.FieldType.SFIXED64,
+<a name="line2915"></a>    type: String
+<a name="line2916"></a>  },
+<a name="line2917"></a>  41: {
+<a name="line2918"></a>    name: &#39;repeated_float&#39;,
+<a name="line2919"></a>    repeated: true,
+<a name="line2920"></a>    fieldType: goog.proto2.Message.FieldType.FLOAT,
+<a name="line2921"></a>    type: Number
+<a name="line2922"></a>  },
+<a name="line2923"></a>  42: {
+<a name="line2924"></a>    name: &#39;repeated_double&#39;,
+<a name="line2925"></a>    repeated: true,
+<a name="line2926"></a>    fieldType: goog.proto2.Message.FieldType.DOUBLE,
+<a name="line2927"></a>    type: Number
+<a name="line2928"></a>  },
+<a name="line2929"></a>  43: {
+<a name="line2930"></a>    name: &#39;repeated_bool&#39;,
+<a name="line2931"></a>    repeated: true,
+<a name="line2932"></a>    fieldType: goog.proto2.Message.FieldType.BOOL,
+<a name="line2933"></a>    type: Boolean
+<a name="line2934"></a>  },
+<a name="line2935"></a>  44: {
+<a name="line2936"></a>    name: &#39;repeated_string&#39;,
+<a name="line2937"></a>    repeated: true,
+<a name="line2938"></a>    fieldType: goog.proto2.Message.FieldType.STRING,
+<a name="line2939"></a>    type: String
+<a name="line2940"></a>  },
+<a name="line2941"></a>  45: {
+<a name="line2942"></a>    name: &#39;repeated_bytes&#39;,
+<a name="line2943"></a>    repeated: true,
+<a name="line2944"></a>    fieldType: goog.proto2.Message.FieldType.BYTES,
+<a name="line2945"></a>    type: String
+<a name="line2946"></a>  },
+<a name="line2947"></a>  46: {
+<a name="line2948"></a>    name: &#39;repeatedgroup&#39;,
+<a name="line2949"></a>    repeated: true,
+<a name="line2950"></a>    fieldType: goog.proto2.Message.FieldType.GROUP,
+<a name="line2951"></a>    type: proto2.TestAllTypes.RepeatedGroup
+<a name="line2952"></a>  },
+<a name="line2953"></a>  48: {
+<a name="line2954"></a>    name: &#39;repeated_nested_message&#39;,
+<a name="line2955"></a>    repeated: true,
+<a name="line2956"></a>    fieldType: goog.proto2.Message.FieldType.MESSAGE,
+<a name="line2957"></a>    type: proto2.TestAllTypes.NestedMessage
+<a name="line2958"></a>  },
+<a name="line2959"></a>  49: {
+<a name="line2960"></a>    name: &#39;repeated_nested_enum&#39;,
+<a name="line2961"></a>    repeated: true,
+<a name="line2962"></a>    fieldType: goog.proto2.Message.FieldType.ENUM,
+<a name="line2963"></a>    defaultValue: proto2.TestAllTypes.NestedEnum.FOO,
+<a name="line2964"></a>    type: proto2.TestAllTypes.NestedEnum
+<a name="line2965"></a>  },
+<a name="line2966"></a>  52: {
+<a name="line2967"></a>    name: &#39;repeated_int64_number&#39;,
+<a name="line2968"></a>    repeated: true,
+<a name="line2969"></a>    fieldType: goog.proto2.Message.FieldType.INT64,
+<a name="line2970"></a>    type: Number
+<a name="line2971"></a>  },
+<a name="line2972"></a>  53: {
+<a name="line2973"></a>    name: &#39;repeated_int64_string&#39;,
+<a name="line2974"></a>    repeated: true,
+<a name="line2975"></a>    fieldType: goog.proto2.Message.FieldType.INT64,
+<a name="line2976"></a>    type: String
+<a name="line2977"></a>  }
+<a name="line2978"></a>});
+<a name="line2979"></a>
+<a name="line2980"></a>
+<a name="line2981"></a>goog.proto2.Message.set$Metadata(proto2.TestAllTypes.NestedMessage, {
+<a name="line2982"></a>  0: {
+<a name="line2983"></a>    name: &#39;NestedMessage&#39;,
+<a name="line2984"></a>    containingType: proto2.TestAllTypes,
+<a name="line2985"></a>    fullName: &#39;TestAllTypes.NestedMessage&#39;
+<a name="line2986"></a>  },
+<a name="line2987"></a>  1: {
+<a name="line2988"></a>    name: &#39;b&#39;,
+<a name="line2989"></a>    fieldType: goog.proto2.Message.FieldType.INT32,
+<a name="line2990"></a>    type: Number
+<a name="line2991"></a>  },
+<a name="line2992"></a>  2: {
+<a name="line2993"></a>    name: &#39;c&#39;,
+<a name="line2994"></a>    fieldType: goog.proto2.Message.FieldType.INT32,
+<a name="line2995"></a>    type: Number
+<a name="line2996"></a>  }
+<a name="line2997"></a>});
+<a name="line2998"></a>
+<a name="line2999"></a>
+<a name="line3000"></a>goog.proto2.Message.set$Metadata(proto2.TestAllTypes.OptionalGroup, {
+<a name="line3001"></a>  0: {
+<a name="line3002"></a>    name: &#39;OptionalGroup&#39;,
+<a name="line3003"></a>    containingType: proto2.TestAllTypes,
+<a name="line3004"></a>    fullName: &#39;TestAllTypes.OptionalGroup&#39;
+<a name="line3005"></a>  },
+<a name="line3006"></a>  17: {
+<a name="line3007"></a>    name: &#39;a&#39;,
+<a name="line3008"></a>    fieldType: goog.proto2.Message.FieldType.INT32,
+<a name="line3009"></a>    type: Number
+<a name="line3010"></a>  }
+<a name="line3011"></a>});
+<a name="line3012"></a>
+<a name="line3013"></a>
+<a name="line3014"></a>goog.proto2.Message.set$Metadata(proto2.TestAllTypes.RepeatedGroup, {
+<a name="line3015"></a>  0: {
+<a name="line3016"></a>    name: &#39;RepeatedGroup&#39;,
+<a name="line3017"></a>    containingType: proto2.TestAllTypes,
+<a name="line3018"></a>    fullName: &#39;TestAllTypes.RepeatedGroup&#39;
+<a name="line3019"></a>  },
+<a name="line3020"></a>  47: {
+<a name="line3021"></a>    name: &#39;a&#39;,
+<a name="line3022"></a>    repeated: true,
+<a name="line3023"></a>    fieldType: goog.proto2.Message.FieldType.INT32,
+<a name="line3024"></a>    type: Number
+<a name="line3025"></a>  }
+<a name="line3026"></a>});
+<a name="line3027"></a>
+<a name="line3028"></a>
+<a name="line3029"></a>goog.proto2.Message.set$Metadata(proto2.TestDefaultParent, {
+<a name="line3030"></a>  0: {
+<a name="line3031"></a>    name: &#39;TestDefaultParent&#39;,
+<a name="line3032"></a>    fullName: &#39;TestDefaultParent&#39;
+<a name="line3033"></a>  },
+<a name="line3034"></a>  1: {
+<a name="line3035"></a>    name: &#39;child&#39;,
+<a name="line3036"></a>    fieldType: goog.proto2.Message.FieldType.MESSAGE,
+<a name="line3037"></a>    type: proto2.TestDefaultChild
+<a name="line3038"></a>  }
+<a name="line3039"></a>});
+<a name="line3040"></a>
+<a name="line3041"></a>
+<a name="line3042"></a>goog.proto2.Message.set$Metadata(proto2.TestDefaultChild, {
+<a name="line3043"></a>  0: {
+<a name="line3044"></a>    name: &#39;TestDefaultChild&#39;,
+<a name="line3045"></a>    fullName: &#39;TestDefaultChild&#39;
+<a name="line3046"></a>  },
+<a name="line3047"></a>  1: {
+<a name="line3048"></a>    name: &#39;foo&#39;,
+<a name="line3049"></a>    fieldType: goog.proto2.Message.FieldType.BOOL,
+<a name="line3050"></a>    defaultValue: true,
+<a name="line3051"></a>    type: Boolean
+<a name="line3052"></a>  }
+<a name="line3053"></a>});
+</pre>
+
+
+</body>
+</html>

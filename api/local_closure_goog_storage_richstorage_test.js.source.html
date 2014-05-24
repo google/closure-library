@@ -1,0 +1,133 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>richstorage_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_storage_richstorage_test.js.html">richstorage_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.storage.RichStorageTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.storage.RichStorageTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.storage.ErrorCode&#39;);
+<a name="line19"></a>goog.require(&#39;goog.storage.RichStorage&#39;);
+<a name="line20"></a>goog.require(&#39;goog.storage.storage_test&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.storage.FakeMechanism&#39;);
+<a name="line23"></a>
+<a name="line24"></a>function testBasicOperations() {
+<a name="line25"></a>  var mechanism = new goog.testing.storage.FakeMechanism();
+<a name="line26"></a>  var storage = new goog.storage.RichStorage(mechanism);
+<a name="line27"></a>  goog.storage.storage_test.runBasicTests(storage);
+<a name="line28"></a>}
+<a name="line29"></a>
+<a name="line30"></a>function testWrapping() {
+<a name="line31"></a>  var mechanism = new goog.testing.storage.FakeMechanism();
+<a name="line32"></a>  var storage = new goog.storage.RichStorage(mechanism);
+<a name="line33"></a>
+<a name="line34"></a>  // Some metadata.
+<a name="line35"></a>  var object = {&#39;a&#39;: 97, &#39;b&#39;: 98};
+<a name="line36"></a>  var wrapper = new goog.storage.RichStorage.Wrapper(object);
+<a name="line37"></a>  wrapper[&#39;meta&#39;] = &#39;info&#39;;
+<a name="line38"></a>  storage.set(&#39;first&#39;, wrapper);
+<a name="line39"></a>  assertObjectEquals(object, storage.get(&#39;first&#39;));
+<a name="line40"></a>  assertObjectEquals(wrapper, storage.getWrapper(&#39;first&#39;));
+<a name="line41"></a>  assertEquals(&#39;info&#39;, storage.getWrapper(&#39;first&#39;)[&#39;meta&#39;]);
+<a name="line42"></a>
+<a name="line43"></a>  // Multiple wrappings.
+<a name="line44"></a>  var wrapper1 = goog.storage.RichStorage.Wrapper.wrapIfNecessary(object);
+<a name="line45"></a>  wrapper1[&#39;some&#39;] = &#39;meta&#39;;
+<a name="line46"></a>  var wrapper2 = goog.storage.RichStorage.Wrapper.wrapIfNecessary(wrapper1);
+<a name="line47"></a>  wrapper2[&#39;more&#39;] = &#39;stuff&#39;;
+<a name="line48"></a>  storage.set(&#39;second&#39;, wrapper2);
+<a name="line49"></a>  assertObjectEquals(object, storage.get(&#39;second&#39;));
+<a name="line50"></a>  assertObjectEquals(wrapper2, storage.getWrapper(&#39;second&#39;));
+<a name="line51"></a>  assertEquals(&#39;meta&#39;, storage.getWrapper(&#39;second&#39;)[&#39;some&#39;]);
+<a name="line52"></a>  assertEquals(&#39;stuff&#39;, storage.getWrapper(&#39;second&#39;)[&#39;more&#39;]);
+<a name="line53"></a>
+<a name="line54"></a>  // Invalid wrappings.
+<a name="line55"></a>  mechanism.set(&#39;third&#39;, &#39;null&#39;);
+<a name="line56"></a>  assertEquals(goog.storage.ErrorCode.INVALID_VALUE,
+<a name="line57"></a>               assertThrows(function() {storage.get(&#39;third&#39;)}));
+<a name="line58"></a>  mechanism.set(&#39;third&#39;, &#39;{&quot;meta&quot;: &quot;data&quot;}&#39;);
+<a name="line59"></a>  assertEquals(goog.storage.ErrorCode.INVALID_VALUE,
+<a name="line60"></a>               assertThrows(function() {storage.get(&#39;third&#39;)}));
+<a name="line61"></a>
+<a name="line62"></a>  // Weird values.
+<a name="line63"></a>  var wrapperA = new goog.storage.RichStorage.Wrapper.wrapIfNecessary(null);
+<a name="line64"></a>  wrapperA[&#39;one&#39;] = 1;
+<a name="line65"></a>  storage.set(&#39;first&#39;, wrapperA);
+<a name="line66"></a>  assertObjectEquals(wrapperA, storage.getWrapper(&#39;first&#39;));
+<a name="line67"></a>  var wrapperB = new goog.storage.RichStorage.Wrapper.wrapIfNecessary(&#39;&#39;);
+<a name="line68"></a>  wrapperA[&#39;two&#39;] = [];
+<a name="line69"></a>  storage.set(&#39;second&#39;, wrapperB);
+<a name="line70"></a>  assertObjectEquals(wrapperB, storage.getWrapper(&#39;second&#39;));
+<a name="line71"></a>
+<a name="line72"></a>  // Clean up.
+<a name="line73"></a>  storage.remove(&#39;first&#39;);
+<a name="line74"></a>  storage.remove(&#39;second&#39;);
+<a name="line75"></a>  storage.remove(&#39;third&#39;);
+<a name="line76"></a>  assertUndefined(storage.get(&#39;first&#39;));
+<a name="line77"></a>  assertUndefined(storage.get(&#39;second&#39;));
+<a name="line78"></a>  assertUndefined(storage.get(&#39;third&#39;));
+<a name="line79"></a>  assertNull(mechanism.get(&#39;first&#39;));
+<a name="line80"></a>  assertNull(mechanism.get(&#39;second&#39;));
+<a name="line81"></a>  assertNull(mechanism.get(&#39;third&#39;));
+<a name="line82"></a>}
+</pre>
+
+
+</body>
+</html>

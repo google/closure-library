@@ -1,0 +1,189 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>wirev8.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_net_webchannel_wirev8.js.html">wirev8.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Codec functions of the v8 wire protocol. Eventually we&#39;d want
+<a name="line17"></a> * to support pluggable wire-format to improve wire efficiency and to enable
+<a name="line18"></a> * binary encoding. Such support will require an interface class, which
+<a name="line19"></a> * will be added later.
+<a name="line20"></a> *
+<a name="line21"></a> * @visibility {:internal}
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.labs.net.webChannel.WireV8&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line28"></a>goog.require(&#39;goog.json&#39;);
+<a name="line29"></a>goog.require(&#39;goog.json.EvalJsonProcessor&#39;);
+<a name="line30"></a>goog.require(&#39;goog.structs&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * The v8 codec class.
+<a name="line36"></a> *
+<a name="line37"></a> * @constructor
+<a name="line38"></a> * @struct
+<a name="line39"></a> */
+<a name="line40"></a>goog.labs.net.webChannel.WireV8 = function() {
+<a name="line41"></a>  /**
+<a name="line42"></a>   * Parser for a response payload. The parser should return an array.
+<a name="line43"></a>   * @private {!goog.string.Parser}
+<a name="line44"></a>   */
+<a name="line45"></a>  this.parser_ = new goog.json.EvalJsonProcessor(null, true);
+<a name="line46"></a>};
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>goog.scope(function() {
+<a name="line50"></a>var WireV8 = goog.labs.net.webChannel.WireV8;
+<a name="line51"></a>var Wire = goog.labs.net.webChannel.Wire;
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Encodes a standalone message into the wire format.
+<a name="line56"></a> *
+<a name="line57"></a> * May throw exception if the message object contains any invalid elements.
+<a name="line58"></a> *
+<a name="line59"></a> * @param {!Object|!goog.structs.Map} message The message data.
+<a name="line60"></a> *     V8 only support JS objects (or Map).
+<a name="line61"></a> * @param {!Array.&lt;string&gt;} buffer The text buffer to write the message to.
+<a name="line62"></a> * @param {string=} opt_prefix The prefix for each field of the object.
+<a name="line63"></a> */
+<a name="line64"></a>WireV8.prototype.encodeMessage = function(message, buffer, opt_prefix) {
+<a name="line65"></a>  var prefix = opt_prefix || &#39;&#39;;
+<a name="line66"></a>  try {
+<a name="line67"></a>    goog.structs.forEach(message, function(value, key) {
+<a name="line68"></a>      var encodedValue = value;
+<a name="line69"></a>      if (goog.isObject(value)) {
+<a name="line70"></a>        encodedValue = goog.json.serialize(value);
+<a name="line71"></a>      }  // keep the fast-path for primitive types
+<a name="line72"></a>      buffer.push(prefix + key + &#39;=&#39; + encodeURIComponent(encodedValue));
+<a name="line73"></a>    });
+<a name="line74"></a>  } catch (ex) {
+<a name="line75"></a>    // We send a map here because lots of the retry logic relies on map IDs,
+<a name="line76"></a>    // so we have to send something (possibly redundant).
+<a name="line77"></a>    buffer.push(prefix + &#39;type&#39; + &#39;=&#39; + encodeURIComponent(&#39;_badmap&#39;));
+<a name="line78"></a>    throw ex;
+<a name="line79"></a>  }
+<a name="line80"></a>};
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Encodes all the buffered messages of the forward channel.
+<a name="line85"></a> *
+<a name="line86"></a> * @param {!Array.&lt;Wire.QueuedMap&gt;} messageQueue The message data.
+<a name="line87"></a> *     V8 only support JS objects.
+<a name="line88"></a> * @param {number} count The number of messages to be encoded.
+<a name="line89"></a> * @param {?function(!Object)} badMapHandler Callback for bad messages.
+<a name="line90"></a> */
+<a name="line91"></a>WireV8.prototype.encodeMessageQueue = function(messageQueue, count,
+<a name="line92"></a>    badMapHandler) {
+<a name="line93"></a>  var sb = [&#39;count=&#39; + count];
+<a name="line94"></a>  var offset;
+<a name="line95"></a>  if (count &gt; 0) {
+<a name="line96"></a>    // To save a bit of bandwidth, specify the base mapId and the rest as
+<a name="line97"></a>    // offsets from it.
+<a name="line98"></a>    offset = messageQueue[0].mapId;
+<a name="line99"></a>    sb.push(&#39;ofs=&#39; + offset);
+<a name="line100"></a>  } else {
+<a name="line101"></a>    offset = 0;
+<a name="line102"></a>  }
+<a name="line103"></a>  for (var i = 0; i &lt; count; i++) {
+<a name="line104"></a>    var mapId = messageQueue[i].mapId;
+<a name="line105"></a>    var map = messageQueue[i].map;
+<a name="line106"></a>    mapId -= offset;
+<a name="line107"></a>    try {
+<a name="line108"></a>      this.encodeMessage(map, sb, &#39;req&#39; + mapId + &#39;_&#39;);
+<a name="line109"></a>    } catch (ex) {
+<a name="line110"></a>      if (badMapHandler) {
+<a name="line111"></a>        badMapHandler(map);
+<a name="line112"></a>      }
+<a name="line113"></a>    }
+<a name="line114"></a>  }
+<a name="line115"></a>  return sb.join(&#39;&amp;&#39;);
+<a name="line116"></a>};
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Decodes a standalone message received from the wire. May throw exception
+<a name="line121"></a> * if text is ill-formatted.
+<a name="line122"></a> *
+<a name="line123"></a> * We use eval() to decode as the server may generate JS literals,
+<a name="line124"></a> * which don&#39;t necessarily comply with the JSON format, such as
+<a name="line125"></a> * double quota, null array element.
+<a name="line126"></a> *
+<a name="line127"></a> * Over time we will phase out servers that don&#39;t generate JSON formatted
+<a name="line128"></a> * messages.
+<a name="line129"></a> *
+<a name="line130"></a> * @param {string} messageText The string content as received from the wire.
+<a name="line131"></a> * @return {*} The decoded message object.
+<a name="line132"></a> */
+<a name="line133"></a>WireV8.prototype.decodeMessage = function(messageText) {
+<a name="line134"></a>  var response = this.parser_.parse(messageText);
+<a name="line135"></a>  goog.asserts.assert(goog.isArray(response));  // throw exception
+<a name="line136"></a>  return response;
+<a name="line137"></a>};
+<a name="line138"></a>});  // goog.scope
+</pre>
+
+
+</body>
+</html>

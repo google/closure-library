@@ -1,0 +1,398 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>activitymonitor.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_activitymonitor.js.html">activitymonitor.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Activity Monitor.
+<a name="line17"></a> *
+<a name="line18"></a> * Fires throttled events when a user interacts with the specified document.
+<a name="line19"></a> * This class also exposes the amount of time since the last user event.
+<a name="line20"></a> *
+<a name="line21"></a> * If you would prefer to get BECOME_ACTIVE and BECOME_IDLE events when the
+<a name="line22"></a> * user changes states, then you should use the IdleTimer class instead.
+<a name="line23"></a> *
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.ui.ActivityMonitor&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.array&#39;);
+<a name="line29"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line30"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line32"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line33"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * Once initialized with a document, the activity monitor can be queried for
+<a name="line39"></a> * the current idle time.
+<a name="line40"></a> *
+<a name="line41"></a> * @param {goog.dom.DomHelper|Array.&lt;goog.dom.DomHelper&gt;=} opt_domHelper
+<a name="line42"></a> *     DomHelper which contains the document(s) to listen to.  If null, the
+<a name="line43"></a> *     default document is usedinstead.
+<a name="line44"></a> * @param {boolean=} opt_useBubble Whether to use the bubble phase to listen for
+<a name="line45"></a> *     events. By default listens on the capture phase so that it won&#39;t miss
+<a name="line46"></a> *     events that get stopPropagation/cancelBubble&#39;d. However, this can cause
+<a name="line47"></a> *     problems in IE8 if the page loads multiple scripts that include the
+<a name="line48"></a> *     closure event handling code.
+<a name="line49"></a> *
+<a name="line50"></a> * @constructor
+<a name="line51"></a> * @extends {goog.events.EventTarget}
+<a name="line52"></a> */
+<a name="line53"></a>goog.ui.ActivityMonitor = function(opt_domHelper, opt_useBubble) {
+<a name="line54"></a>  goog.events.EventTarget.call(this);
+<a name="line55"></a>
+<a name="line56"></a>  /**
+<a name="line57"></a>   * Array of documents that are being listened to.
+<a name="line58"></a>   * @type {Array.&lt;Document&gt;}
+<a name="line59"></a>   * @private
+<a name="line60"></a>   */
+<a name="line61"></a>  this.documents_ = [];
+<a name="line62"></a>
+<a name="line63"></a>  /**
+<a name="line64"></a>   * Whether to use the bubble phase to listen for events.
+<a name="line65"></a>   * @type {boolean}
+<a name="line66"></a>   * @private
+<a name="line67"></a>   */
+<a name="line68"></a>  this.useBubble_ = !!opt_useBubble;
+<a name="line69"></a>
+<a name="line70"></a>  /**
+<a name="line71"></a>   * The event handler.
+<a name="line72"></a>   * @type {goog.events.EventHandler.&lt;!goog.ui.ActivityMonitor&gt;}
+<a name="line73"></a>   * @private
+<a name="line74"></a>   */
+<a name="line75"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line76"></a>
+<a name="line77"></a>  /**
+<a name="line78"></a>   * Whether the current window is an iframe.
+<a name="line79"></a>   * TODO(user): Move to goog.dom.
+<a name="line80"></a>   * @type {boolean}
+<a name="line81"></a>   * @private
+<a name="line82"></a>   */
+<a name="line83"></a>  this.isIframe_ = window.parent != window;
+<a name="line84"></a>
+<a name="line85"></a>  if (!opt_domHelper) {
+<a name="line86"></a>    this.addDocument(goog.dom.getDomHelper().getDocument());
+<a name="line87"></a>  } else if (goog.isArray(opt_domHelper)) {
+<a name="line88"></a>    for (var i = 0; i &lt; opt_domHelper.length; i++) {
+<a name="line89"></a>      this.addDocument(opt_domHelper[i].getDocument());
+<a name="line90"></a>    }
+<a name="line91"></a>  } else {
+<a name="line92"></a>    this.addDocument(opt_domHelper.getDocument());
+<a name="line93"></a>  }
+<a name="line94"></a>
+<a name="line95"></a>  /**
+<a name="line96"></a>   * The time (in milliseconds) of the last user event.
+<a name="line97"></a>   * @type {number}
+<a name="line98"></a>   * @private
+<a name="line99"></a>   */
+<a name="line100"></a>  this.lastEventTime_ = goog.now();
+<a name="line101"></a>
+<a name="line102"></a>};
+<a name="line103"></a>goog.inherits(goog.ui.ActivityMonitor, goog.events.EventTarget);
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * The last event type that was detected.
+<a name="line108"></a> * @type {string}
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.ui.ActivityMonitor.prototype.lastEventType_ = &#39;&#39;;
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * The mouse x-position after the last user event.
+<a name="line116"></a> * @type {number}
+<a name="line117"></a> * @private
+<a name="line118"></a> */
+<a name="line119"></a>goog.ui.ActivityMonitor.prototype.lastMouseX_;
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * The mouse y-position after the last user event.
+<a name="line124"></a> * @type {number}
+<a name="line125"></a> * @private
+<a name="line126"></a> */
+<a name="line127"></a>goog.ui.ActivityMonitor.prototype.lastMouseY_;
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * The earliest time that another throttled ACTIVITY event will be dispatched
+<a name="line132"></a> * @type {number}
+<a name="line133"></a> * @private
+<a name="line134"></a> */
+<a name="line135"></a>goog.ui.ActivityMonitor.prototype.minEventTime_ = 0;
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/**
+<a name="line139"></a> * Minimum amount of time in ms between throttled ACTIVITY events
+<a name="line140"></a> * @type {number}
+<a name="line141"></a> */
+<a name="line142"></a>goog.ui.ActivityMonitor.MIN_EVENT_SPACING = 3 * 1000;
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * If a user executes one of these events, s/he is considered not idle.
+<a name="line147"></a> * @type {Array.&lt;goog.events.EventType&gt;}
+<a name="line148"></a> * @private
+<a name="line149"></a> */
+<a name="line150"></a>goog.ui.ActivityMonitor.userEventTypesBody_ = [
+<a name="line151"></a>  goog.events.EventType.CLICK,
+<a name="line152"></a>  goog.events.EventType.DBLCLICK,
+<a name="line153"></a>  goog.events.EventType.MOUSEDOWN,
+<a name="line154"></a>  goog.events.EventType.MOUSEMOVE,
+<a name="line155"></a>  goog.events.EventType.MOUSEUP
+<a name="line156"></a>];
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * If a user executes one of these events, s/he is considered not idle.
+<a name="line161"></a> * Note: monitoring touch events within iframe cause problems in iOS.
+<a name="line162"></a> * @type {Array.&lt;goog.events.EventType&gt;}
+<a name="line163"></a> * @private
+<a name="line164"></a> */
+<a name="line165"></a>goog.ui.ActivityMonitor.userTouchEventTypesBody_ = [
+<a name="line166"></a>  goog.events.EventType.TOUCHEND,
+<a name="line167"></a>  goog.events.EventType.TOUCHMOVE,
+<a name="line168"></a>  goog.events.EventType.TOUCHSTART
+<a name="line169"></a>];
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * If a user executes one of these events, s/he is considered not idle.
+<a name="line174"></a> * @type {Array.&lt;goog.events.EventType&gt;}
+<a name="line175"></a> * @private
+<a name="line176"></a> */
+<a name="line177"></a>goog.ui.ActivityMonitor.userEventTypesDocuments_ =
+<a name="line178"></a>    [goog.events.EventType.KEYDOWN, goog.events.EventType.KEYUP];
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Event constants for the activity monitor.
+<a name="line183"></a> * @enum {string}
+<a name="line184"></a> */
+<a name="line185"></a>goog.ui.ActivityMonitor.Event = {
+<a name="line186"></a>  /** Event fired when the user does something interactive */
+<a name="line187"></a>  ACTIVITY: &#39;activity&#39;
+<a name="line188"></a>};
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/** @override */
+<a name="line192"></a>goog.ui.ActivityMonitor.prototype.disposeInternal = function() {
+<a name="line193"></a>  goog.ui.ActivityMonitor.superClass_.disposeInternal.call(this);
+<a name="line194"></a>  this.eventHandler_.dispose();
+<a name="line195"></a>  this.eventHandler_ = null;
+<a name="line196"></a>  delete this.documents_;
+<a name="line197"></a>};
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Adds a document to those being monitored by this class.
+<a name="line202"></a> *
+<a name="line203"></a> * @param {Document} doc Document to monitor.
+<a name="line204"></a> */
+<a name="line205"></a>goog.ui.ActivityMonitor.prototype.addDocument = function(doc) {
+<a name="line206"></a>  if (goog.array.contains(this.documents_, doc)) {
+<a name="line207"></a>    return;
+<a name="line208"></a>  }
+<a name="line209"></a>  this.documents_.push(doc);
+<a name="line210"></a>  var useCapture = !this.useBubble_;
+<a name="line211"></a>
+<a name="line212"></a>  var eventsToListenTo = goog.array.concat(
+<a name="line213"></a>      goog.ui.ActivityMonitor.userEventTypesDocuments_,
+<a name="line214"></a>      goog.ui.ActivityMonitor.userEventTypesBody_);
+<a name="line215"></a>
+<a name="line216"></a>  if (!this.isIframe_) {
+<a name="line217"></a>    // Monitoring touch events in iframe causes problems interacting with text
+<a name="line218"></a>    // fields in iOS (input text, textarea, contenteditable, select/copy/paste),
+<a name="line219"></a>    // so just ignore these events. This shouldn&#39;t matter much given that a
+<a name="line220"></a>    // touchstart event followed by touchend event produces a click event,
+<a name="line221"></a>    // which is being monitored correctly.
+<a name="line222"></a>    goog.array.extend(eventsToListenTo,
+<a name="line223"></a>        goog.ui.ActivityMonitor.userTouchEventTypesBody_);
+<a name="line224"></a>  }
+<a name="line225"></a>
+<a name="line226"></a>  this.eventHandler_.listen(doc, eventsToListenTo, this.handleEvent_,
+<a name="line227"></a>      useCapture);
+<a name="line228"></a>};
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Removes a document from those being monitored by this class.
+<a name="line233"></a> *
+<a name="line234"></a> * @param {Document} doc Document to monitor.
+<a name="line235"></a> */
+<a name="line236"></a>goog.ui.ActivityMonitor.prototype.removeDocument = function(doc) {
+<a name="line237"></a>  if (this.isDisposed()) {
+<a name="line238"></a>    return;
+<a name="line239"></a>  }
+<a name="line240"></a>  goog.array.remove(this.documents_, doc);
+<a name="line241"></a>  var useCapture = !this.useBubble_;
+<a name="line242"></a>
+<a name="line243"></a>  var eventsToUnlistenTo = goog.array.concat(
+<a name="line244"></a>      goog.ui.ActivityMonitor.userEventTypesDocuments_,
+<a name="line245"></a>      goog.ui.ActivityMonitor.userEventTypesBody_);
+<a name="line246"></a>
+<a name="line247"></a>  if (!this.isIframe_) {
+<a name="line248"></a>    // See note above about monitoring touch events in iframe.
+<a name="line249"></a>    goog.array.extend(eventsToUnlistenTo,
+<a name="line250"></a>        goog.ui.ActivityMonitor.userTouchEventTypesBody_);
+<a name="line251"></a>  }
+<a name="line252"></a>
+<a name="line253"></a>  this.eventHandler_.unlisten(doc, eventsToUnlistenTo, this.handleEvent_,
+<a name="line254"></a>      useCapture);
+<a name="line255"></a>};
+<a name="line256"></a>
+<a name="line257"></a>
+<a name="line258"></a>/**
+<a name="line259"></a> * Updates the last event time when a user action occurs.
+<a name="line260"></a> * @param {goog.events.BrowserEvent} e Event object.
+<a name="line261"></a> * @private
+<a name="line262"></a> */
+<a name="line263"></a>goog.ui.ActivityMonitor.prototype.handleEvent_ = function(e) {
+<a name="line264"></a>  var update = false;
+<a name="line265"></a>  switch (e.type) {
+<a name="line266"></a>    case goog.events.EventType.MOUSEMOVE:
+<a name="line267"></a>      // In FF 1.5, we get spurious mouseover and mouseout events when the UI
+<a name="line268"></a>      // redraws. We only want to update the idle time if the mouse has moved.
+<a name="line269"></a>      if (typeof this.lastMouseX_ == &#39;number&#39; &amp;&amp;
+<a name="line270"></a>          this.lastMouseX_ != e.clientX ||
+<a name="line271"></a>          typeof this.lastMouseY_ == &#39;number&#39; &amp;&amp;
+<a name="line272"></a>          this.lastMouseY_ != e.clientY) {
+<a name="line273"></a>        update = true;
+<a name="line274"></a>      }
+<a name="line275"></a>      this.lastMouseX_ = e.clientX;
+<a name="line276"></a>      this.lastMouseY_ = e.clientY;
+<a name="line277"></a>      break;
+<a name="line278"></a>    default:
+<a name="line279"></a>      update = true;
+<a name="line280"></a>  }
+<a name="line281"></a>
+<a name="line282"></a>  if (update) {
+<a name="line283"></a>    var type = goog.asserts.assertString(e.type);
+<a name="line284"></a>    this.updateIdleTime(goog.now(), type);
+<a name="line285"></a>  }
+<a name="line286"></a>};
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * Updates the last event time to be the present time, useful for non-DOM
+<a name="line291"></a> * events that should update idle time.
+<a name="line292"></a> */
+<a name="line293"></a>goog.ui.ActivityMonitor.prototype.resetTimer = function() {
+<a name="line294"></a>  this.updateIdleTime(goog.now(), &#39;manual&#39;);
+<a name="line295"></a>};
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>/**
+<a name="line299"></a> * Updates the idle time and fires an event if time has elapsed since
+<a name="line300"></a> * the last update.
+<a name="line301"></a> * @param {number} eventTime Time (in MS) of the event that cleared the idle
+<a name="line302"></a> *     timer.
+<a name="line303"></a> * @param {string} eventType Type of the event, used only for debugging.
+<a name="line304"></a> * @protected
+<a name="line305"></a> */
+<a name="line306"></a>goog.ui.ActivityMonitor.prototype.updateIdleTime = function(
+<a name="line307"></a>    eventTime, eventType) {
+<a name="line308"></a>  // update internal state noting whether the user was idle
+<a name="line309"></a>  this.lastEventTime_ = eventTime;
+<a name="line310"></a>  this.lastEventType_ = eventType;
+<a name="line311"></a>
+<a name="line312"></a>  // dispatch event
+<a name="line313"></a>  if (eventTime &gt; this.minEventTime_) {
+<a name="line314"></a>    this.dispatchEvent(goog.ui.ActivityMonitor.Event.ACTIVITY);
+<a name="line315"></a>    this.minEventTime_ = eventTime + goog.ui.ActivityMonitor.MIN_EVENT_SPACING;
+<a name="line316"></a>  }
+<a name="line317"></a>};
+<a name="line318"></a>
+<a name="line319"></a>
+<a name="line320"></a>/**
+<a name="line321"></a> * Returns the amount of time the user has been idle.
+<a name="line322"></a> * @param {number=} opt_now The current time can optionally be passed in for the
+<a name="line323"></a> *     computation to avoid an extra Date allocation.
+<a name="line324"></a> * @return {number} The amount of time in ms that the user has been idle.
+<a name="line325"></a> */
+<a name="line326"></a>goog.ui.ActivityMonitor.prototype.getIdleTime = function(opt_now) {
+<a name="line327"></a>  var now = opt_now || goog.now();
+<a name="line328"></a>  return now - this.lastEventTime_;
+<a name="line329"></a>};
+<a name="line330"></a>
+<a name="line331"></a>
+<a name="line332"></a>/**
+<a name="line333"></a> * Returns the type of the last user event.
+<a name="line334"></a> * @return {string} event type.
+<a name="line335"></a> */
+<a name="line336"></a>goog.ui.ActivityMonitor.prototype.getLastEventType = function() {
+<a name="line337"></a>  return this.lastEventType_;
+<a name="line338"></a>};
+<a name="line339"></a>
+<a name="line340"></a>
+<a name="line341"></a>/**
+<a name="line342"></a> * Returns the time of the last event
+<a name="line343"></a> * @return {number} last event time.
+<a name="line344"></a> */
+<a name="line345"></a>goog.ui.ActivityMonitor.prototype.getLastEventTime = function() {
+<a name="line346"></a>  return this.lastEventTime_;
+<a name="line347"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>channel.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_net_webchannel_channel.js.html">channel.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A shared interface for WebChannelBase and BaseTestChannel.
+<a name="line17"></a> *
+<a name="line18"></a> * @visibility {:internal}
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.labs.net.webChannel.Channel&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Shared interface between Channel and TestChannel to support callbacks
+<a name="line28"></a> * between WebChannelBase and BaseTestChannel and between Channel and
+<a name="line29"></a> * ChannelRequest.
+<a name="line30"></a> *
+<a name="line31"></a> * @interface
+<a name="line32"></a> */
+<a name="line33"></a>goog.labs.net.webChannel.Channel = function() {};
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>goog.scope(function() {
+<a name="line37"></a>var Channel = goog.labs.net.webChannel.Channel;
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Determines whether to use a secondary domain when the server gives us
+<a name="line42"></a> * a host prefix. This allows us to work around browser per-domain
+<a name="line43"></a> * connection limits.
+<a name="line44"></a> *
+<a name="line45"></a> * Currently, we  use secondary domains when using Trident&#39;s ActiveXObject,
+<a name="line46"></a> * because it supports cross-domain requests out of the box.  Note that in IE10
+<a name="line47"></a> * we no longer use ActiveX since it&#39;s not supported in Metro mode and IE10
+<a name="line48"></a> * supports XHR streaming.
+<a name="line49"></a> *
+<a name="line50"></a> * If you need to use secondary domains on other browsers and IE10,
+<a name="line51"></a> * you have two choices:
+<a name="line52"></a> *     1) If you only care about browsers that support CORS
+<a name="line53"></a> *        (https://developer.mozilla.org/en-US/docs/HTTP_access_control), you
+<a name="line54"></a> *        can use {@link #setSupportsCrossDomainXhrs} and set the appropriate
+<a name="line55"></a> *        CORS response headers on the server.
+<a name="line56"></a> *     2) Or, override this method in a subclass, and make sure that those
+<a name="line57"></a> *        browsers use some messaging mechanism that works cross-domain (e.g
+<a name="line58"></a> *        iframes and window.postMessage).
+<a name="line59"></a> *
+<a name="line60"></a> * @return {boolean} Whether to use secondary domains.
+<a name="line61"></a> * @see http://code.google.com/p/closure-library/issues/detail?id=339
+<a name="line62"></a> */
+<a name="line63"></a>Channel.prototype.shouldUseSecondaryDomains = goog.abstractMethod;
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * Called when creating an XhrIo object.  Override in a subclass if
+<a name="line68"></a> * you need to customize the behavior, for example to enable the creation of
+<a name="line69"></a> * XHR&#39;s capable of calling a secondary domain. Will also allow calling
+<a name="line70"></a> * a secondary domain if withCredentials (CORS) is enabled.
+<a name="line71"></a> * @param {?string} hostPrefix The host prefix, if we need an XhrIo object
+<a name="line72"></a> *     capable of calling a secondary domain.
+<a name="line73"></a> * @return {!goog.net.XhrIo} A new XhrIo object.
+<a name="line74"></a> */
+<a name="line75"></a>Channel.prototype.createXhrIo = goog.abstractMethod;
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Callback from ChannelRequest that indicates a request has completed.
+<a name="line80"></a> * @param {!goog.labs.net.webChannel.ChannelRequest} request
+<a name="line81"></a> *     The request object.
+<a name="line82"></a> */
+<a name="line83"></a>Channel.prototype.onRequestComplete = goog.abstractMethod;
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Returns whether the channel is closed
+<a name="line88"></a> * @return {boolean} true if the channel is closed.
+<a name="line89"></a> */
+<a name="line90"></a>Channel.prototype.isClosed = goog.abstractMethod;
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Callback from ChannelRequest for when new data is received
+<a name="line95"></a> * @param {goog.labs.net.webChannel.ChannelRequest} request
+<a name="line96"></a> *     The request object.
+<a name="line97"></a> * @param {string} responseText The text of the response.
+<a name="line98"></a> */
+<a name="line99"></a>Channel.prototype.onRequestData = goog.abstractMethod;
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Gets whether this channel is currently active. This is used to determine the
+<a name="line104"></a> * length of time to wait before retrying. This call delegates to the handler.
+<a name="line105"></a> * @return {boolean} Whether the channel is currently active.
+<a name="line106"></a> */
+<a name="line107"></a>Channel.prototype.isActive = goog.abstractMethod;
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Not needed for testchannel.
+<a name="line112"></a> *
+<a name="line113"></a> * Gets the Uri used for the connection that sends data to the server.
+<a name="line114"></a> * @param {string} path The path on the host.
+<a name="line115"></a> * @return {goog.Uri} The forward channel URI.
+<a name="line116"></a> */
+<a name="line117"></a>Channel.prototype.getForwardChannelUri = goog.abstractMethod;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Not needed for testchannel.
+<a name="line122"></a> *
+<a name="line123"></a> * Gets the Uri used for the connection that receives data from the server.
+<a name="line124"></a> * @param {?string} hostPrefix The host prefix.
+<a name="line125"></a> * @param {string} path The path on the host.
+<a name="line126"></a> * @return {goog.Uri} The back channel URI.
+<a name="line127"></a> */
+<a name="line128"></a>Channel.prototype.getBackChannelUri = goog.abstractMethod;
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Not needed for testchannel.
+<a name="line133"></a> *
+<a name="line134"></a> * Allows the handler to override a host prefix provided by the server.  Will
+<a name="line135"></a> * be called whenever the channel has received such a prefix and is considering
+<a name="line136"></a> * its use.
+<a name="line137"></a> * @param {?string} serverHostPrefix The host prefix provided by the server.
+<a name="line138"></a> * @return {?string} The host prefix the client should use.
+<a name="line139"></a> */
+<a name="line140"></a>Channel.prototype.correctHostPrefix = goog.abstractMethod;
+<a name="line141"></a>
+<a name="line142"></a>
+<a name="line143"></a>/**
+<a name="line144"></a> * Not needed for testchannel.
+<a name="line145"></a> *
+<a name="line146"></a> * Creates a data Uri applying logic for secondary hostprefix, port
+<a name="line147"></a> * overrides, and versioning.
+<a name="line148"></a> * @param {?string} hostPrefix The host prefix.
+<a name="line149"></a> * @param {string} path The path on the host (may be absolute or relative).
+<a name="line150"></a> * @param {number=} opt_overridePort Optional override port.
+<a name="line151"></a> * @return {goog.Uri} The data URI.
+<a name="line152"></a> */
+<a name="line153"></a>Channel.prototype.createDataUri = goog.abstractMethod;
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>/**
+<a name="line157"></a> * Not needed for testchannel.
+<a name="line158"></a> *
+<a name="line159"></a> * Callback from TestChannel for when the channel is finished.
+<a name="line160"></a> * @param {goog.labs.net.webChannel.BaseTestChannel} testChannel
+<a name="line161"></a> *     The TestChannel.
+<a name="line162"></a> * @param {boolean} useChunked  Whether we can chunk responses.
+<a name="line163"></a> */
+<a name="line164"></a>Channel.prototype.testConnectionFinished = goog.abstractMethod;
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Not needed for testchannel.
+<a name="line169"></a> *
+<a name="line170"></a> * Callback from TestChannel for when the channel has an error.
+<a name="line171"></a> * @param {goog.labs.net.webChannel.BaseTestChannel} testChannel
+<a name="line172"></a> *     The TestChannel.
+<a name="line173"></a> * @param {goog.labs.net.webChannel.ChannelRequest.Error} errorCode
+<a name="line174"></a> *     The error code of the failure.
+<a name="line175"></a> */
+<a name="line176"></a>Channel.prototype.testConnectionFailure = goog.abstractMethod;
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Not needed for testchannel.
+<a name="line181"></a> * Gets the result of previous connectivity tests.
+<a name="line182"></a> *
+<a name="line183"></a> * @return {!goog.labs.net.webChannel.ConnectionState} The connectivity state.
+<a name="line184"></a> */
+<a name="line185"></a>Channel.prototype.getConnectionState = goog.abstractMethod;
+<a name="line186"></a>});  // goog.scope
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,680 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>roundedpanel.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_roundedpanel.js.html">roundedpanel.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Class definition for a rounded corner panel.
+<a name="line17"></a> * @supported IE 6.0+, Safari 2.0+, Firefox 1.5+, Opera 9.2+.
+<a name="line18"></a> * @see ../demos/roundedpanel.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.BaseRoundedPanel&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.ui.CssRoundedPanel&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.ui.GraphicsRoundedPanel&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.ui.RoundedPanel&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.ui.RoundedPanel.Corner&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line30"></a>goog.require(&#39;goog.graphics&#39;);
+<a name="line31"></a>goog.require(&#39;goog.graphics.Path&#39;);
+<a name="line32"></a>goog.require(&#39;goog.graphics.SolidFill&#39;);
+<a name="line33"></a>goog.require(&#39;goog.graphics.Stroke&#39;);
+<a name="line34"></a>goog.require(&#39;goog.math&#39;);
+<a name="line35"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line36"></a>goog.require(&#39;goog.style&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line38"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/**
+<a name="line42"></a> * Factory method that returns an instance of a BaseRoundedPanel.
+<a name="line43"></a> * @param {number} radius The radius of the rounded corner(s), in pixels.
+<a name="line44"></a> * @param {number} borderWidth The thickness of the border, in pixels.
+<a name="line45"></a> * @param {string} borderColor The border color of the panel.
+<a name="line46"></a> * @param {string=} opt_backgroundColor The background color of the panel.
+<a name="line47"></a> * @param {number=} opt_corners The corners of the panel to be rounded. Any
+<a name="line48"></a> *     corners not specified will be rendered as square corners. Will default
+<a name="line49"></a> *     to all square corners if not specified.
+<a name="line50"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
+<a name="line51"></a> *     document we want to render in.
+<a name="line52"></a> * @return {!goog.ui.BaseRoundedPanel} An instance of a
+<a name="line53"></a> *     goog.ui.BaseRoundedPanel subclass.
+<a name="line54"></a> */
+<a name="line55"></a>goog.ui.RoundedPanel.create = function(radius,
+<a name="line56"></a>                                       borderWidth,
+<a name="line57"></a>                                       borderColor,
+<a name="line58"></a>                                       opt_backgroundColor,
+<a name="line59"></a>                                       opt_corners,
+<a name="line60"></a>                                       opt_domHelper) {
+<a name="line61"></a>  // This variable checks for the presence of Safari 3.0+ or Gecko 1.9+,
+<a name="line62"></a>  // which can leverage special CSS styles to create rounded corners.
+<a name="line63"></a>  var isCssReady = goog.userAgent.WEBKIT &amp;&amp;
+<a name="line64"></a>      goog.userAgent.isVersionOrHigher(&#39;500&#39;) ||
+<a name="line65"></a>      goog.userAgent.GECKO &amp;&amp; goog.userAgent.isVersionOrHigher(&#39;1.9a&#39;);
+<a name="line66"></a>
+<a name="line67"></a>  if (isCssReady) {
+<a name="line68"></a>    // Safari 3.0+ and Firefox 3.0+ support this instance.
+<a name="line69"></a>    return new goog.ui.CssRoundedPanel(
+<a name="line70"></a>        radius,
+<a name="line71"></a>        borderWidth,
+<a name="line72"></a>        borderColor,
+<a name="line73"></a>        opt_backgroundColor,
+<a name="line74"></a>        opt_corners,
+<a name="line75"></a>        opt_domHelper);
+<a name="line76"></a>  } else {
+<a name="line77"></a>    return new goog.ui.GraphicsRoundedPanel(
+<a name="line78"></a>        radius,
+<a name="line79"></a>        borderWidth,
+<a name="line80"></a>        borderColor,
+<a name="line81"></a>        opt_backgroundColor,
+<a name="line82"></a>        opt_corners,
+<a name="line83"></a>        opt_domHelper);
+<a name="line84"></a>  }
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Enum for specifying which corners to render.
+<a name="line90"></a> * @enum {number}
+<a name="line91"></a> */
+<a name="line92"></a>goog.ui.RoundedPanel.Corner = {
+<a name="line93"></a>  NONE: 0,
+<a name="line94"></a>  BOTTOM_LEFT: 2,
+<a name="line95"></a>  TOP_LEFT: 4,
+<a name="line96"></a>  LEFT: 6, // BOTTOM_LEFT | TOP_LEFT
+<a name="line97"></a>  TOP_RIGHT: 8,
+<a name="line98"></a>  TOP: 12, // TOP_LEFT | TOP_RIGHT
+<a name="line99"></a>  BOTTOM_RIGHT: 1,
+<a name="line100"></a>  BOTTOM: 3, // BOTTOM_LEFT | BOTTOM_RIGHT
+<a name="line101"></a>  RIGHT: 9, // TOP_RIGHT | BOTTOM_RIGHT
+<a name="line102"></a>  ALL: 15 // TOP | BOTTOM
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * CSS class name suffixes for the elements comprising the RoundedPanel.
+<a name="line108"></a> * @enum {string}
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.ui.RoundedPanel.Classes_ = {
+<a name="line112"></a>  BACKGROUND: goog.getCssName(&#39;goog-roundedpanel-background&#39;),
+<a name="line113"></a>  PANEL: goog.getCssName(&#39;goog-roundedpanel&#39;),
+<a name="line114"></a>  CONTENT: goog.getCssName(&#39;goog-roundedpanel-content&#39;)
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Base class for the hierarchy of RoundedPanel classes. Do not
+<a name="line121"></a> * instantiate directly. Instead, call goog.ui.RoundedPanel.create().
+<a name="line122"></a> * The HTML structure for the RoundedPanel is:
+<a name="line123"></a> * &lt;pre&gt;
+<a name="line124"></a> * - div (Contains the background and content. Class name: goog-roundedpanel)
+<a name="line125"></a> *   - div (Contains the background/rounded corners. Class name:
+<a name="line126"></a> *       goog-roundedpanel-bg)
+<a name="line127"></a> *   - div (Contains the content. Class name: goog-roundedpanel-content)
+<a name="line128"></a> * &lt;/pre&gt;
+<a name="line129"></a> * @param {number} radius The radius of the rounded corner(s), in pixels.
+<a name="line130"></a> * @param {number} borderWidth The thickness of the border, in pixels.
+<a name="line131"></a> * @param {string} borderColor The border color of the panel.
+<a name="line132"></a> * @param {string=} opt_backgroundColor The background color of the panel.
+<a name="line133"></a> * @param {number=} opt_corners The corners of the panel to be rounded. Any
+<a name="line134"></a> *     corners not specified will be rendered as square corners. Will default
+<a name="line135"></a> *     to all square corners if not specified.
+<a name="line136"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
+<a name="line137"></a> *     document we want to render in.
+<a name="line138"></a> * @extends {goog.ui.Component}
+<a name="line139"></a> * @constructor
+<a name="line140"></a> */
+<a name="line141"></a>goog.ui.BaseRoundedPanel = function(radius,
+<a name="line142"></a>                                    borderWidth,
+<a name="line143"></a>                                    borderColor,
+<a name="line144"></a>                                    opt_backgroundColor,
+<a name="line145"></a>                                    opt_corners,
+<a name="line146"></a>                                    opt_domHelper) {
+<a name="line147"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line148"></a>
+<a name="line149"></a>  /**
+<a name="line150"></a>   * The radius of the rounded corner(s), in pixels.
+<a name="line151"></a>   * @type {number}
+<a name="line152"></a>   * @private
+<a name="line153"></a>   */
+<a name="line154"></a>  this.radius_ = radius;
+<a name="line155"></a>
+<a name="line156"></a>  /**
+<a name="line157"></a>   * The thickness of the border, in pixels.
+<a name="line158"></a>   * @type {number}
+<a name="line159"></a>   * @private
+<a name="line160"></a>   */
+<a name="line161"></a>  this.borderWidth_ = borderWidth;
+<a name="line162"></a>
+<a name="line163"></a>  /**
+<a name="line164"></a>   * The border color of the panel.
+<a name="line165"></a>   * @type {string}
+<a name="line166"></a>   * @private
+<a name="line167"></a>   */
+<a name="line168"></a>  this.borderColor_ = borderColor;
+<a name="line169"></a>
+<a name="line170"></a>  /**
+<a name="line171"></a>   * The background color of the panel.
+<a name="line172"></a>   * @type {?string}
+<a name="line173"></a>   * @private
+<a name="line174"></a>   */
+<a name="line175"></a>  this.backgroundColor_ = opt_backgroundColor || null;
+<a name="line176"></a>
+<a name="line177"></a>  /**
+<a name="line178"></a>   * The corners of the panel to be rounded; defaults to
+<a name="line179"></a>   * goog.ui.RoundedPanel.Corner.NONE
+<a name="line180"></a>   * @type {number}
+<a name="line181"></a>   * @private
+<a name="line182"></a>   */
+<a name="line183"></a>  this.corners_ = opt_corners || goog.ui.RoundedPanel.Corner.NONE;
+<a name="line184"></a>};
+<a name="line185"></a>goog.inherits(goog.ui.BaseRoundedPanel, goog.ui.Component);
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * The element containing the rounded corners and background.
+<a name="line190"></a> * @type {Element}
+<a name="line191"></a> * @private
+<a name="line192"></a> */
+<a name="line193"></a>goog.ui.BaseRoundedPanel.prototype.backgroundElement_;
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * The element containing the actual content.
+<a name="line198"></a> * @type {Element}
+<a name="line199"></a> * @private
+<a name="line200"></a> */
+<a name="line201"></a>goog.ui.BaseRoundedPanel.prototype.contentElement_;
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * This method performs all the necessary DOM manipulation to create the panel.
+<a name="line206"></a> * Overrides {@link goog.ui.Component#decorateInternal}.
+<a name="line207"></a> * @param {Element} element The element to decorate.
+<a name="line208"></a> * @protected
+<a name="line209"></a> * @override
+<a name="line210"></a> */
+<a name="line211"></a>goog.ui.BaseRoundedPanel.prototype.decorateInternal = function(element) {
+<a name="line212"></a>  goog.ui.BaseRoundedPanel.superClass_.decorateInternal.call(this, element);
+<a name="line213"></a>  goog.dom.classlist.add(goog.asserts.assert(this.getElement()),
+<a name="line214"></a>      goog.ui.RoundedPanel.Classes_.PANEL);
+<a name="line215"></a>
+<a name="line216"></a>  // Create backgroundElement_, and add it to the DOM.
+<a name="line217"></a>  this.backgroundElement_ = this.getDomHelper().createElement(&#39;div&#39;);
+<a name="line218"></a>  this.backgroundElement_.className = goog.ui.RoundedPanel.Classes_.BACKGROUND;
+<a name="line219"></a>  this.getElement().appendChild(this.backgroundElement_);
+<a name="line220"></a>
+<a name="line221"></a>  // Set contentElement_ by finding a child node within element_ with the
+<a name="line222"></a>  // proper class name. If none exists, create it and add it to the DOM.
+<a name="line223"></a>  this.contentElement_ = goog.dom.getElementsByTagNameAndClass(
+<a name="line224"></a>      null, goog.ui.RoundedPanel.Classes_.CONTENT, this.getElement())[0];
+<a name="line225"></a>  if (!this.contentElement_) {
+<a name="line226"></a>    this.contentElement_ = this.getDomHelper().createDom(&#39;div&#39;);
+<a name="line227"></a>    this.contentElement_.className = goog.ui.RoundedPanel.Classes_.CONTENT;
+<a name="line228"></a>    this.getElement().appendChild(this.contentElement_);
+<a name="line229"></a>  }
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/** @override */
+<a name="line234"></a>goog.ui.BaseRoundedPanel.prototype.disposeInternal = function() {
+<a name="line235"></a>  if (this.backgroundElement_) {
+<a name="line236"></a>    this.getDomHelper().removeNode(this.backgroundElement_);
+<a name="line237"></a>    this.backgroundElement_ = null;
+<a name="line238"></a>  }
+<a name="line239"></a>  this.contentElement_ = null;
+<a name="line240"></a>  goog.ui.BaseRoundedPanel.superClass_.disposeInternal.call(this);
+<a name="line241"></a>};
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Returns the DOM element containing the actual content.
+<a name="line246"></a> * @return {Element} The element containing the actual content (null if none).
+<a name="line247"></a> * @override
+<a name="line248"></a> */
+<a name="line249"></a>goog.ui.BaseRoundedPanel.prototype.getContentElement = function() {
+<a name="line250"></a>  return this.contentElement_;
+<a name="line251"></a>};
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * RoundedPanel class specifically for browsers that support CSS attributes
+<a name="line257"></a> * for elements with rounded borders (ex. Safari 3.0+, Firefox 3.0+). Do not
+<a name="line258"></a> * instantiate directly. Instead, call goog.ui.RoundedPanel.create().
+<a name="line259"></a> * @param {number} radius The radius of the rounded corner(s), in pixels.
+<a name="line260"></a> * @param {number} borderWidth The thickness of the border, in pixels.
+<a name="line261"></a> * @param {string} borderColor The border color of the panel.
+<a name="line262"></a> * @param {string=} opt_backgroundColor The background color of the panel.
+<a name="line263"></a> * @param {number=} opt_corners The corners of the panel to be rounded. Any
+<a name="line264"></a> *     corners not specified will be rendered as square corners. Will
+<a name="line265"></a> *     default to all square corners if not specified.
+<a name="line266"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
+<a name="line267"></a> *     document we want to render in.
+<a name="line268"></a> * @extends {goog.ui.BaseRoundedPanel}
+<a name="line269"></a> * @constructor
+<a name="line270"></a> * @final
+<a name="line271"></a> */
+<a name="line272"></a>goog.ui.CssRoundedPanel = function(radius,
+<a name="line273"></a>                                   borderWidth,
+<a name="line274"></a>                                   borderColor,
+<a name="line275"></a>                                   opt_backgroundColor,
+<a name="line276"></a>                                   opt_corners,
+<a name="line277"></a>                                   opt_domHelper) {
+<a name="line278"></a>  goog.ui.BaseRoundedPanel.call(this,
+<a name="line279"></a>                                radius,
+<a name="line280"></a>                                borderWidth,
+<a name="line281"></a>                                borderColor,
+<a name="line282"></a>                                opt_backgroundColor,
+<a name="line283"></a>                                opt_corners,
+<a name="line284"></a>                                opt_domHelper);
+<a name="line285"></a>};
+<a name="line286"></a>goog.inherits(goog.ui.CssRoundedPanel, goog.ui.BaseRoundedPanel);
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * This method performs all the necessary DOM manipulation to create the panel.
+<a name="line291"></a> * Overrides {@link goog.ui.Component#decorateInternal}.
+<a name="line292"></a> * @param {Element} element The element to decorate.
+<a name="line293"></a> * @protected
+<a name="line294"></a> * @override
+<a name="line295"></a> */
+<a name="line296"></a>goog.ui.CssRoundedPanel.prototype.decorateInternal = function(element) {
+<a name="line297"></a>  goog.ui.CssRoundedPanel.superClass_.decorateInternal.call(this, element);
+<a name="line298"></a>
+<a name="line299"></a>  // Set the border width and background color, if needed.
+<a name="line300"></a>  this.backgroundElement_.style.border = this.borderWidth_ +
+<a name="line301"></a>      &#39;px solid &#39; +
+<a name="line302"></a>      this.borderColor_;
+<a name="line303"></a>  if (this.backgroundColor_) {
+<a name="line304"></a>    this.backgroundElement_.style.backgroundColor = this.backgroundColor_;
+<a name="line305"></a>  }
+<a name="line306"></a>
+<a name="line307"></a>  // Set radii of the appropriate rounded corners.
+<a name="line308"></a>  if (this.corners_ == goog.ui.RoundedPanel.Corner.ALL) {
+<a name="line309"></a>    var styleName = this.getStyle_(goog.ui.RoundedPanel.Corner.ALL);
+<a name="line310"></a>    this.backgroundElement_.style[styleName] = this.radius_ + &#39;px&#39;;
+<a name="line311"></a>  } else {
+<a name="line312"></a>    var topLeftRadius =
+<a name="line313"></a>        this.corners_ &amp; goog.ui.RoundedPanel.Corner.TOP_LEFT ?
+<a name="line314"></a>        this.radius_ :
+<a name="line315"></a>        0;
+<a name="line316"></a>    var cornerStyle = this.getStyle_(goog.ui.RoundedPanel.Corner.TOP_LEFT);
+<a name="line317"></a>    this.backgroundElement_.style[cornerStyle] = topLeftRadius + &#39;px&#39;;
+<a name="line318"></a>    var topRightRadius =
+<a name="line319"></a>        this.corners_ &amp; goog.ui.RoundedPanel.Corner.TOP_RIGHT ?
+<a name="line320"></a>        this.radius_ :
+<a name="line321"></a>        0;
+<a name="line322"></a>    cornerStyle = this.getStyle_(goog.ui.RoundedPanel.Corner.TOP_RIGHT);
+<a name="line323"></a>    this.backgroundElement_.style[cornerStyle] = topRightRadius + &#39;px&#39;;
+<a name="line324"></a>    var bottomRightRadius =
+<a name="line325"></a>        this.corners_ &amp; goog.ui.RoundedPanel.Corner.BOTTOM_RIGHT ?
+<a name="line326"></a>        this.radius_ :
+<a name="line327"></a>        0;
+<a name="line328"></a>    cornerStyle = this.getStyle_(goog.ui.RoundedPanel.Corner.BOTTOM_RIGHT);
+<a name="line329"></a>    this.backgroundElement_.style[cornerStyle] = bottomRightRadius + &#39;px&#39;;
+<a name="line330"></a>    var bottomLeftRadius =
+<a name="line331"></a>        this.corners_ &amp; goog.ui.RoundedPanel.Corner.BOTTOM_LEFT ?
+<a name="line332"></a>        this.radius_ :
+<a name="line333"></a>        0;
+<a name="line334"></a>    cornerStyle = this.getStyle_(goog.ui.RoundedPanel.Corner.BOTTOM_LEFT);
+<a name="line335"></a>    this.backgroundElement_.style[cornerStyle] = bottomLeftRadius + &#39;px&#39;;
+<a name="line336"></a>  }
+<a name="line337"></a>};
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * This method returns the CSS style based on the corner of the panel, and the
+<a name="line342"></a> * user-agent.
+<a name="line343"></a> * @param {number} corner The corner whose style name to retrieve.
+<a name="line344"></a> * @private
+<a name="line345"></a> * @return {string} The CSS style based on the specified corner.
+<a name="line346"></a> */
+<a name="line347"></a>goog.ui.CssRoundedPanel.prototype.getStyle_ = function(corner) {
+<a name="line348"></a>  // Determine the proper corner to work with.
+<a name="line349"></a>  var cssCorner, suffixLeft, suffixRight;
+<a name="line350"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line351"></a>    suffixLeft = &#39;Left&#39;;
+<a name="line352"></a>    suffixRight = &#39;Right&#39;;
+<a name="line353"></a>  } else {
+<a name="line354"></a>    suffixLeft = &#39;left&#39;;
+<a name="line355"></a>    suffixRight = &#39;right&#39;;
+<a name="line356"></a>  }
+<a name="line357"></a>  switch (corner) {
+<a name="line358"></a>    case goog.ui.RoundedPanel.Corner.ALL:
+<a name="line359"></a>      cssCorner = &#39;&#39;;
+<a name="line360"></a>      break;
+<a name="line361"></a>    case goog.ui.RoundedPanel.Corner.TOP_LEFT:
+<a name="line362"></a>      cssCorner = &#39;Top&#39; + suffixLeft;
+<a name="line363"></a>      break;
+<a name="line364"></a>    case goog.ui.RoundedPanel.Corner.TOP_RIGHT:
+<a name="line365"></a>      cssCorner = &#39;Top&#39; + suffixRight;
+<a name="line366"></a>      break;
+<a name="line367"></a>    case goog.ui.RoundedPanel.Corner.BOTTOM_LEFT:
+<a name="line368"></a>      cssCorner = &#39;Bottom&#39; + suffixLeft;
+<a name="line369"></a>      break;
+<a name="line370"></a>    case goog.ui.RoundedPanel.Corner.BOTTOM_RIGHT:
+<a name="line371"></a>      cssCorner = &#39;Bottom&#39; + suffixRight;
+<a name="line372"></a>      break;
+<a name="line373"></a>  }
+<a name="line374"></a>
+<a name="line375"></a>  return goog.userAgent.WEBKIT ?
+<a name="line376"></a>      &#39;WebkitBorder&#39; + cssCorner + &#39;Radius&#39; :
+<a name="line377"></a>      &#39;MozBorderRadius&#39; + cssCorner;
+<a name="line378"></a>};
+<a name="line379"></a>
+<a name="line380"></a>
+<a name="line381"></a>
+<a name="line382"></a>/**
+<a name="line383"></a> * RoundedPanel class that uses goog.graphics to create the rounded corners.
+<a name="line384"></a> * Do not instantiate directly. Instead, call goog.ui.RoundedPanel.create().
+<a name="line385"></a> * @param {number} radius The radius of the rounded corner(s), in pixels.
+<a name="line386"></a> * @param {number} borderWidth The thickness of the border, in pixels.
+<a name="line387"></a> * @param {string} borderColor The border color of the panel.
+<a name="line388"></a> * @param {string=} opt_backgroundColor The background color of the panel.
+<a name="line389"></a> * @param {number=} opt_corners The corners of the panel to be rounded. Any
+<a name="line390"></a> *     corners not specified will be rendered as square corners. Will
+<a name="line391"></a> *     default to all square corners if not specified.
+<a name="line392"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
+<a name="line393"></a> *     document we want to render in.
+<a name="line394"></a> * @extends {goog.ui.BaseRoundedPanel}
+<a name="line395"></a> * @constructor
+<a name="line396"></a> * @final
+<a name="line397"></a> */
+<a name="line398"></a>goog.ui.GraphicsRoundedPanel = function(radius,
+<a name="line399"></a>                                        borderWidth,
+<a name="line400"></a>                                        borderColor,
+<a name="line401"></a>                                        opt_backgroundColor,
+<a name="line402"></a>                                        opt_corners,
+<a name="line403"></a>                                        opt_domHelper) {
+<a name="line404"></a>  goog.ui.BaseRoundedPanel.call(this,
+<a name="line405"></a>                                radius,
+<a name="line406"></a>                                borderWidth,
+<a name="line407"></a>                                borderColor,
+<a name="line408"></a>                                opt_backgroundColor,
+<a name="line409"></a>                                opt_corners,
+<a name="line410"></a>                                opt_domHelper);
+<a name="line411"></a>};
+<a name="line412"></a>goog.inherits(goog.ui.GraphicsRoundedPanel, goog.ui.BaseRoundedPanel);
+<a name="line413"></a>
+<a name="line414"></a>
+<a name="line415"></a>/**
+<a name="line416"></a> * A 4-element array containing the circle centers for the arcs in the
+<a name="line417"></a> * bottom-left, top-left, top-right, and bottom-right corners, respectively.
+<a name="line418"></a> * @type {Array.&lt;goog.math.Coordinate&gt;}
+<a name="line419"></a> * @private
+<a name="line420"></a> */
+<a name="line421"></a>goog.ui.GraphicsRoundedPanel.prototype.arcCenters_;
+<a name="line422"></a>
+<a name="line423"></a>
+<a name="line424"></a>/**
+<a name="line425"></a> * A 4-element array containing the start coordinates for rendering the arcs
+<a name="line426"></a> * in the bottom-left, top-left, top-right, and bottom-right corners,
+<a name="line427"></a> * respectively.
+<a name="line428"></a> * @type {Array.&lt;goog.math.Coordinate&gt;}
+<a name="line429"></a> * @private
+<a name="line430"></a> */
+<a name="line431"></a>goog.ui.GraphicsRoundedPanel.prototype.cornerStarts_;
+<a name="line432"></a>
+<a name="line433"></a>
+<a name="line434"></a>/**
+<a name="line435"></a> * A 4-element array containing the arc end angles for the bottom-left,
+<a name="line436"></a> * top-left, top-right, and bottom-right corners, respectively.
+<a name="line437"></a> * @type {Array.&lt;number&gt;}
+<a name="line438"></a> * @private
+<a name="line439"></a> */
+<a name="line440"></a>goog.ui.GraphicsRoundedPanel.prototype.endAngles_;
+<a name="line441"></a>
+<a name="line442"></a>
+<a name="line443"></a>/**
+<a name="line444"></a> * Graphics object for rendering the background.
+<a name="line445"></a> * @type {goog.graphics.AbstractGraphics}
+<a name="line446"></a> * @private
+<a name="line447"></a> */
+<a name="line448"></a>goog.ui.GraphicsRoundedPanel.prototype.graphics_;
+<a name="line449"></a>
+<a name="line450"></a>
+<a name="line451"></a>/**
+<a name="line452"></a> * A 4-element array containing the rounded corner radii for the bottom-left,
+<a name="line453"></a> * top-left, top-right, and bottom-right corners, respectively.
+<a name="line454"></a> * @type {Array.&lt;number&gt;}
+<a name="line455"></a> * @private
+<a name="line456"></a> */
+<a name="line457"></a>goog.ui.GraphicsRoundedPanel.prototype.radii_;
+<a name="line458"></a>
+<a name="line459"></a>
+<a name="line460"></a>/**
+<a name="line461"></a> * A 4-element array containing the arc start angles for the bottom-left,
+<a name="line462"></a> * top-left, top-right, and bottom-right corners, respectively.
+<a name="line463"></a> * @type {Array.&lt;number&gt;}
+<a name="line464"></a> * @private
+<a name="line465"></a> */
+<a name="line466"></a>goog.ui.GraphicsRoundedPanel.prototype.startAngles_;
+<a name="line467"></a>
+<a name="line468"></a>
+<a name="line469"></a>/**
+<a name="line470"></a> * Thickness constant used as an offset to help determine where to start
+<a name="line471"></a> * rendering.
+<a name="line472"></a> * @type {number}
+<a name="line473"></a> * @private
+<a name="line474"></a> */
+<a name="line475"></a>goog.ui.GraphicsRoundedPanel.BORDER_WIDTH_FACTOR_ = 1 / 2;
+<a name="line476"></a>
+<a name="line477"></a>
+<a name="line478"></a>/**
+<a name="line479"></a> * This method performs all the necessary DOM manipulation to create the panel.
+<a name="line480"></a> * Overrides {@link goog.ui.Component#decorateInternal}.
+<a name="line481"></a> * @param {Element} element The element to decorate.
+<a name="line482"></a> * @protected
+<a name="line483"></a> * @override
+<a name="line484"></a> */
+<a name="line485"></a>goog.ui.GraphicsRoundedPanel.prototype.decorateInternal =
+<a name="line486"></a>    function(element) {
+<a name="line487"></a>  goog.ui.GraphicsRoundedPanel.superClass_.decorateInternal.call(this,
+<a name="line488"></a>                                                                 element);
+<a name="line489"></a>
+<a name="line490"></a>  // Calculate the points and angles for creating the rounded corners. Then
+<a name="line491"></a>  // instantiate a Graphics object for drawing purposes.
+<a name="line492"></a>  var elementSize = goog.style.getSize(this.getElement());
+<a name="line493"></a>  this.calculateArcParameters_(elementSize);
+<a name="line494"></a>  this.graphics_ = goog.graphics.createGraphics(
+<a name="line495"></a>      /** @type {number} */ (elementSize.width),
+<a name="line496"></a>      /** @type {number} */ (elementSize.height),
+<a name="line497"></a>      /** @type {number} */ (elementSize.width),
+<a name="line498"></a>      /** @type {number} */ (elementSize.height),
+<a name="line499"></a>      this.getDomHelper());
+<a name="line500"></a>  this.graphics_.createDom();
+<a name="line501"></a>
+<a name="line502"></a>  // Create the path, starting from the bottom-right corner, moving clockwise.
+<a name="line503"></a>  // End with the top-right corner.
+<a name="line504"></a>  var path = new goog.graphics.Path();
+<a name="line505"></a>  for (var i = 0; i &lt; 4; i++) {
+<a name="line506"></a>    if (this.radii_[i]) {
+<a name="line507"></a>      // If radius &gt; 0, draw an arc, moving to the first point and drawing
+<a name="line508"></a>      // a line to the others.
+<a name="line509"></a>      var cx = this.arcCenters_[i].x;
+<a name="line510"></a>      var cy = this.arcCenters_[i].y;
+<a name="line511"></a>      var rx = this.radii_[i];
+<a name="line512"></a>      var ry = rx;
+<a name="line513"></a>      var fromAngle = this.startAngles_[i];
+<a name="line514"></a>      var extent = this.endAngles_[i] - fromAngle;
+<a name="line515"></a>      var startX = cx + goog.math.angleDx(fromAngle, rx);
+<a name="line516"></a>      var startY = cy + goog.math.angleDy(fromAngle, ry);
+<a name="line517"></a>      if (i &gt; 0) {
+<a name="line518"></a>        var currentPoint = path.getCurrentPoint();
+<a name="line519"></a>        if (!currentPoint || startX != currentPoint[0] ||
+<a name="line520"></a>            startY != currentPoint[1]) {
+<a name="line521"></a>          path.lineTo(startX, startY);
+<a name="line522"></a>        }
+<a name="line523"></a>      } else {
+<a name="line524"></a>        path.moveTo(startX, startY);
+<a name="line525"></a>      }
+<a name="line526"></a>      path.arcTo(rx, ry, fromAngle, extent);
+<a name="line527"></a>    } else if (i == 0) {
+<a name="line528"></a>      // If we&#39;re just starting out (ie. i == 0), move to the starting point.
+<a name="line529"></a>      path.moveTo(this.cornerStarts_[i].x,
+<a name="line530"></a>                  this.cornerStarts_[i].y);
+<a name="line531"></a>    } else {
+<a name="line532"></a>      // Otherwise, draw a line to the starting point.
+<a name="line533"></a>      path.lineTo(this.cornerStarts_[i].x,
+<a name="line534"></a>                  this.cornerStarts_[i].y);
+<a name="line535"></a>    }
+<a name="line536"></a>  }
+<a name="line537"></a>
+<a name="line538"></a>  // Close the path, create a stroke object, and fill the enclosed area, if
+<a name="line539"></a>  // needed. Then render the path.
+<a name="line540"></a>  path.close();
+<a name="line541"></a>  var stroke = this.borderWidth_ ?
+<a name="line542"></a>      new goog.graphics.Stroke(this.borderWidth_, this.borderColor_) :
+<a name="line543"></a>      null;
+<a name="line544"></a>  var fill = this.backgroundColor_ ?
+<a name="line545"></a>      new goog.graphics.SolidFill(this.backgroundColor_, 1) :
+<a name="line546"></a>      null;
+<a name="line547"></a>  this.graphics_.drawPath(path, stroke, fill);
+<a name="line548"></a>  this.graphics_.render(this.backgroundElement_);
+<a name="line549"></a>};
+<a name="line550"></a>
+<a name="line551"></a>
+<a name="line552"></a>/** @override */
+<a name="line553"></a>goog.ui.GraphicsRoundedPanel.prototype.disposeInternal = function() {
+<a name="line554"></a>  goog.ui.GraphicsRoundedPanel.superClass_.disposeInternal.call(this);
+<a name="line555"></a>  this.graphics_.dispose();
+<a name="line556"></a>  delete this.graphics_;
+<a name="line557"></a>  delete this.radii_;
+<a name="line558"></a>  delete this.cornerStarts_;
+<a name="line559"></a>  delete this.arcCenters_;
+<a name="line560"></a>  delete this.startAngles_;
+<a name="line561"></a>  delete this.endAngles_;
+<a name="line562"></a>};
+<a name="line563"></a>
+<a name="line564"></a>
+<a name="line565"></a>/**
+<a name="line566"></a> * Calculates the start coordinates, circle centers, and angles, for the rounded
+<a name="line567"></a> * corners at each corner of the panel.
+<a name="line568"></a> * @param {goog.math.Size} elementSize The size of element_.
+<a name="line569"></a> * @private
+<a name="line570"></a> */
+<a name="line571"></a>goog.ui.GraphicsRoundedPanel.prototype.calculateArcParameters_ =
+<a name="line572"></a>    function(elementSize) {
+<a name="line573"></a>  // Initialize the arrays containing the key points and angles.
+<a name="line574"></a>  this.radii_ = [];
+<a name="line575"></a>  this.cornerStarts_ = [];
+<a name="line576"></a>  this.arcCenters_ = [];
+<a name="line577"></a>  this.startAngles_ = [];
+<a name="line578"></a>  this.endAngles_ = [];
+<a name="line579"></a>
+<a name="line580"></a>  // Set the start points, circle centers, and angles for the bottom-right,
+<a name="line581"></a>  // bottom-left, top-left and top-right corners, in that order.
+<a name="line582"></a>  var angleInterval = 90;
+<a name="line583"></a>  var borderWidthOffset = this.borderWidth_ *
+<a name="line584"></a>      goog.ui.GraphicsRoundedPanel.BORDER_WIDTH_FACTOR_;
+<a name="line585"></a>  var radius, xStart, yStart, xCenter, yCenter, startAngle, endAngle;
+<a name="line586"></a>  for (var i = 0; i &lt; 4; i++) {
+<a name="line587"></a>    var corner = Math.pow(2, i);  // Determines which corner we&#39;re dealing with.
+<a name="line588"></a>    var isLeft = corner &amp; goog.ui.RoundedPanel.Corner.LEFT;
+<a name="line589"></a>    var isTop = corner &amp; goog.ui.RoundedPanel.Corner.TOP;
+<a name="line590"></a>
+<a name="line591"></a>    // Calculate the radius and the start coordinates.
+<a name="line592"></a>    radius = corner &amp; this.corners_ ? this.radius_ : 0;
+<a name="line593"></a>    switch (corner) {
+<a name="line594"></a>      case goog.ui.RoundedPanel.Corner.BOTTOM_LEFT:
+<a name="line595"></a>        xStart = borderWidthOffset + radius;
+<a name="line596"></a>        yStart = elementSize.height - borderWidthOffset;
+<a name="line597"></a>        break;
+<a name="line598"></a>      case goog.ui.RoundedPanel.Corner.TOP_LEFT:
+<a name="line599"></a>        xStart = borderWidthOffset;
+<a name="line600"></a>        yStart = radius + borderWidthOffset;
+<a name="line601"></a>        break;
+<a name="line602"></a>      case goog.ui.RoundedPanel.Corner.TOP_RIGHT:
+<a name="line603"></a>        xStart = elementSize.width - radius - borderWidthOffset;
+<a name="line604"></a>        yStart = borderWidthOffset;
+<a name="line605"></a>        break;
+<a name="line606"></a>      case goog.ui.RoundedPanel.Corner.BOTTOM_RIGHT:
+<a name="line607"></a>        xStart = elementSize.width - borderWidthOffset;
+<a name="line608"></a>        yStart = elementSize.height - radius - borderWidthOffset;
+<a name="line609"></a>        break;
+<a name="line610"></a>    }
+<a name="line611"></a>
+<a name="line612"></a>    // Calculate the circle centers and start/end angles.
+<a name="line613"></a>    xCenter = isLeft ?
+<a name="line614"></a>        radius + borderWidthOffset :
+<a name="line615"></a>        elementSize.width - radius - borderWidthOffset;
+<a name="line616"></a>    yCenter = isTop ?
+<a name="line617"></a>        radius + borderWidthOffset :
+<a name="line618"></a>        elementSize.height - radius - borderWidthOffset;
+<a name="line619"></a>    startAngle = angleInterval * i;
+<a name="line620"></a>    endAngle = startAngle + angleInterval;
+<a name="line621"></a>
+<a name="line622"></a>    // Append the radius, angles, and coordinates to their arrays.
+<a name="line623"></a>    this.radii_[i] = radius;
+<a name="line624"></a>    this.cornerStarts_[i] = new goog.math.Coordinate(xStart, yStart);
+<a name="line625"></a>    this.arcCenters_[i] = new goog.math.Coordinate(xCenter, yCenter);
+<a name="line626"></a>    this.startAngles_[i] = startAngle;
+<a name="line627"></a>    this.endAngles_[i] = endAngle;
+<a name="line628"></a>  }
+<a name="line629"></a>};
+</pre>
+
+
+</body>
+</html>

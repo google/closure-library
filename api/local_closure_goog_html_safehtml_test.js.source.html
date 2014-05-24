@@ -1,0 +1,308 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>safehtml_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_html_safehtml_test.js.html">safehtml_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Unit tests for goog.html.SafeHtml and its builders.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.html.safeHtmlTest&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.html.SafeHtml&#39;);
+<a name="line22"></a>goog.require(&#39;goog.html.SafeStyle&#39;);
+<a name="line23"></a>goog.require(&#39;goog.html.SafeUrl&#39;);
+<a name="line24"></a>goog.require(&#39;goog.html.testing&#39;);
+<a name="line25"></a>goog.require(&#39;goog.i18n.bidi.Dir&#39;);
+<a name="line26"></a>goog.require(&#39;goog.string.Const&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.setTestOnly(&#39;goog.html.safeHtmlTest&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>function testSafeHtml() {
+<a name="line34"></a>  // TODO(user): Consider using SafeHtmlBuilder instead of newSafeHtmlForTest,
+<a name="line35"></a>  // when available.
+<a name="line36"></a>  var safeHtml = goog.html.testing.newSafeHtmlForTest(&#39;Hello &lt;em&gt;World&lt;/em&gt;&#39;);
+<a name="line37"></a>  assertSameHtml(&#39;Hello &lt;em&gt;World&lt;/em&gt;&#39;, safeHtml);
+<a name="line38"></a>  assertEquals(&#39;Hello &lt;em&gt;World&lt;/em&gt;&#39;, safeHtml.getTypedStringValue());
+<a name="line39"></a>  assertEquals(&#39;SafeHtml{Hello &lt;em&gt;World&lt;/em&gt;}&#39;, String(safeHtml));
+<a name="line40"></a>  assertNull(safeHtml.getDirection());
+<a name="line41"></a>
+<a name="line42"></a>  safeHtml = goog.html.testing.newSafeHtmlForTest(
+<a name="line43"></a>      &#39;World &lt;em&gt;Hello&lt;/em&gt;&#39;, goog.i18n.bidi.Dir.RTL);
+<a name="line44"></a>  assertSameHtml(&#39;World &lt;em&gt;Hello&lt;/em&gt;&#39;, safeHtml);
+<a name="line45"></a>  assertEquals(&#39;World &lt;em&gt;Hello&lt;/em&gt;&#39;, safeHtml.getTypedStringValue());
+<a name="line46"></a>  assertEquals(&#39;SafeHtml{World &lt;em&gt;Hello&lt;/em&gt;}&#39;, String(safeHtml));
+<a name="line47"></a>  assertEquals(goog.i18n.bidi.Dir.RTL, safeHtml.getDirection());
+<a name="line48"></a>
+<a name="line49"></a>  // Interface markers are present.
+<a name="line50"></a>  assertTrue(safeHtml.implementsGoogStringTypedString);
+<a name="line51"></a>  assertTrue(safeHtml.implementsGoogI18nBidiDirectionalString);
+<a name="line52"></a>
+<a name="line53"></a>  // Pre-defined constant.
+<a name="line54"></a>  assertSameHtml(&#39;&#39;, goog.html.SafeHtml.EMPTY);
+<a name="line55"></a>}
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>/** @suppress {checkTypes} */
+<a name="line59"></a>function testUnwrap() {
+<a name="line60"></a>  var evil = {};
+<a name="line61"></a>  evil.safeHtmlValueWithSecurityContract__googHtmlSecurityPrivate_ =
+<a name="line62"></a>      &#39;&lt;script&gt;evil()&lt;/script&#39;;
+<a name="line63"></a>  evil.SAFE_HTML_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
+<a name="line64"></a>
+<a name="line65"></a>  var exception = assertThrows(function() {
+<a name="line66"></a>    goog.html.SafeHtml.unwrap(evil);
+<a name="line67"></a>  });
+<a name="line68"></a>  assertTrue(exception.message.indexOf(&#39;expected object of type SafeHtml&#39;) &gt; 0);
+<a name="line69"></a>}
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>function testHtmlEscape() {
+<a name="line73"></a>  // goog.html.SafeHtml passes through unchanged.
+<a name="line74"></a>  var safeHtmlIn = goog.html.SafeHtml.htmlEscape(&#39;&lt;b&gt;in&lt;/b&gt;&#39;);
+<a name="line75"></a>  assertTrue(safeHtmlIn === goog.html.SafeHtml.htmlEscape(safeHtmlIn));
+<a name="line76"></a>
+<a name="line77"></a>  // Plain strings are escaped.
+<a name="line78"></a>  var safeHtml = goog.html.SafeHtml.htmlEscape(&#39;Hello &lt;em&gt;&quot;\&#39;&amp;World&lt;/em&gt;&#39;);
+<a name="line79"></a>  assertSameHtml(&#39;Hello &amp;lt;em&amp;gt;&amp;quot;&amp;#39;&amp;amp;World&amp;lt;/em&amp;gt;&#39;, safeHtml);
+<a name="line80"></a>  assertEquals(&#39;SafeHtml{Hello &amp;lt;em&amp;gt;&amp;quot;&amp;#39;&amp;amp;World&amp;lt;/em&amp;gt;}&#39;,
+<a name="line81"></a>      String(safeHtml));
+<a name="line82"></a>
+<a name="line83"></a>  // Creating from a SafeUrl escapes and retains the known direction (which is
+<a name="line84"></a>  // fixed to RTL for URLs).
+<a name="line85"></a>  var safeUrl = goog.html.SafeUrl.fromConstant(
+<a name="line86"></a>      goog.string.Const.from(&#39;http://example.com/?foo&amp;bar&#39;));
+<a name="line87"></a>  var escapedUrl = goog.html.SafeHtml.htmlEscape(safeUrl);
+<a name="line88"></a>  assertSameHtml(&#39;http://example.com/?foo&amp;amp;bar&#39;, escapedUrl);
+<a name="line89"></a>  assertEquals(goog.i18n.bidi.Dir.LTR, escapedUrl.getDirection());
+<a name="line90"></a>
+<a name="line91"></a>  // Creating SafeHtml from a goog.string.Const escapes as well (i.e., the
+<a name="line92"></a>  // value is treated like any other string). To create HTML markup from
+<a name="line93"></a>  // program literals, SafeHtmlBuilder should be used.
+<a name="line94"></a>  assertSameHtml(&#39;this &amp;amp; that&#39;,
+<a name="line95"></a>      goog.html.SafeHtml.htmlEscape(goog.string.Const.from(&#39;this &amp; that&#39;)));
+<a name="line96"></a>}
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>function testSafeHtmlCreate() {
+<a name="line100"></a>  var br = goog.html.SafeHtml.create(&#39;br&#39;);
+<a name="line101"></a>
+<a name="line102"></a>  assertSameHtml(&#39;&lt;br&gt;&#39;, br);
+<a name="line103"></a>
+<a name="line104"></a>  assertSameHtml(&#39;&lt;span title=&quot;&amp;quot;&quot;&gt;&lt;/span&gt;&#39;,
+<a name="line105"></a>      goog.html.SafeHtml.create(&#39;span&#39;, {&#39;title&#39;: &#39;&quot;&#39;}));
+<a name="line106"></a>
+<a name="line107"></a>  assertSameHtml(&#39;&lt;span&gt;&amp;lt;&lt;/span&gt;&#39;,
+<a name="line108"></a>      goog.html.SafeHtml.create(&#39;span&#39;, {}, &#39;&lt;&#39;));
+<a name="line109"></a>
+<a name="line110"></a>  assertSameHtml(&#39;&lt;span&gt;&lt;br&gt;&lt;/span&gt;&#39;,
+<a name="line111"></a>      goog.html.SafeHtml.create(&#39;span&#39;, {}, br));
+<a name="line112"></a>
+<a name="line113"></a>  assertSameHtml(&#39;&lt;span&gt;&lt;/span&gt;&#39;, goog.html.SafeHtml.create(&#39;span&#39;, {}, []));
+<a name="line114"></a>
+<a name="line115"></a>  assertSameHtml(&#39;&lt;span&gt;&lt;/span&gt;&#39;,
+<a name="line116"></a>      goog.html.SafeHtml.create(&#39;span&#39;, {&#39;title&#39;: null, &#39;class&#39;: undefined}));
+<a name="line117"></a>
+<a name="line118"></a>  assertSameHtml(&#39;&lt;span&gt;x&lt;br&gt;y&lt;/span&gt;&#39;,
+<a name="line119"></a>      goog.html.SafeHtml.create(&#39;span&#39;, {}, [&#39;x&#39;, br, &#39;y&#39;]));
+<a name="line120"></a>
+<a name="line121"></a>  assertSameHtml(&#39;&lt;table border=&quot;0&quot;&gt;&lt;/table&gt;&#39;,
+<a name="line122"></a>      goog.html.SafeHtml.create(&#39;table&#39;, {&#39;border&#39;: 0}));
+<a name="line123"></a>
+<a name="line124"></a>  var onclick = goog.string.Const.from(&#39;alert(/&quot;/)&#39;);
+<a name="line125"></a>  assertSameHtml(&#39;&lt;span onclick=&quot;alert(/&amp;quot;/)&quot;&gt;&lt;/span&gt;&#39;,
+<a name="line126"></a>      goog.html.SafeHtml.create(&#39;span&#39;, {&#39;onclick&#39;: onclick}));
+<a name="line127"></a>
+<a name="line128"></a>  var href = goog.html.testing.newSafeUrlForTest(&#39;?a&amp;b&#39;);
+<a name="line129"></a>  assertSameHtml(&#39;&lt;a href=&quot;?a&amp;amp;b&quot;&gt;&lt;/a&gt;&#39;,
+<a name="line130"></a>      goog.html.SafeHtml.create(&#39;a&#39;, {&#39;href&#39;: href}));
+<a name="line131"></a>
+<a name="line132"></a>  var style = goog.html.testing.newSafeStyleForTest(&#39;border: /* &quot; */ 0;&#39;);
+<a name="line133"></a>  assertSameHtml(&#39;&lt;hr style=&quot;border: /* &amp;quot; */ 0;&quot;&gt;&#39;,
+<a name="line134"></a>      goog.html.SafeHtml.create(&#39;hr&#39;, {&#39;style&#39;: style}));
+<a name="line135"></a>
+<a name="line136"></a>  assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
+<a name="line137"></a>      goog.html.SafeHtml.create(&#39;span&#39;).getDirection());
+<a name="line138"></a>  assertNull(goog.html.SafeHtml.create(&#39;span&#39;, {&#39;dir&#39;: &#39;x&#39;}).getDirection());
+<a name="line139"></a>  assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
+<a name="line140"></a>      goog.html.SafeHtml.create(&#39;span&#39;, {&#39;dir&#39;: &#39;ltr&#39;}, &#39;a&#39;).getDirection());
+<a name="line141"></a>
+<a name="line142"></a>  assertThrows(function() {
+<a name="line143"></a>    goog.html.SafeHtml.create(&#39;script&#39;);
+<a name="line144"></a>  });
+<a name="line145"></a>
+<a name="line146"></a>  assertThrows(function() {
+<a name="line147"></a>    goog.html.SafeHtml.create(&#39;br&#39;, {}, &#39;x&#39;);
+<a name="line148"></a>  });
+<a name="line149"></a>
+<a name="line150"></a>  assertThrows(function() {
+<a name="line151"></a>    goog.html.SafeHtml.create(&#39;img&#39;, {&#39;onerror&#39;: &#39;&#39;});
+<a name="line152"></a>  });
+<a name="line153"></a>
+<a name="line154"></a>  assertThrows(function() {
+<a name="line155"></a>    goog.html.SafeHtml.create(&#39;a&#39;, {&#39;href&#39;: &#39;javascript:alert(1)&#39;});
+<a name="line156"></a>  });
+<a name="line157"></a>
+<a name="line158"></a>  assertThrows(function() {
+<a name="line159"></a>    goog.html.SafeHtml.create(&#39;hr&#39;, {&#39;class&#39;: style});
+<a name="line160"></a>  });
+<a name="line161"></a>
+<a name="line162"></a>  assertThrows(function() {
+<a name="line163"></a>    goog.html.SafeHtml.create(&#39;a href=&quot;&quot;&#39;);
+<a name="line164"></a>  });
+<a name="line165"></a>
+<a name="line166"></a>  assertThrows(function() {
+<a name="line167"></a>    goog.html.SafeHtml.create(&#39;a&#39;, {&#39;title=&quot;&quot; href&#39;: &#39;&#39;});
+<a name="line168"></a>  });
+<a name="line169"></a>}
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>function testSafeHtmlCreate_supportsStyle() {
+<a name="line173"></a>  var style = &#39;color:red;&#39;;
+<a name="line174"></a>  var expected = &#39;&lt;hr style=&quot;&#39; + style + &#39;&quot;&gt;&#39;;
+<a name="line175"></a>  assertThrows(function() {
+<a name="line176"></a>    goog.html.SafeHtml.create(&#39;hr&#39;, {&#39;style&#39;: style});
+<a name="line177"></a>  });
+<a name="line178"></a>  assertSameHtml(expected, goog.html.SafeHtml.create(&#39;hr&#39;, {
+<a name="line179"></a>    &#39;style&#39;: goog.html.SafeStyle.fromConstant(goog.string.Const.from(style))
+<a name="line180"></a>  }));
+<a name="line181"></a>  assertSameHtml(expected, goog.html.SafeHtml.create(&#39;hr&#39;, {
+<a name="line182"></a>    &#39;style&#39;: {&#39;color&#39;: &#39;red&#39;}
+<a name="line183"></a>  }));
+<a name="line184"></a>}
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>function testSafeHtmlCreateWithDir() {
+<a name="line188"></a>  var ltr = goog.i18n.bidi.Dir.LTR;
+<a name="line189"></a>
+<a name="line190"></a>  assertEquals(ltr, goog.html.SafeHtml.createWithDir(ltr, &#39;br&#39;).getDirection());
+<a name="line191"></a>}
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>function testSafeHtmlConcat() {
+<a name="line195"></a>  var br = goog.html.testing.newSafeHtmlForTest(&#39;&lt;br&gt;&#39;);
+<a name="line196"></a>
+<a name="line197"></a>  var html = goog.html.SafeHtml.htmlEscape(&#39;Hello&#39;);
+<a name="line198"></a>  assertSameHtml(&#39;Hello&lt;br&gt;&#39;, goog.html.SafeHtml.concat(html, br));
+<a name="line199"></a>
+<a name="line200"></a>  assertSameHtml(&#39;&#39;, goog.html.SafeHtml.concat());
+<a name="line201"></a>  assertSameHtml(&#39;&#39;, goog.html.SafeHtml.concat([]));
+<a name="line202"></a>
+<a name="line203"></a>  assertSameHtml(&#39;a&lt;br&gt;c&#39;, goog.html.SafeHtml.concat(&#39;a&#39;, br, &#39;c&#39;));
+<a name="line204"></a>  assertSameHtml(&#39;a&lt;br&gt;c&#39;, goog.html.SafeHtml.concat([&#39;a&#39;, br, &#39;c&#39;]));
+<a name="line205"></a>  assertSameHtml(&#39;a&lt;br&gt;c&#39;, goog.html.SafeHtml.concat(&#39;a&#39;, [br, &#39;c&#39;]));
+<a name="line206"></a>  assertSameHtml(&#39;a&lt;br&gt;c&#39;, goog.html.SafeHtml.concat([&#39;a&#39;], br, [&#39;c&#39;]));
+<a name="line207"></a>
+<a name="line208"></a>  var ltr = goog.html.testing.newSafeHtmlForTest(&#39;&#39;, goog.i18n.bidi.Dir.LTR);
+<a name="line209"></a>  var rtl = goog.html.testing.newSafeHtmlForTest(&#39;&#39;, goog.i18n.bidi.Dir.RTL);
+<a name="line210"></a>  var neutral = goog.html.testing.newSafeHtmlForTest(&#39;&#39;,
+<a name="line211"></a>      goog.i18n.bidi.Dir.NEUTRAL);
+<a name="line212"></a>  var unknown = goog.html.testing.newSafeHtmlForTest(&#39;&#39;);
+<a name="line213"></a>  assertEquals(goog.i18n.bidi.Dir.NEUTRAL,
+<a name="line214"></a>      goog.html.SafeHtml.concat().getDirection());
+<a name="line215"></a>  assertEquals(goog.i18n.bidi.Dir.LTR,
+<a name="line216"></a>      goog.html.SafeHtml.concat(ltr, ltr).getDirection());
+<a name="line217"></a>  assertEquals(goog.i18n.bidi.Dir.LTR,
+<a name="line218"></a>      goog.html.SafeHtml.concat(ltr, neutral, ltr).getDirection());
+<a name="line219"></a>  assertNull(goog.html.SafeHtml.concat(ltr, unknown).getDirection());
+<a name="line220"></a>  assertNull(goog.html.SafeHtml.concat(ltr, rtl).getDirection());
+<a name="line221"></a>  assertNull(goog.html.SafeHtml.concat(ltr, [rtl]).getDirection());
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>function testHtmlEscapePreservingNewlines() {
+<a name="line226"></a>  // goog.html.SafeHtml passes through unchanged.
+<a name="line227"></a>  var safeHtmlIn = goog.html.SafeHtml.htmlEscapePreservingNewlines(&#39;&lt;b&gt;in&lt;/b&gt;&#39;);
+<a name="line228"></a>  assertTrue(safeHtmlIn ===
+<a name="line229"></a>      goog.html.SafeHtml.htmlEscapePreservingNewlines(safeHtmlIn));
+<a name="line230"></a>
+<a name="line231"></a>  assertSameHtml(&#39;a&lt;br&gt;c&#39;,
+<a name="line232"></a>      goog.html.SafeHtml.htmlEscapePreservingNewlines(&#39;a\nc&#39;));
+<a name="line233"></a>  assertSameHtml(&#39;&amp;lt;&lt;br&gt;&#39;,
+<a name="line234"></a>      goog.html.SafeHtml.htmlEscapePreservingNewlines(&#39;&lt;\n&#39;));
+<a name="line235"></a>  assertSameHtml(&#39;&lt;br&gt;&#39;,
+<a name="line236"></a>      goog.html.SafeHtml.htmlEscapePreservingNewlines(&#39;\r\n&#39;));
+<a name="line237"></a>  assertSameHtml(&#39;&lt;br&gt;&#39;, goog.html.SafeHtml.htmlEscapePreservingNewlines(&#39;\r&#39;));
+<a name="line238"></a>  assertSameHtml(&#39;&#39;, goog.html.SafeHtml.htmlEscapePreservingNewlines(&#39;&#39;));
+<a name="line239"></a>}
+<a name="line240"></a>
+<a name="line241"></a>
+<a name="line242"></a>function testSafeHtmlConcatWithDir() {
+<a name="line243"></a>  var ltr = goog.i18n.bidi.Dir.LTR;
+<a name="line244"></a>  var rtl = goog.i18n.bidi.Dir.RTL;
+<a name="line245"></a>  var br = goog.html.testing.newSafeHtmlForTest(&#39;&lt;br&gt;&#39;);
+<a name="line246"></a>
+<a name="line247"></a>  assertEquals(ltr, goog.html.SafeHtml.concatWithDir(ltr).getDirection());
+<a name="line248"></a>  assertEquals(ltr, goog.html.SafeHtml.concatWithDir(ltr,
+<a name="line249"></a>      goog.html.testing.newSafeHtmlForTest(&#39;&#39;, rtl)).getDirection());
+<a name="line250"></a>
+<a name="line251"></a>  assertSameHtml(&#39;a&lt;br&gt;c&#39;, goog.html.SafeHtml.concatWithDir(ltr, &#39;a&#39;, br, &#39;c&#39;));
+<a name="line252"></a>}
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>function assertSameHtml(expected, html) {
+<a name="line256"></a>  assertEquals(expected, goog.html.SafeHtml.unwrap(html));
+<a name="line257"></a>}
+</pre>
+
+
+</body>
+</html>

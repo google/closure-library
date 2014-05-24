@@ -1,0 +1,456 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>stringset.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_structs_stringset.js.html">stringset.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Data structure for set of strings.
+<a name="line17"></a> *
+<a name="line18"></a> *
+<a name="line19"></a> * This class implements a set data structure for strings. Adding and removing
+<a name="line20"></a> * is O(1). It doesn&#39;t contain any bloat from {@link goog.structs.Set}, i.e.
+<a name="line21"></a> * it isn&#39;t optimized for IE6 garbage collector (see the description of
+<a name="line22"></a> * {@link goog.structs.Map#keys_} for details), and it distinguishes its
+<a name="line23"></a> * elements by their string value not by hash code.
+<a name="line24"></a> * The implementation assumes that no new keys are added to Object.prototype.
+<a name="line25"></a> */
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.structs.StringSet&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line30"></a>goog.require(&#39;goog.iter&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Creates a set of strings.
+<a name="line36"></a> * @param {!Array=} opt_elements Elements to add to the set. The non-string
+<a name="line37"></a> *     items will be converted to strings, so 15 and &#39;15&#39; will mean the same.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @final
+<a name="line40"></a> */
+<a name="line41"></a>goog.structs.StringSet = function(opt_elements) {
+<a name="line42"></a>  /**
+<a name="line43"></a>   * An object storing the escaped elements of the set in its keys.
+<a name="line44"></a>   * @type {!Object}
+<a name="line45"></a>   * @private
+<a name="line46"></a>   */
+<a name="line47"></a>  this.elements_ = {};
+<a name="line48"></a>
+<a name="line49"></a>  if (opt_elements) {
+<a name="line50"></a>    for (var i = 0; i &lt; opt_elements.length; i++) {
+<a name="line51"></a>      this.elements_[goog.structs.StringSet.encode_(opt_elements[i])] = null;
+<a name="line52"></a>    }
+<a name="line53"></a>  }
+<a name="line54"></a>
+<a name="line55"></a>  goog.asserts.assertObjectPrototypeIsIntact();
+<a name="line56"></a>};
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Empty object. Referring to it is faster than creating a new empty object in
+<a name="line61"></a> * {@code goog.structs.StringSet.encode_}.
+<a name="line62"></a> * @const {!Object}
+<a name="line63"></a> * @private
+<a name="line64"></a> */
+<a name="line65"></a>goog.structs.StringSet.EMPTY_OBJECT_ = {};
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * The &#39;__proto__&#39; and the &#39;__count__&#39; keys aren&#39;t enumerable in Firefox, and
+<a name="line70"></a> * &#39;toString&#39;, &#39;valueOf&#39;, &#39;constructor&#39;, etc. aren&#39;t enumerable in IE so they
+<a name="line71"></a> * have to be escaped before they are added to the internal object.
+<a name="line72"></a> * NOTE: When a new set is created, 50-80% of the CPU time is spent in encode.
+<a name="line73"></a> * @param {*} element The element to escape.
+<a name="line74"></a> * @return {*} The escaped element or the element itself if it doesn&#39;t have to
+<a name="line75"></a> *     be escaped.
+<a name="line76"></a> * @private
+<a name="line77"></a> */
+<a name="line78"></a>goog.structs.StringSet.encode_ = function(element) {
+<a name="line79"></a>  return element in goog.structs.StringSet.EMPTY_OBJECT_ ||
+<a name="line80"></a>      String(element).charCodeAt(0) == 32 ? &#39; &#39; + element : element;
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Inverse function of {@code goog.structs.StringSet.encode_}.
+<a name="line86"></a> * NOTE: forEach would be 30% faster in FF if the compiler inlined decode.
+<a name="line87"></a> * @param {string} key The escaped element used as the key of the internal
+<a name="line88"></a> *     object.
+<a name="line89"></a> * @return {string} The unescaped element.
+<a name="line90"></a> * @private
+<a name="line91"></a> */
+<a name="line92"></a>goog.structs.StringSet.decode_ = function(key) {
+<a name="line93"></a>  return key.charCodeAt(0) == 32 ? key.substr(1) : key;
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Adds a single element to the set.
+<a name="line99"></a> * @param {*} element The element to add. It will be converted to string.
+<a name="line100"></a> */
+<a name="line101"></a>goog.structs.StringSet.prototype.add = function(element) {
+<a name="line102"></a>  this.elements_[goog.structs.StringSet.encode_(element)] = null;
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Adds a the elements of an array to this set.
+<a name="line108"></a> * @param {!Array} arr The array to add the elements of.
+<a name="line109"></a> */
+<a name="line110"></a>goog.structs.StringSet.prototype.addArray = function(arr) {
+<a name="line111"></a>  for (var i = 0; i &lt; arr.length; i++) {
+<a name="line112"></a>    this.elements_[goog.structs.StringSet.encode_(arr[i])] = null;
+<a name="line113"></a>  }
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Adds the elements which are in {@code set1} but not in {@code set2} to this
+<a name="line119"></a> * set.
+<a name="line120"></a> * @param {!goog.structs.StringSet} set1 First set.
+<a name="line121"></a> * @param {!goog.structs.StringSet} set2 Second set.
+<a name="line122"></a> * @private
+<a name="line123"></a> */
+<a name="line124"></a>goog.structs.StringSet.prototype.addDifference_ = function(set1, set2) {
+<a name="line125"></a>  for (var key in set1.elements_) {
+<a name="line126"></a>    if (!(key in set2.elements_)) {
+<a name="line127"></a>      this.elements_[key] = null;
+<a name="line128"></a>    }
+<a name="line129"></a>  }
+<a name="line130"></a>};
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Adds a the elements of a set to this set.
+<a name="line135"></a> * @param {!goog.structs.StringSet} stringSet The set to add the elements of.
+<a name="line136"></a> */
+<a name="line137"></a>goog.structs.StringSet.prototype.addSet = function(stringSet) {
+<a name="line138"></a>  for (var key in stringSet.elements_) {
+<a name="line139"></a>    this.elements_[key] = null;
+<a name="line140"></a>  }
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Removes all elements of the set.
+<a name="line146"></a> */
+<a name="line147"></a>goog.structs.StringSet.prototype.clear = function() {
+<a name="line148"></a>  this.elements_ = {};
+<a name="line149"></a>};
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * @return {!goog.structs.StringSet} Clone of the set.
+<a name="line154"></a> */
+<a name="line155"></a>goog.structs.StringSet.prototype.clone = function() {
+<a name="line156"></a>  var ret = new goog.structs.StringSet;
+<a name="line157"></a>  ret.addSet(this);
+<a name="line158"></a>  return ret;
+<a name="line159"></a>};
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>/**
+<a name="line163"></a> * Tells if the set contains the given element.
+<a name="line164"></a> * @param {*} element The element to check.
+<a name="line165"></a> * @return {boolean} Whether it is in the set.
+<a name="line166"></a> */
+<a name="line167"></a>goog.structs.StringSet.prototype.contains = function(element) {
+<a name="line168"></a>  return goog.structs.StringSet.encode_(element) in this.elements_;
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Tells if the set contains all elements of the array.
+<a name="line174"></a> * @param {!Array} arr The elements to check.
+<a name="line175"></a> * @return {boolean} Whether they are in the set.
+<a name="line176"></a> */
+<a name="line177"></a>goog.structs.StringSet.prototype.containsArray = function(arr) {
+<a name="line178"></a>  for (var i = 0; i &lt; arr.length; i++) {
+<a name="line179"></a>    if (!(goog.structs.StringSet.encode_(arr[i]) in this.elements_)) {
+<a name="line180"></a>      return false;
+<a name="line181"></a>    }
+<a name="line182"></a>  }
+<a name="line183"></a>  return true;
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Tells if this set has the same elements as the given set.
+<a name="line189"></a> * @param {!goog.structs.StringSet} stringSet The other set.
+<a name="line190"></a> * @return {boolean} Whether they have the same elements.
+<a name="line191"></a> */
+<a name="line192"></a>goog.structs.StringSet.prototype.equals = function(stringSet) {
+<a name="line193"></a>  return this.isSubsetOf(stringSet) &amp;&amp; stringSet.isSubsetOf(this);
+<a name="line194"></a>};
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * Calls a function for each element in the set.
+<a name="line199"></a> * @param {function(string, undefined, !goog.structs.StringSet)} f The function
+<a name="line200"></a> *     to call for every element. It takes the element, undefined (because sets
+<a name="line201"></a> *     have no notion of keys), and the set.
+<a name="line202"></a> * @param {Object=} opt_obj The object to be used as the value of &#39;this&#39;
+<a name="line203"></a> *     within {@code f}.
+<a name="line204"></a> */
+<a name="line205"></a>goog.structs.StringSet.prototype.forEach = function(f, opt_obj) {
+<a name="line206"></a>  for (var key in this.elements_) {
+<a name="line207"></a>    f.call(opt_obj, goog.structs.StringSet.decode_(key), undefined, this);
+<a name="line208"></a>  }
+<a name="line209"></a>};
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Counts the number of elements in the set in linear time.
+<a name="line214"></a> * NOTE: getCount is always called at most once per set instance in google3.
+<a name="line215"></a> * If this usage pattern won&#39;t change, the linear getCount implementation is
+<a name="line216"></a> * better, because
+<a name="line217"></a> * &lt;li&gt;populating a set and getting the number of elements in it takes the same
+<a name="line218"></a> * amount of time as keeping a count_ member up to date and getting its value;
+<a name="line219"></a> * &lt;li&gt;if getCount is not called, adding and removing elements have no overhead.
+<a name="line220"></a> * @return {number} The number of elements in the set.
+<a name="line221"></a> */
+<a name="line222"></a>goog.structs.StringSet.prototype.getCount = Object.keys ?
+<a name="line223"></a>    function() {
+<a name="line224"></a>      return Object.keys(this.elements_).length;
+<a name="line225"></a>    } :
+<a name="line226"></a>    function() {
+<a name="line227"></a>      var count = 0;
+<a name="line228"></a>      for (var key in this.elements_) {
+<a name="line229"></a>        count++;
+<a name="line230"></a>      }
+<a name="line231"></a>      return count;
+<a name="line232"></a>    };
+<a name="line233"></a>
+<a name="line234"></a>
+<a name="line235"></a>/**
+<a name="line236"></a> * Calculates the difference of two sets.
+<a name="line237"></a> * @param {!goog.structs.StringSet} stringSet The set to subtract from this set.
+<a name="line238"></a> * @return {!goog.structs.StringSet} {@code this} minus {@code stringSet}.
+<a name="line239"></a> */
+<a name="line240"></a>goog.structs.StringSet.prototype.getDifference = function(stringSet) {
+<a name="line241"></a>  var ret = new goog.structs.StringSet;
+<a name="line242"></a>  ret.addDifference_(this, stringSet);
+<a name="line243"></a>  return ret;
+<a name="line244"></a>};
+<a name="line245"></a>
+<a name="line246"></a>
+<a name="line247"></a>/**
+<a name="line248"></a> * Calculates the intersection of this set with another set.
+<a name="line249"></a> * @param {!goog.structs.StringSet} stringSet The set to take the intersection
+<a name="line250"></a> *     with.
+<a name="line251"></a> * @return {!goog.structs.StringSet} A new set with the common elements.
+<a name="line252"></a> */
+<a name="line253"></a>goog.structs.StringSet.prototype.getIntersection = function(stringSet) {
+<a name="line254"></a>  var ret = new goog.structs.StringSet;
+<a name="line255"></a>  for (var key in this.elements_) {
+<a name="line256"></a>    if (key in stringSet.elements_) {
+<a name="line257"></a>      ret.elements_[key] = null;
+<a name="line258"></a>    }
+<a name="line259"></a>  }
+<a name="line260"></a>  return ret;
+<a name="line261"></a>};
+<a name="line262"></a>
+<a name="line263"></a>
+<a name="line264"></a>/**
+<a name="line265"></a> * Calculates the symmetric difference of two sets.
+<a name="line266"></a> * @param {!goog.structs.StringSet} stringSet The other set.
+<a name="line267"></a> * @return {!goog.structs.StringSet} A new set with the elements in exactly one
+<a name="line268"></a> *     of {@code this} and {@code stringSet}.
+<a name="line269"></a> */
+<a name="line270"></a>goog.structs.StringSet.prototype.getSymmetricDifference = function(stringSet) {
+<a name="line271"></a>  var ret = new goog.structs.StringSet;
+<a name="line272"></a>  ret.addDifference_(this, stringSet);
+<a name="line273"></a>  ret.addDifference_(stringSet, this);
+<a name="line274"></a>  return ret;
+<a name="line275"></a>};
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a>/**
+<a name="line279"></a> * Calculates the union of this set and another set.
+<a name="line280"></a> * @param {!goog.structs.StringSet} stringSet The set to take the union with.
+<a name="line281"></a> * @return {!goog.structs.StringSet} A new set with the union of elements.
+<a name="line282"></a> */
+<a name="line283"></a>goog.structs.StringSet.prototype.getUnion = function(stringSet) {
+<a name="line284"></a>  var ret = this.clone();
+<a name="line285"></a>  ret.addSet(stringSet);
+<a name="line286"></a>  return ret;
+<a name="line287"></a>};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * @return {!Array.&lt;string&gt;} The elements of the set.
+<a name="line292"></a> */
+<a name="line293"></a>goog.structs.StringSet.prototype.getValues = Object.keys ?
+<a name="line294"></a>    function() {
+<a name="line295"></a>      // Object.keys was introduced in JavaScript 1.8.5, Array#map in 1.6.
+<a name="line296"></a>      return Object.keys(this.elements_).map(
+<a name="line297"></a>          goog.structs.StringSet.decode_, this);
+<a name="line298"></a>    } :
+<a name="line299"></a>    function() {
+<a name="line300"></a>      var ret = [];
+<a name="line301"></a>      for (var key in this.elements_) {
+<a name="line302"></a>        ret.push(goog.structs.StringSet.decode_(key));
+<a name="line303"></a>      }
+<a name="line304"></a>      return ret;
+<a name="line305"></a>    };
+<a name="line306"></a>
+<a name="line307"></a>
+<a name="line308"></a>/**
+<a name="line309"></a> * Tells if this set and the given set are disjoint.
+<a name="line310"></a> * @param {!goog.structs.StringSet} stringSet The other set.
+<a name="line311"></a> * @return {boolean} True iff they don&#39;t have common elements.
+<a name="line312"></a> */
+<a name="line313"></a>goog.structs.StringSet.prototype.isDisjoint = function(stringSet) {
+<a name="line314"></a>  for (var key in this.elements_) {
+<a name="line315"></a>    if (key in stringSet.elements_) {
+<a name="line316"></a>      return false;
+<a name="line317"></a>    }
+<a name="line318"></a>  }
+<a name="line319"></a>  return true;
+<a name="line320"></a>};
+<a name="line321"></a>
+<a name="line322"></a>
+<a name="line323"></a>/**
+<a name="line324"></a> * @return {boolean} Whether the set is empty.
+<a name="line325"></a> */
+<a name="line326"></a>goog.structs.StringSet.prototype.isEmpty = function() {
+<a name="line327"></a>  for (var key in this.elements_) {
+<a name="line328"></a>    return false;
+<a name="line329"></a>  }
+<a name="line330"></a>  return true;
+<a name="line331"></a>};
+<a name="line332"></a>
+<a name="line333"></a>
+<a name="line334"></a>/**
+<a name="line335"></a> * Tells if this set is the subset of the given set.
+<a name="line336"></a> * @param {!goog.structs.StringSet} stringSet The other set.
+<a name="line337"></a> * @return {boolean} Whether this set if the subset of that.
+<a name="line338"></a> */
+<a name="line339"></a>goog.structs.StringSet.prototype.isSubsetOf = function(stringSet) {
+<a name="line340"></a>  for (var key in this.elements_) {
+<a name="line341"></a>    if (!(key in stringSet.elements_)) {
+<a name="line342"></a>      return false;
+<a name="line343"></a>    }
+<a name="line344"></a>  }
+<a name="line345"></a>  return true;
+<a name="line346"></a>};
+<a name="line347"></a>
+<a name="line348"></a>
+<a name="line349"></a>/**
+<a name="line350"></a> * Tells if this set is the superset of the given set.
+<a name="line351"></a> * @param {!goog.structs.StringSet} stringSet The other set.
+<a name="line352"></a> * @return {boolean} Whether this set if the superset of that.
+<a name="line353"></a> */
+<a name="line354"></a>goog.structs.StringSet.prototype.isSupersetOf = function(stringSet) {
+<a name="line355"></a>  return stringSet.isSubsetOf(this);
+<a name="line356"></a>};
+<a name="line357"></a>
+<a name="line358"></a>
+<a name="line359"></a>/**
+<a name="line360"></a> * Removes a single element from the set.
+<a name="line361"></a> * @param {*} element The element to remove.
+<a name="line362"></a> * @return {boolean} Whether the element was in the set.
+<a name="line363"></a> */
+<a name="line364"></a>goog.structs.StringSet.prototype.remove = function(element) {
+<a name="line365"></a>  var key = goog.structs.StringSet.encode_(element);
+<a name="line366"></a>  if (key in this.elements_) {
+<a name="line367"></a>    delete this.elements_[key];
+<a name="line368"></a>    return true;
+<a name="line369"></a>  }
+<a name="line370"></a>  return false;
+<a name="line371"></a>};
+<a name="line372"></a>
+<a name="line373"></a>
+<a name="line374"></a>/**
+<a name="line375"></a> * Removes all elements of the given array from this set.
+<a name="line376"></a> * @param {!Array} arr The elements to remove.
+<a name="line377"></a> */
+<a name="line378"></a>goog.structs.StringSet.prototype.removeArray = function(arr) {
+<a name="line379"></a>  for (var i = 0; i &lt; arr.length; i++) {
+<a name="line380"></a>    delete this.elements_[goog.structs.StringSet.encode_(arr[i])];
+<a name="line381"></a>  }
+<a name="line382"></a>};
+<a name="line383"></a>
+<a name="line384"></a>
+<a name="line385"></a>/**
+<a name="line386"></a> * Removes all elements of the given set from this set.
+<a name="line387"></a> * @param {!goog.structs.StringSet} stringSet The set of elements to remove.
+<a name="line388"></a> */
+<a name="line389"></a>goog.structs.StringSet.prototype.removeSet = function(stringSet) {
+<a name="line390"></a>  for (var key in stringSet.elements_) {
+<a name="line391"></a>    delete this.elements_[key];
+<a name="line392"></a>  }
+<a name="line393"></a>};
+<a name="line394"></a>
+<a name="line395"></a>
+<a name="line396"></a>/**
+<a name="line397"></a> * Returns an iterator that iterates over the elements in the set.
+<a name="line398"></a> * NOTE: creating the iterator copies the whole set so use {@link #forEach} when
+<a name="line399"></a> * possible.
+<a name="line400"></a> * @param {boolean=} opt_keys Ignored for sets.
+<a name="line401"></a> * @return {!goog.iter.Iterator} An iterator over the elements in the set.
+<a name="line402"></a> */
+<a name="line403"></a>goog.structs.StringSet.prototype.__iterator__ = function(opt_keys) {
+<a name="line404"></a>  return goog.iter.toIterator(this.getValues());
+<a name="line405"></a>};
+</pre>
+
+
+</body>
+</html>

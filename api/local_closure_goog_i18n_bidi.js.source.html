@@ -1,0 +1,934 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>bidi.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_bidi.js.html">bidi.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utility functions for supporting Bidi issues.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>
+<a name="line20"></a>/**
+<a name="line21"></a> * Namespace for bidi supporting functions.
+<a name="line22"></a> */
+<a name="line23"></a>goog.provide(&#39;goog.i18n.bidi&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.i18n.bidi.Dir&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.i18n.bidi.DirectionalString&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.i18n.bidi.Format&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * @define {boolean} FORCE_RTL forces the {@link goog.i18n.bidi.IS_RTL} constant
+<a name="line31"></a> * to say that the current locale is a RTL locale.  This should only be used
+<a name="line32"></a> * if you want to override the default behavior for deciding whether the
+<a name="line33"></a> * current locale is RTL or not.
+<a name="line34"></a> *
+<a name="line35"></a> * {@see goog.i18n.bidi.IS_RTL}
+<a name="line36"></a> */
+<a name="line37"></a>goog.define(&#39;goog.i18n.bidi.FORCE_RTL&#39;, false);
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Constant that defines whether or not the current locale is a RTL locale.
+<a name="line42"></a> * If {@link goog.i18n.bidi.FORCE_RTL} is not true, this constant will default
+<a name="line43"></a> * to check that {@link goog.LOCALE} is one of a few major RTL locales.
+<a name="line44"></a> *
+<a name="line45"></a> * &lt;p&gt;This is designed to be a maximally efficient compile-time constant. For
+<a name="line46"></a> * example, for the default goog.LOCALE, compiling
+<a name="line47"></a> * &quot;if (goog.i18n.bidi.IS_RTL) alert(&#39;rtl&#39;) else {}&quot; should produce no code. It
+<a name="line48"></a> * is this design consideration that limits the implementation to only
+<a name="line49"></a> * supporting a few major RTL locales, as opposed to the broader repertoire of
+<a name="line50"></a> * something like goog.i18n.bidi.isRtlLanguage.
+<a name="line51"></a> *
+<a name="line52"></a> * &lt;p&gt;Since this constant refers to the directionality of the locale, it is up
+<a name="line53"></a> * to the caller to determine if this constant should also be used for the
+<a name="line54"></a> * direction of the UI.
+<a name="line55"></a> *
+<a name="line56"></a> * {@see goog.LOCALE}
+<a name="line57"></a> *
+<a name="line58"></a> * @type {boolean}
+<a name="line59"></a> *
+<a name="line60"></a> * TODO(user): write a test that checks that this is a compile-time constant.
+<a name="line61"></a> */
+<a name="line62"></a>goog.i18n.bidi.IS_RTL = goog.i18n.bidi.FORCE_RTL ||
+<a name="line63"></a>    (
+<a name="line64"></a>        (goog.LOCALE.substring(0, 2).toLowerCase() == &#39;ar&#39; ||
+<a name="line65"></a>         goog.LOCALE.substring(0, 2).toLowerCase() == &#39;fa&#39; ||
+<a name="line66"></a>         goog.LOCALE.substring(0, 2).toLowerCase() == &#39;he&#39; ||
+<a name="line67"></a>         goog.LOCALE.substring(0, 2).toLowerCase() == &#39;iw&#39; ||
+<a name="line68"></a>         goog.LOCALE.substring(0, 2).toLowerCase() == &#39;ps&#39; ||
+<a name="line69"></a>         goog.LOCALE.substring(0, 2).toLowerCase() == &#39;sd&#39; ||
+<a name="line70"></a>         goog.LOCALE.substring(0, 2).toLowerCase() == &#39;ug&#39; ||
+<a name="line71"></a>         goog.LOCALE.substring(0, 2).toLowerCase() == &#39;ur&#39; ||
+<a name="line72"></a>         goog.LOCALE.substring(0, 2).toLowerCase() == &#39;yi&#39;) &amp;&amp;
+<a name="line73"></a>        (goog.LOCALE.length == 2 ||
+<a name="line74"></a>         goog.LOCALE.substring(2, 3) == &#39;-&#39; ||
+<a name="line75"></a>         goog.LOCALE.substring(2, 3) == &#39;_&#39;)
+<a name="line76"></a>    ) || (
+<a name="line77"></a>        goog.LOCALE.length &gt;= 3 &amp;&amp;
+<a name="line78"></a>        goog.LOCALE.substring(0, 3).toLowerCase() == &#39;ckb&#39; &amp;&amp;
+<a name="line79"></a>        (goog.LOCALE.length == 3 ||
+<a name="line80"></a>         goog.LOCALE.substring(3, 4) == &#39;-&#39; ||
+<a name="line81"></a>         goog.LOCALE.substring(3, 4) == &#39;_&#39;)
+<a name="line82"></a>    );
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Unicode formatting characters and directionality string constants.
+<a name="line87"></a> * @enum {string}
+<a name="line88"></a> */
+<a name="line89"></a>goog.i18n.bidi.Format = {
+<a name="line90"></a>  /** Unicode &quot;Left-To-Right Embedding&quot; (LRE) character. */
+<a name="line91"></a>  LRE: &#39;\u202A&#39;,
+<a name="line92"></a>  /** Unicode &quot;Right-To-Left Embedding&quot; (RLE) character. */
+<a name="line93"></a>  RLE: &#39;\u202B&#39;,
+<a name="line94"></a>  /** Unicode &quot;Pop Directional Formatting&quot; (PDF) character. */
+<a name="line95"></a>  PDF: &#39;\u202C&#39;,
+<a name="line96"></a>  /** Unicode &quot;Left-To-Right Mark&quot; (LRM) character. */
+<a name="line97"></a>  LRM: &#39;\u200E&#39;,
+<a name="line98"></a>  /** Unicode &quot;Right-To-Left Mark&quot; (RLM) character. */
+<a name="line99"></a>  RLM: &#39;\u200F&#39;
+<a name="line100"></a>};
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Directionality enum.
+<a name="line105"></a> * @enum {number}
+<a name="line106"></a> */
+<a name="line107"></a>goog.i18n.bidi.Dir = {
+<a name="line108"></a>  /**
+<a name="line109"></a>   * Left-to-right.
+<a name="line110"></a>   */
+<a name="line111"></a>  LTR: 1,
+<a name="line112"></a>
+<a name="line113"></a>  /**
+<a name="line114"></a>   * Right-to-left.
+<a name="line115"></a>   */
+<a name="line116"></a>  RTL: -1,
+<a name="line117"></a>
+<a name="line118"></a>  /**
+<a name="line119"></a>   * Neither left-to-right nor right-to-left.
+<a name="line120"></a>   */
+<a name="line121"></a>  NEUTRAL: 0,
+<a name="line122"></a>
+<a name="line123"></a>  /**
+<a name="line124"></a>   * A historical misnomer for NEUTRAL.
+<a name="line125"></a>   * @deprecated For &quot;neutral&quot;, use NEUTRAL; for &quot;unknown&quot;, use null.
+<a name="line126"></a>   */
+<a name="line127"></a>  UNKNOWN: 0
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * &#39;right&#39; string constant.
+<a name="line133"></a> * @type {string}
+<a name="line134"></a> */
+<a name="line135"></a>goog.i18n.bidi.RIGHT = &#39;right&#39;;
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/**
+<a name="line139"></a> * &#39;left&#39; string constant.
+<a name="line140"></a> * @type {string}
+<a name="line141"></a> */
+<a name="line142"></a>goog.i18n.bidi.LEFT = &#39;left&#39;;
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * &#39;left&#39; if locale is RTL, &#39;right&#39; if not.
+<a name="line147"></a> * @type {string}
+<a name="line148"></a> */
+<a name="line149"></a>goog.i18n.bidi.I18N_RIGHT = goog.i18n.bidi.IS_RTL ? goog.i18n.bidi.LEFT :
+<a name="line150"></a>    goog.i18n.bidi.RIGHT;
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * &#39;right&#39; if locale is RTL, &#39;left&#39; if not.
+<a name="line155"></a> * @type {string}
+<a name="line156"></a> */
+<a name="line157"></a>goog.i18n.bidi.I18N_LEFT = goog.i18n.bidi.IS_RTL ? goog.i18n.bidi.RIGHT :
+<a name="line158"></a>    goog.i18n.bidi.LEFT;
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Convert a directionality given in various formats to a goog.i18n.bidi.Dir
+<a name="line163"></a> * constant. Useful for interaction with different standards of directionality
+<a name="line164"></a> * representation.
+<a name="line165"></a> *
+<a name="line166"></a> * @param {goog.i18n.bidi.Dir|number|boolean|null} givenDir Directionality given
+<a name="line167"></a> *     in one of the following formats:
+<a name="line168"></a> *     1. A goog.i18n.bidi.Dir constant.
+<a name="line169"></a> *     2. A number (positive = LTR, negative = RTL, 0 = neutral).
+<a name="line170"></a> *     3. A boolean (true = RTL, false = LTR).
+<a name="line171"></a> *     4. A null for unknown directionality.
+<a name="line172"></a> * @param {boolean=} opt_noNeutral Whether a givenDir of zero or
+<a name="line173"></a> *     goog.i18n.bidi.Dir.NEUTRAL should be treated as null, i.e. unknown, in
+<a name="line174"></a> *     order to preserve legacy behavior.
+<a name="line175"></a> * @return {?goog.i18n.bidi.Dir} A goog.i18n.bidi.Dir constant matching the
+<a name="line176"></a> *     given directionality. If given null, returns null (i.e. unknown).
+<a name="line177"></a> */
+<a name="line178"></a>goog.i18n.bidi.toDir = function(givenDir, opt_noNeutral) {
+<a name="line179"></a>  if (typeof givenDir == &#39;number&#39;) {
+<a name="line180"></a>    // This includes the non-null goog.i18n.bidi.Dir case.
+<a name="line181"></a>    return givenDir &gt; 0 ? goog.i18n.bidi.Dir.LTR :
+<a name="line182"></a>        givenDir &lt; 0 ? goog.i18n.bidi.Dir.RTL :
+<a name="line183"></a>        opt_noNeutral ? null : goog.i18n.bidi.Dir.NEUTRAL;
+<a name="line184"></a>  } else if (givenDir == null) {
+<a name="line185"></a>    return null;
+<a name="line186"></a>  } else {
+<a name="line187"></a>    // Must be typeof givenDir == &#39;boolean&#39;.
+<a name="line188"></a>    return givenDir ? goog.i18n.bidi.Dir.RTL : goog.i18n.bidi.Dir.LTR;
+<a name="line189"></a>  }
+<a name="line190"></a>};
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * A practical pattern to identify strong LTR characters. This pattern is not
+<a name="line195"></a> * theoretically correct according to the Unicode standard. It is simplified for
+<a name="line196"></a> * performance and small code size.
+<a name="line197"></a> * @type {string}
+<a name="line198"></a> * @private
+<a name="line199"></a> */
+<a name="line200"></a>goog.i18n.bidi.ltrChars_ =
+<a name="line201"></a>    &#39;A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02B8\u0300-\u0590\u0800-\u1FFF&#39; +
+<a name="line202"></a>    &#39;\u200E\u2C00-\uFB1C\uFE00-\uFE6F\uFEFD-\uFFFF&#39;;
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * A practical pattern to identify strong RTL character. This pattern is not
+<a name="line207"></a> * theoretically correct according to the Unicode standard. It is simplified
+<a name="line208"></a> * for performance and small code size.
+<a name="line209"></a> * @type {string}
+<a name="line210"></a> * @private
+<a name="line211"></a> */
+<a name="line212"></a>goog.i18n.bidi.rtlChars_ = &#39;\u0591-\u07FF\u200F\uFB1D-\uFDFF\uFE70-\uFEFC&#39;;
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * Simplified regular expression for an HTML tag (opening or closing) or an HTML
+<a name="line217"></a> * escape. We might want to skip over such expressions when estimating the text
+<a name="line218"></a> * directionality.
+<a name="line219"></a> * @type {RegExp}
+<a name="line220"></a> * @private
+<a name="line221"></a> */
+<a name="line222"></a>goog.i18n.bidi.htmlSkipReg_ = /&lt;[^&gt;]*&gt;|&amp;[^;]+;/g;
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * Returns the input text with spaces instead of HTML tags or HTML escapes, if
+<a name="line227"></a> * opt_isStripNeeded is true. Else returns the input as is.
+<a name="line228"></a> * Useful for text directionality estimation.
+<a name="line229"></a> * Note: the function should not be used in other contexts; it is not 100%
+<a name="line230"></a> * correct, but rather a good-enough implementation for directionality
+<a name="line231"></a> * estimation purposes.
+<a name="line232"></a> * @param {string} str The given string.
+<a name="line233"></a> * @param {boolean=} opt_isStripNeeded Whether to perform the stripping.
+<a name="line234"></a> *     Default: false (to retain consistency with calling functions).
+<a name="line235"></a> * @return {string} The given string cleaned of HTML tags / escapes.
+<a name="line236"></a> * @private
+<a name="line237"></a> */
+<a name="line238"></a>goog.i18n.bidi.stripHtmlIfNeeded_ = function(str, opt_isStripNeeded) {
+<a name="line239"></a>  return opt_isStripNeeded ? str.replace(goog.i18n.bidi.htmlSkipReg_, &#39;&#39;) :
+<a name="line240"></a>      str;
+<a name="line241"></a>};
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Regular expression to check for RTL characters.
+<a name="line246"></a> * @type {RegExp}
+<a name="line247"></a> * @private
+<a name="line248"></a> */
+<a name="line249"></a>goog.i18n.bidi.rtlCharReg_ = new RegExp(&#39;[&#39; + goog.i18n.bidi.rtlChars_ + &#39;]&#39;);
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * Regular expression to check for LTR characters.
+<a name="line254"></a> * @type {RegExp}
+<a name="line255"></a> * @private
+<a name="line256"></a> */
+<a name="line257"></a>goog.i18n.bidi.ltrCharReg_ = new RegExp(&#39;[&#39; + goog.i18n.bidi.ltrChars_ + &#39;]&#39;);
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/**
+<a name="line261"></a> * Test whether the given string has any RTL characters in it.
+<a name="line262"></a> * @param {string} str The given string that need to be tested.
+<a name="line263"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line264"></a> *     Default: false.
+<a name="line265"></a> * @return {boolean} Whether the string contains RTL characters.
+<a name="line266"></a> */
+<a name="line267"></a>goog.i18n.bidi.hasAnyRtl = function(str, opt_isHtml) {
+<a name="line268"></a>  return goog.i18n.bidi.rtlCharReg_.test(goog.i18n.bidi.stripHtmlIfNeeded_(
+<a name="line269"></a>      str, opt_isHtml));
+<a name="line270"></a>};
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * Test whether the given string has any RTL characters in it.
+<a name="line275"></a> * @param {string} str The given string that need to be tested.
+<a name="line276"></a> * @return {boolean} Whether the string contains RTL characters.
+<a name="line277"></a> * @deprecated Use hasAnyRtl.
+<a name="line278"></a> */
+<a name="line279"></a>goog.i18n.bidi.hasRtlChar = goog.i18n.bidi.hasAnyRtl;
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>/**
+<a name="line283"></a> * Test whether the given string has any LTR characters in it.
+<a name="line284"></a> * @param {string} str The given string that need to be tested.
+<a name="line285"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line286"></a> *     Default: false.
+<a name="line287"></a> * @return {boolean} Whether the string contains LTR characters.
+<a name="line288"></a> */
+<a name="line289"></a>goog.i18n.bidi.hasAnyLtr = function(str, opt_isHtml) {
+<a name="line290"></a>  return goog.i18n.bidi.ltrCharReg_.test(goog.i18n.bidi.stripHtmlIfNeeded_(
+<a name="line291"></a>      str, opt_isHtml));
+<a name="line292"></a>};
+<a name="line293"></a>
+<a name="line294"></a>
+<a name="line295"></a>/**
+<a name="line296"></a> * Regular expression pattern to check if the first character in the string
+<a name="line297"></a> * is LTR.
+<a name="line298"></a> * @type {RegExp}
+<a name="line299"></a> * @private
+<a name="line300"></a> */
+<a name="line301"></a>goog.i18n.bidi.ltrRe_ = new RegExp(&#39;^[&#39; + goog.i18n.bidi.ltrChars_ + &#39;]&#39;);
+<a name="line302"></a>
+<a name="line303"></a>
+<a name="line304"></a>/**
+<a name="line305"></a> * Regular expression pattern to check if the first character in the string
+<a name="line306"></a> * is RTL.
+<a name="line307"></a> * @type {RegExp}
+<a name="line308"></a> * @private
+<a name="line309"></a> */
+<a name="line310"></a>goog.i18n.bidi.rtlRe_ = new RegExp(&#39;^[&#39; + goog.i18n.bidi.rtlChars_ + &#39;]&#39;);
+<a name="line311"></a>
+<a name="line312"></a>
+<a name="line313"></a>/**
+<a name="line314"></a> * Check if the first character in the string is RTL or not.
+<a name="line315"></a> * @param {string} str The given string that need to be tested.
+<a name="line316"></a> * @return {boolean} Whether the first character in str is an RTL char.
+<a name="line317"></a> */
+<a name="line318"></a>goog.i18n.bidi.isRtlChar = function(str) {
+<a name="line319"></a>  return goog.i18n.bidi.rtlRe_.test(str);
+<a name="line320"></a>};
+<a name="line321"></a>
+<a name="line322"></a>
+<a name="line323"></a>/**
+<a name="line324"></a> * Check if the first character in the string is LTR or not.
+<a name="line325"></a> * @param {string} str The given string that need to be tested.
+<a name="line326"></a> * @return {boolean} Whether the first character in str is an LTR char.
+<a name="line327"></a> */
+<a name="line328"></a>goog.i18n.bidi.isLtrChar = function(str) {
+<a name="line329"></a>  return goog.i18n.bidi.ltrRe_.test(str);
+<a name="line330"></a>};
+<a name="line331"></a>
+<a name="line332"></a>
+<a name="line333"></a>/**
+<a name="line334"></a> * Check if the first character in the string is neutral or not.
+<a name="line335"></a> * @param {string} str The given string that need to be tested.
+<a name="line336"></a> * @return {boolean} Whether the first character in str is a neutral char.
+<a name="line337"></a> */
+<a name="line338"></a>goog.i18n.bidi.isNeutralChar = function(str) {
+<a name="line339"></a>  return !goog.i18n.bidi.isLtrChar(str) &amp;&amp; !goog.i18n.bidi.isRtlChar(str);
+<a name="line340"></a>};
+<a name="line341"></a>
+<a name="line342"></a>
+<a name="line343"></a>/**
+<a name="line344"></a> * Regular expressions to check if a piece of text is of LTR directionality
+<a name="line345"></a> * on first character with strong directionality.
+<a name="line346"></a> * @type {RegExp}
+<a name="line347"></a> * @private
+<a name="line348"></a> */
+<a name="line349"></a>goog.i18n.bidi.ltrDirCheckRe_ = new RegExp(
+<a name="line350"></a>    &#39;^[^&#39; + goog.i18n.bidi.rtlChars_ + &#39;]*[&#39; + goog.i18n.bidi.ltrChars_ + &#39;]&#39;);
+<a name="line351"></a>
+<a name="line352"></a>
+<a name="line353"></a>/**
+<a name="line354"></a> * Regular expressions to check if a piece of text is of RTL directionality
+<a name="line355"></a> * on first character with strong directionality.
+<a name="line356"></a> * @type {RegExp}
+<a name="line357"></a> * @private
+<a name="line358"></a> */
+<a name="line359"></a>goog.i18n.bidi.rtlDirCheckRe_ = new RegExp(
+<a name="line360"></a>    &#39;^[^&#39; + goog.i18n.bidi.ltrChars_ + &#39;]*[&#39; + goog.i18n.bidi.rtlChars_ + &#39;]&#39;);
+<a name="line361"></a>
+<a name="line362"></a>
+<a name="line363"></a>/**
+<a name="line364"></a> * Check whether the first strongly directional character (if any) is RTL.
+<a name="line365"></a> * @param {string} str String being checked.
+<a name="line366"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line367"></a> *     Default: false.
+<a name="line368"></a> * @return {boolean} Whether RTL directionality is detected using the first
+<a name="line369"></a> *     strongly-directional character method.
+<a name="line370"></a> */
+<a name="line371"></a>goog.i18n.bidi.startsWithRtl = function(str, opt_isHtml) {
+<a name="line372"></a>  return goog.i18n.bidi.rtlDirCheckRe_.test(goog.i18n.bidi.stripHtmlIfNeeded_(
+<a name="line373"></a>      str, opt_isHtml));
+<a name="line374"></a>};
+<a name="line375"></a>
+<a name="line376"></a>
+<a name="line377"></a>/**
+<a name="line378"></a> * Check whether the first strongly directional character (if any) is RTL.
+<a name="line379"></a> * @param {string} str String being checked.
+<a name="line380"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line381"></a> *     Default: false.
+<a name="line382"></a> * @return {boolean} Whether RTL directionality is detected using the first
+<a name="line383"></a> *     strongly-directional character method.
+<a name="line384"></a> * @deprecated Use startsWithRtl.
+<a name="line385"></a> */
+<a name="line386"></a>goog.i18n.bidi.isRtlText = goog.i18n.bidi.startsWithRtl;
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/**
+<a name="line390"></a> * Check whether the first strongly directional character (if any) is LTR.
+<a name="line391"></a> * @param {string} str String being checked.
+<a name="line392"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line393"></a> *     Default: false.
+<a name="line394"></a> * @return {boolean} Whether LTR directionality is detected using the first
+<a name="line395"></a> *     strongly-directional character method.
+<a name="line396"></a> */
+<a name="line397"></a>goog.i18n.bidi.startsWithLtr = function(str, opt_isHtml) {
+<a name="line398"></a>  return goog.i18n.bidi.ltrDirCheckRe_.test(goog.i18n.bidi.stripHtmlIfNeeded_(
+<a name="line399"></a>      str, opt_isHtml));
+<a name="line400"></a>};
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>/**
+<a name="line404"></a> * Check whether the first strongly directional character (if any) is LTR.
+<a name="line405"></a> * @param {string} str String being checked.
+<a name="line406"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line407"></a> *     Default: false.
+<a name="line408"></a> * @return {boolean} Whether LTR directionality is detected using the first
+<a name="line409"></a> *     strongly-directional character method.
+<a name="line410"></a> * @deprecated Use startsWithLtr.
+<a name="line411"></a> */
+<a name="line412"></a>goog.i18n.bidi.isLtrText = goog.i18n.bidi.startsWithLtr;
+<a name="line413"></a>
+<a name="line414"></a>
+<a name="line415"></a>/**
+<a name="line416"></a> * Regular expression to check if a string looks like something that must
+<a name="line417"></a> * always be LTR even in RTL text, e.g. a URL. When estimating the
+<a name="line418"></a> * directionality of text containing these, we treat these as weakly LTR,
+<a name="line419"></a> * like numbers.
+<a name="line420"></a> * @type {RegExp}
+<a name="line421"></a> * @private
+<a name="line422"></a> */
+<a name="line423"></a>goog.i18n.bidi.isRequiredLtrRe_ = /^http:\/\/.*/;
+<a name="line424"></a>
+<a name="line425"></a>
+<a name="line426"></a>/**
+<a name="line427"></a> * Check whether the input string either contains no strongly directional
+<a name="line428"></a> * characters or looks like a url.
+<a name="line429"></a> * @param {string} str String being checked.
+<a name="line430"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line431"></a> *     Default: false.
+<a name="line432"></a> * @return {boolean} Whether neutral directionality is detected.
+<a name="line433"></a> */
+<a name="line434"></a>goog.i18n.bidi.isNeutralText = function(str, opt_isHtml) {
+<a name="line435"></a>  str = goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml);
+<a name="line436"></a>  return goog.i18n.bidi.isRequiredLtrRe_.test(str) ||
+<a name="line437"></a>      !goog.i18n.bidi.hasAnyLtr(str) &amp;&amp; !goog.i18n.bidi.hasAnyRtl(str);
+<a name="line438"></a>};
+<a name="line439"></a>
+<a name="line440"></a>
+<a name="line441"></a>/**
+<a name="line442"></a> * Regular expressions to check if the last strongly-directional character in a
+<a name="line443"></a> * piece of text is LTR.
+<a name="line444"></a> * @type {RegExp}
+<a name="line445"></a> * @private
+<a name="line446"></a> */
+<a name="line447"></a>goog.i18n.bidi.ltrExitDirCheckRe_ = new RegExp(
+<a name="line448"></a>    &#39;[&#39; + goog.i18n.bidi.ltrChars_ + &#39;][^&#39; + goog.i18n.bidi.rtlChars_ + &#39;]*$&#39;);
+<a name="line449"></a>
+<a name="line450"></a>
+<a name="line451"></a>/**
+<a name="line452"></a> * Regular expressions to check if the last strongly-directional character in a
+<a name="line453"></a> * piece of text is RTL.
+<a name="line454"></a> * @type {RegExp}
+<a name="line455"></a> * @private
+<a name="line456"></a> */
+<a name="line457"></a>goog.i18n.bidi.rtlExitDirCheckRe_ = new RegExp(
+<a name="line458"></a>    &#39;[&#39; + goog.i18n.bidi.rtlChars_ + &#39;][^&#39; + goog.i18n.bidi.ltrChars_ + &#39;]*$&#39;);
+<a name="line459"></a>
+<a name="line460"></a>
+<a name="line461"></a>/**
+<a name="line462"></a> * Check if the exit directionality a piece of text is LTR, i.e. if the last
+<a name="line463"></a> * strongly-directional character in the string is LTR.
+<a name="line464"></a> * @param {string} str String being checked.
+<a name="line465"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line466"></a> *     Default: false.
+<a name="line467"></a> * @return {boolean} Whether LTR exit directionality was detected.
+<a name="line468"></a> */
+<a name="line469"></a>goog.i18n.bidi.endsWithLtr = function(str, opt_isHtml) {
+<a name="line470"></a>  return goog.i18n.bidi.ltrExitDirCheckRe_.test(
+<a name="line471"></a>      goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml));
+<a name="line472"></a>};
+<a name="line473"></a>
+<a name="line474"></a>
+<a name="line475"></a>/**
+<a name="line476"></a> * Check if the exit directionality a piece of text is LTR, i.e. if the last
+<a name="line477"></a> * strongly-directional character in the string is LTR.
+<a name="line478"></a> * @param {string} str String being checked.
+<a name="line479"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line480"></a> *     Default: false.
+<a name="line481"></a> * @return {boolean} Whether LTR exit directionality was detected.
+<a name="line482"></a> * @deprecated Use endsWithLtr.
+<a name="line483"></a> */
+<a name="line484"></a>goog.i18n.bidi.isLtrExitText = goog.i18n.bidi.endsWithLtr;
+<a name="line485"></a>
+<a name="line486"></a>
+<a name="line487"></a>/**
+<a name="line488"></a> * Check if the exit directionality a piece of text is RTL, i.e. if the last
+<a name="line489"></a> * strongly-directional character in the string is RTL.
+<a name="line490"></a> * @param {string} str String being checked.
+<a name="line491"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line492"></a> *     Default: false.
+<a name="line493"></a> * @return {boolean} Whether RTL exit directionality was detected.
+<a name="line494"></a> */
+<a name="line495"></a>goog.i18n.bidi.endsWithRtl = function(str, opt_isHtml) {
+<a name="line496"></a>  return goog.i18n.bidi.rtlExitDirCheckRe_.test(
+<a name="line497"></a>      goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml));
+<a name="line498"></a>};
+<a name="line499"></a>
+<a name="line500"></a>
+<a name="line501"></a>/**
+<a name="line502"></a> * Check if the exit directionality a piece of text is RTL, i.e. if the last
+<a name="line503"></a> * strongly-directional character in the string is RTL.
+<a name="line504"></a> * @param {string} str String being checked.
+<a name="line505"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line506"></a> *     Default: false.
+<a name="line507"></a> * @return {boolean} Whether RTL exit directionality was detected.
+<a name="line508"></a> * @deprecated Use endsWithRtl.
+<a name="line509"></a> */
+<a name="line510"></a>goog.i18n.bidi.isRtlExitText = goog.i18n.bidi.endsWithRtl;
+<a name="line511"></a>
+<a name="line512"></a>
+<a name="line513"></a>/**
+<a name="line514"></a> * A regular expression for matching right-to-left language codes.
+<a name="line515"></a> * See {@link #isRtlLanguage} for the design.
+<a name="line516"></a> * @type {RegExp}
+<a name="line517"></a> * @private
+<a name="line518"></a> */
+<a name="line519"></a>goog.i18n.bidi.rtlLocalesRe_ = new RegExp(
+<a name="line520"></a>    &#39;^(ar|ckb|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|&#39; +
+<a name="line521"></a>    &#39;.*[-_](Arab|Hebr|Thaa|Nkoo|Tfng))&#39; +
+<a name="line522"></a>    &#39;(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)&#39;,
+<a name="line523"></a>    &#39;i&#39;);
+<a name="line524"></a>
+<a name="line525"></a>
+<a name="line526"></a>/**
+<a name="line527"></a> * Check if a BCP 47 / III language code indicates an RTL language, i.e. either:
+<a name="line528"></a> * - a language code explicitly specifying one of the right-to-left scripts,
+<a name="line529"></a> *   e.g. &quot;az-Arab&quot;, or&lt;p&gt;
+<a name="line530"></a> * - a language code specifying one of the languages normally written in a
+<a name="line531"></a> *   right-to-left script, e.g. &quot;fa&quot; (Farsi), except ones explicitly specifying
+<a name="line532"></a> *   Latin or Cyrillic script (which are the usual LTR alternatives).&lt;p&gt;
+<a name="line533"></a> * The list of right-to-left scripts appears in the 100-199 range in
+<a name="line534"></a> * http://www.unicode.org/iso15924/iso15924-num.html, of which Arabic and
+<a name="line535"></a> * Hebrew are by far the most widely used. We also recognize Thaana, N&#39;Ko, and
+<a name="line536"></a> * Tifinagh, which also have significant modern usage. The rest (Syriac,
+<a name="line537"></a> * Samaritan, Mandaic, etc.) seem to have extremely limited or no modern usage
+<a name="line538"></a> * and are not recognized to save on code size.
+<a name="line539"></a> * The languages usually written in a right-to-left script are taken as those
+<a name="line540"></a> * with Suppress-Script: Hebr|Arab|Thaa|Nkoo|Tfng  in
+<a name="line541"></a> * http://www.iana.org/assignments/language-subtag-registry,
+<a name="line542"></a> * as well as Central (or Sorani) Kurdish (ckb), Sindhi (sd) and Uyghur (ug).
+<a name="line543"></a> * Other subtags of the language code, e.g. regions like EG (Egypt), are
+<a name="line544"></a> * ignored.
+<a name="line545"></a> * @param {string} lang BCP 47 (a.k.a III) language code.
+<a name="line546"></a> * @return {boolean} Whether the language code is an RTL language.
+<a name="line547"></a> */
+<a name="line548"></a>goog.i18n.bidi.isRtlLanguage = function(lang) {
+<a name="line549"></a>  return goog.i18n.bidi.rtlLocalesRe_.test(lang);
+<a name="line550"></a>};
+<a name="line551"></a>
+<a name="line552"></a>
+<a name="line553"></a>/**
+<a name="line554"></a> * Regular expression for bracket guard replacement in html.
+<a name="line555"></a> * @type {RegExp}
+<a name="line556"></a> * @private
+<a name="line557"></a> */
+<a name="line558"></a>goog.i18n.bidi.bracketGuardHtmlRe_ =
+<a name="line559"></a>    /(\(.*?\)+)|(\[.*?\]+)|(\{.*?\}+)|(&amp;lt;.*?(&amp;gt;)+)/g;
+<a name="line560"></a>
+<a name="line561"></a>
+<a name="line562"></a>/**
+<a name="line563"></a> * Regular expression for bracket guard replacement in text.
+<a name="line564"></a> * @type {RegExp}
+<a name="line565"></a> * @private
+<a name="line566"></a> */
+<a name="line567"></a>goog.i18n.bidi.bracketGuardTextRe_ =
+<a name="line568"></a>    /(\(.*?\)+)|(\[.*?\]+)|(\{.*?\}+)|(&lt;.*?&gt;+)/g;
+<a name="line569"></a>
+<a name="line570"></a>
+<a name="line571"></a>/**
+<a name="line572"></a> * Apply bracket guard using html span tag. This is to address the problem of
+<a name="line573"></a> * messy bracket display frequently happens in RTL layout.
+<a name="line574"></a> * @param {string} s The string that need to be processed.
+<a name="line575"></a> * @param {boolean=} opt_isRtlContext specifies default direction (usually
+<a name="line576"></a> *     direction of the UI).
+<a name="line577"></a> * @return {string} The processed string, with all bracket guarded.
+<a name="line578"></a> */
+<a name="line579"></a>goog.i18n.bidi.guardBracketInHtml = function(s, opt_isRtlContext) {
+<a name="line580"></a>  var useRtl = opt_isRtlContext === undefined ?
+<a name="line581"></a>      goog.i18n.bidi.hasAnyRtl(s) : opt_isRtlContext;
+<a name="line582"></a>  if (useRtl) {
+<a name="line583"></a>    return s.replace(goog.i18n.bidi.bracketGuardHtmlRe_,
+<a name="line584"></a>        &#39;&lt;span dir=rtl&gt;$&amp;&lt;/span&gt;&#39;);
+<a name="line585"></a>  }
+<a name="line586"></a>  return s.replace(goog.i18n.bidi.bracketGuardHtmlRe_,
+<a name="line587"></a>      &#39;&lt;span dir=ltr&gt;$&amp;&lt;/span&gt;&#39;);
+<a name="line588"></a>};
+<a name="line589"></a>
+<a name="line590"></a>
+<a name="line591"></a>/**
+<a name="line592"></a> * Apply bracket guard using LRM and RLM. This is to address the problem of
+<a name="line593"></a> * messy bracket display frequently happens in RTL layout.
+<a name="line594"></a> * This version works for both plain text and html. But it does not work as
+<a name="line595"></a> * good as guardBracketInHtml in some cases.
+<a name="line596"></a> * @param {string} s The string that need to be processed.
+<a name="line597"></a> * @param {boolean=} opt_isRtlContext specifies default direction (usually
+<a name="line598"></a> *     direction of the UI).
+<a name="line599"></a> * @return {string} The processed string, with all bracket guarded.
+<a name="line600"></a> */
+<a name="line601"></a>goog.i18n.bidi.guardBracketInText = function(s, opt_isRtlContext) {
+<a name="line602"></a>  var useRtl = opt_isRtlContext === undefined ?
+<a name="line603"></a>      goog.i18n.bidi.hasAnyRtl(s) : opt_isRtlContext;
+<a name="line604"></a>  var mark = useRtl ? goog.i18n.bidi.Format.RLM : goog.i18n.bidi.Format.LRM;
+<a name="line605"></a>  return s.replace(goog.i18n.bidi.bracketGuardTextRe_, mark + &#39;$&amp;&#39; + mark);
+<a name="line606"></a>};
+<a name="line607"></a>
+<a name="line608"></a>
+<a name="line609"></a>/**
+<a name="line610"></a> * Enforce the html snippet in RTL directionality regardless overall context.
+<a name="line611"></a> * If the html piece was enclosed by tag, dir will be applied to existing
+<a name="line612"></a> * tag, otherwise a span tag will be added as wrapper. For this reason, if
+<a name="line613"></a> * html snippet start with with tag, this tag must enclose the whole piece. If
+<a name="line614"></a> * the tag already has a dir specified, this new one will override existing
+<a name="line615"></a> * one in behavior (tested on FF and IE).
+<a name="line616"></a> * @param {string} html The string that need to be processed.
+<a name="line617"></a> * @return {string} The processed string, with directionality enforced to RTL.
+<a name="line618"></a> */
+<a name="line619"></a>goog.i18n.bidi.enforceRtlInHtml = function(html) {
+<a name="line620"></a>  if (html.charAt(0) == &#39;&lt;&#39;) {
+<a name="line621"></a>    return html.replace(/&lt;\w+/, &#39;$&amp; dir=rtl&#39;);
+<a name="line622"></a>  }
+<a name="line623"></a>  // &#39;\n&#39; is important for FF so that it won&#39;t incorrectly merge span groups
+<a name="line624"></a>  return &#39;\n&lt;span dir=rtl&gt;&#39; + html + &#39;&lt;/span&gt;&#39;;
+<a name="line625"></a>};
+<a name="line626"></a>
+<a name="line627"></a>
+<a name="line628"></a>/**
+<a name="line629"></a> * Enforce RTL on both end of the given text piece using unicode BiDi formatting
+<a name="line630"></a> * characters RLE and PDF.
+<a name="line631"></a> * @param {string} text The piece of text that need to be wrapped.
+<a name="line632"></a> * @return {string} The wrapped string after process.
+<a name="line633"></a> */
+<a name="line634"></a>goog.i18n.bidi.enforceRtlInText = function(text) {
+<a name="line635"></a>  return goog.i18n.bidi.Format.RLE + text + goog.i18n.bidi.Format.PDF;
+<a name="line636"></a>};
+<a name="line637"></a>
+<a name="line638"></a>
+<a name="line639"></a>/**
+<a name="line640"></a> * Enforce the html snippet in RTL directionality regardless overall context.
+<a name="line641"></a> * If the html piece was enclosed by tag, dir will be applied to existing
+<a name="line642"></a> * tag, otherwise a span tag will be added as wrapper. For this reason, if
+<a name="line643"></a> * html snippet start with with tag, this tag must enclose the whole piece. If
+<a name="line644"></a> * the tag already has a dir specified, this new one will override existing
+<a name="line645"></a> * one in behavior (tested on FF and IE).
+<a name="line646"></a> * @param {string} html The string that need to be processed.
+<a name="line647"></a> * @return {string} The processed string, with directionality enforced to RTL.
+<a name="line648"></a> */
+<a name="line649"></a>goog.i18n.bidi.enforceLtrInHtml = function(html) {
+<a name="line650"></a>  if (html.charAt(0) == &#39;&lt;&#39;) {
+<a name="line651"></a>    return html.replace(/&lt;\w+/, &#39;$&amp; dir=ltr&#39;);
+<a name="line652"></a>  }
+<a name="line653"></a>  // &#39;\n&#39; is important for FF so that it won&#39;t incorrectly merge span groups
+<a name="line654"></a>  return &#39;\n&lt;span dir=ltr&gt;&#39; + html + &#39;&lt;/span&gt;&#39;;
+<a name="line655"></a>};
+<a name="line656"></a>
+<a name="line657"></a>
+<a name="line658"></a>/**
+<a name="line659"></a> * Enforce LTR on both end of the given text piece using unicode BiDi formatting
+<a name="line660"></a> * characters LRE and PDF.
+<a name="line661"></a> * @param {string} text The piece of text that need to be wrapped.
+<a name="line662"></a> * @return {string} The wrapped string after process.
+<a name="line663"></a> */
+<a name="line664"></a>goog.i18n.bidi.enforceLtrInText = function(text) {
+<a name="line665"></a>  return goog.i18n.bidi.Format.LRE + text + goog.i18n.bidi.Format.PDF;
+<a name="line666"></a>};
+<a name="line667"></a>
+<a name="line668"></a>
+<a name="line669"></a>/**
+<a name="line670"></a> * Regular expression to find dimensions such as &quot;padding: .3 0.4ex 5px 6;&quot;
+<a name="line671"></a> * @type {RegExp}
+<a name="line672"></a> * @private
+<a name="line673"></a> */
+<a name="line674"></a>goog.i18n.bidi.dimensionsRe_ =
+<a name="line675"></a>    /:\s*([.\d][.\w]*)\s+([.\d][.\w]*)\s+([.\d][.\w]*)\s+([.\d][.\w]*)/g;
+<a name="line676"></a>
+<a name="line677"></a>
+<a name="line678"></a>/**
+<a name="line679"></a> * Regular expression for left.
+<a name="line680"></a> * @type {RegExp}
+<a name="line681"></a> * @private
+<a name="line682"></a> */
+<a name="line683"></a>goog.i18n.bidi.leftRe_ = /left/gi;
+<a name="line684"></a>
+<a name="line685"></a>
+<a name="line686"></a>/**
+<a name="line687"></a> * Regular expression for right.
+<a name="line688"></a> * @type {RegExp}
+<a name="line689"></a> * @private
+<a name="line690"></a> */
+<a name="line691"></a>goog.i18n.bidi.rightRe_ = /right/gi;
+<a name="line692"></a>
+<a name="line693"></a>
+<a name="line694"></a>/**
+<a name="line695"></a> * Placeholder regular expression for swapping.
+<a name="line696"></a> * @type {RegExp}
+<a name="line697"></a> * @private
+<a name="line698"></a> */
+<a name="line699"></a>goog.i18n.bidi.tempRe_ = /%%%%/g;
+<a name="line700"></a>
+<a name="line701"></a>
+<a name="line702"></a>/**
+<a name="line703"></a> * Swap location parameters and &#39;left&#39;/&#39;right&#39; in CSS specification. The
+<a name="line704"></a> * processed string will be suited for RTL layout. Though this function can
+<a name="line705"></a> * cover most cases, there are always exceptions. It is suggested to put
+<a name="line706"></a> * those exceptions in separate group of CSS string.
+<a name="line707"></a> * @param {string} cssStr CSS spefication string.
+<a name="line708"></a> * @return {string} Processed CSS specification string.
+<a name="line709"></a> */
+<a name="line710"></a>goog.i18n.bidi.mirrorCSS = function(cssStr) {
+<a name="line711"></a>  return cssStr.
+<a name="line712"></a>      // reverse dimensions
+<a name="line713"></a>      replace(goog.i18n.bidi.dimensionsRe_, &#39;:$1 $4 $3 $2&#39;).
+<a name="line714"></a>      replace(goog.i18n.bidi.leftRe_, &#39;%%%%&#39;).          // swap left and right
+<a name="line715"></a>      replace(goog.i18n.bidi.rightRe_, goog.i18n.bidi.LEFT).
+<a name="line716"></a>      replace(goog.i18n.bidi.tempRe_, goog.i18n.bidi.RIGHT);
+<a name="line717"></a>};
+<a name="line718"></a>
+<a name="line719"></a>
+<a name="line720"></a>/**
+<a name="line721"></a> * Regular expression for hebrew double quote substitution, finding quote
+<a name="line722"></a> * directly after hebrew characters.
+<a name="line723"></a> * @type {RegExp}
+<a name="line724"></a> * @private
+<a name="line725"></a> */
+<a name="line726"></a>goog.i18n.bidi.doubleQuoteSubstituteRe_ = /([\u0591-\u05f2])&quot;/g;
+<a name="line727"></a>
+<a name="line728"></a>
+<a name="line729"></a>/**
+<a name="line730"></a> * Regular expression for hebrew single quote substitution, finding quote
+<a name="line731"></a> * directly after hebrew characters.
+<a name="line732"></a> * @type {RegExp}
+<a name="line733"></a> * @private
+<a name="line734"></a> */
+<a name="line735"></a>goog.i18n.bidi.singleQuoteSubstituteRe_ = /([\u0591-\u05f2])&#39;/g;
+<a name="line736"></a>
+<a name="line737"></a>
+<a name="line738"></a>/**
+<a name="line739"></a> * Replace the double and single quote directly after a Hebrew character with
+<a name="line740"></a> * GERESH and GERSHAYIM. In such case, most likely that&#39;s user intention.
+<a name="line741"></a> * @param {string} str String that need to be processed.
+<a name="line742"></a> * @return {string} Processed string with double/single quote replaced.
+<a name="line743"></a> */
+<a name="line744"></a>goog.i18n.bidi.normalizeHebrewQuote = function(str) {
+<a name="line745"></a>  return str.
+<a name="line746"></a>      replace(goog.i18n.bidi.doubleQuoteSubstituteRe_, &#39;$1\u05f4&#39;).
+<a name="line747"></a>      replace(goog.i18n.bidi.singleQuoteSubstituteRe_, &#39;$1\u05f3&#39;);
+<a name="line748"></a>};
+<a name="line749"></a>
+<a name="line750"></a>
+<a name="line751"></a>/**
+<a name="line752"></a> * Regular expression to split a string into &quot;words&quot; for directionality
+<a name="line753"></a> * estimation based on relative word counts.
+<a name="line754"></a> * @type {RegExp}
+<a name="line755"></a> * @private
+<a name="line756"></a> */
+<a name="line757"></a>goog.i18n.bidi.wordSeparatorRe_ = /\s+/;
+<a name="line758"></a>
+<a name="line759"></a>
+<a name="line760"></a>/**
+<a name="line761"></a> * Regular expression to check if a string contains any numerals. Used to
+<a name="line762"></a> * differentiate between completely neutral strings and those containing
+<a name="line763"></a> * numbers, which are weakly LTR.
+<a name="line764"></a> * @type {RegExp}
+<a name="line765"></a> * @private
+<a name="line766"></a> */
+<a name="line767"></a>goog.i18n.bidi.hasNumeralsRe_ = /\d/;
+<a name="line768"></a>
+<a name="line769"></a>
+<a name="line770"></a>/**
+<a name="line771"></a> * This constant controls threshold of RTL directionality.
+<a name="line772"></a> * @type {number}
+<a name="line773"></a> * @private
+<a name="line774"></a> */
+<a name="line775"></a>goog.i18n.bidi.rtlDetectionThreshold_ = 0.40;
+<a name="line776"></a>
+<a name="line777"></a>
+<a name="line778"></a>/**
+<a name="line779"></a> * Estimates the directionality of a string based on relative word counts.
+<a name="line780"></a> * If the number of RTL words is above a certain percentage of the total number
+<a name="line781"></a> * of strongly directional words, returns RTL.
+<a name="line782"></a> * Otherwise, if any words are strongly or weakly LTR, returns LTR.
+<a name="line783"></a> * Otherwise, returns UNKNOWN, which is used to mean &quot;neutral&quot;.
+<a name="line784"></a> * Numbers are counted as weakly LTR.
+<a name="line785"></a> * @param {string} str The string to be checked.
+<a name="line786"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line787"></a> *     Default: false.
+<a name="line788"></a> * @return {goog.i18n.bidi.Dir} Estimated overall directionality of {@code str}.
+<a name="line789"></a> */
+<a name="line790"></a>goog.i18n.bidi.estimateDirection = function(str, opt_isHtml) {
+<a name="line791"></a>  var rtlCount = 0;
+<a name="line792"></a>  var totalCount = 0;
+<a name="line793"></a>  var hasWeaklyLtr = false;
+<a name="line794"></a>  var tokens = goog.i18n.bidi.stripHtmlIfNeeded_(str, opt_isHtml).
+<a name="line795"></a>      split(goog.i18n.bidi.wordSeparatorRe_);
+<a name="line796"></a>  for (var i = 0; i &lt; tokens.length; i++) {
+<a name="line797"></a>    var token = tokens[i];
+<a name="line798"></a>    if (goog.i18n.bidi.startsWithRtl(token)) {
+<a name="line799"></a>      rtlCount++;
+<a name="line800"></a>      totalCount++;
+<a name="line801"></a>    } else if (goog.i18n.bidi.isRequiredLtrRe_.test(token)) {
+<a name="line802"></a>      hasWeaklyLtr = true;
+<a name="line803"></a>    } else if (goog.i18n.bidi.hasAnyLtr(token)) {
+<a name="line804"></a>      totalCount++;
+<a name="line805"></a>    } else if (goog.i18n.bidi.hasNumeralsRe_.test(token)) {
+<a name="line806"></a>      hasWeaklyLtr = true;
+<a name="line807"></a>    }
+<a name="line808"></a>  }
+<a name="line809"></a>
+<a name="line810"></a>  return totalCount == 0 ?
+<a name="line811"></a>      (hasWeaklyLtr ? goog.i18n.bidi.Dir.LTR : goog.i18n.bidi.Dir.NEUTRAL) :
+<a name="line812"></a>      (rtlCount / totalCount &gt; goog.i18n.bidi.rtlDetectionThreshold_ ?
+<a name="line813"></a>          goog.i18n.bidi.Dir.RTL : goog.i18n.bidi.Dir.LTR);
+<a name="line814"></a>};
+<a name="line815"></a>
+<a name="line816"></a>
+<a name="line817"></a>/**
+<a name="line818"></a> * Check the directionality of a piece of text, return true if the piece of
+<a name="line819"></a> * text should be laid out in RTL direction.
+<a name="line820"></a> * @param {string} str The piece of text that need to be detected.
+<a name="line821"></a> * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+<a name="line822"></a> *     Default: false.
+<a name="line823"></a> * @return {boolean} Whether this piece of text should be laid out in RTL.
+<a name="line824"></a> */
+<a name="line825"></a>goog.i18n.bidi.detectRtlDirectionality = function(str, opt_isHtml) {
+<a name="line826"></a>  return goog.i18n.bidi.estimateDirection(str, opt_isHtml) ==
+<a name="line827"></a>      goog.i18n.bidi.Dir.RTL;
+<a name="line828"></a>};
+<a name="line829"></a>
+<a name="line830"></a>
+<a name="line831"></a>/**
+<a name="line832"></a> * Sets text input element&#39;s directionality and text alignment based on a
+<a name="line833"></a> * given directionality. Does nothing if the given directionality is unknown or
+<a name="line834"></a> * neutral.
+<a name="line835"></a> * @param {Element} element Input field element to set directionality to.
+<a name="line836"></a> * @param {goog.i18n.bidi.Dir|number|boolean|null} dir Desired directionality,
+<a name="line837"></a> *     given in one of the following formats:
+<a name="line838"></a> *     1. A goog.i18n.bidi.Dir constant.
+<a name="line839"></a> *     2. A number (positive = LRT, negative = RTL, 0 = neutral).
+<a name="line840"></a> *     3. A boolean (true = RTL, false = LTR).
+<a name="line841"></a> *     4. A null for unknown directionality.
+<a name="line842"></a> */
+<a name="line843"></a>goog.i18n.bidi.setElementDirAndAlign = function(element, dir) {
+<a name="line844"></a>  if (element) {
+<a name="line845"></a>    dir = goog.i18n.bidi.toDir(dir);
+<a name="line846"></a>    if (dir) {
+<a name="line847"></a>      element.style.textAlign =
+<a name="line848"></a>          dir == goog.i18n.bidi.Dir.RTL ?
+<a name="line849"></a>          goog.i18n.bidi.RIGHT : goog.i18n.bidi.LEFT;
+<a name="line850"></a>      element.dir = dir == goog.i18n.bidi.Dir.RTL ? &#39;rtl&#39; : &#39;ltr&#39;;
+<a name="line851"></a>    }
+<a name="line852"></a>  }
+<a name="line853"></a>};
+<a name="line854"></a>
+<a name="line855"></a>
+<a name="line856"></a>
+<a name="line857"></a>/**
+<a name="line858"></a> * Strings that have an (optional) known direction.
+<a name="line859"></a> *
+<a name="line860"></a> * Implementations of this interface are string-like objects that carry an
+<a name="line861"></a> * attached direction, if known.
+<a name="line862"></a> * @interface
+<a name="line863"></a> */
+<a name="line864"></a>goog.i18n.bidi.DirectionalString = function() {};
+<a name="line865"></a>
+<a name="line866"></a>
+<a name="line867"></a>/**
+<a name="line868"></a> * Interface marker of the DirectionalString interface.
+<a name="line869"></a> *
+<a name="line870"></a> * This property can be used to determine at runtime whether or not an object
+<a name="line871"></a> * implements this interface.  All implementations of this interface set this
+<a name="line872"></a> * property to {@code true}.
+<a name="line873"></a> * @type {boolean}
+<a name="line874"></a> */
+<a name="line875"></a>goog.i18n.bidi.DirectionalString.prototype.
+<a name="line876"></a>    implementsGoogI18nBidiDirectionalString;
+<a name="line877"></a>
+<a name="line878"></a>
+<a name="line879"></a>/**
+<a name="line880"></a> * Retrieves this object&#39;s known direction (if any).
+<a name="line881"></a> * @return {?goog.i18n.bidi.Dir} The known direction. Null if unknown.
+<a name="line882"></a> */
+<a name="line883"></a>goog.i18n.bidi.DirectionalString.prototype.getDirection;
+</pre>
+
+
+</body>
+</html>

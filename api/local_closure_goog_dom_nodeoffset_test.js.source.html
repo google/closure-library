@@ -1,0 +1,136 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>nodeoffset_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_nodeoffset_test.js.html">nodeoffset_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.dom.NodeOffsetTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.dom.NodeOffsetTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.NodeOffset&#39;);
+<a name="line20"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line21"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var test1;
+<a name="line25"></a>var test2;
+<a name="line26"></a>var i;
+<a name="line27"></a>var empty;
+<a name="line28"></a>
+<a name="line29"></a>function setUpPage() {
+<a name="line30"></a>  test1 = goog.dom.getElement(&#39;test1&#39;);
+<a name="line31"></a>  i = goog.dom.getElement(&#39;i&#39;);
+<a name="line32"></a>  test2 = goog.dom.getElement(&#39;test2&#39;);
+<a name="line33"></a>  test2.innerHTML = test1.innerHTML;
+<a name="line34"></a>  empty = goog.dom.getElement(&#39;empty&#39;);
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function testElementOffset() {
+<a name="line38"></a>  var nodeOffset = new goog.dom.NodeOffset(i, test1);
+<a name="line39"></a>
+<a name="line40"></a>  var recovered = nodeOffset.findTargetNode(test2);
+<a name="line41"></a>  assertNotNull(&#39;Should recover a node.&#39;, recovered);
+<a name="line42"></a>  assertEquals(&#39;Should recover an I node.&#39;, goog.dom.TagName.I,
+<a name="line43"></a>      recovered.tagName);
+<a name="line44"></a>  assertTrue(&#39;Should recover a child of test2&#39;,
+<a name="line45"></a>      goog.dom.contains(test2, recovered));
+<a name="line46"></a>  assertFalse(&#39;Should not recover a child of test1&#39;,
+<a name="line47"></a>      goog.dom.contains(test1, recovered));
+<a name="line48"></a>
+<a name="line49"></a>  nodeOffset.dispose();
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>function testNodeOffset() {
+<a name="line53"></a>  var nodeOffset = new goog.dom.NodeOffset(i.firstChild, test1);
+<a name="line54"></a>
+<a name="line55"></a>  var recovered = nodeOffset.findTargetNode(test2);
+<a name="line56"></a>  assertNotNull(&#39;Should recover a node.&#39;, recovered);
+<a name="line57"></a>  assertEquals(&#39;Should recover a text node.&#39;, goog.dom.NodeType.TEXT,
+<a name="line58"></a>      recovered.nodeType);
+<a name="line59"></a>  assertEquals(&#39;Should  have correct contents.&#39;, &#39;text.&#39;,
+<a name="line60"></a>      recovered.nodeValue);
+<a name="line61"></a>  assertTrue(&#39;Should recover a child of test2&#39;,
+<a name="line62"></a>      goog.dom.contains(test2, recovered));
+<a name="line63"></a>  assertFalse(&#39;Should not recover a child of test1&#39;,
+<a name="line64"></a>      goog.dom.contains(test1, recovered));
+<a name="line65"></a>
+<a name="line66"></a>  nodeOffset.dispose();
+<a name="line67"></a>}
+<a name="line68"></a>
+<a name="line69"></a>function testToString() {
+<a name="line70"></a>  var nodeOffset = new goog.dom.NodeOffset(i.firstChild, test1);
+<a name="line71"></a>
+<a name="line72"></a>  assertEquals(&#39;Should have correct string representation&#39;,
+<a name="line73"></a>      &#39;3,B\n1,I\n0,#text&#39;, nodeOffset.toString());
+<a name="line74"></a>
+<a name="line75"></a>  nodeOffset.dispose();
+<a name="line76"></a>}
+<a name="line77"></a>
+<a name="line78"></a>function testBadRecovery() {
+<a name="line79"></a>  var nodeOffset = new goog.dom.NodeOffset(i.firstChild, test1);
+<a name="line80"></a>
+<a name="line81"></a>  var recovered = nodeOffset.findTargetNode(empty);
+<a name="line82"></a>  assertNull(&#39;Should recover nothing.&#39;, recovered);
+<a name="line83"></a>
+<a name="line84"></a>  nodeOffset.dispose();
+<a name="line85"></a>}
+</pre>
+
+
+</body>
+</html>

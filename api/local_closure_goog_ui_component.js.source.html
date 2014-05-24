@@ -1,0 +1,1370 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>component.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_component.js.html">component.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Abstract class for all UI components. This defines the standard
+<a name="line17"></a> * design pattern that all UI components should follow.
+<a name="line18"></a> *
+<a name="line19"></a> * @author attila@google.com (Attila Bodis)
+<a name="line20"></a> * @see ../demos/samplecomponent.html
+<a name="line21"></a> * @see http://code.google.com/p/closure-library/wiki/IntroToComponents
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.ui.Component&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.ui.Component.Error&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.ui.Component.EventType&#39;);
+<a name="line27"></a>goog.provide(&#39;goog.ui.Component.State&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.array&#39;);
+<a name="line30"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line31"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line32"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line33"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line34"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line35"></a>goog.require(&#39;goog.object&#39;);
+<a name="line36"></a>goog.require(&#39;goog.style&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.IdGenerator&#39;);
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/**
+<a name="line42"></a> * Default implementation of UI component.
+<a name="line43"></a> *
+<a name="line44"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+<a name="line45"></a> * @constructor
+<a name="line46"></a> * @extends {goog.events.EventTarget}
+<a name="line47"></a> */
+<a name="line48"></a>goog.ui.Component = function(opt_domHelper) {
+<a name="line49"></a>  goog.events.EventTarget.call(this);
+<a name="line50"></a>  this.dom_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line51"></a>
+<a name="line52"></a>  // Set the default right to left value.
+<a name="line53"></a>  this.rightToLeft_ = goog.ui.Component.defaultRightToLeft_;
+<a name="line54"></a>};
+<a name="line55"></a>goog.inherits(goog.ui.Component, goog.events.EventTarget);
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>/**
+<a name="line59"></a> * @define {boolean} Whether to support calling decorate with an element that is
+<a name="line60"></a> *     not yet in the document. If true, we check if the element is in the
+<a name="line61"></a> *     document, and avoid calling enterDocument if it isn&#39;t. If false, we
+<a name="line62"></a> *     maintain legacy behavior (always call enterDocument from decorate).
+<a name="line63"></a> */
+<a name="line64"></a>goog.define(&#39;goog.ui.Component.ALLOW_DETACHED_DECORATION&#39;, false);
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * Generator for unique IDs.
+<a name="line69"></a> * @type {goog.ui.IdGenerator}
+<a name="line70"></a> * @private
+<a name="line71"></a> */
+<a name="line72"></a>goog.ui.Component.prototype.idGenerator_ = goog.ui.IdGenerator.getInstance();
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>// TODO(gboyer): See if we can remove this and just check goog.i18n.bidi.IS_RTL.
+<a name="line76"></a>/**
+<a name="line77"></a> * @define {number} Defines the default BIDI directionality.
+<a name="line78"></a> *     0: Unknown.
+<a name="line79"></a> *     1: Left-to-right.
+<a name="line80"></a> *     -1: Right-to-left.
+<a name="line81"></a> */
+<a name="line82"></a>goog.define(&#39;goog.ui.Component.DEFAULT_BIDI_DIR&#39;, 0);
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * The default right to left value.
+<a name="line87"></a> * @type {?boolean}
+<a name="line88"></a> * @private
+<a name="line89"></a> */
+<a name="line90"></a>goog.ui.Component.defaultRightToLeft_ =
+<a name="line91"></a>    (goog.ui.Component.DEFAULT_BIDI_DIR == 1) ? false :
+<a name="line92"></a>    (goog.ui.Component.DEFAULT_BIDI_DIR == -1) ? true : null;
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * Common events fired by components so that event propagation is useful.  Not
+<a name="line97"></a> * all components are expected to dispatch or listen for all event types.
+<a name="line98"></a> * Events dispatched before a state transition should be cancelable to prevent
+<a name="line99"></a> * the corresponding state change.
+<a name="line100"></a> * @enum {string}
+<a name="line101"></a> */
+<a name="line102"></a>goog.ui.Component.EventType = {
+<a name="line103"></a>  /** Dispatched before the component becomes visible. */
+<a name="line104"></a>  BEFORE_SHOW: &#39;beforeshow&#39;,
+<a name="line105"></a>
+<a name="line106"></a>  /**
+<a name="line107"></a>   * Dispatched after the component becomes visible.
+<a name="line108"></a>   * NOTE(user): For goog.ui.Container, this actually fires before containers
+<a name="line109"></a>   * are shown.  Use goog.ui.Container.EventType.AFTER_SHOW if you want an event
+<a name="line110"></a>   * that fires after a goog.ui.Container is shown.
+<a name="line111"></a>   */
+<a name="line112"></a>  SHOW: &#39;show&#39;,
+<a name="line113"></a>
+<a name="line114"></a>  /** Dispatched before the component becomes hidden. */
+<a name="line115"></a>  HIDE: &#39;hide&#39;,
+<a name="line116"></a>
+<a name="line117"></a>  /** Dispatched before the component becomes disabled. */
+<a name="line118"></a>  DISABLE: &#39;disable&#39;,
+<a name="line119"></a>
+<a name="line120"></a>  /** Dispatched before the component becomes enabled. */
+<a name="line121"></a>  ENABLE: &#39;enable&#39;,
+<a name="line122"></a>
+<a name="line123"></a>  /** Dispatched before the component becomes highlighted. */
+<a name="line124"></a>  HIGHLIGHT: &#39;highlight&#39;,
+<a name="line125"></a>
+<a name="line126"></a>  /** Dispatched before the component becomes un-highlighted. */
+<a name="line127"></a>  UNHIGHLIGHT: &#39;unhighlight&#39;,
+<a name="line128"></a>
+<a name="line129"></a>  /** Dispatched before the component becomes activated. */
+<a name="line130"></a>  ACTIVATE: &#39;activate&#39;,
+<a name="line131"></a>
+<a name="line132"></a>  /** Dispatched before the component becomes deactivated. */
+<a name="line133"></a>  DEACTIVATE: &#39;deactivate&#39;,
+<a name="line134"></a>
+<a name="line135"></a>  /** Dispatched before the component becomes selected. */
+<a name="line136"></a>  SELECT: &#39;select&#39;,
+<a name="line137"></a>
+<a name="line138"></a>  /** Dispatched before the component becomes un-selected. */
+<a name="line139"></a>  UNSELECT: &#39;unselect&#39;,
+<a name="line140"></a>
+<a name="line141"></a>  /** Dispatched before a component becomes checked. */
+<a name="line142"></a>  CHECK: &#39;check&#39;,
+<a name="line143"></a>
+<a name="line144"></a>  /** Dispatched before a component becomes un-checked. */
+<a name="line145"></a>  UNCHECK: &#39;uncheck&#39;,
+<a name="line146"></a>
+<a name="line147"></a>  /** Dispatched before a component becomes focused. */
+<a name="line148"></a>  FOCUS: &#39;focus&#39;,
+<a name="line149"></a>
+<a name="line150"></a>  /** Dispatched before a component becomes blurred. */
+<a name="line151"></a>  BLUR: &#39;blur&#39;,
+<a name="line152"></a>
+<a name="line153"></a>  /** Dispatched before a component is opened (expanded). */
+<a name="line154"></a>  OPEN: &#39;open&#39;,
+<a name="line155"></a>
+<a name="line156"></a>  /** Dispatched before a component is closed (collapsed). */
+<a name="line157"></a>  CLOSE: &#39;close&#39;,
+<a name="line158"></a>
+<a name="line159"></a>  /** Dispatched after a component is moused over. */
+<a name="line160"></a>  ENTER: &#39;enter&#39;,
+<a name="line161"></a>
+<a name="line162"></a>  /** Dispatched after a component is moused out of. */
+<a name="line163"></a>  LEAVE: &#39;leave&#39;,
+<a name="line164"></a>
+<a name="line165"></a>  /** Dispatched after the user activates the component. */
+<a name="line166"></a>  ACTION: &#39;action&#39;,
+<a name="line167"></a>
+<a name="line168"></a>  /** Dispatched after the external-facing state of a component is changed. */
+<a name="line169"></a>  CHANGE: &#39;change&#39;
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Errors thrown by the component.
+<a name="line175"></a> * @enum {string}
+<a name="line176"></a> */
+<a name="line177"></a>goog.ui.Component.Error = {
+<a name="line178"></a>  /**
+<a name="line179"></a>   * Error when a method is not supported.
+<a name="line180"></a>   */
+<a name="line181"></a>  NOT_SUPPORTED: &#39;Method not supported&#39;,
+<a name="line182"></a>
+<a name="line183"></a>  /**
+<a name="line184"></a>   * Error when the given element can not be decorated.
+<a name="line185"></a>   */
+<a name="line186"></a>  DECORATE_INVALID: &#39;Invalid element to decorate&#39;,
+<a name="line187"></a>
+<a name="line188"></a>  /**
+<a name="line189"></a>   * Error when the component is already rendered and another render attempt is
+<a name="line190"></a>   * made.
+<a name="line191"></a>   */
+<a name="line192"></a>  ALREADY_RENDERED: &#39;Component already rendered&#39;,
+<a name="line193"></a>
+<a name="line194"></a>  /**
+<a name="line195"></a>   * Error when an attempt is made to set the parent of a component in a way
+<a name="line196"></a>   * that would result in an inconsistent object graph.
+<a name="line197"></a>   */
+<a name="line198"></a>  PARENT_UNABLE_TO_BE_SET: &#39;Unable to set parent component&#39;,
+<a name="line199"></a>
+<a name="line200"></a>  /**
+<a name="line201"></a>   * Error when an attempt is made to add a child component at an out-of-bounds
+<a name="line202"></a>   * index.  We don&#39;t support sparse child arrays.
+<a name="line203"></a>   */
+<a name="line204"></a>  CHILD_INDEX_OUT_OF_BOUNDS: &#39;Child component index out of bounds&#39;,
+<a name="line205"></a>
+<a name="line206"></a>  /**
+<a name="line207"></a>   * Error when an attempt is made to remove a child component from a component
+<a name="line208"></a>   * other than its parent.
+<a name="line209"></a>   */
+<a name="line210"></a>  NOT_OUR_CHILD: &#39;Child is not in parent component&#39;,
+<a name="line211"></a>
+<a name="line212"></a>  /**
+<a name="line213"></a>   * Error when an operation requiring DOM interaction is made when the
+<a name="line214"></a>   * component is not in the document
+<a name="line215"></a>   */
+<a name="line216"></a>  NOT_IN_DOCUMENT: &#39;Operation not supported while component is not in document&#39;,
+<a name="line217"></a>
+<a name="line218"></a>  /**
+<a name="line219"></a>   * Error when an invalid component state is encountered.
+<a name="line220"></a>   */
+<a name="line221"></a>  STATE_INVALID: &#39;Invalid component state&#39;
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * Common component states.  Components may have distinct appearance depending
+<a name="line227"></a> * on what state(s) apply to them.  Not all components are expected to support
+<a name="line228"></a> * all states.
+<a name="line229"></a> * @enum {number}
+<a name="line230"></a> */
+<a name="line231"></a>goog.ui.Component.State = {
+<a name="line232"></a>  /**
+<a name="line233"></a>   * Union of all supported component states.
+<a name="line234"></a>   */
+<a name="line235"></a>  ALL: 0xFF,
+<a name="line236"></a>
+<a name="line237"></a>  /**
+<a name="line238"></a>   * Component is disabled.
+<a name="line239"></a>   * @see goog.ui.Component.EventType.DISABLE
+<a name="line240"></a>   * @see goog.ui.Component.EventType.ENABLE
+<a name="line241"></a>   */
+<a name="line242"></a>  DISABLED: 0x01,
+<a name="line243"></a>
+<a name="line244"></a>  /**
+<a name="line245"></a>   * Component is highlighted.
+<a name="line246"></a>   * @see goog.ui.Component.EventType.HIGHLIGHT
+<a name="line247"></a>   * @see goog.ui.Component.EventType.UNHIGHLIGHT
+<a name="line248"></a>   */
+<a name="line249"></a>  HOVER: 0x02,
+<a name="line250"></a>
+<a name="line251"></a>  /**
+<a name="line252"></a>   * Component is active (or &quot;pressed&quot;).
+<a name="line253"></a>   * @see goog.ui.Component.EventType.ACTIVATE
+<a name="line254"></a>   * @see goog.ui.Component.EventType.DEACTIVATE
+<a name="line255"></a>   */
+<a name="line256"></a>  ACTIVE: 0x04,
+<a name="line257"></a>
+<a name="line258"></a>  /**
+<a name="line259"></a>   * Component is selected.
+<a name="line260"></a>   * @see goog.ui.Component.EventType.SELECT
+<a name="line261"></a>   * @see goog.ui.Component.EventType.UNSELECT
+<a name="line262"></a>   */
+<a name="line263"></a>  SELECTED: 0x08,
+<a name="line264"></a>
+<a name="line265"></a>  /**
+<a name="line266"></a>   * Component is checked.
+<a name="line267"></a>   * @see goog.ui.Component.EventType.CHECK
+<a name="line268"></a>   * @see goog.ui.Component.EventType.UNCHECK
+<a name="line269"></a>   */
+<a name="line270"></a>  CHECKED: 0x10,
+<a name="line271"></a>
+<a name="line272"></a>  /**
+<a name="line273"></a>   * Component has focus.
+<a name="line274"></a>   * @see goog.ui.Component.EventType.FOCUS
+<a name="line275"></a>   * @see goog.ui.Component.EventType.BLUR
+<a name="line276"></a>   */
+<a name="line277"></a>  FOCUSED: 0x20,
+<a name="line278"></a>
+<a name="line279"></a>  /**
+<a name="line280"></a>   * Component is opened (expanded).  Applies to tree nodes, menu buttons,
+<a name="line281"></a>   * submenus, zippys (zippies?), etc.
+<a name="line282"></a>   * @see goog.ui.Component.EventType.OPEN
+<a name="line283"></a>   * @see goog.ui.Component.EventType.CLOSE
+<a name="line284"></a>   */
+<a name="line285"></a>  OPENED: 0x40
+<a name="line286"></a>};
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * Static helper method; returns the type of event components are expected to
+<a name="line291"></a> * dispatch when transitioning to or from the given state.
+<a name="line292"></a> * @param {goog.ui.Component.State} state State to/from which the component
+<a name="line293"></a> *     is transitioning.
+<a name="line294"></a> * @param {boolean} isEntering Whether the component is entering or leaving the
+<a name="line295"></a> *     state.
+<a name="line296"></a> * @return {goog.ui.Component.EventType} Event type to dispatch.
+<a name="line297"></a> */
+<a name="line298"></a>goog.ui.Component.getStateTransitionEvent = function(state, isEntering) {
+<a name="line299"></a>  switch (state) {
+<a name="line300"></a>    case goog.ui.Component.State.DISABLED:
+<a name="line301"></a>      return isEntering ? goog.ui.Component.EventType.DISABLE :
+<a name="line302"></a>          goog.ui.Component.EventType.ENABLE;
+<a name="line303"></a>    case goog.ui.Component.State.HOVER:
+<a name="line304"></a>      return isEntering ? goog.ui.Component.EventType.HIGHLIGHT :
+<a name="line305"></a>          goog.ui.Component.EventType.UNHIGHLIGHT;
+<a name="line306"></a>    case goog.ui.Component.State.ACTIVE:
+<a name="line307"></a>      return isEntering ? goog.ui.Component.EventType.ACTIVATE :
+<a name="line308"></a>          goog.ui.Component.EventType.DEACTIVATE;
+<a name="line309"></a>    case goog.ui.Component.State.SELECTED:
+<a name="line310"></a>      return isEntering ? goog.ui.Component.EventType.SELECT :
+<a name="line311"></a>          goog.ui.Component.EventType.UNSELECT;
+<a name="line312"></a>    case goog.ui.Component.State.CHECKED:
+<a name="line313"></a>      return isEntering ? goog.ui.Component.EventType.CHECK :
+<a name="line314"></a>          goog.ui.Component.EventType.UNCHECK;
+<a name="line315"></a>    case goog.ui.Component.State.FOCUSED:
+<a name="line316"></a>      return isEntering ? goog.ui.Component.EventType.FOCUS :
+<a name="line317"></a>          goog.ui.Component.EventType.BLUR;
+<a name="line318"></a>    case goog.ui.Component.State.OPENED:
+<a name="line319"></a>      return isEntering ? goog.ui.Component.EventType.OPEN :
+<a name="line320"></a>          goog.ui.Component.EventType.CLOSE;
+<a name="line321"></a>    default:
+<a name="line322"></a>      // Fall through.
+<a name="line323"></a>  }
+<a name="line324"></a>
+<a name="line325"></a>  // Invalid state.
+<a name="line326"></a>  throw Error(goog.ui.Component.Error.STATE_INVALID);
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Set the default right-to-left value. This causes all component&#39;s created from
+<a name="line332"></a> * this point foward to have the given value. This is useful for cases where
+<a name="line333"></a> * a given page is always in one directionality, avoiding unnecessary
+<a name="line334"></a> * right to left determinations.
+<a name="line335"></a> * @param {?boolean} rightToLeft Whether the components should be rendered
+<a name="line336"></a> *     right-to-left. Null iff components should determine their directionality.
+<a name="line337"></a> */
+<a name="line338"></a>goog.ui.Component.setDefaultRightToLeft = function(rightToLeft) {
+<a name="line339"></a>  goog.ui.Component.defaultRightToLeft_ = rightToLeft;
+<a name="line340"></a>};
+<a name="line341"></a>
+<a name="line342"></a>
+<a name="line343"></a>/**
+<a name="line344"></a> * Unique ID of the component, lazily initialized in {@link
+<a name="line345"></a> * goog.ui.Component#getId} if needed.  This property is strictly private and
+<a name="line346"></a> * must not be accessed directly outside of this class!
+<a name="line347"></a> * @type {?string}
+<a name="line348"></a> * @private
+<a name="line349"></a> */
+<a name="line350"></a>goog.ui.Component.prototype.id_ = null;
+<a name="line351"></a>
+<a name="line352"></a>
+<a name="line353"></a>/**
+<a name="line354"></a> * DomHelper used to interact with the document, allowing components to be
+<a name="line355"></a> * created in a different window.
+<a name="line356"></a> * @type {!goog.dom.DomHelper}
+<a name="line357"></a> * @protected
+<a name="line358"></a> * @suppress {underscore|visibility}
+<a name="line359"></a> */
+<a name="line360"></a>goog.ui.Component.prototype.dom_;
+<a name="line361"></a>
+<a name="line362"></a>
+<a name="line363"></a>/**
+<a name="line364"></a> * Whether the component is in the document.
+<a name="line365"></a> * @type {boolean}
+<a name="line366"></a> * @private
+<a name="line367"></a> */
+<a name="line368"></a>goog.ui.Component.prototype.inDocument_ = false;
+<a name="line369"></a>
+<a name="line370"></a>
+<a name="line371"></a>// TODO(attila): Stop referring to this private field in subclasses.
+<a name="line372"></a>/**
+<a name="line373"></a> * The DOM element for the component.
+<a name="line374"></a> * @type {Element}
+<a name="line375"></a> * @private
+<a name="line376"></a> */
+<a name="line377"></a>goog.ui.Component.prototype.element_ = null;
+<a name="line378"></a>
+<a name="line379"></a>
+<a name="line380"></a>/**
+<a name="line381"></a> * Event handler.
+<a name="line382"></a> * TODO(user): rename it to handler_ after all component subclasses in
+<a name="line383"></a> * inside Google have been cleaned up.
+<a name="line384"></a> * Code search: http://go/component_code_search
+<a name="line385"></a> * @type {goog.events.EventHandler}
+<a name="line386"></a> * @private
+<a name="line387"></a> */
+<a name="line388"></a>goog.ui.Component.prototype.googUiComponentHandler_;
+<a name="line389"></a>
+<a name="line390"></a>
+<a name="line391"></a>/**
+<a name="line392"></a> * Whether the component is rendered right-to-left.  Right-to-left is set
+<a name="line393"></a> * lazily when {@link #isRightToLeft} is called the first time, unless it has
+<a name="line394"></a> * been set by calling {@link #setRightToLeft} explicitly.
+<a name="line395"></a> * @type {?boolean}
+<a name="line396"></a> * @private
+<a name="line397"></a> */
+<a name="line398"></a>goog.ui.Component.prototype.rightToLeft_ = null;
+<a name="line399"></a>
+<a name="line400"></a>
+<a name="line401"></a>/**
+<a name="line402"></a> * Arbitrary data object associated with the component.  Such as meta-data.
+<a name="line403"></a> * @type {*}
+<a name="line404"></a> * @private
+<a name="line405"></a> */
+<a name="line406"></a>goog.ui.Component.prototype.model_ = null;
+<a name="line407"></a>
+<a name="line408"></a>
+<a name="line409"></a>/**
+<a name="line410"></a> * Parent component to which events will be propagated.  This property is
+<a name="line411"></a> * strictly private and must not be accessed directly outside of this class!
+<a name="line412"></a> * @type {goog.ui.Component?}
+<a name="line413"></a> * @private
+<a name="line414"></a> */
+<a name="line415"></a>goog.ui.Component.prototype.parent_ = null;
+<a name="line416"></a>
+<a name="line417"></a>
+<a name="line418"></a>/**
+<a name="line419"></a> * Array of child components.  Lazily initialized on first use.  Must be kept in
+<a name="line420"></a> * sync with {@code childIndex_}.  This property is strictly private and must
+<a name="line421"></a> * not be accessed directly outside of this class!
+<a name="line422"></a> * @type {Array.&lt;goog.ui.Component&gt;?}
+<a name="line423"></a> * @private
+<a name="line424"></a> */
+<a name="line425"></a>goog.ui.Component.prototype.children_ = null;
+<a name="line426"></a>
+<a name="line427"></a>
+<a name="line428"></a>/**
+<a name="line429"></a> * Map of child component IDs to child components.  Used for constant-time
+<a name="line430"></a> * random access to child components by ID.  Lazily initialized on first use.
+<a name="line431"></a> * Must be kept in sync with {@code children_}.  This property is strictly
+<a name="line432"></a> * private and must not be accessed directly outside of this class!
+<a name="line433"></a> *
+<a name="line434"></a> * We use a plain Object, not a {@link goog.structs.Map}, for simplicity.
+<a name="line435"></a> * This means components can&#39;t have children with IDs such as &#39;constructor&#39; or
+<a name="line436"></a> * &#39;valueOf&#39;, but this shouldn&#39;t really be an issue in practice, and if it is,
+<a name="line437"></a> * we can always fix it later without changing the API.
+<a name="line438"></a> *
+<a name="line439"></a> * @type {Object}
+<a name="line440"></a> * @private
+<a name="line441"></a> */
+<a name="line442"></a>goog.ui.Component.prototype.childIndex_ = null;
+<a name="line443"></a>
+<a name="line444"></a>
+<a name="line445"></a>/**
+<a name="line446"></a> * Flag used to keep track of whether a component decorated an already existing
+<a name="line447"></a> * element or whether it created the DOM itself.
+<a name="line448"></a> *
+<a name="line449"></a> * If an element is decorated, dispose will leave the node in the document.
+<a name="line450"></a> * It is up to the app to remove the node.
+<a name="line451"></a> *
+<a name="line452"></a> * If an element was rendered, dispose will remove the node automatically.
+<a name="line453"></a> *
+<a name="line454"></a> * @type {boolean}
+<a name="line455"></a> * @private
+<a name="line456"></a> */
+<a name="line457"></a>goog.ui.Component.prototype.wasDecorated_ = false;
+<a name="line458"></a>
+<a name="line459"></a>
+<a name="line460"></a>/**
+<a name="line461"></a> * Gets the unique ID for the instance of this component.  If the instance
+<a name="line462"></a> * doesn&#39;t already have an ID, generates one on the fly.
+<a name="line463"></a> * @return {string} Unique component ID.
+<a name="line464"></a> */
+<a name="line465"></a>goog.ui.Component.prototype.getId = function() {
+<a name="line466"></a>  return this.id_ || (this.id_ = this.idGenerator_.getNextUniqueId());
+<a name="line467"></a>};
+<a name="line468"></a>
+<a name="line469"></a>
+<a name="line470"></a>/**
+<a name="line471"></a> * Assigns an ID to this component instance.  It is the caller&#39;s responsibility
+<a name="line472"></a> * to guarantee that the ID is unique.  If the component is a child of a parent
+<a name="line473"></a> * component, then the parent component&#39;s child index is updated to reflect the
+<a name="line474"></a> * new ID; this may throw an error if the parent already has a child with an ID
+<a name="line475"></a> * that conflicts with the new ID.
+<a name="line476"></a> * @param {string} id Unique component ID.
+<a name="line477"></a> */
+<a name="line478"></a>goog.ui.Component.prototype.setId = function(id) {
+<a name="line479"></a>  if (this.parent_ &amp;&amp; this.parent_.childIndex_) {
+<a name="line480"></a>    // Update the parent&#39;s child index.
+<a name="line481"></a>    goog.object.remove(this.parent_.childIndex_, this.id_);
+<a name="line482"></a>    goog.object.add(this.parent_.childIndex_, id, this);
+<a name="line483"></a>  }
+<a name="line484"></a>
+<a name="line485"></a>  // Update the component ID.
+<a name="line486"></a>  this.id_ = id;
+<a name="line487"></a>};
+<a name="line488"></a>
+<a name="line489"></a>
+<a name="line490"></a>/**
+<a name="line491"></a> * Gets the component&#39;s element.
+<a name="line492"></a> * @return {Element} The element for the component.
+<a name="line493"></a> */
+<a name="line494"></a>goog.ui.Component.prototype.getElement = function() {
+<a name="line495"></a>  return this.element_;
+<a name="line496"></a>};
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * Gets the component&#39;s element. This differs from getElement in that
+<a name="line501"></a> * it assumes that the element exists (i.e. the component has been
+<a name="line502"></a> * rendered/decorated) and will cause an assertion error otherwise (if
+<a name="line503"></a> * assertion is enabled).
+<a name="line504"></a> * @return {!Element} The element for the component.
+<a name="line505"></a> */
+<a name="line506"></a>goog.ui.Component.prototype.getElementStrict = function() {
+<a name="line507"></a>  var el = this.element_;
+<a name="line508"></a>  goog.asserts.assert(
+<a name="line509"></a>      el, &#39;Can not call getElementStrict before rendering/decorating.&#39;);
+<a name="line510"></a>  return el;
+<a name="line511"></a>};
+<a name="line512"></a>
+<a name="line513"></a>
+<a name="line514"></a>/**
+<a name="line515"></a> * Sets the component&#39;s root element to the given element.  Considered
+<a name="line516"></a> * protected and final.
+<a name="line517"></a> *
+<a name="line518"></a> * This should generally only be called during createDom. Setting the element
+<a name="line519"></a> * does not actually change which element is rendered, only the element that is
+<a name="line520"></a> * associated with this UI component.
+<a name="line521"></a> *
+<a name="line522"></a> * This should only be used by subclasses and its associated renderers.
+<a name="line523"></a> *
+<a name="line524"></a> * @param {Element} element Root element for the component.
+<a name="line525"></a> */
+<a name="line526"></a>goog.ui.Component.prototype.setElementInternal = function(element) {
+<a name="line527"></a>  this.element_ = element;
+<a name="line528"></a>};
+<a name="line529"></a>
+<a name="line530"></a>
+<a name="line531"></a>/**
+<a name="line532"></a> * Returns an array of all the elements in this component&#39;s DOM with the
+<a name="line533"></a> * provided className.
+<a name="line534"></a> * @param {string} className The name of the class to look for.
+<a name="line535"></a> * @return {!goog.array.ArrayLike} The items found with the class name provided.
+<a name="line536"></a> */
+<a name="line537"></a>goog.ui.Component.prototype.getElementsByClass = function(className) {
+<a name="line538"></a>  return this.element_ ?
+<a name="line539"></a>      this.dom_.getElementsByClass(className, this.element_) : [];
+<a name="line540"></a>};
+<a name="line541"></a>
+<a name="line542"></a>
+<a name="line543"></a>/**
+<a name="line544"></a> * Returns the first element in this component&#39;s DOM with the provided
+<a name="line545"></a> * className.
+<a name="line546"></a> * @param {string} className The name of the class to look for.
+<a name="line547"></a> * @return {Element} The first item with the class name provided.
+<a name="line548"></a> */
+<a name="line549"></a>goog.ui.Component.prototype.getElementByClass = function(className) {
+<a name="line550"></a>  return this.element_ ?
+<a name="line551"></a>      this.dom_.getElementByClass(className, this.element_) : null;
+<a name="line552"></a>};
+<a name="line553"></a>
+<a name="line554"></a>
+<a name="line555"></a>/**
+<a name="line556"></a> * Similar to {@code getElementByClass} except that it expects the
+<a name="line557"></a> * element to be present in the dom thus returning a required value. Otherwise,
+<a name="line558"></a> * will assert.
+<a name="line559"></a> * @param {string} className The name of the class to look for.
+<a name="line560"></a> * @return {!Element} The first item with the class name provided.
+<a name="line561"></a> */
+<a name="line562"></a>goog.ui.Component.prototype.getRequiredElementByClass = function(className) {
+<a name="line563"></a>  var el = this.getElementByClass(className);
+<a name="line564"></a>  goog.asserts.assert(el, &#39;Expected element in component with class: %s&#39;,
+<a name="line565"></a>      className);
+<a name="line566"></a>  return el;
+<a name="line567"></a>};
+<a name="line568"></a>
+<a name="line569"></a>
+<a name="line570"></a>/**
+<a name="line571"></a> * Returns the event handler for this component, lazily created the first time
+<a name="line572"></a> * this method is called.
+<a name="line573"></a> * @return {!goog.events.EventHandler.&lt;T&gt;} Event handler for this component.
+<a name="line574"></a> * @protected
+<a name="line575"></a> * @this T
+<a name="line576"></a> * @template T
+<a name="line577"></a> */
+<a name="line578"></a>goog.ui.Component.prototype.getHandler = function() {
+<a name="line579"></a>  if (!this.googUiComponentHandler_) {
+<a name="line580"></a>    this.googUiComponentHandler_ = new goog.events.EventHandler(this);
+<a name="line581"></a>  }
+<a name="line582"></a>  return this.googUiComponentHandler_;
+<a name="line583"></a>};
+<a name="line584"></a>
+<a name="line585"></a>
+<a name="line586"></a>/**
+<a name="line587"></a> * Sets the parent of this component to use for event bubbling.  Throws an error
+<a name="line588"></a> * if the component already has a parent or if an attempt is made to add a
+<a name="line589"></a> * component to itself as a child.  Callers must use {@code removeChild}
+<a name="line590"></a> * or {@code removeChildAt} to remove components from their containers before
+<a name="line591"></a> * calling this method.
+<a name="line592"></a> * @see goog.ui.Component#removeChild
+<a name="line593"></a> * @see goog.ui.Component#removeChildAt
+<a name="line594"></a> * @param {goog.ui.Component} parent The parent component.
+<a name="line595"></a> */
+<a name="line596"></a>goog.ui.Component.prototype.setParent = function(parent) {
+<a name="line597"></a>  if (this == parent) {
+<a name="line598"></a>    // Attempting to add a child to itself is an error.
+<a name="line599"></a>    throw Error(goog.ui.Component.Error.PARENT_UNABLE_TO_BE_SET);
+<a name="line600"></a>  }
+<a name="line601"></a>
+<a name="line602"></a>  if (parent &amp;&amp; this.parent_ &amp;&amp; this.id_ &amp;&amp; this.parent_.getChild(this.id_) &amp;&amp;
+<a name="line603"></a>      this.parent_ != parent) {
+<a name="line604"></a>    // This component is already the child of some parent, so it should be
+<a name="line605"></a>    // removed using removeChild/removeChildAt first.
+<a name="line606"></a>    throw Error(goog.ui.Component.Error.PARENT_UNABLE_TO_BE_SET);
+<a name="line607"></a>  }
+<a name="line608"></a>
+<a name="line609"></a>  this.parent_ = parent;
+<a name="line610"></a>  goog.ui.Component.superClass_.setParentEventTarget.call(this, parent);
+<a name="line611"></a>};
+<a name="line612"></a>
+<a name="line613"></a>
+<a name="line614"></a>/**
+<a name="line615"></a> * Returns the component&#39;s parent, if any.
+<a name="line616"></a> * @return {goog.ui.Component?} The parent component.
+<a name="line617"></a> */
+<a name="line618"></a>goog.ui.Component.prototype.getParent = function() {
+<a name="line619"></a>  return this.parent_;
+<a name="line620"></a>};
+<a name="line621"></a>
+<a name="line622"></a>
+<a name="line623"></a>/**
+<a name="line624"></a> * Overrides {@link goog.events.EventTarget#setParentEventTarget} to throw an
+<a name="line625"></a> * error if the parent component is set, and the argument is not the parent.
+<a name="line626"></a> * @override
+<a name="line627"></a> */
+<a name="line628"></a>goog.ui.Component.prototype.setParentEventTarget = function(parent) {
+<a name="line629"></a>  if (this.parent_ &amp;&amp; this.parent_ != parent) {
+<a name="line630"></a>    throw Error(goog.ui.Component.Error.NOT_SUPPORTED);
+<a name="line631"></a>  }
+<a name="line632"></a>  goog.ui.Component.superClass_.setParentEventTarget.call(this, parent);
+<a name="line633"></a>};
+<a name="line634"></a>
+<a name="line635"></a>
+<a name="line636"></a>/**
+<a name="line637"></a> * Returns the dom helper that is being used on this component.
+<a name="line638"></a> * @return {!goog.dom.DomHelper} The dom helper used on this component.
+<a name="line639"></a> */
+<a name="line640"></a>goog.ui.Component.prototype.getDomHelper = function() {
+<a name="line641"></a>  return this.dom_;
+<a name="line642"></a>};
+<a name="line643"></a>
+<a name="line644"></a>
+<a name="line645"></a>/**
+<a name="line646"></a> * Determines whether the component has been added to the document.
+<a name="line647"></a> * @return {boolean} TRUE if rendered. Otherwise, FALSE.
+<a name="line648"></a> */
+<a name="line649"></a>goog.ui.Component.prototype.isInDocument = function() {
+<a name="line650"></a>  return this.inDocument_;
+<a name="line651"></a>};
+<a name="line652"></a>
+<a name="line653"></a>
+<a name="line654"></a>/**
+<a name="line655"></a> * Creates the initial DOM representation for the component.  The default
+<a name="line656"></a> * implementation is to set this.element_ = div.
+<a name="line657"></a> */
+<a name="line658"></a>goog.ui.Component.prototype.createDom = function() {
+<a name="line659"></a>  this.element_ = this.dom_.createElement(&#39;div&#39;);
+<a name="line660"></a>};
+<a name="line661"></a>
+<a name="line662"></a>
+<a name="line663"></a>/**
+<a name="line664"></a> * Renders the component.  If a parent element is supplied, the component&#39;s
+<a name="line665"></a> * element will be appended to it.  If there is no optional parent element and
+<a name="line666"></a> * the element doesn&#39;t have a parentNode then it will be appended to the
+<a name="line667"></a> * document body.
+<a name="line668"></a> *
+<a name="line669"></a> * If this component has a parent component, and the parent component is
+<a name="line670"></a> * not in the document already, then this will not call {@code enterDocument}
+<a name="line671"></a> * on this component.
+<a name="line672"></a> *
+<a name="line673"></a> * Throws an Error if the component is already rendered.
+<a name="line674"></a> *
+<a name="line675"></a> * @param {Element=} opt_parentElement Optional parent element to render the
+<a name="line676"></a> *    component into.
+<a name="line677"></a> */
+<a name="line678"></a>goog.ui.Component.prototype.render = function(opt_parentElement) {
+<a name="line679"></a>  this.render_(opt_parentElement);
+<a name="line680"></a>};
+<a name="line681"></a>
+<a name="line682"></a>
+<a name="line683"></a>/**
+<a name="line684"></a> * Renders the component before another element. The other element should be in
+<a name="line685"></a> * the document already.
+<a name="line686"></a> *
+<a name="line687"></a> * Throws an Error if the component is already rendered.
+<a name="line688"></a> *
+<a name="line689"></a> * @param {Node} sibling Node to render the component before.
+<a name="line690"></a> */
+<a name="line691"></a>goog.ui.Component.prototype.renderBefore = function(sibling) {
+<a name="line692"></a>  this.render_(/** @type {Element} */ (sibling.parentNode),
+<a name="line693"></a>               sibling);
+<a name="line694"></a>};
+<a name="line695"></a>
+<a name="line696"></a>
+<a name="line697"></a>/**
+<a name="line698"></a> * Renders the component.  If a parent element is supplied, the component&#39;s
+<a name="line699"></a> * element will be appended to it.  If there is no optional parent element and
+<a name="line700"></a> * the element doesn&#39;t have a parentNode then it will be appended to the
+<a name="line701"></a> * document body.
+<a name="line702"></a> *
+<a name="line703"></a> * If this component has a parent component, and the parent component is
+<a name="line704"></a> * not in the document already, then this will not call {@code enterDocument}
+<a name="line705"></a> * on this component.
+<a name="line706"></a> *
+<a name="line707"></a> * Throws an Error if the component is already rendered.
+<a name="line708"></a> *
+<a name="line709"></a> * @param {Element=} opt_parentElement Optional parent element to render the
+<a name="line710"></a> *    component into.
+<a name="line711"></a> * @param {Node=} opt_beforeNode Node before which the component is to
+<a name="line712"></a> *    be rendered.  If left out the node is appended to the parent element.
+<a name="line713"></a> * @private
+<a name="line714"></a> */
+<a name="line715"></a>goog.ui.Component.prototype.render_ = function(opt_parentElement,
+<a name="line716"></a>                                               opt_beforeNode) {
+<a name="line717"></a>  if (this.inDocument_) {
+<a name="line718"></a>    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+<a name="line719"></a>  }
+<a name="line720"></a>
+<a name="line721"></a>  if (!this.element_) {
+<a name="line722"></a>    this.createDom();
+<a name="line723"></a>  }
+<a name="line724"></a>
+<a name="line725"></a>  if (opt_parentElement) {
+<a name="line726"></a>    opt_parentElement.insertBefore(this.element_, opt_beforeNode || null);
+<a name="line727"></a>  } else {
+<a name="line728"></a>    this.dom_.getDocument().body.appendChild(this.element_);
+<a name="line729"></a>  }
+<a name="line730"></a>
+<a name="line731"></a>  // If this component has a parent component that isn&#39;t in the document yet,
+<a name="line732"></a>  // we don&#39;t call enterDocument() here.  Instead, when the parent component
+<a name="line733"></a>  // enters the document, the enterDocument() call will propagate to its
+<a name="line734"></a>  // children, including this one.  If the component doesn&#39;t have a parent
+<a name="line735"></a>  // or if the parent is already in the document, we call enterDocument().
+<a name="line736"></a>  if (!this.parent_ || this.parent_.isInDocument()) {
+<a name="line737"></a>    this.enterDocument();
+<a name="line738"></a>  }
+<a name="line739"></a>};
+<a name="line740"></a>
+<a name="line741"></a>
+<a name="line742"></a>/**
+<a name="line743"></a> * Decorates the element for the UI component. If the element is in the
+<a name="line744"></a> * document, the enterDocument method will be called.
+<a name="line745"></a> *
+<a name="line746"></a> * If goog.ui.Component.ALLOW_DETACHED_DECORATION is false, the caller must
+<a name="line747"></a> * pass an element that is in the document.
+<a name="line748"></a> *
+<a name="line749"></a> * @param {Element} element Element to decorate.
+<a name="line750"></a> */
+<a name="line751"></a>goog.ui.Component.prototype.decorate = function(element) {
+<a name="line752"></a>  if (this.inDocument_) {
+<a name="line753"></a>    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+<a name="line754"></a>  } else if (element &amp;&amp; this.canDecorate(element)) {
+<a name="line755"></a>    this.wasDecorated_ = true;
+<a name="line756"></a>
+<a name="line757"></a>    // Set the DOM helper of the component to match the decorated element.
+<a name="line758"></a>    var doc = goog.dom.getOwnerDocument(element);
+<a name="line759"></a>    if (!this.dom_ || this.dom_.getDocument() != doc) {
+<a name="line760"></a>      this.dom_ = goog.dom.getDomHelper(element);
+<a name="line761"></a>    }
+<a name="line762"></a>
+<a name="line763"></a>    // Call specific component decorate logic.
+<a name="line764"></a>    this.decorateInternal(element);
+<a name="line765"></a>
+<a name="line766"></a>    // If supporting detached decoration, check that element is in doc.
+<a name="line767"></a>    if (!goog.ui.Component.ALLOW_DETACHED_DECORATION ||
+<a name="line768"></a>        goog.dom.contains(doc, element)) {
+<a name="line769"></a>      this.enterDocument();
+<a name="line770"></a>    }
+<a name="line771"></a>  } else {
+<a name="line772"></a>    throw Error(goog.ui.Component.Error.DECORATE_INVALID);
+<a name="line773"></a>  }
+<a name="line774"></a>};
+<a name="line775"></a>
+<a name="line776"></a>
+<a name="line777"></a>/**
+<a name="line778"></a> * Determines if a given element can be decorated by this type of component.
+<a name="line779"></a> * This method should be overridden by inheriting objects.
+<a name="line780"></a> * @param {Element} element Element to decorate.
+<a name="line781"></a> * @return {boolean} True if the element can be decorated, false otherwise.
+<a name="line782"></a> */
+<a name="line783"></a>goog.ui.Component.prototype.canDecorate = function(element) {
+<a name="line784"></a>  return true;
+<a name="line785"></a>};
+<a name="line786"></a>
+<a name="line787"></a>
+<a name="line788"></a>/**
+<a name="line789"></a> * @return {boolean} Whether the component was decorated.
+<a name="line790"></a> */
+<a name="line791"></a>goog.ui.Component.prototype.wasDecorated = function() {
+<a name="line792"></a>  return this.wasDecorated_;
+<a name="line793"></a>};
+<a name="line794"></a>
+<a name="line795"></a>
+<a name="line796"></a>/**
+<a name="line797"></a> * Actually decorates the element. Should be overridden by inheriting objects.
+<a name="line798"></a> * This method can assume there are checks to ensure the component has not
+<a name="line799"></a> * already been rendered have occurred and that enter document will be called
+<a name="line800"></a> * afterwards. This method is considered protected.
+<a name="line801"></a> * @param {Element} element Element to decorate.
+<a name="line802"></a> * @protected
+<a name="line803"></a> */
+<a name="line804"></a>goog.ui.Component.prototype.decorateInternal = function(element) {
+<a name="line805"></a>  this.element_ = element;
+<a name="line806"></a>};
+<a name="line807"></a>
+<a name="line808"></a>
+<a name="line809"></a>/**
+<a name="line810"></a> * Called when the component&#39;s element is known to be in the document. Anything
+<a name="line811"></a> * using document.getElementById etc. should be done at this stage.
+<a name="line812"></a> *
+<a name="line813"></a> * If the component contains child components, this call is propagated to its
+<a name="line814"></a> * children.
+<a name="line815"></a> */
+<a name="line816"></a>goog.ui.Component.prototype.enterDocument = function() {
+<a name="line817"></a>  this.inDocument_ = true;
+<a name="line818"></a>
+<a name="line819"></a>  // Propagate enterDocument to child components that have a DOM, if any.
+<a name="line820"></a>  // If a child was decorated before entering the document (permitted when
+<a name="line821"></a>  // goog.ui.Component.ALLOW_DETACHED_DECORATION is true), its enterDocument
+<a name="line822"></a>  // will be called here.
+<a name="line823"></a>  this.forEachChild(function(child) {
+<a name="line824"></a>    if (!child.isInDocument() &amp;&amp; child.getElement()) {
+<a name="line825"></a>      child.enterDocument();
+<a name="line826"></a>    }
+<a name="line827"></a>  });
+<a name="line828"></a>};
+<a name="line829"></a>
+<a name="line830"></a>
+<a name="line831"></a>/**
+<a name="line832"></a> * Called by dispose to clean up the elements and listeners created by a
+<a name="line833"></a> * component, or by a parent component/application who has removed the
+<a name="line834"></a> * component from the document but wants to reuse it later.
+<a name="line835"></a> *
+<a name="line836"></a> * If the component contains child components, this call is propagated to its
+<a name="line837"></a> * children.
+<a name="line838"></a> *
+<a name="line839"></a> * It should be possible for the component to be rendered again once this method
+<a name="line840"></a> * has been called.
+<a name="line841"></a> */
+<a name="line842"></a>goog.ui.Component.prototype.exitDocument = function() {
+<a name="line843"></a>  // Propagate exitDocument to child components that have been rendered, if any.
+<a name="line844"></a>  this.forEachChild(function(child) {
+<a name="line845"></a>    if (child.isInDocument()) {
+<a name="line846"></a>      child.exitDocument();
+<a name="line847"></a>    }
+<a name="line848"></a>  });
+<a name="line849"></a>
+<a name="line850"></a>  if (this.googUiComponentHandler_) {
+<a name="line851"></a>    this.googUiComponentHandler_.removeAll();
+<a name="line852"></a>  }
+<a name="line853"></a>
+<a name="line854"></a>  this.inDocument_ = false;
+<a name="line855"></a>};
+<a name="line856"></a>
+<a name="line857"></a>
+<a name="line858"></a>/**
+<a name="line859"></a> * Disposes of the component.  Calls {@code exitDocument}, which is expected to
+<a name="line860"></a> * remove event handlers and clean up the component.  Propagates the call to
+<a name="line861"></a> * the component&#39;s children, if any. Removes the component&#39;s DOM from the
+<a name="line862"></a> * document unless it was decorated.
+<a name="line863"></a> * @override
+<a name="line864"></a> * @protected
+<a name="line865"></a> */
+<a name="line866"></a>goog.ui.Component.prototype.disposeInternal = function() {
+<a name="line867"></a>  if (this.inDocument_) {
+<a name="line868"></a>    this.exitDocument();
+<a name="line869"></a>  }
+<a name="line870"></a>
+<a name="line871"></a>  if (this.googUiComponentHandler_) {
+<a name="line872"></a>    this.googUiComponentHandler_.dispose();
+<a name="line873"></a>    delete this.googUiComponentHandler_;
+<a name="line874"></a>  }
+<a name="line875"></a>
+<a name="line876"></a>  // Disposes of the component&#39;s children, if any.
+<a name="line877"></a>  this.forEachChild(function(child) {
+<a name="line878"></a>    child.dispose();
+<a name="line879"></a>  });
+<a name="line880"></a>
+<a name="line881"></a>  // Detach the component&#39;s element from the DOM, unless it was decorated.
+<a name="line882"></a>  if (!this.wasDecorated_ &amp;&amp; this.element_) {
+<a name="line883"></a>    goog.dom.removeNode(this.element_);
+<a name="line884"></a>  }
+<a name="line885"></a>
+<a name="line886"></a>  this.children_ = null;
+<a name="line887"></a>  this.childIndex_ = null;
+<a name="line888"></a>  this.element_ = null;
+<a name="line889"></a>  this.model_ = null;
+<a name="line890"></a>  this.parent_ = null;
+<a name="line891"></a>
+<a name="line892"></a>  goog.ui.Component.superClass_.disposeInternal.call(this);
+<a name="line893"></a>};
+<a name="line894"></a>
+<a name="line895"></a>
+<a name="line896"></a>/**
+<a name="line897"></a> * Helper function for subclasses that gets a unique id for a given fragment,
+<a name="line898"></a> * this can be used by components to generate unique string ids for DOM
+<a name="line899"></a> * elements.
+<a name="line900"></a> * @param {string} idFragment A partial id.
+<a name="line901"></a> * @return {string} Unique element id.
+<a name="line902"></a> */
+<a name="line903"></a>goog.ui.Component.prototype.makeId = function(idFragment) {
+<a name="line904"></a>  return this.getId() + &#39;.&#39; + idFragment;
+<a name="line905"></a>};
+<a name="line906"></a>
+<a name="line907"></a>
+<a name="line908"></a>/**
+<a name="line909"></a> * Makes a collection of ids.  This is a convenience method for makeId.  The
+<a name="line910"></a> * object&#39;s values are the id fragments and the new values are the generated
+<a name="line911"></a> * ids.  The key will remain the same.
+<a name="line912"></a> * @param {Object} object The object that will be used to create the ids.
+<a name="line913"></a> * @return {!Object} An object of id keys to generated ids.
+<a name="line914"></a> */
+<a name="line915"></a>goog.ui.Component.prototype.makeIds = function(object) {
+<a name="line916"></a>  var ids = {};
+<a name="line917"></a>  for (var key in object) {
+<a name="line918"></a>    ids[key] = this.makeId(object[key]);
+<a name="line919"></a>  }
+<a name="line920"></a>  return ids;
+<a name="line921"></a>};
+<a name="line922"></a>
+<a name="line923"></a>
+<a name="line924"></a>/**
+<a name="line925"></a> * Returns the model associated with the UI component.
+<a name="line926"></a> * @return {*} The model.
+<a name="line927"></a> */
+<a name="line928"></a>goog.ui.Component.prototype.getModel = function() {
+<a name="line929"></a>  return this.model_;
+<a name="line930"></a>};
+<a name="line931"></a>
+<a name="line932"></a>
+<a name="line933"></a>/**
+<a name="line934"></a> * Sets the model associated with the UI component.
+<a name="line935"></a> * @param {*} obj The model.
+<a name="line936"></a> */
+<a name="line937"></a>goog.ui.Component.prototype.setModel = function(obj) {
+<a name="line938"></a>  this.model_ = obj;
+<a name="line939"></a>};
+<a name="line940"></a>
+<a name="line941"></a>
+<a name="line942"></a>/**
+<a name="line943"></a> * Helper function for returning the fragment portion of an id generated using
+<a name="line944"></a> * makeId().
+<a name="line945"></a> * @param {string} id Id generated with makeId().
+<a name="line946"></a> * @return {string} Fragment.
+<a name="line947"></a> */
+<a name="line948"></a>goog.ui.Component.prototype.getFragmentFromId = function(id) {
+<a name="line949"></a>  return id.substring(this.getId().length + 1);
+<a name="line950"></a>};
+<a name="line951"></a>
+<a name="line952"></a>
+<a name="line953"></a>/**
+<a name="line954"></a> * Helper function for returning an element in the document with a unique id
+<a name="line955"></a> * generated using makeId().
+<a name="line956"></a> * @param {string} idFragment The partial id.
+<a name="line957"></a> * @return {Element} The element with the unique id, or null if it cannot be
+<a name="line958"></a> *     found.
+<a name="line959"></a> */
+<a name="line960"></a>goog.ui.Component.prototype.getElementByFragment = function(idFragment) {
+<a name="line961"></a>  if (!this.inDocument_) {
+<a name="line962"></a>    throw Error(goog.ui.Component.Error.NOT_IN_DOCUMENT);
+<a name="line963"></a>  }
+<a name="line964"></a>  return this.dom_.getElement(this.makeId(idFragment));
+<a name="line965"></a>};
+<a name="line966"></a>
+<a name="line967"></a>
+<a name="line968"></a>/**
+<a name="line969"></a> * Adds the specified component as the last child of this component.  See
+<a name="line970"></a> * {@link goog.ui.Component#addChildAt} for detailed semantics.
+<a name="line971"></a> *
+<a name="line972"></a> * @see goog.ui.Component#addChildAt
+<a name="line973"></a> * @param {goog.ui.Component} child The new child component.
+<a name="line974"></a> * @param {boolean=} opt_render If true, the child component will be rendered
+<a name="line975"></a> *    into the parent.
+<a name="line976"></a> */
+<a name="line977"></a>goog.ui.Component.prototype.addChild = function(child, opt_render) {
+<a name="line978"></a>  // TODO(gboyer): addChildAt(child, this.getChildCount(), false) will
+<a name="line979"></a>  // reposition any already-rendered child to the end.  Instead, perhaps
+<a name="line980"></a>  // addChild(child, false) should never reposition the child; instead, clients
+<a name="line981"></a>  // that need the repositioning will use addChildAt explicitly.  Right now,
+<a name="line982"></a>  // clients can get around this by calling addChild before calling decorate.
+<a name="line983"></a>  this.addChildAt(child, this.getChildCount(), opt_render);
+<a name="line984"></a>};
+<a name="line985"></a>
+<a name="line986"></a>
+<a name="line987"></a>/**
+<a name="line988"></a> * Adds the specified component as a child of this component at the given
+<a name="line989"></a> * 0-based index.
+<a name="line990"></a> *
+<a name="line991"></a> * Both {@code addChild} and {@code addChildAt} assume the following contract
+<a name="line992"></a> * between parent and child components:
+<a name="line993"></a> *  &lt;ul&gt;
+<a name="line994"></a> *    &lt;li&gt;the child component&#39;s element must be a descendant of the parent
+<a name="line995"></a> *        component&#39;s element, and
+<a name="line996"></a> *    &lt;li&gt;the DOM state of the child component must be consistent with the DOM
+<a name="line997"></a> *        state of the parent component (see {@code isInDocument}) in the
+<a name="line998"></a> *        steady state -- the exception is to addChildAt(child, i, false) and
+<a name="line999"></a> *        then immediately decorate/render the child.
+<a name="line1000"></a> *  &lt;/ul&gt;
+<a name="line1001"></a> *
+<a name="line1002"></a> * In particular, {@code parent.addChild(child)} will throw an error if the
+<a name="line1003"></a> * child component is already in the document, but the parent isn&#39;t.
+<a name="line1004"></a> *
+<a name="line1005"></a> * Clients of this API may call {@code addChild} and {@code addChildAt} with
+<a name="line1006"></a> * {@code opt_render} set to true.  If {@code opt_render} is true, calling these
+<a name="line1007"></a> * methods will automatically render the child component&#39;s element into the
+<a name="line1008"></a> * parent component&#39;s element. If the parent does not yet have an element, then
+<a name="line1009"></a> * {@code createDom} will automatically be invoked on the parent before
+<a name="line1010"></a> * rendering the child.
+<a name="line1011"></a> *
+<a name="line1012"></a> * Invoking {@code parent.addChild(child, true)} will throw an error if the
+<a name="line1013"></a> * child component is already in the document, regardless of the parent&#39;s DOM
+<a name="line1014"></a> * state.
+<a name="line1015"></a> *
+<a name="line1016"></a> * If {@code opt_render} is true and the parent component is not already
+<a name="line1017"></a> * in the document, {@code enterDocument} will not be called on this component
+<a name="line1018"></a> * at this point.
+<a name="line1019"></a> *
+<a name="line1020"></a> * Finally, this method also throws an error if the new child already has a
+<a name="line1021"></a> * different parent, or the given index is out of bounds.
+<a name="line1022"></a> *
+<a name="line1023"></a> * @see goog.ui.Component#addChild
+<a name="line1024"></a> * @param {goog.ui.Component} child The new child component.
+<a name="line1025"></a> * @param {number} index 0-based index at which the new child component is to be
+<a name="line1026"></a> *    added; must be between 0 and the current child count (inclusive).
+<a name="line1027"></a> * @param {boolean=} opt_render If true, the child component will be rendered
+<a name="line1028"></a> *    into the parent.
+<a name="line1029"></a> * @return {void} Nada.
+<a name="line1030"></a> */
+<a name="line1031"></a>goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
+<a name="line1032"></a>  goog.asserts.assert(!!child, &#39;Provided element must not be null.&#39;);
+<a name="line1033"></a>
+<a name="line1034"></a>  if (child.inDocument_ &amp;&amp; (opt_render || !this.inDocument_)) {
+<a name="line1035"></a>    // Adding a child that&#39;s already in the document is an error, except if the
+<a name="line1036"></a>    // parent is also in the document and opt_render is false (e.g. decorate()).
+<a name="line1037"></a>    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+<a name="line1038"></a>  }
+<a name="line1039"></a>
+<a name="line1040"></a>  if (index &lt; 0 || index &gt; this.getChildCount()) {
+<a name="line1041"></a>    // Allowing sparse child arrays would lead to strange behavior, so we don&#39;t.
+<a name="line1042"></a>    throw Error(goog.ui.Component.Error.CHILD_INDEX_OUT_OF_BOUNDS);
+<a name="line1043"></a>  }
+<a name="line1044"></a>
+<a name="line1045"></a>  // Create the index and the child array on first use.
+<a name="line1046"></a>  if (!this.childIndex_ || !this.children_) {
+<a name="line1047"></a>    this.childIndex_ = {};
+<a name="line1048"></a>    this.children_ = [];
+<a name="line1049"></a>  }
+<a name="line1050"></a>
+<a name="line1051"></a>  // Moving child within component, remove old reference.
+<a name="line1052"></a>  if (child.getParent() == this) {
+<a name="line1053"></a>    goog.object.set(this.childIndex_, child.getId(), child);
+<a name="line1054"></a>    goog.array.remove(this.children_, child);
+<a name="line1055"></a>
+<a name="line1056"></a>  // Add the child to this component.  goog.object.add() throws an error if
+<a name="line1057"></a>  // a child with the same ID already exists.
+<a name="line1058"></a>  } else {
+<a name="line1059"></a>    goog.object.add(this.childIndex_, child.getId(), child);
+<a name="line1060"></a>  }
+<a name="line1061"></a>
+<a name="line1062"></a>  // Set the parent of the child to this component.  This throws an error if
+<a name="line1063"></a>  // the child is already contained by another component.
+<a name="line1064"></a>  child.setParent(this);
+<a name="line1065"></a>  goog.array.insertAt(this.children_, child, index);
+<a name="line1066"></a>
+<a name="line1067"></a>  if (child.inDocument_ &amp;&amp; this.inDocument_ &amp;&amp; child.getParent() == this) {
+<a name="line1068"></a>    // Changing the position of an existing child, move the DOM node.
+<a name="line1069"></a>    var contentElement = this.getContentElement();
+<a name="line1070"></a>    contentElement.insertBefore(child.getElement(),
+<a name="line1071"></a>        (contentElement.childNodes[index] || null));
+<a name="line1072"></a>
+<a name="line1073"></a>  } else if (opt_render) {
+<a name="line1074"></a>    // If this (parent) component doesn&#39;t have a DOM yet, call createDom now
+<a name="line1075"></a>    // to make sure we render the child component&#39;s element into the correct
+<a name="line1076"></a>    // parent element (otherwise render_ with a null first argument would
+<a name="line1077"></a>    // render the child into the document body, which is almost certainly not
+<a name="line1078"></a>    // what we want).
+<a name="line1079"></a>    if (!this.element_) {
+<a name="line1080"></a>      this.createDom();
+<a name="line1081"></a>    }
+<a name="line1082"></a>    // Render the child into the parent at the appropriate location.  Note that
+<a name="line1083"></a>    // getChildAt(index + 1) returns undefined if inserting at the end.
+<a name="line1084"></a>    // TODO(attila): We should have a renderer with a renderChildAt API.
+<a name="line1085"></a>    var sibling = this.getChildAt(index + 1);
+<a name="line1086"></a>    // render_() calls enterDocument() if the parent is already in the document.
+<a name="line1087"></a>    child.render_(this.getContentElement(), sibling ? sibling.element_ : null);
+<a name="line1088"></a>  } else if (this.inDocument_ &amp;&amp; !child.inDocument_ &amp;&amp; child.element_ &amp;&amp;
+<a name="line1089"></a>      child.element_.parentNode &amp;&amp;
+<a name="line1090"></a>      // Under some circumstances, IE8 implicitly creates a Document Fragment
+<a name="line1091"></a>      // for detached nodes, so ensure the parent is an Element as it should be.
+<a name="line1092"></a>      child.element_.parentNode.nodeType == goog.dom.NodeType.ELEMENT) {
+<a name="line1093"></a>    // We don&#39;t touch the DOM, but if the parent is in the document, and the
+<a name="line1094"></a>    // child element is in the document but not marked as such, then we call
+<a name="line1095"></a>    // enterDocument on the child.
+<a name="line1096"></a>    // TODO(gboyer): It would be nice to move this condition entirely, but
+<a name="line1097"></a>    // there&#39;s a large risk of breaking existing applications that manually
+<a name="line1098"></a>    // append the child to the DOM and then call addChild.
+<a name="line1099"></a>    child.enterDocument();
+<a name="line1100"></a>  }
+<a name="line1101"></a>};
+<a name="line1102"></a>
+<a name="line1103"></a>
+<a name="line1104"></a>/**
+<a name="line1105"></a> * Returns the DOM element into which child components are to be rendered,
+<a name="line1106"></a> * or null if the component itself hasn&#39;t been rendered yet.  This default
+<a name="line1107"></a> * implementation returns the component&#39;s root element.  Subclasses with
+<a name="line1108"></a> * complex DOM structures must override this method.
+<a name="line1109"></a> * @return {Element} Element to contain child elements (null if none).
+<a name="line1110"></a> */
+<a name="line1111"></a>goog.ui.Component.prototype.getContentElement = function() {
+<a name="line1112"></a>  return this.element_;
+<a name="line1113"></a>};
+<a name="line1114"></a>
+<a name="line1115"></a>
+<a name="line1116"></a>/**
+<a name="line1117"></a> * Returns true if the component is rendered right-to-left, false otherwise.
+<a name="line1118"></a> * The first time this function is invoked, the right-to-left rendering property
+<a name="line1119"></a> * is set if it has not been already.
+<a name="line1120"></a> * @return {boolean} Whether the control is rendered right-to-left.
+<a name="line1121"></a> */
+<a name="line1122"></a>goog.ui.Component.prototype.isRightToLeft = function() {
+<a name="line1123"></a>  if (this.rightToLeft_ == null) {
+<a name="line1124"></a>    this.rightToLeft_ = goog.style.isRightToLeft(this.inDocument_ ?
+<a name="line1125"></a>        this.element_ : this.dom_.getDocument().body);
+<a name="line1126"></a>  }
+<a name="line1127"></a>  return /** @type {boolean} */(this.rightToLeft_);
+<a name="line1128"></a>};
+<a name="line1129"></a>
+<a name="line1130"></a>
+<a name="line1131"></a>/**
+<a name="line1132"></a> * Set is right-to-left. This function should be used if the component needs
+<a name="line1133"></a> * to know the rendering direction during dom creation (i.e. before
+<a name="line1134"></a> * {@link #enterDocument} is called and is right-to-left is set).
+<a name="line1135"></a> * @param {boolean} rightToLeft Whether the component is rendered
+<a name="line1136"></a> *     right-to-left.
+<a name="line1137"></a> */
+<a name="line1138"></a>goog.ui.Component.prototype.setRightToLeft = function(rightToLeft) {
+<a name="line1139"></a>  if (this.inDocument_) {
+<a name="line1140"></a>    throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
+<a name="line1141"></a>  }
+<a name="line1142"></a>  this.rightToLeft_ = rightToLeft;
+<a name="line1143"></a>};
+<a name="line1144"></a>
+<a name="line1145"></a>
+<a name="line1146"></a>/**
+<a name="line1147"></a> * Returns true if the component has children.
+<a name="line1148"></a> * @return {boolean} True if the component has children.
+<a name="line1149"></a> */
+<a name="line1150"></a>goog.ui.Component.prototype.hasChildren = function() {
+<a name="line1151"></a>  return !!this.children_ &amp;&amp; this.children_.length != 0;
+<a name="line1152"></a>};
+<a name="line1153"></a>
+<a name="line1154"></a>
+<a name="line1155"></a>/**
+<a name="line1156"></a> * Returns the number of children of this component.
+<a name="line1157"></a> * @return {number} The number of children.
+<a name="line1158"></a> */
+<a name="line1159"></a>goog.ui.Component.prototype.getChildCount = function() {
+<a name="line1160"></a>  return this.children_ ? this.children_.length : 0;
+<a name="line1161"></a>};
+<a name="line1162"></a>
+<a name="line1163"></a>
+<a name="line1164"></a>/**
+<a name="line1165"></a> * Returns an array containing the IDs of the children of this component, or an
+<a name="line1166"></a> * empty array if the component has no children.
+<a name="line1167"></a> * @return {!Array.&lt;string&gt;} Child component IDs.
+<a name="line1168"></a> */
+<a name="line1169"></a>goog.ui.Component.prototype.getChildIds = function() {
+<a name="line1170"></a>  var ids = [];
+<a name="line1171"></a>
+<a name="line1172"></a>  // We don&#39;t use goog.object.getKeys(this.childIndex_) because we want to
+<a name="line1173"></a>  // return the IDs in the correct order as determined by this.children_.
+<a name="line1174"></a>  this.forEachChild(function(child) {
+<a name="line1175"></a>    // addChild()/addChildAt() guarantee that the child array isn&#39;t sparse.
+<a name="line1176"></a>    ids.push(child.getId());
+<a name="line1177"></a>  });
+<a name="line1178"></a>
+<a name="line1179"></a>  return ids;
+<a name="line1180"></a>};
+<a name="line1181"></a>
+<a name="line1182"></a>
+<a name="line1183"></a>/**
+<a name="line1184"></a> * Returns the child with the given ID, or null if no such child exists.
+<a name="line1185"></a> * @param {string} id Child component ID.
+<a name="line1186"></a> * @return {goog.ui.Component?} The child with the given ID; null if none.
+<a name="line1187"></a> */
+<a name="line1188"></a>goog.ui.Component.prototype.getChild = function(id) {
+<a name="line1189"></a>  // Use childIndex_ for O(1) access by ID.
+<a name="line1190"></a>  return (this.childIndex_ &amp;&amp; id) ? /** @type {goog.ui.Component} */ (
+<a name="line1191"></a>      goog.object.get(this.childIndex_, id)) || null : null;
+<a name="line1192"></a>};
+<a name="line1193"></a>
+<a name="line1194"></a>
+<a name="line1195"></a>/**
+<a name="line1196"></a> * Returns the child at the given index, or null if the index is out of bounds.
+<a name="line1197"></a> * @param {number} index 0-based index.
+<a name="line1198"></a> * @return {goog.ui.Component?} The child at the given index; null if none.
+<a name="line1199"></a> */
+<a name="line1200"></a>goog.ui.Component.prototype.getChildAt = function(index) {
+<a name="line1201"></a>  // Use children_ for access by index.
+<a name="line1202"></a>  return this.children_ ? this.children_[index] || null : null;
+<a name="line1203"></a>};
+<a name="line1204"></a>
+<a name="line1205"></a>
+<a name="line1206"></a>/**
+<a name="line1207"></a> * Calls the given function on each of this component&#39;s children in order.  If
+<a name="line1208"></a> * {@code opt_obj} is provided, it will be used as the &#39;this&#39; object in the
+<a name="line1209"></a> * function when called.  The function should take two arguments:  the child
+<a name="line1210"></a> * component and its 0-based index.  The return value is ignored.
+<a name="line1211"></a> * @param {function(this:T,?,number):?} f The function to call for every
+<a name="line1212"></a> * child component; should take 2 arguments (the child and its index).
+<a name="line1213"></a> * @param {T=} opt_obj Used as the &#39;this&#39; object in f when called.
+<a name="line1214"></a> * @template T
+<a name="line1215"></a> */
+<a name="line1216"></a>goog.ui.Component.prototype.forEachChild = function(f, opt_obj) {
+<a name="line1217"></a>  if (this.children_) {
+<a name="line1218"></a>    goog.array.forEach(this.children_, f, opt_obj);
+<a name="line1219"></a>  }
+<a name="line1220"></a>};
+<a name="line1221"></a>
+<a name="line1222"></a>
+<a name="line1223"></a>/**
+<a name="line1224"></a> * Returns the 0-based index of the given child component, or -1 if no such
+<a name="line1225"></a> * child is found.
+<a name="line1226"></a> * @param {goog.ui.Component?} child The child component.
+<a name="line1227"></a> * @return {number} 0-based index of the child component; -1 if not found.
+<a name="line1228"></a> */
+<a name="line1229"></a>goog.ui.Component.prototype.indexOfChild = function(child) {
+<a name="line1230"></a>  return (this.children_ &amp;&amp; child) ? goog.array.indexOf(this.children_, child) :
+<a name="line1231"></a>      -1;
+<a name="line1232"></a>};
+<a name="line1233"></a>
+<a name="line1234"></a>
+<a name="line1235"></a>/**
+<a name="line1236"></a> * Removes the given child from this component, and returns it.  Throws an error
+<a name="line1237"></a> * if the argument is invalid or if the specified child isn&#39;t found in the
+<a name="line1238"></a> * parent component.  The argument can either be a string (interpreted as the
+<a name="line1239"></a> * ID of the child component to remove) or the child component itself.
+<a name="line1240"></a> *
+<a name="line1241"></a> * If {@code opt_unrender} is true, calls {@link goog.ui.component#exitDocument}
+<a name="line1242"></a> * on the removed child, and subsequently detaches the child&#39;s DOM from the
+<a name="line1243"></a> * document.  Otherwise it is the caller&#39;s responsibility to clean up the child
+<a name="line1244"></a> * component&#39;s DOM.
+<a name="line1245"></a> *
+<a name="line1246"></a> * @see goog.ui.Component#removeChildAt
+<a name="line1247"></a> * @param {string|goog.ui.Component|null} child The ID of the child to remove,
+<a name="line1248"></a> *    or the child component itself.
+<a name="line1249"></a> * @param {boolean=} opt_unrender If true, calls {@code exitDocument} on the
+<a name="line1250"></a> *    removed child component, and detaches its DOM from the document.
+<a name="line1251"></a> * @return {goog.ui.Component} The removed component, if any.
+<a name="line1252"></a> */
+<a name="line1253"></a>goog.ui.Component.prototype.removeChild = function(child, opt_unrender) {
+<a name="line1254"></a>  if (child) {
+<a name="line1255"></a>    // Normalize child to be the object and id to be the ID string.  This also
+<a name="line1256"></a>    // ensures that the child is really ours.
+<a name="line1257"></a>    var id = goog.isString(child) ? child : child.getId();
+<a name="line1258"></a>    child = this.getChild(id);
+<a name="line1259"></a>
+<a name="line1260"></a>    if (id &amp;&amp; child) {
+<a name="line1261"></a>      goog.object.remove(this.childIndex_, id);
+<a name="line1262"></a>      goog.array.remove(this.children_, child);
+<a name="line1263"></a>
+<a name="line1264"></a>      if (opt_unrender) {
+<a name="line1265"></a>        // Remove the child component&#39;s DOM from the document.  We have to call
+<a name="line1266"></a>        // exitDocument first (see documentation).
+<a name="line1267"></a>        child.exitDocument();
+<a name="line1268"></a>        if (child.element_) {
+<a name="line1269"></a>          goog.dom.removeNode(child.element_);
+<a name="line1270"></a>        }
+<a name="line1271"></a>      }
+<a name="line1272"></a>
+<a name="line1273"></a>      // Child&#39;s parent must be set to null after exitDocument is called
+<a name="line1274"></a>      // so that the child can unlisten to its parent if required.
+<a name="line1275"></a>      child.setParent(null);
+<a name="line1276"></a>    }
+<a name="line1277"></a>  }
+<a name="line1278"></a>
+<a name="line1279"></a>  if (!child) {
+<a name="line1280"></a>    throw Error(goog.ui.Component.Error.NOT_OUR_CHILD);
+<a name="line1281"></a>  }
+<a name="line1282"></a>
+<a name="line1283"></a>  return /** @type {goog.ui.Component} */(child);
+<a name="line1284"></a>};
+<a name="line1285"></a>
+<a name="line1286"></a>
+<a name="line1287"></a>/**
+<a name="line1288"></a> * Removes the child at the given index from this component, and returns it.
+<a name="line1289"></a> * Throws an error if the argument is out of bounds, or if the specified child
+<a name="line1290"></a> * isn&#39;t found in the parent.  See {@link goog.ui.Component#removeChild} for
+<a name="line1291"></a> * detailed semantics.
+<a name="line1292"></a> *
+<a name="line1293"></a> * @see goog.ui.Component#removeChild
+<a name="line1294"></a> * @param {number} index 0-based index of the child to remove.
+<a name="line1295"></a> * @param {boolean=} opt_unrender If true, calls {@code exitDocument} on the
+<a name="line1296"></a> *    removed child component, and detaches its DOM from the document.
+<a name="line1297"></a> * @return {goog.ui.Component} The removed component, if any.
+<a name="line1298"></a> */
+<a name="line1299"></a>goog.ui.Component.prototype.removeChildAt = function(index, opt_unrender) {
+<a name="line1300"></a>  // removeChild(null) will throw error.
+<a name="line1301"></a>  return this.removeChild(this.getChildAt(index), opt_unrender);
+<a name="line1302"></a>};
+<a name="line1303"></a>
+<a name="line1304"></a>
+<a name="line1305"></a>/**
+<a name="line1306"></a> * Removes every child component attached to this one and returns them.
+<a name="line1307"></a> *
+<a name="line1308"></a> * @see goog.ui.Component#removeChild
+<a name="line1309"></a> * @param {boolean=} opt_unrender If true, calls {@link #exitDocument} on the
+<a name="line1310"></a> *    removed child components, and detaches their DOM from the document.
+<a name="line1311"></a> * @return {!Array.&lt;goog.ui.Component&gt;} The removed components if any.
+<a name="line1312"></a> */
+<a name="line1313"></a>goog.ui.Component.prototype.removeChildren = function(opt_unrender) {
+<a name="line1314"></a>  var removedChildren = [];
+<a name="line1315"></a>  while (this.hasChildren()) {
+<a name="line1316"></a>    removedChildren.push(this.removeChildAt(0, opt_unrender));
+<a name="line1317"></a>  }
+<a name="line1318"></a>  return removedChildren;
+<a name="line1319"></a>};
+</pre>
+
+
+</body>
+</html>

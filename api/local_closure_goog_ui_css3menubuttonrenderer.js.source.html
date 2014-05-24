@@ -1,0 +1,196 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>css3menubuttonrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_css3menubuttonrenderer.js.html">css3menubuttonrenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview An alternative imageless button renderer that uses CSS3 rather
+<a name="line17"></a> * than voodoo to render custom buttons with rounded corners and dimensionality
+<a name="line18"></a> * (via a subtle flat shadow on the bottom half of the button) without the use
+<a name="line19"></a> * of images.
+<a name="line20"></a> *
+<a name="line21"></a> * Based on the Custom Buttons 3.1 visual specification, see
+<a name="line22"></a> * http://go/custombuttons
+<a name="line23"></a> *
+<a name="line24"></a> * Tested and verified to work in Gecko 1.9.2+ and WebKit 528+.
+<a name="line25"></a> *
+<a name="line26"></a> * @author eae@google.com (Emil A Eklund)
+<a name="line27"></a> * @see ../demos/css3menubutton.html
+<a name="line28"></a> */
+<a name="line29"></a>
+<a name="line30"></a>goog.provide(&#39;goog.ui.Css3MenuButtonRenderer&#39;);
+<a name="line31"></a>
+<a name="line32"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line33"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line34"></a>goog.require(&#39;goog.ui.INLINE_BLOCK_CLASSNAME&#39;);
+<a name="line35"></a>goog.require(&#39;goog.ui.MenuButton&#39;);
+<a name="line36"></a>goog.require(&#39;goog.ui.MenuButtonRenderer&#39;);
+<a name="line37"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/**
+<a name="line42"></a> * Custom renderer for {@link goog.ui.MenuButton}s. Css3 buttons can contain
+<a name="line43"></a> * almost arbitrary HTML content, will flow like inline elements, but can be
+<a name="line44"></a> * styled like block-level elements.
+<a name="line45"></a> *
+<a name="line46"></a> * @constructor
+<a name="line47"></a> * @extends {goog.ui.MenuButtonRenderer}
+<a name="line48"></a> * @final
+<a name="line49"></a> */
+<a name="line50"></a>goog.ui.Css3MenuButtonRenderer = function() {
+<a name="line51"></a>  goog.ui.MenuButtonRenderer.call(this);
+<a name="line52"></a>};
+<a name="line53"></a>goog.inherits(goog.ui.Css3MenuButtonRenderer, goog.ui.MenuButtonRenderer);
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * The singleton instance of this renderer class.
+<a name="line58"></a> * @type {goog.ui.Css3MenuButtonRenderer?}
+<a name="line59"></a> * @private
+<a name="line60"></a> */
+<a name="line61"></a>goog.ui.Css3MenuButtonRenderer.instance_ = null;
+<a name="line62"></a>goog.addSingletonGetter(goog.ui.Css3MenuButtonRenderer);
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line67"></a> * by this renderer.
+<a name="line68"></a> * @type {string}
+<a name="line69"></a> */
+<a name="line70"></a>goog.ui.Css3MenuButtonRenderer.CSS_CLASS = goog.getCssName(&#39;goog-css3-button&#39;);
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/** @override */
+<a name="line74"></a>goog.ui.Css3MenuButtonRenderer.prototype.getContentElement = function(element) {
+<a name="line75"></a>  if (element) {
+<a name="line76"></a>    var captionElem = goog.dom.getElementsByTagNameAndClass(
+<a name="line77"></a>        &#39;*&#39;, goog.getCssName(this.getCssClass(), &#39;caption&#39;), element)[0];
+<a name="line78"></a>    return captionElem;
+<a name="line79"></a>  }
+<a name="line80"></a>  return null;
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Returns true if this renderer can decorate the element.  Overrides
+<a name="line86"></a> * {@link goog.ui.MenuButtonRenderer#canDecorate} by returning true if the
+<a name="line87"></a> * element is a DIV, false otherwise.
+<a name="line88"></a> * @param {Element} element Element to decorate.
+<a name="line89"></a> * @return {boolean} Whether the renderer can decorate the element.
+<a name="line90"></a> * @override
+<a name="line91"></a> */
+<a name="line92"></a>goog.ui.Css3MenuButtonRenderer.prototype.canDecorate = function(element) {
+<a name="line93"></a>  return element.tagName == goog.dom.TagName.DIV;
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Takes a text caption or existing DOM structure, and returns the content
+<a name="line99"></a> * wrapped in a pseudo-rounded-corner box.  Creates the following DOM structure:
+<a name="line100"></a> *  &lt;div class=&quot;goog-inline-block goog-css3-button goog-css3-menu-button&quot;&gt;
+<a name="line101"></a> *    &lt;div class=&quot;goog-css3-button-caption&quot;&gt;Contents...&lt;/div&gt;
+<a name="line102"></a> *    &lt;div class=&quot;goog-css3-button-dropdown&quot;&gt;&lt;/div&gt;
+<a name="line103"></a> *  &lt;/div&gt;
+<a name="line104"></a> *
+<a name="line105"></a> * Used by both {@link #createDom} and {@link #decorate}.  To be overridden
+<a name="line106"></a> * by subclasses.
+<a name="line107"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure to wrap
+<a name="line108"></a> *     in a box.
+<a name="line109"></a> * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
+<a name="line110"></a> * @return {Element} Pseudo-rounded-corner box containing the content.
+<a name="line111"></a> * @override
+<a name="line112"></a> */
+<a name="line113"></a>goog.ui.Css3MenuButtonRenderer.prototype.createButton = function(content, dom) {
+<a name="line114"></a>  var baseClass = this.getCssClass();
+<a name="line115"></a>  var inlineBlock = goog.ui.INLINE_BLOCK_CLASSNAME + &#39; &#39;;
+<a name="line116"></a>  return dom.createDom(&#39;div&#39;, inlineBlock,
+<a name="line117"></a>      dom.createDom(&#39;div&#39;, [goog.getCssName(baseClass, &#39;caption&#39;),
+<a name="line118"></a>                            goog.getCssName(&#39;goog-inline-block&#39;)],
+<a name="line119"></a>                    content),
+<a name="line120"></a>      dom.createDom(&#39;div&#39;, [goog.getCssName(baseClass, &#39;dropdown&#39;),
+<a name="line121"></a>                            goog.getCssName(&#39;goog-inline-block&#39;)]));
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Returns the CSS class to be applied to the root element of components
+<a name="line127"></a> * rendered using this renderer.
+<a name="line128"></a> * @return {string} Renderer-specific CSS class.
+<a name="line129"></a> * @override
+<a name="line130"></a> */
+<a name="line131"></a>goog.ui.Css3MenuButtonRenderer.prototype.getCssClass = function() {
+<a name="line132"></a>  return goog.ui.Css3MenuButtonRenderer.CSS_CLASS;
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>// Register a decorator factory function for goog.ui.Css3MenuButtonRenderer.
+<a name="line137"></a>// Since we&#39;re using goog-css3-button as the base class in order to get the
+<a name="line138"></a>// same styling as goog.ui.Css3ButtonRenderer, we need to be explicit about
+<a name="line139"></a>// giving goog-css3-menu-button here.
+<a name="line140"></a>goog.ui.registry.setDecoratorByClassName(
+<a name="line141"></a>    goog.getCssName(&#39;goog-css3-menu-button&#39;),
+<a name="line142"></a>    function() {
+<a name="line143"></a>      return new goog.ui.MenuButton(null, null,
+<a name="line144"></a>          goog.ui.Css3MenuButtonRenderer.getInstance());
+<a name="line145"></a>    });
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>html5history.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_history_html5history.js.html">html5history.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview HTML5 based history implementation, compatible with
+<a name="line17"></a> * goog.History.
+<a name="line18"></a> *
+<a name="line19"></a> * TODO(user): There should really be a history interface and multiple
+<a name="line20"></a> * implementations.
+<a name="line21"></a> *
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.history.Html5History&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.history.Html5History.TokenTransformer&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line32"></a>goog.require(&#39;goog.history.Event&#39;);
+<a name="line33"></a>goog.require(&#39;goog.history.EventType&#39;);
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * An implementation compatible with goog.History that uses the HTML5
+<a name="line39"></a> * history APIs.
+<a name="line40"></a> *
+<a name="line41"></a> * @param {Window=} opt_win The window to listen/dispatch history events on.
+<a name="line42"></a> * @param {goog.history.Html5History.TokenTransformer=} opt_transformer
+<a name="line43"></a> *     The token transformer that is used to create URL from the token
+<a name="line44"></a> *     when storing token without using hash fragment.
+<a name="line45"></a> * @constructor
+<a name="line46"></a> * @extends {goog.events.EventTarget}
+<a name="line47"></a> * @final
+<a name="line48"></a> */
+<a name="line49"></a>goog.history.Html5History = function(opt_win, opt_transformer) {
+<a name="line50"></a>  goog.events.EventTarget.call(this);
+<a name="line51"></a>  goog.asserts.assert(goog.history.Html5History.isSupported(opt_win),
+<a name="line52"></a>      &#39;HTML5 history is not supported.&#39;);
+<a name="line53"></a>
+<a name="line54"></a>  /**
+<a name="line55"></a>   * The window object to use for history tokens.  Typically the top window.
+<a name="line56"></a>   * @type {Window}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.window_ = opt_win || window;
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * The token transformer that is used to create URL from the token
+<a name="line63"></a>   * when storing token without using hash fragment.
+<a name="line64"></a>   * @type {goog.history.Html5History.TokenTransformer}
+<a name="line65"></a>   * @private
+<a name="line66"></a>   */
+<a name="line67"></a>  this.transformer_ = opt_transformer || null;
+<a name="line68"></a>
+<a name="line69"></a>  goog.events.listen(this.window_, goog.events.EventType.POPSTATE,
+<a name="line70"></a>      this.onHistoryEvent_, false, this);
+<a name="line71"></a>  goog.events.listen(this.window_, goog.events.EventType.HASHCHANGE,
+<a name="line72"></a>      this.onHistoryEvent_, false, this);
+<a name="line73"></a>};
+<a name="line74"></a>goog.inherits(goog.history.Html5History, goog.events.EventTarget);
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Returns whether Html5History is supported.
+<a name="line79"></a> * @param {Window=} opt_win Optional window to check.
+<a name="line80"></a> * @return {boolean} Whether html5 history is supported.
+<a name="line81"></a> */
+<a name="line82"></a>goog.history.Html5History.isSupported = function(opt_win) {
+<a name="line83"></a>  var win = opt_win || window;
+<a name="line84"></a>  return !!(win.history &amp;&amp; win.history.pushState);
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Status of when the object is active and dispatching events.
+<a name="line90"></a> * @type {boolean}
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.history.Html5History.prototype.enabled_ = false;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Whether to use the fragment to store the token, defaults to true.
+<a name="line98"></a> * @type {boolean}
+<a name="line99"></a> * @private
+<a name="line100"></a> */
+<a name="line101"></a>goog.history.Html5History.prototype.useFragment_ = true;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * If useFragment is false the path will be used, the path prefix will be
+<a name="line106"></a> * prepended to all tokens. Defaults to &#39;/&#39;.
+<a name="line107"></a> * @type {string}
+<a name="line108"></a> * @private
+<a name="line109"></a> */
+<a name="line110"></a>goog.history.Html5History.prototype.pathPrefix_ = &#39;/&#39;;
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Starts or stops the History.  When enabled, the History object
+<a name="line115"></a> * will immediately fire an event for the current location. The caller can set
+<a name="line116"></a> * up event listeners between the call to the constructor and the call to
+<a name="line117"></a> * setEnabled.
+<a name="line118"></a> *
+<a name="line119"></a> * @param {boolean} enable Whether to enable history.
+<a name="line120"></a> */
+<a name="line121"></a>goog.history.Html5History.prototype.setEnabled = function(enable) {
+<a name="line122"></a>  if (enable == this.enabled_) {
+<a name="line123"></a>    return;
+<a name="line124"></a>  }
+<a name="line125"></a>
+<a name="line126"></a>  this.enabled_ = enable;
+<a name="line127"></a>
+<a name="line128"></a>  if (enable) {
+<a name="line129"></a>    this.dispatchEvent(new goog.history.Event(this.getToken(), false));
+<a name="line130"></a>  }
+<a name="line131"></a>};
+<a name="line132"></a>
+<a name="line133"></a>
+<a name="line134"></a>/**
+<a name="line135"></a> * Returns the current token.
+<a name="line136"></a> * @return {string} The current token.
+<a name="line137"></a> */
+<a name="line138"></a>goog.history.Html5History.prototype.getToken = function() {
+<a name="line139"></a>  if (this.useFragment_) {
+<a name="line140"></a>    var loc = this.window_.location.href;
+<a name="line141"></a>    var index = loc.indexOf(&#39;#&#39;);
+<a name="line142"></a>    return index &lt; 0 ? &#39;&#39; : loc.substring(index + 1);
+<a name="line143"></a>  } else {
+<a name="line144"></a>    return this.transformer_ ?
+<a name="line145"></a>        this.transformer_.retrieveToken(
+<a name="line146"></a>            this.pathPrefix_, this.window_.location) :
+<a name="line147"></a>        this.window_.location.pathname.substr(this.pathPrefix_.length);
+<a name="line148"></a>  }
+<a name="line149"></a>};
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * Sets the history state.
+<a name="line154"></a> * @param {string} token The history state identifier.
+<a name="line155"></a> * @param {string=} opt_title Optional title to associate with history entry.
+<a name="line156"></a> */
+<a name="line157"></a>goog.history.Html5History.prototype.setToken = function(token, opt_title) {
+<a name="line158"></a>  if (token == this.getToken()) {
+<a name="line159"></a>    return;
+<a name="line160"></a>  }
+<a name="line161"></a>
+<a name="line162"></a>  // Per externs/gecko_dom.js document.title can be null.
+<a name="line163"></a>  this.window_.history.pushState(null,
+<a name="line164"></a>      opt_title || this.window_.document.title || &#39;&#39;, this.getUrl_(token));
+<a name="line165"></a>  this.dispatchEvent(new goog.history.Event(token, false));
+<a name="line166"></a>};
+<a name="line167"></a>
+<a name="line168"></a>
+<a name="line169"></a>/**
+<a name="line170"></a> * Replaces the current history state without affecting the rest of the history
+<a name="line171"></a> * stack.
+<a name="line172"></a> * @param {string} token The history state identifier.
+<a name="line173"></a> * @param {string=} opt_title Optional title to associate with history entry.
+<a name="line174"></a> */
+<a name="line175"></a>goog.history.Html5History.prototype.replaceToken = function(token, opt_title) {
+<a name="line176"></a>  // Per externs/gecko_dom.js document.title can be null.
+<a name="line177"></a>  this.window_.history.replaceState(null,
+<a name="line178"></a>      opt_title || this.window_.document.title || &#39;&#39;, this.getUrl_(token));
+<a name="line179"></a>  this.dispatchEvent(new goog.history.Event(token, false));
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/** @override */
+<a name="line184"></a>goog.history.Html5History.prototype.disposeInternal = function() {
+<a name="line185"></a>  goog.events.unlisten(this.window_, goog.events.EventType.POPSTATE,
+<a name="line186"></a>      this.onHistoryEvent_, false, this);
+<a name="line187"></a>  if (this.useFragment_) {
+<a name="line188"></a>    goog.events.unlisten(this.window_, goog.events.EventType.HASHCHANGE,
+<a name="line189"></a>        this.onHistoryEvent_, false, this);
+<a name="line190"></a>  }
+<a name="line191"></a>};
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>/**
+<a name="line195"></a> * Sets whether to use the fragment to store tokens.
+<a name="line196"></a> * @param {boolean} useFragment Whether to use the fragment.
+<a name="line197"></a> */
+<a name="line198"></a>goog.history.Html5History.prototype.setUseFragment = function(useFragment) {
+<a name="line199"></a>  if (this.useFragment_ != useFragment) {
+<a name="line200"></a>    if (useFragment) {
+<a name="line201"></a>      goog.events.listen(this.window_, goog.events.EventType.HASHCHANGE,
+<a name="line202"></a>          this.onHistoryEvent_, false, this);
+<a name="line203"></a>    } else {
+<a name="line204"></a>      goog.events.unlisten(this.window_, goog.events.EventType.HASHCHANGE,
+<a name="line205"></a>          this.onHistoryEvent_, false, this);
+<a name="line206"></a>    }
+<a name="line207"></a>    this.useFragment_ = useFragment;
+<a name="line208"></a>  }
+<a name="line209"></a>};
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Sets the path prefix to use if storing tokens in the path. The path
+<a name="line214"></a> * prefix should start and end with slash.
+<a name="line215"></a> * @param {string} pathPrefix Sets the path prefix.
+<a name="line216"></a> */
+<a name="line217"></a>goog.history.Html5History.prototype.setPathPrefix = function(pathPrefix) {
+<a name="line218"></a>  this.pathPrefix_ = pathPrefix;
+<a name="line219"></a>};
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * Gets the path prefix.
+<a name="line224"></a> * @return {string} The path prefix.
+<a name="line225"></a> */
+<a name="line226"></a>goog.history.Html5History.prototype.getPathPrefix = function() {
+<a name="line227"></a>  return this.pathPrefix_;
+<a name="line228"></a>};
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Gets the URL to set when calling history.pushState
+<a name="line233"></a> * @param {string} token The history token.
+<a name="line234"></a> * @return {string} The URL.
+<a name="line235"></a> * @private
+<a name="line236"></a> */
+<a name="line237"></a>goog.history.Html5History.prototype.getUrl_ = function(token) {
+<a name="line238"></a>  if (this.useFragment_) {
+<a name="line239"></a>    return &#39;#&#39; + token;
+<a name="line240"></a>  } else {
+<a name="line241"></a>    return this.transformer_ ?
+<a name="line242"></a>        this.transformer_.createUrl(
+<a name="line243"></a>            token, this.pathPrefix_, this.window_.location) :
+<a name="line244"></a>        this.pathPrefix_ + token + this.window_.location.search;
+<a name="line245"></a>  }
+<a name="line246"></a>};
+<a name="line247"></a>
+<a name="line248"></a>
+<a name="line249"></a>/**
+<a name="line250"></a> * Handles history events dispatched by the browser.
+<a name="line251"></a> * @param {goog.events.BrowserEvent} e The browser event object.
+<a name="line252"></a> * @private
+<a name="line253"></a> */
+<a name="line254"></a>goog.history.Html5History.prototype.onHistoryEvent_ = function(e) {
+<a name="line255"></a>  if (this.enabled_) {
+<a name="line256"></a>    this.dispatchEvent(new goog.history.Event(this.getToken(), true));
+<a name="line257"></a>  }
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>
+<a name="line262"></a>/**
+<a name="line263"></a> * A token transformer that can create a URL from a history
+<a name="line264"></a> * token. This is used by {@code goog.history.Html5History} to create
+<a name="line265"></a> * URL when storing token without the hash fragment.
+<a name="line266"></a> *
+<a name="line267"></a> * Given a {@code window.location} object containing the location
+<a name="line268"></a> * created by {@code createUrl}, the token transformer allows
+<a name="line269"></a> * retrieval of the token back via {@code retrieveToken}.
+<a name="line270"></a> *
+<a name="line271"></a> * @interface
+<a name="line272"></a> */
+<a name="line273"></a>goog.history.Html5History.TokenTransformer = function() {};
+<a name="line274"></a>
+<a name="line275"></a>
+<a name="line276"></a>/**
+<a name="line277"></a> * Retrieves a history token given the path prefix and
+<a name="line278"></a> * {@code window.location} object.
+<a name="line279"></a> *
+<a name="line280"></a> * @param {string} pathPrefix The path prefix to use when storing token
+<a name="line281"></a> *     in a path; always begin with a slash.
+<a name="line282"></a> * @param {Location} location The {@code window.location} object.
+<a name="line283"></a> *     Treat this object as read-only.
+<a name="line284"></a> * @return {string} token The history token.
+<a name="line285"></a> */
+<a name="line286"></a>goog.history.Html5History.TokenTransformer.prototype.retrieveToken = function(
+<a name="line287"></a>    pathPrefix, location) {};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * Creates a URL to be pushed into HTML5 history stack when storing
+<a name="line292"></a> * token without using hash fragment.
+<a name="line293"></a> *
+<a name="line294"></a> * @param {string} token The history token.
+<a name="line295"></a> * @param {string} pathPrefix The path prefix to use when storing token
+<a name="line296"></a> *     in a path; always begin with a slash.
+<a name="line297"></a> * @param {Location} location The {@code window.location} object.
+<a name="line298"></a> *     Treat this object as read-only.
+<a name="line299"></a> * @return {string} url The complete URL string from path onwards
+<a name="line300"></a> *     (without {@code protocol://host:port} part); must begin with a
+<a name="line301"></a> *     slash.
+<a name="line302"></a> */
+<a name="line303"></a>goog.history.Html5History.TokenTransformer.prototype.createUrl = function(
+<a name="line304"></a>    token, pathPrefix, location) {};
+</pre>
+
+
+</body>
+</html>

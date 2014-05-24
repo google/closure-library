@@ -1,0 +1,632 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>Serializer (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">proto2.Serializer</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Abstract base class for PB2 serializers. A serializer is a class which
+implements the serialization and deserialization of a Protocol Buffer Message
+to/from a specific format.
+
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_proto2_serializer.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/proto2/serializer.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td>goog.proto2.Serializer</td><td></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+      <tr><td><span class="type"><a href="class_goog_proto2_PbLiteSerializer.html">goog.proto2.PbLiteSerializer</a></span></td><td><span class="type"><a href="class_goog_proto2_LazyDeserializer.html">goog.proto2.LazyDeserializer</a></span></td></tr>
+        <tr><td><span class="type"><a href="class_goog_proto2_LazyDeserializer.html">goog.proto2.LazyDeserializer</a></span></td><td>goog.proto2.Serializer</td></tr>
+      <tr><td><span class="type"><a href="class_goog_proto2_TextFormatSerializer.html">goog.proto2.TextFormatSerializer</a></span></td><td>goog.proto2.Serializer</td></tr>
+      <tr><td><span class="type"><a href="class_goog_proto2_ObjectSerializer.html">goog.proto2.ObjectSerializer</a></span></td><td>goog.proto2.Serializer</td></tr>
+  </table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.proto2.Serializer(<span></span>)
+  </div>
+
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_proto2_Serializer.html">
+              goog.proto2.Serializer
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.proto2.Serializer.prototype.deserialize"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">deserialize<span class="args">(<span class="arg">descriptor</span>,&nbsp;<span class="arg">data</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_proto2_Message.html">goog.proto2.Message</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Deserializes a message from the expected format.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">descriptor</span>
+        : <span class="type"><a href="class_goog_proto2_Descriptor.html">goog.proto2.Descriptor</a></span>
+        <div class="entryOverview">The descriptor of the message
+    to be created.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">data</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The data of the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_proto2_Message.html">goog.proto2.Message</a></span>&nbsp;
+            The message created.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_proto2_serializer.js.source.html#line85">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.proto2.Serializer.prototype.deserializeTo"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">deserializeTo<span class="args">(<span class="arg">message</span>,&nbsp;<span class="arg">data</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Deserializes a message from the expected format and places the
+data in the message.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">message</span>
+        : <span class="type"><a href="class_goog_proto2_Message.html">goog.proto2.Message</a></span>
+        <div class="entryOverview">The message in which to
+    place the information.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">data</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The data of the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_proto2_serializer.js.source.html#line101">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.proto2.Serializer.prototype.getDeserializedValue"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getDeserializedValue<span class="args">(<span class="arg">field</span>,&nbsp;<span class="arg">value</span>)</span>
+        </span>
+        &#8658; <span class="type">*</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the deserialized form of the given value for the given field if the
+field is a Message or Group and returns the value, converted or unchanged,
+for primitive field types otherwise.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">field</span>
+        : <span class="type"><a href="class_goog_proto2_FieldDescriptor.html">goog.proto2.FieldDescriptor</a></span>
+        <div class="entryOverview">The field from which this
+    value came.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The value of the field.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">*</span>&nbsp;
+            The value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_proto2_serializer.js.source.html#line117">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.proto2.Serializer.prototype.getSerializedValue"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getSerializedValue<span class="args">(<span class="arg">field</span>,&nbsp;<span class="arg">value</span>)</span>
+        </span>
+        &#8658; <span class="type">*</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the serialized form of the given value for the given field
+if the field is a Message or Group and returns the value unchanged
+otherwise.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">field</span>
+        : <span class="type"><a href="class_goog_proto2_FieldDescriptor.html">goog.proto2.FieldDescriptor</a></span>
+        <div class="entryOverview">The field from which this
+    value came.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The value of the field.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">*</span>&nbsp;
+            The value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_proto2_serializer.js.source.html#line67">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.proto2.Serializer.prototype.serialize"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">serialize<span class="args">(<span class="arg">message</span>)</span>
+        </span>
+        &#8658; <span class="type">*</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Serializes a message to the expected format.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">message</span>
+        : <span class="type"><a href="class_goog_proto2_Message.html">goog.proto2.Message</a></span>
+        <div class="entryOverview">The message to be serialized.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">*</span>&nbsp;
+            The serialized form of the message.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_proto2_serializer.js.source.html#line51">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+<h2>Static Properties</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.proto2.Serializer.DECODE_SYMBOLIC_ENUMS"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.proto2.Serializer.</span><span class="entryName">DECODE_SYMBOLIC_ENUMS</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_proto2_serializer.js.source.html#line41">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package proto2</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="proto2.Serializer"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

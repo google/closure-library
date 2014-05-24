@@ -1,0 +1,206 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>deferredtestcase.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_deferredtestcase.js.html">deferredtestcase.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Defines DeferredTestCase class. By calling waitForDeferred(),
+<a name="line17"></a> * tests in DeferredTestCase can wait for a Deferred object to complete its
+<a name="line18"></a> * callbacks before continuing to the next test.
+<a name="line19"></a> *
+<a name="line20"></a> * Example Usage:
+<a name="line21"></a> *
+<a name="line22"></a> *   var deferredTestCase = goog.testing.DeferredTestCase.createAndInstall();
+<a name="line23"></a> *   // Optionally, set a longer-than-usual step timeout.
+<a name="line24"></a> *   deferredTestCase.stepTimeout = 15 * 1000; // 15 seconds
+<a name="line25"></a> *
+<a name="line26"></a> *   function testDeferredCallbacks() {
+<a name="line27"></a> *     var callbackTime = goog.now();
+<a name="line28"></a> *     var callbacks = new goog.async.Deferred();
+<a name="line29"></a> *     deferredTestCase.addWaitForAsync(&#39;Waiting for 1st callback&#39;, callbacks);
+<a name="line30"></a> *     callbacks.addCallback(
+<a name="line31"></a> *         function() {
+<a name="line32"></a> *           assertTrue(
+<a name="line33"></a> *               &#39;We\&#39;re going back in time!&#39;, goog.now() &gt;= callbackTime);
+<a name="line34"></a> *           callbackTime = goog.now();
+<a name="line35"></a> *         });
+<a name="line36"></a> *     deferredTestCase.addWaitForAsync(&#39;Waiting for 2nd callback&#39;, callbacks);
+<a name="line37"></a> *     callbacks.addCallback(
+<a name="line38"></a> *         function() {
+<a name="line39"></a> *           assertTrue(
+<a name="line40"></a> *               &#39;We\&#39;re going back in time!&#39;, goog.now() &gt;= callbackTime);
+<a name="line41"></a> *           callbackTime = goog.now();
+<a name="line42"></a> *         });
+<a name="line43"></a> *     deferredTestCase.addWaitForAsync(&#39;Waiting for last callback&#39;, callbacks);
+<a name="line44"></a> *     callbacks.addCallback(
+<a name="line45"></a> *         function() {
+<a name="line46"></a> *           assertTrue(
+<a name="line47"></a> *               &#39;We\&#39;re going back in time!&#39;, goog.now() &gt;= callbackTime);
+<a name="line48"></a> *           callbackTime = goog.now();
+<a name="line49"></a> *         });
+<a name="line50"></a> *
+<a name="line51"></a> *     deferredTestCase.waitForDeferred(callbacks);
+<a name="line52"></a> *   }
+<a name="line53"></a> *
+<a name="line54"></a> * Note that DeferredTestCase still preserves the functionality of
+<a name="line55"></a> * AsyncTestCase.
+<a name="line56"></a> *
+<a name="line57"></a> * @see.goog.async.Deferred
+<a name="line58"></a> * @see goog.testing.AsyncTestCase
+<a name="line59"></a> */
+<a name="line60"></a>
+<a name="line61"></a>goog.provide(&#39;goog.testing.DeferredTestCase&#39;);
+<a name="line62"></a>
+<a name="line63"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line64"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line65"></a>goog.require(&#39;goog.testing.TestCase&#39;);
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * A test case that can asynchronously wait on a Deferred object.
+<a name="line71"></a> * @param {string=} opt_name A descriptive name for the test case.
+<a name="line72"></a> * @constructor
+<a name="line73"></a> * @extends {goog.testing.AsyncTestCase}
+<a name="line74"></a> */
+<a name="line75"></a>goog.testing.DeferredTestCase = function(opt_name) {
+<a name="line76"></a>  goog.testing.AsyncTestCase.call(this, opt_name);
+<a name="line77"></a>};
+<a name="line78"></a>goog.inherits(goog.testing.DeferredTestCase, goog.testing.AsyncTestCase);
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Preferred way of creating a DeferredTestCase. Creates one and initializes it
+<a name="line83"></a> * with the G_testRunner.
+<a name="line84"></a> * @param {string=} opt_name A descriptive name for the test case.
+<a name="line85"></a> * @return {!goog.testing.DeferredTestCase} The created DeferredTestCase.
+<a name="line86"></a> */
+<a name="line87"></a>goog.testing.DeferredTestCase.createAndInstall = function(opt_name) {
+<a name="line88"></a>  var deferredTestCase = new goog.testing.DeferredTestCase(opt_name);
+<a name="line89"></a>  goog.testing.TestCase.initializeTestRunner(deferredTestCase);
+<a name="line90"></a>  return deferredTestCase;
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Handler for when the test produces an error.
+<a name="line96"></a> * @param {Error|string} err The error object.
+<a name="line97"></a> * @protected
+<a name="line98"></a> * @throws Always throws a ControlBreakingException.
+<a name="line99"></a> */
+<a name="line100"></a>goog.testing.DeferredTestCase.prototype.onError = function(err) {
+<a name="line101"></a>  this.doAsyncError(err);
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Handler for when the test succeeds.
+<a name="line107"></a> * @protected
+<a name="line108"></a> */
+<a name="line109"></a>goog.testing.DeferredTestCase.prototype.onSuccess = function() {
+<a name="line110"></a>  this.continueTesting();
+<a name="line111"></a>};
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * Adds a callback to update the wait message of this async test case. Using
+<a name="line116"></a> * this method generously also helps to document the test flow.
+<a name="line117"></a> * @param {string} msg The update wait status message.
+<a name="line118"></a> * @param {goog.async.Deferred} d The deferred object to add the waitForAsync
+<a name="line119"></a> *     callback to.
+<a name="line120"></a> * @see goog.testing.AsyncTestCase#waitForAsync
+<a name="line121"></a> */
+<a name="line122"></a>goog.testing.DeferredTestCase.prototype.addWaitForAsync = function(msg, d) {
+<a name="line123"></a>  d.addCallback(goog.bind(this.waitForAsync, this, msg));
+<a name="line124"></a>};
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Wires up given Deferred object to the test case, then starts the
+<a name="line129"></a> * goog.async.Deferred object&#39;s callback.
+<a name="line130"></a> * @param {!string|goog.async.Deferred} a The wait status message or the
+<a name="line131"></a> *     deferred object to wait for.
+<a name="line132"></a> * @param {goog.async.Deferred=} opt_b The deferred object to wait for.
+<a name="line133"></a> */
+<a name="line134"></a>goog.testing.DeferredTestCase.prototype.waitForDeferred = function(a, opt_b) {
+<a name="line135"></a>  var waitMsg;
+<a name="line136"></a>  var deferred;
+<a name="line137"></a>  switch (arguments.length) {
+<a name="line138"></a>    case 1:
+<a name="line139"></a>      deferred = a;
+<a name="line140"></a>      waitMsg = null;
+<a name="line141"></a>      break;
+<a name="line142"></a>    case 2:
+<a name="line143"></a>      deferred = opt_b;
+<a name="line144"></a>      waitMsg = a;
+<a name="line145"></a>      break;
+<a name="line146"></a>    default: // Shouldn&#39;t be here in compiled mode
+<a name="line147"></a>      throw Error(&#39;Invalid number of arguments&#39;);
+<a name="line148"></a>  }
+<a name="line149"></a>  deferred.addCallbacks(this.onSuccess, this.onError, this);
+<a name="line150"></a>  if (!waitMsg) {
+<a name="line151"></a>    waitMsg = &#39;Waiting for deferred in &#39; + this.getCurrentStepName();
+<a name="line152"></a>  }
+<a name="line153"></a>  this.waitForAsync( /** @type {!string} */ (waitMsg));
+<a name="line154"></a>  deferred.callback(true);
+<a name="line155"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iframe.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_iframe.js.html">iframe.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities for creating and working with iframes
+<a name="line17"></a> * cross-browser.
+<a name="line18"></a> * @author gboyer@google.com (Garry Boyer)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.dom.iframe&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Safe source for a blank iframe.
+<a name="line30"></a> *
+<a name="line31"></a> * Intentionally not about:blank, which gives mixed content warnings in IE6
+<a name="line32"></a> * over HTTPS.
+<a name="line33"></a> *
+<a name="line34"></a> * @type {string}
+<a name="line35"></a> */
+<a name="line36"></a>goog.dom.iframe.BLANK_SOURCE = &#39;javascript:&quot;&quot;&#39;;
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Safe source for a new blank iframe that may not cause a new load of the
+<a name="line41"></a> * iframe. This is different from {@code goog.dom.iframe.BLANK_SOURCE} in that
+<a name="line42"></a> * it will allow an iframe to be loaded synchronously in more browsers, notably
+<a name="line43"></a> * Gecko, following the javascript protocol spec.
+<a name="line44"></a> *
+<a name="line45"></a> * NOTE: This should not be used to replace the source of an existing iframe.
+<a name="line46"></a> * The new src value will be ignored, per the spec.
+<a name="line47"></a> *
+<a name="line48"></a> * Due to cross-browser differences, the load is not guaranteed  to be
+<a name="line49"></a> * synchronous. If code depends on the load of the iframe,
+<a name="line50"></a> * then {@code goog.net.IframeLoadMonitor} or a similar technique should be
+<a name="line51"></a> * used.
+<a name="line52"></a> *
+<a name="line53"></a> * According to
+<a name="line54"></a> * http://www.whatwg.org/specs/web-apps/current-work/multipage/webappapis.html#javascript-protocol
+<a name="line55"></a> * the &#39;javascript:&quot;&quot;&#39; URL should trigger a new load of the iframe, which may be
+<a name="line56"></a> * asynchronous. A void src, such as &#39;javascript:undefined&#39;, does not change
+<a name="line57"></a> * the browsing context document&#39;s, and thus should not trigger another load.
+<a name="line58"></a> *
+<a name="line59"></a> * Intentionally not about:blank, which also triggers a load.
+<a name="line60"></a> *
+<a name="line61"></a> * NOTE: &#39;javascript:&#39; URL handling spec compliance varies per browser. IE
+<a name="line62"></a> * throws an error with &#39;javascript:undefined&#39;. Webkit browsers will reload the
+<a name="line63"></a> * iframe when setting this source on an existing iframe.
+<a name="line64"></a> *
+<a name="line65"></a> * @type {string}
+<a name="line66"></a> */
+<a name="line67"></a>goog.dom.iframe.BLANK_SOURCE_NEW_FRAME = goog.userAgent.IE ?
+<a name="line68"></a>    &#39;javascript:&quot;&quot;&#39; :
+<a name="line69"></a>    &#39;javascript:undefined&#39;;
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Styles to help ensure an undecorated iframe.
+<a name="line74"></a> * @type {string}
+<a name="line75"></a> * @private
+<a name="line76"></a> */
+<a name="line77"></a>goog.dom.iframe.STYLES_ = &#39;border:0;vertical-align:bottom;&#39;;
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * Creates a completely blank iframe element.
+<a name="line82"></a> *
+<a name="line83"></a> * The iframe will not caused mixed-content warnings for IE6 under HTTPS.
+<a name="line84"></a> * The iframe will also have no borders or padding, so that the styled width
+<a name="line85"></a> * and height will be the actual width and height of the iframe.
+<a name="line86"></a> *
+<a name="line87"></a> * This function currently only attempts to create a blank iframe.  There
+<a name="line88"></a> * are no guarantees to the contents of the iframe or whether it is rendered
+<a name="line89"></a> * in quirks mode.
+<a name="line90"></a> *
+<a name="line91"></a> * @param {goog.dom.DomHelper} domHelper The dom helper to use.
+<a name="line92"></a> * @param {string=} opt_styles CSS styles for the iframe.
+<a name="line93"></a> * @return {!HTMLIFrameElement} A completely blank iframe.
+<a name="line94"></a> */
+<a name="line95"></a>goog.dom.iframe.createBlank = function(domHelper, opt_styles) {
+<a name="line96"></a>  return /** @type {!HTMLIFrameElement} */ (domHelper.createDom(&#39;iframe&#39;, {
+<a name="line97"></a>    &#39;frameborder&#39;: 0,
+<a name="line98"></a>    // Since iframes are inline elements, we must align to bottom to
+<a name="line99"></a>    // compensate for the line descent.
+<a name="line100"></a>    &#39;style&#39;: goog.dom.iframe.STYLES_ + (opt_styles || &#39;&#39;),
+<a name="line101"></a>    &#39;src&#39;: goog.dom.iframe.BLANK_SOURCE
+<a name="line102"></a>  }));
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Writes the contents of a blank iframe that has already been inserted
+<a name="line108"></a> * into the document.
+<a name="line109"></a> * @param {!HTMLIFrameElement} iframe An iframe with no contents, such as
+<a name="line110"></a> *     one created by goog.dom.iframe.createBlank, but already appended to
+<a name="line111"></a> *     a parent document.
+<a name="line112"></a> * @param {string} content Content to write to the iframe, from doctype to
+<a name="line113"></a> *     the HTML close tag.
+<a name="line114"></a> */
+<a name="line115"></a>goog.dom.iframe.writeContent = function(iframe, content) {
+<a name="line116"></a>  var doc = goog.dom.getFrameContentDocument(iframe);
+<a name="line117"></a>  doc.open();
+<a name="line118"></a>  doc.write(content);
+<a name="line119"></a>  doc.close();
+<a name="line120"></a>};
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>// TODO(gboyer): Provide a higher-level API for the most common use case, so
+<a name="line124"></a>// that you can just provide a list of stylesheets and some content HTML.
+<a name="line125"></a>/**
+<a name="line126"></a> * Creates a same-domain iframe containing preloaded content.
+<a name="line127"></a> *
+<a name="line128"></a> * This is primarily useful for DOM sandboxing.  One use case is to embed
+<a name="line129"></a> * a trusted Javascript app with potentially conflicting CSS styles.  The
+<a name="line130"></a> * second case is to reduce the cost of layout passes by the browser -- for
+<a name="line131"></a> * example, you can perform sandbox sizing of characters in an iframe while
+<a name="line132"></a> * manipulating a heavy DOM in the main window.  The iframe and parent frame
+<a name="line133"></a> * can access each others&#39; properties and functions without restriction.
+<a name="line134"></a> *
+<a name="line135"></a> * @param {!Element} parentElement The parent element in which to append the
+<a name="line136"></a> *     iframe.
+<a name="line137"></a> * @param {string=} opt_headContents Contents to go into the iframe&#39;s head.
+<a name="line138"></a> * @param {string=} opt_bodyContents Contents to go into the iframe&#39;s body.
+<a name="line139"></a> * @param {string=} opt_styles CSS styles for the iframe itself, before adding
+<a name="line140"></a> *     to the parent element.
+<a name="line141"></a> * @param {boolean=} opt_quirks Whether to use quirks mode (false by default).
+<a name="line142"></a> * @return {!HTMLIFrameElement} An iframe that has the specified contents.
+<a name="line143"></a> */
+<a name="line144"></a>goog.dom.iframe.createWithContent = function(
+<a name="line145"></a>    parentElement, opt_headContents, opt_bodyContents, opt_styles, opt_quirks) {
+<a name="line146"></a>  var domHelper = goog.dom.getDomHelper(parentElement);
+<a name="line147"></a>  // Generate the HTML content.
+<a name="line148"></a>  var contentBuf = [];
+<a name="line149"></a>
+<a name="line150"></a>  if (!opt_quirks) {
+<a name="line151"></a>    contentBuf.push(&#39;&lt;!DOCTYPE html&gt;&#39;);
+<a name="line152"></a>  }
+<a name="line153"></a>  contentBuf.push(&#39;&lt;html&gt;&lt;head&gt;&#39;, opt_headContents, &#39;&lt;/head&gt;&lt;body&gt;&#39;,
+<a name="line154"></a>      opt_bodyContents, &#39;&lt;/body&gt;&lt;/html&gt;&#39;);
+<a name="line155"></a>
+<a name="line156"></a>  var iframe = goog.dom.iframe.createBlank(domHelper, opt_styles);
+<a name="line157"></a>
+<a name="line158"></a>  // Cannot manipulate iframe content until it is in a document.
+<a name="line159"></a>  parentElement.appendChild(iframe);
+<a name="line160"></a>  goog.dom.iframe.writeContent(iframe, contentBuf.join(&#39;&#39;));
+<a name="line161"></a>
+<a name="line162"></a>  return iframe;
+<a name="line163"></a>};
+</pre>
+
+
+</body>
+</html>

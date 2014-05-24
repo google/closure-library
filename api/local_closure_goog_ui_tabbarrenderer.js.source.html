@@ -1,0 +1,215 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tabbarrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_tabbarrenderer.js.html">tabbarrenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Default renderer for {@link goog.ui.TabBar}s.  Based on the
+<a name="line17"></a> * original {@code TabPane} code.
+<a name="line18"></a> *
+<a name="line19"></a> * @author attila@google.com (Attila Bodis)
+<a name="line20"></a> * @author eae@google.com (Emil A. Eklund)
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.ui.TabBarRenderer&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.a11y.aria.Role&#39;);
+<a name="line26"></a>goog.require(&#39;goog.object&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.ContainerRenderer&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Default renderer for {@link goog.ui.TabBar}s, based on the {@code TabPane}
+<a name="line33"></a> * code.  The tab bar&#39;s DOM structure is determined by its orientation and
+<a name="line34"></a> * location relative to tab contents.  For example, a horizontal tab bar
+<a name="line35"></a> * located above tab contents looks like this:
+<a name="line36"></a> * &lt;pre&gt;
+<a name="line37"></a> *   &lt;div class=&quot;goog-tab-bar goog-tab-bar-horizontal goog-tab-bar-top&quot;&gt;
+<a name="line38"></a> *     ...(tabs here)...
+<a name="line39"></a> *   &lt;/div&gt;
+<a name="line40"></a> * &lt;/pre&gt;
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @extends {goog.ui.ContainerRenderer}
+<a name="line43"></a> */
+<a name="line44"></a>goog.ui.TabBarRenderer = function() {
+<a name="line45"></a>  goog.ui.ContainerRenderer.call(this, goog.a11y.aria.Role.TAB_LIST);
+<a name="line46"></a>};
+<a name="line47"></a>goog.inherits(goog.ui.TabBarRenderer, goog.ui.ContainerRenderer);
+<a name="line48"></a>goog.addSingletonGetter(goog.ui.TabBarRenderer);
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line53"></a> * by this renderer.
+<a name="line54"></a> * @type {string}
+<a name="line55"></a> */
+<a name="line56"></a>goog.ui.TabBarRenderer.CSS_CLASS = goog.getCssName(&#39;goog-tab-bar&#39;);
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Returns the CSS class name to be applied to the root element of all tab bars
+<a name="line61"></a> * rendered or decorated using this renderer.
+<a name="line62"></a> * @return {string} Renderer-specific CSS class name.
+<a name="line63"></a> * @override
+<a name="line64"></a> */
+<a name="line65"></a>goog.ui.TabBarRenderer.prototype.getCssClass = function() {
+<a name="line66"></a>  return goog.ui.TabBarRenderer.CSS_CLASS;
+<a name="line67"></a>};
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * Sets the tab bar&#39;s state based on the given CSS class name, encountered
+<a name="line72"></a> * during decoration.  Overrides the superclass implementation by recognizing
+<a name="line73"></a> * class names representing tab bar orientation and location.
+<a name="line74"></a> * @param {goog.ui.Container} tabBar Tab bar to configure.
+<a name="line75"></a> * @param {string} className CSS class name.
+<a name="line76"></a> * @param {string} baseClass Base class name used as the root of state-specific
+<a name="line77"></a> *     class names (typically the renderer&#39;s own class name).
+<a name="line78"></a> * @protected
+<a name="line79"></a> * @override
+<a name="line80"></a> */
+<a name="line81"></a>goog.ui.TabBarRenderer.prototype.setStateFromClassName = function(tabBar,
+<a name="line82"></a>    className, baseClass) {
+<a name="line83"></a>  // Create the class-to-location lookup table on first access.
+<a name="line84"></a>  if (!this.locationByClass_) {
+<a name="line85"></a>    this.createLocationByClassMap_();
+<a name="line86"></a>  }
+<a name="line87"></a>
+<a name="line88"></a>  // If the class name corresponds to a location, update the tab bar&#39;s location;
+<a name="line89"></a>  // otherwise let the superclass handle it.
+<a name="line90"></a>  var location = this.locationByClass_[className];
+<a name="line91"></a>  if (location) {
+<a name="line92"></a>    tabBar.setLocation(location);
+<a name="line93"></a>  } else {
+<a name="line94"></a>    goog.ui.TabBarRenderer.superClass_.setStateFromClassName.call(this, tabBar,
+<a name="line95"></a>        className, baseClass);
+<a name="line96"></a>  }
+<a name="line97"></a>};
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Returns all CSS class names applicable to the tab bar, based on its state.
+<a name="line102"></a> * Overrides the superclass implementation by appending the location-specific
+<a name="line103"></a> * class name to the list.
+<a name="line104"></a> * @param {goog.ui.Container} tabBar Tab bar whose CSS classes are to be
+<a name="line105"></a> *     returned.
+<a name="line106"></a> * @return {!Array.&lt;string&gt;} Array of CSS class names applicable to the tab bar.
+<a name="line107"></a> * @override
+<a name="line108"></a> */
+<a name="line109"></a>goog.ui.TabBarRenderer.prototype.getClassNames = function(tabBar) {
+<a name="line110"></a>  var classNames = goog.ui.TabBarRenderer.superClass_.getClassNames.call(this,
+<a name="line111"></a>      tabBar);
+<a name="line112"></a>
+<a name="line113"></a>  // Create the location-to-class lookup table on first access.
+<a name="line114"></a>  if (!this.classByLocation_) {
+<a name="line115"></a>    this.createClassByLocationMap_();
+<a name="line116"></a>  }
+<a name="line117"></a>
+<a name="line118"></a>  // Apped the class name corresponding to the tab bar&#39;s location to the list.
+<a name="line119"></a>  classNames.push(this.classByLocation_[tabBar.getLocation()]);
+<a name="line120"></a>  return classNames;
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Creates the location-to-class lookup table.
+<a name="line126"></a> * @private
+<a name="line127"></a> */
+<a name="line128"></a>goog.ui.TabBarRenderer.prototype.createClassByLocationMap_ = function() {
+<a name="line129"></a>  var baseClass = this.getCssClass();
+<a name="line130"></a>
+<a name="line131"></a>  /**
+<a name="line132"></a>   * Map of locations to location-specific structural class names,
+<a name="line133"></a>   * precomputed and cached on first use to minimize object allocations
+<a name="line134"></a>   * and string concatenation.
+<a name="line135"></a>   * @type {Object}
+<a name="line136"></a>   * @private
+<a name="line137"></a>   */
+<a name="line138"></a>  this.classByLocation_ = goog.object.create(
+<a name="line139"></a>      goog.ui.TabBar.Location.TOP, goog.getCssName(baseClass, &#39;top&#39;),
+<a name="line140"></a>      goog.ui.TabBar.Location.BOTTOM, goog.getCssName(baseClass, &#39;bottom&#39;),
+<a name="line141"></a>      goog.ui.TabBar.Location.START, goog.getCssName(baseClass, &#39;start&#39;),
+<a name="line142"></a>      goog.ui.TabBar.Location.END, goog.getCssName(baseClass, &#39;end&#39;));
+<a name="line143"></a>};
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>/**
+<a name="line147"></a> * Creates the class-to-location lookup table, used during decoration.
+<a name="line148"></a> * @private
+<a name="line149"></a> */
+<a name="line150"></a>goog.ui.TabBarRenderer.prototype.createLocationByClassMap_ = function() {
+<a name="line151"></a>  // We need the classByLocation_ map so we can transpose it.
+<a name="line152"></a>  if (!this.classByLocation_) {
+<a name="line153"></a>    this.createClassByLocationMap_();
+<a name="line154"></a>  }
+<a name="line155"></a>
+<a name="line156"></a>  /**
+<a name="line157"></a>   * Map of location-specific structural class names to locations, used during
+<a name="line158"></a>   * element decoration.  Precomputed and cached on first use to minimize object
+<a name="line159"></a>   * allocations and string concatenation.
+<a name="line160"></a>   * @type {Object}
+<a name="line161"></a>   * @private
+<a name="line162"></a>   */
+<a name="line163"></a>  this.locationByClass_ = goog.object.transpose(this.classByLocation_);
+<a name="line164"></a>};
+</pre>
+
+
+</body>
+</html>

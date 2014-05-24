@@ -1,0 +1,167 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>announcer_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_a11y_aria_announcer_test.js.html">announcer_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.a11y.aria.AnnouncerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.a11y.aria.AnnouncerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.a11y.aria&#39;);
+<a name="line19"></a>goog.require(&#39;goog.a11y.aria.Announcer&#39;);
+<a name="line20"></a>goog.require(&#39;goog.a11y.aria.LivePriority&#39;);
+<a name="line21"></a>goog.require(&#39;goog.a11y.aria.State&#39;);
+<a name="line22"></a>goog.require(&#39;goog.array&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.iframe&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line26"></a>
+<a name="line27"></a>var sandbox;
+<a name="line28"></a>var someDiv;
+<a name="line29"></a>var someSpan;
+<a name="line30"></a>
+<a name="line31"></a>function setUp() {
+<a name="line32"></a>  sandbox = goog.dom.getElement(&#39;sandbox&#39;);
+<a name="line33"></a>  someDiv = goog.dom.createDom(&#39;div&#39;, {id: &#39;someDiv&#39;}, &#39;DIV&#39;);
+<a name="line34"></a>  someSpan = goog.dom.createDom(&#39;span&#39;, {id: &#39;someSpan&#39;}, &#39;SPAN&#39;);
+<a name="line35"></a>  sandbox.appendChild(someDiv);
+<a name="line36"></a>  someDiv.appendChild(someSpan);
+<a name="line37"></a>}
+<a name="line38"></a>
+<a name="line39"></a>function tearDown() {
+<a name="line40"></a>  sandbox.innerHTML = &#39;&#39;;
+<a name="line41"></a>  someDiv = null;
+<a name="line42"></a>  someSpan = null;
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>function testAnnouncerAndDispose() {
+<a name="line46"></a>  var text = &#39;test content&#39;;
+<a name="line47"></a>  var announcer = new goog.a11y.aria.Announcer(goog.dom.getDomHelper());
+<a name="line48"></a>  announcer.say(text);
+<a name="line49"></a>  checkLiveRegionContains(text, &#39;polite&#39;);
+<a name="line50"></a>  goog.dispose(announcer);
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>function testAnnouncerTwice() {
+<a name="line54"></a>  var text = &#39;test content1&#39;;
+<a name="line55"></a>  var text2 = &#39;test content2&#39;;
+<a name="line56"></a>  var announcer = new goog.a11y.aria.Announcer(goog.dom.getDomHelper());
+<a name="line57"></a>  announcer.say(text);
+<a name="line58"></a>  announcer.say(text2);
+<a name="line59"></a>  checkLiveRegionContains(text2, &#39;polite&#39;);
+<a name="line60"></a>  goog.dispose(announcer);
+<a name="line61"></a>}
+<a name="line62"></a>
+<a name="line63"></a>function testAnnouncerAssertive() {
+<a name="line64"></a>  var text = &#39;test content&#39;;
+<a name="line65"></a>  var announcer = new goog.a11y.aria.Announcer(goog.dom.getDomHelper());
+<a name="line66"></a>  announcer.say(text, goog.a11y.aria.LivePriority.ASSERTIVE);
+<a name="line67"></a>  checkLiveRegionContains(text, &#39;assertive&#39;);
+<a name="line68"></a>  goog.dispose(announcer);
+<a name="line69"></a>}
+<a name="line70"></a>
+<a name="line71"></a>function testAnnouncerInIframe() {
+<a name="line72"></a>  var text = &#39;test content&#39;;
+<a name="line73"></a>  var frame = goog.dom.iframe.createWithContent(sandbox);
+<a name="line74"></a>  var helper = goog.dom.getDomHelper(
+<a name="line75"></a>      goog.dom.getFrameContentDocument(frame).body);
+<a name="line76"></a>  var announcer = new goog.a11y.aria.Announcer(helper);
+<a name="line77"></a>  announcer.say(text, &#39;polite&#39;, helper);
+<a name="line78"></a>  checkLiveRegionContains(text, &#39;polite&#39;, helper);
+<a name="line79"></a>  goog.dispose(announcer);
+<a name="line80"></a>}
+<a name="line81"></a>
+<a name="line82"></a>function testAnnouncerWithAriaHidden() {
+<a name="line83"></a>  var text = &#39;test content1&#39;;
+<a name="line84"></a>  var text2 = &#39;test content2&#39;;
+<a name="line85"></a>  var announcer = new goog.a11y.aria.Announcer(goog.dom.getDomHelper());
+<a name="line86"></a>  announcer.say(text);
+<a name="line87"></a>  // Set aria-hidden attribute on the live region (simulates a modal dialog
+<a name="line88"></a>  // being opened).
+<a name="line89"></a>  var liveRegion = getLiveRegion(&#39;polite&#39;);
+<a name="line90"></a>  goog.a11y.aria.setState(liveRegion, goog.a11y.aria.State.HIDDEN, true);
+<a name="line91"></a>
+<a name="line92"></a>  // Announce a new message and make sure that the aria-hidden was removed.
+<a name="line93"></a>  announcer.say(text2);
+<a name="line94"></a>  checkLiveRegionContains(text2, &#39;polite&#39;);
+<a name="line95"></a>  assertEquals(&#39;&#39;,
+<a name="line96"></a>      goog.a11y.aria.getState(liveRegion, goog.a11y.aria.State.HIDDEN));
+<a name="line97"></a>  goog.dispose(announcer);
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>function getLiveRegion(priority, opt_domHelper) {
+<a name="line101"></a>  var dom = opt_domHelper || goog.dom.getDomHelper();
+<a name="line102"></a>  var divs = dom.getElementsByTagNameAndClass(&#39;div&#39;, null);
+<a name="line103"></a>  var liveRegions = [];
+<a name="line104"></a>  goog.array.forEach(divs, function(div) {
+<a name="line105"></a>    if (goog.a11y.aria.getState(div, &#39;live&#39;) == priority) {
+<a name="line106"></a>      liveRegions.push(div);
+<a name="line107"></a>    }
+<a name="line108"></a>  });
+<a name="line109"></a>  assertEquals(1, liveRegions.length);
+<a name="line110"></a>  return liveRegions[0];
+<a name="line111"></a>}
+<a name="line112"></a>
+<a name="line113"></a>function checkLiveRegionContains(text, priority, opt_domHelper) {
+<a name="line114"></a>  var liveRegion = getLiveRegion(priority, opt_domHelper);
+<a name="line115"></a>  assertEquals(text, goog.dom.getTextContent(liveRegion));
+<a name="line116"></a>}
+</pre>
+
+
+</body>
+</html>

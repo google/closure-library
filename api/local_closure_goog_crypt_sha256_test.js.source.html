@@ -1,0 +1,130 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>sha256_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_crypt_sha256_test.js.html">sha256_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.crypt.Sha256Test&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.crypt.Sha256Test&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.crypt&#39;);
+<a name="line19"></a>goog.require(&#39;goog.crypt.Sha256&#39;);
+<a name="line20"></a>goog.require(&#39;goog.crypt.hashTester&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>function testBasicOperations() {
+<a name="line24"></a>  var sha256 = new goog.crypt.Sha256();
+<a name="line25"></a>  goog.crypt.hashTester.runBasicTests(sha256);
+<a name="line26"></a>}
+<a name="line27"></a>
+<a name="line28"></a>function testHashing() {
+<a name="line29"></a>  // Test vectors from:
+<a name="line30"></a>  // csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf
+<a name="line31"></a>
+<a name="line32"></a>  var sha256 = new goog.crypt.Sha256();
+<a name="line33"></a>
+<a name="line34"></a>  // Empty message.
+<a name="line35"></a>  sha256.update([]);
+<a name="line36"></a>  assertElementsEquals(
+<a name="line37"></a>      goog.crypt.hexToByteArray(
+<a name="line38"></a>          &#39;e3b0c44298fc1c149afbf4c8996fb924&#39; +
+<a name="line39"></a>          &#39;27ae41e4649b934ca495991b7852b855&#39;),
+<a name="line40"></a>      sha256.digest());
+<a name="line41"></a>
+<a name="line42"></a>  // One block message.
+<a name="line43"></a>  sha256.reset();
+<a name="line44"></a>  sha256.update(goog.crypt.stringToByteArray(&#39;abc&#39;));
+<a name="line45"></a>  assertElementsEquals(
+<a name="line46"></a>      goog.crypt.hexToByteArray(
+<a name="line47"></a>          &#39;ba7816bf8f01cfea414140de5dae2223&#39; +
+<a name="line48"></a>          &#39;b00361a396177a9cb410ff61f20015ad&#39;),
+<a name="line49"></a>      sha256.digest());
+<a name="line50"></a>
+<a name="line51"></a>  // Multi-block message.
+<a name="line52"></a>  sha256.reset();
+<a name="line53"></a>  sha256.update(
+<a name="line54"></a>      goog.crypt.stringToByteArray(
+<a name="line55"></a>          &#39;abcdbcdecdefdefgefghfghighij&#39; +
+<a name="line56"></a>          &#39;hijkijkljklmklmnlmnomnopnopq&#39;));
+<a name="line57"></a>  assertElementsEquals(
+<a name="line58"></a>      goog.crypt.hexToByteArray(
+<a name="line59"></a>          &#39;248d6a61d20638b8e5c026930c3e6039&#39; +
+<a name="line60"></a>          &#39;a33ce45964ff2167f6ecedd419db06c1&#39;),
+<a name="line61"></a>      sha256.digest());
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/** Check that the code checks for bad input */
+<a name="line66"></a>function testBadInput() {
+<a name="line67"></a>  assertThrows(&#39;Bad input&#39;, function() {
+<a name="line68"></a>    new goog.crypt.Sha256().update({});
+<a name="line69"></a>  });
+<a name="line70"></a>  assertThrows(&#39;Floating point not allows&#39;, function() {
+<a name="line71"></a>    new goog.crypt.Sha256().update([1, 2, 3, 4, 4.5]);
+<a name="line72"></a>  });
+<a name="line73"></a>  assertThrows(&#39;Negative not allowed&#39;, function() {
+<a name="line74"></a>    new goog.crypt.Sha256().update([1, 2, 3, 4, -10]);
+<a name="line75"></a>  });
+<a name="line76"></a>  assertThrows(&#39;Must be byte array&#39;, function() {
+<a name="line77"></a>    new goog.crypt.Sha256().update([1, 2, 3, 4, {}]);
+<a name="line78"></a>  });
+<a name="line79"></a>}
+</pre>
+
+
+</body>
+</html>

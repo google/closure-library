@@ -1,0 +1,322 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>remotearraymatcher.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_ac_remotearraymatcher.js.html">remotearraymatcher.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Class that retrieves autocomplete matches via an ajax call.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.ui.ac.RemoteArrayMatcher&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line23"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line24"></a>goog.require(&#39;goog.events&#39;);
+<a name="line25"></a>goog.require(&#39;goog.json&#39;);
+<a name="line26"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line27"></a>goog.require(&#39;goog.net.XhrIo&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * An array matcher that requests matches via ajax.
+<a name="line33"></a> * @param {string} url The Uri which generates the auto complete matches.  The
+<a name="line34"></a> *     search term is passed to the server as the &#39;token&#39; query param.
+<a name="line35"></a> * @param {boolean=} opt_noSimilar If true, request that the server does not do
+<a name="line36"></a> *     similarity matches for the input token against the dictionary.
+<a name="line37"></a> *     The value is sent to the server as the &#39;use_similar&#39; query param which is
+<a name="line38"></a> *     either &quot;1&quot; (opt_noSimilar==false) or &quot;0&quot; (opt_noSimilar==true).
+<a name="line39"></a> * @constructor
+<a name="line40"></a> * @extends {goog.Disposable}
+<a name="line41"></a> */
+<a name="line42"></a>goog.ui.ac.RemoteArrayMatcher = function(url, opt_noSimilar) {
+<a name="line43"></a>  goog.Disposable.call(this);
+<a name="line44"></a>
+<a name="line45"></a>  /**
+<a name="line46"></a>   * The base URL for the ajax call.  The token and max_matches are added as
+<a name="line47"></a>   * query params.
+<a name="line48"></a>   * @type {string}
+<a name="line49"></a>   * @private
+<a name="line50"></a>   */
+<a name="line51"></a>  this.url_ = url;
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * Whether similar matches should be found as well.  This is sent as a hint
+<a name="line55"></a>   * to the server only.
+<a name="line56"></a>   * @type {boolean}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.useSimilar_ = !opt_noSimilar;
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * The XhrIo object used for making remote requests.  When a new request
+<a name="line63"></a>   * is made, the current one is aborted and the new one sent.
+<a name="line64"></a>   * @type {goog.net.XhrIo}
+<a name="line65"></a>   * @private
+<a name="line66"></a>   */
+<a name="line67"></a>  this.xhr_ = new goog.net.XhrIo();
+<a name="line68"></a>};
+<a name="line69"></a>goog.inherits(goog.ui.ac.RemoteArrayMatcher, goog.Disposable);
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * The HTTP send method (GET, POST) to use when making the ajax call.
+<a name="line74"></a> * @type {string}
+<a name="line75"></a> * @private
+<a name="line76"></a> */
+<a name="line77"></a>goog.ui.ac.RemoteArrayMatcher.prototype.method_ = &#39;GET&#39;;
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * Data to submit during a POST.
+<a name="line82"></a> * @type {string|undefined}
+<a name="line83"></a> * @private
+<a name="line84"></a> */
+<a name="line85"></a>goog.ui.ac.RemoteArrayMatcher.prototype.content_ = undefined;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Headers to send with every HTTP request.
+<a name="line90"></a> * @type {Object|goog.structs.Map}
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.ui.ac.RemoteArrayMatcher.prototype.headers_ = null;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Key to the listener on XHR. Used to clear previous listeners.
+<a name="line98"></a> * @type {goog.events.Key}
+<a name="line99"></a> * @private
+<a name="line100"></a> */
+<a name="line101"></a>goog.ui.ac.RemoteArrayMatcher.prototype.lastListenerKey_ = null;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Set the send method (&quot;GET&quot;, &quot;POST&quot;).
+<a name="line106"></a> * @param {string} method The send method; default: GET.
+<a name="line107"></a> */
+<a name="line108"></a>goog.ui.ac.RemoteArrayMatcher.prototype.setMethod = function(method) {
+<a name="line109"></a>  this.method_ = method;
+<a name="line110"></a>};
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Set the post data.
+<a name="line115"></a> * @param {string} content Post data.
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.ac.RemoteArrayMatcher.prototype.setContent = function(content) {
+<a name="line118"></a>  this.content_ = content;
+<a name="line119"></a>};
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Set the HTTP headers.
+<a name="line124"></a> * @param {Object|goog.structs.Map} headers Map of headers to add to the
+<a name="line125"></a> *     request.
+<a name="line126"></a> */
+<a name="line127"></a>goog.ui.ac.RemoteArrayMatcher.prototype.setHeaders = function(headers) {
+<a name="line128"></a>  this.headers_ = headers;
+<a name="line129"></a>};
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Set the timeout interval.
+<a name="line134"></a> * @param {number} interval Number of milliseconds after which an
+<a name="line135"></a> *     incomplete request will be aborted; 0 means no timeout is set.
+<a name="line136"></a> */
+<a name="line137"></a>goog.ui.ac.RemoteArrayMatcher.prototype.setTimeoutInterval =
+<a name="line138"></a>    function(interval) {
+<a name="line139"></a>  this.xhr_.setTimeoutInterval(interval);
+<a name="line140"></a>};
+<a name="line141"></a>
+<a name="line142"></a>
+<a name="line143"></a>/**
+<a name="line144"></a> * Builds a complete GET-style URL, given the base URI and autocomplete related
+<a name="line145"></a> * parameter values.
+<a name="line146"></a> * &lt;b&gt;Override this to build any customized lookup URLs.&lt;/b&gt;
+<a name="line147"></a> * &lt;b&gt;Can be used to change request method and any post content as well.&lt;/b&gt;
+<a name="line148"></a> * @param {string} uri The base URI of the request target.
+<a name="line149"></a> * @param {string} token Current token in autocomplete.
+<a name="line150"></a> * @param {number} maxMatches Maximum number of matches required.
+<a name="line151"></a> * @param {boolean} useSimilar A hint to the server.
+<a name="line152"></a> * @param {string=} opt_fullString Complete text in the input element.
+<a name="line153"></a> * @return {?string} The complete url. Return null if no request should be sent.
+<a name="line154"></a> * @protected
+<a name="line155"></a> */
+<a name="line156"></a>goog.ui.ac.RemoteArrayMatcher.prototype.buildUrl = function(uri,
+<a name="line157"></a>    token, maxMatches, useSimilar, opt_fullString) {
+<a name="line158"></a>  var url = new goog.Uri(uri);
+<a name="line159"></a>  url.setParameterValue(&#39;token&#39;, token);
+<a name="line160"></a>  url.setParameterValue(&#39;max_matches&#39;, String(maxMatches));
+<a name="line161"></a>  url.setParameterValue(&#39;use_similar&#39;, String(Number(useSimilar)));
+<a name="line162"></a>  return url.toString();
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Returns whether the suggestions should be updated?
+<a name="line168"></a> * &lt;b&gt;Override this to prevent updates eg - when token is empty.&lt;/b&gt;
+<a name="line169"></a> * @param {string} uri The base URI of the request target.
+<a name="line170"></a> * @param {string} token Current token in autocomplete.
+<a name="line171"></a> * @param {number} maxMatches Maximum number of matches required.
+<a name="line172"></a> * @param {boolean} useSimilar A hint to the server.
+<a name="line173"></a> * @param {string=} opt_fullString Complete text in the input element.
+<a name="line174"></a> * @return {boolean} Whether new matches be requested.
+<a name="line175"></a> * @protected
+<a name="line176"></a> */
+<a name="line177"></a>goog.ui.ac.RemoteArrayMatcher.prototype.shouldRequestMatches =
+<a name="line178"></a>    function(uri, token, maxMatches, useSimilar, opt_fullString) {
+<a name="line179"></a>  return true;
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Parses and retrieves the array of suggestions from XHR response.
+<a name="line185"></a> * &lt;b&gt;Override this if the response is not a simple JSON array.&lt;/b&gt;
+<a name="line186"></a> * @param {string} responseText The XHR response text.
+<a name="line187"></a> * @return {Array.&lt;string&gt;} The array of suggestions.
+<a name="line188"></a> * @protected
+<a name="line189"></a> */
+<a name="line190"></a>goog.ui.ac.RemoteArrayMatcher.prototype.parseResponseText = function(
+<a name="line191"></a>    responseText) {
+<a name="line192"></a>
+<a name="line193"></a>  var matches = [];
+<a name="line194"></a>  // If there is no response text, unsafeParse will throw a syntax error.
+<a name="line195"></a>  if (responseText) {
+<a name="line196"></a>    /** @preserveTry */
+<a name="line197"></a>    try {
+<a name="line198"></a>      matches = goog.json.unsafeParse(responseText);
+<a name="line199"></a>    } catch (exception) {
+<a name="line200"></a>    }
+<a name="line201"></a>  }
+<a name="line202"></a>  return /** @type {Array.&lt;string&gt;} */ (matches);
+<a name="line203"></a>};
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Handles the XHR response.
+<a name="line208"></a> * @param {string} token The XHR autocomplete token.
+<a name="line209"></a> * @param {Function} matchHandler The AutoComplete match handler.
+<a name="line210"></a> * @param {goog.events.Event} event The XHR success event.
+<a name="line211"></a> */
+<a name="line212"></a>goog.ui.ac.RemoteArrayMatcher.prototype.xhrCallback = function(token,
+<a name="line213"></a>    matchHandler, event) {
+<a name="line214"></a>  var text = event.target.getResponseText();
+<a name="line215"></a>  matchHandler(token, this.parseResponseText(text));
+<a name="line216"></a>};
+<a name="line217"></a>
+<a name="line218"></a>
+<a name="line219"></a>/**
+<a name="line220"></a> * Retrieve a set of matching rows from the server via ajax.
+<a name="line221"></a> * @param {string} token The text that should be matched; passed to the server
+<a name="line222"></a> *     as the &#39;token&#39; query param.
+<a name="line223"></a> * @param {number} maxMatches The maximum number of matches requested from the
+<a name="line224"></a> *     server; passed as the &#39;max_matches&#39; query param.  The server is
+<a name="line225"></a> *     responsible for limiting the number of matches that are returned.
+<a name="line226"></a> * @param {Function} matchHandler Callback to execute on the result after
+<a name="line227"></a> *     matching.
+<a name="line228"></a> * @param {string=} opt_fullString The full string from the input box.
+<a name="line229"></a> */
+<a name="line230"></a>goog.ui.ac.RemoteArrayMatcher.prototype.requestMatchingRows =
+<a name="line231"></a>    function(token, maxMatches, matchHandler, opt_fullString) {
+<a name="line232"></a>
+<a name="line233"></a>  if (!this.shouldRequestMatches(this.url_, token, maxMatches, this.useSimilar_,
+<a name="line234"></a>      opt_fullString)) {
+<a name="line235"></a>    return;
+<a name="line236"></a>  }
+<a name="line237"></a>  // Set the query params on the URL.
+<a name="line238"></a>  var url = this.buildUrl(this.url_, token, maxMatches, this.useSimilar_,
+<a name="line239"></a>      opt_fullString);
+<a name="line240"></a>  if (!url) {
+<a name="line241"></a>    // Do nothing if there is no URL.
+<a name="line242"></a>    return;
+<a name="line243"></a>  }
+<a name="line244"></a>
+<a name="line245"></a>  // The callback evals the server response and calls the match handler on
+<a name="line246"></a>  // the array of matches.
+<a name="line247"></a>  var callback = goog.bind(this.xhrCallback, this, token, matchHandler);
+<a name="line248"></a>
+<a name="line249"></a>  // Abort the current request and issue the new one; prevent requests from
+<a name="line250"></a>  // being queued up by the browser with a slow server
+<a name="line251"></a>  if (this.xhr_.isActive()) {
+<a name="line252"></a>    this.xhr_.abort();
+<a name="line253"></a>  }
+<a name="line254"></a>  // This ensures if previous XHR is aborted or ends with error, the
+<a name="line255"></a>  // corresponding success-callbacks are cleared.
+<a name="line256"></a>  if (this.lastListenerKey_) {
+<a name="line257"></a>    goog.events.unlistenByKey(this.lastListenerKey_);
+<a name="line258"></a>  }
+<a name="line259"></a>  // Listen once ensures successful callback gets cleared by itself.
+<a name="line260"></a>  this.lastListenerKey_ = goog.events.listenOnce(this.xhr_,
+<a name="line261"></a>      goog.net.EventType.SUCCESS, callback);
+<a name="line262"></a>  this.xhr_.send(url, this.method_, this.content_, this.headers_);
+<a name="line263"></a>};
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/** @override */
+<a name="line267"></a>goog.ui.ac.RemoteArrayMatcher.prototype.disposeInternal = function() {
+<a name="line268"></a>  this.xhr_.dispose();
+<a name="line269"></a>  goog.ui.ac.RemoteArrayMatcher.superClass_.disposeInternal.call(
+<a name="line270"></a>      this);
+<a name="line271"></a>};
+</pre>
+
+
+</body>
+</html>

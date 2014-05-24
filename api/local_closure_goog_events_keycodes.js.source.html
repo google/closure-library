@@ -1,0 +1,467 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>keycodes.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_events_keycodes.js.html">keycodes.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Constant declarations for common key codes.
+<a name="line17"></a> *
+<a name="line18"></a> * @author eae@google.com (Emil A Eklund)
+<a name="line19"></a> * @see ../demos/keyhandler.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.events.KeyCodes&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Key codes for common characters.
+<a name="line29"></a> *
+<a name="line30"></a> * This list is not localized and therefore some of the key codes are not
+<a name="line31"></a> * correct for non US keyboard layouts. See comments below.
+<a name="line32"></a> *
+<a name="line33"></a> * @enum {number}
+<a name="line34"></a> */
+<a name="line35"></a>goog.events.KeyCodes = {
+<a name="line36"></a>  WIN_KEY_FF_LINUX: 0,
+<a name="line37"></a>  MAC_ENTER: 3,
+<a name="line38"></a>  BACKSPACE: 8,
+<a name="line39"></a>  TAB: 9,
+<a name="line40"></a>  NUM_CENTER: 12,  // NUMLOCK on FF/Safari Mac
+<a name="line41"></a>  ENTER: 13,
+<a name="line42"></a>  SHIFT: 16,
+<a name="line43"></a>  CTRL: 17,
+<a name="line44"></a>  ALT: 18,
+<a name="line45"></a>  PAUSE: 19,
+<a name="line46"></a>  CAPS_LOCK: 20,
+<a name="line47"></a>  ESC: 27,
+<a name="line48"></a>  SPACE: 32,
+<a name="line49"></a>  PAGE_UP: 33,     // also NUM_NORTH_EAST
+<a name="line50"></a>  PAGE_DOWN: 34,   // also NUM_SOUTH_EAST
+<a name="line51"></a>  END: 35,         // also NUM_SOUTH_WEST
+<a name="line52"></a>  HOME: 36,        // also NUM_NORTH_WEST
+<a name="line53"></a>  LEFT: 37,        // also NUM_WEST
+<a name="line54"></a>  UP: 38,          // also NUM_NORTH
+<a name="line55"></a>  RIGHT: 39,       // also NUM_EAST
+<a name="line56"></a>  DOWN: 40,        // also NUM_SOUTH
+<a name="line57"></a>  PRINT_SCREEN: 44,
+<a name="line58"></a>  INSERT: 45,      // also NUM_INSERT
+<a name="line59"></a>  DELETE: 46,      // also NUM_DELETE
+<a name="line60"></a>  ZERO: 48,
+<a name="line61"></a>  ONE: 49,
+<a name="line62"></a>  TWO: 50,
+<a name="line63"></a>  THREE: 51,
+<a name="line64"></a>  FOUR: 52,
+<a name="line65"></a>  FIVE: 53,
+<a name="line66"></a>  SIX: 54,
+<a name="line67"></a>  SEVEN: 55,
+<a name="line68"></a>  EIGHT: 56,
+<a name="line69"></a>  NINE: 57,
+<a name="line70"></a>  FF_SEMICOLON: 59, // Firefox (Gecko) fires this for semicolon instead of 186
+<a name="line71"></a>  FF_EQUALS: 61, // Firefox (Gecko) fires this for equals instead of 187
+<a name="line72"></a>  FF_DASH: 173, // Firefox (Gecko) fires this for dash instead of 189
+<a name="line73"></a>  QUESTION_MARK: 63, // needs localization
+<a name="line74"></a>  A: 65,
+<a name="line75"></a>  B: 66,
+<a name="line76"></a>  C: 67,
+<a name="line77"></a>  D: 68,
+<a name="line78"></a>  E: 69,
+<a name="line79"></a>  F: 70,
+<a name="line80"></a>  G: 71,
+<a name="line81"></a>  H: 72,
+<a name="line82"></a>  I: 73,
+<a name="line83"></a>  J: 74,
+<a name="line84"></a>  K: 75,
+<a name="line85"></a>  L: 76,
+<a name="line86"></a>  M: 77,
+<a name="line87"></a>  N: 78,
+<a name="line88"></a>  O: 79,
+<a name="line89"></a>  P: 80,
+<a name="line90"></a>  Q: 81,
+<a name="line91"></a>  R: 82,
+<a name="line92"></a>  S: 83,
+<a name="line93"></a>  T: 84,
+<a name="line94"></a>  U: 85,
+<a name="line95"></a>  V: 86,
+<a name="line96"></a>  W: 87,
+<a name="line97"></a>  X: 88,
+<a name="line98"></a>  Y: 89,
+<a name="line99"></a>  Z: 90,
+<a name="line100"></a>  META: 91, // WIN_KEY_LEFT
+<a name="line101"></a>  WIN_KEY_RIGHT: 92,
+<a name="line102"></a>  CONTEXT_MENU: 93,
+<a name="line103"></a>  NUM_ZERO: 96,
+<a name="line104"></a>  NUM_ONE: 97,
+<a name="line105"></a>  NUM_TWO: 98,
+<a name="line106"></a>  NUM_THREE: 99,
+<a name="line107"></a>  NUM_FOUR: 100,
+<a name="line108"></a>  NUM_FIVE: 101,
+<a name="line109"></a>  NUM_SIX: 102,
+<a name="line110"></a>  NUM_SEVEN: 103,
+<a name="line111"></a>  NUM_EIGHT: 104,
+<a name="line112"></a>  NUM_NINE: 105,
+<a name="line113"></a>  NUM_MULTIPLY: 106,
+<a name="line114"></a>  NUM_PLUS: 107,
+<a name="line115"></a>  NUM_MINUS: 109,
+<a name="line116"></a>  NUM_PERIOD: 110,
+<a name="line117"></a>  NUM_DIVISION: 111,
+<a name="line118"></a>  F1: 112,
+<a name="line119"></a>  F2: 113,
+<a name="line120"></a>  F3: 114,
+<a name="line121"></a>  F4: 115,
+<a name="line122"></a>  F5: 116,
+<a name="line123"></a>  F6: 117,
+<a name="line124"></a>  F7: 118,
+<a name="line125"></a>  F8: 119,
+<a name="line126"></a>  F9: 120,
+<a name="line127"></a>  F10: 121,
+<a name="line128"></a>  F11: 122,
+<a name="line129"></a>  F12: 123,
+<a name="line130"></a>  NUMLOCK: 144,
+<a name="line131"></a>  SCROLL_LOCK: 145,
+<a name="line132"></a>
+<a name="line133"></a>  // OS-specific media keys like volume controls and browser controls.
+<a name="line134"></a>  FIRST_MEDIA_KEY: 166,
+<a name="line135"></a>  LAST_MEDIA_KEY: 183,
+<a name="line136"></a>
+<a name="line137"></a>  SEMICOLON: 186,            // needs localization
+<a name="line138"></a>  DASH: 189,                 // needs localization
+<a name="line139"></a>  EQUALS: 187,               // needs localization
+<a name="line140"></a>  COMMA: 188,                // needs localization
+<a name="line141"></a>  PERIOD: 190,               // needs localization
+<a name="line142"></a>  SLASH: 191,                // needs localization
+<a name="line143"></a>  APOSTROPHE: 192,           // needs localization
+<a name="line144"></a>  TILDE: 192,                // needs localization
+<a name="line145"></a>  SINGLE_QUOTE: 222,         // needs localization
+<a name="line146"></a>  OPEN_SQUARE_BRACKET: 219,  // needs localization
+<a name="line147"></a>  BACKSLASH: 220,            // needs localization
+<a name="line148"></a>  CLOSE_SQUARE_BRACKET: 221, // needs localization
+<a name="line149"></a>  WIN_KEY: 224,
+<a name="line150"></a>  MAC_FF_META: 224, // Firefox (Gecko) fires this for the meta key instead of 91
+<a name="line151"></a>  MAC_WK_CMD_LEFT: 91,  // WebKit Left Command key fired, same as META
+<a name="line152"></a>  MAC_WK_CMD_RIGHT: 93, // WebKit Right Command key fired, different from META
+<a name="line153"></a>  WIN_IME: 229,
+<a name="line154"></a>
+<a name="line155"></a>  // We&#39;ve seen users whose machines fire this keycode at regular one
+<a name="line156"></a>  // second intervals. The common thread among these users is that
+<a name="line157"></a>  // they&#39;re all using Dell Inspiron laptops, so we suspect that this
+<a name="line158"></a>  // indicates a hardware/bios problem.
+<a name="line159"></a>  // http://en.community.dell.com/support-forums/laptop/f/3518/p/19285957/19523128.aspx
+<a name="line160"></a>  PHANTOM: 255
+<a name="line161"></a>};
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>/**
+<a name="line165"></a> * Returns true if the event contains a text modifying key.
+<a name="line166"></a> * @param {goog.events.BrowserEvent} e A key event.
+<a name="line167"></a> * @return {boolean} Whether it&#39;s a text modifying key.
+<a name="line168"></a> */
+<a name="line169"></a>goog.events.KeyCodes.isTextModifyingKeyEvent = function(e) {
+<a name="line170"></a>  if (e.altKey &amp;&amp; !e.ctrlKey ||
+<a name="line171"></a>      e.metaKey ||
+<a name="line172"></a>      // Function keys don&#39;t generate text
+<a name="line173"></a>      e.keyCode &gt;= goog.events.KeyCodes.F1 &amp;&amp;
+<a name="line174"></a>      e.keyCode &lt;= goog.events.KeyCodes.F12) {
+<a name="line175"></a>    return false;
+<a name="line176"></a>  }
+<a name="line177"></a>
+<a name="line178"></a>  // The following keys are quite harmless, even in combination with
+<a name="line179"></a>  // CTRL, ALT or SHIFT.
+<a name="line180"></a>  switch (e.keyCode) {
+<a name="line181"></a>    case goog.events.KeyCodes.ALT:
+<a name="line182"></a>    case goog.events.KeyCodes.CAPS_LOCK:
+<a name="line183"></a>    case goog.events.KeyCodes.CONTEXT_MENU:
+<a name="line184"></a>    case goog.events.KeyCodes.CTRL:
+<a name="line185"></a>    case goog.events.KeyCodes.DOWN:
+<a name="line186"></a>    case goog.events.KeyCodes.END:
+<a name="line187"></a>    case goog.events.KeyCodes.ESC:
+<a name="line188"></a>    case goog.events.KeyCodes.HOME:
+<a name="line189"></a>    case goog.events.KeyCodes.INSERT:
+<a name="line190"></a>    case goog.events.KeyCodes.LEFT:
+<a name="line191"></a>    case goog.events.KeyCodes.MAC_FF_META:
+<a name="line192"></a>    case goog.events.KeyCodes.META:
+<a name="line193"></a>    case goog.events.KeyCodes.NUMLOCK:
+<a name="line194"></a>    case goog.events.KeyCodes.NUM_CENTER:
+<a name="line195"></a>    case goog.events.KeyCodes.PAGE_DOWN:
+<a name="line196"></a>    case goog.events.KeyCodes.PAGE_UP:
+<a name="line197"></a>    case goog.events.KeyCodes.PAUSE:
+<a name="line198"></a>    case goog.events.KeyCodes.PHANTOM:
+<a name="line199"></a>    case goog.events.KeyCodes.PRINT_SCREEN:
+<a name="line200"></a>    case goog.events.KeyCodes.RIGHT:
+<a name="line201"></a>    case goog.events.KeyCodes.SCROLL_LOCK:
+<a name="line202"></a>    case goog.events.KeyCodes.SHIFT:
+<a name="line203"></a>    case goog.events.KeyCodes.UP:
+<a name="line204"></a>    case goog.events.KeyCodes.WIN_KEY:
+<a name="line205"></a>    case goog.events.KeyCodes.WIN_KEY_RIGHT:
+<a name="line206"></a>      return false;
+<a name="line207"></a>    case goog.events.KeyCodes.WIN_KEY_FF_LINUX:
+<a name="line208"></a>      return !goog.userAgent.GECKO;
+<a name="line209"></a>    default:
+<a name="line210"></a>      return e.keyCode &lt; goog.events.KeyCodes.FIRST_MEDIA_KEY ||
+<a name="line211"></a>          e.keyCode &gt; goog.events.KeyCodes.LAST_MEDIA_KEY;
+<a name="line212"></a>  }
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Returns true if the key fires a keypress event in the current browser.
+<a name="line218"></a> *
+<a name="line219"></a> * Accoridng to MSDN [1] IE only fires keypress events for the following keys:
+<a name="line220"></a> * - Letters: A - Z (uppercase and lowercase)
+<a name="line221"></a> * - Numerals: 0 - 9
+<a name="line222"></a> * - Symbols: ! @ # $ % ^ &amp; * ( ) _ - + = &lt; [ ] { } , . / ? \ | &#39; ` &quot; ~
+<a name="line223"></a> * - System: ESC, SPACEBAR, ENTER
+<a name="line224"></a> *
+<a name="line225"></a> * That&#39;s not entirely correct though, for instance there&#39;s no distinction
+<a name="line226"></a> * between upper and lower case letters.
+<a name="line227"></a> *
+<a name="line228"></a> * [1] http://msdn2.microsoft.com/en-us/library/ms536939(VS.85).aspx)
+<a name="line229"></a> *
+<a name="line230"></a> * Safari is similar to IE, but does not fire keypress for ESC.
+<a name="line231"></a> *
+<a name="line232"></a> * Additionally, IE6 does not fire keydown or keypress events for letters when
+<a name="line233"></a> * the control or alt keys are held down and the shift key is not. IE7 does
+<a name="line234"></a> * fire keydown in these cases, though, but not keypress.
+<a name="line235"></a> *
+<a name="line236"></a> * @param {number} keyCode A key code.
+<a name="line237"></a> * @param {number=} opt_heldKeyCode Key code of a currently-held key.
+<a name="line238"></a> * @param {boolean=} opt_shiftKey Whether the shift key is held down.
+<a name="line239"></a> * @param {boolean=} opt_ctrlKey Whether the control key is held down.
+<a name="line240"></a> * @param {boolean=} opt_altKey Whether the alt key is held down.
+<a name="line241"></a> * @return {boolean} Whether it&#39;s a key that fires a keypress event.
+<a name="line242"></a> */
+<a name="line243"></a>goog.events.KeyCodes.firesKeyPressEvent = function(keyCode, opt_heldKeyCode,
+<a name="line244"></a>    opt_shiftKey, opt_ctrlKey, opt_altKey) {
+<a name="line245"></a>  if (!goog.userAgent.IE &amp;&amp;
+<a name="line246"></a>      !(goog.userAgent.WEBKIT &amp;&amp; goog.userAgent.isVersionOrHigher(&#39;525&#39;))) {
+<a name="line247"></a>    return true;
+<a name="line248"></a>  }
+<a name="line249"></a>
+<a name="line250"></a>  if (goog.userAgent.MAC &amp;&amp; opt_altKey) {
+<a name="line251"></a>    return goog.events.KeyCodes.isCharacterKey(keyCode);
+<a name="line252"></a>  }
+<a name="line253"></a>
+<a name="line254"></a>  // Alt but not AltGr which is represented as Alt+Ctrl.
+<a name="line255"></a>  if (opt_altKey &amp;&amp; !opt_ctrlKey) {
+<a name="line256"></a>    return false;
+<a name="line257"></a>  }
+<a name="line258"></a>
+<a name="line259"></a>  // Saves Ctrl or Alt + key for IE and WebKit 525+, which won&#39;t fire keypress.
+<a name="line260"></a>  // Non-IE browsers and WebKit prior to 525 won&#39;t get this far so no need to
+<a name="line261"></a>  // check the user agent.
+<a name="line262"></a>  if (goog.isNumber(opt_heldKeyCode)) {
+<a name="line263"></a>    opt_heldKeyCode = goog.events.KeyCodes.normalizeKeyCode(opt_heldKeyCode);
+<a name="line264"></a>  }
+<a name="line265"></a>  if (!opt_shiftKey &amp;&amp;
+<a name="line266"></a>      (opt_heldKeyCode == goog.events.KeyCodes.CTRL ||
+<a name="line267"></a>       opt_heldKeyCode == goog.events.KeyCodes.ALT ||
+<a name="line268"></a>       goog.userAgent.MAC &amp;&amp;
+<a name="line269"></a>       opt_heldKeyCode == goog.events.KeyCodes.META)) {
+<a name="line270"></a>    return false;
+<a name="line271"></a>  }
+<a name="line272"></a>
+<a name="line273"></a>  // Some keys with Ctrl/Shift do not issue keypress in WEBKIT.
+<a name="line274"></a>  if (goog.userAgent.WEBKIT &amp;&amp; opt_ctrlKey &amp;&amp; opt_shiftKey) {
+<a name="line275"></a>    switch (keyCode) {
+<a name="line276"></a>      case goog.events.KeyCodes.BACKSLASH:
+<a name="line277"></a>      case goog.events.KeyCodes.OPEN_SQUARE_BRACKET:
+<a name="line278"></a>      case goog.events.KeyCodes.CLOSE_SQUARE_BRACKET:
+<a name="line279"></a>      case goog.events.KeyCodes.TILDE:
+<a name="line280"></a>      case goog.events.KeyCodes.SEMICOLON:
+<a name="line281"></a>      case goog.events.KeyCodes.DASH:
+<a name="line282"></a>      case goog.events.KeyCodes.EQUALS:
+<a name="line283"></a>      case goog.events.KeyCodes.COMMA:
+<a name="line284"></a>      case goog.events.KeyCodes.PERIOD:
+<a name="line285"></a>      case goog.events.KeyCodes.SLASH:
+<a name="line286"></a>      case goog.events.KeyCodes.APOSTROPHE:
+<a name="line287"></a>      case goog.events.KeyCodes.SINGLE_QUOTE:
+<a name="line288"></a>        return false;
+<a name="line289"></a>    }
+<a name="line290"></a>  }
+<a name="line291"></a>
+<a name="line292"></a>  // When Ctrl+&lt;somekey&gt; is held in IE, it only fires a keypress once, but it
+<a name="line293"></a>  // continues to fire keydown events as the event repeats.
+<a name="line294"></a>  if (goog.userAgent.IE &amp;&amp; opt_ctrlKey &amp;&amp; opt_heldKeyCode == keyCode) {
+<a name="line295"></a>    return false;
+<a name="line296"></a>  }
+<a name="line297"></a>
+<a name="line298"></a>  switch (keyCode) {
+<a name="line299"></a>    case goog.events.KeyCodes.ENTER:
+<a name="line300"></a>      // IE9 does not fire KEYPRESS on ENTER.
+<a name="line301"></a>      return !(goog.userAgent.IE &amp;&amp; goog.userAgent.isDocumentModeOrHigher(9));
+<a name="line302"></a>    case goog.events.KeyCodes.ESC:
+<a name="line303"></a>      return !goog.userAgent.WEBKIT;
+<a name="line304"></a>  }
+<a name="line305"></a>
+<a name="line306"></a>  return goog.events.KeyCodes.isCharacterKey(keyCode);
+<a name="line307"></a>};
+<a name="line308"></a>
+<a name="line309"></a>
+<a name="line310"></a>/**
+<a name="line311"></a> * Returns true if the key produces a character.
+<a name="line312"></a> * This does not cover characters on non-US keyboards (Russian, Hebrew, etc.).
+<a name="line313"></a> *
+<a name="line314"></a> * @param {number} keyCode A key code.
+<a name="line315"></a> * @return {boolean} Whether it&#39;s a character key.
+<a name="line316"></a> */
+<a name="line317"></a>goog.events.KeyCodes.isCharacterKey = function(keyCode) {
+<a name="line318"></a>  if (keyCode &gt;= goog.events.KeyCodes.ZERO &amp;&amp;
+<a name="line319"></a>      keyCode &lt;= goog.events.KeyCodes.NINE) {
+<a name="line320"></a>    return true;
+<a name="line321"></a>  }
+<a name="line322"></a>
+<a name="line323"></a>  if (keyCode &gt;= goog.events.KeyCodes.NUM_ZERO &amp;&amp;
+<a name="line324"></a>      keyCode &lt;= goog.events.KeyCodes.NUM_MULTIPLY) {
+<a name="line325"></a>    return true;
+<a name="line326"></a>  }
+<a name="line327"></a>
+<a name="line328"></a>  if (keyCode &gt;= goog.events.KeyCodes.A &amp;&amp;
+<a name="line329"></a>      keyCode &lt;= goog.events.KeyCodes.Z) {
+<a name="line330"></a>    return true;
+<a name="line331"></a>  }
+<a name="line332"></a>
+<a name="line333"></a>  // Safari sends zero key code for non-latin characters.
+<a name="line334"></a>  if (goog.userAgent.WEBKIT &amp;&amp; keyCode == 0) {
+<a name="line335"></a>    return true;
+<a name="line336"></a>  }
+<a name="line337"></a>
+<a name="line338"></a>  switch (keyCode) {
+<a name="line339"></a>    case goog.events.KeyCodes.SPACE:
+<a name="line340"></a>    case goog.events.KeyCodes.QUESTION_MARK:
+<a name="line341"></a>    case goog.events.KeyCodes.NUM_PLUS:
+<a name="line342"></a>    case goog.events.KeyCodes.NUM_MINUS:
+<a name="line343"></a>    case goog.events.KeyCodes.NUM_PERIOD:
+<a name="line344"></a>    case goog.events.KeyCodes.NUM_DIVISION:
+<a name="line345"></a>    case goog.events.KeyCodes.SEMICOLON:
+<a name="line346"></a>    case goog.events.KeyCodes.FF_SEMICOLON:
+<a name="line347"></a>    case goog.events.KeyCodes.DASH:
+<a name="line348"></a>    case goog.events.KeyCodes.EQUALS:
+<a name="line349"></a>    case goog.events.KeyCodes.FF_EQUALS:
+<a name="line350"></a>    case goog.events.KeyCodes.COMMA:
+<a name="line351"></a>    case goog.events.KeyCodes.PERIOD:
+<a name="line352"></a>    case goog.events.KeyCodes.SLASH:
+<a name="line353"></a>    case goog.events.KeyCodes.APOSTROPHE:
+<a name="line354"></a>    case goog.events.KeyCodes.SINGLE_QUOTE:
+<a name="line355"></a>    case goog.events.KeyCodes.OPEN_SQUARE_BRACKET:
+<a name="line356"></a>    case goog.events.KeyCodes.BACKSLASH:
+<a name="line357"></a>    case goog.events.KeyCodes.CLOSE_SQUARE_BRACKET:
+<a name="line358"></a>      return true;
+<a name="line359"></a>    default:
+<a name="line360"></a>      return false;
+<a name="line361"></a>  }
+<a name="line362"></a>};
+<a name="line363"></a>
+<a name="line364"></a>
+<a name="line365"></a>/**
+<a name="line366"></a> * Normalizes key codes from OS/Browser-specific value to the general one.
+<a name="line367"></a> * @param {number} keyCode The native key code.
+<a name="line368"></a> * @return {number} The normalized key code.
+<a name="line369"></a> */
+<a name="line370"></a>goog.events.KeyCodes.normalizeKeyCode = function(keyCode) {
+<a name="line371"></a>  if (goog.userAgent.GECKO) {
+<a name="line372"></a>    return goog.events.KeyCodes.normalizeGeckoKeyCode(keyCode);
+<a name="line373"></a>  } else if (goog.userAgent.MAC &amp;&amp; goog.userAgent.WEBKIT) {
+<a name="line374"></a>    return goog.events.KeyCodes.normalizeMacWebKitKeyCode(keyCode);
+<a name="line375"></a>  } else {
+<a name="line376"></a>    return keyCode;
+<a name="line377"></a>  }
+<a name="line378"></a>};
+<a name="line379"></a>
+<a name="line380"></a>
+<a name="line381"></a>/**
+<a name="line382"></a> * Normalizes key codes from their Gecko-specific value to the general one.
+<a name="line383"></a> * @param {number} keyCode The native key code.
+<a name="line384"></a> * @return {number} The normalized key code.
+<a name="line385"></a> */
+<a name="line386"></a>goog.events.KeyCodes.normalizeGeckoKeyCode = function(keyCode) {
+<a name="line387"></a>  switch (keyCode) {
+<a name="line388"></a>    case goog.events.KeyCodes.FF_EQUALS:
+<a name="line389"></a>      return goog.events.KeyCodes.EQUALS;
+<a name="line390"></a>    case goog.events.KeyCodes.FF_SEMICOLON:
+<a name="line391"></a>      return goog.events.KeyCodes.SEMICOLON;
+<a name="line392"></a>    case goog.events.KeyCodes.FF_DASH:
+<a name="line393"></a>      return goog.events.KeyCodes.DASH;
+<a name="line394"></a>    case goog.events.KeyCodes.MAC_FF_META:
+<a name="line395"></a>      return goog.events.KeyCodes.META;
+<a name="line396"></a>    case goog.events.KeyCodes.WIN_KEY_FF_LINUX:
+<a name="line397"></a>      return goog.events.KeyCodes.WIN_KEY;
+<a name="line398"></a>    default:
+<a name="line399"></a>      return keyCode;
+<a name="line400"></a>  }
+<a name="line401"></a>};
+<a name="line402"></a>
+<a name="line403"></a>
+<a name="line404"></a>/**
+<a name="line405"></a> * Normalizes key codes from their Mac WebKit-specific value to the general one.
+<a name="line406"></a> * @param {number} keyCode The native key code.
+<a name="line407"></a> * @return {number} The normalized key code.
+<a name="line408"></a> */
+<a name="line409"></a>goog.events.KeyCodes.normalizeMacWebKitKeyCode = function(keyCode) {
+<a name="line410"></a>  switch (keyCode) {
+<a name="line411"></a>    case goog.events.KeyCodes.MAC_WK_CMD_RIGHT:  // 93
+<a name="line412"></a>      return goog.events.KeyCodes.META;          // 91
+<a name="line413"></a>    default:
+<a name="line414"></a>      return keyCode;
+<a name="line415"></a>  }
+<a name="line416"></a>};
+</pre>
+
+
+</body>
+</html>

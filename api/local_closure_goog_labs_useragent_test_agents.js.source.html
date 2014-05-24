@@ -1,0 +1,356 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>test_agents.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_useragent_test_agents.js.html">test_agents.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &#39;License&#39;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &#39;AS-IS&#39; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Various User-Agent strings.
+<a name="line17"></a> * See http://go/useragentexamples and http://www.useragentstring.com/ for
+<a name="line18"></a> * examples.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.labs.userAgent.testAgents&#39;);
+<a name="line23"></a>goog.setTestOnly(&#39;goog.labs.userAgent.testAgents&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.scope(function() {
+<a name="line26"></a>var testAgents = goog.labs.userAgent.testAgents;
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/** @const {string} */
+<a name="line30"></a>testAgents.ANDROID_BROWSER_235 =
+<a name="line31"></a>    &#39;Mozilla/5.0 (Linux; U; Android 2.3.5; en-us; &#39; +
+<a name="line32"></a>    &#39;HTC Vision Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) &#39; +
+<a name="line33"></a>    &#39;Version/4.0 Mobile Safari/533.1&#39;;
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/** @const {string} */
+<a name="line37"></a>testAgents.ANDROID_BROWSER_221 =
+<a name="line38"></a>    &#39;Mozilla/5.0 (Linux; U; Android 2.2.1; en-ca; LG-P505R Build/FRG83)&#39; +
+<a name="line39"></a>    &#39; AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1&#39;;
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/** @const {string} */
+<a name="line43"></a>testAgents.ANDROID_BROWSER_233 =
+<a name="line44"></a>    &#39;Mozilla/5.0 (Linux; U; Android 2.3.3; en-us; HTC_DesireS_S510e&#39; +
+<a name="line45"></a>    &#39; Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0&#39; +
+<a name="line46"></a>    &#39; Mobile Safari/533.1&#39;;
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>/** @const {string} */
+<a name="line50"></a>testAgents.ANDROID_BROWSER_403 =
+<a name="line51"></a>    &#39;Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Build/IML74K)&#39; +
+<a name="line52"></a>    &#39; AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30&#39;;
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/** @const {string} */
+<a name="line56"></a>// User agent retrieved from dremel queries for cases matching b/13222688
+<a name="line57"></a>testAgents.ANDROID_BROWSER_403_ALT =
+<a name="line58"></a>    &#39;Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K)&#39; +
+<a name="line59"></a>    &#39; AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30&#39;;
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/** @const {string} */
+<a name="line63"></a>testAgents.IE_6 =
+<a name="line64"></a>    &#39;Mozilla/5.0 (Windows; U; MSIE 6.0; Windows NT 5.1; SV1;&#39; +
+<a name="line65"></a>    &#39;.NET CLR 2.0.50727)&#39;;
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/** @const {string} */
+<a name="line69"></a>testAgents.IE_7 =
+<a name="line70"></a>    &#39;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)&#39;;
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/** @const {string} */
+<a name="line74"></a>testAgents.IE_8 =
+<a name="line75"></a>    &#39;Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)&#39;;
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/** @const {string} */
+<a name="line79"></a>testAgents.IE_8_COMPATIBILITY =
+<a name="line80"></a>    &#39;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/4.0)&#39;;
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/** @const {string} */
+<a name="line84"></a>testAgents.IE_9 =
+<a name="line85"></a>    &#39;Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)&#39;;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/** @const {string} */
+<a name="line89"></a>testAgents.IE_9_COMPATIBILITY =
+<a name="line90"></a>    &#39;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0)&#39;;
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/** @const {string} */
+<a name="line94"></a>testAgents.IE_10 =
+<a name="line95"></a>    &#39;Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)&#39;;
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/** @const {string} */
+<a name="line99"></a>testAgents.IE_10_COMPATIBILITY =
+<a name="line100"></a>    &#39;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/6.0)&#39;;
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/** @const {string} */
+<a name="line104"></a>testAgents.IE_11 =
+<a name="line105"></a>    &#39;Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko&#39;;
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/** @const {string} */
+<a name="line109"></a>testAgents.IE_11_COMPATIBILITY_MSIE_7 =
+<a name="line110"></a>    &#39;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.3; Trident/7.0; &#39; +
+<a name="line111"></a>    &#39;.NET4.0E; .NET4.0C)&#39;;
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/** @const {string} */
+<a name="line115"></a>testAgents.IE_11_COMPATIBILITY_MSIE_9 =
+<a name="line116"></a>    &#39;Mozilla/5.0 (MSIE 9.0; Windows NT 6.1; WOW64; Trident/7.0; &#39; +
+<a name="line117"></a>    &#39;rv:11.0) like Gecko&#39;;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/** @const {string} */
+<a name="line121"></a>testAgents.FIREFOX_19 =
+<a name="line122"></a>    &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:19.0) &#39; +
+<a name="line123"></a>    &#39;Gecko/20100101 Firefox/19.0&#39;;
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/** @const {string} */
+<a name="line127"></a>testAgents.FIREFOX_LINUX =
+<a name="line128"></a>    &#39;Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101&#39; +
+<a name="line129"></a>    &#39; Firefox/15.0.1&#39;;
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/** @const {string} */
+<a name="line133"></a>testAgents.FIREFOX_MAC =
+<a name="line134"></a>    &#39;Mozilla/6.0 (Macintosh; I; Intel Mac OS X 11_7_9; de-LI; rv:1.9b4)&#39; +
+<a name="line135"></a>    &#39; Gecko/2012010317 Firefox/10.0a4&#39;;
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/** @const {string} */
+<a name="line139"></a>testAgents.FIREFOX_WINDOWS =
+<a name="line140"></a>    &#39;Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20120403211507&#39; +
+<a name="line141"></a>    &#39; Firefox/14.0.1&#39;;
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/** @const {string} */
+<a name="line145"></a>testAgents.SAFARI_6 =
+<a name="line146"></a>    &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) &#39; +
+<a name="line147"></a>    &#39;AppleWebKit/536.25 (KHTML, like Gecko) &#39; +
+<a name="line148"></a>    &#39;Version/6.0 Safari/536.25&#39;;
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/** @const {string} */
+<a name="line152"></a>testAgents.SAFARI_IPHONE_32 =
+<a name="line153"></a>    &#39;Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us)&#39; +
+<a name="line154"></a>    &#39; AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314&#39; +
+<a name="line155"></a>    &#39; Safari/531.21.10&#39;;
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/** @const {string} */
+<a name="line159"></a>testAgents.SAFARI_IPHONE_421 =
+<a name="line160"></a>    &#39;Mozilla/5.0 (iPhone; U; ru; CPU iPhone OS 4_2_1 like Mac OS X; ru)&#39; +
+<a name="line161"></a>    &#39; AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8C148a&#39; +
+<a name="line162"></a>    &#39; Safari/6533.18.5&#39;;
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/** @const {string} */
+<a name="line166"></a>testAgents.SAFARI_IPHONE_431 =
+<a name="line167"></a>    &#39;Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_1 like Mac OS X; zh-tw)&#39; +
+<a name="line168"></a>    &#39; AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8G4&#39; +
+<a name="line169"></a>    &#39; Safari/6533.18.5&#39;;
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/** @const {string} */
+<a name="line173"></a>testAgents.SAFARI_IPHONE_6 =
+<a name="line174"></a>    &#39;Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X)&#39; +
+<a name="line175"></a>    &#39; AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e&#39; +
+<a name="line176"></a>    &#39; Safari/8536.25&#39;;
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/** @const {string} */
+<a name="line180"></a>testAgents.SAFARI_IPOD =
+<a name="line181"></a>    &#39;Mozila/5.0 (iPod; U; CPU like Mac OS X; en) AppleWebKit/420.1&#39; +
+<a name="line182"></a>    &#39; (KHTML, like Gecko) Version/3.0 Mobile/3A101a Safari/419.3&#39;;
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/** @const {string} */
+<a name="line186"></a>testAgents.SAFARI_MAC =
+<a name="line187"></a>    &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+&#39; +
+<a name="line188"></a>    &#39; (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2&#39;;
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/** @const {string} */
+<a name="line192"></a>testAgents.SAFARI_WINDOWS =
+<a name="line193"></a>    &#39;Mozilla/5.0 (Windows; U; Windows NT 6.1; tr-TR) AppleWebKit/533.20.25&#39; +
+<a name="line194"></a>    &#39; (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27&#39;;
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/** @const {string} */
+<a name="line198"></a>testAgents.OPERA_10 =
+<a name="line199"></a>    &#39;Opera/9.80 (S60; SymbOS; Opera Mobi/447; U; en) &#39; +
+<a name="line200"></a>    &#39;Presto/2.4.18 Version/10.00&#39;;
+<a name="line201"></a>
+<a name="line202"></a>
+<a name="line203"></a>/** @const {string} */
+<a name="line204"></a>testAgents.OPERA_LINUX =
+<a name="line205"></a>    &#39;Opera/9.80 (X11; Linux x86_64; U; fr) Presto/2.9.168 Version/11.50&#39;;
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/** @const {string} */
+<a name="line209"></a>testAgents.OPERA_MAC =
+<a name="line210"></a>    &#39;Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168&#39; +
+<a name="line211"></a>    &#39; Version/11.52&#39;;
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/** @const {string} */
+<a name="line215"></a>testAgents.OPERA_15 =
+<a name="line216"></a>    &#39;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 &#39; +
+<a name="line217"></a>    &#39;(KHTML, like Gecko) Chrome/28.0.1500.52 Safari/537.36 OPR/15.0.1147.100&#39;;
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/** @const {string} */
+<a name="line221"></a>testAgents.IPAD_4 =
+<a name="line222"></a>    &#39;Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us)&#39; +
+<a name="line223"></a>    &#39; AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b&#39; +
+<a name="line224"></a>    &#39; Safari/531.21.10&#39;;
+<a name="line225"></a>
+<a name="line226"></a>
+<a name="line227"></a>/** @const {string} */
+<a name="line228"></a>testAgents.IPAD_5 =
+<a name="line229"></a>    &#39;Mozilla/5.0 (iPad; CPU OS 5_1 like Mac OS X; en-us) AppleWebKit/534.46&#39; +
+<a name="line230"></a>    &#39; (KHTML, like Gecko) Version/5.1 Mobile/9B176 Safari/7534.48.3&#39;;
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/** @const {string} */
+<a name="line234"></a>testAgents.IPAD_6 =
+<a name="line235"></a>    &#39;Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) &#39; +
+<a name="line236"></a>    &#39;AppleWebKit/536.26 (KHTML, like Gecko) &#39; +
+<a name="line237"></a>    &#39;Version/6.0 Mobile/10A403 Safari/8536.25&#39;;
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/** @const {string} */
+<a name="line241"></a>testAgents.CHROME_25 =
+<a name="line242"></a>    &#39;Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) &#39; +
+<a name="line243"></a>    &#39;AppleWebKit/535.8 (KHTML, like Gecko) &#39; +
+<a name="line244"></a>    &#39;Chrome/25.0.1000.10 Safari/535.8&#39;;
+<a name="line245"></a>
+<a name="line246"></a>
+<a name="line247"></a>/** @const {string} */
+<a name="line248"></a>testAgents.CHROME_ANDROID =
+<a name="line249"></a>    &#39;Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) &#39; +
+<a name="line250"></a>    &#39;AppleWebKit/535.7 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile &#39; +
+<a name="line251"></a>    &#39;Safari/535.7&#39;;
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>/** @const {string} */
+<a name="line255"></a>testAgents.CHROME_ANDROID_TABLET =
+<a name="line256"></a>    &#39;Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) &#39; +
+<a name="line257"></a>    &#39;AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Safari/535.19&#39;;
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/** @const {string} */
+<a name="line261"></a>testAgents.CHROME_IPHONE =
+<a name="line262"></a>    &#39;Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X; en-us) &#39; +
+<a name="line263"></a>    &#39;AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/22.0.1194.0 Mobile/11E53 &#39; +
+<a name="line264"></a>    &#39;Safari/7534.48.3&#39;;
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/** @const {string} */
+<a name="line268"></a>testAgents.CHROME_LINUX =
+<a name="line269"></a>    &#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko)&#39; +
+<a name="line270"></a>    &#39; Chrome/26.0.1410.33 Safari/537.31&#39;;
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * We traditionally use Appversion to detect X11
+<a name="line275"></a> * @const {string}
+<a name="line276"></a> */
+<a name="line277"></a>testAgents.CHROME_LINUX_APPVERVERSION =
+<a name="line278"></a>    &#39;5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko)&#39; +
+<a name="line279"></a>    &#39; Chrome/26.0.1410.33 Safari/537.31&#39;;
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>/** @const {string} */
+<a name="line283"></a>testAgents.CHROME_MAC =
+<a name="line284"></a>    &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17&#39; +
+<a name="line285"></a>    &#39; (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17&#39;;
+<a name="line286"></a>
+<a name="line287"></a>
+<a name="line288"></a>/** @const {string} */
+<a name="line289"></a>testAgents.CHROME_OS =
+<a name="line290"></a>    &#39;Mozilla/5.0 (X11; CrOS x86_64 3701.62.0) AppleWebKit/537.31 &#39; +
+<a name="line291"></a>    &#39;(KHTML, like Gecko) Chrome/26.0.1410.40 Safari/537.31&#39;;
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/** @const {string} */
+<a name="line295"></a>testAgents.CHROME_OS_910 =
+<a name="line296"></a>    &#39;Mozilla/5.0 (X11; U; CrOS i686 9.10.0; en-US) AppleWebKit/532.5&#39; +
+<a name="line297"></a>    &#39; (KHTML, like Gecko) Chrome/4.0.253.0 Safari/532.5&#39;;
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/** @const {string} */
+<a name="line301"></a>testAgents.KINDLE_FIRE =
+<a name="line302"></a>    &#39;Mozilla/5.0 (Linux; U; Android 4.0.3; en-us; KFTT Build/IML74K)&#39; +
+<a name="line303"></a>    &#39; AppleWebKit/535.19 (KHTML, like Gecko) Silk/2.1 Mobile Safari/535.19&#39; +
+<a name="line304"></a>    &#39; Silk-Accelerated=true&#39;;
+<a name="line305"></a>});  // goog.scope
+</pre>
+
+
+</body>
+</html>

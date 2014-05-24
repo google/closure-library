@@ -1,0 +1,1219 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>positioning_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_positioning_positioning_test.js.html">positioning_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Unit tests for goog.position.
+<a name="line17"></a> *
+<a name="line18"></a> * @author eae@google.com (Emil A Eklund)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>/** @suppress {extraProvide} */
+<a name="line22"></a>goog.provide(&#39;goog.positioningTest&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.DomHelper&#39;);
+<a name="line26"></a>goog.require(&#39;goog.math.Box&#39;);
+<a name="line27"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line28"></a>goog.require(&#39;goog.math.Rect&#39;);
+<a name="line29"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line30"></a>goog.require(&#39;goog.positioning&#39;);
+<a name="line31"></a>goog.require(&#39;goog.positioning.Corner&#39;);
+<a name="line32"></a>goog.require(&#39;goog.positioning.Overflow&#39;);
+<a name="line33"></a>goog.require(&#39;goog.positioning.OverflowStatus&#39;);
+<a name="line34"></a>goog.require(&#39;goog.style&#39;);
+<a name="line35"></a>goog.require(&#39;goog.testing.ExpectedFailures&#39;);
+<a name="line36"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line37"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line38"></a>goog.require(&#39;goog.userAgent.product&#39;);
+<a name="line39"></a>
+<a name="line40"></a>goog.setTestOnly(&#39;goog.positioningTest&#39;);
+<a name="line41"></a>
+<a name="line42"></a>// Allow positions to be off by one in gecko as it reports scrolling
+<a name="line43"></a>// offsets in steps of 2.
+<a name="line44"></a>var ALLOWED_OFFSET = goog.userAgent.GECKO ? 1 : 0;
+<a name="line45"></a>// Error bar for positions since some browsers are not super accurate
+<a name="line46"></a>// in reporting them.
+<a name="line47"></a>var EPSILON = 2;
+<a name="line48"></a>
+<a name="line49"></a>var expectedFailures = new goog.testing.ExpectedFailures();
+<a name="line50"></a>
+<a name="line51"></a>var corner = goog.positioning.Corner;
+<a name="line52"></a>var overflow = goog.positioning.Overflow;
+<a name="line53"></a>var testArea;
+<a name="line54"></a>
+<a name="line55"></a>function setUp() {
+<a name="line56"></a>  window.scrollTo(0, 0);
+<a name="line57"></a>
+<a name="line58"></a>  var viewportSize = goog.dom.getViewportSize();
+<a name="line59"></a>  // Some tests need enough size viewport.
+<a name="line60"></a>  if (viewportSize.width &lt; 600 || viewportSize.height &lt; 600) {
+<a name="line61"></a>    window.moveTo(0, 0);
+<a name="line62"></a>    window.resizeTo(640, 640);
+<a name="line63"></a>  }
+<a name="line64"></a>
+<a name="line65"></a>  testArea = goog.dom.getElement(&#39;test-area&#39;);
+<a name="line66"></a>}
+<a name="line67"></a>
+<a name="line68"></a>function tearDown() {
+<a name="line69"></a>  expectedFailures.handleTearDown();
+<a name="line70"></a>  testArea.setAttribute(&#39;style&#39;, &#39;&#39;);
+<a name="line71"></a>  testArea.innerHTML = &#39;&#39;;
+<a name="line72"></a>}
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * This is used to round pixel values on FF3 Mac.
+<a name="line77"></a> */
+<a name="line78"></a>function assertRoundedEquals(a, b, c) {
+<a name="line79"></a>  function round(x) {
+<a name="line80"></a>    return goog.userAgent.GECKO &amp;&amp; (goog.userAgent.MAC || goog.userAgent.X11) &amp;&amp;
+<a name="line81"></a>        goog.userAgent.isVersionOrHigher(&#39;1.9&#39;) ? Math.round(x) : x;
+<a name="line82"></a>  }
+<a name="line83"></a>  if (arguments.length == 3) {
+<a name="line84"></a>    assertRoughlyEquals(a, round(b), round(c), ALLOWED_OFFSET);
+<a name="line85"></a>  } else {
+<a name="line86"></a>    assertRoughlyEquals(round(a), round(b), ALLOWED_OFFSET);
+<a name="line87"></a>  }
+<a name="line88"></a>}
+<a name="line89"></a>
+<a name="line90"></a>function testPositionAtAnchorLeftToRight() {
+<a name="line91"></a>  var anchor = document.getElementById(&#39;anchor1&#39;);
+<a name="line92"></a>  var popup = document.getElementById(&#39;popup1&#39;);
+<a name="line93"></a>
+<a name="line94"></a>  // Anchor top left to top left.
+<a name="line95"></a>  goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line96"></a>                                    popup, corner.TOP_LEFT);
+<a name="line97"></a>  var anchorRect = goog.style.getBounds(anchor);
+<a name="line98"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line99"></a>  assertRoundedEquals(&#39;Left edge of popup should line up with left edge &#39; +
+<a name="line100"></a>                      &#39;of anchor.&#39;,
+<a name="line101"></a>                      anchorRect.left,
+<a name="line102"></a>                      popupRect.left);
+<a name="line103"></a>  assertRoundedEquals(&#39;Popup should have the same y position as the anchor.&#39;,
+<a name="line104"></a>                      anchorRect.top,
+<a name="line105"></a>                      popupRect.top);
+<a name="line106"></a>
+<a name="line107"></a>  // Anchor top left to bottom left.
+<a name="line108"></a>  goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_LEFT,
+<a name="line109"></a>                                    popup, corner.TOP_LEFT);
+<a name="line110"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line111"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line112"></a>  assertRoundedEquals(&#39;Left edge of popup should line up with left edge &#39; +
+<a name="line113"></a>                      &#39;of anchor.&#39;,
+<a name="line114"></a>                      anchorRect.left,
+<a name="line115"></a>                      popupRect.left);
+<a name="line116"></a>  assertRoundedEquals(&#39;Popup should be positioned just below the anchor.&#39;,
+<a name="line117"></a>                      anchorRect.top + anchorRect.height,
+<a name="line118"></a>                      popupRect.top);
+<a name="line119"></a>
+<a name="line120"></a>  // Anchor top left to top right.
+<a name="line121"></a>  goog.positioning.positionAtAnchor(anchor, corner.TOP_RIGHT,
+<a name="line122"></a>                                    popup, corner.TOP_LEFT);
+<a name="line123"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line124"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line125"></a>  assertRoundedEquals(&#39;Popup should be positioned just right of the anchor.&#39;,
+<a name="line126"></a>                      anchorRect.left + anchorRect.width,
+<a name="line127"></a>                      popupRect.left);
+<a name="line128"></a>  assertRoundedEquals(&#39;Popup should have the same y position as the anchor.&#39;,
+<a name="line129"></a>                      anchorRect.top,
+<a name="line130"></a>                      popupRect.top);
+<a name="line131"></a>
+<a name="line132"></a>  // Anchor top right to bottom right.
+<a name="line133"></a>  goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_RIGHT,
+<a name="line134"></a>                                    popup, corner.TOP_RIGHT);
+<a name="line135"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line136"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line137"></a>  assertRoundedEquals(&#39;Right edge of popup should line up with right edge &#39; +
+<a name="line138"></a>                      &#39;of anchor.&#39;,
+<a name="line139"></a>                      anchorRect.left + anchorRect.width,
+<a name="line140"></a>                      popupRect.left + popupRect.width);
+<a name="line141"></a>  assertRoundedEquals(&#39;Popup should be positioned just below the anchor.&#39;,
+<a name="line142"></a>                      anchorRect.top + anchorRect.height,
+<a name="line143"></a>                      popupRect.top);
+<a name="line144"></a>
+<a name="line145"></a>  // Anchor top start to bottom start.
+<a name="line146"></a>  goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_START,
+<a name="line147"></a>                                    popup, corner.TOP_START);
+<a name="line148"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line149"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line150"></a>  assertRoundedEquals(&#39;Left edge of popup should line up with left edge &#39; +
+<a name="line151"></a>                      &#39;of anchor.&#39;,
+<a name="line152"></a>                      anchorRect.left,
+<a name="line153"></a>                      popupRect.left);
+<a name="line154"></a>  assertRoundedEquals(&#39;Popup should be positioned just below the anchor.&#39;,
+<a name="line155"></a>                      anchorRect.top + anchorRect.height,
+<a name="line156"></a>                      popupRect.top);
+<a name="line157"></a>}
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>function testPositionAtAnchorWithOffset() {
+<a name="line161"></a>  var anchor = document.getElementById(&#39;anchor1&#39;);
+<a name="line162"></a>  var popup = document.getElementById(&#39;popup1&#39;);
+<a name="line163"></a>
+<a name="line164"></a>  // Anchor top left to top left with an offset moving the popup away from the
+<a name="line165"></a>  // anchor.
+<a name="line166"></a>  goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line167"></a>                                    popup, corner.TOP_LEFT,
+<a name="line168"></a>                                    newCoord(-15, -20));
+<a name="line169"></a>  var anchorRect = goog.style.getBounds(anchor);
+<a name="line170"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line171"></a>  assertRoundedEquals(&#39;Left edge of popup should be fifteen pixels from &#39; +
+<a name="line172"></a>                      &#39;anchor.&#39;,
+<a name="line173"></a>                      anchorRect.left,
+<a name="line174"></a>                      popupRect.left + 15);
+<a name="line175"></a>  assertRoundedEquals(&#39;Top edge of popup should be twenty pixels from anchor.&#39;,
+<a name="line176"></a>                      anchorRect.top,
+<a name="line177"></a>                      popupRect.top + 20);
+<a name="line178"></a>
+<a name="line179"></a>  // Anchor top left to top left with an offset moving the popup towards the
+<a name="line180"></a>  // anchor.
+<a name="line181"></a>  goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line182"></a>                                    popup, corner.TOP_LEFT,
+<a name="line183"></a>                                    newCoord(3, 1));
+<a name="line184"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line185"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line186"></a>  assertRoundedEquals(&#39;Left edge of popup should be three pixels right of &#39; +
+<a name="line187"></a>                      &#39;the anchor\&#39;s left edge&#39;,
+<a name="line188"></a>                      anchorRect.left,
+<a name="line189"></a>                      popupRect.left - 3);
+<a name="line190"></a>  assertRoundedEquals(&#39;Top edge of popup should be one pixel below of the &#39; +
+<a name="line191"></a>                      &#39;anchor\&#39;s top edge&#39;,
+<a name="line192"></a>                      anchorRect.top,
+<a name="line193"></a>                      popupRect.top - 1);
+<a name="line194"></a>}
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>function testPositionAtAnchorOverflowLeftEdgeRightToLeft() {
+<a name="line198"></a>  var anchor = document.getElementById(&#39;anchor5&#39;);
+<a name="line199"></a>  var popup = document.getElementById(&#39;popup5&#39;);
+<a name="line200"></a>
+<a name="line201"></a>  var status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line202"></a>                                                 popup, corner.TOP_RIGHT,
+<a name="line203"></a>                                                 undefined, undefined,
+<a name="line204"></a>                                                 overflow.FAIL_X);
+<a name="line205"></a>  assertFalse(&#39;Positioning operation should have failed.&#39;,
+<a name="line206"></a>              (status &amp; goog.positioning.OverflowStatus.FAILED) == 0);
+<a name="line207"></a>
+<a name="line208"></a>  // Change overflow strategy to ADJUST.
+<a name="line209"></a>  status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line210"></a>                                             popup, corner.TOP_RIGHT,
+<a name="line211"></a>                                             undefined, undefined,
+<a name="line212"></a>                                             overflow.ADJUST_X);
+<a name="line213"></a>
+<a name="line214"></a>  // Fails in Chrome because of infrastructure issues, temporarily disabled.
+<a name="line215"></a>  // See b/4274723.
+<a name="line216"></a>  expectedFailures.expectFailureFor(goog.userAgent.product.CHROME);
+<a name="line217"></a>  try {
+<a name="line218"></a>    assertTrue(&#39;Positioning operation should have been successful.&#39;,
+<a name="line219"></a>               (status &amp; goog.positioning.OverflowStatus.FAILED) == 0);
+<a name="line220"></a>    assertTrue(&#39;Positioning operation should have been adjusted.&#39;,
+<a name="line221"></a>               (status &amp; goog.positioning.OverflowStatus.ADJUSTED_X) != 0);
+<a name="line222"></a>  } catch (e) {
+<a name="line223"></a>    expectedFailures.handleException(e);
+<a name="line224"></a>  }
+<a name="line225"></a>
+<a name="line226"></a>  var anchorRect = goog.style.getBounds(anchor);
+<a name="line227"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line228"></a>  var parentRect = goog.style.getBounds(anchor.parentNode);
+<a name="line229"></a>  assertTrue(&#39;Position should have been adjusted so that the left edge of &#39; +
+<a name="line230"></a>             &#39;the popup is left of the anchor but still within the bounding &#39; +
+<a name="line231"></a>             &#39;box of the parent container.&#39;,
+<a name="line232"></a>      anchorRect.left &lt;= popupRect.left &lt;= parentRect.left);
+<a name="line233"></a>
+<a name="line234"></a>}
+<a name="line235"></a>
+<a name="line236"></a>
+<a name="line237"></a>function testPositionAtAnchorWithMargin() {
+<a name="line238"></a>  var anchor = document.getElementById(&#39;anchor1&#39;);
+<a name="line239"></a>  var popup = document.getElementById(&#39;popup1&#39;);
+<a name="line240"></a>
+<a name="line241"></a>  // Anchor top left to top left.
+<a name="line242"></a>  goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line243"></a>                                    popup, corner.TOP_LEFT, undefined,
+<a name="line244"></a>                                    new goog.math.Box(1, 2, 3, 4));
+<a name="line245"></a>  var anchorRect = goog.style.getBounds(anchor);
+<a name="line246"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line247"></a>  assertRoundedEquals(&#39;Left edge of popup should be four pixels from anchor.&#39;,
+<a name="line248"></a>                      anchorRect.left,
+<a name="line249"></a>                      popupRect.left - 4);
+<a name="line250"></a>  assertRoundedEquals(&#39;Top edge of popup should be one pixels from anchor.&#39;,
+<a name="line251"></a>                      anchorRect.top,
+<a name="line252"></a>                      popupRect.top - 1);
+<a name="line253"></a>
+<a name="line254"></a>  // Anchor top right to bottom right.
+<a name="line255"></a>  goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_RIGHT,
+<a name="line256"></a>                                    popup, corner.TOP_RIGHT, undefined,
+<a name="line257"></a>                                    new goog.math.Box(1, 2, 3, 4));
+<a name="line258"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line259"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line260"></a>
+<a name="line261"></a>  var visibleAnchorRect = goog.positioning.getVisiblePart_(anchor);
+<a name="line262"></a>
+<a name="line263"></a>  assertRoundedEquals(&#39;Right edge of popup should line up with right edge &#39; +
+<a name="line264"></a>                      &#39;of anchor.&#39;,
+<a name="line265"></a>                      visibleAnchorRect.left + visibleAnchorRect.width,
+<a name="line266"></a>                      popupRect.left + popupRect.width + 2);
+<a name="line267"></a>
+<a name="line268"></a>  assertRoundedEquals(&#39;Popup should be positioned just below the anchor.&#39;,
+<a name="line269"></a>                      visibleAnchorRect.top + visibleAnchorRect.height,
+<a name="line270"></a>                      popupRect.top - 1);
+<a name="line271"></a>
+<a name="line272"></a>}
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>function testPositionAtAnchorRightToLeft() {
+<a name="line276"></a>  if (goog.userAgent.IE &amp;&amp; goog.userAgent.isVersionOrHigher(&#39;6&#39;)) {
+<a name="line277"></a>    // These tests fails with IE6.
+<a name="line278"></a>    // TODO(user): Investigate the reason.
+<a name="line279"></a>    return;
+<a name="line280"></a>  }
+<a name="line281"></a>
+<a name="line282"></a>  var anchor = document.getElementById(&#39;anchor2&#39;);
+<a name="line283"></a>  var popup = document.getElementById(&#39;popup2&#39;);
+<a name="line284"></a>
+<a name="line285"></a>  // Anchor top left to top left.
+<a name="line286"></a>  goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line287"></a>                                    popup, corner.TOP_LEFT);
+<a name="line288"></a>  var anchorRect = goog.style.getBounds(anchor);
+<a name="line289"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line290"></a>
+<a name="line291"></a>  assertRoundedEquals(&#39;Left edge of popup should line up with left edge &#39; +
+<a name="line292"></a>                      &#39;of anchor.&#39;,
+<a name="line293"></a>                      anchorRect.left,
+<a name="line294"></a>                      popupRect.left);
+<a name="line295"></a>  assertRoundedEquals(&#39;Popup should have the same y position as the anchor.&#39;,
+<a name="line296"></a>                      anchorRect.top,
+<a name="line297"></a>                      popupRect.top);
+<a name="line298"></a>
+<a name="line299"></a>  // Anchor top start to bottom start.
+<a name="line300"></a>  goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_START,
+<a name="line301"></a>                                    popup, corner.TOP_START);
+<a name="line302"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line303"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line304"></a>  assertRoundedEquals(&#39;Right edge of popup should line up with right edge &#39; +
+<a name="line305"></a>                      &#39;of anchor.&#39;,
+<a name="line306"></a>                      anchorRect.left + anchorRect.width,
+<a name="line307"></a>                      popupRect.left + popupRect.width);
+<a name="line308"></a>  assertRoundedEquals(&#39;Popup should be positioned just below the anchor.&#39;,
+<a name="line309"></a>                      anchorRect.top + anchorRect.height,
+<a name="line310"></a>                      popupRect.top);
+<a name="line311"></a>}
+<a name="line312"></a>
+<a name="line313"></a>function testPositionAtAnchorRightToLeftWithScroll() {
+<a name="line314"></a>  if (goog.userAgent.IE &amp;&amp; goog.userAgent.isVersionOrHigher(&#39;6&#39;)) {
+<a name="line315"></a>    // These tests fails with IE6.
+<a name="line316"></a>    // TODO(user): Investigate the reason.
+<a name="line317"></a>    return;
+<a name="line318"></a>  }
+<a name="line319"></a>
+<a name="line320"></a>  var anchor = document.getElementById(&#39;anchor8&#39;);
+<a name="line321"></a>  var popup = document.getElementById(&#39;popup8&#39;);
+<a name="line322"></a>
+<a name="line323"></a>  // Anchor top left to top left.
+<a name="line324"></a>  goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line325"></a>                                    popup, corner.TOP_LEFT);
+<a name="line326"></a>  var anchorRect = goog.style.getBounds(anchor);
+<a name="line327"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line328"></a>
+<a name="line329"></a>  assertRoundedEquals(&#39;Left edge of popup should line up with left edge &#39; +
+<a name="line330"></a>                      &#39;of anchor.&#39;,
+<a name="line331"></a>                      anchorRect.left,
+<a name="line332"></a>                      popupRect.left);
+<a name="line333"></a>  assertRoundedEquals(&#39;Popup should have the same y position as the anchor.&#39;,
+<a name="line334"></a>                      anchorRect.top,
+<a name="line335"></a>                      popupRect.top);
+<a name="line336"></a>
+<a name="line337"></a>  // Anchor top start to bottom start.
+<a name="line338"></a>  goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_START,
+<a name="line339"></a>                                    popup, corner.TOP_START);
+<a name="line340"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line341"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line342"></a>
+<a name="line343"></a>  var visibleAnchorRect = goog.positioning.getVisiblePart_(anchor);
+<a name="line344"></a>  var visibleAnchorBox = visibleAnchorRect.toBox();
+<a name="line345"></a>
+<a name="line346"></a>  assertRoundedEquals(&#39;Right edge of popup should line up with right edge &#39; +
+<a name="line347"></a>                      &#39;of anchor.&#39;,
+<a name="line348"></a>                      anchorRect.left + anchorRect.width,
+<a name="line349"></a>                      popupRect.left + popupRect.width);
+<a name="line350"></a>  assertRoundedEquals(&#39;Popup should be positioned just below the anchor.&#39;,
+<a name="line351"></a>                      visibleAnchorBox.bottom,
+<a name="line352"></a>                      popupRect.top);
+<a name="line353"></a>}
+<a name="line354"></a>
+<a name="line355"></a>function testPositionAtAnchorBodyViewport() {
+<a name="line356"></a>  var anchor = document.getElementById(&#39;anchor1&#39;);
+<a name="line357"></a>  var popup = document.getElementById(&#39;popup3&#39;);
+<a name="line358"></a>
+<a name="line359"></a>  // Anchor top left to top left.
+<a name="line360"></a>  goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line361"></a>                                    popup, corner.TOP_LEFT);
+<a name="line362"></a>  var anchorRect = goog.style.getBounds(anchor);
+<a name="line363"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line364"></a>  assertEquals(&#39;Left edge of popup should line up with left edge of anchor.&#39;,
+<a name="line365"></a>               anchorRect.left,
+<a name="line366"></a>               popupRect.left);
+<a name="line367"></a>  assertRoughlyEquals(&#39;Popup should have the same y position as the anchor.&#39;,
+<a name="line368"></a>                      anchorRect.top,
+<a name="line369"></a>                      popupRect.top,
+<a name="line370"></a>                      1);
+<a name="line371"></a>
+<a name="line372"></a>  // Anchor top start to bottom right.
+<a name="line373"></a>  goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_RIGHT,
+<a name="line374"></a>                                    popup, corner.TOP_RIGHT);
+<a name="line375"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line376"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line377"></a>  assertEquals(&#39;Right edge of popup should line up with right edge of anchor.&#39;,
+<a name="line378"></a>               anchorRect.left + anchorRect.width,
+<a name="line379"></a>               popupRect.left + popupRect.width);
+<a name="line380"></a>  assertRoughlyEquals(&#39;Popup should be positioned just below the anchor.&#39;,
+<a name="line381"></a>                      anchorRect.top + anchorRect.height,
+<a name="line382"></a>                      popupRect.top,
+<a name="line383"></a>                      1);
+<a name="line384"></a>
+<a name="line385"></a>  // Anchor top right to top left.
+<a name="line386"></a>  goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line387"></a>                                    popup, corner.TOP_RIGHT);
+<a name="line388"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line389"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line390"></a>  assertEquals(&#39;Right edge of popup should line up with left edge of anchor.&#39;,
+<a name="line391"></a>               anchorRect.left,
+<a name="line392"></a>               popupRect.left + popupRect.width);
+<a name="line393"></a>  assertRoughlyEquals(&#39;Popup should have the same y position as the anchor.&#39;,
+<a name="line394"></a>                      anchorRect.top,
+<a name="line395"></a>                      popupRect.top,
+<a name="line396"></a>                      1);
+<a name="line397"></a>}
+<a name="line398"></a>
+<a name="line399"></a>function testPositionAtAnchorSpecificViewport() {
+<a name="line400"></a>  var anchor = document.getElementById(&#39;anchor1&#39;);
+<a name="line401"></a>  var popup = document.getElementById(&#39;popup3&#39;);
+<a name="line402"></a>
+<a name="line403"></a>  // Anchor top right to top left within outerbox.
+<a name="line404"></a>  var status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line405"></a>                                                 popup, corner.TOP_RIGHT,
+<a name="line406"></a>                                                 undefined, undefined,
+<a name="line407"></a>                                                 overflow.FAIL_X);
+<a name="line408"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line409"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line410"></a>  assertTrue(&#39;Positioning operation should have been successful.&#39;,
+<a name="line411"></a>             (status &amp; goog.positioning.OverflowStatus.FAILED) == 0);
+<a name="line412"></a>  assertTrue(&#39;X position should not have been adjusted.&#39;,
+<a name="line413"></a>             (status &amp; goog.positioning.OverflowStatus.ADJUSTED_X) == 0);
+<a name="line414"></a>  assertTrue(&#39;Y position should not have been adjusted.&#39;,
+<a name="line415"></a>             (status &amp; goog.positioning.OverflowStatus.ADJUSTED_Y) == 0);
+<a name="line416"></a>  assertEquals(&#39;Right edge of popup should line up with left edge of anchor.&#39;,
+<a name="line417"></a>               anchorRect.left,
+<a name="line418"></a>               popupRect.left + popupRect.width);
+<a name="line419"></a>  assertRoughlyEquals(&#39;Popup should have the same y position as the anchor.&#39;,
+<a name="line420"></a>                      anchorRect.top,
+<a name="line421"></a>                      popupRect.top,
+<a name="line422"></a>                      1);
+<a name="line423"></a>
+<a name="line424"></a>  // position again within box1.
+<a name="line425"></a>  var box = document.getElementById(&#39;box1&#39;);
+<a name="line426"></a>  var viewport = goog.style.getBounds(box);
+<a name="line427"></a>  status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line428"></a>                                             popup, corner.TOP_RIGHT,
+<a name="line429"></a>                                             undefined, undefined,
+<a name="line430"></a>                                             overflow.FAIL_X, undefined,
+<a name="line431"></a>                                             viewport);
+<a name="line432"></a>  assertFalse(&#39;Positioning operation should have failed.&#39;,
+<a name="line433"></a>              (status &amp; goog.positioning.OverflowStatus.FAILED) == 0);
+<a name="line434"></a>
+<a name="line435"></a>  // Change overflow strategy to adjust.
+<a name="line436"></a>  status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line437"></a>                                             popup, corner.TOP_RIGHT,
+<a name="line438"></a>                                             undefined, undefined,
+<a name="line439"></a>                                             overflow.ADJUST_X, undefined,
+<a name="line440"></a>                                             viewport);
+<a name="line441"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line442"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line443"></a>  assertTrue(&#39;Positioning operation should have been successful.&#39;,
+<a name="line444"></a>             (status &amp; goog.positioning.OverflowStatus.FAILED) == 0);
+<a name="line445"></a>  assertFalse(&#39;X position should have been adjusted.&#39;,
+<a name="line446"></a>              (status &amp; goog.positioning.OverflowStatus.ADJUSTED_X) == 0);
+<a name="line447"></a>  assertTrue(&#39;Y position should not have been adjusted.&#39;,
+<a name="line448"></a>             (status &amp; goog.positioning.OverflowStatus.ADJUSTED_Y) == 0);
+<a name="line449"></a>  assertRoughlyEquals(
+<a name="line450"></a>      &#39;Left edge of popup should line up with left edge of viewport.&#39;,
+<a name="line451"></a>      viewport.left, popupRect.left, EPSILON);
+<a name="line452"></a>  assertRoughlyEquals(&#39;Popup should have the same y position as the anchor.&#39;,
+<a name="line453"></a>                      anchorRect.top,
+<a name="line454"></a>                      popupRect.top,
+<a name="line455"></a>                      1);
+<a name="line456"></a>}
+<a name="line457"></a>
+<a name="line458"></a>function testPositionAtAnchorOutsideViewport() {
+<a name="line459"></a>  var anchor = document.getElementById(&#39;anchor4&#39;);
+<a name="line460"></a>  var popup = document.getElementById(&#39;popup1&#39;);
+<a name="line461"></a>
+<a name="line462"></a>  var status = goog.positioning.positionAtAnchor(anchor, corner.TOP_LEFT,
+<a name="line463"></a>                                                 popup, corner.TOP_RIGHT);
+<a name="line464"></a>  var anchorRect = goog.style.getBounds(anchor);
+<a name="line465"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line466"></a>  assertTrue(&#39;Positioning operation should have been successful.&#39;,
+<a name="line467"></a>             (status &amp; goog.positioning.OverflowStatus.FAILED) == 0);
+<a name="line468"></a>  assertTrue(&#39;X position should not have been adjusted.&#39;,
+<a name="line469"></a>             (status &amp; goog.positioning.OverflowStatus.ADJUSTED_X) == 0);
+<a name="line470"></a>  assertTrue(&#39;Y position should not have been adjusted.&#39;,
+<a name="line471"></a>             (status &amp; goog.positioning.OverflowStatus.ADJUSTED_Y) == 0);
+<a name="line472"></a>
+<a name="line473"></a>  assertEquals(&#39;Right edge of popup should line up with left edge of anchor.&#39;,
+<a name="line474"></a>               anchorRect.left,
+<a name="line475"></a>               popupRect.left + popupRect.width);
+<a name="line476"></a>
+<a name="line477"></a>  // Change overflow strategy to fail.
+<a name="line478"></a>  status = goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_RIGHT,
+<a name="line479"></a>                                             popup, corner.TOP_RIGHT,
+<a name="line480"></a>                                             undefined, undefined,
+<a name="line481"></a>                                             overflow.FAIL_X);
+<a name="line482"></a>  assertFalse(&#39;Positioning operation should have failed.&#39;,
+<a name="line483"></a>              (status &amp; goog.positioning.OverflowStatus.FAILED) == 0);
+<a name="line484"></a>
+<a name="line485"></a>  // Change overflow strategy to adjust.
+<a name="line486"></a>  status = goog.positioning.positionAtAnchor(anchor, corner.BOTTOM_RIGHT,
+<a name="line487"></a>                                             popup, corner.TOP_RIGHT,
+<a name="line488"></a>                                             undefined, undefined,
+<a name="line489"></a>                                             overflow.ADJUST_X);
+<a name="line490"></a>  anchorRect = goog.style.getBounds(anchor);
+<a name="line491"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line492"></a>  assertTrue(&#39;Positioning operation should have been successful.&#39;,
+<a name="line493"></a>             (status &amp; goog.positioning.OverflowStatus.FAILED) == 0);
+<a name="line494"></a>  assertFalse(&#39;X position should have been adjusted.&#39;,
+<a name="line495"></a>              (status &amp; goog.positioning.OverflowStatus.ADJUSTED_X) == 0);
+<a name="line496"></a>  assertTrue(&#39;Y position should not have been adjusted.&#39;,
+<a name="line497"></a>             (status &amp; goog.positioning.OverflowStatus.ADJUSTED_Y) == 0);
+<a name="line498"></a>  assertRoughlyEquals(
+<a name="line499"></a>      &#39;Left edge of popup should line up with left edge of viewport.&#39;,
+<a name="line500"></a>      0, popupRect.left, EPSILON);
+<a name="line501"></a>  assertEquals(&#39;Popup should be positioned just below the anchor.&#39;,
+<a name="line502"></a>               anchorRect.top + anchorRect.height,
+<a name="line503"></a>               popupRect.top);
+<a name="line504"></a>}
+<a name="line505"></a>
+<a name="line506"></a>
+<a name="line507"></a>function testAdjustForViewportFailIgnore() {
+<a name="line508"></a>  var f = goog.positioning.adjustForViewport_;
+<a name="line509"></a>  var viewport = new goog.math.Box(100, 200, 200, 100);
+<a name="line510"></a>  var overflow = goog.positioning.Overflow.IGNORE;
+<a name="line511"></a>
+<a name="line512"></a>  var pos = newCoord(150, 150);
+<a name="line513"></a>  var size = newSize(50, 50);
+<a name="line514"></a>  assertEquals(&#39;Viewport overflow should be ignored.&#39;,
+<a name="line515"></a>               goog.positioning.OverflowStatus.NONE,
+<a name="line516"></a>               f(pos, size, viewport, overflow));
+<a name="line517"></a>
+<a name="line518"></a>  pos = newCoord(150, 150);
+<a name="line519"></a>  size = newSize(100, 50);
+<a name="line520"></a>  assertEquals(&#39;Viewport overflow should be ignored.&#39;,
+<a name="line521"></a>               goog.positioning.OverflowStatus.NONE,
+<a name="line522"></a>               f(pos, size, viewport, overflow));
+<a name="line523"></a>
+<a name="line524"></a>  pos = newCoord(50, 50);
+<a name="line525"></a>  size = newSize(50, 50);
+<a name="line526"></a>  assertEquals(&#39;Viewport overflow should be ignored.&#39;,
+<a name="line527"></a>               goog.positioning.OverflowStatus.NONE,
+<a name="line528"></a>               f(pos, size, viewport, overflow));
+<a name="line529"></a>}
+<a name="line530"></a>
+<a name="line531"></a>
+<a name="line532"></a>function testAdjustForViewportFailXY() {
+<a name="line533"></a>  var f = goog.positioning.adjustForViewport_;
+<a name="line534"></a>  var viewport = new goog.math.Box(100, 200, 200, 100);
+<a name="line535"></a>  var overflow = goog.positioning.Overflow.FAIL_X |
+<a name="line536"></a>                 goog.positioning.Overflow.FAIL_Y;
+<a name="line537"></a>
+<a name="line538"></a>  var pos = newCoord(150, 150);
+<a name="line539"></a>  var size = newSize(50, 50);
+<a name="line540"></a>  assertEquals(&#39;Element should not overflow viewport.&#39;,
+<a name="line541"></a>               goog.positioning.OverflowStatus.NONE,
+<a name="line542"></a>               f(pos, size, viewport, overflow));
+<a name="line543"></a>
+<a name="line544"></a>  pos = newCoord(150, 150);
+<a name="line545"></a>  size = newSize(100, 50);
+<a name="line546"></a>  assertEquals(&#39;Element should overflow the right edge of viewport.&#39;,
+<a name="line547"></a>               goog.positioning.OverflowStatus.FAILED_RIGHT,
+<a name="line548"></a>               f(pos, size, viewport, overflow));
+<a name="line549"></a>
+<a name="line550"></a>  pos = newCoord(150, 150);
+<a name="line551"></a>  size = newSize(50, 100);
+<a name="line552"></a>  assertEquals(&#39;Element should overflow the bottom edge of viewport.&#39;,
+<a name="line553"></a>               goog.positioning.OverflowStatus.FAILED_BOTTOM,
+<a name="line554"></a>               f(pos, size, viewport, overflow));
+<a name="line555"></a>
+<a name="line556"></a>  pos = newCoord(50, 150);
+<a name="line557"></a>  size = newSize(50, 50);
+<a name="line558"></a>  assertEquals(&#39;Element should overflow the left edge of viewport.&#39;,
+<a name="line559"></a>               goog.positioning.OverflowStatus.FAILED_LEFT,
+<a name="line560"></a>               f(pos, size, viewport, overflow));
+<a name="line561"></a>
+<a name="line562"></a>  pos = newCoord(150, 50);
+<a name="line563"></a>  size = newSize(50, 50);
+<a name="line564"></a>  assertEquals(&#39;Element should overflow the top edge of viewport.&#39;,
+<a name="line565"></a>               goog.positioning.OverflowStatus.FAILED_TOP,
+<a name="line566"></a>               f(pos, size, viewport, overflow));
+<a name="line567"></a>
+<a name="line568"></a>  pos = newCoord(50, 50);
+<a name="line569"></a>  size = newSize(50, 50);
+<a name="line570"></a>  assertEquals(&#39;Element should overflow the left &amp; top edges of viewport.&#39;,
+<a name="line571"></a>               goog.positioning.OverflowStatus.FAILED_LEFT |
+<a name="line572"></a>               goog.positioning.OverflowStatus.FAILED_TOP,
+<a name="line573"></a>               f(pos, size, viewport, overflow));
+<a name="line574"></a>}
+<a name="line575"></a>
+<a name="line576"></a>
+<a name="line577"></a>function testAdjustForViewportAdjustXFailY() {
+<a name="line578"></a>  var f = goog.positioning.adjustForViewport_;
+<a name="line579"></a>  var viewport = new goog.math.Box(100, 200, 200, 100);
+<a name="line580"></a>  var overflow = goog.positioning.Overflow.ADJUST_X |
+<a name="line581"></a>                 goog.positioning.Overflow.FAIL_Y;
+<a name="line582"></a>
+<a name="line583"></a>  var pos = newCoord(150, 150);
+<a name="line584"></a>  var size = newSize(50, 50);
+<a name="line585"></a>  assertEquals(&#39;Element should not overflow viewport.&#39;,
+<a name="line586"></a>               goog.positioning.OverflowStatus.NONE,
+<a name="line587"></a>               f(pos, size, viewport, overflow));
+<a name="line588"></a>  assertEquals(&#39;X Position should not have been changed.&#39;, 150, pos.x);
+<a name="line589"></a>  assertEquals(&#39;Y Position should not have been changed.&#39;, 150, pos.y);
+<a name="line590"></a>
+<a name="line591"></a>  pos = newCoord(150, 150);
+<a name="line592"></a>  size = newSize(100, 50);
+<a name="line593"></a>  assertEquals(&#39;Element position should be adjusted not to overflow right &#39; +
+<a name="line594"></a>               &#39;edge of viewport.&#39;,
+<a name="line595"></a>               goog.positioning.OverflowStatus.ADJUSTED_X,
+<a name="line596"></a>               f(pos, size, viewport, overflow));
+<a name="line597"></a>  assertEquals(&#39;X Position should be adjusted to 100.&#39;, 100, pos.x);
+<a name="line598"></a>  assertEquals(&#39;Y Position should not have been changed.&#39;, 150, pos.y);
+<a name="line599"></a>
+<a name="line600"></a>  pos = newCoord(50, 150);
+<a name="line601"></a>  size = newSize(100, 50);
+<a name="line602"></a>  assertEquals(&#39;Element position should be adjusted not to overflow left &#39; +
+<a name="line603"></a>               &#39;edge of viewport.&#39;,
+<a name="line604"></a>               goog.positioning.OverflowStatus.ADJUSTED_X,
+<a name="line605"></a>               f(pos, size, viewport, overflow));
+<a name="line606"></a>  assertEquals(&#39;X Position should be adjusted to 100.&#39;, 100, pos.x);
+<a name="line607"></a>  assertEquals(&#39;Y Position should not have been changed.&#39;, 150, pos.y);
+<a name="line608"></a>
+<a name="line609"></a>
+<a name="line610"></a>  pos = newCoord(50, 50);
+<a name="line611"></a>  size = newSize(100, 50);
+<a name="line612"></a>  assertEquals(&#39;Element position should be adjusted not to overflow left &#39; +
+<a name="line613"></a>               &#39;edge of viewport, should overflow bottom edge.&#39;,
+<a name="line614"></a>               goog.positioning.OverflowStatus.ADJUSTED_X |
+<a name="line615"></a>               goog.positioning.OverflowStatus.FAILED_TOP,
+<a name="line616"></a>               f(pos, size, viewport, overflow));
+<a name="line617"></a>  assertEquals(&#39;X Position should be adjusted to 100.&#39;, 100, pos.x);
+<a name="line618"></a>  assertEquals(&#39;Y Position should not have been changed.&#39;, 50, pos.y);
+<a name="line619"></a>}
+<a name="line620"></a>
+<a name="line621"></a>
+<a name="line622"></a>function testAdjustForViewportResizeHeight() {
+<a name="line623"></a>  var f = goog.positioning.adjustForViewport_;
+<a name="line624"></a>  var viewport = new goog.math.Box(0, 200, 200, 0);
+<a name="line625"></a>  var overflow = goog.positioning.Overflow.RESIZE_HEIGHT;
+<a name="line626"></a>
+<a name="line627"></a>  var pos = newCoord(150, 150);
+<a name="line628"></a>  var size = newSize(25, 100);
+<a name="line629"></a>  assertEquals(&#39;Viewport height should be resized.&#39;,
+<a name="line630"></a>               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED,
+<a name="line631"></a>               f(pos, size, viewport, overflow));
+<a name="line632"></a>  assertEquals(&#39;Height should be resized to 50.&#39;,
+<a name="line633"></a>               50, size.height);
+<a name="line634"></a>  assertTrue(&#39;Output box is within viewport&#39;,
+<a name="line635"></a>             viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
+<a name="line636"></a>                                                 pos.y + size.height, pos.x)));
+<a name="line637"></a>
+<a name="line638"></a>  var pos = newCoord(0, 0);
+<a name="line639"></a>  var size = newSize(50, 250);
+<a name="line640"></a>  assertEquals(&#39;Viewport height should be resized.&#39;,
+<a name="line641"></a>               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED,
+<a name="line642"></a>               f(pos, size, viewport, overflow));
+<a name="line643"></a>  assertEquals(&#39;Height should be resized to 200.&#39;,
+<a name="line644"></a>               200, size.height);
+<a name="line645"></a>  assertTrue(&#39;Output box is within viewport&#39;,
+<a name="line646"></a>             viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
+<a name="line647"></a>                                                 pos.y + size.height, pos.x)));
+<a name="line648"></a>
+<a name="line649"></a>  var pos = newCoord(0, -50);
+<a name="line650"></a>  var size = newSize(50, 240);
+<a name="line651"></a>  assertEquals(&#39;Viewport height should be resized.&#39;,
+<a name="line652"></a>               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED,
+<a name="line653"></a>               f(pos, size, viewport, overflow));
+<a name="line654"></a>  assertEquals(&#39;Height should be resized to 190.&#39;,
+<a name="line655"></a>               190, size.height);
+<a name="line656"></a>  assertTrue(&#39;Output box is within viewport&#39;,
+<a name="line657"></a>             viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
+<a name="line658"></a>                                                 pos.y + size.height, pos.x)));
+<a name="line659"></a>
+<a name="line660"></a>  pos = newCoord(150, 150);
+<a name="line661"></a>  size = newSize(50, 50);
+<a name="line662"></a>  assertEquals(&#39;No Viewport overflow.&#39;,
+<a name="line663"></a>               goog.positioning.OverflowStatus.NONE,
+<a name="line664"></a>               f(pos, size, viewport, overflow));
+<a name="line665"></a>  assertTrue(&#39;Output box is within viewport&#39;,
+<a name="line666"></a>             viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
+<a name="line667"></a>                                                 pos.y + size.height, pos.x)));
+<a name="line668"></a>
+<a name="line669"></a>  var offsetViewport = new goog.math.Box(100, 200, 300, 0);
+<a name="line670"></a>  var pos = newCoord(0, 50);
+<a name="line671"></a>  var size = newSize(50, 240);
+<a name="line672"></a>  assertEquals(&#39;Viewport height should be resized.&#39;,
+<a name="line673"></a>               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED,
+<a name="line674"></a>               f(pos, size, offsetViewport, overflow));
+<a name="line675"></a>  assertEquals(&#39;Height should be resized to 190.&#39;,
+<a name="line676"></a>               190, size.height);
+<a name="line677"></a>  assertTrue(&#39;Output box is within viewport&#39;,
+<a name="line678"></a>             offsetViewport.contains(new goog.math.Box(pos.y,
+<a name="line679"></a>                                                       pos.x + size.width,
+<a name="line680"></a>                                                       pos.y + size.height,
+<a name="line681"></a>                                                       pos.x)));
+<a name="line682"></a>}
+<a name="line683"></a>
+<a name="line684"></a>
+<a name="line685"></a>function testPositionAtAnchorWithResizeHeight() {
+<a name="line686"></a>  var anchor = document.getElementById(&#39;anchor9&#39;);
+<a name="line687"></a>  var popup = document.getElementById(&#39;popup9&#39;);
+<a name="line688"></a>  var box = document.getElementById(&#39;box9&#39;);
+<a name="line689"></a>  var viewport = goog.style.getBounds(box);
+<a name="line690"></a>
+<a name="line691"></a>  var status = goog.positioning.positionAtAnchor(
+<a name="line692"></a>      anchor, corner.TOP_START, popup, corner.TOP_START,
+<a name="line693"></a>      new goog.math.Coordinate(0, -20), null,
+<a name="line694"></a>      goog.positioning.Overflow.RESIZE_HEIGHT, null,
+<a name="line695"></a>      viewport.toBox());
+<a name="line696"></a>  assertEquals(&#39;Status should be HEIGHT_ADJUSTED.&#39;,
+<a name="line697"></a>               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED, status);
+<a name="line698"></a>  assertTrue(&#39;Popup is within viewport&#39;,
+<a name="line699"></a>             viewport.contains(goog.style.getBounds(popup)));
+<a name="line700"></a>}
+<a name="line701"></a>
+<a name="line702"></a>
+<a name="line703"></a>function testPositionAtCoordinateResizeHeight() {
+<a name="line704"></a>  var f = goog.positioning.positionAtCoordinate;
+<a name="line705"></a>  var viewport = new goog.math.Box(0, 50, 50, 0);
+<a name="line706"></a>  var overflow = goog.positioning.Overflow.RESIZE_HEIGHT |
+<a name="line707"></a>      goog.positioning.Overflow.ADJUST_Y;
+<a name="line708"></a>  var popup = document.getElementById(&#39;popup1&#39;);
+<a name="line709"></a>  var corner = goog.positioning.Corner.BOTTOM_LEFT;
+<a name="line710"></a>
+<a name="line711"></a>  var pos = newCoord(100, 100);
+<a name="line712"></a>
+<a name="line713"></a>  assertEquals(&#39;Viewport height should be resized.&#39;,
+<a name="line714"></a>               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED |
+<a name="line715"></a>               goog.positioning.OverflowStatus.ADJUSTED_Y,
+<a name="line716"></a>               f(pos, popup, corner, undefined, viewport, overflow));
+<a name="line717"></a>  var bounds = goog.style.getSize(popup);
+<a name="line718"></a>  assertEquals(&#39;Height should be resized to the size of the viewport.&#39;,
+<a name="line719"></a>               50, bounds.height);
+<a name="line720"></a>}
+<a name="line721"></a>
+<a name="line722"></a>
+<a name="line723"></a>function testGetEffectiveCornerLeftToRight() {
+<a name="line724"></a>  var f = goog.positioning.getEffectiveCorner;
+<a name="line725"></a>  var el = document.getElementById(&#39;ltr&#39;);
+<a name="line726"></a>
+<a name="line727"></a>  assertEquals(&#39;TOP_LEFT should be unchanged for ltr.&#39;,
+<a name="line728"></a>               corner.TOP_LEFT,
+<a name="line729"></a>               f(el, corner.TOP_LEFT));
+<a name="line730"></a>  assertEquals(&#39;TOP_RIGHT should be unchanged for ltr.&#39;,
+<a name="line731"></a>               corner.TOP_RIGHT,
+<a name="line732"></a>               f(el, corner.TOP_RIGHT));
+<a name="line733"></a>  assertEquals(&#39;BOTTOM_LEFT should be unchanged for ltr.&#39;,
+<a name="line734"></a>               corner.BOTTOM_LEFT,
+<a name="line735"></a>               f(el, corner.BOTTOM_LEFT));
+<a name="line736"></a>  assertEquals(&#39;BOTTOM_RIGHT should be unchanged for ltr.&#39;,
+<a name="line737"></a>               corner.BOTTOM_RIGHT,
+<a name="line738"></a>               f(el, corner.BOTTOM_RIGHT));
+<a name="line739"></a>
+<a name="line740"></a>  assertEquals(&#39;TOP_START should be TOP_LEFT for ltr.&#39;,
+<a name="line741"></a>               corner.TOP_LEFT,
+<a name="line742"></a>               f(el, corner.TOP_START));
+<a name="line743"></a>  assertEquals(&#39;TOP_END should be TOP_RIGHT for ltr.&#39;,
+<a name="line744"></a>               corner.TOP_RIGHT,
+<a name="line745"></a>               f(el, corner.TOP_END));
+<a name="line746"></a>  assertEquals(&#39;BOTTOM_START should be BOTTOM_LEFT for ltr.&#39;,
+<a name="line747"></a>               corner.BOTTOM_LEFT,
+<a name="line748"></a>               f(el, corner.BOTTOM_START));
+<a name="line749"></a>  assertEquals(&#39;BOTTOM_END should be BOTTOM_RIGHT for ltr.&#39;,
+<a name="line750"></a>               corner.BOTTOM_RIGHT,
+<a name="line751"></a>               f(el, corner.BOTTOM_END));
+<a name="line752"></a>}
+<a name="line753"></a>
+<a name="line754"></a>
+<a name="line755"></a>function testGetEffectiveCornerRightToLeft() {
+<a name="line756"></a>  var f = goog.positioning.getEffectiveCorner;
+<a name="line757"></a>  var el = document.getElementById(&#39;rtl&#39;);
+<a name="line758"></a>
+<a name="line759"></a>  assertEquals(&#39;TOP_LEFT should be unchanged for rtl.&#39;,
+<a name="line760"></a>               corner.TOP_LEFT,
+<a name="line761"></a>               f(el, corner.TOP_LEFT));
+<a name="line762"></a>  assertEquals(&#39;TOP_RIGHT should be unchanged for rtl.&#39;,
+<a name="line763"></a>               corner.TOP_RIGHT,
+<a name="line764"></a>               f(el, corner.TOP_RIGHT));
+<a name="line765"></a>  assertEquals(&#39;BOTTOM_LEFT should be unchanged for rtl.&#39;,
+<a name="line766"></a>               corner.BOTTOM_LEFT,
+<a name="line767"></a>               f(el, corner.BOTTOM_LEFT));
+<a name="line768"></a>  assertEquals(&#39;BOTTOM_RIGHT should be unchanged for rtl.&#39;,
+<a name="line769"></a>               corner.BOTTOM_RIGHT,
+<a name="line770"></a>               f(el, corner.BOTTOM_RIGHT));
+<a name="line771"></a>
+<a name="line772"></a>  assertEquals(&#39;TOP_START should be TOP_RIGHT for rtl.&#39;,
+<a name="line773"></a>               corner.TOP_RIGHT,
+<a name="line774"></a>               f(el, corner.TOP_START));
+<a name="line775"></a>  assertEquals(&#39;TOP_END should be TOP_LEFT for rtl.&#39;,
+<a name="line776"></a>               corner.TOP_LEFT,
+<a name="line777"></a>               f(el, corner.TOP_END));
+<a name="line778"></a>  assertEquals(&#39;BOTTOM_START should be BOTTOM_RIGHT for rtl.&#39;,
+<a name="line779"></a>               corner.BOTTOM_RIGHT,
+<a name="line780"></a>               f(el, corner.BOTTOM_START));
+<a name="line781"></a>  assertEquals(&#39;BOTTOM_END should be BOTTOM_LEFT for rtl.&#39;,
+<a name="line782"></a>               corner.BOTTOM_LEFT,
+<a name="line783"></a>               f(el, corner.BOTTOM_END));
+<a name="line784"></a>}
+<a name="line785"></a>
+<a name="line786"></a>
+<a name="line787"></a>function testFlipCornerHorizontal() {
+<a name="line788"></a>  var f = goog.positioning.flipCornerHorizontal;
+<a name="line789"></a>
+<a name="line790"></a>  assertEquals(&#39;TOP_LEFT should be flipped to TOP_RIGHT.&#39;,
+<a name="line791"></a>               corner.TOP_RIGHT,
+<a name="line792"></a>               f(corner.TOP_LEFT));
+<a name="line793"></a>  assertEquals(&#39;TOP_RIGHT should be flipped to TOP_LEFT.&#39;,
+<a name="line794"></a>               corner.TOP_LEFT,
+<a name="line795"></a>               f(corner.TOP_RIGHT));
+<a name="line796"></a>  assertEquals(&#39;BOTTOM_LEFT should be flipped to BOTTOM_RIGHT.&#39;,
+<a name="line797"></a>               corner.BOTTOM_RIGHT,
+<a name="line798"></a>               f(corner.BOTTOM_LEFT));
+<a name="line799"></a>  assertEquals(&#39;BOTTOM_RIGHT should be flipped to BOTTOM_LEFT.&#39;,
+<a name="line800"></a>               corner.BOTTOM_LEFT,
+<a name="line801"></a>               f(corner.BOTTOM_RIGHT));
+<a name="line802"></a>
+<a name="line803"></a>  assertEquals(&#39;TOP_START should be flipped to TOP_END.&#39;,
+<a name="line804"></a>               corner.TOP_END,
+<a name="line805"></a>               f(corner.TOP_START));
+<a name="line806"></a>  assertEquals(&#39;TOP_END should be flipped to TOP_START.&#39;,
+<a name="line807"></a>               corner.TOP_START,
+<a name="line808"></a>               f(corner.TOP_END));
+<a name="line809"></a>  assertEquals(&#39;BOTTOM_START should be flipped to BOTTOM_END.&#39;,
+<a name="line810"></a>               corner.BOTTOM_END,
+<a name="line811"></a>               f(corner.BOTTOM_START));
+<a name="line812"></a>  assertEquals(&#39;BOTTOM_END should be flipped to BOTTOM_START.&#39;,
+<a name="line813"></a>               corner.BOTTOM_START,
+<a name="line814"></a>               f(corner.BOTTOM_END));
+<a name="line815"></a>}
+<a name="line816"></a>
+<a name="line817"></a>
+<a name="line818"></a>function testFlipCornerVertical() {
+<a name="line819"></a>  var f = goog.positioning.flipCornerVertical;
+<a name="line820"></a>
+<a name="line821"></a>  assertEquals(&#39;TOP_LEFT should be flipped to BOTTOM_LEFT.&#39;,
+<a name="line822"></a>               corner.BOTTOM_LEFT,
+<a name="line823"></a>               f(corner.TOP_LEFT));
+<a name="line824"></a>  assertEquals(&#39;TOP_RIGHT should be flipped to BOTTOM_RIGHT.&#39;,
+<a name="line825"></a>               corner.BOTTOM_RIGHT,
+<a name="line826"></a>               f(corner.TOP_RIGHT));
+<a name="line827"></a>  assertEquals(&#39;BOTTOM_LEFT should be flipped to TOP_LEFT.&#39;,
+<a name="line828"></a>               corner.TOP_LEFT,
+<a name="line829"></a>               f(corner.BOTTOM_LEFT));
+<a name="line830"></a>  assertEquals(&#39;BOTTOM_RIGHT should be flipped to TOP_RIGHT.&#39;,
+<a name="line831"></a>               corner.TOP_RIGHT,
+<a name="line832"></a>               f(corner.BOTTOM_RIGHT));
+<a name="line833"></a>
+<a name="line834"></a>  assertEquals(&#39;TOP_START should be flipped to BOTTOM_START.&#39;,
+<a name="line835"></a>               corner.BOTTOM_START,
+<a name="line836"></a>               f(corner.TOP_START));
+<a name="line837"></a>  assertEquals(&#39;TOP_END should be flipped to BOTTOM_END.&#39;,
+<a name="line838"></a>               corner.BOTTOM_END,
+<a name="line839"></a>               f(corner.TOP_END));
+<a name="line840"></a>  assertEquals(&#39;BOTTOM_START should be flipped to TOP_START.&#39;,
+<a name="line841"></a>               corner.TOP_START,
+<a name="line842"></a>               f(corner.BOTTOM_START));
+<a name="line843"></a>  assertEquals(&#39;BOTTOM_END should be flipped to TOP_END.&#39;,
+<a name="line844"></a>               corner.TOP_END,
+<a name="line845"></a>               f(corner.BOTTOM_END));
+<a name="line846"></a>}
+<a name="line847"></a>
+<a name="line848"></a>
+<a name="line849"></a>function testFlipCorner() {
+<a name="line850"></a>  var f = goog.positioning.flipCorner;
+<a name="line851"></a>
+<a name="line852"></a>  assertEquals(&#39;TOP_LEFT should be flipped to BOTTOM_RIGHT.&#39;,
+<a name="line853"></a>               corner.BOTTOM_RIGHT,
+<a name="line854"></a>               f(corner.TOP_LEFT));
+<a name="line855"></a>  assertEquals(&#39;TOP_RIGHT should be flipped to BOTTOM_LEFT.&#39;,
+<a name="line856"></a>               corner.BOTTOM_LEFT,
+<a name="line857"></a>               f(corner.TOP_RIGHT));
+<a name="line858"></a>  assertEquals(&#39;BOTTOM_LEFT should be flipped to TOP_RIGHT.&#39;,
+<a name="line859"></a>               corner.TOP_RIGHT,
+<a name="line860"></a>               f(corner.BOTTOM_LEFT));
+<a name="line861"></a>  assertEquals(&#39;BOTTOM_RIGHT should be flipped to TOP_LEFT.&#39;,
+<a name="line862"></a>               corner.TOP_LEFT,
+<a name="line863"></a>               f(corner.BOTTOM_RIGHT));
+<a name="line864"></a>
+<a name="line865"></a>  assertEquals(&#39;TOP_START should be flipped to BOTTOM_END.&#39;,
+<a name="line866"></a>               corner.BOTTOM_END,
+<a name="line867"></a>               f(corner.TOP_START));
+<a name="line868"></a>  assertEquals(&#39;TOP_END should be flipped to BOTTOM_START.&#39;,
+<a name="line869"></a>               corner.BOTTOM_START,
+<a name="line870"></a>               f(corner.TOP_END));
+<a name="line871"></a>  assertEquals(&#39;BOTTOM_START should be flipped to TOP_END.&#39;,
+<a name="line872"></a>               corner.TOP_END,
+<a name="line873"></a>               f(corner.BOTTOM_START));
+<a name="line874"></a>  assertEquals(&#39;BOTTOM_END should be flipped to TOP_START.&#39;,
+<a name="line875"></a>               corner.TOP_START,
+<a name="line876"></a>               f(corner.BOTTOM_END));
+<a name="line877"></a>}
+<a name="line878"></a>
+<a name="line879"></a>function testPositionAtAnchorFrameViewportStandard() {
+<a name="line880"></a>  var iframe = document.getElementById(&#39;iframe-standard&#39;);
+<a name="line881"></a>  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
+<a name="line882"></a>  assertTrue(new goog.dom.DomHelper(iframeDoc).isCss1CompatMode());
+<a name="line883"></a>
+<a name="line884"></a>  new goog.dom.DomHelper(iframeDoc).getDocumentScrollElement().scrollTop = 100;
+<a name="line885"></a>  var anchor = iframeDoc.getElementById(&#39;anchor1&#39;);
+<a name="line886"></a>  var popup = document.getElementById(&#39;popup6&#39;);
+<a name="line887"></a>
+<a name="line888"></a>  var status = goog.positioning.positionAtAnchor(
+<a name="line889"></a>      anchor, corner.TOP_RIGHT, popup, corner.BOTTOM_RIGHT);
+<a name="line890"></a>  var iframeRect = goog.style.getBounds(iframe);
+<a name="line891"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line892"></a>  assertEquals(&#39;Status should not have any ADJUSTED and FAILED.&#39;,
+<a name="line893"></a>               goog.positioning.OverflowStatus.NONE, status);
+<a name="line894"></a>  assertRoundedEquals(&#39;Popup should be positioned just above the iframe, &#39; +
+<a name="line895"></a>                      &#39;not above the anchor element inside the iframe&#39;,
+<a name="line896"></a>                      iframeRect.top,
+<a name="line897"></a>                      popupRect.top + popupRect.height);
+<a name="line898"></a>}
+<a name="line899"></a>
+<a name="line900"></a>function testPositionAtAnchorFrameViewportQuirk() {
+<a name="line901"></a>  var iframe = document.getElementById(&#39;iframe-quirk&#39;);
+<a name="line902"></a>  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
+<a name="line903"></a>  assertFalse(new goog.dom.DomHelper(iframeDoc).isCss1CompatMode());
+<a name="line904"></a>
+<a name="line905"></a>  window.scrollTo(0, 100);
+<a name="line906"></a>  new goog.dom.DomHelper(iframeDoc).getDocumentScrollElement().scrollTop = 100;
+<a name="line907"></a>  var anchor = iframeDoc.getElementById(&#39;anchor1&#39;);
+<a name="line908"></a>  var popup = document.getElementById(&#39;popup6&#39;);
+<a name="line909"></a>
+<a name="line910"></a>  var status = goog.positioning.positionAtAnchor(
+<a name="line911"></a>      anchor, corner.TOP_RIGHT, popup, corner.BOTTOM_RIGHT);
+<a name="line912"></a>  var iframeRect = goog.style.getBounds(iframe);
+<a name="line913"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line914"></a>  assertEquals(&#39;Status should not have any ADJUSTED and FAILED.&#39;,
+<a name="line915"></a>               goog.positioning.OverflowStatus.NONE, status);
+<a name="line916"></a>  assertRoundedEquals(&#39;Popup should be positioned just above the iframe, &#39; +
+<a name="line917"></a>                      &#39;not above the anchor element inside the iframe&#39;,
+<a name="line918"></a>                      iframeRect.top,
+<a name="line919"></a>                      popupRect.top + popupRect.height);
+<a name="line920"></a>}
+<a name="line921"></a>
+<a name="line922"></a>function testPositionAtAnchorFrameViewportWithPopupInScroller() {
+<a name="line923"></a>  var iframe = document.getElementById(&#39;iframe-standard&#39;);
+<a name="line924"></a>  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
+<a name="line925"></a>
+<a name="line926"></a>  new goog.dom.DomHelper(iframeDoc).getDocumentScrollElement().scrollTop = 100;
+<a name="line927"></a>  var anchor = iframeDoc.getElementById(&#39;anchor1&#39;);
+<a name="line928"></a>  var popup = document.getElementById(&#39;popup7&#39;);
+<a name="line929"></a>  popup.offsetParent.scrollTop = 50;
+<a name="line930"></a>
+<a name="line931"></a>  var status = goog.positioning.positionAtAnchor(
+<a name="line932"></a>      anchor, corner.TOP_RIGHT, popup, corner.BOTTOM_RIGHT);
+<a name="line933"></a>  var iframeRect = goog.style.getBounds(iframe);
+<a name="line934"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line935"></a>  assertEquals(&#39;Status should not have any ADJUSTED and FAILED.&#39;,
+<a name="line936"></a>               goog.positioning.OverflowStatus.NONE, status);
+<a name="line937"></a>  assertRoughlyEquals(&#39;Popup should be positioned just above the iframe, &#39; +
+<a name="line938"></a>      &#39;not above the anchor element inside the iframe&#39;,
+<a name="line939"></a>      iframeRect.top,
+<a name="line940"></a>      popupRect.top + popupRect.height,
+<a name="line941"></a>      ALLOWED_OFFSET);
+<a name="line942"></a>}
+<a name="line943"></a>
+<a name="line944"></a>function testPositionAtAnchorNestedFrames() {
+<a name="line945"></a>  var outerIframe = document.getElementById(&#39;nested-outer&#39;);
+<a name="line946"></a>  var outerDoc = goog.dom.getFrameContentDocument(outerIframe);
+<a name="line947"></a>  var popup = outerDoc.getElementById(&#39;popup1&#39;);
+<a name="line948"></a>  var innerIframe = outerDoc.getElementById(&#39;inner-frame&#39;);
+<a name="line949"></a>  var innerDoc = goog.dom.getFrameContentDocument(innerIframe);
+<a name="line950"></a>  var anchor = innerDoc.getElementById(&#39;anchor1&#39;);
+<a name="line951"></a>
+<a name="line952"></a>  var status = goog.positioning.positionAtAnchor(
+<a name="line953"></a>      anchor, corner.TOP_LEFT, popup, corner.BOTTOM_LEFT);
+<a name="line954"></a>  assertEquals(&#39;Status should not have any ADJUSTED and FAILED.&#39;,
+<a name="line955"></a>               goog.positioning.OverflowStatus.NONE, status);
+<a name="line956"></a>  var innerIframeRect = goog.style.getBounds(innerIframe);
+<a name="line957"></a>  var popupRect = goog.style.getBounds(popup);
+<a name="line958"></a>  assertRoundedEquals(&#39;Top of frame should align with bottom of the popup&#39;,
+<a name="line959"></a>                      innerIframeRect.top, popupRect.top + popupRect.height);
+<a name="line960"></a>
+<a name="line961"></a>  // The anchor is scrolled up by 10px.
+<a name="line962"></a>  // Popup position should be the same as above.
+<a name="line963"></a>  goog.dom.getWindow(innerDoc).scrollTo(0, 10);
+<a name="line964"></a>  status = goog.positioning.positionAtAnchor(
+<a name="line965"></a>      anchor, corner.TOP_LEFT, popup, corner.BOTTOM_LEFT);
+<a name="line966"></a>  assertEquals(&#39;Status should not have any ADJUSTED and FAILED.&#39;,
+<a name="line967"></a>               goog.positioning.OverflowStatus.NONE, status);
+<a name="line968"></a>  innerIframeRect = goog.style.getBounds(innerIframe);
+<a name="line969"></a>  popupRect = goog.style.getBounds(popup);
+<a name="line970"></a>  assertRoundedEquals(&#39;Top of frame should align with bottom of the popup&#39;,
+<a name="line971"></a>                      innerIframeRect.top, popupRect.top + popupRect.height);
+<a name="line972"></a>}
+<a name="line973"></a>
+<a name="line974"></a>function testPositionAtAnchorOffscreen() {
+<a name="line975"></a>  var offset = 0;
+<a name="line976"></a>  var anchor = goog.dom.getElement(&#39;offscreen-anchor&#39;);
+<a name="line977"></a>  var popup = goog.dom.getElement(&#39;popup3&#39;);
+<a name="line978"></a>
+<a name="line979"></a>  goog.positioning.positionAtAnchor(
+<a name="line980"></a>      anchor, corner.TOP_LEFT, popup, corner.TOP_LEFT, null, null,
+<a name="line981"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line982"></a>  assertObjectEquals(
+<a name="line983"></a>      newCoord(offset, offset), goog.style.getPageOffset(popup));
+<a name="line984"></a>
+<a name="line985"></a>  goog.positioning.positionAtAnchor(
+<a name="line986"></a>      anchor, corner.TOP_LEFT, popup, corner.TOP_LEFT, null, null,
+<a name="line987"></a>      overflow.ADJUST_X_EXCEPT_OFFSCREEN | overflow.ADJUST_Y);
+<a name="line988"></a>  assertObjectEquals(
+<a name="line989"></a>      newCoord(-1000, offset), goog.style.getPageOffset(popup));
+<a name="line990"></a>
+<a name="line991"></a>  goog.positioning.positionAtAnchor(
+<a name="line992"></a>      anchor, corner.TOP_LEFT, popup, corner.TOP_LEFT, null, null,
+<a name="line993"></a>      overflow.ADJUST_X | overflow.ADJUST_Y_EXCEPT_OFFSCREEN);
+<a name="line994"></a>  assertObjectEquals(
+<a name="line995"></a>      newCoord(offset, -1000), goog.style.getPageOffset(popup));
+<a name="line996"></a>
+<a name="line997"></a>  goog.positioning.positionAtAnchor(
+<a name="line998"></a>      anchor, corner.TOP_LEFT, popup, corner.TOP_LEFT, null, null,
+<a name="line999"></a>      overflow.ADJUST_X_EXCEPT_OFFSCREEN | overflow.ADJUST_Y_EXCEPT_OFFSCREEN);
+<a name="line1000"></a>  assertObjectEquals(
+<a name="line1001"></a>      newCoord(-1000, -1000),
+<a name="line1002"></a>      goog.style.getPageOffset(popup));
+<a name="line1003"></a>}
+<a name="line1004"></a>
+<a name="line1005"></a>function testPositionAtAnchorWithOverflowScrollOffsetParent() {
+<a name="line1006"></a>  var testAreaOffset = goog.style.getPageOffset(testArea);
+<a name="line1007"></a>  var scrollbarWidth = goog.style.getScrollbarWidth();
+<a name="line1008"></a>  window.scrollTo(testAreaOffset.x, testAreaOffset.y);
+<a name="line1009"></a>
+<a name="line1010"></a>  var overflowDiv = goog.dom.createElement(&#39;div&#39;);
+<a name="line1011"></a>  overflowDiv.style.overflow = &#39;scroll&#39;;
+<a name="line1012"></a>  overflowDiv.style.position = &#39;relative&#39;;
+<a name="line1013"></a>  goog.style.setSize(overflowDiv, 200 /* width */, 100 /* height */);
+<a name="line1014"></a>
+<a name="line1015"></a>  var anchor = goog.dom.createElement(&#39;div&#39;);
+<a name="line1016"></a>  anchor.style.position = &#39;absolute&#39;;
+<a name="line1017"></a>  goog.style.setSize(anchor, 50 /* width */, 50 /* height */);
+<a name="line1018"></a>  goog.style.setPosition(anchor, 300 /* left */, 300 /* top */);
+<a name="line1019"></a>
+<a name="line1020"></a>  var popup = createPopupDiv(75 /* width */, 50 /* height */);
+<a name="line1021"></a>
+<a name="line1022"></a>  goog.dom.append(testArea, overflowDiv, anchor);
+<a name="line1023"></a>  goog.dom.append(overflowDiv, popup);
+<a name="line1024"></a>
+<a name="line1025"></a>  // Popup should always be positioned within the overflowDiv
+<a name="line1026"></a>  goog.style.setPosition(overflowDiv, 0 /* left */, 0 /* top */);
+<a name="line1027"></a>  goog.positioning.positionAtAnchor(
+<a name="line1028"></a>      anchor, corner.TOP_LEFT, popup, corner.TOP_RIGHT, null, null,
+<a name="line1029"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line1030"></a>  assertObjectRoughlyEquals(
+<a name="line1031"></a>      new goog.math.Coordinate(
+<a name="line1032"></a>          testAreaOffset.x + 200 - 75 - scrollbarWidth,
+<a name="line1033"></a>          testAreaOffset.y + 100 - 50 - scrollbarWidth),
+<a name="line1034"></a>      goog.style.getPageOffset(popup),
+<a name="line1035"></a>      1);
+<a name="line1036"></a>
+<a name="line1037"></a>  goog.style.setPosition(overflowDiv, 400 /* left */, 0 /* top */);
+<a name="line1038"></a>  goog.positioning.positionAtAnchor(
+<a name="line1039"></a>      anchor, corner.TOP_RIGHT, popup, corner.TOP_LEFT, null, null,
+<a name="line1040"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line1041"></a>  assertObjectRoughlyEquals(
+<a name="line1042"></a>      new goog.math.Coordinate(
+<a name="line1043"></a>          testAreaOffset.x + 400, testAreaOffset.y + 100 - 50 - scrollbarWidth),
+<a name="line1044"></a>      goog.style.getPageOffset(popup),
+<a name="line1045"></a>      1);
+<a name="line1046"></a>
+<a name="line1047"></a>  goog.style.setPosition(overflowDiv, 0 /* left */, 400 /* top */);
+<a name="line1048"></a>  goog.positioning.positionAtAnchor(
+<a name="line1049"></a>      anchor, corner.BOTTOM_LEFT, popup, corner.BOTTOM_RIGHT, null, null,
+<a name="line1050"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line1051"></a>  assertObjectRoughlyEquals(
+<a name="line1052"></a>      new goog.math.Coordinate(
+<a name="line1053"></a>          testAreaOffset.x + 200 - 75 - scrollbarWidth, testAreaOffset.y + 400),
+<a name="line1054"></a>      goog.style.getPageOffset(popup),
+<a name="line1055"></a>      1);
+<a name="line1056"></a>
+<a name="line1057"></a>  goog.style.setPosition(overflowDiv, 400 /* left */, 400 /* top */);
+<a name="line1058"></a>  goog.positioning.positionAtAnchor(
+<a name="line1059"></a>      anchor, corner.BOTTOM_RIGHT, popup, corner.BOTTOM_LEFT, null, null,
+<a name="line1060"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line1061"></a>  assertObjectRoughlyEquals(
+<a name="line1062"></a>      new goog.math.Coordinate(
+<a name="line1063"></a>          testAreaOffset.x + 400, testAreaOffset.y + 400),
+<a name="line1064"></a>      goog.style.getPageOffset(popup),
+<a name="line1065"></a>      1);
+<a name="line1066"></a>
+<a name="line1067"></a>  // No overflow.
+<a name="line1068"></a>  goog.style.setPosition(overflowDiv, 300 - 50 /* left */, 300 /* top */);
+<a name="line1069"></a>  goog.positioning.positionAtAnchor(
+<a name="line1070"></a>      anchor, corner.TOP_LEFT, popup, corner.TOP_RIGHT, null, null,
+<a name="line1071"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line1072"></a>  assertObjectRoughlyEquals(
+<a name="line1073"></a>      new goog.math.Coordinate(
+<a name="line1074"></a>          testAreaOffset.x + 300 - 50, testAreaOffset.y + 300),
+<a name="line1075"></a>      goog.style.getPageOffset(popup),
+<a name="line1076"></a>      1);
+<a name="line1077"></a>}
+<a name="line1078"></a>
+<a name="line1079"></a>function testPositionAtAnchorWithOverflowHiddenParent() {
+<a name="line1080"></a>  var testAreaOffset = goog.style.getPageOffset(testArea);
+<a name="line1081"></a>  window.scrollTo(testAreaOffset.x, testAreaOffset.y);
+<a name="line1082"></a>
+<a name="line1083"></a>  var overflowDiv = goog.dom.createElement(&#39;div&#39;);
+<a name="line1084"></a>  overflowDiv.style.overflow = &#39;hidden&#39;;
+<a name="line1085"></a>  overflowDiv.style.position = &#39;relative&#39;;
+<a name="line1086"></a>  goog.style.setSize(overflowDiv, 200 /* width */, 100 /* height */);
+<a name="line1087"></a>
+<a name="line1088"></a>  var anchor = goog.dom.createElement(&#39;div&#39;);
+<a name="line1089"></a>  anchor.style.position = &#39;absolute&#39;;
+<a name="line1090"></a>  goog.style.setSize(anchor, 50 /* width */, 50 /* height */);
+<a name="line1091"></a>  goog.style.setPosition(anchor, 300 /* left */, 300 /* top */);
+<a name="line1092"></a>
+<a name="line1093"></a>  var popup = createPopupDiv(75 /* width */, 50 /* height */);
+<a name="line1094"></a>
+<a name="line1095"></a>  goog.dom.append(testArea, overflowDiv, anchor);
+<a name="line1096"></a>  goog.dom.append(overflowDiv, popup);
+<a name="line1097"></a>
+<a name="line1098"></a>  // Popup should always be positioned within the overflowDiv
+<a name="line1099"></a>  goog.style.setPosition(overflowDiv, 0 /* left */, 0 /* top */);
+<a name="line1100"></a>  goog.positioning.positionAtAnchor(
+<a name="line1101"></a>      anchor, corner.TOP_LEFT, popup, corner.TOP_RIGHT, null, null,
+<a name="line1102"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line1103"></a>  assertObjectRoughlyEquals(
+<a name="line1104"></a>      new goog.math.Coordinate(
+<a name="line1105"></a>          testAreaOffset.x + 200 - 75, testAreaOffset.y + 100 - 50),
+<a name="line1106"></a>      goog.style.getPageOffset(popup),
+<a name="line1107"></a>      1);
+<a name="line1108"></a>
+<a name="line1109"></a>  goog.style.setPosition(overflowDiv, 400 /* left */, 0 /* top */);
+<a name="line1110"></a>  goog.positioning.positionAtAnchor(
+<a name="line1111"></a>      anchor, corner.TOP_RIGHT, popup, corner.TOP_LEFT, null, null,
+<a name="line1112"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line1113"></a>  assertObjectRoughlyEquals(
+<a name="line1114"></a>      new goog.math.Coordinate(
+<a name="line1115"></a>          testAreaOffset.x + 400, testAreaOffset.y + 100 - 50),
+<a name="line1116"></a>      goog.style.getPageOffset(popup),
+<a name="line1117"></a>      1);
+<a name="line1118"></a>
+<a name="line1119"></a>  goog.style.setPosition(overflowDiv, 0 /* left */, 400 /* top */);
+<a name="line1120"></a>  goog.positioning.positionAtAnchor(
+<a name="line1121"></a>      anchor, corner.BOTTOM_LEFT, popup, corner.BOTTOM_RIGHT, null, null,
+<a name="line1122"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line1123"></a>  assertObjectRoughlyEquals(
+<a name="line1124"></a>      new goog.math.Coordinate(
+<a name="line1125"></a>          testAreaOffset.x + 200 - 75, testAreaOffset.y + 400),
+<a name="line1126"></a>      goog.style.getPageOffset(popup),
+<a name="line1127"></a>      1);
+<a name="line1128"></a>
+<a name="line1129"></a>  goog.style.setPosition(overflowDiv, 400 /* left */, 400 /* top */);
+<a name="line1130"></a>  goog.positioning.positionAtAnchor(
+<a name="line1131"></a>      anchor, corner.BOTTOM_RIGHT, popup, corner.BOTTOM_LEFT, null, null,
+<a name="line1132"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line1133"></a>  assertObjectRoughlyEquals(
+<a name="line1134"></a>      new goog.math.Coordinate(
+<a name="line1135"></a>          testAreaOffset.x + 400, testAreaOffset.y + 400),
+<a name="line1136"></a>      goog.style.getPageOffset(popup),
+<a name="line1137"></a>      1);
+<a name="line1138"></a>
+<a name="line1139"></a>  // No overflow.
+<a name="line1140"></a>  goog.style.setPosition(overflowDiv, 300 - 50 /* left */, 300 /* top */);
+<a name="line1141"></a>  goog.positioning.positionAtAnchor(
+<a name="line1142"></a>      anchor, corner.TOP_LEFT, popup, corner.TOP_RIGHT, null, null,
+<a name="line1143"></a>      overflow.ADJUST_X | overflow.ADJUST_Y);
+<a name="line1144"></a>  assertObjectRoughlyEquals(
+<a name="line1145"></a>      new goog.math.Coordinate(
+<a name="line1146"></a>          testAreaOffset.x + 300 - 50, testAreaOffset.y + 300),
+<a name="line1147"></a>      goog.style.getPageOffset(popup),
+<a name="line1148"></a>      1);
+<a name="line1149"></a>}
+<a name="line1150"></a>
+<a name="line1151"></a>function createPopupDiv(width, height) {
+<a name="line1152"></a>  var popupDiv = goog.dom.createElement(&#39;div&#39;);
+<a name="line1153"></a>  popupDiv.style.position = &#39;absolute&#39;;
+<a name="line1154"></a>  goog.style.setSize(popupDiv, width, height);
+<a name="line1155"></a>  goog.style.setPosition(popupDiv, 0 /* left */, 250 /* top */);
+<a name="line1156"></a>  return popupDiv;
+<a name="line1157"></a>}
+<a name="line1158"></a>
+<a name="line1159"></a>function newCoord(x, y) {
+<a name="line1160"></a>  return new goog.math.Coordinate(x, y);
+<a name="line1161"></a>}
+<a name="line1162"></a>
+<a name="line1163"></a>function newSize(w, h) {
+<a name="line1164"></a>  return new goog.math.Size(w, h);
+<a name="line1165"></a>}
+<a name="line1166"></a>
+<a name="line1167"></a>function newBox(coord, size) {
+<a name="line1168"></a>}
+</pre>
+
+
+</body>
+</html>

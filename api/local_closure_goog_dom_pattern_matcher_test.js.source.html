@@ -1,0 +1,238 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>matcher_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_pattern_matcher_test.js.html">matcher_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.dom.pattern.matcherTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.dom.pattern.matcherTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.pattern.EndTag&#39;);
+<a name="line20"></a>goog.require(&#39;goog.dom.pattern.FullTag&#39;);
+<a name="line21"></a>goog.require(&#39;goog.dom.pattern.Matcher&#39;);
+<a name="line22"></a>goog.require(&#39;goog.dom.pattern.Repeat&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom.pattern.Sequence&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.pattern.StartTag&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.pattern.callback.Counter&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.pattern.callback.Test&#39;);
+<a name="line27"></a>goog.require(&#39;goog.iter.StopIteration&#39;);
+<a name="line28"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line29"></a>
+<a name="line30"></a>function testMatcherAndStartTag() {
+<a name="line31"></a>  var pattern = new goog.dom.pattern.StartTag(&#39;P&#39;);
+<a name="line32"></a>
+<a name="line33"></a>  var counter = new goog.dom.pattern.callback.Counter();
+<a name="line34"></a>  var matcher = new goog.dom.pattern.Matcher();
+<a name="line35"></a>  matcher.addPattern(pattern, counter.getCallback());
+<a name="line36"></a>  matcher.match(document.body);
+<a name="line37"></a>
+<a name="line38"></a>  assertEquals(&#39;StartTag(p) should match 5 times in body&#39;, 5,
+<a name="line39"></a>      counter.count);
+<a name="line40"></a>}
+<a name="line41"></a>
+<a name="line42"></a>function testMatcherAndStartTagTwice() {
+<a name="line43"></a>  var pattern = new goog.dom.pattern.StartTag(&#39;P&#39;);
+<a name="line44"></a>
+<a name="line45"></a>  var counter = new goog.dom.pattern.callback.Counter();
+<a name="line46"></a>  var matcher = new goog.dom.pattern.Matcher();
+<a name="line47"></a>  matcher.addPattern(pattern, counter.getCallback());
+<a name="line48"></a>  matcher.match(document.body);
+<a name="line49"></a>
+<a name="line50"></a>  assertEquals(&#39;StartTag(p) should match 5 times in body&#39;, 5,
+<a name="line51"></a>      counter.count);
+<a name="line52"></a>
+<a name="line53"></a>  // Make sure no state got mangled.
+<a name="line54"></a>  counter.reset();
+<a name="line55"></a>  matcher.match(document.body);
+<a name="line56"></a>
+<a name="line57"></a>  assertEquals(&#39;StartTag(p) should match 5 times in body again&#39;, 5,
+<a name="line58"></a>      counter.count);
+<a name="line59"></a>}
+<a name="line60"></a>
+<a name="line61"></a>function testMatcherAndStartTagAttributes() {
+<a name="line62"></a>  var pattern = new goog.dom.pattern.StartTag(&#39;SPAN&#39;, {id: /./});
+<a name="line63"></a>
+<a name="line64"></a>  var counter = new goog.dom.pattern.callback.Counter();
+<a name="line65"></a>  var matcher = new goog.dom.pattern.Matcher();
+<a name="line66"></a>  matcher.addPattern(pattern, counter.getCallback());
+<a name="line67"></a>  matcher.match(document.body);
+<a name="line68"></a>
+<a name="line69"></a>  assertEquals(&#39;StartTag(span,id) should match 2 times in body&#39;, 2,
+<a name="line70"></a>      counter.count);
+<a name="line71"></a>}
+<a name="line72"></a>
+<a name="line73"></a>function testMatcherWithTwoPatterns() {
+<a name="line74"></a>  var pattern1 = new goog.dom.pattern.StartTag(&#39;SPAN&#39;);
+<a name="line75"></a>  var pattern2 = new goog.dom.pattern.StartTag(&#39;P&#39;);
+<a name="line76"></a>
+<a name="line77"></a>  var counter = new goog.dom.pattern.callback.Counter();
+<a name="line78"></a>
+<a name="line79"></a>  var matcher = new goog.dom.pattern.Matcher();
+<a name="line80"></a>  matcher.addPattern(pattern1, counter.getCallback());
+<a name="line81"></a>  matcher.addPattern(pattern2, counter.getCallback());
+<a name="line82"></a>
+<a name="line83"></a>  matcher.match(document.body);
+<a name="line84"></a>
+<a name="line85"></a>  assertEquals(&#39;StartTag(span|p) should match 8 times in body&#39;, 8,
+<a name="line86"></a>      counter.count);
+<a name="line87"></a>}
+<a name="line88"></a>
+<a name="line89"></a>function testMatcherWithQuit() {
+<a name="line90"></a>  var pattern1 = new goog.dom.pattern.StartTag(&#39;SPAN&#39;);
+<a name="line91"></a>  var pattern2 = new goog.dom.pattern.StartTag(&#39;P&#39;);
+<a name="line92"></a>
+<a name="line93"></a>  var count = 0;
+<a name="line94"></a>  var callback = function(node, position) {
+<a name="line95"></a>    if (node.nodeName == &#39;SPAN&#39;) {
+<a name="line96"></a>      throw goog.iter.StopIteration;
+<a name="line97"></a>      return true;
+<a name="line98"></a>    }
+<a name="line99"></a>    count++;
+<a name="line100"></a>  };
+<a name="line101"></a>
+<a name="line102"></a>  var matcher = new goog.dom.pattern.Matcher();
+<a name="line103"></a>  matcher.addPattern(pattern1, callback);
+<a name="line104"></a>  matcher.addPattern(pattern2, callback);
+<a name="line105"></a>
+<a name="line106"></a>  matcher.match(document.body);
+<a name="line107"></a>
+<a name="line108"></a>  assertEquals(&#39;Stopped span|p should match 1 time in body&#39;, 1, count);
+<a name="line109"></a>}
+<a name="line110"></a>
+<a name="line111"></a>function testMatcherWithReplace() {
+<a name="line112"></a>  var pattern1 = new goog.dom.pattern.StartTag(&#39;B&#39;);
+<a name="line113"></a>  var pattern2 = new goog.dom.pattern.StartTag(&#39;I&#39;);
+<a name="line114"></a>
+<a name="line115"></a>  var count = 0;
+<a name="line116"></a>  var callback = function(node, position) {
+<a name="line117"></a>    count++;
+<a name="line118"></a>    if (node.nodeName == &#39;B&#39;) {
+<a name="line119"></a>      var i = goog.dom.createDom(&#39;I&#39;);
+<a name="line120"></a>      node.parentNode.insertBefore(i, node);
+<a name="line121"></a>      goog.dom.removeNode(node);
+<a name="line122"></a>
+<a name="line123"></a>      position.setPosition(i);
+<a name="line124"></a>
+<a name="line125"></a>      return true;
+<a name="line126"></a>    }
+<a name="line127"></a>  };
+<a name="line128"></a>
+<a name="line129"></a>  var matcher = new goog.dom.pattern.Matcher();
+<a name="line130"></a>  matcher.addPattern(pattern1, callback);
+<a name="line131"></a>  matcher.addPattern(pattern2, callback);
+<a name="line132"></a>
+<a name="line133"></a>  matcher.match(goog.dom.getElement(&#39;div1&#39;));
+<a name="line134"></a>
+<a name="line135"></a>  assertEquals(&#39;i|b-&gt;i should match 5 times in div1&#39;, 5, count);
+<a name="line136"></a>}
+<a name="line137"></a>
+<a name="line138"></a>function testMatcherAndFullTag() {
+<a name="line139"></a>  var pattern = new goog.dom.pattern.FullTag(&#39;P&#39;);
+<a name="line140"></a>
+<a name="line141"></a>  var test = new goog.dom.pattern.callback.Test();
+<a name="line142"></a>
+<a name="line143"></a>  var matcher = new goog.dom.pattern.Matcher();
+<a name="line144"></a>  matcher.addPattern(pattern, test.getCallback());
+<a name="line145"></a>
+<a name="line146"></a>  matcher.match(goog.dom.getElement(&#39;p1&#39;));
+<a name="line147"></a>
+<a name="line148"></a>  assert(&#39;FullTag(p) should match on p1&#39;, test.matched);
+<a name="line149"></a>
+<a name="line150"></a>  test.reset();
+<a name="line151"></a>  matcher.match(goog.dom.getElement(&#39;div1&#39;));
+<a name="line152"></a>
+<a name="line153"></a>  assert(&#39;FullTag(p) should not match on div1&#39;, !test.matched);
+<a name="line154"></a>}
+<a name="line155"></a>
+<a name="line156"></a>function testMatcherAndSequence() {
+<a name="line157"></a>  var pattern = new goog.dom.pattern.Sequence([
+<a name="line158"></a>    new goog.dom.pattern.StartTag(&#39;P&#39;),
+<a name="line159"></a>    new goog.dom.pattern.StartTag(&#39;SPAN&#39;),
+<a name="line160"></a>    new goog.dom.pattern.EndTag(&#39;SPAN&#39;),
+<a name="line161"></a>    new goog.dom.pattern.EndTag(&#39;P&#39;)
+<a name="line162"></a>  ], true);
+<a name="line163"></a>
+<a name="line164"></a>  var counter = new goog.dom.pattern.callback.Counter();
+<a name="line165"></a>  var matcher = new goog.dom.pattern.Matcher();
+<a name="line166"></a>  matcher.addPattern(pattern, counter.getCallback());
+<a name="line167"></a>  matcher.match(document.body);
+<a name="line168"></a>
+<a name="line169"></a>  assertEquals(&#39;Sequence should match 1 times in body&#39;, 1, counter.count);
+<a name="line170"></a>}
+<a name="line171"></a>
+<a name="line172"></a>function testMatcherAndRepeatFullTag() {
+<a name="line173"></a>  var pattern = new goog.dom.pattern.Repeat(
+<a name="line174"></a>      new goog.dom.pattern.FullTag(&#39;P&#39;), 1);
+<a name="line175"></a>
+<a name="line176"></a>  var count = 0;
+<a name="line177"></a>  var tcount = 0;
+<a name="line178"></a>  var matcher = new goog.dom.pattern.Matcher();
+<a name="line179"></a>  matcher.addPattern(pattern, function() {
+<a name="line180"></a>    count++;
+<a name="line181"></a>    tcount += pattern.count;
+<a name="line182"></a>  });
+<a name="line183"></a>  matcher.match(document.body);
+<a name="line184"></a>
+<a name="line185"></a>  assertEquals(&#39;Repeated p should match 2 times in body&#39;, 2, count);
+<a name="line186"></a>  assertEquals(&#39;Repeated p should match 5 total times in body&#39;, 5, tcount);
+<a name="line187"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,2274 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>Logger (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">debug.Logger</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    The Logger is an object used for logging debug messages. Loggers are
+normally named, using a hierarchical dot-separated namespace. Logger names
+can be arbitrary strings, but they should normally be based on the package
+name or class name of the logged component, such as goog.net.BrowserChannel.
+
+The Logger object is loosely based on the java class
+java.util.logging.Logger. It supports different levels of filtering for
+different loggers.
+
+The logger object should never be instantiated by application code. It
+should always use the goog.debug.Logger.getLogger function.
+
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="http://closure-library.googlecode.com/git/closure/goog/demos/debug.html">Demo</a></li>
+            <li><a href="local_closure_goog_debug_logger.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/debug/logger.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td>goog.debug.Logger</td><td></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+</table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.debug.Logger(<span><span class="arg">name</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">name</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the Logger.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_debug_Logger.html">
+              goog.debug.Logger
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.addChild_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addChild_<span class="args">(<span class="arg">name</span>,&nbsp;<span class="arg">logger</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds a child to this logger. This is used for setting up the logger tree.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">name</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The leaf name of the child.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">logger</span>
+        : <span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span>
+        <div class="entryOverview">The child logger.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line765">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.addHandler"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addHandler<span class="args">(<span class="arg">handler</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds a handler to the logger. This doesn't use the event system because
+we want to be able to add logging to the event system.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">handler</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+        <div class="entryOverview">Handler function to add.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line400">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.callPublish_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">callPublish_<span class="args">(<span class="arg">logRecord</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Calls the handlers for publish.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">logRecord</span>
+        : <span class="type"><a href="class_goog_debug_LogRecord.html">goog.debug.LogRecord</a></span>
+        <div class="entryOverview">The log record to publish.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line740">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.config"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">config<span class="args">(<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Logger.Level.CONFIG level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line652">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.doLogRecord_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">doLogRecord_<span class="args">(<span class="arg">logRecord</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a LogRecord.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">logRecord</span>
+        : <span class="type"><a href="class_goog_debug_LogRecord.html">goog.debug.LogRecord</a></span>
+        <div class="entryOverview">A log record to log.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line719">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.fine"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">fine<span class="args">(<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Logger.Level.FINE level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line666">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.finer"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">finer<span class="args">(<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Logger.Level.FINER level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line680">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.finest"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">finest<span class="args">(<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Logger.Level.FINEST level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line694">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.getChildren"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getChildren<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the children of this logger as a map of the child name to the logger.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>&nbsp;
+            The map where the keys are the child leaf names and the
+    values are the Logger objects.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line448">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.getEffectiveLevel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getEffectiveLevel<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_debug_Logger_Level.html">goog.debug.Logger.Level</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the effective level of the logger based on its ancestors' levels.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_debug_Logger_Level.html">goog.debug.Logger.Level</a></span>&nbsp;
+            The level.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line498">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.getLevel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getLevel<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_debug_Logger_Level.html">goog.debug.Logger.Level</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the log level specifying which message levels will be logged by this
+logger. Message levels lower than this value will be discarded.
+The level value Level.OFF can be used to turn off logging. If the level
+is null, it means that this node should inherit its level from its nearest
+ancestor with a specific (non-null) level value.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_debug_Logger_Level.html">goog.debug.Logger.Level</a></span>&nbsp;
+            The level.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line488">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.getLogRecord"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getLogRecord<span class="args">(<span class="arg">level</span>,&nbsp;<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>,&nbsp;<span class="arg">opt_fnStackContext</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_debug_LogRecord.html">goog.debug.LogRecord</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new log record and adds the exception (if present) to it.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">level</span>
+        : <span class="type"><a href="class_goog_debug_Logger_Level.html">goog.debug.Logger.Level</a></span>
+        <div class="entryOverview">One of the level identifiers.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The string message.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error</span><span>&nbsp;|&nbsp;</span><span class="type">Object=</span>
+        <div class="entryOverview">An exception associated with the
+    message.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_fnStackContext</span>
+        : <span class="type">Function=</span>
+        <div class="entryOverview">A function to use as the base
+    of the stack trace used in the log record.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_debug_LogRecord.html">goog.debug.LogRecord</a></span>&nbsp;
+            A log record.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line564">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.getName"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getName<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the name of this logger.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The name of this logger.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line390">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.getParent"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getParent<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the parent of this logger.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span>&nbsp;
+            The parent logger or null if this is the root.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line438">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.info"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">info<span class="args">(<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the <a href="http://Logger.Level.INFO">Logger.Level.INFO</a> level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line638">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.isLoggable"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isLoggable<span class="args">(<span class="arg">level</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Checks if a message of the given level would actually be logged by this
+logger. This check is based on the Loggers effective level, which may be
+inherited from its parent.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">level</span>
+        : <span class="type"><a href="class_goog_debug_Logger_Level.html">goog.debug.Logger.Level</a></span>
+        <div class="entryOverview">The level to check.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the message would be logged.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line524">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.log"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">log<span class="args">(<span class="arg">level</span>,&nbsp;<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message. If the logger is currently enabled for the
+given message level then the given message is forwarded to all the
+registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">level</span>
+        : <span class="type"><a href="class_goog_debug_Logger_Level.html">goog.debug.Logger.Level</a></span>
+        <div class="entryOverview">One of the level identifiers.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error</span><span>&nbsp;|&nbsp;</span><span class="type">Object=</span>
+        <div class="entryOverview">An exception associated with the
+    message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line539">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.logRecord"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">logRecord<span class="args">(<span class="arg">logRecord</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a LogRecord. If the logger is currently enabled for the
+given message level then the given message is forwarded to all the
+registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">logRecord</span>
+        : <span class="type"><a href="class_goog_debug_LogRecord.html">goog.debug.LogRecord</a></span>
+        <div class="entryOverview">A log record to log.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line707">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.removeHandler"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">removeHandler<span class="args">(<span class="arg">handler</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes a handler from the logger. This doesn't use the event system because
+we want to be able to add logging to the event system.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">handler</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+        <div class="entryOverview">Handler function to remove.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the handler was removed.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line423">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.setLevel"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setLevel<span class="args">(<span class="arg">level</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Set the log level specifying which message levels will be logged by this
+logger. Message levels lower than this value will be discarded.
+The level value Level.OFF can be used to turn off logging. If the new level
+is null, it means that this node should inherit its level from its nearest
+ancestor with a specific (non-null) level value.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">level</span>
+        : <span class="type"><a href="class_goog_debug_Logger_Level.html">goog.debug.Logger.Level</a></span>
+        <div class="entryOverview">The new level.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line465">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.setParent_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setParent_<span class="args">(<span class="arg">parent</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the parent of this logger. This is used for setting up the logger tree.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span>
+        <div class="entryOverview">The parent logger.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line754">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.severe"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">severe<span class="args">(<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Logger.Level.SEVERE level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line610">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.shout"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">shout<span class="args">(<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Logger.Level.SHOUT level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line596">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.prototype.warning"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">warning<span class="args">(<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Logger.Level.WARNING level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line624">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_debug_Logger.html">
+              goog.debug.Logger
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.Logger.prototype.children_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">children_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Map of children loggers. The keys are the leaf names of the children and
+the values are the child loggers.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line90">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.Logger.prototype.handlers_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">handlers_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Handlers that are listening to this logger.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line96">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.Logger.prototype.level_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">level_</span>
+        : <span class="type"><a href="class_goog_debug_Logger_Level.html">goog.debug.Logger.Level</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       Level that this logger only filters above. Null indicates it should
+inherit from the parent.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line83">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.Logger.prototype.name_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">name_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Name of the Logger. Generally a dot-separated namespace
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line70">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.Logger.prototype.parent_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">parent_</span>
+        : <span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       Parent Logger.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line76">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Static Methods</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td class="deprecated">
+    <a name="goog.debug.Logger.getLogger"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.Logger.</span><span class="entryName">getLogger<span class="args">(<span class="arg">name</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class="deprecatedMessage">use goog.log instead. <a href="http://go/goog-debug-logger-deprecated">http://go/goog-debug-logger-deprecated</a></span>
+       Finds or creates a logger for a named subsystem. If a logger has already been
+created with the given name it is returned. Otherwise a new logger is
+created. If a new logger is created its log level will be configured based
+on the LogManager configuration and it will configured to also send logging
+output to its parent's handlers. It will be registered in the LogManager
+global namespace.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">name</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A name for the logger. This should be a dot-separated
+name and should normally be based on the package name or class name of the
+subsystem, such as goog.net.BrowserChannel.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span>&nbsp;
+            The named logger.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line355">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.Logger.logToProfilers"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.Logger.</span><span class="entryName">logToProfilers<span class="args">(<span class="arg">msg</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message to profiling tools, if available.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line366">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+<h2>Static Properties</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.Logger.ENABLE_HIERARCHY"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.Logger.</span><span class="entryName">ENABLE_HIERARCHY</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line109">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.Logger.ROOT_LOGGER_NAME"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.Logger.</span><span class="entryName">ROOT_LOGGER_NAME</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line101">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.Logger.rootHandlers_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.Logger.</span><span class="entryName">rootHandlers_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line117">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.Logger.rootLevel_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.Logger.</span><span class="entryName">rootLevel_</span>
+        : <span class="type"><a href="class_goog_debug_Logger_Level.html">goog.debug.Logger.Level</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_logger.js.source.html#line124">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package debug</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="debug.Logger"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

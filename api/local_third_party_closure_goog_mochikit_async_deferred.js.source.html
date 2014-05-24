@@ -1,0 +1,975 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>deferred.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_third_party_closure_goog_mochikit_async_deferred.js.html">deferred.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 Bob Ippolito. All Rights Reserved.
+<a name="line2"></a>// Modifications Copyright 2009 The Closure Library Authors. All Rights
+<a name="line3"></a>// Reserved.
+<a name="line4"></a>
+<a name="line5"></a>/**
+<a name="line6"></a> * @license Portions of this code are from MochiKit, received by
+<a name="line7"></a> * The Closure Authors under the MIT license. All other code is Copyright
+<a name="line8"></a> * 2005-2009 The Closure Authors. All Rights Reserved.
+<a name="line9"></a> */
+<a name="line10"></a>
+<a name="line11"></a>/**
+<a name="line12"></a> * @fileoverview Classes for tracking asynchronous operations and handling the
+<a name="line13"></a> * results. The Deferred object here is patterned after the Deferred object in
+<a name="line14"></a> * the Twisted python networking framework.
+<a name="line15"></a> *
+<a name="line16"></a> * See: http://twistedmatrix.com/projects/core/documentation/howto/defer.html
+<a name="line17"></a> *
+<a name="line18"></a> * Based on the Dojo code which in turn is based on the MochiKit code.
+<a name="line19"></a> *
+<a name="line20"></a> * @author arv@google.com (Erik Arvidsson)
+<a name="line21"></a> * @author brenneman@google.com (Shawn Brenneman)
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.async.Deferred&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.async.Deferred.AlreadyCalledError&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.async.Deferred.CanceledError&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.Promise&#39;);
+<a name="line29"></a>goog.require(&#39;goog.Thenable&#39;);
+<a name="line30"></a>goog.require(&#39;goog.array&#39;);
+<a name="line31"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line32"></a>goog.require(&#39;goog.debug.Error&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/**
+<a name="line37"></a> * A Deferred represents the result of an asynchronous operation. A Deferred
+<a name="line38"></a> * instance has no result when it is created, and is &quot;fired&quot; (given an initial
+<a name="line39"></a> * result) by calling {@code callback} or {@code errback}.
+<a name="line40"></a> *
+<a name="line41"></a> * Once fired, the result is passed through a sequence of callback functions
+<a name="line42"></a> * registered with {@code addCallback} or {@code addErrback}. The functions may
+<a name="line43"></a> * mutate the result before it is passed to the next function in the sequence.
+<a name="line44"></a> *
+<a name="line45"></a> * Callbacks and errbacks may be added at any time, including after the Deferred
+<a name="line46"></a> * has been &quot;fired&quot;. If there are no pending actions in the execution sequence
+<a name="line47"></a> * of a fired Deferred, any new callback functions will be called with the last
+<a name="line48"></a> * computed result. Adding a callback function is the only way to access the
+<a name="line49"></a> * result of the Deferred.
+<a name="line50"></a> *
+<a name="line51"></a> * If a Deferred operation is canceled, an optional user-provided cancellation
+<a name="line52"></a> * function is invoked which may perform any special cleanup, followed by firing
+<a name="line53"></a> * the Deferred&#39;s errback sequence with a {@code CanceledError}. If the
+<a name="line54"></a> * Deferred has already fired, cancellation is ignored.
+<a name="line55"></a> *
+<a name="line56"></a> * Deferreds may be templated to a specific type they produce using generics
+<a name="line57"></a> * with syntax such as:
+<a name="line58"></a> * &lt;code&gt;
+<a name="line59"></a> *   /** @type {goog.async.Deferred.&lt;string&gt;} *&amp;#47;
+<a name="line60"></a> *   var d = new goog.async.Deferred();
+<a name="line61"></a> *   // Compiler can infer that foo is a string.
+<a name="line62"></a> *   d.addCallback(function(foo) {...});
+<a name="line63"></a> *   d.callback(&#39;string&#39;);  // Checked to be passed a string
+<a name="line64"></a> * &lt;/code&gt;
+<a name="line65"></a> * Since deferreds are often used to produce different values across a chain,
+<a name="line66"></a> * the type information is not propagated across chains, but rather only
+<a name="line67"></a> * associated with specifically cast objects.
+<a name="line68"></a> *
+<a name="line69"></a> * @param {Function=} opt_onCancelFunction A function that will be called if the
+<a name="line70"></a> *     Deferred is canceled. If provided, this function runs before the
+<a name="line71"></a> *     Deferred is fired with a {@code CanceledError}.
+<a name="line72"></a> * @param {Object=} opt_defaultScope The default object context to call
+<a name="line73"></a> *     callbacks and errbacks in.
+<a name="line74"></a> * @constructor
+<a name="line75"></a> * @implements {goog.Thenable.&lt;VALUE&gt;}
+<a name="line76"></a> * @template VALUE
+<a name="line77"></a> */
+<a name="line78"></a>goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
+<a name="line79"></a>  /**
+<a name="line80"></a>   * Entries in the sequence are arrays containing a callback, an errback, and
+<a name="line81"></a>   * an optional scope. The callback or errback in an entry may be null.
+<a name="line82"></a>   * @type {!Array.&lt;!Array&gt;}
+<a name="line83"></a>   * @private
+<a name="line84"></a>   */
+<a name="line85"></a>  this.sequence_ = [];
+<a name="line86"></a>
+<a name="line87"></a>  /**
+<a name="line88"></a>   * Optional function that will be called if the Deferred is canceled.
+<a name="line89"></a>   * @type {Function|undefined}
+<a name="line90"></a>   * @private
+<a name="line91"></a>   */
+<a name="line92"></a>  this.onCancelFunction_ = opt_onCancelFunction;
+<a name="line93"></a>
+<a name="line94"></a>  /**
+<a name="line95"></a>   * The default scope to execute callbacks and errbacks in.
+<a name="line96"></a>   * @type {Object}
+<a name="line97"></a>   * @private
+<a name="line98"></a>   */
+<a name="line99"></a>  this.defaultScope_ = opt_defaultScope || null;
+<a name="line100"></a>
+<a name="line101"></a>  /**
+<a name="line102"></a>   * Whether the Deferred has been fired.
+<a name="line103"></a>   * @type {boolean}
+<a name="line104"></a>   * @private
+<a name="line105"></a>   */
+<a name="line106"></a>  this.fired_ = false;
+<a name="line107"></a>
+<a name="line108"></a>  /**
+<a name="line109"></a>   * Whether the last result in the execution sequence was an error.
+<a name="line110"></a>   * @type {boolean}
+<a name="line111"></a>   * @private
+<a name="line112"></a>   */
+<a name="line113"></a>  this.hadError_ = false;
+<a name="line114"></a>
+<a name="line115"></a>  /**
+<a name="line116"></a>   * The current Deferred result, updated as callbacks and errbacks are
+<a name="line117"></a>   * executed.
+<a name="line118"></a>   * @type {*}
+<a name="line119"></a>   * @private
+<a name="line120"></a>   */
+<a name="line121"></a>  this.result_ = undefined;
+<a name="line122"></a>
+<a name="line123"></a>  /**
+<a name="line124"></a>   * Whether the Deferred is blocked waiting on another Deferred to fire. If a
+<a name="line125"></a>   * callback or errback returns a Deferred as a result, the execution sequence
+<a name="line126"></a>   * is blocked until that Deferred result becomes available.
+<a name="line127"></a>   * @type {boolean}
+<a name="line128"></a>   * @private
+<a name="line129"></a>   */
+<a name="line130"></a>  this.blocked_ = false;
+<a name="line131"></a>
+<a name="line132"></a>  /**
+<a name="line133"></a>   * Whether this Deferred is blocking execution of another Deferred. If this
+<a name="line134"></a>   * instance was returned as a result in another Deferred&#39;s execution
+<a name="line135"></a>   * sequence,that other Deferred becomes blocked until this instance&#39;s
+<a name="line136"></a>   * execution sequence completes. No additional callbacks may be added to a
+<a name="line137"></a>   * Deferred once it is blocking another instance.
+<a name="line138"></a>   * @type {boolean}
+<a name="line139"></a>   * @private
+<a name="line140"></a>   */
+<a name="line141"></a>  this.blocking_ = false;
+<a name="line142"></a>
+<a name="line143"></a>  /**
+<a name="line144"></a>   * Whether the Deferred has been canceled without having a custom cancel
+<a name="line145"></a>   * function.
+<a name="line146"></a>   * @type {boolean}
+<a name="line147"></a>   * @private
+<a name="line148"></a>   */
+<a name="line149"></a>  this.silentlyCanceled_ = false;
+<a name="line150"></a>
+<a name="line151"></a>  /**
+<a name="line152"></a>   * If an error is thrown during Deferred execution with no errback to catch
+<a name="line153"></a>   * it, the error is rethrown after a timeout. Reporting the error after a
+<a name="line154"></a>   * timeout allows execution to continue in the calling context (empty when
+<a name="line155"></a>   * no error is scheduled).
+<a name="line156"></a>   * @type {number}
+<a name="line157"></a>   * @private
+<a name="line158"></a>   */
+<a name="line159"></a>  this.unhandledErrorId_ = 0;
+<a name="line160"></a>
+<a name="line161"></a>  /**
+<a name="line162"></a>   * If this Deferred was created by branch(), this will be the &quot;parent&quot;
+<a name="line163"></a>   * Deferred.
+<a name="line164"></a>   * @type {goog.async.Deferred}
+<a name="line165"></a>   * @private
+<a name="line166"></a>   */
+<a name="line167"></a>  this.parent_ = null;
+<a name="line168"></a>
+<a name="line169"></a>  /**
+<a name="line170"></a>   * The number of Deferred objects that have been branched off this one. This
+<a name="line171"></a>   * will be decremented whenever a branch is fired or canceled.
+<a name="line172"></a>   * @type {number}
+<a name="line173"></a>   * @private
+<a name="line174"></a>   */
+<a name="line175"></a>  this.branches_ = 0;
+<a name="line176"></a>
+<a name="line177"></a>  if (goog.async.Deferred.LONG_STACK_TRACES) {
+<a name="line178"></a>    /**
+<a name="line179"></a>     * Holds the stack trace at time of deferred creation if the JS engine
+<a name="line180"></a>     * provides the Error.captureStackTrace API.
+<a name="line181"></a>     * @private {?string}
+<a name="line182"></a>     */
+<a name="line183"></a>    this.constructorStack_ = null;
+<a name="line184"></a>    if (Error.captureStackTrace) {
+<a name="line185"></a>      var target = { stack: &#39;&#39; };
+<a name="line186"></a>      Error.captureStackTrace(target, goog.async.Deferred);
+<a name="line187"></a>      // Check if Error.captureStackTrace worked. It fails in gjstest.
+<a name="line188"></a>      if (typeof target.stack == &#39;string&#39;) {
+<a name="line189"></a>        // Remove first line and force stringify to prevent memory leak due to
+<a name="line190"></a>        // holding on to actual stack frames.
+<a name="line191"></a>        this.constructorStack_ = target.stack.replace(/^[^\n]*\n/, &#39;&#39;);
+<a name="line192"></a>      }
+<a name="line193"></a>    }
+<a name="line194"></a>  }
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * @define {boolean} Whether unhandled errors should always get rethrown to the
+<a name="line200"></a> * global scope. Defaults to the value of goog.DEBUG.
+<a name="line201"></a> */
+<a name="line202"></a>goog.define(&#39;goog.async.Deferred.STRICT_ERRORS&#39;, false);
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * @define {boolean} Whether to attempt to make stack traces long.  Defaults to
+<a name="line207"></a> * the value of goog.DEBUG.
+<a name="line208"></a> */
+<a name="line209"></a>goog.define(&#39;goog.async.Deferred.LONG_STACK_TRACES&#39;, goog.DEBUG);
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Cancels a Deferred that has not yet been fired, or is blocked on another
+<a name="line214"></a> * deferred operation. If this Deferred is waiting for a blocking Deferred to
+<a name="line215"></a> * fire, the blocking Deferred will also be canceled.
+<a name="line216"></a> *
+<a name="line217"></a> * If this Deferred was created by calling branch() on a parent Deferred with
+<a name="line218"></a> * opt_propagateCancel set to true, the parent may also be canceled. If
+<a name="line219"></a> * opt_deepCancel is set, cancel() will be called on the parent (as well as any
+<a name="line220"></a> * other ancestors if the parent is also a branch). If one or more branches were
+<a name="line221"></a> * created with opt_propagateCancel set to true, the parent will be canceled if
+<a name="line222"></a> * cancel() is called on all of those branches.
+<a name="line223"></a> *
+<a name="line224"></a> * @param {boolean=} opt_deepCancel If true, cancels this Deferred&#39;s parent even
+<a name="line225"></a> *     if cancel() hasn&#39;t been called on some of the parent&#39;s branches. Has no
+<a name="line226"></a> *     effect on a branch without opt_propagateCancel set to true.
+<a name="line227"></a> */
+<a name="line228"></a>goog.async.Deferred.prototype.cancel = function(opt_deepCancel) {
+<a name="line229"></a>  if (!this.hasFired()) {
+<a name="line230"></a>    if (this.parent_) {
+<a name="line231"></a>      // Get rid of the parent reference before potentially running the parent&#39;s
+<a name="line232"></a>      // canceler function to ensure that this cancellation isn&#39;t
+<a name="line233"></a>      // double-counted.
+<a name="line234"></a>      var parent = this.parent_;
+<a name="line235"></a>      delete this.parent_;
+<a name="line236"></a>      if (opt_deepCancel) {
+<a name="line237"></a>        parent.cancel(opt_deepCancel);
+<a name="line238"></a>      } else {
+<a name="line239"></a>        parent.branchCancel_();
+<a name="line240"></a>      }
+<a name="line241"></a>    }
+<a name="line242"></a>
+<a name="line243"></a>    if (this.onCancelFunction_) {
+<a name="line244"></a>      // Call in user-specified scope.
+<a name="line245"></a>      this.onCancelFunction_.call(this.defaultScope_, this);
+<a name="line246"></a>    } else {
+<a name="line247"></a>      this.silentlyCanceled_ = true;
+<a name="line248"></a>    }
+<a name="line249"></a>    if (!this.hasFired()) {
+<a name="line250"></a>      this.errback(new goog.async.Deferred.CanceledError(this));
+<a name="line251"></a>    }
+<a name="line252"></a>  } else if (this.result_ instanceof goog.async.Deferred) {
+<a name="line253"></a>    this.result_.cancel();
+<a name="line254"></a>  }
+<a name="line255"></a>};
+<a name="line256"></a>
+<a name="line257"></a>
+<a name="line258"></a>/**
+<a name="line259"></a> * Handle a single branch being canceled. Once all branches are canceled, this
+<a name="line260"></a> * Deferred will be canceled as well.
+<a name="line261"></a> *
+<a name="line262"></a> * @private
+<a name="line263"></a> */
+<a name="line264"></a>goog.async.Deferred.prototype.branchCancel_ = function() {
+<a name="line265"></a>  this.branches_--;
+<a name="line266"></a>  if (this.branches_ &lt;= 0) {
+<a name="line267"></a>    this.cancel();
+<a name="line268"></a>  }
+<a name="line269"></a>};
+<a name="line270"></a>
+<a name="line271"></a>
+<a name="line272"></a>/**
+<a name="line273"></a> * Called after a blocking Deferred fires. Unblocks this Deferred and resumes
+<a name="line274"></a> * its execution sequence.
+<a name="line275"></a> *
+<a name="line276"></a> * @param {boolean} isSuccess Whether the result is a success or an error.
+<a name="line277"></a> * @param {*} res The result of the blocking Deferred.
+<a name="line278"></a> * @private
+<a name="line279"></a> */
+<a name="line280"></a>goog.async.Deferred.prototype.continue_ = function(isSuccess, res) {
+<a name="line281"></a>  this.blocked_ = false;
+<a name="line282"></a>  this.updateResult_(isSuccess, res);
+<a name="line283"></a>};
+<a name="line284"></a>
+<a name="line285"></a>
+<a name="line286"></a>/**
+<a name="line287"></a> * Updates the current result based on the success or failure of the last action
+<a name="line288"></a> * in the execution sequence.
+<a name="line289"></a> *
+<a name="line290"></a> * @param {boolean} isSuccess Whether the new result is a success or an error.
+<a name="line291"></a> * @param {*} res The result.
+<a name="line292"></a> * @private
+<a name="line293"></a> */
+<a name="line294"></a>goog.async.Deferred.prototype.updateResult_ = function(isSuccess, res) {
+<a name="line295"></a>  this.fired_ = true;
+<a name="line296"></a>  this.result_ = res;
+<a name="line297"></a>  this.hadError_ = !isSuccess;
+<a name="line298"></a>  this.fire_();
+<a name="line299"></a>};
+<a name="line300"></a>
+<a name="line301"></a>
+<a name="line302"></a>/**
+<a name="line303"></a> * Verifies that the Deferred has not yet been fired.
+<a name="line304"></a> *
+<a name="line305"></a> * @private
+<a name="line306"></a> * @throws {Error} If this has already been fired.
+<a name="line307"></a> */
+<a name="line308"></a>goog.async.Deferred.prototype.check_ = function() {
+<a name="line309"></a>  if (this.hasFired()) {
+<a name="line310"></a>    if (!this.silentlyCanceled_) {
+<a name="line311"></a>      throw new goog.async.Deferred.AlreadyCalledError(this);
+<a name="line312"></a>    }
+<a name="line313"></a>    this.silentlyCanceled_ = false;
+<a name="line314"></a>  }
+<a name="line315"></a>};
+<a name="line316"></a>
+<a name="line317"></a>
+<a name="line318"></a>/**
+<a name="line319"></a> * Fire the execution sequence for this Deferred by passing the starting result
+<a name="line320"></a> * to the first registered callback.
+<a name="line321"></a> * @param {VALUE=} opt_result The starting result.
+<a name="line322"></a> */
+<a name="line323"></a>goog.async.Deferred.prototype.callback = function(opt_result) {
+<a name="line324"></a>  this.check_();
+<a name="line325"></a>  this.assertNotDeferred_(opt_result);
+<a name="line326"></a>  this.updateResult_(true /* isSuccess */, opt_result);
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Fire the execution sequence for this Deferred by passing the starting error
+<a name="line332"></a> * result to the first registered errback.
+<a name="line333"></a> * @param {*=} opt_result The starting error.
+<a name="line334"></a> */
+<a name="line335"></a>goog.async.Deferred.prototype.errback = function(opt_result) {
+<a name="line336"></a>  this.check_();
+<a name="line337"></a>  this.assertNotDeferred_(opt_result);
+<a name="line338"></a>  this.makeStackTraceLong_(opt_result);
+<a name="line339"></a>  this.updateResult_(false /* isSuccess */, opt_result);
+<a name="line340"></a>};
+<a name="line341"></a>
+<a name="line342"></a>
+<a name="line343"></a>/**
+<a name="line344"></a> * Attempt to make the error&#39;s stack trace be long in that it contains the
+<a name="line345"></a> * stack trace from the point where the deferred was created on top of the
+<a name="line346"></a> * current stack trace to give additional context.
+<a name="line347"></a> * @param {*} error
+<a name="line348"></a> * @private
+<a name="line349"></a> */
+<a name="line350"></a>goog.async.Deferred.prototype.makeStackTraceLong_ = function(error) {
+<a name="line351"></a>  if (!goog.async.Deferred.LONG_STACK_TRACES) {
+<a name="line352"></a>    return;
+<a name="line353"></a>  }
+<a name="line354"></a>  if (this.constructorStack_ &amp;&amp; goog.isObject(error) &amp;&amp; error.stack &amp;&amp;
+<a name="line355"></a>      // Stack looks like it was system generated. See
+<a name="line356"></a>      // https://code.google.com/p/v8/wiki/JavaScriptStackTraceApi
+<a name="line357"></a>      (/^[^\n]+(\n   [^\n]+)+/).test(error.stack)) {
+<a name="line358"></a>    error.stack = error.stack + &#39;\nDEFERRED OPERATION:\n&#39; +
+<a name="line359"></a>        this.constructorStack_;
+<a name="line360"></a>  }
+<a name="line361"></a>};
+<a name="line362"></a>
+<a name="line363"></a>
+<a name="line364"></a>/**
+<a name="line365"></a> * Asserts that an object is not a Deferred.
+<a name="line366"></a> * @param {*} obj The object to test.
+<a name="line367"></a> * @throws {Error} Throws an exception if the object is a Deferred.
+<a name="line368"></a> * @private
+<a name="line369"></a> */
+<a name="line370"></a>goog.async.Deferred.prototype.assertNotDeferred_ = function(obj) {
+<a name="line371"></a>  goog.asserts.assert(
+<a name="line372"></a>      !(obj instanceof goog.async.Deferred),
+<a name="line373"></a>      &#39;An execution sequence may not be initiated with a blocking Deferred.&#39;);
+<a name="line374"></a>};
+<a name="line375"></a>
+<a name="line376"></a>
+<a name="line377"></a>/**
+<a name="line378"></a> * Register a callback function to be called with a successful result. If no
+<a name="line379"></a> * value is returned by the callback function, the result value is unchanged. If
+<a name="line380"></a> * a new value is returned, it becomes the Deferred result and will be passed to
+<a name="line381"></a> * the next callback in the execution sequence.
+<a name="line382"></a> *
+<a name="line383"></a> * If the function throws an error, the error becomes the new result and will be
+<a name="line384"></a> * passed to the next errback in the execution chain.
+<a name="line385"></a> *
+<a name="line386"></a> * If the function returns a Deferred, the execution sequence will be blocked
+<a name="line387"></a> * until that Deferred fires. Its result will be passed to the next callback (or
+<a name="line388"></a> * errback if it is an error result) in this Deferred&#39;s execution sequence.
+<a name="line389"></a> *
+<a name="line390"></a> * @param {!function(this:T,VALUE):?} cb The function to be called with a
+<a name="line391"></a> *     successful result.
+<a name="line392"></a> * @param {T=} opt_scope An optional scope to call the callback in.
+<a name="line393"></a> * @return {!goog.async.Deferred} This Deferred.
+<a name="line394"></a> * @template T
+<a name="line395"></a> */
+<a name="line396"></a>goog.async.Deferred.prototype.addCallback = function(cb, opt_scope) {
+<a name="line397"></a>  return this.addCallbacks(cb, null, opt_scope);
+<a name="line398"></a>};
+<a name="line399"></a>
+<a name="line400"></a>
+<a name="line401"></a>/**
+<a name="line402"></a> * Register a callback function to be called with an error result. If no value
+<a name="line403"></a> * is returned by the function, the error result is unchanged. If a new error
+<a name="line404"></a> * value is returned or thrown, that error becomes the Deferred result and will
+<a name="line405"></a> * be passed to the next errback in the execution sequence.
+<a name="line406"></a> *
+<a name="line407"></a> * If the errback function handles the error by returning a non-error value,
+<a name="line408"></a> * that result will be passed to the next normal callback in the sequence.
+<a name="line409"></a> *
+<a name="line410"></a> * If the function returns a Deferred, the execution sequence will be blocked
+<a name="line411"></a> * until that Deferred fires. Its result will be passed to the next callback (or
+<a name="line412"></a> * errback if it is an error result) in this Deferred&#39;s execution sequence.
+<a name="line413"></a> *
+<a name="line414"></a> * @param {!function(this:T,?):?} eb The function to be called on an
+<a name="line415"></a> *     unsuccessful result.
+<a name="line416"></a> * @param {T=} opt_scope An optional scope to call the errback in.
+<a name="line417"></a> * @return {!goog.async.Deferred.&lt;VALUE&gt;} This Deferred.
+<a name="line418"></a> * @template T
+<a name="line419"></a> */
+<a name="line420"></a>goog.async.Deferred.prototype.addErrback = function(eb, opt_scope) {
+<a name="line421"></a>  return this.addCallbacks(null, eb, opt_scope);
+<a name="line422"></a>};
+<a name="line423"></a>
+<a name="line424"></a>
+<a name="line425"></a>/**
+<a name="line426"></a> * Registers one function as both a callback and errback.
+<a name="line427"></a> *
+<a name="line428"></a> * @param {!function(this:T,?):?} f The function to be called on any result.
+<a name="line429"></a> * @param {T=} opt_scope An optional scope to call the function in.
+<a name="line430"></a> * @return {!goog.async.Deferred} This Deferred.
+<a name="line431"></a> * @template T
+<a name="line432"></a> */
+<a name="line433"></a>goog.async.Deferred.prototype.addBoth = function(f, opt_scope) {
+<a name="line434"></a>  return this.addCallbacks(f, f, opt_scope);
+<a name="line435"></a>};
+<a name="line436"></a>
+<a name="line437"></a>
+<a name="line438"></a>/**
+<a name="line439"></a> * Registers a callback function and an errback function at the same position
+<a name="line440"></a> * in the execution sequence. Only one of these functions will execute,
+<a name="line441"></a> * depending on the error state during the execution sequence.
+<a name="line442"></a> *
+<a name="line443"></a> * NOTE: This is not equivalent to {@code def.addCallback().addErrback()}! If
+<a name="line444"></a> * the callback is invoked, the errback will be skipped, and vice versa.
+<a name="line445"></a> *
+<a name="line446"></a> * @param {(function(this:T,VALUE):?)|null} cb The function to be called on a
+<a name="line447"></a> *     successful result.
+<a name="line448"></a> * @param {(function(this:T,?):?)|null} eb The function to be called on an
+<a name="line449"></a> *     unsuccessful result.
+<a name="line450"></a> * @param {T=} opt_scope An optional scope to call the functions in.
+<a name="line451"></a> * @return {!goog.async.Deferred} This Deferred.
+<a name="line452"></a> * @template T
+<a name="line453"></a> */
+<a name="line454"></a>goog.async.Deferred.prototype.addCallbacks = function(cb, eb, opt_scope) {
+<a name="line455"></a>  goog.asserts.assert(!this.blocking_, &#39;Blocking Deferreds can not be re-used&#39;);
+<a name="line456"></a>  this.sequence_.push([cb, eb, opt_scope]);
+<a name="line457"></a>  if (this.hasFired()) {
+<a name="line458"></a>    this.fire_();
+<a name="line459"></a>  }
+<a name="line460"></a>  return this;
+<a name="line461"></a>};
+<a name="line462"></a>
+<a name="line463"></a>
+<a name="line464"></a>/**
+<a name="line465"></a> * Implements {@see goog.Thenable} for seamless integration with
+<a name="line466"></a> * {@see goog.Promise}.
+<a name="line467"></a> * Deferred results are mutable and may represent multiple values over
+<a name="line468"></a> * their lifetime. Calling {@code then} on a Deferred returns a Promise
+<a name="line469"></a> * with the result of the Deferred at that point in its callback chain.
+<a name="line470"></a> * Note that if the Deferred result is never mutated, and only
+<a name="line471"></a> * {@code then} calls are made, the Deferred will behave like a Promise.
+<a name="line472"></a> *
+<a name="line473"></a> * @override
+<a name="line474"></a> */
+<a name="line475"></a>goog.async.Deferred.prototype.then = function(opt_onFulfilled, opt_onRejected,
+<a name="line476"></a>    opt_context) {
+<a name="line477"></a>  var resolve, reject;
+<a name="line478"></a>  var promise = new goog.Promise(function(res, rej) {
+<a name="line479"></a>    // Copying resolvers to outer scope, so that they are available when the
+<a name="line480"></a>    // deferred callback fires (which may be synchronous).
+<a name="line481"></a>    resolve = res;
+<a name="line482"></a>    reject = rej;
+<a name="line483"></a>  });
+<a name="line484"></a>  this.addCallbacks(resolve, function(reason) {
+<a name="line485"></a>    if (reason instanceof goog.async.Deferred.CanceledError) {
+<a name="line486"></a>      promise.cancel();
+<a name="line487"></a>    } else {
+<a name="line488"></a>      reject(reason);
+<a name="line489"></a>    }
+<a name="line490"></a>  });
+<a name="line491"></a>  return promise.then(opt_onFulfilled, opt_onRejected, opt_context);
+<a name="line492"></a>};
+<a name="line493"></a>goog.Thenable.addImplementation(goog.async.Deferred);
+<a name="line494"></a>
+<a name="line495"></a>
+<a name="line496"></a>/**
+<a name="line497"></a> * Links another Deferred to the end of this Deferred&#39;s execution sequence. The
+<a name="line498"></a> * result of this execution sequence will be passed as the starting result for
+<a name="line499"></a> * the chained Deferred, invoking either its first callback or errback.
+<a name="line500"></a> *
+<a name="line501"></a> * @param {!goog.async.Deferred} otherDeferred The Deferred to chain.
+<a name="line502"></a> * @return {!goog.async.Deferred} This Deferred.
+<a name="line503"></a> */
+<a name="line504"></a>goog.async.Deferred.prototype.chainDeferred = function(otherDeferred) {
+<a name="line505"></a>  this.addCallbacks(
+<a name="line506"></a>      otherDeferred.callback, otherDeferred.errback, otherDeferred);
+<a name="line507"></a>  return this;
+<a name="line508"></a>};
+<a name="line509"></a>
+<a name="line510"></a>
+<a name="line511"></a>/**
+<a name="line512"></a> * Makes this Deferred wait for another Deferred&#39;s execution sequence to
+<a name="line513"></a> * complete before continuing.
+<a name="line514"></a> *
+<a name="line515"></a> * This is equivalent to adding a callback that returns {@code otherDeferred},
+<a name="line516"></a> * but doesn&#39;t prevent additional callbacks from being added to
+<a name="line517"></a> * {@code otherDeferred}.
+<a name="line518"></a> *
+<a name="line519"></a> * @param {!goog.async.Deferred|!goog.Thenable} otherDeferred The Deferred
+<a name="line520"></a> *     to wait for.
+<a name="line521"></a> * @return {!goog.async.Deferred} This Deferred.
+<a name="line522"></a> */
+<a name="line523"></a>goog.async.Deferred.prototype.awaitDeferred = function(otherDeferred) {
+<a name="line524"></a>  if (!(otherDeferred instanceof goog.async.Deferred)) {
+<a name="line525"></a>    // The Thenable case.
+<a name="line526"></a>    return this.addCallback(function() {
+<a name="line527"></a>      return otherDeferred;
+<a name="line528"></a>    });
+<a name="line529"></a>  }
+<a name="line530"></a>  return this.addCallback(goog.bind(otherDeferred.branch, otherDeferred));
+<a name="line531"></a>};
+<a name="line532"></a>
+<a name="line533"></a>
+<a name="line534"></a>/**
+<a name="line535"></a> * Creates a branch off this Deferred&#39;s execution sequence, and returns it as a
+<a name="line536"></a> * new Deferred. The branched Deferred&#39;s starting result will be shared with the
+<a name="line537"></a> * parent at the point of the branch, even if further callbacks are added to the
+<a name="line538"></a> * parent.
+<a name="line539"></a> *
+<a name="line540"></a> * All branches at the same stage in the execution sequence will receive the
+<a name="line541"></a> * same starting value.
+<a name="line542"></a> *
+<a name="line543"></a> * @param {boolean=} opt_propagateCancel If cancel() is called on every child
+<a name="line544"></a> *     branch created with opt_propagateCancel, the parent will be canceled as
+<a name="line545"></a> *     well.
+<a name="line546"></a> * @return {!goog.async.Deferred.&lt;VALUE&gt;} A Deferred that will be started with
+<a name="line547"></a> *     the computed result from this stage in the execution sequence.
+<a name="line548"></a> */
+<a name="line549"></a>goog.async.Deferred.prototype.branch = function(opt_propagateCancel) {
+<a name="line550"></a>  var d = new goog.async.Deferred();
+<a name="line551"></a>  this.chainDeferred(d);
+<a name="line552"></a>  if (opt_propagateCancel) {
+<a name="line553"></a>    d.parent_ = this;
+<a name="line554"></a>    this.branches_++;
+<a name="line555"></a>  }
+<a name="line556"></a>  return d;
+<a name="line557"></a>};
+<a name="line558"></a>
+<a name="line559"></a>
+<a name="line560"></a>/**
+<a name="line561"></a> * @return {boolean} Whether the execution sequence has been started on this
+<a name="line562"></a> *     Deferred by invoking {@code callback} or {@code errback}.
+<a name="line563"></a> */
+<a name="line564"></a>goog.async.Deferred.prototype.hasFired = function() {
+<a name="line565"></a>  return this.fired_;
+<a name="line566"></a>};
+<a name="line567"></a>
+<a name="line568"></a>
+<a name="line569"></a>/**
+<a name="line570"></a> * @param {*} res The latest result in the execution sequence.
+<a name="line571"></a> * @return {boolean} Whether the current result is an error that should cause
+<a name="line572"></a> *     the next errback to fire. May be overridden by subclasses to handle
+<a name="line573"></a> *     special error types.
+<a name="line574"></a> * @protected
+<a name="line575"></a> */
+<a name="line576"></a>goog.async.Deferred.prototype.isError = function(res) {
+<a name="line577"></a>  return res instanceof Error;
+<a name="line578"></a>};
+<a name="line579"></a>
+<a name="line580"></a>
+<a name="line581"></a>/**
+<a name="line582"></a> * @return {boolean} Whether an errback exists in the remaining sequence.
+<a name="line583"></a> * @private
+<a name="line584"></a> */
+<a name="line585"></a>goog.async.Deferred.prototype.hasErrback_ = function() {
+<a name="line586"></a>  return goog.array.some(this.sequence_, function(sequenceRow) {
+<a name="line587"></a>    // The errback is the second element in the array.
+<a name="line588"></a>    return goog.isFunction(sequenceRow[1]);
+<a name="line589"></a>  });
+<a name="line590"></a>};
+<a name="line591"></a>
+<a name="line592"></a>
+<a name="line593"></a>/**
+<a name="line594"></a> * Exhausts the execution sequence while a result is available. The result may
+<a name="line595"></a> * be modified by callbacks or errbacks, and execution will block if the
+<a name="line596"></a> * returned result is an incomplete Deferred.
+<a name="line597"></a> *
+<a name="line598"></a> * @private
+<a name="line599"></a> */
+<a name="line600"></a>goog.async.Deferred.prototype.fire_ = function() {
+<a name="line601"></a>  if (this.unhandledErrorId_ &amp;&amp; this.hasFired() &amp;&amp; this.hasErrback_()) {
+<a name="line602"></a>    // It is possible to add errbacks after the Deferred has fired. If a new
+<a name="line603"></a>    // errback is added immediately after the Deferred encountered an unhandled
+<a name="line604"></a>    // error, but before that error is rethrown, the error is unscheduled.
+<a name="line605"></a>    goog.async.Deferred.unscheduleError_(this.unhandledErrorId_);
+<a name="line606"></a>    this.unhandledErrorId_ = 0;
+<a name="line607"></a>  }
+<a name="line608"></a>
+<a name="line609"></a>  if (this.parent_) {
+<a name="line610"></a>    this.parent_.branches_--;
+<a name="line611"></a>    delete this.parent_;
+<a name="line612"></a>  }
+<a name="line613"></a>
+<a name="line614"></a>  var res = this.result_;
+<a name="line615"></a>  var unhandledException = false;
+<a name="line616"></a>  var isNewlyBlocked = false;
+<a name="line617"></a>
+<a name="line618"></a>  while (this.sequence_.length &amp;&amp; !this.blocked_) {
+<a name="line619"></a>    var sequenceEntry = this.sequence_.shift();
+<a name="line620"></a>
+<a name="line621"></a>    var callback = sequenceEntry[0];
+<a name="line622"></a>    var errback = sequenceEntry[1];
+<a name="line623"></a>    var scope = sequenceEntry[2];
+<a name="line624"></a>
+<a name="line625"></a>    var f = this.hadError_ ? errback : callback;
+<a name="line626"></a>    if (f) {
+<a name="line627"></a>      /** @preserveTry */
+<a name="line628"></a>      try {
+<a name="line629"></a>        var ret = f.call(scope || this.defaultScope_, res);
+<a name="line630"></a>
+<a name="line631"></a>        // If no result, then use previous result.
+<a name="line632"></a>        if (goog.isDef(ret)) {
+<a name="line633"></a>          // Bubble up the error as long as the return value hasn&#39;t changed.
+<a name="line634"></a>          this.hadError_ = this.hadError_ &amp;&amp; (ret == res || this.isError(ret));
+<a name="line635"></a>          this.result_ = res = ret;
+<a name="line636"></a>        }
+<a name="line637"></a>
+<a name="line638"></a>        if (goog.Thenable.isImplementedBy(res)) {
+<a name="line639"></a>          isNewlyBlocked = true;
+<a name="line640"></a>          this.blocked_ = true;
+<a name="line641"></a>        }
+<a name="line642"></a>
+<a name="line643"></a>      } catch (ex) {
+<a name="line644"></a>        res = ex;
+<a name="line645"></a>        this.hadError_ = true;
+<a name="line646"></a>        this.makeStackTraceLong_(res);
+<a name="line647"></a>
+<a name="line648"></a>        if (!this.hasErrback_()) {
+<a name="line649"></a>          // If an error is thrown with no additional errbacks in the queue,
+<a name="line650"></a>          // prepare to rethrow the error.
+<a name="line651"></a>          unhandledException = true;
+<a name="line652"></a>        }
+<a name="line653"></a>      }
+<a name="line654"></a>    }
+<a name="line655"></a>  }
+<a name="line656"></a>
+<a name="line657"></a>  this.result_ = res;
+<a name="line658"></a>
+<a name="line659"></a>  if (isNewlyBlocked) {
+<a name="line660"></a>    var onCallback = goog.bind(this.continue_, this, true /* isSuccess */);
+<a name="line661"></a>    var onErrback = goog.bind(this.continue_, this, false /* isSuccess */);
+<a name="line662"></a>
+<a name="line663"></a>    if (res instanceof goog.async.Deferred) {
+<a name="line664"></a>      res.addCallbacks(onCallback, onErrback);
+<a name="line665"></a>      res.blocking_ = true;
+<a name="line666"></a>    } else {
+<a name="line667"></a>      res.then(onCallback, onErrback);
+<a name="line668"></a>    }
+<a name="line669"></a>  } else if (goog.async.Deferred.STRICT_ERRORS &amp;&amp; this.isError(res) &amp;&amp;
+<a name="line670"></a>      !(res instanceof goog.async.Deferred.CanceledError)) {
+<a name="line671"></a>    this.hadError_ = true;
+<a name="line672"></a>    unhandledException = true;
+<a name="line673"></a>  }
+<a name="line674"></a>
+<a name="line675"></a>  if (unhandledException) {
+<a name="line676"></a>    // Rethrow the unhandled error after a timeout. Execution will continue, but
+<a name="line677"></a>    // the error will be seen by global handlers and the user. The throw will
+<a name="line678"></a>    // be canceled if another errback is appended before the timeout executes.
+<a name="line679"></a>    // The error&#39;s original stack trace is preserved where available.
+<a name="line680"></a>    this.unhandledErrorId_ = goog.async.Deferred.scheduleError_(res);
+<a name="line681"></a>  }
+<a name="line682"></a>};
+<a name="line683"></a>
+<a name="line684"></a>
+<a name="line685"></a>/**
+<a name="line686"></a> * Creates a Deferred that has an initial result.
+<a name="line687"></a> *
+<a name="line688"></a> * @param {*=} opt_result The result.
+<a name="line689"></a> * @return {!goog.async.Deferred} The new Deferred.
+<a name="line690"></a> */
+<a name="line691"></a>goog.async.Deferred.succeed = function(opt_result) {
+<a name="line692"></a>  var d = new goog.async.Deferred();
+<a name="line693"></a>  d.callback(opt_result);
+<a name="line694"></a>  return d;
+<a name="line695"></a>};
+<a name="line696"></a>
+<a name="line697"></a>
+<a name="line698"></a>/**
+<a name="line699"></a> * Creates a Deferred that fires when the given promise resolves.
+<a name="line700"></a> * Use only during migration to Promises.
+<a name="line701"></a> *
+<a name="line702"></a> * @param {!goog.Promise.&lt;T&gt;} promise
+<a name="line703"></a> * @return {!goog.async.Deferred.&lt;T&gt;} The new Deferred.
+<a name="line704"></a> * @template T
+<a name="line705"></a> */
+<a name="line706"></a>goog.async.Deferred.fromPromise = function(promise) {
+<a name="line707"></a>  var d = new goog.async.Deferred();
+<a name="line708"></a>  d.callback();
+<a name="line709"></a>  d.addCallback(function() {
+<a name="line710"></a>    return promise;
+<a name="line711"></a>  });
+<a name="line712"></a>  return d;
+<a name="line713"></a>};
+<a name="line714"></a>
+<a name="line715"></a>
+<a name="line716"></a>/**
+<a name="line717"></a> * Creates a Deferred that has an initial error result.
+<a name="line718"></a> *
+<a name="line719"></a> * @param {*} res The error result.
+<a name="line720"></a> * @return {!goog.async.Deferred} The new Deferred.
+<a name="line721"></a> */
+<a name="line722"></a>goog.async.Deferred.fail = function(res) {
+<a name="line723"></a>  var d = new goog.async.Deferred();
+<a name="line724"></a>  d.errback(res);
+<a name="line725"></a>  return d;
+<a name="line726"></a>};
+<a name="line727"></a>
+<a name="line728"></a>
+<a name="line729"></a>/**
+<a name="line730"></a> * Creates a Deferred that has already been canceled.
+<a name="line731"></a> *
+<a name="line732"></a> * @return {!goog.async.Deferred} The new Deferred.
+<a name="line733"></a> */
+<a name="line734"></a>goog.async.Deferred.canceled = function() {
+<a name="line735"></a>  var d = new goog.async.Deferred();
+<a name="line736"></a>  d.cancel();
+<a name="line737"></a>  return d;
+<a name="line738"></a>};
+<a name="line739"></a>
+<a name="line740"></a>
+<a name="line741"></a>/**
+<a name="line742"></a> * Normalizes values that may or may not be Deferreds.
+<a name="line743"></a> *
+<a name="line744"></a> * If the input value is a Deferred, the Deferred is branched (so the original
+<a name="line745"></a> * execution sequence is not modified) and the input callback added to the new
+<a name="line746"></a> * branch. The branch is returned to the caller.
+<a name="line747"></a> *
+<a name="line748"></a> * If the input value is not a Deferred, the callback will be executed
+<a name="line749"></a> * immediately and an already firing Deferred will be returned to the caller.
+<a name="line750"></a> *
+<a name="line751"></a> * In the following (contrived) example, if &lt;code&gt;isImmediate&lt;/code&gt; is true
+<a name="line752"></a> * then 3 is alerted immediately, otherwise 6 is alerted after a 2-second delay.
+<a name="line753"></a> *
+<a name="line754"></a> * &lt;pre&gt;
+<a name="line755"></a> * var value;
+<a name="line756"></a> * if (isImmediate) {
+<a name="line757"></a> *   value = 3;
+<a name="line758"></a> * } else {
+<a name="line759"></a> *   value = new goog.async.Deferred();
+<a name="line760"></a> *   setTimeout(function() { value.callback(6); }, 2000);
+<a name="line761"></a> * }
+<a name="line762"></a> *
+<a name="line763"></a> * var d = goog.async.Deferred.when(value, alert);
+<a name="line764"></a> * &lt;/pre&gt;
+<a name="line765"></a> *
+<a name="line766"></a> * @param {*} value Deferred or normal value to pass to the callback.
+<a name="line767"></a> * @param {!function(this:T, ?):?} callback The callback to execute.
+<a name="line768"></a> * @param {T=} opt_scope An optional scope to call the callback in.
+<a name="line769"></a> * @return {!goog.async.Deferred} A new Deferred that will call the input
+<a name="line770"></a> *     callback with the input value.
+<a name="line771"></a> * @template T
+<a name="line772"></a> */
+<a name="line773"></a>goog.async.Deferred.when = function(value, callback, opt_scope) {
+<a name="line774"></a>  if (value instanceof goog.async.Deferred) {
+<a name="line775"></a>    return value.branch(true).addCallback(callback, opt_scope);
+<a name="line776"></a>  } else {
+<a name="line777"></a>    return goog.async.Deferred.succeed(value).addCallback(callback, opt_scope);
+<a name="line778"></a>  }
+<a name="line779"></a>};
+<a name="line780"></a>
+<a name="line781"></a>
+<a name="line782"></a>
+<a name="line783"></a>/**
+<a name="line784"></a> * An error sub class that is used when a Deferred has already been called.
+<a name="line785"></a> * @param {!goog.async.Deferred} deferred The Deferred.
+<a name="line786"></a> *
+<a name="line787"></a> * @constructor
+<a name="line788"></a> * @extends {goog.debug.Error}
+<a name="line789"></a> */
+<a name="line790"></a>goog.async.Deferred.AlreadyCalledError = function(deferred) {
+<a name="line791"></a>  goog.debug.Error.call(this);
+<a name="line792"></a>
+<a name="line793"></a>  /**
+<a name="line794"></a>   * The Deferred that raised this error.
+<a name="line795"></a>   * @type {goog.async.Deferred}
+<a name="line796"></a>   */
+<a name="line797"></a>  this.deferred = deferred;
+<a name="line798"></a>};
+<a name="line799"></a>goog.inherits(goog.async.Deferred.AlreadyCalledError, goog.debug.Error);
+<a name="line800"></a>
+<a name="line801"></a>
+<a name="line802"></a>/** @override */
+<a name="line803"></a>goog.async.Deferred.AlreadyCalledError.prototype.message =
+<a name="line804"></a>    &#39;Deferred has already fired&#39;;
+<a name="line805"></a>
+<a name="line806"></a>
+<a name="line807"></a>/** @override */
+<a name="line808"></a>goog.async.Deferred.AlreadyCalledError.prototype.name = &#39;AlreadyCalledError&#39;;
+<a name="line809"></a>
+<a name="line810"></a>
+<a name="line811"></a>
+<a name="line812"></a>/**
+<a name="line813"></a> * An error sub class that is used when a Deferred is canceled.
+<a name="line814"></a> *
+<a name="line815"></a> * @param {!goog.async.Deferred} deferred The Deferred object.
+<a name="line816"></a> * @constructor
+<a name="line817"></a> * @extends {goog.debug.Error}
+<a name="line818"></a> */
+<a name="line819"></a>goog.async.Deferred.CanceledError = function(deferred) {
+<a name="line820"></a>  goog.debug.Error.call(this);
+<a name="line821"></a>
+<a name="line822"></a>  /**
+<a name="line823"></a>   * The Deferred that raised this error.
+<a name="line824"></a>   * @type {goog.async.Deferred}
+<a name="line825"></a>   */
+<a name="line826"></a>  this.deferred = deferred;
+<a name="line827"></a>};
+<a name="line828"></a>goog.inherits(goog.async.Deferred.CanceledError, goog.debug.Error);
+<a name="line829"></a>
+<a name="line830"></a>
+<a name="line831"></a>/** @override */
+<a name="line832"></a>goog.async.Deferred.CanceledError.prototype.message = &#39;Deferred was canceled&#39;;
+<a name="line833"></a>
+<a name="line834"></a>
+<a name="line835"></a>/** @override */
+<a name="line836"></a>goog.async.Deferred.CanceledError.prototype.name = &#39;CanceledError&#39;;
+<a name="line837"></a>
+<a name="line838"></a>
+<a name="line839"></a>
+<a name="line840"></a>/**
+<a name="line841"></a> * Wrapper around errors that are scheduled to be thrown by failing deferreds
+<a name="line842"></a> * after a timeout.
+<a name="line843"></a> *
+<a name="line844"></a> * @param {*} error Error from a failing deferred.
+<a name="line845"></a> * @constructor
+<a name="line846"></a> * @final
+<a name="line847"></a> * @private
+<a name="line848"></a> * @struct
+<a name="line849"></a> */
+<a name="line850"></a>goog.async.Deferred.Error_ = function(error) {
+<a name="line851"></a>  /** @const @private {number} */
+<a name="line852"></a>  this.id_ = goog.global.setTimeout(goog.bind(this.throwError, this), 0);
+<a name="line853"></a>
+<a name="line854"></a>  /** @const @private {*} */
+<a name="line855"></a>  this.error_ = error;
+<a name="line856"></a>};
+<a name="line857"></a>
+<a name="line858"></a>
+<a name="line859"></a>/**
+<a name="line860"></a> * Actually throws the error and removes it from the list of pending
+<a name="line861"></a> * deferred errors.
+<a name="line862"></a> */
+<a name="line863"></a>goog.async.Deferred.Error_.prototype.throwError = function() {
+<a name="line864"></a>  goog.asserts.assert(goog.async.Deferred.errorMap_[this.id_],
+<a name="line865"></a>      &#39;Cannot throw an error that is not scheduled.&#39;);
+<a name="line866"></a>  delete goog.async.Deferred.errorMap_[this.id_];
+<a name="line867"></a>  throw this.error_;
+<a name="line868"></a>};
+<a name="line869"></a>
+<a name="line870"></a>
+<a name="line871"></a>/**
+<a name="line872"></a> * Resets the error throw timer.
+<a name="line873"></a> */
+<a name="line874"></a>goog.async.Deferred.Error_.prototype.resetTimer = function() {
+<a name="line875"></a>  goog.global.clearTimeout(this.id_);
+<a name="line876"></a>};
+<a name="line877"></a>
+<a name="line878"></a>
+<a name="line879"></a>/**
+<a name="line880"></a> * Map of unhandled errors scheduled to be rethrown in a future timestep.
+<a name="line881"></a> * @private {!Object.&lt;number|string, goog.async.Deferred.Error_&gt;}
+<a name="line882"></a> */
+<a name="line883"></a>goog.async.Deferred.errorMap_ = {};
+<a name="line884"></a>
+<a name="line885"></a>
+<a name="line886"></a>/**
+<a name="line887"></a> * Schedules an error to be thrown after a delay.
+<a name="line888"></a> * @param {*} error Error from a failing deferred.
+<a name="line889"></a> * @return {number} Id of the error.
+<a name="line890"></a> * @private
+<a name="line891"></a> */
+<a name="line892"></a>goog.async.Deferred.scheduleError_ = function(error) {
+<a name="line893"></a>  var deferredError = new goog.async.Deferred.Error_(error);
+<a name="line894"></a>  goog.async.Deferred.errorMap_[deferredError.id_] = deferredError;
+<a name="line895"></a>  return deferredError.id_;
+<a name="line896"></a>};
+<a name="line897"></a>
+<a name="line898"></a>
+<a name="line899"></a>/**
+<a name="line900"></a> * Unschedules an error from being thrown.
+<a name="line901"></a> * @param {number} id Id of the deferred error to unschedule.
+<a name="line902"></a> * @private
+<a name="line903"></a> */
+<a name="line904"></a>goog.async.Deferred.unscheduleError_ = function(id) {
+<a name="line905"></a>  var error = goog.async.Deferred.errorMap_[id];
+<a name="line906"></a>  if (error) {
+<a name="line907"></a>    error.resetTimer();
+<a name="line908"></a>    delete goog.async.Deferred.errorMap_[id];
+<a name="line909"></a>  }
+<a name="line910"></a>};
+<a name="line911"></a>
+<a name="line912"></a>
+<a name="line913"></a>/**
+<a name="line914"></a> * Asserts that there are no pending deferred errors. If there are any
+<a name="line915"></a> * scheduled errors, one will be thrown immediately to make this function fail.
+<a name="line916"></a> */
+<a name="line917"></a>goog.async.Deferred.assertNoErrors = function() {
+<a name="line918"></a>  var map = goog.async.Deferred.errorMap_;
+<a name="line919"></a>  for (var key in map) {
+<a name="line920"></a>    var error = map[key];
+<a name="line921"></a>    error.resetTimer();
+<a name="line922"></a>    error.throwError();
+<a name="line923"></a>  }
+<a name="line924"></a>};
+</pre>
+
+
+</body>
+</html>

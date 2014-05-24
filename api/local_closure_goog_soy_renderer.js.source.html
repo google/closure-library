@@ -1,0 +1,364 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>renderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_soy_renderer.js.html">renderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides a soy renderer that allows registration of
+<a name="line17"></a> * injected data (&quot;globals&quot;) that will be passed into the rendered
+<a name="line18"></a> * templates.
+<a name="line19"></a> *
+<a name="line20"></a> * There is also an interface {@link goog.soy.InjectedDataSupplier} that
+<a name="line21"></a> * user should implement to provide the injected data for a specific
+<a name="line22"></a> * application. The injected data format is a JavaScript object:
+<a name="line23"></a> * &lt;pre&gt;
+<a name="line24"></a> * {&#39;dataKey&#39;: &#39;value&#39;, &#39;otherDataKey&#39;: &#39;otherValue&#39;}
+<a name="line25"></a> * &lt;/pre&gt;
+<a name="line26"></a> *
+<a name="line27"></a> * To use injected data, you need to enable the soy-to-js compiler
+<a name="line28"></a> * option {@code --isUsingIjData}. The injected data can then be
+<a name="line29"></a> * referred to in any soy templates as part of a magic &quot;ij&quot;
+<a name="line30"></a> * parameter. For example, {@code $ij.dataKey} will evaluate to
+<a name="line31"></a> * &#39;value&#39; with the above injected data.
+<a name="line32"></a> *
+<a name="line33"></a> * @author henrywong@google.com (Henry Wong)
+<a name="line34"></a> */
+<a name="line35"></a>
+<a name="line36"></a>goog.provide(&#39;goog.soy.InjectedDataSupplier&#39;);
+<a name="line37"></a>goog.provide(&#39;goog.soy.Renderer&#39;);
+<a name="line38"></a>
+<a name="line39"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line40"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line41"></a>goog.require(&#39;goog.soy&#39;);
+<a name="line42"></a>goog.require(&#39;goog.soy.data.SanitizedContent&#39;);
+<a name="line43"></a>goog.require(&#39;goog.soy.data.SanitizedContentKind&#39;);
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Creates a new soy renderer. Note that the renderer will only be
+<a name="line49"></a> * guaranteed to work correctly within the document scope provided in
+<a name="line50"></a> * the DOM helper.
+<a name="line51"></a> *
+<a name="line52"></a> * @param {goog.soy.InjectedDataSupplier=} opt_injectedDataSupplier A supplier
+<a name="line53"></a> *     that provides an injected data.
+<a name="line54"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper;
+<a name="line55"></a> *     defaults to that provided by {@code goog.dom.getDomHelper()}.
+<a name="line56"></a> * @constructor
+<a name="line57"></a> */
+<a name="line58"></a>goog.soy.Renderer = function(opt_injectedDataSupplier, opt_domHelper) {
+<a name="line59"></a>  /**
+<a name="line60"></a>   * @type {goog.dom.DomHelper}
+<a name="line61"></a>   * @private
+<a name="line62"></a>   */
+<a name="line63"></a>  this.dom_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line64"></a>
+<a name="line65"></a>  /**
+<a name="line66"></a>   * @type {goog.soy.InjectedDataSupplier}
+<a name="line67"></a>   * @private
+<a name="line68"></a>   */
+<a name="line69"></a>  this.supplier_ = opt_injectedDataSupplier || null;
+<a name="line70"></a>
+<a name="line71"></a>  /**
+<a name="line72"></a>   * Map from template name to the data used to render that template.
+<a name="line73"></a>   * @type {!goog.soy.Renderer.SavedTemplateRender}
+<a name="line74"></a>   * @private
+<a name="line75"></a>   */
+<a name="line76"></a>  this.savedTemplateRenders_ = [];
+<a name="line77"></a>};
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * @typedef {Array.&lt;{template: string, data: Object, ijData: Object}&gt;}
+<a name="line82"></a> */
+<a name="line83"></a>goog.soy.Renderer.SavedTemplateRender;
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Renders a Soy template into a single node or a document fragment.
+<a name="line88"></a> * Delegates to {@code goog.soy.renderAsFragment}.
+<a name="line89"></a> *
+<a name="line90"></a> * @param {null|function(ARG_TYPES, null=, Object.&lt;string, *&gt;=):*} template
+<a name="line91"></a> *     The Soy template defining the element&#39;s content.
+<a name="line92"></a> * @param {ARG_TYPES=} opt_templateData The data for the template.
+<a name="line93"></a> * @return {!Node} The resulting node or document fragment.
+<a name="line94"></a> * @template ARG_TYPES
+<a name="line95"></a> */
+<a name="line96"></a>goog.soy.Renderer.prototype.renderAsFragment = function(template,
+<a name="line97"></a>                                                        opt_templateData) {
+<a name="line98"></a>  this.saveTemplateRender_(template, opt_templateData);
+<a name="line99"></a>  var node = goog.soy.renderAsFragment(template, opt_templateData,
+<a name="line100"></a>                                       this.getInjectedData_(), this.dom_);
+<a name="line101"></a>  this.handleRender(node);
+<a name="line102"></a>  return node;
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Renders a Soy template into a single node. If the rendered HTML
+<a name="line108"></a> * string represents a single node, then that node is returned.
+<a name="line109"></a> * Otherwise, a DIV element is returned containing the rendered nodes.
+<a name="line110"></a> * Delegates to {@code goog.soy.renderAsElement}.
+<a name="line111"></a> *
+<a name="line112"></a> * @param {null|function(ARG_TYPES, null=, Object.&lt;string, *&gt;=):*} template
+<a name="line113"></a> *     The Soy template defining the element&#39;s content.
+<a name="line114"></a> * @param {ARG_TYPES=} opt_templateData The data for the template.
+<a name="line115"></a> * @return {!Element} Rendered template contents, wrapped in a parent DIV
+<a name="line116"></a> *     element if necessary.
+<a name="line117"></a> * @template ARG_TYPES
+<a name="line118"></a> */
+<a name="line119"></a>goog.soy.Renderer.prototype.renderAsElement = function(template,
+<a name="line120"></a>                                                       opt_templateData) {
+<a name="line121"></a>  this.saveTemplateRender_(template, opt_templateData);
+<a name="line122"></a>  var element = goog.soy.renderAsElement(template, opt_templateData,
+<a name="line123"></a>                                         this.getInjectedData_(), this.dom_);
+<a name="line124"></a>  this.handleRender(element);
+<a name="line125"></a>  return element;
+<a name="line126"></a>};
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * Renders a Soy template and then set the output string as the
+<a name="line131"></a> * innerHTML of the given element. Delegates to {@code goog.soy.renderElement}.
+<a name="line132"></a> *
+<a name="line133"></a> * @param {Element} element The element whose content we are rendering.
+<a name="line134"></a> * @param {null|function(ARG_TYPES, null=, Object.&lt;string, *&gt;=):*} template
+<a name="line135"></a> *     The Soy template defining the element&#39;s content.
+<a name="line136"></a> * @param {ARG_TYPES=} opt_templateData The data for the template.
+<a name="line137"></a> * @template ARG_TYPES
+<a name="line138"></a> */
+<a name="line139"></a>goog.soy.Renderer.prototype.renderElement = function(element, template,
+<a name="line140"></a>                                                     opt_templateData) {
+<a name="line141"></a>  this.saveTemplateRender_(template, opt_templateData);
+<a name="line142"></a>  goog.soy.renderElement(
+<a name="line143"></a>      element, template, opt_templateData, this.getInjectedData_());
+<a name="line144"></a>  this.handleRender(element);
+<a name="line145"></a>};
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Renders a Soy template and returns the output string.
+<a name="line150"></a> * If the template is strict, it must be of kind HTML. To render strict
+<a name="line151"></a> * templates of other kinds, use {@code renderText} (for {@code kind=&quot;text&quot;}) or
+<a name="line152"></a> * {@code renderStrict}.
+<a name="line153"></a> *
+<a name="line154"></a> * @param {null|function(ARG_TYPES, null=, Object.&lt;string, *&gt;=):*} template
+<a name="line155"></a> *     The Soy template to render.
+<a name="line156"></a> * @param {ARG_TYPES=} opt_templateData The data for the template.
+<a name="line157"></a> * @return {string} The return value of rendering the template directly.
+<a name="line158"></a> * @template ARG_TYPES
+<a name="line159"></a> */
+<a name="line160"></a>goog.soy.Renderer.prototype.render = function(template, opt_templateData) {
+<a name="line161"></a>  var result = template(
+<a name="line162"></a>      opt_templateData || {}, undefined, this.getInjectedData_());
+<a name="line163"></a>  goog.asserts.assert(!(result instanceof goog.soy.data.SanitizedContent) ||
+<a name="line164"></a>      result.contentKind === goog.soy.data.SanitizedContentKind.HTML,
+<a name="line165"></a>      &#39;render was called with a strict template of kind other than &quot;html&quot;&#39; +
+<a name="line166"></a>          &#39; (consider using renderText or renderStrict)&#39;);
+<a name="line167"></a>  this.saveTemplateRender_(template, opt_templateData);
+<a name="line168"></a>  this.handleRender();
+<a name="line169"></a>  return String(result);
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Renders a strict Soy template of kind=&quot;text&quot; and returns the output string.
+<a name="line175"></a> * It is an error to use renderText on non-strict templates, or strict templates
+<a name="line176"></a> * of kinds other than &quot;text&quot;.
+<a name="line177"></a> *
+<a name="line178"></a> * @param {null|function(ARG_TYPES, null=, Object.&lt;string, *&gt;=):
+<a name="line179"></a> *     goog.soy.data.SanitizedContent} template The Soy template to render.
+<a name="line180"></a> * @param {ARG_TYPES=} opt_templateData The data for the template.
+<a name="line181"></a> * @return {string} The return value of rendering the template directly.
+<a name="line182"></a> * @template ARG_TYPES
+<a name="line183"></a> */
+<a name="line184"></a>goog.soy.Renderer.prototype.renderText = function(template, opt_templateData) {
+<a name="line185"></a>  var result = template(
+<a name="line186"></a>      opt_templateData || {}, undefined, this.getInjectedData_());
+<a name="line187"></a>  goog.asserts.assertInstanceof(result, goog.soy.data.SanitizedContent,
+<a name="line188"></a>      &#39;renderText cannot be called on a non-strict soy template&#39;);
+<a name="line189"></a>  goog.asserts.assert(
+<a name="line190"></a>      result.contentKind === goog.soy.data.SanitizedContentKind.TEXT,
+<a name="line191"></a>      &#39;renderText was called with a template of kind other than &quot;text&quot;&#39;);
+<a name="line192"></a>  this.saveTemplateRender_(template, opt_templateData);
+<a name="line193"></a>  this.handleRender();
+<a name="line194"></a>  return String(result);
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Renders a strict Soy template and returns the output SanitizedContent object.
+<a name="line200"></a> *
+<a name="line201"></a> * @param {null|function(ARG_TYPES, null=, Object.&lt;string, *&gt;=):RETURN_TYPE}
+<a name="line202"></a> *     template The Soy template to render.
+<a name="line203"></a> * @param {ARG_TYPES=} opt_templateData The data for the template.
+<a name="line204"></a> * @param {goog.soy.data.SanitizedContentKind=} opt_kind The output kind to
+<a name="line205"></a> *     assert. If null, the template must be of kind=&quot;html&quot; (i.e., opt_kind
+<a name="line206"></a> *     defaults to goog.soy.data.SanitizedContentKind.HTML).
+<a name="line207"></a> * @return {RETURN_TYPE} The SanitizedContent object. This return type is
+<a name="line208"></a> *     generic based on the return type of the template, such as
+<a name="line209"></a> *     soy.SanitizedHtml.
+<a name="line210"></a> * @template ARG_TYPES, RETURN_TYPE
+<a name="line211"></a> */
+<a name="line212"></a>goog.soy.Renderer.prototype.renderStrict = function(
+<a name="line213"></a>    template, opt_templateData, opt_kind) {
+<a name="line214"></a>  var result = template(
+<a name="line215"></a>      opt_templateData || {}, undefined, this.getInjectedData_());
+<a name="line216"></a>  goog.asserts.assertInstanceof(result, goog.soy.data.SanitizedContent,
+<a name="line217"></a>      &#39;renderStrict cannot be called on a non-strict soy template&#39;);
+<a name="line218"></a>  goog.asserts.assert(
+<a name="line219"></a>      result.contentKind ===
+<a name="line220"></a>          (opt_kind || goog.soy.data.SanitizedContentKind.HTML),
+<a name="line221"></a>      &#39;renderStrict was called with the wrong kind of template&#39;);
+<a name="line222"></a>  this.saveTemplateRender_(template, opt_templateData);
+<a name="line223"></a>  this.handleRender();
+<a name="line224"></a>  return result;
+<a name="line225"></a>};
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>/**
+<a name="line229"></a> * Renders a strict Soy template of kind=&quot;html&quot; and returns the result as
+<a name="line230"></a> * a goog.html.SafeHtml object.
+<a name="line231"></a> *
+<a name="line232"></a> * Rendering a template that is not a strict template of kind=&quot;html&quot; results in
+<a name="line233"></a> * a runtime error.
+<a name="line234"></a> *
+<a name="line235"></a> * @param {null|function(ARG_TYPES, null=, Object.&lt;string, *&gt;=):
+<a name="line236"></a> *     goog.soy.data.SanitizedContent} template The Soy template to render.
+<a name="line237"></a> * @param {ARG_TYPES=} opt_templateData The data for the template.
+<a name="line238"></a> * @return {!goog.html.SafeHtml}
+<a name="line239"></a> * @template ARG_TYPES
+<a name="line240"></a> */
+<a name="line241"></a>goog.soy.Renderer.prototype.renderSafeHtml = function(
+<a name="line242"></a>    template, opt_templateData) {
+<a name="line243"></a>  var result = this.renderStrict(template, opt_templateData);
+<a name="line244"></a>  return result.toSafeHtml();
+<a name="line245"></a>};
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * @return {!goog.soy.Renderer.SavedTemplateRender} Saved template data for
+<a name="line250"></a> *     the renders that have happened so far.
+<a name="line251"></a> */
+<a name="line252"></a>goog.soy.Renderer.prototype.getSavedTemplateRenders = function() {
+<a name="line253"></a>  return this.savedTemplateRenders_;
+<a name="line254"></a>};
+<a name="line255"></a>
+<a name="line256"></a>
+<a name="line257"></a>/**
+<a name="line258"></a> * Observes rendering of templates by this renderer.
+<a name="line259"></a> * @param {Node=} opt_node Relevant node, if available. The node may or may
+<a name="line260"></a> *     not be in the document, depending on whether Soy is creating an element
+<a name="line261"></a> *     or writing into an existing one.
+<a name="line262"></a> * @protected
+<a name="line263"></a> */
+<a name="line264"></a>goog.soy.Renderer.prototype.handleRender = goog.nullFunction;
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Saves information about the current template render for debug purposes.
+<a name="line269"></a> * @param {Function} template The Soy template defining the element&#39;s content.
+<a name="line270"></a> * @param {Object=} opt_templateData The data for the template.
+<a name="line271"></a> * @private
+<a name="line272"></a> * @suppress {missingProperties} SoyJs compiler adds soyTemplateName to the
+<a name="line273"></a> *     template.
+<a name="line274"></a> */
+<a name="line275"></a>goog.soy.Renderer.prototype.saveTemplateRender_ = function(
+<a name="line276"></a>    template, opt_templateData) {
+<a name="line277"></a>  if (goog.DEBUG) {
+<a name="line278"></a>    this.savedTemplateRenders_.push({
+<a name="line279"></a>      template: template.soyTemplateName,
+<a name="line280"></a>      data: opt_templateData,
+<a name="line281"></a>      ijData: this.getInjectedData_()
+<a name="line282"></a>    });
+<a name="line283"></a>  }
+<a name="line284"></a>};
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>/**
+<a name="line288"></a> * Creates the injectedParams map if necessary and calls the configuration
+<a name="line289"></a> * service to prepopulate it.
+<a name="line290"></a> * @return {Object} The injected params.
+<a name="line291"></a> * @private
+<a name="line292"></a> */
+<a name="line293"></a>goog.soy.Renderer.prototype.getInjectedData_ = function() {
+<a name="line294"></a>  return this.supplier_ ? this.supplier_.getData() : {};
+<a name="line295"></a>};
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * An interface for a supplier that provides Soy injected data.
+<a name="line301"></a> * @interface
+<a name="line302"></a> */
+<a name="line303"></a>goog.soy.InjectedDataSupplier = function() {};
+<a name="line304"></a>
+<a name="line305"></a>
+<a name="line306"></a>/**
+<a name="line307"></a> * Gets the injected data. Implementation may assume that
+<a name="line308"></a> * {@code goog.soy.Renderer} will treat the returned data as
+<a name="line309"></a> * immutable.  The renderer will call this every time one of its
+<a name="line310"></a> * {@code render*} methods is called.
+<a name="line311"></a> * @return {Object} A key-value pair representing the injected data.
+<a name="line312"></a> */
+<a name="line313"></a>goog.soy.InjectedDataSupplier.prototype.getData = function() {};
+</pre>
+
+
+</body>
+</html>

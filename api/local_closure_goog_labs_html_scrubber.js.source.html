@@ -1,0 +1,1078 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>scrubber.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_html_scrubber.js.html">scrubber.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview
+<a name="line18"></a> * HTML tag filtering, and balancing.
+<a name="line19"></a> * A more user-friendly API is exposed via {@code goog.labs.html.sanitizer}.
+<a name="line20"></a> * @visibility {//visibility:private}
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.labs.html.scrubber&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.array&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.tags&#39;);
+<a name="line28"></a>goog.require(&#39;goog.labs.html.attributeRewriterPresubmitWorkaround&#39;);
+<a name="line29"></a>goog.require(&#39;goog.string&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Replaces tags not on the white-list with empty text nodes, dropping all
+<a name="line34"></a> * attributes, and drops other non-text nodes such as comments.
+<a name="line35"></a> *
+<a name="line36"></a> * @param {!Object.&lt;string, boolean&gt;} tagWhitelist a set of lower-case tag names
+<a name="line37"></a> *    following the convention established by {@link goog.object.createSet}.
+<a name="line38"></a> * @param {!Object.&lt;string, Object.&lt;string, goog.labs.html.AttributeRewriter&gt;&gt;}
+<a name="line39"></a> *        attrWhitelist
+<a name="line40"></a> *    maps lower-case tag names and the special string {@code &quot;*&quot;} to functions
+<a name="line41"></a> *    from decoded attribute values to sanitized values or {@code null} to
+<a name="line42"></a> *    indicate that the attribute is not allowed with that value.
+<a name="line43"></a> *
+<a name="line44"></a> *    For example, if {@code attrWhitelist[&#39;a&#39;][&#39;href&#39;]} is defined then it
+<a name="line45"></a> *    is used to sanitize the value of the link&#39;s URL.
+<a name="line46"></a> *
+<a name="line47"></a> *    If {@code attrWhitelist[&#39;*&#39;][&#39;id&#39;]} is defined, and
+<a name="line48"></a> *    {@code attrWhitelist[&#39;div&#39;][&#39;id&#39;]} is not, then the former is used to
+<a name="line49"></a> *    sanitize any {@code id} attribute on a {@code &lt;div&gt;} element.
+<a name="line50"></a> * @param {string} html a string of HTML
+<a name="line51"></a> * @return {string} the input but with potentially dangerous tokens removed.
+<a name="line52"></a> */
+<a name="line53"></a>goog.labs.html.scrubber.scrub = function(tagWhitelist, attrWhitelist, html) {
+<a name="line54"></a>  return goog.labs.html.scrubber.render_(
+<a name="line55"></a>      goog.labs.html.scrubber.balance_(
+<a name="line56"></a>          goog.labs.html.scrubber.filter_(
+<a name="line57"></a>              tagWhitelist,
+<a name="line58"></a>              attrWhitelist,
+<a name="line59"></a>              goog.labs.html.scrubber.lex_(html))));
+<a name="line60"></a>};
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Balances tags in trusted HTML.
+<a name="line65"></a> * @param {string} html a string of HTML
+<a name="line66"></a> * @return {string} the input but with an end-tag for each non-void start tag
+<a name="line67"></a> *     and only for non-void start tags, and with start and end tags nesting
+<a name="line68"></a> *     properly.
+<a name="line69"></a> */
+<a name="line70"></a>goog.labs.html.scrubber.balance = function(html) {
+<a name="line71"></a>  return goog.labs.html.scrubber.render_(
+<a name="line72"></a>      goog.labs.html.scrubber.balance_(
+<a name="line73"></a>          goog.labs.html.scrubber.lex_(html)));
+<a name="line74"></a>};
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/** Character code constant for {@code &#39;&lt;&#39;}.  @private */
+<a name="line78"></a>goog.labs.html.scrubber.CC_LT_ = &#39;&lt;&#39;.charCodeAt(0);
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/** Character code constant for {@code &#39;!&#39;}.  @private */
+<a name="line82"></a>goog.labs.html.scrubber.CC_BANG_ = &#39;!&#39;.charCodeAt(0);
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/** Character code constant for {@code &#39;/&#39;}.  @private */
+<a name="line86"></a>goog.labs.html.scrubber.CC_SLASH_ = &#39;/&#39;.charCodeAt(0);
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/** Character code constant for {@code &#39;?&#39;}.  @private */
+<a name="line90"></a>goog.labs.html.scrubber.CC_QMARK_ = &#39;?&#39;.charCodeAt(0);
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Matches content following a tag name or attribute value, and before the
+<a name="line95"></a> * beginning of the next attribute value.
+<a name="line96"></a> * @private
+<a name="line97"></a> */
+<a name="line98"></a>goog.labs.html.scrubber.ATTR_VALUE_PRECEDER_ = &#39;[^=&gt;]+&#39;;
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/** @private */
+<a name="line102"></a>goog.labs.html.scrubber.UNQUOTED_ATTR_VALUE_ = &#39;(?:[^&quot;\&#39;\\s&gt;][^\\s&gt;]*)&#39;;
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/** @private */
+<a name="line106"></a>goog.labs.html.scrubber.DOUBLE_QUOTED_ATTR_VALUE_ = &#39;(?:&quot;[^&quot;]*&quot;?)&#39;;
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/** @private */
+<a name="line110"></a>goog.labs.html.scrubber.SINGLE_QUOTED_ATTR_VALUE_ = &quot;(?:&#39;[^&#39;]*&#39;?)&quot;;
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Matches the equals-sign and any attribute value following it, but does not
+<a name="line115"></a> * capture any {@code &gt;} that would close the tag.
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.labs.html.scrubber.ATTR_VALUE_ = &#39;=\\s*(?:&#39; +
+<a name="line119"></a>    goog.labs.html.scrubber.UNQUOTED_ATTR_VALUE_ +
+<a name="line120"></a>    &#39;|&#39; + goog.labs.html.scrubber.DOUBLE_QUOTED_ATTR_VALUE_ +
+<a name="line121"></a>    &#39;|&#39; + goog.labs.html.scrubber.SINGLE_QUOTED_ATTR_VALUE_ + &#39;)?&#39;;
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * The body of a tag between the end of the name and the closing {@code &gt;}
+<a name="line126"></a> * if any.
+<a name="line127"></a> * @private
+<a name="line128"></a> */
+<a name="line129"></a>goog.labs.html.scrubber.ATTRS_ =
+<a name="line130"></a>    &#39;(?:&#39; + goog.labs.html.scrubber.ATTR_VALUE_PRECEDER_ +
+<a name="line131"></a>    &#39;|&#39; + goog.labs.html.scrubber.ATTR_VALUE_ + &#39;)*&#39;;
+<a name="line132"></a>
+<a name="line133"></a>
+<a name="line134"></a>/**
+<a name="line135"></a> * A character that continues a tag name as defined at
+<a name="line136"></a> * http://www.w3.org/html/wg/drafts/html/master/syntax.html#tag-name-state
+<a name="line137"></a> * @private
+<a name="line138"></a> */
+<a name="line139"></a>goog.labs.html.scrubber.TAG_NAME_CHAR_ = &#39;[^\t\f\n /&gt;]&#39;;
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * Matches when the next character cannot continue a tag name.
+<a name="line144"></a> * @private
+<a name="line145"></a> */
+<a name="line146"></a>goog.labs.html.scrubber.BREAK_ =
+<a name="line147"></a>    &#39;(?!&#39; + goog.labs.html.scrubber.TAG_NAME_CHAR_ + &#39;)&#39;;
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Matches the open tag and body of a special element :
+<a name="line152"></a> * one whose body cannot contain nested elements so uses special parsing rules.
+<a name="line153"></a> * It does not include the end tag.
+<a name="line154"></a> * @private
+<a name="line155"></a> */
+<a name="line156"></a>goog.labs.html.scrubber.SPECIAL_ELEMENT_ = &#39;&lt;(?:&#39; +
+<a name="line157"></a>    // Special tag name.
+<a name="line158"></a>    &#39;(iframe|script|style|textarea|title|xmp)&#39; +
+<a name="line159"></a>    // End of tag name
+<a name="line160"></a>    goog.labs.html.scrubber.BREAK_ +
+<a name="line161"></a>    // Attributes
+<a name="line162"></a>    goog.labs.html.scrubber.ATTRS_ + &#39;&gt;&#39; +
+<a name="line163"></a>    // Element content includes non &#39;&lt;&#39; characters, and
+<a name="line164"></a>    // &#39;&lt;&#39; that don&#39;t start a matching end tag.
+<a name="line165"></a>    // This uses a back-reference to the tag name to determine whether
+<a name="line166"></a>    // the tag names match.
+<a name="line167"></a>    // Since matching is case-insensitive, this can only be used in
+<a name="line168"></a>    // a case-insensitive regular expression.
+<a name="line169"></a>    // JavaScript does not treat Turkish dotted I&#39;s as equivalent to their
+<a name="line170"></a>    // ASCII equivalents.
+<a name="line171"></a>    &#39;(?:[^&lt;]|&lt;(?!/\\1&#39; + goog.labs.html.scrubber.BREAK_ + &#39;))*&#39; +
+<a name="line172"></a>    &#39;)&#39;;
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * Regexp pattern for an HTML tag.
+<a name="line177"></a> * @private
+<a name="line178"></a> */
+<a name="line179"></a>goog.labs.html.scrubber.TAG_ =
+<a name="line180"></a>    &#39;&lt;[/]?[a-z]&#39; + goog.labs.html.scrubber.TAG_NAME_CHAR_ + &#39;*&#39; +
+<a name="line181"></a>    goog.labs.html.scrubber.ATTRS_ + &#39;&gt;?&#39;;
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * Regexp pattern for an HTML text node.
+<a name="line186"></a> * @private
+<a name="line187"></a> */
+<a name="line188"></a>goog.labs.html.scrubber.TEXT_NODE_ = &#39;(?:[^&lt;]|&lt;(?![a-z]|[?!/]))+&#39;;
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * Matches HTML comments including HTML 5 &quot;bogus comments&quot; of the form
+<a name="line193"></a> * {@code &lt;!...&gt;} or {@code &lt;?...&gt;} or {@code &lt;/...&gt;}.
+<a name="line194"></a> * @private
+<a name="line195"></a> */
+<a name="line196"></a>goog.labs.html.scrubber.COMMENT_ =
+<a name="line197"></a>    &#39;&lt;!--(?:[^\\-]|-+(?![\\-&gt;]))*(?:-(?:-&gt;?)?)?&#39; +
+<a name="line198"></a>    &#39;|&lt;[!?/][^&gt;]*&gt;?&#39;;
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * Regexp pattern for an HTML token after a doctype.
+<a name="line203"></a> * Special elements introduces a capturing group for use with a
+<a name="line204"></a> * back-reference.
+<a name="line205"></a> * @private
+<a name="line206"></a> */
+<a name="line207"></a>goog.labs.html.scrubber.HTML_TOKENS_RE_ = new RegExp(
+<a name="line208"></a>    &#39;(?:&#39; + goog.labs.html.scrubber.TEXT_NODE_ +
+<a name="line209"></a>    &#39;|&#39; + goog.labs.html.scrubber.SPECIAL_ELEMENT_ +
+<a name="line210"></a>    &#39;|&#39; + goog.labs.html.scrubber.TAG_ +
+<a name="line211"></a>    &#39;|&#39; + goog.labs.html.scrubber.COMMENT_ + &#39;)&#39;,
+<a name="line212"></a>    &#39;ig&#39;);
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * An HTML tag which captures the name in group 1,
+<a name="line217"></a> * and any attributes in group 2.
+<a name="line218"></a> * @private
+<a name="line219"></a> */
+<a name="line220"></a>goog.labs.html.scrubber.TAG_RE_ = new RegExp(
+<a name="line221"></a>    &#39;&lt;[/]?([a-z]&#39; + goog.labs.html.scrubber.TAG_NAME_CHAR_ + &#39;*)&#39; +
+<a name="line222"></a>    &#39;(&#39; + goog.labs.html.scrubber.ATTRS_ + &#39;)&gt;?&#39;,
+<a name="line223"></a>    &#39;i&#39;);
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/**
+<a name="line227"></a> * A global matcher that separates attributes out of the tag body cruft.
+<a name="line228"></a> * @private
+<a name="line229"></a> */
+<a name="line230"></a>goog.labs.html.scrubber.ATTRS_RE_ = new RegExp(
+<a name="line231"></a>    &#39;[^=\\s]+\\s*(?:&#39; + goog.labs.html.scrubber.ATTR_VALUE_ + &#39;)?&#39;, &#39;ig&#39;);
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>/**
+<a name="line235"></a> * Returns an array of HTML tokens including tags, text nodes and comments.
+<a name="line236"></a> * &quot;Special&quot; elements, like {@code &lt;script&gt;...&lt;/script&gt;} whose bodies cannot
+<a name="line237"></a> * include nested elements, are returned as single tokens.
+<a name="line238"></a> *
+<a name="line239"></a> * @param {string} html a string of HTML
+<a name="line240"></a> * @return {!Array.&lt;string&gt;}
+<a name="line241"></a> * @private
+<a name="line242"></a> */
+<a name="line243"></a>goog.labs.html.scrubber.lex_ = function(html) {
+<a name="line244"></a>  return (&#39;&#39; + html).match(goog.labs.html.scrubber.HTML_TOKENS_RE_) || [];
+<a name="line245"></a>};
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * Replaces tags not on the white-list with empty text nodes, dropping all
+<a name="line250"></a> * attributes, and drops other non-text nodes such as comments.
+<a name="line251"></a> *
+<a name="line252"></a> * @param {!Object.&lt;string, boolean&gt;} tagWhitelist a set of lower-case tag names
+<a name="line253"></a> *    following the convention established by {@link goog.object.createSet}.
+<a name="line254"></a> * @param {!Object.&lt;string, Object.&lt;string, goog.labs.html.AttributeRewriter&gt;&gt;
+<a name="line255"></a> *        } attrWhitelist
+<a name="line256"></a> *    maps lower-case tag names and the special string {@code &quot;*&quot;} to functions
+<a name="line257"></a> *    from decoded attribute values to sanitized values or {@code null} to
+<a name="line258"></a> *    indicate that the attribute is not allowed with that value.
+<a name="line259"></a> *
+<a name="line260"></a> *    For example, if {@code attrWhitelist[&#39;a&#39;][&#39;href&#39;]} is defined then it is
+<a name="line261"></a> *    used to sanitize the value of the link&#39;s URL.
+<a name="line262"></a> *
+<a name="line263"></a> *    If {@code attrWhitelist[&#39;*&#39;][&#39;id&#39;]} is defined, and
+<a name="line264"></a> *    {@code attrWhitelist[&#39;div&#39;][&#39;id&#39;]} is not, then the former is used to
+<a name="line265"></a> *    sanitize any {@code id} attribute on a {@code &lt;div&gt;} element.
+<a name="line266"></a> * @param {!Array.&lt;string&gt;} htmlTokens an array of HTML tokens as returned by
+<a name="line267"></a> *    {@link goog.labs.html.scrubber.lex_}.
+<a name="line268"></a> * @return {!Array.&lt;string&gt;} the input array modified in place to have some
+<a name="line269"></a> *    tokens removed.
+<a name="line270"></a> * @private
+<a name="line271"></a> */
+<a name="line272"></a>goog.labs.html.scrubber.filter_ = function(
+<a name="line273"></a>    tagWhitelist, attrWhitelist, htmlTokens) {
+<a name="line274"></a>  var genericAttrWhitelist = attrWhitelist[&#39;*&#39;];
+<a name="line275"></a>  for (var i = 0, n = htmlTokens.length; i &lt; n; ++i) {
+<a name="line276"></a>    var htmlToken = htmlTokens[i];
+<a name="line277"></a>    if (htmlToken.charCodeAt(0) !== goog.labs.html.scrubber.CC_LT_) {
+<a name="line278"></a>      // Definitely not a tag
+<a name="line279"></a>      continue;
+<a name="line280"></a>    }
+<a name="line281"></a>
+<a name="line282"></a>    var tag = htmlToken.match(goog.labs.html.scrubber.TAG_RE_);
+<a name="line283"></a>    if (tag) {
+<a name="line284"></a>      var lowerCaseTagName = tag[1].toLowerCase();
+<a name="line285"></a>      var isCloseTag =
+<a name="line286"></a>          htmlToken.charCodeAt(1) === goog.labs.html.scrubber.CC_SLASH_;
+<a name="line287"></a>      var attrs = &#39;&#39;;
+<a name="line288"></a>      if (!isCloseTag &amp;&amp; tag[2]) {
+<a name="line289"></a>        var tagSpecificAttrWhitelist =
+<a name="line290"></a>            /** @type {Object.&lt;string, goog.labs.html.AttributeRewriter&gt;} */ (
+<a name="line291"></a>            goog.labs.html.scrubber.readOwnProperty_(
+<a name="line292"></a>                attrWhitelist, lowerCaseTagName));
+<a name="line293"></a>        if (genericAttrWhitelist || tagSpecificAttrWhitelist) {
+<a name="line294"></a>          attrs = goog.labs.html.scrubber.filterAttrs_(
+<a name="line295"></a>              tag[2], genericAttrWhitelist, tagSpecificAttrWhitelist);
+<a name="line296"></a>        }
+<a name="line297"></a>      }
+<a name="line298"></a>      var specialContent = htmlToken.substring(tag[0].length);
+<a name="line299"></a>      htmlTokens[i] =
+<a name="line300"></a>          (tagWhitelist[lowerCaseTagName] === true) ?
+<a name="line301"></a>          (
+<a name="line302"></a>              (isCloseTag ? &#39;&lt;/&#39; : &#39;&lt;&#39;) + lowerCaseTagName + attrs + &#39;&gt;&#39; +
+<a name="line303"></a>              specialContent
+<a name="line304"></a>          ) :
+<a name="line305"></a>          &#39;&#39;;
+<a name="line306"></a>    } else if (htmlToken.length &gt; 1) {
+<a name="line307"></a>      switch (htmlToken.charCodeAt(1)) {
+<a name="line308"></a>        case goog.labs.html.scrubber.CC_BANG_:
+<a name="line309"></a>        case goog.labs.html.scrubber.CC_SLASH_:
+<a name="line310"></a>        case goog.labs.html.scrubber.CC_QMARK_:
+<a name="line311"></a>          htmlTokens[i] = &#39;&#39;;  // Elide comments.
+<a name="line312"></a>          break;
+<a name="line313"></a>        default:
+<a name="line314"></a>          // Otherwise, token is just a text node that starts with &#39;&lt;&#39;.
+<a name="line315"></a>          // Speed up later passes by normalizing the text node.
+<a name="line316"></a>          htmlTokens[i] = htmlTokens[i].replace(/&lt;/g, &#39;&amp;lt;&#39;);
+<a name="line317"></a>      }
+<a name="line318"></a>    }
+<a name="line319"></a>  }
+<a name="line320"></a>  return htmlTokens;
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Parses attribute names and values out of a tag body and applies the attribute
+<a name="line326"></a> * white-list to produce a tag body containing only safe attributes.
+<a name="line327"></a> *
+<a name="line328"></a> * @param {string} attrsText the text of a tag between the end of the tag name
+<a name="line329"></a> *   and the beginning of the tag end marker, so {@code &quot; foo bar=&#39;baz&#39;&quot;} for
+<a name="line330"></a> *   the tag {@code &lt;tag foo bar=&#39;baz&#39;/&gt;}.
+<a name="line331"></a> * @param {Object.&lt;string, goog.labs.html.AttributeRewriter&gt;}
+<a name="line332"></a> *   genericAttrWhitelist
+<a name="line333"></a> *   a whitelist of attribute transformations for attributes that are allowed
+<a name="line334"></a> *   on any element.
+<a name="line335"></a> * @param {Object.&lt;string, goog.labs.html.AttributeRewriter&gt;}
+<a name="line336"></a> *   tagSpecificAttrWhitelist
+<a name="line337"></a> *   a whitelist of attribute transformations for attributes that are allowed
+<a name="line338"></a> *   on the element started by the tag whose body is {@code tagBody}.
+<a name="line339"></a> * @return {string} a tag-body that consists only of safe attributes.
+<a name="line340"></a> * @private
+<a name="line341"></a> */
+<a name="line342"></a>goog.labs.html.scrubber.filterAttrs_ =
+<a name="line343"></a>    function(attrsText, genericAttrWhitelist, tagSpecificAttrWhitelist) {
+<a name="line344"></a>  var attrs = attrsText.match(goog.labs.html.scrubber.ATTRS_RE_);
+<a name="line345"></a>  var nAttrs = attrs ? attrs.length : 0;
+<a name="line346"></a>  var safeAttrs = &#39;&#39;;
+<a name="line347"></a>  for (var i = 0; i &lt; nAttrs; ++i) {
+<a name="line348"></a>    var attr = attrs[i];
+<a name="line349"></a>    var eq = attr.indexOf(&#39;=&#39;);
+<a name="line350"></a>    var name, value;
+<a name="line351"></a>    if (eq &gt;= 0) {
+<a name="line352"></a>      name = goog.string.trim(attr.substr(0, eq));
+<a name="line353"></a>      value = goog.string.stripQuotes(
+<a name="line354"></a>          goog.string.trim(attr.substr(eq + 1)), &#39;&quot;\&#39;&#39;);
+<a name="line355"></a>    } else {
+<a name="line356"></a>      name = value = attr;
+<a name="line357"></a>    }
+<a name="line358"></a>    name = name.toLowerCase();
+<a name="line359"></a>    var rewriter = /** @type {?goog.labs.html.AttributeRewriter} */ (
+<a name="line360"></a>        tagSpecificAttrWhitelist &amp;&amp;
+<a name="line361"></a>        goog.labs.html.scrubber.readOwnProperty_(
+<a name="line362"></a>            tagSpecificAttrWhitelist, name) ||
+<a name="line363"></a>        genericAttrWhitelist &amp;&amp;
+<a name="line364"></a>        goog.labs.html.scrubber.readOwnProperty_(genericAttrWhitelist, name));
+<a name="line365"></a>    if (rewriter) {
+<a name="line366"></a>      var safeValue = rewriter(goog.string.unescapeEntities(value));
+<a name="line367"></a>      if (safeValue != null) {
+<a name="line368"></a>        if (safeValue.implementsGoogStringTypedString) {
+<a name="line369"></a>          safeValue = /** @type {goog.string.TypedString} */
+<a name="line370"></a>              (safeValue).getTypedStringValue();
+<a name="line371"></a>        }
+<a name="line372"></a>        safeValue = String(safeValue);
+<a name="line373"></a>        if (safeValue.indexOf(&#39;`&#39;) &gt;= 0) {
+<a name="line374"></a>          safeValue += &#39; &#39;;
+<a name="line375"></a>        }
+<a name="line376"></a>        safeAttrs +=
+<a name="line377"></a>            &#39; &#39; + name + &#39;=&quot;&#39; + goog.string.htmlEscape(safeValue, false) +
+<a name="line378"></a>            &#39;&quot;&#39;;
+<a name="line379"></a>      }
+<a name="line380"></a>    }
+<a name="line381"></a>  }
+<a name="line382"></a>  return safeAttrs;
+<a name="line383"></a>};
+<a name="line384"></a>
+<a name="line385"></a>
+<a name="line386"></a>/**
+<a name="line387"></a> * @param {!Object} o the object
+<a name="line388"></a> * @param {!string} k a key into o
+<a name="line389"></a> * @return {*}
+<a name="line390"></a> * @private
+<a name="line391"></a> */
+<a name="line392"></a>goog.labs.html.scrubber.readOwnProperty_ = function(o, k) {
+<a name="line393"></a>  return Object.prototype.hasOwnProperty.call(o, k) ? o[k] : undefined;
+<a name="line394"></a>};
+<a name="line395"></a>
+<a name="line396"></a>
+<a name="line397"></a>/**
+<a name="line398"></a> * We limit the nesting limit of balanced HTML to a large but manageable number
+<a name="line399"></a> * so that built-in browser limits aren&#39;t likely to kick in and undo all our
+<a name="line400"></a> * matching of start and end tags.
+<a name="line401"></a> * &lt;br&gt;
+<a name="line402"></a> * This mitigates the HTML parsing equivalent of stack smashing attacks.
+<a name="line403"></a> * &lt;br&gt;
+<a name="line404"></a> * Otherwise, crafted inputs like
+<a name="line405"></a> * {@code &lt;p&gt;&lt;p&gt;&lt;p&gt;&lt;p&gt;...Ad nauseam...&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;} could exploit
+<a name="line406"></a> * browser bugs, and/or undocumented nesting limit recovery code to misnest
+<a name="line407"></a> * tags.
+<a name="line408"></a> * @private
+<a name="line409"></a> * @const
+<a name="line410"></a> */
+<a name="line411"></a>goog.labs.html.scrubber.BALANCE_NESTING_LIMIT_ = 256;
+<a name="line412"></a>
+<a name="line413"></a>
+<a name="line414"></a>/**
+<a name="line415"></a> * Ensures that there are end-tags for all and only for non-void start tags.
+<a name="line416"></a> * @param {Array.&lt;string&gt;} htmlTokens an array of HTML tokens as returned by
+<a name="line417"></a> *    {@link goog.labs.html.scrubber.lex}.
+<a name="line418"></a> * @return {!Array.&lt;string&gt;} the input array modified in place to have some
+<a name="line419"></a> *    tokens removed.
+<a name="line420"></a> * @private
+<a name="line421"></a> */
+<a name="line422"></a>goog.labs.html.scrubber.balance_ = function(htmlTokens) {
+<a name="line423"></a>  var openElementStack = [];
+<a name="line424"></a>  for (var i = 0, n = htmlTokens.length; i &lt; n; ++i) {
+<a name="line425"></a>    var htmlToken = htmlTokens[i];
+<a name="line426"></a>    if (htmlToken.charCodeAt(0) !== goog.labs.html.scrubber.CC_LT_) {
+<a name="line427"></a>      // Definitely not a tag
+<a name="line428"></a>      continue;
+<a name="line429"></a>    }
+<a name="line430"></a>    var tag = htmlToken.match(goog.labs.html.scrubber.TAG_RE_);
+<a name="line431"></a>    if (tag) {
+<a name="line432"></a>      var lowerCaseTagName = tag[1].toLowerCase();
+<a name="line433"></a>      var isCloseTag =
+<a name="line434"></a>          htmlToken.charCodeAt(1) === goog.labs.html.scrubber.CC_SLASH_;
+<a name="line435"></a>      // Special case: HTML5 mandates that &lt;/br&gt; be treated as &lt;br&gt;.
+<a name="line436"></a>      if (isCloseTag &amp;&amp; lowerCaseTagName == &#39;br&#39;) {
+<a name="line437"></a>        isCloseTag = false;
+<a name="line438"></a>        htmlToken = &#39;&lt;br&gt;&#39;;
+<a name="line439"></a>      }
+<a name="line440"></a>      var isVoidTag = goog.dom.tags.isVoidTag(lowerCaseTagName);
+<a name="line441"></a>      if (isVoidTag &amp;&amp; isCloseTag) {
+<a name="line442"></a>        htmlTokens[i] = &#39;&#39;;
+<a name="line443"></a>        continue;
+<a name="line444"></a>      }
+<a name="line445"></a>
+<a name="line446"></a>      var prefix = &#39;&#39;;
+<a name="line447"></a>
+<a name="line448"></a>      // Insert implied open tags.
+<a name="line449"></a>      var nOpenElements = openElementStack.length;
+<a name="line450"></a>      if (nOpenElements &amp;&amp; !isCloseTag) {
+<a name="line451"></a>        var top = openElementStack[nOpenElements - 1];
+<a name="line452"></a>        var groups = goog.labs.html.scrubber.ELEMENT_GROUPS_[lowerCaseTagName];
+<a name="line453"></a>        if (groups === undefined) {
+<a name="line454"></a>          groups = goog.labs.html.scrubber.Group_.INLINE_;
+<a name="line455"></a>        }
+<a name="line456"></a>        var canContain = goog.labs.html.scrubber.ELEMENT_CONTENTS_[top];
+<a name="line457"></a>        if (!(groups &amp; canContain)) {
+<a name="line458"></a>          var blockContainer = goog.labs.html.scrubber.BLOCK_CONTAINERS_[top];
+<a name="line459"></a>          if (&#39;string&#39; === typeof blockContainer) {
+<a name="line460"></a>            var containerCanContain =
+<a name="line461"></a>                goog.labs.html.scrubber.ELEMENT_CONTENTS_[blockContainer];
+<a name="line462"></a>            if (containerCanContain &amp; groups) {
+<a name="line463"></a>              if (nOpenElements &lt;
+<a name="line464"></a>                  goog.labs.html.scrubber.BALANCE_NESTING_LIMIT_) {
+<a name="line465"></a>                prefix = &#39;&lt;&#39; + blockContainer + &#39;&gt;&#39;;
+<a name="line466"></a>              }
+<a name="line467"></a>              openElementStack[nOpenElements] = blockContainer;
+<a name="line468"></a>              ++nOpenElements;
+<a name="line469"></a>            }
+<a name="line470"></a>          }
+<a name="line471"></a>        }
+<a name="line472"></a>      }
+<a name="line473"></a>
+<a name="line474"></a>      // Insert any missing close tags we need.
+<a name="line475"></a>      var newStackLen = goog.labs.html.scrubber.pickElementsToClose_(
+<a name="line476"></a>          lowerCaseTagName, isCloseTag, openElementStack);
+<a name="line477"></a>
+<a name="line478"></a>      var nClosed = nOpenElements - newStackLen;
+<a name="line479"></a>      if (nClosed) {  // [&quot;p&quot;, &quot;a&quot;, &quot;b&quot;] -&gt; &quot;&lt;/b&gt;&lt;/a&gt;&lt;/p&gt;&quot;
+<a name="line480"></a>        // First, dump anything past the nesting limit.
+<a name="line481"></a>        if (nOpenElements &gt; goog.labs.html.scrubber.BALANCE_NESTING_LIMIT_) {
+<a name="line482"></a>          nClosed -= nOpenElements -
+<a name="line483"></a>              goog.labs.html.scrubber.BALANCE_NESTING_LIMIT_;
+<a name="line484"></a>          nOpenElements = goog.labs.html.scrubber.BALANCE_NESTING_LIMIT_;
+<a name="line485"></a>        }
+<a name="line486"></a>        // Truncate to the new limit, and produce end tags.
+<a name="line487"></a>        var closeTags = openElementStack.splice(newStackLen, nClosed);
+<a name="line488"></a>        if (closeTags.length) {
+<a name="line489"></a>          closeTags.reverse();
+<a name="line490"></a>          prefix += &#39;&lt;/&#39; + closeTags.join(&#39;&gt;&lt;/&#39;) + &#39;&gt;&#39;;
+<a name="line491"></a>        }
+<a name="line492"></a>      }
+<a name="line493"></a>
+<a name="line494"></a>      // We could do resumption here to handle misnested tags like
+<a name="line495"></a>      //    &lt;b&gt;&lt;i class=&quot;c&quot;&gt;Foo&lt;/b&gt;Bar&lt;/i&gt;
+<a name="line496"></a>      // which is equivalent to
+<a name="line497"></a>      //    &lt;b&gt;&lt;i class=&quot;c&quot;&gt;Foo&lt;/i&gt;&lt;/b&gt;&lt;i class=&quot;c&quot;&gt;Bar&lt;/i&gt;
+<a name="line498"></a>      // but that requires storing attributes on the open element stack
+<a name="line499"></a>      // which complicates all the code using it for marginal added value.
+<a name="line500"></a>
+<a name="line501"></a>      if (isCloseTag) {
+<a name="line502"></a>        // If the close tag matched an open tag, then the closed section
+<a name="line503"></a>        // included that tag name.
+<a name="line504"></a>        htmlTokens[i] = prefix;
+<a name="line505"></a>      } else {
+<a name="line506"></a>        if (!isVoidTag) {
+<a name="line507"></a>          openElementStack[openElementStack.length] = lowerCaseTagName;
+<a name="line508"></a>        }
+<a name="line509"></a>        if (openElementStack.length &gt;
+<a name="line510"></a>            goog.labs.html.scrubber.BALANCE_NESTING_LIMIT_) {
+<a name="line511"></a>          htmlToken = &#39;&#39;;
+<a name="line512"></a>        }
+<a name="line513"></a>        htmlTokens[i] = prefix + htmlToken;
+<a name="line514"></a>      }
+<a name="line515"></a>    }
+<a name="line516"></a>  }
+<a name="line517"></a>  if (openElementStack.length) {
+<a name="line518"></a>    if (openElementStack.length &gt;
+<a name="line519"></a>        goog.labs.html.scrubber.BALANCE_NESTING_LIMIT_) {
+<a name="line520"></a>      openElementStack.length = goog.labs.html.scrubber.BALANCE_NESTING_LIMIT_;
+<a name="line521"></a>    }
+<a name="line522"></a>    if (openElementStack.length) {
+<a name="line523"></a>      openElementStack.reverse();
+<a name="line524"></a>      htmlTokens[htmlTokens.length] = &#39;&lt;/&#39; + openElementStack.join(&#39;&gt;&lt;/&#39;) + &#39;&gt;&#39;;
+<a name="line525"></a>    }
+<a name="line526"></a>  }
+<a name="line527"></a>  return htmlTokens;
+<a name="line528"></a>};
+<a name="line529"></a>
+<a name="line530"></a>
+<a name="line531"></a>/**
+<a name="line532"></a> * Normalizes HTML tokens and concatenates them into a string.
+<a name="line533"></a> * @param {Array.&lt;string&gt;} htmlTokens an array of HTML tokens as returned by
+<a name="line534"></a> *    {@link goog.labs.html.scrubber.lex}.
+<a name="line535"></a> * @return {string} a string of HTML.
+<a name="line536"></a> * @private
+<a name="line537"></a> */
+<a name="line538"></a>goog.labs.html.scrubber.render_ = function(htmlTokens) {
+<a name="line539"></a>  for (var i = 0, n = htmlTokens.length; i &lt; n; ++i) {
+<a name="line540"></a>    var htmlToken = htmlTokens[i];
+<a name="line541"></a>    if (htmlToken.charCodeAt(0) === goog.labs.html.scrubber.CC_LT_ &amp;&amp;
+<a name="line542"></a>        goog.labs.html.scrubber.TAG_RE_.test(htmlToken)) {
+<a name="line543"></a>      // The well-formedness and quotedness of attributes must be ensured by
+<a name="line544"></a>      // earlier passes.  filter does this.
+<a name="line545"></a>    } else {
+<a name="line546"></a>      if (htmlToken.indexOf(&#39;&lt;&#39;) &gt;= 0) {
+<a name="line547"></a>        htmlToken = htmlToken.replace(/&lt;/g, &#39;&amp;lt;&#39;);
+<a name="line548"></a>      }
+<a name="line549"></a>      if (htmlToken.indexOf(&#39;&gt;&#39;) &gt;= 0) {
+<a name="line550"></a>        htmlToken = htmlToken.replace(/&gt;/g, &#39;&amp;gt;&#39;);
+<a name="line551"></a>      }
+<a name="line552"></a>      htmlTokens[i] = htmlToken;
+<a name="line553"></a>    }
+<a name="line554"></a>  }
+<a name="line555"></a>  return htmlTokens.join(&#39;&#39;);
+<a name="line556"></a>};
+<a name="line557"></a>
+<a name="line558"></a>
+<a name="line559"></a>/**
+<a name="line560"></a> * Groups of elements used to specify containment relationships.
+<a name="line561"></a> * @enum {number}
+<a name="line562"></a> * @private
+<a name="line563"></a> */
+<a name="line564"></a>goog.labs.html.scrubber.Group_ = {
+<a name="line565"></a>  BLOCK_: (1 &lt;&lt; 0),
+<a name="line566"></a>  INLINE_: (1 &lt;&lt; 1),
+<a name="line567"></a>  INLINE_MINUS_A_: (1 &lt;&lt; 2),
+<a name="line568"></a>  MIXED_: (1 &lt;&lt; 3),
+<a name="line569"></a>  TABLE_CONTENT_: (1 &lt;&lt; 4),
+<a name="line570"></a>  HEAD_CONTENT_: (1 &lt;&lt; 5),
+<a name="line571"></a>  TOP_CONTENT_: (1 &lt;&lt; 6),
+<a name="line572"></a>  AREA_ELEMENT_: (1 &lt;&lt; 7),
+<a name="line573"></a>  FORM_ELEMENT_: (1 &lt;&lt; 8),
+<a name="line574"></a>  LEGEND_ELEMENT_: (1 &lt;&lt; 9),
+<a name="line575"></a>  LI_ELEMENT_: (1 &lt;&lt; 10),
+<a name="line576"></a>  DL_PART_: (1 &lt;&lt; 11),
+<a name="line577"></a>  P_ELEMENT_: (1 &lt;&lt; 12),
+<a name="line578"></a>  OPTIONS_ELEMENT_: (1 &lt;&lt; 13),
+<a name="line579"></a>  OPTION_ELEMENT_: (1 &lt;&lt; 14),
+<a name="line580"></a>  PARAM_ELEMENT_: (1 &lt;&lt; 15),
+<a name="line581"></a>  TABLE_ELEMENT_: (1 &lt;&lt; 16),
+<a name="line582"></a>  TR_ELEMENT_: (1 &lt;&lt; 17),
+<a name="line583"></a>  TD_ELEMENT_: (1 &lt;&lt; 18),
+<a name="line584"></a>  COL_ELEMENT_: (1 &lt;&lt; 19),
+<a name="line585"></a>  CHARACTER_DATA_: (1 &lt;&lt; 20)
+<a name="line586"></a>};
+<a name="line587"></a>
+<a name="line588"></a>
+<a name="line589"></a>/**
+<a name="line590"></a> * Element scopes limit where close tags can have effects.
+<a name="line591"></a> * For example, a table cannot be implicitly closed by a {@code &lt;/p&gt;} even if
+<a name="line592"></a> * the table appears inside a {@code &lt;p&gt;} because the {@code &lt;table&gt;} element
+<a name="line593"></a> * introduces a scope.
+<a name="line594"></a> *
+<a name="line595"></a> * @enum {number}
+<a name="line596"></a> * @private
+<a name="line597"></a> */
+<a name="line598"></a>goog.labs.html.scrubber.Scope_ = {
+<a name="line599"></a>  COMMON_: (1 &lt;&lt; 0),
+<a name="line600"></a>  BUTTON_: (1 &lt;&lt; 1),
+<a name="line601"></a>  LIST_ITEM_: (1 &lt;&lt; 2),
+<a name="line602"></a>  TABLE_: (1 &lt;&lt; 3)
+<a name="line603"></a>};
+<a name="line604"></a>
+<a name="line605"></a>
+<a name="line606"></a>/** @const @private */
+<a name="line607"></a>goog.labs.html.scrubber.ALL_SCOPES_ =
+<a name="line608"></a>    goog.labs.html.scrubber.Scope_.COMMON_ |
+<a name="line609"></a>    goog.labs.html.scrubber.Scope_.BUTTON_ |
+<a name="line610"></a>    goog.labs.html.scrubber.Scope_.LIST_ITEM_ |
+<a name="line611"></a>    goog.labs.html.scrubber.Scope_.TABLE_;
+<a name="line612"></a>
+<a name="line613"></a>
+<a name="line614"></a>/**
+<a name="line615"></a> * Picks which open HTML elements to close.
+<a name="line616"></a> *
+<a name="line617"></a> * @param {string}         lowerCaseTagName The name of the tag.
+<a name="line618"></a> * @param {boolean}        isCloseTag       True for a {@code &lt;/tagname&gt;} tag.
+<a name="line619"></a> * @param {Array.&lt;string&gt;} openElementStack The names of elements that have been
+<a name="line620"></a> *                                          opened and not subsequently closed.
+<a name="line621"></a> * @return {number} the length of openElementStack after closing any tags that
+<a name="line622"></a> *               need to be closed.
+<a name="line623"></a> * @private
+<a name="line624"></a> */
+<a name="line625"></a>goog.labs.html.scrubber.pickElementsToClose_ =
+<a name="line626"></a>    function(lowerCaseTagName, isCloseTag, openElementStack) {
+<a name="line627"></a>  var nOpenElements = openElementStack.length;
+<a name="line628"></a>  if (isCloseTag) {
+<a name="line629"></a>    // Look for a matching close tag inside blocking scopes.
+<a name="line630"></a>    var topMost;
+<a name="line631"></a>    if (/^h[1-6]$/.test(lowerCaseTagName)) {
+<a name="line632"></a>      // &lt;/h1&gt; will close any header.
+<a name="line633"></a>      topMost = -1;
+<a name="line634"></a>      for (var i = nOpenElements; --i &gt;= 0;) {
+<a name="line635"></a>        if (/^h[1-6]$/.test(openElementStack[i])) {
+<a name="line636"></a>          topMost = i;
+<a name="line637"></a>        }
+<a name="line638"></a>      }
+<a name="line639"></a>    } else {
+<a name="line640"></a>      topMost = goog.array.lastIndexOf(openElementStack, lowerCaseTagName);
+<a name="line641"></a>    }
+<a name="line642"></a>    if (topMost &gt;= 0) {
+<a name="line643"></a>      var blockers = goog.labs.html.scrubber.ALL_SCOPES_ &amp;
+<a name="line644"></a>          ~(goog.labs.html.scrubber.ELEMENT_SCOPES_[lowerCaseTagName] | 0);
+<a name="line645"></a>      for (var i = nOpenElements; --i &gt; topMost;) {
+<a name="line646"></a>        var blocks =
+<a name="line647"></a>            goog.labs.html.scrubber.ELEMENT_SCOPES_[openElementStack[i]] | 0;
+<a name="line648"></a>        if (blockers &amp; blocks) {
+<a name="line649"></a>          return nOpenElements;
+<a name="line650"></a>        }
+<a name="line651"></a>      }
+<a name="line652"></a>      return topMost;
+<a name="line653"></a>    }
+<a name="line654"></a>    return nOpenElements;
+<a name="line655"></a>  } else {
+<a name="line656"></a>    // Close anything that cannot contain the tag name.
+<a name="line657"></a>    var groups = goog.labs.html.scrubber.ELEMENT_GROUPS_[lowerCaseTagName];
+<a name="line658"></a>    if (groups === undefined) {
+<a name="line659"></a>      groups = goog.labs.html.scrubber.Group_.INLINE_;
+<a name="line660"></a>    }
+<a name="line661"></a>    for (var i = nOpenElements; --i &gt;= 0;) {
+<a name="line662"></a>      var canContain =
+<a name="line663"></a>          goog.labs.html.scrubber.ELEMENT_CONTENTS_[openElementStack[i]];
+<a name="line664"></a>      if (canContain === undefined) {
+<a name="line665"></a>        canContain = goog.labs.html.scrubber.Group_.INLINE_;
+<a name="line666"></a>      }
+<a name="line667"></a>      if (groups &amp; canContain) {
+<a name="line668"></a>        return i + 1;
+<a name="line669"></a>      }
+<a name="line670"></a>    }
+<a name="line671"></a>    return 0;
+<a name="line672"></a>  }
+<a name="line673"></a>};
+<a name="line674"></a>
+<a name="line675"></a>
+<a name="line676"></a>/**
+<a name="line677"></a> * The groups into which the element falls.
+<a name="line678"></a> * The default is an inline element.
+<a name="line679"></a> * @private
+<a name="line680"></a> */
+<a name="line681"></a>goog.labs.html.scrubber.ELEMENT_GROUPS_ = {
+<a name="line682"></a>  &#39;a&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line683"></a>  &#39;abbr&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line684"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line685"></a>  &#39;acronym&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line686"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line687"></a>  &#39;address&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line688"></a>  &#39;applet&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line689"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line690"></a>  &#39;area&#39;: goog.labs.html.scrubber.Group_.AREA_ELEMENT_,
+<a name="line691"></a>  &#39;audio&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line692"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line693"></a>  &#39;b&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line694"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line695"></a>  &#39;base&#39;: goog.labs.html.scrubber.Group_.HEAD_CONTENT_,
+<a name="line696"></a>  &#39;basefont&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line697"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line698"></a>  &#39;bdi&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line699"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line700"></a>  &#39;bdo&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line701"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line702"></a>  &#39;big&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line703"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line704"></a>  &#39;blink&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line705"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line706"></a>  &#39;blockquote&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line707"></a>  &#39;body&#39;: goog.labs.html.scrubber.Group_.TOP_CONTENT_,
+<a name="line708"></a>  &#39;br&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line709"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line710"></a>  &#39;button&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line711"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line712"></a>  &#39;canvas&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line713"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line714"></a>  &#39;caption&#39;: goog.labs.html.scrubber.Group_.TABLE_CONTENT_,
+<a name="line715"></a>  &#39;center&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line716"></a>  &#39;cite&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line717"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line718"></a>  &#39;code&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line719"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line720"></a>  &#39;col&#39;: goog.labs.html.scrubber.Group_.TABLE_CONTENT_ |
+<a name="line721"></a>      goog.labs.html.scrubber.Group_.COL_ELEMENT_,
+<a name="line722"></a>  &#39;colgroup&#39;: goog.labs.html.scrubber.Group_.TABLE_CONTENT_,
+<a name="line723"></a>  &#39;dd&#39;: goog.labs.html.scrubber.Group_.DL_PART_,
+<a name="line724"></a>  &#39;del&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line725"></a>      goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line726"></a>      goog.labs.html.scrubber.Group_.MIXED_,
+<a name="line727"></a>  &#39;dfn&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line728"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line729"></a>  &#39;dir&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line730"></a>  &#39;div&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line731"></a>  &#39;dl&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line732"></a>  &#39;dt&#39;: goog.labs.html.scrubber.Group_.DL_PART_,
+<a name="line733"></a>  &#39;em&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line734"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line735"></a>  &#39;fieldset&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line736"></a>  &#39;font&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line737"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line738"></a>  &#39;form&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line739"></a>      goog.labs.html.scrubber.Group_.FORM_ELEMENT_,
+<a name="line740"></a>  &#39;h1&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line741"></a>  &#39;h2&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line742"></a>  &#39;h3&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line743"></a>  &#39;h4&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line744"></a>  &#39;h5&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line745"></a>  &#39;h6&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line746"></a>  &#39;head&#39;: goog.labs.html.scrubber.Group_.TOP_CONTENT_,
+<a name="line747"></a>  &#39;hr&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line748"></a>  &#39;html&#39;: 0,
+<a name="line749"></a>  &#39;i&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line750"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line751"></a>  &#39;iframe&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line752"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line753"></a>  &#39;img&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line754"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line755"></a>  &#39;input&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line756"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line757"></a>  &#39;ins&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line758"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line759"></a>  &#39;isindex&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line760"></a>  &#39;kbd&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line761"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line762"></a>  &#39;label&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line763"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line764"></a>  &#39;legend&#39;: goog.labs.html.scrubber.Group_.LEGEND_ELEMENT_,
+<a name="line765"></a>  &#39;li&#39;: goog.labs.html.scrubber.Group_.LI_ELEMENT_,
+<a name="line766"></a>  &#39;link&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line767"></a>      goog.labs.html.scrubber.Group_.HEAD_CONTENT_,
+<a name="line768"></a>  &#39;listing&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line769"></a>  &#39;map&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line770"></a>  &#39;meta&#39;: goog.labs.html.scrubber.Group_.HEAD_CONTENT_,
+<a name="line771"></a>  &#39;nobr&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line772"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line773"></a>  &#39;noframes&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line774"></a>      goog.labs.html.scrubber.Group_.TOP_CONTENT_,
+<a name="line775"></a>  &#39;noscript&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line776"></a>  &#39;object&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line777"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_ |
+<a name="line778"></a>      goog.labs.html.scrubber.Group_.HEAD_CONTENT_,
+<a name="line779"></a>  &#39;ol&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line780"></a>  &#39;optgroup&#39;: goog.labs.html.scrubber.Group_.OPTIONS_ELEMENT_,
+<a name="line781"></a>  &#39;option&#39;: goog.labs.html.scrubber.Group_.OPTIONS_ELEMENT_ |
+<a name="line782"></a>      goog.labs.html.scrubber.Group_.OPTION_ELEMENT_,
+<a name="line783"></a>  &#39;p&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line784"></a>      goog.labs.html.scrubber.Group_.P_ELEMENT_,
+<a name="line785"></a>  &#39;param&#39;: goog.labs.html.scrubber.Group_.PARAM_ELEMENT_,
+<a name="line786"></a>  &#39;pre&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line787"></a>  &#39;q&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line788"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line789"></a>  &#39;s&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line790"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line791"></a>  &#39;samp&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line792"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line793"></a>  &#39;script&#39;: (goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line794"></a>      goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line795"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_ |
+<a name="line796"></a>      goog.labs.html.scrubber.Group_.MIXED_ |
+<a name="line797"></a>      goog.labs.html.scrubber.Group_.TABLE_CONTENT_ |
+<a name="line798"></a>      goog.labs.html.scrubber.Group_.HEAD_CONTENT_ |
+<a name="line799"></a>      goog.labs.html.scrubber.Group_.TOP_CONTENT_ |
+<a name="line800"></a>      goog.labs.html.scrubber.Group_.AREA_ELEMENT_ |
+<a name="line801"></a>      goog.labs.html.scrubber.Group_.FORM_ELEMENT_ |
+<a name="line802"></a>      goog.labs.html.scrubber.Group_.LEGEND_ELEMENT_ |
+<a name="line803"></a>      goog.labs.html.scrubber.Group_.LI_ELEMENT_ |
+<a name="line804"></a>      goog.labs.html.scrubber.Group_.DL_PART_ |
+<a name="line805"></a>      goog.labs.html.scrubber.Group_.P_ELEMENT_ |
+<a name="line806"></a>      goog.labs.html.scrubber.Group_.OPTIONS_ELEMENT_ |
+<a name="line807"></a>      goog.labs.html.scrubber.Group_.OPTION_ELEMENT_ |
+<a name="line808"></a>      goog.labs.html.scrubber.Group_.PARAM_ELEMENT_ |
+<a name="line809"></a>      goog.labs.html.scrubber.Group_.TABLE_ELEMENT_ |
+<a name="line810"></a>      goog.labs.html.scrubber.Group_.TR_ELEMENT_ |
+<a name="line811"></a>      goog.labs.html.scrubber.Group_.TD_ELEMENT_ |
+<a name="line812"></a>      goog.labs.html.scrubber.Group_.COL_ELEMENT_),
+<a name="line813"></a>  &#39;select&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line814"></a>  &#39;small&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line815"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line816"></a>  &#39;span&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line817"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line818"></a>  &#39;strike&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line819"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line820"></a>  &#39;strong&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line821"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line822"></a>  &#39;style&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line823"></a>      goog.labs.html.scrubber.Group_.HEAD_CONTENT_,
+<a name="line824"></a>  &#39;sub&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line825"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line826"></a>  &#39;sup&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line827"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line828"></a>  &#39;table&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line829"></a>      goog.labs.html.scrubber.Group_.TABLE_ELEMENT_,
+<a name="line830"></a>  &#39;tbody&#39;: goog.labs.html.scrubber.Group_.TABLE_CONTENT_,
+<a name="line831"></a>  &#39;td&#39;: goog.labs.html.scrubber.Group_.TD_ELEMENT_,
+<a name="line832"></a>  &#39;textarea&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line833"></a>  &#39;tfoot&#39;: goog.labs.html.scrubber.Group_.TABLE_CONTENT_,
+<a name="line834"></a>  &#39;th&#39;: goog.labs.html.scrubber.Group_.TD_ELEMENT_,
+<a name="line835"></a>  &#39;thead&#39;: goog.labs.html.scrubber.Group_.TABLE_CONTENT_,
+<a name="line836"></a>  &#39;title&#39;: goog.labs.html.scrubber.Group_.HEAD_CONTENT_,
+<a name="line837"></a>  &#39;tr&#39;: goog.labs.html.scrubber.Group_.TABLE_CONTENT_ |
+<a name="line838"></a>      goog.labs.html.scrubber.Group_.TR_ELEMENT_,
+<a name="line839"></a>  &#39;tt&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line840"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line841"></a>  &#39;u&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line842"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line843"></a>  &#39;ul&#39;: goog.labs.html.scrubber.Group_.BLOCK_,
+<a name="line844"></a>  &#39;var&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line845"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line846"></a>  &#39;video&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line847"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line848"></a>  &#39;wbr&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line849"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line850"></a>  &#39;xmp&#39;: goog.labs.html.scrubber.Group_.BLOCK_
+<a name="line851"></a>};
+<a name="line852"></a>
+<a name="line853"></a>
+<a name="line854"></a>/**
+<a name="line855"></a> * The groups which the element can contain.
+<a name="line856"></a> * Defaults to 0.
+<a name="line857"></a> * @private
+<a name="line858"></a> */
+<a name="line859"></a>goog.labs.html.scrubber.ELEMENT_CONTENTS_ = {
+<a name="line860"></a>  &#39;a&#39;: goog.labs.html.scrubber.Group_.INLINE_MINUS_A_,
+<a name="line861"></a>  &#39;abbr&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line862"></a>  &#39;acronym&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line863"></a>  &#39;address&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line864"></a>      goog.labs.html.scrubber.Group_.P_ELEMENT_,
+<a name="line865"></a>  &#39;applet&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line866"></a>      goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line867"></a>      goog.labs.html.scrubber.Group_.PARAM_ELEMENT_,
+<a name="line868"></a>  &#39;b&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line869"></a>  &#39;bdi&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line870"></a>  &#39;bdo&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line871"></a>  &#39;big&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line872"></a>  &#39;blink&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line873"></a>  &#39;blockquote&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line874"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line875"></a>  &#39;body&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line876"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line877"></a>  &#39;button&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line878"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line879"></a>  &#39;canvas&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line880"></a>  &#39;caption&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line881"></a>  &#39;center&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line882"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line883"></a>  &#39;cite&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line884"></a>  &#39;code&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line885"></a>  &#39;colgroup&#39;: goog.labs.html.scrubber.Group_.COL_ELEMENT_,
+<a name="line886"></a>  &#39;dd&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line887"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line888"></a>  &#39;del&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line889"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line890"></a>  &#39;dfn&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line891"></a>  &#39;dir&#39;: goog.labs.html.scrubber.Group_.LI_ELEMENT_,
+<a name="line892"></a>  &#39;div&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line893"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line894"></a>  &#39;dl&#39;: goog.labs.html.scrubber.Group_.DL_PART_,
+<a name="line895"></a>  &#39;dt&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line896"></a>  &#39;em&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line897"></a>  &#39;fieldset&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line898"></a>      goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line899"></a>      goog.labs.html.scrubber.Group_.LEGEND_ELEMENT_,
+<a name="line900"></a>  &#39;font&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line901"></a>  &#39;form&#39;: (goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line902"></a>      goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line903"></a>      goog.labs.html.scrubber.Group_.INLINE_MINUS_A_ |
+<a name="line904"></a>      goog.labs.html.scrubber.Group_.TR_ELEMENT_ |
+<a name="line905"></a>      goog.labs.html.scrubber.Group_.TD_ELEMENT_),
+<a name="line906"></a>  &#39;h1&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line907"></a>  &#39;h2&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line908"></a>  &#39;h3&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line909"></a>  &#39;h4&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line910"></a>  &#39;h5&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line911"></a>  &#39;h6&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line912"></a>  &#39;head&#39;: goog.labs.html.scrubber.Group_.HEAD_CONTENT_,
+<a name="line913"></a>  &#39;html&#39;: goog.labs.html.scrubber.Group_.TOP_CONTENT_,
+<a name="line914"></a>  &#39;i&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line915"></a>  &#39;iframe&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line916"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line917"></a>  &#39;ins&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line918"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line919"></a>  &#39;kbd&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line920"></a>  &#39;label&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line921"></a>  &#39;legend&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line922"></a>  &#39;li&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line923"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line924"></a>  &#39;listing&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line925"></a>  &#39;map&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line926"></a>      goog.labs.html.scrubber.Group_.AREA_ELEMENT_,
+<a name="line927"></a>  &#39;nobr&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line928"></a>  &#39;noframes&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line929"></a>      goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line930"></a>      goog.labs.html.scrubber.Group_.TOP_CONTENT_,
+<a name="line931"></a>  &#39;noscript&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line932"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line933"></a>  &#39;object&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line934"></a>      goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line935"></a>      goog.labs.html.scrubber.Group_.PARAM_ELEMENT_,
+<a name="line936"></a>  &#39;ol&#39;: goog.labs.html.scrubber.Group_.LI_ELEMENT_,
+<a name="line937"></a>  &#39;optgroup&#39;: goog.labs.html.scrubber.Group_.OPTIONS_ELEMENT_,
+<a name="line938"></a>  &#39;option&#39;: goog.labs.html.scrubber.Group_.CHARACTER_DATA_,
+<a name="line939"></a>  &#39;p&#39;: goog.labs.html.scrubber.Group_.INLINE_ |
+<a name="line940"></a>      goog.labs.html.scrubber.Group_.TABLE_ELEMENT_,
+<a name="line941"></a>  &#39;pre&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line942"></a>  &#39;q&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line943"></a>  &#39;s&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line944"></a>  &#39;samp&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line945"></a>  &#39;script&#39;: goog.labs.html.scrubber.Group_.CHARACTER_DATA_,
+<a name="line946"></a>  &#39;select&#39;: goog.labs.html.scrubber.Group_.OPTIONS_ELEMENT_,
+<a name="line947"></a>  &#39;small&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line948"></a>  &#39;span&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line949"></a>  &#39;strike&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line950"></a>  &#39;strong&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line951"></a>  &#39;style&#39;: goog.labs.html.scrubber.Group_.CHARACTER_DATA_,
+<a name="line952"></a>  &#39;sub&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line953"></a>  &#39;sup&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line954"></a>  &#39;table&#39;: goog.labs.html.scrubber.Group_.TABLE_CONTENT_ |
+<a name="line955"></a>      goog.labs.html.scrubber.Group_.FORM_ELEMENT_,
+<a name="line956"></a>  &#39;tbody&#39;: goog.labs.html.scrubber.Group_.TR_ELEMENT_,
+<a name="line957"></a>  &#39;td&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line958"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line959"></a>  &#39;textarea&#39;: goog.labs.html.scrubber.Group_.CHARACTER_DATA_,
+<a name="line960"></a>  &#39;tfoot&#39;: goog.labs.html.scrubber.Group_.FORM_ELEMENT_ |
+<a name="line961"></a>      goog.labs.html.scrubber.Group_.TR_ELEMENT_ |
+<a name="line962"></a>      goog.labs.html.scrubber.Group_.TD_ELEMENT_,
+<a name="line963"></a>  &#39;th&#39;: goog.labs.html.scrubber.Group_.BLOCK_ |
+<a name="line964"></a>      goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line965"></a>  &#39;thead&#39;: goog.labs.html.scrubber.Group_.FORM_ELEMENT_ |
+<a name="line966"></a>      goog.labs.html.scrubber.Group_.TR_ELEMENT_ |
+<a name="line967"></a>      goog.labs.html.scrubber.Group_.TD_ELEMENT_,
+<a name="line968"></a>  &#39;title&#39;: goog.labs.html.scrubber.Group_.CHARACTER_DATA_,
+<a name="line969"></a>  &#39;tr&#39;: goog.labs.html.scrubber.Group_.FORM_ELEMENT_ |
+<a name="line970"></a>      goog.labs.html.scrubber.Group_.TD_ELEMENT_,
+<a name="line971"></a>  &#39;tt&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line972"></a>  &#39;u&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line973"></a>  &#39;ul&#39;: goog.labs.html.scrubber.Group_.LI_ELEMENT_,
+<a name="line974"></a>  &#39;var&#39;: goog.labs.html.scrubber.Group_.INLINE_,
+<a name="line975"></a>  &#39;xmp&#39;: goog.labs.html.scrubber.Group_.INLINE_
+<a name="line976"></a>};
+<a name="line977"></a>
+<a name="line978"></a>
+<a name="line979"></a>/**
+<a name="line980"></a> * The scopes in which an element falls.
+<a name="line981"></a> * No property defaults to 0.
+<a name="line982"></a> * @private
+<a name="line983"></a> */
+<a name="line984"></a>goog.labs.html.scrubber.ELEMENT_SCOPES_ = {
+<a name="line985"></a>  &#39;applet&#39;: goog.labs.html.scrubber.Scope_.COMMON_ |
+<a name="line986"></a>      goog.labs.html.scrubber.Scope_.BUTTON_ |
+<a name="line987"></a>      goog.labs.html.scrubber.Scope_.LIST_ITEM_,
+<a name="line988"></a>  &#39;button&#39;: goog.labs.html.scrubber.Scope_.BUTTON_,
+<a name="line989"></a>  &#39;caption&#39;: goog.labs.html.scrubber.Scope_.COMMON_ |
+<a name="line990"></a>      goog.labs.html.scrubber.Scope_.BUTTON_ |
+<a name="line991"></a>      goog.labs.html.scrubber.Scope_.LIST_ITEM_,
+<a name="line992"></a>  &#39;html&#39;: goog.labs.html.scrubber.Scope_.COMMON_ |
+<a name="line993"></a>      goog.labs.html.scrubber.Scope_.BUTTON_ |
+<a name="line994"></a>      goog.labs.html.scrubber.Scope_.LIST_ITEM_ |
+<a name="line995"></a>      goog.labs.html.scrubber.Scope_.TABLE_,
+<a name="line996"></a>  &#39;object&#39;: goog.labs.html.scrubber.Scope_.COMMON_ |
+<a name="line997"></a>      goog.labs.html.scrubber.Scope_.BUTTON_ |
+<a name="line998"></a>      goog.labs.html.scrubber.Scope_.LIST_ITEM_,
+<a name="line999"></a>  &#39;ol&#39;: goog.labs.html.scrubber.Scope_.LIST_ITEM_,
+<a name="line1000"></a>  &#39;table&#39;: goog.labs.html.scrubber.Scope_.COMMON_ |
+<a name="line1001"></a>      goog.labs.html.scrubber.Scope_.BUTTON_ |
+<a name="line1002"></a>      goog.labs.html.scrubber.Scope_.LIST_ITEM_ |
+<a name="line1003"></a>      goog.labs.html.scrubber.Scope_.TABLE_,
+<a name="line1004"></a>  &#39;td&#39;: goog.labs.html.scrubber.Scope_.COMMON_ |
+<a name="line1005"></a>      goog.labs.html.scrubber.Scope_.BUTTON_ |
+<a name="line1006"></a>      goog.labs.html.scrubber.Scope_.LIST_ITEM_,
+<a name="line1007"></a>  &#39;th&#39;: goog.labs.html.scrubber.Scope_.COMMON_ |
+<a name="line1008"></a>      goog.labs.html.scrubber.Scope_.BUTTON_ |
+<a name="line1009"></a>      goog.labs.html.scrubber.Scope_.LIST_ITEM_,
+<a name="line1010"></a>  &#39;ul&#39;: goog.labs.html.scrubber.Scope_.LIST_ITEM_
+<a name="line1011"></a>};
+<a name="line1012"></a>
+<a name="line1013"></a>
+<a name="line1014"></a>/**
+<a name="line1015"></a> * Per-element, a child that can contain block content.
+<a name="line1016"></a> * @private
+<a name="line1017"></a> */
+<a name="line1018"></a>goog.labs.html.scrubber.BLOCK_CONTAINERS_ = {
+<a name="line1019"></a>  &#39;dl&#39;: &#39;dd&#39;,
+<a name="line1020"></a>  &#39;ol&#39;: &#39;li&#39;,
+<a name="line1021"></a>  &#39;table&#39;: &#39;tr&#39;,
+<a name="line1022"></a>  &#39;tr&#39;: &#39;td&#39;,
+<a name="line1023"></a>  &#39;ul&#39;: &#39;li&#39;
+<a name="line1024"></a>};
+<a name="line1025"></a>
+<a name="line1026"></a>
+<a name="line1027"></a>goog.labs.html.attributeRewriterPresubmitWorkaround();
+</pre>
+
+
+</body>
+</html>

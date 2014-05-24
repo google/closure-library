@@ -1,0 +1,318 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>currency_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_currency_test.js.html">currency_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>goog.provide(&#39;goog.i18n.currencyTest&#39;);
+<a name="line17"></a>goog.setTestOnly(&#39;goog.i18n.currencyTest&#39;);
+<a name="line18"></a>
+<a name="line19"></a>goog.require(&#39;goog.i18n.NumberFormat&#39;);
+<a name="line20"></a>goog.require(&#39;goog.i18n.currency&#39;);
+<a name="line21"></a>goog.require(&#39;goog.i18n.currency.CurrencyInfo&#39;);
+<a name="line22"></a>goog.require(&#39;goog.object&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line25"></a>
+<a name="line26"></a>var stubs = new goog.testing.PropertyReplacer();
+<a name="line27"></a>
+<a name="line28"></a>function setUp() {
+<a name="line29"></a>  stubs.replace(goog.i18n.currency, &#39;CurrencyInfo&#39;,
+<a name="line30"></a>      goog.object.clone(goog.i18n.currency.CurrencyInfo));
+<a name="line31"></a>}
+<a name="line32"></a>
+<a name="line33"></a>function tearDown() {
+<a name="line34"></a>  stubs.reset();
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function testAddTier2Support() {
+<a name="line38"></a>  assertFalse(&#39;LRD&#39; in goog.i18n.currency.CurrencyInfo);
+<a name="line39"></a>  assertThrows(function() {
+<a name="line40"></a>    goog.i18n.currency.getLocalCurrencyPattern(&#39;LRD&#39;);
+<a name="line41"></a>  });
+<a name="line42"></a>
+<a name="line43"></a>  goog.i18n.currency.addTier2Support();
+<a name="line44"></a>  assertTrue(&#39;LRD&#39; in goog.i18n.currency.CurrencyInfo);
+<a name="line45"></a>  assertEquals(&quot;&#39;$&#39;#,##0.00&quot;,
+<a name="line46"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;LRD&#39;));
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>function testCurrencyPattern() {
+<a name="line50"></a>  assertEquals(&quot;&#39;$&#39;#,##0.00&quot;,
+<a name="line51"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;USD&#39;));
+<a name="line52"></a>  assertEquals(&quot;&#39;US$&#39;#,##0.00&quot;,
+<a name="line53"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;USD&#39;));
+<a name="line54"></a>  assertEquals(&quot;USD &#39;$&#39;#,##0.00&quot;,
+<a name="line55"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;USD&#39;));
+<a name="line56"></a>
+<a name="line57"></a>  assertEquals(&quot;&#39;¥&#39;#,##0&quot;,
+<a name="line58"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;JPY&#39;));
+<a name="line59"></a>  assertEquals(&quot;&#39;JP¥&#39;#,##0&quot;,
+<a name="line60"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;JPY&#39;));
+<a name="line61"></a>  assertEquals(&quot;JPY &#39;¥&#39;#,##0&quot;,
+<a name="line62"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;JPY&#39;));
+<a name="line63"></a>
+<a name="line64"></a>  assertEquals(&quot;&#39;?&#39;#,##0.00&quot;,
+<a name="line65"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;EUR&#39;));
+<a name="line66"></a>  assertEquals(&quot;&#39;?&#39;#,##0.00&quot;,
+<a name="line67"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;EUR&#39;));
+<a name="line68"></a>  assertEquals(&quot;EUR &#39;?&#39;#,##0.00&quot;,
+<a name="line69"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;EUR&#39;));
+<a name="line70"></a>
+<a name="line71"></a>  assertEquals(&quot;&#39;¥&#39;#,##0.00&quot;,
+<a name="line72"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;CNY&#39;));
+<a name="line73"></a>  assertEquals(&quot;&#39;RMB¥&#39;#,##0.00&quot;,
+<a name="line74"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;CNY&#39;));
+<a name="line75"></a>  assertEquals(&quot;CNY &#39;¥&#39;#,##0.00&quot;,
+<a name="line76"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;CNY&#39;));
+<a name="line77"></a>
+<a name="line78"></a>  assertEquals(&quot;&#39;Rial&#39;#,##0&quot;,
+<a name="line79"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;YER&#39;));
+<a name="line80"></a>  assertEquals(&quot;&#39;Rial&#39;#,##0&quot;,
+<a name="line81"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;YER&#39;));
+<a name="line82"></a>  assertEquals(&quot;YER &#39;Rial&#39;#,##0&quot;,
+<a name="line83"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;YER&#39;));
+<a name="line84"></a>
+<a name="line85"></a>  assertEquals(&quot;&#39;CHF&#39;#,##0.00&quot;,
+<a name="line86"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;CHF&#39;));
+<a name="line87"></a>  assertEquals(&quot;&#39;CHF&#39;#,##0.00&quot;,
+<a name="line88"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;CHF&#39;));
+<a name="line89"></a>  assertEquals(&quot;&#39;CHF&#39;#,##0.00&quot;,
+<a name="line90"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;CHF&#39;));
+<a name="line91"></a>}
+<a name="line92"></a>
+<a name="line93"></a>function testCurrencyFormatCHF() {
+<a name="line94"></a>  var formatter;
+<a name="line95"></a>  var str;
+<a name="line96"></a>
+<a name="line97"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line98"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;CHF&#39;));
+<a name="line99"></a>  str = formatter.format(123456.7899);
+<a name="line100"></a>  assertEquals(&#39;CHF123,456.79&#39;, str);
+<a name="line101"></a>
+<a name="line102"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line103"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;CHF&#39;));
+<a name="line104"></a>  str = formatter.format(123456.7899);
+<a name="line105"></a>  assertEquals(&#39;CHF123,456.79&#39;, str);
+<a name="line106"></a>
+<a name="line107"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line108"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;CHF&#39;));
+<a name="line109"></a>  str = formatter.format(123456.7899);
+<a name="line110"></a>  assertEquals(&#39;CHF123,456.79&#39;, str);
+<a name="line111"></a>}
+<a name="line112"></a>
+<a name="line113"></a>function testCurrencyFormatYER() {
+<a name="line114"></a>  var formatter;
+<a name="line115"></a>  var str;
+<a name="line116"></a>
+<a name="line117"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line118"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;YER&#39;));
+<a name="line119"></a>  str = formatter.format(123456.7899);
+<a name="line120"></a>  assertEquals(&#39;Rial123,457&#39;, str);
+<a name="line121"></a>
+<a name="line122"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line123"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;YER&#39;));
+<a name="line124"></a>  str = formatter.format(123456.7899);
+<a name="line125"></a>  assertEquals(&#39;Rial123,457&#39;, str);
+<a name="line126"></a>
+<a name="line127"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line128"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;YER&#39;));
+<a name="line129"></a>  str = formatter.format(123456.7899);
+<a name="line130"></a>  assertEquals(&#39;YER Rial123,457&#39;, str);
+<a name="line131"></a>}
+<a name="line132"></a>
+<a name="line133"></a>function testCurrencyFormatCNY() {
+<a name="line134"></a>  var formatter;
+<a name="line135"></a>  var str;
+<a name="line136"></a>
+<a name="line137"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line138"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;CNY&#39;));
+<a name="line139"></a>  str = formatter.format(123456.7899);
+<a name="line140"></a>  assertEquals(&#39;¥123,456.79&#39;, str);
+<a name="line141"></a>
+<a name="line142"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line143"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;CNY&#39;));
+<a name="line144"></a>  str = formatter.format(123456.7899);
+<a name="line145"></a>  assertEquals(&#39;RMB¥123,456.79&#39;, str);
+<a name="line146"></a>
+<a name="line147"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line148"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;CNY&#39;));
+<a name="line149"></a>  str = formatter.format(123456.7899);
+<a name="line150"></a>  assertEquals(&#39;CNY ¥123,456.79&#39;, str);
+<a name="line151"></a>}
+<a name="line152"></a>
+<a name="line153"></a>function testCurrencyFormatCZK() {
+<a name="line154"></a>  var formatter;
+<a name="line155"></a>  var str;
+<a name="line156"></a>
+<a name="line157"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line158"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;CZK&#39;));
+<a name="line159"></a>  str = formatter.format(123456.7899);
+<a name="line160"></a>  assertEquals(&#39;123,456.79 K?&#39;, str);
+<a name="line161"></a>
+<a name="line162"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line163"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;CZK&#39;));
+<a name="line164"></a>  str = formatter.format(123456.7899);
+<a name="line165"></a>  assertEquals(&#39;123,456.79 K?&#39;, str);
+<a name="line166"></a>
+<a name="line167"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line168"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;CZK&#39;));
+<a name="line169"></a>  str = formatter.format(123456.7899);
+<a name="line170"></a>  assertEquals(&#39;CZK 123,456.79 K?&#39;, str);
+<a name="line171"></a>}
+<a name="line172"></a>
+<a name="line173"></a>function testCurrencyFormatEUR() {
+<a name="line174"></a>  var formatter;
+<a name="line175"></a>  var str;
+<a name="line176"></a>
+<a name="line177"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line178"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;EUR&#39;));
+<a name="line179"></a>  str = formatter.format(123456.7899);
+<a name="line180"></a>  assertEquals(&#39;?123,456.79&#39;, str);
+<a name="line181"></a>
+<a name="line182"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line183"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;EUR&#39;));
+<a name="line184"></a>  str = formatter.format(123456.7899);
+<a name="line185"></a>  assertEquals(&#39;?123,456.79&#39;, str);
+<a name="line186"></a>
+<a name="line187"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line188"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;EUR&#39;));
+<a name="line189"></a>  str = formatter.format(123456.7899);
+<a name="line190"></a>  assertEquals(&#39;EUR ?123,456.79&#39;, str);
+<a name="line191"></a>}
+<a name="line192"></a>
+<a name="line193"></a>function testCurrencyFormatJPY() {
+<a name="line194"></a>  var formatter;
+<a name="line195"></a>  var str;
+<a name="line196"></a>
+<a name="line197"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line198"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;JPY&#39;));
+<a name="line199"></a>  str = formatter.format(123456.7899);
+<a name="line200"></a>  assertEquals(&#39;¥123,457&#39;, str);
+<a name="line201"></a>
+<a name="line202"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line203"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;JPY&#39;));
+<a name="line204"></a>  str = formatter.format(123456.7899);
+<a name="line205"></a>  assertEquals(&#39;JP¥123,457&#39;, str);
+<a name="line206"></a>
+<a name="line207"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line208"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;JPY&#39;));
+<a name="line209"></a>  str = formatter.format(123456.7899);
+<a name="line210"></a>  assertEquals(&#39;JPY ¥123,457&#39;, str);
+<a name="line211"></a>}
+<a name="line212"></a>
+<a name="line213"></a>function testCurrencyFormatPLN() {
+<a name="line214"></a>  var formatter;
+<a name="line215"></a>  var str;
+<a name="line216"></a>
+<a name="line217"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line218"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;PLN&#39;));
+<a name="line219"></a>  str = formatter.format(123456.7899);
+<a name="line220"></a>  assertEquals(&#39;123,456.79 z?&#39;, str);
+<a name="line221"></a>
+<a name="line222"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line223"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;PLN&#39;));
+<a name="line224"></a>  str = formatter.format(123456.7899);
+<a name="line225"></a>  assertEquals(&#39;123,456.79 z?&#39;, str);
+<a name="line226"></a>
+<a name="line227"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line228"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;PLN&#39;));
+<a name="line229"></a>  str = formatter.format(123456.7899);
+<a name="line230"></a>  assertEquals(&#39;PLN 123,456.79 z?&#39;, str);
+<a name="line231"></a>}
+<a name="line232"></a>
+<a name="line233"></a>function testCurrencyFormatUSD() {
+<a name="line234"></a>  var formatter;
+<a name="line235"></a>  var str;
+<a name="line236"></a>
+<a name="line237"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line238"></a>      goog.i18n.currency.getLocalCurrencyPattern(&#39;USD&#39;));
+<a name="line239"></a>  str = formatter.format(123456.7899);
+<a name="line240"></a>  assertEquals(&#39;$123,456.79&#39;, str);
+<a name="line241"></a>
+<a name="line242"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line243"></a>      goog.i18n.currency.getPortableCurrencyPattern(&#39;USD&#39;));
+<a name="line244"></a>  str = formatter.format(123456.7899);
+<a name="line245"></a>  assertEquals(&#39;US$123,456.79&#39;, str);
+<a name="line246"></a>
+<a name="line247"></a>  formatter = new goog.i18n.NumberFormat(
+<a name="line248"></a>      goog.i18n.currency.getGlobalCurrencyPattern(&#39;USD&#39;));
+<a name="line249"></a>  str = formatter.format(123456.7899);
+<a name="line250"></a>  assertEquals(&#39;USD $123,456.79&#39;, str);
+<a name="line251"></a>}
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>function testIsPrefixSignPosition() {
+<a name="line255"></a>  assertTrue(goog.i18n.currency.isPrefixSignPosition(&#39;USD&#39;));
+<a name="line256"></a>  assertTrue(goog.i18n.currency.isPrefixSignPosition(&#39;EUR&#39;));
+<a name="line257"></a>}
+<a name="line258"></a>
+<a name="line259"></a>function testGetCurrencySign() {
+<a name="line260"></a>  assertEquals(&#39;USD $&#39;, goog.i18n.currency.getGlobalCurrencySign(&#39;USD&#39;));
+<a name="line261"></a>  assertEquals(&#39;$&#39;, goog.i18n.currency.getLocalCurrencySign(&#39;USD&#39;));
+<a name="line262"></a>  assertEquals(&#39;US$&#39;, goog.i18n.currency.getPortableCurrencySign(&#39;USD&#39;));
+<a name="line263"></a>
+<a name="line264"></a>  assertEquals(&#39;YER Rial&#39;, goog.i18n.currency.getGlobalCurrencySign(&#39;YER&#39;));
+<a name="line265"></a>  assertEquals(&#39;Rial&#39;, goog.i18n.currency.getLocalCurrencySign(&#39;YER&#39;));
+<a name="line266"></a>  assertEquals(&#39;Rial&#39;, goog.i18n.currency.getPortableCurrencySign(&#39;YER&#39;));
+<a name="line267"></a>}
+</pre>
+
+
+</body>
+</html>

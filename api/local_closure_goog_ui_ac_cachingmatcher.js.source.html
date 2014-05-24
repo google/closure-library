@@ -1,0 +1,324 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>cachingmatcher.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_ac_cachingmatcher.js.html">cachingmatcher.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Matcher which maintains a client-side cache on top of some
+<a name="line17"></a> * other matcher.
+<a name="line18"></a> * @author reinerp@google.com (Reiner Pope)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.ac.CachingMatcher&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.async.Throttle&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.ac.ArrayMatcher&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.ac.RenderOptions&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * A matcher which wraps another (typically slow) matcher and
+<a name="line33"></a> * keeps a client-side cache of the results. For instance, you can use this to
+<a name="line34"></a> * wrap a RemoteArrayMatcher to hide the latency of the underlying matcher
+<a name="line35"></a> * having to make ajax request.
+<a name="line36"></a> *
+<a name="line37"></a> * Objects in the cache are deduped on their stringified forms.
+<a name="line38"></a> *
+<a name="line39"></a> * Note - when the user types a character, they will instantly get a set of
+<a name="line40"></a> * local results, and then some time later, the results from the server will
+<a name="line41"></a> * show up.
+<a name="line42"></a> *
+<a name="line43"></a> * @constructor
+<a name="line44"></a> * @param {!Object} baseMatcher The underlying matcher to use. Must implement
+<a name="line45"></a> *     requestMatchingRows.
+<a name="line46"></a> * @final
+<a name="line47"></a> */
+<a name="line48"></a>goog.ui.ac.CachingMatcher = function(baseMatcher) {
+<a name="line49"></a>  /** @private {!Array.&lt;!Object&gt;}} The cache. */
+<a name="line50"></a>  this.rows_ = [];
+<a name="line51"></a>
+<a name="line52"></a>  /**
+<a name="line53"></a>   * Set of stringified rows, for fast deduping. Each element of this.rows_
+<a name="line54"></a>   * is stored in rowStrings_ as (&#39; &#39; + row) to ensure we avoid builtin
+<a name="line55"></a>   * properties like &#39;toString&#39;.
+<a name="line56"></a>   * @private {Object.&lt;string, boolean&gt;}
+<a name="line57"></a>   */
+<a name="line58"></a>  this.rowStrings_ = {};
+<a name="line59"></a>
+<a name="line60"></a>  /**
+<a name="line61"></a>   * Maximum number of rows in the cache. If the cache grows larger than this,
+<a name="line62"></a>   * the entire cache will be emptied.
+<a name="line63"></a>   * @private {number}
+<a name="line64"></a>   */
+<a name="line65"></a>  this.maxCacheSize_ = 1000;
+<a name="line66"></a>
+<a name="line67"></a>  /** @private {!Object} The underlying matcher to use. */
+<a name="line68"></a>  this.baseMatcher_ = baseMatcher;
+<a name="line69"></a>
+<a name="line70"></a>  /**
+<a name="line71"></a>   * Local matching function.
+<a name="line72"></a>   * @private {function(string, number, !Array.&lt;!Object&gt;): !Array.&lt;!Object&gt;}
+<a name="line73"></a>   */
+<a name="line74"></a>  this.getMatchesForRows_ = goog.ui.ac.ArrayMatcher.getMatchesForRows;
+<a name="line75"></a>
+<a name="line76"></a>  /** @private {number} Number of matches to request from the base matcher. */
+<a name="line77"></a>  this.baseMatcherMaxMatches_ = 100;
+<a name="line78"></a>
+<a name="line79"></a>  /** @private {goog.async.Throttle} */
+<a name="line80"></a>  this.throttledTriggerBaseMatch_ =
+<a name="line81"></a>      new goog.async.Throttle(this.triggerBaseMatch_, 150, this);
+<a name="line82"></a>
+<a name="line83"></a>  /** @private {string} */
+<a name="line84"></a>  this.mostRecentToken_ = &#39;&#39;;
+<a name="line85"></a>
+<a name="line86"></a>  /** @private {Function} */
+<a name="line87"></a>  this.mostRecentMatchHandler_ = null;
+<a name="line88"></a>
+<a name="line89"></a>  /** @private {number} */
+<a name="line90"></a>  this.mostRecentMaxMatches_ = 10;
+<a name="line91"></a>
+<a name="line92"></a>  /**
+<a name="line93"></a>   * The set of rows which we last displayed.
+<a name="line94"></a>   *
+<a name="line95"></a>   * NOTE(reinerp): The need for this is subtle. When a server result comes
+<a name="line96"></a>   * back, we don&#39;t want to suddenly change the list of results without the user
+<a name="line97"></a>   * doing anything. So we make sure to add the new server results to the end of
+<a name="line98"></a>   * the currently displayed list.
+<a name="line99"></a>   *
+<a name="line100"></a>   * We need to keep track of the last rows we displayed, because the &quot;similar
+<a name="line101"></a>   * matcher&quot; we use locally might otherwise reorder results.
+<a name="line102"></a>   *
+<a name="line103"></a>   * @private {Array.&lt;!Object&gt;}
+<a name="line104"></a>   */
+<a name="line105"></a>  this.mostRecentMatches_ = [];
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Sets the number of milliseconds with which to throttle the match requests
+<a name="line111"></a> * on the underlying matcher.
+<a name="line112"></a> *
+<a name="line113"></a> * Default value: 150.
+<a name="line114"></a> *
+<a name="line115"></a> * @param {number} throttleTime .
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.ac.CachingMatcher.prototype.setThrottleTime = function(throttleTime) {
+<a name="line118"></a>  this.throttledTriggerBaseMatch_ =
+<a name="line119"></a>      new goog.async.Throttle(this.triggerBaseMatch_, throttleTime, this);
+<a name="line120"></a>};
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Sets the maxMatches to use for the base matcher. If the base matcher makes
+<a name="line125"></a> * AJAX requests, it may help to make this a large number so that the local
+<a name="line126"></a> * cache gets populated quickly.
+<a name="line127"></a> *
+<a name="line128"></a> * Default value: 100.
+<a name="line129"></a> *
+<a name="line130"></a> * @param {number} maxMatches The value to set.
+<a name="line131"></a> */
+<a name="line132"></a>goog.ui.ac.CachingMatcher.prototype.setBaseMatcherMaxMatches =
+<a name="line133"></a>    function(maxMatches) {
+<a name="line134"></a>  this.baseMatcherMaxMatches_ = maxMatches;
+<a name="line135"></a>};
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/**
+<a name="line139"></a> * Sets the maximum size of the local cache. If the local cache grows larger
+<a name="line140"></a> * than this size, it will be emptied.
+<a name="line141"></a> *
+<a name="line142"></a> * Default value: 1000.
+<a name="line143"></a> *
+<a name="line144"></a> * @param {number} maxCacheSize .
+<a name="line145"></a> */
+<a name="line146"></a>goog.ui.ac.CachingMatcher.prototype.setMaxCacheSize = function(maxCacheSize) {
+<a name="line147"></a>  this.maxCacheSize_ = maxCacheSize;
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Sets the local matcher to use.
+<a name="line153"></a> *
+<a name="line154"></a> * The local matcher should be a function with the same signature as
+<a name="line155"></a> * {@link goog.ui.ac.ArrayMatcher.getMatchesForRows}, i.e. its arguments are
+<a name="line156"></a> * searchToken, maxMatches, rowsToSearch; and it returns a list of matching
+<a name="line157"></a> * rows.
+<a name="line158"></a> *
+<a name="line159"></a> * Default value: {@link goog.ui.ac.ArrayMatcher.getMatchesForRows}.
+<a name="line160"></a> *
+<a name="line161"></a> * @param {function(string, number, !Array.&lt;!Object&gt;): !Array.&lt;!Object&gt;}
+<a name="line162"></a> *     localMatcher
+<a name="line163"></a> */
+<a name="line164"></a>goog.ui.ac.CachingMatcher.prototype.setLocalMatcher = function(localMatcher) {
+<a name="line165"></a>  this.getMatchesForRows_ = localMatcher;
+<a name="line166"></a>};
+<a name="line167"></a>
+<a name="line168"></a>
+<a name="line169"></a>/**
+<a name="line170"></a> * Function used to pass matches to the autocomplete.
+<a name="line171"></a> * @param {string} token Token to match.
+<a name="line172"></a> * @param {number} maxMatches Max number of matches to return.
+<a name="line173"></a> * @param {Function} matchHandler callback to execute after matching.
+<a name="line174"></a> */
+<a name="line175"></a>goog.ui.ac.CachingMatcher.prototype.requestMatchingRows =
+<a name="line176"></a>    function(token, maxMatches, matchHandler) {
+<a name="line177"></a>  this.mostRecentMaxMatches_ = maxMatches;
+<a name="line178"></a>  this.mostRecentToken_ = token;
+<a name="line179"></a>  this.mostRecentMatchHandler_ = matchHandler;
+<a name="line180"></a>  this.throttledTriggerBaseMatch_.fire();
+<a name="line181"></a>
+<a name="line182"></a>  var matches = this.getMatchesForRows_(token, maxMatches, this.rows_);
+<a name="line183"></a>  matchHandler(token, matches);
+<a name="line184"></a>  this.mostRecentMatches_ = matches;
+<a name="line185"></a>};
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Adds the specified rows to the cache.
+<a name="line190"></a> * @param {!Array.&lt;!Object&gt;} rows .
+<a name="line191"></a> * @private
+<a name="line192"></a> */
+<a name="line193"></a>goog.ui.ac.CachingMatcher.prototype.addRows_ = function(rows) {
+<a name="line194"></a>  goog.array.forEach(rows, function(row) {
+<a name="line195"></a>    // The &#39; &#39; prefix is to avoid colliding with builtins like toString.
+<a name="line196"></a>    if (!this.rowStrings_[&#39; &#39; + row]) {
+<a name="line197"></a>      this.rows_.push(row);
+<a name="line198"></a>      this.rowStrings_[&#39; &#39; + row] = true;
+<a name="line199"></a>    }
+<a name="line200"></a>  }, this);
+<a name="line201"></a>};
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Checks if the cache is larger than the maximum cache size. If so clears it.
+<a name="line206"></a> * @private
+<a name="line207"></a> */
+<a name="line208"></a>goog.ui.ac.CachingMatcher.prototype.clearCacheIfTooLarge_ = function() {
+<a name="line209"></a>  if (this.rows_.length &gt; this.maxCacheSize_) {
+<a name="line210"></a>    this.rows_ = [];
+<a name="line211"></a>    this.rowStrings_ = {};
+<a name="line212"></a>  }
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Triggers a match request against the base matcher. This function is
+<a name="line218"></a> * unthrottled, so don&#39;t call it directly; instead use
+<a name="line219"></a> * this.throttledTriggerBaseMatch_.
+<a name="line220"></a> * @private
+<a name="line221"></a> */
+<a name="line222"></a>goog.ui.ac.CachingMatcher.prototype.triggerBaseMatch_ = function() {
+<a name="line223"></a>  this.baseMatcher_.requestMatchingRows(this.mostRecentToken_,
+<a name="line224"></a>      this.baseMatcherMaxMatches_, goog.bind(this.onBaseMatch_, this));
+<a name="line225"></a>};
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>/**
+<a name="line229"></a> * Handles a match response from the base matcher.
+<a name="line230"></a> * @param {string} token The token against which the base match was called.
+<a name="line231"></a> * @param {!Array.&lt;!Object&gt;} matches The matches returned by the base matcher.
+<a name="line232"></a> * @private
+<a name="line233"></a> */
+<a name="line234"></a>goog.ui.ac.CachingMatcher.prototype.onBaseMatch_ = function(token, matches) {
+<a name="line235"></a>  // NOTE(reinerp): The user might have typed some more characters since the
+<a name="line236"></a>  // base matcher request was sent out, which manifests in that token might be
+<a name="line237"></a>  // older than this.mostRecentToken_. We make sure to do our local matches
+<a name="line238"></a>  // using this.mostRecentToken_ rather than token so that we display results
+<a name="line239"></a>  // relevant to what the user is seeing right now.
+<a name="line240"></a>
+<a name="line241"></a>  // NOTE(reinerp): We compute a diff between the currently displayed results
+<a name="line242"></a>  // and the new results we would get now that the server results have come
+<a name="line243"></a>  // back. Using this diff, we make sure the new results are only added to the
+<a name="line244"></a>  // end of the list of results. See the documentation on
+<a name="line245"></a>  // this.mostRecentMatches_ for details
+<a name="line246"></a>
+<a name="line247"></a>  this.addRows_(matches);
+<a name="line248"></a>
+<a name="line249"></a>  var oldMatchesSet = {};
+<a name="line250"></a>  goog.array.forEach(this.mostRecentMatches_, function(match) {
+<a name="line251"></a>    // The &#39; &#39; prefix is to avoid colliding with builtins like toString.
+<a name="line252"></a>    oldMatchesSet[&#39; &#39; + match] = true;
+<a name="line253"></a>  });
+<a name="line254"></a>  var newMatches = this.getMatchesForRows_(this.mostRecentToken_,
+<a name="line255"></a>      this.mostRecentMaxMatches_, this.rows_);
+<a name="line256"></a>  newMatches = goog.array.filter(newMatches, function(match) {
+<a name="line257"></a>    return !(oldMatchesSet[&#39; &#39; + match]);
+<a name="line258"></a>  });
+<a name="line259"></a>  newMatches = this.mostRecentMatches_.concat(newMatches)
+<a name="line260"></a>      .slice(0, this.mostRecentMaxMatches_);
+<a name="line261"></a>
+<a name="line262"></a>  this.mostRecentMatches_ = newMatches;
+<a name="line263"></a>
+<a name="line264"></a>  // We&#39;ve gone to the effort of keeping the existing rows as before, so let&#39;s
+<a name="line265"></a>  // make sure to keep them highlighted.
+<a name="line266"></a>  var options = new goog.ui.ac.RenderOptions();
+<a name="line267"></a>  options.setPreserveHilited(true);
+<a name="line268"></a>  this.mostRecentMatchHandler_(this.mostRecentToken_, newMatches, options);
+<a name="line269"></a>
+<a name="line270"></a>  // We clear the cache *after* running the local match, so we don&#39;t
+<a name="line271"></a>  // suddenly remove results just because the remote match came back.
+<a name="line272"></a>  this.clearCacheIfTooLarge_();
+<a name="line273"></a>};
+</pre>
+
+
+</body>
+</html>

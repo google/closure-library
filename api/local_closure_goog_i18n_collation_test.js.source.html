@@ -1,0 +1,115 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>collation_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_collation_test.js.html">collation_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>goog.provide(&#39;goog.i18n.collationTest&#39;);
+<a name="line17"></a>goog.setTestOnly(&#39;goog.i18n.collationTest&#39;);
+<a name="line18"></a>
+<a name="line19"></a>goog.require(&#39;goog.i18n.collation&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.ExpectedFailures&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var expectedFailures;
+<a name="line25"></a>
+<a name="line26"></a>function setUpPage() {
+<a name="line27"></a>  expectedFailures = new goog.testing.ExpectedFailures();
+<a name="line28"></a>}
+<a name="line29"></a>
+<a name="line30"></a>function tearDown() {
+<a name="line31"></a>  expectedFailures.handleTearDown();
+<a name="line32"></a>}
+<a name="line33"></a>
+<a name="line34"></a>function testGetEnComparator() {
+<a name="line35"></a>  goog.LOCALE = &#39;en&#39;;
+<a name="line36"></a>  var compare = goog.i18n.collation.createComparator();
+<a name="line37"></a>  // The côte/coté comparison fails in FF/Linux (v19.0) because
+<a name="line38"></a>  // calling &#39;côte&#39;.localeCompare(&#39;coté&#39;)  gives a negative number (wrong)
+<a name="line39"></a>  // when the test is run but a positive number (correct) when calling
+<a name="line40"></a>  // it later in the web console. FF/OSX doesn&#39;t have this problem.
+<a name="line41"></a>  // Mozilla bug: https://bugzilla.mozilla.org/show_bug.cgi?id=856115
+<a name="line42"></a>  expectedFailures.expectFailureFor(
+<a name="line43"></a>      goog.userAgent.GECKO &amp;&amp; goog.userAgent.LINUX);
+<a name="line44"></a>  try {
+<a name="line45"></a>    assertTrue(compare(&#39;côte&#39;, &#39;coté&#39;) &gt; 0);
+<a name="line46"></a>  } catch (e) {
+<a name="line47"></a>    expectedFailures.handleException(e);
+<a name="line48"></a>  }
+<a name="line49"></a>}
+<a name="line50"></a>
+<a name="line51"></a>function testGetFrComparator() {
+<a name="line52"></a>  goog.LOCALE = &#39;fr-CA&#39;;
+<a name="line53"></a>  var compare = goog.i18n.collation.createComparator();
+<a name="line54"></a>  if (!goog.i18n.collation.hasNativeComparator()) return;
+<a name="line55"></a>  assertTrue(compare(&#39;côte&#39;, &#39;coté&#39;) &lt; 0);
+<a name="line56"></a>}
+<a name="line57"></a>
+<a name="line58"></a>function testGetComparatorForSpecificLocale() {
+<a name="line59"></a>  goog.LOCALE = &#39;en&#39;;
+<a name="line60"></a>  var compare = goog.i18n.collation.createComparator(&#39;fr-CA&#39;);
+<a name="line61"></a>  if (!goog.i18n.collation.hasNativeComparator(&#39;fr-CA&#39;)) return;
+<a name="line62"></a>  // &#39;côte&#39; and &#39;coté&#39; sort differently for en and fr-CA.
+<a name="line63"></a>  assertTrue(compare(&#39;côte&#39;, &#39;coté&#39;) &lt; 0);
+<a name="line64"></a>}
+</pre>
+
+
+</body>
+</html>

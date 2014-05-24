@@ -1,0 +1,263 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>vec3_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_math_vec3_test.js.html">vec3_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.math.Vec3Test&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.math.Vec3Test&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.math.Coordinate3&#39;);
+<a name="line19"></a>goog.require(&#39;goog.math.Vec3&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>function assertVec3Equals(a, b) {
+<a name="line23"></a>  assertTrue(b + &#39; should be equal to &#39; + a, goog.math.Vec3.equals(a, b));
+<a name="line24"></a>}
+<a name="line25"></a>
+<a name="line26"></a>function testVec3() {
+<a name="line27"></a>  var v = new goog.math.Vec3(3.14, 2.78, -7.21);
+<a name="line28"></a>  assertEquals(3.14, v.x);
+<a name="line29"></a>  assertEquals(2.78, v.y);
+<a name="line30"></a>  assertEquals(-7.21, v.z);
+<a name="line31"></a>}
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>function testRandomUnit() {
+<a name="line35"></a>  var a = goog.math.Vec3.randomUnit();
+<a name="line36"></a>  assertRoughlyEquals(1.0, a.magnitude(), 1e-10);
+<a name="line37"></a>}
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>function testRandom() {
+<a name="line41"></a>  var a = goog.math.Vec3.random();
+<a name="line42"></a>  assertTrue(a.magnitude() &lt;= 1.0);
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>function testFromCoordinate3() {
+<a name="line47"></a>  var a = new goog.math.Coordinate3(-2, 10, 4);
+<a name="line48"></a>  var b = goog.math.Vec3.fromCoordinate3(a);
+<a name="line49"></a>  assertEquals(-2, b.x);
+<a name="line50"></a>  assertEquals(10, b.y);
+<a name="line51"></a>  assertEquals(4, b.z);
+<a name="line52"></a>}
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>function testClone() {
+<a name="line56"></a>  var a = new goog.math.Vec3(1, 2, 5);
+<a name="line57"></a>  var b = a.clone();
+<a name="line58"></a>
+<a name="line59"></a>  assertEquals(a.x, b.x);
+<a name="line60"></a>  assertEquals(a.y, b.y);
+<a name="line61"></a>  assertEquals(a.z, b.z);
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>function testMagnitude() {
+<a name="line66"></a>  var a = new goog.math.Vec3(0, 10, 0);
+<a name="line67"></a>  var b = new goog.math.Vec3(3, 4, 5);
+<a name="line68"></a>  var c = new goog.math.Vec3(-4, 3, 8);
+<a name="line69"></a>
+<a name="line70"></a>  assertEquals(10, a.magnitude());
+<a name="line71"></a>  assertEquals(Math.sqrt(50), b.magnitude());
+<a name="line72"></a>  assertEquals(Math.sqrt(89), c.magnitude());
+<a name="line73"></a>}
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>function testSquaredMagnitude() {
+<a name="line77"></a>  var a = new goog.math.Vec3(-3, -4, -5);
+<a name="line78"></a>  assertEquals(50, a.squaredMagnitude());
+<a name="line79"></a>}
+<a name="line80"></a>
+<a name="line81"></a>
+<a name="line82"></a>function testScale() {
+<a name="line83"></a>  var a = new goog.math.Vec3(1, 2, 3);
+<a name="line84"></a>  a.scale(0.5);
+<a name="line85"></a>
+<a name="line86"></a>  assertEquals(0.5, a.x);
+<a name="line87"></a>  assertEquals(1, a.y);
+<a name="line88"></a>  assertEquals(1.5, a.z);
+<a name="line89"></a>}
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>function testInvert() {
+<a name="line93"></a>  var a = new goog.math.Vec3(3, 4, 5);
+<a name="line94"></a>  a.invert();
+<a name="line95"></a>
+<a name="line96"></a>  assertEquals(-3, a.x);
+<a name="line97"></a>  assertEquals(-4, a.y);
+<a name="line98"></a>  assertEquals(-5, a.z);
+<a name="line99"></a>}
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>function testNormalize() {
+<a name="line103"></a>  var a = new goog.math.Vec3(5, 5, 5);
+<a name="line104"></a>  a.normalize();
+<a name="line105"></a>  assertRoughlyEquals(1.0, a.magnitude(), 1e-10);
+<a name="line106"></a>}
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>function testAdd() {
+<a name="line110"></a>  var a = new goog.math.Vec3(1, -1, 7);
+<a name="line111"></a>  a.add(new goog.math.Vec3(3, 3, 3));
+<a name="line112"></a>  assertVec3Equals(new goog.math.Vec3(4, 2, 10), a);
+<a name="line113"></a>}
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>function testSubtract() {
+<a name="line117"></a>  var a = new goog.math.Vec3(1, -1, 4);
+<a name="line118"></a>  a.subtract(new goog.math.Vec3(3, 3, 3));
+<a name="line119"></a>  assertVec3Equals(new goog.math.Vec3(-2, -4, 1), a);
+<a name="line120"></a>}
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>function testEquals() {
+<a name="line124"></a>  var a = new goog.math.Vec3(1, 2, 5);
+<a name="line125"></a>
+<a name="line126"></a>  assertFalse(a.equals(null));
+<a name="line127"></a>  assertFalse(a.equals(new goog.math.Vec3(1, 3, 5)));
+<a name="line128"></a>  assertFalse(a.equals(new goog.math.Vec3(2, 2, 2)));
+<a name="line129"></a>
+<a name="line130"></a>  assertTrue(a.equals(a));
+<a name="line131"></a>  assertTrue(a.equals(new goog.math.Vec3(1, 2, 5)));
+<a name="line132"></a>}
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>function testSum() {
+<a name="line136"></a>  var a = new goog.math.Vec3(0.5, 0.25, 1.2);
+<a name="line137"></a>  var b = new goog.math.Vec3(0.5, 0.75, -0.6);
+<a name="line138"></a>
+<a name="line139"></a>  var c = goog.math.Vec3.sum(a, b);
+<a name="line140"></a>  assertVec3Equals(new goog.math.Vec3(1, 1, 0.6), c);
+<a name="line141"></a>}
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>function testDifference() {
+<a name="line145"></a>  var a = new goog.math.Vec3(0.5, 0.25, 3);
+<a name="line146"></a>  var b = new goog.math.Vec3(0.5, 0.75, 5);
+<a name="line147"></a>
+<a name="line148"></a>  var c = goog.math.Vec3.difference(a, b);
+<a name="line149"></a>  assertVec3Equals(new goog.math.Vec3(0, -0.5, -2), c);
+<a name="line150"></a>}
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>function testDistance() {
+<a name="line154"></a>  var a = new goog.math.Vec3(3, 4, 5);
+<a name="line155"></a>  var b = new goog.math.Vec3(-3, -4, 5);
+<a name="line156"></a>
+<a name="line157"></a>  assertEquals(10, goog.math.Vec3.distance(a, b));
+<a name="line158"></a>}
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>function testSquaredDistance() {
+<a name="line162"></a>  var a = new goog.math.Vec3(3, 4, 5);
+<a name="line163"></a>  var b = new goog.math.Vec3(-3, -4, 5);
+<a name="line164"></a>
+<a name="line165"></a>  assertEquals(100, goog.math.Vec3.squaredDistance(a, b));
+<a name="line166"></a>}
+<a name="line167"></a>
+<a name="line168"></a>
+<a name="line169"></a>function testVec3Equals() {
+<a name="line170"></a>  assertTrue(goog.math.Vec3.equals(null, null, null));
+<a name="line171"></a>  assertFalse(goog.math.Vec3.equals(null, new goog.math.Vec3()));
+<a name="line172"></a>
+<a name="line173"></a>  var a = new goog.math.Vec3(1, 3, 5);
+<a name="line174"></a>  assertTrue(goog.math.Vec3.equals(a, a));
+<a name="line175"></a>  assertTrue(goog.math.Vec3.equals(a, new goog.math.Vec3(1, 3, 5)));
+<a name="line176"></a>  assertFalse(goog.math.Vec3.equals(1, new goog.math.Vec3(3, 1, 5)));
+<a name="line177"></a>}
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>function testDot() {
+<a name="line181"></a>  var a = new goog.math.Vec3(0, 5, 2);
+<a name="line182"></a>  var b = new goog.math.Vec3(3, 0, 5);
+<a name="line183"></a>  assertEquals(10, goog.math.Vec3.dot(a, b));
+<a name="line184"></a>
+<a name="line185"></a>  var c = new goog.math.Vec3(-5, -5, 5);
+<a name="line186"></a>  var d = new goog.math.Vec3(0, 7, -2);
+<a name="line187"></a>  assertEquals(-45, goog.math.Vec3.dot(c, d));
+<a name="line188"></a>}
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>function testCross() {
+<a name="line192"></a>  var a = new goog.math.Vec3(3, 0, 0);
+<a name="line193"></a>  var b = new goog.math.Vec3(0, 2, 0);
+<a name="line194"></a>  assertVec3Equals(new goog.math.Vec3(0, 0, 6), goog.math.Vec3.cross(a, b));
+<a name="line195"></a>
+<a name="line196"></a>  var c = new goog.math.Vec3(1, 2, 3);
+<a name="line197"></a>  var d = new goog.math.Vec3(4, 5, 6);
+<a name="line198"></a>  assertVec3Equals(new goog.math.Vec3(-3, 6, -3), goog.math.Vec3.cross(c, d));
+<a name="line199"></a>}
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>function testLerp() {
+<a name="line203"></a>  var a = new goog.math.Vec3(0, 0, 0);
+<a name="line204"></a>  var b = new goog.math.Vec3(10, 10, 10);
+<a name="line205"></a>
+<a name="line206"></a>  for (var i = 0; i &lt;= 10; i++) {
+<a name="line207"></a>    var c = goog.math.Vec3.lerp(a, b, i / 10);
+<a name="line208"></a>    assertEquals(i, c.x);
+<a name="line209"></a>    assertEquals(i, c.y);
+<a name="line210"></a>    assertEquals(i, c.z);
+<a name="line211"></a>  }
+<a name="line212"></a>}
+</pre>
+
+
+</body>
+</html>

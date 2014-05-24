@@ -1,0 +1,1377 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>base_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_base_test.js.html">base_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Unit tests for Closure&#39;s base.js.
+<a name="line18"></a> *
+<a name="line19"></a> * @nocompile
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.baseTest&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.setTestOnly(&#39;goog.baseTest&#39;);
+<a name="line25"></a>
+<a name="line26"></a>// Used to test dynamic loading works, see testRequire*
+<a name="line27"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line28"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line29"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line30"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line31"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line32"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line33"></a>
+<a name="line34"></a>function getFramedVars(name) {
+<a name="line35"></a>  var w = window.frames[name];
+<a name="line36"></a>  var doc = w.document;
+<a name="line37"></a>  doc.open();
+<a name="line38"></a>  doc.write(&#39;&lt;script&gt;&#39; +
+<a name="line39"></a>            &#39;var a = [0, 1, 2];&#39; +
+<a name="line40"></a>            &#39;var o = {a: 0, b: 1};&#39; +
+<a name="line41"></a>            &#39;var n = 42;&#39; +
+<a name="line42"></a>            &#39;var b = true;&#39; +
+<a name="line43"></a>            &#39;var s = &quot;string&quot;;&#39; +
+<a name="line44"></a>            &#39;var nv = null;&#39; +
+<a name="line45"></a>            &#39;var u = undefined;&#39; +
+<a name="line46"></a>            &#39;var fv = function(){};&#39; +
+<a name="line47"></a>            &#39;&lt;/&#39; + &#39;script&gt;&#39;);
+<a name="line48"></a>  doc.close();
+<a name="line49"></a>  return {
+<a name="line50"></a>    &#39;array&#39;: w.a,
+<a name="line51"></a>    &#39;object&#39;: w.o,
+<a name="line52"></a>    &#39;number&#39;: w.n,
+<a name="line53"></a>    &#39;boolean&#39;: w.b,
+<a name="line54"></a>    &#39;string&#39;: w.s,
+<a name="line55"></a>    &#39;functionVar&#39;: w.fv,
+<a name="line56"></a>    &#39;nullVar&#39;: w.nv,
+<a name="line57"></a>    &#39;undefinedVar&#39;: w.u
+<a name="line58"></a>  };
+<a name="line59"></a>}
+<a name="line60"></a>
+<a name="line61"></a>var framedVars = getFramedVars(&#39;f1&#39;);
+<a name="line62"></a>var framedVars2 = getFramedVars(&#39;f2&#39;);
+<a name="line63"></a>// remove iframe
+<a name="line64"></a>var iframeElement = document.getElementById(&#39;f2&#39;);
+<a name="line65"></a>iframeElement.parentNode.removeChild(iframeElement);
+<a name="line66"></a>var stubs = new goog.testing.PropertyReplacer();
+<a name="line67"></a>var originalGoogBind = goog.bind;
+<a name="line68"></a>
+<a name="line69"></a>function tearDown() {
+<a name="line70"></a>  goog.setCssNameMapping(undefined);
+<a name="line71"></a>  stubs.reset();
+<a name="line72"></a>  goog.bind = originalGoogBind;
+<a name="line73"></a>}
+<a name="line74"></a>
+<a name="line75"></a>function testLibrary() {
+<a name="line76"></a>  assertNotUndefined(&quot;&#39;goog&#39; not loaded&quot;, goog);
+<a name="line77"></a>}
+<a name="line78"></a>
+<a name="line79"></a>function testDefine() {
+<a name="line80"></a>  goog.define(&#39;SOME_DEFINE&#39;, 123); // overridden by 456
+<a name="line81"></a>  assertEquals(SOME_DEFINE, 456);
+<a name="line82"></a>
+<a name="line83"></a>  goog.define(&#39;SOME_OTHER_DEFINE&#39;, 123); // not overridden
+<a name="line84"></a>  assertEquals(SOME_OTHER_DEFINE, 123);
+<a name="line85"></a>
+<a name="line86"></a>  goog.provide(&#39;ns&#39;);
+<a name="line87"></a>
+<a name="line88"></a>  goog.define(&#39;ns.SOME_DEFINE&#39;, 123); // overridden by 456
+<a name="line89"></a>  assertEquals(SOME_DEFINE, 456);
+<a name="line90"></a>
+<a name="line91"></a>  goog.define(&#39;ns.SOME_OTHER_DEFINE&#39;, 123); // not overridden
+<a name="line92"></a>  assertEquals(SOME_OTHER_DEFINE, 123);
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>function testProvide() {
+<a name="line96"></a>  goog.provide(&#39;goog.test.name.space&#39;);
+<a name="line97"></a>  assertNotUndefined(&#39;provide failed: goog.test&#39;, goog.test);
+<a name="line98"></a>  assertNotUndefined(&#39;provide failed: goog.test.name&#39;, goog.test.name);
+<a name="line99"></a>  assertNotUndefined(&#39;provide failed: goog.test.name.space&#39;,
+<a name="line100"></a>      goog.test.name.space);
+<a name="line101"></a>
+<a name="line102"></a>  // ensure that providing &#39;goog.test.name&#39; doesn&#39;t throw an exception
+<a name="line103"></a>  goog.provide(&#39;goog.test&#39;);
+<a name="line104"></a>  goog.provide(&#39;goog.test.name&#39;);
+<a name="line105"></a>
+<a name="line106"></a>  delete goog.test;
+<a name="line107"></a>}
+<a name="line108"></a>
+<a name="line109"></a>function testProvideStrictness() {
+<a name="line110"></a>  goog.provide(&#39;goog.xy&#39;);
+<a name="line111"></a>  assertProvideFails(&#39;goog.xy&#39;);
+<a name="line112"></a>
+<a name="line113"></a>  goog.provide(&#39;goog.xy.z&#39;);
+<a name="line114"></a>  assertProvideFails(&#39;goog.xy&#39;);
+<a name="line115"></a>
+<a name="line116"></a>  window[&#39;goog&#39;][&#39;xyz&#39;] = &#39;Bob&#39;;
+<a name="line117"></a>  assertProvideFails(&#39;goog.xyz&#39;);
+<a name="line118"></a>
+<a name="line119"></a>  delete goog.xy;
+<a name="line120"></a>  delete goog.xyz;
+<a name="line121"></a>}
+<a name="line122"></a>
+<a name="line123"></a>function assertProvideFails(namespace) {
+<a name="line124"></a>  assertThrows(&#39;goog.provide(&#39; + namespace + &#39;) should have failed&#39;,
+<a name="line125"></a>      goog.partial(goog.provide, namespace));
+<a name="line126"></a>}
+<a name="line127"></a>
+<a name="line128"></a>function testIsProvided() {
+<a name="line129"></a>  goog.provide(&#39;goog.explicit&#39;);
+<a name="line130"></a>  assertTrue(goog.isProvided_(&#39;goog.explicit&#39;));
+<a name="line131"></a>  goog.provide(&#39;goog.implicit.explicit&#39;);
+<a name="line132"></a>  assertFalse(goog.isProvided_(&#39;goog.implicit&#39;));
+<a name="line133"></a>  assertTrue(goog.isProvided_(&#39;goog.implicit.explicit&#39;));
+<a name="line134"></a>}
+<a name="line135"></a>
+<a name="line136"></a>function testGlobalize() {
+<a name="line137"></a>  goog.globalize(goog);
+<a name="line138"></a>  assertNotUndefined(&#39;Globalize goog&#39;, provide);
+<a name="line139"></a>
+<a name="line140"></a>  var a = {a: 1, b: 2, c: 3};
+<a name="line141"></a>  var b = {};
+<a name="line142"></a>  goog.globalize(a, b);
+<a name="line143"></a>  assertNotUndefined(&#39;Globalize to arbitrary object&#39;, b.a);
+<a name="line144"></a>  assertNotUndefined(&#39;Globalize to arbitrary object&#39;, b.b);
+<a name="line145"></a>  assertNotUndefined(&#39;Globalize to arbitrary object&#39;, b.c);
+<a name="line146"></a>}
+<a name="line147"></a>
+<a name="line148"></a>function testExportSymbol() {
+<a name="line149"></a>  var date = new Date();
+<a name="line150"></a>
+<a name="line151"></a>  assertTrue(typeof nodots == &#39;undefined&#39;);
+<a name="line152"></a>  goog.exportSymbol(&#39;nodots&#39;, date);
+<a name="line153"></a>  assertEquals(date, nodots);
+<a name="line154"></a>  nodots = undefined;
+<a name="line155"></a>
+<a name="line156"></a>  assertTrue(typeof gotcher == &#39;undefined&#39;);
+<a name="line157"></a>  goog.exportSymbol(&#39;gotcher.dots.right.Here&#39;, date);
+<a name="line158"></a>  assertEquals(date, gotcher.dots.right.Here);
+<a name="line159"></a>  gotcher = undefined;
+<a name="line160"></a>
+<a name="line161"></a>  goog.provide(&#39;an.existing.path&#39;);
+<a name="line162"></a>  assertNotNull(an.existing.path);
+<a name="line163"></a>  goog.exportSymbol(&#39;an.existing.path&#39;, date);
+<a name="line164"></a>  assertEquals(date, an.existing.path);
+<a name="line165"></a>  an = undefined;
+<a name="line166"></a>
+<a name="line167"></a>  var foo = {foo: &#39;foo&#39;};
+<a name="line168"></a>  var bar = {bar: &#39;bar&#39;};
+<a name="line169"></a>  var baz = {baz: &#39;baz&#39;};
+<a name="line170"></a>  goog.exportSymbol(&#39;one.two.three.Four&#39;, foo);
+<a name="line171"></a>  goog.exportSymbol(&#39;one.two.three.five&#39;, bar);
+<a name="line172"></a>  goog.exportSymbol(&#39;one.two.six&#39;, baz);
+<a name="line173"></a>  assertEquals(foo, one.two.three.Four);
+<a name="line174"></a>  assertEquals(bar, one.two.three.five);
+<a name="line175"></a>  assertEquals(baz, one.two.six);
+<a name="line176"></a>
+<a name="line177"></a>  var win = {};
+<a name="line178"></a>  var fooBar = {foo: &#39;foo&#39;, bar: &#39;bar&#39;};
+<a name="line179"></a>  goog.exportSymbol(&#39;one.two.four&#39;, fooBar, win);
+<a name="line180"></a>  assertEquals(fooBar, win.one.two.four);
+<a name="line181"></a>  assertTrue(&#39;four&#39; in win.one.two);
+<a name="line182"></a>  assertFalse(&#39;four&#39; in one.two);
+<a name="line183"></a>  one = undefined;
+<a name="line184"></a>}
+<a name="line185"></a>
+<a name="line186"></a>goog.exportSymbol(&#39;exceptionTest&#39;, function() {
+<a name="line187"></a>  throw Error(&#39;ERROR&#39;);
+<a name="line188"></a>});
+<a name="line189"></a>
+<a name="line190"></a>function testExportSymbolExceptions() {
+<a name="line191"></a>  var e = assertThrows(&#39;Exception wasn\&#39;t thrown by exported function&#39;,
+<a name="line192"></a>      exceptionTest);
+<a name="line193"></a>  assertEquals(&#39;Unexpected error thrown&#39;, &#39;ERROR&#39;, e.message);
+<a name="line194"></a>}
+<a name="line195"></a>
+<a name="line196"></a>//=== tests for Require logic ===
+<a name="line197"></a>
+<a name="line198"></a>function testRequireClosure() {
+<a name="line199"></a>  assertNotUndefined(&#39;goog.Timer should be available&#39;, goog.Timer);
+<a name="line200"></a>  assertNotUndefined(
+<a name="line201"></a>      &#39;goog.events.EventTarget should be available&#39;,
+<a name="line202"></a>      /** @suppress {missingRequire} */ goog.events.EventTarget);
+<a name="line203"></a>}
+<a name="line204"></a>
+<a name="line205"></a>function testRequireWithExternalDuplicate() {
+<a name="line206"></a>  // Do a provide without going via goog.require. Then goog.require it
+<a name="line207"></a>  // indirectly and ensure it doesn&#39;t cause a duplicate script.
+<a name="line208"></a>  goog.addDependency(&#39;dup.js&#39;, [&#39;dup.base&#39;], []);
+<a name="line209"></a>  goog.addDependency(&#39;dup-child.js&#39;, [&#39;dup.base.child&#39;], [&#39;dup.base&#39;]);
+<a name="line210"></a>  goog.provide(&#39;dup.base&#39;);
+<a name="line211"></a>
+<a name="line212"></a>  stubs.set(goog, &#39;isDocumentFinishedLoading_&#39;, false);
+<a name="line213"></a>  stubs.set(goog.global, &#39;CLOSURE_IMPORT_SCRIPT&#39;, function(src) {
+<a name="line214"></a>    if (src == goog.basePath + &#39;dup.js&#39;) {
+<a name="line215"></a>      fail(&#39;Duplicate script written!&#39;);
+<a name="line216"></a>    } else if (src == goog.basePath + &#39;dup-child.js&#39;) {
+<a name="line217"></a>      // Allow expected script.
+<a name="line218"></a>      return true;
+<a name="line219"></a>    } else {
+<a name="line220"></a>      // Avoid affecting other state.
+<a name="line221"></a>      return false;
+<a name="line222"></a>    }
+<a name="line223"></a>  });
+<a name="line224"></a>
+<a name="line225"></a>  // To differentiate this call from the real one.
+<a name="line226"></a>  var require = goog.require;
+<a name="line227"></a>  require(&#39;dup.base.child&#39;);
+<a name="line228"></a>}
+<a name="line229"></a>
+<a name="line230"></a>//=== tests for language enhancements ===
+<a name="line231"></a>
+<a name="line232"></a>function testTypeOf() {
+<a name="line233"></a>  assertEquals(&#39;array&#39;, goog.typeOf([]));
+<a name="line234"></a>  assertEquals(&#39;string&#39;, goog.typeOf(&#39;string&#39;));
+<a name="line235"></a>  assertEquals(&#39;number&#39;, goog.typeOf(123));
+<a name="line236"></a>  assertEquals(&#39;null&#39;, goog.typeOf(null));
+<a name="line237"></a>  assertEquals(&#39;undefined&#39;, goog.typeOf(undefined));
+<a name="line238"></a>  assertEquals(&#39;object&#39;, goog.typeOf({}));
+<a name="line239"></a>  assertEquals(&#39;function&#39;, goog.typeOf(function() {}));
+<a name="line240"></a>
+<a name="line241"></a>  // Make sure that NodeList is not treated as an array... NodeLists should
+<a name="line242"></a>  // be of type object but Safari incorrectly reports it as function so a not
+<a name="line243"></a>  // equals test will have to suffice here.
+<a name="line244"></a>  assertNotEquals(&#39;array&#39;, goog.typeOf(document.getElementsByName(&#39;*&#39;)));
+<a name="line245"></a>  assertNotEquals(&#39;function&#39;, goog.typeOf(document.getElementsByName(&#39;*&#39;)));
+<a name="line246"></a>  assertEquals(&#39;object&#39;, goog.typeOf(document.getElementsByName(&#39;*&#39;)));
+<a name="line247"></a>}
+<a name="line248"></a>
+<a name="line249"></a>function testTypeOfFramed() {
+<a name="line250"></a>  assertEquals(&#39;array&#39;, goog.typeOf(framedVars.array));
+<a name="line251"></a>  assertEquals(&#39;string&#39;, goog.typeOf(framedVars.string));
+<a name="line252"></a>  assertEquals(&#39;number&#39;, goog.typeOf(framedVars.number));
+<a name="line253"></a>  assertEquals(&#39;null&#39;, goog.typeOf(framedVars.nullVar));
+<a name="line254"></a>  assertEquals(&#39;undefined&#39;, goog.typeOf(framedVars.undefinedVar));
+<a name="line255"></a>  assertEquals(&#39;object&#39;, goog.typeOf(framedVars.object));
+<a name="line256"></a>  assertEquals(&#39;function&#39;, goog.typeOf(framedVars.functionVar));
+<a name="line257"></a>
+<a name="line258"></a>  // Opera throws when trying to do cross frame typeof on node lists.
+<a name="line259"></a>  // IE behaves very strange when it comes to DOM nodes on disconnected frames.
+<a name="line260"></a>}
+<a name="line261"></a>
+<a name="line262"></a>function testTypeOfFramed2() {
+<a name="line263"></a>  assertEquals(&#39;array&#39;, goog.typeOf(framedVars2.array));
+<a name="line264"></a>  assertEquals(&#39;string&#39;, goog.typeOf(framedVars2.string));
+<a name="line265"></a>  assertEquals(&#39;number&#39;, goog.typeOf(framedVars2.number));
+<a name="line266"></a>  assertEquals(&#39;null&#39;, goog.typeOf(framedVars2.nullVar));
+<a name="line267"></a>  assertEquals(&#39;undefined&#39;, goog.typeOf(framedVars2.undefinedVar));
+<a name="line268"></a>  assertEquals(&#39;object&#39;, goog.typeOf(framedVars2.object));
+<a name="line269"></a>  assertEquals(&#39;function&#39;, goog.typeOf(framedVars2.functionVar));
+<a name="line270"></a>
+<a name="line271"></a>  // Opera throws when trying to do cross frame typeof on node lists.
+<a name="line272"></a>  // IE behaves very strange when it comes to DOM nodes on disconnected frames.
+<a name="line273"></a>}
+<a name="line274"></a>
+<a name="line275"></a>function testIsDef() {
+<a name="line276"></a>  var defined = &#39;foo&#39;;
+<a name="line277"></a>  var nullVar = null;
+<a name="line278"></a>  var notDefined;
+<a name="line279"></a>
+<a name="line280"></a>  assertTrue(&#39;defined should be defined&#39;, goog.isDef(defined));
+<a name="line281"></a>  assertTrue(&#39;null should be defined&#39;, goog.isDef(defined));
+<a name="line282"></a>  assertFalse(&#39;undefined should not be defined&#39;, goog.isDef(notDefined));
+<a name="line283"></a>}
+<a name="line284"></a>
+<a name="line285"></a>function testIsDefAndNotNull() {
+<a name="line286"></a>  assertTrue(&#39;string is defined and non-null&#39;, goog.isDefAndNotNull(&#39;&#39;));
+<a name="line287"></a>  assertTrue(&#39;object is defined and non-null&#39;, goog.isDefAndNotNull({}));
+<a name="line288"></a>  assertTrue(&#39;function is defined and non-null&#39;,
+<a name="line289"></a>      goog.isDefAndNotNull(goog.nullFunction));
+<a name="line290"></a>  assertTrue(&#39;zero is defined and non-null&#39;,
+<a name="line291"></a>      goog.isDefAndNotNull(0));
+<a name="line292"></a>  assertFalse(&#39;null&#39;, goog.isDefAndNotNull(null));
+<a name="line293"></a>  assertFalse(&#39;undefined&#39;, goog.isDefAndNotNull(undefined));
+<a name="line294"></a>}
+<a name="line295"></a>
+<a name="line296"></a>function testIsNull() {
+<a name="line297"></a>  var notNull = &#39;foo&#39;;
+<a name="line298"></a>  var nullVar = null;
+<a name="line299"></a>  var notDefined;
+<a name="line300"></a>
+<a name="line301"></a>  assertFalse(&#39;defined should not be null&#39;, goog.isNull(notNull));
+<a name="line302"></a>  assertTrue(&#39;null should be null&#39;, goog.isNull(nullVar));
+<a name="line303"></a>  assertFalse(&#39;undefined should not be null&#39;, goog.isNull(notDefined));
+<a name="line304"></a>}
+<a name="line305"></a>
+<a name="line306"></a>function testIsArray() {
+<a name="line307"></a>  var array = [1, 2, 3];
+<a name="line308"></a>  var arrayWithLengthSet = [1, 2, 3];
+<a name="line309"></a>  arrayWithLengthSet.length = 2;
+<a name="line310"></a>  var objWithArrayFunctions = {slice: function() {}, length: 0};
+<a name="line311"></a>  var object = {a: 1, b: 2, c: 3};
+<a name="line312"></a>  var nullVar = null;
+<a name="line313"></a>  var notDefined;
+<a name="line314"></a>  var elem = document.getElementById(&#39;elem&#39;);
+<a name="line315"></a>  var text = document.getElementById(&#39;text&#39;).firstChild;
+<a name="line316"></a>  var impostor = document.body.getElementsByTagName(&#39;BOGUS&#39;);
+<a name="line317"></a>  impostor.push = Array.prototype.push;
+<a name="line318"></a>  impostor.pop = Array.prototype.pop;
+<a name="line319"></a>  impostor.slice = Array.prototype.slice;
+<a name="line320"></a>  impostor.splice = Array.prototype.splice;
+<a name="line321"></a>
+<a name="line322"></a>  assertTrue(&#39;array should be an array&#39;, goog.isArray(array));
+<a name="line323"></a>  assertTrue(&#39;arrayWithLengthSet should be an array&#39;,
+<a name="line324"></a>             goog.isArray(arrayWithLengthSet));
+<a name="line325"></a>  assertFalse(&#39;object with array functions should not be an array unless &#39; +
+<a name="line326"></a>              &#39;length is not enumerable&#39;, goog.isArray(objWithArrayFunctions));
+<a name="line327"></a>  assertFalse(&#39;object should not be an array&#39;, goog.isArray(object));
+<a name="line328"></a>  assertFalse(&#39;null should not be an array&#39;, goog.isArray(nullVar));
+<a name="line329"></a>  assertFalse(&#39;undefined should not be an array&#39;, goog.isArray(notDefined));
+<a name="line330"></a>  assertFalse(&#39;NodeList should not be an array&#39;, goog.isArray(elem.childNodes));
+<a name="line331"></a>  assertFalse(&#39;TextNode should not be an array&#39;, goog.isArray(text));
+<a name="line332"></a>  assertTrue(&#39;Array of nodes should be an array&#39;,
+<a name="line333"></a>             goog.isArray([elem.firstChild, elem.lastChild]));
+<a name="line334"></a>  assertFalse(&#39;An impostor should not be an array&#39;, goog.isArray(impostor));
+<a name="line335"></a>}
+<a name="line336"></a>
+<a name="line337"></a>function testTypeOfAcrossWindow() {
+<a name="line338"></a>  if (goog.userAgent.WEBKIT &amp;&amp; goog.userAgent.MAC) {
+<a name="line339"></a>    // The server farm has issues with new windows on Safari Mac.
+<a name="line340"></a>    return;
+<a name="line341"></a>  }
+<a name="line342"></a>
+<a name="line343"></a>  var w = window.open(&#39;&#39;, &#39;blank&#39;);
+<a name="line344"></a>  if (w) {
+<a name="line345"></a>    try {
+<a name="line346"></a>      try {
+<a name="line347"></a>        var d = w.document;
+<a name="line348"></a>        d.open();
+<a name="line349"></a>        d.write(&#39;&lt;script&gt;function fun(){};&#39; +
+<a name="line350"></a>                &#39;var arr = [];&#39; +
+<a name="line351"></a>                &#39;var x = 42;&#39; +
+<a name="line352"></a>                &#39;var s = &quot;&quot;;&#39; +
+<a name="line353"></a>                &#39;var b = true;&#39; +
+<a name="line354"></a>                &#39;var obj = {length: 0, splice: {}, call: {}};&#39; +
+<a name="line355"></a>                &#39;&lt;/&#39; + &#39;script&gt;&#39;);
+<a name="line356"></a>        d.close();
+<a name="line357"></a>      } catch (ex) {
+<a name="line358"></a>        // In Firefox Linux on the server farm we don&#39;t have access to
+<a name="line359"></a>        // w.document.
+<a name="line360"></a>        return;
+<a name="line361"></a>      }
+<a name="line362"></a>
+<a name="line363"></a>      assertEquals(&#39;function&#39;, goog.typeOf(w.fun));
+<a name="line364"></a>      assertEquals(&#39;array&#39;, goog.typeOf(w.arr));
+<a name="line365"></a>      assertEquals(&#39;number&#39;, goog.typeOf(w.x));
+<a name="line366"></a>      assertEquals(&#39;string&#39;, goog.typeOf(w.s));
+<a name="line367"></a>      assertEquals(&#39;boolean&#39;, goog.typeOf(w.b));
+<a name="line368"></a>      assertEquals(&#39;object&#39;, goog.typeOf(w.obj));
+<a name="line369"></a>    } finally {
+<a name="line370"></a>      w.close();
+<a name="line371"></a>    }
+<a name="line372"></a>  }
+<a name="line373"></a>}
+<a name="line374"></a>
+<a name="line375"></a>function testIsArrayLike() {
+<a name="line376"></a>  var array = [1, 2, 3];
+<a name="line377"></a>  var objectWithNumericLength = {length: 2};
+<a name="line378"></a>  var objectWithNonNumericLength = {length: &#39;a&#39;};
+<a name="line379"></a>  var object = {a: 1, b: 2};
+<a name="line380"></a>  var nullVar = null;
+<a name="line381"></a>  var notDefined;
+<a name="line382"></a>  var elem = document.getElementById(&#39;elem&#39;);
+<a name="line383"></a>  var text = document.getElementById(&#39;text&#39;).firstChild;
+<a name="line384"></a>
+<a name="line385"></a>  assertTrue(&#39;array should be array-like&#39;, goog.isArrayLike(array));
+<a name="line386"></a>  assertTrue(&#39;obj w/numeric length should be array-like&#39;,
+<a name="line387"></a>      goog.isArrayLike(objectWithNumericLength));
+<a name="line388"></a>  assertFalse(&#39;obj w/non-numeric length should not be array-like&#39;,
+<a name="line389"></a>      goog.isArrayLike(objectWithNonNumericLength));
+<a name="line390"></a>  assertFalse(&#39;object should not be array-like&#39;, goog.isArrayLike(object));
+<a name="line391"></a>  assertFalse(&#39;null should not be array-like&#39;, goog.isArrayLike(nullVar));
+<a name="line392"></a>  assertFalse(&#39;undefined should not be array-like&#39;,
+<a name="line393"></a>      goog.isArrayLike(notDefined));
+<a name="line394"></a>  assertTrue(&#39;NodeList should be array-like&#39;,
+<a name="line395"></a>      goog.isArrayLike(elem.childNodes));
+<a name="line396"></a>  // TODO(attila): Fix isArrayLike to return false for text nodes!
+<a name="line397"></a>  // assertFalse(&#39;TextNode should not be array-like&#39;, goog.isArrayLike(text));
+<a name="line398"></a>  assertTrue(&#39;Array of nodes should be array-like&#39;,
+<a name="line399"></a>      goog.isArrayLike([elem.firstChild, elem.lastChild]));
+<a name="line400"></a>}
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>// Use mock date in testIsDateLike() rather than a real goog.date.Date to
+<a name="line404"></a>// minimize dependencies in this unit test.
+<a name="line405"></a>function MockGoogDate() {}
+<a name="line406"></a>
+<a name="line407"></a>MockGoogDate.prototype.getFullYear = function() {
+<a name="line408"></a>  return 2007;
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>function testIsDateLike() {
+<a name="line413"></a>  var jsDate = new Date();
+<a name="line414"></a>  var googDate = new MockGoogDate();
+<a name="line415"></a>  var string = &#39;foo&#39;;
+<a name="line416"></a>  var number = 1;
+<a name="line417"></a>  var nullVar = null;
+<a name="line418"></a>  var notDefined;
+<a name="line419"></a>
+<a name="line420"></a>  assertTrue(&#39;js Date should be date-like&#39;, goog.isDateLike(jsDate));
+<a name="line421"></a>  assertTrue(&#39;goog Date should be date-like&#39;, goog.isDateLike(googDate));
+<a name="line422"></a>  assertFalse(&#39;string should not be date-like&#39;, goog.isDateLike(string));
+<a name="line423"></a>  assertFalse(&#39;number should not be date-like&#39;, goog.isDateLike(number));
+<a name="line424"></a>  assertFalse(&#39;nullVar should not be date-like&#39;, goog.isDateLike(nullVar));
+<a name="line425"></a>  assertFalse(&#39;undefined should not be date-like&#39;, goog.isDateLike(notDefined));
+<a name="line426"></a>}
+<a name="line427"></a>
+<a name="line428"></a>function testIsString() {
+<a name="line429"></a>  var string = &#39;foo&#39;;
+<a name="line430"></a>  var number = 2;
+<a name="line431"></a>  var nullVar = null;
+<a name="line432"></a>  var notDefined;
+<a name="line433"></a>
+<a name="line434"></a>  assertTrue(&#39;string should be a string&#39;, goog.isString(string));
+<a name="line435"></a>  assertFalse(&#39;number should not be a string&#39;, goog.isString(number));
+<a name="line436"></a>  assertFalse(&#39;null should not be a string&#39;, goog.isString(nullVar));
+<a name="line437"></a>  assertFalse(&#39;undefined should not be a string&#39;, goog.isString(notDefined));
+<a name="line438"></a>}
+<a name="line439"></a>
+<a name="line440"></a>function testIsBoolean() {
+<a name="line441"></a>  var b = true;
+<a name="line442"></a>  var s = &#39;true&#39;;
+<a name="line443"></a>  var num = 1;
+<a name="line444"></a>  var nullVar = null;
+<a name="line445"></a>  var notDefined;
+<a name="line446"></a>
+<a name="line447"></a>  assertTrue(&#39;boolean should be a boolean&#39;, goog.isBoolean(b));
+<a name="line448"></a>  assertFalse(&#39;string should not be a boolean&#39;, goog.isBoolean(s));
+<a name="line449"></a>  assertFalse(&#39;number should not be a boolean&#39;, goog.isBoolean(num));
+<a name="line450"></a>  assertFalse(&#39;null should not be a boolean&#39;, goog.isBoolean(nullVar));
+<a name="line451"></a>  assertFalse(&#39;undefined should not be a boolean&#39;, goog.isBoolean(notDefined));
+<a name="line452"></a>}
+<a name="line453"></a>
+<a name="line454"></a>function testIsNumber() {
+<a name="line455"></a>  var number = 1;
+<a name="line456"></a>  var string = &#39;1&#39;;
+<a name="line457"></a>  var nullVar = null;
+<a name="line458"></a>  var notDefined;
+<a name="line459"></a>
+<a name="line460"></a>  assertTrue(&#39;number should be a number&#39;, goog.isNumber(number));
+<a name="line461"></a>  assertFalse(&#39;string should not be a number&#39;, goog.isNumber(string));
+<a name="line462"></a>  assertFalse(&#39;null should not be a number&#39;, goog.isNumber(nullVar));
+<a name="line463"></a>  assertFalse(&#39;undefined should not be a number&#39;, goog.isNumber(notDefined));
+<a name="line464"></a>}
+<a name="line465"></a>
+<a name="line466"></a>function testIsFunction() {
+<a name="line467"></a>  var func = function() { return 1; };
+<a name="line468"></a>  var object = {a: 1, b: 2};
+<a name="line469"></a>  var nullVar = null;
+<a name="line470"></a>  var notDefined;
+<a name="line471"></a>
+<a name="line472"></a>  assertTrue(&#39;function should be a function&#39;, goog.isFunction(func));
+<a name="line473"></a>  assertFalse(&#39;object should not be a function&#39;, goog.isFunction(object));
+<a name="line474"></a>  assertFalse(&#39;null should not be a function&#39;, goog.isFunction(nullVar));
+<a name="line475"></a>  assertFalse(&#39;undefined should not be a function&#39;,
+<a name="line476"></a>              goog.isFunction(notDefined));
+<a name="line477"></a>}
+<a name="line478"></a>
+<a name="line479"></a>function testIsObject() {
+<a name="line480"></a>  var object = {a: 1, b: 2};
+<a name="line481"></a>  var string = &#39;b&#39;;
+<a name="line482"></a>  var nullVar = null;
+<a name="line483"></a>  var notDefined;
+<a name="line484"></a>  var array = [0, 1, 2];
+<a name="line485"></a>  var fun = function() {};
+<a name="line486"></a>
+<a name="line487"></a>  assertTrue(&#39;object should be an object&#39;, goog.isObject(object));
+<a name="line488"></a>  assertTrue(&#39;array should be an object&#39;, goog.isObject(array));
+<a name="line489"></a>  assertTrue(&#39;function should be an object&#39;, goog.isObject(fun));
+<a name="line490"></a>  assertFalse(&#39;string should not be an object&#39;, goog.isObject(string));
+<a name="line491"></a>  assertFalse(&#39;null should not be an object&#39;, goog.isObject(nullVar));
+<a name="line492"></a>  assertFalse(&#39;undefined should not be an object&#39;, goog.isObject(notDefined));
+<a name="line493"></a>}
+<a name="line494"></a>
+<a name="line495"></a>
+<a name="line496"></a>//=== tests for unique ID methods ===
+<a name="line497"></a>
+<a name="line498"></a>function testGetUid() {
+<a name="line499"></a>  var a = {};
+<a name="line500"></a>  var b = {};
+<a name="line501"></a>  var c = {};
+<a name="line502"></a>
+<a name="line503"></a>  var uid1 = goog.getUid(a);
+<a name="line504"></a>  var uid2 = goog.getUid(b);
+<a name="line505"></a>  var uid3 = goog.getUid(c);
+<a name="line506"></a>
+<a name="line507"></a>  assertNotEquals(&#39;Unique IDs must be unique&#39;, uid1, uid2);
+<a name="line508"></a>  assertNotEquals(&#39;Unique IDs must be unique&#39;, uid1, uid3);
+<a name="line509"></a>  assertNotEquals(&#39;Unique IDs must be unique&#39;, uid2, uid3);
+<a name="line510"></a>}
+<a name="line511"></a>
+<a name="line512"></a>function testHasUid() {
+<a name="line513"></a>  var a = {};
+<a name="line514"></a>
+<a name="line515"></a>  assertFalse(goog.hasUid(a));
+<a name="line516"></a>  assertFalse(goog.UID_PROPERTY_ in a);
+<a name="line517"></a>
+<a name="line518"></a>  var uid = goog.getUid(a);
+<a name="line519"></a>  assertTrue(goog.hasUid(a));
+<a name="line520"></a>  assertEquals(uid, goog.getUid(a));
+<a name="line521"></a>}
+<a name="line522"></a>
+<a name="line523"></a>function testRemoveUidFromPlainObject() {
+<a name="line524"></a>  var a = {};
+<a name="line525"></a>  var uid = goog.getUid(a);
+<a name="line526"></a>  goog.removeUid(a);
+<a name="line527"></a>  assertNotEquals(&quot;An object&#39;s old and new unique IDs should be different&quot;,
+<a name="line528"></a>      uid, goog.getUid(a));
+<a name="line529"></a>}
+<a name="line530"></a>
+<a name="line531"></a>function testRemoveUidFromObjectWithoutUid() {
+<a name="line532"></a>  var a = {};
+<a name="line533"></a>  // Removing a unique ID should not fail even if it did not exist
+<a name="line534"></a>  goog.removeUid(a);
+<a name="line535"></a>}
+<a name="line536"></a>
+<a name="line537"></a>function testRemoveUidFromNode() {
+<a name="line538"></a>  var node = document.createElement(&#39;div&#39;);
+<a name="line539"></a>  var nodeUid = goog.getUid(node);
+<a name="line540"></a>  goog.removeUid(node);
+<a name="line541"></a>  assertNotEquals(&quot;A node&#39;s old and new unique IDs should be different&quot;,
+<a name="line542"></a>      nodeUid, goog.getUid(node));
+<a name="line543"></a>}
+<a name="line544"></a>
+<a name="line545"></a>function testConstructorUid() {
+<a name="line546"></a>  function BaseClass() {};
+<a name="line547"></a>  function SubClass() {};
+<a name="line548"></a>  goog.inherits(SubClass, BaseClass);
+<a name="line549"></a>
+<a name="line550"></a>  var baseClassUid = goog.getUid(BaseClass);
+<a name="line551"></a>  var subClassUid = goog.getUid(SubClass);
+<a name="line552"></a>
+<a name="line553"></a>  assertTrue(&#39;Unique ID of BaseClass must be a number&#39;,
+<a name="line554"></a>      typeof baseClassUid == &#39;number&#39;);
+<a name="line555"></a>  assertTrue(&#39;Unique ID of SubClass must be a number&#39;,
+<a name="line556"></a>      typeof subClassUid == &#39;number&#39;);
+<a name="line557"></a>  assertNotEquals(&#39;Unique IDs of BaseClass and SubClass must differ&#39;,
+<a name="line558"></a>      baseClassUid, subClassUid);
+<a name="line559"></a>  assertNotEquals(&#39;Unique IDs of BaseClass and SubClass instances must differ&#39;,
+<a name="line560"></a>      goog.getUid(new BaseClass), goog.getUid(new SubClass));
+<a name="line561"></a>
+<a name="line562"></a>  assertEquals(&#39;Unique IDs of BaseClass.prototype and SubClass.prototype &#39; +
+<a name="line563"></a>      &#39;should differ, but to keep the implementation simple, we do not &#39; +
+<a name="line564"></a>      &#39;handle this edge case.&#39;,
+<a name="line565"></a>      goog.getUid(BaseClass.prototype), goog.getUid(SubClass.prototype));
+<a name="line566"></a>}
+<a name="line567"></a>
+<a name="line568"></a>
+<a name="line569"></a>/**
+<a name="line570"></a> * Tests against Chrome bug where the re-created element will have the uid
+<a name="line571"></a> * property set but undefined. See bug 1252508.
+<a name="line572"></a> */
+<a name="line573"></a>function testUidNotUndefinedOnReusedElement() {
+<a name="line574"></a>  var div = document.createElement(&#39;DIV&#39;);
+<a name="line575"></a>  document.body.appendChild(div);
+<a name="line576"></a>  div.innerHTML = &#39;&lt;form id=&quot;form&quot;&gt;&lt;/form&gt;&#39;;
+<a name="line577"></a>  var span = div.getElementsByTagName(&#39;FORM&#39;)[0];
+<a name="line578"></a>  goog.getUid(span);
+<a name="line579"></a>
+<a name="line580"></a>  div.innerHTML = &#39;&lt;form id=&quot;form&quot;&gt;&lt;/form&gt;&#39;;
+<a name="line581"></a>  var span2 = div.getElementsByTagName(&#39;FORM&#39;)[0];
+<a name="line582"></a>  assertNotUndefined(goog.getUid(span2));
+<a name="line583"></a>}
+<a name="line584"></a>
+<a name="line585"></a>function testWindowUid() {
+<a name="line586"></a>  var uid = goog.getUid(window);
+<a name="line587"></a>  assertTrue(&#39;window unique id is a number&#39;, goog.isNumber(uid));
+<a name="line588"></a>  assertEquals(&#39;returns the same id second time&#39;, uid, goog.getUid(window));
+<a name="line589"></a>  goog.removeUid(window);
+<a name="line590"></a>  assertNotEquals(&#39;generates new id after the old one is removed&#39;,
+<a name="line591"></a>      goog.getUid(window));
+<a name="line592"></a>}
+<a name="line593"></a>
+<a name="line594"></a>//=== tests for clone method ===
+<a name="line595"></a>
+<a name="line596"></a>function testClonePrimitive() {
+<a name="line597"></a>  assertEquals(&#39;cloning a primitive should return an equal primitive&#39;,
+<a name="line598"></a>      5, goog.cloneObject(5));
+<a name="line599"></a>}
+<a name="line600"></a>
+<a name="line601"></a>function testCloneObjectThatHasACloneMethod() {
+<a name="line602"></a>  var original = {
+<a name="line603"></a>    name: &#39;original&#39;,
+<a name="line604"></a>    clone: function() { return { name: &#39;clone&#39; }; }
+<a name="line605"></a>  };
+<a name="line606"></a>
+<a name="line607"></a>  var clone = goog.cloneObject(original);
+<a name="line608"></a>  assertEquals(&#39;original&#39;, original.name);
+<a name="line609"></a>  assertEquals(&#39;clone&#39;, clone.name);
+<a name="line610"></a>}
+<a name="line611"></a>
+<a name="line612"></a>function testCloneFlatObject() {
+<a name="line613"></a>  var original = {a: 1, b: 2, c: 3};
+<a name="line614"></a>  var clone = goog.cloneObject(original);
+<a name="line615"></a>  assertNotEquals(original, clone);
+<a name="line616"></a>  assertEquals(1, clone.a);
+<a name="line617"></a>  assertEquals(2, clone.b);
+<a name="line618"></a>  assertEquals(3, clone.c);
+<a name="line619"></a>}
+<a name="line620"></a>
+<a name="line621"></a>function testCloneDeepObject() {
+<a name="line622"></a>  var original = {
+<a name="line623"></a>    a: 1,
+<a name="line624"></a>    b: {c: 2, d: 3},
+<a name="line625"></a>    e: {f: {g: 4, h: 5}}
+<a name="line626"></a>  };
+<a name="line627"></a>  var clone = goog.cloneObject(original);
+<a name="line628"></a>
+<a name="line629"></a>  assertNotEquals(original, clone);
+<a name="line630"></a>  assertNotEquals(original.b, clone.b);
+<a name="line631"></a>  assertNotEquals(original.e, clone.e);
+<a name="line632"></a>
+<a name="line633"></a>  assertEquals(1, clone.a);
+<a name="line634"></a>  assertEquals(2, clone.b.c);
+<a name="line635"></a>  assertEquals(3, clone.b.d);
+<a name="line636"></a>  assertEquals(4, clone.e.f.g);
+<a name="line637"></a>  assertEquals(5, clone.e.f.h);
+<a name="line638"></a>}
+<a name="line639"></a>
+<a name="line640"></a>function testCloneFunctions() {
+<a name="line641"></a>  var original = {
+<a name="line642"></a>    f: function() {
+<a name="line643"></a>      return &#39;hi&#39;;
+<a name="line644"></a>    }
+<a name="line645"></a>  };
+<a name="line646"></a>  var clone = goog.cloneObject(original);
+<a name="line647"></a>
+<a name="line648"></a>  assertNotEquals(original, clone);
+<a name="line649"></a>  assertEquals(&#39;hi&#39;, clone.f());
+<a name="line650"></a>  assertEquals(original.f, clone.f);
+<a name="line651"></a>}
+<a name="line652"></a>
+<a name="line653"></a>
+<a name="line654"></a>//=== tests for bind() and friends ===
+<a name="line655"></a>
+<a name="line656"></a>// Function.prototype.bind and Function.prototype.partial are purposefullly
+<a name="line657"></a>// not defined in open sourced Closure.  These functions sniff for their
+<a name="line658"></a>// presence.
+<a name="line659"></a>
+<a name="line660"></a>var foo = &#39;global&#39;;
+<a name="line661"></a>var obj = {foo: &#39;obj&#39;};
+<a name="line662"></a>
+<a name="line663"></a>function getFoo(arg1, arg2) {
+<a name="line664"></a>  return {foo: this.foo, arg1: arg1, arg2: arg2};
+<a name="line665"></a>}
+<a name="line666"></a>
+<a name="line667"></a>function testBindWithoutObj() {
+<a name="line668"></a>  if (Function.prototype.bind) {
+<a name="line669"></a>    assertEquals(foo, getFoo.bind()().foo);
+<a name="line670"></a>  }
+<a name="line671"></a>}
+<a name="line672"></a>
+<a name="line673"></a>function testBindWithObj() {
+<a name="line674"></a>  if (Function.prototype.bind) {
+<a name="line675"></a>    assertEquals(obj.foo, getFoo.bind(obj)().foo);
+<a name="line676"></a>  }
+<a name="line677"></a>}
+<a name="line678"></a>
+<a name="line679"></a>function testBindWithNullObj() {
+<a name="line680"></a>  if (Function.prototype.bind) {
+<a name="line681"></a>    assertEquals(foo, getFoo.bind()().foo);
+<a name="line682"></a>  }
+<a name="line683"></a>}
+<a name="line684"></a>
+<a name="line685"></a>function testBindStaticArgs() {
+<a name="line686"></a>  if (Function.prototype.bind) {
+<a name="line687"></a>    var fooprime = getFoo.bind(obj, &#39;hot&#39;, &#39;dog&#39;);
+<a name="line688"></a>    var res = fooprime();
+<a name="line689"></a>    assertEquals(obj.foo, res.foo);
+<a name="line690"></a>    assertEquals(&#39;hot&#39;, res.arg1);
+<a name="line691"></a>    assertEquals(&#39;dog&#39;, res.arg2);
+<a name="line692"></a>  }
+<a name="line693"></a>}
+<a name="line694"></a>
+<a name="line695"></a>function testBindDynArgs() {
+<a name="line696"></a>  if (Function.prototype.bind) {
+<a name="line697"></a>    var res = getFoo.bind(obj)(&#39;hot&#39;, &#39;dog&#39;);
+<a name="line698"></a>    assertEquals(obj.foo, res.foo);
+<a name="line699"></a>    assertEquals(&#39;hot&#39;, res.arg1);
+<a name="line700"></a>    assertEquals(&#39;dog&#39;, res.arg2);
+<a name="line701"></a>  }
+<a name="line702"></a>}
+<a name="line703"></a>
+<a name="line704"></a>function testBindCurriedArgs() {
+<a name="line705"></a>  if (Function.prototype.bind) {
+<a name="line706"></a>    var res = getFoo.bind(obj, &#39;hot&#39;)(&#39;dog&#39;);
+<a name="line707"></a>    assertEquals(obj.foo, res.foo);
+<a name="line708"></a>    assertEquals(&#39;hot&#39;, res.arg1);
+<a name="line709"></a>    assertEquals(&#39;dog&#39;, res.arg2);
+<a name="line710"></a>  }
+<a name="line711"></a>}
+<a name="line712"></a>
+<a name="line713"></a>function testBindDoubleBind() {
+<a name="line714"></a>  var getFooP = goog.bind(getFoo, obj, &#39;hot&#39;);
+<a name="line715"></a>  var getFooP2 = goog.bind(getFooP, null, &#39;dog&#39;);
+<a name="line716"></a>
+<a name="line717"></a>  var res = getFooP2();
+<a name="line718"></a>  assertEquals(&quot;res.arg1 should be &#39;hot&#39;&quot;, &#39;hot&#39;, res.arg1);
+<a name="line719"></a>  assertEquals(&quot;res.arg2 should be &#39;dog&#39;&quot;, &#39;dog&#39;, res.arg2);
+<a name="line720"></a>}
+<a name="line721"></a>
+<a name="line722"></a>function testBindWithCall() {
+<a name="line723"></a>  var obj = {};
+<a name="line724"></a>  var obj2 = {};
+<a name="line725"></a>  var f = function() {
+<a name="line726"></a>    assertEquals(&#39;this should be bound to obj&#39;, obj, this);
+<a name="line727"></a>  };
+<a name="line728"></a>  var b = goog.bind(f, obj);
+<a name="line729"></a>  b.call(null);
+<a name="line730"></a>  b.call(obj2);
+<a name="line731"></a>}
+<a name="line732"></a>
+<a name="line733"></a>function testBindJs() {
+<a name="line734"></a>  assertEquals(1, goog.bindJs_(add, {valueOf: function() { return 1; }})());
+<a name="line735"></a>  assertEquals(3, goog.bindJs_(add, null, 1, 2)());
+<a name="line736"></a>}
+<a name="line737"></a>
+<a name="line738"></a>function testBindNative() {
+<a name="line739"></a>  if (Function.prototype.bind &amp;&amp;
+<a name="line740"></a>      Function.prototype.bind.toString().indexOf(&#39;native code&#39;) != -1) {
+<a name="line741"></a>    assertEquals(
+<a name="line742"></a>        1, goog.bindNative_(add, {valueOf: function() { return 1; }})());
+<a name="line743"></a>    assertEquals(3, goog.bindNative_(add, null, 1, 2)());
+<a name="line744"></a>
+<a name="line745"></a>    assertThrows(function() {
+<a name="line746"></a>      goog.bindNative_(null, null);
+<a name="line747"></a>    });
+<a name="line748"></a>  }
+<a name="line749"></a>}
+<a name="line750"></a>
+<a name="line751"></a>function testBindDefault() {
+<a name="line752"></a>  assertEquals(
+<a name="line753"></a>      1, goog.bind(add, {valueOf: function() { return 1; }})());
+<a name="line754"></a>  assertEquals(3, goog.bind(add, null, 1, 2)());
+<a name="line755"></a>}
+<a name="line756"></a>
+<a name="line757"></a>function add(var_args) {
+<a name="line758"></a>  var sum = Number(this) || 0;
+<a name="line759"></a>  for (var i = 0; i &lt; arguments.length; i++) {
+<a name="line760"></a>    sum += arguments[i];
+<a name="line761"></a>  }
+<a name="line762"></a>  return sum;
+<a name="line763"></a>}
+<a name="line764"></a>
+<a name="line765"></a>function testPartial() {
+<a name="line766"></a>  var f = function(x, y) {
+<a name="line767"></a>    return x + y;
+<a name="line768"></a>  };
+<a name="line769"></a>  var g = goog.partial(f, 1);
+<a name="line770"></a>  assertEquals(3, g(2));
+<a name="line771"></a>
+<a name="line772"></a>  var h = goog.partial(f, 1, 2);
+<a name="line773"></a>  assertEquals(3, h());
+<a name="line774"></a>
+<a name="line775"></a>  var i = goog.partial(f);
+<a name="line776"></a>  assertEquals(3, i(1, 2));
+<a name="line777"></a>}
+<a name="line778"></a>
+<a name="line779"></a>function testPartialUsesGlobal() {
+<a name="line780"></a>  var f = function(x, y) {
+<a name="line781"></a>    assertEquals(goog.global, this);
+<a name="line782"></a>    return x + y;
+<a name="line783"></a>  };
+<a name="line784"></a>  var g = goog.partial(f, 1);
+<a name="line785"></a>  var h = goog.partial(g, 2);
+<a name="line786"></a>  assertEquals(3, h());
+<a name="line787"></a>}
+<a name="line788"></a>
+<a name="line789"></a>function testPartialWithCall() {
+<a name="line790"></a>  var obj = {};
+<a name="line791"></a>  var f = function(x, y) {
+<a name="line792"></a>    assertEquals(obj, this);
+<a name="line793"></a>    return x + y;
+<a name="line794"></a>  };
+<a name="line795"></a>  var g = goog.partial(f, 1);
+<a name="line796"></a>  var h = goog.partial(g, 2);
+<a name="line797"></a>  assertEquals(3, h.call(obj));
+<a name="line798"></a>}
+<a name="line799"></a>
+<a name="line800"></a>function testPartialAndBind() {
+<a name="line801"></a>  // This ensures that this &quot;survives&quot; through a partial.
+<a name="line802"></a>  var p = goog.partial(getFoo, &#39;hot&#39;);
+<a name="line803"></a>  var b = goog.bind(p, obj, &#39;dog&#39;);
+<a name="line804"></a>
+<a name="line805"></a>  var res = b();
+<a name="line806"></a>  assertEquals(obj.foo, res.foo);
+<a name="line807"></a>  assertEquals(&#39;hot&#39;, res.arg1);
+<a name="line808"></a>  assertEquals(&#39;dog&#39;, res.arg2);
+<a name="line809"></a>}
+<a name="line810"></a>
+<a name="line811"></a>function testBindAndPartial() {
+<a name="line812"></a>  // This ensures that this &quot;survives&quot; through a partial.
+<a name="line813"></a>  var b = goog.bind(getFoo, obj, &#39;hot&#39;);
+<a name="line814"></a>  var p = goog.partial(b, &#39;dog&#39;);
+<a name="line815"></a>
+<a name="line816"></a>  var res = p();
+<a name="line817"></a>  assertEquals(obj.foo, res.foo);
+<a name="line818"></a>  assertEquals(&#39;hot&#39;, res.arg1);
+<a name="line819"></a>  assertEquals(&#39;dog&#39;, res.arg2);
+<a name="line820"></a>}
+<a name="line821"></a>
+<a name="line822"></a>function testPartialMultipleCalls() {
+<a name="line823"></a>  var f = goog.testing.recordFunction();
+<a name="line824"></a>
+<a name="line825"></a>  var a = goog.partial(f, &#39;foo&#39;);
+<a name="line826"></a>  var b = goog.partial(a, &#39;bar&#39;);
+<a name="line827"></a>
+<a name="line828"></a>  a();
+<a name="line829"></a>  a();
+<a name="line830"></a>  b();
+<a name="line831"></a>  b();
+<a name="line832"></a>
+<a name="line833"></a>  assertEquals(4, f.getCallCount());
+<a name="line834"></a>
+<a name="line835"></a>  var calls = f.getCalls();
+<a name="line836"></a>  assertArrayEquals([&#39;foo&#39;], calls[0].getArguments());
+<a name="line837"></a>  assertArrayEquals([&#39;foo&#39;], calls[1].getArguments());
+<a name="line838"></a>  assertArrayEquals([&#39;foo&#39;, &#39;bar&#39;], calls[2].getArguments());
+<a name="line839"></a>  assertArrayEquals([&#39;foo&#39;, &#39;bar&#39;], calls[3].getArguments());
+<a name="line840"></a>}
+<a name="line841"></a>
+<a name="line842"></a>
+<a name="line843"></a>function testGlobalEval() {
+<a name="line844"></a>  goog.globalEval(&#39;var foofoofoo = 125;&#39;);
+<a name="line845"></a>  assertEquals(&#39;Var should be globally assigned&#39;, 125, goog.global.foofoofoo);
+<a name="line846"></a>  var foofoofoo = 128;
+<a name="line847"></a>  assertEquals(&#39;Global should not have changed&#39;, 125, goog.global.foofoofoo);
+<a name="line848"></a>
+<a name="line849"></a>  // NOTE(user): foofoofoo would normally be available in the function scope,
+<a name="line850"></a>  // via the scope chain, but the JsUnit framework seems to do something weird
+<a name="line851"></a>  // which makes it not work.
+<a name="line852"></a>}
+<a name="line853"></a>
+<a name="line854"></a>function testGlobalEvalWithHtml() {
+<a name="line855"></a>  // Make sure we don&#39;t trip on HTML markup in the code
+<a name="line856"></a>  goog.global.evalTestResult = &#39;failed&#39;;
+<a name="line857"></a>  goog.global.evalTest = function(arg) {
+<a name="line858"></a>    goog.global.evalTestResult = arg;
+<a name="line859"></a>  };
+<a name="line860"></a>
+<a name="line861"></a>  goog.globalEval(&#39;evalTest(&quot;&lt;test&gt;&quot;)&#39;);
+<a name="line862"></a>
+<a name="line863"></a>  assertEquals(&#39;Should be able to evaluate strings with HTML in&#39;,
+<a name="line864"></a>      &#39;&lt;test&gt;&#39;, goog.global.evalTestResult);
+<a name="line865"></a>}
+<a name="line866"></a>
+<a name="line867"></a>
+<a name="line868"></a>//=== tests for inherits ===
+<a name="line869"></a>
+<a name="line870"></a>function testInherits() {
+<a name="line871"></a>  function Foo() {};
+<a name="line872"></a>  function Bar() {};
+<a name="line873"></a>  goog.inherits(Bar, Foo);
+<a name="line874"></a>  var bar = new Bar();
+<a name="line875"></a>
+<a name="line876"></a>  assert(&#39;object should be instance of constructor&#39;,
+<a name="line877"></a>      bar instanceof Bar);
+<a name="line878"></a>  assert(&#39;object should be instance of base constructor&#39;,
+<a name="line879"></a>      bar instanceof Foo);
+<a name="line880"></a>}
+<a name="line881"></a>
+<a name="line882"></a>function testInherits_constructor() {
+<a name="line883"></a>  function Foo() {};
+<a name="line884"></a>  function Bar() {};
+<a name="line885"></a>  goog.inherits(Bar, Foo);
+<a name="line886"></a>  var bar = new Bar();
+<a name="line887"></a>
+<a name="line888"></a>  assertEquals(&#39;constructor property should match constructor function&#39;,
+<a name="line889"></a>      Bar, bar.constructor);
+<a name="line890"></a>  assertEquals(&#39;Superclass constructor should match constructor function&#39;,
+<a name="line891"></a>      Foo, Bar.superClass_.constructor);
+<a name="line892"></a>}
+<a name="line893"></a>
+<a name="line894"></a>
+<a name="line895"></a>//=== tests for makeSingleton ===
+<a name="line896"></a>function testMakeSingleton() {
+<a name="line897"></a>  function Foo() {};
+<a name="line898"></a>  goog.addSingletonGetter(Foo);
+<a name="line899"></a>
+<a name="line900"></a>  assertNotNull(&#39;Should add get instance function&#39;, Foo.getInstance);
+<a name="line901"></a>
+<a name="line902"></a>  var x = Foo.getInstance();
+<a name="line903"></a>  assertNotNull(&#39;Should successfully create an object&#39;, x);
+<a name="line904"></a>
+<a name="line905"></a>  var y = Foo.getInstance();
+<a name="line906"></a>  assertEquals(&#39;Should return the same object&#39;, x, y);
+<a name="line907"></a>
+<a name="line908"></a>  delete Foo.instance_;
+<a name="line909"></a>
+<a name="line910"></a>  var z = Foo.getInstance();
+<a name="line911"></a>  assertNotNull(&#39;Should work after clearing for testing&#39;, z);
+<a name="line912"></a>
+<a name="line913"></a>  assertNotEquals(&#39;Should return a different object after clearing for testing&#39;,
+<a name="line914"></a>      x, z);
+<a name="line915"></a>}
+<a name="line916"></a>
+<a name="line917"></a>
+<a name="line918"></a>//=== tests for now ===
+<a name="line919"></a>
+<a name="line920"></a>function testNow() {
+<a name="line921"></a>  var toleranceMilliseconds = 20;  // 10 ms was not enough for IE7.
+<a name="line922"></a>  var now1 = new Date().getTime();
+<a name="line923"></a>  var now2 = goog.now();
+<a name="line924"></a>  assertTrue(Math.abs(now1 - now2) &lt; toleranceMilliseconds);
+<a name="line925"></a>}
+<a name="line926"></a>
+<a name="line927"></a>
+<a name="line928"></a>//=== test non-html context ===
+<a name="line929"></a>
+<a name="line930"></a>function testInHtmlDocument() {
+<a name="line931"></a>  var savedGoogGlobal = goog.global;
+<a name="line932"></a>  try {
+<a name="line933"></a>    goog.global = {};
+<a name="line934"></a>    assertFalse(goog.inHtmlDocument_());
+<a name="line935"></a>    goog.global.document = {};
+<a name="line936"></a>    assertFalse(goog.inHtmlDocument_());
+<a name="line937"></a>    goog.global.document.write = function() {};
+<a name="line938"></a>    assertTrue(goog.inHtmlDocument_());
+<a name="line939"></a>  } finally {
+<a name="line940"></a>    // Restore context to respect other tests.
+<a name="line941"></a>    goog.global = savedGoogGlobal;
+<a name="line942"></a>  }
+<a name="line943"></a>}
+<a name="line944"></a>
+<a name="line945"></a>function testLoadInNonHtmlNotThrows() {
+<a name="line946"></a>  var savedGoogGlobal = goog.global;
+<a name="line947"></a>  try {
+<a name="line948"></a>    goog.global = {};
+<a name="line949"></a>    goog.global.document = {};
+<a name="line950"></a>    assertFalse(goog.inHtmlDocument_());
+<a name="line951"></a>    // The goog code which is executed at load.
+<a name="line952"></a>    goog.findBasePath_();
+<a name="line953"></a>    goog.writeScriptTag_(goog.basePath + &#39;deps.js&#39;);
+<a name="line954"></a>  } finally {
+<a name="line955"></a>    // Restore context to respect other tests.
+<a name="line956"></a>    goog.global = savedGoogGlobal;
+<a name="line957"></a>  }
+<a name="line958"></a>}
+<a name="line959"></a>
+<a name="line960"></a>function testLoadBaseWithQueryParamOk() {
+<a name="line961"></a>  var savedGoogGlobal = goog.global;
+<a name="line962"></a>  try {
+<a name="line963"></a>    goog.global = {};
+<a name="line964"></a>    goog.global.document = {
+<a name="line965"></a>      write: goog.nullFunction,
+<a name="line966"></a>      getElementsByTagName: goog.functions.constant(
+<a name="line967"></a>          [{src: &#39;/path/to/base.js?zx=5&#39;}])
+<a name="line968"></a>    };
+<a name="line969"></a>    assertTrue(goog.inHtmlDocument_());
+<a name="line970"></a>    goog.findBasePath_();
+<a name="line971"></a>    assertEquals(&#39;/path/to/&#39;, goog.basePath);
+<a name="line972"></a>  } finally {
+<a name="line973"></a>    // Restore context to respect other tests.
+<a name="line974"></a>    goog.global = savedGoogGlobal;
+<a name="line975"></a>  }
+<a name="line976"></a>}
+<a name="line977"></a>
+<a name="line978"></a>//=== tests for getmsg ===
+<a name="line979"></a>function testGetMsgWithDollarSigns() {
+<a name="line980"></a>  var msg = goog.getMsg(&#39;{$amount} per minute&#39;,
+<a name="line981"></a>      {amount: &#39;$0.15&#39;});
+<a name="line982"></a>  assertEquals(&#39;$0.15 per minute&#39;, msg);
+<a name="line983"></a>  msg = goog.getMsg(&#39;{$amount} per minute&#39;,
+<a name="line984"></a>      {amount: &#39;$0.$1$5&#39;});
+<a name="line985"></a>  assertEquals(&#39;$0.$1$5 per minute&#39;, msg);
+<a name="line986"></a>
+<a name="line987"></a>  msg = goog.getMsg(&#39;This is a {$rate} sale!&#39;,
+<a name="line988"></a>      {rate: &#39;$$$$$$$$$$10&#39;});
+<a name="line989"></a>  assertEquals(&#39;This is a $$$$$$$$$$10 sale!&#39;, msg);
+<a name="line990"></a>  msg = goog.getMsg(&#39;{$name}! Hamburgers: {$hCost}, Hotdogs: {$dCost}.&#39;, {
+<a name="line991"></a>    name: &#39;Burger Bob&#39;,
+<a name="line992"></a>    hCost: &#39;$0.50&#39;,
+<a name="line993"></a>    dCost: &#39;$100&#39;
+<a name="line994"></a>  });
+<a name="line995"></a>  assertEquals(&#39;Burger Bob! Hamburgers: $0.50, Hotdogs: $100.&#39;, msg);
+<a name="line996"></a>}
+<a name="line997"></a>
+<a name="line998"></a>
+<a name="line999"></a>//=== miscellaneous tests ===
+<a name="line1000"></a>
+<a name="line1001"></a>function testIdentity() {
+<a name="line1002"></a>  assertEquals(3, goog.identityFunction(3));
+<a name="line1003"></a>  assertEquals(3, goog.identityFunction(3, 4));
+<a name="line1004"></a>  assertEquals(null, goog.identityFunction(null));
+<a name="line1005"></a>  assertTrue(goog.identityFunction() === undefined);
+<a name="line1006"></a>}
+<a name="line1007"></a>
+<a name="line1008"></a>function testGetObjectByName() {
+<a name="line1009"></a>  var m = {
+<a name="line1010"></a>    &#39;undefined&#39;: undefined,
+<a name="line1011"></a>    &#39;null&#39;: null,
+<a name="line1012"></a>    emptyString: &#39;&#39;,
+<a name="line1013"></a>    &#39;false&#39;: false,
+<a name="line1014"></a>    &#39;true&#39;: true,
+<a name="line1015"></a>    zero: 0,
+<a name="line1016"></a>    one: 1,
+<a name="line1017"></a>    two: {
+<a name="line1018"></a>      three: 3,
+<a name="line1019"></a>      four: {
+<a name="line1020"></a>        five: 5
+<a name="line1021"></a>      }
+<a name="line1022"></a>    },
+<a name="line1023"></a>    &#39;six|seven&#39;: &#39;6|7&#39;,
+<a name="line1024"></a>    &#39;eight.nine&#39;: 8.9
+<a name="line1025"></a>  };
+<a name="line1026"></a>  goog.global.m = m;
+<a name="line1027"></a>
+<a name="line1028"></a>  assertNull(goog.getObjectByName(&#39;m.undefined&#39;));
+<a name="line1029"></a>  assertNull(goog.getObjectByName(&#39;m.null&#39;));
+<a name="line1030"></a>  assertEquals(goog.getObjectByName(&#39;m.emptyString&#39;), &#39;&#39;);
+<a name="line1031"></a>  assertEquals(goog.getObjectByName(&#39;m.false&#39;), false);
+<a name="line1032"></a>  assertEquals(goog.getObjectByName(&#39;m.true&#39;), true);
+<a name="line1033"></a>  assertEquals(goog.getObjectByName(&#39;m.zero&#39;), 0);
+<a name="line1034"></a>  assertEquals(goog.getObjectByName(&#39;m.one&#39;), 1);
+<a name="line1035"></a>  assertEquals(goog.getObjectByName(&#39;m.two.three&#39;), 3);
+<a name="line1036"></a>  assertEquals(goog.getObjectByName(&#39;m.two.four.five&#39;), 5);
+<a name="line1037"></a>  assertEquals(goog.getObjectByName(&#39;m.six|seven&#39;), &#39;6|7&#39;);
+<a name="line1038"></a>  assertNull(goog.getObjectByName(&#39;m.eight.nine&#39;));
+<a name="line1039"></a>  assertNull(goog.getObjectByName(&#39;m.notThere&#39;));
+<a name="line1040"></a>
+<a name="line1041"></a>  assertEquals(goog.getObjectByName(&#39;one&#39;, m), 1);
+<a name="line1042"></a>  assertEquals(goog.getObjectByName(&#39;two.three&#39;, m), 3);
+<a name="line1043"></a>  assertEquals(goog.getObjectByName(&#39;two.four.five&#39;, m), 5);
+<a name="line1044"></a>  assertEquals(goog.getObjectByName(&#39;six|seven&#39;, m), &#39;6|7&#39;);
+<a name="line1045"></a>  assertNull(goog.getObjectByName(&#39;eight.nine&#39;, m));
+<a name="line1046"></a>  assertNull(goog.getObjectByName(&#39;notThere&#39;, m));
+<a name="line1047"></a>}
+<a name="line1048"></a>
+<a name="line1049"></a>
+<a name="line1050"></a>function testGetCssName() {
+<a name="line1051"></a>  assertEquals(&#39;classname&#39;, goog.getCssName(&#39;classname&#39;));
+<a name="line1052"></a>  assertEquals(&#39;random-classname&#39;, goog.getCssName(&#39;random-classname&#39;));
+<a name="line1053"></a>  assertEquals(&#39;control-modifier&#39;, goog.getCssName(&#39;control&#39;, &#39;modifier&#39;));
+<a name="line1054"></a>
+<a name="line1055"></a>  goog.setCssNameMapping({
+<a name="line1056"></a>    &#39;goog&#39;: &#39;a&#39;,
+<a name="line1057"></a>    &#39;disabled&#39;: &#39;b&#39;
+<a name="line1058"></a>  }, &#39;BY_PART&#39;);
+<a name="line1059"></a>  var g = goog.getCssName(&#39;goog&#39;);
+<a name="line1060"></a>  assertEquals(&#39;a&#39;, g);
+<a name="line1061"></a>  assertEquals(&#39;a-b&#39;, goog.getCssName(g, &#39;disabled&#39;));
+<a name="line1062"></a>  assertEquals(&#39;a-b&#39;, goog.getCssName(&#39;goog-disabled&#39;));
+<a name="line1063"></a>  assertEquals(&#39;a-button&#39;, goog.getCssName(&#39;goog-button&#39;));
+<a name="line1064"></a>
+<a name="line1065"></a>  goog.setCssNameMapping({
+<a name="line1066"></a>    &#39;goog-button&#39;: &#39;a&#39;,
+<a name="line1067"></a>    &#39;active&#39;: &#39;b&#39;
+<a name="line1068"></a>  }, &#39;BY_WHOLE&#39;);
+<a name="line1069"></a>
+<a name="line1070"></a>  g = goog.getCssName(&#39;goog-button&#39;);
+<a name="line1071"></a>  assertEquals(&#39;a&#39;, g);
+<a name="line1072"></a>  assertEquals(&#39;a-b&#39;, goog.getCssName(g, &#39;active&#39;));
+<a name="line1073"></a>  assertEquals(&#39;goog-disabled&#39;, goog.getCssName(&#39;goog-disabled&#39;));
+<a name="line1074"></a>}
+<a name="line1075"></a>
+<a name="line1076"></a>function testAddDependency() {
+<a name="line1077"></a>  stubs.set(goog, &#39;writeScriptTag_&#39;, goog.nullFunction);
+<a name="line1078"></a>  stubs.set(goog, &#39;isDocumentFinishedLoading_&#39;, false);
+<a name="line1079"></a>
+<a name="line1080"></a>  goog.addDependency(
+<a name="line1081"></a>      &#39;foo.js&#39;,
+<a name="line1082"></a>      [&#39;testDep.foo&#39;],
+<a name="line1083"></a>      [&#39;testDep.bar&#39;]);
+<a name="line1084"></a>
+<a name="line1085"></a>  goog.provide(&#39;testDep.bar&#39;);
+<a name="line1086"></a>
+<a name="line1087"></a>  // To differentiate this call from the real one.
+<a name="line1088"></a>  var require = goog.require;
+<a name="line1089"></a>
+<a name="line1090"></a>  // this used to throw an exception
+<a name="line1091"></a>  require(&#39;testDep.foo&#39;);
+<a name="line1092"></a>
+<a name="line1093"></a>  assertTrue(goog.isObject(testDep.bar));
+<a name="line1094"></a>
+<a name="line1095"></a>  // Unset provided namespace so the test can be re-run.
+<a name="line1096"></a>  testDep = undefined;
+<a name="line1097"></a>}
+<a name="line1098"></a>
+<a name="line1099"></a>function testBaseMethod() {
+<a name="line1100"></a>  function A() {}
+<a name="line1101"></a>  A.prototype.foo = function(x, y) {
+<a name="line1102"></a>    return x + y;
+<a name="line1103"></a>  };
+<a name="line1104"></a>
+<a name="line1105"></a>  function B() {}
+<a name="line1106"></a>  goog.inherits(B, A);
+<a name="line1107"></a>  B.prototype.foo = function(x, y) {
+<a name="line1108"></a>    return 2 + goog.base(this, &#39;foo&#39;, x, y);
+<a name="line1109"></a>  };
+<a name="line1110"></a>
+<a name="line1111"></a>  function C() {}
+<a name="line1112"></a>  goog.inherits(C, B);
+<a name="line1113"></a>  C.prototype.foo = function(x, y) {
+<a name="line1114"></a>    return 4 + goog.base(this, &#39;foo&#39;, x, y);
+<a name="line1115"></a>  };
+<a name="line1116"></a>
+<a name="line1117"></a>  var d = new C();
+<a name="line1118"></a>  d.foo = function(x, y) {
+<a name="line1119"></a>    return 8 + goog.base(this, &#39;foo&#39;, x, y);
+<a name="line1120"></a>  };
+<a name="line1121"></a>
+<a name="line1122"></a>  assertEquals(15, d.foo(1, 0));
+<a name="line1123"></a>  assertEquals(16, d.foo(1, 1));
+<a name="line1124"></a>  assertEquals(16, d.foo(2, 0));
+<a name="line1125"></a>  assertEquals(7, (new C()).foo(1, 0));
+<a name="line1126"></a>  assertEquals(3, (new B()).foo(1, 0));
+<a name="line1127"></a>  assertThrows(function() {
+<a name="line1128"></a>    goog.base(d, &#39;foo&#39;, 1, 0);
+<a name="line1129"></a>  });
+<a name="line1130"></a>
+<a name="line1131"></a>  delete B.prototype.foo;
+<a name="line1132"></a>  assertEquals(13, d.foo(1, 0));
+<a name="line1133"></a>
+<a name="line1134"></a>  delete C.prototype.foo;
+<a name="line1135"></a>  assertEquals(9, d.foo(1, 0));
+<a name="line1136"></a>}
+<a name="line1137"></a>
+<a name="line1138"></a>function testBaseMethodAndBaseCtor() {
+<a name="line1139"></a>  // This will fail on FF4.0 if the following bug is not fixed:
+<a name="line1140"></a>  // https://bugzilla.mozilla.org/show_bug.cgi?id=586482
+<a name="line1141"></a>  function A(x, y) {
+<a name="line1142"></a>    this.foo(x, y);
+<a name="line1143"></a>  }
+<a name="line1144"></a>  A.prototype.foo = function(x, y) {
+<a name="line1145"></a>    this.bar = x + y;
+<a name="line1146"></a>  };
+<a name="line1147"></a>
+<a name="line1148"></a>  function B(x, y) {
+<a name="line1149"></a>    goog.base(this, x, y);
+<a name="line1150"></a>  }
+<a name="line1151"></a>  goog.inherits(B, A);
+<a name="line1152"></a>  B.prototype.foo = function(x, y) {
+<a name="line1153"></a>    goog.base(this, &#39;foo&#39;, x, y);
+<a name="line1154"></a>    this.bar = this.bar * 2;
+<a name="line1155"></a>  };
+<a name="line1156"></a>
+<a name="line1157"></a>  assertEquals(14, new B(3, 4).bar);
+<a name="line1158"></a>}
+<a name="line1159"></a>
+<a name="line1160"></a>function testBaseClass() {
+<a name="line1161"></a>  function A(x, y) {
+<a name="line1162"></a>    this.foo = x + y;
+<a name="line1163"></a>  }
+<a name="line1164"></a>
+<a name="line1165"></a>  function B(x, y) {
+<a name="line1166"></a>    goog.base(this, x, y);
+<a name="line1167"></a>    this.foo += 2;
+<a name="line1168"></a>  }
+<a name="line1169"></a>  goog.inherits(B, A);
+<a name="line1170"></a>
+<a name="line1171"></a>  function C(x, y) {
+<a name="line1172"></a>    goog.base(this, x, y);
+<a name="line1173"></a>    this.foo += 4;
+<a name="line1174"></a>  }
+<a name="line1175"></a>  goog.inherits(C, B);
+<a name="line1176"></a>
+<a name="line1177"></a>  function D(x, y) {
+<a name="line1178"></a>    goog.base(this, x, y);
+<a name="line1179"></a>    this.foo += 8;
+<a name="line1180"></a>  }
+<a name="line1181"></a>  goog.inherits(D, C);
+<a name="line1182"></a>
+<a name="line1183"></a>  assertEquals(15, (new D(1, 0)).foo);
+<a name="line1184"></a>  assertEquals(16, (new D(1, 1)).foo);
+<a name="line1185"></a>  assertEquals(16, (new D(2, 0)).foo);
+<a name="line1186"></a>  assertEquals(7, (new C(1, 0)).foo);
+<a name="line1187"></a>  assertEquals(3, (new B(1, 0)).foo);
+<a name="line1188"></a>}
+<a name="line1189"></a>
+<a name="line1190"></a>function testClassBaseOnMethod() {
+<a name="line1191"></a>  function A() {}
+<a name="line1192"></a>  A.prototype.foo = function(x, y) {
+<a name="line1193"></a>    return x + y;
+<a name="line1194"></a>  };
+<a name="line1195"></a>
+<a name="line1196"></a>  function B() {}
+<a name="line1197"></a>  goog.inherits(B, A);
+<a name="line1198"></a>  B.prototype.foo = function(x, y) {
+<a name="line1199"></a>    return 2 + B.base(this, &#39;foo&#39;, x, y);
+<a name="line1200"></a>  };
+<a name="line1201"></a>
+<a name="line1202"></a>  function C() {}
+<a name="line1203"></a>  goog.inherits(C, B);
+<a name="line1204"></a>  C.prototype.foo = function(x, y) {
+<a name="line1205"></a>    return 4 + C.base(this, &#39;foo&#39;, x, y);
+<a name="line1206"></a>  };
+<a name="line1207"></a>
+<a name="line1208"></a>  var d = new C();
+<a name="line1209"></a>  assertEquals(7, d.foo(1, 0));
+<a name="line1210"></a>  assertEquals(8, d.foo(1, 1));
+<a name="line1211"></a>  assertEquals(8, d.foo(2, 0));
+<a name="line1212"></a>  assertEquals(3, (new B()).foo(1, 0));
+<a name="line1213"></a>
+<a name="line1214"></a>  delete B.prototype.foo;
+<a name="line1215"></a>  assertEquals(5, d.foo(1, 0));
+<a name="line1216"></a>
+<a name="line1217"></a>  delete C.prototype.foo;
+<a name="line1218"></a>  assertEquals(1, d.foo(1, 0));
+<a name="line1219"></a>}
+<a name="line1220"></a>
+<a name="line1221"></a>function testClassBaseOnConstructor() {
+<a name="line1222"></a>  function A(x, y) {
+<a name="line1223"></a>    this.foo = x + y;
+<a name="line1224"></a>  }
+<a name="line1225"></a>
+<a name="line1226"></a>  function B(x, y) {
+<a name="line1227"></a>    B.base(this, &#39;constructor&#39;, x, y);
+<a name="line1228"></a>    this.foo += 2;
+<a name="line1229"></a>  }
+<a name="line1230"></a>  goog.inherits(B, A);
+<a name="line1231"></a>
+<a name="line1232"></a>  function C(x, y) {
+<a name="line1233"></a>    C.base(this, &#39;constructor&#39;, x, y);
+<a name="line1234"></a>    this.foo += 4;
+<a name="line1235"></a>  }
+<a name="line1236"></a>  goog.inherits(C, B);
+<a name="line1237"></a>
+<a name="line1238"></a>  function D(x, y) {
+<a name="line1239"></a>    D.base(this, &#39;constructor&#39;, x, y);
+<a name="line1240"></a>    this.foo += 8;
+<a name="line1241"></a>  }
+<a name="line1242"></a>  goog.inherits(D, C);
+<a name="line1243"></a>
+<a name="line1244"></a>  assertEquals(15, (new D(1, 0)).foo);
+<a name="line1245"></a>  assertEquals(16, (new D(1, 1)).foo);
+<a name="line1246"></a>  assertEquals(16, (new D(2, 0)).foo);
+<a name="line1247"></a>  assertEquals(7, (new C(1, 0)).foo);
+<a name="line1248"></a>  assertEquals(3, (new B(1, 0)).foo);
+<a name="line1249"></a>}
+<a name="line1250"></a>
+<a name="line1251"></a>function testClassBaseOnMethodAndBaseCtor() {
+<a name="line1252"></a>  function A(x, y) {
+<a name="line1253"></a>    this.foo(x, y);
+<a name="line1254"></a>  }
+<a name="line1255"></a>  A.prototype.foo = function(x, y) {
+<a name="line1256"></a>    this.bar = x + y;
+<a name="line1257"></a>  };
+<a name="line1258"></a>
+<a name="line1259"></a>  function B(x, y) {
+<a name="line1260"></a>    B.base(this, &#39;constructor&#39;, x, y);
+<a name="line1261"></a>  }
+<a name="line1262"></a>  goog.inherits(B, A);
+<a name="line1263"></a>  B.prototype.foo = function(x, y) {
+<a name="line1264"></a>    B.base(this, &#39;foo&#39;, x, y);
+<a name="line1265"></a>    this.bar = this.bar * 2;
+<a name="line1266"></a>  };
+<a name="line1267"></a>
+<a name="line1268"></a>  assertEquals(14, new B(3, 4).bar);
+<a name="line1269"></a>}
+<a name="line1270"></a>
+<a name="line1271"></a>function testGoogRequireCheck() {
+<a name="line1272"></a>  stubs.set(goog, &#39;ENABLE_DEBUG_LOADER&#39;, false);
+<a name="line1273"></a>  stubs.set(goog, &#39;useStrictRequires&#39;, true);
+<a name="line1274"></a>  stubs.set(goog, &#39;implicitNamespaces_&#39;, {});
+<a name="line1275"></a>
+<a name="line1276"></a>  // Aliased so that build tools do not mistake this for an actual call.
+<a name="line1277"></a>  var require = goog.require;
+<a name="line1278"></a>  assertThrows(&#39;Requiring non-required namespace should fail&#39;,
+<a name="line1279"></a>      function() {
+<a name="line1280"></a>        require(&#39;far.out&#39;);
+<a name="line1281"></a>      });
+<a name="line1282"></a>
+<a name="line1283"></a>  assertUndefined(goog.global.far);
+<a name="line1284"></a>  assertEvaluatesToFalse(goog.getObjectByName(&#39;far.out&#39;));
+<a name="line1285"></a>  assertObjectEquals({}, goog.implicitNamespaces_);
+<a name="line1286"></a>  assertFalse(goog.isProvided_(&#39;far.out&#39;));
+<a name="line1287"></a>
+<a name="line1288"></a>  goog.provide(&#39;far.out&#39;);
+<a name="line1289"></a>
+<a name="line1290"></a>  assertNotUndefined(far.out);
+<a name="line1291"></a>  assertEvaluatesToTrue(goog.getObjectByName(&#39;far.out&#39;));
+<a name="line1292"></a>  assertObjectEquals({&#39;far&#39;: true}, goog.implicitNamespaces_);
+<a name="line1293"></a>  assertTrue(goog.isProvided_(&#39;far.out&#39;));
+<a name="line1294"></a>
+<a name="line1295"></a>  goog.global.far.out = 42;
+<a name="line1296"></a>  assertEquals(42, goog.getObjectByName(&#39;far.out&#39;));
+<a name="line1297"></a>  assertTrue(goog.isProvided_(&#39;far.out&#39;));
+<a name="line1298"></a>
+<a name="line1299"></a>  // Empty string should be allowed.
+<a name="line1300"></a>  goog.global.far.out = &#39;&#39;;
+<a name="line1301"></a>  assertEquals(&#39;&#39;, goog.getObjectByName(&#39;far.out&#39;));
+<a name="line1302"></a>  assertTrue(goog.isProvided_(&#39;far.out&#39;));
+<a name="line1303"></a>
+<a name="line1304"></a>  // Null or undefined are not allowed.
+<a name="line1305"></a>  goog.global.far.out = null;
+<a name="line1306"></a>  assertNull(goog.getObjectByName(&#39;far.out&#39;));
+<a name="line1307"></a>  assertFalse(goog.isProvided_(&#39;far.out&#39;));
+<a name="line1308"></a>
+<a name="line1309"></a>  goog.global.far.out = undefined;
+<a name="line1310"></a>  assertNull(goog.getObjectByName(&#39;far.out&#39;));
+<a name="line1311"></a>  assertFalse(goog.isProvided_(&#39;far.out&#39;));
+<a name="line1312"></a>
+<a name="line1313"></a>  stubs.reset();
+<a name="line1314"></a>  delete far;
+<a name="line1315"></a>}
+<a name="line1316"></a>
+<a name="line1317"></a>function testLateRequireProtection() {
+<a name="line1318"></a>  if (!document.readyState) return;
+<a name="line1319"></a>  var e = assertThrows(function() {
+<a name="line1320"></a>    // To differentiate this call from the real one.
+<a name="line1321"></a>    var require = goog.require;
+<a name="line1322"></a>    require(&#39;goog.ui.Component&#39;);
+<a name="line1323"></a>  });
+<a name="line1324"></a>
+<a name="line1325"></a>  assertContains(&#39;after document load&#39;, e.message);
+<a name="line1326"></a>}
+</pre>
+
+
+</body>
+</html>

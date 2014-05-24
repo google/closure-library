@@ -1,0 +1,266 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>savedcaretrange.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_savedcaretrange.js.html">savedcaretrange.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview An API for saving and restoring ranges as HTML carets.
+<a name="line17"></a> *
+<a name="line18"></a> * @author nicksantos@google.com (Nick Santos)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.dom.SavedCaretRange&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.SavedRange&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line28"></a>goog.require(&#39;goog.string&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * A struct for holding context about saved selections.
+<a name="line34"></a> * This can be used to preserve the selection and restore while the DOM is
+<a name="line35"></a> * manipulated, or through an asynchronous call. Use goog.dom.Range factory
+<a name="line36"></a> * methods to obtain an {@see goog.dom.AbstractRange} instance, and use
+<a name="line37"></a> * {@see goog.dom.AbstractRange#saveUsingCarets} to obtain a SavedCaretRange.
+<a name="line38"></a> * For editor ranges under content-editable elements or design-mode iframes,
+<a name="line39"></a> * prefer using {@see goog.editor.range.saveUsingNormalizedCarets}.
+<a name="line40"></a> * @param {goog.dom.AbstractRange} range The range being saved.
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @extends {goog.dom.SavedRange}
+<a name="line43"></a> */
+<a name="line44"></a>goog.dom.SavedCaretRange = function(range) {
+<a name="line45"></a>  goog.dom.SavedRange.call(this);
+<a name="line46"></a>
+<a name="line47"></a>  /**
+<a name="line48"></a>   * The DOM id of the caret at the start of the range.
+<a name="line49"></a>   * @type {string}
+<a name="line50"></a>   * @private
+<a name="line51"></a>   */
+<a name="line52"></a>  this.startCaretId_ = goog.string.createUniqueString();
+<a name="line53"></a>
+<a name="line54"></a>  /**
+<a name="line55"></a>   * The DOM id of the caret at the end of the range.
+<a name="line56"></a>   * @type {string}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.endCaretId_ = goog.string.createUniqueString();
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * Whether the range is reversed (anchor at the end).
+<a name="line63"></a>   * @private {boolean}
+<a name="line64"></a>   */
+<a name="line65"></a>  this.reversed_ = range.isReversed();
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * A DOM helper for storing the current document context.
+<a name="line69"></a>   * @type {goog.dom.DomHelper}
+<a name="line70"></a>   * @private
+<a name="line71"></a>   */
+<a name="line72"></a>  this.dom_ = goog.dom.getDomHelper(range.getDocument());
+<a name="line73"></a>
+<a name="line74"></a>  range.surroundWithNodes(this.createCaret_(true), this.createCaret_(false));
+<a name="line75"></a>};
+<a name="line76"></a>goog.inherits(goog.dom.SavedCaretRange, goog.dom.SavedRange);
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Gets the range that this SavedCaretRage represents, without selecting it
+<a name="line81"></a> * or removing the carets from the DOM.
+<a name="line82"></a> * @return {goog.dom.AbstractRange?} An abstract range.
+<a name="line83"></a> */
+<a name="line84"></a>goog.dom.SavedCaretRange.prototype.toAbstractRange = function() {
+<a name="line85"></a>  var range = null;
+<a name="line86"></a>  var startCaret = this.getCaret(true);
+<a name="line87"></a>  var endCaret = this.getCaret(false);
+<a name="line88"></a>  if (startCaret &amp;&amp; endCaret) {
+<a name="line89"></a>    /** @suppress {missingRequire} circular dependency */
+<a name="line90"></a>    range = goog.dom.Range.createFromNodes(startCaret, 0, endCaret, 0);
+<a name="line91"></a>  }
+<a name="line92"></a>  return range;
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Gets carets.
+<a name="line98"></a> * @param {boolean} start If true, returns the start caret. Otherwise, get the
+<a name="line99"></a> *     end caret.
+<a name="line100"></a> * @return {Element} The start or end caret in the given document.
+<a name="line101"></a> */
+<a name="line102"></a>goog.dom.SavedCaretRange.prototype.getCaret = function(start) {
+<a name="line103"></a>  return this.dom_.getElement(start ? this.startCaretId_ : this.endCaretId_);
+<a name="line104"></a>};
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Removes the carets from the current restoration document.
+<a name="line109"></a> * @param {goog.dom.AbstractRange=} opt_range A range whose offsets have already
+<a name="line110"></a> *     been adjusted for caret removal; it will be adjusted if it is also
+<a name="line111"></a> *     affected by post-removal operations, such as text node normalization.
+<a name="line112"></a> * @return {goog.dom.AbstractRange|undefined} The adjusted range, if opt_range
+<a name="line113"></a> *     was provided.
+<a name="line114"></a> */
+<a name="line115"></a>goog.dom.SavedCaretRange.prototype.removeCarets = function(opt_range) {
+<a name="line116"></a>  goog.dom.removeNode(this.getCaret(true));
+<a name="line117"></a>  goog.dom.removeNode(this.getCaret(false));
+<a name="line118"></a>  return opt_range;
+<a name="line119"></a>};
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Sets the document where the range will be restored.
+<a name="line124"></a> * @param {!Document} doc An HTML document.
+<a name="line125"></a> */
+<a name="line126"></a>goog.dom.SavedCaretRange.prototype.setRestorationDocument = function(doc) {
+<a name="line127"></a>  this.dom_.setDocument(doc);
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Reconstruct the selection from the given saved range. Removes carets after
+<a name="line133"></a> * restoring the selection. If restore does not dispose this saved range, it may
+<a name="line134"></a> * only be restored a second time if innerHTML or some other mechanism is used
+<a name="line135"></a> * to restore the carets to the dom.
+<a name="line136"></a> * @return {goog.dom.AbstractRange?} Restored selection.
+<a name="line137"></a> * @override
+<a name="line138"></a> * @protected
+<a name="line139"></a> */
+<a name="line140"></a>goog.dom.SavedCaretRange.prototype.restoreInternal = function() {
+<a name="line141"></a>  var range = null;
+<a name="line142"></a>  var anchorCaret = this.getCaret(!this.reversed_);
+<a name="line143"></a>  var focusCaret = this.getCaret(this.reversed_);
+<a name="line144"></a>  if (anchorCaret &amp;&amp; focusCaret) {
+<a name="line145"></a>    var anchorNode = anchorCaret.parentNode;
+<a name="line146"></a>    var anchorOffset = goog.array.indexOf(anchorNode.childNodes, anchorCaret);
+<a name="line147"></a>    var focusNode = focusCaret.parentNode;
+<a name="line148"></a>    var focusOffset = goog.array.indexOf(focusNode.childNodes, focusCaret);
+<a name="line149"></a>    if (focusNode == anchorNode) {
+<a name="line150"></a>      // Compensate for the start caret being removed.
+<a name="line151"></a>      if (this.reversed_) {
+<a name="line152"></a>        anchorOffset--;
+<a name="line153"></a>      } else {
+<a name="line154"></a>        focusOffset--;
+<a name="line155"></a>      }
+<a name="line156"></a>    }
+<a name="line157"></a>    /** @suppress {missingRequire} circular dependency */
+<a name="line158"></a>    range = goog.dom.Range.createFromNodes(anchorNode, anchorOffset,
+<a name="line159"></a>                                           focusNode, focusOffset);
+<a name="line160"></a>    range = this.removeCarets(range);
+<a name="line161"></a>    range.select();
+<a name="line162"></a>  } else {
+<a name="line163"></a>    // If only one caret was found, remove it.
+<a name="line164"></a>    this.removeCarets();
+<a name="line165"></a>  }
+<a name="line166"></a>  return range;
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Dispose the saved range and remove the carets from the DOM.
+<a name="line172"></a> * @override
+<a name="line173"></a> * @protected
+<a name="line174"></a> */
+<a name="line175"></a>goog.dom.SavedCaretRange.prototype.disposeInternal = function() {
+<a name="line176"></a>  this.removeCarets();
+<a name="line177"></a>  this.dom_ = null;
+<a name="line178"></a>};
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Creates a caret element.
+<a name="line183"></a> * @param {boolean} start If true, creates the start caret. Otherwise,
+<a name="line184"></a> *     creates the end caret.
+<a name="line185"></a> * @return {!Element} The new caret element.
+<a name="line186"></a> * @private
+<a name="line187"></a> */
+<a name="line188"></a>goog.dom.SavedCaretRange.prototype.createCaret_ = function(start) {
+<a name="line189"></a>  return this.dom_.createDom(goog.dom.TagName.SPAN,
+<a name="line190"></a>      {&#39;id&#39;: start ? this.startCaretId_ : this.endCaretId_});
+<a name="line191"></a>};
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>/**
+<a name="line195"></a> * A regex that will match all saved range carets in a string.
+<a name="line196"></a> * @type {RegExp}
+<a name="line197"></a> */
+<a name="line198"></a>goog.dom.SavedCaretRange.CARET_REGEX = /&lt;span\s+id=&quot;?goog_\d+&quot;?&gt;&lt;\/span&gt;/ig;
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * Returns whether two strings of html are equal, ignoring any saved carets.
+<a name="line203"></a> * Thus two strings of html whose only difference is the id of their saved
+<a name="line204"></a> * carets will be considered equal, since they represent html with the
+<a name="line205"></a> * same selection.
+<a name="line206"></a> * @param {string} str1 The first string.
+<a name="line207"></a> * @param {string} str2 The second string.
+<a name="line208"></a> * @return {boolean} Whether two strings of html are equal, ignoring any
+<a name="line209"></a> *     saved carets.
+<a name="line210"></a> */
+<a name="line211"></a>goog.dom.SavedCaretRange.htmlEqual = function(str1, str2) {
+<a name="line212"></a>  return str1 == str2 ||
+<a name="line213"></a>      str1.replace(goog.dom.SavedCaretRange.CARET_REGEX, &#39;&#39;) ==
+<a name="line214"></a>          str2.replace(goog.dom.SavedCaretRange.CARET_REGEX, &#39;&#39;);
+<a name="line215"></a>};
+</pre>
+
+
+</body>
+</html>

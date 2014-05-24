@@ -1,0 +1,1862 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>node.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">node.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_editor_node.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/editor/node.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/editor/node.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.findHighestMatchingAncestor"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">findHighestMatchingAncestor<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">hasProperty</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Search ancestor nodes using a predicate function and returns the topmost
+ancestor in the chain of consecutive ancestors that satisfies the condition.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node whose ancestors have to be searched.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">hasProperty</span>
+        : <span class="type">function(Node): boolean</span>
+        <div class="entryOverview">A function that takes a parent
+    node as a parameter and returns true if it meets the criteria.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The topmost ancestor or null if no ancestor satisfies the
+    predicate function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line325">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.findInChildren"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">findInChildren<span class="args">(<span class="arg">parent</span>,&nbsp;<span class="arg">hasProperty</span>)</span>
+        </span>
+        &#8658; <span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Search child nodes using a predicate function and return the first node that
+satisfies the condition.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The parent node to search.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">hasProperty</span>
+        : <span class="type">function(Node):boolean</span>
+        <div class="entryOverview">A function that takes a child
+   node as a parameter and returns true if it meets the criteria.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>?</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The index of the node found, or null if no node is found.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line305">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.findTopMostEditableAncestor"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">findTopMostEditableAncestor<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">criteria</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Finds the top-most DOM node inside an editable field that is an ancestor
+(or self) of a given DOM node and meets the specified criteria.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The DOM node where the search starts.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">criteria</span>
+        : <span class="type">function(Node) : boolean</span>
+        <div class="entryOverview">A function that takes a DOM node
+    as a parameter and returns a boolean to indicate whether the node meets
+    the criteria or not.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The DOM node if found, or null.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line393">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.getChildHelper_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">getChildHelper_<span class="args">(<span class="arg">parent</span>,&nbsp;<span class="arg">isReversed</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Internal helper for lastChild/firstChild that skips nodes that are entirely
+whitespace or comments.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The reference node.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">isReversed</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">Whether children should be traversed forward
+    or backward.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The first/last child of sibling that is important according
+    to goog.editor.node.isImportant, or null if no such node exists.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line210">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.getFirstChild"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">getFirstChild<span class="args">(<span class="arg">parent</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Version of firstChild that skips nodes that are entirely
+whitespace and comments.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The reference node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The first child of sibling that is important according to
+    goog.editor.node.isImportant, or null if no such node exists.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line149">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.getFirstValue_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">getFirstValue_<span class="args">(<span class="arg">iterator</span>)</span>
+        </span>
+        &#8658; <span class="type">*</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Utility function that returns the first value from an iterator or null if
+the iterator is empty.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterator</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>
+        <div class="entryOverview">The iterator to get a value from.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">*</span>&nbsp;
+            The first value from the iterator.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line226">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.getLastChild"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">getLastChild<span class="args">(<span class="arg">parent</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Version of lastChild that skips nodes that are entirely whitespace or
+comments.  (Normally lastChild is a property of all DOM nodes that gives the
+last of the nodes contained directly in the reference node.)
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The reference node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The last child of sibling that is important according to
+    goog.editor.node.isImportant, or null if no such node exists.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line162">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.getLeftMostLeaf"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">getLeftMostLeaf<span class="args">(<span class="arg">parent</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Get the left-most non-ignorable leaf node of the given node.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The parent ndoe.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The left-most non-ignorable leaf node.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line133">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.getLength"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">getLength<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the length of the text in node if it is a text node, or the number
+of children of the node, if it is an element. Useful for range-manipulation
+code where you need to know the offset for the right side of the node.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to get the length of.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The length of the node.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line292">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.getNextSibling"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">getNextSibling<span class="args">(<span class="arg">sibling</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Version of nextSibling that skips nodes that are entirely whitespace or
+comments.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">sibling</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The reference node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The closest next sibling to sibling that is important
+    according to goog.editor.node.isImportant, or null if no
+    such node exists.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line193">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.getPreviousSibling"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">getPreviousSibling<span class="args">(<span class="arg">sibling</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Version of previoussibling that skips nodes that are entirely
+whitespace or comments.  (Normally previousSibling is a property
+of all DOM nodes that gives the sibling node, the node that is
+a child of the same parent, that occurs immediately before the
+reference node.)
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">sibling</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The reference node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The closest previous sibling to sibling that is
+    important according to goog.editor.node.isImportant, or null if no such
+    node exists.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line178">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.getRightMostLeaf"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">getRightMostLeaf<span class="args">(<span class="arg">parent</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Get the right-most non-ignorable leaf node of the given node.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The parent ndoe.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The right-most non-ignorable leaf node.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line119">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.getSecondHalfOfNode_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">getSecondHalfOfNode_<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">startNode</span>,&nbsp;<span class="arg">firstChild</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a clone of node, moving all children after startNode to it.
+When firstChild is not null or undefined, it is also appended to the clone
+as the first child.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to clone.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">startNode</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">All siblings after this node will be moved to the
+    clone.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">firstChild</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span><span>&nbsp;|&nbsp;</span><span class="type">undefined</span>
+        <div class="entryOverview">The first child of the new cloned element.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The cloned node that now contains the children after
+    startNode.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line438">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.isAllNonNbspWhiteSpace"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">isAllNonNbspWhiteSpace<span class="args">(<span class="arg">textNode</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Determine whether a node's text content is entirely whitespace.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">textNode</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">A node implementing the CharacterData interface (i.e.,
+    a Text, Comment, or CDATASection node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the text content of node is whitespace,
+    otherwise false.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line257">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.isBlockTag"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">isBlockTag<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Checks if node is a block-level html element. The <tt>display</tt> css
+property is ignored.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to test.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the node is a block-level node.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line342">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.isEditable"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">isEditable<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Checks if a node is inside an editable container.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to test.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the node is in an editable container.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line379">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.isEditableContainer"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">isEditableContainer<span class="args">(<span class="arg">element</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Checks if an element is a top-level editable container (meaning that
+it itself is not editable, but all its child nodes are editable).
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">element</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The element to test.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the element is a top-level editable container.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line368">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.isEmpty"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">isEmpty<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">opt_prohibitSingleNbsp</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns true if the node contains only whitespace and is not and does not
+contain any images, iframes or embed tags.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to check.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_prohibitSingleNbsp</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">By default, this function treats a
+    single nbsp as empty.  Set this to true to treat this case as non-empty.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the node contains only whitespace.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line270">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.isImportant"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">isImportant<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Determine if a node should be returned by the iterator functions.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">An object implementing the DOM1 Node interface.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the node is an element, or a text node that
+    is not all whitespace.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line242">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.isStandardsMode"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">isStandardsMode<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Check if the node is in a standards mode document.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to test.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the node is in a standards mode document.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line109">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.replaceInnerHtml"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">replaceInnerHtml<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">html</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Replaces the innerHTML of a node.
+
+IE has serious problems if you try to set innerHTML of an editable node with
+any selection. Early versions of IE tear up the old internal tree storage, to
+help avoid ref-counting loops. But this sometimes leaves the selection object
+in a bad state and leads to segfaults.
+
+Removing the nodes first prevents IE from tearing them up. This is not
+strictly necessary in nodes that do not have the selection. You should always
+use this function when setting innerHTML inside of a field.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">A node.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">html</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The innerHTML to set on the node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line477">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.skipEmptyTextNodes"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">skipEmptyTextNodes<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Skips siblings of a node that are empty text nodes.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">A node. May be null.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The node or the first sibling of the node that is not an
+    empty text node. May be null.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line353">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.node.splitDomTreeAt"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">splitDomTreeAt<span class="args">(<span class="arg">currentNode</span>,&nbsp;<span class="arg">opt_secondHalf</span>,&nbsp;<span class="arg">opt_root</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Splits off a subtree.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">currentNode</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The starting splitting point.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_secondHalf</span>
+        : <span class="type">Node=</span>
+        <div class="entryOverview">The initial leftmost leaf the new subtree.
+    If null, siblings after currentNode will be placed in the subtree, but
+    no additional node will be.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_root</span>
+        : <span class="type">Node=</span>
+        <div class="entryOverview">The top of the tree where splitting stops at.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>&nbsp;
+            The new subtree.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line414">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td class="deprecated">
+    <a name="goog.editor.node.transferChildren"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.node.</span><span class="entryName">transferChildren<span class="args">(<span class="arg">newNode</span>,&nbsp;<span class="arg">oldNode</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class="deprecatedMessage">Use goog.dom.append directly instead.</span>
+       Appends all of oldNode's children to newNode. This removes all children from
+oldNode and appends them to newNode. oldNode is left with no children.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">newNode</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">Node to transfer children to.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">oldNode</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">Node to transfer children from.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_node.js.source.html#line457">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory editor</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/editor/node.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

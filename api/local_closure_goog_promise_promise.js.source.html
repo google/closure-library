@@ -1,0 +1,1036 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>promise.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_promise_promise.js.html">promise.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.Promise&#39;);
+<a name="line16"></a>
+<a name="line17"></a>goog.require(&#39;goog.Thenable&#39;);
+<a name="line18"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line19"></a>goog.require(&#39;goog.async.run&#39;);
+<a name="line20"></a>goog.require(&#39;goog.async.throwException&#39;);
+<a name="line21"></a>goog.require(&#39;goog.debug.Error&#39;);
+<a name="line22"></a>goog.require(&#39;goog.promise.Resolver&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Promises provide a result that may be resolved asynchronously. A Promise may
+<a name="line28"></a> * be resolved by being fulfilled or rejected with a value, which will be known
+<a name="line29"></a> * as the fulfillment value or the rejection reason. Whether fulfilled or
+<a name="line30"></a> * rejected, the Promise result is immutable once it is set.
+<a name="line31"></a> *
+<a name="line32"></a> * Promises may represent results of any type, including undefined. Rejection
+<a name="line33"></a> * reasons are typically Errors, but may also be of any type. Closure Promises
+<a name="line34"></a> * allow for optional type annotations that enforce that fulfillment values are
+<a name="line35"></a> * of the appropriate types at compile time.
+<a name="line36"></a> *
+<a name="line37"></a> * The result of a Promise is accessible by calling {@code then} and registering
+<a name="line38"></a> * {@code onFulfilled} and {@code onRejected} callbacks. Once the Promise
+<a name="line39"></a> * resolves, the relevant callbacks are invoked with the fulfillment value or
+<a name="line40"></a> * rejection reason as argument. Callbacks are always invoked in the order they
+<a name="line41"></a> * were registered, even when additional {@code then} calls are made from inside
+<a name="line42"></a> * another callback. A callback is always run asynchronously sometime after the
+<a name="line43"></a> * scope containing the registering {@code then} invocation has returned.
+<a name="line44"></a> *
+<a name="line45"></a> * If a Promise is resolved with another Promise, the first Promise will block
+<a name="line46"></a> * until the second is resolved, and then assumes the same result as the second
+<a name="line47"></a> * Promise. This allows Promises to depend on the results of other Promises,
+<a name="line48"></a> * linking together multiple asynchronous operations.
+<a name="line49"></a> *
+<a name="line50"></a> * This implementation is compatible with the Promises/A+ specification and
+<a name="line51"></a> * passes that specification&#39;s conformance test suite. A Closure Promise may be
+<a name="line52"></a> * resolved with a Promise instance (or sufficiently compatible Promise-like
+<a name="line53"></a> * object) created by other Promise implementations. From the specification,
+<a name="line54"></a> * Promise-like objects are known as &quot;Thenables&quot;.
+<a name="line55"></a> *
+<a name="line56"></a> * @see http://promisesaplus.com/
+<a name="line57"></a> *
+<a name="line58"></a> * @param {function(
+<a name="line59"></a> *             this:RESOLVER_CONTEXT,
+<a name="line60"></a> *             function((TYPE|IThenable.&lt;TYPE&gt;|Thenable)=),
+<a name="line61"></a> *             function(*)): void} resolver
+<a name="line62"></a> *     Initialization function that is invoked immediately with {@code resolve}
+<a name="line63"></a> *     and {@code reject} functions as arguments. The Promise is resolved or
+<a name="line64"></a> *     rejected with the first argument passed to either function.
+<a name="line65"></a> * @param {RESOLVER_CONTEXT=} opt_context An optional context for executing the
+<a name="line66"></a> *     resolver function. If unspecified, the resolver function will be executed
+<a name="line67"></a> *     in the default scope.
+<a name="line68"></a> * @constructor
+<a name="line69"></a> * @struct
+<a name="line70"></a> * @final
+<a name="line71"></a> * @implements {goog.Thenable.&lt;TYPE&gt;}
+<a name="line72"></a> * @template TYPE,RESOLVER_CONTEXT
+<a name="line73"></a> */
+<a name="line74"></a>goog.Promise = function(resolver, opt_context) {
+<a name="line75"></a>  /**
+<a name="line76"></a>   * The internal state of this Promise. Either PENDING, FULFILLED, REJECTED, or
+<a name="line77"></a>   * BLOCKED.
+<a name="line78"></a>   * @private {goog.Promise.State_}
+<a name="line79"></a>   */
+<a name="line80"></a>  this.state_ = goog.Promise.State_.PENDING;
+<a name="line81"></a>
+<a name="line82"></a>  /**
+<a name="line83"></a>   * The resolved result of the Promise. Immutable once set with either a
+<a name="line84"></a>   * fulfillment value or rejection reason.
+<a name="line85"></a>   * @private {*}
+<a name="line86"></a>   */
+<a name="line87"></a>  this.result_ = undefined;
+<a name="line88"></a>
+<a name="line89"></a>  /**
+<a name="line90"></a>   * For Promises created by calling {@code then()}, the originating parent.
+<a name="line91"></a>   * @private {goog.Promise}
+<a name="line92"></a>   */
+<a name="line93"></a>  this.parent_ = null;
+<a name="line94"></a>
+<a name="line95"></a>  /**
+<a name="line96"></a>   * The list of {@code onFulfilled} and {@code onRejected} callbacks added to
+<a name="line97"></a>   * this Promise by calls to {@code then()}.
+<a name="line98"></a>   * @private {Array.&lt;goog.Promise.CallbackEntry_&gt;}
+<a name="line99"></a>   */
+<a name="line100"></a>  this.callbackEntries_ = null;
+<a name="line101"></a>
+<a name="line102"></a>  /**
+<a name="line103"></a>   * Whether the Promise is in the queue of Promises to execute.
+<a name="line104"></a>   * @private {boolean}
+<a name="line105"></a>   */
+<a name="line106"></a>  this.executing_ = false;
+<a name="line107"></a>
+<a name="line108"></a>  if (goog.Promise.UNHANDLED_REJECTION_DELAY &gt; 0) {
+<a name="line109"></a>    /**
+<a name="line110"></a>     * A timeout ID used when the {@code UNHANDLED_REJECTION_DELAY} is greater
+<a name="line111"></a>     * than 0 milliseconds. The ID is set when the Promise is rejected, and
+<a name="line112"></a>     * cleared only if an {@code onRejected} callback is invoked for the
+<a name="line113"></a>     * Promise (or one of its descendants) before the delay is exceeded.
+<a name="line114"></a>     *
+<a name="line115"></a>     * If the rejection is not handled before the timeout completes, the
+<a name="line116"></a>     * rejection reason is passed to the unhandled rejection handler.
+<a name="line117"></a>     * @private {number}
+<a name="line118"></a>     */
+<a name="line119"></a>    this.unhandledRejectionId_ = 0;
+<a name="line120"></a>  } else if (goog.Promise.UNHANDLED_REJECTION_DELAY == 0) {
+<a name="line121"></a>    /**
+<a name="line122"></a>     * When the {@code UNHANDLED_REJECTION_DELAY} is set to 0 milliseconds, a
+<a name="line123"></a>     * boolean that is set if the Promise is rejected, and reset to false if an
+<a name="line124"></a>     * {@code onRejected} callback is invoked for the Promise (or one of its
+<a name="line125"></a>     * descendants). If the rejection is not handled before the next timestep,
+<a name="line126"></a>     * the rejection reason is passed to the unhandled rejection handler.
+<a name="line127"></a>     * @private {boolean}
+<a name="line128"></a>     */
+<a name="line129"></a>    this.hadUnhandledRejection_ = false;
+<a name="line130"></a>  }
+<a name="line131"></a>
+<a name="line132"></a>  if (goog.Promise.LONG_STACK_TRACES) {
+<a name="line133"></a>    /**
+<a name="line134"></a>     * A list of stack trace frames pointing to the locations where this Promise
+<a name="line135"></a>     * was created or had callbacks added to it. Saved to add additional context
+<a name="line136"></a>     * to stack traces when an exception is thrown.
+<a name="line137"></a>     * @private {!Array.&lt;string&gt;}
+<a name="line138"></a>     */
+<a name="line139"></a>    this.stack_ = [];
+<a name="line140"></a>    this.addStackTrace_(new Error(&#39;created&#39;));
+<a name="line141"></a>
+<a name="line142"></a>    /**
+<a name="line143"></a>     * Index of the most recently executed stack frame entry.
+<a name="line144"></a>     * @private {number}
+<a name="line145"></a>     */
+<a name="line146"></a>    this.currentStep_ = 0;
+<a name="line147"></a>  }
+<a name="line148"></a>
+<a name="line149"></a>  try {
+<a name="line150"></a>    var self = this;
+<a name="line151"></a>    resolver.call(
+<a name="line152"></a>        opt_context,
+<a name="line153"></a>        function(value) {
+<a name="line154"></a>          self.resolve_(goog.Promise.State_.FULFILLED, value);
+<a name="line155"></a>        },
+<a name="line156"></a>        function(reason) {
+<a name="line157"></a>          self.resolve_(goog.Promise.State_.REJECTED, reason);
+<a name="line158"></a>        });
+<a name="line159"></a>  } catch (e) {
+<a name="line160"></a>    this.resolve_(goog.Promise.State_.REJECTED, e);
+<a name="line161"></a>  }
+<a name="line162"></a>};
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * @define {boolean} Whether traces of {@code then} calls should be included in
+<a name="line167"></a> * exceptions thrown
+<a name="line168"></a> */
+<a name="line169"></a>goog.define(&#39;goog.Promise.LONG_STACK_TRACES&#39;, goog.DEBUG);
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * @define {number} The delay in milliseconds before a rejected Promise&#39;s reason
+<a name="line174"></a> * is passed to the rejection handler. By default, the rejection handler
+<a name="line175"></a> * rethrows the rejection reason so that it appears in the developer console or
+<a name="line176"></a> * {@code window.onerror} handler.
+<a name="line177"></a> *
+<a name="line178"></a> * Rejections are rethrown as quickly as possible by default. A negative value
+<a name="line179"></a> * disables rejection handling entirely.
+<a name="line180"></a> */
+<a name="line181"></a>goog.define(&#39;goog.Promise.UNHANDLED_REJECTION_DELAY&#39;, 0);
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * The possible internal states for a Promise. These states are not directly
+<a name="line186"></a> * observable to external callers.
+<a name="line187"></a> * @enum {number}
+<a name="line188"></a> * @private
+<a name="line189"></a> */
+<a name="line190"></a>goog.Promise.State_ = {
+<a name="line191"></a>  /** The Promise is waiting for resolution. */
+<a name="line192"></a>  PENDING: 0,
+<a name="line193"></a>
+<a name="line194"></a>  /** The Promise is blocked waiting for the result of another Thenable. */
+<a name="line195"></a>  BLOCKED: 1,
+<a name="line196"></a>
+<a name="line197"></a>  /** The Promise has been resolved with a fulfillment value. */
+<a name="line198"></a>  FULFILLED: 2,
+<a name="line199"></a>
+<a name="line200"></a>  /** The Promise has been resolved with a rejection reason. */
+<a name="line201"></a>  REJECTED: 3
+<a name="line202"></a>};
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * Typedef for entries in the callback chain. Each call to {@code then},
+<a name="line207"></a> * {@code thenCatch}, or {@code thenAlways} creates an entry containing the
+<a name="line208"></a> * functions that may be invoked once the Promise is resolved.
+<a name="line209"></a> *
+<a name="line210"></a> * @typedef {{
+<a name="line211"></a> *   child: goog.Promise,
+<a name="line212"></a> *   onFulfilled: function(*),
+<a name="line213"></a> *   onRejected: function(*)
+<a name="line214"></a> * }}
+<a name="line215"></a> * @private
+<a name="line216"></a> */
+<a name="line217"></a>goog.Promise.CallbackEntry_;
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * @param {(TYPE|goog.Thenable.&lt;TYPE&gt;|Thenable)=} opt_value
+<a name="line222"></a> * @return {!goog.Promise.&lt;TYPE&gt;} A new Promise that is immediately resolved
+<a name="line223"></a> *     with the given value.
+<a name="line224"></a> * @template TYPE
+<a name="line225"></a> */
+<a name="line226"></a>goog.Promise.resolve = function(opt_value) {
+<a name="line227"></a>  return new goog.Promise(function(resolve, reject) {
+<a name="line228"></a>    resolve(opt_value);
+<a name="line229"></a>  });
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * @param {*=} opt_reason
+<a name="line235"></a> * @return {!goog.Promise} A new Promise that is immediately rejected with the
+<a name="line236"></a> *     given reason.
+<a name="line237"></a> */
+<a name="line238"></a>goog.Promise.reject = function(opt_reason) {
+<a name="line239"></a>  return new goog.Promise(function(resolve, reject) {
+<a name="line240"></a>    reject(opt_reason);
+<a name="line241"></a>  });
+<a name="line242"></a>};
+<a name="line243"></a>
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * @param {!Array.&lt;!(goog.Thenable.&lt;TYPE&gt;|Thenable)&gt;} promises
+<a name="line247"></a> * @return {!goog.Promise.&lt;TYPE&gt;} A Promise that receives the result of the
+<a name="line248"></a> *     first Promise (or Promise-like) input to complete.
+<a name="line249"></a> * @template TYPE
+<a name="line250"></a> */
+<a name="line251"></a>goog.Promise.race = function(promises) {
+<a name="line252"></a>  return new goog.Promise(function(resolve, reject) {
+<a name="line253"></a>    if (!promises.length) {
+<a name="line254"></a>      resolve(undefined);
+<a name="line255"></a>    }
+<a name="line256"></a>    for (var i = 0, promise; promise = promises[i]; i++) {
+<a name="line257"></a>      promise.then(resolve, reject);
+<a name="line258"></a>    }
+<a name="line259"></a>  });
+<a name="line260"></a>};
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * @param {!Array.&lt;!(goog.Thenable.&lt;TYPE&gt;|Thenable)&gt;} promises
+<a name="line265"></a> * @return {!goog.Promise.&lt;!Array.&lt;TYPE&gt;&gt;} A Promise that receives a list of
+<a name="line266"></a> *     every fulfilled value once every input Promise (or Promise-like) is
+<a name="line267"></a> *     successfully fulfilled, or is rejected by the first rejection result.
+<a name="line268"></a> * @template TYPE
+<a name="line269"></a> */
+<a name="line270"></a>goog.Promise.all = function(promises) {
+<a name="line271"></a>  return new goog.Promise(function(resolve, reject) {
+<a name="line272"></a>    var toFulfill = promises.length;
+<a name="line273"></a>    var values = [];
+<a name="line274"></a>
+<a name="line275"></a>    if (!toFulfill) {
+<a name="line276"></a>      resolve(values);
+<a name="line277"></a>      return;
+<a name="line278"></a>    }
+<a name="line279"></a>
+<a name="line280"></a>    var onFulfill = function(index, value) {
+<a name="line281"></a>      toFulfill--;
+<a name="line282"></a>      values[index] = value;
+<a name="line283"></a>      if (toFulfill == 0) {
+<a name="line284"></a>        resolve(values);
+<a name="line285"></a>      }
+<a name="line286"></a>    };
+<a name="line287"></a>
+<a name="line288"></a>    var onReject = function(reason) {
+<a name="line289"></a>      reject(reason);
+<a name="line290"></a>    };
+<a name="line291"></a>
+<a name="line292"></a>    for (var i = 0, promise; promise = promises[i]; i++) {
+<a name="line293"></a>      promise.then(goog.partial(onFulfill, i), onReject);
+<a name="line294"></a>    }
+<a name="line295"></a>  });
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * @param {!Array.&lt;!(goog.Thenable.&lt;TYPE&gt;|Thenable)&gt;} promises
+<a name="line301"></a> * @return {!goog.Promise.&lt;TYPE&gt;} A Promise that receives the value of the first
+<a name="line302"></a> *     input to be fulfilled, or is rejected with a list of every rejection
+<a name="line303"></a> *     reason if all inputs are rejected.
+<a name="line304"></a> * @template TYPE
+<a name="line305"></a> */
+<a name="line306"></a>goog.Promise.firstFulfilled = function(promises) {
+<a name="line307"></a>  return new goog.Promise(function(resolve, reject) {
+<a name="line308"></a>    var toReject = promises.length;
+<a name="line309"></a>    var reasons = [];
+<a name="line310"></a>
+<a name="line311"></a>    if (!toReject) {
+<a name="line312"></a>      resolve(undefined);
+<a name="line313"></a>      return;
+<a name="line314"></a>    }
+<a name="line315"></a>
+<a name="line316"></a>    var onFulfill = function(value) {
+<a name="line317"></a>      resolve(value);
+<a name="line318"></a>    };
+<a name="line319"></a>
+<a name="line320"></a>    var onReject = function(index, reason) {
+<a name="line321"></a>      toReject--;
+<a name="line322"></a>      reasons[index] = reason;
+<a name="line323"></a>      if (toReject == 0) {
+<a name="line324"></a>        reject(reasons);
+<a name="line325"></a>      }
+<a name="line326"></a>    };
+<a name="line327"></a>
+<a name="line328"></a>    for (var i = 0, promise; promise = promises[i]; i++) {
+<a name="line329"></a>      promise.then(onFulfill, goog.partial(onReject, i));
+<a name="line330"></a>    }
+<a name="line331"></a>  });
+<a name="line332"></a>};
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * @return {!goog.promise.Resolver.&lt;TYPE&gt;} Resolver wrapping the promise and its
+<a name="line337"></a> *     resolve / reject functions. Resolving or rejecting the resolver
+<a name="line338"></a> *     resolves or rejects the promise.
+<a name="line339"></a> * @template TYPE
+<a name="line340"></a> */
+<a name="line341"></a>goog.Promise.withResolver = function() {
+<a name="line342"></a>  var resolve, reject;
+<a name="line343"></a>  var promise = new goog.Promise(function(rs, rj) {
+<a name="line344"></a>    resolve = rs;
+<a name="line345"></a>    reject = rj;
+<a name="line346"></a>  });
+<a name="line347"></a>  return new goog.Promise.Resolver_(promise, resolve, reject);
+<a name="line348"></a>};
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>/**
+<a name="line352"></a> * Adds callbacks that will operate on the result of the Promise, returning a
+<a name="line353"></a> * new child Promise.
+<a name="line354"></a> *
+<a name="line355"></a> * If the Promise is fulfilled, the {@code onFulfilled} callback will be invoked
+<a name="line356"></a> * with the fulfillment value as argument, and the child Promise will be
+<a name="line357"></a> * fulfilled with the return value of the callback. If the callback throws an
+<a name="line358"></a> * exception, the child Promise will be rejected with the thrown value instead.
+<a name="line359"></a> *
+<a name="line360"></a> * If the Promise is rejected, the {@code onRejected} callback will be invoked
+<a name="line361"></a> * with the rejection reason as argument, and the child Promise will be resolved
+<a name="line362"></a> * with the return value or rejected with the thrown value of the callback.
+<a name="line363"></a> *
+<a name="line364"></a> * @override
+<a name="line365"></a> */
+<a name="line366"></a>goog.Promise.prototype.then = function(
+<a name="line367"></a>    opt_onFulfilled, opt_onRejected, opt_context) {
+<a name="line368"></a>
+<a name="line369"></a>  if (opt_onFulfilled != null) {
+<a name="line370"></a>    goog.asserts.assertFunction(opt_onFulfilled,
+<a name="line371"></a>        &#39;opt_onFulfilled should be a function.&#39;);
+<a name="line372"></a>  }
+<a name="line373"></a>  if (opt_onRejected != null) {
+<a name="line374"></a>    goog.asserts.assertFunction(opt_onRejected,
+<a name="line375"></a>        &#39;opt_onRejected should be a function. Did you pass opt_context &#39; +
+<a name="line376"></a>        &#39;as the second argument instead of the third?&#39;);
+<a name="line377"></a>  }
+<a name="line378"></a>
+<a name="line379"></a>  if (goog.Promise.LONG_STACK_TRACES) {
+<a name="line380"></a>    this.addStackTrace_(new Error(&#39;then&#39;));
+<a name="line381"></a>  }
+<a name="line382"></a>
+<a name="line383"></a>  return this.addChildPromise_(
+<a name="line384"></a>      goog.isFunction(opt_onFulfilled) ? opt_onFulfilled : null,
+<a name="line385"></a>      goog.isFunction(opt_onRejected) ? opt_onRejected : null,
+<a name="line386"></a>      opt_context);
+<a name="line387"></a>};
+<a name="line388"></a>goog.Thenable.addImplementation(goog.Promise);
+<a name="line389"></a>
+<a name="line390"></a>
+<a name="line391"></a>/**
+<a name="line392"></a> * Adds a callback that will be invoked whether the Promise is fulfilled or
+<a name="line393"></a> * rejected. The callback receives no argument, and no new child Promise is
+<a name="line394"></a> * created. This is useful for ensuring that cleanup takes place after certain
+<a name="line395"></a> * asynchronous operations. Callbacks added with {@code thenAlways} will be
+<a name="line396"></a> * executed in the same order with other calls to {@code then},
+<a name="line397"></a> * {@code thenAlways}, or {@code thenCatch}.
+<a name="line398"></a> *
+<a name="line399"></a> * Since it does not produce a new child Promise, cancellation propagation is
+<a name="line400"></a> * not prevented by adding callbacks with {@code thenAlways}. A Promise that has
+<a name="line401"></a> * a cleanup handler added with {@code thenAlways} will be canceled if all of
+<a name="line402"></a> * its children created by {@code then} (or {@code thenCatch}) are canceled.
+<a name="line403"></a> *
+<a name="line404"></a> * @param {function(this:THIS): void} onResolved A function that will be invoked
+<a name="line405"></a> *     when the Promise is resolved.
+<a name="line406"></a> * @param {THIS=} opt_context An optional context object that will be the
+<a name="line407"></a> *     execution context for the callbacks. By default, functions are executed
+<a name="line408"></a> *     in the global scope.
+<a name="line409"></a> * @return {!goog.Promise.&lt;TYPE&gt;} This Promise, for chaining additional calls.
+<a name="line410"></a> * @template THIS
+<a name="line411"></a> */
+<a name="line412"></a>goog.Promise.prototype.thenAlways = function(onResolved, opt_context) {
+<a name="line413"></a>  if (goog.Promise.LONG_STACK_TRACES) {
+<a name="line414"></a>    this.addStackTrace_(new Error(&#39;thenAlways&#39;));
+<a name="line415"></a>  }
+<a name="line416"></a>
+<a name="line417"></a>  var callback = function() {
+<a name="line418"></a>    try {
+<a name="line419"></a>      // Ensure that no arguments are passed to onResolved.
+<a name="line420"></a>      onResolved.call(opt_context);
+<a name="line421"></a>    } catch (err) {
+<a name="line422"></a>      goog.Promise.handleRejection_.call(null, err);
+<a name="line423"></a>    }
+<a name="line424"></a>  };
+<a name="line425"></a>
+<a name="line426"></a>  this.addCallbackEntry_({
+<a name="line427"></a>    child: null,
+<a name="line428"></a>    onRejected: callback,
+<a name="line429"></a>    onFulfilled: callback
+<a name="line430"></a>  });
+<a name="line431"></a>  return this;
+<a name="line432"></a>};
+<a name="line433"></a>
+<a name="line434"></a>
+<a name="line435"></a>/**
+<a name="line436"></a> * Adds a callback that will be invoked only if the Promise is rejected. This
+<a name="line437"></a> * is equivalent to {@code then(null, onRejected)}.
+<a name="line438"></a> *
+<a name="line439"></a> * @param {!function(this:THIS, *): *} onRejected A function that will be
+<a name="line440"></a> *     invoked with the rejection reason if the Promise is rejected.
+<a name="line441"></a> * @param {THIS=} opt_context An optional context object that will be the
+<a name="line442"></a> *     execution context for the callbacks. By default, functions are executed
+<a name="line443"></a> *     in the global scope.
+<a name="line444"></a> * @return {!goog.Promise} A new Promise that will receive the result of the
+<a name="line445"></a> *     callback.
+<a name="line446"></a> * @template THIS
+<a name="line447"></a> */
+<a name="line448"></a>goog.Promise.prototype.thenCatch = function(onRejected, opt_context) {
+<a name="line449"></a>  if (goog.Promise.LONG_STACK_TRACES) {
+<a name="line450"></a>    this.addStackTrace_(new Error(&#39;thenCatch&#39;));
+<a name="line451"></a>  }
+<a name="line452"></a>  return this.addChildPromise_(null, onRejected, opt_context);
+<a name="line453"></a>};
+<a name="line454"></a>
+<a name="line455"></a>
+<a name="line456"></a>/**
+<a name="line457"></a> * Cancels the Promise if it is still pending by rejecting it with a cancel
+<a name="line458"></a> * Error. No action is performed if the Promise is already resolved.
+<a name="line459"></a> *
+<a name="line460"></a> * All child Promises of the canceled Promise will be rejected with the same
+<a name="line461"></a> * cancel error, as with normal Promise rejection. If the Promise to be canceled
+<a name="line462"></a> * is the only child of a pending Promise, the parent Promise will also be
+<a name="line463"></a> * canceled. Cancellation may propagate upward through multiple generations.
+<a name="line464"></a> *
+<a name="line465"></a> * @param {string=} opt_message An optional debugging message for describing the
+<a name="line466"></a> *     cancellation reason.
+<a name="line467"></a> */
+<a name="line468"></a>goog.Promise.prototype.cancel = function(opt_message) {
+<a name="line469"></a>  if (this.state_ == goog.Promise.State_.PENDING) {
+<a name="line470"></a>    goog.async.run(function() {
+<a name="line471"></a>      var err = new goog.Promise.CancellationError(opt_message);
+<a name="line472"></a>      this.cancelInternal_(err);
+<a name="line473"></a>    }, this);
+<a name="line474"></a>  }
+<a name="line475"></a>};
+<a name="line476"></a>
+<a name="line477"></a>
+<a name="line478"></a>/**
+<a name="line479"></a> * Cancels this Promise with the given error.
+<a name="line480"></a> *
+<a name="line481"></a> * @param {!Error} err The cancellation error.
+<a name="line482"></a> * @private
+<a name="line483"></a> */
+<a name="line484"></a>goog.Promise.prototype.cancelInternal_ = function(err) {
+<a name="line485"></a>  if (this.state_ == goog.Promise.State_.PENDING) {
+<a name="line486"></a>    if (this.parent_) {
+<a name="line487"></a>      // Cancel the Promise and remove it from the parent&#39;s child list.
+<a name="line488"></a>      this.parent_.cancelChild_(this, err);
+<a name="line489"></a>    } else {
+<a name="line490"></a>      this.resolve_(goog.Promise.State_.REJECTED, err);
+<a name="line491"></a>    }
+<a name="line492"></a>  }
+<a name="line493"></a>};
+<a name="line494"></a>
+<a name="line495"></a>
+<a name="line496"></a>/**
+<a name="line497"></a> * Cancels a child Promise from the list of callback entries. If the Promise has
+<a name="line498"></a> * not already been resolved, reject it with a cancel error. If there are no
+<a name="line499"></a> * other children in the list of callback entries, propagate the cancellation
+<a name="line500"></a> * by canceling this Promise as well.
+<a name="line501"></a> *
+<a name="line502"></a> * @param {!goog.Promise} childPromise The Promise to cancel.
+<a name="line503"></a> * @param {!Error} err The cancel error to use for rejecting the Promise.
+<a name="line504"></a> * @private
+<a name="line505"></a> */
+<a name="line506"></a>goog.Promise.prototype.cancelChild_ = function(childPromise, err) {
+<a name="line507"></a>  if (!this.callbackEntries_) {
+<a name="line508"></a>    return;
+<a name="line509"></a>  }
+<a name="line510"></a>  var childCount = 0;
+<a name="line511"></a>  var childIndex = -1;
+<a name="line512"></a>
+<a name="line513"></a>  // Find the callback entry for the childPromise, and count whether there are
+<a name="line514"></a>  // additional child Promises.
+<a name="line515"></a>  for (var i = 0, entry; entry = this.callbackEntries_[i]; i++) {
+<a name="line516"></a>    var child = entry.child;
+<a name="line517"></a>    if (child) {
+<a name="line518"></a>      childCount++;
+<a name="line519"></a>      if (child == childPromise) {
+<a name="line520"></a>        childIndex = i;
+<a name="line521"></a>      }
+<a name="line522"></a>      if (childIndex &gt;= 0 &amp;&amp; childCount &gt; 1) {
+<a name="line523"></a>        break;
+<a name="line524"></a>      }
+<a name="line525"></a>    }
+<a name="line526"></a>  }
+<a name="line527"></a>
+<a name="line528"></a>  // If the child Promise was the only child, cancel this Promise as well.
+<a name="line529"></a>  // Otherwise, reject only the child Promise with the cancel error.
+<a name="line530"></a>  if (childIndex &gt;= 0) {
+<a name="line531"></a>    if (this.state_ == goog.Promise.State_.PENDING &amp;&amp; childCount == 1) {
+<a name="line532"></a>      this.cancelInternal_(err);
+<a name="line533"></a>    } else {
+<a name="line534"></a>      var callbackEntry = this.callbackEntries_.splice(childIndex, 1)[0];
+<a name="line535"></a>      this.executeCallback_(
+<a name="line536"></a>          callbackEntry, goog.Promise.State_.REJECTED, err);
+<a name="line537"></a>    }
+<a name="line538"></a>  }
+<a name="line539"></a>};
+<a name="line540"></a>
+<a name="line541"></a>
+<a name="line542"></a>/**
+<a name="line543"></a> * Adds a callback entry to the current Promise, and schedules callback
+<a name="line544"></a> * execution if the Promise has already been resolved.
+<a name="line545"></a> *
+<a name="line546"></a> * @param {goog.Promise.CallbackEntry_} callbackEntry Record containing
+<a name="line547"></a> *     {@code onFulfilled} and {@code onRejected} callbacks to execute after
+<a name="line548"></a> *     the Promise is resolved.
+<a name="line549"></a> * @private
+<a name="line550"></a> */
+<a name="line551"></a>goog.Promise.prototype.addCallbackEntry_ = function(callbackEntry) {
+<a name="line552"></a>  if ((!this.callbackEntries_ || !this.callbackEntries_.length) &amp;&amp;
+<a name="line553"></a>      (this.state_ == goog.Promise.State_.FULFILLED ||
+<a name="line554"></a>       this.state_ == goog.Promise.State_.REJECTED)) {
+<a name="line555"></a>    this.scheduleCallbacks_();
+<a name="line556"></a>  }
+<a name="line557"></a>  if (!this.callbackEntries_) {
+<a name="line558"></a>    this.callbackEntries_ = [];
+<a name="line559"></a>  }
+<a name="line560"></a>  this.callbackEntries_.push(callbackEntry);
+<a name="line561"></a>};
+<a name="line562"></a>
+<a name="line563"></a>
+<a name="line564"></a>/**
+<a name="line565"></a> * Creates a child Promise and adds it to the callback entry list. The result of
+<a name="line566"></a> * the child Promise is determined by the state of the parent Promise and the
+<a name="line567"></a> * result of the {@code onFulfilled} or {@code onRejected} callbacks as
+<a name="line568"></a> * specified in the Promise resolution procedure.
+<a name="line569"></a> *
+<a name="line570"></a> * @see http://promisesaplus.com/#the__method
+<a name="line571"></a> *
+<a name="line572"></a> * @param {?function(this:THIS, TYPE):
+<a name="line573"></a> *          (RESULT|goog.Promise.&lt;RESULT&gt;|Thenable)} onFulfilled A callback that
+<a name="line574"></a> *     will be invoked if the Promise is fullfilled, or null.
+<a name="line575"></a> * @param {?function(this:THIS, *): *} onRejected A callback that will be
+<a name="line576"></a> *     invoked if the Promise is rejected, or null.
+<a name="line577"></a> * @param {THIS=} opt_context An optional execution context for the callbacks.
+<a name="line578"></a> *     in the default calling context.
+<a name="line579"></a> * @return {!goog.Promise} The child Promise.
+<a name="line580"></a> * @template RESULT,THIS
+<a name="line581"></a> * @private
+<a name="line582"></a> */
+<a name="line583"></a>goog.Promise.prototype.addChildPromise_ = function(
+<a name="line584"></a>    onFulfilled, onRejected, opt_context) {
+<a name="line585"></a>
+<a name="line586"></a>  var callbackEntry = {
+<a name="line587"></a>    child: null,
+<a name="line588"></a>    onFulfilled: null,
+<a name="line589"></a>    onRejected: null
+<a name="line590"></a>  };
+<a name="line591"></a>
+<a name="line592"></a>  callbackEntry.child = new goog.Promise(function(resolve, reject) {
+<a name="line593"></a>    // Invoke onFulfilled, or resolve with the parent&#39;s value if absent.
+<a name="line594"></a>    callbackEntry.onFulfilled = onFulfilled ? function(value) {
+<a name="line595"></a>      try {
+<a name="line596"></a>        var result = onFulfilled.call(opt_context, value);
+<a name="line597"></a>        resolve(result);
+<a name="line598"></a>      } catch (err) {
+<a name="line599"></a>        reject(err);
+<a name="line600"></a>      }
+<a name="line601"></a>    } : resolve;
+<a name="line602"></a>
+<a name="line603"></a>    // Invoke onRejected, or reject with the parent&#39;s reason if absent.
+<a name="line604"></a>    callbackEntry.onRejected = onRejected ? function(reason) {
+<a name="line605"></a>      try {
+<a name="line606"></a>        var result = onRejected.call(opt_context, reason);
+<a name="line607"></a>        if (!goog.isDef(result) &amp;&amp;
+<a name="line608"></a>            reason instanceof goog.Promise.CancellationError) {
+<a name="line609"></a>          // Propagate cancellation to children if no other result is returned.
+<a name="line610"></a>          reject(reason);
+<a name="line611"></a>        } else {
+<a name="line612"></a>          resolve(result);
+<a name="line613"></a>        }
+<a name="line614"></a>      } catch (err) {
+<a name="line615"></a>        reject(err);
+<a name="line616"></a>      }
+<a name="line617"></a>    } : reject;
+<a name="line618"></a>  });
+<a name="line619"></a>
+<a name="line620"></a>  callbackEntry.child.parent_ = this;
+<a name="line621"></a>  this.addCallbackEntry_(
+<a name="line622"></a>      /** @type {goog.Promise.CallbackEntry_} */ (callbackEntry));
+<a name="line623"></a>  return callbackEntry.child;
+<a name="line624"></a>};
+<a name="line625"></a>
+<a name="line626"></a>
+<a name="line627"></a>/**
+<a name="line628"></a> * Unblocks the Promise and fulfills it with the given value.
+<a name="line629"></a> *
+<a name="line630"></a> * @param {TYPE} value
+<a name="line631"></a> * @private
+<a name="line632"></a> */
+<a name="line633"></a>goog.Promise.prototype.unblockAndFulfill_ = function(value) {
+<a name="line634"></a>  goog.asserts.assert(this.state_ == goog.Promise.State_.BLOCKED);
+<a name="line635"></a>  this.state_ = goog.Promise.State_.PENDING;
+<a name="line636"></a>  this.resolve_(goog.Promise.State_.FULFILLED, value);
+<a name="line637"></a>};
+<a name="line638"></a>
+<a name="line639"></a>
+<a name="line640"></a>/**
+<a name="line641"></a> * Unblocks the Promise and rejects it with the given rejection reason.
+<a name="line642"></a> *
+<a name="line643"></a> * @param {*} reason
+<a name="line644"></a> * @private
+<a name="line645"></a> */
+<a name="line646"></a>goog.Promise.prototype.unblockAndReject_ = function(reason) {
+<a name="line647"></a>  goog.asserts.assert(this.state_ == goog.Promise.State_.BLOCKED);
+<a name="line648"></a>  this.state_ = goog.Promise.State_.PENDING;
+<a name="line649"></a>  this.resolve_(goog.Promise.State_.REJECTED, reason);
+<a name="line650"></a>};
+<a name="line651"></a>
+<a name="line652"></a>
+<a name="line653"></a>/**
+<a name="line654"></a> * Attempts to resolve a Promise with a given resolution state and value. This
+<a name="line655"></a> * is a no-op if the given Promise has already been resolved.
+<a name="line656"></a> *
+<a name="line657"></a> * If the given result is a Thenable (such as another Promise), the Promise will
+<a name="line658"></a> * be resolved with the same state and result as the Thenable once it is itself
+<a name="line659"></a> * resolved.
+<a name="line660"></a> *
+<a name="line661"></a> * If the given result is not a Thenable, the Promise will be fulfilled or
+<a name="line662"></a> * rejected with that result based on the given state.
+<a name="line663"></a> *
+<a name="line664"></a> * @see http://promisesaplus.com/#the_promise_resolution_procedure
+<a name="line665"></a> *
+<a name="line666"></a> * @param {goog.Promise.State_} state
+<a name="line667"></a> * @param {*} x The result to apply to the Promise.
+<a name="line668"></a> * @private
+<a name="line669"></a> */
+<a name="line670"></a>goog.Promise.prototype.resolve_ = function(state, x) {
+<a name="line671"></a>  if (this.state_ != goog.Promise.State_.PENDING) {
+<a name="line672"></a>    return;
+<a name="line673"></a>  }
+<a name="line674"></a>
+<a name="line675"></a>  if (this == x) {
+<a name="line676"></a>    state = goog.Promise.State_.REJECTED;
+<a name="line677"></a>    x = new TypeError(&#39;Promise cannot resolve to itself&#39;);
+<a name="line678"></a>
+<a name="line679"></a>  } else if (goog.Thenable.isImplementedBy(x)) {
+<a name="line680"></a>    x = /** @type {!goog.Thenable} */ (x);
+<a name="line681"></a>    this.state_ = goog.Promise.State_.BLOCKED;
+<a name="line682"></a>    x.then(this.unblockAndFulfill_, this.unblockAndReject_, this);
+<a name="line683"></a>    return;
+<a name="line684"></a>
+<a name="line685"></a>  } else if (goog.isObject(x)) {
+<a name="line686"></a>    try {
+<a name="line687"></a>      var then = x[&#39;then&#39;];
+<a name="line688"></a>      if (goog.isFunction(then)) {
+<a name="line689"></a>        this.tryThen_(x, then);
+<a name="line690"></a>        return;
+<a name="line691"></a>      }
+<a name="line692"></a>    } catch (e) {
+<a name="line693"></a>      state = goog.Promise.State_.REJECTED;
+<a name="line694"></a>      x = e;
+<a name="line695"></a>    }
+<a name="line696"></a>  }
+<a name="line697"></a>
+<a name="line698"></a>  this.result_ = x;
+<a name="line699"></a>  this.state_ = state;
+<a name="line700"></a>  this.scheduleCallbacks_();
+<a name="line701"></a>
+<a name="line702"></a>  if (state == goog.Promise.State_.REJECTED &amp;&amp;
+<a name="line703"></a>      !(x instanceof goog.Promise.CancellationError)) {
+<a name="line704"></a>    goog.Promise.addUnhandledRejection_(this, x);
+<a name="line705"></a>  }
+<a name="line706"></a>};
+<a name="line707"></a>
+<a name="line708"></a>
+<a name="line709"></a>/**
+<a name="line710"></a> * Attempts to call the {@code then} method on an object in the hopes that it is
+<a name="line711"></a> * a Promise-compatible instance. This allows interoperation between different
+<a name="line712"></a> * Promise implementations, however a non-compliant object may cause a Promise
+<a name="line713"></a> * to hang indefinitely. If the {@code then} method throws an exception, the
+<a name="line714"></a> * dependent Promise will be rejected with the thrown value.
+<a name="line715"></a> *
+<a name="line716"></a> * @see http://promisesaplus.com/#point-70
+<a name="line717"></a> *
+<a name="line718"></a> * @param {Thenable} thenable An object with a {@code then} method that may be
+<a name="line719"></a> *     compatible with the Promise/A+ specification.
+<a name="line720"></a> * @param {!Function} then The {@code then} method of the Thenable object.
+<a name="line721"></a> * @private
+<a name="line722"></a> */
+<a name="line723"></a>goog.Promise.prototype.tryThen_ = function(thenable, then) {
+<a name="line724"></a>  this.state_ = goog.Promise.State_.BLOCKED;
+<a name="line725"></a>  var promise = this;
+<a name="line726"></a>  var called = false;
+<a name="line727"></a>
+<a name="line728"></a>  var resolve = function(value) {
+<a name="line729"></a>    if (!called) {
+<a name="line730"></a>      called = true;
+<a name="line731"></a>      promise.unblockAndFulfill_(value);
+<a name="line732"></a>    }
+<a name="line733"></a>  };
+<a name="line734"></a>
+<a name="line735"></a>  var reject = function(reason) {
+<a name="line736"></a>    if (!called) {
+<a name="line737"></a>      called = true;
+<a name="line738"></a>      promise.unblockAndReject_(reason);
+<a name="line739"></a>    }
+<a name="line740"></a>  };
+<a name="line741"></a>
+<a name="line742"></a>  try {
+<a name="line743"></a>    then.call(thenable, resolve, reject);
+<a name="line744"></a>  } catch (e) {
+<a name="line745"></a>    reject(e);
+<a name="line746"></a>  }
+<a name="line747"></a>};
+<a name="line748"></a>
+<a name="line749"></a>
+<a name="line750"></a>/**
+<a name="line751"></a> * Executes the pending callbacks of a resolved Promise after a timeout.
+<a name="line752"></a> *
+<a name="line753"></a> * Section 2.2.4 of the Promises/A+ specification requires that Promise
+<a name="line754"></a> * callbacks must only be invoked from a call stack that only contains Promise
+<a name="line755"></a> * implementation code, which we accomplish by invoking callback execution after
+<a name="line756"></a> * a timeout. If {@code startExecution_} is called multiple times for the same
+<a name="line757"></a> * Promise, the callback chain will be evaluated only once. Additional callbacks
+<a name="line758"></a> * may be added during the evaluation phase, and will be executed in the same
+<a name="line759"></a> * event loop.
+<a name="line760"></a> *
+<a name="line761"></a> * All Promises added to the waiting list during the same browser event loop
+<a name="line762"></a> * will be executed in one batch to avoid using a separate timeout per Promise.
+<a name="line763"></a> *
+<a name="line764"></a> * @private
+<a name="line765"></a> */
+<a name="line766"></a>goog.Promise.prototype.scheduleCallbacks_ = function() {
+<a name="line767"></a>  if (!this.executing_) {
+<a name="line768"></a>    this.executing_ = true;
+<a name="line769"></a>    goog.async.run(this.executeCallbacks_, this);
+<a name="line770"></a>  }
+<a name="line771"></a>};
+<a name="line772"></a>
+<a name="line773"></a>
+<a name="line774"></a>/**
+<a name="line775"></a> * Executes all pending callbacks for this Promise.
+<a name="line776"></a> *
+<a name="line777"></a> * @private
+<a name="line778"></a> */
+<a name="line779"></a>goog.Promise.prototype.executeCallbacks_ = function() {
+<a name="line780"></a>  while (this.callbackEntries_ &amp;&amp; this.callbackEntries_.length) {
+<a name="line781"></a>    var entries = this.callbackEntries_;
+<a name="line782"></a>    this.callbackEntries_ = [];
+<a name="line783"></a>
+<a name="line784"></a>    for (var i = 0; i &lt; entries.length; i++) {
+<a name="line785"></a>      if (goog.Promise.LONG_STACK_TRACES) {
+<a name="line786"></a>        this.currentStep_++;
+<a name="line787"></a>      }
+<a name="line788"></a>      this.executeCallback_(entries[i], this.state_, this.result_);
+<a name="line789"></a>    }
+<a name="line790"></a>  }
+<a name="line791"></a>  this.executing_ = false;
+<a name="line792"></a>};
+<a name="line793"></a>
+<a name="line794"></a>
+<a name="line795"></a>/**
+<a name="line796"></a> * Executes a pending callback for this Promise. Invokes an {@code onFulfilled}
+<a name="line797"></a> * or {@code onRejected} callback based on the resolved state of the Promise.
+<a name="line798"></a> *
+<a name="line799"></a> * @param {!goog.Promise.CallbackEntry_} callbackEntry An entry containing the
+<a name="line800"></a> *     onFulfilled and/or onRejected callbacks for this step.
+<a name="line801"></a> * @param {goog.Promise.State_} state The resolution status of the Promise,
+<a name="line802"></a> *     either FULFILLED or REJECTED.
+<a name="line803"></a> * @param {*} result The resolved result of the Promise.
+<a name="line804"></a> * @private
+<a name="line805"></a> */
+<a name="line806"></a>goog.Promise.prototype.executeCallback_ = function(
+<a name="line807"></a>    callbackEntry, state, result) {
+<a name="line808"></a>  if (state == goog.Promise.State_.FULFILLED) {
+<a name="line809"></a>    callbackEntry.onFulfilled(result);
+<a name="line810"></a>  } else {
+<a name="line811"></a>    this.removeUnhandledRejection_();
+<a name="line812"></a>    callbackEntry.onRejected(result);
+<a name="line813"></a>  }
+<a name="line814"></a>};
+<a name="line815"></a>
+<a name="line816"></a>
+<a name="line817"></a>/**
+<a name="line818"></a> * Records a stack trace entry for functions that call {@code then} or the
+<a name="line819"></a> * Promise constructor. May be disabled by unsetting {@code LONG_STACK_TRACES}.
+<a name="line820"></a> *
+<a name="line821"></a> * @param {!Error} err An Error object created by the calling function for
+<a name="line822"></a> *     providing a stack trace.
+<a name="line823"></a> * @private
+<a name="line824"></a> */
+<a name="line825"></a>goog.Promise.prototype.addStackTrace_ = function(err) {
+<a name="line826"></a>  if (goog.Promise.LONG_STACK_TRACES &amp;&amp; goog.isString(err.stack)) {
+<a name="line827"></a>    // Extract the third line of the stack trace, which is the entry for the
+<a name="line828"></a>    // user function that called into Promise code.
+<a name="line829"></a>    var trace = err.stack.split(&#39;\n&#39;, 4)[3];
+<a name="line830"></a>    var message = err.message;
+<a name="line831"></a>
+<a name="line832"></a>    // Pad the message to align the traces.
+<a name="line833"></a>    message += Array(11 - message.length).join(&#39; &#39;);
+<a name="line834"></a>    this.stack_.push(message + trace);
+<a name="line835"></a>  }
+<a name="line836"></a>};
+<a name="line837"></a>
+<a name="line838"></a>
+<a name="line839"></a>/**
+<a name="line840"></a> * Adds extra stack trace information to an exception for the list of
+<a name="line841"></a> * asynchronous {@code then} calls that have been run for this Promise. Stack
+<a name="line842"></a> * trace information is recorded in {@see #addStackTrace_}, and appended to
+<a name="line843"></a> * rethrown errors when {@code LONG_STACK_TRACES} is enabled.
+<a name="line844"></a> *
+<a name="line845"></a> * @param {*} err An unhandled exception captured during callback execution.
+<a name="line846"></a> * @private
+<a name="line847"></a> */
+<a name="line848"></a>goog.Promise.prototype.appendLongStack_ = function(err) {
+<a name="line849"></a>  if (goog.Promise.LONG_STACK_TRACES &amp;&amp;
+<a name="line850"></a>      err &amp;&amp; goog.isString(err.stack) &amp;&amp; this.stack_.length) {
+<a name="line851"></a>    var longTrace = [&#39;Promise trace:&#39;];
+<a name="line852"></a>
+<a name="line853"></a>    for (var promise = this; promise; promise = promise.parent_) {
+<a name="line854"></a>      for (var i = this.currentStep_; i &gt;= 0; i--) {
+<a name="line855"></a>        longTrace.push(promise.stack_[i]);
+<a name="line856"></a>      }
+<a name="line857"></a>      longTrace.push(&#39;Value: &#39; +
+<a name="line858"></a>          &#39;[&#39; + (promise.state_ == goog.Promise.State_.REJECTED ?
+<a name="line859"></a>              &#39;REJECTED&#39; : &#39;FULFILLED&#39;) + &#39;] &#39; +
+<a name="line860"></a>          &#39;&lt;&#39; + String(promise.result_) + &#39;&gt;&#39;);
+<a name="line861"></a>    }
+<a name="line862"></a>    err.stack += &#39;\n\n&#39; + longTrace.join(&#39;\n&#39;);
+<a name="line863"></a>  }
+<a name="line864"></a>};
+<a name="line865"></a>
+<a name="line866"></a>
+<a name="line867"></a>/**
+<a name="line868"></a> * Marks this rejected Promise as having being handled. Also marks any parent
+<a name="line869"></a> * Promises in the rejected state as handled. The rejection handler will no
+<a name="line870"></a> * longer be invoked for this Promise (if it has not been called already).
+<a name="line871"></a> *
+<a name="line872"></a> * @private
+<a name="line873"></a> */
+<a name="line874"></a>goog.Promise.prototype.removeUnhandledRejection_ = function() {
+<a name="line875"></a>  if (goog.Promise.UNHANDLED_REJECTION_DELAY &gt; 0) {
+<a name="line876"></a>    for (var p = this; p &amp;&amp; p.unhandledRejectionId_; p = p.parent_) {
+<a name="line877"></a>      goog.global.clearTimeout(p.unhandledRejectionId_);
+<a name="line878"></a>      p.unhandledRejectionId_ = 0;
+<a name="line879"></a>    }
+<a name="line880"></a>  } else if (goog.Promise.UNHANDLED_REJECTION_DELAY == 0) {
+<a name="line881"></a>    for (var p = this; p &amp;&amp; p.hadUnhandledRejection_; p = p.parent_) {
+<a name="line882"></a>      p.hadUnhandledRejection_ = false;
+<a name="line883"></a>    }
+<a name="line884"></a>  }
+<a name="line885"></a>};
+<a name="line886"></a>
+<a name="line887"></a>
+<a name="line888"></a>/**
+<a name="line889"></a> * Marks this rejected Promise as unhandled. If no {@code onRejected} callback
+<a name="line890"></a> * is called for this Promise before the {@code UNHANDLED_REJECTION_DELAY}
+<a name="line891"></a> * expires, the reason will be passed to the unhandled rejection handler. The
+<a name="line892"></a> * handler typically rethrows the rejection reason so that it becomes visible in
+<a name="line893"></a> * the developer console.
+<a name="line894"></a> *
+<a name="line895"></a> * @param {!goog.Promise} promise The rejected Promise.
+<a name="line896"></a> * @param {*} reason The Promise rejection reason.
+<a name="line897"></a> * @private
+<a name="line898"></a> */
+<a name="line899"></a>goog.Promise.addUnhandledRejection_ = function(promise, reason) {
+<a name="line900"></a>  if (goog.Promise.UNHANDLED_REJECTION_DELAY &gt; 0) {
+<a name="line901"></a>    promise.unhandledRejectionId_ = goog.global.setTimeout(function() {
+<a name="line902"></a>      promise.appendLongStack_(reason);
+<a name="line903"></a>      goog.Promise.handleRejection_.call(null, reason);
+<a name="line904"></a>    }, goog.Promise.UNHANDLED_REJECTION_DELAY);
+<a name="line905"></a>
+<a name="line906"></a>  } else if (goog.Promise.UNHANDLED_REJECTION_DELAY == 0) {
+<a name="line907"></a>    promise.hadUnhandledRejection_ = true;
+<a name="line908"></a>    goog.async.run(function() {
+<a name="line909"></a>      if (promise.hadUnhandledRejection_) {
+<a name="line910"></a>        promise.appendLongStack_(reason);
+<a name="line911"></a>        goog.Promise.handleRejection_.call(null, reason);
+<a name="line912"></a>      }
+<a name="line913"></a>    });
+<a name="line914"></a>  }
+<a name="line915"></a>};
+<a name="line916"></a>
+<a name="line917"></a>
+<a name="line918"></a>/**
+<a name="line919"></a> * A method that is invoked with the rejection reasons for Promises that are
+<a name="line920"></a> * rejected but have no {@code onRejected} callbacks registered yet.
+<a name="line921"></a> * @type {function(*)}
+<a name="line922"></a> * @private
+<a name="line923"></a> */
+<a name="line924"></a>goog.Promise.handleRejection_ = goog.async.throwException;
+<a name="line925"></a>
+<a name="line926"></a>
+<a name="line927"></a>/**
+<a name="line928"></a> * Sets a handler that will be called with reasons from unhandled rejected
+<a name="line929"></a> * Promises. If the rejected Promise (or one of its descendants) has an
+<a name="line930"></a> * {@code onRejected} callback registered, the rejection will be considered
+<a name="line931"></a> * handled, and the rejection handler will not be called.
+<a name="line932"></a> *
+<a name="line933"></a> * By default, unhandled rejections are rethrown so that the error may be
+<a name="line934"></a> * captured by the developer console or a {@code window.onerror} handler.
+<a name="line935"></a> *
+<a name="line936"></a> * @param {function(*)} handler A function that will be called with reasons from
+<a name="line937"></a> *     rejected Promises. Defaults to {@code goog.async.throwException}.
+<a name="line938"></a> */
+<a name="line939"></a>goog.Promise.setUnhandledRejectionHandler = function(handler) {
+<a name="line940"></a>  goog.Promise.handleRejection_ = handler;
+<a name="line941"></a>};
+<a name="line942"></a>
+<a name="line943"></a>
+<a name="line944"></a>
+<a name="line945"></a>/**
+<a name="line946"></a> * Error used as a rejection reason for canceled Promises.
+<a name="line947"></a> *
+<a name="line948"></a> * @param {string=} opt_message
+<a name="line949"></a> * @constructor
+<a name="line950"></a> * @extends {goog.debug.Error}
+<a name="line951"></a> * @final
+<a name="line952"></a> */
+<a name="line953"></a>goog.Promise.CancellationError = function(opt_message) {
+<a name="line954"></a>  goog.Promise.CancellationError.base(this, &#39;constructor&#39;, opt_message);
+<a name="line955"></a>};
+<a name="line956"></a>goog.inherits(goog.Promise.CancellationError, goog.debug.Error);
+<a name="line957"></a>
+<a name="line958"></a>
+<a name="line959"></a>/** @override */
+<a name="line960"></a>goog.Promise.CancellationError.prototype.name = &#39;cancel&#39;;
+<a name="line961"></a>
+<a name="line962"></a>
+<a name="line963"></a>
+<a name="line964"></a>/**
+<a name="line965"></a> * Internal implementation of the resolver interface.
+<a name="line966"></a> *
+<a name="line967"></a> * @param {!goog.Promise.&lt;TYPE&gt;} promise
+<a name="line968"></a> * @param {function((TYPE|goog.Promise.&lt;TYPE&gt;|Thenable))} resolve
+<a name="line969"></a> * @param {function(*): void} reject
+<a name="line970"></a> * @implements {goog.promise.Resolver.&lt;TYPE&gt;}
+<a name="line971"></a> * @final @struct
+<a name="line972"></a> * @constructor
+<a name="line973"></a> * @private
+<a name="line974"></a> * @template TYPE
+<a name="line975"></a> */
+<a name="line976"></a>goog.Promise.Resolver_ = function(promise, resolve, reject) {
+<a name="line977"></a>  /** @const */
+<a name="line978"></a>  this.promise = promise;
+<a name="line979"></a>
+<a name="line980"></a>  /** @const */
+<a name="line981"></a>  this.resolve = resolve;
+<a name="line982"></a>
+<a name="line983"></a>  /** @const */
+<a name="line984"></a>  this.reject = reject;
+<a name="line985"></a>};
+</pre>
+
+
+</body>
+</html>

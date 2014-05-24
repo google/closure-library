@@ -1,0 +1,1050 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>history.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_history_history.js.html">history.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Browser history stack management class.
+<a name="line17"></a> *
+<a name="line18"></a> * The goog.History object allows a page to create history state without leaving
+<a name="line19"></a> * the current document. This allows users to, for example, hit the browser&#39;s
+<a name="line20"></a> * back button without leaving the current page.
+<a name="line21"></a> *
+<a name="line22"></a> * The history object can be instantiated in one of two modes. In user visible
+<a name="line23"></a> * mode, the current history state is shown in the browser address bar as a
+<a name="line24"></a> * document location fragment (the portion of the URL after the &#39;#&#39;). These
+<a name="line25"></a> * addresses can be bookmarked, copied and pasted into another browser, and
+<a name="line26"></a> * modified directly by the user like any other URL.
+<a name="line27"></a> *
+<a name="line28"></a> * If the history object is created in invisible mode, the user can still
+<a name="line29"></a> * affect the state using the browser forward and back buttons, but the current
+<a name="line30"></a> * state is not displayed in the browser address bar. These states are not
+<a name="line31"></a> * bookmarkable or editable.
+<a name="line32"></a> *
+<a name="line33"></a> * It is possible to use both types of history object on the same page, but not
+<a name="line34"></a> * currently recommended due to browser deficiencies.
+<a name="line35"></a> *
+<a name="line36"></a> * Tested to work in:
+<a name="line37"></a> * &lt;ul&gt;
+<a name="line38"></a> *   &lt;li&gt;Firefox 1.0-4.0
+<a name="line39"></a> *   &lt;li&gt;Internet Explorer 5.5-9.0
+<a name="line40"></a> *   &lt;li&gt;Opera 9+
+<a name="line41"></a> *   &lt;li&gt;Safari 4+
+<a name="line42"></a> * &lt;/ul&gt;
+<a name="line43"></a> *
+<a name="line44"></a> * @author brenneman@google.com (Shawn Brenneman)
+<a name="line45"></a> * @see ../demos/history1.html
+<a name="line46"></a> * @see ../demos/history2.html
+<a name="line47"></a> */
+<a name="line48"></a>
+<a name="line49"></a>/* Some browser specific implementation notes:
+<a name="line50"></a> *
+<a name="line51"></a> * Firefox (through version 2.0.0.1):
+<a name="line52"></a> *
+<a name="line53"></a> * Ideally, navigating inside the hidden iframe could be done using
+<a name="line54"></a> * about:blank#state instead of a real page on the server. Setting the hash on
+<a name="line55"></a> * about:blank creates history entries, but the hash is not recorded and is lost
+<a name="line56"></a> * when the user hits the back button. This is true in Opera as well. A blank
+<a name="line57"></a> * HTML page must be provided for invisible states to be recorded in the iframe
+<a name="line58"></a> * hash.
+<a name="line59"></a> *
+<a name="line60"></a> * After leaving the page with the History object and returning to it (by
+<a name="line61"></a> * hitting the back button from another site), the last state of the iframe is
+<a name="line62"></a> * overwritten. The most recent state is saved in a hidden input field so the
+<a name="line63"></a> * previous state can be restored.
+<a name="line64"></a> *
+<a name="line65"></a> * Firefox does not store the previous value of dynamically generated input
+<a name="line66"></a> * elements. To save the state, the hidden element must be in the HTML document,
+<a name="line67"></a> * either in the original source or added with document.write. If a reference
+<a name="line68"></a> * to the input element is not provided as a constructor argument, then the
+<a name="line69"></a> * history object creates one using document.write, in which case the history
+<a name="line70"></a> * object must be created from a script in the body element of the page.
+<a name="line71"></a> *
+<a name="line72"></a> * Manually editing the address field to a different hash link prevents further
+<a name="line73"></a> * updates to the address bar. The page continues to work as normal, but the
+<a name="line74"></a> * address shown will be incorrect until the page is reloaded.
+<a name="line75"></a> *
+<a name="line76"></a> * NOTE(user): It should be noted that Firefox will URL encode any non-regular
+<a name="line77"></a> * ascii character, along with |space|, &quot;, &lt;, and &gt;, when added to the fragment.
+<a name="line78"></a> * If you expect these characters in your tokens you should consider that
+<a name="line79"></a> * setToken(&#39;&lt;b&gt;&#39;) would result in the history fragment &quot;%3Cb%3E&quot;, and
+<a name="line80"></a> * &quot;esp&amp;eacute;re&quot; would show &quot;esp%E8re&quot;.  (IE allows unicode characters in the
+<a name="line81"></a> * fragment)
+<a name="line82"></a> *
+<a name="line83"></a> * TODO(user): Should we encapsulate this escaping into the API for visible
+<a name="line84"></a> * history and encode all characters that aren&#39;t supported by Firefox?  It also
+<a name="line85"></a> * needs to be optional so apps can elect to handle the escaping themselves.
+<a name="line86"></a> *
+<a name="line87"></a> *
+<a name="line88"></a> * Internet Explorer (through version 7.0):
+<a name="line89"></a> *
+<a name="line90"></a> * IE does not modify the history stack when the document fragment is changed.
+<a name="line91"></a> * We create history entries instead by using document.open and document.write
+<a name="line92"></a> * into a hidden iframe.
+<a name="line93"></a> *
+<a name="line94"></a> * IE destroys the history stack when navigating from /foo.html#someFragment to
+<a name="line95"></a> * /foo.html. The workaround is to always append the # to the URL. This is
+<a name="line96"></a> * somewhat unfortunate when loading the page without any # specified, because
+<a name="line97"></a> * a second &quot;click&quot; sound will play on load as the fragment is automatically
+<a name="line98"></a> * appended. If the hash is always present, this can be avoided.
+<a name="line99"></a> *
+<a name="line100"></a> * Manually editing the hash in the address bar in IE6 and then hitting the back
+<a name="line101"></a> * button can replace the page with a blank page. This is a Bad User Experience,
+<a name="line102"></a> * but probably not preventable.
+<a name="line103"></a> *
+<a name="line104"></a> * IE also has a bug when the page is loaded via a server redirect, setting
+<a name="line105"></a> * a new hash value on the window location will force a page reload. This will
+<a name="line106"></a> * happen the first time setToken is called with a new token. The only known
+<a name="line107"></a> * workaround is to force a client reload early, for example by setting
+<a name="line108"></a> * window.location.hash = window.location.hash, which will otherwise be a no-op.
+<a name="line109"></a> *
+<a name="line110"></a> * Internet Explorer 8.0, Webkit 532.1 and Gecko 1.9.2:
+<a name="line111"></a> *
+<a name="line112"></a> * IE8 has introduced the support to the HTML5 onhashchange event, which means
+<a name="line113"></a> * we don&#39;t have to do any polling to detect fragment changes. Chrome and
+<a name="line114"></a> * Firefox have added it on their newer builds, wekbit 532.1 and gecko 1.9.2.
+<a name="line115"></a> * http://www.w3.org/TR/html5/history.html
+<a name="line116"></a> * NOTE(goto): it is important to note that the document needs to have the
+<a name="line117"></a> * &lt;!DOCTYPE html&gt; tag to enable the IE8 HTML5 mode. If the tag is not present,
+<a name="line118"></a> * IE8 will enter IE7 compatibility mode (which can also be enabled manually).
+<a name="line119"></a> *
+<a name="line120"></a> * Opera (through version 9.02):
+<a name="line121"></a> *
+<a name="line122"></a> * Navigating through pages at a rate faster than some threshhold causes Opera
+<a name="line123"></a> * to cancel all outstanding timeouts and intervals, including the location
+<a name="line124"></a> * polling loop. Since this condition cannot be detected, common input events
+<a name="line125"></a> * are captured to cause the loop to restart.
+<a name="line126"></a> *
+<a name="line127"></a> * location.replace is adding a history entry inside setHash_, despite
+<a name="line128"></a> * documentation that suggests it should not.
+<a name="line129"></a> *
+<a name="line130"></a> *
+<a name="line131"></a> * Safari (through version 2.0.4):
+<a name="line132"></a> *
+<a name="line133"></a> * After hitting the back button, the location.hash property is no longer
+<a name="line134"></a> * readable from JavaScript. This is fixed in later WebKit builds, but not in
+<a name="line135"></a> * currently shipping Safari. For now, the only recourse is to disable history
+<a name="line136"></a> * states in Safari. Pages are still navigable via the History object, but the
+<a name="line137"></a> * back button cannot restore previous states.
+<a name="line138"></a> *
+<a name="line139"></a> * Safari sets history states on navigation to a hashlink, but doesn&#39;t allow
+<a name="line140"></a> * polling of the hash, so following actual anchor links in the page will create
+<a name="line141"></a> * useless history entries. Using location.replace does not seem to prevent
+<a name="line142"></a> * this. Not a terribly good user experience, but fixed in later Webkits.
+<a name="line143"></a> *
+<a name="line144"></a> *
+<a name="line145"></a> * WebKit (nightly version 420+):
+<a name="line146"></a> *
+<a name="line147"></a> * This almost works. Returning to a page with an invisible history object does
+<a name="line148"></a> * not restore the old state, however, and there is no pageshow event that fires
+<a name="line149"></a> * in this browser. Holding off on finding a solution for now.
+<a name="line150"></a> *
+<a name="line151"></a> *
+<a name="line152"></a> * HTML5 capable browsers (Firefox 4, Chrome, Safari 5)
+<a name="line153"></a> *
+<a name="line154"></a> * No known issues. The goog.history.Html5History class provides a simpler
+<a name="line155"></a> * implementation more suitable for recent browsers. These implementations
+<a name="line156"></a> * should be merged so the history class automatically invokes the correct
+<a name="line157"></a> * implementation.
+<a name="line158"></a> */
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>goog.provide(&#39;goog.History&#39;);
+<a name="line162"></a>goog.provide(&#39;goog.History.Event&#39;);
+<a name="line163"></a>goog.provide(&#39;goog.History.EventType&#39;);
+<a name="line164"></a>
+<a name="line165"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line166"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line167"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line168"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line169"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line170"></a>goog.require(&#39;goog.history.Event&#39;);
+<a name="line171"></a>goog.require(&#39;goog.history.EventType&#39;);
+<a name="line172"></a>goog.require(&#39;goog.memoize&#39;);
+<a name="line173"></a>goog.require(&#39;goog.string&#39;);
+<a name="line174"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * A history management object. Can be instantiated in user-visible mode (uses
+<a name="line180"></a> * the address fragment to manage state) or in hidden mode. This object should
+<a name="line181"></a> * be created from a script in the document body before the document has
+<a name="line182"></a> * finished loading.
+<a name="line183"></a> *
+<a name="line184"></a> * To store the hidden states in browsers other than IE, a hidden iframe is
+<a name="line185"></a> * used. It must point to a valid html page on the same domain (which can and
+<a name="line186"></a> * probably should be blank.)
+<a name="line187"></a> *
+<a name="line188"></a> * Sample instantiation and usage:
+<a name="line189"></a> *
+<a name="line190"></a> * &lt;pre&gt;
+<a name="line191"></a> * // Instantiate history to use the address bar for state.
+<a name="line192"></a> * var h = new goog.History();
+<a name="line193"></a> * goog.events.listen(h, goog.history.EventType.NAVIGATE, navCallback);
+<a name="line194"></a> * h.setEnabled(true);
+<a name="line195"></a> *
+<a name="line196"></a> * // Any changes to the location hash will call the following function.
+<a name="line197"></a> * function navCallback(e) {
+<a name="line198"></a> *   alert(&#39;Navigated to state &quot;&#39; + e.token + &#39;&quot;&#39;);
+<a name="line199"></a> * }
+<a name="line200"></a> *
+<a name="line201"></a> * // The history token can also be set from code directly.
+<a name="line202"></a> * h.setToken(&#39;foo&#39;);
+<a name="line203"></a> * &lt;/pre&gt;
+<a name="line204"></a> *
+<a name="line205"></a> * @param {boolean=} opt_invisible True to use hidden history states instead of
+<a name="line206"></a> *     the user-visible location hash.
+<a name="line207"></a> * @param {string=} opt_blankPageUrl A URL to a blank page on the same server.
+<a name="line208"></a> *     Required if opt_invisible is true.  This URL is also used as the src
+<a name="line209"></a> *     for the iframe used to track history state in IE (if not specified the
+<a name="line210"></a> *     iframe is not given a src attribute).  Access is Denied error may
+<a name="line211"></a> *     occur in IE7 if the window&#39;s URL&#39;s scheme is https, and this URL is
+<a name="line212"></a> *     not specified.
+<a name="line213"></a> * @param {HTMLInputElement=} opt_input The hidden input element to be used to
+<a name="line214"></a> *     store the history token.  If not provided, a hidden input element will
+<a name="line215"></a> *     be created using document.write.
+<a name="line216"></a> * @param {HTMLIFrameElement=} opt_iframe The hidden iframe that will be used by
+<a name="line217"></a> *     IE for pushing history state changes, or by all browsers if opt_invisible
+<a name="line218"></a> *     is true. If not provided, a hidden iframe element will be created using
+<a name="line219"></a> *     document.write.
+<a name="line220"></a> * @constructor
+<a name="line221"></a> * @extends {goog.events.EventTarget}
+<a name="line222"></a> */
+<a name="line223"></a>goog.History = function(opt_invisible, opt_blankPageUrl, opt_input,
+<a name="line224"></a>                        opt_iframe) {
+<a name="line225"></a>  goog.events.EventTarget.call(this);
+<a name="line226"></a>
+<a name="line227"></a>  if (opt_invisible &amp;&amp; !opt_blankPageUrl) {
+<a name="line228"></a>    throw Error(&#39;Can\&#39;t use invisible history without providing a blank page.&#39;);
+<a name="line229"></a>  }
+<a name="line230"></a>
+<a name="line231"></a>  var input;
+<a name="line232"></a>  if (opt_input) {
+<a name="line233"></a>    input = opt_input;
+<a name="line234"></a>  } else {
+<a name="line235"></a>    var inputId = &#39;history_state&#39; + goog.History.historyCount_;
+<a name="line236"></a>    document.write(goog.string.subs(goog.History.INPUT_TEMPLATE_,
+<a name="line237"></a>                                    inputId, inputId));
+<a name="line238"></a>    input = goog.dom.getElement(inputId);
+<a name="line239"></a>  }
+<a name="line240"></a>
+<a name="line241"></a>  /**
+<a name="line242"></a>   * An input element that stores the current iframe state. Used to restore
+<a name="line243"></a>   * the state when returning to the page on non-IE browsers.
+<a name="line244"></a>   * @type {HTMLInputElement}
+<a name="line245"></a>   * @private
+<a name="line246"></a>   */
+<a name="line247"></a>  this.hiddenInput_ = /** @type {HTMLInputElement} */ (input);
+<a name="line248"></a>
+<a name="line249"></a>  /**
+<a name="line250"></a>   * The window whose location contains the history token fragment. This is
+<a name="line251"></a>   * the window that contains the hidden input. It&#39;s typically the top window.
+<a name="line252"></a>   * It is not necessarily the same window that the js code is loaded in.
+<a name="line253"></a>   * @type {Window}
+<a name="line254"></a>   * @private
+<a name="line255"></a>   */
+<a name="line256"></a>  this.window_ = opt_input ?
+<a name="line257"></a>      goog.dom.getWindow(goog.dom.getOwnerDocument(opt_input)) : window;
+<a name="line258"></a>
+<a name="line259"></a>  /**
+<a name="line260"></a>   * The base URL for the hidden iframe. Must refer to a document in the
+<a name="line261"></a>   * same domain as the main page.
+<a name="line262"></a>   * @type {string|undefined}
+<a name="line263"></a>   * @private
+<a name="line264"></a>   */
+<a name="line265"></a>  this.iframeSrc_ = opt_blankPageUrl;
+<a name="line266"></a>
+<a name="line267"></a>  if (goog.userAgent.IE &amp;&amp; !opt_blankPageUrl) {
+<a name="line268"></a>    this.iframeSrc_ = window.location.protocol == &#39;https&#39; ? &#39;https:///&#39; :
+<a name="line269"></a>                                                            &#39;javascript:&quot;&quot;&#39;;
+<a name="line270"></a>  }
+<a name="line271"></a>
+<a name="line272"></a>  /**
+<a name="line273"></a>   * A timer for polling the current history state for changes.
+<a name="line274"></a>   * @type {goog.Timer}
+<a name="line275"></a>   * @private
+<a name="line276"></a>   */
+<a name="line277"></a>  this.timer_ = new goog.Timer(goog.History.PollingType.NORMAL);
+<a name="line278"></a>  this.registerDisposable(this.timer_);
+<a name="line279"></a>
+<a name="line280"></a>  /**
+<a name="line281"></a>   * True if the state tokens are displayed in the address bar, false for hidden
+<a name="line282"></a>   * history states.
+<a name="line283"></a>   * @type {boolean}
+<a name="line284"></a>   * @private
+<a name="line285"></a>   */
+<a name="line286"></a>  this.userVisible_ = !opt_invisible;
+<a name="line287"></a>
+<a name="line288"></a>  /**
+<a name="line289"></a>   * An object to keep track of the history event listeners.
+<a name="line290"></a>   * @type {goog.events.EventHandler.&lt;!goog.History&gt;}
+<a name="line291"></a>   * @private
+<a name="line292"></a>   */
+<a name="line293"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line294"></a>
+<a name="line295"></a>  if (opt_invisible || goog.History.LEGACY_IE) {
+<a name="line296"></a>    var iframe;
+<a name="line297"></a>    if (opt_iframe) {
+<a name="line298"></a>      iframe = opt_iframe;
+<a name="line299"></a>    } else {
+<a name="line300"></a>      var iframeId = &#39;history_iframe&#39; + goog.History.historyCount_;
+<a name="line301"></a>      var srcAttribute = this.iframeSrc_ ?
+<a name="line302"></a>          &#39;src=&quot;&#39; + goog.string.htmlEscape(this.iframeSrc_) + &#39;&quot;&#39; :
+<a name="line303"></a>          &#39;&#39;;
+<a name="line304"></a>      document.write(goog.string.subs(goog.History.IFRAME_TEMPLATE_,
+<a name="line305"></a>                                      iframeId,
+<a name="line306"></a>                                      srcAttribute));
+<a name="line307"></a>      iframe = goog.dom.getElement(iframeId);
+<a name="line308"></a>    }
+<a name="line309"></a>
+<a name="line310"></a>    /**
+<a name="line311"></a>     * Internet Explorer uses a hidden iframe for all history changes. Other
+<a name="line312"></a>     * browsers use the iframe only for pushing invisible states.
+<a name="line313"></a>     * @type {HTMLIFrameElement}
+<a name="line314"></a>     * @private
+<a name="line315"></a>     */
+<a name="line316"></a>    this.iframe_ = /** @type {HTMLIFrameElement} */ (iframe);
+<a name="line317"></a>
+<a name="line318"></a>    /**
+<a name="line319"></a>     * Whether the hidden iframe has had a document written to it yet in this
+<a name="line320"></a>     * session.
+<a name="line321"></a>     * @type {boolean}
+<a name="line322"></a>     * @private
+<a name="line323"></a>     */
+<a name="line324"></a>    this.unsetIframe_ = true;
+<a name="line325"></a>  }
+<a name="line326"></a>
+<a name="line327"></a>  if (goog.History.LEGACY_IE) {
+<a name="line328"></a>    // IE relies on the hidden input to restore the history state from previous
+<a name="line329"></a>    // sessions, but input values are only restored after window.onload. Set up
+<a name="line330"></a>    // a callback to poll the value after the onload event.
+<a name="line331"></a>    this.eventHandler_.listen(this.window_,
+<a name="line332"></a>                              goog.events.EventType.LOAD,
+<a name="line333"></a>                              this.onDocumentLoaded);
+<a name="line334"></a>
+<a name="line335"></a>    /**
+<a name="line336"></a>     * IE-only variable for determining if the document has loaded.
+<a name="line337"></a>     * @type {boolean}
+<a name="line338"></a>     * @protected
+<a name="line339"></a>     */
+<a name="line340"></a>    this.documentLoaded = false;
+<a name="line341"></a>
+<a name="line342"></a>    /**
+<a name="line343"></a>     * IE-only variable for storing whether the history object should be enabled
+<a name="line344"></a>     * once the document finishes loading.
+<a name="line345"></a>     * @type {boolean}
+<a name="line346"></a>     * @private
+<a name="line347"></a>     */
+<a name="line348"></a>    this.shouldEnable_ = false;
+<a name="line349"></a>  }
+<a name="line350"></a>
+<a name="line351"></a>  // Set the initial history state.
+<a name="line352"></a>  if (this.userVisible_) {
+<a name="line353"></a>    this.setHash_(this.getToken(), true);
+<a name="line354"></a>  } else {
+<a name="line355"></a>    this.setIframeToken_(this.hiddenInput_.value);
+<a name="line356"></a>  }
+<a name="line357"></a>
+<a name="line358"></a>  goog.History.historyCount_++;
+<a name="line359"></a>};
+<a name="line360"></a>goog.inherits(goog.History, goog.events.EventTarget);
+<a name="line361"></a>
+<a name="line362"></a>
+<a name="line363"></a>/**
+<a name="line364"></a> * Status of when the object is active and dispatching events.
+<a name="line365"></a> * @type {boolean}
+<a name="line366"></a> * @private
+<a name="line367"></a> */
+<a name="line368"></a>goog.History.prototype.enabled_ = false;
+<a name="line369"></a>
+<a name="line370"></a>
+<a name="line371"></a>/**
+<a name="line372"></a> * Whether the object is performing polling with longer intervals. This can
+<a name="line373"></a> * occur for instance when setting the location of the iframe when in invisible
+<a name="line374"></a> * mode and the server that is hosting the blank html page is down. In FF, this
+<a name="line375"></a> * will cause the location of the iframe to no longer be accessible, with
+<a name="line376"></a> * permision denied exceptions being thrown on every access of the history
+<a name="line377"></a> * token. When this occurs, the polling interval is elongated. This causes
+<a name="line378"></a> * exceptions to be thrown at a lesser rate while allowing for the history
+<a name="line379"></a> * object to resurrect itself when the html page becomes accessible.
+<a name="line380"></a> * @type {boolean}
+<a name="line381"></a> * @private
+<a name="line382"></a> */
+<a name="line383"></a>goog.History.prototype.longerPolling_ = false;
+<a name="line384"></a>
+<a name="line385"></a>
+<a name="line386"></a>/**
+<a name="line387"></a> * The last token set by the history object, used to poll for changes.
+<a name="line388"></a> * @type {?string}
+<a name="line389"></a> * @private
+<a name="line390"></a> */
+<a name="line391"></a>goog.History.prototype.lastToken_ = null;
+<a name="line392"></a>
+<a name="line393"></a>
+<a name="line394"></a>/**
+<a name="line395"></a> * Whether the browser supports HTML5 history management&#39;s onhashchange event.
+<a name="line396"></a> * {@link http://www.w3.org/TR/html5/history.html}. IE 9 in compatibility mode
+<a name="line397"></a> * indicates that onhashchange is in window, but testing reveals the event
+<a name="line398"></a> * isn&#39;t actually fired.
+<a name="line399"></a> * @return {boolean} Whether onhashchange is supported.
+<a name="line400"></a> */
+<a name="line401"></a>goog.History.isOnHashChangeSupported = goog.memoize(function() {
+<a name="line402"></a>  return goog.userAgent.IE ?
+<a name="line403"></a>      document.documentMode &gt;= 8 :
+<a name="line404"></a>      &#39;onhashchange&#39; in goog.global;
+<a name="line405"></a>});
+<a name="line406"></a>
+<a name="line407"></a>
+<a name="line408"></a>/**
+<a name="line409"></a> * Whether the current browser is Internet Explorer prior to version 8. Many IE
+<a name="line410"></a> * specific workarounds developed before version 8 are unnecessary in more
+<a name="line411"></a> * current versions.
+<a name="line412"></a> * @type {boolean}
+<a name="line413"></a> */
+<a name="line414"></a>goog.History.LEGACY_IE = goog.userAgent.IE &amp;&amp;
+<a name="line415"></a>    !goog.userAgent.isDocumentModeOrHigher(8);
+<a name="line416"></a>
+<a name="line417"></a>
+<a name="line418"></a>/**
+<a name="line419"></a> * Whether the browser always requires the hash to be present. Internet Explorer
+<a name="line420"></a> * before version 8 will reload the HTML page if the hash is omitted.
+<a name="line421"></a> * @type {boolean}
+<a name="line422"></a> */
+<a name="line423"></a>goog.History.HASH_ALWAYS_REQUIRED = goog.History.LEGACY_IE;
+<a name="line424"></a>
+<a name="line425"></a>
+<a name="line426"></a>/**
+<a name="line427"></a> * If not null, polling in the user invisible mode will be disabled until this
+<a name="line428"></a> * token is seen. This is used to prevent a race condition where the iframe
+<a name="line429"></a> * hangs temporarily while the location is changed.
+<a name="line430"></a> * @type {?string}
+<a name="line431"></a> * @private
+<a name="line432"></a> */
+<a name="line433"></a>goog.History.prototype.lockedToken_ = null;
+<a name="line434"></a>
+<a name="line435"></a>
+<a name="line436"></a>/** @override */
+<a name="line437"></a>goog.History.prototype.disposeInternal = function() {
+<a name="line438"></a>  goog.History.superClass_.disposeInternal.call(this);
+<a name="line439"></a>  this.eventHandler_.dispose();
+<a name="line440"></a>  this.setEnabled(false);
+<a name="line441"></a>};
+<a name="line442"></a>
+<a name="line443"></a>
+<a name="line444"></a>/**
+<a name="line445"></a> * Starts or stops the History polling loop. When enabled, the History object
+<a name="line446"></a> * will immediately fire an event for the current location. The caller can set
+<a name="line447"></a> * up event listeners between the call to the constructor and the call to
+<a name="line448"></a> * setEnabled.
+<a name="line449"></a> *
+<a name="line450"></a> * On IE, actual startup may be delayed until the iframe and hidden input
+<a name="line451"></a> * element have been loaded and can be polled. This behavior is transparent to
+<a name="line452"></a> * the caller.
+<a name="line453"></a> *
+<a name="line454"></a> * @param {boolean} enable Whether to enable the history polling loop.
+<a name="line455"></a> */
+<a name="line456"></a>goog.History.prototype.setEnabled = function(enable) {
+<a name="line457"></a>
+<a name="line458"></a>  if (enable == this.enabled_) {
+<a name="line459"></a>    return;
+<a name="line460"></a>  }
+<a name="line461"></a>
+<a name="line462"></a>  if (goog.History.LEGACY_IE &amp;&amp; !this.documentLoaded) {
+<a name="line463"></a>    // Wait until the document has actually loaded before enabling the
+<a name="line464"></a>    // object or any saved state from a previous session will be lost.
+<a name="line465"></a>    this.shouldEnable_ = enable;
+<a name="line466"></a>    return;
+<a name="line467"></a>  }
+<a name="line468"></a>
+<a name="line469"></a>  if (enable) {
+<a name="line470"></a>    if (goog.userAgent.OPERA) {
+<a name="line471"></a>      // Capture events for common user input so we can restart the timer in
+<a name="line472"></a>      // Opera if it fails. Yes, this is distasteful. See operaDefibrillator_.
+<a name="line473"></a>      this.eventHandler_.listen(this.window_.document,
+<a name="line474"></a>                                goog.History.INPUT_EVENTS_,
+<a name="line475"></a>                                this.operaDefibrillator_);
+<a name="line476"></a>    } else if (goog.userAgent.GECKO) {
+<a name="line477"></a>      // Firefox will not restore the correct state after navigating away from
+<a name="line478"></a>      // and then back to the page with the history object. This can be fixed
+<a name="line479"></a>      // by restarting the history object on the pageshow event.
+<a name="line480"></a>      this.eventHandler_.listen(this.window_, &#39;pageshow&#39;, this.onShow_);
+<a name="line481"></a>    }
+<a name="line482"></a>
+<a name="line483"></a>    // TODO(user): make HTML5 and invisible history work by listening to the
+<a name="line484"></a>    // iframe # changes instead of the window.
+<a name="line485"></a>    if (goog.History.isOnHashChangeSupported() &amp;&amp;
+<a name="line486"></a>        this.userVisible_) {
+<a name="line487"></a>      this.eventHandler_.listen(
+<a name="line488"></a>          this.window_, goog.events.EventType.HASHCHANGE, this.onHashChange_);
+<a name="line489"></a>      this.enabled_ = true;
+<a name="line490"></a>      this.dispatchEvent(new goog.history.Event(this.getToken(), false));
+<a name="line491"></a>    } else if (!goog.userAgent.IE || this.documentLoaded) {
+<a name="line492"></a>      // Start dispatching history events if all necessary loading has
+<a name="line493"></a>      // completed (always true for browsers other than IE.)
+<a name="line494"></a>      this.eventHandler_.listen(this.timer_, goog.Timer.TICK,
+<a name="line495"></a>          goog.bind(this.check_, this, true));
+<a name="line496"></a>
+<a name="line497"></a>      this.enabled_ = true;
+<a name="line498"></a>
+<a name="line499"></a>      // Initialize last token at startup except on IE &lt; 8, where the last token
+<a name="line500"></a>      // must only be set in conjunction with IFRAME updates, or the IFRAME will
+<a name="line501"></a>      // start out of sync and remove any pre-existing URI fragment.
+<a name="line502"></a>      if (!goog.History.LEGACY_IE) {
+<a name="line503"></a>        this.lastToken_ = this.getToken();
+<a name="line504"></a>        this.dispatchEvent(new goog.history.Event(this.getToken(), false));
+<a name="line505"></a>      }
+<a name="line506"></a>
+<a name="line507"></a>      this.timer_.start();
+<a name="line508"></a>    }
+<a name="line509"></a>
+<a name="line510"></a>  } else {
+<a name="line511"></a>    this.enabled_ = false;
+<a name="line512"></a>    this.eventHandler_.removeAll();
+<a name="line513"></a>    this.timer_.stop();
+<a name="line514"></a>  }
+<a name="line515"></a>};
+<a name="line516"></a>
+<a name="line517"></a>
+<a name="line518"></a>/**
+<a name="line519"></a> * Callback for the window onload event in IE. This is necessary to read the
+<a name="line520"></a> * value of the hidden input after restoring a history session. The value of
+<a name="line521"></a> * input elements is not viewable until after window onload for some reason (the
+<a name="line522"></a> * iframe state is similarly unavailable during the loading phase.)  If
+<a name="line523"></a> * setEnabled is called before the iframe has completed loading, the history
+<a name="line524"></a> * object will actually be enabled at this point.
+<a name="line525"></a> * @protected
+<a name="line526"></a> */
+<a name="line527"></a>goog.History.prototype.onDocumentLoaded = function() {
+<a name="line528"></a>  this.documentLoaded = true;
+<a name="line529"></a>
+<a name="line530"></a>  if (this.hiddenInput_.value) {
+<a name="line531"></a>    // Any saved value in the hidden input can only be read after the document
+<a name="line532"></a>    // has been loaded due to an IE limitation. Restore the previous state if
+<a name="line533"></a>    // it has been set.
+<a name="line534"></a>    this.setIframeToken_(this.hiddenInput_.value, true);
+<a name="line535"></a>  }
+<a name="line536"></a>
+<a name="line537"></a>  this.setEnabled(this.shouldEnable_);
+<a name="line538"></a>};
+<a name="line539"></a>
+<a name="line540"></a>
+<a name="line541"></a>/**
+<a name="line542"></a> * Handler for the Gecko pageshow event. Restarts the history object so that the
+<a name="line543"></a> * correct state can be restored in the hash or iframe.
+<a name="line544"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line545"></a> * @private
+<a name="line546"></a> */
+<a name="line547"></a>goog.History.prototype.onShow_ = function(e) {
+<a name="line548"></a>  // NOTE(user): persisted is a property passed in the pageshow event that
+<a name="line549"></a>  // indicates whether the page is being persisted from the cache or is being
+<a name="line550"></a>  // loaded for the first time.
+<a name="line551"></a>  if (e.getBrowserEvent()[&#39;persisted&#39;]) {
+<a name="line552"></a>    this.setEnabled(false);
+<a name="line553"></a>    this.setEnabled(true);
+<a name="line554"></a>  }
+<a name="line555"></a>};
+<a name="line556"></a>
+<a name="line557"></a>
+<a name="line558"></a>/**
+<a name="line559"></a> * Handles HTML5 onhashchange events on browsers where it is supported.
+<a name="line560"></a> * This is very similar to {@link #check_}, except that it is not executed
+<a name="line561"></a> * continuously. It is only used when
+<a name="line562"></a> * {@code goog.History.isOnHashChangeSupported()} is true.
+<a name="line563"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line564"></a> * @private
+<a name="line565"></a> */
+<a name="line566"></a>goog.History.prototype.onHashChange_ = function(e) {
+<a name="line567"></a>  var hash = this.getLocationFragment_(this.window_);
+<a name="line568"></a>  if (hash != this.lastToken_) {
+<a name="line569"></a>    this.update_(hash, true);
+<a name="line570"></a>  }
+<a name="line571"></a>};
+<a name="line572"></a>
+<a name="line573"></a>
+<a name="line574"></a>/**
+<a name="line575"></a> * @return {string} The current token.
+<a name="line576"></a> */
+<a name="line577"></a>goog.History.prototype.getToken = function() {
+<a name="line578"></a>  if (this.lockedToken_ != null) {
+<a name="line579"></a>    return this.lockedToken_;
+<a name="line580"></a>  } else if (this.userVisible_) {
+<a name="line581"></a>    return this.getLocationFragment_(this.window_);
+<a name="line582"></a>  } else {
+<a name="line583"></a>    return this.getIframeToken_() || &#39;&#39;;
+<a name="line584"></a>  }
+<a name="line585"></a>};
+<a name="line586"></a>
+<a name="line587"></a>
+<a name="line588"></a>/**
+<a name="line589"></a> * Sets the history state. When user visible states are used, the URL fragment
+<a name="line590"></a> * will be set to the provided token.  Sometimes it is necessary to set the
+<a name="line591"></a> * history token before the document title has changed, in this case IE&#39;s
+<a name="line592"></a> * history drop down can be out of sync with the token.  To get around this
+<a name="line593"></a> * problem, the app can pass in a title to use with the hidden iframe.
+<a name="line594"></a> * @param {string} token The history state identifier.
+<a name="line595"></a> * @param {string=} opt_title Optional title used when setting the hidden iframe
+<a name="line596"></a> *     title in IE.
+<a name="line597"></a> */
+<a name="line598"></a>goog.History.prototype.setToken = function(token, opt_title) {
+<a name="line599"></a>  this.setHistoryState_(token, false, opt_title);
+<a name="line600"></a>};
+<a name="line601"></a>
+<a name="line602"></a>
+<a name="line603"></a>/**
+<a name="line604"></a> * Replaces the current history state without affecting the rest of the history
+<a name="line605"></a> * stack.
+<a name="line606"></a> * @param {string} token The history state identifier.
+<a name="line607"></a> * @param {string=} opt_title Optional title used when setting the hidden iframe
+<a name="line608"></a> *     title in IE.
+<a name="line609"></a> */
+<a name="line610"></a>goog.History.prototype.replaceToken = function(token, opt_title) {
+<a name="line611"></a>  this.setHistoryState_(token, true, opt_title);
+<a name="line612"></a>};
+<a name="line613"></a>
+<a name="line614"></a>
+<a name="line615"></a>/**
+<a name="line616"></a> * Gets the location fragment for the current URL.  We don&#39;t use location.hash
+<a name="line617"></a> * directly as the browser helpfully urlDecodes the string for us which can
+<a name="line618"></a> * corrupt the tokens.  For example, if we want to store: label/%2Froot it would
+<a name="line619"></a> * be returned as label//root.
+<a name="line620"></a> * @param {Window} win The window object to use.
+<a name="line621"></a> * @return {string} The fragment.
+<a name="line622"></a> * @private
+<a name="line623"></a> */
+<a name="line624"></a>goog.History.prototype.getLocationFragment_ = function(win) {
+<a name="line625"></a>  var href = win.location.href;
+<a name="line626"></a>  var index = href.indexOf(&#39;#&#39;);
+<a name="line627"></a>  return index &lt; 0 ? &#39;&#39; : href.substring(index + 1);
+<a name="line628"></a>};
+<a name="line629"></a>
+<a name="line630"></a>
+<a name="line631"></a>/**
+<a name="line632"></a> * Sets the history state. When user visible states are used, the URL fragment
+<a name="line633"></a> * will be set to the provided token. Setting opt_replace to true will cause the
+<a name="line634"></a> * navigation to occur, but will replace the current history entry without
+<a name="line635"></a> * affecting the length of the stack.
+<a name="line636"></a> *
+<a name="line637"></a> * @param {string} token The history state identifier.
+<a name="line638"></a> * @param {boolean} replace Set to replace the current history entry instead of
+<a name="line639"></a> *    appending a new history state.
+<a name="line640"></a> * @param {string=} opt_title Optional title used when setting the hidden iframe
+<a name="line641"></a> *     title in IE.
+<a name="line642"></a> * @private
+<a name="line643"></a> */
+<a name="line644"></a>goog.History.prototype.setHistoryState_ = function(token, replace, opt_title) {
+<a name="line645"></a>  if (this.getToken() != token) {
+<a name="line646"></a>    if (this.userVisible_) {
+<a name="line647"></a>      this.setHash_(token, replace);
+<a name="line648"></a>
+<a name="line649"></a>      if (!goog.History.isOnHashChangeSupported()) {
+<a name="line650"></a>        if (goog.userAgent.IE) {
+<a name="line651"></a>          // IE must save state using the iframe.
+<a name="line652"></a>          this.setIframeToken_(token, replace, opt_title);
+<a name="line653"></a>        }
+<a name="line654"></a>      }
+<a name="line655"></a>
+<a name="line656"></a>      // This condition needs to be called even if
+<a name="line657"></a>      // goog.History.isOnHashChangeSupported() is true so the NAVIGATE event
+<a name="line658"></a>      // fires sychronously.
+<a name="line659"></a>      if (this.enabled_) {
+<a name="line660"></a>        this.check_(false);
+<a name="line661"></a>      }
+<a name="line662"></a>    } else {
+<a name="line663"></a>      // Fire the event immediately so that setting history is synchronous, but
+<a name="line664"></a>      // set a suspendToken so that polling doesn&#39;t trigger a &#39;back&#39;.
+<a name="line665"></a>      this.setIframeToken_(token, replace);
+<a name="line666"></a>      this.lockedToken_ = this.lastToken_ = this.hiddenInput_.value = token;
+<a name="line667"></a>      this.dispatchEvent(new goog.history.Event(token, false));
+<a name="line668"></a>    }
+<a name="line669"></a>  }
+<a name="line670"></a>};
+<a name="line671"></a>
+<a name="line672"></a>
+<a name="line673"></a>/**
+<a name="line674"></a> * Sets or replaces the URL fragment. The token does not need to be URL encoded
+<a name="line675"></a> * according to the URL specification, though certain characters (like newline)
+<a name="line676"></a> * are automatically stripped.
+<a name="line677"></a> *
+<a name="line678"></a> * If opt_replace is not set, non-IE browsers will append a new entry to the
+<a name="line679"></a> * history list. Setting the hash does not affect the history stack in IE
+<a name="line680"></a> * (unless there is a pre-existing named anchor for that hash.)
+<a name="line681"></a> *
+<a name="line682"></a> * Older versions of Webkit cannot query the location hash, but it still can be
+<a name="line683"></a> * set. If we detect one of these versions, always replace instead of creating
+<a name="line684"></a> * new history entries.
+<a name="line685"></a> *
+<a name="line686"></a> * window.location.replace replaces the current state from the history stack.
+<a name="line687"></a> * http://www.whatwg.org/specs/web-apps/current-work/#dom-location-replace
+<a name="line688"></a> * http://www.whatwg.org/specs/web-apps/current-work/#replacement-enabled
+<a name="line689"></a> *
+<a name="line690"></a> * @param {string} token The new string to set.
+<a name="line691"></a> * @param {boolean=} opt_replace Set to true to replace the current token
+<a name="line692"></a> *    without appending a history entry.
+<a name="line693"></a> * @private
+<a name="line694"></a> */
+<a name="line695"></a>goog.History.prototype.setHash_ = function(token, opt_replace) {
+<a name="line696"></a>  // If the page uses a BASE element, setting location.hash directly will
+<a name="line697"></a>  // navigate away from the current document. Also, the original URL path may
+<a name="line698"></a>  // possibly change from HTML5 history pushState. To account for these, the
+<a name="line699"></a>  // full path is always specified.
+<a name="line700"></a>  var loc = this.window_.location;
+<a name="line701"></a>  var url = loc.href.split(&#39;#&#39;)[0];
+<a name="line702"></a>
+<a name="line703"></a>  // If a hash has already been set, then removing it programmatically will
+<a name="line704"></a>  // reload the page. Once there is a hash, we won&#39;t remove it.
+<a name="line705"></a>  var hasHash = goog.string.contains(loc.href, &#39;#&#39;);
+<a name="line706"></a>
+<a name="line707"></a>  if (goog.History.HASH_ALWAYS_REQUIRED || hasHash || token) {
+<a name="line708"></a>    url += &#39;#&#39; + token;
+<a name="line709"></a>  }
+<a name="line710"></a>
+<a name="line711"></a>  if (url != loc.href) {
+<a name="line712"></a>    if (opt_replace) {
+<a name="line713"></a>      loc.replace(url);
+<a name="line714"></a>    } else {
+<a name="line715"></a>      loc.href = url;
+<a name="line716"></a>    }
+<a name="line717"></a>  }
+<a name="line718"></a>};
+<a name="line719"></a>
+<a name="line720"></a>
+<a name="line721"></a>/**
+<a name="line722"></a> * Sets the hidden iframe state. On IE, this is accomplished by writing a new
+<a name="line723"></a> * document into the iframe. In Firefox, the iframe&#39;s URL fragment stores the
+<a name="line724"></a> * state instead.
+<a name="line725"></a> *
+<a name="line726"></a> * Older versions of webkit cannot set the iframe, so ignore those browsers.
+<a name="line727"></a> *
+<a name="line728"></a> * @param {string} token The new string to set.
+<a name="line729"></a> * @param {boolean=} opt_replace Set to true to replace the current iframe state
+<a name="line730"></a> *     without appending a new history entry.
+<a name="line731"></a> * @param {string=} opt_title Optional title used when setting the hidden iframe
+<a name="line732"></a> *     title in IE.
+<a name="line733"></a> * @private
+<a name="line734"></a> */
+<a name="line735"></a>goog.History.prototype.setIframeToken_ = function(token,
+<a name="line736"></a>                                                  opt_replace,
+<a name="line737"></a>                                                  opt_title) {
+<a name="line738"></a>  if (this.unsetIframe_ || token != this.getIframeToken_()) {
+<a name="line739"></a>
+<a name="line740"></a>    this.unsetIframe_ = false;
+<a name="line741"></a>    token = goog.string.urlEncode(token);
+<a name="line742"></a>
+<a name="line743"></a>    if (goog.userAgent.IE) {
+<a name="line744"></a>      // Caching the iframe document results in document permission errors after
+<a name="line745"></a>      // leaving the page and returning. Access it anew each time instead.
+<a name="line746"></a>      var doc = goog.dom.getFrameContentDocument(this.iframe_);
+<a name="line747"></a>
+<a name="line748"></a>      doc.open(&#39;text/html&#39;, opt_replace ? &#39;replace&#39; : undefined);
+<a name="line749"></a>      doc.write(goog.string.subs(
+<a name="line750"></a>          goog.History.IFRAME_SOURCE_TEMPLATE_,
+<a name="line751"></a>          goog.string.htmlEscape(
+<a name="line752"></a>              /** @type {string} */ (opt_title || this.window_.document.title)),
+<a name="line753"></a>          token));
+<a name="line754"></a>      doc.close();
+<a name="line755"></a>    } else {
+<a name="line756"></a>      var url = this.iframeSrc_ + &#39;#&#39; + token;
+<a name="line757"></a>
+<a name="line758"></a>      // In Safari, it is possible for the contentWindow of the iframe to not
+<a name="line759"></a>      // be present when the page is loading after a reload.
+<a name="line760"></a>      var contentWindow = this.iframe_.contentWindow;
+<a name="line761"></a>      if (contentWindow) {
+<a name="line762"></a>        if (opt_replace) {
+<a name="line763"></a>          contentWindow.location.replace(url);
+<a name="line764"></a>        } else {
+<a name="line765"></a>          contentWindow.location.href = url;
+<a name="line766"></a>        }
+<a name="line767"></a>      }
+<a name="line768"></a>    }
+<a name="line769"></a>  }
+<a name="line770"></a>};
+<a name="line771"></a>
+<a name="line772"></a>
+<a name="line773"></a>/**
+<a name="line774"></a> * Return the current state string from the hidden iframe. On internet explorer,
+<a name="line775"></a> * this is stored as a string in the document body. Other browsers use the
+<a name="line776"></a> * location hash of the hidden iframe.
+<a name="line777"></a> *
+<a name="line778"></a> * Older versions of webkit cannot access the iframe location, so always return
+<a name="line779"></a> * null in that case.
+<a name="line780"></a> *
+<a name="line781"></a> * @return {?string} The state token saved in the iframe (possibly null if the
+<a name="line782"></a> *     iframe has never loaded.).
+<a name="line783"></a> * @private
+<a name="line784"></a> */
+<a name="line785"></a>goog.History.prototype.getIframeToken_ = function() {
+<a name="line786"></a>  if (goog.userAgent.IE) {
+<a name="line787"></a>    var doc = goog.dom.getFrameContentDocument(this.iframe_);
+<a name="line788"></a>    return doc.body ? goog.string.urlDecode(doc.body.innerHTML) : null;
+<a name="line789"></a>  } else {
+<a name="line790"></a>    // In Safari, it is possible for the contentWindow of the iframe to not
+<a name="line791"></a>    // be present when the page is loading after a reload.
+<a name="line792"></a>    var contentWindow = this.iframe_.contentWindow;
+<a name="line793"></a>    if (contentWindow) {
+<a name="line794"></a>      var hash;
+<a name="line795"></a>      /** @preserveTry */
+<a name="line796"></a>      try {
+<a name="line797"></a>        // Iframe tokens are urlEncoded
+<a name="line798"></a>        hash = goog.string.urlDecode(this.getLocationFragment_(contentWindow));
+<a name="line799"></a>      } catch (e) {
+<a name="line800"></a>        // An exception will be thrown if the location of the iframe can not be
+<a name="line801"></a>        // accessed (permission denied). This can occur in FF if the the server
+<a name="line802"></a>        // that is hosting the blank html page goes down and then a new history
+<a name="line803"></a>        // token is set. The iframe will navigate to an error page, and the
+<a name="line804"></a>        // location of the iframe can no longer be accessed. Due to the polling,
+<a name="line805"></a>        // this will cause constant exceptions to be thrown. In this case,
+<a name="line806"></a>        // we enable longer polling. We do not have to attempt to reset the
+<a name="line807"></a>        // iframe token because (a) we already fired the NAVIGATE event when
+<a name="line808"></a>        // setting the token, (b) we can rely on the locked token for current
+<a name="line809"></a>        // state, and (c) the token is still in the history and
+<a name="line810"></a>        // accesible on forward/back.
+<a name="line811"></a>        if (!this.longerPolling_) {
+<a name="line812"></a>          this.setLongerPolling_(true);
+<a name="line813"></a>        }
+<a name="line814"></a>
+<a name="line815"></a>        return null;
+<a name="line816"></a>      }
+<a name="line817"></a>
+<a name="line818"></a>      // There was no exception when getting the hash so turn off longer polling
+<a name="line819"></a>      // if it is on.
+<a name="line820"></a>      if (this.longerPolling_) {
+<a name="line821"></a>        this.setLongerPolling_(false);
+<a name="line822"></a>      }
+<a name="line823"></a>
+<a name="line824"></a>      return hash || null;
+<a name="line825"></a>    } else {
+<a name="line826"></a>      return null;
+<a name="line827"></a>    }
+<a name="line828"></a>  }
+<a name="line829"></a>};
+<a name="line830"></a>
+<a name="line831"></a>
+<a name="line832"></a>/**
+<a name="line833"></a> * Checks the state of the document fragment and the iframe title to detect
+<a name="line834"></a> * navigation changes. If {@code goog.HistoryisOnHashChangeSupported()} is
+<a name="line835"></a> * {@code false}, then this runs approximately twenty times per second.
+<a name="line836"></a> * @param {boolean} isNavigation True if the event was initiated by a browser
+<a name="line837"></a> *     action, false if it was caused by a setToken call. See
+<a name="line838"></a> *     {@link goog.history.Event}.
+<a name="line839"></a> * @private
+<a name="line840"></a> */
+<a name="line841"></a>goog.History.prototype.check_ = function(isNavigation) {
+<a name="line842"></a>  if (this.userVisible_) {
+<a name="line843"></a>    var hash = this.getLocationFragment_(this.window_);
+<a name="line844"></a>    if (hash != this.lastToken_) {
+<a name="line845"></a>      this.update_(hash, isNavigation);
+<a name="line846"></a>    }
+<a name="line847"></a>  }
+<a name="line848"></a>
+<a name="line849"></a>  // Old IE uses the iframe for both visible and non-visible versions.
+<a name="line850"></a>  if (!this.userVisible_ || goog.History.LEGACY_IE) {
+<a name="line851"></a>    var token = this.getIframeToken_() || &#39;&#39;;
+<a name="line852"></a>    if (this.lockedToken_ == null || token == this.lockedToken_) {
+<a name="line853"></a>      this.lockedToken_ = null;
+<a name="line854"></a>      if (token != this.lastToken_) {
+<a name="line855"></a>        this.update_(token, isNavigation);
+<a name="line856"></a>      }
+<a name="line857"></a>    }
+<a name="line858"></a>  }
+<a name="line859"></a>};
+<a name="line860"></a>
+<a name="line861"></a>
+<a name="line862"></a>/**
+<a name="line863"></a> * Updates the current history state with a given token. Called after a change
+<a name="line864"></a> * to the location or the iframe state is detected by poll_.
+<a name="line865"></a> *
+<a name="line866"></a> * @param {string} token The new history state.
+<a name="line867"></a> * @param {boolean} isNavigation True if the event was initiated by a browser
+<a name="line868"></a> *     action, false if it was caused by a setToken call. See
+<a name="line869"></a> *     {@link goog.history.Event}.
+<a name="line870"></a> * @private
+<a name="line871"></a> */
+<a name="line872"></a>goog.History.prototype.update_ = function(token, isNavigation) {
+<a name="line873"></a>  this.lastToken_ = this.hiddenInput_.value = token;
+<a name="line874"></a>
+<a name="line875"></a>  if (this.userVisible_) {
+<a name="line876"></a>    if (goog.History.LEGACY_IE) {
+<a name="line877"></a>      this.setIframeToken_(token);
+<a name="line878"></a>    }
+<a name="line879"></a>
+<a name="line880"></a>    this.setHash_(token);
+<a name="line881"></a>  } else {
+<a name="line882"></a>    this.setIframeToken_(token);
+<a name="line883"></a>  }
+<a name="line884"></a>
+<a name="line885"></a>  this.dispatchEvent(new goog.history.Event(this.getToken(), isNavigation));
+<a name="line886"></a>};
+<a name="line887"></a>
+<a name="line888"></a>
+<a name="line889"></a>/**
+<a name="line890"></a> * Sets if the history oject should use longer intervals when polling.
+<a name="line891"></a> *
+<a name="line892"></a> * @param {boolean} longerPolling Whether to enable longer polling.
+<a name="line893"></a> * @private
+<a name="line894"></a> */
+<a name="line895"></a>goog.History.prototype.setLongerPolling_ = function(longerPolling) {
+<a name="line896"></a>  if (this.longerPolling_ != longerPolling) {
+<a name="line897"></a>    this.timer_.setInterval(longerPolling ?
+<a name="line898"></a>        goog.History.PollingType.LONG : goog.History.PollingType.NORMAL);
+<a name="line899"></a>  }
+<a name="line900"></a>  this.longerPolling_ = longerPolling;
+<a name="line901"></a>};
+<a name="line902"></a>
+<a name="line903"></a>
+<a name="line904"></a>/**
+<a name="line905"></a> * Opera cancels all outstanding timeouts and intervals after any rapid
+<a name="line906"></a> * succession of navigation events, including the interval used to detect
+<a name="line907"></a> * navigation events. This function restarts the interval so that navigation can
+<a name="line908"></a> * continue. Ideally, only events which would be likely to cause a navigation
+<a name="line909"></a> * change (mousedown and keydown) would be bound to this function. Since Opera
+<a name="line910"></a> * seems to ignore keydown events while the alt key is pressed (such as
+<a name="line911"></a> * alt-left or right arrow), this function is also bound to the much more
+<a name="line912"></a> * frequent mousemove event. This way, when the update loop freezes, it will
+<a name="line913"></a> * unstick itself as the user wiggles the mouse in frustration.
+<a name="line914"></a> * @private
+<a name="line915"></a> */
+<a name="line916"></a>goog.History.prototype.operaDefibrillator_ = function() {
+<a name="line917"></a>  this.timer_.stop();
+<a name="line918"></a>  this.timer_.start();
+<a name="line919"></a>};
+<a name="line920"></a>
+<a name="line921"></a>
+<a name="line922"></a>/**
+<a name="line923"></a> * List of user input event types registered in Opera to restart the history
+<a name="line924"></a> * timer (@see goog.History#operaDefibrillator_).
+<a name="line925"></a> * @type {Array.&lt;string&gt;}
+<a name="line926"></a> * @private
+<a name="line927"></a> */
+<a name="line928"></a>goog.History.INPUT_EVENTS_ = [
+<a name="line929"></a>  goog.events.EventType.MOUSEDOWN,
+<a name="line930"></a>  goog.events.EventType.KEYDOWN,
+<a name="line931"></a>  goog.events.EventType.MOUSEMOVE
+<a name="line932"></a>];
+<a name="line933"></a>
+<a name="line934"></a>
+<a name="line935"></a>/**
+<a name="line936"></a> * Minimal HTML page used to populate the iframe in Internet Explorer. The title
+<a name="line937"></a> * is visible in the history dropdown menu, the iframe state is stored as the
+<a name="line938"></a> * body innerHTML.
+<a name="line939"></a> * @type {string}
+<a name="line940"></a> * @private
+<a name="line941"></a> */
+<a name="line942"></a>goog.History.IFRAME_SOURCE_TEMPLATE_ = &#39;&lt;title&gt;%s&lt;/title&gt;&lt;body&gt;%s&lt;/body&gt;&#39;;
+<a name="line943"></a>
+<a name="line944"></a>
+<a name="line945"></a>/**
+<a name="line946"></a> * HTML template for an invisible iframe.
+<a name="line947"></a> * @type {string}
+<a name="line948"></a> * @private
+<a name="line949"></a> */
+<a name="line950"></a>goog.History.IFRAME_TEMPLATE_ =
+<a name="line951"></a>    &#39;&lt;iframe id=&quot;%s&quot; style=&quot;display:none&quot; %s&gt;&lt;/iframe&gt;&#39;;
+<a name="line952"></a>
+<a name="line953"></a>
+<a name="line954"></a>/**
+<a name="line955"></a> * HTML template for an invisible named input element.
+<a name="line956"></a> * @type {string}
+<a name="line957"></a> * @private
+<a name="line958"></a> */
+<a name="line959"></a>goog.History.INPUT_TEMPLATE_ =
+<a name="line960"></a>    &#39;&lt;input type=&quot;text&quot; name=&quot;%s&quot; id=&quot;%s&quot; style=&quot;display:none&quot;&gt;&#39;;
+<a name="line961"></a>
+<a name="line962"></a>
+<a name="line963"></a>/**
+<a name="line964"></a> * Counter for the number of goog.History objects that have been instantiated.
+<a name="line965"></a> * Used to create unique IDs.
+<a name="line966"></a> * @type {number}
+<a name="line967"></a> * @private
+<a name="line968"></a> */
+<a name="line969"></a>goog.History.historyCount_ = 0;
+<a name="line970"></a>
+<a name="line971"></a>
+<a name="line972"></a>/**
+<a name="line973"></a> * Types of polling. The values are in ms of the polling interval.
+<a name="line974"></a> * @enum {number}
+<a name="line975"></a> */
+<a name="line976"></a>goog.History.PollingType = {
+<a name="line977"></a>  NORMAL: 150,
+<a name="line978"></a>  LONG: 10000
+<a name="line979"></a>};
+<a name="line980"></a>
+<a name="line981"></a>
+<a name="line982"></a>/**
+<a name="line983"></a> * Constant for the history change event type.
+<a name="line984"></a> * @enum {string}
+<a name="line985"></a> * @deprecated Use goog.history.EventType.
+<a name="line986"></a> */
+<a name="line987"></a>goog.History.EventType = goog.history.EventType;
+<a name="line988"></a>
+<a name="line989"></a>
+<a name="line990"></a>
+<a name="line991"></a>/**
+<a name="line992"></a> * Constant for the history change event type.
+<a name="line993"></a> * @param {string} token The string identifying the new history state.
+<a name="line994"></a> * @extends {goog.events.Event}
+<a name="line995"></a> * @constructor
+<a name="line996"></a> * @deprecated Use goog.history.Event.
+<a name="line997"></a> * @final
+<a name="line998"></a> */
+<a name="line999"></a>goog.History.Event = goog.history.Event;
+</pre>
+
+
+</body>
+</html>

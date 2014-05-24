@@ -1,0 +1,639 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>affinetransform.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_graphics_affinetransform.js.html">affinetransform.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Provides an object representation of an AffineTransform and
+<a name="line18"></a> * methods for working with it.
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.graphics.AffineTransform&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.math&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Creates a 2D affine transform. An affine transform performs a linear
+<a name="line30"></a> * mapping from 2D coordinates to other 2D coordinates that preserves the
+<a name="line31"></a> * &quot;straightness&quot; and &quot;parallelness&quot; of lines.
+<a name="line32"></a> *
+<a name="line33"></a> * Such a coordinate transformation can be represented by a 3 row by 3 column
+<a name="line34"></a> * matrix with an implied last row of [ 0 0 1 ]. This matrix transforms source
+<a name="line35"></a> * coordinates (x,y) into destination coordinates (x&#39;,y&#39;) by considering them
+<a name="line36"></a> * to be a column vector and multiplying the coordinate vector by the matrix
+<a name="line37"></a> * according to the following process:
+<a name="line38"></a> * &lt;pre&gt;
+<a name="line39"></a> *      [ x&#39;]   [  m00  m01  m02  ] [ x ]   [ m00x + m01y + m02 ]
+<a name="line40"></a> *      [ y&#39;] = [  m10  m11  m12  ] [ y ] = [ m10x + m11y + m12 ]
+<a name="line41"></a> *      [ 1 ]   [   0    0    1   ] [ 1 ]   [         1         ]
+<a name="line42"></a> * &lt;/pre&gt;
+<a name="line43"></a> *
+<a name="line44"></a> * This class is optimized for speed and minimizes calculations based on its
+<a name="line45"></a> * knowledge of the underlying matrix (as opposed to say simply performing
+<a name="line46"></a> * matrix multiplication).
+<a name="line47"></a> *
+<a name="line48"></a> * @param {number=} opt_m00 The m00 coordinate of the transform.
+<a name="line49"></a> * @param {number=} opt_m10 The m10 coordinate of the transform.
+<a name="line50"></a> * @param {number=} opt_m01 The m01 coordinate of the transform.
+<a name="line51"></a> * @param {number=} opt_m11 The m11 coordinate of the transform.
+<a name="line52"></a> * @param {number=} opt_m02 The m02 coordinate of the transform.
+<a name="line53"></a> * @param {number=} opt_m12 The m12 coordinate of the transform.
+<a name="line54"></a> * @constructor
+<a name="line55"></a> * @final
+<a name="line56"></a> */
+<a name="line57"></a>goog.graphics.AffineTransform = function(opt_m00, opt_m10, opt_m01,
+<a name="line58"></a>    opt_m11, opt_m02, opt_m12) {
+<a name="line59"></a>  if (arguments.length == 6) {
+<a name="line60"></a>    this.setTransform(/** @type {number} */ (opt_m00),
+<a name="line61"></a>                      /** @type {number} */ (opt_m10),
+<a name="line62"></a>                      /** @type {number} */ (opt_m01),
+<a name="line63"></a>                      /** @type {number} */ (opt_m11),
+<a name="line64"></a>                      /** @type {number} */ (opt_m02),
+<a name="line65"></a>                      /** @type {number} */ (opt_m12));
+<a name="line66"></a>  } else if (arguments.length != 0) {
+<a name="line67"></a>    throw Error(&#39;Insufficient matrix parameters&#39;);
+<a name="line68"></a>  } else {
+<a name="line69"></a>    this.m00_ = this.m11_ = 1;
+<a name="line70"></a>    this.m10_ = this.m01_ = this.m02_ = this.m12_ = 0;
+<a name="line71"></a>  }
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * @return {boolean} Whether this transform is the identity transform.
+<a name="line77"></a> */
+<a name="line78"></a>goog.graphics.AffineTransform.prototype.isIdentity = function() {
+<a name="line79"></a>  return this.m00_ == 1 &amp;&amp; this.m10_ == 0 &amp;&amp; this.m01_ == 0 &amp;&amp;
+<a name="line80"></a>      this.m11_ == 1 &amp;&amp; this.m02_ == 0 &amp;&amp; this.m12_ == 0;
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * @return {!goog.graphics.AffineTransform} A copy of this transform.
+<a name="line86"></a> */
+<a name="line87"></a>goog.graphics.AffineTransform.prototype.clone = function() {
+<a name="line88"></a>  return new goog.graphics.AffineTransform(this.m00_, this.m10_, this.m01_,
+<a name="line89"></a>      this.m11_, this.m02_, this.m12_);
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Sets this transform to the matrix specified by the 6 values.
+<a name="line95"></a> *
+<a name="line96"></a> * @param {number} m00 The m00 coordinate of the transform.
+<a name="line97"></a> * @param {number} m10 The m10 coordinate of the transform.
+<a name="line98"></a> * @param {number} m01 The m01 coordinate of the transform.
+<a name="line99"></a> * @param {number} m11 The m11 coordinate of the transform.
+<a name="line100"></a> * @param {number} m02 The m02 coordinate of the transform.
+<a name="line101"></a> * @param {number} m12 The m12 coordinate of the transform.
+<a name="line102"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line103"></a> */
+<a name="line104"></a>goog.graphics.AffineTransform.prototype.setTransform = function(m00, m10, m01,
+<a name="line105"></a>    m11, m02, m12) {
+<a name="line106"></a>  if (!goog.isNumber(m00) || !goog.isNumber(m10) || !goog.isNumber(m01) ||
+<a name="line107"></a>      !goog.isNumber(m11) || !goog.isNumber(m02) || !goog.isNumber(m12)) {
+<a name="line108"></a>    throw Error(&#39;Invalid transform parameters&#39;);
+<a name="line109"></a>  }
+<a name="line110"></a>  this.m00_ = m00;
+<a name="line111"></a>  this.m10_ = m10;
+<a name="line112"></a>  this.m01_ = m01;
+<a name="line113"></a>  this.m11_ = m11;
+<a name="line114"></a>  this.m02_ = m02;
+<a name="line115"></a>  this.m12_ = m12;
+<a name="line116"></a>  return this;
+<a name="line117"></a>};
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Sets this transform to be identical to the given transform.
+<a name="line122"></a> *
+<a name="line123"></a> * @param {!goog.graphics.AffineTransform} tx The transform to copy.
+<a name="line124"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line125"></a> */
+<a name="line126"></a>goog.graphics.AffineTransform.prototype.copyFrom = function(tx) {
+<a name="line127"></a>  this.m00_ = tx.m00_;
+<a name="line128"></a>  this.m10_ = tx.m10_;
+<a name="line129"></a>  this.m01_ = tx.m01_;
+<a name="line130"></a>  this.m11_ = tx.m11_;
+<a name="line131"></a>  this.m02_ = tx.m02_;
+<a name="line132"></a>  this.m12_ = tx.m12_;
+<a name="line133"></a>  return this;
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Concatenates this transform with a scaling transformation.
+<a name="line139"></a> *
+<a name="line140"></a> * @param {number} sx The x-axis scaling factor.
+<a name="line141"></a> * @param {number} sy The y-axis scaling factor.
+<a name="line142"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line143"></a> */
+<a name="line144"></a>goog.graphics.AffineTransform.prototype.scale = function(sx, sy) {
+<a name="line145"></a>  this.m00_ *= sx;
+<a name="line146"></a>  this.m10_ *= sx;
+<a name="line147"></a>  this.m01_ *= sy;
+<a name="line148"></a>  this.m11_ *= sy;
+<a name="line149"></a>  return this;
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * Pre-concatenates this transform with a scaling transformation,
+<a name="line155"></a> * i.e. calculates the following matrix product:
+<a name="line156"></a> *
+<a name="line157"></a> * &lt;pre&gt;
+<a name="line158"></a> * [sx  0 0] [m00 m01 m02]
+<a name="line159"></a> * [ 0 sy 0] [m10 m11 m12]
+<a name="line160"></a> * [ 0  0 1] [  0   0   1]
+<a name="line161"></a> * &lt;/pre&gt;
+<a name="line162"></a> *
+<a name="line163"></a> * @param {number} sx The x-axis scaling factor.
+<a name="line164"></a> * @param {number} sy The y-axis scaling factor.
+<a name="line165"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line166"></a> */
+<a name="line167"></a>goog.graphics.AffineTransform.prototype.preScale = function(sx, sy) {
+<a name="line168"></a>  this.m00_ *= sx;
+<a name="line169"></a>  this.m01_ *= sx;
+<a name="line170"></a>  this.m02_ *= sx;
+<a name="line171"></a>  this.m10_ *= sy;
+<a name="line172"></a>  this.m11_ *= sy;
+<a name="line173"></a>  this.m12_ *= sy;
+<a name="line174"></a>  return this;
+<a name="line175"></a>};
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * Concatenates this transform with a translate transformation.
+<a name="line180"></a> *
+<a name="line181"></a> * @param {number} dx The distance to translate in the x direction.
+<a name="line182"></a> * @param {number} dy The distance to translate in the y direction.
+<a name="line183"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line184"></a> */
+<a name="line185"></a>goog.graphics.AffineTransform.prototype.translate = function(dx, dy) {
+<a name="line186"></a>  this.m02_ += dx * this.m00_ + dy * this.m01_;
+<a name="line187"></a>  this.m12_ += dx * this.m10_ + dy * this.m11_;
+<a name="line188"></a>  return this;
+<a name="line189"></a>};
+<a name="line190"></a>
+<a name="line191"></a>
+<a name="line192"></a>/**
+<a name="line193"></a> * Pre-concatenates this transform with a translate transformation,
+<a name="line194"></a> * i.e. calculates the following matrix product:
+<a name="line195"></a> *
+<a name="line196"></a> * &lt;pre&gt;
+<a name="line197"></a> * [1 0 dx] [m00 m01 m02]
+<a name="line198"></a> * [0 1 dy] [m10 m11 m12]
+<a name="line199"></a> * [0 0  1] [  0   0   1]
+<a name="line200"></a> * &lt;/pre&gt;
+<a name="line201"></a> *
+<a name="line202"></a> * @param {number} dx The distance to translate in the x direction.
+<a name="line203"></a> * @param {number} dy The distance to translate in the y direction.
+<a name="line204"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line205"></a> */
+<a name="line206"></a>goog.graphics.AffineTransform.prototype.preTranslate = function(dx, dy) {
+<a name="line207"></a>  this.m02_ += dx;
+<a name="line208"></a>  this.m12_ += dy;
+<a name="line209"></a>  return this;
+<a name="line210"></a>};
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Concatenates this transform with a rotation transformation around an anchor
+<a name="line215"></a> * point.
+<a name="line216"></a> *
+<a name="line217"></a> * @param {number} theta The angle of rotation measured in radians.
+<a name="line218"></a> * @param {number} x The x coordinate of the anchor point.
+<a name="line219"></a> * @param {number} y The y coordinate of the anchor point.
+<a name="line220"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line221"></a> */
+<a name="line222"></a>goog.graphics.AffineTransform.prototype.rotate = function(theta, x, y) {
+<a name="line223"></a>  return this.concatenate(
+<a name="line224"></a>      goog.graphics.AffineTransform.getRotateInstance(theta, x, y));
+<a name="line225"></a>};
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>/**
+<a name="line229"></a> * Pre-concatenates this transform with a rotation transformation around an
+<a name="line230"></a> * anchor point.
+<a name="line231"></a> *
+<a name="line232"></a> * @param {number} theta The angle of rotation measured in radians.
+<a name="line233"></a> * @param {number} x The x coordinate of the anchor point.
+<a name="line234"></a> * @param {number} y The y coordinate of the anchor point.
+<a name="line235"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line236"></a> */
+<a name="line237"></a>goog.graphics.AffineTransform.prototype.preRotate = function(theta, x, y) {
+<a name="line238"></a>  return this.preConcatenate(
+<a name="line239"></a>      goog.graphics.AffineTransform.getRotateInstance(theta, x, y));
+<a name="line240"></a>};
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * Concatenates this transform with a shear transformation.
+<a name="line245"></a> *
+<a name="line246"></a> * @param {number} shx The x shear factor.
+<a name="line247"></a> * @param {number} shy The y shear factor.
+<a name="line248"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line249"></a> */
+<a name="line250"></a>goog.graphics.AffineTransform.prototype.shear = function(shx, shy) {
+<a name="line251"></a>  var m00 = this.m00_;
+<a name="line252"></a>  var m10 = this.m10_;
+<a name="line253"></a>  this.m00_ += shy * this.m01_;
+<a name="line254"></a>  this.m10_ += shy * this.m11_;
+<a name="line255"></a>  this.m01_ += shx * m00;
+<a name="line256"></a>  this.m11_ += shx * m10;
+<a name="line257"></a>  return this;
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * Pre-concatenates this transform with a shear transformation.
+<a name="line263"></a> * i.e. calculates the following matrix product:
+<a name="line264"></a> *
+<a name="line265"></a> * &lt;pre&gt;
+<a name="line266"></a> * [  1 shx 0] [m00 m01 m02]
+<a name="line267"></a> * [shy   1 0] [m10 m11 m12]
+<a name="line268"></a> * [  0   0 1] [  0   0   1]
+<a name="line269"></a> * &lt;/pre&gt;
+<a name="line270"></a> *
+<a name="line271"></a> * @param {number} shx The x shear factor.
+<a name="line272"></a> * @param {number} shy The y shear factor.
+<a name="line273"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line274"></a> */
+<a name="line275"></a>goog.graphics.AffineTransform.prototype.preShear = function(shx, shy) {
+<a name="line276"></a>  var m00 = this.m00_;
+<a name="line277"></a>  var m01 = this.m01_;
+<a name="line278"></a>  var m02 = this.m02_;
+<a name="line279"></a>  this.m00_ += shx * this.m10_;
+<a name="line280"></a>  this.m01_ += shx * this.m11_;
+<a name="line281"></a>  this.m02_ += shx * this.m12_;
+<a name="line282"></a>  this.m10_ += shy * m00;
+<a name="line283"></a>  this.m11_ += shy * m01;
+<a name="line284"></a>  this.m12_ += shy * m02;
+<a name="line285"></a>  return this;
+<a name="line286"></a>};
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * @return {string} A string representation of this transform. The format of
+<a name="line291"></a> *     of the string is compatible with SVG matrix notation, i.e.
+<a name="line292"></a> *     &quot;matrix(a,b,c,d,e,f)&quot;.
+<a name="line293"></a> * @override
+<a name="line294"></a> */
+<a name="line295"></a>goog.graphics.AffineTransform.prototype.toString = function() {
+<a name="line296"></a>  return &#39;matrix(&#39; +
+<a name="line297"></a>      [this.m00_, this.m10_, this.m01_, this.m11_, this.m02_, this.m12_].join(
+<a name="line298"></a>          &#39;,&#39;) +
+<a name="line299"></a>      &#39;)&#39;;
+<a name="line300"></a>};
+<a name="line301"></a>
+<a name="line302"></a>
+<a name="line303"></a>/**
+<a name="line304"></a> * @return {number} The scaling factor in the x-direction (m00).
+<a name="line305"></a> */
+<a name="line306"></a>goog.graphics.AffineTransform.prototype.getScaleX = function() {
+<a name="line307"></a>  return this.m00_;
+<a name="line308"></a>};
+<a name="line309"></a>
+<a name="line310"></a>
+<a name="line311"></a>/**
+<a name="line312"></a> * @return {number} The scaling factor in the y-direction (m11).
+<a name="line313"></a> */
+<a name="line314"></a>goog.graphics.AffineTransform.prototype.getScaleY = function() {
+<a name="line315"></a>  return this.m11_;
+<a name="line316"></a>};
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/**
+<a name="line320"></a> * @return {number} The translation in the x-direction (m02).
+<a name="line321"></a> */
+<a name="line322"></a>goog.graphics.AffineTransform.prototype.getTranslateX = function() {
+<a name="line323"></a>  return this.m02_;
+<a name="line324"></a>};
+<a name="line325"></a>
+<a name="line326"></a>
+<a name="line327"></a>/**
+<a name="line328"></a> * @return {number} The translation in the y-direction (m12).
+<a name="line329"></a> */
+<a name="line330"></a>goog.graphics.AffineTransform.prototype.getTranslateY = function() {
+<a name="line331"></a>  return this.m12_;
+<a name="line332"></a>};
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * @return {number} The shear factor in the x-direction (m01).
+<a name="line337"></a> */
+<a name="line338"></a>goog.graphics.AffineTransform.prototype.getShearX = function() {
+<a name="line339"></a>  return this.m01_;
+<a name="line340"></a>};
+<a name="line341"></a>
+<a name="line342"></a>
+<a name="line343"></a>/**
+<a name="line344"></a> * @return {number} The shear factor in the y-direction (m10).
+<a name="line345"></a> */
+<a name="line346"></a>goog.graphics.AffineTransform.prototype.getShearY = function() {
+<a name="line347"></a>  return this.m10_;
+<a name="line348"></a>};
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>/**
+<a name="line352"></a> * Concatenates an affine transform to this transform.
+<a name="line353"></a> *
+<a name="line354"></a> * @param {!goog.graphics.AffineTransform} tx The transform to concatenate.
+<a name="line355"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line356"></a> */
+<a name="line357"></a>goog.graphics.AffineTransform.prototype.concatenate = function(tx) {
+<a name="line358"></a>  var m0 = this.m00_;
+<a name="line359"></a>  var m1 = this.m01_;
+<a name="line360"></a>  this.m00_ = tx.m00_ * m0 + tx.m10_ * m1;
+<a name="line361"></a>  this.m01_ = tx.m01_ * m0 + tx.m11_ * m1;
+<a name="line362"></a>  this.m02_ += tx.m02_ * m0 + tx.m12_ * m1;
+<a name="line363"></a>
+<a name="line364"></a>  m0 = this.m10_;
+<a name="line365"></a>  m1 = this.m11_;
+<a name="line366"></a>  this.m10_ = tx.m00_ * m0 + tx.m10_ * m1;
+<a name="line367"></a>  this.m11_ = tx.m01_ * m0 + tx.m11_ * m1;
+<a name="line368"></a>  this.m12_ += tx.m02_ * m0 + tx.m12_ * m1;
+<a name="line369"></a>  return this;
+<a name="line370"></a>};
+<a name="line371"></a>
+<a name="line372"></a>
+<a name="line373"></a>/**
+<a name="line374"></a> * Pre-concatenates an affine transform to this transform.
+<a name="line375"></a> *
+<a name="line376"></a> * @param {!goog.graphics.AffineTransform} tx The transform to preconcatenate.
+<a name="line377"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line378"></a> */
+<a name="line379"></a>goog.graphics.AffineTransform.prototype.preConcatenate = function(tx) {
+<a name="line380"></a>  var m0 = this.m00_;
+<a name="line381"></a>  var m1 = this.m10_;
+<a name="line382"></a>  this.m00_ = tx.m00_ * m0 + tx.m01_ * m1;
+<a name="line383"></a>  this.m10_ = tx.m10_ * m0 + tx.m11_ * m1;
+<a name="line384"></a>
+<a name="line385"></a>  m0 = this.m01_;
+<a name="line386"></a>  m1 = this.m11_;
+<a name="line387"></a>  this.m01_ = tx.m00_ * m0 + tx.m01_ * m1;
+<a name="line388"></a>  this.m11_ = tx.m10_ * m0 + tx.m11_ * m1;
+<a name="line389"></a>
+<a name="line390"></a>  m0 = this.m02_;
+<a name="line391"></a>  m1 = this.m12_;
+<a name="line392"></a>  this.m02_ = tx.m00_ * m0 + tx.m01_ * m1 + tx.m02_;
+<a name="line393"></a>  this.m12_ = tx.m10_ * m0 + tx.m11_ * m1 + tx.m12_;
+<a name="line394"></a>  return this;
+<a name="line395"></a>};
+<a name="line396"></a>
+<a name="line397"></a>
+<a name="line398"></a>/**
+<a name="line399"></a> * Transforms an array of coordinates by this transform and stores the result
+<a name="line400"></a> * into a destination array.
+<a name="line401"></a> *
+<a name="line402"></a> * @param {!Array.&lt;number&gt;} src The array containing the source points
+<a name="line403"></a> *     as x, y value pairs.
+<a name="line404"></a> * @param {number} srcOff The offset to the first point to be transformed.
+<a name="line405"></a> * @param {!Array.&lt;number&gt;} dst The array into which to store the transformed
+<a name="line406"></a> *     point pairs.
+<a name="line407"></a> * @param {number} dstOff The offset of the location of the first transformed
+<a name="line408"></a> *     point in the destination array.
+<a name="line409"></a> * @param {number} numPts The number of points to tranform.
+<a name="line410"></a> */
+<a name="line411"></a>goog.graphics.AffineTransform.prototype.transform = function(src, srcOff, dst,
+<a name="line412"></a>    dstOff, numPts) {
+<a name="line413"></a>  var i = srcOff;
+<a name="line414"></a>  var j = dstOff;
+<a name="line415"></a>  var srcEnd = srcOff + 2 * numPts;
+<a name="line416"></a>  while (i &lt; srcEnd) {
+<a name="line417"></a>    var x = src[i++];
+<a name="line418"></a>    var y = src[i++];
+<a name="line419"></a>    dst[j++] = x * this.m00_ + y * this.m01_ + this.m02_;
+<a name="line420"></a>    dst[j++] = x * this.m10_ + y * this.m11_ + this.m12_;
+<a name="line421"></a>  }
+<a name="line422"></a>};
+<a name="line423"></a>
+<a name="line424"></a>
+<a name="line425"></a>/**
+<a name="line426"></a> * @return {number} The determinant of this transform.
+<a name="line427"></a> */
+<a name="line428"></a>goog.graphics.AffineTransform.prototype.getDeterminant = function() {
+<a name="line429"></a>  return this.m00_ * this.m11_ - this.m01_ * this.m10_;
+<a name="line430"></a>};
+<a name="line431"></a>
+<a name="line432"></a>
+<a name="line433"></a>/**
+<a name="line434"></a> * Returns whether the transform is invertible. A transform is not invertible
+<a name="line435"></a> * if the determinant is 0 or any value is non-finite or NaN.
+<a name="line436"></a> *
+<a name="line437"></a> * @return {boolean} Whether the transform is invertible.
+<a name="line438"></a> */
+<a name="line439"></a>goog.graphics.AffineTransform.prototype.isInvertible = function() {
+<a name="line440"></a>  var det = this.getDeterminant();
+<a name="line441"></a>  return goog.math.isFiniteNumber(det) &amp;&amp;
+<a name="line442"></a>      goog.math.isFiniteNumber(this.m02_) &amp;&amp;
+<a name="line443"></a>      goog.math.isFiniteNumber(this.m12_) &amp;&amp;
+<a name="line444"></a>      det != 0;
+<a name="line445"></a>};
+<a name="line446"></a>
+<a name="line447"></a>
+<a name="line448"></a>/**
+<a name="line449"></a> * @return {!goog.graphics.AffineTransform} An AffineTransform object
+<a name="line450"></a> *     representing the inverse transformation.
+<a name="line451"></a> */
+<a name="line452"></a>goog.graphics.AffineTransform.prototype.createInverse = function() {
+<a name="line453"></a>  var det = this.getDeterminant();
+<a name="line454"></a>  return new goog.graphics.AffineTransform(
+<a name="line455"></a>      this.m11_ / det,
+<a name="line456"></a>      -this.m10_ / det,
+<a name="line457"></a>      -this.m01_ / det,
+<a name="line458"></a>      this.m00_ / det,
+<a name="line459"></a>      (this.m01_ * this.m12_ - this.m11_ * this.m02_) / det,
+<a name="line460"></a>      (this.m10_ * this.m02_ - this.m00_ * this.m12_) / det);
+<a name="line461"></a>};
+<a name="line462"></a>
+<a name="line463"></a>
+<a name="line464"></a>/**
+<a name="line465"></a> * Creates a transform representing a scaling transformation.
+<a name="line466"></a> *
+<a name="line467"></a> * @param {number} sx The x-axis scaling factor.
+<a name="line468"></a> * @param {number} sy The y-axis scaling factor.
+<a name="line469"></a> * @return {!goog.graphics.AffineTransform} A transform representing a scaling
+<a name="line470"></a> *     transformation.
+<a name="line471"></a> */
+<a name="line472"></a>goog.graphics.AffineTransform.getScaleInstance = function(sx, sy) {
+<a name="line473"></a>  return new goog.graphics.AffineTransform().setToScale(sx, sy);
+<a name="line474"></a>};
+<a name="line475"></a>
+<a name="line476"></a>
+<a name="line477"></a>/**
+<a name="line478"></a> * Creates a transform representing a translation transformation.
+<a name="line479"></a> *
+<a name="line480"></a> * @param {number} dx The distance to translate in the x direction.
+<a name="line481"></a> * @param {number} dy The distance to translate in the y direction.
+<a name="line482"></a> * @return {!goog.graphics.AffineTransform} A transform representing a
+<a name="line483"></a> *     translation transformation.
+<a name="line484"></a> */
+<a name="line485"></a>goog.graphics.AffineTransform.getTranslateInstance = function(dx, dy) {
+<a name="line486"></a>  return new goog.graphics.AffineTransform().setToTranslation(dx, dy);
+<a name="line487"></a>};
+<a name="line488"></a>
+<a name="line489"></a>
+<a name="line490"></a>/**
+<a name="line491"></a> * Creates a transform representing a shearing transformation.
+<a name="line492"></a> *
+<a name="line493"></a> * @param {number} shx The x-axis shear factor.
+<a name="line494"></a> * @param {number} shy The y-axis shear factor.
+<a name="line495"></a> * @return {!goog.graphics.AffineTransform} A transform representing a shearing
+<a name="line496"></a> *     transformation.
+<a name="line497"></a> */
+<a name="line498"></a>goog.graphics.AffineTransform.getShearInstance = function(shx, shy) {
+<a name="line499"></a>  return new goog.graphics.AffineTransform().setToShear(shx, shy);
+<a name="line500"></a>};
+<a name="line501"></a>
+<a name="line502"></a>
+<a name="line503"></a>/**
+<a name="line504"></a> * Creates a transform representing a rotation transformation.
+<a name="line505"></a> *
+<a name="line506"></a> * @param {number} theta The angle of rotation measured in radians.
+<a name="line507"></a> * @param {number} x The x coordinate of the anchor point.
+<a name="line508"></a> * @param {number} y The y coordinate of the anchor point.
+<a name="line509"></a> * @return {!goog.graphics.AffineTransform} A transform representing a rotation
+<a name="line510"></a> *     transformation.
+<a name="line511"></a> */
+<a name="line512"></a>goog.graphics.AffineTransform.getRotateInstance = function(theta, x, y) {
+<a name="line513"></a>  return new goog.graphics.AffineTransform().setToRotation(theta, x, y);
+<a name="line514"></a>};
+<a name="line515"></a>
+<a name="line516"></a>
+<a name="line517"></a>/**
+<a name="line518"></a> * Sets this transform to a scaling transformation.
+<a name="line519"></a> *
+<a name="line520"></a> * @param {number} sx The x-axis scaling factor.
+<a name="line521"></a> * @param {number} sy The y-axis scaling factor.
+<a name="line522"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line523"></a> */
+<a name="line524"></a>goog.graphics.AffineTransform.prototype.setToScale = function(sx, sy) {
+<a name="line525"></a>  return this.setTransform(sx, 0, 0, sy, 0, 0);
+<a name="line526"></a>};
+<a name="line527"></a>
+<a name="line528"></a>
+<a name="line529"></a>/**
+<a name="line530"></a> * Sets this transform to a translation transformation.
+<a name="line531"></a> *
+<a name="line532"></a> * @param {number} dx The distance to translate in the x direction.
+<a name="line533"></a> * @param {number} dy The distance to translate in the y direction.
+<a name="line534"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line535"></a> */
+<a name="line536"></a>goog.graphics.AffineTransform.prototype.setToTranslation = function(dx, dy) {
+<a name="line537"></a>  return this.setTransform(1, 0, 0, 1, dx, dy);
+<a name="line538"></a>};
+<a name="line539"></a>
+<a name="line540"></a>
+<a name="line541"></a>/**
+<a name="line542"></a> * Sets this transform to a shearing transformation.
+<a name="line543"></a> *
+<a name="line544"></a> * @param {number} shx The x-axis shear factor.
+<a name="line545"></a> * @param {number} shy The y-axis shear factor.
+<a name="line546"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line547"></a> */
+<a name="line548"></a>goog.graphics.AffineTransform.prototype.setToShear = function(shx, shy) {
+<a name="line549"></a>  return this.setTransform(1, shy, shx, 1, 0, 0);
+<a name="line550"></a>};
+<a name="line551"></a>
+<a name="line552"></a>
+<a name="line553"></a>/**
+<a name="line554"></a> * Sets this transform to a rotation transformation.
+<a name="line555"></a> *
+<a name="line556"></a> * @param {number} theta The angle of rotation measured in radians.
+<a name="line557"></a> * @param {number} x The x coordinate of the anchor point.
+<a name="line558"></a> * @param {number} y The y coordinate of the anchor point.
+<a name="line559"></a> * @return {!goog.graphics.AffineTransform} This affine transform.
+<a name="line560"></a> */
+<a name="line561"></a>goog.graphics.AffineTransform.prototype.setToRotation = function(theta, x, y) {
+<a name="line562"></a>  var cos = Math.cos(theta);
+<a name="line563"></a>  var sin = Math.sin(theta);
+<a name="line564"></a>  return this.setTransform(cos, sin, -sin, cos,
+<a name="line565"></a>      x - x * cos + y * sin, y - x * sin - y * cos);
+<a name="line566"></a>};
+<a name="line567"></a>
+<a name="line568"></a>
+<a name="line569"></a>/**
+<a name="line570"></a> * Compares two affine transforms for equality.
+<a name="line571"></a> *
+<a name="line572"></a> * @param {goog.graphics.AffineTransform} tx The other affine transform.
+<a name="line573"></a> * @return {boolean} whether the two transforms are equal.
+<a name="line574"></a> */
+<a name="line575"></a>goog.graphics.AffineTransform.prototype.equals = function(tx) {
+<a name="line576"></a>  if (this == tx) {
+<a name="line577"></a>    return true;
+<a name="line578"></a>  }
+<a name="line579"></a>  if (!tx) {
+<a name="line580"></a>    return false;
+<a name="line581"></a>  }
+<a name="line582"></a>  return this.m00_ == tx.m00_ &amp;&amp;
+<a name="line583"></a>      this.m01_ == tx.m01_ &amp;&amp;
+<a name="line584"></a>      this.m02_ == tx.m02_ &amp;&amp;
+<a name="line585"></a>      this.m10_ == tx.m10_ &amp;&amp;
+<a name="line586"></a>      this.m11_ == tx.m11_ &amp;&amp;
+<a name="line587"></a>      this.m12_ == tx.m12_;
+<a name="line588"></a>};
+</pre>
+
+
+</body>
+</html>

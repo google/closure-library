@@ -1,0 +1,1449 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>EntriesPanel (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">tweak.EntriesPanel</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    The body of the tweaks UI and also used for BooleanGroup.
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_tweak_tweakui.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/tweak/tweakui.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td>goog.tweak.EntriesPanel</td><td></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+</table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.tweak.EntriesPanel(<span><span class="arg">entries</span>,&nbsp;<span class="arg">opt_domHelper</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entries</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span>!</span><span class="type"><a href="class_goog_tweak_BaseEntry.html">goog.tweak.BaseEntry</a></span>&gt;
+        <div class="entryOverview">The entries to show in the
+    panel.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <span class="type">goog.dom.DomHelper=</span>
+        <div class="entryOverview">The DomHelper to render with.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_tweak_EntriesPanel.html">
+              goog.tweak.EntriesPanel
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.boundHelpOnClickHandler_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">boundHelpOnClickHandler_<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       The bound onclick handler for the help question marks.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line395">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.createBooleanSettingDom_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createBooleanSettingDom_<span class="args">(<span class="arg">tweak</span>,&nbsp;<span class="arg">label</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">DocumentFragment</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates the DOM element to control the given boolean setting.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">tweak</span>
+        : <span>!</span><span class="type"><a href="class_goog_tweak_BooleanSetting.html">goog.tweak.BooleanSetting</a></span>
+        <div class="entryOverview">The setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">label</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The label for the entry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">DocumentFragment</span>&nbsp;
+            The DOM elements.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line638">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.createButtonActionDom_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createButtonActionDom_<span class="args">(<span class="arg">tweak</span>,&nbsp;<span class="arg">label</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates the DOM element to control the given button action.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">tweak</span>
+        : <span>!</span><span class="type"><a href="class_goog_tweak_ButtonAction.html">goog.tweak.ButtonAction</a></span>
+        <div class="entryOverview">The action.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">label</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The label for the entry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>&nbsp;
+            The DOM element.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line735">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.createComboBoxDom_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createComboBoxDom_<span class="args">(<span class="arg">tweak</span>,&nbsp;<span class="arg">label</span>,&nbsp;<span class="arg">onchangeFunc</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">DocumentFragment</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates the DOM element to control the given enum setting.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">tweak</span>
+        : <span>!</span><span class="type"><a href="class_goog_tweak_StringSetting.html">goog.tweak.StringSetting</a></span><span>&nbsp;|&nbsp;</span><span>!</span><span class="type"><a href="class_goog_tweak_NumericSetting.html">goog.tweak.NumericSetting</a></span>
+        <div class="entryOverview">The
+    setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">label</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The label for the entry.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">onchangeFunc</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+        <div class="entryOverview">onchange event handler.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">DocumentFragment</span>&nbsp;
+            The DOM element.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line602">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.createEntryElem_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createEntryElem_<span class="args">(<span class="arg">entry</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates and returns a form element for the given entry.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entry</span>
+        : <span>!</span><span class="type"><a href="class_goog_tweak_BaseEntry.html">goog.tweak.BaseEntry</a></span>
+        <div class="entryOverview">The entry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>&nbsp;
+            The root DOM element for the entry.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line511">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.createHelpElem_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createHelpElem_<span class="args">(<span class="arg">entry</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates and returns a help element for the given entry.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entry</span>
+        : <span class="type"><a href="class_goog_tweak_BaseEntry.html">goog.tweak.BaseEntry</a></span>
+        <div class="entryOverview">The entry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>&nbsp;
+            The root element of the created DOM.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line561">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.createSubPanelDom_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createSubPanelDom_<span class="args">(<span class="arg">entry</span>,&nbsp;<span class="arg">label</span>,&nbsp;<span class="arg">childEntries</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">DocumentFragment</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates the DOM for a BooleanGroup or NamespaceEntry.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entry</span>
+        : <span>!</span><span class="type"><a href="class_goog_tweak_BooleanGroup.html">goog.tweak.BooleanGroup</a></span><span>&nbsp;|&nbsp;</span><span>!</span><span class="type"><a href="class_goog_tweak_NamespaceEntry_.html">goog.tweak.NamespaceEntry_</a></span>
+        <div class="entryOverview">The
+    entry.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">label</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The label for the entry.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">childEntries</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="class_goog_tweak_BaseEntry.html">goog.tweak.BaseEntry</a></span>&gt;
+        <div class="entryOverview">The child entries.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">DocumentFragment</span>&nbsp;
+            The DOM element.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line670">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.createTextBoxDom_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createTextBoxDom_<span class="args">(<span class="arg">tweak</span>,&nbsp;<span class="arg">label</span>,&nbsp;<span class="arg">onchangeFunc</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">DocumentFragment</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates the DOM element to control the given string setting.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">tweak</span>
+        : <span>!</span><span class="type"><a href="class_goog_tweak_StringSetting.html">goog.tweak.StringSetting</a></span><span>&nbsp;|&nbsp;</span><span>!</span><span class="type"><a href="class_goog_tweak_NumericSetting.html">goog.tweak.NumericSetting</a></span>
+        <div class="entryOverview">The
+    setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">label</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The label for the entry.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">onchangeFunc</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+        <div class="entryOverview">onchange event handler.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">DocumentFragment</span>&nbsp;
+            The DOM element.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line709">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.createTweakEntryDom_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">createTweakEntryDom_<span class="args">(<span class="arg">entry</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span><span>&nbsp;|&nbsp;</span><span>!</span><span class="type">DocumentFragment</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates the DOM element to control the given entry.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entry</span>
+        : <span>!</span><span class="type"><a href="class_goog_tweak_BaseEntry.html">goog.tweak.BaseEntry</a></span>
+        <div class="entryOverview">The entry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span><span>&nbsp;|&nbsp;</span><span>!</span><span class="type">DocumentFragment</span>&nbsp;
+            The DOM element.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line749">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.getRootElement"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getRootElement<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>&nbsp;
+            Returns the expanded element. Must not be called before
+    render().
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line440">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.insertEntry"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">insertEntry<span class="args">(<span class="arg">entry</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Inserts the given entry into the panel.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entry</span>
+        : <span>!</span><span class="type"><a href="class_goog_tweak_BaseEntry.html">goog.tweak.BaseEntry</a></span>
+        <div class="entryOverview">The entry to insert.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line492">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.onHelpClick_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">onHelpClick_<span class="args">(<span class="arg">entryDiv</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Click handler for the help link.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entryDiv</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The div that contains the tweak.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line536">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.render"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">render<span class="args">(<span class="arg">opt_endElement</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates and returns the expanded element.
+The markup looks like:
+<div><a>Show Descriptions</a><div>
+     ...
+     {endElement}
+  </div></div>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_endElement</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span><span>&nbsp;|&nbsp;</span><span class="type">DocumentFragment=</span>
+        <div class="entryOverview">Element to insert after all
+    tweak entries.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>&nbsp;
+            The root element for the panel.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line461">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.showDescription_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">showDescription_<span class="args">(<span class="arg">entryDiv</span>,&nbsp;<span class="arg">show</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Twiddle the DOM so that the entry within the given span is shown/hidden.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entryDiv</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The div that contains the tweak.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">show</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">True to show, false to hide.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line547">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.EntriesPanel.prototype.toggleAllDescriptions"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">toggleAllDescriptions<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Show all entry descriptions (has the same effect as clicking on all ?'s).
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line582">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_tweak_EntriesPanel.html">
+              goog.tweak.EntriesPanel
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.EntriesPanel.prototype.childPanels"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">childPanels</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Map of tweak ID -&gt; EntriesPanel for child panels (BooleanGroups).
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line432">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.EntriesPanel.prototype.domHelper_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">domHelper_</span>
+        : <span class="type"><a href="class_goog_dom_DomHelper.html">goog.dom.DomHelper</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The DomHelper to render with.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line426">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.EntriesPanel.prototype.entries_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">entries_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The entries to show in the panel.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line387">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.EntriesPanel.prototype.mainPanel_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">mainPanel_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The element that contains all of the settings and the endElement.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line411">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.EntriesPanel.prototype.rootElem_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">rootElem_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The element that contains the UI.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line404">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.EntriesPanel.prototype.showAllDescriptionsState_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">showAllDescriptionsState_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Flips between true/false each time the "Toggle Descriptions" link is
+clicked.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui.js.source.html#line419">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package tweak</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="tweak.EntriesPanel"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

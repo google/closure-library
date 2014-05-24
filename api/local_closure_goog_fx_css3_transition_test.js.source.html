@@ -1,0 +1,270 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>transition_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_fx_css3_transition_test.js.html">transition_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.fx.css3.TransitionTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.fx.css3.TransitionTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dispose&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events&#39;);
+<a name="line21"></a>goog.require(&#39;goog.fx.Transition&#39;);
+<a name="line22"></a>goog.require(&#39;goog.fx.css3.Transition&#39;);
+<a name="line23"></a>goog.require(&#39;goog.style.transition&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line27"></a>
+<a name="line28"></a>var transition;
+<a name="line29"></a>var element;
+<a name="line30"></a>var mockClock;
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>function createTransition(element, duration) {
+<a name="line34"></a>  return new goog.fx.css3.Transition(
+<a name="line35"></a>      element, duration, {&#39;opacity&#39;: 0}, {&#39;opacity&#39;: 1},
+<a name="line36"></a>      {property: &#39;opacity&#39;, duration: duration, timing: &#39;ease-in&#39;, delay: 0});
+<a name="line37"></a>}
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>function setUp() {
+<a name="line41"></a>  mockClock = new goog.testing.MockClock(true);
+<a name="line42"></a>  element = goog.dom.createElement(&#39;div&#39;);
+<a name="line43"></a>  document.body.appendChild(element);
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>function tearDown() {
+<a name="line48"></a>  goog.dispose(transition);
+<a name="line49"></a>  goog.dispose(mockClock);
+<a name="line50"></a>  goog.dom.removeNode(element);
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>function testPlayEventFiredOnPlay() {
+<a name="line55"></a>  if (!goog.style.transition.isSupported()) return;
+<a name="line56"></a>
+<a name="line57"></a>  transition = createTransition(element, 10);
+<a name="line58"></a>  var handlerCalled = false;
+<a name="line59"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.PLAY,
+<a name="line60"></a>      function() {
+<a name="line61"></a>        handlerCalled = true;
+<a name="line62"></a>      });
+<a name="line63"></a>
+<a name="line64"></a>  transition.play();
+<a name="line65"></a>  assertTrue(handlerCalled);
+<a name="line66"></a>}
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>function testBeginEventFiredOnPlay() {
+<a name="line70"></a>  if (!goog.style.transition.isSupported()) return;
+<a name="line71"></a>
+<a name="line72"></a>  transition = createTransition(element, 10);
+<a name="line73"></a>  var handlerCalled = false;
+<a name="line74"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.BEGIN,
+<a name="line75"></a>      function() {
+<a name="line76"></a>        handlerCalled = true;
+<a name="line77"></a>      });
+<a name="line78"></a>
+<a name="line79"></a>  transition.play();
+<a name="line80"></a>  assertTrue(handlerCalled);
+<a name="line81"></a>}
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>function testFinishEventsFiredAfterFinish() {
+<a name="line85"></a>  if (!goog.style.transition.isSupported()) return;
+<a name="line86"></a>
+<a name="line87"></a>  transition = createTransition(element, 10);
+<a name="line88"></a>  var finishHandlerCalled = false;
+<a name="line89"></a>  var endHandlerCalled = false;
+<a name="line90"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.FINISH,
+<a name="line91"></a>      function() {
+<a name="line92"></a>        finishHandlerCalled = true;
+<a name="line93"></a>      });
+<a name="line94"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+<a name="line95"></a>      function() {
+<a name="line96"></a>        endHandlerCalled = true;
+<a name="line97"></a>      });
+<a name="line98"></a>
+<a name="line99"></a>  transition.play();
+<a name="line100"></a>
+<a name="line101"></a>  mockClock.tick(10000);
+<a name="line102"></a>
+<a name="line103"></a>  assertTrue(finishHandlerCalled);
+<a name="line104"></a>  assertTrue(endHandlerCalled);
+<a name="line105"></a>}
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>function testEventsWhenTransitionIsUnsupported() {
+<a name="line109"></a>  if (goog.style.transition.isSupported()) return;
+<a name="line110"></a>
+<a name="line111"></a>  transition = createTransition(element, 10);
+<a name="line112"></a>
+<a name="line113"></a>  var stopHandlerCalled = false;
+<a name="line114"></a>  var finishHandlerCalled = false, endHandlerCalled = false;
+<a name="line115"></a>  var beginHandlerCalled = false, playHandlerCalled = false;
+<a name="line116"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.BEGIN,
+<a name="line117"></a>      function() {
+<a name="line118"></a>        beginHandlerCalled = true;
+<a name="line119"></a>      });
+<a name="line120"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.PLAY,
+<a name="line121"></a>      function() {
+<a name="line122"></a>        playHandlerCalled = true;
+<a name="line123"></a>      });
+<a name="line124"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.FINISH,
+<a name="line125"></a>      function() {
+<a name="line126"></a>        finishHandlerCalled = true;
+<a name="line127"></a>      });
+<a name="line128"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+<a name="line129"></a>      function() {
+<a name="line130"></a>        endHandlerCalled = true;
+<a name="line131"></a>      });
+<a name="line132"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
+<a name="line133"></a>      function() {
+<a name="line134"></a>        stopHandlerCalled = true;
+<a name="line135"></a>      });
+<a name="line136"></a>
+<a name="line137"></a>  assertFalse(transition.play());
+<a name="line138"></a>
+<a name="line139"></a>  assertTrue(beginHandlerCalled);
+<a name="line140"></a>  assertTrue(playHandlerCalled);
+<a name="line141"></a>  assertTrue(endHandlerCalled);
+<a name="line142"></a>  assertTrue(finishHandlerCalled);
+<a name="line143"></a>
+<a name="line144"></a>  transition.stop();
+<a name="line145"></a>
+<a name="line146"></a>  assertFalse(stopHandlerCalled);
+<a name="line147"></a>}
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>function testCallingStopDuringAnimationWorks() {
+<a name="line151"></a>  if (!goog.style.transition.isSupported()) return;
+<a name="line152"></a>
+<a name="line153"></a>  transition = createTransition(element, 10);
+<a name="line154"></a>
+<a name="line155"></a>  var stopHandler = goog.testing.recordFunction();
+<a name="line156"></a>  var endHandler = goog.testing.recordFunction();
+<a name="line157"></a>  var finishHandler = goog.testing.recordFunction();
+<a name="line158"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
+<a name="line159"></a>      stopHandler);
+<a name="line160"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+<a name="line161"></a>      endHandler);
+<a name="line162"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.FINISH,
+<a name="line163"></a>      finishHandler);
+<a name="line164"></a>
+<a name="line165"></a>  transition.play();
+<a name="line166"></a>  mockClock.tick(1);
+<a name="line167"></a>  transition.stop();
+<a name="line168"></a>  assertEquals(1, stopHandler.getCallCount());
+<a name="line169"></a>  assertEquals(1, endHandler.getCallCount());
+<a name="line170"></a>  mockClock.tick(10000);
+<a name="line171"></a>  assertEquals(0, finishHandler.getCallCount());
+<a name="line172"></a>}
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>function testCallingStopImmediatelyWorks() {
+<a name="line176"></a>  if (!goog.style.transition.isSupported()) return;
+<a name="line177"></a>
+<a name="line178"></a>  transition = createTransition(element, 10);
+<a name="line179"></a>
+<a name="line180"></a>  var stopHandler = goog.testing.recordFunction();
+<a name="line181"></a>  var endHandler = goog.testing.recordFunction();
+<a name="line182"></a>  var finishHandler = goog.testing.recordFunction();
+<a name="line183"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
+<a name="line184"></a>      stopHandler);
+<a name="line185"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+<a name="line186"></a>      endHandler);
+<a name="line187"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.FINISH,
+<a name="line188"></a>      finishHandler);
+<a name="line189"></a>
+<a name="line190"></a>  transition.play();
+<a name="line191"></a>  transition.stop();
+<a name="line192"></a>  assertEquals(1, stopHandler.getCallCount());
+<a name="line193"></a>  assertEquals(1, endHandler.getCallCount());
+<a name="line194"></a>  mockClock.tick(10000);
+<a name="line195"></a>  assertEquals(0, finishHandler.getCallCount());
+<a name="line196"></a>}
+<a name="line197"></a>
+<a name="line198"></a>function testCallingStopAfterAnimationDoesNothing() {
+<a name="line199"></a>  if (!goog.style.transition.isSupported()) return;
+<a name="line200"></a>
+<a name="line201"></a>  transition = createTransition(element, 10);
+<a name="line202"></a>
+<a name="line203"></a>  var stopHandler = goog.testing.recordFunction();
+<a name="line204"></a>  var endHandler = goog.testing.recordFunction();
+<a name="line205"></a>  var finishHandler = goog.testing.recordFunction();
+<a name="line206"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.STOP,
+<a name="line207"></a>      stopHandler);
+<a name="line208"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.END,
+<a name="line209"></a>      endHandler);
+<a name="line210"></a>  goog.events.listen(transition, goog.fx.Transition.EventType.FINISH,
+<a name="line211"></a>      finishHandler);
+<a name="line212"></a>
+<a name="line213"></a>  transition.play();
+<a name="line214"></a>  mockClock.tick(10000);
+<a name="line215"></a>  transition.stop();
+<a name="line216"></a>  assertEquals(0, stopHandler.getCallCount());
+<a name="line217"></a>  assertEquals(1, endHandler.getCallCount());
+<a name="line218"></a>  assertEquals(1, finishHandler.getCallCount());
+<a name="line219"></a>}
+</pre>
+
+
+</body>
+</html>

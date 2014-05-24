@@ -1,0 +1,247 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>transition.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_fx_css3_transition.js.html">transition.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview CSS3 transition base library.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.fx.css3.Transition&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line23"></a>goog.require(&#39;goog.fx.TransitionBase&#39;);
+<a name="line24"></a>goog.require(&#39;goog.style&#39;);
+<a name="line25"></a>goog.require(&#39;goog.style.transition&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * A class to handle targeted CSS3 transition. This class
+<a name="line31"></a> * handles common features required for targeted CSS3 transition.
+<a name="line32"></a> *
+<a name="line33"></a> * Browser that does not support CSS3 transition will still receive all
+<a name="line34"></a> * the events fired by the transition object, but will not have any transition
+<a name="line35"></a> * played. If the browser supports the final state as set in setFinalState
+<a name="line36"></a> * method, the element will ends in the final state.
+<a name="line37"></a> *
+<a name="line38"></a> * Transitioning multiple properties with the same setting is possible
+<a name="line39"></a> * by setting Css3Property&#39;s property to &#39;all&#39;. Performing multiple
+<a name="line40"></a> * transitions can be done via setting multiple initialStyle,
+<a name="line41"></a> * finalStyle and transitions. Css3Property&#39;s delay can be used to
+<a name="line42"></a> * delay one of the transition. Here is an example for a transition
+<a name="line43"></a> * that expands on the width and then followed by the height:
+<a name="line44"></a> *
+<a name="line45"></a> * &lt;pre&gt;
+<a name="line46"></a> *   initialStyle: {width: 10px, height: 10px}
+<a name="line47"></a> *   finalStyle: {width: 100px, height: 100px}
+<a name="line48"></a> *   transitions: [
+<a name="line49"></a> *     {property: width, duration: 1, timing: &#39;ease-in&#39;, delay: 0},
+<a name="line50"></a> *     {property: height, duration: 1, timing: &#39;ease-in&#39;, delay: 1}
+<a name="line51"></a> *   ]
+<a name="line52"></a> * &lt;/pre&gt;
+<a name="line53"></a> *
+<a name="line54"></a> * @param {Element} element The element to be transitioned.
+<a name="line55"></a> * @param {number} duration The duration of the transition in seconds.
+<a name="line56"></a> *     This should be the longest of all transitions.
+<a name="line57"></a> * @param {Object} initialStyle Initial style properties of the element before
+<a name="line58"></a> *     animating. Set using {@code goog.style.setStyle}.
+<a name="line59"></a> * @param {Object} finalStyle Final style properties of the element after
+<a name="line60"></a> *     animating. Set using {@code goog.style.setStyle}.
+<a name="line61"></a> * @param {goog.style.transition.Css3Property|
+<a name="line62"></a> *     Array.&lt;goog.style.transition.Css3Property&gt;} transitions A single CSS3
+<a name="line63"></a> *     transition property or an array of it.
+<a name="line64"></a> * @extends {goog.fx.TransitionBase}
+<a name="line65"></a> * @constructor
+<a name="line66"></a> */
+<a name="line67"></a>goog.fx.css3.Transition = function(
+<a name="line68"></a>    element, duration, initialStyle, finalStyle, transitions) {
+<a name="line69"></a>  goog.fx.css3.Transition.base(this, &#39;constructor&#39;);
+<a name="line70"></a>
+<a name="line71"></a>  /**
+<a name="line72"></a>   * @type {Element}
+<a name="line73"></a>   * @private
+<a name="line74"></a>   */
+<a name="line75"></a>  this.element_ = element;
+<a name="line76"></a>
+<a name="line77"></a>  /**
+<a name="line78"></a>   * @type {number}
+<a name="line79"></a>   * @private
+<a name="line80"></a>   */
+<a name="line81"></a>  this.duration_ = duration;
+<a name="line82"></a>
+<a name="line83"></a>  /**
+<a name="line84"></a>   * @type {Object}
+<a name="line85"></a>   * @private
+<a name="line86"></a>   */
+<a name="line87"></a>  this.initialStyle_ = initialStyle;
+<a name="line88"></a>
+<a name="line89"></a>  /**
+<a name="line90"></a>   * @type {Object}
+<a name="line91"></a>   * @private
+<a name="line92"></a>   */
+<a name="line93"></a>  this.finalStyle_ = finalStyle;
+<a name="line94"></a>
+<a name="line95"></a>  /**
+<a name="line96"></a>   * @type {Array.&lt;goog.style.transition.Css3Property&gt;}
+<a name="line97"></a>   * @private
+<a name="line98"></a>   */
+<a name="line99"></a>  this.transitions_ = goog.isArray(transitions) ? transitions : [transitions];
+<a name="line100"></a>};
+<a name="line101"></a>goog.inherits(goog.fx.css3.Transition, goog.fx.TransitionBase);
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Timer id to be used to cancel animation part-way.
+<a name="line106"></a> * @type {number}
+<a name="line107"></a> * @private
+<a name="line108"></a> */
+<a name="line109"></a>goog.fx.css3.Transition.prototype.timerId_;
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/** @override */
+<a name="line113"></a>goog.fx.css3.Transition.prototype.play = function() {
+<a name="line114"></a>  if (this.isPlaying()) {
+<a name="line115"></a>    return false;
+<a name="line116"></a>  }
+<a name="line117"></a>
+<a name="line118"></a>  this.onBegin();
+<a name="line119"></a>  this.onPlay();
+<a name="line120"></a>
+<a name="line121"></a>  this.startTime = goog.now();
+<a name="line122"></a>  this.setStatePlaying();
+<a name="line123"></a>
+<a name="line124"></a>  if (goog.style.transition.isSupported()) {
+<a name="line125"></a>    goog.style.setStyle(this.element_, this.initialStyle_);
+<a name="line126"></a>    // Allow element to get updated to its initial state before installing
+<a name="line127"></a>    // CSS3 transition.
+<a name="line128"></a>    this.timerId_ = goog.Timer.callOnce(this.play_, undefined, this);
+<a name="line129"></a>    return true;
+<a name="line130"></a>  } else {
+<a name="line131"></a>    this.stop_(false);
+<a name="line132"></a>    return false;
+<a name="line133"></a>  }
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Helper method for play method. This needs to be executed on a timer.
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.fx.css3.Transition.prototype.play_ = function() {
+<a name="line142"></a>  goog.style.transition.set(this.element_, this.transitions_);
+<a name="line143"></a>  goog.style.setStyle(this.element_, this.finalStyle_);
+<a name="line144"></a>  this.timerId_ = goog.Timer.callOnce(
+<a name="line145"></a>      goog.bind(this.stop_, this, false), this.duration_ * 1000);
+<a name="line146"></a>};
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/** @override */
+<a name="line150"></a>goog.fx.css3.Transition.prototype.stop = function() {
+<a name="line151"></a>  if (!this.isPlaying()) return;
+<a name="line152"></a>
+<a name="line153"></a>  this.stop_(true);
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Helper method for stop method.
+<a name="line159"></a> * @param {boolean} stopped If the transition was stopped.
+<a name="line160"></a> * @private
+<a name="line161"></a> */
+<a name="line162"></a>goog.fx.css3.Transition.prototype.stop_ = function(stopped) {
+<a name="line163"></a>  goog.style.transition.removeAll(this.element_);
+<a name="line164"></a>
+<a name="line165"></a>  // Clear the timer.
+<a name="line166"></a>  goog.Timer.clear(this.timerId_);
+<a name="line167"></a>
+<a name="line168"></a>  // Make sure that we have reached the final style.
+<a name="line169"></a>  goog.style.setStyle(this.element_, this.finalStyle_);
+<a name="line170"></a>
+<a name="line171"></a>  this.endTime = goog.now();
+<a name="line172"></a>  this.setStateStopped();
+<a name="line173"></a>
+<a name="line174"></a>  if (stopped) {
+<a name="line175"></a>    this.onStop();
+<a name="line176"></a>  } else {
+<a name="line177"></a>    this.onFinish();
+<a name="line178"></a>  }
+<a name="line179"></a>  this.onEnd();
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/** @override */
+<a name="line184"></a>goog.fx.css3.Transition.prototype.disposeInternal = function() {
+<a name="line185"></a>  this.stop();
+<a name="line186"></a>  goog.fx.css3.Transition.base(this, &#39;disposeInternal&#39;);
+<a name="line187"></a>};
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * Pausing CSS3 Transitions in not supported.
+<a name="line192"></a> * @override
+<a name="line193"></a> */
+<a name="line194"></a>goog.fx.css3.Transition.prototype.pause = function() {
+<a name="line195"></a>  goog.asserts.assert(false, &#39;Css3 transitions does not support pause action.&#39;);
+<a name="line196"></a>};
+</pre>
+
+
+</body>
+</html>

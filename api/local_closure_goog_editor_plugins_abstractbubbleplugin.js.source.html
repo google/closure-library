@@ -1,0 +1,728 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>abstractbubbleplugin.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_plugins_abstractbubbleplugin.js.html">abstractbubbleplugin.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2005 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Base class for bubble plugins.
+<a name="line17"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.editor.plugins.AbstractBubblePlugin&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.Range&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line26"></a>goog.require(&#39;goog.editor.Plugin&#39;);
+<a name="line27"></a>goog.require(&#39;goog.editor.style&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line32"></a>goog.require(&#39;goog.events.actionEventWrapper&#39;);
+<a name="line33"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line34"></a>goog.require(&#39;goog.string.Unicode&#39;);
+<a name="line35"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line36"></a>goog.require(&#39;goog.ui.editor.Bubble&#39;);
+<a name="line37"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/**
+<a name="line42"></a> * Base class for bubble plugins. This is used for to connect user behavior
+<a name="line43"></a> * in the editor to a goog.ui.editor.Bubble UI element that allows
+<a name="line44"></a> * the user to modify the properties of an element on their page (e.g. the alt
+<a name="line45"></a> * text of an image tag).
+<a name="line46"></a> *
+<a name="line47"></a> * Subclasses should override the abstract method getBubbleTargetFromSelection()
+<a name="line48"></a> * with code to determine if the current selection should activate the bubble
+<a name="line49"></a> * type. The other abstract method createBubbleContents() should be overriden
+<a name="line50"></a> * with code to create the inside markup of the bubble.  The base class creates
+<a name="line51"></a> * the rest of the bubble.
+<a name="line52"></a> *
+<a name="line53"></a> * @constructor
+<a name="line54"></a> * @extends {goog.editor.Plugin}
+<a name="line55"></a> */
+<a name="line56"></a>goog.editor.plugins.AbstractBubblePlugin = function() {
+<a name="line57"></a>  goog.editor.plugins.AbstractBubblePlugin.base(this, &#39;constructor&#39;);
+<a name="line58"></a>
+<a name="line59"></a>  /**
+<a name="line60"></a>   * Place to register events the plugin listens to.
+<a name="line61"></a>   * @type {goog.events.EventHandler.&lt;
+<a name="line62"></a>   *     !goog.editor.plugins.AbstractBubblePlugin&gt;}
+<a name="line63"></a>   * @protected
+<a name="line64"></a>   */
+<a name="line65"></a>  this.eventRegister = new goog.events.EventHandler(this);
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * Instance factory function that creates a bubble UI component.  If set to a
+<a name="line69"></a>   * non-null value, this function will be used to create a bubble instead of
+<a name="line70"></a>   * the global factory function.  It takes as parameters the bubble parent
+<a name="line71"></a>   * element and the z index to draw the bubble at.
+<a name="line72"></a>   * @type {?function(!Element, number): !goog.ui.editor.Bubble}
+<a name="line73"></a>   * @private
+<a name="line74"></a>   */
+<a name="line75"></a>  this.bubbleFactory_ = null;
+<a name="line76"></a>};
+<a name="line77"></a>goog.inherits(goog.editor.plugins.AbstractBubblePlugin, goog.editor.Plugin);
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * The css class name of option link elements.
+<a name="line82"></a> * @type {string}
+<a name="line83"></a> * @private
+<a name="line84"></a> */
+<a name="line85"></a>goog.editor.plugins.AbstractBubblePlugin.OPTION_LINK_CLASSNAME_ =
+<a name="line86"></a>    goog.getCssName(&#39;tr_option-link&#39;);
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * The css class name of link elements.
+<a name="line91"></a> * @type {string}
+<a name="line92"></a> * @private
+<a name="line93"></a> */
+<a name="line94"></a>goog.editor.plugins.AbstractBubblePlugin.LINK_CLASSNAME_ =
+<a name="line95"></a>    goog.getCssName(&#39;tr_bubble_link&#39;);
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/**
+<a name="line99"></a> * The constant string used to separate option links.
+<a name="line100"></a> * @type {string}
+<a name="line101"></a> * @protected
+<a name="line102"></a> */
+<a name="line103"></a>goog.editor.plugins.AbstractBubblePlugin.DASH_NBSP_STRING =
+<a name="line104"></a>    goog.string.Unicode.NBSP + &#39;-&#39; + goog.string.Unicode.NBSP;
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Default factory function for creating a bubble UI component.
+<a name="line109"></a> * @param {!Element} parent The parent element for the bubble.
+<a name="line110"></a> * @param {number} zIndex The z index to draw the bubble at.
+<a name="line111"></a> * @return {!goog.ui.editor.Bubble} The new bubble component.
+<a name="line112"></a> * @private
+<a name="line113"></a> */
+<a name="line114"></a>goog.editor.plugins.AbstractBubblePlugin.defaultBubbleFactory_ = function(
+<a name="line115"></a>    parent, zIndex) {
+<a name="line116"></a>  return new goog.ui.editor.Bubble(parent, zIndex);
+<a name="line117"></a>};
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Global factory function that creates a bubble UI component. It takes as
+<a name="line122"></a> * parameters the bubble parent element and the z index to draw the bubble at.
+<a name="line123"></a> * @type {function(!Element, number): !goog.ui.editor.Bubble}
+<a name="line124"></a> * @private
+<a name="line125"></a> */
+<a name="line126"></a>goog.editor.plugins.AbstractBubblePlugin.globalBubbleFactory_ =
+<a name="line127"></a>    goog.editor.plugins.AbstractBubblePlugin.defaultBubbleFactory_;
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Sets the global bubble factory function.
+<a name="line132"></a> * @param {function(!Element, number): !goog.ui.editor.Bubble}
+<a name="line133"></a> *     bubbleFactory Function that creates a bubble for the given bubble parent
+<a name="line134"></a> *     element and z index.
+<a name="line135"></a> */
+<a name="line136"></a>goog.editor.plugins.AbstractBubblePlugin.setBubbleFactory = function(
+<a name="line137"></a>    bubbleFactory) {
+<a name="line138"></a>  goog.editor.plugins.AbstractBubblePlugin.globalBubbleFactory_ = bubbleFactory;
+<a name="line139"></a>};
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * Map from field id to shared bubble object.
+<a name="line144"></a> * @type {!Object.&lt;goog.ui.editor.Bubble&gt;}
+<a name="line145"></a> * @private
+<a name="line146"></a> */
+<a name="line147"></a>goog.editor.plugins.AbstractBubblePlugin.bubbleMap_ = {};
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * The optional parent of the bubble.  If null or not set, we will use the
+<a name="line152"></a> * application document. This is useful when you have an editor embedded in
+<a name="line153"></a> * a scrolling DIV.
+<a name="line154"></a> * @type {Element|undefined}
+<a name="line155"></a> * @private
+<a name="line156"></a> */
+<a name="line157"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.bubbleParent_;
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * The id of the panel this plugin added to the shared bubble.  Null when
+<a name="line162"></a> * this plugin doesn&#39;t currently have a panel in a bubble.
+<a name="line163"></a> * @type {string?}
+<a name="line164"></a> * @private
+<a name="line165"></a> */
+<a name="line166"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.panelId_ = null;
+<a name="line167"></a>
+<a name="line168"></a>
+<a name="line169"></a>/**
+<a name="line170"></a> * Whether this bubble should support tabbing through the link elements. False
+<a name="line171"></a> * by default.
+<a name="line172"></a> * @type {boolean}
+<a name="line173"></a> * @private
+<a name="line174"></a> */
+<a name="line175"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.keyboardNavigationEnabled_ =
+<a name="line176"></a>    false;
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Sets the instance bubble factory function.  If set to a non-null value, this
+<a name="line181"></a> * function will be used to create a bubble instead of the global factory
+<a name="line182"></a> * function.
+<a name="line183"></a> * @param {?function(!Element, number): !goog.ui.editor.Bubble} bubbleFactory
+<a name="line184"></a> *     Function that creates a bubble for the given bubble parent element and z
+<a name="line185"></a> *     index.  Null to reset the factory function.
+<a name="line186"></a> */
+<a name="line187"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.setBubbleFactory = function(
+<a name="line188"></a>    bubbleFactory) {
+<a name="line189"></a>  this.bubbleFactory_ = bubbleFactory;
+<a name="line190"></a>};
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Sets whether the bubble should support tabbing through the link elements.
+<a name="line195"></a> * @param {boolean} keyboardNavigationEnabled Whether the bubble should support
+<a name="line196"></a> *     tabbing through the link elements.
+<a name="line197"></a> */
+<a name="line198"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.enableKeyboardNavigation =
+<a name="line199"></a>    function(keyboardNavigationEnabled) {
+<a name="line200"></a>  this.keyboardNavigationEnabled_ = keyboardNavigationEnabled;
+<a name="line201"></a>};
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Sets the bubble parent.
+<a name="line206"></a> * @param {Element} bubbleParent An element where the bubble will be
+<a name="line207"></a> *     anchored. If null, we will use the application document. This
+<a name="line208"></a> *     is useful when you have an editor embedded in a scrolling div.
+<a name="line209"></a> */
+<a name="line210"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.setBubbleParent = function(
+<a name="line211"></a>    bubbleParent) {
+<a name="line212"></a>  this.bubbleParent_ = bubbleParent;
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Returns the bubble map.  Subclasses may override to use a separate map.
+<a name="line218"></a> * @return {!Object.&lt;goog.ui.editor.Bubble&gt;}
+<a name="line219"></a> * @protected
+<a name="line220"></a> */
+<a name="line221"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.getBubbleMap = function() {
+<a name="line222"></a>  return goog.editor.plugins.AbstractBubblePlugin.bubbleMap_;
+<a name="line223"></a>};
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/**
+<a name="line227"></a> * @return {goog.dom.DomHelper} The dom helper for the bubble window.
+<a name="line228"></a> */
+<a name="line229"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.getBubbleDom = function() {
+<a name="line230"></a>  return this.dom_;
+<a name="line231"></a>};
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>/** @override */
+<a name="line235"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.getTrogClassId =
+<a name="line236"></a>    goog.functions.constant(&#39;AbstractBubblePlugin&#39;);
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>/**
+<a name="line240"></a> * Returns the element whose properties the bubble manipulates.
+<a name="line241"></a> * @return {Element} The target element.
+<a name="line242"></a> */
+<a name="line243"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.getTargetElement =
+<a name="line244"></a>    function() {
+<a name="line245"></a>  return this.targetElement_;
+<a name="line246"></a>};
+<a name="line247"></a>
+<a name="line248"></a>
+<a name="line249"></a>/** @override */
+<a name="line250"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.handleKeyUp = function(e) {
+<a name="line251"></a>  // For example, when an image is selected, pressing any key overwrites
+<a name="line252"></a>  // the image and the panel should be hidden.
+<a name="line253"></a>  // Therefore we need to track key presses when the bubble is showing.
+<a name="line254"></a>  if (this.isVisible()) {
+<a name="line255"></a>    this.handleSelectionChange();
+<a name="line256"></a>  }
+<a name="line257"></a>  return false;
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * Pops up a property bubble for the given selection if appropriate and closes
+<a name="line263"></a> * open property bubbles if no longer needed.  This should not be overridden.
+<a name="line264"></a> * @override
+<a name="line265"></a> */
+<a name="line266"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.handleSelectionChange =
+<a name="line267"></a>    function(opt_e, opt_target) {
+<a name="line268"></a>  var selectedElement;
+<a name="line269"></a>  if (opt_e) {
+<a name="line270"></a>    selectedElement = /** @type {Element} */ (opt_e.target);
+<a name="line271"></a>  } else if (opt_target) {
+<a name="line272"></a>    selectedElement = /** @type {Element} */ (opt_target);
+<a name="line273"></a>  } else {
+<a name="line274"></a>    var range = this.getFieldObject().getRange();
+<a name="line275"></a>    if (range) {
+<a name="line276"></a>      var startNode = range.getStartNode();
+<a name="line277"></a>      var endNode = range.getEndNode();
+<a name="line278"></a>      var startOffset = range.getStartOffset();
+<a name="line279"></a>      var endOffset = range.getEndOffset();
+<a name="line280"></a>      // Sometimes in IE, the range will be collapsed, but think the end node
+<a name="line281"></a>      // and start node are different (although in the same visible position).
+<a name="line282"></a>      // In this case, favor the position IE thinks is the start node.
+<a name="line283"></a>      if (goog.userAgent.IE &amp;&amp; range.isCollapsed() &amp;&amp; startNode != endNode) {
+<a name="line284"></a>        range = goog.dom.Range.createCaret(startNode, startOffset);
+<a name="line285"></a>      }
+<a name="line286"></a>      if (startNode.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp;
+<a name="line287"></a>          startNode == endNode &amp;&amp; startOffset == endOffset - 1) {
+<a name="line288"></a>        var element = startNode.childNodes[startOffset];
+<a name="line289"></a>        if (element.nodeType == goog.dom.NodeType.ELEMENT) {
+<a name="line290"></a>          selectedElement = element;
+<a name="line291"></a>        }
+<a name="line292"></a>      }
+<a name="line293"></a>    }
+<a name="line294"></a>    selectedElement = selectedElement || range &amp;&amp; range.getContainerElement();
+<a name="line295"></a>  }
+<a name="line296"></a>  return this.handleSelectionChangeInternal(selectedElement);
+<a name="line297"></a>};
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * Pops up a property bubble for the given selection if appropriate and closes
+<a name="line302"></a> * open property bubbles if no longer needed.
+<a name="line303"></a> * @param {Element?} selectedElement The selected element.
+<a name="line304"></a> * @return {boolean} Always false, allowing every bubble plugin to handle the
+<a name="line305"></a> *     event.
+<a name="line306"></a> * @protected
+<a name="line307"></a> */
+<a name="line308"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.
+<a name="line309"></a>    handleSelectionChangeInternal = function(selectedElement) {
+<a name="line310"></a>  if (selectedElement) {
+<a name="line311"></a>    var bubbleTarget = this.getBubbleTargetFromSelection(selectedElement);
+<a name="line312"></a>    if (bubbleTarget) {
+<a name="line313"></a>      if (bubbleTarget != this.targetElement_ || !this.panelId_) {
+<a name="line314"></a>        // Make sure any existing panel of the same type is closed before
+<a name="line315"></a>        // creating a new one.
+<a name="line316"></a>        if (this.panelId_) {
+<a name="line317"></a>          this.closeBubble();
+<a name="line318"></a>        }
+<a name="line319"></a>        this.createBubble(bubbleTarget);
+<a name="line320"></a>      }
+<a name="line321"></a>      return false;
+<a name="line322"></a>    }
+<a name="line323"></a>  }
+<a name="line324"></a>
+<a name="line325"></a>  if (this.panelId_) {
+<a name="line326"></a>    this.closeBubble();
+<a name="line327"></a>  }
+<a name="line328"></a>
+<a name="line329"></a>  return false;
+<a name="line330"></a>};
+<a name="line331"></a>
+<a name="line332"></a>
+<a name="line333"></a>/**
+<a name="line334"></a> * Should be overriden by subclasses to return the bubble target element or
+<a name="line335"></a> * null if an element of their required type isn&#39;t found.
+<a name="line336"></a> * @param {Element} selectedElement The target of the selection change event or
+<a name="line337"></a> *     the parent container of the current entire selection.
+<a name="line338"></a> * @return {Element?} The HTML bubble target element or null if no element of
+<a name="line339"></a> *     the required type is not found.
+<a name="line340"></a> */
+<a name="line341"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.
+<a name="line342"></a>    getBubbleTargetFromSelection = goog.abstractMethod;
+<a name="line343"></a>
+<a name="line344"></a>
+<a name="line345"></a>/** @override */
+<a name="line346"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.disable = function(field) {
+<a name="line347"></a>  // When the field is made uneditable, dispose of the bubble.  We do this
+<a name="line348"></a>  // because the next time the field is made editable again it may be in
+<a name="line349"></a>  // a different document / iframe.
+<a name="line350"></a>  if (field.isUneditable()) {
+<a name="line351"></a>    var bubbleMap = this.getBubbleMap();
+<a name="line352"></a>    var bubble = bubbleMap[field.id];
+<a name="line353"></a>    if (bubble) {
+<a name="line354"></a>      bubble.dispose();
+<a name="line355"></a>      delete bubbleMap[field.id];
+<a name="line356"></a>    }
+<a name="line357"></a>  }
+<a name="line358"></a>};
+<a name="line359"></a>
+<a name="line360"></a>
+<a name="line361"></a>/**
+<a name="line362"></a> * @return {!goog.ui.editor.Bubble} The shared bubble object for the field this
+<a name="line363"></a> *     plugin is registered on.  Creates it if necessary.
+<a name="line364"></a> * @private
+<a name="line365"></a> */
+<a name="line366"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.getSharedBubble_ =
+<a name="line367"></a>    function() {
+<a name="line368"></a>  var bubbleParent = /** @type {!Element} */ (this.bubbleParent_ ||
+<a name="line369"></a>      this.getFieldObject().getAppWindow().document.body);
+<a name="line370"></a>  this.dom_ = goog.dom.getDomHelper(bubbleParent);
+<a name="line371"></a>
+<a name="line372"></a>  var bubbleMap = this.getBubbleMap();
+<a name="line373"></a>  var bubble = bubbleMap[this.getFieldObject().id];
+<a name="line374"></a>  if (!bubble) {
+<a name="line375"></a>    var factory = this.bubbleFactory_ ||
+<a name="line376"></a>        goog.editor.plugins.AbstractBubblePlugin.globalBubbleFactory_;
+<a name="line377"></a>    bubble = factory.call(null, bubbleParent,
+<a name="line378"></a>        this.getFieldObject().getBaseZindex());
+<a name="line379"></a>    bubbleMap[this.getFieldObject().id] = bubble;
+<a name="line380"></a>  }
+<a name="line381"></a>  return bubble;
+<a name="line382"></a>};
+<a name="line383"></a>
+<a name="line384"></a>
+<a name="line385"></a>/**
+<a name="line386"></a> * Creates and shows the property bubble.
+<a name="line387"></a> * @param {Element} targetElement The target element of the bubble.
+<a name="line388"></a> */
+<a name="line389"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.createBubble = function(
+<a name="line390"></a>    targetElement) {
+<a name="line391"></a>  var bubble = this.getSharedBubble_();
+<a name="line392"></a>  if (!bubble.hasPanelOfType(this.getBubbleType())) {
+<a name="line393"></a>    this.targetElement_ = targetElement;
+<a name="line394"></a>
+<a name="line395"></a>    this.panelId_ = bubble.addPanel(this.getBubbleType(), this.getBubbleTitle(),
+<a name="line396"></a>        targetElement,
+<a name="line397"></a>        goog.bind(this.createBubbleContents, this),
+<a name="line398"></a>        this.shouldPreferBubbleAboveElement());
+<a name="line399"></a>    this.eventRegister.listen(bubble, goog.ui.Component.EventType.HIDE,
+<a name="line400"></a>        this.handlePanelClosed_);
+<a name="line401"></a>
+<a name="line402"></a>    this.onShow();
+<a name="line403"></a>
+<a name="line404"></a>    if (this.keyboardNavigationEnabled_) {
+<a name="line405"></a>      this.eventRegister.listen(bubble.getContentElement(),
+<a name="line406"></a>          goog.events.EventType.KEYDOWN, this.onBubbleKey_);
+<a name="line407"></a>    }
+<a name="line408"></a>  }
+<a name="line409"></a>};
+<a name="line410"></a>
+<a name="line411"></a>
+<a name="line412"></a>/**
+<a name="line413"></a> * @return {string} The type of bubble shown by this plugin.  Usually the tag
+<a name="line414"></a> *     name of the element this bubble targets.
+<a name="line415"></a> * @protected
+<a name="line416"></a> */
+<a name="line417"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.getBubbleType = function() {
+<a name="line418"></a>  return &#39;&#39;;
+<a name="line419"></a>};
+<a name="line420"></a>
+<a name="line421"></a>
+<a name="line422"></a>/**
+<a name="line423"></a> * @return {string} The title for bubble shown by this plugin.  Defaults to no
+<a name="line424"></a> *     title.  Should be overridden by subclasses.
+<a name="line425"></a> * @protected
+<a name="line426"></a> */
+<a name="line427"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.getBubbleTitle = function() {
+<a name="line428"></a>  return &#39;&#39;;
+<a name="line429"></a>};
+<a name="line430"></a>
+<a name="line431"></a>
+<a name="line432"></a>/**
+<a name="line433"></a> * @return {boolean} Whether the bubble should prefer placement above the
+<a name="line434"></a> *     target element.
+<a name="line435"></a> * @protected
+<a name="line436"></a> */
+<a name="line437"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.
+<a name="line438"></a>    shouldPreferBubbleAboveElement = goog.functions.FALSE;
+<a name="line439"></a>
+<a name="line440"></a>
+<a name="line441"></a>/**
+<a name="line442"></a> * Should be overriden by subclasses to add the type specific contents to the
+<a name="line443"></a> *     bubble.
+<a name="line444"></a> * @param {Element} bubbleContainer The container element of the bubble to
+<a name="line445"></a> *     which the contents should be added.
+<a name="line446"></a> * @protected
+<a name="line447"></a> */
+<a name="line448"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.createBubbleContents =
+<a name="line449"></a>    goog.abstractMethod;
+<a name="line450"></a>
+<a name="line451"></a>
+<a name="line452"></a>/**
+<a name="line453"></a> * Register the handler for the target&#39;s CLICK event.
+<a name="line454"></a> * @param {Element} target The event source element.
+<a name="line455"></a> * @param {Function} handler The event handler.
+<a name="line456"></a> * @protected
+<a name="line457"></a> * @deprecated Use goog.editor.plugins.AbstractBubblePlugin.
+<a name="line458"></a> *     registerActionHandler to register click and enter events.
+<a name="line459"></a> */
+<a name="line460"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.registerClickHandler =
+<a name="line461"></a>    function(target, handler) {
+<a name="line462"></a>  this.registerActionHandler(target, handler);
+<a name="line463"></a>};
+<a name="line464"></a>
+<a name="line465"></a>
+<a name="line466"></a>/**
+<a name="line467"></a> * Register the handler for the target&#39;s CLICK and ENTER key events.
+<a name="line468"></a> * @param {Element} target The event source element.
+<a name="line469"></a> * @param {Function} handler The event handler.
+<a name="line470"></a> * @protected
+<a name="line471"></a> */
+<a name="line472"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.registerActionHandler =
+<a name="line473"></a>    function(target, handler) {
+<a name="line474"></a>  this.eventRegister.listenWithWrapper(target, goog.events.actionEventWrapper,
+<a name="line475"></a>      handler);
+<a name="line476"></a>};
+<a name="line477"></a>
+<a name="line478"></a>
+<a name="line479"></a>/**
+<a name="line480"></a> * Closes the bubble.
+<a name="line481"></a> */
+<a name="line482"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.closeBubble = function() {
+<a name="line483"></a>  if (this.panelId_) {
+<a name="line484"></a>    this.getSharedBubble_().removePanel(this.panelId_);
+<a name="line485"></a>    this.handlePanelClosed_();
+<a name="line486"></a>  }
+<a name="line487"></a>};
+<a name="line488"></a>
+<a name="line489"></a>
+<a name="line490"></a>/**
+<a name="line491"></a> * Called after the bubble is shown. The default implementation does nothing.
+<a name="line492"></a> * Override it to provide your own one.
+<a name="line493"></a> * @protected
+<a name="line494"></a> */
+<a name="line495"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.onShow = goog.nullFunction;
+<a name="line496"></a>
+<a name="line497"></a>
+<a name="line498"></a>/**
+<a name="line499"></a> * Called when the bubble is closed or hidden. The default implementation does
+<a name="line500"></a> * nothing.
+<a name="line501"></a> * @protected
+<a name="line502"></a> */
+<a name="line503"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.cleanOnBubbleClose =
+<a name="line504"></a>    goog.nullFunction;
+<a name="line505"></a>
+<a name="line506"></a>
+<a name="line507"></a>/**
+<a name="line508"></a> * Handles when the bubble panel is closed.  Invoked when the entire bubble is
+<a name="line509"></a> * hidden and also directly when the panel is closed manually.
+<a name="line510"></a> * @private
+<a name="line511"></a> */
+<a name="line512"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.handlePanelClosed_ =
+<a name="line513"></a>    function() {
+<a name="line514"></a>  this.targetElement_ = null;
+<a name="line515"></a>  this.panelId_ = null;
+<a name="line516"></a>  this.eventRegister.removeAll();
+<a name="line517"></a>  this.cleanOnBubbleClose();
+<a name="line518"></a>};
+<a name="line519"></a>
+<a name="line520"></a>
+<a name="line521"></a>/**
+<a name="line522"></a> * In case the keyboard navigation is enabled, this will focus to the first link
+<a name="line523"></a> * element in the bubble when TAB is clicked. The user could still go through
+<a name="line524"></a> * the rest of tabbable UI elements using shift + TAB.
+<a name="line525"></a> * @override
+<a name="line526"></a> */
+<a name="line527"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.handleKeyDown = function(e) {
+<a name="line528"></a>  if (this.keyboardNavigationEnabled_ &amp;&amp;
+<a name="line529"></a>      this.isVisible() &amp;&amp;
+<a name="line530"></a>      e.keyCode == goog.events.KeyCodes.TAB &amp;&amp; !e.shiftKey) {
+<a name="line531"></a>    var bubbleEl = this.getSharedBubble_().getContentElement();
+<a name="line532"></a>    var linkEl = goog.dom.getElementByClass(
+<a name="line533"></a>        goog.editor.plugins.AbstractBubblePlugin.LINK_CLASSNAME_, bubbleEl);
+<a name="line534"></a>    if (linkEl) {
+<a name="line535"></a>      linkEl.focus();
+<a name="line536"></a>      e.preventDefault();
+<a name="line537"></a>      return true;
+<a name="line538"></a>    }
+<a name="line539"></a>  }
+<a name="line540"></a>  return false;
+<a name="line541"></a>};
+<a name="line542"></a>
+<a name="line543"></a>
+<a name="line544"></a>/**
+<a name="line545"></a> * Handles a key event on the bubble. This ensures that the focus loops through
+<a name="line546"></a> * the link elements found in the bubble and then the focus is got by the field
+<a name="line547"></a> * element.
+<a name="line548"></a> * @param {goog.events.BrowserEvent} e The event.
+<a name="line549"></a> * @private
+<a name="line550"></a> */
+<a name="line551"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.onBubbleKey_ = function(e) {
+<a name="line552"></a>  if (this.isVisible() &amp;&amp;
+<a name="line553"></a>      e.keyCode == goog.events.KeyCodes.TAB) {
+<a name="line554"></a>    var bubbleEl = this.getSharedBubble_().getContentElement();
+<a name="line555"></a>    var links = goog.dom.getElementsByClass(
+<a name="line556"></a>        goog.editor.plugins.AbstractBubblePlugin.LINK_CLASSNAME_, bubbleEl);
+<a name="line557"></a>    var tabbingOutOfBubble = e.shiftKey ?
+<a name="line558"></a>        links[0] == e.target :
+<a name="line559"></a>        links.length &amp;&amp; links[links.length - 1] == e.target;
+<a name="line560"></a>    if (tabbingOutOfBubble) {
+<a name="line561"></a>      this.getFieldObject().focus();
+<a name="line562"></a>      e.preventDefault();
+<a name="line563"></a>    }
+<a name="line564"></a>  }
+<a name="line565"></a>};
+<a name="line566"></a>
+<a name="line567"></a>
+<a name="line568"></a>/**
+<a name="line569"></a> * @return {boolean} Whether the bubble is visible.
+<a name="line570"></a> */
+<a name="line571"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.isVisible = function() {
+<a name="line572"></a>  return !!this.panelId_;
+<a name="line573"></a>};
+<a name="line574"></a>
+<a name="line575"></a>
+<a name="line576"></a>/**
+<a name="line577"></a> * Reposition the property bubble.
+<a name="line578"></a> */
+<a name="line579"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.reposition = function() {
+<a name="line580"></a>  var bubble = this.getSharedBubble_();
+<a name="line581"></a>  if (bubble) {
+<a name="line582"></a>    bubble.reposition();
+<a name="line583"></a>  }
+<a name="line584"></a>};
+<a name="line585"></a>
+<a name="line586"></a>
+<a name="line587"></a>/**
+<a name="line588"></a> * Helper method that creates option links (such as edit, test, remove)
+<a name="line589"></a> * @param {string} id String id for the span id.
+<a name="line590"></a> * @return {Element} The option link element.
+<a name="line591"></a> * @protected
+<a name="line592"></a> */
+<a name="line593"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.createLinkOption = function(
+<a name="line594"></a>    id) {
+<a name="line595"></a>  // Dash plus link are together in a span so we can hide/show them easily
+<a name="line596"></a>  return this.dom_.createDom(goog.dom.TagName.SPAN,
+<a name="line597"></a>      {
+<a name="line598"></a>        id: id,
+<a name="line599"></a>        className:
+<a name="line600"></a>            goog.editor.plugins.AbstractBubblePlugin.OPTION_LINK_CLASSNAME_
+<a name="line601"></a>      },
+<a name="line602"></a>      this.dom_.createTextNode(
+<a name="line603"></a>          goog.editor.plugins.AbstractBubblePlugin.DASH_NBSP_STRING));
+<a name="line604"></a>};
+<a name="line605"></a>
+<a name="line606"></a>
+<a name="line607"></a>/**
+<a name="line608"></a> * Helper method that creates a link with text set to linkText and optionaly
+<a name="line609"></a> * wires up a listener for the CLICK event or the link.
+<a name="line610"></a> * @param {string} linkId The id of the link.
+<a name="line611"></a> * @param {string} linkText Text of the link.
+<a name="line612"></a> * @param {Function=} opt_onClick Optional function to call when the link is
+<a name="line613"></a> *     clicked.
+<a name="line614"></a> * @param {Element=} opt_container If specified, location to insert link. If no
+<a name="line615"></a> *     container is specified, the old link is removed and replaced.
+<a name="line616"></a> * @return {Element} The link element.
+<a name="line617"></a> * @protected
+<a name="line618"></a> */
+<a name="line619"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.createLink = function(
+<a name="line620"></a>    linkId, linkText, opt_onClick, opt_container) {
+<a name="line621"></a>  var link = this.createLinkHelper(linkId, linkText, false, opt_container);
+<a name="line622"></a>  if (opt_onClick) {
+<a name="line623"></a>    this.registerActionHandler(link, opt_onClick);
+<a name="line624"></a>  }
+<a name="line625"></a>  return link;
+<a name="line626"></a>};
+<a name="line627"></a>
+<a name="line628"></a>
+<a name="line629"></a>/**
+<a name="line630"></a> * Helper method to create a link to insert into the bubble.
+<a name="line631"></a> * @param {string} linkId The id of the link.
+<a name="line632"></a> * @param {string} linkText Text of the link.
+<a name="line633"></a> * @param {boolean} isAnchor Set to true to create an actual anchor tag
+<a name="line634"></a> *     instead of a span.  Actual links are right clickable (e.g. to open in
+<a name="line635"></a> *     a new window) and also update window status on hover.
+<a name="line636"></a> * @param {Element=} opt_container If specified, location to insert link. If no
+<a name="line637"></a> *     container is specified, the old link is removed and replaced.
+<a name="line638"></a> * @return {Element} The link element.
+<a name="line639"></a> * @protected
+<a name="line640"></a> */
+<a name="line641"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.createLinkHelper = function(
+<a name="line642"></a>    linkId, linkText, isAnchor, opt_container) {
+<a name="line643"></a>  var link = this.dom_.createDom(
+<a name="line644"></a>      isAnchor ? goog.dom.TagName.A : goog.dom.TagName.SPAN,
+<a name="line645"></a>      {className: goog.editor.plugins.AbstractBubblePlugin.LINK_CLASSNAME_},
+<a name="line646"></a>      linkText);
+<a name="line647"></a>  if (this.keyboardNavigationEnabled_) {
+<a name="line648"></a>    link.setAttribute(&#39;tabindex&#39;, 0);
+<a name="line649"></a>  }
+<a name="line650"></a>  link.setAttribute(&#39;role&#39;, &#39;link&#39;);
+<a name="line651"></a>  this.setupLink(link, linkId, opt_container);
+<a name="line652"></a>  goog.editor.style.makeUnselectable(link, this.eventRegister);
+<a name="line653"></a>  return link;
+<a name="line654"></a>};
+<a name="line655"></a>
+<a name="line656"></a>
+<a name="line657"></a>/**
+<a name="line658"></a> * Inserts a link in the given container if it is specified or removes
+<a name="line659"></a> * the old link with this id and replaces it with the new link
+<a name="line660"></a> * @param {Element} link Html element to insert.
+<a name="line661"></a> * @param {string} linkId Id of the link.
+<a name="line662"></a> * @param {Element=} opt_container If specified, location to insert link.
+<a name="line663"></a> * @protected
+<a name="line664"></a> */
+<a name="line665"></a>goog.editor.plugins.AbstractBubblePlugin.prototype.setupLink = function(
+<a name="line666"></a>    link, linkId, opt_container) {
+<a name="line667"></a>  if (opt_container) {
+<a name="line668"></a>    opt_container.appendChild(link);
+<a name="line669"></a>  } else {
+<a name="line670"></a>    var oldLink = this.dom_.getElement(linkId);
+<a name="line671"></a>    if (oldLink) {
+<a name="line672"></a>      goog.dom.replaceNode(link, oldLink);
+<a name="line673"></a>    }
+<a name="line674"></a>  }
+<a name="line675"></a>
+<a name="line676"></a>  link.id = linkId;
+<a name="line677"></a>};
+</pre>
+
+
+</body>
+</html>

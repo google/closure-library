@@ -1,0 +1,431 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>menuitemrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_menuitemrenderer.js.html">menuitemrenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Renderer for {@link goog.ui.MenuItem}s.
+<a name="line17"></a> *
+<a name="line18"></a> * @author attila@google.com (Attila Bodis)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.MenuItemRenderer&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.a11y.aria&#39;);
+<a name="line24"></a>goog.require(&#39;goog.a11y.aria.Role&#39;);
+<a name="line25"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line28"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line29"></a>goog.require(&#39;goog.ui.ControlRenderer&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Default renderer for {@link goog.ui.MenuItem}s.  Each item has the following
+<a name="line35"></a> * structure:
+<a name="line36"></a> * &lt;pre&gt;
+<a name="line37"></a> *   &lt;div class=&quot;goog-menuitem&quot;&gt;
+<a name="line38"></a> *     &lt;div class=&quot;goog-menuitem-content&quot;&gt;
+<a name="line39"></a> *       ...(menu item contents)...
+<a name="line40"></a> *     &lt;/div&gt;
+<a name="line41"></a> *   &lt;/div&gt;
+<a name="line42"></a> * &lt;/pre&gt;
+<a name="line43"></a> * @constructor
+<a name="line44"></a> * @extends {goog.ui.ControlRenderer}
+<a name="line45"></a> */
+<a name="line46"></a>goog.ui.MenuItemRenderer = function() {
+<a name="line47"></a>  goog.ui.ControlRenderer.call(this);
+<a name="line48"></a>
+<a name="line49"></a>  /**
+<a name="line50"></a>   * Commonly used CSS class names, cached here for convenience (and to avoid
+<a name="line51"></a>   * unnecessary string concatenation).
+<a name="line52"></a>   * @type {!Array.&lt;string&gt;}
+<a name="line53"></a>   * @private
+<a name="line54"></a>   */
+<a name="line55"></a>  this.classNameCache_ = [];
+<a name="line56"></a>};
+<a name="line57"></a>goog.inherits(goog.ui.MenuItemRenderer, goog.ui.ControlRenderer);
+<a name="line58"></a>goog.addSingletonGetter(goog.ui.MenuItemRenderer);
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * CSS class name the renderer applies to menu item elements.
+<a name="line63"></a> * @type {string}
+<a name="line64"></a> */
+<a name="line65"></a>goog.ui.MenuItemRenderer.CSS_CLASS = goog.getCssName(&#39;goog-menuitem&#39;);
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * Constants for referencing composite CSS classes.
+<a name="line70"></a> * @enum {number}
+<a name="line71"></a> * @private
+<a name="line72"></a> */
+<a name="line73"></a>goog.ui.MenuItemRenderer.CompositeCssClassIndex_ = {
+<a name="line74"></a>  HOVER: 0,
+<a name="line75"></a>  CHECKBOX: 1,
+<a name="line76"></a>  CONTENT: 2
+<a name="line77"></a>};
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * Returns the composite CSS class by using the cached value or by constructing
+<a name="line82"></a> * the value from the base CSS class and the passed index.
+<a name="line83"></a> * @param {goog.ui.MenuItemRenderer.CompositeCssClassIndex_} index Index for the
+<a name="line84"></a> *     CSS class - could be highlight, checkbox or content in usual cases.
+<a name="line85"></a> * @return {string} The composite CSS class.
+<a name="line86"></a> * @private
+<a name="line87"></a> */
+<a name="line88"></a>goog.ui.MenuItemRenderer.prototype.getCompositeCssClass_ = function(index) {
+<a name="line89"></a>  var result = this.classNameCache_[index];
+<a name="line90"></a>  if (!result) {
+<a name="line91"></a>    switch (index) {
+<a name="line92"></a>      case goog.ui.MenuItemRenderer.CompositeCssClassIndex_.HOVER:
+<a name="line93"></a>        result = goog.getCssName(this.getStructuralCssClass(), &#39;highlight&#39;);
+<a name="line94"></a>        break;
+<a name="line95"></a>      case goog.ui.MenuItemRenderer.CompositeCssClassIndex_.CHECKBOX:
+<a name="line96"></a>        result = goog.getCssName(this.getStructuralCssClass(), &#39;checkbox&#39;);
+<a name="line97"></a>        break;
+<a name="line98"></a>      case goog.ui.MenuItemRenderer.CompositeCssClassIndex_.CONTENT:
+<a name="line99"></a>        result = goog.getCssName(this.getStructuralCssClass(), &#39;content&#39;);
+<a name="line100"></a>        break;
+<a name="line101"></a>    }
+<a name="line102"></a>    this.classNameCache_[index] = result;
+<a name="line103"></a>  }
+<a name="line104"></a>
+<a name="line105"></a>  return result;
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/** @override */
+<a name="line110"></a>goog.ui.MenuItemRenderer.prototype.getAriaRole = function() {
+<a name="line111"></a>  return goog.a11y.aria.Role.MENU_ITEM;
+<a name="line112"></a>};
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * Overrides {@link goog.ui.ControlRenderer#createDom} by adding extra markup
+<a name="line117"></a> * and stying to the menu item&#39;s element if it is selectable or checkable.
+<a name="line118"></a> * @param {goog.ui.Control} item Menu item to render.
+<a name="line119"></a> * @return {Element} Root element for the item.
+<a name="line120"></a> * @override
+<a name="line121"></a> */
+<a name="line122"></a>goog.ui.MenuItemRenderer.prototype.createDom = function(item) {
+<a name="line123"></a>  var element = item.getDomHelper().createDom(
+<a name="line124"></a>      &#39;div&#39;, this.getClassNames(item).join(&#39; &#39;),
+<a name="line125"></a>      this.createContent(item.getContent(), item.getDomHelper()));
+<a name="line126"></a>  this.setEnableCheckBoxStructure(item, element,
+<a name="line127"></a>      item.isSupportedState(goog.ui.Component.State.SELECTED) ||
+<a name="line128"></a>      item.isSupportedState(goog.ui.Component.State.CHECKED));
+<a name="line129"></a>  this.setAriaStates(item, element);
+<a name="line130"></a>  this.correctAriaRole(item, element);
+<a name="line131"></a>  return element;
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/** @override */
+<a name="line136"></a>goog.ui.MenuItemRenderer.prototype.getContentElement = function(element) {
+<a name="line137"></a>  return /** @type {Element} */ (element &amp;&amp; element.firstChild);
+<a name="line138"></a>};
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * Overrides {@link goog.ui.ControlRenderer#decorate} by initializing the
+<a name="line143"></a> * menu item to checkable based on whether the element to be decorated has
+<a name="line144"></a> * extra stying indicating that it should be.
+<a name="line145"></a> * @param {goog.ui.Control} item Menu item instance to decorate the element.
+<a name="line146"></a> * @param {Element} element Element to decorate.
+<a name="line147"></a> * @return {Element} Decorated element.
+<a name="line148"></a> * @override
+<a name="line149"></a> */
+<a name="line150"></a>goog.ui.MenuItemRenderer.prototype.decorate = function(item, element) {
+<a name="line151"></a>  goog.asserts.assert(element);
+<a name="line152"></a>  if (!this.hasContentStructure(element)) {
+<a name="line153"></a>    element.appendChild(
+<a name="line154"></a>        this.createContent(element.childNodes, item.getDomHelper()));
+<a name="line155"></a>  }
+<a name="line156"></a>  if (goog.dom.classlist.contains(element, goog.getCssName(&#39;goog-option&#39;))) {
+<a name="line157"></a>    (/** @type {goog.ui.MenuItem} */ (item)).setCheckable(true);
+<a name="line158"></a>    this.setCheckable(item, element, true);
+<a name="line159"></a>  }
+<a name="line160"></a>  return goog.ui.MenuItemRenderer.superClass_.decorate.call(this, item,
+<a name="line161"></a>      element);
+<a name="line162"></a>};
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * Takes a menu item&#39;s root element, and sets its content to the given text
+<a name="line167"></a> * caption or DOM structure.  Overrides the superclass immplementation by
+<a name="line168"></a> * making sure that the checkbox structure (for selectable/checkable menu
+<a name="line169"></a> * items) is preserved.
+<a name="line170"></a> * @param {Element} element The item&#39;s root element.
+<a name="line171"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure to be
+<a name="line172"></a> *     set as the item&#39;s content.
+<a name="line173"></a> * @override
+<a name="line174"></a> */
+<a name="line175"></a>goog.ui.MenuItemRenderer.prototype.setContent = function(element, content) {
+<a name="line176"></a>  // Save the checkbox element, if present.
+<a name="line177"></a>  var contentElement = this.getContentElement(element);
+<a name="line178"></a>  var checkBoxElement = this.hasCheckBoxStructure(element) ?
+<a name="line179"></a>      contentElement.firstChild : null;
+<a name="line180"></a>  goog.ui.MenuItemRenderer.superClass_.setContent.call(this, element, content);
+<a name="line181"></a>  if (checkBoxElement &amp;&amp; !this.hasCheckBoxStructure(element)) {
+<a name="line182"></a>    // The call to setContent() blew away the checkbox element; reattach it.
+<a name="line183"></a>    contentElement.insertBefore(checkBoxElement,
+<a name="line184"></a>        contentElement.firstChild || null);
+<a name="line185"></a>  }
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Returns true if the element appears to have a proper menu item structure by
+<a name="line191"></a> * checking whether its first child has the appropriate structural class name.
+<a name="line192"></a> * @param {Element} element Element to check.
+<a name="line193"></a> * @return {boolean} Whether the element appears to have a proper menu item DOM.
+<a name="line194"></a> * @protected
+<a name="line195"></a> */
+<a name="line196"></a>goog.ui.MenuItemRenderer.prototype.hasContentStructure = function(element) {
+<a name="line197"></a>  var child = goog.dom.getFirstElementChild(element);
+<a name="line198"></a>  var contentClassName = this.getCompositeCssClass_(
+<a name="line199"></a>      goog.ui.MenuItemRenderer.CompositeCssClassIndex_.CONTENT);
+<a name="line200"></a>  return !!child &amp;&amp; goog.dom.classlist.contains(child, contentClassName);
+<a name="line201"></a>};
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Wraps the given text caption or existing DOM node(s) in a structural element
+<a name="line206"></a> * containing the menu item&#39;s contents.
+<a name="line207"></a> * @param {goog.ui.ControlContent} content Menu item contents.
+<a name="line208"></a> * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
+<a name="line209"></a> * @return {Element} Menu item content element.
+<a name="line210"></a> * @protected
+<a name="line211"></a> */
+<a name="line212"></a>goog.ui.MenuItemRenderer.prototype.createContent = function(content, dom) {
+<a name="line213"></a>  var contentClassName = this.getCompositeCssClass_(
+<a name="line214"></a>      goog.ui.MenuItemRenderer.CompositeCssClassIndex_.CONTENT);
+<a name="line215"></a>  return dom.createDom(&#39;div&#39;, contentClassName, content);
+<a name="line216"></a>};
+<a name="line217"></a>
+<a name="line218"></a>
+<a name="line219"></a>/**
+<a name="line220"></a> * Enables/disables radio button semantics on the menu item.
+<a name="line221"></a> * @param {goog.ui.Control} item Menu item to update.
+<a name="line222"></a> * @param {Element} element Menu item element to update (may be null if the
+<a name="line223"></a> *     item hasn&#39;t been rendered yet).
+<a name="line224"></a> * @param {boolean} selectable Whether the item should be selectable.
+<a name="line225"></a> */
+<a name="line226"></a>goog.ui.MenuItemRenderer.prototype.setSelectable = function(item, element,
+<a name="line227"></a>    selectable) {
+<a name="line228"></a>  if (element) {
+<a name="line229"></a>    goog.a11y.aria.setRole(element,
+<a name="line230"></a>        selectable ?
+<a name="line231"></a>        goog.a11y.aria.Role.MENU_ITEM_RADIO :
+<a name="line232"></a>        /** @type {string} */ (this.getAriaRole()));
+<a name="line233"></a>    this.setEnableCheckBoxStructure(item, element, selectable);
+<a name="line234"></a>  }
+<a name="line235"></a>};
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>/**
+<a name="line239"></a> * Enables/disables checkbox semantics on the menu item.
+<a name="line240"></a> * @param {goog.ui.Control} item Menu item to update.
+<a name="line241"></a> * @param {Element} element Menu item element to update (may be null if the
+<a name="line242"></a> *     item hasn&#39;t been rendered yet).
+<a name="line243"></a> * @param {boolean} checkable Whether the item should be checkable.
+<a name="line244"></a> */
+<a name="line245"></a>goog.ui.MenuItemRenderer.prototype.setCheckable = function(item, element,
+<a name="line246"></a>    checkable) {
+<a name="line247"></a>  if (element) {
+<a name="line248"></a>    goog.a11y.aria.setRole(element,
+<a name="line249"></a>        checkable ?
+<a name="line250"></a>        goog.a11y.aria.Role.MENU_ITEM_CHECKBOX :
+<a name="line251"></a>        /** @type {string} */ (this.getAriaRole()));
+<a name="line252"></a>    this.setEnableCheckBoxStructure(item, element, checkable);
+<a name="line253"></a>  }
+<a name="line254"></a>};
+<a name="line255"></a>
+<a name="line256"></a>
+<a name="line257"></a>/**
+<a name="line258"></a> * Determines whether the item contains a checkbox element.
+<a name="line259"></a> * @param {Element} element Menu item root element.
+<a name="line260"></a> * @return {boolean} Whether the element contains a checkbox element.
+<a name="line261"></a> * @protected
+<a name="line262"></a> */
+<a name="line263"></a>goog.ui.MenuItemRenderer.prototype.hasCheckBoxStructure = function(element) {
+<a name="line264"></a>  var contentElement = this.getContentElement(element);
+<a name="line265"></a>  if (contentElement) {
+<a name="line266"></a>    var child = contentElement.firstChild;
+<a name="line267"></a>    var checkboxClassName = this.getCompositeCssClass_(
+<a name="line268"></a>        goog.ui.MenuItemRenderer.CompositeCssClassIndex_.CHECKBOX);
+<a name="line269"></a>    return !!child &amp;&amp; goog.dom.isElement(child) &amp;&amp;
+<a name="line270"></a>        goog.dom.classlist.contains(/** @type {!Element} */ (child),
+<a name="line271"></a>            checkboxClassName);
+<a name="line272"></a>  }
+<a name="line273"></a>  return false;
+<a name="line274"></a>};
+<a name="line275"></a>
+<a name="line276"></a>
+<a name="line277"></a>/**
+<a name="line278"></a> * Adds or removes extra markup and CSS styling to the menu item to make it
+<a name="line279"></a> * selectable or non-selectable, depending on the value of the
+<a name="line280"></a> * {@code selectable} argument.
+<a name="line281"></a> * @param {goog.ui.Control} item Menu item to update.
+<a name="line282"></a> * @param {Element} element Menu item element to update.
+<a name="line283"></a> * @param {boolean} enable Whether to add or remove the checkbox structure.
+<a name="line284"></a> * @protected
+<a name="line285"></a> */
+<a name="line286"></a>goog.ui.MenuItemRenderer.prototype.setEnableCheckBoxStructure = function(item,
+<a name="line287"></a>    element, enable) {
+<a name="line288"></a>  goog.asserts.assert(element);
+<a name="line289"></a>  if (enable != this.hasCheckBoxStructure(element)) {
+<a name="line290"></a>    goog.dom.classlist.enable(element, goog.getCssName(&#39;goog-option&#39;), enable);
+<a name="line291"></a>    var contentElement = this.getContentElement(element);
+<a name="line292"></a>    if (enable) {
+<a name="line293"></a>      // Insert checkbox structure.
+<a name="line294"></a>      var checkboxClassName = this.getCompositeCssClass_(
+<a name="line295"></a>          goog.ui.MenuItemRenderer.CompositeCssClassIndex_.CHECKBOX);
+<a name="line296"></a>      contentElement.insertBefore(
+<a name="line297"></a>          item.getDomHelper().createDom(&#39;div&#39;, checkboxClassName),
+<a name="line298"></a>          contentElement.firstChild || null);
+<a name="line299"></a>    } else {
+<a name="line300"></a>      // Remove checkbox structure.
+<a name="line301"></a>      contentElement.removeChild(contentElement.firstChild);
+<a name="line302"></a>    }
+<a name="line303"></a>  }
+<a name="line304"></a>};
+<a name="line305"></a>
+<a name="line306"></a>
+<a name="line307"></a>/**
+<a name="line308"></a> * Takes a single {@link goog.ui.Component.State}, and returns the
+<a name="line309"></a> * corresponding CSS class name (null if none).  Overrides the superclass
+<a name="line310"></a> * implementation by using &#39;highlight&#39; as opposed to &#39;hover&#39; as the CSS
+<a name="line311"></a> * class name suffix for the HOVER state, for backwards compatibility.
+<a name="line312"></a> * @param {goog.ui.Component.State} state Component state.
+<a name="line313"></a> * @return {string|undefined} CSS class representing the given state
+<a name="line314"></a> *     (undefined if none).
+<a name="line315"></a> * @override
+<a name="line316"></a> */
+<a name="line317"></a>goog.ui.MenuItemRenderer.prototype.getClassForState = function(state) {
+<a name="line318"></a>  switch (state) {
+<a name="line319"></a>    case goog.ui.Component.State.HOVER:
+<a name="line320"></a>      // We use &#39;highlight&#39; as the suffix, for backwards compatibility.
+<a name="line321"></a>      return this.getCompositeCssClass_(
+<a name="line322"></a>          goog.ui.MenuItemRenderer.CompositeCssClassIndex_.HOVER);
+<a name="line323"></a>    case goog.ui.Component.State.CHECKED:
+<a name="line324"></a>    case goog.ui.Component.State.SELECTED:
+<a name="line325"></a>      // We use &#39;goog-option-selected&#39; as the class, for backwards
+<a name="line326"></a>      // compatibility.
+<a name="line327"></a>      return goog.getCssName(&#39;goog-option-selected&#39;);
+<a name="line328"></a>    default:
+<a name="line329"></a>      return goog.ui.MenuItemRenderer.superClass_.getClassForState.call(this,
+<a name="line330"></a>          state);
+<a name="line331"></a>  }
+<a name="line332"></a>};
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * Takes a single CSS class name which may represent a component state, and
+<a name="line337"></a> * returns the corresponding component state (0x00 if none).  Overrides the
+<a name="line338"></a> * superclass implementation by treating &#39;goog-option-selected&#39; as special,
+<a name="line339"></a> * for backwards compatibility.
+<a name="line340"></a> * @param {string} className CSS class name, possibly representing a component
+<a name="line341"></a> *     state.
+<a name="line342"></a> * @return {goog.ui.Component.State} state Component state corresponding
+<a name="line343"></a> *     to the given CSS class (0x00 if none).
+<a name="line344"></a> * @override
+<a name="line345"></a> */
+<a name="line346"></a>goog.ui.MenuItemRenderer.prototype.getStateFromClass = function(className) {
+<a name="line347"></a>  var hoverClassName = this.getCompositeCssClass_(
+<a name="line348"></a>      goog.ui.MenuItemRenderer.CompositeCssClassIndex_.HOVER);
+<a name="line349"></a>  switch (className) {
+<a name="line350"></a>    case goog.getCssName(&#39;goog-option-selected&#39;):
+<a name="line351"></a>      return goog.ui.Component.State.CHECKED;
+<a name="line352"></a>    case hoverClassName:
+<a name="line353"></a>      return goog.ui.Component.State.HOVER;
+<a name="line354"></a>    default:
+<a name="line355"></a>      return goog.ui.MenuItemRenderer.superClass_.getStateFromClass.call(this,
+<a name="line356"></a>          className);
+<a name="line357"></a>  }
+<a name="line358"></a>};
+<a name="line359"></a>
+<a name="line360"></a>
+<a name="line361"></a>/** @override */
+<a name="line362"></a>goog.ui.MenuItemRenderer.prototype.getCssClass = function() {
+<a name="line363"></a>  return goog.ui.MenuItemRenderer.CSS_CLASS;
+<a name="line364"></a>};
+<a name="line365"></a>
+<a name="line366"></a>
+<a name="line367"></a>/**
+<a name="line368"></a> * Corrects the ARIA role based on checkable and selectable.
+<a name="line369"></a> * @param {goog.ui.Control} item The owner menu item.
+<a name="line370"></a> * @param {Element} element The element.
+<a name="line371"></a> */
+<a name="line372"></a>goog.ui.MenuItemRenderer.prototype.correctAriaRole = function(item, element) {
+<a name="line373"></a>  if (item.isSupportedState(goog.ui.Component.State.SELECTED) ||
+<a name="line374"></a>      item.isSupportedState(goog.ui.Component.State.CHECKED)) {
+<a name="line375"></a>    this.setAriaRole(element,
+<a name="line376"></a>        item.isSupportedState(goog.ui.Component.State.CHECKED) ?
+<a name="line377"></a>        goog.a11y.aria.Role.MENU_ITEM_CHECKBOX :
+<a name="line378"></a>        goog.a11y.aria.Role.MENU_ITEM_RADIO);
+<a name="line379"></a>  }
+<a name="line380"></a>};
+</pre>
+
+
+</body>
+</html>

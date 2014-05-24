@@ -1,0 +1,1811 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>basictextformatter.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_plugins_basictextformatter.js.html">basictextformatter.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Functions to style text.
+<a name="line17"></a> *
+<a name="line18"></a> * @author nicksantos@google.com (Nick Santos)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.editor.plugins.BasicTextFormatter&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.editor.plugins.BasicTextFormatter.COMMAND&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.Range&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line29"></a>goog.require(&#39;goog.editor.BrowserFeature&#39;);
+<a name="line30"></a>goog.require(&#39;goog.editor.Command&#39;);
+<a name="line31"></a>goog.require(&#39;goog.editor.Link&#39;);
+<a name="line32"></a>goog.require(&#39;goog.editor.Plugin&#39;);
+<a name="line33"></a>goog.require(&#39;goog.editor.node&#39;);
+<a name="line34"></a>goog.require(&#39;goog.editor.range&#39;);
+<a name="line35"></a>goog.require(&#39;goog.editor.style&#39;);
+<a name="line36"></a>goog.require(&#39;goog.iter&#39;);
+<a name="line37"></a>goog.require(&#39;goog.iter.StopIteration&#39;);
+<a name="line38"></a>goog.require(&#39;goog.log&#39;);
+<a name="line39"></a>goog.require(&#39;goog.object&#39;);
+<a name="line40"></a>goog.require(&#39;goog.string&#39;);
+<a name="line41"></a>goog.require(&#39;goog.string.Unicode&#39;);
+<a name="line42"></a>goog.require(&#39;goog.style&#39;);
+<a name="line43"></a>goog.require(&#39;goog.ui.editor.messages&#39;);
+<a name="line44"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * Functions to style text (e.g. underline, make bold, etc.)
+<a name="line50"></a> * @constructor
+<a name="line51"></a> * @extends {goog.editor.Plugin}
+<a name="line52"></a> */
+<a name="line53"></a>goog.editor.plugins.BasicTextFormatter = function() {
+<a name="line54"></a>  goog.editor.Plugin.call(this);
+<a name="line55"></a>};
+<a name="line56"></a>goog.inherits(goog.editor.plugins.BasicTextFormatter, goog.editor.Plugin);
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/** @override */
+<a name="line60"></a>goog.editor.plugins.BasicTextFormatter.prototype.getTrogClassId = function() {
+<a name="line61"></a>  return &#39;BTF&#39;;
+<a name="line62"></a>};
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Logging object.
+<a name="line67"></a> * @type {goog.log.Logger}
+<a name="line68"></a> * @protected
+<a name="line69"></a> * @override
+<a name="line70"></a> */
+<a name="line71"></a>goog.editor.plugins.BasicTextFormatter.prototype.logger =
+<a name="line72"></a>    goog.log.getLogger(&#39;goog.editor.plugins.BasicTextFormatter&#39;);
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Commands implemented by this plugin.
+<a name="line77"></a> * @enum {string}
+<a name="line78"></a> */
+<a name="line79"></a>goog.editor.plugins.BasicTextFormatter.COMMAND = {
+<a name="line80"></a>  LINK: &#39;+link&#39;,
+<a name="line81"></a>  FORMAT_BLOCK: &#39;+formatBlock&#39;,
+<a name="line82"></a>  INDENT: &#39;+indent&#39;,
+<a name="line83"></a>  OUTDENT: &#39;+outdent&#39;,
+<a name="line84"></a>  STRIKE_THROUGH: &#39;+strikeThrough&#39;,
+<a name="line85"></a>  HORIZONTAL_RULE: &#39;+insertHorizontalRule&#39;,
+<a name="line86"></a>  SUBSCRIPT: &#39;+subscript&#39;,
+<a name="line87"></a>  SUPERSCRIPT: &#39;+superscript&#39;,
+<a name="line88"></a>  UNDERLINE: &#39;+underline&#39;,
+<a name="line89"></a>  BOLD: &#39;+bold&#39;,
+<a name="line90"></a>  ITALIC: &#39;+italic&#39;,
+<a name="line91"></a>  FONT_SIZE: &#39;+fontSize&#39;,
+<a name="line92"></a>  FONT_FACE: &#39;+fontName&#39;,
+<a name="line93"></a>  FONT_COLOR: &#39;+foreColor&#39;,
+<a name="line94"></a>  BACKGROUND_COLOR: &#39;+backColor&#39;,
+<a name="line95"></a>  ORDERED_LIST: &#39;+insertOrderedList&#39;,
+<a name="line96"></a>  UNORDERED_LIST: &#39;+insertUnorderedList&#39;,
+<a name="line97"></a>  JUSTIFY_CENTER: &#39;+justifyCenter&#39;,
+<a name="line98"></a>  JUSTIFY_FULL: &#39;+justifyFull&#39;,
+<a name="line99"></a>  JUSTIFY_RIGHT: &#39;+justifyRight&#39;,
+<a name="line100"></a>  JUSTIFY_LEFT: &#39;+justifyLeft&#39;
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Inverse map of execCommand strings to
+<a name="line106"></a> * {@link goog.editor.plugins.BasicTextFormatter.COMMAND} constants. Used to
+<a name="line107"></a> * determine whether a string corresponds to a command this plugin
+<a name="line108"></a> * handles in O(1) time.
+<a name="line109"></a> * @type {Object}
+<a name="line110"></a> * @private
+<a name="line111"></a> */
+<a name="line112"></a>goog.editor.plugins.BasicTextFormatter.SUPPORTED_COMMANDS_ =
+<a name="line113"></a>    goog.object.transpose(goog.editor.plugins.BasicTextFormatter.COMMAND);
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Whether the string corresponds to a command this plugin handles.
+<a name="line118"></a> * @param {string} command Command string to check.
+<a name="line119"></a> * @return {boolean} Whether the string corresponds to a command
+<a name="line120"></a> *     this plugin handles.
+<a name="line121"></a> * @override
+<a name="line122"></a> */
+<a name="line123"></a>goog.editor.plugins.BasicTextFormatter.prototype.isSupportedCommand = function(
+<a name="line124"></a>    command) {
+<a name="line125"></a>  // TODO(user): restore this to simple check once table editing
+<a name="line126"></a>  // is moved out into its own plugin
+<a name="line127"></a>  return command in goog.editor.plugins.BasicTextFormatter.SUPPORTED_COMMANDS_;
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * @return {goog.dom.AbstractRange} The closure range object that wraps the
+<a name="line133"></a> *     current user selection.
+<a name="line134"></a> * @private
+<a name="line135"></a> */
+<a name="line136"></a>goog.editor.plugins.BasicTextFormatter.prototype.getRange_ = function() {
+<a name="line137"></a>  return this.getFieldObject().getRange();
+<a name="line138"></a>};
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * @return {!Document} The document object associated with the currently active
+<a name="line143"></a> *     field.
+<a name="line144"></a> * @private
+<a name="line145"></a> */
+<a name="line146"></a>goog.editor.plugins.BasicTextFormatter.prototype.getDocument_ = function() {
+<a name="line147"></a>  return this.getFieldDomHelper().getDocument();
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Execute a user-initiated command.
+<a name="line153"></a> * @param {string} command Command to execute.
+<a name="line154"></a> * @param {...*} var_args For color commands, this
+<a name="line155"></a> *     should be the hex color (with the #). For FORMAT_BLOCK, this should be
+<a name="line156"></a> *     the goog.editor.plugins.BasicTextFormatter.BLOCK_COMMAND.
+<a name="line157"></a> *     It will be unused for other commands.
+<a name="line158"></a> * @return {Object|undefined} The result of the command.
+<a name="line159"></a> * @override
+<a name="line160"></a> */
+<a name="line161"></a>goog.editor.plugins.BasicTextFormatter.prototype.execCommandInternal = function(
+<a name="line162"></a>    command, var_args) {
+<a name="line163"></a>  var preserveDir, styleWithCss, needsFormatBlockDiv, hasDummySelection;
+<a name="line164"></a>  var result;
+<a name="line165"></a>  var opt_arg = arguments[1];
+<a name="line166"></a>
+<a name="line167"></a>  switch (command) {
+<a name="line168"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.BACKGROUND_COLOR:
+<a name="line169"></a>      // Don&#39;t bother for no color selected, color picker is resetting itself.
+<a name="line170"></a>      if (!goog.isNull(opt_arg)) {
+<a name="line171"></a>        if (goog.editor.BrowserFeature.EATS_EMPTY_BACKGROUND_COLOR) {
+<a name="line172"></a>          this.applyBgColorManually_(opt_arg);
+<a name="line173"></a>        } else if (goog.userAgent.OPERA) {
+<a name="line174"></a>          // backColor will color the block level element instead of
+<a name="line175"></a>          // the selected span of text in Opera.
+<a name="line176"></a>          this.execCommandHelper_(&#39;hiliteColor&#39;, opt_arg);
+<a name="line177"></a>        } else {
+<a name="line178"></a>          this.execCommandHelper_(command, opt_arg);
+<a name="line179"></a>        }
+<a name="line180"></a>      }
+<a name="line181"></a>      break;
+<a name="line182"></a>
+<a name="line183"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.LINK:
+<a name="line184"></a>      result = this.toggleLink_(opt_arg);
+<a name="line185"></a>      break;
+<a name="line186"></a>
+<a name="line187"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_CENTER:
+<a name="line188"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_FULL:
+<a name="line189"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_RIGHT:
+<a name="line190"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_LEFT:
+<a name="line191"></a>      this.justify_(command);
+<a name="line192"></a>      break;
+<a name="line193"></a>
+<a name="line194"></a>    default:
+<a name="line195"></a>      if (goog.userAgent.IE &amp;&amp;
+<a name="line196"></a>          command ==
+<a name="line197"></a>              goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK &amp;&amp;
+<a name="line198"></a>          opt_arg) {
+<a name="line199"></a>        // IE requires that the argument be in the form of an opening
+<a name="line200"></a>        // tag, like &lt;h1&gt;, including angle brackets.  WebKit will accept
+<a name="line201"></a>        // the arguemnt with or without brackets, and Firefox pre-3 supports
+<a name="line202"></a>        // only a fixed subset of tags with brackets, and prefers without.
+<a name="line203"></a>        // So we only add them IE only.
+<a name="line204"></a>        opt_arg = &#39;&lt;&#39; + opt_arg + &#39;&gt;&#39;;
+<a name="line205"></a>      }
+<a name="line206"></a>
+<a name="line207"></a>      if (command ==
+<a name="line208"></a>          goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_COLOR &amp;&amp;
+<a name="line209"></a>          goog.isNull(opt_arg)) {
+<a name="line210"></a>        // If we don&#39;t have a color, then FONT_COLOR is a no-op.
+<a name="line211"></a>        break;
+<a name="line212"></a>      }
+<a name="line213"></a>
+<a name="line214"></a>      switch (command) {
+<a name="line215"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.INDENT:
+<a name="line216"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.OUTDENT:
+<a name="line217"></a>          if (goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS) {
+<a name="line218"></a>            if (goog.userAgent.GECKO) {
+<a name="line219"></a>              styleWithCss = true;
+<a name="line220"></a>            }
+<a name="line221"></a>            if (goog.userAgent.OPERA) {
+<a name="line222"></a>              if (command ==
+<a name="line223"></a>                  goog.editor.plugins.BasicTextFormatter.COMMAND.OUTDENT) {
+<a name="line224"></a>                // styleWithCSS actually sets negative margins on &lt;blockquote&gt;
+<a name="line225"></a>                // to outdent them. If the command is enabled without
+<a name="line226"></a>                // styleWithCSS flipped on, then the caret is in a blockquote so
+<a name="line227"></a>                // styleWithCSS must not be used. But if the command is not
+<a name="line228"></a>                // enabled, styleWithCSS should be used so that elements such as
+<a name="line229"></a>                // a &lt;div&gt; with a margin-left style can still be outdented.
+<a name="line230"></a>                // (Opera bug: CORE-21118)
+<a name="line231"></a>                styleWithCss =
+<a name="line232"></a>                    !this.getDocument_().queryCommandEnabled(&#39;outdent&#39;);
+<a name="line233"></a>              } else {
+<a name="line234"></a>                // Always use styleWithCSS for indenting. Otherwise, Opera will
+<a name="line235"></a>                // make separate &lt;blockquote&gt;s around *each* indented line,
+<a name="line236"></a>                // which adds big default &lt;blockquote&gt; margins between each
+<a name="line237"></a>                // indented line.
+<a name="line238"></a>                styleWithCss = true;
+<a name="line239"></a>              }
+<a name="line240"></a>            }
+<a name="line241"></a>          }
+<a name="line242"></a>          // Fall through.
+<a name="line243"></a>
+<a name="line244"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.ORDERED_LIST:
+<a name="line245"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.UNORDERED_LIST:
+<a name="line246"></a>          if (goog.editor.BrowserFeature.LEAVES_P_WHEN_REMOVING_LISTS &amp;&amp;
+<a name="line247"></a>              this.queryCommandStateInternal_(this.getDocument_(),
+<a name="line248"></a>                  command)) {
+<a name="line249"></a>            // IE leaves behind P tags when unapplying lists.
+<a name="line250"></a>            // If we&#39;re not in P-mode, then we want divs
+<a name="line251"></a>            // So, unlistify, then convert the Ps into divs.
+<a name="line252"></a>            needsFormatBlockDiv = this.getFieldObject().queryCommandValue(
+<a name="line253"></a>                goog.editor.Command.DEFAULT_TAG) != goog.dom.TagName.P;
+<a name="line254"></a>          } else if (!goog.editor.BrowserFeature.CAN_LISTIFY_BR) {
+<a name="line255"></a>            // IE doesn&#39;t convert BRed line breaks into separate list items.
+<a name="line256"></a>            // So convert the BRs to divs, then do the listify.
+<a name="line257"></a>            this.convertBreaksToDivs_();
+<a name="line258"></a>          }
+<a name="line259"></a>
+<a name="line260"></a>          // This fix only works in Gecko.
+<a name="line261"></a>          if (goog.userAgent.GECKO &amp;&amp;
+<a name="line262"></a>              goog.editor.BrowserFeature.FORGETS_FORMATTING_WHEN_LISTIFYING &amp;&amp;
+<a name="line263"></a>              !this.queryCommandValue(command)) {
+<a name="line264"></a>            hasDummySelection |= this.beforeInsertListGecko_();
+<a name="line265"></a>          }
+<a name="line266"></a>          // Fall through to preserveDir block
+<a name="line267"></a>
+<a name="line268"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK:
+<a name="line269"></a>          // Both FF &amp; IE may lose directionality info. Save/restore it.
+<a name="line270"></a>          // TODO(user): Does Safari also need this?
+<a name="line271"></a>          // TODO (gmark, jparent): This isn&#39;t ideal because it uses a string
+<a name="line272"></a>          // literal, so if the plugin name changes, it would break. We need a
+<a name="line273"></a>          // better solution. See also other places in code that use
+<a name="line274"></a>          // this.getPluginByClassId(&#39;Bidi&#39;).
+<a name="line275"></a>          preserveDir = !!this.getFieldObject().getPluginByClassId(&#39;Bidi&#39;);
+<a name="line276"></a>          break;
+<a name="line277"></a>
+<a name="line278"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.SUBSCRIPT:
+<a name="line279"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.SUPERSCRIPT:
+<a name="line280"></a>          if (goog.editor.BrowserFeature.NESTS_SUBSCRIPT_SUPERSCRIPT) {
+<a name="line281"></a>            // This browser nests subscript and superscript when both are
+<a name="line282"></a>            // applied, instead of canceling out the first when applying the
+<a name="line283"></a>            // second.
+<a name="line284"></a>            this.applySubscriptSuperscriptWorkarounds_(command);
+<a name="line285"></a>          }
+<a name="line286"></a>          break;
+<a name="line287"></a>
+<a name="line288"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.UNDERLINE:
+<a name="line289"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.BOLD:
+<a name="line290"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.ITALIC:
+<a name="line291"></a>          // If we are applying the formatting, then we want to have
+<a name="line292"></a>          // styleWithCSS false so that we generate html tags (like &lt;b&gt;).  If we
+<a name="line293"></a>          // are unformatting something, we want to have styleWithCSS true so
+<a name="line294"></a>          // that we can unformat both html tags and inline styling.
+<a name="line295"></a>          // TODO(user): What about WebKit and Opera?
+<a name="line296"></a>          styleWithCss = goog.userAgent.GECKO &amp;&amp;
+<a name="line297"></a>                         goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &amp;&amp;
+<a name="line298"></a>                         this.queryCommandValue(command);
+<a name="line299"></a>          break;
+<a name="line300"></a>
+<a name="line301"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_COLOR:
+<a name="line302"></a>        case goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_FACE:
+<a name="line303"></a>          // It is very expensive in FF (order of magnitude difference) to use
+<a name="line304"></a>          // font tags instead of styled spans. Whenever possible,
+<a name="line305"></a>          // force FF to use spans.
+<a name="line306"></a>          // Font size is very expensive too, but FF always uses font tags,
+<a name="line307"></a>          // regardless of which styleWithCSS value you use.
+<a name="line308"></a>          styleWithCss = goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &amp;&amp;
+<a name="line309"></a>                         goog.userAgent.GECKO;
+<a name="line310"></a>      }
+<a name="line311"></a>
+<a name="line312"></a>      /**
+<a name="line313"></a>       * Cases where we just use the default execCommand (in addition
+<a name="line314"></a>       * to the above fall-throughs)
+<a name="line315"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.STRIKE_THROUGH:
+<a name="line316"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.HORIZONTAL_RULE:
+<a name="line317"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.SUBSCRIPT:
+<a name="line318"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.SUPERSCRIPT:
+<a name="line319"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.UNDERLINE:
+<a name="line320"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.BOLD:
+<a name="line321"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.ITALIC:
+<a name="line322"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_SIZE:
+<a name="line323"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_FACE:
+<a name="line324"></a>       */
+<a name="line325"></a>      this.execCommandHelper_(command, opt_arg, preserveDir, !!styleWithCss);
+<a name="line326"></a>
+<a name="line327"></a>      if (hasDummySelection) {
+<a name="line328"></a>        this.getDocument_().execCommand(&#39;Delete&#39;, false, true);
+<a name="line329"></a>      }
+<a name="line330"></a>
+<a name="line331"></a>      if (needsFormatBlockDiv) {
+<a name="line332"></a>        this.getDocument_().execCommand(&#39;FormatBlock&#39;, false, &#39;&lt;div&gt;&#39;);
+<a name="line333"></a>      }
+<a name="line334"></a>  }
+<a name="line335"></a>  // FF loses focus, so we have to set the focus back to the document or the
+<a name="line336"></a>  // user can&#39;t type after selecting from menu.  In IE, focus is set correctly
+<a name="line337"></a>  // and resetting it here messes it up.
+<a name="line338"></a>  if (goog.userAgent.GECKO &amp;&amp; !this.getFieldObject().inModalMode()) {
+<a name="line339"></a>    this.focusField_();
+<a name="line340"></a>  }
+<a name="line341"></a>  return result;
+<a name="line342"></a>};
+<a name="line343"></a>
+<a name="line344"></a>
+<a name="line345"></a>/**
+<a name="line346"></a> * Focuses on the field.
+<a name="line347"></a> * @private
+<a name="line348"></a> */
+<a name="line349"></a>goog.editor.plugins.BasicTextFormatter.prototype.focusField_ = function() {
+<a name="line350"></a>  this.getFieldDomHelper().getWindow().focus();
+<a name="line351"></a>};
+<a name="line352"></a>
+<a name="line353"></a>
+<a name="line354"></a>/**
+<a name="line355"></a> * Gets the command value.
+<a name="line356"></a> * @param {string} command The command value to get.
+<a name="line357"></a> * @return {string|boolean|null} The current value of the command in the given
+<a name="line358"></a> *     selection.  NOTE: This return type list is not documented in MSDN or MDC
+<a name="line359"></a> *     and has been constructed from experience.  Please update it
+<a name="line360"></a> *     if necessary.
+<a name="line361"></a> * @override
+<a name="line362"></a> */
+<a name="line363"></a>goog.editor.plugins.BasicTextFormatter.prototype.queryCommandValue = function(
+<a name="line364"></a>    command) {
+<a name="line365"></a>  var styleWithCss;
+<a name="line366"></a>  switch (command) {
+<a name="line367"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.LINK:
+<a name="line368"></a>      return this.isNodeInState_(goog.dom.TagName.A);
+<a name="line369"></a>
+<a name="line370"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_CENTER:
+<a name="line371"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_FULL:
+<a name="line372"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_RIGHT:
+<a name="line373"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.JUSTIFY_LEFT:
+<a name="line374"></a>      return this.isJustification_(command);
+<a name="line375"></a>
+<a name="line376"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.FORMAT_BLOCK:
+<a name="line377"></a>      // TODO(nicksantos): See if we can use queryCommandValue here.
+<a name="line378"></a>      return goog.editor.plugins.BasicTextFormatter.getSelectionBlockState_(
+<a name="line379"></a>          this.getFieldObject().getRange());
+<a name="line380"></a>
+<a name="line381"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.INDENT:
+<a name="line382"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.OUTDENT:
+<a name="line383"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.HORIZONTAL_RULE:
+<a name="line384"></a>      // TODO: See if there are reasonable results to return for
+<a name="line385"></a>      // these commands.
+<a name="line386"></a>      return false;
+<a name="line387"></a>
+<a name="line388"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_SIZE:
+<a name="line389"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_FACE:
+<a name="line390"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.FONT_COLOR:
+<a name="line391"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.BACKGROUND_COLOR:
+<a name="line392"></a>      // We use queryCommandValue here since we don&#39;t just want to know if a
+<a name="line393"></a>      // color/fontface/fontsize is applied, we want to know WHICH one it is.
+<a name="line394"></a>      return this.queryCommandValueInternal_(this.getDocument_(), command,
+<a name="line395"></a>          goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &amp;&amp;
+<a name="line396"></a>          goog.userAgent.GECKO);
+<a name="line397"></a>
+<a name="line398"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.UNDERLINE:
+<a name="line399"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.BOLD:
+<a name="line400"></a>    case goog.editor.plugins.BasicTextFormatter.COMMAND.ITALIC:
+<a name="line401"></a>      styleWithCss = goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &amp;&amp;
+<a name="line402"></a>                     goog.userAgent.GECKO;
+<a name="line403"></a>
+<a name="line404"></a>    default:
+<a name="line405"></a>      /**
+<a name="line406"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.STRIKE_THROUGH
+<a name="line407"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.SUBSCRIPT
+<a name="line408"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.SUPERSCRIPT
+<a name="line409"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.UNDERLINE
+<a name="line410"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.BOLD
+<a name="line411"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.ITALIC
+<a name="line412"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.ORDERED_LIST
+<a name="line413"></a>       * goog.editor.plugins.BasicTextFormatter.COMMAND.UNORDERED_LIST
+<a name="line414"></a>       */
+<a name="line415"></a>      // This only works for commands that use the default execCommand
+<a name="line416"></a>      return this.queryCommandStateInternal_(this.getDocument_(), command,
+<a name="line417"></a>          styleWithCss);
+<a name="line418"></a>  }
+<a name="line419"></a>};
+<a name="line420"></a>
+<a name="line421"></a>
+<a name="line422"></a>/**
+<a name="line423"></a> * @override
+<a name="line424"></a> */
+<a name="line425"></a>goog.editor.plugins.BasicTextFormatter.prototype.prepareContentsHtml =
+<a name="line426"></a>    function(html) {
+<a name="line427"></a>  // If the browser collapses empty nodes and the field has only a script
+<a name="line428"></a>  // tag in it, then it will collapse this node. Which will mean the user
+<a name="line429"></a>  // can&#39;t click into it to edit it.
+<a name="line430"></a>  if (goog.editor.BrowserFeature.COLLAPSES_EMPTY_NODES &amp;&amp;
+<a name="line431"></a>      html.match(/^\s*&lt;script/i)) {
+<a name="line432"></a>    html = &#39;&amp;nbsp;&#39; + html;
+<a name="line433"></a>  }
+<a name="line434"></a>
+<a name="line435"></a>  if (goog.editor.BrowserFeature.CONVERT_TO_B_AND_I_TAGS) {
+<a name="line436"></a>    // Some browsers (FF) can&#39;t undo strong/em in some cases, but can undo b/i!
+<a name="line437"></a>    html = html.replace(/&lt;(\/?)strong([^\w])/gi, &#39;&lt;$1b$2&#39;);
+<a name="line438"></a>    html = html.replace(/&lt;(\/?)em([^\w])/gi, &#39;&lt;$1i$2&#39;);
+<a name="line439"></a>  }
+<a name="line440"></a>
+<a name="line441"></a>  return html;
+<a name="line442"></a>};
+<a name="line443"></a>
+<a name="line444"></a>
+<a name="line445"></a>/**
+<a name="line446"></a> * @override
+<a name="line447"></a> */
+<a name="line448"></a>goog.editor.plugins.BasicTextFormatter.prototype.cleanContentsDom =
+<a name="line449"></a>    function(fieldCopy) {
+<a name="line450"></a>  var images = fieldCopy.getElementsByTagName(goog.dom.TagName.IMG);
+<a name="line451"></a>  for (var i = 0, image; image = images[i]; i++) {
+<a name="line452"></a>    if (goog.editor.BrowserFeature.SHOWS_CUSTOM_ATTRS_IN_INNER_HTML) {
+<a name="line453"></a>      // Only need to remove these attributes in IE because
+<a name="line454"></a>      // Firefox and Safari don&#39;t show custom attributes in the innerHTML.
+<a name="line455"></a>      image.removeAttribute(&#39;tabIndex&#39;);
+<a name="line456"></a>      image.removeAttribute(&#39;tabIndexSet&#39;);
+<a name="line457"></a>      goog.removeUid(image);
+<a name="line458"></a>
+<a name="line459"></a>      // Declare oldTypeIndex for the compiler. The associated plugin may not be
+<a name="line460"></a>      // included in the compiled bundle.
+<a name="line461"></a>      /** @type {string} */ image.oldTabIndex;
+<a name="line462"></a>
+<a name="line463"></a>      // oldTabIndex will only be set if
+<a name="line464"></a>      // goog.editor.BrowserFeature.TABS_THROUGH_IMAGES is true and we&#39;re in
+<a name="line465"></a>      // P-on-enter mode.
+<a name="line466"></a>      if (image.oldTabIndex) {
+<a name="line467"></a>        image.tabIndex = image.oldTabIndex;
+<a name="line468"></a>      }
+<a name="line469"></a>    }
+<a name="line470"></a>  }
+<a name="line471"></a>};
+<a name="line472"></a>
+<a name="line473"></a>
+<a name="line474"></a>/**
+<a name="line475"></a> * @override
+<a name="line476"></a> */
+<a name="line477"></a>goog.editor.plugins.BasicTextFormatter.prototype.cleanContentsHtml =
+<a name="line478"></a>    function(html) {
+<a name="line479"></a>  if (goog.editor.BrowserFeature.MOVES_STYLE_TO_HEAD) {
+<a name="line480"></a>    // Safari creates a new &lt;head&gt; element for &lt;style&gt; tags, so prepend their
+<a name="line481"></a>    // contents to the output.
+<a name="line482"></a>    var heads = this.getFieldObject().getEditableDomHelper().
+<a name="line483"></a>        getElementsByTagNameAndClass(goog.dom.TagName.HEAD);
+<a name="line484"></a>    var stylesHtmlArr = [];
+<a name="line485"></a>
+<a name="line486"></a>    // i starts at 1 so we don&#39;t copy in the original, legitimate &lt;head&gt;.
+<a name="line487"></a>    var numHeads = heads.length;
+<a name="line488"></a>    for (var i = 1; i &lt; numHeads; ++i) {
+<a name="line489"></a>      var styles = heads[i].getElementsByTagName(goog.dom.TagName.STYLE);
+<a name="line490"></a>      var numStyles = styles.length;
+<a name="line491"></a>      for (var j = 0; j &lt; numStyles; ++j) {
+<a name="line492"></a>        stylesHtmlArr.push(styles[j].outerHTML);
+<a name="line493"></a>      }
+<a name="line494"></a>    }
+<a name="line495"></a>    return stylesHtmlArr.join(&#39;&#39;) + html;
+<a name="line496"></a>  }
+<a name="line497"></a>
+<a name="line498"></a>  return html;
+<a name="line499"></a>};
+<a name="line500"></a>
+<a name="line501"></a>
+<a name="line502"></a>/**
+<a name="line503"></a> * @override
+<a name="line504"></a> */
+<a name="line505"></a>goog.editor.plugins.BasicTextFormatter.prototype.handleKeyboardShortcut =
+<a name="line506"></a>    function(e, key, isModifierPressed) {
+<a name="line507"></a>  if (!isModifierPressed) {
+<a name="line508"></a>    return false;
+<a name="line509"></a>  }
+<a name="line510"></a>  var command;
+<a name="line511"></a>  switch (key) {
+<a name="line512"></a>    case &#39;b&#39;: // Ctrl+B
+<a name="line513"></a>      command = goog.editor.plugins.BasicTextFormatter.COMMAND.BOLD;
+<a name="line514"></a>      break;
+<a name="line515"></a>    case &#39;i&#39;: // Ctrl+I
+<a name="line516"></a>      command = goog.editor.plugins.BasicTextFormatter.COMMAND.ITALIC;
+<a name="line517"></a>      break;
+<a name="line518"></a>    case &#39;u&#39;: // Ctrl+U
+<a name="line519"></a>      command = goog.editor.plugins.BasicTextFormatter.COMMAND.UNDERLINE;
+<a name="line520"></a>      break;
+<a name="line521"></a>    case &#39;s&#39;: // Ctrl+S
+<a name="line522"></a>      // TODO(user): This doesn&#39;t belong in here.  Clients should handle
+<a name="line523"></a>      // this themselves.
+<a name="line524"></a>      // Catching control + s prevents the annoying browser save dialog
+<a name="line525"></a>      // from appearing.
+<a name="line526"></a>      return true;
+<a name="line527"></a>  }
+<a name="line528"></a>
+<a name="line529"></a>  if (command) {
+<a name="line530"></a>    this.getFieldObject().execCommand(command);
+<a name="line531"></a>    return true;
+<a name="line532"></a>  }
+<a name="line533"></a>
+<a name="line534"></a>  return false;
+<a name="line535"></a>};
+<a name="line536"></a>
+<a name="line537"></a>
+<a name="line538"></a>// Helpers for execCommand
+<a name="line539"></a>
+<a name="line540"></a>
+<a name="line541"></a>/**
+<a name="line542"></a> * Regular expression to match BRs in HTML. Saves the BRs&#39; attributes in $1 for
+<a name="line543"></a> * use with replace(). In non-IE browsers, does not match BRs adjacent to an
+<a name="line544"></a> * opening or closing DIV or P tag, since nonrendered BR elements can occur at
+<a name="line545"></a> * the end of block level containers in those browsers&#39; editors.
+<a name="line546"></a> * @type {RegExp}
+<a name="line547"></a> * @private
+<a name="line548"></a> */
+<a name="line549"></a>goog.editor.plugins.BasicTextFormatter.BR_REGEXP_ =
+<a name="line550"></a>    goog.userAgent.IE ? /&lt;br([^\/&gt;]*)\/?&gt;/gi :
+<a name="line551"></a>                        /&lt;br([^\/&gt;]*)\/?&gt;(?!&lt;\/(div|p)&gt;)/gi;
+<a name="line552"></a>
+<a name="line553"></a>
+<a name="line554"></a>/**
+<a name="line555"></a> * Convert BRs in the selection to divs.
+<a name="line556"></a> * This is only intended to be used in IE and Opera.
+<a name="line557"></a> * @return {boolean} Whether any BR&#39;s were converted.
+<a name="line558"></a> * @private
+<a name="line559"></a> */
+<a name="line560"></a>goog.editor.plugins.BasicTextFormatter.prototype.convertBreaksToDivs_ =
+<a name="line561"></a>    function() {
+<a name="line562"></a>  if (!goog.userAgent.IE &amp;&amp; !goog.userAgent.OPERA) {
+<a name="line563"></a>    // This function is only supported on IE and Opera.
+<a name="line564"></a>    return false;
+<a name="line565"></a>  }
+<a name="line566"></a>  var range = this.getRange_();
+<a name="line567"></a>  var parent = range.getContainerElement();
+<a name="line568"></a>  var doc = this.getDocument_();
+<a name="line569"></a>
+<a name="line570"></a>  goog.editor.plugins.BasicTextFormatter.BR_REGEXP_.lastIndex = 0;
+<a name="line571"></a>  // Only mess with the HTML/selection if it contains a BR.
+<a name="line572"></a>  if (goog.editor.plugins.BasicTextFormatter.BR_REGEXP_.test(
+<a name="line573"></a>      parent.innerHTML)) {
+<a name="line574"></a>    // Insert temporary markers to remember the selection.
+<a name="line575"></a>    var savedRange = range.saveUsingCarets();
+<a name="line576"></a>
+<a name="line577"></a>    if (parent.tagName == goog.dom.TagName.P) {
+<a name="line578"></a>      // Can&#39;t append paragraphs to paragraph tags. Throws an exception in IE.
+<a name="line579"></a>      goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_(
+<a name="line580"></a>          parent, true);
+<a name="line581"></a>    } else {
+<a name="line582"></a>      // Used to do:
+<a name="line583"></a>      // IE: &lt;div&gt;foo&lt;br&gt;bar&lt;/div&gt; --&gt; &lt;div&gt;foo&lt;p id=&quot;temp_br&quot;&gt;bar&lt;/div&gt;
+<a name="line584"></a>      // Opera: &lt;div&gt;foo&lt;br&gt;bar&lt;/div&gt; --&gt; &lt;div&gt;foo&lt;p class=&quot;temp_br&quot;&gt;bar&lt;/div&gt;
+<a name="line585"></a>      // To fix bug 1939883, now does for both:
+<a name="line586"></a>      // &lt;div&gt;foo&lt;br&gt;bar&lt;/div&gt; --&gt; &lt;div&gt;foo&lt;p trtempbr=&quot;temp_br&quot;&gt;bar&lt;/div&gt;
+<a name="line587"></a>      // TODO(user): Confirm if there&#39;s any way to skip this
+<a name="line588"></a>      // intermediate step of converting br&#39;s to p&#39;s before converting those to
+<a name="line589"></a>      // div&#39;s. The reason may be hidden in CLs 5332866 and 8530601.
+<a name="line590"></a>      var attribute = &#39;trtempbr&#39;;
+<a name="line591"></a>      var value = &#39;temp_br&#39;;
+<a name="line592"></a>      var newHtml = parent.innerHTML.replace(
+<a name="line593"></a>          goog.editor.plugins.BasicTextFormatter.BR_REGEXP_,
+<a name="line594"></a>          &#39;&lt;p$1 &#39; + attribute + &#39;=&quot;&#39; + value + &#39;&quot;&gt;&#39;);
+<a name="line595"></a>      goog.editor.node.replaceInnerHtml(parent, newHtml);
+<a name="line596"></a>
+<a name="line597"></a>      var paragraphs =
+<a name="line598"></a>          goog.array.toArray(parent.getElementsByTagName(goog.dom.TagName.P));
+<a name="line599"></a>      goog.iter.forEach(paragraphs, function(paragraph) {
+<a name="line600"></a>        if (paragraph.getAttribute(attribute) == value) {
+<a name="line601"></a>          paragraph.removeAttribute(attribute);
+<a name="line602"></a>          if (goog.string.isBreakingWhitespace(
+<a name="line603"></a>              goog.dom.getTextContent(paragraph))) {
+<a name="line604"></a>            // Prevent the empty blocks from collapsing.
+<a name="line605"></a>            // A &lt;BR&gt; is preferable because it doesn&#39;t result in any text being
+<a name="line606"></a>            // added to the &quot;blank&quot; line. In IE, however, it is possible to
+<a name="line607"></a>            // place the caret after the &lt;br&gt;, which effectively creates a
+<a name="line608"></a>            // visible line break. Because of this, we have to resort to using a
+<a name="line609"></a>            // &amp;nbsp; in IE.
+<a name="line610"></a>            var child = goog.userAgent.IE ?
+<a name="line611"></a>                doc.createTextNode(goog.string.Unicode.NBSP) :
+<a name="line612"></a>                doc.createElement(goog.dom.TagName.BR);
+<a name="line613"></a>            paragraph.appendChild(child);
+<a name="line614"></a>          }
+<a name="line615"></a>          goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_(
+<a name="line616"></a>              paragraph);
+<a name="line617"></a>        }
+<a name="line618"></a>      });
+<a name="line619"></a>    }
+<a name="line620"></a>
+<a name="line621"></a>    // Select the previously selected text so we only listify
+<a name="line622"></a>    // the selected portion and maintain the user&#39;s selection.
+<a name="line623"></a>    savedRange.restore();
+<a name="line624"></a>    return true;
+<a name="line625"></a>  }
+<a name="line626"></a>
+<a name="line627"></a>  return false;
+<a name="line628"></a>};
+<a name="line629"></a>
+<a name="line630"></a>
+<a name="line631"></a>/**
+<a name="line632"></a> * Convert the given paragraph to being a div. This clobbers the
+<a name="line633"></a> * passed-in node!
+<a name="line634"></a> * This is only intended to be used in IE and Opera.
+<a name="line635"></a> * @param {Node} paragraph Paragragh to convert to a div.
+<a name="line636"></a> * @param {boolean=} opt_convertBrs If true, also convert BRs to divs.
+<a name="line637"></a> * @private
+<a name="line638"></a> */
+<a name="line639"></a>goog.editor.plugins.BasicTextFormatter.convertParagraphToDiv_ =
+<a name="line640"></a>    function(paragraph, opt_convertBrs) {
+<a name="line641"></a>  if (!goog.userAgent.IE &amp;&amp; !goog.userAgent.OPERA) {
+<a name="line642"></a>    // This function is only supported on IE and Opera.
+<a name="line643"></a>    return;
+<a name="line644"></a>  }
+<a name="line645"></a>  var outerHTML = paragraph.outerHTML.replace(/&lt;(\/?)p/gi, &#39;&lt;$1div&#39;);
+<a name="line646"></a>  if (opt_convertBrs) {
+<a name="line647"></a>    // IE fills in the closing div tag if it&#39;s missing!
+<a name="line648"></a>    outerHTML = outerHTML.replace(
+<a name="line649"></a>        goog.editor.plugins.BasicTextFormatter.BR_REGEXP_,
+<a name="line650"></a>        &#39;&lt;/div&gt;&lt;div$1&gt;&#39;);
+<a name="line651"></a>  }
+<a name="line652"></a>  if (goog.userAgent.OPERA &amp;&amp; !/&lt;\/div&gt;$/i.test(outerHTML)) {
+<a name="line653"></a>    // Opera doesn&#39;t automatically add the closing tag, so add it if needed.
+<a name="line654"></a>    outerHTML += &#39;&lt;/div&gt;&#39;;
+<a name="line655"></a>  }
+<a name="line656"></a>  paragraph.outerHTML = outerHTML;
+<a name="line657"></a>};
+<a name="line658"></a>
+<a name="line659"></a>
+<a name="line660"></a>/**
+<a name="line661"></a> * If this is a goog.editor.plugins.BasicTextFormatter.COMMAND,
+<a name="line662"></a> * convert it to something that we can pass into execCommand,
+<a name="line663"></a> * queryCommandState, etc.
+<a name="line664"></a> *
+<a name="line665"></a> * TODO(user): Consider doing away with the + and converter completely.
+<a name="line666"></a> *
+<a name="line667"></a> * @param {goog.editor.plugins.BasicTextFormatter.COMMAND|string}
+<a name="line668"></a> *     command A command key.
+<a name="line669"></a> * @return {string} The equivalent execCommand command.
+<a name="line670"></a> * @private
+<a name="line671"></a> */
+<a name="line672"></a>goog.editor.plugins.BasicTextFormatter.convertToRealExecCommand_ = function(
+<a name="line673"></a>    command) {
+<a name="line674"></a>  return command.indexOf(&#39;+&#39;) == 0 ? command.substring(1) : command;
+<a name="line675"></a>};
+<a name="line676"></a>
+<a name="line677"></a>
+<a name="line678"></a>/**
+<a name="line679"></a> * Justify the text in the selection.
+<a name="line680"></a> * @param {string} command The type of justification to perform.
+<a name="line681"></a> * @private
+<a name="line682"></a> */
+<a name="line683"></a>goog.editor.plugins.BasicTextFormatter.prototype.justify_ = function(command) {
+<a name="line684"></a>  this.execCommandHelper_(command, null, false, true);
+<a name="line685"></a>  // Firefox cannot justify divs.  In fact, justifying divs results in removing
+<a name="line686"></a>  // the divs and replacing them with brs.  So &quot;&lt;div&gt;foo&lt;/div&gt;&lt;div&gt;bar&lt;/div&gt;&quot;
+<a name="line687"></a>  // becomes &quot;foo&lt;br&gt;bar&quot; after alignment is applied.  However, if you justify
+<a name="line688"></a>  // again, then you get &quot;&lt;div style=&#39;text-align: right&#39;&gt;foo&lt;br&gt;bar&lt;/div&gt;&quot;,
+<a name="line689"></a>  // which at least looks visually correct.  Since justification is (normally)
+<a name="line690"></a>  // idempotent, it isn&#39;t a problem when the selection does not contain divs to
+<a name="line691"></a>  // apply justifcation again.
+<a name="line692"></a>  if (goog.userAgent.GECKO) {
+<a name="line693"></a>    this.execCommandHelper_(command, null, false, true);
+<a name="line694"></a>  }
+<a name="line695"></a>
+<a name="line696"></a>  // Convert all block elements in the selection to use CSS text-align
+<a name="line697"></a>  // instead of the align property. This works better because the align
+<a name="line698"></a>  // property is overridden by the CSS text-align property.
+<a name="line699"></a>  //
+<a name="line700"></a>  // Only for browsers that can&#39;t handle this by the styleWithCSS execCommand,
+<a name="line701"></a>  // which allows us to specify if we should insert align or text-align.
+<a name="line702"></a>  // TODO(user): What about WebKit or Opera?
+<a name="line703"></a>  if (!(goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS &amp;&amp;
+<a name="line704"></a>        goog.userAgent.GECKO)) {
+<a name="line705"></a>    goog.iter.forEach(this.getFieldObject().getRange(),
+<a name="line706"></a>        goog.editor.plugins.BasicTextFormatter.convertContainerToTextAlign_);
+<a name="line707"></a>  }
+<a name="line708"></a>};
+<a name="line709"></a>
+<a name="line710"></a>
+<a name="line711"></a>/**
+<a name="line712"></a> * Converts the block element containing the given node to use CSS text-align
+<a name="line713"></a> * instead of the align property.
+<a name="line714"></a> * @param {Node} node The node to convert the container of.
+<a name="line715"></a> * @private
+<a name="line716"></a> */
+<a name="line717"></a>goog.editor.plugins.BasicTextFormatter.convertContainerToTextAlign_ =
+<a name="line718"></a>    function(node) {
+<a name="line719"></a>  var container = goog.editor.style.getContainer(node);
+<a name="line720"></a>
+<a name="line721"></a>  // TODO(user): Fix this so that it doesn&#39;t screw up tables.
+<a name="line722"></a>  if (container.align) {
+<a name="line723"></a>    container.style.textAlign = container.align;
+<a name="line724"></a>    container.removeAttribute(&#39;align&#39;);
+<a name="line725"></a>  }
+<a name="line726"></a>};
+<a name="line727"></a>
+<a name="line728"></a>
+<a name="line729"></a>/**
+<a name="line730"></a> * Perform an execCommand on the active document.
+<a name="line731"></a> * @param {string} command The command to execute.
+<a name="line732"></a> * @param {string|number|boolean|null=} opt_value Optional value.
+<a name="line733"></a> * @param {boolean=} opt_preserveDir Set true to make sure that command does not
+<a name="line734"></a> *     change directionality of the selected text (works only if all selected
+<a name="line735"></a> *     text has the same directionality, otherwise ignored). Should not be true
+<a name="line736"></a> *     if bidi plugin is not loaded.
+<a name="line737"></a> * @param {boolean=} opt_styleWithCss Set to true to ask the browser to use CSS
+<a name="line738"></a> *     to perform the execCommand.
+<a name="line739"></a> * @private
+<a name="line740"></a> */
+<a name="line741"></a>goog.editor.plugins.BasicTextFormatter.prototype.execCommandHelper_ = function(
+<a name="line742"></a>    command, opt_value, opt_preserveDir, opt_styleWithCss) {
+<a name="line743"></a>  // There is a bug in FF: some commands do not preserve attributes of the
+<a name="line744"></a>  // block-level elements they replace.
+<a name="line745"></a>  // This (among the rest) leads to loss of directionality information.
+<a name="line746"></a>  // For now we use a hack (when opt_preserveDir==true) to avoid this
+<a name="line747"></a>  // directionality problem in the simplest cases.
+<a name="line748"></a>  // Known affected commands: formatBlock, insertOrderedList,
+<a name="line749"></a>  // insertUnorderedList, indent, outdent.
+<a name="line750"></a>  // A similar problem occurs in IE when insertOrderedList or
+<a name="line751"></a>  // insertUnorderedList remove existing list.
+<a name="line752"></a>  var dir = null;
+<a name="line753"></a>  if (opt_preserveDir) {
+<a name="line754"></a>    dir =
+<a name="line755"></a>        this.getFieldObject().queryCommandValue(
+<a name="line756"></a>            goog.editor.Command.DIR_RTL) ? &#39;rtl&#39; :
+<a name="line757"></a>        this.getFieldObject().queryCommandValue(
+<a name="line758"></a>            goog.editor.Command.DIR_LTR) ? &#39;ltr&#39; :
+<a name="line759"></a>        null;
+<a name="line760"></a>  }
+<a name="line761"></a>
+<a name="line762"></a>  command = goog.editor.plugins.BasicTextFormatter.convertToRealExecCommand_(
+<a name="line763"></a>      command);
+<a name="line764"></a>
+<a name="line765"></a>  var endDiv, nbsp;
+<a name="line766"></a>  if (goog.userAgent.IE) {
+<a name="line767"></a>    var ret = this.applyExecCommandIEFixes_(command);
+<a name="line768"></a>    endDiv = ret[0];
+<a name="line769"></a>    nbsp = ret[1];
+<a name="line770"></a>  }
+<a name="line771"></a>
+<a name="line772"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line773"></a>    endDiv = this.applyExecCommandSafariFixes_(command);
+<a name="line774"></a>  }
+<a name="line775"></a>
+<a name="line776"></a>  if (goog.userAgent.GECKO) {
+<a name="line777"></a>    this.applyExecCommandGeckoFixes_(command);
+<a name="line778"></a>  }
+<a name="line779"></a>
+<a name="line780"></a>  if (goog.editor.BrowserFeature.DOESNT_OVERRIDE_FONT_SIZE_IN_STYLE_ATTR &amp;&amp;
+<a name="line781"></a>      command.toLowerCase() == &#39;fontsize&#39;) {
+<a name="line782"></a>    this.removeFontSizeFromStyleAttrs_();
+<a name="line783"></a>  }
+<a name="line784"></a>
+<a name="line785"></a>  var doc = this.getDocument_();
+<a name="line786"></a>  if (opt_styleWithCss &amp;&amp;
+<a name="line787"></a>      goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS) {
+<a name="line788"></a>    doc.execCommand(&#39;styleWithCSS&#39;, false, true);
+<a name="line789"></a>    if (goog.userAgent.OPERA) {
+<a name="line790"></a>      this.invalidateInlineCss_();
+<a name="line791"></a>    }
+<a name="line792"></a>  }
+<a name="line793"></a>
+<a name="line794"></a>  doc.execCommand(command, false, opt_value);
+<a name="line795"></a>  if (opt_styleWithCss &amp;&amp;
+<a name="line796"></a>      goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS) {
+<a name="line797"></a>    // If we enabled styleWithCSS, turn it back off.
+<a name="line798"></a>    doc.execCommand(&#39;styleWithCSS&#39;, false, false);
+<a name="line799"></a>  }
+<a name="line800"></a>
+<a name="line801"></a>  if (goog.userAgent.WEBKIT &amp;&amp;
+<a name="line802"></a>      !goog.userAgent.isVersionOrHigher(&#39;526&#39;) &amp;&amp;
+<a name="line803"></a>      command.toLowerCase() == &#39;formatblock&#39; &amp;&amp;
+<a name="line804"></a>      opt_value &amp;&amp; /^[&lt;]?h\d[&gt;]?$/i.test(opt_value)) {
+<a name="line805"></a>    this.cleanUpSafariHeadings_();
+<a name="line806"></a>  }
+<a name="line807"></a>
+<a name="line808"></a>  if (/insert(un)?orderedlist/i.test(command)) {
+<a name="line809"></a>    // NOTE(user): This doesn&#39;t check queryCommandState because it seems to
+<a name="line810"></a>    // lie. Also, this runs for insertunorderedlist so that the the list
+<a name="line811"></a>    // isn&#39;t made up of an &lt;ul&gt; for each &lt;li&gt; - even though it looks the same,
+<a name="line812"></a>    // the markup is disgusting.
+<a name="line813"></a>    if (goog.userAgent.WEBKIT &amp;&amp;
+<a name="line814"></a>        !goog.userAgent.isVersionOrHigher(534)) {
+<a name="line815"></a>      this.fixSafariLists_();
+<a name="line816"></a>    }
+<a name="line817"></a>    if (goog.userAgent.IE) {
+<a name="line818"></a>      this.fixIELists_();
+<a name="line819"></a>
+<a name="line820"></a>      if (nbsp) {
+<a name="line821"></a>        // Remove the text node, if applicable.  Do not try to instead clobber
+<a name="line822"></a>        // the contents of the text node if it was added, or the same invalid
+<a name="line823"></a>        // node thing as above will happen.  The error won&#39;t happen here, it
+<a name="line824"></a>        // will happen after you hit enter and then do anything that loops
+<a name="line825"></a>        // through the dom and tries to read that node.
+<a name="line826"></a>        goog.dom.removeNode(nbsp);
+<a name="line827"></a>      }
+<a name="line828"></a>    }
+<a name="line829"></a>  }
+<a name="line830"></a>
+<a name="line831"></a>  if (endDiv) {
+<a name="line832"></a>    // Remove the dummy div.
+<a name="line833"></a>    goog.dom.removeNode(endDiv);
+<a name="line834"></a>  }
+<a name="line835"></a>
+<a name="line836"></a>  // Restore directionality if required and only when unambigous (dir!=null).
+<a name="line837"></a>  if (dir) {
+<a name="line838"></a>    this.getFieldObject().execCommand(dir);
+<a name="line839"></a>  }
+<a name="line840"></a>};
+<a name="line841"></a>
+<a name="line842"></a>
+<a name="line843"></a>/**
+<a name="line844"></a> * Applies a background color to a selection when the browser can&#39;t do the job.
+<a name="line845"></a> *
+<a name="line846"></a> * NOTE(nicksantos): If you think this is hacky, you should try applying
+<a name="line847"></a> * background color in Opera. It made me cry.
+<a name="line848"></a> *
+<a name="line849"></a> * @param {string} bgColor backgroundColor from .formatText to .execCommand.
+<a name="line850"></a> * @private
+<a name="line851"></a> */
+<a name="line852"></a>goog.editor.plugins.BasicTextFormatter.prototype.applyBgColorManually_ =
+<a name="line853"></a>    function(bgColor) {
+<a name="line854"></a>  var needsSpaceInTextNode = goog.userAgent.GECKO;
+<a name="line855"></a>  var range = this.getFieldObject().getRange();
+<a name="line856"></a>  var textNode;
+<a name="line857"></a>  var parentTag;
+<a name="line858"></a>  if (range &amp;&amp; range.isCollapsed()) {
+<a name="line859"></a>    // Hack to handle Firefox bug:
+<a name="line860"></a>    // https://bugzilla.mozilla.org/show_bug.cgi?id=279330
+<a name="line861"></a>    // execCommand hiliteColor in Firefox on collapsed selection creates
+<a name="line862"></a>    // a font tag onkeypress
+<a name="line863"></a>    textNode = this.getFieldDomHelper().
+<a name="line864"></a>        createTextNode(needsSpaceInTextNode ? &#39; &#39; : &#39;&#39;);
+<a name="line865"></a>
+<a name="line866"></a>    var containerNode = range.getStartNode();
+<a name="line867"></a>    // Check if we&#39;re inside a tag that contains the cursor and nothing else;
+<a name="line868"></a>    // if we are, don&#39;t create a dummySpan. Just use this containing tag to
+<a name="line869"></a>    // hide the 1-space selection.
+<a name="line870"></a>    // If the user sets a background color on a collapsed selection, then sets
+<a name="line871"></a>    // another one immediately, we get a span tag with a single empty TextNode.
+<a name="line872"></a>    // If the user sets a background color, types, then backspaces, we get a
+<a name="line873"></a>    // span tag with nothing inside it (container is the span).
+<a name="line874"></a>    parentTag = containerNode.nodeType == goog.dom.NodeType.ELEMENT ?
+<a name="line875"></a>        containerNode : containerNode.parentNode;
+<a name="line876"></a>
+<a name="line877"></a>    if (parentTag.innerHTML == &#39;&#39;) {
+<a name="line878"></a>      // There&#39;s an Element to work with
+<a name="line879"></a>      // make the space character invisible using a CSS indent hack
+<a name="line880"></a>      parentTag.style.textIndent = &#39;-10000px&#39;;
+<a name="line881"></a>      parentTag.appendChild(textNode);
+<a name="line882"></a>    } else {
+<a name="line883"></a>      // No Element to work with; make one
+<a name="line884"></a>      // create a span with a space character inside
+<a name="line885"></a>      // make the space character invisible using a CSS indent hack
+<a name="line886"></a>      parentTag = this.getFieldDomHelper().createDom(&#39;span&#39;,
+<a name="line887"></a>          {&#39;style&#39;: &#39;text-indent:-10000px&#39;}, textNode);
+<a name="line888"></a>      range.replaceContentsWithNode(parentTag);
+<a name="line889"></a>    }
+<a name="line890"></a>    goog.dom.Range.createFromNodeContents(textNode).select();
+<a name="line891"></a>  }
+<a name="line892"></a>
+<a name="line893"></a>  this.execCommandHelper_(&#39;hiliteColor&#39;, bgColor, false, true);
+<a name="line894"></a>
+<a name="line895"></a>  if (textNode) {
+<a name="line896"></a>    // eliminate the space if necessary.
+<a name="line897"></a>    if (needsSpaceInTextNode) {
+<a name="line898"></a>      textNode.data = &#39;&#39;;
+<a name="line899"></a>    }
+<a name="line900"></a>
+<a name="line901"></a>    // eliminate the hack.
+<a name="line902"></a>    parentTag.style.textIndent = &#39;&#39;;
+<a name="line903"></a>    // execCommand modified our span so we leave it in place.
+<a name="line904"></a>  }
+<a name="line905"></a>};
+<a name="line906"></a>
+<a name="line907"></a>
+<a name="line908"></a>/**
+<a name="line909"></a> * Toggle link for the current selection:
+<a name="line910"></a> *   If selection contains a link, unlink it, return null.
+<a name="line911"></a> *   Otherwise, make selection into a link, return the link.
+<a name="line912"></a> * @param {string=} opt_target Target for the link.
+<a name="line913"></a> * @return {goog.editor.Link?} The resulting link, or null if a link was
+<a name="line914"></a> *     removed.
+<a name="line915"></a> * @private
+<a name="line916"></a> */
+<a name="line917"></a>goog.editor.plugins.BasicTextFormatter.prototype.toggleLink_ = function(
+<a name="line918"></a>    opt_target) {
+<a name="line919"></a>  if (!this.getFieldObject().isSelectionEditable()) {
+<a name="line920"></a>    this.focusField_();
+<a name="line921"></a>  }
+<a name="line922"></a>
+<a name="line923"></a>  var range = this.getRange_();
+<a name="line924"></a>  // Since we wrap images in links, its possible that the user selected an
+<a name="line925"></a>  // image and clicked link, in which case we want to actually use the
+<a name="line926"></a>  // image as the selection.
+<a name="line927"></a>  var parent = range &amp;&amp; range.getContainerElement();
+<a name="line928"></a>  var link = /** @type {Element} */ (
+<a name="line929"></a>      goog.dom.getAncestorByTagNameAndClass(parent, goog.dom.TagName.A));
+<a name="line930"></a>  if (link &amp;&amp; goog.editor.node.isEditable(link)) {
+<a name="line931"></a>    goog.dom.flattenElement(link);
+<a name="line932"></a>  } else {
+<a name="line933"></a>    var editableLink = this.createLink_(range, &#39;/&#39;, opt_target);
+<a name="line934"></a>    if (editableLink) {
+<a name="line935"></a>      if (!this.getFieldObject().execCommand(
+<a name="line936"></a>          goog.editor.Command.MODAL_LINK_EDITOR, editableLink)) {
+<a name="line937"></a>        var url = this.getFieldObject().getAppWindow().prompt(
+<a name="line938"></a>            goog.ui.editor.messages.MSG_LINK_TO, &#39;http://&#39;);
+<a name="line939"></a>        if (url) {
+<a name="line940"></a>          editableLink.setTextAndUrl(editableLink.getCurrentText() || url, url);
+<a name="line941"></a>          editableLink.placeCursorRightOf();
+<a name="line942"></a>        } else {
+<a name="line943"></a>          var savedRange = goog.editor.range.saveUsingNormalizedCarets(
+<a name="line944"></a>              goog.dom.Range.createFromNodeContents(editableLink.getAnchor()));
+<a name="line945"></a>          editableLink.removeLink();
+<a name="line946"></a>          savedRange.restore().select();
+<a name="line947"></a>          return null;
+<a name="line948"></a>        }
+<a name="line949"></a>      }
+<a name="line950"></a>      return editableLink;
+<a name="line951"></a>    }
+<a name="line952"></a>  }
+<a name="line953"></a>  return null;
+<a name="line954"></a>};
+<a name="line955"></a>
+<a name="line956"></a>
+<a name="line957"></a>/**
+<a name="line958"></a> * Create a link out of the current selection.  If nothing is selected, insert
+<a name="line959"></a> * a new link.  Otherwise, enclose the selection in a link.
+<a name="line960"></a> * @param {goog.dom.AbstractRange} range The closure range object for the
+<a name="line961"></a> *     current selection.
+<a name="line962"></a> * @param {string} url The url to link to.
+<a name="line963"></a> * @param {string=} opt_target Target for the link.
+<a name="line964"></a> * @return {goog.editor.Link?} The newly created link, or null if the link
+<a name="line965"></a> *     couldn&#39;t be created.
+<a name="line966"></a> * @private
+<a name="line967"></a> */
+<a name="line968"></a>goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(range,
+<a name="line969"></a>    url, opt_target) {
+<a name="line970"></a>  var anchor = null;
+<a name="line971"></a>  var anchors = [];
+<a name="line972"></a>  var parent = range &amp;&amp; range.getContainerElement();
+<a name="line973"></a>  // We do not yet support creating links around images.  Instead of throwing
+<a name="line974"></a>  // lots of js errors, just fail silently.
+<a name="line975"></a>  // TODO(user): Add support for linking images.
+<a name="line976"></a>  if (parent &amp;&amp; parent.tagName == goog.dom.TagName.IMG) {
+<a name="line977"></a>    return null;
+<a name="line978"></a>  }
+<a name="line979"></a>  // If range is not present, the editable field doesn&#39;t have focus, abort
+<a name="line980"></a>  // creating a link.
+<a name="line981"></a>  if (!range) {
+<a name="line982"></a>    return null;
+<a name="line983"></a>  }
+<a name="line984"></a>
+<a name="line985"></a>  if (range.isCollapsed()) {
+<a name="line986"></a>    var textRange = range.getTextRange(0).getBrowserRangeObject();
+<a name="line987"></a>    if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
+<a name="line988"></a>      anchor = this.getFieldDomHelper().createElement(goog.dom.TagName.A);
+<a name="line989"></a>      textRange.insertNode(anchor);
+<a name="line990"></a>    } else if (goog.editor.BrowserFeature.HAS_IE_RANGES) {
+<a name="line991"></a>      // TODO: Use goog.dom.AbstractRange&#39;s surroundContents
+<a name="line992"></a>      textRange.pasteHTML(&quot;&lt;a id=&#39;newLink&#39;&gt;&lt;/a&gt;&quot;);
+<a name="line993"></a>      anchor = this.getFieldDomHelper().getElement(&#39;newLink&#39;);
+<a name="line994"></a>      anchor.removeAttribute(&#39;id&#39;);
+<a name="line995"></a>    }
+<a name="line996"></a>  } else {
+<a name="line997"></a>    // Create a unique identifier for the link so we can retrieve it later.
+<a name="line998"></a>    // execCommand doesn&#39;t return the link to us, and we need a way to find
+<a name="line999"></a>    // the newly created link in the dom, and the url is the only property
+<a name="line1000"></a>    // we have control over, so we set that to be unique and then find it.
+<a name="line1001"></a>    var uniqueId = goog.string.createUniqueString();
+<a name="line1002"></a>    this.execCommandHelper_(&#39;CreateLink&#39;, uniqueId);
+<a name="line1003"></a>    var setHrefAndLink = function(element, index, arr) {
+<a name="line1004"></a>      // We can&#39;t do straight comparision since the href can contain the
+<a name="line1005"></a>      // absolute url.
+<a name="line1006"></a>      if (goog.string.endsWith(element.href, uniqueId)) {
+<a name="line1007"></a>        anchors.push(element);
+<a name="line1008"></a>      }
+<a name="line1009"></a>    };
+<a name="line1010"></a>
+<a name="line1011"></a>    goog.array.forEach(this.getFieldObject().getElement().getElementsByTagName(
+<a name="line1012"></a>        goog.dom.TagName.A), setHrefAndLink);
+<a name="line1013"></a>    if (anchors.length) {
+<a name="line1014"></a>      anchor = anchors.pop();
+<a name="line1015"></a>    }
+<a name="line1016"></a>  }
+<a name="line1017"></a>
+<a name="line1018"></a>  return goog.editor.Link.createNewLink(
+<a name="line1019"></a>      /** @type {HTMLAnchorElement} */ (anchor), url, opt_target, anchors);
+<a name="line1020"></a>};
+<a name="line1021"></a>
+<a name="line1022"></a>
+<a name="line1023"></a>//---------------------------------------------------------------------
+<a name="line1024"></a>// browser fixes
+<a name="line1025"></a>
+<a name="line1026"></a>
+<a name="line1027"></a>/**
+<a name="line1028"></a> * The following execCommands are &quot;broken&quot; in some way - in IE they allow
+<a name="line1029"></a> * the nodes outside the contentEditable region to get modified (see
+<a name="line1030"></a> * execCommand below for more details).
+<a name="line1031"></a> * @const
+<a name="line1032"></a> * @private
+<a name="line1033"></a> */
+<a name="line1034"></a>goog.editor.plugins.BasicTextFormatter.brokenExecCommandsIE_ = {
+<a name="line1035"></a>  &#39;indent&#39; : 1,
+<a name="line1036"></a>  &#39;outdent&#39; : 1,
+<a name="line1037"></a>  &#39;insertOrderedList&#39; : 1,
+<a name="line1038"></a>  &#39;insertUnorderedList&#39; : 1,
+<a name="line1039"></a>  &#39;justifyCenter&#39; : 1,
+<a name="line1040"></a>  &#39;justifyFull&#39; : 1,
+<a name="line1041"></a>  &#39;justifyRight&#39;: 1,
+<a name="line1042"></a>  &#39;justifyLeft&#39;: 1,
+<a name="line1043"></a>  &#39;ltr&#39; : 1,
+<a name="line1044"></a>  &#39;rtl&#39; : 1
+<a name="line1045"></a>};
+<a name="line1046"></a>
+<a name="line1047"></a>
+<a name="line1048"></a>/**
+<a name="line1049"></a> * When the following commands are executed while the selection is
+<a name="line1050"></a> * inside a blockquote, they hose the blockquote tag in weird and
+<a name="line1051"></a> * unintuitive ways.
+<a name="line1052"></a> * @const
+<a name="line1053"></a> * @private
+<a name="line1054"></a> */
+<a name="line1055"></a>goog.editor.plugins.BasicTextFormatter.blockquoteHatingCommandsIE_ = {
+<a name="line1056"></a>  &#39;insertOrderedList&#39; : 1,
+<a name="line1057"></a>  &#39;insertUnorderedList&#39; : 1
+<a name="line1058"></a>};
+<a name="line1059"></a>
+<a name="line1060"></a>
+<a name="line1061"></a>/**
+<a name="line1062"></a> * Makes sure that superscript is removed before applying subscript, and vice
+<a name="line1063"></a> * versa. Fixes {@link http://buganizer/issue?id=1173491} .
+<a name="line1064"></a> * @param {goog.editor.plugins.BasicTextFormatter.COMMAND} command The command
+<a name="line1065"></a> *     being applied, either SUBSCRIPT or SUPERSCRIPT.
+<a name="line1066"></a> * @private
+<a name="line1067"></a> */
+<a name="line1068"></a>goog.editor.plugins.BasicTextFormatter.
+<a name="line1069"></a>    prototype.applySubscriptSuperscriptWorkarounds_ = function(command) {
+<a name="line1070"></a>  if (!this.queryCommandValue(command)) {
+<a name="line1071"></a>    // The current selection doesn&#39;t currently have the requested
+<a name="line1072"></a>    // command, so we are applying it as opposed to removing it.
+<a name="line1073"></a>    // (Note that queryCommandValue() will only return true if the
+<a name="line1074"></a>    // command is applied to the whole selection, not just part of it.
+<a name="line1075"></a>    // In this case it is fine because only if the whole selection has
+<a name="line1076"></a>    // the command applied will we be removing it and thus skipping the
+<a name="line1077"></a>    // removal of the opposite command.)
+<a name="line1078"></a>    var oppositeCommand =
+<a name="line1079"></a>        (command == goog.editor.plugins.BasicTextFormatter.COMMAND.SUBSCRIPT ?
+<a name="line1080"></a>            goog.editor.plugins.BasicTextFormatter.COMMAND.SUPERSCRIPT :
+<a name="line1081"></a>            goog.editor.plugins.BasicTextFormatter.COMMAND.SUBSCRIPT);
+<a name="line1082"></a>    var oppositeExecCommand = goog.editor.plugins.BasicTextFormatter.
+<a name="line1083"></a>        convertToRealExecCommand_(oppositeCommand);
+<a name="line1084"></a>    // Executing the opposite command on a selection that already has it
+<a name="line1085"></a>    // applied will cancel it out. But if the selection only has the
+<a name="line1086"></a>    // opposite command applied to a part of it, the browser will
+<a name="line1087"></a>    // normalize the selection to have the opposite command applied on
+<a name="line1088"></a>    // the whole of it.
+<a name="line1089"></a>    if (!this.queryCommandValue(oppositeCommand)) {
+<a name="line1090"></a>      // The selection doesn&#39;t have the opposite command applied to the
+<a name="line1091"></a>      // whole of it, so let&#39;s exec the opposite command to normalize
+<a name="line1092"></a>      // the selection.
+<a name="line1093"></a>      // Note: since we know both subscript and superscript commands
+<a name="line1094"></a>      // will boil down to a simple call to the browser&#39;s execCommand(),
+<a name="line1095"></a>      // for performance reasons we can do that directly instead of
+<a name="line1096"></a>      // calling execCommandHelper_(). However this is a potential for
+<a name="line1097"></a>      // bugs if the implementation of execCommandHelper_() is changed
+<a name="line1098"></a>      // to do something more int eh case of subscript and superscript.
+<a name="line1099"></a>      this.getDocument_().execCommand(oppositeExecCommand, false, null);
+<a name="line1100"></a>    }
+<a name="line1101"></a>    // Now that we know the whole selection has the opposite command
+<a name="line1102"></a>    // applied, we exec it a second time to properly remove it.
+<a name="line1103"></a>    this.getDocument_().execCommand(oppositeExecCommand, false, null);
+<a name="line1104"></a>  }
+<a name="line1105"></a>};
+<a name="line1106"></a>
+<a name="line1107"></a>
+<a name="line1108"></a>/**
+<a name="line1109"></a> * Removes inline font-size styles from elements fully contained in the
+<a name="line1110"></a> * selection, so the font tags produced by execCommand work properly.
+<a name="line1111"></a> * See {@bug 1286408}.
+<a name="line1112"></a> * @private
+<a name="line1113"></a> */
+<a name="line1114"></a>goog.editor.plugins.BasicTextFormatter.prototype.removeFontSizeFromStyleAttrs_ =
+<a name="line1115"></a>    function() {
+<a name="line1116"></a>  // Expand the range so that we consider surrounding tags. E.g. if only the
+<a name="line1117"></a>  // text node inside a span is selected, the browser could wrap a font tag
+<a name="line1118"></a>  // around the span and leave the selection such that only the text node is
+<a name="line1119"></a>  // found when looking inside the range, not the span.
+<a name="line1120"></a>  var range = goog.editor.range.expand(this.getFieldObject().getRange(),
+<a name="line1121"></a>                                       this.getFieldObject().getElement());
+<a name="line1122"></a>  goog.iter.forEach(goog.iter.filter(range, function(tag, dummy, iter) {
+<a name="line1123"></a>    return iter.isStartTag() &amp;&amp; range.containsNode(tag);
+<a name="line1124"></a>  }), function(node) {
+<a name="line1125"></a>    goog.style.setStyle(node, &#39;font-size&#39;, &#39;&#39;);
+<a name="line1126"></a>    // Gecko doesn&#39;t remove empty style tags.
+<a name="line1127"></a>    if (goog.userAgent.GECKO &amp;&amp;
+<a name="line1128"></a>        node.style.length == 0 &amp;&amp; node.getAttribute(&#39;style&#39;) != null) {
+<a name="line1129"></a>      node.removeAttribute(&#39;style&#39;);
+<a name="line1130"></a>    }
+<a name="line1131"></a>  });
+<a name="line1132"></a>};
+<a name="line1133"></a>
+<a name="line1134"></a>
+<a name="line1135"></a>/**
+<a name="line1136"></a> * Apply pre-execCommand fixes for IE.
+<a name="line1137"></a> * @param {string} command The command to execute.
+<a name="line1138"></a> * @return {!Array.&lt;Node&gt;} Array of nodes to be removed after the execCommand.
+<a name="line1139"></a> *     Will never be longer than 2 elements.
+<a name="line1140"></a> * @private
+<a name="line1141"></a> */
+<a name="line1142"></a>goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandIEFixes_ =
+<a name="line1143"></a>    function(command) {
+<a name="line1144"></a>  // IE has a crazy bug where executing list commands
+<a name="line1145"></a>  // around blockquotes cause the blockquotes to get transformed
+<a name="line1146"></a>  // into &quot;&lt;OL&gt;&lt;OL&gt;&quot; or &quot;&lt;UL&gt;&lt;UL&gt;&quot; tags.
+<a name="line1147"></a>  var toRemove = [];
+<a name="line1148"></a>  var endDiv = null;
+<a name="line1149"></a>  var range = this.getRange_();
+<a name="line1150"></a>  var dh = this.getFieldDomHelper();
+<a name="line1151"></a>  if (command in
+<a name="line1152"></a>      goog.editor.plugins.BasicTextFormatter.blockquoteHatingCommandsIE_) {
+<a name="line1153"></a>    var parent = range &amp;&amp; range.getContainerElement();
+<a name="line1154"></a>    if (parent) {
+<a name="line1155"></a>      var blockquotes = goog.dom.getElementsByTagNameAndClass(
+<a name="line1156"></a>          goog.dom.TagName.BLOCKQUOTE, null, parent);
+<a name="line1157"></a>
+<a name="line1158"></a>      // If a blockquote contains the selection, the fix is easy:
+<a name="line1159"></a>      // add a dummy div to the blockquote that isn&#39;t in the current selection.
+<a name="line1160"></a>      //
+<a name="line1161"></a>      // if the selection contains a blockquote,
+<a name="line1162"></a>      // there appears to be no easy way to protect it from getting mangled.
+<a name="line1163"></a>      // For now, we&#39;re just going to punt on this and try to
+<a name="line1164"></a>      // adjust the selection so that IE does something reasonable.
+<a name="line1165"></a>      //
+<a name="line1166"></a>      // TODO(nicksantos): Find a better fix for this.
+<a name="line1167"></a>      var bq;
+<a name="line1168"></a>      for (var i = 0; i &lt; blockquotes.length; i++) {
+<a name="line1169"></a>        if (range.containsNode(blockquotes[i])) {
+<a name="line1170"></a>          bq = blockquotes[i];
+<a name="line1171"></a>          break;
+<a name="line1172"></a>        }
+<a name="line1173"></a>      }
+<a name="line1174"></a>
+<a name="line1175"></a>      var bqThatNeedsDummyDiv =
+<a name="line1176"></a>          bq || goog.dom.getAncestorByTagNameAndClass(parent, &#39;BLOCKQUOTE&#39;);
+<a name="line1177"></a>      if (bqThatNeedsDummyDiv) {
+<a name="line1178"></a>        endDiv = dh.createDom(&#39;div&#39;, {style: &#39;height:0&#39;});
+<a name="line1179"></a>        goog.dom.appendChild(bqThatNeedsDummyDiv, endDiv);
+<a name="line1180"></a>        toRemove.push(endDiv);
+<a name="line1181"></a>
+<a name="line1182"></a>        if (bq) {
+<a name="line1183"></a>          range = goog.dom.Range.createFromNodes(bq, 0, endDiv, 0);
+<a name="line1184"></a>        } else if (range.containsNode(endDiv)) {
+<a name="line1185"></a>          // the selection might be the entire blockquote, and
+<a name="line1186"></a>          // it&#39;s important that endDiv not be in the selection.
+<a name="line1187"></a>          range = goog.dom.Range.createFromNodes(
+<a name="line1188"></a>              range.getStartNode(), range.getStartOffset(),
+<a name="line1189"></a>              endDiv, 0);
+<a name="line1190"></a>        }
+<a name="line1191"></a>        range.select();
+<a name="line1192"></a>      }
+<a name="line1193"></a>    }
+<a name="line1194"></a>  }
+<a name="line1195"></a>
+<a name="line1196"></a>  // IE has a crazy bug where certain block execCommands cause it to mess with
+<a name="line1197"></a>  // the DOM nodes above the contentEditable element if the selection contains
+<a name="line1198"></a>  // or partially contains the last block element in the contentEditable
+<a name="line1199"></a>  // element.
+<a name="line1200"></a>  // Known commands: Indent, outdent, insertorderedlist, insertunorderedlist,
+<a name="line1201"></a>  // Justify (all of them)
+<a name="line1202"></a>
+<a name="line1203"></a>  // Both of the above are &quot;solved&quot; by appending a dummy div to the field
+<a name="line1204"></a>  // before the execCommand and removing it after, but we don&#39;t need to do this
+<a name="line1205"></a>  // if we&#39;ve alread added a dummy div somewhere else.
+<a name="line1206"></a>  var fieldObject = this.getFieldObject();
+<a name="line1207"></a>  if (!fieldObject.usesIframe() &amp;&amp; !endDiv) {
+<a name="line1208"></a>    if (command in
+<a name="line1209"></a>        goog.editor.plugins.BasicTextFormatter.brokenExecCommandsIE_) {
+<a name="line1210"></a>      var field = fieldObject.getElement();
+<a name="line1211"></a>
+<a name="line1212"></a>      // If the field is totally empty, or if the field contains only text nodes
+<a name="line1213"></a>      // and the cursor is at the end of the field, then IE stills walks outside
+<a name="line1214"></a>      // the contentEditable region and destroys things AND justify will not
+<a name="line1215"></a>      // work. This is &quot;solved&quot; by adding a text node into the end of the
+<a name="line1216"></a>      // field and moving the cursor before it.
+<a name="line1217"></a>      if (range &amp;&amp; range.isCollapsed() &amp;&amp;
+<a name="line1218"></a>          !goog.dom.getFirstElementChild(field)) {
+<a name="line1219"></a>        // The problem only occurs if the selection is at the end of the field.
+<a name="line1220"></a>        var selection = range.getTextRange(0).getBrowserRangeObject();
+<a name="line1221"></a>        var testRange = selection.duplicate();
+<a name="line1222"></a>        testRange.moveToElementText(field);
+<a name="line1223"></a>        testRange.collapse(false);
+<a name="line1224"></a>
+<a name="line1225"></a>        if (testRange.isEqual(selection)) {
+<a name="line1226"></a>          // For reasons I really don&#39;t understand, if you use a breaking space
+<a name="line1227"></a>          // here, either &quot; &quot; or String.fromCharCode(32), this textNode becomes
+<a name="line1228"></a>          // corrupted, only after you hit ENTER to split it.  It exists in the
+<a name="line1229"></a>          // dom in that its parent has it as childNode and the parent&#39;s
+<a name="line1230"></a>          // innerText is correct, but the node itself throws invalid argument
+<a name="line1231"></a>          // errors when you try to access its data, parentNode, nextSibling,
+<a name="line1232"></a>          // previousSibling or most other properties.  WTF.
+<a name="line1233"></a>          var nbsp = dh.createTextNode(goog.string.Unicode.NBSP);
+<a name="line1234"></a>          field.appendChild(nbsp);
+<a name="line1235"></a>          selection.move(&#39;character&#39;, 1);
+<a name="line1236"></a>          selection.move(&#39;character&#39;, -1);
+<a name="line1237"></a>          selection.select();
+<a name="line1238"></a>          toRemove.push(nbsp);
+<a name="line1239"></a>        }
+<a name="line1240"></a>      }
+<a name="line1241"></a>
+<a name="line1242"></a>      endDiv = dh.createDom(&#39;div&#39;, {style: &#39;height:0&#39;});
+<a name="line1243"></a>      goog.dom.appendChild(field, endDiv);
+<a name="line1244"></a>      toRemove.push(endDiv);
+<a name="line1245"></a>    }
+<a name="line1246"></a>  }
+<a name="line1247"></a>
+<a name="line1248"></a>  return toRemove;
+<a name="line1249"></a>};
+<a name="line1250"></a>
+<a name="line1251"></a>
+<a name="line1252"></a>/**
+<a name="line1253"></a> * Fix a ridiculous Safari bug: the first letters of new headings
+<a name="line1254"></a> * somehow retain their original font size and weight if multiple lines are
+<a name="line1255"></a> * selected during the execCommand that turns them into headings.
+<a name="line1256"></a> * The solution is to strip these styles which are normally stripped when
+<a name="line1257"></a> * making things headings anyway.
+<a name="line1258"></a> * @private
+<a name="line1259"></a> */
+<a name="line1260"></a>goog.editor.plugins.BasicTextFormatter.prototype.cleanUpSafariHeadings_ =
+<a name="line1261"></a>    function() {
+<a name="line1262"></a>  goog.iter.forEach(this.getRange_(), function(node) {
+<a name="line1263"></a>    if (node.className == &#39;Apple-style-span&#39;) {
+<a name="line1264"></a>      // These shouldn&#39;t persist after creating headings via
+<a name="line1265"></a>      // a FormatBlock execCommand.
+<a name="line1266"></a>      node.style.fontSize = &#39;&#39;;
+<a name="line1267"></a>      node.style.fontWeight = &#39;&#39;;
+<a name="line1268"></a>    }
+<a name="line1269"></a>  });
+<a name="line1270"></a>};
+<a name="line1271"></a>
+<a name="line1272"></a>
+<a name="line1273"></a>/**
+<a name="line1274"></a> * Prevent Safari from making each list item be &quot;1&quot; when converting from
+<a name="line1275"></a> * unordered to ordered lists.
+<a name="line1276"></a> * (see https://bugs.webkit.org/show_bug.cgi?id=19539, fixed by 2010-04-21)
+<a name="line1277"></a> * @private
+<a name="line1278"></a> */
+<a name="line1279"></a>goog.editor.plugins.BasicTextFormatter.prototype.fixSafariLists_ = function() {
+<a name="line1280"></a>  var previousList = false;
+<a name="line1281"></a>  goog.iter.forEach(this.getRange_(), function(node) {
+<a name="line1282"></a>    var tagName = node.tagName;
+<a name="line1283"></a>    if (tagName == goog.dom.TagName.UL || tagName == goog.dom.TagName.OL) {
+<a name="line1284"></a>      // Don&#39;t disturb lists outside of the selection. If this is the first &lt;ul&gt;
+<a name="line1285"></a>      // or &lt;ol&gt; in the range, we don&#39;t really want to merge the previous list
+<a name="line1286"></a>      // into it, since that list isn&#39;t in the range.
+<a name="line1287"></a>      if (!previousList) {
+<a name="line1288"></a>        previousList = true;
+<a name="line1289"></a>        return;
+<a name="line1290"></a>      }
+<a name="line1291"></a>      // The lists must be siblings to be merged; otherwise, indented sublists
+<a name="line1292"></a>      // could be broken.
+<a name="line1293"></a>      var previousElementSibling = goog.dom.getPreviousElementSibling(node);
+<a name="line1294"></a>      if (!previousElementSibling) {
+<a name="line1295"></a>        return;
+<a name="line1296"></a>      }
+<a name="line1297"></a>      // Make sure there isn&#39;t text between the two lists before they are merged
+<a name="line1298"></a>      var range = node.ownerDocument.createRange();
+<a name="line1299"></a>      range.setStartAfter(previousElementSibling);
+<a name="line1300"></a>      range.setEndBefore(node);
+<a name="line1301"></a>      if (!goog.string.isEmpty(range.toString())) {
+<a name="line1302"></a>        return;
+<a name="line1303"></a>      }
+<a name="line1304"></a>      // Make sure both are lists of the same type (ordered or unordered)
+<a name="line1305"></a>      if (previousElementSibling.nodeName == node.nodeName) {
+<a name="line1306"></a>        // We must merge the previous list into this one. Moving around
+<a name="line1307"></a>        // the current node will break the iterator, so we can&#39;t merge
+<a name="line1308"></a>        // this list into the previous one.
+<a name="line1309"></a>        while (previousElementSibling.lastChild) {
+<a name="line1310"></a>          node.insertBefore(previousElementSibling.lastChild, node.firstChild);
+<a name="line1311"></a>        }
+<a name="line1312"></a>        previousElementSibling.parentNode.removeChild(previousElementSibling);
+<a name="line1313"></a>      }
+<a name="line1314"></a>    }
+<a name="line1315"></a>  });
+<a name="line1316"></a>};
+<a name="line1317"></a>
+<a name="line1318"></a>
+<a name="line1319"></a>/**
+<a name="line1320"></a> * Sane &quot;type&quot; attribute values for OL elements
+<a name="line1321"></a> * @private
+<a name="line1322"></a> */
+<a name="line1323"></a>goog.editor.plugins.BasicTextFormatter.orderedListTypes_ = {
+<a name="line1324"></a>  &#39;1&#39; : 1,
+<a name="line1325"></a>  &#39;a&#39; : 1,
+<a name="line1326"></a>  &#39;A&#39; : 1,
+<a name="line1327"></a>  &#39;i&#39; : 1,
+<a name="line1328"></a>  &#39;I&#39; : 1
+<a name="line1329"></a>};
+<a name="line1330"></a>
+<a name="line1331"></a>
+<a name="line1332"></a>/**
+<a name="line1333"></a> * Sane &quot;type&quot; attribute values for UL elements
+<a name="line1334"></a> * @private
+<a name="line1335"></a> */
+<a name="line1336"></a>goog.editor.plugins.BasicTextFormatter.unorderedListTypes_ = {
+<a name="line1337"></a>  &#39;disc&#39; : 1,
+<a name="line1338"></a>  &#39;circle&#39; : 1,
+<a name="line1339"></a>  &#39;square&#39; : 1
+<a name="line1340"></a>};
+<a name="line1341"></a>
+<a name="line1342"></a>
+<a name="line1343"></a>/**
+<a name="line1344"></a> * Changing an OL to a UL (or the other way around) will fail if the list
+<a name="line1345"></a> * has a type attribute (such as &quot;UL type=disc&quot; becoming &quot;OL type=disc&quot;, which
+<a name="line1346"></a> * is visually identical). Most browsers will remove the type attribute
+<a name="line1347"></a> * automatically, but IE doesn&#39;t. This does it manually.
+<a name="line1348"></a> * @private
+<a name="line1349"></a> */
+<a name="line1350"></a>goog.editor.plugins.BasicTextFormatter.prototype.fixIELists_ = function() {
+<a name="line1351"></a>  // Find the lowest-level &lt;ul&gt; or &lt;ol&gt; that contains the entire range.
+<a name="line1352"></a>  var range = this.getRange_();
+<a name="line1353"></a>  var container = range &amp;&amp; range.getContainer();
+<a name="line1354"></a>  while (container &amp;&amp;
+<a name="line1355"></a>         container.tagName != goog.dom.TagName.UL &amp;&amp;
+<a name="line1356"></a>         container.tagName != goog.dom.TagName.OL) {
+<a name="line1357"></a>    container = container.parentNode;
+<a name="line1358"></a>  }
+<a name="line1359"></a>  if (container) {
+<a name="line1360"></a>    // We want the parent node of the list so that we can grab it using
+<a name="line1361"></a>    // getElementsByTagName
+<a name="line1362"></a>    container = container.parentNode;
+<a name="line1363"></a>  }
+<a name="line1364"></a>  if (!container) return;
+<a name="line1365"></a>  var lists = goog.array.toArray(
+<a name="line1366"></a>      container.getElementsByTagName(goog.dom.TagName.UL));
+<a name="line1367"></a>  goog.array.extend(lists, goog.array.toArray(
+<a name="line1368"></a>      container.getElementsByTagName(goog.dom.TagName.OL)));
+<a name="line1369"></a>  // Fix the lists
+<a name="line1370"></a>  goog.array.forEach(lists, function(node) {
+<a name="line1371"></a>    var type = node.type;
+<a name="line1372"></a>    if (type) {
+<a name="line1373"></a>      var saneTypes =
+<a name="line1374"></a>          (node.tagName == goog.dom.TagName.UL ?
+<a name="line1375"></a>              goog.editor.plugins.BasicTextFormatter.unorderedListTypes_ :
+<a name="line1376"></a>              goog.editor.plugins.BasicTextFormatter.orderedListTypes_);
+<a name="line1377"></a>      if (!saneTypes[type]) {
+<a name="line1378"></a>        node.type = &#39;&#39;;
+<a name="line1379"></a>      }
+<a name="line1380"></a>    }
+<a name="line1381"></a>  });
+<a name="line1382"></a>};
+<a name="line1383"></a>
+<a name="line1384"></a>
+<a name="line1385"></a>/**
+<a name="line1386"></a> * In WebKit, the following commands will modify the node with
+<a name="line1387"></a> * contentEditable=true if there are no block-level elements.
+<a name="line1388"></a> * @private
+<a name="line1389"></a> */
+<a name="line1390"></a>goog.editor.plugins.BasicTextFormatter.brokenExecCommandsSafari_ = {
+<a name="line1391"></a>  &#39;justifyCenter&#39; : 1,
+<a name="line1392"></a>  &#39;justifyFull&#39; : 1,
+<a name="line1393"></a>  &#39;justifyRight&#39;: 1,
+<a name="line1394"></a>  &#39;justifyLeft&#39;: 1,
+<a name="line1395"></a>  &#39;formatBlock&#39; : 1
+<a name="line1396"></a>};
+<a name="line1397"></a>
+<a name="line1398"></a>
+<a name="line1399"></a>/**
+<a name="line1400"></a> * In WebKit, the following commands can hang the browser if the selection
+<a name="line1401"></a> * touches the beginning of the field.
+<a name="line1402"></a> * https://bugs.webkit.org/show_bug.cgi?id=19735
+<a name="line1403"></a> * @private
+<a name="line1404"></a> */
+<a name="line1405"></a>goog.editor.plugins.BasicTextFormatter.hangingExecCommandWebkit_ = {
+<a name="line1406"></a>  &#39;insertOrderedList&#39;: 1,
+<a name="line1407"></a>  &#39;insertUnorderedList&#39;: 1
+<a name="line1408"></a>};
+<a name="line1409"></a>
+<a name="line1410"></a>
+<a name="line1411"></a>/**
+<a name="line1412"></a> * Apply pre-execCommand fixes for Safari.
+<a name="line1413"></a> * @param {string} command The command to execute.
+<a name="line1414"></a> * @return {!Element|undefined} The div added to the field.
+<a name="line1415"></a> * @private
+<a name="line1416"></a> */
+<a name="line1417"></a>goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandSafariFixes_ =
+<a name="line1418"></a>    function(command) {
+<a name="line1419"></a>  // See the comment on brokenExecCommandsSafari_
+<a name="line1420"></a>  var div;
+<a name="line1421"></a>  if (goog.editor.plugins.BasicTextFormatter.
+<a name="line1422"></a>      brokenExecCommandsSafari_[command]) {
+<a name="line1423"></a>    // Add a new div at the end of the field.
+<a name="line1424"></a>    // Safari knows that it would be wrong to apply text-align to the
+<a name="line1425"></a>    // contentEditable element if there are non-empty block nodes in the field,
+<a name="line1426"></a>    // because then it would align them too. So in this case, it will
+<a name="line1427"></a>    // enclose the current selection in a block node.
+<a name="line1428"></a>    div = this.getFieldDomHelper().createDom(
+<a name="line1429"></a>        &#39;div&#39;, {&#39;style&#39;: &#39;height: 0&#39;}, &#39;x&#39;);
+<a name="line1430"></a>    goog.dom.appendChild(this.getFieldObject().getElement(), div);
+<a name="line1431"></a>  }
+<a name="line1432"></a>
+<a name="line1433"></a>  if (!goog.userAgent.isVersionOrHigher(534) &amp;&amp;
+<a name="line1434"></a>      goog.editor.plugins.BasicTextFormatter.
+<a name="line1435"></a>          hangingExecCommandWebkit_[command]) {
+<a name="line1436"></a>    // Add a new div at the beginning of the field.
+<a name="line1437"></a>    var field = this.getFieldObject().getElement();
+<a name="line1438"></a>    div = this.getFieldDomHelper().createDom(
+<a name="line1439"></a>        &#39;div&#39;, {&#39;style&#39;: &#39;height: 0&#39;}, &#39;x&#39;);
+<a name="line1440"></a>    field.insertBefore(div, field.firstChild);
+<a name="line1441"></a>  }
+<a name="line1442"></a>
+<a name="line1443"></a>  return div;
+<a name="line1444"></a>};
+<a name="line1445"></a>
+<a name="line1446"></a>
+<a name="line1447"></a>/**
+<a name="line1448"></a> * Apply pre-execCommand fixes for Gecko.
+<a name="line1449"></a> * @param {string} command The command to execute.
+<a name="line1450"></a> * @private
+<a name="line1451"></a> */
+<a name="line1452"></a>goog.editor.plugins.BasicTextFormatter.prototype.applyExecCommandGeckoFixes_ =
+<a name="line1453"></a>    function(command) {
+<a name="line1454"></a>  if (goog.userAgent.isVersionOrHigher(&#39;1.9&#39;) &amp;&amp;
+<a name="line1455"></a>      command.toLowerCase() == &#39;formatblock&#39;) {
+<a name="line1456"></a>    // Firefox 3 and above throw a JS error for formatblock if the range is
+<a name="line1457"></a>    // a child of the body node. Changing the selection to the BR fixes the
+<a name="line1458"></a>    // problem.
+<a name="line1459"></a>    // See https://bugzilla.mozilla.org/show_bug.cgi?id=481696
+<a name="line1460"></a>    var range = this.getRange_();
+<a name="line1461"></a>    var startNode = range.getStartNode();
+<a name="line1462"></a>    if (range.isCollapsed() &amp;&amp; startNode &amp;&amp;
+<a name="line1463"></a>        startNode.tagName == goog.dom.TagName.BODY) {
+<a name="line1464"></a>      var startOffset = range.getStartOffset();
+<a name="line1465"></a>      var childNode = startNode.childNodes[startOffset];
+<a name="line1466"></a>      if (childNode &amp;&amp; childNode.tagName == goog.dom.TagName.BR) {
+<a name="line1467"></a>        // Change the range using getBrowserRange() because goog.dom.TextRange
+<a name="line1468"></a>        // will avoid setting &lt;br&gt;s directly.
+<a name="line1469"></a>        // @see goog.dom.TextRange#createFromNodes
+<a name="line1470"></a>        var browserRange = range.getBrowserRangeObject();
+<a name="line1471"></a>        browserRange.setStart(childNode, 0);
+<a name="line1472"></a>        browserRange.setEnd(childNode, 0);
+<a name="line1473"></a>      }
+<a name="line1474"></a>    }
+<a name="line1475"></a>  }
+<a name="line1476"></a>};
+<a name="line1477"></a>
+<a name="line1478"></a>
+<a name="line1479"></a>/**
+<a name="line1480"></a> * Workaround for Opera bug CORE-23903. Opera sometimes fails to invalidate
+<a name="line1481"></a> * serialized CSS or innerHTML for the DOM after certain execCommands when
+<a name="line1482"></a> * styleWithCSS is on. Toggling an inline style on the elements fixes it.
+<a name="line1483"></a> * @private
+<a name="line1484"></a> */
+<a name="line1485"></a>goog.editor.plugins.BasicTextFormatter.prototype.invalidateInlineCss_ =
+<a name="line1486"></a>    function() {
+<a name="line1487"></a>  var ancestors = [];
+<a name="line1488"></a>  var ancestor = this.getFieldObject().getRange().getContainerElement();
+<a name="line1489"></a>  do {
+<a name="line1490"></a>    ancestors.push(ancestor);
+<a name="line1491"></a>  } while (ancestor = ancestor.parentNode);
+<a name="line1492"></a>  var nodesInSelection = goog.iter.chain(
+<a name="line1493"></a>      goog.iter.toIterator(this.getFieldObject().getRange()),
+<a name="line1494"></a>      goog.iter.toIterator(ancestors));
+<a name="line1495"></a>  var containersInSelection =
+<a name="line1496"></a>      goog.iter.filter(nodesInSelection, goog.editor.style.isContainer);
+<a name="line1497"></a>  goog.iter.forEach(containersInSelection, function(element) {
+<a name="line1498"></a>    var oldOutline = element.style.outline;
+<a name="line1499"></a>    element.style.outline = &#39;0px solid red&#39;;
+<a name="line1500"></a>    element.style.outline = oldOutline;
+<a name="line1501"></a>  });
+<a name="line1502"></a>};
+<a name="line1503"></a>
+<a name="line1504"></a>
+<a name="line1505"></a>/**
+<a name="line1506"></a> * Work around a Gecko bug that causes inserted lists to forget the current
+<a name="line1507"></a> * font. This affects WebKit in the same way and Opera in a slightly different
+<a name="line1508"></a> * way, but this workaround only works in Gecko.
+<a name="line1509"></a> * WebKit bug: https://bugs.webkit.org/show_bug.cgi?id=19653
+<a name="line1510"></a> * Mozilla bug: https://bugzilla.mozilla.org/show_bug.cgi?id=439966
+<a name="line1511"></a> * Opera bug: https://bugs.opera.com/show_bug.cgi?id=340392
+<a name="line1512"></a> * TODO: work around this issue in WebKit and Opera as well.
+<a name="line1513"></a> * @return {boolean} Whether the workaround was applied.
+<a name="line1514"></a> * @private
+<a name="line1515"></a> */
+<a name="line1516"></a>goog.editor.plugins.BasicTextFormatter.prototype.beforeInsertListGecko_ =
+<a name="line1517"></a>    function() {
+<a name="line1518"></a>  var tag = this.getFieldObject().queryCommandValue(
+<a name="line1519"></a>      goog.editor.Command.DEFAULT_TAG);
+<a name="line1520"></a>  if (tag == goog.dom.TagName.P || tag == goog.dom.TagName.DIV) {
+<a name="line1521"></a>    return false;
+<a name="line1522"></a>  }
+<a name="line1523"></a>
+<a name="line1524"></a>  // Prevent Firefox from forgetting current formatting
+<a name="line1525"></a>  // when creating a list.
+<a name="line1526"></a>  // The bug happens with a collapsed selection, but it won&#39;t
+<a name="line1527"></a>  // happen when text with the desired formatting is selected.
+<a name="line1528"></a>  // So, we insert some dummy text, insert the list,
+<a name="line1529"></a>  // then remove the dummy text (while preserving its formatting).
+<a name="line1530"></a>  // (This formatting bug also affects WebKit, but this fix
+<a name="line1531"></a>  // only seems to work in Firefox)
+<a name="line1532"></a>  var range = this.getRange_();
+<a name="line1533"></a>  if (range.isCollapsed() &amp;&amp;
+<a name="line1534"></a>      (range.getContainer().nodeType != goog.dom.NodeType.TEXT)) {
+<a name="line1535"></a>    var tempTextNode = this.getFieldDomHelper().
+<a name="line1536"></a>        createTextNode(goog.string.Unicode.NBSP);
+<a name="line1537"></a>    range.insertNode(tempTextNode, false);
+<a name="line1538"></a>    goog.dom.Range.createFromNodeContents(tempTextNode).select();
+<a name="line1539"></a>    return true;
+<a name="line1540"></a>  }
+<a name="line1541"></a>  return false;
+<a name="line1542"></a>};
+<a name="line1543"></a>
+<a name="line1544"></a>
+<a name="line1545"></a>// Helpers for queryCommandState
+<a name="line1546"></a>
+<a name="line1547"></a>
+<a name="line1548"></a>/**
+<a name="line1549"></a> * Get the toolbar state for the block-level elements in the given range.
+<a name="line1550"></a> * @param {goog.dom.AbstractRange} range The range to get toolbar state for.
+<a name="line1551"></a> * @return {string?} The selection block state.
+<a name="line1552"></a> * @private
+<a name="line1553"></a> */
+<a name="line1554"></a>goog.editor.plugins.BasicTextFormatter.getSelectionBlockState_ =
+<a name="line1555"></a>    function(range) {
+<a name="line1556"></a>  var tagName = null;
+<a name="line1557"></a>  goog.iter.forEach(range, function(node, ignore, it) {
+<a name="line1558"></a>    if (!it.isEndTag()) {
+<a name="line1559"></a>      // Iterate over all containers in the range, checking if they all have the
+<a name="line1560"></a>      // same tagName.
+<a name="line1561"></a>      var container = goog.editor.style.getContainer(node);
+<a name="line1562"></a>      var thisTagName = container.tagName;
+<a name="line1563"></a>      tagName = tagName || thisTagName;
+<a name="line1564"></a>
+<a name="line1565"></a>      if (tagName != thisTagName) {
+<a name="line1566"></a>        // If we find a container tag that doesn&#39;t match, exit right away.
+<a name="line1567"></a>        tagName = null;
+<a name="line1568"></a>        throw goog.iter.StopIteration;
+<a name="line1569"></a>      }
+<a name="line1570"></a>
+<a name="line1571"></a>      // Skip the tag.
+<a name="line1572"></a>      it.skipTag();
+<a name="line1573"></a>    }
+<a name="line1574"></a>  });
+<a name="line1575"></a>
+<a name="line1576"></a>  return tagName;
+<a name="line1577"></a>};
+<a name="line1578"></a>
+<a name="line1579"></a>
+<a name="line1580"></a>/**
+<a name="line1581"></a> * Hash of suppoted justifications.
+<a name="line1582"></a> * @type {Object}
+<a name="line1583"></a> * @private
+<a name="line1584"></a> */
+<a name="line1585"></a>goog.editor.plugins.BasicTextFormatter.SUPPORTED_JUSTIFICATIONS_ = {
+<a name="line1586"></a>  &#39;center&#39;: 1,
+<a name="line1587"></a>  &#39;justify&#39;: 1,
+<a name="line1588"></a>  &#39;right&#39;: 1,
+<a name="line1589"></a>  &#39;left&#39;: 1
+<a name="line1590"></a>};
+<a name="line1591"></a>
+<a name="line1592"></a>
+<a name="line1593"></a>/**
+<a name="line1594"></a> * Returns true if the current justification matches the justification
+<a name="line1595"></a> * command for the entire selection.
+<a name="line1596"></a> * @param {string} command The justification command to check for.
+<a name="line1597"></a> * @return {boolean} Whether the current justification matches the justification
+<a name="line1598"></a> *     command for the entire selection.
+<a name="line1599"></a> * @private
+<a name="line1600"></a> */
+<a name="line1601"></a>goog.editor.plugins.BasicTextFormatter.prototype.isJustification_ =
+<a name="line1602"></a>    function(command) {
+<a name="line1603"></a>  var alignment = command.replace(&#39;+justify&#39;, &#39;&#39;).toLowerCase();
+<a name="line1604"></a>  if (alignment == &#39;full&#39;) {
+<a name="line1605"></a>    alignment = &#39;justify&#39;;
+<a name="line1606"></a>  }
+<a name="line1607"></a>  var bidiPlugin = this.getFieldObject().getPluginByClassId(&#39;Bidi&#39;);
+<a name="line1608"></a>  if (bidiPlugin) {
+<a name="line1609"></a>    // BiDi aware version
+<a name="line1610"></a>
+<a name="line1611"></a>    // TODO: Since getComputedStyle is not used here, this version may be even
+<a name="line1612"></a>    // faster. If profiling confirms that it would be good to use this approach
+<a name="line1613"></a>    // in both cases. Otherwise the bidi part should be moved into an
+<a name="line1614"></a>    // execCommand so this bidi plugin dependence isn&#39;t needed here.
+<a name="line1615"></a>    /** @type {Function} */
+<a name="line1616"></a>    bidiPlugin.getSelectionAlignment;
+<a name="line1617"></a>    return alignment == bidiPlugin.getSelectionAlignment();
+<a name="line1618"></a>  } else {
+<a name="line1619"></a>    // BiDi unaware version
+<a name="line1620"></a>    var range = this.getRange_();
+<a name="line1621"></a>    if (!range) {
+<a name="line1622"></a>      // When nothing is in the selection then no justification
+<a name="line1623"></a>      // command matches.
+<a name="line1624"></a>      return false;
+<a name="line1625"></a>    }
+<a name="line1626"></a>
+<a name="line1627"></a>    var parent = range.getContainerElement();
+<a name="line1628"></a>    var nodes =
+<a name="line1629"></a>        goog.array.filter(
+<a name="line1630"></a>            parent.childNodes,
+<a name="line1631"></a>            function(node) {
+<a name="line1632"></a>              return goog.editor.node.isImportant(node) &amp;&amp;
+<a name="line1633"></a>                  range.containsNode(node, true);
+<a name="line1634"></a>            });
+<a name="line1635"></a>    nodes = nodes.length ? nodes : [parent];
+<a name="line1636"></a>
+<a name="line1637"></a>    for (var i = 0; i &lt; nodes.length; i++) {
+<a name="line1638"></a>      var current = nodes[i];
+<a name="line1639"></a>
+<a name="line1640"></a>      // If any node in the selection is not aligned the way we are checking,
+<a name="line1641"></a>      // then the justification command does not match.
+<a name="line1642"></a>      var container = goog.editor.style.getContainer(
+<a name="line1643"></a>          /** @type {Node} */ (current));
+<a name="line1644"></a>      if (alignment !=
+<a name="line1645"></a>          goog.editor.plugins.BasicTextFormatter.getNodeJustification_(
+<a name="line1646"></a>              container)) {
+<a name="line1647"></a>        return false;
+<a name="line1648"></a>      }
+<a name="line1649"></a>    }
+<a name="line1650"></a>
+<a name="line1651"></a>    // If all nodes in the selection are aligned the way we are checking,
+<a name="line1652"></a>    // the justification command does match.
+<a name="line1653"></a>    return true;
+<a name="line1654"></a>  }
+<a name="line1655"></a>};
+<a name="line1656"></a>
+<a name="line1657"></a>
+<a name="line1658"></a>/**
+<a name="line1659"></a> * Determines the justification for a given block-level element.
+<a name="line1660"></a> * @param {Element} element The node to get justification for.
+<a name="line1661"></a> * @return {string} The justification for a given block-level node.
+<a name="line1662"></a> * @private
+<a name="line1663"></a> */
+<a name="line1664"></a>goog.editor.plugins.BasicTextFormatter.getNodeJustification_ =
+<a name="line1665"></a>    function(element) {
+<a name="line1666"></a>  var value = goog.style.getComputedTextAlign(element);
+<a name="line1667"></a>  // Strip preceding -moz- or -webkit- (@bug 2472589).
+<a name="line1668"></a>  value = value.replace(/^-(moz|webkit)-/, &#39;&#39;);
+<a name="line1669"></a>
+<a name="line1670"></a>  // If there is no alignment, try the inline property,
+<a name="line1671"></a>  // otherwise assume left aligned.
+<a name="line1672"></a>  // TODO: for rtl languages we probably need to assume right.
+<a name="line1673"></a>  if (!goog.editor.plugins.BasicTextFormatter.
+<a name="line1674"></a>      SUPPORTED_JUSTIFICATIONS_[value]) {
+<a name="line1675"></a>    value = element.align || &#39;left&#39;;
+<a name="line1676"></a>  }
+<a name="line1677"></a>  return /** @type {string} */ (value);
+<a name="line1678"></a>};
+<a name="line1679"></a>
+<a name="line1680"></a>
+<a name="line1681"></a>/**
+<a name="line1682"></a> * Returns true if a selection contained in the node should set the appropriate
+<a name="line1683"></a> * toolbar state for the given nodeName, e.g. if the node is contained in a
+<a name="line1684"></a> * strong element and nodeName is &quot;strong&quot;, then it will return true.
+<a name="line1685"></a> * @param {string} nodeName The type of node to check for.
+<a name="line1686"></a> * @return {boolean} Whether the user&#39;s selection is in the given state.
+<a name="line1687"></a> * @private
+<a name="line1688"></a> */
+<a name="line1689"></a>goog.editor.plugins.BasicTextFormatter.prototype.isNodeInState_ =
+<a name="line1690"></a>    function(nodeName) {
+<a name="line1691"></a>  var range = this.getRange_();
+<a name="line1692"></a>  var node = range &amp;&amp; range.getContainerElement();
+<a name="line1693"></a>  var ancestor = goog.dom.getAncestorByTagNameAndClass(node, nodeName);
+<a name="line1694"></a>  return !!ancestor &amp;&amp; goog.editor.node.isEditable(ancestor);
+<a name="line1695"></a>};
+<a name="line1696"></a>
+<a name="line1697"></a>
+<a name="line1698"></a>/**
+<a name="line1699"></a> * Wrapper for browser&#39;s queryCommandState.
+<a name="line1700"></a> * @param {Document|TextRange|Range} queryObject The object to query.
+<a name="line1701"></a> * @param {string} command The command to check.
+<a name="line1702"></a> * @param {boolean=} opt_styleWithCss Set to true to enable styleWithCSS before
+<a name="line1703"></a> *     performing the queryCommandState.
+<a name="line1704"></a> * @return {boolean} The command state.
+<a name="line1705"></a> * @private
+<a name="line1706"></a> */
+<a name="line1707"></a>goog.editor.plugins.BasicTextFormatter.prototype.queryCommandStateInternal_ =
+<a name="line1708"></a>    function(queryObject, command, opt_styleWithCss) {
+<a name="line1709"></a>  return /** @type {boolean} */ (this.queryCommandHelper_(true, queryObject,
+<a name="line1710"></a>      command, opt_styleWithCss));
+<a name="line1711"></a>};
+<a name="line1712"></a>
+<a name="line1713"></a>
+<a name="line1714"></a>/**
+<a name="line1715"></a> * Wrapper for browser&#39;s queryCommandValue.
+<a name="line1716"></a> * @param {Document|TextRange|Range} queryObject The object to query.
+<a name="line1717"></a> * @param {string} command The command to check.
+<a name="line1718"></a> * @param {boolean=} opt_styleWithCss Set to true to enable styleWithCSS before
+<a name="line1719"></a> *     performing the queryCommandValue.
+<a name="line1720"></a> * @return {string|boolean|null} The command value.
+<a name="line1721"></a> * @private
+<a name="line1722"></a> */
+<a name="line1723"></a>goog.editor.plugins.BasicTextFormatter.prototype.queryCommandValueInternal_ =
+<a name="line1724"></a>    function(queryObject, command, opt_styleWithCss) {
+<a name="line1725"></a>  return this.queryCommandHelper_(false, queryObject,
+<a name="line1726"></a>      command, opt_styleWithCss);
+<a name="line1727"></a>};
+<a name="line1728"></a>
+<a name="line1729"></a>
+<a name="line1730"></a>/**
+<a name="line1731"></a> * Helper function to perform queryCommand(Value|State).
+<a name="line1732"></a> * @param {boolean} isGetQueryCommandState True to use queryCommandState, false
+<a name="line1733"></a> *     to use queryCommandValue.
+<a name="line1734"></a> * @param {Document|TextRange|Range} queryObject The object to query.
+<a name="line1735"></a> * @param {string} command The command to check.
+<a name="line1736"></a> * @param {boolean=} opt_styleWithCss Set to true to enable styleWithCSS before
+<a name="line1737"></a> *     performing the queryCommand(Value|State).
+<a name="line1738"></a> * @return {string|boolean|null} The command value.
+<a name="line1739"></a> * @private
+<a name="line1740"></a> */
+<a name="line1741"></a>goog.editor.plugins.BasicTextFormatter.prototype.queryCommandHelper_ = function(
+<a name="line1742"></a>    isGetQueryCommandState, queryObject, command, opt_styleWithCss) {
+<a name="line1743"></a>  command =
+<a name="line1744"></a>      goog.editor.plugins.BasicTextFormatter.convertToRealExecCommand_(
+<a name="line1745"></a>          command);
+<a name="line1746"></a>  if (opt_styleWithCss) {
+<a name="line1747"></a>    var doc = this.getDocument_();
+<a name="line1748"></a>    // Don&#39;t use this.execCommandHelper_ here, as it is more heavyweight
+<a name="line1749"></a>    // and inserts a dummy div to protect against comamnds that could step
+<a name="line1750"></a>    // outside the editable region, which would cause change event on
+<a name="line1751"></a>    // every toolbar update.
+<a name="line1752"></a>    doc.execCommand(&#39;styleWithCSS&#39;, false, true);
+<a name="line1753"></a>  }
+<a name="line1754"></a>  var ret = isGetQueryCommandState ? queryObject.queryCommandState(command) :
+<a name="line1755"></a>      queryObject.queryCommandValue(command);
+<a name="line1756"></a>  if (opt_styleWithCss) {
+<a name="line1757"></a>    doc.execCommand(&#39;styleWithCSS&#39;, false, false);
+<a name="line1758"></a>  }
+<a name="line1759"></a>  return ret;
+<a name="line1760"></a>};
+</pre>
+
+
+</body>
+</html>

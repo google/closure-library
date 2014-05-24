@@ -1,0 +1,120 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>hash.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_crypt_hash.js.html">hash.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Abstract cryptographic hash interface.
+<a name="line17"></a> *
+<a name="line18"></a> * See goog.crypt.Sha1 and goog.crypt.Md5 for sample implementations.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.crypt.Hash&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Create a cryptographic hash instance.
+<a name="line28"></a> *
+<a name="line29"></a> * @constructor
+<a name="line30"></a> * @struct
+<a name="line31"></a> */
+<a name="line32"></a>goog.crypt.Hash = function() {
+<a name="line33"></a>  /**
+<a name="line34"></a>   * The block size for the hasher.
+<a name="line35"></a>   * @type {number}
+<a name="line36"></a>   */
+<a name="line37"></a>  this.blockSize = -1;
+<a name="line38"></a>};
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/**
+<a name="line42"></a> * Resets the internal accumulator.
+<a name="line43"></a> */
+<a name="line44"></a>goog.crypt.Hash.prototype.reset = goog.abstractMethod;
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Adds a byte array (array with values in [0-255] range) or a string (might
+<a name="line49"></a> * only contain 8-bit, i.e., Latin1 characters) to the internal accumulator.
+<a name="line50"></a> *
+<a name="line51"></a> * Many hash functions operate on blocks of data and implement optimizations
+<a name="line52"></a> * when a full chunk of data is readily available. Hence it is often preferable
+<a name="line53"></a> * to provide large chunks of data (a kilobyte or more) than to repeatedly
+<a name="line54"></a> * call the update method with few tens of bytes. If this is not possible, or
+<a name="line55"></a> * not feasible, it might be good to provide data in multiplies of hash block
+<a name="line56"></a> * size (often 64 bytes). Please see the implementation and performance tests
+<a name="line57"></a> * of your favourite hash.
+<a name="line58"></a> *
+<a name="line59"></a> * @param {Array.&lt;number&gt;|Uint8Array|string} bytes Data used for the update.
+<a name="line60"></a> * @param {number=} opt_length Number of bytes to use.
+<a name="line61"></a> */
+<a name="line62"></a>goog.crypt.Hash.prototype.update = goog.abstractMethod;
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * @return {!Array.&lt;number&gt;} The finalized hash computed
+<a name="line67"></a> *     from the internal accumulator.
+<a name="line68"></a> */
+<a name="line69"></a>goog.crypt.Hash.prototype.digest = goog.abstractMethod;
+</pre>
+
+
+</body>
+</html>

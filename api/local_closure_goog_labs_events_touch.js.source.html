@@ -1,0 +1,132 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>touch.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_events_touch.js.html">touch.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities to abstract mouse and touch events.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.labs.events.touch&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.labs.events.touch.TouchData&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line26"></a>goog.require(&#39;goog.string&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Description the geometry and target of an event.
+<a name="line31"></a> *
+<a name="line32"></a> * @typedef {{
+<a name="line33"></a> *   clientX: number,
+<a name="line34"></a> *   clientY: number,
+<a name="line35"></a> *   screenX: number,
+<a name="line36"></a> *   screenY: number,
+<a name="line37"></a> *   target: EventTarget
+<a name="line38"></a> * }}
+<a name="line39"></a> */
+<a name="line40"></a>goog.labs.events.touch.TouchData;
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * Takes a mouse or touch event and returns the relevent geometry and target
+<a name="line45"></a> * data.
+<a name="line46"></a> * @param {!Event} e A mouse or touch event.
+<a name="line47"></a> * @return {!goog.labs.events.touch.TouchData}
+<a name="line48"></a> */
+<a name="line49"></a>goog.labs.events.touch.getTouchData = function(e) {
+<a name="line50"></a>
+<a name="line51"></a>  var source = e;
+<a name="line52"></a>  goog.asserts.assert(
+<a name="line53"></a>      goog.string.startsWith(e.type, &#39;touch&#39;) ||
+<a name="line54"></a>      goog.string.startsWith(e.type, &#39;mouse&#39;),
+<a name="line55"></a>      &#39;Event must be mouse or touch event.&#39;);
+<a name="line56"></a>
+<a name="line57"></a>  if (goog.string.startsWith(e.type, &#39;touch&#39;)) {
+<a name="line58"></a>    goog.asserts.assert(
+<a name="line59"></a>        goog.array.contains([
+<a name="line60"></a>          goog.events.EventType.TOUCHCANCEL,
+<a name="line61"></a>          goog.events.EventType.TOUCHEND,
+<a name="line62"></a>          goog.events.EventType.TOUCHMOVE,
+<a name="line63"></a>          goog.events.EventType.TOUCHSTART
+<a name="line64"></a>        ], e.type),
+<a name="line65"></a>        &#39;Touch event not of valid type.&#39;);
+<a name="line66"></a>
+<a name="line67"></a>    // If the event is end or cancel, take the first changed touch,
+<a name="line68"></a>    // otherwise the first target touch.
+<a name="line69"></a>    source = (e.type == goog.events.EventType.TOUCHEND ||
+<a name="line70"></a>              e.type == goog.events.EventType.TOUCHCANCEL) ?
+<a name="line71"></a>             e.changedTouches[0] : e.targetTouches[0];
+<a name="line72"></a>  }
+<a name="line73"></a>
+<a name="line74"></a>  return {
+<a name="line75"></a>    clientX: source[&#39;clientX&#39;],
+<a name="line76"></a>    clientY: source[&#39;clientY&#39;],
+<a name="line77"></a>    screenX: source[&#39;screenX&#39;],
+<a name="line78"></a>    screenY: source[&#39;screenY&#39;],
+<a name="line79"></a>    target: source[&#39;target&#39;]
+<a name="line80"></a>  };
+<a name="line81"></a>};
+</pre>
+
+
+</body>
+</html>

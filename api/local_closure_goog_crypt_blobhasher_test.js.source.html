@@ -1,0 +1,433 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>blobhasher_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_crypt_blobhasher_test.js.html">blobhasher_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.crypt.BlobHasherTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.crypt.BlobHasherTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.crypt&#39;);
+<a name="line19"></a>goog.require(&#39;goog.crypt.BlobHasher&#39;);
+<a name="line20"></a>goog.require(&#39;goog.crypt.Md5&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line24"></a>
+<a name="line25"></a>// A browser-independent mock of goog.fs.sliceBlob. The actual implementation
+<a name="line26"></a>// calls the underlying slice method differently based on browser version.
+<a name="line27"></a>// This mock does not support negative opt_end.
+<a name="line28"></a>var fsSliceBlobMock = function(blob, start, opt_end) {
+<a name="line29"></a>  if (!goog.isNumber(opt_end)) {
+<a name="line30"></a>    opt_end = blob.size;
+<a name="line31"></a>  }
+<a name="line32"></a>  return blob.slice(start, opt_end);
+<a name="line33"></a>};
+<a name="line34"></a>
+<a name="line35"></a>// Mock out the Blob using a string.
+<a name="line36"></a>BlobMock = function(string) {
+<a name="line37"></a>  this.data = string;
+<a name="line38"></a>  this.size = this.data.length;
+<a name="line39"></a>};
+<a name="line40"></a>
+<a name="line41"></a>BlobMock.prototype.slice = function(start, end) {
+<a name="line42"></a>  return new BlobMock(this.data.substr(start, end - start));
+<a name="line43"></a>};
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>// Mock out the FileReader to have control over the flow.
+<a name="line47"></a>FileReaderMock = function() {
+<a name="line48"></a>  this.array_ = [];
+<a name="line49"></a>  this.result = null;
+<a name="line50"></a>  this.readyState = this.EMPTY;
+<a name="line51"></a>
+<a name="line52"></a>  this.onload = null;
+<a name="line53"></a>  this.onabort = null;
+<a name="line54"></a>  this.onerror = null;
+<a name="line55"></a>};
+<a name="line56"></a>
+<a name="line57"></a>FileReaderMock.prototype.EMPTY = 0;
+<a name="line58"></a>FileReaderMock.prototype.LOADING = 1;
+<a name="line59"></a>FileReaderMock.prototype.DONE = 2;
+<a name="line60"></a>
+<a name="line61"></a>FileReaderMock.prototype.mockLoad = function() {
+<a name="line62"></a>  this.readyState = this.DONE;
+<a name="line63"></a>  this.result = this.array_;
+<a name="line64"></a>  if (this.onload) {
+<a name="line65"></a>    this.onload.call();
+<a name="line66"></a>  }
+<a name="line67"></a>};
+<a name="line68"></a>
+<a name="line69"></a>FileReaderMock.prototype.abort = function() {
+<a name="line70"></a>  this.readyState = this.DONE;
+<a name="line71"></a>  if (this.onabort) {
+<a name="line72"></a>    this.onabort.call();
+<a name="line73"></a>  }
+<a name="line74"></a>};
+<a name="line75"></a>
+<a name="line76"></a>FileReaderMock.prototype.mockError = function() {
+<a name="line77"></a>  this.readyState = this.DONE;
+<a name="line78"></a>  if (this.onerror) {
+<a name="line79"></a>    this.onerror.call();
+<a name="line80"></a>  }
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>FileReaderMock.prototype.readAsArrayBuffer = function(blobMock) {
+<a name="line84"></a>  this.readyState = this.LOADING;
+<a name="line85"></a>  this.array_ = [];
+<a name="line86"></a>  for (var i = 0; i &lt; blobMock.size; ++i) {
+<a name="line87"></a>    this.array_[i] = blobMock.data.charCodeAt(i);
+<a name="line88"></a>  }
+<a name="line89"></a>};
+<a name="line90"></a>
+<a name="line91"></a>FileReaderMock.prototype.isLoading = function() {
+<a name="line92"></a>  return this.readyState == this.LOADING;
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>var stubs = new goog.testing.PropertyReplacer();
+<a name="line96"></a>function setUp() {
+<a name="line97"></a>  stubs.set(goog.global, &#39;FileReader&#39;, FileReaderMock);
+<a name="line98"></a>  stubs.set(goog.fs, &#39;sliceBlob&#39;, fsSliceBlobMock);
+<a name="line99"></a>}
+<a name="line100"></a>
+<a name="line101"></a>function tearDown() {
+<a name="line102"></a>  stubs.reset();
+<a name="line103"></a>}
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Makes the blobHasher read chunks from the blob and hash it. The number of
+<a name="line108"></a> * reads shall not exceed a pre-determined number (typically blob size / chunk
+<a name="line109"></a> * size) for computing hash. This function fails fast (after maxReads is
+<a name="line110"></a> * reached), assuming that the hasher failed to generate hashes. This prevents
+<a name="line111"></a> * the test suite from going into infinite loop.
+<a name="line112"></a> * @param {!goog.crypt.BlobHasher} blobHasher Hasher in action.
+<a name="line113"></a> * @param {number} maxReads Max number of read attempts.
+<a name="line114"></a> */
+<a name="line115"></a>function readFromBlob(blobHasher, maxReads) {
+<a name="line116"></a>  var counter = 0;
+<a name="line117"></a>  while (blobHasher.fileReader_ &amp;&amp; blobHasher.fileReader_.isLoading() &amp;&amp;
+<a name="line118"></a>         counter &lt;= maxReads) {
+<a name="line119"></a>    blobHasher.fileReader_.mockLoad();
+<a name="line120"></a>    counter++;
+<a name="line121"></a>  }
+<a name="line122"></a>  assertTrue(counter &lt;= maxReads);
+<a name="line123"></a>  return counter;
+<a name="line124"></a>}
+<a name="line125"></a>
+<a name="line126"></a>function testBasicOperations() {
+<a name="line127"></a>  if (!window.Blob) {
+<a name="line128"></a>    return;
+<a name="line129"></a>  }
+<a name="line130"></a>
+<a name="line131"></a>  // Test hashing with one chunk.
+<a name="line132"></a>  var hashFn = new goog.crypt.Md5();
+<a name="line133"></a>  var blobHasher = new goog.crypt.BlobHasher(hashFn);
+<a name="line134"></a>  var blob = new BlobMock(&#39;The quick brown fox jumps over the lazy dog&#39;);
+<a name="line135"></a>  blobHasher.hash(blob);
+<a name="line136"></a>  readFromBlob(blobHasher, 1);
+<a name="line137"></a>  assertEquals(&#39;9e107d9d372bb6826bd81d3542a419d6&#39;,
+<a name="line138"></a>               goog.crypt.byteArrayToHex(blobHasher.getHash()));
+<a name="line139"></a>
+<a name="line140"></a>  // Test hashing with multiple chunks.
+<a name="line141"></a>  blobHasher = new goog.crypt.BlobHasher(hashFn, 7);
+<a name="line142"></a>  blobHasher.hash(blob);
+<a name="line143"></a>  readFromBlob(blobHasher, Math.ceil(blob.size / 7));
+<a name="line144"></a>  assertEquals(&#39;9e107d9d372bb6826bd81d3542a419d6&#39;,
+<a name="line145"></a>               goog.crypt.byteArrayToHex(blobHasher.getHash()));
+<a name="line146"></a>
+<a name="line147"></a>  // Test hashing with no chunks.
+<a name="line148"></a>  blob = new BlobMock(&#39;&#39;);
+<a name="line149"></a>  blobHasher.hash(blob);
+<a name="line150"></a>  readFromBlob(blobHasher, 1);
+<a name="line151"></a>  assertEquals(&#39;d41d8cd98f00b204e9800998ecf8427e&#39;,
+<a name="line152"></a>               goog.crypt.byteArrayToHex(blobHasher.getHash()));
+<a name="line153"></a>
+<a name="line154"></a>}
+<a name="line155"></a>
+<a name="line156"></a>function testNormalFlow() {
+<a name="line157"></a>  if (!window.Blob) {
+<a name="line158"></a>    return;
+<a name="line159"></a>  }
+<a name="line160"></a>
+<a name="line161"></a>  // Test the flow with one chunk.
+<a name="line162"></a>  var hashFn = new goog.crypt.Md5();
+<a name="line163"></a>  var blobHasher = new goog.crypt.BlobHasher(hashFn, 13);
+<a name="line164"></a>  var blob = new BlobMock(&#39;short&#39;);
+<a name="line165"></a>  var startedEvents = 0;
+<a name="line166"></a>  var progressEvents = 0;
+<a name="line167"></a>  var completeEvents = 0;
+<a name="line168"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.STARTED,
+<a name="line169"></a>                     function() { ++startedEvents; });
+<a name="line170"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.PROGRESS,
+<a name="line171"></a>                     function() { ++progressEvents; });
+<a name="line172"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.COMPLETE,
+<a name="line173"></a>                     function() { ++completeEvents; });
+<a name="line174"></a>  blobHasher.hash(blob);
+<a name="line175"></a>  assertEquals(1, startedEvents);
+<a name="line176"></a>  assertEquals(0, progressEvents);
+<a name="line177"></a>  assertEquals(0, completeEvents);
+<a name="line178"></a>  readFromBlob(blobHasher, 1);
+<a name="line179"></a>  assertEquals(1, startedEvents);
+<a name="line180"></a>  assertEquals(1, progressEvents);
+<a name="line181"></a>  assertEquals(1, completeEvents);
+<a name="line182"></a>
+<a name="line183"></a>  // Test the flow with multiple chunks.
+<a name="line184"></a>  blob = new BlobMock(&#39;The quick brown fox jumps over the lazy dog&#39;);
+<a name="line185"></a>  startedEvents = 0;
+<a name="line186"></a>  progressEvents = 0;
+<a name="line187"></a>  completeEvents = 0;
+<a name="line188"></a>  var progressLoops = 0;
+<a name="line189"></a>  blobHasher.hash(blob);
+<a name="line190"></a>  assertEquals(1, startedEvents);
+<a name="line191"></a>  assertEquals(0, progressEvents);
+<a name="line192"></a>  assertEquals(0, completeEvents);
+<a name="line193"></a>  progressLoops = readFromBlob(blobHasher, Math.ceil(blob.size / 13));
+<a name="line194"></a>  assertEquals(1, startedEvents);
+<a name="line195"></a>  assertEquals(progressLoops, progressEvents);
+<a name="line196"></a>  assertEquals(1, completeEvents);
+<a name="line197"></a>}
+<a name="line198"></a>
+<a name="line199"></a>function testAbortsAndErrors() {
+<a name="line200"></a>  if (!window.Blob) {
+<a name="line201"></a>    return;
+<a name="line202"></a>  }
+<a name="line203"></a>
+<a name="line204"></a>  var hashFn = new goog.crypt.Md5();
+<a name="line205"></a>  var blobHasher = new goog.crypt.BlobHasher(hashFn, 13);
+<a name="line206"></a>  var blob = new BlobMock(&#39;The quick brown fox jumps over the lazy dog&#39;);
+<a name="line207"></a>  var abortEvents = 0;
+<a name="line208"></a>  var errorEvents = 0;
+<a name="line209"></a>  var completeEvents = 0;
+<a name="line210"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.ABORT,
+<a name="line211"></a>                     function() { ++abortEvents; });
+<a name="line212"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.ERROR,
+<a name="line213"></a>                     function() { ++errorEvents; });
+<a name="line214"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.COMPLETE,
+<a name="line215"></a>                     function() { ++completeEvents; });
+<a name="line216"></a>
+<a name="line217"></a>  // Immediate abort.
+<a name="line218"></a>  blobHasher.hash(blob);
+<a name="line219"></a>  assertEquals(0, abortEvents);
+<a name="line220"></a>  assertEquals(0, errorEvents);
+<a name="line221"></a>  assertEquals(0, completeEvents);
+<a name="line222"></a>  blobHasher.abort();
+<a name="line223"></a>  blobHasher.abort();
+<a name="line224"></a>  assertEquals(1, abortEvents);
+<a name="line225"></a>  assertEquals(0, errorEvents);
+<a name="line226"></a>  assertEquals(0, completeEvents);
+<a name="line227"></a>  abortEvents = 0;
+<a name="line228"></a>
+<a name="line229"></a>  // Delayed abort.
+<a name="line230"></a>  blobHasher.hash(blob);
+<a name="line231"></a>  blobHasher.fileReader_.mockLoad();
+<a name="line232"></a>  assertEquals(0, abortEvents);
+<a name="line233"></a>  assertEquals(0, errorEvents);
+<a name="line234"></a>  assertEquals(0, completeEvents);
+<a name="line235"></a>  blobHasher.abort();
+<a name="line236"></a>  blobHasher.abort();
+<a name="line237"></a>  assertEquals(1, abortEvents);
+<a name="line238"></a>  assertEquals(0, errorEvents);
+<a name="line239"></a>  assertEquals(0, completeEvents);
+<a name="line240"></a>  abortEvents = 0;
+<a name="line241"></a>
+<a name="line242"></a>  // Immediate error.
+<a name="line243"></a>  blobHasher.hash(blob);
+<a name="line244"></a>  blobHasher.fileReader_.mockError();
+<a name="line245"></a>  assertEquals(0, abortEvents);
+<a name="line246"></a>  assertEquals(1, errorEvents);
+<a name="line247"></a>  assertEquals(0, completeEvents);
+<a name="line248"></a>  errorEvents = 0;
+<a name="line249"></a>
+<a name="line250"></a>  // Delayed error.
+<a name="line251"></a>  blobHasher.hash(blob);
+<a name="line252"></a>  blobHasher.fileReader_.mockLoad();
+<a name="line253"></a>  blobHasher.fileReader_.mockError();
+<a name="line254"></a>  assertEquals(0, abortEvents);
+<a name="line255"></a>  assertEquals(1, errorEvents);
+<a name="line256"></a>  assertEquals(0, completeEvents);
+<a name="line257"></a>  abortEvents = 0;
+<a name="line258"></a>
+<a name="line259"></a>}
+<a name="line260"></a>
+<a name="line261"></a>function testBasicThrottling() {
+<a name="line262"></a>  if (!window.Blob) {
+<a name="line263"></a>    return;
+<a name="line264"></a>  }
+<a name="line265"></a>
+<a name="line266"></a>  var hashFn = new goog.crypt.Md5();
+<a name="line267"></a>  var blobHasher = new goog.crypt.BlobHasher(hashFn, 5);
+<a name="line268"></a>  var blob = new BlobMock(&#39;The quick brown fox jumps over the lazy dog&#39;);
+<a name="line269"></a>  var throttledEvents = 0;
+<a name="line270"></a>  var completeEvents = 0;
+<a name="line271"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.THROTTLED,
+<a name="line272"></a>                     function() { ++throttledEvents; });
+<a name="line273"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.COMPLETE,
+<a name="line274"></a>                     function() { ++completeEvents; });
+<a name="line275"></a>
+<a name="line276"></a>  // Start a throttled hash. No chunks should be processed yet.
+<a name="line277"></a>  blobHasher.setHashingLimit(0);
+<a name="line278"></a>  assertEquals(0, throttledEvents);
+<a name="line279"></a>  blobHasher.hash(blob);
+<a name="line280"></a>  assertEquals(1, throttledEvents);
+<a name="line281"></a>  assertEquals(0, blobHasher.getBytesProcessed());
+<a name="line282"></a>  assertNull(blobHasher.fileReader_);
+<a name="line283"></a>
+<a name="line284"></a>  // One chunk should be processed.
+<a name="line285"></a>  blobHasher.setHashingLimit(4);
+<a name="line286"></a>  assertEquals(1, throttledEvents);
+<a name="line287"></a>  assertEquals(1, readFromBlob(blobHasher, 1));
+<a name="line288"></a>  assertEquals(2, throttledEvents);
+<a name="line289"></a>  assertEquals(4, blobHasher.getBytesProcessed());
+<a name="line290"></a>
+<a name="line291"></a>  // One more chunk should be processed.
+<a name="line292"></a>  blobHasher.setHashingLimit(5);
+<a name="line293"></a>  assertEquals(2, throttledEvents);
+<a name="line294"></a>  assertEquals(1, readFromBlob(blobHasher, 1));
+<a name="line295"></a>  assertEquals(3, throttledEvents);
+<a name="line296"></a>  assertEquals(5, blobHasher.getBytesProcessed());
+<a name="line297"></a>
+<a name="line298"></a>  // Two more chunks should be processed.
+<a name="line299"></a>  blobHasher.setHashingLimit(15);
+<a name="line300"></a>  assertEquals(3, throttledEvents);
+<a name="line301"></a>  assertEquals(2, readFromBlob(blobHasher, 2));
+<a name="line302"></a>  assertEquals(4, throttledEvents);
+<a name="line303"></a>  assertEquals(15, blobHasher.getBytesProcessed());
+<a name="line304"></a>
+<a name="line305"></a>  // The entire blob should be processed.
+<a name="line306"></a>  blobHasher.setHashingLimit(Infinity);
+<a name="line307"></a>  var expectedChunks = Math.ceil(blob.size / 5) - 3;
+<a name="line308"></a>  assertEquals(expectedChunks, readFromBlob(blobHasher, expectedChunks));
+<a name="line309"></a>  assertEquals(4, throttledEvents);
+<a name="line310"></a>  assertEquals(1, completeEvents);
+<a name="line311"></a>  assertEquals(&#39;9e107d9d372bb6826bd81d3542a419d6&#39;,
+<a name="line312"></a>               goog.crypt.byteArrayToHex(blobHasher.getHash()));
+<a name="line313"></a>}
+<a name="line314"></a>
+<a name="line315"></a>function testLengthZeroThrottling() {
+<a name="line316"></a>  if (!window.Blob) {
+<a name="line317"></a>    return;
+<a name="line318"></a>  }
+<a name="line319"></a>
+<a name="line320"></a>  var hashFn = new goog.crypt.Md5();
+<a name="line321"></a>  var blobHasher = new goog.crypt.BlobHasher(hashFn);
+<a name="line322"></a>  var throttledEvents = 0;
+<a name="line323"></a>  var completeEvents = 0;
+<a name="line324"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.THROTTLED,
+<a name="line325"></a>                     function() { ++throttledEvents; });
+<a name="line326"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.COMPLETE,
+<a name="line327"></a>                     function() { ++completeEvents; });
+<a name="line328"></a>
+<a name="line329"></a>  // Test throttling with length 0 blob.
+<a name="line330"></a>  var blob = new BlobMock(&#39;&#39;);
+<a name="line331"></a>  blobHasher.setHashingLimit(0);
+<a name="line332"></a>  blobHasher.hash(blob);
+<a name="line333"></a>  assertEquals(0, throttledEvents);
+<a name="line334"></a>  assertEquals(1, completeEvents);
+<a name="line335"></a>  assertEquals(&#39;d41d8cd98f00b204e9800998ecf8427e&#39;,
+<a name="line336"></a>               goog.crypt.byteArrayToHex(blobHasher.getHash()));
+<a name="line337"></a>}
+<a name="line338"></a>
+<a name="line339"></a>function testAbortsAndErrorsWhileThrottling() {
+<a name="line340"></a>  if (!window.Blob) {
+<a name="line341"></a>    return;
+<a name="line342"></a>  }
+<a name="line343"></a>
+<a name="line344"></a>  var hashFn = new goog.crypt.Md5();
+<a name="line345"></a>  var blobHasher = new goog.crypt.BlobHasher(hashFn, 5);
+<a name="line346"></a>  var blob = new BlobMock(&#39;The quick brown fox jumps over the lazy dog&#39;);
+<a name="line347"></a>  var abortEvents = 0;
+<a name="line348"></a>  var errorEvents = 0;
+<a name="line349"></a>  var throttledEvents = 0;
+<a name="line350"></a>  var completeEvents = 0;
+<a name="line351"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.ABORT,
+<a name="line352"></a>                     function() { ++abortEvents; });
+<a name="line353"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.ERROR,
+<a name="line354"></a>                     function() { ++errorEvents; });
+<a name="line355"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.THROTTLED,
+<a name="line356"></a>                     function() { ++throttledEvents; });
+<a name="line357"></a>  goog.events.listen(blobHasher, goog.crypt.BlobHasher.EventType.COMPLETE,
+<a name="line358"></a>                     function() { ++completeEvents; });
+<a name="line359"></a>
+<a name="line360"></a>  // Test that processing cannot be continued after abort.
+<a name="line361"></a>  blobHasher.setHashingLimit(0);
+<a name="line362"></a>  blobHasher.hash(blob);
+<a name="line363"></a>  assertEquals(1, throttledEvents);
+<a name="line364"></a>  blobHasher.abort();
+<a name="line365"></a>  assertEquals(1, abortEvents);
+<a name="line366"></a>  blobHasher.setHashingLimit(10);
+<a name="line367"></a>  assertNull(blobHasher.fileReader_);
+<a name="line368"></a>  assertEquals(1, throttledEvents);
+<a name="line369"></a>  assertEquals(0, completeEvents);
+<a name="line370"></a>  assertNull(blobHasher.getHash());
+<a name="line371"></a>
+<a name="line372"></a>  // Test that processing cannot be continued after error.
+<a name="line373"></a>  blobHasher.hash(blob);
+<a name="line374"></a>  assertEquals(1, throttledEvents);
+<a name="line375"></a>  blobHasher.fileReader_.mockError();
+<a name="line376"></a>  assertEquals(1, errorEvents);
+<a name="line377"></a>  blobHasher.setHashingLimit(100);
+<a name="line378"></a>  assertNull(blobHasher.fileReader_);
+<a name="line379"></a>  assertEquals(1, throttledEvents);
+<a name="line380"></a>  assertEquals(0, completeEvents);
+<a name="line381"></a>  assertNull(blobHasher.getHash());
+<a name="line382"></a>}
+</pre>
+
+
+</body>
+</html>

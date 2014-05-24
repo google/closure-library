@@ -1,0 +1,103 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>object_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_object_object_test.js.html">object_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.labs.objectTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.labs.objectTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.labs.object&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>function testIs() {
+<a name="line22"></a>  var object = {};
+<a name="line23"></a>  assertTrue(goog.labs.object.is(object, object));
+<a name="line24"></a>  assertFalse(goog.labs.object.is(object, {}));
+<a name="line25"></a>
+<a name="line26"></a>  assertTrue(goog.labs.object.is(NaN, NaN));
+<a name="line27"></a>  assertTrue(goog.labs.object.is(0, 0));
+<a name="line28"></a>  assertTrue(goog.labs.object.is(1, 1));
+<a name="line29"></a>  assertTrue(goog.labs.object.is(-1, -1));
+<a name="line30"></a>  assertTrue(goog.labs.object.is(123, 123));
+<a name="line31"></a>  assertFalse(goog.labs.object.is(0, -0));
+<a name="line32"></a>  assertFalse(goog.labs.object.is(-0, 0));
+<a name="line33"></a>  assertFalse(goog.labs.object.is(0, 1));
+<a name="line34"></a>
+<a name="line35"></a>  assertTrue(goog.labs.object.is(true, true));
+<a name="line36"></a>  assertTrue(goog.labs.object.is(false, false));
+<a name="line37"></a>  assertFalse(goog.labs.object.is(true, false));
+<a name="line38"></a>  assertFalse(goog.labs.object.is(false, true));
+<a name="line39"></a>
+<a name="line40"></a>  assertTrue(goog.labs.object.is(&#39;&#39;, &#39;&#39;));
+<a name="line41"></a>  assertTrue(goog.labs.object.is(&#39;a&#39;, &#39;a&#39;));
+<a name="line42"></a>  assertFalse(goog.labs.object.is(&#39;&#39;, &#39;a&#39;));
+<a name="line43"></a>  assertFalse(goog.labs.object.is(&#39;a&#39;, &#39;&#39;));
+<a name="line44"></a>  assertFalse(goog.labs.object.is(&#39;a&#39;, &#39;b&#39;));
+<a name="line45"></a>
+<a name="line46"></a>  assertFalse(goog.labs.object.is(true, &#39;true&#39;));
+<a name="line47"></a>  assertFalse(goog.labs.object.is(&#39;true&#39;, true));
+<a name="line48"></a>  assertFalse(goog.labs.object.is(false, &#39;false&#39;));
+<a name="line49"></a>  assertFalse(goog.labs.object.is(&#39;false&#39;, false));
+<a name="line50"></a>  assertFalse(goog.labs.object.is(0, &#39;0&#39;));
+<a name="line51"></a>  assertFalse(goog.labs.object.is(&#39;0&#39;, 0));
+<a name="line52"></a>}
+</pre>
+
+
+</body>
+</html>

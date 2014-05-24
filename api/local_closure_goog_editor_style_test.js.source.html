@@ -1,0 +1,225 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>style_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_style_test.js.html">style_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.editor.styleTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.editor.styleTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line20"></a>goog.require(&#39;goog.editor.BrowserFeature&#39;);
+<a name="line21"></a>goog.require(&#39;goog.editor.style&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line23"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line24"></a>goog.require(&#39;goog.style&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.LooseMock&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.mockmatchers&#39;);
+<a name="line28"></a>
+<a name="line29"></a>var parentNode = null;
+<a name="line30"></a>var childNode1 = null;
+<a name="line31"></a>var childNode2 = null;
+<a name="line32"></a>var childNode3 = null;
+<a name="line33"></a>var gChildWsNode1 = null;
+<a name="line34"></a>var gChildTextNode1 = null;
+<a name="line35"></a>var gChildNbspNode1 = null;
+<a name="line36"></a>var gChildMixedNode1 = null;
+<a name="line37"></a>var gChildWsNode2a = null;
+<a name="line38"></a>var gChildWsNode2b = null;
+<a name="line39"></a>var gChildTextNode3a = null;
+<a name="line40"></a>var gChildWsNode3 = null;
+<a name="line41"></a>var gChildTextNode3b = null;
+<a name="line42"></a>
+<a name="line43"></a>var $dom = goog.dom.createDom;
+<a name="line44"></a>var $text = goog.dom.createTextNode;
+<a name="line45"></a>
+<a name="line46"></a>function setUpGetNodeFunctions() {
+<a name="line47"></a>  parentNode = $dom(
+<a name="line48"></a>      &#39;p&#39;, {id: &#39;parentNode&#39;},
+<a name="line49"></a>      childNode1 = $dom(&#39;div&#39;, null,
+<a name="line50"></a>          gChildWsNode1 = $text(&#39; \t\r\n&#39;),
+<a name="line51"></a>          gChildTextNode1 = $text(&#39;Child node&#39;),
+<a name="line52"></a>          gChildNbspNode1 = $text(&#39;\u00a0&#39;),
+<a name="line53"></a>          gChildMixedNode1 = $text(&#39;Text\n plus\u00a0&#39;)),
+<a name="line54"></a>      childNode2 = $dom(&#39;div&#39;, null,
+<a name="line55"></a>          gChildWsNode2a = $text(&#39;&#39;),
+<a name="line56"></a>          gChildWsNode2b = $text(&#39; &#39;)),
+<a name="line57"></a>      childNode3 = $dom(&#39;div&#39;, null,
+<a name="line58"></a>          gChildTextNode3a = $text(&#39;I am a grand child&#39;),
+<a name="line59"></a>          gChildWsNode3 = $text(&#39;   \t  \r   \n&#39;),
+<a name="line60"></a>          gChildTextNode3b = $text(&#39;I am also a grand child&#39;)));
+<a name="line61"></a>
+<a name="line62"></a>  document.body.appendChild(parentNode);
+<a name="line63"></a>}
+<a name="line64"></a>
+<a name="line65"></a>function tearDownGetNodeFunctions() {
+<a name="line66"></a>  document.body.removeChild(parentNode);
+<a name="line67"></a>
+<a name="line68"></a>  parentNode = null;
+<a name="line69"></a>  childNode1 = null;
+<a name="line70"></a>  childNode2 = null;
+<a name="line71"></a>  childNode3 = null;
+<a name="line72"></a>  gChildWsNode1 = null;
+<a name="line73"></a>  gChildTextNode1 = null;
+<a name="line74"></a>  gChildNbspNode1 = null;
+<a name="line75"></a>  gChildMixedNode1 = null;
+<a name="line76"></a>  gChildWsNode2a = null;
+<a name="line77"></a>  gChildWsNode2b = null;
+<a name="line78"></a>  gChildTextNode3a = null;
+<a name="line79"></a>  gChildWsNode3 = null;
+<a name="line80"></a>  gChildTextNode3b = null;
+<a name="line81"></a>}
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Test isBlockLevel with a node that is block style and a node that is not
+<a name="line86"></a> */
+<a name="line87"></a>function testIsDisplayBlock() {
+<a name="line88"></a>  assertTrue(&#39;Body is block style&#39;,
+<a name="line89"></a>      goog.editor.style.isDisplayBlock(document.body));
+<a name="line90"></a>  var tableNode = $dom(&#39;table&#39;);
+<a name="line91"></a>  assertFalse(&#39;Table is not block style&#39;,
+<a name="line92"></a>      goog.editor.style.isDisplayBlock(tableNode));
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Test that isContainer returns true when the node is of non-inline HTML and
+<a name="line98"></a> * false when it is not
+<a name="line99"></a> */
+<a name="line100"></a>function testIsContainer() {
+<a name="line101"></a>  var tableNode = $dom(&#39;table&#39;);
+<a name="line102"></a>  var liNode = $dom(&#39;li&#39;);
+<a name="line103"></a>  var textNode = $text(&#39;I am text&#39;);
+<a name="line104"></a>  document.body.appendChild(textNode);
+<a name="line105"></a>
+<a name="line106"></a>  assertTrue(&#39;Table is a container&#39;,
+<a name="line107"></a>      goog.editor.style.isContainer(tableNode));
+<a name="line108"></a>  assertTrue(&#39;Body is a container&#39;,
+<a name="line109"></a>      goog.editor.style.isContainer(document.body));
+<a name="line110"></a>  assertTrue(&#39;List item is a container&#39;,
+<a name="line111"></a>      goog.editor.style.isContainer(liNode));
+<a name="line112"></a>  assertFalse(&#39;Text node is not a container&#39;,
+<a name="line113"></a>      goog.editor.style.isContainer(textNode));
+<a name="line114"></a>}
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Test that getContainer properly returns the node itself if it is a
+<a name="line119"></a> * container, an ancestor node if it is a container, and null otherwise
+<a name="line120"></a> */
+<a name="line121"></a>function testGetContainer() {
+<a name="line122"></a>  setUpGetNodeFunctions();
+<a name="line123"></a>  assertEquals(&#39;Should return self&#39;, childNode1,
+<a name="line124"></a>      goog.editor.style.getContainer(childNode1));
+<a name="line125"></a>  assertEquals(&#39;Should return parent&#39;, childNode1,
+<a name="line126"></a>      goog.editor.style.getContainer(gChildWsNode1));
+<a name="line127"></a>  assertNull(&#39;Document has no ancestors&#39;,
+<a name="line128"></a>      goog.editor.style.getContainer(document));
+<a name="line129"></a>  tearDownGetNodeFunctions();
+<a name="line130"></a>}
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>function testMakeUnselectable() {
+<a name="line134"></a>  var div = goog.dom.createElement(goog.dom.TagName.DIV);
+<a name="line135"></a>  div.innerHTML =
+<a name="line136"></a>      &#39;&lt;div&gt;No input&lt;/div&gt;&#39; +
+<a name="line137"></a>      &#39;&lt;p&gt;&lt;input type=&quot;checkbox&quot;&gt;Checkbox&lt;/p&gt;&#39; +
+<a name="line138"></a>      &#39;&lt;span&gt;&lt;input type=&quot;text&quot;&gt;&lt;/span&gt;&#39;;
+<a name="line139"></a>  document.body.appendChild(div);
+<a name="line140"></a>
+<a name="line141"></a>  var eventHandler = new goog.testing.LooseMock(goog.events.EventHandler);
+<a name="line142"></a>  if (goog.editor.BrowserFeature.HAS_UNSELECTABLE_STYLE) {
+<a name="line143"></a>    eventHandler.listen(div, goog.events.EventType.MOUSEDOWN,
+<a name="line144"></a>        goog.testing.mockmatchers.isFunction, true);
+<a name="line145"></a>  }
+<a name="line146"></a>  eventHandler.$replay();
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>  var childDiv = div.firstChild;
+<a name="line150"></a>  var p = div.childNodes[1];
+<a name="line151"></a>  var span = div.lastChild;
+<a name="line152"></a>  var checkbox = p.firstChild;
+<a name="line153"></a>  var text = span.firstChild;
+<a name="line154"></a>
+<a name="line155"></a>  goog.editor.style.makeUnselectable(div, eventHandler);
+<a name="line156"></a>
+<a name="line157"></a>  assertEquals(
+<a name="line158"></a>      &#39;For browsers with non-overridable selectability, the root should be &#39; +
+<a name="line159"></a>      &#39;selectable.  Otherwise it should be unselectable.&#39;,
+<a name="line160"></a>      !goog.editor.BrowserFeature.HAS_UNSELECTABLE_STYLE,
+<a name="line161"></a>      goog.style.isUnselectable(div));
+<a name="line162"></a>  assertTrue(goog.style.isUnselectable(childDiv));
+<a name="line163"></a>  assertTrue(goog.style.isUnselectable(p));
+<a name="line164"></a>  assertTrue(goog.style.isUnselectable(checkbox));
+<a name="line165"></a>
+<a name="line166"></a>  assertEquals(
+<a name="line167"></a>      &#39;For browsers with non-overridable selectability, the span will be &#39; +
+<a name="line168"></a>      &#39;selectable.  Otherwise it will be unselectable. &#39;,
+<a name="line169"></a>      !goog.editor.BrowserFeature.HAS_UNSELECTABLE_STYLE,
+<a name="line170"></a>      goog.style.isUnselectable(span));
+<a name="line171"></a>  assertFalse(goog.style.isUnselectable(text));
+<a name="line172"></a>
+<a name="line173"></a>  eventHandler.$verify();
+<a name="line174"></a>}
+</pre>
+
+
+</body>
+</html>

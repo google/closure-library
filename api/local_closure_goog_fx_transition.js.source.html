@@ -1,0 +1,126 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>transition.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_fx_transition.js.html">transition.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview An interface for transition animation. This is a simple
+<a name="line17"></a> * interface that allows for playing and stopping a transition. It adds
+<a name="line18"></a> * a simple event model with BEGIN and END event.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.fx.Transition&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.fx.Transition.EventType&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * An interface for programmatic transition. Must extend
+<a name="line29"></a> * {@code goog.events.EventTarget}.
+<a name="line30"></a> * @interface
+<a name="line31"></a> */
+<a name="line32"></a>goog.fx.Transition = function() {};
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Transition event types.
+<a name="line37"></a> * @enum {string}
+<a name="line38"></a> */
+<a name="line39"></a>goog.fx.Transition.EventType = {
+<a name="line40"></a>  /** Dispatched when played for the first time OR when it is resumed. */
+<a name="line41"></a>  PLAY: &#39;play&#39;,
+<a name="line42"></a>
+<a name="line43"></a>  /** Dispatched only when the animation starts from the beginning. */
+<a name="line44"></a>  BEGIN: &#39;begin&#39;,
+<a name="line45"></a>
+<a name="line46"></a>  /** Dispatched only when animation is restarted after a pause. */
+<a name="line47"></a>  RESUME: &#39;resume&#39;,
+<a name="line48"></a>
+<a name="line49"></a>  /**
+<a name="line50"></a>   * Dispatched when animation comes to the end of its duration OR stop
+<a name="line51"></a>   * is called.
+<a name="line52"></a>   */
+<a name="line53"></a>  END: &#39;end&#39;,
+<a name="line54"></a>
+<a name="line55"></a>  /** Dispatched only when stop is called. */
+<a name="line56"></a>  STOP: &#39;stop&#39;,
+<a name="line57"></a>
+<a name="line58"></a>  /** Dispatched only when animation comes to its end naturally. */
+<a name="line59"></a>  FINISH: &#39;finish&#39;,
+<a name="line60"></a>
+<a name="line61"></a>  /** Dispatched when an animation is paused. */
+<a name="line62"></a>  PAUSE: &#39;pause&#39;
+<a name="line63"></a>};
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * Plays the transition.
+<a name="line68"></a> */
+<a name="line69"></a>goog.fx.Transition.prototype.play;
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Stops the transition.
+<a name="line74"></a> */
+<a name="line75"></a>goog.fx.Transition.prototype.stop;
+</pre>
+
+
+</body>
+</html>

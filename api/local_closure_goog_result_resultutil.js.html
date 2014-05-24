@@ -1,0 +1,1260 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>resultutil.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">resultutil.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_result_resultutil.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/result/resultutil.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/result/resultutil.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_result_DependentResultImpl_.html">
+          goog.result.DependentResultImpl_</a><br/>
+        <div class="class-details">A DependentResult represents a Result whose eventual value depends on the
+value of one or more other Results. For example, the Result returned by
+</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.cancelParentResults"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">cancelParentResults<span class="args">(<span class="arg">dependentResult</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Given a DependentResult, cancels the Results it depends on (that is, the
+results returned by getParentResults). This function does not recurse,
+so e.g. parents of parents are not canceled; only the immediate parents of
+the given Result are canceled.
+
+Example using @see goog.result.combine:
+<pre class="lang-js prettyprint">
+var result1 = xhr.get('testdata/xhr_test_text.data');
+
+// Get a second independent Result.
+var result2 = xhr.getJson('testdata/xhr_test_json.data');
+
+// Create a Result that resolves when both prior results resolve.
+var combinedResult = goog.result.combineOnSuccess(result1, result2);
+
+combinedResult.wait(function() {
+  if (combinedResult.isCanceled()) {
+    goog.result.cancelParentResults(combinedResult);
+  }
+});
+
+// Now, canceling combinedResult will cancel both result1 and result2.
+combinedResult.cancel();
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">dependentResult</span>
+        : <span>!</span><span class="type"><a href="interface_goog_result_DependentResult.html">goog.result.DependentResult</a></span>
+        <div class="entryOverview">A Result that is
+    dependent on the values of other Results (for example the Result of a
+    goog.result.combine, goog.result.chain, or goog.result.transform call).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            True if any results were successfully canceled; otherwise
+    false.
+TODO(user): Implement a recursive version of this that cancels all
+ancestor results.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line506">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.canceledResult"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">canceledResult<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a canceled result.
+The result will be resolved to an error of type CancelError.
+
+Example:
+<pre class="lang-js prettyprint">
+
+var result = goog.result.canceledResult();
+assertEquals(goog.result.Result.State.ERROR, result.getState());
+var error = result.getError();
+assertTrue(error instanceof goog.result.Result.CancelError);
+
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>&nbsp;
+            A canceled Result.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line99">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.chain"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">chain<span class="args">(<span class="arg">result</span>,&nbsp;<span class="arg">actionCallback</span>,&nbsp;<span class="arg">opt_scope</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_result_DependentResult.html">goog.result.DependentResult</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       The chain function aids in chaining of asynchronous Results. This provides a
+convenience for use cases where asynchronous operations must happen serially
+i.e. subsequent asynchronous operations are dependent on data returned by
+prior asynchronous operations.
+
+It accepts a result and an action callback as arguments and returns a
+result. The action callback is called when the first result succeeds and is
+supposed to return a second result. The returned result is resolved when one
+of both of the results resolve (depending on their success or failure.) The
+state and value of the returned result in the various cases is documented
+below:
+<pre class="lang-js prettyprint">
+
+First Result State:    Second Result State:    Returned Result State:
+SUCCESS                SUCCESS                 SUCCESS
+SUCCESS                ERROR                   ERROR
+ERROR                  Not created             ERROR
+</pre>
+
+The value of the returned result, in the case both results succeed, is the
+value of the second result (the result returned by the action callback.)
+
+Example:
+<pre class="lang-js prettyprint">
+
+var testDataResult = xhr.get('testdata/xhr_test_text.data');
+
+// Chain this result to perform another asynchronous operation when this
+// Result is resolved.
+var chainedResult = goog.result.chain(testDataResult,
+    function(testDataResult) {
+
+      // The result value of testDataResult is the URL for JSON data.
+      var jsonDataUrl = testDataResult.getValue();
+
+      // Create a new Result object when the original result is resolved.
+      var jsonResult = xhr.getJson(jsonDataUrl);
+
+      // Return the newly created Result.
+      return jsonResult;
+    });
+
+// The chained result resolves to success when both results resolve to
+// success.
+goog.result.waitOnSuccess(chainedResult, function(resultValue, result) {
+
+  // At this point, both results have succeeded and we can use the JSON
+  // data returned by the second asynchronous call.
+  var jsonData = resultValue;
+  assertEquals('ok', jsonData['stat']);
+});
+
+// Attach the error handler to be called when either Result fails.
+goog.result.waitOnError(chainedResult, function(result) {
+  alert('chained result failed!');
+});
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">result</span>
+        : <span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>
+        <div class="entryOverview">The result to chain.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">actionCallback</span>
+        : <span class="type">function(this:T, !goog.result.Result):!goog.result.Result</span>
+        <div class="entryOverview">The callback called when the result is resolved. This
+    callback must return a Result.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_scope</span>
+        : <span class="type">T=</span>
+        <div class="entryOverview">Optional scope for the action callback.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_result_DependentResult.html">goog.result.DependentResult</a></span>&nbsp;
+            A result that is resolved when both
+    the given Result and the Result returned by the actionCallback have
+    resolved.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line322">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.combine&checkResults"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">combine&checkResults<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line390">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.combine"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">combine<span class="args">(<span class="arg">var_args</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_result_DependentResult.html">goog.result.DependentResult</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a result that waits on all given results to resolve. Once all have
+resolved, the returned result will succeed (and never error).
+
+Example:
+<pre class="lang-js prettyprint">
+
+var result1 = xhr.get('testdata/xhr_test_text.data');
+
+// Get a second independent Result.
+var result2 = xhr.getJson('testdata/xhr_test_json.data');
+
+// Create a Result that resolves when both prior results resolve.
+var combinedResult = goog.result.combine(result1, result2);
+
+// Process data after resolution of both results.
+goog.result.waitOnSuccess(combinedResult, function(results) {
+  goog.array.forEach(results, function(result) {
+      alert(result.getState());
+  });
+});
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">var_args</span>
+        : <span class="type">...!goog.result.Result</span>
+        <div class="entryOverview">The results to wait on.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_result_DependentResult.html">goog.result.DependentResult</a></span>&nbsp;
+            A new Result whose eventual value will
+    be the resolved given Result objects.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line381">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.combineOnSuccess"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">combineOnSuccess<span class="args">(<span class="arg">var_args</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_result_DependentResult.html">goog.result.DependentResult</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a result that waits on all given results to resolve. Once all have
+resolved, the returned result will succeed if and only if all given results
+succeeded. Otherwise it will error.
+
+Example:
+<pre class="lang-js prettyprint">
+
+var result1 = xhr.get('testdata/xhr_test_text.data');
+
+// Get a second independent Result.
+var result2 = xhr.getJson('testdata/xhr_test_json.data');
+
+// Create a Result that resolves when both prior results resolve.
+var combinedResult = goog.result.combineOnSuccess(result1, result2);
+
+// Process data after successful resolution of both results.
+goog.result.waitOnSuccess(combinedResult, function(results) {
+  var textData = results[0].getValue();
+  var jsonData = results[1].getValue();
+  assertEquals('Just some data.', textData);
+  assertEquals('ok', jsonData['stat']);
+});
+
+// Handle errors when either or both results failed.
+goog.result.waitOnError(combinedResult, function(combined) {
+  var results = combined.getError();
+
+  if (results[0].getState() == goog.result.Result.State.ERROR) {
+    alert('result1 failed');
+  }
+
+  if (results[1].getState() == goog.result.Result.State.ERROR) {
+    alert('result2 failed');
+  }
+});
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">var_args</span>
+        : <span class="type">...!goog.result.Result</span>
+        <div class="entryOverview">The results to wait on.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_result_DependentResult.html">goog.result.DependentResult</a></span>&nbsp;
+            A new Result whose eventual value will
+    be an array of values of the given Result objects.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line448">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.failedResult"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">failedResult<span class="args">(<span class="arg">opt_error</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a failed result with the optional error slug set.
+
+Example:
+<pre class="lang-js prettyprint">
+
+var error = new Error('something-failed');
+var result = goog.result.failedResult(error);
+assertEquals(goog.result.Result.State.ERROR, result.getState());
+assertEquals(error, result.getError());
+
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_error</span>
+        : <span class="type">*=</span>
+        <div class="entryOverview">The error to which the result should resolve.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>&nbsp;
+            A Result object that has already been resolved
+    to the supplied Error.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line76">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.combine&isResolved"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">combine&isResolved<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line386">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.combineOnSuccess&resolvedSuccessfully"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">combineOnSuccess&resolvedSuccessfully<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line452">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.successfulResult"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">successfulResult<span class="args">(<span class="arg">value</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a successful result containing the provided value.
+
+Example:
+<pre class="lang-js prettyprint">
+
+var value = 'some-value';
+var result = goog.result.immediateResult(value);
+assertEquals(goog.result.Result.State.SUCCESS, result.getState());
+assertEquals(value, result.getValue());
+
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type">*</span>
+        <div class="entryOverview">The value of the result.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>&nbsp;
+            A Result object that has already been resolved
+    to the supplied value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line52">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.transform"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">transform<span class="args">(<span class="arg">result</span>,&nbsp;<span class="arg">transformer</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_result_DependentResult.html">goog.result.DependentResult</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Given a result and a transform function, returns a new result whose value,
+on success, will be the value of the given result after having been passed
+through the transform function.
+
+If the given result is an error, the returned result is also an error and the
+transform will not be called.
+
+Example:
+<pre class="lang-js prettyprint">
+
+var result = xhr.getJson('testdata/xhr_test_json.data');
+
+// Transform contents of returned data using 'processJson' and create a
+// transformed result to use returned JSON.
+var transformedResult = goog.result.transform(result, processJson);
+
+// Attach success and failure handlers to the tranformed result.
+goog.result.waitOnSuccess(transformedResult, function(resultValue, result) {
+  var jsonData = resultValue;
+  assertEquals('ok', jsonData['stat']);
+});
+
+goog.result.waitOnError(transformedResult, function(error) {
+  // Failed getJson call
+});
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">result</span>
+        : <span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>
+        <div class="entryOverview">The result whose value will be
+    transformed.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">transformer</span>
+        : <span>?</span><span class="type">function(</span>)<span>:?</span>
+        <div class="entryOverview">The transformer
+    function. The return value of this function will become the value of the
+    returned result.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_result_DependentResult.html">goog.result.DependentResult</a></span>&nbsp;
+            A new Result whose eventual value will
+    be the returned value of the transformer function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line238">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.wait"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">wait<span class="args">(<span class="arg">result</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_scope</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Calls the handler on resolution of the result (success or failure).
+The handler is passed the result object as the only parameter. The call will
+be immediate if the result is no longer pending.
+
+Example:
+<pre class="lang-js prettyprint">
+
+var result = xhr.get('testdata/xhr_test_text.data');
+
+// Wait for the result to be resolved and alert it's state.
+goog.result.wait(result, function(result) {
+  alert('State: ' + result.getState());
+});
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">result</span>
+        : <span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>
+        <div class="entryOverview">The result to install the handlers.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">handler</span>
+        : <span class="type">function(this:T, !goog.result.Result</span>)
+        <div class="entryOverview">The handler to be
+    called. The handler is passed the result object as the only parameter.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_scope</span>
+        : <span>!</span><span class="type">T=</span>
+        <div class="entryOverview">Optional scope for the handler.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line128">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.waitOnError"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">waitOnError<span class="args">(<span class="arg">result</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_scope</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Calls the handler if the result action errors. The result object is passed as
+the only parameter to the handler. The call will be immediate if the result
+object has already resolved to an error.
+
+Example:
+
+<pre class="lang-js prettyprint">
+
+var result = xhr.get('testdata/xhr_test_text.data');
+
+// Attach a failure handler.
+goog.result.waitOnError(result, function(error) {
+ // Failed asynchronous call!
+});
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">result</span>
+        : <span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>
+        <div class="entryOverview">The result to install the handlers.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">handler</span>
+        : <span class="type">function(this:T, ?, !goog.result.Result</span>)
+        <div class="entryOverview">The handler to be
+    called. The handler is passed the error and the result object as
+    parameters.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_scope</span>
+        : <span>!</span><span class="type">T=</span>
+        <div class="entryOverview">Optional scope for the handler.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line191">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.result.waitOnSuccess"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.result.</span><span class="entryName">waitOnSuccess<span class="args">(<span class="arg">result</span>,&nbsp;<span class="arg">handler</span>,&nbsp;<span class="arg">opt_scope</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Calls the handler if the result succeeds. The result object is the only
+parameter passed to the handler. The call will be immediate if the result
+has already succeeded.
+
+Example:
+<pre class="lang-js prettyprint">
+
+var result = xhr.get('testdata/xhr_test_text.data');
+
+// attach a success handler.
+goog.result.waitOnSuccess(result, function(resultValue, result) {
+  var datavalue = result.getvalue();
+  alert('value: ' + datavalue + ' == ' + resultValue);
+});
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">result</span>
+        : <span>!</span><span class="type"><a href="interface_goog_result_Result.html">goog.result.Result</a></span>
+        <div class="entryOverview">The result to install the handlers.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">handler</span>
+        : <span class="type">function(this:T, ?, !goog.result.Result</span>)
+        <div class="entryOverview">The handler to be
+    called. The handler is passed the result value and the result as
+    parameters.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_scope</span>
+        : <span>!</span><span class="type">T=</span>
+        <div class="entryOverview">Optional scope for the handler.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_result_resultutil.js.source.html#line157">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory result</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/result/resultutil.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

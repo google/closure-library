@@ -1,0 +1,233 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>bulkloader.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_bulkloader.js.html">bulkloader.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Loads a list of URIs in bulk. All requests must be a success
+<a name="line17"></a> * in order for the load to be considered a success.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.net.BulkLoader&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line24"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line25"></a>goog.require(&#39;goog.log&#39;);
+<a name="line26"></a>goog.require(&#39;goog.net.BulkLoaderHelper&#39;);
+<a name="line27"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line28"></a>goog.require(&#39;goog.net.XhrIo&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Class used to load multiple URIs.
+<a name="line34"></a> * @param {Array.&lt;string|goog.Uri&gt;} uris The URIs to load.
+<a name="line35"></a> * @constructor
+<a name="line36"></a> * @extends {goog.events.EventTarget}
+<a name="line37"></a> * @final
+<a name="line38"></a> */
+<a name="line39"></a>goog.net.BulkLoader = function(uris) {
+<a name="line40"></a>  goog.events.EventTarget.call(this);
+<a name="line41"></a>
+<a name="line42"></a>  /**
+<a name="line43"></a>   * The bulk loader helper.
+<a name="line44"></a>   * @type {goog.net.BulkLoaderHelper}
+<a name="line45"></a>   * @private
+<a name="line46"></a>   */
+<a name="line47"></a>  this.helper_ = new goog.net.BulkLoaderHelper(uris);
+<a name="line48"></a>
+<a name="line49"></a>  /**
+<a name="line50"></a>   * The handler for managing events.
+<a name="line51"></a>   * @type {goog.events.EventHandler.&lt;!goog.net.BulkLoader&gt;}
+<a name="line52"></a>   * @private
+<a name="line53"></a>   */
+<a name="line54"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line55"></a>};
+<a name="line56"></a>goog.inherits(goog.net.BulkLoader, goog.events.EventTarget);
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * A logger.
+<a name="line61"></a> * @type {goog.log.Logger}
+<a name="line62"></a> * @private
+<a name="line63"></a> */
+<a name="line64"></a>goog.net.BulkLoader.prototype.logger_ =
+<a name="line65"></a>    goog.log.getLogger(&#39;goog.net.BulkLoader&#39;);
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * Gets the response texts, in order.
+<a name="line70"></a> * @return {Array.&lt;string&gt;} The response texts.
+<a name="line71"></a> */
+<a name="line72"></a>goog.net.BulkLoader.prototype.getResponseTexts = function() {
+<a name="line73"></a>  return this.helper_.getResponseTexts();
+<a name="line74"></a>};
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Gets the request Uris.
+<a name="line79"></a> * @return {Array.&lt;string&gt;} The request URIs, in order.
+<a name="line80"></a> */
+<a name="line81"></a>goog.net.BulkLoader.prototype.getRequestUris = function() {
+<a name="line82"></a>  return this.helper_.getUris();
+<a name="line83"></a>};
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Starts the process of loading the URIs.
+<a name="line88"></a> */
+<a name="line89"></a>goog.net.BulkLoader.prototype.load = function() {
+<a name="line90"></a>  var eventHandler = this.eventHandler_;
+<a name="line91"></a>  var uris = this.helper_.getUris();
+<a name="line92"></a>  goog.log.info(this.logger_,
+<a name="line93"></a>      &#39;Starting load of code with &#39; + uris.length + &#39; uris.&#39;);
+<a name="line94"></a>
+<a name="line95"></a>  for (var i = 0; i &lt; uris.length; i++) {
+<a name="line96"></a>    var xhrIo = new goog.net.XhrIo();
+<a name="line97"></a>    eventHandler.listen(xhrIo,
+<a name="line98"></a>        goog.net.EventType.COMPLETE,
+<a name="line99"></a>        goog.bind(this.handleEvent_, this, i));
+<a name="line100"></a>
+<a name="line101"></a>    xhrIo.send(uris[i]);
+<a name="line102"></a>  }
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Handles all events fired by the XhrManager.
+<a name="line108"></a> * @param {number} id The id of the request.
+<a name="line109"></a> * @param {goog.events.Event} e The event.
+<a name="line110"></a> * @private
+<a name="line111"></a> */
+<a name="line112"></a>goog.net.BulkLoader.prototype.handleEvent_ = function(id, e) {
+<a name="line113"></a>  goog.log.info(this.logger_, &#39;Received event &quot;&#39; + e.type + &#39;&quot; for id &#39; + id +
+<a name="line114"></a>      &#39; with uri &#39; + this.helper_.getUri(id));
+<a name="line115"></a>  var xhrIo = /** @type {goog.net.XhrIo} */ (e.target);
+<a name="line116"></a>  if (xhrIo.isSuccess()) {
+<a name="line117"></a>    this.handleSuccess_(id, xhrIo);
+<a name="line118"></a>  } else {
+<a name="line119"></a>    this.handleError_(id, xhrIo);
+<a name="line120"></a>  }
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Handles when a request is successful (i.e., completed and response received).
+<a name="line126"></a> * Stores thhe responseText and checks if loading is complete.
+<a name="line127"></a> * @param {number} id The id of the request.
+<a name="line128"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo objects that was used.
+<a name="line129"></a> * @private
+<a name="line130"></a> */
+<a name="line131"></a>goog.net.BulkLoader.prototype.handleSuccess_ = function(
+<a name="line132"></a>    id, xhrIo) {
+<a name="line133"></a>  // Save the response text.
+<a name="line134"></a>  this.helper_.setResponseText(id, xhrIo.getResponseText());
+<a name="line135"></a>
+<a name="line136"></a>  // Check if all response texts have been received.
+<a name="line137"></a>  if (this.helper_.isLoadComplete()) {
+<a name="line138"></a>    this.finishLoad_();
+<a name="line139"></a>  }
+<a name="line140"></a>  xhrIo.dispose();
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Handles when a request has ended in error (i.e., all retries completed and
+<a name="line146"></a> * none were successful). Cancels loading of the URI&#39;s.
+<a name="line147"></a> * @param {number|string} id The id of the request.
+<a name="line148"></a> * @param {goog.net.XhrIo} xhrIo The XhrIo objects that was used.
+<a name="line149"></a> * @private
+<a name="line150"></a> */
+<a name="line151"></a>goog.net.BulkLoader.prototype.handleError_ = function(
+<a name="line152"></a>    id, xhrIo) {
+<a name="line153"></a>  // TODO(user): Abort all pending requests.
+<a name="line154"></a>
+<a name="line155"></a>  // Dispatch the ERROR event.
+<a name="line156"></a>  this.dispatchEvent(goog.net.EventType.ERROR);
+<a name="line157"></a>  xhrIo.dispose();
+<a name="line158"></a>};
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Finishes the load of the URI&#39;s. Dispatches the SUCCESS event.
+<a name="line163"></a> * @private
+<a name="line164"></a> */
+<a name="line165"></a>goog.net.BulkLoader.prototype.finishLoad_ = function() {
+<a name="line166"></a>  goog.log.info(this.logger_, &#39;All uris loaded.&#39;);
+<a name="line167"></a>
+<a name="line168"></a>  // Dispatch the SUCCESS event.
+<a name="line169"></a>  this.dispatchEvent(goog.net.EventType.SUCCESS);
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/** @override */
+<a name="line174"></a>goog.net.BulkLoader.prototype.disposeInternal = function() {
+<a name="line175"></a>  goog.net.BulkLoader.superClass_.disposeInternal.call(this);
+<a name="line176"></a>
+<a name="line177"></a>  this.eventHandler_.dispose();
+<a name="line178"></a>  this.eventHandler_ = null;
+<a name="line179"></a>
+<a name="line180"></a>  this.helper_.dispose();
+<a name="line181"></a>  this.helper_ = null;
+<a name="line182"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>equationeditorplugin.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_plugins_equationeditorplugin.js.html">equationeditorplugin.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.editor.plugins.EquationEditorPlugin&#39;);
+<a name="line16"></a>
+<a name="line17"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line18"></a>goog.require(&#39;goog.editor.Command&#39;);
+<a name="line19"></a>goog.require(&#39;goog.editor.plugins.AbstractDialogPlugin&#39;);
+<a name="line20"></a>goog.require(&#39;goog.editor.range&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line23"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line24"></a>goog.require(&#39;goog.log&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.editor.AbstractDialog&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.editor.EquationEditorDialog&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.equation.ImageRenderer&#39;);
+<a name="line28"></a>goog.require(&#39;goog.ui.equation.PaletteManager&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * A plugin that opens the equation editor in a dialog window.
+<a name="line34"></a> * @param {string=} opt_helpUrl A URL pointing to help documentation.
+<a name="line35"></a> * @constructor
+<a name="line36"></a> * @extends {goog.editor.plugins.AbstractDialogPlugin}
+<a name="line37"></a> * @final
+<a name="line38"></a> */
+<a name="line39"></a>goog.editor.plugins.EquationEditorPlugin = function(opt_helpUrl) {
+<a name="line40"></a>  /**
+<a name="line41"></a>   * The IMG element for the equation being edited, null if creating a new
+<a name="line42"></a>   * equation.
+<a name="line43"></a>   * @type {Element}
+<a name="line44"></a>   * @private
+<a name="line45"></a>   */
+<a name="line46"></a>  this.originalElement_;
+<a name="line47"></a>
+<a name="line48"></a>  /**
+<a name="line49"></a>   * A URL pointing to help documentation.
+<a name="line50"></a>   * @type {string}
+<a name="line51"></a>   * @private
+<a name="line52"></a>   */
+<a name="line53"></a>  this.helpUrl_ = opt_helpUrl || &#39;&#39;;
+<a name="line54"></a>
+<a name="line55"></a>  /**
+<a name="line56"></a>   * The listener key for double click events.
+<a name="line57"></a>   * @type {goog.events.Key}
+<a name="line58"></a>   * @private
+<a name="line59"></a>   */
+<a name="line60"></a>  this.dblClickKey_;
+<a name="line61"></a>
+<a name="line62"></a>  goog.editor.plugins.AbstractDialogPlugin.call(this,
+<a name="line63"></a>      goog.editor.Command.EQUATION);
+<a name="line64"></a>};
+<a name="line65"></a>goog.inherits(goog.editor.plugins.EquationEditorPlugin,
+<a name="line66"></a>    goog.editor.plugins.AbstractDialogPlugin);
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * The logger for the EquationEditorPlugin.
+<a name="line71"></a> * @type {goog.log.Logger}
+<a name="line72"></a> * @private
+<a name="line73"></a> */
+<a name="line74"></a>goog.editor.plugins.EquationEditorPlugin.prototype.logger_ =
+<a name="line75"></a>    goog.log.getLogger(&#39;goog.editor.plugins.EquationEditorPlugin&#39;);
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/** @override */
+<a name="line79"></a>goog.editor.plugins.EquationEditorPlugin.prototype.getTrogClassId =
+<a name="line80"></a>    goog.functions.constant(&#39;EquationEditorPlugin&#39;);
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * @override
+<a name="line85"></a> */
+<a name="line86"></a>goog.editor.plugins.EquationEditorPlugin.prototype.createDialog =
+<a name="line87"></a>    function(dom, opt_arg) {
+<a name="line88"></a>  var equationImgEl = /** @type {Element} */ (opt_arg || null);
+<a name="line89"></a>
+<a name="line90"></a>  var equationStr = equationImgEl ?
+<a name="line91"></a>      goog.ui.equation.ImageRenderer.getEquationFromImage(equationImgEl) : &#39;&#39;;
+<a name="line92"></a>
+<a name="line93"></a>  this.originalElement_ = equationImgEl;
+<a name="line94"></a>  var dialog = new goog.ui.editor.EquationEditorDialog(
+<a name="line95"></a>      this.populateContext_(dom), dom, equationStr, this.helpUrl_);
+<a name="line96"></a>  dialog.addEventListener(goog.ui.editor.AbstractDialog.EventType.OK,
+<a name="line97"></a>      this.handleOk_,
+<a name="line98"></a>      false,
+<a name="line99"></a>      this);
+<a name="line100"></a>  return dialog;
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Populates the context that this plugin runs in.
+<a name="line106"></a> * @param {!goog.dom.DomHelper} domHelper The dom helper to be used for the
+<a name="line107"></a> *     palette manager.
+<a name="line108"></a> * @return {!Object} The context that this plugin runs in.
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.editor.plugins.EquationEditorPlugin.prototype.populateContext_ =
+<a name="line112"></a>    function(domHelper) {
+<a name="line113"></a>  var context = {};
+<a name="line114"></a>  context.paletteManager = new goog.ui.equation.PaletteManager(domHelper);
+<a name="line115"></a>  return context;
+<a name="line116"></a>};
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Returns the selected text in the editable field for using as initial
+<a name="line121"></a> * equation string for the equation editor.
+<a name="line122"></a> *
+<a name="line123"></a> * TODO(user): Sanity check the selected text and return it only if it
+<a name="line124"></a> *     reassembles a TeX equation and is not too long.
+<a name="line125"></a> *
+<a name="line126"></a> * @return {string} Selected text in the editable field for using it as
+<a name="line127"></a> *     initial equation string for the equation editor.
+<a name="line128"></a> * @private
+<a name="line129"></a> */
+<a name="line130"></a>goog.editor.plugins.EquationEditorPlugin.prototype.getEquationFromSelection_ =
+<a name="line131"></a>    function() {
+<a name="line132"></a>  var range = this.getFieldObject().getRange();
+<a name="line133"></a>  if (range) {
+<a name="line134"></a>    return range.getText();
+<a name="line135"></a>  }
+<a name="line136"></a>
+<a name="line137"></a>  return &#39;&#39;;
+<a name="line138"></a>};
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/** @override */
+<a name="line142"></a>goog.editor.plugins.EquationEditorPlugin.prototype.enable =
+<a name="line143"></a>    function(fieldObject) {
+<a name="line144"></a>  goog.editor.plugins.EquationEditorPlugin.base(this, &#39;enable&#39;, fieldObject);
+<a name="line145"></a>  if (this.isEnabled(fieldObject)) {
+<a name="line146"></a>    this.dblClickKey_ = goog.events.listen(fieldObject.getElement(),
+<a name="line147"></a>        goog.events.EventType.DBLCLICK,
+<a name="line148"></a>        goog.bind(this.handleDoubleClick_, this), false, this);
+<a name="line149"></a>  }
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/** @override */
+<a name="line154"></a>goog.editor.plugins.EquationEditorPlugin.prototype.disable =
+<a name="line155"></a>    function(fieldObject) {
+<a name="line156"></a>  goog.editor.plugins.EquationEditorPlugin.base(this, &#39;disable&#39;, fieldObject);
+<a name="line157"></a>  if (!this.isEnabled(fieldObject)) {
+<a name="line158"></a>    goog.events.unlistenByKey(this.dblClickKey_);
+<a name="line159"></a>  }
+<a name="line160"></a>};
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * Handles double clicks in the field area.
+<a name="line165"></a> * @param {goog.events.Event} e The event.
+<a name="line166"></a> * @private
+<a name="line167"></a> */
+<a name="line168"></a>goog.editor.plugins.EquationEditorPlugin.prototype.handleDoubleClick_ =
+<a name="line169"></a>    function(e) {
+<a name="line170"></a>  var node = /** @type {Node} */ (e.target);
+<a name="line171"></a>  this.execCommand(goog.editor.Command.EQUATION, node);
+<a name="line172"></a>};
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * Called when user clicks OK. Inserts the equation at cursor position in the
+<a name="line177"></a> * active editable field.
+<a name="line178"></a> * @param {goog.ui.editor.EquationEditorOkEvent} e The OK event.
+<a name="line179"></a> * @private
+<a name="line180"></a> */
+<a name="line181"></a>goog.editor.plugins.EquationEditorPlugin.prototype.handleOk_ =
+<a name="line182"></a>    function(e) {
+<a name="line183"></a>  // First restore the selection so we can manipulate the editable field&#39;s
+<a name="line184"></a>  // content according to what was selected.
+<a name="line185"></a>  this.restoreOriginalSelection();
+<a name="line186"></a>
+<a name="line187"></a>  // Notify listeners that the editable field&#39;s contents are about to change.
+<a name="line188"></a>  this.getFieldObject().dispatchBeforeChange();
+<a name="line189"></a>
+<a name="line190"></a>  var dh = this.getFieldDomHelper();
+<a name="line191"></a>  var node = dh.htmlToDocumentFragment(e.equationHtml);
+<a name="line192"></a>
+<a name="line193"></a>  if (this.originalElement_) {
+<a name="line194"></a>    // Editing existing equation: replace the old equation node with the new
+<a name="line195"></a>    // one.
+<a name="line196"></a>    goog.dom.replaceNode(node, this.originalElement_);
+<a name="line197"></a>  } else {
+<a name="line198"></a>    // Clear out what was previously selected, unless selection is already
+<a name="line199"></a>    // empty (aka collapsed), and replace it with the new equation node.
+<a name="line200"></a>    // TODO(user): there is a bug in FF where removeContents() may remove a
+<a name="line201"></a>    // &lt;br&gt; right before and/or after the selection. Currently this is fixed
+<a name="line202"></a>    // only for case of collapsed selection where we simply avoid calling
+<a name="line203"></a>    // removeContants().
+<a name="line204"></a>    var range = this.getFieldObject().getRange();
+<a name="line205"></a>    if (!range.isCollapsed()) {
+<a name="line206"></a>      range.removeContents();
+<a name="line207"></a>    }
+<a name="line208"></a>    node = range.insertNode(node, false);
+<a name="line209"></a>  }
+<a name="line210"></a>
+<a name="line211"></a>  // Place the cursor to the right of the
+<a name="line212"></a>  // equation image.
+<a name="line213"></a>  goog.editor.range.placeCursorNextTo(node, false);
+<a name="line214"></a>
+<a name="line215"></a>  this.getFieldObject().dispatchChange();
+<a name="line216"></a>};
+</pre>
+
+
+</body>
+</html>

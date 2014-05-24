@@ -1,0 +1,177 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>bezier_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_math_bezier_test.js.html">bezier_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.math.BezierTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.math.BezierTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.math&#39;);
+<a name="line19"></a>goog.require(&#39;goog.math.Bezier&#39;);
+<a name="line20"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>function testEquals() {
+<a name="line24"></a>  var input = new goog.math.Bezier(1, 2, 3, 4, 5, 6, 7, 8);
+<a name="line25"></a>
+<a name="line26"></a>  assert(input.equals(input));
+<a name="line27"></a>}
+<a name="line28"></a>
+<a name="line29"></a>function testClone() {
+<a name="line30"></a>  var input = new goog.math.Bezier(1, 2, 3, 4, 5, 6, 7, 8);
+<a name="line31"></a>
+<a name="line32"></a>  assertNotEquals(&#39;Clone returns a new object&#39;, input, input.clone());
+<a name="line33"></a>  assert(&#39;Contents of clone match original&#39;, input.equals(input.clone()));
+<a name="line34"></a>}
+<a name="line35"></a>
+<a name="line36"></a>function testFlip() {
+<a name="line37"></a>  var input = new goog.math.Bezier(1, 1, 2, 2, 3, 3, 4, 4);
+<a name="line38"></a>  var compare = new goog.math.Bezier(4, 4, 3, 3, 2, 2, 1, 1);
+<a name="line39"></a>
+<a name="line40"></a>  var flipped = input.clone();
+<a name="line41"></a>  flipped.flip();
+<a name="line42"></a>  assert(&#39;Flipped behaves as expected&#39;, compare.equals(flipped));
+<a name="line43"></a>
+<a name="line44"></a>  flipped.flip();
+<a name="line45"></a>  assert(&#39;Flipping twice gives original&#39;, input.equals(flipped));
+<a name="line46"></a>}
+<a name="line47"></a>
+<a name="line48"></a>function testGetPoint() {
+<a name="line49"></a>  var input = new goog.math.Bezier(0, 1, 1, 2, 2, 3, 3, 4);
+<a name="line50"></a>
+<a name="line51"></a>  assert(goog.math.Coordinate.equals(input.getPoint(0),
+<a name="line52"></a>      new goog.math.Coordinate(0, 1)));
+<a name="line53"></a>  assert(goog.math.Coordinate.equals(input.getPoint(1),
+<a name="line54"></a>      new goog.math.Coordinate(3, 4)));
+<a name="line55"></a>  assert(goog.math.Coordinate.equals(input.getPoint(0.5),
+<a name="line56"></a>      new goog.math.Coordinate(1.5, 2.5)));
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>function testGetPointX() {
+<a name="line60"></a>  var input = new goog.math.Bezier(0, 1, 1, 2, 2, 3, 3, 4);
+<a name="line61"></a>
+<a name="line62"></a>  assert(goog.math.nearlyEquals(input.getPointX(0), 0));
+<a name="line63"></a>  assert(goog.math.nearlyEquals(input.getPointX(1), 3));
+<a name="line64"></a>  assert(goog.math.nearlyEquals(input.getPointX(0.5), 1.5));
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>function testGetPointY() {
+<a name="line68"></a>  var input = new goog.math.Bezier(0, 1, 1, 2, 2, 3, 3, 4);
+<a name="line69"></a>
+<a name="line70"></a>  assert(goog.math.nearlyEquals(input.getPointY(0), 1));
+<a name="line71"></a>  assert(goog.math.nearlyEquals(input.getPointY(1), 4));
+<a name="line72"></a>  assert(goog.math.nearlyEquals(input.getPointY(0.5), 2.5));
+<a name="line73"></a>}
+<a name="line74"></a>
+<a name="line75"></a>function testSubdivide() {
+<a name="line76"></a>  var input = new goog.math.Bezier(0, 1, 1, 2, 2, 3, 3, 4);
+<a name="line77"></a>
+<a name="line78"></a>  input.subdivide(1 / 3, 2 / 3);
+<a name="line79"></a>
+<a name="line80"></a>  assert(goog.math.nearlyEquals(1, input.x0));
+<a name="line81"></a>  assert(goog.math.nearlyEquals(2, input.y0));
+<a name="line82"></a>  assert(goog.math.nearlyEquals(2, input.x3));
+<a name="line83"></a>  assert(goog.math.nearlyEquals(3, input.y3));
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>function testSolvePositionFromXValue() {
+<a name="line87"></a>  var eps = 1e-6;
+<a name="line88"></a>  var bezier = new goog.math.Bezier(0, 0, 0.25, 0.1, 0.25, 1, 1, 1);
+<a name="line89"></a>  var pt = bezier.getPoint(0.5);
+<a name="line90"></a>  assertRoughlyEquals(0.3125, pt.x, eps);
+<a name="line91"></a>  assertRoughlyEquals(0.5375, pt.y, eps);
+<a name="line92"></a>  assertRoughlyEquals(0.321,
+<a name="line93"></a>      bezier.solvePositionFromXValue(bezier.getPoint(0.321).x), eps);
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>function testSolveYValueFromXValue() {
+<a name="line97"></a>  var eps = 1e-6;
+<a name="line98"></a>  // The following example is taken from
+<a name="line99"></a>  // http://www.netzgesta.de/dev/cubic-bezier-timing-function.html.
+<a name="line100"></a>  // The timing values shown in that page are 1 - &lt;value&gt; so the
+<a name="line101"></a>  // bezier curves in this test are constructed with 1 - ctrl points.
+<a name="line102"></a>  // E.g. ctrl points (0, 0, 0.25, 0.1, 0.25, 1, 1, 1) become
+<a name="line103"></a>  // (1, 1, 0.75, 0, 0.75, 0.9, 0, 0) here. Since chanding the order of
+<a name="line104"></a>  // the ctrl points does not affect the shape of the curve, once can also
+<a name="line105"></a>  // have (0, 0, 0.75, 0.9, 0.75, 0, 1, 1).
+<a name="line106"></a>
+<a name="line107"></a>  // netzgesta example.
+<a name="line108"></a>  var bezier = new goog.math.Bezier(1, 1, 0.75, 0.9, 0.75, 0, 0, 0);
+<a name="line109"></a>  assertRoughlyEquals(0.024374631, bezier.solveYValueFromXValue(0.2), eps);
+<a name="line110"></a>  assertRoughlyEquals(0.317459494, bezier.solveYValueFromXValue(0.6), eps);
+<a name="line111"></a>  assertRoughlyEquals(0.905205002, bezier.solveYValueFromXValue(0.9), eps);
+<a name="line112"></a>
+<a name="line113"></a>  // netzgesta example with ctrl points in the reverse order so that 1st and
+<a name="line114"></a>  // last ctrl points are (0, 0) and (1, 1). Note the result is exactly the
+<a name="line115"></a>  // same.
+<a name="line116"></a>  bezier = new goog.math.Bezier(0, 0, 0.75, 0, 0.75, 0.9, 1, 1);
+<a name="line117"></a>  assertRoughlyEquals(0.024374631, bezier.solveYValueFromXValue(0.2), eps);
+<a name="line118"></a>  assertRoughlyEquals(0.317459494, bezier.solveYValueFromXValue(0.6), eps);
+<a name="line119"></a>  assertRoughlyEquals(0.905205002, bezier.solveYValueFromXValue(0.9), eps);
+<a name="line120"></a>
+<a name="line121"></a>  // Ease-out css animation timing in webkit.
+<a name="line122"></a>  bezier = new goog.math.Bezier(0, 0, 0, 0, 0.58, 1, 1, 1);
+<a name="line123"></a>  assertRoughlyEquals(0.308366667, bezier.solveYValueFromXValue(0.2), eps);
+<a name="line124"></a>  assertRoughlyEquals(0.785139061, bezier.solveYValueFromXValue(0.6), eps);
+<a name="line125"></a>  assertRoughlyEquals(0.982973389, bezier.solveYValueFromXValue(0.9), eps);
+<a name="line126"></a>}
+</pre>
+
+
+</body>
+</html>

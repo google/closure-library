@@ -1,0 +1,908 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>svggraphics.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_graphics_svggraphics.js.html">svggraphics.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview SvgGraphics sub class that uses SVG to draw the graphics.
+<a name="line18"></a> * @author arv@google.com (Erik Arvidsson)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.graphics.SvgGraphics&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line27"></a>goog.require(&#39;goog.graphics.AbstractGraphics&#39;);
+<a name="line28"></a>goog.require(&#39;goog.graphics.LinearGradient&#39;);
+<a name="line29"></a>goog.require(&#39;goog.graphics.Path&#39;);
+<a name="line30"></a>goog.require(&#39;goog.graphics.SolidFill&#39;);
+<a name="line31"></a>goog.require(&#39;goog.graphics.Stroke&#39;);
+<a name="line32"></a>goog.require(&#39;goog.graphics.SvgEllipseElement&#39;);
+<a name="line33"></a>goog.require(&#39;goog.graphics.SvgGroupElement&#39;);
+<a name="line34"></a>goog.require(&#39;goog.graphics.SvgImageElement&#39;);
+<a name="line35"></a>goog.require(&#39;goog.graphics.SvgPathElement&#39;);
+<a name="line36"></a>goog.require(&#39;goog.graphics.SvgRectElement&#39;);
+<a name="line37"></a>goog.require(&#39;goog.graphics.SvgTextElement&#39;);
+<a name="line38"></a>goog.require(&#39;goog.math&#39;);
+<a name="line39"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line40"></a>goog.require(&#39;goog.style&#39;);
+<a name="line41"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * A Graphics implementation for drawing using SVG.
+<a name="line47"></a> * @param {string|number} width The width in pixels.  Strings
+<a name="line48"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
+<a name="line49"></a> * @param {string|number} height The height in pixels.  Strings
+<a name="line50"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
+<a name="line51"></a> * @param {?number=} opt_coordWidth The coordinate width - if
+<a name="line52"></a> *     omitted or null, defaults to same as width.
+<a name="line53"></a> * @param {?number=} opt_coordHeight The coordinate height - if
+<a name="line54"></a> *     omitted or null, defaults to same as height.
+<a name="line55"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
+<a name="line56"></a> *     document we want to render in.
+<a name="line57"></a> * @constructor
+<a name="line58"></a> * @extends {goog.graphics.AbstractGraphics}
+<a name="line59"></a> * @deprecated goog.graphics is deprecated. It existed to abstract over browser
+<a name="line60"></a> *     differences before the canvas tag was widely supported.  See
+<a name="line61"></a> *     http://en.wikipedia.org/wiki/Canvas_element for details.
+<a name="line62"></a> * @final
+<a name="line63"></a> */
+<a name="line64"></a>goog.graphics.SvgGraphics = function(width, height,
+<a name="line65"></a>                                     opt_coordWidth, opt_coordHeight,
+<a name="line66"></a>                                     opt_domHelper) {
+<a name="line67"></a>  goog.graphics.AbstractGraphics.call(this, width, height,
+<a name="line68"></a>                                      opt_coordWidth, opt_coordHeight,
+<a name="line69"></a>                                      opt_domHelper);
+<a name="line70"></a>
+<a name="line71"></a>  /**
+<a name="line72"></a>   * Map from def key to id of def root element.
+<a name="line73"></a>   * Defs are global &quot;defines&quot; of svg that are used to share common attributes,
+<a name="line74"></a>   * for example gradients.
+<a name="line75"></a>   * @type {Object}
+<a name="line76"></a>   * @private
+<a name="line77"></a>   */
+<a name="line78"></a>  this.defs_ = {};
+<a name="line79"></a>
+<a name="line80"></a>  /**
+<a name="line81"></a>   * Whether to manually implement viewBox by using a coordinate transform.
+<a name="line82"></a>   * As of 1/11/08 this is necessary for Safari 3 but not for the nightly
+<a name="line83"></a>   * WebKit build. Apply to webkit versions &lt; 526. 525 is the
+<a name="line84"></a>   * last version used by Safari 3.1.
+<a name="line85"></a>   * @type {boolean}
+<a name="line86"></a>   * @private
+<a name="line87"></a>   */
+<a name="line88"></a>  this.useManualViewbox_ = goog.userAgent.WEBKIT &amp;&amp;
+<a name="line89"></a>                           !goog.userAgent.isVersionOrHigher(526);
+<a name="line90"></a>
+<a name="line91"></a>  /**
+<a name="line92"></a>   * Event handler.
+<a name="line93"></a>   * @type {goog.events.EventHandler.&lt;!goog.graphics.SvgGraphics&gt;}
+<a name="line94"></a>   * @private
+<a name="line95"></a>   */
+<a name="line96"></a>  this.handler_ = new goog.events.EventHandler(this);
+<a name="line97"></a>};
+<a name="line98"></a>goog.inherits(goog.graphics.SvgGraphics, goog.graphics.AbstractGraphics);
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * The SVG namespace URN
+<a name="line103"></a> * @private
+<a name="line104"></a> * @type {string}
+<a name="line105"></a> */
+<a name="line106"></a>goog.graphics.SvgGraphics.SVG_NS_ = &#39;http://www.w3.org/2000/svg&#39;;
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * The name prefix for def entries
+<a name="line111"></a> * @private
+<a name="line112"></a> * @type {string}
+<a name="line113"></a> */
+<a name="line114"></a>goog.graphics.SvgGraphics.DEF_ID_PREFIX_ = &#39;_svgdef_&#39;;
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * The next available unique identifier for a def entry.
+<a name="line119"></a> * This is a static variable, so that when multiple graphics are used in one
+<a name="line120"></a> * document, the same def id can not be re-defined by another SvgGraphics.
+<a name="line121"></a> * @type {number}
+<a name="line122"></a> * @private
+<a name="line123"></a> */
+<a name="line124"></a>goog.graphics.SvgGraphics.nextDefId_ = 0;
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Svg element for definitions for other elements, e.g. linear gradients.
+<a name="line129"></a> * @type {Element}
+<a name="line130"></a> * @private
+<a name="line131"></a> */
+<a name="line132"></a>goog.graphics.SvgGraphics.prototype.defsElement_;
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Creates an SVG element. Used internally and by different SVG classes.
+<a name="line137"></a> * @param {string} tagName The type of element to create.
+<a name="line138"></a> * @param {Object=} opt_attributes Map of name-value pairs for attributes.
+<a name="line139"></a> * @return {!Element} The created element.
+<a name="line140"></a> * @private
+<a name="line141"></a> */
+<a name="line142"></a>goog.graphics.SvgGraphics.prototype.createSvgElement_ = function(tagName,
+<a name="line143"></a>    opt_attributes) {
+<a name="line144"></a>  var element = this.dom_.getDocument().createElementNS(
+<a name="line145"></a>      goog.graphics.SvgGraphics.SVG_NS_, tagName);
+<a name="line146"></a>
+<a name="line147"></a>  if (opt_attributes) {
+<a name="line148"></a>    this.setElementAttributes(element, opt_attributes);
+<a name="line149"></a>  }
+<a name="line150"></a>
+<a name="line151"></a>  return element;
+<a name="line152"></a>};
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * Sets properties to an SVG element. Used internally and by different
+<a name="line157"></a> * SVG elements.
+<a name="line158"></a> * @param {Element} element The svg element.
+<a name="line159"></a> * @param {Object} attributes Map of name-value pairs for attributes.
+<a name="line160"></a> */
+<a name="line161"></a>goog.graphics.SvgGraphics.prototype.setElementAttributes = function(element,
+<a name="line162"></a>    attributes) {
+<a name="line163"></a>  for (var key in attributes) {
+<a name="line164"></a>    element.setAttribute(key, attributes[key]);
+<a name="line165"></a>  }
+<a name="line166"></a>};
+<a name="line167"></a>
+<a name="line168"></a>
+<a name="line169"></a>/**
+<a name="line170"></a> * Appends an element.
+<a name="line171"></a> *
+<a name="line172"></a> * @param {goog.graphics.Element} element The element wrapper.
+<a name="line173"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
+<a name="line174"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line175"></a> * @private
+<a name="line176"></a> */
+<a name="line177"></a>goog.graphics.SvgGraphics.prototype.append_ = function(element, opt_group) {
+<a name="line178"></a>  var parent = opt_group || this.canvasElement;
+<a name="line179"></a>  parent.getElement().appendChild(element.getElement());
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Sets the fill of the given element.
+<a name="line185"></a> * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
+<a name="line186"></a> * @param {goog.graphics.Fill?} fill The fill object.
+<a name="line187"></a> * @override
+<a name="line188"></a> */
+<a name="line189"></a>goog.graphics.SvgGraphics.prototype.setElementFill = function(element, fill) {
+<a name="line190"></a>  var svgElement = element.getElement();
+<a name="line191"></a>  if (fill instanceof goog.graphics.SolidFill) {
+<a name="line192"></a>    svgElement.setAttribute(&#39;fill&#39;, fill.getColor());
+<a name="line193"></a>    svgElement.setAttribute(&#39;fill-opacity&#39;, fill.getOpacity());
+<a name="line194"></a>  } else if (fill instanceof goog.graphics.LinearGradient) {
+<a name="line195"></a>    // create a def key which is just a concat of all the relevant fields
+<a name="line196"></a>    var defKey = &#39;lg-&#39; +
+<a name="line197"></a>                 fill.getX1() + &#39;-&#39; + fill.getY1() + &#39;-&#39; +
+<a name="line198"></a>                 fill.getX2() + &#39;-&#39; + fill.getY2() + &#39;-&#39; +
+<a name="line199"></a>                 fill.getColor1() + &#39;-&#39; + fill.getColor2();
+<a name="line200"></a>    // It seems that the SVG version accepts opacity where the VML does not
+<a name="line201"></a>
+<a name="line202"></a>    var id = this.getDef(defKey);
+<a name="line203"></a>
+<a name="line204"></a>    if (!id) { // No def for this yet, create it
+<a name="line205"></a>      // Create the gradient def entry (only linear gradient are supported)
+<a name="line206"></a>      var gradient = this.createSvgElement_(&#39;linearGradient&#39;, {
+<a name="line207"></a>        &#39;x1&#39;: fill.getX1(),
+<a name="line208"></a>        &#39;y1&#39;: fill.getY1(),
+<a name="line209"></a>        &#39;x2&#39;: fill.getX2(),
+<a name="line210"></a>        &#39;y2&#39;: fill.getY2(),
+<a name="line211"></a>        &#39;gradientUnits&#39;: &#39;userSpaceOnUse&#39;
+<a name="line212"></a>      });
+<a name="line213"></a>
+<a name="line214"></a>      var gstyle = &#39;stop-color:&#39; + fill.getColor1();
+<a name="line215"></a>      if (goog.isNumber(fill.getOpacity1())) {
+<a name="line216"></a>        gstyle += &#39;;stop-opacity:&#39; + fill.getOpacity1();
+<a name="line217"></a>      }
+<a name="line218"></a>      var stop1 = this.createSvgElement_(
+<a name="line219"></a>          &#39;stop&#39;, {&#39;offset&#39;: &#39;0%&#39;, &#39;style&#39;: gstyle});
+<a name="line220"></a>      gradient.appendChild(stop1);
+<a name="line221"></a>
+<a name="line222"></a>      // LinearGradients don&#39;t have opacity in VML so implement that before
+<a name="line223"></a>      // enabling the following code.
+<a name="line224"></a>      // if (fill.getOpacity() != null) {
+<a name="line225"></a>      //   gstyles += &#39;opacity:&#39; + fill.getOpacity() + &#39;;&#39;
+<a name="line226"></a>      // }
+<a name="line227"></a>      gstyle = &#39;stop-color:&#39; + fill.getColor2();
+<a name="line228"></a>      if (goog.isNumber(fill.getOpacity2())) {
+<a name="line229"></a>        gstyle += &#39;;stop-opacity:&#39; + fill.getOpacity2();
+<a name="line230"></a>      }
+<a name="line231"></a>      var stop2 = this.createSvgElement_(
+<a name="line232"></a>          &#39;stop&#39;, {&#39;offset&#39;: &#39;100%&#39;, &#39;style&#39;: gstyle});
+<a name="line233"></a>      gradient.appendChild(stop2);
+<a name="line234"></a>
+<a name="line235"></a>      // LinearGradients don&#39;t have opacity in VML so implement that before
+<a name="line236"></a>      // enabling the following code.
+<a name="line237"></a>      // if (fill.getOpacity() != null) {
+<a name="line238"></a>      //   gstyles += &#39;opacity:&#39; + fill.getOpacity() + &#39;;&#39;
+<a name="line239"></a>      // }
+<a name="line240"></a>
+<a name="line241"></a>      id = this.addDef(defKey, gradient);
+<a name="line242"></a>    }
+<a name="line243"></a>
+<a name="line244"></a>    // Link element to linearGradient definition
+<a name="line245"></a>    svgElement.setAttribute(&#39;fill&#39;, &#39;url(#&#39; + id + &#39;)&#39;);
+<a name="line246"></a>  } else {
+<a name="line247"></a>    svgElement.setAttribute(&#39;fill&#39;, &#39;none&#39;);
+<a name="line248"></a>  }
+<a name="line249"></a>};
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * Sets the stroke of the given element.
+<a name="line254"></a> * @param {goog.graphics.StrokeAndFillElement} element The element wrapper.
+<a name="line255"></a> * @param {goog.graphics.Stroke?} stroke The stroke object.
+<a name="line256"></a> * @override
+<a name="line257"></a> */
+<a name="line258"></a>goog.graphics.SvgGraphics.prototype.setElementStroke = function(element,
+<a name="line259"></a>    stroke) {
+<a name="line260"></a>  var svgElement = element.getElement();
+<a name="line261"></a>  if (stroke) {
+<a name="line262"></a>    svgElement.setAttribute(&#39;stroke&#39;, stroke.getColor());
+<a name="line263"></a>
+<a name="line264"></a>    var width = stroke.getWidth();
+<a name="line265"></a>    if (goog.isString(width) &amp;&amp; width.indexOf(&#39;px&#39;) != -1) {
+<a name="line266"></a>      svgElement.setAttribute(&#39;stroke-width&#39;,
+<a name="line267"></a>          parseFloat(width) / this.getPixelScaleX());
+<a name="line268"></a>    } else {
+<a name="line269"></a>      svgElement.setAttribute(&#39;stroke-width&#39;, width);
+<a name="line270"></a>    }
+<a name="line271"></a>  } else {
+<a name="line272"></a>    svgElement.setAttribute(&#39;stroke&#39;, &#39;none&#39;);
+<a name="line273"></a>  }
+<a name="line274"></a>};
+<a name="line275"></a>
+<a name="line276"></a>
+<a name="line277"></a>/**
+<a name="line278"></a> * Set the transformation of an element.
+<a name="line279"></a> * @param {goog.graphics.Element} element The element wrapper.
+<a name="line280"></a> * @param {number} x The x coordinate of the translation transform.
+<a name="line281"></a> * @param {number} y The y coordinate of the translation transform.
+<a name="line282"></a> * @param {number} angle The angle of the rotation transform.
+<a name="line283"></a> * @param {number} centerX The horizontal center of the rotation transform.
+<a name="line284"></a> * @param {number} centerY The vertical center of the rotation transform.
+<a name="line285"></a> * @override
+<a name="line286"></a> */
+<a name="line287"></a>goog.graphics.SvgGraphics.prototype.setElementTransform = function(element, x,
+<a name="line288"></a>    y, angle, centerX, centerY) {
+<a name="line289"></a>  element.getElement().setAttribute(&#39;transform&#39;, &#39;translate(&#39; + x + &#39;,&#39; + y +
+<a name="line290"></a>      &#39;) rotate(&#39; + angle + &#39; &#39; + centerX + &#39; &#39; + centerY + &#39;)&#39;);
+<a name="line291"></a>};
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * Creates the DOM representation of the graphics area.
+<a name="line296"></a> * @override
+<a name="line297"></a> */
+<a name="line298"></a>goog.graphics.SvgGraphics.prototype.createDom = function() {
+<a name="line299"></a>  // Set up the standard attributes.
+<a name="line300"></a>  var attributes = {
+<a name="line301"></a>    &#39;width&#39;: this.width,
+<a name="line302"></a>    &#39;height&#39;: this.height,
+<a name="line303"></a>    &#39;overflow&#39;: &#39;hidden&#39;
+<a name="line304"></a>  };
+<a name="line305"></a>
+<a name="line306"></a>  var svgElement = this.createSvgElement_(&#39;svg&#39;, attributes);
+<a name="line307"></a>
+<a name="line308"></a>  var groupElement = this.createSvgElement_(&#39;g&#39;);
+<a name="line309"></a>
+<a name="line310"></a>  this.defsElement_ = this.createSvgElement_(&#39;defs&#39;);
+<a name="line311"></a>  this.canvasElement = new goog.graphics.SvgGroupElement(groupElement, this);
+<a name="line312"></a>
+<a name="line313"></a>  svgElement.appendChild(this.defsElement_);
+<a name="line314"></a>  svgElement.appendChild(groupElement);
+<a name="line315"></a>
+<a name="line316"></a>  // Use the svgElement as the root element.
+<a name="line317"></a>  this.setElementInternal(svgElement);
+<a name="line318"></a>
+<a name="line319"></a>  // Set up the coordinate system.
+<a name="line320"></a>  this.setViewBox_();
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Changes the coordinate system position.
+<a name="line326"></a> * @param {number} left The coordinate system left bound.
+<a name="line327"></a> * @param {number} top The coordinate system top bound.
+<a name="line328"></a> * @override
+<a name="line329"></a> */
+<a name="line330"></a>goog.graphics.SvgGraphics.prototype.setCoordOrigin = function(left, top) {
+<a name="line331"></a>  this.coordLeft = left;
+<a name="line332"></a>  this.coordTop = top;
+<a name="line333"></a>
+<a name="line334"></a>  this.setViewBox_();
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * Changes the coordinate size.
+<a name="line340"></a> * @param {number} coordWidth The coordinate width.
+<a name="line341"></a> * @param {number} coordHeight The coordinate height.
+<a name="line342"></a> * @override
+<a name="line343"></a> */
+<a name="line344"></a>goog.graphics.SvgGraphics.prototype.setCoordSize = function(coordWidth,
+<a name="line345"></a>    coordHeight) {
+<a name="line346"></a>  goog.graphics.SvgGraphics.superClass_.setCoordSize.apply(
+<a name="line347"></a>      this, arguments);
+<a name="line348"></a>  this.setViewBox_();
+<a name="line349"></a>};
+<a name="line350"></a>
+<a name="line351"></a>
+<a name="line352"></a>/**
+<a name="line353"></a> * @return {string} The view box string.
+<a name="line354"></a> * @private
+<a name="line355"></a> */
+<a name="line356"></a>goog.graphics.SvgGraphics.prototype.getViewBox_ = function() {
+<a name="line357"></a>  return this.coordLeft + &#39; &#39; + this.coordTop + &#39; &#39; +
+<a name="line358"></a>      (this.coordWidth ? this.coordWidth + &#39; &#39; + this.coordHeight : &#39;&#39;);
+<a name="line359"></a>};
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * Sets up the view box.
+<a name="line364"></a> * @private
+<a name="line365"></a> */
+<a name="line366"></a>goog.graphics.SvgGraphics.prototype.setViewBox_ = function() {
+<a name="line367"></a>  if (this.coordWidth || this.coordLeft || this.coordTop) {
+<a name="line368"></a>    this.getElement().setAttribute(&#39;preserveAspectRatio&#39;, &#39;none&#39;);
+<a name="line369"></a>    if (this.useManualViewbox_) {
+<a name="line370"></a>      this.updateManualViewBox_();
+<a name="line371"></a>    } else {
+<a name="line372"></a>      this.getElement().setAttribute(&#39;viewBox&#39;, this.getViewBox_());
+<a name="line373"></a>    }
+<a name="line374"></a>  }
+<a name="line375"></a>};
+<a name="line376"></a>
+<a name="line377"></a>
+<a name="line378"></a>/**
+<a name="line379"></a> * Updates the transform of the root element to fake a viewBox.  Should only
+<a name="line380"></a> * be called when useManualViewbox_ is set.
+<a name="line381"></a> * @private
+<a name="line382"></a> */
+<a name="line383"></a>goog.graphics.SvgGraphics.prototype.updateManualViewBox_ = function() {
+<a name="line384"></a>  if (!this.isInDocument() ||
+<a name="line385"></a>      !(this.coordWidth || this.coordLeft || !this.coordTop)) {
+<a name="line386"></a>    return;
+<a name="line387"></a>  }
+<a name="line388"></a>
+<a name="line389"></a>  var size = this.getPixelSize();
+<a name="line390"></a>  if (size.width == 0) {
+<a name="line391"></a>    // In Safari, invisible SVG is sometimes shown.  Explicitly hide it.
+<a name="line392"></a>    this.getElement().style.visibility = &#39;hidden&#39;;
+<a name="line393"></a>    return;
+<a name="line394"></a>  }
+<a name="line395"></a>
+<a name="line396"></a>  this.getElement().style.visibility = &#39;&#39;;
+<a name="line397"></a>
+<a name="line398"></a>  var offsetX = - this.coordLeft;
+<a name="line399"></a>  var offsetY = - this.coordTop;
+<a name="line400"></a>  var scaleX = size.width / this.coordWidth;
+<a name="line401"></a>  var scaleY = size.height / this.coordHeight;
+<a name="line402"></a>
+<a name="line403"></a>  this.canvasElement.getElement().setAttribute(&#39;transform&#39;,
+<a name="line404"></a>      &#39;scale(&#39; + scaleX + &#39; &#39; + scaleY + &#39;) &#39; +
+<a name="line405"></a>      &#39;translate(&#39; + offsetX + &#39; &#39; + offsetY + &#39;)&#39;);
+<a name="line406"></a>};
+<a name="line407"></a>
+<a name="line408"></a>
+<a name="line409"></a>/**
+<a name="line410"></a> * Change the size of the canvas.
+<a name="line411"></a> * @param {number} pixelWidth The width in pixels.
+<a name="line412"></a> * @param {number} pixelHeight The height in pixels.
+<a name="line413"></a> * @override
+<a name="line414"></a> */
+<a name="line415"></a>goog.graphics.SvgGraphics.prototype.setSize = function(pixelWidth,
+<a name="line416"></a>    pixelHeight) {
+<a name="line417"></a>  goog.style.setSize(this.getElement(), pixelWidth, pixelHeight);
+<a name="line418"></a>};
+<a name="line419"></a>
+<a name="line420"></a>
+<a name="line421"></a>/** @override */
+<a name="line422"></a>goog.graphics.SvgGraphics.prototype.getPixelSize = function() {
+<a name="line423"></a>  if (!goog.userAgent.GECKO) {
+<a name="line424"></a>    return this.isInDocument() ?
+<a name="line425"></a>        goog.style.getSize(this.getElement()) :
+<a name="line426"></a>        goog.graphics.SvgGraphics.base(this, &#39;getPixelSize&#39;);
+<a name="line427"></a>  }
+<a name="line428"></a>
+<a name="line429"></a>  // In Gecko, goog.style.getSize does not work for SVG elements.  We have to
+<a name="line430"></a>  // compute the size manually if it is percentage based.
+<a name="line431"></a>  var width = this.width;
+<a name="line432"></a>  var height = this.height;
+<a name="line433"></a>  var computeWidth = goog.isString(width) &amp;&amp; width.indexOf(&#39;%&#39;) != -1;
+<a name="line434"></a>  var computeHeight = goog.isString(height) &amp;&amp; height.indexOf(&#39;%&#39;) != -1;
+<a name="line435"></a>
+<a name="line436"></a>  if (!this.isInDocument() &amp;&amp; (computeWidth || computeHeight)) {
+<a name="line437"></a>    return null;
+<a name="line438"></a>  }
+<a name="line439"></a>
+<a name="line440"></a>  var parent;
+<a name="line441"></a>  var parentSize;
+<a name="line442"></a>
+<a name="line443"></a>  if (computeWidth) {
+<a name="line444"></a>    parent = /** @type {Element} */ (this.getElement().parentNode);
+<a name="line445"></a>    parentSize = goog.style.getSize(parent);
+<a name="line446"></a>    width = parseFloat(/** @type {string} */ (width)) * parentSize.width / 100;
+<a name="line447"></a>  }
+<a name="line448"></a>
+<a name="line449"></a>  if (computeHeight) {
+<a name="line450"></a>    parent = parent || /** @type {Element} */ (this.getElement().parentNode);
+<a name="line451"></a>    parentSize = parentSize || goog.style.getSize(parent);
+<a name="line452"></a>    height = parseFloat(/** @type {string} */ (height)) * parentSize.height /
+<a name="line453"></a>        100;
+<a name="line454"></a>  }
+<a name="line455"></a>
+<a name="line456"></a>  return new goog.math.Size(/** @type {number} */ (width),
+<a name="line457"></a>      /** @type {number} */ (height));
+<a name="line458"></a>};
+<a name="line459"></a>
+<a name="line460"></a>
+<a name="line461"></a>/**
+<a name="line462"></a> * Remove all drawing elements from the graphics.
+<a name="line463"></a> * @override
+<a name="line464"></a> */
+<a name="line465"></a>goog.graphics.SvgGraphics.prototype.clear = function() {
+<a name="line466"></a>  this.canvasElement.clear();
+<a name="line467"></a>  goog.dom.removeChildren(this.defsElement_);
+<a name="line468"></a>  this.defs_ = {};
+<a name="line469"></a>};
+<a name="line470"></a>
+<a name="line471"></a>
+<a name="line472"></a>/**
+<a name="line473"></a> * Draw an ellipse.
+<a name="line474"></a> *
+<a name="line475"></a> * @param {number} cx Center X coordinate.
+<a name="line476"></a> * @param {number} cy Center Y coordinate.
+<a name="line477"></a> * @param {number} rx Radius length for the x-axis.
+<a name="line478"></a> * @param {number} ry Radius length for the y-axis.
+<a name="line479"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line480"></a> *    stroke.
+<a name="line481"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line482"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
+<a name="line483"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line484"></a> *
+<a name="line485"></a> * @return {!goog.graphics.EllipseElement} The newly created element.
+<a name="line486"></a> * @override
+<a name="line487"></a> */
+<a name="line488"></a>goog.graphics.SvgGraphics.prototype.drawEllipse = function(
+<a name="line489"></a>    cx, cy, rx, ry, stroke, fill, opt_group) {
+<a name="line490"></a>  var element = this.createSvgElement_(&#39;ellipse&#39;,
+<a name="line491"></a>      {&#39;cx&#39;: cx, &#39;cy&#39;: cy, &#39;rx&#39;: rx, &#39;ry&#39;: ry});
+<a name="line492"></a>  var wrapper = new goog.graphics.SvgEllipseElement(element, this, stroke,
+<a name="line493"></a>      fill);
+<a name="line494"></a>  this.append_(wrapper, opt_group);
+<a name="line495"></a>  return wrapper;
+<a name="line496"></a>};
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * Draw a rectangle.
+<a name="line501"></a> *
+<a name="line502"></a> * @param {number} x X coordinate (left).
+<a name="line503"></a> * @param {number} y Y coordinate (top).
+<a name="line504"></a> * @param {number} width Width of rectangle.
+<a name="line505"></a> * @param {number} height Height of rectangle.
+<a name="line506"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line507"></a> *    stroke.
+<a name="line508"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line509"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
+<a name="line510"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line511"></a> *
+<a name="line512"></a> * @return {!goog.graphics.RectElement} The newly created element.
+<a name="line513"></a> * @override
+<a name="line514"></a> */
+<a name="line515"></a>goog.graphics.SvgGraphics.prototype.drawRect = function(x, y, width, height,
+<a name="line516"></a>    stroke, fill, opt_group) {
+<a name="line517"></a>  var element = this.createSvgElement_(&#39;rect&#39;,
+<a name="line518"></a>      {&#39;x&#39;: x, &#39;y&#39;: y, &#39;width&#39;: width, &#39;height&#39;: height});
+<a name="line519"></a>  var wrapper = new goog.graphics.SvgRectElement(element, this, stroke, fill);
+<a name="line520"></a>  this.append_(wrapper, opt_group);
+<a name="line521"></a>  return wrapper;
+<a name="line522"></a>};
+<a name="line523"></a>
+<a name="line524"></a>
+<a name="line525"></a>/**
+<a name="line526"></a> * Draw an image.
+<a name="line527"></a> *
+<a name="line528"></a> * @param {number} x X coordinate (left).
+<a name="line529"></a> * @param {number} y Y coordinate (top).
+<a name="line530"></a> * @param {number} width Width of the image.
+<a name="line531"></a> * @param {number} height Height of the image.
+<a name="line532"></a> * @param {string} src The source fo the image.
+<a name="line533"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
+<a name="line534"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line535"></a> *
+<a name="line536"></a> * @return {!goog.graphics.ImageElement} The newly created image wrapped in a
+<a name="line537"></a> *     rectangle element.
+<a name="line538"></a> */
+<a name="line539"></a>goog.graphics.SvgGraphics.prototype.drawImage = function(x, y, width, height,
+<a name="line540"></a>    src, opt_group) {
+<a name="line541"></a>  var element = this.createSvgElement_(&#39;image&#39;, {
+<a name="line542"></a>    &#39;x&#39;: x,
+<a name="line543"></a>    &#39;y&#39;: y,
+<a name="line544"></a>    &#39;width&#39;: width,
+<a name="line545"></a>    &#39;height&#39;: height,
+<a name="line546"></a>    &#39;image-rendering&#39;: &#39;optimizeQuality&#39;,
+<a name="line547"></a>    &#39;preserveAspectRatio&#39;: &#39;none&#39;
+<a name="line548"></a>  });
+<a name="line549"></a>  element.setAttributeNS(&#39;http://www.w3.org/1999/xlink&#39;, &#39;href&#39;, src);
+<a name="line550"></a>  var wrapper = new goog.graphics.SvgImageElement(element, this);
+<a name="line551"></a>  this.append_(wrapper, opt_group);
+<a name="line552"></a>  return wrapper;
+<a name="line553"></a>};
+<a name="line554"></a>
+<a name="line555"></a>
+<a name="line556"></a>/**
+<a name="line557"></a> * Draw a text string vertically centered on a given line.
+<a name="line558"></a> *
+<a name="line559"></a> * @param {string} text The text to draw.
+<a name="line560"></a> * @param {number} x1 X coordinate of start of line.
+<a name="line561"></a> * @param {number} y1 Y coordinate of start of line.
+<a name="line562"></a> * @param {number} x2 X coordinate of end of line.
+<a name="line563"></a> * @param {number} y2 Y coordinate of end of line.
+<a name="line564"></a> * @param {string} align Horizontal alignment: left (default), center, right.
+<a name="line565"></a> * @param {goog.graphics.Font} font Font describing the font properties.
+<a name="line566"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line567"></a> *    stroke.
+<a name="line568"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line569"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
+<a name="line570"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line571"></a> *
+<a name="line572"></a> * @return {!goog.graphics.TextElement} The newly created element.
+<a name="line573"></a> * @override
+<a name="line574"></a> */
+<a name="line575"></a>goog.graphics.SvgGraphics.prototype.drawTextOnLine = function(
+<a name="line576"></a>    text, x1, y1, x2, y2, align, font, stroke, fill, opt_group) {
+<a name="line577"></a>  var angle = Math.round(goog.math.angle(x1, y1, x2, y2));
+<a name="line578"></a>  var dx = x2 - x1;
+<a name="line579"></a>  var dy = y2 - y1;
+<a name="line580"></a>  var lineLength = Math.round(Math.sqrt(dx * dx + dy * dy)); // Length of line
+<a name="line581"></a>
+<a name="line582"></a>  // SVG baseline is on the glyph&#39;s base line. We estimate it as 85% of the
+<a name="line583"></a>  // font height. This is just a rough estimate, but do not have a better way.
+<a name="line584"></a>  var fontSize = font.size;
+<a name="line585"></a>  var attributes = {&#39;font-family&#39;: font.family, &#39;font-size&#39;: fontSize};
+<a name="line586"></a>  var baseline = Math.round(fontSize * 0.85);
+<a name="line587"></a>  var textY = Math.round(y1 - (fontSize / 2) + baseline);
+<a name="line588"></a>  var textX = x1;
+<a name="line589"></a>  if (align == &#39;center&#39;) {
+<a name="line590"></a>    textX += Math.round(lineLength / 2);
+<a name="line591"></a>    attributes[&#39;text-anchor&#39;] = &#39;middle&#39;;
+<a name="line592"></a>  } else if (align == &#39;right&#39;) {
+<a name="line593"></a>    textX += lineLength;
+<a name="line594"></a>    attributes[&#39;text-anchor&#39;] = &#39;end&#39;;
+<a name="line595"></a>  }
+<a name="line596"></a>  attributes[&#39;x&#39;] = textX;
+<a name="line597"></a>  attributes[&#39;y&#39;] = textY;
+<a name="line598"></a>  if (font.bold) {
+<a name="line599"></a>    attributes[&#39;font-weight&#39;] = &#39;bold&#39;;
+<a name="line600"></a>  }
+<a name="line601"></a>  if (font.italic) {
+<a name="line602"></a>    attributes[&#39;font-style&#39;] = &#39;italic&#39;;
+<a name="line603"></a>  }
+<a name="line604"></a>  if (angle != 0) {
+<a name="line605"></a>    attributes[&#39;transform&#39;] = &#39;rotate(&#39; + angle + &#39; &#39; + x1 + &#39; &#39; + y1 + &#39;)&#39;;
+<a name="line606"></a>  }
+<a name="line607"></a>
+<a name="line608"></a>  var element = this.createSvgElement_(&#39;text&#39;, attributes);
+<a name="line609"></a>  element.appendChild(this.dom_.getDocument().createTextNode(text));
+<a name="line610"></a>
+<a name="line611"></a>  // Bypass a Firefox-Mac bug where text fill is ignored. If text has no stroke,
+<a name="line612"></a>  // set a stroke, otherwise the text will not be visible.
+<a name="line613"></a>  if (stroke == null &amp;&amp; goog.userAgent.GECKO &amp;&amp; goog.userAgent.MAC) {
+<a name="line614"></a>    var color = &#39;black&#39;;
+<a name="line615"></a>    // For solid fills, use the fill color
+<a name="line616"></a>    if (fill instanceof goog.graphics.SolidFill) {
+<a name="line617"></a>      color = fill.getColor();
+<a name="line618"></a>    }
+<a name="line619"></a>    stroke = new goog.graphics.Stroke(1, color);
+<a name="line620"></a>  }
+<a name="line621"></a>
+<a name="line622"></a>  var wrapper = new goog.graphics.SvgTextElement(element, this, stroke, fill);
+<a name="line623"></a>  this.append_(wrapper, opt_group);
+<a name="line624"></a>  return wrapper;
+<a name="line625"></a>};
+<a name="line626"></a>
+<a name="line627"></a>
+<a name="line628"></a>/**
+<a name="line629"></a> * Draw a path.
+<a name="line630"></a> *
+<a name="line631"></a> * @param {!goog.graphics.Path} path The path object to draw.
+<a name="line632"></a> * @param {goog.graphics.Stroke?} stroke Stroke object describing the
+<a name="line633"></a> *    stroke.
+<a name="line634"></a> * @param {goog.graphics.Fill?} fill Fill object describing the fill.
+<a name="line635"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
+<a name="line636"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line637"></a> *
+<a name="line638"></a> * @return {!goog.graphics.PathElement} The newly created element.
+<a name="line639"></a> * @override
+<a name="line640"></a> */
+<a name="line641"></a>goog.graphics.SvgGraphics.prototype.drawPath = function(
+<a name="line642"></a>    path, stroke, fill, opt_group) {
+<a name="line643"></a>
+<a name="line644"></a>  var element = this.createSvgElement_(&#39;path&#39;,
+<a name="line645"></a>      {&#39;d&#39;: goog.graphics.SvgGraphics.getSvgPath(path)});
+<a name="line646"></a>  var wrapper = new goog.graphics.SvgPathElement(element, this, stroke, fill);
+<a name="line647"></a>  this.append_(wrapper, opt_group);
+<a name="line648"></a>  return wrapper;
+<a name="line649"></a>};
+<a name="line650"></a>
+<a name="line651"></a>
+<a name="line652"></a>/**
+<a name="line653"></a> * Returns a string representation of a logical path suitable for use in
+<a name="line654"></a> * an SVG element.
+<a name="line655"></a> *
+<a name="line656"></a> * @param {goog.graphics.Path} path The logical path.
+<a name="line657"></a> * @return {string} The SVG path representation.
+<a name="line658"></a> * @suppress {deprecated} goog.graphics is deprecated.
+<a name="line659"></a> */
+<a name="line660"></a>goog.graphics.SvgGraphics.getSvgPath = function(path) {
+<a name="line661"></a>  var list = [];
+<a name="line662"></a>  path.forEachSegment(function(segment, args) {
+<a name="line663"></a>    switch (segment) {
+<a name="line664"></a>      case goog.graphics.Path.Segment.MOVETO:
+<a name="line665"></a>        list.push(&#39;M&#39;);
+<a name="line666"></a>        Array.prototype.push.apply(list, args);
+<a name="line667"></a>        break;
+<a name="line668"></a>      case goog.graphics.Path.Segment.LINETO:
+<a name="line669"></a>        list.push(&#39;L&#39;);
+<a name="line670"></a>        Array.prototype.push.apply(list, args);
+<a name="line671"></a>        break;
+<a name="line672"></a>      case goog.graphics.Path.Segment.CURVETO:
+<a name="line673"></a>        list.push(&#39;C&#39;);
+<a name="line674"></a>        Array.prototype.push.apply(list, args);
+<a name="line675"></a>        break;
+<a name="line676"></a>      case goog.graphics.Path.Segment.ARCTO:
+<a name="line677"></a>        var extent = args[3];
+<a name="line678"></a>        var toAngle = args[2] + extent;
+<a name="line679"></a>        list.push(&#39;A&#39;, args[0], args[1],
+<a name="line680"></a>            0, Math.abs(extent) &gt; 180 ? 1 : 0, extent &gt; 0 ? 1 : 0,
+<a name="line681"></a>            args[4], args[5]);
+<a name="line682"></a>        break;
+<a name="line683"></a>      case goog.graphics.Path.Segment.CLOSE:
+<a name="line684"></a>        list.push(&#39;Z&#39;);
+<a name="line685"></a>        break;
+<a name="line686"></a>    }
+<a name="line687"></a>  });
+<a name="line688"></a>  return list.join(&#39; &#39;);
+<a name="line689"></a>};
+<a name="line690"></a>
+<a name="line691"></a>
+<a name="line692"></a>/**
+<a name="line693"></a> * Create an empty group of drawing elements.
+<a name="line694"></a> *
+<a name="line695"></a> * @param {goog.graphics.GroupElement=} opt_group The group wrapper element
+<a name="line696"></a> *     to append to. If not specified, appends to the main canvas.
+<a name="line697"></a> *
+<a name="line698"></a> * @return {!goog.graphics.GroupElement} The newly created group.
+<a name="line699"></a> * @override
+<a name="line700"></a> */
+<a name="line701"></a>goog.graphics.SvgGraphics.prototype.createGroup = function(opt_group) {
+<a name="line702"></a>  var element = this.createSvgElement_(&#39;g&#39;);
+<a name="line703"></a>  var parent = opt_group || this.canvasElement;
+<a name="line704"></a>  parent.getElement().appendChild(element);
+<a name="line705"></a>  return new goog.graphics.SvgGroupElement(element, this);
+<a name="line706"></a>};
+<a name="line707"></a>
+<a name="line708"></a>
+<a name="line709"></a>/**
+<a name="line710"></a> * Measure and return the width (in pixels) of a given text string.
+<a name="line711"></a> * Text measurement is needed to make sure a text can fit in the allocated area.
+<a name="line712"></a> * The way text length is measured is by writing it into a div that is after
+<a name="line713"></a> * the visible area, measure the div width, and immediatly erase the written
+<a name="line714"></a> * value.
+<a name="line715"></a> *
+<a name="line716"></a> * @param {string} text The text string to measure.
+<a name="line717"></a> * @param {goog.graphics.Font} font The font object describing the font style.
+<a name="line718"></a> * @override
+<a name="line719"></a> */
+<a name="line720"></a>goog.graphics.SvgGraphics.prototype.getTextWidth = function(text, font) {
+<a name="line721"></a>  // TODO(user) Implement
+<a name="line722"></a>};
+<a name="line723"></a>
+<a name="line724"></a>
+<a name="line725"></a>/**
+<a name="line726"></a> * Adds a defintion of an element to the global definitions.
+<a name="line727"></a> * @param {string} defKey This is a key that should be unique in a way that
+<a name="line728"></a> *     if two definitions are equal the should have the same key.
+<a name="line729"></a> * @param {Element} defElement DOM element to add as a definition. It must
+<a name="line730"></a> *     have an id attribute set.
+<a name="line731"></a> * @return {string} The assigned id of the defElement.
+<a name="line732"></a> */
+<a name="line733"></a>goog.graphics.SvgGraphics.prototype.addDef = function(defKey, defElement) {
+<a name="line734"></a>  if (defKey in this.defs_) {
+<a name="line735"></a>    return this.defs_[defKey];
+<a name="line736"></a>  }
+<a name="line737"></a>  var id = goog.graphics.SvgGraphics.DEF_ID_PREFIX_ +
+<a name="line738"></a>      goog.graphics.SvgGraphics.nextDefId_++;
+<a name="line739"></a>  defElement.setAttribute(&#39;id&#39;, id);
+<a name="line740"></a>  this.defs_[defKey] = id;
+<a name="line741"></a>
+<a name="line742"></a>  // Add the def defElement of the defs list.
+<a name="line743"></a>  var defs = this.defsElement_;
+<a name="line744"></a>  defs.appendChild(defElement);
+<a name="line745"></a>  return id;
+<a name="line746"></a>};
+<a name="line747"></a>
+<a name="line748"></a>
+<a name="line749"></a>/**
+<a name="line750"></a> * Returns the id of a definition element.
+<a name="line751"></a> * @param {string} defKey This is a key that should be unique in a way that
+<a name="line752"></a> *     if two definitions are equal the should have the same key.
+<a name="line753"></a> * @return {?string} The id of the found definition element or null if
+<a name="line754"></a> *     not found.
+<a name="line755"></a> */
+<a name="line756"></a>goog.graphics.SvgGraphics.prototype.getDef = function(defKey) {
+<a name="line757"></a>  return defKey in this.defs_ ? this.defs_[defKey] : null;
+<a name="line758"></a>};
+<a name="line759"></a>
+<a name="line760"></a>
+<a name="line761"></a>/**
+<a name="line762"></a> * Removes a definition of an elemnt from the global definitions.
+<a name="line763"></a> * @param {string} defKey This is a key that should be unique in a way that
+<a name="line764"></a> *     if two definitions are equal they should have the same key.
+<a name="line765"></a> */
+<a name="line766"></a>goog.graphics.SvgGraphics.prototype.removeDef = function(defKey) {
+<a name="line767"></a>  var id = this.getDef(defKey);
+<a name="line768"></a>  if (id) {
+<a name="line769"></a>    var element = this.dom_.getElement(id);
+<a name="line770"></a>    this.defsElement_.removeChild(element);
+<a name="line771"></a>    delete this.defs_[defKey];
+<a name="line772"></a>  }
+<a name="line773"></a>};
+<a name="line774"></a>
+<a name="line775"></a>
+<a name="line776"></a>/** @override */
+<a name="line777"></a>goog.graphics.SvgGraphics.prototype.enterDocument = function() {
+<a name="line778"></a>  var oldPixelSize = this.getPixelSize();
+<a name="line779"></a>  goog.graphics.SvgGraphics.superClass_.enterDocument.call(this);
+<a name="line780"></a>
+<a name="line781"></a>  // Dispatch a resize if this is the first time the size value is accurate.
+<a name="line782"></a>  if (!oldPixelSize) {
+<a name="line783"></a>    this.dispatchEvent(goog.events.EventType.RESIZE);
+<a name="line784"></a>  }
+<a name="line785"></a>
+<a name="line786"></a>
+<a name="line787"></a>  // For percentage based heights, listen for changes to size.
+<a name="line788"></a>  if (this.useManualViewbox_) {
+<a name="line789"></a>    var width = this.width;
+<a name="line790"></a>    var height = this.height;
+<a name="line791"></a>
+<a name="line792"></a>    if (typeof width == &#39;string&#39; &amp;&amp; width.indexOf(&#39;%&#39;) != -1 &amp;&amp;
+<a name="line793"></a>        typeof height == &#39;string&#39; &amp;&amp; height.indexOf(&#39;%&#39;) != -1) {
+<a name="line794"></a>      // SVG elements don&#39;t behave well with respect to size events, so we
+<a name="line795"></a>      // resort to polling.
+<a name="line796"></a>      this.handler_.listen(goog.graphics.SvgGraphics.getResizeCheckTimer_(),
+<a name="line797"></a>          goog.Timer.TICK, this.updateManualViewBox_);
+<a name="line798"></a>    }
+<a name="line799"></a>
+<a name="line800"></a>    this.updateManualViewBox_();
+<a name="line801"></a>  }
+<a name="line802"></a>};
+<a name="line803"></a>
+<a name="line804"></a>
+<a name="line805"></a>/** @override */
+<a name="line806"></a>goog.graphics.SvgGraphics.prototype.exitDocument = function() {
+<a name="line807"></a>  goog.graphics.SvgGraphics.superClass_.exitDocument.call(this);
+<a name="line808"></a>
+<a name="line809"></a>  // Stop polling.
+<a name="line810"></a>  if (this.useManualViewbox_) {
+<a name="line811"></a>    this.handler_.unlisten(goog.graphics.SvgGraphics.getResizeCheckTimer_(),
+<a name="line812"></a>        goog.Timer.TICK, this.updateManualViewBox_);
+<a name="line813"></a>  }
+<a name="line814"></a>};
+<a name="line815"></a>
+<a name="line816"></a>
+<a name="line817"></a>/**
+<a name="line818"></a> * Disposes of the component by removing event handlers, detacing DOM nodes from
+<a name="line819"></a> * the document body, and removing references to them.
+<a name="line820"></a> * @override
+<a name="line821"></a> * @protected
+<a name="line822"></a> */
+<a name="line823"></a>goog.graphics.SvgGraphics.prototype.disposeInternal = function() {
+<a name="line824"></a>  delete this.defs_;
+<a name="line825"></a>  delete this.defsElement_;
+<a name="line826"></a>  delete this.canvasElement;
+<a name="line827"></a>  goog.graphics.SvgGraphics.superClass_.disposeInternal.call(this);
+<a name="line828"></a>};
+<a name="line829"></a>
+<a name="line830"></a>
+<a name="line831"></a>/**
+<a name="line832"></a> * The centralized resize checking timer.
+<a name="line833"></a> * @type {goog.Timer|undefined}
+<a name="line834"></a> * @private
+<a name="line835"></a> */
+<a name="line836"></a>goog.graphics.SvgGraphics.resizeCheckTimer_;
+<a name="line837"></a>
+<a name="line838"></a>
+<a name="line839"></a>/**
+<a name="line840"></a> * @return {goog.Timer} The centralized timer object used for interval timing.
+<a name="line841"></a> * @private
+<a name="line842"></a> */
+<a name="line843"></a>goog.graphics.SvgGraphics.getResizeCheckTimer_ = function() {
+<a name="line844"></a>  if (!goog.graphics.SvgGraphics.resizeCheckTimer_) {
+<a name="line845"></a>    goog.graphics.SvgGraphics.resizeCheckTimer_ = new goog.Timer(400);
+<a name="line846"></a>    goog.graphics.SvgGraphics.resizeCheckTimer_.start();
+<a name="line847"></a>  }
+<a name="line848"></a>
+<a name="line849"></a>  return /** @type {goog.Timer} */ (
+<a name="line850"></a>      goog.graphics.SvgGraphics.resizeCheckTimer_);
+<a name="line851"></a>};
+<a name="line852"></a>
+<a name="line853"></a>
+<a name="line854"></a>/** @override */
+<a name="line855"></a>goog.graphics.SvgGraphics.prototype.isDomClonable = function() {
+<a name="line856"></a>  return true;
+<a name="line857"></a>};
+</pre>
+
+
+</body>
+</html>

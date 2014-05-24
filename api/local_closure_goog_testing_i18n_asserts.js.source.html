@@ -1,0 +1,128 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>asserts.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_i18n_asserts.js.html">asserts.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Assert functions that account for locale data changes.
+<a name="line17"></a> *
+<a name="line18"></a> * The locale data gets updated from CLDR (http://cldr.unicode.org/),
+<a name="line19"></a> * and CLDR gets an update about twice per year.
+<a name="line20"></a> * So the locale data are expected to change.
+<a name="line21"></a> * This can make unit tests quite fragile:
+<a name="line22"></a> *   assertEquals(&quot;Dec 31, 2013, 1:23pm&quot;, format);
+<a name="line23"></a> * Now imagine that the decision is made to add a dot after abbreviations,
+<a name="line24"></a> * and a comma between date and time.
+<a name="line25"></a> * The previous assert will fail, because the string is now
+<a name="line26"></a> *   &quot;Dec. 31 2013, 1:23pm&quot;
+<a name="line27"></a> *
+<a name="line28"></a> * One option is to not unit test the results of the formatters client side,
+<a name="line29"></a> * and just trust that CLDR and closure/i18n takes care of that.
+<a name="line30"></a> * The other option is to be a more flexible when testing.
+<a name="line31"></a> * This is the role of assertI18nEquals, to centralize all the small
+<a name="line32"></a> * differences between hard-coded values in unit tests and the current result.
+<a name="line33"></a> * It allows some decupling, so that the closure/i18n can be updated without
+<a name="line34"></a> * breaking all the clients using it.
+<a name="line35"></a> * For the example above, this will succeed:
+<a name="line36"></a> *   assertI18nEquals(&quot;Dec 31, 2013, 1:23pm&quot;, &quot;Dec. 31, 2013 1:23pm&quot;);
+<a name="line37"></a> * It does this by white-listing, no &quot;guessing&quot; involved.
+<a name="line38"></a> *
+<a name="line39"></a> * But I would say that the best practice is the first option: trust the
+<a name="line40"></a> * library, stop unit-testing it.
+<a name="line41"></a> */
+<a name="line42"></a>
+<a name="line43"></a>goog.provide(&#39;goog.testing.i18n.asserts&#39;);
+<a name="line44"></a>goog.setTestOnly(&#39;goog.testing.i18n.asserts&#39;);
+<a name="line45"></a>
+<a name="line46"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>/**
+<a name="line50"></a> * A map of known tests where locale data changed, but the old values are
+<a name="line51"></a> * still tested for by various clients.
+<a name="line52"></a> * @const {!Object.&lt;string, string&gt;}
+<a name="line53"></a> * @private
+<a name="line54"></a> */
+<a name="line55"></a>goog.testing.i18n.asserts.EXPECTED_VALUE_MAP_ = {
+<a name="line56"></a>  // Data to test the assert itself, old string as key, new string as value
+<a name="line57"></a>};
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * Asserts that the two values are &quot;almost equal&quot; from i18n perspective
+<a name="line62"></a> * (based on a manually maintained and validated whitelist).
+<a name="line63"></a> * @param {string} expected The expected value.
+<a name="line64"></a> * @param {string} actual The actual value.
+<a name="line65"></a> */
+<a name="line66"></a>goog.testing.i18n.asserts.assertI18nEquals = function(expected, actual) {
+<a name="line67"></a>  if (expected == actual) {
+<a name="line68"></a>    return;
+<a name="line69"></a>  }
+<a name="line70"></a>
+<a name="line71"></a>  var newExpected = goog.testing.i18n.asserts.EXPECTED_VALUE_MAP_[expected];
+<a name="line72"></a>  if (newExpected == actual) {
+<a name="line73"></a>    return;
+<a name="line74"></a>  }
+<a name="line75"></a>
+<a name="line76"></a>  assertEquals(expected, actual);
+<a name="line77"></a>};
+</pre>
+
+
+</body>
+</html>

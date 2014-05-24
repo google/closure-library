@@ -1,0 +1,176 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>uchar_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_uchar_test.js.html">uchar_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.i18n.uCharTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.i18n.uCharTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.i18n.uChar&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>function testToHexString() {
+<a name="line22"></a>  var result = goog.i18n.uChar.toHexString(&#39;\uD869\uDED6&#39;);
+<a name="line23"></a>  assertEquals(&#39;U+2A6D6&#39;, result);
+<a name="line24"></a>}
+<a name="line25"></a>
+<a name="line26"></a>function testPadString() {
+<a name="line27"></a>  var result = goog.i18n.uChar.padString_(&#39;abc&#39;, 4, &#39;0&#39;);
+<a name="line28"></a>  assertEquals(&#39;0abc&#39;, result);
+<a name="line29"></a>}
+<a name="line30"></a>
+<a name="line31"></a>function testToCharCode() {
+<a name="line32"></a>  var result = goog.i18n.uChar.toCharCode(&#39;\uD869\uDED6&#39;);
+<a name="line33"></a>  assertEquals(0x2A6D6, result);
+<a name="line34"></a>}
+<a name="line35"></a>
+<a name="line36"></a>function testcodePointAt() {
+<a name="line37"></a>  // Basic cases.
+<a name="line38"></a>  assertEquals(0x006C, goog.i18n.uChar.getCodePointAround(&#39;Hello!&#39;, 2));
+<a name="line39"></a>  assertEquals(0x2708 /* Airplane symbol (non-ASCII) */,
+<a name="line40"></a>      goog.i18n.uChar.getCodePointAround(&#39;Hello\u2708&#39;, 5));
+<a name="line41"></a>
+<a name="line42"></a>  // Supplementary characters.
+<a name="line43"></a>  assertEquals(0x2A6D6, goog.i18n.uChar.getCodePointAround(&#39;\uD869\uDED6&#39;, 0));
+<a name="line44"></a>  assertEquals(-0x2A6D6, goog.i18n.uChar.getCodePointAround(&#39;\uD869\uDED6&#39;, 1));
+<a name="line45"></a>  assertEquals(0xD869, goog.i18n.uChar.getCodePointAround(&#39;\uD869&#39; + &#39;w&#39;, 0));
+<a name="line46"></a>  assertEquals(0xDED6, goog.i18n.uChar.getCodePointAround(&#39;\uD869&#39; + &#39;w&#39; +
+<a name="line47"></a>      &#39;\uDED6&#39;, 2));
+<a name="line48"></a>}
+<a name="line49"></a>
+<a name="line50"></a>function testBuildSupplementaryCodePoint() {
+<a name="line51"></a>  var result = goog.i18n.uChar.buildSupplementaryCodePoint(0xD869, 0xDED6);
+<a name="line52"></a>  assertEquals(0x2A6D6, result);
+<a name="line53"></a>  assertNull(goog.i18n.uChar.buildSupplementaryCodePoint(0xDED6, 0xD869));
+<a name="line54"></a>  assertNull(goog.i18n.uChar.buildSupplementaryCodePoint(0xD869, 0xAC00));
+<a name="line55"></a>}
+<a name="line56"></a>
+<a name="line57"></a>function testCharCount() {
+<a name="line58"></a>  assertEquals(2, goog.i18n.uChar.charCount(0x2A6D6));
+<a name="line59"></a>  assertEquals(1, goog.i18n.uChar.charCount(0xAC00));
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>function testIsSupplementaryCodePoint() {
+<a name="line63"></a>  assertTrue(goog.i18n.uChar.isSupplementaryCodePoint(0x2A6D6));
+<a name="line64"></a>  assertFalse(goog.i18n.uChar.isSupplementaryCodePoint(0xAC00));
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>function testIsLeadSurrogateCodepoint() {
+<a name="line68"></a>  assertTrue(goog.i18n.uChar.isLeadSurrogateCodePoint(0xD869));
+<a name="line69"></a>  assertFalse(goog.i18n.uChar.isLeadSurrogateCodePoint(0xDED6));
+<a name="line70"></a>  assertFalse(goog.i18n.uChar.isLeadSurrogateCodePoint(0xAC00));
+<a name="line71"></a>}
+<a name="line72"></a>
+<a name="line73"></a>function testIsTrailSurrogateCodePoint() {
+<a name="line74"></a>  assertTrue(goog.i18n.uChar.isTrailSurrogateCodePoint(0xDED6));
+<a name="line75"></a>  assertFalse(goog.i18n.uChar.isTrailSurrogateCodePoint(0xD869));
+<a name="line76"></a>  assertFalse(goog.i18n.uChar.isTrailSurrogateCodePoint(0xAC00));
+<a name="line77"></a>}
+<a name="line78"></a>
+<a name="line79"></a>function testFromCharCode() {
+<a name="line80"></a>  var result = goog.i18n.uChar.fromCharCode(0x2A6D6);
+<a name="line81"></a>  assertEquals(&#39;\uD869\uDED6&#39;, result);
+<a name="line82"></a>}
+<a name="line83"></a>
+<a name="line84"></a>function testFromCharCode_invalidValues() {
+<a name="line85"></a>  var result = goog.i18n.uChar.fromCharCode(-1);
+<a name="line86"></a>  assertEquals(null, result);
+<a name="line87"></a>
+<a name="line88"></a>  result = goog.i18n.uChar.fromCharCode(
+<a name="line89"></a>      goog.i18n.uChar.CODE_POINT_MAX_VALUE_ + 1);
+<a name="line90"></a>  assertEquals(null, result);
+<a name="line91"></a>
+<a name="line92"></a>  result = goog.i18n.uChar.fromCharCode(null);
+<a name="line93"></a>  assertEquals(null, result);
+<a name="line94"></a>
+<a name="line95"></a>  result = goog.i18n.uChar.fromCharCode(undefined);
+<a name="line96"></a>  assertEquals(null, result);
+<a name="line97"></a>
+<a name="line98"></a>  result = goog.i18n.uChar.fromCharCode(NaN);
+<a name="line99"></a>  assertEquals(null, result);
+<a name="line100"></a>}
+<a name="line101"></a>
+<a name="line102"></a>function testToName() {
+<a name="line103"></a>  var result = goog.i18n.uChar.toName(&#39; &#39;);
+<a name="line104"></a>  assertEquals(&#39;Space&#39;, result);
+<a name="line105"></a>}
+<a name="line106"></a>
+<a name="line107"></a>function testToNameForNumberKey() {
+<a name="line108"></a>  var result = goog.i18n.uChar.toName(&#39;\u2028&#39;);
+<a name="line109"></a>  assertEquals(&#39;Line Separator&#39;, result);
+<a name="line110"></a>}
+<a name="line111"></a>
+<a name="line112"></a>function testToNameForVariationSelector() {
+<a name="line113"></a>  var result = goog.i18n.uChar.toName(&#39;\ufe00&#39;);
+<a name="line114"></a>  assertEquals(&#39;Variation Selector - 1&#39;, result);
+<a name="line115"></a>}
+<a name="line116"></a>
+<a name="line117"></a>function testToNameForVariationSelectorSupp() {
+<a name="line118"></a>  var result = goog.i18n.uChar.toName(&#39;\uDB40\uDD00&#39;);
+<a name="line119"></a>  assertEquals(&#39;Variation Selector - 17&#39;, result);
+<a name="line120"></a>}
+<a name="line121"></a>
+<a name="line122"></a>function testToNameForNull() {
+<a name="line123"></a>  var result = goog.i18n.uChar.toName(&#39;a&#39;);
+<a name="line124"></a>  assertNull(result);
+<a name="line125"></a>}
+</pre>
+
+
+</body>
+</html>

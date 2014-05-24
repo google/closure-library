@@ -1,0 +1,329 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>forwardchannelrequestpool.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_net_webchannel_forwardchannelrequestpool.js.html">forwardchannelrequestpool.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A pool of forward channel requests to enable real-time
+<a name="line17"></a> * messaging from the client to server.
+<a name="line18"></a> *
+<a name="line19"></a> * @visibility {:internal}
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.labs.net.webChannel.ForwardChannelRequestPool&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.array&#39;);
+<a name="line26"></a>goog.require(&#39;goog.string&#39;);
+<a name="line27"></a>goog.require(&#39;goog.structs.Set&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.scope(function() {
+<a name="line30"></a>// type checking only (no require)
+<a name="line31"></a>var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * This class represents the state of all forward channel requests.
+<a name="line37"></a> *
+<a name="line38"></a> * @param {number=} opt_maxPoolSize The maximum pool size.
+<a name="line39"></a> *
+<a name="line40"></a> * @constructor
+<a name="line41"></a> * @final
+<a name="line42"></a> */
+<a name="line43"></a>goog.labs.net.webChannel.ForwardChannelRequestPool = function(opt_maxPoolSize) {
+<a name="line44"></a>  /**
+<a name="line45"></a>   * THe max pool size as configured.
+<a name="line46"></a>   *
+<a name="line47"></a>   * @private {number}
+<a name="line48"></a>   */
+<a name="line49"></a>  this.maxPoolSizeConfigured_ = opt_maxPoolSize ||
+<a name="line50"></a>          goog.labs.net.webChannel.ForwardChannelRequestPool.MAX_POOL_SIZE_;
+<a name="line51"></a>
+<a name="line52"></a>  /**
+<a name="line53"></a>   * The current size limit of the request pool. This limit is meant to be
+<a name="line54"></a>   * read-only after the channel is fully opened.
+<a name="line55"></a>   *
+<a name="line56"></a>   * If SPDY is enabled, set it to the max pool size, which is also
+<a name="line57"></a>   * configurable.
+<a name="line58"></a>   *
+<a name="line59"></a>   * @private {number}
+<a name="line60"></a>   */
+<a name="line61"></a>  this.maxSize_ = ForwardChannelRequestPool.isSpdyEnabled_() ?
+<a name="line62"></a>      this.maxPoolSizeConfigured_ : 1;
+<a name="line63"></a>
+<a name="line64"></a>  /**
+<a name="line65"></a>   * The container for all the pending request objects.
+<a name="line66"></a>   *
+<a name="line67"></a>   * @private {goog.structs.Set.&lt;ChannelRequest&gt;}
+<a name="line68"></a>   */
+<a name="line69"></a>  this.requestPool_ = null;
+<a name="line70"></a>
+<a name="line71"></a>  if (this.maxSize_ &gt; 1) {
+<a name="line72"></a>    this.requestPool_ = new goog.structs.Set();
+<a name="line73"></a>  }
+<a name="line74"></a>
+<a name="line75"></a>  /**
+<a name="line76"></a>   * The single request object when the pool size is limited to one.
+<a name="line77"></a>   *
+<a name="line78"></a>   * @private {ChannelRequest}
+<a name="line79"></a>   */
+<a name="line80"></a>  this.request_ = null;
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>var ForwardChannelRequestPool =
+<a name="line84"></a>    goog.labs.net.webChannel.ForwardChannelRequestPool;
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * The default size limit of the request pool.
+<a name="line89"></a> *
+<a name="line90"></a> * @private {number}
+<a name="line91"></a> */
+<a name="line92"></a>ForwardChannelRequestPool.MAX_POOL_SIZE_ = 10;
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * @return {boolean} True if SPDY is enabled for the current page using
+<a name="line97"></a> *     chrome specific APIs.
+<a name="line98"></a> * @private
+<a name="line99"></a> */
+<a name="line100"></a>ForwardChannelRequestPool.isSpdyEnabled_ = function() {
+<a name="line101"></a>  return !!(window.chrome &amp;&amp; window.chrome.loadTimes &amp;&amp;
+<a name="line102"></a>      window.chrome.loadTimes() &amp;&amp; window.chrome.loadTimes().wasFetchedViaSpdy);
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Once we know the client protocol (from the handshake), check if we need
+<a name="line108"></a> * enable the request pool accordingly. This is more robust than using
+<a name="line109"></a> * browser-internal APIs (specific to Chrome).
+<a name="line110"></a> *
+<a name="line111"></a> * @param {string} clientProtocol The client protocol
+<a name="line112"></a> */
+<a name="line113"></a>ForwardChannelRequestPool.prototype.applyClientProtocol = function(
+<a name="line114"></a>    clientProtocol) {
+<a name="line115"></a>  if (this.requestPool_) {
+<a name="line116"></a>    return;
+<a name="line117"></a>  }
+<a name="line118"></a>
+<a name="line119"></a>  if (goog.string.contains(clientProtocol, &#39;spdy&#39;) ||
+<a name="line120"></a>      goog.string.contains(clientProtocol, &#39;quic&#39;)) {
+<a name="line121"></a>    this.maxSize_ = this.maxPoolSizeConfigured_;
+<a name="line122"></a>    this.requestPool_ = new goog.structs.Set();
+<a name="line123"></a>    if (this.request_) {
+<a name="line124"></a>      this.addRequest(this.request_);
+<a name="line125"></a>      this.request_ = null;
+<a name="line126"></a>    }
+<a name="line127"></a>  }
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * @return {boolean} True if the pool is full.
+<a name="line133"></a> */
+<a name="line134"></a>ForwardChannelRequestPool.prototype.isFull = function() {
+<a name="line135"></a>  if (this.request_) {
+<a name="line136"></a>    return true;
+<a name="line137"></a>  }
+<a name="line138"></a>
+<a name="line139"></a>  if (this.requestPool_) {
+<a name="line140"></a>    return this.requestPool_.getCount() &gt;= this.maxSize_;
+<a name="line141"></a>  }
+<a name="line142"></a>
+<a name="line143"></a>  return false;
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * @return {number} The current size limit.
+<a name="line149"></a> */
+<a name="line150"></a>ForwardChannelRequestPool.prototype.getMaxSize = function() {
+<a name="line151"></a>  return this.maxSize_;
+<a name="line152"></a>};
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * @return {number} The number of pending requests in the pool.
+<a name="line157"></a> */
+<a name="line158"></a>ForwardChannelRequestPool.prototype.getRequestCount = function() {
+<a name="line159"></a>  if (this.request_) {
+<a name="line160"></a>    return 1;
+<a name="line161"></a>  }
+<a name="line162"></a>
+<a name="line163"></a>  if (this.requestPool_) {
+<a name="line164"></a>    return this.requestPool_.getCount();
+<a name="line165"></a>  }
+<a name="line166"></a>
+<a name="line167"></a>  return 0;
+<a name="line168"></a>};
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * @param {ChannelRequest} req The channel request.
+<a name="line173"></a> * @return {boolean} True if the request is a included inside the pool.
+<a name="line174"></a> */
+<a name="line175"></a>ForwardChannelRequestPool.prototype.hasRequest = function(req) {
+<a name="line176"></a>  if (this.request_) {
+<a name="line177"></a>    return this.request_ == req;
+<a name="line178"></a>  }
+<a name="line179"></a>
+<a name="line180"></a>  if (this.requestPool_) {
+<a name="line181"></a>    return this.requestPool_.contains(req);
+<a name="line182"></a>  }
+<a name="line183"></a>
+<a name="line184"></a>  return false;
+<a name="line185"></a>};
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Adds a new request to the pool.
+<a name="line190"></a> *
+<a name="line191"></a> * @param {!ChannelRequest} req The new channel request.
+<a name="line192"></a> */
+<a name="line193"></a>ForwardChannelRequestPool.prototype.addRequest = function(req) {
+<a name="line194"></a>  if (this.requestPool_) {
+<a name="line195"></a>    this.requestPool_.add(req);
+<a name="line196"></a>  } else {
+<a name="line197"></a>    this.request_ = req;
+<a name="line198"></a>  }
+<a name="line199"></a>};
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>/**
+<a name="line203"></a> * Removes the given request from the pool.
+<a name="line204"></a> *
+<a name="line205"></a> * @param {ChannelRequest} req The channel request.
+<a name="line206"></a> * @return {boolean} Whether the request has been removed from the pool.
+<a name="line207"></a> */
+<a name="line208"></a>ForwardChannelRequestPool.prototype.removeRequest = function(req) {
+<a name="line209"></a>  if (this.request_ &amp;&amp; this.request_ == req) {
+<a name="line210"></a>    this.request_ = null;
+<a name="line211"></a>    return true;
+<a name="line212"></a>  }
+<a name="line213"></a>
+<a name="line214"></a>  if (this.requestPool_ &amp;&amp; this.requestPool_.contains(req)) {
+<a name="line215"></a>    this.requestPool_.remove(req);
+<a name="line216"></a>    return true;
+<a name="line217"></a>  }
+<a name="line218"></a>
+<a name="line219"></a>  return false;
+<a name="line220"></a>};
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/**
+<a name="line224"></a> * Clears the pool and cancel all the pending requests.
+<a name="line225"></a> */
+<a name="line226"></a>ForwardChannelRequestPool.prototype.cancel = function() {
+<a name="line227"></a>  if (this.request_) {
+<a name="line228"></a>    this.request_.cancel();
+<a name="line229"></a>    this.request_ = null;
+<a name="line230"></a>    return;
+<a name="line231"></a>  }
+<a name="line232"></a>
+<a name="line233"></a>  if (this.requestPool_ &amp;&amp; !this.requestPool_.isEmpty()) {
+<a name="line234"></a>    goog.array.forEach(this.requestPool_.getValues(), function(val) {
+<a name="line235"></a>      val.cancel();
+<a name="line236"></a>    });
+<a name="line237"></a>    this.requestPool_.clear();
+<a name="line238"></a>  }
+<a name="line239"></a>};
+<a name="line240"></a>
+<a name="line241"></a>
+<a name="line242"></a>/**
+<a name="line243"></a> * @return {boolean} Whether there are any pending requests.
+<a name="line244"></a> */
+<a name="line245"></a>ForwardChannelRequestPool.prototype.hasPendingRequest = function() {
+<a name="line246"></a>  return (this.request_ != null) ||
+<a name="line247"></a>      (this.requestPool_ != null &amp;&amp; !this.requestPool_.isEmpty());
+<a name="line248"></a>};
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>/**
+<a name="line252"></a> * Cancels all pending requests and force the completion of channel requests.
+<a name="line253"></a> *
+<a name="line254"></a> * Need go through the standard onRequestComplete logic to expose the max-retry
+<a name="line255"></a> * failure in the standard way.
+<a name="line256"></a> *
+<a name="line257"></a> * @param {!function(!ChannelRequest)} onComplete The completion callback.
+<a name="line258"></a> * @return {boolean} true if any request has been forced to complete.
+<a name="line259"></a> */
+<a name="line260"></a>ForwardChannelRequestPool.prototype.forceComplete = function(onComplete) {
+<a name="line261"></a>  if (this.request_ != null) {
+<a name="line262"></a>    this.request_.cancel();
+<a name="line263"></a>    onComplete(this.request_);
+<a name="line264"></a>    return true;
+<a name="line265"></a>  }
+<a name="line266"></a>
+<a name="line267"></a>  if (this.requestPool_ &amp;&amp; !this.requestPool_.isEmpty()) {
+<a name="line268"></a>    goog.array.forEach(this.requestPool_.getValues(),
+<a name="line269"></a>        function(val) {
+<a name="line270"></a>          val.cancel();
+<a name="line271"></a>          onComplete(val);
+<a name="line272"></a>        });
+<a name="line273"></a>    return true;
+<a name="line274"></a>  }
+<a name="line275"></a>
+<a name="line276"></a>  return false;
+<a name="line277"></a>};
+<a name="line278"></a>});  // goog.scope
+</pre>
+
+
+</body>
+</html>

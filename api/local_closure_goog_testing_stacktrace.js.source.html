@@ -1,0 +1,651 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>stacktrace.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_stacktrace.js.html">stacktrace.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Tools for parsing and pretty printing error stack traces.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.testing.stacktrace&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.testing.stacktrace.Frame&#39;);
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Class representing one stack frame.
+<a name="line27"></a> * @param {string} context Context object, empty in case of global functions or
+<a name="line28"></a> *     if the browser doesn&#39;t provide this information.
+<a name="line29"></a> * @param {string} name Function name, empty in case of anonymous functions.
+<a name="line30"></a> * @param {string} alias Alias of the function if available. For example the
+<a name="line31"></a> *     function name will be &#39;c&#39; and the alias will be &#39;b&#39; if the function is
+<a name="line32"></a> *     defined as &lt;code&gt;a.b = function c() {};&lt;/code&gt;.
+<a name="line33"></a> * @param {string} args Arguments of the function in parentheses if available.
+<a name="line34"></a> * @param {string} path File path or URL including line number and optionally
+<a name="line35"></a> *     column number separated by colons.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @final
+<a name="line38"></a> */
+<a name="line39"></a>goog.testing.stacktrace.Frame = function(context, name, alias, args, path) {
+<a name="line40"></a>  this.context_ = context;
+<a name="line41"></a>  this.name_ = name;
+<a name="line42"></a>  this.alias_ = alias;
+<a name="line43"></a>  this.args_ = args;
+<a name="line44"></a>  this.path_ = path;
+<a name="line45"></a>};
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * @return {string} The function name or empty string if the function is
+<a name="line50"></a> *     anonymous and the object field which it&#39;s assigned to is unknown.
+<a name="line51"></a> */
+<a name="line52"></a>goog.testing.stacktrace.Frame.prototype.getName = function() {
+<a name="line53"></a>  return this.name_;
+<a name="line54"></a>};
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * @return {boolean} Whether the stack frame contains an anonymous function.
+<a name="line59"></a> */
+<a name="line60"></a>goog.testing.stacktrace.Frame.prototype.isAnonymous = function() {
+<a name="line61"></a>  return !this.name_ || this.context_ == &#39;[object Object]&#39;;
+<a name="line62"></a>};
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Brings one frame of the stack trace into a common format across browsers.
+<a name="line67"></a> * @return {string} Pretty printed stack frame.
+<a name="line68"></a> */
+<a name="line69"></a>goog.testing.stacktrace.Frame.prototype.toCanonicalString = function() {
+<a name="line70"></a>  var htmlEscape = goog.testing.stacktrace.htmlEscape_;
+<a name="line71"></a>  var deobfuscate = goog.testing.stacktrace.maybeDeobfuscateFunctionName_;
+<a name="line72"></a>
+<a name="line73"></a>  var canonical = [
+<a name="line74"></a>    this.context_ ? htmlEscape(this.context_) + &#39;.&#39; : &#39;&#39;,
+<a name="line75"></a>    this.name_ ? htmlEscape(deobfuscate(this.name_)) : &#39;anonymous&#39;,
+<a name="line76"></a>    htmlEscape(this.args_),
+<a name="line77"></a>    this.alias_ ? &#39; [as &#39; + htmlEscape(deobfuscate(this.alias_)) + &#39;]&#39; : &#39;&#39;
+<a name="line78"></a>  ];
+<a name="line79"></a>
+<a name="line80"></a>  if (this.path_) {
+<a name="line81"></a>    canonical.push(&#39; at &#39;);
+<a name="line82"></a>    // If Closure Inspector is installed and running, then convert the line
+<a name="line83"></a>    // into a source link for displaying the code in Firebug.
+<a name="line84"></a>    if (goog.testing.stacktrace.isClosureInspectorActive_()) {
+<a name="line85"></a>      var lineNumber = this.path_.match(/\d+$/)[0];
+<a name="line86"></a>      canonical.push(&#39;&lt;a href=&quot;&quot; onclick=&quot;CLOSURE_INSPECTOR___.showLine(\&#39;&#39;,
+<a name="line87"></a>          htmlEscape(this.path_), &#39;\&#39;, \&#39;&#39;, lineNumber, &#39;\&#39;); return false&quot;&gt;&#39;,
+<a name="line88"></a>          htmlEscape(this.path_), &#39;&lt;/a&gt;&#39;);
+<a name="line89"></a>    } else {
+<a name="line90"></a>      canonical.push(htmlEscape(this.path_));
+<a name="line91"></a>    }
+<a name="line92"></a>  }
+<a name="line93"></a>  return canonical.join(&#39;&#39;);
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Maximum number of steps while the call chain is followed.
+<a name="line99"></a> * @type {number}
+<a name="line100"></a> * @private
+<a name="line101"></a> */
+<a name="line102"></a>goog.testing.stacktrace.MAX_DEPTH_ = 20;
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Maximum length of a string that can be matched with a RegExp on
+<a name="line107"></a> * Firefox 3x. Exceeding this approximate length will cause string.match
+<a name="line108"></a> * to exceed Firefox&#39;s stack quota. This situation can be encountered
+<a name="line109"></a> * when goog.globalEval is invoked with a long argument; such as
+<a name="line110"></a> * when loading a module.
+<a name="line111"></a> * @type {number}
+<a name="line112"></a> * @private
+<a name="line113"></a> */
+<a name="line114"></a>goog.testing.stacktrace.MAX_FIREFOX_FRAMESTRING_LENGTH_ = 500000;
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * RegExp pattern for JavaScript identifiers. We don&#39;t support Unicode
+<a name="line119"></a> * identifiers defined in ECMAScript v3.
+<a name="line120"></a> * @type {string}
+<a name="line121"></a> * @private
+<a name="line122"></a> */
+<a name="line123"></a>goog.testing.stacktrace.IDENTIFIER_PATTERN_ = &#39;[a-zA-Z_$][\\w$]*&#39;;
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * RegExp pattern for function name alias in the Chrome stack trace.
+<a name="line128"></a> * @type {string}
+<a name="line129"></a> * @private
+<a name="line130"></a> */
+<a name="line131"></a>goog.testing.stacktrace.CHROME_ALIAS_PATTERN_ =
+<a name="line132"></a>    &#39;(?: \\[as (&#39; + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + &#39;)\\])?&#39;;
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * RegExp pattern for function names and constructor calls in the Chrome stack
+<a name="line137"></a> * trace.
+<a name="line138"></a> * @type {string}
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.testing.stacktrace.CHROME_FUNCTION_NAME_PATTERN_ =
+<a name="line142"></a>    &#39;(?:new )?(?:&#39; + goog.testing.stacktrace.IDENTIFIER_PATTERN_ +
+<a name="line143"></a>    &#39;|&lt;anonymous&gt;)&#39;;
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>/**
+<a name="line147"></a> * RegExp pattern for function call in the Chrome stack trace.
+<a name="line148"></a> * Creates 3 submatches with context object (optional), function name and
+<a name="line149"></a> * function alias (optional).
+<a name="line150"></a> * @type {string}
+<a name="line151"></a> * @private
+<a name="line152"></a> */
+<a name="line153"></a>goog.testing.stacktrace.CHROME_FUNCTION_CALL_PATTERN_ =
+<a name="line154"></a>    &#39; (?:(.*?)\\.)?(&#39; + goog.testing.stacktrace.CHROME_FUNCTION_NAME_PATTERN_ +
+<a name="line155"></a>    &#39;)&#39; + goog.testing.stacktrace.CHROME_ALIAS_PATTERN_;
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/**
+<a name="line159"></a> * RegExp pattern for an URL + position inside the file.
+<a name="line160"></a> * @type {string}
+<a name="line161"></a> * @private
+<a name="line162"></a> */
+<a name="line163"></a>goog.testing.stacktrace.URL_PATTERN_ =
+<a name="line164"></a>    &#39;((?:http|https|file)://[^\\s)]+|javascript:.*)&#39;;
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * RegExp pattern for an URL + line number + column number in Chrome.
+<a name="line169"></a> * The URL is either in submatch 1 or submatch 2.
+<a name="line170"></a> * @type {string}
+<a name="line171"></a> * @private
+<a name="line172"></a> */
+<a name="line173"></a>goog.testing.stacktrace.CHROME_URL_PATTERN_ = &#39; (?:&#39; +
+<a name="line174"></a>    &#39;\\(unknown source\\)&#39; + &#39;|&#39; +
+<a name="line175"></a>    &#39;\\(native\\)&#39; + &#39;|&#39; +
+<a name="line176"></a>    &#39;\\((?:eval at )?&#39; + goog.testing.stacktrace.URL_PATTERN_ + &#39;\\)&#39; + &#39;|&#39; +
+<a name="line177"></a>    goog.testing.stacktrace.URL_PATTERN_ + &#39;)&#39;;
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * Regular expression for parsing one stack frame in Chrome.
+<a name="line182"></a> * @type {!RegExp}
+<a name="line183"></a> * @private
+<a name="line184"></a> */
+<a name="line185"></a>goog.testing.stacktrace.CHROME_STACK_FRAME_REGEXP_ = new RegExp(&#39;^    at&#39; +
+<a name="line186"></a>    &#39;(?:&#39; + goog.testing.stacktrace.CHROME_FUNCTION_CALL_PATTERN_ + &#39;)?&#39; +
+<a name="line187"></a>    goog.testing.stacktrace.CHROME_URL_PATTERN_ + &#39;$&#39;);
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * RegExp pattern for function call in the Firefox stack trace.
+<a name="line192"></a> * Creates 2 submatches with function name (optional) and arguments.
+<a name="line193"></a> * @type {string}
+<a name="line194"></a> * @private
+<a name="line195"></a> */
+<a name="line196"></a>goog.testing.stacktrace.FIREFOX_FUNCTION_CALL_PATTERN_ =
+<a name="line197"></a>    &#39;(&#39; + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + &#39;)?&#39; +
+<a name="line198"></a>    &#39;(\\(.*\\))?@&#39;;
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * Regular expression for parsing one stack frame in Firefox.
+<a name="line203"></a> * @type {!RegExp}
+<a name="line204"></a> * @private
+<a name="line205"></a> */
+<a name="line206"></a>goog.testing.stacktrace.FIREFOX_STACK_FRAME_REGEXP_ = new RegExp(&#39;^&#39; +
+<a name="line207"></a>    goog.testing.stacktrace.FIREFOX_FUNCTION_CALL_PATTERN_ +
+<a name="line208"></a>    &#39;(?::0|&#39; + goog.testing.stacktrace.URL_PATTERN_ + &#39;)$&#39;);
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/**
+<a name="line212"></a> * RegExp pattern for an anonymous function call in an Opera stack frame.
+<a name="line213"></a> * Creates 2 (optional) submatches: the context object and function name.
+<a name="line214"></a> * @type {string}
+<a name="line215"></a> * @const
+<a name="line216"></a> * @private
+<a name="line217"></a> */
+<a name="line218"></a>goog.testing.stacktrace.OPERA_ANONYMOUS_FUNCTION_NAME_PATTERN_ =
+<a name="line219"></a>    &#39;&lt;anonymous function(?:\\: &#39; +
+<a name="line220"></a>    &#39;(?:(&#39; + goog.testing.stacktrace.IDENTIFIER_PATTERN_ +
+<a name="line221"></a>    &#39;(?:\\.&#39; + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + &#39;)*)\\.)?&#39; +
+<a name="line222"></a>    &#39;(&#39; + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + &#39;))?&gt;&#39;;
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * RegExp pattern for a function call in an Opera stack frame.
+<a name="line227"></a> * Creates 4 (optional) submatches: the function name (if not anonymous),
+<a name="line228"></a> * the aliased context object and function name (if anonymous), and the
+<a name="line229"></a> * function call arguments.
+<a name="line230"></a> * @type {string}
+<a name="line231"></a> * @const
+<a name="line232"></a> * @private
+<a name="line233"></a> */
+<a name="line234"></a>goog.testing.stacktrace.OPERA_FUNCTION_CALL_PATTERN_ =
+<a name="line235"></a>    &#39;(?:(?:(&#39; + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + &#39;)|&#39; +
+<a name="line236"></a>    goog.testing.stacktrace.OPERA_ANONYMOUS_FUNCTION_NAME_PATTERN_ +
+<a name="line237"></a>    &#39;)(\\(.*\\)))?@&#39;;
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * Regular expression for parsing on stack frame in Opera 11.68+
+<a name="line242"></a> * @type {!RegExp}
+<a name="line243"></a> * @const
+<a name="line244"></a> * @private
+<a name="line245"></a> */
+<a name="line246"></a>goog.testing.stacktrace.OPERA_STACK_FRAME_REGEXP_ = new RegExp(&#39;^&#39; +
+<a name="line247"></a>    goog.testing.stacktrace.OPERA_FUNCTION_CALL_PATTERN_ +
+<a name="line248"></a>    goog.testing.stacktrace.URL_PATTERN_ + &#39;?$&#39;);
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>/**
+<a name="line252"></a> * Regular expression for finding the function name in its source.
+<a name="line253"></a> * @type {!RegExp}
+<a name="line254"></a> * @private
+<a name="line255"></a> */
+<a name="line256"></a>goog.testing.stacktrace.FUNCTION_SOURCE_REGEXP_ = new RegExp(
+<a name="line257"></a>    &#39;^function (&#39; + goog.testing.stacktrace.IDENTIFIER_PATTERN_ + &#39;)&#39;);
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/**
+<a name="line261"></a> * RegExp pattern for function call in a IE stack trace. This expression allows
+<a name="line262"></a> * for identifiers like &#39;Anonymous function&#39;, &#39;eval code&#39;, and &#39;Global code&#39;.
+<a name="line263"></a> * @type {string}
+<a name="line264"></a> * @const
+<a name="line265"></a> * @private
+<a name="line266"></a> */
+<a name="line267"></a>goog.testing.stacktrace.IE_FUNCTION_CALL_PATTERN_ = &#39;(&#39; +
+<a name="line268"></a>    goog.testing.stacktrace.IDENTIFIER_PATTERN_ + &#39;(?:\\s+\\w+)*)&#39;;
+<a name="line269"></a>
+<a name="line270"></a>
+<a name="line271"></a>/**
+<a name="line272"></a> * Regular expression for parsing a stack frame in IE.
+<a name="line273"></a> * @type {!RegExp}
+<a name="line274"></a> * @const
+<a name="line275"></a> * @private
+<a name="line276"></a> */
+<a name="line277"></a>goog.testing.stacktrace.IE_STACK_FRAME_REGEXP_ = new RegExp(&#39;^   at &#39; +
+<a name="line278"></a>    goog.testing.stacktrace.IE_FUNCTION_CALL_PATTERN_ +
+<a name="line279"></a>    &#39;\\s*\\((eval code:[^)]*|&#39; + goog.testing.stacktrace.URL_PATTERN_ +
+<a name="line280"></a>    &#39;)\\)?$&#39;);
+<a name="line281"></a>
+<a name="line282"></a>
+<a name="line283"></a>/**
+<a name="line284"></a> * Creates a stack trace by following the call chain. Based on
+<a name="line285"></a> * {@link goog.debug.getStacktrace}.
+<a name="line286"></a> * @return {!Array.&lt;!goog.testing.stacktrace.Frame&gt;} Stack frames.
+<a name="line287"></a> * @private
+<a name="line288"></a> * @suppress {es5Strict}
+<a name="line289"></a> */
+<a name="line290"></a>goog.testing.stacktrace.followCallChain_ = function() {
+<a name="line291"></a>  var frames = [];
+<a name="line292"></a>  var fn = arguments.callee.caller;
+<a name="line293"></a>  var depth = 0;
+<a name="line294"></a>
+<a name="line295"></a>  while (fn &amp;&amp; depth &lt; goog.testing.stacktrace.MAX_DEPTH_) {
+<a name="line296"></a>    var fnString = Function.prototype.toString.call(fn);
+<a name="line297"></a>    var match = fnString.match(goog.testing.stacktrace.FUNCTION_SOURCE_REGEXP_);
+<a name="line298"></a>    var functionName = match ? match[1] : &#39;&#39;;
+<a name="line299"></a>
+<a name="line300"></a>    var argsBuilder = [&#39;(&#39;];
+<a name="line301"></a>    if (fn.arguments) {
+<a name="line302"></a>      for (var i = 0; i &lt; fn.arguments.length; i++) {
+<a name="line303"></a>        var arg = fn.arguments[i];
+<a name="line304"></a>        if (i &gt; 0) {
+<a name="line305"></a>          argsBuilder.push(&#39;, &#39;);
+<a name="line306"></a>        }
+<a name="line307"></a>        if (goog.isString(arg)) {
+<a name="line308"></a>          argsBuilder.push(&#39;&quot;&#39;, arg, &#39;&quot;&#39;);
+<a name="line309"></a>        } else {
+<a name="line310"></a>          // Some args are mocks, and we don&#39;t want to fail from them not having
+<a name="line311"></a>          // expected a call to toString, so instead insert a static string.
+<a name="line312"></a>          if (arg &amp;&amp; arg[&#39;$replay&#39;]) {
+<a name="line313"></a>            argsBuilder.push(&#39;goog.testing.Mock&#39;);
+<a name="line314"></a>          } else {
+<a name="line315"></a>            argsBuilder.push(String(arg));
+<a name="line316"></a>          }
+<a name="line317"></a>        }
+<a name="line318"></a>      }
+<a name="line319"></a>    } else {
+<a name="line320"></a>      // Opera 10 doesn&#39;t know the arguments of native functions.
+<a name="line321"></a>      argsBuilder.push(&#39;unknown&#39;);
+<a name="line322"></a>    }
+<a name="line323"></a>    argsBuilder.push(&#39;)&#39;);
+<a name="line324"></a>    var args = argsBuilder.join(&#39;&#39;);
+<a name="line325"></a>
+<a name="line326"></a>    frames.push(new goog.testing.stacktrace.Frame(&#39;&#39;, functionName, &#39;&#39;, args,
+<a name="line327"></a>        &#39;&#39;));
+<a name="line328"></a>
+<a name="line329"></a>    /** @preserveTry */
+<a name="line330"></a>    try {
+<a name="line331"></a>      fn = fn.caller;
+<a name="line332"></a>    } catch (e) {
+<a name="line333"></a>      break;
+<a name="line334"></a>    }
+<a name="line335"></a>    depth++;
+<a name="line336"></a>  }
+<a name="line337"></a>
+<a name="line338"></a>  return frames;
+<a name="line339"></a>};
+<a name="line340"></a>
+<a name="line341"></a>
+<a name="line342"></a>/**
+<a name="line343"></a> * Parses one stack frame.
+<a name="line344"></a> * @param {string} frameStr The stack frame as string.
+<a name="line345"></a> * @return {goog.testing.stacktrace.Frame} Stack frame object or null if the
+<a name="line346"></a> *     parsing failed.
+<a name="line347"></a> * @private
+<a name="line348"></a> */
+<a name="line349"></a>goog.testing.stacktrace.parseStackFrame_ = function(frameStr) {
+<a name="line350"></a>  var m = frameStr.match(goog.testing.stacktrace.CHROME_STACK_FRAME_REGEXP_);
+<a name="line351"></a>  if (m) {
+<a name="line352"></a>    return new goog.testing.stacktrace.Frame(m[1] || &#39;&#39;, m[2] || &#39;&#39;, m[3] || &#39;&#39;,
+<a name="line353"></a>        &#39;&#39;, m[4] || m[5] || &#39;&#39;);
+<a name="line354"></a>  }
+<a name="line355"></a>
+<a name="line356"></a>  if (frameStr.length &gt;
+<a name="line357"></a>      goog.testing.stacktrace.MAX_FIREFOX_FRAMESTRING_LENGTH_) {
+<a name="line358"></a>    return goog.testing.stacktrace.parseLongFirefoxFrame_(frameStr);
+<a name="line359"></a>  }
+<a name="line360"></a>
+<a name="line361"></a>  m = frameStr.match(goog.testing.stacktrace.FIREFOX_STACK_FRAME_REGEXP_);
+<a name="line362"></a>  if (m) {
+<a name="line363"></a>    return new goog.testing.stacktrace.Frame(&#39;&#39;, m[1] || &#39;&#39;, &#39;&#39;, m[2] || &#39;&#39;,
+<a name="line364"></a>        m[3] || &#39;&#39;);
+<a name="line365"></a>  }
+<a name="line366"></a>
+<a name="line367"></a>  m = frameStr.match(goog.testing.stacktrace.OPERA_STACK_FRAME_REGEXP_);
+<a name="line368"></a>  if (m) {
+<a name="line369"></a>    return new goog.testing.stacktrace.Frame(m[2] || &#39;&#39;, m[1] || m[3] || &#39;&#39;,
+<a name="line370"></a>        &#39;&#39;, m[4] || &#39;&#39;, m[5] || &#39;&#39;);
+<a name="line371"></a>  }
+<a name="line372"></a>
+<a name="line373"></a>  m = frameStr.match(goog.testing.stacktrace.IE_STACK_FRAME_REGEXP_);
+<a name="line374"></a>  if (m) {
+<a name="line375"></a>    return new goog.testing.stacktrace.Frame(&#39;&#39;, m[1] || &#39;&#39;, &#39;&#39;, &#39;&#39;,
+<a name="line376"></a>        m[2] || &#39;&#39;);
+<a name="line377"></a>  }
+<a name="line378"></a>
+<a name="line379"></a>  return null;
+<a name="line380"></a>};
+<a name="line381"></a>
+<a name="line382"></a>
+<a name="line383"></a>/**
+<a name="line384"></a> * Parses a long firefox stack frame.
+<a name="line385"></a> * @param {string} frameStr The stack frame as string.
+<a name="line386"></a> * @return {!goog.testing.stacktrace.Frame} Stack frame object.
+<a name="line387"></a> * @private
+<a name="line388"></a> */
+<a name="line389"></a>goog.testing.stacktrace.parseLongFirefoxFrame_ = function(frameStr) {
+<a name="line390"></a>  var firstParen = frameStr.indexOf(&#39;(&#39;);
+<a name="line391"></a>  var lastAmpersand = frameStr.lastIndexOf(&#39;@&#39;);
+<a name="line392"></a>  var lastColon = frameStr.lastIndexOf(&#39;:&#39;);
+<a name="line393"></a>  var functionName = &#39;&#39;;
+<a name="line394"></a>  if ((firstParen &gt;= 0) &amp;&amp; (firstParen &lt; lastAmpersand)) {
+<a name="line395"></a>    functionName = frameStr.substring(0, firstParen);
+<a name="line396"></a>  }
+<a name="line397"></a>  var loc = &#39;&#39;;
+<a name="line398"></a>  if ((lastAmpersand &gt;= 0) &amp;&amp; (lastAmpersand + 1 &lt; lastColon)) {
+<a name="line399"></a>    loc = frameStr.substring(lastAmpersand + 1);
+<a name="line400"></a>  }
+<a name="line401"></a>  var args = &#39;&#39;;
+<a name="line402"></a>  if ((firstParen &gt;= 0 &amp;&amp; lastAmpersand &gt; 0) &amp;&amp;
+<a name="line403"></a>      (firstParen &lt; lastAmpersand)) {
+<a name="line404"></a>    args = frameStr.substring(firstParen, lastAmpersand);
+<a name="line405"></a>  }
+<a name="line406"></a>  return new goog.testing.stacktrace.Frame(&#39;&#39;, functionName, &#39;&#39;, args, loc);
+<a name="line407"></a>};
+<a name="line408"></a>
+<a name="line409"></a>
+<a name="line410"></a>/**
+<a name="line411"></a> * Function to deobfuscate function names.
+<a name="line412"></a> * @type {function(string): string}
+<a name="line413"></a> * @private
+<a name="line414"></a> */
+<a name="line415"></a>goog.testing.stacktrace.deobfuscateFunctionName_;
+<a name="line416"></a>
+<a name="line417"></a>
+<a name="line418"></a>/**
+<a name="line419"></a> * Sets function to deobfuscate function names.
+<a name="line420"></a> * @param {function(string): string} fn function to deobfuscate function names.
+<a name="line421"></a> */
+<a name="line422"></a>goog.testing.stacktrace.setDeobfuscateFunctionName = function(fn) {
+<a name="line423"></a>  goog.testing.stacktrace.deobfuscateFunctionName_ = fn;
+<a name="line424"></a>};
+<a name="line425"></a>
+<a name="line426"></a>
+<a name="line427"></a>/**
+<a name="line428"></a> * Deobfuscates a compiled function name with the function passed to
+<a name="line429"></a> * {@link #setDeobfuscateFunctionName}. Returns the original function name if
+<a name="line430"></a> * the deobfuscator hasn&#39;t been set.
+<a name="line431"></a> * @param {string} name The function name to deobfuscate.
+<a name="line432"></a> * @return {string} The deobfuscated function name.
+<a name="line433"></a> * @private
+<a name="line434"></a> */
+<a name="line435"></a>goog.testing.stacktrace.maybeDeobfuscateFunctionName_ = function(name) {
+<a name="line436"></a>  return goog.testing.stacktrace.deobfuscateFunctionName_ ?
+<a name="line437"></a>      goog.testing.stacktrace.deobfuscateFunctionName_(name) : name;
+<a name="line438"></a>};
+<a name="line439"></a>
+<a name="line440"></a>
+<a name="line441"></a>/**
+<a name="line442"></a> * @return {boolean} Whether the Closure Inspector is active.
+<a name="line443"></a> * @private
+<a name="line444"></a> */
+<a name="line445"></a>goog.testing.stacktrace.isClosureInspectorActive_ = function() {
+<a name="line446"></a>  return Boolean(goog.global[&#39;CLOSURE_INSPECTOR___&#39;] &amp;&amp;
+<a name="line447"></a>      goog.global[&#39;CLOSURE_INSPECTOR___&#39;][&#39;supportsJSUnit&#39;]);
+<a name="line448"></a>};
+<a name="line449"></a>
+<a name="line450"></a>
+<a name="line451"></a>/**
+<a name="line452"></a> * Escapes the special character in HTML.
+<a name="line453"></a> * @param {string} text Plain text.
+<a name="line454"></a> * @return {string} Escaped text.
+<a name="line455"></a> * @private
+<a name="line456"></a> */
+<a name="line457"></a>goog.testing.stacktrace.htmlEscape_ = function(text) {
+<a name="line458"></a>  return text.replace(/&amp;/g, &#39;&amp;amp;&#39;).
+<a name="line459"></a>             replace(/&lt;/g, &#39;&amp;lt;&#39;).
+<a name="line460"></a>             replace(/&gt;/g, &#39;&amp;gt;&#39;).
+<a name="line461"></a>             replace(/&quot;/g, &#39;&amp;quot;&#39;);
+<a name="line462"></a>};
+<a name="line463"></a>
+<a name="line464"></a>
+<a name="line465"></a>/**
+<a name="line466"></a> * Converts the stack frames into canonical format. Chops the beginning and the
+<a name="line467"></a> * end of it which come from the testing environment, not from the test itself.
+<a name="line468"></a> * @param {!Array.&lt;goog.testing.stacktrace.Frame&gt;} frames The frames.
+<a name="line469"></a> * @return {string} Canonical, pretty printed stack trace.
+<a name="line470"></a> * @private
+<a name="line471"></a> */
+<a name="line472"></a>goog.testing.stacktrace.framesToString_ = function(frames) {
+<a name="line473"></a>  // Removes the anonymous calls from the end of the stack trace (they come
+<a name="line474"></a>  // from testrunner.js, testcase.js and asserts.js), so the stack trace will
+<a name="line475"></a>  // end with the test... method.
+<a name="line476"></a>  var lastIndex = frames.length - 1;
+<a name="line477"></a>  while (frames[lastIndex] &amp;&amp; frames[lastIndex].isAnonymous()) {
+<a name="line478"></a>    lastIndex--;
+<a name="line479"></a>  }
+<a name="line480"></a>
+<a name="line481"></a>  // Removes the beginning of the stack trace until the call of the private
+<a name="line482"></a>  // _assert function (inclusive), so the stack trace will begin with a public
+<a name="line483"></a>  // asserter. Does nothing if _assert is not present in the stack trace.
+<a name="line484"></a>  var privateAssertIndex = -1;
+<a name="line485"></a>  for (var i = 0; i &lt; frames.length; i++) {
+<a name="line486"></a>    if (frames[i] &amp;&amp; frames[i].getName() == &#39;_assert&#39;) {
+<a name="line487"></a>      privateAssertIndex = i;
+<a name="line488"></a>      break;
+<a name="line489"></a>    }
+<a name="line490"></a>  }
+<a name="line491"></a>
+<a name="line492"></a>  var canonical = [];
+<a name="line493"></a>  for (var i = privateAssertIndex + 1; i &lt;= lastIndex; i++) {
+<a name="line494"></a>    canonical.push(&#39;&gt; &#39;);
+<a name="line495"></a>    if (frames[i]) {
+<a name="line496"></a>      canonical.push(frames[i].toCanonicalString());
+<a name="line497"></a>    } else {
+<a name="line498"></a>      canonical.push(&#39;(unknown)&#39;);
+<a name="line499"></a>    }
+<a name="line500"></a>    canonical.push(&#39;\n&#39;);
+<a name="line501"></a>  }
+<a name="line502"></a>  return canonical.join(&#39;&#39;);
+<a name="line503"></a>};
+<a name="line504"></a>
+<a name="line505"></a>
+<a name="line506"></a>/**
+<a name="line507"></a> * Parses the browser&#39;s native stack trace.
+<a name="line508"></a> * @param {string} stack Stack trace.
+<a name="line509"></a> * @return {!Array.&lt;goog.testing.stacktrace.Frame&gt;} Stack frames. The
+<a name="line510"></a> *     unrecognized frames will be nulled out.
+<a name="line511"></a> * @private
+<a name="line512"></a> */
+<a name="line513"></a>goog.testing.stacktrace.parse_ = function(stack) {
+<a name="line514"></a>  var lines = stack.replace(/\s*$/, &#39;&#39;).split(&#39;\n&#39;);
+<a name="line515"></a>  var frames = [];
+<a name="line516"></a>  for (var i = 0; i &lt; lines.length; i++) {
+<a name="line517"></a>    frames.push(goog.testing.stacktrace.parseStackFrame_(lines[i]));
+<a name="line518"></a>  }
+<a name="line519"></a>  return frames;
+<a name="line520"></a>};
+<a name="line521"></a>
+<a name="line522"></a>
+<a name="line523"></a>/**
+<a name="line524"></a> * Brings the stack trace into a common format across browsers.
+<a name="line525"></a> * @param {string} stack Browser-specific stack trace.
+<a name="line526"></a> * @return {string} Same stack trace in common format.
+<a name="line527"></a> */
+<a name="line528"></a>goog.testing.stacktrace.canonicalize = function(stack) {
+<a name="line529"></a>  var frames = goog.testing.stacktrace.parse_(stack);
+<a name="line530"></a>  return goog.testing.stacktrace.framesToString_(frames);
+<a name="line531"></a>};
+<a name="line532"></a>
+<a name="line533"></a>
+<a name="line534"></a>/**
+<a name="line535"></a> * Returns the native stack trace.
+<a name="line536"></a> * @return {string|!Array.&lt;!CallSite&gt;}
+<a name="line537"></a> * @private
+<a name="line538"></a> */
+<a name="line539"></a>goog.testing.stacktrace.getNativeStack_ = function() {
+<a name="line540"></a>  var tmpError = new Error();
+<a name="line541"></a>  if (tmpError.stack) {
+<a name="line542"></a>    return tmpError.stack;
+<a name="line543"></a>  }
+<a name="line544"></a>
+<a name="line545"></a>  // IE10 will only create a stack trace when the Error is thrown.
+<a name="line546"></a>  // We use null.x() to throw an exception because the closure compiler may
+<a name="line547"></a>  // replace &quot;throw&quot; with a function call in an attempt to minimize the binary
+<a name="line548"></a>  // size, which in turn has the side effect of adding an unwanted stack frame.
+<a name="line549"></a>  try {
+<a name="line550"></a>    null.x();
+<a name="line551"></a>  } catch (e) {
+<a name="line552"></a>    return e.stack;
+<a name="line553"></a>  }
+<a name="line554"></a>  return &#39;&#39;;
+<a name="line555"></a>};
+<a name="line556"></a>
+<a name="line557"></a>
+<a name="line558"></a>/**
+<a name="line559"></a> * Gets the native stack trace if available otherwise follows the call chain.
+<a name="line560"></a> * @return {string} The stack trace in canonical format.
+<a name="line561"></a> */
+<a name="line562"></a>goog.testing.stacktrace.get = function() {
+<a name="line563"></a>  var stack = goog.testing.stacktrace.getNativeStack_();
+<a name="line564"></a>  var frames;
+<a name="line565"></a>  if (!stack) {
+<a name="line566"></a>    frames = goog.testing.stacktrace.followCallChain_();
+<a name="line567"></a>  } else if (goog.isArray(stack)) {
+<a name="line568"></a>    frames = goog.testing.stacktrace.callSitesToFrames_(stack);
+<a name="line569"></a>  } else {
+<a name="line570"></a>    frames = goog.testing.stacktrace.parse_(stack);
+<a name="line571"></a>  }
+<a name="line572"></a>  return goog.testing.stacktrace.framesToString_(frames);
+<a name="line573"></a>};
+<a name="line574"></a>
+<a name="line575"></a>
+<a name="line576"></a>/**
+<a name="line577"></a> * Converts an array of CallSite (elements of a stack trace in V8) to an array
+<a name="line578"></a> * of Frames.
+<a name="line579"></a> * @param {!Array.&lt;!CallSite&gt;} stack The stack as an array of CallSites.
+<a name="line580"></a> * @return {!Array.&lt;!goog.testing.stacktrace.Frame&gt;} The stack as an array of
+<a name="line581"></a> *     Frames.
+<a name="line582"></a> * @private
+<a name="line583"></a> */
+<a name="line584"></a>goog.testing.stacktrace.callSitesToFrames_ = function(stack) {
+<a name="line585"></a>  var frames = [];
+<a name="line586"></a>  for (var i = 0; i &lt; stack.length; i++) {
+<a name="line587"></a>    var callSite = stack[i];
+<a name="line588"></a>    var functionName = callSite.getFunctionName() || &#39;unknown&#39;;
+<a name="line589"></a>    var fileName = callSite.getFileName();
+<a name="line590"></a>    var path = fileName ? fileName + &#39;:&#39; + callSite.getLineNumber() + &#39;:&#39; +
+<a name="line591"></a>        callSite.getColumnNumber() : &#39;unknown&#39;;
+<a name="line592"></a>    frames.push(
+<a name="line593"></a>        new goog.testing.stacktrace.Frame(&#39;&#39;, functionName, &#39;&#39;, &#39;&#39;, path));
+<a name="line594"></a>  }
+<a name="line595"></a>  return frames;
+<a name="line596"></a>};
+<a name="line597"></a>
+<a name="line598"></a>
+<a name="line599"></a>goog.exportSymbol(&#39;setDeobfuscateFunctionName&#39;,
+<a name="line600"></a>    goog.testing.stacktrace.setDeobfuscateFunctionName);
+</pre>
+
+
+</body>
+</html>

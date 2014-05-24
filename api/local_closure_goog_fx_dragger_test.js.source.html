@@ -1,0 +1,510 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>dragger_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_fx_dragger_test.js.html">dragger_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.fx.DraggerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.fx.DraggerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line23"></a>goog.require(&#39;goog.fx.Dragger&#39;);
+<a name="line24"></a>goog.require(&#39;goog.math.Rect&#39;);
+<a name="line25"></a>goog.require(&#39;goog.style.bidi&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.StrictMock&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.events&#39;);
+<a name="line28"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line29"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line30"></a>
+<a name="line31"></a>var HAS_SET_CAPTURE = goog.fx.Dragger.HAS_SET_CAPTURE_;
+<a name="line32"></a>
+<a name="line33"></a>var target;
+<a name="line34"></a>var targetRtl;
+<a name="line35"></a>
+<a name="line36"></a>function setUp() {
+<a name="line37"></a>  var sandbox = goog.dom.getElement(&#39;sandbox&#39;);
+<a name="line38"></a>  target = goog.dom.createDom(&#39;div&#39;, {
+<a name="line39"></a>    &#39;id&#39;: &#39;target&#39;,
+<a name="line40"></a>    &#39;style&#39;: &#39;display:none;position:absolute;top:15px;left:10px&#39;
+<a name="line41"></a>  });
+<a name="line42"></a>  sandbox.appendChild(target);
+<a name="line43"></a>  sandbox.appendChild(goog.dom.createDom(&#39;div&#39;, {&#39;id&#39;: &#39;handle&#39;}));
+<a name="line44"></a>
+<a name="line45"></a>  var sandboxRtl = goog.dom.getElement(&#39;sandbox_rtl&#39;);
+<a name="line46"></a>  targetRtl = goog.dom.createDom(&#39;div&#39;, {
+<a name="line47"></a>    &#39;id&#39;: &#39;target_rtl&#39;,
+<a name="line48"></a>    &#39;style&#39;: &#39;position:absolute; top:15px; right:10px; width:10px; &#39; +
+<a name="line49"></a>        &#39;height: 10px; background: green;&#39;
+<a name="line50"></a>  });
+<a name="line51"></a>  sandboxRtl.appendChild(targetRtl);
+<a name="line52"></a>  sandboxRtl.appendChild(goog.dom.createDom(&#39;div&#39;, {
+<a name="line53"></a>    &#39;id&#39;: &#39;background_rtl&#39;,
+<a name="line54"></a>    &#39;style&#39;: &#39;width: 10000px;height:50px;position:absolute;color:blue;&#39;
+<a name="line55"></a>  }));
+<a name="line56"></a>  sandboxRtl.appendChild(goog.dom.createDom(&#39;div&#39;, {&#39;id&#39;: &#39;handle_rtl&#39;}));
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>function tearDown() {
+<a name="line60"></a>  goog.dom.getElement(&#39;sandbox&#39;).innerHTML = &#39;&#39;;
+<a name="line61"></a>  goog.dom.getElement(&#39;sandbox_rtl&#39;).innerHTML = &#39;&#39;;
+<a name="line62"></a>  goog.events.removeAll(document);
+<a name="line63"></a>}
+<a name="line64"></a>
+<a name="line65"></a>function testStartDrag() {
+<a name="line66"></a>  runStartDragTest(&#39;handle&#39;, target);
+<a name="line67"></a>}
+<a name="line68"></a>
+<a name="line69"></a>function testStartDrag_rtl() {
+<a name="line70"></a>  runStartDragTest(&#39;handle_rtl&#39;, targetRtl);
+<a name="line71"></a>}
+<a name="line72"></a>
+<a name="line73"></a>function runStartDragTest(handleId, targetElement) {
+<a name="line74"></a>  var dragger =
+<a name="line75"></a>      new goog.fx.Dragger(targetElement, goog.dom.getElement(handleId));
+<a name="line76"></a>  if (handleId == &#39;handle_rtl&#39;) {
+<a name="line77"></a>    dragger.enableRightPositioningForRtl(true);
+<a name="line78"></a>  }
+<a name="line79"></a>  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line80"></a>  e.type = goog.events.EventType.MOUSEDOWN;
+<a name="line81"></a>  e.clientX = 1;
+<a name="line82"></a>  e.clientY = 2;
+<a name="line83"></a>  e.isMouseActionButton().$returns(true);
+<a name="line84"></a>  e.preventDefault();
+<a name="line85"></a>  e.isMouseActionButton().$returns(true);
+<a name="line86"></a>  e.preventDefault();
+<a name="line87"></a>  e.$replay();
+<a name="line88"></a>
+<a name="line89"></a>  goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function() {
+<a name="line90"></a>    targetElement.style.display = &#39;block&#39;;
+<a name="line91"></a>  });
+<a name="line92"></a>
+<a name="line93"></a>  dragger.startDrag(e);
+<a name="line94"></a>
+<a name="line95"></a>  assertTrue(&#39;Start drag with no hysteresis must actually start the drag.&#39;,
+<a name="line96"></a>      dragger.isDragging());
+<a name="line97"></a>  if (handleId == &#39;handle_rtl&#39;) {
+<a name="line98"></a>    assertEquals(10, goog.style.bidi.getOffsetStart(targetElement));
+<a name="line99"></a>  }
+<a name="line100"></a>  assertEquals(&#39;Dragger startX must match event\&#39;s clientX.&#39;,
+<a name="line101"></a>      1, dragger.startX);
+<a name="line102"></a>  assertEquals(&#39;Dragger clientX must match event\&#39;s clientX&#39;,
+<a name="line103"></a>      1, dragger.clientX);
+<a name="line104"></a>  assertEquals(&#39;Dragger startY must match event\&#39;s clientY.&#39;,
+<a name="line105"></a>      2, dragger.startY);
+<a name="line106"></a>  assertEquals(&#39;Dragger clientY must match event\&#39;s clientY&#39;,
+<a name="line107"></a>      2, dragger.clientY);
+<a name="line108"></a>  assertEquals(&#39;Dragger deltaX must match target\&#39;s offsetLeft&#39;,
+<a name="line109"></a>      10, dragger.deltaX);
+<a name="line110"></a>  assertEquals(&#39;Dragger deltaY must match target\&#39;s offsetTop&#39;,
+<a name="line111"></a>      15, dragger.deltaY);
+<a name="line112"></a>
+<a name="line113"></a>  dragger = new goog.fx.Dragger(targetElement, goog.dom.getElement(handleId));
+<a name="line114"></a>  dragger.setHysteresis(1);
+<a name="line115"></a>  dragger.startDrag(e);
+<a name="line116"></a>  assertFalse(&#39;Start drag with a valid non-zero hysteresis should not start &#39; +
+<a name="line117"></a>      &#39;the drag.&#39;, dragger.isDragging());
+<a name="line118"></a>  e.$verify();
+<a name="line119"></a>}
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * @bug 1381317 Cancelling start drag didn&#39;t end the attempt to drag.
+<a name="line124"></a> */
+<a name="line125"></a>function testStartDrag_Cancel() {
+<a name="line126"></a>  var dragger = new goog.fx.Dragger(target);
+<a name="line127"></a>
+<a name="line128"></a>  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line129"></a>  e.type = goog.events.EventType.MOUSEDOWN;
+<a name="line130"></a>  e.clientX = 1;
+<a name="line131"></a>  e.clientY = 2;
+<a name="line132"></a>  e.isMouseActionButton().$returns(true);
+<a name="line133"></a>  e.$replay();
+<a name="line134"></a>
+<a name="line135"></a>  goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function(e) {
+<a name="line136"></a>    // Cancel drag.
+<a name="line137"></a>    e.preventDefault();
+<a name="line138"></a>  });
+<a name="line139"></a>
+<a name="line140"></a>  dragger.startDrag(e);
+<a name="line141"></a>
+<a name="line142"></a>  assertFalse(&#39;Start drag must have been cancelled.&#39;,
+<a name="line143"></a>      dragger.isDragging());
+<a name="line144"></a>  assertFalse(&#39;Dragger must not have registered mousemove handlers.&#39;,
+<a name="line145"></a>      goog.events.hasListener(dragger.document_,
+<a name="line146"></a>          goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
+<a name="line147"></a>  assertFalse(&#39;Dragger must not have registered mouseup handlers.&#39;,
+<a name="line148"></a>      goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
+<a name="line149"></a>          !HAS_SET_CAPTURE));
+<a name="line150"></a>  e.$verify();
+<a name="line151"></a>}
+<a name="line152"></a>
+<a name="line153"></a>
+<a name="line154"></a>/**
+<a name="line155"></a> * Tests that start drag happens on left mousedown.
+<a name="line156"></a> */
+<a name="line157"></a>function testStartDrag_LeftMouseDownOnly() {
+<a name="line158"></a>  var dragger = new goog.fx.Dragger(target);
+<a name="line159"></a>
+<a name="line160"></a>  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line161"></a>  e.type = goog.events.EventType.MOUSEDOWN;
+<a name="line162"></a>  e.clientX = 1;
+<a name="line163"></a>  e.clientY = 2;
+<a name="line164"></a>  e.isMouseActionButton().$returns(false);
+<a name="line165"></a>  e.$replay();
+<a name="line166"></a>
+<a name="line167"></a>  goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function(e) {
+<a name="line168"></a>    fail(&#39;No drag START event should have been dispatched&#39;);
+<a name="line169"></a>  });
+<a name="line170"></a>
+<a name="line171"></a>  dragger.startDrag(e);
+<a name="line172"></a>
+<a name="line173"></a>  assertFalse(&#39;Start drag must have been cancelled.&#39;,
+<a name="line174"></a>      dragger.isDragging());
+<a name="line175"></a>  assertFalse(&#39;Dragger must not have registered mousemove handlers.&#39;,
+<a name="line176"></a>      goog.events.hasListener(dragger.document_,
+<a name="line177"></a>          goog.events.EventType.MOUSEMOVE, true));
+<a name="line178"></a>  assertFalse(&#39;Dragger must not have registered mouseup handlers.&#39;,
+<a name="line179"></a>      goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
+<a name="line180"></a>          true));
+<a name="line181"></a>  e.$verify();
+<a name="line182"></a>}
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Tests that start drag happens on other event type than MOUSEDOWN.
+<a name="line187"></a> */
+<a name="line188"></a>function testStartDrag_MouseMove() {
+<a name="line189"></a>  var dragger = new goog.fx.Dragger(target);
+<a name="line190"></a>
+<a name="line191"></a>  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line192"></a>  e.type = goog.events.EventType.MOUSEMOVE;
+<a name="line193"></a>  e.clientX = 1;
+<a name="line194"></a>  e.clientY = 2;
+<a name="line195"></a>  e.preventDefault();
+<a name="line196"></a>  e.$replay();
+<a name="line197"></a>
+<a name="line198"></a>  var startDragFired = false;
+<a name="line199"></a>  goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function(e) {
+<a name="line200"></a>    startDragFired = true;
+<a name="line201"></a>  });
+<a name="line202"></a>
+<a name="line203"></a>  dragger.startDrag(e);
+<a name="line204"></a>
+<a name="line205"></a>  assertTrue(&#39;Dragging should be in progress.&#39;, dragger.isDragging());
+<a name="line206"></a>  assertTrue(&#39;Start drag event should have fired.&#39;, startDragFired);
+<a name="line207"></a>  assertTrue(&#39;Dragger must have registered mousemove handlers.&#39;,
+<a name="line208"></a>      goog.events.hasListener(dragger.document_,
+<a name="line209"></a>          goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
+<a name="line210"></a>  assertTrue(&#39;Dragger must have registered mouseup handlers.&#39;,
+<a name="line211"></a>      goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
+<a name="line212"></a>          !HAS_SET_CAPTURE));
+<a name="line213"></a>  e.$verify();
+<a name="line214"></a>}
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * @bug 1381317 Cancelling start drag didn&#39;t end the attempt to drag.
+<a name="line219"></a> */
+<a name="line220"></a>function testHandleMove_Cancel() {
+<a name="line221"></a>  var dragger = new goog.fx.Dragger(target);
+<a name="line222"></a>  dragger.setHysteresis(5);
+<a name="line223"></a>
+<a name="line224"></a>  goog.events.listen(dragger, goog.fx.Dragger.EventType.START, function(e) {
+<a name="line225"></a>    // Cancel drag.
+<a name="line226"></a>    e.preventDefault();
+<a name="line227"></a>  });
+<a name="line228"></a>
+<a name="line229"></a>  var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line230"></a>  e.clientX = 1;
+<a name="line231"></a>  e.clientY = 2;
+<a name="line232"></a>  e.isMouseActionButton().$returns(true).
+<a name="line233"></a>      $anyTimes();
+<a name="line234"></a>  e.preventDefault();
+<a name="line235"></a>  e.$replay();
+<a name="line236"></a>  dragger.startDrag(e);
+<a name="line237"></a>  assertFalse(&#39;Start drag must not start drag because of hysterisis.&#39;,
+<a name="line238"></a>      dragger.isDragging());
+<a name="line239"></a>  assertTrue(&#39;Dragger must have registered mousemove handlers.&#39;,
+<a name="line240"></a>      goog.events.hasListener(dragger.document_,
+<a name="line241"></a>          goog.events.EventType.MOUSEMOVE, !HAS_SET_CAPTURE));
+<a name="line242"></a>  assertTrue(&#39;Dragger must have registered mouseup handlers.&#39;,
+<a name="line243"></a>      goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
+<a name="line244"></a>          !HAS_SET_CAPTURE));
+<a name="line245"></a>
+<a name="line246"></a>  e.clientX = 10;
+<a name="line247"></a>  e.clientY = 10;
+<a name="line248"></a>  dragger.handleMove_(e);
+<a name="line249"></a>  assertFalse(&#39;Drag must be cancelled.&#39;, dragger.isDragging());
+<a name="line250"></a>  assertFalse(&#39;Dragger must unregistered mousemove handlers.&#39;,
+<a name="line251"></a>      goog.events.hasListener(dragger.document_,
+<a name="line252"></a>          goog.events.EventType.MOUSEMOVE, true));
+<a name="line253"></a>  assertFalse(&#39;Dragger must unregistered mouseup handlers.&#39;,
+<a name="line254"></a>      goog.events.hasListener(dragger.document_, goog.events.EventType.MOUSEUP,
+<a name="line255"></a>          true));
+<a name="line256"></a>  e.$verify();
+<a name="line257"></a>}
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/**
+<a name="line261"></a> * @bug 1714667 IE built in drag and drop handling stops dragging.
+<a name="line262"></a> */
+<a name="line263"></a>function testIeDragStartCancelling() {
+<a name="line264"></a>  // Testing only IE.
+<a name="line265"></a>  if (!goog.userAgent.IE) {
+<a name="line266"></a>    return;
+<a name="line267"></a>  }
+<a name="line268"></a>
+<a name="line269"></a>  // Built in &#39;dragstart&#39; cancelling not enabled.
+<a name="line270"></a>  var dragger = new goog.fx.Dragger(target);
+<a name="line271"></a>
+<a name="line272"></a>  var e = new goog.events.Event(goog.events.EventType.MOUSEDOWN);
+<a name="line273"></a>  e.clientX = 1;
+<a name="line274"></a>  e.clientY = 2;
+<a name="line275"></a>  e.button = 1; // IE only constant for left button.
+<a name="line276"></a>  var be = new goog.events.BrowserEvent(e);
+<a name="line277"></a>  dragger.startDrag(be);
+<a name="line278"></a>  assertTrue(&#39;The drag should have started.&#39;, dragger.isDragging());
+<a name="line279"></a>
+<a name="line280"></a>  e = new goog.events.Event(goog.events.EventType.DRAGSTART);
+<a name="line281"></a>  e.target = dragger.document_.documentElement;
+<a name="line282"></a>  assertTrue(&#39;The event should not be canceled.&#39;,
+<a name="line283"></a>      goog.testing.events.fireBrowserEvent(e));
+<a name="line284"></a>
+<a name="line285"></a>  dragger.dispose();
+<a name="line286"></a>
+<a name="line287"></a>  // Built in &#39;dragstart&#39; cancelling enabled.
+<a name="line288"></a>  dragger = new goog.fx.Dragger(target);
+<a name="line289"></a>  dragger.setCancelIeDragStart(true);
+<a name="line290"></a>
+<a name="line291"></a>  e = new goog.events.Event(goog.events.EventType.MOUSEDOWN);
+<a name="line292"></a>  e.clientX = 1;
+<a name="line293"></a>  e.clientY = 2;
+<a name="line294"></a>  e.button = 1; // IE only constant for left button.
+<a name="line295"></a>  be = new goog.events.BrowserEvent(e);
+<a name="line296"></a>  dragger.startDrag(be);
+<a name="line297"></a>  assertTrue(&#39;The drag should have started.&#39;, dragger.isDragging());
+<a name="line298"></a>
+<a name="line299"></a>  e = new goog.events.Event(goog.events.EventType.DRAGSTART);
+<a name="line300"></a>  e.target = dragger.document_.documentElement;
+<a name="line301"></a>  assertFalse(&#39;The event should be canceled.&#39;,
+<a name="line302"></a>      goog.testing.events.fireBrowserEvent(e));
+<a name="line303"></a>
+<a name="line304"></a>  dragger.dispose();
+<a name="line305"></a>}
+<a name="line306"></a>
+<a name="line307"></a>
+<a name="line308"></a>/** @bug 1680770 */
+<a name="line309"></a>function testOnWindowMouseOut() {
+<a name="line310"></a>  // Test older Gecko browsers - FireFox 2.
+<a name="line311"></a>  if (goog.userAgent.GECKO &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;1.9a&#39;)) {
+<a name="line312"></a>    var dragger = new goog.fx.Dragger(target);
+<a name="line313"></a>
+<a name="line314"></a>    var dragCanceled = false;
+<a name="line315"></a>    goog.events.listen(dragger, goog.fx.Dragger.EventType.END, function(e) {
+<a name="line316"></a>      dragCanceled = e.dragCanceled;
+<a name="line317"></a>    });
+<a name="line318"></a>
+<a name="line319"></a>    var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line320"></a>    e.type = goog.events.EventType.MOUSEDOWN;
+<a name="line321"></a>    e.clientX = 1;
+<a name="line322"></a>    e.clientY = 2;
+<a name="line323"></a>    e.isMouseActionButton().$returns(true);
+<a name="line324"></a>    e.preventDefault();
+<a name="line325"></a>    e.$replay();
+<a name="line326"></a>    dragger.startDrag(e);
+<a name="line327"></a>    e.$verify();
+<a name="line328"></a>
+<a name="line329"></a>    assertTrue(dragger.isDragging());
+<a name="line330"></a>
+<a name="line331"></a>    e = new goog.events.BrowserEvent();
+<a name="line332"></a>    e.type = goog.events.EventType.MOUSEOUT;
+<a name="line333"></a>    e.target = goog.dom.getElement(&#39;sandbox&#39;);
+<a name="line334"></a>    e.currentTarget = window.top;
+<a name="line335"></a>    e.relatedTarget = target;
+<a name="line336"></a>    dragger.onWindowMouseOut_(e);
+<a name="line337"></a>
+<a name="line338"></a>    assertFalse(&#39;Drag is not canceled for normal in-window mouseout.&#39;,
+<a name="line339"></a>        dragCanceled);
+<a name="line340"></a>    assertTrue(&#39;Must not stop dragging for normal in-window mouseout.&#39;,
+<a name="line341"></a>        dragger.isDragging());
+<a name="line342"></a>
+<a name="line343"></a>    dragCanceled = false;
+<a name="line344"></a>    delete e.relatedTarget;
+<a name="line345"></a>    e.target = goog.dom.createDom(&#39;iframe&#39;);
+<a name="line346"></a>    dragger.onWindowMouseOut_(e);
+<a name="line347"></a>    assertFalse(&#39;Drag is not canceled for mousing into iframe.&#39;,
+<a name="line348"></a>        dragCanceled);
+<a name="line349"></a>    assertTrue(&#39;Must not stop dragging for mousing into iframe.&#39;,
+<a name="line350"></a>        dragger.isDragging());
+<a name="line351"></a>
+<a name="line352"></a>    dragCanceled = false;
+<a name="line353"></a>    e.target = target;
+<a name="line354"></a>    dragger.onWindowMouseOut_(e);
+<a name="line355"></a>    assertTrue(&#39;Drag is canceled for real mouse out of top window.&#39;,
+<a name="line356"></a>        dragCanceled);
+<a name="line357"></a>    assertFalse(&#39;Must stop dragging for real mouse out of top window.&#39;,
+<a name="line358"></a>        dragger.isDragging());
+<a name="line359"></a>  }
+<a name="line360"></a>}
+<a name="line361"></a>
+<a name="line362"></a>function testLimits() {
+<a name="line363"></a>  var dragger = new goog.fx.Dragger(target);
+<a name="line364"></a>
+<a name="line365"></a>  assertEquals(100, dragger.limitX(100));
+<a name="line366"></a>  assertEquals(100, dragger.limitY(100));
+<a name="line367"></a>
+<a name="line368"></a>  dragger.setLimits(new goog.math.Rect(10, 20, 30, 40));
+<a name="line369"></a>
+<a name="line370"></a>  assertEquals(10, dragger.limitX(0));
+<a name="line371"></a>  assertEquals(40, dragger.limitX(100));
+<a name="line372"></a>  assertEquals(20, dragger.limitY(0));
+<a name="line373"></a>  assertEquals(60, dragger.limitY(100));
+<a name="line374"></a>}
+<a name="line375"></a>
+<a name="line376"></a>function testWindowBlur() {
+<a name="line377"></a>  if (!goog.fx.Dragger.HAS_SET_CAPTURE_) {
+<a name="line378"></a>    var dragger = new goog.fx.Dragger(target);
+<a name="line379"></a>
+<a name="line380"></a>    var dragEnded = false;
+<a name="line381"></a>    goog.events.listen(dragger, goog.fx.Dragger.EventType.END, function(e) {
+<a name="line382"></a>      dragEnded = true;
+<a name="line383"></a>    });
+<a name="line384"></a>
+<a name="line385"></a>    var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line386"></a>    e.type = goog.events.EventType.MOUSEDOWN;
+<a name="line387"></a>    e.clientX = 1;
+<a name="line388"></a>    e.clientY = 2;
+<a name="line389"></a>    e.isMouseActionButton().$returns(true);
+<a name="line390"></a>    e.preventDefault();
+<a name="line391"></a>    e.$replay();
+<a name="line392"></a>    dragger.startDrag(e);
+<a name="line393"></a>    e.$verify();
+<a name="line394"></a>
+<a name="line395"></a>    assertTrue(dragger.isDragging());
+<a name="line396"></a>
+<a name="line397"></a>    e = new goog.events.BrowserEvent();
+<a name="line398"></a>    e.type = goog.events.EventType.BLUR;
+<a name="line399"></a>    e.target = window;
+<a name="line400"></a>    e.currentTarget = window;
+<a name="line401"></a>    goog.testing.events.fireBrowserEvent(e);
+<a name="line402"></a>
+<a name="line403"></a>    assertTrue(dragEnded);
+<a name="line404"></a>  }
+<a name="line405"></a>}
+<a name="line406"></a>
+<a name="line407"></a>function testBlur() {
+<a name="line408"></a>  if (!goog.fx.Dragger.HAS_SET_CAPTURE_) {
+<a name="line409"></a>    var dragger = new goog.fx.Dragger(target);
+<a name="line410"></a>
+<a name="line411"></a>    var dragEnded = false;
+<a name="line412"></a>    goog.events.listen(dragger, goog.fx.Dragger.EventType.END, function(e) {
+<a name="line413"></a>      dragEnded = true;
+<a name="line414"></a>    });
+<a name="line415"></a>
+<a name="line416"></a>    var e = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line417"></a>    e.type = goog.events.EventType.MOUSEDOWN;
+<a name="line418"></a>    e.clientX = 1;
+<a name="line419"></a>    e.clientY = 2;
+<a name="line420"></a>    e.isMouseActionButton().$returns(true);
+<a name="line421"></a>    e.preventDefault();
+<a name="line422"></a>    e.$replay();
+<a name="line423"></a>    dragger.startDrag(e);
+<a name="line424"></a>    e.$verify();
+<a name="line425"></a>
+<a name="line426"></a>    assertTrue(dragger.isDragging());
+<a name="line427"></a>
+<a name="line428"></a>    e = new goog.events.BrowserEvent();
+<a name="line429"></a>    e.type = goog.events.EventType.BLUR;
+<a name="line430"></a>    e.target = document.body;
+<a name="line431"></a>    e.currentTarget = document.body;
+<a name="line432"></a>    // Blur events do not bubble but the test event system does not emulate that
+<a name="line433"></a>    // part so we add a capturing listener on the target and stops the
+<a name="line434"></a>    // propagation at the target, preventing any event from bubbling.
+<a name="line435"></a>    goog.events.listen(document.body, goog.events.EventType.BLUR, function(e) {
+<a name="line436"></a>      e.propagationStopped_ = true;
+<a name="line437"></a>    }, true);
+<a name="line438"></a>    goog.testing.events.fireBrowserEvent(e);
+<a name="line439"></a>
+<a name="line440"></a>    assertFalse(dragEnded);
+<a name="line441"></a>  }
+<a name="line442"></a>}
+<a name="line443"></a>
+<a name="line444"></a>function testCloneNode() {
+<a name="line445"></a>  var element = goog.dom.createDom(&#39;div&#39;);
+<a name="line446"></a>  element.innerHTML =
+<a name="line447"></a>      &#39;&lt;input type=&quot;hidden&quot; value=&quot;v0&quot;&gt;&#39; +
+<a name="line448"></a>      &#39;&lt;textarea&gt;v1&lt;/textarea&gt;&#39; +
+<a name="line449"></a>      &#39;&lt;textarea&gt;v2&lt;/textarea&gt;&#39;;
+<a name="line450"></a>  element.childNodes[0].value = &#39;\&#39;new\&#39;\n&quot;value&quot;&#39;;
+<a name="line451"></a>  element.childNodes[1].value = &#39;&lt;&#39; + &#39;/textarea&gt;&amp;lt;3&#39;;
+<a name="line452"></a>  element.childNodes[2].value = &#39;&lt;script&gt;\n\talert(&quot;oops!&quot;);&lt;&#39; + &#39;/script&gt;&#39;;
+<a name="line453"></a>  var clone = goog.fx.Dragger.cloneNode(element);
+<a name="line454"></a>  assertEquals(element.childNodes[0].value, clone.childNodes[0].value);
+<a name="line455"></a>  assertEquals(element.childNodes[1].value, clone.childNodes[1].value);
+<a name="line456"></a>  assertEquals(element.childNodes[2].value, clone.childNodes[2].value);
+<a name="line457"></a>  clone = goog.fx.Dragger.cloneNode(element.childNodes[2]);
+<a name="line458"></a>  assertEquals(element.childNodes[2].value, clone.value);
+<a name="line459"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,1214 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>asserts_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_asserts_test.js.html">asserts_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.assertsTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.assertsTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line20"></a>goog.require(&#39;goog.iter.Iterator&#39;);
+<a name="line21"></a>goog.require(&#39;goog.iter.StopIteration&#39;);
+<a name="line22"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line23"></a>goog.require(&#39;goog.structs.Set&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line26"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line27"></a>
+<a name="line28"></a>function testAssertTrue() {
+<a name="line29"></a>  assertTrue(true);
+<a name="line30"></a>  assertTrue(&#39;Good assertion&#39;, true);
+<a name="line31"></a>  assertThrowsJsUnitException(
+<a name="line32"></a>      function() { assertTrue(false); },
+<a name="line33"></a>      &#39;Call to assertTrue(boolean) with false&#39;);
+<a name="line34"></a>  assertThrowsJsUnitException(
+<a name="line35"></a>      function() { assertTrue(&#39;Should be true&#39;, false); },
+<a name="line36"></a>      &#39;Should be true\nCall to assertTrue(boolean) with false&#39;);
+<a name="line37"></a>  assertThrowsJsUnitException(
+<a name="line38"></a>      function() { assertTrue(null); },
+<a name="line39"></a>      &#39;Bad argument to assertTrue(boolean)&#39;);
+<a name="line40"></a>  assertThrowsJsUnitException(
+<a name="line41"></a>      function() { assertTrue(undefined); },
+<a name="line42"></a>      &#39;Bad argument to assertTrue(boolean)&#39;);
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>function testAssertFalse() {
+<a name="line46"></a>  assertFalse(false);
+<a name="line47"></a>  assertFalse(&#39;Good assertion&#39;, false);
+<a name="line48"></a>  assertThrowsJsUnitException(
+<a name="line49"></a>      function() { assertFalse(true); },
+<a name="line50"></a>      &#39;Call to assertFalse(boolean) with true&#39;);
+<a name="line51"></a>  assertThrowsJsUnitException(
+<a name="line52"></a>      function() { assertFalse(&#39;Should be false&#39;, true); },
+<a name="line53"></a>      &#39;Should be false\nCall to assertFalse(boolean) with true&#39;);
+<a name="line54"></a>  assertThrowsJsUnitException(
+<a name="line55"></a>      function() { assertFalse(null); },
+<a name="line56"></a>      &#39;Bad argument to assertFalse(boolean)&#39;);
+<a name="line57"></a>  assertThrowsJsUnitException(
+<a name="line58"></a>      function() { assertFalse(undefined); },
+<a name="line59"></a>      &#39;Bad argument to assertFalse(boolean)&#39;);
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>function testAssertEqualsWithString() {
+<a name="line63"></a>  assertEquals(&#39;a&#39;, &#39;a&#39;);
+<a name="line64"></a>  assertEquals(&#39;Good assertion&#39;, &#39;a&#39;, &#39;a&#39;);
+<a name="line65"></a>  assertThrowsJsUnitException(
+<a name="line66"></a>      function() { assertEquals(&#39;a&#39;, &#39;b&#39;); },
+<a name="line67"></a>      &#39;Expected &lt;a&gt; (String) but was &lt;b&gt; (String)&#39;);
+<a name="line68"></a>  assertThrowsJsUnitException(
+<a name="line69"></a>      function() { assertEquals(&#39;Bad assertion&#39;, &#39;a&#39;, &#39;b&#39;); },
+<a name="line70"></a>      &#39;Bad assertion\nExpected &lt;a&gt; (String) but was &lt;b&gt; (String)&#39;);
+<a name="line71"></a>}
+<a name="line72"></a>
+<a name="line73"></a>function testAssertEqualsWithInteger() {
+<a name="line74"></a>  assertEquals(1, 1);
+<a name="line75"></a>  assertEquals(&#39;Good assertion&#39;, 1, 1);
+<a name="line76"></a>  assertThrowsJsUnitException(
+<a name="line77"></a>      function() { assertEquals(1, 2); },
+<a name="line78"></a>      &#39;Expected &lt;1&gt; (Number) but was &lt;2&gt; (Number)&#39;);
+<a name="line79"></a>  assertThrowsJsUnitException(
+<a name="line80"></a>      function() { assertEquals(&#39;Bad assertion&#39;, 1, 2); },
+<a name="line81"></a>      &#39;Bad assertion\nExpected &lt;1&gt; (Number) but was &lt;2&gt; (Number)&#39;);
+<a name="line82"></a>}
+<a name="line83"></a>
+<a name="line84"></a>function testAssertNotEquals() {
+<a name="line85"></a>  assertNotEquals(&#39;a&#39;, &#39;b&#39;);
+<a name="line86"></a>  assertNotEquals(&#39;a&#39;, &#39;a&#39;, &#39;b&#39;);
+<a name="line87"></a>  assertThrowsJsUnitException(
+<a name="line88"></a>      function() { assertNotEquals(&#39;a&#39;, &#39;a&#39;); },
+<a name="line89"></a>      &#39;Expected not to be &lt;a&gt; (String)&#39;);
+<a name="line90"></a>  assertThrowsJsUnitException(
+<a name="line91"></a>      function() { assertNotEquals(&#39;a&#39;, &#39;a&#39;, &#39;a&#39;); },
+<a name="line92"></a>      &#39;a\nExpected not to be &lt;a&gt; (String)&#39;);
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>function testAssertNull() {
+<a name="line96"></a>  assertNull(null);
+<a name="line97"></a>  assertNull(&#39;Good assertion&#39;, null);
+<a name="line98"></a>  assertThrowsJsUnitException(
+<a name="line99"></a>      function() { assertNull(true); },
+<a name="line100"></a>      &#39;Expected &lt;null&gt; but was &lt;true&gt; (Boolean)&#39;);
+<a name="line101"></a>  assertThrowsJsUnitException(
+<a name="line102"></a>      function() { assertNull(&#39;Should be null&#39;, false); },
+<a name="line103"></a>      &#39;Should be null\nExpected &lt;null&gt; but was &lt;false&gt; (Boolean)&#39;);
+<a name="line104"></a>  assertThrowsJsUnitException(
+<a name="line105"></a>      function() { assertNull(undefined); },
+<a name="line106"></a>      &#39;Expected &lt;null&gt; but was &lt;undefined&gt;&#39;);
+<a name="line107"></a>  assertThrowsJsUnitException(
+<a name="line108"></a>      function() { assertNull(1); },
+<a name="line109"></a>      &#39;Expected &lt;null&gt; but was &lt;1&gt; (Number)&#39;);
+<a name="line110"></a>}
+<a name="line111"></a>
+<a name="line112"></a>function testAssertNotNull() {
+<a name="line113"></a>  assertNotNull(true);
+<a name="line114"></a>  assertNotNull(&#39;Good assertion&#39;, true);
+<a name="line115"></a>  assertNotNull(false);
+<a name="line116"></a>  assertNotNull(undefined);
+<a name="line117"></a>  assertNotNull(1);
+<a name="line118"></a>  assertNotNull(&#39;a&#39;);
+<a name="line119"></a>  assertThrowsJsUnitException(
+<a name="line120"></a>      function() { assertNotNull(null); },
+<a name="line121"></a>      &#39;Expected not to be &lt;null&gt;&#39;);
+<a name="line122"></a>  assertThrowsJsUnitException(
+<a name="line123"></a>      function() { assertNotNull(&#39;Should not be null&#39;, null); },
+<a name="line124"></a>      &#39;Should not be null\nExpected not to be &lt;null&gt;&#39;);
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>function testAssertUndefined() {
+<a name="line128"></a>  assertUndefined(undefined);
+<a name="line129"></a>  assertUndefined(&#39;Good assertion&#39;, undefined);
+<a name="line130"></a>  assertThrowsJsUnitException(
+<a name="line131"></a>      function() { assertUndefined(true); },
+<a name="line132"></a>      &#39;Expected &lt;undefined&gt; but was &lt;true&gt; (Boolean)&#39;);
+<a name="line133"></a>  assertThrowsJsUnitException(
+<a name="line134"></a>      function() { assertUndefined(&#39;Should be undefined&#39;, false); },
+<a name="line135"></a>      &#39;Should be undefined\nExpected &lt;undefined&gt; but was &lt;false&gt; (Boolean)&#39;);
+<a name="line136"></a>  assertThrowsJsUnitException(
+<a name="line137"></a>      function() { assertUndefined(null); },
+<a name="line138"></a>      &#39;Expected &lt;undefined&gt; but was &lt;null&gt;&#39;);
+<a name="line139"></a>  assertThrowsJsUnitException(
+<a name="line140"></a>      function() { assertUndefined(1); },
+<a name="line141"></a>      &#39;Expected &lt;undefined&gt; but was &lt;1&gt; (Number)&#39;);
+<a name="line142"></a>}
+<a name="line143"></a>
+<a name="line144"></a>function testAssertNotUndefined() {
+<a name="line145"></a>  assertNotUndefined(true);
+<a name="line146"></a>  assertNotUndefined(&#39;Good assertion&#39;, true);
+<a name="line147"></a>  assertNotUndefined(false);
+<a name="line148"></a>  assertNotUndefined(null);
+<a name="line149"></a>  assertNotUndefined(1);
+<a name="line150"></a>  assertNotUndefined(&#39;a&#39;);
+<a name="line151"></a>  assertThrowsJsUnitException(
+<a name="line152"></a>      function() { assertNotUndefined(undefined); },
+<a name="line153"></a>      &#39;Expected not to be &lt;undefined&gt;&#39;);
+<a name="line154"></a>  assertThrowsJsUnitException(
+<a name="line155"></a>      function() { assertNotUndefined(&#39;Should not be undefined&#39;, undefined); },
+<a name="line156"></a>      &#39;Should not be undefined\nExpected not to be &lt;undefined&gt;&#39;);
+<a name="line157"></a>}
+<a name="line158"></a>
+<a name="line159"></a>function testAssertNotNullNorUndefined() {
+<a name="line160"></a>  assertNotNullNorUndefined(true);
+<a name="line161"></a>  assertNotNullNorUndefined(&#39;Good assertion&#39;, true);
+<a name="line162"></a>  assertNotNullNorUndefined(false);
+<a name="line163"></a>  assertNotNullNorUndefined(1);
+<a name="line164"></a>  assertNotNullNorUndefined(0);
+<a name="line165"></a>  assertNotNullNorUndefined(&#39;a&#39;);
+<a name="line166"></a>  assertThrowsJsUnitException(function() {
+<a name="line167"></a>    assertNotNullNorUndefined(undefined);
+<a name="line168"></a>  }, &#39;Expected not to be &lt;undefined&gt;&#39;);
+<a name="line169"></a>  assertThrowsJsUnitException(function() {
+<a name="line170"></a>    assertNotNullNorUndefined(&#39;Should not be undefined&#39;, undefined);
+<a name="line171"></a>  }, &#39;Should not be undefined\nExpected not to be &lt;undefined&gt;&#39;);
+<a name="line172"></a>  assertThrowsJsUnitException(function() {
+<a name="line173"></a>    assertNotNullNorUndefined(null);
+<a name="line174"></a>  }, &#39;Expected not to be &lt;null&gt;&#39;);
+<a name="line175"></a>  assertThrowsJsUnitException(function() {
+<a name="line176"></a>    assertNotNullNorUndefined(&#39;Should not be null&#39;, null);
+<a name="line177"></a>  }, &#39;Should not be null\nExpected not to be &lt;null&gt;&#39;);
+<a name="line178"></a>}
+<a name="line179"></a>
+<a name="line180"></a>function testAssertNonEmptyString() {
+<a name="line181"></a>  assertNonEmptyString(&#39;hello&#39;);
+<a name="line182"></a>  assertNonEmptyString(&#39;Good assertion&#39;, &#39;hello&#39;);
+<a name="line183"></a>  assertNonEmptyString(&#39;true&#39;);
+<a name="line184"></a>  assertNonEmptyString(&#39;false&#39;);
+<a name="line185"></a>  assertNonEmptyString(&#39;1&#39;);
+<a name="line186"></a>  assertNonEmptyString(&#39;null&#39;);
+<a name="line187"></a>  assertNonEmptyString(&#39;undefined&#39;);
+<a name="line188"></a>  assertNonEmptyString(&#39;\n&#39;);
+<a name="line189"></a>  assertNonEmptyString(&#39; &#39;);
+<a name="line190"></a>  assertThrowsJsUnitException(
+<a name="line191"></a>      function() { assertNonEmptyString(&#39;&#39;); },
+<a name="line192"></a>      &#39;Expected non-empty string but was &lt;&gt; (String)&#39;);
+<a name="line193"></a>  assertThrowsJsUnitException(
+<a name="line194"></a>      function() { assertNonEmptyString(&#39;Should be non-empty string&#39;, &#39;&#39;); },
+<a name="line195"></a>      &#39;Should be non-empty string\n&#39; +
+<a name="line196"></a>      &#39;Expected non-empty string but was &lt;&gt; (String)&#39;);
+<a name="line197"></a>  assertThrowsJsUnitException(
+<a name="line198"></a>      function() { assertNonEmptyString(true); },
+<a name="line199"></a>      &#39;Expected non-empty string but was &lt;true&gt; (Boolean)&#39;);
+<a name="line200"></a>  assertThrowsJsUnitException(
+<a name="line201"></a>      function() { assertNonEmptyString(false); },
+<a name="line202"></a>      &#39;Expected non-empty string but was &lt;false&gt; (Boolean)&#39;);
+<a name="line203"></a>  assertThrowsJsUnitException(
+<a name="line204"></a>      function() { assertNonEmptyString(1); },
+<a name="line205"></a>      &#39;Expected non-empty string but was &lt;1&gt; (Number)&#39;);
+<a name="line206"></a>  assertThrowsJsUnitException(
+<a name="line207"></a>      function() { assertNonEmptyString(null); },
+<a name="line208"></a>      &#39;Expected non-empty string but was &lt;null&gt;&#39;);
+<a name="line209"></a>  assertThrowsJsUnitException(
+<a name="line210"></a>      function() { assertNonEmptyString(undefined); },
+<a name="line211"></a>      &#39;Expected non-empty string but was &lt;undefined&gt;&#39;);
+<a name="line212"></a>  assertThrowsJsUnitException(
+<a name="line213"></a>      function() { assertNonEmptyString([&#39;hello&#39;]); },
+<a name="line214"></a>      &#39;Expected non-empty string but was &lt;hello&gt; (Array)&#39;);
+<a name="line215"></a>  // Different browsers return different values/types in the failure message
+<a name="line216"></a>  // so don&#39;t bother checking if the message is exactly as expected.
+<a name="line217"></a>  assertThrowsJsUnitException(
+<a name="line218"></a>      function() { assertNonEmptyString(goog.dom.createTextNode(&#39;hello&#39;)); });
+<a name="line219"></a>}
+<a name="line220"></a>
+<a name="line221"></a>function testAssertNaN() {
+<a name="line222"></a>  assertNaN(NaN);
+<a name="line223"></a>  assertNaN(&#39;Good assertion&#39;, NaN);
+<a name="line224"></a>  assertThrowsJsUnitException(
+<a name="line225"></a>      function() { assertNaN(1); }, &#39;Expected NaN&#39;);
+<a name="line226"></a>  assertThrowsJsUnitException(
+<a name="line227"></a>      function() { assertNaN(&#39;Should be NaN&#39;, 1); },
+<a name="line228"></a>      &#39;Should be NaN\nExpected NaN&#39;);
+<a name="line229"></a>  assertThrowsJsUnitException(
+<a name="line230"></a>      function() { assertNaN(true); }, &#39;Expected NaN&#39;);
+<a name="line231"></a>  assertThrowsJsUnitException(
+<a name="line232"></a>      function() { assertNaN(false); }, &#39;Expected NaN&#39;);
+<a name="line233"></a>  assertThrowsJsUnitException(
+<a name="line234"></a>      function() { assertNaN(null); }, &#39;Expected NaN&#39;);
+<a name="line235"></a>  assertThrowsJsUnitException(
+<a name="line236"></a>      function() { assertNaN(&#39;&#39;); }, &#39;Expected NaN&#39;);
+<a name="line237"></a>
+<a name="line238"></a>  // TODO(user): These assertions fail. We should decide on the
+<a name="line239"></a>  // semantics of assertNaN
+<a name="line240"></a>  //assertThrowsJsUnitException(function() { assertNaN(undefined); },
+<a name="line241"></a>  //    &#39;Expected NaN&#39;);
+<a name="line242"></a>  //assertThrowsJsUnitException(function() { assertNaN(&#39;a&#39;); },
+<a name="line243"></a>  //    &#39;Expected NaN&#39;);
+<a name="line244"></a>}
+<a name="line245"></a>
+<a name="line246"></a>function testAssertNotNaN() {
+<a name="line247"></a>  assertNotNaN(1);
+<a name="line248"></a>  assertNotNaN(&#39;Good assertion&#39;, 1);
+<a name="line249"></a>  assertNotNaN(true);
+<a name="line250"></a>  assertNotNaN(false);
+<a name="line251"></a>  assertNotNaN(&#39;&#39;);
+<a name="line252"></a>  assertNotNaN(null);
+<a name="line253"></a>
+<a name="line254"></a>  // TODO(user): These assertions fail. We should decide on the
+<a name="line255"></a>  // semantics of assertNotNaN
+<a name="line256"></a>  //assertNotNaN(undefined);
+<a name="line257"></a>  //assertNotNaN(&#39;a&#39;);
+<a name="line258"></a>
+<a name="line259"></a>  assertThrowsJsUnitException(
+<a name="line260"></a>      function() { assertNotNaN(Number.NaN); },
+<a name="line261"></a>      &#39;Expected not NaN&#39;);
+<a name="line262"></a>  assertThrowsJsUnitException(
+<a name="line263"></a>      function() { assertNotNaN(&#39;Should not be NaN&#39;, Number.NaN); },
+<a name="line264"></a>      &#39;Should not be NaN\nExpected not NaN&#39;);
+<a name="line265"></a>}
+<a name="line266"></a>
+<a name="line267"></a>function testAssertObjectEquals() {
+<a name="line268"></a>  var obj1 = [{&#39;a&#39;: &#39;hello&#39;, &#39;b&#39;: &#39;world&#39;}];
+<a name="line269"></a>  var obj2 = [{&#39;a&#39;: &#39;hello&#39;, &#39;c&#39;: &#39;dear&#39;, &#39;b&#39; : &#39;world&#39;}];
+<a name="line270"></a>
+<a name="line271"></a>  // Check with obj1 and obj2 as first and second arguments respectively.
+<a name="line272"></a>  assertThrows(&#39;Objects should not be equal&#39;, function() {
+<a name="line273"></a>    assertObjectEquals(obj1, obj2);
+<a name="line274"></a>  });
+<a name="line275"></a>
+<a name="line276"></a>  // Check with obj1 and obj2 as second and first arguments respectively.
+<a name="line277"></a>  assertThrows(&#39;Objects should not be equal&#39;, function() {
+<a name="line278"></a>    assertObjectEquals(obj2, obj1);
+<a name="line279"></a>  });
+<a name="line280"></a>
+<a name="line281"></a>  // Test if equal objects are considered equal.
+<a name="line282"></a>  var obj3 = [{&#39;b&#39;: &#39;world&#39;, &#39;a&#39;: &#39;hello&#39;}];
+<a name="line283"></a>  assertObjectEquals(obj1, obj3);
+<a name="line284"></a>  assertObjectEquals(obj3, obj1);
+<a name="line285"></a>
+<a name="line286"></a>  // Test with a case where one of the members has an undefined value.
+<a name="line287"></a>  var obj4 = [{&#39;a&#39;: &#39;hello&#39;, &#39;b&#39;: undefined}];
+<a name="line288"></a>  var obj5 = [{&#39;a&#39;: &#39;hello&#39;}];
+<a name="line289"></a>
+<a name="line290"></a>  // Check with obj4 and obj5 as first and second arguments respectively.
+<a name="line291"></a>  assertThrows(&#39;Objects should not be equal&#39;, function() {
+<a name="line292"></a>    assertObjectEquals(obj4, obj5);
+<a name="line293"></a>  });
+<a name="line294"></a>
+<a name="line295"></a>  // Check with obj5 and obj4 as first and second arguments respectively.
+<a name="line296"></a>  assertThrows(&#39;Objects should not be equal&#39;, function() {
+<a name="line297"></a>    assertObjectEquals(obj5, obj4);
+<a name="line298"></a>  });
+<a name="line299"></a>}
+<a name="line300"></a>
+<a name="line301"></a>function testAssertObjectNotEquals() {
+<a name="line302"></a>  var obj1 = [{&#39;a&#39;: &#39;hello&#39;, &#39;b&#39;: &#39;world&#39;}];
+<a name="line303"></a>  var obj2 = [{&#39;a&#39;: &#39;hello&#39;, &#39;c&#39;: &#39;dear&#39;, &#39;b&#39; : &#39;world&#39;}];
+<a name="line304"></a>
+<a name="line305"></a>  // Check with obj1 and obj2 as first and second arguments respectively.
+<a name="line306"></a>  assertObjectNotEquals(obj1, obj2);
+<a name="line307"></a>
+<a name="line308"></a>  // Check with obj1 and obj2 as second and first arguments respectively.
+<a name="line309"></a>  assertObjectNotEquals(obj2, obj1);
+<a name="line310"></a>
+<a name="line311"></a>  // Test if equal objects are considered equal.
+<a name="line312"></a>  var obj3 = [{&#39;b&#39;: &#39;world&#39;, &#39;a&#39;: &#39;hello&#39;}];
+<a name="line313"></a>  var error = assertThrows(&#39;Objects should be equal&#39;, function() {
+<a name="line314"></a>    assertObjectNotEquals(obj1, obj3);
+<a name="line315"></a>  });
+<a name="line316"></a>  assertContains(&#39;Objects should not be equal&#39;, error.message);
+<a name="line317"></a>  error = assertThrows(&#39;Objects should be equal&#39;, function() {
+<a name="line318"></a>    assertObjectNotEquals(obj3, obj1);
+<a name="line319"></a>  });
+<a name="line320"></a>  assertContains(&#39;Objects should not be equal&#39;, error.message);
+<a name="line321"></a>
+<a name="line322"></a>  // Test with a case where one of the members has an undefined value.
+<a name="line323"></a>  var obj4 = [{&#39;a&#39;: &#39;hello&#39;, &#39;b&#39;: undefined}];
+<a name="line324"></a>  var obj5 = [{&#39;a&#39;: &#39;hello&#39;}];
+<a name="line325"></a>
+<a name="line326"></a>  // Check with obj4 and obj5 as first and second arguments respectively.
+<a name="line327"></a>  assertObjectNotEquals(obj4, obj5);
+<a name="line328"></a>
+<a name="line329"></a>  // Check with obj5 and obj4 as first and second arguments respectively.
+<a name="line330"></a>  assertObjectNotEquals(obj5, obj4);
+<a name="line331"></a>}
+<a name="line332"></a>
+<a name="line333"></a>function testAssertObjectEquals2() {
+<a name="line334"></a>  // NOTE: (0 in [undefined]) is true on FF but false on IE.
+<a name="line335"></a>  // (0 in {&#39;0&#39;: undefined}) is true on both.
+<a name="line336"></a>  // grrr.
+<a name="line337"></a>  assertObjectEquals(&#39;arrays should be equal&#39;, [undefined], [undefined]);
+<a name="line338"></a>  assertThrows(&#39;arrays should not be equal&#39;, function() {
+<a name="line339"></a>    assertObjectEquals([undefined, undefined], [undefined]);
+<a name="line340"></a>  });
+<a name="line341"></a>  assertThrows(&#39;arrays should not be equal&#39;, function() {
+<a name="line342"></a>    assertObjectEquals([undefined], [undefined, undefined]);
+<a name="line343"></a>  });
+<a name="line344"></a>}
+<a name="line345"></a>
+<a name="line346"></a>function testAssertObjectEquals3() {
+<a name="line347"></a>  // Check that objects that contain identical Map objects compare
+<a name="line348"></a>  // as equals. We can&#39;t do a negative test because on browsers that
+<a name="line349"></a>  // implement __iterator__ we can&#39;t check the values of the iterated
+<a name="line350"></a>  // properties.
+<a name="line351"></a>  var obj1 = [{&#39;a&#39;: &#39;hi&#39;,
+<a name="line352"></a>               &#39;b&#39;: new goog.structs.Map(&#39;hola&#39;, &#39;amigo&#39;,
+<a name="line353"></a>                                         &#39;como&#39;, &#39;estas?&#39;)},
+<a name="line354"></a>              14,
+<a name="line355"></a>              &#39;yes&#39;,
+<a name="line356"></a>              true];
+<a name="line357"></a>  var obj2 = [{&#39;a&#39;: &#39;hi&#39;,
+<a name="line358"></a>               &#39;b&#39;: new goog.structs.Map(&#39;hola&#39;, &#39;amigo&#39;,
+<a name="line359"></a>                                         &#39;como&#39;, &#39;estas?&#39;)},
+<a name="line360"></a>              14,
+<a name="line361"></a>              &#39;yes&#39;,
+<a name="line362"></a>              true];
+<a name="line363"></a>  assertObjectEquals(&#39;Objects should be equal&#39;, obj1, obj2);
+<a name="line364"></a>
+<a name="line365"></a>  var obj3 = {&#39;a&#39;: [1, 2]};
+<a name="line366"></a>  var obj4 = {&#39;a&#39;: [1, 2, 3]};
+<a name="line367"></a>  assertThrows(&#39;inner arrays should not be equal&#39;, function() {
+<a name="line368"></a>    assertObjectEquals(obj3, obj4);
+<a name="line369"></a>  });
+<a name="line370"></a>  assertThrows(&#39;inner arrays should not be equal&#39;, function() {
+<a name="line371"></a>    assertObjectEquals(obj4, obj3);
+<a name="line372"></a>  });
+<a name="line373"></a>}
+<a name="line374"></a>
+<a name="line375"></a>function testAssertObjectEqualsSet() {
+<a name="line376"></a>  // verify that Sets compare equal, when run in an environment that
+<a name="line377"></a>  // supports iterators
+<a name="line378"></a>  var set1 = new goog.structs.Set();
+<a name="line379"></a>  var set2 = new goog.structs.Set();
+<a name="line380"></a>
+<a name="line381"></a>  set1.add(&#39;a&#39;);
+<a name="line382"></a>  set1.add(&#39;b&#39;);
+<a name="line383"></a>  set1.add(13);
+<a name="line384"></a>
+<a name="line385"></a>  set2.add(&#39;a&#39;);
+<a name="line386"></a>  set2.add(&#39;b&#39;);
+<a name="line387"></a>  set2.add(13);
+<a name="line388"></a>
+<a name="line389"></a>  assertObjectEquals(&#39;sets should be equal&#39;, set1, set2);
+<a name="line390"></a>
+<a name="line391"></a>  set2.add(&#39;hey&#39;);
+<a name="line392"></a>  assertThrows(&#39;sets should not be equal&#39;, function() {
+<a name="line393"></a>    assertObjectEquals(set1, set2);
+<a name="line394"></a>  });
+<a name="line395"></a>}
+<a name="line396"></a>
+<a name="line397"></a>function testAssertObjectEqualsIterNoEquals() {
+<a name="line398"></a>  // an object with an iterator but no equals() and no map_ cannot
+<a name="line399"></a>  // be compared
+<a name="line400"></a>  function Thing() {
+<a name="line401"></a>    this.what = [];
+<a name="line402"></a>  }
+<a name="line403"></a>  Thing.prototype.add = function(n, v) {
+<a name="line404"></a>    this.what.push(n + &#39;@&#39; + v);
+<a name="line405"></a>  };
+<a name="line406"></a>  Thing.prototype.get = function(n) {
+<a name="line407"></a>    var m = new RegExp(&#39;^&#39; + n + &#39;@(.*)$&#39;, &#39;&#39;);
+<a name="line408"></a>    for (var i = 0; i &lt; this.what.length; ++i) {
+<a name="line409"></a>      var match = this.what[i].match(m);
+<a name="line410"></a>      if (match) {
+<a name="line411"></a>        return match[1];
+<a name="line412"></a>      }
+<a name="line413"></a>    }
+<a name="line414"></a>    return null;
+<a name="line415"></a>  };
+<a name="line416"></a>  Thing.prototype.__iterator__ = function() {
+<a name="line417"></a>    var iter = new goog.iter.Iterator;
+<a name="line418"></a>    iter.index = 0;
+<a name="line419"></a>    iter.thing = this;
+<a name="line420"></a>    iter.next = function() {
+<a name="line421"></a>      if (this.index &lt; this.thing.what.length) {
+<a name="line422"></a>        return this.thing.what[this.index++].split(&#39;@&#39;)[0];
+<a name="line423"></a>      } else {
+<a name="line424"></a>        throw goog.iter.StopIteration;
+<a name="line425"></a>      }
+<a name="line426"></a>    };
+<a name="line427"></a>    return iter;
+<a name="line428"></a>  };
+<a name="line429"></a>
+<a name="line430"></a>  var thing1 = new Thing(); thing1.name = &#39;thing1&#39;;
+<a name="line431"></a>  var thing2 = new Thing(); thing2.name = &#39;thing2&#39;;
+<a name="line432"></a>  thing1.add(&#39;red&#39;, &#39;fish&#39;);
+<a name="line433"></a>  thing1.add(&#39;blue&#39;, &#39;fish&#39;);
+<a name="line434"></a>
+<a name="line435"></a>  thing2.add(&#39;red&#39;, &#39;fish&#39;);
+<a name="line436"></a>  thing2.add(&#39;blue&#39;, &#39;fish&#39;);
+<a name="line437"></a>
+<a name="line438"></a>  assertThrows(&#39;things should not be equal&#39;, function() {
+<a name="line439"></a>    assertObjectEquals(thing1, thing2);
+<a name="line440"></a>  });
+<a name="line441"></a>}
+<a name="line442"></a>
+<a name="line443"></a>function testAssertObjectEqualsWithDates() {
+<a name="line444"></a>  var date = new Date(2010, 0, 1);
+<a name="line445"></a>  var dateWithMilliseconds = new Date(2010, 0, 1, 0, 0, 0, 1);
+<a name="line446"></a>  assertObjectEquals(new Date(2010, 0, 1), date);
+<a name="line447"></a>  assertThrows(goog.partial(assertObjectEquals, date, dateWithMilliseconds));
+<a name="line448"></a>}
+<a name="line449"></a>
+<a name="line450"></a>function testAssertObjectEqualsSparseArrays() {
+<a name="line451"></a>  var arr1 = [, 2,, 4];
+<a name="line452"></a>  var arr2 = [1, 2, 3, 4, 5];
+<a name="line453"></a>
+<a name="line454"></a>  assertThrows(&#39;Sparse arrays should not be equal&#39;, function() {
+<a name="line455"></a>    assertObjectEquals(arr1, arr2);
+<a name="line456"></a>  });
+<a name="line457"></a>
+<a name="line458"></a>  assertThrows(&#39;Sparse arrays should not be equal&#39;, function() {
+<a name="line459"></a>    assertObjectEquals(arr2, arr1);
+<a name="line460"></a>  });
+<a name="line461"></a>}
+<a name="line462"></a>
+<a name="line463"></a>function testAssertObjectEqualsSparseArrays2() {
+<a name="line464"></a>  // On IE6-8, the expression &quot;1 in [4,undefined]&quot; evaluates to false,
+<a name="line465"></a>  // but true on other browsers. FML. This test verifies a regression
+<a name="line466"></a>  // where IE reported that arr4 was not equal to arr1 or arr2.
+<a name="line467"></a>  var arr1 = [1,, 3];
+<a name="line468"></a>  var arr2 = [1, undefined, 3];
+<a name="line469"></a>  var arr3 = goog.array.clone(arr1);
+<a name="line470"></a>  var arr4 = [];
+<a name="line471"></a>  arr4.push(1, undefined, 3);
+<a name="line472"></a>
+<a name="line473"></a>  // Assert that all those arrays are equivalent pairwise.
+<a name="line474"></a>  var arrays = [arr1, arr2, arr3, arr4];
+<a name="line475"></a>  for (var i = 0; i &lt; arrays.length; i++) {
+<a name="line476"></a>    for (var j = 0; j &lt; arrays.length; j++) {
+<a name="line477"></a>      assertArrayEquals(arrays[i], arrays[j]);
+<a name="line478"></a>    }
+<a name="line479"></a>  }
+<a name="line480"></a>}
+<a name="line481"></a>
+<a name="line482"></a>function testAssertObjectEqualsArraysWithExtraProps() {
+<a name="line483"></a>  var arr1 = [1];
+<a name="line484"></a>  var arr2 = [1];
+<a name="line485"></a>  arr2.foo = 3;
+<a name="line486"></a>
+<a name="line487"></a>  assertThrows(&#39;Aarrays should not be equal&#39;, function() {
+<a name="line488"></a>    assertObjectEquals(arr1, arr2);
+<a name="line489"></a>  });
+<a name="line490"></a>
+<a name="line491"></a>  assertThrows(&#39;Arrays should not be equal&#39;, function() {
+<a name="line492"></a>    assertObjectEquals(arr2, arr1);
+<a name="line493"></a>  });
+<a name="line494"></a>}
+<a name="line495"></a>
+<a name="line496"></a>function testAssertSameElementsOnArray() {
+<a name="line497"></a>  assertSameElements([1, 2], [2, 1]);
+<a name="line498"></a>  assertSameElements(&#39;Good assertion&#39;, [1, 2], [2, 1]);
+<a name="line499"></a>  assertSameElements(&#39;Good assertion with duplicates&#39;, [1, 1, 2], [2, 1, 1]);
+<a name="line500"></a>  assertThrowsJsUnitException(
+<a name="line501"></a>      function() {
+<a name="line502"></a>        assertSameElements([1, 2], [1]);
+<a name="line503"></a>      },
+<a name="line504"></a>      &#39;Expected 2 elements: [1,2], got 1 elements: [1]&#39;);
+<a name="line505"></a>  assertThrowsJsUnitException(
+<a name="line506"></a>      function() {
+<a name="line507"></a>        assertSameElements(&#39;Should match&#39;, [1, 2], [1]);
+<a name="line508"></a>      },
+<a name="line509"></a>      &#39;Should match\nExpected 2 elements: [1,2], got 1 elements: [1]&#39;);
+<a name="line510"></a>  assertThrowsJsUnitException(
+<a name="line511"></a>      function() {
+<a name="line512"></a>        assertSameElements([1, 2], [1, 3]);
+<a name="line513"></a>      },
+<a name="line514"></a>      &#39;Expected [1,2], got [1,3]&#39;);
+<a name="line515"></a>  assertThrowsJsUnitException(
+<a name="line516"></a>      function() {
+<a name="line517"></a>        assertSameElements(&#39;Should match&#39;, [1, 2], [1, 3]);
+<a name="line518"></a>      },
+<a name="line519"></a>      &#39;Should match\nExpected [1,2], got [1,3]&#39;);
+<a name="line520"></a>  assertThrowsJsUnitException(
+<a name="line521"></a>      function() {
+<a name="line522"></a>        assertSameElements([1, 1, 2], [2, 2, 1]);
+<a name="line523"></a>      },
+<a name="line524"></a>      &#39;Expected [1,1,2], got [2,2,1]&#39;);
+<a name="line525"></a>}
+<a name="line526"></a>
+<a name="line527"></a>function testAssertSameElementsOnArrayLike() {
+<a name="line528"></a>  assertSameElements({0: 0, 1: 1, length: 2}, {length: 2, 1: 1, 0: 0});
+<a name="line529"></a>  assertThrowsJsUnitException(
+<a name="line530"></a>      function() {
+<a name="line531"></a>        assertSameElements({0: 0, 1: 1, length: 2}, {0: 0, length: 1});
+<a name="line532"></a>      },
+<a name="line533"></a>      &#39;Expected 2 elements: [0,1], got 1 elements: [0]&#39;);
+<a name="line534"></a>}
+<a name="line535"></a>
+<a name="line536"></a>function testAssertSameElementsWithBadArguments() {
+<a name="line537"></a>  assertThrowsJsUnitException(
+<a name="line538"></a>      function() {
+<a name="line539"></a>        assertSameElements([], new goog.structs.Set());
+<a name="line540"></a>      },
+<a name="line541"></a>      &#39;Bad arguments to assertSameElements(opt_message, expected: &#39; +
+<a name="line542"></a>      &#39;ArrayLike, actual: ArrayLike)\n&#39; +
+<a name="line543"></a>      &#39;Call to assertTrue(boolean) with false&#39;);
+<a name="line544"></a>}
+<a name="line545"></a>
+<a name="line546"></a>var implicitlyTrue = [
+<a name="line547"></a>  true,
+<a name="line548"></a>  1,
+<a name="line549"></a>  -1,
+<a name="line550"></a>  &#39; &#39;,
+<a name="line551"></a>  &#39;string&#39;,
+<a name="line552"></a>  Infinity,
+<a name="line553"></a>  new Object()
+<a name="line554"></a>];
+<a name="line555"></a>
+<a name="line556"></a>var implicitlyFalse = [
+<a name="line557"></a>  false,
+<a name="line558"></a>  0,
+<a name="line559"></a>  &#39;&#39;,
+<a name="line560"></a>  null,
+<a name="line561"></a>  undefined,
+<a name="line562"></a>  NaN
+<a name="line563"></a>];
+<a name="line564"></a>
+<a name="line565"></a>function testAssertEvaluatesToTrue() {
+<a name="line566"></a>  assertEvaluatesToTrue(true);
+<a name="line567"></a>  assertEvaluatesToTrue(&#39;&#39;, true);
+<a name="line568"></a>  assertEvaluatesToTrue(&#39;Good assertion&#39;, true);
+<a name="line569"></a>  assertThrowsJsUnitException(
+<a name="line570"></a>      function() { assertEvaluatesToTrue(false); },
+<a name="line571"></a>      &#39;Expected to evaluate to true&#39;);
+<a name="line572"></a>  assertThrowsJsUnitException(
+<a name="line573"></a>      function() {assertEvaluatesToTrue(&#39;Should be true&#39;, false); },
+<a name="line574"></a>      &#39;Should be true\nExpected to evaluate to true&#39;);
+<a name="line575"></a>  for (var i = 0; i &lt; implicitlyTrue.length; i++) {
+<a name="line576"></a>    assertEvaluatesToTrue(String(&#39;Test &#39; + implicitlyTrue[i] +
+<a name="line577"></a>        &#39; [&#39; + i + &#39;]&#39;), implicitlyTrue[i]);
+<a name="line578"></a>  }
+<a name="line579"></a>  for (var i = 0; i &lt; implicitlyFalse.length; i++) {
+<a name="line580"></a>    assertThrowsJsUnitException(
+<a name="line581"></a>        function() { assertEvaluatesToTrue(implicitlyFalse[i]); },
+<a name="line582"></a>        &#39;Expected to evaluate to true&#39;);
+<a name="line583"></a>  }
+<a name="line584"></a>}
+<a name="line585"></a>
+<a name="line586"></a>function testAssertEvaluatesToFalse() {
+<a name="line587"></a>  assertEvaluatesToFalse(false);
+<a name="line588"></a>  assertEvaluatesToFalse(&#39;Good assertion&#39;, false);
+<a name="line589"></a>  assertThrowsJsUnitException(
+<a name="line590"></a>      function() { assertEvaluatesToFalse(true); },
+<a name="line591"></a>      &#39;Expected to evaluate to false&#39;);
+<a name="line592"></a>  assertThrowsJsUnitException(
+<a name="line593"></a>      function() { assertEvaluatesToFalse(&#39;Should be false&#39;, true); },
+<a name="line594"></a>      &#39;Should be false\nExpected to evaluate to false&#39;);
+<a name="line595"></a>  for (var i = 0; i &lt; implicitlyFalse.length; i++) {
+<a name="line596"></a>    assertEvaluatesToFalse(String(&#39;Test &#39; + implicitlyFalse[i] +
+<a name="line597"></a>        &#39; [&#39; + i + &#39;]&#39;), implicitlyFalse[i]);
+<a name="line598"></a>  }
+<a name="line599"></a>  for (var i = 0; i &lt; implicitlyTrue.length; i++) {
+<a name="line600"></a>    assertThrowsJsUnitException(
+<a name="line601"></a>        function() { assertEvaluatesToFalse(implicitlyTrue[i]); },
+<a name="line602"></a>        &#39;Expected to evaluate to false&#39;);
+<a name="line603"></a>  }
+<a name="line604"></a>}
+<a name="line605"></a>
+<a name="line606"></a>function testAssertHTMLEquals() {
+<a name="line607"></a>  // TODO
+<a name="line608"></a>}
+<a name="line609"></a>
+<a name="line610"></a>function testAssertHashEquals() {
+<a name="line611"></a>  assertHashEquals({a: 1, b: 2}, {b: 2, a: 1});
+<a name="line612"></a>  assertHashEquals(&#39;Good assertion&#39;, {a: 1, b: 2}, {b: 2, a: 1});
+<a name="line613"></a>  assertHashEquals({a: undefined}, {a: undefined});
+<a name="line614"></a>  // Missing key.
+<a name="line615"></a>  assertThrowsJsUnitException(
+<a name="line616"></a>      function() { assertHashEquals({a: 1, b: 2}, {a: 1}); },
+<a name="line617"></a>      &#39;Expected hash had key b that was not found&#39;);
+<a name="line618"></a>  assertThrowsJsUnitException(
+<a name="line619"></a>      function() { assertHashEquals(&#39;Should match&#39;, {a: 1, b: 2}, {a: 1}); },
+<a name="line620"></a>      &#39;Should match\nExpected hash had key b that was not found&#39;);
+<a name="line621"></a>  assertThrowsJsUnitException(
+<a name="line622"></a>      function() { assertHashEquals({a: undefined}, {}); },
+<a name="line623"></a>      &#39;Expected hash had key a that was not found&#39;);
+<a name="line624"></a>  // Not equal key.
+<a name="line625"></a>  assertThrowsJsUnitException(
+<a name="line626"></a>      function() { assertHashEquals({a: 1}, {a: 5}); },
+<a name="line627"></a>      &#39;Value for key a mismatch - expected = 1, actual = 5&#39;);
+<a name="line628"></a>  assertThrowsJsUnitException(
+<a name="line629"></a>      function() { assertHashEquals(&#39;Should match&#39;, {a: 1}, {a: 5}); },
+<a name="line630"></a>      &#39;Should match\nValue for key a mismatch - expected = 1, actual = 5&#39;);
+<a name="line631"></a>  assertThrowsJsUnitException(
+<a name="line632"></a>      function() { assertHashEquals({a: undefined}, {a: 1})},
+<a name="line633"></a>      &#39;Value for key a mismatch - expected = undefined, actual = 1&#39;);
+<a name="line634"></a>  // Extra key.
+<a name="line635"></a>  assertThrowsJsUnitException(
+<a name="line636"></a>      function() { assertHashEquals({a: 1}, {a: 1, b: 1}); },
+<a name="line637"></a>      &#39;Actual hash had key b that was not expected&#39;);
+<a name="line638"></a>  assertThrowsJsUnitException(
+<a name="line639"></a>      function() { assertHashEquals(&#39;Should match&#39;, {a: 1}, {a: 1, b: 1}); },
+<a name="line640"></a>      &#39;Should match\nActual hash had key b that was not expected&#39;);
+<a name="line641"></a>}
+<a name="line642"></a>
+<a name="line643"></a>function testAssertRoughlyEquals() {
+<a name="line644"></a>  assertRoughlyEquals(1, 1, 0);
+<a name="line645"></a>  assertRoughlyEquals(&#39;Good assertion&#39;, 1, 1, 0);
+<a name="line646"></a>  assertRoughlyEquals(1, 1.1, 0.11);
+<a name="line647"></a>  assertRoughlyEquals(1.1, 1, 0.11);
+<a name="line648"></a>  assertThrowsJsUnitException(
+<a name="line649"></a>      function() { assertRoughlyEquals(1, 1.1, 0.05); },
+<a name="line650"></a>      &#39;Expected 1, but got 1.1 which was more than 0.05 away&#39;);
+<a name="line651"></a>  assertThrowsJsUnitException(
+<a name="line652"></a>      function() { assertRoughlyEquals(&#39;Close enough&#39;, 1, 1.1, 0.05); },
+<a name="line653"></a>      &#39;Close enough\nExpected 1, but got 1.1 which was more than 0.05 away&#39;);
+<a name="line654"></a>}
+<a name="line655"></a>
+<a name="line656"></a>function testAssertContains() {
+<a name="line657"></a>  var a = [1, 2, 3];
+<a name="line658"></a>  assertContains(1, [1, 2, 3]);
+<a name="line659"></a>  assertContains(&#39;Should contain&#39;, 1, [1, 2, 3]);
+<a name="line660"></a>  assertThrowsJsUnitException(
+<a name="line661"></a>      function() { assertContains(4, [1, 2, 3]); },
+<a name="line662"></a>      &#39;Expected \&#39;1,2,3\&#39; to contain \&#39;4\&#39;&#39;);
+<a name="line663"></a>  assertThrowsJsUnitException(
+<a name="line664"></a>      function() { assertContains(&#39;Should contain&#39;, 4, [1, 2, 3]); },
+<a name="line665"></a>      &#39;Should contain\nExpected \&#39;1,2,3\&#39; to contain \&#39;4\&#39;&#39;);
+<a name="line666"></a>  // assertContains uses ===.
+<a name="line667"></a>  var o = new Object();
+<a name="line668"></a>  assertContains(o, [o, 2, 3]);
+<a name="line669"></a>  assertThrowsJsUnitException(
+<a name="line670"></a>      function() { assertContains(o, [1, 2, 3]); },
+<a name="line671"></a>      &#39;Expected \&#39;1,2,3\&#39; to contain \&#39;[object Object]\&#39;&#39;);
+<a name="line672"></a>}
+<a name="line673"></a>
+<a name="line674"></a>function testAssertNotContains() {
+<a name="line675"></a>  var a = [1, 2, 3];
+<a name="line676"></a>  assertNotContains(4, [1, 2, 3]);
+<a name="line677"></a>  assertNotContains(&#39;Should not contain&#39;, 4, [1, 2, 3]);
+<a name="line678"></a>  assertThrowsJsUnitException(
+<a name="line679"></a>      function() { assertNotContains(1, [1, 2, 3]); },
+<a name="line680"></a>      &#39;Expected \&#39;1,2,3\&#39; not to contain \&#39;1\&#39;&#39;);
+<a name="line681"></a>  assertThrowsJsUnitException(
+<a name="line682"></a>      function() { assertNotContains(&#39;Should not contain&#39;, 1, [1, 2, 3]); },
+<a name="line683"></a>      &quot;Should not contain\nExpected &#39;1,2,3&#39; not to contain &#39;1&#39;&quot;);
+<a name="line684"></a>  // assertNotContains uses ===.
+<a name="line685"></a>  var o = new Object();
+<a name="line686"></a>  assertNotContains({}, [o, 2, 3]);
+<a name="line687"></a>  assertThrowsJsUnitException(
+<a name="line688"></a>      function() { assertNotContains(o, [o, 2, 3]); },
+<a name="line689"></a>      &#39;Expected \&#39;[object Object],2,3\&#39; not to contain \&#39;[object Object]\&#39;&#39;);
+<a name="line690"></a>}
+<a name="line691"></a>
+<a name="line692"></a>function testAssertRegExp() {
+<a name="line693"></a>  var a = &#39;I like turtles&#39;;
+<a name="line694"></a>  assertRegExp(/turtles$/, a);
+<a name="line695"></a>  assertRegExp(&#39;turtles$&#39;, a);
+<a name="line696"></a>  assertRegExp(&#39;Expected subject to be about turtles&#39;, /turtles$/, a);
+<a name="line697"></a>  assertRegExp(&#39;Expected subject to be about turtles&#39;, &#39;turtles$&#39;, a);
+<a name="line698"></a>
+<a name="line699"></a>  var b = &#39;Hello&#39;;
+<a name="line700"></a>  assertThrowsJsUnitException(
+<a name="line701"></a>      function() { assertRegExp(/turtles$/, b); },
+<a name="line702"></a>      &#39;Expected \&#39;Hello\&#39; to match RegExp /turtles$/&#39;);
+<a name="line703"></a>  assertThrowsJsUnitException(
+<a name="line704"></a>      function() { assertRegExp(&#39;turtles$&#39;, b); },
+<a name="line705"></a>      &#39;Expected \&#39;Hello\&#39; to match RegExp /turtles$/&#39;);
+<a name="line706"></a>}
+<a name="line707"></a>
+<a name="line708"></a>function testAssertThrows() {
+<a name="line709"></a>  var failed = false;
+<a name="line710"></a>  try {
+<a name="line711"></a>    assertThrows(&#39;assertThrows should not pass with null param&#39;, null);
+<a name="line712"></a>    failed = true;
+<a name="line713"></a>  } catch (e) {
+<a name="line714"></a>  }
+<a name="line715"></a>  assertFalse(&#39;Fail should not get set to true&#39;, failed);
+<a name="line716"></a>
+<a name="line717"></a>  try {
+<a name="line718"></a>    assertThrows(
+<a name="line719"></a>        &#39;assertThrows should not pass with undefined param&#39;,
+<a name="line720"></a>        undefined);
+<a name="line721"></a>    failed = true;
+<a name="line722"></a>  } catch (e) {
+<a name="line723"></a>  }
+<a name="line724"></a>  assertFalse(&#39;Fail should not get set to true&#39;, failed);
+<a name="line725"></a>
+<a name="line726"></a>  try {
+<a name="line727"></a>    assertThrows(&#39;assertThrows should not pass with number param&#39;, 1);
+<a name="line728"></a>    failed = true;
+<a name="line729"></a>  } catch (e) {
+<a name="line730"></a>  }
+<a name="line731"></a>  assertFalse(&#39;Fail should not get set to true&#39;, failed);
+<a name="line732"></a>
+<a name="line733"></a>  try {
+<a name="line734"></a>    assertThrows(&#39;assertThrows should not pass with string param&#39;, &#39;string&#39;);
+<a name="line735"></a>    failed = true;
+<a name="line736"></a>  } catch (e) {
+<a name="line737"></a>  }
+<a name="line738"></a>  assertFalse(&#39;Fail should not get set to true&#39;, failed);
+<a name="line739"></a>
+<a name="line740"></a>  try {
+<a name="line741"></a>    assertThrows(&#39;assertThrows should not pass with object param&#39;, {});
+<a name="line742"></a>    failed = true;
+<a name="line743"></a>  } catch (e) {
+<a name="line744"></a>  }
+<a name="line745"></a>  assertFalse(&#39;Fail should not get set to true&#39;, failed);
+<a name="line746"></a>
+<a name="line747"></a>  try {
+<a name="line748"></a>    var error = assertThrows(&#39;valid function throws Error&#39;, function() {
+<a name="line749"></a>      throw new Error(&#39;test&#39;);
+<a name="line750"></a>    });
+<a name="line751"></a>  } catch (e) {
+<a name="line752"></a>    fail(&#39;assertThrows incorrectly doesn\&#39;t detect a thrown exception&#39;);
+<a name="line753"></a>  }
+<a name="line754"></a>  assertEquals(&#39;error message&#39;, &#39;test&#39;, error.message);
+<a name="line755"></a>
+<a name="line756"></a>  try {
+<a name="line757"></a>    var stringError = assertThrows(&#39;valid function throws string error&#39;,
+<a name="line758"></a>        function() {
+<a name="line759"></a>          throw &#39;string error test&#39;;
+<a name="line760"></a>        });
+<a name="line761"></a>  } catch (e) {
+<a name="line762"></a>    fail(&#39;assertThrows doesn\&#39;t detect a thrown string exception&#39;);
+<a name="line763"></a>  }
+<a name="line764"></a>  assertEquals(&#39;string error&#39;, &#39;string error test&#39;, stringError);
+<a name="line765"></a>}
+<a name="line766"></a>
+<a name="line767"></a>function testAssertNotThrows() {
+<a name="line768"></a>  var failed = false;
+<a name="line769"></a>  try {
+<a name="line770"></a>    assertNotThrows(&#39;assertNotThrows should not pass with null param&#39;, null);
+<a name="line771"></a>    failed = true;
+<a name="line772"></a>  } catch (e) {
+<a name="line773"></a>  }
+<a name="line774"></a>  assertFalse(&#39;Fail should not get set to true&#39;, failed);
+<a name="line775"></a>
+<a name="line776"></a>  try {
+<a name="line777"></a>    assertNotThrows(
+<a name="line778"></a>        &#39;assertNotThrows should not pass with undefined param&#39;, undefined);
+<a name="line779"></a>    failed = true;
+<a name="line780"></a>  } catch (e) {
+<a name="line781"></a>  }
+<a name="line782"></a>  assertFalse(&#39;Fail should not get set to true&#39;, failed);
+<a name="line783"></a>
+<a name="line784"></a>  try {
+<a name="line785"></a>    assertNotThrows(&#39;assertNotThrows should not pass with number param&#39;, 1);
+<a name="line786"></a>    failed = true;
+<a name="line787"></a>  } catch (e) {
+<a name="line788"></a>  }
+<a name="line789"></a>  assertFalse(&#39;Fail should not get set to true&#39;, failed);
+<a name="line790"></a>
+<a name="line791"></a>  try {
+<a name="line792"></a>    assertNotThrows(&#39;assertNotThrows should not pass with string param&#39;,
+<a name="line793"></a>        &#39;string&#39;);
+<a name="line794"></a>    failed = true;
+<a name="line795"></a>  } catch (e) {
+<a name="line796"></a>  }
+<a name="line797"></a>  assertFalse(&#39;Fail should not get set to true&#39;, failed);
+<a name="line798"></a>
+<a name="line799"></a>
+<a name="line800"></a>  try {
+<a name="line801"></a>    assertNotThrows(&#39;assertNotThrows should not pass with object param&#39;, {});
+<a name="line802"></a>    failed = true;
+<a name="line803"></a>  } catch (e) {
+<a name="line804"></a>  }
+<a name="line805"></a>  assertFalse(&#39;Fail should not get set to true&#39;, failed);
+<a name="line806"></a>
+<a name="line807"></a>
+<a name="line808"></a>  var result;
+<a name="line809"></a>  try {
+<a name="line810"></a>    result = assertNotThrows(&#39;valid function&#39;,
+<a name="line811"></a>        function() {
+<a name="line812"></a>          return &#39;some value&#39;;
+<a name="line813"></a>        });
+<a name="line814"></a>  } catch (e) {
+<a name="line815"></a>    // Shouldn&#39;t be here: throw exception.
+<a name="line816"></a>    fail(&#39;assertNotThrows returned failure on a valid function&#39;);
+<a name="line817"></a>  }
+<a name="line818"></a>  assertEquals(&#39;assertNotThrows should return the result of the function.&#39;,
+<a name="line819"></a>      &#39;some value&#39;, result);
+<a name="line820"></a>
+<a name="line821"></a>  var errorDescription = &#39;a test error exception&#39;;
+<a name="line822"></a>  try {
+<a name="line823"></a>    assertNotThrows(&#39;non valid error throwing function&#39;,
+<a name="line824"></a>        function() {
+<a name="line825"></a>          throw new Error(errorDescription);
+<a name="line826"></a>        });
+<a name="line827"></a>    failed = true;
+<a name="line828"></a>  } catch (e) {
+<a name="line829"></a>    // Some browsers don&#39;t have a stack trace so expect to at least have the
+<a name="line830"></a>    // error description. For Gecko and IE7 not even that is included.
+<a name="line831"></a>    if (!goog.userAgent.GECKO &amp;&amp;
+<a name="line832"></a>        (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(&#39;8&#39;))) {
+<a name="line833"></a>      assertContains(errorDescription, e.message);
+<a name="line834"></a>    }
+<a name="line835"></a>  }
+<a name="line836"></a>  assertFalse(&#39;assertNotThrows did not fail on a thrown exception&#39;, failed);
+<a name="line837"></a>}
+<a name="line838"></a>
+<a name="line839"></a>function testAssertArrayEquals() {
+<a name="line840"></a>  var a1 = [0, 1, 2];
+<a name="line841"></a>  var a2 = [0, 1, 2];
+<a name="line842"></a>  assertArrayEquals(&#39;Arrays should be equal&#39;, a1, a2);
+<a name="line843"></a>
+<a name="line844"></a>  assertThrows(&#39;Should have thrown because args are not arrays&#39;, function() {
+<a name="line845"></a>    assertArrayEquals(true, true);
+<a name="line846"></a>  });
+<a name="line847"></a>
+<a name="line848"></a>  a1 = [0, undefined, 2];
+<a name="line849"></a>  a2 = [0, , 2];
+<a name="line850"></a>  // The following test fails unexpectedly. The bug is tracked at
+<a name="line851"></a>  // http://code.google.com/p/closure-library/issues/detail?id=419
+<a name="line852"></a>  // assertThrows(
+<a name="line853"></a>  //     &#39;assertArrayEquals distinguishes undefined items from sparse arrays&#39;,
+<a name="line854"></a>  //     function() {
+<a name="line855"></a>  //       assertArrayEquals(a1, a2);
+<a name="line856"></a>  //     });
+<a name="line857"></a>
+<a name="line858"></a>  // For the record. This behavior will probably change in the future.
+<a name="line859"></a>  assertArrayEquals(
+<a name="line860"></a>      &#39;Bug: sparse arrays and undefined items are not distinguished&#39;,
+<a name="line861"></a>      [0, undefined, 2], [0, , 2]);
+<a name="line862"></a>
+<a name="line863"></a>  assertThrows(&#39;The array elements should be compared with ===&#39;, function() {
+<a name="line864"></a>    assertArrayEquals([0], [&#39;0&#39;]);
+<a name="line865"></a>  });
+<a name="line866"></a>
+<a name="line867"></a>  assertThrows(&#39;Arrays with different length should be different&#39;,
+<a name="line868"></a>      function() {
+<a name="line869"></a>        assertArrayEquals([0, undefined], [0]);
+<a name="line870"></a>      });
+<a name="line871"></a>
+<a name="line872"></a>  a1 = [0];
+<a name="line873"></a>  a2 = [0];
+<a name="line874"></a>  a2[-1] = -1;
+<a name="line875"></a>  assertArrayEquals(&#39;Negative indexes are ignored&#39;, a1, a2);
+<a name="line876"></a>
+<a name="line877"></a>  a1 = [0];
+<a name="line878"></a>  a2 = [0];
+<a name="line879"></a>  a2[&#39;extra&#39;] = 1;
+<a name="line880"></a>  assertArrayEquals(
+<a name="line881"></a>      &#39;Extra properties are ignored. Use assertObjectEquals to compare them.&#39;,
+<a name="line882"></a>      a1, a2);
+<a name="line883"></a>
+<a name="line884"></a>  assertArrayEquals(&#39;An example where assertObjectEquals would fail in IE.&#39;,
+<a name="line885"></a>      [&#39;x&#39;], &#39;x&#39;.match(/x/g));
+<a name="line886"></a>}
+<a name="line887"></a>
+<a name="line888"></a>function testAssertObjectsEqualsDifferentArrays() {
+<a name="line889"></a>  assertThrows(&#39;Should have thrown because args are different&#39;, function() {
+<a name="line890"></a>    var a1 = [&#39;className1&#39;];
+<a name="line891"></a>    var a2 = [&#39;className2&#39;];
+<a name="line892"></a>    assertObjectEquals(a1, a2);
+<a name="line893"></a>  });
+<a name="line894"></a>}
+<a name="line895"></a>
+<a name="line896"></a>function testAssertObjectsEqualsNegativeArrayIndexes() {
+<a name="line897"></a>  var a1 = [0];
+<a name="line898"></a>  var a2 = [0];
+<a name="line899"></a>  a2[-1] = -1;
+<a name="line900"></a>  // The following test fails unexpectedly. The bug is tracked at
+<a name="line901"></a>  // http://code.google.com/p/closure-library/issues/detail?id=418
+<a name="line902"></a>  // assertThrows(&#39;assertObjectEquals compares negative indexes&#39;, function() {
+<a name="line903"></a>  //   assertObjectEquals(a1, a2);
+<a name="line904"></a>  // });
+<a name="line905"></a>}
+<a name="line906"></a>
+<a name="line907"></a>function testAssertObjectsEqualsDifferentTypeSameToString() {
+<a name="line908"></a>  assertThrows(&#39;Should have thrown because args are different&#39;, function() {
+<a name="line909"></a>    var a1 = &#39;className1&#39;;
+<a name="line910"></a>    var a2 = [&#39;className1&#39;];
+<a name="line911"></a>    assertObjectEquals(a1, a2);
+<a name="line912"></a>  });
+<a name="line913"></a>
+<a name="line914"></a>  assertThrows(&#39;Should have thrown because args are different&#39;, function() {
+<a name="line915"></a>    var a1 = [&#39;className1&#39;];
+<a name="line916"></a>    var a2 = {&#39;0&#39;: &#39;className1&#39;};
+<a name="line917"></a>    assertObjectEquals(a1, a2);
+<a name="line918"></a>  });
+<a name="line919"></a>
+<a name="line920"></a>  assertThrows(&#39;Should have thrown because args are different&#39;, function() {
+<a name="line921"></a>    var a1 = [&#39;className1&#39;];
+<a name="line922"></a>    var a2 = [[&#39;className1&#39;]];
+<a name="line923"></a>    assertObjectEquals(a1, a2);
+<a name="line924"></a>  });
+<a name="line925"></a>}
+<a name="line926"></a>
+<a name="line927"></a>function testAssertObjectsRoughlyEquals() {
+<a name="line928"></a>  assertObjectRoughlyEquals({&#39;a&#39;: 1}, {&#39;a&#39;: 1.2}, 0.3);
+<a name="line929"></a>  assertThrowsJsUnitException(
+<a name="line930"></a>      function() { assertObjectRoughlyEquals({&#39;a&#39;: 1}, {&#39;a&#39;: 1.2}, 0.1); },
+<a name="line931"></a>      &#39;Expected &lt;[object Object]&gt; (Object) but was &lt;[object Object]&gt; &#39; +
+<a name="line932"></a>      &#39;(Object)\n   a: Expected &lt;1&gt; (Number) but was &lt;1.2&gt; (Number) which &#39; +
+<a name="line933"></a>      &#39;was more than 0.1 away&#39;);
+<a name="line934"></a>}
+<a name="line935"></a>
+<a name="line936"></a>function testFindDifferences_equal() {
+<a name="line937"></a>  assertNull(goog.testing.asserts.findDifferences(true, true));
+<a name="line938"></a>  assertNull(goog.testing.asserts.findDifferences(null, null));
+<a name="line939"></a>  assertNull(goog.testing.asserts.findDifferences(undefined, undefined));
+<a name="line940"></a>  assertNull(goog.testing.asserts.findDifferences(1, 1));
+<a name="line941"></a>  assertNull(goog.testing.asserts.findDifferences([1, &#39;a&#39;], [1, &#39;a&#39;]));
+<a name="line942"></a>  assertNull(goog.testing.asserts.findDifferences(
+<a name="line943"></a>      [[1, 2], [3, 4]], [[1, 2], [3, 4]]));
+<a name="line944"></a>  assertNull(goog.testing.asserts.findDifferences(
+<a name="line945"></a>      [{a: 1, b: 2}], [{b: 2, a: 1}]));
+<a name="line946"></a>  assertNull(goog.testing.asserts.findDifferences(null, null));
+<a name="line947"></a>  assertNull(goog.testing.asserts.findDifferences(undefined, undefined));
+<a name="line948"></a>}
+<a name="line949"></a>
+<a name="line950"></a>function testFindDifferences_unequal() {
+<a name="line951"></a>  assertNotNull(goog.testing.asserts.findDifferences(true, false));
+<a name="line952"></a>  assertNotNull(goog.testing.asserts.findDifferences(
+<a name="line953"></a>      [{a: 1, b: 2}], [{a: 2, b: 1}]));
+<a name="line954"></a>  assertNotNull(goog.testing.asserts.findDifferences(
+<a name="line955"></a>      [{a: 1}], [{a: 1, b: [2]}]));
+<a name="line956"></a>  assertNotNull(goog.testing.asserts.findDifferences(
+<a name="line957"></a>      [{a: 1, b: [2]}], [{a: 1}]));
+<a name="line958"></a>}
+<a name="line959"></a>
+<a name="line960"></a>function testFindDifferences_objectsAndNull() {
+<a name="line961"></a>  assertNotNull(goog.testing.asserts.findDifferences({a: 1}, null));
+<a name="line962"></a>  assertNotNull(goog.testing.asserts.findDifferences(null, {a: 1}));
+<a name="line963"></a>  assertNotNull(goog.testing.asserts.findDifferences(null, []));
+<a name="line964"></a>  assertNotNull(goog.testing.asserts.findDifferences([], null));
+<a name="line965"></a>  assertNotNull(goog.testing.asserts.findDifferences([], undefined));
+<a name="line966"></a>}
+<a name="line967"></a>
+<a name="line968"></a>function testFindDifferences_basicCycle() {
+<a name="line969"></a>  var a = {};
+<a name="line970"></a>  var b = {};
+<a name="line971"></a>  a.self = a;
+<a name="line972"></a>  b.self = b;
+<a name="line973"></a>  assertNull(goog.testing.asserts.findDifferences(a, b));
+<a name="line974"></a>
+<a name="line975"></a>  a.unique = 1;
+<a name="line976"></a>  assertNotNull(goog.testing.asserts.findDifferences(a, b));
+<a name="line977"></a>}
+<a name="line978"></a>
+<a name="line979"></a>function testFindDifferences_crossedCycle() {
+<a name="line980"></a>  var a = {};
+<a name="line981"></a>  var b = {};
+<a name="line982"></a>  a.self = b;
+<a name="line983"></a>  b.self = a;
+<a name="line984"></a>  assertNull(goog.testing.asserts.findDifferences(a, b));
+<a name="line985"></a>
+<a name="line986"></a>  a.unique = 1;
+<a name="line987"></a>  assertNotNull(goog.testing.asserts.findDifferences(a, b));
+<a name="line988"></a>}
+<a name="line989"></a>
+<a name="line990"></a>function testFindDifferences_asymmetricCycle() {
+<a name="line991"></a>  var a = {};
+<a name="line992"></a>  var b = {};
+<a name="line993"></a>  var c = {};
+<a name="line994"></a>  var d = {};
+<a name="line995"></a>  var e = {};
+<a name="line996"></a>  a.self = b;
+<a name="line997"></a>  b.self = a;
+<a name="line998"></a>  c.self = d;
+<a name="line999"></a>  d.self = e;
+<a name="line1000"></a>  e.self = c;
+<a name="line1001"></a>  assertNotNull(goog.testing.asserts.findDifferences(a, c));
+<a name="line1002"></a>}
+<a name="line1003"></a>
+<a name="line1004"></a>function testFindDifferences_basicCycleArray() {
+<a name="line1005"></a>  var a = [];
+<a name="line1006"></a>  var b = [];
+<a name="line1007"></a>  a[0] = a;
+<a name="line1008"></a>  b[0] = b;
+<a name="line1009"></a>  assertNull(goog.testing.asserts.findDifferences(a, b));
+<a name="line1010"></a>
+<a name="line1011"></a>  a[1] = 1;
+<a name="line1012"></a>  assertNotNull(goog.testing.asserts.findDifferences(a, b));
+<a name="line1013"></a>}
+<a name="line1014"></a>
+<a name="line1015"></a>function testFindDifferences_crossedCycleArray() {
+<a name="line1016"></a>  var a = [];
+<a name="line1017"></a>  var b = [];
+<a name="line1018"></a>  a[0] = b;
+<a name="line1019"></a>  b[0] = a;
+<a name="line1020"></a>  assertNull(goog.testing.asserts.findDifferences(a, b));
+<a name="line1021"></a>
+<a name="line1022"></a>  a[1] = 1;
+<a name="line1023"></a>  assertNotNull(goog.testing.asserts.findDifferences(a, b));
+<a name="line1024"></a>}
+<a name="line1025"></a>
+<a name="line1026"></a>function testFindDifferences_asymmetricCycleArray() {
+<a name="line1027"></a>  var a = [];
+<a name="line1028"></a>  var b = [];
+<a name="line1029"></a>  var c = [];
+<a name="line1030"></a>  var d = [];
+<a name="line1031"></a>  var e = [];
+<a name="line1032"></a>  a[0] = b;
+<a name="line1033"></a>  b[0] = a;
+<a name="line1034"></a>  c[0] = d;
+<a name="line1035"></a>  d[0] = e;
+<a name="line1036"></a>  e[0] = c;
+<a name="line1037"></a>  assertNotNull(goog.testing.asserts.findDifferences(a, c));
+<a name="line1038"></a>}
+<a name="line1039"></a>
+<a name="line1040"></a>function testFindDifferences_multiCycles() {
+<a name="line1041"></a>  var a = {};
+<a name="line1042"></a>  a.cycle1 = a;
+<a name="line1043"></a>  a.test = {
+<a name="line1044"></a>    cycle2: a
+<a name="line1045"></a>  };
+<a name="line1046"></a>
+<a name="line1047"></a>  var b = {};
+<a name="line1048"></a>  b.cycle1 = b;
+<a name="line1049"></a>  b.test = {
+<a name="line1050"></a>    cycle2: b
+<a name="line1051"></a>  };
+<a name="line1052"></a>  assertNull(goog.testing.asserts.findDifferences(a, b));
+<a name="line1053"></a>}
+<a name="line1054"></a>
+<a name="line1055"></a>function testFindDifferences_binaryTree() {
+<a name="line1056"></a>  function createBinTree(depth, root) {
+<a name="line1057"></a>    if (depth == 0) {
+<a name="line1058"></a>      return {root: root};
+<a name="line1059"></a>    } else {
+<a name="line1060"></a>      var node = {};
+<a name="line1061"></a>      node.left = createBinTree(depth - 1, root || node);
+<a name="line1062"></a>      node.right = createBinTree(depth - 1, root || node);
+<a name="line1063"></a>      return node;
+<a name="line1064"></a>    }
+<a name="line1065"></a>  }
+<a name="line1066"></a>
+<a name="line1067"></a>  // TODO(gboyer,user): This test does not terminate with the current
+<a name="line1068"></a>  // algorithm. Can be enabled when (if) the algorithm is improved.
+<a name="line1069"></a>  //assertNull(goog.testing.asserts.findDifferences(
+<a name="line1070"></a>  //    createBinTree(5, null), createBinTree(5, null)));
+<a name="line1071"></a>  assertNotNull(goog.testing.asserts.findDifferences(
+<a name="line1072"></a>      createBinTree(4, null), createBinTree(5, null)));
+<a name="line1073"></a>}
+<a name="line1074"></a>
+<a name="line1075"></a>function testStringForWindowIE() {
+<a name="line1076"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;8&#39;)) {
+<a name="line1077"></a>    // NOTE(user): This test sees of we are being affected by a JScript bug
+<a name="line1078"></a>    // in try/finally handling. This bug only affects the lowest try/finally
+<a name="line1079"></a>    // block in the stack. Calling this function via VBScript allows
+<a name="line1080"></a>    // us to run the test synchronously in an empty JS stack.
+<a name="line1081"></a>    window.execScript(&#39;stringForWindowIEHelper()&#39;, &#39;vbscript&#39;);
+<a name="line1082"></a>    assertEquals(&#39;&lt;[object]&gt; (Object)&#39;, window.stringForWindowIEResult);
+<a name="line1083"></a>  }
+<a name="line1084"></a>}
+<a name="line1085"></a>
+<a name="line1086"></a>function testStringSamePrefix() {
+<a name="line1087"></a>  assertThrowsJsUnitException(
+<a name="line1088"></a>      function() { assertEquals(&#39;abcdefghi&#39;, &#39;abcdefghx&#39;); },
+<a name="line1089"></a>      &#39;Expected &lt;abcdefghi&gt; (String) but was &lt;abcdefghx&gt; (String)\n&#39; +
+<a name="line1090"></a>      &#39;Difference was at position 8. Expected [...ghi] vs. actual [...ghx]&#39;);
+<a name="line1091"></a>}
+<a name="line1092"></a>
+<a name="line1093"></a>function testStringSameSuffix() {
+<a name="line1094"></a>  assertThrowsJsUnitException(
+<a name="line1095"></a>      function() { assertEquals(&#39;xbcdefghi&#39;, &#39;abcdefghi&#39;); },
+<a name="line1096"></a>      &#39;Expected &lt;xbcdefghi&gt; (String) but was &lt;abcdefghi&gt; (String)\n&#39; +
+<a name="line1097"></a>      &#39;Difference was at position 0. Expected [xbc...] vs. actual [abc...]&#39;);
+<a name="line1098"></a>}
+<a name="line1099"></a>
+<a name="line1100"></a>function testStringDissimilarShort() {
+<a name="line1101"></a>  assertThrowsJsUnitException(
+<a name="line1102"></a>      function() { assertEquals(&#39;x&#39;, &#39;y&#39;); },
+<a name="line1103"></a>      &#39;Expected &lt;x&gt; (String) but was &lt;y&gt; (String)&#39;);
+<a name="line1104"></a>}
+<a name="line1105"></a>
+<a name="line1106"></a>function testStringDissimilarLong() {
+<a name="line1107"></a>  assertThrowsJsUnitException(
+<a name="line1108"></a>      function() { assertEquals(&#39;xxxxxxxxxx&#39;, &#39;yyyyyyyyyy&#39;); },
+<a name="line1109"></a>      &#39;Expected &lt;xxxxxxxxxx&gt; (String) but was &lt;yyyyyyyyyy&gt; (String)&#39;);
+<a name="line1110"></a>}
+<a name="line1111"></a>
+<a name="line1112"></a>function testAssertElementsEquals() {
+<a name="line1113"></a>  assertElementsEquals([1, 2], [1, 2]);
+<a name="line1114"></a>  assertElementsEquals([1, 2], {0: 1, 1: 2, length: 2});
+<a name="line1115"></a>  assertElementsEquals(&#39;Good assertion&#39;, [1, 2], [1, 2]);
+<a name="line1116"></a>  assertThrowsJsUnitException(
+<a name="line1117"></a>      function() {
+<a name="line1118"></a>        assertElementsEquals(&#39;Message&#39;, [1, 2], [1]);
+<a name="line1119"></a>      },
+<a name="line1120"></a>      &#39;length mismatch: Message\n&#39; +
+<a name="line1121"></a>      &#39;Expected &lt;2&gt; (Number) but was &lt;1&gt; (Number)&#39;);
+<a name="line1122"></a>}
+<a name="line1123"></a>
+<a name="line1124"></a>function testStackTrace() {
+<a name="line1125"></a>  try {
+<a name="line1126"></a>    assertTrue(false);
+<a name="line1127"></a>  } catch (e) {
+<a name="line1128"></a>    if (Error.captureStackTrace) {
+<a name="line1129"></a>      assertNotUndefined(e.stack);
+<a name="line1130"></a>    }
+<a name="line1131"></a>    if (e.stack) {
+<a name="line1132"></a>      assertContains(&#39;testStackTrace&#39;, e.stack);
+<a name="line1133"></a>    }
+<a name="line1134"></a>  }
+<a name="line1135"></a>}
+<a name="line1136"></a>
+<a name="line1137"></a>function stringForWindowIEHelper() {
+<a name="line1138"></a>  window.stringForWindowIEResult = _displayStringForValue(window);
+<a name="line1139"></a>}
+<a name="line1140"></a>
+<a name="line1141"></a>function testDisplayStringForValue() {
+<a name="line1142"></a>  assertEquals(&#39;&lt;hello&gt; (String)&#39;, _displayStringForValue(&#39;hello&#39;));
+<a name="line1143"></a>  assertEquals(&#39;&lt;1&gt; (Number)&#39;, _displayStringForValue(1));
+<a name="line1144"></a>  assertEquals(&#39;&lt;null&gt;&#39;, _displayStringForValue(null));
+<a name="line1145"></a>  assertEquals(&#39;&lt;undefined&gt;&#39;, _displayStringForValue(undefined));
+<a name="line1146"></a>  assertEquals(&#39;&lt;hello,,,,1&gt; (Array)&#39;, _displayStringForValue(
+<a name="line1147"></a>      [&#39;hello&#39;, /* array hole */, undefined, null, 1]));
+<a name="line1148"></a>}
+<a name="line1149"></a>
+<a name="line1150"></a>function testDisplayStringForValue_exception() {
+<a name="line1151"></a>  assertEquals(&#39;&lt;toString failed: foo message&gt; (Object)&#39;,
+<a name="line1152"></a>      _displayStringForValue({toString: function() {
+<a name="line1153"></a>        throw Error(&#39;foo message&#39;);
+<a name="line1154"></a>      }}));
+<a name="line1155"></a>}
+<a name="line1156"></a>
+<a name="line1157"></a>function testDisplayStringForValue_cycle() {
+<a name="line1158"></a>  var cycle = [&#39;cycle&#39;];
+<a name="line1159"></a>  cycle.push(cycle);
+<a name="line1160"></a>  assertTrue(
+<a name="line1161"></a>      &#39;Computing string should terminate and result in a reasonable length&#39;,
+<a name="line1162"></a>      _displayStringForValue(cycle).length &lt; 1000);
+<a name="line1163"></a>}
+</pre>
+
+
+</body>
+</html>

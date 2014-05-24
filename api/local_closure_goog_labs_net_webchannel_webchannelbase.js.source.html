@@ -1,0 +1,2146 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>webchannelbase.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_net_webchannel_webchannelbase.js.html">webchannelbase.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Base WebChannel implementation.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.labs.net.webChannel.WebChannelBase&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line26"></a>goog.require(&#39;goog.debug.TextFormatter&#39;);
+<a name="line27"></a>goog.require(&#39;goog.json&#39;);
+<a name="line28"></a>goog.require(&#39;goog.labs.net.webChannel.BaseTestChannel&#39;);
+<a name="line29"></a>goog.require(&#39;goog.labs.net.webChannel.Channel&#39;);
+<a name="line30"></a>goog.require(&#39;goog.labs.net.webChannel.ChannelRequest&#39;);
+<a name="line31"></a>goog.require(&#39;goog.labs.net.webChannel.ConnectionState&#39;);
+<a name="line32"></a>goog.require(&#39;goog.labs.net.webChannel.ForwardChannelRequestPool&#39;);
+<a name="line33"></a>goog.require(&#39;goog.labs.net.webChannel.WebChannelDebug&#39;);
+<a name="line34"></a>goog.require(&#39;goog.labs.net.webChannel.Wire&#39;);
+<a name="line35"></a>goog.require(&#39;goog.labs.net.webChannel.WireV8&#39;);
+<a name="line36"></a>goog.require(&#39;goog.labs.net.webChannel.netUtils&#39;);
+<a name="line37"></a>goog.require(&#39;goog.labs.net.webChannel.requestStats&#39;);
+<a name="line38"></a>goog.require(&#39;goog.labs.net.webChannel.requestStats.Stat&#39;);
+<a name="line39"></a>goog.require(&#39;goog.log&#39;);
+<a name="line40"></a>goog.require(&#39;goog.net.XhrIo&#39;);
+<a name="line41"></a>goog.require(&#39;goog.object&#39;);
+<a name="line42"></a>goog.require(&#39;goog.string&#39;);
+<a name="line43"></a>goog.require(&#39;goog.structs&#39;);
+<a name="line44"></a>goog.require(&#39;goog.structs.CircularBuffer&#39;);
+<a name="line45"></a>
+<a name="line46"></a>goog.scope(function() {
+<a name="line47"></a>var BaseTestChannel = goog.labs.net.webChannel.BaseTestChannel;
+<a name="line48"></a>var ChannelRequest = goog.labs.net.webChannel.ChannelRequest;
+<a name="line49"></a>var ConnectionState = goog.labs.net.webChannel.ConnectionState;
+<a name="line50"></a>var ForwardChannelRequestPool =
+<a name="line51"></a>    goog.labs.net.webChannel.ForwardChannelRequestPool;
+<a name="line52"></a>var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
+<a name="line53"></a>var Wire = goog.labs.net.webChannel.Wire;
+<a name="line54"></a>var WireV8 = goog.labs.net.webChannel.WireV8;
+<a name="line55"></a>var netUtils = goog.labs.net.webChannel.netUtils;
+<a name="line56"></a>var requestStats = goog.labs.net.webChannel.requestStats;
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * This WebChannel implementation is branched off goog.net.BrowserChannel
+<a name="line62"></a> * for now. Ongoing changes to goog.net.BrowserChannel will be back
+<a name="line63"></a> * ported to this implementation as needed.
+<a name="line64"></a> *
+<a name="line65"></a> * @param {!goog.net.WebChannel.Options=} opt_options Configuration for the
+<a name="line66"></a> *        WebChannel instance.
+<a name="line67"></a> * @param {string=} opt_clientVersion An application-specific version number
+<a name="line68"></a> *        that is sent to the server when connected.
+<a name="line69"></a> * @param {!ConnectionState=} opt_conn Previously determined connection
+<a name="line70"></a> *        conditions.
+<a name="line71"></a> * @constructor
+<a name="line72"></a> * @struct
+<a name="line73"></a> * @implements {goog.labs.net.webChannel.Channel}
+<a name="line74"></a> */
+<a name="line75"></a>goog.labs.net.webChannel.WebChannelBase = function(opt_options,
+<a name="line76"></a>    opt_clientVersion, opt_conn) {
+<a name="line77"></a>  /**
+<a name="line78"></a>   * The application specific version that is passed to the server.
+<a name="line79"></a>   * @private {?string}
+<a name="line80"></a>   */
+<a name="line81"></a>  this.clientVersion_ = opt_clientVersion || null;
+<a name="line82"></a>
+<a name="line83"></a>  /**
+<a name="line84"></a>   * An array of queued maps that need to be sent to the server.
+<a name="line85"></a>   * @private {!Array.&lt;Wire.QueuedMap&gt;}
+<a name="line86"></a>   */
+<a name="line87"></a>  this.outgoingMaps_ = [];
+<a name="line88"></a>
+<a name="line89"></a>  /**
+<a name="line90"></a>   * An array of dequeued maps that we have either received a non-successful
+<a name="line91"></a>   * response for, or no response at all, and which therefore may or may not
+<a name="line92"></a>   * have been received by the server.
+<a name="line93"></a>   * @private {!Array.&lt;Wire.QueuedMap&gt;}
+<a name="line94"></a>   */
+<a name="line95"></a>  this.pendingMaps_ = [];
+<a name="line96"></a>
+<a name="line97"></a>  /**
+<a name="line98"></a>   * The channel debug used for logging
+<a name="line99"></a>   * @private {!WebChannelDebug}
+<a name="line100"></a>   */
+<a name="line101"></a>  this.channelDebug_ = new WebChannelDebug();
+<a name="line102"></a>
+<a name="line103"></a>  /**
+<a name="line104"></a>   * Previous connectivity test results.
+<a name="line105"></a>   * @private {!ConnectionState}
+<a name="line106"></a>   */
+<a name="line107"></a>  this.ConnState_ = opt_conn || new ConnectionState();
+<a name="line108"></a>
+<a name="line109"></a>  /**
+<a name="line110"></a>   * Extra HTTP headers to add to all the requests sent to the server.
+<a name="line111"></a>   * @private {Object}
+<a name="line112"></a>   */
+<a name="line113"></a>  this.extraHeaders_ = null;
+<a name="line114"></a>
+<a name="line115"></a>  /**
+<a name="line116"></a>   * Extra parameters to add to all the requests sent to the server.
+<a name="line117"></a>   * @private {Object}
+<a name="line118"></a>   */
+<a name="line119"></a>  this.extraParams_ = null;
+<a name="line120"></a>
+<a name="line121"></a>  /**
+<a name="line122"></a>   * The ChannelRequest object for the backchannel.
+<a name="line123"></a>   * @private {ChannelRequest}
+<a name="line124"></a>   */
+<a name="line125"></a>  this.backChannelRequest_ = null;
+<a name="line126"></a>
+<a name="line127"></a>  /**
+<a name="line128"></a>   * The relative path (in the context of the the page hosting the browser
+<a name="line129"></a>   * channel) for making requests to the server.
+<a name="line130"></a>   * @private {?string}
+<a name="line131"></a>   */
+<a name="line132"></a>  this.path_ = null;
+<a name="line133"></a>
+<a name="line134"></a>  /**
+<a name="line135"></a>   * The absolute URI for the forwardchannel request.
+<a name="line136"></a>   * @private {goog.Uri}
+<a name="line137"></a>   */
+<a name="line138"></a>  this.forwardChannelUri_ = null;
+<a name="line139"></a>
+<a name="line140"></a>  /**
+<a name="line141"></a>   * The absolute URI for the backchannel request.
+<a name="line142"></a>   * @private {goog.Uri}
+<a name="line143"></a>   */
+<a name="line144"></a>  this.backChannelUri_ = null;
+<a name="line145"></a>
+<a name="line146"></a>  /**
+<a name="line147"></a>   * A subdomain prefix for using a subdomain in IE for the backchannel
+<a name="line148"></a>   * requests.
+<a name="line149"></a>   * @private {?string}
+<a name="line150"></a>   */
+<a name="line151"></a>  this.hostPrefix_ = null;
+<a name="line152"></a>
+<a name="line153"></a>  /**
+<a name="line154"></a>   * Whether we allow the use of a subdomain in IE for the backchannel requests.
+<a name="line155"></a>   * @private {boolean}
+<a name="line156"></a>   */
+<a name="line157"></a>  this.allowHostPrefix_ = true;
+<a name="line158"></a>
+<a name="line159"></a>  /**
+<a name="line160"></a>   * The next id to use for the RID (request identifier) parameter. This
+<a name="line161"></a>   * identifier uniquely identifies the forward channel request.
+<a name="line162"></a>   * @private {number}
+<a name="line163"></a>   */
+<a name="line164"></a>  this.nextRid_ = 0;
+<a name="line165"></a>
+<a name="line166"></a>  /**
+<a name="line167"></a>   * The id to use for the next outgoing map. This identifier uniquely
+<a name="line168"></a>   * identifies a sent map.
+<a name="line169"></a>   * @private {number}
+<a name="line170"></a>   */
+<a name="line171"></a>  this.nextMapId_ = 0;
+<a name="line172"></a>
+<a name="line173"></a>  /**
+<a name="line174"></a>   * Whether to fail forward-channel requests after one try or a few tries.
+<a name="line175"></a>   * @private {boolean}
+<a name="line176"></a>   */
+<a name="line177"></a>  this.failFast_ = false;
+<a name="line178"></a>
+<a name="line179"></a>  /**
+<a name="line180"></a>   * The handler that receive callbacks for state changes and data.
+<a name="line181"></a>   * @private {goog.labs.net.webChannel.WebChannelBase.Handler}
+<a name="line182"></a>   */
+<a name="line183"></a>  this.handler_ = null;
+<a name="line184"></a>
+<a name="line185"></a>  /**
+<a name="line186"></a>   * Timer identifier for asynchronously making a forward channel request.
+<a name="line187"></a>   * @private {?number}
+<a name="line188"></a>   */
+<a name="line189"></a>  this.forwardChannelTimerId_ = null;
+<a name="line190"></a>
+<a name="line191"></a>  /**
+<a name="line192"></a>   * Timer identifier for asynchronously making a back channel request.
+<a name="line193"></a>   * @private {?number}
+<a name="line194"></a>   */
+<a name="line195"></a>  this.backChannelTimerId_ = null;
+<a name="line196"></a>
+<a name="line197"></a>  /**
+<a name="line198"></a>   * Timer identifier for the timer that waits for us to retry the backchannel
+<a name="line199"></a>   * in the case where it is dead and no longer receiving data.
+<a name="line200"></a>   * @private {?number}
+<a name="line201"></a>   */
+<a name="line202"></a>  this.deadBackChannelTimerId_ = null;
+<a name="line203"></a>
+<a name="line204"></a>  /**
+<a name="line205"></a>   * The TestChannel object which encapsulates the logic for determining
+<a name="line206"></a>   * interesting network conditions about the client.
+<a name="line207"></a>   * @private {BaseTestChannel}
+<a name="line208"></a>   */
+<a name="line209"></a>  this.connectionTest_ = null;
+<a name="line210"></a>
+<a name="line211"></a>  /**
+<a name="line212"></a>   * Whether the client&#39;s network conditions can support chunked responses.
+<a name="line213"></a>   * @private {?boolean}
+<a name="line214"></a>   */
+<a name="line215"></a>  this.useChunked_ = null;
+<a name="line216"></a>
+<a name="line217"></a>  /**
+<a name="line218"></a>   * Whether chunked mode is allowed. In certain debugging situations, it&#39;s
+<a name="line219"></a>   * useful to disable this.
+<a name="line220"></a>   * @private {boolean}
+<a name="line221"></a>   */
+<a name="line222"></a>  this.allowChunkedMode_ = true;
+<a name="line223"></a>
+<a name="line224"></a>  /**
+<a name="line225"></a>   * The array identifier of the last array received from the server for the
+<a name="line226"></a>   * backchannel request.
+<a name="line227"></a>   * @private {number}
+<a name="line228"></a>   */
+<a name="line229"></a>  this.lastArrayId_ = -1;
+<a name="line230"></a>
+<a name="line231"></a>  /**
+<a name="line232"></a>   * The array id of the last array sent by the server that we know about.
+<a name="line233"></a>   * @private {number}
+<a name="line234"></a>   */
+<a name="line235"></a>  this.lastPostResponseArrayId_ = -1;
+<a name="line236"></a>
+<a name="line237"></a>  /**
+<a name="line238"></a>   * The last status code received.
+<a name="line239"></a>   * @private {number}
+<a name="line240"></a>   */
+<a name="line241"></a>  this.lastStatusCode_ = -1;
+<a name="line242"></a>
+<a name="line243"></a>  /**
+<a name="line244"></a>   * Number of times we have retried the current forward channel request.
+<a name="line245"></a>   * @private {number}
+<a name="line246"></a>   */
+<a name="line247"></a>  this.forwardChannelRetryCount_ = 0;
+<a name="line248"></a>
+<a name="line249"></a>  /**
+<a name="line250"></a>   * Number of times in a row that we have retried the current back channel
+<a name="line251"></a>   * request and received no data.
+<a name="line252"></a>   * @private {number}
+<a name="line253"></a>   */
+<a name="line254"></a>  this.backChannelRetryCount_ = 0;
+<a name="line255"></a>
+<a name="line256"></a>  /**
+<a name="line257"></a>   * The attempt id for the current back channel request. Starts at 1 and
+<a name="line258"></a>   * increments for each reconnect. The server uses this to log if our
+<a name="line259"></a>   * connection is flaky or not.
+<a name="line260"></a>   * @private {number}
+<a name="line261"></a>   */
+<a name="line262"></a>  this.backChannelAttemptId_ = 0;
+<a name="line263"></a>
+<a name="line264"></a>  /**
+<a name="line265"></a>   * The base part of the time before firing next retry request. Default is 5
+<a name="line266"></a>   * seconds. Note that a random delay is added (see {@link retryDelaySeedMs_})
+<a name="line267"></a>   * for all retries, and linear backoff is applied to the sum for subsequent
+<a name="line268"></a>   * retries.
+<a name="line269"></a>   * @private {number}
+<a name="line270"></a>   */
+<a name="line271"></a>  this.baseRetryDelayMs_ = 5 * 1000;
+<a name="line272"></a>
+<a name="line273"></a>  /**
+<a name="line274"></a>   * A random time between 0 and this number of MS is added to the
+<a name="line275"></a>   * {@link baseRetryDelayMs_}. Default is 10 seconds.
+<a name="line276"></a>   * @private {number}
+<a name="line277"></a>   */
+<a name="line278"></a>  this.retryDelaySeedMs_ = 10 * 1000;
+<a name="line279"></a>
+<a name="line280"></a>  /**
+<a name="line281"></a>   * Maximum number of attempts to connect to the server for forward channel
+<a name="line282"></a>   * requests. Defaults to 2.
+<a name="line283"></a>   * @private {number}
+<a name="line284"></a>   */
+<a name="line285"></a>  this.forwardChannelMaxRetries_ = 2;
+<a name="line286"></a>
+<a name="line287"></a>  /**
+<a name="line288"></a>   * The timeout in milliseconds for a forward channel request. Defaults to 20
+<a name="line289"></a>   * seconds. Note that part of this timeout can be randomized.
+<a name="line290"></a>   * @private {number}
+<a name="line291"></a>   */
+<a name="line292"></a>  this.forwardChannelRequestTimeoutMs_ = 20 * 1000;
+<a name="line293"></a>
+<a name="line294"></a>  /**
+<a name="line295"></a>   * A throttle time in ms for readystatechange events for the backchannel.
+<a name="line296"></a>   * Useful for throttling when ready state is INTERACTIVE (partial data).
+<a name="line297"></a>   *
+<a name="line298"></a>   * This throttle is useful if the server sends large data chunks down the
+<a name="line299"></a>   * backchannel.  It prevents examining XHR partial data on every readystate
+<a name="line300"></a>   * change event.  This is useful because large chunks can trigger hundreds
+<a name="line301"></a>   * of readystatechange events, each of which takes ~5ms or so to handle,
+<a name="line302"></a>   * in turn making the UI unresponsive for a significant period.
+<a name="line303"></a>   *
+<a name="line304"></a>   * If set to zero no throttle is used.
+<a name="line305"></a>   * @private {number}
+<a name="line306"></a>   */
+<a name="line307"></a>  this.readyStateChangeThrottleMs_ = 0;
+<a name="line308"></a>
+<a name="line309"></a>  /**
+<a name="line310"></a>   * Whether cross origin requests are supported for the channel.
+<a name="line311"></a>   *
+<a name="line312"></a>   * See {@link goog.net.XhrIo#setWithCredentials}.
+<a name="line313"></a>   * @private {boolean}
+<a name="line314"></a>   */
+<a name="line315"></a>  this.supportsCrossDomainXhrs_ = false;
+<a name="line316"></a>
+<a name="line317"></a>  /**
+<a name="line318"></a>   * The current session id.
+<a name="line319"></a>   * @private {string}
+<a name="line320"></a>   */
+<a name="line321"></a>  this.sid_ = &#39;&#39;;
+<a name="line322"></a>
+<a name="line323"></a>  /**
+<a name="line324"></a>   * The current ChannelRequest pool for the forward channel.
+<a name="line325"></a>   * @private {!ForwardChannelRequestPool}
+<a name="line326"></a>   */
+<a name="line327"></a>  this.forwardChannelRequestPool_ = new ForwardChannelRequestPool(
+<a name="line328"></a>      opt_options &amp;&amp; opt_options.concurrentRequestLimit);
+<a name="line329"></a>
+<a name="line330"></a>  /**
+<a name="line331"></a>   * The V8 codec.
+<a name="line332"></a>   * @private {!WireV8}
+<a name="line333"></a>   */
+<a name="line334"></a>  this.wireCodec_ = new WireV8();
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>var WebChannelBase = goog.labs.net.webChannel.WebChannelBase;
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * The channel version that we negotiated with the server for this session.
+<a name="line342"></a> * Starts out as the version we request, and then is changed to the negotiated
+<a name="line343"></a> * version after the initial open.
+<a name="line344"></a> * @private {number}
+<a name="line345"></a> */
+<a name="line346"></a>WebChannelBase.prototype.channelVersion_ = Wire.LATEST_CHANNEL_VERSION;
+<a name="line347"></a>
+<a name="line348"></a>
+<a name="line349"></a>/**
+<a name="line350"></a> * Enum type for the channel state machine.
+<a name="line351"></a> * @enum {number}
+<a name="line352"></a> */
+<a name="line353"></a>WebChannelBase.State = {
+<a name="line354"></a>  /** The channel is closed. */
+<a name="line355"></a>  CLOSED: 0,
+<a name="line356"></a>
+<a name="line357"></a>  /** The channel has been initialized but hasn&#39;t yet initiated a connection. */
+<a name="line358"></a>  INIT: 1,
+<a name="line359"></a>
+<a name="line360"></a>  /** The channel is in the process of opening a connection to the server. */
+<a name="line361"></a>  OPENING: 2,
+<a name="line362"></a>
+<a name="line363"></a>  /** The channel is open. */
+<a name="line364"></a>  OPENED: 3
+<a name="line365"></a>};
+<a name="line366"></a>
+<a name="line367"></a>
+<a name="line368"></a>/**
+<a name="line369"></a> * The current state of the WebChannel.
+<a name="line370"></a> * @private {!WebChannelBase.State}
+<a name="line371"></a> */
+<a name="line372"></a>WebChannelBase.prototype.state_ = WebChannelBase.State.INIT;
+<a name="line373"></a>
+<a name="line374"></a>
+<a name="line375"></a>/**
+<a name="line376"></a> * The timeout in milliseconds for a forward channel request.
+<a name="line377"></a> * @type {number}
+<a name="line378"></a> */
+<a name="line379"></a>WebChannelBase.FORWARD_CHANNEL_RETRY_TIMEOUT = 20 * 1000;
+<a name="line380"></a>
+<a name="line381"></a>
+<a name="line382"></a>/**
+<a name="line383"></a> * Maximum number of attempts to connect to the server for back channel
+<a name="line384"></a> * requests.
+<a name="line385"></a> * @type {number}
+<a name="line386"></a> */
+<a name="line387"></a>WebChannelBase.BACK_CHANNEL_MAX_RETRIES = 3;
+<a name="line388"></a>
+<a name="line389"></a>
+<a name="line390"></a>/**
+<a name="line391"></a> * A number in MS of how long we guess the maxmium amount of time a round trip
+<a name="line392"></a> * to the server should take. In the future this could be substituted with a
+<a name="line393"></a> * real measurement of the RTT.
+<a name="line394"></a> * @type {number}
+<a name="line395"></a> */
+<a name="line396"></a>WebChannelBase.RTT_ESTIMATE = 3 * 1000;
+<a name="line397"></a>
+<a name="line398"></a>
+<a name="line399"></a>/**
+<a name="line400"></a> * When retrying for an inactive channel, we will multiply the total delay by
+<a name="line401"></a> * this number.
+<a name="line402"></a> * @type {number}
+<a name="line403"></a> */
+<a name="line404"></a>WebChannelBase.INACTIVE_CHANNEL_RETRY_FACTOR = 2;
+<a name="line405"></a>
+<a name="line406"></a>
+<a name="line407"></a>/**
+<a name="line408"></a> * Enum type for identifying an error.
+<a name="line409"></a> * @enum {number}
+<a name="line410"></a> */
+<a name="line411"></a>WebChannelBase.Error = {
+<a name="line412"></a>  /** Value that indicates no error has occurred. */
+<a name="line413"></a>  OK: 0,
+<a name="line414"></a>
+<a name="line415"></a>  /** An error due to a request failing. */
+<a name="line416"></a>  REQUEST_FAILED: 2,
+<a name="line417"></a>
+<a name="line418"></a>  /** An error due to the user being logged out. */
+<a name="line419"></a>  LOGGED_OUT: 4,
+<a name="line420"></a>
+<a name="line421"></a>  /** An error due to server response which contains no data. */
+<a name="line422"></a>  NO_DATA: 5,
+<a name="line423"></a>
+<a name="line424"></a>  /** An error due to a server response indicating an unknown session id */
+<a name="line425"></a>  UNKNOWN_SESSION_ID: 6,
+<a name="line426"></a>
+<a name="line427"></a>  /** An error due to a server response requesting to stop the channel. */
+<a name="line428"></a>  STOP: 7,
+<a name="line429"></a>
+<a name="line430"></a>  /** A general network error. */
+<a name="line431"></a>  NETWORK: 8,
+<a name="line432"></a>
+<a name="line433"></a>  /** An error due to bad data being returned from the server. */
+<a name="line434"></a>  BAD_DATA: 10,
+<a name="line435"></a>
+<a name="line436"></a>  /** An error due to a response that is not parsable. */
+<a name="line437"></a>  BAD_RESPONSE: 11,
+<a name="line438"></a>
+<a name="line439"></a>  /** ActiveX is blocked by the machine&#39;s admin settings. */
+<a name="line440"></a>  ACTIVE_X_BLOCKED: 12
+<a name="line441"></a>};
+<a name="line442"></a>
+<a name="line443"></a>
+<a name="line444"></a>/**
+<a name="line445"></a> * Internal enum type for the two channel types.
+<a name="line446"></a> * @enum {number}
+<a name="line447"></a> * @private
+<a name="line448"></a> */
+<a name="line449"></a>WebChannelBase.ChannelType_ = {
+<a name="line450"></a>  FORWARD_CHANNEL: 1,
+<a name="line451"></a>
+<a name="line452"></a>  BACK_CHANNEL: 2
+<a name="line453"></a>};
+<a name="line454"></a>
+<a name="line455"></a>
+<a name="line456"></a>/**
+<a name="line457"></a> * The maximum number of maps that can be sent in one POST. Should match
+<a name="line458"></a> * MAX_MAPS_PER_REQUEST on the server code.
+<a name="line459"></a> * @type {number}
+<a name="line460"></a> * @private
+<a name="line461"></a> */
+<a name="line462"></a>WebChannelBase.MAX_MAPS_PER_REQUEST_ = 1000;
+<a name="line463"></a>
+<a name="line464"></a>
+<a name="line465"></a>/**
+<a name="line466"></a> * A guess at a cutoff at which to no longer assume the backchannel is dead
+<a name="line467"></a> * when we are slow to receive data. Number in bytes.
+<a name="line468"></a> *
+<a name="line469"></a> * Assumption: The worst bandwidth we work on is 50 kilobits/sec
+<a name="line470"></a> * 50kbits/sec * (1 byte / 8 bits) * 6 sec dead backchannel timeout
+<a name="line471"></a> * @type {number}
+<a name="line472"></a> */
+<a name="line473"></a>WebChannelBase.OUTSTANDING_DATA_BACKCHANNEL_RETRY_CUTOFF = 37500;
+<a name="line474"></a>
+<a name="line475"></a>
+<a name="line476"></a>/**
+<a name="line477"></a> * @return {!ForwardChannelRequestPool} The forward channel request pool.
+<a name="line478"></a> */
+<a name="line479"></a>WebChannelBase.prototype.getForwardChannelRequestPool = function() {
+<a name="line480"></a>  return this.forwardChannelRequestPool_;
+<a name="line481"></a>};
+<a name="line482"></a>
+<a name="line483"></a>
+<a name="line484"></a>/**
+<a name="line485"></a> * @return {!Object} The codec object, to be used for the test channel.
+<a name="line486"></a> */
+<a name="line487"></a>WebChannelBase.prototype.getWireCodec = function() {
+<a name="line488"></a>  return this.wireCodec_;
+<a name="line489"></a>};
+<a name="line490"></a>
+<a name="line491"></a>
+<a name="line492"></a>/**
+<a name="line493"></a> * Returns the logger.
+<a name="line494"></a> *
+<a name="line495"></a> * @return {!WebChannelDebug} The channel debug object.
+<a name="line496"></a> */
+<a name="line497"></a>WebChannelBase.prototype.getChannelDebug = function() {
+<a name="line498"></a>  return this.channelDebug_;
+<a name="line499"></a>};
+<a name="line500"></a>
+<a name="line501"></a>
+<a name="line502"></a>/**
+<a name="line503"></a> * Sets the logger.
+<a name="line504"></a> *
+<a name="line505"></a> * @param {!WebChannelDebug} channelDebug The channel debug object.
+<a name="line506"></a> */
+<a name="line507"></a>WebChannelBase.prototype.setChannelDebug = function(channelDebug) {
+<a name="line508"></a>  this.channelDebug_ = channelDebug;
+<a name="line509"></a>};
+<a name="line510"></a>
+<a name="line511"></a>
+<a name="line512"></a>/**
+<a name="line513"></a> * Starts the channel. This initiates connections to the server.
+<a name="line514"></a> *
+<a name="line515"></a> * @param {string} testPath  The path for the test connection.
+<a name="line516"></a> * @param {string} channelPath  The path for the channel connection.
+<a name="line517"></a> * @param {!Object=} opt_extraParams Extra parameter keys and values to add to
+<a name="line518"></a> *     the requests.
+<a name="line519"></a> * @param {string=} opt_oldSessionId  Session ID from a previous session.
+<a name="line520"></a> * @param {number=} opt_oldArrayId  The last array ID from a previous session.
+<a name="line521"></a> */
+<a name="line522"></a>WebChannelBase.prototype.connect = function(testPath, channelPath,
+<a name="line523"></a>    opt_extraParams, opt_oldSessionId, opt_oldArrayId) {
+<a name="line524"></a>  this.channelDebug_.debug(&#39;connect()&#39;);
+<a name="line525"></a>
+<a name="line526"></a>  requestStats.notifyStatEvent(requestStats.Stat.CONNECT_ATTEMPT);
+<a name="line527"></a>
+<a name="line528"></a>  this.path_ = channelPath;
+<a name="line529"></a>  this.extraParams_ = opt_extraParams || {};
+<a name="line530"></a>
+<a name="line531"></a>  // Attach parameters about the previous session if reconnecting.
+<a name="line532"></a>  if (opt_oldSessionId &amp;&amp; goog.isDef(opt_oldArrayId)) {
+<a name="line533"></a>    this.extraParams_[&#39;OSID&#39;] = opt_oldSessionId;
+<a name="line534"></a>    this.extraParams_[&#39;OAID&#39;] = opt_oldArrayId;
+<a name="line535"></a>  }
+<a name="line536"></a>
+<a name="line537"></a>  this.connectTest_(testPath);
+<a name="line538"></a>};
+<a name="line539"></a>
+<a name="line540"></a>
+<a name="line541"></a>/**
+<a name="line542"></a> * Disconnects and closes the channel.
+<a name="line543"></a> */
+<a name="line544"></a>WebChannelBase.prototype.disconnect = function() {
+<a name="line545"></a>  this.channelDebug_.debug(&#39;disconnect()&#39;);
+<a name="line546"></a>
+<a name="line547"></a>  this.cancelRequests_();
+<a name="line548"></a>
+<a name="line549"></a>  if (this.state_ == WebChannelBase.State.OPENED) {
+<a name="line550"></a>    var rid = this.nextRid_++;
+<a name="line551"></a>    var uri = this.forwardChannelUri_.clone();
+<a name="line552"></a>    uri.setParameterValue(&#39;SID&#39;, this.sid_);
+<a name="line553"></a>    uri.setParameterValue(&#39;RID&#39;, rid);
+<a name="line554"></a>    uri.setParameterValue(&#39;TYPE&#39;, &#39;terminate&#39;);
+<a name="line555"></a>
+<a name="line556"></a>    // Add the reconnect parameters.
+<a name="line557"></a>    this.addAdditionalParams_(uri);
+<a name="line558"></a>
+<a name="line559"></a>    var request = ChannelRequest.createChannelRequest(
+<a name="line560"></a>        this, this.channelDebug_, this.sid_, rid);
+<a name="line561"></a>    request.sendUsingImgTag(uri);
+<a name="line562"></a>  }
+<a name="line563"></a>
+<a name="line564"></a>  this.onClose_();
+<a name="line565"></a>};
+<a name="line566"></a>
+<a name="line567"></a>
+<a name="line568"></a>/**
+<a name="line569"></a> * Returns the session id of the channel. Only available after the
+<a name="line570"></a> * channel has been opened.
+<a name="line571"></a> * @return {string} Session ID.
+<a name="line572"></a> */
+<a name="line573"></a>WebChannelBase.prototype.getSessionId = function() {
+<a name="line574"></a>  return this.sid_;
+<a name="line575"></a>};
+<a name="line576"></a>
+<a name="line577"></a>
+<a name="line578"></a>/**
+<a name="line579"></a> * Starts the test channel to determine network conditions.
+<a name="line580"></a> *
+<a name="line581"></a> * @param {string} testPath  The relative PATH for the test connection.
+<a name="line582"></a> * @private
+<a name="line583"></a> */
+<a name="line584"></a>WebChannelBase.prototype.connectTest_ = function(testPath) {
+<a name="line585"></a>  this.channelDebug_.debug(&#39;connectTest_()&#39;);
+<a name="line586"></a>  if (!this.okToMakeRequest_()) {
+<a name="line587"></a>    return; // channel is cancelled
+<a name="line588"></a>  }
+<a name="line589"></a>  this.connectionTest_ = new BaseTestChannel(this, this.channelDebug_);
+<a name="line590"></a>  this.connectionTest_.setExtraHeaders(this.extraHeaders_);
+<a name="line591"></a>  this.connectionTest_.connect(testPath);
+<a name="line592"></a>};
+<a name="line593"></a>
+<a name="line594"></a>
+<a name="line595"></a>/**
+<a name="line596"></a> * Starts the regular channel which is run after the test channel is complete.
+<a name="line597"></a> * @private
+<a name="line598"></a> */
+<a name="line599"></a>WebChannelBase.prototype.connectChannel_ = function() {
+<a name="line600"></a>  this.channelDebug_.debug(&#39;connectChannel_()&#39;);
+<a name="line601"></a>  this.ensureInState_(WebChannelBase.State.INIT, WebChannelBase.State.CLOSED);
+<a name="line602"></a>  this.forwardChannelUri_ =
+<a name="line603"></a>      this.getForwardChannelUri(/** @type {string} */ (this.path_));
+<a name="line604"></a>  this.ensureForwardChannel_();
+<a name="line605"></a>};
+<a name="line606"></a>
+<a name="line607"></a>
+<a name="line608"></a>/**
+<a name="line609"></a> * Cancels all outstanding requests.
+<a name="line610"></a> * @private
+<a name="line611"></a> */
+<a name="line612"></a>WebChannelBase.prototype.cancelRequests_ = function() {
+<a name="line613"></a>  if (this.connectionTest_) {
+<a name="line614"></a>    this.connectionTest_.abort();
+<a name="line615"></a>    this.connectionTest_ = null;
+<a name="line616"></a>  }
+<a name="line617"></a>
+<a name="line618"></a>  if (this.backChannelRequest_) {
+<a name="line619"></a>    this.backChannelRequest_.cancel();
+<a name="line620"></a>    this.backChannelRequest_ = null;
+<a name="line621"></a>  }
+<a name="line622"></a>
+<a name="line623"></a>  if (this.backChannelTimerId_) {
+<a name="line624"></a>    goog.global.clearTimeout(this.backChannelTimerId_);
+<a name="line625"></a>    this.backChannelTimerId_ = null;
+<a name="line626"></a>  }
+<a name="line627"></a>
+<a name="line628"></a>  this.clearDeadBackchannelTimer_();
+<a name="line629"></a>
+<a name="line630"></a>  this.forwardChannelRequestPool_.cancel();
+<a name="line631"></a>
+<a name="line632"></a>  if (this.forwardChannelTimerId_) {
+<a name="line633"></a>    goog.global.clearTimeout(this.forwardChannelTimerId_);
+<a name="line634"></a>    this.forwardChannelTimerId_ = null;
+<a name="line635"></a>  }
+<a name="line636"></a>};
+<a name="line637"></a>
+<a name="line638"></a>
+<a name="line639"></a>/**
+<a name="line640"></a> * Returns the extra HTTP headers to add to all the requests sent to the server.
+<a name="line641"></a> *
+<a name="line642"></a> * @return {Object} The HTTP headers, or null.
+<a name="line643"></a> */
+<a name="line644"></a>WebChannelBase.prototype.getExtraHeaders = function() {
+<a name="line645"></a>  return this.extraHeaders_;
+<a name="line646"></a>};
+<a name="line647"></a>
+<a name="line648"></a>
+<a name="line649"></a>/**
+<a name="line650"></a> * Sets extra HTTP headers to add to all the requests sent to the server.
+<a name="line651"></a> *
+<a name="line652"></a> * @param {Object} extraHeaders The HTTP headers, or null.
+<a name="line653"></a> */
+<a name="line654"></a>WebChannelBase.prototype.setExtraHeaders = function(extraHeaders) {
+<a name="line655"></a>  this.extraHeaders_ = extraHeaders;
+<a name="line656"></a>};
+<a name="line657"></a>
+<a name="line658"></a>
+<a name="line659"></a>/**
+<a name="line660"></a> * Sets the throttle for handling onreadystatechange events for the request.
+<a name="line661"></a> *
+<a name="line662"></a> * @param {number} throttle The throttle in ms.  A value of zero indicates
+<a name="line663"></a> *     no throttle.
+<a name="line664"></a> */
+<a name="line665"></a>WebChannelBase.prototype.setReadyStateChangeThrottle = function(throttle) {
+<a name="line666"></a>  this.readyStateChangeThrottleMs_ = throttle;
+<a name="line667"></a>};
+<a name="line668"></a>
+<a name="line669"></a>
+<a name="line670"></a>/**
+<a name="line671"></a> * Sets whether cross origin requests are supported for the channel.
+<a name="line672"></a> *
+<a name="line673"></a> * Setting this allows the creation of requests to secondary domains and
+<a name="line674"></a> * sends XHRs with the CORS withCredentials bit set to true.
+<a name="line675"></a> *
+<a name="line676"></a> * In order for cross-origin requests to work, the server will also need to set
+<a name="line677"></a> * CORS response headers as per:
+<a name="line678"></a> * https://developer.mozilla.org/en-US/docs/HTTP_access_control
+<a name="line679"></a> *
+<a name="line680"></a> * See {@link goog.net.XhrIo#setWithCredentials}.
+<a name="line681"></a> * @param {boolean} supportCrossDomain Whether cross domain XHRs are supported.
+<a name="line682"></a> */
+<a name="line683"></a>WebChannelBase.prototype.setSupportsCrossDomainXhrs =
+<a name="line684"></a>    function(supportCrossDomain) {
+<a name="line685"></a>  this.supportsCrossDomainXhrs_ = supportCrossDomain;
+<a name="line686"></a>};
+<a name="line687"></a>
+<a name="line688"></a>
+<a name="line689"></a>/**
+<a name="line690"></a> * Returns the handler used for channel callback events.
+<a name="line691"></a> *
+<a name="line692"></a> * @return {WebChannelBase.Handler} The handler.
+<a name="line693"></a> */
+<a name="line694"></a>WebChannelBase.prototype.getHandler = function() {
+<a name="line695"></a>  return this.handler_;
+<a name="line696"></a>};
+<a name="line697"></a>
+<a name="line698"></a>
+<a name="line699"></a>/**
+<a name="line700"></a> * Sets the handler used for channel callback events.
+<a name="line701"></a> * @param {WebChannelBase.Handler} handler The handler to set.
+<a name="line702"></a> */
+<a name="line703"></a>WebChannelBase.prototype.setHandler = function(handler) {
+<a name="line704"></a>  this.handler_ = handler;
+<a name="line705"></a>};
+<a name="line706"></a>
+<a name="line707"></a>
+<a name="line708"></a>/**
+<a name="line709"></a> * Returns whether the channel allows the use of a subdomain. There may be
+<a name="line710"></a> * cases where this isn&#39;t allowed.
+<a name="line711"></a> * @return {boolean} Whether a host prefix is allowed.
+<a name="line712"></a> */
+<a name="line713"></a>WebChannelBase.prototype.getAllowHostPrefix = function() {
+<a name="line714"></a>  return this.allowHostPrefix_;
+<a name="line715"></a>};
+<a name="line716"></a>
+<a name="line717"></a>
+<a name="line718"></a>/**
+<a name="line719"></a> * Sets whether the channel allows the use of a subdomain. There may be cases
+<a name="line720"></a> * where this isn&#39;t allowed, for example, logging in with troutboard where
+<a name="line721"></a> * using a subdomain causes Apache to force the user to authenticate twice.
+<a name="line722"></a> * @param {boolean} allowHostPrefix Whether a host prefix is allowed.
+<a name="line723"></a> */
+<a name="line724"></a>WebChannelBase.prototype.setAllowHostPrefix = function(allowHostPrefix) {
+<a name="line725"></a>  this.allowHostPrefix_ = allowHostPrefix;
+<a name="line726"></a>};
+<a name="line727"></a>
+<a name="line728"></a>
+<a name="line729"></a>/**
+<a name="line730"></a> * Returns whether the channel is buffered or not. This state is valid for
+<a name="line731"></a> * querying only after the test connection has completed. This may be
+<a name="line732"></a> * queried in the WebChannelBase.okToMakeRequest() callback.
+<a name="line733"></a> * A channel may be buffered if the test connection determines that
+<a name="line734"></a> * a chunked response could not be sent down within a suitable time.
+<a name="line735"></a> * @return {boolean} Whether the channel is buffered.
+<a name="line736"></a> */
+<a name="line737"></a>WebChannelBase.prototype.isBuffered = function() {
+<a name="line738"></a>  return !this.useChunked_;
+<a name="line739"></a>};
+<a name="line740"></a>
+<a name="line741"></a>
+<a name="line742"></a>/**
+<a name="line743"></a> * Returns whether chunked mode is allowed. In certain debugging situations,
+<a name="line744"></a> * it&#39;s useful for the application to have a way to disable chunked mode for a
+<a name="line745"></a> * user.
+<a name="line746"></a>
+<a name="line747"></a> * @return {boolean} Whether chunked mode is allowed.
+<a name="line748"></a> */
+<a name="line749"></a>WebChannelBase.prototype.getAllowChunkedMode = function() {
+<a name="line750"></a>  return this.allowChunkedMode_;
+<a name="line751"></a>};
+<a name="line752"></a>
+<a name="line753"></a>
+<a name="line754"></a>/**
+<a name="line755"></a> * Sets whether chunked mode is allowed. In certain debugging situations, it&#39;s
+<a name="line756"></a> * useful for the application to have a way to disable chunked mode for a user.
+<a name="line757"></a> * @param {boolean} allowChunkedMode  Whether chunked mode is allowed.
+<a name="line758"></a> */
+<a name="line759"></a>WebChannelBase.prototype.setAllowChunkedMode = function(allowChunkedMode) {
+<a name="line760"></a>  this.allowChunkedMode_ = allowChunkedMode;
+<a name="line761"></a>};
+<a name="line762"></a>
+<a name="line763"></a>
+<a name="line764"></a>/**
+<a name="line765"></a> * Sends a request to the server. The format of the request is a Map data
+<a name="line766"></a> * structure of key/value pairs. These maps are then encoded in a format
+<a name="line767"></a> * suitable for the wire and then reconstituted as a Map data structure that
+<a name="line768"></a> * the server can process.
+<a name="line769"></a> * @param {!Object|!goog.structs.Map} map The map to send.
+<a name="line770"></a> * @param {!Object=} opt_context The context associated with the map.
+<a name="line771"></a> */
+<a name="line772"></a>WebChannelBase.prototype.sendMap = function(map, opt_context) {
+<a name="line773"></a>  goog.asserts.assert(this.state_ != WebChannelBase.State.CLOSED,
+<a name="line774"></a>      &#39;Invalid operation: sending map when state is closed&#39;);
+<a name="line775"></a>
+<a name="line776"></a>  // We can only send 1000 maps per POST, but typically we should never have
+<a name="line777"></a>  // that much to send, so warn if we exceed that (we still send all the maps).
+<a name="line778"></a>  if (this.outgoingMaps_.length == WebChannelBase.MAX_MAPS_PER_REQUEST_) {
+<a name="line779"></a>    // severe() is temporary so that we get these uploaded and can figure out
+<a name="line780"></a>    // what&#39;s causing them. Afterwards can change to warning().
+<a name="line781"></a>    this.channelDebug_.severe(
+<a name="line782"></a>        &#39;Already have &#39; + WebChannelBase.MAX_MAPS_PER_REQUEST_ +
+<a name="line783"></a>        &#39; queued maps upon queueing &#39; + goog.json.serialize(map));
+<a name="line784"></a>  }
+<a name="line785"></a>
+<a name="line786"></a>  this.outgoingMaps_.push(
+<a name="line787"></a>      new Wire.QueuedMap(this.nextMapId_++, map, opt_context));
+<a name="line788"></a>  if (this.state_ == WebChannelBase.State.OPENING ||
+<a name="line789"></a>      this.state_ == WebChannelBase.State.OPENED) {
+<a name="line790"></a>    this.ensureForwardChannel_();
+<a name="line791"></a>  }
+<a name="line792"></a>};
+<a name="line793"></a>
+<a name="line794"></a>
+<a name="line795"></a>/**
+<a name="line796"></a> * When set to true, this changes the behavior of the forward channel so it
+<a name="line797"></a> * will not retry requests; it will fail after one network failure, and if
+<a name="line798"></a> * there was already one network failure, the request will fail immediately.
+<a name="line799"></a> * @param {boolean} failFast  Whether or not to fail fast.
+<a name="line800"></a> */
+<a name="line801"></a>WebChannelBase.prototype.setFailFast = function(failFast) {
+<a name="line802"></a>  this.failFast_ = failFast;
+<a name="line803"></a>  this.channelDebug_.info(&#39;setFailFast: &#39; + failFast);
+<a name="line804"></a>  if ((this.forwardChannelRequestPool_.hasPendingRequest() ||
+<a name="line805"></a>       this.forwardChannelTimerId_) &amp;&amp;
+<a name="line806"></a>      this.forwardChannelRetryCount_ &gt; this.getForwardChannelMaxRetries()) {
+<a name="line807"></a>    this.channelDebug_.info(
+<a name="line808"></a>        &#39;Retry count &#39; + this.forwardChannelRetryCount_ +
+<a name="line809"></a>        &#39; &gt; new maxRetries &#39; + this.getForwardChannelMaxRetries() +
+<a name="line810"></a>        &#39;. Fail immediately!&#39;);
+<a name="line811"></a>
+<a name="line812"></a>    if (!this.forwardChannelRequestPool_.forceComplete(
+<a name="line813"></a>        goog.bind(this.onRequestComplete, this))) {
+<a name="line814"></a>      // i.e., this.forwardChannelTimerId_
+<a name="line815"></a>      goog.global.clearTimeout(this.forwardChannelTimerId_);
+<a name="line816"></a>      this.forwardChannelTimerId_ = null;
+<a name="line817"></a>      // The error code from the last failed request is gone, so just use a
+<a name="line818"></a>      // generic one.
+<a name="line819"></a>      this.signalError_(WebChannelBase.Error.REQUEST_FAILED);
+<a name="line820"></a>    }
+<a name="line821"></a>  }
+<a name="line822"></a>};
+<a name="line823"></a>
+<a name="line824"></a>
+<a name="line825"></a>/**
+<a name="line826"></a> * @return {number} The max number of forward-channel retries, which will be 0
+<a name="line827"></a> * in fail-fast mode.
+<a name="line828"></a> */
+<a name="line829"></a>WebChannelBase.prototype.getForwardChannelMaxRetries = function() {
+<a name="line830"></a>  return this.failFast_ ? 0 : this.forwardChannelMaxRetries_;
+<a name="line831"></a>};
+<a name="line832"></a>
+<a name="line833"></a>
+<a name="line834"></a>/**
+<a name="line835"></a> * Sets the maximum number of attempts to connect to the server for forward
+<a name="line836"></a> * channel requests.
+<a name="line837"></a> * @param {number} retries The maximum number of attempts.
+<a name="line838"></a> */
+<a name="line839"></a>WebChannelBase.prototype.setForwardChannelMaxRetries = function(retries) {
+<a name="line840"></a>  this.forwardChannelMaxRetries_ = retries;
+<a name="line841"></a>};
+<a name="line842"></a>
+<a name="line843"></a>
+<a name="line844"></a>/**
+<a name="line845"></a> * Sets the timeout for a forward channel request.
+<a name="line846"></a> * @param {number} timeoutMs The timeout in milliseconds.
+<a name="line847"></a> */
+<a name="line848"></a>WebChannelBase.prototype.setForwardChannelRequestTimeout = function(timeoutMs) {
+<a name="line849"></a>  this.forwardChannelRequestTimeoutMs_ = timeoutMs;
+<a name="line850"></a>};
+<a name="line851"></a>
+<a name="line852"></a>
+<a name="line853"></a>/**
+<a name="line854"></a> * @return {number} The max number of back-channel retries, which is a constant.
+<a name="line855"></a> */
+<a name="line856"></a>WebChannelBase.prototype.getBackChannelMaxRetries = function() {
+<a name="line857"></a>  // Back-channel retries is a constant.
+<a name="line858"></a>  return WebChannelBase.BACK_CHANNEL_MAX_RETRIES;
+<a name="line859"></a>};
+<a name="line860"></a>
+<a name="line861"></a>
+<a name="line862"></a>/**
+<a name="line863"></a> * @override
+<a name="line864"></a> */
+<a name="line865"></a>WebChannelBase.prototype.isClosed = function() {
+<a name="line866"></a>  return this.state_ == WebChannelBase.State.CLOSED;
+<a name="line867"></a>};
+<a name="line868"></a>
+<a name="line869"></a>
+<a name="line870"></a>/**
+<a name="line871"></a> * Returns the channel state.
+<a name="line872"></a> * @return {WebChannelBase.State} The current state of the channel.
+<a name="line873"></a> */
+<a name="line874"></a>WebChannelBase.prototype.getState = function() {
+<a name="line875"></a>  return this.state_;
+<a name="line876"></a>};
+<a name="line877"></a>
+<a name="line878"></a>
+<a name="line879"></a>/**
+<a name="line880"></a> * Return the last status code received for a request.
+<a name="line881"></a> * @return {number} The last status code received for a request.
+<a name="line882"></a> */
+<a name="line883"></a>WebChannelBase.prototype.getLastStatusCode = function() {
+<a name="line884"></a>  return this.lastStatusCode_;
+<a name="line885"></a>};
+<a name="line886"></a>
+<a name="line887"></a>
+<a name="line888"></a>/**
+<a name="line889"></a> * @return {number} The last array id received.
+<a name="line890"></a> */
+<a name="line891"></a>WebChannelBase.prototype.getLastArrayId = function() {
+<a name="line892"></a>  return this.lastArrayId_;
+<a name="line893"></a>};
+<a name="line894"></a>
+<a name="line895"></a>
+<a name="line896"></a>/**
+<a name="line897"></a> * Returns whether there are outstanding requests servicing the channel.
+<a name="line898"></a> * @return {boolean} true if there are outstanding requests.
+<a name="line899"></a> */
+<a name="line900"></a>WebChannelBase.prototype.hasOutstandingRequests = function() {
+<a name="line901"></a>  return this.getOutstandingRequests_() != 0;
+<a name="line902"></a>};
+<a name="line903"></a>
+<a name="line904"></a>
+<a name="line905"></a>/**
+<a name="line906"></a> * Returns the number of outstanding requests.
+<a name="line907"></a> * @return {number} The number of outstanding requests to the server.
+<a name="line908"></a> * @private
+<a name="line909"></a> */
+<a name="line910"></a>WebChannelBase.prototype.getOutstandingRequests_ = function() {
+<a name="line911"></a>  var count = 0;
+<a name="line912"></a>  if (this.backChannelRequest_) {
+<a name="line913"></a>    count++;
+<a name="line914"></a>  }
+<a name="line915"></a>  count += this.forwardChannelRequestPool_.getRequestCount();
+<a name="line916"></a>  return count;
+<a name="line917"></a>};
+<a name="line918"></a>
+<a name="line919"></a>
+<a name="line920"></a>/**
+<a name="line921"></a> * Ensures that a forward channel request is scheduled.
+<a name="line922"></a> * @private
+<a name="line923"></a> */
+<a name="line924"></a>WebChannelBase.prototype.ensureForwardChannel_ = function() {
+<a name="line925"></a>  if (this.forwardChannelRequestPool_.isFull()) {
+<a name="line926"></a>    // enough connection in process - no need to start a new request
+<a name="line927"></a>    return;
+<a name="line928"></a>  }
+<a name="line929"></a>
+<a name="line930"></a>  if (this.forwardChannelTimerId_) {
+<a name="line931"></a>    // no need to start a new request - one is already scheduled
+<a name="line932"></a>    return;
+<a name="line933"></a>  }
+<a name="line934"></a>
+<a name="line935"></a>  this.forwardChannelTimerId_ = requestStats.setTimeout(
+<a name="line936"></a>      goog.bind(this.onStartForwardChannelTimer_, this), 0);
+<a name="line937"></a>  this.forwardChannelRetryCount_ = 0;
+<a name="line938"></a>};
+<a name="line939"></a>
+<a name="line940"></a>
+<a name="line941"></a>/**
+<a name="line942"></a> * Schedules a forward-channel retry for the specified request, unless the max
+<a name="line943"></a> * retries has been reached.
+<a name="line944"></a> * @param {ChannelRequest} request The failed request to retry.
+<a name="line945"></a> * @return {boolean} true iff a retry was scheduled.
+<a name="line946"></a> * @private
+<a name="line947"></a> */
+<a name="line948"></a>WebChannelBase.prototype.maybeRetryForwardChannel_ =
+<a name="line949"></a>    function(request) {
+<a name="line950"></a>  if (this.forwardChannelRequestPool_.isFull() || this.forwardChannelTimerId_) {
+<a name="line951"></a>    // Should be impossible to be called in this state.
+<a name="line952"></a>    this.channelDebug_.severe(&#39;Request already in progress&#39;);
+<a name="line953"></a>    return false;
+<a name="line954"></a>  }
+<a name="line955"></a>
+<a name="line956"></a>  if (this.state_ == WebChannelBase.State.INIT ||  // no retry open_()
+<a name="line957"></a>      (this.forwardChannelRetryCount_ &gt;= this.getForwardChannelMaxRetries())) {
+<a name="line958"></a>    return false;
+<a name="line959"></a>  }
+<a name="line960"></a>
+<a name="line961"></a>  this.channelDebug_.debug(&#39;Going to retry POST&#39;);
+<a name="line962"></a>
+<a name="line963"></a>  this.forwardChannelTimerId_ = requestStats.setTimeout(
+<a name="line964"></a>      goog.bind(this.onStartForwardChannelTimer_, this, request),
+<a name="line965"></a>      this.getRetryTime_(this.forwardChannelRetryCount_));
+<a name="line966"></a>  this.forwardChannelRetryCount_++;
+<a name="line967"></a>  return true;
+<a name="line968"></a>};
+<a name="line969"></a>
+<a name="line970"></a>
+<a name="line971"></a>/**
+<a name="line972"></a> * Timer callback for ensureForwardChannel
+<a name="line973"></a> * @param {ChannelRequest=} opt_retryRequest A failed request
+<a name="line974"></a> * to retry.
+<a name="line975"></a> * @private
+<a name="line976"></a> */
+<a name="line977"></a>WebChannelBase.prototype.onStartForwardChannelTimer_ = function(
+<a name="line978"></a>    opt_retryRequest) {
+<a name="line979"></a>  this.forwardChannelTimerId_ = null;
+<a name="line980"></a>  this.startForwardChannel_(opt_retryRequest);
+<a name="line981"></a>};
+<a name="line982"></a>
+<a name="line983"></a>
+<a name="line984"></a>/**
+<a name="line985"></a> * Begins a new forward channel operation to the server.
+<a name="line986"></a> * @param {ChannelRequest=} opt_retryRequest A failed request to retry.
+<a name="line987"></a> * @private
+<a name="line988"></a> */
+<a name="line989"></a>WebChannelBase.prototype.startForwardChannel_ = function(
+<a name="line990"></a>    opt_retryRequest) {
+<a name="line991"></a>  this.channelDebug_.debug(&#39;startForwardChannel_&#39;);
+<a name="line992"></a>  if (!this.okToMakeRequest_()) {
+<a name="line993"></a>    return; // channel is cancelled
+<a name="line994"></a>  } else if (this.state_ == WebChannelBase.State.INIT) {
+<a name="line995"></a>    if (opt_retryRequest) {
+<a name="line996"></a>      this.channelDebug_.severe(&#39;Not supposed to retry the open&#39;);
+<a name="line997"></a>      return;
+<a name="line998"></a>    }
+<a name="line999"></a>    this.open_();
+<a name="line1000"></a>    this.state_ = WebChannelBase.State.OPENING;
+<a name="line1001"></a>  } else if (this.state_ == WebChannelBase.State.OPENED) {
+<a name="line1002"></a>    if (opt_retryRequest) {
+<a name="line1003"></a>      this.makeForwardChannelRequest_(opt_retryRequest);
+<a name="line1004"></a>      return;
+<a name="line1005"></a>    }
+<a name="line1006"></a>
+<a name="line1007"></a>    if (this.outgoingMaps_.length == 0) {
+<a name="line1008"></a>      this.channelDebug_.debug(&#39;startForwardChannel_ returned: &#39; +
+<a name="line1009"></a>                                   &#39;nothing to send&#39;);
+<a name="line1010"></a>      // no need to start a new forward channel request
+<a name="line1011"></a>      return;
+<a name="line1012"></a>    }
+<a name="line1013"></a>
+<a name="line1014"></a>    if (this.forwardChannelRequestPool_.isFull()) {
+<a name="line1015"></a>      // Should be impossible to be called in this state.
+<a name="line1016"></a>      this.channelDebug_.severe(&#39;startForwardChannel_ returned: &#39; +
+<a name="line1017"></a>          &#39;connection already in progress&#39;);
+<a name="line1018"></a>      return;
+<a name="line1019"></a>    }
+<a name="line1020"></a>
+<a name="line1021"></a>    this.makeForwardChannelRequest_();
+<a name="line1022"></a>    this.channelDebug_.debug(&#39;startForwardChannel_ finished, sent request&#39;);
+<a name="line1023"></a>  }
+<a name="line1024"></a>};
+<a name="line1025"></a>
+<a name="line1026"></a>
+<a name="line1027"></a>/**
+<a name="line1028"></a> * Establishes a new channel session with the the server.
+<a name="line1029"></a> * @private
+<a name="line1030"></a> */
+<a name="line1031"></a>WebChannelBase.prototype.open_ = function() {
+<a name="line1032"></a>  this.channelDebug_.debug(&#39;open_()&#39;);
+<a name="line1033"></a>  this.nextRid_ = Math.floor(Math.random() * 100000);
+<a name="line1034"></a>
+<a name="line1035"></a>  var rid = this.nextRid_++;
+<a name="line1036"></a>  var request = ChannelRequest.createChannelRequest(
+<a name="line1037"></a>      this, this.channelDebug_, &#39;&#39;, rid);
+<a name="line1038"></a>  request.setExtraHeaders(this.extraHeaders_);
+<a name="line1039"></a>  var requestText = this.dequeueOutgoingMaps_();
+<a name="line1040"></a>  var uri = this.forwardChannelUri_.clone();
+<a name="line1041"></a>  uri.setParameterValue(&#39;RID&#39;, rid);
+<a name="line1042"></a>  if (this.clientVersion_) {
+<a name="line1043"></a>    uri.setParameterValue(&#39;CVER&#39;, this.clientVersion_);
+<a name="line1044"></a>  }
+<a name="line1045"></a>
+<a name="line1046"></a>  // Add the reconnect parameters.
+<a name="line1047"></a>  this.addAdditionalParams_(uri);
+<a name="line1048"></a>
+<a name="line1049"></a>  this.forwardChannelRequestPool_.addRequest(request);
+<a name="line1050"></a>  request.xmlHttpPost(uri, requestText, true);
+<a name="line1051"></a>};
+<a name="line1052"></a>
+<a name="line1053"></a>
+<a name="line1054"></a>/**
+<a name="line1055"></a> * Makes a forward channel request using XMLHTTP.
+<a name="line1056"></a> * @param {!ChannelRequest=} opt_retryRequest A failed request to retry.
+<a name="line1057"></a> * @private
+<a name="line1058"></a> */
+<a name="line1059"></a>WebChannelBase.prototype.makeForwardChannelRequest_ =
+<a name="line1060"></a>    function(opt_retryRequest) {
+<a name="line1061"></a>  var rid;
+<a name="line1062"></a>  var requestText;
+<a name="line1063"></a>  if (opt_retryRequest) {
+<a name="line1064"></a>    this.requeuePendingMaps_();
+<a name="line1065"></a>    rid = this.nextRid_ - 1;  // Must use last RID
+<a name="line1066"></a>    requestText = this.dequeueOutgoingMaps_();
+<a name="line1067"></a>  } else {
+<a name="line1068"></a>    rid = this.nextRid_++;
+<a name="line1069"></a>    requestText = this.dequeueOutgoingMaps_();
+<a name="line1070"></a>  }
+<a name="line1071"></a>
+<a name="line1072"></a>  var uri = this.forwardChannelUri_.clone();
+<a name="line1073"></a>  uri.setParameterValue(&#39;SID&#39;, this.sid_);
+<a name="line1074"></a>  uri.setParameterValue(&#39;RID&#39;, rid);
+<a name="line1075"></a>  uri.setParameterValue(&#39;AID&#39;, this.lastArrayId_);
+<a name="line1076"></a>  // Add the additional reconnect parameters.
+<a name="line1077"></a>  this.addAdditionalParams_(uri);
+<a name="line1078"></a>
+<a name="line1079"></a>  var request = ChannelRequest.createChannelRequest(this, this.channelDebug_,
+<a name="line1080"></a>      this.sid_, rid, this.forwardChannelRetryCount_ + 1);
+<a name="line1081"></a>  request.setExtraHeaders(this.extraHeaders_);
+<a name="line1082"></a>
+<a name="line1083"></a>  // Randomize from 50%-100% of the forward channel timeout to avoid
+<a name="line1084"></a>  // a big hit if servers happen to die at once.
+<a name="line1085"></a>  request.setTimeout(
+<a name="line1086"></a>      Math.round(this.forwardChannelRequestTimeoutMs_ * 0.50) +
+<a name="line1087"></a>      Math.round(this.forwardChannelRequestTimeoutMs_ * 0.50 * Math.random()));
+<a name="line1088"></a>  this.forwardChannelRequestPool_.addRequest(request);
+<a name="line1089"></a>  request.xmlHttpPost(uri, requestText, true);
+<a name="line1090"></a>};
+<a name="line1091"></a>
+<a name="line1092"></a>
+<a name="line1093"></a>/**
+<a name="line1094"></a> * Adds the additional parameters from the handler to the given URI.
+<a name="line1095"></a> * @param {!goog.Uri} uri The URI to add the parameters to.
+<a name="line1096"></a> * @private
+<a name="line1097"></a> */
+<a name="line1098"></a>WebChannelBase.prototype.addAdditionalParams_ = function(uri) {
+<a name="line1099"></a>  // Add the additional reconnect parameters as needed.
+<a name="line1100"></a>  if (this.handler_) {
+<a name="line1101"></a>    var params = this.handler_.getAdditionalParams(this);
+<a name="line1102"></a>    if (params) {
+<a name="line1103"></a>      goog.structs.forEach(params, function(value, key, coll) {
+<a name="line1104"></a>        uri.setParameterValue(key, value);
+<a name="line1105"></a>      });
+<a name="line1106"></a>    }
+<a name="line1107"></a>  }
+<a name="line1108"></a>};
+<a name="line1109"></a>
+<a name="line1110"></a>
+<a name="line1111"></a>/**
+<a name="line1112"></a> * Returns the request text from the outgoing maps and resets it.
+<a name="line1113"></a> * @return {string} The encoded request text created from all the currently
+<a name="line1114"></a> *                  queued outgoing maps.
+<a name="line1115"></a> * @private
+<a name="line1116"></a> */
+<a name="line1117"></a>WebChannelBase.prototype.dequeueOutgoingMaps_ = function() {
+<a name="line1118"></a>  var count = Math.min(this.outgoingMaps_.length,
+<a name="line1119"></a>                       WebChannelBase.MAX_MAPS_PER_REQUEST_);
+<a name="line1120"></a>  var badMapHandler = this.handler_ ?
+<a name="line1121"></a>      goog.bind(this.handler_.badMapError, this.handler_, this) : null;
+<a name="line1122"></a>  var result = this.wireCodec_.encodeMessageQueue(
+<a name="line1123"></a>      this.outgoingMaps_, count, badMapHandler);
+<a name="line1124"></a>  this.pendingMaps_ = this.pendingMaps_.concat(
+<a name="line1125"></a>      this.outgoingMaps_.splice(0, count));
+<a name="line1126"></a>  return result;
+<a name="line1127"></a>};
+<a name="line1128"></a>
+<a name="line1129"></a>
+<a name="line1130"></a>/**
+<a name="line1131"></a> * Requeues unacknowledged sent arrays for retransmission in the next forward
+<a name="line1132"></a> * channel request.
+<a name="line1133"></a> * @private
+<a name="line1134"></a> */
+<a name="line1135"></a>WebChannelBase.prototype.requeuePendingMaps_ = function() {
+<a name="line1136"></a>  this.outgoingMaps_ = this.pendingMaps_.concat(this.outgoingMaps_);
+<a name="line1137"></a>  this.pendingMaps_.length = 0;
+<a name="line1138"></a>};
+<a name="line1139"></a>
+<a name="line1140"></a>
+<a name="line1141"></a>/**
+<a name="line1142"></a> * Ensures there is a backchannel request for receiving data from the server.
+<a name="line1143"></a> * @private
+<a name="line1144"></a> */
+<a name="line1145"></a>WebChannelBase.prototype.ensureBackChannel_ = function() {
+<a name="line1146"></a>  if (this.backChannelRequest_) {
+<a name="line1147"></a>    // already have one
+<a name="line1148"></a>    return;
+<a name="line1149"></a>  }
+<a name="line1150"></a>
+<a name="line1151"></a>  if (this.backChannelTimerId_) {
+<a name="line1152"></a>    // no need to start a new request - one is already scheduled
+<a name="line1153"></a>    return;
+<a name="line1154"></a>  }
+<a name="line1155"></a>
+<a name="line1156"></a>  this.backChannelAttemptId_ = 1;
+<a name="line1157"></a>  this.backChannelTimerId_ = requestStats.setTimeout(
+<a name="line1158"></a>      goog.bind(this.onStartBackChannelTimer_, this), 0);
+<a name="line1159"></a>  this.backChannelRetryCount_ = 0;
+<a name="line1160"></a>};
+<a name="line1161"></a>
+<a name="line1162"></a>
+<a name="line1163"></a>/**
+<a name="line1164"></a> * Schedules a back-channel retry, unless the max retries has been reached.
+<a name="line1165"></a> * @return {boolean} true iff a retry was scheduled.
+<a name="line1166"></a> * @private
+<a name="line1167"></a> */
+<a name="line1168"></a>WebChannelBase.prototype.maybeRetryBackChannel_ = function() {
+<a name="line1169"></a>  if (this.backChannelRequest_ || this.backChannelTimerId_) {
+<a name="line1170"></a>    // Should be impossible to be called in this state.
+<a name="line1171"></a>    this.channelDebug_.severe(&#39;Request already in progress&#39;);
+<a name="line1172"></a>    return false;
+<a name="line1173"></a>  }
+<a name="line1174"></a>
+<a name="line1175"></a>  if (this.backChannelRetryCount_ &gt;= this.getBackChannelMaxRetries()) {
+<a name="line1176"></a>    return false;
+<a name="line1177"></a>  }
+<a name="line1178"></a>
+<a name="line1179"></a>  this.channelDebug_.debug(&#39;Going to retry GET&#39;);
+<a name="line1180"></a>
+<a name="line1181"></a>  this.backChannelAttemptId_++;
+<a name="line1182"></a>  this.backChannelTimerId_ = requestStats.setTimeout(
+<a name="line1183"></a>      goog.bind(this.onStartBackChannelTimer_, this),
+<a name="line1184"></a>      this.getRetryTime_(this.backChannelRetryCount_));
+<a name="line1185"></a>  this.backChannelRetryCount_++;
+<a name="line1186"></a>  return true;
+<a name="line1187"></a>};
+<a name="line1188"></a>
+<a name="line1189"></a>
+<a name="line1190"></a>/**
+<a name="line1191"></a> * Timer callback for ensureBackChannel_.
+<a name="line1192"></a> * @private
+<a name="line1193"></a> */
+<a name="line1194"></a>WebChannelBase.prototype.onStartBackChannelTimer_ = function() {
+<a name="line1195"></a>  this.backChannelTimerId_ = null;
+<a name="line1196"></a>  this.startBackChannel_();
+<a name="line1197"></a>};
+<a name="line1198"></a>
+<a name="line1199"></a>
+<a name="line1200"></a>/**
+<a name="line1201"></a> * Begins a new back channel operation to the server.
+<a name="line1202"></a> * @private
+<a name="line1203"></a> */
+<a name="line1204"></a>WebChannelBase.prototype.startBackChannel_ = function() {
+<a name="line1205"></a>  if (!this.okToMakeRequest_()) {
+<a name="line1206"></a>    // channel is cancelled
+<a name="line1207"></a>    return;
+<a name="line1208"></a>  }
+<a name="line1209"></a>
+<a name="line1210"></a>  this.channelDebug_.debug(&#39;Creating new HttpRequest&#39;);
+<a name="line1211"></a>  this.backChannelRequest_ = ChannelRequest.createChannelRequest(this,
+<a name="line1212"></a>      this.channelDebug_, this.sid_, &#39;rpc&#39;, this.backChannelAttemptId_);
+<a name="line1213"></a>  this.backChannelRequest_.setExtraHeaders(this.extraHeaders_);
+<a name="line1214"></a>  this.backChannelRequest_.setReadyStateChangeThrottle(
+<a name="line1215"></a>      this.readyStateChangeThrottleMs_);
+<a name="line1216"></a>  var uri = this.backChannelUri_.clone();
+<a name="line1217"></a>  uri.setParameterValue(&#39;RID&#39;, &#39;rpc&#39;);
+<a name="line1218"></a>  uri.setParameterValue(&#39;SID&#39;, this.sid_);
+<a name="line1219"></a>  uri.setParameterValue(&#39;CI&#39;, this.useChunked_ ? &#39;0&#39; : &#39;1&#39;);
+<a name="line1220"></a>  uri.setParameterValue(&#39;AID&#39;, this.lastArrayId_);
+<a name="line1221"></a>
+<a name="line1222"></a>  // Add the reconnect parameters.
+<a name="line1223"></a>  this.addAdditionalParams_(uri);
+<a name="line1224"></a>
+<a name="line1225"></a>  if (!ChannelRequest.supportsXhrStreaming()) {
+<a name="line1226"></a>    uri.setParameterValue(&#39;TYPE&#39;, &#39;html&#39;);
+<a name="line1227"></a>    this.backChannelRequest_.tridentGet(uri, Boolean(this.hostPrefix_));
+<a name="line1228"></a>  } else {
+<a name="line1229"></a>    uri.setParameterValue(&#39;TYPE&#39;, &#39;xmlhttp&#39;);
+<a name="line1230"></a>    this.backChannelRequest_.xmlHttpGet(uri, true /* decodeChunks */,
+<a name="line1231"></a>        this.hostPrefix_, false /* opt_noClose */);
+<a name="line1232"></a>  }
+<a name="line1233"></a>  this.channelDebug_.debug(&#39;New Request created&#39;);
+<a name="line1234"></a>};
+<a name="line1235"></a>
+<a name="line1236"></a>
+<a name="line1237"></a>/**
+<a name="line1238"></a> * Gives the handler a chance to return an error code and stop channel
+<a name="line1239"></a> * execution. A handler might want to do this to check that the user is still
+<a name="line1240"></a> * logged in, for example.
+<a name="line1241"></a> * @private
+<a name="line1242"></a> * @return {boolean} If it&#39;s OK to make a request.
+<a name="line1243"></a> */
+<a name="line1244"></a>WebChannelBase.prototype.okToMakeRequest_ = function() {
+<a name="line1245"></a>  if (this.handler_) {
+<a name="line1246"></a>    var result = this.handler_.okToMakeRequest(this);
+<a name="line1247"></a>    if (result != WebChannelBase.Error.OK) {
+<a name="line1248"></a>      this.channelDebug_.debug(
+<a name="line1249"></a>          &#39;Handler returned error code from okToMakeRequest&#39;);
+<a name="line1250"></a>      this.signalError_(result);
+<a name="line1251"></a>      return false;
+<a name="line1252"></a>    }
+<a name="line1253"></a>  }
+<a name="line1254"></a>  return true;
+<a name="line1255"></a>};
+<a name="line1256"></a>
+<a name="line1257"></a>
+<a name="line1258"></a>/**
+<a name="line1259"></a> * @override
+<a name="line1260"></a> */
+<a name="line1261"></a>WebChannelBase.prototype.testConnectionFinished =
+<a name="line1262"></a>    function(testChannel, useChunked) {
+<a name="line1263"></a>  this.channelDebug_.debug(&#39;Test Connection Finished&#39;);
+<a name="line1264"></a>
+<a name="line1265"></a>  // Forward channel will not be used prior to this method is called
+<a name="line1266"></a>  var clientProtocol = testChannel.getClientProtocol();
+<a name="line1267"></a>  if (clientProtocol) {
+<a name="line1268"></a>    this.forwardChannelRequestPool_.applyClientProtocol(clientProtocol);
+<a name="line1269"></a>  }
+<a name="line1270"></a>
+<a name="line1271"></a>  this.useChunked_ = this.allowChunkedMode_ &amp;&amp; useChunked;
+<a name="line1272"></a>  this.lastStatusCode_ = testChannel.getLastStatusCode();
+<a name="line1273"></a>
+<a name="line1274"></a>  this.connectChannel_();
+<a name="line1275"></a>};
+<a name="line1276"></a>
+<a name="line1277"></a>
+<a name="line1278"></a>/**
+<a name="line1279"></a> * @override
+<a name="line1280"></a> */
+<a name="line1281"></a>WebChannelBase.prototype.testConnectionFailure =
+<a name="line1282"></a>    function(testChannel, errorCode) {
+<a name="line1283"></a>  this.channelDebug_.debug(&#39;Test Connection Failed&#39;);
+<a name="line1284"></a>  this.lastStatusCode_ = testChannel.getLastStatusCode();
+<a name="line1285"></a>  this.signalError_(WebChannelBase.Error.REQUEST_FAILED);
+<a name="line1286"></a>};
+<a name="line1287"></a>
+<a name="line1288"></a>
+<a name="line1289"></a>/**
+<a name="line1290"></a> * @override
+<a name="line1291"></a> */
+<a name="line1292"></a>WebChannelBase.prototype.onRequestData = function(request, responseText) {
+<a name="line1293"></a>  if (this.state_ == WebChannelBase.State.CLOSED ||
+<a name="line1294"></a>      (this.backChannelRequest_ != request &amp;&amp;
+<a name="line1295"></a>       !this.forwardChannelRequestPool_.hasRequest(request))) {
+<a name="line1296"></a>    // either CLOSED or a request we don&#39;t know about (perhaps an old request)
+<a name="line1297"></a>    return;
+<a name="line1298"></a>  }
+<a name="line1299"></a>  this.lastStatusCode_ = request.getLastStatusCode();
+<a name="line1300"></a>
+<a name="line1301"></a>  if (this.forwardChannelRequestPool_.hasRequest(request) &amp;&amp;
+<a name="line1302"></a>      this.state_ == WebChannelBase.State.OPENED) {
+<a name="line1303"></a>    var response;
+<a name="line1304"></a>    try {
+<a name="line1305"></a>      response = this.wireCodec_.decodeMessage(responseText);
+<a name="line1306"></a>    } catch (ex) {
+<a name="line1307"></a>      response = null;
+<a name="line1308"></a>    }
+<a name="line1309"></a>    if (goog.isArray(response) &amp;&amp; response.length == 3) {
+<a name="line1310"></a>      this.handlePostResponse_(/** @type {!Array} */ (response), request);
+<a name="line1311"></a>    } else {
+<a name="line1312"></a>      this.channelDebug_.debug(&#39;Bad POST response data returned&#39;);
+<a name="line1313"></a>      this.signalError_(WebChannelBase.Error.BAD_RESPONSE);
+<a name="line1314"></a>    }
+<a name="line1315"></a>  } else {
+<a name="line1316"></a>    if (this.backChannelRequest_ == request) {
+<a name="line1317"></a>      this.clearDeadBackchannelTimer_();
+<a name="line1318"></a>    }
+<a name="line1319"></a>    if (!goog.string.isEmpty(responseText)) {
+<a name="line1320"></a>      var response = this.wireCodec_.decodeMessage(responseText);
+<a name="line1321"></a>      this.onInput_(/** @type {!Array} */ (response));
+<a name="line1322"></a>    }
+<a name="line1323"></a>  }
+<a name="line1324"></a>};
+<a name="line1325"></a>
+<a name="line1326"></a>
+<a name="line1327"></a>/**
+<a name="line1328"></a> * Handles a POST response from the server.
+<a name="line1329"></a> * @param {Array} responseValues The key value pairs in the POST response.
+<a name="line1330"></a> * @param {!ChannelRequest} forwardReq The forward channel request that
+<a name="line1331"></a> * triggers this function call.
+<a name="line1332"></a> * @private
+<a name="line1333"></a> */
+<a name="line1334"></a>WebChannelBase.prototype.handlePostResponse_ = function(
+<a name="line1335"></a>    responseValues, forwardReq) {
+<a name="line1336"></a>  // The first response value is set to 0 if server is missing backchannel.
+<a name="line1337"></a>  if (responseValues[0] == 0) {
+<a name="line1338"></a>    this.handleBackchannelMissing_(forwardReq);
+<a name="line1339"></a>    return;
+<a name="line1340"></a>  }
+<a name="line1341"></a>  this.lastPostResponseArrayId_ = responseValues[1];
+<a name="line1342"></a>  var outstandingArrays = this.lastPostResponseArrayId_ - this.lastArrayId_;
+<a name="line1343"></a>  if (0 &lt; outstandingArrays) {
+<a name="line1344"></a>    var numOutstandingBackchannelBytes = responseValues[2];
+<a name="line1345"></a>    this.channelDebug_.debug(numOutstandingBackchannelBytes + &#39; bytes (in &#39; +
+<a name="line1346"></a>        outstandingArrays + &#39; arrays) are outstanding on the BackChannel&#39;);
+<a name="line1347"></a>    if (!this.shouldRetryBackChannel_(numOutstandingBackchannelBytes)) {
+<a name="line1348"></a>      return;
+<a name="line1349"></a>    }
+<a name="line1350"></a>    if (!this.deadBackChannelTimerId_) {
+<a name="line1351"></a>      // We expect to receive data within 2 RTTs or we retry the backchannel.
+<a name="line1352"></a>      this.deadBackChannelTimerId_ = requestStats.setTimeout(
+<a name="line1353"></a>          goog.bind(this.onBackChannelDead_, this),
+<a name="line1354"></a>          2 * WebChannelBase.RTT_ESTIMATE);
+<a name="line1355"></a>    }
+<a name="line1356"></a>  }
+<a name="line1357"></a>};
+<a name="line1358"></a>
+<a name="line1359"></a>
+<a name="line1360"></a>/**
+<a name="line1361"></a> * Handles a POST response from the server telling us that it has detected that
+<a name="line1362"></a> * we have no hanging GET connection.
+<a name="line1363"></a> * @param {!ChannelRequest} forwardReq The forward channel request that
+<a name="line1364"></a> * triggers this function call.
+<a name="line1365"></a> * @private
+<a name="line1366"></a> */
+<a name="line1367"></a>WebChannelBase.prototype.handleBackchannelMissing_ = function(forwardReq) {
+<a name="line1368"></a>  // As long as the back channel was started before the POST was sent,
+<a name="line1369"></a>  // we should retry the backchannel. We give a slight buffer of RTT_ESTIMATE
+<a name="line1370"></a>  // so as not to excessively retry the backchannel
+<a name="line1371"></a>  this.channelDebug_.debug(&#39;Server claims our backchannel is missing.&#39;);
+<a name="line1372"></a>  if (this.backChannelTimerId_) {
+<a name="line1373"></a>    this.channelDebug_.debug(&#39;But we are currently starting the request.&#39;);
+<a name="line1374"></a>    return;
+<a name="line1375"></a>  } else if (!this.backChannelRequest_) {
+<a name="line1376"></a>    this.channelDebug_.warning(
+<a name="line1377"></a>        &#39;We do not have a BackChannel established&#39;);
+<a name="line1378"></a>  } else if (this.backChannelRequest_.getRequestStartTime() +
+<a name="line1379"></a>      WebChannelBase.RTT_ESTIMATE &lt; forwardReq.getRequestStartTime()) {
+<a name="line1380"></a>    this.clearDeadBackchannelTimer_();
+<a name="line1381"></a>    this.backChannelRequest_.cancel();
+<a name="line1382"></a>    this.backChannelRequest_ = null;
+<a name="line1383"></a>  } else {
+<a name="line1384"></a>    return;
+<a name="line1385"></a>  }
+<a name="line1386"></a>  this.maybeRetryBackChannel_();
+<a name="line1387"></a>  requestStats.notifyStatEvent(requestStats.Stat.BACKCHANNEL_MISSING);
+<a name="line1388"></a>};
+<a name="line1389"></a>
+<a name="line1390"></a>
+<a name="line1391"></a>/**
+<a name="line1392"></a> * Determines whether we should start the process of retrying a possibly
+<a name="line1393"></a> * dead backchannel.
+<a name="line1394"></a> * @param {number} outstandingBytes The number of bytes for which the server has
+<a name="line1395"></a> *     not yet received acknowledgement.
+<a name="line1396"></a> * @return {boolean} Whether to start the backchannel retry timer.
+<a name="line1397"></a> * @private
+<a name="line1398"></a> */
+<a name="line1399"></a>WebChannelBase.prototype.shouldRetryBackChannel_ = function(
+<a name="line1400"></a>    outstandingBytes) {
+<a name="line1401"></a>  // Not too many outstanding bytes, not buffered and not after a retry.
+<a name="line1402"></a>  return outstandingBytes &lt;
+<a name="line1403"></a>      WebChannelBase.OUTSTANDING_DATA_BACKCHANNEL_RETRY_CUTOFF &amp;&amp;
+<a name="line1404"></a>      !this.isBuffered() &amp;&amp;
+<a name="line1405"></a>      this.backChannelRetryCount_ == 0;
+<a name="line1406"></a>};
+<a name="line1407"></a>
+<a name="line1408"></a>
+<a name="line1409"></a>/**
+<a name="line1410"></a> * Decides which host prefix should be used, if any.  If there is a handler,
+<a name="line1411"></a> * allows the handler to validate a host prefix provided by the server, and
+<a name="line1412"></a> * optionally override it.
+<a name="line1413"></a> * @param {?string} serverHostPrefix The host prefix provided by the server.
+<a name="line1414"></a> * @return {?string} The host prefix to actually use, if any. Will return null
+<a name="line1415"></a> *     if the use of host prefixes was disabled via setAllowHostPrefix().
+<a name="line1416"></a> * @override
+<a name="line1417"></a> */
+<a name="line1418"></a>WebChannelBase.prototype.correctHostPrefix = function(serverHostPrefix) {
+<a name="line1419"></a>  if (this.allowHostPrefix_) {
+<a name="line1420"></a>    if (this.handler_) {
+<a name="line1421"></a>      return this.handler_.correctHostPrefix(serverHostPrefix);
+<a name="line1422"></a>    }
+<a name="line1423"></a>    return serverHostPrefix;
+<a name="line1424"></a>  }
+<a name="line1425"></a>  return null;
+<a name="line1426"></a>};
+<a name="line1427"></a>
+<a name="line1428"></a>
+<a name="line1429"></a>/**
+<a name="line1430"></a> * Handles the timer that indicates that our backchannel is no longer able to
+<a name="line1431"></a> * successfully receive data from the server.
+<a name="line1432"></a> * @private
+<a name="line1433"></a> */
+<a name="line1434"></a>WebChannelBase.prototype.onBackChannelDead_ = function() {
+<a name="line1435"></a>  if (goog.isDefAndNotNull(this.deadBackChannelTimerId_)) {
+<a name="line1436"></a>    this.deadBackChannelTimerId_ = null;
+<a name="line1437"></a>    this.backChannelRequest_.cancel();
+<a name="line1438"></a>    this.backChannelRequest_ = null;
+<a name="line1439"></a>    this.maybeRetryBackChannel_();
+<a name="line1440"></a>    requestStats.notifyStatEvent(requestStats.Stat.BACKCHANNEL_DEAD);
+<a name="line1441"></a>  }
+<a name="line1442"></a>};
+<a name="line1443"></a>
+<a name="line1444"></a>
+<a name="line1445"></a>/**
+<a name="line1446"></a> * Clears the timer that indicates that our backchannel is no longer able to
+<a name="line1447"></a> * successfully receive data from the server.
+<a name="line1448"></a> * @private
+<a name="line1449"></a> */
+<a name="line1450"></a>WebChannelBase.prototype.clearDeadBackchannelTimer_ = function() {
+<a name="line1451"></a>  if (goog.isDefAndNotNull(this.deadBackChannelTimerId_)) {
+<a name="line1452"></a>    goog.global.clearTimeout(this.deadBackChannelTimerId_);
+<a name="line1453"></a>    this.deadBackChannelTimerId_ = null;
+<a name="line1454"></a>  }
+<a name="line1455"></a>};
+<a name="line1456"></a>
+<a name="line1457"></a>
+<a name="line1458"></a>/**
+<a name="line1459"></a> * Returns whether or not the given error/status combination is fatal or not.
+<a name="line1460"></a> * On fatal errors we immediately close the session rather than retrying the
+<a name="line1461"></a> * failed request.
+<a name="line1462"></a> * @param {?ChannelRequest.Error} error The error code for the
+<a name="line1463"></a> * failed request.
+<a name="line1464"></a> * @param {number} statusCode The last HTTP status code.
+<a name="line1465"></a> * @return {boolean} Whether or not the error is fatal.
+<a name="line1466"></a> * @private
+<a name="line1467"></a> */
+<a name="line1468"></a>WebChannelBase.isFatalError_ = function(error, statusCode) {
+<a name="line1469"></a>  return error == ChannelRequest.Error.UNKNOWN_SESSION_ID ||
+<a name="line1470"></a>      error == ChannelRequest.Error.ACTIVE_X_BLOCKED ||
+<a name="line1471"></a>      (error == ChannelRequest.Error.STATUS &amp;&amp;
+<a name="line1472"></a>       statusCode &gt; 0);
+<a name="line1473"></a>};
+<a name="line1474"></a>
+<a name="line1475"></a>
+<a name="line1476"></a>/**
+<a name="line1477"></a> * @override
+<a name="line1478"></a> */
+<a name="line1479"></a>WebChannelBase.prototype.onRequestComplete = function(request) {
+<a name="line1480"></a>  this.channelDebug_.debug(&#39;Request complete&#39;);
+<a name="line1481"></a>  var type;
+<a name="line1482"></a>  if (this.backChannelRequest_ == request) {
+<a name="line1483"></a>    this.clearDeadBackchannelTimer_();
+<a name="line1484"></a>    this.backChannelRequest_ = null;
+<a name="line1485"></a>    type = WebChannelBase.ChannelType_.BACK_CHANNEL;
+<a name="line1486"></a>  } else if (this.forwardChannelRequestPool_.hasRequest(request)) {
+<a name="line1487"></a>    this.forwardChannelRequestPool_.removeRequest(request);
+<a name="line1488"></a>    type = WebChannelBase.ChannelType_.FORWARD_CHANNEL;
+<a name="line1489"></a>  } else {
+<a name="line1490"></a>    // return if it was an old request from a previous session
+<a name="line1491"></a>    return;
+<a name="line1492"></a>  }
+<a name="line1493"></a>
+<a name="line1494"></a>  this.lastStatusCode_ = request.getLastStatusCode();
+<a name="line1495"></a>
+<a name="line1496"></a>  if (this.state_ == WebChannelBase.State.CLOSED) {
+<a name="line1497"></a>    return;
+<a name="line1498"></a>  }
+<a name="line1499"></a>
+<a name="line1500"></a>  if (request.getSuccess()) {
+<a name="line1501"></a>    // Yay!
+<a name="line1502"></a>    if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
+<a name="line1503"></a>      var size = request.getPostData() ? request.getPostData().length : 0;
+<a name="line1504"></a>      requestStats.notifyTimingEvent(size,
+<a name="line1505"></a>          goog.now() - request.getRequestStartTime(),
+<a name="line1506"></a>          this.forwardChannelRetryCount_);
+<a name="line1507"></a>      this.ensureForwardChannel_();
+<a name="line1508"></a>      this.onSuccess_();
+<a name="line1509"></a>      this.pendingMaps_.length = 0;
+<a name="line1510"></a>    } else {  // i.e., back-channel
+<a name="line1511"></a>      this.ensureBackChannel_();
+<a name="line1512"></a>    }
+<a name="line1513"></a>    return;
+<a name="line1514"></a>  }
+<a name="line1515"></a>  // Else unsuccessful. Fall through.
+<a name="line1516"></a>
+<a name="line1517"></a>  var lastError = request.getLastError();
+<a name="line1518"></a>  if (!WebChannelBase.isFatalError_(lastError, this.lastStatusCode_)) {
+<a name="line1519"></a>    // Maybe retry.
+<a name="line1520"></a>    this.channelDebug_.debug(&#39;Maybe retrying, last error: &#39; +
+<a name="line1521"></a>        ChannelRequest.errorStringFromCode(lastError, this.lastStatusCode_));
+<a name="line1522"></a>    if (type == WebChannelBase.ChannelType_.FORWARD_CHANNEL) {
+<a name="line1523"></a>      if (this.maybeRetryForwardChannel_(request)) {
+<a name="line1524"></a>        return;
+<a name="line1525"></a>      }
+<a name="line1526"></a>    }
+<a name="line1527"></a>    if (type == WebChannelBase.ChannelType_.BACK_CHANNEL) {
+<a name="line1528"></a>      if (this.maybeRetryBackChannel_()) {
+<a name="line1529"></a>        return;
+<a name="line1530"></a>      }
+<a name="line1531"></a>    }
+<a name="line1532"></a>    // Else exceeded max retries. Fall through.
+<a name="line1533"></a>    this.channelDebug_.debug(&#39;Exceeded max number of retries&#39;);
+<a name="line1534"></a>  } else {
+<a name="line1535"></a>    // Else fatal error. Fall through and mark the pending maps as failed.
+<a name="line1536"></a>    this.channelDebug_.debug(&#39;Not retrying due to error type&#39;);
+<a name="line1537"></a>  }
+<a name="line1538"></a>
+<a name="line1539"></a>
+<a name="line1540"></a>  // Can&#39;t save this session. :(
+<a name="line1541"></a>  this.channelDebug_.debug(&#39;Error: HTTP request failed&#39;);
+<a name="line1542"></a>  switch (lastError) {
+<a name="line1543"></a>    case ChannelRequest.Error.NO_DATA:
+<a name="line1544"></a>      this.signalError_(WebChannelBase.Error.NO_DATA);
+<a name="line1545"></a>      break;
+<a name="line1546"></a>    case ChannelRequest.Error.BAD_DATA:
+<a name="line1547"></a>      this.signalError_(WebChannelBase.Error.BAD_DATA);
+<a name="line1548"></a>      break;
+<a name="line1549"></a>    case ChannelRequest.Error.UNKNOWN_SESSION_ID:
+<a name="line1550"></a>      this.signalError_(WebChannelBase.Error.UNKNOWN_SESSION_ID);
+<a name="line1551"></a>      break;
+<a name="line1552"></a>    case ChannelRequest.Error.ACTIVE_X_BLOCKED:
+<a name="line1553"></a>      this.signalError_(WebChannelBase.Error.ACTIVE_X_BLOCKED);
+<a name="line1554"></a>      break;
+<a name="line1555"></a>    default:
+<a name="line1556"></a>      this.signalError_(WebChannelBase.Error.REQUEST_FAILED);
+<a name="line1557"></a>      break;
+<a name="line1558"></a>  }
+<a name="line1559"></a>};
+<a name="line1560"></a>
+<a name="line1561"></a>
+<a name="line1562"></a>/**
+<a name="line1563"></a> * @param {number} retryCount Number of retries so far.
+<a name="line1564"></a> * @return {number} Time in ms before firing next retry request.
+<a name="line1565"></a> * @private
+<a name="line1566"></a> */
+<a name="line1567"></a>WebChannelBase.prototype.getRetryTime_ = function(retryCount) {
+<a name="line1568"></a>  var retryTime = this.baseRetryDelayMs_ +
+<a name="line1569"></a>      Math.floor(Math.random() * this.retryDelaySeedMs_);
+<a name="line1570"></a>  if (!this.isActive()) {
+<a name="line1571"></a>    this.channelDebug_.debug(&#39;Inactive channel&#39;);
+<a name="line1572"></a>    retryTime =
+<a name="line1573"></a>        retryTime * WebChannelBase.INACTIVE_CHANNEL_RETRY_FACTOR;
+<a name="line1574"></a>  }
+<a name="line1575"></a>  // Backoff for subsequent retries
+<a name="line1576"></a>  retryTime *= retryCount;
+<a name="line1577"></a>  return retryTime;
+<a name="line1578"></a>};
+<a name="line1579"></a>
+<a name="line1580"></a>
+<a name="line1581"></a>/**
+<a name="line1582"></a> * @param {number} baseDelayMs The base part of the retry delay, in ms.
+<a name="line1583"></a> * @param {number} delaySeedMs A random delay between 0 and this is added to
+<a name="line1584"></a> *     the base part.
+<a name="line1585"></a> */
+<a name="line1586"></a>WebChannelBase.prototype.setRetryDelay = function(baseDelayMs, delaySeedMs) {
+<a name="line1587"></a>  this.baseRetryDelayMs_ = baseDelayMs;
+<a name="line1588"></a>  this.retryDelaySeedMs_ = delaySeedMs;
+<a name="line1589"></a>};
+<a name="line1590"></a>
+<a name="line1591"></a>
+<a name="line1592"></a>/**
+<a name="line1593"></a> * Processes the data returned by the server.
+<a name="line1594"></a> * @param {!Array.&lt;!Array&gt;} respArray The response array returned by the server.
+<a name="line1595"></a> * @private
+<a name="line1596"></a> */
+<a name="line1597"></a>WebChannelBase.prototype.onInput_ = function(respArray) {
+<a name="line1598"></a>  var batch = this.handler_ &amp;&amp; this.handler_.channelHandleMultipleArrays ?
+<a name="line1599"></a>      [] : null;
+<a name="line1600"></a>  for (var i = 0; i &lt; respArray.length; i++) {
+<a name="line1601"></a>    var nextArray = respArray[i];
+<a name="line1602"></a>    this.lastArrayId_ = nextArray[0];
+<a name="line1603"></a>    nextArray = nextArray[1];
+<a name="line1604"></a>    if (this.state_ == WebChannelBase.State.OPENING) {
+<a name="line1605"></a>      if (nextArray[0] == &#39;c&#39;) {
+<a name="line1606"></a>        this.sid_ = nextArray[1];
+<a name="line1607"></a>        this.hostPrefix_ = this.correctHostPrefix(nextArray[2]);
+<a name="line1608"></a>        var negotiatedVersion = nextArray[3];
+<a name="line1609"></a>        if (goog.isDefAndNotNull(negotiatedVersion)) {
+<a name="line1610"></a>          this.channelVersion_ = negotiatedVersion;
+<a name="line1611"></a>        }
+<a name="line1612"></a>        this.state_ = WebChannelBase.State.OPENED;
+<a name="line1613"></a>        if (this.handler_) {
+<a name="line1614"></a>          this.handler_.channelOpened(this);
+<a name="line1615"></a>        }
+<a name="line1616"></a>        this.backChannelUri_ = this.getBackChannelUri(
+<a name="line1617"></a>            this.hostPrefix_, /** @type {string} */ (this.path_));
+<a name="line1618"></a>        // Open connection to receive data
+<a name="line1619"></a>        this.ensureBackChannel_();
+<a name="line1620"></a>      } else if (nextArray[0] == &#39;stop&#39;) {
+<a name="line1621"></a>        this.signalError_(WebChannelBase.Error.STOP);
+<a name="line1622"></a>      }
+<a name="line1623"></a>    } else if (this.state_ == WebChannelBase.State.OPENED) {
+<a name="line1624"></a>      if (nextArray[0] == &#39;stop&#39;) {
+<a name="line1625"></a>        if (batch &amp;&amp; !goog.array.isEmpty(batch)) {
+<a name="line1626"></a>          this.handler_.channelHandleMultipleArrays(this, batch);
+<a name="line1627"></a>          batch.length = 0;
+<a name="line1628"></a>        }
+<a name="line1629"></a>        this.signalError_(WebChannelBase.Error.STOP);
+<a name="line1630"></a>      } else if (nextArray[0] == &#39;noop&#39;) {
+<a name="line1631"></a>        // ignore - noop to keep connection happy
+<a name="line1632"></a>      } else {
+<a name="line1633"></a>        if (batch) {
+<a name="line1634"></a>          batch.push(nextArray);
+<a name="line1635"></a>        } else if (this.handler_) {
+<a name="line1636"></a>          this.handler_.channelHandleArray(this, nextArray);
+<a name="line1637"></a>        }
+<a name="line1638"></a>      }
+<a name="line1639"></a>      // We have received useful data on the back-channel, so clear its retry
+<a name="line1640"></a>      // count. We do this because back-channels by design do not complete
+<a name="line1641"></a>      // quickly, so on a flaky connection we could have many fail to complete
+<a name="line1642"></a>      // fully but still deliver a lot of data before they fail. We don&#39;t want
+<a name="line1643"></a>      // to count such failures towards the retry limit, because we don&#39;t want
+<a name="line1644"></a>      // to give up on a session if we can still receive data.
+<a name="line1645"></a>      this.backChannelRetryCount_ = 0;
+<a name="line1646"></a>    }
+<a name="line1647"></a>  }
+<a name="line1648"></a>  if (batch &amp;&amp; !goog.array.isEmpty(batch)) {
+<a name="line1649"></a>    this.handler_.channelHandleMultipleArrays(this, batch);
+<a name="line1650"></a>  }
+<a name="line1651"></a>};
+<a name="line1652"></a>
+<a name="line1653"></a>
+<a name="line1654"></a>/**
+<a name="line1655"></a> * Helper to ensure the channel is in the expected state.
+<a name="line1656"></a> * @param {...number} var_args The channel must be in one of the indicated
+<a name="line1657"></a> *     states.
+<a name="line1658"></a> * @private
+<a name="line1659"></a> */
+<a name="line1660"></a>WebChannelBase.prototype.ensureInState_ = function(var_args) {
+<a name="line1661"></a>  goog.asserts.assert(goog.array.contains(arguments, this.state_),
+<a name="line1662"></a>      &#39;Unexpected channel state: %s&#39;, this.state_);
+<a name="line1663"></a>};
+<a name="line1664"></a>
+<a name="line1665"></a>
+<a name="line1666"></a>/**
+<a name="line1667"></a> * Signals an error has occurred.
+<a name="line1668"></a> * @param {WebChannelBase.Error} error The error code for the failure.
+<a name="line1669"></a> * @private
+<a name="line1670"></a> */
+<a name="line1671"></a>WebChannelBase.prototype.signalError_ = function(error) {
+<a name="line1672"></a>  this.channelDebug_.info(&#39;Error code &#39; + error);
+<a name="line1673"></a>  if (error == WebChannelBase.Error.REQUEST_FAILED) {
+<a name="line1674"></a>    // Create a separate Internet connection to check
+<a name="line1675"></a>    // if it&#39;s a server error or user&#39;s network error.
+<a name="line1676"></a>    var imageUri = null;
+<a name="line1677"></a>    if (this.handler_) {
+<a name="line1678"></a>      imageUri = this.handler_.getNetworkTestImageUri(this);
+<a name="line1679"></a>    }
+<a name="line1680"></a>    netUtils.testNetwork(goog.bind(this.testNetworkCallback_, this), imageUri);
+<a name="line1681"></a>  } else {
+<a name="line1682"></a>    requestStats.notifyStatEvent(requestStats.Stat.ERROR_OTHER);
+<a name="line1683"></a>  }
+<a name="line1684"></a>  this.onError_(error);
+<a name="line1685"></a>};
+<a name="line1686"></a>
+<a name="line1687"></a>
+<a name="line1688"></a>/**
+<a name="line1689"></a> * Callback for netUtils.testNetwork during error handling.
+<a name="line1690"></a> * @param {boolean} networkUp Whether the network is up.
+<a name="line1691"></a> * @private
+<a name="line1692"></a> */
+<a name="line1693"></a>WebChannelBase.prototype.testNetworkCallback_ = function(networkUp) {
+<a name="line1694"></a>  if (networkUp) {
+<a name="line1695"></a>    this.channelDebug_.info(&#39;Successfully pinged google.com&#39;);
+<a name="line1696"></a>    requestStats.notifyStatEvent(requestStats.Stat.ERROR_OTHER);
+<a name="line1697"></a>  } else {
+<a name="line1698"></a>    this.channelDebug_.info(&#39;Failed to ping google.com&#39;);
+<a name="line1699"></a>    requestStats.notifyStatEvent(requestStats.Stat.ERROR_NETWORK);
+<a name="line1700"></a>    // We call onError_ here instead of signalError_ because the latter just
+<a name="line1701"></a>    // calls notifyStatEvent, and we don&#39;t want to have another stat event.
+<a name="line1702"></a>    this.onError_(WebChannelBase.Error.NETWORK);
+<a name="line1703"></a>  }
+<a name="line1704"></a>};
+<a name="line1705"></a>
+<a name="line1706"></a>
+<a name="line1707"></a>/**
+<a name="line1708"></a> * Called when messages have been successfully sent from the queue.
+<a name="line1709"></a> * @private
+<a name="line1710"></a> */
+<a name="line1711"></a>WebChannelBase.prototype.onSuccess_ = function() {
+<a name="line1712"></a>  // TODO(user): optimize for request pool (&gt;1)
+<a name="line1713"></a>  if (this.handler_) {
+<a name="line1714"></a>    this.handler_.channelSuccess(this, this.pendingMaps_);
+<a name="line1715"></a>  }
+<a name="line1716"></a>};
+<a name="line1717"></a>
+<a name="line1718"></a>
+<a name="line1719"></a>/**
+<a name="line1720"></a> * Called when we&#39;ve determined the final error for a channel. It closes the
+<a name="line1721"></a> * notifiers the handler of the error and closes the channel.
+<a name="line1722"></a> * @param {WebChannelBase.Error} error  The error code for the failure.
+<a name="line1723"></a> * @private
+<a name="line1724"></a> */
+<a name="line1725"></a>WebChannelBase.prototype.onError_ = function(error) {
+<a name="line1726"></a>  this.channelDebug_.debug(&#39;HttpChannel: error - &#39; + error);
+<a name="line1727"></a>  this.state_ = WebChannelBase.State.CLOSED;
+<a name="line1728"></a>  if (this.handler_) {
+<a name="line1729"></a>    this.handler_.channelError(this, error);
+<a name="line1730"></a>  }
+<a name="line1731"></a>  this.onClose_();
+<a name="line1732"></a>  this.cancelRequests_();
+<a name="line1733"></a>};
+<a name="line1734"></a>
+<a name="line1735"></a>
+<a name="line1736"></a>/**
+<a name="line1737"></a> * Called when the channel has been closed. It notifiers the handler of the
+<a name="line1738"></a> * event, and reports any pending or undelivered maps.
+<a name="line1739"></a> * @private
+<a name="line1740"></a> */
+<a name="line1741"></a>WebChannelBase.prototype.onClose_ = function() {
+<a name="line1742"></a>  this.state_ = WebChannelBase.State.CLOSED;
+<a name="line1743"></a>  this.lastStatusCode_ = -1;
+<a name="line1744"></a>  if (this.handler_) {
+<a name="line1745"></a>    if (this.pendingMaps_.length == 0 &amp;&amp; this.outgoingMaps_.length == 0) {
+<a name="line1746"></a>      this.handler_.channelClosed(this);
+<a name="line1747"></a>    } else {
+<a name="line1748"></a>      this.channelDebug_.debug(&#39;Number of undelivered maps&#39; +
+<a name="line1749"></a>          &#39;, pending: &#39; + this.pendingMaps_.length +
+<a name="line1750"></a>          &#39;, outgoing: &#39; + this.outgoingMaps_.length);
+<a name="line1751"></a>
+<a name="line1752"></a>      var copyOfPendingMaps = goog.array.clone(this.pendingMaps_);
+<a name="line1753"></a>      var copyOfUndeliveredMaps = goog.array.clone(this.outgoingMaps_);
+<a name="line1754"></a>      this.pendingMaps_.length = 0;
+<a name="line1755"></a>      this.outgoingMaps_.length = 0;
+<a name="line1756"></a>
+<a name="line1757"></a>      this.handler_.channelClosed(this, copyOfPendingMaps,
+<a name="line1758"></a>          copyOfUndeliveredMaps);
+<a name="line1759"></a>    }
+<a name="line1760"></a>  }
+<a name="line1761"></a>};
+<a name="line1762"></a>
+<a name="line1763"></a>
+<a name="line1764"></a>/**
+<a name="line1765"></a> * @override
+<a name="line1766"></a> */
+<a name="line1767"></a>WebChannelBase.prototype.getForwardChannelUri = function(path) {
+<a name="line1768"></a>  var uri = this.createDataUri(null, path);
+<a name="line1769"></a>  this.channelDebug_.debug(&#39;GetForwardChannelUri: &#39; + uri);
+<a name="line1770"></a>  return uri;
+<a name="line1771"></a>};
+<a name="line1772"></a>
+<a name="line1773"></a>
+<a name="line1774"></a>/**
+<a name="line1775"></a> * @override
+<a name="line1776"></a> */
+<a name="line1777"></a>WebChannelBase.prototype.getConnectionState = function() {
+<a name="line1778"></a>  return this.ConnState_;
+<a name="line1779"></a>};
+<a name="line1780"></a>
+<a name="line1781"></a>
+<a name="line1782"></a>/**
+<a name="line1783"></a> * @override
+<a name="line1784"></a> */
+<a name="line1785"></a>WebChannelBase.prototype.getBackChannelUri = function(hostPrefix, path) {
+<a name="line1786"></a>  var uri = this.createDataUri(this.shouldUseSecondaryDomains() ?
+<a name="line1787"></a>      hostPrefix : null, path);
+<a name="line1788"></a>  this.channelDebug_.debug(&#39;GetBackChannelUri: &#39; + uri);
+<a name="line1789"></a>  return uri;
+<a name="line1790"></a>};
+<a name="line1791"></a>
+<a name="line1792"></a>
+<a name="line1793"></a>/**
+<a name="line1794"></a> * @override
+<a name="line1795"></a> */
+<a name="line1796"></a>WebChannelBase.prototype.createDataUri =
+<a name="line1797"></a>    function(hostPrefix, path, opt_overridePort) {
+<a name="line1798"></a>  var uri = goog.Uri.parse(path);
+<a name="line1799"></a>  var uriAbsolute = (uri.getDomain() != &#39;&#39;);
+<a name="line1800"></a>  if (uriAbsolute) {
+<a name="line1801"></a>    if (hostPrefix) {
+<a name="line1802"></a>      uri.setDomain(hostPrefix + &#39;.&#39; + uri.getDomain());
+<a name="line1803"></a>    }
+<a name="line1804"></a>
+<a name="line1805"></a>    uri.setPort(opt_overridePort || uri.getPort());
+<a name="line1806"></a>  } else {
+<a name="line1807"></a>    var locationPage = window.location;
+<a name="line1808"></a>    var hostName;
+<a name="line1809"></a>    if (hostPrefix) {
+<a name="line1810"></a>      hostName = hostPrefix + &#39;.&#39; + locationPage.hostname;
+<a name="line1811"></a>    } else {
+<a name="line1812"></a>      hostName = locationPage.hostname;
+<a name="line1813"></a>    }
+<a name="line1814"></a>
+<a name="line1815"></a>    var port = opt_overridePort || locationPage.port;
+<a name="line1816"></a>
+<a name="line1817"></a>    uri = goog.Uri.create(locationPage.protocol, null, hostName, port, path);
+<a name="line1818"></a>  }
+<a name="line1819"></a>
+<a name="line1820"></a>  if (this.extraParams_) {
+<a name="line1821"></a>    goog.object.forEach(this.extraParams_, function(value, key) {
+<a name="line1822"></a>      uri.setParameterValue(key, value);
+<a name="line1823"></a>    });
+<a name="line1824"></a>  }
+<a name="line1825"></a>
+<a name="line1826"></a>  // Add the protocol version to the URI.
+<a name="line1827"></a>  uri.setParameterValue(&#39;VER&#39;, this.channelVersion_);
+<a name="line1828"></a>
+<a name="line1829"></a>  // Add the reconnect parameters.
+<a name="line1830"></a>  this.addAdditionalParams_(uri);
+<a name="line1831"></a>
+<a name="line1832"></a>  return uri;
+<a name="line1833"></a>};
+<a name="line1834"></a>
+<a name="line1835"></a>
+<a name="line1836"></a>/**
+<a name="line1837"></a> * @override
+<a name="line1838"></a> */
+<a name="line1839"></a>WebChannelBase.prototype.createXhrIo = function(hostPrefix) {
+<a name="line1840"></a>  if (hostPrefix &amp;&amp; !this.supportsCrossDomainXhrs_) {
+<a name="line1841"></a>    throw Error(&#39;Can\&#39;t create secondary domain capable XhrIo object.&#39;);
+<a name="line1842"></a>  }
+<a name="line1843"></a>  var xhr = new goog.net.XhrIo();
+<a name="line1844"></a>  xhr.setWithCredentials(this.supportsCrossDomainXhrs_);
+<a name="line1845"></a>  return xhr;
+<a name="line1846"></a>};
+<a name="line1847"></a>
+<a name="line1848"></a>
+<a name="line1849"></a>/**
+<a name="line1850"></a> * @override
+<a name="line1851"></a> */
+<a name="line1852"></a>WebChannelBase.prototype.isActive = function() {
+<a name="line1853"></a>  return !!this.handler_ &amp;&amp; this.handler_.isActive(this);
+<a name="line1854"></a>};
+<a name="line1855"></a>
+<a name="line1856"></a>
+<a name="line1857"></a>/**
+<a name="line1858"></a> * @override
+<a name="line1859"></a> */
+<a name="line1860"></a>WebChannelBase.prototype.shouldUseSecondaryDomains = function() {
+<a name="line1861"></a>  return this.supportsCrossDomainXhrs_ ||
+<a name="line1862"></a>      !ChannelRequest.supportsXhrStreaming();
+<a name="line1863"></a>};
+<a name="line1864"></a>
+<a name="line1865"></a>
+<a name="line1866"></a>/**
+<a name="line1867"></a> * A LogSaver that can be used to accumulate all the debug logs so they
+<a name="line1868"></a> * can be sent to the server when a problem is detected.
+<a name="line1869"></a> */
+<a name="line1870"></a>WebChannelBase.LogSaver = {};
+<a name="line1871"></a>
+<a name="line1872"></a>
+<a name="line1873"></a>/**
+<a name="line1874"></a> * Buffer for accumulating the debug log
+<a name="line1875"></a> * @type {goog.structs.CircularBuffer}
+<a name="line1876"></a> * @private
+<a name="line1877"></a> */
+<a name="line1878"></a>WebChannelBase.LogSaver.buffer_ = new goog.structs.CircularBuffer(1000);
+<a name="line1879"></a>
+<a name="line1880"></a>
+<a name="line1881"></a>/**
+<a name="line1882"></a> * Whether we&#39;re currently accumulating the debug log.
+<a name="line1883"></a> * @type {boolean}
+<a name="line1884"></a> * @private
+<a name="line1885"></a> */
+<a name="line1886"></a>WebChannelBase.LogSaver.enabled_ = false;
+<a name="line1887"></a>
+<a name="line1888"></a>
+<a name="line1889"></a>/**
+<a name="line1890"></a> * Formatter for saving logs.
+<a name="line1891"></a> * @type {goog.debug.Formatter}
+<a name="line1892"></a> * @private
+<a name="line1893"></a> */
+<a name="line1894"></a>WebChannelBase.LogSaver.formatter_ = new goog.debug.TextFormatter();
+<a name="line1895"></a>
+<a name="line1896"></a>
+<a name="line1897"></a>/**
+<a name="line1898"></a> * Returns whether the LogSaver is enabled.
+<a name="line1899"></a> * @return {boolean} Whether saving is enabled or disabled.
+<a name="line1900"></a> */
+<a name="line1901"></a>WebChannelBase.LogSaver.isEnabled = function() {
+<a name="line1902"></a>  return WebChannelBase.LogSaver.enabled_;
+<a name="line1903"></a>};
+<a name="line1904"></a>
+<a name="line1905"></a>
+<a name="line1906"></a>/**
+<a name="line1907"></a> * Enables of disables the LogSaver.
+<a name="line1908"></a> * @param {boolean} enable Whether to enable or disable saving.
+<a name="line1909"></a> */
+<a name="line1910"></a>WebChannelBase.LogSaver.setEnabled = function(enable) {
+<a name="line1911"></a>  if (enable == WebChannelBase.LogSaver.enabled_) {
+<a name="line1912"></a>    return;
+<a name="line1913"></a>  }
+<a name="line1914"></a>
+<a name="line1915"></a>  var fn = WebChannelBase.LogSaver.addLogRecord;
+<a name="line1916"></a>  var logger = goog.log.getLogger(&#39;goog.net&#39;);
+<a name="line1917"></a>  if (enable) {
+<a name="line1918"></a>    goog.log.addHandler(logger, fn);
+<a name="line1919"></a>  } else {
+<a name="line1920"></a>    goog.log.removeHandler(logger, fn);
+<a name="line1921"></a>  }
+<a name="line1922"></a>};
+<a name="line1923"></a>
+<a name="line1924"></a>
+<a name="line1925"></a>/**
+<a name="line1926"></a> * Adds a log record.
+<a name="line1927"></a> * @param {goog.log.LogRecord} logRecord the LogRecord.
+<a name="line1928"></a> */
+<a name="line1929"></a>WebChannelBase.LogSaver.addLogRecord = function(logRecord) {
+<a name="line1930"></a>  WebChannelBase.LogSaver.buffer_.add(
+<a name="line1931"></a>      WebChannelBase.LogSaver.formatter_.formatRecord(logRecord));
+<a name="line1932"></a>};
+<a name="line1933"></a>
+<a name="line1934"></a>
+<a name="line1935"></a>/**
+<a name="line1936"></a> * Returns the log as a single string.
+<a name="line1937"></a> * @return {string} The log as a single string.
+<a name="line1938"></a> */
+<a name="line1939"></a>WebChannelBase.LogSaver.getBuffer = function() {
+<a name="line1940"></a>  return WebChannelBase.LogSaver.buffer_.getValues().join(&#39;&#39;);
+<a name="line1941"></a>};
+<a name="line1942"></a>
+<a name="line1943"></a>
+<a name="line1944"></a>/**
+<a name="line1945"></a> * Clears the buffer
+<a name="line1946"></a> */
+<a name="line1947"></a>WebChannelBase.LogSaver.clearBuffer = function() {
+<a name="line1948"></a>  WebChannelBase.LogSaver.buffer_.clear();
+<a name="line1949"></a>};
+<a name="line1950"></a>
+<a name="line1951"></a>
+<a name="line1952"></a>
+<a name="line1953"></a>/**
+<a name="line1954"></a> * Abstract base class for the channel handler
+<a name="line1955"></a> * @constructor
+<a name="line1956"></a> * @struct
+<a name="line1957"></a> */
+<a name="line1958"></a>WebChannelBase.Handler = function() {};
+<a name="line1959"></a>
+<a name="line1960"></a>
+<a name="line1961"></a>/**
+<a name="line1962"></a> * Callback handler for when a batch of response arrays is received from the
+<a name="line1963"></a> * server. When null, batched dispatching is disabled.
+<a name="line1964"></a> * @type {?function(!WebChannelBase, !Array.&lt;!Array&gt;)}
+<a name="line1965"></a> */
+<a name="line1966"></a>WebChannelBase.Handler.prototype.channelHandleMultipleArrays = null;
+<a name="line1967"></a>
+<a name="line1968"></a>
+<a name="line1969"></a>/**
+<a name="line1970"></a> * Whether it&#39;s okay to make a request to the server. A handler can return
+<a name="line1971"></a> * false if the channel should fail. For example, if the user has logged out,
+<a name="line1972"></a> * the handler may want all requests to fail immediately.
+<a name="line1973"></a> * @param {WebChannelBase} channel The channel.
+<a name="line1974"></a> * @return {WebChannelBase.Error} An error code. The code should
+<a name="line1975"></a> * return WebChannelBase.Error.OK to indicate it&#39;s okay. Any other
+<a name="line1976"></a> * error code will cause a failure.
+<a name="line1977"></a> */
+<a name="line1978"></a>WebChannelBase.Handler.prototype.okToMakeRequest = function(channel) {
+<a name="line1979"></a>  return WebChannelBase.Error.OK;
+<a name="line1980"></a>};
+<a name="line1981"></a>
+<a name="line1982"></a>
+<a name="line1983"></a>/**
+<a name="line1984"></a> * Indicates the WebChannel has successfully negotiated with the server
+<a name="line1985"></a> * and can now send and receive data.
+<a name="line1986"></a> * @param {WebChannelBase} channel The channel.
+<a name="line1987"></a> */
+<a name="line1988"></a>WebChannelBase.Handler.prototype.channelOpened = function(channel) {
+<a name="line1989"></a>};
+<a name="line1990"></a>
+<a name="line1991"></a>
+<a name="line1992"></a>/**
+<a name="line1993"></a> * New input is available for the application to process.
+<a name="line1994"></a> *
+<a name="line1995"></a> * @param {WebChannelBase} channel The channel.
+<a name="line1996"></a> * @param {Array} array The data array.
+<a name="line1997"></a> */
+<a name="line1998"></a>WebChannelBase.Handler.prototype.channelHandleArray = function(channel, array) {
+<a name="line1999"></a>};
+<a name="line2000"></a>
+<a name="line2001"></a>
+<a name="line2002"></a>/**
+<a name="line2003"></a> * Indicates maps were successfully sent on the channel.
+<a name="line2004"></a> *
+<a name="line2005"></a> * @param {WebChannelBase} channel The channel.
+<a name="line2006"></a> * @param {Array.&lt;Wire.QueuedMap&gt;} deliveredMaps The
+<a name="line2007"></a> *     array of maps that have been delivered to the server. This is a direct
+<a name="line2008"></a> *     reference to the internal array, so a copy should be made
+<a name="line2009"></a> *     if the caller desires a reference to the data.
+<a name="line2010"></a> */
+<a name="line2011"></a>WebChannelBase.Handler.prototype.channelSuccess =
+<a name="line2012"></a>    function(channel, deliveredMaps) {
+<a name="line2013"></a>};
+<a name="line2014"></a>
+<a name="line2015"></a>
+<a name="line2016"></a>/**
+<a name="line2017"></a> * Indicates an error occurred on the WebChannel.
+<a name="line2018"></a> *
+<a name="line2019"></a> * @param {WebChannelBase} channel The channel.
+<a name="line2020"></a> * @param {WebChannelBase.Error} error The error code.
+<a name="line2021"></a> */
+<a name="line2022"></a>WebChannelBase.Handler.prototype.channelError = function(channel, error) {
+<a name="line2023"></a>};
+<a name="line2024"></a>
+<a name="line2025"></a>
+<a name="line2026"></a>/**
+<a name="line2027"></a> * Indicates the WebChannel is closed. Also notifies about which maps,
+<a name="line2028"></a> * if any, that may not have been delivered to the server.
+<a name="line2029"></a> * @param {WebChannelBase} channel The channel.
+<a name="line2030"></a> * @param {Array.&lt;Wire.QueuedMap&gt;=} opt_pendingMaps The
+<a name="line2031"></a> *     array of pending maps, which may or may not have been delivered to the
+<a name="line2032"></a> *     server.
+<a name="line2033"></a> * @param {Array.&lt;Wire.QueuedMap&gt;=} opt_undeliveredMaps
+<a name="line2034"></a> *     The array of undelivered maps, which have definitely not been delivered
+<a name="line2035"></a> *     to the server.
+<a name="line2036"></a> */
+<a name="line2037"></a>WebChannelBase.Handler.prototype.channelClosed =
+<a name="line2038"></a>    function(channel, opt_pendingMaps, opt_undeliveredMaps) {
+<a name="line2039"></a>};
+<a name="line2040"></a>
+<a name="line2041"></a>
+<a name="line2042"></a>/**
+<a name="line2043"></a> * Gets any parameters that should be added at the time another connection is
+<a name="line2044"></a> * made to the server.
+<a name="line2045"></a> * @param {WebChannelBase} channel The channel.
+<a name="line2046"></a> * @return {!Object} Extra parameter keys and values to add to the
+<a name="line2047"></a> *                  requests.
+<a name="line2048"></a> */
+<a name="line2049"></a>WebChannelBase.Handler.prototype.getAdditionalParams = function(channel) {
+<a name="line2050"></a>  return {};
+<a name="line2051"></a>};
+<a name="line2052"></a>
+<a name="line2053"></a>
+<a name="line2054"></a>/**
+<a name="line2055"></a> * Gets the URI of an image that can be used to test network connectivity.
+<a name="line2056"></a> * @param {WebChannelBase} channel The channel.
+<a name="line2057"></a> * @return {goog.Uri?} A custom URI to load for the network test.
+<a name="line2058"></a> */
+<a name="line2059"></a>WebChannelBase.Handler.prototype.getNetworkTestImageUri = function(channel) {
+<a name="line2060"></a>  return null;
+<a name="line2061"></a>};
+<a name="line2062"></a>
+<a name="line2063"></a>
+<a name="line2064"></a>/**
+<a name="line2065"></a> * Gets whether this channel is currently active. This is used to determine the
+<a name="line2066"></a> * length of time to wait before retrying.
+<a name="line2067"></a> * @param {WebChannelBase} channel The channel.
+<a name="line2068"></a> * @return {boolean} Whether the channel is currently active.
+<a name="line2069"></a> */
+<a name="line2070"></a>WebChannelBase.Handler.prototype.isActive = function(channel) {
+<a name="line2071"></a>  return true;
+<a name="line2072"></a>};
+<a name="line2073"></a>
+<a name="line2074"></a>
+<a name="line2075"></a>/**
+<a name="line2076"></a> * Called by the channel if enumeration of the map throws an exception.
+<a name="line2077"></a> * @param {WebChannelBase} channel The channel.
+<a name="line2078"></a> * @param {Object} map The map that can&#39;t be enumerated.
+<a name="line2079"></a> */
+<a name="line2080"></a>WebChannelBase.Handler.prototype.badMapError = function(channel, map) {
+<a name="line2081"></a>};
+<a name="line2082"></a>
+<a name="line2083"></a>
+<a name="line2084"></a>/**
+<a name="line2085"></a> * Allows the handler to override a host prefix provided by the server. Will
+<a name="line2086"></a> * be called whenever the channel has received such a prefix and is considering
+<a name="line2087"></a> * its use.
+<a name="line2088"></a> * @param {?string} serverHostPrefix The host prefix provided by the server.
+<a name="line2089"></a> * @return {?string} The host prefix the client should use.
+<a name="line2090"></a> */
+<a name="line2091"></a>WebChannelBase.Handler.prototype.correctHostPrefix =
+<a name="line2092"></a>    function(serverHostPrefix) {
+<a name="line2093"></a>  return serverHostPrefix;
+<a name="line2094"></a>};
+<a name="line2095"></a>});  // goog.scope
+</pre>
+
+
+</body>
+</html>

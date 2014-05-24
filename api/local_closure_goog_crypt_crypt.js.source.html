@@ -1,0 +1,224 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>crypt.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_crypt_crypt.js.html">crypt.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Namespace with crypto related helper functions.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.crypt&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.array&#39;);
+<a name="line22"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Turns a string into an array of bytes; a &quot;byte&quot; being a JS number in the
+<a name="line27"></a> * range 0-255.
+<a name="line28"></a> * @param {string} str String value to arrify.
+<a name="line29"></a> * @return {!Array.&lt;number&gt;} Array of numbers corresponding to the
+<a name="line30"></a> *     UCS character codes of each character in str.
+<a name="line31"></a> */
+<a name="line32"></a>goog.crypt.stringToByteArray = function(str) {
+<a name="line33"></a>  var output = [], p = 0;
+<a name="line34"></a>  for (var i = 0; i &lt; str.length; i++) {
+<a name="line35"></a>    var c = str.charCodeAt(i);
+<a name="line36"></a>    while (c &gt; 0xff) {
+<a name="line37"></a>      output[p++] = c &amp; 0xff;
+<a name="line38"></a>      c &gt;&gt;= 8;
+<a name="line39"></a>    }
+<a name="line40"></a>    output[p++] = c;
+<a name="line41"></a>  }
+<a name="line42"></a>  return output;
+<a name="line43"></a>};
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Turns an array of numbers into the string given by the concatenation of the
+<a name="line48"></a> * characters to which the numbers correspond.
+<a name="line49"></a> * @param {Array} bytes Array of numbers representing characters.
+<a name="line50"></a> * @return {string} Stringification of the array.
+<a name="line51"></a> */
+<a name="line52"></a>goog.crypt.byteArrayToString = function(bytes) {
+<a name="line53"></a>  var CHUNK_SIZE = 8192;
+<a name="line54"></a>
+<a name="line55"></a>  // Special-case the simple case for speed&#39;s sake.
+<a name="line56"></a>  if (bytes.length &lt; CHUNK_SIZE) {
+<a name="line57"></a>    return String.fromCharCode.apply(null, bytes);
+<a name="line58"></a>  }
+<a name="line59"></a>
+<a name="line60"></a>  // The remaining logic splits conversion by chunks since
+<a name="line61"></a>  // Function#apply() has a maximum parameter count.
+<a name="line62"></a>  // See discussion: http://goo.gl/LrWmZ9
+<a name="line63"></a>
+<a name="line64"></a>  var str = &#39;&#39;;
+<a name="line65"></a>  for (var i = 0; i &lt; bytes.length; i += CHUNK_SIZE) {
+<a name="line66"></a>    var chunk = goog.array.slice(bytes, i, i + CHUNK_SIZE);
+<a name="line67"></a>    str += String.fromCharCode.apply(null, chunk);
+<a name="line68"></a>  }
+<a name="line69"></a>  return str;
+<a name="line70"></a>};
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * Turns an array of numbers into the hex string given by the concatenation of
+<a name="line75"></a> * the hex values to which the numbers correspond.
+<a name="line76"></a> * @param {Uint8Array|Int8Array|Array.&lt;number&gt;} array Array of numbers
+<a name="line77"></a> *     representing characters.
+<a name="line78"></a> * @return {string} Hex string.
+<a name="line79"></a> */
+<a name="line80"></a>goog.crypt.byteArrayToHex = function(array) {
+<a name="line81"></a>  return goog.array.map(array, function(numByte) {
+<a name="line82"></a>    var hexByte = numByte.toString(16);
+<a name="line83"></a>    return hexByte.length &gt; 1 ? hexByte : &#39;0&#39; + hexByte;
+<a name="line84"></a>  }).join(&#39;&#39;);
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Converts a hex string into an integer array.
+<a name="line90"></a> * @param {string} hexString Hex string of 16-bit integers (two characters
+<a name="line91"></a> *     per integer).
+<a name="line92"></a> * @return {!Array.&lt;number&gt;} Array of {0,255} integers for the given string.
+<a name="line93"></a> */
+<a name="line94"></a>goog.crypt.hexToByteArray = function(hexString) {
+<a name="line95"></a>  goog.asserts.assert(hexString.length % 2 == 0,
+<a name="line96"></a>                      &#39;Key string length must be multiple of 2&#39;);
+<a name="line97"></a>  var arr = [];
+<a name="line98"></a>  for (var i = 0; i &lt; hexString.length; i += 2) {
+<a name="line99"></a>    arr.push(parseInt(hexString.substring(i, i + 2), 16));
+<a name="line100"></a>  }
+<a name="line101"></a>  return arr;
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Converts a JS string to a UTF-8 &quot;byte&quot; array.
+<a name="line107"></a> * @param {string} str 16-bit unicode string.
+<a name="line108"></a> * @return {!Array.&lt;number&gt;} UTF-8 byte array.
+<a name="line109"></a> */
+<a name="line110"></a>goog.crypt.stringToUtf8ByteArray = function(str) {
+<a name="line111"></a>  // TODO(user): Use native implementations if/when available
+<a name="line112"></a>  str = str.replace(/\r\n/g, &#39;\n&#39;);
+<a name="line113"></a>  var out = [], p = 0;
+<a name="line114"></a>  for (var i = 0; i &lt; str.length; i++) {
+<a name="line115"></a>    var c = str.charCodeAt(i);
+<a name="line116"></a>    if (c &lt; 128) {
+<a name="line117"></a>      out[p++] = c;
+<a name="line118"></a>    } else if (c &lt; 2048) {
+<a name="line119"></a>      out[p++] = (c &gt;&gt; 6) | 192;
+<a name="line120"></a>      out[p++] = (c &amp; 63) | 128;
+<a name="line121"></a>    } else {
+<a name="line122"></a>      out[p++] = (c &gt;&gt; 12) | 224;
+<a name="line123"></a>      out[p++] = ((c &gt;&gt; 6) &amp; 63) | 128;
+<a name="line124"></a>      out[p++] = (c &amp; 63) | 128;
+<a name="line125"></a>    }
+<a name="line126"></a>  }
+<a name="line127"></a>  return out;
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Converts a UTF-8 byte array to JavaScript&#39;s 16-bit Unicode.
+<a name="line133"></a> * @param {Uint8Array|Int8Array|Array.&lt;number&gt;} bytes UTF-8 byte array.
+<a name="line134"></a> * @return {string} 16-bit Unicode string.
+<a name="line135"></a> */
+<a name="line136"></a>goog.crypt.utf8ByteArrayToString = function(bytes) {
+<a name="line137"></a>  // TODO(user): Use native implementations if/when available
+<a name="line138"></a>  var out = [], pos = 0, c = 0;
+<a name="line139"></a>  while (pos &lt; bytes.length) {
+<a name="line140"></a>    var c1 = bytes[pos++];
+<a name="line141"></a>    if (c1 &lt; 128) {
+<a name="line142"></a>      out[c++] = String.fromCharCode(c1);
+<a name="line143"></a>    } else if (c1 &gt; 191 &amp;&amp; c1 &lt; 224) {
+<a name="line144"></a>      var c2 = bytes[pos++];
+<a name="line145"></a>      out[c++] = String.fromCharCode((c1 &amp; 31) &lt;&lt; 6 | c2 &amp; 63);
+<a name="line146"></a>    } else {
+<a name="line147"></a>      var c2 = bytes[pos++];
+<a name="line148"></a>      var c3 = bytes[pos++];
+<a name="line149"></a>      out[c++] = String.fromCharCode(
+<a name="line150"></a>          (c1 &amp; 15) &lt;&lt; 12 | (c2 &amp; 63) &lt;&lt; 6 | c3 &amp; 63);
+<a name="line151"></a>    }
+<a name="line152"></a>  }
+<a name="line153"></a>  return out.join(&#39;&#39;);
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * XOR two byte arrays.
+<a name="line159"></a> * @param {!ArrayBufferView|!Array.&lt;number&gt;} bytes1 Byte array 1.
+<a name="line160"></a> * @param {!ArrayBufferView|!Array.&lt;number&gt;} bytes2 Byte array 2.
+<a name="line161"></a> * @return {!Array.&lt;number&gt;} Resulting XOR of the two byte arrays.
+<a name="line162"></a> */
+<a name="line163"></a>goog.crypt.xorByteArray = function(bytes1, bytes2) {
+<a name="line164"></a>  goog.asserts.assert(
+<a name="line165"></a>      bytes1.length == bytes2.length,
+<a name="line166"></a>      &#39;XOR array lengths must match&#39;);
+<a name="line167"></a>
+<a name="line168"></a>  var result = [];
+<a name="line169"></a>  for (var i = 0; i &lt; bytes1.length; i++) {
+<a name="line170"></a>    result.push(bytes1[i] ^ bytes2[i]);
+<a name="line171"></a>  }
+<a name="line172"></a>  return result;
+<a name="line173"></a>};
+</pre>
+
+
+</body>
+</html>

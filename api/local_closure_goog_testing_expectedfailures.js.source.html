@@ -1,0 +1,288 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>expectedfailures.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_expectedfailures.js.html">expectedfailures.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Helper class to allow for expected unit test failures.
+<a name="line17"></a> *
+<a name="line18"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.testing.ExpectedFailures&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.debug.DivConsole&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line28"></a>goog.require(&#39;goog.log&#39;);
+<a name="line29"></a>goog.require(&#39;goog.style&#39;);
+<a name="line30"></a>goog.require(&#39;goog.testing.JsUnitException&#39;);
+<a name="line31"></a>goog.require(&#39;goog.testing.TestCase&#39;);
+<a name="line32"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/**
+<a name="line37"></a> * Helper class for allowing some unit tests to fail, particularly designed to
+<a name="line38"></a> * mark tests that should be fixed on a given browser.
+<a name="line39"></a> *
+<a name="line40"></a> * &lt;pre&gt;
+<a name="line41"></a> * var expectedFailures = new goog.testing.ExpectedFailures();
+<a name="line42"></a> *
+<a name="line43"></a> * function tearDown() {
+<a name="line44"></a> *   expectedFailures.handleTearDown();
+<a name="line45"></a> * }
+<a name="line46"></a> *
+<a name="line47"></a> * function testSomethingThatBreaksInWebKit() {
+<a name="line48"></a> *   expectedFailures.expectFailureFor(goog.userAgent.WEBKIT);
+<a name="line49"></a> *
+<a name="line50"></a> *   try {
+<a name="line51"></a> *     ...
+<a name="line52"></a> *     assert(somethingThatFailsInWebKit);
+<a name="line53"></a> *     ...
+<a name="line54"></a> *   } catch (e) {
+<a name="line55"></a> *     expectedFailures.handleException(e);
+<a name="line56"></a> *   }
+<a name="line57"></a> * }
+<a name="line58"></a> * &lt;/pre&gt;
+<a name="line59"></a> *
+<a name="line60"></a> * @constructor
+<a name="line61"></a> * @final
+<a name="line62"></a> */
+<a name="line63"></a>goog.testing.ExpectedFailures = function() {
+<a name="line64"></a>  goog.testing.ExpectedFailures.setUpConsole_();
+<a name="line65"></a>  this.reset_();
+<a name="line66"></a>};
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * The lazily created debugging console.
+<a name="line71"></a> * @type {goog.debug.DivConsole?}
+<a name="line72"></a> * @private
+<a name="line73"></a> */
+<a name="line74"></a>goog.testing.ExpectedFailures.console_ = null;
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Logger for the expected failures.
+<a name="line79"></a> * @type {goog.log.Logger}
+<a name="line80"></a> * @private
+<a name="line81"></a> */
+<a name="line82"></a>goog.testing.ExpectedFailures.prototype.logger_ =
+<a name="line83"></a>    goog.log.getLogger(&#39;goog.testing.ExpectedFailures&#39;);
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Whether or not we are expecting failure.
+<a name="line88"></a> * @type {boolean}
+<a name="line89"></a> * @private
+<a name="line90"></a> */
+<a name="line91"></a>goog.testing.ExpectedFailures.prototype.expectingFailure_;
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * The string to emit upon an expected failure.
+<a name="line96"></a> * @type {string}
+<a name="line97"></a> * @private
+<a name="line98"></a> */
+<a name="line99"></a>goog.testing.ExpectedFailures.prototype.failureMessage_;
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * An array of suppressed failures.
+<a name="line104"></a> * @type {Array}
+<a name="line105"></a> * @private
+<a name="line106"></a> */
+<a name="line107"></a>goog.testing.ExpectedFailures.prototype.suppressedFailures_;
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Sets up the debug console, if it isn&#39;t already set up.
+<a name="line112"></a> * @private
+<a name="line113"></a> */
+<a name="line114"></a>goog.testing.ExpectedFailures.setUpConsole_ = function() {
+<a name="line115"></a>  if (!goog.testing.ExpectedFailures.console_) {
+<a name="line116"></a>    var xButton = goog.dom.createDom(goog.dom.TagName.DIV, {
+<a name="line117"></a>      &#39;style&#39;: &#39;position: absolute; border-left:1px solid #333;&#39; +
+<a name="line118"></a>          &#39;border-bottom:1px solid #333; right: 0; top: 0; width: 1em;&#39; +
+<a name="line119"></a>          &#39;height: 1em; cursor: pointer; background-color: #cde;&#39; +
+<a name="line120"></a>          &#39;text-align: center; color: black&#39;
+<a name="line121"></a>    }, &#39;X&#39;);
+<a name="line122"></a>    var div = goog.dom.createDom(goog.dom.TagName.DIV, {
+<a name="line123"></a>      &#39;style&#39;: &#39;position: absolute; border: 1px solid #333; right: 10px;&#39; +
+<a name="line124"></a>          &#39;top : 10px; width: 400px; display: none&#39;
+<a name="line125"></a>    }, xButton);
+<a name="line126"></a>    document.body.appendChild(div);
+<a name="line127"></a>    goog.events.listen(xButton, goog.events.EventType.CLICK, function() {
+<a name="line128"></a>      goog.style.setElementShown(div, false);
+<a name="line129"></a>    });
+<a name="line130"></a>
+<a name="line131"></a>    goog.testing.ExpectedFailures.console_ = new goog.debug.DivConsole(div);
+<a name="line132"></a>    goog.log.addHandler(goog.testing.ExpectedFailures.prototype.logger_,
+<a name="line133"></a>        goog.bind(goog.style.setElementShown, null, div, true));
+<a name="line134"></a>    goog.log.addHandler(goog.testing.ExpectedFailures.prototype.logger_,
+<a name="line135"></a>        goog.bind(goog.testing.ExpectedFailures.console_.addLogRecord,
+<a name="line136"></a>            goog.testing.ExpectedFailures.console_));
+<a name="line137"></a>  }
+<a name="line138"></a>};
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * Register to expect failure for the given condition.  Multiple calls to this
+<a name="line143"></a> * function act as a boolean OR.  The first applicable message will be used.
+<a name="line144"></a> * @param {boolean} condition Whether to expect failure.
+<a name="line145"></a> * @param {string=} opt_message Descriptive message of this expected failure.
+<a name="line146"></a> */
+<a name="line147"></a>goog.testing.ExpectedFailures.prototype.expectFailureFor = function(
+<a name="line148"></a>    condition, opt_message) {
+<a name="line149"></a>  this.expectingFailure_ = this.expectingFailure_ || condition;
+<a name="line150"></a>  if (condition) {
+<a name="line151"></a>    this.failureMessage_ = this.failureMessage_ || opt_message || &#39;&#39;;
+<a name="line152"></a>  }
+<a name="line153"></a>};
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>/**
+<a name="line157"></a> * Determines if the given exception was expected.
+<a name="line158"></a> * @param {Object} ex The exception to check.
+<a name="line159"></a> * @return {boolean} Whether the exception was expected.
+<a name="line160"></a> */
+<a name="line161"></a>goog.testing.ExpectedFailures.prototype.isExceptionExpected = function(ex) {
+<a name="line162"></a>  return this.expectingFailure_ &amp;&amp; ex instanceof goog.testing.JsUnitException;
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Handle an exception, suppressing it if it is a unit test failure that we
+<a name="line168"></a> * expected.
+<a name="line169"></a> * @param {Error} ex The exception to handle.
+<a name="line170"></a> */
+<a name="line171"></a>goog.testing.ExpectedFailures.prototype.handleException = function(ex) {
+<a name="line172"></a>  if (this.isExceptionExpected(ex)) {
+<a name="line173"></a>    goog.log.info(this.logger_, &#39;Suppressing test failure in &#39; +
+<a name="line174"></a>        goog.testing.TestCase.currentTestName + &#39;:&#39; +
+<a name="line175"></a>        (this.failureMessage_ ? &#39;\n(&#39; + this.failureMessage_ + &#39;)&#39; : &#39;&#39;),
+<a name="line176"></a>        ex);
+<a name="line177"></a>    this.suppressedFailures_.push(ex);
+<a name="line178"></a>    return;
+<a name="line179"></a>  }
+<a name="line180"></a>
+<a name="line181"></a>  // Rethrow the exception if we weren&#39;t expecting it or if it is a normal
+<a name="line182"></a>  // exception.
+<a name="line183"></a>  throw ex;
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Run the given function, catching any expected failures.
+<a name="line189"></a> * @param {Function} func The function to run.
+<a name="line190"></a> * @param {boolean=} opt_lenient Whether to ignore if the expected failures
+<a name="line191"></a> *     didn&#39;t occur.  In this case a warning will be logged in handleTearDown.
+<a name="line192"></a> */
+<a name="line193"></a>goog.testing.ExpectedFailures.prototype.run = function(func, opt_lenient) {
+<a name="line194"></a>  try {
+<a name="line195"></a>    func();
+<a name="line196"></a>  } catch (ex) {
+<a name="line197"></a>    this.handleException(ex);
+<a name="line198"></a>  }
+<a name="line199"></a>
+<a name="line200"></a>  if (!opt_lenient &amp;&amp; this.expectingFailure_ &amp;&amp;
+<a name="line201"></a>      !this.suppressedFailures_.length) {
+<a name="line202"></a>    fail(this.getExpectationMessage_());
+<a name="line203"></a>  }
+<a name="line204"></a>};
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * @return {string} A warning describing an expected failure that didn&#39;t occur.
+<a name="line209"></a> * @private
+<a name="line210"></a> */
+<a name="line211"></a>goog.testing.ExpectedFailures.prototype.getExpectationMessage_ = function() {
+<a name="line212"></a>  return &#39;Expected a test failure in \&#39;&#39; +
+<a name="line213"></a>         goog.testing.TestCase.currentTestName + &#39;\&#39; but the test passed.&#39;;
+<a name="line214"></a>};
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * Handle the tearDown phase of a test, alerting the user if an expected test
+<a name="line219"></a> * was not suppressed.
+<a name="line220"></a> */
+<a name="line221"></a>goog.testing.ExpectedFailures.prototype.handleTearDown = function() {
+<a name="line222"></a>  if (this.expectingFailure_ &amp;&amp; !this.suppressedFailures_.length) {
+<a name="line223"></a>    goog.log.warning(this.logger_, this.getExpectationMessage_());
+<a name="line224"></a>  }
+<a name="line225"></a>  this.reset_();
+<a name="line226"></a>};
+<a name="line227"></a>
+<a name="line228"></a>
+<a name="line229"></a>/**
+<a name="line230"></a> * Reset internal state.
+<a name="line231"></a> * @private
+<a name="line232"></a> */
+<a name="line233"></a>goog.testing.ExpectedFailures.prototype.reset_ = function() {
+<a name="line234"></a>  this.expectingFailure_ = false;
+<a name="line235"></a>  this.failureMessage_ = &#39;&#39;;
+<a name="line236"></a>  this.suppressedFailures_ = [];
+<a name="line237"></a>};
+</pre>
+
+
+</body>
+</html>

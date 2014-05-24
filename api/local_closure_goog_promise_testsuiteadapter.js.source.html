@@ -1,0 +1,125 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>testsuiteadapter.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_promise_testsuiteadapter.js.html">testsuiteadapter.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Test adapter for testing Closure Promises against the
+<a name="line17"></a> * Promises/A+ Compliance Test Suite, which is implemented as a Node.js module.
+<a name="line18"></a> *
+<a name="line19"></a> * This test suite adapter may not be run in Node.js directly, but must first be
+<a name="line20"></a> * compiled with the Closure Compiler to pull in the required dependencies.
+<a name="line21"></a> *
+<a name="line22"></a> * @see https://npmjs.org/package/promises-aplus-tests
+<a name="line23"></a> */
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.promise.testSuiteAdapter&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.Promise&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.setTestOnly(&#39;goog.promise.testSuiteAdapter&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>var promisesAplusTests = /** @type {function(!Object, function(*))} */ (
+<a name="line33"></a>    require(&#39;promises_aplus_tests&#39;));
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/**
+<a name="line37"></a> * Adapter for specifying Promise-creating functions to the Promises test suite.
+<a name="line38"></a> * @type {!Object}
+<a name="line39"></a> */
+<a name="line40"></a>goog.promise.testSuiteAdapter = {
+<a name="line41"></a>  /** @type {function(*): !goog.Promise} */
+<a name="line42"></a>  &#39;resolved&#39;: goog.Promise.resolve,
+<a name="line43"></a>
+<a name="line44"></a>  /** @type {function(*): !goog.Promise} */
+<a name="line45"></a>  &#39;rejected&#39;: goog.Promise.reject,
+<a name="line46"></a>
+<a name="line47"></a>  /** @return {!Object} */
+<a name="line48"></a>  &#39;deferred&#39;: function() {
+<a name="line49"></a>    var promiseObj = {};
+<a name="line50"></a>    promiseObj[&#39;promise&#39;] = new goog.Promise(function(resolve, reject) {
+<a name="line51"></a>      promiseObj[&#39;resolve&#39;] = resolve;
+<a name="line52"></a>      promiseObj[&#39;reject&#39;] = reject;
+<a name="line53"></a>    });
+<a name="line54"></a>    return promiseObj;
+<a name="line55"></a>  }
+<a name="line56"></a>};
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>// Node.js defines setTimeout globally, but Closure relies on finding it
+<a name="line60"></a>// defined on goog.global.
+<a name="line61"></a>goog.exportSymbol(&#39;setTimeout&#39;, setTimeout);
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>// Rethrowing an error to the global scope kills Node immediately. Suppress
+<a name="line65"></a>// error rethrowing for running this test suite.
+<a name="line66"></a>goog.Promise.setUnhandledRejectionHandler(goog.nullFunction);
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>// Run the tests, exiting with a failure code if any of the tests fail.
+<a name="line70"></a>promisesAplusTests(goog.promise.testSuiteAdapter, function(err) {
+<a name="line71"></a>  if (err) {
+<a name="line72"></a>    process.exit(1);
+<a name="line73"></a>  }
+<a name="line74"></a>});
+</pre>
+
+
+</body>
+</html>

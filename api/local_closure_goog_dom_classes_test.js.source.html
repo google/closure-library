@@ -1,0 +1,282 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>classes_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_classes_test.js.html">classes_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Shared code for classes_test.html &amp; classes_quirks_test.html.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.dom.classes_test&#39;);
+<a name="line20"></a>goog.setTestOnly(&#39;goog.dom.classes_test&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom.classes&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>var classes = goog.dom.classes;
+<a name="line28"></a>
+<a name="line29"></a>function testGet() {
+<a name="line30"></a>  var el = document.createElement(&#39;div&#39;);
+<a name="line31"></a>  assertArrayEquals([], goog.dom.classes.get(el));
+<a name="line32"></a>  el.className = &#39;C&#39;;
+<a name="line33"></a>  assertArrayEquals([&#39;C&#39;], goog.dom.classes.get(el));
+<a name="line34"></a>  el.className = &#39;C D&#39;;
+<a name="line35"></a>  assertArrayEquals([&#39;C&#39;, &#39;D&#39;], goog.dom.classes.get(el));
+<a name="line36"></a>  el.className = &#39;C\nD&#39;;
+<a name="line37"></a>  assertArrayEquals([&#39;C&#39;, &#39;D&#39;], goog.dom.classes.get(el));
+<a name="line38"></a>  el.className = &#39; C &#39;;
+<a name="line39"></a>  assertArrayEquals([&#39;C&#39;], goog.dom.classes.get(el));
+<a name="line40"></a>}
+<a name="line41"></a>
+<a name="line42"></a>function testSetAddHasRemove() {
+<a name="line43"></a>  var el = goog.dom.getElement(&#39;p1&#39;);
+<a name="line44"></a>  classes.set(el, &#39;SOMECLASS&#39;);
+<a name="line45"></a>  assertTrue(&#39;Should have SOMECLASS&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line46"></a>
+<a name="line47"></a>  classes.set(el, &#39;OTHERCLASS&#39;);
+<a name="line48"></a>  assertTrue(&#39;Should have OTHERCLASS&#39;, classes.has(el, &#39;OTHERCLASS&#39;));
+<a name="line49"></a>  assertFalse(&#39;Should not have SOMECLASS&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line50"></a>
+<a name="line51"></a>  classes.add(el, &#39;WOOCLASS&#39;);
+<a name="line52"></a>  assertTrue(&#39;Should have OTHERCLASS&#39;, classes.has(el, &#39;OTHERCLASS&#39;));
+<a name="line53"></a>  assertTrue(&#39;Should have WOOCLASS&#39;, classes.has(el, &#39;WOOCLASS&#39;));
+<a name="line54"></a>
+<a name="line55"></a>  classes.add(el, &#39;ACLASS&#39;, &#39;BCLASS&#39;, &#39;CCLASS&#39;);
+<a name="line56"></a>  assertTrue(&#39;Should have OTHERCLASS&#39;, classes.has(el, &#39;OTHERCLASS&#39;));
+<a name="line57"></a>  assertTrue(&#39;Should have WOOCLASS&#39;, classes.has(el, &#39;WOOCLASS&#39;));
+<a name="line58"></a>  assertTrue(&#39;Should have ACLASS&#39;, classes.has(el, &#39;ACLASS&#39;));
+<a name="line59"></a>  assertTrue(&#39;Should have BCLASS&#39;, classes.has(el, &#39;BCLASS&#39;));
+<a name="line60"></a>  assertTrue(&#39;Should have CCLASS&#39;, classes.has(el, &#39;CCLASS&#39;));
+<a name="line61"></a>
+<a name="line62"></a>  classes.remove(el, &#39;CCLASS&#39;);
+<a name="line63"></a>  assertTrue(&#39;Should have OTHERCLASS&#39;, classes.has(el, &#39;OTHERCLASS&#39;));
+<a name="line64"></a>  assertTrue(&#39;Should have WOOCLASS&#39;, classes.has(el, &#39;WOOCLASS&#39;));
+<a name="line65"></a>  assertTrue(&#39;Should have ACLASS&#39;, classes.has(el, &#39;ACLASS&#39;));
+<a name="line66"></a>  assertTrue(&#39;Should have BCLASS&#39;, classes.has(el, &#39;BCLASS&#39;));
+<a name="line67"></a>  assertFalse(&#39;Should not have CCLASS&#39;, classes.has(el, &#39;CCLASS&#39;));
+<a name="line68"></a>
+<a name="line69"></a>  classes.remove(el, &#39;ACLASS&#39;, &#39;BCLASS&#39;);
+<a name="line70"></a>  assertTrue(&#39;Should have OTHERCLASS&#39;, classes.has(el, &#39;OTHERCLASS&#39;));
+<a name="line71"></a>  assertTrue(&#39;Should have WOOCLASS&#39;, classes.has(el, &#39;WOOCLASS&#39;));
+<a name="line72"></a>  assertFalse(&#39;Should not have ACLASS&#39;, classes.has(el, &#39;ACLASS&#39;));
+<a name="line73"></a>  assertFalse(&#39;Should not have BCLASS&#39;, classes.has(el, &#39;BCLASS&#39;));
+<a name="line74"></a>}
+<a name="line75"></a>
+<a name="line76"></a>// While support for this isn&#39;t implied in the method documentation,
+<a name="line77"></a>// this is a frequently used pattern.
+<a name="line78"></a>function testAddWithSpacesInClassName() {
+<a name="line79"></a>  var el = goog.dom.getElement(&#39;p1&#39;);
+<a name="line80"></a>  classes.add(el, &#39;CLASS1 CLASS2&#39;, &#39;CLASS3 CLASS4&#39;);
+<a name="line81"></a>  assertTrue(&#39;Should have CLASS1&#39;, classes.has(el, &#39;CLASS1&#39;));
+<a name="line82"></a>  assertTrue(&#39;Should have CLASS2&#39;, classes.has(el, &#39;CLASS2&#39;));
+<a name="line83"></a>  assertTrue(&#39;Should have CLASS3&#39;, classes.has(el, &#39;CLASS3&#39;));
+<a name="line84"></a>  assertTrue(&#39;Should have CLASS4&#39;, classes.has(el, &#39;CLASS4&#39;));
+<a name="line85"></a>}
+<a name="line86"></a>
+<a name="line87"></a>function testSwap() {
+<a name="line88"></a>  var el = goog.dom.getElement(&#39;p1&#39;);
+<a name="line89"></a>  classes.set(el, &#39;SOMECLASS FIRST&#39;);
+<a name="line90"></a>
+<a name="line91"></a>  assertTrue(&#39;Should have FIRST class&#39;, classes.has(el, &#39;FIRST&#39;));
+<a name="line92"></a>  assertTrue(&#39;Should have FIRST class&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line93"></a>  assertFalse(&#39;Should not have second class&#39;, classes.has(el, &#39;second&#39;));
+<a name="line94"></a>
+<a name="line95"></a>  classes.swap(el, &#39;FIRST&#39;, &#39;second&#39;);
+<a name="line96"></a>
+<a name="line97"></a>  assertFalse(&#39;Should not have FIRST class&#39;, classes.has(el, &#39;FIRST&#39;));
+<a name="line98"></a>  assertTrue(&#39;Should have FIRST class&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line99"></a>  assertTrue(&#39;Should have second class&#39;, classes.has(el, &#39;second&#39;));
+<a name="line100"></a>
+<a name="line101"></a>  classes.swap(el, &#39;second&#39;, &#39;FIRST&#39;);
+<a name="line102"></a>
+<a name="line103"></a>  assertTrue(&#39;Should have FIRST class&#39;, classes.has(el, &#39;FIRST&#39;));
+<a name="line104"></a>  assertTrue(&#39;Should have FIRST class&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line105"></a>  assertFalse(&#39;Should not have second class&#39;, classes.has(el, &#39;second&#39;));
+<a name="line106"></a>}
+<a name="line107"></a>
+<a name="line108"></a>function testEnable() {
+<a name="line109"></a>  var el = goog.dom.getElement(&#39;p1&#39;);
+<a name="line110"></a>  classes.set(el, &#39;SOMECLASS FIRST&#39;);
+<a name="line111"></a>
+<a name="line112"></a>  assertTrue(&#39;Should have FIRST class&#39;, classes.has(el, &#39;FIRST&#39;));
+<a name="line113"></a>  assertTrue(&#39;Should have SOMECLASS class&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line114"></a>
+<a name="line115"></a>  classes.enable(el, &#39;FIRST&#39;, false);
+<a name="line116"></a>
+<a name="line117"></a>  assertFalse(&#39;Should not have FIRST class&#39;, classes.has(el, &#39;FIRST&#39;));
+<a name="line118"></a>  assertTrue(&#39;Should have SOMECLASS class&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line119"></a>
+<a name="line120"></a>  classes.enable(el, &#39;FIRST&#39;, true);
+<a name="line121"></a>
+<a name="line122"></a>  assertTrue(&#39;Should have FIRST class&#39;, classes.has(el, &#39;FIRST&#39;));
+<a name="line123"></a>  assertTrue(&#39;Should have SOMECLASS class&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line124"></a>}
+<a name="line125"></a>
+<a name="line126"></a>function testToggle() {
+<a name="line127"></a>  var el = goog.dom.getElement(&#39;p1&#39;);
+<a name="line128"></a>  classes.set(el, &#39;SOMECLASS FIRST&#39;);
+<a name="line129"></a>
+<a name="line130"></a>  assertTrue(&#39;Should have FIRST class&#39;, classes.has(el, &#39;FIRST&#39;));
+<a name="line131"></a>  assertTrue(&#39;Should have SOMECLASS class&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line132"></a>
+<a name="line133"></a>  classes.toggle(el, &#39;FIRST&#39;);
+<a name="line134"></a>
+<a name="line135"></a>  assertFalse(&#39;Should not have FIRST class&#39;, classes.has(el, &#39;FIRST&#39;));
+<a name="line136"></a>  assertTrue(&#39;Should have SOMECLASS class&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line137"></a>
+<a name="line138"></a>  classes.toggle(el, &#39;FIRST&#39;);
+<a name="line139"></a>
+<a name="line140"></a>  assertTrue(&#39;Should have FIRST class&#39;, classes.has(el, &#39;FIRST&#39;));
+<a name="line141"></a>  assertTrue(&#39;Should have SOMECLASS class&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line142"></a>}
+<a name="line143"></a>
+<a name="line144"></a>function testAddNotAddingMultiples() {
+<a name="line145"></a>  var el = goog.dom.getElement(&#39;span6&#39;);
+<a name="line146"></a>  assertTrue(classes.add(el, &#39;A&#39;));
+<a name="line147"></a>  assertEquals(&#39;A&#39;, el.className);
+<a name="line148"></a>  assertFalse(classes.add(el, &#39;A&#39;));
+<a name="line149"></a>  assertEquals(&#39;A&#39;, el.className);
+<a name="line150"></a>  assertFalse(classes.add(el, &#39;B&#39;, &#39;B&#39;));
+<a name="line151"></a>  assertEquals(&#39;A B&#39;, el.className);
+<a name="line152"></a>}
+<a name="line153"></a>
+<a name="line154"></a>function testAddRemoveString() {
+<a name="line155"></a>  var el = goog.dom.getElement(&#39;span6&#39;);
+<a name="line156"></a>  el.className = &#39;A&#39;;
+<a name="line157"></a>
+<a name="line158"></a>  goog.dom.classes.addRemove(el, &#39;A&#39;, &#39;B&#39;);
+<a name="line159"></a>  assertEquals(&#39;B&#39;, el.className);
+<a name="line160"></a>
+<a name="line161"></a>  goog.dom.classes.addRemove(el, null, &#39;C&#39;);
+<a name="line162"></a>  assertEquals(&#39;B C&#39;, el.className);
+<a name="line163"></a>
+<a name="line164"></a>  goog.dom.classes.addRemove(el, &#39;C&#39;, &#39;D&#39;);
+<a name="line165"></a>  assertEquals(&#39;B D&#39;, el.className);
+<a name="line166"></a>
+<a name="line167"></a>  goog.dom.classes.addRemove(el, &#39;D&#39;, null);
+<a name="line168"></a>  assertEquals(&#39;B&#39;, el.className);
+<a name="line169"></a>}
+<a name="line170"></a>
+<a name="line171"></a>function testAddRemoveArray() {
+<a name="line172"></a>  var el = goog.dom.getElement(&#39;span6&#39;);
+<a name="line173"></a>  el.className = &#39;A&#39;;
+<a name="line174"></a>
+<a name="line175"></a>  goog.dom.classes.addRemove(el, [&#39;A&#39;], [&#39;B&#39;]);
+<a name="line176"></a>  assertEquals(&#39;B&#39;, el.className);
+<a name="line177"></a>
+<a name="line178"></a>  goog.dom.classes.addRemove(el, [], [&#39;C&#39;]);
+<a name="line179"></a>  assertEquals(&#39;B C&#39;, el.className);
+<a name="line180"></a>
+<a name="line181"></a>  goog.dom.classes.addRemove(el, [&#39;C&#39;], [&#39;D&#39;]);
+<a name="line182"></a>  assertEquals(&#39;B D&#39;, el.className);
+<a name="line183"></a>
+<a name="line184"></a>  goog.dom.classes.addRemove(el, [&#39;D&#39;], []);
+<a name="line185"></a>  assertEquals(&#39;B&#39;, el.className);
+<a name="line186"></a>}
+<a name="line187"></a>
+<a name="line188"></a>function testAddRemoveMultiple() {
+<a name="line189"></a>  var el = goog.dom.getElement(&#39;span6&#39;);
+<a name="line190"></a>  el.className = &#39;A&#39;;
+<a name="line191"></a>
+<a name="line192"></a>  goog.dom.classes.addRemove(el, [&#39;A&#39;], [&#39;B&#39;, &#39;C&#39;, &#39;D&#39;]);
+<a name="line193"></a>  assertEquals(&#39;B C D&#39;, el.className);
+<a name="line194"></a>
+<a name="line195"></a>  goog.dom.classes.addRemove(el, [], [&#39;E&#39;, &#39;F&#39;]);
+<a name="line196"></a>  assertEquals(&#39;B C D E F&#39;, el.className);
+<a name="line197"></a>
+<a name="line198"></a>  goog.dom.classes.addRemove(el, [&#39;C&#39;, &#39;E&#39;], []);
+<a name="line199"></a>  assertEquals(&#39;B D F&#39;, el.className);
+<a name="line200"></a>
+<a name="line201"></a>  goog.dom.classes.addRemove(el, [&#39;B&#39;], [&#39;G&#39;]);
+<a name="line202"></a>  assertEquals(&#39;D F G&#39;, el.className);
+<a name="line203"></a>}
+<a name="line204"></a>
+<a name="line205"></a>// While support for this isn&#39;t implied in the method documentation,
+<a name="line206"></a>// this is a frequently used pattern.
+<a name="line207"></a>function testAddRemoveWithSpacesInClassName() {
+<a name="line208"></a>  var el = goog.dom.getElement(&#39;p1&#39;);
+<a name="line209"></a>  classes.addRemove(el, &#39;&#39;, &#39;CLASS1 CLASS2&#39;);
+<a name="line210"></a>  assertTrue(&#39;Should have CLASS1&#39;, classes.has(el, &#39;CLASS1&#39;));
+<a name="line211"></a>  assertTrue(&#39;Should have CLASS2&#39;, classes.has(el, &#39;CLASS2&#39;));
+<a name="line212"></a>}
+<a name="line213"></a>
+<a name="line214"></a>function testHasWithNewlines() {
+<a name="line215"></a>  var el = goog.dom.getElement(&#39;p3&#39;);
+<a name="line216"></a>  assertTrue(&#39;Should have SOMECLASS&#39;, classes.has(el, &#39;SOMECLASS&#39;));
+<a name="line217"></a>  assertTrue(&#39;Should also have OTHERCLASS&#39;, classes.has(el, &#39;OTHERCLASS&#39;));
+<a name="line218"></a>  assertFalse(&#39;Should not have WEIRDCLASS&#39;, classes.has(el, &#39;WEIRDCLASS&#39;));
+<a name="line219"></a>}
+<a name="line220"></a>
+<a name="line221"></a>function testEmptyClassNames() {
+<a name="line222"></a>  var el = goog.dom.getElement(&#39;span1&#39;);
+<a name="line223"></a>  // At the very least, make sure these do not error out.
+<a name="line224"></a>  assertFalse(&#39;Should not have an empty class&#39;, classes.has(el, &#39;&#39;));
+<a name="line225"></a>  classes.add(el, &#39;&#39;);
+<a name="line226"></a>  classes.toggle(el, &#39;&#39;);
+<a name="line227"></a>  assertFalse(&#39;Should not remove an empty class&#39;, classes.remove(el, &#39;&#39;));
+<a name="line228"></a>  classes.swap(el, &#39;&#39;, &#39;OTHERCLASS&#39;);
+<a name="line229"></a>  classes.swap(el, &#39;TEST1&#39;, &#39;&#39;);
+<a name="line230"></a>  classes.addRemove(el, &#39;&#39;, &#39;&#39;);
+<a name="line231"></a>}
+</pre>
+
+
+</body>
+</html>

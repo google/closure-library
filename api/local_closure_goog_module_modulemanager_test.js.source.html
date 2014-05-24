@@ -1,0 +1,2251 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>modulemanager_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_module_modulemanager_test.js.html">modulemanager_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.module.ModuleManagerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.module.ModuleManagerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line20"></a>goog.require(&#39;goog.module.BaseModule&#39;);
+<a name="line21"></a>goog.require(&#39;goog.module.ModuleManager&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line26"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line27"></a>
+<a name="line28"></a>var clock;
+<a name="line29"></a>var requestCount = 0;
+<a name="line30"></a>
+<a name="line31"></a>function setUpPage() {
+<a name="line32"></a>  clock = new goog.testing.MockClock(true);
+<a name="line33"></a>}
+<a name="line34"></a>
+<a name="line35"></a>function tearDownPage() {
+<a name="line36"></a>  clock.dispose();
+<a name="line37"></a>}
+<a name="line38"></a>
+<a name="line39"></a>function setUp() {
+<a name="line40"></a>  requestCount = 0;
+<a name="line41"></a>}
+<a name="line42"></a>
+<a name="line43"></a>function getModuleManager(infoMap) {
+<a name="line44"></a>  var mm = new goog.module.ModuleManager();
+<a name="line45"></a>  mm.setAllModuleInfo(infoMap);
+<a name="line46"></a>
+<a name="line47"></a>  mm.isModuleLoaded = function(id) {
+<a name="line48"></a>    return this.getModuleInfo(id).isLoaded();
+<a name="line49"></a>  };
+<a name="line50"></a>  return mm;
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>function createSuccessfulBatchLoader(moduleMgr) {
+<a name="line54"></a>  return {
+<a name="line55"></a>    loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
+<a name="line56"></a>        opt_timeoutFn) {
+<a name="line57"></a>      requestCount++;
+<a name="line58"></a>      setTimeout(goog.bind(this.onLoad, this, ids.concat(), 0), 5);
+<a name="line59"></a>    },
+<a name="line60"></a>    onLoad: function(ids, idxLoaded) {
+<a name="line61"></a>      moduleMgr.beforeLoadModuleCode(ids[idxLoaded]);
+<a name="line62"></a>      moduleMgr.setLoaded(ids[idxLoaded]);
+<a name="line63"></a>      moduleMgr.afterLoadModuleCode(ids[idxLoaded]);
+<a name="line64"></a>      var idx = idxLoaded + 1;
+<a name="line65"></a>      if (idx &lt; ids.length) {
+<a name="line66"></a>        setTimeout(goog.bind(this.onLoad, this, ids, idx), 2);
+<a name="line67"></a>      }
+<a name="line68"></a>    }};
+<a name="line69"></a>}
+<a name="line70"></a>
+<a name="line71"></a>function createSuccessfulNonBatchLoader(moduleMgr) {
+<a name="line72"></a>  return {
+<a name="line73"></a>    loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
+<a name="line74"></a>        opt_timeoutFn) {
+<a name="line75"></a>      requestCount++;
+<a name="line76"></a>      setTimeout(function() {
+<a name="line77"></a>        moduleMgr.beforeLoadModuleCode(ids[0]);
+<a name="line78"></a>        moduleMgr.setLoaded(ids[0]);
+<a name="line79"></a>        moduleMgr.afterLoadModuleCode(ids[0]);
+<a name="line80"></a>        if (opt_successFn) {
+<a name="line81"></a>          opt_successFn();
+<a name="line82"></a>        }
+<a name="line83"></a>      }, 5);
+<a name="line84"></a>    }};
+<a name="line85"></a>}
+<a name="line86"></a>
+<a name="line87"></a>function createUnsuccessfulLoader(moduleMgr, status) {
+<a name="line88"></a>  return {
+<a name="line89"></a>    loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
+<a name="line90"></a>        opt_timeoutFn) {
+<a name="line91"></a>      moduleMgr.beforeLoadModuleCode(ids[0]);
+<a name="line92"></a>      setTimeout(function() { opt_errFn(status); }, 5);
+<a name="line93"></a>    }};
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>function createUnsuccessfulBatchLoader(moduleMgr, status) {
+<a name="line97"></a>  return {
+<a name="line98"></a>    loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
+<a name="line99"></a>        opt_timeoutFn) {
+<a name="line100"></a>      setTimeout(function() { opt_errFn(status); }, 5);
+<a name="line101"></a>    }};
+<a name="line102"></a>}
+<a name="line103"></a>
+<a name="line104"></a>function createTimeoutLoader(moduleMgr, status) {
+<a name="line105"></a>  return {
+<a name="line106"></a>    loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
+<a name="line107"></a>        opt_timeoutFn) {
+<a name="line108"></a>      setTimeout(function() { opt_timeoutFn(status); }, 5);
+<a name="line109"></a>    }};
+<a name="line110"></a>}
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Tests loading a module under different conditions i.e. unloaded
+<a name="line115"></a> * module, already loaded module, module loaded through user initiated
+<a name="line116"></a> * actions, synchronous callback for a module that has been already
+<a name="line117"></a> * loaded. Test both batch and non-batch loaders.
+<a name="line118"></a> */
+<a name="line119"></a>function testExecOnLoad() {
+<a name="line120"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line121"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line122"></a>  execOnLoad_(mm);
+<a name="line123"></a>
+<a name="line124"></a>  mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line125"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line126"></a>  mm.setBatchModeEnabled(true);
+<a name="line127"></a>  execOnLoad_(mm);
+<a name="line128"></a>}
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Tests execOnLoad with the specified module manager.
+<a name="line133"></a> * @param {goog.module.ModuleManager} mm The module manager.
+<a name="line134"></a> */
+<a name="line135"></a>function execOnLoad_(mm) {
+<a name="line136"></a>  // When module is unloaded, execOnLoad is async.
+<a name="line137"></a>  var execCalled1 = false;
+<a name="line138"></a>  mm.execOnLoad(&#39;a&#39;, function() { execCalled1 = true; });
+<a name="line139"></a>  assertFalse(&#39;module &quot;a&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line140"></a>  assertTrue(&#39;module &quot;a&quot; should be loading&#39;, mm.isModuleLoading(&#39;a&#39;));
+<a name="line141"></a>  assertFalse(&#39;execCalled1 should not be set yet&#39;, execCalled1);
+<a name="line142"></a>  assertTrue(&#39;ModuleManager should be active&#39;, mm.isActive());
+<a name="line143"></a>  assertFalse(
+<a name="line144"></a>      &#39;ModuleManager should not be user active&#39;, mm.isUserActive());
+<a name="line145"></a>  clock.tick(5);
+<a name="line146"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line147"></a>  assertFalse(
+<a name="line148"></a>      &#39;module &quot;a&quot; should not be loading&#39;, mm.isModuleLoading(&#39;a&#39;));
+<a name="line149"></a>  assertTrue(&#39;execCalled1 should be set&#39;, execCalled1);
+<a name="line150"></a>  assertFalse(&#39;ModuleManager should not be active&#39;, mm.isActive());
+<a name="line151"></a>  assertFalse(
+<a name="line152"></a>      &#39;ModuleManager should not be user active&#39;, mm.isUserActive());
+<a name="line153"></a>
+<a name="line154"></a>  // When module is already loaded, execOnLoad is still async unless
+<a name="line155"></a>  // specified otherwise.
+<a name="line156"></a>  var execCalled2 = false;
+<a name="line157"></a>  mm.execOnLoad(&#39;a&#39;, function() { execCalled2 = true; });
+<a name="line158"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line159"></a>  assertFalse(
+<a name="line160"></a>      &#39;module &quot;a&quot; should not be loading&#39;, mm.isModuleLoading(&#39;a&#39;));
+<a name="line161"></a>  assertFalse(&#39;execCalled2 should not be set yet&#39;, execCalled2);
+<a name="line162"></a>  clock.tick(5);
+<a name="line163"></a>  assertTrue(&#39;execCalled2 should be set&#39;, execCalled2);
+<a name="line164"></a>
+<a name="line165"></a>  // When module is unloaded, execOnLoad is async (user active).
+<a name="line166"></a>  var execCalled5 = false;
+<a name="line167"></a>  mm.execOnLoad(&#39;c&#39;,
+<a name="line168"></a>      function() { execCalled5 = true; }, null, null, true);
+<a name="line169"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line170"></a>  assertTrue(&#39;module &quot;c&quot; should be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line171"></a>  assertFalse(&#39;execCalled1 should not be set yet&#39;, execCalled5);
+<a name="line172"></a>  assertTrue(&#39;ModuleManager should be active&#39;, mm.isActive());
+<a name="line173"></a>  assertTrue(&#39;ModuleManager should be user active&#39;, mm.isUserActive());
+<a name="line174"></a>  clock.tick(5);
+<a name="line175"></a>  assertTrue(&#39;module &quot;c&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line176"></a>  assertFalse(
+<a name="line177"></a>      &#39;module &quot;c&quot; should not be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line178"></a>  assertTrue(&#39;execCalled1 should be set&#39;, execCalled5);
+<a name="line179"></a>  assertFalse(&#39;ModuleManager should not be active&#39;, mm.isActive());
+<a name="line180"></a>  assertFalse(
+<a name="line181"></a>      &#39;ModuleManager should not be user active&#39;, mm.isUserActive());
+<a name="line182"></a>
+<a name="line183"></a>  // When module is already loaded, execOnLoad is still synchronous when
+<a name="line184"></a>  // so specified
+<a name="line185"></a>  var execCalled6 = false;
+<a name="line186"></a>  mm.execOnLoad(&#39;c&#39;, function() { execCalled6 = true; },
+<a name="line187"></a>      undefined, undefined, undefined, true);
+<a name="line188"></a>  assertTrue(&#39;module &quot;c&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line189"></a>  assertFalse(
+<a name="line190"></a>      &#39;module &quot;c&quot; should not be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line191"></a>  assertTrue(&#39;execCalled6 should be set&#39;, execCalled6);
+<a name="line192"></a>  clock.tick(5);
+<a name="line193"></a>  assertTrue(&#39;execCalled6 should still be set&#39;, execCalled6);
+<a name="line194"></a>
+<a name="line195"></a>}
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Test aborting the callback called on module load.
+<a name="line200"></a> */
+<a name="line201"></a>function testExecOnLoadAbort() {
+<a name="line202"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line203"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line204"></a>
+<a name="line205"></a>  // When module is unloaded and abort is called, module still gets
+<a name="line206"></a>  // loaded, but callback is cancelled.
+<a name="line207"></a>  var execCalled1 = false;
+<a name="line208"></a>  var callback1 = mm.execOnLoad(&#39;b&#39;, function() { execCalled1 = true; });
+<a name="line209"></a>  callback1.abort();
+<a name="line210"></a>  clock.tick(5);
+<a name="line211"></a>  assertTrue(&#39;module &quot;b&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line212"></a>  assertFalse(&#39;execCalled3 should not be set&#39;, execCalled1);
+<a name="line213"></a>
+<a name="line214"></a>  // When module is already loaded, execOnLoad is still async, so calling
+<a name="line215"></a>  // abort should still cancel the callback.
+<a name="line216"></a>  var execCalled2 = false;
+<a name="line217"></a>  var callback2 = mm.execOnLoad(&#39;a&#39;, function() { execCalled2 = true; });
+<a name="line218"></a>  callback2.abort();
+<a name="line219"></a>  clock.tick(5);
+<a name="line220"></a>  assertFalse(&#39;execCalled2 should not be set&#39;, execCalled2);
+<a name="line221"></a>}
+<a name="line222"></a>
+<a name="line223"></a>
+<a name="line224"></a>/**
+<a name="line225"></a> * Test preloading modules and ensure that the before load, after load
+<a name="line226"></a> * and set load called are called only once per module.
+<a name="line227"></a> */
+<a name="line228"></a>function testExecOnLoadWhilePreloadingAndViceVersa() {
+<a name="line229"></a>  var mm = getModuleManager({&#39;c&#39;: [], &#39;d&#39;: []});
+<a name="line230"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line231"></a>  execOnLoadWhilePreloadingAndViceVersa_(mm);
+<a name="line232"></a>
+<a name="line233"></a>  mm = getModuleManager({&#39;c&#39;: [], &#39;d&#39;: []});
+<a name="line234"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line235"></a>  mm.setBatchModeEnabled(true);
+<a name="line236"></a>  execOnLoadWhilePreloadingAndViceVersa_(mm);
+<a name="line237"></a>}
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * Perform tests with the specified module manager.
+<a name="line242"></a> * @param {goog.module.ModuleManager} mm The module manager.
+<a name="line243"></a> */
+<a name="line244"></a>function execOnLoadWhilePreloadingAndViceVersa_(mm) {
+<a name="line245"></a>  var mm = getModuleManager({&#39;c&#39;: [], &#39;d&#39;: []});
+<a name="line246"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line247"></a>
+<a name="line248"></a>  var origSetLoaded = mm.setLoaded;
+<a name="line249"></a>  var calls = [0, 0, 0];
+<a name="line250"></a>  mm.beforeLoadModuleCode = function(id) {
+<a name="line251"></a>    calls[0]++;
+<a name="line252"></a>  };
+<a name="line253"></a>  mm.setLoaded = function(id) {
+<a name="line254"></a>    calls[1]++;
+<a name="line255"></a>    origSetLoaded.call(mm, id);
+<a name="line256"></a>  };
+<a name="line257"></a>  mm.afterLoadModuleCode = function(id) {
+<a name="line258"></a>    calls[2]++;
+<a name="line259"></a>  };
+<a name="line260"></a>
+<a name="line261"></a>  mm.preloadModule(&#39;c&#39;, 2);
+<a name="line262"></a>  assertFalse(
+<a name="line263"></a>      &#39;module &quot;c&quot; should not be loading yet&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line264"></a>  clock.tick(2);
+<a name="line265"></a>  assertTrue(
+<a name="line266"></a>      &#39;module &quot;c&quot; should now be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line267"></a>  mm.execOnLoad(&#39;c&#39;, function() {});
+<a name="line268"></a>  assertTrue(
+<a name="line269"></a>      &#39;module &quot;c&quot; should still be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line270"></a>  clock.tick(5);
+<a name="line271"></a>  assertFalse(
+<a name="line272"></a>      &#39;module &quot;c&quot; should be done loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line273"></a>  assertEquals(
+<a name="line274"></a>      &#39;beforeLoad should only be called once for &quot;c&quot;&#39;, 1, calls[0]);
+<a name="line275"></a>  assertEquals(
+<a name="line276"></a>      &#39;setLoaded should only be called once for &quot;c&quot;&#39;, 1, calls[1]);
+<a name="line277"></a>  assertEquals(
+<a name="line278"></a>      &#39;afterLoad should only be called once for &quot;c&quot;&#39;, 1, calls[2]);
+<a name="line279"></a>
+<a name="line280"></a>  mm.execOnLoad(&#39;d&#39;, function() {});
+<a name="line281"></a>  assertTrue(
+<a name="line282"></a>      &#39;module &quot;d&quot; should now be loading&#39;, mm.isModuleLoading(&#39;d&#39;));
+<a name="line283"></a>  mm.preloadModule(&#39;d&#39;, 2);
+<a name="line284"></a>  clock.tick(5);
+<a name="line285"></a>  assertFalse(
+<a name="line286"></a>      &#39;module &quot;d&quot; should be done loading&#39;, mm.isModuleLoading(&#39;d&#39;));
+<a name="line287"></a>  assertTrue(
+<a name="line288"></a>      &#39;module &quot;d&quot; should now be loaded&#39;, mm.isModuleLoaded(&#39;d&#39;));
+<a name="line289"></a>  assertEquals(
+<a name="line290"></a>      &#39;beforeLoad should only be called once for &quot;d&quot;&#39;, 2, calls[0]);
+<a name="line291"></a>  assertEquals(
+<a name="line292"></a>      &#39;setLoaded should only be called once for &quot;d&quot;&#39;, 2, calls[1]);
+<a name="line293"></a>  assertEquals(
+<a name="line294"></a>      &#39;afterLoad should only be called once for &quot;d&quot;&#39;, 2, calls[2]);
+<a name="line295"></a>}
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>/**
+<a name="line299"></a> * Tests that multiple callbacks on the same module don&#39;t cause
+<a name="line300"></a> * confusion about the active state after the module is finally loaded.
+<a name="line301"></a> */
+<a name="line302"></a>function testUserInitiatedExecOnLoadEventuallyLeavesManagerIdle() {
+<a name="line303"></a>  var mm = getModuleManager({&#39;c&#39;: [], &#39;d&#39;: []});
+<a name="line304"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line305"></a>
+<a name="line306"></a>  var calledBack1 = false;
+<a name="line307"></a>  var calledBack2 = false;
+<a name="line308"></a>
+<a name="line309"></a>  mm.execOnLoad(
+<a name="line310"></a>      &#39;c&#39;,
+<a name="line311"></a>      function() {
+<a name="line312"></a>        calledBack1 = true;
+<a name="line313"></a>      },
+<a name="line314"></a>      undefined,
+<a name="line315"></a>      undefined,
+<a name="line316"></a>      true);
+<a name="line317"></a>  mm.execOnLoad(
+<a name="line318"></a>      &#39;c&#39;,
+<a name="line319"></a>      function() {
+<a name="line320"></a>        calledBack2 = true;
+<a name="line321"></a>      },
+<a name="line322"></a>      undefined,
+<a name="line323"></a>      undefined,
+<a name="line324"></a>      true);
+<a name="line325"></a>  mm.load(&#39;c&#39;);
+<a name="line326"></a>
+<a name="line327"></a>  assertTrue(
+<a name="line328"></a>      &#39;Manager should be active while waiting for load&#39;, mm.isUserActive());
+<a name="line329"></a>
+<a name="line330"></a>  clock.tick(5);
+<a name="line331"></a>
+<a name="line332"></a>  assertTrue(&#39;First callback should be called&#39;, calledBack1);
+<a name="line333"></a>  assertTrue(&#39;Second callback should be called&#39;, calledBack2);
+<a name="line334"></a>  assertFalse(
+<a name="line335"></a>      &#39;Manager should be inactive after loading is complete&#39;,
+<a name="line336"></a>      mm.isUserActive());
+<a name="line337"></a>}
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * Tests loading a module by requesting a Deferred object.
+<a name="line342"></a> */
+<a name="line343"></a>function testLoad() {
+<a name="line344"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line345"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line346"></a>
+<a name="line347"></a>  var calledBack = false;
+<a name="line348"></a>  var error = null;
+<a name="line349"></a>
+<a name="line350"></a>  var d = mm.load(&#39;a&#39;);
+<a name="line351"></a>  d.addCallback(function(ctx) {
+<a name="line352"></a>    calledBack = true;
+<a name="line353"></a>  });
+<a name="line354"></a>  d.addErrback(function(err) {
+<a name="line355"></a>    error = err;
+<a name="line356"></a>  });
+<a name="line357"></a>
+<a name="line358"></a>  assertFalse(calledBack);
+<a name="line359"></a>  assertNull(error);
+<a name="line360"></a>  assertFalse(mm.isUserActive());
+<a name="line361"></a>
+<a name="line362"></a>  clock.tick(5);
+<a name="line363"></a>
+<a name="line364"></a>  assertTrue(calledBack);
+<a name="line365"></a>  assertNull(error);
+<a name="line366"></a>}
+<a name="line367"></a>
+<a name="line368"></a>
+<a name="line369"></a>/**
+<a name="line370"></a> * Tests loading 2 modules asserting that the loads happen in parallel
+<a name="line371"></a> * in one unit of time.
+<a name="line372"></a> */
+<a name="line373"></a>function testLoad_concurrent() {
+<a name="line374"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line375"></a>  mm.setConcurrentLoadingEnabled(true);
+<a name="line376"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line377"></a>
+<a name="line378"></a>  var calledBack = false;
+<a name="line379"></a>  var error = null;
+<a name="line380"></a>
+<a name="line381"></a>  mm.load(&#39;a&#39;);
+<a name="line382"></a>  mm.load(&#39;b&#39;);
+<a name="line383"></a>  assertEquals(2, requestCount);
+<a name="line384"></a>  // Only time for one serialized download.
+<a name="line385"></a>  clock.tick(5);
+<a name="line386"></a>
+<a name="line387"></a>  assertTrue(mm.getModuleInfo(&#39;a&#39;).isLoaded());
+<a name="line388"></a>  assertTrue(mm.getModuleInfo(&#39;b&#39;).isLoaded());
+<a name="line389"></a>}
+<a name="line390"></a>
+<a name="line391"></a>function testLoad_concurrentSecondIsDepOfFist() {
+<a name="line392"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line393"></a>  mm.setBatchModeEnabled(true);
+<a name="line394"></a>  mm.setConcurrentLoadingEnabled(true);
+<a name="line395"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line396"></a>
+<a name="line397"></a>  var calledBack = false;
+<a name="line398"></a>  var error = null;
+<a name="line399"></a>
+<a name="line400"></a>  mm.loadMultiple([&#39;a&#39;, &#39;b&#39;]);
+<a name="line401"></a>  mm.load(&#39;b&#39;);
+<a name="line402"></a>  assertEquals(&#39;No 2nd request expected&#39;, 1, requestCount);
+<a name="line403"></a>  // Only time for one serialized download.
+<a name="line404"></a>  clock.tick(5);
+<a name="line405"></a>  clock.tick(2); // Makes second module come in from batch requst.
+<a name="line406"></a>
+<a name="line407"></a>  assertTrue(mm.getModuleInfo(&#39;a&#39;).isLoaded());
+<a name="line408"></a>  assertTrue(mm.getModuleInfo(&#39;b&#39;).isLoaded());
+<a name="line409"></a>}
+<a name="line410"></a>
+<a name="line411"></a>function testLoad_nonConcurrent() {
+<a name="line412"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line413"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line414"></a>
+<a name="line415"></a>  var calledBack = false;
+<a name="line416"></a>  var error = null;
+<a name="line417"></a>
+<a name="line418"></a>  mm.load(&#39;a&#39;);
+<a name="line419"></a>  mm.load(&#39;b&#39;);
+<a name="line420"></a>  assertEquals(1, requestCount);
+<a name="line421"></a>  // Only time for one serialized download.
+<a name="line422"></a>  clock.tick(5);
+<a name="line423"></a>
+<a name="line424"></a>  assertTrue(mm.getModuleInfo(&#39;a&#39;).isLoaded());
+<a name="line425"></a>  assertFalse(mm.getModuleInfo(&#39;b&#39;).isLoaded());
+<a name="line426"></a>}
+<a name="line427"></a>
+<a name="line428"></a>function testLoadUnknown() {
+<a name="line429"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line430"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line431"></a>  var e = assertThrows(function() {
+<a name="line432"></a>    mm.load(&#39;DoesNotExist&#39;);
+<a name="line433"></a>  });
+<a name="line434"></a>  assertEquals(&#39;Unknown module: DoesNotExist&#39;, e.message);
+<a name="line435"></a>}
+<a name="line436"></a>
+<a name="line437"></a>
+<a name="line438"></a>/**
+<a name="line439"></a> * Tests loading multiple modules by requesting a Deferred object.
+<a name="line440"></a> */
+<a name="line441"></a>function testLoadMultiple() {
+<a name="line442"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line443"></a>  mm.setBatchModeEnabled(true);
+<a name="line444"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line445"></a>
+<a name="line446"></a>  var calledBack = false;
+<a name="line447"></a>  var error = null;
+<a name="line448"></a>  var calledBack2 = false;
+<a name="line449"></a>  var error2 = null;
+<a name="line450"></a>
+<a name="line451"></a>  var dMap = mm.loadMultiple([&#39;a&#39;, &#39;b&#39;]);
+<a name="line452"></a>  dMap[&#39;a&#39;].addCallback(function(ctx) {
+<a name="line453"></a>    calledBack = true;
+<a name="line454"></a>  });
+<a name="line455"></a>  dMap[&#39;a&#39;].addErrback(function(err) {
+<a name="line456"></a>    error = err;
+<a name="line457"></a>  });
+<a name="line458"></a>  dMap[&#39;b&#39;].addCallback(function(ctx) {
+<a name="line459"></a>    calledBack2 = true;
+<a name="line460"></a>  });
+<a name="line461"></a>  dMap[&#39;b&#39;].addErrback(function(err) {
+<a name="line462"></a>    error2 = err;
+<a name="line463"></a>  });
+<a name="line464"></a>
+<a name="line465"></a>  assertFalse(calledBack);
+<a name="line466"></a>  assertFalse(calledBack2);
+<a name="line467"></a>
+<a name="line468"></a>  clock.tick(5);
+<a name="line469"></a>  assertTrue(calledBack);
+<a name="line470"></a>  assertFalse(calledBack2);
+<a name="line471"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line472"></a>  assertFalse(&#39;module &quot;b&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line473"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line474"></a>
+<a name="line475"></a>  clock.tick(2);
+<a name="line476"></a>
+<a name="line477"></a>  assertTrue(calledBack);
+<a name="line478"></a>  assertTrue(calledBack2);
+<a name="line479"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line480"></a>  assertTrue(&#39;module &quot;b&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line481"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line482"></a>  assertNull(error);
+<a name="line483"></a>  assertNull(error2);
+<a name="line484"></a>}
+<a name="line485"></a>
+<a name="line486"></a>
+<a name="line487"></a>/**
+<a name="line488"></a> * Tests loading multiple modules with deps by requesting a Deferred object.
+<a name="line489"></a> */
+<a name="line490"></a>function testLoadMultipleWithDeps() {
+<a name="line491"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [&#39;c&#39;], &#39;c&#39;: []});
+<a name="line492"></a>  mm.setBatchModeEnabled(true);
+<a name="line493"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line494"></a>
+<a name="line495"></a>  var calledBack = false;
+<a name="line496"></a>  var error = null;
+<a name="line497"></a>  var calledBack2 = false;
+<a name="line498"></a>  var error2 = null;
+<a name="line499"></a>
+<a name="line500"></a>  var dMap = mm.loadMultiple([&#39;a&#39;, &#39;b&#39;]);
+<a name="line501"></a>  dMap[&#39;a&#39;].addCallback(function(ctx) {
+<a name="line502"></a>    calledBack = true;
+<a name="line503"></a>  });
+<a name="line504"></a>  dMap[&#39;a&#39;].addErrback(function(err) {
+<a name="line505"></a>    error = err;
+<a name="line506"></a>  });
+<a name="line507"></a>  dMap[&#39;b&#39;].addCallback(function(ctx) {
+<a name="line508"></a>    calledBack2 = true;
+<a name="line509"></a>  });
+<a name="line510"></a>  dMap[&#39;b&#39;].addErrback(function(err) {
+<a name="line511"></a>    error2 = err;
+<a name="line512"></a>  });
+<a name="line513"></a>
+<a name="line514"></a>  assertFalse(calledBack);
+<a name="line515"></a>  assertFalse(calledBack2);
+<a name="line516"></a>
+<a name="line517"></a>  clock.tick(5);
+<a name="line518"></a>  assertTrue(calledBack);
+<a name="line519"></a>  assertFalse(calledBack2);
+<a name="line520"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line521"></a>  assertFalse(&#39;module &quot;b&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line522"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line523"></a>
+<a name="line524"></a>  clock.tick(2);
+<a name="line525"></a>
+<a name="line526"></a>  assertFalse(calledBack2);
+<a name="line527"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line528"></a>  assertFalse(&#39;module &quot;b&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line529"></a>  assertTrue(&#39;module &quot;c&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line530"></a>
+<a name="line531"></a>  clock.tick(2);
+<a name="line532"></a>
+<a name="line533"></a>  assertTrue(calledBack2);
+<a name="line534"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line535"></a>  assertTrue(&#39;module &quot;b&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line536"></a>  assertTrue(&#39;module &quot;c&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line537"></a>  assertNull(error);
+<a name="line538"></a>  assertNull(error2);
+<a name="line539"></a>}
+<a name="line540"></a>
+<a name="line541"></a>
+<a name="line542"></a>/**
+<a name="line543"></a> * Tests loading multiple modules by requesting a Deferred object when
+<a name="line544"></a> * a server error occurs.
+<a name="line545"></a> */
+<a name="line546"></a>function testLoadMultipleWithErrors() {
+<a name="line547"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line548"></a>  mm.setBatchModeEnabled(true);
+<a name="line549"></a>  mm.setLoader(createUnsuccessfulLoader(mm, 500));
+<a name="line550"></a>
+<a name="line551"></a>  var calledBack = false;
+<a name="line552"></a>  var error = null;
+<a name="line553"></a>  var calledBack2 = false;
+<a name="line554"></a>  var error2 = null;
+<a name="line555"></a>  var calledBack3 = false;
+<a name="line556"></a>  var error3 = null;
+<a name="line557"></a>
+<a name="line558"></a>  var dMap = mm.loadMultiple([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]);
+<a name="line559"></a>  dMap[&#39;a&#39;].addCallback(function(ctx) {
+<a name="line560"></a>    calledBack = true;
+<a name="line561"></a>  });
+<a name="line562"></a>  dMap[&#39;a&#39;].addErrback(function(err) {
+<a name="line563"></a>    error = err;
+<a name="line564"></a>  });
+<a name="line565"></a>  dMap[&#39;b&#39;].addCallback(function(ctx) {
+<a name="line566"></a>    calledBack2 = true;
+<a name="line567"></a>  });
+<a name="line568"></a>  dMap[&#39;b&#39;].addErrback(function(err) {
+<a name="line569"></a>    error2 = err;
+<a name="line570"></a>  });
+<a name="line571"></a>  dMap[&#39;c&#39;].addCallback(function(ctx) {
+<a name="line572"></a>    calledBack3 = true;
+<a name="line573"></a>  });
+<a name="line574"></a>  dMap[&#39;c&#39;].addErrback(function(err) {
+<a name="line575"></a>    error3 = err;
+<a name="line576"></a>  });
+<a name="line577"></a>
+<a name="line578"></a>  assertFalse(calledBack);
+<a name="line579"></a>  assertFalse(calledBack2);
+<a name="line580"></a>  assertFalse(calledBack3);
+<a name="line581"></a>
+<a name="line582"></a>  clock.tick(4);
+<a name="line583"></a>
+<a name="line584"></a>  // A module request is now underway using the unsuccessful loader.
+<a name="line585"></a>  // We substitute a successful loader for future module load requests.
+<a name="line586"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line587"></a>
+<a name="line588"></a>  clock.tick(1);
+<a name="line589"></a>
+<a name="line590"></a>  assertFalse(calledBack);
+<a name="line591"></a>  assertFalse(calledBack2);
+<a name="line592"></a>  assertFalse(calledBack3);
+<a name="line593"></a>  assertFalse(&#39;module &quot;a&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line594"></a>  assertFalse(&#39;module &quot;b&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line595"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line596"></a>
+<a name="line597"></a>  // Retry should happen after a backoff
+<a name="line598"></a>  clock.tick(5 + mm.getBackOff_());
+<a name="line599"></a>
+<a name="line600"></a>  assertTrue(calledBack);
+<a name="line601"></a>  assertFalse(calledBack2);
+<a name="line602"></a>  assertFalse(calledBack3);
+<a name="line603"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line604"></a>  assertFalse(&#39;module &quot;b&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line605"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line606"></a>
+<a name="line607"></a>  clock.tick(2);
+<a name="line608"></a>  assertTrue(calledBack2);
+<a name="line609"></a>  assertFalse(calledBack3);
+<a name="line610"></a>  assertTrue(&#39;module &quot;b&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line611"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line612"></a>
+<a name="line613"></a>  clock.tick(2);
+<a name="line614"></a>  assertTrue(calledBack3);
+<a name="line615"></a>  assertTrue(&#39;module &quot;c&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line616"></a>
+<a name="line617"></a>  assertNull(error);
+<a name="line618"></a>  assertNull(error2);
+<a name="line619"></a>  assertNull(error3);
+<a name="line620"></a>}
+<a name="line621"></a>
+<a name="line622"></a>
+<a name="line623"></a>/**
+<a name="line624"></a> * Tests loading multiple modules by requesting a Deferred object when
+<a name="line625"></a> * consecutive server error occur and the loader falls back to serial
+<a name="line626"></a> * loads.
+<a name="line627"></a> */
+<a name="line628"></a>function testLoadMultipleWithErrorsFallbackOnSerial() {
+<a name="line629"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line630"></a>  mm.setBatchModeEnabled(true);
+<a name="line631"></a>  mm.setLoader(createUnsuccessfulLoader(mm, 500));
+<a name="line632"></a>
+<a name="line633"></a>  var calledBack = false;
+<a name="line634"></a>  var error = null;
+<a name="line635"></a>  var calledBack2 = false;
+<a name="line636"></a>  var error2 = null;
+<a name="line637"></a>  var calledBack3 = false;
+<a name="line638"></a>  var error3 = null;
+<a name="line639"></a>
+<a name="line640"></a>  var dMap = mm.loadMultiple([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]);
+<a name="line641"></a>  dMap[&#39;a&#39;].addCallback(function(ctx) {
+<a name="line642"></a>    calledBack = true;
+<a name="line643"></a>  });
+<a name="line644"></a>  dMap[&#39;a&#39;].addErrback(function(err) {
+<a name="line645"></a>    error = err;
+<a name="line646"></a>  });
+<a name="line647"></a>  dMap[&#39;b&#39;].addCallback(function(ctx) {
+<a name="line648"></a>    calledBack2 = true;
+<a name="line649"></a>  });
+<a name="line650"></a>  dMap[&#39;b&#39;].addErrback(function(err) {
+<a name="line651"></a>    error2 = err;
+<a name="line652"></a>  });
+<a name="line653"></a>  dMap[&#39;c&#39;].addCallback(function(ctx) {
+<a name="line654"></a>    calledBack3 = true;
+<a name="line655"></a>  });
+<a name="line656"></a>  dMap[&#39;c&#39;].addErrback(function(err) {
+<a name="line657"></a>    error3 = err;
+<a name="line658"></a>  });
+<a name="line659"></a>
+<a name="line660"></a>  assertFalse(calledBack);
+<a name="line661"></a>  assertFalse(calledBack2);
+<a name="line662"></a>  assertFalse(calledBack3);
+<a name="line663"></a>
+<a name="line664"></a>  clock.tick(5);
+<a name="line665"></a>
+<a name="line666"></a>  assertFalse(calledBack);
+<a name="line667"></a>  assertFalse(calledBack2);
+<a name="line668"></a>  assertFalse(calledBack3);
+<a name="line669"></a>  assertFalse(&#39;module &quot;a&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line670"></a>  assertFalse(&#39;module &quot;b&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line671"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line672"></a>
+<a name="line673"></a>  // Retry should happen and fail after a backoff
+<a name="line674"></a>  clock.tick(5 + mm.getBackOff_());
+<a name="line675"></a>  assertFalse(calledBack);
+<a name="line676"></a>  assertFalse(calledBack2);
+<a name="line677"></a>  assertFalse(calledBack3);
+<a name="line678"></a>  assertFalse(&#39;module &quot;a&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line679"></a>  assertFalse(&#39;module &quot;b&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line680"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line681"></a>
+<a name="line682"></a>  // A second retry should happen after a backoff
+<a name="line683"></a>  clock.tick(4 + mm.getBackOff_());
+<a name="line684"></a>  // The second retry is now underway using the unsuccessful loader.
+<a name="line685"></a>  // We substitute a successful loader for future module load requests.
+<a name="line686"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line687"></a>
+<a name="line688"></a>  clock.tick(1);
+<a name="line689"></a>
+<a name="line690"></a>  // A second retry should fail now
+<a name="line691"></a>  assertFalse(calledBack);
+<a name="line692"></a>  assertFalse(calledBack2);
+<a name="line693"></a>  assertFalse(calledBack3);
+<a name="line694"></a>  assertFalse(&#39;module &quot;a&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line695"></a>  assertFalse(&#39;module &quot;b&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line696"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line697"></a>
+<a name="line698"></a>  // Each module should be loaded individually now, each taking 5 ticks
+<a name="line699"></a>
+<a name="line700"></a>  clock.tick(5);
+<a name="line701"></a>  assertTrue(calledBack);
+<a name="line702"></a>  assertFalse(calledBack2);
+<a name="line703"></a>  assertFalse(calledBack3);
+<a name="line704"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;a&#39;));
+<a name="line705"></a>  assertFalse(&#39;module &quot;b&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line706"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line707"></a>
+<a name="line708"></a>  clock.tick(5);
+<a name="line709"></a>  assertTrue(calledBack2);
+<a name="line710"></a>  assertFalse(calledBack3);
+<a name="line711"></a>  assertTrue(&#39;module &quot;b&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;b&#39;));
+<a name="line712"></a>  assertFalse(&#39;module &quot;c&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line713"></a>
+<a name="line714"></a>  clock.tick(5);
+<a name="line715"></a>  assertTrue(calledBack3);
+<a name="line716"></a>  assertTrue(&#39;module &quot;c&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;c&#39;));
+<a name="line717"></a>
+<a name="line718"></a>  assertNull(error);
+<a name="line719"></a>  assertNull(error2);
+<a name="line720"></a>  assertNull(error3);
+<a name="line721"></a>}
+<a name="line722"></a>
+<a name="line723"></a>
+<a name="line724"></a>/**
+<a name="line725"></a> * Tests loading a module by user action by requesting a Deferred object.
+<a name="line726"></a> */
+<a name="line727"></a>function testLoadForUser() {
+<a name="line728"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line729"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line730"></a>
+<a name="line731"></a>  var calledBack = false;
+<a name="line732"></a>  var error = null;
+<a name="line733"></a>
+<a name="line734"></a>  var d = mm.load(&#39;a&#39;, true);
+<a name="line735"></a>  d.addCallback(function(ctx) {
+<a name="line736"></a>    calledBack = true;
+<a name="line737"></a>  });
+<a name="line738"></a>  d.addErrback(function(err) {
+<a name="line739"></a>    error = err;
+<a name="line740"></a>  });
+<a name="line741"></a>
+<a name="line742"></a>  assertFalse(calledBack);
+<a name="line743"></a>  assertNull(error);
+<a name="line744"></a>  assertTrue(mm.isUserActive());
+<a name="line745"></a>
+<a name="line746"></a>  clock.tick(5);
+<a name="line747"></a>
+<a name="line748"></a>  assertTrue(calledBack);
+<a name="line749"></a>  assertNull(error);
+<a name="line750"></a>}
+<a name="line751"></a>
+<a name="line752"></a>
+<a name="line753"></a>/**
+<a name="line754"></a> * Tests that preloading a module calls back the deferred object.
+<a name="line755"></a> */
+<a name="line756"></a>function testPreloadDeferredWhenNotLoaded() {
+<a name="line757"></a>  var mm = getModuleManager({&#39;a&#39;: []});
+<a name="line758"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line759"></a>
+<a name="line760"></a>  var calledBack = false;
+<a name="line761"></a>
+<a name="line762"></a>  var d = mm.preloadModule(&#39;a&#39;);
+<a name="line763"></a>  d.addCallback(function(ctx) {
+<a name="line764"></a>    calledBack = true;
+<a name="line765"></a>  });
+<a name="line766"></a>
+<a name="line767"></a>  // First load should take five ticks.
+<a name="line768"></a>  assertFalse(&#39;module &quot;a&quot; should not be loaded yet&#39;, calledBack);
+<a name="line769"></a>  clock.tick(5);
+<a name="line770"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, calledBack);
+<a name="line771"></a>}
+<a name="line772"></a>
+<a name="line773"></a>
+<a name="line774"></a>/**
+<a name="line775"></a> * Tests preloading an already loaded module.
+<a name="line776"></a> */
+<a name="line777"></a>function testPreloadDeferredWhenLoaded() {
+<a name="line778"></a>  var mm = getModuleManager({&#39;a&#39;: []});
+<a name="line779"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line780"></a>
+<a name="line781"></a>  var calledBack = false;
+<a name="line782"></a>
+<a name="line783"></a>  mm.preloadModule(&#39;a&#39;);
+<a name="line784"></a>  clock.tick(5);
+<a name="line785"></a>
+<a name="line786"></a>  var d = mm.preloadModule(&#39;a&#39;);
+<a name="line787"></a>  d.addCallback(function(ctx) {
+<a name="line788"></a>    calledBack = true;
+<a name="line789"></a>  });
+<a name="line790"></a>
+<a name="line791"></a>  // Module is already loaded, should be called back after the setTimeout
+<a name="line792"></a>  // in preloadModule.
+<a name="line793"></a>  assertFalse(&#39;deferred for module &quot;a&quot; should not be called yet&#39;, calledBack);
+<a name="line794"></a>  clock.tick(1);
+<a name="line795"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, calledBack);
+<a name="line796"></a>}
+<a name="line797"></a>
+<a name="line798"></a>
+<a name="line799"></a>/**
+<a name="line800"></a> * Tests preloading a module that is currently loading.
+<a name="line801"></a> */
+<a name="line802"></a>function testPreloadDeferredWhenLoading() {
+<a name="line803"></a>  var mm = getModuleManager({&#39;a&#39;: []});
+<a name="line804"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line805"></a>
+<a name="line806"></a>  mm.preloadModule(&#39;a&#39;);
+<a name="line807"></a>  clock.tick(1);
+<a name="line808"></a>
+<a name="line809"></a>  // &#39;b&#39; is in the middle of loading, should get called back when it&#39;s done.
+<a name="line810"></a>  var calledBack = false;
+<a name="line811"></a>  var d = mm.preloadModule(&#39;a&#39;);
+<a name="line812"></a>  d.addCallback(function(ctx) {
+<a name="line813"></a>    calledBack = true;
+<a name="line814"></a>  });
+<a name="line815"></a>
+<a name="line816"></a>  assertFalse(&#39;module &quot;a&quot; should not be loaded yet&#39;, calledBack);
+<a name="line817"></a>  clock.tick(4);
+<a name="line818"></a>  assertTrue(&#39;module &quot;a&quot; should be loaded&#39;, calledBack);
+<a name="line819"></a>}
+<a name="line820"></a>
+<a name="line821"></a>
+<a name="line822"></a>/**
+<a name="line823"></a> * Tests that load doesn&#39;t trigger another load if a module is already
+<a name="line824"></a> * preloading.
+<a name="line825"></a> */
+<a name="line826"></a>function testLoadWhenPreloading() {
+<a name="line827"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line828"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line829"></a>
+<a name="line830"></a>  var origSetLoaded = mm.setLoaded;
+<a name="line831"></a>  var calls = [0, 0, 0];
+<a name="line832"></a>  mm.beforeLoadModuleCode = function(id) {
+<a name="line833"></a>    calls[0]++;
+<a name="line834"></a>  };
+<a name="line835"></a>  mm.setLoaded = function(id) {
+<a name="line836"></a>    calls[1]++;
+<a name="line837"></a>    origSetLoaded.call(mm, id);
+<a name="line838"></a>  };
+<a name="line839"></a>  mm.afterLoadModuleCode = function(id) {
+<a name="line840"></a>    calls[2]++;
+<a name="line841"></a>  };
+<a name="line842"></a>
+<a name="line843"></a>  var calledBack = false;
+<a name="line844"></a>  var error = null;
+<a name="line845"></a>
+<a name="line846"></a>  mm.preloadModule(&#39;c&#39;, 2);
+<a name="line847"></a>  assertFalse(
+<a name="line848"></a>      &#39;module &quot;c&quot; should not be loading yet&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line849"></a>  clock.tick(2);
+<a name="line850"></a>  assertTrue(
+<a name="line851"></a>      &#39;module &quot;c&quot; should now be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line852"></a>
+<a name="line853"></a>  var d = mm.load(&#39;c&#39;);
+<a name="line854"></a>  d.addCallback(function(ctx) {
+<a name="line855"></a>    calledBack = true;
+<a name="line856"></a>  });
+<a name="line857"></a>  d.addErrback(function(err) {
+<a name="line858"></a>    error = err;
+<a name="line859"></a>  });
+<a name="line860"></a>
+<a name="line861"></a>  assertTrue(
+<a name="line862"></a>      &#39;module &quot;c&quot; should still be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line863"></a>  clock.tick(5);
+<a name="line864"></a>  assertFalse(
+<a name="line865"></a>      &#39;module &quot;c&quot; should be done loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line866"></a>  assertEquals(
+<a name="line867"></a>      &#39;beforeLoad should only be called once for &quot;c&quot;&#39;, 1, calls[0]);
+<a name="line868"></a>  assertEquals(
+<a name="line869"></a>      &#39;setLoaded should only be called once for &quot;c&quot;&#39;, 1, calls[1]);
+<a name="line870"></a>  assertEquals(
+<a name="line871"></a>      &#39;afterLoad should only be called once for &quot;c&quot;&#39;, 1, calls[2]);
+<a name="line872"></a>
+<a name="line873"></a>  assertTrue(calledBack);
+<a name="line874"></a>  assertNull(error);
+<a name="line875"></a>}
+<a name="line876"></a>
+<a name="line877"></a>
+<a name="line878"></a>/**
+<a name="line879"></a> * Tests that load doesn&#39;t trigger another load if a module is already
+<a name="line880"></a> * preloading.
+<a name="line881"></a> */
+<a name="line882"></a>function testLoadMultipleWhenPreloading() {
+<a name="line883"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [&#39;d&#39;], &#39;c&#39;: [], &#39;d&#39;: []});
+<a name="line884"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line885"></a>  mm.setBatchModeEnabled(true);
+<a name="line886"></a>
+<a name="line887"></a>  var origSetLoaded = mm.setLoaded;
+<a name="line888"></a>  var calls = {&#39;a&#39;: [0, 0, 0], &#39;b&#39;: [0, 0, 0],
+<a name="line889"></a>    &#39;c&#39;: [0, 0, 0], &#39;d&#39;: [0, 0, 0]};
+<a name="line890"></a>  mm.beforeLoadModuleCode = function(id) {
+<a name="line891"></a>    calls[id][0]++;
+<a name="line892"></a>  };
+<a name="line893"></a>  mm.setLoaded = function(id) {
+<a name="line894"></a>    calls[id][1]++;
+<a name="line895"></a>    origSetLoaded.call(mm, id);
+<a name="line896"></a>  };
+<a name="line897"></a>  mm.afterLoadModuleCode = function(id) {
+<a name="line898"></a>    calls[id][2]++;
+<a name="line899"></a>  };
+<a name="line900"></a>
+<a name="line901"></a>  var calledBack = false;
+<a name="line902"></a>  var error = null;
+<a name="line903"></a>  var calledBack2 = false;
+<a name="line904"></a>  var error2 = null;
+<a name="line905"></a>  var calledBack3 = false;
+<a name="line906"></a>  var error3 = null;
+<a name="line907"></a>
+<a name="line908"></a>  mm.preloadModule(&#39;c&#39;, 2);
+<a name="line909"></a>  mm.preloadModule(&#39;d&#39;, 3);
+<a name="line910"></a>  assertFalse(
+<a name="line911"></a>      &#39;module &quot;c&quot; should not be loading yet&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line912"></a>  assertFalse(
+<a name="line913"></a>      &#39;module &quot;d&quot; should not be loading yet&#39;, mm.isModuleLoading(&#39;d&#39;));
+<a name="line914"></a>  clock.tick(2);
+<a name="line915"></a>  assertTrue(
+<a name="line916"></a>      &#39;module &quot;c&quot; should now be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line917"></a>  clock.tick(1);
+<a name="line918"></a>  assertTrue(
+<a name="line919"></a>      &#39;module &quot;d&quot; should now be loading&#39;, mm.isModuleLoading(&#39;d&#39;));
+<a name="line920"></a>
+<a name="line921"></a>  var dMap = mm.loadMultiple([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]);
+<a name="line922"></a>  dMap[&#39;a&#39;].addCallback(function(ctx) {
+<a name="line923"></a>    calledBack = true;
+<a name="line924"></a>  });
+<a name="line925"></a>  dMap[&#39;a&#39;].addErrback(function(err) {
+<a name="line926"></a>    error = err;
+<a name="line927"></a>  });
+<a name="line928"></a>  dMap[&#39;b&#39;].addCallback(function(ctx) {
+<a name="line929"></a>    calledBack2 = true;
+<a name="line930"></a>  });
+<a name="line931"></a>  dMap[&#39;b&#39;].addErrback(function(err) {
+<a name="line932"></a>    error2 = err;
+<a name="line933"></a>  });
+<a name="line934"></a>  dMap[&#39;c&#39;].addCallback(function(ctx) {
+<a name="line935"></a>    calledBack3 = true;
+<a name="line936"></a>  });
+<a name="line937"></a>  dMap[&#39;c&#39;].addErrback(function(err) {
+<a name="line938"></a>    error3 = err;
+<a name="line939"></a>  });
+<a name="line940"></a>
+<a name="line941"></a>  assertTrue(
+<a name="line942"></a>      &#39;module &quot;a&quot; should be loading&#39;, mm.isModuleLoading(&#39;a&#39;));
+<a name="line943"></a>  assertTrue(
+<a name="line944"></a>      &#39;module &quot;b&quot; should be loading&#39;, mm.isModuleLoading(&#39;b&#39;));
+<a name="line945"></a>  assertTrue(
+<a name="line946"></a>      &#39;module &quot;c&quot; should still be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line947"></a>  clock.tick(4);
+<a name="line948"></a>  assertTrue(calledBack3);
+<a name="line949"></a>
+<a name="line950"></a>  assertFalse(
+<a name="line951"></a>      &#39;module &quot;c&quot; should be done loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line952"></a>  assertTrue(
+<a name="line953"></a>      &#39;module &quot;d&quot; should still be loading&#39;, mm.isModuleLoading(&#39;d&#39;));
+<a name="line954"></a>  clock.tick(5);
+<a name="line955"></a>  assertFalse(
+<a name="line956"></a>      &#39;module &quot;d&quot; should be done loading&#39;, mm.isModuleLoading(&#39;d&#39;));
+<a name="line957"></a>
+<a name="line958"></a>  assertFalse(calledBack);
+<a name="line959"></a>  assertFalse(calledBack2);
+<a name="line960"></a>  assertTrue(
+<a name="line961"></a>      &#39;module &quot;a&quot; should still be loading&#39;, mm.isModuleLoading(&#39;a&#39;));
+<a name="line962"></a>  assertTrue(
+<a name="line963"></a>      &#39;module &quot;b&quot; should still be loading&#39;, mm.isModuleLoading(&#39;b&#39;));
+<a name="line964"></a>  clock.tick(7);
+<a name="line965"></a>
+<a name="line966"></a>  assertTrue(calledBack);
+<a name="line967"></a>  assertTrue(calledBack2);
+<a name="line968"></a>  assertFalse(
+<a name="line969"></a>      &#39;module &quot;a&quot; should be done loading&#39;, mm.isModuleLoading(&#39;a&#39;));
+<a name="line970"></a>  assertFalse(
+<a name="line971"></a>      &#39;module &quot;b&quot; should be done loading&#39;, mm.isModuleLoading(&#39;b&#39;));
+<a name="line972"></a>
+<a name="line973"></a>  assertEquals(
+<a name="line974"></a>      &#39;beforeLoad should only be called once for &quot;a&quot;&#39;, 1, calls[&#39;a&#39;][0]);
+<a name="line975"></a>  assertEquals(
+<a name="line976"></a>      &#39;setLoaded should only be called once for &quot;a&quot;&#39;, 1, calls[&#39;a&#39;][1]);
+<a name="line977"></a>  assertEquals(
+<a name="line978"></a>      &#39;afterLoad should only be called once for &quot;a&quot;&#39;, 1, calls[&#39;a&#39;][2]);
+<a name="line979"></a>  assertEquals(
+<a name="line980"></a>      &#39;beforeLoad should only be called once for &quot;b&quot;&#39;, 1, calls[&#39;b&#39;][0]);
+<a name="line981"></a>  assertEquals(
+<a name="line982"></a>      &#39;setLoaded should only be called once for &quot;b&quot;&#39;, 1, calls[&#39;b&#39;][1]);
+<a name="line983"></a>  assertEquals(
+<a name="line984"></a>      &#39;afterLoad should only be called once for &quot;b&quot;&#39;, 1, calls[&#39;b&#39;][2]);
+<a name="line985"></a>  assertEquals(
+<a name="line986"></a>      &#39;beforeLoad should only be called once for &quot;c&quot;&#39;, 1, calls[&#39;c&#39;][0]);
+<a name="line987"></a>  assertEquals(
+<a name="line988"></a>      &#39;setLoaded should only be called once for &quot;c&quot;&#39;, 1, calls[&#39;c&#39;][1]);
+<a name="line989"></a>  assertEquals(
+<a name="line990"></a>      &#39;afterLoad should only be called once for &quot;c&quot;&#39;, 1, calls[&#39;c&#39;][2]);
+<a name="line991"></a>  assertEquals(
+<a name="line992"></a>      &#39;beforeLoad should only be called once for &quot;d&quot;&#39;, 1, calls[&#39;d&#39;][0]);
+<a name="line993"></a>  assertEquals(
+<a name="line994"></a>      &#39;setLoaded should only be called once for &quot;d&quot;&#39;, 1, calls[&#39;d&#39;][1]);
+<a name="line995"></a>  assertEquals(
+<a name="line996"></a>      &#39;afterLoad should only be called once for &quot;d&quot;&#39;, 1, calls[&#39;d&#39;][2]);
+<a name="line997"></a>
+<a name="line998"></a>  assertNull(error);
+<a name="line999"></a>  assertNull(error2);
+<a name="line1000"></a>  assertNull(error3);
+<a name="line1001"></a>}
+<a name="line1002"></a>
+<a name="line1003"></a>
+<a name="line1004"></a>/**
+<a name="line1005"></a> * Tests that the deferred is still called when loadMultiple loads modules
+<a name="line1006"></a> * that are already preloading.
+<a name="line1007"></a> */
+<a name="line1008"></a>function testLoadMultipleWhenPreloadingSameModules() {
+<a name="line1009"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [&#39;d&#39;], &#39;c&#39;: [], &#39;d&#39;: []});
+<a name="line1010"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line1011"></a>  mm.setBatchModeEnabled(true);
+<a name="line1012"></a>
+<a name="line1013"></a>  var origSetLoaded = mm.setLoaded;
+<a name="line1014"></a>  var calls = {&#39;c&#39;: [0, 0, 0], &#39;d&#39;: [0, 0, 0]};
+<a name="line1015"></a>  mm.beforeLoadModuleCode = function(id) {
+<a name="line1016"></a>    calls[id][0]++;
+<a name="line1017"></a>  };
+<a name="line1018"></a>  mm.setLoaded = function(id) {
+<a name="line1019"></a>    calls[id][1]++;
+<a name="line1020"></a>    origSetLoaded.call(mm, id);
+<a name="line1021"></a>  };
+<a name="line1022"></a>  mm.afterLoadModuleCode = function(id) {
+<a name="line1023"></a>    calls[id][2]++;
+<a name="line1024"></a>  };
+<a name="line1025"></a>
+<a name="line1026"></a>  var calledBack = false;
+<a name="line1027"></a>  var error = null;
+<a name="line1028"></a>  var calledBack2 = false;
+<a name="line1029"></a>  var error2 = null;
+<a name="line1030"></a>
+<a name="line1031"></a>  mm.preloadModule(&#39;c&#39;, 2);
+<a name="line1032"></a>  mm.preloadModule(&#39;d&#39;, 3);
+<a name="line1033"></a>  assertFalse(
+<a name="line1034"></a>      &#39;module &quot;c&quot; should not be loading yet&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line1035"></a>  assertFalse(
+<a name="line1036"></a>      &#39;module &quot;d&quot; should not be loading yet&#39;, mm.isModuleLoading(&#39;d&#39;));
+<a name="line1037"></a>  clock.tick(2);
+<a name="line1038"></a>  assertTrue(
+<a name="line1039"></a>      &#39;module &quot;c&quot; should now be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line1040"></a>  clock.tick(1);
+<a name="line1041"></a>  assertTrue(
+<a name="line1042"></a>      &#39;module &quot;d&quot; should now be loading&#39;, mm.isModuleLoading(&#39;d&#39;));
+<a name="line1043"></a>
+<a name="line1044"></a>  var dMap = mm.loadMultiple([&#39;c&#39;, &#39;d&#39;]);
+<a name="line1045"></a>  dMap[&#39;c&#39;].addCallback(function(ctx) {
+<a name="line1046"></a>    calledBack = true;
+<a name="line1047"></a>  });
+<a name="line1048"></a>  dMap[&#39;c&#39;].addErrback(function(err) {
+<a name="line1049"></a>    error = err;
+<a name="line1050"></a>  });
+<a name="line1051"></a>  dMap[&#39;d&#39;].addCallback(function(ctx) {
+<a name="line1052"></a>    calledBack2 = true;
+<a name="line1053"></a>  });
+<a name="line1054"></a>  dMap[&#39;d&#39;].addErrback(function(err) {
+<a name="line1055"></a>    error2 = err;
+<a name="line1056"></a>  });
+<a name="line1057"></a>
+<a name="line1058"></a>  assertTrue(
+<a name="line1059"></a>      &#39;module &quot;c&quot; should still be loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line1060"></a>  clock.tick(4);
+<a name="line1061"></a>  assertFalse(
+<a name="line1062"></a>      &#39;module &quot;c&quot; should be done loading&#39;, mm.isModuleLoading(&#39;c&#39;));
+<a name="line1063"></a>  assertTrue(
+<a name="line1064"></a>      &#39;module &quot;d&quot; should still be loading&#39;, mm.isModuleLoading(&#39;d&#39;));
+<a name="line1065"></a>  clock.tick(5);
+<a name="line1066"></a>  assertFalse(
+<a name="line1067"></a>      &#39;module &quot;d&quot; should be done loading&#39;, mm.isModuleLoading(&#39;d&#39;));
+<a name="line1068"></a>
+<a name="line1069"></a>  assertTrue(calledBack);
+<a name="line1070"></a>  assertTrue(calledBack2);
+<a name="line1071"></a>
+<a name="line1072"></a>  assertEquals(
+<a name="line1073"></a>      &#39;beforeLoad should only be called once for &quot;c&quot;&#39;, 1, calls[&#39;c&#39;][0]);
+<a name="line1074"></a>  assertEquals(
+<a name="line1075"></a>      &#39;setLoaded should only be called once for &quot;c&quot;&#39;, 1, calls[&#39;c&#39;][1]);
+<a name="line1076"></a>  assertEquals(
+<a name="line1077"></a>      &#39;afterLoad should only be called once for &quot;c&quot;&#39;, 1, calls[&#39;c&#39;][2]);
+<a name="line1078"></a>  assertEquals(
+<a name="line1079"></a>      &#39;beforeLoad should only be called once for &quot;d&quot;&#39;, 1, calls[&#39;d&#39;][0]);
+<a name="line1080"></a>  assertEquals(
+<a name="line1081"></a>      &#39;setLoaded should only be called once for &quot;d&quot;&#39;, 1, calls[&#39;d&#39;][1]);
+<a name="line1082"></a>  assertEquals(
+<a name="line1083"></a>      &#39;afterLoad should only be called once for &quot;d&quot;&#39;, 1, calls[&#39;d&#39;][2]);
+<a name="line1084"></a>
+<a name="line1085"></a>  assertNull(error);
+<a name="line1086"></a>  assertNull(error2);
+<a name="line1087"></a>}
+<a name="line1088"></a>
+<a name="line1089"></a>
+<a name="line1090"></a>/**
+<a name="line1091"></a> * Tests loading a module via load when the module is already
+<a name="line1092"></a> * loaded.  The deferred&#39;s callback should be called immediately.
+<a name="line1093"></a> */
+<a name="line1094"></a>function testLoadWhenLoaded() {
+<a name="line1095"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line1096"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line1097"></a>
+<a name="line1098"></a>  var calledBack = false;
+<a name="line1099"></a>  var error = null;
+<a name="line1100"></a>
+<a name="line1101"></a>  mm.preloadModule(&#39;b&#39;, 2);
+<a name="line1102"></a>  clock.tick(10);
+<a name="line1103"></a>
+<a name="line1104"></a>  assertFalse(
+<a name="line1105"></a>      &#39;module &quot;b&quot; should be done loading&#39;, mm.isModuleLoading(&#39;b&#39;));
+<a name="line1106"></a>
+<a name="line1107"></a>  var d = mm.load(&#39;b&#39;);
+<a name="line1108"></a>  d.addCallback(function(ctx) {
+<a name="line1109"></a>    calledBack = true;
+<a name="line1110"></a>  });
+<a name="line1111"></a>  d.addErrback(function(err) {
+<a name="line1112"></a>    error = err;
+<a name="line1113"></a>  });
+<a name="line1114"></a>
+<a name="line1115"></a>  assertTrue(calledBack);
+<a name="line1116"></a>  assertNull(error);
+<a name="line1117"></a>}
+<a name="line1118"></a>
+<a name="line1119"></a>
+<a name="line1120"></a>/**
+<a name="line1121"></a> * Tests that the deferred&#39;s errbacks are called if the module fails to load.
+<a name="line1122"></a> */
+<a name="line1123"></a>function testLoadWithFailingModule() {
+<a name="line1124"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line1125"></a>  mm.setLoader(createUnsuccessfulLoader(mm, 401));
+<a name="line1126"></a>  mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+<a name="line1127"></a>      function(callbackType, id, cause) {
+<a name="line1128"></a>        assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1129"></a>            goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+<a name="line1130"></a>            cause);
+<a name="line1131"></a>        firedLoadFailed = true;
+<a name="line1132"></a>      });
+<a name="line1133"></a>  var calledBack = false;
+<a name="line1134"></a>  var error = null;
+<a name="line1135"></a>
+<a name="line1136"></a>  var d = mm.load(&#39;a&#39;);
+<a name="line1137"></a>  d.addCallback(function(ctx) {
+<a name="line1138"></a>    calledBack = true;
+<a name="line1139"></a>  });
+<a name="line1140"></a>  d.addErrback(function(err) {
+<a name="line1141"></a>    error = err;
+<a name="line1142"></a>  });
+<a name="line1143"></a>
+<a name="line1144"></a>  assertFalse(calledBack);
+<a name="line1145"></a>  assertNull(error);
+<a name="line1146"></a>
+<a name="line1147"></a>  clock.tick(500);
+<a name="line1148"></a>
+<a name="line1149"></a>  assertFalse(calledBack);
+<a name="line1150"></a>
+<a name="line1151"></a>  // NOTE: Deferred always calls errbacks with an Error object.  For now the
+<a name="line1152"></a>  // module manager just passes the FailureType which gets set as the Error
+<a name="line1153"></a>  // object&#39;s message.
+<a name="line1154"></a>  assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1155"></a>      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+<a name="line1156"></a>      Number(error.message));
+<a name="line1157"></a>}
+<a name="line1158"></a>
+<a name="line1159"></a>
+<a name="line1160"></a>/**
+<a name="line1161"></a> * Tests that the deferred&#39;s errbacks are called if a module fails to load.
+<a name="line1162"></a> */
+<a name="line1163"></a>function testLoadMultipleWithFailingModule() {
+<a name="line1164"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line1165"></a>  mm.setLoader(createUnsuccessfulLoader(mm, 401));
+<a name="line1166"></a>  mm.setBatchModeEnabled(true);
+<a name="line1167"></a>  mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+<a name="line1168"></a>      function(callbackType, id, cause) {
+<a name="line1169"></a>        assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1170"></a>            goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+<a name="line1171"></a>            cause);
+<a name="line1172"></a>      });
+<a name="line1173"></a>  var calledBack11 = false;
+<a name="line1174"></a>  var error11 = null;
+<a name="line1175"></a>  var calledBack12 = false;
+<a name="line1176"></a>  var error12 = null;
+<a name="line1177"></a>  var calledBack21 = false;
+<a name="line1178"></a>  var error21 = null;
+<a name="line1179"></a>  var calledBack22 = false;
+<a name="line1180"></a>  var error22 = null;
+<a name="line1181"></a>
+<a name="line1182"></a>  var dMap = mm.loadMultiple([&#39;a&#39;, &#39;b&#39;]);
+<a name="line1183"></a>  dMap[&#39;a&#39;].addCallback(function(ctx) {
+<a name="line1184"></a>    calledBack11 = true;
+<a name="line1185"></a>  });
+<a name="line1186"></a>  dMap[&#39;a&#39;].addErrback(function(err) {
+<a name="line1187"></a>    error11 = err;
+<a name="line1188"></a>  });
+<a name="line1189"></a>  dMap[&#39;b&#39;].addCallback(function(ctx) {
+<a name="line1190"></a>    calledBack12 = true;
+<a name="line1191"></a>  });
+<a name="line1192"></a>  dMap[&#39;b&#39;].addErrback(function(err) {
+<a name="line1193"></a>    error12 = err;
+<a name="line1194"></a>  });
+<a name="line1195"></a>
+<a name="line1196"></a>  var dMap2 = mm.loadMultiple([&#39;b&#39;, &#39;c&#39;]);
+<a name="line1197"></a>  dMap2[&#39;b&#39;].addCallback(function(ctx) {
+<a name="line1198"></a>    calledBack21 = true;
+<a name="line1199"></a>  });
+<a name="line1200"></a>  dMap2[&#39;b&#39;].addErrback(function(err) {
+<a name="line1201"></a>    error21 = err;
+<a name="line1202"></a>  });
+<a name="line1203"></a>  dMap2[&#39;c&#39;].addCallback(function(ctx) {
+<a name="line1204"></a>    calledBack22 = true;
+<a name="line1205"></a>  });
+<a name="line1206"></a>  dMap2[&#39;c&#39;].addErrback(function(err) {
+<a name="line1207"></a>    error22 = err;
+<a name="line1208"></a>  });
+<a name="line1209"></a>
+<a name="line1210"></a>  assertFalse(calledBack11);
+<a name="line1211"></a>  assertFalse(calledBack12);
+<a name="line1212"></a>  assertFalse(calledBack21);
+<a name="line1213"></a>  assertFalse(calledBack22);
+<a name="line1214"></a>  assertNull(error11);
+<a name="line1215"></a>  assertNull(error12);
+<a name="line1216"></a>  assertNull(error21);
+<a name="line1217"></a>  assertNull(error22);
+<a name="line1218"></a>
+<a name="line1219"></a>  clock.tick(5);
+<a name="line1220"></a>
+<a name="line1221"></a>  assertFalse(calledBack11);
+<a name="line1222"></a>  assertFalse(calledBack12);
+<a name="line1223"></a>  assertFalse(calledBack21);
+<a name="line1224"></a>  assertFalse(calledBack22);
+<a name="line1225"></a>
+<a name="line1226"></a>  // NOTE: Deferred always calls errbacks with an Error object.  For now the
+<a name="line1227"></a>  // module manager just passes the FailureType which gets set as the Error
+<a name="line1228"></a>  // object&#39;s message.
+<a name="line1229"></a>  assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1230"></a>      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+<a name="line1231"></a>      Number(error11.message));
+<a name="line1232"></a>  assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1233"></a>      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+<a name="line1234"></a>      Number(error12.message));
+<a name="line1235"></a>
+<a name="line1236"></a>  // The first deferred of the second load should be called since it asks for
+<a name="line1237"></a>  // one of the failed modules.
+<a name="line1238"></a>  assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1239"></a>      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+<a name="line1240"></a>      Number(error21.message));
+<a name="line1241"></a>
+<a name="line1242"></a>  // The last deferred should be dropped so it is neither called back nor an
+<a name="line1243"></a>  // error.
+<a name="line1244"></a>  assertFalse(calledBack22);
+<a name="line1245"></a>  assertNull(error22);
+<a name="line1246"></a>}
+<a name="line1247"></a>
+<a name="line1248"></a>
+<a name="line1249"></a>/**
+<a name="line1250"></a> * Tests that the right dependencies are cancelled on a loadMultiple failure.
+<a name="line1251"></a> */
+<a name="line1252"></a>function testLoadMultipleWithFailingModuleDependencies() {
+<a name="line1253"></a>  var mm = getModuleManager(
+<a name="line1254"></a>      {&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: [&#39;b&#39;], &#39;d&#39;: [&#39;c&#39;], &#39;e&#39;: []});
+<a name="line1255"></a>  mm.setLoader(createUnsuccessfulLoader(mm, 401));
+<a name="line1256"></a>  mm.setBatchModeEnabled(true);
+<a name="line1257"></a>  var cancelledIds = [];
+<a name="line1258"></a>
+<a name="line1259"></a>  mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+<a name="line1260"></a>      function(callbackType, id, cause) {
+<a name="line1261"></a>        assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1262"></a>            goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+<a name="line1263"></a>            cause);
+<a name="line1264"></a>        cancelledIds.push(id);
+<a name="line1265"></a>      });
+<a name="line1266"></a>  var calledBack11 = false;
+<a name="line1267"></a>  var error11 = null;
+<a name="line1268"></a>  var calledBack12 = false;
+<a name="line1269"></a>  var error12 = null;
+<a name="line1270"></a>  var calledBack21 = false;
+<a name="line1271"></a>  var error21 = null;
+<a name="line1272"></a>  var calledBack22 = false;
+<a name="line1273"></a>  var error22 = null;
+<a name="line1274"></a>  var calledBack23 = false;
+<a name="line1275"></a>  var error23 = null;
+<a name="line1276"></a>
+<a name="line1277"></a>  var dMap = mm.loadMultiple([&#39;a&#39;, &#39;b&#39;]);
+<a name="line1278"></a>  dMap[&#39;a&#39;].addCallback(function(ctx) {
+<a name="line1279"></a>    calledBack11 = true;
+<a name="line1280"></a>  });
+<a name="line1281"></a>  dMap[&#39;a&#39;].addErrback(function(err) {
+<a name="line1282"></a>    error11 = err;
+<a name="line1283"></a>  });
+<a name="line1284"></a>  dMap[&#39;b&#39;].addCallback(function(ctx) {
+<a name="line1285"></a>    calledBack12 = true;
+<a name="line1286"></a>  });
+<a name="line1287"></a>  dMap[&#39;b&#39;].addErrback(function(err) {
+<a name="line1288"></a>    error12 = err;
+<a name="line1289"></a>  });
+<a name="line1290"></a>
+<a name="line1291"></a>  var dMap2 = mm.loadMultiple([&#39;c&#39;, &#39;d&#39;, &#39;e&#39;]);
+<a name="line1292"></a>  dMap2[&#39;c&#39;].addCallback(function(ctx) {
+<a name="line1293"></a>    calledBack21 = true;
+<a name="line1294"></a>  });
+<a name="line1295"></a>  dMap2[&#39;c&#39;].addErrback(function(err) {
+<a name="line1296"></a>    error21 = err;
+<a name="line1297"></a>  });
+<a name="line1298"></a>  dMap2[&#39;d&#39;].addCallback(function(ctx) {
+<a name="line1299"></a>    calledBack22 = true;
+<a name="line1300"></a>  });
+<a name="line1301"></a>  dMap2[&#39;d&#39;].addErrback(function(err) {
+<a name="line1302"></a>    error22 = err;
+<a name="line1303"></a>  });
+<a name="line1304"></a>  dMap2[&#39;e&#39;].addCallback(function(ctx) {
+<a name="line1305"></a>    calledBack23 = true;
+<a name="line1306"></a>  });
+<a name="line1307"></a>  dMap2[&#39;e&#39;].addErrback(function(err) {
+<a name="line1308"></a>    error23 = err;
+<a name="line1309"></a>  });
+<a name="line1310"></a>
+<a name="line1311"></a>  assertFalse(calledBack11);
+<a name="line1312"></a>  assertFalse(calledBack12);
+<a name="line1313"></a>  assertFalse(calledBack21);
+<a name="line1314"></a>  assertFalse(calledBack22);
+<a name="line1315"></a>  assertFalse(calledBack23);
+<a name="line1316"></a>  assertNull(error11);
+<a name="line1317"></a>  assertNull(error12);
+<a name="line1318"></a>  assertNull(error21);
+<a name="line1319"></a>  assertNull(error22);
+<a name="line1320"></a>  assertNull(error23);
+<a name="line1321"></a>
+<a name="line1322"></a>  clock.tick(5);
+<a name="line1323"></a>
+<a name="line1324"></a>  assertFalse(calledBack11);
+<a name="line1325"></a>  assertFalse(calledBack12);
+<a name="line1326"></a>  assertFalse(calledBack21);
+<a name="line1327"></a>  assertFalse(calledBack22);
+<a name="line1328"></a>  assertFalse(calledBack23);
+<a name="line1329"></a>
+<a name="line1330"></a>  // NOTE: Deferred always calls errbacks with an Error object.  For now the
+<a name="line1331"></a>  // module manager just passes the FailureType which gets set as the Error
+<a name="line1332"></a>  // object&#39;s message.
+<a name="line1333"></a>  assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1334"></a>      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+<a name="line1335"></a>      Number(error11.message));
+<a name="line1336"></a>  assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1337"></a>      goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+<a name="line1338"></a>      Number(error12.message));
+<a name="line1339"></a>
+<a name="line1340"></a>  // Check that among the failed modules, &#39;c&#39; and &#39;d&#39; are also cancelled
+<a name="line1341"></a>  // due to dependencies.
+<a name="line1342"></a>  assertTrue(goog.array.equals([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;], cancelledIds.sort()));
+<a name="line1343"></a>}
+<a name="line1344"></a>
+<a name="line1345"></a>
+<a name="line1346"></a>/**
+<a name="line1347"></a> * Tests that when loading multiple modules, the input array is not modified
+<a name="line1348"></a> * when it has duplicates.
+<a name="line1349"></a> */
+<a name="line1350"></a>function testLoadMultipleWithDuplicates() {
+<a name="line1351"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: []});
+<a name="line1352"></a>  mm.setBatchModeEnabled(true);
+<a name="line1353"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line1354"></a>
+<a name="line1355"></a>  var listWithDuplicates = [&#39;a&#39;, &#39;a&#39;, &#39;b&#39;];
+<a name="line1356"></a>  mm.loadMultiple(listWithDuplicates);
+<a name="line1357"></a>  assertArrayEquals(&#39;loadMultiple should not modify its input&#39;,
+<a name="line1358"></a>      [&#39;a&#39;, &#39;a&#39;, &#39;b&#39;], listWithDuplicates);
+<a name="line1359"></a>}
+<a name="line1360"></a>
+<a name="line1361"></a>
+<a name="line1362"></a>/**
+<a name="line1363"></a> * Test loading dependencies transitively.
+<a name="line1364"></a> */
+<a name="line1365"></a>function testLoadingDepsInNonBatchMode1() {
+<a name="line1366"></a>  var mm = getModuleManager({
+<a name="line1367"></a>    &#39;i&#39;: [],
+<a name="line1368"></a>    &#39;j&#39;: [],
+<a name="line1369"></a>    &#39;k&#39;: [&#39;j&#39;],
+<a name="line1370"></a>    &#39;l&#39;: [&#39;i&#39;, &#39;j&#39;, &#39;k&#39;]});
+<a name="line1371"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line1372"></a>
+<a name="line1373"></a>  mm.preloadModule(&#39;j&#39;);
+<a name="line1374"></a>  clock.tick(5);
+<a name="line1375"></a>  assertTrue(&#39;module &quot;j&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;j&#39;));
+<a name="line1376"></a>  assertFalse(
+<a name="line1377"></a>      &#39;module &quot;i&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;i&#39;));
+<a name="line1378"></a>  assertFalse(
+<a name="line1379"></a>      &#39;module &quot;k&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;k&#39;));
+<a name="line1380"></a>  assertFalse(
+<a name="line1381"></a>      &#39;module &quot;l&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;l&#39;));
+<a name="line1382"></a>
+<a name="line1383"></a>  // When loading a module in non-batch mode, its dependencies should be
+<a name="line1384"></a>  // requested independently, and in dependency order.
+<a name="line1385"></a>  mm.preloadModule(&#39;l&#39;);
+<a name="line1386"></a>  clock.tick(5);
+<a name="line1387"></a>  assertTrue(&#39;module &quot;i&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;i&#39;));
+<a name="line1388"></a>  assertFalse(
+<a name="line1389"></a>      &#39;module &quot;k&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;k&#39;));
+<a name="line1390"></a>  assertFalse(
+<a name="line1391"></a>      &#39;module &quot;l&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;l&#39;));
+<a name="line1392"></a>  clock.tick(5);
+<a name="line1393"></a>  assertTrue(&#39;module &quot;k&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;k&#39;));
+<a name="line1394"></a>  assertFalse(
+<a name="line1395"></a>      &#39;module &quot;l&quot; should not be loaded (3)&#39;, mm.isModuleLoaded(&#39;l&#39;));
+<a name="line1396"></a>  clock.tick(5);
+<a name="line1397"></a>  assertTrue(
+<a name="line1398"></a>      &#39;module &quot;l&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;l&#39;));
+<a name="line1399"></a>}
+<a name="line1400"></a>
+<a name="line1401"></a>
+<a name="line1402"></a>/**
+<a name="line1403"></a> * Test loading dependencies transitively and in dependency order.
+<a name="line1404"></a> */
+<a name="line1405"></a>function testLoadingDepsInNonBatchMode2() {
+<a name="line1406"></a>  var mm = getModuleManager({
+<a name="line1407"></a>    &#39;h&#39;: [],
+<a name="line1408"></a>    &#39;i&#39;: [&#39;h&#39;],
+<a name="line1409"></a>    &#39;j&#39;: [&#39;i&#39;],
+<a name="line1410"></a>    &#39;k&#39;: [&#39;j&#39;],
+<a name="line1411"></a>    &#39;l&#39;: [&#39;i&#39;, &#39;j&#39;, &#39;k&#39;],
+<a name="line1412"></a>    &#39;m&#39;: [&#39;l&#39;]});
+<a name="line1413"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line1414"></a>
+<a name="line1415"></a>  // When loading a module in non-batch mode, its dependencies should be
+<a name="line1416"></a>  // requested independently, and in dependency order. The order in this
+<a name="line1417"></a>  // case should be h,i,j,k,l,m.
+<a name="line1418"></a>  mm.preloadModule(&#39;m&#39;);
+<a name="line1419"></a>  clock.tick(5);
+<a name="line1420"></a>  assertTrue(&#39;module &quot;h&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;h&#39;));
+<a name="line1421"></a>  assertFalse(
+<a name="line1422"></a>      &#39;module &quot;i&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;i&#39;));
+<a name="line1423"></a>  assertFalse(
+<a name="line1424"></a>      &#39;module &quot;j&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;j&#39;));
+<a name="line1425"></a>  assertFalse(
+<a name="line1426"></a>      &#39;module &quot;k&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;k&#39;));
+<a name="line1427"></a>  assertFalse(
+<a name="line1428"></a>      &#39;module &quot;l&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;l&#39;));
+<a name="line1429"></a>  assertFalse(
+<a name="line1430"></a>      &#39;module &quot;m&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;m&#39;));
+<a name="line1431"></a>
+<a name="line1432"></a>  clock.tick(5);
+<a name="line1433"></a>  assertTrue(&#39;module &quot;i&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;i&#39;));
+<a name="line1434"></a>  assertFalse(
+<a name="line1435"></a>      &#39;module &quot;j&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;j&#39;));
+<a name="line1436"></a>  assertFalse(
+<a name="line1437"></a>      &#39;module &quot;k&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;k&#39;));
+<a name="line1438"></a>  assertFalse(
+<a name="line1439"></a>      &#39;module &quot;l&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;l&#39;));
+<a name="line1440"></a>  assertFalse(
+<a name="line1441"></a>      &#39;module &quot;m&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;m&#39;));
+<a name="line1442"></a>
+<a name="line1443"></a>  clock.tick(5);
+<a name="line1444"></a>  assertTrue(&#39;module &quot;j&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;j&#39;));
+<a name="line1445"></a>  assertFalse(
+<a name="line1446"></a>      &#39;module &quot;k&quot; should not be loaded (3)&#39;, mm.isModuleLoaded(&#39;k&#39;));
+<a name="line1447"></a>  assertFalse(
+<a name="line1448"></a>      &#39;module &quot;l&quot; should not be loaded (3)&#39;, mm.isModuleLoaded(&#39;l&#39;));
+<a name="line1449"></a>  assertFalse(
+<a name="line1450"></a>      &#39;module &quot;m&quot; should not be loaded (3)&#39;, mm.isModuleLoaded(&#39;m&#39;));
+<a name="line1451"></a>
+<a name="line1452"></a>  clock.tick(5);
+<a name="line1453"></a>  assertTrue(&#39;module &quot;k&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;k&#39;));
+<a name="line1454"></a>  assertFalse(
+<a name="line1455"></a>      &#39;module &quot;l&quot; should not be loaded (4)&#39;, mm.isModuleLoaded(&#39;l&#39;));
+<a name="line1456"></a>  assertFalse(
+<a name="line1457"></a>      &#39;module &quot;m&quot; should not be loaded (4)&#39;, mm.isModuleLoaded(&#39;m&#39;));
+<a name="line1458"></a>
+<a name="line1459"></a>  clock.tick(5);
+<a name="line1460"></a>  assertTrue(&#39;module &quot;l&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;l&#39;));
+<a name="line1461"></a>  assertFalse(
+<a name="line1462"></a>      &#39;module &quot;m&quot; should not be loaded (5)&#39;, mm.isModuleLoaded(&#39;m&#39;));
+<a name="line1463"></a>
+<a name="line1464"></a>  clock.tick(5);
+<a name="line1465"></a>  assertTrue(&#39;module &quot;m&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;m&#39;));
+<a name="line1466"></a>}
+<a name="line1467"></a>
+<a name="line1468"></a>function testLoadingDepsInBatchMode() {
+<a name="line1469"></a>  var mm = getModuleManager({
+<a name="line1470"></a>    &#39;e&#39;: [],
+<a name="line1471"></a>    &#39;f&#39;: [],
+<a name="line1472"></a>    &#39;g&#39;: [&#39;f&#39;],
+<a name="line1473"></a>    &#39;h&#39;: [&#39;e&#39;, &#39;f&#39;, &#39;g&#39;]});
+<a name="line1474"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line1475"></a>  mm.setBatchModeEnabled(true);
+<a name="line1476"></a>
+<a name="line1477"></a>  mm.preloadModule(&#39;f&#39;);
+<a name="line1478"></a>  clock.tick(5);
+<a name="line1479"></a>  assertTrue(&#39;module &quot;f&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;f&#39;));
+<a name="line1480"></a>  assertFalse(
+<a name="line1481"></a>      &#39;module &quot;e&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;e&#39;));
+<a name="line1482"></a>  assertFalse(
+<a name="line1483"></a>      &#39;module &quot;g&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;g&#39;));
+<a name="line1484"></a>  assertFalse(
+<a name="line1485"></a>      &#39;module &quot;h&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;h&#39;));
+<a name="line1486"></a>
+<a name="line1487"></a>  // When loading a module in batch mode, its not-yet-loaded dependencies
+<a name="line1488"></a>  // should be requested at the same time, and in dependency order.
+<a name="line1489"></a>  mm.preloadModule(&#39;h&#39;);
+<a name="line1490"></a>  clock.tick(5);
+<a name="line1491"></a>  assertTrue(&#39;module &quot;e&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;e&#39;));
+<a name="line1492"></a>  assertFalse(
+<a name="line1493"></a>      &#39;module &quot;g&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;g&#39;));
+<a name="line1494"></a>  assertFalse(
+<a name="line1495"></a>      &#39;module &quot;h&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;h&#39;));
+<a name="line1496"></a>  clock.tick(2);
+<a name="line1497"></a>  assertTrue(
+<a name="line1498"></a>      &#39;module &quot;g&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;g&#39;));
+<a name="line1499"></a>  assertFalse(
+<a name="line1500"></a>      &#39;module &quot;h&quot; should not be loaded (3)&#39;, mm.isModuleLoaded(&#39;h&#39;));
+<a name="line1501"></a>  clock.tick(2);
+<a name="line1502"></a>  assertTrue(
+<a name="line1503"></a>      &#39;module &quot;h&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;h&#39;));
+<a name="line1504"></a>}
+<a name="line1505"></a>
+<a name="line1506"></a>
+<a name="line1507"></a>/**
+<a name="line1508"></a> * Test unauthorized errors while loading modules.
+<a name="line1509"></a> */
+<a name="line1510"></a>function testUnauthorizedLoading() {
+<a name="line1511"></a>  var mm = getModuleManager({
+<a name="line1512"></a>    &#39;m&#39;: [],
+<a name="line1513"></a>    &#39;n&#39;: [],
+<a name="line1514"></a>    &#39;o&#39;: [&#39;n&#39;]});
+<a name="line1515"></a>  mm.setLoader(createUnsuccessfulLoader(mm, 401));
+<a name="line1516"></a>
+<a name="line1517"></a>  // Callback checks for an unauthorized error
+<a name="line1518"></a>  var firedLoadFailed = false;
+<a name="line1519"></a>  mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+<a name="line1520"></a>      function(callbackType, id, cause) {
+<a name="line1521"></a>        assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1522"></a>                     goog.module.ModuleManager.FailureType.UNAUTHORIZED,
+<a name="line1523"></a>                     cause);
+<a name="line1524"></a>        firedLoadFailed = true;
+<a name="line1525"></a>      });
+<a name="line1526"></a>  mm.execOnLoad(&#39;o&#39;, function() {});
+<a name="line1527"></a>  assertTrue(&#39;module &quot;o&quot; should be loading&#39;, mm.isModuleLoading(&#39;o&#39;));
+<a name="line1528"></a>  assertTrue(&#39;module &quot;n&quot; should be loading&#39;, mm.isModuleLoading(&#39;n&#39;));
+<a name="line1529"></a>  clock.tick(5);
+<a name="line1530"></a>  assertTrue(
+<a name="line1531"></a>      &#39;should have called unauthorized module callback&#39;, firedLoadFailed);
+<a name="line1532"></a>  assertFalse(
+<a name="line1533"></a>      &#39;module &quot;o&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;o&#39;));
+<a name="line1534"></a>  assertFalse(
+<a name="line1535"></a>      &#39;module &quot;o&quot; should not be loading&#39;, mm.isModuleLoading(&#39;o&#39;));
+<a name="line1536"></a>  assertFalse(
+<a name="line1537"></a>      &#39;module &quot;n&quot; should not be loaded&#39;, mm.isModuleLoaded(&#39;n&#39;));
+<a name="line1538"></a>  assertFalse(
+<a name="line1539"></a>      &#39;module &quot;n&quot; should not be loading&#39;, mm.isModuleLoading(&#39;n&#39;));
+<a name="line1540"></a>}
+<a name="line1541"></a>
+<a name="line1542"></a>
+<a name="line1543"></a>/**
+<a name="line1544"></a> * Test error loading modules which are retried.
+<a name="line1545"></a> */
+<a name="line1546"></a>function testErrorLoadingModule() {
+<a name="line1547"></a>  var mm = getModuleManager({
+<a name="line1548"></a>    &#39;p&#39;: [&#39;q&#39;],
+<a name="line1549"></a>    &#39;q&#39;: [],
+<a name="line1550"></a>    &#39;r&#39;: [&#39;q&#39;, &#39;p&#39;]});
+<a name="line1551"></a>  mm.setLoader(createUnsuccessfulLoader(mm, 500));
+<a name="line1552"></a>
+<a name="line1553"></a>  mm.preloadModule(&#39;r&#39;);
+<a name="line1554"></a>  clock.tick(4);
+<a name="line1555"></a>
+<a name="line1556"></a>  // A module request is now underway using the unsuccessful loader.
+<a name="line1557"></a>  // We substitute a successful loader for future module load requests.
+<a name="line1558"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line1559"></a>  clock.tick(1);
+<a name="line1560"></a>  assertFalse(
+<a name="line1561"></a>      &#39;module &quot;q&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;q&#39;));
+<a name="line1562"></a>  assertFalse(
+<a name="line1563"></a>      &#39;module &quot;p&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;p&#39;));
+<a name="line1564"></a>  assertFalse(
+<a name="line1565"></a>      &#39;module &quot;r&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;r&#39;));
+<a name="line1566"></a>
+<a name="line1567"></a>  // Failed loads are automatically retried after a backOff.
+<a name="line1568"></a>  clock.tick(5 + mm.getBackOff_());
+<a name="line1569"></a>  assertTrue(&#39;module &quot;q&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;q&#39;));
+<a name="line1570"></a>  assertFalse(
+<a name="line1571"></a>      &#39;module &quot;p&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;p&#39;));
+<a name="line1572"></a>  assertFalse(
+<a name="line1573"></a>      &#39;module &quot;r&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;r&#39;));
+<a name="line1574"></a>
+<a name="line1575"></a>  // A successful load decrements the backOff.
+<a name="line1576"></a>  clock.tick(5);
+<a name="line1577"></a>  assertTrue(&#39;module &quot;p&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;p&#39;));
+<a name="line1578"></a>  assertFalse(
+<a name="line1579"></a>      &#39;module &quot;r&quot; should not be loaded (3)&#39;, mm.isModuleLoaded(&#39;r&#39;));
+<a name="line1580"></a>  clock.tick(5);
+<a name="line1581"></a>  assertTrue(
+<a name="line1582"></a>      &#39;module &quot;r&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;r&#39;));
+<a name="line1583"></a>}
+<a name="line1584"></a>
+<a name="line1585"></a>
+<a name="line1586"></a>/**
+<a name="line1587"></a> * Tests error loading modules which are retried.
+<a name="line1588"></a> */
+<a name="line1589"></a>function testErrorLoadingModule_batchMode() {
+<a name="line1590"></a>  var mm = getModuleManager({
+<a name="line1591"></a>    &#39;p&#39;: [&#39;q&#39;],
+<a name="line1592"></a>    &#39;q&#39;: [],
+<a name="line1593"></a>    &#39;r&#39;: [&#39;q&#39;, &#39;p&#39;]});
+<a name="line1594"></a>  mm.setLoader(createUnsuccessfulBatchLoader(mm, 500));
+<a name="line1595"></a>  mm.setBatchModeEnabled(true);
+<a name="line1596"></a>
+<a name="line1597"></a>  mm.preloadModule(&#39;r&#39;);
+<a name="line1598"></a>  clock.tick(4);
+<a name="line1599"></a>
+<a name="line1600"></a>  // A module request is now underway using the unsuccessful loader.
+<a name="line1601"></a>  // We substitute a successful loader for future module load requests.
+<a name="line1602"></a>  mm.setLoader(createSuccessfulBatchLoader(mm));
+<a name="line1603"></a>  clock.tick(1);
+<a name="line1604"></a>  assertFalse(
+<a name="line1605"></a>      &#39;module &quot;q&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;q&#39;));
+<a name="line1606"></a>  assertFalse(
+<a name="line1607"></a>      &#39;module &quot;p&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;p&#39;));
+<a name="line1608"></a>  assertFalse(
+<a name="line1609"></a>      &#39;module &quot;r&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;r&#39;));
+<a name="line1610"></a>
+<a name="line1611"></a>  // Failed loads are automatically retried after a backOff.
+<a name="line1612"></a>  clock.tick(5 + mm.getBackOff_());
+<a name="line1613"></a>  assertTrue(&#39;module &quot;q&quot; should be loaded&#39;, mm.isModuleLoaded(&#39;q&#39;));
+<a name="line1614"></a>  clock.tick(2);
+<a name="line1615"></a>  assertTrue(
+<a name="line1616"></a>      &#39;module &quot;p&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;p&#39;));
+<a name="line1617"></a>  clock.tick(2);
+<a name="line1618"></a>  assertTrue(
+<a name="line1619"></a>      &#39;module &quot;r&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;r&#39;));
+<a name="line1620"></a>}
+<a name="line1621"></a>
+<a name="line1622"></a>
+<a name="line1623"></a>/**
+<a name="line1624"></a> * Test consecutive errors in loading modules.
+<a name="line1625"></a> */
+<a name="line1626"></a>function testConsecutiveErrors() {
+<a name="line1627"></a>  var mm = getModuleManager({&#39;s&#39;: []});
+<a name="line1628"></a>  mm.setLoader(createUnsuccessfulLoader(mm, 500));
+<a name="line1629"></a>
+<a name="line1630"></a>  // Register an error callback for consecutive failures.
+<a name="line1631"></a>  var firedLoadFailed = false;
+<a name="line1632"></a>  mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+<a name="line1633"></a>      function(callbackType, id, cause) {
+<a name="line1634"></a>        assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1635"></a>            goog.module.ModuleManager.FailureType.CONSECUTIVE_FAILURES,
+<a name="line1636"></a>            cause);
+<a name="line1637"></a>        firedLoadFailed = true;
+<a name="line1638"></a>      });
+<a name="line1639"></a>
+<a name="line1640"></a>  mm.preloadModule(&#39;s&#39;);
+<a name="line1641"></a>  assertFalse(
+<a name="line1642"></a>      &#39;module &quot;s&quot; should not be loaded (0)&#39;, mm.isModuleLoaded(&#39;s&#39;));
+<a name="line1643"></a>
+<a name="line1644"></a>  // Fail twice.
+<a name="line1645"></a>  for (var i = 0; i &lt; 2; i++) {
+<a name="line1646"></a>    clock.tick(5 + mm.getBackOff_());
+<a name="line1647"></a>    assertFalse(
+<a name="line1648"></a>        &#39;module &quot;s&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;s&#39;));
+<a name="line1649"></a>    assertFalse(
+<a name="line1650"></a>        &#39;should not fire failed callback (1)&#39;, firedLoadFailed);
+<a name="line1651"></a>  }
+<a name="line1652"></a>
+<a name="line1653"></a>  // Fail a third time and check that the callback is fired.
+<a name="line1654"></a>  clock.tick(5 + mm.getBackOff_());
+<a name="line1655"></a>  assertFalse(
+<a name="line1656"></a>      &#39;module &quot;s&quot; should not be loaded (2)&#39;, mm.isModuleLoaded(&#39;s&#39;));
+<a name="line1657"></a>  assertTrue(
+<a name="line1658"></a>      &#39;should have fired failed callback&#39;, firedLoadFailed);
+<a name="line1659"></a>
+<a name="line1660"></a>  // Check that it doesn&#39;t attempt to load the module anymore after it has
+<a name="line1661"></a>  // failed.
+<a name="line1662"></a>  var triedLoad = false;
+<a name="line1663"></a>  mm.setLoader({
+<a name="line1664"></a>    loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn) {
+<a name="line1665"></a>      triedLoad = true;
+<a name="line1666"></a>    }});
+<a name="line1667"></a>
+<a name="line1668"></a>  // Also reset the failed callback flag and make sure it isn&#39;t called
+<a name="line1669"></a>  // again.
+<a name="line1670"></a>  firedLoadFailed = false;
+<a name="line1671"></a>  clock.tick(10 + mm.getBackOff_());
+<a name="line1672"></a>  assertFalse(
+<a name="line1673"></a>      &#39;module &quot;s&quot; should not be loaded (3)&#39;, mm.isModuleLoaded(&#39;s&#39;));
+<a name="line1674"></a>  assertFalse(&#39;No more loads should have been tried&#39;, triedLoad);
+<a name="line1675"></a>  assertFalse(&#39;The load failed callback should be fired only once&#39;,
+<a name="line1676"></a>      firedLoadFailed);
+<a name="line1677"></a>}
+<a name="line1678"></a>
+<a name="line1679"></a>
+<a name="line1680"></a>/**
+<a name="line1681"></a> * Test loading errors due to old code.
+<a name="line1682"></a> */
+<a name="line1683"></a>function testOldCodeGoneError() {
+<a name="line1684"></a>  var mm = getModuleManager({&#39;s&#39;: []});
+<a name="line1685"></a>  mm.setLoader(createUnsuccessfulLoader(mm, 410));
+<a name="line1686"></a>
+<a name="line1687"></a>  // Callback checks for an old code failure
+<a name="line1688"></a>  var firedLoadFailed = false;
+<a name="line1689"></a>  mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+<a name="line1690"></a>      function(callbackType, id, cause) {
+<a name="line1691"></a>        assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1692"></a>            goog.module.ModuleManager.FailureType.OLD_CODE_GONE,
+<a name="line1693"></a>            cause);
+<a name="line1694"></a>        firedLoadFailed = true;
+<a name="line1695"></a>      });
+<a name="line1696"></a>
+<a name="line1697"></a>  mm.preloadModule(&#39;s&#39;, 0);
+<a name="line1698"></a>  assertFalse(
+<a name="line1699"></a>      &#39;module &quot;s&quot; should not be loaded (0)&#39;, mm.isModuleLoaded(&#39;s&#39;));
+<a name="line1700"></a>  clock.tick(5);
+<a name="line1701"></a>  assertFalse(
+<a name="line1702"></a>      &#39;module &quot;s&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;s&#39;));
+<a name="line1703"></a>  assertTrue(
+<a name="line1704"></a>      &#39;should have called old code gone callback&#39;, firedLoadFailed);
+<a name="line1705"></a>}
+<a name="line1706"></a>
+<a name="line1707"></a>
+<a name="line1708"></a>/**
+<a name="line1709"></a> * Test timeout.
+<a name="line1710"></a> */
+<a name="line1711"></a>function testTimeout() {
+<a name="line1712"></a>  var mm = getModuleManager({&#39;s&#39;: []});
+<a name="line1713"></a>  mm.setLoader(createTimeoutLoader(mm));
+<a name="line1714"></a>
+<a name="line1715"></a>  // Callback checks for timeout
+<a name="line1716"></a>  var firedTimeout = false;
+<a name="line1717"></a>  mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+<a name="line1718"></a>      function(callbackType, id, cause) {
+<a name="line1719"></a>        assertEquals(&#39;Failure cause was not as expected&#39;,
+<a name="line1720"></a>            goog.module.ModuleManager.FailureType.TIMEOUT,
+<a name="line1721"></a>            cause);
+<a name="line1722"></a>        firedTimeout = true;
+<a name="line1723"></a>      });
+<a name="line1724"></a>
+<a name="line1725"></a>  mm.preloadModule(&#39;s&#39;, 0);
+<a name="line1726"></a>  assertFalse(
+<a name="line1727"></a>      &#39;module &quot;s&quot; should not be loaded (0)&#39;, mm.isModuleLoaded(&#39;s&#39;));
+<a name="line1728"></a>  clock.tick(5);
+<a name="line1729"></a>  assertFalse(
+<a name="line1730"></a>      &#39;module &quot;s&quot; should not be loaded (1)&#39;, mm.isModuleLoaded(&#39;s&#39;));
+<a name="line1731"></a>  assertTrue(
+<a name="line1732"></a>      &#39;should have called timeout callback&#39;, firedTimeout);
+<a name="line1733"></a>}
+<a name="line1734"></a>
+<a name="line1735"></a>
+<a name="line1736"></a>/**
+<a name="line1737"></a> * Tests that an error during execOnLoad will trigger the error callback.
+<a name="line1738"></a> */
+<a name="line1739"></a>function testExecOnLoadError() {
+<a name="line1740"></a>  // Expect two callbacks, each of which will be called with callback type
+<a name="line1741"></a>  // ERROR, the right module id and failure type INIT_ERROR.
+<a name="line1742"></a>  var errorCallback1 = goog.testing.createFunctionMock(&#39;callback1&#39;);
+<a name="line1743"></a>  errorCallback1(goog.module.ModuleManager.CallbackType.ERROR, &#39;b&#39;,
+<a name="line1744"></a>      goog.module.ModuleManager.FailureType.INIT_ERROR);
+<a name="line1745"></a>
+<a name="line1746"></a>  var errorCallback2 = goog.testing.createFunctionMock(&#39;callback2&#39;);
+<a name="line1747"></a>  errorCallback2(goog.module.ModuleManager.CallbackType.ERROR, &#39;b&#39;,
+<a name="line1748"></a>      goog.module.ModuleManager.FailureType.INIT_ERROR);
+<a name="line1749"></a>
+<a name="line1750"></a>  errorCallback1.$replay();
+<a name="line1751"></a>  errorCallback2.$replay();
+<a name="line1752"></a>
+<a name="line1753"></a>  var mm = new goog.module.ModuleManager();
+<a name="line1754"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line1755"></a>
+<a name="line1756"></a>  // Register the first callback before setting the module info map.
+<a name="line1757"></a>  mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+<a name="line1758"></a>      errorCallback1);
+<a name="line1759"></a>
+<a name="line1760"></a>  mm.setAllModuleInfo({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line1761"></a>
+<a name="line1762"></a>  // Register the second callback after setting the module info map.
+<a name="line1763"></a>  mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+<a name="line1764"></a>      errorCallback2);
+<a name="line1765"></a>
+<a name="line1766"></a>  var execOnLoadBCalled = false;
+<a name="line1767"></a>  mm.execOnLoad(&#39;b&#39;, function() {
+<a name="line1768"></a>    execOnLoadBCalled = true;
+<a name="line1769"></a>    throw new Error();
+<a name="line1770"></a>  });
+<a name="line1771"></a>
+<a name="line1772"></a>  clock.tick(5);
+<a name="line1773"></a>
+<a name="line1774"></a>  assertTrue(&#39;execOnLoad should have been called on module b.&#39;,
+<a name="line1775"></a>      execOnLoadBCalled);
+<a name="line1776"></a>  errorCallback1.$verify();
+<a name="line1777"></a>  errorCallback2.$verify();
+<a name="line1778"></a>}
+<a name="line1779"></a>
+<a name="line1780"></a>
+<a name="line1781"></a>/**
+<a name="line1782"></a> * Tests that an error during execOnLoad will trigger the error callback.
+<a name="line1783"></a> * Uses setAllModuleInfoString rather than setAllModuleInfo.
+<a name="line1784"></a> */
+<a name="line1785"></a>function testExecOnLoadErrorModuleInfoString() {
+<a name="line1786"></a>  // Expect a callback to be called with callback type ERROR, the right module
+<a name="line1787"></a>  // id and failure type INIT_ERROR.
+<a name="line1788"></a>  var errorCallback = goog.testing.createFunctionMock(&#39;callback&#39;);
+<a name="line1789"></a>  errorCallback(goog.module.ModuleManager.CallbackType.ERROR, &#39;b&#39;,
+<a name="line1790"></a>      goog.module.ModuleManager.FailureType.INIT_ERROR);
+<a name="line1791"></a>
+<a name="line1792"></a>  errorCallback.$replay();
+<a name="line1793"></a>
+<a name="line1794"></a>  var mm = new goog.module.ModuleManager();
+<a name="line1795"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line1796"></a>
+<a name="line1797"></a>  // Register the first callback before setting the module info map.
+<a name="line1798"></a>  mm.registerCallback(goog.module.ModuleManager.CallbackType.ERROR,
+<a name="line1799"></a>      errorCallback);
+<a name="line1800"></a>
+<a name="line1801"></a>  mm.setAllModuleInfoString(&#39;a/b/c&#39;);
+<a name="line1802"></a>
+<a name="line1803"></a>  var execOnLoadBCalled = false;
+<a name="line1804"></a>  mm.execOnLoad(&#39;b&#39;, function() {
+<a name="line1805"></a>    execOnLoadBCalled = true;
+<a name="line1806"></a>    throw new Error();
+<a name="line1807"></a>  });
+<a name="line1808"></a>
+<a name="line1809"></a>  clock.tick(5);
+<a name="line1810"></a>
+<a name="line1811"></a>  assertTrue(&#39;execOnLoad should have been called on module b.&#39;,
+<a name="line1812"></a>      execOnLoadBCalled);
+<a name="line1813"></a>  errorCallback.$verify();
+<a name="line1814"></a>}
+<a name="line1815"></a>
+<a name="line1816"></a>
+<a name="line1817"></a>/**
+<a name="line1818"></a> * Make sure ModuleInfo objects in moduleInfoMap_ get disposed.
+<a name="line1819"></a> */
+<a name="line1820"></a>function testDispose() {
+<a name="line1821"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line1822"></a>
+<a name="line1823"></a>  var moduleInfoA = mm.getModuleInfo(&#39;a&#39;);
+<a name="line1824"></a>  assertNotNull(moduleInfoA);
+<a name="line1825"></a>  var moduleInfoB = mm.getModuleInfo(&#39;b&#39;);
+<a name="line1826"></a>  assertNotNull(moduleInfoB);
+<a name="line1827"></a>  var moduleInfoC = mm.getModuleInfo(&#39;c&#39;);
+<a name="line1828"></a>  assertNotNull(moduleInfoC);
+<a name="line1829"></a>
+<a name="line1830"></a>  mm.dispose();
+<a name="line1831"></a>  assertTrue(moduleInfoA.isDisposed());
+<a name="line1832"></a>  assertTrue(moduleInfoB.isDisposed());
+<a name="line1833"></a>  assertTrue(moduleInfoC.isDisposed());
+<a name="line1834"></a>}
+<a name="line1835"></a>
+<a name="line1836"></a>function testDependencyOrderingWithSimpleDeps() {
+<a name="line1837"></a>  var mm = getModuleManager({
+<a name="line1838"></a>    &#39;a&#39;: [&#39;b&#39;, &#39;c&#39;],
+<a name="line1839"></a>    &#39;b&#39;: [&#39;d&#39;],
+<a name="line1840"></a>    &#39;c&#39;: [&#39;e&#39;, &#39;f&#39;],
+<a name="line1841"></a>    &#39;d&#39;: [],
+<a name="line1842"></a>    &#39;e&#39;: [],
+<a name="line1843"></a>    &#39;f&#39;: []
+<a name="line1844"></a>  });
+<a name="line1845"></a>  var ids = mm.getNotYetLoadedTransitiveDepIds_(&#39;a&#39;);
+<a name="line1846"></a>  assertDependencyOrder(ids, mm);
+<a name="line1847"></a>  assertArrayEquals([&#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;], ids);
+<a name="line1848"></a>}
+<a name="line1849"></a>
+<a name="line1850"></a>function testDependencyOrderingWithCommonDepsInDeps() {
+<a name="line1851"></a>  // Tests to make sure that if dependencies of the root are loaded before
+<a name="line1852"></a>  // their common dependencies.
+<a name="line1853"></a>  var mm = getModuleManager({
+<a name="line1854"></a>    &#39;a&#39;: [&#39;b&#39;, &#39;c&#39;],
+<a name="line1855"></a>    &#39;b&#39;: [&#39;d&#39;],
+<a name="line1856"></a>    &#39;c&#39;: [&#39;d&#39;],
+<a name="line1857"></a>    &#39;d&#39;: []
+<a name="line1858"></a>  });
+<a name="line1859"></a>  var ids = mm.getNotYetLoadedTransitiveDepIds_(&#39;a&#39;);
+<a name="line1860"></a>  assertDependencyOrder(ids, mm);
+<a name="line1861"></a>  assertArrayEquals([&#39;d&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;], ids);
+<a name="line1862"></a>}
+<a name="line1863"></a>
+<a name="line1864"></a>function testDependencyOrderingWithCommonDepsInRoot1() {
+<a name="line1865"></a>  // Tests the case where a dependency of the root depends on another
+<a name="line1866"></a>  // dependency of the root.  Irregardless of ordering in the root&#39;s
+<a name="line1867"></a>  // deps.
+<a name="line1868"></a>  var mm = getModuleManager({
+<a name="line1869"></a>    &#39;a&#39;: [&#39;b&#39;, &#39;c&#39;],
+<a name="line1870"></a>    &#39;b&#39;: [&#39;c&#39;],
+<a name="line1871"></a>    &#39;c&#39;: []
+<a name="line1872"></a>  });
+<a name="line1873"></a>  var ids = mm.getNotYetLoadedTransitiveDepIds_(&#39;a&#39;);
+<a name="line1874"></a>  assertDependencyOrder(ids, mm);
+<a name="line1875"></a>  assertArrayEquals([&#39;c&#39;, &#39;b&#39;, &#39;a&#39;], ids);
+<a name="line1876"></a>}
+<a name="line1877"></a>
+<a name="line1878"></a>function testDependencyOrderingWithCommonDepsInRoot2() {
+<a name="line1879"></a>  // Tests the case where a dependency of the root depends on another
+<a name="line1880"></a>  // dependency of the root.  Irregardless of ordering in the root&#39;s
+<a name="line1881"></a>  // deps.
+<a name="line1882"></a>  var mm = getModuleManager({
+<a name="line1883"></a>    &#39;a&#39;: [&#39;b&#39;, &#39;c&#39;],
+<a name="line1884"></a>    &#39;b&#39;: [],
+<a name="line1885"></a>    &#39;c&#39;: [&#39;b&#39;]
+<a name="line1886"></a>  });
+<a name="line1887"></a>  var ids = mm.getNotYetLoadedTransitiveDepIds_(&#39;a&#39;);
+<a name="line1888"></a>  assertDependencyOrder(ids, mm);
+<a name="line1889"></a>  assertArrayEquals([&#39;b&#39;, &#39;c&#39;, &#39;a&#39;], ids);
+<a name="line1890"></a>}
+<a name="line1891"></a>
+<a name="line1892"></a>function testDependencyOrderingWithGmailExample() {
+<a name="line1893"></a>  // Real dependency graph taken from gmail.
+<a name="line1894"></a>  var mm = getModuleManager({
+<a name="line1895"></a>    &#39;s&#39;: [&#39;dp&#39;, &#39;ml&#39;, &#39;md&#39;],
+<a name="line1896"></a>    &#39;dp&#39;: [&#39;a&#39;],
+<a name="line1897"></a>    &#39;ml&#39;: [&#39;ld&#39;, &#39;m&#39;],
+<a name="line1898"></a>    &#39;ld&#39;: [&#39;a&#39;],
+<a name="line1899"></a>    &#39;m&#39;: [&#39;ad&#39;, &#39;mh&#39;, &#39;n&#39;],
+<a name="line1900"></a>    &#39;md&#39;: [&#39;mh&#39;, &#39;ld&#39;],
+<a name="line1901"></a>    &#39;a&#39;: [],
+<a name="line1902"></a>    &#39;mh&#39;: [],
+<a name="line1903"></a>    &#39;ad&#39;: [],
+<a name="line1904"></a>    &#39;n&#39;: []
+<a name="line1905"></a>  });
+<a name="line1906"></a>
+<a name="line1907"></a>  mm.setLoaded(&#39;a&#39;);
+<a name="line1908"></a>  mm.setLoaded(&#39;m&#39;);
+<a name="line1909"></a>  mm.setLoaded(&#39;n&#39;);
+<a name="line1910"></a>  mm.setLoaded(&#39;ad&#39;);
+<a name="line1911"></a>  mm.setLoaded(&#39;mh&#39;);
+<a name="line1912"></a>
+<a name="line1913"></a>  var ids = mm.getNotYetLoadedTransitiveDepIds_(&#39;s&#39;);
+<a name="line1914"></a>  assertDependencyOrder(ids, mm);
+<a name="line1915"></a>  assertArrayEquals([&#39;ld&#39;, &#39;dp&#39;, &#39;ml&#39;, &#39;md&#39;, &#39;s&#39;], ids);
+<a name="line1916"></a>}
+<a name="line1917"></a>
+<a name="line1918"></a>function assertDependencyOrder(list, mm) {
+<a name="line1919"></a>  var seen = {};
+<a name="line1920"></a>  for (var i = 0; i &lt; list.length; i++) {
+<a name="line1921"></a>    var id = list[i];
+<a name="line1922"></a>    seen[id] = true;
+<a name="line1923"></a>    var deps = mm.getModuleInfo(id).getDependencies();
+<a name="line1924"></a>    for (var j = 0; j &lt; deps.length; j++) {
+<a name="line1925"></a>      var dep = deps[j];
+<a name="line1926"></a>      assertTrue(&#39;Unresolved dependency [&#39; + dep + &#39;] for [&#39; + id + &#39;].&#39;,
+<a name="line1927"></a>          seen[dep] || mm.getModuleInfo(dep).isLoaded());
+<a name="line1928"></a>    }
+<a name="line1929"></a>  }
+<a name="line1930"></a>}
+<a name="line1931"></a>
+<a name="line1932"></a>function testRegisterInitializationCallback() {
+<a name="line1933"></a>  var initCalled = 0;
+<a name="line1934"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line1935"></a>  mm.setLoader(createSuccessfulNonBatchLoaderWithRegisterInitCallback(mm,
+<a name="line1936"></a>      function() {
+<a name="line1937"></a>        ++initCalled;
+<a name="line1938"></a>      }));
+<a name="line1939"></a>  execOnLoad_(mm);
+<a name="line1940"></a>  // execOnLoad_ loads modules a and c
+<a name="line1941"></a>  assertTrue(initCalled == 2);
+<a name="line1942"></a>}
+<a name="line1943"></a>
+<a name="line1944"></a>function createSuccessfulNonBatchLoaderWithRegisterInitCallback(
+<a name="line1945"></a>    moduleMgr, fn) {
+<a name="line1946"></a>  return {
+<a name="line1947"></a>    loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
+<a name="line1948"></a>        opt_timeoutFn) {
+<a name="line1949"></a>      moduleMgr.beforeLoadModuleCode(ids[0]);
+<a name="line1950"></a>      moduleMgr.registerInitializationCallback(fn);
+<a name="line1951"></a>      setTimeout(function() {
+<a name="line1952"></a>        moduleMgr.setLoaded(ids[0]);
+<a name="line1953"></a>        moduleMgr.afterLoadModuleCode(ids[0]);
+<a name="line1954"></a>        if (opt_successFn) {
+<a name="line1955"></a>          opt_successFn();
+<a name="line1956"></a>        }
+<a name="line1957"></a>      }, 5);
+<a name="line1958"></a>    }};
+<a name="line1959"></a>}
+<a name="line1960"></a>
+<a name="line1961"></a>function testSetModuleConstructor() {
+<a name="line1962"></a>  var initCalled = 0;
+<a name="line1963"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [], &#39;c&#39;: []});
+<a name="line1964"></a>  var info = {
+<a name="line1965"></a>    &#39;a&#39;: { ctor: AModule, count: 0 },
+<a name="line1966"></a>    &#39;b&#39;: { ctor: BModule, count: 0 },
+<a name="line1967"></a>    &#39;c&#39;: { ctor: CModule, count: 0 }
+<a name="line1968"></a>  };
+<a name="line1969"></a>  function AModule() {
+<a name="line1970"></a>    ++info[&#39;a&#39;].count;
+<a name="line1971"></a>    goog.module.BaseModule.call(this);
+<a name="line1972"></a>  }
+<a name="line1973"></a>  goog.inherits(AModule, goog.module.BaseModule);
+<a name="line1974"></a>  function BModule() {
+<a name="line1975"></a>    ++info[&#39;b&#39;].count;
+<a name="line1976"></a>    goog.module.BaseModule.call(this);
+<a name="line1977"></a>  }
+<a name="line1978"></a>  goog.inherits(BModule, goog.module.BaseModule);
+<a name="line1979"></a>  function CModule() {
+<a name="line1980"></a>    ++info[&#39;c&#39;].count;
+<a name="line1981"></a>    goog.module.BaseModule.call(this);
+<a name="line1982"></a>  }
+<a name="line1983"></a>  goog.inherits(CModule, goog.module.BaseModule);
+<a name="line1984"></a>
+<a name="line1985"></a>  mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(mm, info));
+<a name="line1986"></a>  execOnLoad_(mm);
+<a name="line1987"></a>  assertTrue(info[&#39;a&#39;].count == 1);
+<a name="line1988"></a>  assertTrue(info[&#39;b&#39;].count == 0);
+<a name="line1989"></a>  assertTrue(info[&#39;c&#39;].count == 1);
+<a name="line1990"></a>  assertTrue(mm.getModuleInfo(&#39;a&#39;).getModule() instanceof AModule);
+<a name="line1991"></a>  assertTrue(mm.getModuleInfo(&#39;c&#39;).getModule() instanceof CModule);
+<a name="line1992"></a>}
+<a name="line1993"></a>
+<a name="line1994"></a>
+<a name="line1995"></a>/**
+<a name="line1996"></a> * Tests that a call to load the loading module during module initialization
+<a name="line1997"></a> * doesn&#39;t trigger a second load.
+<a name="line1998"></a> */
+<a name="line1999"></a>function testLoadWhenInitializing() {
+<a name="line2000"></a>  var mm = getModuleManager({&#39;a&#39;: []});
+<a name="line2001"></a>  mm.setLoader(createSuccessfulNonBatchLoader(mm));
+<a name="line2002"></a>
+<a name="line2003"></a>  var info = {
+<a name="line2004"></a>    &#39;a&#39;: { ctor: AModule, count: 0 }
+<a name="line2005"></a>  };
+<a name="line2006"></a>  function AModule() {
+<a name="line2007"></a>    ++info[&#39;a&#39;].count;
+<a name="line2008"></a>    goog.module.BaseModule.call(this);
+<a name="line2009"></a>  }
+<a name="line2010"></a>  goog.inherits(AModule, goog.module.BaseModule);
+<a name="line2011"></a>  AModule.prototype.initialize = function() {
+<a name="line2012"></a>    mm.load(&#39;a&#39;);
+<a name="line2013"></a>  };
+<a name="line2014"></a>  mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(mm, info));
+<a name="line2015"></a>  mm.preloadModule(&#39;a&#39;);
+<a name="line2016"></a>  clock.tick(5);
+<a name="line2017"></a>  assertEquals(info[&#39;a&#39;].count, 1);
+<a name="line2018"></a>}
+<a name="line2019"></a>
+<a name="line2020"></a>function testErrorInEarlyCallback() {
+<a name="line2021"></a>  var errback = goog.testing.recordFunction();
+<a name="line2022"></a>  var callback = goog.testing.recordFunction();
+<a name="line2023"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [&#39;a&#39;]});
+<a name="line2024"></a>  mm.getModuleInfo(&#39;a&#39;).registerEarlyCallback(goog.functions.error(&#39;error&#39;));
+<a name="line2025"></a>  mm.getModuleInfo(&#39;a&#39;).registerCallback(callback);
+<a name="line2026"></a>  mm.getModuleInfo(&#39;a&#39;).registerErrback(errback);
+<a name="line2027"></a>
+<a name="line2028"></a>  mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
+<a name="line2029"></a>      mm, createModulesFor(&#39;a&#39;, &#39;b&#39;)));
+<a name="line2030"></a>  mm.preloadModule(&#39;b&#39;);
+<a name="line2031"></a>  clock.tick(5);
+<a name="line2032"></a>
+<a name="line2033"></a>  assertEquals(0, callback.getCallCount());
+<a name="line2034"></a>  assertEquals(1, errback.getCallCount());
+<a name="line2035"></a>  assertEquals(goog.module.ModuleManager.FailureType.INIT_ERROR,
+<a name="line2036"></a>      errback.getLastCall().getArguments()[0]);
+<a name="line2037"></a>  assertTrue(mm.getModuleInfo(&#39;a&#39;).isLoaded());
+<a name="line2038"></a>  assertFalse(mm.getModuleInfo(&#39;b&#39;).isLoaded());
+<a name="line2039"></a>
+<a name="line2040"></a>  clock.tick(5);
+<a name="line2041"></a>  assertTrue(mm.getModuleInfo(&#39;b&#39;).isLoaded());
+<a name="line2042"></a>}
+<a name="line2043"></a>
+<a name="line2044"></a>function testErrorInNormalCallback() {
+<a name="line2045"></a>  var earlyCallback = goog.testing.recordFunction();
+<a name="line2046"></a>  var errback = goog.testing.recordFunction();
+<a name="line2047"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [&#39;a&#39;]});
+<a name="line2048"></a>  mm.getModuleInfo(&#39;a&#39;).registerEarlyCallback(earlyCallback);
+<a name="line2049"></a>  mm.getModuleInfo(&#39;a&#39;).registerEarlyCallback(goog.functions.error(&#39;error&#39;));
+<a name="line2050"></a>  mm.getModuleInfo(&#39;a&#39;).registerErrback(errback);
+<a name="line2051"></a>
+<a name="line2052"></a>  mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
+<a name="line2053"></a>      mm, createModulesFor(&#39;a&#39;, &#39;b&#39;)));
+<a name="line2054"></a>  mm.preloadModule(&#39;b&#39;);
+<a name="line2055"></a>  clock.tick(10);
+<a name="line2056"></a>
+<a name="line2057"></a>  assertEquals(1, errback.getCallCount());
+<a name="line2058"></a>  assertEquals(goog.module.ModuleManager.FailureType.INIT_ERROR,
+<a name="line2059"></a>      errback.getLastCall().getArguments()[0]);
+<a name="line2060"></a>  assertTrue(mm.getModuleInfo(&#39;a&#39;).isLoaded());
+<a name="line2061"></a>  assertTrue(mm.getModuleInfo(&#39;b&#39;).isLoaded());
+<a name="line2062"></a>}
+<a name="line2063"></a>
+<a name="line2064"></a>function testErrorInErrback() {
+<a name="line2065"></a>  var mm = getModuleManager({&#39;a&#39;: [], &#39;b&#39;: [&#39;a&#39;]});
+<a name="line2066"></a>  mm.getModuleInfo(&#39;a&#39;).registerCallback(goog.functions.error(&#39;error1&#39;));
+<a name="line2067"></a>  mm.getModuleInfo(&#39;a&#39;).registerErrback(goog.functions.error(&#39;error2&#39;));
+<a name="line2068"></a>
+<a name="line2069"></a>  mm.setLoader(createSuccessfulNonBatchLoaderWithConstructor(
+<a name="line2070"></a>      mm, createModulesFor(&#39;a&#39;, &#39;b&#39;)));
+<a name="line2071"></a>  mm.preloadModule(&#39;a&#39;);
+<a name="line2072"></a>  var e = assertThrows(function() {
+<a name="line2073"></a>    clock.tick(10);
+<a name="line2074"></a>  });
+<a name="line2075"></a>  assertContains(&#39;Module errback failure&#39;, e.message);
+<a name="line2076"></a>  if (!goog.userAgent.IE) {
+<a name="line2077"></a>    assertContains(&#39;error2&#39;, e.message);
+<a name="line2078"></a>  }
+<a name="line2079"></a>
+<a name="line2080"></a>  assertTrue(mm.getModuleInfo(&#39;a&#39;).isLoaded());
+<a name="line2081"></a>}
+<a name="line2082"></a>
+<a name="line2083"></a>function createModulesFor(var_args) {
+<a name="line2084"></a>  var result = {};
+<a name="line2085"></a>  for (var i = 0; i &lt; arguments.length; i++) {
+<a name="line2086"></a>    var key = arguments[i];
+<a name="line2087"></a>    result[key] = {ctor: goog.module.BaseModule};
+<a name="line2088"></a>  }
+<a name="line2089"></a>  return result;
+<a name="line2090"></a>}
+<a name="line2091"></a>
+<a name="line2092"></a>function createSuccessfulNonBatchLoaderWithConstructor(moduleMgr, info) {
+<a name="line2093"></a>  return {
+<a name="line2094"></a>    loadModules: function(ids, moduleInfoMap, opt_successFn, opt_errFn,
+<a name="line2095"></a>        opt_timeoutFn) {
+<a name="line2096"></a>      setTimeout(function() {
+<a name="line2097"></a>        moduleMgr.beforeLoadModuleCode(ids[0]);
+<a name="line2098"></a>        moduleMgr.setModuleConstructor(info[ids[0]].ctor);
+<a name="line2099"></a>        moduleMgr.setLoaded(ids[0]);
+<a name="line2100"></a>        moduleMgr.afterLoadModuleCode(ids[0]);
+<a name="line2101"></a>        if (opt_successFn) {
+<a name="line2102"></a>          opt_successFn();
+<a name="line2103"></a>        }
+<a name="line2104"></a>      }, 5);
+<a name="line2105"></a>    }};
+<a name="line2106"></a>}
+<a name="line2107"></a>
+<a name="line2108"></a>function testInitCallbackInBaseModule() {
+<a name="line2109"></a>  var mm = new goog.module.ModuleManager();
+<a name="line2110"></a>  var called = false;
+<a name="line2111"></a>  var context;
+<a name="line2112"></a>  mm.registerInitializationCallback(function(mcontext) {
+<a name="line2113"></a>    called = true;
+<a name="line2114"></a>    context = mcontext;
+<a name="line2115"></a>  });
+<a name="line2116"></a>  mm.setAllModuleInfo({&#39;a&#39;: [], &#39;b&#39;: [&#39;a&#39;]});
+<a name="line2117"></a>  assertTrue(&#39;Base initialization not called&#39;, called);
+<a name="line2118"></a>  assertNull(&#39;Context should still be null&#39;, context);
+<a name="line2119"></a>
+<a name="line2120"></a>  var mm = new goog.module.ModuleManager();
+<a name="line2121"></a>  called = false;
+<a name="line2122"></a>  mm.registerInitializationCallback(function(mcontext) {
+<a name="line2123"></a>    called = true;
+<a name="line2124"></a>    context = mcontext;
+<a name="line2125"></a>  });
+<a name="line2126"></a>  var appContext = {};
+<a name="line2127"></a>  mm.setModuleContext(appContext);
+<a name="line2128"></a>  assertTrue(&#39;Base initialization not called after setModuleContext&#39;, called);
+<a name="line2129"></a>  assertEquals(&#39;Did not receive module context&#39;, appContext, context);
+<a name="line2130"></a>}
+<a name="line2131"></a>
+<a name="line2132"></a>function testSetAllModuleInfoString() {
+<a name="line2133"></a>  var info = &#39;base/one:0/two:0/three:0,1,2/four:0,3/five:&#39;;
+<a name="line2134"></a>  var mm = new goog.module.ModuleManager();
+<a name="line2135"></a>  mm.setAllModuleInfoString(info);
+<a name="line2136"></a>
+<a name="line2137"></a>  assertNotNull(&#39;Base should exist&#39;, mm.getModuleInfo(&#39;base&#39;));
+<a name="line2138"></a>  assertNotNull(&#39;One should exist&#39;, mm.getModuleInfo(&#39;one&#39;));
+<a name="line2139"></a>  assertNotNull(&#39;Two should exist&#39;, mm.getModuleInfo(&#39;two&#39;));
+<a name="line2140"></a>  assertNotNull(&#39;Three should exist&#39;, mm.getModuleInfo(&#39;three&#39;));
+<a name="line2141"></a>  assertNotNull(&#39;Four should exist&#39;, mm.getModuleInfo(&#39;four&#39;));
+<a name="line2142"></a>  assertNotNull(&#39;Five should exist&#39;, mm.getModuleInfo(&#39;five&#39;));
+<a name="line2143"></a>
+<a name="line2144"></a>  assertArrayEquals([&#39;base&#39;, &#39;one&#39;, &#39;two&#39;],
+<a name="line2145"></a>      mm.getModuleInfo(&#39;three&#39;).getDependencies());
+<a name="line2146"></a>  assertArrayEquals([&#39;base&#39;, &#39;three&#39;],
+<a name="line2147"></a>      mm.getModuleInfo(&#39;four&#39;).getDependencies());
+<a name="line2148"></a>  assertArrayEquals([],
+<a name="line2149"></a>      mm.getModuleInfo(&#39;five&#39;).getDependencies());
+<a name="line2150"></a>}
+<a name="line2151"></a>
+<a name="line2152"></a>function testSetAllModuleInfoStringWithEmptyString() {
+<a name="line2153"></a>  var mm = new goog.module.ModuleManager();
+<a name="line2154"></a>  var called = false;
+<a name="line2155"></a>  var context;
+<a name="line2156"></a>  mm.registerInitializationCallback(function(mcontext) {
+<a name="line2157"></a>    called = true;
+<a name="line2158"></a>    context = mcontext;
+<a name="line2159"></a>  });
+<a name="line2160"></a>  mm.setAllModuleInfoString(&#39;&#39;);
+<a name="line2161"></a>  assertTrue(&#39;Initialization not called&#39;, called);
+<a name="line2162"></a>}
+<a name="line2163"></a>
+<a name="line2164"></a>function testBackOffAmounts() {
+<a name="line2165"></a>  var mm = new goog.module.ModuleManager();
+<a name="line2166"></a>  assertEquals(0, mm.getBackOff_());
+<a name="line2167"></a>
+<a name="line2168"></a>  mm.consecutiveFailures_++;
+<a name="line2169"></a>  assertEquals(5000, mm.getBackOff_());
+<a name="line2170"></a>
+<a name="line2171"></a>  mm.consecutiveFailures_++;
+<a name="line2172"></a>  assertEquals(20000, mm.getBackOff_());
+<a name="line2173"></a>}
+<a name="line2174"></a>
+<a name="line2175"></a>
+<a name="line2176"></a>/**
+<a name="line2177"></a> * Tests that the IDLE callbacks are executed for active-&gt;idle transitions
+<a name="line2178"></a> * after setAllModuleInfoString with currently loading modules.
+<a name="line2179"></a> */
+<a name="line2180"></a>function testIdleCallbackWithInitialModules() {
+<a name="line2181"></a>  var callback = goog.testing.recordFunction();
+<a name="line2182"></a>
+<a name="line2183"></a>  var mm = new goog.module.ModuleManager();
+<a name="line2184"></a>  mm.setAllModuleInfoString(&#39;a&#39;, [&#39;a&#39;]);
+<a name="line2185"></a>  mm.registerCallback(
+<a name="line2186"></a>      goog.module.ModuleManager.CallbackType.IDLE, callback);
+<a name="line2187"></a>
+<a name="line2188"></a>  assertTrue(mm.isActive());
+<a name="line2189"></a>
+<a name="line2190"></a>  mm.beforeLoadModuleCode(&#39;a&#39;);
+<a name="line2191"></a>
+<a name="line2192"></a>  assertEquals(0, callback.getCallCount());
+<a name="line2193"></a>
+<a name="line2194"></a>  mm.setLoaded(&#39;a&#39;);
+<a name="line2195"></a>  mm.afterLoadModuleCode(&#39;a&#39;);
+<a name="line2196"></a>
+<a name="line2197"></a>  assertFalse(mm.isActive());
+<a name="line2198"></a>
+<a name="line2199"></a>  assertEquals(1, callback.getCallCount());
+<a name="line2200"></a>}
+</pre>
+
+
+</body>
+</html>

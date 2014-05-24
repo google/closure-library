@@ -1,0 +1,251 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mechanismtester.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_storage_mechanism_mechanismtester.js.html">mechanismtester.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Unit tests for the abstract storage mechanism interface.
+<a name="line17"></a> *
+<a name="line18"></a> * These tests should be included in tests of any class extending
+<a name="line19"></a> * goog.storage.mechanism.Mechanism.
+<a name="line20"></a> *
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.storage.mechanism.mechanismTester&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.storage.mechanism.ErrorCode&#39;);
+<a name="line26"></a>goog.require(&#39;goog.storage.mechanism.HTML5LocalStorage&#39;);
+<a name="line27"></a>goog.require(&#39;goog.storage.mechanism.Mechanism&#39;);
+<a name="line28"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line29"></a>goog.require(&#39;goog.userAgent.product&#39;);
+<a name="line30"></a>goog.require(&#39;goog.userAgent.product.isVersion&#39;);
+<a name="line31"></a>goog.setTestOnly(&#39;goog.storage.mechanism.mechanismTester&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>var mechanism = null;
+<a name="line35"></a>var minimumQuota = 0;
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>function testSetGet() {
+<a name="line39"></a>  if (!mechanism) {
+<a name="line40"></a>    return;
+<a name="line41"></a>  }
+<a name="line42"></a>  mechanism.set(&#39;first&#39;, &#39;one&#39;);
+<a name="line43"></a>  assertEquals(&#39;one&#39;, mechanism.get(&#39;first&#39;));
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>function testChange() {
+<a name="line48"></a>  if (!mechanism) {
+<a name="line49"></a>    return;
+<a name="line50"></a>  }
+<a name="line51"></a>  mechanism.set(&#39;first&#39;, &#39;one&#39;);
+<a name="line52"></a>  mechanism.set(&#39;first&#39;, &#39;two&#39;);
+<a name="line53"></a>  assertEquals(&#39;two&#39;, mechanism.get(&#39;first&#39;));
+<a name="line54"></a>}
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>function testRemove() {
+<a name="line58"></a>  if (!mechanism) {
+<a name="line59"></a>    return;
+<a name="line60"></a>  }
+<a name="line61"></a>  mechanism.set(&#39;first&#39;, &#39;one&#39;);
+<a name="line62"></a>  mechanism.remove(&#39;first&#39;);
+<a name="line63"></a>  assertNull(mechanism.get(&#39;first&#39;));
+<a name="line64"></a>}
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>function testSetRemoveSet() {
+<a name="line68"></a>  if (!mechanism) {
+<a name="line69"></a>    return;
+<a name="line70"></a>  }
+<a name="line71"></a>  mechanism.set(&#39;first&#39;, &#39;one&#39;);
+<a name="line72"></a>  mechanism.remove(&#39;first&#39;);
+<a name="line73"></a>  mechanism.set(&#39;first&#39;, &#39;one&#39;);
+<a name="line74"></a>  assertEquals(&#39;one&#39;, mechanism.get(&#39;first&#39;));
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>function testRemoveRemove() {
+<a name="line79"></a>  if (!mechanism) {
+<a name="line80"></a>    return;
+<a name="line81"></a>  }
+<a name="line82"></a>  mechanism.remove(&#39;first&#39;);
+<a name="line83"></a>  mechanism.remove(&#39;first&#39;);
+<a name="line84"></a>  assertNull(mechanism.get(&#39;first&#39;));
+<a name="line85"></a>}
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>function testSetTwo() {
+<a name="line89"></a>  if (!mechanism) {
+<a name="line90"></a>    return;
+<a name="line91"></a>  }
+<a name="line92"></a>  mechanism.set(&#39;first&#39;, &#39;one&#39;);
+<a name="line93"></a>  mechanism.set(&#39;second&#39;, &#39;two&#39;);
+<a name="line94"></a>  assertEquals(&#39;one&#39;, mechanism.get(&#39;first&#39;));
+<a name="line95"></a>  assertEquals(&#39;two&#39;, mechanism.get(&#39;second&#39;));
+<a name="line96"></a>}
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>function testChangeTwo() {
+<a name="line100"></a>  if (!mechanism) {
+<a name="line101"></a>    return;
+<a name="line102"></a>  }
+<a name="line103"></a>  mechanism.set(&#39;first&#39;, &#39;one&#39;);
+<a name="line104"></a>  mechanism.set(&#39;second&#39;, &#39;two&#39;);
+<a name="line105"></a>  mechanism.set(&#39;second&#39;, &#39;three&#39;);
+<a name="line106"></a>  mechanism.set(&#39;first&#39;, &#39;four&#39;);
+<a name="line107"></a>  assertEquals(&#39;four&#39;, mechanism.get(&#39;first&#39;));
+<a name="line108"></a>  assertEquals(&#39;three&#39;, mechanism.get(&#39;second&#39;));
+<a name="line109"></a>}
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>function testSetRemoveThree() {
+<a name="line113"></a>  if (!mechanism) {
+<a name="line114"></a>    return;
+<a name="line115"></a>  }
+<a name="line116"></a>  mechanism.set(&#39;first&#39;, &#39;one&#39;);
+<a name="line117"></a>  mechanism.set(&#39;second&#39;, &#39;two&#39;);
+<a name="line118"></a>  mechanism.set(&#39;third&#39;, &#39;three&#39;);
+<a name="line119"></a>  mechanism.remove(&#39;second&#39;);
+<a name="line120"></a>  assertNull(mechanism.get(&#39;second&#39;));
+<a name="line121"></a>  assertEquals(&#39;one&#39;, mechanism.get(&#39;first&#39;));
+<a name="line122"></a>  assertEquals(&#39;three&#39;, mechanism.get(&#39;third&#39;));
+<a name="line123"></a>  mechanism.remove(&#39;first&#39;);
+<a name="line124"></a>  assertNull(mechanism.get(&#39;first&#39;));
+<a name="line125"></a>  assertEquals(&#39;three&#39;, mechanism.get(&#39;third&#39;));
+<a name="line126"></a>  mechanism.remove(&#39;third&#39;);
+<a name="line127"></a>  assertNull(mechanism.get(&#39;third&#39;));
+<a name="line128"></a>}
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>function testEmptyValue() {
+<a name="line132"></a>  if (!mechanism) {
+<a name="line133"></a>    return;
+<a name="line134"></a>  }
+<a name="line135"></a>  mechanism.set(&#39;third&#39;, &#39;&#39;);
+<a name="line136"></a>  assertEquals(&#39;&#39;, mechanism.get(&#39;third&#39;));
+<a name="line137"></a>}
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>function testWeirdKeys() {
+<a name="line141"></a>  if (!mechanism) {
+<a name="line142"></a>    return;
+<a name="line143"></a>  }
+<a name="line144"></a>  // Some weird keys. We leave out some tests for some browsers where they
+<a name="line145"></a>  // trigger browser bugs, and where the keys are too obscure to prepare a
+<a name="line146"></a>  // workaround.
+<a name="line147"></a>  mechanism.set(&#39; &#39;, &#39;space&#39;);
+<a name="line148"></a>  mechanism.set(&#39;=+!@#$%^&amp;*()-_\\|;:\&#39;&quot;,./&lt;&gt;?[]{}~`&#39;, &#39;control&#39;);
+<a name="line149"></a>  mechanism.set(
+<a name="line150"></a>      &#39;\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341&#39;, &#39;ten&#39;);
+<a name="line151"></a>  mechanism.set(&#39;\0&#39;, &#39;null&#39;);
+<a name="line152"></a>  mechanism.set(&#39;\0\0&#39;, &#39;double null&#39;);
+<a name="line153"></a>  mechanism.set(&#39;\0A&#39;, &#39;null A&#39;);
+<a name="line154"></a>  mechanism.set(&#39;&#39;, &#39;zero&#39;);
+<a name="line155"></a>  assertEquals(&#39;space&#39;, mechanism.get(&#39; &#39;));
+<a name="line156"></a>  assertEquals(&#39;control&#39;, mechanism.get(&#39;=+!@#$%^&amp;*()-_\\|;:\&#39;&quot;,./&lt;&gt;?[]{}~`&#39;));
+<a name="line157"></a>  assertEquals(&#39;ten&#39;, mechanism.get(
+<a name="line158"></a>      &#39;\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341&#39;));
+<a name="line159"></a>  if (!goog.userAgent.IE) {
+<a name="line160"></a>    // IE does not properly handle nulls in HTML5 localStorage keys (IE8, IE9).
+<a name="line161"></a>    // https://connect.microsoft.com/IE/feedback/details/667799/
+<a name="line162"></a>    assertEquals(&#39;null&#39;, mechanism.get(&#39;\0&#39;));
+<a name="line163"></a>    assertEquals(&#39;double null&#39;, mechanism.get(&#39;\0\0&#39;));
+<a name="line164"></a>    assertEquals(&#39;null A&#39;, mechanism.get(&#39;\0A&#39;));
+<a name="line165"></a>  }
+<a name="line166"></a>  if (!goog.userAgent.GECKO) {
+<a name="line167"></a>    // Firefox does not properly handle the empty key (FF 3.5, 3.6, 4.0).
+<a name="line168"></a>    // https://bugzilla.mozilla.org/show_bug.cgi?id=510849
+<a name="line169"></a>    assertEquals(&#39;zero&#39;, mechanism.get(&#39;&#39;));
+<a name="line170"></a>  }
+<a name="line171"></a>}
+<a name="line172"></a>
+<a name="line173"></a>
+<a name="line174"></a>function testQuota() {
+<a name="line175"></a>  if (!mechanism) {
+<a name="line176"></a>    return;
+<a name="line177"></a>  }
+<a name="line178"></a>  // This test might crash Safari 4, so it is disabled for this version.
+<a name="line179"></a>  // It works fine on Safari 3 and Safari 5.
+<a name="line180"></a>  if (goog.userAgent.product.SAFARI &amp;&amp;
+<a name="line181"></a>      goog.userAgent.product.isVersion(4) &amp;&amp;
+<a name="line182"></a>      !goog.userAgent.product.isVersion(5)) {
+<a name="line183"></a>    return;
+<a name="line184"></a>  }
+<a name="line185"></a>  var buffer = &#39;\u03ff&#39;; // 2 bytes
+<a name="line186"></a>  var savedBytes = 0;
+<a name="line187"></a>  try {
+<a name="line188"></a>    while (buffer.length &lt; minimumQuota) {
+<a name="line189"></a>      buffer = buffer + buffer;
+<a name="line190"></a>      mechanism.set(&#39;foo&#39;, buffer);
+<a name="line191"></a>      savedBytes = buffer.length;
+<a name="line192"></a>    }
+<a name="line193"></a>  } catch (ex) {
+<a name="line194"></a>    if (ex != goog.storage.mechanism.ErrorCode.QUOTA_EXCEEDED) {
+<a name="line195"></a>      throw ex;
+<a name="line196"></a>    }
+<a name="line197"></a>  }
+<a name="line198"></a>  mechanism.remove(&#39;foo&#39;);
+<a name="line199"></a>  assertTrue(savedBytes &gt;= minimumQuota);
+<a name="line200"></a>}
+</pre>
+
+
+</body>
+</html>

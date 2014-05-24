@@ -1,0 +1,226 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>priorityqueue_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_structs_priorityqueue_test.js.html">priorityqueue_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.structs.PriorityQueueTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.structs.PriorityQueueTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.structs&#39;);
+<a name="line19"></a>goog.require(&#39;goog.structs.PriorityQueue&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>function getPriorityQueue() {
+<a name="line23"></a>  var p = new goog.structs.PriorityQueue();
+<a name="line24"></a>  p.enqueue(0, &#39;a&#39;);
+<a name="line25"></a>  p.enqueue(1, &#39;b&#39;);
+<a name="line26"></a>  p.enqueue(2, &#39;c&#39;);
+<a name="line27"></a>  p.enqueue(3, &#39;d&#39;);
+<a name="line28"></a>  return p;
+<a name="line29"></a>}
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>function getPriorityQueue2() {
+<a name="line33"></a>  var p = new goog.structs.PriorityQueue();
+<a name="line34"></a>  p.insert(1, &#39;b&#39;);
+<a name="line35"></a>  p.insert(3, &#39;d&#39;);
+<a name="line36"></a>  p.insert(0, &#39;a&#39;);
+<a name="line37"></a>  p.insert(2, &#39;c&#39;);
+<a name="line38"></a>  return p;
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>function testGetCount1() {
+<a name="line43"></a>  var p = getPriorityQueue();
+<a name="line44"></a>  assertEquals(&#39;count, should be 4&#39;, p.getCount(), 4);
+<a name="line45"></a>  p.dequeue();
+<a name="line46"></a>  assertEquals(&#39;count, should be 3&#39;, p.getCount(), 3);
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>function testGetCount2() {
+<a name="line51"></a>  var p = getPriorityQueue();
+<a name="line52"></a>  assertEquals(&#39;count, should be 4&#39;, p.getCount(), 4);
+<a name="line53"></a>  p.dequeue();
+<a name="line54"></a>  assertEquals(&#39;count, should be 3&#39;, p.getCount(), 3);
+<a name="line55"></a>}
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>function testGetCount3() {
+<a name="line59"></a>  var p = getPriorityQueue();
+<a name="line60"></a>  p.dequeue();
+<a name="line61"></a>  p.dequeue();
+<a name="line62"></a>  p.dequeue();
+<a name="line63"></a>  p.dequeue();
+<a name="line64"></a>  assertEquals(&#39;count, should be 0&#39;, p.getCount(), 0);
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>function testKeys() {
+<a name="line69"></a>  var p = getPriorityQueue();
+<a name="line70"></a>  var keys = p.getKeys();
+<a name="line71"></a>  for (var i = 0; i &lt; 4; i++) {
+<a name="line72"></a>    assertTrue(&#39;getKeys, key &#39; + i + &#39; found&#39;, goog.structs.contains(keys, i));
+<a name="line73"></a>  }
+<a name="line74"></a>  assertEquals(&#39;getKeys, Should be 4 keys&#39;, goog.structs.getCount(keys), 4);
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>function testValues() {
+<a name="line79"></a>  var p = getPriorityQueue();
+<a name="line80"></a>  var values = p.getValues();
+<a name="line81"></a>
+<a name="line82"></a>  assertTrue(&#39;getKeys, value &quot;a&quot; found&#39;, goog.structs.contains(values, &#39;a&#39;));
+<a name="line83"></a>  assertTrue(&#39;getKeys, value &quot;b&quot; found&#39;, goog.structs.contains(values, &#39;b&#39;));
+<a name="line84"></a>  assertTrue(&#39;getKeys, value &quot;c&quot; found&#39;, goog.structs.contains(values, &#39;c&#39;));
+<a name="line85"></a>  assertTrue(&#39;getKeys, value &quot;d&quot; found&#39;, goog.structs.contains(values, &#39;d&#39;));
+<a name="line86"></a>  assertEquals(&#39;getKeys, Should be 4 keys&#39;, goog.structs.getCount(values), 4);
+<a name="line87"></a>}
+<a name="line88"></a>
+<a name="line89"></a>
+<a name="line90"></a>function testClear() {
+<a name="line91"></a>  var p = getPriorityQueue();
+<a name="line92"></a>  p.clear();
+<a name="line93"></a>  assertTrue(&#39;cleared so it should be empty&#39;, p.isEmpty());
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>function testIsEmpty() {
+<a name="line98"></a>  var p = getPriorityQueue();
+<a name="line99"></a>  assertFalse(&#39;4 values so should not be empty&#39;, p.isEmpty());
+<a name="line100"></a>
+<a name="line101"></a>  p.dequeue();
+<a name="line102"></a>  p.dequeue();
+<a name="line103"></a>  p.dequeue();
+<a name="line104"></a>  assertFalse(&#39;1 values so should not be empty&#39;, p.isEmpty());
+<a name="line105"></a>
+<a name="line106"></a>  p.dequeue();
+<a name="line107"></a>  assertTrue(&#39;0 values so should be empty&#39;, p.isEmpty());
+<a name="line108"></a>}
+<a name="line109"></a>
+<a name="line110"></a>
+<a name="line111"></a>function testPeek1() {
+<a name="line112"></a>  var p = getPriorityQueue();
+<a name="line113"></a>  assertEquals(&#39;peek, Should be &quot;a&quot;&#39;, p.peek(), &#39;a&#39;);
+<a name="line114"></a>}
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>function testPeek2() {
+<a name="line118"></a>  var p = getPriorityQueue2();
+<a name="line119"></a>  assertEquals(&#39;peek, Should be &quot;a&quot;&#39;, p.peek(), &#39;a&#39;);
+<a name="line120"></a>}
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>function testPeek3() {
+<a name="line124"></a>  var p = getPriorityQueue();
+<a name="line125"></a>  p.clear();
+<a name="line126"></a>  assertEquals(&#39;peek, Should be &quot;a&quot;&#39;, p.peek(), undefined);
+<a name="line127"></a>}
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>function testDequeue1() {
+<a name="line131"></a>  var p = getPriorityQueue();
+<a name="line132"></a>
+<a name="line133"></a>  assertEquals(&#39;dequeue, Should be &quot;a&quot;&#39;, p.dequeue(), &#39;a&#39;);
+<a name="line134"></a>  assertEquals(&#39;dequeue, Should be &quot;b&quot;&#39;, p.dequeue(), &#39;b&#39;);
+<a name="line135"></a>  assertEquals(&#39;dequeue, Should be &quot;c&quot;&#39;, p.dequeue(), &#39;c&#39;);
+<a name="line136"></a>  assertEquals(&#39;dequeue, Should be &quot;d&quot;&#39;, p.dequeue(), &#39;d&#39;);
+<a name="line137"></a>}
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>function testDequeue2() {
+<a name="line141"></a>  var p = getPriorityQueue2();
+<a name="line142"></a>
+<a name="line143"></a>  assertEquals(&#39;dequeue, Should be &quot;a&quot;&#39;, p.dequeue(), &#39;a&#39;);
+<a name="line144"></a>  assertEquals(&#39;dequeue, Should be &quot;b&quot;&#39;, p.dequeue(), &#39;b&#39;);
+<a name="line145"></a>  assertEquals(&#39;dequeue, Should be &quot;c&quot;&#39;, p.dequeue(), &#39;c&#39;);
+<a name="line146"></a>  assertEquals(&#39;dequeue, Should be &quot;d&quot;&#39;, p.dequeue(), &#39;d&#39;);
+<a name="line147"></a>}
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>function testEnqueuePeek1() {
+<a name="line151"></a>  var p = new goog.structs.PriorityQueue();
+<a name="line152"></a>
+<a name="line153"></a>  p.enqueue(3, &#39;d&#39;);
+<a name="line154"></a>  assertEquals(&#39;peak, Should be &quot;d&quot;&#39;, p.peek(), &#39;d&#39;);
+<a name="line155"></a>  p.enqueue(2, &#39;c&#39;);
+<a name="line156"></a>  assertEquals(&#39;peak, Should be &quot;c&quot;&#39;, p.peek(), &#39;c&#39;);
+<a name="line157"></a>  p.enqueue(1, &#39;b&#39;);
+<a name="line158"></a>  assertEquals(&#39;peak, Should be &quot;b&quot;&#39;, p.peek(), &#39;b&#39;);
+<a name="line159"></a>  p.enqueue(0, &#39;a&#39;);
+<a name="line160"></a>  assertEquals(&#39;peak, Should be &quot;a&quot;&#39;, p.peek(), &#39;a&#39;);
+<a name="line161"></a>}
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>function testEnqueuePeek2() {
+<a name="line165"></a>  var p = new goog.structs.PriorityQueue();
+<a name="line166"></a>
+<a name="line167"></a>  p.enqueue(1, &#39;b&#39;);
+<a name="line168"></a>  assertEquals(&#39;peak, Should be &quot;b&quot;&#39;, p.peek(), &#39;b&#39;);
+<a name="line169"></a>  p.enqueue(3, &#39;d&#39;);
+<a name="line170"></a>  assertEquals(&#39;peak, Should be &quot;b&quot;&#39;, p.peek(), &#39;b&#39;);
+<a name="line171"></a>  p.enqueue(0, &#39;a&#39;);
+<a name="line172"></a>  assertEquals(&#39;peak, Should be &quot;a&quot;&#39;, p.peek(), &#39;a&#39;);
+<a name="line173"></a>  p.enqueue(2, &#39;c&#39;);
+<a name="line174"></a>  assertEquals(&#39;peak, Should be &quot;a&quot;&#39;, p.peek(), &#39;a&#39;);
+<a name="line175"></a>}
+</pre>
+
+
+</body>
+</html>

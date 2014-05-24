@@ -1,0 +1,445 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tabbar.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_tabbar.js.html">tabbar.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Tab bar UI component.
+<a name="line17"></a> *
+<a name="line18"></a> * @author attila@google.com (Attila Bodis)
+<a name="line19"></a> * @see ../demos/tabbar.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.TabBar&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.ui.TabBar.Location&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.ui.Component.EventType&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.Container&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.Container.Orientation&#39;);
+<a name="line28"></a>// We need to include following dependency because of the magic with
+<a name="line29"></a>// goog.ui.registry.setDecoratorByClassName
+<a name="line30"></a>goog.require(&#39;goog.ui.Tab&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.TabBarRenderer&#39;);
+<a name="line32"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/**
+<a name="line37"></a> * Tab bar UI component.  A tab bar contains tabs, rendered above, below,
+<a name="line38"></a> * before, or after tab contents.  Tabs in tab bars dispatch the following
+<a name="line39"></a> * events:
+<a name="line40"></a> * &lt;ul&gt;
+<a name="line41"></a> *   &lt;li&gt;{@link goog.ui.Component.EventType.ACTION} when activated via the
+<a name="line42"></a> *       keyboard or the mouse,
+<a name="line43"></a> *   &lt;li&gt;{@link goog.ui.Component.EventType.SELECT} when selected, and
+<a name="line44"></a> *   &lt;li&gt;{@link goog.ui.Component.EventType.UNSELECT} when deselected.
+<a name="line45"></a> * &lt;/ul&gt;
+<a name="line46"></a> * Clients may listen for all of the above events on the tab bar itself, and
+<a name="line47"></a> * refer to the event target to identify the tab that dispatched the event.
+<a name="line48"></a> * When an unselected tab is clicked for the first time, it dispatches both a
+<a name="line49"></a> * {@code SELECT} event and an {@code ACTION} event; subsequent clicks on an
+<a name="line50"></a> * already selected tab only result in {@code ACTION} events.
+<a name="line51"></a> *
+<a name="line52"></a> * @param {goog.ui.TabBar.Location=} opt_location Tab bar location; defaults to
+<a name="line53"></a> *     {@link goog.ui.TabBar.Location.TOP}.
+<a name="line54"></a> * @param {goog.ui.TabBarRenderer=} opt_renderer Renderer used to render or
+<a name="line55"></a> *     decorate the container; defaults to {@link goog.ui.TabBarRenderer}.
+<a name="line56"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper, used for document
+<a name="line57"></a> *     interaction.
+<a name="line58"></a> * @constructor
+<a name="line59"></a> * @extends {goog.ui.Container}
+<a name="line60"></a> */
+<a name="line61"></a>goog.ui.TabBar = function(opt_location, opt_renderer, opt_domHelper) {
+<a name="line62"></a>  this.setLocation(opt_location || goog.ui.TabBar.Location.TOP);
+<a name="line63"></a>
+<a name="line64"></a>  goog.ui.Container.call(this, this.getOrientation(),
+<a name="line65"></a>      opt_renderer || goog.ui.TabBarRenderer.getInstance(),
+<a name="line66"></a>      opt_domHelper);
+<a name="line67"></a>
+<a name="line68"></a>  this.listenToTabEvents_();
+<a name="line69"></a>};
+<a name="line70"></a>goog.inherits(goog.ui.TabBar, goog.ui.Container);
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * Tab bar location relative to tab contents.
+<a name="line75"></a> * @enum {string}
+<a name="line76"></a> */
+<a name="line77"></a>goog.ui.TabBar.Location = {
+<a name="line78"></a>  // Above tab contents.
+<a name="line79"></a>  TOP: &#39;top&#39;,
+<a name="line80"></a>  // Below tab contents.
+<a name="line81"></a>  BOTTOM: &#39;bottom&#39;,
+<a name="line82"></a>  // To the left of tab contents (to the right if the page is right-to-left).
+<a name="line83"></a>  START: &#39;start&#39;,
+<a name="line84"></a>  // To the right of tab contents (to the left if the page is right-to-left).
+<a name="line85"></a>  END: &#39;end&#39;
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Tab bar location; defaults to {@link goog.ui.TabBar.Location.TOP}.
+<a name="line91"></a> * @type {goog.ui.TabBar.Location}
+<a name="line92"></a> * @private
+<a name="line93"></a> */
+<a name="line94"></a>goog.ui.TabBar.prototype.location_;
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Whether keyboard navigation should change the selected tab, or just move
+<a name="line99"></a> * the highlight.  Defaults to true.
+<a name="line100"></a> * @type {boolean}
+<a name="line101"></a> * @private
+<a name="line102"></a> */
+<a name="line103"></a>goog.ui.TabBar.prototype.autoSelectTabs_ = true;
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * The currently selected tab (null if none).
+<a name="line108"></a> * @type {goog.ui.Control?}
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.ui.TabBar.prototype.selectedTab_ = null;
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * @override
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.TabBar.prototype.enterDocument = function() {
+<a name="line118"></a>  goog.ui.TabBar.superClass_.enterDocument.call(this);
+<a name="line119"></a>
+<a name="line120"></a>  this.listenToTabEvents_();
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/** @override */
+<a name="line125"></a>goog.ui.TabBar.prototype.disposeInternal = function() {
+<a name="line126"></a>  goog.ui.TabBar.superClass_.disposeInternal.call(this);
+<a name="line127"></a>  this.selectedTab_ = null;
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Removes the tab from the tab bar.  Overrides the superclass implementation
+<a name="line133"></a> * by deselecting the tab being removed.  Since {@link #removeChildAt} uses
+<a name="line134"></a> * {@link #removeChild} internally, we only need to override this method.
+<a name="line135"></a> * @param {string|goog.ui.Component} tab Tab to remove.
+<a name="line136"></a> * @param {boolean=} opt_unrender Whether to call {@code exitDocument} on the
+<a name="line137"></a> *     removed tab, and detach its DOM from the document (defaults to false).
+<a name="line138"></a> * @return {goog.ui.Control} The removed tab, if any.
+<a name="line139"></a> * @override
+<a name="line140"></a> */
+<a name="line141"></a>goog.ui.TabBar.prototype.removeChild = function(tab, opt_unrender) {
+<a name="line142"></a>  // This actually only accepts goog.ui.Controls. There&#39;s a TODO
+<a name="line143"></a>  // on the superclass method to fix this.
+<a name="line144"></a>  this.deselectIfSelected(/** @type {goog.ui.Control} */ (tab));
+<a name="line145"></a>  return goog.ui.TabBar.superClass_.removeChild.call(this, tab, opt_unrender);
+<a name="line146"></a>};
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/**
+<a name="line150"></a> * @return {goog.ui.TabBar.Location} Tab bar location relative to tab contents.
+<a name="line151"></a> */
+<a name="line152"></a>goog.ui.TabBar.prototype.getLocation = function() {
+<a name="line153"></a>  return this.location_;
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Sets the location of the tab bar relative to tab contents.
+<a name="line159"></a> * @param {goog.ui.TabBar.Location} location Tab bar location relative to tab
+<a name="line160"></a> *     contents.
+<a name="line161"></a> * @throws {Error} If the tab bar has already been rendered.
+<a name="line162"></a> */
+<a name="line163"></a>goog.ui.TabBar.prototype.setLocation = function(location) {
+<a name="line164"></a>  // setOrientation() will take care of throwing an error if already rendered.
+<a name="line165"></a>  this.setOrientation(goog.ui.TabBar.getOrientationFromLocation(location));
+<a name="line166"></a>  this.location_ = location;
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * @return {boolean} Whether keyboard navigation should change the selected tab,
+<a name="line172"></a> *     or just move the highlight.
+<a name="line173"></a> */
+<a name="line174"></a>goog.ui.TabBar.prototype.isAutoSelectTabs = function() {
+<a name="line175"></a>  return this.autoSelectTabs_;
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Enables or disables auto-selecting tabs using the keyboard.  If auto-select
+<a name="line181"></a> * is enabled, keyboard navigation switches tabs immediately, otherwise it just
+<a name="line182"></a> * moves the highlight.
+<a name="line183"></a> * @param {boolean} enable Whether keyboard navigation should change the
+<a name="line184"></a> *     selected tab, or just move the highlight.
+<a name="line185"></a> */
+<a name="line186"></a>goog.ui.TabBar.prototype.setAutoSelectTabs = function(enable) {
+<a name="line187"></a>  this.autoSelectTabs_ = enable;
+<a name="line188"></a>};
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * Highlights the tab at the given index in response to a keyboard event.
+<a name="line193"></a> * Overrides the superclass implementation by also selecting the tab if
+<a name="line194"></a> * {@link #isAutoSelectTabs} returns true.
+<a name="line195"></a> * @param {number} index Index of tab to highlight.
+<a name="line196"></a> * @protected
+<a name="line197"></a> * @override
+<a name="line198"></a> */
+<a name="line199"></a>goog.ui.TabBar.prototype.setHighlightedIndexFromKeyEvent = function(index) {
+<a name="line200"></a>  goog.ui.TabBar.superClass_.setHighlightedIndexFromKeyEvent.call(this, index);
+<a name="line201"></a>  if (this.autoSelectTabs_) {
+<a name="line202"></a>    // Immediately select the tab.
+<a name="line203"></a>    this.setSelectedTabIndex(index);
+<a name="line204"></a>  }
+<a name="line205"></a>};
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * @return {goog.ui.Control?} The currently selected tab (null if none).
+<a name="line210"></a> */
+<a name="line211"></a>goog.ui.TabBar.prototype.getSelectedTab = function() {
+<a name="line212"></a>  return this.selectedTab_;
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Selects the given tab.
+<a name="line218"></a> * @param {goog.ui.Control?} tab Tab to select (null to select none).
+<a name="line219"></a> */
+<a name="line220"></a>goog.ui.TabBar.prototype.setSelectedTab = function(tab) {
+<a name="line221"></a>  if (tab) {
+<a name="line222"></a>    // Select the tab and have it dispatch a SELECT event, to be handled in
+<a name="line223"></a>    // handleTabSelect() below.
+<a name="line224"></a>    tab.setSelected(true);
+<a name="line225"></a>  } else if (this.getSelectedTab()) {
+<a name="line226"></a>    // De-select the currently selected tab and have it dispatch an UNSELECT
+<a name="line227"></a>    // event, to be handled in handleTabUnselect() below.
+<a name="line228"></a>    this.getSelectedTab().setSelected(false);
+<a name="line229"></a>  }
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * @return {number} Index of the currently selected tab (-1 if none).
+<a name="line235"></a> */
+<a name="line236"></a>goog.ui.TabBar.prototype.getSelectedTabIndex = function() {
+<a name="line237"></a>  return this.indexOfChild(this.getSelectedTab());
+<a name="line238"></a>};
+<a name="line239"></a>
+<a name="line240"></a>
+<a name="line241"></a>/**
+<a name="line242"></a> * Selects the tab at the given index.
+<a name="line243"></a> * @param {number} index Index of the tab to select (-1 to select none).
+<a name="line244"></a> */
+<a name="line245"></a>goog.ui.TabBar.prototype.setSelectedTabIndex = function(index) {
+<a name="line246"></a>  this.setSelectedTab(/** @type {goog.ui.Tab} */ (this.getChildAt(index)));
+<a name="line247"></a>};
+<a name="line248"></a>
+<a name="line249"></a>
+<a name="line250"></a>/**
+<a name="line251"></a> * If the specified tab is the currently selected tab, deselects it, and
+<a name="line252"></a> * selects the closest selectable tab in the tab bar (first looking before,
+<a name="line253"></a> * then after the deselected tab).  Does nothing if the argument is not the
+<a name="line254"></a> * currently selected tab.  Called internally when a tab is removed, hidden,
+<a name="line255"></a> * or disabled, to ensure that another tab is selected instead.
+<a name="line256"></a> * @param {goog.ui.Control?} tab Tab to deselect (if any).
+<a name="line257"></a> * @protected
+<a name="line258"></a> */
+<a name="line259"></a>goog.ui.TabBar.prototype.deselectIfSelected = function(tab) {
+<a name="line260"></a>  if (tab &amp;&amp; tab == this.getSelectedTab()) {
+<a name="line261"></a>    var index = this.indexOfChild(tab);
+<a name="line262"></a>    // First look for the closest selectable tab before this one.
+<a name="line263"></a>    for (var i = index - 1;
+<a name="line264"></a>         tab = /** @type {goog.ui.Tab} */ (this.getChildAt(i));
+<a name="line265"></a>         i--) {
+<a name="line266"></a>      if (this.isSelectableTab(tab)) {
+<a name="line267"></a>        this.setSelectedTab(tab);
+<a name="line268"></a>        return;
+<a name="line269"></a>      }
+<a name="line270"></a>    }
+<a name="line271"></a>    // Next, look for the closest selectable tab after this one.
+<a name="line272"></a>    for (var j = index + 1;
+<a name="line273"></a>         tab = /** @type {goog.ui.Tab} */ (this.getChildAt(j));
+<a name="line274"></a>         j++) {
+<a name="line275"></a>      if (this.isSelectableTab(tab)) {
+<a name="line276"></a>        this.setSelectedTab(tab);
+<a name="line277"></a>        return;
+<a name="line278"></a>      }
+<a name="line279"></a>    }
+<a name="line280"></a>    // If all else fails, just set the selection to null.
+<a name="line281"></a>    this.setSelectedTab(null);
+<a name="line282"></a>  }
+<a name="line283"></a>};
+<a name="line284"></a>
+<a name="line285"></a>
+<a name="line286"></a>/**
+<a name="line287"></a> * Returns true if the tab is selectable, false otherwise.  Only visible and
+<a name="line288"></a> * enabled tabs are selectable.
+<a name="line289"></a> * @param {goog.ui.Control} tab Tab to check.
+<a name="line290"></a> * @return {boolean} Whether the tab is selectable.
+<a name="line291"></a> * @protected
+<a name="line292"></a> */
+<a name="line293"></a>goog.ui.TabBar.prototype.isSelectableTab = function(tab) {
+<a name="line294"></a>  return tab.isVisible() &amp;&amp; tab.isEnabled();
+<a name="line295"></a>};
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>/**
+<a name="line299"></a> * Handles {@code SELECT} events dispatched by tabs as they become selected.
+<a name="line300"></a> * @param {goog.events.Event} e Select event to handle.
+<a name="line301"></a> * @protected
+<a name="line302"></a> */
+<a name="line303"></a>goog.ui.TabBar.prototype.handleTabSelect = function(e) {
+<a name="line304"></a>  if (this.selectedTab_ &amp;&amp; this.selectedTab_ != e.target) {
+<a name="line305"></a>    // Deselect currently selected tab.
+<a name="line306"></a>    this.selectedTab_.setSelected(false);
+<a name="line307"></a>  }
+<a name="line308"></a>  this.selectedTab_ = /** @type {goog.ui.Tab} */ (e.target);
+<a name="line309"></a>};
+<a name="line310"></a>
+<a name="line311"></a>
+<a name="line312"></a>/**
+<a name="line313"></a> * Handles {@code UNSELECT} events dispatched by tabs as they become deselected.
+<a name="line314"></a> * @param {goog.events.Event} e Unselect event to handle.
+<a name="line315"></a> * @protected
+<a name="line316"></a> */
+<a name="line317"></a>goog.ui.TabBar.prototype.handleTabUnselect = function(e) {
+<a name="line318"></a>  if (e.target == this.selectedTab_) {
+<a name="line319"></a>    this.selectedTab_ = null;
+<a name="line320"></a>  }
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Handles {@code DISABLE} events displayed by tabs.
+<a name="line326"></a> * @param {goog.events.Event} e Disable event to handle.
+<a name="line327"></a> * @protected
+<a name="line328"></a> */
+<a name="line329"></a>goog.ui.TabBar.prototype.handleTabDisable = function(e) {
+<a name="line330"></a>  this.deselectIfSelected(/** @type {goog.ui.Tab} */ (e.target));
+<a name="line331"></a>};
+<a name="line332"></a>
+<a name="line333"></a>
+<a name="line334"></a>/**
+<a name="line335"></a> * Handles {@code HIDE} events displayed by tabs.
+<a name="line336"></a> * @param {goog.events.Event} e Hide event to handle.
+<a name="line337"></a> * @protected
+<a name="line338"></a> */
+<a name="line339"></a>goog.ui.TabBar.prototype.handleTabHide = function(e) {
+<a name="line340"></a>  this.deselectIfSelected(/** @type {goog.ui.Tab} */ (e.target));
+<a name="line341"></a>};
+<a name="line342"></a>
+<a name="line343"></a>
+<a name="line344"></a>/**
+<a name="line345"></a> * Handles focus events dispatched by the tab bar&#39;s key event target.  If no tab
+<a name="line346"></a> * is currently highlighted, highlights the selected tab or the first tab if no
+<a name="line347"></a> * tab is selected either.
+<a name="line348"></a> * @param {goog.events.Event} e Focus event to handle.
+<a name="line349"></a> * @protected
+<a name="line350"></a> * @override
+<a name="line351"></a> */
+<a name="line352"></a>goog.ui.TabBar.prototype.handleFocus = function(e) {
+<a name="line353"></a>  if (!this.getHighlighted()) {
+<a name="line354"></a>    this.setHighlighted(this.getSelectedTab() ||
+<a name="line355"></a>        /** @type {goog.ui.Tab} */ (this.getChildAt(0)));
+<a name="line356"></a>  }
+<a name="line357"></a>};
+<a name="line358"></a>
+<a name="line359"></a>
+<a name="line360"></a>/**
+<a name="line361"></a> * Subscribes to events dispatched by tabs.
+<a name="line362"></a> * @private
+<a name="line363"></a> */
+<a name="line364"></a>goog.ui.TabBar.prototype.listenToTabEvents_ = function() {
+<a name="line365"></a>  // Listen for SELECT, UNSELECT, DISABLE, and HIDE events dispatched by tabs.
+<a name="line366"></a>  this.getHandler().
+<a name="line367"></a>      listen(this, goog.ui.Component.EventType.SELECT, this.handleTabSelect).
+<a name="line368"></a>      listen(this,
+<a name="line369"></a>             goog.ui.Component.EventType.UNSELECT,
+<a name="line370"></a>             this.handleTabUnselect).
+<a name="line371"></a>      listen(this, goog.ui.Component.EventType.DISABLE, this.handleTabDisable).
+<a name="line372"></a>      listen(this, goog.ui.Component.EventType.HIDE, this.handleTabHide);
+<a name="line373"></a>};
+<a name="line374"></a>
+<a name="line375"></a>
+<a name="line376"></a>/**
+<a name="line377"></a> * Returns the {@link goog.ui.Container.Orientation} that is implied by the
+<a name="line378"></a> * given {@link goog.ui.TabBar.Location}.
+<a name="line379"></a> * @param {goog.ui.TabBar.Location} location Tab bar location.
+<a name="line380"></a> * @return {goog.ui.Container.Orientation} Corresponding orientation.
+<a name="line381"></a> */
+<a name="line382"></a>goog.ui.TabBar.getOrientationFromLocation = function(location) {
+<a name="line383"></a>  return location == goog.ui.TabBar.Location.START ||
+<a name="line384"></a>         location == goog.ui.TabBar.Location.END ?
+<a name="line385"></a>             goog.ui.Container.Orientation.VERTICAL :
+<a name="line386"></a>             goog.ui.Container.Orientation.HORIZONTAL;
+<a name="line387"></a>};
+<a name="line388"></a>
+<a name="line389"></a>
+<a name="line390"></a>// Register a decorator factory function for goog.ui.TabBars.
+<a name="line391"></a>goog.ui.registry.setDecoratorByClassName(goog.ui.TabBarRenderer.CSS_CLASS,
+<a name="line392"></a>    function() {
+<a name="line393"></a>      return new goog.ui.TabBar();
+<a name="line394"></a>    });
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>anim_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_fx_anim_anim_test.js.html">anim_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.fx.animTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.fx.animTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.async.AnimationDelay&#39;);
+<a name="line19"></a>goog.require(&#39;goog.async.Delay&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events&#39;);
+<a name="line21"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line22"></a>goog.require(&#39;goog.fx.Animation&#39;);
+<a name="line23"></a>goog.require(&#39;goog.fx.anim&#39;);
+<a name="line24"></a>goog.require(&#39;goog.object&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line28"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line29"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line30"></a>
+<a name="line31"></a>var clock, replacer;
+<a name="line32"></a>
+<a name="line33"></a>function setUpPage() {
+<a name="line34"></a>  clock = new goog.testing.MockClock(true);
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function tearDownPage() {
+<a name="line38"></a>  clock.dispose();
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>function setUp() {
+<a name="line42"></a>  replacer = new goog.testing.PropertyReplacer();
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>function tearDown() {
+<a name="line46"></a>  replacer.reset();
+<a name="line47"></a>  goog.fx.anim.tearDown();
+<a name="line48"></a>}
+<a name="line49"></a>
+<a name="line50"></a>function testDelayWithMocks() {
+<a name="line51"></a>  goog.fx.anim.setAnimationWindow(null);
+<a name="line52"></a>  registerAndUnregisterAnimationWithMocks(goog.async.Delay);
+<a name="line53"></a>}
+<a name="line54"></a>
+<a name="line55"></a>function testAnimationDelayWithMocks() {
+<a name="line56"></a>  goog.fx.anim.setAnimationWindow(window);
+<a name="line57"></a>  registerAndUnregisterAnimationWithMocks(goog.async.AnimationDelay);
+<a name="line58"></a>}
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * @param {!Function} delayType The constructor for Delay or AnimationDelay.
+<a name="line63"></a> *     The methods will be mocked out.
+<a name="line64"></a> */
+<a name="line65"></a>function registerAndUnregisterAnimationWithMocks(delayType) {
+<a name="line66"></a>  var timerCount = 0;
+<a name="line67"></a>
+<a name="line68"></a>  replacer.set(delayType.prototype, &#39;start&#39;, function() {
+<a name="line69"></a>    timerCount++;
+<a name="line70"></a>  });
+<a name="line71"></a>  replacer.set(delayType.prototype, &#39;stop&#39;, function() {
+<a name="line72"></a>    timerCount--;
+<a name="line73"></a>  });
+<a name="line74"></a>  replacer.set(delayType.prototype, &#39;isActive&#39;, function() {
+<a name="line75"></a>    return timerCount &gt; 0;
+<a name="line76"></a>  });
+<a name="line77"></a>
+<a name="line78"></a>  var forbiddenDelayType = delayType == goog.async.AnimationDelay ?
+<a name="line79"></a>      goog.async.Delay : goog.async.AnimationDelay;
+<a name="line80"></a>  replacer.set(forbiddenDelayType.prototype,
+<a name="line81"></a>      &#39;start&#39;, goog.functions.error());
+<a name="line82"></a>  replacer.set(forbiddenDelayType.prototype,
+<a name="line83"></a>      &#39;stop&#39;, goog.functions.error());
+<a name="line84"></a>  replacer.set(forbiddenDelayType.prototype,
+<a name="line85"></a>      &#39;isActive&#39;, goog.functions.error());
+<a name="line86"></a>
+<a name="line87"></a>  var anim = new goog.fx.Animation([0], [1], 1000);
+<a name="line88"></a>  var anim2 = new goog.fx.Animation([0], [1], 1000);
+<a name="line89"></a>
+<a name="line90"></a>  goog.fx.anim.registerAnimation(anim);
+<a name="line91"></a>
+<a name="line92"></a>  assertTrue(&#39;Should contain the animation&#39;,
+<a name="line93"></a>             goog.object.containsValue(goog.fx.anim.activeAnimations_,
+<a name="line94"></a>                                       anim));
+<a name="line95"></a>  assertEquals(&#39;Should have called start once&#39;, 1, timerCount);
+<a name="line96"></a>
+<a name="line97"></a>  goog.fx.anim.registerAnimation(anim2);
+<a name="line98"></a>
+<a name="line99"></a>  assertEquals(&#39;Should not have called start again&#39;, 1, timerCount);
+<a name="line100"></a>
+<a name="line101"></a>  // Add anim again.
+<a name="line102"></a>  goog.fx.anim.registerAnimation(anim);
+<a name="line103"></a>  assertTrue(&#39;Should contain the animation&#39;,
+<a name="line104"></a>             goog.object.containsValue(goog.fx.anim.activeAnimations_,
+<a name="line105"></a>                                       anim));
+<a name="line106"></a>  assertEquals(&#39;Should not have called start again&#39;, 1, timerCount);
+<a name="line107"></a>
+<a name="line108"></a>  goog.fx.anim.unregisterAnimation(anim);
+<a name="line109"></a>  assertFalse(&#39;Should not contain the animation&#39;,
+<a name="line110"></a>              goog.object.containsValue(goog.fx.anim.activeAnimations_,
+<a name="line111"></a>                                        anim));
+<a name="line112"></a>  assertEquals(&#39;clearTimeout should not have been called&#39;, 1, timerCount);
+<a name="line113"></a>
+<a name="line114"></a>  goog.fx.anim.unregisterAnimation(anim2);
+<a name="line115"></a>  assertEquals(&#39;There should be no remaining timers&#39;, 0, timerCount);
+<a name="line116"></a>
+<a name="line117"></a>  // Make sure we don&#39;t trigger setTimeout or setInterval.
+<a name="line118"></a>  clock.tick(1000);
+<a name="line119"></a>  goog.fx.anim.cycleAnimations_(goog.now());
+<a name="line120"></a>
+<a name="line121"></a>  assertEquals(&#39;There should be no remaining timers&#39;, 0, timerCount);
+<a name="line122"></a>
+<a name="line123"></a>  anim.dispose();
+<a name="line124"></a>  anim2.dispose();
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>function testRegisterAndUnregisterAnimationWithRequestAnimationFrameGecko() {
+<a name="line128"></a>  // Only FF4 onwards support requestAnimationFrame.
+<a name="line129"></a>  if (!goog.userAgent.GECKO || !goog.userAgent.isVersionOrHigher(&#39;2.0&#39;) ||
+<a name="line130"></a>      goog.userAgent.isVersionOrHigher(&#39;17&#39;)) {
+<a name="line131"></a>    return;
+<a name="line132"></a>  }
+<a name="line133"></a>
+<a name="line134"></a>  goog.fx.anim.setAnimationWindow(window);
+<a name="line135"></a>
+<a name="line136"></a>  var anim = new goog.fx.Animation([0], [1], 1000);
+<a name="line137"></a>  var anim2 = new goog.fx.Animation([0], [1], 1000);
+<a name="line138"></a>
+<a name="line139"></a>  goog.fx.anim.registerAnimation(anim);
+<a name="line140"></a>
+<a name="line141"></a>  assertTrue(&#39;Should contain the animation&#39;,
+<a name="line142"></a>             goog.object.containsValue(goog.fx.anim.activeAnimations_,
+<a name="line143"></a>                                       anim));
+<a name="line144"></a>
+<a name="line145"></a>  assertEquals(&#39;Should have listen to MozBeforePaint once&#39;, 1,
+<a name="line146"></a>      goog.events.getListeners(window, &#39;MozBeforePaint&#39;, false).length);
+<a name="line147"></a>
+<a name="line148"></a>  goog.fx.anim.registerAnimation(anim2);
+<a name="line149"></a>
+<a name="line150"></a>  assertEquals(&#39;Should not add more listener for MozBeforePaint&#39;, 1,
+<a name="line151"></a>      goog.events.getListeners(window, &#39;MozBeforePaint&#39;, false).length);
+<a name="line152"></a>
+<a name="line153"></a>  // Add anim again.
+<a name="line154"></a>  goog.fx.anim.registerAnimation(anim);
+<a name="line155"></a>  assertTrue(&#39;Should contain the animation&#39;,
+<a name="line156"></a>             goog.object.containsValue(goog.fx.anim.activeAnimations_,
+<a name="line157"></a>                                       anim));
+<a name="line158"></a>  assertEquals(&#39;Should not add more listener for MozBeforePaint&#39;, 1,
+<a name="line159"></a>      goog.events.getListeners(window, &#39;MozBeforePaint&#39;, false).length);
+<a name="line160"></a>
+<a name="line161"></a>  goog.fx.anim.unregisterAnimation(anim);
+<a name="line162"></a>  assertFalse(&#39;Should not contain the animation&#39;,
+<a name="line163"></a>              goog.object.containsValue(goog.fx.anim.activeAnimations_,
+<a name="line164"></a>                                        anim));
+<a name="line165"></a>  assertEquals(&#39;Should not clear listener for MozBeforePaint yet&#39;, 1,
+<a name="line166"></a>      goog.events.getListeners(window, &#39;MozBeforePaint&#39;, false).length);
+<a name="line167"></a>
+<a name="line168"></a>  goog.fx.anim.unregisterAnimation(anim2);
+<a name="line169"></a>  assertEquals(&#39;There should be no more listener for MozBeforePaint&#39;, 0,
+<a name="line170"></a>      goog.events.getListeners(window, &#39;MozBeforePaint&#39;, false).length);
+<a name="line171"></a>
+<a name="line172"></a>  anim.dispose();
+<a name="line173"></a>  anim2.dispose();
+<a name="line174"></a>
+<a name="line175"></a>  goog.fx.anim.setAnimationWindow(null);
+<a name="line176"></a>}
+<a name="line177"></a>
+<a name="line178"></a>function testRegisterUnregisterAnimation() {
+<a name="line179"></a>  var anim = new goog.fx.Animation([0], [1], 1000);
+<a name="line180"></a>
+<a name="line181"></a>  goog.fx.anim.registerAnimation(anim);
+<a name="line182"></a>
+<a name="line183"></a>  assertTrue(&#39;There should be an active timer&#39;,
+<a name="line184"></a>      goog.fx.anim.animationDelay_ &amp;&amp; goog.fx.anim.animationDelay_.isActive());
+<a name="line185"></a>  assertEquals(&#39;There should be an active animations&#39;,
+<a name="line186"></a>      1, goog.object.getCount(goog.fx.anim.activeAnimations_));
+<a name="line187"></a>
+<a name="line188"></a>  goog.fx.anim.unregisterAnimation(anim);
+<a name="line189"></a>
+<a name="line190"></a>  assertTrue(&#39;There should be no active animations&#39;,
+<a name="line191"></a>      goog.object.isEmpty(goog.fx.anim.activeAnimations_));
+<a name="line192"></a>  assertFalse(&#39;There should be no active timer&#39;,
+<a name="line193"></a>      goog.fx.anim.animationDelay_ &amp;&amp; goog.fx.anim.animationDelay_.isActive());
+<a name="line194"></a>
+<a name="line195"></a>  anim.dispose();
+<a name="line196"></a>}
+<a name="line197"></a>
+<a name="line198"></a>function testCycleWithMockClock() {
+<a name="line199"></a>  goog.fx.anim.setAnimationWindow(null);
+<a name="line200"></a>  var anim = new goog.fx.Animation([0], [1], 1000);
+<a name="line201"></a>  anim.onAnimationFrame = goog.testing.recordFunction();
+<a name="line202"></a>
+<a name="line203"></a>  goog.fx.anim.registerAnimation(anim);
+<a name="line204"></a>  clock.tick(goog.fx.anim.TIMEOUT);
+<a name="line205"></a>
+<a name="line206"></a>  assertEquals(1, anim.onAnimationFrame.getCallCount());
+<a name="line207"></a>}
+<a name="line208"></a>
+<a name="line209"></a>function testCycleWithMockClockAndAnimationWindow() {
+<a name="line210"></a>  goog.fx.anim.setAnimationWindow(window);
+<a name="line211"></a>  var anim = new goog.fx.Animation([0], [1], 1000);
+<a name="line212"></a>  anim.onAnimationFrame = goog.testing.recordFunction();
+<a name="line213"></a>
+<a name="line214"></a>  goog.fx.anim.registerAnimation(anim);
+<a name="line215"></a>  clock.tick(goog.fx.anim.TIMEOUT);
+<a name="line216"></a>
+<a name="line217"></a>  assertEquals(1, anim.onAnimationFrame.getCallCount());
+<a name="line218"></a>}
+</pre>
+
+
+</body>
+</html>

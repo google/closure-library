@@ -1,0 +1,267 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>icontent_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_icontent_test.js.html">icontent_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.editor.icontentTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.editor.icontentTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.editor.BrowserFeature&#39;);
+<a name="line20"></a>goog.require(&#39;goog.editor.icontent&#39;);
+<a name="line21"></a>goog.require(&#39;goog.editor.icontent.FieldFormatInfo&#39;);
+<a name="line22"></a>goog.require(&#39;goog.editor.icontent.FieldStyleInfo&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line25"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line26"></a>
+<a name="line27"></a>var wrapperDiv;
+<a name="line28"></a>var realIframe;
+<a name="line29"></a>var realIframeDoc;
+<a name="line30"></a>var propertyReplacer;
+<a name="line31"></a>
+<a name="line32"></a>function setUp() {
+<a name="line33"></a>  wrapperDiv = goog.dom.createDom(&#39;div&#39;, null,
+<a name="line34"></a>      realIframe = goog.dom.createDom(&#39;iframe&#39;));
+<a name="line35"></a>  goog.dom.appendChild(document.body, wrapperDiv);
+<a name="line36"></a>  realIframeDoc = realIframe.contentWindow.document;
+<a name="line37"></a>  propertyReplacer = new goog.testing.PropertyReplacer();
+<a name="line38"></a>}
+<a name="line39"></a>
+<a name="line40"></a>function tearDown() {
+<a name="line41"></a>  goog.dom.removeNode(wrapperDiv);
+<a name="line42"></a>  propertyReplacer.reset();
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>function testWriteHttpsInitialIframeContent() {
+<a name="line46"></a>  // This is not a particularly useful test; it&#39;s just a sanity check to make
+<a name="line47"></a>  // sure nothing explodes
+<a name="line48"></a>  var info =
+<a name="line49"></a>      new goog.editor.icontent.FieldFormatInfo(&#39;id&#39;, false, false, false);
+<a name="line50"></a>  var doc = createMockDocument();
+<a name="line51"></a>  goog.editor.icontent.writeHttpsInitialIframe(info, doc, &#39;some html&#39;);
+<a name="line52"></a>  assertBodyCorrect(doc.body, &#39;id&#39;, &#39;some html&#39;);
+<a name="line53"></a>}
+<a name="line54"></a>
+<a name="line55"></a>function testWriteHttpsInitialIframeContentRtl() {
+<a name="line56"></a>  var info = new goog.editor.icontent.FieldFormatInfo(&#39;id&#39;, false, false, true);
+<a name="line57"></a>  var doc = createMockDocument();
+<a name="line58"></a>  goog.editor.icontent.writeHttpsInitialIframe(info, doc, &#39;some html&#39;);
+<a name="line59"></a>  assertBodyCorrect(doc.body, &#39;id&#39;, &#39;some html&#39;, true);
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>function testWriteInitialIframeContentBlendedStandardsGrowing() {
+<a name="line63"></a>  if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+<a name="line64"></a>    return; // only executes when using an iframe
+<a name="line65"></a>  }
+<a name="line66"></a>
+<a name="line67"></a>  var info = new goog.editor.icontent.FieldFormatInfo(&#39;id&#39;, true, true, false);
+<a name="line68"></a>  var styleInfo = new goog.editor.icontent.FieldStyleInfo(wrapperDiv,
+<a name="line69"></a>      &#39;.MyClass { position: absolute; top: 500px; }&#39;);
+<a name="line70"></a>  var doc = realIframeDoc;
+<a name="line71"></a>  var html = &#39;&lt;div class=&quot;MyClass&quot;&gt;Some Html&lt;/div&gt;&#39;;
+<a name="line72"></a>  goog.editor.icontent.writeNormalInitialBlendedIframe(info, html,
+<a name="line73"></a>      styleInfo, realIframe);
+<a name="line74"></a>
+<a name="line75"></a>  assertBodyCorrect(doc.body, &#39;id&#39;, html);
+<a name="line76"></a>  assertEquals(&#39;CSS1Compat&#39;, doc.compatMode); // standards
+<a name="line77"></a>  assertEquals(&#39;auto&#39;, doc.documentElement.style.height); // growing
+<a name="line78"></a>  assertEquals(&#39;100%&#39;, doc.body.style.height); // standards
+<a name="line79"></a>  assertEquals(&#39;hidden&#39;, doc.body.style.overflowY); // growing
+<a name="line80"></a>  assertEquals(&#39;&#39;, realIframe.style.position); // no padding on wrapper
+<a name="line81"></a>
+<a name="line82"></a>  assertEquals(500, doc.body.firstChild.offsetTop);
+<a name="line83"></a>  assert(doc.getElementsByTagName(&#39;style&#39;)[0].innerHTML.indexOf(
+<a name="line84"></a>      &#39;-moz-force-broken-image-icon&#39;) != -1); // standards
+<a name="line85"></a>}
+<a name="line86"></a>
+<a name="line87"></a>function testWriteInitialIframeContentBlendedQuirksFixedRtl() {
+<a name="line88"></a>  if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+<a name="line89"></a>    return; // only executes when using an iframe
+<a name="line90"></a>  }
+<a name="line91"></a>
+<a name="line92"></a>  var info = new goog.editor.icontent.FieldFormatInfo(&#39;id&#39;, false, true, true);
+<a name="line93"></a>  var styleInfo = new goog.editor.icontent.FieldStyleInfo(wrapperDiv, &#39;&#39;);
+<a name="line94"></a>  wrapperDiv.style.padding = &#39;2px 5px&#39;;
+<a name="line95"></a>  var doc = realIframeDoc;
+<a name="line96"></a>  var html = &#39;Some Html&#39;;
+<a name="line97"></a>  goog.editor.icontent.writeNormalInitialBlendedIframe(info, html,
+<a name="line98"></a>      styleInfo, realIframe);
+<a name="line99"></a>
+<a name="line100"></a>  assertBodyCorrect(doc.body, &#39;id&#39;, html, true);
+<a name="line101"></a>  assertEquals(&#39;BackCompat&#39;, doc.compatMode); // quirks
+<a name="line102"></a>  assertEquals(&#39;100%&#39;, doc.documentElement.style.height); // fixed height
+<a name="line103"></a>  assertEquals(&#39;auto&#39;, doc.body.style.height); // quirks
+<a name="line104"></a>  assertEquals(&#39;auto&#39;, doc.body.style.overflow); // fixed height
+<a name="line105"></a>
+<a name="line106"></a>  assertEquals(&#39;-2px&#39;, realIframe.style.marginTop);
+<a name="line107"></a>  assertEquals(&#39;-5px&#39;, realIframe.style.marginLeft);
+<a name="line108"></a>  assert(doc.getElementsByTagName(&#39;style&#39;)[0].innerHTML.indexOf(
+<a name="line109"></a>      &#39;-moz-force-broken-image-icon&#39;) == -1); // quirks
+<a name="line110"></a>}
+<a name="line111"></a>
+<a name="line112"></a>function testWhiteboxStandardsFixedRtl() {
+<a name="line113"></a>  var info = new goog.editor.icontent.FieldFormatInfo(&#39;id&#39;, true, false, true);
+<a name="line114"></a>  var styleInfo = null;
+<a name="line115"></a>  var doc = realIframeDoc;
+<a name="line116"></a>  var html = &#39;Some Html&#39;;
+<a name="line117"></a>  goog.editor.icontent.writeNormalInitialBlendedIframe(info, html,
+<a name="line118"></a>      styleInfo, realIframe);
+<a name="line119"></a>  assertBodyCorrect(doc.body, &#39;id&#39;, html, true);
+<a name="line120"></a>
+<a name="line121"></a>  // TODO(nicksantos): on Safari, there&#39;s a bug where all written iframes
+<a name="line122"></a>  // are CSS1Compat. It&#39;s fixed in the nightlies as of 3/31/08, so remove
+<a name="line123"></a>  // this guard when the latest version of Safari is on the farm.
+<a name="line124"></a>  if (!goog.userAgent.WEBKIT) {
+<a name="line125"></a>    assertEquals(&#39;BackCompat&#39;, doc.compatMode); // always use quirks in whitebox
+<a name="line126"></a>  }
+<a name="line127"></a>}
+<a name="line128"></a>
+<a name="line129"></a>function testGetInitialIframeContent() {
+<a name="line130"></a>  var info = new goog.editor.icontent.FieldFormatInfo(
+<a name="line131"></a>      &#39;id&#39;, true, false, false);
+<a name="line132"></a>  var styleInfo = null;
+<a name="line133"></a>  var html = &#39;Some Html&#39;;
+<a name="line134"></a>  propertyReplacer.set(goog.editor.BrowserFeature,
+<a name="line135"></a>      &#39;HAS_CONTENT_EDITABLE&#39;, false);
+<a name="line136"></a>  var htmlOut = goog.editor.icontent.getInitialIframeContent_(
+<a name="line137"></a>      info, html, styleInfo);
+<a name="line138"></a>  assertEquals(/contentEditable/i.test(htmlOut), false);
+<a name="line139"></a>  propertyReplacer.set(goog.editor.BrowserFeature,
+<a name="line140"></a>      &#39;HAS_CONTENT_EDITABLE&#39;, true);
+<a name="line141"></a>  htmlOut = goog.editor.icontent.getInitialIframeContent_(
+<a name="line142"></a>      info, html, styleInfo);
+<a name="line143"></a>  assertEquals(/&lt;body[^&gt;]+?contentEditable/i.test(htmlOut), true);
+<a name="line144"></a>  assertEquals(/&lt;html[^&gt;]+?style=&quot;[^&gt;&quot;]*min-width:\s*0/i.test(htmlOut), true);
+<a name="line145"></a>  assertEquals(/&lt;body[^&gt;]+?style=&quot;[^&gt;&quot;]*min-width:\s*0/i.test(htmlOut), true);
+<a name="line146"></a>}
+<a name="line147"></a>
+<a name="line148"></a>function testIframeMinWidthOverride() {
+<a name="line149"></a>  if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+<a name="line150"></a>    return; // only executes when using an iframe
+<a name="line151"></a>  }
+<a name="line152"></a>
+<a name="line153"></a>  var info = new goog.editor.icontent.FieldFormatInfo(&#39;id&#39;, true, true, false);
+<a name="line154"></a>  var styleInfo = new goog.editor.icontent.FieldStyleInfo(wrapperDiv,
+<a name="line155"></a>      &#39;.MyClass { position: absolute; top: 500px; }&#39;);
+<a name="line156"></a>  var doc = realIframeDoc;
+<a name="line157"></a>  var html = &#39;&lt;div class=&quot;MyClass&quot;&gt;Some Html&lt;/div&gt;&#39;;
+<a name="line158"></a>  goog.editor.icontent.writeNormalInitialBlendedIframe(info, html,
+<a name="line159"></a>      styleInfo, realIframe);
+<a name="line160"></a>
+<a name="line161"></a>  // Make sure that the minimum width isn&#39;t being inherited from the parent
+<a name="line162"></a>  // document&#39;s style.
+<a name="line163"></a>  assertTrue(doc.body.offsetWidth &lt; 700);
+<a name="line164"></a>}
+<a name="line165"></a>
+<a name="line166"></a>function testBlendedStandardsGrowingMatchesComparisonDiv() {
+<a name="line167"></a>  // TODO(nicksantos): If we ever move
+<a name="line168"></a>  // TR_EditableUtil.prototype.makeIframeField_
+<a name="line169"></a>  // into goog.editor.icontent (and I think we should), we could actually run
+<a name="line170"></a>  // functional tests to ensure that the iframed field matches the dimensions
+<a name="line171"></a>  // of the equivalent uneditable div. Functional tests would help a lot here.
+<a name="line172"></a>}
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * Check a given body for the most basic properties that all iframes must have.
+<a name="line177"></a> *
+<a name="line178"></a> * @param {Element} body The actual body element
+<a name="line179"></a> * @param {string} id The expected id
+<a name="line180"></a> * @param {string} bodyHTML The expected innerHTML
+<a name="line181"></a> * @param {boolean=} opt_rtl If true, expect RTL directionality
+<a name="line182"></a> */
+<a name="line183"></a>function assertBodyCorrect(body, id, bodyHTML, opt_rtl) {
+<a name="line184"></a>  assertEquals(bodyHTML, body.innerHTML);
+<a name="line185"></a>  // We can&#39;t just check
+<a name="line186"></a>  // assert(HAS_CONTENTE_EDITABLE, !!body.contentEditable) since in
+<a name="line187"></a>  // FF 3 we don&#39;t currently use contentEditable, but body.contentEditable
+<a name="line188"></a>  // = &#39;inherit&#39; and !!&#39;inherit&#39; = true.
+<a name="line189"></a>  if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+<a name="line190"></a>    assertEquals(&#39;true&#39;, String(body.contentEditable));
+<a name="line191"></a>  } else {
+<a name="line192"></a>    assertNotEquals(&#39;true&#39;, String(body.contentEditable));
+<a name="line193"></a>  }
+<a name="line194"></a>  assertContains(&#39;editable&#39;, body.className.match(/\S+/g));
+<a name="line195"></a>  assertEquals(&#39;true&#39;, String(body.getAttribute(&#39;g_editable&#39;)));
+<a name="line196"></a>  assertEquals(&#39;true&#39;,
+<a name="line197"></a>      // IE has bugs with getAttribute(&#39;hideFocus&#39;), and
+<a name="line198"></a>      // Webkit has bugs with normal .hideFocus access.
+<a name="line199"></a>      String(goog.userAgent.IE ? body.hideFocus :
+<a name="line200"></a>          body.getAttribute(&#39;hideFocus&#39;)));
+<a name="line201"></a>  assertEquals(id, body.id);
+<a name="line202"></a>}
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * @return {Object} A mock document
+<a name="line207"></a> */
+<a name="line208"></a>function createMockDocument() {
+<a name="line209"></a>  return {
+<a name="line210"></a>    body: {
+<a name="line211"></a>      setAttribute: function(key, val) { this[key] = val; },
+<a name="line212"></a>      getAttribute: function(key) { return this[key]; },
+<a name="line213"></a>      style: { direction: &#39;&#39; }
+<a name="line214"></a>    }
+<a name="line215"></a>  };
+<a name="line216"></a>}
+</pre>
+
+
+</body>
+</html>

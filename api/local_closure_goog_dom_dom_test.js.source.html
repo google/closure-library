@@ -1,0 +1,1651 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>dom_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_dom_test.js.html">dom_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Shared code for dom_test.html and dom_quirks_test.html.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>/** @suppress {extraProvide} */
+<a name="line20"></a>goog.provide(&#39;goog.dom.dom_test&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line23"></a>goog.require(&#39;goog.dom.BrowserFeature&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.DomHelper&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line27"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line28"></a>goog.require(&#39;goog.object&#39;);
+<a name="line29"></a>goog.require(&#39;goog.string.Unicode&#39;);
+<a name="line30"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line31"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line32"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line33"></a>goog.require(&#39;goog.userAgent.product&#39;);
+<a name="line34"></a>goog.require(&#39;goog.userAgent.product.isVersion&#39;);
+<a name="line35"></a>
+<a name="line36"></a>goog.setTestOnly(&#39;dom_test&#39;);
+<a name="line37"></a>
+<a name="line38"></a>var $ = goog.dom.getElement;
+<a name="line39"></a>
+<a name="line40"></a>var divForTestingScrolling;
+<a name="line41"></a>var myIframe;
+<a name="line42"></a>var myIframeDoc;
+<a name="line43"></a>var stubs;
+<a name="line44"></a>
+<a name="line45"></a>function setUpPage() {
+<a name="line46"></a>
+<a name="line47"></a>  stubs = new goog.testing.PropertyReplacer();
+<a name="line48"></a>  divForTestingScrolling = document.createElement(&#39;div&#39;);
+<a name="line49"></a>  divForTestingScrolling.style.width = &#39;5000px&#39;;
+<a name="line50"></a>  divForTestingScrolling.style.height = &#39;5000px&#39;;
+<a name="line51"></a>  document.body.appendChild(divForTestingScrolling);
+<a name="line52"></a>
+<a name="line53"></a>  // Setup for the iframe
+<a name="line54"></a>  myIframe = $(&#39;myIframe&#39;);
+<a name="line55"></a>  myIframeDoc = goog.dom.getFrameContentDocument(
+<a name="line56"></a>      /** @type {HTMLIFrameElement} */ (myIframe));
+<a name="line57"></a>
+<a name="line58"></a>  // Set up document for iframe: total height of elements in document is 65
+<a name="line59"></a>  // If the elements are not create like below, IE will get a wrong height for
+<a name="line60"></a>  // the document.
+<a name="line61"></a>  myIframeDoc.open();
+<a name="line62"></a>  // Make sure we progate the compat mode
+<a name="line63"></a>  myIframeDoc.write((goog.dom.isCss1CompatMode() ? &#39;&lt;!DOCTYPE html&gt;&#39; : &#39;&#39;) +
+<a name="line64"></a>      &#39;&lt;style&gt;body{margin:0;padding:0}&lt;/style&gt;&#39; +
+<a name="line65"></a>      &#39;&lt;div style=&quot;height:42px;font-size:1px;line-height:0;&quot;&gt;&#39; +
+<a name="line66"></a>          &#39;hello world&lt;/div&gt;&#39; +
+<a name="line67"></a>      &#39;&lt;div style=&quot;height:23px;font-size:1px;line-height:0;&quot;&gt;&#39; +
+<a name="line68"></a>          &#39;hello world&lt;/div&gt;&#39;);
+<a name="line69"></a>  myIframeDoc.close();
+<a name="line70"></a>}
+<a name="line71"></a>
+<a name="line72"></a>function tearDownPage() {
+<a name="line73"></a>  document.body.removeChild(divForTestingScrolling);
+<a name="line74"></a>}
+<a name="line75"></a>
+<a name="line76"></a>function tearDown() {
+<a name="line77"></a>  window.scrollTo(0, 0);
+<a name="line78"></a>  stubs.reset();
+<a name="line79"></a>}
+<a name="line80"></a>
+<a name="line81"></a>function testDom() {
+<a name="line82"></a>  assert(&#39;Dom library exists&#39;, typeof goog.dom != &#39;undefined&#39;);
+<a name="line83"></a>}
+<a name="line84"></a>
+<a name="line85"></a>function testGetElement() {
+<a name="line86"></a>  var el = $(&#39;testEl&#39;);
+<a name="line87"></a>  assertEquals(&#39;Should be able to get id&#39;, el.id, &#39;testEl&#39;);
+<a name="line88"></a>
+<a name="line89"></a>  assertEquals($, goog.dom.getElement);
+<a name="line90"></a>  assertEquals(goog.dom.$, goog.dom.getElement);
+<a name="line91"></a>}
+<a name="line92"></a>
+<a name="line93"></a>function testGetElementDomHelper() {
+<a name="line94"></a>  var domHelper = new goog.dom.DomHelper();
+<a name="line95"></a>  var el = domHelper.getElement(&#39;testEl&#39;);
+<a name="line96"></a>  assertEquals(&#39;Should be able to get id&#39;, el.id, &#39;testEl&#39;);
+<a name="line97"></a>}
+<a name="line98"></a>
+<a name="line99"></a>function testGetRequiredElement() {
+<a name="line100"></a>  var el = goog.dom.getRequiredElement(&#39;testEl&#39;);
+<a name="line101"></a>  assertTrue(goog.isDefAndNotNull(el));
+<a name="line102"></a>  assertEquals(&#39;testEl&#39;, el.id);
+<a name="line103"></a>  assertThrows(function() {
+<a name="line104"></a>    goog.dom.getRequiredElement(&#39;does_not_exist&#39;);
+<a name="line105"></a>  });
+<a name="line106"></a>}
+<a name="line107"></a>
+<a name="line108"></a>function testGetRequiredElementDomHelper() {
+<a name="line109"></a>  var domHelper = new goog.dom.DomHelper();
+<a name="line110"></a>  var el = domHelper.getRequiredElement(&#39;testEl&#39;);
+<a name="line111"></a>  assertTrue(goog.isDefAndNotNull(el));
+<a name="line112"></a>  assertEquals(&#39;testEl&#39;, el.id);
+<a name="line113"></a>  assertThrows(function() {
+<a name="line114"></a>    goog.dom.getRequiredElementByClass(&#39;does_not_exist&#39;, container);
+<a name="line115"></a>  });
+<a name="line116"></a>}
+<a name="line117"></a>
+<a name="line118"></a>function testGetRequiredElementByClassDomHelper() {
+<a name="line119"></a>  var domHelper = new goog.dom.DomHelper();
+<a name="line120"></a>  assertNotNull(domHelper.getRequiredElementByClass(&#39;test1&#39;));
+<a name="line121"></a>  assertNotNull(domHelper.getRequiredElementByClass(&#39;test2&#39;));
+<a name="line122"></a>
+<a name="line123"></a>  var container = domHelper.getElement(&#39;span-container&#39;);
+<a name="line124"></a>  assertNotNull(domHelper.getElementByClass(&#39;test1&#39;, container));
+<a name="line125"></a>  assertThrows(function() {
+<a name="line126"></a>    domHelper.getRequiredElementByClass(&#39;does_not_exist&#39;, container);
+<a name="line127"></a>  });
+<a name="line128"></a>}
+<a name="line129"></a>
+<a name="line130"></a>function testGetElementsByTagNameAndClass() {
+<a name="line131"></a>  assertEquals(&#39;Should get 6 spans&#39;,
+<a name="line132"></a>      goog.dom.getElementsByTagNameAndClass(&#39;span&#39;).length, 6);
+<a name="line133"></a>  assertEquals(&#39;Should get 6 spans&#39;,
+<a name="line134"></a>      goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;).length, 6);
+<a name="line135"></a>  assertEquals(&#39;Should get 3 spans&#39;,
+<a name="line136"></a>      goog.dom.getElementsByTagNameAndClass(&#39;span&#39;, &#39;test1&#39;).length, 3);
+<a name="line137"></a>  assertEquals(&#39;Should get 1 span&#39;,
+<a name="line138"></a>      goog.dom.getElementsByTagNameAndClass(&#39;span&#39;, &#39;test2&#39;).length, 1);
+<a name="line139"></a>  assertEquals(&#39;Should get 1 span&#39;,
+<a name="line140"></a>      goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;test2&#39;).length, 1);
+<a name="line141"></a>  assertEquals(&#39;Should get lots of elements&#39;,
+<a name="line142"></a>      goog.dom.getElementsByTagNameAndClass().length,
+<a name="line143"></a>      document.getElementsByTagName(&#39;*&#39;).length);
+<a name="line144"></a>
+<a name="line145"></a>  assertEquals(&#39;Should get 1 span&#39;,
+<a name="line146"></a>      goog.dom.getElementsByTagNameAndClass(&#39;span&#39;, null, $(&#39;testEl&#39;)).length,
+<a name="line147"></a>      1);
+<a name="line148"></a>
+<a name="line149"></a>  // &#39;*&#39; as the tag name should be equivalent to all tags
+<a name="line150"></a>  var container = goog.dom.getElement(&#39;span-container&#39;);
+<a name="line151"></a>  assertEquals(5,
+<a name="line152"></a>      goog.dom.getElementsByTagNameAndClass(&#39;*&#39;, undefined, container).length);
+<a name="line153"></a>  assertEquals(3,
+<a name="line154"></a>      goog.dom.getElementsByTagNameAndClass(&#39;*&#39;, &#39;test1&#39;, container).length);
+<a name="line155"></a>  assertEquals(1,
+<a name="line156"></a>      goog.dom.getElementsByTagNameAndClass(&#39;*&#39;, &#39;test2&#39;, container).length);
+<a name="line157"></a>
+<a name="line158"></a>  // Some version of WebKit have problems with mixed-case class names
+<a name="line159"></a>  assertEquals(1,
+<a name="line160"></a>      goog.dom.getElementsByTagNameAndClass(
+<a name="line161"></a>          undefined, &#39;mixedCaseClass&#39;).length);
+<a name="line162"></a>
+<a name="line163"></a>  // Make sure that out of bounds indices are OK
+<a name="line164"></a>  assertUndefined(
+<a name="line165"></a>      goog.dom.getElementsByTagNameAndClass(undefined, &#39;noSuchClass&#39;)[0]);
+<a name="line166"></a>
+<a name="line167"></a>  assertEquals(goog.dom.getElementsByTagNameAndClass,
+<a name="line168"></a>      goog.dom.getElementsByTagNameAndClass);
+<a name="line169"></a>}
+<a name="line170"></a>
+<a name="line171"></a>function testGetElementsByClass() {
+<a name="line172"></a>  assertEquals(3, goog.dom.getElementsByClass(&#39;test1&#39;).length);
+<a name="line173"></a>  assertEquals(1, goog.dom.getElementsByClass(&#39;test2&#39;).length);
+<a name="line174"></a>  assertEquals(0, goog.dom.getElementsByClass(&#39;nonexistant&#39;).length);
+<a name="line175"></a>
+<a name="line176"></a>  var container = goog.dom.getElement(&#39;span-container&#39;);
+<a name="line177"></a>  assertEquals(3, goog.dom.getElementsByClass(&#39;test1&#39;, container).length);
+<a name="line178"></a>}
+<a name="line179"></a>
+<a name="line180"></a>function testGetElementByClass() {
+<a name="line181"></a>  assertNotNull(goog.dom.getElementByClass(&#39;test1&#39;));
+<a name="line182"></a>  assertNotNull(goog.dom.getElementByClass(&#39;test2&#39;));
+<a name="line183"></a>  // assertNull(goog.dom.getElementByClass(&#39;nonexistant&#39;));
+<a name="line184"></a>
+<a name="line185"></a>  var container = goog.dom.getElement(&#39;span-container&#39;);
+<a name="line186"></a>  assertNotNull(goog.dom.getElementByClass(&#39;test1&#39;, container));
+<a name="line187"></a>}
+<a name="line188"></a>
+<a name="line189"></a>function testSetProperties() {
+<a name="line190"></a>  var attrs = {&#39;name&#39;: &#39;test3&#39;, &#39;title&#39;: &#39;A title&#39;, &#39;random&#39;: &#39;woop&#39;};
+<a name="line191"></a>  var el = $(&#39;testEl&#39;);
+<a name="line192"></a>
+<a name="line193"></a>  var res = goog.dom.setProperties(el, attrs);
+<a name="line194"></a>  assertEquals(&#39;Should be equal&#39;, el.name, &#39;test3&#39;);
+<a name="line195"></a>  assertEquals(&#39;Should be equal&#39;, el.title, &#39;A title&#39;);
+<a name="line196"></a>  assertEquals(&#39;Should be equal&#39;, el.random, &#39;woop&#39;);
+<a name="line197"></a>}
+<a name="line198"></a>
+<a name="line199"></a>function testSetPropertiesDirectAttributeMap() {
+<a name="line200"></a>  var attrs = {&#39;usemap&#39;: &#39;#myMap&#39;};
+<a name="line201"></a>  var el = goog.dom.createDom(&#39;img&#39;);
+<a name="line202"></a>
+<a name="line203"></a>  var res = goog.dom.setProperties(el, attrs);
+<a name="line204"></a>  assertEquals(&#39;Should be equal&#39;, &#39;#myMap&#39;, el.getAttribute(&#39;usemap&#39;));
+<a name="line205"></a>}
+<a name="line206"></a>
+<a name="line207"></a>function testSetPropertiesAria() {
+<a name="line208"></a>  var attrs = {
+<a name="line209"></a>    &#39;aria-hidden&#39;: &#39;true&#39;,
+<a name="line210"></a>    &#39;aria-label&#39;: &#39;This is a label&#39;,
+<a name="line211"></a>    &#39;role&#39;: &#39;presentation&#39;
+<a name="line212"></a>  };
+<a name="line213"></a>  var el = goog.dom.createDom(&#39;div&#39;);
+<a name="line214"></a>
+<a name="line215"></a>  goog.dom.setProperties(el, attrs);
+<a name="line216"></a>  assertEquals(&#39;Should be equal&#39;, &#39;true&#39;, el.getAttribute(&#39;aria-hidden&#39;));
+<a name="line217"></a>  assertEquals(&#39;Should be equal&#39;,
+<a name="line218"></a>      &#39;This is a label&#39;, el.getAttribute(&#39;aria-label&#39;));
+<a name="line219"></a>  assertEquals(&#39;Should be equal&#39;, &#39;presentation&#39;, el.getAttribute(&#39;role&#39;));
+<a name="line220"></a>}
+<a name="line221"></a>
+<a name="line222"></a>function testSetPropertiesData() {
+<a name="line223"></a>  var attrs = {
+<a name="line224"></a>    &#39;data-tooltip&#39;: &#39;This is a tooltip&#39;,
+<a name="line225"></a>    &#39;data-tooltip-delay&#39;: &#39;100&#39;
+<a name="line226"></a>  };
+<a name="line227"></a>  var el = goog.dom.createDom(&#39;div&#39;);
+<a name="line228"></a>
+<a name="line229"></a>  goog.dom.setProperties(el, attrs);
+<a name="line230"></a>  assertEquals(&#39;Should be equal&#39;, &#39;This is a tooltip&#39;,
+<a name="line231"></a>      el.getAttribute(&#39;data-tooltip&#39;));
+<a name="line232"></a>  assertEquals(&#39;Should be equal&#39;, &#39;100&#39;,
+<a name="line233"></a>      el.getAttribute(&#39;data-tooltip-delay&#39;));
+<a name="line234"></a>}
+<a name="line235"></a>
+<a name="line236"></a>function testSetTableProperties() {
+<a name="line237"></a>  var attrs = {
+<a name="line238"></a>    &#39;style&#39;: &#39;padding-left: 10px;&#39;,
+<a name="line239"></a>    &#39;class&#39;: &#39;mytestclass&#39;,
+<a name="line240"></a>    &#39;height&#39;: &#39;101&#39;,
+<a name="line241"></a>    &#39;cellpadding&#39;: &#39;15&#39;
+<a name="line242"></a>  };
+<a name="line243"></a>  var el = $(&#39;testTable1&#39;);
+<a name="line244"></a>
+<a name="line245"></a>  var res = goog.dom.setProperties(el, attrs);
+<a name="line246"></a>  assertEquals(&#39;Should be equal&#39;, el.style.paddingLeft, &#39;10px&#39;);
+<a name="line247"></a>  assertEquals(&#39;Should be equal&#39;, el.className, &#39;mytestclass&#39;);
+<a name="line248"></a>  assertEquals(&#39;Should be equal&#39;, el.getAttribute(&#39;height&#39;), &#39;101&#39;);
+<a name="line249"></a>  assertEquals(&#39;Should be equal&#39;, el.cellPadding, &#39;15&#39;);
+<a name="line250"></a>}
+<a name="line251"></a>
+<a name="line252"></a>function testGetViewportSize() {
+<a name="line253"></a>  // TODO: This is failing in the test runner now, fix later.
+<a name="line254"></a>  //var dims = getViewportSize();
+<a name="line255"></a>  //assertNotUndefined(&#39;Should be defined at least&#39;, dims.width);
+<a name="line256"></a>  //assertNotUndefined(&#39;Should be defined at least&#39;, dims.height);
+<a name="line257"></a>}
+<a name="line258"></a>
+<a name="line259"></a>function testGetViewportSizeInIframe() {
+<a name="line260"></a>  var iframe = /** @type {HTMLIFrameElement} */ (goog.dom.getElement(&#39;iframe&#39;));
+<a name="line261"></a>  var contentDoc = goog.dom.getFrameContentDocument(iframe);
+<a name="line262"></a>  contentDoc.write(&#39;&lt;body&gt;&lt;/body&gt;&#39;);
+<a name="line263"></a>
+<a name="line264"></a>  var outerSize = goog.dom.getViewportSize();
+<a name="line265"></a>  var innerSize = (new goog.dom.DomHelper(contentDoc)).getViewportSize();
+<a name="line266"></a>  assert(&#39;Viewport sizes must not match&#39;,
+<a name="line267"></a>      innerSize.width != outerSize.width);
+<a name="line268"></a>}
+<a name="line269"></a>
+<a name="line270"></a>function testGetDocumentHeightInIframe() {
+<a name="line271"></a>  var doc = goog.dom.getDomHelper(myIframeDoc).getDocument();
+<a name="line272"></a>  var height = goog.dom.getDomHelper(myIframeDoc).getDocumentHeight();
+<a name="line273"></a>
+<a name="line274"></a>  // Broken in webkit quirks mode and in IE8+
+<a name="line275"></a>  if ((goog.dom.isCss1CompatMode_(doc) || !goog.userAgent.WEBKIT) &amp;&amp;
+<a name="line276"></a>      !isIE8OrHigher()) {
+<a name="line277"></a>    assertEquals(&#39;height should be 65&#39;, 42 + 23, height);
+<a name="line278"></a>  }
+<a name="line279"></a>}
+<a name="line280"></a>
+<a name="line281"></a>function testCreateDom() {
+<a name="line282"></a>  var el = goog.dom.createDom(&#39;div&#39;,
+<a name="line283"></a>      {
+<a name="line284"></a>        style: &#39;border: 1px solid black; width: 50%; background-color: #EEE;&#39;,
+<a name="line285"></a>        onclick: &quot;alert(&#39;woo&#39;)&quot;
+<a name="line286"></a>      },
+<a name="line287"></a>      goog.dom.createDom(
+<a name="line288"></a>          &#39;p&#39;, {style: &#39;font: normal 12px arial; color: red; &#39;}, &#39;Para 1&#39;),
+<a name="line289"></a>      goog.dom.createDom(
+<a name="line290"></a>          &#39;p&#39;, {style: &#39;font: bold 18px garamond; color: blue; &#39;}, &#39;Para 2&#39;),
+<a name="line291"></a>      goog.dom.createDom(
+<a name="line292"></a>          &#39;p&#39;, {style: &#39;font: normal 24px monospace; color: green&#39;},
+<a name="line293"></a>          &#39;Para 3 &#39;,
+<a name="line294"></a>          goog.dom.createDom(&#39;a&#39;, {
+<a name="line295"></a>            name: &#39;link&#39;, href: &#39;http://bbc.co.uk&#39;
+<a name="line296"></a>          },
+<a name="line297"></a>          &#39;has a link&#39;),
+<a name="line298"></a>          &#39;, how cool is this?&#39;));
+<a name="line299"></a>
+<a name="line300"></a>  assertEquals(&#39;Tagname should be a DIV&#39;, &#39;DIV&#39;, el.tagName);
+<a name="line301"></a>  assertEquals(&#39;Style width should be 50%&#39;, &#39;50%&#39;, el.style.width);
+<a name="line302"></a>  assertEquals(&#39;first child is a P tag&#39;, &#39;P&#39;, el.childNodes[0].tagName);
+<a name="line303"></a>  assertEquals(&#39;second child .innerHTML&#39;, &#39;Para 2&#39;,
+<a name="line304"></a>               el.childNodes[1].innerHTML);
+<a name="line305"></a>
+<a name="line306"></a>  assertEquals(goog.dom.createDom, goog.dom.createDom);
+<a name="line307"></a>}
+<a name="line308"></a>
+<a name="line309"></a>function testCreateDomNoChildren() {
+<a name="line310"></a>  var el;
+<a name="line311"></a>
+<a name="line312"></a>  // Test unspecified children.
+<a name="line313"></a>  el = goog.dom.createDom(&#39;div&#39;);
+<a name="line314"></a>  assertNull(&#39;firstChild should be null&#39;, el.firstChild);
+<a name="line315"></a>
+<a name="line316"></a>  // Test null children.
+<a name="line317"></a>  el = goog.dom.createDom(&#39;div&#39;, null, null);
+<a name="line318"></a>  assertNull(&#39;firstChild should be null&#39;, el.firstChild);
+<a name="line319"></a>
+<a name="line320"></a>  // Test empty array of children.
+<a name="line321"></a>  el = goog.dom.createDom(&#39;div&#39;, null, []);
+<a name="line322"></a>  assertNull(&#39;firstChild should be null&#39;, el.firstChild);
+<a name="line323"></a>}
+<a name="line324"></a>
+<a name="line325"></a>function testCreateDomAcceptsArray() {
+<a name="line326"></a>  var items = [
+<a name="line327"></a>    goog.dom.createDom(&#39;li&#39;, {}, &#39;Item 1&#39;),
+<a name="line328"></a>    goog.dom.createDom(&#39;li&#39;, {}, &#39;Item 2&#39;)
+<a name="line329"></a>  ];
+<a name="line330"></a>  var ul = goog.dom.createDom(&#39;ul&#39;, {}, items);
+<a name="line331"></a>  assertEquals(&#39;List should have two children&#39;, 2, ul.childNodes.length);
+<a name="line332"></a>  assertEquals(&#39;First child should be an LI tag&#39;,
+<a name="line333"></a>      &#39;LI&#39;, ul.firstChild.tagName);
+<a name="line334"></a>  assertEquals(&#39;Item 1&#39;, ul.childNodes[0].innerHTML);
+<a name="line335"></a>  assertEquals(&#39;Item 2&#39;, ul.childNodes[1].innerHTML);
+<a name="line336"></a>}
+<a name="line337"></a>
+<a name="line338"></a>function testCreateDomStringArg() {
+<a name="line339"></a>  var el;
+<a name="line340"></a>
+<a name="line341"></a>  // Test string arg.
+<a name="line342"></a>  el = goog.dom.createDom(&#39;div&#39;, null, &#39;Hello&#39;);
+<a name="line343"></a>  assertEquals(&#39;firstChild should be a text node&#39;, goog.dom.NodeType.TEXT,
+<a name="line344"></a>      el.firstChild.nodeType);
+<a name="line345"></a>  assertEquals(&#39;firstChild should have node value &quot;Hello&quot;&#39;, &#39;Hello&#39;,
+<a name="line346"></a>      el.firstChild.nodeValue);
+<a name="line347"></a>
+<a name="line348"></a>  // Test text node arg.
+<a name="line349"></a>  el = goog.dom.createDom(&#39;div&#39;, null, goog.dom.createTextNode(&#39;World&#39;));
+<a name="line350"></a>  assertEquals(&#39;firstChild should be a text node&#39;, goog.dom.NodeType.TEXT,
+<a name="line351"></a>      el.firstChild.nodeType);
+<a name="line352"></a>  assertEquals(&#39;firstChild should have node value &quot;World&quot;&#39;, &#39;World&#39;,
+<a name="line353"></a>      el.firstChild.nodeValue);
+<a name="line354"></a>}
+<a name="line355"></a>
+<a name="line356"></a>function testCreateDomNodeListArg() {
+<a name="line357"></a>  var el;
+<a name="line358"></a>  var emptyElem = goog.dom.createDom(&#39;div&#39;);
+<a name="line359"></a>  var simpleElem = goog.dom.createDom(&#39;div&#39;, null, &#39;Hello, world!&#39;);
+<a name="line360"></a>  var complexElem = goog.dom.createDom(&#39;div&#39;, null, &#39;Hello, &#39;,
+<a name="line361"></a>      goog.dom.createDom(&#39;b&#39;, null, &#39;world&#39;), goog.dom.createTextNode(&#39;!&#39;));
+<a name="line362"></a>
+<a name="line363"></a>  // Test empty node list.
+<a name="line364"></a>  el = goog.dom.createDom(&#39;div&#39;, null, emptyElem.childNodes);
+<a name="line365"></a>  assertNull(&#39;emptyElem.firstChild should be null&#39;, emptyElem.firstChild);
+<a name="line366"></a>  assertNull(&#39;firstChild should be null&#39;, el.firstChild);
+<a name="line367"></a>
+<a name="line368"></a>  // Test simple node list.
+<a name="line369"></a>  el = goog.dom.createDom(&#39;div&#39;, null, simpleElem.childNodes);
+<a name="line370"></a>  assertNull(&#39;simpleElem.firstChild should be null&#39;, simpleElem.firstChild);
+<a name="line371"></a>  assertEquals(&#39;firstChild should be a text node with value &quot;Hello, world!&quot;&#39;,
+<a name="line372"></a>      &#39;Hello, world!&#39;, el.firstChild.nodeValue);
+<a name="line373"></a>
+<a name="line374"></a>  // Test complex node list.
+<a name="line375"></a>  el = goog.dom.createDom(&#39;div&#39;, null, complexElem.childNodes);
+<a name="line376"></a>  assertNull(&#39;complexElem.firstChild should be null&#39;, complexElem.firstChild);
+<a name="line377"></a>  assertEquals(&#39;Element should have 3 child nodes&#39;, 3, el.childNodes.length);
+<a name="line378"></a>  assertEquals(&#39;childNodes[0] should be a text node with value &quot;Hello, &quot;&#39;,
+<a name="line379"></a>      &#39;Hello, &#39;, el.childNodes[0].nodeValue);
+<a name="line380"></a>  assertEquals(&#39;childNodes[1] should be an element node with tagName &quot;B&quot;&#39;,
+<a name="line381"></a>      &#39;B&#39;, el.childNodes[1].tagName);
+<a name="line382"></a>  assertEquals(&#39;childNodes[2] should be a text node with value &quot;!&quot;&#39;, &#39;!&#39;,
+<a name="line383"></a>      el.childNodes[2].nodeValue);
+<a name="line384"></a>}
+<a name="line385"></a>
+<a name="line386"></a>function testCreateDomWithTypeAttribute() {
+<a name="line387"></a>  var el = goog.dom.createDom(&#39;button&#39;, {&#39;type&#39;: &#39;reset&#39;, &#39;id&#39;: &#39;cool-button&#39;},
+<a name="line388"></a>      &#39;Cool button&#39;);
+<a name="line389"></a>  assertNotNull(&#39;Button with type attribute was created successfully&#39;, el);
+<a name="line390"></a>  assertEquals(&#39;Button has correct type attribute&#39;, &#39;reset&#39;, el.type);
+<a name="line391"></a>  assertEquals(&#39;Button has correct id&#39;, &#39;cool-button&#39;, el.id);
+<a name="line392"></a>}
+<a name="line393"></a>
+<a name="line394"></a>function testCreateDomWithClassList() {
+<a name="line395"></a>  var el = goog.dom.createDom(&#39;div&#39;, [&#39;foo&#39;, &#39;bar&#39;]);
+<a name="line396"></a>  assertEquals(&#39;foo bar&#39;, el.className);
+<a name="line397"></a>
+<a name="line398"></a>  el = goog.dom.createDom(&#39;div&#39;, [&#39;foo&#39;, &#39;foo&#39;]);
+<a name="line399"></a>  assertEquals(&#39;foo&#39;, el.className);
+<a name="line400"></a>}
+<a name="line401"></a>
+<a name="line402"></a>function testContains() {
+<a name="line403"></a>  assertTrue(&#39;HTML should contain BODY&#39;, goog.dom.contains(
+<a name="line404"></a>      document.documentElement, document.body));
+<a name="line405"></a>  assertTrue(&#39;Document should contain BODY&#39;, goog.dom.contains(
+<a name="line406"></a>      document, document.body));
+<a name="line407"></a>
+<a name="line408"></a>  var d = goog.dom.createDom(&#39;p&#39;, null, &#39;A paragraph&#39;);
+<a name="line409"></a>  var t = d.firstChild;
+<a name="line410"></a>  assertTrue(&#39;Same element&#39;, goog.dom.contains(d, d));
+<a name="line411"></a>  assertTrue(&#39;Same text&#39;, goog.dom.contains(t, t));
+<a name="line412"></a>  assertTrue(&#39;Nested text&#39;, goog.dom.contains(d, t));
+<a name="line413"></a>  assertFalse(&#39;Nested text, reversed&#39;, goog.dom.contains(t, d));
+<a name="line414"></a>  assertFalse(&#39;Disconnected element&#39;, goog.dom.contains(
+<a name="line415"></a>      document, d));
+<a name="line416"></a>  goog.dom.appendChild(document.body, d);
+<a name="line417"></a>  assertTrue(&#39;Connected element&#39;, goog.dom.contains(
+<a name="line418"></a>      document, d));
+<a name="line419"></a>  goog.dom.removeNode(d);
+<a name="line420"></a>}
+<a name="line421"></a>
+<a name="line422"></a>function testCreateDomWithClassName() {
+<a name="line423"></a>  var el = goog.dom.createDom(&#39;div&#39;, &#39;cls&#39;);
+<a name="line424"></a>  assertNull(&#39;firstChild should be null&#39;, el.firstChild);
+<a name="line425"></a>  assertEquals(&#39;Tagname should be a DIV&#39;, &#39;DIV&#39;, el.tagName);
+<a name="line426"></a>  assertEquals(&#39;ClassName should be cls&#39;, &#39;cls&#39;, el.className);
+<a name="line427"></a>
+<a name="line428"></a>  el = goog.dom.createDom(&#39;div&#39;, &#39;&#39;);
+<a name="line429"></a>  assertEquals(&#39;ClassName should be empty&#39;, &#39;&#39;, el.className);
+<a name="line430"></a>}
+<a name="line431"></a>
+<a name="line432"></a>function testCompareNodeOrder() {
+<a name="line433"></a>  var b1 = $(&#39;b1&#39;);
+<a name="line434"></a>  var b2 = $(&#39;b2&#39;);
+<a name="line435"></a>  var p2 = $(&#39;p2&#39;);
+<a name="line436"></a>
+<a name="line437"></a>  assertEquals(&#39;equal nodes should compare to 0&#39;, 0,
+<a name="line438"></a>      goog.dom.compareNodeOrder(b1, b1));
+<a name="line439"></a>
+<a name="line440"></a>  assertTrue(&#39;parent should come before child&#39;,
+<a name="line441"></a>      goog.dom.compareNodeOrder(p2, b1) &lt; 0);
+<a name="line442"></a>  assertTrue(&#39;child should come after parent&#39;,
+<a name="line443"></a>      goog.dom.compareNodeOrder(b1, p2) &gt; 0);
+<a name="line444"></a>
+<a name="line445"></a>  assertTrue(&#39;parent should come before text child&#39;,
+<a name="line446"></a>      goog.dom.compareNodeOrder(b1, b1.firstChild) &lt; 0);
+<a name="line447"></a>  assertTrue(&#39;text child should come after parent&#39;, goog.dom.compareNodeOrder(
+<a name="line448"></a>      b1.firstChild, b1) &gt; 0);
+<a name="line449"></a>
+<a name="line450"></a>  assertTrue(&#39;first sibling should come before second&#39;,
+<a name="line451"></a>      goog.dom.compareNodeOrder(b1, b2) &lt; 0);
+<a name="line452"></a>  assertTrue(&#39;second sibling should come after first&#39;,
+<a name="line453"></a>      goog.dom.compareNodeOrder(b2, b1) &gt; 0);
+<a name="line454"></a>
+<a name="line455"></a>  assertTrue(&#39;text node after cousin element returns correct value&#39;,
+<a name="line456"></a>      goog.dom.compareNodeOrder(b1.nextSibling, b1) &gt; 0);
+<a name="line457"></a>  assertTrue(&#39;text node before cousin element returns correct value&#39;,
+<a name="line458"></a>      goog.dom.compareNodeOrder(b1, b1.nextSibling) &lt; 0);
+<a name="line459"></a>
+<a name="line460"></a>  assertTrue(&#39;text node is before once removed cousin element&#39;,
+<a name="line461"></a>      goog.dom.compareNodeOrder(b1.firstChild, b2) &lt; 0);
+<a name="line462"></a>  assertTrue(&#39;once removed cousin element is before text node&#39;,
+<a name="line463"></a>      goog.dom.compareNodeOrder(b2, b1.firstChild) &gt; 0);
+<a name="line464"></a>
+<a name="line465"></a>  assertTrue(&#39;text node is after once removed cousin text node&#39;,
+<a name="line466"></a>      goog.dom.compareNodeOrder(b1.nextSibling, b1.firstChild) &gt; 0);
+<a name="line467"></a>  assertTrue(&#39;once removed cousin text node is before text node&#39;,
+<a name="line468"></a>      goog.dom.compareNodeOrder(b1.firstChild, b1.nextSibling) &lt; 0);
+<a name="line469"></a>
+<a name="line470"></a>  assertTrue(&#39;first text node is before second text node&#39;,
+<a name="line471"></a>      goog.dom.compareNodeOrder(b1.previousSibling, b1.nextSibling) &lt; 0);
+<a name="line472"></a>  assertTrue(&#39;second text node is after first text node&#39;,
+<a name="line473"></a>      goog.dom.compareNodeOrder(b1.nextSibling, b1.previousSibling) &gt; 0);
+<a name="line474"></a>
+<a name="line475"></a>  assertTrue(&#39;grandchild is after grandparent&#39;,
+<a name="line476"></a>      goog.dom.compareNodeOrder(b1.firstChild, b1.parentNode) &gt; 0);
+<a name="line477"></a>  assertTrue(&#39;grandparent is after grandchild&#39;,
+<a name="line478"></a>      goog.dom.compareNodeOrder(b1.parentNode, b1.firstChild) &lt; 0);
+<a name="line479"></a>
+<a name="line480"></a>  assertTrue(&#39;grandchild is after grandparent&#39;,
+<a name="line481"></a>      goog.dom.compareNodeOrder(b1.firstChild, b1.parentNode) &gt; 0);
+<a name="line482"></a>  assertTrue(&#39;grandparent is after grandchild&#39;,
+<a name="line483"></a>      goog.dom.compareNodeOrder(b1.parentNode, b1.firstChild) &lt; 0);
+<a name="line484"></a>
+<a name="line485"></a>  assertTrue(&#39;second cousins compare correctly&#39;,
+<a name="line486"></a>      goog.dom.compareNodeOrder(b1.firstChild, b2.firstChild) &lt; 0);
+<a name="line487"></a>  assertTrue(&#39;second cousins compare correctly in reverse&#39;,
+<a name="line488"></a>      goog.dom.compareNodeOrder(b2.firstChild, b1.firstChild) &gt; 0);
+<a name="line489"></a>
+<a name="line490"></a>  assertTrue(&#39;testEl2 is after testEl&#39;,
+<a name="line491"></a>      goog.dom.compareNodeOrder($(&#39;testEl2&#39;), $(&#39;testEl&#39;)) &gt; 0);
+<a name="line492"></a>  assertTrue(&#39;testEl is before testEl2&#39;,
+<a name="line493"></a>      goog.dom.compareNodeOrder($(&#39;testEl&#39;), $(&#39;testEl2&#39;)) &lt; 0);
+<a name="line494"></a>
+<a name="line495"></a>  var p = $(&#39;order-test&#39;);
+<a name="line496"></a>  var text1 = document.createTextNode(&#39;1&#39;);
+<a name="line497"></a>  p.appendChild(text1);
+<a name="line498"></a>  var text2 = document.createTextNode(&#39;1&#39;);
+<a name="line499"></a>  p.appendChild(text2);
+<a name="line500"></a>
+<a name="line501"></a>  assertEquals(&#39;Equal text nodes should compare to 0&#39;, 0,
+<a name="line502"></a>      goog.dom.compareNodeOrder(text1, text1));
+<a name="line503"></a>  assertTrue(&#39;First text node is before second&#39;,
+<a name="line504"></a>      goog.dom.compareNodeOrder(text1, text2) &lt; 0);
+<a name="line505"></a>  assertTrue(&#39;Second text node is after first&#39;,
+<a name="line506"></a>      goog.dom.compareNodeOrder(text2, text1) &gt; 0);
+<a name="line507"></a>  assertTrue(&#39;Late text node is after b1&#39;,
+<a name="line508"></a>      goog.dom.compareNodeOrder(text1, $(&#39;b1&#39;)) &gt; 0);
+<a name="line509"></a>
+<a name="line510"></a>  assertTrue(&#39;Document node is before non-document node&#39;,
+<a name="line511"></a>      goog.dom.compareNodeOrder(document, b1) &lt; 0);
+<a name="line512"></a>  assertTrue(&#39;Non-document node is after document node&#39;,
+<a name="line513"></a>      goog.dom.compareNodeOrder(b1, document) &gt; 0);
+<a name="line514"></a>}
+<a name="line515"></a>
+<a name="line516"></a>function testFindCommonAncestor() {
+<a name="line517"></a>  var b1 = $(&#39;b1&#39;);
+<a name="line518"></a>  var b2 = $(&#39;b2&#39;);
+<a name="line519"></a>  var p1 = $(&#39;p1&#39;);
+<a name="line520"></a>  var p2 = $(&#39;p2&#39;);
+<a name="line521"></a>  var testEl2 = $(&#39;testEl2&#39;);
+<a name="line522"></a>
+<a name="line523"></a>  assertNull(&#39;findCommonAncestor() = null&#39;, goog.dom.findCommonAncestor());
+<a name="line524"></a>  assertEquals(&#39;findCommonAncestor(b1) = b1&#39;, b1,
+<a name="line525"></a>      goog.dom.findCommonAncestor(b1));
+<a name="line526"></a>  assertEquals(&#39;findCommonAncestor(b1, b1) = b1&#39;, b1,
+<a name="line527"></a>      goog.dom.findCommonAncestor(b1, b1));
+<a name="line528"></a>  assertEquals(&#39;findCommonAncestor(b1, b2) = p2&#39;, p2,
+<a name="line529"></a>      goog.dom.findCommonAncestor(b1, b2));
+<a name="line530"></a>  assertEquals(&#39;findCommonAncestor(p1, b2) = body&#39;, document.body,
+<a name="line531"></a>      goog.dom.findCommonAncestor(p1, b2));
+<a name="line532"></a>  assertEquals(&#39;findCommonAncestor(testEl2, b1, b2, p1, p2) = body&#39;,
+<a name="line533"></a>      document.body, goog.dom.findCommonAncestor(testEl2, b1, b2, p1, p2));
+<a name="line534"></a>
+<a name="line535"></a>  var outOfDoc = document.createElement(&#39;div&#39;);
+<a name="line536"></a>  assertNull(&#39;findCommonAncestor(outOfDoc, b1) = null&#39;,
+<a name="line537"></a>      goog.dom.findCommonAncestor(outOfDoc, b1));
+<a name="line538"></a>}
+<a name="line539"></a>
+<a name="line540"></a>function testRemoveNode() {
+<a name="line541"></a>  var b = document.createElement(&#39;b&#39;);
+<a name="line542"></a>  var el = $(&#39;p1&#39;);
+<a name="line543"></a>  el.appendChild(b);
+<a name="line544"></a>  goog.dom.removeNode(b);
+<a name="line545"></a>  assertTrue(&#39;b should have been removed&#39;, el.lastChild != b);
+<a name="line546"></a>}
+<a name="line547"></a>
+<a name="line548"></a>function testReplaceNode() {
+<a name="line549"></a>  var n = $(&#39;toReplace&#39;);
+<a name="line550"></a>  var previousSibling = n.previousSibling;
+<a name="line551"></a>  var goodNode = goog.dom.createDom(&#39;div&#39;, {&#39;id&#39;: &#39;goodReplaceNode&#39;});
+<a name="line552"></a>  goog.dom.replaceNode(goodNode, n);
+<a name="line553"></a>
+<a name="line554"></a>  assertEquals(&#39;n should have been replaced&#39;, previousSibling.nextSibling,
+<a name="line555"></a>      goodNode);
+<a name="line556"></a>  assertNull(&#39;n should no longer be in the DOM tree&#39;, $(&#39;toReplace&#39;));
+<a name="line557"></a>
+<a name="line558"></a>  var badNode = goog.dom.createDom(&#39;div&#39;, {&#39;id&#39;: &#39;badReplaceNode&#39;});
+<a name="line559"></a>  goog.dom.replaceNode(badNode, n);
+<a name="line560"></a>  assertNull(&#39;badNode should not be in the DOM tree&#39;, $(&#39;badReplaceNode&#39;));
+<a name="line561"></a>}
+<a name="line562"></a>
+<a name="line563"></a>function testAppendChildAt() {
+<a name="line564"></a>  var parent = $(&#39;p2&#39;);
+<a name="line565"></a>  var origNumChildren = parent.childNodes.length;
+<a name="line566"></a>
+<a name="line567"></a>  var child1 = document.createElement(&#39;div&#39;);
+<a name="line568"></a>  goog.dom.insertChildAt(parent, child1, origNumChildren);
+<a name="line569"></a>  assertEquals(origNumChildren + 1, parent.childNodes.length);
+<a name="line570"></a>
+<a name="line571"></a>  var child2 = document.createElement(&#39;div&#39;);
+<a name="line572"></a>  goog.dom.insertChildAt(parent, child2, origNumChildren + 42);
+<a name="line573"></a>  assertEquals(origNumChildren + 2, parent.childNodes.length);
+<a name="line574"></a>
+<a name="line575"></a>  var child3 = document.createElement(&#39;div&#39;);
+<a name="line576"></a>  goog.dom.insertChildAt(parent, child3, 0);
+<a name="line577"></a>  assertEquals(origNumChildren + 3, parent.childNodes.length);
+<a name="line578"></a>
+<a name="line579"></a>  var child4 = document.createElement(&#39;div&#39;);
+<a name="line580"></a>  goog.dom.insertChildAt(parent, child3, 2);
+<a name="line581"></a>  assertEquals(origNumChildren + 3, parent.childNodes.length);
+<a name="line582"></a>
+<a name="line583"></a>  parent.removeChild(child1);
+<a name="line584"></a>  parent.removeChild(child2);
+<a name="line585"></a>  parent.removeChild(child3);
+<a name="line586"></a>
+<a name="line587"></a>  var emptyParentNotInDocument = document.createElement(&#39;div&#39;);
+<a name="line588"></a>  goog.dom.insertChildAt(emptyParentNotInDocument, child1, 0);
+<a name="line589"></a>  assertEquals(1, emptyParentNotInDocument.childNodes.length);
+<a name="line590"></a>}
+<a name="line591"></a>
+<a name="line592"></a>function testFlattenElement() {
+<a name="line593"></a>  var text = document.createTextNode(&#39;Text&#39;);
+<a name="line594"></a>  var br = document.createElement(&#39;br&#39;);
+<a name="line595"></a>  var span = goog.dom.createDom(&#39;span&#39;, null, text, br);
+<a name="line596"></a>  assertEquals(&#39;span should have 2 children&#39;, 2, span.childNodes.length);
+<a name="line597"></a>
+<a name="line598"></a>  var el = $(&#39;p1&#39;);
+<a name="line599"></a>  el.appendChild(span);
+<a name="line600"></a>
+<a name="line601"></a>  var ret = goog.dom.flattenElement(span);
+<a name="line602"></a>
+<a name="line603"></a>  assertTrue(&#39;span should have been removed&#39;, el.lastChild != span);
+<a name="line604"></a>  assertFalse(&#39;span should have no parent&#39;, !!span.parentNode &amp;&amp;
+<a name="line605"></a>      span.parentNode.nodeType != goog.dom.NodeType.DOCUMENT_FRAGMENT);
+<a name="line606"></a>  assertEquals(&#39;span should have no children&#39;, 0, span.childNodes.length);
+<a name="line607"></a>  assertEquals(&#39;Last child of p should be br&#39;, br, el.lastChild);
+<a name="line608"></a>  assertEquals(&#39;Previous sibling of br should be text&#39;, text,
+<a name="line609"></a>      br.previousSibling);
+<a name="line610"></a>
+<a name="line611"></a>  var outOfDoc = goog.dom.createDom(&#39;span&#39;, null, &#39;1 child&#39;);
+<a name="line612"></a>  // Should do nothing.
+<a name="line613"></a>  goog.dom.flattenElement(outOfDoc);
+<a name="line614"></a>  assertEquals(&#39;outOfDoc should still have 1 child&#39;, 1,
+<a name="line615"></a>      outOfDoc.childNodes.length);
+<a name="line616"></a>}
+<a name="line617"></a>
+<a name="line618"></a>function testIsNodeLike() {
+<a name="line619"></a>  assertTrue(&#39;document should be node like&#39;, goog.dom.isNodeLike(document));
+<a name="line620"></a>  assertTrue(&#39;document.body should be node like&#39;,
+<a name="line621"></a>             goog.dom.isNodeLike(document.body));
+<a name="line622"></a>  assertTrue(&#39;a text node should be node like&#39;, goog.dom.isNodeLike(
+<a name="line623"></a>      document.createTextNode(&#39;&#39;)));
+<a name="line624"></a>
+<a name="line625"></a>  assertFalse(&#39;null should not be node like&#39;, goog.dom.isNodeLike(null));
+<a name="line626"></a>  assertFalse(&#39;a string should not be node like&#39;, goog.dom.isNodeLike(&#39;abcd&#39;));
+<a name="line627"></a>
+<a name="line628"></a>  assertTrue(&#39;custom object should be node like&#39;,
+<a name="line629"></a>             goog.dom.isNodeLike({nodeType: 1}));
+<a name="line630"></a>}
+<a name="line631"></a>
+<a name="line632"></a>function testIsElement() {
+<a name="line633"></a>  assertFalse(&#39;document is not an element&#39;, goog.dom.isElement(document));
+<a name="line634"></a>  assertTrue(&#39;document.body is an element&#39;,
+<a name="line635"></a>             goog.dom.isElement(document.body));
+<a name="line636"></a>  assertFalse(&#39;a text node is not an element&#39;, goog.dom.isElement(
+<a name="line637"></a>      document.createTextNode(&#39;&#39;)));
+<a name="line638"></a>  assertTrue(&#39;an element created with createElement() is an element&#39;,
+<a name="line639"></a>      goog.dom.isElement(document.createElement(&#39;a&#39;)));
+<a name="line640"></a>
+<a name="line641"></a>  assertFalse(&#39;null is not an element&#39;, goog.dom.isElement(null));
+<a name="line642"></a>  assertFalse(&#39;a string is not an element&#39;, goog.dom.isElement(&#39;abcd&#39;));
+<a name="line643"></a>
+<a name="line644"></a>  assertTrue(&#39;custom object is an element&#39;,
+<a name="line645"></a>             goog.dom.isElement({nodeType: 1}));
+<a name="line646"></a>  assertFalse(&#39;custom non-element object is a not an element&#39;,
+<a name="line647"></a>              goog.dom.isElement({someProperty: &#39;somevalue&#39;}));
+<a name="line648"></a>}
+<a name="line649"></a>
+<a name="line650"></a>function testIsWindow() {
+<a name="line651"></a>  var global = goog.global;
+<a name="line652"></a>  var frame = window.frames[&#39;frame&#39;];
+<a name="line653"></a>  var otherWindow = window.open(&#39;&#39;, &#39;blank&#39;);
+<a name="line654"></a>  var object = {window: goog.global};
+<a name="line655"></a>  var nullVar = null;
+<a name="line656"></a>  var notDefined;
+<a name="line657"></a>
+<a name="line658"></a>  try {
+<a name="line659"></a>    // Use try/finally to ensure that we clean up the window we open, even if an
+<a name="line660"></a>    // assertion fails or something else goes wrong.
+<a name="line661"></a>    assertTrue(&#39;global object in HTML context should be a window&#39;,
+<a name="line662"></a>               goog.dom.isWindow(goog.global));
+<a name="line663"></a>    assertTrue(&#39;iframe window should be a window&#39;, goog.dom.isWindow(frame));
+<a name="line664"></a>    if (otherWindow) {
+<a name="line665"></a>      assertTrue(&#39;other window should be a window&#39;,
+<a name="line666"></a>                 goog.dom.isWindow(otherWindow));
+<a name="line667"></a>    }
+<a name="line668"></a>    assertFalse(&#39;object should not be a window&#39;, goog.dom.isWindow(object));
+<a name="line669"></a>    assertFalse(&#39;null should not be a window&#39;, goog.dom.isWindow(nullVar));
+<a name="line670"></a>    assertFalse(&#39;undefined should not be a window&#39;,
+<a name="line671"></a>                goog.dom.isWindow(notDefined));
+<a name="line672"></a>  } finally {
+<a name="line673"></a>    if (otherWindow) {
+<a name="line674"></a>      otherWindow.close();
+<a name="line675"></a>    }
+<a name="line676"></a>  }
+<a name="line677"></a>}
+<a name="line678"></a>
+<a name="line679"></a>function testGetOwnerDocument() {
+<a name="line680"></a>  assertEquals(goog.dom.getOwnerDocument($(&#39;p1&#39;)), document);
+<a name="line681"></a>  assertEquals(goog.dom.getOwnerDocument(document.body), document);
+<a name="line682"></a>  assertEquals(goog.dom.getOwnerDocument(document.documentElement), document);
+<a name="line683"></a>}
+<a name="line684"></a>
+<a name="line685"></a>// Tests the breakages resulting in rollback cl/64715474
+<a name="line686"></a>function testGetOwnerDocumentNonNodeInput() {
+<a name="line687"></a>  // We should fail on null.
+<a name="line688"></a>  assertThrows(function() {
+<a name="line689"></a>    goog.dom.getOwnerDocument(null);
+<a name="line690"></a>  });
+<a name="line691"></a>  assertEquals(document, goog.dom.getOwnerDocument(window));
+<a name="line692"></a>}
+<a name="line693"></a>
+<a name="line694"></a>function testDomHelper() {
+<a name="line695"></a>  var x = new goog.dom.DomHelper(window.frames[&#39;frame&#39;].document);
+<a name="line696"></a>  assertTrue(&#39;Should have some HTML&#39;,
+<a name="line697"></a>             x.getDocument().body.innerHTML.length &gt; 0);
+<a name="line698"></a>}
+<a name="line699"></a>
+<a name="line700"></a>function testGetFirstElementChild() {
+<a name="line701"></a>  var p2 = $(&#39;p2&#39;);
+<a name="line702"></a>  var b1 = goog.dom.getFirstElementChild(p2);
+<a name="line703"></a>  assertNotNull(&#39;First element child of p2 should not be null&#39;, b1);
+<a name="line704"></a>  assertEquals(&#39;First element child is b1&#39;, &#39;b1&#39;, b1.id);
+<a name="line705"></a>
+<a name="line706"></a>  var c = goog.dom.getFirstElementChild(b1);
+<a name="line707"></a>  assertNull(&#39;First element child of b1 should be null&#39;, c);
+<a name="line708"></a>
+<a name="line709"></a>  // Test with an undefined firstElementChild attribute.
+<a name="line710"></a>  var b2 = $(&#39;b2&#39;);
+<a name="line711"></a>  var mockP2 = {
+<a name="line712"></a>    childNodes: [b1, b2],
+<a name="line713"></a>    firstChild: b1,
+<a name="line714"></a>    firstElementChild: undefined
+<a name="line715"></a>  };
+<a name="line716"></a>
+<a name="line717"></a>  b1 = goog.dom.getFirstElementChild(mockP2);
+<a name="line718"></a>  assertNotNull(&#39;First element child of mockP2 should not be null&#39;, b1);
+<a name="line719"></a>  assertEquals(&#39;First element child is b1&#39;, &#39;b1&#39;, b1.id);
+<a name="line720"></a>}
+<a name="line721"></a>
+<a name="line722"></a>function testGetLastElementChild() {
+<a name="line723"></a>  var p2 = $(&#39;p2&#39;);
+<a name="line724"></a>  var b2 = goog.dom.getLastElementChild(p2);
+<a name="line725"></a>  assertNotNull(&#39;Last element child of p2 should not be null&#39;, b2);
+<a name="line726"></a>  assertEquals(&#39;Last element child is b2&#39;, &#39;b2&#39;, b2.id);
+<a name="line727"></a>
+<a name="line728"></a>  var c = goog.dom.getLastElementChild(b2);
+<a name="line729"></a>  assertNull(&#39;Last element child of b2 should be null&#39;, c);
+<a name="line730"></a>
+<a name="line731"></a>  // Test with an undefined lastElementChild attribute.
+<a name="line732"></a>  var b1 = $(&#39;b1&#39;);
+<a name="line733"></a>  var mockP2 = {
+<a name="line734"></a>    childNodes: [b1, b2],
+<a name="line735"></a>    lastChild: b2,
+<a name="line736"></a>    lastElementChild: undefined
+<a name="line737"></a>  };
+<a name="line738"></a>
+<a name="line739"></a>  b2 = goog.dom.getLastElementChild(mockP2);
+<a name="line740"></a>  assertNotNull(&#39;Last element child of mockP2 should not be null&#39;, b2);
+<a name="line741"></a>  assertEquals(&#39;Last element child is b2&#39;, &#39;b2&#39;, b2.id);
+<a name="line742"></a>}
+<a name="line743"></a>
+<a name="line744"></a>function testGetNextElementSibling() {
+<a name="line745"></a>  var b1 = $(&#39;b1&#39;);
+<a name="line746"></a>  var b2 = goog.dom.getNextElementSibling(b1);
+<a name="line747"></a>  assertNotNull(&#39;Next element sibling of b1 should not be null&#39;, b1);
+<a name="line748"></a>  assertEquals(&#39;Next element sibling is b2&#39;, &#39;b2&#39;, b2.id);
+<a name="line749"></a>
+<a name="line750"></a>  var c = goog.dom.getNextElementSibling(b2);
+<a name="line751"></a>  assertNull(&#39;Next element sibling of b2 should be null&#39;, c);
+<a name="line752"></a>
+<a name="line753"></a>  // Test with an undefined nextElementSibling attribute.
+<a name="line754"></a>  var mockB1 = {
+<a name="line755"></a>    nextSibling: b2,
+<a name="line756"></a>    nextElementSibling: undefined
+<a name="line757"></a>  };
+<a name="line758"></a>
+<a name="line759"></a>  b2 = goog.dom.getNextElementSibling(mockB1);
+<a name="line760"></a>  assertNotNull(&#39;Next element sibling of mockB1 should not be null&#39;, b1);
+<a name="line761"></a>  assertEquals(&#39;Next element sibling is b2&#39;, &#39;b2&#39;, b2.id);
+<a name="line762"></a>}
+<a name="line763"></a>
+<a name="line764"></a>function testGetPreviousElementSibling() {
+<a name="line765"></a>  var b2 = $(&#39;b2&#39;);
+<a name="line766"></a>  var b1 = goog.dom.getPreviousElementSibling(b2);
+<a name="line767"></a>  assertNotNull(&#39;Previous element sibling of b2 should not be null&#39;, b1);
+<a name="line768"></a>  assertEquals(&#39;Previous element sibling is b1&#39;, &#39;b1&#39;, b1.id);
+<a name="line769"></a>
+<a name="line770"></a>  var c = goog.dom.getPreviousElementSibling(b1);
+<a name="line771"></a>  assertNull(&#39;Previous element sibling of b1 should be null&#39;, c);
+<a name="line772"></a>
+<a name="line773"></a>  // Test with an undefined previousElementSibling attribute.
+<a name="line774"></a>  var mockB2 = {
+<a name="line775"></a>    previousSibling: b1,
+<a name="line776"></a>    previousElementSibling: undefined
+<a name="line777"></a>  };
+<a name="line778"></a>
+<a name="line779"></a>  b1 = goog.dom.getPreviousElementSibling(mockB2);
+<a name="line780"></a>  assertNotNull(&#39;Previous element sibling of mockB2 should not be null&#39;, b1);
+<a name="line781"></a>  assertEquals(&#39;Previous element sibling is b1&#39;, &#39;b1&#39;, b1.id);
+<a name="line782"></a>}
+<a name="line783"></a>
+<a name="line784"></a>function testGetChildren() {
+<a name="line785"></a>  var p2 = $(&#39;p2&#39;);
+<a name="line786"></a>  var children = goog.dom.getChildren(p2);
+<a name="line787"></a>  assertNotNull(&#39;Elements array should not be null&#39;, children);
+<a name="line788"></a>  assertEquals(&#39;List of element children should be length two.&#39;, 2,
+<a name="line789"></a>      children.length);
+<a name="line790"></a>
+<a name="line791"></a>  var b1 = $(&#39;b1&#39;);
+<a name="line792"></a>  var b2 = $(&#39;b2&#39;);
+<a name="line793"></a>  assertObjectEquals(&#39;First element child should be b1.&#39;, b1, children[0]);
+<a name="line794"></a>  assertObjectEquals(&#39;Second element child should be b2.&#39;, b2, children[1]);
+<a name="line795"></a>
+<a name="line796"></a>  var noChildren = goog.dom.getChildren(b1);
+<a name="line797"></a>  assertNotNull(&#39;Element children array should not be null&#39;, noChildren);
+<a name="line798"></a>  assertEquals(&#39;List of element children should be length zero.&#39;, 0,
+<a name="line799"></a>      noChildren.length);
+<a name="line800"></a>
+<a name="line801"></a>  // Test with an undefined children attribute.
+<a name="line802"></a>  var mockP2 = {
+<a name="line803"></a>    childNodes: [b1, b2],
+<a name="line804"></a>    children: undefined
+<a name="line805"></a>  };
+<a name="line806"></a>
+<a name="line807"></a>  children = goog.dom.getChildren(mockP2);
+<a name="line808"></a>  assertNotNull(&#39;Elements array should not be null&#39;, children);
+<a name="line809"></a>  assertEquals(&#39;List of element children should be length two.&#39;, 2,
+<a name="line810"></a>      children.length);
+<a name="line811"></a>
+<a name="line812"></a>  assertObjectEquals(&#39;First element child should be b1.&#39;, b1, children[0]);
+<a name="line813"></a>  assertObjectEquals(&#39;Second element child should be b2.&#39;, b2, children[1]);
+<a name="line814"></a>}
+<a name="line815"></a>
+<a name="line816"></a>function testGetNextNode() {
+<a name="line817"></a>  var tree = goog.dom.htmlToDocumentFragment(
+<a name="line818"></a>      &#39;&lt;div&gt;&#39; +
+<a name="line819"></a>      &#39;&lt;p&gt;Some text&lt;/p&gt;&#39; +
+<a name="line820"></a>      &#39;&lt;blockquote&gt;Some &lt;i&gt;special&lt;/i&gt; &lt;b&gt;text&lt;/b&gt;&lt;/blockquote&gt;&#39; +
+<a name="line821"></a>      &#39;&lt;address&gt;&lt;!-- comment --&gt;Foo&lt;/address&gt;&#39; +
+<a name="line822"></a>      &#39;&lt;/div&gt;&#39;);
+<a name="line823"></a>
+<a name="line824"></a>  assertNull(goog.dom.getNextNode(null));
+<a name="line825"></a>
+<a name="line826"></a>  var node = tree;
+<a name="line827"></a>  var next = function() {
+<a name="line828"></a>    return node = goog.dom.getNextNode(node);
+<a name="line829"></a>  };
+<a name="line830"></a>
+<a name="line831"></a>  assertEquals(&#39;P&#39;, next().tagName);
+<a name="line832"></a>  assertEquals(&#39;Some text&#39;, next().nodeValue);
+<a name="line833"></a>  assertEquals(&#39;BLOCKQUOTE&#39;, next().tagName);
+<a name="line834"></a>  assertEquals(&#39;Some &#39;, next().nodeValue);
+<a name="line835"></a>  assertEquals(&#39;I&#39;, next().tagName);
+<a name="line836"></a>  assertEquals(&#39;special&#39;, next().nodeValue);
+<a name="line837"></a>  assertEquals(&#39; &#39;, next().nodeValue);
+<a name="line838"></a>  assertEquals(&#39;B&#39;, next().tagName);
+<a name="line839"></a>  assertEquals(&#39;text&#39;, next().nodeValue);
+<a name="line840"></a>  assertEquals(&#39;ADDRESS&#39;, next().tagName);
+<a name="line841"></a>  assertEquals(goog.dom.NodeType.COMMENT, next().nodeType);
+<a name="line842"></a>  assertEquals(&#39;Foo&#39;, next().nodeValue);
+<a name="line843"></a>
+<a name="line844"></a>  assertNull(next());
+<a name="line845"></a>}
+<a name="line846"></a>
+<a name="line847"></a>function testGetPreviousNode() {
+<a name="line848"></a>  var tree = goog.dom.htmlToDocumentFragment(
+<a name="line849"></a>      &#39;&lt;div&gt;&#39; +
+<a name="line850"></a>      &#39;&lt;p&gt;Some text&lt;/p&gt;&#39; +
+<a name="line851"></a>      &#39;&lt;blockquote&gt;Some &lt;i&gt;special&lt;/i&gt; &lt;b&gt;text&lt;/b&gt;&lt;/blockquote&gt;&#39; +
+<a name="line852"></a>      &#39;&lt;address&gt;&lt;!-- comment --&gt;Foo&lt;/address&gt;&#39; +
+<a name="line853"></a>      &#39;&lt;/div&gt;&#39;);
+<a name="line854"></a>
+<a name="line855"></a>  assertNull(goog.dom.getPreviousNode(null));
+<a name="line856"></a>
+<a name="line857"></a>  var node = tree.lastChild.lastChild;
+<a name="line858"></a>  var previous = function() {
+<a name="line859"></a>    return node = goog.dom.getPreviousNode(node);
+<a name="line860"></a>  };
+<a name="line861"></a>
+<a name="line862"></a>  assertEquals(goog.dom.NodeType.COMMENT, previous().nodeType);
+<a name="line863"></a>  assertEquals(&#39;ADDRESS&#39;, previous().tagName);
+<a name="line864"></a>  assertEquals(&#39;text&#39;, previous().nodeValue);
+<a name="line865"></a>  assertEquals(&#39;B&#39;, previous().tagName);
+<a name="line866"></a>  assertEquals(&#39; &#39;, previous().nodeValue);
+<a name="line867"></a>  assertEquals(&#39;special&#39;, previous().nodeValue);
+<a name="line868"></a>  assertEquals(&#39;I&#39;, previous().tagName);
+<a name="line869"></a>  assertEquals(&#39;Some &#39;, previous().nodeValue);
+<a name="line870"></a>  assertEquals(&#39;BLOCKQUOTE&#39;, previous().tagName);
+<a name="line871"></a>  assertEquals(&#39;Some text&#39;, previous().nodeValue);
+<a name="line872"></a>  assertEquals(&#39;P&#39;, previous().tagName);
+<a name="line873"></a>  assertEquals(&#39;DIV&#39;, previous().tagName);
+<a name="line874"></a>
+<a name="line875"></a>  if (!goog.userAgent.IE) {
+<a name="line876"></a>    // Internet Explorer maintains a parentNode for Elements after they are
+<a name="line877"></a>    // removed from the hierarchy. Everyone else agrees on a null parentNode.
+<a name="line878"></a>    assertNull(previous());
+<a name="line879"></a>  }
+<a name="line880"></a>}
+<a name="line881"></a>
+<a name="line882"></a>function testSetTextContent() {
+<a name="line883"></a>  var p1 = $(&#39;p1&#39;);
+<a name="line884"></a>  var s = &#39;hello world&#39;;
+<a name="line885"></a>  goog.dom.setTextContent(p1, s);
+<a name="line886"></a>  assertEquals(&#39;We should have one childNode after setTextContent&#39;, 1,
+<a name="line887"></a>      p1.childNodes.length);
+<a name="line888"></a>  assertEquals(s, p1.firstChild.data);
+<a name="line889"></a>  assertEquals(s, p1.innerHTML);
+<a name="line890"></a>
+<a name="line891"></a>  s = &#39;four elefants &lt; five ants&#39;;
+<a name="line892"></a>  var sHtml = &#39;four elefants &amp;lt; five ants&#39;;
+<a name="line893"></a>  goog.dom.setTextContent(p1, s);
+<a name="line894"></a>  assertEquals(&#39;We should have one childNode after setTextContent&#39;, 1,
+<a name="line895"></a>      p1.childNodes.length);
+<a name="line896"></a>  assertEquals(s, p1.firstChild.data);
+<a name="line897"></a>  assertEquals(sHtml, p1.innerHTML);
+<a name="line898"></a>
+<a name="line899"></a>  // ensure that we remove existing children
+<a name="line900"></a>  p1.innerHTML = &#39;a&lt;b&gt;b&lt;/b&gt;c&#39;;
+<a name="line901"></a>  s = &#39;hello world&#39;;
+<a name="line902"></a>  goog.dom.setTextContent(p1, s);
+<a name="line903"></a>  assertEquals(&#39;We should have one childNode after setTextContent&#39;, 1,
+<a name="line904"></a>      p1.childNodes.length);
+<a name="line905"></a>  assertEquals(s, p1.firstChild.data);
+<a name="line906"></a>
+<a name="line907"></a>  // same but start with an element
+<a name="line908"></a>  p1.innerHTML = &#39;&lt;b&gt;a&lt;/b&gt;b&lt;i&gt;c&lt;/i&gt;&#39;;
+<a name="line909"></a>  s = &#39;hello world&#39;;
+<a name="line910"></a>  goog.dom.setTextContent(p1, s);
+<a name="line911"></a>  assertEquals(&#39;We should have one childNode after setTextContent&#39;, 1,
+<a name="line912"></a>      p1.childNodes.length);
+<a name="line913"></a>  assertEquals(s, p1.firstChild.data);
+<a name="line914"></a>
+<a name="line915"></a>  // Text/CharacterData
+<a name="line916"></a>  p1.innerHTML = &#39;before&#39;;
+<a name="line917"></a>  s = &#39;after&#39;;
+<a name="line918"></a>  goog.dom.setTextContent(p1.firstChild, s);
+<a name="line919"></a>  assertEquals(&#39;We should have one childNode after setTextContent&#39;, 1,
+<a name="line920"></a>      p1.childNodes.length);
+<a name="line921"></a>  assertEquals(s, p1.firstChild.data);
+<a name="line922"></a>
+<a name="line923"></a>  // DocumentFragment
+<a name="line924"></a>  var df = document.createDocumentFragment();
+<a name="line925"></a>  s = &#39;hello world&#39;;
+<a name="line926"></a>  goog.dom.setTextContent(df, s);
+<a name="line927"></a>  assertEquals(&#39;We should have one childNode after setTextContent&#39;, 1,
+<a name="line928"></a>      df.childNodes.length);
+<a name="line929"></a>  assertEquals(s, df.firstChild.data);
+<a name="line930"></a>
+<a name="line931"></a>  // clean up
+<a name="line932"></a>  p1.innerHTML = &#39;&#39;;
+<a name="line933"></a>}
+<a name="line934"></a>
+<a name="line935"></a>function testFindNode() {
+<a name="line936"></a>  var expected = document.body;
+<a name="line937"></a>  var result = goog.dom.findNode(document, function(n) {
+<a name="line938"></a>    return n.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp; n.tagName == &#39;BODY&#39;;
+<a name="line939"></a>  });
+<a name="line940"></a>  assertEquals(expected, result);
+<a name="line941"></a>
+<a name="line942"></a>  expected = document.getElementsByTagName(&#39;P&#39;)[0];
+<a name="line943"></a>  result = goog.dom.findNode(document, function(n) {
+<a name="line944"></a>    return n.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp; n.tagName == &#39;P&#39;;
+<a name="line945"></a>  });
+<a name="line946"></a>  assertEquals(expected, result);
+<a name="line947"></a>
+<a name="line948"></a>  result = goog.dom.findNode(document, function(n) {
+<a name="line949"></a>    return false;
+<a name="line950"></a>  });
+<a name="line951"></a>  assertUndefined(result);
+<a name="line952"></a>}
+<a name="line953"></a>
+<a name="line954"></a>function testFindNodes() {
+<a name="line955"></a>  var expected = document.getElementsByTagName(&#39;P&#39;);
+<a name="line956"></a>  var result = goog.dom.findNodes(document, function(n) {
+<a name="line957"></a>    return n.nodeType == goog.dom.NodeType.ELEMENT &amp;&amp; n.tagName == &#39;P&#39;;
+<a name="line958"></a>  });
+<a name="line959"></a>  assertEquals(expected.length, result.length);
+<a name="line960"></a>  assertEquals(expected[0], result[0]);
+<a name="line961"></a>  assertEquals(expected[1], result[1]);
+<a name="line962"></a>
+<a name="line963"></a>  result = goog.dom.findNodes(document, function(n) {
+<a name="line964"></a>    return false;
+<a name="line965"></a>  }).length;
+<a name="line966"></a>  assertEquals(0, result);
+<a name="line967"></a>}
+<a name="line968"></a>
+<a name="line969"></a>function createTestDom(txt) {
+<a name="line970"></a>  var dom = goog.dom.createDom(&#39;div&#39;);
+<a name="line971"></a>  dom.innerHTML = txt;
+<a name="line972"></a>  return dom;
+<a name="line973"></a>}
+<a name="line974"></a>
+<a name="line975"></a>function testIsFocusableTabIndex() {
+<a name="line976"></a>  assertFalse(&#39;isFocusableTabIndex() must be false for no tab index&#39;,
+<a name="line977"></a>      goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;noTabIndex&#39;)));
+<a name="line978"></a>  assertFalse(&#39;isFocusableTabIndex() must be false for tab index -2&#39;,
+<a name="line979"></a>      goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;tabIndexNegative2&#39;)));
+<a name="line980"></a>  assertFalse(&#39;isFocusableTabIndex() must be false for tab index -1&#39;,
+<a name="line981"></a>      goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;tabIndexNegative1&#39;)));
+<a name="line982"></a>
+<a name="line983"></a>  // WebKit on Mac doesn&#39;t support focusable DIVs until version 526 and later.
+<a name="line984"></a>  if (!goog.userAgent.WEBKIT || !goog.userAgent.MAC ||
+<a name="line985"></a>      goog.userAgent.isVersionOrHigher(&#39;526&#39;)) {
+<a name="line986"></a>    assertTrue(&#39;isFocusableTabIndex() must be true for tab index 0&#39;,
+<a name="line987"></a>        goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;tabIndex0&#39;)));
+<a name="line988"></a>    assertTrue(&#39;isFocusableTabIndex() must be true for tab index 1&#39;,
+<a name="line989"></a>        goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;tabIndex1&#39;)));
+<a name="line990"></a>    assertTrue(&#39;isFocusableTabIndex() must be true for tab index 2&#39;,
+<a name="line991"></a>        goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;tabIndex2&#39;)));
+<a name="line992"></a>  }
+<a name="line993"></a>}
+<a name="line994"></a>
+<a name="line995"></a>function testSetFocusableTabIndex() {
+<a name="line996"></a>  // WebKit on Mac doesn&#39;t support focusable DIVs until version 526 and later.
+<a name="line997"></a>  if (!goog.userAgent.WEBKIT || !goog.userAgent.MAC ||
+<a name="line998"></a>      goog.userAgent.isVersionOrHigher(&#39;526&#39;)) {
+<a name="line999"></a>    // Test enabling focusable tab index.
+<a name="line1000"></a>    goog.dom.setFocusableTabIndex(goog.dom.getElement(&#39;noTabIndex&#39;), true);
+<a name="line1001"></a>    assertTrue(&#39;isFocusableTabIndex() must be true after enabling tab index&#39;,
+<a name="line1002"></a>        goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;noTabIndex&#39;)));
+<a name="line1003"></a>
+<a name="line1004"></a>    // Test disabling focusable tab index that was added programmatically.
+<a name="line1005"></a>    goog.dom.setFocusableTabIndex(goog.dom.getElement(&#39;noTabIndex&#39;), false);
+<a name="line1006"></a>    assertFalse(&#39;isFocusableTabIndex() must be false after disabling tab &#39; +
+<a name="line1007"></a>        &#39;index that was programmatically added&#39;,
+<a name="line1008"></a>        goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;noTabIndex&#39;)));
+<a name="line1009"></a>
+<a name="line1010"></a>    // Test disabling focusable tab index that was specified in markup.
+<a name="line1011"></a>    goog.dom.setFocusableTabIndex(goog.dom.getElement(&#39;tabIndex0&#39;), false);
+<a name="line1012"></a>    assertFalse(&#39;isFocusableTabIndex() must be false after disabling tab &#39; +
+<a name="line1013"></a>        &#39;index that was specified in markup&#39;,
+<a name="line1014"></a>        goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;tabIndex0&#39;)));
+<a name="line1015"></a>
+<a name="line1016"></a>    // Test re-enabling focusable tab index.
+<a name="line1017"></a>    goog.dom.setFocusableTabIndex(goog.dom.getElement(&#39;tabIndex0&#39;), true);
+<a name="line1018"></a>    assertTrue(&#39;isFocusableTabIndex() must be true after reenabling tabindex&#39;,
+<a name="line1019"></a>        goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;tabIndex0&#39;)));
+<a name="line1020"></a>  }
+<a name="line1021"></a>}
+<a name="line1022"></a>
+<a name="line1023"></a>function testIsFocusable() {
+<a name="line1024"></a>  // Test all types of form elements with no tab index specified are focusable.
+<a name="line1025"></a>  assertTrue(&#39;isFocusable() must be true for anchor elements with &#39; +
+<a name="line1026"></a>      &#39;no tab index&#39;,
+<a name="line1027"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;noTabIndexAnchor&#39;)));
+<a name="line1028"></a>  assertTrue(&#39;isFocusable() must be true for input elements with &#39; +
+<a name="line1029"></a>      &#39;no tab index&#39;,
+<a name="line1030"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;noTabIndexInput&#39;)));
+<a name="line1031"></a>  assertTrue(&#39;isFocusable() must be true for textarea elements with &#39; +
+<a name="line1032"></a>      &#39;no tab index&#39;,
+<a name="line1033"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;noTabIndexTextArea&#39;)));
+<a name="line1034"></a>  assertTrue(&#39;isFocusable() must be true for select elements with &#39; +
+<a name="line1035"></a>      &#39;no tab index&#39;,
+<a name="line1036"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;noTabIndexSelect&#39;)));
+<a name="line1037"></a>  assertTrue(&#39;isFocusable() must be true for button elements with &#39; +
+<a name="line1038"></a>      &#39;no tab index&#39;,
+<a name="line1039"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;noTabIndexButton&#39;)));
+<a name="line1040"></a>
+<a name="line1041"></a>  // Test form element with negative tab index is not focusable.
+<a name="line1042"></a>  assertFalse(&#39;isFocusable() must be false for form elements with &#39; +
+<a name="line1043"></a>      &#39;negative tab index&#39;,
+<a name="line1044"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;negTabIndexButton&#39;)));
+<a name="line1045"></a>
+<a name="line1046"></a>  // Test form element with zero tab index is focusable.
+<a name="line1047"></a>  assertTrue(&#39;isFocusable() must be true for form elements with &#39; +
+<a name="line1048"></a>      &#39;zero tab index&#39;,
+<a name="line1049"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;zeroTabIndexButton&#39;)));
+<a name="line1050"></a>
+<a name="line1051"></a>  // Test form element with positive tab index is focusable.
+<a name="line1052"></a>  assertTrue(&#39;isFocusable() must be true for form elements with &#39; +
+<a name="line1053"></a>      &#39;positive tab index&#39;,
+<a name="line1054"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;posTabIndexButton&#39;)));
+<a name="line1055"></a>
+<a name="line1056"></a>  // Test disabled form element with no tab index is not focusable.
+<a name="line1057"></a>  assertFalse(&#39;isFocusable() must be false for disabled form elements with &#39; +
+<a name="line1058"></a>      &#39;no tab index&#39;,
+<a name="line1059"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;disabledNoTabIndexButton&#39;)));
+<a name="line1060"></a>
+<a name="line1061"></a>  // Test disabled form element with negative tab index is not focusable.
+<a name="line1062"></a>  assertFalse(&#39;isFocusable() must be false for disabled form elements with &#39; +
+<a name="line1063"></a>      &#39;negative tab index&#39;,
+<a name="line1064"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;disabledNegTabIndexButton&#39;)));
+<a name="line1065"></a>
+<a name="line1066"></a>  // Test disabled form element with zero tab index is not focusable.
+<a name="line1067"></a>  assertFalse(&#39;isFocusable() must be false for disabled form elements with &#39; +
+<a name="line1068"></a>      &#39;zero tab index&#39;,
+<a name="line1069"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;disabledZeroTabIndexButton&#39;)));
+<a name="line1070"></a>
+<a name="line1071"></a>  // Test disabled form element with positive tab index is not focusable.
+<a name="line1072"></a>  assertFalse(&#39;isFocusable() must be false for disabled form elements with &#39; +
+<a name="line1073"></a>      &#39;positive tab index&#39;,
+<a name="line1074"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;disabledPosTabIndexButton&#39;)));
+<a name="line1075"></a>
+<a name="line1076"></a>  // Test non-form types should return same value as isFocusableTabIndex()
+<a name="line1077"></a>  assertEquals(&#39;isFocusable() and isFocusableTabIndex() must agree for &#39; +
+<a name="line1078"></a>      &#39; no tab index&#39;,
+<a name="line1079"></a>      goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;noTabIndex&#39;)),
+<a name="line1080"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;noTabIndex&#39;)));
+<a name="line1081"></a>  assertEquals(&#39;isFocusable() and isFocusableTabIndex() must agree for &#39; +
+<a name="line1082"></a>      &#39; tab index -2&#39;,
+<a name="line1083"></a>      goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;tabIndexNegative2&#39;)),
+<a name="line1084"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;tabIndexNegative2&#39;)));
+<a name="line1085"></a>  assertEquals(&#39;isFocusable() and isFocusableTabIndex() must agree for &#39; +
+<a name="line1086"></a>      &#39; tab index -1&#39;,
+<a name="line1087"></a>      goog.dom.isFocusableTabIndex(goog.dom.getElement(&#39;tabIndexNegative1&#39;)),
+<a name="line1088"></a>      goog.dom.isFocusable(goog.dom.getElement(&#39;tabIndexNegative1&#39;)));
+<a name="line1089"></a>
+<a name="line1090"></a>}
+<a name="line1091"></a>
+<a name="line1092"></a>function testGetTextContent() {
+<a name="line1093"></a>  function t(inp, out) {
+<a name="line1094"></a>    assertEquals(out.replace(/ /g, &#39;_&#39;),
+<a name="line1095"></a>                 goog.dom.getTextContent(
+<a name="line1096"></a>                     createTestDom(inp)).replace(/ /g, &#39;_&#39;));
+<a name="line1097"></a>  }
+<a name="line1098"></a>
+<a name="line1099"></a>  t(&#39;abcde&#39;, &#39;abcde&#39;);
+<a name="line1100"></a>  t(&#39;a&lt;b&gt;bcd&lt;/b&gt;efgh&#39;, &#39;abcdefgh&#39;);
+<a name="line1101"></a>  t(&#39;a&lt;script type=&quot;text/javascript&#39; + &#39;&quot;&gt;var a=1;&lt;&#39; + &#39;/script&gt;h&#39;, &#39;ah&#39;);
+<a name="line1102"></a>  t(&#39;&lt;html&gt;&lt;head&gt;&lt;style type=&quot;text/css&quot;&gt;&#39; +
+<a name="line1103"></a>    &#39;p{margin:100%;padding:5px}\n.class{background-color:red;}&lt;/style&gt;&#39; +
+<a name="line1104"></a>    &#39;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Hello&lt;/h1&gt;\n&lt;p&gt;One two three&lt;/p&gt;\n&lt;table&gt;&lt;tr&gt;&lt;td&gt;a&#39; +
+<a name="line1105"></a>    &#39;&lt;td&gt;b&lt;/table&gt;&lt;&#39; + &#39;script&gt;var a = \&#39;foo\&#39;;&#39; +
+<a name="line1106"></a>    &#39;&lt;/scrip&#39; + &#39;t&gt;&lt;/body&gt;&lt;/html&gt;&#39;, &#39;HelloOne two threeab&#39;);
+<a name="line1107"></a>  t(&#39;abc&lt;br&gt;def&#39;, &#39;abc\ndef&#39;);
+<a name="line1108"></a>  t(&#39;abc&lt;br&gt;\ndef&#39;, &#39;abc\ndef&#39;);
+<a name="line1109"></a>  t(&#39;abc&lt;br&gt;\n\ndef&#39;, &#39;abc\ndef&#39;);
+<a name="line1110"></a>  t(&#39;abc&lt;br&gt;&lt;br&gt;\ndef&#39;, &#39;abc\n\ndef&#39;);
+<a name="line1111"></a>  t(&#39; &lt;b&gt;abcde  &lt;/b&gt;   &#39;, &#39;abcde &#39;);
+<a name="line1112"></a>  t(&#39; &lt;b&gt;abcde    &lt;/b&gt; hi  &#39;, &#39;abcde hi &#39;);
+<a name="line1113"></a>  t(&#39; \n&lt;b&gt;abcde  &lt;/b&gt;   &#39;, &#39;abcde &#39;);
+<a name="line1114"></a>  t(&#39; \n&lt;b&gt;abcde  &lt;/b&gt;   \n\n\n&#39;, &#39;abcde &#39;);
+<a name="line1115"></a>  t(&#39;&lt;p&gt;abcde&lt;/p&gt;\nfg&#39;, &#39;abcdefg&#39;);
+<a name="line1116"></a>  t(&#39;\n &lt;div&gt;  &lt;b&gt;abcde  &lt;/b&gt;   &#39;, &#39;abcde &#39;);
+<a name="line1117"></a>  t(&#39; \n&amp;shy;&lt;b&gt;abcde &amp;shy; &lt;/b&gt;   \n\n\n&amp;shy;&#39;, &#39;abcde &#39;);
+<a name="line1118"></a>  t(&#39; \n&amp;shy;\n\n&amp;shy;\na   &#39;, &#39;a &#39;);
+<a name="line1119"></a>  t(&#39; \n&lt;wbr&gt;&lt;/wbr&gt;&lt;b&gt;abcde &lt;wbr&gt;&lt;/wbr&gt; &lt;/b&gt;   \n\n\n&lt;wbr&gt;&lt;/wbr&gt;&#39;, &#39;abcde &#39;);
+<a name="line1120"></a>  t(&#39;a&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;b&#39;,
+<a name="line1121"></a>      goog.dom.BrowserFeature.CAN_USE_INNER_TEXT ?
+<a name="line1122"></a>      &#39;a     b&#39; : &#39;a\xA0\xA0\xA0\xA0\xA0b&#39;);
+<a name="line1123"></a>}
+<a name="line1124"></a>
+<a name="line1125"></a>function testGetNodeTextLength() {
+<a name="line1126"></a>
+<a name="line1127"></a>  assertEquals(6, goog.dom.getNodeTextLength(createTestDom(&#39;abcdef&#39;)));
+<a name="line1128"></a>  assertEquals(8, goog.dom.getNodeTextLength(
+<a name="line1129"></a>      createTestDom(&#39;a&lt;b&gt;bcd&lt;/b&gt;efgh&#39;)));
+<a name="line1130"></a>  assertEquals(2, goog.dom.getNodeTextLength(createTestDom(
+<a name="line1131"></a>      &#39;a&lt;script type=&quot;text/javascript&#39; + &#39;&quot;&gt;var a = 1234;&lt;&#39; + &#39;/script&gt;h&#39;)));
+<a name="line1132"></a>  assertEquals(4, goog.dom.getNodeTextLength(createTestDom(
+<a name="line1133"></a>      &#39;a&lt;br&gt;\n&lt;!-- some comments --&gt;\nfo&#39;)));
+<a name="line1134"></a>  assertEquals(20, goog.dom.getNodeTextLength(createTestDom(
+<a name="line1135"></a>      &#39;&lt;html&gt;&lt;head&gt;&lt;style type=&quot;text/css&quot;&gt;&#39; +
+<a name="line1136"></a>      &#39;p{margin:100%;padding:5px}\n.class{background-color:red;}&lt;/style&gt;&#39; +
+<a name="line1137"></a>      &#39;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Hello&lt;/h1&gt;&lt;p&gt;One two three&lt;/p&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;a&lt;td&gt;b&#39; +
+<a name="line1138"></a>      &#39;&lt;/table&gt;&lt;&#39; + &#39;script&gt;var a = \&#39;foo\&#39;;&lt;/scrip&#39; +
+<a name="line1139"></a>      &#39;t&gt;&lt;/body&gt;&lt;/html&gt;&#39;)));
+<a name="line1140"></a>  assertEquals(10, goog.dom.getNodeTextLength(createTestDom(
+<a name="line1141"></a>      &#39;a&lt;b&gt;bcd&lt;/b&gt;&lt;br /&gt;efghi&#39;)));
+<a name="line1142"></a>}
+<a name="line1143"></a>
+<a name="line1144"></a>function testGetNodeTextOffset() {
+<a name="line1145"></a>  assertEquals(4, goog.dom.getNodeTextOffset($(&#39;offsetTest1&#39;),
+<a name="line1146"></a>                                             $(&#39;offsetParent1&#39;)));
+<a name="line1147"></a>  assertEquals(12, goog.dom.getNodeTextOffset($(&#39;offsetTest1&#39;)));
+<a name="line1148"></a>}
+<a name="line1149"></a>
+<a name="line1150"></a>function testGetNodeAtOffset() {
+<a name="line1151"></a>  var html = &#39;&lt;div id=a&gt;123&lt;b id=b&gt;45&lt;/b&gt;&lt;span id=c&gt;67&lt;b id=d&gt;89&lt;i id=e&gt;01&#39; +
+<a name="line1152"></a>             &#39;&lt;/i&gt;23&lt;i id=f&gt;45&lt;/i&gt;67&lt;/b&gt;890&lt;i id=g&gt;123&lt;/i&gt;&lt;b id=h&gt;456&lt;/b&gt;&#39; +
+<a name="line1153"></a>             &#39;&lt;/span&gt;&lt;/div&gt;&lt;div id=i&gt;7890&lt;i id=j&gt;123&lt;/i&gt;&lt;/div&gt;&#39;;
+<a name="line1154"></a>  var node = document.createElement(&#39;div&#39;);
+<a name="line1155"></a>  node.innerHTML = html;
+<a name="line1156"></a>  var rv = {};
+<a name="line1157"></a>
+<a name="line1158"></a>  goog.dom.getNodeAtOffset(node, 2, rv);
+<a name="line1159"></a>  assertEquals(&#39;123&#39;, rv.node.nodeValue);
+<a name="line1160"></a>  assertEquals(&#39;a&#39;, rv.node.parentNode.id);
+<a name="line1161"></a>  assertEquals(1, rv.remainder);
+<a name="line1162"></a>
+<a name="line1163"></a>  goog.dom.getNodeAtOffset(node, 3, rv);
+<a name="line1164"></a>  assertEquals(&#39;123&#39;, rv.node.nodeValue);
+<a name="line1165"></a>  assertEquals(&#39;a&#39;, rv.node.parentNode.id);
+<a name="line1166"></a>  assertEquals(2, rv.remainder);
+<a name="line1167"></a>
+<a name="line1168"></a>  goog.dom.getNodeAtOffset(node, 5, rv);
+<a name="line1169"></a>  assertEquals(&#39;45&#39;, rv.node.nodeValue);
+<a name="line1170"></a>  assertEquals(&#39;b&#39;, rv.node.parentNode.id);
+<a name="line1171"></a>  assertEquals(1, rv.remainder);
+<a name="line1172"></a>
+<a name="line1173"></a>  goog.dom.getNodeAtOffset(node, 6, rv);
+<a name="line1174"></a>  assertEquals(&#39;67&#39;, rv.node.nodeValue);
+<a name="line1175"></a>  assertEquals(&#39;c&#39;, rv.node.parentNode.id);
+<a name="line1176"></a>  assertEquals(0, rv.remainder);
+<a name="line1177"></a>
+<a name="line1178"></a>  goog.dom.getNodeAtOffset(node, 23, rv);
+<a name="line1179"></a>  assertEquals(&#39;123&#39;, rv.node.nodeValue);
+<a name="line1180"></a>  assertEquals(&#39;g&#39;, rv.node.parentNode.id);
+<a name="line1181"></a>  assertEquals(2, rv.remainder);
+<a name="line1182"></a>
+<a name="line1183"></a>  goog.dom.getNodeAtOffset(node, 30, rv);
+<a name="line1184"></a>  assertEquals(&#39;7890&#39;, rv.node.nodeValue);
+<a name="line1185"></a>  assertEquals(&#39;i&#39;, rv.node.parentNode.id);
+<a name="line1186"></a>  assertEquals(3, rv.remainder);
+<a name="line1187"></a>
+<a name="line1188"></a>}
+<a name="line1189"></a>
+<a name="line1190"></a>// IE inserts line breaks and capitalizes nodenames.
+<a name="line1191"></a>function assertEqualsCaseAndLeadingWhitespaceInsensitive(value1, value2) {
+<a name="line1192"></a>  value1 = value1.replace(/^\s+|\s+$/g, &#39;&#39;).toLowerCase();
+<a name="line1193"></a>  value2 = value2.replace(/^\s+|\s+$/g, &#39;&#39;).toLowerCase();
+<a name="line1194"></a>  assertEquals(value1, value2);
+<a name="line1195"></a>}
+<a name="line1196"></a>
+<a name="line1197"></a>function testGetOuterHtml() {
+<a name="line1198"></a>  var contents = &#39;&lt;b&gt;foo&lt;/b&gt;&#39;;
+<a name="line1199"></a>  var node = document.createElement(&#39;div&#39;);
+<a name="line1200"></a>  node.setAttribute(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line1201"></a>  node.innerHTML = contents;
+<a name="line1202"></a>  assertEqualsCaseAndLeadingWhitespaceInsensitive(
+<a name="line1203"></a>      goog.dom.getOuterHtml(node), &#39;&lt;div foo=&quot;bar&quot;&gt;&#39; + contents + &#39;&lt;/div&gt;&#39;);
+<a name="line1204"></a>
+<a name="line1205"></a>  var imgNode = document.createElement(&#39;img&#39;);
+<a name="line1206"></a>  imgNode.setAttribute(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line1207"></a>  assertEqualsCaseAndLeadingWhitespaceInsensitive(
+<a name="line1208"></a>      goog.dom.getOuterHtml(imgNode), &#39;&lt;img foo=&quot;bar&quot;&gt;&#39;);
+<a name="line1209"></a>}
+<a name="line1210"></a>
+<a name="line1211"></a>
+<a name="line1212"></a>function testGetWindowFrame() {
+<a name="line1213"></a>  var frameWindow = window.frames[&#39;frame&#39;];
+<a name="line1214"></a>  var frameDocument = frameWindow.document;
+<a name="line1215"></a>  var frameDomHelper = new goog.dom.DomHelper(frameDocument);
+<a name="line1216"></a>
+<a name="line1217"></a>  // Cannot use assertEquals since IE fails on ===
+<a name="line1218"></a>  assertTrue(frameWindow == frameDomHelper.getWindow());
+<a name="line1219"></a>}
+<a name="line1220"></a>
+<a name="line1221"></a>function testGetWindow() {
+<a name="line1222"></a>  var domHelper = new goog.dom.DomHelper();
+<a name="line1223"></a>  // Cannot use assertEquals since IE fails on ===
+<a name="line1224"></a>  assertTrue(window == domHelper.getWindow());
+<a name="line1225"></a>}
+<a name="line1226"></a>
+<a name="line1227"></a>function testGetWindowStatic() {
+<a name="line1228"></a>  // Cannot use assertEquals since IE fails on ===
+<a name="line1229"></a>  assertTrue(window == goog.dom.getWindow());
+<a name="line1230"></a>}
+<a name="line1231"></a>
+<a name="line1232"></a>function testIsNodeList() {
+<a name="line1233"></a>  var elem = document.getElementById(&#39;p2&#39;);
+<a name="line1234"></a>  var text = document.getElementById(&#39;b2&#39;).firstChild;
+<a name="line1235"></a>
+<a name="line1236"></a>  assertTrue(&#39;NodeList should be a node list&#39;,
+<a name="line1237"></a>      goog.dom.isNodeList(elem.childNodes));
+<a name="line1238"></a>  assertFalse(&#39;TextNode should not be a node list&#39;,
+<a name="line1239"></a>      goog.dom.isNodeList(text));
+<a name="line1240"></a>  assertFalse(&#39;Array of nodes should not be a node list&#39;,
+<a name="line1241"></a>      goog.dom.isNodeList([elem.firstChild, elem.lastChild]));
+<a name="line1242"></a>}
+<a name="line1243"></a>
+<a name="line1244"></a>function testGetFrameContentDocument() {
+<a name="line1245"></a>  var iframe = document.getElementsByTagName(&#39;iframe&#39;)[0];
+<a name="line1246"></a>  var name = iframe.name;
+<a name="line1247"></a>  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
+<a name="line1248"></a>  assertEquals(window.frames[name].document, iframeDoc);
+<a name="line1249"></a>}
+<a name="line1250"></a>
+<a name="line1251"></a>function testGetFrameContentWindow() {
+<a name="line1252"></a>  var iframe = document.getElementsByTagName(&#39;iframe&#39;)[0];
+<a name="line1253"></a>  var name = iframe.name;
+<a name="line1254"></a>  var iframeWin = goog.dom.getFrameContentWindow(iframe);
+<a name="line1255"></a>  assertEquals(window.frames[name], iframeWin);
+<a name="line1256"></a>}
+<a name="line1257"></a>
+<a name="line1258"></a>function testCanHaveChildren() {
+<a name="line1259"></a>  var EMPTY_ELEMENTS = goog.object.createSet(
+<a name="line1260"></a>      goog.dom.TagName.APPLET,
+<a name="line1261"></a>      goog.dom.TagName.AREA,
+<a name="line1262"></a>      goog.dom.TagName.BASE,
+<a name="line1263"></a>      goog.dom.TagName.BR,
+<a name="line1264"></a>      goog.dom.TagName.COL,
+<a name="line1265"></a>      goog.dom.TagName.COMMAND,
+<a name="line1266"></a>      goog.dom.TagName.EMBED,
+<a name="line1267"></a>      goog.dom.TagName.FRAME,
+<a name="line1268"></a>      goog.dom.TagName.HR,
+<a name="line1269"></a>      goog.dom.TagName.IMG,
+<a name="line1270"></a>      goog.dom.TagName.INPUT,
+<a name="line1271"></a>      goog.dom.TagName.IFRAME,
+<a name="line1272"></a>      goog.dom.TagName.ISINDEX,
+<a name="line1273"></a>      goog.dom.TagName.KEYGEN,
+<a name="line1274"></a>      goog.dom.TagName.LINK,
+<a name="line1275"></a>      goog.dom.TagName.NOFRAMES,
+<a name="line1276"></a>      goog.dom.TagName.NOSCRIPT,
+<a name="line1277"></a>      goog.dom.TagName.META,
+<a name="line1278"></a>      goog.dom.TagName.OBJECT,
+<a name="line1279"></a>      goog.dom.TagName.PARAM,
+<a name="line1280"></a>      goog.dom.TagName.SCRIPT,
+<a name="line1281"></a>      goog.dom.TagName.SOURCE,
+<a name="line1282"></a>      goog.dom.TagName.STYLE,
+<a name="line1283"></a>      goog.dom.TagName.TRACK,
+<a name="line1284"></a>      goog.dom.TagName.WBR);
+<a name="line1285"></a>
+<a name="line1286"></a>  // IE opens a dialog warning about using Java content if an EMBED is created.
+<a name="line1287"></a>  var IE_ILLEGAL_ELEMENTS = goog.object.createSet(goog.dom.TagName.EMBED);
+<a name="line1288"></a>
+<a name="line1289"></a>  for (var tag in goog.dom.TagName) {
+<a name="line1290"></a>    if (goog.userAgent.IE &amp;&amp; tag in IE_ILLEGAL_ELEMENTS) {
+<a name="line1291"></a>      continue;
+<a name="line1292"></a>    }
+<a name="line1293"></a>
+<a name="line1294"></a>    var expected = !(tag in EMPTY_ELEMENTS);
+<a name="line1295"></a>    var node = goog.dom.createElement(tag);
+<a name="line1296"></a>    assertEquals(tag + &#39; should &#39; + (expected ? &#39;&#39; : &#39;not &#39;) +
+<a name="line1297"></a>        &#39;have children&#39;, expected, goog.dom.canHaveChildren(node));
+<a name="line1298"></a>
+<a name="line1299"></a>    // Make sure we can _actually_ add a child if we identify the node as
+<a name="line1300"></a>    // allowing children.
+<a name="line1301"></a>    if (goog.dom.canHaveChildren(node)) {
+<a name="line1302"></a>      node.appendChild(goog.dom.createDom(&#39;div&#39;, null, &#39;foo&#39;));
+<a name="line1303"></a>    }
+<a name="line1304"></a>  }
+<a name="line1305"></a>}
+<a name="line1306"></a>
+<a name="line1307"></a>function testGetAncestorNoMatch() {
+<a name="line1308"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1309"></a>  assertNull(goog.dom.getAncestor(elem, function() {return false;}));
+<a name="line1310"></a>}
+<a name="line1311"></a>
+<a name="line1312"></a>function testGetAncestorMatchSelf() {
+<a name="line1313"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1314"></a>  var matched = goog.dom.getAncestor(elem, function() {return true;}, true);
+<a name="line1315"></a>  assertEquals(elem, matched);
+<a name="line1316"></a>}
+<a name="line1317"></a>
+<a name="line1318"></a>function testGetAncestorNoMatchSelf() {
+<a name="line1319"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1320"></a>  var matched = goog.dom.getAncestor(elem, function() {return true;});
+<a name="line1321"></a>  assertEquals(elem.parentNode, matched);
+<a name="line1322"></a>}
+<a name="line1323"></a>
+<a name="line1324"></a>function testGetAncestorWithMaxSearchStepsMatchSelf()  {
+<a name="line1325"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1326"></a>  var matched = goog.dom.getAncestor(
+<a name="line1327"></a>      elem, function() {return true;}, true, 2);
+<a name="line1328"></a>  assertEquals(elem, matched);
+<a name="line1329"></a>}
+<a name="line1330"></a>
+<a name="line1331"></a>function testGetAncestorWithMaxSearchStepsMatch() {
+<a name="line1332"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1333"></a>  var searchEl = elem.parentNode.parentNode;
+<a name="line1334"></a>  var matched = goog.dom.getAncestor(
+<a name="line1335"></a>      elem, function(el) {return el == searchEl;}, false, 1);
+<a name="line1336"></a>  assertEquals(searchEl, matched);
+<a name="line1337"></a>}
+<a name="line1338"></a>
+<a name="line1339"></a>function testGetAncestorWithMaxSearchStepsNoMatch() {
+<a name="line1340"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1341"></a>  var searchEl = elem.parentNode.parentNode;
+<a name="line1342"></a>  var matched = goog.dom.getAncestor(
+<a name="line1343"></a>      elem, function(el) {return el == searchEl;}, false, 0);
+<a name="line1344"></a>  assertNull(matched);
+<a name="line1345"></a>}
+<a name="line1346"></a>
+<a name="line1347"></a>function testGetAncestorByTagNameNoMatch() {
+<a name="line1348"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1349"></a>  assertNull(
+<a name="line1350"></a>      goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.IMG));
+<a name="line1351"></a>}
+<a name="line1352"></a>
+<a name="line1353"></a>function testGetAncestorByTagNameOnly() {
+<a name="line1354"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1355"></a>  var expected = goog.dom.getElement(&#39;testAncestorDiv&#39;);
+<a name="line1356"></a>  assertEquals(expected,
+<a name="line1357"></a>      goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV));
+<a name="line1358"></a>  assertEquals(expected,
+<a name="line1359"></a>      goog.dom.getAncestorByTagNameAndClass(elem, &#39;div&#39;));
+<a name="line1360"></a>}
+<a name="line1361"></a>
+<a name="line1362"></a>function testGetAncestorByClassNameNoMatch() {
+<a name="line1363"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1364"></a>  assertNull(
+<a name="line1365"></a>      goog.dom.getAncestorByClass(elem, &#39;bogusClassName&#39;));
+<a name="line1366"></a>}
+<a name="line1367"></a>
+<a name="line1368"></a>function testGetAncestorByClassName() {
+<a name="line1369"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1370"></a>  var expected = goog.dom.getElement(&#39;testAncestorP&#39;);
+<a name="line1371"></a>  assertEquals(expected,
+<a name="line1372"></a>      goog.dom.getAncestorByClass(elem, &#39;testAncestor&#39;));
+<a name="line1373"></a>}
+<a name="line1374"></a>
+<a name="line1375"></a>function testGetAncestorByTagNameAndClass() {
+<a name="line1376"></a>  var elem = goog.dom.getElement(&#39;nestedElement&#39;);
+<a name="line1377"></a>  var expected = goog.dom.getElement(&#39;testAncestorDiv&#39;);
+<a name="line1378"></a>  assertEquals(expected,
+<a name="line1379"></a>      goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV,
+<a name="line1380"></a>          &#39;testAncestor&#39;));
+<a name="line1381"></a>  assertNull(
+<a name="line1382"></a>      &#39;Should return null if no search criteria are given&#39;,
+<a name="line1383"></a>      goog.dom.getAncestorByTagNameAndClass(elem));
+<a name="line1384"></a>}
+<a name="line1385"></a>
+<a name="line1386"></a>function testCreateTable() {
+<a name="line1387"></a>  var table = goog.dom.createTable(2, 3, true);
+<a name="line1388"></a>  assertEquals(2, table.getElementsByTagName(goog.dom.TagName.TR).length);
+<a name="line1389"></a>  assertEquals(3,
+<a name="line1390"></a>      table.getElementsByTagName(goog.dom.TagName.TR)[0].childNodes.length);
+<a name="line1391"></a>  assertEquals(6, table.getElementsByTagName(goog.dom.TagName.TD).length);
+<a name="line1392"></a>  assertEquals(goog.string.Unicode.NBSP,
+<a name="line1393"></a>      table.getElementsByTagName(goog.dom.TagName.TD)[0].firstChild.nodeValue);
+<a name="line1394"></a>
+<a name="line1395"></a>  table = goog.dom.createTable(2, 3, false);
+<a name="line1396"></a>  assertEquals(2, table.getElementsByTagName(goog.dom.TagName.TR).length);
+<a name="line1397"></a>  assertEquals(3,
+<a name="line1398"></a>      table.getElementsByTagName(goog.dom.TagName.TR)[0].childNodes.length);
+<a name="line1399"></a>  assertEquals(6, table.getElementsByTagName(goog.dom.TagName.TD).length);
+<a name="line1400"></a>  assertEquals(0,
+<a name="line1401"></a>      table.getElementsByTagName(goog.dom.TagName.TD)[0].childNodes.length);
+<a name="line1402"></a>}
+<a name="line1403"></a>
+<a name="line1404"></a>function testHtmlToDocumentFragment() {
+<a name="line1405"></a>  var docFragment = goog.dom.htmlToDocumentFragment(&#39;&lt;a&gt;1&lt;/a&gt;&lt;b&gt;2&lt;/b&gt;&#39;);
+<a name="line1406"></a>  assertNull(docFragment.parentNode);
+<a name="line1407"></a>  assertEquals(2, docFragment.childNodes.length);
+<a name="line1408"></a>
+<a name="line1409"></a>  var div = goog.dom.htmlToDocumentFragment(&#39;&lt;div&gt;3&lt;/div&gt;&#39;);
+<a name="line1410"></a>  assertEquals(&#39;DIV&#39;, div.tagName);
+<a name="line1411"></a>
+<a name="line1412"></a>  var script = goog.dom.htmlToDocumentFragment(&#39;&lt;script&gt;&lt;/script&gt;&#39;);
+<a name="line1413"></a>  assertEquals(&#39;SCRIPT&#39;, script.tagName);
+<a name="line1414"></a>
+<a name="line1415"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isDocumentModeOrHigher(9)) {
+<a name="line1416"></a>    // Removing an Element from a DOM tree in IE sets its parentNode to a new
+<a name="line1417"></a>    // DocumentFragment. Bizarre!
+<a name="line1418"></a>    assertEquals(goog.dom.NodeType.DOCUMENT_FRAGMENT,
+<a name="line1419"></a>                 goog.dom.removeNode(div).parentNode.nodeType);
+<a name="line1420"></a>  } else {
+<a name="line1421"></a>    assertNull(div.parentNode);
+<a name="line1422"></a>  }
+<a name="line1423"></a>}
+<a name="line1424"></a>
+<a name="line1425"></a>function testAppend() {
+<a name="line1426"></a>  var div = document.createElement(&#39;div&#39;);
+<a name="line1427"></a>  var b = document.createElement(&#39;b&#39;);
+<a name="line1428"></a>  var c = document.createTextNode(&#39;c&#39;);
+<a name="line1429"></a>  goog.dom.append(div, &#39;a&#39;, b, c);
+<a name="line1430"></a>  assertEqualsCaseAndLeadingWhitespaceInsensitive(&#39;a&lt;b&gt;&lt;/b&gt;c&#39;, div.innerHTML);
+<a name="line1431"></a>}
+<a name="line1432"></a>
+<a name="line1433"></a>function testAppend2() {
+<a name="line1434"></a>  var div = myIframeDoc.createElement(&#39;div&#39;);
+<a name="line1435"></a>  var b = myIframeDoc.createElement(&#39;b&#39;);
+<a name="line1436"></a>  var c = myIframeDoc.createTextNode(&#39;c&#39;);
+<a name="line1437"></a>  goog.dom.append(div, &#39;a&#39;, b, c);
+<a name="line1438"></a>  assertEqualsCaseAndLeadingWhitespaceInsensitive(&#39;a&lt;b&gt;&lt;/b&gt;c&#39;, div.innerHTML);
+<a name="line1439"></a>}
+<a name="line1440"></a>
+<a name="line1441"></a>function testAppend3() {
+<a name="line1442"></a>  var div = document.createElement(&#39;div&#39;);
+<a name="line1443"></a>  var b = document.createElement(&#39;b&#39;);
+<a name="line1444"></a>  var c = document.createTextNode(&#39;c&#39;);
+<a name="line1445"></a>  goog.dom.append(div, [&#39;a&#39;, b, c]);
+<a name="line1446"></a>  assertEqualsCaseAndLeadingWhitespaceInsensitive(&#39;a&lt;b&gt;&lt;/b&gt;c&#39;, div.innerHTML);
+<a name="line1447"></a>}
+<a name="line1448"></a>
+<a name="line1449"></a>function testAppend4() {
+<a name="line1450"></a>  var div = document.createElement(&#39;div&#39;);
+<a name="line1451"></a>  var div2 = document.createElement(&#39;div&#39;);
+<a name="line1452"></a>  div2.innerHTML = &#39;a&lt;b&gt;&lt;/b&gt;c&#39;;
+<a name="line1453"></a>  goog.dom.append(div, div2.childNodes);
+<a name="line1454"></a>  assertEqualsCaseAndLeadingWhitespaceInsensitive(&#39;a&lt;b&gt;&lt;/b&gt;c&#39;, div.innerHTML);
+<a name="line1455"></a>  assertFalse(div2.hasChildNodes());
+<a name="line1456"></a>}
+<a name="line1457"></a>
+<a name="line1458"></a>function testGetDocumentScroll() {
+<a name="line1459"></a>  // setUpPage added divForTestingScrolling to the DOM. It&#39;s not init&#39;d here so
+<a name="line1460"></a>  // it can be shared amonst other tests.
+<a name="line1461"></a>  window.scrollTo(100, 100);
+<a name="line1462"></a>
+<a name="line1463"></a>  assertEquals(100, goog.dom.getDocumentScroll().x);
+<a name="line1464"></a>  assertEquals(100, goog.dom.getDocumentScroll().y);
+<a name="line1465"></a>}
+<a name="line1466"></a>
+<a name="line1467"></a>function testGetDocumentScrollOfFixedViewport() {
+<a name="line1468"></a>  // iOS and perhaps other environments don&#39;t actually support scrolling.
+<a name="line1469"></a>  // Instead, you view the document&#39;s fixed layout through a screen viewport.
+<a name="line1470"></a>  // We need getDocumentScroll to handle this case though.
+<a name="line1471"></a>  // In case of IE10 though, we do want to use scrollLeft/scrollTop
+<a name="line1472"></a>  // because the rest of the positioning is done off the scrolled away origin.
+<a name="line1473"></a>  var fakeDocumentScrollElement = {scrollLeft: 0, scrollTop: 0};
+<a name="line1474"></a>  var fakeDocument = {
+<a name="line1475"></a>    defaultView: {pageXOffset: 100, pageYOffset: 100},
+<a name="line1476"></a>    documentElement: fakeDocumentScrollElement,
+<a name="line1477"></a>    body: fakeDocumentScrollElement
+<a name="line1478"></a>  };
+<a name="line1479"></a>  var dh = goog.dom.getDomHelper(document);
+<a name="line1480"></a>  dh.setDocument(fakeDocument);
+<a name="line1481"></a>  if (goog.userAgent.IE &amp;&amp; goog.userAgent.isVersionOrHigher(10)) {
+<a name="line1482"></a>    assertEquals(0, dh.getDocumentScroll().x);
+<a name="line1483"></a>    assertEquals(0, dh.getDocumentScroll().y);
+<a name="line1484"></a>  } else {
+<a name="line1485"></a>    assertEquals(100, dh.getDocumentScroll().x);
+<a name="line1486"></a>    assertEquals(100, dh.getDocumentScroll().y);
+<a name="line1487"></a>  }
+<a name="line1488"></a>}
+<a name="line1489"></a>
+<a name="line1490"></a>
+<a name="line1491"></a>function testGetDocumentScrollFromDocumentWithoutABody() {
+<a name="line1492"></a>  // Some documents, like SVG docs, do not have a body element. The document
+<a name="line1493"></a>  // element should be used when computing the document scroll for these
+<a name="line1494"></a>  // documents.
+<a name="line1495"></a>  var fakeDocument = {
+<a name="line1496"></a>    defaultView: {pageXOffset: 0, pageYOffset: 0},
+<a name="line1497"></a>    documentElement: {scrollLeft: 0, scrollTop: 0}
+<a name="line1498"></a>  };
+<a name="line1499"></a>
+<a name="line1500"></a>  var dh = new goog.dom.DomHelper(fakeDocument);
+<a name="line1501"></a>  assertEquals(fakeDocument.documentElement, dh.getDocumentScrollElement());
+<a name="line1502"></a>  assertEquals(0, dh.getDocumentScroll().x);
+<a name="line1503"></a>  assertEquals(0, dh.getDocumentScroll().y);
+<a name="line1504"></a>  // OK if this does not throw.
+<a name="line1505"></a>}
+<a name="line1506"></a>
+<a name="line1507"></a>function testActiveElementIE() {
+<a name="line1508"></a>  if (!goog.userAgent.IE) {
+<a name="line1509"></a>    return;
+<a name="line1510"></a>  }
+<a name="line1511"></a>
+<a name="line1512"></a>  var link = goog.dom.getElement(&#39;link&#39;);
+<a name="line1513"></a>  link.focus();
+<a name="line1514"></a>
+<a name="line1515"></a>  assertEquals(link.tagName, goog.dom.getActiveElement(document).tagName);
+<a name="line1516"></a>  assertEquals(link, goog.dom.getActiveElement(document));
+<a name="line1517"></a>}
+<a name="line1518"></a>
+<a name="line1519"></a>function testParentElement() {
+<a name="line1520"></a>  var testEl = $(&#39;testEl&#39;);
+<a name="line1521"></a>  var bodyEl = goog.dom.getParentElement(testEl);
+<a name="line1522"></a>  assertNotNull(bodyEl);
+<a name="line1523"></a>  var htmlEl = goog.dom.getParentElement(bodyEl);
+<a name="line1524"></a>  assertNotNull(htmlEl);
+<a name="line1525"></a>  var documentNotAnElement = goog.dom.getParentElement(htmlEl);
+<a name="line1526"></a>  assertNull(documentNotAnElement);
+<a name="line1527"></a>
+<a name="line1528"></a>  var tree = goog.dom.htmlToDocumentFragment(
+<a name="line1529"></a>      &#39;&lt;div&gt;&#39; +
+<a name="line1530"></a>      &#39;&lt;p&gt;Some text&lt;/p&gt;&#39; +
+<a name="line1531"></a>      &#39;&lt;blockquote&gt;Some &lt;i&gt;special&lt;/i&gt; &lt;b&gt;text&lt;/b&gt;&lt;/blockquote&gt;&#39; +
+<a name="line1532"></a>      &#39;&lt;address&gt;&lt;!-- comment --&gt;Foo&lt;/address&gt;&#39; +
+<a name="line1533"></a>      &#39;&lt;/div&gt;&#39;);
+<a name="line1534"></a>  assertNull(goog.dom.getParentElement(tree));
+<a name="line1535"></a>  pEl = goog.dom.getNextNode(tree);
+<a name="line1536"></a>  var fragmentRootEl = goog.dom.getParentElement(pEl);
+<a name="line1537"></a>  assertEquals(tree, fragmentRootEl);
+<a name="line1538"></a>
+<a name="line1539"></a>  var detachedEl = goog.dom.createDom(&#39;div&#39;);
+<a name="line1540"></a>  var detachedHasNoParent = goog.dom.getParentElement(detachedEl);
+<a name="line1541"></a>  assertNull(detachedHasNoParent);
+<a name="line1542"></a>
+<a name="line1543"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;9&#39;)) {
+<a name="line1544"></a>    // svg is not supported in IE8 and below.
+<a name="line1545"></a>    return;
+<a name="line1546"></a>  }
+<a name="line1547"></a>
+<a name="line1548"></a>  var svg = $(&#39;testSvg&#39;);
+<a name="line1549"></a>  assertNotNull(svg);
+<a name="line1550"></a>  var rect = $(&#39;testRect&#39;);
+<a name="line1551"></a>  assertNotNull(rect);
+<a name="line1552"></a>  var g = $(&#39;testG&#39;);
+<a name="line1553"></a>  assertNotNull(g);
+<a name="line1554"></a>
+<a name="line1555"></a>  if (goog.userAgent.IE &amp;&amp; goog.userAgent.isVersionOrHigher(&#39;9&#39;)) {
+<a name="line1556"></a>    // test to make sure IE9 is returning undefined for .parentElement
+<a name="line1557"></a>    assertUndefined(g.parentElement);
+<a name="line1558"></a>    assertUndefined(rect.parentElement);
+<a name="line1559"></a>    assertUndefined(svg.parentElement);
+<a name="line1560"></a>  }
+<a name="line1561"></a>  var shouldBeG = goog.dom.getParentElement(rect);
+<a name="line1562"></a>  assertEquals(g, shouldBeG);
+<a name="line1563"></a>  var shouldBeSvg = goog.dom.getParentElement(g);
+<a name="line1564"></a>  assertEquals(svg, shouldBeSvg);
+<a name="line1565"></a>  var shouldBeBody = goog.dom.getParentElement(svg);
+<a name="line1566"></a>  assertEquals(bodyEl, shouldBeBody);
+<a name="line1567"></a>}
+<a name="line1568"></a>
+<a name="line1569"></a>
+<a name="line1570"></a>/**
+<a name="line1571"></a> * @return {boolean} Returns true if the userAgent is IE8 or higher.
+<a name="line1572"></a> */
+<a name="line1573"></a>function isIE8OrHigher() {
+<a name="line1574"></a>  return goog.userAgent.IE &amp;&amp; goog.userAgent.product.isVersion(&#39;8&#39;);
+<a name="line1575"></a>}
+<a name="line1576"></a>
+<a name="line1577"></a>
+<a name="line1578"></a>function testDevicePixelRatio() {
+<a name="line1579"></a>  stubs.set(goog.dom, &#39;getWindow&#39;, goog.functions.constant(
+<a name="line1580"></a>      {
+<a name="line1581"></a>        matchMedia: function(query) {
+<a name="line1582"></a>          return {
+<a name="line1583"></a>            matches: query.indexOf(&#39;1.5&#39;) &gt;= 0
+<a name="line1584"></a>          };
+<a name="line1585"></a>        }
+<a name="line1586"></a>      }));
+<a name="line1587"></a>
+<a name="line1588"></a>  stubs.set(goog.functions, &#39;CACHE_RETURN_VALUE&#39;, false);
+<a name="line1589"></a>
+<a name="line1590"></a>  assertEquals(goog.dom.getPixelRatio(), 1.5);
+<a name="line1591"></a>
+<a name="line1592"></a>  stubs.set(goog.dom, &#39;getWindow&#39;, goog.functions.constant(
+<a name="line1593"></a>      {devicePixelRatio: 2.0}));
+<a name="line1594"></a>  goog.dom.devicePixelRatio_ = null;
+<a name="line1595"></a>  assertEquals(goog.dom.getPixelRatio(), 2);
+<a name="line1596"></a>
+<a name="line1597"></a>  stubs.set(goog.dom, &#39;getWindow&#39;, goog.functions.constant({}));
+<a name="line1598"></a>  goog.dom.devicePixelRatio_ = null;
+<a name="line1599"></a>  assertEquals(goog.dom.getPixelRatio(), 1);
+<a name="line1600"></a>}
+</pre>
+
+
+</body>
+</html>

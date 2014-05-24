@@ -1,0 +1,463 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>csv.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_format_csv.js.html">csv.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides a parser that turns a string of well-formed CSV data
+<a name="line17"></a> * into an array of objects or an array of arrays. All values are returned as
+<a name="line18"></a> * strings; the user has to convert data into numbers or Dates as required.
+<a name="line19"></a> * Empty fields (adjacent commas) are returned as empty strings.
+<a name="line20"></a> *
+<a name="line21"></a> * This parser uses http://tools.ietf.org/html/rfc4180 as the definition of CSV.
+<a name="line22"></a> *
+<a name="line23"></a> * @author nnaze@google.com (Nathan Naze) Ported to Closure
+<a name="line24"></a> */
+<a name="line25"></a>goog.provide(&#39;goog.labs.format.csv&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.labs.format.csv.ParseError&#39;);
+<a name="line27"></a>goog.provide(&#39;goog.labs.format.csv.Token&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.array&#39;);
+<a name="line30"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line31"></a>goog.require(&#39;goog.debug.Error&#39;);
+<a name="line32"></a>goog.require(&#39;goog.object&#39;);
+<a name="line33"></a>goog.require(&#39;goog.string&#39;);
+<a name="line34"></a>goog.require(&#39;goog.string.newlines&#39;);
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * @define {boolean} Enable verbose debugging. This is a flag so it can be
+<a name="line39"></a> * enabled in production if necessary post-compilation.  Otherwise, debug
+<a name="line40"></a> * information will be stripped to minimize final code size.
+<a name="line41"></a> */
+<a name="line42"></a>goog.labs.format.csv.ENABLE_VERBOSE_DEBUGGING = goog.DEBUG;
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Error thrown when parsing fails.
+<a name="line48"></a> *
+<a name="line49"></a> * @param {string} text The CSV source text being parsed.
+<a name="line50"></a> * @param {number} index The index, in the string, of the position of the
+<a name="line51"></a> *      error.
+<a name="line52"></a> * @param {string=} opt_message A description of the violated parse expectation.
+<a name="line53"></a> * @constructor
+<a name="line54"></a> * @extends {goog.debug.Error}
+<a name="line55"></a> * @final
+<a name="line56"></a> */
+<a name="line57"></a>goog.labs.format.csv.ParseError = function(text, index, opt_message) {
+<a name="line58"></a>
+<a name="line59"></a>  var message;
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * @type {?{line: number, column: number}} The line and column of the parse
+<a name="line63"></a>   *     error.
+<a name="line64"></a>   */
+<a name="line65"></a>  this.position = null;
+<a name="line66"></a>
+<a name="line67"></a>  if (goog.labs.format.csv.ENABLE_VERBOSE_DEBUGGING) {
+<a name="line68"></a>    message = opt_message || &#39;&#39;;
+<a name="line69"></a>
+<a name="line70"></a>    var info = goog.labs.format.csv.ParseError.findLineInfo_(text, index);
+<a name="line71"></a>    if (info) {
+<a name="line72"></a>      var lineNumber = info.lineIndex + 1;
+<a name="line73"></a>      var columnNumber = index - info.line.startLineIndex + 1;
+<a name="line74"></a>
+<a name="line75"></a>      this.position = {
+<a name="line76"></a>        line: lineNumber,
+<a name="line77"></a>        column: columnNumber
+<a name="line78"></a>      };
+<a name="line79"></a>
+<a name="line80"></a>      message += goog.string.subs(&#39; at line %s column %s&#39;,
+<a name="line81"></a>                                  lineNumber, columnNumber);
+<a name="line82"></a>      message += &#39;\n&#39; + goog.labs.format.csv.ParseError.getLineDebugString_(
+<a name="line83"></a>          info.line.getContent(), columnNumber);
+<a name="line84"></a>    }
+<a name="line85"></a>  }
+<a name="line86"></a>
+<a name="line87"></a>  goog.labs.format.csv.ParseError.base(this, &#39;constructor&#39;, message);
+<a name="line88"></a>};
+<a name="line89"></a>goog.inherits(goog.labs.format.csv.ParseError, goog.debug.Error);
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/** @inheritDoc */
+<a name="line93"></a>goog.labs.format.csv.ParseError.prototype.name = &#39;ParseError&#39;;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Calculate the line and column for an index in a string.
+<a name="line98"></a> * TODO(nnaze): Consider moving to goog.string.newlines.
+<a name="line99"></a> * @param {string} str A string.
+<a name="line100"></a> * @param {number} index An index into the string.
+<a name="line101"></a> * @return {?{line: !goog.string.newlines.Line, lineIndex: number}} The line
+<a name="line102"></a> *     and index of the line.
+<a name="line103"></a> * @private
+<a name="line104"></a> */
+<a name="line105"></a>goog.labs.format.csv.ParseError.findLineInfo_ = function(str, index) {
+<a name="line106"></a>  var lines = goog.string.newlines.getLines(str);
+<a name="line107"></a>  var lineIndex = goog.array.findIndex(lines, function(line) {
+<a name="line108"></a>    return line.startLineIndex &lt;= index &amp;&amp; line.endLineIndex &gt; index;
+<a name="line109"></a>  });
+<a name="line110"></a>
+<a name="line111"></a>  if (goog.isNumber(lineIndex)) {
+<a name="line112"></a>    var line = lines[lineIndex];
+<a name="line113"></a>    return {
+<a name="line114"></a>      line: line,
+<a name="line115"></a>      lineIndex: lineIndex
+<a name="line116"></a>    };
+<a name="line117"></a>  }
+<a name="line118"></a>
+<a name="line119"></a>  return null;
+<a name="line120"></a>};
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Get a debug string of a line and a pointing caret beneath it.
+<a name="line125"></a> * @param {string} str The string.
+<a name="line126"></a> * @param {number} column The column to point at (1-indexed).
+<a name="line127"></a> * @return {string} The debug line.
+<a name="line128"></a> * @private
+<a name="line129"></a> */
+<a name="line130"></a>goog.labs.format.csv.ParseError.getLineDebugString_ = function(str, column) {
+<a name="line131"></a>  var returnString = str + &#39;\n&#39;;
+<a name="line132"></a>  returnString += goog.string.repeat(&#39; &#39;, column - 1) + &#39;^&#39;;
+<a name="line133"></a>  return returnString;
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * A token -- a single-character string or a sentinel.
+<a name="line139"></a> * @typedef {string|!goog.labs.format.csv.Sentinels_}
+<a name="line140"></a> */
+<a name="line141"></a>goog.labs.format.csv.Token;
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Parses a CSV string to create a two-dimensional array.
+<a name="line146"></a> *
+<a name="line147"></a> * This function does not process header lines, etc -- such transformations can
+<a name="line148"></a> * be made on the resulting array.
+<a name="line149"></a> *
+<a name="line150"></a> * @param {string} text The entire CSV text to be parsed.
+<a name="line151"></a> * @param {boolean=} opt_ignoreErrors Whether to ignore parsing errors and
+<a name="line152"></a> *      instead try to recover and keep going.
+<a name="line153"></a> * @return {!Array.&lt;!Array.&lt;string&gt;&gt;} The parsed CSV.
+<a name="line154"></a> */
+<a name="line155"></a>goog.labs.format.csv.parse = function(text, opt_ignoreErrors) {
+<a name="line156"></a>
+<a name="line157"></a>  var index = 0;  // current char offset being considered
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>  var EOF = goog.labs.format.csv.Sentinels_.EOF;
+<a name="line161"></a>  var EOR = goog.labs.format.csv.Sentinels_.EOR;
+<a name="line162"></a>  var NEWLINE = goog.labs.format.csv.Sentinels_.NEWLINE;   // \r?\n
+<a name="line163"></a>  var EMPTY = goog.labs.format.csv.Sentinels_.EMPTY;
+<a name="line164"></a>
+<a name="line165"></a>  var pushBackToken = null;   // A single-token pushback.
+<a name="line166"></a>  var sawComma = false; // Special case for terminal comma.
+<a name="line167"></a>
+<a name="line168"></a>  /**
+<a name="line169"></a>   * Push a single token into the push-back variable.
+<a name="line170"></a>   * @param {goog.labs.format.csv.Token} t Single token.
+<a name="line171"></a>   */
+<a name="line172"></a>  function pushBack(t) {
+<a name="line173"></a>    goog.labs.format.csv.assertToken_(t);
+<a name="line174"></a>    goog.asserts.assert(goog.isNull(pushBackToken));
+<a name="line175"></a>    pushBackToken = t;
+<a name="line176"></a>  }
+<a name="line177"></a>
+<a name="line178"></a>  /**
+<a name="line179"></a>   * @return {goog.labs.format.csv.Token} The next token in the stream.
+<a name="line180"></a>   */
+<a name="line181"></a>  function nextToken() {
+<a name="line182"></a>
+<a name="line183"></a>    // Give the push back token if present.
+<a name="line184"></a>    if (pushBackToken != null) {
+<a name="line185"></a>      var c = pushBackToken;
+<a name="line186"></a>      pushBackToken = null;
+<a name="line187"></a>      return c;
+<a name="line188"></a>    }
+<a name="line189"></a>
+<a name="line190"></a>    // We&#39;re done. EOF.
+<a name="line191"></a>    if (index &gt;= text.length) {
+<a name="line192"></a>      return EOF;
+<a name="line193"></a>    }
+<a name="line194"></a>
+<a name="line195"></a>    // Give the next charater.
+<a name="line196"></a>    var chr = text.charAt(index++);
+<a name="line197"></a>    goog.labs.format.csv.assertToken_(chr);
+<a name="line198"></a>
+<a name="line199"></a>    // Check if this is a newline.  If so, give the new line sentinel.
+<a name="line200"></a>    var isNewline = false;
+<a name="line201"></a>    if (chr == &#39;\n&#39;) {
+<a name="line202"></a>      isNewline = true;
+<a name="line203"></a>    } else if (chr == &#39;\r&#39;) {
+<a name="line204"></a>
+<a name="line205"></a>      // This is a &#39;\r\n&#39; newline. Treat as single token, go
+<a name="line206"></a>      // forward two indicies.
+<a name="line207"></a>      if (index &lt; text.length &amp;&amp; text.charAt(index) == &#39;\n&#39;) {
+<a name="line208"></a>        index++;
+<a name="line209"></a>      }
+<a name="line210"></a>
+<a name="line211"></a>      isNewline = true;
+<a name="line212"></a>    }
+<a name="line213"></a>
+<a name="line214"></a>    if (isNewline) {
+<a name="line215"></a>      return NEWLINE;
+<a name="line216"></a>    }
+<a name="line217"></a>
+<a name="line218"></a>    return chr;
+<a name="line219"></a>  }
+<a name="line220"></a>
+<a name="line221"></a>  /**
+<a name="line222"></a>   * Read a quoted field from input.
+<a name="line223"></a>   * @return {string} The field, as a string.
+<a name="line224"></a>   */
+<a name="line225"></a>  function readQuotedField() {
+<a name="line226"></a>    // We&#39;ve already consumed the first quote by the time we get here.
+<a name="line227"></a>    var start = index;
+<a name="line228"></a>    var end = null;
+<a name="line229"></a>
+<a name="line230"></a>    for (var token = nextToken(); token != EOF; token = nextToken()) {
+<a name="line231"></a>      if (token == &#39;&quot;&#39;) {
+<a name="line232"></a>        end = index - 1;
+<a name="line233"></a>        token = nextToken();
+<a name="line234"></a>
+<a name="line235"></a>        // Two double quotes in a row.  Keep scanning.
+<a name="line236"></a>        if (token == &#39;&quot;&#39;) {
+<a name="line237"></a>          end = null;
+<a name="line238"></a>          continue;
+<a name="line239"></a>        }
+<a name="line240"></a>
+<a name="line241"></a>        // End of field.  Break out.
+<a name="line242"></a>        if (token == &#39;,&#39; || token == EOF || token == NEWLINE) {
+<a name="line243"></a>          if (token == NEWLINE) {
+<a name="line244"></a>            pushBack(token);
+<a name="line245"></a>          }
+<a name="line246"></a>          break;
+<a name="line247"></a>        }
+<a name="line248"></a>
+<a name="line249"></a>        if (!opt_ignoreErrors) {
+<a name="line250"></a>          // Ignoring errors here means keep going in current field after
+<a name="line251"></a>          // closing quote. E.g. &quot;ab&quot;c,d splits into abc,d
+<a name="line252"></a>          throw new goog.labs.format.csv.ParseError(
+<a name="line253"></a>              text, index - 1,
+<a name="line254"></a>              &#39;Unexpected character &quot;&#39; + token + &#39;&quot; after quote mark&#39;);
+<a name="line255"></a>        } else {
+<a name="line256"></a>          // Fall back to reading the rest of this field as unquoted.
+<a name="line257"></a>          // Note: the rest is guaranteed not start with &quot;, as that case is
+<a name="line258"></a>          // eliminated above.
+<a name="line259"></a>          var prefix = &#39;&quot;&#39; + text.substring(start, index);
+<a name="line260"></a>          var suffix = readField();
+<a name="line261"></a>          if (suffix == EOR) {
+<a name="line262"></a>            pushBack(NEWLINE);
+<a name="line263"></a>            return prefix;
+<a name="line264"></a>          } else {
+<a name="line265"></a>            return prefix + suffix;
+<a name="line266"></a>          }
+<a name="line267"></a>        }
+<a name="line268"></a>      }
+<a name="line269"></a>    }
+<a name="line270"></a>
+<a name="line271"></a>    if (goog.isNull(end)) {
+<a name="line272"></a>      if (!opt_ignoreErrors) {
+<a name="line273"></a>        throw new goog.labs.format.csv.ParseError(
+<a name="line274"></a>            text, text.length - 1,
+<a name="line275"></a>            &#39;Unexpected end of text after open quote&#39;);
+<a name="line276"></a>      } else {
+<a name="line277"></a>        end = text.length;
+<a name="line278"></a>      }
+<a name="line279"></a>    }
+<a name="line280"></a>
+<a name="line281"></a>    // Take substring, combine double quotes.
+<a name="line282"></a>    return text.substring(start, end).replace(/&quot;&quot;/g, &#39;&quot;&#39;);
+<a name="line283"></a>  }
+<a name="line284"></a>
+<a name="line285"></a>  /**
+<a name="line286"></a>   * Read a field from input.
+<a name="line287"></a>   * @return {string|!goog.labs.format.csv.Sentinels_} The field, as a string,
+<a name="line288"></a>   *     or a sentinel (if applicable).
+<a name="line289"></a>   */
+<a name="line290"></a>  function readField() {
+<a name="line291"></a>    var start = index;
+<a name="line292"></a>    var didSeeComma = sawComma;
+<a name="line293"></a>    sawComma = false;
+<a name="line294"></a>    var token = nextToken();
+<a name="line295"></a>    if (token == EMPTY) {
+<a name="line296"></a>      return EOR;
+<a name="line297"></a>    }
+<a name="line298"></a>    if (token == EOF || token == NEWLINE) {
+<a name="line299"></a>      if (didSeeComma) {
+<a name="line300"></a>        pushBack(EMPTY);
+<a name="line301"></a>        return &#39;&#39;;
+<a name="line302"></a>      }
+<a name="line303"></a>      return EOR;
+<a name="line304"></a>    }
+<a name="line305"></a>
+<a name="line306"></a>    // This is the beginning of a quoted field.
+<a name="line307"></a>    if (token == &#39;&quot;&#39;) {
+<a name="line308"></a>      return readQuotedField();
+<a name="line309"></a>    }
+<a name="line310"></a>
+<a name="line311"></a>    while (true) {
+<a name="line312"></a>
+<a name="line313"></a>      // This is the end of line or file.
+<a name="line314"></a>      if (token == EOF || token == NEWLINE) {
+<a name="line315"></a>        pushBack(token);
+<a name="line316"></a>        break;
+<a name="line317"></a>      }
+<a name="line318"></a>
+<a name="line319"></a>      // This is the end of record.
+<a name="line320"></a>      if (token == &#39;,&#39;) {
+<a name="line321"></a>        sawComma = true;
+<a name="line322"></a>        break;
+<a name="line323"></a>      }
+<a name="line324"></a>
+<a name="line325"></a>      if (token == &#39;&quot;&#39; &amp;&amp; !opt_ignoreErrors) {
+<a name="line326"></a>        throw new goog.labs.format.csv.ParseError(text, index - 1,
+<a name="line327"></a>                                                  &#39;Unexpected quote mark&#39;);
+<a name="line328"></a>      }
+<a name="line329"></a>
+<a name="line330"></a>      token = nextToken();
+<a name="line331"></a>    }
+<a name="line332"></a>
+<a name="line333"></a>
+<a name="line334"></a>    var returnString = (token == EOF) ?
+<a name="line335"></a>        text.substring(start) :  // Return to end of file.
+<a name="line336"></a>        text.substring(start, index - 1);
+<a name="line337"></a>
+<a name="line338"></a>    return returnString.replace(/[\r\n]+/g, &#39;&#39;); // Squash any CRLFs.
+<a name="line339"></a>  }
+<a name="line340"></a>
+<a name="line341"></a>  /**
+<a name="line342"></a>   * Read the next record.
+<a name="line343"></a>   * @return {!Array.&lt;string&gt;|!goog.labs.format.csv.Sentinels_} A single record
+<a name="line344"></a>   *     with multiple fields.
+<a name="line345"></a>   */
+<a name="line346"></a>  function readRecord() {
+<a name="line347"></a>    if (index &gt;= text.length) {
+<a name="line348"></a>      return EOF;
+<a name="line349"></a>    }
+<a name="line350"></a>    var record = [];
+<a name="line351"></a>    for (var field = readField(); field != EOR; field = readField()) {
+<a name="line352"></a>      record.push(field);
+<a name="line353"></a>    }
+<a name="line354"></a>    return record;
+<a name="line355"></a>  }
+<a name="line356"></a>
+<a name="line357"></a>  // Read all records and return.
+<a name="line358"></a>  var records = [];
+<a name="line359"></a>  for (var record = readRecord(); record != EOF; record = readRecord()) {
+<a name="line360"></a>    records.push(record);
+<a name="line361"></a>  }
+<a name="line362"></a>  return records;
+<a name="line363"></a>};
+<a name="line364"></a>
+<a name="line365"></a>
+<a name="line366"></a>/**
+<a name="line367"></a> * Sentinel tracking objects.
+<a name="line368"></a> * @enum {Object}
+<a name="line369"></a> * @private
+<a name="line370"></a> */
+<a name="line371"></a>goog.labs.format.csv.Sentinels_ = {
+<a name="line372"></a>  /** Empty field */
+<a name="line373"></a>  EMPTY: {},
+<a name="line374"></a>
+<a name="line375"></a>  /** End of file */
+<a name="line376"></a>  EOF: {},
+<a name="line377"></a>
+<a name="line378"></a>  /** End of record */
+<a name="line379"></a>  EOR: {},
+<a name="line380"></a>
+<a name="line381"></a>  /** Newline. \r?\n */
+<a name="line382"></a>  NEWLINE: {}
+<a name="line383"></a>};
+<a name="line384"></a>
+<a name="line385"></a>
+<a name="line386"></a>/**
+<a name="line387"></a> * @param {string} str A string.
+<a name="line388"></a> * @return {boolean} Whether the string is a single character.
+<a name="line389"></a> * @private
+<a name="line390"></a> */
+<a name="line391"></a>goog.labs.format.csv.isCharacterString_ = function(str) {
+<a name="line392"></a>  return goog.isString(str) &amp;&amp; str.length == 1;
+<a name="line393"></a>};
+<a name="line394"></a>
+<a name="line395"></a>
+<a name="line396"></a>/**
+<a name="line397"></a> * Assert the parameter is a token.
+<a name="line398"></a> * @param {*} o What should be a token.
+<a name="line399"></a> * @throws {goog.asserts.AssertionError} If {@ code} is not a token.
+<a name="line400"></a> * @private
+<a name="line401"></a> */
+<a name="line402"></a>goog.labs.format.csv.assertToken_ = function(o) {
+<a name="line403"></a>  if (goog.isString(o)) {
+<a name="line404"></a>    goog.asserts.assertString(o);
+<a name="line405"></a>    goog.asserts.assert(goog.labs.format.csv.isCharacterString_(o),
+<a name="line406"></a>        &#39;Should be a string of length 1 or a sentinel.&#39;);
+<a name="line407"></a>  } else {
+<a name="line408"></a>    goog.asserts.assert(
+<a name="line409"></a>        goog.object.containsValue(goog.labs.format.csv.Sentinels_, o),
+<a name="line410"></a>        &#39;Should be a string of length 1 or a sentinel.&#39;);
+<a name="line411"></a>  }
+<a name="line412"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>deferredtestcase_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_deferredtestcase_test.js.html">deferredtestcase_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.DeferredTestCaseTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.DeferredTestCaseTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.DeferredTestCase&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.TestCase&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.TestRunner&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line24"></a>
+<a name="line25"></a>var deferredTestCase =
+<a name="line26"></a>    goog.testing.DeferredTestCase.createAndInstall(document.title);
+<a name="line27"></a>var testTestCase;
+<a name="line28"></a>var runner;
+<a name="line29"></a>
+<a name="line30"></a>// Optionally, set a longer-than-usual step timeout.
+<a name="line31"></a>deferredTestCase.stepTimeout = 15 * 1000; // 15 seconds
+<a name="line32"></a>
+<a name="line33"></a>// This is the sample code in deferredtestcase.js
+<a name="line34"></a>function testDeferredCallbacks() {
+<a name="line35"></a>  var callbackTime = goog.now();
+<a name="line36"></a>  var callbacks = new goog.async.Deferred();
+<a name="line37"></a>  deferredTestCase.addWaitForAsync(&#39;Waiting for 1st callback&#39;, callbacks);
+<a name="line38"></a>  callbacks.addCallback(
+<a name="line39"></a>      function() {
+<a name="line40"></a>        assertTrue(
+<a name="line41"></a>            &#39;We\&#39;re going back in time!&#39;, goog.now() &gt;= callbackTime);
+<a name="line42"></a>        callbackTime = goog.now();
+<a name="line43"></a>      });
+<a name="line44"></a>  deferredTestCase.addWaitForAsync(&#39;Waiting for 2nd callback&#39;, callbacks);
+<a name="line45"></a>  callbacks.addCallback(
+<a name="line46"></a>      function() {
+<a name="line47"></a>        assertTrue(
+<a name="line48"></a>            &#39;We\&#39;re going back in time!&#39;, goog.now() &gt;= callbackTime);
+<a name="line49"></a>        callbackTime = goog.now();
+<a name="line50"></a>      });
+<a name="line51"></a>  deferredTestCase.addWaitForAsync(&#39;Waiting for last callback&#39;, callbacks);
+<a name="line52"></a>  callbacks.addCallback(
+<a name="line53"></a>      function() {
+<a name="line54"></a>        assertTrue(
+<a name="line55"></a>            &#39;We\&#39;re going back in time!&#39;, goog.now() &gt;= callbackTime);
+<a name="line56"></a>        callbackTime = goog.now();
+<a name="line57"></a>      });
+<a name="line58"></a>
+<a name="line59"></a>  deferredTestCase.waitForDeferred(callbacks);
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>function createDeferredTestCase(d) {
+<a name="line63"></a>  testTestCase = new goog.testing.DeferredTestCase(&#39;Foobar TestCase&#39;);
+<a name="line64"></a>  testTestCase.add(new goog.testing.TestCase.Test(
+<a name="line65"></a>      &#39;Foobar Test&#39;,
+<a name="line66"></a>      function() {
+<a name="line67"></a>        this.waitForDeferred(d);
+<a name="line68"></a>      },
+<a name="line69"></a>      testTestCase));
+<a name="line70"></a>
+<a name="line71"></a>  var testCompleteCallback = new goog.async.Deferred();
+<a name="line72"></a>  testTestCase.setCompletedCallback(
+<a name="line73"></a>      function() {
+<a name="line74"></a>        testCompleteCallback.callback(true);
+<a name="line75"></a>      });
+<a name="line76"></a>
+<a name="line77"></a>  // We&#39;re not going to use the runner to run the test, but we attach one
+<a name="line78"></a>  // here anyway because without a runner TestCase throws an exception in
+<a name="line79"></a>  // finalize().
+<a name="line80"></a>  var runner = new goog.testing.TestRunner();
+<a name="line81"></a>  runner.initialize(testTestCase);
+<a name="line82"></a>
+<a name="line83"></a>  return testCompleteCallback;
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>function testDeferredWait() {
+<a name="line87"></a>  var d = new goog.async.Deferred();
+<a name="line88"></a>  deferredTestCase.addWaitForAsync(&#39;Foobar&#39;, d);
+<a name="line89"></a>  d.addCallback(function() {
+<a name="line90"></a>    return goog.async.Deferred.succeed(true);
+<a name="line91"></a>  });
+<a name="line92"></a>  deferredTestCase.waitForDeferred(d);
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>function testNonAsync() {
+<a name="line96"></a>  assertTrue(true);
+<a name="line97"></a>}
+<a name="line98"></a>
+<a name="line99"></a>function testPassWithTestRunner() {
+<a name="line100"></a>  var d = new goog.async.Deferred();
+<a name="line101"></a>  d.addCallback(function() {
+<a name="line102"></a>    return goog.async.Deferred.succeed(true);
+<a name="line103"></a>  });
+<a name="line104"></a>
+<a name="line105"></a>  var testCompleteDeferred = createDeferredTestCase(d);
+<a name="line106"></a>  testTestCase.execute();
+<a name="line107"></a>
+<a name="line108"></a>  var deferredCallbackOnPass = new goog.async.Deferred();
+<a name="line109"></a>  deferredCallbackOnPass.addCallback(function() {
+<a name="line110"></a>    return testCompleteDeferred;
+<a name="line111"></a>  });
+<a name="line112"></a>  deferredCallbackOnPass.addCallback(function() {
+<a name="line113"></a>    assertTrue(&#39;Test case should have succeded.&#39;, testTestCase.isSuccess());
+<a name="line114"></a>  });
+<a name="line115"></a>
+<a name="line116"></a>  deferredTestCase.waitForDeferred(deferredCallbackOnPass);
+<a name="line117"></a>}
+<a name="line118"></a>
+<a name="line119"></a>function testFailWithTestRunner() {
+<a name="line120"></a>  var d = new goog.async.Deferred();
+<a name="line121"></a>  d.addCallback(function() {
+<a name="line122"></a>    return goog.async.Deferred.fail(true);
+<a name="line123"></a>  });
+<a name="line124"></a>
+<a name="line125"></a>  var testCompleteDeferred = createDeferredTestCase(d);
+<a name="line126"></a>
+<a name="line127"></a>  // Mock doAsyncError to instead let the test completes successfully,
+<a name="line128"></a>  // but record the failure. The test works as is because the failing
+<a name="line129"></a>  // deferred is not actually asynchronous.
+<a name="line130"></a>  var mockDoAsyncError = goog.testing.recordFunction(function() {
+<a name="line131"></a>    testTestCase.continueTesting();
+<a name="line132"></a>  });
+<a name="line133"></a>  testTestCase.doAsyncError = mockDoAsyncError;
+<a name="line134"></a>
+<a name="line135"></a>  testTestCase.execute();
+<a name="line136"></a>  assertEquals(1, mockDoAsyncError.getCallCount());
+<a name="line137"></a>}
+</pre>
+
+
+</body>
+</html>

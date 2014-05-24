@@ -1,0 +1,616 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>utils_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_uri_utils_test.js.html">utils_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.uri.utilsTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.uri.utilsTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line19"></a>goog.require(&#39;goog.string&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>goog.require(&#39;goog.uri.utils&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var utils = goog.uri.utils;
+<a name="line25"></a>var stubs = new goog.testing.PropertyReplacer();
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>function setUpPage() {
+<a name="line29"></a>  goog.string.getRandomString = goog.functions.constant(&#39;RANDOM&#39;);
+<a name="line30"></a>}
+<a name="line31"></a>
+<a name="line32"></a>function tearDown() {
+<a name="line33"></a>  stubs.reset();
+<a name="line34"></a>}
+<a name="line35"></a>
+<a name="line36"></a>function testSplit() {
+<a name="line37"></a>  var uri = &#39;http://www.google.com:80/path%20path+path?q=query&amp;hl=en#fragment&#39;;
+<a name="line38"></a>  assertEquals(&#39;http&#39;, utils.getScheme(uri));
+<a name="line39"></a>  assertNull(utils.getUserInfoEncoded(uri));
+<a name="line40"></a>  assertNull(utils.getUserInfo(uri));
+<a name="line41"></a>  assertEquals(&#39;www.google.com&#39;, utils.getDomainEncoded(uri));
+<a name="line42"></a>  assertEquals(&#39;www.google.com&#39;, utils.getDomain(uri));
+<a name="line43"></a>  assertEquals(80, utils.getPort(uri));
+<a name="line44"></a>  assertEquals(&#39;/path%20path+path&#39;, utils.getPathEncoded(uri));
+<a name="line45"></a>  assertEquals(&#39;/path path+path&#39;, utils.getPath(uri));
+<a name="line46"></a>  assertEquals(&#39;q=query&amp;hl=en&#39;, utils.getQueryData(uri));
+<a name="line47"></a>  assertEquals(&#39;fragment&#39;, utils.getFragmentEncoded(uri));
+<a name="line48"></a>  assertEquals(&#39;fragment&#39;, utils.getFragment(uri));
+<a name="line49"></a>
+<a name="line50"></a>  assertEquals(utils.getDomain(&#39;http://[2607:f8b0:4006:802::1006]&#39;),
+<a name="line51"></a>      &#39;[2607:f8b0:4006:802::1006]&#39;);
+<a name="line52"></a>  assertEquals(utils.getDomain(&#39;http://[2607:f8b0:4006:802::1006]:80&#39;),
+<a name="line53"></a>      &#39;[2607:f8b0:4006:802::1006]&#39;);
+<a name="line54"></a>  assertEquals(utils.getPort(&#39;http://[2607:f8b0:4006:802::1006]:80&#39;), 80);
+<a name="line55"></a>  assertEquals(utils.getDomain(&#39;http://[2607]:80/?q=]&#39;), &#39;[2607]&#39;);
+<a name="line56"></a>  assertEquals(utils.getDomain(&#39;http://!!!&#39;), &#39;!!!&#39;);
+<a name="line57"></a>  assertNull(utils.getPath(&#39;http://!!!&#39;));
+<a name="line58"></a>  assertNull(utils.getScheme(&#39;www.x.com:80&#39;));
+<a name="line59"></a>  assertEquals(&#39;Query data with no fragment identifier&#39;, &#39;foo=bar&amp;baz=bin&#39;,
+<a name="line60"></a>      utils.getQueryData(&#39;http://google.com?foo=bar&amp;baz=bin&#39;));
+<a name="line61"></a>}
+<a name="line62"></a>
+<a name="line63"></a>function testMailtoUri() {
+<a name="line64"></a>  var uri = &#39;mailto:joe+random@hominid.com&#39;;
+<a name="line65"></a>  assertNull(utils.getDomain(uri));
+<a name="line66"></a>  assertEquals(&#39;mailto&#39;, utils.getScheme(uri));
+<a name="line67"></a>  assertEquals(&#39;joe+random@hominid.com&#39;, utils.getPath(uri));
+<a name="line68"></a>}
+<a name="line69"></a>
+<a name="line70"></a>function testSplitRelativeUri() {
+<a name="line71"></a>  var uri = &#39;/path%20path+path?q=query&amp;hl=en#fragment&#39;;
+<a name="line72"></a>  assertNull(utils.getScheme(uri));
+<a name="line73"></a>  assertNull(utils.getDomain(uri));
+<a name="line74"></a>  assertNull(utils.getDomainEncoded(uri));
+<a name="line75"></a>  assertNull(utils.getPort(uri));
+<a name="line76"></a>  assertEquals(&#39;/path%20path+path&#39;, utils.getPathEncoded(uri));
+<a name="line77"></a>  assertEquals(&#39;/path path+path&#39;, utils.getPath(uri));
+<a name="line78"></a>  assertEquals(&#39;q=query&amp;hl=en&#39;, utils.getQueryData(uri));
+<a name="line79"></a>  assertEquals(&#39;fragment&#39;, utils.getFragmentEncoded(uri));
+<a name="line80"></a>  assertEquals(&#39;fragment&#39;, utils.getFragment(uri));
+<a name="line81"></a>}
+<a name="line82"></a>
+<a name="line83"></a>function testSplitBadAuthority() {
+<a name="line84"></a>  // This URL has a syntax error per the RFC (port number must be digits, and
+<a name="line85"></a>  // host cannot contain a colon except in [...]). This test is solely to
+<a name="line86"></a>  // &#39;document&#39; the current behavior, which may affect application handling
+<a name="line87"></a>  // of erroneous URLs.
+<a name="line88"></a>  assertEquals(utils.getDomain(&#39;http://host:port/&#39;), &#39;host:port&#39;);
+<a name="line89"></a>  assertNull(utils.getPort(&#39;http://host:port/&#39;));
+<a name="line90"></a>}
+<a name="line91"></a>
+<a name="line92"></a>function testSplitIntoHostAndPath() {
+<a name="line93"></a>  // Splitting into host and path takes care of one of the major use cases
+<a name="line94"></a>  // of resolve, without implementing a generic algorithm that undoubtedly
+<a name="line95"></a>  // requires a huge footprint.
+<a name="line96"></a>  var uri = &#39;http://www.google.com:80/path%20path+path?q=query&amp;hl=en#fragment&#39;;
+<a name="line97"></a>  assertEquals(&#39;http://www.google.com:80&#39;,
+<a name="line98"></a>      goog.uri.utils.getHost(uri));
+<a name="line99"></a>  assertEquals(&#39;/path%20path+path?q=query&amp;hl=en#fragment&#39;,
+<a name="line100"></a>      goog.uri.utils.getPathAndAfter(uri));
+<a name="line101"></a>
+<a name="line102"></a>  var uri2 = &#39;http://www.google.com/calendar&#39;;
+<a name="line103"></a>  assertEquals(&#39;should handle missing fields&#39;, &#39;http://www.google.com&#39;,
+<a name="line104"></a>      goog.uri.utils.getHost(uri2));
+<a name="line105"></a>  assertEquals(&#39;should handle missing fields&#39;, &#39;/calendar&#39;,
+<a name="line106"></a>      goog.uri.utils.getPathAndAfter(uri2));
+<a name="line107"></a>}
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>function testRelativeUrisHaveNoPath() {
+<a name="line111"></a>  assertNull(utils.getPathEncoded(&#39;?hello&#39;));
+<a name="line112"></a>}
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>function testSetFragmentEncoded() {
+<a name="line116"></a>  var expected = &#39;http://www.google.com/path#bar&#39;;
+<a name="line117"></a>  assertEquals(expected,
+<a name="line118"></a>      utils.setFragmentEncoded(&#39;http://www.google.com/path#foo&#39;, &#39;bar&#39;));
+<a name="line119"></a>
+<a name="line120"></a>  assertEquals(expected,
+<a name="line121"></a>      utils.setFragmentEncoded(&#39;http://www.google.com/path&#39;, &#39;bar&#39;));
+<a name="line122"></a>
+<a name="line123"></a>  assertEquals(&#39;http://www.google.com/path&#39;,
+<a name="line124"></a>      utils.setFragmentEncoded(&#39;http://www.google.com/path&#39;, &#39;&#39;));
+<a name="line125"></a>
+<a name="line126"></a>  assertEquals(&#39;http://www.google.com/path&#39;,
+<a name="line127"></a>      utils.setFragmentEncoded(&#39;http://www.google.com/path&#39;, null));
+<a name="line128"></a>}
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>function testGetParamValue() {
+<a name="line132"></a>  assertEquals(&#39;v1&#39;,
+<a name="line133"></a>      utils.getParamValue(&#39;/path?key=v1&amp;c=d&amp;keywithsuffix=v3&amp;key=v2&#39;, &#39;key&#39;));
+<a name="line134"></a>
+<a name="line135"></a>  assertEquals(&#39;v1&#39;,
+<a name="line136"></a>      utils.getParamValue(&#39;/path?kEY=v1&amp;c=d&amp;keywithsuffix=v3&amp;key=v2&#39;, &#39;kEY&#39;));
+<a name="line137"></a>}
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>function testGetParamValues() {
+<a name="line141"></a>  assertArrayEquals(&#39;should ignore confusing suffixes&#39;, [&#39;v1&#39;, &#39;v2&#39;],
+<a name="line142"></a>      utils.getParamValues(
+<a name="line143"></a>          &#39;/path?a=b&amp;key=v1&amp;c=d&amp;key=v2&amp;keywithsuffix=v3&#39;, &#39;key&#39;));
+<a name="line144"></a>  assertArrayEquals(&#39;should be case sensitive&#39;, [&#39;v2&#39;],
+<a name="line145"></a>      utils.getParamValues(&#39;/path?a=b&amp;keY=v1&amp;c=d&amp;KEy=v2&amp;keywithsuffix=v3&#39;,
+<a name="line146"></a>          &#39;KEy&#39;));
+<a name="line147"></a>  assertArrayEquals(&#39;should work for the first parameter&#39;, [&#39;v1&#39;, &#39;v2&#39;],
+<a name="line148"></a>      utils.getParamValues(&#39;/path?key=v1&amp;c=d&amp;key=v2&amp;keywithsuffix=v3&#39;, &#39;key&#39;));
+<a name="line149"></a>  assertArrayEquals(&#39;should work for the last parameter&#39;, [&#39;v1&#39;, &#39;v2&#39;],
+<a name="line150"></a>      utils.getParamValues(&#39;/path?key=v1&amp;c=d&amp;keywithsuffix=v3&amp;key=v2&#39;, &#39;key&#39;));
+<a name="line151"></a>  assertArrayEquals([&#39;1&#39;],
+<a name="line152"></a>      utils.getParamValues(&#39;http://foo.com?q=1#?q=2&amp;q=3&#39;, &#39;q&#39;));
+<a name="line153"></a>}
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>function testGetParamValueAllowsEqualInValues() {
+<a name="line157"></a>  assertEquals(&#39;equals signs can appear unencoded&#39;, &#39;v1=v2&#39;,
+<a name="line158"></a>      utils.getParamValue(&#39;/path?key=v1=v2&#39;, &#39;key&#39;));
+<a name="line159"></a>  assertArrayEquals([&#39;v1=v2=v3&#39;],
+<a name="line160"></a>      utils.getParamValues(&#39;/path?key=v1=v2=v3&#39;, &#39;key&#39;));
+<a name="line161"></a>}
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>function testGetParamValueNoSuchKey() {
+<a name="line165"></a>  var uri = &#39;/path?key=v1&amp;c=d&amp;keywithsuffix=v3&amp;key=v2&#39;;
+<a name="line166"></a>  assertNull(utils.getParamValue(uri, &#39;nosuchkey&#39;));
+<a name="line167"></a>  assertArrayEquals([], utils.getParamValues(uri, &#39;nosuchkey&#39;));
+<a name="line168"></a>  assertFalse(utils.hasParam(uri, &#39;nosuchkey&#39;));
+<a name="line169"></a>  assertNull(utils.getParamValue(&#39;q=1&#39;, &#39;q&#39;));
+<a name="line170"></a>  assertEquals(&#39;1&#39;, utils.getParamValue(&#39;?q=1&#39;, &#39;q&#39;));
+<a name="line171"></a>}
+<a name="line172"></a>
+<a name="line173"></a>
+<a name="line174"></a>function testGetParamValueEmptyAndMissingValueStrings() {
+<a name="line175"></a>  assertEquals(&#39;&#39;, utils.getParamValue(&#39;/path?key&amp;bar&#39;, &#39;key&#39;));
+<a name="line176"></a>  assertEquals(&#39;&#39;, utils.getParamValue(&#39;/path?foo=bar&amp;key&#39;, &#39;key&#39;));
+<a name="line177"></a>  assertEquals(&#39;&#39;, utils.getParamValue(&#39;/path?key&#39;, &#39;key&#39;));
+<a name="line178"></a>  assertEquals(&#39;&#39;, utils.getParamValue(&#39;/path?key=&#39;, &#39;key&#39;));
+<a name="line179"></a>  assertArrayEquals([&#39;&#39;], utils.getParamValues(&#39;/path?key&#39;, &#39;key&#39;));
+<a name="line180"></a>  assertArrayEquals([&#39;&#39;], utils.getParamValues(&#39;/path?key&amp;bar&#39;, &#39;key&#39;));
+<a name="line181"></a>  assertArrayEquals([&#39;&#39;], utils.getParamValues(&#39;/path?foo=bar&amp;key&#39;, &#39;key&#39;));
+<a name="line182"></a>  assertArrayEquals([&#39;&#39;], utils.getParamValues(&#39;/path?foo=bar&amp;key=&#39;, &#39;key&#39;));
+<a name="line183"></a>  assertArrayEquals([&#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;j&#39;, &#39;&#39;],
+<a name="line184"></a>      utils.getParamValues(&#39;/path?key&amp;key&amp;key=&amp;key=j&amp;key&#39;, &#39;key&#39;));
+<a name="line185"></a>  assertArrayEquals([&#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;],
+<a name="line186"></a>      utils.getParamValues(&#39;/pathqqq?q&amp;qq&amp;q&amp;q=&amp;q&amp;q&#39;, &#39;q&#39;));
+<a name="line187"></a>  assertTrue(utils.hasParam(&#39;/path?key=&#39;, &#39;key&#39;));
+<a name="line188"></a>}
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>function testGetParamValueDecoding() {
+<a name="line192"></a>  assertEquals(&#39;plus should be supported as alias of space&#39;, &#39;foo bar baz&#39;,
+<a name="line193"></a>      utils.getParamValue(&#39;/path?key=foo+bar%20baz&#39;, &#39;key&#39;));
+<a name="line194"></a>  assertArrayEquals([&#39;foo bar baz&#39;],
+<a name="line195"></a>      utils.getParamValues(&#39;/path?key=foo%20bar%20baz&#39;, &#39;key&#39;));
+<a name="line196"></a>}
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>function testGetParamIgnoresParamsInFragmentIdentifiers() {
+<a name="line200"></a>  assertFalse(utils.hasParam(&#39;/path?bah#a&amp;key=foo&#39;, &#39;key&#39;));
+<a name="line201"></a>  assertEquals(null, utils.getParamValue(&#39;/path?bah#a&amp;key=bar&#39;, &#39;key&#39;));
+<a name="line202"></a>  assertArrayEquals([], utils.getParamValues(&#39;/path?bah#a&amp;key=bar&#39;, &#39;key&#39;));
+<a name="line203"></a>}
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>function testGetParamIgnoresExcludesFragmentFromParameterValue() {
+<a name="line207"></a>  // Make sure the &#39;#&#39; doesn&#39;t get included anywhere, for parameter values
+<a name="line208"></a>  // of different lengths.
+<a name="line209"></a>  assertEquals(&#39;foo&#39;,
+<a name="line210"></a>      utils.getParamValue(&#39;/path?key=foo#key=bar&amp;key=baz&#39;, &#39;key&#39;));
+<a name="line211"></a>  assertArrayEquals([&#39;foo&#39;],
+<a name="line212"></a>      utils.getParamValues(&#39;/path?key=foo#key=bar&amp;key=baz&#39;, &#39;key&#39;));
+<a name="line213"></a>  assertEquals(&#39;&#39;,
+<a name="line214"></a>      utils.getParamValue(&#39;/path?key#key=bar&amp;key=baz&#39;, &#39;key&#39;));
+<a name="line215"></a>  assertArrayEquals([&#39;&#39;],
+<a name="line216"></a>      utils.getParamValues(&#39;/path?key#key=bar&amp;key=baz&#39;, &#39;key&#39;));
+<a name="line217"></a>  assertEquals(&#39;x&#39;,
+<a name="line218"></a>      utils.getParamValue(&#39;/path?key=x#key=bar&amp;key=baz&#39;, &#39;key&#39;));
+<a name="line219"></a>  assertArrayEquals([&#39;x&#39;],
+<a name="line220"></a>      utils.getParamValues(&#39;/path?key=x#key=bar&amp;key=baz&#39;, &#39;key&#39;));
+<a name="line221"></a>
+<a name="line222"></a>  // Simply make sure hasParam doesn&#39;t die in this case.
+<a name="line223"></a>  assertTrue(utils.hasParam(&#39;/path?key=foo#key=bar&amp;key=baz&#39;, &#39;key&#39;));
+<a name="line224"></a>  assertTrue(utils.hasParam(&#39;/path?key=foo#key&amp;key=baz&#39;, &#39;key&#39;));
+<a name="line225"></a>}
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>function testSameDomainPathsDiffer() {
+<a name="line229"></a>  var uri1 = &#39;http://www.google.com/a&#39;;
+<a name="line230"></a>  var uri2 = &#39;http://www.google.com/b&#39;;
+<a name="line231"></a>  assertTrue(goog.uri.utils.haveSameDomain(uri1, uri2));
+<a name="line232"></a>  assertTrue(goog.uri.utils.haveSameDomain(uri2, uri1));
+<a name="line233"></a>}
+<a name="line234"></a>
+<a name="line235"></a>
+<a name="line236"></a>function testSameDomainSchemesDiffer() {
+<a name="line237"></a>  var uri1 = &#39;http://www.google.com&#39;;
+<a name="line238"></a>  var uri2 = &#39;https://www.google.com&#39;;
+<a name="line239"></a>  assertFalse(goog.uri.utils.haveSameDomain(uri1, uri2));
+<a name="line240"></a>  assertFalse(goog.uri.utils.haveSameDomain(uri2, uri1));
+<a name="line241"></a>}
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>function testSameDomainPortsDiffer() {
+<a name="line245"></a>  var uri1 = &#39;http://www.google.com:1234/a&#39;;
+<a name="line246"></a>  var uri2 = &#39;http://www.google.com/b&#39;;
+<a name="line247"></a>  var uri3 = &#39;http://www.google.com:2345/b&#39;;
+<a name="line248"></a>  assertFalse(goog.uri.utils.haveSameDomain(uri1, uri2));
+<a name="line249"></a>  assertFalse(goog.uri.utils.haveSameDomain(uri2, uri1));
+<a name="line250"></a>  assertFalse(goog.uri.utils.haveSameDomain(uri1, uri3));
+<a name="line251"></a>}
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>function testSameDomainDomainsDiffer() {
+<a name="line255"></a>  var uri1 = &#39;/a&#39;;
+<a name="line256"></a>  var uri2 = &#39;http://www.google.com/b&#39;;
+<a name="line257"></a>  assertFalse(goog.uri.utils.haveSameDomain(uri1, uri2));
+<a name="line258"></a>  assertFalse(goog.uri.utils.haveSameDomain(uri2, uri1));
+<a name="line259"></a>}
+<a name="line260"></a>
+<a name="line261"></a>
+<a name="line262"></a>function testSameDomainSubDomainDiffers() {
+<a name="line263"></a>  var uri1 = &#39;http://www.google.com/a&#39;;
+<a name="line264"></a>  var uri2 = &#39;http://mail.google.com/b&#39;;
+<a name="line265"></a>  assertFalse(goog.uri.utils.haveSameDomain(uri1, uri2));
+<a name="line266"></a>  assertFalse(goog.uri.utils.haveSameDomain(uri2, uri1));
+<a name="line267"></a>}
+<a name="line268"></a>
+<a name="line269"></a>
+<a name="line270"></a>function testSameDomainNoDomain() {
+<a name="line271"></a>  var uri1 = &#39;/a&#39;;
+<a name="line272"></a>  var uri2 = &#39;/b&#39;;
+<a name="line273"></a>  assertTrue(goog.uri.utils.haveSameDomain(uri1, uri2));
+<a name="line274"></a>  assertTrue(goog.uri.utils.haveSameDomain(uri2, uri1));
+<a name="line275"></a>}
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a>
+<a name="line279"></a>/**
+<a name="line280"></a> * Simple class with a constant toString.
+<a name="line281"></a> * @param {string} stringValue The result of toString.
+<a name="line282"></a> * @constructor
+<a name="line283"></a> */
+<a name="line284"></a>function HasString(stringValue) {
+<a name="line285"></a>  this.value_ = stringValue;
+<a name="line286"></a>}
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/** @override */
+<a name="line290"></a>HasString.prototype.toString = function() {
+<a name="line291"></a>  return this.value_;
+<a name="line292"></a>};
+<a name="line293"></a>
+<a name="line294"></a>
+<a name="line295"></a>function testBuildFromEncodedParts() {
+<a name="line296"></a>  assertEquals(&#39;should handle full URL&#39;,
+<a name="line297"></a>      &#39;http://foo@www.google.com:80/path?q=query#fragment&#39;,
+<a name="line298"></a>      utils.buildFromEncodedParts(&#39;http&#39;, &#39;foo&#39;, &#39;www.google.com&#39;,
+<a name="line299"></a>          80, &#39;/path&#39;, &#39;q=query&#39;, &#39;fragment&#39;));
+<a name="line300"></a>  assertEquals(&#39;should handle unspecified parameters&#39;, &#39;/search&#39;,
+<a name="line301"></a>      utils.buildFromEncodedParts(null, null, undefined, null, &#39;/search&#39;));
+<a name="line302"></a>  assertEquals(&#39;should handle params of non-primitive types&#39;,
+<a name="line303"></a>      &#39;http://foo@www.google.com:80/path?q=query#fragment&#39;,
+<a name="line304"></a>      utils.buildFromEncodedParts(new HasString(&#39;http&#39;), new HasString(&#39;foo&#39;),
+<a name="line305"></a>          new HasString(&#39;www.google.com&#39;), new HasString(&#39;80&#39;),
+<a name="line306"></a>          new HasString(&#39;/path&#39;), new HasString(&#39;q=query&#39;),
+<a name="line307"></a>          new HasString(&#39;fragment&#39;)));
+<a name="line308"></a>}
+<a name="line309"></a>
+<a name="line310"></a>
+<a name="line311"></a>function testAppendParam() {
+<a name="line312"></a>  assertEquals(&#39;http://foo.com?q=1&#39;,
+<a name="line313"></a>      utils.appendParam(&#39;http://foo.com&#39;, &#39;q&#39;, 1));
+<a name="line314"></a>  assertEquals(&#39;http://foo.com?q=1#preserve&#39;,
+<a name="line315"></a>      utils.appendParam(&#39;http://foo.com#preserve&#39;, &#39;q&#39;, 1));
+<a name="line316"></a>  assertEquals(&#39;should tolerate a lone question mark&#39;,
+<a name="line317"></a>      &#39;http://foo.com?q=1&#39;,
+<a name="line318"></a>      utils.appendParam(&#39;http://foo.com?&#39;, &#39;q&#39;, 1));
+<a name="line319"></a>  assertEquals(&#39;http://foo.com?q=1&amp;r=2&#39;,
+<a name="line320"></a>      utils.appendParam(&#39;http://foo.com?q=1&#39;, &#39;r&#39;, 2));
+<a name="line321"></a>  assertEquals(&#39;http://foo.com?q=1&amp;r=2&amp;s=3#preserve&#39;,
+<a name="line322"></a>      utils.appendParam(&#39;http://foo.com?q=1&amp;r=2#preserve&#39;, &#39;s&#39;, 3));
+<a name="line323"></a>  assertEquals(&#39;q=1&amp;r=2&amp;s=3&amp;s=4&#39;,
+<a name="line324"></a>      utils.buildQueryData([&#39;q&#39;, 1, &#39;r&#39;, 2, &#39;s&#39;, [3, 4]]));
+<a name="line325"></a>  assertEquals(&#39;&#39;,
+<a name="line326"></a>      utils.buildQueryData([]));
+<a name="line327"></a>  assertEquals(&#39;?q=1#preserve&#39;,
+<a name="line328"></a>      utils.appendParam(&#39;#preserve&#39;, &#39;q&#39;, 1));
+<a name="line329"></a>}
+<a name="line330"></a>
+<a name="line331"></a>function testAppendParams() {
+<a name="line332"></a>  assertEquals(&#39;http://foo.com&#39;,
+<a name="line333"></a>      utils.appendParams(&#39;http://foo.com&#39;));
+<a name="line334"></a>  assertEquals(&#39;http://foo.com?q=1&amp;r=2&amp;s=3&amp;s=4#preserve&#39;,
+<a name="line335"></a>      utils.appendParams(&#39;http://foo.com#preserve&#39;,
+<a name="line336"></a>          &#39;q&#39;, 1, &#39;r&#39;, 2, &#39;s&#39;, [3, 4]));
+<a name="line337"></a>  assertEquals(&#39;http://foo.com?a=1&amp;q=1&amp;r=2&amp;s=3&amp;s=4#preserve&#39;,
+<a name="line338"></a>      utils.appendParams(&#39;http://foo.com?a=1#preserve&#39;,
+<a name="line339"></a>          &#39;q&#39;, 1, &#39;r&#39;, 2, &#39;s&#39;, [3, 4]));
+<a name="line340"></a>  assertEquals(&#39;http://foo.com?q=1&amp;r=2&amp;s=3&amp;s=4#preserve&#39;,
+<a name="line341"></a>      utils.appendParams(&#39;http://foo.com?#preserve&#39;,
+<a name="line342"></a>          &#39;q&#39;, 1, &#39;r&#39;, 2, &#39;s&#39;, [3, 4]));
+<a name="line343"></a>  assertEquals(&#39;?q=1&amp;r=2&amp;s=3&amp;s=4#preserve&#39;,
+<a name="line344"></a>      utils.appendParams(&#39;#preserve&#39;,
+<a name="line345"></a>          &#39;q&#39;, 1, &#39;r&#39;, 2, &#39;s&#39;, [3, 4]));
+<a name="line346"></a>  assertEquals(&#39;A question mark must not be appended if there are no &#39; +
+<a name="line347"></a>      &#39;parameters, otherwise repeated appends will be broken.&#39;,
+<a name="line348"></a>      &#39;http://foo.com#test&#39;, utils.appendParams(&#39;http://foo.com#test&#39;));
+<a name="line349"></a>  assertEquals(&#39;should handle objects with to-string&#39;,
+<a name="line350"></a>      &#39;http://foo.com?q=a&amp;r=b&#39;,
+<a name="line351"></a>      utils.appendParams(&#39;http://foo.com&#39;,
+<a name="line352"></a>          &#39;q&#39;, new HasString(&#39;a&#39;), &#39;r&#39;, [new HasString(&#39;b&#39;)]));
+<a name="line353"></a>
+<a name="line354"></a>  assertThrows(&#39;appendParams should fail with an odd number of arguments.&#39;,
+<a name="line355"></a>      function() {
+<a name="line356"></a>        utils.appendParams(&#39;http://foo.com&#39;, &#39;a&#39;, 1, &#39;b&#39;);
+<a name="line357"></a>      });
+<a name="line358"></a>}
+<a name="line359"></a>
+<a name="line360"></a>
+<a name="line361"></a>function testValuelessParam() {
+<a name="line362"></a>  assertEquals(&#39;http://foo.com?q&#39;,
+<a name="line363"></a>      utils.appendParam(&#39;http://foo.com&#39;, &#39;q&#39;));
+<a name="line364"></a>  assertEquals(&#39;http://foo.com?q&#39;,
+<a name="line365"></a>      utils.appendParam(&#39;http://foo.com&#39;, &#39;q&#39;, null /* opt_value */));
+<a name="line366"></a>  assertEquals(&#39;http://foo.com?q#preserve&#39;,
+<a name="line367"></a>      utils.appendParam(&#39;http://foo.com#preserve&#39;, &#39;q&#39;));
+<a name="line368"></a>  assertEquals(&#39;should tolerate a lone question mark&#39;,
+<a name="line369"></a>      &#39;http://foo.com?q&#39;,
+<a name="line370"></a>      utils.appendParam(&#39;http://foo.com?&#39;, &#39;q&#39;));
+<a name="line371"></a>  assertEquals(&#39;http://foo.com?q=1&amp;r&#39;,
+<a name="line372"></a>      utils.appendParam(&#39;http://foo.com?q=1&#39;, &#39;r&#39;));
+<a name="line373"></a>  assertEquals(&#39;http://foo.com?q=1&amp;r=2&amp;s#preserve&#39;,
+<a name="line374"></a>      utils.appendParam(&#39;http://foo.com?q=1&amp;r=2#preserve&#39;, &#39;s&#39;));
+<a name="line375"></a>  assertTrue(utils.hasParam(&#39;http://foo.com?q=1&amp;r=2&amp;s#preserve&#39;, &#39;s&#39;));
+<a name="line376"></a>}
+<a name="line377"></a>
+<a name="line378"></a>
+<a name="line379"></a>function testAppendParamsAsArray() {
+<a name="line380"></a>  assertEquals(&#39;http://foo.com?q=1&amp;r=2&amp;s=3&amp;s=4#preserve&#39;,
+<a name="line381"></a>      utils.appendParams(&#39;http://foo.com#preserve&#39;,
+<a name="line382"></a>          [&#39;q&#39;, 1, &#39;r&#39;, 2, &#39;s&#39;, [3, 4]]));
+<a name="line383"></a>  assertEquals(&#39;http://foo.com?q=1&amp;s=3&amp;s=4#preserve&#39;,
+<a name="line384"></a>      utils.appendParams(&#39;http://foo.com#preserve&#39;,
+<a name="line385"></a>          [&#39;q&#39;, 1, &#39;r&#39;, null, &#39;s&#39;, [3, 4]]));
+<a name="line386"></a>  assertEquals(&#39;http://foo.com?q=1&amp;s=3&amp;s=4#preserve&#39;,
+<a name="line387"></a>      utils.appendParams(&#39;http://foo.com#preserve&#39;,
+<a name="line388"></a>          [&#39;q&#39;, 1, &#39;r&#39;, undefined, &#39;s&#39;, [3, 4]]));
+<a name="line389"></a>  assertEquals(&#39;http://foo.com?q=1&amp;r=2&amp;s=3&amp;s=4&amp;s=null&amp;s=undefined#preserve&#39;,
+<a name="line390"></a>      utils.appendParams(&#39;http://foo.com#preserve&#39;,
+<a name="line391"></a>          [&#39;q&#39;, 1, &#39;r&#39;, 2, &#39;s&#39;, [3, new HasString(&#39;4&#39;), null, undefined]]));
+<a name="line392"></a>}
+<a name="line393"></a>
+<a name="line394"></a>
+<a name="line395"></a>function testAppendParamEscapes() {
+<a name="line396"></a>  assertEquals(&#39;http://foo.com?h=a%20b&#39;,
+<a name="line397"></a>      utils.appendParams(&#39;http://foo.com&#39;, &#39;h&#39;, &#39;a b&#39;));
+<a name="line398"></a>  assertEquals(&#39;h=a%20b&#39;, utils.buildQueryData([&#39;h&#39;, &#39;a b&#39;]));
+<a name="line399"></a>  assertEquals(&#39;h=a%20b&#39;, utils.buildQueryDataFromMap({&#39;h&#39;: &#39;a b&#39;}));
+<a name="line400"></a>}
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>function testAppendParamsFromMap() {
+<a name="line404"></a>  var uri = utils.appendParamsFromMap(&#39;http://www.foo.com&#39;,
+<a name="line405"></a>      {&#39;a&#39;: 1, &#39;b&#39;: &#39;bob&#39;, &#39;c&#39;: [1, 2, new HasString(&#39;3&#39;)]});
+<a name="line406"></a>  assertArrayEquals([&#39;1&#39;], utils.getParamValues(uri, &#39;a&#39;));
+<a name="line407"></a>  assertArrayEquals([&#39;bob&#39;], utils.getParamValues(uri, &#39;b&#39;));
+<a name="line408"></a>  assertArrayEquals([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;], utils.getParamValues(uri, &#39;c&#39;));
+<a name="line409"></a>}
+<a name="line410"></a>
+<a name="line411"></a>function testBuildQueryDataFromMap() {
+<a name="line412"></a>  assertEquals(&#39;a=1&#39;, utils.buildQueryDataFromMap({&#39;a&#39;: 1}));
+<a name="line413"></a>  var uri = &#39;foo.com?&#39; + utils.buildQueryDataFromMap(
+<a name="line414"></a>      {&#39;a&#39;: 1, &#39;b&#39;: &#39;bob&#39;, &#39;c&#39;: [1, 2, new HasString(&#39;3&#39;)]});
+<a name="line415"></a>  assertArrayEquals([&#39;1&#39;], utils.getParamValues(uri, &#39;a&#39;));
+<a name="line416"></a>  assertArrayEquals([&#39;bob&#39;], utils.getParamValues(uri, &#39;b&#39;));
+<a name="line417"></a>  assertArrayEquals([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;], utils.getParamValues(uri, &#39;c&#39;));
+<a name="line418"></a>}
+<a name="line419"></a>
+<a name="line420"></a>
+<a name="line421"></a>function testMultiParamSkipsNullParams() {
+<a name="line422"></a>  // For the multi-param functions, null and undefined keys should be
+<a name="line423"></a>  // skipped, but null within a parameter array should still be appended.
+<a name="line424"></a>  assertEquals(&#39;buildQueryDataFromMap&#39;, &#39;a=null&#39;,
+<a name="line425"></a>      utils.buildQueryDataFromMap({&#39;a&#39;: [null], &#39;b&#39;: null, &#39;c&#39;: undefined}));
+<a name="line426"></a>  assertEquals(&#39;buildQueryData&#39;, &#39;a=null&#39;,
+<a name="line427"></a>      utils.buildQueryData([&#39;a&#39;, [null], &#39;b&#39;, null, &#39;c&#39;, undefined]));
+<a name="line428"></a>  assertEquals(&#39;appendParams&#39;, &#39;foo.com?a=null&#39;,
+<a name="line429"></a>      utils.appendParams(&#39;foo.com&#39;, &#39;a&#39;, [null], &#39;b&#39;, null, &#39;c&#39;, undefined));
+<a name="line430"></a>  assertEquals(&#39;empty strings should NOT be skipped&#39;, &#39;foo.com?a&amp;b&#39;,
+<a name="line431"></a>      utils.appendParams(&#39;foo.com&#39;, &#39;a&#39;, [&#39;&#39;], &#39;b&#39;, &#39;&#39;));
+<a name="line432"></a>}
+<a name="line433"></a>
+<a name="line434"></a>
+<a name="line435"></a>function testRemoveParam() {
+<a name="line436"></a>  assertEquals(&#39;remove middle&#39;, &#39;http://foo.com?q=1&amp;s=3&#39;,
+<a name="line437"></a>      utils.removeParam(&#39;http://foo.com?q=1&amp;r=2&amp;s=3&#39;, &#39;r&#39;));
+<a name="line438"></a>  assertEquals(&#39;remove first&#39;, &#39;http://foo.com?r=2&amp;s=3&#39;,
+<a name="line439"></a>      utils.removeParam(&#39;http://foo.com?q=1&amp;r=2&amp;s=3&#39;, &#39;q&#39;));
+<a name="line440"></a>  assertEquals(&#39;remove last&#39;, &#39;http://foo.com?q=1&amp;r=2&#39;,
+<a name="line441"></a>      utils.removeParam(&#39;http://foo.com?q=1&amp;r=2&amp;s=3&#39;, &#39;s&#39;));
+<a name="line442"></a>  assertEquals(&#39;remove only param&#39;, &#39;http://foo.com&#39;,
+<a name="line443"></a>      utils.removeParam(&#39;http://foo.com?q=1&#39;, &#39;q&#39;));
+<a name="line444"></a>}
+<a name="line445"></a>
+<a name="line446"></a>
+<a name="line447"></a>function testRemoveParamWithFragment() {
+<a name="line448"></a>  assertEquals(&#39;remove middle&#39;, &#39;http://foo.com?q=1&amp;s=3#?r=1&amp;r=1&#39;,
+<a name="line449"></a>      utils.removeParam(&#39;http://foo.com?q=1&amp;r=2&amp;s=3#?r=1&amp;r=1&#39;, &#39;r&#39;));
+<a name="line450"></a>  assertEquals(&#39;remove first&#39;, &#39;http://foo.com?r=2&amp;s=3#?q=1&amp;q=1&#39;,
+<a name="line451"></a>      utils.removeParam(&#39;http://foo.com?q=1&amp;r=2&amp;s=3#?q=1&amp;q=1&#39;, &#39;q&#39;));
+<a name="line452"></a>  assertEquals(&#39;remove only param&#39;, &#39;http://foo.com#?q=1&amp;q=1&#39;,
+<a name="line453"></a>      utils.removeParam(&#39;http://foo.com?q=1#?q=1&amp;q=1&#39;, &#39;q&#39;));
+<a name="line454"></a>  assertEquals(&#39;remove last&#39;, &#39;http://foo.com?q=1&amp;r=2#?s=1&amp;s=1&#39;,
+<a name="line455"></a>      utils.removeParam(&#39;http://foo.com?q=1&amp;r=2&amp;s=3#?s=1&amp;s=1&#39;, &#39;s&#39;));
+<a name="line456"></a>}
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>function testRemoveNonExistent() {
+<a name="line460"></a>  assertEquals(&#39;remove key not present&#39;, &#39;http://foo.com?q=1&#39;,
+<a name="line461"></a>      utils.removeParam(&#39;http://foo.com?q=1&#39;, &#39;nosuchkey&#39;));
+<a name="line462"></a>  assertEquals(&#39;remove key not present&#39;, &#39;http://foo.com#q=1&#39;,
+<a name="line463"></a>      utils.removeParam(&#39;http://foo.com#q=1&#39;, &#39;q&#39;));
+<a name="line464"></a>  assertEquals(&#39;remove key from empty string&#39;, &#39;&#39;,
+<a name="line465"></a>      utils.removeParam(&#39;&#39;, &#39;nosuchkey&#39;));
+<a name="line466"></a>}
+<a name="line467"></a>
+<a name="line468"></a>
+<a name="line469"></a>function testRemoveMultiple() {
+<a name="line470"></a>  assertEquals(&#39;remove four of the same&#39;, &#39;http://foo.com&#39;,
+<a name="line471"></a>      utils.removeParam(&#39;http://foo.com?q=1&amp;q=2&amp;q=3&amp;q=4&#39;, &#39;q&#39;));
+<a name="line472"></a>  assertEquals(&#39;remove four of the same with another one in the middle&#39;,
+<a name="line473"></a>      &#39;http://foo.com?a=99&#39;,
+<a name="line474"></a>      utils.removeParam(&#39;http://foo.com?q=1&amp;q=2&amp;a=99&amp;q=3&amp;q=4&#39;, &#39;q&#39;));
+<a name="line475"></a>}
+<a name="line476"></a>
+<a name="line477"></a>
+<a name="line478"></a>function testSetParam() {
+<a name="line479"></a>  assertEquals(&#39;middle, no fragment&#39;, &#39;http://foo.com?q=1&amp;s=3&amp;r=999&#39;,
+<a name="line480"></a>      utils.setParam(&#39;http://foo.com?q=1&amp;r=2&amp;s=3&#39;, &#39;r&#39;, 999));
+<a name="line481"></a>  assertEquals(&#39;middle&#39;, &#39;http://foo.com?q=1&amp;s=3&amp;r=999#?r=1&amp;r=1&#39;,
+<a name="line482"></a>      utils.setParam(&#39;http://foo.com?q=1&amp;r=2&amp;s=3#?r=1&amp;r=1&#39;, &#39;r&#39;, 999));
+<a name="line483"></a>  assertEquals(&#39;first&#39;, &#39;http://foo.com?r=2&amp;s=3&amp;q=999#?q=1&amp;q=1&#39;,
+<a name="line484"></a>      utils.setParam(&#39;http://foo.com?q=1&amp;r=2&amp;s=3#?q=1&amp;q=1&#39;, &#39;q&#39;, 999));
+<a name="line485"></a>  assertEquals(&#39;only param&#39;, &#39;http://foo.com?q=999#?q=1&amp;q=1&#39;,
+<a name="line486"></a>      utils.setParam(&#39;http://foo.com?q=1#?q=1&amp;q=1&#39;, &#39;q&#39;, 999));
+<a name="line487"></a>  assertEquals(&#39;last&#39;, &#39;http://foo.com?q=1&amp;r=2&amp;s=999#?s=1&amp;s=1&#39;,
+<a name="line488"></a>      utils.setParam(&#39;http://foo.com?q=1&amp;r=2&amp;s=3#?s=1&amp;s=1&#39;, &#39;s&#39;, 999));
+<a name="line489"></a>  assertEquals(&#39;multiple&#39;, &#39;http://foo.com?s=999#?s=1&amp;s=1&#39;,
+<a name="line490"></a>      utils.setParam(&#39;http://foo.com?s=1&amp;s=2&amp;s=3#?s=1&amp;s=1&#39;, &#39;s&#39;, 999));
+<a name="line491"></a>  assertEquals(&#39;none&#39;, &#39;http://foo.com?r=1&amp;s=999#?s=1&amp;s=1&#39;,
+<a name="line492"></a>      utils.setParam(&#39;http://foo.com?r=1#?s=1&amp;s=1&#39;, &#39;s&#39;, 999));
+<a name="line493"></a>}
+<a name="line494"></a>
+<a name="line495"></a>
+<a name="line496"></a>function testModifyQueryParams() {
+<a name="line497"></a>  var uri = &#39;http://foo.com?a=A&amp;a=A2&amp;b=B&amp;b=B2&amp;c=C&#39;;
+<a name="line498"></a>
+<a name="line499"></a>  uri = utils.appendParam(uri, &#39;d&#39;, &#39;D&#39;);
+<a name="line500"></a>  assertEquals(&#39;http://foo.com?a=A&amp;a=A2&amp;b=B&amp;b=B2&amp;c=C&amp;d=D&#39;, uri);
+<a name="line501"></a>
+<a name="line502"></a>  uri = utils.removeParam(uri, &#39;d&#39;);
+<a name="line503"></a>  uri = utils.appendParam(uri, &#39;d&#39;, &#39;D2&#39;);
+<a name="line504"></a>  assertEquals(&#39;http://foo.com?a=A&amp;a=A2&amp;b=B&amp;b=B2&amp;c=C&amp;d=D2&#39;, uri);
+<a name="line505"></a>
+<a name="line506"></a>  uri = utils.removeParam(uri, &#39;a&#39;);
+<a name="line507"></a>  uri = utils.appendParam(uri, &#39;a&#39;, &#39;A3&#39;);
+<a name="line508"></a>  assertEquals(&#39;http://foo.com?b=B&amp;b=B2&amp;c=C&amp;d=D2&amp;a=A3&#39;, uri);
+<a name="line509"></a>
+<a name="line510"></a>  uri = utils.removeParam(uri, &#39;a&#39;);
+<a name="line511"></a>  uri = utils.appendParam(uri, &#39;a&#39;, &#39;A4&#39;);
+<a name="line512"></a>  assertEquals(&#39;A4&#39;, utils.getParamValue(uri, &#39;a&#39;));
+<a name="line513"></a>}
+<a name="line514"></a>
+<a name="line515"></a>
+<a name="line516"></a>function testBrowserEncoding() {
+<a name="line517"></a>  // Sanity check borrowed from old code to ensure that encodeURIComponent
+<a name="line518"></a>  // is good enough.  Entire test should be safe to delete.
+<a name="line519"></a>  var allowedInFragment = /[A-Za-z0-9\-\._~!$&amp;&#39;()*+,;=:@/?]/g;
+<a name="line520"></a>
+<a name="line521"></a>  var sb = [];
+<a name="line522"></a>  for (var i = 33; i &lt; 500; i++) {  // arbitrarily use first 500 chars.
+<a name="line523"></a>    sb.push(String.fromCharCode(i));
+<a name="line524"></a>  }
+<a name="line525"></a>  var testString = sb.join(&#39;&#39;);
+<a name="line526"></a>
+<a name="line527"></a>  var encodedStr = encodeURIComponent(testString);
+<a name="line528"></a>
+<a name="line529"></a>  // Strip all percent encoded characters, as they&#39;re ok.
+<a name="line530"></a>  encodedStr = encodedStr.replace(/%[0-9A-F][0-9A-F]/g, &#39;&#39;);
+<a name="line531"></a>
+<a name="line532"></a>  // Remove allowed characters.
+<a name="line533"></a>  encodedStr = encodedStr.replace(allowedInFragment, &#39;&#39;);
+<a name="line534"></a>
+<a name="line535"></a>  // Only illegal characters should remain, which is a fail.
+<a name="line536"></a>  assertEquals(&#39;String should be empty&#39;, 0, encodedStr.length);
+<a name="line537"></a>}
+<a name="line538"></a>
+<a name="line539"></a>
+<a name="line540"></a>function testAppendPath() {
+<a name="line541"></a>  var uri = &#39;http://www.foo.com&#39;;
+<a name="line542"></a>  var expected = uri + &#39;/dummy&#39;;
+<a name="line543"></a>  assertEquals(&#39;Path has no trailing &quot;/&quot;, adding with leading &quot;/&quot; failed&#39;,
+<a name="line544"></a>      expected,
+<a name="line545"></a>      goog.uri.utils.appendPath(uri, &#39;/dummy&#39;));
+<a name="line546"></a>  assertEquals(&#39;Path has no trailing &quot;/&quot;, adding with no leading &quot;/&quot; failed&#39;,
+<a name="line547"></a>      expected,
+<a name="line548"></a>      goog.uri.utils.appendPath(uri, &#39;dummy&#39;));
+<a name="line549"></a>  uri = uri + &#39;/&#39;;
+<a name="line550"></a>  assertEquals(&#39;Path has trailing &quot;/&quot;, adding with leading &quot;/&quot; failed&#39;,
+<a name="line551"></a>      expected,
+<a name="line552"></a>      goog.uri.utils.appendPath(uri, &#39;/dummy&#39;));
+<a name="line553"></a>
+<a name="line554"></a>  assertEquals(&#39;Path has trailing &quot;/&quot;, adding with no leading &quot;/&quot; failed&#39;,
+<a name="line555"></a>      expected,
+<a name="line556"></a>      goog.uri.utils.appendPath(uri, &#39;dummy&#39;));
+<a name="line557"></a>}
+<a name="line558"></a>
+<a name="line559"></a>
+<a name="line560"></a>function testMakeUnique() {
+<a name="line561"></a>  assertEquals(&#39;http://www.google.com?zx=RANDOM#blob&#39;,
+<a name="line562"></a>      goog.uri.utils.makeUnique(&#39;http://www.google.com#blob&#39;));
+<a name="line563"></a>  assertEquals(&#39;http://www.google.com?a=1&amp;b=2&amp;zx=RANDOM#blob&#39;,
+<a name="line564"></a>      goog.uri.utils.makeUnique(&#39;http://www.google.com?zx=9&amp;a=1&amp;b=2#blob&#39;));
+<a name="line565"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>relativewithplurals_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_date_relativewithplurals_test.js.html">relativewithplurals_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.date.relativeWithPluralsTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.date.relativeWithPluralsTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.date.relative&#39;);
+<a name="line19"></a>/** @suppress {extraRequire} Include shared tests. */
+<a name="line20"></a>goog.require(&#39;goog.date.relativeTest&#39;);
+<a name="line21"></a>/** @suppress {extraRequire} Included for side effects. */
+<a name="line22"></a>goog.require(&#39;goog.date.relativeWithPlurals&#39;);
+<a name="line23"></a>goog.require(&#39;goog.i18n.DateTimeFormat&#39;);
+<a name="line24"></a>goog.require(&#39;goog.i18n.DateTimeSymbols&#39;);
+<a name="line25"></a>goog.require(&#39;goog.i18n.DateTimeSymbols_bn&#39;); // Bengali
+<a name="line26"></a>goog.require(&#39;goog.i18n.DateTimeSymbols_en&#39;);
+<a name="line27"></a>goog.require(&#39;goog.i18n.DateTimeSymbols_fa&#39;); // Persian
+<a name="line28"></a>goog.require(&#39;goog.i18n.NumberFormatSymbols&#39;);
+<a name="line29"></a>goog.require(&#39;goog.i18n.NumberFormatSymbols_bn&#39;); // Bengali
+<a name="line30"></a>goog.require(&#39;goog.i18n.NumberFormatSymbols_en&#39;);
+<a name="line31"></a>goog.require(&#39;goog.i18n.NumberFormatSymbols_fa&#39;); // Persian
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>function tearDown() {
+<a name="line35"></a>  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_en;
+<a name="line36"></a>  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_en;
+<a name="line37"></a>}
+<a name="line38"></a>
+<a name="line39"></a>function testFormatRelativeForPastDatesPersianDigits() {
+<a name="line40"></a>  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fa;
+<a name="line41"></a>  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_fa;
+<a name="line42"></a>  var fn = goog.date.relative.format;
+<a name="line43"></a>
+<a name="line44"></a>  // The text here is English, as it comes from localized resources, not
+<a name="line45"></a>  // from CLDR. It works properly in production, but it&#39;s not loaded here.
+<a name="line46"></a>  // Will need to wait for CLDR 24, when the data we need will be available,
+<a name="line47"></a>  // so that we can add it to DateTimeSymbols and out of localization.
+<a name="line48"></a>
+<a name="line49"></a>  // For Persian \u06F0 is the base, so \u6F0 = digit 0, \u6F5 = digit 5 ...
+<a name="line50"></a>  // &quot;Western&quot; digits in square brackets for convenience
+<a name="line51"></a>  assertEquals(&#39;Should round seconds to the minute below&#39;,
+<a name="line52"></a>      localizeNumber(0) + &#39; minutes ago&#39;,  // ? minutes ago
+<a name="line53"></a>      fn(timestamp(&#39;23 March 2009 14:30:10&#39;)));
+<a name="line54"></a>
+<a name="line55"></a>  assertEquals(&#39;Should round seconds to the minute below&#39;,
+<a name="line56"></a>      localizeNumber(1) + &#39; minute ago&#39;,  // ? minute ago
+<a name="line57"></a>      fn(timestamp(&#39;23 March 2009 14:29:56&#39;)));
+<a name="line58"></a>
+<a name="line59"></a>  assertEquals(&#39;Should round seconds to the minute below&#39;,
+<a name="line60"></a>      localizeNumber(2) + &#39; minutes ago&#39;,  // ? minutes ago
+<a name="line61"></a>      fn(timestamp(&#39;23 March 2009 14:29:00&#39;)));
+<a name="line62"></a>
+<a name="line63"></a>  assertEquals(localizeNumber(10) + &#39; minutes ago&#39;,  // ?? minutes ago
+<a name="line64"></a>      fn(timestamp(&#39;23 March 2009 14:20:10&#39;)));
+<a name="line65"></a>  assertEquals(localizeNumber(59) + &#39; minutes ago&#39;,  // ?? minutes ago
+<a name="line66"></a>      fn(timestamp(&#39;23 March 2009 13:31:42&#39;)));
+<a name="line67"></a>  assertEquals(localizeNumber(2) + &#39; hours ago&#39;,  // ? hours ago
+<a name="line68"></a>      fn(timestamp(&#39;23 March 2009 12:20:56&#39;)));
+<a name="line69"></a>  assertEquals(localizeNumber(23) + &#39; hours ago&#39;,  // ?? hours ago
+<a name="line70"></a>      fn(timestamp(&#39;22 March 2009 15:30:56&#39;)));
+<a name="line71"></a>  assertEquals(localizeNumber(1) + &#39; day ago&#39;,  // ? day ago
+<a name="line72"></a>      fn(timestamp(&#39;22 March 2009 12:11:04&#39;)));
+<a name="line73"></a>  assertEquals(localizeNumber(1) + &#39; day ago&#39;,  // ? day ago
+<a name="line74"></a>      fn(timestamp(&#39;22 March 2009 00:00:00&#39;)));
+<a name="line75"></a>  assertEquals(localizeNumber(2) + &#39; days ago&#39;,  // ? days ago
+<a name="line76"></a>      fn(timestamp(&#39;21 March 2009 23:59:59&#39;)));
+<a name="line77"></a>  assertEquals(localizeNumber(2) + &#39; days ago&#39;,  // ? days ago
+<a name="line78"></a>      fn(timestamp(&#39;21 March 2009 10:30:56&#39;)));
+<a name="line79"></a>  assertEquals(localizeNumber(2) + &#39; days ago&#39;,  // ? days ago
+<a name="line80"></a>      fn(timestamp(&#39;21 March 2009 00:00:00&#39;)));
+<a name="line81"></a>  assertEquals(localizeNumber(3) + &#39; days ago&#39;,  // ? days ago
+<a name="line82"></a>      fn(timestamp(&#39;20 March 2009 23:59:59&#39;)));
+<a name="line83"></a>}
+<a name="line84"></a>
+<a name="line85"></a>function testFormatRelativeForFutureDatesBengaliDigits() {
+<a name="line86"></a>  var fn = goog.date.relative.format;
+<a name="line87"></a>  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_bn;
+<a name="line88"></a>  goog.i18n.NumberFormatSymbols = goog.i18n.NumberFormatSymbols_bn;
+<a name="line89"></a>
+<a name="line90"></a>  // For Bengali \u09E6 is the base, so \u09E6 = digit 0, \u09EB = digit 5
+<a name="line91"></a>  // &quot;Western&quot; digits in square brackets for convenience
+<a name="line92"></a>  assertEquals(&#39;Should round seconds to the minute below&#39;,
+<a name="line93"></a>      &#39;in &#39; + localizeNumber(1) + &#39; minute&#39;,  // in ? minute
+<a name="line94"></a>      fn(timestamp(&#39;23 March 2009 14:32:05&#39;)));
+<a name="line95"></a>
+<a name="line96"></a>  assertEquals(&#39;Should round seconds to the minute below&#39;,
+<a name="line97"></a>      &#39;in &#39; + localizeNumber(2) + &#39; minutes&#39;,  // in ? minutes
+<a name="line98"></a>      fn(timestamp(&#39;23 March 2009 14:33:00&#39;)));
+<a name="line99"></a>
+<a name="line100"></a>  assertEquals(&#39;in &#39; + localizeNumber(10) + &#39; minutes&#39;,  // in ?? minutes
+<a name="line101"></a>      fn(timestamp(&#39;23 March 2009 14:40:10&#39;)));
+<a name="line102"></a>  assertEquals(&#39;in &#39; + localizeNumber(59) + &#39; minutes&#39;,  // in ?? minutes
+<a name="line103"></a>      fn(timestamp(&#39;23 March 2009 15:29:15&#39;)));
+<a name="line104"></a>  assertEquals(&#39;in &#39; + localizeNumber(2) + &#39; hours&#39;,  // in ? hours
+<a name="line105"></a>      fn(timestamp(&#39;23 March 2009 17:20:56&#39;)));
+<a name="line106"></a>  assertEquals(&#39;in &#39; + localizeNumber(23) + &#39; hours&#39;,  // in ?? hours
+<a name="line107"></a>      fn(timestamp(&#39;24 March 2009 13:30:56&#39;)));
+<a name="line108"></a>  assertEquals(&#39;in &#39; + localizeNumber(1) + &#39; day&#39;,  // in ? day
+<a name="line109"></a>      fn(timestamp(&#39;24 March 2009 14:31:07&#39;)));
+<a name="line110"></a>  assertEquals(&#39;in &#39; + localizeNumber(1) + &#39; day&#39;,  // in ? day
+<a name="line111"></a>      fn(timestamp(&#39;24 March 2009 16:11:04&#39;)));
+<a name="line112"></a>  assertEquals(&#39;in &#39; + localizeNumber(1) + &#39; day&#39;,  // in ? day
+<a name="line113"></a>      fn(timestamp(&#39;24 March 2009 23:59:59&#39;)));
+<a name="line114"></a>  assertEquals(&#39;in &#39; + localizeNumber(2) + &#39; days&#39;,  // in ? days
+<a name="line115"></a>      fn(timestamp(&#39;25 March 2009 00:00:00&#39;)));
+<a name="line116"></a>  assertEquals(&#39;in &#39; + localizeNumber(2) + &#39; days&#39;,  // in ? days
+<a name="line117"></a>      fn(timestamp(&#39;25 March 2009 10:30:56&#39;)));
+<a name="line118"></a>  assertEquals(&#39;in &#39; + localizeNumber(2) + &#39; days&#39;,  // in ? days
+<a name="line119"></a>      fn(timestamp(&#39;25 March 2009 23:59:59&#39;)));
+<a name="line120"></a>  assertEquals(&#39;in &#39; + localizeNumber(3) + &#39; days&#39;,  // in ? days
+<a name="line121"></a>      fn(timestamp(&#39;26 March 2009 00:00:00&#39;)));
+<a name="line122"></a>}
+<a name="line123"></a>
+<a name="line124"></a>function localizeNumber(value) {
+<a name="line125"></a>  // Quick conversion to national digits, to increase readability of the
+<a name="line126"></a>  // tests above.
+<a name="line127"></a>  return goog.i18n.DateTimeFormat.localizeNumbers(value);
+<a name="line128"></a>}
+</pre>
+
+
+</body>
+</html>

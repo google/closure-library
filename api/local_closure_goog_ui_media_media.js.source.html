@@ -1,0 +1,337 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>media.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_media_media.js.html">media.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides the base goog.ui.Control and goog.ui.ControlRenderer
+<a name="line17"></a> * for media types, as well as a media model consistent with the Yahoo Media RSS
+<a name="line18"></a> * specification {@link http://search.yahoo.com/mrss/}.
+<a name="line19"></a> *
+<a name="line20"></a> * The goog.ui.media.* package is basically a set of goog.ui.ControlRenderers
+<a name="line21"></a> * subclasses (such as goog.ui.media.Youtube, goog.ui.media.Picasa, etc) that
+<a name="line22"></a> * should all work with the same goog.ui.Control (goog.ui.media.Media) logic.
+<a name="line23"></a> *
+<a name="line24"></a> * This design guarantees that all different types of medias will behave alike
+<a name="line25"></a> * (in a base level) but will look different.
+<a name="line26"></a> *
+<a name="line27"></a> * In MVC terms, {@link goog.ui.media.Media} is the Controller,
+<a name="line28"></a> * {@link goog.ui.media.MediaRenderer} + CSS definitions are the View and
+<a name="line29"></a> * {@code goog.ui.media.MediaModel} is the data Model. Typically,
+<a name="line30"></a> * MediaRenderer will be subclassed to provide media specific renderers.
+<a name="line31"></a> * MediaRenderer subclasses are also responsible for defining the data model.
+<a name="line32"></a> *
+<a name="line33"></a> * This design is strongly patterned after:
+<a name="line34"></a> * http://go/closure_control_subclassing
+<a name="line35"></a> *
+<a name="line36"></a> * goog.ui.media.MediaRenderer handles the basic common ways to display media,
+<a name="line37"></a> * such as displaying tooltips, frames, minimize/maximize buttons, play buttons,
+<a name="line38"></a> * etc. Its subclasses are responsible for rendering media specific DOM
+<a name="line39"></a> * structures, like youtube flash players, picasa albums, etc.
+<a name="line40"></a> *
+<a name="line41"></a> * goog.ui.media.Media handles the Control of Medias, by listening to events
+<a name="line42"></a> * and firing the appropriate actions. It knows about the existence of captions,
+<a name="line43"></a> * minimize/maximize buttons, and takes all the actions needed to change states,
+<a name="line44"></a> * including delegating the UI actions to MediaRenderers.
+<a name="line45"></a> *
+<a name="line46"></a> * Although MediaRenderer is a base class designed to be subclassed, it can
+<a name="line47"></a> * be used by itself:
+<a name="line48"></a> *
+<a name="line49"></a> * &lt;pre&gt;
+<a name="line50"></a> *   var renderer = new goog.ui.media.MediaRenderer();
+<a name="line51"></a> *   var control = new goog.ui.media.Media(&#39;hello world&#39;, renderer);
+<a name="line52"></a> *   var control.render(goog.dom.getElement(&#39;mediaHolder&#39;));
+<a name="line53"></a> * &lt;/pre&gt;
+<a name="line54"></a> *
+<a name="line55"></a> * It requires a few CSS rules to be defined, which you should use to control
+<a name="line56"></a> * how the component is displayed. {@link goog.ui.ControlRenderer}s is very CSS
+<a name="line57"></a> * intensive, which separates the UI structure (the HTML DOM elements, which is
+<a name="line58"></a> * created by the {@code goog.ui.media.MediaRenderer}) from the UI view (which
+<a name="line59"></a> * nodes are visible, which aren&#39;t, where they are positioned. These are defined
+<a name="line60"></a> * on the CSS rules for each state). A few examples of CSS selectors that needs
+<a name="line61"></a> * to be defined are:
+<a name="line62"></a> *
+<a name="line63"></a> * &lt;ul&gt;
+<a name="line64"></a> *   &lt;li&gt;.goog-ui-media
+<a name="line65"></a> *   &lt;li&gt;.goog-ui-media-hover
+<a name="line66"></a> *   &lt;li&gt;.goog-ui-media-selected
+<a name="line67"></a> * &lt;/ul&gt;
+<a name="line68"></a> *
+<a name="line69"></a> * If you want to have different custom renderers CSS namespaces (eg. you may
+<a name="line70"></a> * want to show a small thumbnail, or you may want to hide the caption, etc),
+<a name="line71"></a> * you can do so by using:
+<a name="line72"></a> *
+<a name="line73"></a> * &lt;pre&gt;
+<a name="line74"></a> *   var renderer = goog.ui.ControlRenderer.getCustomRenderer(
+<a name="line75"></a> *       goog.ui.media.MediaRenderer, &#39;my-custom-namespace&#39;);
+<a name="line76"></a> *   var media = new goog.ui.media.Media(&#39;&#39;, renderer);
+<a name="line77"></a> *   media.render(goog.dom.getElement(&#39;parent&#39;));
+<a name="line78"></a> * &lt;/pre&gt;
+<a name="line79"></a> *
+<a name="line80"></a> * Which will allow you to set your own .my-custom-namespace-hover,
+<a name="line81"></a> * .my-custom-namespace-selected CSS selectors.
+<a name="line82"></a> *
+<a name="line83"></a> * NOTE(user): it seems like an overkill to subclass goog.ui.Control instead of
+<a name="line84"></a> * using a factory, but we wanted to make sure we had more control over the
+<a name="line85"></a> * events for future media implementations. Since we intent to use it in many
+<a name="line86"></a> * different places, it makes sense to have a more flexible design that lets us
+<a name="line87"></a> * control the inner workings of goog.ui.Control.
+<a name="line88"></a> *
+<a name="line89"></a> * TODO(user): implement, as needed, the Media specific state changes UI, such
+<a name="line90"></a> * as minimize/maximize buttons, expand/close buttons, etc.
+<a name="line91"></a> *
+<a name="line92"></a> */
+<a name="line93"></a>
+<a name="line94"></a>goog.provide(&#39;goog.ui.media.Media&#39;);
+<a name="line95"></a>goog.provide(&#39;goog.ui.media.MediaRenderer&#39;);
+<a name="line96"></a>
+<a name="line97"></a>goog.require(&#39;goog.style&#39;);
+<a name="line98"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line99"></a>goog.require(&#39;goog.ui.Control&#39;);
+<a name="line100"></a>goog.require(&#39;goog.ui.ControlRenderer&#39;);
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Provides the control mechanism of media types.
+<a name="line106"></a> *
+<a name="line107"></a> * @param {goog.ui.media.MediaModel} dataModel The data model to be used by the
+<a name="line108"></a> *     renderer.
+<a name="line109"></a> * @param {goog.ui.ControlRenderer=} opt_renderer Renderer used to render or
+<a name="line110"></a> *     decorate the component; defaults to {@link goog.ui.ControlRenderer}.
+<a name="line111"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
+<a name="line112"></a> *     document interaction.
+<a name="line113"></a> * @constructor
+<a name="line114"></a> * @extends {goog.ui.Control}
+<a name="line115"></a> * @final
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.media.Media = function(dataModel, opt_renderer, opt_domHelper) {
+<a name="line118"></a>  goog.ui.Control.call(this, null, opt_renderer, opt_domHelper);
+<a name="line119"></a>
+<a name="line120"></a>  // Sets up the data model.
+<a name="line121"></a>  this.setDataModel(dataModel);
+<a name="line122"></a>  this.setSupportedState(goog.ui.Component.State.OPENED, true);
+<a name="line123"></a>  this.setSupportedState(goog.ui.Component.State.SELECTED, true);
+<a name="line124"></a>  // TODO(user): had to do this to for mouseDownHandler not to
+<a name="line125"></a>  // e.preventDefault(), because it was not allowing the event to reach the
+<a name="line126"></a>  // flash player. figure out a better way to not e.preventDefault().
+<a name="line127"></a>  this.setAllowTextSelection(true);
+<a name="line128"></a>
+<a name="line129"></a>  // Media items don&#39;t use RTL styles, so avoid accessing computed styles to
+<a name="line130"></a>  // figure out if the control is RTL.
+<a name="line131"></a>  this.setRightToLeft(false);
+<a name="line132"></a>};
+<a name="line133"></a>goog.inherits(goog.ui.media.Media, goog.ui.Control);
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * The media data model used on the renderer.
+<a name="line138"></a> *
+<a name="line139"></a> * @type {goog.ui.media.MediaModel}
+<a name="line140"></a> * @private
+<a name="line141"></a> */
+<a name="line142"></a>goog.ui.media.Media.prototype.dataModel_;
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * Sets the media model to be used on the renderer.
+<a name="line147"></a> * @param {goog.ui.media.MediaModel} dataModel The media model the renderer
+<a name="line148"></a> *     should use.
+<a name="line149"></a> */
+<a name="line150"></a>goog.ui.media.Media.prototype.setDataModel = function(dataModel) {
+<a name="line151"></a>  this.dataModel_ = dataModel;
+<a name="line152"></a>};
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * Gets the media model renderer is using.
+<a name="line157"></a> * @return {goog.ui.media.MediaModel} The media model being used.
+<a name="line158"></a> */
+<a name="line159"></a>goog.ui.media.Media.prototype.getDataModel = function() {
+<a name="line160"></a>  return this.dataModel_;
+<a name="line161"></a>};
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * Base class of all media renderers. Provides the common renderer functionality
+<a name="line167"></a> * of medias.
+<a name="line168"></a> *
+<a name="line169"></a> * The current common functionality shared by Medias is to have an outer frame
+<a name="line170"></a> * that gets highlighted on mouse hover.
+<a name="line171"></a> *
+<a name="line172"></a> * TODO(user): implement more common UI behavior, as needed.
+<a name="line173"></a> *
+<a name="line174"></a> * NOTE(user): I am not enjoying how the subclasses are changing their state
+<a name="line175"></a> * through setState() ... maybe provide abstract methods like
+<a name="line176"></a> * goog.ui.media.MediaRenderer.prototype.preview = goog.abstractMethod;
+<a name="line177"></a> * goog.ui.media.MediaRenderer.prototype.play = goog.abstractMethod;
+<a name="line178"></a> * goog.ui.media.MediaRenderer.prototype.minimize = goog.abstractMethod;
+<a name="line179"></a> * goog.ui.media.MediaRenderer.prototype.maximize = goog.abstractMethod;
+<a name="line180"></a> * and call them on this parent class setState ?
+<a name="line181"></a> *
+<a name="line182"></a> * @constructor
+<a name="line183"></a> * @extends {goog.ui.ControlRenderer}
+<a name="line184"></a> */
+<a name="line185"></a>goog.ui.media.MediaRenderer = function() {
+<a name="line186"></a>  goog.ui.ControlRenderer.call(this);
+<a name="line187"></a>};
+<a name="line188"></a>goog.inherits(goog.ui.media.MediaRenderer, goog.ui.ControlRenderer);
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * Builds the common DOM structure of medias. Builds an outer div, and appends
+<a name="line193"></a> * a child div with the {@code goog.ui.Control.getContent} content. Marks the
+<a name="line194"></a> * caption with a {@code this.getClassClass()} + &#39;-caption&#39; css flag, so that
+<a name="line195"></a> * specific renderers can hide/show the caption as desired.
+<a name="line196"></a> *
+<a name="line197"></a> * @param {goog.ui.Control} control The control instance.
+<a name="line198"></a> * @return {!Element} The DOM structure that represents control.
+<a name="line199"></a> * @override
+<a name="line200"></a> */
+<a name="line201"></a>goog.ui.media.MediaRenderer.prototype.createDom = function(control) {
+<a name="line202"></a>  var domHelper = control.getDomHelper();
+<a name="line203"></a>  var div = domHelper.createElement(&#39;div&#39;);
+<a name="line204"></a>  div.className = this.getClassNames(control).join(&#39; &#39;);
+<a name="line205"></a>
+<a name="line206"></a>  var dataModel = control.getDataModel();
+<a name="line207"></a>
+<a name="line208"></a>  // Only creates DOMs if the data is available.
+<a name="line209"></a>  if (dataModel.getCaption()) {
+<a name="line210"></a>    var caption = domHelper.createElement(&#39;div&#39;);
+<a name="line211"></a>    caption.className = goog.getCssName(this.getCssClass(), &#39;caption&#39;);
+<a name="line212"></a>    caption.appendChild(domHelper.createDom(
+<a name="line213"></a>        &#39;p&#39;, goog.getCssName(this.getCssClass(), &#39;caption-text&#39;),
+<a name="line214"></a>        dataModel.getCaption()));
+<a name="line215"></a>    domHelper.appendChild(div, caption);
+<a name="line216"></a>  }
+<a name="line217"></a>
+<a name="line218"></a>  if (dataModel.getDescription()) {
+<a name="line219"></a>    var description = domHelper.createElement(&#39;div&#39;);
+<a name="line220"></a>    description.className = goog.getCssName(this.getCssClass(), &#39;description&#39;);
+<a name="line221"></a>    description.appendChild(domHelper.createDom(
+<a name="line222"></a>        &#39;p&#39;, goog.getCssName(this.getCssClass(), &#39;description-text&#39;),
+<a name="line223"></a>        dataModel.getDescription()));
+<a name="line224"></a>    domHelper.appendChild(div, description);
+<a name="line225"></a>  }
+<a name="line226"></a>
+<a name="line227"></a>  // Creates thumbnails of the media.
+<a name="line228"></a>  var thumbnails = dataModel.getThumbnails() || [];
+<a name="line229"></a>  for (var index = 0; index &lt; thumbnails.length; index++) {
+<a name="line230"></a>    var thumbnail = thumbnails[index];
+<a name="line231"></a>    var thumbnailElement = domHelper.createElement(&#39;img&#39;);
+<a name="line232"></a>    thumbnailElement.src = thumbnail.getUrl();
+<a name="line233"></a>    thumbnailElement.className = this.getThumbnailCssName(index);
+<a name="line234"></a>
+<a name="line235"></a>    // Check that the size is defined and that the size&#39;s height and width
+<a name="line236"></a>    // are defined. Undefined height and width is deprecated but still
+<a name="line237"></a>    // seems to exist in some cases.
+<a name="line238"></a>    var size = thumbnail.getSize();
+<a name="line239"></a>
+<a name="line240"></a>    if (size &amp;&amp; goog.isDefAndNotNull(size.height) &amp;&amp;
+<a name="line241"></a>        goog.isDefAndNotNull(size.width)) {
+<a name="line242"></a>      goog.style.setSize(thumbnailElement, size);
+<a name="line243"></a>    }
+<a name="line244"></a>    domHelper.appendChild(div, thumbnailElement);
+<a name="line245"></a>  }
+<a name="line246"></a>
+<a name="line247"></a>  if (dataModel.getPlayer()) {
+<a name="line248"></a>    // if medias have players, allow UI for a play button.
+<a name="line249"></a>    var playButton = domHelper.createElement(&#39;div&#39;);
+<a name="line250"></a>    playButton.className = goog.getCssName(this.getCssClass(), &#39;playbutton&#39;);
+<a name="line251"></a>    domHelper.appendChild(div, playButton);
+<a name="line252"></a>  }
+<a name="line253"></a>
+<a name="line254"></a>  control.setElementInternal(div);
+<a name="line255"></a>
+<a name="line256"></a>  this.setState(
+<a name="line257"></a>      control,
+<a name="line258"></a>      /** @type {goog.ui.Component.State} */ (control.getState()),
+<a name="line259"></a>      true);
+<a name="line260"></a>
+<a name="line261"></a>  return div;
+<a name="line262"></a>};
+<a name="line263"></a>
+<a name="line264"></a>
+<a name="line265"></a>/**
+<a name="line266"></a> * Returns a renamable CSS class name for a numbered thumbnail. The default
+<a name="line267"></a> * implementation generates the class names goog-ui-media-thumbnail0,
+<a name="line268"></a> * goog-ui-media-thumbnail1, and the generic goog-ui-media-thumbnailn.
+<a name="line269"></a> * Subclasses can override this method when their media requires additional
+<a name="line270"></a> * specific class names (Applications are supposed to know how many thumbnails
+<a name="line271"></a> * media will have).
+<a name="line272"></a> *
+<a name="line273"></a> * @param {number} index The thumbnail index.
+<a name="line274"></a> * @return {string} CSS class name.
+<a name="line275"></a> * @protected
+<a name="line276"></a> */
+<a name="line277"></a>goog.ui.media.MediaRenderer.prototype.getThumbnailCssName = function(index) {
+<a name="line278"></a>  switch (index) {
+<a name="line279"></a>    case 0: return goog.getCssName(this.getCssClass(), &#39;thumbnail0&#39;);
+<a name="line280"></a>    case 1: return goog.getCssName(this.getCssClass(), &#39;thumbnail1&#39;);
+<a name="line281"></a>    case 2: return goog.getCssName(this.getCssClass(), &#39;thumbnail2&#39;);
+<a name="line282"></a>    case 3: return goog.getCssName(this.getCssClass(), &#39;thumbnail3&#39;);
+<a name="line283"></a>    case 4: return goog.getCssName(this.getCssClass(), &#39;thumbnail4&#39;);
+<a name="line284"></a>    default: return goog.getCssName(this.getCssClass(), &#39;thumbnailn&#39;);
+<a name="line285"></a>  }
+<a name="line286"></a>};
+</pre>
+
+
+</body>
+</html>

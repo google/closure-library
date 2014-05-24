@@ -1,0 +1,440 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>attributes.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_a11y_aria_attributes.js.html">attributes.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview The file contains generated enumerations for ARIA states
+<a name="line18"></a> * and properties as defined by W3C ARIA standard:
+<a name="line19"></a> * http://www.w3.org/TR/wai-aria/.
+<a name="line20"></a> *
+<a name="line21"></a> * This is auto-generated code. Do not manually edit! For more details
+<a name="line22"></a> * about how to edit it via the generator check go/closure-ariagen.
+<a name="line23"></a> */
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.a11y.aria.AutoCompleteValues&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.a11y.aria.CheckedValues&#39;);
+<a name="line27"></a>goog.provide(&#39;goog.a11y.aria.DropEffectValues&#39;);
+<a name="line28"></a>goog.provide(&#39;goog.a11y.aria.ExpandedValues&#39;);
+<a name="line29"></a>goog.provide(&#39;goog.a11y.aria.GrabbedValues&#39;);
+<a name="line30"></a>goog.provide(&#39;goog.a11y.aria.InvalidValues&#39;);
+<a name="line31"></a>goog.provide(&#39;goog.a11y.aria.LivePriority&#39;);
+<a name="line32"></a>goog.provide(&#39;goog.a11y.aria.OrientationValues&#39;);
+<a name="line33"></a>goog.provide(&#39;goog.a11y.aria.PressedValues&#39;);
+<a name="line34"></a>goog.provide(&#39;goog.a11y.aria.RelevantValues&#39;);
+<a name="line35"></a>goog.provide(&#39;goog.a11y.aria.SelectedValues&#39;);
+<a name="line36"></a>goog.provide(&#39;goog.a11y.aria.SortValues&#39;);
+<a name="line37"></a>goog.provide(&#39;goog.a11y.aria.State&#39;);
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * ARIA states and properties.
+<a name="line42"></a> * @enum {string}
+<a name="line43"></a> */
+<a name="line44"></a>goog.a11y.aria.State = {
+<a name="line45"></a>  // ARIA property for setting the currently active descendant of an element,
+<a name="line46"></a>  // for example the selected item in a list box. Value: ID of an element.
+<a name="line47"></a>  ACTIVEDESCENDANT: &#39;activedescendant&#39;,
+<a name="line48"></a>
+<a name="line49"></a>  // ARIA property that, if true, indicates that all of a changed region should
+<a name="line50"></a>  // be presented, instead of only parts. Value: one of {true, false}.
+<a name="line51"></a>  ATOMIC: &#39;atomic&#39;,
+<a name="line52"></a>
+<a name="line53"></a>  // ARIA property to specify that input completion is provided. Value:
+<a name="line54"></a>  // one of {&#39;inline&#39;, &#39;list&#39;, &#39;both&#39;, &#39;none&#39;}.
+<a name="line55"></a>  AUTOCOMPLETE: &#39;autocomplete&#39;,
+<a name="line56"></a>
+<a name="line57"></a>  // ARIA state to indicate that an element and its subtree are being updated.
+<a name="line58"></a>  // Value: one of {true, false}.
+<a name="line59"></a>  BUSY: &#39;busy&#39;,
+<a name="line60"></a>
+<a name="line61"></a>  // ARIA state for a checked item. Value: one of {&#39;true&#39;, &#39;false&#39;, &#39;mixed&#39;,
+<a name="line62"></a>  // undefined}.
+<a name="line63"></a>  CHECKED: &#39;checked&#39;,
+<a name="line64"></a>
+<a name="line65"></a>  // ARIA property that identifies the element or elements whose contents or
+<a name="line66"></a>  // presence are controlled by this element.
+<a name="line67"></a>  // Value: space-separated IDs of other elements.
+<a name="line68"></a>  CONTROLS: &#39;controls&#39;,
+<a name="line69"></a>
+<a name="line70"></a>  // ARIA property that identifies the element or elements that describe
+<a name="line71"></a>  // this element. Value: space-separated IDs of other elements.
+<a name="line72"></a>  DESCRIBEDBY: &#39;describedby&#39;,
+<a name="line73"></a>
+<a name="line74"></a>  // ARIA state for a disabled item. Value: one of {true, false}.
+<a name="line75"></a>  DISABLED: &#39;disabled&#39;,
+<a name="line76"></a>
+<a name="line77"></a>  // ARIA property that indicates what functions can be performed when a
+<a name="line78"></a>  // dragged object is released on the drop target.  Value: one of
+<a name="line79"></a>  // {&#39;copy&#39;, &#39;move&#39;, &#39;link&#39;, &#39;execute&#39;, &#39;popup&#39;, &#39;none&#39;}.
+<a name="line80"></a>  DROPEFFECT: &#39;dropeffect&#39;,
+<a name="line81"></a>
+<a name="line82"></a>  // ARIA state for setting whether the element like a tree node is expanded.
+<a name="line83"></a>  // Value: one of {true, false, undefined}.
+<a name="line84"></a>  EXPANDED: &#39;expanded&#39;,
+<a name="line85"></a>
+<a name="line86"></a>  // ARIA property that identifies the next element (or elements) in the
+<a name="line87"></a>  // recommended reading order of content. Value: space-separated ids of
+<a name="line88"></a>  // elements to flow to.
+<a name="line89"></a>  FLOWTO: &#39;flowto&#39;,
+<a name="line90"></a>
+<a name="line91"></a>  // ARIA state that indicates an element&#39;s &quot;grabbed&quot; state in drag-and-drop.
+<a name="line92"></a>  // Value: one of {true, false, undefined}.
+<a name="line93"></a>  GRABBED: &#39;grabbed&#39;,
+<a name="line94"></a>
+<a name="line95"></a>  // ARIA property indicating whether the element has a popup.
+<a name="line96"></a>  // Value: one of {true, false}.
+<a name="line97"></a>  HASPOPUP: &#39;haspopup&#39;,
+<a name="line98"></a>
+<a name="line99"></a>  // ARIA state indicating that the element is not visible or perceivable
+<a name="line100"></a>  // to any user. Value: one of {true, false}.
+<a name="line101"></a>  HIDDEN: &#39;hidden&#39;,
+<a name="line102"></a>
+<a name="line103"></a>  // ARIA state indicating that the entered value does not conform. Value:
+<a name="line104"></a>  // one of {false, true, &#39;grammar&#39;, &#39;spelling&#39;}
+<a name="line105"></a>  INVALID: &#39;invalid&#39;,
+<a name="line106"></a>
+<a name="line107"></a>  // ARIA property that provides a label to override any other text, value, or
+<a name="line108"></a>  // contents used to describe this element. Value: string.
+<a name="line109"></a>  LABEL: &#39;label&#39;,
+<a name="line110"></a>
+<a name="line111"></a>  // ARIA property for setting the element which labels another element.
+<a name="line112"></a>  // Value: space-separated IDs of elements.
+<a name="line113"></a>  LABELLEDBY: &#39;labelledby&#39;,
+<a name="line114"></a>
+<a name="line115"></a>  // ARIA property for setting the level of an element in the hierarchy.
+<a name="line116"></a>  // Value: integer.
+<a name="line117"></a>  LEVEL: &#39;level&#39;,
+<a name="line118"></a>
+<a name="line119"></a>  // ARIA property indicating that an element will be updated, and
+<a name="line120"></a>  // describes the types of updates the user agents, assistive technologies,
+<a name="line121"></a>  // and user can expect from the live region. Value: one of {&#39;off&#39;, &#39;polite&#39;,
+<a name="line122"></a>  // &#39;assertive&#39;}.
+<a name="line123"></a>  LIVE: &#39;live&#39;,
+<a name="line124"></a>
+<a name="line125"></a>  // ARIA property indicating whether a text box can accept multiline input.
+<a name="line126"></a>  // Value: one of {true, false}.
+<a name="line127"></a>  MULTILINE: &#39;multiline&#39;,
+<a name="line128"></a>
+<a name="line129"></a>  // ARIA property indicating if the user may select more than one item.
+<a name="line130"></a>  // Value: one of {true, false}.
+<a name="line131"></a>  MULTISELECTABLE: &#39;multiselectable&#39;,
+<a name="line132"></a>
+<a name="line133"></a>  // ARIA property indicating if the element is horizontal or vertical.
+<a name="line134"></a>  // Value: one of {&#39;vertical&#39;, &#39;horizontal&#39;}.
+<a name="line135"></a>  ORIENTATION: &#39;orientation&#39;,
+<a name="line136"></a>
+<a name="line137"></a>  // ARIA property creating a visual, functional, or contextual parent/child
+<a name="line138"></a>  // relationship when the DOM hierarchy can&#39;t be used to represent it.
+<a name="line139"></a>  // Value: Space-separated IDs of elements.
+<a name="line140"></a>  OWNS: &#39;owns&#39;,
+<a name="line141"></a>
+<a name="line142"></a>  // ARIA property that defines an element&#39;s number of position in a list.
+<a name="line143"></a>  // Value: integer.
+<a name="line144"></a>  POSINSET: &#39;posinset&#39;,
+<a name="line145"></a>
+<a name="line146"></a>  // ARIA state for a pressed item.
+<a name="line147"></a>  // Value: one of {true, false, undefined, &#39;mixed&#39;}.
+<a name="line148"></a>  PRESSED: &#39;pressed&#39;,
+<a name="line149"></a>
+<a name="line150"></a>  // ARIA property indicating that an element is not editable.
+<a name="line151"></a>  // Value: one of {true, false}.
+<a name="line152"></a>  READONLY: &#39;readonly&#39;,
+<a name="line153"></a>
+<a name="line154"></a>  // ARIA property indicating that change notifications within this subtree
+<a name="line155"></a>  // of a live region should be announced. Value: one of {&#39;additions&#39;,
+<a name="line156"></a>  // &#39;removals&#39;, &#39;text&#39;, &#39;all&#39;, &#39;additions text&#39;}.
+<a name="line157"></a>  RELEVANT: &#39;relevant&#39;,
+<a name="line158"></a>
+<a name="line159"></a>  // ARIA property indicating that user input is required on this element
+<a name="line160"></a>  // before a form may be submitted. Value: one of {true, false}.
+<a name="line161"></a>  REQUIRED: &#39;required&#39;,
+<a name="line162"></a>
+<a name="line163"></a>  // ARIA state for setting the currently selected item in the list.
+<a name="line164"></a>  // Value: one of {true, false, undefined}.
+<a name="line165"></a>  SELECTED: &#39;selected&#39;,
+<a name="line166"></a>
+<a name="line167"></a>  // ARIA property defining the number of items in a list. Value: integer.
+<a name="line168"></a>  SETSIZE: &#39;setsize&#39;,
+<a name="line169"></a>
+<a name="line170"></a>  // ARIA property indicating if items are sorted. Value: one of {&#39;ascending&#39;,
+<a name="line171"></a>  // &#39;descending&#39;, &#39;none&#39;, &#39;other&#39;}.
+<a name="line172"></a>  SORT: &#39;sort&#39;,
+<a name="line173"></a>
+<a name="line174"></a>  // ARIA property for slider maximum value. Value: number.
+<a name="line175"></a>  VALUEMAX: &#39;valuemax&#39;,
+<a name="line176"></a>
+<a name="line177"></a>  // ARIA property for slider minimum value. Value: number.
+<a name="line178"></a>  VALUEMIN: &#39;valuemin&#39;,
+<a name="line179"></a>
+<a name="line180"></a>  // ARIA property for slider active value. Value: number.
+<a name="line181"></a>  VALUENOW: &#39;valuenow&#39;,
+<a name="line182"></a>
+<a name="line183"></a>  // ARIA property for slider active value represented as text.
+<a name="line184"></a>  // Value: string.
+<a name="line185"></a>  VALUETEXT: &#39;valuetext&#39;
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * ARIA state values for AutoCompleteValues.
+<a name="line191"></a> * @enum {string}
+<a name="line192"></a> */
+<a name="line193"></a>goog.a11y.aria.AutoCompleteValues = {
+<a name="line194"></a>  // The system provides text after the caret as a suggestion
+<a name="line195"></a>  // for how to complete the field.
+<a name="line196"></a>  INLINE: &#39;inline&#39;,
+<a name="line197"></a>  // A list of choices appears from which the user can choose,
+<a name="line198"></a>  // but the edit box retains focus.
+<a name="line199"></a>  LIST: &#39;list&#39;,
+<a name="line200"></a>  // A list of choices appears and the currently selected suggestion
+<a name="line201"></a>  // also appears inline.
+<a name="line202"></a>  BOTH: &#39;both&#39;,
+<a name="line203"></a>  // No input completion suggestions are provided.
+<a name="line204"></a>  NONE: &#39;none&#39;
+<a name="line205"></a>};
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * ARIA state values for DropEffectValues.
+<a name="line210"></a> * @enum {string}
+<a name="line211"></a> */
+<a name="line212"></a>goog.a11y.aria.DropEffectValues = {
+<a name="line213"></a>  // A duplicate of the source object will be dropped into the target.
+<a name="line214"></a>  COPY: &#39;copy&#39;,
+<a name="line215"></a>  // The source object will be removed from its current location
+<a name="line216"></a>  // and dropped into the target.
+<a name="line217"></a>  MOVE: &#39;move&#39;,
+<a name="line218"></a>  // A reference or shortcut to the dragged object
+<a name="line219"></a>  // will be created in the target object.
+<a name="line220"></a>  LINK: &#39;link&#39;,
+<a name="line221"></a>  // A function supported by the drop target is
+<a name="line222"></a>  // executed, using the drag source as an input.
+<a name="line223"></a>  EXECUTE: &#39;execute&#39;,
+<a name="line224"></a>  // There is a popup menu or dialog that allows the user to choose
+<a name="line225"></a>  // one of the drag operations (copy, move, link, execute) and any other
+<a name="line226"></a>  // drag functionality, such as cancel.
+<a name="line227"></a>  POPUP: &#39;popup&#39;,
+<a name="line228"></a>  // No operation can be performed; effectively
+<a name="line229"></a>  // cancels the drag operation if an attempt is made to drop on this object.
+<a name="line230"></a>  NONE: &#39;none&#39;
+<a name="line231"></a>};
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>/**
+<a name="line235"></a> * ARIA state values for LivePriority.
+<a name="line236"></a> * @enum {string}
+<a name="line237"></a> */
+<a name="line238"></a>goog.a11y.aria.LivePriority = {
+<a name="line239"></a>  // Updates to the region will not be presented to the user
+<a name="line240"></a>  // unless the assitive technology is currently focused on that region.
+<a name="line241"></a>  OFF: &#39;off&#39;,
+<a name="line242"></a>  // (Background change) Assistive technologies SHOULD announce
+<a name="line243"></a>  // updates at the next graceful opportunity, such as at the end of
+<a name="line244"></a>  // speaking the current sentence or when the user pauses typing.
+<a name="line245"></a>  POLITE: &#39;polite&#39;,
+<a name="line246"></a>  // This information has the highest priority and assistive
+<a name="line247"></a>  // technologies SHOULD notify the user immediately.
+<a name="line248"></a>  // Because an interruption may disorient users or cause them to not complete
+<a name="line249"></a>  // their current task, authors SHOULD NOT use the assertive value unless the
+<a name="line250"></a>  // interruption is imperative.
+<a name="line251"></a>  ASSERTIVE: &#39;assertive&#39;
+<a name="line252"></a>};
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * ARIA state values for OrientationValues.
+<a name="line257"></a> * @enum {string}
+<a name="line258"></a> */
+<a name="line259"></a>goog.a11y.aria.OrientationValues = {
+<a name="line260"></a>  // The element is oriented vertically.
+<a name="line261"></a>  VERTICAL: &#39;vertical&#39;,
+<a name="line262"></a>  // The element is oriented horizontally.
+<a name="line263"></a>  HORIZONTAL: &#39;horizontal&#39;
+<a name="line264"></a>};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * ARIA state values for RelevantValues.
+<a name="line269"></a> * @enum {string}
+<a name="line270"></a> */
+<a name="line271"></a>goog.a11y.aria.RelevantValues = {
+<a name="line272"></a>  // Element nodes are added to the DOM within the live region.
+<a name="line273"></a>  ADDITIONS: &#39;additions&#39;,
+<a name="line274"></a>  // Text or element nodes within the live region are removed from the DOM.
+<a name="line275"></a>  REMOVALS: &#39;removals&#39;,
+<a name="line276"></a>  // Text is added to any DOM descendant nodes of the live region.
+<a name="line277"></a>  TEXT: &#39;text&#39;,
+<a name="line278"></a>  // Equivalent to the combination of all values, &quot;additions removals text&quot;.
+<a name="line279"></a>  ALL: &#39;all&#39;
+<a name="line280"></a>};
+<a name="line281"></a>
+<a name="line282"></a>
+<a name="line283"></a>/**
+<a name="line284"></a> * ARIA state values for SortValues.
+<a name="line285"></a> * @enum {string}
+<a name="line286"></a> */
+<a name="line287"></a>goog.a11y.aria.SortValues = {
+<a name="line288"></a>  // Items are sorted in ascending order by this column.
+<a name="line289"></a>  ASCENDING: &#39;ascending&#39;,
+<a name="line290"></a>  // Items are sorted in descending order by this column.
+<a name="line291"></a>  DESCENDING: &#39;descending&#39;,
+<a name="line292"></a>  // There is no defined sort applied to the column.
+<a name="line293"></a>  NONE: &#39;none&#39;,
+<a name="line294"></a>  // A sort algorithm other than ascending or descending has been applied.
+<a name="line295"></a>  OTHER: &#39;other&#39;
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * ARIA state values for CheckedValues.
+<a name="line301"></a> * @enum {string}
+<a name="line302"></a> */
+<a name="line303"></a>goog.a11y.aria.CheckedValues = {
+<a name="line304"></a>  // The selectable element is checked.
+<a name="line305"></a>  TRUE: &#39;true&#39;,
+<a name="line306"></a>  // The selectable element is not checked.
+<a name="line307"></a>  FALSE: &#39;false&#39;,
+<a name="line308"></a>  // Indicates a mixed mode value for a tri-state
+<a name="line309"></a>  // checkbox or menuitemcheckbox.
+<a name="line310"></a>  MIXED: &#39;mixed&#39;,
+<a name="line311"></a>  // The element does not support being checked.
+<a name="line312"></a>  UNDEFINED: &#39;undefined&#39;
+<a name="line313"></a>};
+<a name="line314"></a>
+<a name="line315"></a>
+<a name="line316"></a>/**
+<a name="line317"></a> * ARIA state values for ExpandedValues.
+<a name="line318"></a> * @enum {string}
+<a name="line319"></a> */
+<a name="line320"></a>goog.a11y.aria.ExpandedValues = {
+<a name="line321"></a>  // The element, or another grouping element it controls, is expanded.
+<a name="line322"></a>  TRUE: &#39;true&#39;,
+<a name="line323"></a>  // The element, or another grouping element it controls, is collapsed.
+<a name="line324"></a>  FALSE: &#39;false&#39;,
+<a name="line325"></a>  // The element, or another grouping element
+<a name="line326"></a>  // it controls, is neither expandable nor collapsible; all its
+<a name="line327"></a>  // child elements are shown or there are no child elements.
+<a name="line328"></a>  UNDEFINED: &#39;undefined&#39;
+<a name="line329"></a>};
+<a name="line330"></a>
+<a name="line331"></a>
+<a name="line332"></a>/**
+<a name="line333"></a> * ARIA state values for GrabbedValues.
+<a name="line334"></a> * @enum {string}
+<a name="line335"></a> */
+<a name="line336"></a>goog.a11y.aria.GrabbedValues = {
+<a name="line337"></a>  // Indicates that the element has been &quot;grabbed&quot; for dragging.
+<a name="line338"></a>  TRUE: &#39;true&#39;,
+<a name="line339"></a>  // Indicates that the element supports being dragged.
+<a name="line340"></a>  FALSE: &#39;false&#39;,
+<a name="line341"></a>  // Indicates that the element does not support being dragged.
+<a name="line342"></a>  UNDEFINED: &#39;undefined&#39;
+<a name="line343"></a>};
+<a name="line344"></a>
+<a name="line345"></a>
+<a name="line346"></a>/**
+<a name="line347"></a> * ARIA state values for InvalidValues.
+<a name="line348"></a> * @enum {string}
+<a name="line349"></a> */
+<a name="line350"></a>goog.a11y.aria.InvalidValues = {
+<a name="line351"></a>  // There are no detected errors in the value.
+<a name="line352"></a>  FALSE: &#39;false&#39;,
+<a name="line353"></a>  // The value entered by the user has failed validation.
+<a name="line354"></a>  TRUE: &#39;true&#39;,
+<a name="line355"></a>  // A grammatical error was detected.
+<a name="line356"></a>  GRAMMAR: &#39;grammar&#39;,
+<a name="line357"></a>  // A spelling error was detected.
+<a name="line358"></a>  SPELLING: &#39;spelling&#39;
+<a name="line359"></a>};
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * ARIA state values for PressedValues.
+<a name="line364"></a> * @enum {string}
+<a name="line365"></a> */
+<a name="line366"></a>goog.a11y.aria.PressedValues = {
+<a name="line367"></a>  // The element is pressed.
+<a name="line368"></a>  TRUE: &#39;true&#39;,
+<a name="line369"></a>  // The element supports being pressed but is not currently pressed.
+<a name="line370"></a>  FALSE: &#39;false&#39;,
+<a name="line371"></a>  // Indicates a mixed mode value for a tri-state toggle button.
+<a name="line372"></a>  MIXED: &#39;mixed&#39;,
+<a name="line373"></a>  // The element does not support being pressed.
+<a name="line374"></a>  UNDEFINED: &#39;undefined&#39;
+<a name="line375"></a>};
+<a name="line376"></a>
+<a name="line377"></a>
+<a name="line378"></a>/**
+<a name="line379"></a> * ARIA state values for SelectedValues.
+<a name="line380"></a> * @enum {string}
+<a name="line381"></a> */
+<a name="line382"></a>goog.a11y.aria.SelectedValues = {
+<a name="line383"></a>  // The selectable element is selected.
+<a name="line384"></a>  TRUE: &#39;true&#39;,
+<a name="line385"></a>  // The selectable element is not selected.
+<a name="line386"></a>  FALSE: &#39;false&#39;,
+<a name="line387"></a>  // The element is not selectable.
+<a name="line388"></a>  UNDEFINED: &#39;undefined&#39;
+<a name="line389"></a>};
+</pre>
+
+
+</body>
+</html>

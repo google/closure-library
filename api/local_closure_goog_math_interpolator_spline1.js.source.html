@@ -1,0 +1,253 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>spline1.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_math_interpolator_spline1.js.html">spline1.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A one dimensional cubic spline interpolator with not-a-knot
+<a name="line17"></a> * boundary conditions.
+<a name="line18"></a> *
+<a name="line19"></a> * See http://en.wikipedia.org/wiki/Spline_interpolation.
+<a name="line20"></a> *
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.math.interpolator.Spline1&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.array&#39;);
+<a name="line26"></a>goog.require(&#39;goog.math&#39;);
+<a name="line27"></a>goog.require(&#39;goog.math.interpolator.Interpolator1&#39;);
+<a name="line28"></a>goog.require(&#39;goog.math.tdma&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * A one dimensional cubic spline interpolator with natural boundary conditions.
+<a name="line34"></a> * @implements {goog.math.interpolator.Interpolator1}
+<a name="line35"></a> * @constructor
+<a name="line36"></a> */
+<a name="line37"></a>goog.math.interpolator.Spline1 = function() {
+<a name="line38"></a>  /**
+<a name="line39"></a>   * The abscissa of the data points.
+<a name="line40"></a>   * @type {!Array.&lt;number&gt;}
+<a name="line41"></a>   * @private
+<a name="line42"></a>   */
+<a name="line43"></a>  this.x_ = [];
+<a name="line44"></a>
+<a name="line45"></a>  /**
+<a name="line46"></a>   * The spline interval coefficients.
+<a name="line47"></a>   * Note that, in general, the length of coeffs and x is not the same.
+<a name="line48"></a>   * @type {!Array.&lt;!Array.&lt;number&gt;&gt;}
+<a name="line49"></a>   * @private
+<a name="line50"></a>   */
+<a name="line51"></a>  this.coeffs_ = [[0, 0, 0, Number.NaN]];
+<a name="line52"></a>};
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/** @override */
+<a name="line56"></a>goog.math.interpolator.Spline1.prototype.setData = function(x, y) {
+<a name="line57"></a>  goog.asserts.assert(x.length == y.length,
+<a name="line58"></a>      &#39;input arrays to setData should have the same length&#39;);
+<a name="line59"></a>  if (x.length &gt; 0) {
+<a name="line60"></a>    this.coeffs_ = this.computeSplineCoeffs_(x, y);
+<a name="line61"></a>    this.x_ = x.slice();
+<a name="line62"></a>  } else {
+<a name="line63"></a>    this.coeffs_ = [[0, 0, 0, Number.NaN]];
+<a name="line64"></a>    this.x_ = [];
+<a name="line65"></a>  }
+<a name="line66"></a>};
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/** @override */
+<a name="line70"></a>goog.math.interpolator.Spline1.prototype.interpolate = function(x) {
+<a name="line71"></a>  var pos = goog.array.binarySearch(this.x_, x);
+<a name="line72"></a>  if (pos &lt; 0) {
+<a name="line73"></a>    pos = -pos - 2;
+<a name="line74"></a>  }
+<a name="line75"></a>  pos = goog.math.clamp(pos, 0, this.coeffs_.length - 1);
+<a name="line76"></a>
+<a name="line77"></a>  var d = x - this.x_[pos];
+<a name="line78"></a>  var d2 = d * d;
+<a name="line79"></a>  var d3 = d2 * d;
+<a name="line80"></a>  var coeffs = this.coeffs_[pos];
+<a name="line81"></a>  return coeffs[0] * d3 + coeffs[1] * d2 + coeffs[2] * d + coeffs[3];
+<a name="line82"></a>};
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Solve for the spline coefficients such that the spline precisely interpolates
+<a name="line87"></a> * the data points.
+<a name="line88"></a> * @param {Array.&lt;number&gt;} x The abscissa of the spline data points.
+<a name="line89"></a> * @param {Array.&lt;number&gt;} y The ordinate of the spline data points.
+<a name="line90"></a> * @return {!Array.&lt;!Array.&lt;number&gt;&gt;} The spline interval coefficients.
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.math.interpolator.Spline1.prototype.computeSplineCoeffs_ = function(x, y) {
+<a name="line94"></a>  var nIntervals = x.length - 1;
+<a name="line95"></a>  var dx = new Array(nIntervals);
+<a name="line96"></a>  var delta = new Array(nIntervals);
+<a name="line97"></a>  for (var i = 0; i &lt; nIntervals; ++i) {
+<a name="line98"></a>    dx[i] = x[i + 1] - x[i];
+<a name="line99"></a>    delta[i] = (y[i + 1] - y[i]) / dx[i];
+<a name="line100"></a>  }
+<a name="line101"></a>
+<a name="line102"></a>  // Compute the spline coefficients from the 1st order derivatives.
+<a name="line103"></a>  var coeffs = [];
+<a name="line104"></a>  if (nIntervals == 0) {
+<a name="line105"></a>    // Nearest neighbor interpolation.
+<a name="line106"></a>    coeffs[0] = [0, 0, 0, y[0]];
+<a name="line107"></a>  } else if (nIntervals == 1) {
+<a name="line108"></a>    // Straight line interpolation.
+<a name="line109"></a>    coeffs[0] = [0, 0, delta[0], y[0]];
+<a name="line110"></a>  } else if (nIntervals == 2) {
+<a name="line111"></a>    // Parabola interpolation.
+<a name="line112"></a>    var c3 = 0;
+<a name="line113"></a>    var c2 = (delta[1] - delta[0]) / (dx[0] + dx[1]);
+<a name="line114"></a>    var c1 = delta[0] - c2 * dx[0];
+<a name="line115"></a>    var c0 = y[0];
+<a name="line116"></a>    coeffs[0] = [c3, c2, c1, c0];
+<a name="line117"></a>  } else {
+<a name="line118"></a>    // General Spline interpolation. Compute the 1st order derivatives from
+<a name="line119"></a>    // the Spline equations.
+<a name="line120"></a>    var deriv = this.computeDerivatives(dx, delta);
+<a name="line121"></a>    for (var i = 0; i &lt; nIntervals; ++i) {
+<a name="line122"></a>      var c3 = (deriv[i] - 2 * delta[i] + deriv[i + 1]) / (dx[i] * dx[i]);
+<a name="line123"></a>      var c2 = (3 * delta[i] - 2 * deriv[i] - deriv[i + 1]) / dx[i];
+<a name="line124"></a>      var c1 = deriv[i];
+<a name="line125"></a>      var c0 = y[i];
+<a name="line126"></a>      coeffs[i] = [c3, c2, c1, c0];
+<a name="line127"></a>    }
+<a name="line128"></a>  }
+<a name="line129"></a>  return coeffs;
+<a name="line130"></a>};
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Computes the derivative at each point of the spline such that
+<a name="line135"></a> * the curve is C2. It uses not-a-knot boundary conditions.
+<a name="line136"></a> * @param {Array.&lt;number&gt;} dx The spacing between consecutive data points.
+<a name="line137"></a> * @param {Array.&lt;number&gt;} slope The slopes between consecutive data points.
+<a name="line138"></a> * @return {!Array.&lt;number&gt;} The Spline derivative at each data point.
+<a name="line139"></a> * @protected
+<a name="line140"></a> */
+<a name="line141"></a>goog.math.interpolator.Spline1.prototype.computeDerivatives = function(
+<a name="line142"></a>    dx, slope) {
+<a name="line143"></a>  var nIntervals = dx.length;
+<a name="line144"></a>
+<a name="line145"></a>  // Compute the main diagonal of the system of equations.
+<a name="line146"></a>  var mainDiag = new Array(nIntervals + 1);
+<a name="line147"></a>  mainDiag[0] = dx[1];
+<a name="line148"></a>  for (var i = 1; i &lt; nIntervals; ++i) {
+<a name="line149"></a>    mainDiag[i] = 2 * (dx[i] + dx[i - 1]);
+<a name="line150"></a>  }
+<a name="line151"></a>  mainDiag[nIntervals] = dx[nIntervals - 2];
+<a name="line152"></a>
+<a name="line153"></a>  // Compute the sub diagonal of the system of equations.
+<a name="line154"></a>  var subDiag = new Array(nIntervals);
+<a name="line155"></a>  for (var i = 0; i &lt; nIntervals; ++i) {
+<a name="line156"></a>    subDiag[i] = dx[i + 1];
+<a name="line157"></a>  }
+<a name="line158"></a>  subDiag[nIntervals - 1] = dx[nIntervals - 2] + dx[nIntervals - 1];
+<a name="line159"></a>
+<a name="line160"></a>  // Compute the super diagonal of the system of equations.
+<a name="line161"></a>  var supDiag = new Array(nIntervals);
+<a name="line162"></a>  supDiag[0] = dx[0] + dx[1];
+<a name="line163"></a>  for (var i = 1; i &lt; nIntervals; ++i) {
+<a name="line164"></a>    supDiag[i] = dx[i - 1];
+<a name="line165"></a>  }
+<a name="line166"></a>
+<a name="line167"></a>  // Compute the right vector of the system of equations.
+<a name="line168"></a>  var vecRight = new Array(nIntervals + 1);
+<a name="line169"></a>  vecRight[0] = ((dx[0] + 2 * supDiag[0]) * dx[1] * slope[0] +
+<a name="line170"></a>      dx[0] * dx[0] * slope[1]) / supDiag[0];
+<a name="line171"></a>  for (var i = 1; i &lt; nIntervals; ++i) {
+<a name="line172"></a>    vecRight[i] = 3 * (dx[i] * slope[i - 1] + dx[i - 1] * slope[i]);
+<a name="line173"></a>  }
+<a name="line174"></a>  vecRight[nIntervals] = (dx[nIntervals - 1] * dx[nIntervals - 1] *
+<a name="line175"></a>      slope[nIntervals - 2] + (2 * subDiag[nIntervals - 1] +
+<a name="line176"></a>      dx[nIntervals - 1]) * dx[nIntervals - 2] * slope[nIntervals - 1]) /
+<a name="line177"></a>      subDiag[nIntervals - 1];
+<a name="line178"></a>
+<a name="line179"></a>  // Solve the system of equations.
+<a name="line180"></a>  var deriv = goog.math.tdma.solve(
+<a name="line181"></a>      subDiag, mainDiag, supDiag, vecRight);
+<a name="line182"></a>
+<a name="line183"></a>  return deriv;
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Note that the inverse of a cubic spline is not a cubic spline in general.
+<a name="line189"></a> * As a result the inverse implementation is only approximate. In
+<a name="line190"></a> * particular, it only guarantees the exact inverse at the original input data
+<a name="line191"></a> * points passed to setData.
+<a name="line192"></a> * @override
+<a name="line193"></a> */
+<a name="line194"></a>goog.math.interpolator.Spline1.prototype.getInverse = function() {
+<a name="line195"></a>  var interpolator = new goog.math.interpolator.Spline1();
+<a name="line196"></a>  var y = [];
+<a name="line197"></a>  for (var i = 0; i &lt; this.x_.length; i++) {
+<a name="line198"></a>    y[i] = this.interpolate(this.x_[i]);
+<a name="line199"></a>  }
+<a name="line200"></a>  interpolator.setData(y, this.x_);
+<a name="line201"></a>  return interpolator;
+<a name="line202"></a>};
+</pre>
+
+
+</body>
+</html>

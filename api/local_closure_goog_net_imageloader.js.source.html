@@ -1,0 +1,388 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>imageloader.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_imageloader.js.html">imageloader.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Image loader utility class.  Useful when an application needs
+<a name="line17"></a> * to preload multiple images, for example so they can be sized.
+<a name="line18"></a> *
+<a name="line19"></a> * @author attila@google.com (Attila Bodis)
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.net.ImageLoader&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line29"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line30"></a>goog.require(&#39;goog.object&#39;);
+<a name="line31"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Image loader utility class.  Raises a {@link goog.events.EventType.LOAD}
+<a name="line37"></a> * event for each image loaded, with an {@link Image} object as the target of
+<a name="line38"></a> * the event, normalized to have {@code naturalHeight} and {@code naturalWidth}
+<a name="line39"></a> * attributes.
+<a name="line40"></a> *
+<a name="line41"></a> * To use this class, run:
+<a name="line42"></a> *
+<a name="line43"></a> * &lt;pre&gt;
+<a name="line44"></a> *   var imageLoader = new goog.net.ImageLoader();
+<a name="line45"></a> *   goog.events.listen(imageLoader, goog.net.EventType.COMPLETE,
+<a name="line46"></a> *       function(e) { ... });
+<a name="line47"></a> *   imageLoader.addImage(&quot;image_id&quot;, &quot;http://path/to/image.gif&quot;);
+<a name="line48"></a> *   imageLoader.start();
+<a name="line49"></a> * &lt;/pre&gt;
+<a name="line50"></a> *
+<a name="line51"></a> * The start() method must be called to start image loading.  Images can be
+<a name="line52"></a> * added and removed after loading has started, but only those images added
+<a name="line53"></a> * before start() was called will be loaded until start() is called again.
+<a name="line54"></a> * A goog.net.EventType.COMPLETE event will be dispatched only once all
+<a name="line55"></a> * outstanding images have completed uploading.
+<a name="line56"></a> *
+<a name="line57"></a> * @param {Element=} opt_parent An optional parent element whose document object
+<a name="line58"></a> *     should be used to load images.
+<a name="line59"></a> * @constructor
+<a name="line60"></a> * @extends {goog.events.EventTarget}
+<a name="line61"></a> * @final
+<a name="line62"></a> */
+<a name="line63"></a>goog.net.ImageLoader = function(opt_parent) {
+<a name="line64"></a>  goog.events.EventTarget.call(this);
+<a name="line65"></a>
+<a name="line66"></a>  /**
+<a name="line67"></a>   * Map of image IDs to their request including their image src, used to keep
+<a name="line68"></a>   * track of the images to load.  Once images have started loading, they&#39;re
+<a name="line69"></a>   * removed from this map.
+<a name="line70"></a>   * @type {!Object.&lt;!goog.net.ImageLoader.ImageRequest_&gt;}
+<a name="line71"></a>   * @private
+<a name="line72"></a>   */
+<a name="line73"></a>  this.imageIdToRequestMap_ = {};
+<a name="line74"></a>
+<a name="line75"></a>  /**
+<a name="line76"></a>   * Map of image IDs to their image element, used only for images that are in
+<a name="line77"></a>   * the process of loading.  Used to clean-up event listeners and to know
+<a name="line78"></a>   * when we&#39;ve completed loading images.
+<a name="line79"></a>   * @type {!Object.&lt;string, !Element&gt;}
+<a name="line80"></a>   * @private
+<a name="line81"></a>   */
+<a name="line82"></a>  this.imageIdToImageMap_ = {};
+<a name="line83"></a>
+<a name="line84"></a>  /**
+<a name="line85"></a>   * Event handler object, used to keep track of onload and onreadystatechange
+<a name="line86"></a>   * listeners.
+<a name="line87"></a>   * @type {!goog.events.EventHandler.&lt;!goog.net.ImageLoader&gt;}
+<a name="line88"></a>   * @private
+<a name="line89"></a>   */
+<a name="line90"></a>  this.handler_ = new goog.events.EventHandler(this);
+<a name="line91"></a>
+<a name="line92"></a>  /**
+<a name="line93"></a>   * The parent element whose document object will be used to load images.
+<a name="line94"></a>   * Useful if you want to load the images from a window other than the current
+<a name="line95"></a>   * window in order to control the Referer header sent when the image is
+<a name="line96"></a>   * loaded.
+<a name="line97"></a>   * @type {Element|undefined}
+<a name="line98"></a>   * @private
+<a name="line99"></a>   */
+<a name="line100"></a>  this.parent_ = opt_parent;
+<a name="line101"></a>};
+<a name="line102"></a>goog.inherits(goog.net.ImageLoader, goog.events.EventTarget);
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * The type of image request to dispatch, if this is a CORS-enabled image
+<a name="line107"></a> * request. CORS-enabled images can be reused in canvas elements without them
+<a name="line108"></a> * being tainted. The server hosting the image should include the appropriate
+<a name="line109"></a> * CORS header.
+<a name="line110"></a> * @see https://developer.mozilla.org/en-US/docs/HTML/CORS_Enabled_Image
+<a name="line111"></a> * @enum {string}
+<a name="line112"></a> */
+<a name="line113"></a>goog.net.ImageLoader.CorsRequestType = {
+<a name="line114"></a>  ANONYMOUS: &#39;anonymous&#39;,
+<a name="line115"></a>  USE_CREDENTIALS: &#39;use-credentials&#39;
+<a name="line116"></a>};
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Describes a request for an image. This includes its URL and its CORS-request
+<a name="line121"></a> * type, if any.
+<a name="line122"></a> * @typedef {{
+<a name="line123"></a> *   src: string,
+<a name="line124"></a> *   corsRequestType: ?goog.net.ImageLoader.CorsRequestType
+<a name="line125"></a> * }}
+<a name="line126"></a> * @private
+<a name="line127"></a> */
+<a name="line128"></a>goog.net.ImageLoader.ImageRequest_;
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * An array of event types to listen to on images.  This is browser dependent.
+<a name="line133"></a> *
+<a name="line134"></a> * For IE 10 and below, Internet Explorer doesn&#39;t reliably raise LOAD events
+<a name="line135"></a> * on images, so we must use READY_STATE_CHANGE.  Since the image is cached
+<a name="line136"></a> * locally, IE won&#39;t fire the LOAD event while the onreadystate event is fired
+<a name="line137"></a> * always. On the other hand, the ERROR event is always fired whenever the image
+<a name="line138"></a> * is not loaded successfully no matter whether it&#39;s cached or not.
+<a name="line139"></a> *
+<a name="line140"></a> * In IE 11, onreadystatechange is removed and replaced with onload:
+<a name="line141"></a> *
+<a name="line142"></a> * http://msdn.microsoft.com/en-us/library/ie/ms536957(v=vs.85).aspx
+<a name="line143"></a> * http://msdn.microsoft.com/en-us/library/ie/bg182625(v=vs.85).aspx
+<a name="line144"></a> *
+<a name="line145"></a> * @type {!Array.&lt;string&gt;}
+<a name="line146"></a> * @private
+<a name="line147"></a> */
+<a name="line148"></a>goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
+<a name="line149"></a>  goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;11&#39;) ?
+<a name="line150"></a>      goog.net.EventType.READY_STATE_CHANGE :
+<a name="line151"></a>      goog.events.EventType.LOAD,
+<a name="line152"></a>  goog.net.EventType.ABORT,
+<a name="line153"></a>  goog.net.EventType.ERROR
+<a name="line154"></a>];
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Adds an image to the image loader, and associates it with the given ID
+<a name="line159"></a> * string.  If an image with that ID already exists, it is silently replaced.
+<a name="line160"></a> * When the image in question is loaded, the target of the LOAD event will be
+<a name="line161"></a> * an {@code Image} object with {@code id} and {@code src} attributes based on
+<a name="line162"></a> * these arguments.
+<a name="line163"></a> * @param {string} id The ID of the image to load.
+<a name="line164"></a> * @param {string|Image} image Either the source URL of the image or the HTML
+<a name="line165"></a> *     image element itself (or any object with a {@code src} property, really).
+<a name="line166"></a> * @param {!goog.net.ImageLoader.CorsRequestType=} opt_corsRequestType The type
+<a name="line167"></a> *     of CORS request to use, if any.
+<a name="line168"></a> */
+<a name="line169"></a>goog.net.ImageLoader.prototype.addImage = function(
+<a name="line170"></a>    id, image, opt_corsRequestType) {
+<a name="line171"></a>  var src = goog.isString(image) ? image : image.src;
+<a name="line172"></a>  if (src) {
+<a name="line173"></a>    // For now, we just store the source URL for the image.
+<a name="line174"></a>    this.imageIdToRequestMap_[id] = {
+<a name="line175"></a>      src: src,
+<a name="line176"></a>      corsRequestType: goog.isDef(opt_corsRequestType) ?
+<a name="line177"></a>          opt_corsRequestType : null
+<a name="line178"></a>    };
+<a name="line179"></a>  }
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Removes the image associated with the given ID string from the image loader.
+<a name="line185"></a> * If the image was previously loading, removes any listeners for its events
+<a name="line186"></a> * and dispatches a COMPLETE event if all remaining images have now completed.
+<a name="line187"></a> * @param {string} id The ID of the image to remove.
+<a name="line188"></a> */
+<a name="line189"></a>goog.net.ImageLoader.prototype.removeImage = function(id) {
+<a name="line190"></a>  delete this.imageIdToRequestMap_[id];
+<a name="line191"></a>
+<a name="line192"></a>  var image = this.imageIdToImageMap_[id];
+<a name="line193"></a>  if (image) {
+<a name="line194"></a>    delete this.imageIdToImageMap_[id];
+<a name="line195"></a>
+<a name="line196"></a>    // Stop listening for events on the image.
+<a name="line197"></a>    this.handler_.unlisten(image, goog.net.ImageLoader.IMAGE_LOAD_EVENTS_,
+<a name="line198"></a>        this.onNetworkEvent_);
+<a name="line199"></a>
+<a name="line200"></a>    // If this was the last image, raise a COMPLETE event.
+<a name="line201"></a>    if (goog.object.isEmpty(this.imageIdToImageMap_) &amp;&amp;
+<a name="line202"></a>        goog.object.isEmpty(this.imageIdToRequestMap_)) {
+<a name="line203"></a>      this.dispatchEvent(goog.net.EventType.COMPLETE);
+<a name="line204"></a>    }
+<a name="line205"></a>  }
+<a name="line206"></a>};
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Starts loading all images in the image loader in parallel.  Raises a LOAD
+<a name="line211"></a> * event each time an image finishes loading, and a COMPLETE event after all
+<a name="line212"></a> * images have finished loading.
+<a name="line213"></a> */
+<a name="line214"></a>goog.net.ImageLoader.prototype.start = function() {
+<a name="line215"></a>  // Iterate over the keys, rather than the full object, to essentially clone
+<a name="line216"></a>  // the initial queued images in case any event handlers decide to add more
+<a name="line217"></a>  // images before this loop has finished executing.
+<a name="line218"></a>  var imageIdToRequestMap = this.imageIdToRequestMap_;
+<a name="line219"></a>  goog.array.forEach(goog.object.getKeys(imageIdToRequestMap),
+<a name="line220"></a>      function(id) {
+<a name="line221"></a>        var imageRequest = imageIdToRequestMap[id];
+<a name="line222"></a>        if (imageRequest) {
+<a name="line223"></a>          delete imageIdToRequestMap[id];
+<a name="line224"></a>          this.loadImage_(imageRequest, id);
+<a name="line225"></a>        }
+<a name="line226"></a>      }, this);
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Creates an {@code Image} object with the specified ID and source URL, and
+<a name="line232"></a> * listens for network events raised as the image is loaded.
+<a name="line233"></a> * @param {!goog.net.ImageLoader.ImageRequest_} imageRequest The request data.
+<a name="line234"></a> * @param {string} id The unique ID of the image to load.
+<a name="line235"></a> * @private
+<a name="line236"></a> */
+<a name="line237"></a>goog.net.ImageLoader.prototype.loadImage_ = function(imageRequest, id) {
+<a name="line238"></a>  if (this.isDisposed()) {
+<a name="line239"></a>    // When loading an image in IE7 (and maybe IE8), the error handler
+<a name="line240"></a>    // may fire before we yield JS control. If the error handler
+<a name="line241"></a>    // dispose the ImageLoader, this method will throw exception.
+<a name="line242"></a>    return;
+<a name="line243"></a>  }
+<a name="line244"></a>
+<a name="line245"></a>  var image;
+<a name="line246"></a>  if (this.parent_) {
+<a name="line247"></a>    var dom = goog.dom.getDomHelper(this.parent_);
+<a name="line248"></a>    image = dom.createDom(&#39;img&#39;);
+<a name="line249"></a>  } else {
+<a name="line250"></a>    image = new Image();
+<a name="line251"></a>  }
+<a name="line252"></a>
+<a name="line253"></a>  if (imageRequest.corsRequestType) {
+<a name="line254"></a>    image.crossOrigin = imageRequest.corsRequestType;
+<a name="line255"></a>  }
+<a name="line256"></a>
+<a name="line257"></a>  this.handler_.listen(image, goog.net.ImageLoader.IMAGE_LOAD_EVENTS_,
+<a name="line258"></a>      this.onNetworkEvent_);
+<a name="line259"></a>  this.imageIdToImageMap_[id] = image;
+<a name="line260"></a>
+<a name="line261"></a>  image.id = id;
+<a name="line262"></a>  image.src = imageRequest.src;
+<a name="line263"></a>};
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * Handles net events (READY_STATE_CHANGE, LOAD, ABORT, and ERROR).
+<a name="line268"></a> * @param {goog.events.Event} evt The network event to handle.
+<a name="line269"></a> * @private
+<a name="line270"></a> */
+<a name="line271"></a>goog.net.ImageLoader.prototype.onNetworkEvent_ = function(evt) {
+<a name="line272"></a>  var image = /** @type {Element} */ (evt.currentTarget);
+<a name="line273"></a>
+<a name="line274"></a>  if (!image) {
+<a name="line275"></a>    return;
+<a name="line276"></a>  }
+<a name="line277"></a>
+<a name="line278"></a>  if (evt.type == goog.net.EventType.READY_STATE_CHANGE) {
+<a name="line279"></a>    // This implies that the user agent is IE; see loadImage_().
+<a name="line280"></a>    // Noe that this block is used to check whether the image is ready to
+<a name="line281"></a>    // dispatch the COMPLETE event.
+<a name="line282"></a>    if (image.readyState == goog.net.EventType.COMPLETE) {
+<a name="line283"></a>      // This is the IE equivalent of a LOAD event.
+<a name="line284"></a>      evt.type = goog.events.EventType.LOAD;
+<a name="line285"></a>    } else {
+<a name="line286"></a>      // This may imply that the load failed.
+<a name="line287"></a>      // Note that the image has only the following states:
+<a name="line288"></a>      //   * uninitialized
+<a name="line289"></a>      //   * loading
+<a name="line290"></a>      //   * complete
+<a name="line291"></a>      // When the ERROR or the ABORT event is fired, the readyState
+<a name="line292"></a>      // will be either uninitialized or loading and we&#39;d ignore those states
+<a name="line293"></a>      // since they will be handled separately (eg: evt.type = &#39;ERROR&#39;).
+<a name="line294"></a>
+<a name="line295"></a>      // Notes from MSDN : The states through which an object passes are
+<a name="line296"></a>      // determined by that object. An object can skip certain states
+<a name="line297"></a>      // (for example, interactive) if the state does not apply to that object.
+<a name="line298"></a>      // see http://msdn.microsoft.com/en-us/library/ms534359(VS.85).aspx
+<a name="line299"></a>
+<a name="line300"></a>      // The image is not loaded, ignore.
+<a name="line301"></a>      return;
+<a name="line302"></a>    }
+<a name="line303"></a>  }
+<a name="line304"></a>
+<a name="line305"></a>  // Add natural width/height properties for non-Gecko browsers.
+<a name="line306"></a>  if (typeof image.naturalWidth == &#39;undefined&#39;) {
+<a name="line307"></a>    if (evt.type == goog.events.EventType.LOAD) {
+<a name="line308"></a>      image.naturalWidth = image.width;
+<a name="line309"></a>      image.naturalHeight = image.height;
+<a name="line310"></a>    } else {
+<a name="line311"></a>      // This implies that the image fails to be loaded.
+<a name="line312"></a>      image.naturalWidth = 0;
+<a name="line313"></a>      image.naturalHeight = 0;
+<a name="line314"></a>    }
+<a name="line315"></a>  }
+<a name="line316"></a>
+<a name="line317"></a>  // Redispatch the event on behalf of the image. Note that the external
+<a name="line318"></a>  // listener may dispose this instance.
+<a name="line319"></a>  this.dispatchEvent({type: evt.type, target: image});
+<a name="line320"></a>
+<a name="line321"></a>  if (this.isDisposed()) {
+<a name="line322"></a>    // If instance was disposed by listener, exit this function.
+<a name="line323"></a>    return;
+<a name="line324"></a>  }
+<a name="line325"></a>
+<a name="line326"></a>  this.removeImage(image.id);
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/** @override */
+<a name="line331"></a>goog.net.ImageLoader.prototype.disposeInternal = function() {
+<a name="line332"></a>  delete this.imageIdToRequestMap_;
+<a name="line333"></a>  delete this.imageIdToImageMap_;
+<a name="line334"></a>  goog.dispose(this.handler_);
+<a name="line335"></a>
+<a name="line336"></a>  goog.net.ImageLoader.superClass_.disposeInternal.call(this);
+<a name="line337"></a>};
+</pre>
+
+
+</body>
+</html>

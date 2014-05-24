@@ -1,0 +1,1976 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>vec2d (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">vec.vec2d</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.abs"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">abs<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Takes the absolute value of each component of vec0 storing the result in
+resultVec.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The source vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to receive the result.
+    May be vec0.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line217">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.add"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">add<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">vec1</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Performs a component-wise addition of vec0 and vec1 together storing the
+result into resultVec.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The first addend.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">vec1</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The second addend.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to
+    receive the result. May be vec0 or vec1.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line130">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.componentDivide"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">componentDivide<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">vec1</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Divides each component of vec0 with the matching element of vec0
+storing the divisor into resultVec.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The first vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">vec1</span>
+        : <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The second vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to
+    receive the result. May be vec0.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line184">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.componentMultiply"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">componentMultiply<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">vec1</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Multiplies each component of vec0 with the matching element of vec0
+storing the products into resultVec.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The first vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">vec1</span>
+        : <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The second vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to
+    receive the result. May be vec0.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line166">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.create"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">create<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a vec2d with all elements initialized to zero.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            The new vec2d.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line52">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.direction"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">direction<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">vec1</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a unit vector pointing from one point to another.
+If the input points are equal then the result will be all zeros.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">Origin point.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">vec1</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">Target point.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to receive the
+    results (may be vec0 or vec1).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line333">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.distance"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">distance<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">vec1</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the distance between two points.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">First point.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">vec1</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">Second point.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The distance between the points.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line317">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.distanceSquared"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">distanceSquared<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">vec1</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the squared distance between two points.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">First point.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">vec1</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">Second point.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The squared distance between the points.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line303">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.dot"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">dot<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">vec1</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the scalar product of vectors vec0 and vec1.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The first vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">vec1</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The second vector.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The scalar product.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line291">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.equals"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">equals<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">vec1</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns true if the components of vec0 are equal to the components of vec1.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The first vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">vec1</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The second vector.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            True if the vectors are equal, false otherwise.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line421">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.lerp"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">lerp<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">vec1</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Linearly interpolate from vec0 to vec1 according to f. The value of f should
+be in the range [0..1] otherwise the results are undefined.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The first vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">vec1</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The second vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The interpolation factor.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to receive the
+    results (may be vec0 or vec1).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line360">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.magnitude"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">magnitude<span class="args">(<span class="arg">vec0</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the magnitude of the given vector.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The magnitude of the vector.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line260">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.magnitudeSquared"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">magnitudeSquared<span class="args">(<span class="arg">vec0</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the magnitudeSquared of the given vector.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The magnitude of the vector.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line248">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.max"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">max<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">limit</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Compares the components of vec0 with the components of another vector or
+scalar, storing the larger values in resultVec.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The source vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">limit</span>
+        : <span class="type">goog.vec.vec2d.Type</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The limit vector or scalar.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to receive the
+    results (may be vec0 or limit).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line379">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.min"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">min<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">limit</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Compares the components of vec0 with the components of another vector or
+scalar, storing the smaller values in resultVec.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The source vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">limit</span>
+        : <span class="type">goog.vec.vec2d.Type</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The limit vector or scalar.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to receive the
+    results (may be vec0 or limit).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line402">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.negate"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">negate<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Negates vec0, storing the result into resultVec.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to negate.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to
+    receive the result. May be vec0.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line200">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.normalize"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">normalize<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Normalizes the given vector storing the result into resultVec.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to normalize.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to
+    receive the result. May be vec0.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line275">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.scale"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">scale<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">scalar</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Multiplies each component of vec0 with scalar storing the product into
+resultVec.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The source vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">scalar</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The value to multiply with each component of vec0.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to
+    receive the result. May be vec0.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line235">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.setFromArray"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">setFromArray<span class="args">(<span class="arg">vec</span>,&nbsp;<span class="arg">src</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Initializes vec2d vec from Array src.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The destination vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">src</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+        <div class="entryOverview">The source vector.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return vec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line112">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.setFromValues"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">setFromValues<span class="args">(<span class="arg">vec</span>,&nbsp;<span class="arg">v0</span>,&nbsp;<span class="arg">v1</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Initializes the vector with the given values.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to receive the values.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">v0</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The value for element at index 0.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">v1</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The value for element at index 1.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return vec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line66">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.setFromVec2d"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">setFromVec2d<span class="args">(<span class="arg">vec</span>,&nbsp;<span class="arg">src</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Initializes vec2d vec from vec2d src.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The destination vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">src</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The source vector.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return vec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line81">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.setFromVec2f"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">setFromVec2f<span class="args">(<span class="arg">vec</span>,&nbsp;<span class="arg">src</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Initializes vec2d vec from vec2f src (typed as a Float32Array to
+avoid circular goog.requires).
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The destination vector.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">src</span>
+        : <span class="type">Float32Array</span>
+        <div class="entryOverview">The source vector.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return vec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line97">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.vec.vec2d.subtract"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">subtract<span class="args">(<span class="arg">vec0</span>,&nbsp;<span class="arg">vec1</span>,&nbsp;<span class="arg">resultVec</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type">goog.vec.vec2d.Type</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Performs a component-wise subtraction of vec1 from vec0 storing the
+result into resultVec.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">vec0</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The minuend.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">vec1</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The subtrahend.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">resultVec</span>
+        : <span class="type">goog.vec.vec2d.Type</span>
+        <div class="entryOverview">The vector to
+    receive the result. May be vec0 or vec1.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type">goog.vec.vec2d.Type</span>&nbsp;
+            Return resultVec so that operations can be
+    chained together.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line148">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.vec.vec2d.Type"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.vec.vec2d.</span><span class="entryName">Type</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_vec_vec2d.js.source.html#line44">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package vec</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="vec.vec2d"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

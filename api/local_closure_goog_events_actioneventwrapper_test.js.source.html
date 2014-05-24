@@ -1,0 +1,307 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>actioneventwrapper_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_events_actioneventwrapper_test.js.html">actioneventwrapper_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.events.actionEventWrapperTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.events.actionEventWrapperTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.a11y.aria&#39;);
+<a name="line19"></a>goog.require(&#39;goog.a11y.aria.Role&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line23"></a>goog.require(&#39;goog.events.actionEventWrapper&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.events&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line26"></a>var a, eh, events;
+<a name="line27"></a>
+<a name="line28"></a>function setUpPage() {
+<a name="line29"></a>  a = document.getElementById(&#39;a&#39;);
+<a name="line30"></a>}
+<a name="line31"></a>
+<a name="line32"></a>function setUp() {
+<a name="line33"></a>  events = [];
+<a name="line34"></a>  eh = new goog.events.EventHandler();
+<a name="line35"></a>
+<a name="line36"></a>  assertEquals(&#39;No listeners registered yet&#39;, 0,
+<a name="line37"></a>      goog.events.getListeners(a).length);
+<a name="line38"></a>}
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>function tearDown() {
+<a name="line42"></a>  eh.dispose();
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>var Foo = function() {};
+<a name="line46"></a>Foo.prototype.test = function(e) {
+<a name="line47"></a>  events.push(e);
+<a name="line48"></a>};
+<a name="line49"></a>
+<a name="line50"></a>function assertListenersExist(el, listenerCount, capt) {
+<a name="line51"></a>  var EVENT_TYPES = goog.events.ActionEventWrapper_.EVENT_TYPES_;
+<a name="line52"></a>  for (var i = 0; i &lt; EVENT_TYPES.length; ++i) {
+<a name="line53"></a>    assertEquals(listenerCount, goog.events.getListeners(
+<a name="line54"></a>        el, EVENT_TYPES[i], capt).length);
+<a name="line55"></a>  }
+<a name="line56"></a>}
+<a name="line57"></a>
+<a name="line58"></a>function testAddActionListener() {
+<a name="line59"></a>  var listener = function(e) { events.push(e);};
+<a name="line60"></a>  goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
+<a name="line61"></a>
+<a name="line62"></a>  assertListenersExist(a, 1, false);
+<a name="line63"></a>
+<a name="line64"></a>  goog.testing.events.fireClickSequence(a);
+<a name="line65"></a>  assertEquals(&#39;1 event should have been dispatched&#39;, 1, events.length);
+<a name="line66"></a>  assertEquals(&#39;Should be an click event&#39;, &#39;click&#39;, events[0].type);
+<a name="line67"></a>
+<a name="line68"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
+<a name="line69"></a>  assertEquals(&#39;2 events should have been dispatched&#39;, 2, events.length);
+<a name="line70"></a>  assertEquals(&#39;Should be a keypress event&#39;, &#39;keypress&#39;, events[1].type);
+<a name="line71"></a>
+<a name="line72"></a>  goog.a11y.aria.setRole(
+<a name="line73"></a>      /** @type {!Element} */ (a), goog.a11y.aria.Role.BUTTON);
+<a name="line74"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.SPACE);
+<a name="line75"></a>  assertEquals(&#39;3 events should have been dispatched&#39;, 3, events.length);
+<a name="line76"></a>  assertEquals(&#39;Should be a keyup event&#39;, &#39;keyup&#39;, events[2].type);
+<a name="line77"></a>  assertTrue(&#39;Should be default prevented.&#39;, events[2].defaultPrevented);
+<a name="line78"></a>  goog.a11y.aria.removeRole(/** @type {!Element} */ (a));
+<a name="line79"></a>
+<a name="line80"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.SPACE);
+<a name="line81"></a>  assertEquals(&#39;3 events should have been dispatched&#39;, 3, events.length);
+<a name="line82"></a>
+<a name="line83"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
+<a name="line84"></a>  assertEquals(&#39;3 events should have been dispatched&#39;, 3, events.length);
+<a name="line85"></a>
+<a name="line86"></a>  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
+<a name="line87"></a>      listener);
+<a name="line88"></a>  assertListenersExist(a, 0, false);
+<a name="line89"></a>}
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>function testAddActionListenerForHandleEvent() {
+<a name="line93"></a>  var listener = {
+<a name="line94"></a>    handleEvent: function(e) { events.push(e); }
+<a name="line95"></a>  };
+<a name="line96"></a>  goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
+<a name="line97"></a>
+<a name="line98"></a>  assertListenersExist(a, 1, false);
+<a name="line99"></a>
+<a name="line100"></a>  goog.testing.events.fireClickSequence(a);
+<a name="line101"></a>  assertEquals(&#39;1 event should have been dispatched&#39;, 1, events.length);
+<a name="line102"></a>  assertEquals(&#39;Should be an click event&#39;, &#39;click&#39;, events[0].type);
+<a name="line103"></a>
+<a name="line104"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
+<a name="line105"></a>  assertEquals(&#39;2 events should have been dispatched&#39;, 2, events.length);
+<a name="line106"></a>  assertEquals(&#39;Should be a keypress event&#39;, &#39;keypress&#39;, events[1].type);
+<a name="line107"></a>
+<a name="line108"></a>  goog.a11y.aria.setRole(
+<a name="line109"></a>      /** @type {!Element} */ (a), goog.a11y.aria.Role.BUTTON);
+<a name="line110"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.SPACE);
+<a name="line111"></a>  assertEquals(&#39;3 events should have been dispatched&#39;, 3, events.length);
+<a name="line112"></a>  assertEquals(&#39;Should be a keyup event&#39;, &#39;keyup&#39;, events[2].type);
+<a name="line113"></a>  assertTrue(&#39;Should be default prevented.&#39;, events[2].defaultPrevented);
+<a name="line114"></a>  goog.a11y.aria.removeRole(/** @type {!Element} */ (a));
+<a name="line115"></a>
+<a name="line116"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.SPACE);
+<a name="line117"></a>  assertEquals(&#39;3 events should have been dispatched&#39;, 3, events.length);
+<a name="line118"></a>
+<a name="line119"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
+<a name="line120"></a>  assertEquals(&#39;3 events should have been dispatched&#39;, 3, events.length);
+<a name="line121"></a>
+<a name="line122"></a>  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
+<a name="line123"></a>      listener);
+<a name="line124"></a>  assertListenersExist(a, 0, false);
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>function testAddActionListenerInCaptPhase() {
+<a name="line129"></a>  var count = 0;
+<a name="line130"></a>  var captListener = function(e) {
+<a name="line131"></a>    events.push(e);
+<a name="line132"></a>    assertEquals(0, count);
+<a name="line133"></a>    count++;
+<a name="line134"></a>  };
+<a name="line135"></a>
+<a name="line136"></a>  var bubbleListener = function(e) {
+<a name="line137"></a>    events.push(e);
+<a name="line138"></a>    assertEquals(1, count);
+<a name="line139"></a>    count = 0;
+<a name="line140"></a>  };
+<a name="line141"></a>
+<a name="line142"></a>  goog.events.listenWithWrapper(a, goog.events.actionEventWrapper,
+<a name="line143"></a>      captListener, true);
+<a name="line144"></a>
+<a name="line145"></a>  goog.events.listenWithWrapper(a, goog.events.actionEventWrapper,
+<a name="line146"></a>      bubbleListener);
+<a name="line147"></a>
+<a name="line148"></a>  assertListenersExist(a, 1, false);
+<a name="line149"></a>  assertListenersExist(a, 1, true);
+<a name="line150"></a>
+<a name="line151"></a>  goog.testing.events.fireClickSequence(a);
+<a name="line152"></a>  assertEquals(&#39;2 event should have been dispatched&#39;, 2, events.length);
+<a name="line153"></a>  assertEquals(&#39;Should be an click event&#39;, &#39;click&#39;, events[0].type);
+<a name="line154"></a>
+<a name="line155"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
+<a name="line156"></a>  assertEquals(&#39;4 events should have been dispatched&#39;, 4, events.length);
+<a name="line157"></a>  assertEquals(&#39;Should be a keypress event&#39;, &#39;keypress&#39;, events[2].type);
+<a name="line158"></a>
+<a name="line159"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.SPACE);
+<a name="line160"></a>  assertEquals(&#39;4 events should have been dispatched&#39;, 4, events.length);
+<a name="line161"></a>
+<a name="line162"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
+<a name="line163"></a>  assertEquals(&#39;4 events should have been dispatched&#39;, 4, events.length);
+<a name="line164"></a>
+<a name="line165"></a>  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
+<a name="line166"></a>      captListener, true);
+<a name="line167"></a>  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
+<a name="line168"></a>      bubbleListener);
+<a name="line169"></a>
+<a name="line170"></a>  assertListenersExist(a, 0, false);
+<a name="line171"></a>  assertListenersExist(a, 0, true);
+<a name="line172"></a>}
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>function testRemoveActionListener() {
+<a name="line176"></a>  var listener1 = function(e) { events.push(e); };
+<a name="line177"></a>  var listener2 = function(e) { events.push({type: &#39;err&#39;}); };
+<a name="line178"></a>
+<a name="line179"></a>  goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener1);
+<a name="line180"></a>  assertListenersExist(a, 1, false);
+<a name="line181"></a>
+<a name="line182"></a>  goog.events.listenWithWrapper(a, goog.events.actionEventWrapper, listener2);
+<a name="line183"></a>  assertListenersExist(a, 2, false);
+<a name="line184"></a>
+<a name="line185"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
+<a name="line186"></a>  assertEquals(&#39;2 events should have been dispatched&#39;, 2, events.length);
+<a name="line187"></a>  assertEquals(&#39;Should be a keypress event&#39;, &#39;keypress&#39;, events[0].type);
+<a name="line188"></a>  assertEquals(&#39;Should be an err event&#39;, &#39;err&#39;, events[1].type);
+<a name="line189"></a>
+<a name="line190"></a>  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
+<a name="line191"></a>      listener2);
+<a name="line192"></a>  assertListenersExist(a, 1, false);
+<a name="line193"></a>
+<a name="line194"></a>  events = [];
+<a name="line195"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
+<a name="line196"></a>  assertEquals(&#39;1 event should have been dispatched&#39;, 1, events.length);
+<a name="line197"></a>  assertEquals(&#39;Should be a keypress event&#39;, &#39;keypress&#39;, events[0].type);
+<a name="line198"></a>
+<a name="line199"></a>  goog.events.unlistenWithWrapper(a, goog.events.actionEventWrapper,
+<a name="line200"></a>      listener1);
+<a name="line201"></a>  assertListenersExist(a, 0, false);
+<a name="line202"></a>}
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>function testEventHandlerActionListener() {
+<a name="line206"></a>  var listener = function(e) { events.push(e); };
+<a name="line207"></a>  eh.listenWithWrapper(a, goog.events.actionEventWrapper, listener);
+<a name="line208"></a>
+<a name="line209"></a>  assertListenersExist(a, 1, false);
+<a name="line210"></a>
+<a name="line211"></a>  goog.testing.events.fireClickSequence(a);
+<a name="line212"></a>  assertEquals(&#39;1 event should have been dispatched&#39;, 1, events.length);
+<a name="line213"></a>  assertEquals(&#39;Should be an click event&#39;, &#39;click&#39;, events[0].type);
+<a name="line214"></a>
+<a name="line215"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
+<a name="line216"></a>  assertEquals(&#39;2 events should have been dispatched&#39;, 2, events.length);
+<a name="line217"></a>  assertEquals(&#39;Should be a keypress event&#39;, &#39;keypress&#39;, events[1].type);
+<a name="line218"></a>
+<a name="line219"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.SPACE);
+<a name="line220"></a>  assertEquals(&#39;2 events should have been dispatched&#39;, 2, events.length);
+<a name="line221"></a>
+<a name="line222"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
+<a name="line223"></a>  assertEquals(&#39;2 events should have been dispatched&#39;, 2, events.length);
+<a name="line224"></a>
+<a name="line225"></a>  eh.unlistenWithWrapper(a, goog.events.actionEventWrapper,
+<a name="line226"></a>      listener);
+<a name="line227"></a>  assertListenersExist(a, 0, false);
+<a name="line228"></a>}
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>function testEventHandlerActionListenerWithScope() {
+<a name="line232"></a>  var foo = new Foo();
+<a name="line233"></a>  var eh2 = new goog.events.EventHandler(foo);
+<a name="line234"></a>
+<a name="line235"></a>  eh2.listenWithWrapper(a, goog.events.actionEventWrapper, foo.test);
+<a name="line236"></a>
+<a name="line237"></a>  assertListenersExist(a, 1, false);
+<a name="line238"></a>
+<a name="line239"></a>  goog.testing.events.fireClickSequence(a);
+<a name="line240"></a>  assertEquals(&#39;1 event should have been dispatched&#39;, 1, events.length);
+<a name="line241"></a>  assertEquals(&#39;Should be an click event&#39;, &#39;click&#39;, events[0].type);
+<a name="line242"></a>
+<a name="line243"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ENTER);
+<a name="line244"></a>  assertEquals(&#39;2 events should have been dispatched&#39;, 2, events.length);
+<a name="line245"></a>  assertEquals(&#39;Should be a keypress event&#39;, &#39;keypress&#39;, events[1].type);
+<a name="line246"></a>
+<a name="line247"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.SPACE);
+<a name="line248"></a>  assertEquals(&#39;2 events should have been dispatched&#39;, 2, events.length);
+<a name="line249"></a>
+<a name="line250"></a>  goog.testing.events.fireKeySequence(a, goog.events.KeyCodes.ESC);
+<a name="line251"></a>  assertEquals(&#39;2 events should have been dispatched&#39;, 2, events.length);
+<a name="line252"></a>
+<a name="line253"></a>  eh2.dispose();
+<a name="line254"></a>  assertListenersExist(a, 0, false);
+<a name="line255"></a>  delete foo;
+<a name="line256"></a>}
+</pre>
+
+
+</body>
+</html>

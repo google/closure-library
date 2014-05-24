@@ -1,0 +1,203 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>internationalizedemailaddress_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_format_internationalizedemailaddress_test.js.html">internationalizedemailaddress_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2014 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.format.InternationalizedEmailAddressTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.format.InternationalizedEmailAddressTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.format.InternationalizedEmailAddress&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>/**
+<a name="line24"></a> * Asserts that the given validation function generates the expected outcome for
+<a name="line25"></a> * a set of expected valid and a second set of expected invalid addresses.
+<a name="line26"></a> * containing the specified address strings, irrespective of their order.
+<a name="line27"></a> * @param {function(string):boolean} testFunc Validation function to be tested.
+<a name="line28"></a> * @param {!Array.&lt;string&gt;} valid List of addresses that should be valid.
+<a name="line29"></a> * @param {!Array.&lt;string&gt;} invalid List of addresses that should be invalid.
+<a name="line30"></a> * @private
+<a name="line31"></a> */
+<a name="line32"></a>function doIsValidTest(testFunc, valid, invalid) {
+<a name="line33"></a>  goog.array.forEach(valid, function(str) {
+<a name="line34"></a>    assertTrue(&#39;&quot;&#39; + str + &#39;&quot; should be valid.&#39;, testFunc(str));
+<a name="line35"></a>  });
+<a name="line36"></a>  goog.array.forEach(invalid, function(str) {
+<a name="line37"></a>    assertFalse(&#39;&quot;&#39; + str + &#39;&quot; should be invalid.&#39;, testFunc(str));
+<a name="line38"></a>  });
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * Asserts that parsing the inputString produces a list of email addresses
+<a name="line44"></a> * containing the specified address strings, irrespective of their order.
+<a name="line45"></a> * @param {string} inputString A raw address list.
+<a name="line46"></a> * @param {!Array.&lt;string&gt;} expectedList The expected results.
+<a name="line47"></a> * @param {string=} opt_message An assertion message.
+<a name="line48"></a> * @return {string} the resulting email address objects.
+<a name="line49"></a> */
+<a name="line50"></a>function assertParsedList(inputString, expectedList, opt_message) {
+<a name="line51"></a>  var message = opt_message || &#39;Should parse address correctly&#39;;
+<a name="line52"></a>  var result = goog.format.InternationalizedEmailAddress.parseList(inputString);
+<a name="line53"></a>  assertEquals(
+<a name="line54"></a>      &#39;Should have correct # of addresses&#39;, expectedList.length, result.length);
+<a name="line55"></a>  for (var i = 0; i &lt; expectedList.length; ++i) {
+<a name="line56"></a>    assertEquals(message, expectedList[i], result[i].getAddress());
+<a name="line57"></a>  }
+<a name="line58"></a>  return result;
+<a name="line59"></a>}
+<a name="line60"></a>
+<a name="line61"></a>function testParseList() {
+<a name="line62"></a>  // Test only the new cases added by EAI (other cases covered in parent
+<a name="line63"></a>  // class test)
+<a name="line64"></a>  assertParsedList(&#39;&lt;me.???@me.xn--l8jtg9b&gt;&#39;, [&#39;me.???@me.xn--l8jtg9b&#39;]);
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>function testIsEaiValid() {
+<a name="line68"></a>  var valid = [
+<a name="line69"></a>    &#39;e@b.eu&#39;,
+<a name="line70"></a>    &#39;&lt;a.b+foo@c.com&gt;&#39;,
+<a name="line71"></a>    &#39;eric &lt;e@b.com&gt;&#39;,
+<a name="line72"></a>    &#39;&quot;e&quot; &lt;e@b.com&gt;&#39;,
+<a name="line73"></a>    &#39;a@FOO.MUSEUM&#39;,
+<a name="line74"></a>    &#39;bla@b.co.ac.uk&#39;,
+<a name="line75"></a>    &#39;bla@a.b.com&#39;,
+<a name="line76"></a>    &#39;o\&#39;hara@gm.com&#39;,
+<a name="line77"></a>    &#39;plus+is+allowed@gmail.com&#39;,
+<a name="line78"></a>    &#39;!/#$%&amp;\&#39;*+-=~|`{}?^_@expample.com&#39;,
+<a name="line79"></a>    &#39;confirm-bhk=modulo.org@yahoogroups.com&#39;,
+<a name="line80"></a>    &#39;?.?-?@???.???&#39;,
+<a name="line81"></a>    &#39;???@test.com&#39;,
+<a name="line82"></a>    &#39;test@test.???&#39;,
+<a name="line83"></a>    &#39;test@???.com&#39;,
+<a name="line84"></a>    &#39;me.???@me.xn--l8jtg9b&#39;,
+<a name="line85"></a>    &#39;???@me.xn--l8jtg9b&#39;
+<a name="line86"></a>  ];
+<a name="line87"></a>  var invalid = [
+<a name="line88"></a>    null,
+<a name="line89"></a>    undefined,
+<a name="line90"></a>    &#39;e&#39;,
+<a name="line91"></a>    &#39;&#39;,
+<a name="line92"></a>    &#39;e @c.com&#39;,
+<a name="line93"></a>    &#39;a@b&#39;,
+<a name="line94"></a>    &#39;foo.com&#39;,
+<a name="line95"></a>    &#39;foo@c..com&#39;,
+<a name="line96"></a>    &#39;test@gma=il.com&#39;,
+<a name="line97"></a>    &#39;aaa@gmail&#39;,
+<a name="line98"></a>    &#39;has some spaces@gmail.com&#39;,
+<a name="line99"></a>    &#39;has@three@at@signs.com&#39;,
+<a name="line100"></a>    &#39;@no-local-part.com&#39;
+<a name="line101"></a>  ];
+<a name="line102"></a>  doIsValidTest(
+<a name="line103"></a>      goog.format.InternationalizedEmailAddress.isValidAddress, valid, invalid);
+<a name="line104"></a>}
+<a name="line105"></a>
+<a name="line106"></a>function testIsValidLocalPart() {
+<a name="line107"></a>  var valid = [
+<a name="line108"></a>    &#39;e&#39;,
+<a name="line109"></a>    &#39;a.b+foo&#39;,
+<a name="line110"></a>    &#39;o\&#39;hara&#39;,
+<a name="line111"></a>    &#39;user+someone&#39;,
+<a name="line112"></a>    &#39;!/#$%&amp;\&#39;*+-=~|`{}?^_&#39;,
+<a name="line113"></a>    &#39;confirm-bhk=modulo.org&#39;,
+<a name="line114"></a>    &#39;me.???&#39;,
+<a name="line115"></a>    &#39;???&#39;
+<a name="line116"></a>  ];
+<a name="line117"></a>  var invalid = [
+<a name="line118"></a>    null,
+<a name="line119"></a>    undefined,
+<a name="line120"></a>    &#39;A@b@c&#39;,
+<a name="line121"></a>    &#39;a&quot;b(c)d,e:f;g&lt;h&gt;i[j\\k]l&#39;,
+<a name="line122"></a>    &#39;just&quot;not&quot;right&#39;,
+<a name="line123"></a>    &#39;this is&quot;not\\allowed&#39;,
+<a name="line124"></a>    &#39;this\\ still\&quot;not\\\\allowed&#39;,
+<a name="line125"></a>    &#39;has some spaces&#39;
+<a name="line126"></a>  ];
+<a name="line127"></a>  doIsValidTest(goog.format.InternationalizedEmailAddress.isValidLocalPartSpec,
+<a name="line128"></a>      valid, invalid);
+<a name="line129"></a>}
+<a name="line130"></a>
+<a name="line131"></a>function testIsValidDomainPart() {
+<a name="line132"></a>  var valid = [
+<a name="line133"></a>    &#39;example.com&#39;,
+<a name="line134"></a>    &#39;dept.example.org&#39;,
+<a name="line135"></a>    &#39;long.domain.with.lots.of.dots&#39;,
+<a name="line136"></a>    &#39;me.xn--l8jtg9b&#39;,
+<a name="line137"></a>    &#39;me.???&#39;,
+<a name="line138"></a>    &#39;sld.looooooongtld&#39;
+<a name="line139"></a>  ];
+<a name="line140"></a>  var invalid = [
+<a name="line141"></a>    null,
+<a name="line142"></a>    undefined,
+<a name="line143"></a>    &#39;&#39;,
+<a name="line144"></a>    &#39;@has.an.at.sign&#39;,
+<a name="line145"></a>    &#39;..has.leading.dots&#39;,
+<a name="line146"></a>    &#39;gma=il.com&#39;,
+<a name="line147"></a>    &#39;DoesNotHaveADot&#39;,
+<a name="line148"></a>    &#39;aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeffffffffffgggggggggg&#39;
+<a name="line149"></a>  ];
+<a name="line150"></a>  doIsValidTest(goog.format.InternationalizedEmailAddress.isValidDomainPartSpec,
+<a name="line151"></a>      valid, invalid);
+<a name="line152"></a>}
+</pre>
+
+
+</body>
+</html>

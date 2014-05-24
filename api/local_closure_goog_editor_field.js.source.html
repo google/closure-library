@@ -1,0 +1,2782 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>field.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_field.js.html">field.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>// All Rights Reserved.
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Class to encapsulate an editable field.  Always uses an
+<a name="line18"></a> * iframe to contain the editable area, never inherits the style of the
+<a name="line19"></a> * surrounding page, and is always a fixed height.
+<a name="line20"></a> *
+<a name="line21"></a> * @author nicksantos@google.com (Nick Santos)
+<a name="line22"></a> * @see ../demos/editor/editor.html
+<a name="line23"></a> * @see ../demos/editor/field_basic.html
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.editor.Field&#39;);
+<a name="line27"></a>goog.provide(&#39;goog.editor.Field.EventType&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.a11y.aria&#39;);
+<a name="line30"></a>goog.require(&#39;goog.a11y.aria.Role&#39;);
+<a name="line31"></a>goog.require(&#39;goog.array&#39;);
+<a name="line32"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line33"></a>goog.require(&#39;goog.async.Delay&#39;);
+<a name="line34"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line35"></a>goog.require(&#39;goog.dom.Range&#39;);
+<a name="line36"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line37"></a>goog.require(&#39;goog.editor.BrowserFeature&#39;);
+<a name="line38"></a>goog.require(&#39;goog.editor.Command&#39;);
+<a name="line39"></a>goog.require(&#39;goog.editor.Plugin&#39;);
+<a name="line40"></a>goog.require(&#39;goog.editor.icontent&#39;);
+<a name="line41"></a>goog.require(&#39;goog.editor.icontent.FieldFormatInfo&#39;);
+<a name="line42"></a>goog.require(&#39;goog.editor.icontent.FieldStyleInfo&#39;);
+<a name="line43"></a>goog.require(&#39;goog.editor.node&#39;);
+<a name="line44"></a>goog.require(&#39;goog.editor.range&#39;);
+<a name="line45"></a>goog.require(&#39;goog.events&#39;);
+<a name="line46"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line47"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line48"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line49"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line50"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line51"></a>goog.require(&#39;goog.log&#39;);
+<a name="line52"></a>goog.require(&#39;goog.string&#39;);
+<a name="line53"></a>goog.require(&#39;goog.string.Unicode&#39;);
+<a name="line54"></a>goog.require(&#39;goog.style&#39;);
+<a name="line55"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line56"></a>goog.require(&#39;goog.userAgent.product&#39;);
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * This class encapsulates an editable field.
+<a name="line62"></a> *
+<a name="line63"></a> * event: load Fires when the field is loaded
+<a name="line64"></a> * event: unload Fires when the field is unloaded (made not editable)
+<a name="line65"></a> *
+<a name="line66"></a> * event: beforechange Fires before the content of the field might change
+<a name="line67"></a> *
+<a name="line68"></a> * event: delayedchange Fires a short time after field has changed. If multiple
+<a name="line69"></a> *                      change events happen really close to each other only
+<a name="line70"></a> *                      the last one will trigger the delayedchange event.
+<a name="line71"></a> *
+<a name="line72"></a> * event: beforefocus Fires before the field becomes active
+<a name="line73"></a> * event: focus Fires when the field becomes active. Fires after the blur event
+<a name="line74"></a> * event: blur Fires when the field becomes inactive
+<a name="line75"></a> *
+<a name="line76"></a> * TODO: figure out if blur or beforefocus fires first in IE and make FF match
+<a name="line77"></a> *
+<a name="line78"></a> * @param {string} id An identifer for the field. This is used to find the
+<a name="line79"></a> *    field and the element associated with this field.
+<a name="line80"></a> * @param {Document=} opt_doc The document that the element with the given
+<a name="line81"></a> *     id can be found in.  If not provided, the default document is used.
+<a name="line82"></a> * @constructor
+<a name="line83"></a> * @extends {goog.events.EventTarget}
+<a name="line84"></a> */
+<a name="line85"></a>goog.editor.Field = function(id, opt_doc) {
+<a name="line86"></a>  goog.events.EventTarget.call(this);
+<a name="line87"></a>
+<a name="line88"></a>  /**
+<a name="line89"></a>   * The id for this editable field, which must match the id of the element
+<a name="line90"></a>   * associated with this field.
+<a name="line91"></a>   * @type {string}
+<a name="line92"></a>   */
+<a name="line93"></a>  this.id = id;
+<a name="line94"></a>
+<a name="line95"></a>  /**
+<a name="line96"></a>   * The hash code for this field. Should be equal to the id.
+<a name="line97"></a>   * @type {string}
+<a name="line98"></a>   * @private
+<a name="line99"></a>   */
+<a name="line100"></a>  this.hashCode_ = id;
+<a name="line101"></a>
+<a name="line102"></a>  /**
+<a name="line103"></a>   * Dom helper for the editable node.
+<a name="line104"></a>   * @type {goog.dom.DomHelper}
+<a name="line105"></a>   * @protected
+<a name="line106"></a>   */
+<a name="line107"></a>  this.editableDomHelper = null;
+<a name="line108"></a>
+<a name="line109"></a>  /**
+<a name="line110"></a>   * Map of class id to registered plugin.
+<a name="line111"></a>   * @type {Object}
+<a name="line112"></a>   * @private
+<a name="line113"></a>   */
+<a name="line114"></a>  this.plugins_ = {};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>  /**
+<a name="line118"></a>   * Plugins registered on this field, indexed by the goog.editor.Plugin.Op
+<a name="line119"></a>   * that they support.
+<a name="line120"></a>   * @type {Object.&lt;Array&gt;}
+<a name="line121"></a>   * @private
+<a name="line122"></a>   */
+<a name="line123"></a>  this.indexedPlugins_ = {};
+<a name="line124"></a>
+<a name="line125"></a>  for (var op in goog.editor.Plugin.OPCODE) {
+<a name="line126"></a>    this.indexedPlugins_[op] = [];
+<a name="line127"></a>  }
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>  /**
+<a name="line131"></a>   * Additional styles to install for the editable field.
+<a name="line132"></a>   * @type {string}
+<a name="line133"></a>   * @protected
+<a name="line134"></a>   */
+<a name="line135"></a>  this.cssStyles = &#39;&#39;;
+<a name="line136"></a>
+<a name="line137"></a>  // The field will not listen to change events until it has finished loading
+<a name="line138"></a>  this.stoppedEvents_ = {};
+<a name="line139"></a>  this.stopEvent(goog.editor.Field.EventType.CHANGE);
+<a name="line140"></a>  this.stopEvent(goog.editor.Field.EventType.DELAYEDCHANGE);
+<a name="line141"></a>  this.isModified_ = false;
+<a name="line142"></a>  this.isEverModified_ = false;
+<a name="line143"></a>  this.delayedChangeTimer_ = new goog.async.Delay(this.dispatchDelayedChange_,
+<a name="line144"></a>      goog.editor.Field.DELAYED_CHANGE_FREQUENCY, this);
+<a name="line145"></a>
+<a name="line146"></a>  this.debouncedEvents_ = {};
+<a name="line147"></a>  for (var key in goog.editor.Field.EventType) {
+<a name="line148"></a>    this.debouncedEvents_[goog.editor.Field.EventType[key]] = 0;
+<a name="line149"></a>  }
+<a name="line150"></a>
+<a name="line151"></a>  if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
+<a name="line152"></a>    this.changeTimerGecko_ = new goog.async.Delay(this.handleChange,
+<a name="line153"></a>        goog.editor.Field.CHANGE_FREQUENCY, this);
+<a name="line154"></a>  }
+<a name="line155"></a>
+<a name="line156"></a>  /**
+<a name="line157"></a>   * @type {goog.events.EventHandler.&lt;!goog.editor.Field&gt;}
+<a name="line158"></a>   * @protected
+<a name="line159"></a>   */
+<a name="line160"></a>  this.eventRegister = new goog.events.EventHandler(this);
+<a name="line161"></a>
+<a name="line162"></a>  // Wrappers around this field, to be disposed when the field is disposed.
+<a name="line163"></a>  this.wrappers_ = [];
+<a name="line164"></a>
+<a name="line165"></a>  this.loadState_ = goog.editor.Field.LoadState_.UNEDITABLE;
+<a name="line166"></a>
+<a name="line167"></a>  var doc = opt_doc || document;
+<a name="line168"></a>
+<a name="line169"></a>  /**
+<a name="line170"></a>   * @type {!goog.dom.DomHelper}
+<a name="line171"></a>   * @protected
+<a name="line172"></a>   */
+<a name="line173"></a>  this.originalDomHelper = goog.dom.getDomHelper(doc);
+<a name="line174"></a>
+<a name="line175"></a>  /**
+<a name="line176"></a>   * @type {Element}
+<a name="line177"></a>   * @protected
+<a name="line178"></a>   */
+<a name="line179"></a>  this.originalElement = this.originalDomHelper.getElement(this.id);
+<a name="line180"></a>
+<a name="line181"></a>  // Default to the same window as the field is in.
+<a name="line182"></a>  this.appWindow_ = this.originalDomHelper.getWindow();
+<a name="line183"></a>};
+<a name="line184"></a>goog.inherits(goog.editor.Field, goog.events.EventTarget);
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * The editable dom node.
+<a name="line189"></a> * @type {Element}
+<a name="line190"></a> * TODO(user): Make this private!
+<a name="line191"></a> */
+<a name="line192"></a>goog.editor.Field.prototype.field = null;
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * The original node that is being made editable, or null if it has
+<a name="line197"></a> * not yet been found.
+<a name="line198"></a> * @type {Element}
+<a name="line199"></a> * @protected
+<a name="line200"></a> */
+<a name="line201"></a>goog.editor.Field.prototype.originalElement = null;
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Logging object.
+<a name="line206"></a> * @type {goog.log.Logger}
+<a name="line207"></a> * @protected
+<a name="line208"></a> */
+<a name="line209"></a>goog.editor.Field.prototype.logger =
+<a name="line210"></a>    goog.log.getLogger(&#39;goog.editor.Field&#39;);
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Event types that can be stopped/started.
+<a name="line215"></a> * @enum {string}
+<a name="line216"></a> */
+<a name="line217"></a>goog.editor.Field.EventType = {
+<a name="line218"></a>  /**
+<a name="line219"></a>   * Dispatched when the command state of the selection may have changed. This
+<a name="line220"></a>   * event should be listened to for updating toolbar state.
+<a name="line221"></a>   */
+<a name="line222"></a>  COMMAND_VALUE_CHANGE: &#39;cvc&#39;,
+<a name="line223"></a>  /**
+<a name="line224"></a>   * Dispatched when the field is loaded and ready to use.
+<a name="line225"></a>   */
+<a name="line226"></a>  LOAD: &#39;load&#39;,
+<a name="line227"></a>  /**
+<a name="line228"></a>   * Dispatched when the field is fully unloaded and uneditable.
+<a name="line229"></a>   */
+<a name="line230"></a>  UNLOAD: &#39;unload&#39;,
+<a name="line231"></a>  /**
+<a name="line232"></a>   * Dispatched before the field contents are changed.
+<a name="line233"></a>   */
+<a name="line234"></a>  BEFORECHANGE: &#39;beforechange&#39;,
+<a name="line235"></a>  /**
+<a name="line236"></a>   * Dispatched when the field contents change, in FF only.
+<a name="line237"></a>   * Used for internal resizing, please do not use.
+<a name="line238"></a>   */
+<a name="line239"></a>  CHANGE: &#39;change&#39;,
+<a name="line240"></a>  /**
+<a name="line241"></a>   * Dispatched on a slight delay after changes are made.
+<a name="line242"></a>   * Use for autosave, or other times your app needs to know
+<a name="line243"></a>   * that the field contents changed.
+<a name="line244"></a>   */
+<a name="line245"></a>  DELAYEDCHANGE: &#39;delayedchange&#39;,
+<a name="line246"></a>  /**
+<a name="line247"></a>   * Dispatched before focus in moved into the field.
+<a name="line248"></a>   */
+<a name="line249"></a>  BEFOREFOCUS: &#39;beforefocus&#39;,
+<a name="line250"></a>  /**
+<a name="line251"></a>   * Dispatched when focus is moved into the field.
+<a name="line252"></a>   */
+<a name="line253"></a>  FOCUS: &#39;focus&#39;,
+<a name="line254"></a>  /**
+<a name="line255"></a>   * Dispatched when the field is blurred.
+<a name="line256"></a>   */
+<a name="line257"></a>  BLUR: &#39;blur&#39;,
+<a name="line258"></a>  /**
+<a name="line259"></a>   * Dispatched before tab is handled by the field.  This is a legacy way
+<a name="line260"></a>   * of controlling tab behavior.  Use trog.plugins.AbstractTabHandler now.
+<a name="line261"></a>   */
+<a name="line262"></a>  BEFORETAB: &#39;beforetab&#39;,
+<a name="line263"></a>  /**
+<a name="line264"></a>   * Dispatched after the iframe containing the field is resized, so that UI
+<a name="line265"></a>   * components which contain it can respond.
+<a name="line266"></a>   */
+<a name="line267"></a>  IFRAME_RESIZED: &#39;ifrsz&#39;,
+<a name="line268"></a>  /**
+<a name="line269"></a>   * Dispatched when the selection changes.
+<a name="line270"></a>   * Use handleSelectionChange from plugin API instead of listening
+<a name="line271"></a>   * directly to this event.
+<a name="line272"></a>   */
+<a name="line273"></a>  SELECTIONCHANGE: &#39;selectionchange&#39;
+<a name="line274"></a>};
+<a name="line275"></a>
+<a name="line276"></a>
+<a name="line277"></a>/**
+<a name="line278"></a> * The load state of the field.
+<a name="line279"></a> * @enum {number}
+<a name="line280"></a> * @private
+<a name="line281"></a> */
+<a name="line282"></a>goog.editor.Field.LoadState_ = {
+<a name="line283"></a>  UNEDITABLE: 0,
+<a name="line284"></a>  LOADING: 1,
+<a name="line285"></a>  EDITABLE: 2
+<a name="line286"></a>};
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * The amount of time that a debounce blocks an event.
+<a name="line291"></a> * TODO(nicksantos): As of 9/30/07, this is only used for blocking
+<a name="line292"></a> * a keyup event after a keydown. We might need to tweak this for other
+<a name="line293"></a> * types of events. Maybe have a per-event debounce time?
+<a name="line294"></a> * @type {number}
+<a name="line295"></a> * @private
+<a name="line296"></a> */
+<a name="line297"></a>goog.editor.Field.DEBOUNCE_TIME_MS_ = 500;
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * There is at most one &quot;active&quot; field at a time.  By &quot;active&quot; field, we mean
+<a name="line302"></a> * a field that has focus and is being used.
+<a name="line303"></a> * @type {?string}
+<a name="line304"></a> * @private
+<a name="line305"></a> */
+<a name="line306"></a>goog.editor.Field.activeFieldId_ = null;
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>/**
+<a name="line310"></a> * Whether this field is in &quot;modal interaction&quot; mode. This usually
+<a name="line311"></a> * means that it&#39;s being edited by a dialog.
+<a name="line312"></a> * @type {boolean}
+<a name="line313"></a> * @private
+<a name="line314"></a> */
+<a name="line315"></a>goog.editor.Field.prototype.inModalMode_ = false;
+<a name="line316"></a>
+<a name="line317"></a>
+<a name="line318"></a>/**
+<a name="line319"></a> * The window where dialogs and bubbles should be rendered.
+<a name="line320"></a> * @type {!Window}
+<a name="line321"></a> * @private
+<a name="line322"></a> */
+<a name="line323"></a>goog.editor.Field.prototype.appWindow_;
+<a name="line324"></a>
+<a name="line325"></a>
+<a name="line326"></a>/**
+<a name="line327"></a> * The dom helper for the node to be made editable.
+<a name="line328"></a> * @type {goog.dom.DomHelper}
+<a name="line329"></a> * @protected
+<a name="line330"></a> */
+<a name="line331"></a>goog.editor.Field.prototype.originalDomHelper;
+<a name="line332"></a>
+<a name="line333"></a>
+<a name="line334"></a>/**
+<a name="line335"></a> * Target node to be used when dispatching SELECTIONCHANGE asynchronously on
+<a name="line336"></a> * mouseup (to avoid IE quirk). Should be set just before starting the timer and
+<a name="line337"></a> * nulled right after consuming.
+<a name="line338"></a> * @type {Node}
+<a name="line339"></a> * @private
+<a name="line340"></a> */
+<a name="line341"></a>goog.editor.Field.prototype.selectionChangeTarget_;
+<a name="line342"></a>
+<a name="line343"></a>
+<a name="line344"></a>/**
+<a name="line345"></a> * Flag controlling wether to capture mouse up events on the window or not.
+<a name="line346"></a> * @type {boolean}
+<a name="line347"></a> * @private
+<a name="line348"></a> */
+<a name="line349"></a>goog.editor.Field.prototype.useWindowMouseUp_ = false;
+<a name="line350"></a>
+<a name="line351"></a>
+<a name="line352"></a>/**
+<a name="line353"></a> * FLag indicating the handling of a mouse event sequence.
+<a name="line354"></a> * @type {boolean}
+<a name="line355"></a> * @private
+<a name="line356"></a> */
+<a name="line357"></a>goog.editor.Field.prototype.waitingForMouseUp_ = false;
+<a name="line358"></a>
+<a name="line359"></a>
+<a name="line360"></a>/**
+<a name="line361"></a> * Sets the active field id.
+<a name="line362"></a> * @param {?string} fieldId The active field id.
+<a name="line363"></a> */
+<a name="line364"></a>goog.editor.Field.setActiveFieldId = function(fieldId) {
+<a name="line365"></a>  goog.editor.Field.activeFieldId_ = fieldId;
+<a name="line366"></a>};
+<a name="line367"></a>
+<a name="line368"></a>
+<a name="line369"></a>/**
+<a name="line370"></a> * @return {?string} The id of the active field.
+<a name="line371"></a> */
+<a name="line372"></a>goog.editor.Field.getActiveFieldId = function() {
+<a name="line373"></a>  return goog.editor.Field.activeFieldId_;
+<a name="line374"></a>};
+<a name="line375"></a>
+<a name="line376"></a>
+<a name="line377"></a>/**
+<a name="line378"></a> * Sets flag to control whether to use window mouse up after seeing
+<a name="line379"></a> * a mouse down operation on the field.
+<a name="line380"></a> * @param {boolean} flag True to track window mouse up.
+<a name="line381"></a> */
+<a name="line382"></a>goog.editor.Field.prototype.setUseWindowMouseUp = function(flag) {
+<a name="line383"></a>  goog.asserts.assert(!flag || !this.usesIframe(),
+<a name="line384"></a>      &#39;procssing window mouse up should only be enabled when not using iframe&#39;);
+<a name="line385"></a>  this.useWindowMouseUp_ = flag;
+<a name="line386"></a>};
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/**
+<a name="line390"></a> * @return {boolean} Whether we&#39;re in modal interaction mode. When this
+<a name="line391"></a> *     returns true, another plugin is interacting with the field contents
+<a name="line392"></a> *     in a synchronous way, and expects you not to make changes to
+<a name="line393"></a> *     the field&#39;s DOM structure or selection.
+<a name="line394"></a> */
+<a name="line395"></a>goog.editor.Field.prototype.inModalMode = function() {
+<a name="line396"></a>  return this.inModalMode_;
+<a name="line397"></a>};
+<a name="line398"></a>
+<a name="line399"></a>
+<a name="line400"></a>/**
+<a name="line401"></a> * @param {boolean} inModalMode Sets whether we&#39;re in modal interaction mode.
+<a name="line402"></a> */
+<a name="line403"></a>goog.editor.Field.prototype.setModalMode = function(inModalMode) {
+<a name="line404"></a>  this.inModalMode_ = inModalMode;
+<a name="line405"></a>};
+<a name="line406"></a>
+<a name="line407"></a>
+<a name="line408"></a>/**
+<a name="line409"></a> * Returns a string usable as a hash code for this field. For field&#39;s
+<a name="line410"></a> * that were created with an id, the hash code is guaranteed to be the id.
+<a name="line411"></a> * TODO(user): I think we can get rid of this.  Seems only used from editor.
+<a name="line412"></a> * @return {string} The hash code for this editable field.
+<a name="line413"></a> */
+<a name="line414"></a>goog.editor.Field.prototype.getHashCode = function() {
+<a name="line415"></a>  return this.hashCode_;
+<a name="line416"></a>};
+<a name="line417"></a>
+<a name="line418"></a>
+<a name="line419"></a>/**
+<a name="line420"></a> * Returns the editable DOM element or null if this field
+<a name="line421"></a> * is not editable.
+<a name="line422"></a> * &lt;p&gt;On IE or Safari this is the element with contentEditable=true
+<a name="line423"></a> * (in whitebox mode, the iFrame body).
+<a name="line424"></a> * &lt;p&gt;On Gecko this is the iFrame body
+<a name="line425"></a> * TODO(user): How do we word this for subclass version?
+<a name="line426"></a> * @return {Element} The editable DOM element, defined as above.
+<a name="line427"></a> */
+<a name="line428"></a>goog.editor.Field.prototype.getElement = function() {
+<a name="line429"></a>  return this.field;
+<a name="line430"></a>};
+<a name="line431"></a>
+<a name="line432"></a>
+<a name="line433"></a>/**
+<a name="line434"></a> * Returns original DOM element that is being made editable by Trogedit or
+<a name="line435"></a> * null if that element has not yet been found in the appropriate document.
+<a name="line436"></a> * @return {Element} The original element.
+<a name="line437"></a> */
+<a name="line438"></a>goog.editor.Field.prototype.getOriginalElement = function() {
+<a name="line439"></a>  return this.originalElement;
+<a name="line440"></a>};
+<a name="line441"></a>
+<a name="line442"></a>
+<a name="line443"></a>/**
+<a name="line444"></a> * Registers a keyboard event listener on the field.  This is necessary for
+<a name="line445"></a> * Gecko since the fields are contained in an iFrame and there is no way to
+<a name="line446"></a> * auto-propagate key events up to the main window.
+<a name="line447"></a> * @param {string|Array.&lt;string&gt;} type Event type to listen for or array of
+<a name="line448"></a> *    event types, for example goog.events.EventType.KEYDOWN.
+<a name="line449"></a> * @param {Function} listener Function to be used as the listener.
+<a name="line450"></a> * @param {boolean=} opt_capture Whether to use capture phase (optional,
+<a name="line451"></a> *    defaults to false).
+<a name="line452"></a> * @param {Object=} opt_handler Object in whose scope to call the listener.
+<a name="line453"></a> */
+<a name="line454"></a>goog.editor.Field.prototype.addListener = function(type, listener, opt_capture,
+<a name="line455"></a>                                                   opt_handler) {
+<a name="line456"></a>  var elem = this.getElement();
+<a name="line457"></a>  // On Gecko, keyboard events only reliably fire on the document element when
+<a name="line458"></a>  // using an iframe.
+<a name="line459"></a>  if (goog.editor.BrowserFeature.USE_DOCUMENT_FOR_KEY_EVENTS &amp;&amp; elem &amp;&amp;
+<a name="line460"></a>      this.usesIframe()) {
+<a name="line461"></a>    elem = elem.ownerDocument;
+<a name="line462"></a>  }
+<a name="line463"></a>  if (opt_handler) {
+<a name="line464"></a>    this.eventRegister.listenWithScope(
+<a name="line465"></a>        elem, type, listener, opt_capture, opt_handler);
+<a name="line466"></a>  } else {
+<a name="line467"></a>    this.eventRegister.listen(elem, type, listener, opt_capture);
+<a name="line468"></a>  }
+<a name="line469"></a>};
+<a name="line470"></a>
+<a name="line471"></a>
+<a name="line472"></a>/**
+<a name="line473"></a> * Returns the registered plugin with the given classId.
+<a name="line474"></a> * @param {string} classId classId of the plugin.
+<a name="line475"></a> * @return {goog.editor.Plugin} Registered plugin with the given classId.
+<a name="line476"></a> */
+<a name="line477"></a>goog.editor.Field.prototype.getPluginByClassId = function(classId) {
+<a name="line478"></a>  return this.plugins_[classId];
+<a name="line479"></a>};
+<a name="line480"></a>
+<a name="line481"></a>
+<a name="line482"></a>/**
+<a name="line483"></a> * Registers the plugin with the editable field.
+<a name="line484"></a> * @param {goog.editor.Plugin} plugin The plugin to register.
+<a name="line485"></a> */
+<a name="line486"></a>goog.editor.Field.prototype.registerPlugin = function(plugin) {
+<a name="line487"></a>  var classId = plugin.getTrogClassId();
+<a name="line488"></a>  if (this.plugins_[classId]) {
+<a name="line489"></a>    goog.log.error(this.logger,
+<a name="line490"></a>        &#39;Cannot register the same class of plugin twice.&#39;);
+<a name="line491"></a>  }
+<a name="line492"></a>  this.plugins_[classId] = plugin;
+<a name="line493"></a>
+<a name="line494"></a>  // Only key events and execute should have these has* functions with a custom
+<a name="line495"></a>  // handler array since they need to be very careful about performance.
+<a name="line496"></a>  // The rest of the plugin hooks should be event-based.
+<a name="line497"></a>  for (var op in goog.editor.Plugin.OPCODE) {
+<a name="line498"></a>    var opcode = goog.editor.Plugin.OPCODE[op];
+<a name="line499"></a>    if (plugin[opcode]) {
+<a name="line500"></a>      this.indexedPlugins_[op].push(plugin);
+<a name="line501"></a>    }
+<a name="line502"></a>  }
+<a name="line503"></a>  plugin.registerFieldObject(this);
+<a name="line504"></a>
+<a name="line505"></a>  // By default we enable all plugins for fields that are currently loaded.
+<a name="line506"></a>  if (this.isLoaded()) {
+<a name="line507"></a>    plugin.enable(this);
+<a name="line508"></a>  }
+<a name="line509"></a>};
+<a name="line510"></a>
+<a name="line511"></a>
+<a name="line512"></a>/**
+<a name="line513"></a> * Unregisters the plugin with this field.
+<a name="line514"></a> * @param {goog.editor.Plugin} plugin The plugin to unregister.
+<a name="line515"></a> */
+<a name="line516"></a>goog.editor.Field.prototype.unregisterPlugin = function(plugin) {
+<a name="line517"></a>  var classId = plugin.getTrogClassId();
+<a name="line518"></a>  if (!this.plugins_[classId]) {
+<a name="line519"></a>    goog.log.error(this.logger,
+<a name="line520"></a>        &#39;Cannot unregister a plugin that isn\&#39;t registered.&#39;);
+<a name="line521"></a>  }
+<a name="line522"></a>  delete this.plugins_[classId];
+<a name="line523"></a>
+<a name="line524"></a>  for (var op in goog.editor.Plugin.OPCODE) {
+<a name="line525"></a>    var opcode = goog.editor.Plugin.OPCODE[op];
+<a name="line526"></a>    if (plugin[opcode]) {
+<a name="line527"></a>      goog.array.remove(this.indexedPlugins_[op], plugin);
+<a name="line528"></a>    }
+<a name="line529"></a>  }
+<a name="line530"></a>
+<a name="line531"></a>  plugin.unregisterFieldObject(this);
+<a name="line532"></a>};
+<a name="line533"></a>
+<a name="line534"></a>
+<a name="line535"></a>/**
+<a name="line536"></a> * Sets the value that will replace the style attribute of this field&#39;s
+<a name="line537"></a> * element when the field is made non-editable. This method is called with the
+<a name="line538"></a> * current value of the style attribute when the field is made editable.
+<a name="line539"></a> * @param {string} cssText The value of the style attribute.
+<a name="line540"></a> */
+<a name="line541"></a>goog.editor.Field.prototype.setInitialStyle = function(cssText) {
+<a name="line542"></a>  this.cssText = cssText;
+<a name="line543"></a>};
+<a name="line544"></a>
+<a name="line545"></a>
+<a name="line546"></a>/**
+<a name="line547"></a> * Reset the properties on the original field element to how it was before
+<a name="line548"></a> * it was made editable.
+<a name="line549"></a> */
+<a name="line550"></a>goog.editor.Field.prototype.resetOriginalElemProperties = function() {
+<a name="line551"></a>  var field = this.getOriginalElement();
+<a name="line552"></a>  field.removeAttribute(&#39;contentEditable&#39;);
+<a name="line553"></a>  field.removeAttribute(&#39;g_editable&#39;);
+<a name="line554"></a>  field.removeAttribute(&#39;role&#39;);
+<a name="line555"></a>
+<a name="line556"></a>  if (!this.id) {
+<a name="line557"></a>    field.removeAttribute(&#39;id&#39;);
+<a name="line558"></a>  } else {
+<a name="line559"></a>    field.id = this.id;
+<a name="line560"></a>  }
+<a name="line561"></a>
+<a name="line562"></a>  field.className = this.savedClassName_ || &#39;&#39;;
+<a name="line563"></a>
+<a name="line564"></a>  var cssText = this.cssText;
+<a name="line565"></a>  if (!cssText) {
+<a name="line566"></a>    field.removeAttribute(&#39;style&#39;);
+<a name="line567"></a>  } else {
+<a name="line568"></a>    goog.dom.setProperties(field, {&#39;style&#39; : cssText});
+<a name="line569"></a>  }
+<a name="line570"></a>
+<a name="line571"></a>  if (goog.isString(this.originalFieldLineHeight_)) {
+<a name="line572"></a>    goog.style.setStyle(field, &#39;lineHeight&#39;, this.originalFieldLineHeight_);
+<a name="line573"></a>    this.originalFieldLineHeight_ = null;
+<a name="line574"></a>  }
+<a name="line575"></a>};
+<a name="line576"></a>
+<a name="line577"></a>
+<a name="line578"></a>/**
+<a name="line579"></a> * Checks the modified state of the field.
+<a name="line580"></a> * Note: Changes that take place while the goog.editor.Field.EventType.CHANGE
+<a name="line581"></a> * event is stopped do not effect the modified state.
+<a name="line582"></a> * @param {boolean=} opt_useIsEverModified Set to true to check if the field
+<a name="line583"></a> *   has ever been modified since it was created, otherwise checks if the field
+<a name="line584"></a> *   has been modified since the last goog.editor.Field.EventType.DELAYEDCHANGE
+<a name="line585"></a> *   event was dispatched.
+<a name="line586"></a> * @return {boolean} Whether the field has been modified.
+<a name="line587"></a> */
+<a name="line588"></a>goog.editor.Field.prototype.isModified = function(opt_useIsEverModified) {
+<a name="line589"></a>  return opt_useIsEverModified ? this.isEverModified_ : this.isModified_;
+<a name="line590"></a>};
+<a name="line591"></a>
+<a name="line592"></a>
+<a name="line593"></a>/**
+<a name="line594"></a> * Number of milliseconds after a change when the change event should be fired.
+<a name="line595"></a> * @type {number}
+<a name="line596"></a> */
+<a name="line597"></a>goog.editor.Field.CHANGE_FREQUENCY = 15;
+<a name="line598"></a>
+<a name="line599"></a>
+<a name="line600"></a>/**
+<a name="line601"></a> * Number of milliseconds between delayed change events.
+<a name="line602"></a> * @type {number}
+<a name="line603"></a> */
+<a name="line604"></a>goog.editor.Field.DELAYED_CHANGE_FREQUENCY = 250;
+<a name="line605"></a>
+<a name="line606"></a>
+<a name="line607"></a>/**
+<a name="line608"></a> * @return {boolean} Whether the field is implemented as an iframe.
+<a name="line609"></a> */
+<a name="line610"></a>goog.editor.Field.prototype.usesIframe = goog.functions.TRUE;
+<a name="line611"></a>
+<a name="line612"></a>
+<a name="line613"></a>/**
+<a name="line614"></a> * @return {boolean} Whether the field should be rendered with a fixed
+<a name="line615"></a> *     height, or should expand to fit its contents.
+<a name="line616"></a> */
+<a name="line617"></a>goog.editor.Field.prototype.isFixedHeight = goog.functions.TRUE;
+<a name="line618"></a>
+<a name="line619"></a>
+<a name="line620"></a>/**
+<a name="line621"></a> * @return {boolean} Whether the field should be refocused on input.
+<a name="line622"></a> *    This is a workaround for the iOS bug that text input doesn&#39;t work
+<a name="line623"></a> *    when the main window listens touch events.
+<a name="line624"></a> */
+<a name="line625"></a>goog.editor.Field.prototype.shouldRefocusOnInputMobileSafari =
+<a name="line626"></a>    goog.functions.FALSE;
+<a name="line627"></a>
+<a name="line628"></a>
+<a name="line629"></a>/**
+<a name="line630"></a> * Map of keyCodes (not charCodes) that cause changes in the field contents.
+<a name="line631"></a> * @type {Object}
+<a name="line632"></a> * @private
+<a name="line633"></a> */
+<a name="line634"></a>goog.editor.Field.KEYS_CAUSING_CHANGES_ = {
+<a name="line635"></a>  46: true, // DEL
+<a name="line636"></a>  8: true // BACKSPACE
+<a name="line637"></a>};
+<a name="line638"></a>
+<a name="line639"></a>if (!goog.userAgent.IE) {
+<a name="line640"></a>  // Only IE doesn&#39;t change the field by default upon tab.
+<a name="line641"></a>  // TODO(user): This really isn&#39;t right now that we have tab plugins.
+<a name="line642"></a>  goog.editor.Field.KEYS_CAUSING_CHANGES_[9] = true; // TAB
+<a name="line643"></a>}
+<a name="line644"></a>
+<a name="line645"></a>
+<a name="line646"></a>/**
+<a name="line647"></a> * Map of keyCodes (not charCodes) that when used in conjunction with the
+<a name="line648"></a> * Ctrl key cause changes in the field contents. These are the keys that are
+<a name="line649"></a> * not handled by basic formatting trogedit plugins.
+<a name="line650"></a> * @type {Object}
+<a name="line651"></a> * @private
+<a name="line652"></a> */
+<a name="line653"></a>goog.editor.Field.CTRL_KEYS_CAUSING_CHANGES_ = {
+<a name="line654"></a>  86: true, // V
+<a name="line655"></a>  88: true // X
+<a name="line656"></a>};
+<a name="line657"></a>
+<a name="line658"></a>if (goog.userAgent.WINDOWS &amp;&amp; !goog.userAgent.GECKO) {
+<a name="line659"></a>  // In IE and Webkit, input from IME (Input Method Editor) does not generate a
+<a name="line660"></a>  // keypress event so we have to rely on the keydown event. This way we have
+<a name="line661"></a>  // false positives while the user is using keyboard to select the
+<a name="line662"></a>  // character to input, but it is still better than the false negatives
+<a name="line663"></a>  // that ignores user&#39;s final input at all.
+<a name="line664"></a>  goog.editor.Field.KEYS_CAUSING_CHANGES_[229] = true; // from IME;
+<a name="line665"></a>}
+<a name="line666"></a>
+<a name="line667"></a>
+<a name="line668"></a>/**
+<a name="line669"></a> * Returns true if the keypress generates a change in contents.
+<a name="line670"></a> * @param {goog.events.BrowserEvent} e The event.
+<a name="line671"></a> * @param {boolean} testAllKeys True to test for all types of generating keys.
+<a name="line672"></a> *     False to test for only the keys found in
+<a name="line673"></a> *     goog.editor.Field.KEYS_CAUSING_CHANGES_.
+<a name="line674"></a> * @return {boolean} Whether the keypress generates a change in contents.
+<a name="line675"></a> * @private
+<a name="line676"></a> */
+<a name="line677"></a>goog.editor.Field.isGeneratingKey_ = function(e, testAllKeys) {
+<a name="line678"></a>  if (goog.editor.Field.isSpecialGeneratingKey_(e)) {
+<a name="line679"></a>    return true;
+<a name="line680"></a>  }
+<a name="line681"></a>
+<a name="line682"></a>  return !!(testAllKeys &amp;&amp; !(e.ctrlKey || e.metaKey) &amp;&amp;
+<a name="line683"></a>      (!goog.userAgent.GECKO || e.charCode));
+<a name="line684"></a>};
+<a name="line685"></a>
+<a name="line686"></a>
+<a name="line687"></a>/**
+<a name="line688"></a> * Returns true if the keypress generates a change in the contents.
+<a name="line689"></a> * due to a special key listed in goog.editor.Field.KEYS_CAUSING_CHANGES_
+<a name="line690"></a> * @param {goog.events.BrowserEvent} e The event.
+<a name="line691"></a> * @return {boolean} Whether the keypress generated a change in the contents.
+<a name="line692"></a> * @private
+<a name="line693"></a> */
+<a name="line694"></a>goog.editor.Field.isSpecialGeneratingKey_ = function(e) {
+<a name="line695"></a>  var testCtrlKeys = (e.ctrlKey || e.metaKey) &amp;&amp;
+<a name="line696"></a>      e.keyCode in goog.editor.Field.CTRL_KEYS_CAUSING_CHANGES_;
+<a name="line697"></a>  var testRegularKeys = !(e.ctrlKey || e.metaKey) &amp;&amp;
+<a name="line698"></a>      e.keyCode in goog.editor.Field.KEYS_CAUSING_CHANGES_;
+<a name="line699"></a>
+<a name="line700"></a>  return testCtrlKeys || testRegularKeys;
+<a name="line701"></a>};
+<a name="line702"></a>
+<a name="line703"></a>
+<a name="line704"></a>/**
+<a name="line705"></a> * Sets the application window.
+<a name="line706"></a> * @param {!Window} appWindow The window where dialogs and bubbles should be
+<a name="line707"></a> *     rendered.
+<a name="line708"></a> */
+<a name="line709"></a>goog.editor.Field.prototype.setAppWindow = function(appWindow) {
+<a name="line710"></a>  this.appWindow_ = appWindow;
+<a name="line711"></a>};
+<a name="line712"></a>
+<a name="line713"></a>
+<a name="line714"></a>/**
+<a name="line715"></a> * Returns the &quot;application&quot; window, where dialogs and bubbles
+<a name="line716"></a> * should be rendered.
+<a name="line717"></a> * @return {!Window} The window.
+<a name="line718"></a> */
+<a name="line719"></a>goog.editor.Field.prototype.getAppWindow = function() {
+<a name="line720"></a>  return this.appWindow_;
+<a name="line721"></a>};
+<a name="line722"></a>
+<a name="line723"></a>
+<a name="line724"></a>/**
+<a name="line725"></a> * Sets the zIndex that the field should be based off of.
+<a name="line726"></a> * TODO(user): Get rid of this completely.  Here for Sites.
+<a name="line727"></a> *     Should this be set directly on UI plugins?
+<a name="line728"></a> *
+<a name="line729"></a> * @param {number} zindex The base zIndex of the editor.
+<a name="line730"></a> */
+<a name="line731"></a>goog.editor.Field.prototype.setBaseZindex = function(zindex) {
+<a name="line732"></a>  this.baseZindex_ = zindex;
+<a name="line733"></a>};
+<a name="line734"></a>
+<a name="line735"></a>
+<a name="line736"></a>/**
+<a name="line737"></a> * Returns the zindex of the base level of the field.
+<a name="line738"></a> *
+<a name="line739"></a> * @return {number} The base zindex of the editor.
+<a name="line740"></a> */
+<a name="line741"></a>goog.editor.Field.prototype.getBaseZindex = function() {
+<a name="line742"></a>  return this.baseZindex_ || 0;
+<a name="line743"></a>};
+<a name="line744"></a>
+<a name="line745"></a>
+<a name="line746"></a>/**
+<a name="line747"></a> * Sets up the field object and window util of this field, and enables this
+<a name="line748"></a> * editable field with all registered plugins.
+<a name="line749"></a> * This is essential to the initialization of the field.
+<a name="line750"></a> * It must be called when the field becomes fully loaded and editable.
+<a name="line751"></a> * @param {Element} field The field property.
+<a name="line752"></a> * @protected
+<a name="line753"></a> */
+<a name="line754"></a>goog.editor.Field.prototype.setupFieldObject = function(field) {
+<a name="line755"></a>  this.loadState_ = goog.editor.Field.LoadState_.EDITABLE;
+<a name="line756"></a>  this.field = field;
+<a name="line757"></a>  this.editableDomHelper = goog.dom.getDomHelper(field);
+<a name="line758"></a>  this.isModified_ = false;
+<a name="line759"></a>  this.isEverModified_ = false;
+<a name="line760"></a>  field.setAttribute(&#39;g_editable&#39;, &#39;true&#39;);
+<a name="line761"></a>  goog.a11y.aria.setRole(field, goog.a11y.aria.Role.TEXTBOX);
+<a name="line762"></a>};
+<a name="line763"></a>
+<a name="line764"></a>
+<a name="line765"></a>/**
+<a name="line766"></a> * Help make the field not editable by setting internal data structures to null,
+<a name="line767"></a> * and disabling this field with all registered plugins.
+<a name="line768"></a> * @private
+<a name="line769"></a> */
+<a name="line770"></a>goog.editor.Field.prototype.tearDownFieldObject_ = function() {
+<a name="line771"></a>  this.loadState_ = goog.editor.Field.LoadState_.UNEDITABLE;
+<a name="line772"></a>
+<a name="line773"></a>  for (var classId in this.plugins_) {
+<a name="line774"></a>    var plugin = this.plugins_[classId];
+<a name="line775"></a>    if (!plugin.activeOnUneditableFields()) {
+<a name="line776"></a>      plugin.disable(this);
+<a name="line777"></a>    }
+<a name="line778"></a>  }
+<a name="line779"></a>
+<a name="line780"></a>  this.field = null;
+<a name="line781"></a>  this.editableDomHelper = null;
+<a name="line782"></a>};
+<a name="line783"></a>
+<a name="line784"></a>
+<a name="line785"></a>/**
+<a name="line786"></a> * Initialize listeners on the field.
+<a name="line787"></a> * @private
+<a name="line788"></a> */
+<a name="line789"></a>goog.editor.Field.prototype.setupChangeListeners_ = function() {
+<a name="line790"></a>  if ((goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &amp;&amp;
+<a name="line791"></a>      this.usesIframe() &amp;&amp; this.shouldRefocusOnInputMobileSafari()) {
+<a name="line792"></a>    // This is a workaround for the iOS bug that text input doesn&#39;t work
+<a name="line793"></a>    // when the main window listens touch events.
+<a name="line794"></a>    var editWindow = this.getEditableDomHelper().getWindow();
+<a name="line795"></a>    this.boundRefocusListenerMobileSafari_ =
+<a name="line796"></a>        goog.bind(editWindow.focus, editWindow);
+<a name="line797"></a>    editWindow.addEventListener(goog.events.EventType.KEYDOWN,
+<a name="line798"></a>        this.boundRefocusListenerMobileSafari_, false);
+<a name="line799"></a>    editWindow.addEventListener(goog.events.EventType.TOUCHEND,
+<a name="line800"></a>        this.boundRefocusListenerMobileSafari_, false);
+<a name="line801"></a>  }
+<a name="line802"></a>  if (goog.userAgent.OPERA &amp;&amp; this.usesIframe()) {
+<a name="line803"></a>    // We can&#39;t use addListener here because we need to listen on the window,
+<a name="line804"></a>    // and removing listeners on window objects from the event register throws
+<a name="line805"></a>    // an exception if the window is closed.
+<a name="line806"></a>    this.boundFocusListenerOpera_ =
+<a name="line807"></a>        goog.bind(this.dispatchFocusAndBeforeFocus_, this);
+<a name="line808"></a>    this.boundBlurListenerOpera_ =
+<a name="line809"></a>        goog.bind(this.dispatchBlur, this);
+<a name="line810"></a>    var editWindow = this.getEditableDomHelper().getWindow();
+<a name="line811"></a>    editWindow.addEventListener(goog.events.EventType.FOCUS,
+<a name="line812"></a>        this.boundFocusListenerOpera_, false);
+<a name="line813"></a>    editWindow.addEventListener(goog.events.EventType.BLUR,
+<a name="line814"></a>        this.boundBlurListenerOpera_, false);
+<a name="line815"></a>  } else {
+<a name="line816"></a>    if (goog.editor.BrowserFeature.SUPPORTS_FOCUSIN) {
+<a name="line817"></a>      this.addListener(goog.events.EventType.FOCUS, this.dispatchFocus_);
+<a name="line818"></a>      this.addListener(goog.events.EventType.FOCUSIN,
+<a name="line819"></a>                       this.dispatchBeforeFocus_);
+<a name="line820"></a>    } else {
+<a name="line821"></a>      this.addListener(goog.events.EventType.FOCUS,
+<a name="line822"></a>                       this.dispatchFocusAndBeforeFocus_);
+<a name="line823"></a>    }
+<a name="line824"></a>    this.addListener(goog.events.EventType.BLUR, this.dispatchBlur,
+<a name="line825"></a>                     goog.editor.BrowserFeature.USE_MUTATION_EVENTS);
+<a name="line826"></a>  }
+<a name="line827"></a>
+<a name="line828"></a>  if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
+<a name="line829"></a>    // Ways to detect changes in Mozilla:
+<a name="line830"></a>    //
+<a name="line831"></a>    // keypress - check event.charCode (only typable characters has a
+<a name="line832"></a>    //            charCode), but also keyboard commands lile Ctrl+C will
+<a name="line833"></a>    //            return a charCode.
+<a name="line834"></a>    // dragdrop - fires when the user drops something. This does not necessary
+<a name="line835"></a>    //            lead to a change but we cannot detect if it will or not
+<a name="line836"></a>    //
+<a name="line837"></a>    // Known Issues: We cannot detect cut and paste using menus
+<a name="line838"></a>    //               We cannot detect when someone moves something out of the
+<a name="line839"></a>    //               field using drag and drop.
+<a name="line840"></a>    //
+<a name="line841"></a>    this.setupMutationEventHandlersGecko();
+<a name="line842"></a>  } else {
+<a name="line843"></a>    // Ways to detect that a change is about to happen in other browsers.
+<a name="line844"></a>    // (IE and Safari have these events. Opera appears to work, but we haven&#39;t
+<a name="line845"></a>    //  researched it.)
+<a name="line846"></a>    //
+<a name="line847"></a>    // onbeforepaste
+<a name="line848"></a>    // onbeforecut
+<a name="line849"></a>    // ondrop - happens when the user drops something on the editable text
+<a name="line850"></a>    //          field the value at this time does not contain the dropped text
+<a name="line851"></a>    // ondragleave - when the user drags something from the current document.
+<a name="line852"></a>    //               This might not cause a change if the action was copy
+<a name="line853"></a>    //               instead of move
+<a name="line854"></a>    // onkeypress - IE only fires keypress events if the key will generate
+<a name="line855"></a>    //              output. It will not trigger for delete and backspace
+<a name="line856"></a>    // onkeydown - For delete and backspace
+<a name="line857"></a>    //
+<a name="line858"></a>    // known issues: IE triggers beforepaste just by opening the edit menu
+<a name="line859"></a>    //               delete at the end should not cause beforechange
+<a name="line860"></a>    //               backspace at the beginning should not cause beforechange
+<a name="line861"></a>    //               see above in ondragleave
+<a name="line862"></a>    // TODO(user): Why don&#39;t we dispatchBeforeChange from the
+<a name="line863"></a>    // handleDrop event for all browsers?
+<a name="line864"></a>    this.addListener([&#39;beforecut&#39;, &#39;beforepaste&#39;, &#39;drop&#39;, &#39;dragend&#39;],
+<a name="line865"></a>        this.dispatchBeforeChange);
+<a name="line866"></a>    this.addListener([&#39;cut&#39;, &#39;paste&#39;],
+<a name="line867"></a>        goog.functions.lock(this.dispatchChange));
+<a name="line868"></a>    this.addListener(&#39;drop&#39;, this.handleDrop_);
+<a name="line869"></a>  }
+<a name="line870"></a>
+<a name="line871"></a>  // TODO(user): Figure out why we use dragend vs dragdrop and
+<a name="line872"></a>  // document this better.
+<a name="line873"></a>  var dropEventName = goog.userAgent.WEBKIT ? &#39;dragend&#39; : &#39;dragdrop&#39;;
+<a name="line874"></a>  this.addListener(dropEventName, this.handleDrop_);
+<a name="line875"></a>
+<a name="line876"></a>  this.addListener(goog.events.EventType.KEYDOWN, this.handleKeyDown_);
+<a name="line877"></a>  this.addListener(goog.events.EventType.KEYPRESS, this.handleKeyPress_);
+<a name="line878"></a>  this.addListener(goog.events.EventType.KEYUP, this.handleKeyUp_);
+<a name="line879"></a>
+<a name="line880"></a>  this.selectionChangeTimer_ =
+<a name="line881"></a>      new goog.async.Delay(this.handleSelectionChangeTimer_,
+<a name="line882"></a>                           goog.editor.Field.SELECTION_CHANGE_FREQUENCY_, this);
+<a name="line883"></a>
+<a name="line884"></a>  if (goog.editor.BrowserFeature.FOLLOWS_EDITABLE_LINKS) {
+<a name="line885"></a>    this.addListener(
+<a name="line886"></a>        goog.events.EventType.CLICK, goog.editor.Field.cancelLinkClick_);
+<a name="line887"></a>  }
+<a name="line888"></a>
+<a name="line889"></a>  this.addListener(goog.events.EventType.MOUSEDOWN, this.handleMouseDown_);
+<a name="line890"></a>  if (this.useWindowMouseUp_) {
+<a name="line891"></a>    this.eventRegister.listen(this.editableDomHelper.getDocument(),
+<a name="line892"></a>        goog.events.EventType.MOUSEUP, this.handleMouseUp_);
+<a name="line893"></a>    this.addListener(goog.events.EventType.DRAGSTART, this.handleDragStart_);
+<a name="line894"></a>  } else {
+<a name="line895"></a>    this.addListener(goog.events.EventType.MOUSEUP, this.handleMouseUp_);
+<a name="line896"></a>  }
+<a name="line897"></a>};
+<a name="line898"></a>
+<a name="line899"></a>
+<a name="line900"></a>/**
+<a name="line901"></a> * Frequency to check for selection changes.
+<a name="line902"></a> * @type {number}
+<a name="line903"></a> * @private
+<a name="line904"></a> */
+<a name="line905"></a>goog.editor.Field.SELECTION_CHANGE_FREQUENCY_ = 250;
+<a name="line906"></a>
+<a name="line907"></a>
+<a name="line908"></a>/**
+<a name="line909"></a> * Stops all listeners and timers.
+<a name="line910"></a> * @protected
+<a name="line911"></a> */
+<a name="line912"></a>goog.editor.Field.prototype.clearListeners = function() {
+<a name="line913"></a>  if (this.eventRegister) {
+<a name="line914"></a>    this.eventRegister.removeAll();
+<a name="line915"></a>  }
+<a name="line916"></a>
+<a name="line917"></a>  if ((goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &amp;&amp;
+<a name="line918"></a>      this.usesIframe() &amp;&amp; this.shouldRefocusOnInputMobileSafari()) {
+<a name="line919"></a>    try {
+<a name="line920"></a>      var editWindow = this.getEditableDomHelper().getWindow();
+<a name="line921"></a>      editWindow.removeEventListener(goog.events.EventType.KEYDOWN,
+<a name="line922"></a>          this.boundRefocusListenerMobileSafari_, false);
+<a name="line923"></a>      editWindow.removeEventListener(goog.events.EventType.TOUCHEND,
+<a name="line924"></a>          this.boundRefocusListenerMobileSafari_, false);
+<a name="line925"></a>    } catch (e) {
+<a name="line926"></a>      // The editWindow no longer exists, or has been navigated to a different-
+<a name="line927"></a>      // origin URL. Either way, the event listeners have already been removed
+<a name="line928"></a>      // for us.
+<a name="line929"></a>    }
+<a name="line930"></a>    delete this.boundRefocusListenerMobileSafari_;
+<a name="line931"></a>  }
+<a name="line932"></a>  if (goog.userAgent.OPERA &amp;&amp; this.usesIframe()) {
+<a name="line933"></a>    try {
+<a name="line934"></a>      var editWindow = this.getEditableDomHelper().getWindow();
+<a name="line935"></a>      editWindow.removeEventListener(goog.events.EventType.FOCUS,
+<a name="line936"></a>          this.boundFocusListenerOpera_, false);
+<a name="line937"></a>      editWindow.removeEventListener(goog.events.EventType.BLUR,
+<a name="line938"></a>          this.boundBlurListenerOpera_, false);
+<a name="line939"></a>    } catch (e) {
+<a name="line940"></a>      // The editWindow no longer exists, or has been navigated to a different-
+<a name="line941"></a>      // origin URL. Either way, the event listeners have already been removed
+<a name="line942"></a>      // for us.
+<a name="line943"></a>    }
+<a name="line944"></a>    delete this.boundFocusListenerOpera_;
+<a name="line945"></a>    delete this.boundBlurListenerOpera_;
+<a name="line946"></a>  }
+<a name="line947"></a>
+<a name="line948"></a>  if (this.changeTimerGecko_) {
+<a name="line949"></a>    this.changeTimerGecko_.stop();
+<a name="line950"></a>  }
+<a name="line951"></a>  this.delayedChangeTimer_.stop();
+<a name="line952"></a>};
+<a name="line953"></a>
+<a name="line954"></a>
+<a name="line955"></a>/** @override */
+<a name="line956"></a>goog.editor.Field.prototype.disposeInternal = function() {
+<a name="line957"></a>  if (this.isLoading() || this.isLoaded()) {
+<a name="line958"></a>    goog.log.warning(this.logger, &#39;Disposing a field that is in use.&#39;);
+<a name="line959"></a>  }
+<a name="line960"></a>
+<a name="line961"></a>  if (this.getOriginalElement()) {
+<a name="line962"></a>    this.execCommand(goog.editor.Command.CLEAR_LOREM);
+<a name="line963"></a>  }
+<a name="line964"></a>
+<a name="line965"></a>  this.tearDownFieldObject_();
+<a name="line966"></a>  this.clearListeners();
+<a name="line967"></a>  this.clearFieldLoadListener_();
+<a name="line968"></a>  this.originalDomHelper = null;
+<a name="line969"></a>
+<a name="line970"></a>  if (this.eventRegister) {
+<a name="line971"></a>    this.eventRegister.dispose();
+<a name="line972"></a>    this.eventRegister = null;
+<a name="line973"></a>  }
+<a name="line974"></a>
+<a name="line975"></a>  this.removeAllWrappers();
+<a name="line976"></a>
+<a name="line977"></a>  if (goog.editor.Field.getActiveFieldId() == this.id) {
+<a name="line978"></a>    goog.editor.Field.setActiveFieldId(null);
+<a name="line979"></a>  }
+<a name="line980"></a>
+<a name="line981"></a>  for (var classId in this.plugins_) {
+<a name="line982"></a>    var plugin = this.plugins_[classId];
+<a name="line983"></a>    if (plugin.isAutoDispose()) {
+<a name="line984"></a>      plugin.dispose();
+<a name="line985"></a>    }
+<a name="line986"></a>  }
+<a name="line987"></a>  delete(this.plugins_);
+<a name="line988"></a>
+<a name="line989"></a>  goog.editor.Field.superClass_.disposeInternal.call(this);
+<a name="line990"></a>};
+<a name="line991"></a>
+<a name="line992"></a>
+<a name="line993"></a>/**
+<a name="line994"></a> * Attach an wrapper to this field, to be thrown out when the field
+<a name="line995"></a> * is disposed.
+<a name="line996"></a> * @param {goog.Disposable} wrapper The wrapper to attach.
+<a name="line997"></a> */
+<a name="line998"></a>goog.editor.Field.prototype.attachWrapper = function(wrapper) {
+<a name="line999"></a>  this.wrappers_.push(wrapper);
+<a name="line1000"></a>};
+<a name="line1001"></a>
+<a name="line1002"></a>
+<a name="line1003"></a>/**
+<a name="line1004"></a> * Removes all wrappers and destroys them.
+<a name="line1005"></a> */
+<a name="line1006"></a>goog.editor.Field.prototype.removeAllWrappers = function() {
+<a name="line1007"></a>  var wrapper;
+<a name="line1008"></a>  while (wrapper = this.wrappers_.pop()) {
+<a name="line1009"></a>    wrapper.dispose();
+<a name="line1010"></a>  }
+<a name="line1011"></a>};
+<a name="line1012"></a>
+<a name="line1013"></a>
+<a name="line1014"></a>/**
+<a name="line1015"></a> * List of mutation events in Gecko browsers.
+<a name="line1016"></a> * @type {Array.&lt;string&gt;}
+<a name="line1017"></a> * @protected
+<a name="line1018"></a> */
+<a name="line1019"></a>goog.editor.Field.MUTATION_EVENTS_GECKO = [
+<a name="line1020"></a>  &#39;DOMNodeInserted&#39;,
+<a name="line1021"></a>  &#39;DOMNodeRemoved&#39;,
+<a name="line1022"></a>  &#39;DOMNodeRemovedFromDocument&#39;,
+<a name="line1023"></a>  &#39;DOMNodeInsertedIntoDocument&#39;,
+<a name="line1024"></a>  &#39;DOMCharacterDataModified&#39;
+<a name="line1025"></a>];
+<a name="line1026"></a>
+<a name="line1027"></a>
+<a name="line1028"></a>/**
+<a name="line1029"></a> * Mutation events tell us when something has changed for mozilla.
+<a name="line1030"></a> * @protected
+<a name="line1031"></a> */
+<a name="line1032"></a>goog.editor.Field.prototype.setupMutationEventHandlersGecko = function() {
+<a name="line1033"></a>  // Always use DOMSubtreeModified on Gecko when not using an iframe so that
+<a name="line1034"></a>  // DOM mutations outside the Field do not trigger handleMutationEventGecko_.
+<a name="line1035"></a>  if (goog.editor.BrowserFeature.HAS_DOM_SUBTREE_MODIFIED_EVENT ||
+<a name="line1036"></a>      !this.usesIframe()) {
+<a name="line1037"></a>    this.eventRegister.listen(this.getElement(), &#39;DOMSubtreeModified&#39;,
+<a name="line1038"></a>        this.handleMutationEventGecko_);
+<a name="line1039"></a>  } else {
+<a name="line1040"></a>    var doc = this.getEditableDomHelper().getDocument();
+<a name="line1041"></a>    this.eventRegister.listen(doc, goog.editor.Field.MUTATION_EVENTS_GECKO,
+<a name="line1042"></a>        this.handleMutationEventGecko_, true);
+<a name="line1043"></a>
+<a name="line1044"></a>    // DOMAttrModified fires for a lot of events we want to ignore.  This goes
+<a name="line1045"></a>    // through a different handler so that we can ignore many of these.
+<a name="line1046"></a>    this.eventRegister.listen(doc, &#39;DOMAttrModified&#39;,
+<a name="line1047"></a>        goog.bind(this.handleDomAttrChange, this,
+<a name="line1048"></a>            this.handleMutationEventGecko_),
+<a name="line1049"></a>        true);
+<a name="line1050"></a>  }
+<a name="line1051"></a>};
+<a name="line1052"></a>
+<a name="line1053"></a>
+<a name="line1054"></a>/**
+<a name="line1055"></a> * Handle before change key events and fire the beforetab event if appropriate.
+<a name="line1056"></a> * This needs to happen on keydown in IE and keypress in FF.
+<a name="line1057"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line1058"></a> * @return {boolean} Whether to still perform the default key action.  Only set
+<a name="line1059"></a> *     to true if the actual event has already been canceled.
+<a name="line1060"></a> * @private
+<a name="line1061"></a> */
+<a name="line1062"></a>goog.editor.Field.prototype.handleBeforeChangeKeyEvent_ = function(e) {
+<a name="line1063"></a>  // There are two reasons to block a key:
+<a name="line1064"></a>  var block =
+<a name="line1065"></a>      // #1: to intercept a tab
+<a name="line1066"></a>      // TODO: possibly don&#39;t allow clients to intercept tabs outside of LIs and
+<a name="line1067"></a>      // maybe tables as well?
+<a name="line1068"></a>      (e.keyCode == goog.events.KeyCodes.TAB &amp;&amp; !this.dispatchBeforeTab_(e)) ||
+<a name="line1069"></a>      // #2: to block a Firefox-specific bug where Macs try to navigate
+<a name="line1070"></a>      // back a page when you hit command+left arrow or comamnd-right arrow.
+<a name="line1071"></a>      // See https://bugzilla.mozilla.org/show_bug.cgi?id=341886
+<a name="line1072"></a>      // TODO(nicksantos): Get Firefox to fix this.
+<a name="line1073"></a>      (goog.userAgent.GECKO &amp;&amp; e.metaKey &amp;&amp;
+<a name="line1074"></a>       (e.keyCode == goog.events.KeyCodes.LEFT ||
+<a name="line1075"></a>        e.keyCode == goog.events.KeyCodes.RIGHT));
+<a name="line1076"></a>
+<a name="line1077"></a>  if (block) {
+<a name="line1078"></a>    e.preventDefault();
+<a name="line1079"></a>    return false;
+<a name="line1080"></a>  } else {
+<a name="line1081"></a>    // In Gecko we have both keyCode and charCode. charCode is for human
+<a name="line1082"></a>    // readable characters like a, b and c. However pressing ctrl+c and so on
+<a name="line1083"></a>    // also causes charCode to be set.
+<a name="line1084"></a>
+<a name="line1085"></a>    // TODO(arv): Del at end of field or backspace at beginning should be
+<a name="line1086"></a>    // ignored.
+<a name="line1087"></a>    this.gotGeneratingKey_ = e.charCode ||
+<a name="line1088"></a>        goog.editor.Field.isGeneratingKey_(e, goog.userAgent.GECKO);
+<a name="line1089"></a>    if (this.gotGeneratingKey_) {
+<a name="line1090"></a>      this.dispatchBeforeChange();
+<a name="line1091"></a>      // TODO(robbyw): Should we return the value of the above?
+<a name="line1092"></a>    }
+<a name="line1093"></a>  }
+<a name="line1094"></a>
+<a name="line1095"></a>  return true;
+<a name="line1096"></a>};
+<a name="line1097"></a>
+<a name="line1098"></a>
+<a name="line1099"></a>/**
+<a name="line1100"></a> * Keycodes that result in a selectionchange event (e.g. the cursor moving).
+<a name="line1101"></a> * @enum {number}
+<a name="line1102"></a> * @private
+<a name="line1103"></a> */
+<a name="line1104"></a>goog.editor.Field.SELECTION_CHANGE_KEYCODES_ = {
+<a name="line1105"></a>  8: 1,  // backspace
+<a name="line1106"></a>  9: 1,  // tab
+<a name="line1107"></a>  13: 1, // enter
+<a name="line1108"></a>  33: 1, // page up
+<a name="line1109"></a>  34: 1, // page down
+<a name="line1110"></a>  35: 1, // end
+<a name="line1111"></a>  36: 1, // home
+<a name="line1112"></a>  37: 1, // left
+<a name="line1113"></a>  38: 1, // up
+<a name="line1114"></a>  39: 1, // right
+<a name="line1115"></a>  40: 1, // down
+<a name="line1116"></a>  46: 1  // delete
+<a name="line1117"></a>};
+<a name="line1118"></a>
+<a name="line1119"></a>
+<a name="line1120"></a>/**
+<a name="line1121"></a> * Map of keyCodes (not charCodes) that when used in conjunction with the
+<a name="line1122"></a> * Ctrl key cause selection changes in the field contents. These are the keys
+<a name="line1123"></a> * that are not handled by the basic formatting trogedit plugins. Note that
+<a name="line1124"></a> * combinations like Ctrl-left etc are already handled in
+<a name="line1125"></a> * SELECTION_CHANGE_KEYCODES_
+<a name="line1126"></a> * @type {Object}
+<a name="line1127"></a> * @private
+<a name="line1128"></a> */
+<a name="line1129"></a>goog.editor.Field.CTRL_KEYS_CAUSING_SELECTION_CHANGES_ = {
+<a name="line1130"></a>  65: true, // A
+<a name="line1131"></a>  86: true, // V
+<a name="line1132"></a>  88: true // X
+<a name="line1133"></a>};
+<a name="line1134"></a>
+<a name="line1135"></a>
+<a name="line1136"></a>/**
+<a name="line1137"></a> * Map of keyCodes (not charCodes) that might need to be handled as a keyboard
+<a name="line1138"></a> * shortcut (even when ctrl/meta key is not pressed) by some plugin. Currently
+<a name="line1139"></a> * it is a small list. If it grows too big we can optimize it by using ranges
+<a name="line1140"></a> * or extending it from SELECTION_CHANGE_KEYCODES_
+<a name="line1141"></a> * @type {Object}
+<a name="line1142"></a> * @private
+<a name="line1143"></a> */
+<a name="line1144"></a>goog.editor.Field.POTENTIAL_SHORTCUT_KEYCODES_ = {
+<a name="line1145"></a>  8: 1,  // backspace
+<a name="line1146"></a>  9: 1,  // tab
+<a name="line1147"></a>  13: 1, // enter
+<a name="line1148"></a>  27: 1, // esc
+<a name="line1149"></a>  33: 1, // page up
+<a name="line1150"></a>  34: 1, // page down
+<a name="line1151"></a>  37: 1, // left
+<a name="line1152"></a>  38: 1, // up
+<a name="line1153"></a>  39: 1, // right
+<a name="line1154"></a>  40: 1  // down
+<a name="line1155"></a>};
+<a name="line1156"></a>
+<a name="line1157"></a>
+<a name="line1158"></a>/**
+<a name="line1159"></a> * Calls all the plugins of the given operation, in sequence, with the
+<a name="line1160"></a> * given arguments. This is short-circuiting: once one plugin cancels
+<a name="line1161"></a> * the event, no more plugins will be invoked.
+<a name="line1162"></a> * @param {goog.editor.Plugin.Op} op A plugin op.
+<a name="line1163"></a> * @param {...*} var_args The arguments to the plugin.
+<a name="line1164"></a> * @return {boolean} True if one of the plugins cancel the event, false
+<a name="line1165"></a> *    otherwise.
+<a name="line1166"></a> * @private
+<a name="line1167"></a> */
+<a name="line1168"></a>goog.editor.Field.prototype.invokeShortCircuitingOp_ = function(op, var_args) {
+<a name="line1169"></a>  var plugins = this.indexedPlugins_[op];
+<a name="line1170"></a>  var argList = goog.array.slice(arguments, 1);
+<a name="line1171"></a>  for (var i = 0; i &lt; plugins.length; ++i) {
+<a name="line1172"></a>    // If the plugin returns true, that means it handled the event and
+<a name="line1173"></a>    // we shouldn&#39;t propagate to the other plugins.
+<a name="line1174"></a>    var plugin = plugins[i];
+<a name="line1175"></a>    if ((plugin.isEnabled(this) ||
+<a name="line1176"></a>         goog.editor.Plugin.IRREPRESSIBLE_OPS[op]) &amp;&amp;
+<a name="line1177"></a>        plugin[goog.editor.Plugin.OPCODE[op]].apply(plugin, argList)) {
+<a name="line1178"></a>      // Only one plugin is allowed to handle the event. If for some reason
+<a name="line1179"></a>      // a plugin wants to handle it and still allow other plugins to handle
+<a name="line1180"></a>      // it, it shouldn&#39;t return true.
+<a name="line1181"></a>      return true;
+<a name="line1182"></a>    }
+<a name="line1183"></a>  }
+<a name="line1184"></a>
+<a name="line1185"></a>  return false;
+<a name="line1186"></a>};
+<a name="line1187"></a>
+<a name="line1188"></a>
+<a name="line1189"></a>/**
+<a name="line1190"></a> * Invoke this operation on all plugins with the given arguments.
+<a name="line1191"></a> * @param {goog.editor.Plugin.Op} op A plugin op.
+<a name="line1192"></a> * @param {...*} var_args The arguments to the plugin.
+<a name="line1193"></a> * @private
+<a name="line1194"></a> */
+<a name="line1195"></a>goog.editor.Field.prototype.invokeOp_ = function(op, var_args) {
+<a name="line1196"></a>  var plugins = this.indexedPlugins_[op];
+<a name="line1197"></a>  var argList = goog.array.slice(arguments, 1);
+<a name="line1198"></a>  for (var i = 0; i &lt; plugins.length; ++i) {
+<a name="line1199"></a>    var plugin = plugins[i];
+<a name="line1200"></a>    if (plugin.isEnabled(this) ||
+<a name="line1201"></a>        goog.editor.Plugin.IRREPRESSIBLE_OPS[op]) {
+<a name="line1202"></a>      plugin[goog.editor.Plugin.OPCODE[op]].apply(plugin, argList);
+<a name="line1203"></a>    }
+<a name="line1204"></a>  }
+<a name="line1205"></a>};
+<a name="line1206"></a>
+<a name="line1207"></a>
+<a name="line1208"></a>/**
+<a name="line1209"></a> * Reduce this argument over all plugins. The result of each plugin invocation
+<a name="line1210"></a> * will be passed to the next plugin invocation. See goog.array.reduce.
+<a name="line1211"></a> * @param {goog.editor.Plugin.Op} op A plugin op.
+<a name="line1212"></a> * @param {string} arg The argument to reduce. For now, we assume it&#39;s a
+<a name="line1213"></a> *     string, but we should widen this later if there are reducing
+<a name="line1214"></a> *     plugins that don&#39;t operate on strings.
+<a name="line1215"></a> * @param {...*} var_args Any extra arguments to pass to the plugin. These args
+<a name="line1216"></a> *     will not be reduced.
+<a name="line1217"></a> * @return {string} The reduced argument.
+<a name="line1218"></a> * @private
+<a name="line1219"></a> */
+<a name="line1220"></a>goog.editor.Field.prototype.reduceOp_ = function(op, arg, var_args) {
+<a name="line1221"></a>  var plugins = this.indexedPlugins_[op];
+<a name="line1222"></a>  var argList = goog.array.slice(arguments, 1);
+<a name="line1223"></a>  for (var i = 0; i &lt; plugins.length; ++i) {
+<a name="line1224"></a>    var plugin = plugins[i];
+<a name="line1225"></a>    if (plugin.isEnabled(this) ||
+<a name="line1226"></a>        goog.editor.Plugin.IRREPRESSIBLE_OPS[op]) {
+<a name="line1227"></a>      argList[0] = plugin[goog.editor.Plugin.OPCODE[op]].apply(
+<a name="line1228"></a>          plugin, argList);
+<a name="line1229"></a>    }
+<a name="line1230"></a>  }
+<a name="line1231"></a>  return argList[0];
+<a name="line1232"></a>};
+<a name="line1233"></a>
+<a name="line1234"></a>
+<a name="line1235"></a>/**
+<a name="line1236"></a> * Prepare the given contents, then inject them into the editable field.
+<a name="line1237"></a> * @param {?string} contents The contents to prepare.
+<a name="line1238"></a> * @param {Element} field The field element.
+<a name="line1239"></a> * @protected
+<a name="line1240"></a> */
+<a name="line1241"></a>goog.editor.Field.prototype.injectContents = function(contents, field) {
+<a name="line1242"></a>  var styles = {};
+<a name="line1243"></a>  var newHtml = this.getInjectableContents(contents, styles);
+<a name="line1244"></a>  goog.style.setStyle(field, styles);
+<a name="line1245"></a>  goog.editor.node.replaceInnerHtml(field, newHtml);
+<a name="line1246"></a>};
+<a name="line1247"></a>
+<a name="line1248"></a>
+<a name="line1249"></a>/**
+<a name="line1250"></a> * Returns prepared contents that can be injected into the editable field.
+<a name="line1251"></a> * @param {?string} contents The contents to prepare.
+<a name="line1252"></a> * @param {Object} styles A map that will be populated with styles that should
+<a name="line1253"></a> *     be applied to the field element together with the contents.
+<a name="line1254"></a> * @return {string} The prepared contents.
+<a name="line1255"></a> */
+<a name="line1256"></a>goog.editor.Field.prototype.getInjectableContents = function(contents, styles) {
+<a name="line1257"></a>  return this.reduceOp_(
+<a name="line1258"></a>      goog.editor.Plugin.Op.PREPARE_CONTENTS_HTML, contents || &#39;&#39;, styles);
+<a name="line1259"></a>};
+<a name="line1260"></a>
+<a name="line1261"></a>
+<a name="line1262"></a>/**
+<a name="line1263"></a> * Handles keydown on the field.
+<a name="line1264"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line1265"></a> * @private
+<a name="line1266"></a> */
+<a name="line1267"></a>goog.editor.Field.prototype.handleKeyDown_ = function(e) {
+<a name="line1268"></a>  if (!goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
+<a name="line1269"></a>    if (!this.handleBeforeChangeKeyEvent_(e)) {
+<a name="line1270"></a>      return;
+<a name="line1271"></a>    }
+<a name="line1272"></a>  }
+<a name="line1273"></a>
+<a name="line1274"></a>  if (!this.invokeShortCircuitingOp_(goog.editor.Plugin.Op.KEYDOWN, e) &amp;&amp;
+<a name="line1275"></a>      goog.editor.BrowserFeature.USES_KEYDOWN) {
+<a name="line1276"></a>    this.handleKeyboardShortcut_(e);
+<a name="line1277"></a>  }
+<a name="line1278"></a>};
+<a name="line1279"></a>
+<a name="line1280"></a>
+<a name="line1281"></a>/**
+<a name="line1282"></a> * Handles keypress on the field.
+<a name="line1283"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line1284"></a> * @private
+<a name="line1285"></a> */
+<a name="line1286"></a>goog.editor.Field.prototype.handleKeyPress_ = function(e) {
+<a name="line1287"></a>  if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
+<a name="line1288"></a>    if (!this.handleBeforeChangeKeyEvent_(e)) {
+<a name="line1289"></a>      return;
+<a name="line1290"></a>    }
+<a name="line1291"></a>  } else {
+<a name="line1292"></a>    // In IE only keys that generate output trigger keypress
+<a name="line1293"></a>    // In Mozilla charCode is set for keys generating content.
+<a name="line1294"></a>    this.gotGeneratingKey_ = true;
+<a name="line1295"></a>    this.dispatchBeforeChange();
+<a name="line1296"></a>  }
+<a name="line1297"></a>
+<a name="line1298"></a>  if (!this.invokeShortCircuitingOp_(goog.editor.Plugin.Op.KEYPRESS, e) &amp;&amp;
+<a name="line1299"></a>      !goog.editor.BrowserFeature.USES_KEYDOWN) {
+<a name="line1300"></a>    this.handleKeyboardShortcut_(e);
+<a name="line1301"></a>  }
+<a name="line1302"></a>};
+<a name="line1303"></a>
+<a name="line1304"></a>
+<a name="line1305"></a>/**
+<a name="line1306"></a> * Handles keyup on the field.
+<a name="line1307"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line1308"></a> * @private
+<a name="line1309"></a> */
+<a name="line1310"></a>goog.editor.Field.prototype.handleKeyUp_ = function(e) {
+<a name="line1311"></a>  if (!goog.editor.BrowserFeature.USE_MUTATION_EVENTS &amp;&amp;
+<a name="line1312"></a>      (this.gotGeneratingKey_ ||
+<a name="line1313"></a>       goog.editor.Field.isSpecialGeneratingKey_(e))) {
+<a name="line1314"></a>    // The special keys won&#39;t have set the gotGeneratingKey flag, so we check
+<a name="line1315"></a>    // for them explicitly
+<a name="line1316"></a>    this.handleChange();
+<a name="line1317"></a>  }
+<a name="line1318"></a>
+<a name="line1319"></a>  this.invokeShortCircuitingOp_(goog.editor.Plugin.Op.KEYUP, e);
+<a name="line1320"></a>
+<a name="line1321"></a>  if (this.isEventStopped(goog.editor.Field.EventType.SELECTIONCHANGE)) {
+<a name="line1322"></a>    return;
+<a name="line1323"></a>  }
+<a name="line1324"></a>
+<a name="line1325"></a>  if (goog.editor.Field.SELECTION_CHANGE_KEYCODES_[e.keyCode] ||
+<a name="line1326"></a>      ((e.ctrlKey || e.metaKey) &amp;&amp;
+<a name="line1327"></a>       goog.editor.Field.CTRL_KEYS_CAUSING_SELECTION_CHANGES_[e.keyCode])) {
+<a name="line1328"></a>    this.selectionChangeTimer_.start();
+<a name="line1329"></a>  }
+<a name="line1330"></a>};
+<a name="line1331"></a>
+<a name="line1332"></a>
+<a name="line1333"></a>/**
+<a name="line1334"></a> * Handles keyboard shortcuts on the field.  Note that we bake this into our
+<a name="line1335"></a> * handleKeyPress/handleKeyDown rather than using goog.events.KeyHandler or
+<a name="line1336"></a> * goog.ui.KeyboardShortcutHandler for performance reasons.  Since these
+<a name="line1337"></a> * are handled on every key stroke, we do not want to be going out to the
+<a name="line1338"></a> * event system every time.
+<a name="line1339"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line1340"></a> * @private
+<a name="line1341"></a> */
+<a name="line1342"></a>goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
+<a name="line1343"></a>  // Alt key is used for i18n languages to enter certain characters. like
+<a name="line1344"></a>  // control + alt + z (used for IMEs) and control + alt + s for Polish.
+<a name="line1345"></a>  // So we don&#39;t invoke handleKeyboardShortcut at all for alt keys.
+<a name="line1346"></a>  if (e.altKey) {
+<a name="line1347"></a>    return;
+<a name="line1348"></a>  }
+<a name="line1349"></a>
+<a name="line1350"></a>  var isModifierPressed = goog.userAgent.MAC ? e.metaKey : e.ctrlKey;
+<a name="line1351"></a>  if (isModifierPressed ||
+<a name="line1352"></a>      goog.editor.Field.POTENTIAL_SHORTCUT_KEYCODES_[e.keyCode]) {
+<a name="line1353"></a>    // TODO(user): goog.events.KeyHandler uses much more complicated logic
+<a name="line1354"></a>    // to determine key.  Consider changing to what they do.
+<a name="line1355"></a>    var key = e.charCode || e.keyCode;
+<a name="line1356"></a>
+<a name="line1357"></a>    if (key == 17) { // Ctrl key
+<a name="line1358"></a>      // In IE and Webkit pressing Ctrl key itself results in this event.
+<a name="line1359"></a>      return;
+<a name="line1360"></a>    }
+<a name="line1361"></a>
+<a name="line1362"></a>    var stringKey = String.fromCharCode(key).toLowerCase();
+<a name="line1363"></a>    if (this.invokeShortCircuitingOp_(goog.editor.Plugin.Op.SHORTCUT,
+<a name="line1364"></a>                                      e, stringKey, isModifierPressed)) {
+<a name="line1365"></a>      e.preventDefault();
+<a name="line1366"></a>      // We don&#39;t call stopPropagation as some other handler outside of
+<a name="line1367"></a>      // trogedit might need it.
+<a name="line1368"></a>    }
+<a name="line1369"></a>  }
+<a name="line1370"></a>};
+<a name="line1371"></a>
+<a name="line1372"></a>
+<a name="line1373"></a>/**
+<a name="line1374"></a> * Executes an editing command as per the registered plugins.
+<a name="line1375"></a> * @param {string} command The command to execute.
+<a name="line1376"></a> * @param {...*} var_args Any additional parameters needed to execute the
+<a name="line1377"></a> *     command.
+<a name="line1378"></a> * @return {*} False if the command wasn&#39;t handled, otherwise, the result of
+<a name="line1379"></a> *     the command.
+<a name="line1380"></a> */
+<a name="line1381"></a>goog.editor.Field.prototype.execCommand = function(command, var_args) {
+<a name="line1382"></a>  var args = arguments;
+<a name="line1383"></a>  var result;
+<a name="line1384"></a>
+<a name="line1385"></a>  var plugins = this.indexedPlugins_[goog.editor.Plugin.Op.EXEC_COMMAND];
+<a name="line1386"></a>  for (var i = 0; i &lt; plugins.length; ++i) {
+<a name="line1387"></a>    // If the plugin supports the command, that means it handled the
+<a name="line1388"></a>    // event and we shouldn&#39;t propagate to the other plugins.
+<a name="line1389"></a>    var plugin = plugins[i];
+<a name="line1390"></a>    if (plugin.isEnabled(this) &amp;&amp; plugin.isSupportedCommand(command)) {
+<a name="line1391"></a>      result = plugin.execCommand.apply(plugin, args);
+<a name="line1392"></a>      break;
+<a name="line1393"></a>    }
+<a name="line1394"></a>  }
+<a name="line1395"></a>
+<a name="line1396"></a>  return result;
+<a name="line1397"></a>};
+<a name="line1398"></a>
+<a name="line1399"></a>
+<a name="line1400"></a>/**
+<a name="line1401"></a> * Gets the value of command(s).
+<a name="line1402"></a> * @param {string|Array.&lt;string&gt;} commands String name(s) of the command.
+<a name="line1403"></a> * @return {*} Value of each command. Returns false (or array of falses)
+<a name="line1404"></a> *     if designMode is off or the field is otherwise uneditable, and
+<a name="line1405"></a> *     there are no activeOnUneditable plugins for the command.
+<a name="line1406"></a> */
+<a name="line1407"></a>goog.editor.Field.prototype.queryCommandValue = function(commands) {
+<a name="line1408"></a>  var isEditable = this.isLoaded() &amp;&amp; this.isSelectionEditable();
+<a name="line1409"></a>  if (goog.isString(commands)) {
+<a name="line1410"></a>    return this.queryCommandValueInternal_(commands, isEditable);
+<a name="line1411"></a>  } else {
+<a name="line1412"></a>    var state = {};
+<a name="line1413"></a>    for (var i = 0; i &lt; commands.length; i++) {
+<a name="line1414"></a>      state[commands[i]] = this.queryCommandValueInternal_(commands[i],
+<a name="line1415"></a>          isEditable);
+<a name="line1416"></a>    }
+<a name="line1417"></a>    return state;
+<a name="line1418"></a>  }
+<a name="line1419"></a>};
+<a name="line1420"></a>
+<a name="line1421"></a>
+<a name="line1422"></a>/**
+<a name="line1423"></a> * Gets the value of this command.
+<a name="line1424"></a> * @param {string} command The command to check.
+<a name="line1425"></a> * @param {boolean} isEditable Whether the field is currently editable.
+<a name="line1426"></a> * @return {*} The state of this command. Null if not handled.
+<a name="line1427"></a> *     False if the field is uneditable and there are no handlers for
+<a name="line1428"></a> *     uneditable commands.
+<a name="line1429"></a> * @private
+<a name="line1430"></a> */
+<a name="line1431"></a>goog.editor.Field.prototype.queryCommandValueInternal_ = function(command,
+<a name="line1432"></a>    isEditable) {
+<a name="line1433"></a>  var plugins = this.indexedPlugins_[goog.editor.Plugin.Op.QUERY_COMMAND];
+<a name="line1434"></a>  for (var i = 0; i &lt; plugins.length; ++i) {
+<a name="line1435"></a>    var plugin = plugins[i];
+<a name="line1436"></a>    if (plugin.isEnabled(this) &amp;&amp; plugin.isSupportedCommand(command) &amp;&amp;
+<a name="line1437"></a>        (isEditable || plugin.activeOnUneditableFields())) {
+<a name="line1438"></a>      return plugin.queryCommandValue(command);
+<a name="line1439"></a>    }
+<a name="line1440"></a>  }
+<a name="line1441"></a>  return isEditable ? null : false;
+<a name="line1442"></a>};
+<a name="line1443"></a>
+<a name="line1444"></a>
+<a name="line1445"></a>/**
+<a name="line1446"></a> * Fires a change event only if the attribute change effects the editiable
+<a name="line1447"></a> * field. We ignore events that are internal browser events (ie scrollbar
+<a name="line1448"></a> * state change)
+<a name="line1449"></a> * @param {Function} handler The function to call if this is not an internal
+<a name="line1450"></a> *     browser event.
+<a name="line1451"></a> * @param {goog.events.BrowserEvent} browserEvent The browser event.
+<a name="line1452"></a> * @protected
+<a name="line1453"></a> */
+<a name="line1454"></a>goog.editor.Field.prototype.handleDomAttrChange =
+<a name="line1455"></a>    function(handler, browserEvent) {
+<a name="line1456"></a>  if (this.isEventStopped(goog.editor.Field.EventType.CHANGE)) {
+<a name="line1457"></a>    return;
+<a name="line1458"></a>  }
+<a name="line1459"></a>
+<a name="line1460"></a>  var e = browserEvent.getBrowserEvent();
+<a name="line1461"></a>
+<a name="line1462"></a>  // For XUL elements, since we don&#39;t care what they are doing
+<a name="line1463"></a>  try {
+<a name="line1464"></a>    if (e.originalTarget.prefix || e.originalTarget.nodeName == &#39;scrollbar&#39;) {
+<a name="line1465"></a>      return;
+<a name="line1466"></a>    }
+<a name="line1467"></a>  } catch (ex1) {
+<a name="line1468"></a>    // Some XUL nodes don&#39;t like you reading their properties.  If we got
+<a name="line1469"></a>    // the exception, this implies  a XUL node so we can return.
+<a name="line1470"></a>    return;
+<a name="line1471"></a>  }
+<a name="line1472"></a>
+<a name="line1473"></a>  // Check if prev and new values are different, sometimes this fires when
+<a name="line1474"></a>  // nothing has really changed.
+<a name="line1475"></a>  if (e.prevValue == e.newValue) {
+<a name="line1476"></a>    return;
+<a name="line1477"></a>  }
+<a name="line1478"></a>  handler.call(this, e);
+<a name="line1479"></a>};
+<a name="line1480"></a>
+<a name="line1481"></a>
+<a name="line1482"></a>/**
+<a name="line1483"></a> * Handle a mutation event.
+<a name="line1484"></a> * @param {goog.events.BrowserEvent|Event} e The browser event.
+<a name="line1485"></a> * @private
+<a name="line1486"></a> */
+<a name="line1487"></a>goog.editor.Field.prototype.handleMutationEventGecko_ = function(e) {
+<a name="line1488"></a>  if (this.isEventStopped(goog.editor.Field.EventType.CHANGE)) {
+<a name="line1489"></a>    return;
+<a name="line1490"></a>  }
+<a name="line1491"></a>
+<a name="line1492"></a>  e = e.getBrowserEvent ? e.getBrowserEvent() : e;
+<a name="line1493"></a>  // For people with firebug, firebug sets this property on elements it is
+<a name="line1494"></a>  // inserting into the dom.
+<a name="line1495"></a>  if (e.target.firebugIgnore) {
+<a name="line1496"></a>    return;
+<a name="line1497"></a>  }
+<a name="line1498"></a>
+<a name="line1499"></a>  this.isModified_ = true;
+<a name="line1500"></a>  this.isEverModified_ = true;
+<a name="line1501"></a>  this.changeTimerGecko_.start();
+<a name="line1502"></a>};
+<a name="line1503"></a>
+<a name="line1504"></a>
+<a name="line1505"></a>/**
+<a name="line1506"></a> * Handle drop events. Deal with focus/selection issues and set the document
+<a name="line1507"></a> * as changed.
+<a name="line1508"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line1509"></a> * @private
+<a name="line1510"></a> */
+<a name="line1511"></a>goog.editor.Field.prototype.handleDrop_ = function(e) {
+<a name="line1512"></a>  if (goog.userAgent.IE) {
+<a name="line1513"></a>    // TODO(user): This should really be done in the loremipsum plugin.
+<a name="line1514"></a>    this.execCommand(goog.editor.Command.CLEAR_LOREM, true);
+<a name="line1515"></a>  }
+<a name="line1516"></a>
+<a name="line1517"></a>  // TODO(user): I just moved this code to this location, but I wonder why
+<a name="line1518"></a>  // it is only done for this case.  Investigate.
+<a name="line1519"></a>  if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
+<a name="line1520"></a>    this.dispatchFocusAndBeforeFocus_();
+<a name="line1521"></a>  }
+<a name="line1522"></a>
+<a name="line1523"></a>  this.dispatchChange();
+<a name="line1524"></a>};
+<a name="line1525"></a>
+<a name="line1526"></a>
+<a name="line1527"></a>/**
+<a name="line1528"></a> * @return {HTMLIFrameElement} The iframe that&#39;s body is editable.
+<a name="line1529"></a> * @protected
+<a name="line1530"></a> */
+<a name="line1531"></a>goog.editor.Field.prototype.getEditableIframe = function() {
+<a name="line1532"></a>  var dh;
+<a name="line1533"></a>  if (this.usesIframe() &amp;&amp; (dh = this.getEditableDomHelper())) {
+<a name="line1534"></a>    // If the iframe has been destroyed, the dh could still exist since the
+<a name="line1535"></a>    // node may not be gc&#39;ed, but fetching the window can fail.
+<a name="line1536"></a>    var win = dh.getWindow();
+<a name="line1537"></a>    return /** @type {HTMLIFrameElement} */ (win &amp;&amp; win.frameElement);
+<a name="line1538"></a>  }
+<a name="line1539"></a>  return null;
+<a name="line1540"></a>};
+<a name="line1541"></a>
+<a name="line1542"></a>
+<a name="line1543"></a>/**
+<a name="line1544"></a> * @return {goog.dom.DomHelper?} The dom helper for the editable node.
+<a name="line1545"></a> */
+<a name="line1546"></a>goog.editor.Field.prototype.getEditableDomHelper = function() {
+<a name="line1547"></a>  return this.editableDomHelper;
+<a name="line1548"></a>};
+<a name="line1549"></a>
+<a name="line1550"></a>
+<a name="line1551"></a>/**
+<a name="line1552"></a> * @return {goog.dom.AbstractRange?} Closure range object wrapping the selection
+<a name="line1553"></a> *     in this field or null if this field is not currently editable.
+<a name="line1554"></a> */
+<a name="line1555"></a>goog.editor.Field.prototype.getRange = function() {
+<a name="line1556"></a>  var win = this.editableDomHelper &amp;&amp; this.editableDomHelper.getWindow();
+<a name="line1557"></a>  return win &amp;&amp; goog.dom.Range.createFromWindow(win);
+<a name="line1558"></a>};
+<a name="line1559"></a>
+<a name="line1560"></a>
+<a name="line1561"></a>/**
+<a name="line1562"></a> * Dispatch a selection change event, optionally caused by the given browser
+<a name="line1563"></a> * event or selecting the given target.
+<a name="line1564"></a> * @param {goog.events.BrowserEvent=} opt_e Optional browser event causing this
+<a name="line1565"></a> *     event.
+<a name="line1566"></a> * @param {Node=} opt_target The node the selection changed to.
+<a name="line1567"></a> */
+<a name="line1568"></a>goog.editor.Field.prototype.dispatchSelectionChangeEvent = function(
+<a name="line1569"></a>    opt_e, opt_target) {
+<a name="line1570"></a>  if (this.isEventStopped(goog.editor.Field.EventType.SELECTIONCHANGE)) {
+<a name="line1571"></a>    return;
+<a name="line1572"></a>  }
+<a name="line1573"></a>
+<a name="line1574"></a>  // The selection is editable only if the selection is inside the
+<a name="line1575"></a>  // editable field.
+<a name="line1576"></a>  var range = this.getRange();
+<a name="line1577"></a>  var rangeContainer = range &amp;&amp; range.getContainerElement();
+<a name="line1578"></a>  this.isSelectionEditable_ = !!rangeContainer &amp;&amp;
+<a name="line1579"></a>      goog.dom.contains(this.getElement(), rangeContainer);
+<a name="line1580"></a>
+<a name="line1581"></a>  this.dispatchCommandValueChange();
+<a name="line1582"></a>  this.dispatchEvent({
+<a name="line1583"></a>    type: goog.editor.Field.EventType.SELECTIONCHANGE,
+<a name="line1584"></a>    originalType: opt_e &amp;&amp; opt_e.type
+<a name="line1585"></a>  });
+<a name="line1586"></a>
+<a name="line1587"></a>  this.invokeShortCircuitingOp_(goog.editor.Plugin.Op.SELECTION,
+<a name="line1588"></a>                                opt_e, opt_target);
+<a name="line1589"></a>};
+<a name="line1590"></a>
+<a name="line1591"></a>
+<a name="line1592"></a>/**
+<a name="line1593"></a> * Dispatch a selection change event using a browser event that was
+<a name="line1594"></a> * asynchronously saved earlier.
+<a name="line1595"></a> * @private
+<a name="line1596"></a> */
+<a name="line1597"></a>goog.editor.Field.prototype.handleSelectionChangeTimer_ = function() {
+<a name="line1598"></a>  var t = this.selectionChangeTarget_;
+<a name="line1599"></a>  this.selectionChangeTarget_ = null;
+<a name="line1600"></a>  this.dispatchSelectionChangeEvent(undefined, t);
+<a name="line1601"></a>};
+<a name="line1602"></a>
+<a name="line1603"></a>
+<a name="line1604"></a>/**
+<a name="line1605"></a> * This dispatches the beforechange event on the editable field
+<a name="line1606"></a> */
+<a name="line1607"></a>goog.editor.Field.prototype.dispatchBeforeChange = function() {
+<a name="line1608"></a>  if (this.isEventStopped(goog.editor.Field.EventType.BEFORECHANGE)) {
+<a name="line1609"></a>    return;
+<a name="line1610"></a>  }
+<a name="line1611"></a>
+<a name="line1612"></a>  this.dispatchEvent(goog.editor.Field.EventType.BEFORECHANGE);
+<a name="line1613"></a>};
+<a name="line1614"></a>
+<a name="line1615"></a>
+<a name="line1616"></a>/**
+<a name="line1617"></a> * This dispatches the beforetab event on the editable field. If this event is
+<a name="line1618"></a> * cancelled, then the default tab behavior is prevented.
+<a name="line1619"></a> * @param {goog.events.BrowserEvent} e The tab event.
+<a name="line1620"></a> * @private
+<a name="line1621"></a> * @return {boolean} The result of dispatchEvent.
+<a name="line1622"></a> */
+<a name="line1623"></a>goog.editor.Field.prototype.dispatchBeforeTab_ = function(e) {
+<a name="line1624"></a>  return this.dispatchEvent({
+<a name="line1625"></a>    type: goog.editor.Field.EventType.BEFORETAB,
+<a name="line1626"></a>    shiftKey: e.shiftKey,
+<a name="line1627"></a>    altKey: e.altKey,
+<a name="line1628"></a>    ctrlKey: e.ctrlKey
+<a name="line1629"></a>  });
+<a name="line1630"></a>};
+<a name="line1631"></a>
+<a name="line1632"></a>
+<a name="line1633"></a>/**
+<a name="line1634"></a> * Temporarily ignore change events. If the time has already been set, it will
+<a name="line1635"></a> * fire immediately now.  Further setting of the timer is stopped and
+<a name="line1636"></a> * dispatching of events is stopped until startChangeEvents is called.
+<a name="line1637"></a> * @param {boolean=} opt_stopChange Whether to ignore base change events.
+<a name="line1638"></a> * @param {boolean=} opt_stopDelayedChange Whether to ignore delayed change
+<a name="line1639"></a> *     events.
+<a name="line1640"></a> */
+<a name="line1641"></a>goog.editor.Field.prototype.stopChangeEvents = function(opt_stopChange,
+<a name="line1642"></a>    opt_stopDelayedChange) {
+<a name="line1643"></a>  if (opt_stopChange) {
+<a name="line1644"></a>    if (this.changeTimerGecko_) {
+<a name="line1645"></a>      this.changeTimerGecko_.fireIfActive();
+<a name="line1646"></a>    }
+<a name="line1647"></a>
+<a name="line1648"></a>    this.stopEvent(goog.editor.Field.EventType.CHANGE);
+<a name="line1649"></a>  }
+<a name="line1650"></a>  if (opt_stopDelayedChange) {
+<a name="line1651"></a>    this.clearDelayedChange();
+<a name="line1652"></a>    this.stopEvent(goog.editor.Field.EventType.DELAYEDCHANGE);
+<a name="line1653"></a>  }
+<a name="line1654"></a>};
+<a name="line1655"></a>
+<a name="line1656"></a>
+<a name="line1657"></a>/**
+<a name="line1658"></a> * Start change events again and fire once if desired.
+<a name="line1659"></a> * @param {boolean=} opt_fireChange Whether to fire the change event
+<a name="line1660"></a> *      immediately.
+<a name="line1661"></a> * @param {boolean=} opt_fireDelayedChange Whether to fire the delayed change
+<a name="line1662"></a> *      event immediately.
+<a name="line1663"></a> */
+<a name="line1664"></a>goog.editor.Field.prototype.startChangeEvents = function(opt_fireChange,
+<a name="line1665"></a>    opt_fireDelayedChange) {
+<a name="line1666"></a>
+<a name="line1667"></a>  if (!opt_fireChange &amp;&amp; this.changeTimerGecko_) {
+<a name="line1668"></a>    // In the case where change events were stopped and we&#39;re not firing
+<a name="line1669"></a>    // them on start, the user was trying to suppress all change or delayed
+<a name="line1670"></a>    // change events. Clear the change timer now while the events are still
+<a name="line1671"></a>    // stopped so that its firing doesn&#39;t fire a stopped change event, or
+<a name="line1672"></a>    // queue up a delayed change event that we were trying to stop.
+<a name="line1673"></a>    this.changeTimerGecko_.fireIfActive();
+<a name="line1674"></a>  }
+<a name="line1675"></a>
+<a name="line1676"></a>  this.startEvent(goog.editor.Field.EventType.CHANGE);
+<a name="line1677"></a>  this.startEvent(goog.editor.Field.EventType.DELAYEDCHANGE);
+<a name="line1678"></a>  if (opt_fireChange) {
+<a name="line1679"></a>    this.handleChange();
+<a name="line1680"></a>  }
+<a name="line1681"></a>
+<a name="line1682"></a>  if (opt_fireDelayedChange) {
+<a name="line1683"></a>    this.dispatchDelayedChange_();
+<a name="line1684"></a>  }
+<a name="line1685"></a>};
+<a name="line1686"></a>
+<a name="line1687"></a>
+<a name="line1688"></a>/**
+<a name="line1689"></a> * Stops the event of the given type from being dispatched.
+<a name="line1690"></a> * @param {goog.editor.Field.EventType} eventType type of event to stop.
+<a name="line1691"></a> */
+<a name="line1692"></a>goog.editor.Field.prototype.stopEvent = function(eventType) {
+<a name="line1693"></a>  this.stoppedEvents_[eventType] = 1;
+<a name="line1694"></a>};
+<a name="line1695"></a>
+<a name="line1696"></a>
+<a name="line1697"></a>/**
+<a name="line1698"></a> * Re-starts the event of the given type being dispatched, if it had
+<a name="line1699"></a> * previously been stopped with stopEvent().
+<a name="line1700"></a> * @param {goog.editor.Field.EventType} eventType type of event to start.
+<a name="line1701"></a> */
+<a name="line1702"></a>goog.editor.Field.prototype.startEvent = function(eventType) {
+<a name="line1703"></a>  // Toggling this bit on/off instead of deleting it/re-adding it
+<a name="line1704"></a>  // saves array allocations.
+<a name="line1705"></a>  this.stoppedEvents_[eventType] = 0;
+<a name="line1706"></a>};
+<a name="line1707"></a>
+<a name="line1708"></a>
+<a name="line1709"></a>/**
+<a name="line1710"></a> * Block an event for a short amount of time. Intended
+<a name="line1711"></a> * for the situation where an event pair fires in quick succession
+<a name="line1712"></a> * (e.g., mousedown/mouseup, keydown/keyup, focus/blur),
+<a name="line1713"></a> * and we want the second event in the pair to get &quot;debounced.&quot;
+<a name="line1714"></a> *
+<a name="line1715"></a> * WARNING: This should never be used to solve race conditions or for
+<a name="line1716"></a> * mission-critical actions. It should only be used for UI improvements,
+<a name="line1717"></a> * where it&#39;s okay if the behavior is non-deterministic.
+<a name="line1718"></a> *
+<a name="line1719"></a> * @param {goog.editor.Field.EventType} eventType type of event to debounce.
+<a name="line1720"></a> */
+<a name="line1721"></a>goog.editor.Field.prototype.debounceEvent = function(eventType) {
+<a name="line1722"></a>  this.debouncedEvents_[eventType] = goog.now();
+<a name="line1723"></a>};
+<a name="line1724"></a>
+<a name="line1725"></a>
+<a name="line1726"></a>/**
+<a name="line1727"></a> * Checks if the event of the given type has stopped being dispatched
+<a name="line1728"></a> * @param {goog.editor.Field.EventType} eventType type of event to check.
+<a name="line1729"></a> * @return {boolean} true if the event has been stopped with stopEvent().
+<a name="line1730"></a> * @protected
+<a name="line1731"></a> */
+<a name="line1732"></a>goog.editor.Field.prototype.isEventStopped = function(eventType) {
+<a name="line1733"></a>  return !!this.stoppedEvents_[eventType] ||
+<a name="line1734"></a>      (this.debouncedEvents_[eventType] &amp;&amp;
+<a name="line1735"></a>       (goog.now() - this.debouncedEvents_[eventType] &lt;=
+<a name="line1736"></a>        goog.editor.Field.DEBOUNCE_TIME_MS_));
+<a name="line1737"></a>};
+<a name="line1738"></a>
+<a name="line1739"></a>
+<a name="line1740"></a>/**
+<a name="line1741"></a> * Calls a function to manipulate the dom of this field. This method should be
+<a name="line1742"></a> * used whenever Trogedit clients need to modify the dom of the field, so that
+<a name="line1743"></a> * delayed change events are handled appropriately. Extra delayed change events
+<a name="line1744"></a> * will cause undesired states to be added to the undo-redo stack. This method
+<a name="line1745"></a> * will always fire at most one delayed change event, depending on the value of
+<a name="line1746"></a> * {@code opt_preventDelayedChange}.
+<a name="line1747"></a> *
+<a name="line1748"></a> * @param {function()} func The function to call that will manipulate the dom.
+<a name="line1749"></a> * @param {boolean=} opt_preventDelayedChange Whether delayed change should be
+<a name="line1750"></a> *      prevented after calling {@code func}. Defaults to always firing
+<a name="line1751"></a> *      delayed change.
+<a name="line1752"></a> * @param {Object=} opt_handler Object in whose scope to call the listener.
+<a name="line1753"></a> */
+<a name="line1754"></a>goog.editor.Field.prototype.manipulateDom = function(func,
+<a name="line1755"></a>    opt_preventDelayedChange, opt_handler) {
+<a name="line1756"></a>
+<a name="line1757"></a>  this.stopChangeEvents(true, true);
+<a name="line1758"></a>  // We don&#39;t want any problems with the passed in function permanently
+<a name="line1759"></a>  // stopping change events. That would break Trogedit.
+<a name="line1760"></a>  try {
+<a name="line1761"></a>    func.call(opt_handler);
+<a name="line1762"></a>  } finally {
+<a name="line1763"></a>    // If the field isn&#39;t loaded then change and delayed change events will be
+<a name="line1764"></a>    // started as part of the onload behavior.
+<a name="line1765"></a>    if (this.isLoaded()) {
+<a name="line1766"></a>      // We assume that func always modified the dom and so fire a single change
+<a name="line1767"></a>      // event. Delayed change is only fired if not prevented by the user.
+<a name="line1768"></a>      if (opt_preventDelayedChange) {
+<a name="line1769"></a>        this.startEvent(goog.editor.Field.EventType.CHANGE);
+<a name="line1770"></a>        this.handleChange();
+<a name="line1771"></a>        this.startEvent(goog.editor.Field.EventType.DELAYEDCHANGE);
+<a name="line1772"></a>      } else {
+<a name="line1773"></a>        this.dispatchChange();
+<a name="line1774"></a>      }
+<a name="line1775"></a>    }
+<a name="line1776"></a>  }
+<a name="line1777"></a>};
+<a name="line1778"></a>
+<a name="line1779"></a>
+<a name="line1780"></a>/**
+<a name="line1781"></a> * Dispatches a command value change event.
+<a name="line1782"></a> * @param {Array.&lt;string&gt;=} opt_commands Commands whose state has
+<a name="line1783"></a> *     changed.
+<a name="line1784"></a> */
+<a name="line1785"></a>goog.editor.Field.prototype.dispatchCommandValueChange =
+<a name="line1786"></a>    function(opt_commands) {
+<a name="line1787"></a>  if (opt_commands) {
+<a name="line1788"></a>    this.dispatchEvent({
+<a name="line1789"></a>      type: goog.editor.Field.EventType.COMMAND_VALUE_CHANGE,
+<a name="line1790"></a>      commands: opt_commands
+<a name="line1791"></a>    });
+<a name="line1792"></a>  } else {
+<a name="line1793"></a>    this.dispatchEvent(goog.editor.Field.EventType.COMMAND_VALUE_CHANGE);
+<a name="line1794"></a>  }
+<a name="line1795"></a>};
+<a name="line1796"></a>
+<a name="line1797"></a>
+<a name="line1798"></a>/**
+<a name="line1799"></a> * Dispatches the appropriate set of change events. This only fires
+<a name="line1800"></a> * synchronous change events in blended-mode, iframe-using mozilla. It just
+<a name="line1801"></a> * starts the appropriate timer for goog.editor.Field.EventType.DELAYEDCHANGE.
+<a name="line1802"></a> * This also starts up change events again if they were stopped.
+<a name="line1803"></a> *
+<a name="line1804"></a> * @param {boolean=} opt_noDelay True if
+<a name="line1805"></a> *      goog.editor.Field.EventType.DELAYEDCHANGE should be fired syncronously.
+<a name="line1806"></a> */
+<a name="line1807"></a>goog.editor.Field.prototype.dispatchChange = function(opt_noDelay) {
+<a name="line1808"></a>  this.startChangeEvents(true, opt_noDelay);
+<a name="line1809"></a>};
+<a name="line1810"></a>
+<a name="line1811"></a>
+<a name="line1812"></a>/**
+<a name="line1813"></a> * Handle a change in the Editable Field.  Marks the field has modified,
+<a name="line1814"></a> * dispatches the change event on the editable field (moz only), starts the
+<a name="line1815"></a> * timer for the delayed change event.  Note that these actions only occur if
+<a name="line1816"></a> * the proper events are not stopped.
+<a name="line1817"></a> */
+<a name="line1818"></a>goog.editor.Field.prototype.handleChange = function() {
+<a name="line1819"></a>  if (this.isEventStopped(goog.editor.Field.EventType.CHANGE)) {
+<a name="line1820"></a>    return;
+<a name="line1821"></a>  }
+<a name="line1822"></a>
+<a name="line1823"></a>  // Clear the changeTimerGecko_ if it&#39;s active, since any manual call to
+<a name="line1824"></a>  // handle change is equiavlent to changeTimerGecko_.fire().
+<a name="line1825"></a>  if (this.changeTimerGecko_) {
+<a name="line1826"></a>    this.changeTimerGecko_.stop();
+<a name="line1827"></a>  }
+<a name="line1828"></a>
+<a name="line1829"></a>  this.isModified_ = true;
+<a name="line1830"></a>  this.isEverModified_ = true;
+<a name="line1831"></a>
+<a name="line1832"></a>  if (this.isEventStopped(goog.editor.Field.EventType.DELAYEDCHANGE)) {
+<a name="line1833"></a>    return;
+<a name="line1834"></a>  }
+<a name="line1835"></a>
+<a name="line1836"></a>  this.delayedChangeTimer_.start();
+<a name="line1837"></a>};
+<a name="line1838"></a>
+<a name="line1839"></a>
+<a name="line1840"></a>/**
+<a name="line1841"></a> * Dispatch a delayed change event.
+<a name="line1842"></a> * @private
+<a name="line1843"></a> */
+<a name="line1844"></a>goog.editor.Field.prototype.dispatchDelayedChange_ = function() {
+<a name="line1845"></a>  if (this.isEventStopped(goog.editor.Field.EventType.DELAYEDCHANGE)) {
+<a name="line1846"></a>    return;
+<a name="line1847"></a>  }
+<a name="line1848"></a>  // Clear the delayedChangeTimer_ if it&#39;s active, since any manual call to
+<a name="line1849"></a>  // dispatchDelayedChange_ is equivalent to delayedChangeTimer_.fire().
+<a name="line1850"></a>  this.delayedChangeTimer_.stop();
+<a name="line1851"></a>  this.isModified_ = false;
+<a name="line1852"></a>  this.dispatchEvent(goog.editor.Field.EventType.DELAYEDCHANGE);
+<a name="line1853"></a>};
+<a name="line1854"></a>
+<a name="line1855"></a>
+<a name="line1856"></a>/**
+<a name="line1857"></a> * Don&#39;t wait for the timer and just fire the delayed change event if it&#39;s
+<a name="line1858"></a> * pending.
+<a name="line1859"></a> */
+<a name="line1860"></a>goog.editor.Field.prototype.clearDelayedChange = function() {
+<a name="line1861"></a>  // The changeTimerGecko_ will queue up a delayed change so to fully clear
+<a name="line1862"></a>  // delayed change we must also clear this timer.
+<a name="line1863"></a>  if (this.changeTimerGecko_) {
+<a name="line1864"></a>    this.changeTimerGecko_.fireIfActive();
+<a name="line1865"></a>  }
+<a name="line1866"></a>  this.delayedChangeTimer_.fireIfActive();
+<a name="line1867"></a>};
+<a name="line1868"></a>
+<a name="line1869"></a>
+<a name="line1870"></a>/**
+<a name="line1871"></a> * Dispatch beforefocus and focus for FF. Note that both of these actually
+<a name="line1872"></a> * happen in the document&#39;s &quot;focus&quot; event. Unfortunately, we don&#39;t actually
+<a name="line1873"></a> * have a way of getting in before the focus event in FF (boo! hiss!).
+<a name="line1874"></a> * In IE, we use onfocusin for before focus and onfocus for focus.
+<a name="line1875"></a> * @private
+<a name="line1876"></a> */
+<a name="line1877"></a>goog.editor.Field.prototype.dispatchFocusAndBeforeFocus_ = function() {
+<a name="line1878"></a>  this.dispatchBeforeFocus_();
+<a name="line1879"></a>  this.dispatchFocus_();
+<a name="line1880"></a>};
+<a name="line1881"></a>
+<a name="line1882"></a>
+<a name="line1883"></a>/**
+<a name="line1884"></a> * Dispatches a before focus event.
+<a name="line1885"></a> * @private
+<a name="line1886"></a> */
+<a name="line1887"></a>goog.editor.Field.prototype.dispatchBeforeFocus_ = function() {
+<a name="line1888"></a>  if (this.isEventStopped(goog.editor.Field.EventType.BEFOREFOCUS)) {
+<a name="line1889"></a>    return;
+<a name="line1890"></a>  }
+<a name="line1891"></a>
+<a name="line1892"></a>  this.execCommand(goog.editor.Command.CLEAR_LOREM, true);
+<a name="line1893"></a>  this.dispatchEvent(goog.editor.Field.EventType.BEFOREFOCUS);
+<a name="line1894"></a>};
+<a name="line1895"></a>
+<a name="line1896"></a>
+<a name="line1897"></a>/**
+<a name="line1898"></a> * Dispatches a focus event.
+<a name="line1899"></a> * @private
+<a name="line1900"></a> */
+<a name="line1901"></a>goog.editor.Field.prototype.dispatchFocus_ = function() {
+<a name="line1902"></a>  if (this.isEventStopped(goog.editor.Field.EventType.FOCUS)) {
+<a name="line1903"></a>    return;
+<a name="line1904"></a>  }
+<a name="line1905"></a>  goog.editor.Field.setActiveFieldId(this.id);
+<a name="line1906"></a>
+<a name="line1907"></a>  this.isSelectionEditable_ = true;
+<a name="line1908"></a>
+<a name="line1909"></a>  this.dispatchEvent(goog.editor.Field.EventType.FOCUS);
+<a name="line1910"></a>
+<a name="line1911"></a>  if (goog.editor.BrowserFeature.
+<a name="line1912"></a>      PUTS_CURSOR_BEFORE_FIRST_BLOCK_ELEMENT_ON_FOCUS) {
+<a name="line1913"></a>    // If the cursor is at the beginning of the field, make sure that it is
+<a name="line1914"></a>    // in the first user-visible line break, e.g.,
+<a name="line1915"></a>    // no selection: &lt;div&gt;&lt;p&gt;...&lt;/p&gt;&lt;/div&gt; --&gt; &lt;div&gt;&lt;p&gt;|cursor|...&lt;/p&gt;&lt;/div&gt;
+<a name="line1916"></a>    // &lt;div&gt;|cursor|&lt;p&gt;...&lt;/p&gt;&lt;/div&gt; --&gt; &lt;div&gt;&lt;p&gt;|cursor|...&lt;/p&gt;&lt;/div&gt;
+<a name="line1917"></a>    // &lt;body&gt;|cursor|&lt;p&gt;...&lt;/p&gt;&lt;/body&gt; --&gt; &lt;body&gt;&lt;p&gt;|cursor|...&lt;/p&gt;&lt;/body&gt;
+<a name="line1918"></a>    var field = this.getElement();
+<a name="line1919"></a>    var range = this.getRange();
+<a name="line1920"></a>
+<a name="line1921"></a>    if (range) {
+<a name="line1922"></a>      var focusNode = range.getFocusNode();
+<a name="line1923"></a>      if (range.getFocusOffset() == 0 &amp;&amp; (!focusNode || focusNode == field ||
+<a name="line1924"></a>          focusNode.tagName == goog.dom.TagName.BODY)) {
+<a name="line1925"></a>        goog.editor.range.selectNodeStart(field);
+<a name="line1926"></a>      }
+<a name="line1927"></a>    }
+<a name="line1928"></a>  }
+<a name="line1929"></a>
+<a name="line1930"></a>  if (!goog.editor.BrowserFeature.CLEARS_SELECTION_WHEN_FOCUS_LEAVES &amp;&amp;
+<a name="line1931"></a>      this.usesIframe()) {
+<a name="line1932"></a>    var parent = this.getEditableDomHelper().getWindow().parent;
+<a name="line1933"></a>    parent.getSelection().removeAllRanges();
+<a name="line1934"></a>  }
+<a name="line1935"></a>};
+<a name="line1936"></a>
+<a name="line1937"></a>
+<a name="line1938"></a>/**
+<a name="line1939"></a> * Dispatches a blur event.
+<a name="line1940"></a> * @protected
+<a name="line1941"></a> */
+<a name="line1942"></a>goog.editor.Field.prototype.dispatchBlur = function() {
+<a name="line1943"></a>  if (this.isEventStopped(goog.editor.Field.EventType.BLUR)) {
+<a name="line1944"></a>    return;
+<a name="line1945"></a>  }
+<a name="line1946"></a>
+<a name="line1947"></a>  // Another field may have already been registered as active, so only
+<a name="line1948"></a>  // clear out the active field id if we still think this field is active.
+<a name="line1949"></a>  if (goog.editor.Field.getActiveFieldId() == this.id) {
+<a name="line1950"></a>    goog.editor.Field.setActiveFieldId(null);
+<a name="line1951"></a>  }
+<a name="line1952"></a>
+<a name="line1953"></a>  this.isSelectionEditable_ = false;
+<a name="line1954"></a>  this.dispatchEvent(goog.editor.Field.EventType.BLUR);
+<a name="line1955"></a>};
+<a name="line1956"></a>
+<a name="line1957"></a>
+<a name="line1958"></a>/**
+<a name="line1959"></a> * @return {boolean} Whether the selection is editable.
+<a name="line1960"></a> */
+<a name="line1961"></a>goog.editor.Field.prototype.isSelectionEditable = function() {
+<a name="line1962"></a>  return this.isSelectionEditable_;
+<a name="line1963"></a>};
+<a name="line1964"></a>
+<a name="line1965"></a>
+<a name="line1966"></a>/**
+<a name="line1967"></a> * Event handler for clicks in browsers that will follow a link when the user
+<a name="line1968"></a> * clicks, even if it&#39;s editable. We stop the click manually
+<a name="line1969"></a> * @param {goog.events.BrowserEvent} e The event.
+<a name="line1970"></a> * @private
+<a name="line1971"></a> */
+<a name="line1972"></a>goog.editor.Field.cancelLinkClick_ = function(e) {
+<a name="line1973"></a>  if (goog.dom.getAncestorByTagNameAndClass(
+<a name="line1974"></a>      /** @type {Node} */ (e.target), goog.dom.TagName.A)) {
+<a name="line1975"></a>    e.preventDefault();
+<a name="line1976"></a>  }
+<a name="line1977"></a>};
+<a name="line1978"></a>
+<a name="line1979"></a>
+<a name="line1980"></a>/**
+<a name="line1981"></a> * Handle mouse down inside the editable field.
+<a name="line1982"></a> * @param {goog.events.BrowserEvent} e The event.
+<a name="line1983"></a> * @private
+<a name="line1984"></a> */
+<a name="line1985"></a>goog.editor.Field.prototype.handleMouseDown_ = function(e) {
+<a name="line1986"></a>  goog.editor.Field.setActiveFieldId(this.id);
+<a name="line1987"></a>
+<a name="line1988"></a>  // Open links in a new window if the user control + clicks.
+<a name="line1989"></a>  if (goog.userAgent.IE) {
+<a name="line1990"></a>    var targetElement = e.target;
+<a name="line1991"></a>    if (targetElement &amp;&amp;
+<a name="line1992"></a>        targetElement.tagName == goog.dom.TagName.A &amp;&amp; e.ctrlKey) {
+<a name="line1993"></a>      this.originalDomHelper.getWindow().open(targetElement.href);
+<a name="line1994"></a>    }
+<a name="line1995"></a>  }
+<a name="line1996"></a>  this.waitingForMouseUp_ = true;
+<a name="line1997"></a>};
+<a name="line1998"></a>
+<a name="line1999"></a>
+<a name="line2000"></a>/**
+<a name="line2001"></a> * Handle drag start. Needs to cancel listening for the mouse up event on the
+<a name="line2002"></a> * window.
+<a name="line2003"></a> * @param {goog.events.BrowserEvent} e The event.
+<a name="line2004"></a> * @private
+<a name="line2005"></a> */
+<a name="line2006"></a>goog.editor.Field.prototype.handleDragStart_ = function(e) {
+<a name="line2007"></a>  this.waitingForMouseUp_ = false;
+<a name="line2008"></a>};
+<a name="line2009"></a>
+<a name="line2010"></a>
+<a name="line2011"></a>/**
+<a name="line2012"></a> * Handle mouse up inside the editable field.
+<a name="line2013"></a> * @param {goog.events.BrowserEvent} e The event.
+<a name="line2014"></a> * @private
+<a name="line2015"></a> */
+<a name="line2016"></a>goog.editor.Field.prototype.handleMouseUp_ = function(e) {
+<a name="line2017"></a>  if (this.useWindowMouseUp_ &amp;&amp; !this.waitingForMouseUp_) {
+<a name="line2018"></a>    return;
+<a name="line2019"></a>  }
+<a name="line2020"></a>  this.waitingForMouseUp_ = false;
+<a name="line2021"></a>
+<a name="line2022"></a>  /*
+<a name="line2023"></a>   * We fire a selection change event immediately for listeners that depend on
+<a name="line2024"></a>   * the native browser event object (e).  On IE, a listener that tries to
+<a name="line2025"></a>   * retrieve the selection with goog.dom.Range may see an out-of-date
+<a name="line2026"></a>   * selection range.
+<a name="line2027"></a>   */
+<a name="line2028"></a>  this.dispatchSelectionChangeEvent(e);
+<a name="line2029"></a>  if (goog.userAgent.IE) {
+<a name="line2030"></a>    /*
+<a name="line2031"></a>     * Fire a second selection change event for listeners that need an
+<a name="line2032"></a>     * up-to-date selection range. Save the event&#39;s target to be sent with it
+<a name="line2033"></a>     * (it&#39;s safer than saving a copy of the event itself).
+<a name="line2034"></a>     */
+<a name="line2035"></a>    this.selectionChangeTarget_ = /** @type {Node} */ (e.target);
+<a name="line2036"></a>    this.selectionChangeTimer_.start();
+<a name="line2037"></a>  }
+<a name="line2038"></a>};
+<a name="line2039"></a>
+<a name="line2040"></a>
+<a name="line2041"></a>/**
+<a name="line2042"></a> * Retrieve the HTML contents of a field.
+<a name="line2043"></a> *
+<a name="line2044"></a> * Do NOT just get the innerHTML of a field directly--there&#39;s a lot of
+<a name="line2045"></a> * processing that needs to happen.
+<a name="line2046"></a>  * @return {string} The scrubbed contents of the field.
+<a name="line2047"></a> */
+<a name="line2048"></a>goog.editor.Field.prototype.getCleanContents = function() {
+<a name="line2049"></a>  if (this.queryCommandValue(goog.editor.Command.USING_LOREM)) {
+<a name="line2050"></a>    return goog.string.Unicode.NBSP;
+<a name="line2051"></a>  }
+<a name="line2052"></a>
+<a name="line2053"></a>  if (!this.isLoaded()) {
+<a name="line2054"></a>    // The field is uneditable, so it&#39;s ok to read contents directly.
+<a name="line2055"></a>    var elem = this.getOriginalElement();
+<a name="line2056"></a>    if (!elem) {
+<a name="line2057"></a>      goog.log.log(this.logger, goog.log.Level.SHOUT,
+<a name="line2058"></a>          &quot;Couldn&#39;t get the field element to read the contents&quot;);
+<a name="line2059"></a>    }
+<a name="line2060"></a>    return elem.innerHTML;
+<a name="line2061"></a>  }
+<a name="line2062"></a>
+<a name="line2063"></a>  var fieldCopy = this.getFieldCopy();
+<a name="line2064"></a>
+<a name="line2065"></a>  // Allow the plugins to handle their cleanup.
+<a name="line2066"></a>  this.invokeOp_(goog.editor.Plugin.Op.CLEAN_CONTENTS_DOM, fieldCopy);
+<a name="line2067"></a>  return this.reduceOp_(
+<a name="line2068"></a>      goog.editor.Plugin.Op.CLEAN_CONTENTS_HTML, fieldCopy.innerHTML);
+<a name="line2069"></a>};
+<a name="line2070"></a>
+<a name="line2071"></a>
+<a name="line2072"></a>/**
+<a name="line2073"></a> * Get the copy of the editable field element, which has the innerHTML set
+<a name="line2074"></a> * correctly.
+<a name="line2075"></a> * @return {!Element} The copy of the editable field.
+<a name="line2076"></a> * @protected
+<a name="line2077"></a> */
+<a name="line2078"></a>goog.editor.Field.prototype.getFieldCopy = function() {
+<a name="line2079"></a>  var field = this.getElement();
+<a name="line2080"></a>  // Deep cloneNode strips some script tag contents in IE, so we do this.
+<a name="line2081"></a>  var fieldCopy = /** @type {Element} */(field.cloneNode(false));
+<a name="line2082"></a>
+<a name="line2083"></a>  // For some reason, when IE sets innerHtml of the cloned node, it strips
+<a name="line2084"></a>  // script tags that fall at the beginning of an element. Appending a
+<a name="line2085"></a>  // non-breaking space prevents this.
+<a name="line2086"></a>  var html = field.innerHTML;
+<a name="line2087"></a>  if (goog.userAgent.IE &amp;&amp; html.match(/^\s*&lt;script/i)) {
+<a name="line2088"></a>    html = goog.string.Unicode.NBSP + html;
+<a name="line2089"></a>  }
+<a name="line2090"></a>  fieldCopy.innerHTML = html;
+<a name="line2091"></a>  return fieldCopy;
+<a name="line2092"></a>};
+<a name="line2093"></a>
+<a name="line2094"></a>
+<a name="line2095"></a>/**
+<a name="line2096"></a> * Sets the contents of the field.
+<a name="line2097"></a> * @param {boolean} addParas Boolean to specify whether to add paragraphs
+<a name="line2098"></a> *    to long fields.
+<a name="line2099"></a> * @param {?string} html html to insert.  If html=null, then this defaults
+<a name="line2100"></a> *    to a nsbp for mozilla and an empty string for IE.
+<a name="line2101"></a> * @param {boolean=} opt_dontFireDelayedChange True to make this content change
+<a name="line2102"></a> *    not fire a delayed change event.
+<a name="line2103"></a> * @param {boolean=} opt_applyLorem Whether to apply lorem ipsum styles.
+<a name="line2104"></a> */
+<a name="line2105"></a>goog.editor.Field.prototype.setHtml = function(
+<a name="line2106"></a>    addParas, html, opt_dontFireDelayedChange, opt_applyLorem) {
+<a name="line2107"></a>  if (this.isLoading()) {
+<a name="line2108"></a>    goog.log.error(this.logger, &quot;Can&#39;t set html while loading Trogedit&quot;);
+<a name="line2109"></a>    return;
+<a name="line2110"></a>  }
+<a name="line2111"></a>
+<a name="line2112"></a>  // Clear the lorem ipsum style, always.
+<a name="line2113"></a>  if (opt_applyLorem) {
+<a name="line2114"></a>    this.execCommand(goog.editor.Command.CLEAR_LOREM);
+<a name="line2115"></a>  }
+<a name="line2116"></a>
+<a name="line2117"></a>  if (html &amp;&amp; addParas) {
+<a name="line2118"></a>    html = &#39;&lt;p&gt;&#39; + html + &#39;&lt;/p&gt;&#39;;
+<a name="line2119"></a>  }
+<a name="line2120"></a>
+<a name="line2121"></a>  // If we don&#39;t want change events to fire, we have to turn off change events
+<a name="line2122"></a>  // before setting the field contents, since that causes mutation events.
+<a name="line2123"></a>  if (opt_dontFireDelayedChange) {
+<a name="line2124"></a>    this.stopChangeEvents(false, true);
+<a name="line2125"></a>  }
+<a name="line2126"></a>
+<a name="line2127"></a>  this.setInnerHtml_(html);
+<a name="line2128"></a>
+<a name="line2129"></a>  // Set the lorem ipsum style, if the element is empty.
+<a name="line2130"></a>  if (opt_applyLorem) {
+<a name="line2131"></a>    this.execCommand(goog.editor.Command.UPDATE_LOREM);
+<a name="line2132"></a>  }
+<a name="line2133"></a>
+<a name="line2134"></a>  // TODO(user): This check should probably be moved to isEventStopped and
+<a name="line2135"></a>  // startEvent.
+<a name="line2136"></a>  if (this.isLoaded()) {
+<a name="line2137"></a>    if (opt_dontFireDelayedChange) { // Turn back on change events
+<a name="line2138"></a>      // We must fire change timer if necessary before restarting change events!
+<a name="line2139"></a>      // Otherwise, the change timer firing after we restart events will cause
+<a name="line2140"></a>      // the delayed change we were trying to stop. Flow:
+<a name="line2141"></a>      //   Stop delayed change
+<a name="line2142"></a>      //   setInnerHtml_, this starts the change timer
+<a name="line2143"></a>      //   start delayed change
+<a name="line2144"></a>      //   change timer fires
+<a name="line2145"></a>      //   starts delayed change timer since event was not stopped
+<a name="line2146"></a>      //   delayed change fires for the delayed change we tried to stop.
+<a name="line2147"></a>      if (goog.editor.BrowserFeature.USE_MUTATION_EVENTS) {
+<a name="line2148"></a>        this.changeTimerGecko_.fireIfActive();
+<a name="line2149"></a>      }
+<a name="line2150"></a>      this.startChangeEvents();
+<a name="line2151"></a>    } else { // Mark the document as changed and fire change events.
+<a name="line2152"></a>      this.dispatchChange();
+<a name="line2153"></a>    }
+<a name="line2154"></a>  }
+<a name="line2155"></a>};
+<a name="line2156"></a>
+<a name="line2157"></a>
+<a name="line2158"></a>/**
+<a name="line2159"></a> * Sets the inner HTML of the field. Works on both editable and
+<a name="line2160"></a> * uneditable fields.
+<a name="line2161"></a> * @param {?string} html The new inner HTML of the field.
+<a name="line2162"></a> * @private
+<a name="line2163"></a> */
+<a name="line2164"></a>goog.editor.Field.prototype.setInnerHtml_ = function(html) {
+<a name="line2165"></a>  var field = this.getElement();
+<a name="line2166"></a>  if (field) {
+<a name="line2167"></a>    // Safari will put &lt;style&gt; tags into *new* &lt;head&gt; elements. When setting
+<a name="line2168"></a>    // HTML, we need to remove these spare &lt;head&gt;s to make sure there&#39;s a
+<a name="line2169"></a>    // clean slate, but keep the first &lt;head&gt;.
+<a name="line2170"></a>    // Note:  We punt on this issue for the non iframe case since
+<a name="line2171"></a>    // we don&#39;t want to screw with the main document.
+<a name="line2172"></a>    if (this.usesIframe() &amp;&amp; goog.editor.BrowserFeature.MOVES_STYLE_TO_HEAD) {
+<a name="line2173"></a>      var heads = field.ownerDocument.getElementsByTagName(&#39;HEAD&#39;);
+<a name="line2174"></a>      for (var i = heads.length - 1; i &gt;= 1; --i) {
+<a name="line2175"></a>        heads[i].parentNode.removeChild(heads[i]);
+<a name="line2176"></a>      }
+<a name="line2177"></a>    }
+<a name="line2178"></a>  } else {
+<a name="line2179"></a>    field = this.getOriginalElement();
+<a name="line2180"></a>  }
+<a name="line2181"></a>
+<a name="line2182"></a>  if (field) {
+<a name="line2183"></a>    this.injectContents(html, field);
+<a name="line2184"></a>  }
+<a name="line2185"></a>};
+<a name="line2186"></a>
+<a name="line2187"></a>
+<a name="line2188"></a>/**
+<a name="line2189"></a> * Attemps to turn on designMode for a document.  This function can fail under
+<a name="line2190"></a> * certain circumstances related to the load event, and will throw an exception.
+<a name="line2191"></a> * @protected
+<a name="line2192"></a> */
+<a name="line2193"></a>goog.editor.Field.prototype.turnOnDesignModeGecko = function() {
+<a name="line2194"></a>  var doc = this.getEditableDomHelper().getDocument();
+<a name="line2195"></a>
+<a name="line2196"></a>  // NOTE(nicksantos): This will fail under certain conditions, like
+<a name="line2197"></a>  // when the node has display: none. It&#39;s up to clients to ensure that
+<a name="line2198"></a>  // their fields are valid when they try to make them editable.
+<a name="line2199"></a>  doc.designMode = &#39;on&#39;;
+<a name="line2200"></a>
+<a name="line2201"></a>  if (goog.editor.BrowserFeature.HAS_STYLE_WITH_CSS) {
+<a name="line2202"></a>    doc.execCommand(&#39;styleWithCSS&#39;, false, false);
+<a name="line2203"></a>  }
+<a name="line2204"></a>};
+<a name="line2205"></a>
+<a name="line2206"></a>
+<a name="line2207"></a>/**
+<a name="line2208"></a> * Installs styles if needed. Only writes styles when they can&#39;t be written
+<a name="line2209"></a> * inline directly into the field.
+<a name="line2210"></a> * @protected
+<a name="line2211"></a> */
+<a name="line2212"></a>goog.editor.Field.prototype.installStyles = function() {
+<a name="line2213"></a>  if (this.cssStyles &amp;&amp; this.shouldLoadAsynchronously()) {
+<a name="line2214"></a>    goog.style.installStyles(this.cssStyles, this.getElement());
+<a name="line2215"></a>  }
+<a name="line2216"></a>};
+<a name="line2217"></a>
+<a name="line2218"></a>
+<a name="line2219"></a>/**
+<a name="line2220"></a> * Signal that the field is loaded and ready to use.  Change events now are
+<a name="line2221"></a> * in effect.
+<a name="line2222"></a> * @private
+<a name="line2223"></a> */
+<a name="line2224"></a>goog.editor.Field.prototype.dispatchLoadEvent_ = function() {
+<a name="line2225"></a>  var field = this.getElement();
+<a name="line2226"></a>
+<a name="line2227"></a>  this.installStyles();
+<a name="line2228"></a>  this.startChangeEvents();
+<a name="line2229"></a>  goog.log.info(this.logger, &#39;Dispatching load &#39; + this.id);
+<a name="line2230"></a>  this.dispatchEvent(goog.editor.Field.EventType.LOAD);
+<a name="line2231"></a>};
+<a name="line2232"></a>
+<a name="line2233"></a>
+<a name="line2234"></a>/**
+<a name="line2235"></a> * @return {boolean} Whether the field is uneditable.
+<a name="line2236"></a> */
+<a name="line2237"></a>goog.editor.Field.prototype.isUneditable = function() {
+<a name="line2238"></a>  return this.loadState_ == goog.editor.Field.LoadState_.UNEDITABLE;
+<a name="line2239"></a>};
+<a name="line2240"></a>
+<a name="line2241"></a>
+<a name="line2242"></a>/**
+<a name="line2243"></a> * @return {boolean} Whether the field has finished loading.
+<a name="line2244"></a> */
+<a name="line2245"></a>goog.editor.Field.prototype.isLoaded = function() {
+<a name="line2246"></a>  return this.loadState_ == goog.editor.Field.LoadState_.EDITABLE;
+<a name="line2247"></a>};
+<a name="line2248"></a>
+<a name="line2249"></a>
+<a name="line2250"></a>/**
+<a name="line2251"></a> * @return {boolean} Whether the field is in the process of loading.
+<a name="line2252"></a> */
+<a name="line2253"></a>goog.editor.Field.prototype.isLoading = function() {
+<a name="line2254"></a>  return this.loadState_ == goog.editor.Field.LoadState_.LOADING;
+<a name="line2255"></a>};
+<a name="line2256"></a>
+<a name="line2257"></a>
+<a name="line2258"></a>/**
+<a name="line2259"></a> * Gives the field focus.
+<a name="line2260"></a> */
+<a name="line2261"></a>goog.editor.Field.prototype.focus = function() {
+<a name="line2262"></a>  if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE &amp;&amp;
+<a name="line2263"></a>      this.usesIframe()) {
+<a name="line2264"></a>    // In designMode, only the window itself can be focused; not the element.
+<a name="line2265"></a>    this.getEditableDomHelper().getWindow().focus();
+<a name="line2266"></a>  } else {
+<a name="line2267"></a>    if (goog.userAgent.OPERA) {
+<a name="line2268"></a>      // Opera will scroll to the bottom of the focused document, even
+<a name="line2269"></a>      // if it is contained in an iframe that is scrolled to the top and
+<a name="line2270"></a>      // the bottom flows past the end of it. To prevent this,
+<a name="line2271"></a>      // save the scroll position of the document containing the editor
+<a name="line2272"></a>      // iframe, then restore it after the focus.
+<a name="line2273"></a>      var scrollX = this.appWindow_.pageXOffset;
+<a name="line2274"></a>      var scrollY = this.appWindow_.pageYOffset;
+<a name="line2275"></a>    }
+<a name="line2276"></a>    this.getElement().focus();
+<a name="line2277"></a>    if (goog.userAgent.OPERA) {
+<a name="line2278"></a>      this.appWindow_.scrollTo(
+<a name="line2279"></a>          /** @type {number} */ (scrollX), /** @type {number} */ (scrollY));
+<a name="line2280"></a>    }
+<a name="line2281"></a>  }
+<a name="line2282"></a>};
+<a name="line2283"></a>
+<a name="line2284"></a>
+<a name="line2285"></a>/**
+<a name="line2286"></a> * Gives the field focus and places the cursor at the start of the field.
+<a name="line2287"></a> */
+<a name="line2288"></a>goog.editor.Field.prototype.focusAndPlaceCursorAtStart = function() {
+<a name="line2289"></a>  // NOTE(user): Excluding Gecko to maintain existing behavior post refactoring
+<a name="line2290"></a>  // placeCursorAtStart into its own method. In Gecko browsers that currently
+<a name="line2291"></a>  // have a selection the existing selection will be restored, otherwise it
+<a name="line2292"></a>  // will go to the start.
+<a name="line2293"></a>  // TODO(user): Refactor the code using this and related methods. We should
+<a name="line2294"></a>  // only mess with the selection in the case where there is not an existing
+<a name="line2295"></a>  // selection in the field.
+<a name="line2296"></a>  if (goog.editor.BrowserFeature.HAS_IE_RANGES || goog.userAgent.WEBKIT) {
+<a name="line2297"></a>    this.placeCursorAtStart();
+<a name="line2298"></a>  }
+<a name="line2299"></a>  this.focus();
+<a name="line2300"></a>};
+<a name="line2301"></a>
+<a name="line2302"></a>
+<a name="line2303"></a>/**
+<a name="line2304"></a> * Place the cursor at the start of this field. It&#39;s recommended that you only
+<a name="line2305"></a> * use this method (and manipulate the selection in general) when there is not
+<a name="line2306"></a> * an existing selection in the field.
+<a name="line2307"></a> */
+<a name="line2308"></a>goog.editor.Field.prototype.placeCursorAtStart = function() {
+<a name="line2309"></a>  this.placeCursorAtStartOrEnd_(true);
+<a name="line2310"></a>};
+<a name="line2311"></a>
+<a name="line2312"></a>
+<a name="line2313"></a>/**
+<a name="line2314"></a> * Place the cursor at the start of this field. It&#39;s recommended that you only
+<a name="line2315"></a> * use this method (and manipulate the selection in general) when there is not
+<a name="line2316"></a> * an existing selection in the field.
+<a name="line2317"></a> */
+<a name="line2318"></a>goog.editor.Field.prototype.placeCursorAtEnd = function() {
+<a name="line2319"></a>  this.placeCursorAtStartOrEnd_(false);
+<a name="line2320"></a>};
+<a name="line2321"></a>
+<a name="line2322"></a>
+<a name="line2323"></a>/**
+<a name="line2324"></a> * Helper method to place the cursor at the start or end of this field.
+<a name="line2325"></a> * @param {boolean} isStart True for start, false for end.
+<a name="line2326"></a> * @private
+<a name="line2327"></a> */
+<a name="line2328"></a>goog.editor.Field.prototype.placeCursorAtStartOrEnd_ = function(isStart) {
+<a name="line2329"></a>  var field = this.getElement();
+<a name="line2330"></a>  if (field) {
+<a name="line2331"></a>    var cursorPosition = isStart ? goog.editor.node.getLeftMostLeaf(field) :
+<a name="line2332"></a>        goog.editor.node.getRightMostLeaf(field);
+<a name="line2333"></a>    if (field == cursorPosition) {
+<a name="line2334"></a>      // The rightmost leaf we found was the field element itself (which likely
+<a name="line2335"></a>      // means the field element is empty). We can&#39;t place the cursor next to
+<a name="line2336"></a>      // the field element, so just place it at the beginning.
+<a name="line2337"></a>      goog.dom.Range.createCaret(field, 0).select();
+<a name="line2338"></a>    } else {
+<a name="line2339"></a>      goog.editor.range.placeCursorNextTo(cursorPosition, isStart);
+<a name="line2340"></a>    }
+<a name="line2341"></a>    this.dispatchSelectionChangeEvent();
+<a name="line2342"></a>  }
+<a name="line2343"></a>};
+<a name="line2344"></a>
+<a name="line2345"></a>
+<a name="line2346"></a>/**
+<a name="line2347"></a> * Restore a saved range, and set the focus on the field.
+<a name="line2348"></a> * If no range is specified, we simply set the focus.
+<a name="line2349"></a> * @param {goog.dom.SavedRange=} opt_range A previously saved selected range.
+<a name="line2350"></a> */
+<a name="line2351"></a>goog.editor.Field.prototype.restoreSavedRange = function(opt_range) {
+<a name="line2352"></a>  if (goog.userAgent.IE) {
+<a name="line2353"></a>    this.focus();
+<a name="line2354"></a>  }
+<a name="line2355"></a>  if (opt_range) {
+<a name="line2356"></a>    opt_range.restore();
+<a name="line2357"></a>  }
+<a name="line2358"></a>  if (!goog.userAgent.IE) {
+<a name="line2359"></a>    this.focus();
+<a name="line2360"></a>  }
+<a name="line2361"></a>};
+<a name="line2362"></a>
+<a name="line2363"></a>
+<a name="line2364"></a>/**
+<a name="line2365"></a> * Makes a field editable.
+<a name="line2366"></a> *
+<a name="line2367"></a> * @param {string=} opt_iframeSrc URL to set the iframe src to if necessary.
+<a name="line2368"></a> */
+<a name="line2369"></a>goog.editor.Field.prototype.makeEditable = function(opt_iframeSrc) {
+<a name="line2370"></a>  this.loadState_ = goog.editor.Field.LoadState_.LOADING;
+<a name="line2371"></a>
+<a name="line2372"></a>  var field = this.getOriginalElement();
+<a name="line2373"></a>
+<a name="line2374"></a>  // TODO: In the fieldObj, save the field&#39;s id, className, cssText
+<a name="line2375"></a>  // in order to reset it on closeField. That way, we can muck with the field&#39;s
+<a name="line2376"></a>  // css, id, class and restore to how it was at the end.
+<a name="line2377"></a>  this.nodeName = field.nodeName;
+<a name="line2378"></a>  this.savedClassName_ = field.className;
+<a name="line2379"></a>  this.setInitialStyle(field.style.cssText);
+<a name="line2380"></a>
+<a name="line2381"></a>  field.className += &#39; editable&#39;;
+<a name="line2382"></a>
+<a name="line2383"></a>  this.makeEditableInternal(opt_iframeSrc);
+<a name="line2384"></a>};
+<a name="line2385"></a>
+<a name="line2386"></a>
+<a name="line2387"></a>/**
+<a name="line2388"></a> * Handles actually making something editable - creating necessary nodes,
+<a name="line2389"></a> * injecting content, etc.
+<a name="line2390"></a> * @param {string=} opt_iframeSrc URL to set the iframe src to if necessary.
+<a name="line2391"></a> * @protected
+<a name="line2392"></a> */
+<a name="line2393"></a>goog.editor.Field.prototype.makeEditableInternal = function(opt_iframeSrc) {
+<a name="line2394"></a>  this.makeIframeField_(opt_iframeSrc);
+<a name="line2395"></a>};
+<a name="line2396"></a>
+<a name="line2397"></a>
+<a name="line2398"></a>/**
+<a name="line2399"></a> * Handle the loading of the field (e.g. once the field is ready to setup).
+<a name="line2400"></a> * TODO(user): this should probably just be moved into dispatchLoadEvent_.
+<a name="line2401"></a> * @protected
+<a name="line2402"></a> */
+<a name="line2403"></a>goog.editor.Field.prototype.handleFieldLoad = function() {
+<a name="line2404"></a>  if (goog.userAgent.IE) {
+<a name="line2405"></a>    // This sometimes fails if the selection is invalid. This can happen, for
+<a name="line2406"></a>    // example, if you attach a CLICK handler to the field that causes the
+<a name="line2407"></a>    // field to be removed from the DOM and replaced with an editor
+<a name="line2408"></a>    // -- however, listening to another event like MOUSEDOWN does not have this
+<a name="line2409"></a>    // issue since no mouse selection has happened at that time.
+<a name="line2410"></a>    goog.dom.Range.clearSelection(this.editableDomHelper.getWindow());
+<a name="line2411"></a>  }
+<a name="line2412"></a>
+<a name="line2413"></a>  if (goog.editor.Field.getActiveFieldId() != this.id) {
+<a name="line2414"></a>    this.execCommand(goog.editor.Command.UPDATE_LOREM);
+<a name="line2415"></a>  }
+<a name="line2416"></a>
+<a name="line2417"></a>  this.setupChangeListeners_();
+<a name="line2418"></a>  this.dispatchLoadEvent_();
+<a name="line2419"></a>
+<a name="line2420"></a>  // Enabling plugins after we fire the load event so that clients have a
+<a name="line2421"></a>  // chance to set initial field contents before we start mucking with
+<a name="line2422"></a>  // everything.
+<a name="line2423"></a>  for (var classId in this.plugins_) {
+<a name="line2424"></a>    this.plugins_[classId].enable(this);
+<a name="line2425"></a>  }
+<a name="line2426"></a>};
+<a name="line2427"></a>
+<a name="line2428"></a>
+<a name="line2429"></a>/**
+<a name="line2430"></a> * Closes the field and cancels all pending change timers.  Note that this
+<a name="line2431"></a> * means that if a change event has not fired yet, it will not fire.  Clients
+<a name="line2432"></a> * should check fieldOj.isModified() if they depend on the final change event.
+<a name="line2433"></a> * Throws an error if the field is already uneditable.
+<a name="line2434"></a> *
+<a name="line2435"></a> * @param {boolean=} opt_skipRestore True to prevent copying of editable field
+<a name="line2436"></a> *     contents back into the original node.
+<a name="line2437"></a> */
+<a name="line2438"></a>goog.editor.Field.prototype.makeUneditable = function(opt_skipRestore) {
+<a name="line2439"></a>  if (this.isUneditable()) {
+<a name="line2440"></a>    throw Error(&#39;makeUneditable: Field is already uneditable&#39;);
+<a name="line2441"></a>  }
+<a name="line2442"></a>
+<a name="line2443"></a>  // Fire any events waiting on a timeout.
+<a name="line2444"></a>  // Clearing delayed change also clears changeTimerGecko_.
+<a name="line2445"></a>  this.clearDelayedChange();
+<a name="line2446"></a>  this.selectionChangeTimer_.fireIfActive();
+<a name="line2447"></a>  this.execCommand(goog.editor.Command.CLEAR_LOREM);
+<a name="line2448"></a>
+<a name="line2449"></a>  var html = null;
+<a name="line2450"></a>  if (!opt_skipRestore &amp;&amp; this.getElement()) {
+<a name="line2451"></a>    // Rest of cleanup is simpler if field was never initialized.
+<a name="line2452"></a>    html = this.getCleanContents();
+<a name="line2453"></a>  }
+<a name="line2454"></a>
+<a name="line2455"></a>  // First clean up anything that happens in makeFieldEditable
+<a name="line2456"></a>  // (i.e. anything that needs cleanup even if field has not loaded).
+<a name="line2457"></a>  this.clearFieldLoadListener_();
+<a name="line2458"></a>
+<a name="line2459"></a>  var field = this.getOriginalElement();
+<a name="line2460"></a>  if (goog.editor.Field.getActiveFieldId() == field.id) {
+<a name="line2461"></a>    goog.editor.Field.setActiveFieldId(null);
+<a name="line2462"></a>  }
+<a name="line2463"></a>
+<a name="line2464"></a>  // Clear all listeners before removing the nodes from the dom - if
+<a name="line2465"></a>  // there are listeners on the iframe window, Firefox throws errors trying
+<a name="line2466"></a>  // to unlisten once the iframe is no longer in the dom.
+<a name="line2467"></a>  this.clearListeners();
+<a name="line2468"></a>
+<a name="line2469"></a>  // For fields that have loaded, clean up anything that happened in
+<a name="line2470"></a>  // handleFieldOpen or later.
+<a name="line2471"></a>  // If html is provided, copy it back and reset the properties on the field
+<a name="line2472"></a>  // so that the original node will have the same properties as it did before
+<a name="line2473"></a>  // it was made editable.
+<a name="line2474"></a>  if (goog.isString(html)) {
+<a name="line2475"></a>    goog.editor.node.replaceInnerHtml(field, html);
+<a name="line2476"></a>    this.resetOriginalElemProperties();
+<a name="line2477"></a>  }
+<a name="line2478"></a>
+<a name="line2479"></a>  this.restoreDom();
+<a name="line2480"></a>  this.tearDownFieldObject_();
+<a name="line2481"></a>
+<a name="line2482"></a>  // On Safari, make sure to un-focus the field so that the
+<a name="line2483"></a>  // native &quot;current field&quot; highlight style gets removed.
+<a name="line2484"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line2485"></a>    field.blur();
+<a name="line2486"></a>  }
+<a name="line2487"></a>
+<a name="line2488"></a>  this.execCommand(goog.editor.Command.UPDATE_LOREM);
+<a name="line2489"></a>  this.dispatchEvent(goog.editor.Field.EventType.UNLOAD);
+<a name="line2490"></a>};
+<a name="line2491"></a>
+<a name="line2492"></a>
+<a name="line2493"></a>/**
+<a name="line2494"></a> * Restores the dom to how it was before being made editable.
+<a name="line2495"></a> * @protected
+<a name="line2496"></a> */
+<a name="line2497"></a>goog.editor.Field.prototype.restoreDom = function() {
+<a name="line2498"></a>  // TODO(user): Consider only removing the iframe if we are
+<a name="line2499"></a>  // restoring the original node, aka, if opt_html.
+<a name="line2500"></a>  var field = this.getOriginalElement();
+<a name="line2501"></a>  // TODO(robbyw): Consider throwing an error if !field.
+<a name="line2502"></a>  if (field) {
+<a name="line2503"></a>    // If the field is in the process of loading when it starts getting torn
+<a name="line2504"></a>    // up, the iframe will not exist.
+<a name="line2505"></a>    var iframe = this.getEditableIframe();
+<a name="line2506"></a>    if (iframe) {
+<a name="line2507"></a>      goog.dom.replaceNode(field, iframe);
+<a name="line2508"></a>    }
+<a name="line2509"></a>  }
+<a name="line2510"></a>};
+<a name="line2511"></a>
+<a name="line2512"></a>
+<a name="line2513"></a>/**
+<a name="line2514"></a> * Returns true if the field needs to be loaded asynchrnously.
+<a name="line2515"></a> * @return {boolean} True if loads are async.
+<a name="line2516"></a> * @protected
+<a name="line2517"></a> */
+<a name="line2518"></a>goog.editor.Field.prototype.shouldLoadAsynchronously = function() {
+<a name="line2519"></a>  if (!goog.isDef(this.isHttps_)) {
+<a name="line2520"></a>    this.isHttps_ = false;
+<a name="line2521"></a>
+<a name="line2522"></a>    if (goog.userAgent.IE &amp;&amp; this.usesIframe()) {
+<a name="line2523"></a>      // IE iframes need to load asynchronously if they are in https as we need
+<a name="line2524"></a>      // to set an actual src on the iframe and wait for it to load.
+<a name="line2525"></a>
+<a name="line2526"></a>      // Find the top-most window we have access to and see if it&#39;s https.
+<a name="line2527"></a>      // Technically this could fail if we have an http frame in an https frame
+<a name="line2528"></a>      // on the same domain (or vice versa), but walking up the window heirarchy
+<a name="line2529"></a>      // to find the first window that has an http* protocol seems like
+<a name="line2530"></a>      // overkill.
+<a name="line2531"></a>      var win = this.originalDomHelper.getWindow();
+<a name="line2532"></a>      while (win != win.parent) {
+<a name="line2533"></a>        try {
+<a name="line2534"></a>          win = win.parent;
+<a name="line2535"></a>        } catch (e) {
+<a name="line2536"></a>          break;
+<a name="line2537"></a>        }
+<a name="line2538"></a>      }
+<a name="line2539"></a>      var loc = win.location;
+<a name="line2540"></a>      this.isHttps_ = loc.protocol == &#39;https:&#39; &amp;&amp;
+<a name="line2541"></a>          loc.search.indexOf(&#39;nocheckhttps&#39;) == -1;
+<a name="line2542"></a>    }
+<a name="line2543"></a>  }
+<a name="line2544"></a>  return this.isHttps_;
+<a name="line2545"></a>};
+<a name="line2546"></a>
+<a name="line2547"></a>
+<a name="line2548"></a>/**
+<a name="line2549"></a> * Start the editable iframe creation process for Mozilla or IE whitebox.
+<a name="line2550"></a> * The iframes load asynchronously.
+<a name="line2551"></a> *
+<a name="line2552"></a> * @param {string=} opt_iframeSrc URL to set the iframe src to if necessary.
+<a name="line2553"></a> * @private
+<a name="line2554"></a> */
+<a name="line2555"></a>goog.editor.Field.prototype.makeIframeField_ = function(opt_iframeSrc) {
+<a name="line2556"></a>  var field = this.getOriginalElement();
+<a name="line2557"></a>  // TODO(robbyw): Consider throwing an error if !field.
+<a name="line2558"></a>  if (field) {
+<a name="line2559"></a>    var html = field.innerHTML;
+<a name="line2560"></a>
+<a name="line2561"></a>    // Invoke prepareContentsHtml on all plugins to prepare html for editing.
+<a name="line2562"></a>    // Make sure this is done before calling this.attachFrame which removes the
+<a name="line2563"></a>    // original element from DOM tree. Plugins may assume that the original
+<a name="line2564"></a>    // element is still in its original position in DOM.
+<a name="line2565"></a>    var styles = {};
+<a name="line2566"></a>    html = this.reduceOp_(goog.editor.Plugin.Op.PREPARE_CONTENTS_HTML,
+<a name="line2567"></a>        html, styles);
+<a name="line2568"></a>
+<a name="line2569"></a>    var iframe = /** @type {HTMLIFrameElement} */(
+<a name="line2570"></a>        this.originalDomHelper.createDom(goog.dom.TagName.IFRAME,
+<a name="line2571"></a>            this.getIframeAttributes()));
+<a name="line2572"></a>
+<a name="line2573"></a>    // TODO(nicksantos): Figure out if this is ever needed in SAFARI?
+<a name="line2574"></a>    // In IE over HTTPS we need to wait for a load event before we set up the
+<a name="line2575"></a>    // iframe, this is to prevent a security prompt or access is denied
+<a name="line2576"></a>    // errors.
+<a name="line2577"></a>    // NOTE(user): This hasn&#39;t been confirmed.  isHttps_ allows a query
+<a name="line2578"></a>    // param, nocheckhttps, which we can use to ascertain if this is actually
+<a name="line2579"></a>    // needed.  It was originally thought to be needed for IE6 SP1, but
+<a name="line2580"></a>    // errors have been seen in IE7 as well.
+<a name="line2581"></a>    if (this.shouldLoadAsynchronously()) {
+<a name="line2582"></a>      // onLoad is the function to call once the iframe is ready to continue
+<a name="line2583"></a>      // loading.
+<a name="line2584"></a>      var onLoad = goog.bind(this.iframeFieldLoadHandler, this, iframe,
+<a name="line2585"></a>          html, styles);
+<a name="line2586"></a>
+<a name="line2587"></a>      this.fieldLoadListenerKey_ = goog.events.listen(iframe,
+<a name="line2588"></a>          goog.events.EventType.LOAD, onLoad, true);
+<a name="line2589"></a>
+<a name="line2590"></a>      if (opt_iframeSrc) {
+<a name="line2591"></a>        iframe.src = opt_iframeSrc;
+<a name="line2592"></a>      }
+<a name="line2593"></a>    }
+<a name="line2594"></a>
+<a name="line2595"></a>    this.attachIframe(iframe);
+<a name="line2596"></a>
+<a name="line2597"></a>    // Only continue if its not IE HTTPS in which case we&#39;re waiting for load.
+<a name="line2598"></a>    if (!this.shouldLoadAsynchronously()) {
+<a name="line2599"></a>      this.iframeFieldLoadHandler(iframe, html, styles);
+<a name="line2600"></a>    }
+<a name="line2601"></a>  }
+<a name="line2602"></a>};
+<a name="line2603"></a>
+<a name="line2604"></a>
+<a name="line2605"></a>/**
+<a name="line2606"></a> * Given the original field element, and the iframe that is destined to
+<a name="line2607"></a> * become the editable field, styles them appropriately and add the iframe
+<a name="line2608"></a> * to the dom.
+<a name="line2609"></a> *
+<a name="line2610"></a> * @param {HTMLIFrameElement} iframe The iframe element.
+<a name="line2611"></a> * @protected
+<a name="line2612"></a> */
+<a name="line2613"></a>goog.editor.Field.prototype.attachIframe = function(iframe) {
+<a name="line2614"></a>  var field = this.getOriginalElement();
+<a name="line2615"></a>  // TODO(user): Why do we do these two lines .. and why whitebox only?
+<a name="line2616"></a>  iframe.className = field.className;
+<a name="line2617"></a>  iframe.id = field.id;
+<a name="line2618"></a>  goog.dom.replaceNode(iframe, field);
+<a name="line2619"></a>};
+<a name="line2620"></a>
+<a name="line2621"></a>
+<a name="line2622"></a>/**
+<a name="line2623"></a> * @param {Object} extraStyles A map of extra styles.
+<a name="line2624"></a> * @return {!goog.editor.icontent.FieldFormatInfo} The FieldFormatInfo
+<a name="line2625"></a> *     object for this field&#39;s configuration.
+<a name="line2626"></a> * @protected
+<a name="line2627"></a> */
+<a name="line2628"></a>goog.editor.Field.prototype.getFieldFormatInfo = function(extraStyles) {
+<a name="line2629"></a>  var originalElement = this.getOriginalElement();
+<a name="line2630"></a>  var isStandardsMode = goog.editor.node.isStandardsMode(originalElement);
+<a name="line2631"></a>
+<a name="line2632"></a>  return new goog.editor.icontent.FieldFormatInfo(
+<a name="line2633"></a>      this.id,
+<a name="line2634"></a>      isStandardsMode,
+<a name="line2635"></a>      false,
+<a name="line2636"></a>      false,
+<a name="line2637"></a>      extraStyles);
+<a name="line2638"></a>};
+<a name="line2639"></a>
+<a name="line2640"></a>
+<a name="line2641"></a>/**
+<a name="line2642"></a> * Writes the html content into the iframe.  Handles writing any aditional
+<a name="line2643"></a> * styling as well.
+<a name="line2644"></a> * @param {HTMLIFrameElement} iframe Iframe to write contents into.
+<a name="line2645"></a> * @param {string} innerHtml The html content to write into the iframe.
+<a name="line2646"></a> * @param {Object} extraStyles A map of extra style attributes.
+<a name="line2647"></a> * @protected
+<a name="line2648"></a> */
+<a name="line2649"></a>goog.editor.Field.prototype.writeIframeContent = function(
+<a name="line2650"></a>    iframe, innerHtml, extraStyles) {
+<a name="line2651"></a>  var formatInfo = this.getFieldFormatInfo(extraStyles);
+<a name="line2652"></a>
+<a name="line2653"></a>  if (this.shouldLoadAsynchronously()) {
+<a name="line2654"></a>    var doc = goog.dom.getFrameContentDocument(iframe);
+<a name="line2655"></a>    goog.editor.icontent.writeHttpsInitialIframe(formatInfo, doc, innerHtml);
+<a name="line2656"></a>  } else {
+<a name="line2657"></a>    var styleInfo = new goog.editor.icontent.FieldStyleInfo(
+<a name="line2658"></a>        this.getElement(), this.cssStyles);
+<a name="line2659"></a>    goog.editor.icontent.writeNormalInitialIframe(formatInfo, innerHtml,
+<a name="line2660"></a>        styleInfo, iframe);
+<a name="line2661"></a>  }
+<a name="line2662"></a>};
+<a name="line2663"></a>
+<a name="line2664"></a>
+<a name="line2665"></a>/**
+<a name="line2666"></a> * The function to call when the editable iframe loads.
+<a name="line2667"></a> *
+<a name="line2668"></a> * @param {HTMLIFrameElement} iframe Iframe that just loaded.
+<a name="line2669"></a> * @param {string} innerHtml Html to put inside the body of the iframe.
+<a name="line2670"></a> * @param {Object} styles Property-value map of CSS styles to install on
+<a name="line2671"></a> *     editable field.
+<a name="line2672"></a> * @protected
+<a name="line2673"></a> */
+<a name="line2674"></a>goog.editor.Field.prototype.iframeFieldLoadHandler = function(iframe,
+<a name="line2675"></a>    innerHtml, styles) {
+<a name="line2676"></a>  this.clearFieldLoadListener_();
+<a name="line2677"></a>
+<a name="line2678"></a>  iframe.allowTransparency = &#39;true&#39;;
+<a name="line2679"></a>  this.writeIframeContent(iframe, innerHtml, styles);
+<a name="line2680"></a>  var doc = goog.dom.getFrameContentDocument(iframe);
+<a name="line2681"></a>
+<a name="line2682"></a>  // Make sure to get this pointer after the doc.write as the doc.write
+<a name="line2683"></a>  // clobbers all the document contents.
+<a name="line2684"></a>  var body = doc.body;
+<a name="line2685"></a>  this.setupFieldObject(body);
+<a name="line2686"></a>
+<a name="line2687"></a>  if (!goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE &amp;&amp;
+<a name="line2688"></a>      this.usesIframe()) {
+<a name="line2689"></a>    this.turnOnDesignModeGecko();
+<a name="line2690"></a>  }
+<a name="line2691"></a>
+<a name="line2692"></a>  this.handleFieldLoad();
+<a name="line2693"></a>};
+<a name="line2694"></a>
+<a name="line2695"></a>
+<a name="line2696"></a>/**
+<a name="line2697"></a> * Clears fieldLoadListener for a field. Must be called even (especially?) if
+<a name="line2698"></a> * the field is not yet loaded and therefore not in this.fieldMap_
+<a name="line2699"></a> * @private
+<a name="line2700"></a> */
+<a name="line2701"></a>goog.editor.Field.prototype.clearFieldLoadListener_ = function() {
+<a name="line2702"></a>  if (this.fieldLoadListenerKey_) {
+<a name="line2703"></a>    goog.events.unlistenByKey(this.fieldLoadListenerKey_);
+<a name="line2704"></a>    this.fieldLoadListenerKey_ = null;
+<a name="line2705"></a>  }
+<a name="line2706"></a>};
+<a name="line2707"></a>
+<a name="line2708"></a>
+<a name="line2709"></a>/**
+<a name="line2710"></a> * @return {!Object} Get the HTML attributes for this field&#39;s iframe.
+<a name="line2711"></a> * @protected
+<a name="line2712"></a> */
+<a name="line2713"></a>goog.editor.Field.prototype.getIframeAttributes = function() {
+<a name="line2714"></a>  var iframeStyle = &#39;padding:0;&#39; + this.getOriginalElement().style.cssText;
+<a name="line2715"></a>
+<a name="line2716"></a>  if (!goog.string.endsWith(iframeStyle, &#39;;&#39;)) {
+<a name="line2717"></a>    iframeStyle += &#39;;&#39;;
+<a name="line2718"></a>  }
+<a name="line2719"></a>
+<a name="line2720"></a>  iframeStyle += &#39;background-color:white;&#39;;
+<a name="line2721"></a>
+<a name="line2722"></a>  // Ensure that the iframe has default overflow styling.  If overflow is
+<a name="line2723"></a>  // set to auto, an IE rendering bug can occur when it tries to render a
+<a name="line2724"></a>  // table at the very bottom of the field, such that the table would cause
+<a name="line2725"></a>  // a scrollbar, that makes the entire field go blank.
+<a name="line2726"></a>  if (goog.userAgent.IE) {
+<a name="line2727"></a>    iframeStyle += &#39;overflow:visible;&#39;;
+<a name="line2728"></a>  }
+<a name="line2729"></a>
+<a name="line2730"></a>  return { &#39;frameBorder&#39;: 0, &#39;style&#39;: iframeStyle };
+<a name="line2731"></a>};
+</pre>
+
+
+</body>
+</html>

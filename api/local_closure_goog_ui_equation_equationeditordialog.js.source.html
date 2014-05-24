@@ -1,0 +1,190 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>equationeditordialog.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_equation_equationeditordialog.js.html">equationeditordialog.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.ui.equation.EquationEditorDialog&#39;);
+<a name="line16"></a>
+<a name="line17"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line20"></a>goog.require(&#39;goog.ui.Dialog&#39;);
+<a name="line21"></a>goog.require(&#39;goog.ui.equation.EquationEditor&#39;);
+<a name="line22"></a>goog.require(&#39;goog.ui.equation.PaletteManager&#39;);
+<a name="line23"></a>goog.require(&#39;goog.ui.equation.TexEditor&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * User interface for equation editor plugin standalone tests.
+<a name="line29"></a> * @constructor
+<a name="line30"></a> * @param {string=} opt_equation Encoded equation. If not specified, starts with
+<a name="line31"></a> *     an empty equation.
+<a name="line32"></a> * @extends {goog.ui.Dialog}
+<a name="line33"></a> * @final
+<a name="line34"></a> */
+<a name="line35"></a>goog.ui.equation.EquationEditorDialog = function(opt_equation) {
+<a name="line36"></a>  goog.ui.Dialog.call(this);
+<a name="line37"></a>  this.setTitle(&#39;Equation Editor&#39;);
+<a name="line38"></a>
+<a name="line39"></a>  var buttonSet = new goog.ui.Dialog.ButtonSet();
+<a name="line40"></a>  buttonSet.set(goog.ui.Dialog.DefaultButtonKeys.OK,
+<a name="line41"></a>      opt_equation ? &#39;Save changes&#39; : &#39;Insert equation&#39;,
+<a name="line42"></a>      true);
+<a name="line43"></a>  buttonSet.set(goog.ui.Dialog.DefaultButtonKeys.CANCEL,
+<a name="line44"></a>      &#39;Cancel&#39;, false, true);
+<a name="line45"></a>  this.setButtonSet(buttonSet);
+<a name="line46"></a>
+<a name="line47"></a>  // Create the main editor contents.
+<a name="line48"></a>  var contentElement = this.getContentElement();
+<a name="line49"></a>  var domHelper = goog.dom.getDomHelper(contentElement);
+<a name="line50"></a>  var context = this.populateContext_();
+<a name="line51"></a>
+<a name="line52"></a>  /**
+<a name="line53"></a>   * The equation editor main API.
+<a name="line54"></a>   * @type {goog.ui.equation.TexEditor}
+<a name="line55"></a>   * @private
+<a name="line56"></a>   */
+<a name="line57"></a>  this.equationEditor_ =
+<a name="line58"></a>      new goog.ui.equation.TexEditor(context, &#39;&#39;, domHelper);
+<a name="line59"></a>
+<a name="line60"></a>  this.equationEditor_.addEventListener(
+<a name="line61"></a>      goog.ui.equation.EquationEditor.EventType.CHANGE,
+<a name="line62"></a>      this.onChange_, false, this);
+<a name="line63"></a>
+<a name="line64"></a>  this.equationEditor_.render(this.getContentElement());
+<a name="line65"></a>  this.setEquation(opt_equation || &#39;&#39;);
+<a name="line66"></a>
+<a name="line67"></a>  goog.dom.classlist.add(
+<a name="line68"></a>      goog.asserts.assert(this.getDialogElement()), &#39;ee-modal-dialog&#39;);
+<a name="line69"></a>};
+<a name="line70"></a>goog.inherits(goog.ui.equation.EquationEditorDialog, goog.ui.Dialog);
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * The dialog&#39;s OK button element.
+<a name="line75"></a> * @type {Element?}
+<a name="line76"></a> * @private
+<a name="line77"></a> */
+<a name="line78"></a>goog.ui.equation.EquationEditorDialog.prototype.okButton_;
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/** @override */
+<a name="line82"></a>goog.ui.equation.EquationEditorDialog.prototype.setVisible = function(visible) {
+<a name="line83"></a>  goog.ui.equation.EquationEditorDialog.base(this, &#39;setVisible&#39;, visible);
+<a name="line84"></a>  this.equationEditor_.setVisible(visible);
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Populates the context of this dialog.
+<a name="line90"></a> * @return {!Object} The context that this dialog runs in.
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.ui.equation.EquationEditorDialog.prototype.populateContext_ = function() {
+<a name="line94"></a>  var context = {};
+<a name="line95"></a>  context.paletteManager = new goog.ui.equation.PaletteManager(
+<a name="line96"></a>      this.getDomHelper());
+<a name="line97"></a>  return context;
+<a name="line98"></a>};
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * Handles CHANGE event fired when user changes equation.
+<a name="line103"></a> * @param {goog.ui.equation.ChangeEvent} e The event object.
+<a name="line104"></a> * @private
+<a name="line105"></a> */
+<a name="line106"></a>goog.ui.equation.EquationEditorDialog.prototype.onChange_ = function(e) {
+<a name="line107"></a>  if (!this.okButton_) {
+<a name="line108"></a>    this.okButton_ = this.getButtonSet().getButton(
+<a name="line109"></a>        goog.ui.Dialog.DefaultButtonKeys.OK);
+<a name="line110"></a>  }
+<a name="line111"></a>  this.okButton_.disabled = !e.isValid;
+<a name="line112"></a>};
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * Returns the encoded equation.
+<a name="line117"></a> * @return {string} The encoded equation.
+<a name="line118"></a> */
+<a name="line119"></a>goog.ui.equation.EquationEditorDialog.prototype.getEquation = function() {
+<a name="line120"></a>  return this.equationEditor_.getEquation();
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Sets the encoded equation.
+<a name="line126"></a> * @param {string} equation The encoded equation.
+<a name="line127"></a> */
+<a name="line128"></a>goog.ui.equation.EquationEditorDialog.prototype.setEquation =
+<a name="line129"></a>    function(equation) {
+<a name="line130"></a>  this.equationEditor_.setEquation(equation);
+<a name="line131"></a>};
+<a name="line132"></a>
+<a name="line133"></a>
+<a name="line134"></a>/**
+<a name="line135"></a> * @return {string} The html code to embed in the document.
+<a name="line136"></a> */
+<a name="line137"></a>goog.ui.equation.EquationEditorDialog.prototype.getHtml = function() {
+<a name="line138"></a>  return this.equationEditor_.getHtml();
+<a name="line139"></a>};
+</pre>
+
+
+</body>
+</html>

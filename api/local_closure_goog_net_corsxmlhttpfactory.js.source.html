@@ -1,0 +1,323 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>corsxmlhttpfactory.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_corsxmlhttpfactory.js.html">corsxmlhttpfactory.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This file contain classes that add support for cross-domain XHR
+<a name="line17"></a> * requests (see http://www.w3.org/TR/cors/). Most modern browsers are able to
+<a name="line18"></a> * use a regular XMLHttpRequest for that, but IE 8 use XDomainRequest object
+<a name="line19"></a> * instead. This file provides an adapter from this object to a goog.net.XhrLike
+<a name="line20"></a> * and a factory to allow using this with a goog.net.XhrIo instance.
+<a name="line21"></a> *
+<a name="line22"></a> * IE 7 and older versions are not supported (given that they do not support
+<a name="line23"></a> * CORS requests).
+<a name="line24"></a> */
+<a name="line25"></a>goog.provide(&#39;goog.net.CorsXmlHttpFactory&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.net.IeCorsXhrAdapter&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.net.HttpStatus&#39;);
+<a name="line29"></a>goog.require(&#39;goog.net.XhrLike&#39;);
+<a name="line30"></a>goog.require(&#39;goog.net.XmlHttp&#39;);
+<a name="line31"></a>goog.require(&#39;goog.net.XmlHttpFactory&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * A factory of XML http request objects that supports cross domain requests.
+<a name="line37"></a> * This class should be instantiated and passed as the parameter of a
+<a name="line38"></a> * goog.net.XhrIo constructor to allow cross-domain requests in every browser.
+<a name="line39"></a> *
+<a name="line40"></a> * @extends {goog.net.XmlHttpFactory}
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @final
+<a name="line43"></a> */
+<a name="line44"></a>goog.net.CorsXmlHttpFactory = function() {
+<a name="line45"></a>  goog.net.XmlHttpFactory.call(this);
+<a name="line46"></a>};
+<a name="line47"></a>goog.inherits(goog.net.CorsXmlHttpFactory, goog.net.XmlHttpFactory);
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>/** @override */
+<a name="line51"></a>goog.net.CorsXmlHttpFactory.prototype.createInstance = function() {
+<a name="line52"></a>  var xhr = new XMLHttpRequest();
+<a name="line53"></a>  if ((&#39;withCredentials&#39; in xhr)) {
+<a name="line54"></a>    return xhr;
+<a name="line55"></a>  } else if (typeof XDomainRequest != &#39;undefined&#39;) {
+<a name="line56"></a>    return new goog.net.IeCorsXhrAdapter();
+<a name="line57"></a>  } else {
+<a name="line58"></a>    throw Error(&#39;Unsupported browser&#39;);
+<a name="line59"></a>  }
+<a name="line60"></a>};
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/** @override */
+<a name="line64"></a>goog.net.CorsXmlHttpFactory.prototype.internalGetOptions = function() {
+<a name="line65"></a>  return {};
+<a name="line66"></a>};
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * An adapter around Internet Explorer&#39;s XDomainRequest object that makes it
+<a name="line72"></a> * look like a standard XMLHttpRequest. This can be used instead of
+<a name="line73"></a> * XMLHttpRequest to support CORS.
+<a name="line74"></a> *
+<a name="line75"></a> * @implements {goog.net.XhrLike}
+<a name="line76"></a> * @constructor
+<a name="line77"></a> * @struct
+<a name="line78"></a> * @final
+<a name="line79"></a> */
+<a name="line80"></a>goog.net.IeCorsXhrAdapter = function() {
+<a name="line81"></a>  /**
+<a name="line82"></a>   * The underlying XDomainRequest used to make the HTTP request.
+<a name="line83"></a>   * @type {!XDomainRequest}
+<a name="line84"></a>   * @private
+<a name="line85"></a>   */
+<a name="line86"></a>  this.xdr_ = new XDomainRequest();
+<a name="line87"></a>
+<a name="line88"></a>  /**
+<a name="line89"></a>   * The simulated ready state.
+<a name="line90"></a>   * @type {number}
+<a name="line91"></a>   */
+<a name="line92"></a>  this.readyState = goog.net.XmlHttp.ReadyState.UNINITIALIZED;
+<a name="line93"></a>
+<a name="line94"></a>  /**
+<a name="line95"></a>   * The simulated ready state change callback function.
+<a name="line96"></a>   * @type {Function}
+<a name="line97"></a>   */
+<a name="line98"></a>  this.onreadystatechange = null;
+<a name="line99"></a>
+<a name="line100"></a>  /**
+<a name="line101"></a>   * The simulated response text parameter.
+<a name="line102"></a>   * @type {?string}
+<a name="line103"></a>   */
+<a name="line104"></a>  this.responseText = null;
+<a name="line105"></a>
+<a name="line106"></a>  /**
+<a name="line107"></a>   * The simulated status code
+<a name="line108"></a>   * @type {number}
+<a name="line109"></a>   */
+<a name="line110"></a>  this.status = -1;
+<a name="line111"></a>
+<a name="line112"></a>  /** @override */
+<a name="line113"></a>  this.responseXML = null;
+<a name="line114"></a>
+<a name="line115"></a>  /** @override */
+<a name="line116"></a>  this.statusText = null;
+<a name="line117"></a>
+<a name="line118"></a>  this.xdr_.onload = goog.bind(this.handleLoad_, this);
+<a name="line119"></a>  this.xdr_.onerror = goog.bind(this.handleError_, this);
+<a name="line120"></a>  this.xdr_.onprogress = goog.bind(this.handleProgress_, this);
+<a name="line121"></a>  this.xdr_.ontimeout = goog.bind(this.handleTimeout_, this);
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Opens a connection to the provided URL.
+<a name="line127"></a> * @param {string} method The HTTP method to use. Valid methods include GET and
+<a name="line128"></a> *     POST.
+<a name="line129"></a> * @param {string} url The URL to contact. The authority of this URL must match
+<a name="line130"></a> *     the authority of the current page&#39;s URL (e.g. http or https).
+<a name="line131"></a> * @param {?boolean=} opt_async Whether the request is asynchronous, defaulting
+<a name="line132"></a> *     to true. XDomainRequest does not support syncronous requests, so setting
+<a name="line133"></a> *     it to false will actually raise an exception.
+<a name="line134"></a> * @override
+<a name="line135"></a> */
+<a name="line136"></a>goog.net.IeCorsXhrAdapter.prototype.open = function(method, url, opt_async) {
+<a name="line137"></a>  if (goog.isDefAndNotNull(opt_async) &amp;&amp; (!opt_async)) {
+<a name="line138"></a>    throw new Error(&#39;Only async requests are supported.&#39;);
+<a name="line139"></a>  }
+<a name="line140"></a>  this.xdr_.open(method, url);
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Sends the request to the remote server. Before calling this function, always
+<a name="line146"></a> * call {@link open}.
+<a name="line147"></a> * @param {(ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string)=}
+<a name="line148"></a> *     opt_content The content to send as POSTDATA, if any. Only string data is
+<a name="line149"></a> *     supported by this implementation.
+<a name="line150"></a> * @override
+<a name="line151"></a> */
+<a name="line152"></a>goog.net.IeCorsXhrAdapter.prototype.send = function(opt_content) {
+<a name="line153"></a>  if (opt_content) {
+<a name="line154"></a>    if (typeof opt_content == &#39;string&#39;) {
+<a name="line155"></a>      this.xdr_.send(opt_content);
+<a name="line156"></a>    } else {
+<a name="line157"></a>      throw new Error(&#39;Only string data is supported&#39;);
+<a name="line158"></a>    }
+<a name="line159"></a>  } else {
+<a name="line160"></a>    this.xdr_.send();
+<a name="line161"></a>  }
+<a name="line162"></a>};
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * @override
+<a name="line167"></a> */
+<a name="line168"></a>goog.net.IeCorsXhrAdapter.prototype.abort = function() {
+<a name="line169"></a>  this.xdr_.abort();
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/**
+<a name="line174"></a> * Sets a request header to send to the remote server. Because this
+<a name="line175"></a> * implementation does not support request headers, this function does nothing.
+<a name="line176"></a> * @param {string} key The name of the HTTP header to set. Ignored.
+<a name="line177"></a> * @param {string} value The value to set for the HTTP header. Ignored.
+<a name="line178"></a> * @override
+<a name="line179"></a> */
+<a name="line180"></a>goog.net.IeCorsXhrAdapter.prototype.setRequestHeader = function(key, value) {
+<a name="line181"></a>  // Unsupported; ignore the header.
+<a name="line182"></a>};
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Returns the value of the response header identified by key. This
+<a name="line187"></a> * implementation only supports the &#39;content-type&#39; header.
+<a name="line188"></a> * @param {string} key The request header to fetch. If this parameter is set to
+<a name="line189"></a> *     &#39;content-type&#39; (case-insensitive), this function returns the value of
+<a name="line190"></a> *     the &#39;content-type&#39; request header. If this parameter is set to any other
+<a name="line191"></a> *     value, this function always returns an empty string.
+<a name="line192"></a> * @return {string} The value of the response header, or an empty string if key
+<a name="line193"></a> *     is not &#39;content-type&#39; (case-insensitive).
+<a name="line194"></a> * @override
+<a name="line195"></a> */
+<a name="line196"></a>goog.net.IeCorsXhrAdapter.prototype.getResponseHeader = function(key) {
+<a name="line197"></a>  if (key.toLowerCase() == &#39;content-type&#39;) {
+<a name="line198"></a>    return this.xdr_.contentType;
+<a name="line199"></a>  }
+<a name="line200"></a>  return &#39;&#39;;
+<a name="line201"></a>};
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Handles a request that has fully loaded successfully.
+<a name="line206"></a> * @private
+<a name="line207"></a> */
+<a name="line208"></a>goog.net.IeCorsXhrAdapter.prototype.handleLoad_ = function() {
+<a name="line209"></a>  // IE only calls onload if the status is 200, so the status code must be OK.
+<a name="line210"></a>  this.status = goog.net.HttpStatus.OK;
+<a name="line211"></a>  this.responseText = this.xdr_.responseText;
+<a name="line212"></a>  this.setReadyState_(goog.net.XmlHttp.ReadyState.COMPLETE);
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Handles a request that has failed to load.
+<a name="line218"></a> * @private
+<a name="line219"></a> */
+<a name="line220"></a>goog.net.IeCorsXhrAdapter.prototype.handleError_ = function() {
+<a name="line221"></a>  // IE doesn&#39;t tell us what the status code actually is (other than the fact
+<a name="line222"></a>  // that it is not 200), so simulate an INTERNAL_SERVER_ERROR.
+<a name="line223"></a>  this.status = goog.net.HttpStatus.INTERNAL_SERVER_ERROR;
+<a name="line224"></a>  this.responseText = null;
+<a name="line225"></a>  this.setReadyState_(goog.net.XmlHttp.ReadyState.COMPLETE);
+<a name="line226"></a>};
+<a name="line227"></a>
+<a name="line228"></a>
+<a name="line229"></a>/**
+<a name="line230"></a> * Handles a request that timed out.
+<a name="line231"></a> * @private
+<a name="line232"></a> */
+<a name="line233"></a>goog.net.IeCorsXhrAdapter.prototype.handleTimeout_ = function() {
+<a name="line234"></a>  this.handleError_();
+<a name="line235"></a>};
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>/**
+<a name="line239"></a> * Handles a request that is in the process of loading.
+<a name="line240"></a> * @private
+<a name="line241"></a> */
+<a name="line242"></a>goog.net.IeCorsXhrAdapter.prototype.handleProgress_ = function() {
+<a name="line243"></a>  // IE only calls onprogress if the status is 200, so the status code must be
+<a name="line244"></a>  // OK.
+<a name="line245"></a>  this.status = goog.net.HttpStatus.OK;
+<a name="line246"></a>  this.setReadyState_(goog.net.XmlHttp.ReadyState.LOADING);
+<a name="line247"></a>};
+<a name="line248"></a>
+<a name="line249"></a>
+<a name="line250"></a>/**
+<a name="line251"></a> * Sets this XHR&#39;s ready state and fires the onreadystatechange listener (if one
+<a name="line252"></a> * is set).
+<a name="line253"></a> * @param {number} readyState The new ready state.
+<a name="line254"></a> * @private
+<a name="line255"></a> */
+<a name="line256"></a>goog.net.IeCorsXhrAdapter.prototype.setReadyState_ = function(readyState) {
+<a name="line257"></a>  this.readyState = readyState;
+<a name="line258"></a>  if (this.onreadystatechange) {
+<a name="line259"></a>    this.onreadystatechange();
+<a name="line260"></a>  }
+<a name="line261"></a>};
+<a name="line262"></a>
+<a name="line263"></a>
+<a name="line264"></a>/**
+<a name="line265"></a> * Returns the response headers from the server. This implemntation only returns
+<a name="line266"></a> * the &#39;content-type&#39; header.
+<a name="line267"></a> * @return {string} The headers returned from the server.
+<a name="line268"></a> * @override
+<a name="line269"></a> */
+<a name="line270"></a>goog.net.IeCorsXhrAdapter.prototype.getAllResponseHeaders = function() {
+<a name="line271"></a>  return &#39;content-type: &#39; + this.xdr_.contentType;
+<a name="line272"></a>};
+</pre>
+
+
+</body>
+</html>

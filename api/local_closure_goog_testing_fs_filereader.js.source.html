@@ -1,0 +1,326 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>filereader.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_fs_filereader.js.html">filereader.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Mock FileReader object.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.testing.fs.FileReader&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line23"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line24"></a>goog.require(&#39;goog.fs.Error&#39;);
+<a name="line25"></a>goog.require(&#39;goog.fs.FileReader&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.fs.ProgressEvent&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * A mock FileReader object. This emits the same events as
+<a name="line32"></a> * {@link goog.fs.FileReader}.
+<a name="line33"></a> *
+<a name="line34"></a> * @constructor
+<a name="line35"></a> * @extends {goog.events.EventTarget}
+<a name="line36"></a> */
+<a name="line37"></a>goog.testing.fs.FileReader = function() {
+<a name="line38"></a>  goog.testing.fs.FileReader.base(this, &#39;constructor&#39;);
+<a name="line39"></a>
+<a name="line40"></a>  /**
+<a name="line41"></a>   * The current state of the reader.
+<a name="line42"></a>   * @type {goog.fs.FileReader.ReadyState}
+<a name="line43"></a>   * @private
+<a name="line44"></a>   */
+<a name="line45"></a>  this.readyState_ = goog.fs.FileReader.ReadyState.INIT;
+<a name="line46"></a>};
+<a name="line47"></a>goog.inherits(goog.testing.fs.FileReader, goog.events.EventTarget);
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>/**
+<a name="line51"></a> * The most recent error experienced by this reader.
+<a name="line52"></a> * @type {goog.fs.Error}
+<a name="line53"></a> * @private
+<a name="line54"></a> */
+<a name="line55"></a>goog.testing.fs.FileReader.prototype.error_;
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>/**
+<a name="line59"></a> * Whether the current operation has been aborted.
+<a name="line60"></a> * @type {boolean}
+<a name="line61"></a> * @private
+<a name="line62"></a> */
+<a name="line63"></a>goog.testing.fs.FileReader.prototype.aborted_ = false;
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * The blob this reader is reading from.
+<a name="line68"></a> * @type {goog.testing.fs.Blob}
+<a name="line69"></a> * @private
+<a name="line70"></a> */
+<a name="line71"></a>goog.testing.fs.FileReader.prototype.blob_;
+<a name="line72"></a>
+<a name="line73"></a>
+<a name="line74"></a>/**
+<a name="line75"></a> * The possible return types.
+<a name="line76"></a> * @enum {number}
+<a name="line77"></a> */
+<a name="line78"></a>goog.testing.fs.FileReader.ReturnType = {
+<a name="line79"></a>  /**
+<a name="line80"></a>   * Used when reading as text.
+<a name="line81"></a>   */
+<a name="line82"></a>  TEXT: 1,
+<a name="line83"></a>
+<a name="line84"></a>  /**
+<a name="line85"></a>   * Used when reading as binary string.
+<a name="line86"></a>   */
+<a name="line87"></a>  BINARY_STRING: 2,
+<a name="line88"></a>
+<a name="line89"></a>  /**
+<a name="line90"></a>   * Used when reading as array buffer.
+<a name="line91"></a>   */
+<a name="line92"></a>  ARRAY_BUFFER: 3,
+<a name="line93"></a>
+<a name="line94"></a>  /**
+<a name="line95"></a>   * Used when reading as data URL.
+<a name="line96"></a>   */
+<a name="line97"></a>  DATA_URL: 4
+<a name="line98"></a>};
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * The return type we&#39;re reading.
+<a name="line103"></a> * @type {goog.testing.fs.FileReader.ReturnType}
+<a name="line104"></a> * @private
+<a name="line105"></a> */
+<a name="line106"></a>goog.testing.fs.FileReader.returnType_;
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * @see {goog.fs.FileReader#getReadyState}
+<a name="line111"></a> * @return {goog.fs.FileReader.ReadyState} The current ready state.
+<a name="line112"></a> */
+<a name="line113"></a>goog.testing.fs.FileReader.prototype.getReadyState = function() {
+<a name="line114"></a>  return this.readyState_;
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * @see {goog.fs.FileReader#getError}
+<a name="line120"></a> * @return {goog.fs.Error} The current error.
+<a name="line121"></a> */
+<a name="line122"></a>goog.testing.fs.FileReader.prototype.getError = function() {
+<a name="line123"></a>  return this.error_;
+<a name="line124"></a>};
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * @see {goog.fs.FileReader#abort}
+<a name="line129"></a> */
+<a name="line130"></a>goog.testing.fs.FileReader.prototype.abort = function() {
+<a name="line131"></a>  if (this.readyState_ != goog.fs.FileReader.ReadyState.LOADING) {
+<a name="line132"></a>    var msg = &#39;aborting read&#39;;
+<a name="line133"></a>    throw new goog.fs.Error(
+<a name="line134"></a>        /** @type {!FileError} */ ({&#39;name&#39;: &#39;InvalidStateError&#39;}),
+<a name="line135"></a>        msg);
+<a name="line136"></a>  }
+<a name="line137"></a>
+<a name="line138"></a>  this.aborted_ = true;
+<a name="line139"></a>};
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * @see {goog.fs.FileReader#getResult}
+<a name="line144"></a> * @return {*} The result of the file read.
+<a name="line145"></a> */
+<a name="line146"></a>goog.testing.fs.FileReader.prototype.getResult = function() {
+<a name="line147"></a>  if (this.readyState_ != goog.fs.FileReader.ReadyState.DONE) {
+<a name="line148"></a>    return undefined;
+<a name="line149"></a>  }
+<a name="line150"></a>  if (this.error_) {
+<a name="line151"></a>    return undefined;
+<a name="line152"></a>  }
+<a name="line153"></a>  if (this.returnType_ == goog.testing.fs.FileReader.ReturnType.TEXT) {
+<a name="line154"></a>    return this.blob_.toString();
+<a name="line155"></a>  } else if (this.returnType_ ==
+<a name="line156"></a>      goog.testing.fs.FileReader.ReturnType.ARRAY_BUFFER) {
+<a name="line157"></a>    return this.blob_.toArrayBuffer();
+<a name="line158"></a>  } else if (this.returnType_ ==
+<a name="line159"></a>      goog.testing.fs.FileReader.ReturnType.BINARY_STRING) {
+<a name="line160"></a>    return this.blob_.toString();
+<a name="line161"></a>  } else if (this.returnType_ ==
+<a name="line162"></a>      goog.testing.fs.FileReader.ReturnType.DATA_URL) {
+<a name="line163"></a>    return this.blob_.toDataUrl();
+<a name="line164"></a>  } else {
+<a name="line165"></a>    return undefined;
+<a name="line166"></a>  }
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Fires the read events.
+<a name="line172"></a> * @param {!goog.testing.fs.Blob} blob The blob to read from.
+<a name="line173"></a> * @private
+<a name="line174"></a> */
+<a name="line175"></a>goog.testing.fs.FileReader.prototype.read_ = function(blob) {
+<a name="line176"></a>  this.blob_ = blob;
+<a name="line177"></a>  if (this.readyState_ == goog.fs.FileReader.ReadyState.LOADING) {
+<a name="line178"></a>    var msg = &#39;reading file&#39;;
+<a name="line179"></a>    throw new goog.fs.Error(
+<a name="line180"></a>        /** @type {!FileError} */ ({&#39;name&#39;: &#39;InvalidStateError&#39;}),
+<a name="line181"></a>        msg);
+<a name="line182"></a>  }
+<a name="line183"></a>
+<a name="line184"></a>  this.readyState_ = goog.fs.FileReader.ReadyState.LOADING;
+<a name="line185"></a>  goog.Timer.callOnce(function() {
+<a name="line186"></a>    if (this.aborted_) {
+<a name="line187"></a>      this.abort_(blob.size);
+<a name="line188"></a>      return;
+<a name="line189"></a>    }
+<a name="line190"></a>
+<a name="line191"></a>    this.progressEvent_(goog.fs.FileReader.EventType.LOAD_START, 0, blob.size);
+<a name="line192"></a>    this.progressEvent_(goog.fs.FileReader.EventType.LOAD, blob.size / 2,
+<a name="line193"></a>        blob.size);
+<a name="line194"></a>    this.progressEvent_(goog.fs.FileReader.EventType.LOAD, blob.size,
+<a name="line195"></a>        blob.size);
+<a name="line196"></a>    this.readyState_ = goog.fs.FileReader.ReadyState.DONE;
+<a name="line197"></a>    this.progressEvent_(goog.fs.FileReader.EventType.LOAD, blob.size,
+<a name="line198"></a>        blob.size);
+<a name="line199"></a>    this.progressEvent_(goog.fs.FileReader.EventType.LOAD_END, blob.size,
+<a name="line200"></a>        blob.size);
+<a name="line201"></a>  }, 0, this);
+<a name="line202"></a>};
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * @see {goog.fs.FileReader#readAsBinaryString}
+<a name="line207"></a> * @param {!goog.testing.fs.Blob} blob The blob to read.
+<a name="line208"></a> */
+<a name="line209"></a>goog.testing.fs.FileReader.prototype.readAsBinaryString = function(blob) {
+<a name="line210"></a>  this.returnType_ = goog.testing.fs.FileReader.ReturnType.BINARY_STRING;
+<a name="line211"></a>  this.read_(blob);
+<a name="line212"></a>};
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * @see {goog.fs.FileReader#readAsArrayBuffer}
+<a name="line217"></a> * @param {!goog.testing.fs.Blob} blob The blob to read.
+<a name="line218"></a> */
+<a name="line219"></a>goog.testing.fs.FileReader.prototype.readAsArrayBuffer = function(blob) {
+<a name="line220"></a>  this.returnType_ = goog.testing.fs.FileReader.ReturnType.ARRAY_BUFFER;
+<a name="line221"></a>  this.read_(blob);
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * @see {goog.fs.FileReader#readAsText}
+<a name="line227"></a> * @param {!goog.testing.fs.Blob} blob The blob to read.
+<a name="line228"></a> * @param {string=} opt_encoding The name of the encoding to use.
+<a name="line229"></a> */
+<a name="line230"></a>goog.testing.fs.FileReader.prototype.readAsText = function(blob, opt_encoding) {
+<a name="line231"></a>  this.returnType_ = goog.testing.fs.FileReader.ReturnType.TEXT;
+<a name="line232"></a>  this.read_(blob);
+<a name="line233"></a>};
+<a name="line234"></a>
+<a name="line235"></a>
+<a name="line236"></a>/**
+<a name="line237"></a> * @see {goog.fs.FileReader#readAsDataUrl}
+<a name="line238"></a> * @param {!goog.testing.fs.Blob} blob The blob to read.
+<a name="line239"></a> */
+<a name="line240"></a>goog.testing.fs.FileReader.prototype.readAsDataUrl = function(blob) {
+<a name="line241"></a>  this.returnType_ = goog.testing.fs.FileReader.ReturnType.DATA_URL;
+<a name="line242"></a>  this.read_(blob);
+<a name="line243"></a>};
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/**
+<a name="line247"></a> * Abort the current action and emit appropriate events.
+<a name="line248"></a> *
+<a name="line249"></a> * @param {number} total The total data that was to be processed, in bytes.
+<a name="line250"></a> * @private
+<a name="line251"></a> */
+<a name="line252"></a>goog.testing.fs.FileReader.prototype.abort_ = function(total) {
+<a name="line253"></a>  this.error_ = new goog.fs.Error(
+<a name="line254"></a>      /** @type {!FileError} */ ({&#39;name&#39;: &#39;AbortError&#39;}),
+<a name="line255"></a>      &#39;reading file&#39;);
+<a name="line256"></a>  this.progressEvent_(goog.fs.FileReader.EventType.ERROR, 0, total);
+<a name="line257"></a>  this.progressEvent_(goog.fs.FileReader.EventType.ABORT, 0, total);
+<a name="line258"></a>  this.readyState_ = goog.fs.FileReader.ReadyState.DONE;
+<a name="line259"></a>  this.progressEvent_(goog.fs.FileReader.EventType.LOAD_END, 0, total);
+<a name="line260"></a>  this.aborted_ = false;
+<a name="line261"></a>};
+<a name="line262"></a>
+<a name="line263"></a>
+<a name="line264"></a>/**
+<a name="line265"></a> * Dispatch a progress event.
+<a name="line266"></a> *
+<a name="line267"></a> * @param {goog.fs.FileReader.EventType} type The event type.
+<a name="line268"></a> * @param {number} loaded The number of bytes processed.
+<a name="line269"></a> * @param {number} total The total data that was to be processed, in bytes.
+<a name="line270"></a> * @private
+<a name="line271"></a> */
+<a name="line272"></a>goog.testing.fs.FileReader.prototype.progressEvent_ = function(type, loaded,
+<a name="line273"></a>    total) {
+<a name="line274"></a>  this.dispatchEvent(new goog.testing.fs.ProgressEvent(type, loaded, total));
+<a name="line275"></a>};
+</pre>
+
+
+</body>
+</html>

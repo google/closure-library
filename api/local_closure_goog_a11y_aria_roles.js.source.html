@@ -1,0 +1,267 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>roles.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_a11y_aria_roles.js.html">roles.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview The file contains generated enumerations for ARIA roles
+<a name="line18"></a> * as defined by W3C ARIA standard: http://www.w3.org/TR/wai-aria/.
+<a name="line19"></a> *
+<a name="line20"></a> * This is auto-generated code. Do not manually edit! For more details
+<a name="line21"></a> * about how to edit it via the generator check go/closure-ariagen.
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.a11y.aria.Role&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * ARIA role values.
+<a name="line29"></a> * @enum {string}
+<a name="line30"></a> */
+<a name="line31"></a>goog.a11y.aria.Role = {
+<a name="line32"></a>  // ARIA role for an alert element that doesn&#39;t need to be explicitly closed.
+<a name="line33"></a>  ALERT: &#39;alert&#39;,
+<a name="line34"></a>
+<a name="line35"></a>  // ARIA role for an alert dialog element that takes focus and must be closed.
+<a name="line36"></a>  ALERTDIALOG: &#39;alertdialog&#39;,
+<a name="line37"></a>
+<a name="line38"></a>  // ARIA role for an application that implements its own keyboard navigation.
+<a name="line39"></a>  APPLICATION: &#39;application&#39;,
+<a name="line40"></a>
+<a name="line41"></a>  // ARIA role for an article.
+<a name="line42"></a>  ARTICLE: &#39;article&#39;,
+<a name="line43"></a>
+<a name="line44"></a>  // ARIA role for a banner containing mostly site content, not page content.
+<a name="line45"></a>  BANNER: &#39;banner&#39;,
+<a name="line46"></a>
+<a name="line47"></a>  // ARIA role for a button element.
+<a name="line48"></a>  BUTTON: &#39;button&#39;,
+<a name="line49"></a>
+<a name="line50"></a>  // ARIA role for a checkbox button element; use with the CHECKED state.
+<a name="line51"></a>  CHECKBOX: &#39;checkbox&#39;,
+<a name="line52"></a>
+<a name="line53"></a>  // ARIA role for a column header of a table or grid.
+<a name="line54"></a>  COLUMNHEADER: &#39;columnheader&#39;,
+<a name="line55"></a>
+<a name="line56"></a>  // ARIA role for a combo box element.
+<a name="line57"></a>  COMBOBOX: &#39;combobox&#39;,
+<a name="line58"></a>
+<a name="line59"></a>  // ARIA role for a supporting section of the document.
+<a name="line60"></a>  COMPLEMENTARY: &#39;complementary&#39;,
+<a name="line61"></a>
+<a name="line62"></a>  // ARIA role for a large perceivable region that contains information
+<a name="line63"></a>  // about the parent document.
+<a name="line64"></a>  CONTENTINFO: &#39;contentinfo&#39;,
+<a name="line65"></a>
+<a name="line66"></a>  // ARIA role for a definition of a term or concept.
+<a name="line67"></a>  DEFINITION: &#39;definition&#39;,
+<a name="line68"></a>
+<a name="line69"></a>  // ARIA role for a dialog, some descendant must take initial focus.
+<a name="line70"></a>  DIALOG: &#39;dialog&#39;,
+<a name="line71"></a>
+<a name="line72"></a>  // ARIA role for a directory, like a table of contents.
+<a name="line73"></a>  DIRECTORY: &#39;directory&#39;,
+<a name="line74"></a>
+<a name="line75"></a>  // ARIA role for a part of a page that&#39;s a document, not a web application.
+<a name="line76"></a>  DOCUMENT: &#39;document&#39;,
+<a name="line77"></a>
+<a name="line78"></a>  // ARIA role for a landmark region logically considered one form.
+<a name="line79"></a>  FORM: &#39;form&#39;,
+<a name="line80"></a>
+<a name="line81"></a>  // ARIA role for an interactive control of tabular data.
+<a name="line82"></a>  GRID: &#39;grid&#39;,
+<a name="line83"></a>
+<a name="line84"></a>  // ARIA role for a cell in a grid.
+<a name="line85"></a>  GRIDCELL: &#39;gridcell&#39;,
+<a name="line86"></a>
+<a name="line87"></a>  // ARIA role for a group of related elements like tree item siblings.
+<a name="line88"></a>  GROUP: &#39;group&#39;,
+<a name="line89"></a>
+<a name="line90"></a>  // ARIA role for a heading element.
+<a name="line91"></a>  HEADING: &#39;heading&#39;,
+<a name="line92"></a>
+<a name="line93"></a>  // ARIA role for a container of elements that together comprise one image.
+<a name="line94"></a>  IMG: &#39;img&#39;,
+<a name="line95"></a>
+<a name="line96"></a>  // ARIA role for a link.
+<a name="line97"></a>  LINK: &#39;link&#39;,
+<a name="line98"></a>
+<a name="line99"></a>  // ARIA role for a list of non-interactive list items.
+<a name="line100"></a>  LIST: &#39;list&#39;,
+<a name="line101"></a>
+<a name="line102"></a>  // ARIA role for a listbox.
+<a name="line103"></a>  LISTBOX: &#39;listbox&#39;,
+<a name="line104"></a>
+<a name="line105"></a>  // ARIA role for a list item.
+<a name="line106"></a>  LISTITEM: &#39;listitem&#39;,
+<a name="line107"></a>
+<a name="line108"></a>  // ARIA role for a live region where new information is added.
+<a name="line109"></a>  LOG: &#39;log&#39;,
+<a name="line110"></a>
+<a name="line111"></a>  // ARIA landmark role for the main content in a document. Use only once.
+<a name="line112"></a>  MAIN: &#39;main&#39;,
+<a name="line113"></a>
+<a name="line114"></a>  // ARIA role for a live region of non-essential information that changes.
+<a name="line115"></a>  MARQUEE: &#39;marquee&#39;,
+<a name="line116"></a>
+<a name="line117"></a>  // ARIA role for a mathematical expression.
+<a name="line118"></a>  MATH: &#39;math&#39;,
+<a name="line119"></a>
+<a name="line120"></a>  // ARIA role for a popup menu.
+<a name="line121"></a>  MENU: &#39;menu&#39;,
+<a name="line122"></a>
+<a name="line123"></a>  // ARIA role for a menubar element containing menu elements.
+<a name="line124"></a>  MENUBAR: &#39;menubar&#39;,
+<a name="line125"></a>
+<a name="line126"></a>  // ARIA role for menu item elements.
+<a name="line127"></a>  MENU_ITEM: &#39;menuitem&#39;,
+<a name="line128"></a>
+<a name="line129"></a>  // ARIA role for a checkbox box element inside a menu.
+<a name="line130"></a>  MENU_ITEM_CHECKBOX: &#39;menuitemcheckbox&#39;,
+<a name="line131"></a>
+<a name="line132"></a>  // ARIA role for a radio button element inside a menu.
+<a name="line133"></a>  MENU_ITEM_RADIO: &#39;menuitemradio&#39;,
+<a name="line134"></a>
+<a name="line135"></a>  // ARIA landmark role for a collection of navigation links.
+<a name="line136"></a>  NAVIGATION: &#39;navigation&#39;,
+<a name="line137"></a>
+<a name="line138"></a>  // ARIA role for a section ancillary to the main content.
+<a name="line139"></a>  NOTE: &#39;note&#39;,
+<a name="line140"></a>
+<a name="line141"></a>  // ARIA role for option items that are  children of combobox, listbox, menu,
+<a name="line142"></a>  // radiogroup, or tree elements.
+<a name="line143"></a>  OPTION: &#39;option&#39;,
+<a name="line144"></a>
+<a name="line145"></a>  // ARIA role for ignorable cosmetic elements with no semantic significance.
+<a name="line146"></a>  PRESENTATION: &#39;presentation&#39;,
+<a name="line147"></a>
+<a name="line148"></a>  // ARIA role for a progress bar element.
+<a name="line149"></a>  PROGRESSBAR: &#39;progressbar&#39;,
+<a name="line150"></a>
+<a name="line151"></a>  // ARIA role for a radio button element.
+<a name="line152"></a>  RADIO: &#39;radio&#39;,
+<a name="line153"></a>
+<a name="line154"></a>  // ARIA role for a group of connected radio button elements.
+<a name="line155"></a>  RADIOGROUP: &#39;radiogroup&#39;,
+<a name="line156"></a>
+<a name="line157"></a>  // ARIA role for an important region of the page.
+<a name="line158"></a>  REGION: &#39;region&#39;,
+<a name="line159"></a>
+<a name="line160"></a>  // ARIA role for a row of cells in a grid.
+<a name="line161"></a>  ROW: &#39;row&#39;,
+<a name="line162"></a>
+<a name="line163"></a>  // ARIA role for a group of one or more rows in a grid.
+<a name="line164"></a>  ROWGROUP: &#39;rowgroup&#39;,
+<a name="line165"></a>
+<a name="line166"></a>  // ARIA role for a row header of a table or grid.
+<a name="line167"></a>  ROWHEADER: &#39;rowheader&#39;,
+<a name="line168"></a>
+<a name="line169"></a>  // ARIA role for a scrollbar element.
+<a name="line170"></a>  SCROLLBAR: &#39;scrollbar&#39;,
+<a name="line171"></a>
+<a name="line172"></a>  // ARIA landmark role for a part of the page providing search functionality.
+<a name="line173"></a>  SEARCH: &#39;search&#39;,
+<a name="line174"></a>
+<a name="line175"></a>  // ARIA role for a menu separator.
+<a name="line176"></a>  SEPARATOR: &#39;separator&#39;,
+<a name="line177"></a>
+<a name="line178"></a>  // ARIA role for a slider.
+<a name="line179"></a>  SLIDER: &#39;slider&#39;,
+<a name="line180"></a>
+<a name="line181"></a>  // ARIA role for a spin button.
+<a name="line182"></a>  SPINBUTTON: &#39;spinbutton&#39;,
+<a name="line183"></a>
+<a name="line184"></a>  // ARIA role for a live region with advisory info less severe than an alert.
+<a name="line185"></a>  STATUS: &#39;status&#39;,
+<a name="line186"></a>
+<a name="line187"></a>  // ARIA role for a tab button.
+<a name="line188"></a>  TAB: &#39;tab&#39;,
+<a name="line189"></a>
+<a name="line190"></a>  // ARIA role for a tab bar (i.e. a list of tab buttons).
+<a name="line191"></a>  TAB_LIST: &#39;tablist&#39;,
+<a name="line192"></a>
+<a name="line193"></a>  // ARIA role for a tab page (i.e. the element holding tab contents).
+<a name="line194"></a>  TAB_PANEL: &#39;tabpanel&#39;,
+<a name="line195"></a>
+<a name="line196"></a>  // ARIA role for a textbox element.
+<a name="line197"></a>  TEXTBOX: &#39;textbox&#39;,
+<a name="line198"></a>
+<a name="line199"></a>  // ARIA role for an element displaying elapsed time or time remaining.
+<a name="line200"></a>  TIMER: &#39;timer&#39;,
+<a name="line201"></a>
+<a name="line202"></a>  // ARIA role for a toolbar element.
+<a name="line203"></a>  TOOLBAR: &#39;toolbar&#39;,
+<a name="line204"></a>
+<a name="line205"></a>  // ARIA role for a tooltip element.
+<a name="line206"></a>  TOOLTIP: &#39;tooltip&#39;,
+<a name="line207"></a>
+<a name="line208"></a>  // ARIA role for a tree.
+<a name="line209"></a>  TREE: &#39;tree&#39;,
+<a name="line210"></a>
+<a name="line211"></a>  // ARIA role for a grid whose rows can be expanded and collapsed like a tree.
+<a name="line212"></a>  TREEGRID: &#39;treegrid&#39;,
+<a name="line213"></a>
+<a name="line214"></a>  // ARIA role for a tree item that sometimes may be expanded or collapsed.
+<a name="line215"></a>  TREEITEM: &#39;treeitem&#39;
+<a name="line216"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iframemask.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_iframemask.js.html">iframemask.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Iframe shims, to protect controls on the underlying page
+<a name="line17"></a> * from bleeding through popups.
+<a name="line18"></a> *
+<a name="line19"></a> * @author gboyer@google.com (Garrett Boyer)
+<a name="line20"></a> * @author nicksantos@google.com (Nick Santos) (Ported to Closure)
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.ui.IframeMask&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line27"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.iframe&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line31"></a>goog.require(&#39;goog.style&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Controller for an iframe mask. The mask is only valid in the current
+<a name="line37"></a> * document, or else the document of the given DOM helper.
+<a name="line38"></a> *
+<a name="line39"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper for the relevant
+<a name="line40"></a> *     document.
+<a name="line41"></a> * @param {goog.structs.Pool=} opt_iframePool An optional source of iframes.
+<a name="line42"></a> *     Iframes will be grabbed from the pool when they&#39;re needed and returned
+<a name="line43"></a> *     to the pool (but still attached to the DOM) when they&#39;re done.
+<a name="line44"></a> * @constructor
+<a name="line45"></a> * @extends {goog.Disposable}
+<a name="line46"></a> */
+<a name="line47"></a>goog.ui.IframeMask = function(opt_domHelper, opt_iframePool) {
+<a name="line48"></a>  goog.Disposable.call(this);
+<a name="line49"></a>
+<a name="line50"></a>  /**
+<a name="line51"></a>   * The DOM helper for this document.
+<a name="line52"></a>   * @type {goog.dom.DomHelper}
+<a name="line53"></a>   * @private
+<a name="line54"></a>   */
+<a name="line55"></a>  this.dom_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line56"></a>
+<a name="line57"></a>  /**
+<a name="line58"></a>   * An Element to snap the mask to. If none is given, defaults to
+<a name="line59"></a>   * a full-screen iframe mask.
+<a name="line60"></a>   * @type {Element}
+<a name="line61"></a>   * @private
+<a name="line62"></a>   */
+<a name="line63"></a>  this.snapElement_ = this.dom_.getDocument().documentElement;
+<a name="line64"></a>
+<a name="line65"></a>  /**
+<a name="line66"></a>   * An event handler for listening to popups and the like.
+<a name="line67"></a>   * @type {goog.events.EventHandler.&lt;!goog.ui.IframeMask&gt;}
+<a name="line68"></a>   * @private
+<a name="line69"></a>   */
+<a name="line70"></a>  this.handler_ = new goog.events.EventHandler(this);
+<a name="line71"></a>
+<a name="line72"></a>  /**
+<a name="line73"></a>   * An iframe pool.
+<a name="line74"></a>   * @type {goog.structs.Pool|undefined}
+<a name="line75"></a>   * @private
+<a name="line76"></a>   */
+<a name="line77"></a>  this.iframePool_ = opt_iframePool;
+<a name="line78"></a>};
+<a name="line79"></a>goog.inherits(goog.ui.IframeMask, goog.Disposable);
+<a name="line80"></a>
+<a name="line81"></a>
+<a name="line82"></a>/**
+<a name="line83"></a> * An iframe.
+<a name="line84"></a> * @type {HTMLIFrameElement}
+<a name="line85"></a> * @private
+<a name="line86"></a> */
+<a name="line87"></a>goog.ui.IframeMask.prototype.iframe_;
+<a name="line88"></a>
+<a name="line89"></a>
+<a name="line90"></a>/**
+<a name="line91"></a> * The z-index of the iframe mask.
+<a name="line92"></a> * @type {number}
+<a name="line93"></a> * @private
+<a name="line94"></a> */
+<a name="line95"></a>goog.ui.IframeMask.prototype.zIndex_ = 1;
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/**
+<a name="line99"></a> * The opacity of the iframe mask, expressed as a value between 0 and 1, with
+<a name="line100"></a> * 1 being totally opaque.
+<a name="line101"></a> * @type {number}
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.ui.IframeMask.prototype.opacity_ = 0;
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Removes the iframe from the DOM.
+<a name="line109"></a> * @override
+<a name="line110"></a> * @protected
+<a name="line111"></a> */
+<a name="line112"></a>goog.ui.IframeMask.prototype.disposeInternal = function() {
+<a name="line113"></a>  if (this.iframePool_) {
+<a name="line114"></a>    this.iframePool_.releaseObject(
+<a name="line115"></a>        /** @type {HTMLIFrameElement} */ (this.iframe_));
+<a name="line116"></a>  } else {
+<a name="line117"></a>    goog.dom.removeNode(this.iframe_);
+<a name="line118"></a>  }
+<a name="line119"></a>  this.iframe_ = null;
+<a name="line120"></a>
+<a name="line121"></a>  this.handler_.dispose();
+<a name="line122"></a>  this.handler_ = null;
+<a name="line123"></a>
+<a name="line124"></a>  goog.ui.IframeMask.superClass_.disposeInternal.call(this);
+<a name="line125"></a>};
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * CSS for a hidden iframe.
+<a name="line130"></a> * @type {string}
+<a name="line131"></a> * @private
+<a name="line132"></a> */
+<a name="line133"></a>goog.ui.IframeMask.HIDDEN_CSS_TEXT_ =
+<a name="line134"></a>    &#39;position:absolute;display:none;z-index:1&#39;;
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Removes the mask from the screen.
+<a name="line139"></a> */
+<a name="line140"></a>goog.ui.IframeMask.prototype.hideMask = function() {
+<a name="line141"></a>  if (this.iframe_) {
+<a name="line142"></a>    this.iframe_.style.cssText = goog.ui.IframeMask.HIDDEN_CSS_TEXT_;
+<a name="line143"></a>    if (this.iframePool_) {
+<a name="line144"></a>      this.iframePool_.releaseObject(this.iframe_);
+<a name="line145"></a>      this.iframe_ = null;
+<a name="line146"></a>    }
+<a name="line147"></a>  }
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Gets the iframe to use as a mask. Creates a new one if one has not been
+<a name="line153"></a> * created yet.
+<a name="line154"></a> * @return {!HTMLIFrameElement} The iframe.
+<a name="line155"></a> * @private
+<a name="line156"></a> */
+<a name="line157"></a>goog.ui.IframeMask.prototype.getIframe_ = function() {
+<a name="line158"></a>  if (!this.iframe_) {
+<a name="line159"></a>    this.iframe_ = this.iframePool_ ?
+<a name="line160"></a>        /** @type {HTMLIFrameElement} */ (this.iframePool_.getObject()) :
+<a name="line161"></a>        goog.dom.iframe.createBlank(this.dom_);
+<a name="line162"></a>    this.iframe_.style.cssText = goog.ui.IframeMask.HIDDEN_CSS_TEXT_;
+<a name="line163"></a>    this.dom_.getDocument().body.appendChild(this.iframe_);
+<a name="line164"></a>  }
+<a name="line165"></a>  return this.iframe_;
+<a name="line166"></a>};
+<a name="line167"></a>
+<a name="line168"></a>
+<a name="line169"></a>/**
+<a name="line170"></a> * Applies the iframe mask to the screen.
+<a name="line171"></a> */
+<a name="line172"></a>goog.ui.IframeMask.prototype.applyMask = function() {
+<a name="line173"></a>  var iframe = this.getIframe_();
+<a name="line174"></a>  var bounds = goog.style.getBounds(this.snapElement_);
+<a name="line175"></a>  iframe.style.cssText =
+<a name="line176"></a>      &#39;position:absolute;&#39; +
+<a name="line177"></a>      &#39;left:&#39; + bounds.left + &#39;px;&#39; +
+<a name="line178"></a>      &#39;top:&#39; + bounds.top + &#39;px;&#39; +
+<a name="line179"></a>      &#39;width:&#39; + bounds.width + &#39;px;&#39; +
+<a name="line180"></a>      &#39;height:&#39; + bounds.height + &#39;px;&#39; +
+<a name="line181"></a>      &#39;z-index:&#39; + this.zIndex_;
+<a name="line182"></a>  goog.style.setOpacity(iframe, this.opacity_);
+<a name="line183"></a>  iframe.style.display = &#39;block&#39;;
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Sets the opacity of the mask. Will take effect the next time the mask
+<a name="line189"></a> * is applied.
+<a name="line190"></a> * @param {number} opacity A value between 0 and 1, with 1 being
+<a name="line191"></a> *     totally opaque.
+<a name="line192"></a> */
+<a name="line193"></a>goog.ui.IframeMask.prototype.setOpacity = function(opacity) {
+<a name="line194"></a>  this.opacity_ = opacity;
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Sets the z-index of the mask. Will take effect the next time the mask
+<a name="line200"></a> * is applied.
+<a name="line201"></a> * @param {number} zIndex A z-index value.
+<a name="line202"></a> */
+<a name="line203"></a>goog.ui.IframeMask.prototype.setZIndex = function(zIndex) {
+<a name="line204"></a>  this.zIndex_ = zIndex;
+<a name="line205"></a>};
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * Sets the element to use as the bounds of the mask. Takes effect immediately.
+<a name="line210"></a> * @param {Element} snapElement The snap element, which the iframe will be
+<a name="line211"></a> *     &quot;snapped&quot; around.
+<a name="line212"></a> */
+<a name="line213"></a>goog.ui.IframeMask.prototype.setSnapElement = function(snapElement) {
+<a name="line214"></a>  this.snapElement_ = snapElement;
+<a name="line215"></a>  if (this.iframe_ &amp;&amp; goog.style.isElementShown(this.iframe_)) {
+<a name="line216"></a>    this.applyMask();
+<a name="line217"></a>  }
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Listens on the specified target, hiding and showing the iframe mask
+<a name="line223"></a> * when the given event types are dispatched.
+<a name="line224"></a> * @param {goog.events.EventTarget} target The event target to listen on.
+<a name="line225"></a> * @param {string} showEvent When this event fires, the mask will be applied.
+<a name="line226"></a> * @param {string} hideEvent When this event fires, the mask will be hidden.
+<a name="line227"></a> * @param {Element=} opt_snapElement When the mask is applied, it will
+<a name="line228"></a> *     automatically snap to this element. If no element is specified, it will
+<a name="line229"></a> *     use the default snap element.
+<a name="line230"></a> */
+<a name="line231"></a>goog.ui.IframeMask.prototype.listenOnTarget = function(target, showEvent,
+<a name="line232"></a>    hideEvent, opt_snapElement) {
+<a name="line233"></a>  var timerKey;
+<a name="line234"></a>  this.handler_.listen(target, showEvent, function() {
+<a name="line235"></a>    if (opt_snapElement) {
+<a name="line236"></a>      this.setSnapElement(opt_snapElement);
+<a name="line237"></a>    }
+<a name="line238"></a>    // Check out the iframe asynchronously, so we don&#39;t block the SHOW
+<a name="line239"></a>    // event and cause a bounce.
+<a name="line240"></a>    timerKey = goog.Timer.callOnce(this.applyMask, 0, this);
+<a name="line241"></a>  });
+<a name="line242"></a>  this.handler_.listen(target, hideEvent, function() {
+<a name="line243"></a>    if (timerKey) {
+<a name="line244"></a>      goog.Timer.clear(timerKey);
+<a name="line245"></a>      timerKey = null;
+<a name="line246"></a>    }
+<a name="line247"></a>    this.hideMask();
+<a name="line248"></a>  });
+<a name="line249"></a>};
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * Removes all handlers attached by listenOnTarget.
+<a name="line254"></a> */
+<a name="line255"></a>goog.ui.IframeMask.prototype.removeHandlers = function() {
+<a name="line256"></a>  this.handler_.removeAll();
+<a name="line257"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>errorhandler.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_debug_errorhandler.js.html">errorhandler.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Error handling utilities.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.debug.ErrorHandler&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.debug.ErrorHandler.ProtectedFunctionError&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line24"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line25"></a>goog.require(&#39;goog.debug.EntryPointMonitor&#39;);
+<a name="line26"></a>goog.require(&#39;goog.debug.Trace&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * The ErrorHandler can be used to to wrap functions with a try/catch
+<a name="line32"></a> * statement. If an exception is thrown, the given error handler function will
+<a name="line33"></a> * be called.
+<a name="line34"></a> *
+<a name="line35"></a> * When this object is disposed, it will stop handling exceptions and tracing.
+<a name="line36"></a> * It will also try to restore window.setTimeout and window.setInterval
+<a name="line37"></a> * if it wrapped them. Notice that in the general case, it is not technically
+<a name="line38"></a> * possible to remove the wrapper, because functions have no knowledge of
+<a name="line39"></a> * what they have been assigned to. So the app is responsible for other
+<a name="line40"></a> * forms of unwrapping.
+<a name="line41"></a> *
+<a name="line42"></a> * @param {Function} handler Handler for exceptions.
+<a name="line43"></a> * @constructor
+<a name="line44"></a> * @extends {goog.Disposable}
+<a name="line45"></a> * @implements {goog.debug.EntryPointMonitor}
+<a name="line46"></a> */
+<a name="line47"></a>goog.debug.ErrorHandler = function(handler) {
+<a name="line48"></a>  goog.debug.ErrorHandler.base(this, &#39;constructor&#39;);
+<a name="line49"></a>
+<a name="line50"></a>  /**
+<a name="line51"></a>   * Handler for exceptions, which can do logging, reporting, etc.
+<a name="line52"></a>   * @type {Function}
+<a name="line53"></a>   * @private
+<a name="line54"></a>   */
+<a name="line55"></a>  this.errorHandlerFn_ = handler;
+<a name="line56"></a>
+<a name="line57"></a>  /**
+<a name="line58"></a>   * Whether errors should be wrapped in
+<a name="line59"></a>   * goog.debug.ErrorHandler.ProtectedFunctionError before rethrowing.
+<a name="line60"></a>   * @type {boolean}
+<a name="line61"></a>   * @private
+<a name="line62"></a>   */
+<a name="line63"></a>  this.wrapErrors_ = true;  // TODO(user) Change default.
+<a name="line64"></a>
+<a name="line65"></a>  /**
+<a name="line66"></a>   * Whether to add a prefix to all error messages. The prefix is
+<a name="line67"></a>   * goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX. This option
+<a name="line68"></a>   * only has an effect if this.wrapErrors_  is set to false.
+<a name="line69"></a>   * @type {boolean}
+<a name="line70"></a>   * @private
+<a name="line71"></a>   */
+<a name="line72"></a>  this.prefixErrorMessages_ = false;
+<a name="line73"></a>};
+<a name="line74"></a>goog.inherits(goog.debug.ErrorHandler, goog.Disposable);
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Whether to add tracers when instrumenting entry points.
+<a name="line79"></a> * @type {boolean}
+<a name="line80"></a> * @private
+<a name="line81"></a> */
+<a name="line82"></a>goog.debug.ErrorHandler.prototype.addTracersToProtectedFunctions_ = false;
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Enable tracers when instrumenting entry points.
+<a name="line87"></a> * @param {boolean} newVal See above.
+<a name="line88"></a> */
+<a name="line89"></a>goog.debug.ErrorHandler.prototype.setAddTracersToProtectedFunctions =
+<a name="line90"></a>    function(newVal) {
+<a name="line91"></a>  this.addTracersToProtectedFunctions_ = newVal;
+<a name="line92"></a>};
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/** @override */
+<a name="line96"></a>goog.debug.ErrorHandler.prototype.wrap = function(fn) {
+<a name="line97"></a>  return this.protectEntryPoint(goog.asserts.assertFunction(fn));
+<a name="line98"></a>};
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/** @override */
+<a name="line102"></a>goog.debug.ErrorHandler.prototype.unwrap = function(fn) {
+<a name="line103"></a>  goog.asserts.assertFunction(fn);
+<a name="line104"></a>  return fn[this.getFunctionIndex_(false)] || fn;
+<a name="line105"></a>};
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Private helper function to return a span that can be clicked on to display
+<a name="line110"></a> * an alert with the current stack trace. Newlines are replaced with a
+<a name="line111"></a> * placeholder so that they will not be html-escaped.
+<a name="line112"></a> * @param {string} stackTrace The stack trace to create a span for.
+<a name="line113"></a> * @return {string} A span which can be clicked on to show the stack trace.
+<a name="line114"></a> * @private
+<a name="line115"></a> */
+<a name="line116"></a>goog.debug.ErrorHandler.prototype.getStackTraceHolder_ = function(stackTrace) {
+<a name="line117"></a>  var buffer = [];
+<a name="line118"></a>  buffer.push(&#39;##PE_STACK_START##&#39;);
+<a name="line119"></a>  buffer.push(stackTrace.replace(/(\r\n|\r|\n)/g, &#39;##STACK_BR##&#39;));
+<a name="line120"></a>  buffer.push(&#39;##PE_STACK_END##&#39;);
+<a name="line121"></a>  return buffer.join(&#39;&#39;);
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Get the index for a function. Used for internal indexing.
+<a name="line127"></a> * @param {boolean} wrapper True for the wrapper; false for the wrapped.
+<a name="line128"></a> * @return {string} The index where we should store the function in its
+<a name="line129"></a> *     wrapper/wrapped function.
+<a name="line130"></a> * @private
+<a name="line131"></a> */
+<a name="line132"></a>goog.debug.ErrorHandler.prototype.getFunctionIndex_ = function(wrapper) {
+<a name="line133"></a>  return (wrapper ? &#39;__wrapper_&#39; : &#39;__protected_&#39;) + goog.getUid(this) + &#39;__&#39;;
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Installs exception protection for an entry point function. When an exception
+<a name="line139"></a> * is thrown from a protected function, a handler will be invoked to handle it.
+<a name="line140"></a> *
+<a name="line141"></a> * @param {Function} fn An entry point function to be protected.
+<a name="line142"></a> * @return {!Function} A protected wrapper function that calls the entry point
+<a name="line143"></a> *     function.
+<a name="line144"></a> */
+<a name="line145"></a>goog.debug.ErrorHandler.prototype.protectEntryPoint = function(fn) {
+<a name="line146"></a>  var protectedFnName = this.getFunctionIndex_(true);
+<a name="line147"></a>  if (!fn[protectedFnName]) {
+<a name="line148"></a>    var wrapper = fn[protectedFnName] = this.getProtectedFunction(fn);
+<a name="line149"></a>    wrapper[this.getFunctionIndex_(false)] = fn;
+<a name="line150"></a>  }
+<a name="line151"></a>  return fn[protectedFnName];
+<a name="line152"></a>};
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * Helps {@link #protectEntryPoint} by actually creating the protected
+<a name="line157"></a> * wrapper function, after {@link #protectEntryPoint} determines that one does
+<a name="line158"></a> * not already exist for the given function.  Can be overriden by subclasses
+<a name="line159"></a> * that may want to implement different error handling, or add additional
+<a name="line160"></a> * entry point hooks.
+<a name="line161"></a> * @param {!Function} fn An entry point function to be protected.
+<a name="line162"></a> * @return {!Function} protected wrapper function.
+<a name="line163"></a> * @protected
+<a name="line164"></a> */
+<a name="line165"></a>goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
+<a name="line166"></a>  var that = this;
+<a name="line167"></a>  var tracers = this.addTracersToProtectedFunctions_;
+<a name="line168"></a>  if (tracers) {
+<a name="line169"></a>    var stackTrace = goog.debug.getStacktraceSimple(15);
+<a name="line170"></a>  }
+<a name="line171"></a>  var googDebugErrorHandlerProtectedFunction = function() {
+<a name="line172"></a>    if (that.isDisposed()) {
+<a name="line173"></a>      return fn.apply(this, arguments);
+<a name="line174"></a>    }
+<a name="line175"></a>
+<a name="line176"></a>    if (tracers) {
+<a name="line177"></a>      var tracer = goog.debug.Trace.startTracer(&#39;protectedEntryPoint: &#39; +
+<a name="line178"></a>          that.getStackTraceHolder_(stackTrace));
+<a name="line179"></a>    }
+<a name="line180"></a>    try {
+<a name="line181"></a>      return fn.apply(this, arguments);
+<a name="line182"></a>    } catch (e) {
+<a name="line183"></a>      that.errorHandlerFn_(e);
+<a name="line184"></a>      if (!that.wrapErrors_) {
+<a name="line185"></a>        // Add the prefix to the existing message.
+<a name="line186"></a>        if (that.prefixErrorMessages_) {
+<a name="line187"></a>          if (typeof e === &#39;object&#39;) {
+<a name="line188"></a>            e.message =
+<a name="line189"></a>                goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
+<a name="line190"></a>                e.message;
+<a name="line191"></a>          } else {
+<a name="line192"></a>            e = goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
+<a name="line193"></a>                e;
+<a name="line194"></a>          }
+<a name="line195"></a>        }
+<a name="line196"></a>        if (goog.DEBUG) {
+<a name="line197"></a>          // Work around for https://code.google.com/p/v8/issues/detail?id=2625
+<a name="line198"></a>          // and https://code.google.com/p/chromium/issues/detail?id=237059
+<a name="line199"></a>          // Custom errors and errors with custom stack traces show the wrong
+<a name="line200"></a>          // stack trace
+<a name="line201"></a>          // If it has a stack and Error.captureStackTrace is supported (only
+<a name="line202"></a>          // supported in V8 as of May 2013) log the stack to the console.
+<a name="line203"></a>          if (e &amp;&amp; e.stack &amp;&amp; Error.captureStackTrace &amp;&amp;
+<a name="line204"></a>              goog.global[&#39;console&#39;]) {
+<a name="line205"></a>            goog.global[&#39;console&#39;][&#39;error&#39;](e.message, e.stack);
+<a name="line206"></a>          }
+<a name="line207"></a>        }
+<a name="line208"></a>        // Re-throw original error. This is great for debugging as it makes
+<a name="line209"></a>        // browser JS dev consoles show the correct error and stack trace.
+<a name="line210"></a>        throw e;
+<a name="line211"></a>      }
+<a name="line212"></a>      // Re-throw it since this may be expected by the caller.
+<a name="line213"></a>      throw new goog.debug.ErrorHandler.ProtectedFunctionError(e);
+<a name="line214"></a>    } finally {
+<a name="line215"></a>      if (tracers) {
+<a name="line216"></a>        goog.debug.Trace.stopTracer(tracer);
+<a name="line217"></a>      }
+<a name="line218"></a>    }
+<a name="line219"></a>  };
+<a name="line220"></a>  googDebugErrorHandlerProtectedFunction[this.getFunctionIndex_(false)] = fn;
+<a name="line221"></a>  return googDebugErrorHandlerProtectedFunction;
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>// TODO(user): Allow these functions to take in the window to protect.
+<a name="line226"></a>/**
+<a name="line227"></a> * Installs exception protection for window.setTimeout to handle exceptions.
+<a name="line228"></a> */
+<a name="line229"></a>goog.debug.ErrorHandler.prototype.protectWindowSetTimeout =
+<a name="line230"></a>    function() {
+<a name="line231"></a>  this.protectWindowFunctionsHelper_(&#39;setTimeout&#39;);
+<a name="line232"></a>};
+<a name="line233"></a>
+<a name="line234"></a>
+<a name="line235"></a>/**
+<a name="line236"></a> * Install exception protection for window.setInterval to handle exceptions.
+<a name="line237"></a> */
+<a name="line238"></a>goog.debug.ErrorHandler.prototype.protectWindowSetInterval =
+<a name="line239"></a>    function() {
+<a name="line240"></a>  this.protectWindowFunctionsHelper_(&#39;setInterval&#39;);
+<a name="line241"></a>};
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Install exception protection for window.requestAnimationFrame to handle
+<a name="line246"></a> * exceptions.
+<a name="line247"></a> */
+<a name="line248"></a>goog.debug.ErrorHandler.prototype.protectWindowRequestAnimationFrame =
+<a name="line249"></a>    function() {
+<a name="line250"></a>  var win = goog.getObjectByName(&#39;window&#39;);
+<a name="line251"></a>  var fnNames = [
+<a name="line252"></a>    &#39;requestAnimationFrame&#39;,
+<a name="line253"></a>    &#39;mozRequestAnimationFrame&#39;,
+<a name="line254"></a>    &#39;webkitAnimationFrame&#39;,
+<a name="line255"></a>    &#39;msRequestAnimationFrame&#39;
+<a name="line256"></a>  ];
+<a name="line257"></a>  for (var i = 0; i &lt; fnNames.length; i++) {
+<a name="line258"></a>    var fnName = fnNames[i];
+<a name="line259"></a>    if (fnNames[i] in win) {
+<a name="line260"></a>      this.protectWindowFunctionsHelper_(fnName);
+<a name="line261"></a>    }
+<a name="line262"></a>  }
+<a name="line263"></a>};
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * Helper function for protecting a function that causes a function to be
+<a name="line268"></a> * asynchronously called, for example setTimeout or requestAnimationFrame.
+<a name="line269"></a> * @param {string} fnName The name of the function to protect.
+<a name="line270"></a> * @private
+<a name="line271"></a> */
+<a name="line272"></a>goog.debug.ErrorHandler.prototype.protectWindowFunctionsHelper_ =
+<a name="line273"></a>    function(fnName) {
+<a name="line274"></a>  var win = goog.getObjectByName(&#39;window&#39;);
+<a name="line275"></a>  var originalFn = win[fnName];
+<a name="line276"></a>  var that = this;
+<a name="line277"></a>  win[fnName] = function(fn, time) {
+<a name="line278"></a>    // Don&#39;t try to protect strings. In theory, we could try to globalEval
+<a name="line279"></a>    // the string, but this seems to lead to permission errors on IE6.
+<a name="line280"></a>    if (goog.isString(fn)) {
+<a name="line281"></a>      fn = goog.partial(goog.globalEval, fn);
+<a name="line282"></a>    }
+<a name="line283"></a>    fn = that.protectEntryPoint(fn);
+<a name="line284"></a>
+<a name="line285"></a>    // IE doesn&#39;t support .call for setInterval/setTimeout, but it
+<a name="line286"></a>    // also doesn&#39;t care what &quot;this&quot; is, so we can just call the
+<a name="line287"></a>    // original function directly
+<a name="line288"></a>    if (originalFn.call) {
+<a name="line289"></a>      return originalFn.call(this, fn, time);
+<a name="line290"></a>    } else {
+<a name="line291"></a>      return originalFn(fn, time);
+<a name="line292"></a>    }
+<a name="line293"></a>  };
+<a name="line294"></a>  win[fnName][this.getFunctionIndex_(false)] = originalFn;
+<a name="line295"></a>};
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>/**
+<a name="line299"></a> * Set whether to wrap errors that occur in protected functions in a
+<a name="line300"></a> * goog.debug.ErrorHandler.ProtectedFunctionError.
+<a name="line301"></a> * @param {boolean} wrapErrors Whether to wrap errors.
+<a name="line302"></a> */
+<a name="line303"></a>goog.debug.ErrorHandler.prototype.setWrapErrors = function(wrapErrors) {
+<a name="line304"></a>  this.wrapErrors_ = wrapErrors;
+<a name="line305"></a>};
+<a name="line306"></a>
+<a name="line307"></a>
+<a name="line308"></a>/**
+<a name="line309"></a> * Set whether to add a prefix to all error messages that occur in protected
+<a name="line310"></a> * functions.
+<a name="line311"></a> * @param {boolean} prefixErrorMessages Whether to add a prefix to error
+<a name="line312"></a> *     messages.
+<a name="line313"></a> */
+<a name="line314"></a>goog.debug.ErrorHandler.prototype.setPrefixErrorMessages =
+<a name="line315"></a>    function(prefixErrorMessages) {
+<a name="line316"></a>  this.prefixErrorMessages_ = prefixErrorMessages;
+<a name="line317"></a>};
+<a name="line318"></a>
+<a name="line319"></a>
+<a name="line320"></a>/** @override */
+<a name="line321"></a>goog.debug.ErrorHandler.prototype.disposeInternal = function() {
+<a name="line322"></a>  // Try to unwrap window.setTimeout and window.setInterval.
+<a name="line323"></a>  var win = goog.getObjectByName(&#39;window&#39;);
+<a name="line324"></a>  win.setTimeout = this.unwrap(win.setTimeout);
+<a name="line325"></a>  win.setInterval = this.unwrap(win.setInterval);
+<a name="line326"></a>
+<a name="line327"></a>  goog.debug.ErrorHandler.base(this, &#39;disposeInternal&#39;);
+<a name="line328"></a>};
+<a name="line329"></a>
+<a name="line330"></a>
+<a name="line331"></a>
+<a name="line332"></a>/**
+<a name="line333"></a> * Error thrown to the caller of a protected entry point if the entry point
+<a name="line334"></a> * throws an error.
+<a name="line335"></a> * @param {*} cause The error thrown by the entry point.
+<a name="line336"></a> * @constructor
+<a name="line337"></a> * @extends {goog.debug.Error}
+<a name="line338"></a> * @final
+<a name="line339"></a> */
+<a name="line340"></a>goog.debug.ErrorHandler.ProtectedFunctionError = function(cause) {
+<a name="line341"></a>  var message = goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX +
+<a name="line342"></a>      (cause &amp;&amp; cause.message ? String(cause.message) : String(cause));
+<a name="line343"></a>  goog.debug.ErrorHandler.ProtectedFunctionError.base(
+<a name="line344"></a>      this, &#39;constructor&#39;, message);
+<a name="line345"></a>
+<a name="line346"></a>  /**
+<a name="line347"></a>   * The error thrown by the entry point.
+<a name="line348"></a>   * @type {*}
+<a name="line349"></a>   */
+<a name="line350"></a>  this.cause = cause;
+<a name="line351"></a>
+<a name="line352"></a>  var stack = cause &amp;&amp; cause.stack;
+<a name="line353"></a>  if (stack &amp;&amp; goog.isString(stack)) {
+<a name="line354"></a>    this.stack = /** @type {string} */ (stack);
+<a name="line355"></a>  }
+<a name="line356"></a>};
+<a name="line357"></a>goog.inherits(goog.debug.ErrorHandler.ProtectedFunctionError, goog.debug.Error);
+<a name="line358"></a>
+<a name="line359"></a>
+<a name="line360"></a>/**
+<a name="line361"></a> * Text to prefix the message with.
+<a name="line362"></a> * @type {string}
+<a name="line363"></a> */
+<a name="line364"></a>goog.debug.ErrorHandler.ProtectedFunctionError.MESSAGE_PREFIX =
+<a name="line365"></a>    &#39;Error in protected function: &#39;;
+</pre>
+
+
+</body>
+</html>

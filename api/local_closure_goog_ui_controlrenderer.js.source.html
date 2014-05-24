@@ -1,0 +1,977 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>controlrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_controlrenderer.js.html">controlrenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Base class for control renderers.
+<a name="line17"></a> * TODO(attila):  If the renderer framework works well, pull it into Component.
+<a name="line18"></a> *
+<a name="line19"></a> * @author attila@google.com (Attila Bodis)
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.ControlRenderer&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.a11y.aria&#39;);
+<a name="line25"></a>goog.require(&#39;goog.a11y.aria.Role&#39;);
+<a name="line26"></a>goog.require(&#39;goog.a11y.aria.State&#39;);
+<a name="line27"></a>goog.require(&#39;goog.array&#39;);
+<a name="line28"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line30"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line31"></a>goog.require(&#39;goog.object&#39;);
+<a name="line32"></a>goog.require(&#39;goog.string&#39;);
+<a name="line33"></a>goog.require(&#39;goog.style&#39;);
+<a name="line34"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line35"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Default renderer for {@link goog.ui.Control}s.  Can be used as-is, but
+<a name="line41"></a> * subclasses of Control will probably want to use renderers specifically
+<a name="line42"></a> * tailored for them by extending this class.  Controls that use renderers
+<a name="line43"></a> * delegate one or more of the following API methods to the renderer:
+<a name="line44"></a> * &lt;ul&gt;
+<a name="line45"></a> *    &lt;li&gt;{@code createDom} - renders the DOM for the component
+<a name="line46"></a> *    &lt;li&gt;{@code canDecorate} - determines whether an element can be decorated
+<a name="line47"></a> *        by the component
+<a name="line48"></a> *    &lt;li&gt;{@code decorate} - decorates an existing element with the component
+<a name="line49"></a> *    &lt;li&gt;{@code setState} - updates the appearance of the component based on
+<a name="line50"></a> *        its state
+<a name="line51"></a> *    &lt;li&gt;{@code getContent} - returns the component&#39;s content
+<a name="line52"></a> *    &lt;li&gt;{@code setContent} - sets the component&#39;s content
+<a name="line53"></a> * &lt;/ul&gt;
+<a name="line54"></a> * Controls are stateful; renderers, on the other hand, should be stateless and
+<a name="line55"></a> * reusable.
+<a name="line56"></a> * @constructor
+<a name="line57"></a> */
+<a name="line58"></a>goog.ui.ControlRenderer = function() {
+<a name="line59"></a>};
+<a name="line60"></a>goog.addSingletonGetter(goog.ui.ControlRenderer);
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Constructs a new renderer and sets the CSS class that the renderer will use
+<a name="line65"></a> * as the base CSS class to apply to all elements rendered by that renderer.
+<a name="line66"></a> * An example to use this function using a color palette:
+<a name="line67"></a> *
+<a name="line68"></a> * &lt;pre&gt;
+<a name="line69"></a> * var myCustomRenderer = goog.ui.ControlRenderer.getCustomRenderer(
+<a name="line70"></a> *     goog.ui.PaletteRenderer, &#39;my-special-palette&#39;);
+<a name="line71"></a> * var newColorPalette = new goog.ui.ColorPalette(
+<a name="line72"></a> *     colors, myCustomRenderer, opt_domHelper);
+<a name="line73"></a> * &lt;/pre&gt;
+<a name="line74"></a> *
+<a name="line75"></a> * Your CSS can look like this now:
+<a name="line76"></a> * &lt;pre&gt;
+<a name="line77"></a> * .my-special-palette { }
+<a name="line78"></a> * .my-special-palette-table { }
+<a name="line79"></a> * .my-special-palette-cell { }
+<a name="line80"></a> * etc.
+<a name="line81"></a> * &lt;/pre&gt;
+<a name="line82"></a> *
+<a name="line83"></a> * &lt;em&gt;instead&lt;/em&gt; of
+<a name="line84"></a> * &lt;pre&gt;
+<a name="line85"></a> * .CSS_MY_SPECIAL_PALETTE .goog-palette { }
+<a name="line86"></a> * .CSS_MY_SPECIAL_PALETTE .goog-palette-table { }
+<a name="line87"></a> * .CSS_MY_SPECIAL_PALETTE .goog-palette-cell { }
+<a name="line88"></a> * etc.
+<a name="line89"></a> * &lt;/pre&gt;
+<a name="line90"></a> *
+<a name="line91"></a> * You would want to use this functionality when you want an instance of a
+<a name="line92"></a> * component to have specific styles different than the other components of the
+<a name="line93"></a> * same type in your application.  This avoids using descendant selectors to
+<a name="line94"></a> * apply the specific styles to this component.
+<a name="line95"></a> *
+<a name="line96"></a> * @param {Function} ctor The constructor of the renderer you are trying to
+<a name="line97"></a> *     create.
+<a name="line98"></a> * @param {string} cssClassName The name of the CSS class for this renderer.
+<a name="line99"></a> * @return {goog.ui.ControlRenderer} An instance of the desired renderer with
+<a name="line100"></a> *     its getCssClass() method overridden to return the supplied custom CSS
+<a name="line101"></a> *     class name.
+<a name="line102"></a> */
+<a name="line103"></a>goog.ui.ControlRenderer.getCustomRenderer = function(ctor, cssClassName) {
+<a name="line104"></a>  var renderer = new ctor();
+<a name="line105"></a>
+<a name="line106"></a>  /**
+<a name="line107"></a>   * Returns the CSS class to be applied to the root element of components
+<a name="line108"></a>   * rendered using this renderer.
+<a name="line109"></a>   * @return {string} Renderer-specific CSS class.
+<a name="line110"></a>   */
+<a name="line111"></a>  renderer.getCssClass = function() {
+<a name="line112"></a>    return cssClassName;
+<a name="line113"></a>  };
+<a name="line114"></a>
+<a name="line115"></a>  return renderer;
+<a name="line116"></a>};
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line121"></a> * by this renderer.
+<a name="line122"></a> * @type {string}
+<a name="line123"></a> */
+<a name="line124"></a>goog.ui.ControlRenderer.CSS_CLASS = goog.getCssName(&#39;goog-control&#39;);
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Array of arrays of CSS classes that we want composite classes added and
+<a name="line129"></a> * removed for in IE6 and lower as a workaround for lack of multi-class CSS
+<a name="line130"></a> * selector support.
+<a name="line131"></a> *
+<a name="line132"></a> * Subclasses that have accompanying CSS requiring this workaround should define
+<a name="line133"></a> * their own static IE6_CLASS_COMBINATIONS constant and override
+<a name="line134"></a> * getIe6ClassCombinations to return it.
+<a name="line135"></a> *
+<a name="line136"></a> * For example, if your stylesheet uses the selector .button.collapse-left
+<a name="line137"></a> * (and is compiled to .button_collapse-left for the IE6 version of the
+<a name="line138"></a> * stylesheet,) you should include [&#39;button&#39;, &#39;collapse-left&#39;] in this array
+<a name="line139"></a> * and the class button_collapse-left will be applied to the root element
+<a name="line140"></a> * whenever both button and collapse-left are applied individually.
+<a name="line141"></a> *
+<a name="line142"></a> * Members of each class name combination will be joined with underscores in the
+<a name="line143"></a> * order that they&#39;re defined in the array. You should alphabetize them (for
+<a name="line144"></a> * compatibility with the CSS compiler) unless you are doing something special.
+<a name="line145"></a> * @type {Array.&lt;Array.&lt;string&gt;&gt;}
+<a name="line146"></a> */
+<a name="line147"></a>goog.ui.ControlRenderer.IE6_CLASS_COMBINATIONS = [];
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Map of component states to corresponding ARIA attributes.  Since the mapping
+<a name="line152"></a> * of component states to ARIA attributes is neither component- nor
+<a name="line153"></a> * renderer-specific, this is a static property of the renderer class, and is
+<a name="line154"></a> * initialized on first use.
+<a name="line155"></a> * @type {Object.&lt;goog.ui.Component.State, goog.a11y.aria.State&gt;}
+<a name="line156"></a> * @private
+<a name="line157"></a> * @const
+<a name="line158"></a> */
+<a name="line159"></a>goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_;
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>/**
+<a name="line163"></a> * Map of certain ARIA states to ARIA roles that support them. Used for checked
+<a name="line164"></a> * and selected Component states because they are used on Components with ARIA
+<a name="line165"></a> * roles that do not support the corresponding ARIA state.
+<a name="line166"></a> * @private {!Object.&lt;goog.a11y.aria.Role, goog.a11y.aria.State&gt;}
+<a name="line167"></a> * @const
+<a name="line168"></a> */
+<a name="line169"></a>goog.ui.ControlRenderer.TOGGLE_ARIA_STATE_MAP_ = goog.object.create(
+<a name="line170"></a>    goog.a11y.aria.Role.BUTTON, goog.a11y.aria.State.PRESSED,
+<a name="line171"></a>    goog.a11y.aria.Role.CHECKBOX, goog.a11y.aria.State.CHECKED,
+<a name="line172"></a>    goog.a11y.aria.Role.MENU_ITEM, goog.a11y.aria.State.SELECTED,
+<a name="line173"></a>    goog.a11y.aria.Role.MENU_ITEM_CHECKBOX, goog.a11y.aria.State.CHECKED,
+<a name="line174"></a>    goog.a11y.aria.Role.MENU_ITEM_RADIO, goog.a11y.aria.State.CHECKED,
+<a name="line175"></a>    goog.a11y.aria.Role.RADIO, goog.a11y.aria.State.CHECKED,
+<a name="line176"></a>    goog.a11y.aria.Role.TAB, goog.a11y.aria.State.SELECTED,
+<a name="line177"></a>    goog.a11y.aria.Role.TREEITEM, goog.a11y.aria.State.SELECTED);
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * Returns the ARIA role to be applied to the control.
+<a name="line182"></a> * See http://wiki/Main/ARIA for more info.
+<a name="line183"></a> * @return {goog.a11y.aria.Role|undefined} ARIA role.
+<a name="line184"></a> */
+<a name="line185"></a>goog.ui.ControlRenderer.prototype.getAriaRole = function() {
+<a name="line186"></a>  // By default, the ARIA role is unspecified.
+<a name="line187"></a>  return undefined;
+<a name="line188"></a>};
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * Returns the control&#39;s contents wrapped in a DIV, with the renderer&#39;s own
+<a name="line193"></a> * CSS class and additional state-specific classes applied to it.
+<a name="line194"></a> * @param {goog.ui.Control} control Control to render.
+<a name="line195"></a> * @return {Element} Root element for the control.
+<a name="line196"></a> */
+<a name="line197"></a>goog.ui.ControlRenderer.prototype.createDom = function(control) {
+<a name="line198"></a>  // Create and return DIV wrapping contents.
+<a name="line199"></a>  var element = control.getDomHelper().createDom(
+<a name="line200"></a>      &#39;div&#39;, this.getClassNames(control).join(&#39; &#39;), control.getContent());
+<a name="line201"></a>
+<a name="line202"></a>  this.setAriaStates(control, element);
+<a name="line203"></a>  return element;
+<a name="line204"></a>};
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * Takes the control&#39;s root element and returns the parent element of the
+<a name="line209"></a> * control&#39;s contents.  Since by default controls are rendered as a single
+<a name="line210"></a> * DIV, the default implementation returns the element itself.  Subclasses
+<a name="line211"></a> * with more complex DOM structures must override this method as needed.
+<a name="line212"></a> * @param {Element} element Root element of the control whose content element
+<a name="line213"></a> *     is to be returned.
+<a name="line214"></a> * @return {Element} The control&#39;s content element.
+<a name="line215"></a> */
+<a name="line216"></a>goog.ui.ControlRenderer.prototype.getContentElement = function(element) {
+<a name="line217"></a>  return element;
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Updates the control&#39;s DOM by adding or removing the specified class name
+<a name="line223"></a> * to/from its root element. May add additional combined classes as needed in
+<a name="line224"></a> * IE6 and lower. Because of this, subclasses should use this method when
+<a name="line225"></a> * modifying class names on the control&#39;s root element.
+<a name="line226"></a> * @param {goog.ui.Control|Element} control Control instance (or root element)
+<a name="line227"></a> *     to be updated.
+<a name="line228"></a> * @param {string} className CSS class name to add or remove.
+<a name="line229"></a> * @param {boolean} enable Whether to add or remove the class name.
+<a name="line230"></a> */
+<a name="line231"></a>goog.ui.ControlRenderer.prototype.enableClassName = function(control,
+<a name="line232"></a>    className, enable) {
+<a name="line233"></a>  var element = /** @type {Element} */ (
+<a name="line234"></a>      control.getElement ? control.getElement() : control);
+<a name="line235"></a>  if (element) {
+<a name="line236"></a>    var classNames = [className];
+<a name="line237"></a>
+<a name="line238"></a>    // For IE6, we need to enable any combined classes involving this class
+<a name="line239"></a>    // as well.
+<a name="line240"></a>    // TODO(user): Remove this as IE6 is no longer in use.
+<a name="line241"></a>    if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;7&#39;)) {
+<a name="line242"></a>      classNames = this.getAppliedCombinedClassNames_(
+<a name="line243"></a>          goog.dom.classlist.get(element), className);
+<a name="line244"></a>      classNames.push(className);
+<a name="line245"></a>    }
+<a name="line246"></a>
+<a name="line247"></a>    goog.dom.classlist.enableAll(element, classNames, enable);
+<a name="line248"></a>  }
+<a name="line249"></a>};
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * Updates the control&#39;s DOM by adding or removing the specified extra class
+<a name="line254"></a> * name to/from its element.
+<a name="line255"></a> * @param {goog.ui.Control} control Control to be updated.
+<a name="line256"></a> * @param {string} className CSS class name to add or remove.
+<a name="line257"></a> * @param {boolean} enable Whether to add or remove the class name.
+<a name="line258"></a> */
+<a name="line259"></a>goog.ui.ControlRenderer.prototype.enableExtraClassName = function(control,
+<a name="line260"></a>    className, enable) {
+<a name="line261"></a>  // The base class implementation is trivial; subclasses should override as
+<a name="line262"></a>  // needed.
+<a name="line263"></a>  this.enableClassName(control, className, enable);
+<a name="line264"></a>};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Returns true if this renderer can decorate the element, false otherwise.
+<a name="line269"></a> * The default implementation always returns true.
+<a name="line270"></a> * @param {Element} element Element to decorate.
+<a name="line271"></a> * @return {boolean} Whether the renderer can decorate the element.
+<a name="line272"></a> */
+<a name="line273"></a>goog.ui.ControlRenderer.prototype.canDecorate = function(element) {
+<a name="line274"></a>  return true;
+<a name="line275"></a>};
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a>/**
+<a name="line279"></a> * Default implementation of {@code decorate} for {@link goog.ui.Control}s.
+<a name="line280"></a> * Initializes the control&#39;s ID, content, and state based on the ID of the
+<a name="line281"></a> * element, its child nodes, and its CSS classes, respectively.  Returns the
+<a name="line282"></a> * element.
+<a name="line283"></a> * @param {goog.ui.Control} control Control instance to decorate the element.
+<a name="line284"></a> * @param {Element} element Element to decorate.
+<a name="line285"></a> * @return {Element} Decorated element.
+<a name="line286"></a> */
+<a name="line287"></a>goog.ui.ControlRenderer.prototype.decorate = function(control, element) {
+<a name="line288"></a>  // Set the control&#39;s ID to the decorated element&#39;s DOM ID, if any.
+<a name="line289"></a>  if (element.id) {
+<a name="line290"></a>    control.setId(element.id);
+<a name="line291"></a>  }
+<a name="line292"></a>
+<a name="line293"></a>  // Set the control&#39;s content to the decorated element&#39;s content.
+<a name="line294"></a>  var contentElem = this.getContentElement(element);
+<a name="line295"></a>  if (contentElem &amp;&amp; contentElem.firstChild) {
+<a name="line296"></a>    control.setContentInternal(contentElem.firstChild.nextSibling ?
+<a name="line297"></a>        goog.array.clone(contentElem.childNodes) : contentElem.firstChild);
+<a name="line298"></a>  } else {
+<a name="line299"></a>    control.setContentInternal(null);
+<a name="line300"></a>  }
+<a name="line301"></a>
+<a name="line302"></a>  // Initialize the control&#39;s state based on the decorated element&#39;s CSS class.
+<a name="line303"></a>  // This implementation is optimized to minimize object allocations, string
+<a name="line304"></a>  // comparisons, and DOM access.
+<a name="line305"></a>  var state = 0x00;
+<a name="line306"></a>  var rendererClassName = this.getCssClass();
+<a name="line307"></a>  var structuralClassName = this.getStructuralCssClass();
+<a name="line308"></a>  var hasRendererClassName = false;
+<a name="line309"></a>  var hasStructuralClassName = false;
+<a name="line310"></a>  var hasCombinedClassName = false;
+<a name="line311"></a>  var classNames = goog.array.toArray(goog.dom.classlist.get(element));
+<a name="line312"></a>  goog.array.forEach(classNames, function(className) {
+<a name="line313"></a>    if (!hasRendererClassName &amp;&amp; className == rendererClassName) {
+<a name="line314"></a>      hasRendererClassName = true;
+<a name="line315"></a>      if (structuralClassName == rendererClassName) {
+<a name="line316"></a>        hasStructuralClassName = true;
+<a name="line317"></a>      }
+<a name="line318"></a>    } else if (!hasStructuralClassName &amp;&amp; className == structuralClassName) {
+<a name="line319"></a>      hasStructuralClassName = true;
+<a name="line320"></a>    } else {
+<a name="line321"></a>      state |= this.getStateFromClass(className);
+<a name="line322"></a>    }
+<a name="line323"></a>  }, this);
+<a name="line324"></a>  control.setStateInternal(state);
+<a name="line325"></a>
+<a name="line326"></a>  // Make sure the element has the renderer&#39;s CSS classes applied, as well as
+<a name="line327"></a>  // any extra class names set on the control.
+<a name="line328"></a>  if (!hasRendererClassName) {
+<a name="line329"></a>    classNames.push(rendererClassName);
+<a name="line330"></a>    if (structuralClassName == rendererClassName) {
+<a name="line331"></a>      hasStructuralClassName = true;
+<a name="line332"></a>    }
+<a name="line333"></a>  }
+<a name="line334"></a>  if (!hasStructuralClassName) {
+<a name="line335"></a>    classNames.push(structuralClassName);
+<a name="line336"></a>  }
+<a name="line337"></a>  var extraClassNames = control.getExtraClassNames();
+<a name="line338"></a>  if (extraClassNames) {
+<a name="line339"></a>    classNames.push.apply(classNames, extraClassNames);
+<a name="line340"></a>  }
+<a name="line341"></a>
+<a name="line342"></a>  // For IE6, rewrite all classes on the decorated element if any combined
+<a name="line343"></a>  // classes apply.
+<a name="line344"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;7&#39;)) {
+<a name="line345"></a>    var combinedClasses = this.getAppliedCombinedClassNames_(
+<a name="line346"></a>        classNames);
+<a name="line347"></a>    if (combinedClasses.length &gt; 0) {
+<a name="line348"></a>      classNames.push.apply(classNames, combinedClasses);
+<a name="line349"></a>      hasCombinedClassName = true;
+<a name="line350"></a>    }
+<a name="line351"></a>  }
+<a name="line352"></a>
+<a name="line353"></a>  // Only write to the DOM if new class names had to be added to the element.
+<a name="line354"></a>  if (!hasRendererClassName || !hasStructuralClassName ||
+<a name="line355"></a>      extraClassNames || hasCombinedClassName) {
+<a name="line356"></a>    goog.dom.classlist.set(element, classNames.join(&#39; &#39;));
+<a name="line357"></a>  }
+<a name="line358"></a>
+<a name="line359"></a>  this.setAriaStates(control, element);
+<a name="line360"></a>  return element;
+<a name="line361"></a>};
+<a name="line362"></a>
+<a name="line363"></a>
+<a name="line364"></a>/**
+<a name="line365"></a> * Initializes the control&#39;s DOM by configuring properties that can only be set
+<a name="line366"></a> * after the DOM has entered the document.  This implementation sets up BiDi
+<a name="line367"></a> * and keyboard focus.  Called from {@link goog.ui.Control#enterDocument}.
+<a name="line368"></a> * @param {goog.ui.Control} control Control whose DOM is to be initialized
+<a name="line369"></a> *     as it enters the document.
+<a name="line370"></a> */
+<a name="line371"></a>goog.ui.ControlRenderer.prototype.initializeDom = function(control) {
+<a name="line372"></a>  // Initialize render direction (BiDi).  We optimize the left-to-right render
+<a name="line373"></a>  // direction by assuming that elements are left-to-right by default, and only
+<a name="line374"></a>  // updating their styling if they are explicitly set to right-to-left.
+<a name="line375"></a>  if (control.isRightToLeft()) {
+<a name="line376"></a>    this.setRightToLeft(control.getElement(), true);
+<a name="line377"></a>  }
+<a name="line378"></a>
+<a name="line379"></a>  // Initialize keyboard focusability (tab index).  We assume that components
+<a name="line380"></a>  // aren&#39;t focusable by default (i.e have no tab index), and only touch the
+<a name="line381"></a>  // DOM if the component is focusable, enabled, and visible, and therefore
+<a name="line382"></a>  // needs a tab index.
+<a name="line383"></a>  if (control.isEnabled()) {
+<a name="line384"></a>    this.setFocusable(control, control.isVisible());
+<a name="line385"></a>  }
+<a name="line386"></a>};
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/**
+<a name="line390"></a> * Sets the element&#39;s ARIA role.
+<a name="line391"></a> * @param {Element} element Element to update.
+<a name="line392"></a> * @param {?goog.a11y.aria.Role=} opt_preferredRole The preferred ARIA role.
+<a name="line393"></a> */
+<a name="line394"></a>goog.ui.ControlRenderer.prototype.setAriaRole = function(element,
+<a name="line395"></a>    opt_preferredRole) {
+<a name="line396"></a>  var ariaRole = opt_preferredRole || this.getAriaRole();
+<a name="line397"></a>  if (ariaRole) {
+<a name="line398"></a>    goog.asserts.assert(element,
+<a name="line399"></a>        &#39;The element passed as a first parameter cannot be null.&#39;);
+<a name="line400"></a>    var currentRole = goog.a11y.aria.getRole(element);
+<a name="line401"></a>    if (ariaRole == currentRole) {
+<a name="line402"></a>      return;
+<a name="line403"></a>    }
+<a name="line404"></a>    goog.a11y.aria.setRole(element, ariaRole);
+<a name="line405"></a>  }
+<a name="line406"></a>};
+<a name="line407"></a>
+<a name="line408"></a>
+<a name="line409"></a>/**
+<a name="line410"></a> * Sets the element&#39;s ARIA attributes, including distinguishing between
+<a name="line411"></a> * universally supported ARIA properties and ARIA states that are only
+<a name="line412"></a> * supported by certain ARIA roles. Only attributes which are initialized to be
+<a name="line413"></a> * true will be set.
+<a name="line414"></a> * @param {!goog.ui.Control} control Control whose ARIA state will be updated.
+<a name="line415"></a> * @param {!Element} element Element whose ARIA state is to be updated.
+<a name="line416"></a> */
+<a name="line417"></a>goog.ui.ControlRenderer.prototype.setAriaStates = function(control, element) {
+<a name="line418"></a>  goog.asserts.assert(control);
+<a name="line419"></a>  goog.asserts.assert(element);
+<a name="line420"></a>
+<a name="line421"></a>  if (!control.isVisible()) {
+<a name="line422"></a>    goog.a11y.aria.setState(
+<a name="line423"></a>        element, goog.a11y.aria.State.HIDDEN, !control.isVisible());
+<a name="line424"></a>  }
+<a name="line425"></a>  if (!control.isEnabled()) {
+<a name="line426"></a>    this.updateAriaState(
+<a name="line427"></a>        element, goog.ui.Component.State.DISABLED, !control.isEnabled());
+<a name="line428"></a>  }
+<a name="line429"></a>  if (control.isSupportedState(goog.ui.Component.State.SELECTED)) {
+<a name="line430"></a>    this.updateAriaState(
+<a name="line431"></a>        element, goog.ui.Component.State.SELECTED, control.isSelected());
+<a name="line432"></a>  }
+<a name="line433"></a>  if (control.isSupportedState(goog.ui.Component.State.CHECKED)) {
+<a name="line434"></a>    this.updateAriaState(
+<a name="line435"></a>        element, goog.ui.Component.State.CHECKED, control.isChecked());
+<a name="line436"></a>  }
+<a name="line437"></a>  if (control.isSupportedState(goog.ui.Component.State.OPENED)) {
+<a name="line438"></a>    this.updateAriaState(
+<a name="line439"></a>        element, goog.ui.Component.State.OPENED, control.isOpen());
+<a name="line440"></a>  }
+<a name="line441"></a>};
+<a name="line442"></a>
+<a name="line443"></a>
+<a name="line444"></a>/**
+<a name="line445"></a> * Allows or disallows text selection within the control&#39;s DOM.
+<a name="line446"></a> * @param {Element} element The control&#39;s root element.
+<a name="line447"></a> * @param {boolean} allow Whether the element should allow text selection.
+<a name="line448"></a> */
+<a name="line449"></a>goog.ui.ControlRenderer.prototype.setAllowTextSelection = function(element,
+<a name="line450"></a>    allow) {
+<a name="line451"></a>  // On all browsers other than IE and Opera, it isn&#39;t necessary to recursively
+<a name="line452"></a>  // apply unselectable styling to the element&#39;s children.
+<a name="line453"></a>  goog.style.setUnselectable(element, !allow,
+<a name="line454"></a>      !goog.userAgent.IE &amp;&amp; !goog.userAgent.OPERA);
+<a name="line455"></a>};
+<a name="line456"></a>
+<a name="line457"></a>
+<a name="line458"></a>/**
+<a name="line459"></a> * Applies special styling to/from the control&#39;s element if it is rendered
+<a name="line460"></a> * right-to-left, and removes it if it is rendered left-to-right.
+<a name="line461"></a> * @param {Element} element The control&#39;s root element.
+<a name="line462"></a> * @param {boolean} rightToLeft Whether the component is rendered
+<a name="line463"></a> *     right-to-left.
+<a name="line464"></a> */
+<a name="line465"></a>goog.ui.ControlRenderer.prototype.setRightToLeft = function(element,
+<a name="line466"></a>    rightToLeft) {
+<a name="line467"></a>  this.enableClassName(element,
+<a name="line468"></a>      goog.getCssName(this.getStructuralCssClass(), &#39;rtl&#39;), rightToLeft);
+<a name="line469"></a>};
+<a name="line470"></a>
+<a name="line471"></a>
+<a name="line472"></a>/**
+<a name="line473"></a> * Returns true if the control&#39;s key event target supports keyboard focus
+<a name="line474"></a> * (based on its {@code tabIndex} attribute), false otherwise.
+<a name="line475"></a> * @param {goog.ui.Control} control Control whose key event target is to be
+<a name="line476"></a> *     checked.
+<a name="line477"></a> * @return {boolean} Whether the control&#39;s key event target is focusable.
+<a name="line478"></a> */
+<a name="line479"></a>goog.ui.ControlRenderer.prototype.isFocusable = function(control) {
+<a name="line480"></a>  var keyTarget;
+<a name="line481"></a>  if (control.isSupportedState(goog.ui.Component.State.FOCUSED) &amp;&amp;
+<a name="line482"></a>      (keyTarget = control.getKeyEventTarget())) {
+<a name="line483"></a>    return goog.dom.isFocusableTabIndex(keyTarget);
+<a name="line484"></a>  }
+<a name="line485"></a>  return false;
+<a name="line486"></a>};
+<a name="line487"></a>
+<a name="line488"></a>
+<a name="line489"></a>/**
+<a name="line490"></a> * Updates the control&#39;s key event target to make it focusable or non-focusable
+<a name="line491"></a> * via its {@code tabIndex} attribute.  Does nothing if the control doesn&#39;t
+<a name="line492"></a> * support the {@code FOCUSED} state, or if it has no key event target.
+<a name="line493"></a> * @param {goog.ui.Control} control Control whose key event target is to be
+<a name="line494"></a> *     updated.
+<a name="line495"></a> * @param {boolean} focusable Whether to enable keyboard focus support on the
+<a name="line496"></a> *     control&#39;s key event target.
+<a name="line497"></a> */
+<a name="line498"></a>goog.ui.ControlRenderer.prototype.setFocusable = function(control, focusable) {
+<a name="line499"></a>  var keyTarget;
+<a name="line500"></a>  if (control.isSupportedState(goog.ui.Component.State.FOCUSED) &amp;&amp;
+<a name="line501"></a>      (keyTarget = control.getKeyEventTarget())) {
+<a name="line502"></a>    if (!focusable &amp;&amp; control.isFocused()) {
+<a name="line503"></a>      // Blur before hiding.  Note that IE calls onblur handlers asynchronously.
+<a name="line504"></a>      try {
+<a name="line505"></a>        keyTarget.blur();
+<a name="line506"></a>      } catch (e) {
+<a name="line507"></a>        // TODO(user|user):  Find out why this fails on IE.
+<a name="line508"></a>      }
+<a name="line509"></a>      // The blur event dispatched by the key event target element when blur()
+<a name="line510"></a>      // was called on it should have been handled by the control&#39;s handleBlur()
+<a name="line511"></a>      // method, so at this point the control should no longer be focused.
+<a name="line512"></a>      // However, blur events are unreliable on IE and FF3, so if at this point
+<a name="line513"></a>      // the control is still focused, we trigger its handleBlur() method
+<a name="line514"></a>      // programmatically.
+<a name="line515"></a>      if (control.isFocused()) {
+<a name="line516"></a>        control.handleBlur(null);
+<a name="line517"></a>      }
+<a name="line518"></a>    }
+<a name="line519"></a>    // Don&#39;t overwrite existing tab index values unless needed.
+<a name="line520"></a>    if (goog.dom.isFocusableTabIndex(keyTarget) != focusable) {
+<a name="line521"></a>      goog.dom.setFocusableTabIndex(keyTarget, focusable);
+<a name="line522"></a>    }
+<a name="line523"></a>  }
+<a name="line524"></a>};
+<a name="line525"></a>
+<a name="line526"></a>
+<a name="line527"></a>/**
+<a name="line528"></a> * Shows or hides the element.
+<a name="line529"></a> * @param {Element} element Element to update.
+<a name="line530"></a> * @param {boolean} visible Whether to show the element.
+<a name="line531"></a> */
+<a name="line532"></a>goog.ui.ControlRenderer.prototype.setVisible = function(element, visible) {
+<a name="line533"></a>  // The base class implementation is trivial; subclasses should override as
+<a name="line534"></a>  // needed.  It should be possible to do animated reveals, for example.
+<a name="line535"></a>  goog.style.setElementShown(element, visible);
+<a name="line536"></a>  if (element) {
+<a name="line537"></a>    goog.a11y.aria.setState(element, goog.a11y.aria.State.HIDDEN, !visible);
+<a name="line538"></a>  }
+<a name="line539"></a>};
+<a name="line540"></a>
+<a name="line541"></a>
+<a name="line542"></a>/**
+<a name="line543"></a> * Updates the appearance of the control in response to a state change.
+<a name="line544"></a> * @param {goog.ui.Control} control Control instance to update.
+<a name="line545"></a> * @param {goog.ui.Component.State} state State to enable or disable.
+<a name="line546"></a> * @param {boolean} enable Whether the control is entering or exiting the state.
+<a name="line547"></a> */
+<a name="line548"></a>goog.ui.ControlRenderer.prototype.setState = function(control, state, enable) {
+<a name="line549"></a>  var element = control.getElement();
+<a name="line550"></a>  if (element) {
+<a name="line551"></a>    var className = this.getClassForState(state);
+<a name="line552"></a>    if (className) {
+<a name="line553"></a>      this.enableClassName(control, className, enable);
+<a name="line554"></a>    }
+<a name="line555"></a>    this.updateAriaState(element, state, enable);
+<a name="line556"></a>  }
+<a name="line557"></a>};
+<a name="line558"></a>
+<a name="line559"></a>
+<a name="line560"></a>/**
+<a name="line561"></a> * Updates the element&#39;s ARIA (accessibility) attributes , including
+<a name="line562"></a> * distinguishing between universally supported ARIA properties and ARIA states
+<a name="line563"></a> * that are only supported by certain ARIA roles.
+<a name="line564"></a> * @param {Element} element Element whose ARIA state is to be updated.
+<a name="line565"></a> * @param {goog.ui.Component.State} state Component state being enabled or
+<a name="line566"></a> *     disabled.
+<a name="line567"></a> * @param {boolean} enable Whether the state is being enabled or disabled.
+<a name="line568"></a> * @protected
+<a name="line569"></a> */
+<a name="line570"></a>goog.ui.ControlRenderer.prototype.updateAriaState = function(element, state,
+<a name="line571"></a>    enable) {
+<a name="line572"></a>  // Ensure the ARIA attribute map exists.
+<a name="line573"></a>  if (!goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_) {
+<a name="line574"></a>    goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_ = goog.object.create(
+<a name="line575"></a>        goog.ui.Component.State.DISABLED, goog.a11y.aria.State.DISABLED,
+<a name="line576"></a>        goog.ui.Component.State.SELECTED, goog.a11y.aria.State.SELECTED,
+<a name="line577"></a>        goog.ui.Component.State.CHECKED, goog.a11y.aria.State.CHECKED,
+<a name="line578"></a>        goog.ui.Component.State.OPENED, goog.a11y.aria.State.EXPANDED);
+<a name="line579"></a>  }
+<a name="line580"></a>  goog.asserts.assert(element,
+<a name="line581"></a>      &#39;The element passed as a first parameter cannot be null.&#39;);
+<a name="line582"></a>  var ariaAttr = goog.ui.ControlRenderer.getAriaStateForAriaRole_(
+<a name="line583"></a>      element, goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_[state]);
+<a name="line584"></a>  if (ariaAttr) {
+<a name="line585"></a>    goog.a11y.aria.setState(element, ariaAttr, enable);
+<a name="line586"></a>  }
+<a name="line587"></a>};
+<a name="line588"></a>
+<a name="line589"></a>
+<a name="line590"></a>/**
+<a name="line591"></a> * Returns the appropriate ARIA attribute based on ARIA role if the ARIA
+<a name="line592"></a> * attribute is an ARIA state.
+<a name="line593"></a> * @param {!Element} element The element from which to get the ARIA role for
+<a name="line594"></a> * matching ARIA state.
+<a name="line595"></a> * @param {goog.a11y.aria.State} attr The ARIA attribute to check to see if it
+<a name="line596"></a> * can be applied to the given ARIA role.
+<a name="line597"></a> * @return {goog.a11y.aria.State} An ARIA attribute that can be applied to the
+<a name="line598"></a> * given ARIA role.
+<a name="line599"></a> * @private
+<a name="line600"></a> */
+<a name="line601"></a>goog.ui.ControlRenderer.getAriaStateForAriaRole_ = function(element, attr) {
+<a name="line602"></a>  var role = goog.a11y.aria.getRole(element);
+<a name="line603"></a>  if (!role) {
+<a name="line604"></a>    return attr;
+<a name="line605"></a>  }
+<a name="line606"></a>  role = /** @type {goog.a11y.aria.Role} */ (role);
+<a name="line607"></a>  var matchAttr = goog.ui.ControlRenderer.TOGGLE_ARIA_STATE_MAP_[role] || attr;
+<a name="line608"></a>  return goog.ui.ControlRenderer.isAriaState_(attr) ? matchAttr : attr;
+<a name="line609"></a>};
+<a name="line610"></a>
+<a name="line611"></a>
+<a name="line612"></a>/**
+<a name="line613"></a> * Determines if the given ARIA attribute is an ARIA property or ARIA state.
+<a name="line614"></a> * @param {goog.a11y.aria.State} attr The ARIA attribute to classify.
+<a name="line615"></a> * @return {boolean} If the ARIA attribute is an ARIA state.
+<a name="line616"></a> * @private
+<a name="line617"></a> */
+<a name="line618"></a>goog.ui.ControlRenderer.isAriaState_ = function(attr) {
+<a name="line619"></a>  return attr == goog.a11y.aria.State.CHECKED ||
+<a name="line620"></a>      attr == goog.a11y.aria.State.SELECTED;
+<a name="line621"></a>};
+<a name="line622"></a>
+<a name="line623"></a>
+<a name="line624"></a>/**
+<a name="line625"></a> * Takes a control&#39;s root element, and sets its content to the given text
+<a name="line626"></a> * caption or DOM structure.  The default implementation replaces the children
+<a name="line627"></a> * of the given element.  Renderers that create more complex DOM structures
+<a name="line628"></a> * must override this method accordingly.
+<a name="line629"></a> * @param {Element} element The control&#39;s root element.
+<a name="line630"></a> * @param {goog.ui.ControlContent} content Text caption or DOM structure to be
+<a name="line631"></a> *     set as the control&#39;s content. The DOM nodes will not be cloned, they
+<a name="line632"></a> *     will only moved under the content element of the control.
+<a name="line633"></a> */
+<a name="line634"></a>goog.ui.ControlRenderer.prototype.setContent = function(element, content) {
+<a name="line635"></a>  var contentElem = this.getContentElement(element);
+<a name="line636"></a>  if (contentElem) {
+<a name="line637"></a>    goog.dom.removeChildren(contentElem);
+<a name="line638"></a>    if (content) {
+<a name="line639"></a>      if (goog.isString(content)) {
+<a name="line640"></a>        goog.dom.setTextContent(contentElem, content);
+<a name="line641"></a>      } else {
+<a name="line642"></a>        var childHandler = function(child) {
+<a name="line643"></a>          if (child) {
+<a name="line644"></a>            var doc = goog.dom.getOwnerDocument(contentElem);
+<a name="line645"></a>            contentElem.appendChild(goog.isString(child) ?
+<a name="line646"></a>                doc.createTextNode(child) : child);
+<a name="line647"></a>          }
+<a name="line648"></a>        };
+<a name="line649"></a>        if (goog.isArray(content)) {
+<a name="line650"></a>          // Array of nodes.
+<a name="line651"></a>          goog.array.forEach(content, childHandler);
+<a name="line652"></a>        } else if (goog.isArrayLike(content) &amp;&amp; !(&#39;nodeType&#39; in content)) {
+<a name="line653"></a>          // NodeList. The second condition filters out TextNode which also has
+<a name="line654"></a>          // length attribute but is not array like. The nodes have to be cloned
+<a name="line655"></a>          // because childHandler removes them from the list during iteration.
+<a name="line656"></a>          goog.array.forEach(goog.array.clone(/** @type {NodeList} */(content)),
+<a name="line657"></a>              childHandler);
+<a name="line658"></a>        } else {
+<a name="line659"></a>          // Node or string.
+<a name="line660"></a>          childHandler(content);
+<a name="line661"></a>        }
+<a name="line662"></a>      }
+<a name="line663"></a>    }
+<a name="line664"></a>  }
+<a name="line665"></a>};
+<a name="line666"></a>
+<a name="line667"></a>
+<a name="line668"></a>/**
+<a name="line669"></a> * Returns the element within the component&#39;s DOM that should receive keyboard
+<a name="line670"></a> * focus (null if none).  The default implementation returns the control&#39;s root
+<a name="line671"></a> * element.
+<a name="line672"></a> * @param {goog.ui.Control} control Control whose key event target is to be
+<a name="line673"></a> *     returned.
+<a name="line674"></a> * @return {Element} The key event target.
+<a name="line675"></a> */
+<a name="line676"></a>goog.ui.ControlRenderer.prototype.getKeyEventTarget = function(control) {
+<a name="line677"></a>  return control.getElement();
+<a name="line678"></a>};
+<a name="line679"></a>
+<a name="line680"></a>
+<a name="line681"></a>// CSS class name management.
+<a name="line682"></a>
+<a name="line683"></a>
+<a name="line684"></a>/**
+<a name="line685"></a> * Returns the CSS class name to be applied to the root element of all
+<a name="line686"></a> * components rendered or decorated using this renderer.  The class name
+<a name="line687"></a> * is expected to uniquely identify the renderer class, i.e. no two
+<a name="line688"></a> * renderer classes are expected to share the same CSS class name.
+<a name="line689"></a> * @return {string} Renderer-specific CSS class name.
+<a name="line690"></a> */
+<a name="line691"></a>goog.ui.ControlRenderer.prototype.getCssClass = function() {
+<a name="line692"></a>  return goog.ui.ControlRenderer.CSS_CLASS;
+<a name="line693"></a>};
+<a name="line694"></a>
+<a name="line695"></a>
+<a name="line696"></a>/**
+<a name="line697"></a> * Returns an array of combinations of classes to apply combined class names for
+<a name="line698"></a> * in IE6 and below. See {@link IE6_CLASS_COMBINATIONS} for more detail. This
+<a name="line699"></a> * method doesn&#39;t reference {@link IE6_CLASS_COMBINATIONS} so that it can be
+<a name="line700"></a> * compiled out, but subclasses should return their IE6_CLASS_COMBINATIONS
+<a name="line701"></a> * static constant instead.
+<a name="line702"></a> * @return {Array.&lt;Array.&lt;string&gt;&gt;} Array of class name combinations.
+<a name="line703"></a> */
+<a name="line704"></a>goog.ui.ControlRenderer.prototype.getIe6ClassCombinations = function() {
+<a name="line705"></a>  return [];
+<a name="line706"></a>};
+<a name="line707"></a>
+<a name="line708"></a>
+<a name="line709"></a>/**
+<a name="line710"></a> * Returns the name of a DOM structure-specific CSS class to be applied to the
+<a name="line711"></a> * root element of all components rendered or decorated using this renderer.
+<a name="line712"></a> * Unlike the class name returned by {@link #getCssClass}, the structural class
+<a name="line713"></a> * name may be shared among different renderers that generate similar DOM
+<a name="line714"></a> * structures.  The structural class name also serves as the basis of derived
+<a name="line715"></a> * class names used to identify and style structural elements of the control&#39;s
+<a name="line716"></a> * DOM, as well as the basis for state-specific class names.  The default
+<a name="line717"></a> * implementation returns the same class name as {@link #getCssClass}, but
+<a name="line718"></a> * subclasses are expected to override this method as needed.
+<a name="line719"></a> * @return {string} DOM structure-specific CSS class name (same as the renderer-
+<a name="line720"></a> *     specific CSS class name by default).
+<a name="line721"></a> */
+<a name="line722"></a>goog.ui.ControlRenderer.prototype.getStructuralCssClass = function() {
+<a name="line723"></a>  return this.getCssClass();
+<a name="line724"></a>};
+<a name="line725"></a>
+<a name="line726"></a>
+<a name="line727"></a>/**
+<a name="line728"></a> * Returns all CSS class names applicable to the given control, based on its
+<a name="line729"></a> * state.  The return value is an array of strings containing
+<a name="line730"></a> * &lt;ol&gt;
+<a name="line731"></a> *   &lt;li&gt;the renderer-specific CSS class returned by {@link #getCssClass},
+<a name="line732"></a> *       followed by
+<a name="line733"></a> *   &lt;li&gt;the structural CSS class returned by {@link getStructuralCssClass} (if
+<a name="line734"></a> *       different from the renderer-specific CSS class), followed by
+<a name="line735"></a> *   &lt;li&gt;any state-specific classes returned by {@link #getClassNamesForState},
+<a name="line736"></a> *       followed by
+<a name="line737"></a> *   &lt;li&gt;any extra classes returned by the control&#39;s {@code getExtraClassNames}
+<a name="line738"></a> *       method and
+<a name="line739"></a> *   &lt;li&gt;for IE6 and lower, additional combined classes from
+<a name="line740"></a> *       {@link getAppliedCombinedClassNames_}.
+<a name="line741"></a> * &lt;/ol&gt;
+<a name="line742"></a> * Since all controls have at least one renderer-specific CSS class name, this
+<a name="line743"></a> * method is guaranteed to return an array of at least one element.
+<a name="line744"></a> * @param {goog.ui.Control} control Control whose CSS classes are to be
+<a name="line745"></a> *     returned.
+<a name="line746"></a> * @return {!Array.&lt;string&gt;} Array of CSS class names applicable to the control.
+<a name="line747"></a> * @protected
+<a name="line748"></a> */
+<a name="line749"></a>goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
+<a name="line750"></a>  var cssClass = this.getCssClass();
+<a name="line751"></a>
+<a name="line752"></a>  // Start with the renderer-specific class name.
+<a name="line753"></a>  var classNames = [cssClass];
+<a name="line754"></a>
+<a name="line755"></a>  // Add structural class name, if different.
+<a name="line756"></a>  var structuralCssClass = this.getStructuralCssClass();
+<a name="line757"></a>  if (structuralCssClass != cssClass) {
+<a name="line758"></a>    classNames.push(structuralCssClass);
+<a name="line759"></a>  }
+<a name="line760"></a>
+<a name="line761"></a>  // Add state-specific class names, if any.
+<a name="line762"></a>  var classNamesForState = this.getClassNamesForState(control.getState());
+<a name="line763"></a>  classNames.push.apply(classNames, classNamesForState);
+<a name="line764"></a>
+<a name="line765"></a>  // Add extra class names, if any.
+<a name="line766"></a>  var extraClassNames = control.getExtraClassNames();
+<a name="line767"></a>  if (extraClassNames) {
+<a name="line768"></a>    classNames.push.apply(classNames, extraClassNames);
+<a name="line769"></a>  }
+<a name="line770"></a>
+<a name="line771"></a>  // Add composite classes for IE6 support
+<a name="line772"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;7&#39;)) {
+<a name="line773"></a>    classNames.push.apply(classNames,
+<a name="line774"></a>        this.getAppliedCombinedClassNames_(classNames));
+<a name="line775"></a>  }
+<a name="line776"></a>
+<a name="line777"></a>  return classNames;
+<a name="line778"></a>};
+<a name="line779"></a>
+<a name="line780"></a>
+<a name="line781"></a>/**
+<a name="line782"></a> * Returns an array of all the combined class names that should be applied based
+<a name="line783"></a> * on the given list of classes. Checks the result of
+<a name="line784"></a> * {@link getIe6ClassCombinations} for any combinations that have all
+<a name="line785"></a> * members contained in classes. If a combination matches, the members are
+<a name="line786"></a> * joined with an underscore (in order), and added to the return array.
+<a name="line787"></a> *
+<a name="line788"></a> * If opt_includedClass is provided, return only the combined classes that have
+<a name="line789"></a> * all members contained in classes AND include opt_includedClass as well.
+<a name="line790"></a> * opt_includedClass is added to classes as well.
+<a name="line791"></a> * @param {goog.array.ArrayLike.&lt;string&gt;} classes Array-like thing of classes to
+<a name="line792"></a> *     return matching combined classes for.
+<a name="line793"></a> * @param {?string=} opt_includedClass If provided, get only the combined
+<a name="line794"></a> *     classes that include this one.
+<a name="line795"></a> * @return {!Array.&lt;string&gt;} Array of combined class names that should be
+<a name="line796"></a> *     applied.
+<a name="line797"></a> * @private
+<a name="line798"></a> */
+<a name="line799"></a>goog.ui.ControlRenderer.prototype.getAppliedCombinedClassNames_ = function(
+<a name="line800"></a>    classes, opt_includedClass) {
+<a name="line801"></a>  var toAdd = [];
+<a name="line802"></a>  if (opt_includedClass) {
+<a name="line803"></a>    classes = classes.concat([opt_includedClass]);
+<a name="line804"></a>  }
+<a name="line805"></a>  goog.array.forEach(this.getIe6ClassCombinations(), function(combo) {
+<a name="line806"></a>    if (goog.array.every(combo, goog.partial(goog.array.contains, classes)) &amp;&amp;
+<a name="line807"></a>        (!opt_includedClass || goog.array.contains(combo, opt_includedClass))) {
+<a name="line808"></a>      toAdd.push(combo.join(&#39;_&#39;));
+<a name="line809"></a>    }
+<a name="line810"></a>  });
+<a name="line811"></a>  return toAdd;
+<a name="line812"></a>};
+<a name="line813"></a>
+<a name="line814"></a>
+<a name="line815"></a>/**
+<a name="line816"></a> * Takes a bit mask of {@link goog.ui.Component.State}s, and returns an array
+<a name="line817"></a> * of the appropriate class names representing the given state, suitable to be
+<a name="line818"></a> * applied to the root element of a component rendered using this renderer, or
+<a name="line819"></a> * null if no state-specific classes need to be applied.  This default
+<a name="line820"></a> * implementation uses the renderer&#39;s {@link getClassForState} method to
+<a name="line821"></a> * generate each state-specific class.
+<a name="line822"></a> * @param {number} state Bit mask of component states.
+<a name="line823"></a> * @return {!Array.&lt;string&gt;} Array of CSS class names representing the given
+<a name="line824"></a> *     state.
+<a name="line825"></a> * @protected
+<a name="line826"></a> */
+<a name="line827"></a>goog.ui.ControlRenderer.prototype.getClassNamesForState = function(state) {
+<a name="line828"></a>  var classNames = [];
+<a name="line829"></a>  while (state) {
+<a name="line830"></a>    // For each enabled state, push the corresponding CSS class name onto
+<a name="line831"></a>    // the classNames array.
+<a name="line832"></a>    var mask = state &amp; -state;  // Least significant bit
+<a name="line833"></a>    classNames.push(this.getClassForState(
+<a name="line834"></a>        /** @type {goog.ui.Component.State} */ (mask)));
+<a name="line835"></a>    state &amp;= ~mask;
+<a name="line836"></a>  }
+<a name="line837"></a>  return classNames;
+<a name="line838"></a>};
+<a name="line839"></a>
+<a name="line840"></a>
+<a name="line841"></a>/**
+<a name="line842"></a> * Takes a single {@link goog.ui.Component.State}, and returns the
+<a name="line843"></a> * corresponding CSS class name (null if none).
+<a name="line844"></a> * @param {goog.ui.Component.State} state Component state.
+<a name="line845"></a> * @return {string|undefined} CSS class representing the given state (undefined
+<a name="line846"></a> *     if none).
+<a name="line847"></a> * @protected
+<a name="line848"></a> */
+<a name="line849"></a>goog.ui.ControlRenderer.prototype.getClassForState = function(state) {
+<a name="line850"></a>  if (!this.classByState_) {
+<a name="line851"></a>    this.createClassByStateMap_();
+<a name="line852"></a>  }
+<a name="line853"></a>  return this.classByState_[state];
+<a name="line854"></a>};
+<a name="line855"></a>
+<a name="line856"></a>
+<a name="line857"></a>/**
+<a name="line858"></a> * Takes a single CSS class name which may represent a component state, and
+<a name="line859"></a> * returns the corresponding component state (0x00 if none).
+<a name="line860"></a> * @param {string} className CSS class name, possibly representing a component
+<a name="line861"></a> *     state.
+<a name="line862"></a> * @return {goog.ui.Component.State} state Component state corresponding
+<a name="line863"></a> *     to the given CSS class (0x00 if none).
+<a name="line864"></a> * @protected
+<a name="line865"></a> */
+<a name="line866"></a>goog.ui.ControlRenderer.prototype.getStateFromClass = function(className) {
+<a name="line867"></a>  if (!this.stateByClass_) {
+<a name="line868"></a>    this.createStateByClassMap_();
+<a name="line869"></a>  }
+<a name="line870"></a>  var state = parseInt(this.stateByClass_[className], 10);
+<a name="line871"></a>  return /** @type {goog.ui.Component.State} */ (isNaN(state) ? 0x00 : state);
+<a name="line872"></a>};
+<a name="line873"></a>
+<a name="line874"></a>
+<a name="line875"></a>/**
+<a name="line876"></a> * Creates the lookup table of states to classes, used during state changes.
+<a name="line877"></a> * @private
+<a name="line878"></a> */
+<a name="line879"></a>goog.ui.ControlRenderer.prototype.createClassByStateMap_ = function() {
+<a name="line880"></a>  var baseClass = this.getStructuralCssClass();
+<a name="line881"></a>
+<a name="line882"></a>  // This ensures space-separated css classnames are not allowed, which some
+<a name="line883"></a>  // ControlRenderers had been doing.  See http://b/13694665.
+<a name="line884"></a>  var isValidClassName = !goog.string.contains(
+<a name="line885"></a>      goog.string.normalizeWhitespace(baseClass), &#39; &#39;);
+<a name="line886"></a>  goog.asserts.assert(isValidClassName,
+<a name="line887"></a>      &#39;ControlRenderer has an invalid css class: \&#39;&#39; + baseClass + &#39;\&#39;&#39;);
+<a name="line888"></a>
+<a name="line889"></a>  /**
+<a name="line890"></a>   * Map of component states to state-specific structural class names,
+<a name="line891"></a>   * used when changing the DOM in response to a state change.  Precomputed
+<a name="line892"></a>   * and cached on first use to minimize object allocations and string
+<a name="line893"></a>   * concatenation.
+<a name="line894"></a>   * @type {Object}
+<a name="line895"></a>   * @private
+<a name="line896"></a>   */
+<a name="line897"></a>  this.classByState_ = goog.object.create(
+<a name="line898"></a>      goog.ui.Component.State.DISABLED, goog.getCssName(baseClass, &#39;disabled&#39;),
+<a name="line899"></a>      goog.ui.Component.State.HOVER, goog.getCssName(baseClass, &#39;hover&#39;),
+<a name="line900"></a>      goog.ui.Component.State.ACTIVE, goog.getCssName(baseClass, &#39;active&#39;),
+<a name="line901"></a>      goog.ui.Component.State.SELECTED, goog.getCssName(baseClass, &#39;selected&#39;),
+<a name="line902"></a>      goog.ui.Component.State.CHECKED, goog.getCssName(baseClass, &#39;checked&#39;),
+<a name="line903"></a>      goog.ui.Component.State.FOCUSED, goog.getCssName(baseClass, &#39;focused&#39;),
+<a name="line904"></a>      goog.ui.Component.State.OPENED, goog.getCssName(baseClass, &#39;open&#39;));
+<a name="line905"></a>};
+<a name="line906"></a>
+<a name="line907"></a>
+<a name="line908"></a>/**
+<a name="line909"></a> * Creates the lookup table of classes to states, used during decoration.
+<a name="line910"></a> * @private
+<a name="line911"></a> */
+<a name="line912"></a>goog.ui.ControlRenderer.prototype.createStateByClassMap_ = function() {
+<a name="line913"></a>  // We need the classByState_ map so we can transpose it.
+<a name="line914"></a>  if (!this.classByState_) {
+<a name="line915"></a>    this.createClassByStateMap_();
+<a name="line916"></a>  }
+<a name="line917"></a>
+<a name="line918"></a>  /**
+<a name="line919"></a>   * Map of state-specific structural class names to component states,
+<a name="line920"></a>   * used during element decoration.  Precomputed and cached on first use
+<a name="line921"></a>   * to minimize object allocations and string concatenation.
+<a name="line922"></a>   * @type {Object}
+<a name="line923"></a>   * @private
+<a name="line924"></a>   */
+<a name="line925"></a>  this.stateByClass_ = goog.object.transpose(this.classByState_);
+<a name="line926"></a>};
+</pre>
+
+
+</body>
+</html>

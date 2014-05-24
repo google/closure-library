@@ -1,0 +1,153 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>pluralrules_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_pluralrules_test.js.html">pluralrules_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.i18n.pluralRulesTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.i18n.pluralRulesTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.i18n.pluralRules&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>/** @suppress {missingRequire} */
+<a name="line23"></a>var Keyword = goog.i18n.pluralRules.Keyword;
+<a name="line24"></a>
+<a name="line25"></a>function testSimpleSelectEn() {
+<a name="line26"></a>  var funcSelect = goog.i18n.pluralRules.enSelect_;
+<a name="line27"></a>
+<a name="line28"></a>  assertEquals(Keyword.OTHER, funcSelect(0)); // 0 dollars
+<a name="line29"></a>  assertEquals(Keyword.ONE, funcSelect(1)); // 1 dollar
+<a name="line30"></a>  assertEquals(Keyword.OTHER, funcSelect(2)); // 2 dollars
+<a name="line31"></a>
+<a name="line32"></a>  assertEquals(Keyword.OTHER, funcSelect(0, 2)); // 0.00 dollars
+<a name="line33"></a>  assertEquals(Keyword.OTHER, funcSelect(1, 2)); // 1.00 dollars
+<a name="line34"></a>  assertEquals(Keyword.OTHER, funcSelect(2, 2)); // 2.00 dollars
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function testSimpleSelectRo() {
+<a name="line38"></a>  var funcSelect = goog.i18n.pluralRules.roSelect_;
+<a name="line39"></a>
+<a name="line40"></a>  assertEquals(Keyword.FEW, funcSelect(0)); // 0 dolari
+<a name="line41"></a>  assertEquals(Keyword.ONE, funcSelect(1)); // 1 dolar
+<a name="line42"></a>  assertEquals(Keyword.FEW, funcSelect(2)); // 2 dolari
+<a name="line43"></a>  assertEquals(Keyword.FEW, funcSelect(12)); // 12 dolari
+<a name="line44"></a>  assertEquals(Keyword.OTHER, funcSelect(23)); // 23 de dolari
+<a name="line45"></a>  assertEquals(Keyword.FEW, funcSelect(1212)); // 1212 dolari
+<a name="line46"></a>  assertEquals(Keyword.OTHER, funcSelect(1223)); // 1223 de dolari
+<a name="line47"></a>
+<a name="line48"></a>  assertEquals(Keyword.FEW, funcSelect(0, 2)); // 0.00 dolari
+<a name="line49"></a>  assertEquals(Keyword.FEW, funcSelect(1, 2)); // 1.00 dolari
+<a name="line50"></a>  assertEquals(Keyword.FEW, funcSelect(2, 2)); // 2.00 dolari
+<a name="line51"></a>  assertEquals(Keyword.FEW, funcSelect(12, 2)); // 12.00 dolari
+<a name="line52"></a>  assertEquals(Keyword.FEW, funcSelect(23, 2)); // 23.00  dolari
+<a name="line53"></a>  assertEquals(Keyword.FEW, funcSelect(1212, 2)); // 1212.00  dolari
+<a name="line54"></a>  assertEquals(Keyword.FEW, funcSelect(1223, 2)); // 1223.00 dolari
+<a name="line55"></a>}
+<a name="line56"></a>
+<a name="line57"></a>function testSimpleSelectSr() {
+<a name="line58"></a>  var funcSelect = goog.i18n.pluralRules.srSelect_; // Serbian
+<a name="line59"></a>
+<a name="line60"></a>  assertEquals(Keyword.ONE, funcSelect(1));
+<a name="line61"></a>  assertEquals(Keyword.ONE, funcSelect(31));
+<a name="line62"></a>  assertEquals(Keyword.ONE, funcSelect(0.1));
+<a name="line63"></a>  assertEquals(Keyword.ONE, funcSelect(1.1));
+<a name="line64"></a>  assertEquals(Keyword.ONE, funcSelect(2.1));
+<a name="line65"></a>
+<a name="line66"></a>  assertEquals(Keyword.FEW, funcSelect(3));
+<a name="line67"></a>  assertEquals(Keyword.FEW, funcSelect(33));
+<a name="line68"></a>  assertEquals(Keyword.FEW, funcSelect(0.2));
+<a name="line69"></a>  assertEquals(Keyword.FEW, funcSelect(0.3));
+<a name="line70"></a>  assertEquals(Keyword.FEW, funcSelect(0.4));
+<a name="line71"></a>  assertEquals(Keyword.FEW, funcSelect(2.2));
+<a name="line72"></a>
+<a name="line73"></a>  assertEquals(Keyword.OTHER, funcSelect(2.11));
+<a name="line74"></a>  assertEquals(Keyword.OTHER, funcSelect(2.12));
+<a name="line75"></a>  assertEquals(Keyword.OTHER, funcSelect(2.13));
+<a name="line76"></a>  assertEquals(Keyword.OTHER, funcSelect(2.14));
+<a name="line77"></a>  assertEquals(Keyword.OTHER, funcSelect(2.15));
+<a name="line78"></a>
+<a name="line79"></a>  assertEquals(Keyword.OTHER, funcSelect(0));
+<a name="line80"></a>  assertEquals(Keyword.OTHER, funcSelect(5));
+<a name="line81"></a>  assertEquals(Keyword.OTHER, funcSelect(10));
+<a name="line82"></a>  assertEquals(Keyword.OTHER, funcSelect(35));
+<a name="line83"></a>  assertEquals(Keyword.OTHER, funcSelect(37));
+<a name="line84"></a>  assertEquals(Keyword.OTHER, funcSelect(40));
+<a name="line85"></a>  assertEquals(Keyword.OTHER, funcSelect(0.0, 1));
+<a name="line86"></a>  assertEquals(Keyword.OTHER, funcSelect(0.5));
+<a name="line87"></a>  assertEquals(Keyword.OTHER, funcSelect(0.6));
+<a name="line88"></a>
+<a name="line89"></a>  assertEquals(Keyword.FEW, funcSelect(2));
+<a name="line90"></a>  assertEquals(Keyword.ONE, funcSelect(2.1));
+<a name="line91"></a>  assertEquals(Keyword.FEW, funcSelect(2.2));
+<a name="line92"></a>  assertEquals(Keyword.FEW, funcSelect(2.3));
+<a name="line93"></a>  assertEquals(Keyword.FEW, funcSelect(2.4));
+<a name="line94"></a>  assertEquals(Keyword.OTHER, funcSelect(2.5));
+<a name="line95"></a>
+<a name="line96"></a>  assertEquals(Keyword.OTHER, funcSelect(20));
+<a name="line97"></a>  assertEquals(Keyword.ONE, funcSelect(21));
+<a name="line98"></a>  assertEquals(Keyword.FEW, funcSelect(22));
+<a name="line99"></a>  assertEquals(Keyword.FEW, funcSelect(23));
+<a name="line100"></a>  assertEquals(Keyword.FEW, funcSelect(24));
+<a name="line101"></a>  assertEquals(Keyword.OTHER, funcSelect(25));
+<a name="line102"></a>}
+</pre>
+
+
+</body>
+</html>

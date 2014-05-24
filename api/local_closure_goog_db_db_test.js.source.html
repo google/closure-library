@@ -1,0 +1,1707 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>db_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_db_db_test.js.html">db_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.dbTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.dbTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line19"></a>goog.require(&#39;goog.array&#39;);
+<a name="line20"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line21"></a>goog.require(&#39;goog.async.DeferredList&#39;);
+<a name="line22"></a>goog.require(&#39;goog.db&#39;);
+<a name="line23"></a>goog.require(&#39;goog.db.Cursor&#39;);
+<a name="line24"></a>goog.require(&#39;goog.db.Error&#39;);
+<a name="line25"></a>goog.require(&#39;goog.db.IndexedDb&#39;);
+<a name="line26"></a>goog.require(&#39;goog.db.KeyRange&#39;);
+<a name="line27"></a>goog.require(&#39;goog.db.Transaction&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events&#39;);
+<a name="line29"></a>goog.require(&#39;goog.object&#39;);
+<a name="line30"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line31"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line32"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line33"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line34"></a>goog.require(&#39;goog.userAgent.product&#39;);
+<a name="line35"></a>goog.require(&#39;goog.userAgent.product.isVersion&#39;);
+<a name="line36"></a>
+<a name="line37"></a>var idbSupported = goog.userAgent.product.CHROME &amp;&amp;
+<a name="line38"></a>    goog.userAgent.product.isVersion(&#39;22&#39;);
+<a name="line39"></a>var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+<a name="line40"></a>asyncTestCase.stepTimeout = 5000;
+<a name="line41"></a>var dbName;
+<a name="line42"></a>var dbBaseName = &#39;testDb&#39;;
+<a name="line43"></a>var globalDb = null;
+<a name="line44"></a>var propertyReplacer;
+<a name="line45"></a>
+<a name="line46"></a>// On Chrome 24+, the database reports its default version as 1 as opposed to
+<a name="line47"></a>// the empty string (as per the new spec).
+<a name="line48"></a>var baseVersion = goog.userAgent.product.isVersion(&#39;24&#39;) ? 1 : &#39;&#39;;
+<a name="line49"></a>
+<a name="line50"></a>var dbVersion = 1;
+<a name="line51"></a>
+<a name="line52"></a>function unblockDatabase(db) {
+<a name="line53"></a>  // If a test goes wrong, the database connection may not be closed reliably.
+<a name="line54"></a>  // This listens for a version change event (e.g. from deleting it in
+<a name="line55"></a>  // preparation for the next test) and closes the existing connection when one
+<a name="line56"></a>  // is received.
+<a name="line57"></a>  goog.events.listen(
+<a name="line58"></a>      db, goog.db.IndexedDb.EventType.VERSION_CHANGE,
+<a name="line59"></a>      function(ev) { db.close(); });
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>function openDatabase() {
+<a name="line63"></a>  return goog.db.openDatabase(dbName).addCallback(unblockDatabase);
+<a name="line64"></a>}
+<a name="line65"></a>
+<a name="line66"></a>function incrementVersion(db, onUpgradeNeeded) {
+<a name="line67"></a>  if (db.isOpen()) {
+<a name="line68"></a>    db.close();
+<a name="line69"></a>  }
+<a name="line70"></a>
+<a name="line71"></a>  var onBlocked = function(ev) {
+<a name="line72"></a>    fail(&#39;Upgrade to version &#39; + dbVersion + &#39; is blocked.&#39;);
+<a name="line73"></a>  };
+<a name="line74"></a>
+<a name="line75"></a>  return goog.db.openDatabase(dbName, ++dbVersion, onUpgradeNeeded, onBlocked).
+<a name="line76"></a>      addCallback(unblockDatabase).addCallback(function(db) {
+<a name="line77"></a>        assertEquals(dbVersion, db.getVersion());
+<a name="line78"></a>      });
+<a name="line79"></a>}
+<a name="line80"></a>
+<a name="line81"></a>function addStore(db) {
+<a name="line82"></a>  return incrementVersion(db, function(ev, db, tx) {
+<a name="line83"></a>    db.createObjectStore(&#39;store&#39;);
+<a name="line84"></a>  });
+<a name="line85"></a>}
+<a name="line86"></a>
+<a name="line87"></a>function addStoreWithIndex(db) {
+<a name="line88"></a>  return incrementVersion(db, function(ev, db, tx) {
+<a name="line89"></a>    var store = db.createObjectStore(&#39;store&#39;, {keyPath: &#39;key&#39;});
+<a name="line90"></a>    store.createIndex(&#39;index&#39;, &#39;value&#39;);
+<a name="line91"></a>  });
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>function populateStore(values, keys, db) {
+<a name="line95"></a>  var putTx = db.createTransaction(
+<a name="line96"></a>      [&#39;store&#39;],
+<a name="line97"></a>      goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line98"></a>
+<a name="line99"></a>  var store = putTx.objectStore(&#39;store&#39;);
+<a name="line100"></a>  for (var i = 0; i &lt; values.length; ++i) {
+<a name="line101"></a>    store.put(values[i], keys[i]);
+<a name="line102"></a>  }
+<a name="line103"></a>  return putTx.wait();
+<a name="line104"></a>}
+<a name="line105"></a>
+<a name="line106"></a>function populateStoreWithObjects(values, keys, db) {
+<a name="line107"></a>  var putTx = db.createTransaction(
+<a name="line108"></a>      [&#39;store&#39;],
+<a name="line109"></a>      goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line110"></a>  var store = putTx.objectStore(&#39;store&#39;);
+<a name="line111"></a>  goog.array.forEach(values, function(value, index) {
+<a name="line112"></a>    store.put({&#39;key&#39;: keys[index], &#39;value&#39;: value});
+<a name="line113"></a>  });
+<a name="line114"></a>  return putTx.wait();
+<a name="line115"></a>}
+<a name="line116"></a>
+<a name="line117"></a>function assertStoreValues(values, db) {
+<a name="line118"></a>  var assertStoreTx = db.createTransaction([&#39;store&#39;]);
+<a name="line119"></a>  assertStoreTx.objectStore(&#39;store&#39;).getAll().addCallback(function(results) {
+<a name="line120"></a>    assertSameElements(values, results);
+<a name="line121"></a>    closeAndContinue(db);
+<a name="line122"></a>  });
+<a name="line123"></a>}
+<a name="line124"></a>
+<a name="line125"></a>function assertStoreObjectValues(values, db) {
+<a name="line126"></a>  var assertStoreTx = db.createTransaction([&#39;store&#39;]);
+<a name="line127"></a>  assertStoreTx.objectStore(&#39;store&#39;).getAll().addCallback(function(results) {
+<a name="line128"></a>    var retrievedValues = goog.array.map(results, function(result) {
+<a name="line129"></a>      return result[&#39;value&#39;];
+<a name="line130"></a>    });
+<a name="line131"></a>    assertSameElements(values, retrievedValues);
+<a name="line132"></a>    closeAndContinue(db);
+<a name="line133"></a>  });
+<a name="line134"></a>}
+<a name="line135"></a>
+<a name="line136"></a>function assertStoreValuesAndCursorsDisposed(values, cursors, db) {
+<a name="line137"></a>  var assertStoreTx = db.createTransaction([&#39;store&#39;]);
+<a name="line138"></a>  assertStoreTx.objectStore(&#39;store&#39;).getAll().addCallback(function(results) {
+<a name="line139"></a>    assertSameElements(values, results);
+<a name="line140"></a>    assertTrue(cursors.length &gt; 0);
+<a name="line141"></a>    goog.array.forEach(cursors, function(elem, index, array) {
+<a name="line142"></a>      console.log(elem);
+<a name="line143"></a>      assertTrue(&#39;array[&#39; + index + &#39;] (&#39; + elem + &#39;) is not disposed&#39;,
+<a name="line144"></a>                 goog.Disposable.isDisposed(elem));
+<a name="line145"></a>    });
+<a name="line146"></a>    closeAndContinue(db);
+<a name="line147"></a>  });
+<a name="line148"></a>}
+<a name="line149"></a>
+<a name="line150"></a>function assertStoreDoesntExist(db) {
+<a name="line151"></a>  try {
+<a name="line152"></a>    db.createTransaction([&#39;store&#39;]);
+<a name="line153"></a>    fail(&#39;Create transaction with a non-existent store should have failed.&#39;);
+<a name="line154"></a>  } catch (e) {
+<a name="line155"></a>    // expected
+<a name="line156"></a>    assertEquals(e.getName(), goog.db.Error.ErrorName.NOT_FOUND_ERR);
+<a name="line157"></a>    closeAndContinue(db);
+<a name="line158"></a>  }
+<a name="line159"></a>}
+<a name="line160"></a>
+<a name="line161"></a>function failOnError(err) {
+<a name="line162"></a>  fail(err.message);
+<a name="line163"></a>}
+<a name="line164"></a>
+<a name="line165"></a>function failOnErrorEvent(ev) {
+<a name="line166"></a>  fail(ev.target.message);
+<a name="line167"></a>}
+<a name="line168"></a>
+<a name="line169"></a>function closeAndContinue(db) {
+<a name="line170"></a>  db.close();
+<a name="line171"></a>  asyncTestCase.continueTesting();
+<a name="line172"></a>}
+<a name="line173"></a>
+<a name="line174"></a>function setUpPage() {
+<a name="line175"></a>  propertyReplacer = new goog.testing.PropertyReplacer();
+<a name="line176"></a>}
+<a name="line177"></a>
+<a name="line178"></a>function setUp() {
+<a name="line179"></a>  if (!idbSupported) {
+<a name="line180"></a>    return;
+<a name="line181"></a>  }
+<a name="line182"></a>
+<a name="line183"></a>  // Always use a clean database by generating a new database name.
+<a name="line184"></a>  dbName = dbBaseName + Date.now().toString();
+<a name="line185"></a>  globalDb = openDatabase();
+<a name="line186"></a>}
+<a name="line187"></a>
+<a name="line188"></a>function tearDown() {
+<a name="line189"></a>  propertyReplacer.reset();
+<a name="line190"></a>}
+<a name="line191"></a>
+<a name="line192"></a>function testDatabaseOpened() {
+<a name="line193"></a>  if (!idbSupported) {
+<a name="line194"></a>    return;
+<a name="line195"></a>  }
+<a name="line196"></a>
+<a name="line197"></a>  asyncTestCase.waitForAsync(&#39;check database is open&#39;);
+<a name="line198"></a>  assertNotNull(globalDb);
+<a name="line199"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line200"></a>    assertTrue(db.isOpen());
+<a name="line201"></a>    closeAndContinue(db);
+<a name="line202"></a>  }).addErrback(failOnError);
+<a name="line203"></a>}
+<a name="line204"></a>
+<a name="line205"></a>function testOpenWithNewVersion() {
+<a name="line206"></a>  if (!idbSupported) {
+<a name="line207"></a>    return;
+<a name="line208"></a>  }
+<a name="line209"></a>
+<a name="line210"></a>  var upgradeNeeded = false;
+<a name="line211"></a>  asyncTestCase.waitForAsync(&#39;open with new version&#39;);
+<a name="line212"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line213"></a>    assertEquals(baseVersion, db.getVersion());
+<a name="line214"></a>    db.close();
+<a name="line215"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line216"></a>      upgradeNeeded = true;
+<a name="line217"></a>    });
+<a name="line218"></a>  }).addCallback(function(db) {
+<a name="line219"></a>    assertTrue(upgradeNeeded);
+<a name="line220"></a>    closeAndContinue(db);
+<a name="line221"></a>  }).addErrback(failOnError);
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>function testManipulateObjectStores() {
+<a name="line225"></a>  if (!idbSupported) {
+<a name="line226"></a>    return;
+<a name="line227"></a>  }
+<a name="line228"></a>
+<a name="line229"></a>  asyncTestCase.waitForAsync(&#39;manipulate object stores&#39;);
+<a name="line230"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line231"></a>    assertEquals(baseVersion, db.getVersion());
+<a name="line232"></a>    db.close();
+<a name="line233"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line234"></a>      db.createObjectStore(&#39;basicStore&#39;);
+<a name="line235"></a>      db.createObjectStore(&#39;keyPathStore&#39;, {keyPath: &#39;keyGoesHere&#39;});
+<a name="line236"></a>      db.createObjectStore(&#39;autoIncrementStore&#39;, {autoIncrement: true});
+<a name="line237"></a>    });
+<a name="line238"></a>  }).addCallback(function(db) {
+<a name="line239"></a>    var storeNames = db.getObjectStoreNames();
+<a name="line240"></a>    assertEquals(3, storeNames.length);
+<a name="line241"></a>    assertTrue(storeNames.contains(&#39;basicStore&#39;));
+<a name="line242"></a>    assertTrue(storeNames.contains(&#39;keyPathStore&#39;));
+<a name="line243"></a>    assertTrue(storeNames.contains(&#39;autoIncrementStore&#39;));
+<a name="line244"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line245"></a>      db.deleteObjectStore(&#39;basicStore&#39;);
+<a name="line246"></a>    });
+<a name="line247"></a>  }).addCallback(function(db) {
+<a name="line248"></a>    var storeNames = db.getObjectStoreNames();
+<a name="line249"></a>    assertEquals(2, storeNames.length);
+<a name="line250"></a>    assertFalse(storeNames.contains(&#39;basicStore&#39;));
+<a name="line251"></a>    assertTrue(storeNames.contains(&#39;keyPathStore&#39;));
+<a name="line252"></a>    assertTrue(storeNames.contains(&#39;autoIncrementStore&#39;));
+<a name="line253"></a>    closeAndContinue(db);
+<a name="line254"></a>  }).addErrback(failOnError);
+<a name="line255"></a>}
+<a name="line256"></a>
+<a name="line257"></a>function testBadObjectStoreManipulation() {
+<a name="line258"></a>  if (!idbSupported) {
+<a name="line259"></a>    return;
+<a name="line260"></a>  }
+<a name="line261"></a>
+<a name="line262"></a>  asyncTestCase.waitForAsync(&#39;bad object store manipulation&#39;);
+<a name="line263"></a>  var expectedCode = goog.db.Error.ErrorName.INVALID_STATE_ERR;
+<a name="line264"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line265"></a>    try {
+<a name="line266"></a>      db.createObjectStore(&#39;diediedie&#39;);
+<a name="line267"></a>      fail(&#39;Create object store outside transaction should have failed.&#39;);
+<a name="line268"></a>    } catch (err) {
+<a name="line269"></a>      // expected
+<a name="line270"></a>      assertEquals(expectedCode, err.getName());
+<a name="line271"></a>    }
+<a name="line272"></a>  }).addCallback(addStore).addCallback(function(db) {
+<a name="line273"></a>    try {
+<a name="line274"></a>      db.deleteObjectStore(&#39;store&#39;);
+<a name="line275"></a>      fail(&#39;Delete object store outside transaction should have failed.&#39;);
+<a name="line276"></a>    } catch (err) {
+<a name="line277"></a>      // expected
+<a name="line278"></a>      assertEquals(expectedCode, err.getName());
+<a name="line279"></a>    }
+<a name="line280"></a>  }).addCallback(function(db) {
+<a name="line281"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line282"></a>      try {
+<a name="line283"></a>        db.deleteObjectStore(&#39;diediedie&#39;);
+<a name="line284"></a>        fail(&#39;Delete non-existent store should have failed.&#39;);
+<a name="line285"></a>      } catch (err) {
+<a name="line286"></a>        // expected
+<a name="line287"></a>        assertEquals(goog.db.Error.ErrorName.NOT_FOUND_ERR, err.getName());
+<a name="line288"></a>      }
+<a name="line289"></a>    });
+<a name="line290"></a>  }).addCallback(closeAndContinue).addErrback(failOnError);
+<a name="line291"></a>}
+<a name="line292"></a>
+<a name="line293"></a>function testGetNonExistentObjectStore() {
+<a name="line294"></a>  if (!idbSupported) {
+<a name="line295"></a>    return;
+<a name="line296"></a>  }
+<a name="line297"></a>
+<a name="line298"></a>  asyncTestCase.waitForAsync(&#39;get non-existent object store&#39;);
+<a name="line299"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line300"></a>    var tx = db.createTransaction([&#39;store&#39;]);
+<a name="line301"></a>    try {
+<a name="line302"></a>      tx.objectStore(&#39;diediedie&#39;);
+<a name="line303"></a>      fail(&#39;getting non-existent object store should have failed&#39;);
+<a name="line304"></a>    } catch (err) {
+<a name="line305"></a>      assertEquals(goog.db.Error.ErrorName.NOT_FOUND_ERR, err.getName());
+<a name="line306"></a>    }
+<a name="line307"></a>    closeAndContinue(db);
+<a name="line308"></a>  }).addErrback(failOnError);
+<a name="line309"></a>}
+<a name="line310"></a>
+<a name="line311"></a>function testCreateTransaction() {
+<a name="line312"></a>  if (!idbSupported) {
+<a name="line313"></a>    return;
+<a name="line314"></a>  }
+<a name="line315"></a>
+<a name="line316"></a>  asyncTestCase.waitForAsync(&#39;create transactions&#39;);
+<a name="line317"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line318"></a>    var tx = db.createTransaction([&#39;store&#39;]);
+<a name="line319"></a>    assertEquals(
+<a name="line320"></a>        &#39;mode not READ_ONLY&#39;,
+<a name="line321"></a>        goog.db.Transaction.TransactionMode.READ_ONLY,
+<a name="line322"></a>        tx.getMode());
+<a name="line323"></a>    tx = db.createTransaction(
+<a name="line324"></a>        [&#39;store&#39;],
+<a name="line325"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line326"></a>    assertEquals(
+<a name="line327"></a>        &#39;mode not READ_WRITE&#39;,
+<a name="line328"></a>        goog.db.Transaction.TransactionMode.READ_WRITE,
+<a name="line329"></a>        tx.getMode());
+<a name="line330"></a>    closeAndContinue(db);
+<a name="line331"></a>  }).addErrback(failOnError);
+<a name="line332"></a>}
+<a name="line333"></a>
+<a name="line334"></a>function testPutRecord() {
+<a name="line335"></a>  if (!idbSupported) {
+<a name="line336"></a>    return;
+<a name="line337"></a>  }
+<a name="line338"></a>
+<a name="line339"></a>  asyncTestCase.waitForAsync(&#39;putting record&#39;);
+<a name="line340"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line341"></a>    var rw = goog.db.Transaction.TransactionMode.READ_WRITE;
+<a name="line342"></a>    var COMPLETE = goog.db.Transaction.EventTypes.COMPLETE;
+<a name="line343"></a>    var ERROR = goog.db.Transaction.EventTypes.ERROR;
+<a name="line344"></a>
+<a name="line345"></a>    function checkForOverwrittenValue() {
+<a name="line346"></a>      var checkOverwriteTx = db.createTransaction([&#39;store&#39;]);
+<a name="line347"></a>      checkOverwriteTx.objectStore(&#39;store&#39;).get(&#39;putKey&#39;).addCallback(
+<a name="line348"></a>          function(result) {
+<a name="line349"></a>            // this is guaranteed to run before the COMPLETE event fires on
+<a name="line350"></a>            // the transaction
+<a name="line351"></a>            assertEquals(&#39;overwritten&#39;, result.key);
+<a name="line352"></a>            assertEquals(&#39;value2&#39;, result.value);
+<a name="line353"></a>          });
+<a name="line354"></a>
+<a name="line355"></a>      goog.events.listen(checkOverwriteTx, ERROR, failOnErrorEvent);
+<a name="line356"></a>      goog.events.listen(checkOverwriteTx, COMPLETE, function() {
+<a name="line357"></a>        closeAndContinue(db);
+<a name="line358"></a>      });
+<a name="line359"></a>    }
+<a name="line360"></a>
+<a name="line361"></a>    function overwriteValue() {
+<a name="line362"></a>      var overwriteTx = db.createTransaction([&#39;store&#39;], rw);
+<a name="line363"></a>      overwriteTx.objectStore(&#39;store&#39;).put(
+<a name="line364"></a>          {key: &#39;overwritten&#39;, value: &#39;value2&#39;},
+<a name="line365"></a>          &#39;putKey&#39;);
+<a name="line366"></a>
+<a name="line367"></a>      goog.events.listen(overwriteTx, ERROR, failOnErrorEvent);
+<a name="line368"></a>      goog.events.listen(overwriteTx, COMPLETE, checkForOverwrittenValue);
+<a name="line369"></a>    }
+<a name="line370"></a>
+<a name="line371"></a>    function checkForInitialValue() {
+<a name="line372"></a>      var checkResultsTx = db.createTransaction([&#39;store&#39;]);
+<a name="line373"></a>      checkResultsTx.objectStore(&#39;store&#39;).get(&#39;putKey&#39;).addCallback(
+<a name="line374"></a>          function(result) {
+<a name="line375"></a>            assertEquals(&#39;initial&#39;, result.key);
+<a name="line376"></a>            assertEquals(&#39;value1&#39;, result.value);
+<a name="line377"></a>          });
+<a name="line378"></a>      goog.events.listen(checkResultsTx, ERROR, failOnErrorEvent);
+<a name="line379"></a>      goog.events.listen(checkResultsTx, COMPLETE, overwriteValue);
+<a name="line380"></a>    }
+<a name="line381"></a>
+<a name="line382"></a>    var initialPutTx = db.createTransaction([&#39;store&#39;], rw);
+<a name="line383"></a>    initialPutTx.objectStore(&#39;store&#39;).put(
+<a name="line384"></a>        {key: &#39;initial&#39;, value: &#39;value1&#39;},
+<a name="line385"></a>        &#39;putKey&#39;);
+<a name="line386"></a>
+<a name="line387"></a>    goog.events.listen(initialPutTx, ERROR, failOnErrorEvent);
+<a name="line388"></a>    goog.events.listen(initialPutTx, COMPLETE, checkForInitialValue);
+<a name="line389"></a>
+<a name="line390"></a>  }).addErrback(failOnError);
+<a name="line391"></a>}
+<a name="line392"></a>
+<a name="line393"></a>function testAddRecord() {
+<a name="line394"></a>  if (!idbSupported) {
+<a name="line395"></a>    return;
+<a name="line396"></a>  }
+<a name="line397"></a>
+<a name="line398"></a>  asyncTestCase.waitForAsync(&#39;adding record&#39;);
+<a name="line399"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line400"></a>    var rw = goog.db.Transaction.TransactionMode.READ_WRITE;
+<a name="line401"></a>    var COMPLETE = goog.db.Transaction.EventTypes.COMPLETE;
+<a name="line402"></a>    var ERROR = goog.db.Transaction.EventTypes.ERROR;
+<a name="line403"></a>
+<a name="line404"></a>    var initialAddTx = db.createTransaction([&#39;store&#39;], rw);
+<a name="line405"></a>    initialAddTx.objectStore(&#39;store&#39;).add(
+<a name="line406"></a>        {key: &#39;hi&#39;, value: &#39;something&#39;},
+<a name="line407"></a>        &#39;stuff&#39;);
+<a name="line408"></a>
+<a name="line409"></a>    goog.events.listen(initialAddTx, ERROR, failOnErrorEvent);
+<a name="line410"></a>    goog.events.listen(initialAddTx, COMPLETE, function() {
+<a name="line411"></a>      var successfulAddTx = db.createTransaction([&#39;store&#39;]);
+<a name="line412"></a>      successfulAddTx.objectStore(&#39;store&#39;).get(&#39;stuff&#39;).addCallback(
+<a name="line413"></a>          function(result) {
+<a name="line414"></a>            assertEquals(&#39;hi&#39;, result.key);
+<a name="line415"></a>            assertEquals(&#39;something&#39;, result.value);
+<a name="line416"></a>          });
+<a name="line417"></a>
+<a name="line418"></a>      goog.events.listen(successfulAddTx, ERROR, failOnErrorEvent);
+<a name="line419"></a>      goog.events.listen(successfulAddTx, COMPLETE, function() {
+<a name="line420"></a>        var addOverwriteTx = db.createTransaction([&#39;store&#39;], rw);
+<a name="line421"></a>        addOverwriteTx.objectStore(&#39;store&#39;).add(
+<a name="line422"></a>            {key: &#39;bye&#39;, value: &#39;nothing&#39;}, &#39;stuff&#39;).addErrback(function(err) {
+<a name="line423"></a>          // expected
+<a name="line424"></a>          assertEquals(
+<a name="line425"></a>              goog.db.Error.ErrorName.CONSTRAINT_ERR,
+<a name="line426"></a>              err.getName());
+<a name="line427"></a>        });
+<a name="line428"></a>
+<a name="line429"></a>        goog.events.listen(addOverwriteTx, COMPLETE, function() {
+<a name="line430"></a>          fail(&#39;adding existing record should not have succeeded&#39;);
+<a name="line431"></a>        });
+<a name="line432"></a>        goog.events.listen(addOverwriteTx, ERROR, function(ev) {
+<a name="line433"></a>          // expected
+<a name="line434"></a>          assertEquals(
+<a name="line435"></a>              goog.db.Error.ErrorName.CONSTRAINT_ERR,
+<a name="line436"></a>              ev.target.getName());
+<a name="line437"></a>          closeAndContinue(db);
+<a name="line438"></a>        });
+<a name="line439"></a>      });
+<a name="line440"></a>    });
+<a name="line441"></a>  }).addErrback(failOnError);
+<a name="line442"></a>}
+<a name="line443"></a>
+<a name="line444"></a>function testPutRecordKeyPathStore() {
+<a name="line445"></a>  if (!idbSupported) {
+<a name="line446"></a>    return;
+<a name="line447"></a>  }
+<a name="line448"></a>
+<a name="line449"></a>  asyncTestCase.waitForAsync(&#39;adding record, key path store&#39;);
+<a name="line450"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line451"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line452"></a>      db.createObjectStore(&#39;keyStore&#39;, {keyPath: &#39;key&#39;});
+<a name="line453"></a>    });
+<a name="line454"></a>  }).addCallback(function(db) {
+<a name="line455"></a>    var COMPLETE = goog.db.Transaction.EventTypes.COMPLETE;
+<a name="line456"></a>    var ERROR = goog.db.Transaction.EventTypes.ERROR;
+<a name="line457"></a>
+<a name="line458"></a>    var putTx = db.createTransaction(
+<a name="line459"></a>        [&#39;keyStore&#39;],
+<a name="line460"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line461"></a>    putTx.objectStore(&#39;keyStore&#39;).put({key: &#39;hi&#39;, value: &#39;something&#39;});
+<a name="line462"></a>
+<a name="line463"></a>    goog.events.listen(putTx, ERROR, failOnErrorEvent);
+<a name="line464"></a>    goog.events.listen(putTx, COMPLETE, function() {
+<a name="line465"></a>      var checkResultsTx = db.createTransaction([&#39;keyStore&#39;]);
+<a name="line466"></a>      checkResultsTx.objectStore(&#39;keyStore&#39;).get(&#39;hi&#39;).addCallback(
+<a name="line467"></a>          function(result) {
+<a name="line468"></a>            assertNotUndefined(result);
+<a name="line469"></a>            assertEquals(&#39;hi&#39;, result.key);
+<a name="line470"></a>            assertEquals(&#39;something&#39;, result.value);
+<a name="line471"></a>          });
+<a name="line472"></a>
+<a name="line473"></a>      goog.events.listen(checkResultsTx, ERROR, failOnErrorEvent);
+<a name="line474"></a>      goog.events.listen(checkResultsTx, COMPLETE, function() {
+<a name="line475"></a>        closeAndContinue(db);
+<a name="line476"></a>      });
+<a name="line477"></a>    });
+<a name="line478"></a>  }).addErrback(failOnError);
+<a name="line479"></a>}
+<a name="line480"></a>
+<a name="line481"></a>function testPutBadRecordKeyPathStore() {
+<a name="line482"></a>  if (!idbSupported) {
+<a name="line483"></a>    return;
+<a name="line484"></a>  }
+<a name="line485"></a>
+<a name="line486"></a>  asyncTestCase.waitForAsync(&#39;adding bad record, key path store&#39;);
+<a name="line487"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line488"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line489"></a>      db.createObjectStore(&#39;keyStore&#39;, {keyPath: &#39;key&#39;});
+<a name="line490"></a>    });
+<a name="line491"></a>  }).addCallback(function(db) {
+<a name="line492"></a>    var badTx = db.createTransaction(
+<a name="line493"></a>        [&#39;keyStore&#39;],
+<a name="line494"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line495"></a>    badTx.objectStore(&#39;keyStore&#39;).put(
+<a name="line496"></a>        {key: &#39;diedie&#39;, value: &#39;anything&#39;},
+<a name="line497"></a>        &#39;badKey&#39;).addCallback(function() {
+<a name="line498"></a>      fail(&#39;inserting with explicit key should have failed&#39;);
+<a name="line499"></a>    }).addErrback(function(err) {
+<a name="line500"></a>      // expected
+<a name="line501"></a>      assertEquals(goog.db.Error.ErrorName.DATA_ERR, err.getName());
+<a name="line502"></a>      closeAndContinue(db);
+<a name="line503"></a>    });
+<a name="line504"></a>  }).addErrback(failOnError);
+<a name="line505"></a>}
+<a name="line506"></a>
+<a name="line507"></a>function testPutRecordAutoIncrementStore() {
+<a name="line508"></a>  if (!idbSupported) {
+<a name="line509"></a>    return;
+<a name="line510"></a>  }
+<a name="line511"></a>
+<a name="line512"></a>  asyncTestCase.waitForAsync(&#39;adding record, auto increment store&#39;);
+<a name="line513"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line514"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line515"></a>      db.createObjectStore(&#39;aiStore&#39;, {autoIncrement: true});
+<a name="line516"></a>    });
+<a name="line517"></a>  }).addCallback(function(db) {
+<a name="line518"></a>    var tx = db.createTransaction(
+<a name="line519"></a>        [&#39;aiStore&#39;],
+<a name="line520"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line521"></a>    tx.objectStore(&#39;aiStore&#39;).put(&#39;1&#39;);
+<a name="line522"></a>    tx.objectStore(&#39;aiStore&#39;).put(&#39;2&#39;);
+<a name="line523"></a>    tx.objectStore(&#39;aiStore&#39;).put(&#39;3&#39;);
+<a name="line524"></a>    goog.events.listen(
+<a name="line525"></a>        tx,
+<a name="line526"></a>        goog.db.Transaction.EventTypes.ERROR,
+<a name="line527"></a>        failOnErrorEvent);
+<a name="line528"></a>
+<a name="line529"></a>    goog.events.listen(tx, goog.db.Transaction.EventTypes.COMPLETE, function() {
+<a name="line530"></a>      var tx = db.createTransaction([&#39;aiStore&#39;]);
+<a name="line531"></a>      tx.objectStore(&#39;aiStore&#39;).getAll().addCallback(function(results) {
+<a name="line532"></a>        assertEquals(3, results.length);
+<a name="line533"></a>        // only checking to see if the results are included because the keys
+<a name="line534"></a>        // are not specified
+<a name="line535"></a>        assertNotEquals(-1, results.indexOf(&#39;1&#39;));
+<a name="line536"></a>        assertNotEquals(-1, results.indexOf(&#39;2&#39;));
+<a name="line537"></a>        assertNotEquals(-1, results.indexOf(&#39;3&#39;));
+<a name="line538"></a>        closeAndContinue(db);
+<a name="line539"></a>      });
+<a name="line540"></a>    });
+<a name="line541"></a>  }).addErrback(failOnError);
+<a name="line542"></a>}
+<a name="line543"></a>
+<a name="line544"></a>function testPutRecordKeyPathAndAutoIncrementStore() {
+<a name="line545"></a>  if (!idbSupported) {
+<a name="line546"></a>    return;
+<a name="line547"></a>  }
+<a name="line548"></a>
+<a name="line549"></a>  asyncTestCase.waitForAsync(&#39;adding record, key path + auto increment store&#39;);
+<a name="line550"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line551"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line552"></a>      db.createObjectStore(&#39;hybridStore&#39;, {
+<a name="line553"></a>        keyPath: &#39;key&#39;,
+<a name="line554"></a>        autoIncrement: true
+<a name="line555"></a>      });
+<a name="line556"></a>    });
+<a name="line557"></a>  }).addCallback(function(db) {
+<a name="line558"></a>    var tx = db.createTransaction(
+<a name="line559"></a>        [&#39;hybridStore&#39;],
+<a name="line560"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line561"></a>    tx.objectStore(&#39;hybridStore&#39;).put({value: &#39;whatever&#39;});
+<a name="line562"></a>    goog.events.listen(
+<a name="line563"></a>        tx,
+<a name="line564"></a>        goog.db.Transaction.EventTypes.ERROR,
+<a name="line565"></a>        failOnErrorEvent);
+<a name="line566"></a>
+<a name="line567"></a>    goog.events.listen(tx, goog.db.Transaction.EventTypes.COMPLETE, function() {
+<a name="line568"></a>      var tx = db.createTransaction([&#39;hybridStore&#39;]);
+<a name="line569"></a>      tx.objectStore(&#39;hybridStore&#39;).getAll().addCallback(function(results) {
+<a name="line570"></a>        assertEquals(1, results.length);
+<a name="line571"></a>        assertEquals(&#39;whatever&#39;, results[0].value);
+<a name="line572"></a>        assertNotUndefined(results[0].key);
+<a name="line573"></a>        closeAndContinue(db);
+<a name="line574"></a>      });
+<a name="line575"></a>    });
+<a name="line576"></a>  }).addErrback(failOnError);
+<a name="line577"></a>}
+<a name="line578"></a>
+<a name="line579"></a>function testPutIllegalRecords() {
+<a name="line580"></a>  if (!idbSupported) {
+<a name="line581"></a>    return;
+<a name="line582"></a>  }
+<a name="line583"></a>
+<a name="line584"></a>  asyncTestCase.waitForAsync(&#39;adding illegal records&#39;);
+<a name="line585"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line586"></a>    var tx = db.createTransaction(
+<a name="line587"></a>        [&#39;store&#39;],
+<a name="line588"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line589"></a>
+<a name="line590"></a>    tx.objectStore(&#39;store&#39;).put(&#39;death&#39;, null).addCallback(function() {
+<a name="line591"></a>      fail(&#39;putting with null key should have failed&#39;);
+<a name="line592"></a>    }).addErrback(function(err) {
+<a name="line593"></a>      assertEquals(goog.db.Error.ErrorName.DATA_ERR, err.getName());
+<a name="line594"></a>    });
+<a name="line595"></a>
+<a name="line596"></a>    tx.objectStore(&#39;store&#39;).put(&#39;death&#39;, NaN).addCallback(function() {
+<a name="line597"></a>      fail(&#39;putting with NaN key should have failed&#39;);
+<a name="line598"></a>    }).addErrback(function(err) {
+<a name="line599"></a>      assertEquals(goog.db.Error.ErrorName.DATA_ERR, err.getName());
+<a name="line600"></a>    });
+<a name="line601"></a>
+<a name="line602"></a>    tx.objectStore(&#39;store&#39;).put(&#39;death&#39;, undefined).addCallback(function() {
+<a name="line603"></a>      fail(&#39;putting with undefined key should have failed&#39;);
+<a name="line604"></a>    }).addErrback(function(err) {
+<a name="line605"></a>      assertEquals(goog.db.Error.ErrorName.DATA_ERR, err.getName());
+<a name="line606"></a>    });
+<a name="line607"></a>
+<a name="line608"></a>    closeAndContinue(db);
+<a name="line609"></a>  }).addErrback(failOnError);
+<a name="line610"></a>}
+<a name="line611"></a>
+<a name="line612"></a>function testPutIllegalRecordsWithIndex() {
+<a name="line613"></a>  if (!idbSupported) {
+<a name="line614"></a>    return;
+<a name="line615"></a>  }
+<a name="line616"></a>
+<a name="line617"></a>  asyncTestCase.waitForAsync(&#39;adding illegal records&#39;);
+<a name="line618"></a>  globalDb.branch().addCallback(addStoreWithIndex).addCallback(function(db) {
+<a name="line619"></a>    var tx = db.createTransaction(
+<a name="line620"></a>        [&#39;store&#39;],
+<a name="line621"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line622"></a>
+<a name="line623"></a>    tx.objectStore(&#39;store&#39;).put({key: &#39;diediedie&#39;, value: null}).
+<a name="line624"></a>        addErrback(function(err) {
+<a name="line625"></a>          assertEquals(goog.db.Error.ErrorCode.DATA_ERR, err.code);
+<a name="line626"></a>        });
+<a name="line627"></a>
+<a name="line628"></a>    tx.objectStore(&#39;store&#39;).put({key: &#39;dietodeath&#39;, value: NaN}).
+<a name="line629"></a>        addErrback(function(err) {
+<a name="line630"></a>          assertEquals(goog.db.Error.ErrorCode.DATA_ERR, err.code);
+<a name="line631"></a>        });
+<a name="line632"></a>
+<a name="line633"></a>    tx.objectStore(&#39;store&#39;).put({key: &#39;dietodeath&#39;, value: undefined}).
+<a name="line634"></a>        addErrback(function(err) {
+<a name="line635"></a>          assertEquals(goog.db.Error.ErrorCode.DATA_ERR, err.code);
+<a name="line636"></a>        });
+<a name="line637"></a>
+<a name="line638"></a>    closeAndContinue(db);
+<a name="line639"></a>  }).addErrback(failOnError);
+<a name="line640"></a>}
+<a name="line641"></a>
+<a name="line642"></a>function testDeleteRecord() {
+<a name="line643"></a>  if (!idbSupported) {
+<a name="line644"></a>    return;
+<a name="line645"></a>  }
+<a name="line646"></a>
+<a name="line647"></a>  asyncTestCase.waitForAsync(&#39;deleting record&#39;);
+<a name="line648"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line649"></a>    var rw = goog.db.Transaction.TransactionMode.READ_WRITE;
+<a name="line650"></a>    var COMPLETE = goog.db.Transaction.EventTypes.COMPLETE;
+<a name="line651"></a>    var ERROR = goog.db.Transaction.EventTypes.ERROR;
+<a name="line652"></a>    var putTx = db.createTransaction([&#39;store&#39;], rw);
+<a name="line653"></a>    putTx.objectStore(&#39;store&#39;).put({key: &#39;hi&#39;, value: &#39;something&#39;}, &#39;stuff&#39;);
+<a name="line654"></a>
+<a name="line655"></a>    goog.events.listen(putTx, ERROR, failOnErrorEvent);
+<a name="line656"></a>    goog.events.listen(putTx, COMPLETE, function() {
+<a name="line657"></a>      var deleteTx = db.createTransaction([&#39;store&#39;], rw);
+<a name="line658"></a>      deleteTx.objectStore(&#39;store&#39;).remove(&#39;stuff&#39;);
+<a name="line659"></a>
+<a name="line660"></a>      goog.events.listen(deleteTx, ERROR, failOnErrorEvent);
+<a name="line661"></a>      goog.events.listen(deleteTx, COMPLETE, function() {
+<a name="line662"></a>        var checkResultsTx = db.createTransaction([&#39;store&#39;]);
+<a name="line663"></a>        checkResultsTx.objectStore(&#39;store&#39;).get(&#39;stuff&#39;).addCallback(
+<a name="line664"></a>            function(result) {
+<a name="line665"></a>              assertUndefined(result);
+<a name="line666"></a>            });
+<a name="line667"></a>
+<a name="line668"></a>        goog.events.listen(checkResultsTx, ERROR, failOnErrorEvent);
+<a name="line669"></a>        goog.events.listen(checkResultsTx, COMPLETE, function() {
+<a name="line670"></a>          closeAndContinue(db);
+<a name="line671"></a>        });
+<a name="line672"></a>      });
+<a name="line673"></a>    });
+<a name="line674"></a>  }).addErrback(failOnError);
+<a name="line675"></a>}
+<a name="line676"></a>
+<a name="line677"></a>function testGetAll() {
+<a name="line678"></a>  if (!idbSupported) {
+<a name="line679"></a>    return;
+<a name="line680"></a>  }
+<a name="line681"></a>
+<a name="line682"></a>  var values = [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;];
+<a name="line683"></a>  var keys = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;];
+<a name="line684"></a>
+<a name="line685"></a>  var addData = goog.partial(populateStore, values, keys);
+<a name="line686"></a>  var checkStore = goog.partial(assertStoreValues, values);
+<a name="line687"></a>
+<a name="line688"></a>  asyncTestCase.waitForAsync(&#39;getting all&#39;);
+<a name="line689"></a>  globalDb.branch().addCallbacks(addStore, failOnError).
+<a name="line690"></a>      addCallback(addData).
+<a name="line691"></a>      addCallback(checkStore);
+<a name="line692"></a>}
+<a name="line693"></a>
+<a name="line694"></a>function testGetAllFreesCursor() {
+<a name="line695"></a>  if (!idbSupported) {
+<a name="line696"></a>    return;
+<a name="line697"></a>  }
+<a name="line698"></a>  var values = [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;];
+<a name="line699"></a>  var keys = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;];
+<a name="line700"></a>
+<a name="line701"></a>  var addData = goog.partial(populateStore, values, keys);
+<a name="line702"></a>  var origCursor = goog.db.Cursor;
+<a name="line703"></a>  var cursors = [];
+<a name="line704"></a>  /** @constructor */
+<a name="line705"></a>  var testCursor = function() {
+<a name="line706"></a>    origCursor.call(this);
+<a name="line707"></a>    cursors.push(this);
+<a name="line708"></a>  };
+<a name="line709"></a>  goog.object.extend(testCursor, origCursor);
+<a name="line710"></a>  // We don&#39;t use goog.inherits here because we are going to be overwriting
+<a name="line711"></a>  // goog.db.Cursor and we don&#39;t want a new &quot;base&quot; method as
+<a name="line712"></a>  // goog.db.Cursor.base(this, &#39;constructor&#39;) would be a call to
+<a name="line713"></a>  // testCursor.base(this, &#39;constructor&#39;) which would be goog.db.Cursor and be
+<a name="line714"></a>  // an infinite loop.
+<a name="line715"></a>  testCursor.prototype = origCursor.prototype;
+<a name="line716"></a>  propertyReplacer.replace(goog.db, &#39;Cursor&#39;, testCursor);
+<a name="line717"></a>  var checkStoreAndCursorDisposed =
+<a name="line718"></a>      goog.partial(assertStoreValuesAndCursorsDisposed, values, cursors);
+<a name="line719"></a>
+<a name="line720"></a>  asyncTestCase.waitForAsync(&#39;getting all&#39;);
+<a name="line721"></a>  globalDb.branch().addCallbacks(addStore, failOnError).
+<a name="line722"></a>      addCallback(addData).
+<a name="line723"></a>      addCallback(checkStoreAndCursorDisposed);
+<a name="line724"></a>}
+<a name="line725"></a>
+<a name="line726"></a>function testObjectStoreCursorGet() {
+<a name="line727"></a>  if (!idbSupported) {
+<a name="line728"></a>    return;
+<a name="line729"></a>  }
+<a name="line730"></a>
+<a name="line731"></a>  var values = [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;];
+<a name="line732"></a>  var keys = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line733"></a>
+<a name="line734"></a>  var addData = goog.partial(populateStore, values, keys);
+<a name="line735"></a>
+<a name="line736"></a>  // Open the cursor over range [&#39;b&#39;, &#39;c&#39;], move in backwards direction.
+<a name="line737"></a>  var openCursorAndCheck = function(db) {
+<a name="line738"></a>    var cursorTx = db.createTransaction([&#39;store&#39;]);
+<a name="line739"></a>    var store = cursorTx.objectStore(&#39;store&#39;);
+<a name="line740"></a>    var values = [];
+<a name="line741"></a>    var keys = [];
+<a name="line742"></a>
+<a name="line743"></a>    var whenTxComplete = new goog.async.Deferred();
+<a name="line744"></a>    goog.events.listen(
+<a name="line745"></a>        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+<a name="line746"></a>    goog.events.listen(
+<a name="line747"></a>        cursorTx, goog.db.Transaction.EventTypes.COMPLETE, function() {
+<a name="line748"></a>          whenTxComplete.callback();
+<a name="line749"></a>        });
+<a name="line750"></a>
+<a name="line751"></a>    var whenCursorComplete = new goog.async.Deferred();
+<a name="line752"></a>    var cursor = store.openCursor(
+<a name="line753"></a>        goog.db.KeyRange.bound(&#39;b&#39;, &#39;c&#39;),
+<a name="line754"></a>        goog.db.Cursor.Direction.PREV);
+<a name="line755"></a>
+<a name="line756"></a>    var key = goog.events.listen(
+<a name="line757"></a>        cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
+<a name="line758"></a>          values.push(cursor.getValue());
+<a name="line759"></a>          keys.push(cursor.getKey());
+<a name="line760"></a>          cursor.next();
+<a name="line761"></a>        });
+<a name="line762"></a>
+<a name="line763"></a>    goog.events.listenOnce(cursor, [
+<a name="line764"></a>      goog.db.Cursor.EventType.COMPLETE,
+<a name="line765"></a>      goog.db.Cursor.EventType.ERROR
+<a name="line766"></a>    ], function(evt) {
+<a name="line767"></a>      goog.events.unlistenByKey(key);
+<a name="line768"></a>      if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
+<a name="line769"></a>        whenCursorComplete.callback(db);
+<a name="line770"></a>      } else {
+<a name="line771"></a>        whenCursorComplete.errback();
+<a name="line772"></a>      }
+<a name="line773"></a>    });
+<a name="line774"></a>
+<a name="line775"></a>    var whenAllComplete = goog.async.DeferredList.gatherResults([
+<a name="line776"></a>      whenCursorComplete,
+<a name="line777"></a>      whenTxComplete
+<a name="line778"></a>    ]);
+<a name="line779"></a>    whenAllComplete.addCallback(function(results) {
+<a name="line780"></a>      var db = results[0];
+<a name="line781"></a>      assertArrayEquals([&#39;3&#39;, &#39;2&#39;], values);
+<a name="line782"></a>      assertArrayEquals([&#39;c&#39;, &#39;b&#39;], keys);
+<a name="line783"></a>      closeAndContinue(db);
+<a name="line784"></a>    });
+<a name="line785"></a>  };
+<a name="line786"></a>
+<a name="line787"></a>  asyncTestCase.waitForAsync(&#39;getting range&#39;);
+<a name="line788"></a>  globalDb.branch().addCallbacks(addStore, failOnError).
+<a name="line789"></a>      addCallback(addData).
+<a name="line790"></a>      addCallback(openCursorAndCheck);
+<a name="line791"></a>}
+<a name="line792"></a>
+<a name="line793"></a>function testObjectStoreCursorReplace() {
+<a name="line794"></a>  if (!idbSupported) {
+<a name="line795"></a>    return;
+<a name="line796"></a>  }
+<a name="line797"></a>
+<a name="line798"></a>  var values = [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;];
+<a name="line799"></a>  var keys = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line800"></a>
+<a name="line801"></a>  var addData = goog.partial(populateStore, values, keys);
+<a name="line802"></a>
+<a name="line803"></a>  // Store should contain [&#39;1&#39;, &#39;2&#39;, &#39;5&#39;, &#39;4&#39;] after replacement.
+<a name="line804"></a>  var checkStore = goog.partial(assertStoreValues, [&#39;1&#39;, &#39;2&#39;, &#39;5&#39;, &#39;4&#39;]);
+<a name="line805"></a>
+<a name="line806"></a>  // Use a bounded cursor for (&#39;b&#39;, &#39;c&#39;] to update value &#39;3&#39; -&gt; &#39;5&#39;.
+<a name="line807"></a>  var openCursorAndReplace = function(db) {
+<a name="line808"></a>    var d = new goog.async.Deferred();
+<a name="line809"></a>    var cursorTx = db.createTransaction(
+<a name="line810"></a>        [&#39;store&#39;],
+<a name="line811"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line812"></a>
+<a name="line813"></a>    var whenTxComplete = new goog.async.Deferred();
+<a name="line814"></a>    goog.events.listen(
+<a name="line815"></a>        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+<a name="line816"></a>    goog.events.listen(
+<a name="line817"></a>        cursorTx, goog.db.Transaction.EventTypes.COMPLETE, function() {
+<a name="line818"></a>          whenTxComplete.callback();
+<a name="line819"></a>        });
+<a name="line820"></a>
+<a name="line821"></a>    var store = cursorTx.objectStore(&#39;store&#39;);
+<a name="line822"></a>    var whenCursorComplete = new goog.async.Deferred();
+<a name="line823"></a>    var cursor = store.openCursor(goog.db.KeyRange.bound(&#39;b&#39;, &#39;c&#39;, true));
+<a name="line824"></a>
+<a name="line825"></a>    var key = goog.events.listen(
+<a name="line826"></a>        cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
+<a name="line827"></a>          assertEquals(&#39;3&#39;, cursor.getValue());
+<a name="line828"></a>          cursor.update(&#39;5&#39;).addCallback(function() {
+<a name="line829"></a>            cursor.next();
+<a name="line830"></a>          }).addErrback(failOnError);
+<a name="line831"></a>        });
+<a name="line832"></a>
+<a name="line833"></a>    goog.events.listenOnce(cursor, [
+<a name="line834"></a>      goog.db.Cursor.EventType.COMPLETE,
+<a name="line835"></a>      goog.db.Cursor.EventType.ERROR
+<a name="line836"></a>    ], function(evt) {
+<a name="line837"></a>      goog.events.unlistenByKey(key);
+<a name="line838"></a>      if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
+<a name="line839"></a>        whenCursorComplete.callback(db);
+<a name="line840"></a>      } else {
+<a name="line841"></a>        whenCursorComplete.errback();
+<a name="line842"></a>      }
+<a name="line843"></a>    });
+<a name="line844"></a>
+<a name="line845"></a>    goog.async.DeferredList.gatherResults([
+<a name="line846"></a>      whenCursorComplete,
+<a name="line847"></a>      whenTxComplete
+<a name="line848"></a>    ]).addCallbacks(function(results) {
+<a name="line849"></a>      d.callback(results[0]);
+<a name="line850"></a>    }, failOnError);
+<a name="line851"></a>
+<a name="line852"></a>    return d;
+<a name="line853"></a>  };
+<a name="line854"></a>
+<a name="line855"></a>  // Setup and execute test case.
+<a name="line856"></a>  asyncTestCase.waitForAsync(&#39;replacing value by cursor&#39;);
+<a name="line857"></a>  globalDb.branch().addCallbacks(addStore, failOnError).
+<a name="line858"></a>      addCallback(addData).
+<a name="line859"></a>      addCallback(openCursorAndReplace).
+<a name="line860"></a>      addCallback(checkStore);
+<a name="line861"></a>}
+<a name="line862"></a>
+<a name="line863"></a>function testObjectStoreCursorRemove() {
+<a name="line864"></a>  if (!idbSupported) {
+<a name="line865"></a>    return;
+<a name="line866"></a>  }
+<a name="line867"></a>
+<a name="line868"></a>  var values = [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;];
+<a name="line869"></a>  var keys = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line870"></a>
+<a name="line871"></a>  var addData = goog.partial(populateStore, values, keys);
+<a name="line872"></a>
+<a name="line873"></a>  // Store should contain [&#39;1&#39;, &#39;2&#39;] after removing elements.
+<a name="line874"></a>  var checkStore = goog.partial(assertStoreValues, [&#39;1&#39;, &#39;2&#39;]);
+<a name="line875"></a>
+<a name="line876"></a>  // Use a bounded cursor for (&#39;b&#39;, ...) to remove &#39;3&#39;, &#39;4&#39;.
+<a name="line877"></a>  var openCursorAndRemove = function(db) {
+<a name="line878"></a>    var d = new goog.async.Deferred();
+<a name="line879"></a>    var cursorTx = db.createTransaction(
+<a name="line880"></a>        [&#39;store&#39;],
+<a name="line881"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line882"></a>
+<a name="line883"></a>    var whenTxComplete = new goog.async.Deferred();
+<a name="line884"></a>    goog.events.listen(
+<a name="line885"></a>        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+<a name="line886"></a>    goog.events.listen(
+<a name="line887"></a>        cursorTx, goog.db.Transaction.EventTypes.COMPLETE, function() {
+<a name="line888"></a>          whenTxComplete.callback();
+<a name="line889"></a>        });
+<a name="line890"></a>
+<a name="line891"></a>
+<a name="line892"></a>    var store = cursorTx.objectStore(&#39;store&#39;);
+<a name="line893"></a>    var whenCursorComplete = new goog.async.Deferred();
+<a name="line894"></a>    var cursor = store.openCursor(goog.db.KeyRange.lowerBound(&#39;b&#39;, true));
+<a name="line895"></a>
+<a name="line896"></a>    var key = goog.events.listen(
+<a name="line897"></a>        cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
+<a name="line898"></a>          cursor.remove(&#39;5&#39;).addCallback(function() {
+<a name="line899"></a>            cursor.next();
+<a name="line900"></a>          }).addErrback(failOnError);
+<a name="line901"></a>        });
+<a name="line902"></a>
+<a name="line903"></a>    goog.events.listenOnce(cursor, [
+<a name="line904"></a>      goog.db.Cursor.EventType.COMPLETE,
+<a name="line905"></a>      goog.db.Cursor.EventType.ERROR
+<a name="line906"></a>    ], function(evt) {
+<a name="line907"></a>      goog.events.unlistenByKey(key);
+<a name="line908"></a>      if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
+<a name="line909"></a>        whenCursorComplete.callback(db);
+<a name="line910"></a>      } else {
+<a name="line911"></a>        whenCursorComplete.errback();
+<a name="line912"></a>      }
+<a name="line913"></a>    });
+<a name="line914"></a>
+<a name="line915"></a>    goog.async.DeferredList.gatherResults([
+<a name="line916"></a>      whenCursorComplete,
+<a name="line917"></a>      whenTxComplete
+<a name="line918"></a>    ]).addCallbacks(function(results) {
+<a name="line919"></a>      d.callback(results[0]);
+<a name="line920"></a>    }, failOnError);
+<a name="line921"></a>
+<a name="line922"></a>    return d;
+<a name="line923"></a>  };
+<a name="line924"></a>
+<a name="line925"></a>  // Setup and execute test case.
+<a name="line926"></a>  asyncTestCase.waitForAsync(&#39;removing value by cursor&#39;);
+<a name="line927"></a>  globalDb.branch().addCallbacks(addStore, failOnError).
+<a name="line928"></a>      addCallback(addData).
+<a name="line929"></a>      addCallback(openCursorAndRemove).
+<a name="line930"></a>      addCallback(checkStore);
+<a name="line931"></a>}
+<a name="line932"></a>
+<a name="line933"></a>function testClear() {
+<a name="line934"></a>  if (!idbSupported) {
+<a name="line935"></a>    return;
+<a name="line936"></a>  }
+<a name="line937"></a>
+<a name="line938"></a>  asyncTestCase.waitForAsync(&#39;clearing&#39;);
+<a name="line939"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line940"></a>    var rw = goog.db.Transaction.TransactionMode.READ_WRITE;
+<a name="line941"></a>    var COMPLETE = goog.db.Transaction.EventTypes.COMPLETE;
+<a name="line942"></a>    var ERROR = goog.db.Transaction.EventTypes.ERROR;
+<a name="line943"></a>
+<a name="line944"></a>    var putTx = db.createTransaction([&#39;store&#39;], rw);
+<a name="line945"></a>    putTx.objectStore(&#39;store&#39;).put(&#39;1&#39;, &#39;a&#39;);
+<a name="line946"></a>    putTx.objectStore(&#39;store&#39;).put(&#39;2&#39;, &#39;b&#39;);
+<a name="line947"></a>    putTx.objectStore(&#39;store&#39;).put(&#39;3&#39;, &#39;c&#39;);
+<a name="line948"></a>
+<a name="line949"></a>    goog.events.listen(putTx, ERROR, failOnErrorEvent);
+<a name="line950"></a>    goog.events.listen(putTx, COMPLETE, function() {
+<a name="line951"></a>      var clearTx = db.createTransaction([&#39;store&#39;], rw);
+<a name="line952"></a>      clearTx.objectStore(&#39;store&#39;).clear();
+<a name="line953"></a>
+<a name="line954"></a>      goog.events.listen(clearTx, ERROR, failOnErrorEvent);
+<a name="line955"></a>      goog.events.listen(clearTx, COMPLETE, function() {
+<a name="line956"></a>        var checkResultsTx = db.createTransaction([&#39;store&#39;]);
+<a name="line957"></a>        checkResultsTx.objectStore(&#39;store&#39;).getAll().addCallback(
+<a name="line958"></a>            function(results) {
+<a name="line959"></a>              assertEquals(0, results.length);
+<a name="line960"></a>            }).addErrback(failOnError);
+<a name="line961"></a>
+<a name="line962"></a>        goog.events.listen(checkResultsTx, ERROR, failOnErrorEvent);
+<a name="line963"></a>        goog.events.listen(checkResultsTx, COMPLETE, function() {
+<a name="line964"></a>          closeAndContinue(db);
+<a name="line965"></a>        });
+<a name="line966"></a>      });
+<a name="line967"></a>    });
+<a name="line968"></a>  }).addErrback(failOnError);
+<a name="line969"></a>}
+<a name="line970"></a>
+<a name="line971"></a>function testAbortTransaction() {
+<a name="line972"></a>  if (!idbSupported) {
+<a name="line973"></a>    return;
+<a name="line974"></a>  }
+<a name="line975"></a>
+<a name="line976"></a>  asyncTestCase.waitForAsync(&#39;abort transaction&#39;);
+<a name="line977"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line978"></a>    var abortTx = db.createTransaction(
+<a name="line979"></a>        [&#39;store&#39;],
+<a name="line980"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line981"></a>    abortTx.objectStore(&#39;store&#39;).put(&#39;data&#39;, &#39;stuff&#39;).addCallback(function() {
+<a name="line982"></a>      abortTx.abort();
+<a name="line983"></a>    });
+<a name="line984"></a>    goog.events.listen(
+<a name="line985"></a>        abortTx,
+<a name="line986"></a>        goog.db.Transaction.EventTypes.ERROR,
+<a name="line987"></a>        failOnErrorEvent);
+<a name="line988"></a>
+<a name="line989"></a>    goog.events.listen(
+<a name="line990"></a>        abortTx,
+<a name="line991"></a>        goog.db.Transaction.EventTypes.COMPLETE,
+<a name="line992"></a>        function() {
+<a name="line993"></a>          fail(&#39;transaction shouldn\&#39;t have completed after being aborted&#39;);
+<a name="line994"></a>        });
+<a name="line995"></a>
+<a name="line996"></a>    goog.events.listen(
+<a name="line997"></a>        abortTx,
+<a name="line998"></a>        goog.db.Transaction.EventTypes.ABORT,
+<a name="line999"></a>        function() {
+<a name="line1000"></a>          var checkResultsTx = db.createTransaction([&#39;store&#39;]);
+<a name="line1001"></a>          checkResultsTx.objectStore(&#39;store&#39;).get(&#39;stuff&#39;).addCallback(
+<a name="line1002"></a>              function(result) {
+<a name="line1003"></a>                assertUndefined(result);
+<a name="line1004"></a>              });
+<a name="line1005"></a>          goog.events.listen(
+<a name="line1006"></a>              checkResultsTx,
+<a name="line1007"></a>              goog.db.Transaction.EventTypes.COMPLETE,
+<a name="line1008"></a>              function() {
+<a name="line1009"></a>                closeAndContinue(db);
+<a name="line1010"></a>              });
+<a name="line1011"></a>        });
+<a name="line1012"></a>  }).addErrback(failOnError);
+<a name="line1013"></a>}
+<a name="line1014"></a>
+<a name="line1015"></a>function testInactiveTransaction() {
+<a name="line1016"></a>  if (!idbSupported) {
+<a name="line1017"></a>    return;
+<a name="line1018"></a>  }
+<a name="line1019"></a>
+<a name="line1020"></a>  asyncTestCase.waitForAsync(&#39;inactive transaction&#39;);
+<a name="line1021"></a>  globalDb.branch().addCallback(addStoreWithIndex).addCallback(function(db) {
+<a name="line1022"></a>    var tx = db.createTransaction(
+<a name="line1023"></a>        [&#39;store&#39;],
+<a name="line1024"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line1025"></a>    var store = tx.objectStore(&#39;store&#39;);
+<a name="line1026"></a>    var index = store.getIndex(&#39;index&#39;);
+<a name="line1027"></a>    store.put({key: &#39;something&#39;, value: &#39;anything&#39;});
+<a name="line1028"></a>    goog.events.listen(tx, goog.db.Transaction.EventTypes.COMPLETE, function() {
+<a name="line1029"></a>      var expectedCode = goog.db.Error.ErrorName.TRANSACTION_INACTIVE_ERR;
+<a name="line1030"></a>      store.put({
+<a name="line1031"></a>        key: &#39;another&#39;,
+<a name="line1032"></a>        value: &#39;thing&#39;
+<a name="line1033"></a>      }).addCallback(function() {
+<a name="line1034"></a>        fail(&#39;putting with inactive transaction should have failed&#39;);
+<a name="line1035"></a>      }).addErrback(function(err) {
+<a name="line1036"></a>        assertEquals(expectedCode, err.getName());
+<a name="line1037"></a>      });
+<a name="line1038"></a>      store.add({
+<a name="line1039"></a>        key: &#39;another&#39;,
+<a name="line1040"></a>        value: &#39;thing&#39;
+<a name="line1041"></a>      }).addCallback(function() {
+<a name="line1042"></a>        fail(&#39;adding with inactive transaction should have failed&#39;);
+<a name="line1043"></a>      }).addErrback(function(err) {
+<a name="line1044"></a>        assertEquals(expectedCode, err.getName());
+<a name="line1045"></a>      });
+<a name="line1046"></a>      store.remove(&#39;something&#39;).addCallback(function() {
+<a name="line1047"></a>        fail(&#39;deleting with inactive transaction should have failed&#39;);
+<a name="line1048"></a>      }).addErrback(function(err) {
+<a name="line1049"></a>        assertEquals(expectedCode, err.getName());
+<a name="line1050"></a>      });
+<a name="line1051"></a>      store.get(&#39;something&#39;).addCallback(function() {
+<a name="line1052"></a>        fail(&#39;getting with inactive transaction should have failed&#39;);
+<a name="line1053"></a>      }).addErrback(function(err) {
+<a name="line1054"></a>        assertEquals(expectedCode, err.getName());
+<a name="line1055"></a>      });
+<a name="line1056"></a>      store.getAll().addCallback(function() {
+<a name="line1057"></a>        fail(&#39;getting all with inactive transaction should have failed&#39;);
+<a name="line1058"></a>      }).addErrback(function(err) {
+<a name="line1059"></a>        assertEquals(expectedCode, err.getName());
+<a name="line1060"></a>      });
+<a name="line1061"></a>      store.clear().addCallback(function() {
+<a name="line1062"></a>        fail(&#39;clearing all with inactive transaction should have failed&#39;);
+<a name="line1063"></a>      }).addErrback(function(err) {
+<a name="line1064"></a>        assertEquals(expectedCode, err.getName());
+<a name="line1065"></a>      });
+<a name="line1066"></a>
+<a name="line1067"></a>      index.get(&#39;anything&#39;).
+<a name="line1068"></a>          addCallback(function() {
+<a name="line1069"></a>            fail(&#39;getting from index with inactive transaction should have &#39; +
+<a name="line1070"></a>                &#39;failed&#39;);
+<a name="line1071"></a>          }).addErrback(function(err) {
+<a name="line1072"></a>            assertEquals(expectedCode, err.getName());
+<a name="line1073"></a>          });
+<a name="line1074"></a>      index.getKey(&#39;anything&#39;).
+<a name="line1075"></a>          addCallback(function() {
+<a name="line1076"></a>            fail(&#39;getting key from index with inactive transaction &#39; +
+<a name="line1077"></a>                &#39;should have failed&#39;);
+<a name="line1078"></a>          }).addErrback(function(err) {
+<a name="line1079"></a>            assertEquals(expectedCode, err.getName());
+<a name="line1080"></a>          });
+<a name="line1081"></a>      index.getAll(&#39;anything&#39;).
+<a name="line1082"></a>          addCallback(function() {
+<a name="line1083"></a>            fail(&#39;getting all from index with inactive transaction &#39; +
+<a name="line1084"></a>                &#39;should have failed&#39;);
+<a name="line1085"></a>          }).addErrback(function(err) {
+<a name="line1086"></a>            assertEquals(expectedCode, err.getName());
+<a name="line1087"></a>          });
+<a name="line1088"></a>      index.getAllKeys(&#39;anything&#39;).
+<a name="line1089"></a>          addCallback(function() {
+<a name="line1090"></a>            fail(&#39;getting all keys from index with inactive transaction &#39; +
+<a name="line1091"></a>                &#39;should have failed&#39;);
+<a name="line1092"></a>          }).addErrback(function(err) {
+<a name="line1093"></a>            assertEquals(expectedCode, err.getName());
+<a name="line1094"></a>          });
+<a name="line1095"></a>      closeAndContinue(db);
+<a name="line1096"></a>    });
+<a name="line1097"></a>  }).addErrback(failOnError);
+<a name="line1098"></a>}
+<a name="line1099"></a>
+<a name="line1100"></a>function testWrongTransactionMode() {
+<a name="line1101"></a>  if (!idbSupported) {
+<a name="line1102"></a>    return;
+<a name="line1103"></a>  }
+<a name="line1104"></a>
+<a name="line1105"></a>  asyncTestCase.waitForAsync(&#39;wrong transaction mode&#39;);
+<a name="line1106"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line1107"></a>    var tx = db.createTransaction([&#39;store&#39;]);
+<a name="line1108"></a>    assertEquals(goog.db.Transaction.TransactionMode.READ_ONLY, tx.getMode());
+<a name="line1109"></a>    tx.objectStore(&#39;store&#39;).put(&#39;KABOOM!&#39;, &#39;anything&#39;).addCallback(function() {
+<a name="line1110"></a>      fail(&#39;putting should have failed&#39;);
+<a name="line1111"></a>    }).addErrback(function(err) {
+<a name="line1112"></a>      assertEquals(goog.db.Error.ErrorName.READ_ONLY_ERR, err.getName());
+<a name="line1113"></a>    });
+<a name="line1114"></a>    tx.objectStore(&#39;store&#39;).add(&#39;EXPLODE!&#39;, &#39;die&#39;).addCallback(function() {
+<a name="line1115"></a>      fail(&#39;adding should have failed&#39;);
+<a name="line1116"></a>    }).addErrback(function(err) {
+<a name="line1117"></a>      assertEquals(goog.db.Error.ErrorName.READ_ONLY_ERR, err.getName());
+<a name="line1118"></a>    });
+<a name="line1119"></a>    tx.objectStore(&#39;store&#39;).remove(&#39;no key&#39;, &#39;nothing&#39;).addCallback(function() {
+<a name="line1120"></a>      fail(&#39;deleting should have failed&#39;);
+<a name="line1121"></a>    }).addErrback(function(err) {
+<a name="line1122"></a>      assertEquals(goog.db.Error.ErrorName.READ_ONLY_ERR, err.getName());
+<a name="line1123"></a>    });
+<a name="line1124"></a>    closeAndContinue(db);
+<a name="line1125"></a>  }).addErrback(failOnError);
+<a name="line1126"></a>}
+<a name="line1127"></a>
+<a name="line1128"></a>function testManipulateIndexes() {
+<a name="line1129"></a>  if (!idbSupported) {
+<a name="line1130"></a>    return;
+<a name="line1131"></a>  }
+<a name="line1132"></a>
+<a name="line1133"></a>  asyncTestCase.waitForAsync(&#39;index manipulation&#39;);
+<a name="line1134"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line1135"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line1136"></a>      var store = db.createObjectStore(&#39;store&#39;);
+<a name="line1137"></a>      store.createIndex(&#39;index&#39;, &#39;attr1&#39;);
+<a name="line1138"></a>      store.createIndex(&#39;uniqueIndex&#39;, &#39;attr2&#39;, {unique: true});
+<a name="line1139"></a>      store.createIndex(&#39;multirowIndex&#39;, &#39;attr3&#39;, {multirow: true});
+<a name="line1140"></a>    });
+<a name="line1141"></a>  }).addCallback(function(db) {
+<a name="line1142"></a>    var tx = db.createTransaction([&#39;store&#39;]);
+<a name="line1143"></a>    var store = tx.objectStore(&#39;store&#39;);
+<a name="line1144"></a>    var index = store.getIndex(&#39;index&#39;);
+<a name="line1145"></a>    var uniqueIndex = store.getIndex(&#39;uniqueIndex&#39;);
+<a name="line1146"></a>    var multirowIndex = store.getIndex(&#39;multirowIndex&#39;);
+<a name="line1147"></a>    try {
+<a name="line1148"></a>      var dies = store.getIndex(&#39;diediedie&#39;);
+<a name="line1149"></a>      fail(&#39;getting non-existent index should have failed&#39;);
+<a name="line1150"></a>    } catch (err) {
+<a name="line1151"></a>      assertEquals(goog.db.Error.ErrorName.NOT_FOUND_ERR, err.getName());
+<a name="line1152"></a>    }
+<a name="line1153"></a>
+<a name="line1154"></a>    return tx.wait();
+<a name="line1155"></a>  }).addCallback(function(db) {
+<a name="line1156"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line1157"></a>      var store = tx.objectStore(&#39;store&#39;);
+<a name="line1158"></a>      store.deleteIndex(&#39;index&#39;);
+<a name="line1159"></a>      try {
+<a name="line1160"></a>        store.deleteIndex(&#39;diediedie&#39;);
+<a name="line1161"></a>        fail(&#39;deleting non-existent index should have failed&#39;);
+<a name="line1162"></a>      } catch (err) {
+<a name="line1163"></a>        assertEquals(goog.db.Error.ErrorName.NOT_FOUND_ERR, err.getName());
+<a name="line1164"></a>      }
+<a name="line1165"></a>    });
+<a name="line1166"></a>  }).addCallback(function(db) {
+<a name="line1167"></a>    var tx = db.createTransaction([&#39;store&#39;]);
+<a name="line1168"></a>    var store = tx.objectStore(&#39;store&#39;);
+<a name="line1169"></a>    try {
+<a name="line1170"></a>      var index = store.getIndex(&#39;index&#39;);
+<a name="line1171"></a>      fail(&#39;getting deleted index should have failed&#39;);
+<a name="line1172"></a>    } catch (err) {
+<a name="line1173"></a>      assertEquals(goog.db.Error.ErrorName.NOT_FOUND_ERR, err.getName());
+<a name="line1174"></a>    }
+<a name="line1175"></a>    var uniqueIndex = store.getIndex(&#39;uniqueIndex&#39;);
+<a name="line1176"></a>    var multirowIndex = store.getIndex(&#39;multirowIndex&#39;);
+<a name="line1177"></a>  }).addCallback(closeAndContinue).addErrback(failOnError);
+<a name="line1178"></a>}
+<a name="line1179"></a>
+<a name="line1180"></a>function testAddRecordWithIndex() {
+<a name="line1181"></a>  if (!idbSupported) {
+<a name="line1182"></a>    return;
+<a name="line1183"></a>  }
+<a name="line1184"></a>
+<a name="line1185"></a>  asyncTestCase.waitForAsync(&#39;add record with index&#39;);
+<a name="line1186"></a>  globalDb.branch().addCallback(addStoreWithIndex).addCallback(function(db) {
+<a name="line1187"></a>    var COMPLETE = goog.db.Transaction.EventTypes.COMPLETE;
+<a name="line1188"></a>    var addTx = db.createTransaction(
+<a name="line1189"></a>        [&#39;store&#39;],
+<a name="line1190"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line1191"></a>    var store = addTx.objectStore(&#39;store&#39;);
+<a name="line1192"></a>    assertFalse(store.getIndex(&#39;index&#39;).isUnique());
+<a name="line1193"></a>    assertEquals(&#39;value&#39;, store.getIndex(&#39;index&#39;).getKeyPath());
+<a name="line1194"></a>    store.add({key: &#39;someKey&#39;, value: &#39;lookUpThis&#39;});
+<a name="line1195"></a>
+<a name="line1196"></a>    goog.events.listen(addTx, COMPLETE, function() {
+<a name="line1197"></a>      var checkResultsTx = db.createTransaction([&#39;store&#39;]);
+<a name="line1198"></a>      var index = checkResultsTx.objectStore(&#39;store&#39;).getIndex(&#39;index&#39;);
+<a name="line1199"></a>      index.get(&#39;lookUpThis&#39;).addCallback(function(result) {
+<a name="line1200"></a>        assertNotUndefined(result);
+<a name="line1201"></a>        assertEquals(&#39;someKey&#39;, result.key);
+<a name="line1202"></a>        assertEquals(&#39;lookUpThis&#39;, result.value);
+<a name="line1203"></a>      });
+<a name="line1204"></a>      index.getKey(&#39;lookUpThis&#39;).addCallback(function(result) {
+<a name="line1205"></a>        assertNotUndefined(result);
+<a name="line1206"></a>        assertEquals(&#39;someKey&#39;, result);
+<a name="line1207"></a>      });
+<a name="line1208"></a>      goog.events.listen(
+<a name="line1209"></a>          checkResultsTx,
+<a name="line1210"></a>          goog.db.Transaction.EventTypes.ERROR,
+<a name="line1211"></a>          failOnErrorEvent);
+<a name="line1212"></a>      goog.events.listen(checkResultsTx, COMPLETE, function() {
+<a name="line1213"></a>        closeAndContinue(db);
+<a name="line1214"></a>      });
+<a name="line1215"></a>    });
+<a name="line1216"></a>  }).addErrback(failOnError);
+<a name="line1217"></a>}
+<a name="line1218"></a>
+<a name="line1219"></a>function testGetMultipleRecordsFromIndex() {
+<a name="line1220"></a>  if (!idbSupported) {
+<a name="line1221"></a>    return;
+<a name="line1222"></a>  }
+<a name="line1223"></a>
+<a name="line1224"></a>  asyncTestCase.waitForAsync(&#39;get multiple records from index&#39;);
+<a name="line1225"></a>  globalDb.branch().addCallback(addStoreWithIndex).addCallback(function(db) {
+<a name="line1226"></a>    var COMPLETE = goog.db.Transaction.EventTypes.COMPLETE;
+<a name="line1227"></a>    var addTx = db.createTransaction(
+<a name="line1228"></a>        [&#39;store&#39;],
+<a name="line1229"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line1230"></a>    addTx.objectStore(&#39;store&#39;).add({key: &#39;1&#39;, value: &#39;a&#39;});
+<a name="line1231"></a>    addTx.objectStore(&#39;store&#39;).add({key: &#39;2&#39;, value: &#39;a&#39;});
+<a name="line1232"></a>    addTx.objectStore(&#39;store&#39;).add({key: &#39;3&#39;, value: &#39;b&#39;});
+<a name="line1233"></a>    // The following line breaks Chrome 14, but not Chrome 15:
+<a name="line1234"></a>    // addTx.objectStore(&#39;store&#39;).add({key: &#39;4&#39;});
+<a name="line1235"></a>    goog.events.listen(
+<a name="line1236"></a>        addTx,
+<a name="line1237"></a>        goog.db.Transaction.EventTypes.ERROR,
+<a name="line1238"></a>        failOnErrorEvent);
+<a name="line1239"></a>
+<a name="line1240"></a>    goog.events.listen(addTx, COMPLETE, function() {
+<a name="line1241"></a>      var checkResultsTx = db.createTransaction([&#39;store&#39;]);
+<a name="line1242"></a>      var index = checkResultsTx.objectStore(&#39;store&#39;).getIndex(&#39;index&#39;);
+<a name="line1243"></a>      index.getAll().addCallback(function(results) {
+<a name="line1244"></a>        assertNotUndefined(results);
+<a name="line1245"></a>        assertEquals(3, results.length);
+<a name="line1246"></a>      });
+<a name="line1247"></a>      index.getAll(&#39;a&#39;).addCallback(function(results) {
+<a name="line1248"></a>        assertNotUndefined(results);
+<a name="line1249"></a>        assertEquals(2, results.length);
+<a name="line1250"></a>      });
+<a name="line1251"></a>      index.getAllKeys().addCallback(function(results) {
+<a name="line1252"></a>        assertNotUndefined(results);
+<a name="line1253"></a>        assertEquals(3, results.length);
+<a name="line1254"></a>      });
+<a name="line1255"></a>      index.getAllKeys(&#39;b&#39;).addCallback(function(results) {
+<a name="line1256"></a>        assertNotUndefined(results);
+<a name="line1257"></a>        assertEquals(1, results.length);
+<a name="line1258"></a>      });
+<a name="line1259"></a>
+<a name="line1260"></a>      goog.events.listen(
+<a name="line1261"></a>          checkResultsTx,
+<a name="line1262"></a>          goog.db.Transaction.EventTypes.ERROR,
+<a name="line1263"></a>          failOnErrorEvent);
+<a name="line1264"></a>      goog.events.listen(checkResultsTx, COMPLETE, function() {
+<a name="line1265"></a>        closeAndContinue(db);
+<a name="line1266"></a>      });
+<a name="line1267"></a>    });
+<a name="line1268"></a>  }).addErrback(failOnError);
+<a name="line1269"></a>}
+<a name="line1270"></a>
+<a name="line1271"></a>function testUniqueIndex() {
+<a name="line1272"></a>  if (!idbSupported) {
+<a name="line1273"></a>    return;
+<a name="line1274"></a>  }
+<a name="line1275"></a>
+<a name="line1276"></a>  asyncTestCase.waitForAsync(&#39;adding to unique index&#39;);
+<a name="line1277"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line1278"></a>    return incrementVersion(db, function(ev, db, tx) {
+<a name="line1279"></a>      var store = db.createObjectStore(&#39;store&#39;, {keyPath: &#39;key&#39;});
+<a name="line1280"></a>      store.createIndex(&#39;index&#39;, &#39;value&#39;, {unique: true});
+<a name="line1281"></a>    });
+<a name="line1282"></a>  }).addCallback(function(db) {
+<a name="line1283"></a>    var tx = db.createTransaction(
+<a name="line1284"></a>        [&#39;store&#39;],
+<a name="line1285"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line1286"></a>    assertTrue(tx.objectStore(&#39;store&#39;).getIndex(&#39;index&#39;).isUnique());
+<a name="line1287"></a>    tx.objectStore(&#39;store&#39;).add({key: &#39;1&#39;, value: &#39;a&#39;});
+<a name="line1288"></a>    tx.objectStore(&#39;store&#39;).add({key: &#39;2&#39;, value: &#39;a&#39;});
+<a name="line1289"></a>    goog.events.listen(tx, goog.db.Transaction.EventTypes.ERROR, function(ev) {
+<a name="line1290"></a>      // expected
+<a name="line1291"></a>      assertTrue(
+<a name="line1292"></a>          &#39;Expected DATA_ERR, CONSTRAINT_ERR, was &#39;,
+<a name="line1293"></a>          // Chrome 21, 23+.
+<a name="line1294"></a>          goog.db.Error.ErrorName.CONSTRAINT_ERR == ev.target.getName() ||
+<a name="line1295"></a>          // Chrome 22.
+<a name="line1296"></a>          goog.db.Error.ErrorName.DATE_ERR == ev.target.getName());
+<a name="line1297"></a>      closeAndContinue(db);
+<a name="line1298"></a>    });
+<a name="line1299"></a>  }).addErrback(failOnError);
+<a name="line1300"></a>}
+<a name="line1301"></a>
+<a name="line1302"></a>function testDeleteDatabase() {
+<a name="line1303"></a>  if (!idbSupported) {
+<a name="line1304"></a>    return;
+<a name="line1305"></a>  }
+<a name="line1306"></a>
+<a name="line1307"></a>  asyncTestCase.waitForAsync(&#39;deleting database&#39;);
+<a name="line1308"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line1309"></a>    db.close();
+<a name="line1310"></a>    return goog.db.deleteDatabase(dbName, function() {
+<a name="line1311"></a>      fail(&#39;didn\&#39;t expect deleteDatabase to be blocked&#39;);
+<a name="line1312"></a>    });
+<a name="line1313"></a>  }).addCallback(openDatabase).
+<a name="line1314"></a>      addCallback(assertStoreDoesntExist).
+<a name="line1315"></a>      addErrback(failOnError);
+<a name="line1316"></a>}
+<a name="line1317"></a>
+<a name="line1318"></a>function testDeleteDatabaseIsBlocked() {
+<a name="line1319"></a>  if (!idbSupported) {
+<a name="line1320"></a>    return;
+<a name="line1321"></a>  }
+<a name="line1322"></a>
+<a name="line1323"></a>  var wasBlocked = false;
+<a name="line1324"></a>  asyncTestCase.waitForAsync(&#39;deleting database (blocked)&#39;);
+<a name="line1325"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line1326"></a>    db.close();
+<a name="line1327"></a>    // Get a fresh connection, without any events registered on globalDb.
+<a name="line1328"></a>    return goog.db.openDatabase(dbName);
+<a name="line1329"></a>  }).addCallback(function(db) {
+<a name="line1330"></a>    return goog.db.deleteDatabase(dbName, function(ev) {
+<a name="line1331"></a>      wasBlocked = true;
+<a name="line1332"></a>      db.close();
+<a name="line1333"></a>    });
+<a name="line1334"></a>  }).addCallback(function() {
+<a name="line1335"></a>    assertTrue(wasBlocked);
+<a name="line1336"></a>    return openDatabase();
+<a name="line1337"></a>  }).addCallback(assertStoreDoesntExist).addErrback(failOnError);
+<a name="line1338"></a>}
+<a name="line1339"></a>
+<a name="line1340"></a>function testBlockedDeleteDatabaseWithVersionChangeEvent() {
+<a name="line1341"></a>  if (!idbSupported) {
+<a name="line1342"></a>    return;
+<a name="line1343"></a>  }
+<a name="line1344"></a>
+<a name="line1345"></a>  var gotVersionChange = false;
+<a name="line1346"></a>  asyncTestCase.waitForAsync(&#39;deleting database (blocked)&#39;);
+<a name="line1347"></a>  globalDb.branch().addCallback(addStore).addCallback(function(db) {
+<a name="line1348"></a>    db.close();
+<a name="line1349"></a>    // Get a fresh connection, without any events registered on globalDb.
+<a name="line1350"></a>    return goog.db.openDatabase(dbName);
+<a name="line1351"></a>  }).addCallback(function(db) {
+<a name="line1352"></a>    goog.events.listen(db, goog.db.IndexedDb.EventType.VERSION_CHANGE,
+<a name="line1353"></a>                       function(ev) {
+<a name="line1354"></a>          gotVersionChange = true;
+<a name="line1355"></a>          db.close();
+<a name="line1356"></a>        });
+<a name="line1357"></a>    return goog.db.deleteDatabase(dbName);
+<a name="line1358"></a>  }).addCallback(function() {
+<a name="line1359"></a>    assertTrue(gotVersionChange);
+<a name="line1360"></a>    return openDatabase();
+<a name="line1361"></a>  }).addCallback(assertStoreDoesntExist);
+<a name="line1362"></a>}
+<a name="line1363"></a>
+<a name="line1364"></a>function testDeleteNonExistentDatabase() {
+<a name="line1365"></a>  if (!idbSupported) {
+<a name="line1366"></a>    return;
+<a name="line1367"></a>  }
+<a name="line1368"></a>
+<a name="line1369"></a>  // Deleting non-existent db is a no-op.  Shall not throw anything.
+<a name="line1370"></a>  asyncTestCase.waitForAsync(&#39;check delete non-existent db&#39;);
+<a name="line1371"></a>  globalDb.branch().addCallback(function(db) {
+<a name="line1372"></a>    db.close();
+<a name="line1373"></a>    return goog.db.deleteDatabase(&#39;non-existent-db&#39;);
+<a name="line1374"></a>  }).addCallbacks(function() {
+<a name="line1375"></a>    asyncTestCase.continueTesting();
+<a name="line1376"></a>  }, failOnError);
+<a name="line1377"></a>}
+<a name="line1378"></a>
+<a name="line1379"></a>function testObjectStoreCountAll() {
+<a name="line1380"></a>  if (!idbSupported) {
+<a name="line1381"></a>    return;
+<a name="line1382"></a>  }
+<a name="line1383"></a>
+<a name="line1384"></a>  var values = [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;];
+<a name="line1385"></a>  var keys = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line1386"></a>
+<a name="line1387"></a>  var addData = goog.partial(populateStore, values, keys);
+<a name="line1388"></a>  var checkCountAll = function(db) {
+<a name="line1389"></a>    var tx = db.createTransaction([&#39;store&#39;]);
+<a name="line1390"></a>    var store = tx.objectStore(&#39;store&#39;);
+<a name="line1391"></a>    return store.count().addCallbacks(function(count) {
+<a name="line1392"></a>      assertEquals(values.length, count);
+<a name="line1393"></a>      tx.dispose();
+<a name="line1394"></a>      closeAndContinue(db);
+<a name="line1395"></a>    }, function(e) {
+<a name="line1396"></a>      tx.dispose();
+<a name="line1397"></a>      db.close();
+<a name="line1398"></a>      failOnError(e);
+<a name="line1399"></a>    });
+<a name="line1400"></a>  };
+<a name="line1401"></a>
+<a name="line1402"></a>  asyncTestCase.waitForAsync(&#39;testObjectStoreCountAll&#39;);
+<a name="line1403"></a>  globalDb.branch().addCallbacks(addStore, failOnError).
+<a name="line1404"></a>      addCallback(addData).
+<a name="line1405"></a>      addCallback(checkCountAll);
+<a name="line1406"></a>}
+<a name="line1407"></a>
+<a name="line1408"></a>function testObjectStoreCountSome() {
+<a name="line1409"></a>  if (!idbSupported) {
+<a name="line1410"></a>    return;
+<a name="line1411"></a>  }
+<a name="line1412"></a>
+<a name="line1413"></a>  var values = [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;];
+<a name="line1414"></a>  var keys = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line1415"></a>
+<a name="line1416"></a>  var addData = goog.partial(populateStore, values, keys);
+<a name="line1417"></a>  var checkCountSome = function(db) {
+<a name="line1418"></a>    var tx = db.createTransaction([&#39;store&#39;]);
+<a name="line1419"></a>    var store = tx.objectStore(&#39;store&#39;);
+<a name="line1420"></a>    return store.count(goog.db.KeyRange.bound(&#39;b&#39;, &#39;c&#39;)).addCallbacks(
+<a name="line1421"></a>        function(count) {
+<a name="line1422"></a>          assertEquals(2, count);
+<a name="line1423"></a>          tx.dispose();
+<a name="line1424"></a>          closeAndContinue(db);
+<a name="line1425"></a>        }, function(e) {
+<a name="line1426"></a>          tx.dispose();
+<a name="line1427"></a>          db.close();
+<a name="line1428"></a>          failOnError(e);
+<a name="line1429"></a>        });
+<a name="line1430"></a>  };
+<a name="line1431"></a>
+<a name="line1432"></a>  asyncTestCase.waitForAsync(&#39;testObjectStoreCountSome&#39;);
+<a name="line1433"></a>  globalDb.branch().addCallbacks(addStore, failOnError).
+<a name="line1434"></a>      addCallback(addData).
+<a name="line1435"></a>      addCallback(checkCountSome);
+<a name="line1436"></a>}
+<a name="line1437"></a>
+<a name="line1438"></a>function testIndexCursorGet() {
+<a name="line1439"></a>  if (!idbSupported) {
+<a name="line1440"></a>    return;
+<a name="line1441"></a>  }
+<a name="line1442"></a>
+<a name="line1443"></a>  var values = [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;];
+<a name="line1444"></a>  var keys = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line1445"></a>
+<a name="line1446"></a>  var addData = goog.partial(populateStoreWithObjects, values, keys);
+<a name="line1447"></a>
+<a name="line1448"></a>  // Open the cursor over range [&#39;b&#39;, &#39;c&#39;], move in backwards direction.
+<a name="line1449"></a>  var openCursorAndCheck = function(db) {
+<a name="line1450"></a>    var cursorTx = db.createTransaction([&#39;store&#39;]);
+<a name="line1451"></a>    var store = cursorTx.objectStore(&#39;store&#39;);
+<a name="line1452"></a>    var index = store.getIndex(&#39;index&#39;);
+<a name="line1453"></a>    var values = [];
+<a name="line1454"></a>    var keys = [];
+<a name="line1455"></a>
+<a name="line1456"></a>    var txDeferred = new goog.async.Deferred();
+<a name="line1457"></a>    goog.events.listen(
+<a name="line1458"></a>        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+<a name="line1459"></a>    goog.events.listen(
+<a name="line1460"></a>        cursorTx, goog.db.Transaction.EventTypes.COMPLETE,
+<a name="line1461"></a>        function() {
+<a name="line1462"></a>          txDeferred.callback();
+<a name="line1463"></a>        });
+<a name="line1464"></a>
+<a name="line1465"></a>    var cursorDeferred = new goog.async.Deferred();
+<a name="line1466"></a>    var cursor = index.openCursor(
+<a name="line1467"></a>        goog.db.KeyRange.bound(&#39;2&#39;, &#39;3&#39;),
+<a name="line1468"></a>        goog.db.Cursor.Direction.PREV);
+<a name="line1469"></a>
+<a name="line1470"></a>    var key = goog.events.listen(
+<a name="line1471"></a>        cursor, goog.db.Cursor.EventType.NEW_DATA,
+<a name="line1472"></a>        function() {
+<a name="line1473"></a>          values.push(cursor.getValue()[&#39;value&#39;]);
+<a name="line1474"></a>          keys.push(cursor.getValue()[&#39;key&#39;]);
+<a name="line1475"></a>          cursor.next();
+<a name="line1476"></a>        });
+<a name="line1477"></a>
+<a name="line1478"></a>    goog.events.listenOnce(
+<a name="line1479"></a>        cursor,
+<a name="line1480"></a>        [goog.db.Cursor.EventType.COMPLETE, goog.db.Cursor.EventType.ERROR],
+<a name="line1481"></a>        function(evt) {
+<a name="line1482"></a>          goog.events.unlistenByKey(key);
+<a name="line1483"></a>          if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
+<a name="line1484"></a>            cursorDeferred.callback(db);
+<a name="line1485"></a>          } else {
+<a name="line1486"></a>            cursorDeferred.errback();
+<a name="line1487"></a>          }
+<a name="line1488"></a>        });
+<a name="line1489"></a>
+<a name="line1490"></a>    goog.async.DeferredList.gatherResults(
+<a name="line1491"></a>        [cursorDeferred, txDeferred]).addCallback(
+<a name="line1492"></a>        function(results) {
+<a name="line1493"></a>          goog.events.unlistenByKey(key);
+<a name="line1494"></a>          var db = results[0];
+<a name="line1495"></a>          assertArrayEquals([&#39;3&#39;, &#39;2&#39;], values);
+<a name="line1496"></a>          assertArrayEquals([&#39;c&#39;, &#39;b&#39;], keys);
+<a name="line1497"></a>          closeAndContinue(db);
+<a name="line1498"></a>        });
+<a name="line1499"></a>  };
+<a name="line1500"></a>
+<a name="line1501"></a>  asyncTestCase.waitForAsync(&#39;testIndexCursorGet&#39;);
+<a name="line1502"></a>  globalDb.branch().addCallbacks(addStoreWithIndex, failOnError).
+<a name="line1503"></a>      addCallback(addData).
+<a name="line1504"></a>      addCallback(openCursorAndCheck);
+<a name="line1505"></a>}
+<a name="line1506"></a>
+<a name="line1507"></a>function testIndexCursorReplace() {
+<a name="line1508"></a>  if (!idbSupported) {
+<a name="line1509"></a>    return;
+<a name="line1510"></a>  }
+<a name="line1511"></a>
+<a name="line1512"></a>  var values = [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;];
+<a name="line1513"></a>  var keys = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line1514"></a>
+<a name="line1515"></a>  var addData = goog.partial(populateStoreWithObjects, values, keys);
+<a name="line1516"></a>
+<a name="line1517"></a>  // Store should contain [&#39;1&#39;, &#39;2&#39;, &#39;5&#39;, &#39;4&#39;] after replacement.
+<a name="line1518"></a>  var checkStore = goog.partial(assertStoreObjectValues, [&#39;1&#39;, &#39;2&#39;, &#39;5&#39;, &#39;4&#39;]);
+<a name="line1519"></a>
+<a name="line1520"></a>  // Use a bounded cursor for [&#39;3&#39;, &#39;4&#39;) to update value &#39;3&#39; -&gt; &#39;5&#39;.
+<a name="line1521"></a>  var openCursorAndReplace = function(db) {
+<a name="line1522"></a>    var d = new goog.async.Deferred();
+<a name="line1523"></a>    var cursorTx = db.createTransaction(
+<a name="line1524"></a>        [&#39;store&#39;],
+<a name="line1525"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line1526"></a>
+<a name="line1527"></a>    var txDeferred = new goog.async.Deferred();
+<a name="line1528"></a>    goog.events.listen(
+<a name="line1529"></a>        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+<a name="line1530"></a>    goog.events.listen(
+<a name="line1531"></a>        cursorTx, goog.db.Transaction.EventTypes.COMPLETE,
+<a name="line1532"></a>        function() {
+<a name="line1533"></a>          txDeferred.callback();
+<a name="line1534"></a>        });
+<a name="line1535"></a>
+<a name="line1536"></a>    var store = cursorTx.objectStore(&#39;store&#39;);
+<a name="line1537"></a>    var index = store.getIndex(&#39;index&#39;);
+<a name="line1538"></a>    var cursorDeferred = new goog.async.Deferred();
+<a name="line1539"></a>    var cursor = index.openCursor(
+<a name="line1540"></a>        goog.db.KeyRange.bound(&#39;3&#39;, &#39;4&#39;, false, true));
+<a name="line1541"></a>
+<a name="line1542"></a>    var key = goog.events.listen(
+<a name="line1543"></a>        cursor, goog.db.Cursor.EventType.NEW_DATA,
+<a name="line1544"></a>        function() {
+<a name="line1545"></a>          assertEquals(&#39;3&#39;, cursor.getValue()[&#39;value&#39;]);
+<a name="line1546"></a>          cursor.update(
+<a name="line1547"></a>              {
+<a name="line1548"></a>                &#39;key&#39;: cursor.getValue()[&#39;key&#39;],
+<a name="line1549"></a>                &#39;value&#39;: &#39;5&#39;
+<a name="line1550"></a>              }).addCallback(function() {
+<a name="line1551"></a>            cursor.next();
+<a name="line1552"></a>          }).addErrback(failOnError);
+<a name="line1553"></a>        });
+<a name="line1554"></a>
+<a name="line1555"></a>    goog.events.listenOnce(
+<a name="line1556"></a>        cursor,
+<a name="line1557"></a>        [goog.db.Cursor.EventType.COMPLETE, goog.db.Cursor.EventType.ERROR],
+<a name="line1558"></a>        function(evt) {
+<a name="line1559"></a>          goog.events.unlistenByKey(key);
+<a name="line1560"></a>          if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
+<a name="line1561"></a>            cursorDeferred.callback(db);
+<a name="line1562"></a>          } else {
+<a name="line1563"></a>            cursorDeferred.errback();
+<a name="line1564"></a>          }
+<a name="line1565"></a>        });
+<a name="line1566"></a>
+<a name="line1567"></a>    goog.async.DeferredList.gatherResults(
+<a name="line1568"></a>        [cursorDeferred, txDeferred]).addCallbacks(
+<a name="line1569"></a>        function(results) {
+<a name="line1570"></a>          goog.events.unlistenByKey(key);
+<a name="line1571"></a>          d.callback(results[0]);
+<a name="line1572"></a>        }, failOnError);
+<a name="line1573"></a>
+<a name="line1574"></a>    return d;
+<a name="line1575"></a>  };
+<a name="line1576"></a>
+<a name="line1577"></a>  // Setup and execute test case.
+<a name="line1578"></a>  asyncTestCase.waitForAsync(&#39;replacing value by cursor&#39;);
+<a name="line1579"></a>  globalDb.branch().addCallbacks(addStoreWithIndex, failOnError).
+<a name="line1580"></a>      addCallback(addData).
+<a name="line1581"></a>      addCallback(openCursorAndReplace).
+<a name="line1582"></a>      addCallback(checkStore);
+<a name="line1583"></a>}
+<a name="line1584"></a>
+<a name="line1585"></a>function testIndexCursorRemove() {
+<a name="line1586"></a>  if (!idbSupported) {
+<a name="line1587"></a>    return;
+<a name="line1588"></a>  }
+<a name="line1589"></a>
+<a name="line1590"></a>  var values = [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;];
+<a name="line1591"></a>  var keys = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line1592"></a>
+<a name="line1593"></a>  var addData = goog.partial(populateStoreWithObjects, values, keys);
+<a name="line1594"></a>
+<a name="line1595"></a>  // Store should contain [&#39;1&#39;, &#39;2&#39;] after removing elements.
+<a name="line1596"></a>  var checkStore = goog.partial(assertStoreObjectValues, [&#39;1&#39;, &#39;2&#39;]);
+<a name="line1597"></a>
+<a name="line1598"></a>  // Use a bounded cursor for (&#39;2&#39;, ...) to remove &#39;3&#39;, &#39;4&#39;.
+<a name="line1599"></a>  var openCursorAndRemove = function(db) {
+<a name="line1600"></a>    var d = new goog.async.Deferred();
+<a name="line1601"></a>    var cursorTx = db.createTransaction(
+<a name="line1602"></a>        [&#39;store&#39;],
+<a name="line1603"></a>        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line1604"></a>
+<a name="line1605"></a>    var txDeferred = new goog.async.Deferred();
+<a name="line1606"></a>    goog.events.listen(
+<a name="line1607"></a>        cursorTx, goog.db.Transaction.EventTypes.ERROR, failOnError);
+<a name="line1608"></a>    goog.events.listen(
+<a name="line1609"></a>        cursorTx, goog.db.Transaction.EventTypes.COMPLETE,
+<a name="line1610"></a>        function() {
+<a name="line1611"></a>          txDeferred.callback();
+<a name="line1612"></a>        });
+<a name="line1613"></a>
+<a name="line1614"></a>
+<a name="line1615"></a>    var store = cursorTx.objectStore(&#39;store&#39;);
+<a name="line1616"></a>    var index = store.getIndex(&#39;index&#39;);
+<a name="line1617"></a>    var cursorDeferred = new goog.async.Deferred();
+<a name="line1618"></a>    var cursor = index.openCursor(goog.db.KeyRange.lowerBound(&#39;2&#39;, true));
+<a name="line1619"></a>
+<a name="line1620"></a>    var key = goog.events.listen(
+<a name="line1621"></a>        cursor, goog.db.Cursor.EventType.NEW_DATA,
+<a name="line1622"></a>        function() {
+<a name="line1623"></a>          cursor.remove(&#39;5&#39;).addCallback(function() {
+<a name="line1624"></a>            cursor.next();
+<a name="line1625"></a>          }).addErrback(failOnError);
+<a name="line1626"></a>        });
+<a name="line1627"></a>
+<a name="line1628"></a>    goog.events.listenOnce(
+<a name="line1629"></a>        cursor,
+<a name="line1630"></a>        [goog.db.Cursor.EventType.COMPLETE, goog.db.Cursor.EventType.ERROR],
+<a name="line1631"></a>        function(evt) {
+<a name="line1632"></a>          goog.events.unlistenByKey(key);
+<a name="line1633"></a>          if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
+<a name="line1634"></a>            cursorDeferred.callback(db);
+<a name="line1635"></a>          } else {
+<a name="line1636"></a>            cursorDeferred.errback();
+<a name="line1637"></a>          }
+<a name="line1638"></a>        });
+<a name="line1639"></a>
+<a name="line1640"></a>    goog.async.DeferredList.gatherResults(
+<a name="line1641"></a>        [cursorDeferred, txDeferred]).addCallbacks(
+<a name="line1642"></a>        function(results) {
+<a name="line1643"></a>          goog.events.unlistenByKey(key);
+<a name="line1644"></a>          d.callback(results[0]);
+<a name="line1645"></a>        }, failOnError);
+<a name="line1646"></a>
+<a name="line1647"></a>    return d;
+<a name="line1648"></a>  };
+<a name="line1649"></a>
+<a name="line1650"></a>  // Setup and execute test case.
+<a name="line1651"></a>  asyncTestCase.waitForAsync(&#39;removing value by cursor&#39;);
+<a name="line1652"></a>  globalDb.branch().addCallbacks(addStoreWithIndex, failOnError).
+<a name="line1653"></a>      addCallback(addData).
+<a name="line1654"></a>      addCallback(openCursorAndRemove).
+<a name="line1655"></a>      addCallback(checkStore);
+<a name="line1656"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>cssom_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_cssom_cssom_test.js.html">cssom_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.cssomTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.cssomTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.cssom&#39;);
+<a name="line20"></a>goog.require(&#39;goog.cssom.CssRuleType&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line23"></a>
+<a name="line24"></a>// Since sheet cssom_test1.css&#39;s first line is to import
+<a name="line25"></a>// cssom_test2.css, we should get 2 before one in the string.
+<a name="line26"></a>var cssText = &#39;.css-link-1 { display: block; } &#39; +
+<a name="line27"></a>    &#39;.css-import-2 { display: block; } &#39; +
+<a name="line28"></a>    &#39;.css-import-1 { display: block; } &#39; +
+<a name="line29"></a>    &#39;.css-style-1 { display: block; } &#39; +
+<a name="line30"></a>    &#39;.css-style-2 { display: block; } &#39; +
+<a name="line31"></a>    &#39;.css-style-3 { display: block; }&#39;;
+<a name="line32"></a>
+<a name="line33"></a>var replacementCssText = &#39;.css-repl-1 { display: block; }&#39;;
+<a name="line34"></a>
+<a name="line35"></a>var isIe7 = goog.userAgent.IE &amp;&amp;
+<a name="line36"></a>    (goog.userAgent.compare(goog.userAgent.VERSION, &#39;7.0&#39;) == 0);
+<a name="line37"></a>
+<a name="line38"></a>// We&#39;re going to toLowerCase cssText before testing, because IE returns
+<a name="line39"></a>// CSS property names in UPPERCASE, and the function shouldn&#39;t
+<a name="line40"></a>// &quot;fix&quot; the text as it would be expensive and rarely of use.
+<a name="line41"></a>// Same goes for the trailing whitespace in IE.
+<a name="line42"></a>// Same goes for fixing the optimized removal of trailing ; in rules.
+<a name="line43"></a>// Also needed for Opera.
+<a name="line44"></a>function fixCssTextForIe(cssText) {
+<a name="line45"></a>  cssText = cssText.toLowerCase().replace(/\s*$/, &#39;&#39;);
+<a name="line46"></a>  if (cssText.match(/[^;] \}/)) {
+<a name="line47"></a>    cssText = cssText.replace(/([^;]) \}/g, &#39;$1; }&#39;);
+<a name="line48"></a>  }
+<a name="line49"></a>  return cssText;
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>function testGetFileNameFromStyleSheet() {
+<a name="line53"></a>  var styleSheet = {&#39;href&#39;: &#39;http://foo.com/something/filename.css&#39;};
+<a name="line54"></a>  assertEquals(&#39;filename.css&#39;,
+<a name="line55"></a>      goog.cssom.getFileNameFromStyleSheet(styleSheet));
+<a name="line56"></a>
+<a name="line57"></a>  styleSheet = {&#39;href&#39;: &#39;https://foo.com:123/something/filename.css&#39;};
+<a name="line58"></a>  assertEquals(&#39;filename.css&#39;,
+<a name="line59"></a>      goog.cssom.getFileNameFromStyleSheet(styleSheet));
+<a name="line60"></a>
+<a name="line61"></a>  styleSheet = {&#39;href&#39;: &#39;http://foo.com/something/filename.css?bar=bas&#39;};
+<a name="line62"></a>  assertEquals(&#39;filename.css&#39;,
+<a name="line63"></a>      goog.cssom.getFileNameFromStyleSheet(styleSheet));
+<a name="line64"></a>
+<a name="line65"></a>  styleSheet = {&#39;href&#39;: &#39;filename.css?bar=bas&#39;};
+<a name="line66"></a>  assertEquals(&#39;filename.css&#39;,
+<a name="line67"></a>      goog.cssom.getFileNameFromStyleSheet(styleSheet));
+<a name="line68"></a>
+<a name="line69"></a>  styleSheet = {&#39;href&#39;: &#39;filename.css&#39;};
+<a name="line70"></a>  assertEquals(&#39;filename.css&#39;,
+<a name="line71"></a>      goog.cssom.getFileNameFromStyleSheet(styleSheet));
+<a name="line72"></a>}
+<a name="line73"></a>
+<a name="line74"></a>function testGetAllCssStyleSheets() {
+<a name="line75"></a>  var styleSheets = goog.cssom.getAllCssStyleSheets();
+<a name="line76"></a>  assertEquals(4, styleSheets.length);
+<a name="line77"></a>  // Makes sure they&#39;re in the right cascade order.
+<a name="line78"></a>  assertEquals(&#39;cssom_test_link_1.css&#39;,
+<a name="line79"></a>      goog.cssom.getFileNameFromStyleSheet(styleSheets[0]));
+<a name="line80"></a>  assertEquals(&#39;cssom_test_import_2.css&#39;,
+<a name="line81"></a>      goog.cssom.getFileNameFromStyleSheet(styleSheets[1]));
+<a name="line82"></a>  assertEquals(&#39;cssom_test_import_1.css&#39;,
+<a name="line83"></a>      goog.cssom.getFileNameFromStyleSheet(styleSheets[2]));
+<a name="line84"></a>  // Not an external styleSheet
+<a name="line85"></a>  assertNull(goog.cssom.getFileNameFromStyleSheet(styleSheets[3]));
+<a name="line86"></a>}
+<a name="line87"></a>
+<a name="line88"></a>function testGetAllCssText() {
+<a name="line89"></a>  var allCssText = goog.cssom.getAllCssText();
+<a name="line90"></a>  // In IE7, a CSSRule object gets included twice and replaces another
+<a name="line91"></a>  // existing CSSRule object. We aren&#39;t using
+<a name="line92"></a>  // goog.testing.ExpectedFailures since it brings in additional CSS
+<a name="line93"></a>  // which breaks a lot of our expectations about the number of rules
+<a name="line94"></a>  // present in a style sheet.
+<a name="line95"></a>  if (!isIe7) {
+<a name="line96"></a>    assertEquals(cssText, fixCssTextForIe(allCssText));
+<a name="line97"></a>  }
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>function testGetAllCssStyleRules() {
+<a name="line101"></a>  var allCssRules = goog.cssom.getAllCssStyleRules();
+<a name="line102"></a>  assertEquals(6, allCssRules.length);
+<a name="line103"></a>}
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>function testAddCssText() {
+<a name="line107"></a>  var newCssText = &#39;.css-add-1 { display: block; }&#39;;
+<a name="line108"></a>  var newCssNode = goog.cssom.addCssText(newCssText);
+<a name="line109"></a>
+<a name="line110"></a>  assertEquals(document.styleSheets.length, 3);
+<a name="line111"></a>
+<a name="line112"></a>  var allCssText = goog.cssom.getAllCssText();
+<a name="line113"></a>
+<a name="line114"></a>  // In IE7, a CSSRule object gets included twice and replaces another
+<a name="line115"></a>  // existing CSSRule object. We aren&#39;t using
+<a name="line116"></a>  // goog.testing.ExpectedFailures since it brings in additional CSS
+<a name="line117"></a>  // which breaks a lot of our expectations about the number of rules
+<a name="line118"></a>  // present in a style sheet.
+<a name="line119"></a>  if (!isIe7) {
+<a name="line120"></a>    // Opera inserts the CSSRule to the first position. And fixCssText
+<a name="line121"></a>    // is also needed to clean up whitespace.
+<a name="line122"></a>    if (goog.userAgent.OPERA) {
+<a name="line123"></a>      assertEquals(newCssText + &#39; &#39; + cssText,
+<a name="line124"></a>                   fixCssTextForIe(allCssText));
+<a name="line125"></a>    } else {
+<a name="line126"></a>      assertEquals(cssText + &#39; &#39; + newCssText,
+<a name="line127"></a>                   fixCssTextForIe(allCssText));
+<a name="line128"></a>    }
+<a name="line129"></a>  }
+<a name="line130"></a>
+<a name="line131"></a>  var cssRules = goog.cssom.getAllCssStyleRules();
+<a name="line132"></a>  assertEquals(7, cssRules.length);
+<a name="line133"></a>
+<a name="line134"></a>  // Remove the new stylesheet now so it doesn&#39;t interfere with other
+<a name="line135"></a>  // tests.
+<a name="line136"></a>  newCssNode.parentNode.removeChild(newCssNode);
+<a name="line137"></a>  // Sanity check.
+<a name="line138"></a>  cssRules = goog.cssom.getAllCssStyleRules();
+<a name="line139"></a>  assertEquals(6, cssRules.length);
+<a name="line140"></a>}
+<a name="line141"></a>
+<a name="line142"></a>function testAddCssRule() {
+<a name="line143"></a>  // test that addCssRule correctly adds the rule to the style
+<a name="line144"></a>  // sheet.
+<a name="line145"></a>  var styleSheets = goog.cssom.getAllCssStyleSheets();
+<a name="line146"></a>  var styleSheet = styleSheets[3];
+<a name="line147"></a>  var newCssRule = &#39;.css-addCssRule { display: block; }&#39;;
+<a name="line148"></a>  var rules = styleSheet.rules || styleSheet.cssRules;
+<a name="line149"></a>  var origNumberOfRules = rules.length;
+<a name="line150"></a>
+<a name="line151"></a>  goog.cssom.addCssRule(styleSheet, newCssRule, 1);
+<a name="line152"></a>
+<a name="line153"></a>  rules = styleSheet.rules || styleSheet.cssRules;
+<a name="line154"></a>  var newNumberOfRules = rules.length;
+<a name="line155"></a>  assertEquals(newNumberOfRules, origNumberOfRules + 1);
+<a name="line156"></a>
+<a name="line157"></a>  // Remove the added rule so we don&#39;t mess up other tests.
+<a name="line158"></a>  goog.cssom.removeCssRule(styleSheet, 1);
+<a name="line159"></a>}
+<a name="line160"></a>
+<a name="line161"></a>function testAddCssRuleAtPos() {
+<a name="line162"></a>  // test that addCssRule correctly adds the rule to the style
+<a name="line163"></a>  // sheet at the specified position.
+<a name="line164"></a>  var styleSheets = goog.cssom.getAllCssStyleSheets();
+<a name="line165"></a>  var styleSheet = styleSheets[3];
+<a name="line166"></a>  var newCssRule = &#39;.css-addCssRulePos { display: block; }&#39;;
+<a name="line167"></a>  var rules = styleSheet.cssRules || styleSheet.rules;
+<a name="line168"></a>  var origNumberOfRules = rules.length;
+<a name="line169"></a>
+<a name="line170"></a>  // Firefox croaks if we try to insert a CSSRule at an index that
+<a name="line171"></a>  // contains a CSSImport Rule. Since we deal only with CSSStyleRule
+<a name="line172"></a>  // objects, we find the first CSSStyleRule and return its index.
+<a name="line173"></a>  //
+<a name="line174"></a>  // NOTE(user): We could have unified the code block below for all
+<a name="line175"></a>  // browsers but IE6 horribly mangled up the stylesheet by creating
+<a name="line176"></a>  // duplicate instances of a rule when removeCssRule was invoked
+<a name="line177"></a>  // just after addCssRule with the looping construct in. This is
+<a name="line178"></a>  // perfectly fine since IE&#39;s styleSheet.rules does not contain
+<a name="line179"></a>  // references to anything but CSSStyleRules.
+<a name="line180"></a>  var pos = 0;
+<a name="line181"></a>  if (styleSheet.cssRules) {
+<a name="line182"></a>    pos = goog.array.findIndex(rules, function(rule) {
+<a name="line183"></a>      return rule.type == goog.cssom.CssRuleType.STYLE;
+<a name="line184"></a>    });
+<a name="line185"></a>  }
+<a name="line186"></a>  goog.cssom.addCssRule(styleSheet, newCssRule, pos);
+<a name="line187"></a>
+<a name="line188"></a>  rules = styleSheet.cssRules || styleSheet.rules;
+<a name="line189"></a>  var newNumberOfRules = rules.length;
+<a name="line190"></a>  assertEquals(newNumberOfRules, origNumberOfRules + 1);
+<a name="line191"></a>
+<a name="line192"></a>  // Remove the added rule so we don&#39;t mess up other tests.
+<a name="line193"></a>  goog.cssom.removeCssRule(styleSheet, pos);
+<a name="line194"></a>
+<a name="line195"></a>  rules = styleSheet.cssRules || styleSheet.rules;
+<a name="line196"></a>  assertEquals(origNumberOfRules, rules.length);
+<a name="line197"></a>}
+<a name="line198"></a>
+<a name="line199"></a>function testAddCssRuleNoIndex() {
+<a name="line200"></a>  // How well do we handle cases where the optional index is
+<a name="line201"></a>  //  not passed in?
+<a name="line202"></a>  var styleSheets = goog.cssom.getAllCssStyleSheets();
+<a name="line203"></a>  var styleSheet = styleSheets[3];
+<a name="line204"></a>  var rules = styleSheet.cssRules || styleSheet.rules;
+<a name="line205"></a>  var origNumberOfRules = rules.length;
+<a name="line206"></a>  var newCssRule = &#39;.css-addCssRuleNoIndex { display: block; }&#39;;
+<a name="line207"></a>
+<a name="line208"></a>  // Try inserting the rule without specifying an index.
+<a name="line209"></a>  // Make sure we don&#39;t throw an exception, and that we added
+<a name="line210"></a>  // the entry.
+<a name="line211"></a>  goog.cssom.addCssRule(styleSheet, newCssRule);
+<a name="line212"></a>
+<a name="line213"></a>  rules = styleSheet.cssRules || styleSheet.rules;
+<a name="line214"></a>  var newNumberOfRules = rules.length;
+<a name="line215"></a>  assertEquals(newNumberOfRules, origNumberOfRules + 1);
+<a name="line216"></a>
+<a name="line217"></a>  // Remove the added rule so we don&#39;t mess up the other tests.
+<a name="line218"></a>  goog.cssom.removeCssRule(styleSheet, newNumberOfRules - 1);
+<a name="line219"></a>
+<a name="line220"></a>  rules = styleSheet.cssRules || styleSheet.rules;
+<a name="line221"></a>  assertEquals(origNumberOfRules, rules.length);
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>function testGetParentStyleSheetAfterGetAllCssStyleRules() {
+<a name="line226"></a>  var cssRules = goog.cssom.getAllCssStyleRules();
+<a name="line227"></a>  var cssRule = cssRules[4];
+<a name="line228"></a>  var parentStyleSheet = goog.cssom.getParentStyleSheet(cssRule);
+<a name="line229"></a>  var styleSheets = goog.cssom.getAllCssStyleSheets();
+<a name="line230"></a>  var styleSheet = styleSheets[3];
+<a name="line231"></a>  assertEquals(styleSheet, parentStyleSheet);
+<a name="line232"></a>}
+<a name="line233"></a>
+<a name="line234"></a>function testGetCssRuleIndexInParentStyleSheetAfterGetAllCssStyleRules() {
+<a name="line235"></a>  var cssRules = goog.cssom.getAllCssStyleRules();
+<a name="line236"></a>  var cssRule = cssRules[4];
+<a name="line237"></a>  // Note here that this is correct - IE&#39;s styleSheet.rules does not
+<a name="line238"></a>  // contain references to anything but CSSStyleRules while FF and others
+<a name="line239"></a>  // include anything that inherits from the CSSRule interface.
+<a name="line240"></a>  // See http://dev.w3.org/csswg/cssom/#cssrule.
+<a name="line241"></a>  var ruleIndex = goog.userAgent.IE ? 1 : 2;
+<a name="line242"></a>  assertEquals(ruleIndex,
+<a name="line243"></a>      goog.cssom.getCssRuleIndexInParentStyleSheet(cssRule));
+<a name="line244"></a>}
+<a name="line245"></a>
+<a name="line246"></a>function testGetCssRuleIndexInParentStyleSheetNonStyleRule() {
+<a name="line247"></a>  // IE&#39;s styleSheet.rules only contain CSSStyleRules.
+<a name="line248"></a>  if (!goog.userAgent.IE) {
+<a name="line249"></a>    var styleSheets = goog.cssom.getAllCssStyleSheets();
+<a name="line250"></a>    var styleSheet = styleSheets[3];
+<a name="line251"></a>    var newCssRule = &#39;@media print { .css-nonStyle { display: block; } }&#39;;
+<a name="line252"></a>    goog.cssom.addCssRule(styleSheet, newCssRule);
+<a name="line253"></a>    var rules = styleSheet.rules || styleSheet.cssRules;
+<a name="line254"></a>    var cssRule = rules[rules.length - 1];
+<a name="line255"></a>    assertEquals(goog.cssom.CssRuleType.MEDIA, cssRule.type);
+<a name="line256"></a>    // Make sure we don&#39;t throw an exception.
+<a name="line257"></a>    goog.cssom.getCssRuleIndexInParentStyleSheet(cssRule, styleSheet);
+<a name="line258"></a>    // Remove the added rule.
+<a name="line259"></a>    goog.cssom.removeCssRule(styleSheet, rules.length - 1);
+<a name="line260"></a>  }
+<a name="line261"></a>}
+<a name="line262"></a>
+<a name="line263"></a>// Tests the scenario where we have a known stylesheet and index.
+<a name="line264"></a>function testReplaceCssRuleWithStyleSheetAndIndex() {
+<a name="line265"></a>  var styleSheets = goog.cssom.getAllCssStyleSheets();
+<a name="line266"></a>  var styleSheet = styleSheets[3];
+<a name="line267"></a>  var rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
+<a name="line268"></a>  var index = 2;
+<a name="line269"></a>  var origCssRule = rules[index];
+<a name="line270"></a>  var origCssText =
+<a name="line271"></a>      fixCssTextForIe(goog.cssom.getCssTextFromCssRule(origCssRule));
+<a name="line272"></a>
+<a name="line273"></a>  goog.cssom.replaceCssRule(origCssRule, replacementCssText, styleSheet,
+<a name="line274"></a>      index);
+<a name="line275"></a>
+<a name="line276"></a>  var rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
+<a name="line277"></a>  var newCssRule = rules[index];
+<a name="line278"></a>  var newCssText = goog.cssom.getCssTextFromCssRule(newCssRule);
+<a name="line279"></a>  assertEquals(replacementCssText, fixCssTextForIe(newCssText));
+<a name="line280"></a>
+<a name="line281"></a>  // Now we need to re-replace our rule, to preserve parity for the other
+<a name="line282"></a>  // tests.
+<a name="line283"></a>  goog.cssom.replaceCssRule(newCssRule, origCssText, styleSheet, index);
+<a name="line284"></a>  var rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
+<a name="line285"></a>  var nowCssRule = rules[index];
+<a name="line286"></a>  var nowCssText = goog.cssom.getCssTextFromCssRule(nowCssRule);
+<a name="line287"></a>  assertEquals(origCssText, fixCssTextForIe(nowCssText));
+<a name="line288"></a>}
+<a name="line289"></a>
+<a name="line290"></a>function testReplaceCssRuleUsingGetAllCssStyleRules() {
+<a name="line291"></a>  var cssRules = goog.cssom.getAllCssStyleRules();
+<a name="line292"></a>  var origCssRule = cssRules[4];
+<a name="line293"></a>  var origCssText =
+<a name="line294"></a>      fixCssTextForIe(goog.cssom.getCssTextFromCssRule(origCssRule));
+<a name="line295"></a>  // notice we don&#39;t pass in the stylesheet or index.
+<a name="line296"></a>  goog.cssom.replaceCssRule(origCssRule, replacementCssText);
+<a name="line297"></a>
+<a name="line298"></a>  var styleSheets = goog.cssom.getAllCssStyleSheets();
+<a name="line299"></a>  var styleSheet = styleSheets[3];
+<a name="line300"></a>  var rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
+<a name="line301"></a>  var index = goog.userAgent.IE ? 1 : 2;
+<a name="line302"></a>  var newCssRule = rules[index];
+<a name="line303"></a>  var newCssText =
+<a name="line304"></a>      fixCssTextForIe(goog.cssom.getCssTextFromCssRule(newCssRule));
+<a name="line305"></a>  assertEquals(replacementCssText, newCssText);
+<a name="line306"></a>
+<a name="line307"></a>  // try getting it the other way around too.
+<a name="line308"></a>  var cssRules = goog.cssom.getAllCssStyleRules();
+<a name="line309"></a>  var newCssRule = cssRules[4];
+<a name="line310"></a>  var newCssText =
+<a name="line311"></a>      fixCssTextForIe(goog.cssom.getCssTextFromCssRule(newCssRule));
+<a name="line312"></a>  assertEquals(replacementCssText, newCssText);
+<a name="line313"></a>
+<a name="line314"></a>  // Now we need to re-replace our rule, to preserve parity for the other
+<a name="line315"></a>  // tests.
+<a name="line316"></a>  goog.cssom.replaceCssRule(newCssRule, origCssText);
+<a name="line317"></a>  var cssRules = goog.cssom.getAllCssStyleRules();
+<a name="line318"></a>  var nowCssRule = cssRules[4];
+<a name="line319"></a>  var nowCssText =
+<a name="line320"></a>      fixCssTextForIe(goog.cssom.getCssTextFromCssRule(nowCssRule));
+<a name="line321"></a>  assertEquals(origCssText, nowCssText);
+<a name="line322"></a>}
+</pre>
+
+
+</body>
+</html>

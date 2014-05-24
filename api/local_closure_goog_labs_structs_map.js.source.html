@@ -1,0 +1,398 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>map.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_structs_map.js.html">map.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A map data structure that offers a convenient API to
+<a name="line17"></a> * manipulate a key, value map. The key must be a string.
+<a name="line18"></a> *
+<a name="line19"></a> * This implementation also ensure that you can use keys that would
+<a name="line20"></a> * not be usable using a normal object literal {}. Some examples
+<a name="line21"></a> * include __proto__ (all newer browsers), toString/hasOwnProperty (IE
+<a name="line22"></a> * &lt;= 8).
+<a name="line23"></a> */
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.labs.structs.Map&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.array&#39;);
+<a name="line28"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line29"></a>goog.require(&#39;goog.labs.object&#39;);
+<a name="line30"></a>goog.require(&#39;goog.object&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Creates a new map.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @struct
+<a name="line38"></a> * @final
+<a name="line39"></a> */
+<a name="line40"></a>goog.labs.structs.Map = function() {
+<a name="line41"></a>  // clear() initializes the map to the empty state.
+<a name="line42"></a>  this.clear();
+<a name="line43"></a>};
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * @type {function(this: Object, string): boolean}
+<a name="line48"></a> * @private
+<a name="line49"></a> */
+<a name="line50"></a>goog.labs.structs.Map.objectPropertyIsEnumerable_ =
+<a name="line51"></a>    Object.prototype.propertyIsEnumerable;
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * @type {function(this: Object, string): boolean}
+<a name="line56"></a> * @private
+<a name="line57"></a> */
+<a name="line58"></a>goog.labs.structs.Map.objectHasOwnProperty_ =
+<a name="line59"></a>    Object.prototype.hasOwnProperty;
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Primary backing store of this map.
+<a name="line64"></a> * @type {!Object}
+<a name="line65"></a> * @private
+<a name="line66"></a> */
+<a name="line67"></a>goog.labs.structs.Map.prototype.map_;
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * Secondary backing store for keys. The index corresponds to the
+<a name="line72"></a> * index for secondaryStoreValues_.
+<a name="line73"></a> * @type {!Array.&lt;string&gt;}
+<a name="line74"></a> * @private
+<a name="line75"></a> */
+<a name="line76"></a>goog.labs.structs.Map.prototype.secondaryStoreKeys_;
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Secondary backing store for keys. The index corresponds to the
+<a name="line81"></a> * index for secondaryStoreValues_.
+<a name="line82"></a> * @type {!Array.&lt;*&gt;}
+<a name="line83"></a> * @private
+<a name="line84"></a> */
+<a name="line85"></a>goog.labs.structs.Map.prototype.secondaryStoreValues_;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * @private {number}
+<a name="line90"></a> */
+<a name="line91"></a>goog.labs.structs.Map.prototype.count_;
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Adds the (key, value) pair, overriding previous entry with the same
+<a name="line96"></a> * key, if any.
+<a name="line97"></a> * @param {string} key The key.
+<a name="line98"></a> * @param {*} value The value.
+<a name="line99"></a> */
+<a name="line100"></a>goog.labs.structs.Map.prototype.set = function(key, value) {
+<a name="line101"></a>  this.assertKeyIsString_(key);
+<a name="line102"></a>
+<a name="line103"></a>  var newKey = !this.hasKeyInPrimaryStore_(key);
+<a name="line104"></a>  this.map_[key] = value;
+<a name="line105"></a>
+<a name="line106"></a>  // __proto__ is not settable on object.
+<a name="line107"></a>  if (key == &#39;__proto__&#39; ||
+<a name="line108"></a>      // Shadows for built-in properties are not enumerable in IE &lt;= 8 .
+<a name="line109"></a>      (!goog.labs.structs.Map.BrowserFeature.OBJECT_CREATE_SUPPORTED &amp;&amp;
+<a name="line110"></a>       !goog.labs.structs.Map.objectPropertyIsEnumerable_.call(
+<a name="line111"></a>           this.map_, key))) {
+<a name="line112"></a>    delete this.map_[key];
+<a name="line113"></a>    var index = goog.array.indexOf(this.secondaryStoreKeys_, key);
+<a name="line114"></a>    if ((newKey = index &lt; 0)) {
+<a name="line115"></a>      index = this.secondaryStoreKeys_.length;
+<a name="line116"></a>    }
+<a name="line117"></a>
+<a name="line118"></a>    this.secondaryStoreKeys_[index] = key;
+<a name="line119"></a>    this.secondaryStoreValues_[index] = value;
+<a name="line120"></a>  }
+<a name="line121"></a>
+<a name="line122"></a>  if (newKey) this.count_++;
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * Gets the value for the given key.
+<a name="line128"></a> * @param {string} key The key whose value we want to retrieve.
+<a name="line129"></a> * @param {*=} opt_default The default value to return if the key does
+<a name="line130"></a> *     not exist in the map, default to undefined.
+<a name="line131"></a> * @return {*} The value corresponding to the given key, or opt_default
+<a name="line132"></a> *     if the key does not exist in this map.
+<a name="line133"></a> */
+<a name="line134"></a>goog.labs.structs.Map.prototype.get = function(key, opt_default) {
+<a name="line135"></a>  this.assertKeyIsString_(key);
+<a name="line136"></a>
+<a name="line137"></a>  if (this.hasKeyInPrimaryStore_(key)) {
+<a name="line138"></a>    return this.map_[key];
+<a name="line139"></a>  }
+<a name="line140"></a>
+<a name="line141"></a>  var index = goog.array.indexOf(this.secondaryStoreKeys_, key);
+<a name="line142"></a>  return index &gt;= 0 ? this.secondaryStoreValues_[index] : opt_default;
+<a name="line143"></a>};
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>/**
+<a name="line147"></a> * Removes the map entry with the given key.
+<a name="line148"></a> * @param {string} key The key to remove.
+<a name="line149"></a> * @return {boolean} True if the entry is removed.
+<a name="line150"></a> */
+<a name="line151"></a>goog.labs.structs.Map.prototype.remove = function(key) {
+<a name="line152"></a>  this.assertKeyIsString_(key);
+<a name="line153"></a>
+<a name="line154"></a>  if (this.hasKeyInPrimaryStore_(key)) {
+<a name="line155"></a>    this.count_--;
+<a name="line156"></a>    delete this.map_[key];
+<a name="line157"></a>    return true;
+<a name="line158"></a>  } else {
+<a name="line159"></a>    var index = goog.array.indexOf(this.secondaryStoreKeys_, key);
+<a name="line160"></a>    if (index &gt;= 0) {
+<a name="line161"></a>      this.count_--;
+<a name="line162"></a>      goog.array.removeAt(this.secondaryStoreKeys_, index);
+<a name="line163"></a>      goog.array.removeAt(this.secondaryStoreValues_, index);
+<a name="line164"></a>      return true;
+<a name="line165"></a>    }
+<a name="line166"></a>  }
+<a name="line167"></a>  return false;
+<a name="line168"></a>};
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * Adds the content of the map to this map. If a new entry uses a key
+<a name="line173"></a> * that already exists in this map, the existing key is replaced.
+<a name="line174"></a> * @param {!goog.labs.structs.Map} map The map to add.
+<a name="line175"></a> */
+<a name="line176"></a>goog.labs.structs.Map.prototype.addAll = function(map) {
+<a name="line177"></a>  goog.array.forEach(map.getKeys(), function(key) {
+<a name="line178"></a>    this.set(key, map.get(key));
+<a name="line179"></a>  }, this);
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * @return {boolean} True if the map is empty.
+<a name="line185"></a> */
+<a name="line186"></a>goog.labs.structs.Map.prototype.isEmpty = function() {
+<a name="line187"></a>  return !this.count_;
+<a name="line188"></a>};
+<a name="line189"></a>
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * @return {number} The number of the entries in this map.
+<a name="line193"></a> */
+<a name="line194"></a>goog.labs.structs.Map.prototype.getCount = function() {
+<a name="line195"></a>  return this.count_;
+<a name="line196"></a>};
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * @param {string} key The key to check.
+<a name="line201"></a> * @return {boolean} True if the map contains the given key.
+<a name="line202"></a> */
+<a name="line203"></a>goog.labs.structs.Map.prototype.containsKey = function(key) {
+<a name="line204"></a>  this.assertKeyIsString_(key);
+<a name="line205"></a>  return this.hasKeyInPrimaryStore_(key) ||
+<a name="line206"></a>      goog.array.contains(this.secondaryStoreKeys_, key);
+<a name="line207"></a>};
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * Whether the map contains the given value. The comparison is done
+<a name="line212"></a> * using !== comparator. Also returns true if the passed value is NaN
+<a name="line213"></a> * and a NaN value exists in the map.
+<a name="line214"></a> * @param {*} value Value to check.
+<a name="line215"></a> * @return {boolean} True if the map contains the given value.
+<a name="line216"></a> */
+<a name="line217"></a>goog.labs.structs.Map.prototype.containsValue = function(value) {
+<a name="line218"></a>  var found = goog.object.some(this.map_, function(v, k) {
+<a name="line219"></a>    return this.hasKeyInPrimaryStore_(k) &amp;&amp;
+<a name="line220"></a>        goog.labs.object.is(v, value);
+<a name="line221"></a>  }, this);
+<a name="line222"></a>  return found || goog.array.contains(this.secondaryStoreValues_, value);
+<a name="line223"></a>};
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/**
+<a name="line227"></a> * @return {!Array.&lt;string&gt;} An array of all the keys contained in this map.
+<a name="line228"></a> */
+<a name="line229"></a>goog.labs.structs.Map.prototype.getKeys = function() {
+<a name="line230"></a>  var keys;
+<a name="line231"></a>  if (goog.labs.structs.Map.BrowserFeature.OBJECT_KEYS_SUPPORTED) {
+<a name="line232"></a>    keys = goog.array.clone(Object.keys(this.map_));
+<a name="line233"></a>  } else {
+<a name="line234"></a>    keys = [];
+<a name="line235"></a>    for (var key in this.map_) {
+<a name="line236"></a>      if (goog.labs.structs.Map.objectHasOwnProperty_.call(this.map_, key)) {
+<a name="line237"></a>        keys.push(key);
+<a name="line238"></a>      }
+<a name="line239"></a>    }
+<a name="line240"></a>  }
+<a name="line241"></a>
+<a name="line242"></a>  goog.array.extend(keys, this.secondaryStoreKeys_);
+<a name="line243"></a>  return keys;
+<a name="line244"></a>};
+<a name="line245"></a>
+<a name="line246"></a>
+<a name="line247"></a>/**
+<a name="line248"></a> * @return {!Array.&lt;*&gt;} An array of all the values contained in this map.
+<a name="line249"></a> *     There may be duplicates.
+<a name="line250"></a> */
+<a name="line251"></a>goog.labs.structs.Map.prototype.getValues = function() {
+<a name="line252"></a>  var values = [];
+<a name="line253"></a>  var keys = this.getKeys();
+<a name="line254"></a>  for (var i = 0; i &lt; keys.length; i++) {
+<a name="line255"></a>    values.push(this.get(keys[i]));
+<a name="line256"></a>  }
+<a name="line257"></a>  return values;
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * @return {!Array.&lt;Array&gt;} An array of entries. Each entry is of the
+<a name="line263"></a> *     form [key, value]. Do not rely on consistent ordering of entries.
+<a name="line264"></a> */
+<a name="line265"></a>goog.labs.structs.Map.prototype.getEntries = function() {
+<a name="line266"></a>  var entries = [];
+<a name="line267"></a>  var keys = this.getKeys();
+<a name="line268"></a>  for (var i = 0; i &lt; keys.length; i++) {
+<a name="line269"></a>    var key = keys[i];
+<a name="line270"></a>    entries.push([key, this.get(key)]);
+<a name="line271"></a>  }
+<a name="line272"></a>  return entries;
+<a name="line273"></a>};
+<a name="line274"></a>
+<a name="line275"></a>
+<a name="line276"></a>/**
+<a name="line277"></a> * Clears the map to the initial state.
+<a name="line278"></a> */
+<a name="line279"></a>goog.labs.structs.Map.prototype.clear = function() {
+<a name="line280"></a>  this.map_ = goog.labs.structs.Map.BrowserFeature.OBJECT_CREATE_SUPPORTED ?
+<a name="line281"></a>      Object.create(null) : {};
+<a name="line282"></a>  this.secondaryStoreKeys_ = [];
+<a name="line283"></a>  this.secondaryStoreValues_ = [];
+<a name="line284"></a>  this.count_ = 0;
+<a name="line285"></a>};
+<a name="line286"></a>
+<a name="line287"></a>
+<a name="line288"></a>/**
+<a name="line289"></a> * Clones this map.
+<a name="line290"></a> * @return {!goog.labs.structs.Map} The clone of this map.
+<a name="line291"></a> */
+<a name="line292"></a>goog.labs.structs.Map.prototype.clone = function() {
+<a name="line293"></a>  var map = new goog.labs.structs.Map();
+<a name="line294"></a>  map.addAll(this);
+<a name="line295"></a>  return map;
+<a name="line296"></a>};
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * @param {string} key The key to check.
+<a name="line301"></a> * @return {boolean} True if the given key has been added successfully
+<a name="line302"></a> *     to the primary store.
+<a name="line303"></a> * @private
+<a name="line304"></a> */
+<a name="line305"></a>goog.labs.structs.Map.prototype.hasKeyInPrimaryStore_ = function(key) {
+<a name="line306"></a>  // New browsers that support Object.create do not allow setting of
+<a name="line307"></a>  // __proto__. In other browsers, hasOwnProperty will return true for
+<a name="line308"></a>  // __proto__ for object created with literal {}, so we need to
+<a name="line309"></a>  // special case it.
+<a name="line310"></a>  if (key == &#39;__proto__&#39;) {
+<a name="line311"></a>    return false;
+<a name="line312"></a>  }
+<a name="line313"></a>
+<a name="line314"></a>  if (goog.labs.structs.Map.BrowserFeature.OBJECT_CREATE_SUPPORTED) {
+<a name="line315"></a>    return key in this.map_;
+<a name="line316"></a>  }
+<a name="line317"></a>
+<a name="line318"></a>  return goog.labs.structs.Map.objectHasOwnProperty_.call(this.map_, key);
+<a name="line319"></a>};
+<a name="line320"></a>
+<a name="line321"></a>
+<a name="line322"></a>/**
+<a name="line323"></a> * Asserts that the given key is a string.
+<a name="line324"></a> * @param {string} key The key to check.
+<a name="line325"></a> * @private
+<a name="line326"></a> */
+<a name="line327"></a>goog.labs.structs.Map.prototype.assertKeyIsString_ = function(key) {
+<a name="line328"></a>  goog.asserts.assert(goog.isString(key), &#39;key must be a string.&#39;);
+<a name="line329"></a>};
+<a name="line330"></a>
+<a name="line331"></a>
+<a name="line332"></a>/**
+<a name="line333"></a> * Browser feature enum necessary for map.
+<a name="line334"></a> * @enum {boolean}
+<a name="line335"></a> */
+<a name="line336"></a>goog.labs.structs.Map.BrowserFeature = {
+<a name="line337"></a>  // TODO(user): Replace with goog.userAgent detection.
+<a name="line338"></a>  /**
+<a name="line339"></a>   * Whether Object.create method is supported.
+<a name="line340"></a>   */
+<a name="line341"></a>  OBJECT_CREATE_SUPPORTED: !!Object.create,
+<a name="line342"></a>
+<a name="line343"></a>  /**
+<a name="line344"></a>   * Whether Object.keys method is supported.
+<a name="line345"></a>   */
+<a name="line346"></a>  OBJECT_KEYS_SUPPORTED: !!Object.keys
+<a name="line347"></a>};
+</pre>
+
+
+</body>
+</html>

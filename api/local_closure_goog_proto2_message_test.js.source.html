@@ -1,0 +1,511 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>message_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_proto2_message_test.js.html">message_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.proto2.MessageTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.proto2.MessageTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line19"></a>goog.require(&#39;proto2.TestAllTypes&#39;);
+<a name="line20"></a>goog.require(&#39;proto2.TestAllTypes.NestedEnum&#39;);
+<a name="line21"></a>goog.require(&#39;proto2.TestAllTypes.NestedMessage&#39;);
+<a name="line22"></a>goog.require(&#39;proto2.TestAllTypes.OptionalGroup&#39;);
+<a name="line23"></a>goog.require(&#39;proto2.TestAllTypes.RepeatedGroup&#39;);
+<a name="line24"></a>
+<a name="line25"></a>function testEqualsWithEmptyMessages() {
+<a name="line26"></a>  var message1 = new proto2.TestAllTypes();
+<a name="line27"></a>  assertTrue(&#39;same message object&#39;, message1.equals(message1));
+<a name="line28"></a>  assertFalse(&#39;comparison with null&#39;, message1.equals(null));
+<a name="line29"></a>  assertFalse(&#39;comparison with undefined&#39;, message1.equals(undefined));
+<a name="line30"></a>
+<a name="line31"></a>  var message2 = new proto2.TestAllTypes();
+<a name="line32"></a>  assertTrue(&#39;two empty message objects&#39;, message1.equals(message2));
+<a name="line33"></a>
+<a name="line34"></a>  var message3 = new proto2.TestAllTypes.NestedMessage();
+<a name="line35"></a>  assertFalse(&#39;different message types&#39;, message3.equals(message1));
+<a name="line36"></a>}
+<a name="line37"></a>
+<a name="line38"></a>function testEqualsWithSingleInt32Field() {
+<a name="line39"></a>  var message1 = new proto2.TestAllTypes();
+<a name="line40"></a>  var message2 = new proto2.TestAllTypes();
+<a name="line41"></a>
+<a name="line42"></a>  message1.setOptionalInt32(1);
+<a name="line43"></a>  assertFalse(&#39;message1 has an extra int32 field&#39;, message1.equals(message2));
+<a name="line44"></a>
+<a name="line45"></a>  message2.setOptionalInt32(1);
+<a name="line46"></a>  assertTrue(&#39;same int32 field in both messages&#39;, message1.equals(message2));
+<a name="line47"></a>
+<a name="line48"></a>  message2.setOptionalInt32(2);
+<a name="line49"></a>  assertFalse(&#39;different int32 field&#39;, message1.equals(message2));
+<a name="line50"></a>
+<a name="line51"></a>  message1.clearOptionalInt32();
+<a name="line52"></a>  assertFalse(&#39;message2 has an extra int32 field&#39;, message1.equals(message2));
+<a name="line53"></a>}
+<a name="line54"></a>
+<a name="line55"></a>function testEqualsWithRepeatedInt32Fields() {
+<a name="line56"></a>  var message1 = new proto2.TestAllTypes();
+<a name="line57"></a>  var message2 = new proto2.TestAllTypes();
+<a name="line58"></a>
+<a name="line59"></a>  message1.addRepeatedInt32(0);
+<a name="line60"></a>  message2.addRepeatedInt32(0);
+<a name="line61"></a>  assertTrue(&#39;equal repeated int32 field&#39;, message1.equals(message2));
+<a name="line62"></a>
+<a name="line63"></a>  message1.addRepeatedInt32(1);
+<a name="line64"></a>  assertFalse(&#39;message1 has more items&#39;, message1.equals(message2));
+<a name="line65"></a>
+<a name="line66"></a>  message2.addRepeatedInt32(1);
+<a name="line67"></a>  message2.addRepeatedInt32(1);
+<a name="line68"></a>  assertFalse(&#39;message2 has more items&#39;, message1.equals(message2));
+<a name="line69"></a>
+<a name="line70"></a>  message1.addRepeatedInt32(2);
+<a name="line71"></a>  assertFalse(&#39;different int32 items&#39;, message1.equals(message2));
+<a name="line72"></a>}
+<a name="line73"></a>
+<a name="line74"></a>function testEqualsWithDefaultValue() {
+<a name="line75"></a>  var message1 = new proto2.TestAllTypes();
+<a name="line76"></a>  var message2 = new proto2.TestAllTypes();
+<a name="line77"></a>  message1.setOptionalInt64(&#39;1&#39;);
+<a name="line78"></a>
+<a name="line79"></a>  assertEquals(&#39;message1.getOptionalInt64OrDefault should return 1&#39;,
+<a name="line80"></a>      &#39;1&#39;, message1.getOptionalInt64OrDefault());
+<a name="line81"></a>  assertEquals(&#39;message2.getOptionalInt64OrDefault should return 1 too&#39;,
+<a name="line82"></a>      &#39;1&#39;, message2.getOptionalInt64OrDefault());
+<a name="line83"></a>  assertTrue(&#39;message1.hasOptionalInt64() should be true&#39;,
+<a name="line84"></a>      message1.hasOptionalInt64());
+<a name="line85"></a>  assertFalse(&#39;message2.hasOptionalInt64() should be false&#39;,
+<a name="line86"></a>      message2.hasOptionalInt64());
+<a name="line87"></a>  assertFalse(&#39;as a result they are not equal&#39;, message1.equals(message2));
+<a name="line88"></a>}
+<a name="line89"></a>
+<a name="line90"></a>function testEqualsWithOptionalGroup() {
+<a name="line91"></a>  var message1 = new proto2.TestAllTypes();
+<a name="line92"></a>  var message2 = new proto2.TestAllTypes();
+<a name="line93"></a>  var group1 = new proto2.TestAllTypes.OptionalGroup();
+<a name="line94"></a>  var group2 = new proto2.TestAllTypes.OptionalGroup();
+<a name="line95"></a>
+<a name="line96"></a>  message1.setOptionalgroup(group1);
+<a name="line97"></a>  assertFalse(&#39;only message1 has OptionalGroup field&#39;,
+<a name="line98"></a>      message1.equals(message2));
+<a name="line99"></a>
+<a name="line100"></a>  message2.setOptionalgroup(group2);
+<a name="line101"></a>  assertTrue(&#39;both messages have OptionalGroup field&#39;,
+<a name="line102"></a>      message1.equals(message2));
+<a name="line103"></a>
+<a name="line104"></a>  group1.setA(0);
+<a name="line105"></a>  group2.setA(1);
+<a name="line106"></a>  assertFalse(&#39;different value in the optional group&#39;,
+<a name="line107"></a>      message1.equals(message2));
+<a name="line108"></a>
+<a name="line109"></a>  message1.clearOptionalgroup();
+<a name="line110"></a>  assertFalse(&#39;only message2 has OptionalGroup field&#39;,
+<a name="line111"></a>      message1.equals(message2));
+<a name="line112"></a>}
+<a name="line113"></a>
+<a name="line114"></a>function testEqualsWithRepeatedGroup() {
+<a name="line115"></a>  var message1 = new proto2.TestAllTypes();
+<a name="line116"></a>  var message2 = new proto2.TestAllTypes();
+<a name="line117"></a>  var group1 = new proto2.TestAllTypes.RepeatedGroup();
+<a name="line118"></a>  var group2 = new proto2.TestAllTypes.RepeatedGroup();
+<a name="line119"></a>
+<a name="line120"></a>  message1.addRepeatedgroup(group1);
+<a name="line121"></a>  assertFalse(&#39;message1 has more RepeatedGroups&#39;,
+<a name="line122"></a>      message1.equals(message2));
+<a name="line123"></a>
+<a name="line124"></a>  message2.addRepeatedgroup(group2);
+<a name="line125"></a>  assertTrue(&#39;both messages have one RepeatedGroup&#39;,
+<a name="line126"></a>      message1.equals(message2));
+<a name="line127"></a>
+<a name="line128"></a>  group1.addA(1);
+<a name="line129"></a>  assertFalse(&#39;message1 has more int32s in RepeatedGroup&#39;,
+<a name="line130"></a>      message1.equals(message2));
+<a name="line131"></a>
+<a name="line132"></a>  group2.addA(1);
+<a name="line133"></a>  assertTrue(&#39;both messages have one int32 in RepeatedGroup&#39;,
+<a name="line134"></a>      message1.equals(message2));
+<a name="line135"></a>
+<a name="line136"></a>  group1.addA(1);
+<a name="line137"></a>  group2.addA(2);
+<a name="line138"></a>  assertFalse(&#39;the messages have different int32s in RepeatedGroup&#39;,
+<a name="line139"></a>      message1.equals(message2));
+<a name="line140"></a>}
+<a name="line141"></a>
+<a name="line142"></a>function testEqualsWithNestedMessage() {
+<a name="line143"></a>  var message1 = new proto2.TestAllTypes();
+<a name="line144"></a>  var message2 = new proto2.TestAllTypes();
+<a name="line145"></a>  var nested1 = new proto2.TestAllTypes.NestedMessage();
+<a name="line146"></a>  var nested2 = new proto2.TestAllTypes.NestedMessage();
+<a name="line147"></a>
+<a name="line148"></a>  message1.setOptionalNestedMessage(nested1);
+<a name="line149"></a>  assertFalse(&#39;only message1 has nested message&#39;, message1.equals(message2));
+<a name="line150"></a>
+<a name="line151"></a>  message2.setOptionalNestedMessage(nested2);
+<a name="line152"></a>  assertTrue(&#39;both messages have nested message&#39;, message1.equals(message2));
+<a name="line153"></a>
+<a name="line154"></a>  nested1.setB(1);
+<a name="line155"></a>  assertFalse(&#39;different int32 in the nested messages&#39;,
+<a name="line156"></a>      message1.equals(message2));
+<a name="line157"></a>
+<a name="line158"></a>  message1.clearOptionalNestedMessage();
+<a name="line159"></a>  assertFalse(&#39;only message2 has nested message&#39;, message1.equals(message2));
+<a name="line160"></a>}
+<a name="line161"></a>
+<a name="line162"></a>function testEqualsWithNestedEnum() {
+<a name="line163"></a>  var message1 = new proto2.TestAllTypes();
+<a name="line164"></a>  var message2 = new proto2.TestAllTypes();
+<a name="line165"></a>
+<a name="line166"></a>  message1.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+<a name="line167"></a>  assertFalse(&#39;only message1 has nested enum&#39;, message1.equals(message2));
+<a name="line168"></a>
+<a name="line169"></a>  message2.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+<a name="line170"></a>  assertTrue(&#39;both messages have nested enum&#39;, message1.equals(message2));
+<a name="line171"></a>
+<a name="line172"></a>  message2.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.BAR);
+<a name="line173"></a>  assertFalse(&#39;different enum value&#39;, message1.equals(message2));
+<a name="line174"></a>
+<a name="line175"></a>  message1.clearOptionalNestedEnum();
+<a name="line176"></a>  assertFalse(&#39;only message2 has nested enum&#39;, message1.equals(message2));
+<a name="line177"></a>}
+<a name="line178"></a>
+<a name="line179"></a>function testEqualsWithUnknownFields() {
+<a name="line180"></a>  var message1 = new proto2.TestAllTypes();
+<a name="line181"></a>  var message2 = new proto2.TestAllTypes();
+<a name="line182"></a>  message1.setUnknown(999, &#39;foo&#39;);
+<a name="line183"></a>  message1.setUnknown(999, &#39;bar&#39;);
+<a name="line184"></a>  assertTrue(&#39;unknown fields are ignored&#39;, message1.equals(message2));
+<a name="line185"></a>}
+<a name="line186"></a>
+<a name="line187"></a>function testCloneEmptyMessage() {
+<a name="line188"></a>  var message = new proto2.TestAllTypes();
+<a name="line189"></a>  var clone = message.clone();
+<a name="line190"></a>  assertObjectEquals(&#39;cloned empty message&#39;, message, clone);
+<a name="line191"></a>}
+<a name="line192"></a>
+<a name="line193"></a>function testCloneMessageWithSeveralFields() {
+<a name="line194"></a>  var message = new proto2.TestAllTypes();
+<a name="line195"></a>  message.setOptionalInt32(1);
+<a name="line196"></a>  message.addRepeatedInt32(2);
+<a name="line197"></a>  var optionalGroup = new proto2.TestAllTypes.OptionalGroup();
+<a name="line198"></a>  optionalGroup.setA(3);
+<a name="line199"></a>  message.setOptionalgroup(optionalGroup);
+<a name="line200"></a>  var repeatedGroup = new proto2.TestAllTypes.RepeatedGroup();
+<a name="line201"></a>  repeatedGroup.addA(4);
+<a name="line202"></a>  message.addRepeatedgroup(repeatedGroup);
+<a name="line203"></a>  var nestedMessage = new proto2.TestAllTypes.NestedMessage();
+<a name="line204"></a>  nestedMessage.setB(5);
+<a name="line205"></a>  message.setOptionalNestedMessage(nestedMessage);
+<a name="line206"></a>  message.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+<a name="line207"></a>  message.setUnknown(999, &#39;foo&#39;);
+<a name="line208"></a>
+<a name="line209"></a>  var clone = message.clone();
+<a name="line210"></a>  assertNotEquals(&#39;different OptionalGroup instance&#39;,
+<a name="line211"></a>      message.getOptionalgroup(), clone.getOptionalgroup());
+<a name="line212"></a>  assertNotEquals(&#39;different RepeatedGroup array instance&#39;,
+<a name="line213"></a>      message.repeatedgroupArray(), clone.repeatedgroupArray());
+<a name="line214"></a>  assertNotEquals(&#39;different RepeatedGroup array item instance&#39;,
+<a name="line215"></a>      message.getRepeatedgroup(0), clone.getRepeatedgroup(0));
+<a name="line216"></a>  assertNotEquals(&#39;different NestedMessage instance&#39;,
+<a name="line217"></a>      message.getOptionalNestedMessage(), clone.getOptionalNestedMessage());
+<a name="line218"></a>}
+<a name="line219"></a>
+<a name="line220"></a>function testCloneWithUnknownFields() {
+<a name="line221"></a>  var message = new proto2.TestAllTypes();
+<a name="line222"></a>  message.setUnknown(999, &#39;foo&#39;);
+<a name="line223"></a>
+<a name="line224"></a>  var clone = message.clone();
+<a name="line225"></a>  assertTrue(&#39;clone.equals(message) returns true&#39;, clone.equals(message));
+<a name="line226"></a>  clone.forEachUnknown(function(tag, value) {
+<a name="line227"></a>    fail(&#39;the unknown fields should not have been cloned&#39;);
+<a name="line228"></a>  });
+<a name="line229"></a>
+<a name="line230"></a>  clone.setUnknown(999, &#39;foo&#39;);
+<a name="line231"></a>  assertObjectEquals(&#39;the original and the cloned message are equal except &#39; +
+<a name="line232"></a>      &#39;for the unknown fields&#39;, message, clone);
+<a name="line233"></a>}
+<a name="line234"></a>
+<a name="line235"></a>function testCopyFromSameMessage() {
+<a name="line236"></a>  var source = new proto2.TestAllTypes();
+<a name="line237"></a>  source.setOptionalInt32(32);
+<a name="line238"></a>  source.copyFrom(source);
+<a name="line239"></a>  assertEquals(32, source.getOptionalInt32());
+<a name="line240"></a>}
+<a name="line241"></a>
+<a name="line242"></a>function testCopyFromFlatMessage() {
+<a name="line243"></a>  // Recursive copying is implicitly tested in the testClone... methods.
+<a name="line244"></a>
+<a name="line245"></a>  var source = new proto2.TestAllTypes();
+<a name="line246"></a>  source.setOptionalInt32(32);
+<a name="line247"></a>  source.setOptionalInt64(&#39;64&#39;);
+<a name="line248"></a>  source.addRepeatedInt32(32);
+<a name="line249"></a>
+<a name="line250"></a>  var target = new proto2.TestAllTypes();
+<a name="line251"></a>  target.setOptionalInt32(33);
+<a name="line252"></a>  target.setOptionalUint32(33);
+<a name="line253"></a>  target.addRepeatedInt32(33);
+<a name="line254"></a>
+<a name="line255"></a>  target.copyFrom(source);
+<a name="line256"></a>  assertObjectEquals(&#39;source and target are equal after copyFrom&#39;, source,
+<a name="line257"></a>      target);
+<a name="line258"></a>
+<a name="line259"></a>  target.copyFrom(source);
+<a name="line260"></a>  assertObjectEquals(&#39;second copyFrom call has no effect&#39;, source, target);
+<a name="line261"></a>
+<a name="line262"></a>  source.setUnknown(999, &#39;foo&#39;);
+<a name="line263"></a>  target.setUnknown(999, &#39;bar&#39;);
+<a name="line264"></a>  target.copyFrom(source);
+<a name="line265"></a>  assertThrows(&#39;unknown fields are not copied&#39;,
+<a name="line266"></a>      goog.partial(assertObjectEquals, source, target));
+<a name="line267"></a>}
+<a name="line268"></a>
+<a name="line269"></a>function testMergeFromEmptyMessage() {
+<a name="line270"></a>  var source = new proto2.TestAllTypes();
+<a name="line271"></a>  source.setOptionalInt32(32);
+<a name="line272"></a>  source.setOptionalInt64(&#39;64&#39;);
+<a name="line273"></a>  var nested = new proto2.TestAllTypes.NestedMessage();
+<a name="line274"></a>  nested.setB(66);
+<a name="line275"></a>  source.setOptionalNestedMessage(nested);
+<a name="line276"></a>
+<a name="line277"></a>  var target = new proto2.TestAllTypes();
+<a name="line278"></a>  target.mergeFrom(source);
+<a name="line279"></a>  assertObjectEquals(&#39;source and target are equal after mergeFrom&#39;, source,
+<a name="line280"></a>      target);
+<a name="line281"></a>}
+<a name="line282"></a>
+<a name="line283"></a>function testMergeFromFlatMessage() {
+<a name="line284"></a>  var source = new proto2.TestAllTypes();
+<a name="line285"></a>  source.setOptionalInt32(32);
+<a name="line286"></a>  source.setOptionalString(&#39;foo&#39;);
+<a name="line287"></a>  source.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+<a name="line288"></a>
+<a name="line289"></a>  var target = new proto2.TestAllTypes();
+<a name="line290"></a>  target.setOptionalInt64(&#39;64&#39;);
+<a name="line291"></a>  target.setOptionalString(&#39;bar&#39;);
+<a name="line292"></a>  target.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.BAR);
+<a name="line293"></a>
+<a name="line294"></a>  var expected = new proto2.TestAllTypes();
+<a name="line295"></a>  expected.setOptionalInt32(32);
+<a name="line296"></a>  expected.setOptionalInt64(&#39;64&#39;);
+<a name="line297"></a>  expected.setOptionalString(&#39;foo&#39;);
+<a name="line298"></a>  expected.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+<a name="line299"></a>
+<a name="line300"></a>  target.mergeFrom(source);
+<a name="line301"></a>  assertObjectEquals(&#39;expected and target are equal after mergeFrom&#39;, expected,
+<a name="line302"></a>      target);
+<a name="line303"></a>}
+<a name="line304"></a>
+<a name="line305"></a>function testMergeFromNestedMessage() {
+<a name="line306"></a>  var source = new proto2.TestAllTypes();
+<a name="line307"></a>  var nested = new proto2.TestAllTypes.NestedMessage();
+<a name="line308"></a>  nested.setB(66);
+<a name="line309"></a>  source.setOptionalNestedMessage(nested);
+<a name="line310"></a>
+<a name="line311"></a>  var target = new proto2.TestAllTypes();
+<a name="line312"></a>  nested = new proto2.TestAllTypes.NestedMessage();
+<a name="line313"></a>  nested.setC(77);
+<a name="line314"></a>  target.setOptionalNestedMessage(nested);
+<a name="line315"></a>
+<a name="line316"></a>  var expected = new proto2.TestAllTypes();
+<a name="line317"></a>  nested = new proto2.TestAllTypes.NestedMessage();
+<a name="line318"></a>  nested.setB(66);
+<a name="line319"></a>  nested.setC(77);
+<a name="line320"></a>  expected.setOptionalNestedMessage(nested);
+<a name="line321"></a>
+<a name="line322"></a>  target.mergeFrom(source);
+<a name="line323"></a>  assertObjectEquals(&#39;expected and target are equal after mergeFrom&#39;, expected,
+<a name="line324"></a>      target);
+<a name="line325"></a>}
+<a name="line326"></a>
+<a name="line327"></a>function testMergeFromRepeatedMessage() {
+<a name="line328"></a>  var source = new proto2.TestAllTypes();
+<a name="line329"></a>  source.addRepeatedInt32(2);
+<a name="line330"></a>  source.addRepeatedInt32(3);
+<a name="line331"></a>
+<a name="line332"></a>  var target = new proto2.TestAllTypes();
+<a name="line333"></a>  target.addRepeatedInt32(1);
+<a name="line334"></a>
+<a name="line335"></a>  target.mergeFrom(source);
+<a name="line336"></a>  assertArrayEquals(&#39;repeated_int32 array has elements from both messages&#39;,
+<a name="line337"></a>      [1, 2, 3], target.repeatedInt32Array());
+<a name="line338"></a>}
+<a name="line339"></a>
+<a name="line340"></a>function testInitDefaultsWithEmptyMessage() {
+<a name="line341"></a>  var message = new proto2.TestAllTypes();
+<a name="line342"></a>  message.initDefaults(false);
+<a name="line343"></a>
+<a name="line344"></a>  assertFalse(&#39;int32 field is not set&#39;, message.hasOptionalInt32());
+<a name="line345"></a>  assertFalse(&#39;int64 [default=1] field is not set&#39;, message.hasOptionalInt64());
+<a name="line346"></a>  assertTrue(&#39;optional group field is set&#39;, message.hasOptionalgroup());
+<a name="line347"></a>  assertFalse(&#39;int32 inside the group is not set&#39;,
+<a name="line348"></a>      message.getOptionalgroup().hasA());
+<a name="line349"></a>  assertObjectEquals(&#39;value of the optional group&#39;,
+<a name="line350"></a>      new proto2.TestAllTypes.OptionalGroup(), message.getOptionalgroup());
+<a name="line351"></a>  assertTrue(&#39;nested message is set&#39;, message.hasOptionalNestedMessage());
+<a name="line352"></a>  assertObjectEquals(&#39;value of the nested message&#39;,
+<a name="line353"></a>      new proto2.TestAllTypes.NestedMessage(),
+<a name="line354"></a>      message.getOptionalNestedMessage());
+<a name="line355"></a>  assertFalse(&#39;nested enum is not set&#39;, message.hasOptionalNestedEnum());
+<a name="line356"></a>  assertFalse(&#39;repeated int32 is not set&#39;, message.hasRepeatedInt32());
+<a name="line357"></a>  assertFalse(&#39;repeated nested message is not set&#39;,
+<a name="line358"></a>      message.hasRepeatedNestedMessage());
+<a name="line359"></a>
+<a name="line360"></a>  message = new proto2.TestAllTypes();
+<a name="line361"></a>  message.initDefaults(true);
+<a name="line362"></a>
+<a name="line363"></a>  assertTrue(&#39;int32 field is set&#39;, message.hasOptionalInt32());
+<a name="line364"></a>  assertEquals(&#39;value of the int32 field&#39;, 0, message.getOptionalInt32());
+<a name="line365"></a>  assertTrue(&#39;int64 [default=1] field is set&#39;, message.hasOptionalInt64());
+<a name="line366"></a>  assertEquals(&#39;value of the int64 field&#39;, &#39;1&#39;, message.getOptionalInt64());
+<a name="line367"></a>  assertTrue(&#39;int32 inside nested message is set&#39;,
+<a name="line368"></a>      message.getOptionalNestedMessage().hasB());
+<a name="line369"></a>  assertEquals(&#39;value of the int32 field inside the nested message&#39;, 0,
+<a name="line370"></a>      message.getOptionalNestedMessage().getB());
+<a name="line371"></a>}
+<a name="line372"></a>
+<a name="line373"></a>function testInitDefaultsWithNonEmptyMessage() {
+<a name="line374"></a>  var message = new proto2.TestAllTypes();
+<a name="line375"></a>  message.setOptionalInt32(32);
+<a name="line376"></a>  message.setOptionalInt64(&#39;64&#39;);
+<a name="line377"></a>  message.setOptionalgroup(new proto2.TestAllTypes.OptionalGroup());
+<a name="line378"></a>  var nested1 = new proto2.TestAllTypes.NestedMessage();
+<a name="line379"></a>  nested1.setB(66);
+<a name="line380"></a>  message.setOptionalNestedMessage(nested1);
+<a name="line381"></a>  var nested2 = new proto2.TestAllTypes.NestedMessage();
+<a name="line382"></a>  message.addRepeatedNestedMessage(nested2);
+<a name="line383"></a>  var nested3 = new proto2.TestAllTypes.NestedMessage();
+<a name="line384"></a>  nested3.setB(66);
+<a name="line385"></a>  message.addRepeatedNestedMessage(nested3);
+<a name="line386"></a>
+<a name="line387"></a>  message.initDefaults(true);
+<a name="line388"></a>  assertEquals(&#39;int32 field is unchanged&#39;, 32, message.getOptionalInt32());
+<a name="line389"></a>  assertEquals(&#39;int64 [default=1] field is unchanged&#39;, &#39;64&#39;,
+<a name="line390"></a>      message.getOptionalInt64());
+<a name="line391"></a>  assertTrue(&#39;bool field is initialized&#39;, message.hasOptionalBool());
+<a name="line392"></a>  assertFalse(&#39;value of the bool field&#39;, message.getOptionalBool());
+<a name="line393"></a>  assertTrue(&#39;int32 inside the optional group is initialized&#39;,
+<a name="line394"></a>      message.getOptionalgroup().hasA());
+<a name="line395"></a>  assertEquals(&#39;value of the int32 inside the optional group&#39;, 0,
+<a name="line396"></a>      message.getOptionalgroup().getA());
+<a name="line397"></a>  assertEquals(&#39;int32 inside nested message is unchanged&#39;, 66,
+<a name="line398"></a>      message.getOptionalNestedMessage().getB());
+<a name="line399"></a>  assertTrue(&#39;int32 at index 0 of the repeated nested message is initialized&#39;,
+<a name="line400"></a>      message.getRepeatedNestedMessage(0).hasB());
+<a name="line401"></a>  assertEquals(&#39;value of int32 at index 0 of the repeated nested message&#39;, 0,
+<a name="line402"></a>      message.getRepeatedNestedMessage(0).getB());
+<a name="line403"></a>  assertEquals(&#39;int32 at index 1 of the repeated nested message is unchanged&#39;,
+<a name="line404"></a>      66, message.getRepeatedNestedMessage(1).getB());
+<a name="line405"></a>}
+<a name="line406"></a>
+<a name="line407"></a>function testInitDefaultsTwice() {
+<a name="line408"></a>  var message = new proto2.TestAllTypes();
+<a name="line409"></a>  message.initDefaults(false);
+<a name="line410"></a>  var clone = message.clone();
+<a name="line411"></a>  clone.initDefaults(false);
+<a name="line412"></a>  assertObjectEquals(&#39;second call of initDefaults(false) has no effect&#39;,
+<a name="line413"></a>      message, clone);
+<a name="line414"></a>
+<a name="line415"></a>  message = new proto2.TestAllTypes();
+<a name="line416"></a>  message.initDefaults(true);
+<a name="line417"></a>  clone = message.clone();
+<a name="line418"></a>  clone.initDefaults(true);
+<a name="line419"></a>  assertObjectEquals(&#39;second call of initDefaults(true) has no effect&#39;,
+<a name="line420"></a>      message, clone);
+<a name="line421"></a>}
+<a name="line422"></a>
+<a name="line423"></a>function testInitDefaultsThenClone() {
+<a name="line424"></a>  var message = new proto2.TestAllTypes();
+<a name="line425"></a>  message.initDefaults(true);
+<a name="line426"></a>  assertObjectEquals(&#39;message is cloned properly&#39;, message, message.clone());
+<a name="line427"></a>}
+<a name="line428"></a>
+<a name="line429"></a>function testGetAfterSetWithLazyDeserializer() {
+<a name="line430"></a>  // Test makes sure that the lazy deserializer for a field is not
+<a name="line431"></a>  // erroneously called when get$Value is called after set$Value.
+<a name="line432"></a>  var message = new proto2.TestAllTypes();
+<a name="line433"></a>
+<a name="line434"></a>  var fakeDeserializer = {}; // stub with no methods defined; fails hard
+<a name="line435"></a>  message.initializeForLazyDeserializer(fakeDeserializer, {} /* data */);
+<a name="line436"></a>  message.setOptionalBool(true);
+<a name="line437"></a>  assertEquals(true, message.getOptionalBool());
+<a name="line438"></a>}
+<a name="line439"></a>
+<a name="line440"></a>function testHasOnLazyDeserializer() {
+<a name="line441"></a>  // Test that null values for fields are treated as absent by the lazy
+<a name="line442"></a>  // deserializer.
+<a name="line443"></a>  var message = new proto2.TestAllTypes();
+<a name="line444"></a>
+<a name="line445"></a>  var fakeDeserializer = {}; // stub with no methods defined; fails hard
+<a name="line446"></a>  message.initializeForLazyDeserializer(fakeDeserializer,
+<a name="line447"></a>      {13: false} /* data */);
+<a name="line448"></a>  assertEquals(true, message.hasOptionalBool());
+<a name="line449"></a>}
+<a name="line450"></a>
+<a name="line451"></a>function testHasOnLazyDeserializerWithNulls() {
+<a name="line452"></a>  // Test that null values for fields are treated as absent by the lazy
+<a name="line453"></a>  // deserializer.
+<a name="line454"></a>  var message = new proto2.TestAllTypes();
+<a name="line455"></a>
+<a name="line456"></a>  var fakeDeserializer = {}; // stub with no methods defined; fails hard
+<a name="line457"></a>  message.initializeForLazyDeserializer(fakeDeserializer,
+<a name="line458"></a>      {13: null} /* data */);
+<a name="line459"></a>  assertEquals(false, message.hasOptionalBool());
+<a name="line460"></a>}
+</pre>
+
+
+</body>
+</html>

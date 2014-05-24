@@ -1,0 +1,308 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>layoutasserts_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_style_layoutasserts_test.js.html">layoutasserts_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.style.layoutassertsTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.style.layoutassertsTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.style&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>/** @suppress {extraRequire} */
+<a name="line22"></a>goog.require(&#39;goog.testing.style.layoutasserts&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var div1;
+<a name="line25"></a>var div2;
+<a name="line26"></a>var DEFAULT_WIDTH = 200;
+<a name="line27"></a>var DEFAULT_HEIGHT = 100;
+<a name="line28"></a>
+<a name="line29"></a>function setUp() {
+<a name="line30"></a>  div1 = goog.dom.createDom(
+<a name="line31"></a>      &#39;div&#39;,
+<a name="line32"></a>      {
+<a name="line33"></a>        id: &#39;test&#39;,
+<a name="line34"></a>        className: &#39;test&#39;,
+<a name="line35"></a>        style: &#39;position:absolute;top:0;left:0;&#39; +
+<a name="line36"></a>            &#39;width:&#39; + DEFAULT_WIDTH + &#39;px;&#39; +
+<a name="line37"></a>            &#39;height:&#39; + DEFAULT_HEIGHT + &#39;px;&#39; +
+<a name="line38"></a>                &#39;background-color:#EEE&#39;,
+<a name="line39"></a>        innerHTML: &#39;abc&#39;
+<a name="line40"></a>      });
+<a name="line41"></a>  div2 = goog.dom.createDom(&#39;div&#39;,
+<a name="line42"></a>      {
+<a name="line43"></a>        id: &#39;test2&#39;,
+<a name="line44"></a>        className: &#39;test2&#39;,
+<a name="line45"></a>        style: &#39;position:absolute;&#39; +
+<a name="line46"></a>            &#39;top:0;left:0;&#39; +
+<a name="line47"></a>            &#39;width:&#39; + DEFAULT_WIDTH + &#39;px;&#39; +
+<a name="line48"></a>            &#39;height:&#39; + DEFAULT_HEIGHT + &#39;px;&#39; +
+<a name="line49"></a>            &#39;background-color:#F00&#39;,
+<a name="line50"></a>        innerHTML: &#39;abc&#39;
+<a name="line51"></a>      });
+<a name="line52"></a>
+<a name="line53"></a>}
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>function tearDown() {
+<a name="line57"></a>  div1 = null;
+<a name="line58"></a>  div2 = null;
+<a name="line59"></a>}
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Tests assertIsVisible.
+<a name="line64"></a> */
+<a name="line65"></a>function testAssertIsVisible() {
+<a name="line66"></a>  assertThrows(&#39;Exception should be thrown when asserting visibility.&#39;,
+<a name="line67"></a>      goog.bind(assertIsVisible, null, null)); // assertIsVisible(null)
+<a name="line68"></a>
+<a name="line69"></a>  // Attach it to BODY tag and assert that it is visible.
+<a name="line70"></a>  document.body.appendChild(div1);
+<a name="line71"></a>  assertIsVisible(&#39;Div should be visible.&#39;, div1);
+<a name="line72"></a>
+<a name="line73"></a>  // Tests with hidden element
+<a name="line74"></a>  failed = false;
+<a name="line75"></a>  goog.style.setElementShown(div1, false /* display */);
+<a name="line76"></a>  assertThrows(&#39;Exception should be thrown when asserting visibility.&#39;,
+<a name="line77"></a>      goog.bind(assertIsVisible, null, div1));
+<a name="line78"></a>
+<a name="line79"></a>  // Clean up.
+<a name="line80"></a>  document.body.removeChild(div1);
+<a name="line81"></a>}
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Tests assertNotVisible.
+<a name="line86"></a> */
+<a name="line87"></a>function testAssertNotVisible() {
+<a name="line88"></a>  // Tests null as a parameter.
+<a name="line89"></a>  var element = null;
+<a name="line90"></a>  assertNotVisible(element);
+<a name="line91"></a>
+<a name="line92"></a>  // Attach the element to BODY element, assert should fail.
+<a name="line93"></a>  document.body.appendChild(div1);
+<a name="line94"></a>  assertThrows(&#39;Exception should be thrown when asserting non-visibility.&#39;,
+<a name="line95"></a>      goog.bind(assertNotVisible, null, div1));
+<a name="line96"></a>
+<a name="line97"></a>  // Clean up.
+<a name="line98"></a>  document.body.removeChild(div1);
+<a name="line99"></a>}
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Tests assertIsIntersect.
+<a name="line104"></a> */
+<a name="line105"></a>function testAssertIntersect() {
+<a name="line106"></a>  document.body.appendChild(div1);
+<a name="line107"></a>  document.body.appendChild(div2);
+<a name="line108"></a>
+<a name="line109"></a>  // No intersection
+<a name="line110"></a>  goog.style.setPosition(div1, 0, 0);
+<a name="line111"></a>  goog.style.setPosition(div2, 500, 500);
+<a name="line112"></a>  assertThrows(&#39;Exception should be thrown when asserting intersection.&#39;,
+<a name="line113"></a>      goog.bind(assertIntersect, null, div1, div2));
+<a name="line114"></a>  assertNoIntersect(div1, div2);
+<a name="line115"></a>
+<a name="line116"></a>  // Some intersection
+<a name="line117"></a>  goog.style.setPosition(div1, 0, 0);
+<a name="line118"></a>  goog.style.setPosition(div2, 50, 50);
+<a name="line119"></a>  assertThrows(&#39;Exception should be thrown when asserting no intersection.&#39;,
+<a name="line120"></a>      goog.bind(assertNoIntersect, null, div1, div2));
+<a name="line121"></a>  assertIntersect(div1, div2);
+<a name="line122"></a>
+<a name="line123"></a>  // Completely superimposed.
+<a name="line124"></a>  goog.style.setPosition(div1, 0, 0);
+<a name="line125"></a>  goog.style.setPosition(div2, 0, 0);
+<a name="line126"></a>  assertThrows(&#39;Exception should be thrown when asserting no intersection.&#39;,
+<a name="line127"></a>      goog.bind(assertNoIntersect, null, div1, div2));
+<a name="line128"></a>  assertIntersect(div1, div2);
+<a name="line129"></a>}
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Tests assertWidth.
+<a name="line134"></a> */
+<a name="line135"></a>function testAssertWidth() {
+<a name="line136"></a>  document.body.appendChild(div1);
+<a name="line137"></a>
+<a name="line138"></a>  // Test correct width
+<a name="line139"></a>  assertWidth(div1, DEFAULT_WIDTH);
+<a name="line140"></a>
+<a name="line141"></a>  // Test wrong width
+<a name="line142"></a>  assertThrows(&#39;Exception should be thrown when elements has wrong width&#39;,
+<a name="line143"></a>      goog.bind(assertWidth, null, div1, 400));
+<a name="line144"></a>
+<a name="line145"></a>  // Test a valid tolerance value
+<a name="line146"></a>  assertWidthWithinTolerance(div1, 180, 20);
+<a name="line147"></a>
+<a name="line148"></a>  // Test exceeding tolerance value
+<a name="line149"></a>  assertThrows(
+<a name="line150"></a>      &#39;Exception should be thrown when element\&#39;s width exceeds tolerance&#39;,
+<a name="line151"></a>      goog.bind(assertWidthWithinTolerance, null, div1, 100, 0.1));
+<a name="line152"></a>}
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * Tests assertHeight.
+<a name="line157"></a> */
+<a name="line158"></a>function testAssertHeight() {
+<a name="line159"></a>  document.body.appendChild(div1);
+<a name="line160"></a>
+<a name="line161"></a>  // Test correct height
+<a name="line162"></a>  assertHeight(div1, DEFAULT_HEIGHT);
+<a name="line163"></a>
+<a name="line164"></a>  // Test wrong height
+<a name="line165"></a>  assertThrows(&#39;Exception should be thrown when element has wrong height.&#39;,
+<a name="line166"></a>      goog.bind(assertHeightWithinTolerance, null, div1, 300));
+<a name="line167"></a>
+<a name="line168"></a>  // Test a valid tolerance value
+<a name="line169"></a>  assertHeightWithinTolerance(div1, 90, 10);
+<a name="line170"></a>
+<a name="line171"></a>  // Test exceeding tolerance value
+<a name="line172"></a>  assertThrows(
+<a name="line173"></a>      &#39;Exception should be thrown when element\&#39;s height exceeds tolerance&#39;,
+<a name="line174"></a>      goog.bind(assertHeight, null, div1, 50, 0.2));
+<a name="line175"></a>}
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * Tests assertIsLeftOf.
+<a name="line180"></a> */
+<a name="line181"></a>function testAssertIsLeftOf() {
+<a name="line182"></a>  document.body.appendChild(div1);
+<a name="line183"></a>  document.body.appendChild(div2);
+<a name="line184"></a>
+<a name="line185"></a>  // Test elements of same size &amp; location
+<a name="line186"></a>  assertThrows(&#39;Exception should be thrown when elements intersect.&#39;,
+<a name="line187"></a>      goog.bind(assertIsLeftOf, null, div1, div2));
+<a name="line188"></a>  assertThrows(&#39;Exception should be thrown when elements intersect.&#39;,
+<a name="line189"></a>      goog.bind(
+<a name="line190"></a>          assertIsStrictlyLeftOf, null, div1, div2));
+<a name="line191"></a>
+<a name="line192"></a>  // Test elements that are not left to right
+<a name="line193"></a>  goog.style.setPosition(div1, 100, 0);
+<a name="line194"></a>  goog.style.setPosition(div2, 0, 0);
+<a name="line195"></a>  assertThrows(
+<a name="line196"></a>      &#39;Exception should be thrown when elements are not left to right.&#39;,
+<a name="line197"></a>      goog.bind(assertIsLeftOf, null, div1, div2));
+<a name="line198"></a>  assertThrows(
+<a name="line199"></a>      &#39;Exception should be thrown when elements are not left to right.&#39;,
+<a name="line200"></a>      goog.bind(
+<a name="line201"></a>          assertIsStrictlyLeftOf, null, div1, div2));
+<a name="line202"></a>
+<a name="line203"></a>  // Test elements that intersect, but is left to right
+<a name="line204"></a>  goog.style.setPosition(div1, 0, 0);
+<a name="line205"></a>  goog.style.setPosition(div2, 100, 0);
+<a name="line206"></a>  assertIsLeftOf(div1, div2);
+<a name="line207"></a>  assertThrows(&#39;Exception should be thrown when elements intersect.&#39;,
+<a name="line208"></a>      goog.bind(
+<a name="line209"></a>          assertIsStrictlyLeftOf, null, div1, div2));
+<a name="line210"></a>
+<a name="line211"></a>  // Test elements that are strictly left to right
+<a name="line212"></a>  goog.style.setPosition(div1, 0, 0);
+<a name="line213"></a>  goog.style.setPosition(div2, 999, 0);
+<a name="line214"></a>  assertIsLeftOf(div1, div2);
+<a name="line215"></a>  assertIsStrictlyLeftOf(div1, div2);
+<a name="line216"></a>}
+<a name="line217"></a>
+<a name="line218"></a>
+<a name="line219"></a>/**
+<a name="line220"></a> * Tests assertIsAbove.
+<a name="line221"></a> */
+<a name="line222"></a>function testAssertIsAbove() {
+<a name="line223"></a>  document.body.appendChild(div1);
+<a name="line224"></a>  document.body.appendChild(div2);
+<a name="line225"></a>
+<a name="line226"></a>  // Test elements of same size &amp; location
+<a name="line227"></a>  assertThrows(&#39;Exception should be thrown when elements intersect.&#39;,
+<a name="line228"></a>      goog.bind(assertIsAbove, null, div1, div2));
+<a name="line229"></a>  assertThrows(&#39;Exception should be thrown when elements intersect.&#39;,
+<a name="line230"></a>      goog.bind(
+<a name="line231"></a>      assertIsStrictlyAbove, null, div1, div2));
+<a name="line232"></a>
+<a name="line233"></a>  // Test elements that are not top to bottom
+<a name="line234"></a>  goog.style.setPosition(div1, 0, 999);
+<a name="line235"></a>  goog.style.setPosition(div2, 0, 0);
+<a name="line236"></a>  assertThrows(
+<a name="line237"></a>      &#39;Exception should be thrown when elements are not top to bottom.&#39;,
+<a name="line238"></a>      goog.bind(assertIsAbove, null, div1, div2));
+<a name="line239"></a>  assertThrows(
+<a name="line240"></a>      &#39;Exception should be thrown when elements are not top to bottom.&#39;,
+<a name="line241"></a>      goog.bind(
+<a name="line242"></a>      assertIsStrictlyAbove, null, div1, div2));
+<a name="line243"></a>
+<a name="line244"></a>  // Test elements that intersect, but is top to bottom
+<a name="line245"></a>  goog.style.setPosition(div1, 0, 0);
+<a name="line246"></a>  goog.style.setPosition(div2, 0, 50);
+<a name="line247"></a>  assertIsAbove(div1, div2);
+<a name="line248"></a>  assertThrows(&#39;Exception should be thrown when elements intersect.&#39;,
+<a name="line249"></a>      goog.bind(
+<a name="line250"></a>      assertIsStrictlyAbove, null, div1, div2));
+<a name="line251"></a>
+<a name="line252"></a>  // Test elements that are top to bottom
+<a name="line253"></a>  goog.style.setPosition(div1, 0, 0);
+<a name="line254"></a>  goog.style.setPosition(div2, 0, 999);
+<a name="line255"></a>  assertIsAbove(div1, div2);
+<a name="line256"></a>  assertIsStrictlyAbove(div1, div2);
+<a name="line257"></a>}
+</pre>
+
+
+</body>
+</html>

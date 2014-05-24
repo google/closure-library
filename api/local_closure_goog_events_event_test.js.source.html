@@ -1,0 +1,120 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>event_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_events_event_test.js.html">event_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.events.EventTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.events.EventTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events.EventId&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var e, target;
+<a name="line24"></a>
+<a name="line25"></a>function setUp() {
+<a name="line26"></a>  target = new goog.events.EventTarget();
+<a name="line27"></a>  e = new goog.events.Event(&#39;eventType&#39;, target);
+<a name="line28"></a>}
+<a name="line29"></a>
+<a name="line30"></a>function tearDown() {
+<a name="line31"></a>  target.dispose();
+<a name="line32"></a>  e.dispose();
+<a name="line33"></a>}
+<a name="line34"></a>
+<a name="line35"></a>function testConstructor() {
+<a name="line36"></a>  assertNotNull(&#39;Event must not be null&#39;, e);
+<a name="line37"></a>  assertEquals(&#39;Event type must be as expected&#39;, &#39;eventType&#39;, e.type);
+<a name="line38"></a>  assertEquals(&#39;Event target must be as expected&#39;, target, e.target);
+<a name="line39"></a>  assertEquals(&#39;Current target must be as expected&#39;, target,
+<a name="line40"></a>      e.currentTarget);
+<a name="line41"></a>}
+<a name="line42"></a>
+<a name="line43"></a>function testStopPropagation() {
+<a name="line44"></a>  // This test breaks encapsulation because there is no public getter for
+<a name="line45"></a>  // propagationStopped_.
+<a name="line46"></a>  assertFalse(&#39;Propagation must not have been stopped&#39;,
+<a name="line47"></a>      e.propagationStopped_);
+<a name="line48"></a>  e.stopPropagation();
+<a name="line49"></a>  assertTrue(&#39;Propagation must have been stopped&#39;, e.propagationStopped_);
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>function testPreventDefault() {
+<a name="line53"></a>  // This test breaks encapsulation because there is no public getter for
+<a name="line54"></a>  // returnValue_.
+<a name="line55"></a>  assertTrue(&#39;Return value must be true&#39;, e.returnValue_);
+<a name="line56"></a>  e.preventDefault();
+<a name="line57"></a>  assertFalse(&#39;Return value must be false&#39;, e.returnValue_);
+<a name="line58"></a>}
+<a name="line59"></a>
+<a name="line60"></a>function testDefaultPrevented() {
+<a name="line61"></a>  assertFalse(&#39;Default action must not be prevented&#39;, e.defaultPrevented);
+<a name="line62"></a>  e.preventDefault();
+<a name="line63"></a>  assertTrue(&#39;Default action must be prevented&#39;, e.defaultPrevented);
+<a name="line64"></a>}
+<a name="line65"></a>
+<a name="line66"></a>function testEventId() {
+<a name="line67"></a>  e = new goog.events.Event(new goog.events.EventId(&#39;eventType&#39;));
+<a name="line68"></a>  assertEquals(&#39;Event type must be as expected&#39;, &#39;eventType&#39;, e.type);
+<a name="line69"></a>}
+</pre>
+
+
+</body>
+</html>

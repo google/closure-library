@@ -1,0 +1,687 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>abstractdragdrop_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_fx_abstractdragdrop_test.js.html">abstractdragdrop_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.fx.AbstractDragDropTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.fx.AbstractDragDropTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line20"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line21"></a>goog.require(&#39;goog.fx.AbstractDragDrop&#39;);
+<a name="line22"></a>goog.require(&#39;goog.fx.DragDropItem&#39;);
+<a name="line23"></a>goog.require(&#39;goog.math.Box&#39;);
+<a name="line24"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line25"></a>goog.require(&#39;goog.style&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.events&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line28"></a>
+<a name="line29"></a>var targets = [
+<a name="line30"></a>  { box_: new goog.math.Box(0, 3, 1, 1) },
+<a name="line31"></a>  { box_: new goog.math.Box(0, 7, 2, 6) },
+<a name="line32"></a>  { box_: new goog.math.Box(2, 2, 3, 1) },
+<a name="line33"></a>  { box_: new goog.math.Box(4, 1, 6, 1) },
+<a name="line34"></a>  { box_: new goog.math.Box(4, 9, 7, 6) },
+<a name="line35"></a>  { box_: new goog.math.Box(9, 9, 10, 1) }
+<a name="line36"></a>];
+<a name="line37"></a>
+<a name="line38"></a>var targets2 = [
+<a name="line39"></a>  { box_: new goog.math.Box(10, 50, 20, 10) },
+<a name="line40"></a>  { box_: new goog.math.Box(20, 50, 30, 10) },
+<a name="line41"></a>  { box_: new goog.math.Box(60, 50, 70, 10) },
+<a name="line42"></a>  { box_: new goog.math.Box(70, 50, 80, 10) }
+<a name="line43"></a>];
+<a name="line44"></a>
+<a name="line45"></a>var targets3 = [
+<a name="line46"></a>  { box_: new goog.math.Box(0, 4, 1, 1) },
+<a name="line47"></a>  { box_: new goog.math.Box(1, 6, 4, 5) },
+<a name="line48"></a>  { box_: new goog.math.Box(5, 5, 6, 2) },
+<a name="line49"></a>  { box_: new goog.math.Box(2, 1, 5, 0) }
+<a name="line50"></a>];
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Test the utility function which tells how two one dimensional ranges
+<a name="line55"></a> * overlap.
+<a name="line56"></a> */
+<a name="line57"></a>function testRangeOverlap() {
+<a name="line58"></a>  assertEquals(RangeOverlap.LEFT, rangeOverlap(1, 2, 3, 4));
+<a name="line59"></a>  assertEquals(RangeOverlap.LEFT, rangeOverlap(2, 3, 3, 4));
+<a name="line60"></a>  assertEquals(RangeOverlap.LEFT_IN, rangeOverlap(1, 3, 2, 4));
+<a name="line61"></a>  assertEquals(RangeOverlap.IN, rangeOverlap(1, 3, 1, 4));
+<a name="line62"></a>  assertEquals(RangeOverlap.IN, rangeOverlap(2, 3, 1, 4));
+<a name="line63"></a>  assertEquals(RangeOverlap.IN, rangeOverlap(3, 4, 1, 4));
+<a name="line64"></a>  assertEquals(RangeOverlap.RIGHT_IN, rangeOverlap(2, 4, 1, 3));
+<a name="line65"></a>  assertEquals(RangeOverlap.RIGHT, rangeOverlap(2, 3, 1, 2));
+<a name="line66"></a>  assertEquals(RangeOverlap.RIGHT, rangeOverlap(3, 4, 1, 2));
+<a name="line67"></a>  assertEquals(RangeOverlap.CONTAINS, rangeOverlap(1, 4, 2, 3));
+<a name="line68"></a>}
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * An enum describing how two ranges overlap (non-symmetrical relation).
+<a name="line73"></a> * @enum {number}
+<a name="line74"></a> */
+<a name="line75"></a>RangeOverlap = {
+<a name="line76"></a>  LEFT: 1,      // First range is placed to the left of the second.
+<a name="line77"></a>  LEFT_IN: 2,   // First range overlaps on the left side of the second.
+<a name="line78"></a>  IN: 3,        // First range is completely contained in the second.
+<a name="line79"></a>  RIGHT_IN: 4,  // First range overlaps on the right side of the second.
+<a name="line80"></a>  RIGHT: 5,     // First range is placed to the right side of the second.
+<a name="line81"></a>  CONTAINS: 6   // First range contains the second.
+<a name="line82"></a>};
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Computes how two one dimentional ranges overlap.
+<a name="line87"></a> *
+<a name="line88"></a> * @param {number} left1 Left inclusive bound of the first range.
+<a name="line89"></a> * @param {number} right1 Right exclusive bound of the first range.
+<a name="line90"></a> * @param {number} left2 Left inclusive bound of the second range.
+<a name="line91"></a> * @param {number} right2 Right exclusive bound of the second range.
+<a name="line92"></a> * @return {RangeOverlap} The enum value describing the type of the overlap.
+<a name="line93"></a> */
+<a name="line94"></a>function rangeOverlap(left1, right1, left2, right2) {
+<a name="line95"></a>  if (right1 &lt;= left2) return RangeOverlap.LEFT;
+<a name="line96"></a>  if (left1 &gt;= right2) return RangeOverlap.RIGHT;
+<a name="line97"></a>  var leftIn = left1 &gt;= left2;
+<a name="line98"></a>  var rightIn = right1 &lt;= right2;
+<a name="line99"></a>  if (leftIn &amp;&amp; rightIn) return RangeOverlap.IN;
+<a name="line100"></a>  if (leftIn) return RangeOverlap.RIGHT_IN;
+<a name="line101"></a>  if (rightIn) return RangeOverlap.LEFT_IN;
+<a name="line102"></a>  return RangeOverlap.CONTAINS;
+<a name="line103"></a>}
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Tells whether two boxes overlap.
+<a name="line108"></a> *
+<a name="line109"></a> * @param {goog.math.Box} box1 First box in question.
+<a name="line110"></a> * @param {goog.math.Box} box2 Second box in question.
+<a name="line111"></a> * @return {boolean} Whether boxes overlap in any way.
+<a name="line112"></a> */
+<a name="line113"></a>function boxOverlaps(box1, box2) {
+<a name="line114"></a>  var horizontalOverlap = rangeOverlap(
+<a name="line115"></a>      box1.left, box1.right, box2.left, box2.right);
+<a name="line116"></a>  var verticalOverlap = rangeOverlap(
+<a name="line117"></a>      box1.top, box1.bottom, box2.top, box2.bottom);
+<a name="line118"></a>  return horizontalOverlap != RangeOverlap.LEFT &amp;&amp;
+<a name="line119"></a>      horizontalOverlap != RangeOverlap.RIGHT &amp;&amp;
+<a name="line120"></a>      verticalOverlap != RangeOverlap.LEFT &amp;&amp;
+<a name="line121"></a>      verticalOverlap != RangeOverlap.RIGHT;
+<a name="line122"></a>}
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Tests if the utility function to compute box overlapping functions properly.
+<a name="line127"></a> */
+<a name="line128"></a>function testBoxOverlaps() {
+<a name="line129"></a>  // Overlapping tests.
+<a name="line130"></a>  var box2 = new goog.math.Box(1, 4, 4, 1);
+<a name="line131"></a>
+<a name="line132"></a>  // Corner overlaps.
+<a name="line133"></a>  assertTrue(&#39;NW overlap&#39;, boxOverlaps(new goog.math.Box(0, 2, 2, 0), box2));
+<a name="line134"></a>  assertTrue(&#39;NE overlap&#39;, boxOverlaps(new goog.math.Box(0, 5, 2, 3), box2));
+<a name="line135"></a>  assertTrue(&#39;SE overlap&#39;, boxOverlaps(new goog.math.Box(3, 5, 5, 3), box2));
+<a name="line136"></a>  assertTrue(&#39;SW overlap&#39;, boxOverlaps(new goog.math.Box(3, 2, 5, 0), box2));
+<a name="line137"></a>
+<a name="line138"></a>  // Inside.
+<a name="line139"></a>  assertTrue(&#39;Inside overlap&#39;,
+<a name="line140"></a>      boxOverlaps(new goog.math.Box(2, 3, 3, 2), box2));
+<a name="line141"></a>
+<a name="line142"></a>  // Around.
+<a name="line143"></a>  assertTrue(&#39;Outside overlap&#39;,
+<a name="line144"></a>      boxOverlaps(new goog.math.Box(0, 5, 5, 0), box2));
+<a name="line145"></a>
+<a name="line146"></a>  // Edge overlaps.
+<a name="line147"></a>  assertTrue(&#39;N overlap&#39;, boxOverlaps(new goog.math.Box(0, 3, 2, 2), box2));
+<a name="line148"></a>  assertTrue(&#39;E overlap&#39;, boxOverlaps(new goog.math.Box(2, 5, 3, 3), box2));
+<a name="line149"></a>  assertTrue(&#39;S overlap&#39;, boxOverlaps(new goog.math.Box(3, 3, 5, 2), box2));
+<a name="line150"></a>  assertTrue(&#39;W overlap&#39;, boxOverlaps(new goog.math.Box(2, 2, 3, 0), box2));
+<a name="line151"></a>
+<a name="line152"></a>  assertTrue(&#39;N-in overlap&#39;, boxOverlaps(new goog.math.Box(0, 5, 2, 0), box2));
+<a name="line153"></a>  assertTrue(&#39;E-in overlap&#39;, boxOverlaps(new goog.math.Box(0, 5, 5, 3), box2));
+<a name="line154"></a>  assertTrue(&#39;S-in overlap&#39;, boxOverlaps(new goog.math.Box(3, 5, 5, 0), box2));
+<a name="line155"></a>  assertTrue(&#39;W-in overlap&#39;, boxOverlaps(new goog.math.Box(0, 2, 5, 0), box2));
+<a name="line156"></a>
+<a name="line157"></a>  // Does not overlap.
+<a name="line158"></a>  var box2 = new goog.math.Box(3, 6, 6, 3);
+<a name="line159"></a>
+<a name="line160"></a>  // Along the edge - shorter.
+<a name="line161"></a>  assertFalse(&#39;N-in no overlap&#39;,
+<a name="line162"></a>      boxOverlaps(new goog.math.Box(1, 5, 2, 4), box2));
+<a name="line163"></a>  assertFalse(&#39;E-in no overlap&#39;,
+<a name="line164"></a>      boxOverlaps(new goog.math.Box(4, 8, 5, 7), box2));
+<a name="line165"></a>  assertFalse(&#39;S-in no overlap&#39;,
+<a name="line166"></a>      boxOverlaps(new goog.math.Box(7, 5, 8, 4), box2));
+<a name="line167"></a>  assertFalse(&#39;N-in no overlap&#39;,
+<a name="line168"></a>      boxOverlaps(new goog.math.Box(4, 2, 5, 1), box2));
+<a name="line169"></a>
+<a name="line170"></a>  // By the corner.
+<a name="line171"></a>  assertFalse(&#39;NE no overlap&#39;,
+<a name="line172"></a>      boxOverlaps(new goog.math.Box(1, 8, 2, 7), box2));
+<a name="line173"></a>  assertFalse(&#39;SE no overlap&#39;,
+<a name="line174"></a>      boxOverlaps(new goog.math.Box(7, 8, 8, 7), box2));
+<a name="line175"></a>  assertFalse(&#39;SW no overlap&#39;,
+<a name="line176"></a>      boxOverlaps(new goog.math.Box(7, 2, 8, 1), box2));
+<a name="line177"></a>  assertFalse(&#39;NW no overlap&#39;,
+<a name="line178"></a>      boxOverlaps(new goog.math.Box(1, 2, 2, 1), box2));
+<a name="line179"></a>
+<a name="line180"></a>  // Perpendicular to an edge.
+<a name="line181"></a>  assertFalse(&#39;NNE no overlap&#39;,
+<a name="line182"></a>      boxOverlaps(new goog.math.Box(1, 7, 2, 5), box2));
+<a name="line183"></a>  assertFalse(&#39;NEE no overlap&#39;,
+<a name="line184"></a>      boxOverlaps(new goog.math.Box(2, 8, 4, 7), box2));
+<a name="line185"></a>  assertFalse(&#39;SEE no overlap&#39;,
+<a name="line186"></a>      boxOverlaps(new goog.math.Box(5, 8, 7, 7), box2));
+<a name="line187"></a>  assertFalse(&#39;SSE no overlap&#39;,
+<a name="line188"></a>      boxOverlaps(new goog.math.Box(7, 7, 8, 5), box2));
+<a name="line189"></a>  assertFalse(&#39;SSW no overlap&#39;,
+<a name="line190"></a>      boxOverlaps(new goog.math.Box(7, 4, 8, 2), box2));
+<a name="line191"></a>  assertFalse(&#39;SWW no overlap&#39;,
+<a name="line192"></a>      boxOverlaps(new goog.math.Box(5, 2, 7, 1), box2));
+<a name="line193"></a>  assertFalse(&#39;NWW no overlap&#39;,
+<a name="line194"></a>      boxOverlaps(new goog.math.Box(2, 2, 4, 1), box2));
+<a name="line195"></a>  assertFalse(&#39;NNW no overlap&#39;,
+<a name="line196"></a>      boxOverlaps(new goog.math.Box(1, 4, 2, 2), box2));
+<a name="line197"></a>
+<a name="line198"></a>  // Along the edge - longer.
+<a name="line199"></a>  assertFalse(&#39;N no overlap&#39;,
+<a name="line200"></a>      boxOverlaps(new goog.math.Box(0, 7, 1, 2), box2));
+<a name="line201"></a>  assertFalse(&#39;E no overlap&#39;,
+<a name="line202"></a>      boxOverlaps(new goog.math.Box(2, 9, 7, 8), box2));
+<a name="line203"></a>  assertFalse(&#39;S no overlap&#39;,
+<a name="line204"></a>      boxOverlaps(new goog.math.Box(8, 7, 9, 2), box2));
+<a name="line205"></a>  assertFalse(&#39;W no overlap&#39;,
+<a name="line206"></a>      boxOverlaps(new goog.math.Box(2, 1, 7, 0), box2));
+<a name="line207"></a>}
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * Checks whether a given box overlaps any of given DnD target boxes.
+<a name="line212"></a> *
+<a name="line213"></a> * @param {goog.math.Box} box The box to check.
+<a name="line214"></a> * @param {Array.&lt;Object&gt;} targets The array of targets with boxes to check
+<a name="line215"></a> *     if they overlap with the given box.
+<a name="line216"></a> * @return {boolean} Whether the box overlaps any of the target boxes.
+<a name="line217"></a> */
+<a name="line218"></a>function boxOverlapsTargets(box, targets) {
+<a name="line219"></a>  return goog.array.some(targets, function(target) {
+<a name="line220"></a>    return boxOverlaps(box, target.box_);
+<a name="line221"></a>  });
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>function testMaybeCreateDummyTargetForPosition() {
+<a name="line226"></a>  var testGroup = new goog.fx.AbstractDragDrop();
+<a name="line227"></a>  testGroup.targetList_ = targets;
+<a name="line228"></a>  testGroup.targetBox_ = new goog.math.Box(0, 9, 10, 1);
+<a name="line229"></a>
+<a name="line230"></a>  var target = testGroup.maybeCreateDummyTargetForPosition_(3, 3);
+<a name="line231"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line232"></a>  assertTrue(testGroup.isInside(3, 3, target.box_));
+<a name="line233"></a>
+<a name="line234"></a>  target = testGroup.maybeCreateDummyTargetForPosition_(2, 4);
+<a name="line235"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line236"></a>  assertTrue(testGroup.isInside(2, 4, target.box_));
+<a name="line237"></a>
+<a name="line238"></a>  target = testGroup.maybeCreateDummyTargetForPosition_(2, 7);
+<a name="line239"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line240"></a>  assertTrue(testGroup.isInside(2, 7, target.box_));
+<a name="line241"></a>
+<a name="line242"></a>  testGroup.targetList_.push({ box_: new goog.math.Box(5, 6, 6, 0) });
+<a name="line243"></a>
+<a name="line244"></a>  target = testGroup.maybeCreateDummyTargetForPosition_(3, 3);
+<a name="line245"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line246"></a>  assertTrue(testGroup.isInside(3, 3, target.box_));
+<a name="line247"></a>
+<a name="line248"></a>  target = testGroup.maybeCreateDummyTargetForPosition_(2, 7);
+<a name="line249"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line250"></a>  assertTrue(testGroup.isInside(2, 7, target.box_));
+<a name="line251"></a>
+<a name="line252"></a>  target = testGroup.maybeCreateDummyTargetForPosition_(6, 3);
+<a name="line253"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line254"></a>  assertTrue(testGroup.isInside(6, 3, target.box_));
+<a name="line255"></a>
+<a name="line256"></a>  target = testGroup.maybeCreateDummyTargetForPosition_(0, 3);
+<a name="line257"></a>  assertNull(target);
+<a name="line258"></a>  target = testGroup.maybeCreateDummyTargetForPosition_(9, 0);
+<a name="line259"></a>  assertNull(target);
+<a name="line260"></a>}
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>function testMaybeCreateDummyTargetForPosition2() {
+<a name="line264"></a>  var testGroup = new goog.fx.AbstractDragDrop();
+<a name="line265"></a>  testGroup.targetList_ = targets2;
+<a name="line266"></a>  testGroup.targetBox_ = new goog.math.Box(10, 50, 80, 10);
+<a name="line267"></a>
+<a name="line268"></a>  var target = testGroup.maybeCreateDummyTargetForPosition_(30, 40);
+<a name="line269"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line270"></a>  assertTrue(testGroup.isInside(30, 40, target.box_));
+<a name="line271"></a>
+<a name="line272"></a>  target = testGroup.maybeCreateDummyTargetForPosition_(45, 40);
+<a name="line273"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line274"></a>  assertTrue(testGroup.isInside(45, 40, target.box_));
+<a name="line275"></a>
+<a name="line276"></a>  testGroup.targetList_.push({ box_: new goog.math.Box(40, 50, 50, 40) });
+<a name="line277"></a>
+<a name="line278"></a>  target = testGroup.maybeCreateDummyTargetForPosition_(30, 40);
+<a name="line279"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line280"></a>  target = testGroup.maybeCreateDummyTargetForPosition_(45, 35);
+<a name="line281"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line282"></a>}
+<a name="line283"></a>
+<a name="line284"></a>
+<a name="line285"></a>function testMaybeCreateDummyTargetForPosition3BoxHasDecentSize() {
+<a name="line286"></a>  var testGroup = new goog.fx.AbstractDragDrop();
+<a name="line287"></a>  testGroup.targetList_ = targets3;
+<a name="line288"></a>  testGroup.targetBox_ = new goog.math.Box(0, 6, 6, 0);
+<a name="line289"></a>
+<a name="line290"></a>  var target = testGroup.maybeCreateDummyTargetForPosition_(3, 3);
+<a name="line291"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line292"></a>  assertTrue(testGroup.isInside(3, 3, target.box_));
+<a name="line293"></a>  assertEquals(&#39;(1t, 5r, 5b, 1l)&#39;, target.box_.toString());
+<a name="line294"></a>}
+<a name="line295"></a>
+<a name="line296"></a>
+<a name="line297"></a>function testMaybeCreateDummyTargetForPosition4() {
+<a name="line298"></a>  var testGroup = new goog.fx.AbstractDragDrop();
+<a name="line299"></a>  testGroup.targetList_ = targets;
+<a name="line300"></a>  testGroup.targetBox_ = new goog.math.Box(0, 9, 10, 1);
+<a name="line301"></a>
+<a name="line302"></a>  for (var x = testGroup.targetBox_.left;
+<a name="line303"></a>       x &lt; testGroup.targetBox_.right;
+<a name="line304"></a>       x++) {
+<a name="line305"></a>    for (var y = testGroup.targetBox_.top;
+<a name="line306"></a>        y &lt; testGroup.targetBox_.bottom;
+<a name="line307"></a>        y++) {
+<a name="line308"></a>      var inRealTarget = false;
+<a name="line309"></a>      for (var i = 0; i &lt; testGroup.targetList_.length; i++) {
+<a name="line310"></a>        if (testGroup.isInside(x, y, testGroup.targetList_[i].box_)) {
+<a name="line311"></a>          inRealTarget = true;
+<a name="line312"></a>          break;
+<a name="line313"></a>        }
+<a name="line314"></a>      }
+<a name="line315"></a>      if (!inRealTarget) {
+<a name="line316"></a>        var target = testGroup.maybeCreateDummyTargetForPosition_(x, y);
+<a name="line317"></a>        if (target) {
+<a name="line318"></a>          assertFalse(&#39;Fake target for point(&#39; + x + &#39;,&#39; + y + &#39;) should &#39; +
+<a name="line319"></a>              &#39;not overlap any real targets.&#39;,
+<a name="line320"></a>              boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line321"></a>          assertTrue(testGroup.isInside(x, y, target.box_));
+<a name="line322"></a>        }
+<a name="line323"></a>      }
+<a name="line324"></a>    }
+<a name="line325"></a>  }
+<a name="line326"></a>}
+<a name="line327"></a>
+<a name="line328"></a>function testMaybeCreateDummyTargetForPosition_NegativePositions() {
+<a name="line329"></a>  var negTargets = [
+<a name="line330"></a>    { box_: new goog.math.Box(-20, 10, -5, 1) },
+<a name="line331"></a>    { box_: new goog.math.Box(20, 10, 30, 1) }
+<a name="line332"></a>  ];
+<a name="line333"></a>
+<a name="line334"></a>  var testGroup = new goog.fx.AbstractDragDrop();
+<a name="line335"></a>  testGroup.targetList_ = negTargets;
+<a name="line336"></a>  testGroup.targetBox_ = new goog.math.Box(-20, 10, 30, 1);
+<a name="line337"></a>
+<a name="line338"></a>  var target = testGroup.maybeCreateDummyTargetForPosition_(1, 5);
+<a name="line339"></a>  assertFalse(boxOverlapsTargets(target.box_, testGroup.targetList_));
+<a name="line340"></a>  assertTrue(testGroup.isInside(1, 5, target.box_));
+<a name="line341"></a>}
+<a name="line342"></a>
+<a name="line343"></a>function testMaybeCreateDummyTargetOutsideScrollableContainer() {
+<a name="line344"></a>  var targets = [
+<a name="line345"></a>    { box_: new goog.math.Box(0, 3, 10, 1) },
+<a name="line346"></a>    { box_: new goog.math.Box(20, 3, 30, 1) }
+<a name="line347"></a>  ];
+<a name="line348"></a>  var target = targets[0];
+<a name="line349"></a>
+<a name="line350"></a>  var testGroup = new goog.fx.AbstractDragDrop();
+<a name="line351"></a>  testGroup.targetList_ = targets;
+<a name="line352"></a>  testGroup.targetBox_ = new goog.math.Box(0, 3, 30, 1);
+<a name="line353"></a>
+<a name="line354"></a>  testGroup.addScrollableContainer(document.getElementById(&#39;container1&#39;));
+<a name="line355"></a>  var container = testGroup.scrollableContainers_[0];
+<a name="line356"></a>  container.containedTargets_.push(target);
+<a name="line357"></a>  container.box_ = new goog.math.Box(0, 3, 5, 1); // shorter than target
+<a name="line358"></a>  target.scrollableContainer_ = container;
+<a name="line359"></a>
+<a name="line360"></a>  // mouse cursor is below scrollable target but not the actual target
+<a name="line361"></a>  var dummyTarget = testGroup.maybeCreateDummyTargetForPosition_(2, 7);
+<a name="line362"></a>  // dummy target should not overlap the scrollable container
+<a name="line363"></a>  assertFalse(boxOverlaps(dummyTarget.box_, container.box_));
+<a name="line364"></a>  // but should overlap the actual target, since not all of it is visible
+<a name="line365"></a>  assertTrue(boxOverlaps(dummyTarget.box_, target.box_));
+<a name="line366"></a>}
+<a name="line367"></a>
+<a name="line368"></a>function testMaybeCreateDummyTargetInsideScrollableContainer() {
+<a name="line369"></a>  var targets = [
+<a name="line370"></a>    { box_: new goog.math.Box(0, 3, 10, 1) },
+<a name="line371"></a>    { box_: new goog.math.Box(20, 3, 30, 1) }
+<a name="line372"></a>  ];
+<a name="line373"></a>  var target = targets[0];
+<a name="line374"></a>
+<a name="line375"></a>  var testGroup = new goog.fx.AbstractDragDrop();
+<a name="line376"></a>  testGroup.targetList_ = targets;
+<a name="line377"></a>  testGroup.targetBox_ = new goog.math.Box(0, 3, 30, 1);
+<a name="line378"></a>
+<a name="line379"></a>  testGroup.addScrollableContainer(document.getElementById(&#39;container1&#39;));
+<a name="line380"></a>  var container = testGroup.scrollableContainers_[0];
+<a name="line381"></a>  container.containedTargets_.push(target);
+<a name="line382"></a>  container.box_ = new goog.math.Box(0, 3, 20, 1); // longer than target
+<a name="line383"></a>  target.scrollableContainer_ = container;
+<a name="line384"></a>
+<a name="line385"></a>  // mouse cursor is below both the scrollable and the actual target
+<a name="line386"></a>  var dummyTarget = testGroup.maybeCreateDummyTargetForPosition_(2, 15);
+<a name="line387"></a>  // dummy target should overlap the scrollable container
+<a name="line388"></a>  assertTrue(boxOverlaps(dummyTarget.box_, container.box_));
+<a name="line389"></a>  // but not overlap the actual target
+<a name="line390"></a>  assertFalse(boxOverlaps(dummyTarget.box_, target.box_));
+<a name="line391"></a>}
+<a name="line392"></a>
+<a name="line393"></a>function testCalculateTargetBox() {
+<a name="line394"></a>  var testGroup = new goog.fx.AbstractDragDrop();
+<a name="line395"></a>  testGroup.targetList_ = [];
+<a name="line396"></a>  goog.array.forEach(targets, function(target) {
+<a name="line397"></a>    testGroup.targetList_.push(target);
+<a name="line398"></a>    testGroup.calculateTargetBox_(target.box_);
+<a name="line399"></a>  });
+<a name="line400"></a>  assertTrue(goog.math.Box.equals(testGroup.targetBox_,
+<a name="line401"></a>      new goog.math.Box(0, 9, 10, 1)));
+<a name="line402"></a>
+<a name="line403"></a>  testGroup = new goog.fx.AbstractDragDrop();
+<a name="line404"></a>  testGroup.targetList_ = [];
+<a name="line405"></a>  goog.array.forEach(targets2, function(target) {
+<a name="line406"></a>    testGroup.targetList_.push(target);
+<a name="line407"></a>    testGroup.calculateTargetBox_(target.box_);
+<a name="line408"></a>  });
+<a name="line409"></a>  assertTrue(goog.math.Box.equals(testGroup.targetBox_,
+<a name="line410"></a>      new goog.math.Box(10, 50, 80, 10)));
+<a name="line411"></a>
+<a name="line412"></a>  testGroup = new goog.fx.AbstractDragDrop();
+<a name="line413"></a>  testGroup.targetList_ = [];
+<a name="line414"></a>  goog.array.forEach(targets3, function(target) {
+<a name="line415"></a>    testGroup.targetList_.push(target);
+<a name="line416"></a>    testGroup.calculateTargetBox_(target.box_);
+<a name="line417"></a>  });
+<a name="line418"></a>  assertTrue(goog.math.Box.equals(testGroup.targetBox_,
+<a name="line419"></a>      new goog.math.Box(0, 6, 6, 0)));
+<a name="line420"></a>}
+<a name="line421"></a>
+<a name="line422"></a>
+<a name="line423"></a>function testIsInside() {
+<a name="line424"></a>  var add = new goog.fx.AbstractDragDrop();
+<a name="line425"></a>  // The box in question.
+<a name="line426"></a>  // 10,20+++++20,20
+<a name="line427"></a>  //   +         |
+<a name="line428"></a>  // 10,30-----20,30
+<a name="line429"></a>  var box = new goog.math.Box(20, 20, 30, 10);
+<a name="line430"></a>
+<a name="line431"></a>  assertTrue(&#39;A point somewhere in the middle of the box should be inside.&#39;,
+<a name="line432"></a>      add.isInside(15, 25, box));
+<a name="line433"></a>
+<a name="line434"></a>  assertTrue(&#39;A point in top-left corner should be inside the box.&#39;,
+<a name="line435"></a>      add.isInside(10, 20, box));
+<a name="line436"></a>
+<a name="line437"></a>  assertTrue(&#39;A point on top border should be inside the box.&#39;,
+<a name="line438"></a>      add.isInside(15, 20, box));
+<a name="line439"></a>
+<a name="line440"></a>  assertFalse(&#39;A point in top-right corner should be outside the box.&#39;,
+<a name="line441"></a>      add.isInside(20, 20, box));
+<a name="line442"></a>
+<a name="line443"></a>  assertFalse(&#39;A point on right border should be outside the box.&#39;,
+<a name="line444"></a>      add.isInside(20, 25, box));
+<a name="line445"></a>
+<a name="line446"></a>  assertFalse(&#39;A point in bottom-right corner should be outside the box.&#39;,
+<a name="line447"></a>      add.isInside(20, 30, box));
+<a name="line448"></a>
+<a name="line449"></a>  assertFalse(&#39;A point on bottom border should be outside the box.&#39;,
+<a name="line450"></a>      add.isInside(15, 30, box));
+<a name="line451"></a>
+<a name="line452"></a>  assertFalse(&#39;A point in bottom-left corner should be outside the box.&#39;,
+<a name="line453"></a>      add.isInside(10, 30, box));
+<a name="line454"></a>
+<a name="line455"></a>  assertTrue(&#39;A point on left border should be inside the box.&#39;,
+<a name="line456"></a>      add.isInside(10, 25, box));
+<a name="line457"></a>
+<a name="line458"></a>  add.dispose();
+<a name="line459"></a>}
+<a name="line460"></a>
+<a name="line461"></a>
+<a name="line462"></a>function testAddingRemovingScrollableContainers() {
+<a name="line463"></a>  var group = new goog.fx.AbstractDragDrop();
+<a name="line464"></a>  var el1 = document.createElement(&#39;div&#39;);
+<a name="line465"></a>  var el2 = document.createElement(&#39;div&#39;);
+<a name="line466"></a>
+<a name="line467"></a>  assertEquals(0, group.scrollableContainers_.length);
+<a name="line468"></a>
+<a name="line469"></a>  group.addScrollableContainer(el1);
+<a name="line470"></a>  assertEquals(1, group.scrollableContainers_.length);
+<a name="line471"></a>
+<a name="line472"></a>  group.addScrollableContainer(el2);
+<a name="line473"></a>  assertEquals(2, group.scrollableContainers_.length);
+<a name="line474"></a>
+<a name="line475"></a>  group.removeAllScrollableContainers();
+<a name="line476"></a>  assertEquals(0, group.scrollableContainers_.length);
+<a name="line477"></a>}
+<a name="line478"></a>
+<a name="line479"></a>
+<a name="line480"></a>function testScrollableContainersCalculation() {
+<a name="line481"></a>  var group = new goog.fx.AbstractDragDrop();
+<a name="line482"></a>  var target = new goog.fx.AbstractDragDrop();
+<a name="line483"></a>
+<a name="line484"></a>  group.addTarget(target);
+<a name="line485"></a>  group.addScrollableContainer(document.getElementById(&#39;container1&#39;));
+<a name="line486"></a>  var container = group.scrollableContainers_[0];
+<a name="line487"></a>
+<a name="line488"></a>  var item1 = new goog.fx.DragDropItem(document.getElementById(&#39;child1&#39;));
+<a name="line489"></a>  var item2 = new goog.fx.DragDropItem(document.getElementById(&#39;child2&#39;));
+<a name="line490"></a>
+<a name="line491"></a>  target.items_.push(item1);
+<a name="line492"></a>  group.recalculateDragTargets();
+<a name="line493"></a>  group.recalculateScrollableContainers();
+<a name="line494"></a>
+<a name="line495"></a>  assertEquals(1, container.containedTargets_.length);
+<a name="line496"></a>  assertEquals(container, group.targetList_[0].scrollableContainer_);
+<a name="line497"></a>
+<a name="line498"></a>  target.items_.push(item2);
+<a name="line499"></a>  group.recalculateDragTargets();
+<a name="line500"></a>  assertEquals(1, container.containedTargets_.length);
+<a name="line501"></a>  assertNull(group.targetList_[0].scrollableContainer_);
+<a name="line502"></a>
+<a name="line503"></a>  group.recalculateScrollableContainers();
+<a name="line504"></a>  assertEquals(2, container.containedTargets_.length);
+<a name="line505"></a>  assertEquals(container, group.targetList_[1].scrollableContainer_);
+<a name="line506"></a>}
+<a name="line507"></a>
+<a name="line508"></a>// See http://b/7494613.
+<a name="line509"></a>function testMouseUpOutsideElement() {
+<a name="line510"></a>  var group = new goog.fx.AbstractDragDrop();
+<a name="line511"></a>  var target = new goog.fx.AbstractDragDrop();
+<a name="line512"></a>  group.addTarget(target);
+<a name="line513"></a>  var item1 = new goog.fx.DragDropItem(document.getElementById(&#39;child1&#39;));
+<a name="line514"></a>  group.items_.push(item1);
+<a name="line515"></a>  item1.setParent(group);
+<a name="line516"></a>  group.init();
+<a name="line517"></a>
+<a name="line518"></a>  group.startDrag = goog.functions.error(&#39;startDrag should not be called.&#39;);
+<a name="line519"></a>
+<a name="line520"></a>  goog.testing.events.fireMouseDownEvent(item1.element);
+<a name="line521"></a>  goog.testing.events.fireMouseUpEvent(item1.element.parentNode);
+<a name="line522"></a>  // This should have no effect (not start a drag) since the previous event
+<a name="line523"></a>  // should have cleared the listeners.
+<a name="line524"></a>  goog.testing.events.fireMouseOutEvent(item1.element);
+<a name="line525"></a>
+<a name="line526"></a>  group.dispose();
+<a name="line527"></a>  target.dispose();
+<a name="line528"></a>}
+<a name="line529"></a>
+<a name="line530"></a>function testScrollBeforeMoveDrag() {
+<a name="line531"></a>  var group = new goog.fx.AbstractDragDrop();
+<a name="line532"></a>  var target = new goog.fx.AbstractDragDrop();
+<a name="line533"></a>
+<a name="line534"></a>  group.addTarget(target);
+<a name="line535"></a>  var container = document.getElementById(&#39;container1&#39;);
+<a name="line536"></a>  group.addScrollableContainer(container);
+<a name="line537"></a>
+<a name="line538"></a>  var childEl = document.getElementById(&#39;child1&#39;);
+<a name="line539"></a>  var item = new goog.fx.DragDropItem(childEl);
+<a name="line540"></a>  item.currentDragElement_ = childEl;
+<a name="line541"></a>
+<a name="line542"></a>  target.items_.push(item);
+<a name="line543"></a>  group.recalculateDragTargets();
+<a name="line544"></a>  group.recalculateScrollableContainers();
+<a name="line545"></a>
+<a name="line546"></a>  // Simulare starting a drag.
+<a name="line547"></a>  var moveEvent = {
+<a name="line548"></a>    &#39;clientX&#39;: 8,
+<a name="line549"></a>    &#39;clientY&#39;: 10,
+<a name="line550"></a>    &#39;type&#39;: goog.events.EventType.MOUSEMOVE,
+<a name="line551"></a>    &#39;relatedTarget&#39;: childEl,
+<a name="line552"></a>    &#39;preventDefault&#39;: function() {}
+<a name="line553"></a>  };
+<a name="line554"></a>  group.startDrag(moveEvent, item);
+<a name="line555"></a>
+<a name="line556"></a>  // Simulate scrolling before the first move drag event.
+<a name="line557"></a>  var scrollEvent = {
+<a name="line558"></a>    &#39;target&#39;: container
+<a name="line559"></a>  };
+<a name="line560"></a>  assertNotThrows(goog.bind(group.containerScrollHandler_, group, scrollEvent));
+<a name="line561"></a>}
+<a name="line562"></a>
+<a name="line563"></a>
+<a name="line564"></a>function testMouseMove_mouseOutBeforeThreshold() {
+<a name="line565"></a>  // Setup dragdrop and item
+<a name="line566"></a>  var itemEl = document.createElement(&#39;div&#39;);
+<a name="line567"></a>  var childEl = document.createElement(&#39;div&#39;);
+<a name="line568"></a>  itemEl.appendChild(childEl);
+<a name="line569"></a>  var add = new goog.fx.AbstractDragDrop();
+<a name="line570"></a>  var item = new goog.fx.DragDropItem(itemEl);
+<a name="line571"></a>  item.setParent(add);
+<a name="line572"></a>  add.items_.push(item);
+<a name="line573"></a>
+<a name="line574"></a>  // Simulate maybeStartDrag
+<a name="line575"></a>  item.startPosition_ = new goog.math.Coordinate(10, 10);
+<a name="line576"></a>  item.currentDragElement_ = itemEl;
+<a name="line577"></a>
+<a name="line578"></a>  // Test
+<a name="line579"></a>  var draggedItem = null;
+<a name="line580"></a>  add.startDrag = function(event, item) {
+<a name="line581"></a>    draggedItem = item;
+<a name="line582"></a>  };
+<a name="line583"></a>
+<a name="line584"></a>  var event = {&#39;clientX&#39;: 8, &#39;clientY&#39;: 10, // Drag distance is only 2
+<a name="line585"></a>    &#39;type&#39;: goog.events.EventType.MOUSEOUT, &#39;target&#39;: childEl};
+<a name="line586"></a>  item.mouseMove_(event);
+<a name="line587"></a>  assertEquals(&#39;DragStart should not be fired for mouseout on child element.&#39;,
+<a name="line588"></a>      null, draggedItem);
+<a name="line589"></a>
+<a name="line590"></a>  var event = {&#39;clientX&#39;: 8, &#39;clientY&#39;: 10, // Drag distance is only 2
+<a name="line591"></a>    &#39;type&#39;: goog.events.EventType.MOUSEOUT, &#39;target&#39;: itemEl};
+<a name="line592"></a>  item.mouseMove_(event);
+<a name="line593"></a>  assertEquals(&#39;DragStart should be fired for mouseout on main element.&#39;,
+<a name="line594"></a>      item, draggedItem);
+<a name="line595"></a>}
+<a name="line596"></a>
+<a name="line597"></a>
+<a name="line598"></a>function testGetDragElementPosition() {
+<a name="line599"></a>  var testGroup = new goog.fx.AbstractDragDrop();
+<a name="line600"></a>  var sourceEl = document.createElement(&#39;div&#39;);
+<a name="line601"></a>  document.body.appendChild(sourceEl);
+<a name="line602"></a>
+<a name="line603"></a>  var pageOffset = goog.style.getPageOffset(sourceEl);
+<a name="line604"></a>  var pos = testGroup.getDragElementPosition(sourceEl);
+<a name="line605"></a>  assertEquals(&#39;Drag element position should be source element page offset&#39;,
+<a name="line606"></a>      pageOffset.x, pos.x);
+<a name="line607"></a>  assertEquals(&#39;Drag element position should be source element page offset&#39;,
+<a name="line608"></a>      pageOffset.y, pos.y);
+<a name="line609"></a>
+<a name="line610"></a>  sourceEl.style.marginLeft = &#39;5px&#39;;
+<a name="line611"></a>  sourceEl.style.marginTop = &#39;7px&#39;;
+<a name="line612"></a>  pageOffset = goog.style.getPageOffset(sourceEl);
+<a name="line613"></a>  pos = testGroup.getDragElementPosition(sourceEl);
+<a name="line614"></a>  assertEquals(&#39;Drag element position should be adjusted for source element &#39; +
+<a name="line615"></a>      &#39;margins&#39;, pageOffset.x - 10, pos.x);
+<a name="line616"></a>  assertEquals(&#39;Drag element position should be adjusted for source element &#39; +
+<a name="line617"></a>      &#39;margins&#39;, pageOffset.y - 14, pos.y);
+<a name="line618"></a>}
+<a name="line619"></a>
+<a name="line620"></a>
+<a name="line621"></a>// Helper function for manual debugging.
+<a name="line622"></a>function drawTargets(targets, multiplier) {
+<a name="line623"></a>  var colors = [&#39;green&#39;, &#39;blue&#39;, &#39;red&#39;, &#39;lime&#39;, &#39;pink&#39;, &#39;silver&#39;, &#39;orange&#39;];
+<a name="line624"></a>  var cont = document.getElementById(&#39;cont&#39;);
+<a name="line625"></a>  cont.innerHTML = &#39;&#39;;
+<a name="line626"></a>  for (var i = 0; i &lt; targets.length; i++) {
+<a name="line627"></a>    var box = targets[i].box_;
+<a name="line628"></a>    var el = document.createElement(&#39;div&#39;);
+<a name="line629"></a>    el.style.top = (box.top * multiplier) + &#39;px&#39;;
+<a name="line630"></a>    el.style.left = (box.left * multiplier) + &#39;px&#39;;
+<a name="line631"></a>    el.style.width = ((box.right - box.left) * multiplier) + &#39;px&#39;;
+<a name="line632"></a>    el.style.height = ((box.bottom - box.top) * multiplier) + &#39;px&#39;;
+<a name="line633"></a>    el.style.backgroundColor = colors[i];
+<a name="line634"></a>    cont.appendChild(el);
+<a name="line635"></a>  }
+<a name="line636"></a>}
+</pre>
+
+
+</body>
+</html>

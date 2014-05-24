@@ -1,0 +1,1012 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>plugins (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">editor.plugins</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_AbstractBubblePlugin.html">
+          goog.editor.plugins.AbstractBubblePlugin</a><br/>
+        <div class="class-details">Base class for bubble plugins. This is used for to connect user behavior
+in the editor to a goog.ui.editor.Bubble UI element that allows
+the user to modify the properties of an element on their page (e.g. the alt
+text of an image tag).
+
+Subclasses should override the abstract method getBubbleTargetFromSelection()
+with code to determine if the current selection should activate the bubble
+type. The other abstract method createBubbleContents() should be overriden
+with code to create the inside markup of the bubble.  The base class creates
+the rest of the bubble.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_AbstractDialogPlugin.html">
+          goog.editor.plugins.AbstractDialogPlugin</a><br/>
+        <div class="class-details">An abstract superclass for a Trogedit plugin that creates exactly one
+dialog. By default dialogs are not reused -- each time execCommand is called,
+a new instance of the dialog object is created (and the old one disposed of).
+To enable reusing of the dialog object, subclasses should call
+setReuseDialog() after calling the superclass constructor.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_AbstractTabHandler.html">
+          goog.editor.plugins.AbstractTabHandler</a><br/>
+        <div class="class-details">Plugin to handle tab keys. Specific tab behavior defined by subclasses.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_BasicTextFormatter.html">
+          goog.editor.plugins.BasicTextFormatter</a><br/>
+        <div class="class-details">Functions to style text (e.g. underline, make bold, etc.)
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_Blockquote.html">
+          goog.editor.plugins.Blockquote</a><br/>
+        <div class="class-details">Plugin to handle splitting block quotes.  This plugin does nothing on its
+own and should be used in conjunction with EnterHandler or one of its
+subclasses.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_Emoticons.html">
+          goog.editor.plugins.Emoticons</a><br/>
+        <div class="class-details">Plugin for generating emoticons.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_EnterHandler.html">
+          goog.editor.plugins.EnterHandler</a><br/>
+        <div class="class-details">Plugin to handle enter keys. This does all the crazy to normalize (as much as
+is reasonable) what happens when you hit enter. This also handles the
+special casing of hitting enter in a blockquote.
+
+In IE, Webkit, and Opera, the resulting HTML uses one DIV tag per line. In
+Firefox, the resulting HTML uses BR tags at the end of each line.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_EquationEditorPlugin.html">
+          goog.editor.plugins.EquationEditorPlugin</a><br/>
+        <div class="class-details">A plugin that opens the equation editor in a dialog window.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_FirstStrong.html">
+          goog.editor.plugins.FirstStrong</a><br/>
+        <div class="class-details">First Strong plugin.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_HeaderFormatter.html">
+          goog.editor.plugins.HeaderFormatter</a><br/>
+        <div class="class-details">Applies header styles to text.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_LinkBubble.html">
+          goog.editor.plugins.LinkBubble</a><br/>
+        <div class="class-details">Property bubble plugin for links.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_LinkDialogPlugin.html">
+          goog.editor.plugins.LinkDialogPlugin</a><br/>
+        <div class="class-details">A plugin that opens the link dialog.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_LinkShortcutPlugin.html">
+          goog.editor.plugins.LinkShortcutPlugin</a><br/>
+        <div class="class-details">Plugin to add a keyboard shortcut for the link command
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_ListTabHandler.html">
+          goog.editor.plugins.ListTabHandler</a><br/>
+        <div class="class-details">Plugin to handle tab keys in lists to indent and outdent.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_LoremIpsum.html">
+          goog.editor.plugins.LoremIpsum</a><br/>
+        <div class="class-details">A plugin that manages lorem ipsum state of editable fields.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_RemoveFormatting.html">
+          goog.editor.plugins.RemoveFormatting</a><br/>
+        <div class="class-details">A plugin to handle removing formatting from selected text.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_SpacesTabHandler.html">
+          goog.editor.plugins.SpacesTabHandler</a><br/>
+        <div class="class-details">Plugin to handle tab keys when not in lists to add 4 spaces.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_TableEditor.html">
+          goog.editor.plugins.TableEditor</a><br/>
+        <div class="class-details">Plugin that adds support for table creation and editing commands.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_TagOnEnterHandler.html">
+          goog.editor.plugins.TagOnEnterHandler</a><br/>
+        <div class="class-details">Plugin to handle enter keys. This subclass normalizes all browsers to use
+the given block tag on enter.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_UndoRedo.html">
+          goog.editor.plugins.UndoRedo</a><br/>
+        <div class="class-details">Encapsulates undo/redo logic using a custom undo stack (i.e. not browser
+built-in). Browser built-in undo stacks are too flaky (e.g. IE's gets
+clobbered on DOM modifications). Also, this allows interleaving non-editing
+commands into the undo stack via the UndoRedoManager.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_UndoRedoManager.html">
+          goog.editor.plugins.UndoRedoManager</a><br/>
+        <div class="class-details">Manages undo and redo operations through a series of <code> UndoRedoState</code>s
+maintained on undo and redo stacks.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_plugins_UndoRedoState.html">
+          goog.editor.plugins.UndoRedoState</a><br/>
+        <div class="class-details">Represents an undo and redo action for a particular state transition.
+
+</div>
+ </div>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.AbstractBubblePluginTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">AbstractBubblePluginTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_abstractbubbleplugin_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.AbstractDialogPluginTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">AbstractDialogPluginTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_abstractdialogplugin_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.AbstractTabHandlerTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">AbstractTabHandlerTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_abstracttabhandler_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.BasicTextFormatterTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">BasicTextFormatterTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_basictextformatter_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.BlockquoteTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">BlockquoteTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_blockquote_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.EmoticonsTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">EmoticonsTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_emoticons_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.EnterHandlerTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">EnterHandlerTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_enterhandler_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.EquationEditorPluginTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">EquationEditorPluginTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_equationeditorplugin_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.FirstStrongTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">FirstStrongTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_firststrong_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.HeaderFormatterTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">HeaderFormatterTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_headerformatter_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.LinkBubbleTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">LinkBubbleTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_linkbubble_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.LinkShortcutPluginTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">LinkShortcutPluginTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_linkshortcutplugin_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.ListTabHandlerTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">ListTabHandlerTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_listtabhandler_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.LoremIpsumTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">LoremIpsumTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_loremipsum_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.RemoveFormattingTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">RemoveFormattingTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_removeformatting_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.SpacesTabHandlerTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">SpacesTabHandlerTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_spacestabhandler_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.TableEditorTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">TableEditorTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_tableeditor_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.TagOnEnterHandlerTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">TagOnEnterHandlerTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_tagonenterhandler_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.UndoRedoManagerTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">UndoRedoManagerTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_undoredomanager_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.UndoRedoStateTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">UndoRedoStateTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_undoredostate_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.UndoRedoTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">UndoRedoTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_undoredo_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.editor.plugins.equation"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.plugins.</span><span class="entryName">equation</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_plugins_equationeditorbubble.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package editor</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="editor.plugins"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

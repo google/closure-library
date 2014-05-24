@@ -1,0 +1,124 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>vec.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_vec_vec.js.html">vec.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Supplies global data types and constants for the vector math
+<a name="line18"></a> *     library.
+<a name="line19"></a> */
+<a name="line20"></a>goog.provide(&#39;goog.vec&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.vec.AnyType&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.vec.ArrayType&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.vec.Float32&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.vec.Float64&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.vec.Number&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * On platforms that don&#39;t have native Float32Array or Float64Array support we
+<a name="line30"></a> * use a javascript implementation so that this math library can be used on all
+<a name="line31"></a> * platforms.
+<a name="line32"></a> * @suppress {extraRequire}
+<a name="line33"></a> */
+<a name="line34"></a>goog.require(&#39;goog.vec.Float32Array&#39;);
+<a name="line35"></a>/** @suppress {extraRequire} */
+<a name="line36"></a>goog.require(&#39;goog.vec.Float64Array&#39;);
+<a name="line37"></a>
+<a name="line38"></a>// All vector and matrix operations are based upon arrays of numbers using
+<a name="line39"></a>// either Float32Array, Float64Array, or a standard Javascript Array of
+<a name="line40"></a>// Numbers.
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/** @typedef {!Float32Array} */
+<a name="line44"></a>goog.vec.Float32;
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/** @typedef {!Float64Array} */
+<a name="line48"></a>goog.vec.Float64;
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/** @typedef {!Array.&lt;number&gt;} */
+<a name="line52"></a>goog.vec.Number;
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/** @typedef {!goog.vec.Float32|!goog.vec.Float64|!goog.vec.Number} */
+<a name="line56"></a>goog.vec.AnyType;
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * @deprecated Use AnyType.
+<a name="line61"></a> * @typedef {!Float32Array|!Array.&lt;number&gt;}
+<a name="line62"></a> */
+<a name="line63"></a>goog.vec.ArrayType;
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * For graphics work, 6 decimal places of accuracy are typically all that is
+<a name="line68"></a> * required.
+<a name="line69"></a> *
+<a name="line70"></a> * @type {number}
+<a name="line71"></a> * @const
+<a name="line72"></a> */
+<a name="line73"></a>goog.vec.EPSILON = 1e-6;
+</pre>
+
+
+</body>
+</html>

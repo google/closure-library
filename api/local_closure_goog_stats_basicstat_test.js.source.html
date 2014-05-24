@@ -1,0 +1,216 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>basicstat_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_stats_basicstat_test.js.html">basicstat_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.stats.BasicStatTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.stats.BasicStatTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.stats.BasicStat&#39;);
+<a name="line20"></a>goog.require(&#39;goog.string.format&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.PseudoRandom&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line24"></a>
+<a name="line25"></a>function testGetSlotBoundary() {
+<a name="line26"></a>  var stat = new goog.stats.BasicStat(1654);
+<a name="line27"></a>  assertEquals(&#39;Checking interval&#39;, 33, stat.slotInterval_);
+<a name="line28"></a>
+<a name="line29"></a>  assertEquals(132, stat.getSlotBoundary_(125));
+<a name="line30"></a>  assertEquals(165, stat.getSlotBoundary_(132));
+<a name="line31"></a>  assertEquals(132, stat.getSlotBoundary_(99));
+<a name="line32"></a>  assertEquals(99, stat.getSlotBoundary_(98));
+<a name="line33"></a>}
+<a name="line34"></a>
+<a name="line35"></a>function testCheckForTimeTravel() {
+<a name="line36"></a>  var stat = new goog.stats.BasicStat(1000);
+<a name="line37"></a>
+<a name="line38"></a>  // no slots yet, should always be OK
+<a name="line39"></a>  stat.checkForTimeTravel_(100);
+<a name="line40"></a>  stat.checkForTimeTravel_(-1);
+<a name="line41"></a>
+<a name="line42"></a>  stat.incBy(1, 125); // creates a first bucket, ending at t=140
+<a name="line43"></a>
+<a name="line44"></a>  // Even though these go backwards in time, our basic fuzzy check passes
+<a name="line45"></a>  // because we just check that the time is within the latest interval bucket.
+<a name="line46"></a>  stat.checkForTimeTravel_(141);
+<a name="line47"></a>  stat.checkForTimeTravel_(140);
+<a name="line48"></a>  stat.checkForTimeTravel_(139);
+<a name="line49"></a>  stat.checkForTimeTravel_(125);
+<a name="line50"></a>  stat.checkForTimeTravel_(124);
+<a name="line51"></a>  stat.checkForTimeTravel_(120);
+<a name="line52"></a>
+<a name="line53"></a>  // State should still be the same, all of the above times are valid.
+<a name="line54"></a>  assertEquals(&#39;State unchanged when called with good times&#39;, 1, stat.get(125));
+<a name="line55"></a>
+<a name="line56"></a>  stat.checkForTimeTravel_(119);
+<a name="line57"></a>  assertEquals(&#39;Reset after called with a bad time&#39;, 0, stat.get(125));
+<a name="line58"></a>}
+<a name="line59"></a>
+<a name="line60"></a>function testConstantIncrementPerSlot() {
+<a name="line61"></a>  var stat = new goog.stats.BasicStat(1000);
+<a name="line62"></a>
+<a name="line63"></a>  var now = 1000;
+<a name="line64"></a>  for (var i = 0; i &lt; 50; ++i) {
+<a name="line65"></a>    var newMax = 1000 + i;
+<a name="line66"></a>    var newMin = 1000 - i;
+<a name="line67"></a>    stat.incBy(newMin, now);
+<a name="line68"></a>    stat.incBy(newMax, now);
+<a name="line69"></a>
+<a name="line70"></a>    var msg = goog.string.format(
+<a name="line71"></a>        &#39;now=%d i=%d newMin=%d newMax=%d&#39;, now, i, newMin, newMax);
+<a name="line72"></a>    assertEquals(msg, 2000 * (i + 1), stat.get(now));
+<a name="line73"></a>    assertEquals(msg, newMax, stat.getMax(now));
+<a name="line74"></a>    assertEquals(msg, newMin, stat.getMin(now));
+<a name="line75"></a>
+<a name="line76"></a>    now += 20; // push into the next slots
+<a name="line77"></a>  }
+<a name="line78"></a>
+<a name="line79"></a>  // The next increment should cause old data to fall off.
+<a name="line80"></a>  stat.incBy(1, now);
+<a name="line81"></a>  assertEquals(2000 * 49 + 1, stat.get(now));
+<a name="line82"></a>  assertEquals(1, stat.getMin(now));
+<a name="line83"></a>  assertEquals(1049, stat.getMax(now));
+<a name="line84"></a>
+<a name="line85"></a>  now += 20; // drop off another bucket
+<a name="line86"></a>  stat.incBy(1, now);
+<a name="line87"></a>  assertEquals(2000 * 48 + 2, stat.get(now));
+<a name="line88"></a>  assertEquals(1, stat.getMin(now));
+<a name="line89"></a>  assertEquals(1049, stat.getMax(now));
+<a name="line90"></a>}
+<a name="line91"></a>
+<a name="line92"></a>function testSparseBuckets() {
+<a name="line93"></a>  var stat = new goog.stats.BasicStat(1000);
+<a name="line94"></a>  var now = 1000;
+<a name="line95"></a>
+<a name="line96"></a>  stat.incBy(10, now);
+<a name="line97"></a>  assertEquals(10, stat.get(now));
+<a name="line98"></a>
+<a name="line99"></a>  now += 5000; // the old slot is now still in memory, but should be ignored
+<a name="line100"></a>  stat.incBy(1, now);
+<a name="line101"></a>  assertEquals(1, stat.get(now));
+<a name="line102"></a>}
+<a name="line103"></a>
+<a name="line104"></a>function testFuzzy() {
+<a name="line105"></a>  var stat = new goog.stats.BasicStat(1000);
+<a name="line106"></a>  var test = new PerfectlySlowStat(1000);
+<a name="line107"></a>  var rand = new goog.testing.PseudoRandom(58849020);
+<a name="line108"></a>  var eventCount = 0;
+<a name="line109"></a>
+<a name="line110"></a>  // test over 5 simulated seconds (2 for IE, due to timeouts)
+<a name="line111"></a>  var simulationDuration = goog.userAgent.IE ? 2000 : 5000;
+<a name="line112"></a>  for (var now = 1000; now &lt; simulationDuration; ) {
+<a name="line113"></a>    var count = Math.floor(rand.random() * 2147483648);
+<a name="line114"></a>    var delay = Math.floor(rand.random() * 25);
+<a name="line115"></a>    for (var i = 0; i &lt;= delay; ++i) {
+<a name="line116"></a>      var time = now + i;
+<a name="line117"></a>      var msg = goog.string.format(&#39;now=%d eventCount=%d&#39;, time, eventCount);
+<a name="line118"></a>      var expected = test.getStats(now + i);
+<a name="line119"></a>      assertEquals(expected.count, stat.get(time));
+<a name="line120"></a>      assertEquals(expected.min, stat.getMin(time));
+<a name="line121"></a>      assertEquals(expected.max, stat.getMax(time));
+<a name="line122"></a>    }
+<a name="line123"></a>
+<a name="line124"></a>    now += delay;
+<a name="line125"></a>    stat.incBy(count, now);
+<a name="line126"></a>    test.incBy(count, now);
+<a name="line127"></a>    eventCount++;
+<a name="line128"></a>  }
+<a name="line129"></a>}
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * A horribly inefficient implementation of BasicStat that stores
+<a name="line135"></a> * every event in an array and dynamically filters to perform
+<a name="line136"></a> * aggregations.
+<a name="line137"></a> * @constructor
+<a name="line138"></a> */
+<a name="line139"></a>var PerfectlySlowStat = function(interval) {
+<a name="line140"></a>  this.interval_ = interval;
+<a name="line141"></a>  this.slotSize_ = Math.floor(interval / goog.stats.BasicStat.NUM_SLOTS_);
+<a name="line142"></a>  this.events_ = [];
+<a name="line143"></a>};
+<a name="line144"></a>
+<a name="line145"></a>PerfectlySlowStat.prototype.incBy = function(amt, now) {
+<a name="line146"></a>  this.events_.push({&#39;time&#39;: now, &#39;count&#39;: amt});
+<a name="line147"></a>};
+<a name="line148"></a>
+<a name="line149"></a>PerfectlySlowStat.prototype.getStats = function(now) {
+<a name="line150"></a>  var end = Math.floor(now / this.slotSize_) * this.slotSize_ + this.slotSize_;
+<a name="line151"></a>  var start = end - this.interval_;
+<a name="line152"></a>  var events = goog.array.filter(this.events_,
+<a name="line153"></a>      function(e) { return e.time &gt;= start });
+<a name="line154"></a>  return {
+<a name="line155"></a>    &#39;count&#39;: goog.array.reduce(events,
+<a name="line156"></a>        function(sum, e) { return sum + e.count },
+<a name="line157"></a>        0),
+<a name="line158"></a>    &#39;min&#39;: goog.array.reduce(events,
+<a name="line159"></a>        function(min, e) { return Math.min(min, e.count); },
+<a name="line160"></a>        Number.MAX_VALUE),
+<a name="line161"></a>    &#39;max&#39;: goog.array.reduce(events,
+<a name="line162"></a>        function(max, e) { return Math.max(max, e.count); },
+<a name="line163"></a>        Number.MIN_VALUE)
+<a name="line164"></a>  };
+<a name="line165"></a>};
+</pre>
+
+
+</body>
+</html>

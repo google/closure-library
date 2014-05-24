@@ -1,0 +1,414 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>w3crange.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_browserrange_w3crange.js.html">w3crange.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the W3C spec following range wrapper.
+<a name="line17"></a> *
+<a name="line18"></a> * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
+<a name="line19"></a> *
+<a name="line20"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.dom.browserrange.W3cRange&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom.RangeEndpoint&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.browserrange.AbstractRange&#39;);
+<a name="line30"></a>goog.require(&#39;goog.string&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * The constructor for W3C specific browser ranges.
+<a name="line36"></a> * @param {Range} range The range object.
+<a name="line37"></a> * @constructor
+<a name="line38"></a> * @extends {goog.dom.browserrange.AbstractRange}
+<a name="line39"></a> */
+<a name="line40"></a>goog.dom.browserrange.W3cRange = function(range) {
+<a name="line41"></a>  this.range_ = range;
+<a name="line42"></a>};
+<a name="line43"></a>goog.inherits(goog.dom.browserrange.W3cRange,
+<a name="line44"></a>              goog.dom.browserrange.AbstractRange);
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Returns a browser range spanning the given node&#39;s contents.
+<a name="line49"></a> * @param {Node} node The node to select.
+<a name="line50"></a> * @return {!Range} A browser range spanning the node&#39;s contents.
+<a name="line51"></a> * @protected
+<a name="line52"></a> */
+<a name="line53"></a>goog.dom.browserrange.W3cRange.getBrowserRangeForNode = function(node) {
+<a name="line54"></a>  var nodeRange = goog.dom.getOwnerDocument(node).createRange();
+<a name="line55"></a>
+<a name="line56"></a>  if (node.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line57"></a>    nodeRange.setStart(node, 0);
+<a name="line58"></a>    nodeRange.setEnd(node, node.length);
+<a name="line59"></a>  } else {
+<a name="line60"></a>    if (!goog.dom.browserrange.canContainRangeEndpoint(node)) {
+<a name="line61"></a>      var rangeParent = node.parentNode;
+<a name="line62"></a>      var rangeStartOffset = goog.array.indexOf(rangeParent.childNodes, node);
+<a name="line63"></a>      nodeRange.setStart(rangeParent, rangeStartOffset);
+<a name="line64"></a>      nodeRange.setEnd(rangeParent, rangeStartOffset + 1);
+<a name="line65"></a>    } else {
+<a name="line66"></a>      var tempNode, leaf = node;
+<a name="line67"></a>      while ((tempNode = leaf.firstChild) &amp;&amp;
+<a name="line68"></a>          goog.dom.browserrange.canContainRangeEndpoint(tempNode)) {
+<a name="line69"></a>        leaf = tempNode;
+<a name="line70"></a>      }
+<a name="line71"></a>      nodeRange.setStart(leaf, 0);
+<a name="line72"></a>
+<a name="line73"></a>      leaf = node;
+<a name="line74"></a>      while ((tempNode = leaf.lastChild) &amp;&amp;
+<a name="line75"></a>          goog.dom.browserrange.canContainRangeEndpoint(tempNode)) {
+<a name="line76"></a>        leaf = tempNode;
+<a name="line77"></a>      }
+<a name="line78"></a>      nodeRange.setEnd(leaf, leaf.nodeType == goog.dom.NodeType.ELEMENT ?
+<a name="line79"></a>          leaf.childNodes.length : leaf.length);
+<a name="line80"></a>    }
+<a name="line81"></a>  }
+<a name="line82"></a>
+<a name="line83"></a>  return nodeRange;
+<a name="line84"></a>};
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * Returns a browser range spanning the given nodes.
+<a name="line89"></a> * @param {Node} startNode The node to start with - should not be a BR.
+<a name="line90"></a> * @param {number} startOffset The offset within the start node.
+<a name="line91"></a> * @param {Node} endNode The node to end with - should not be a BR.
+<a name="line92"></a> * @param {number} endOffset The offset within the end node.
+<a name="line93"></a> * @return {!Range} A browser range spanning the node&#39;s contents.
+<a name="line94"></a> * @protected
+<a name="line95"></a> */
+<a name="line96"></a>goog.dom.browserrange.W3cRange.getBrowserRangeForNodes = function(startNode,
+<a name="line97"></a>    startOffset, endNode, endOffset) {
+<a name="line98"></a>  // Create and return the range.
+<a name="line99"></a>  var nodeRange = goog.dom.getOwnerDocument(startNode).createRange();
+<a name="line100"></a>  nodeRange.setStart(startNode, startOffset);
+<a name="line101"></a>  nodeRange.setEnd(endNode, endOffset);
+<a name="line102"></a>  return nodeRange;
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Creates a range object that selects the given node&#39;s text.
+<a name="line108"></a> * @param {Node} node The node to select.
+<a name="line109"></a> * @return {!goog.dom.browserrange.W3cRange} A Gecko range wrapper object.
+<a name="line110"></a> */
+<a name="line111"></a>goog.dom.browserrange.W3cRange.createFromNodeContents = function(node) {
+<a name="line112"></a>  return new goog.dom.browserrange.W3cRange(
+<a name="line113"></a>      goog.dom.browserrange.W3cRange.getBrowserRangeForNode(node));
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Creates a range object that selects between the given nodes.
+<a name="line119"></a> * @param {Node} startNode The node to start with.
+<a name="line120"></a> * @param {number} startOffset The offset within the start node.
+<a name="line121"></a> * @param {Node} endNode The node to end with.
+<a name="line122"></a> * @param {number} endOffset The offset within the end node.
+<a name="line123"></a> * @return {!goog.dom.browserrange.W3cRange} A wrapper object.
+<a name="line124"></a> */
+<a name="line125"></a>goog.dom.browserrange.W3cRange.createFromNodes = function(startNode,
+<a name="line126"></a>    startOffset, endNode, endOffset) {
+<a name="line127"></a>  return new goog.dom.browserrange.W3cRange(
+<a name="line128"></a>      goog.dom.browserrange.W3cRange.getBrowserRangeForNodes(startNode,
+<a name="line129"></a>          startOffset, endNode, endOffset));
+<a name="line130"></a>};
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * @return {!goog.dom.browserrange.W3cRange} A clone of this range.
+<a name="line135"></a> * @override
+<a name="line136"></a> */
+<a name="line137"></a>goog.dom.browserrange.W3cRange.prototype.clone = function() {
+<a name="line138"></a>  return new this.constructor(this.range_.cloneRange());
+<a name="line139"></a>};
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/** @override */
+<a name="line143"></a>goog.dom.browserrange.W3cRange.prototype.getBrowserRange = function() {
+<a name="line144"></a>  return this.range_;
+<a name="line145"></a>};
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/** @override */
+<a name="line149"></a>goog.dom.browserrange.W3cRange.prototype.getContainer = function() {
+<a name="line150"></a>  return this.range_.commonAncestorContainer;
+<a name="line151"></a>};
+<a name="line152"></a>
+<a name="line153"></a>
+<a name="line154"></a>/** @override */
+<a name="line155"></a>goog.dom.browserrange.W3cRange.prototype.getStartNode = function() {
+<a name="line156"></a>  return this.range_.startContainer;
+<a name="line157"></a>};
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/** @override */
+<a name="line161"></a>goog.dom.browserrange.W3cRange.prototype.getStartOffset = function() {
+<a name="line162"></a>  return this.range_.startOffset;
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/** @override */
+<a name="line167"></a>goog.dom.browserrange.W3cRange.prototype.getEndNode = function() {
+<a name="line168"></a>  return this.range_.endContainer;
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/** @override */
+<a name="line173"></a>goog.dom.browserrange.W3cRange.prototype.getEndOffset = function() {
+<a name="line174"></a>  return this.range_.endOffset;
+<a name="line175"></a>};
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/** @override */
+<a name="line179"></a>goog.dom.browserrange.W3cRange.prototype.compareBrowserRangeEndpoints =
+<a name="line180"></a>    function(range, thisEndpoint, otherEndpoint) {
+<a name="line181"></a>  return this.range_.compareBoundaryPoints(
+<a name="line182"></a>      otherEndpoint == goog.dom.RangeEndpoint.START ?
+<a name="line183"></a>          (thisEndpoint == goog.dom.RangeEndpoint.START ?
+<a name="line184"></a>              goog.global[&#39;Range&#39;].START_TO_START :
+<a name="line185"></a>              goog.global[&#39;Range&#39;].START_TO_END) :
+<a name="line186"></a>          (thisEndpoint == goog.dom.RangeEndpoint.START ?
+<a name="line187"></a>              goog.global[&#39;Range&#39;].END_TO_START :
+<a name="line188"></a>              goog.global[&#39;Range&#39;].END_TO_END),
+<a name="line189"></a>      /** @type {Range} */ (range));
+<a name="line190"></a>};
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/** @override */
+<a name="line194"></a>goog.dom.browserrange.W3cRange.prototype.isCollapsed = function() {
+<a name="line195"></a>  return this.range_.collapsed;
+<a name="line196"></a>};
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/** @override */
+<a name="line200"></a>goog.dom.browserrange.W3cRange.prototype.getText = function() {
+<a name="line201"></a>  return this.range_.toString();
+<a name="line202"></a>};
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/** @override */
+<a name="line206"></a>goog.dom.browserrange.W3cRange.prototype.getValidHtml = function() {
+<a name="line207"></a>  var div = goog.dom.getDomHelper(this.range_.startContainer).createDom(&#39;div&#39;);
+<a name="line208"></a>  div.appendChild(this.range_.cloneContents());
+<a name="line209"></a>  var result = div.innerHTML;
+<a name="line210"></a>
+<a name="line211"></a>  if (goog.string.startsWith(result, &#39;&lt;&#39;) ||
+<a name="line212"></a>      !this.isCollapsed() &amp;&amp; !goog.string.contains(result, &#39;&lt;&#39;)) {
+<a name="line213"></a>    // We attempt to mimic IE, which returns no containing element when a
+<a name="line214"></a>    // only text nodes are selected, does return the containing element when
+<a name="line215"></a>    // the selection is empty, and does return the element when multiple nodes
+<a name="line216"></a>    // are selected.
+<a name="line217"></a>    return result;
+<a name="line218"></a>  }
+<a name="line219"></a>
+<a name="line220"></a>  var container = this.getContainer();
+<a name="line221"></a>  container = container.nodeType == goog.dom.NodeType.ELEMENT ? container :
+<a name="line222"></a>      container.parentNode;
+<a name="line223"></a>
+<a name="line224"></a>  var html = goog.dom.getOuterHtml(
+<a name="line225"></a>      /** @type {Element} */ (container.cloneNode(false)));
+<a name="line226"></a>  return html.replace(&#39;&gt;&#39;, &#39;&gt;&#39; + result);
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>// SELECTION MODIFICATION
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/** @override */
+<a name="line234"></a>goog.dom.browserrange.W3cRange.prototype.select = function(reverse) {
+<a name="line235"></a>  var win = goog.dom.getWindow(goog.dom.getOwnerDocument(this.getStartNode()));
+<a name="line236"></a>  this.selectInternal(win.getSelection(), reverse);
+<a name="line237"></a>};
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * Select this range.
+<a name="line242"></a> * @param {Selection} selection Browser selection object.
+<a name="line243"></a> * @param {*} reverse Whether to select this range in reverse.
+<a name="line244"></a> * @protected
+<a name="line245"></a> */
+<a name="line246"></a>goog.dom.browserrange.W3cRange.prototype.selectInternal = function(selection,
+<a name="line247"></a>                                                                   reverse) {
+<a name="line248"></a>  // Browser-specific tricks are needed to create reversed selections
+<a name="line249"></a>  // programatically. For this generic W3C codepath, ignore the reverse
+<a name="line250"></a>  // parameter.
+<a name="line251"></a>  selection.removeAllRanges();
+<a name="line252"></a>  selection.addRange(this.range_);
+<a name="line253"></a>};
+<a name="line254"></a>
+<a name="line255"></a>
+<a name="line256"></a>/** @override */
+<a name="line257"></a>goog.dom.browserrange.W3cRange.prototype.removeContents = function() {
+<a name="line258"></a>  var range = this.range_;
+<a name="line259"></a>  range.extractContents();
+<a name="line260"></a>
+<a name="line261"></a>  if (range.startContainer.hasChildNodes()) {
+<a name="line262"></a>    // Remove any now empty nodes surrounding the extracted contents.
+<a name="line263"></a>    var rangeStartContainer =
+<a name="line264"></a>        range.startContainer.childNodes[range.startOffset];
+<a name="line265"></a>    if (rangeStartContainer) {
+<a name="line266"></a>      var rangePrevious = rangeStartContainer.previousSibling;
+<a name="line267"></a>
+<a name="line268"></a>      if (goog.dom.getRawTextContent(rangeStartContainer) == &#39;&#39;) {
+<a name="line269"></a>        goog.dom.removeNode(rangeStartContainer);
+<a name="line270"></a>      }
+<a name="line271"></a>
+<a name="line272"></a>      if (rangePrevious &amp;&amp; goog.dom.getRawTextContent(rangePrevious) == &#39;&#39;) {
+<a name="line273"></a>        goog.dom.removeNode(rangePrevious);
+<a name="line274"></a>      }
+<a name="line275"></a>    }
+<a name="line276"></a>  }
+<a name="line277"></a>};
+<a name="line278"></a>
+<a name="line279"></a>
+<a name="line280"></a>/** @override */
+<a name="line281"></a>goog.dom.browserrange.W3cRange.prototype.surroundContents = function(element) {
+<a name="line282"></a>  this.range_.surroundContents(element);
+<a name="line283"></a>  return element;
+<a name="line284"></a>};
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>/** @override */
+<a name="line288"></a>goog.dom.browserrange.W3cRange.prototype.insertNode = function(node, before) {
+<a name="line289"></a>  var range = this.range_.cloneRange();
+<a name="line290"></a>  range.collapse(before);
+<a name="line291"></a>  range.insertNode(node);
+<a name="line292"></a>  range.detach();
+<a name="line293"></a>
+<a name="line294"></a>  return node;
+<a name="line295"></a>};
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>/** @override */
+<a name="line299"></a>goog.dom.browserrange.W3cRange.prototype.surroundWithNodes = function(
+<a name="line300"></a>    startNode, endNode) {
+<a name="line301"></a>  var win = goog.dom.getWindow(
+<a name="line302"></a>      goog.dom.getOwnerDocument(this.getStartNode()));
+<a name="line303"></a>  var selectionRange = goog.dom.Range.createFromWindow(win);
+<a name="line304"></a>  if (selectionRange) {
+<a name="line305"></a>    var sNode = selectionRange.getStartNode();
+<a name="line306"></a>    var eNode = selectionRange.getEndNode();
+<a name="line307"></a>    var sOffset = selectionRange.getStartOffset();
+<a name="line308"></a>    var eOffset = selectionRange.getEndOffset();
+<a name="line309"></a>  }
+<a name="line310"></a>
+<a name="line311"></a>  var clone1 = this.range_.cloneRange();
+<a name="line312"></a>  var clone2 = this.range_.cloneRange();
+<a name="line313"></a>
+<a name="line314"></a>  clone1.collapse(false);
+<a name="line315"></a>  clone2.collapse(true);
+<a name="line316"></a>
+<a name="line317"></a>  clone1.insertNode(endNode);
+<a name="line318"></a>  clone2.insertNode(startNode);
+<a name="line319"></a>
+<a name="line320"></a>  clone1.detach();
+<a name="line321"></a>  clone2.detach();
+<a name="line322"></a>
+<a name="line323"></a>  if (selectionRange) {
+<a name="line324"></a>    // There are 4 ways that surroundWithNodes can wreck the saved
+<a name="line325"></a>    // selection object. All of them happen when an inserted node splits
+<a name="line326"></a>    // a text node, and one of the end points of the selection was in the
+<a name="line327"></a>    // latter half of that text node.
+<a name="line328"></a>    //
+<a name="line329"></a>    // Clients of this library should use saveUsingCarets to avoid this
+<a name="line330"></a>    // problem. Unfortunately, saveUsingCarets uses this method, so that&#39;s
+<a name="line331"></a>    // not really an option for us. :( We just recompute the offsets.
+<a name="line332"></a>    var isInsertedNode = function(n) {
+<a name="line333"></a>      return n == startNode || n == endNode;
+<a name="line334"></a>    };
+<a name="line335"></a>    if (sNode.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line336"></a>      while (sOffset &gt; sNode.length) {
+<a name="line337"></a>        sOffset -= sNode.length;
+<a name="line338"></a>        do {
+<a name="line339"></a>          sNode = sNode.nextSibling;
+<a name="line340"></a>        } while (isInsertedNode(sNode));
+<a name="line341"></a>      }
+<a name="line342"></a>    }
+<a name="line343"></a>
+<a name="line344"></a>    if (eNode.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line345"></a>      while (eOffset &gt; eNode.length) {
+<a name="line346"></a>        eOffset -= eNode.length;
+<a name="line347"></a>        do {
+<a name="line348"></a>          eNode = eNode.nextSibling;
+<a name="line349"></a>        } while (isInsertedNode(eNode));
+<a name="line350"></a>      }
+<a name="line351"></a>    }
+<a name="line352"></a>
+<a name="line353"></a>    goog.dom.Range.createFromNodes(
+<a name="line354"></a>        sNode, /** @type {number} */ (sOffset),
+<a name="line355"></a>        eNode, /** @type {number} */ (eOffset)).select();
+<a name="line356"></a>  }
+<a name="line357"></a>};
+<a name="line358"></a>
+<a name="line359"></a>
+<a name="line360"></a>/** @override */
+<a name="line361"></a>goog.dom.browserrange.W3cRange.prototype.collapse = function(toStart) {
+<a name="line362"></a>  this.range_.collapse(toStart);
+<a name="line363"></a>};
+</pre>
+
+
+</body>
+</html>

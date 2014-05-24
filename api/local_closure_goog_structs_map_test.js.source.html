@@ -1,0 +1,477 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>map_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_structs_map_test.js.html">map_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.structs.MapTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.structs.MapTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.iter&#39;);
+<a name="line19"></a>goog.require(&#39;goog.structs&#39;);
+<a name="line20"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>function stringifyMap(m) {
+<a name="line24"></a>  var keys = goog.structs.getKeys(m);
+<a name="line25"></a>  var s = &#39;&#39;;
+<a name="line26"></a>  for (var i = 0; i &lt; keys.length; i++) {
+<a name="line27"></a>    s += keys[i] + m[keys[i]];
+<a name="line28"></a>  }
+<a name="line29"></a>  return s;
+<a name="line30"></a>}
+<a name="line31"></a>
+<a name="line32"></a>function getMap() {
+<a name="line33"></a>  var m = new goog.structs.Map;
+<a name="line34"></a>  m.set(&#39;a&#39;, 0);
+<a name="line35"></a>  m.set(&#39;b&#39;, 1);
+<a name="line36"></a>  m.set(&#39;c&#39;, 2);
+<a name="line37"></a>  m.set(&#39;d&#39;, 3);
+<a name="line38"></a>  return m;
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>function testGetCount() {
+<a name="line42"></a>  var m = getMap();
+<a name="line43"></a>  assertEquals(&#39;count, should be 4&#39;, m.getCount(), 4);
+<a name="line44"></a>  m.remove(&#39;d&#39;);
+<a name="line45"></a>  assertEquals(&#39;count, should be 3&#39;, m.getCount(), 3);
+<a name="line46"></a>}
+<a name="line47"></a>
+<a name="line48"></a>function testKeys() {
+<a name="line49"></a>  var m = getMap();
+<a name="line50"></a>  assertEquals(&#39;getKeys, The keys should be a,b,c&#39;, m.getKeys().join(&#39;,&#39;),
+<a name="line51"></a>      &#39;a,b,c,d&#39;);
+<a name="line52"></a>}
+<a name="line53"></a>
+<a name="line54"></a>function testValues() {
+<a name="line55"></a>  var m = getMap();
+<a name="line56"></a>  assertEquals(&#39;getValues, The values should be 0,1,2&#39;,
+<a name="line57"></a>      m.getValues().join(&#39;,&#39;), &#39;0,1,2,3&#39;);
+<a name="line58"></a>}
+<a name="line59"></a>
+<a name="line60"></a>function testContainsKey() {
+<a name="line61"></a>  var m = getMap();
+<a name="line62"></a>  assertTrue(&quot;containsKey, Should contain the &#39;a&#39; key&quot;, m.containsKey(&#39;a&#39;));
+<a name="line63"></a>  assertFalse(&quot;containsKey, Should not contain the &#39;e&#39; key&quot;,
+<a name="line64"></a>      m.containsKey(&#39;e&#39;));
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>function testClear() {
+<a name="line68"></a>  var m = getMap();
+<a name="line69"></a>  m.clear();
+<a name="line70"></a>  assertTrue(&#39;cleared so it should be empty&#39;, m.isEmpty());
+<a name="line71"></a>  assertTrue(&quot;cleared so it should not contain &#39;a&#39; key&quot;, !m.containsKey(&#39;a&#39;));
+<a name="line72"></a>}
+<a name="line73"></a>
+<a name="line74"></a>function testAddAll() {
+<a name="line75"></a>  var m = new goog.structs.Map;
+<a name="line76"></a>  m.addAll({a: 0, b: 1, c: 2, d: 3});
+<a name="line77"></a>  assertTrue(&#39;addAll so it should not be empty&#39;, !m.isEmpty());
+<a name="line78"></a>  assertTrue(&quot;addAll so it should contain &#39;c&#39; key&quot;, m.containsKey(&#39;c&#39;));
+<a name="line79"></a>
+<a name="line80"></a>  var m2 = new goog.structs.Map;
+<a name="line81"></a>  m2.addAll(m);
+<a name="line82"></a>  assertTrue(&#39;addAll so it should not be empty&#39;, !m2.isEmpty());
+<a name="line83"></a>  assertTrue(&quot;addAll so it should contain &#39;c&#39; key&quot;, m2.containsKey(&#39;c&#39;));
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>function testConstructor() {
+<a name="line87"></a>  var m = getMap();
+<a name="line88"></a>  var m2 = new goog.structs.Map(m);
+<a name="line89"></a>  assertTrue(&#39;constr with Map so it should not be empty&#39;, !m2.isEmpty());
+<a name="line90"></a>  assertTrue(&quot;constr with Map so it should contain &#39;c&#39; key&quot;,
+<a name="line91"></a>      m2.containsKey(&#39;c&#39;));
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>function testConstructorWithVarArgs() {
+<a name="line96"></a>  var m = new goog.structs.Map(&#39;a&#39;, 1);
+<a name="line97"></a>  assertTrue(&#39;constr with var_args so it should not be empty&#39;, !m.isEmpty());
+<a name="line98"></a>  assertEquals(&#39;constr with var_args&#39;, 1, m.get(&#39;a&#39;));
+<a name="line99"></a>
+<a name="line100"></a>  m = new goog.structs.Map(&#39;a&#39;, 1, &#39;b&#39;, 2);
+<a name="line101"></a>  assertTrue(&#39;constr with var_args so it should not be empty&#39;, !m.isEmpty());
+<a name="line102"></a>  assertEquals(&#39;constr with var_args&#39;, 1, m.get(&#39;a&#39;));
+<a name="line103"></a>  assertEquals(&#39;constr with var_args&#39;, 2, m.get(&#39;b&#39;));
+<a name="line104"></a>
+<a name="line105"></a>  assertThrows(&#39;Odd number of arguments is not allowed&#39;, function() {
+<a name="line106"></a>    var m = new goog.structs.Map(&#39;a&#39;, 1, &#39;b&#39;);
+<a name="line107"></a>  });
+<a name="line108"></a>}
+<a name="line109"></a>
+<a name="line110"></a>function testClone() {
+<a name="line111"></a>  var m = getMap();
+<a name="line112"></a>  var m2 = m.clone();
+<a name="line113"></a>  assertTrue(&#39;clone so it should not be empty&#39;, !m2.isEmpty());
+<a name="line114"></a>  assertTrue(&quot;clone so it should contain &#39;c&#39; key&quot;, m2.containsKey(&#39;c&#39;));
+<a name="line115"></a>}
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>function testRemove() {
+<a name="line119"></a>  var m = new goog.structs.Map();
+<a name="line120"></a>  for (var i = 0; i &lt; 1000; i++) {
+<a name="line121"></a>    m.set(i, &#39;foo&#39;);
+<a name="line122"></a>  }
+<a name="line123"></a>
+<a name="line124"></a>  for (var i = 0; i &lt; 1000; i++) {
+<a name="line125"></a>    assertTrue(m.keys_.length &lt;= 2 * m.getCount());
+<a name="line126"></a>    m.remove(i);
+<a name="line127"></a>  }
+<a name="line128"></a>  assertTrue(m.isEmpty());
+<a name="line129"></a>  assertEquals(&#39;&#39;, m.getKeys().join(&#39;&#39;));
+<a name="line130"></a>}
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>function testForEach() {
+<a name="line134"></a>  var m = getMap();
+<a name="line135"></a>  var s = &#39;&#39;;
+<a name="line136"></a>  goog.structs.forEach(m, function(val, key, m2) {
+<a name="line137"></a>    assertNotUndefined(key);
+<a name="line138"></a>    assertEquals(m, m2);
+<a name="line139"></a>    s += key + val;
+<a name="line140"></a>  });
+<a name="line141"></a>  assertEquals(s, &#39;a0b1c2d3&#39;);
+<a name="line142"></a>}
+<a name="line143"></a>
+<a name="line144"></a>function testFilter() {
+<a name="line145"></a>  var m = getMap();
+<a name="line146"></a>
+<a name="line147"></a>  var m2 = goog.structs.filter(m, function(val, key, m3) {
+<a name="line148"></a>    assertNotUndefined(key);
+<a name="line149"></a>    assertEquals(m, m3);
+<a name="line150"></a>    return val &gt; 1;
+<a name="line151"></a>  });
+<a name="line152"></a>  assertEquals(stringifyMap(m2), &#39;c2d3&#39;);
+<a name="line153"></a>}
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>function testMap() {
+<a name="line157"></a>  var m = getMap();
+<a name="line158"></a>  var m2 = goog.structs.map(m, function(val, key, m3) {
+<a name="line159"></a>    assertNotUndefined(key);
+<a name="line160"></a>    assertEquals(m, m3);
+<a name="line161"></a>    return val * val;
+<a name="line162"></a>  });
+<a name="line163"></a>  assertEquals(stringifyMap(m2), &#39;a0b1c4d9&#39;);
+<a name="line164"></a>}
+<a name="line165"></a>
+<a name="line166"></a>function testSome() {
+<a name="line167"></a>  var m = getMap();
+<a name="line168"></a>  var b = goog.structs.some(m, function(val, key, m2) {
+<a name="line169"></a>    assertNotUndefined(key);
+<a name="line170"></a>    assertEquals(m, m2);
+<a name="line171"></a>    return val &gt; 1;
+<a name="line172"></a>  });
+<a name="line173"></a>  assertTrue(b);
+<a name="line174"></a>  var b = goog.structs.some(m, function(val, key, m2) {
+<a name="line175"></a>    assertNotUndefined(key);
+<a name="line176"></a>    assertEquals(m, m2);
+<a name="line177"></a>    return val &gt; 100;
+<a name="line178"></a>  });
+<a name="line179"></a>  assertFalse(b);
+<a name="line180"></a>}
+<a name="line181"></a>
+<a name="line182"></a>function testEvery() {
+<a name="line183"></a>  var m = getMap();
+<a name="line184"></a>  var b = goog.structs.every(m, function(val, key, m2) {
+<a name="line185"></a>    assertNotUndefined(key);
+<a name="line186"></a>    assertEquals(m, m2);
+<a name="line187"></a>    return val &gt;= 0;
+<a name="line188"></a>  });
+<a name="line189"></a>  assertTrue(b);
+<a name="line190"></a>  b = goog.structs.every(m, function(val, key, m2) {
+<a name="line191"></a>    assertNotUndefined(key);
+<a name="line192"></a>    assertEquals(m, m2);
+<a name="line193"></a>    return val &gt; 1;
+<a name="line194"></a>  });
+<a name="line195"></a>  assertFalse(b);
+<a name="line196"></a>}
+<a name="line197"></a>
+<a name="line198"></a>function testContainsValue() {
+<a name="line199"></a>  var m = getMap();
+<a name="line200"></a>  assertTrue(m.containsValue(3));
+<a name="line201"></a>  assertFalse(m.containsValue(4));
+<a name="line202"></a>}
+<a name="line203"></a>
+<a name="line204"></a>function testObjectProperties() {
+<a name="line205"></a>  var m = new goog.structs.Map;
+<a name="line206"></a>
+<a name="line207"></a>  assertEquals(m.get(&#39;toString&#39;), undefined);
+<a name="line208"></a>  assertEquals(m.get(&#39;valueOf&#39;), undefined);
+<a name="line209"></a>  assertEquals(m.get(&#39;eval&#39;), undefined);
+<a name="line210"></a>  assertEquals(m.get(&#39;toSource&#39;), undefined);
+<a name="line211"></a>  assertEquals(m.get(&#39;prototype&#39;), undefined);
+<a name="line212"></a>  assertEquals(m.get(&#39;:foo&#39;), undefined);
+<a name="line213"></a>
+<a name="line214"></a>  m.set(&#39;toString&#39;, &#39;once&#39;);
+<a name="line215"></a>  m.set(&#39;valueOf&#39;, &#39;upon&#39;);
+<a name="line216"></a>  m.set(&#39;eval&#39;, &#39;a&#39;);
+<a name="line217"></a>  m.set(&#39;toSource&#39;, &#39;midnight&#39;);
+<a name="line218"></a>  m.set(&#39;prototype&#39;, &#39;dreary&#39;);
+<a name="line219"></a>  m.set(&#39;hasOwnProperty&#39;, &#39;dark&#39;);
+<a name="line220"></a>  m.set(&#39;:foo&#39;, &#39;happy&#39;);
+<a name="line221"></a>
+<a name="line222"></a>  assertEquals(m.get(&#39;toString&#39;), &#39;once&#39;);
+<a name="line223"></a>  assertEquals(m.get(&#39;valueOf&#39;), &#39;upon&#39;);
+<a name="line224"></a>  assertEquals(m.get(&#39;eval&#39;), &#39;a&#39;);
+<a name="line225"></a>  assertEquals(m.get(&#39;toSource&#39;), &#39;midnight&#39;);
+<a name="line226"></a>  assertEquals(m.get(&#39;prototype&#39;), &#39;dreary&#39;);
+<a name="line227"></a>  assertEquals(m.get(&#39;hasOwnProperty&#39;), &#39;dark&#39;);
+<a name="line228"></a>  assertEquals(m.get(&#39;:foo&#39;), &#39;happy&#39;);
+<a name="line229"></a>
+<a name="line230"></a>  var keys = m.getKeys().join(&#39;,&#39;);
+<a name="line231"></a>  assertEquals(keys,
+<a name="line232"></a>      &#39;toString,valueOf,eval,toSource,prototype,hasOwnProperty,:foo&#39;);
+<a name="line233"></a>
+<a name="line234"></a>  var values = m.getValues().join(&#39;,&#39;);
+<a name="line235"></a>  assertEquals(values, &#39;once,upon,a,midnight,dreary,dark,happy&#39;);
+<a name="line236"></a>}
+<a name="line237"></a>
+<a name="line238"></a>function testDuplicateKeys() {
+<a name="line239"></a>  var m = new goog.structs.Map;
+<a name="line240"></a>
+<a name="line241"></a>  m.set(&#39;a&#39;, 1);
+<a name="line242"></a>  m.set(&#39;b&#39;, 2);
+<a name="line243"></a>  m.set(&#39;c&#39;, 3);
+<a name="line244"></a>  m.set(&#39;d&#39;, 4);
+<a name="line245"></a>  m.set(&#39;e&#39;, 5);
+<a name="line246"></a>  m.set(&#39;f&#39;, 6);
+<a name="line247"></a>  assertEquals(6, m.getKeys().length);
+<a name="line248"></a>  m.set(&#39;foo&#39;, 1);
+<a name="line249"></a>  assertEquals(7, m.getKeys().length);
+<a name="line250"></a>  m.remove(&#39;foo&#39;);
+<a name="line251"></a>  assertEquals(6, m.getKeys().length);
+<a name="line252"></a>  m.set(&#39;foo&#39;, 2);
+<a name="line253"></a>  assertEquals(7, m.getKeys().length);
+<a name="line254"></a>  m.remove(&#39;foo&#39;);
+<a name="line255"></a>  m.set(&#39;foo&#39;, 3);
+<a name="line256"></a>  m.remove(&#39;foo&#39;);
+<a name="line257"></a>  m.set(&#39;foo&#39;, 4);
+<a name="line258"></a>  assertEquals(7, m.getKeys().length);
+<a name="line259"></a>}
+<a name="line260"></a>
+<a name="line261"></a>function testGetKeyIterator() {
+<a name="line262"></a>  var m = new goog.structs.Map;
+<a name="line263"></a>  m.set(&#39;a&#39;, 1);
+<a name="line264"></a>  m.set(&#39;b&#39;, 2);
+<a name="line265"></a>  m.set(&#39;c&#39;, 3);
+<a name="line266"></a>  m.set(&#39;d&#39;, 4);
+<a name="line267"></a>  m.set(&#39;e&#39;, 5);
+<a name="line268"></a>
+<a name="line269"></a>  var iter = m.getKeyIterator();
+<a name="line270"></a>  assertEquals(&#39;Should contain the keys&#39;, &#39;abcde&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line271"></a>
+<a name="line272"></a>  m.remove(&#39;b&#39;);
+<a name="line273"></a>  m.remove(&#39;d&#39;);
+<a name="line274"></a>  iter = m.getKeyIterator();
+<a name="line275"></a>  assertEquals(&#39;Should not contain the removed keys&#39;,
+<a name="line276"></a>               &#39;ace&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line277"></a>}
+<a name="line278"></a>
+<a name="line279"></a>function testGetValueIterator() {
+<a name="line280"></a>  var m = new goog.structs.Map;
+<a name="line281"></a>  m.set(&#39;a&#39;, 1);
+<a name="line282"></a>  m.set(&#39;b&#39;, 2);
+<a name="line283"></a>  m.set(&#39;c&#39;, 3);
+<a name="line284"></a>  m.set(&#39;d&#39;, 4);
+<a name="line285"></a>  m.set(&#39;e&#39;, 5);
+<a name="line286"></a>
+<a name="line287"></a>  var iter = m.getValueIterator();
+<a name="line288"></a>  assertEquals(&#39;Should contain the values&#39;, &#39;12345&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line289"></a>
+<a name="line290"></a>  m.remove(&#39;b&#39;);
+<a name="line291"></a>  m.remove(&#39;d&#39;);
+<a name="line292"></a>  iter = m.getValueIterator();
+<a name="line293"></a>  assertEquals(&#39;Should not contain the removed keys&#39;,
+<a name="line294"></a>               &#39;135&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line295"></a>}
+<a name="line296"></a>
+<a name="line297"></a>function testDefaultIterator() {
+<a name="line298"></a>  // The default iterator should behave like the value iterator
+<a name="line299"></a>
+<a name="line300"></a>  var m = new goog.structs.Map;
+<a name="line301"></a>  m.set(&#39;a&#39;, 1);
+<a name="line302"></a>  m.set(&#39;b&#39;, 2);
+<a name="line303"></a>  m.set(&#39;c&#39;, 3);
+<a name="line304"></a>  m.set(&#39;d&#39;, 4);
+<a name="line305"></a>  m.set(&#39;e&#39;, 5);
+<a name="line306"></a>
+<a name="line307"></a>  assertEquals(&#39;Should contain the values&#39;, &#39;12345&#39;, goog.iter.join(m, &#39;&#39;));
+<a name="line308"></a>
+<a name="line309"></a>  m.remove(&#39;b&#39;);
+<a name="line310"></a>  m.remove(&#39;d&#39;);
+<a name="line311"></a>  assertEquals(&#39;Should not contain the removed keys&#39;,
+<a name="line312"></a>               &#39;135&#39;, goog.iter.join(m, &#39;&#39;));
+<a name="line313"></a>}
+<a name="line314"></a>
+<a name="line315"></a>function testMutatedIterator() {
+<a name="line316"></a>  var message = &#39;The map has changed since the iterator was created&#39;;
+<a name="line317"></a>
+<a name="line318"></a>  var m = new goog.structs.Map;
+<a name="line319"></a>  m.set(&#39;a&#39;, 1);
+<a name="line320"></a>  m.set(&#39;b&#39;, 2);
+<a name="line321"></a>  m.set(&#39;c&#39;, 3);
+<a name="line322"></a>  m.set(&#39;d&#39;, 4);
+<a name="line323"></a>
+<a name="line324"></a>  var iter = m.getValueIterator();
+<a name="line325"></a>  m.set(&#39;e&#39;, 5);
+<a name="line326"></a>  var ex = assertThrows(&#39;Expected an exception since the map has changed&#39;,
+<a name="line327"></a>      function() {
+<a name="line328"></a>        iter.next();
+<a name="line329"></a>      });
+<a name="line330"></a>  assertEquals(message, ex.message);
+<a name="line331"></a>
+<a name="line332"></a>  m = new goog.structs.Map;
+<a name="line333"></a>  m.set(&#39;a&#39;, 1);
+<a name="line334"></a>  m.set(&#39;b&#39;, 2);
+<a name="line335"></a>  m.set(&#39;c&#39;, 3);
+<a name="line336"></a>  m.set(&#39;d&#39;, 4);
+<a name="line337"></a>
+<a name="line338"></a>  iter = m.getValueIterator();
+<a name="line339"></a>  m.remove(&#39;d&#39;);
+<a name="line340"></a>  var ex = assertThrows(&#39;Expected an exception since the map has changed&#39;,
+<a name="line341"></a>      function() {
+<a name="line342"></a>        iter.next();
+<a name="line343"></a>      });
+<a name="line344"></a>  assertEquals(message, ex.message);
+<a name="line345"></a>
+<a name="line346"></a>  m = new goog.structs.Map;
+<a name="line347"></a>  m.set(&#39;a&#39;, 1);
+<a name="line348"></a>  m.set(&#39;b&#39;, 2);
+<a name="line349"></a>  m.set(&#39;c&#39;, 3);
+<a name="line350"></a>  m.set(&#39;d&#39;, 4);
+<a name="line351"></a>
+<a name="line352"></a>  iter = m.getValueIterator();
+<a name="line353"></a>  m.set(&#39;d&#39;, 5);
+<a name="line354"></a>  iter.next();
+<a name="line355"></a>  // Changing an existing value is OK.
+<a name="line356"></a>  iter.next();
+<a name="line357"></a>}
+<a name="line358"></a>
+<a name="line359"></a>function testTranspose() {
+<a name="line360"></a>  var m = new goog.structs.Map;
+<a name="line361"></a>  m.set(&#39;a&#39;, 1);
+<a name="line362"></a>  m.set(&#39;b&#39;, 2);
+<a name="line363"></a>  m.set(&#39;c&#39;, 3);
+<a name="line364"></a>  m.set(&#39;d&#39;, 4);
+<a name="line365"></a>  m.set(&#39;e&#39;, 5);
+<a name="line366"></a>
+<a name="line367"></a>  var transposed = m.transpose();
+<a name="line368"></a>  assertEquals(&#39;Should contain the keys&#39;, &#39;abcde&#39;,
+<a name="line369"></a>      goog.iter.join(transposed, &#39;&#39;));
+<a name="line370"></a>}
+<a name="line371"></a>
+<a name="line372"></a>function testToObject() {
+<a name="line373"></a>  Object.prototype.b = 0;
+<a name="line374"></a>  try {
+<a name="line375"></a>    var map = new goog.structs.Map();
+<a name="line376"></a>    map.set(&#39;a&#39;, 0);
+<a name="line377"></a>    var obj = map.toObject();
+<a name="line378"></a>    assertTrue(&#39;object representation has key &quot;a&quot;&#39;, obj.hasOwnProperty(&#39;a&#39;));
+<a name="line379"></a>    assertFalse(&#39;object representation does not have key &quot;b&quot;&#39;,
+<a name="line380"></a>        obj.hasOwnProperty(&#39;b&#39;));
+<a name="line381"></a>    assertEquals(&#39;value for key &quot;a&quot;&#39;, 0, obj[&#39;a&#39;]);
+<a name="line382"></a>  } finally {
+<a name="line383"></a>    delete Object.prototype.b;
+<a name="line384"></a>  }
+<a name="line385"></a>}
+<a name="line386"></a>
+<a name="line387"></a>function testEqualsWithSameObject() {
+<a name="line388"></a>  var map1 = getMap();
+<a name="line389"></a>  assertTrue(&#39;maps are the same object&#39;, map1.equals(map1));
+<a name="line390"></a>}
+<a name="line391"></a>
+<a name="line392"></a>function testEqualsWithDifferentSizeMaps() {
+<a name="line393"></a>  var map1 = getMap();
+<a name="line394"></a>  var map2 = new goog.structs.Map();
+<a name="line395"></a>
+<a name="line396"></a>  assertFalse(&#39;maps are different sizes&#39;, map1.equals(map2));
+<a name="line397"></a>}
+<a name="line398"></a>
+<a name="line399"></a>function testEqualsWithDefaultEqualityFn() {
+<a name="line400"></a>  var map1 = new goog.structs.Map();
+<a name="line401"></a>  var map2 = new goog.structs.Map();
+<a name="line402"></a>
+<a name="line403"></a>  assertTrue(&#39;maps are both empty&#39;, map1.equals(map2));
+<a name="line404"></a>
+<a name="line405"></a>  map1 = getMap();
+<a name="line406"></a>  map2 = getMap();
+<a name="line407"></a>  assertTrue(&#39;maps are the same&#39;, map1.equals(map2));
+<a name="line408"></a>
+<a name="line409"></a>  map2.set(&#39;d&#39;, &#39;3&#39;);
+<a name="line410"></a>  assertFalse(&#39;maps have 3 and \&#39;3\&#39;&#39;, map1.equals(map2));
+<a name="line411"></a>}
+<a name="line412"></a>
+<a name="line413"></a>function testEqualsWithCustomEqualityFn() {
+<a name="line414"></a>  var map1 = new goog.structs.Map();
+<a name="line415"></a>  var map2 = new goog.structs.Map();
+<a name="line416"></a>
+<a name="line417"></a>  map1.set(&#39;a&#39;, 0);
+<a name="line418"></a>  map1.set(&#39;b&#39;, 1);
+<a name="line419"></a>
+<a name="line420"></a>  map2.set(&#39;a&#39;, &#39;0&#39;);
+<a name="line421"></a>  map2.set(&#39;b&#39;, &#39;1&#39;);
+<a name="line422"></a>
+<a name="line423"></a>  var equalsFn = function(a, b) { return a == b };
+<a name="line424"></a>
+<a name="line425"></a>  assertTrue(&#39;maps are equal with ==&#39;, map1.equals(map2, equalsFn));
+<a name="line426"></a>}
+</pre>
+
+
+</body>
+</html>

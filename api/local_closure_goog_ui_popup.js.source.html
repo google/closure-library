@@ -1,0 +1,399 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>popup.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_popup.js.html">popup.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the Popup class.
+<a name="line17"></a> *
+<a name="line18"></a> * @author eae@google.com (Emil A Eklund)
+<a name="line19"></a> * @see ../demos/popup.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.Popup&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.ui.Popup.AbsolutePosition&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.ui.Popup.AnchoredPosition&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.ui.Popup.AnchoredViewPortPosition&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.ui.Popup.ClientPosition&#39;);
+<a name="line27"></a>goog.provide(&#39;goog.ui.Popup.Corner&#39;);
+<a name="line28"></a>goog.provide(&#39;goog.ui.Popup.Overflow&#39;);
+<a name="line29"></a>goog.provide(&#39;goog.ui.Popup.ViewPortClientPosition&#39;);
+<a name="line30"></a>goog.provide(&#39;goog.ui.Popup.ViewPortPosition&#39;);
+<a name="line31"></a>
+<a name="line32"></a>goog.require(&#39;goog.math.Box&#39;);
+<a name="line33"></a>goog.require(&#39;goog.positioning.AbsolutePosition&#39;);
+<a name="line34"></a>goog.require(&#39;goog.positioning.AnchoredPosition&#39;);
+<a name="line35"></a>goog.require(&#39;goog.positioning.AnchoredViewportPosition&#39;);
+<a name="line36"></a>goog.require(&#39;goog.positioning.ClientPosition&#39;);
+<a name="line37"></a>goog.require(&#39;goog.positioning.Corner&#39;);
+<a name="line38"></a>goog.require(&#39;goog.positioning.Overflow&#39;);
+<a name="line39"></a>goog.require(&#39;goog.positioning.ViewportClientPosition&#39;);
+<a name="line40"></a>goog.require(&#39;goog.positioning.ViewportPosition&#39;);
+<a name="line41"></a>goog.require(&#39;goog.style&#39;);
+<a name="line42"></a>goog.require(&#39;goog.ui.PopupBase&#39;);
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * The Popup class provides functionality for displaying an absolutely
+<a name="line48"></a> * positioned element at a particular location in the window. It&#39;s designed to
+<a name="line49"></a> * be used as the foundation for building controls like a menu or tooltip. The
+<a name="line50"></a> * Popup class includes functionality for displaying a Popup near adjacent to
+<a name="line51"></a> * an anchor element.
+<a name="line52"></a> *
+<a name="line53"></a> * This works cross browser and thus does not use IE&#39;s createPopup feature
+<a name="line54"></a> * which supports extending outside the edge of the brower window.
+<a name="line55"></a> *
+<a name="line56"></a> * @param {Element=} opt_element A DOM element for the popup.
+<a name="line57"></a> * @param {goog.positioning.AbstractPosition=} opt_position A positioning helper
+<a name="line58"></a> *     object.
+<a name="line59"></a> * @constructor
+<a name="line60"></a> * @extends {goog.ui.PopupBase}
+<a name="line61"></a> */
+<a name="line62"></a>goog.ui.Popup = function(opt_element, opt_position) {
+<a name="line63"></a>  /**
+<a name="line64"></a>   * Corner of the popup to used in the positioning algorithm.
+<a name="line65"></a>   *
+<a name="line66"></a>   * @type {goog.positioning.Corner}
+<a name="line67"></a>   * @private
+<a name="line68"></a>   */
+<a name="line69"></a>  this.popupCorner_ = goog.positioning.Corner.TOP_START;
+<a name="line70"></a>
+<a name="line71"></a>  /**
+<a name="line72"></a>   * Positioning helper object.
+<a name="line73"></a>   *
+<a name="line74"></a>   * @type {goog.positioning.AbstractPosition|undefined}
+<a name="line75"></a>   * @protected
+<a name="line76"></a>   * @suppress {underscore|visibility}
+<a name="line77"></a>   */
+<a name="line78"></a>  this.position_ = opt_position || undefined;
+<a name="line79"></a>  goog.ui.PopupBase.call(this, opt_element);
+<a name="line80"></a>};
+<a name="line81"></a>goog.inherits(goog.ui.Popup, goog.ui.PopupBase);
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Enum for representing an element corner for positioning the popup.
+<a name="line86"></a> *
+<a name="line87"></a> * @enum {number}
+<a name="line88"></a> *
+<a name="line89"></a> * @deprecated Use {@link goog.positioning.Corner} instead, this alias will be
+<a name="line90"></a> *     removed at the end of Q1 2009.
+<a name="line91"></a> */
+<a name="line92"></a>goog.ui.Popup.Corner = goog.positioning.Corner;
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * Enum for representing position handling in cases where the element would be
+<a name="line97"></a> * positioned outside the viewport.
+<a name="line98"></a> *
+<a name="line99"></a> * @enum {number}
+<a name="line100"></a> *
+<a name="line101"></a> * @deprecated Use {@link goog.positioning.Overflow} instead, this alias will be
+<a name="line102"></a> *     removed at the end of Q1 2009.
+<a name="line103"></a> */
+<a name="line104"></a>goog.ui.Popup.Overflow = goog.positioning.Overflow;
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Margin for the popup used in positioning algorithms.
+<a name="line109"></a> *
+<a name="line110"></a> * @type {goog.math.Box|undefined}
+<a name="line111"></a> * @private
+<a name="line112"></a> */
+<a name="line113"></a>goog.ui.Popup.prototype.margin_;
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Returns the corner of the popup to used in the positioning algorithm.
+<a name="line118"></a> *
+<a name="line119"></a> * @return {goog.positioning.Corner} The popup corner used for positioning.
+<a name="line120"></a> */
+<a name="line121"></a>goog.ui.Popup.prototype.getPinnedCorner = function() {
+<a name="line122"></a>  return this.popupCorner_;
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * Sets the corner of the popup to used in the positioning algorithm.
+<a name="line128"></a> *
+<a name="line129"></a> * @param {goog.positioning.Corner} corner The popup corner used for
+<a name="line130"></a> *     positioning.
+<a name="line131"></a> */
+<a name="line132"></a>goog.ui.Popup.prototype.setPinnedCorner = function(corner) {
+<a name="line133"></a>  this.popupCorner_ = corner;
+<a name="line134"></a>  if (this.isVisible()) {
+<a name="line135"></a>    this.reposition();
+<a name="line136"></a>  }
+<a name="line137"></a>};
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * @return {goog.positioning.AbstractPosition} The position helper object
+<a name="line142"></a> *     associated with the popup.
+<a name="line143"></a> */
+<a name="line144"></a>goog.ui.Popup.prototype.getPosition = function() {
+<a name="line145"></a>  return this.position_ || null;
+<a name="line146"></a>};
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/**
+<a name="line150"></a> * Sets the position helper object associated with the popup.
+<a name="line151"></a> *
+<a name="line152"></a> * @param {goog.positioning.AbstractPosition} position A position helper object.
+<a name="line153"></a> */
+<a name="line154"></a>goog.ui.Popup.prototype.setPosition = function(position) {
+<a name="line155"></a>  this.position_ = position || undefined;
+<a name="line156"></a>  if (this.isVisible()) {
+<a name="line157"></a>    this.reposition();
+<a name="line158"></a>  }
+<a name="line159"></a>};
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>/**
+<a name="line163"></a> * Returns the margin to place around the popup.
+<a name="line164"></a> *
+<a name="line165"></a> * @return {goog.math.Box?} The margin.
+<a name="line166"></a> */
+<a name="line167"></a>goog.ui.Popup.prototype.getMargin = function() {
+<a name="line168"></a>  return this.margin_ || null;
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Sets the margin to place around the popup.
+<a name="line174"></a> *
+<a name="line175"></a> * @param {goog.math.Box|number|null} arg1 Top value or Box.
+<a name="line176"></a> * @param {number=} opt_arg2 Right value.
+<a name="line177"></a> * @param {number=} opt_arg3 Bottom value.
+<a name="line178"></a> * @param {number=} opt_arg4 Left value.
+<a name="line179"></a> */
+<a name="line180"></a>goog.ui.Popup.prototype.setMargin = function(arg1, opt_arg2, opt_arg3,
+<a name="line181"></a>                                             opt_arg4) {
+<a name="line182"></a>  if (arg1 == null || arg1 instanceof goog.math.Box) {
+<a name="line183"></a>    this.margin_ = arg1;
+<a name="line184"></a>  } else {
+<a name="line185"></a>    this.margin_ = new goog.math.Box(arg1,
+<a name="line186"></a>        /** @type {number} */ (opt_arg2),
+<a name="line187"></a>        /** @type {number} */ (opt_arg3),
+<a name="line188"></a>        /** @type {number} */ (opt_arg4));
+<a name="line189"></a>  }
+<a name="line190"></a>  if (this.isVisible()) {
+<a name="line191"></a>    this.reposition();
+<a name="line192"></a>  }
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Repositions the popup according to the current state.
+<a name="line198"></a> * @override
+<a name="line199"></a> */
+<a name="line200"></a>goog.ui.Popup.prototype.reposition = function() {
+<a name="line201"></a>  if (!this.position_) {
+<a name="line202"></a>    return;
+<a name="line203"></a>  }
+<a name="line204"></a>
+<a name="line205"></a>  var hideForPositioning = !this.isVisible() &amp;&amp;
+<a name="line206"></a>      this.getType() != goog.ui.PopupBase.Type.MOVE_OFFSCREEN;
+<a name="line207"></a>  var el = this.getElement();
+<a name="line208"></a>  if (hideForPositioning) {
+<a name="line209"></a>    el.style.visibility = &#39;hidden&#39;;
+<a name="line210"></a>    goog.style.setElementShown(el, true);
+<a name="line211"></a>  }
+<a name="line212"></a>
+<a name="line213"></a>  this.position_.reposition(el, this.popupCorner_, this.margin_);
+<a name="line214"></a>
+<a name="line215"></a>  if (hideForPositioning) {
+<a name="line216"></a>    // NOTE(eae): The visibility property is reset to &#39;visible&#39; by the show_
+<a name="line217"></a>    // method in PopupBase. Resetting it here causes flickering in some
+<a name="line218"></a>    // situations, even if set to visible after the display property has been
+<a name="line219"></a>    // set to none by the call below.
+<a name="line220"></a>    goog.style.setElementShown(el, false);
+<a name="line221"></a>  }
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/**
+<a name="line227"></a> * Encapsulates a popup position where the popup is anchored at a corner of
+<a name="line228"></a> * an element.
+<a name="line229"></a> *
+<a name="line230"></a> * When using AnchoredPosition, it is recommended that the popup element
+<a name="line231"></a> * specified in the Popup constructor or Popup.setElement be absolutely
+<a name="line232"></a> * positioned.
+<a name="line233"></a> *
+<a name="line234"></a> * @param {Element} element The element to anchor the popup at.
+<a name="line235"></a> * @param {goog.positioning.Corner} corner The corner of the element to anchor
+<a name="line236"></a> *     the popup at.
+<a name="line237"></a> * @constructor
+<a name="line238"></a> * @extends {goog.positioning.AbstractPosition}
+<a name="line239"></a> *
+<a name="line240"></a> * @deprecated Use {@link goog.positioning.AnchoredPosition} instead, this
+<a name="line241"></a> *     alias will be removed at the end of Q1 2009.
+<a name="line242"></a> * @final
+<a name="line243"></a> */
+<a name="line244"></a>goog.ui.Popup.AnchoredPosition = goog.positioning.AnchoredPosition;
+<a name="line245"></a>
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * Encapsulates a popup position where the popup is anchored at a corner of
+<a name="line250"></a> * an element. The corners are swapped if dictated by the viewport. For instance
+<a name="line251"></a> * if a popup is anchored with its top left corner to the bottom left corner of
+<a name="line252"></a> * the anchor the popup is either displayed below the anchor (as specified) or
+<a name="line253"></a> * above it if there&#39;s not enough room to display it below.
+<a name="line254"></a> *
+<a name="line255"></a> * When using AnchoredPosition, it is recommended that the popup element
+<a name="line256"></a> * specified in the Popup constructor or Popup.setElement be absolutely
+<a name="line257"></a> * positioned.
+<a name="line258"></a> *
+<a name="line259"></a> * @param {Element} element The element to anchor the popup at.
+<a name="line260"></a> * @param {goog.positioning.Corner} corner The corner of the element to anchor
+<a name="line261"></a> *    the popup at.
+<a name="line262"></a> * @param {boolean=} opt_adjust Whether the positioning should be adjusted until
+<a name="line263"></a> *    the element fits inside the viewport even if that means that the anchored
+<a name="line264"></a> *    corners are ignored.
+<a name="line265"></a> * @constructor
+<a name="line266"></a> * @extends {goog.ui.Popup.AnchoredPosition}
+<a name="line267"></a> *
+<a name="line268"></a> * @deprecated Use {@link goog.positioning.AnchoredViewportPosition} instead,
+<a name="line269"></a> *     this alias will be removed at the end of Q1 2009.
+<a name="line270"></a> */
+<a name="line271"></a>goog.ui.Popup.AnchoredViewPortPosition =
+<a name="line272"></a>    goog.positioning.AnchoredViewportPosition;
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>
+<a name="line276"></a>/**
+<a name="line277"></a> * Encapsulates a popup position where the popup absolutely positioned by
+<a name="line278"></a> * setting the left/top style elements directly to the specified values.
+<a name="line279"></a> * The position is generally relative to the element&#39;s offsetParent. Normally,
+<a name="line280"></a> * this is the document body, but can be another element if the popup element
+<a name="line281"></a> * is scoped by an element with relative position.
+<a name="line282"></a> *
+<a name="line283"></a> * @param {number|!goog.math.Coordinate} arg1 Left position or coordinate.
+<a name="line284"></a> * @param {number=} opt_arg2 Top position.
+<a name="line285"></a> * @constructor
+<a name="line286"></a> * @extends {goog.positioning.AbstractPosition}
+<a name="line287"></a> *
+<a name="line288"></a> * @deprecated Use {@link goog.positioning.AbsolutePosition} instead, this alias
+<a name="line289"></a> *     will be removed at the end of Q1 2009.
+<a name="line290"></a> * @final
+<a name="line291"></a> */
+<a name="line292"></a>goog.ui.Popup.AbsolutePosition = goog.positioning.AbsolutePosition;
+<a name="line293"></a>
+<a name="line294"></a>
+<a name="line295"></a>
+<a name="line296"></a>/**
+<a name="line297"></a> * Encapsulates a popup position where the popup is positioned according to
+<a name="line298"></a> * coordinates relative to the  element&#39;s view port (page). This calculates the
+<a name="line299"></a> * correct position to use even if the element is relatively positioned to some
+<a name="line300"></a> * other element.
+<a name="line301"></a> *
+<a name="line302"></a> * @param {number|!goog.math.Coordinate} arg1 Left position or coordinate.
+<a name="line303"></a> * @param {number=} opt_arg2 Top position.
+<a name="line304"></a> * @constructor
+<a name="line305"></a> * @extends {goog.ui.Popup.AbsolutePosition}
+<a name="line306"></a> *
+<a name="line307"></a> * @deprecated Use {@link goog.positioning.ViewPortPosition} instead, this alias
+<a name="line308"></a> *     will be removed at the end of Q1 2009.
+<a name="line309"></a> */
+<a name="line310"></a>goog.ui.Popup.ViewPortPosition = goog.positioning.ViewportPosition;
+<a name="line311"></a>
+<a name="line312"></a>
+<a name="line313"></a>
+<a name="line314"></a>/**
+<a name="line315"></a> * Encapsulates a popup position where the popup is positioned relative to the
+<a name="line316"></a> * window (client) coordinates. This calculates the correct position to
+<a name="line317"></a> * use even if the element is relatively positioned to some other element. This
+<a name="line318"></a> * is for trying to position an element at the spot of the mouse cursor in
+<a name="line319"></a> * a MOUSEMOVE event. Just use the event.clientX and event.clientY as the
+<a name="line320"></a> * parameters.
+<a name="line321"></a> *
+<a name="line322"></a> * @param {number|!goog.math.Coordinate} arg1 Left position or coordinate.
+<a name="line323"></a> * @param {number=} opt_arg2 Top position.
+<a name="line324"></a> * @constructor
+<a name="line325"></a> * @extends {goog.ui.Popup.AbsolutePosition}
+<a name="line326"></a> *
+<a name="line327"></a> * @deprecated Use {@link goog.positioning.ClientPosition} instead, this alias
+<a name="line328"></a> *     will be removed at the end of Q1 2009.
+<a name="line329"></a> * @final
+<a name="line330"></a> */
+<a name="line331"></a>goog.ui.Popup.ClientPosition = goog.positioning.ClientPosition;
+<a name="line332"></a>
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * Encapsulates a popup position where the popup is positioned relative to the
+<a name="line337"></a> * window (client) coordinates, and made to stay within the viewport.
+<a name="line338"></a> *
+<a name="line339"></a> * @param {number|!goog.math.Coordinate} arg1 Left position or coordinate.
+<a name="line340"></a> * @param {number=} opt_arg2 Top position if arg1 is a number representing the
+<a name="line341"></a> *     left position, ignored otherwise.
+<a name="line342"></a> * @constructor
+<a name="line343"></a> * @extends {goog.ui.Popup.ClientPosition}
+<a name="line344"></a> *
+<a name="line345"></a> * @deprecated Use {@link goog.positioning.ViewPortClientPosition} instead, this
+<a name="line346"></a> *     alias will be removed at the end of Q1 2009.
+<a name="line347"></a> */
+<a name="line348"></a>goog.ui.Popup.ViewPortClientPosition = goog.positioning.ViewportClientPosition;
+</pre>
+
+
+</body>
+</html>

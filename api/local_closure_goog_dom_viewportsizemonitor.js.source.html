@@ -1,0 +1,231 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>viewportsizemonitor.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_viewportsizemonitor.js.html">viewportsizemonitor.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utility class that monitors viewport size changes.
+<a name="line17"></a> *
+<a name="line18"></a> * @author attila@google.com (Attila Bodis)
+<a name="line19"></a> * @see ../demos/viewportsizemonitor.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.dom.ViewportSizeMonitor&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line28"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * This class can be used to monitor changes in the viewport size.  Instances
+<a name="line34"></a> * dispatch a {@link goog.events.EventType.RESIZE} event when the viewport size
+<a name="line35"></a> * changes.  Handlers can call {@link goog.dom.ViewportSizeMonitor#getSize} to
+<a name="line36"></a> * get the new viewport size.
+<a name="line37"></a> *
+<a name="line38"></a> * Use this class if you want to execute resize/reflow logic each time the
+<a name="line39"></a> * user resizes the browser window.  This class is guaranteed to only dispatch
+<a name="line40"></a> * {@code RESIZE} events when the pixel dimensions of the viewport change.
+<a name="line41"></a> * (Internet Explorer fires resize events if any element on the page is resized,
+<a name="line42"></a> * even if the viewport dimensions are unchanged, which can lead to infinite
+<a name="line43"></a> * resize loops.)
+<a name="line44"></a> *
+<a name="line45"></a> * Example usage:
+<a name="line46"></a> *  &lt;pre&gt;
+<a name="line47"></a> *    var vsm = new goog.dom.ViewportSizeMonitor();
+<a name="line48"></a> *    goog.events.listen(vsm, goog.events.EventType.RESIZE, function(e) {
+<a name="line49"></a> *      alert(&#39;Viewport size changed to &#39; + vsm.getSize());
+<a name="line50"></a> *    });
+<a name="line51"></a> *  &lt;/pre&gt;
+<a name="line52"></a> *
+<a name="line53"></a> * Manually verified on IE6, IE7, FF2, Opera 11, Safari 4 and Chrome.
+<a name="line54"></a> *
+<a name="line55"></a> * @param {Window=} opt_window The window to monitor; defaults to the window in
+<a name="line56"></a> *    which this code is executing.
+<a name="line57"></a> * @constructor
+<a name="line58"></a> * @extends {goog.events.EventTarget}
+<a name="line59"></a> */
+<a name="line60"></a>goog.dom.ViewportSizeMonitor = function(opt_window) {
+<a name="line61"></a>  goog.events.EventTarget.call(this);
+<a name="line62"></a>
+<a name="line63"></a>  // Default the window to the current window if unspecified.
+<a name="line64"></a>  this.window_ = opt_window || window;
+<a name="line65"></a>
+<a name="line66"></a>  // Listen for window resize events.
+<a name="line67"></a>  this.listenerKey_ = goog.events.listen(this.window_,
+<a name="line68"></a>      goog.events.EventType.RESIZE, this.handleResize_, false, this);
+<a name="line69"></a>
+<a name="line70"></a>  // Set the initial size.
+<a name="line71"></a>  this.size_ = goog.dom.getViewportSize(this.window_);
+<a name="line72"></a>};
+<a name="line73"></a>goog.inherits(goog.dom.ViewportSizeMonitor, goog.events.EventTarget);
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * Returns a viewport size monitor for the given window.  A new one is created
+<a name="line78"></a> * if it doesn&#39;t exist already.  This prevents the unnecessary creation of
+<a name="line79"></a> * multiple spooling monitors for a window.
+<a name="line80"></a> * @param {Window=} opt_window The window to monitor; defaults to the window in
+<a name="line81"></a> *     which this code is executing.
+<a name="line82"></a> * @return {!goog.dom.ViewportSizeMonitor} Monitor for the given window.
+<a name="line83"></a> */
+<a name="line84"></a>goog.dom.ViewportSizeMonitor.getInstanceForWindow = function(opt_window) {
+<a name="line85"></a>  var currentWindow = opt_window || window;
+<a name="line86"></a>  var uid = goog.getUid(currentWindow);
+<a name="line87"></a>
+<a name="line88"></a>  return goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid] =
+<a name="line89"></a>      goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid] ||
+<a name="line90"></a>      new goog.dom.ViewportSizeMonitor(currentWindow);
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Removes and disposes a viewport size monitor for the given window if one
+<a name="line96"></a> * exists.
+<a name="line97"></a> * @param {Window=} opt_window The window whose monitor should be removed;
+<a name="line98"></a> *     defaults to the window in which this code is executing.
+<a name="line99"></a> */
+<a name="line100"></a>goog.dom.ViewportSizeMonitor.removeInstanceForWindow = function(opt_window) {
+<a name="line101"></a>  var uid = goog.getUid(opt_window || window);
+<a name="line102"></a>
+<a name="line103"></a>  goog.dispose(goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid]);
+<a name="line104"></a>  delete goog.dom.ViewportSizeMonitor.windowInstanceMap_[uid];
+<a name="line105"></a>};
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Map of window hash code to viewport size monitor for that window, if
+<a name="line110"></a> * created.
+<a name="line111"></a> * @type {Object.&lt;number,goog.dom.ViewportSizeMonitor&gt;}
+<a name="line112"></a> * @private
+<a name="line113"></a> */
+<a name="line114"></a>goog.dom.ViewportSizeMonitor.windowInstanceMap_ = {};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Event listener key for window the window resize handler, as returned by
+<a name="line119"></a> * {@link goog.events.listen}.
+<a name="line120"></a> * @type {goog.events.Key}
+<a name="line121"></a> * @private
+<a name="line122"></a> */
+<a name="line123"></a>goog.dom.ViewportSizeMonitor.prototype.listenerKey_ = null;
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * The window to monitor.  Defaults to the window in which the code is running.
+<a name="line128"></a> * @type {Window}
+<a name="line129"></a> * @private
+<a name="line130"></a> */
+<a name="line131"></a>goog.dom.ViewportSizeMonitor.prototype.window_ = null;
+<a name="line132"></a>
+<a name="line133"></a>
+<a name="line134"></a>/**
+<a name="line135"></a> * The most recently recorded size of the viewport, in pixels.
+<a name="line136"></a> * @type {goog.math.Size?}
+<a name="line137"></a> * @private
+<a name="line138"></a> */
+<a name="line139"></a>goog.dom.ViewportSizeMonitor.prototype.size_ = null;
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * Returns the most recently recorded size of the viewport, in pixels.  May
+<a name="line144"></a> * return null if no window resize event has been handled yet.
+<a name="line145"></a> * @return {goog.math.Size} The viewport dimensions, in pixels.
+<a name="line146"></a> */
+<a name="line147"></a>goog.dom.ViewportSizeMonitor.prototype.getSize = function() {
+<a name="line148"></a>  // Return a clone instead of the original to preserve encapsulation.
+<a name="line149"></a>  return this.size_ ? this.size_.clone() : null;
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/** @override */
+<a name="line154"></a>goog.dom.ViewportSizeMonitor.prototype.disposeInternal = function() {
+<a name="line155"></a>  goog.dom.ViewportSizeMonitor.superClass_.disposeInternal.call(this);
+<a name="line156"></a>
+<a name="line157"></a>  if (this.listenerKey_) {
+<a name="line158"></a>    goog.events.unlistenByKey(this.listenerKey_);
+<a name="line159"></a>    this.listenerKey_ = null;
+<a name="line160"></a>  }
+<a name="line161"></a>
+<a name="line162"></a>  this.window_ = null;
+<a name="line163"></a>  this.size_ = null;
+<a name="line164"></a>};
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Handles window resize events by measuring the dimensions of the
+<a name="line169"></a> * viewport and dispatching a {@link goog.events.EventType.RESIZE} event if the
+<a name="line170"></a> * current dimensions are different from the previous ones.
+<a name="line171"></a> * @param {goog.events.Event} event The window resize event to handle.
+<a name="line172"></a> * @private
+<a name="line173"></a> */
+<a name="line174"></a>goog.dom.ViewportSizeMonitor.prototype.handleResize_ = function(event) {
+<a name="line175"></a>  var size = goog.dom.getViewportSize(this.window_);
+<a name="line176"></a>  if (!goog.math.Size.equals(size, this.size_)) {
+<a name="line177"></a>    this.size_ = size;
+<a name="line178"></a>    this.dispatchEvent(goog.events.EventType.RESIZE);
+<a name="line179"></a>  }
+<a name="line180"></a>};
+</pre>
+
+
+</body>
+</html>

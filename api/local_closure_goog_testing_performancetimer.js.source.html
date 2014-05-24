@@ -1,0 +1,457 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>performancetimer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_performancetimer.js.html">performancetimer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Performance timer.
+<a name="line17"></a> *
+<a name="line18"></a> * {@see goog.testing.benchmark} for an easy way to use this functionality.
+<a name="line19"></a> *
+<a name="line20"></a> * @author attila@google.com (Attila Bodis)
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.testing.PerformanceTimer&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.testing.PerformanceTimer.Task&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.array&#39;);
+<a name="line27"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line28"></a>goog.require(&#39;goog.math&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Creates a performance timer that runs test functions a number of times to
+<a name="line34"></a> * generate timing samples, and provides performance statistics (minimum,
+<a name="line35"></a> * maximum, average, and standard deviation).
+<a name="line36"></a> * @param {number=} opt_numSamples Number of times to run the test function;
+<a name="line37"></a> *     defaults to 10.
+<a name="line38"></a> * @param {number=} opt_timeoutInterval Number of milliseconds after which the
+<a name="line39"></a> *     test is to be aborted; defaults to 5 seconds (5,000ms).
+<a name="line40"></a> * @constructor
+<a name="line41"></a> */
+<a name="line42"></a>goog.testing.PerformanceTimer = function(opt_numSamples, opt_timeoutInterval) {
+<a name="line43"></a>  /**
+<a name="line44"></a>   * Number of times the test function is to be run; defaults to 10.
+<a name="line45"></a>   * @type {number}
+<a name="line46"></a>   * @private
+<a name="line47"></a>   */
+<a name="line48"></a>  this.numSamples_ = opt_numSamples || 10;
+<a name="line49"></a>
+<a name="line50"></a>  /**
+<a name="line51"></a>   * Number of milliseconds after which the test is to be aborted; defaults to
+<a name="line52"></a>   * 5,000ms.
+<a name="line53"></a>   * @type {number}
+<a name="line54"></a>   * @private
+<a name="line55"></a>   */
+<a name="line56"></a>  this.timeoutInterval_ = opt_timeoutInterval || 5000;
+<a name="line57"></a>
+<a name="line58"></a>  /**
+<a name="line59"></a>   * Whether to discard outliers (i.e. the smallest and the largest values)
+<a name="line60"></a>   * from the sample set before computing statistics.  Defaults to false.
+<a name="line61"></a>   * @type {boolean}
+<a name="line62"></a>   * @private
+<a name="line63"></a>   */
+<a name="line64"></a>  this.discardOutliers_ = false;
+<a name="line65"></a>};
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * @return {number} The number of times the test function will be run.
+<a name="line70"></a> */
+<a name="line71"></a>goog.testing.PerformanceTimer.prototype.getNumSamples = function() {
+<a name="line72"></a>  return this.numSamples_;
+<a name="line73"></a>};
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * Sets the number of times the test function will be run.
+<a name="line78"></a> * @param {number} numSamples Number of times to run the test function.
+<a name="line79"></a> */
+<a name="line80"></a>goog.testing.PerformanceTimer.prototype.setNumSamples = function(numSamples) {
+<a name="line81"></a>  this.numSamples_ = numSamples;
+<a name="line82"></a>};
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * @return {number} The number of milliseconds after which the test times out.
+<a name="line87"></a> */
+<a name="line88"></a>goog.testing.PerformanceTimer.prototype.getTimeoutInterval = function() {
+<a name="line89"></a>  return this.timeoutInterval_;
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Sets the number of milliseconds after which the test times out.
+<a name="line95"></a> * @param {number} timeoutInterval Timeout interval in ms.
+<a name="line96"></a> */
+<a name="line97"></a>goog.testing.PerformanceTimer.prototype.setTimeoutInterval = function(
+<a name="line98"></a>    timeoutInterval) {
+<a name="line99"></a>  this.timeoutInterval_ = timeoutInterval;
+<a name="line100"></a>};
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Sets whether to ignore the smallest and the largest values when computing
+<a name="line105"></a> * stats.
+<a name="line106"></a> * @param {boolean} discard Whether to discard outlier values.
+<a name="line107"></a> */
+<a name="line108"></a>goog.testing.PerformanceTimer.prototype.setDiscardOutliers = function(discard) {
+<a name="line109"></a>  this.discardOutliers_ = discard;
+<a name="line110"></a>};
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * @return {boolean} Whether outlier values are discarded prior to computing
+<a name="line115"></a> *     stats.
+<a name="line116"></a> */
+<a name="line117"></a>goog.testing.PerformanceTimer.prototype.isDiscardOutliers = function() {
+<a name="line118"></a>  return this.discardOutliers_;
+<a name="line119"></a>};
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/**
+<a name="line123"></a> * Executes the test function the required number of times (or until the
+<a name="line124"></a> * test run exceeds the timeout interval, whichever comes first).  Returns
+<a name="line125"></a> * an object containing the following:
+<a name="line126"></a> * &lt;pre&gt;
+<a name="line127"></a> *   {
+<a name="line128"></a> *     &#39;average&#39;: average execution time (ms)
+<a name="line129"></a> *     &#39;count&#39;: number of executions (may be fewer than expected due to timeout)
+<a name="line130"></a> *     &#39;maximum&#39;: longest execution time (ms)
+<a name="line131"></a> *     &#39;minimum&#39;: shortest execution time (ms)
+<a name="line132"></a> *     &#39;standardDeviation&#39;: sample standard deviation (ms)
+<a name="line133"></a> *     &#39;total&#39;: total execution time (ms)
+<a name="line134"></a> *   }
+<a name="line135"></a> * &lt;/pre&gt;
+<a name="line136"></a> *
+<a name="line137"></a> * @param {Function} testFn Test function whose performance is to
+<a name="line138"></a> *     be measured.
+<a name="line139"></a> * @return {!Object} Object containing performance stats.
+<a name="line140"></a> */
+<a name="line141"></a>goog.testing.PerformanceTimer.prototype.run = function(testFn) {
+<a name="line142"></a>  return this.runTask(new goog.testing.PerformanceTimer.Task(
+<a name="line143"></a>      /** @type {goog.testing.PerformanceTimer.TestFunction} */ (testFn)));
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * Executes the test function of the specified task as described in
+<a name="line149"></a> * {@code run}. In addition, if specified, the set up and tear down functions of
+<a name="line150"></a> * the task are invoked before and after each invocation of the test function.
+<a name="line151"></a> * @see goog.testing.PerformanceTimer#run
+<a name="line152"></a> * @param {goog.testing.PerformanceTimer.Task} task A task describing the test
+<a name="line153"></a> *     function to invoke.
+<a name="line154"></a> * @return {!Object} Object containing performance stats.
+<a name="line155"></a> */
+<a name="line156"></a>goog.testing.PerformanceTimer.prototype.runTask = function(task) {
+<a name="line157"></a>  var samples = [];
+<a name="line158"></a>  var testStart = goog.now();
+<a name="line159"></a>  var totalRunTime = 0;
+<a name="line160"></a>
+<a name="line161"></a>  var testFn = task.getTest();
+<a name="line162"></a>  var setUpFn = task.getSetUp();
+<a name="line163"></a>  var tearDownFn = task.getTearDown();
+<a name="line164"></a>
+<a name="line165"></a>  for (var i = 0; i &lt; this.numSamples_ &amp;&amp; totalRunTime &lt;= this.timeoutInterval_;
+<a name="line166"></a>       i++) {
+<a name="line167"></a>    setUpFn();
+<a name="line168"></a>    var sampleStart = goog.now();
+<a name="line169"></a>    testFn();
+<a name="line170"></a>    var sampleEnd = goog.now();
+<a name="line171"></a>    tearDownFn();
+<a name="line172"></a>    samples[i] = sampleEnd - sampleStart;
+<a name="line173"></a>    totalRunTime = sampleEnd - testStart;
+<a name="line174"></a>  }
+<a name="line175"></a>
+<a name="line176"></a>  return this.finishTask_(samples);
+<a name="line177"></a>};
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>/**
+<a name="line181"></a> * Finishes the run of a task by creating a result object from samples, in the
+<a name="line182"></a> * format described in {@code run}.
+<a name="line183"></a> * @see goog.testing.PerformanceTimer#run
+<a name="line184"></a> * @return {!Object} Object containing performance stats.
+<a name="line185"></a> * @private
+<a name="line186"></a> */
+<a name="line187"></a>goog.testing.PerformanceTimer.prototype.finishTask_ = function(samples) {
+<a name="line188"></a>  if (this.discardOutliers_ &amp;&amp; samples.length &gt; 2) {
+<a name="line189"></a>    goog.array.remove(samples, Math.min.apply(null, samples));
+<a name="line190"></a>    goog.array.remove(samples, Math.max.apply(null, samples));
+<a name="line191"></a>  }
+<a name="line192"></a>
+<a name="line193"></a>  return goog.testing.PerformanceTimer.createResults(samples);
+<a name="line194"></a>};
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * Executes the test function of the specified task asynchronously. The test
+<a name="line199"></a> * function is expected to take a callback as input and has to call it to signal
+<a name="line200"></a> * that it&#39;s done. In addition, if specified, the setUp and tearDown functions
+<a name="line201"></a> * of the task are invoked before and after each invocation of the test
+<a name="line202"></a> * function. Note that setUp/tearDown functions take a callback as input and
+<a name="line203"></a> * must call this callback when they are done.
+<a name="line204"></a> * @see goog.testing.PerformanceTimer#run
+<a name="line205"></a> * @param {goog.testing.PerformanceTimer.Task} task A task describing the test
+<a name="line206"></a> *     function to invoke.
+<a name="line207"></a> * @return {!goog.async.Deferred} The deferred result, eventually an object
+<a name="line208"></a> *     containing performance stats.
+<a name="line209"></a> */
+<a name="line210"></a>goog.testing.PerformanceTimer.prototype.runAsyncTask = function(task) {
+<a name="line211"></a>  var samples = [];
+<a name="line212"></a>  var testStart = goog.now();
+<a name="line213"></a>
+<a name="line214"></a>  var testFn = task.getTest();
+<a name="line215"></a>  var setUpFn = task.getSetUp();
+<a name="line216"></a>  var tearDownFn = task.getTearDown();
+<a name="line217"></a>
+<a name="line218"></a>  // Note that this uses a separate code path from runTask() because
+<a name="line219"></a>  // implementing runTask() in terms of runAsyncTask() could easily cause
+<a name="line220"></a>  // a stack overflow if there are many iterations.
+<a name="line221"></a>  var result = new goog.async.Deferred();
+<a name="line222"></a>  this.runAsyncTaskSample_(testFn, setUpFn, tearDownFn, result, samples,
+<a name="line223"></a>      testStart);
+<a name="line224"></a>  return result;
+<a name="line225"></a>};
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>/**
+<a name="line229"></a> * Runs a task once, waits for the test function to complete asynchronously
+<a name="line230"></a> * and starts another run if not enough samples have been collected. Otherwise
+<a name="line231"></a> * finishes this task.
+<a name="line232"></a> * @param {goog.testing.PerformanceTimer.TestFunction} testFn The test function.
+<a name="line233"></a> * @param {goog.testing.PerformanceTimer.TestFunction} setUpFn The set up
+<a name="line234"></a> *     function that will be called once before the test function is run.
+<a name="line235"></a> * @param {goog.testing.PerformanceTimer.TestFunction} tearDownFn The set up
+<a name="line236"></a> *     function that will be called once after the test function completed.
+<a name="line237"></a> * @param {!goog.async.Deferred} result The deferred result, eventually an
+<a name="line238"></a> *     object containing performance stats.
+<a name="line239"></a> * @param {!Array.&lt;number&gt;} samples The time samples from all runs of the test
+<a name="line240"></a> *     function so far.
+<a name="line241"></a> * @param {number} testStart The timestamp when the first sample was started.
+<a name="line242"></a> * @private
+<a name="line243"></a> */
+<a name="line244"></a>goog.testing.PerformanceTimer.prototype.runAsyncTaskSample_ = function(testFn,
+<a name="line245"></a>    setUpFn, tearDownFn, result, samples, testStart) {
+<a name="line246"></a>  var timer = this;
+<a name="line247"></a>  timer.handleOptionalDeferred_(setUpFn, function() {
+<a name="line248"></a>    var sampleStart = goog.now();
+<a name="line249"></a>    timer.handleOptionalDeferred_(testFn, function() {
+<a name="line250"></a>      var sampleEnd = goog.now();
+<a name="line251"></a>      timer.handleOptionalDeferred_(tearDownFn, function() {
+<a name="line252"></a>        samples.push(sampleEnd - sampleStart);
+<a name="line253"></a>        var totalRunTime = sampleEnd - testStart;
+<a name="line254"></a>        if (samples.length &lt; timer.numSamples_ &amp;&amp;
+<a name="line255"></a>            totalRunTime &lt;= timer.timeoutInterval_) {
+<a name="line256"></a>          timer.runAsyncTaskSample_(testFn, setUpFn, tearDownFn, result,
+<a name="line257"></a>              samples, testStart);
+<a name="line258"></a>        } else {
+<a name="line259"></a>          result.callback(timer.finishTask_(samples));
+<a name="line260"></a>        }
+<a name="line261"></a>      });
+<a name="line262"></a>    });
+<a name="line263"></a>  });
+<a name="line264"></a>};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Execute a function that optionally returns a deferred object and continue
+<a name="line269"></a> * with the given continuation function only once the deferred object has a
+<a name="line270"></a> * result.
+<a name="line271"></a> * @param {goog.testing.PerformanceTimer.TestFunction} deferredFactory The
+<a name="line272"></a> *     function that optionally returns a deferred object.
+<a name="line273"></a> * @param {function()} continuationFunction The function that should be called
+<a name="line274"></a> *     after the optional deferred has a result.
+<a name="line275"></a> * @private
+<a name="line276"></a> */
+<a name="line277"></a>goog.testing.PerformanceTimer.prototype.handleOptionalDeferred_ = function(
+<a name="line278"></a>    deferredFactory, continuationFunction) {
+<a name="line279"></a>  var deferred = deferredFactory();
+<a name="line280"></a>  if (deferred) {
+<a name="line281"></a>    deferred.addCallback(continuationFunction);
+<a name="line282"></a>  } else {
+<a name="line283"></a>    continuationFunction();
+<a name="line284"></a>  }
+<a name="line285"></a>};
+<a name="line286"></a>
+<a name="line287"></a>
+<a name="line288"></a>/**
+<a name="line289"></a> * Creates a performance timer results object by analyzing a given array of
+<a name="line290"></a> * sample timings.
+<a name="line291"></a> * @param {Array.&lt;number&gt;} samples The samples to analyze.
+<a name="line292"></a> * @return {!Object} Object containing performance stats.
+<a name="line293"></a> */
+<a name="line294"></a>goog.testing.PerformanceTimer.createResults = function(samples) {
+<a name="line295"></a>  return {
+<a name="line296"></a>    &#39;average&#39;: goog.math.average.apply(null, samples),
+<a name="line297"></a>    &#39;count&#39;: samples.length,
+<a name="line298"></a>    &#39;maximum&#39;: Math.max.apply(null, samples),
+<a name="line299"></a>    &#39;minimum&#39;: Math.min.apply(null, samples),
+<a name="line300"></a>    &#39;standardDeviation&#39;: goog.math.standardDeviation.apply(null, samples),
+<a name="line301"></a>    &#39;total&#39;: goog.math.sum.apply(null, samples)
+<a name="line302"></a>  };
+<a name="line303"></a>};
+<a name="line304"></a>
+<a name="line305"></a>
+<a name="line306"></a>/**
+<a name="line307"></a> * A test function whose performance should be measured or a setUp/tearDown
+<a name="line308"></a> * function. It may optionally return a deferred object. If it does so, the
+<a name="line309"></a> * test harness will assume the function is asynchronous and it must signal
+<a name="line310"></a> * that it&#39;s done by setting an (empty) result on the deferred object. If the
+<a name="line311"></a> * function doesn&#39;t return anything, the test harness will assume it&#39;s
+<a name="line312"></a> * synchronous.
+<a name="line313"></a> * @typedef {function():(goog.async.Deferred|undefined)}
+<a name="line314"></a> */
+<a name="line315"></a>goog.testing.PerformanceTimer.TestFunction;
+<a name="line316"></a>
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/**
+<a name="line320"></a> * A task for the performance timer to measure. Callers can specify optional
+<a name="line321"></a> * setUp and tearDown methods to control state before and after each run of the
+<a name="line322"></a> * test function.
+<a name="line323"></a> * @param {goog.testing.PerformanceTimer.TestFunction} test Test function whose
+<a name="line324"></a> *     performance is to be measured.
+<a name="line325"></a> * @constructor
+<a name="line326"></a> * @final
+<a name="line327"></a> */
+<a name="line328"></a>goog.testing.PerformanceTimer.Task = function(test) {
+<a name="line329"></a>  /**
+<a name="line330"></a>   * The test function to time.
+<a name="line331"></a>   * @type {goog.testing.PerformanceTimer.TestFunction}
+<a name="line332"></a>   * @private
+<a name="line333"></a>   */
+<a name="line334"></a>  this.test_ = test;
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * An optional set up function to run before each invocation of the test
+<a name="line340"></a> * function.
+<a name="line341"></a> * @type {goog.testing.PerformanceTimer.TestFunction}
+<a name="line342"></a> * @private
+<a name="line343"></a> */
+<a name="line344"></a>goog.testing.PerformanceTimer.Task.prototype.setUp_ = goog.nullFunction;
+<a name="line345"></a>
+<a name="line346"></a>
+<a name="line347"></a>/**
+<a name="line348"></a> * An optional tear down function to run after each invocation of the test
+<a name="line349"></a> * function.
+<a name="line350"></a> * @type {goog.testing.PerformanceTimer.TestFunction}
+<a name="line351"></a> * @private
+<a name="line352"></a> */
+<a name="line353"></a>goog.testing.PerformanceTimer.Task.prototype.tearDown_ = goog.nullFunction;
+<a name="line354"></a>
+<a name="line355"></a>
+<a name="line356"></a>/**
+<a name="line357"></a> * @return {goog.testing.PerformanceTimer.TestFunction} The test function to
+<a name="line358"></a> *     time.
+<a name="line359"></a> */
+<a name="line360"></a>goog.testing.PerformanceTimer.Task.prototype.getTest = function() {
+<a name="line361"></a>  return this.test_;
+<a name="line362"></a>};
+<a name="line363"></a>
+<a name="line364"></a>
+<a name="line365"></a>/**
+<a name="line366"></a> * Specifies a set up function to be invoked before each invocation of the test
+<a name="line367"></a> * function.
+<a name="line368"></a> * @param {goog.testing.PerformanceTimer.TestFunction} setUp The set up
+<a name="line369"></a> *     function.
+<a name="line370"></a> * @return {!goog.testing.PerformanceTimer.Task} This task.
+<a name="line371"></a> */
+<a name="line372"></a>goog.testing.PerformanceTimer.Task.prototype.withSetUp = function(setUp) {
+<a name="line373"></a>  this.setUp_ = setUp;
+<a name="line374"></a>  return this;
+<a name="line375"></a>};
+<a name="line376"></a>
+<a name="line377"></a>
+<a name="line378"></a>/**
+<a name="line379"></a> * @return {goog.testing.PerformanceTimer.TestFunction} The set up function or
+<a name="line380"></a> *     the default no-op function if none was specified.
+<a name="line381"></a> */
+<a name="line382"></a>goog.testing.PerformanceTimer.Task.prototype.getSetUp = function() {
+<a name="line383"></a>  return this.setUp_;
+<a name="line384"></a>};
+<a name="line385"></a>
+<a name="line386"></a>
+<a name="line387"></a>/**
+<a name="line388"></a> * Specifies a tear down function to be invoked after each invocation of the
+<a name="line389"></a> * test function.
+<a name="line390"></a> * @param {goog.testing.PerformanceTimer.TestFunction} tearDown The tear down
+<a name="line391"></a> *     function.
+<a name="line392"></a> * @return {!goog.testing.PerformanceTimer.Task} This task.
+<a name="line393"></a> */
+<a name="line394"></a>goog.testing.PerformanceTimer.Task.prototype.withTearDown = function(tearDown) {
+<a name="line395"></a>  this.tearDown_ = tearDown;
+<a name="line396"></a>  return this;
+<a name="line397"></a>};
+<a name="line398"></a>
+<a name="line399"></a>
+<a name="line400"></a>/**
+<a name="line401"></a> * @return {goog.testing.PerformanceTimer.TestFunction} The tear down function
+<a name="line402"></a> *     or the default no-op function if none was specified.
+<a name="line403"></a> */
+<a name="line404"></a>goog.testing.PerformanceTimer.Task.prototype.getTearDown = function() {
+<a name="line405"></a>  return this.tearDown_;
+<a name="line406"></a>};
+</pre>
+
+
+</body>
+</html>

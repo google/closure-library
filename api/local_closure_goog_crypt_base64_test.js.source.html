@@ -1,0 +1,188 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>base64_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_crypt_base64_test.js.html">base64_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.crypt.base64Test&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.crypt.base64Test&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.crypt&#39;);
+<a name="line19"></a>goog.require(&#39;goog.crypt.base64&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>// Static test data
+<a name="line23"></a>var tests = [
+<a name="line24"></a>  &#39;&#39;, &#39;&#39;,
+<a name="line25"></a>  &#39;f&#39;, &#39;Zg==&#39;,
+<a name="line26"></a>  &#39;fo&#39;, &#39;Zm8=&#39;,
+<a name="line27"></a>  &#39;foo&#39;, &#39;Zm9v&#39;,
+<a name="line28"></a>  &#39;foob&#39;, &#39;Zm9vYg==&#39;,
+<a name="line29"></a>  &#39;fooba&#39;, &#39;Zm9vYmE=&#39;,
+<a name="line30"></a>  &#39;foobar&#39;, &#39;Zm9vYmFy&#39;,
+<a name="line31"></a>
+<a name="line32"></a>  // Testing non-ascii characters (1-10 in chinese)
+<a name="line33"></a>  &#39;\xe4\xb8\x80\xe4\xba\x8c\xe4\xb8\x89\xe5\x9b\x9b\xe4\xba\x94\xe5&#39; +
+<a name="line34"></a>      &#39;\x85\xad\xe4\xb8\x83\xe5\x85\xab\xe4\xb9\x9d\xe5\x8d\x81&#39;,
+<a name="line35"></a>  &#39;5LiA5LqM5LiJ5Zub5LqU5YWt5LiD5YWr5Lmd5Y2B&#39;];
+<a name="line36"></a>
+<a name="line37"></a>function testByteArrayEncoding() {
+<a name="line38"></a>  // Let&#39;s see if it&#39;s sane by feeding it some well-known values. Index i
+<a name="line39"></a>  // has the input and index i+1 has the expected value.
+<a name="line40"></a>  for (var i = 0; i &lt; tests.length; i += 2) {
+<a name="line41"></a>    var enc = goog.crypt.base64.encodeByteArray(
+<a name="line42"></a>        goog.crypt.stringToByteArray(tests[i]));
+<a name="line43"></a>    assertEquals(tests[i + 1], enc);
+<a name="line44"></a>    var dec = goog.crypt.byteArrayToString(
+<a name="line45"></a>        goog.crypt.base64.decodeStringToByteArray(enc));
+<a name="line46"></a>    assertEquals(tests[i], dec);
+<a name="line47"></a>  }
+<a name="line48"></a>}
+<a name="line49"></a>
+<a name="line50"></a>function testOddLengthByteArrayEncoding() {
+<a name="line51"></a>  var buffer = [0, 0, 0];
+<a name="line52"></a>  var encodedBuffer = goog.crypt.base64.encodeByteArray(buffer);
+<a name="line53"></a>  assertEquals(&#39;AAAA&#39;, encodedBuffer);
+<a name="line54"></a>
+<a name="line55"></a>  var decodedBuffer = goog.crypt.base64.decodeStringToByteArray(encodedBuffer);
+<a name="line56"></a>  assertEquals(decodedBuffer.length, buffer.length);
+<a name="line57"></a>  for (i = 0; i &lt; buffer.length; i++) {
+<a name="line58"></a>    assertEquals(buffer[i], decodedBuffer[i]);
+<a name="line59"></a>  }
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>// Tests that decoding a string where the length is not a multiple of 4 does
+<a name="line63"></a>// not produce spurious trailing zeroes.  This is a regression test for
+<a name="line64"></a>// cl/65120705, which fixes a bug that was introduced when support for
+<a name="line65"></a>// non-padded base64 encoding was added in cl/20209336.
+<a name="line66"></a>function testOddLengthByteArrayDecoding() {
+<a name="line67"></a>  // The base-64 encoding of the bytes [97, 98, 99, 100], with no padding.
+<a name="line68"></a>  // The padded version would be &quot;YWJjZA==&quot; (length 8), or &quot;YWJjZA..&quot; if
+<a name="line69"></a>  // web-safe.
+<a name="line70"></a>  var encodedBuffer = &#39;YWJjZA&#39;;
+<a name="line71"></a>  var decodedBuffer1 = goog.crypt.base64.decodeStringToByteArray(encodedBuffer);
+<a name="line72"></a>  assertEquals(4, decodedBuffer1.length);
+<a name="line73"></a>  // Note that byteArrayToString ignores any trailing zeroes because
+<a name="line74"></a>  // String.fromCharCode(0) is &#39;&#39;.
+<a name="line75"></a>  assertEquals(&#39;abcd&#39;, goog.crypt.byteArrayToString(decodedBuffer1));
+<a name="line76"></a>
+<a name="line77"></a>  // Repeat the test in web-safe decoding mode.
+<a name="line78"></a>  var decodedBuffer2 = goog.crypt.base64.decodeStringToByteArray(encodedBuffer,
+<a name="line79"></a>      true  /* web-safe */);
+<a name="line80"></a>  assertEquals(4, decodedBuffer2.length);
+<a name="line81"></a>  assertEquals(&#39;abcd&#39;, goog.crypt.byteArrayToString(decodedBuffer2));
+<a name="line82"></a>}
+<a name="line83"></a>
+<a name="line84"></a>function testShortcutPathEncoding() {
+<a name="line85"></a>  // Test the higher-level API (tests the btoa/atob shortcut path)
+<a name="line86"></a>  for (var i = 0; i &lt; tests.length; i += 2) {
+<a name="line87"></a>    var enc = goog.crypt.base64.encodeString(tests[i]);
+<a name="line88"></a>    assertEquals(tests[i + 1], enc);
+<a name="line89"></a>    var dec = goog.crypt.base64.decodeString(enc);
+<a name="line90"></a>    assertEquals(tests[i], dec);
+<a name="line91"></a>  }
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>function testMultipleIterations() {
+<a name="line95"></a>  // Now run it through its paces
+<a name="line96"></a>
+<a name="line97"></a>  var numIterations = 100;
+<a name="line98"></a>  for (var i = 0; i &lt; numIterations; i++) {
+<a name="line99"></a>
+<a name="line100"></a>    var input = [];
+<a name="line101"></a>    for (var j = 0; j &lt; i; j++)
+<a name="line102"></a>      input[j] = j % 256;
+<a name="line103"></a>
+<a name="line104"></a>    var encoded = goog.crypt.base64.encodeByteArray(input);
+<a name="line105"></a>    var decoded = goog.crypt.base64.decodeStringToByteArray(encoded);
+<a name="line106"></a>    assertEquals(&#39;Decoded length not equal to input length?&#39;,
+<a name="line107"></a>        input.length, decoded.length);
+<a name="line108"></a>
+<a name="line109"></a>    for (var j = 0; j &lt; i; j++)
+<a name="line110"></a>      assertEquals(&#39;Values differ at position &#39; + j, input[j], decoded[j]);
+<a name="line111"></a>  }
+<a name="line112"></a>}
+<a name="line113"></a>
+<a name="line114"></a>function testWebSafeEncoding() {
+<a name="line115"></a>  // Test non-websafe / websafe difference
+<a name="line116"></a>  var test = &#39;&gt;&gt;&gt;???&gt;&gt;&gt;???=/+&#39;;
+<a name="line117"></a>  var enc = goog.crypt.base64.encodeByteArray(
+<a name="line118"></a>      goog.crypt.stringToByteArray(test));
+<a name="line119"></a>  assertEquals(&#39;Non-websafe broken?&#39;, &#39;Pj4+Pz8/Pj4+Pz8/PS8r&#39;, enc);
+<a name="line120"></a>  enc = goog.crypt.base64.encodeString(test);
+<a name="line121"></a>  assertEquals(&#39;Non-websafe broken?&#39;, &#39;Pj4+Pz8/Pj4+Pz8/PS8r&#39;, enc);
+<a name="line122"></a>  enc = goog.crypt.base64.encodeByteArray(
+<a name="line123"></a>      goog.crypt.stringToByteArray(test), true /* websafe */);
+<a name="line124"></a>  assertEquals(&#39;Websafe encoding broken&#39;, &#39;Pj4-Pz8_Pj4-Pz8_PS8r&#39;, enc);
+<a name="line125"></a>  enc = goog.crypt.base64.encodeString(test, true);
+<a name="line126"></a>  assertEquals(&#39;Non-websafe broken?&#39;, &#39;Pj4-Pz8_Pj4-Pz8_PS8r&#39;, enc);
+<a name="line127"></a>  var dec = goog.crypt.byteArrayToString(
+<a name="line128"></a>      goog.crypt.base64.decodeStringToByteArray(enc, true /* websafe */));
+<a name="line129"></a>  assertEquals(&#39;Websafe decoding broken&#39;, test, dec);
+<a name="line130"></a>  dec = goog.crypt.base64.decodeString(enc, true /* websafe */);
+<a name="line131"></a>  assertEquals(&#39;Websafe decoding broken&#39;, test, dec);
+<a name="line132"></a>
+<a name="line133"></a>  // Test parsing malformed characters
+<a name="line134"></a>  assertThrows(&#39;Didn\&#39;t throw on malformed input&#39;, function() {
+<a name="line135"></a>    goog.crypt.base64.decodeStringToByteArray(&#39;foooooo+oooo&#39;, true /*websafe*/);
+<a name="line136"></a>  });
+<a name="line137"></a>}
+</pre>
+
+
+</body>
+</html>

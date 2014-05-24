@@ -1,0 +1,1109 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>uri_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_uri_uri_test.js.html">uri_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Unit tests for goog.Uri.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.UriTest&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.setTestOnly(&#39;goog.UriTest&#39;);
+<a name="line26"></a>
+<a name="line27"></a>function testUriParse() {
+<a name="line28"></a>  var uri = new goog.Uri(&#39;http://www.google.com:80/path?q=query#fragmento&#39;);
+<a name="line29"></a>  assertEquals(&#39;http&#39;, uri.getScheme());
+<a name="line30"></a>  assertEquals(&#39;&#39;, uri.getUserInfo());
+<a name="line31"></a>  assertEquals(&#39;www.google.com&#39;, uri.getDomain());
+<a name="line32"></a>  assertEquals(80, uri.getPort());
+<a name="line33"></a>  assertEquals(&#39;/path&#39;, uri.getPath());
+<a name="line34"></a>  assertEquals(&#39;q=query&#39;, uri.getQuery());
+<a name="line35"></a>  assertEquals(&#39;fragmento&#39;, uri.getFragment());
+<a name="line36"></a>
+<a name="line37"></a>  assertEquals(&#39;terer258+foo@gmail.com&#39;,
+<a name="line38"></a>               goog.Uri.parse(&#39;mailto:terer258+foo@gmail.com&#39;).getPath());
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>function testUriParseAcceptsThingsWithToString() {
+<a name="line42"></a>  // Ensure that the goog.Uri constructor coerces random types to strings.
+<a name="line43"></a>  var uriStr = &#39;http://www.google.com:80/path?q=query#fragmento&#39;;
+<a name="line44"></a>  var uri = new goog.Uri({toString: function() { return uriStr; }});
+<a name="line45"></a>  assertEquals(&#39;http://www.google.com:80/path?q=query#fragmento&#39;,
+<a name="line46"></a>      uri.toString());
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>function testUriCreate() {
+<a name="line50"></a>  assertEquals(
+<a name="line51"></a>      &#39;http://www.google.com:81/search%20path?q=what%20to%20eat%2Bdrink%3F&#39;,
+<a name="line52"></a>      goog.Uri.create(&#39;http&#39;, null, &#39;www.google.com&#39;, 81, &#39;/search path&#39;,
+<a name="line53"></a>          (new goog.Uri.QueryData).set(&#39;q&#39;, &#39;what to eat+drink?&#39;), null)
+<a name="line54"></a>      .toString());
+<a name="line55"></a>
+<a name="line56"></a>  assertEquals(
+<a name="line57"></a>      &#39;http://www.google.com:80/search%20path?q=what%20to%20eat%2Bdrink%3F&#39;,
+<a name="line58"></a>      goog.Uri.create(&#39;http&#39;, null, &#39;www.google.com&#39;, 80, &#39;/search path&#39;,
+<a name="line59"></a>          (new goog.Uri.QueryData).set(&#39;q&#39;, &#39;what to eat+drink?&#39;), null)
+<a name="line60"></a>      .toString());
+<a name="line61"></a>
+<a name="line62"></a>  assertEquals(
+<a name="line63"></a>      &#39;http://www.google.com/search%20path?q=what%20to%20eat%2Bdrink%3F&#39;,
+<a name="line64"></a>      goog.Uri.create(&#39;http&#39;, null, &#39;www.google.com&#39;, null, &#39;/search path&#39;,
+<a name="line65"></a>          (new goog.Uri.QueryData).set(&#39;q&#39;, &#39;what to eat+drink?&#39;), null)
+<a name="line66"></a>      .toString());
+<a name="line67"></a>
+<a name="line68"></a>  var createdUri = goog.Uri.create(
+<a name="line69"></a>      &#39;http&#39;, null, &#39;www.google.com&#39;, null, &#39;/search path&#39;,
+<a name="line70"></a>      new goog.Uri.QueryData(null, null, true).set(&#39;Q&#39;, &#39;what to eat+drink?&#39;),
+<a name="line71"></a>      null);
+<a name="line72"></a>
+<a name="line73"></a>  assertEquals(&#39;http://www.google.com/search%20path?q=what%20to%20eat%2Bdrink%3F&#39;,
+<a name="line74"></a>               createdUri.toString());
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>function testClone() {
+<a name="line78"></a>  var uri1 = new goog.Uri(
+<a name="line79"></a>      &#39;http://user:pass@www.google.com:8080/foo?a=1&amp;b=2#c=3&#39;);
+<a name="line80"></a>  // getCount forces instantiation of internal data structures to more
+<a name="line81"></a>  // thoroughly test clone.
+<a name="line82"></a>  uri1.getQueryData().getCount();
+<a name="line83"></a>  var uri2 = uri1.clone();
+<a name="line84"></a>
+<a name="line85"></a>  assertNotEquals(uri1, uri2);
+<a name="line86"></a>  assertEquals(uri1.toString(), uri2.toString());
+<a name="line87"></a>  assertEquals(2, uri2.getQueryData().getCount());
+<a name="line88"></a>
+<a name="line89"></a>  uri2.setParameterValues(&#39;q&#39;, &#39;bar&#39;);
+<a name="line90"></a>  assertFalse(uri1.getParameterValue(&#39;q&#39;) == &#39;bar&#39;);
+<a name="line91"></a>}
+<a name="line92"></a>
+<a name="line93"></a>function testRelativeUris() {
+<a name="line94"></a>  assertFalse(new goog.Uri(&#39;?hello&#39;).hasPath());
+<a name="line95"></a>}
+<a name="line96"></a>
+<a name="line97"></a>function testAbsolutePathResolution() {
+<a name="line98"></a>  var uri1 = new goog.Uri(&#39;http://www.google.com:8080/path?q=query#fragmento&#39;);
+<a name="line99"></a>
+<a name="line100"></a>  assertEquals(&#39;http://www.google.com:8080/foo&#39;,
+<a name="line101"></a>               uri1.resolve(new goog.Uri(&#39;/foo&#39;)).toString());
+<a name="line102"></a>
+<a name="line103"></a>  assertEquals(&#39;http://www.google.com:8080/foo/bar&#39;,
+<a name="line104"></a>               goog.Uri.resolve(&#39;http://www.google.com:8080/search/&#39;,
+<a name="line105"></a>                                &#39;/foo/bar&#39;).toString());
+<a name="line106"></a>}
+<a name="line107"></a>
+<a name="line108"></a>function testRelativePathResolution() {
+<a name="line109"></a>  var uri1 = new goog.Uri(&#39;http://www.google.com:8080/path?q=query#fragmento&#39;);
+<a name="line110"></a>  assertEquals(&#39;http://www.google.com:8080/foo&#39;,
+<a name="line111"></a>               uri1.resolve(goog.Uri.parse(&#39;foo&#39;)).toString());
+<a name="line112"></a>
+<a name="line113"></a>  var uri2 = new goog.Uri(&#39;http://www.google.com:8080/search&#39;);
+<a name="line114"></a>  assertEquals(&#39;http://www.google.com:8080/foo/bar&#39;,
+<a name="line115"></a>               uri2.resolve(new goog.Uri(&#39;foo/bar&#39;)).toString());
+<a name="line116"></a>
+<a name="line117"></a>  var uri3 = new goog.Uri(&#39;http://www.google.com:8080/search/&#39;);
+<a name="line118"></a>  assertEquals(&#39;http://www.google.com:8080/search/foo/bar&#39;,
+<a name="line119"></a>               uri3.resolve(new goog.Uri(&#39;foo/bar&#39;)).toString());
+<a name="line120"></a>
+<a name="line121"></a>  var uri4 = new goog.Uri(&#39;foo&#39;);
+<a name="line122"></a>  assertEquals(&#39;bar&#39;,
+<a name="line123"></a>               uri4.resolve(new goog.Uri(&#39;bar&#39;)).toString());
+<a name="line124"></a>}
+<a name="line125"></a>
+<a name="line126"></a>function testDomainResolution() {
+<a name="line127"></a>  assertEquals(&#39;https://www.google.com/foo/bar&#39;,
+<a name="line128"></a>               new goog.Uri(&#39;https://www.fark.com:443/search/&#39;).resolve(
+<a name="line129"></a>                   new goog.Uri(&#39;//www.google.com/foo/bar&#39;)
+<a name="line130"></a>               ).toString());
+<a name="line131"></a>
+<a name="line132"></a>  assertEquals(&#39;http://www.google.com/&#39;,
+<a name="line133"></a>               goog.Uri.resolve(&#39;http://www.fark.com/search/&#39;,
+<a name="line134"></a>                                &#39;//www.google.com/&#39;).toString());
+<a name="line135"></a>}
+<a name="line136"></a>
+<a name="line137"></a>function testQueryResolution() {
+<a name="line138"></a>  assertEquals(&#39;http://www.google.com/search?q=new%20search&#39;,
+<a name="line139"></a>               goog.Uri.parse(&#39;http://www.google.com/search?q=old+search&#39;).
+<a name="line140"></a>                   resolve(goog.Uri.parse(&#39;?q=new%20search&#39;)).toString());
+<a name="line141"></a>
+<a name="line142"></a>  assertEquals(&#39;http://www.google.com/search?q=new%20search&#39;,
+<a name="line143"></a>               goog.Uri.parse(&#39;http://www.google.com/search?q=old+search#hi&#39;).
+<a name="line144"></a>                   resolve(goog.Uri.parse(&#39;?q=new%20search&#39;)).toString());
+<a name="line145"></a>}
+<a name="line146"></a>
+<a name="line147"></a>function testFragmentResolution() {
+<a name="line148"></a>  assertEquals(&#39;http://www.google.com/foo/bar?q=hi#there&#39;,
+<a name="line149"></a>               goog.Uri.resolve(&#39;http://www.google.com/foo/bar?q=hi&#39;,
+<a name="line150"></a>                                &#39;#there&#39;).toString());
+<a name="line151"></a>
+<a name="line152"></a>  assertEquals(&#39;http://www.google.com/foo/bar?q=hi#there&#39;,
+<a name="line153"></a>               goog.Uri.resolve(&#39;http://www.google.com/foo/bar?q=hi#you&#39;,
+<a name="line154"></a>                                &#39;#there&#39;).toString());
+<a name="line155"></a>}
+<a name="line156"></a>
+<a name="line157"></a>function testBogusResolution() {
+<a name="line158"></a>  var uri = goog.Uri.parse(&#39;some:base/url&#39;).resolve(
+<a name="line159"></a>      goog.Uri.parse(&#39;a://completely.different/url&#39;));
+<a name="line160"></a>  assertEquals(&#39;a://completely.different/url&#39;, uri.toString());
+<a name="line161"></a>}
+<a name="line162"></a>
+<a name="line163"></a>function testDotSegmentsRemovalRemoveLeadingDots() {
+<a name="line164"></a>  // Test removing leading &quot;../&quot; and &quot;./&quot;
+<a name="line165"></a>  assertEquals(&#39;bar&#39;, goog.Uri.removeDotSegments(&#39;../bar&#39;));
+<a name="line166"></a>  assertEquals(&#39;bar&#39;, goog.Uri.removeDotSegments(&#39;./bar&#39;));
+<a name="line167"></a>  assertEquals(&#39;bar&#39;, goog.Uri.removeDotSegments(&#39;.././bar&#39;));
+<a name="line168"></a>  assertEquals(&#39;bar&#39;, goog.Uri.removeDotSegments(&#39;.././bar&#39;));
+<a name="line169"></a>}
+<a name="line170"></a>
+<a name="line171"></a>function testDotSegmentRemovalRemoveSingleDot() {
+<a name="line172"></a>  // Tests replacing &quot;/./&quot; with &quot;/&quot;
+<a name="line173"></a>  assertEquals(&#39;/foo/bar&#39;, goog.Uri.removeDotSegments(&#39;/foo/./bar&#39;));
+<a name="line174"></a>  assertEquals(&#39;/bar/&#39;, goog.Uri.removeDotSegments(&#39;/bar/./&#39;));
+<a name="line175"></a>
+<a name="line176"></a>  // Test replacing trailing &quot;/.&quot; with &quot;/&quot;
+<a name="line177"></a>  assertEquals(&#39;/&#39;, goog.Uri.removeDotSegments(&#39;/.&#39;));
+<a name="line178"></a>  assertEquals(&#39;/bar/&#39;, goog.Uri.removeDotSegments(&#39;/bar/.&#39;));
+<a name="line179"></a>}
+<a name="line180"></a>
+<a name="line181"></a>function testDotSegmentRemovalRemoveDoubleDot() {
+<a name="line182"></a>  // Test resolving &quot;/../&quot;
+<a name="line183"></a>  assertEquals(&#39;/bar&#39;, goog.Uri.removeDotSegments(&#39;/foo/../bar&#39;));
+<a name="line184"></a>  assertEquals(&#39;/&#39;, goog.Uri.removeDotSegments(&#39;/bar/../&#39;));
+<a name="line185"></a>
+<a name="line186"></a>  // Test resolving trailing &quot;/..&quot;
+<a name="line187"></a>  assertEquals(&#39;/&#39;, goog.Uri.removeDotSegments(&#39;/..&#39;));
+<a name="line188"></a>  assertEquals(&#39;/&#39;, goog.Uri.removeDotSegments(&#39;/bar/..&#39;));
+<a name="line189"></a>  assertEquals(&#39;/foo/&#39;, goog.Uri.removeDotSegments(&#39;/foo/bar/..&#39;));
+<a name="line190"></a>}
+<a name="line191"></a>
+<a name="line192"></a>function testDotSegmentRemovalRemovePlainDots() {
+<a name="line193"></a>  // RFC 3986, section 5.2.4, point 2.D.
+<a name="line194"></a>  // Test resolving plain &quot;..&quot; or &quot;.&quot;
+<a name="line195"></a>  assertEquals(&#39;&#39;, goog.Uri.removeDotSegments(&#39;.&#39;));
+<a name="line196"></a>  assertEquals(&#39;&#39;, goog.Uri.removeDotSegments(&#39;..&#39;));
+<a name="line197"></a>}
+<a name="line198"></a>
+<a name="line199"></a>function testPathConcatenation() {
+<a name="line200"></a>  // Check accordenance with RFC 3986, section 5.2.4
+<a name="line201"></a>  assertResolvedEquals(&#39;bar&#39;, &#39;&#39;, &#39;bar&#39;);
+<a name="line202"></a>  assertResolvedEquals(&#39;/bar&#39;, &#39;/&#39;, &#39;bar&#39;);
+<a name="line203"></a>  assertResolvedEquals(&#39;/bar&#39;, &#39;/foo&#39;, &#39;/bar&#39;);
+<a name="line204"></a>  assertResolvedEquals(&#39;/foo/foo&#39;, &#39;/foo/bar&#39;, &#39;foo&#39;);
+<a name="line205"></a>}
+<a name="line206"></a>
+<a name="line207"></a>function testPathConcatenationDontRemoveForEmptyUri() {
+<a name="line208"></a>  // Resolving URIs with empty path should not result in dot segments removal.
+<a name="line209"></a>  // See: algorithm in section 5.2.2: code inside &#39;if (R.path == &quot;&quot;)&#39; clause.
+<a name="line210"></a>  assertResolvedEquals(&#39;/search/../foo&#39;, &#39;/search/../foo&#39;, &#39;&#39;);
+<a name="line211"></a>  assertResolvedEquals(&#39;/search/./foo&#39;, &#39;/search/./foo&#39;, &#39;&#39;);
+<a name="line212"></a>}
+<a name="line213"></a>
+<a name="line214"></a>function testParameterGetters() {
+<a name="line215"></a>  function assertArraysEqual(l1, l2) {
+<a name="line216"></a>    if (!l1 || !l2) {
+<a name="line217"></a>      assertEquals(l1, l2);
+<a name="line218"></a>      return;
+<a name="line219"></a>    }
+<a name="line220"></a>    var l1s = l1.toString(), l2s = l2.toString();
+<a name="line221"></a>    assertEquals(l1s, l2s);
+<a name="line222"></a>    assertEquals(l1s, l1.length, l2.length);
+<a name="line223"></a>    for (var i = 0; i &lt; l1.length; ++i) {
+<a name="line224"></a>      assertEquals(&#39;part &#39; + i + &#39; of &#39; + l1.length + &#39; in &#39; + l1s,
+<a name="line225"></a>                   l1[i], l2[i]);
+<a name="line226"></a>    }
+<a name="line227"></a>  }
+<a name="line228"></a>
+<a name="line229"></a>  assertArraysEqual([&#39;v1&#39;, &#39;v2&#39;],
+<a name="line230"></a>      goog.Uri.parse(&#39;/path?a=b&amp;key=v1&amp;c=d&amp;key=v2&amp;keywithsuffix=v3&#39;).
+<a name="line231"></a>          getParameterValues(&#39;key&#39;));
+<a name="line232"></a>
+<a name="line233"></a>  assertArraysEqual([&#39;v1&#39;, &#39;v2&#39;],
+<a name="line234"></a>      goog.Uri.parse(&#39;/path?a=b&amp;keY=v1&amp;c=d&amp;KEy=v2&amp;keywithsuffix=v3&#39;, true).
+<a name="line235"></a>          getParameterValues(&#39;kEy&#39;));
+<a name="line236"></a>
+<a name="line237"></a>  assertEquals(&#39;v1&#39;,
+<a name="line238"></a>      goog.Uri.parse(&#39;/path?key=v1&amp;c=d&amp;keywithsuffix=v3&amp;key=v2&#39;).
+<a name="line239"></a>          getParameterValue(&#39;key&#39;));
+<a name="line240"></a>
+<a name="line241"></a>  assertEquals(&#39;v1&#39;,
+<a name="line242"></a>      goog.Uri.parse(&#39;/path?kEY=v1&amp;c=d&amp;keywithsuffix=v3&amp;key=v2&#39;, true).
+<a name="line243"></a>          getParameterValue(&#39;Key&#39;));
+<a name="line244"></a>
+<a name="line245"></a>  assertEquals(&#39;v1=v2&#39;,
+<a name="line246"></a>      goog.Uri.parse(&#39;/path?key=v1=v2&#39;, true).getParameterValue(&#39;key&#39;));
+<a name="line247"></a>
+<a name="line248"></a>  assertEquals(&#39;v1=v2=v3&#39;,
+<a name="line249"></a>      goog.Uri.parse(&#39;/path?key=v1=v2=v3&#39;, true).getParameterValue(&#39;key&#39;));
+<a name="line250"></a>
+<a name="line251"></a>  assertArraysEqual(undefined,
+<a name="line252"></a>                    goog.Uri.parse(&#39;/path?key=v1&amp;c=d&amp;keywithsuffix=v3&amp;key=v2&#39;).
+<a name="line253"></a>                    getParameterValue(&#39;nosuchkey&#39;));
+<a name="line254"></a>
+<a name="line255"></a>  // test boundary conditions
+<a name="line256"></a>  assertArraysEqual([&#39;v1&#39;, &#39;v2&#39;],
+<a name="line257"></a>      goog.Uri.parse(&#39;/path?key=v1&amp;c=d&amp;key=v2&amp;keywithsuffix=v3&#39;).
+<a name="line258"></a>          getParameterValues(&#39;key&#39;));
+<a name="line259"></a>  assertArraysEqual([&#39;v1&#39;, &#39;v2&#39;],
+<a name="line260"></a>      goog.Uri.parse(&#39;/path?key=v1&amp;c=d&amp;keywithsuffix=v3&amp;key=v2&#39;).
+<a name="line261"></a>          getParameterValues(&#39;key&#39;));
+<a name="line262"></a>
+<a name="line263"></a>  // test no =
+<a name="line264"></a>  assertArraysEqual([&#39;&#39;],
+<a name="line265"></a>      goog.Uri.parse(&#39;/path?key&#39;).getParameterValues(&#39;key&#39;));
+<a name="line266"></a>  assertArraysEqual([&#39;&#39;],
+<a name="line267"></a>      goog.Uri.parse(&#39;/path?key&#39;, true).getParameterValues(&#39;key&#39;));
+<a name="line268"></a>
+<a name="line269"></a>  assertArraysEqual([&#39;&#39;],
+<a name="line270"></a>                    goog.Uri.parse(&#39;/path?foo=bar&amp;key&#39;).
+<a name="line271"></a>                    getParameterValues(&#39;key&#39;));
+<a name="line272"></a>  assertArraysEqual([&#39;&#39;],
+<a name="line273"></a>                    goog.Uri.parse(&#39;/path?foo=bar&amp;key&#39;, true).
+<a name="line274"></a>                    getParameterValues(&#39;key&#39;));
+<a name="line275"></a>
+<a name="line276"></a>  assertEquals(&#39;&#39;,
+<a name="line277"></a>               goog.Uri.parse(&#39;/path?key&#39;).getParameterValue(&#39;key&#39;));
+<a name="line278"></a>  assertEquals(&#39;&#39;,
+<a name="line279"></a>               goog.Uri.parse(&#39;/path?key&#39;, true).getParameterValue(&#39;key&#39;));
+<a name="line280"></a>
+<a name="line281"></a>  assertEquals(&#39;&#39;,
+<a name="line282"></a>               goog.Uri.parse(&#39;/path?foo=bar&amp;key&#39;).getParameterValue(&#39;key&#39;));
+<a name="line283"></a>  assertEquals(&#39;&#39;,
+<a name="line284"></a>               goog.Uri.parse(&#39;/path?foo=bar&amp;key&#39;, true).
+<a name="line285"></a>               getParameterValue(&#39;key&#39;));
+<a name="line286"></a>
+<a name="line287"></a>  var u = new goog.Uri(&#39;/path?a=b&amp;key=v1&amp;c=d&amp;key=v2&amp;keywithsuffix=v3&#39;);
+<a name="line288"></a>  assertArraysEqual(u.getParameterValues(&#39;a&#39;), [&#39;b&#39;]);
+<a name="line289"></a>  assertArraysEqual(u.getParameterValues(&#39;key&#39;), [&#39;v1&#39;, &#39;v2&#39;]);
+<a name="line290"></a>  assertArraysEqual(u.getParameterValues(&#39;c&#39;), [&#39;d&#39;]);
+<a name="line291"></a>  assertArraysEqual(u.getParameterValues(&#39;keywithsuffix&#39;), [&#39;v3&#39;]);
+<a name="line292"></a>  assertArraysEqual(u.getParameterValues(&#39;KeyWITHSuffix&#39;), []);
+<a name="line293"></a>
+<a name="line294"></a>  // Make sure constructing from another URI preserves case-sensitivity
+<a name="line295"></a>  var u2 = new goog.Uri(u);
+<a name="line296"></a>  assertArraysEqual(u2.getParameterValues(&#39;a&#39;), [&#39;b&#39;]);
+<a name="line297"></a>  assertArraysEqual(u2.getParameterValues(&#39;key&#39;), [&#39;v1&#39;, &#39;v2&#39;]);
+<a name="line298"></a>  assertArraysEqual(u2.getParameterValues(&#39;c&#39;), [&#39;d&#39;]);
+<a name="line299"></a>  assertArraysEqual(u2.getParameterValues(&#39;keywithsuffix&#39;), [&#39;v3&#39;]);
+<a name="line300"></a>  assertArraysEqual(u2.getParameterValues(&#39;KeyWITHSuffix&#39;), []);
+<a name="line301"></a>
+<a name="line302"></a>  u = new goog.Uri(&#39;/path?a=b&amp;key=v1&amp;c=d&amp;kEy=v2&amp;keywithsuffix=v3&#39;, true);
+<a name="line303"></a>  assertArraysEqual(u.getParameterValues(&#39;A&#39;), [&#39;b&#39;]);
+<a name="line304"></a>  assertArraysEqual(u.getParameterValues(&#39;keY&#39;), [&#39;v1&#39;, &#39;v2&#39;]);
+<a name="line305"></a>  assertArraysEqual(u.getParameterValues(&#39;c&#39;), [&#39;d&#39;]);
+<a name="line306"></a>  assertArraysEqual(u.getParameterValues(&#39;keyWITHsuffix&#39;), [&#39;v3&#39;]);
+<a name="line307"></a>
+<a name="line308"></a>  // Make sure constructing from another URI preserves case-insensitivity
+<a name="line309"></a>  u2 = new goog.Uri(u);
+<a name="line310"></a>  assertArraysEqual(u2.getParameterValues(&#39;A&#39;), [&#39;b&#39;]);
+<a name="line311"></a>  assertArraysEqual(u2.getParameterValues(&#39;keY&#39;), [&#39;v1&#39;, &#39;v2&#39;]);
+<a name="line312"></a>  assertArraysEqual(u2.getParameterValues(&#39;c&#39;), [&#39;d&#39;]);
+<a name="line313"></a>  assertArraysEqual(u2.getParameterValues(&#39;keyWITHsuffix&#39;), [&#39;v3&#39;]);
+<a name="line314"></a>}
+<a name="line315"></a>
+<a name="line316"></a>function testRemoveParameter() {
+<a name="line317"></a>  assertEquals(&#39;/path?a=b&amp;c=d&amp;keywithsuffix=v3&#39;,
+<a name="line318"></a>               goog.Uri.parse(&#39;/path?a=b&amp;key=v1&amp;c=d&amp;key=v2&amp;keywithsuffix=v3&#39;)
+<a name="line319"></a>               .removeParameter(&#39;key&#39;).toString());
+<a name="line320"></a>}
+<a name="line321"></a>
+<a name="line322"></a>function testParameterSetters() {
+<a name="line323"></a>  assertEquals(&#39;/path?a=b&amp;key=newval&amp;c=d&amp;keywithsuffix=v3&#39;,
+<a name="line324"></a>               goog.Uri.parse(&#39;/path?a=b&amp;key=v1&amp;c=d&amp;key=v2&amp;keywithsuffix=v3&#39;)
+<a name="line325"></a>               .setParameterValue(&#39;key&#39;, &#39;newval&#39;).toString());
+<a name="line326"></a>
+<a name="line327"></a>  assertEquals(&#39;/path?a=b&amp;key=1&amp;key=2&amp;key=3&amp;c=d&amp;keywithsuffix=v3&#39;,
+<a name="line328"></a>               goog.Uri.parse(&#39;/path?a=b&amp;key=v1&amp;c=d&amp;key=v2&amp;keywithsuffix=v3&#39;)
+<a name="line329"></a>               .setParameterValues(&#39;key&#39;, [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;]).toString());
+<a name="line330"></a>
+<a name="line331"></a>  assertEquals(&#39;/path&#39;,
+<a name="line332"></a>      goog.Uri.parse(&#39;/path?key=v1&amp;key=v2&#39;)
+<a name="line333"></a>          .setParameterValues(&#39;key&#39;, []).toString());
+<a name="line334"></a>
+<a name="line335"></a>  // Test case-insensitive setters
+<a name="line336"></a>  assertEquals(&#39;/path?a=b&amp;key=newval&amp;c=d&amp;keywithsuffix=v3&#39;,
+<a name="line337"></a>      goog.Uri.parse(&#39;/path?a=b&amp;key=v1&amp;c=d&amp;key=v2&amp;keywithsuffix=v3&#39;, true)
+<a name="line338"></a>               .setParameterValue(&#39;KEY&#39;, &#39;newval&#39;).toString());
+<a name="line339"></a>
+<a name="line340"></a>  assertEquals(
+<a name="line341"></a>      &#39;/path?a=b&amp;key=1&amp;key=2&amp;key=3&amp;c=d&amp;keywithsuffix=v3&#39;,
+<a name="line342"></a>      goog.Uri.parse(&#39;/path?a=b&amp;key=v1&amp;c=d&amp;key=v2&amp;keywithsuffix=v3&#39;, true)
+<a name="line343"></a>          .setParameterValues(&#39;kEY&#39;, [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;]).toString());
+<a name="line344"></a>}
+<a name="line345"></a>
+<a name="line346"></a>function testEncoding() {
+<a name="line347"></a>  assertEquals(&#39;/foo bar baz&#39;,
+<a name="line348"></a>               goog.Uri.parse(&#39;/foo%20bar%20baz&#39;).getPath());
+<a name="line349"></a>  assertEquals(&#39;/foo+bar+baz&#39;,
+<a name="line350"></a>               goog.Uri.parse(&#39;/foo+bar+baz&#39;).getPath());
+<a name="line351"></a>}
+<a name="line352"></a>
+<a name="line353"></a>function testSetScheme() {
+<a name="line354"></a>  var uri = new goog.Uri(&#39;http://www.google.com:80/path?q=query#fragmento&#39;);
+<a name="line355"></a>
+<a name="line356"></a>  uri.setScheme(&#39;https&#39;);
+<a name="line357"></a>  assertTrue(uri.hasScheme());
+<a name="line358"></a>  assertEquals(&#39;https&#39;, uri.getScheme());
+<a name="line359"></a>  assertEquals(&#39;https://www.google.com:80/path?q=query#fragmento&#39;,
+<a name="line360"></a>               uri.toString());
+<a name="line361"></a>
+<a name="line362"></a>  uri.setScheme(encodeURIComponent(&#39;ab cd&#39;), true);
+<a name="line363"></a>  assertTrue(uri.hasScheme());
+<a name="line364"></a>  assertEquals(&#39;ab cd&#39;, uri.getScheme());
+<a name="line365"></a>  assertEquals(&#39;ab%20cd://www.google.com:80/path?q=query#fragmento&#39;,
+<a name="line366"></a>               uri.toString());
+<a name="line367"></a>
+<a name="line368"></a>  uri.setScheme(&#39;http:&#39;);
+<a name="line369"></a>  assertTrue(uri.hasScheme());
+<a name="line370"></a>  assertEquals(&#39;http&#39;, uri.getScheme());
+<a name="line371"></a>  assertEquals(&#39;http://www.google.com:80/path?q=query#fragmento&#39;,
+<a name="line372"></a>               uri.toString());
+<a name="line373"></a>
+<a name="line374"></a>  uri.setScheme(&#39;&#39;);
+<a name="line375"></a>  assertFalse(uri.hasScheme());
+<a name="line376"></a>  assertEquals(&#39;&#39;, uri.getScheme());
+<a name="line377"></a>  assertEquals(&#39;//www.google.com:80/path?q=query#fragmento&#39;,
+<a name="line378"></a>               uri.toString());
+<a name="line379"></a>}
+<a name="line380"></a>
+<a name="line381"></a>function testSetDomain() {
+<a name="line382"></a>  var uri = new goog.Uri(&#39;http://www.google.com:80/path?q=query#fragmento&#39;);
+<a name="line383"></a>
+<a name="line384"></a>  uri.setDomain(&#39;\u1e21oogle.com&#39;);
+<a name="line385"></a>  assertTrue(uri.hasDomain());
+<a name="line386"></a>  assertEquals(&#39;\u1e21oogle.com&#39;, uri.getDomain());
+<a name="line387"></a>  assertEquals(&#39;http://%E1%B8%A1oogle.com:80/path?q=query#fragmento&#39;,
+<a name="line388"></a>               uri.toString());
+<a name="line389"></a>
+<a name="line390"></a>  uri.setDomain(encodeURIComponent(&#39;\u1e21oogle.com&#39;), true);
+<a name="line391"></a>  assertTrue(uri.hasDomain());
+<a name="line392"></a>  assertEquals(&#39;\u1e21oogle.com&#39;, uri.getDomain());
+<a name="line393"></a>  assertEquals(&#39;http://%E1%B8%A1oogle.com:80/path?q=query#fragmento&#39;,
+<a name="line394"></a>               uri.toString());
+<a name="line395"></a>
+<a name="line396"></a>  uri.setDomain(&#39;&#39;);
+<a name="line397"></a>  assertFalse(uri.hasDomain());
+<a name="line398"></a>  assertEquals(&#39;&#39;, uri.getDomain());
+<a name="line399"></a>  assertEquals(&#39;http:/path?q=query#fragmento&#39;,
+<a name="line400"></a>               uri.toString());
+<a name="line401"></a>}
+<a name="line402"></a>
+<a name="line403"></a>function testSetPort() {
+<a name="line404"></a>  var uri = new goog.Uri(&#39;http://www.google.com:80/path?q=query#fragmento&#39;);
+<a name="line405"></a>
+<a name="line406"></a>  assertThrows(function() {
+<a name="line407"></a>    uri.setPort(-1);
+<a name="line408"></a>  });
+<a name="line409"></a>  assertEquals(80, uri.getPort());
+<a name="line410"></a>
+<a name="line411"></a>  assertThrows(function() {
+<a name="line412"></a>    uri.setPort(&#39;a&#39;);
+<a name="line413"></a>  });
+<a name="line414"></a>  assertEquals(80, uri.getPort());
+<a name="line415"></a>
+<a name="line416"></a>  uri.setPort(443);
+<a name="line417"></a>  assertTrue(uri.hasPort());
+<a name="line418"></a>  assertEquals(443, uri.getPort());
+<a name="line419"></a>  assertEquals(&#39;http://www.google.com:443/path?q=query#fragmento&#39;,
+<a name="line420"></a>               uri.toString());
+<a name="line421"></a>
+<a name="line422"></a>  // TODO(user): This is undocumented, but exist in previous unit
+<a name="line423"></a>  // test. We should clarify whether this is intended (alternatively,
+<a name="line424"></a>  // setPort(0) also works).
+<a name="line425"></a>  uri.setPort(null);
+<a name="line426"></a>  assertFalse(uri.hasPort());
+<a name="line427"></a>  assertEquals(null, uri.getPort());
+<a name="line428"></a>  assertEquals(&#39;http://www.google.com/path?q=query#fragmento&#39;,
+<a name="line429"></a>               uri.toString());
+<a name="line430"></a>}
+<a name="line431"></a>
+<a name="line432"></a>function testSetPath() {
+<a name="line433"></a>  var uri = new goog.Uri(&#39;http://www.google.com:80/path?q=query#fragmento&#39;);
+<a name="line434"></a>
+<a name="line435"></a>  uri.setPath(&#39;/search path/&#39;);
+<a name="line436"></a>  assertTrue(uri.hasPath());
+<a name="line437"></a>  assertEquals(&#39;/search path/&#39;, uri.getPath());
+<a name="line438"></a>  assertEquals(
+<a name="line439"></a>      &#39;http://www.google.com:80/search%20path/?q=query#fragmento&#39;,
+<a name="line440"></a>      uri.toString());
+<a name="line441"></a>
+<a name="line442"></a>  uri.setPath(encodeURIComponent(&#39;/search path 2/&#39;), true);
+<a name="line443"></a>  assertTrue(uri.hasPath());
+<a name="line444"></a>  assertEquals(&#39;/search path 2/&#39;, uri.getPath());
+<a name="line445"></a>  assertEquals(
+<a name="line446"></a>      &#39;http://www.google.com:80/search%20path%202/?q=query#fragmento&#39;,
+<a name="line447"></a>      uri.toString());
+<a name="line448"></a>
+<a name="line449"></a>  uri.setPath(&#39;&#39;);
+<a name="line450"></a>  assertFalse(uri.hasPath());
+<a name="line451"></a>  assertEquals(&#39;&#39;, uri.getPath());
+<a name="line452"></a>  assertEquals(
+<a name="line453"></a>      &#39;http://www.google.com:80?q=query#fragmento&#39;,
+<a name="line454"></a>      uri.toString());
+<a name="line455"></a>}
+<a name="line456"></a>
+<a name="line457"></a>function testSetFragment() {
+<a name="line458"></a>  var uri = new goog.Uri(&#39;http://www.google.com:80/path?q=query#fragmento&#39;);
+<a name="line459"></a>
+<a name="line460"></a>  uri.setFragment(&#39;foo?bar=a b&amp;baz=2&#39;);
+<a name="line461"></a>  assertTrue(uri.hasFragment());
+<a name="line462"></a>  assertEquals(&#39;foo?bar=a b&amp;baz=2&#39;, uri.getFragment());
+<a name="line463"></a>  assertEquals(
+<a name="line464"></a>      &#39;http://www.google.com:80/path?q=query#foo?bar=a%20b&amp;baz=2&#39;,
+<a name="line465"></a>      uri.toString());
+<a name="line466"></a>
+<a name="line467"></a>  uri.setFragment(encodeURIComponent(&#39;foo?bar=a b&amp;baz=3&#39;), true);
+<a name="line468"></a>  assertTrue(uri.hasFragment());
+<a name="line469"></a>  assertEquals(&#39;foo?bar=a b&amp;baz=3&#39;, uri.getFragment());
+<a name="line470"></a>  assertEquals(
+<a name="line471"></a>      &#39;http://www.google.com:80/path?q=query#foo?bar=a%20b&amp;baz=3&#39;,
+<a name="line472"></a>      uri.toString());
+<a name="line473"></a>
+<a name="line474"></a>  uri.setFragment(&#39;&#39;);
+<a name="line475"></a>  assertFalse(uri.hasFragment());
+<a name="line476"></a>  assertEquals(&#39;&#39;, uri.getFragment());
+<a name="line477"></a>  assertEquals(
+<a name="line478"></a>      &#39;http://www.google.com:80/path?q=query&#39;,
+<a name="line479"></a>      uri.toString());
+<a name="line480"></a>}
+<a name="line481"></a>
+<a name="line482"></a>function testSetUserInfo() {
+<a name="line483"></a>  var uri = new goog.Uri(&#39;http://www.google.com:80/path?q=query#fragmento&#39;);
+<a name="line484"></a>
+<a name="line485"></a>  uri.setUserInfo(&#39;user:pw d&#39;);
+<a name="line486"></a>  assertTrue(uri.hasUserInfo());
+<a name="line487"></a>  assertEquals(&#39;user:pw d&#39;, uri.getUserInfo());
+<a name="line488"></a>  assertEquals(&#39;http://user:pw%20d@www.google.com:80/path?q=query#fragmento&#39;,
+<a name="line489"></a>      uri.toString());
+<a name="line490"></a>
+<a name="line491"></a>  uri.setUserInfo(encodeURIComponent(&#39;user:pw d2&#39;), true);
+<a name="line492"></a>  assertTrue(uri.hasUserInfo());
+<a name="line493"></a>  assertEquals(&#39;user:pw d2&#39;, uri.getUserInfo());
+<a name="line494"></a>  assertEquals(&#39;http://user:pw%20d2@www.google.com:80/path?q=query#fragmento&#39;,
+<a name="line495"></a>      uri.toString());
+<a name="line496"></a>
+<a name="line497"></a>  uri.setUserInfo(&#39;user&#39;);
+<a name="line498"></a>  assertTrue(uri.hasUserInfo());
+<a name="line499"></a>  assertEquals(&#39;user&#39;, uri.getUserInfo());
+<a name="line500"></a>  assertEquals(&#39;http://user@www.google.com:80/path?q=query#fragmento&#39;,
+<a name="line501"></a>      uri.toString());
+<a name="line502"></a>
+<a name="line503"></a>  uri.setUserInfo(&#39;&#39;);
+<a name="line504"></a>  assertFalse(uri.hasUserInfo());
+<a name="line505"></a>  assertEquals(&#39;&#39;, uri.getUserInfo());
+<a name="line506"></a>  assertEquals(&#39;http://www.google.com:80/path?q=query#fragmento&#39;,
+<a name="line507"></a>      uri.toString());
+<a name="line508"></a>}
+<a name="line509"></a>
+<a name="line510"></a>function testSetParameterValues() {
+<a name="line511"></a>  var uri = new goog.Uri(&#39;http://www.google.com:80/path?q=query#fragmento&#39;);
+<a name="line512"></a>
+<a name="line513"></a>  uri.setParameterValues(&#39;q&#39;, [&#39;foo&#39;, &#39;other query&#39;]);
+<a name="line514"></a>  assertEquals(&#39;http://www.google.com:80/path?q=foo&amp;q=other%20query#fragmento&#39;,
+<a name="line515"></a>      uri.toString());
+<a name="line516"></a>
+<a name="line517"></a>  uri.setParameterValues(&#39;lang&#39;, &#39;en&#39;);
+<a name="line518"></a>  assertEquals(
+<a name="line519"></a>      &#39;http://www.google.com:80/path?q=foo&amp;q=other%20query&amp;lang=en#fragmento&#39;,
+<a name="line520"></a>      uri.toString());
+<a name="line521"></a>}
+<a name="line522"></a>
+<a name="line523"></a>function testTreatmentOfAt1() {
+<a name="line524"></a>  var uri = new goog.Uri(&#39;http://www.google.com?q=johndoe@gmail.com&#39;);
+<a name="line525"></a>  assertEquals(&#39;http&#39;, uri.getScheme());
+<a name="line526"></a>  assertEquals(&#39;www.google.com&#39;, uri.getDomain());
+<a name="line527"></a>  assertEquals(&#39;johndoe@gmail.com&#39;, uri.getParameterValue(&#39;q&#39;));
+<a name="line528"></a>
+<a name="line529"></a>  uri = goog.Uri.create(&#39;http&#39;, null, &#39;www.google.com&#39;, null, null,
+<a name="line530"></a>                        &#39;q=johndoe@gmail.com&#39;, null);
+<a name="line531"></a>  assertEquals(&#39;http://www.google.com?q=johndoe%40gmail.com&#39;, uri.toString());
+<a name="line532"></a>}
+<a name="line533"></a>
+<a name="line534"></a>function testTreatmentOfAt2() {
+<a name="line535"></a>  var uri = new goog.Uri(&#39;http://www/~johndoe@gmail.com/foo&#39;);
+<a name="line536"></a>  assertEquals(&#39;http&#39;, uri.getScheme());
+<a name="line537"></a>  assertEquals(&#39;www&#39;, uri.getDomain());
+<a name="line538"></a>  assertEquals(&#39;/~johndoe@gmail.com/foo&#39;, uri.getPath());
+<a name="line539"></a>
+<a name="line540"></a>  assertEquals(&#39;http://www/~johndoe@gmail.com/foo&#39;,
+<a name="line541"></a>               goog.Uri.create(&#39;http&#39;, null, &#39;www&#39;, null,
+<a name="line542"></a>                               &#39;/~johndoe@gmail.com/foo&#39;, null, null).
+<a name="line543"></a>               toString());
+<a name="line544"></a>}
+<a name="line545"></a>
+<a name="line546"></a>function testTreatmentOfAt3() {
+<a name="line547"></a>  var uri = new goog.Uri(&#39;ftp://skroob:1234@teleport/~skroob@vacuum&#39;);
+<a name="line548"></a>  assertEquals(&#39;ftp&#39;, uri.getScheme());
+<a name="line549"></a>  assertEquals(&#39;skroob:1234&#39;, uri.getUserInfo());
+<a name="line550"></a>  assertEquals(&#39;teleport&#39;, uri.getDomain());
+<a name="line551"></a>  assertEquals(&#39;/~skroob@vacuum&#39;, uri.getPath());
+<a name="line552"></a>
+<a name="line553"></a>  assertEquals(&#39;ftp://skroob:1234@teleport/~skroob@vacuum&#39;,
+<a name="line554"></a>               goog.Uri.create(&#39;ftp&#39;, &#39;skroob:1234&#39;, &#39;teleport&#39;, null,
+<a name="line555"></a>                               &#39;/~skroob@vacuum&#39;, null, null).toString());
+<a name="line556"></a>}
+<a name="line557"></a>
+<a name="line558"></a>function testTreatmentOfAt4() {
+<a name="line559"></a>  assertEquals(&#39;ftp://darkhelmet:45%4078@teleport/~dhelmet@vacuum&#39;,
+<a name="line560"></a>               goog.Uri.create(&#39;ftp&#39;, &#39;darkhelmet:45@78&#39;, &#39;teleport&#39;, null,
+<a name="line561"></a>                               &#39;/~dhelmet@vacuum&#39;, null, null).toString());
+<a name="line562"></a>}
+<a name="line563"></a>
+<a name="line564"></a>function testSameDomain1() {
+<a name="line565"></a>  var uri1 = &#39;http://www.google.com/a&#39;;
+<a name="line566"></a>  var uri2 = &#39;http://www.google.com/b&#39;;
+<a name="line567"></a>  assertTrue(goog.Uri.haveSameDomain(uri1, uri2));
+<a name="line568"></a>  assertTrue(goog.Uri.haveSameDomain(uri2, uri1));
+<a name="line569"></a>}
+<a name="line570"></a>
+<a name="line571"></a>function testSameDomain2() {
+<a name="line572"></a>  var uri1 = &#39;http://www.google.com:1234/a&#39;;
+<a name="line573"></a>  var uri2 = &#39;http://www.google.com/b&#39;;
+<a name="line574"></a>  assertFalse(goog.Uri.haveSameDomain(uri1, uri2));
+<a name="line575"></a>  assertFalse(goog.Uri.haveSameDomain(uri2, uri1));
+<a name="line576"></a>}
+<a name="line577"></a>
+<a name="line578"></a>function testSameDomain3() {
+<a name="line579"></a>  var uri1 = &#39;www.google.com/a&#39;;
+<a name="line580"></a>  var uri2 = &#39;http://www.google.com/b&#39;;
+<a name="line581"></a>  assertFalse(goog.Uri.haveSameDomain(uri1, uri2));
+<a name="line582"></a>  assertFalse(goog.Uri.haveSameDomain(uri2, uri1));
+<a name="line583"></a>}
+<a name="line584"></a>
+<a name="line585"></a>function testSameDomain4() {
+<a name="line586"></a>  var uri1 = &#39;/a&#39;;
+<a name="line587"></a>  var uri2 = &#39;http://www.google.com/b&#39;;
+<a name="line588"></a>  assertFalse(goog.Uri.haveSameDomain(uri1, uri2));
+<a name="line589"></a>  assertFalse(goog.Uri.haveSameDomain(uri2, uri1));
+<a name="line590"></a>}
+<a name="line591"></a>
+<a name="line592"></a>function testSameDomain5() {
+<a name="line593"></a>  var uri1 = &#39;http://www.google.com/a&#39;;
+<a name="line594"></a>  var uri2 = &#39;http://mail.google.com/b&#39;;
+<a name="line595"></a>  assertFalse(goog.Uri.haveSameDomain(uri1, uri2));
+<a name="line596"></a>  assertFalse(goog.Uri.haveSameDomain(uri2, uri1));
+<a name="line597"></a>}
+<a name="line598"></a>
+<a name="line599"></a>function testSameDomain6() {
+<a name="line600"></a>  var uri1 = &#39;/a&#39;;
+<a name="line601"></a>  var uri2 = &#39;/b&#39;;
+<a name="line602"></a>  assertTrue(goog.Uri.haveSameDomain(uri1, uri2));
+<a name="line603"></a>  assertTrue(goog.Uri.haveSameDomain(uri2, uri1));
+<a name="line604"></a>}
+<a name="line605"></a>
+<a name="line606"></a>function testMakeUnique() {
+<a name="line607"></a>  var uri1 = new goog.Uri(&#39;http://www.google.com/setgmail&#39;);
+<a name="line608"></a>  uri1.makeUnique();
+<a name="line609"></a>  var uri2 = new goog.Uri(&#39;http://www.google.com/setgmail&#39;);
+<a name="line610"></a>  uri2.makeUnique();
+<a name="line611"></a>  assertTrue(uri1.getQueryData().containsKey(goog.Uri.RANDOM_PARAM));
+<a name="line612"></a>  assertTrue(uri1.toString() != uri2.toString());
+<a name="line613"></a>}
+<a name="line614"></a>
+<a name="line615"></a>function testSetReadOnly() {
+<a name="line616"></a>  var uri = new goog.Uri(&#39;http://www.google.com/setgmail&#39;);
+<a name="line617"></a>  uri.setReadOnly(true);
+<a name="line618"></a>  assertThrows(function() {
+<a name="line619"></a>    uri.setParameterValue(&#39;cant&#39;, &#39;dothis&#39;);
+<a name="line620"></a>  });
+<a name="line621"></a>}
+<a name="line622"></a>
+<a name="line623"></a>function testSetReadOnlyChained() {
+<a name="line624"></a>  var uri = new goog.Uri(&#39;http://www.google.com/setgmail&#39;).setReadOnly(true);
+<a name="line625"></a>  assertThrows(function() {
+<a name="line626"></a>    uri.setParameterValue(&#39;cant&#39;, &#39;dothis&#39;);
+<a name="line627"></a>  });
+<a name="line628"></a>}
+<a name="line629"></a>
+<a name="line630"></a>function testQueryDataCount() {
+<a name="line631"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line632"></a>  assertEquals(5, qd.getCount());
+<a name="line633"></a>}
+<a name="line634"></a>
+<a name="line635"></a>function testQueryDataRemove() {
+<a name="line636"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line637"></a>  qd.remove(&#39;c&#39;);
+<a name="line638"></a>  assertEquals(4, qd.getCount());
+<a name="line639"></a>  assertEquals(&#39;a=A&amp;a=A2&amp;b=B&amp;b=B2&#39;, String(qd));
+<a name="line640"></a>  qd.remove(&#39;a&#39;);
+<a name="line641"></a>  assertEquals(2, qd.getCount());
+<a name="line642"></a>  assertEquals(&#39;b=B&amp;b=B2&#39;, String(qd));
+<a name="line643"></a>}
+<a name="line644"></a>
+<a name="line645"></a>function testQueryDataClear() {
+<a name="line646"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line647"></a>  qd.clear();
+<a name="line648"></a>  assertEquals(0, qd.getCount());
+<a name="line649"></a>  assertEquals(&#39;&#39;, String(qd));
+<a name="line650"></a>}
+<a name="line651"></a>
+<a name="line652"></a>function testQueryDataIsEmpty() {
+<a name="line653"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line654"></a>  qd.remove(&#39;a&#39;);
+<a name="line655"></a>  assertFalse(qd.isEmpty());
+<a name="line656"></a>  qd.remove(&#39;b&#39;);
+<a name="line657"></a>  assertFalse(qd.isEmpty());
+<a name="line658"></a>  qd.remove(&#39;c&#39;);
+<a name="line659"></a>  assertTrue(qd.isEmpty());
+<a name="line660"></a>
+<a name="line661"></a>  qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line662"></a>  qd.clear();
+<a name="line663"></a>  assertTrue(qd.isEmpty());
+<a name="line664"></a>
+<a name="line665"></a>  qd = new goog.Uri.QueryData(&#39;&#39;);
+<a name="line666"></a>  assertTrue(qd.isEmpty());
+<a name="line667"></a>}
+<a name="line668"></a>
+<a name="line669"></a>function testQueryDataContainsKey() {
+<a name="line670"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line671"></a>  assertTrue(qd.containsKey(&#39;a&#39;));
+<a name="line672"></a>  assertTrue(qd.containsKey(&#39;b&#39;));
+<a name="line673"></a>  assertTrue(qd.containsKey(&#39;c&#39;));
+<a name="line674"></a>  qd.remove(&#39;a&#39;);
+<a name="line675"></a>  assertFalse(qd.containsKey(&#39;a&#39;));
+<a name="line676"></a>  assertTrue(qd.containsKey(&#39;b&#39;));
+<a name="line677"></a>  assertTrue(qd.containsKey(&#39;c&#39;));
+<a name="line678"></a>  qd.remove(&#39;b&#39;);
+<a name="line679"></a>  assertFalse(qd.containsKey(&#39;a&#39;));
+<a name="line680"></a>  assertFalse(qd.containsKey(&#39;b&#39;));
+<a name="line681"></a>  assertTrue(qd.containsKey(&#39;c&#39;));
+<a name="line682"></a>  qd.remove(&#39;c&#39;);
+<a name="line683"></a>  assertFalse(qd.containsKey(&#39;a&#39;));
+<a name="line684"></a>  assertFalse(qd.containsKey(&#39;b&#39;));
+<a name="line685"></a>  assertFalse(qd.containsKey(&#39;c&#39;));
+<a name="line686"></a>
+<a name="line687"></a>  qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line688"></a>  qd.clear();
+<a name="line689"></a>  assertFalse(qd.containsKey(&#39;a&#39;));
+<a name="line690"></a>  assertFalse(qd.containsKey(&#39;b&#39;));
+<a name="line691"></a>  assertFalse(qd.containsKey(&#39;c&#39;));
+<a name="line692"></a>
+<a name="line693"></a>  // Test case-insensitive
+<a name="line694"></a>  qd = new goog.Uri.QueryData(&#39;aaa=A&amp;bbb=B&amp;aaa=A2&amp;bbbb=B2&amp;ccc=C&#39;, null, true);
+<a name="line695"></a>  assertTrue(qd.containsKey(&#39;aaa&#39;));
+<a name="line696"></a>  assertTrue(qd.containsKey(&#39;bBb&#39;));
+<a name="line697"></a>  assertTrue(qd.containsKey(&#39;CCC&#39;));
+<a name="line698"></a>
+<a name="line699"></a>  qd = new goog.Uri.QueryData(&#39;a=b=c&#39;);
+<a name="line700"></a>  assertTrue(qd.containsKey(&#39;a&#39;));
+<a name="line701"></a>  assertFalse(qd.containsKey(&#39;b&#39;));
+<a name="line702"></a>}
+<a name="line703"></a>
+<a name="line704"></a>function testQueryDataContainsValue() {
+<a name="line705"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line706"></a>
+<a name="line707"></a>  assertTrue(qd.containsValue(&#39;A&#39;));
+<a name="line708"></a>  assertTrue(qd.containsValue(&#39;B&#39;));
+<a name="line709"></a>  assertTrue(qd.containsValue(&#39;A2&#39;));
+<a name="line710"></a>  assertTrue(qd.containsValue(&#39;B2&#39;));
+<a name="line711"></a>  assertTrue(qd.containsValue(&#39;C&#39;));
+<a name="line712"></a>  qd.remove(&#39;a&#39;);
+<a name="line713"></a>  assertFalse(qd.containsValue(&#39;A&#39;));
+<a name="line714"></a>  assertTrue(qd.containsValue(&#39;B&#39;));
+<a name="line715"></a>  assertFalse(qd.containsValue(&#39;A2&#39;));
+<a name="line716"></a>  assertTrue(qd.containsValue(&#39;B2&#39;));
+<a name="line717"></a>  assertTrue(qd.containsValue(&#39;C&#39;));
+<a name="line718"></a>  qd.remove(&#39;b&#39;);
+<a name="line719"></a>  assertFalse(qd.containsValue(&#39;A&#39;));
+<a name="line720"></a>  assertFalse(qd.containsValue(&#39;B&#39;));
+<a name="line721"></a>  assertFalse(qd.containsValue(&#39;A2&#39;));
+<a name="line722"></a>  assertFalse(qd.containsValue(&#39;B2&#39;));
+<a name="line723"></a>  assertTrue(qd.containsValue(&#39;C&#39;));
+<a name="line724"></a>  qd.remove(&#39;c&#39;);
+<a name="line725"></a>  assertFalse(qd.containsValue(&#39;A&#39;));
+<a name="line726"></a>  assertFalse(qd.containsValue(&#39;B&#39;));
+<a name="line727"></a>  assertFalse(qd.containsValue(&#39;A2&#39;));
+<a name="line728"></a>  assertFalse(qd.containsValue(&#39;B2&#39;));
+<a name="line729"></a>  assertFalse(qd.containsValue(&#39;C&#39;));
+<a name="line730"></a>
+<a name="line731"></a>  qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line732"></a>  qd.clear();
+<a name="line733"></a>  assertFalse(qd.containsValue(&#39;A&#39;));
+<a name="line734"></a>  assertFalse(qd.containsValue(&#39;B&#39;));
+<a name="line735"></a>  assertFalse(qd.containsValue(&#39;A2&#39;));
+<a name="line736"></a>  assertFalse(qd.containsValue(&#39;B2&#39;));
+<a name="line737"></a>  assertFalse(qd.containsValue(&#39;C&#39;));
+<a name="line738"></a>
+<a name="line739"></a>  qd = new goog.Uri.QueryData(&#39;a=b=c&#39;);
+<a name="line740"></a>  assertTrue(qd.containsValue(&#39;b=c&#39;));
+<a name="line741"></a>  assertFalse(qd.containsValue(&#39;b&#39;));
+<a name="line742"></a>  assertFalse(qd.containsValue(&#39;c&#39;));
+<a name="line743"></a>}
+<a name="line744"></a>
+<a name="line745"></a>function testQueryDataGetKeys() {
+<a name="line746"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C=extra&#39;);
+<a name="line747"></a>
+<a name="line748"></a>  assertEquals(&#39;aabbc&#39;, qd.getKeys().join(&#39;&#39;));
+<a name="line749"></a>  qd.remove(&#39;a&#39;);
+<a name="line750"></a>  assertEquals(&#39;bbc&#39;, qd.getKeys().join(&#39;&#39;));
+<a name="line751"></a>  qd.add(&#39;d&#39;, &#39;D&#39;);
+<a name="line752"></a>  qd.add(&#39;d&#39;, &#39;D&#39;);
+<a name="line753"></a>  assertEquals(&#39;bbcdd&#39;, qd.getKeys().join(&#39;&#39;));
+<a name="line754"></a>
+<a name="line755"></a>  // Test case-insensitive
+<a name="line756"></a>  qd = new goog.Uri.QueryData(&#39;A=A&amp;B=B&amp;a=A2&amp;b=B2&amp;C=C=extra&#39;, null, true);
+<a name="line757"></a>
+<a name="line758"></a>  assertEquals(&#39;aabbc&#39;, qd.getKeys().join(&#39;&#39;));
+<a name="line759"></a>  qd.remove(&#39;a&#39;);
+<a name="line760"></a>  assertEquals(&#39;bbc&#39;, qd.getKeys().join(&#39;&#39;));
+<a name="line761"></a>  qd.add(&#39;d&#39;, &#39;D&#39;);
+<a name="line762"></a>  qd.add(&#39;D&#39;, &#39;D&#39;);
+<a name="line763"></a>  assertEquals(&#39;bbcdd&#39;, qd.getKeys().join(&#39;&#39;));
+<a name="line764"></a>}
+<a name="line765"></a>
+<a name="line766"></a>function testQueryDataGetValues() {
+<a name="line767"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C=extra&#39;);
+<a name="line768"></a>
+<a name="line769"></a>  assertArrayEquals([&#39;A&#39;, &#39;A2&#39;, &#39;B&#39;, &#39;B2&#39;, &#39;C=extra&#39;], qd.getValues());
+<a name="line770"></a>  qd.remove(&#39;a&#39;);
+<a name="line771"></a>  assertArrayEquals([&#39;B&#39;, &#39;B2&#39;, &#39;C=extra&#39;], qd.getValues());
+<a name="line772"></a>  qd.add(&#39;d&#39;, &#39;D&#39;);
+<a name="line773"></a>  qd.add(&#39;d&#39;, &#39;D&#39;);
+<a name="line774"></a>  assertArrayEquals([&#39;B&#39;, &#39;B2&#39;, &#39;C=extra&#39;, &#39;D&#39;, &#39;D&#39;], qd.getValues());
+<a name="line775"></a>
+<a name="line776"></a>  qd.add(&#39;e&#39;, new String(&#39;Eee&#39;));
+<a name="line777"></a>  assertArrayEquals([&#39;B&#39;, &#39;B2&#39;, &#39;C=extra&#39;, &#39;D&#39;, &#39;D&#39;, &#39;Eee&#39;], qd.getValues());
+<a name="line778"></a>
+<a name="line779"></a>  assertArrayEquals([&#39;Eee&#39;], qd.getValues(&#39;e&#39;));
+<a name="line780"></a>}
+<a name="line781"></a>
+<a name="line782"></a>function testQueryDataSet() {
+<a name="line783"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line784"></a>
+<a name="line785"></a>  qd.set(&#39;d&#39;, &#39;D&#39;);
+<a name="line786"></a>  assertEquals(&#39;a=A&amp;a=A2&amp;b=B&amp;b=B2&amp;c=C&amp;d=D&#39;, String(qd));
+<a name="line787"></a>  qd.set(&#39;d&#39;, &#39;D2&#39;);
+<a name="line788"></a>  assertEquals(&#39;a=A&amp;a=A2&amp;b=B&amp;b=B2&amp;c=C&amp;d=D2&#39;, String(qd));
+<a name="line789"></a>  qd.set(&#39;a&#39;, &#39;A3&#39;);
+<a name="line790"></a>  assertEquals(&#39;a=A3&amp;b=B&amp;b=B2&amp;c=C&amp;d=D2&#39;, String(qd));
+<a name="line791"></a>  qd.remove(&#39;a&#39;);
+<a name="line792"></a>  qd.set(&#39;a&#39;, &#39;A4&#39;);
+<a name="line793"></a>  // this is different in IE and Mozilla so we cannot use the toString to test
+<a name="line794"></a>  assertEquals(&#39;A4&#39;, qd.get(&#39;a&#39;));
+<a name="line795"></a>}
+<a name="line796"></a>
+<a name="line797"></a>function testQueryDataGet() {
+<a name="line798"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C=extra&#39;);
+<a name="line799"></a>
+<a name="line800"></a>  assertEquals(&#39;A&#39;, qd.get(&#39;a&#39;));
+<a name="line801"></a>  assertEquals(&#39;B&#39;, qd.get(&#39;b&#39;));
+<a name="line802"></a>  assertEquals(&#39;C=extra&#39;, qd.get(&#39;c&#39;));
+<a name="line803"></a>  assertEquals(&#39;Default&#39;, qd.get(&#39;d&#39;, &#39;Default&#39;));
+<a name="line804"></a>
+<a name="line805"></a>  qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C=extra&#39;, null, true);
+<a name="line806"></a>
+<a name="line807"></a>  assertEquals(&#39;A&#39;, qd.get(&#39;A&#39;));
+<a name="line808"></a>  assertEquals(&#39;B&#39;, qd.get(&#39;b&#39;));
+<a name="line809"></a>  assertEquals(&#39;C=extra&#39;, qd.get(&#39;C&#39;));
+<a name="line810"></a>  assertEquals(&#39;Default&#39;, qd.get(&#39;D&#39;, &#39;Default&#39;));
+<a name="line811"></a>
+<a name="line812"></a>  // Some unit tests pass undefined to get method (even though the type
+<a name="line813"></a>  // for key is {string}). This is not caught by JsCompiler as
+<a name="line814"></a>  // tests aren&#39;t typically compiled.
+<a name="line815"></a>  assertUndefined(qd.get(undefined));
+<a name="line816"></a>}
+<a name="line817"></a>
+<a name="line818"></a>
+<a name="line819"></a>function testQueryDataSetValues() {
+<a name="line820"></a>  var qd = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;a=A2&amp;b=B2&amp;c=C&#39;);
+<a name="line821"></a>
+<a name="line822"></a>  qd.setValues(&#39;a&#39;, [&#39;A3&#39;, &#39;A4&#39;, &#39;A5&#39;]);
+<a name="line823"></a>  assertEquals(&#39;a=A3&amp;a=A4&amp;a=A5&amp;b=B&amp;b=B2&amp;c=C&#39;, String(qd));
+<a name="line824"></a>  qd.setValues(&#39;d&#39;, [&#39;D&#39;]);
+<a name="line825"></a>  assertEquals(&#39;a=A3&amp;a=A4&amp;a=A5&amp;b=B&amp;b=B2&amp;c=C&amp;d=D&#39;, String(qd));
+<a name="line826"></a>  qd.setValues(&#39;e&#39;, []);
+<a name="line827"></a>  assertEquals(&#39;a=A3&amp;a=A4&amp;a=A5&amp;b=B&amp;b=B2&amp;c=C&amp;d=D&#39;, String(qd));
+<a name="line828"></a>}
+<a name="line829"></a>
+<a name="line830"></a>function testQueryDataSetIgnoreCase() {
+<a name="line831"></a>  var qd = new goog.Uri.QueryData(&#39;aaA=one&amp;BBb=two&amp;cCc=three&#39;);
+<a name="line832"></a>  assertEquals(&#39;one&#39;, qd.get(&#39;aaA&#39;));
+<a name="line833"></a>  assertEquals(undefined, qd.get(&#39;aaa&#39;));
+<a name="line834"></a>  qd.setIgnoreCase(true);
+<a name="line835"></a>  assertEquals(&#39;one&#39;, qd.get(&#39;aaA&#39;));
+<a name="line836"></a>  assertEquals(&#39;one&#39;, qd.get(&#39;aaa&#39;));
+<a name="line837"></a>  qd.setIgnoreCase(false);
+<a name="line838"></a>  assertEquals(undefined, qd.get(&#39;aaA&#39;));
+<a name="line839"></a>  assertEquals(&#39;one&#39;, qd.get(&#39;aaa&#39;));
+<a name="line840"></a>  qd.add(&#39;DdD&#39;, &#39;four&#39;);
+<a name="line841"></a>  assertEquals(&#39;four&#39;, qd.get(&#39;DdD&#39;));
+<a name="line842"></a>  assertEquals(undefined, qd.get(&#39;ddd&#39;));
+<a name="line843"></a>}
+<a name="line844"></a>
+<a name="line845"></a>function testQueryDataSetIgnoreCaseWithMultipleValues() {
+<a name="line846"></a>  var qd = new goog.Uri.QueryData(&#39;aaA=one&amp;aaA=two&#39;);
+<a name="line847"></a>  qd.setIgnoreCase(true);
+<a name="line848"></a>  assertArrayEquals([&#39;one&#39;, &#39;two&#39;], qd.getValues(&#39;aaA&#39;));
+<a name="line849"></a>  assertArrayEquals([&#39;one&#39;, &#39;two&#39;], qd.getValues(&#39;aaa&#39;));
+<a name="line850"></a>}
+<a name="line851"></a>
+<a name="line852"></a>function testQueryDataExtend() {
+<a name="line853"></a>  var qd1 = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;c=C&#39;);
+<a name="line854"></a>  var qd2 = new goog.Uri.QueryData(&#39;d=D&amp;e=E&#39;);
+<a name="line855"></a>  qd1.extend(qd2);
+<a name="line856"></a>  assertEquals(&#39;a=A&amp;b=B&amp;c=C&amp;d=D&amp;e=E&#39;, String(qd1));
+<a name="line857"></a>
+<a name="line858"></a>  qd1 = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;c=C&#39;);
+<a name="line859"></a>  qd2 = new goog.Uri.QueryData(&#39;d=D&amp;e=E&#39;);
+<a name="line860"></a>  var qd3 = new goog.Uri.QueryData(&#39;f=F&amp;g=G&#39;);
+<a name="line861"></a>  qd1.extend(qd2, qd3);
+<a name="line862"></a>  assertEquals(&#39;a=A&amp;b=B&amp;c=C&amp;d=D&amp;e=E&amp;f=F&amp;g=G&#39;, String(qd1));
+<a name="line863"></a>
+<a name="line864"></a>  qd1 = new goog.Uri.QueryData(&#39;a=A&amp;b=B&amp;c=C&#39;);
+<a name="line865"></a>  qd2 = new goog.Uri.QueryData(&#39;a=A&amp;c=C&#39;);
+<a name="line866"></a>  qd1.extend(qd2);
+<a name="line867"></a>  assertEquals(&#39;a=A&amp;a=A&amp;b=B&amp;c=C&amp;c=C&#39;, String(qd1));
+<a name="line868"></a>}
+<a name="line869"></a>
+<a name="line870"></a>function testQueryDataCreateFromMap() {
+<a name="line871"></a>  assertEquals(&#39;&#39;, String(goog.Uri.QueryData.createFromMap({})));
+<a name="line872"></a>  assertEquals(&#39;a=A&amp;b=B&amp;c=C&#39;,
+<a name="line873"></a>      String(goog.Uri.QueryData.createFromMap({a: &#39;A&#39;, b: &#39;B&#39;, c: &#39;C&#39;})));
+<a name="line874"></a>  assertEquals(&#39;a=foo%26bar&#39;,
+<a name="line875"></a>      String(goog.Uri.QueryData.createFromMap({a: &#39;foo&amp;bar&#39;})));
+<a name="line876"></a>}
+<a name="line877"></a>
+<a name="line878"></a>function testQueryDataCreateFromMapWithArrayValues() {
+<a name="line879"></a>  var obj = {&#39;key&#39;: [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;]};
+<a name="line880"></a>  var qd = goog.Uri.QueryData.createFromMap(obj);
+<a name="line881"></a>  assertEquals(&#39;key=1&amp;key=2&amp;key=3&#39;, qd.toString());
+<a name="line882"></a>  qd.add(&#39;breakCache&#39;, 1);
+<a name="line883"></a>  obj.key.push(&#39;4&#39;);
+<a name="line884"></a>  assertEquals(&#39;key=1&amp;key=2&amp;key=3&amp;breakCache=1&#39;, qd.toString());
+<a name="line885"></a>
+<a name="line886"></a>}
+<a name="line887"></a>
+<a name="line888"></a>function testQueryDataCreateFromKeysValues() {
+<a name="line889"></a>  assertEquals(&#39;&#39;, String(goog.Uri.QueryData.createFromKeysValues([], [])));
+<a name="line890"></a>  assertEquals(&#39;a=A&amp;b=B&amp;c=C&#39;, String(goog.Uri.QueryData.createFromKeysValues(
+<a name="line891"></a>      [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;], [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;])));
+<a name="line892"></a>  assertEquals(&#39;a=A&amp;a=B&amp;a=C&#39;, String(goog.Uri.QueryData.createFromKeysValues(
+<a name="line893"></a>      [&#39;a&#39;, &#39;a&#39;, &#39;a&#39;], [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;])));
+<a name="line894"></a>}
+<a name="line895"></a>
+<a name="line896"></a>function testQueryDataAddMultipleValuesWithSameKey() {
+<a name="line897"></a>  var qd = new goog.Uri.QueryData();
+<a name="line898"></a>  qd.add(&#39;abc&#39;, &#39;v&#39;);
+<a name="line899"></a>  qd.add(&#39;abc&#39;, &#39;v2&#39;);
+<a name="line900"></a>  qd.add(&#39;abc&#39;, &#39;v3&#39;);
+<a name="line901"></a>  assertEquals(&#39;abc=v&amp;abc=v2&amp;abc=v3&#39;, qd.toString());
+<a name="line902"></a>}
+<a name="line903"></a>
+<a name="line904"></a>function testQueryDataAddWithArray() {
+<a name="line905"></a>  var qd = new goog.Uri.QueryData();
+<a name="line906"></a>  qd.add(&#39;abc&#39;, [&#39;v&#39;, &#39;v2&#39;]);
+<a name="line907"></a>  assertEquals(&#39;abc=v%2Cv2&#39;, qd.toString());
+<a name="line908"></a>}
+<a name="line909"></a>
+<a name="line910"></a>function testFragmentEncoding() {
+<a name="line911"></a>  var allowedInFragment = /[A-Za-z0-9\-\._~!$&amp;&#39;()*+,;=:@/?]/g;
+<a name="line912"></a>
+<a name="line913"></a>  var sb = [];
+<a name="line914"></a>  for (var i = 33; i &lt; 500; i++) {  // arbitrarily use first 500 chars.
+<a name="line915"></a>    sb.push(String.fromCharCode(i));
+<a name="line916"></a>  }
+<a name="line917"></a>  var testString = sb.join(&#39;&#39;);
+<a name="line918"></a>
+<a name="line919"></a>  var fragment = new goog.Uri().setFragment(testString).toString();
+<a name="line920"></a>
+<a name="line921"></a>  // Remove first &#39;#&#39; character.
+<a name="line922"></a>  fragment = fragment.substr(1);
+<a name="line923"></a>
+<a name="line924"></a>  // Strip all percent encoded characters, as they&#39;re ok.
+<a name="line925"></a>  fragment = fragment.replace(/%[0-9A-F][0-9A-F]/g, &#39;&#39;);
+<a name="line926"></a>
+<a name="line927"></a>  // Remove allowed characters.
+<a name="line928"></a>  fragment = fragment.replace(allowedInFragment, &#39;&#39;);
+<a name="line929"></a>
+<a name="line930"></a>  // Only illegal characters should remain, which is a fail.
+<a name="line931"></a>  assertEquals(&#39;String should be empty&#39;, 0, fragment.length);
+<a name="line932"></a>
+<a name="line933"></a>}
+<a name="line934"></a>
+<a name="line935"></a>// Tests, that creating URI from components and then
+<a name="line936"></a>// getting the components back yields equal results.
+<a name="line937"></a>// The special attention is payed to test proper encoding
+<a name="line938"></a>// and decoding of URI components.
+<a name="line939"></a>function testComponentsAfterUriCreate() {
+<a name="line940"></a>  var createdUri = new goog.Uri.create(&#39;%40&#39;,  // scheme
+<a name="line941"></a>                                       &#39;%41&#39;,  // user info
+<a name="line942"></a>                                       &#39;%42&#39;,  // domain
+<a name="line943"></a>                                       43,     // port
+<a name="line944"></a>                                       &#39;%44&#39;,  // path
+<a name="line945"></a>                                       &#39;%45&#39;,  // query
+<a name="line946"></a>                                       &#39;%46&#39;); // fragment
+<a name="line947"></a>
+<a name="line948"></a>  assertEquals(&#39;%40&#39;, createdUri.getScheme());
+<a name="line949"></a>  assertEquals(&#39;%41&#39;, createdUri.getUserInfo());
+<a name="line950"></a>  assertEquals(&#39;%42&#39;, createdUri.getDomain());
+<a name="line951"></a>  assertEquals(43, createdUri.getPort());
+<a name="line952"></a>  assertEquals(&#39;%44&#39;, createdUri.getPath());
+<a name="line953"></a>  assertEquals(&#39;%2545&#39;, createdUri.getQuery()); // returns encoded value
+<a name="line954"></a>  assertEquals(&#39;%45&#39;, createdUri.getDecodedQuery());
+<a name="line955"></a>  assertEquals(&#39;%2545&#39;, createdUri.getEncodedQuery());
+<a name="line956"></a>  assertEquals(&#39;%46&#39;, createdUri.getFragment());
+<a name="line957"></a>}
+<a name="line958"></a>
+<a name="line959"></a>// Tests setting the query string and then reading back
+<a name="line960"></a>// query parameter values.
+<a name="line961"></a>function testSetQueryAndGetParameterValue() {
+<a name="line962"></a>  var uri = new goog.Uri();
+<a name="line963"></a>
+<a name="line964"></a>  // Sets query as decoded string.
+<a name="line965"></a>  uri.setQuery(&#39;i=j&amp;k&#39;);
+<a name="line966"></a>  assertEquals(&#39;?i=j&amp;k&#39;, uri.toString());
+<a name="line967"></a>  assertEquals(&#39;i=j&amp;k&#39;, uri.getDecodedQuery());
+<a name="line968"></a>  assertEquals(&#39;i=j&amp;k&#39;, uri.getEncodedQuery());
+<a name="line969"></a>  assertEquals(&#39;i=j&amp;k&#39;, uri.getQuery()); // returns encoded value
+<a name="line970"></a>  assertEquals(&#39;j&#39;, uri.getParameterValue(&#39;i&#39;));
+<a name="line971"></a>  assertEquals(&#39;&#39;, uri.getParameterValue(&#39;k&#39;));
+<a name="line972"></a>
+<a name="line973"></a>  // Sets query as encoded string.
+<a name="line974"></a>  uri.setQuery(&#39;i=j&amp;k&#39;, true);
+<a name="line975"></a>  assertEquals(&#39;?i=j&amp;k&#39;, uri.toString());
+<a name="line976"></a>  assertEquals(&#39;i=j&amp;k&#39;, uri.getDecodedQuery());
+<a name="line977"></a>  assertEquals(&#39;i=j&amp;k&#39;, uri.getEncodedQuery());
+<a name="line978"></a>  assertEquals(&#39;i=j&amp;k&#39;, uri.getQuery()); // returns encoded value
+<a name="line979"></a>  assertEquals(&#39;j&#39;, uri.getParameterValue(&#39;i&#39;));
+<a name="line980"></a>  assertEquals(&#39;&#39;, uri.getParameterValue(&#39;k&#39;));
+<a name="line981"></a>
+<a name="line982"></a>  // Sets query as decoded string.
+<a name="line983"></a>  uri.setQuery(&#39;i=j%26k&#39;);
+<a name="line984"></a>  assertEquals(&#39;?i=j%2526k&#39;, uri.toString());
+<a name="line985"></a>  assertEquals(&#39;i=j%26k&#39;, uri.getDecodedQuery());
+<a name="line986"></a>  assertEquals(&#39;i=j%2526k&#39;, uri.getEncodedQuery());
+<a name="line987"></a>  assertEquals(&#39;i=j%2526k&#39;, uri.getQuery()); // returns encoded value
+<a name="line988"></a>  assertEquals(&#39;j%26k&#39;, uri.getParameterValue(&#39;i&#39;));
+<a name="line989"></a>  assertUndefined(uri.getParameterValue(&#39;k&#39;));
+<a name="line990"></a>
+<a name="line991"></a>  // Sets query as encoded string.
+<a name="line992"></a>  uri.setQuery(&#39;i=j%26k&#39;, true);
+<a name="line993"></a>  assertEquals(&#39;?i=j%26k&#39;, uri.toString());
+<a name="line994"></a>  assertEquals(&#39;i=j&amp;k&#39;, uri.getDecodedQuery());
+<a name="line995"></a>  assertEquals(&#39;i=j%26k&#39;, uri.getEncodedQuery());
+<a name="line996"></a>  assertEquals(&#39;i=j%26k&#39;, uri.getQuery()); // returns encoded value
+<a name="line997"></a>  assertEquals(&#39;j&amp;k&#39;, uri.getParameterValue(&#39;i&#39;));
+<a name="line998"></a>  assertUndefined(uri.getParameterValue(&#39;k&#39;));
+<a name="line999"></a>}
+<a name="line1000"></a>
+<a name="line1001"></a>// Tests setting query parameter values and the reading back the query string.
+<a name="line1002"></a>function testSetParameterValueAndGetQuery() {
+<a name="line1003"></a>  var uri = new goog.Uri();
+<a name="line1004"></a>
+<a name="line1005"></a>  uri.setParameterValue(&#39;a&#39;, &#39;b&amp;c&#39;);
+<a name="line1006"></a>  assertEquals(&#39;?a=b%26c&#39;, uri.toString());
+<a name="line1007"></a>  assertEquals(&#39;a=b&amp;c&#39;, uri.getDecodedQuery());
+<a name="line1008"></a>  assertEquals(&#39;a=b%26c&#39;, uri.getEncodedQuery());
+<a name="line1009"></a>  assertEquals(&#39;a=b%26c&#39;, uri.getQuery()); // returns encoded value
+<a name="line1010"></a>
+<a name="line1011"></a>  uri.setParameterValue(&#39;a&#39;, &#39;b%26c&#39;);
+<a name="line1012"></a>  assertEquals(&#39;?a=b%2526c&#39;, uri.toString());
+<a name="line1013"></a>  assertEquals(&#39;a=b%26c&#39;, uri.getDecodedQuery());
+<a name="line1014"></a>  assertEquals(&#39;a=b%2526c&#39;, uri.getEncodedQuery());
+<a name="line1015"></a>  assertEquals(&#39;a=b%2526c&#39;, uri.getQuery()); // returns encoded value
+<a name="line1016"></a>}
+<a name="line1017"></a>
+<a name="line1018"></a>
+<a name="line1019"></a>// Tests that building a URI with a query string and then reading it back
+<a name="line1020"></a>// gives the same result.
+<a name="line1021"></a>function testQueryNotModified() {
+<a name="line1022"></a>  assertEquals(&#39;?foo&#39;, new goog.Uri(&#39;?foo&#39;).toString());
+<a name="line1023"></a>  assertEquals(&#39;?foo=&#39;, new goog.Uri(&#39;?foo=&#39;).toString());
+<a name="line1024"></a>  assertEquals(&#39;?foo=bar&#39;, new goog.Uri(&#39;?foo=bar&#39;).toString());
+<a name="line1025"></a>  assertEquals(&#39;?&amp;=&amp;=&amp;&#39;, new goog.Uri(&#39;?&amp;=&amp;=&amp;&#39;).toString());
+<a name="line1026"></a>}
+<a name="line1027"></a>
+<a name="line1028"></a>function testRelativePathNotUnescapedWithColon() {
+<a name="line1029"></a>  assertEquals(&#39;javascript%3aalert(1)&#39;,
+<a name="line1030"></a>               new goog.Uri(&#39;javascript%3aalert(1)&#39;).toString());
+<a name="line1031"></a>}
+<a name="line1032"></a>
+<a name="line1033"></a>function testAbsolutePathUnescapedWithColon() {
+<a name="line1034"></a>  assertEquals(&#39;/javascript:alert(1)&#39;,
+<a name="line1035"></a>               new goog.Uri(&#39;/javascript%3aalert(1)&#39;).toString());
+<a name="line1036"></a>  assertEquals(&#39;http://www.foo.bar/path:with:colon/x&#39;,
+<a name="line1037"></a>               new goog.Uri(&#39;http://www.foo.bar/path:with:colon/x&#39;).toString());
+<a name="line1038"></a>  assertEquals(&#39;//www.foo.bar/path:with:colon/x&#39;,
+<a name="line1039"></a>               new goog.Uri(&#39;//www.foo.bar/path:with:colon/x&#39;).toString());
+<a name="line1040"></a>}
+<a name="line1041"></a>
+<a name="line1042"></a>// verifies bug http://b/9821952
+<a name="line1043"></a>function testGetQueryForEmptyString() {
+<a name="line1044"></a>  var queryData = new goog.Uri.QueryData(&#39;a=b&amp;c=d&#39;);
+<a name="line1045"></a>  assertArrayEquals([&#39;b&#39;, &#39;d&#39;], queryData.getValues());
+<a name="line1046"></a>  assertArrayEquals([], queryData.getValues(&#39;&#39;));
+<a name="line1047"></a>
+<a name="line1048"></a>  queryData = new goog.Uri.QueryData(&#39;a=b&amp;c=d&amp;=e&#39;);
+<a name="line1049"></a>  assertArrayEquals([&#39;e&#39;], queryData.getValues(&#39;&#39;));
+<a name="line1050"></a>}
+<a name="line1051"></a>
+<a name="line1052"></a>function assertDotRemovedEquals(expected, path) {
+<a name="line1053"></a>  assertEquals(expected, goog.Uri.removeDotSegments(path));
+<a name="line1054"></a>}
+<a name="line1055"></a>
+<a name="line1056"></a>function assertResolvedEquals(expected, base, other) {
+<a name="line1057"></a>  assertEquals(expected, goog.Uri.resolve(base, other).toString());
+<a name="line1058"></a>}
+</pre>
+
+
+</body>
+</html>

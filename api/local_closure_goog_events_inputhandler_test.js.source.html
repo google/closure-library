@@ -1,0 +1,146 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>inputhandler_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_events_inputhandler_test.js.html">inputhandler_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.events.InputHandlerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.events.InputHandlerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events.InputHandler&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.events&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.events.Event&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line27"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line28"></a>
+<a name="line29"></a>var inputHandler;
+<a name="line30"></a>var eventHandler;
+<a name="line31"></a>
+<a name="line32"></a>function setUp() {
+<a name="line33"></a>  eventHandler = new goog.events.EventHandler();
+<a name="line34"></a>}
+<a name="line35"></a>
+<a name="line36"></a>function tearDown() {
+<a name="line37"></a>  goog.dispose(inputHandler);
+<a name="line38"></a>  goog.dispose(eventHandler);
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>function testInputWithPlaceholder() {
+<a name="line42"></a>  var input = goog.dom.getElement(&#39;input-w-placeholder&#39;);
+<a name="line43"></a>  inputHandler = new goog.events.InputHandler(input);
+<a name="line44"></a>  var callback = listenToInput(inputHandler);
+<a name="line45"></a>  fireFakeInputEvent(input);
+<a name="line46"></a>  assertEquals(0, callback.getCallCount());
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>function testInputWithPlaceholder_withValue() {
+<a name="line50"></a>  var input = goog.dom.getElement(&#39;input-w-placeholder&#39;);
+<a name="line51"></a>  inputHandler = new goog.events.InputHandler(input);
+<a name="line52"></a>  var callback = listenToInput(inputHandler);
+<a name="line53"></a>  input.value = &#39;foo&#39;;
+<a name="line54"></a>  fireFakeInputEvent(input);
+<a name="line55"></a>  assertEquals(0, callback.getCallCount());
+<a name="line56"></a>}
+<a name="line57"></a>
+<a name="line58"></a>function testInputWithPlaceholder_someKeys() {
+<a name="line59"></a>  var input = goog.dom.getElement(&#39;input-w-placeholder&#39;);
+<a name="line60"></a>  inputHandler = new goog.events.InputHandler(input);
+<a name="line61"></a>  var callback = listenToInput(inputHandler);
+<a name="line62"></a>  input.focus();
+<a name="line63"></a>  input.value = &#39;foo&#39;;
+<a name="line64"></a>
+<a name="line65"></a>  fireInputEvent(input, goog.events.KeyCodes.M);
+<a name="line66"></a>  assertEquals(1, callback.getCallCount());
+<a name="line67"></a>}
+<a name="line68"></a>
+<a name="line69"></a>function listenToInput(inputHandler) {
+<a name="line70"></a>  var callback = goog.testing.recordFunction();
+<a name="line71"></a>  eventHandler.listen(
+<a name="line72"></a>      inputHandler,
+<a name="line73"></a>      goog.events.InputHandler.EventType.INPUT,
+<a name="line74"></a>      callback);
+<a name="line75"></a>  return callback;
+<a name="line76"></a>}
+<a name="line77"></a>
+<a name="line78"></a>function fireFakeInputEvent(input) {
+<a name="line79"></a>  // Simulate the input event that IE fires on focus when a placeholder
+<a name="line80"></a>  // is present.
+<a name="line81"></a>  input.focus();
+<a name="line82"></a>  if (goog.userAgent.IE &amp;&amp; goog.userAgent.isVersionOrHigher(10)) {
+<a name="line83"></a>    // IE fires an input event with keycode 0
+<a name="line84"></a>    fireInputEvent(input, 0);
+<a name="line85"></a>  }
+<a name="line86"></a>}
+<a name="line87"></a>
+<a name="line88"></a>function fireInputEvent(input, keyCode) {
+<a name="line89"></a>  var inputEvent = new goog.testing.events.Event(
+<a name="line90"></a>      goog.events.EventType.INPUT,
+<a name="line91"></a>      input);
+<a name="line92"></a>  inputEvent.keyCode = keyCode;
+<a name="line93"></a>  inputEvent.charCode = keyCode;
+<a name="line94"></a>  goog.testing.events.fireBrowserEvent(inputEvent);
+<a name="line95"></a>}
+</pre>
+
+
+</body>
+</html>

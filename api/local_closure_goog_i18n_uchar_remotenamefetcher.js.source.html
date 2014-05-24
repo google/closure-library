@@ -1,0 +1,333 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>remotenamefetcher.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_uchar_remotenamefetcher.js.html">remotenamefetcher.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Object which fetches Unicode codepoint names from a remote data
+<a name="line17"></a> * source. This data source should accept two parameters:
+<a name="line18"></a> * &lt;ol&gt;
+<a name="line19"></a> * &lt;li&gt;c - the list of codepoints in hexadecimal format
+<a name="line20"></a> * &lt;li&gt;p - the name property
+<a name="line21"></a> * &lt;/ol&gt;
+<a name="line22"></a> * and return a JSON object representation of the result.
+<a name="line23"></a> * For example, calling this data source with the following URL:
+<a name="line24"></a> * http://datasource?c=50,ff,102bd&amp;p=name
+<a name="line25"></a> * Should return a JSON object which looks like this:
+<a name="line26"></a> * &lt;pre&gt;
+<a name="line27"></a> * {&quot;50&quot;:{&quot;name&quot;:&quot;LATIN CAPITAL LETTER P&quot;},
+<a name="line28"></a> * &quot;ff&quot;:{&quot;name&quot;:&quot;LATIN SMALL LETTER Y WITH DIAERESIS&quot;},
+<a name="line29"></a> * &quot;102bd&quot;:{&quot;name&quot;:&quot;CARIAN LETTER K2&quot;}}
+<a name="line30"></a> * &lt;/pre&gt;.
+<a name="line31"></a> */
+<a name="line32"></a>
+<a name="line33"></a>goog.provide(&#39;goog.i18n.uChar.RemoteNameFetcher&#39;);
+<a name="line34"></a>
+<a name="line35"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line36"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line37"></a>goog.require(&#39;goog.i18n.uChar&#39;);
+<a name="line38"></a>goog.require(&#39;goog.i18n.uChar.NameFetcher&#39;);
+<a name="line39"></a>goog.require(&#39;goog.log&#39;);
+<a name="line40"></a>goog.require(&#39;goog.net.XhrIo&#39;);
+<a name="line41"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * Builds the RemoteNameFetcher object. This object retrieves codepoint names
+<a name="line47"></a> * from a remote data source.
+<a name="line48"></a> *
+<a name="line49"></a> * @param {string} dataSourceUri URI to the data source.
+<a name="line50"></a> * @constructor
+<a name="line51"></a> * @implements {goog.i18n.uChar.NameFetcher}
+<a name="line52"></a> * @extends {goog.Disposable}
+<a name="line53"></a> * @final
+<a name="line54"></a> */
+<a name="line55"></a>goog.i18n.uChar.RemoteNameFetcher = function(dataSourceUri) {
+<a name="line56"></a>  goog.i18n.uChar.RemoteNameFetcher.base(this, &#39;constructor&#39;);
+<a name="line57"></a>
+<a name="line58"></a>  /**
+<a name="line59"></a>   * XHRIo object for prefetch() asynchronous calls.
+<a name="line60"></a>   *
+<a name="line61"></a>   * @type {!goog.net.XhrIo}
+<a name="line62"></a>   * @private
+<a name="line63"></a>   */
+<a name="line64"></a>  this.prefetchXhrIo_ = new goog.net.XhrIo();
+<a name="line65"></a>
+<a name="line66"></a>  /**
+<a name="line67"></a>   * XHRIo object for getName() asynchronous calls.
+<a name="line68"></a>   *
+<a name="line69"></a>   * @type {!goog.net.XhrIo}
+<a name="line70"></a>   * @private
+<a name="line71"></a>   */
+<a name="line72"></a>  this.getNameXhrIo_ = new goog.net.XhrIo();
+<a name="line73"></a>
+<a name="line74"></a>  /**
+<a name="line75"></a>   * URI to the data.
+<a name="line76"></a>   *
+<a name="line77"></a>   * @type {string}
+<a name="line78"></a>   * @private
+<a name="line79"></a>   */
+<a name="line80"></a>  this.dataSourceUri_ = dataSourceUri;
+<a name="line81"></a>
+<a name="line82"></a>  /**
+<a name="line83"></a>   * A cache of all the collected names from the server.
+<a name="line84"></a>   *
+<a name="line85"></a>   * @type {!goog.structs.Map}
+<a name="line86"></a>   * @private
+<a name="line87"></a>   */
+<a name="line88"></a>  this.charNames_ = new goog.structs.Map();
+<a name="line89"></a>};
+<a name="line90"></a>goog.inherits(goog.i18n.uChar.RemoteNameFetcher, goog.Disposable);
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Key to the listener on XHR for prefetch(). Used to clear previous listeners.
+<a name="line95"></a> *
+<a name="line96"></a> * @type {goog.events.Key}
+<a name="line97"></a> * @private
+<a name="line98"></a> */
+<a name="line99"></a>goog.i18n.uChar.RemoteNameFetcher.prototype.prefetchLastListenerKey_;
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Key to the listener on XHR for getName(). Used to clear previous listeners.
+<a name="line104"></a> *
+<a name="line105"></a> * @type {goog.events.Key}
+<a name="line106"></a> * @private
+<a name="line107"></a> */
+<a name="line108"></a>goog.i18n.uChar.RemoteNameFetcher.prototype.getNameLastListenerKey_;
+<a name="line109"></a>
+<a name="line110"></a>
+<a name="line111"></a>/**
+<a name="line112"></a> * A reference to the RemoteNameFetcher logger.
+<a name="line113"></a> *
+<a name="line114"></a> * @type {goog.log.Logger}
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.i18n.uChar.RemoteNameFetcher.logger_ =
+<a name="line118"></a>    goog.log.getLogger(&#39;goog.i18n.uChar.RemoteNameFetcher&#39;);
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/** @override */
+<a name="line124"></a>goog.i18n.uChar.RemoteNameFetcher.prototype.disposeInternal = function() {
+<a name="line125"></a>  goog.i18n.uChar.RemoteNameFetcher.base(this, &#39;disposeInternal&#39;);
+<a name="line126"></a>  this.prefetchXhrIo_.dispose();
+<a name="line127"></a>  this.getNameXhrIo_.dispose();
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/** @override */
+<a name="line132"></a>goog.i18n.uChar.RemoteNameFetcher.prototype.prefetch = function(characters) {
+<a name="line133"></a>  // Abort the current request if there is one
+<a name="line134"></a>  if (this.prefetchXhrIo_.isActive()) {
+<a name="line135"></a>    goog.i18n.uChar.RemoteNameFetcher.logger_.
+<a name="line136"></a>        info(&#39;Aborted previous prefetch() call for new incoming request&#39;);
+<a name="line137"></a>    this.prefetchXhrIo_.abort();
+<a name="line138"></a>  }
+<a name="line139"></a>  if (this.prefetchLastListenerKey_) {
+<a name="line140"></a>    goog.events.unlistenByKey(this.prefetchLastListenerKey_);
+<a name="line141"></a>  }
+<a name="line142"></a>
+<a name="line143"></a>  // Set up new listener
+<a name="line144"></a>  var preFetchCallback = goog.bind(this.prefetchCallback_, this);
+<a name="line145"></a>  this.prefetchLastListenerKey_ = goog.events.listenOnce(this.prefetchXhrIo_,
+<a name="line146"></a>      goog.net.EventType.COMPLETE, preFetchCallback);
+<a name="line147"></a>
+<a name="line148"></a>  this.fetch_(goog.i18n.uChar.RemoteNameFetcher.RequestType_.BASE_88,
+<a name="line149"></a>      characters, this.prefetchXhrIo_);
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * Callback on completion of the prefetch operation.
+<a name="line155"></a> *
+<a name="line156"></a> * @private
+<a name="line157"></a> */
+<a name="line158"></a>goog.i18n.uChar.RemoteNameFetcher.prototype.prefetchCallback_ = function() {
+<a name="line159"></a>  this.processResponse_(this.prefetchXhrIo_);
+<a name="line160"></a>};
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/** @override */
+<a name="line164"></a>goog.i18n.uChar.RemoteNameFetcher.prototype.getName = function(character,
+<a name="line165"></a>    callback) {
+<a name="line166"></a>  var codepoint = goog.i18n.uChar.toCharCode(character).toString(16);
+<a name="line167"></a>
+<a name="line168"></a>  if (this.charNames_.containsKey(codepoint)) {
+<a name="line169"></a>    var name = /** @type {string} */ (this.charNames_.get(codepoint));
+<a name="line170"></a>    callback(name);
+<a name="line171"></a>    return;
+<a name="line172"></a>  }
+<a name="line173"></a>
+<a name="line174"></a>  // Abort the current request if there is one
+<a name="line175"></a>  if (this.getNameXhrIo_.isActive()) {
+<a name="line176"></a>    goog.i18n.uChar.RemoteNameFetcher.logger_.
+<a name="line177"></a>        info(&#39;Aborted previous getName() call for new incoming request&#39;);
+<a name="line178"></a>    this.getNameXhrIo_.abort();
+<a name="line179"></a>  }
+<a name="line180"></a>  if (this.getNameLastListenerKey_) {
+<a name="line181"></a>    goog.events.unlistenByKey(this.getNameLastListenerKey_);
+<a name="line182"></a>  }
+<a name="line183"></a>
+<a name="line184"></a>  // Set up new listener
+<a name="line185"></a>  var getNameCallback = goog.bind(this.getNameCallback_, this, codepoint,
+<a name="line186"></a>      callback);
+<a name="line187"></a>  this.getNameLastListenerKey_ = goog.events.listenOnce(this.getNameXhrIo_,
+<a name="line188"></a>      goog.net.EventType.COMPLETE, getNameCallback);
+<a name="line189"></a>
+<a name="line190"></a>  this.fetch_(goog.i18n.uChar.RemoteNameFetcher.RequestType_.CODEPOINT,
+<a name="line191"></a>      codepoint, this.getNameXhrIo_);
+<a name="line192"></a>};
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * Callback on completion of the getName operation.
+<a name="line197"></a> *
+<a name="line198"></a> * @param {string} codepoint The codepoint in hexadecimal format.
+<a name="line199"></a> * @param {function(?string)} callback The callback function called when the
+<a name="line200"></a> *     name retrieval is complete, contains a single string parameter with the
+<a name="line201"></a> *     codepoint name, this parameter will be null if the character name is not
+<a name="line202"></a> *     defined.
+<a name="line203"></a> * @private
+<a name="line204"></a> */
+<a name="line205"></a>goog.i18n.uChar.RemoteNameFetcher.prototype.getNameCallback_ = function(
+<a name="line206"></a>    codepoint, callback) {
+<a name="line207"></a>  this.processResponse_(this.getNameXhrIo_);
+<a name="line208"></a>  var name = /** @type {?string} */ (this.charNames_.get(codepoint, null));
+<a name="line209"></a>  callback(name);
+<a name="line210"></a>};
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Process the response received from the server and store results in the cache.
+<a name="line215"></a> *
+<a name="line216"></a> * @param {!goog.net.XhrIo} xhrIo The XhrIo object used to make the request.
+<a name="line217"></a> * @private
+<a name="line218"></a> */
+<a name="line219"></a>goog.i18n.uChar.RemoteNameFetcher.prototype.processResponse_ = function(xhrIo) {
+<a name="line220"></a>  if (!xhrIo.isSuccess()) {
+<a name="line221"></a>    goog.log.error(goog.i18n.uChar.RemoteNameFetcher.logger_,
+<a name="line222"></a>        &#39;Problem with data source: &#39; + xhrIo.getLastError());
+<a name="line223"></a>    return;
+<a name="line224"></a>  }
+<a name="line225"></a>  var result = xhrIo.getResponseJson();
+<a name="line226"></a>  for (var codepoint in result) {
+<a name="line227"></a>    if (result[codepoint].hasOwnProperty(&#39;name&#39;)) {
+<a name="line228"></a>      this.charNames_.set(codepoint, result[codepoint][&#39;name&#39;]);
+<a name="line229"></a>    }
+<a name="line230"></a>  }
+<a name="line231"></a>};
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>/**
+<a name="line235"></a> * Enum for the different request types.
+<a name="line236"></a> *
+<a name="line237"></a> * @enum {string}
+<a name="line238"></a> * @private
+<a name="line239"></a> */
+<a name="line240"></a>goog.i18n.uChar.RemoteNameFetcher.RequestType_ = {
+<a name="line241"></a>
+<a name="line242"></a>  /**
+<a name="line243"></a>   * Request type that uses a base 88 string containing a set of codepoints to
+<a name="line244"></a>   * be fetched from the server (see goog.i18n.charpickerdata for more
+<a name="line245"></a>   * information on b88).
+<a name="line246"></a>   */
+<a name="line247"></a>  BASE_88: &#39;b88&#39;,
+<a name="line248"></a>
+<a name="line249"></a>  /**
+<a name="line250"></a>   * Request type that uses a a string of comma separated codepoint values.
+<a name="line251"></a>   */
+<a name="line252"></a>  CODEPOINT: &#39;c&#39;
+<a name="line253"></a>};
+<a name="line254"></a>
+<a name="line255"></a>
+<a name="line256"></a>/**
+<a name="line257"></a> * Fetches a set of codepoint names from the data source.
+<a name="line258"></a> *
+<a name="line259"></a> * @param {!goog.i18n.uChar.RemoteNameFetcher.RequestType_} requestType The
+<a name="line260"></a> *     request type of the operation. This parameter specifies how the server is
+<a name="line261"></a> *     called to fetch a particular set of codepoints.
+<a name="line262"></a> * @param {string} requestInput The input to the request, this is the value that
+<a name="line263"></a> *     is passed onto the server to complete the request.
+<a name="line264"></a> * @param {!goog.net.XhrIo} xhrIo The XHRIo object to execute the server call.
+<a name="line265"></a> * @private
+<a name="line266"></a> */
+<a name="line267"></a>goog.i18n.uChar.RemoteNameFetcher.prototype.fetch_ = function(requestType,
+<a name="line268"></a>    requestInput, xhrIo) {
+<a name="line269"></a>  var url = new goog.Uri(this.dataSourceUri_);
+<a name="line270"></a>  url.setParameterValue(requestType, requestInput);
+<a name="line271"></a>  url.setParameterValue(&#39;p&#39;, &#39;name&#39;);
+<a name="line272"></a>  goog.log.info(goog.i18n.uChar.RemoteNameFetcher.logger_, &#39;Request: &#39; +
+<a name="line273"></a>      url.toString());
+<a name="line274"></a>  xhrIo.send(url);
+<a name="line275"></a>};
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a>/** @override */
+<a name="line279"></a>goog.i18n.uChar.RemoteNameFetcher.prototype.isNameAvailable = function(
+<a name="line280"></a>    character) {
+<a name="line281"></a>  return true;
+<a name="line282"></a>};
+</pre>
+
+
+</body>
+</html>

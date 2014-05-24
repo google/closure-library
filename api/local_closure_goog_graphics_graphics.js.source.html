@@ -1,0 +1,193 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>graphics.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_graphics_graphics.js.html">graphics.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Graphics utility functions and factory methods.
+<a name="line18"></a> * @author arv@google.com (Erik Arvidsson)
+<a name="line19"></a> * @see ../demos/graphics/advancedcoordinates.html
+<a name="line20"></a> * @see ../demos/graphics/advancedcoordinates2.html
+<a name="line21"></a> * @see ../demos/graphics/basicelements.html
+<a name="line22"></a> * @see ../demos/graphics/events.html
+<a name="line23"></a> * @see ../demos/graphics/modifyelements.html
+<a name="line24"></a> * @see ../demos/graphics/tiger.html
+<a name="line25"></a> */
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>goog.provide(&#39;goog.graphics&#39;);
+<a name="line29"></a>
+<a name="line30"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line31"></a>goog.require(&#39;goog.graphics.CanvasGraphics&#39;);
+<a name="line32"></a>goog.require(&#39;goog.graphics.SvgGraphics&#39;);
+<a name="line33"></a>goog.require(&#39;goog.graphics.VmlGraphics&#39;);
+<a name="line34"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * Returns an instance of goog.graphics.AbstractGraphics that knows how to draw
+<a name="line39"></a> * for the current platform (A factory for the proper Graphics implementation)
+<a name="line40"></a> * @param {string|number} width The width in pixels.  Strings
+<a name="line41"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
+<a name="line42"></a> * @param {string|number} height The height in pixels.  Strings
+<a name="line43"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
+<a name="line44"></a> * @param {?number=} opt_coordWidth The optional coordinate width - if
+<a name="line45"></a> *     omitted or null, defaults to same as width.
+<a name="line46"></a> * @param {?number=} opt_coordHeight The optional coordinate height - if
+<a name="line47"></a> *     omitted or null, defaults to same as height.
+<a name="line48"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
+<a name="line49"></a> *     document we want to render in.
+<a name="line50"></a> * @return {!goog.graphics.AbstractGraphics} The created instance.
+<a name="line51"></a> * @deprecated goog.graphics is deprecated. It existed to abstract over browser
+<a name="line52"></a> *     differences before the canvas tag was widely supported.  See
+<a name="line53"></a> *     http://en.wikipedia.org/wiki/Canvas_element for details.
+<a name="line54"></a> */
+<a name="line55"></a>goog.graphics.createGraphics = function(width, height, opt_coordWidth,
+<a name="line56"></a>    opt_coordHeight, opt_domHelper) {
+<a name="line57"></a>  var graphics;
+<a name="line58"></a>  // On IE9 and above, SVG is available, except in compatibility mode.
+<a name="line59"></a>  // We check createElementNS on document object that is not exist in
+<a name="line60"></a>  // compatibility mode.
+<a name="line61"></a>  if (goog.userAgent.IE &amp;&amp;
+<a name="line62"></a>      (!goog.userAgent.isVersionOrHigher(&#39;9&#39;) ||
+<a name="line63"></a>       !(opt_domHelper || goog.dom.getDomHelper()).
+<a name="line64"></a>           getDocument().createElementNS)) {
+<a name="line65"></a>    graphics = new goog.graphics.VmlGraphics(width, height,
+<a name="line66"></a>        opt_coordWidth, opt_coordHeight, opt_domHelper);
+<a name="line67"></a>  } else if (goog.userAgent.WEBKIT &amp;&amp;
+<a name="line68"></a>             (!goog.userAgent.isVersionOrHigher(&#39;420&#39;) ||
+<a name="line69"></a>              goog.userAgent.MOBILE)) {
+<a name="line70"></a>    graphics = new goog.graphics.CanvasGraphics(width, height,
+<a name="line71"></a>        opt_coordWidth, opt_coordHeight, opt_domHelper);
+<a name="line72"></a>  } else {
+<a name="line73"></a>    graphics = new goog.graphics.SvgGraphics(width, height,
+<a name="line74"></a>        opt_coordWidth, opt_coordHeight, opt_domHelper);
+<a name="line75"></a>  }
+<a name="line76"></a>
+<a name="line77"></a>  // Create the dom now, because all drawing methods require that the
+<a name="line78"></a>  // main dom element (the canvas) has been already created.
+<a name="line79"></a>  graphics.createDom();
+<a name="line80"></a>
+<a name="line81"></a>  return graphics;
+<a name="line82"></a>};
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Returns an instance of goog.graphics.AbstractGraphics that knows how to draw
+<a name="line87"></a> * for the current platform (A factory for the proper Graphics implementation)
+<a name="line88"></a> * @param {string|number} width The width in pixels.  Strings
+<a name="line89"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
+<a name="line90"></a> * @param {string|number} height The height in pixels.   Strings
+<a name="line91"></a> *     expressing percentages of parent with (e.g. &#39;80%&#39;) are also accepted.
+<a name="line92"></a> * @param {?number=} opt_coordWidth The optional coordinate width, defaults to
+<a name="line93"></a> *     same as width.
+<a name="line94"></a> * @param {?number=} opt_coordHeight The optional coordinate height, defaults to
+<a name="line95"></a> *     same as height.
+<a name="line96"></a> * @param {goog.dom.DomHelper=} opt_domHelper The DOM helper object for the
+<a name="line97"></a> *     document we want to render in.
+<a name="line98"></a> * @return {!goog.graphics.AbstractGraphics} The created instance.
+<a name="line99"></a> * @deprecated goog.graphics is deprecated. It existed to abstract over browser
+<a name="line100"></a> *     differences before the canvas tag was widely supported.  See
+<a name="line101"></a> *     http://en.wikipedia.org/wiki/Canvas_element for details.
+<a name="line102"></a> */
+<a name="line103"></a>goog.graphics.createSimpleGraphics = function(width, height,
+<a name="line104"></a>    opt_coordWidth, opt_coordHeight, opt_domHelper) {
+<a name="line105"></a>  if (goog.userAgent.MAC &amp;&amp; goog.userAgent.GECKO &amp;&amp;
+<a name="line106"></a>      !goog.userAgent.isVersionOrHigher(&#39;1.9a&#39;)) {
+<a name="line107"></a>    // Canvas is 6x faster than SVG on Mac FF 2.0
+<a name="line108"></a>    var graphics = new goog.graphics.CanvasGraphics(
+<a name="line109"></a>        width, height, opt_coordWidth, opt_coordHeight,
+<a name="line110"></a>        opt_domHelper);
+<a name="line111"></a>    graphics.createDom();
+<a name="line112"></a>    return graphics;
+<a name="line113"></a>  }
+<a name="line114"></a>
+<a name="line115"></a>  // Otherwise, defer to normal graphics object creation.
+<a name="line116"></a>  return goog.graphics.createGraphics(width, height, opt_coordWidth,
+<a name="line117"></a>      opt_coordHeight, opt_domHelper);
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Static function to check if the current browser has Graphics support.
+<a name="line123"></a> * @return {boolean} True if the current browser has Graphics support.
+<a name="line124"></a> * @deprecated goog.graphics is deprecated. It existed to abstract over browser
+<a name="line125"></a> *     differences before the canvas tag was widely supported.  See
+<a name="line126"></a> *     http://en.wikipedia.org/wiki/Canvas_element for details.
+<a name="line127"></a> */
+<a name="line128"></a>goog.graphics.isBrowserSupported = function() {
+<a name="line129"></a>  if (goog.userAgent.IE) {
+<a name="line130"></a>    return goog.userAgent.isVersionOrHigher(&#39;5.5&#39;);
+<a name="line131"></a>  }
+<a name="line132"></a>  if (goog.userAgent.GECKO) {
+<a name="line133"></a>    return goog.userAgent.isVersionOrHigher(&#39;1.8&#39;);
+<a name="line134"></a>  }
+<a name="line135"></a>  if (goog.userAgent.OPERA) {
+<a name="line136"></a>    return goog.userAgent.isVersionOrHigher(&#39;9.0&#39;);
+<a name="line137"></a>  }
+<a name="line138"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line139"></a>    return goog.userAgent.isVersionOrHigher(&#39;412&#39;);
+<a name="line140"></a>  }
+<a name="line141"></a>  return false;
+<a name="line142"></a>};
+</pre>
+
+
+</body>
+</html>

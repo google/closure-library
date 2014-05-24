@@ -1,0 +1,158 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>portoperator_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_messaging_portoperator_test.js.html">portoperator_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.messaging.PortOperatorTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.messaging.PortOperatorTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.messaging.PortNetwork&#39;);
+<a name="line19"></a>goog.require(&#39;goog.messaging.PortOperator&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.MockControl&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.messaging.MockMessageChannel&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.messaging.MockMessagePort&#39;);
+<a name="line25"></a>
+<a name="line26"></a>var stubs;
+<a name="line27"></a>
+<a name="line28"></a>var mockControl;
+<a name="line29"></a>var mockChannel1;
+<a name="line30"></a>var mockChannel2;
+<a name="line31"></a>var operator;
+<a name="line32"></a>
+<a name="line33"></a>function setUpPage() {
+<a name="line34"></a>  stubs = new goog.testing.PropertyReplacer();
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function setUp() {
+<a name="line38"></a>  mockControl = new goog.testing.MockControl();
+<a name="line39"></a>  var index = 0;
+<a name="line40"></a>  stubs.set(goog.global, &#39;MessageChannel&#39;, function() {
+<a name="line41"></a>    this.port1 = makeMockPort(index, 1);
+<a name="line42"></a>    this.port2 = makeMockPort(index, 2);
+<a name="line43"></a>    index += 1;
+<a name="line44"></a>  });
+<a name="line45"></a>
+<a name="line46"></a>  mockChannel1 = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line47"></a>  mockChannel2 = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line48"></a>  operator = new goog.messaging.PortOperator(&#39;operator&#39;);
+<a name="line49"></a>  operator.addPort(&#39;1&#39;, mockChannel1);
+<a name="line50"></a>  operator.addPort(&#39;2&#39;, mockChannel2);
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>function tearDown() {
+<a name="line54"></a>  goog.dispose(operator);
+<a name="line55"></a>  mockControl.$verifyAll();
+<a name="line56"></a>  stubs.reset();
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>function makeMockPort(index, port) {
+<a name="line60"></a>  return new goog.testing.messaging.MockMessagePort(
+<a name="line61"></a>      {index: index, port: port}, mockControl);
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>function testConnectSelfToPortViaRequestConnection() {
+<a name="line65"></a>  mockChannel1.send(goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE, {
+<a name="line66"></a>    success: true, name: &#39;operator&#39;, port: makeMockPort(0, 1)
+<a name="line67"></a>  });
+<a name="line68"></a>  mockControl.$replayAll();
+<a name="line69"></a>  mockChannel1.receive(
+<a name="line70"></a>      goog.messaging.PortNetwork.REQUEST_CONNECTION_SERVICE, &#39;operator&#39;);
+<a name="line71"></a>  var port = operator.dial(&#39;1&#39;).port_;
+<a name="line72"></a>  assertObjectEquals({index: 0, port: 2}, port.id);
+<a name="line73"></a>  assertEquals(true, port.started);
+<a name="line74"></a>}
+<a name="line75"></a>
+<a name="line76"></a>function testConnectSelfToPortViaGetPort() {
+<a name="line77"></a>  mockChannel1.send(goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE, {
+<a name="line78"></a>    success: true, name: &#39;operator&#39;, port: makeMockPort(0, 1)
+<a name="line79"></a>  });
+<a name="line80"></a>  mockControl.$replayAll();
+<a name="line81"></a>  var port = operator.dial(&#39;1&#39;).port_;
+<a name="line82"></a>  assertObjectEquals({index: 0, port: 2}, port.id);
+<a name="line83"></a>  assertEquals(true, port.started);
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>function testConnectTwoCallers() {
+<a name="line87"></a>  mockChannel1.send(goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE, {
+<a name="line88"></a>    success: true, name: &#39;2&#39;, port: makeMockPort(0, 1)
+<a name="line89"></a>  });
+<a name="line90"></a>  mockChannel2.send(goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE, {
+<a name="line91"></a>    success: true, name: &#39;1&#39;, port: makeMockPort(0, 2)
+<a name="line92"></a>  });
+<a name="line93"></a>  mockControl.$replayAll();
+<a name="line94"></a>  mockChannel1.receive(
+<a name="line95"></a>      goog.messaging.PortNetwork.REQUEST_CONNECTION_SERVICE, &#39;2&#39;);
+<a name="line96"></a>}
+<a name="line97"></a>
+<a name="line98"></a>function testConnectCallerToNonexistentCaller() {
+<a name="line99"></a>  mockChannel1.send(goog.messaging.PortNetwork.GRANT_CONNECTION_SERVICE, {
+<a name="line100"></a>    success: false,
+<a name="line101"></a>    message: &#39;Port &quot;1&quot; requested a connection to port &quot;no&quot;, which doesn\&#39;t &#39; +
+<a name="line102"></a>        &#39;exist&#39;
+<a name="line103"></a>  });
+<a name="line104"></a>  mockControl.$replayAll();
+<a name="line105"></a>  mockChannel1.receive(
+<a name="line106"></a>      goog.messaging.PortNetwork.REQUEST_CONNECTION_SERVICE, &#39;no&#39;);
+<a name="line107"></a>}
+</pre>
+
+
+</body>
+</html>

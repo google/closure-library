@@ -1,0 +1,271 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>vec2_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_math_vec2_test.js.html">vec2_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.math.Vec2Test&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.math.Vec2Test&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.math.Vec2&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>function assertVectorEquals(a, b) {
+<a name="line22"></a>  assertTrue(b + &#39; should be equal to &#39; + a, goog.math.Vec2.equals(a, b));
+<a name="line23"></a>}
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>function testVec2() {
+<a name="line27"></a>  var v = new goog.math.Vec2(3.14, 2.78);
+<a name="line28"></a>  assertEquals(3.14, v.x);
+<a name="line29"></a>  assertEquals(2.78, v.y);
+<a name="line30"></a>}
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>function testRandomUnit() {
+<a name="line34"></a>  var a = goog.math.Vec2.randomUnit();
+<a name="line35"></a>  assertRoughlyEquals(1.0, a.magnitude(), 1e-10);
+<a name="line36"></a>}
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>function testRandom() {
+<a name="line40"></a>  var a = goog.math.Vec2.random();
+<a name="line41"></a>  assertTrue(a.magnitude() &lt;= 1.0);
+<a name="line42"></a>}
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>function testClone() {
+<a name="line46"></a>  var a = new goog.math.Vec2(1, 2);
+<a name="line47"></a>  var b = a.clone();
+<a name="line48"></a>
+<a name="line49"></a>  assertEquals(a.x, b.x);
+<a name="line50"></a>  assertEquals(a.y, b.y);
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>function testMagnitude() {
+<a name="line55"></a>  var a = new goog.math.Vec2(0, 10);
+<a name="line56"></a>  var b = new goog.math.Vec2(3, 4);
+<a name="line57"></a>
+<a name="line58"></a>  assertEquals(10, a.magnitude());
+<a name="line59"></a>  assertEquals(5, b.magnitude());
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>function testSquaredMagnitude() {
+<a name="line64"></a>  var a = new goog.math.Vec2(-3, -4);
+<a name="line65"></a>  assertEquals(25, a.squaredMagnitude());
+<a name="line66"></a>}
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>function testScaleFactor() {
+<a name="line70"></a>  var a = new goog.math.Vec2(1, 2);
+<a name="line71"></a>  var scaled = a.scale(0.5);
+<a name="line72"></a>
+<a name="line73"></a>  assertTrue(&#39;The type of the return value should be goog.math.Vec2&#39;,
+<a name="line74"></a>      scaled instanceof goog.math.Vec2);
+<a name="line75"></a>  assertVectorEquals(new goog.math.Vec2(0.5, 1), a);
+<a name="line76"></a>}
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>function testScaleXY() {
+<a name="line80"></a>  var a = new goog.math.Vec2(10, 15);
+<a name="line81"></a>  var scaled = a.scale(2, 3);
+<a name="line82"></a>  assertEquals(&#39;The function should return the target instance&#39;, a, scaled);
+<a name="line83"></a>  assertTrue(&#39;The type of the return value should be goog.math.Vec2&#39;,
+<a name="line84"></a>      scaled instanceof goog.math.Vec2);
+<a name="line85"></a>  assertVectorEquals(new goog.math.Vec2(20, 45), a);
+<a name="line86"></a>}
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>function testInvert() {
+<a name="line90"></a>  var a = new goog.math.Vec2(3, 4);
+<a name="line91"></a>  a.invert();
+<a name="line92"></a>
+<a name="line93"></a>  assertEquals(-3, a.x);
+<a name="line94"></a>  assertEquals(-4, a.y);
+<a name="line95"></a>}
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>function testNormalize() {
+<a name="line99"></a>  var a = new goog.math.Vec2(5, 5);
+<a name="line100"></a>  a.normalize();
+<a name="line101"></a>  assertRoughlyEquals(1.0, a.magnitude(), 1e-10);
+<a name="line102"></a>}
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>function testAdd() {
+<a name="line106"></a>  var a = new goog.math.Vec2(1, -1);
+<a name="line107"></a>  a.add(new goog.math.Vec2(3, 3));
+<a name="line108"></a>  assertVectorEquals(new goog.math.Vec2(4, 2), a);
+<a name="line109"></a>}
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>function testSubtract() {
+<a name="line113"></a>  var a = new goog.math.Vec2(1, -1);
+<a name="line114"></a>  a.subtract(new goog.math.Vec2(3, 3));
+<a name="line115"></a>  assertVectorEquals(new goog.math.Vec2(-2, -4), a);
+<a name="line116"></a>}
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>function testRotate() {
+<a name="line120"></a>  var a = new goog.math.Vec2(1, -1);
+<a name="line121"></a>  a.rotate(Math.PI / 2);
+<a name="line122"></a>  assertRoughlyEquals(1, a.x, 0.000001);
+<a name="line123"></a>  assertRoughlyEquals(1, a.y, 0.000001);
+<a name="line124"></a>  a.rotate(-Math.PI);
+<a name="line125"></a>  assertRoughlyEquals(-1, a.x, 0.000001);
+<a name="line126"></a>  assertRoughlyEquals(-1, a.y, 0.000001);
+<a name="line127"></a>}
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>function testRotateAroundPoint() {
+<a name="line131"></a>  var a = goog.math.Vec2.rotateAroundPoint(
+<a name="line132"></a>      new goog.math.Vec2(1, -1), new goog.math.Vec2(1, 0), Math.PI / 2);
+<a name="line133"></a>  assertRoughlyEquals(2, a.x, 0.000001);
+<a name="line134"></a>  assertRoughlyEquals(0, a.y, 0.000001);
+<a name="line135"></a>}
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>function testEquals() {
+<a name="line139"></a>  var a = new goog.math.Vec2(1, 2);
+<a name="line140"></a>
+<a name="line141"></a>  assertFalse(a.equals(null));
+<a name="line142"></a>  assertFalse(a.equals(new goog.math.Vec2(1, 3)));
+<a name="line143"></a>  assertFalse(a.equals(new goog.math.Vec2(2, 2)));
+<a name="line144"></a>
+<a name="line145"></a>  assertTrue(a.equals(a));
+<a name="line146"></a>  assertTrue(a.equals(new goog.math.Vec2(1, 2)));
+<a name="line147"></a>}
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>function testSum() {
+<a name="line151"></a>  var a = new goog.math.Vec2(0.5, 0.25);
+<a name="line152"></a>  var b = new goog.math.Vec2(0.5, 0.75);
+<a name="line153"></a>
+<a name="line154"></a>  var c = goog.math.Vec2.sum(a, b);
+<a name="line155"></a>  assertVectorEquals(new goog.math.Vec2(1, 1), c);
+<a name="line156"></a>}
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>function testDifference() {
+<a name="line160"></a>  var a = new goog.math.Vec2(0.5, 0.25);
+<a name="line161"></a>  var b = new goog.math.Vec2(0.5, 0.75);
+<a name="line162"></a>
+<a name="line163"></a>  var c = goog.math.Vec2.difference(a, b);
+<a name="line164"></a>  assertVectorEquals(new goog.math.Vec2(0, -0.5), c);
+<a name="line165"></a>}
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>function testDistance() {
+<a name="line169"></a>  var a = new goog.math.Vec2(3, 4);
+<a name="line170"></a>  var b = new goog.math.Vec2(-3, -4);
+<a name="line171"></a>
+<a name="line172"></a>  assertEquals(10, goog.math.Vec2.distance(a, b));
+<a name="line173"></a>}
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>function testSquaredDistance() {
+<a name="line177"></a>  var a = new goog.math.Vec2(3, 4);
+<a name="line178"></a>  var b = new goog.math.Vec2(-3, -4);
+<a name="line179"></a>
+<a name="line180"></a>  assertEquals(100, goog.math.Vec2.squaredDistance(a, b));
+<a name="line181"></a>}
+<a name="line182"></a>
+<a name="line183"></a>
+<a name="line184"></a>function testVec2Equals() {
+<a name="line185"></a>  assertTrue(goog.math.Vec2.equals(null, null));
+<a name="line186"></a>  assertFalse(goog.math.Vec2.equals(null, new goog.math.Vec2()));
+<a name="line187"></a>
+<a name="line188"></a>  var a = new goog.math.Vec2(1, 3);
+<a name="line189"></a>  assertTrue(goog.math.Vec2.equals(a, a));
+<a name="line190"></a>  assertTrue(goog.math.Vec2.equals(a, new goog.math.Vec2(1, 3)));
+<a name="line191"></a>  assertFalse(goog.math.Vec2.equals(1, new goog.math.Vec2(3, 1)));
+<a name="line192"></a>}
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>function testDot() {
+<a name="line196"></a>  var a = new goog.math.Vec2(0, 5);
+<a name="line197"></a>  var b = new goog.math.Vec2(3, 0);
+<a name="line198"></a>  assertEquals(0, goog.math.Vec2.dot(a, b));
+<a name="line199"></a>
+<a name="line200"></a>  var c = new goog.math.Vec2(-5, -5);
+<a name="line201"></a>  var d = new goog.math.Vec2(0, 7);
+<a name="line202"></a>  assertEquals(-35, goog.math.Vec2.dot(c, d));
+<a name="line203"></a>}
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>function testLerp() {
+<a name="line207"></a>  var a = new goog.math.Vec2(0, 0);
+<a name="line208"></a>  var b = new goog.math.Vec2(10, 10);
+<a name="line209"></a>
+<a name="line210"></a>  for (var i = 0; i &lt;= 10; i++) {
+<a name="line211"></a>    var c = goog.math.Vec2.lerp(a, b, i / 10);
+<a name="line212"></a>    assertEquals(i, c.x);
+<a name="line213"></a>    assertEquals(i, c.y);
+<a name="line214"></a>  }
+<a name="line215"></a>}
+<a name="line216"></a>
+<a name="line217"></a>
+<a name="line218"></a>function testToString() {
+<a name="line219"></a>  testEquals(&#39;(0, 0)&#39;, new goog.math.Vec2(0, 0).toString());
+<a name="line220"></a>}
+</pre>
+
+
+</body>
+</html>

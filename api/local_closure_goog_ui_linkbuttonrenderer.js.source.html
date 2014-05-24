@@ -1,0 +1,118 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>linkbuttonrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_linkbuttonrenderer.js.html">linkbuttonrenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Similiar to {@link goog.ui.FlatButtonRenderer},
+<a name="line17"></a> * but underlines text instead of adds borders.
+<a name="line18"></a> *
+<a name="line19"></a> * For accessibility reasons, it is best to use this with a goog.ui.Button
+<a name="line20"></a> * instead of an A element for links that perform actions in the page.  Links
+<a name="line21"></a> * that have an href and open a new page can and should remain as A elements.
+<a name="line22"></a> *
+<a name="line23"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.ui.LinkButtonRenderer&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.ui.Button&#39;);
+<a name="line29"></a>goog.require(&#39;goog.ui.FlatButtonRenderer&#39;);
+<a name="line30"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Link renderer for {@link goog.ui.Button}s.  Link buttons can contain
+<a name="line36"></a> * almost arbitrary HTML content, will flow like inline elements, but can be
+<a name="line37"></a> * styled like block-level elements.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @extends {goog.ui.FlatButtonRenderer}
+<a name="line40"></a> */
+<a name="line41"></a>goog.ui.LinkButtonRenderer = function() {
+<a name="line42"></a>  goog.ui.FlatButtonRenderer.call(this);
+<a name="line43"></a>};
+<a name="line44"></a>goog.inherits(goog.ui.LinkButtonRenderer, goog.ui.FlatButtonRenderer);
+<a name="line45"></a>goog.addSingletonGetter(goog.ui.LinkButtonRenderer);
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line50"></a> * by this renderer.
+<a name="line51"></a> * @type {string}
+<a name="line52"></a> */
+<a name="line53"></a>goog.ui.LinkButtonRenderer.CSS_CLASS = goog.getCssName(&#39;goog-link-button&#39;);
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/** @override */
+<a name="line57"></a>goog.ui.LinkButtonRenderer.prototype.getCssClass = function() {
+<a name="line58"></a>  return goog.ui.LinkButtonRenderer.CSS_CLASS;
+<a name="line59"></a>};
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>// Register a decorator factory function for Link Buttons.
+<a name="line63"></a>goog.ui.registry.setDecoratorByClassName(goog.ui.LinkButtonRenderer.CSS_CLASS,
+<a name="line64"></a>    function() {
+<a name="line65"></a>      // Uses goog.ui.Button, but with LinkButtonRenderer.
+<a name="line66"></a>      return new goog.ui.Button(null, goog.ui.LinkButtonRenderer.getInstance());
+<a name="line67"></a>    });
+</pre>
+
+
+</body>
+</html>

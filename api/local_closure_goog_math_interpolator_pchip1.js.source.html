@@ -1,0 +1,133 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>pchip1.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_math_interpolator_pchip1.js.html">pchip1.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A one dimensional monotone cubic spline interpolator.
+<a name="line17"></a> *
+<a name="line18"></a> * See http://en.wikipedia.org/wiki/Monotone_cubic_interpolation.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.math.interpolator.Pchip1&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.math&#39;);
+<a name="line25"></a>goog.require(&#39;goog.math.interpolator.Spline1&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * A one dimensional monotone cubic spline interpolator.
+<a name="line31"></a> * @extends {goog.math.interpolator.Spline1}
+<a name="line32"></a> * @constructor
+<a name="line33"></a> * @final
+<a name="line34"></a> */
+<a name="line35"></a>goog.math.interpolator.Pchip1 = function() {
+<a name="line36"></a>  goog.math.interpolator.Pchip1.base(this, &#39;constructor&#39;);
+<a name="line37"></a>};
+<a name="line38"></a>goog.inherits(goog.math.interpolator.Pchip1, goog.math.interpolator.Spline1);
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/** @override */
+<a name="line42"></a>goog.math.interpolator.Pchip1.prototype.computeDerivatives = function(
+<a name="line43"></a>    dx, slope) {
+<a name="line44"></a>  var len = dx.length;
+<a name="line45"></a>  var deriv = new Array(len + 1);
+<a name="line46"></a>  for (var i = 1; i &lt; len; ++i) {
+<a name="line47"></a>    if (goog.math.sign(slope[i - 1]) * goog.math.sign(slope[i]) &lt;= 0) {
+<a name="line48"></a>      deriv[i] = 0;
+<a name="line49"></a>    } else {
+<a name="line50"></a>      var w1 = 2 * dx[i] + dx[i - 1];
+<a name="line51"></a>      var w2 = dx[i] + 2 * dx[i - 1];
+<a name="line52"></a>      deriv[i] = (w1 + w2) / (w1 / slope[i - 1] + w2 / slope[i]);
+<a name="line53"></a>    }
+<a name="line54"></a>  }
+<a name="line55"></a>  deriv[0] = this.computeDerivativeAtBoundary_(
+<a name="line56"></a>      dx[0], dx[1], slope[0], slope[1]);
+<a name="line57"></a>  deriv[len] = this.computeDerivativeAtBoundary_(
+<a name="line58"></a>      dx[len - 1], dx[len - 2], slope[len - 1], slope[len - 2]);
+<a name="line59"></a>  return deriv;
+<a name="line60"></a>};
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Computes the derivative of a data point at a boundary.
+<a name="line65"></a> * @param {number} dx0 The spacing of the 1st data point.
+<a name="line66"></a> * @param {number} dx1 The spacing of the 2nd data point.
+<a name="line67"></a> * @param {number} slope0 The slope of the 1st data point.
+<a name="line68"></a> * @param {number} slope1 The slope of the 2nd data point.
+<a name="line69"></a> * @return {number} The derivative at the 1st data point.
+<a name="line70"></a> * @private
+<a name="line71"></a> */
+<a name="line72"></a>goog.math.interpolator.Pchip1.prototype.computeDerivativeAtBoundary_ = function(
+<a name="line73"></a>    dx0, dx1, slope0, slope1) {
+<a name="line74"></a>  var deriv = ((2 * dx0 + dx1) * slope0 - dx0 * slope1) / (dx0 + dx1);
+<a name="line75"></a>  if (goog.math.sign(deriv) != goog.math.sign(slope0)) {
+<a name="line76"></a>    deriv = 0;
+<a name="line77"></a>  } else if (goog.math.sign(slope0) != goog.math.sign(slope1) &amp;&amp;
+<a name="line78"></a>      Math.abs(deriv) &gt; Math.abs(3 * slope0)) {
+<a name="line79"></a>    deriv = 3 * slope0;
+<a name="line80"></a>  }
+<a name="line81"></a>  return deriv;
+<a name="line82"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>encryptedstorage.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_storage_encryptedstorage.js.html">encryptedstorage.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides a convenient API for data persistence with key and
+<a name="line17"></a> * object encryption. Without a valid secret, the existence of a particular
+<a name="line18"></a> * key can&#39;t be verified and values can&#39;t be decrypted. The value encryption
+<a name="line19"></a> * is salted, so subsequent writes of the same cleartext result in different
+<a name="line20"></a> * ciphertext. The ciphertext is *not* authenticated, so there is no protection
+<a name="line21"></a> * against data manipulation.
+<a name="line22"></a> *
+<a name="line23"></a> * The metadata is *not* encrypted, so expired keys can be cleaned up without
+<a name="line24"></a> * decrypting them. If sensitive metadata is added in subclasses, it is up
+<a name="line25"></a> * to the subclass to protect this information, perhaps by embedding it in
+<a name="line26"></a> * the object.
+<a name="line27"></a> *
+<a name="line28"></a> */
+<a name="line29"></a>
+<a name="line30"></a>goog.provide(&#39;goog.storage.EncryptedStorage&#39;);
+<a name="line31"></a>
+<a name="line32"></a>goog.require(&#39;goog.crypt&#39;);
+<a name="line33"></a>goog.require(&#39;goog.crypt.Arc4&#39;);
+<a name="line34"></a>goog.require(&#39;goog.crypt.Sha1&#39;);
+<a name="line35"></a>goog.require(&#39;goog.crypt.base64&#39;);
+<a name="line36"></a>goog.require(&#39;goog.json&#39;);
+<a name="line37"></a>goog.require(&#39;goog.json.Serializer&#39;);
+<a name="line38"></a>goog.require(&#39;goog.storage.CollectableStorage&#39;);
+<a name="line39"></a>goog.require(&#39;goog.storage.ErrorCode&#39;);
+<a name="line40"></a>goog.require(&#39;goog.storage.RichStorage&#39;);
+<a name="line41"></a>goog.require(&#39;goog.storage.RichStorage.Wrapper&#39;);
+<a name="line42"></a>goog.require(&#39;goog.storage.mechanism.IterableMechanism&#39;);
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Provides an encrypted storage. The keys are hashed with a secret, so
+<a name="line48"></a> * their existence cannot be verified without the knowledge of the secret.
+<a name="line49"></a> * The values are encrypted using the key, a salt, and the secret, so
+<a name="line50"></a> * stream cipher initialization varies for each stored value.
+<a name="line51"></a> *
+<a name="line52"></a> * @param {!goog.storage.mechanism.IterableMechanism} mechanism The underlying
+<a name="line53"></a> *     storage mechanism.
+<a name="line54"></a> * @param {string} secret The secret key used to encrypt the storage.
+<a name="line55"></a> * @constructor
+<a name="line56"></a> * @extends {goog.storage.CollectableStorage}
+<a name="line57"></a> * @final
+<a name="line58"></a> */
+<a name="line59"></a>goog.storage.EncryptedStorage = function(mechanism, secret) {
+<a name="line60"></a>  goog.storage.EncryptedStorage.base(this, &#39;constructor&#39;, mechanism);
+<a name="line61"></a>  this.secret_ = goog.crypt.stringToByteArray(secret);
+<a name="line62"></a>  this.cleartextSerializer_ = new goog.json.Serializer();
+<a name="line63"></a>};
+<a name="line64"></a>goog.inherits(goog.storage.EncryptedStorage, goog.storage.CollectableStorage);
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * Metadata key under which the salt is stored.
+<a name="line69"></a> *
+<a name="line70"></a> * @type {string}
+<a name="line71"></a> * @protected
+<a name="line72"></a> */
+<a name="line73"></a>goog.storage.EncryptedStorage.SALT_KEY = &#39;salt&#39;;
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * The secret used to encrypt the storage.
+<a name="line78"></a> *
+<a name="line79"></a> * @type {Array.&lt;number&gt;}
+<a name="line80"></a> * @private
+<a name="line81"></a> */
+<a name="line82"></a>goog.storage.EncryptedStorage.prototype.secret_ = null;
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * The JSON serializer used to serialize values before encryption. This can
+<a name="line87"></a> * be potentially different from serializing for the storage mechanism (see
+<a name="line88"></a> * goog.storage.Storage), so a separate serializer is kept here.
+<a name="line89"></a> *
+<a name="line90"></a> * @type {goog.json.Serializer}
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.storage.EncryptedStorage.prototype.cleartextSerializer_ = null;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Hashes a key using the secret.
+<a name="line98"></a> *
+<a name="line99"></a> * @param {string} key The key.
+<a name="line100"></a> * @return {string} The hash.
+<a name="line101"></a> * @private
+<a name="line102"></a> */
+<a name="line103"></a>goog.storage.EncryptedStorage.prototype.hashKeyWithSecret_ = function(key) {
+<a name="line104"></a>  var sha1 = new goog.crypt.Sha1();
+<a name="line105"></a>  sha1.update(goog.crypt.stringToByteArray(key));
+<a name="line106"></a>  sha1.update(this.secret_);
+<a name="line107"></a>  return goog.crypt.base64.encodeByteArray(sha1.digest(), true);
+<a name="line108"></a>};
+<a name="line109"></a>
+<a name="line110"></a>
+<a name="line111"></a>/**
+<a name="line112"></a> * Encrypts a value using a key, a salt, and the secret.
+<a name="line113"></a> *
+<a name="line114"></a> * @param {!Array.&lt;number&gt;} salt The salt.
+<a name="line115"></a> * @param {string} key The key.
+<a name="line116"></a> * @param {string} value The cleartext value.
+<a name="line117"></a> * @return {string} The encrypted value.
+<a name="line118"></a> * @private
+<a name="line119"></a> */
+<a name="line120"></a>goog.storage.EncryptedStorage.prototype.encryptValue_ = function(
+<a name="line121"></a>    salt, key, value) {
+<a name="line122"></a>  if (!(salt.length &gt; 0)) {
+<a name="line123"></a>    throw Error(&#39;Non-empty salt must be provided&#39;);
+<a name="line124"></a>  }
+<a name="line125"></a>  var sha1 = new goog.crypt.Sha1();
+<a name="line126"></a>  sha1.update(goog.crypt.stringToByteArray(key));
+<a name="line127"></a>  sha1.update(salt);
+<a name="line128"></a>  sha1.update(this.secret_);
+<a name="line129"></a>  var arc4 = new goog.crypt.Arc4();
+<a name="line130"></a>  arc4.setKey(sha1.digest());
+<a name="line131"></a>  // Warm up the streamcypher state, see goog.crypt.Arc4 for details.
+<a name="line132"></a>  arc4.discard(1536);
+<a name="line133"></a>  var bytes = goog.crypt.stringToByteArray(value);
+<a name="line134"></a>  arc4.crypt(bytes);
+<a name="line135"></a>  return goog.crypt.byteArrayToString(bytes);
+<a name="line136"></a>};
+<a name="line137"></a>
+<a name="line138"></a>
+<a name="line139"></a>/**
+<a name="line140"></a> * Decrypts a value using a key, a salt, and the secret.
+<a name="line141"></a> *
+<a name="line142"></a> * @param {!Array.&lt;number&gt;} salt The salt.
+<a name="line143"></a> * @param {string} key The key.
+<a name="line144"></a> * @param {string} value The encrypted value.
+<a name="line145"></a> * @return {string} The decrypted value.
+<a name="line146"></a> * @private
+<a name="line147"></a> */
+<a name="line148"></a>goog.storage.EncryptedStorage.prototype.decryptValue_ = function(
+<a name="line149"></a>    salt, key, value) {
+<a name="line150"></a>  // ARC4 is symmetric.
+<a name="line151"></a>  return this.encryptValue_(salt, key, value);
+<a name="line152"></a>};
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/** @override */
+<a name="line156"></a>goog.storage.EncryptedStorage.prototype.set = function(
+<a name="line157"></a>    key, value, opt_expiration) {
+<a name="line158"></a>  if (!goog.isDef(value)) {
+<a name="line159"></a>    goog.storage.EncryptedStorage.prototype.remove.call(this, key);
+<a name="line160"></a>    return;
+<a name="line161"></a>  }
+<a name="line162"></a>  var salt = [];
+<a name="line163"></a>  // 64-bit random salt.
+<a name="line164"></a>  for (var i = 0; i &lt; 8; ++i) {
+<a name="line165"></a>    salt[i] = Math.floor(Math.random() * 0x100);
+<a name="line166"></a>  }
+<a name="line167"></a>  var wrapper = new goog.storage.RichStorage.Wrapper(
+<a name="line168"></a>      this.encryptValue_(salt, key,
+<a name="line169"></a>                         this.cleartextSerializer_.serialize(value)));
+<a name="line170"></a>  wrapper[goog.storage.EncryptedStorage.SALT_KEY] = salt;
+<a name="line171"></a>  goog.storage.EncryptedStorage.base(this, &#39;set&#39;,
+<a name="line172"></a>      this.hashKeyWithSecret_(key), wrapper, opt_expiration);
+<a name="line173"></a>};
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/** @override */
+<a name="line177"></a>goog.storage.EncryptedStorage.prototype.getWrapper = function(
+<a name="line178"></a>    key, opt_expired) {
+<a name="line179"></a>  var wrapper = goog.storage.EncryptedStorage.base(this, &#39;getWrapper&#39;,
+<a name="line180"></a>                          this.hashKeyWithSecret_(key), opt_expired);
+<a name="line181"></a>  if (!wrapper) {
+<a name="line182"></a>    return undefined;
+<a name="line183"></a>  }
+<a name="line184"></a>  var value = goog.storage.RichStorage.Wrapper.unwrap(wrapper);
+<a name="line185"></a>  var salt = wrapper[goog.storage.EncryptedStorage.SALT_KEY];
+<a name="line186"></a>  if (!goog.isString(value) || !goog.isArray(salt) || !salt.length) {
+<a name="line187"></a>    throw goog.storage.ErrorCode.INVALID_VALUE;
+<a name="line188"></a>  }
+<a name="line189"></a>  var json = this.decryptValue_(salt, key, value);
+<a name="line190"></a>  /** @preserveTry */
+<a name="line191"></a>  try {
+<a name="line192"></a>    wrapper[goog.storage.RichStorage.DATA_KEY] = goog.json.parse(json);
+<a name="line193"></a>  } catch (e) {
+<a name="line194"></a>    throw goog.storage.ErrorCode.DECRYPTION_ERROR;
+<a name="line195"></a>  }
+<a name="line196"></a>  return wrapper;
+<a name="line197"></a>};
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/** @override */
+<a name="line201"></a>goog.storage.EncryptedStorage.prototype.remove = function(key) {
+<a name="line202"></a>  goog.storage.EncryptedStorage.base(
+<a name="line203"></a>      this, &#39;remove&#39;, this.hashKeyWithSecret_(key));
+<a name="line204"></a>};
+</pre>
+
+
+</body>
+</html>

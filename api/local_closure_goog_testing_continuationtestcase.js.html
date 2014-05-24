@@ -1,0 +1,162 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>continuationtestcase.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">continuationtestcase.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_testing_continuationtestcase.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/testing/continuationtestcase.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/testing/continuationtestcase.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_ContinuationTestCase.html">
+          goog.testing.ContinuationTestCase</a><br/>
+        <div class="class-details">Constructs a test case that supports tests with continuations. Test functions
+may issue "wait" commands that suspend the test temporarily and continue once
+the wait condition is met.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_ContinuationTestCase_Step.html">
+          goog.testing.ContinuationTestCase.Step</a><br/>
+        <div class="class-details">Constructs a single step in a larger continuation test. Each step is similar
+to a typical TestCase test, except it may wait for an event or timeout to
+occur before running the test function.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_ContinuationTestCase_Test.html">
+          goog.testing.ContinuationTestCase.Test</a><br/>
+        <div class="class-details">Creates a continuation test case, which consists of multiple test steps that
+occur in several phases.
+
+The steps are distributed between setUp, test, and tearDown phases. During
+the execution of each step, 0 or more steps may be added to the current
+phase. Once all steps in a phase have completed, the next phase will be
+executed.
+
+If any errors occur (such as an assertion failure), the setUp and Test phases
+will be cancelled immediately. The tearDown phase will always start, but may
+be cancelled as well if it raises an error.
+
+</div>
+ </div>
+      
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory testing</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/testing/continuationtestcase.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

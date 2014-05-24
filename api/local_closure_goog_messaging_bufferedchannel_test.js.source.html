@@ -1,0 +1,319 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>bufferedchannel_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_messaging_bufferedchannel_test.js.html">bufferedchannel_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.messaging.BufferedChannelTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.messaging.BufferedChannelTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.debug.Console&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line20"></a>goog.require(&#39;goog.log&#39;);
+<a name="line21"></a>goog.require(&#39;goog.log.Level&#39;);
+<a name="line22"></a>goog.require(&#39;goog.messaging.BufferedChannel&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.MockControl&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.async.MockControl&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.messaging.MockMessageChannel&#39;);
+<a name="line28"></a>
+<a name="line29"></a>var clock;
+<a name="line30"></a>var messages = [
+<a name="line31"></a>  {serviceName: &#39;firstService&#39;, payload: &#39;firstPayload&#39;},
+<a name="line32"></a>  {serviceName: &#39;secondService&#39;, payload: &#39;secondPayload&#39;}
+<a name="line33"></a>];
+<a name="line34"></a>var mockControl;
+<a name="line35"></a>var asyncMockControl;
+<a name="line36"></a>
+<a name="line37"></a>function setUpPage() {
+<a name="line38"></a>  if (goog.global.console) {
+<a name="line39"></a>    new goog.debug.Console().setCapturing(true);
+<a name="line40"></a>  }
+<a name="line41"></a>  var logger = goog.log.getLogger(&#39;goog.messaging&#39;);
+<a name="line42"></a>  logger.setLevel(goog.log.Level.ALL);
+<a name="line43"></a>  goog.log.addHandler(logger, function(logRecord) {
+<a name="line44"></a>    var msg = goog.dom.createDom(&#39;div&#39;);
+<a name="line45"></a>    msg.innerHTML = logRecord.getMessage();
+<a name="line46"></a>    goog.dom.appendChild(goog.dom.getElement(&#39;debug-div&#39;), msg);
+<a name="line47"></a>  });
+<a name="line48"></a>  clock = new goog.testing.MockClock();
+<a name="line49"></a>  mockControl = new goog.testing.MockControl();
+<a name="line50"></a>  asyncMockControl = new goog.testing.async.MockControl(mockControl);
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>function setUp() {
+<a name="line55"></a>  clock.install();
+<a name="line56"></a>}
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>function tearDown() {
+<a name="line60"></a>  clock.uninstall();
+<a name="line61"></a>  mockControl.$tearDown();
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>function assertMessageArraysEqual(ma1, ma2) {
+<a name="line66"></a>  assertEquals(&#39;message array lengths differ&#39;, ma1.length, ma2.length);
+<a name="line67"></a>  for (var i = 0; i &lt; ma1.length; i++) {
+<a name="line68"></a>    assertEquals(
+<a name="line69"></a>        &#39;message array serviceNames differ&#39;,
+<a name="line70"></a>        ma1[i].serviceName, ma2[i].serviceName);
+<a name="line71"></a>    assertEquals(
+<a name="line72"></a>        &#39;message array payloads differ&#39;,
+<a name="line73"></a>        ma1[i].payload, ma2[i].payload);
+<a name="line74"></a>  }
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>function testDelegationToWrappedChannel() {
+<a name="line79"></a>  var mockChannel = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line80"></a>  var channel = new goog.messaging.BufferedChannel(mockChannel);
+<a name="line81"></a>
+<a name="line82"></a>  channel.registerDefaultService(
+<a name="line83"></a>      asyncMockControl.asyncAssertEquals(
+<a name="line84"></a>          &#39;default service should be delegated&#39;,
+<a name="line85"></a>          &#39;defaultServiceName&#39;, &#39;default service payload&#39;));
+<a name="line86"></a>  channel.registerService(
+<a name="line87"></a>      &#39;normalServiceName&#39;,
+<a name="line88"></a>      asyncMockControl.asyncAssertEquals(
+<a name="line89"></a>          &#39;normal service should be delegated&#39;,
+<a name="line90"></a>          &#39;normal service payload&#39;));
+<a name="line91"></a>  mockChannel.send(
+<a name="line92"></a>      goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + &#39;:message&#39;,
+<a name="line93"></a>      &#39;payload&#39;);
+<a name="line94"></a>
+<a name="line95"></a>  mockControl.$replayAll();
+<a name="line96"></a>  channel.peerReady_ = true;  // Prevent buffering so we delegate send calls.
+<a name="line97"></a>  mockChannel.receive(
+<a name="line98"></a>      goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + &#39;:defaultServiceName&#39;,
+<a name="line99"></a>      &#39;default service payload&#39;);
+<a name="line100"></a>  mockChannel.receive(
+<a name="line101"></a>      goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + &#39;:normalServiceName&#39;,
+<a name="line102"></a>      &#39;normal service payload&#39;);
+<a name="line103"></a>  channel.send(&#39;message&#39;, &#39;payload&#39;);
+<a name="line104"></a>  mockControl.$verifyAll();
+<a name="line105"></a>}
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>function testOptionalConnectCallbackExecutes() {
+<a name="line109"></a>  var mockChannel = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line110"></a>  var channel = new goog.messaging.BufferedChannel(mockChannel);
+<a name="line111"></a>  var mockConnectCb = mockControl.createFunctionMock(&#39;mockConnectCb&#39;);
+<a name="line112"></a>  mockConnectCb();
+<a name="line113"></a>
+<a name="line114"></a>  mockControl.$replayAll();
+<a name="line115"></a>  channel.connect(mockConnectCb);
+<a name="line116"></a>  mockControl.$verifyAll();
+<a name="line117"></a>}
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>function testSendExceptionsInSendReadyPingStopsTimerAndReraises() {
+<a name="line121"></a>  var mockChannel = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line122"></a>  var channel = new goog.messaging.BufferedChannel(mockChannel);
+<a name="line123"></a>
+<a name="line124"></a>  var errorMessage = &#39;errorMessage&#39;;
+<a name="line125"></a>  mockChannel.send(
+<a name="line126"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:&#39; +
+<a name="line127"></a>      goog.messaging.BufferedChannel.PEER_READY_SERVICE_NAME_,
+<a name="line128"></a>      /* payload */ &#39;&#39;).$throws(Error(errorMessage));
+<a name="line129"></a>  channel.timer_.enabled = true;
+<a name="line130"></a>
+<a name="line131"></a>  mockControl.$replayAll();
+<a name="line132"></a>  var exception = assertThrows(function() {
+<a name="line133"></a>    channel.sendReadyPing_();
+<a name="line134"></a>  });
+<a name="line135"></a>  assertContains(errorMessage, exception.message);
+<a name="line136"></a>  assertFalse(channel.timer_.enabled);
+<a name="line137"></a>  mockControl.$verifyAll();
+<a name="line138"></a>}
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>function testPollingIntervalDefaultAndOverride() {
+<a name="line142"></a>  var mockChannel = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line143"></a>  var channel = new goog.messaging.BufferedChannel(mockChannel);
+<a name="line144"></a>
+<a name="line145"></a>  assertEquals(
+<a name="line146"></a>      goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_,
+<a name="line147"></a>      channel.timer_.getInterval());
+<a name="line148"></a>  var interval = 100;
+<a name="line149"></a>  var longIntervalChannel = new goog.messaging.BufferedChannel(
+<a name="line150"></a>      new goog.testing.messaging.MockMessageChannel(mockControl), interval);
+<a name="line151"></a>  assertEquals(interval, longIntervalChannel.timer_.getInterval());
+<a name="line152"></a>}
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>function testBidirectionalCommunicationBuffersUntilReadyPingsSucceed() {
+<a name="line156"></a>  var mockChannel1 = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line157"></a>  var mockChannel2 = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line158"></a>  var bufferedChannel1 = new goog.messaging.BufferedChannel(mockChannel1);
+<a name="line159"></a>  var bufferedChannel2 = new goog.messaging.BufferedChannel(mockChannel2);
+<a name="line160"></a>  mockChannel1.send(
+<a name="line161"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:setPeerReady_&#39;,
+<a name="line162"></a>      &#39;&#39;).$does(function() {
+<a name="line163"></a>    bufferedChannel2.setPeerReady_(&#39;&#39;);
+<a name="line164"></a>  });
+<a name="line165"></a>  mockChannel2.send(
+<a name="line166"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:setPeerReady_&#39;,
+<a name="line167"></a>      &#39;1&#39;).$does(function() {
+<a name="line168"></a>    bufferedChannel1.setPeerReady_(&#39;1&#39;);
+<a name="line169"></a>  });
+<a name="line170"></a>  mockChannel1.send(
+<a name="line171"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:setPeerReady_&#39;,
+<a name="line172"></a>      &#39;1&#39;).$does(function() {
+<a name="line173"></a>    bufferedChannel2.setPeerReady_(&#39;1&#39;);
+<a name="line174"></a>  });
+<a name="line175"></a>  mockChannel1.send(goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + &#39;:&#39; +
+<a name="line176"></a>                    messages[0].serviceName,
+<a name="line177"></a>                    messages[0].payload);
+<a name="line178"></a>  mockChannel2.send(goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + &#39;:&#39; +
+<a name="line179"></a>                    messages[1].serviceName,
+<a name="line180"></a>                    messages[1].payload);
+<a name="line181"></a>
+<a name="line182"></a>  mockControl.$replayAll();
+<a name="line183"></a>  bufferedChannel1.send(messages[0].serviceName, messages[0].payload);
+<a name="line184"></a>  bufferedChannel2.send(messages[1].serviceName, messages[1].payload);
+<a name="line185"></a>  assertMessageArraysEqual([messages[0]], bufferedChannel1.buffer_);
+<a name="line186"></a>  assertMessageArraysEqual([messages[1]], bufferedChannel2.buffer_);
+<a name="line187"></a>  // First tick causes setPeerReady_ to fire, which in turn flushes the buffers.
+<a name="line188"></a>  clock.tick(goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_);
+<a name="line189"></a>  assertEquals(bufferedChannel1.buffer_, null);
+<a name="line190"></a>  assertEquals(bufferedChannel2.buffer_, null);
+<a name="line191"></a>  // Now that peers are ready, a second tick causes no more sends.
+<a name="line192"></a>  clock.tick(goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_);
+<a name="line193"></a>  mockControl.$verifyAll();
+<a name="line194"></a>}
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>function testBidirectionalCommunicationReconnectsAfterOneSideRestarts() {
+<a name="line198"></a>  var mockChannel1 = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line199"></a>  var mockChannel2 = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line200"></a>  var mockChannel3 = new goog.testing.messaging.MockMessageChannel(mockControl);
+<a name="line201"></a>  var bufferedChannel1 = new goog.messaging.BufferedChannel(mockChannel1);
+<a name="line202"></a>  var bufferedChannel2 = new goog.messaging.BufferedChannel(mockChannel2);
+<a name="line203"></a>  var bufferedChannel3 = new goog.messaging.BufferedChannel(mockChannel3);
+<a name="line204"></a>
+<a name="line205"></a>  // First tick
+<a name="line206"></a>  mockChannel1.send(
+<a name="line207"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:setPeerReady_&#39;,
+<a name="line208"></a>      &#39;&#39;).$does(function() {
+<a name="line209"></a>    bufferedChannel2.setPeerReady_(&#39;&#39;);
+<a name="line210"></a>  });
+<a name="line211"></a>  mockChannel2.send(
+<a name="line212"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:setPeerReady_&#39;,
+<a name="line213"></a>      &#39;1&#39;).$does(function() {
+<a name="line214"></a>    bufferedChannel1.setPeerReady_(&#39;1&#39;);
+<a name="line215"></a>  });
+<a name="line216"></a>  mockChannel1.send(
+<a name="line217"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:setPeerReady_&#39;,
+<a name="line218"></a>      &#39;1&#39;).$does(function() {
+<a name="line219"></a>    bufferedChannel2.setPeerReady_(&#39;1&#39;);
+<a name="line220"></a>  });
+<a name="line221"></a>  mockChannel3.send(
+<a name="line222"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:setPeerReady_&#39;,
+<a name="line223"></a>      &#39;&#39;);  // pretend it&#39;s not ready to connect yet
+<a name="line224"></a>
+<a name="line225"></a>  // Second tick
+<a name="line226"></a>  mockChannel3.send(
+<a name="line227"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:setPeerReady_&#39;,
+<a name="line228"></a>      &#39;&#39;).$does(function() {
+<a name="line229"></a>    bufferedChannel1.setPeerReady_(&#39;&#39;);
+<a name="line230"></a>  });
+<a name="line231"></a>
+<a name="line232"></a>  // Third tick
+<a name="line233"></a>  mockChannel1.send(
+<a name="line234"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:setPeerReady_&#39;,
+<a name="line235"></a>      &#39;1&#39;).$does(function() {
+<a name="line236"></a>    bufferedChannel3.setPeerReady_(&#39;1&#39;);
+<a name="line237"></a>  });
+<a name="line238"></a>  mockChannel3.send(
+<a name="line239"></a>      goog.messaging.BufferedChannel.CONTROL_CHANNEL_NAME_ + &#39;:setPeerReady_&#39;,
+<a name="line240"></a>      &#39;1&#39;).$does(function() {
+<a name="line241"></a>    bufferedChannel1.setPeerReady_(&#39;1&#39;);
+<a name="line242"></a>  });
+<a name="line243"></a>
+<a name="line244"></a>  mockChannel1.send(goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + &#39;:&#39; +
+<a name="line245"></a>                    messages[0].serviceName,
+<a name="line246"></a>                    messages[0].payload);
+<a name="line247"></a>  mockChannel3.send(goog.messaging.BufferedChannel.USER_CHANNEL_NAME_ + &#39;:&#39; +
+<a name="line248"></a>                    messages[1].serviceName,
+<a name="line249"></a>                    messages[1].payload);
+<a name="line250"></a>
+<a name="line251"></a>  mockControl.$replayAll();
+<a name="line252"></a>  // First tick causes setPeerReady_ to fire, which sets up the connection
+<a name="line253"></a>  // between channels 1 and 2.
+<a name="line254"></a>  clock.tick(goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_);
+<a name="line255"></a>  assertTrue(bufferedChannel1.peerReady_);
+<a name="line256"></a>  assertTrue(bufferedChannel2.peerReady_);
+<a name="line257"></a>  // Now pretend that channel 2 went down and was replaced by channel 3, which
+<a name="line258"></a>  // is trying to connect with channel 1.
+<a name="line259"></a>  clock.tick(goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_);
+<a name="line260"></a>  assertTrue(bufferedChannel1.peerReady_);
+<a name="line261"></a>  clock.tick(goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_);
+<a name="line262"></a>  assertTrue(bufferedChannel3.peerReady_);
+<a name="line263"></a>  bufferedChannel1.send(messages[0].serviceName, messages[0].payload);
+<a name="line264"></a>  bufferedChannel3.send(messages[1].serviceName, messages[1].payload);
+<a name="line265"></a>  // All timers stopped, nothing happens on the fourth tick.
+<a name="line266"></a>  clock.tick(goog.messaging.BufferedChannel.DEFAULT_INTERVAL_MILLIS_);
+<a name="line267"></a>  mockControl.$verifyAll();
+<a name="line268"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>browserrange.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_browserrange_browserrange.js.html">browserrange.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the browser range namespace and interface, as
+<a name="line17"></a> * well as several useful utility functions.
+<a name="line18"></a> *
+<a name="line19"></a> * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
+<a name="line20"></a> *
+<a name="line21"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line22"></a> *
+<a name="line23"></a> * @supported IE6, IE7, FF1.5+, Safari.
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.dom.browserrange&#39;);
+<a name="line28"></a>goog.provide(&#39;goog.dom.browserrange.Error&#39;);
+<a name="line29"></a>
+<a name="line30"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line31"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line32"></a>goog.require(&#39;goog.dom.browserrange.GeckoRange&#39;);
+<a name="line33"></a>goog.require(&#39;goog.dom.browserrange.IeRange&#39;);
+<a name="line34"></a>goog.require(&#39;goog.dom.browserrange.OperaRange&#39;);
+<a name="line35"></a>goog.require(&#39;goog.dom.browserrange.W3cRange&#39;);
+<a name="line36"></a>goog.require(&#39;goog.dom.browserrange.WebKitRange&#39;);
+<a name="line37"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Common error constants.
+<a name="line42"></a> * @enum {string}
+<a name="line43"></a> */
+<a name="line44"></a>goog.dom.browserrange.Error = {
+<a name="line45"></a>  NOT_IMPLEMENTED: &#39;Not Implemented&#39;
+<a name="line46"></a>};
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>// NOTE(robbyw): While it would be nice to eliminate the duplicate switches
+<a name="line50"></a>//               below, doing so uncovers bugs in the JsCompiler in which
+<a name="line51"></a>//               necessary code is stripped out.
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Static method that returns the proper type of browser range.
+<a name="line56"></a> * @param {Range|TextRange} range A browser range object.
+<a name="line57"></a> * @return {!goog.dom.browserrange.AbstractRange} A wrapper object.
+<a name="line58"></a> */
+<a name="line59"></a>goog.dom.browserrange.createRange = function(range) {
+<a name="line60"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isDocumentModeOrHigher(9)) {
+<a name="line61"></a>    return new goog.dom.browserrange.IeRange(
+<a name="line62"></a>        /** @type {TextRange} */ (range),
+<a name="line63"></a>        goog.dom.getOwnerDocument(range.parentElement()));
+<a name="line64"></a>  } else if (goog.userAgent.WEBKIT) {
+<a name="line65"></a>    return new goog.dom.browserrange.WebKitRange(
+<a name="line66"></a>        /** @type {Range} */ (range));
+<a name="line67"></a>  } else if (goog.userAgent.GECKO) {
+<a name="line68"></a>    return new goog.dom.browserrange.GeckoRange(
+<a name="line69"></a>        /** @type {Range} */ (range));
+<a name="line70"></a>  } else if (goog.userAgent.OPERA) {
+<a name="line71"></a>    return new goog.dom.browserrange.OperaRange(
+<a name="line72"></a>        /** @type {Range} */ (range));
+<a name="line73"></a>  } else {
+<a name="line74"></a>    // Default other browsers, including Opera, to W3c ranges.
+<a name="line75"></a>    return new goog.dom.browserrange.W3cRange(
+<a name="line76"></a>        /** @type {Range} */ (range));
+<a name="line77"></a>  }
+<a name="line78"></a>};
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Static method that returns the proper type of browser range.
+<a name="line83"></a> * @param {Node} node The node to select.
+<a name="line84"></a> * @return {!goog.dom.browserrange.AbstractRange} A wrapper object.
+<a name="line85"></a> */
+<a name="line86"></a>goog.dom.browserrange.createRangeFromNodeContents = function(node) {
+<a name="line87"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isDocumentModeOrHigher(9)) {
+<a name="line88"></a>    return goog.dom.browserrange.IeRange.createFromNodeContents(node);
+<a name="line89"></a>  } else if (goog.userAgent.WEBKIT) {
+<a name="line90"></a>    return goog.dom.browserrange.WebKitRange.createFromNodeContents(node);
+<a name="line91"></a>  } else if (goog.userAgent.GECKO) {
+<a name="line92"></a>    return goog.dom.browserrange.GeckoRange.createFromNodeContents(node);
+<a name="line93"></a>  } else if (goog.userAgent.OPERA) {
+<a name="line94"></a>    return goog.dom.browserrange.OperaRange.createFromNodeContents(node);
+<a name="line95"></a>  } else {
+<a name="line96"></a>    // Default other browsers to W3c ranges.
+<a name="line97"></a>    return goog.dom.browserrange.W3cRange.createFromNodeContents(node);
+<a name="line98"></a>  }
+<a name="line99"></a>};
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Static method that returns the proper type of browser range.
+<a name="line104"></a> * @param {Node} startNode The node to start with.
+<a name="line105"></a> * @param {number} startOffset The offset within the node to start.  This is
+<a name="line106"></a> *     either the index into the childNodes array for element startNodes or
+<a name="line107"></a> *     the index into the character array for text startNodes.
+<a name="line108"></a> * @param {Node} endNode The node to end with.
+<a name="line109"></a> * @param {number} endOffset The offset within the node to end.  This is
+<a name="line110"></a> *     either the index into the childNodes array for element endNodes or
+<a name="line111"></a> *     the index into the character array for text endNodes.
+<a name="line112"></a> * @return {!goog.dom.browserrange.AbstractRange} A wrapper object.
+<a name="line113"></a> */
+<a name="line114"></a>goog.dom.browserrange.createRangeFromNodes = function(startNode, startOffset,
+<a name="line115"></a>    endNode, endOffset) {
+<a name="line116"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isDocumentModeOrHigher(9)) {
+<a name="line117"></a>    return goog.dom.browserrange.IeRange.createFromNodes(startNode, startOffset,
+<a name="line118"></a>        endNode, endOffset);
+<a name="line119"></a>  } else if (goog.userAgent.WEBKIT) {
+<a name="line120"></a>    return goog.dom.browserrange.WebKitRange.createFromNodes(startNode,
+<a name="line121"></a>        startOffset, endNode, endOffset);
+<a name="line122"></a>  } else if (goog.userAgent.GECKO) {
+<a name="line123"></a>    return goog.dom.browserrange.GeckoRange.createFromNodes(startNode,
+<a name="line124"></a>        startOffset, endNode, endOffset);
+<a name="line125"></a>  } else if (goog.userAgent.OPERA) {
+<a name="line126"></a>    return goog.dom.browserrange.OperaRange.createFromNodes(startNode,
+<a name="line127"></a>        startOffset, endNode, endOffset);
+<a name="line128"></a>  } else {
+<a name="line129"></a>    // Default other browsers to W3c ranges.
+<a name="line130"></a>    return goog.dom.browserrange.W3cRange.createFromNodes(startNode,
+<a name="line131"></a>        startOffset, endNode, endOffset);
+<a name="line132"></a>  }
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Tests whether the given node can contain a range end point.
+<a name="line138"></a> * @param {Node} node The node to check.
+<a name="line139"></a> * @return {boolean} Whether the given node can contain a range end point.
+<a name="line140"></a> */
+<a name="line141"></a>goog.dom.browserrange.canContainRangeEndpoint = function(node) {
+<a name="line142"></a>  // NOTE(user, bloom): This is not complete, as divs with style -
+<a name="line143"></a>  // &#39;display:inline-block&#39; or &#39;position:absolute&#39; can also not contain range
+<a name="line144"></a>  // endpoints. A more complete check is to see if that element can be partially
+<a name="line145"></a>  // selected (can be container) or not.
+<a name="line146"></a>  return goog.dom.canHaveChildren(node) ||
+<a name="line147"></a>      node.nodeType == goog.dom.NodeType.TEXT;
+<a name="line148"></a>};
+</pre>
+
+
+</body>
+</html>

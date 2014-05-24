@@ -1,0 +1,735 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>textformatserializer_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_proto2_textformatserializer_test.js.html">textformatserializer_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Unit tests for goog.proto2.TextFormatSerializer.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>/** @suppress {extraProvide} */
+<a name="line21"></a>goog.provide(&#39;goog.proto2.TextFormatSerializerTest&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.proto2.ObjectSerializer&#39;);
+<a name="line24"></a>goog.require(&#39;goog.proto2.TextFormatSerializer&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line26"></a>goog.require(&#39;proto2.TestAllTypes&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.setTestOnly(&#39;goog.proto2.TextFormatSerializerTest&#39;);
+<a name="line29"></a>
+<a name="line30"></a>function testSerialization() {
+<a name="line31"></a>  var message = new proto2.TestAllTypes();
+<a name="line32"></a>
+<a name="line33"></a>  // Set the fields.
+<a name="line34"></a>  // Singular.
+<a name="line35"></a>  message.setOptionalInt32(101);
+<a name="line36"></a>  message.setOptionalUint32(103);
+<a name="line37"></a>  message.setOptionalSint32(105);
+<a name="line38"></a>  message.setOptionalFixed32(107);
+<a name="line39"></a>  message.setOptionalSfixed32(109);
+<a name="line40"></a>  message.setOptionalInt64(&#39;102&#39;);
+<a name="line41"></a>  message.setOptionalFloat(111.5);
+<a name="line42"></a>  message.setOptionalDouble(112.5);
+<a name="line43"></a>  message.setOptionalBool(true);
+<a name="line44"></a>  message.setOptionalString(&#39;test&#39;);
+<a name="line45"></a>  message.setOptionalBytes(&#39;abcd&#39;);
+<a name="line46"></a>
+<a name="line47"></a>  var group = new proto2.TestAllTypes.OptionalGroup();
+<a name="line48"></a>  group.setA(111);
+<a name="line49"></a>
+<a name="line50"></a>  message.setOptionalgroup(group);
+<a name="line51"></a>
+<a name="line52"></a>  var nestedMessage = new proto2.TestAllTypes.NestedMessage();
+<a name="line53"></a>  nestedMessage.setB(112);
+<a name="line54"></a>
+<a name="line55"></a>  message.setOptionalNestedMessage(nestedMessage);
+<a name="line56"></a>
+<a name="line57"></a>  message.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+<a name="line58"></a>
+<a name="line59"></a>  // Repeated.
+<a name="line60"></a>  message.addRepeatedInt32(201);
+<a name="line61"></a>  message.addRepeatedInt32(202);
+<a name="line62"></a>
+<a name="line63"></a>  // Serialize to a simplified text format.
+<a name="line64"></a>  var simplified = new goog.proto2.TextFormatSerializer().serialize(message);
+<a name="line65"></a>  var expected = &#39;optional_int32: 101\n&#39; +
+<a name="line66"></a>      &#39;optional_int64: 102\n&#39; +
+<a name="line67"></a>      &#39;optional_uint32: 103\n&#39; +
+<a name="line68"></a>      &#39;optional_sint32: 105\n&#39; +
+<a name="line69"></a>      &#39;optional_fixed32: 107\n&#39; +
+<a name="line70"></a>      &#39;optional_sfixed32: 109\n&#39; +
+<a name="line71"></a>      &#39;optional_float: 111.5\n&#39; +
+<a name="line72"></a>      &#39;optional_double: 112.5\n&#39; +
+<a name="line73"></a>      &#39;optional_bool: true\n&#39; +
+<a name="line74"></a>      &#39;optional_string: &quot;test&quot;\n&#39; +
+<a name="line75"></a>      &#39;optional_bytes: &quot;abcd&quot;\n&#39; +
+<a name="line76"></a>      &#39;optionalgroup {\n&#39; +
+<a name="line77"></a>      &#39;  a: 111\n&#39; +
+<a name="line78"></a>      &#39;}\n&#39; +
+<a name="line79"></a>      &#39;optional_nested_message {\n&#39; +
+<a name="line80"></a>      &#39;  b: 112\n&#39; +
+<a name="line81"></a>      &#39;}\n&#39; +
+<a name="line82"></a>      &#39;optional_nested_enum: FOO\n&#39; +
+<a name="line83"></a>      &#39;repeated_int32: 201\n&#39; +
+<a name="line84"></a>      &#39;repeated_int32: 202\n&#39;;
+<a name="line85"></a>
+<a name="line86"></a>  assertEquals(expected, simplified);
+<a name="line87"></a>}
+<a name="line88"></a>
+<a name="line89"></a>function testSerializationOfUnknown() {
+<a name="line90"></a>  var nestedUnknown = new proto2.TestAllTypes();
+<a name="line91"></a>  var message = new proto2.TestAllTypes();
+<a name="line92"></a>
+<a name="line93"></a>  // Set the fields.
+<a name="line94"></a>  // Known.
+<a name="line95"></a>  message.setOptionalInt32(101);
+<a name="line96"></a>  message.addRepeatedInt32(201);
+<a name="line97"></a>  message.addRepeatedInt32(202);
+<a name="line98"></a>
+<a name="line99"></a>  nestedUnknown.addRepeatedInt32(301);
+<a name="line100"></a>  nestedUnknown.addRepeatedInt32(302);
+<a name="line101"></a>
+<a name="line102"></a>  // Unknown.
+<a name="line103"></a>  message.setUnknown(1000, 301);
+<a name="line104"></a>  message.setUnknown(1001, 302);
+<a name="line105"></a>  message.setUnknown(1002, &#39;hello world&#39;);
+<a name="line106"></a>  message.setUnknown(1002, nestedUnknown);
+<a name="line107"></a>
+<a name="line108"></a>  nestedUnknown.setUnknown(2000, 401);
+<a name="line109"></a>
+<a name="line110"></a>  // Serialize.
+<a name="line111"></a>  var simplified = new goog.proto2.TextFormatSerializer().serialize(message);
+<a name="line112"></a>  var expected = &#39;optional_int32: 101\n&#39; +
+<a name="line113"></a>      &#39;repeated_int32: 201\n&#39; +
+<a name="line114"></a>      &#39;repeated_int32: 202\n&#39; +
+<a name="line115"></a>      &#39;1000: 301\n&#39; +
+<a name="line116"></a>      &#39;1001: 302\n&#39; +
+<a name="line117"></a>      &#39;1002 {\n&#39; +
+<a name="line118"></a>      &#39;  repeated_int32: 301\n&#39; +
+<a name="line119"></a>      &#39;  repeated_int32: 302\n&#39; +
+<a name="line120"></a>      &#39;  2000: 401\n&#39; +
+<a name="line121"></a>      &#39;}\n&#39;;
+<a name="line122"></a>
+<a name="line123"></a>  assertEquals(expected, simplified);
+<a name="line124"></a>}
+<a name="line125"></a>
+<a name="line126"></a>function testSerializationOfUnknownParsedFromObject() {
+<a name="line127"></a>  // Construct the object-serialized representation of the message constructed
+<a name="line128"></a>  // programmatically in the test above.
+<a name="line129"></a>  var serialized = {
+<a name="line130"></a>    1: 101,
+<a name="line131"></a>    31: [201, 202],
+<a name="line132"></a>    1000: 301,
+<a name="line133"></a>    1001: 302,
+<a name="line134"></a>    1002: {
+<a name="line135"></a>      31: [301, 302],
+<a name="line136"></a>      2000: 401
+<a name="line137"></a>    }
+<a name="line138"></a>  };
+<a name="line139"></a>
+<a name="line140"></a>  // Deserialize that representation into a TestAllTypes message.
+<a name="line141"></a>  var objectSerializer = new goog.proto2.ObjectSerializer();
+<a name="line142"></a>  var message = new proto2.TestAllTypes();
+<a name="line143"></a>  objectSerializer.deserializeTo(message, serialized);
+<a name="line144"></a>
+<a name="line145"></a>  // Check that the text format matches what we expect.
+<a name="line146"></a>  var simplified = new goog.proto2.TextFormatSerializer().serialize(message);
+<a name="line147"></a>  var expected = (
+<a name="line148"></a>      &#39;optional_int32: 101\n&#39; +
+<a name="line149"></a>      &#39;repeated_int32: 201\n&#39; +
+<a name="line150"></a>      &#39;repeated_int32: 202\n&#39; +
+<a name="line151"></a>      &#39;1000: 301\n&#39; +
+<a name="line152"></a>      &#39;1001: 302\n&#39; +
+<a name="line153"></a>      &#39;1002 {\n&#39; +
+<a name="line154"></a>      &#39;  31: 301\n&#39; +
+<a name="line155"></a>      &#39;  31: 302\n&#39; +
+<a name="line156"></a>      &#39;  2000: 401\n&#39; +
+<a name="line157"></a>      &#39;}\n&#39;
+<a name="line158"></a>      );
+<a name="line159"></a>  assertEquals(expected, simplified);
+<a name="line160"></a>}
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * Asserts that the given string value parses into the given set of tokens.
+<a name="line165"></a> * @param {string} value The string value to parse.
+<a name="line166"></a> * @param {Array.&lt;Object&gt; | Object} tokens The tokens to check against. If not
+<a name="line167"></a> *     an array, a single token is expected.
+<a name="line168"></a> * @param {boolean=} opt_ignoreWhitespace Whether whitespace tokens should be
+<a name="line169"></a> *     skipped by the tokenizer.
+<a name="line170"></a> */
+<a name="line171"></a>function assertTokens(value, tokens, opt_ignoreWhitespace) {
+<a name="line172"></a>  var tokenizer = new goog.proto2.TextFormatSerializer.Tokenizer_(
+<a name="line173"></a>      value, opt_ignoreWhitespace);
+<a name="line174"></a>  var tokensFound = [];
+<a name="line175"></a>
+<a name="line176"></a>  while (tokenizer.next()) {
+<a name="line177"></a>    tokensFound.push(tokenizer.getCurrent());
+<a name="line178"></a>  }
+<a name="line179"></a>
+<a name="line180"></a>  if (goog.typeOf(tokens) != &#39;array&#39;) {
+<a name="line181"></a>    tokens = [tokens];
+<a name="line182"></a>  }
+<a name="line183"></a>
+<a name="line184"></a>  assertEquals(tokens.length, tokensFound.length);
+<a name="line185"></a>  for (var i = 0; i &lt; tokens.length; ++i) {
+<a name="line186"></a>    assertToken(tokens[i], tokensFound[i]);
+<a name="line187"></a>  }
+<a name="line188"></a>}
+<a name="line189"></a>
+<a name="line190"></a>function assertToken(expected, found) {
+<a name="line191"></a>  assertEquals(expected.type, found.type);
+<a name="line192"></a>  if (expected.value) {
+<a name="line193"></a>    assertEquals(expected.value, found.value);
+<a name="line194"></a>  }
+<a name="line195"></a>}
+<a name="line196"></a>
+<a name="line197"></a>function testTokenizer() {
+<a name="line198"></a>  var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
+<a name="line199"></a>  assertTokens(&#39;{ 123 }&#39;, [
+<a name="line200"></a>    { type: types.OPEN_BRACE },
+<a name="line201"></a>    { type: types.WHITESPACE, value: &#39; &#39; },
+<a name="line202"></a>    { type: types.NUMBER, value: &#39;123&#39; },
+<a name="line203"></a>    { type: types.WHITESPACE, value: &#39; &#39;},
+<a name="line204"></a>    { type: types.CLOSE_BRACE }
+<a name="line205"></a>  ]);
+<a name="line206"></a>}
+<a name="line207"></a>
+<a name="line208"></a>function testTokenizerNoWhitespace() {
+<a name="line209"></a>  var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
+<a name="line210"></a>  assertTokens(&#39;{ &quot;hello world&quot; }&#39;, [
+<a name="line211"></a>    { type: types.OPEN_BRACE },
+<a name="line212"></a>    { type: types.STRING, value: &#39;&quot;hello world&quot;&#39; },
+<a name="line213"></a>    { type: types.CLOSE_BRACE }
+<a name="line214"></a>  ], true);
+<a name="line215"></a>}
+<a name="line216"></a>
+<a name="line217"></a>
+<a name="line218"></a>function assertIdentifier(identifier) {
+<a name="line219"></a>  var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
+<a name="line220"></a>  assertTokens(identifier, { type: types.IDENTIFIER, value: identifier });
+<a name="line221"></a>}
+<a name="line222"></a>
+<a name="line223"></a>function assertComment(comment) {
+<a name="line224"></a>  var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
+<a name="line225"></a>  assertTokens(comment, { type: types.COMMENT, value: comment });
+<a name="line226"></a>}
+<a name="line227"></a>
+<a name="line228"></a>function assertString(str) {
+<a name="line229"></a>  var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
+<a name="line230"></a>  assertTokens(str, { type: types.STRING, value: str });
+<a name="line231"></a>}
+<a name="line232"></a>
+<a name="line233"></a>function assertNumber(num) {
+<a name="line234"></a>  num = num.toString();
+<a name="line235"></a>  var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
+<a name="line236"></a>  assertTokens(num, { type: types.NUMBER, value: num });
+<a name="line237"></a>}
+<a name="line238"></a>
+<a name="line239"></a>function testTokenizerSingleTokens() {
+<a name="line240"></a>  var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
+<a name="line241"></a>  assertTokens(&#39;{&#39;, { type: types.OPEN_BRACE });
+<a name="line242"></a>  assertTokens(&#39;}&#39;, { type: types.CLOSE_BRACE });
+<a name="line243"></a>  assertTokens(&#39;&lt;&#39;, { type: types.OPEN_TAG });
+<a name="line244"></a>  assertTokens(&#39;&gt;&#39;, { type: types.CLOSE_TAG });
+<a name="line245"></a>  assertTokens(&#39;:&#39;, { type: types.COLON });
+<a name="line246"></a>  assertTokens(&#39;,&#39;, { type: types.COMMA });
+<a name="line247"></a>  assertTokens(&#39;;&#39;, { type: types.SEMI });
+<a name="line248"></a>
+<a name="line249"></a>  assertIdentifier(&#39;abcd&#39;);
+<a name="line250"></a>  assertIdentifier(&#39;Abcd&#39;);
+<a name="line251"></a>  assertIdentifier(&#39;ABcd&#39;);
+<a name="line252"></a>  assertIdentifier(&#39;ABcD&#39;);
+<a name="line253"></a>  assertIdentifier(&#39;a123nc&#39;);
+<a name="line254"></a>  assertIdentifier(&#39;a45_bC&#39;);
+<a name="line255"></a>  assertIdentifier(&#39;A45_bC&#39;);
+<a name="line256"></a>
+<a name="line257"></a>  assertIdentifier(&#39;inf&#39;);
+<a name="line258"></a>  assertIdentifier(&#39;infinity&#39;);
+<a name="line259"></a>  assertIdentifier(&#39;nan&#39;);
+<a name="line260"></a>
+<a name="line261"></a>  assertNumber(0);
+<a name="line262"></a>  assertNumber(10);
+<a name="line263"></a>  assertNumber(123);
+<a name="line264"></a>  assertNumber(1234);
+<a name="line265"></a>  assertNumber(123.56);
+<a name="line266"></a>  assertNumber(-124);
+<a name="line267"></a>  assertNumber(-1234);
+<a name="line268"></a>  assertNumber(-123.56);
+<a name="line269"></a>  assertNumber(&#39;123f&#39;);
+<a name="line270"></a>  assertNumber(&#39;123.6f&#39;);
+<a name="line271"></a>  assertNumber(&#39;-123f&#39;);
+<a name="line272"></a>  assertNumber(&#39;-123.8f&#39;);
+<a name="line273"></a>  assertNumber(&#39;0x1234&#39;);
+<a name="line274"></a>  assertNumber(&#39;0x12ac34&#39;);
+<a name="line275"></a>  assertNumber(&#39;0x49e281db686fb&#39;);
+<a name="line276"></a>
+<a name="line277"></a>  assertString(&#39;&quot;&quot;&#39;);
+<a name="line278"></a>  assertString(&#39;&quot;hello world&quot;&#39;);
+<a name="line279"></a>  assertString(&#39;&quot;hello # world&quot;&#39;);
+<a name="line280"></a>  assertString(&#39;&quot;hello #\\&quot; world&quot;&#39;);
+<a name="line281"></a>  assertString(&#39;&quot;|&quot;&#39;);
+<a name="line282"></a>  assertString(&#39;&quot;\\&quot;\\&quot;&quot;&#39;);
+<a name="line283"></a>  assertString(&#39;&quot;\\&quot;foo\\&quot;&quot;&#39;);
+<a name="line284"></a>  assertString(&#39;&quot;\\&quot;foo\\&quot; and \\&quot;bar\\&quot;&quot;&#39;);
+<a name="line285"></a>  assertString(&#39;&quot;foo \\&quot;and\\&quot; bar&quot;&#39;);
+<a name="line286"></a>
+<a name="line287"></a>  assertComment(&#39;# foo bar baz&#39;);
+<a name="line288"></a>  assertComment(&#39;# foo ## bar baz&#39;);
+<a name="line289"></a>  assertComment(&#39;# foo &quot;bar&quot; baz&#39;);
+<a name="line290"></a>}
+<a name="line291"></a>
+<a name="line292"></a>function testSerializationOfStringWithQuotes() {
+<a name="line293"></a>  var nestedUnknown = new proto2.TestAllTypes();
+<a name="line294"></a>  var message = new proto2.TestAllTypes();
+<a name="line295"></a>  message.setOptionalString(&#39;hello &quot;world&quot;&#39;);
+<a name="line296"></a>
+<a name="line297"></a>  // Serialize.
+<a name="line298"></a>  var simplified = new goog.proto2.TextFormatSerializer().serialize(message);
+<a name="line299"></a>  var expected = &#39;optional_string: &quot;hello \\&quot;world\\&quot;&quot;\n&#39;;
+<a name="line300"></a>  assertEquals(expected, simplified);
+<a name="line301"></a>}
+<a name="line302"></a>
+<a name="line303"></a>function testDeserialization() {
+<a name="line304"></a>  var message = new proto2.TestAllTypes();
+<a name="line305"></a>  var value = &#39;optional_int32: 101\n&#39; +
+<a name="line306"></a>      &#39;repeated_int32: 201\n&#39; +
+<a name="line307"></a>      &#39;repeated_int32: 202\n&#39; +
+<a name="line308"></a>      &#39;optional_float: 123.4&#39;;
+<a name="line309"></a>
+<a name="line310"></a>  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line311"></a>
+<a name="line312"></a>  assertEquals(101, message.getOptionalInt32());
+<a name="line313"></a>  assertEquals(201, message.getRepeatedInt32(0));
+<a name="line314"></a>  assertEquals(202, message.getRepeatedInt32(1));
+<a name="line315"></a>  assertEquals(123.4, message.getOptionalFloat());
+<a name="line316"></a>}
+<a name="line317"></a>
+<a name="line318"></a>function testDeserializationOfList() {
+<a name="line319"></a>  var message = new proto2.TestAllTypes();
+<a name="line320"></a>  var value = &#39;optional_int32: 101\n&#39; +
+<a name="line321"></a>      &#39;repeated_int32: [201, 202]\n&#39; +
+<a name="line322"></a>      &#39;optional_float: 123.4&#39;;
+<a name="line323"></a>
+<a name="line324"></a>  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line325"></a>
+<a name="line326"></a>  assertEquals(101, message.getOptionalInt32());
+<a name="line327"></a>  assertEquals(201, message.getRepeatedInt32(0));
+<a name="line328"></a>  assertEquals(123.4, message.getOptionalFloat());
+<a name="line329"></a>}
+<a name="line330"></a>
+<a name="line331"></a>function testDeserializationOfIntegerAsHexadecimalString() {
+<a name="line332"></a>  var message = new proto2.TestAllTypes();
+<a name="line333"></a>  var value = &#39;optional_int32: 0x1\n&#39; +
+<a name="line334"></a>      &#39;optional_sint32: 0xf\n&#39; +
+<a name="line335"></a>      &#39;optional_uint32: 0xffffffff\n&#39; +
+<a name="line336"></a>      &#39;repeated_int32: [0x0, 0xff]\n&#39;;
+<a name="line337"></a>
+<a name="line338"></a>  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line339"></a>
+<a name="line340"></a>  assertEquals(1, message.getOptionalInt32());
+<a name="line341"></a>  assertEquals(15, message.getOptionalSint32());
+<a name="line342"></a>  assertEquals(4294967295, message.getOptionalUint32());
+<a name="line343"></a>  assertEquals(0, message.getRepeatedInt32(0));
+<a name="line344"></a>  assertEquals(255, message.getRepeatedInt32(1));
+<a name="line345"></a>}
+<a name="line346"></a>
+<a name="line347"></a>function testDeserializationOfInt64AsHexadecimalString() {
+<a name="line348"></a>  var message = new proto2.TestAllTypes();
+<a name="line349"></a>  var value = &#39;optional_int64: 0xf&#39;;
+<a name="line350"></a>
+<a name="line351"></a>  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line352"></a>
+<a name="line353"></a>  assertEquals(&#39;0xf&#39;, message.getOptionalInt64());
+<a name="line354"></a>}
+<a name="line355"></a>
+<a name="line356"></a>function testDeserializationOfZeroFalseAndEmptyString() {
+<a name="line357"></a>  var message = new proto2.TestAllTypes();
+<a name="line358"></a>  var value = &#39;optional_int32: 0\n&#39; +
+<a name="line359"></a>      &#39;optional_bool: false\n&#39; +
+<a name="line360"></a>      &#39;optional_string: &quot;&quot;&#39;;
+<a name="line361"></a>
+<a name="line362"></a>  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line363"></a>
+<a name="line364"></a>  assertEquals(0, message.getOptionalInt32());
+<a name="line365"></a>  assertEquals(false, message.getOptionalBool());
+<a name="line366"></a>  assertEquals(&#39;&#39;, message.getOptionalString());
+<a name="line367"></a>}
+<a name="line368"></a>
+<a name="line369"></a>function testDeserializationSkipUnknown() {
+<a name="line370"></a>  var message = new proto2.TestAllTypes();
+<a name="line371"></a>  var value = &#39;optional_int32: 101\n&#39; +
+<a name="line372"></a>      &#39;repeated_int32: 201\n&#39; +
+<a name="line373"></a>      &#39;some_unknown: true\n&#39; +
+<a name="line374"></a>      &#39;repeated_int32: 202\n&#39; +
+<a name="line375"></a>      &#39;optional_float: 123.4&#39;;
+<a name="line376"></a>
+<a name="line377"></a>  var parser = new goog.proto2.TextFormatSerializer.Parser();
+<a name="line378"></a>  assertTrue(parser.parse(message, value, true));
+<a name="line379"></a>
+<a name="line380"></a>  assertEquals(101, message.getOptionalInt32());
+<a name="line381"></a>  assertEquals(201, message.getRepeatedInt32(0));
+<a name="line382"></a>  assertEquals(202, message.getRepeatedInt32(1));
+<a name="line383"></a>  assertEquals(123.4, message.getOptionalFloat());
+<a name="line384"></a>}
+<a name="line385"></a>
+<a name="line386"></a>function testDeserializationSkipUnknownList() {
+<a name="line387"></a>  var message = new proto2.TestAllTypes();
+<a name="line388"></a>  var value = &#39;optional_int32: 101\n&#39; +
+<a name="line389"></a>      &#39;repeated_int32: 201\n&#39; +
+<a name="line390"></a>      &#39;some_unknown: [true, 1, 201, &quot;hello&quot;]\n&#39; +
+<a name="line391"></a>      &#39;repeated_int32: 202\n&#39; +
+<a name="line392"></a>      &#39;optional_float: 123.4&#39;;
+<a name="line393"></a>
+<a name="line394"></a>  var parser = new goog.proto2.TextFormatSerializer.Parser();
+<a name="line395"></a>  assertTrue(parser.parse(message, value, true));
+<a name="line396"></a>
+<a name="line397"></a>  assertEquals(101, message.getOptionalInt32());
+<a name="line398"></a>  assertEquals(201, message.getRepeatedInt32(0));
+<a name="line399"></a>  assertEquals(202, message.getRepeatedInt32(1));
+<a name="line400"></a>  assertEquals(123.4, message.getOptionalFloat());
+<a name="line401"></a>}
+<a name="line402"></a>
+<a name="line403"></a>function testDeserializationSkipUnknownNested() {
+<a name="line404"></a>  var message = new proto2.TestAllTypes();
+<a name="line405"></a>  var value = &#39;optional_int32: 101\n&#39; +
+<a name="line406"></a>      &#39;repeated_int32: 201\n&#39; +
+<a name="line407"></a>      &#39;some_unknown: &lt;\n&#39; +
+<a name="line408"></a>      &#39;  a: 1\n&#39; +
+<a name="line409"></a>      &#39;  b: 2\n&#39; +
+<a name="line410"></a>      &#39;&gt;\n&#39; +
+<a name="line411"></a>      &#39;repeated_int32: 202\n&#39; +
+<a name="line412"></a>      &#39;optional_float: 123.4&#39;;
+<a name="line413"></a>
+<a name="line414"></a>  var parser = new goog.proto2.TextFormatSerializer.Parser();
+<a name="line415"></a>  assertTrue(parser.parse(message, value, true));
+<a name="line416"></a>
+<a name="line417"></a>  assertEquals(101, message.getOptionalInt32());
+<a name="line418"></a>  assertEquals(201, message.getRepeatedInt32(0));
+<a name="line419"></a>  assertEquals(202, message.getRepeatedInt32(1));
+<a name="line420"></a>  assertEquals(123.4, message.getOptionalFloat());
+<a name="line421"></a>}
+<a name="line422"></a>
+<a name="line423"></a>function testDeserializationSkipUnknownNestedInvalid() {
+<a name="line424"></a>  var message = new proto2.TestAllTypes();
+<a name="line425"></a>  var value = &#39;optional_int32: 101\n&#39; +
+<a name="line426"></a>      &#39;repeated_int32: 201\n&#39; +
+<a name="line427"></a>      &#39;some_unknown: &lt;\n&#39; +
+<a name="line428"></a>      &#39;  a: \n&#39; + // Missing value.
+<a name="line429"></a>      &#39;  b: 2\n&#39; +
+<a name="line430"></a>      &#39;&gt;\n&#39; +
+<a name="line431"></a>      &#39;repeated_int32: 202\n&#39; +
+<a name="line432"></a>      &#39;optional_float: 123.4&#39;;
+<a name="line433"></a>
+<a name="line434"></a>  var parser = new goog.proto2.TextFormatSerializer.Parser();
+<a name="line435"></a>  assertFalse(parser.parse(message, value, true));
+<a name="line436"></a>}
+<a name="line437"></a>
+<a name="line438"></a>function testDeserializationSkipUnknownNestedInvalid2() {
+<a name="line439"></a>  var message = new proto2.TestAllTypes();
+<a name="line440"></a>  var value = &#39;optional_int32: 101\n&#39; +
+<a name="line441"></a>      &#39;repeated_int32: 201\n&#39; +
+<a name="line442"></a>      &#39;some_unknown: &lt;\n&#39; +
+<a name="line443"></a>      &#39;  a: 2\n&#39; +
+<a name="line444"></a>      &#39;  b: 2\n&#39; +
+<a name="line445"></a>      &#39;}\n&#39; + // Delimiter mismatch
+<a name="line446"></a>      &#39;repeated_int32: 202\n&#39; +
+<a name="line447"></a>      &#39;optional_float: 123.4&#39;;
+<a name="line448"></a>
+<a name="line449"></a>  var parser = new goog.proto2.TextFormatSerializer.Parser();
+<a name="line450"></a>  assertFalse(parser.parse(message, value, true));
+<a name="line451"></a>}
+<a name="line452"></a>
+<a name="line453"></a>
+<a name="line454"></a>function testDeserializationLegacyFormat() {
+<a name="line455"></a>  var message = new proto2.TestAllTypes();
+<a name="line456"></a>  var value = &#39;optional_int32: 101,\n&#39; +
+<a name="line457"></a>      &#39;repeated_int32: 201,\n&#39; +
+<a name="line458"></a>      &#39;repeated_int32: 202;\n&#39; +
+<a name="line459"></a>      &#39;optional_float: 123.4&#39;;
+<a name="line460"></a>
+<a name="line461"></a>  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line462"></a>
+<a name="line463"></a>  assertEquals(101, message.getOptionalInt32());
+<a name="line464"></a>  assertEquals(201, message.getRepeatedInt32(0));
+<a name="line465"></a>  assertEquals(202, message.getRepeatedInt32(1));
+<a name="line466"></a>  assertEquals(123.4, message.getOptionalFloat());
+<a name="line467"></a>}
+<a name="line468"></a>
+<a name="line469"></a>function testDeserializationVariedNumbers() {
+<a name="line470"></a>  var message = new proto2.TestAllTypes();
+<a name="line471"></a>  var value = (
+<a name="line472"></a>      &#39;repeated_int32: 23\n&#39; +
+<a name="line473"></a>      &#39;repeated_int32: -3\n&#39; +
+<a name="line474"></a>      &#39;repeated_int32: 0xdeadbeef\n&#39; +
+<a name="line475"></a>      &#39;repeated_float: 123.0\n&#39; +
+<a name="line476"></a>      &#39;repeated_float: -3.27\n&#39; +
+<a name="line477"></a>      &#39;repeated_float: -35.5f\n&#39;
+<a name="line478"></a>      );
+<a name="line479"></a>
+<a name="line480"></a>  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line481"></a>
+<a name="line482"></a>  assertEquals(23, message.getRepeatedInt32(0));
+<a name="line483"></a>  assertEquals(-3, message.getRepeatedInt32(1));
+<a name="line484"></a>  assertEquals(3735928559, message.getRepeatedInt32(2));
+<a name="line485"></a>  assertEquals(123.0, message.getRepeatedFloat(0));
+<a name="line486"></a>  assertEquals(-3.27, message.getRepeatedFloat(1));
+<a name="line487"></a>  assertEquals(-35.5, message.getRepeatedFloat(2));
+<a name="line488"></a>}
+<a name="line489"></a>
+<a name="line490"></a>function testParseNumericalConstant() {
+<a name="line491"></a>  var parseNumericalConstant =
+<a name="line492"></a>      goog.proto2.TextFormatSerializer.Parser.parseNumericalConstant_;
+<a name="line493"></a>
+<a name="line494"></a>  assertEquals(Infinity, parseNumericalConstant(&#39;inf&#39;));
+<a name="line495"></a>  assertEquals(Infinity, parseNumericalConstant(&#39;inff&#39;));
+<a name="line496"></a>  assertEquals(Infinity, parseNumericalConstant(&#39;infinity&#39;));
+<a name="line497"></a>  assertEquals(Infinity, parseNumericalConstant(&#39;infinityf&#39;));
+<a name="line498"></a>  assertEquals(Infinity, parseNumericalConstant(&#39;Infinityf&#39;));
+<a name="line499"></a>
+<a name="line500"></a>  assertEquals(-Infinity, parseNumericalConstant(&#39;-inf&#39;));
+<a name="line501"></a>  assertEquals(-Infinity, parseNumericalConstant(&#39;-inff&#39;));
+<a name="line502"></a>  assertEquals(-Infinity, parseNumericalConstant(&#39;-infinity&#39;));
+<a name="line503"></a>  assertEquals(-Infinity, parseNumericalConstant(&#39;-infinityf&#39;));
+<a name="line504"></a>  assertEquals(-Infinity, parseNumericalConstant(&#39;-Infinity&#39;));
+<a name="line505"></a>
+<a name="line506"></a>  assertNull(parseNumericalConstant(&#39;-infin&#39;));
+<a name="line507"></a>  assertNull(parseNumericalConstant(&#39;infin&#39;));
+<a name="line508"></a>  assertNull(parseNumericalConstant(&#39;-infinite&#39;));
+<a name="line509"></a>
+<a name="line510"></a>  assertNull(parseNumericalConstant(&#39;-infin&#39;));
+<a name="line511"></a>  assertNull(parseNumericalConstant(&#39;infin&#39;));
+<a name="line512"></a>  assertNull(parseNumericalConstant(&#39;-infinite&#39;));
+<a name="line513"></a>
+<a name="line514"></a>  assertTrue(isNaN(parseNumericalConstant(&#39;Nan&#39;)));
+<a name="line515"></a>  assertTrue(isNaN(parseNumericalConstant(&#39;NaN&#39;)));
+<a name="line516"></a>  assertTrue(isNaN(parseNumericalConstant(&#39;NAN&#39;)));
+<a name="line517"></a>  assertTrue(isNaN(parseNumericalConstant(&#39;nan&#39;)));
+<a name="line518"></a>  assertTrue(isNaN(parseNumericalConstant(&#39;nanf&#39;)));
+<a name="line519"></a>  assertTrue(isNaN(parseNumericalConstant(&#39;NaNf&#39;)));
+<a name="line520"></a>
+<a name="line521"></a>  assertEquals(Number.POSITIVE_INFINITY, parseNumericalConstant(&#39;infinity&#39;));
+<a name="line522"></a>  assertEquals(Number.NEGATIVE_INFINITY, parseNumericalConstant(&#39;-inf&#39;));
+<a name="line523"></a>  assertEquals(Number.NEGATIVE_INFINITY, parseNumericalConstant(&#39;-infinity&#39;));
+<a name="line524"></a>
+<a name="line525"></a>  assertNull(parseNumericalConstant(&#39;na&#39;));
+<a name="line526"></a>  assertNull(parseNumericalConstant(&#39;-nan&#39;));
+<a name="line527"></a>  assertNull(parseNumericalConstant(&#39;none&#39;));
+<a name="line528"></a>}
+<a name="line529"></a>
+<a name="line530"></a>function testDeserializationOfNumericalConstants() {
+<a name="line531"></a>
+<a name="line532"></a>  var message = new proto2.TestAllTypes();
+<a name="line533"></a>  var value = (
+<a name="line534"></a>      &#39;repeated_float: inf\n&#39; +
+<a name="line535"></a>      &#39;repeated_float: -inf\n&#39; +
+<a name="line536"></a>      &#39;repeated_float: nan\n&#39; +
+<a name="line537"></a>      &#39;repeated_float: 300.2\n&#39;
+<a name="line538"></a>      );
+<a name="line539"></a>
+<a name="line540"></a>  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line541"></a>
+<a name="line542"></a>  assertEquals(Infinity, message.getRepeatedFloat(0));
+<a name="line543"></a>  assertEquals(-Infinity, message.getRepeatedFloat(1));
+<a name="line544"></a>  assertTrue(isNaN(message.getRepeatedFloat(2)));
+<a name="line545"></a>  assertEquals(300.2, message.getRepeatedFloat(3));
+<a name="line546"></a>}
+<a name="line547"></a>
+<a name="line548"></a>function testGetNumberFromString() {
+<a name="line549"></a>  var getNumberFromString =
+<a name="line550"></a>      goog.proto2.TextFormatSerializer.Parser.getNumberFromString_;
+<a name="line551"></a>
+<a name="line552"></a>  assertEquals(3735928559, getNumberFromString(&#39;0xdeadbeef&#39;));
+<a name="line553"></a>  assertEquals(4276215469, getNumberFromString(&#39;0xFEE1DEAD&#39;));
+<a name="line554"></a>  assertEquals(123.1, getNumberFromString(&#39;123.1&#39;));
+<a name="line555"></a>  assertEquals(123.0, getNumberFromString(&#39;123.0&#39;));
+<a name="line556"></a>  assertEquals(-29.3, getNumberFromString(&#39;-29.3f&#39;));
+<a name="line557"></a>  assertEquals(23, getNumberFromString(&#39;23&#39;));
+<a name="line558"></a>  assertEquals(-3, getNumberFromString(&#39;-3&#39;));
+<a name="line559"></a>  assertEquals(-3.27, getNumberFromString(&#39;-3.27&#39;));
+<a name="line560"></a>
+<a name="line561"></a>  assertThrows(goog.partial(getNumberFromString, &#39;cat&#39;));
+<a name="line562"></a>  assertThrows(goog.partial(getNumberFromString, &#39;NaN&#39;));
+<a name="line563"></a>  assertThrows(goog.partial(getNumberFromString, &#39;inf&#39;));
+<a name="line564"></a>}
+<a name="line565"></a>
+<a name="line566"></a>function testDeserializationError() {
+<a name="line567"></a>  var message = new proto2.TestAllTypes();
+<a name="line568"></a>  var value = &#39;optional_int33: 101\n&#39;;
+<a name="line569"></a>  var result =
+<a name="line570"></a>      new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line571"></a>  assertEquals(result, &#39;Unknown field: optional_int33&#39;);
+<a name="line572"></a>}
+<a name="line573"></a>
+<a name="line574"></a>function testNestedDeserialization() {
+<a name="line575"></a>  var message = new proto2.TestAllTypes();
+<a name="line576"></a>  var value = &#39;optional_int32: 101\n&#39; +
+<a name="line577"></a>      &#39;optional_nested_message: {\n&#39; +
+<a name="line578"></a>      &#39;  b: 301\n&#39; +
+<a name="line579"></a>      &#39;}&#39;;
+<a name="line580"></a>
+<a name="line581"></a>  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line582"></a>
+<a name="line583"></a>  assertEquals(101, message.getOptionalInt32());
+<a name="line584"></a>  assertEquals(301, message.getOptionalNestedMessage().getB());
+<a name="line585"></a>}
+<a name="line586"></a>
+<a name="line587"></a>function testNestedDeserializationLegacyFormat() {
+<a name="line588"></a>  var message = new proto2.TestAllTypes();
+<a name="line589"></a>  var value = &#39;optional_int32: 101\n&#39; +
+<a name="line590"></a>      &#39;optional_nested_message: &lt;\n&#39; +
+<a name="line591"></a>      &#39;  b: 301\n&#39; +
+<a name="line592"></a>      &#39;&gt;&#39;;
+<a name="line593"></a>
+<a name="line594"></a>  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+<a name="line595"></a>
+<a name="line596"></a>  assertEquals(101, message.getOptionalInt32());
+<a name="line597"></a>  assertEquals(301, message.getOptionalNestedMessage().getB());
+<a name="line598"></a>}
+<a name="line599"></a>
+<a name="line600"></a>function testBidirectional() {
+<a name="line601"></a>  var message = new proto2.TestAllTypes();
+<a name="line602"></a>
+<a name="line603"></a>  // Set the fields.
+<a name="line604"></a>  // Singular.
+<a name="line605"></a>  message.setOptionalInt32(101);
+<a name="line606"></a>  message.setOptionalInt64(&#39;102&#39;);
+<a name="line607"></a>  message.setOptionalUint32(103);
+<a name="line608"></a>  message.setOptionalUint64(&#39;104&#39;);
+<a name="line609"></a>  message.setOptionalSint32(105);
+<a name="line610"></a>  message.setOptionalSint64(&#39;106&#39;);
+<a name="line611"></a>  message.setOptionalFixed32(107);
+<a name="line612"></a>  message.setOptionalFixed64(&#39;108&#39;);
+<a name="line613"></a>  message.setOptionalSfixed32(109);
+<a name="line614"></a>  message.setOptionalSfixed64(&#39;110&#39;);
+<a name="line615"></a>  message.setOptionalFloat(111.5);
+<a name="line616"></a>  message.setOptionalDouble(112.5);
+<a name="line617"></a>  message.setOptionalBool(true);
+<a name="line618"></a>  message.setOptionalString(&#39;test&#39;);
+<a name="line619"></a>  message.setOptionalBytes(&#39;abcd&#39;);
+<a name="line620"></a>
+<a name="line621"></a>  var group = new proto2.TestAllTypes.OptionalGroup();
+<a name="line622"></a>  group.setA(111);
+<a name="line623"></a>
+<a name="line624"></a>  message.setOptionalgroup(group);
+<a name="line625"></a>
+<a name="line626"></a>  var nestedMessage = new proto2.TestAllTypes.NestedMessage();
+<a name="line627"></a>  nestedMessage.setB(112);
+<a name="line628"></a>
+<a name="line629"></a>  message.setOptionalNestedMessage(nestedMessage);
+<a name="line630"></a>
+<a name="line631"></a>  message.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+<a name="line632"></a>
+<a name="line633"></a>  // Repeated.
+<a name="line634"></a>  message.addRepeatedInt32(201);
+<a name="line635"></a>  message.addRepeatedInt32(202);
+<a name="line636"></a>  message.addRepeatedString(&#39;hello &quot;world&quot;&#39;);
+<a name="line637"></a>
+<a name="line638"></a>  // Serialize the message to text form.
+<a name="line639"></a>  var serializer = new goog.proto2.TextFormatSerializer();
+<a name="line640"></a>  var textform = serializer.serialize(message);
+<a name="line641"></a>
+<a name="line642"></a>  // Create a copy and deserialize into the copy.
+<a name="line643"></a>  var copy = new proto2.TestAllTypes();
+<a name="line644"></a>  serializer.deserializeTo(copy, textform);
+<a name="line645"></a>
+<a name="line646"></a>  // Assert that the messages are structurally equivalent.
+<a name="line647"></a>  assertTrue(copy.equals(message));
+<a name="line648"></a>}
+<a name="line649"></a>
+<a name="line650"></a>function testBidirectional64BitNumber() {
+<a name="line651"></a>  var message = new proto2.TestAllTypes();
+<a name="line652"></a>  message.setOptionalInt64Number(10000000);
+<a name="line653"></a>  message.setOptionalInt64String(&#39;200000000000000000&#39;);
+<a name="line654"></a>
+<a name="line655"></a>  // Serialize the message to text form.
+<a name="line656"></a>  var serializer = new goog.proto2.TextFormatSerializer();
+<a name="line657"></a>  var textform = serializer.serialize(message);
+<a name="line658"></a>
+<a name="line659"></a>  // Create a copy and deserialize into the copy.
+<a name="line660"></a>  var copy = new proto2.TestAllTypes();
+<a name="line661"></a>  serializer.deserializeTo(copy, textform);
+<a name="line662"></a>
+<a name="line663"></a>  // Assert that the messages are structurally equivalent.
+<a name="line664"></a>  assertTrue(copy.equals(message));
+<a name="line665"></a>}
+<a name="line666"></a>
+<a name="line667"></a>function testUseEnumValues() {
+<a name="line668"></a>  var message = new proto2.TestAllTypes();
+<a name="line669"></a>  message.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+<a name="line670"></a>
+<a name="line671"></a>  var serializer = new goog.proto2.TextFormatSerializer(false, true);
+<a name="line672"></a>  var textform = serializer.serialize(message);
+<a name="line673"></a>
+<a name="line674"></a>  var expected = &#39;optional_nested_enum: 0\n&#39;;
+<a name="line675"></a>
+<a name="line676"></a>  assertEquals(expected, textform);
+<a name="line677"></a>
+<a name="line678"></a>  var deserializedMessage = new proto2.TestAllTypes();
+<a name="line679"></a>  serializer.deserializeTo(deserializedMessage, textform);
+<a name="line680"></a>
+<a name="line681"></a>  assertEquals(
+<a name="line682"></a>      proto2.TestAllTypes.NestedEnum.FOO,
+<a name="line683"></a>      deserializedMessage.getOptionalNestedEnum());
+<a name="line684"></a>}
+</pre>
+
+
+</body>
+</html>

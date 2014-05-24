@@ -1,0 +1,266 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>arraymatcher.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_ac_arraymatcher.js.html">arraymatcher.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Basic class for matching words in an array.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.ac.ArrayMatcher&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.string&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Basic class for matching words in an array
+<a name="line29"></a> * @constructor
+<a name="line30"></a> * @param {Array} rows Dictionary of items to match.  Can be objects if they
+<a name="line31"></a> *     have a toString method that returns the value to match against.
+<a name="line32"></a> * @param {boolean=} opt_noSimilar if true, do not do similarity matches for the
+<a name="line33"></a> *     input token against the dictionary.
+<a name="line34"></a> */
+<a name="line35"></a>goog.ui.ac.ArrayMatcher = function(rows, opt_noSimilar) {
+<a name="line36"></a>  this.rows_ = rows || [];
+<a name="line37"></a>  this.useSimilar_ = !opt_noSimilar;
+<a name="line38"></a>};
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/**
+<a name="line42"></a> * Replaces the rows that this object searches over.
+<a name="line43"></a> * @param {Array} rows Dictionary of items to match.
+<a name="line44"></a> */
+<a name="line45"></a>goog.ui.ac.ArrayMatcher.prototype.setRows = function(rows) {
+<a name="line46"></a>  this.rows_ = rows || [];
+<a name="line47"></a>};
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>/**
+<a name="line51"></a> * Function used to pass matches to the autocomplete
+<a name="line52"></a> * @param {string} token Token to match.
+<a name="line53"></a> * @param {number} maxMatches Max number of matches to return.
+<a name="line54"></a> * @param {Function} matchHandler callback to execute after matching.
+<a name="line55"></a> * @param {string=} opt_fullString The full string from the input box.
+<a name="line56"></a> */
+<a name="line57"></a>goog.ui.ac.ArrayMatcher.prototype.requestMatchingRows =
+<a name="line58"></a>    function(token, maxMatches, matchHandler, opt_fullString) {
+<a name="line59"></a>
+<a name="line60"></a>  var matches = this.useSimilar_ ?
+<a name="line61"></a>      goog.ui.ac.ArrayMatcher.getMatchesForRows(token, maxMatches, this.rows_) :
+<a name="line62"></a>      this.getPrefixMatches(token, maxMatches);
+<a name="line63"></a>
+<a name="line64"></a>  matchHandler(token, matches);
+<a name="line65"></a>};
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * Matches the token against the specified rows, first looking for prefix
+<a name="line70"></a> * matches and if that fails, then looking for similar matches.
+<a name="line71"></a> *
+<a name="line72"></a> * @param {string} token Token to match.
+<a name="line73"></a> * @param {number} maxMatches Max number of matches to return.
+<a name="line74"></a> * @param {!Array} rows Rows to search for matches. Can be objects if they have
+<a name="line75"></a> *     a toString method that returns the value to match against.
+<a name="line76"></a> * @return {!Array} Rows that match.
+<a name="line77"></a> */
+<a name="line78"></a>goog.ui.ac.ArrayMatcher.getMatchesForRows =
+<a name="line79"></a>    function(token, maxMatches, rows) {
+<a name="line80"></a>  var matches =
+<a name="line81"></a>      goog.ui.ac.ArrayMatcher.getPrefixMatchesForRows(token, maxMatches, rows);
+<a name="line82"></a>
+<a name="line83"></a>  if (matches.length == 0) {
+<a name="line84"></a>    matches = goog.ui.ac.ArrayMatcher.getSimilarMatchesForRows(token,
+<a name="line85"></a>        maxMatches, rows);
+<a name="line86"></a>  }
+<a name="line87"></a>  return matches;
+<a name="line88"></a>};
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Matches the token against the start of words in the row.
+<a name="line93"></a> * @param {string} token Token to match.
+<a name="line94"></a> * @param {number} maxMatches Max number of matches to return.
+<a name="line95"></a> * @return {!Array} Rows that match.
+<a name="line96"></a> */
+<a name="line97"></a>goog.ui.ac.ArrayMatcher.prototype.getPrefixMatches =
+<a name="line98"></a>    function(token, maxMatches) {
+<a name="line99"></a>  return goog.ui.ac.ArrayMatcher.getPrefixMatchesForRows(token, maxMatches,
+<a name="line100"></a>      this.rows_);
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Matches the token against the start of words in the row.
+<a name="line106"></a> * @param {string} token Token to match.
+<a name="line107"></a> * @param {number} maxMatches Max number of matches to return.
+<a name="line108"></a> * @param {!Array} rows Rows to search for matches. Can be objects if they have
+<a name="line109"></a> *     a toString method that returns the value to match against.
+<a name="line110"></a> * @return {!Array} Rows that match.
+<a name="line111"></a> */
+<a name="line112"></a>goog.ui.ac.ArrayMatcher.getPrefixMatchesForRows =
+<a name="line113"></a>    function(token, maxMatches, rows) {
+<a name="line114"></a>  var matches = [];
+<a name="line115"></a>
+<a name="line116"></a>  if (token != &#39;&#39;) {
+<a name="line117"></a>    var escapedToken = goog.string.regExpEscape(token);
+<a name="line118"></a>    var matcher = new RegExp(&#39;(^|\\W+)&#39; + escapedToken, &#39;i&#39;);
+<a name="line119"></a>
+<a name="line120"></a>    for (var i = 0; i &lt; rows.length &amp;&amp; matches.length &lt; maxMatches; i++) {
+<a name="line121"></a>      var row = rows[i];
+<a name="line122"></a>      if (String(row).match(matcher)) {
+<a name="line123"></a>        matches.push(row);
+<a name="line124"></a>      }
+<a name="line125"></a>    }
+<a name="line126"></a>  }
+<a name="line127"></a>  return matches;
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Matches the token against similar rows, by calculating &quot;distance&quot; between the
+<a name="line133"></a> * terms.
+<a name="line134"></a> * @param {string} token Token to match.
+<a name="line135"></a> * @param {number} maxMatches Max number of matches to return.
+<a name="line136"></a> * @return {!Array} The best maxMatches rows.
+<a name="line137"></a> */
+<a name="line138"></a>goog.ui.ac.ArrayMatcher.prototype.getSimilarRows = function(token, maxMatches) {
+<a name="line139"></a>  return goog.ui.ac.ArrayMatcher.getSimilarMatchesForRows(token, maxMatches,
+<a name="line140"></a>      this.rows_);
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Matches the token against similar rows, by calculating &quot;distance&quot; between the
+<a name="line146"></a> * terms.
+<a name="line147"></a> * @param {string} token Token to match.
+<a name="line148"></a> * @param {number} maxMatches Max number of matches to return.
+<a name="line149"></a> * @param {!Array} rows Rows to search for matches. Can be objects if they have
+<a name="line150"></a> *     a toString method that returns the value to match against.
+<a name="line151"></a> * @return {!Array} The best maxMatches rows.
+<a name="line152"></a> */
+<a name="line153"></a>goog.ui.ac.ArrayMatcher.getSimilarMatchesForRows =
+<a name="line154"></a>    function(token, maxMatches, rows) {
+<a name="line155"></a>  var results = [];
+<a name="line156"></a>
+<a name="line157"></a>  for (var index = 0; index &lt; rows.length; index++) {
+<a name="line158"></a>    var row = rows[index];
+<a name="line159"></a>    var str = token.toLowerCase();
+<a name="line160"></a>    var txt = String(row).toLowerCase();
+<a name="line161"></a>    var score = 0;
+<a name="line162"></a>
+<a name="line163"></a>    if (txt.indexOf(str) != -1) {
+<a name="line164"></a>      score = parseInt((txt.indexOf(str) / 4).toString(), 10);
+<a name="line165"></a>
+<a name="line166"></a>    } else {
+<a name="line167"></a>      var arr = str.split(&#39;&#39;);
+<a name="line168"></a>
+<a name="line169"></a>      var lastPos = -1;
+<a name="line170"></a>      var penalty = 10;
+<a name="line171"></a>
+<a name="line172"></a>      for (var i = 0, c; c = arr[i]; i++) {
+<a name="line173"></a>        var pos = txt.indexOf(c);
+<a name="line174"></a>
+<a name="line175"></a>        if (pos &gt; lastPos) {
+<a name="line176"></a>          var diff = pos - lastPos - 1;
+<a name="line177"></a>
+<a name="line178"></a>          if (diff &gt; penalty - 5) {
+<a name="line179"></a>            diff = penalty - 5;
+<a name="line180"></a>          }
+<a name="line181"></a>
+<a name="line182"></a>          score += diff;
+<a name="line183"></a>
+<a name="line184"></a>          lastPos = pos;
+<a name="line185"></a>        } else {
+<a name="line186"></a>          score += penalty;
+<a name="line187"></a>          penalty += 5;
+<a name="line188"></a>        }
+<a name="line189"></a>      }
+<a name="line190"></a>    }
+<a name="line191"></a>
+<a name="line192"></a>    if (score &lt; str.length * 6) {
+<a name="line193"></a>      results.push({
+<a name="line194"></a>        str: row,
+<a name="line195"></a>        score: score,
+<a name="line196"></a>        index: index
+<a name="line197"></a>      });
+<a name="line198"></a>    }
+<a name="line199"></a>  }
+<a name="line200"></a>
+<a name="line201"></a>  results.sort(function(a, b) {
+<a name="line202"></a>    var diff = a.score - b.score;
+<a name="line203"></a>    if (diff != 0) {
+<a name="line204"></a>      return diff;
+<a name="line205"></a>    }
+<a name="line206"></a>    return a.index - b.index;
+<a name="line207"></a>  });
+<a name="line208"></a>
+<a name="line209"></a>  var matches = [];
+<a name="line210"></a>  for (var i = 0; i &lt; maxMatches &amp;&amp; i &lt; results.length; i++) {
+<a name="line211"></a>    matches.push(results[i].str);
+<a name="line212"></a>  }
+<a name="line213"></a>
+<a name="line214"></a>  return matches;
+<a name="line215"></a>};
+</pre>
+
+
+</body>
+</html>

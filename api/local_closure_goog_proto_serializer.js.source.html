@@ -1,0 +1,121 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>serializer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_proto_serializer.js.html">serializer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Protocol buffer serializer.
+<a name="line17"></a> * @author arv@google.com (Erik Arvidsson)
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>// TODO(arv): Serialize booleans as 0 and 1
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.proto.Serializer&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.json.Serializer&#39;);
+<a name="line28"></a>goog.require(&#39;goog.string&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Object that can serialize objects or values to a protocol buffer string.
+<a name="line34"></a> * @constructor
+<a name="line35"></a> * @extends {goog.json.Serializer}
+<a name="line36"></a> * @final
+<a name="line37"></a> */
+<a name="line38"></a>goog.proto.Serializer = function() {
+<a name="line39"></a>  goog.json.Serializer.call(this);
+<a name="line40"></a>};
+<a name="line41"></a>goog.inherits(goog.proto.Serializer, goog.json.Serializer);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * Serializes an array to a protocol buffer string. This overrides the JSON
+<a name="line46"></a> * method to output empty slots when the value is null or undefined.
+<a name="line47"></a> * @param {Array} arr The array to serialize.
+<a name="line48"></a> * @param {Array} sb Array used as a string builder.
+<a name="line49"></a> * @override
+<a name="line50"></a> */
+<a name="line51"></a>goog.proto.Serializer.prototype.serializeArray = function(arr, sb) {
+<a name="line52"></a>  var l = arr.length;
+<a name="line53"></a>  sb.push(&#39;[&#39;);
+<a name="line54"></a>  var emptySlots = 0;
+<a name="line55"></a>  var sep = &#39;&#39;;
+<a name="line56"></a>  for (var i = 0; i &lt; l; i++) {
+<a name="line57"></a>    if (arr[i] == null) { // catches undefined as well
+<a name="line58"></a>      emptySlots++;
+<a name="line59"></a>    } else {
+<a name="line60"></a>      if (emptySlots &gt; 0) {
+<a name="line61"></a>        sb.push(goog.string.repeat(&#39;,&#39;, emptySlots));
+<a name="line62"></a>        emptySlots = 0;
+<a name="line63"></a>      }
+<a name="line64"></a>      sb.push(sep);
+<a name="line65"></a>      this.serializeInternal(arr[i], sb);
+<a name="line66"></a>      sep = &#39;,&#39;;
+<a name="line67"></a>    }
+<a name="line68"></a>  }
+<a name="line69"></a>  sb.push(&#39;]&#39;);
+<a name="line70"></a>};
+</pre>
+
+
+</body>
+</html>

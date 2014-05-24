@@ -1,0 +1,306 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>viewportsizemonitor.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">viewportsizemonitor.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="http://closure-library.googlecode.com/git/closure/goog/demos/viewportsizemonitor.html">Demo</a></li>
+            <li><a href="local_closure_goog_dom_viewportsizemonitor.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/dom/viewportsizemonitor.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/dom/viewportsizemonitor.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_dom_ViewportSizeMonitor.html">
+          goog.dom.ViewportSizeMonitor</a><br/>
+        <div class="class-details">This class can be used to monitor changes in the viewport size.  Instances
+dispatch a <code> goog.events.EventType.RESIZE</code> event when the viewport size
+changes.  Handlers can call <code> goog.dom.ViewportSizeMonitor#getSize</code> to
+get the new viewport size.
+
+Use this class if you want to execute resize/reflow logic each time the
+user resizes the browser window.  This class is guaranteed to only dispatch
+<code> RESIZE</code> events when the pixel dimensions of the viewport change.
+(Internet Explorer fires resize events if any element on the page is resized,
+even if the viewport dimensions are unchanged, which can lead to infinite
+resize loops.)
+
+Example usage:
+ <pre class="lang-js prettyprint">
+   var vsm = new goog.dom.ViewportSizeMonitor();
+   goog.events.listen(vsm, goog.events.EventType.RESIZE, function(e) {
+     alert('Viewport size changed to ' + vsm.getSize());
+   });
+ </pre>
+
+Manually verified on IE6, IE7, FF2, Opera 11, Safari 4 and Chrome.
+
+</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.ViewportSizeMonitor.getInstanceForWindow"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.ViewportSizeMonitor.</span><span class="entryName">getInstanceForWindow<span class="args">(<span class="arg">opt_window</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_dom_ViewportSizeMonitor.html">goog.dom.ViewportSizeMonitor</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a viewport size monitor for the given window.  A new one is created
+if it doesn't exist already.  This prevents the unnecessary creation of
+multiple spooling monitors for a window.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_window</span>
+        : <span class="type">Window=</span>
+        <div class="entryOverview">The window to monitor; defaults to the window in
+    which this code is executing.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_dom_ViewportSizeMonitor.html">goog.dom.ViewportSizeMonitor</a></span>&nbsp;
+            Monitor for the given window.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_viewportsizemonitor.js.source.html#line84">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.dom.ViewportSizeMonitor.removeInstanceForWindow"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.dom.ViewportSizeMonitor.</span><span class="entryName">removeInstanceForWindow<span class="args">(<span class="arg">opt_window</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes and disposes a viewport size monitor for the given window if one
+exists.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_window</span>
+        : <span class="type">Window=</span>
+        <div class="entryOverview">The window whose monitor should be removed;
+    defaults to the window in which this code is executing.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_dom_viewportsizemonitor.js.source.html#line100">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory dom</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/dom/viewportsizemonitor.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

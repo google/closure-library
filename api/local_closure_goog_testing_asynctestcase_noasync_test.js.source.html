@@ -1,0 +1,162 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>asynctestcase_noasync_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_asynctestcase_noasync_test.js.html">asynctestcase_noasync_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.AsyncTestCaseSyncTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.AsyncTestCaseSyncTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>// Has the setUp() function been called.
+<a name="line22"></a>var setUpCalled = false;
+<a name="line23"></a>// Has the current test function completed. This helps us to ensure that the
+<a name="line24"></a>// next test is not started before the previous completed.
+<a name="line25"></a>var curTestIsDone = true;
+<a name="line26"></a>// For restoring it later.
+<a name="line27"></a>var oldTimeout = window.setTimeout;
+<a name="line28"></a>// Use an asynchronous test runner for our tests.
+<a name="line29"></a>var asyncTestCase =
+<a name="line30"></a>    goog.testing.AsyncTestCase.createAndInstall(document.title);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Uses window.setTimeout() to perform asynchronous behaviour and uses
+<a name="line35"></a> * asyncTestCase.waitForAsync() and asyncTestCase.continueTesting() to mark
+<a name="line36"></a> * the beginning and end of it.
+<a name="line37"></a> * @param {number} numAsyncCalls The number of asynchronous calls to make.
+<a name="line38"></a> * @param {string} name The name of the current step.
+<a name="line39"></a> */
+<a name="line40"></a>function doAsyncStuff(numAsyncCalls, name) {
+<a name="line41"></a>  if (numAsyncCalls &gt; 0) {
+<a name="line42"></a>    curTestIsDone = false;
+<a name="line43"></a>    asyncTestCase.waitForAsync(
+<a name="line44"></a>        &#39;doAsyncStuff-&#39; + name + &#39;(&#39; + numAsyncCalls + &#39;)&#39;);
+<a name="line45"></a>    window.setTimeout(function() {
+<a name="line46"></a>      doAsyncStuff(numAsyncCalls - 1, name);
+<a name="line47"></a>    }, 0);
+<a name="line48"></a>  } else {
+<a name="line49"></a>    curTestIsDone = true;
+<a name="line50"></a>    asyncTestCase.continueTesting();
+<a name="line51"></a>  }
+<a name="line52"></a>}
+<a name="line53"></a>
+<a name="line54"></a>function setUpPage() {
+<a name="line55"></a>  debug(&#39;setUpPage was called.&#39;);
+<a name="line56"></a>  // Don&#39;t do anything asynchronously.
+<a name="line57"></a>  window.setTimeout = function(callback, time) {
+<a name="line58"></a>    callback();
+<a name="line59"></a>  };
+<a name="line60"></a>  doAsyncStuff(3, &#39;setUpPage&#39;);
+<a name="line61"></a>}
+<a name="line62"></a>function setUp() {
+<a name="line63"></a>  assertTrue(curTestIsDone);
+<a name="line64"></a>  doAsyncStuff(3, &#39;setUp&#39;);
+<a name="line65"></a>}
+<a name="line66"></a>function tearDown() {
+<a name="line67"></a>  assertTrue(curTestIsDone);
+<a name="line68"></a>}
+<a name="line69"></a>function test1() {
+<a name="line70"></a>  assertTrue(curTestIsDone);
+<a name="line71"></a>  doAsyncStuff(1, &#39;test1&#39;);
+<a name="line72"></a>}
+<a name="line73"></a>function test2() {
+<a name="line74"></a>  assertTrue(curTestIsDone);
+<a name="line75"></a>  doAsyncStuff(2, &#39;test2&#39;);
+<a name="line76"></a>}
+<a name="line77"></a>function test3() {
+<a name="line78"></a>  assertTrue(curTestIsDone);
+<a name="line79"></a>  doAsyncStuff(5, &#39;test3&#39;);
+<a name="line80"></a>}
+<a name="line81"></a>var callback = function() {
+<a name="line82"></a>  curTestIsDone = true;
+<a name="line83"></a>  asyncTestCase.signal();
+<a name="line84"></a>};
+<a name="line85"></a>var doAsyncSignals = function() {
+<a name="line86"></a>  curTestIsDone = false;
+<a name="line87"></a>  window.setTimeout(callback, 0);
+<a name="line88"></a>};
+<a name="line89"></a>function testSignalsReturn() {
+<a name="line90"></a>  doAsyncSignals();
+<a name="line91"></a>  doAsyncSignals();
+<a name="line92"></a>  doAsyncSignals();
+<a name="line93"></a>  asyncTestCase.waitForSignals(3);
+<a name="line94"></a>}
+<a name="line95"></a>function testSignalsCallContinueTestingBeforeFinishing() {
+<a name="line96"></a>  doAsyncSignals();
+<a name="line97"></a>  asyncTestCase.waitForSignals(2);
+<a name="line98"></a>
+<a name="line99"></a>  window.setTimeout(function() {
+<a name="line100"></a>    var thrown = assertThrows(function() {
+<a name="line101"></a>      asyncTestCase.continueTesting();
+<a name="line102"></a>    });
+<a name="line103"></a>    assertEquals(&#39;Still waiting for 1 signals.&#39;, thrown.message);
+<a name="line104"></a>  }, 0);
+<a name="line105"></a>  doAsyncSignals(); // To not timeout.
+<a name="line106"></a>}
+<a name="line107"></a>function tearDownPage() {
+<a name="line108"></a>  debug(&#39;tearDownPage was called.&#39;);
+<a name="line109"></a>  assertTrue(curTestIsDone);
+<a name="line110"></a>  window.setTimeout = oldTimeout;
+<a name="line111"></a>}
+</pre>
+
+
+</body>
+</html>

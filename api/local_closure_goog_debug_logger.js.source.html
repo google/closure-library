@@ -1,0 +1,936 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>logger.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_debug_logger.js.html">logger.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the Logger class. Please minimize dependencies
+<a name="line17"></a> * this file has on other closure classes as any dependency it takes won&#39;t be
+<a name="line18"></a> * able to use the logging infrastructure.
+<a name="line19"></a> *
+<a name="line20"></a> * @see ../demos/debug.html
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.debug.LogManager&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.debug.Loggable&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.debug.Logger&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.debug.Logger.Level&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.array&#39;);
+<a name="line29"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line30"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line31"></a>goog.require(&#39;goog.debug.LogBuffer&#39;);
+<a name="line32"></a>goog.require(&#39;goog.debug.LogRecord&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * A message value that can be handled by a Logger.
+<a name="line37"></a> *
+<a name="line38"></a> * Functions are treated like callbacks, but are only called when the event&#39;s
+<a name="line39"></a> * log level is enabled. This is useful for logging messages that are expensive
+<a name="line40"></a> * to construct.
+<a name="line41"></a> *
+<a name="line42"></a> * @typedef {string|function(): string}
+<a name="line43"></a> */
+<a name="line44"></a>goog.debug.Loggable;
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * The Logger is an object used for logging debug messages. Loggers are
+<a name="line50"></a> * normally named, using a hierarchical dot-separated namespace. Logger names
+<a name="line51"></a> * can be arbitrary strings, but they should normally be based on the package
+<a name="line52"></a> * name or class name of the logged component, such as goog.net.BrowserChannel.
+<a name="line53"></a> *
+<a name="line54"></a> * The Logger object is loosely based on the java class
+<a name="line55"></a> * java.util.logging.Logger. It supports different levels of filtering for
+<a name="line56"></a> * different loggers.
+<a name="line57"></a> *
+<a name="line58"></a> * The logger object should never be instantiated by application code. It
+<a name="line59"></a> * should always use the goog.debug.Logger.getLogger function.
+<a name="line60"></a> *
+<a name="line61"></a> * @constructor
+<a name="line62"></a> * @param {string} name The name of the Logger.
+<a name="line63"></a> * @final
+<a name="line64"></a> */
+<a name="line65"></a>goog.debug.Logger = function(name) {
+<a name="line66"></a>  /**
+<a name="line67"></a>   * Name of the Logger. Generally a dot-separated namespace
+<a name="line68"></a>   * @private {string}
+<a name="line69"></a>   */
+<a name="line70"></a>  this.name_ = name;
+<a name="line71"></a>
+<a name="line72"></a>  /**
+<a name="line73"></a>   * Parent Logger.
+<a name="line74"></a>   * @private {goog.debug.Logger}
+<a name="line75"></a>   */
+<a name="line76"></a>  this.parent_ = null;
+<a name="line77"></a>
+<a name="line78"></a>  /**
+<a name="line79"></a>   * Level that this logger only filters above. Null indicates it should
+<a name="line80"></a>   * inherit from the parent.
+<a name="line81"></a>   * @private {goog.debug.Logger.Level}
+<a name="line82"></a>   */
+<a name="line83"></a>  this.level_ = null;
+<a name="line84"></a>
+<a name="line85"></a>  /**
+<a name="line86"></a>   * Map of children loggers. The keys are the leaf names of the children and
+<a name="line87"></a>   * the values are the child loggers.
+<a name="line88"></a>   * @private {Object}
+<a name="line89"></a>   */
+<a name="line90"></a>  this.children_ = null;
+<a name="line91"></a>
+<a name="line92"></a>  /**
+<a name="line93"></a>   * Handlers that are listening to this logger.
+<a name="line94"></a>   * @private {Array.&lt;Function&gt;}
+<a name="line95"></a>   */
+<a name="line96"></a>  this.handlers_ = null;
+<a name="line97"></a>};
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/** @const */
+<a name="line101"></a>goog.debug.Logger.ROOT_LOGGER_NAME = &#39;&#39;;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * @define {boolean} Toggles whether loggers other than the root logger can have
+<a name="line106"></a> *     log handlers attached to them and whether they can have their log level
+<a name="line107"></a> *     set. Logging is a bit faster when this is set to false.
+<a name="line108"></a> */
+<a name="line109"></a>goog.define(&#39;goog.debug.Logger.ENABLE_HIERARCHY&#39;, true);
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>if (!goog.debug.Logger.ENABLE_HIERARCHY) {
+<a name="line113"></a>  /**
+<a name="line114"></a>   * @type {!Array.&lt;Function&gt;}
+<a name="line115"></a>   * @private
+<a name="line116"></a>   */
+<a name="line117"></a>  goog.debug.Logger.rootHandlers_ = [];
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>  /**
+<a name="line121"></a>   * @type {goog.debug.Logger.Level}
+<a name="line122"></a>   * @private
+<a name="line123"></a>   */
+<a name="line124"></a>  goog.debug.Logger.rootLevel_;
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * The Level class defines a set of standard logging levels that
+<a name="line131"></a> * can be used to control logging output.  The logging Level objects
+<a name="line132"></a> * are ordered and are specified by ordered integers.  Enabling logging
+<a name="line133"></a> * at a given level also enables logging at all higher levels.
+<a name="line134"></a> * &lt;p&gt;
+<a name="line135"></a> * Clients should normally use the predefined Level constants such
+<a name="line136"></a> * as Level.SEVERE.
+<a name="line137"></a> * &lt;p&gt;
+<a name="line138"></a> * The levels in descending order are:
+<a name="line139"></a> * &lt;ul&gt;
+<a name="line140"></a> * &lt;li&gt;SEVERE (highest value)
+<a name="line141"></a> * &lt;li&gt;WARNING
+<a name="line142"></a> * &lt;li&gt;INFO
+<a name="line143"></a> * &lt;li&gt;CONFIG
+<a name="line144"></a> * &lt;li&gt;FINE
+<a name="line145"></a> * &lt;li&gt;FINER
+<a name="line146"></a> * &lt;li&gt;FINEST  (lowest value)
+<a name="line147"></a> * &lt;/ul&gt;
+<a name="line148"></a> * In addition there is a level OFF that can be used to turn
+<a name="line149"></a> * off logging, and a level ALL that can be used to enable
+<a name="line150"></a> * logging of all messages.
+<a name="line151"></a> *
+<a name="line152"></a> * @param {string} name The name of the level.
+<a name="line153"></a> * @param {number} value The numeric value of the level.
+<a name="line154"></a> * @constructor
+<a name="line155"></a> * @final
+<a name="line156"></a> */
+<a name="line157"></a>goog.debug.Logger.Level = function(name, value) {
+<a name="line158"></a>  /**
+<a name="line159"></a>   * The name of the level
+<a name="line160"></a>   * @type {string}
+<a name="line161"></a>   */
+<a name="line162"></a>  this.name = name;
+<a name="line163"></a>
+<a name="line164"></a>  /**
+<a name="line165"></a>   * The numeric value of the level
+<a name="line166"></a>   * @type {number}
+<a name="line167"></a>   */
+<a name="line168"></a>  this.value = value;
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * @return {string} String representation of the logger level.
+<a name="line174"></a> * @override
+<a name="line175"></a> */
+<a name="line176"></a>goog.debug.Logger.Level.prototype.toString = function() {
+<a name="line177"></a>  return this.name;
+<a name="line178"></a>};
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * OFF is a special level that can be used to turn off logging.
+<a name="line183"></a> * This level is initialized to &lt;CODE&gt;Infinity&lt;/CODE&gt;.
+<a name="line184"></a> * @type {!goog.debug.Logger.Level}
+<a name="line185"></a> */
+<a name="line186"></a>goog.debug.Logger.Level.OFF =
+<a name="line187"></a>    new goog.debug.Logger.Level(&#39;OFF&#39;, Infinity);
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>/**
+<a name="line191"></a> * SHOUT is a message level for extra debugging loudness.
+<a name="line192"></a> * This level is initialized to &lt;CODE&gt;1200&lt;/CODE&gt;.
+<a name="line193"></a> * @type {!goog.debug.Logger.Level}
+<a name="line194"></a> */
+<a name="line195"></a>goog.debug.Logger.Level.SHOUT = new goog.debug.Logger.Level(&#39;SHOUT&#39;, 1200);
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * SEVERE is a message level indicating a serious failure.
+<a name="line200"></a> * This level is initialized to &lt;CODE&gt;1000&lt;/CODE&gt;.
+<a name="line201"></a> * @type {!goog.debug.Logger.Level}
+<a name="line202"></a> */
+<a name="line203"></a>goog.debug.Logger.Level.SEVERE = new goog.debug.Logger.Level(&#39;SEVERE&#39;, 1000);
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * WARNING is a message level indicating a potential problem.
+<a name="line208"></a> * This level is initialized to &lt;CODE&gt;900&lt;/CODE&gt;.
+<a name="line209"></a> * @type {!goog.debug.Logger.Level}
+<a name="line210"></a> */
+<a name="line211"></a>goog.debug.Logger.Level.WARNING = new goog.debug.Logger.Level(&#39;WARNING&#39;, 900);
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/**
+<a name="line215"></a> * INFO is a message level for informational messages.
+<a name="line216"></a> * This level is initialized to &lt;CODE&gt;800&lt;/CODE&gt;.
+<a name="line217"></a> * @type {!goog.debug.Logger.Level}
+<a name="line218"></a> */
+<a name="line219"></a>goog.debug.Logger.Level.INFO = new goog.debug.Logger.Level(&#39;INFO&#39;, 800);
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * CONFIG is a message level for static configuration messages.
+<a name="line224"></a> * This level is initialized to &lt;CODE&gt;700&lt;/CODE&gt;.
+<a name="line225"></a> * @type {!goog.debug.Logger.Level}
+<a name="line226"></a> */
+<a name="line227"></a>goog.debug.Logger.Level.CONFIG = new goog.debug.Logger.Level(&#39;CONFIG&#39;, 700);
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * FINE is a message level providing tracing information.
+<a name="line232"></a> * This level is initialized to &lt;CODE&gt;500&lt;/CODE&gt;.
+<a name="line233"></a> * @type {!goog.debug.Logger.Level}
+<a name="line234"></a> */
+<a name="line235"></a>goog.debug.Logger.Level.FINE = new goog.debug.Logger.Level(&#39;FINE&#39;, 500);
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>/**
+<a name="line239"></a> * FINER indicates a fairly detailed tracing message.
+<a name="line240"></a> * This level is initialized to &lt;CODE&gt;400&lt;/CODE&gt;.
+<a name="line241"></a> * @type {!goog.debug.Logger.Level}
+<a name="line242"></a> */
+<a name="line243"></a>goog.debug.Logger.Level.FINER = new goog.debug.Logger.Level(&#39;FINER&#39;, 400);
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * FINEST indicates a highly detailed tracing message.
+<a name="line247"></a> * This level is initialized to &lt;CODE&gt;300&lt;/CODE&gt;.
+<a name="line248"></a> * @type {!goog.debug.Logger.Level}
+<a name="line249"></a> */
+<a name="line250"></a>
+<a name="line251"></a>goog.debug.Logger.Level.FINEST = new goog.debug.Logger.Level(&#39;FINEST&#39;, 300);
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>/**
+<a name="line255"></a> * ALL indicates that all messages should be logged.
+<a name="line256"></a> * This level is initialized to &lt;CODE&gt;0&lt;/CODE&gt;.
+<a name="line257"></a> * @type {!goog.debug.Logger.Level}
+<a name="line258"></a> */
+<a name="line259"></a>goog.debug.Logger.Level.ALL = new goog.debug.Logger.Level(&#39;ALL&#39;, 0);
+<a name="line260"></a>
+<a name="line261"></a>
+<a name="line262"></a>/**
+<a name="line263"></a> * The predefined levels.
+<a name="line264"></a> * @type {!Array.&lt;!goog.debug.Logger.Level&gt;}
+<a name="line265"></a> * @final
+<a name="line266"></a> */
+<a name="line267"></a>goog.debug.Logger.Level.PREDEFINED_LEVELS = [
+<a name="line268"></a>  goog.debug.Logger.Level.OFF,
+<a name="line269"></a>  goog.debug.Logger.Level.SHOUT,
+<a name="line270"></a>  goog.debug.Logger.Level.SEVERE,
+<a name="line271"></a>  goog.debug.Logger.Level.WARNING,
+<a name="line272"></a>  goog.debug.Logger.Level.INFO,
+<a name="line273"></a>  goog.debug.Logger.Level.CONFIG,
+<a name="line274"></a>  goog.debug.Logger.Level.FINE,
+<a name="line275"></a>  goog.debug.Logger.Level.FINER,
+<a name="line276"></a>  goog.debug.Logger.Level.FINEST,
+<a name="line277"></a>  goog.debug.Logger.Level.ALL];
+<a name="line278"></a>
+<a name="line279"></a>
+<a name="line280"></a>/**
+<a name="line281"></a> * A lookup map used to find the level object based on the name or value of
+<a name="line282"></a> * the level object.
+<a name="line283"></a> * @type {Object}
+<a name="line284"></a> * @private
+<a name="line285"></a> */
+<a name="line286"></a>goog.debug.Logger.Level.predefinedLevelsCache_ = null;
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * Creates the predefined levels cache and populates it.
+<a name="line291"></a> * @private
+<a name="line292"></a> */
+<a name="line293"></a>goog.debug.Logger.Level.createPredefinedLevelsCache_ = function() {
+<a name="line294"></a>  goog.debug.Logger.Level.predefinedLevelsCache_ = {};
+<a name="line295"></a>  for (var i = 0, level; level = goog.debug.Logger.Level.PREDEFINED_LEVELS[i];
+<a name="line296"></a>       i++) {
+<a name="line297"></a>    goog.debug.Logger.Level.predefinedLevelsCache_[level.value] = level;
+<a name="line298"></a>    goog.debug.Logger.Level.predefinedLevelsCache_[level.name] = level;
+<a name="line299"></a>  }
+<a name="line300"></a>};
+<a name="line301"></a>
+<a name="line302"></a>
+<a name="line303"></a>/**
+<a name="line304"></a> * Gets the predefined level with the given name.
+<a name="line305"></a> * @param {string} name The name of the level.
+<a name="line306"></a> * @return {goog.debug.Logger.Level} The level, or null if none found.
+<a name="line307"></a> */
+<a name="line308"></a>goog.debug.Logger.Level.getPredefinedLevel = function(name) {
+<a name="line309"></a>  if (!goog.debug.Logger.Level.predefinedLevelsCache_) {
+<a name="line310"></a>    goog.debug.Logger.Level.createPredefinedLevelsCache_();
+<a name="line311"></a>  }
+<a name="line312"></a>
+<a name="line313"></a>  return goog.debug.Logger.Level.predefinedLevelsCache_[name] || null;
+<a name="line314"></a>};
+<a name="line315"></a>
+<a name="line316"></a>
+<a name="line317"></a>/**
+<a name="line318"></a> * Gets the highest predefined level &lt;= #value.
+<a name="line319"></a> * @param {number} value Level value.
+<a name="line320"></a> * @return {goog.debug.Logger.Level} The level, or null if none found.
+<a name="line321"></a> */
+<a name="line322"></a>goog.debug.Logger.Level.getPredefinedLevelByValue = function(value) {
+<a name="line323"></a>  if (!goog.debug.Logger.Level.predefinedLevelsCache_) {
+<a name="line324"></a>    goog.debug.Logger.Level.createPredefinedLevelsCache_();
+<a name="line325"></a>  }
+<a name="line326"></a>
+<a name="line327"></a>  if (value in goog.debug.Logger.Level.predefinedLevelsCache_) {
+<a name="line328"></a>    return goog.debug.Logger.Level.predefinedLevelsCache_[value];
+<a name="line329"></a>  }
+<a name="line330"></a>
+<a name="line331"></a>  for (var i = 0; i &lt; goog.debug.Logger.Level.PREDEFINED_LEVELS.length; ++i) {
+<a name="line332"></a>    var level = goog.debug.Logger.Level.PREDEFINED_LEVELS[i];
+<a name="line333"></a>    if (level.value &lt;= value) {
+<a name="line334"></a>      return level;
+<a name="line335"></a>    }
+<a name="line336"></a>  }
+<a name="line337"></a>  return null;
+<a name="line338"></a>};
+<a name="line339"></a>
+<a name="line340"></a>
+<a name="line341"></a>/**
+<a name="line342"></a> * Finds or creates a logger for a named subsystem. If a logger has already been
+<a name="line343"></a> * created with the given name it is returned. Otherwise a new logger is
+<a name="line344"></a> * created. If a new logger is created its log level will be configured based
+<a name="line345"></a> * on the LogManager configuration and it will configured to also send logging
+<a name="line346"></a> * output to its parent&#39;s handlers. It will be registered in the LogManager
+<a name="line347"></a> * global namespace.
+<a name="line348"></a> *
+<a name="line349"></a> * @param {string} name A name for the logger. This should be a dot-separated
+<a name="line350"></a> * name and should normally be based on the package name or class name of the
+<a name="line351"></a> * subsystem, such as goog.net.BrowserChannel.
+<a name="line352"></a> * @return {!goog.debug.Logger} The named logger.
+<a name="line353"></a> * @deprecated use goog.log instead. http://go/goog-debug-logger-deprecated
+<a name="line354"></a> */
+<a name="line355"></a>goog.debug.Logger.getLogger = function(name) {
+<a name="line356"></a>  return goog.debug.LogManager.getLogger(name);
+<a name="line357"></a>};
+<a name="line358"></a>
+<a name="line359"></a>
+<a name="line360"></a>/**
+<a name="line361"></a> * Logs a message to profiling tools, if available.
+<a name="line362"></a> * {@see https://developers.google.com/web-toolkit/speedtracer/logging-api}
+<a name="line363"></a> * {@see http://msdn.microsoft.com/en-us/library/dd433074(VS.85).aspx}
+<a name="line364"></a> * @param {string} msg The message to log.
+<a name="line365"></a> */
+<a name="line366"></a>goog.debug.Logger.logToProfilers = function(msg) {
+<a name="line367"></a>  // Using goog.global, as loggers might be used in window-less contexts.
+<a name="line368"></a>  if (goog.global[&#39;console&#39;]) {
+<a name="line369"></a>    if (goog.global[&#39;console&#39;][&#39;timeStamp&#39;]) {
+<a name="line370"></a>      // Logs a message to Firebug, Web Inspector, SpeedTracer, etc.
+<a name="line371"></a>      goog.global[&#39;console&#39;][&#39;timeStamp&#39;](msg);
+<a name="line372"></a>    } else if (goog.global[&#39;console&#39;][&#39;markTimeline&#39;]) {
+<a name="line373"></a>      // TODO(user): markTimeline is deprecated. Drop this else clause entirely
+<a name="line374"></a>      // after Chrome M14 hits stable.
+<a name="line375"></a>      goog.global[&#39;console&#39;][&#39;markTimeline&#39;](msg);
+<a name="line376"></a>    }
+<a name="line377"></a>  }
+<a name="line378"></a>
+<a name="line379"></a>  if (goog.global[&#39;msWriteProfilerMark&#39;]) {
+<a name="line380"></a>    // Logs a message to the Microsoft profiler
+<a name="line381"></a>    goog.global[&#39;msWriteProfilerMark&#39;](msg);
+<a name="line382"></a>  }
+<a name="line383"></a>};
+<a name="line384"></a>
+<a name="line385"></a>
+<a name="line386"></a>/**
+<a name="line387"></a> * Gets the name of this logger.
+<a name="line388"></a> * @return {string} The name of this logger.
+<a name="line389"></a> */
+<a name="line390"></a>goog.debug.Logger.prototype.getName = function() {
+<a name="line391"></a>  return this.name_;
+<a name="line392"></a>};
+<a name="line393"></a>
+<a name="line394"></a>
+<a name="line395"></a>/**
+<a name="line396"></a> * Adds a handler to the logger. This doesn&#39;t use the event system because
+<a name="line397"></a> * we want to be able to add logging to the event system.
+<a name="line398"></a> * @param {Function} handler Handler function to add.
+<a name="line399"></a> */
+<a name="line400"></a>goog.debug.Logger.prototype.addHandler = function(handler) {
+<a name="line401"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line402"></a>    if (goog.debug.Logger.ENABLE_HIERARCHY) {
+<a name="line403"></a>      if (!this.handlers_) {
+<a name="line404"></a>        this.handlers_ = [];
+<a name="line405"></a>      }
+<a name="line406"></a>      this.handlers_.push(handler);
+<a name="line407"></a>    } else {
+<a name="line408"></a>      goog.asserts.assert(!this.name_,
+<a name="line409"></a>          &#39;Cannot call addHandler on a non-root logger when &#39; +
+<a name="line410"></a>          &#39;goog.debug.Logger.ENABLE_HIERARCHY is false.&#39;);
+<a name="line411"></a>      goog.debug.Logger.rootHandlers_.push(handler);
+<a name="line412"></a>    }
+<a name="line413"></a>  }
+<a name="line414"></a>};
+<a name="line415"></a>
+<a name="line416"></a>
+<a name="line417"></a>/**
+<a name="line418"></a> * Removes a handler from the logger. This doesn&#39;t use the event system because
+<a name="line419"></a> * we want to be able to add logging to the event system.
+<a name="line420"></a> * @param {Function} handler Handler function to remove.
+<a name="line421"></a> * @return {boolean} Whether the handler was removed.
+<a name="line422"></a> */
+<a name="line423"></a>goog.debug.Logger.prototype.removeHandler = function(handler) {
+<a name="line424"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line425"></a>    var handlers = goog.debug.Logger.ENABLE_HIERARCHY ? this.handlers_ :
+<a name="line426"></a>        goog.debug.Logger.rootHandlers_;
+<a name="line427"></a>    return !!handlers &amp;&amp; goog.array.remove(handlers, handler);
+<a name="line428"></a>  } else {
+<a name="line429"></a>    return false;
+<a name="line430"></a>  }
+<a name="line431"></a>};
+<a name="line432"></a>
+<a name="line433"></a>
+<a name="line434"></a>/**
+<a name="line435"></a> * Returns the parent of this logger.
+<a name="line436"></a> * @return {goog.debug.Logger} The parent logger or null if this is the root.
+<a name="line437"></a> */
+<a name="line438"></a>goog.debug.Logger.prototype.getParent = function() {
+<a name="line439"></a>  return this.parent_;
+<a name="line440"></a>};
+<a name="line441"></a>
+<a name="line442"></a>
+<a name="line443"></a>/**
+<a name="line444"></a> * Returns the children of this logger as a map of the child name to the logger.
+<a name="line445"></a> * @return {!Object} The map where the keys are the child leaf names and the
+<a name="line446"></a> *     values are the Logger objects.
+<a name="line447"></a> */
+<a name="line448"></a>goog.debug.Logger.prototype.getChildren = function() {
+<a name="line449"></a>  if (!this.children_) {
+<a name="line450"></a>    this.children_ = {};
+<a name="line451"></a>  }
+<a name="line452"></a>  return this.children_;
+<a name="line453"></a>};
+<a name="line454"></a>
+<a name="line455"></a>
+<a name="line456"></a>/**
+<a name="line457"></a> * Set the log level specifying which message levels will be logged by this
+<a name="line458"></a> * logger. Message levels lower than this value will be discarded.
+<a name="line459"></a> * The level value Level.OFF can be used to turn off logging. If the new level
+<a name="line460"></a> * is null, it means that this node should inherit its level from its nearest
+<a name="line461"></a> * ancestor with a specific (non-null) level value.
+<a name="line462"></a> *
+<a name="line463"></a> * @param {goog.debug.Logger.Level} level The new level.
+<a name="line464"></a> */
+<a name="line465"></a>goog.debug.Logger.prototype.setLevel = function(level) {
+<a name="line466"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line467"></a>    if (goog.debug.Logger.ENABLE_HIERARCHY) {
+<a name="line468"></a>      this.level_ = level;
+<a name="line469"></a>    } else {
+<a name="line470"></a>      goog.asserts.assert(!this.name_,
+<a name="line471"></a>          &#39;Cannot call setLevel() on a non-root logger when &#39; +
+<a name="line472"></a>          &#39;goog.debug.Logger.ENABLE_HIERARCHY is false.&#39;);
+<a name="line473"></a>      goog.debug.Logger.rootLevel_ = level;
+<a name="line474"></a>    }
+<a name="line475"></a>  }
+<a name="line476"></a>};
+<a name="line477"></a>
+<a name="line478"></a>
+<a name="line479"></a>/**
+<a name="line480"></a> * Gets the log level specifying which message levels will be logged by this
+<a name="line481"></a> * logger. Message levels lower than this value will be discarded.
+<a name="line482"></a> * The level value Level.OFF can be used to turn off logging. If the level
+<a name="line483"></a> * is null, it means that this node should inherit its level from its nearest
+<a name="line484"></a> * ancestor with a specific (non-null) level value.
+<a name="line485"></a> *
+<a name="line486"></a> * @return {goog.debug.Logger.Level} The level.
+<a name="line487"></a> */
+<a name="line488"></a>goog.debug.Logger.prototype.getLevel = function() {
+<a name="line489"></a>  return goog.debug.LOGGING_ENABLED ?
+<a name="line490"></a>      this.level_ : goog.debug.Logger.Level.OFF;
+<a name="line491"></a>};
+<a name="line492"></a>
+<a name="line493"></a>
+<a name="line494"></a>/**
+<a name="line495"></a> * Returns the effective level of the logger based on its ancestors&#39; levels.
+<a name="line496"></a> * @return {goog.debug.Logger.Level} The level.
+<a name="line497"></a> */
+<a name="line498"></a>goog.debug.Logger.prototype.getEffectiveLevel = function() {
+<a name="line499"></a>  if (!goog.debug.LOGGING_ENABLED) {
+<a name="line500"></a>    return goog.debug.Logger.Level.OFF;
+<a name="line501"></a>  }
+<a name="line502"></a>
+<a name="line503"></a>  if (!goog.debug.Logger.ENABLE_HIERARCHY) {
+<a name="line504"></a>    return goog.debug.Logger.rootLevel_;
+<a name="line505"></a>  }
+<a name="line506"></a>  if (this.level_) {
+<a name="line507"></a>    return this.level_;
+<a name="line508"></a>  }
+<a name="line509"></a>  if (this.parent_) {
+<a name="line510"></a>    return this.parent_.getEffectiveLevel();
+<a name="line511"></a>  }
+<a name="line512"></a>  goog.asserts.fail(&#39;Root logger has no level set.&#39;);
+<a name="line513"></a>  return null;
+<a name="line514"></a>};
+<a name="line515"></a>
+<a name="line516"></a>
+<a name="line517"></a>/**
+<a name="line518"></a> * Checks if a message of the given level would actually be logged by this
+<a name="line519"></a> * logger. This check is based on the Loggers effective level, which may be
+<a name="line520"></a> * inherited from its parent.
+<a name="line521"></a> * @param {goog.debug.Logger.Level} level The level to check.
+<a name="line522"></a> * @return {boolean} Whether the message would be logged.
+<a name="line523"></a> */
+<a name="line524"></a>goog.debug.Logger.prototype.isLoggable = function(level) {
+<a name="line525"></a>  return goog.debug.LOGGING_ENABLED &amp;&amp;
+<a name="line526"></a>      level.value &gt;= this.getEffectiveLevel().value;
+<a name="line527"></a>};
+<a name="line528"></a>
+<a name="line529"></a>
+<a name="line530"></a>/**
+<a name="line531"></a> * Logs a message. If the logger is currently enabled for the
+<a name="line532"></a> * given message level then the given message is forwarded to all the
+<a name="line533"></a> * registered output Handler objects.
+<a name="line534"></a> * @param {goog.debug.Logger.Level} level One of the level identifiers.
+<a name="line535"></a> * @param {goog.debug.Loggable} msg The message to log.
+<a name="line536"></a> * @param {Error|Object=} opt_exception An exception associated with the
+<a name="line537"></a> *     message.
+<a name="line538"></a> */
+<a name="line539"></a>goog.debug.Logger.prototype.log = function(level, msg, opt_exception) {
+<a name="line540"></a>  // java caches the effective level, not sure it&#39;s necessary here
+<a name="line541"></a>  if (goog.debug.LOGGING_ENABLED &amp;&amp; this.isLoggable(level)) {
+<a name="line542"></a>    // Message callbacks can be useful when a log message is expensive to build.
+<a name="line543"></a>    if (goog.isFunction(msg)) {
+<a name="line544"></a>      msg = msg();
+<a name="line545"></a>    }
+<a name="line546"></a>
+<a name="line547"></a>    this.doLogRecord_(this.getLogRecord(
+<a name="line548"></a>        level, msg, opt_exception, goog.debug.Logger.prototype.log));
+<a name="line549"></a>  }
+<a name="line550"></a>};
+<a name="line551"></a>
+<a name="line552"></a>
+<a name="line553"></a>/**
+<a name="line554"></a> * Creates a new log record and adds the exception (if present) to it.
+<a name="line555"></a> * @param {goog.debug.Logger.Level} level One of the level identifiers.
+<a name="line556"></a> * @param {string} msg The string message.
+<a name="line557"></a> * @param {Error|Object=} opt_exception An exception associated with the
+<a name="line558"></a> *     message.
+<a name="line559"></a> * @param {Function=} opt_fnStackContext A function to use as the base
+<a name="line560"></a> *     of the stack trace used in the log record.
+<a name="line561"></a> * @return {!goog.debug.LogRecord} A log record.
+<a name="line562"></a> * @suppress {es5Strict}
+<a name="line563"></a> */
+<a name="line564"></a>goog.debug.Logger.prototype.getLogRecord = function(
+<a name="line565"></a>    level, msg, opt_exception, opt_fnStackContext) {
+<a name="line566"></a>  if (goog.debug.LogBuffer.isBufferingEnabled()) {
+<a name="line567"></a>    var logRecord =
+<a name="line568"></a>        goog.debug.LogBuffer.getInstance().addRecord(level, msg, this.name_);
+<a name="line569"></a>  } else {
+<a name="line570"></a>    logRecord = new goog.debug.LogRecord(level, String(msg), this.name_);
+<a name="line571"></a>  }
+<a name="line572"></a>  if (opt_exception) {
+<a name="line573"></a>    var context;
+<a name="line574"></a>    if (goog.STRICT_MODE_COMPATIBLE) {
+<a name="line575"></a>      context = opt_fnStackContext || goog.debug.Logger.prototype.getLogRecord;
+<a name="line576"></a>    } else {
+<a name="line577"></a>      context = opt_fnStackContext || arguments.callee.caller;
+<a name="line578"></a>    }
+<a name="line579"></a>
+<a name="line580"></a>    logRecord.setException(opt_exception);
+<a name="line581"></a>    logRecord.setExceptionText(
+<a name="line582"></a>        goog.debug.exposeException(opt_exception,
+<a name="line583"></a>            opt_fnStackContext || goog.debug.Logger.prototype.getLogRecord));
+<a name="line584"></a>  }
+<a name="line585"></a>  return logRecord;
+<a name="line586"></a>};
+<a name="line587"></a>
+<a name="line588"></a>
+<a name="line589"></a>/**
+<a name="line590"></a> * Logs a message at the Logger.Level.SHOUT level.
+<a name="line591"></a> * If the logger is currently enabled for the given message level then the
+<a name="line592"></a> * given message is forwarded to all the registered output Handler objects.
+<a name="line593"></a> * @param {goog.debug.Loggable} msg The message to log.
+<a name="line594"></a> * @param {Error=} opt_exception An exception associated with the message.
+<a name="line595"></a> */
+<a name="line596"></a>goog.debug.Logger.prototype.shout = function(msg, opt_exception) {
+<a name="line597"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line598"></a>    this.log(goog.debug.Logger.Level.SHOUT, msg, opt_exception);
+<a name="line599"></a>  }
+<a name="line600"></a>};
+<a name="line601"></a>
+<a name="line602"></a>
+<a name="line603"></a>/**
+<a name="line604"></a> * Logs a message at the Logger.Level.SEVERE level.
+<a name="line605"></a> * If the logger is currently enabled for the given message level then the
+<a name="line606"></a> * given message is forwarded to all the registered output Handler objects.
+<a name="line607"></a> * @param {goog.debug.Loggable} msg The message to log.
+<a name="line608"></a> * @param {Error=} opt_exception An exception associated with the message.
+<a name="line609"></a> */
+<a name="line610"></a>goog.debug.Logger.prototype.severe = function(msg, opt_exception) {
+<a name="line611"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line612"></a>    this.log(goog.debug.Logger.Level.SEVERE, msg, opt_exception);
+<a name="line613"></a>  }
+<a name="line614"></a>};
+<a name="line615"></a>
+<a name="line616"></a>
+<a name="line617"></a>/**
+<a name="line618"></a> * Logs a message at the Logger.Level.WARNING level.
+<a name="line619"></a> * If the logger is currently enabled for the given message level then the
+<a name="line620"></a> * given message is forwarded to all the registered output Handler objects.
+<a name="line621"></a> * @param {goog.debug.Loggable} msg The message to log.
+<a name="line622"></a> * @param {Error=} opt_exception An exception associated with the message.
+<a name="line623"></a> */
+<a name="line624"></a>goog.debug.Logger.prototype.warning = function(msg, opt_exception) {
+<a name="line625"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line626"></a>    this.log(goog.debug.Logger.Level.WARNING, msg, opt_exception);
+<a name="line627"></a>  }
+<a name="line628"></a>};
+<a name="line629"></a>
+<a name="line630"></a>
+<a name="line631"></a>/**
+<a name="line632"></a> * Logs a message at the Logger.Level.INFO level.
+<a name="line633"></a> * If the logger is currently enabled for the given message level then the
+<a name="line634"></a> * given message is forwarded to all the registered output Handler objects.
+<a name="line635"></a> * @param {goog.debug.Loggable} msg The message to log.
+<a name="line636"></a> * @param {Error=} opt_exception An exception associated with the message.
+<a name="line637"></a> */
+<a name="line638"></a>goog.debug.Logger.prototype.info = function(msg, opt_exception) {
+<a name="line639"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line640"></a>    this.log(goog.debug.Logger.Level.INFO, msg, opt_exception);
+<a name="line641"></a>  }
+<a name="line642"></a>};
+<a name="line643"></a>
+<a name="line644"></a>
+<a name="line645"></a>/**
+<a name="line646"></a> * Logs a message at the Logger.Level.CONFIG level.
+<a name="line647"></a> * If the logger is currently enabled for the given message level then the
+<a name="line648"></a> * given message is forwarded to all the registered output Handler objects.
+<a name="line649"></a> * @param {goog.debug.Loggable} msg The message to log.
+<a name="line650"></a> * @param {Error=} opt_exception An exception associated with the message.
+<a name="line651"></a> */
+<a name="line652"></a>goog.debug.Logger.prototype.config = function(msg, opt_exception) {
+<a name="line653"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line654"></a>    this.log(goog.debug.Logger.Level.CONFIG, msg, opt_exception);
+<a name="line655"></a>  }
+<a name="line656"></a>};
+<a name="line657"></a>
+<a name="line658"></a>
+<a name="line659"></a>/**
+<a name="line660"></a> * Logs a message at the Logger.Level.FINE level.
+<a name="line661"></a> * If the logger is currently enabled for the given message level then the
+<a name="line662"></a> * given message is forwarded to all the registered output Handler objects.
+<a name="line663"></a> * @param {goog.debug.Loggable} msg The message to log.
+<a name="line664"></a> * @param {Error=} opt_exception An exception associated with the message.
+<a name="line665"></a> */
+<a name="line666"></a>goog.debug.Logger.prototype.fine = function(msg, opt_exception) {
+<a name="line667"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line668"></a>    this.log(goog.debug.Logger.Level.FINE, msg, opt_exception);
+<a name="line669"></a>  }
+<a name="line670"></a>};
+<a name="line671"></a>
+<a name="line672"></a>
+<a name="line673"></a>/**
+<a name="line674"></a> * Logs a message at the Logger.Level.FINER level.
+<a name="line675"></a> * If the logger is currently enabled for the given message level then the
+<a name="line676"></a> * given message is forwarded to all the registered output Handler objects.
+<a name="line677"></a> * @param {goog.debug.Loggable} msg The message to log.
+<a name="line678"></a> * @param {Error=} opt_exception An exception associated with the message.
+<a name="line679"></a> */
+<a name="line680"></a>goog.debug.Logger.prototype.finer = function(msg, opt_exception) {
+<a name="line681"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line682"></a>    this.log(goog.debug.Logger.Level.FINER, msg, opt_exception);
+<a name="line683"></a>  }
+<a name="line684"></a>};
+<a name="line685"></a>
+<a name="line686"></a>
+<a name="line687"></a>/**
+<a name="line688"></a> * Logs a message at the Logger.Level.FINEST level.
+<a name="line689"></a> * If the logger is currently enabled for the given message level then the
+<a name="line690"></a> * given message is forwarded to all the registered output Handler objects.
+<a name="line691"></a> * @param {goog.debug.Loggable} msg The message to log.
+<a name="line692"></a> * @param {Error=} opt_exception An exception associated with the message.
+<a name="line693"></a> */
+<a name="line694"></a>goog.debug.Logger.prototype.finest = function(msg, opt_exception) {
+<a name="line695"></a>  if (goog.debug.LOGGING_ENABLED) {
+<a name="line696"></a>    this.log(goog.debug.Logger.Level.FINEST, msg, opt_exception);
+<a name="line697"></a>  }
+<a name="line698"></a>};
+<a name="line699"></a>
+<a name="line700"></a>
+<a name="line701"></a>/**
+<a name="line702"></a> * Logs a LogRecord. If the logger is currently enabled for the
+<a name="line703"></a> * given message level then the given message is forwarded to all the
+<a name="line704"></a> * registered output Handler objects.
+<a name="line705"></a> * @param {goog.debug.LogRecord} logRecord A log record to log.
+<a name="line706"></a> */
+<a name="line707"></a>goog.debug.Logger.prototype.logRecord = function(logRecord) {
+<a name="line708"></a>  if (goog.debug.LOGGING_ENABLED &amp;&amp; this.isLoggable(logRecord.getLevel())) {
+<a name="line709"></a>    this.doLogRecord_(logRecord);
+<a name="line710"></a>  }
+<a name="line711"></a>};
+<a name="line712"></a>
+<a name="line713"></a>
+<a name="line714"></a>/**
+<a name="line715"></a> * Logs a LogRecord.
+<a name="line716"></a> * @param {goog.debug.LogRecord} logRecord A log record to log.
+<a name="line717"></a> * @private
+<a name="line718"></a> */
+<a name="line719"></a>goog.debug.Logger.prototype.doLogRecord_ = function(logRecord) {
+<a name="line720"></a>  goog.debug.Logger.logToProfilers(&#39;log:&#39; + logRecord.getMessage());
+<a name="line721"></a>  if (goog.debug.Logger.ENABLE_HIERARCHY) {
+<a name="line722"></a>    var target = this;
+<a name="line723"></a>    while (target) {
+<a name="line724"></a>      target.callPublish_(logRecord);
+<a name="line725"></a>      target = target.getParent();
+<a name="line726"></a>    }
+<a name="line727"></a>  } else {
+<a name="line728"></a>    for (var i = 0, handler; handler = goog.debug.Logger.rootHandlers_[i++]; ) {
+<a name="line729"></a>      handler(logRecord);
+<a name="line730"></a>    }
+<a name="line731"></a>  }
+<a name="line732"></a>};
+<a name="line733"></a>
+<a name="line734"></a>
+<a name="line735"></a>/**
+<a name="line736"></a> * Calls the handlers for publish.
+<a name="line737"></a> * @param {goog.debug.LogRecord} logRecord The log record to publish.
+<a name="line738"></a> * @private
+<a name="line739"></a> */
+<a name="line740"></a>goog.debug.Logger.prototype.callPublish_ = function(logRecord) {
+<a name="line741"></a>  if (this.handlers_) {
+<a name="line742"></a>    for (var i = 0, handler; handler = this.handlers_[i]; i++) {
+<a name="line743"></a>      handler(logRecord);
+<a name="line744"></a>    }
+<a name="line745"></a>  }
+<a name="line746"></a>};
+<a name="line747"></a>
+<a name="line748"></a>
+<a name="line749"></a>/**
+<a name="line750"></a> * Sets the parent of this logger. This is used for setting up the logger tree.
+<a name="line751"></a> * @param {goog.debug.Logger} parent The parent logger.
+<a name="line752"></a> * @private
+<a name="line753"></a> */
+<a name="line754"></a>goog.debug.Logger.prototype.setParent_ = function(parent) {
+<a name="line755"></a>  this.parent_ = parent;
+<a name="line756"></a>};
+<a name="line757"></a>
+<a name="line758"></a>
+<a name="line759"></a>/**
+<a name="line760"></a> * Adds a child to this logger. This is used for setting up the logger tree.
+<a name="line761"></a> * @param {string} name The leaf name of the child.
+<a name="line762"></a> * @param {goog.debug.Logger} logger The child logger.
+<a name="line763"></a> * @private
+<a name="line764"></a> */
+<a name="line765"></a>goog.debug.Logger.prototype.addChild_ = function(name, logger) {
+<a name="line766"></a>  this.getChildren()[name] = logger;
+<a name="line767"></a>};
+<a name="line768"></a>
+<a name="line769"></a>
+<a name="line770"></a>/**
+<a name="line771"></a> * There is a single global LogManager object that is used to maintain a set of
+<a name="line772"></a> * shared state about Loggers and log services. This is loosely based on the
+<a name="line773"></a> * java class java.util.logging.LogManager.
+<a name="line774"></a> */
+<a name="line775"></a>goog.debug.LogManager = {};
+<a name="line776"></a>
+<a name="line777"></a>
+<a name="line778"></a>/**
+<a name="line779"></a> * Map of logger names to logger objects.
+<a name="line780"></a> *
+<a name="line781"></a> * @type {!Object.&lt;string, !goog.debug.Logger&gt;}
+<a name="line782"></a> * @private
+<a name="line783"></a> */
+<a name="line784"></a>goog.debug.LogManager.loggers_ = {};
+<a name="line785"></a>
+<a name="line786"></a>
+<a name="line787"></a>/**
+<a name="line788"></a> * The root logger which is the root of the logger tree.
+<a name="line789"></a> * @type {goog.debug.Logger}
+<a name="line790"></a> * @private
+<a name="line791"></a> */
+<a name="line792"></a>goog.debug.LogManager.rootLogger_ = null;
+<a name="line793"></a>
+<a name="line794"></a>
+<a name="line795"></a>/**
+<a name="line796"></a> * Initializes the LogManager if not already initialized.
+<a name="line797"></a> */
+<a name="line798"></a>goog.debug.LogManager.initialize = function() {
+<a name="line799"></a>  if (!goog.debug.LogManager.rootLogger_) {
+<a name="line800"></a>    goog.debug.LogManager.rootLogger_ = new goog.debug.Logger(
+<a name="line801"></a>        goog.debug.Logger.ROOT_LOGGER_NAME);
+<a name="line802"></a>    goog.debug.LogManager.loggers_[goog.debug.Logger.ROOT_LOGGER_NAME] =
+<a name="line803"></a>        goog.debug.LogManager.rootLogger_;
+<a name="line804"></a>    goog.debug.LogManager.rootLogger_.setLevel(goog.debug.Logger.Level.CONFIG);
+<a name="line805"></a>  }
+<a name="line806"></a>};
+<a name="line807"></a>
+<a name="line808"></a>
+<a name="line809"></a>/**
+<a name="line810"></a> * Returns all the loggers.
+<a name="line811"></a> * @return {!Object.&lt;string, !goog.debug.Logger&gt;} Map of logger names to logger
+<a name="line812"></a> *     objects.
+<a name="line813"></a> */
+<a name="line814"></a>goog.debug.LogManager.getLoggers = function() {
+<a name="line815"></a>  return goog.debug.LogManager.loggers_;
+<a name="line816"></a>};
+<a name="line817"></a>
+<a name="line818"></a>
+<a name="line819"></a>/**
+<a name="line820"></a> * Returns the root of the logger tree namespace, the logger with the empty
+<a name="line821"></a> * string as its name.
+<a name="line822"></a> *
+<a name="line823"></a> * @return {!goog.debug.Logger} The root logger.
+<a name="line824"></a> */
+<a name="line825"></a>goog.debug.LogManager.getRoot = function() {
+<a name="line826"></a>  goog.debug.LogManager.initialize();
+<a name="line827"></a>  return /** @type {!goog.debug.Logger} */ (goog.debug.LogManager.rootLogger_);
+<a name="line828"></a>};
+<a name="line829"></a>
+<a name="line830"></a>
+<a name="line831"></a>/**
+<a name="line832"></a> * Finds a named logger.
+<a name="line833"></a> *
+<a name="line834"></a> * @param {string} name A name for the logger. This should be a dot-separated
+<a name="line835"></a> * name and should normally be based on the package name or class name of the
+<a name="line836"></a> * subsystem, such as goog.net.BrowserChannel.
+<a name="line837"></a> * @return {!goog.debug.Logger} The named logger.
+<a name="line838"></a> */
+<a name="line839"></a>goog.debug.LogManager.getLogger = function(name) {
+<a name="line840"></a>  goog.debug.LogManager.initialize();
+<a name="line841"></a>  var ret = goog.debug.LogManager.loggers_[name];
+<a name="line842"></a>  return ret || goog.debug.LogManager.createLogger_(name);
+<a name="line843"></a>};
+<a name="line844"></a>
+<a name="line845"></a>
+<a name="line846"></a>/**
+<a name="line847"></a> * Creates a function that can be passed to goog.debug.catchErrors. The function
+<a name="line848"></a> * will log all reported errors using the given logger.
+<a name="line849"></a> * @param {goog.debug.Logger=} opt_logger The logger to log the errors to.
+<a name="line850"></a> *     Defaults to the root logger.
+<a name="line851"></a> * @return {function(Object)} The created function.
+<a name="line852"></a> */
+<a name="line853"></a>goog.debug.LogManager.createFunctionForCatchErrors = function(opt_logger) {
+<a name="line854"></a>  return function(info) {
+<a name="line855"></a>    var logger = opt_logger || goog.debug.LogManager.getRoot();
+<a name="line856"></a>    logger.severe(&#39;Error: &#39; + info.message + &#39; (&#39; + info.fileName +
+<a name="line857"></a>                  &#39; @ Line: &#39; + info.line + &#39;)&#39;);
+<a name="line858"></a>  };
+<a name="line859"></a>};
+<a name="line860"></a>
+<a name="line861"></a>
+<a name="line862"></a>/**
+<a name="line863"></a> * Creates the named logger. Will also create the parents of the named logger
+<a name="line864"></a> * if they don&#39;t yet exist.
+<a name="line865"></a> * @param {string} name The name of the logger.
+<a name="line866"></a> * @return {!goog.debug.Logger} The named logger.
+<a name="line867"></a> * @private
+<a name="line868"></a> */
+<a name="line869"></a>goog.debug.LogManager.createLogger_ = function(name) {
+<a name="line870"></a>  // find parent logger
+<a name="line871"></a>  var logger = new goog.debug.Logger(name);
+<a name="line872"></a>  if (goog.debug.Logger.ENABLE_HIERARCHY) {
+<a name="line873"></a>    var lastDotIndex = name.lastIndexOf(&#39;.&#39;);
+<a name="line874"></a>    var parentName = name.substr(0, lastDotIndex);
+<a name="line875"></a>    var leafName = name.substr(lastDotIndex + 1);
+<a name="line876"></a>    var parentLogger = goog.debug.LogManager.getLogger(parentName);
+<a name="line877"></a>
+<a name="line878"></a>    // tell the parent about the child and the child about the parent
+<a name="line879"></a>    parentLogger.addChild_(leafName, logger);
+<a name="line880"></a>    logger.setParent_(parentLogger);
+<a name="line881"></a>  }
+<a name="line882"></a>
+<a name="line883"></a>  goog.debug.LogManager.loggers_[name] = logger;
+<a name="line884"></a>  return logger;
+<a name="line885"></a>};
+</pre>
+
+
+</body>
+</html>

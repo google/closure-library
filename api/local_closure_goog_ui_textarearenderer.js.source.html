@@ -1,0 +1,221 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>textarearenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_textarearenderer.js.html">textarearenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//     http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Native browser textarea renderer for {@link goog.ui.Textarea}s.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.ui.TextareaRenderer&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line22"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line23"></a>goog.require(&#39;goog.ui.ControlRenderer&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Renderer for {@link goog.ui.Textarea}s.  Renders and decorates native HTML
+<a name="line29"></a> * textarea elements.  Since native HTML textareas have built-in support for
+<a name="line30"></a> * many features, overrides many expensive (and redundant) superclass methods to
+<a name="line31"></a> * be no-ops.
+<a name="line32"></a> * @constructor
+<a name="line33"></a> * @extends {goog.ui.ControlRenderer}
+<a name="line34"></a> * @final
+<a name="line35"></a> */
+<a name="line36"></a>goog.ui.TextareaRenderer = function() {
+<a name="line37"></a>  goog.ui.ControlRenderer.call(this);
+<a name="line38"></a>};
+<a name="line39"></a>goog.inherits(goog.ui.TextareaRenderer, goog.ui.ControlRenderer);
+<a name="line40"></a>goog.addSingletonGetter(goog.ui.TextareaRenderer);
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line45"></a> * by this renderer.
+<a name="line46"></a> * @type {string}
+<a name="line47"></a> */
+<a name="line48"></a>goog.ui.TextareaRenderer.CSS_CLASS = goog.getCssName(&#39;goog-textarea&#39;);
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/** @override */
+<a name="line52"></a>goog.ui.TextareaRenderer.prototype.getAriaRole = function() {
+<a name="line53"></a>  // textareas don&#39;t need ARIA roles to be recognized by screen readers.
+<a name="line54"></a>  return undefined;
+<a name="line55"></a>};
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>/** @override */
+<a name="line59"></a>goog.ui.TextareaRenderer.prototype.decorate = function(control, element) {
+<a name="line60"></a>  this.setUpTextarea_(control);
+<a name="line61"></a>  goog.ui.TextareaRenderer.superClass_.decorate.call(this, control,
+<a name="line62"></a>      element);
+<a name="line63"></a>  control.setContent(element.value);
+<a name="line64"></a>  return element;
+<a name="line65"></a>};
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * Returns the textarea&#39;s contents wrapped in an HTML textarea element.  Sets
+<a name="line70"></a> * the textarea&#39;s disabled attribute as needed.
+<a name="line71"></a> * @param {goog.ui.Control} textarea Textarea to render.
+<a name="line72"></a> * @return {!Element} Root element for the Textarea control (an HTML textarea
+<a name="line73"></a> *     element).
+<a name="line74"></a> * @override
+<a name="line75"></a> */
+<a name="line76"></a>goog.ui.TextareaRenderer.prototype.createDom = function(textarea) {
+<a name="line77"></a>  this.setUpTextarea_(textarea);
+<a name="line78"></a>  var element = textarea.getDomHelper().createDom(&#39;textarea&#39;, {
+<a name="line79"></a>    &#39;class&#39;: this.getClassNames(textarea).join(&#39; &#39;),
+<a name="line80"></a>    &#39;disabled&#39;: !textarea.isEnabled()
+<a name="line81"></a>  }, textarea.getContent() || &#39;&#39;);
+<a name="line82"></a>  return element;
+<a name="line83"></a>};
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Overrides {@link goog.ui.TextareaRenderer#canDecorate} by returning true only
+<a name="line88"></a> * if the element is an HTML textarea.
+<a name="line89"></a> * @param {Element} element Element to decorate.
+<a name="line90"></a> * @return {boolean} Whether the renderer can decorate the element.
+<a name="line91"></a> * @override
+<a name="line92"></a> */
+<a name="line93"></a>goog.ui.TextareaRenderer.prototype.canDecorate = function(element) {
+<a name="line94"></a>  return element.tagName == goog.dom.TagName.TEXTAREA;
+<a name="line95"></a>};
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/**
+<a name="line99"></a> * Textareas natively support right-to-left rendering.
+<a name="line100"></a> * @override
+<a name="line101"></a> */
+<a name="line102"></a>goog.ui.TextareaRenderer.prototype.setRightToLeft = goog.nullFunction;
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Textareas are always focusable as long as they are enabled.
+<a name="line107"></a> * @override
+<a name="line108"></a> */
+<a name="line109"></a>goog.ui.TextareaRenderer.prototype.isFocusable = function(textarea) {
+<a name="line110"></a>  return textarea.isEnabled();
+<a name="line111"></a>};
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * Textareas natively support keyboard focus.
+<a name="line116"></a> * @override
+<a name="line117"></a> */
+<a name="line118"></a>goog.ui.TextareaRenderer.prototype.setFocusable = goog.nullFunction;
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Textareas also expose the DISABLED state in the HTML textarea&#39;s
+<a name="line123"></a> * {@code disabled} attribute.
+<a name="line124"></a> * @override
+<a name="line125"></a> */
+<a name="line126"></a>goog.ui.TextareaRenderer.prototype.setState = function(textarea, state,
+<a name="line127"></a>    enable) {
+<a name="line128"></a>  goog.ui.TextareaRenderer.superClass_.setState.call(this, textarea, state,
+<a name="line129"></a>      enable);
+<a name="line130"></a>  var element = textarea.getElement();
+<a name="line131"></a>  if (element &amp;&amp; state == goog.ui.Component.State.DISABLED) {
+<a name="line132"></a>    element.disabled = enable;
+<a name="line133"></a>  }
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Textareas don&#39;t need ARIA states to support accessibility, so this is
+<a name="line139"></a> * a no-op.
+<a name="line140"></a> * @override
+<a name="line141"></a> */
+<a name="line142"></a>goog.ui.TextareaRenderer.prototype.updateAriaState = goog.nullFunction;
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * Sets up the textarea control such that it doesn&#39;t waste time adding
+<a name="line147"></a> * functionality that is already natively supported by browser
+<a name="line148"></a> * textareas.
+<a name="line149"></a> * @param {goog.ui.Control} textarea Textarea control to configure.
+<a name="line150"></a> * @private
+<a name="line151"></a> */
+<a name="line152"></a>goog.ui.TextareaRenderer.prototype.setUpTextarea_ = function(textarea) {
+<a name="line153"></a>  textarea.setHandleMouseEvents(false);
+<a name="line154"></a>  textarea.setAutoStates(goog.ui.Component.State.ALL, false);
+<a name="line155"></a>  textarea.setSupportedState(goog.ui.Component.State.FOCUSED, false);
+<a name="line156"></a>};
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/** @override **/
+<a name="line160"></a>goog.ui.TextareaRenderer.prototype.setContent = function(element, value) {
+<a name="line161"></a>  if (element) {
+<a name="line162"></a>    element.value = value;
+<a name="line163"></a>  }
+<a name="line164"></a>};
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/** @override **/
+<a name="line168"></a>goog.ui.TextareaRenderer.prototype.getCssClass = function() {
+<a name="line169"></a>  return goog.ui.TextareaRenderer.CSS_CLASS;
+<a name="line170"></a>};
+</pre>
+
+
+</body>
+</html>

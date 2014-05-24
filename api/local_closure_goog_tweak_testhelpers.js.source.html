@@ -1,0 +1,169 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>testhelpers.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_tweak_testhelpers.js.html">testhelpers.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Common test functions for tweak unit tests.
+<a name="line17"></a> *
+<a name="line18"></a> * @author agrieve@google.com (Andrew Grieve)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.tweak.testhelpers&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.tweak&#39;);
+<a name="line24"></a>goog.require(&#39;goog.tweak.BooleanGroup&#39;);
+<a name="line25"></a>goog.require(&#39;goog.tweak.BooleanInGroupSetting&#39;);
+<a name="line26"></a>goog.require(&#39;goog.tweak.BooleanSetting&#39;);
+<a name="line27"></a>goog.require(&#39;goog.tweak.ButtonAction&#39;);
+<a name="line28"></a>goog.require(&#39;goog.tweak.NumericSetting&#39;);
+<a name="line29"></a>goog.require(&#39;goog.tweak.Registry&#39;);
+<a name="line30"></a>goog.require(&#39;goog.tweak.StringSetting&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>var boolEntry;
+<a name="line34"></a>var boolEntry2;
+<a name="line35"></a>var strEntry;
+<a name="line36"></a>var strEntry2;
+<a name="line37"></a>var strEnumEntry;
+<a name="line38"></a>var numEntry;
+<a name="line39"></a>var numEnumEntry;
+<a name="line40"></a>var boolGroup;
+<a name="line41"></a>var boolOneEntry;
+<a name="line42"></a>var boolTwoEntry;
+<a name="line43"></a>var buttonEntry;
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Creates a registry with some entries in it.
+<a name="line48"></a> * @param {string} queryParams The query parameter string to use for the
+<a name="line49"></a> *     registry.
+<a name="line50"></a> * @param {!Object.&lt;string|number|boolean&gt;=} opt_compilerOverrides Compiler
+<a name="line51"></a> *     overrides.
+<a name="line52"></a> * @suppress {accessControls} Private state is accessed for test purposes.
+<a name="line53"></a> */
+<a name="line54"></a>function createRegistryEntries(queryParams, opt_compilerOverrides) {
+<a name="line55"></a>  // Initialize the registry with the given query string.
+<a name="line56"></a>  var registry =
+<a name="line57"></a>      new goog.tweak.Registry(queryParams, opt_compilerOverrides || {});
+<a name="line58"></a>  goog.tweak.registry_ = registry;
+<a name="line59"></a>
+<a name="line60"></a>  boolEntry = new goog.tweak.BooleanSetting(&#39;Bool&#39;, &#39;The bool1&#39;);
+<a name="line61"></a>  registry.register(boolEntry);
+<a name="line62"></a>
+<a name="line63"></a>  boolEntry2 = new goog.tweak.BooleanSetting(&#39;Bool2&#39;, &#39;The bool2&#39;);
+<a name="line64"></a>  boolEntry2.setDefaultValue(true);
+<a name="line65"></a>  registry.register(boolEntry2);
+<a name="line66"></a>
+<a name="line67"></a>  strEntry = new goog.tweak.StringSetting(&#39;Str&#39;, &#39;The str1&#39;);
+<a name="line68"></a>  strEntry.setParamName(&#39;s&#39;);
+<a name="line69"></a>  registry.register(strEntry);
+<a name="line70"></a>
+<a name="line71"></a>  strEntry2 = new goog.tweak.StringSetting(&#39;Str2&#39;, &#39;The str2&#39;);
+<a name="line72"></a>  strEntry2.setDefaultValue(&#39;foo&#39;);
+<a name="line73"></a>  registry.register(strEntry2);
+<a name="line74"></a>
+<a name="line75"></a>  strEnumEntry = new goog.tweak.StringSetting(&#39;Enum&#39;, &#39;The enum&#39;);
+<a name="line76"></a>  strEnumEntry.setValidValues([&#39;A&#39;, &#39;B&#39;, &#39;C&#39;]);
+<a name="line77"></a>  strEnumEntry.setRestartRequired(false);
+<a name="line78"></a>  registry.register(strEnumEntry);
+<a name="line79"></a>
+<a name="line80"></a>  numEntry = new goog.tweak.NumericSetting(&#39;Num&#39;, &#39;The num&#39;);
+<a name="line81"></a>  numEntry.setDefaultValue(99);
+<a name="line82"></a>  registry.register(numEntry);
+<a name="line83"></a>
+<a name="line84"></a>  numEnumEntry = new goog.tweak.NumericSetting(&#39;Enum2&#39;, &#39;The 2nd enum&#39;);
+<a name="line85"></a>  numEnumEntry.setValidValues([1, 2, 3]);
+<a name="line86"></a>  numEnumEntry.setRestartRequired(false);
+<a name="line87"></a>  numEnumEntry.label = &#39;Enum the second&amp;&#39;;
+<a name="line88"></a>  registry.register(numEnumEntry);
+<a name="line89"></a>
+<a name="line90"></a>  boolGroup = new goog.tweak.BooleanGroup(&#39;BoolGroup&#39;, &#39;The bool group&#39;);
+<a name="line91"></a>  registry.register(boolGroup);
+<a name="line92"></a>
+<a name="line93"></a>  boolOneEntry = new goog.tweak.BooleanInGroupSetting(&#39;BoolOne&#39;, &#39;Desc for 1&#39;,
+<a name="line94"></a>      boolGroup);
+<a name="line95"></a>  boolOneEntry.setToken(&#39;B1&#39;);
+<a name="line96"></a>  boolOneEntry.setRestartRequired(false);
+<a name="line97"></a>  boolGroup.addChild(boolOneEntry);
+<a name="line98"></a>  registry.register(boolOneEntry);
+<a name="line99"></a>
+<a name="line100"></a>  boolTwoEntry = new goog.tweak.BooleanInGroupSetting(&#39;BoolTwo&#39;, &#39;Desc for 2&#39;,
+<a name="line101"></a>      boolGroup);
+<a name="line102"></a>  boolTwoEntry.setDefaultValue(true);
+<a name="line103"></a>  boolGroup.addChild(boolTwoEntry);
+<a name="line104"></a>  registry.register(boolTwoEntry);
+<a name="line105"></a>
+<a name="line106"></a>  buttonEntry = new goog.tweak.ButtonAction(&#39;Button&#39;, &#39;The Btn&#39;,
+<a name="line107"></a>      goog.nullFunction);
+<a name="line108"></a>  buttonEntry.label = &#39;&lt;btn&gt;&#39;;
+<a name="line109"></a>  registry.register(buttonEntry);
+<a name="line110"></a>
+<a name="line111"></a>  var nsBoolGroup = new goog.tweak.BooleanGroup(&#39;foo.bar.BoolGroup&#39;,
+<a name="line112"></a>      &#39;Namespaced Bool Group&#39;);
+<a name="line113"></a>  registry.register(nsBoolGroup);
+<a name="line114"></a>  var nsBool = new goog.tweak.BooleanInGroupSetting(&#39;foo.bar.BoolOne&#39;,
+<a name="line115"></a>      &#39;Desc for Namespaced 1&#39;, nsBoolGroup);
+<a name="line116"></a>  nsBoolGroup.addChild(nsBool);
+<a name="line117"></a>  registry.register(nsBool);
+<a name="line118"></a>}
+</pre>
+
+
+</body>
+</html>

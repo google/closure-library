@@ -1,0 +1,276 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>soy_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_soy_soy_test.js.html">soy_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.soyTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.soyTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line20"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line21"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line22"></a>goog.require(&#39;goog.soy&#39;);
+<a name="line23"></a>/** @suppress {extraRequire} */
+<a name="line24"></a>goog.require(&#39;goog.soy.testHelper&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line27"></a>
+<a name="line28"></a>var stubs;
+<a name="line29"></a>
+<a name="line30"></a>function setUp() {
+<a name="line31"></a>  stubs = new goog.testing.PropertyReplacer();
+<a name="line32"></a>}
+<a name="line33"></a>
+<a name="line34"></a>function tearDown() {
+<a name="line35"></a>  stubs.reset();
+<a name="line36"></a>}
+<a name="line37"></a>
+<a name="line38"></a>function testRenderElement() {
+<a name="line39"></a>  var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
+<a name="line40"></a>  goog.soy.renderElement(testDiv, example.multiRootTemplate, {name: &#39;Boo&#39;});
+<a name="line41"></a>  assertEquals(&#39;&lt;div&gt;Hello&lt;/div&gt;&lt;div&gt;Boo&lt;/div&gt;&#39;, elementToInnerHtml(testDiv));
+<a name="line42"></a>}
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>function testRenderElementWithNoTemplateData() {
+<a name="line46"></a>  var testDiv = goog.dom.createElement(goog.dom.TagName.DIV);
+<a name="line47"></a>  goog.soy.renderElement(testDiv, example.noDataTemplate);
+<a name="line48"></a>  assertEquals(&#39;&lt;div&gt;Hello&lt;/div&gt;&#39;, elementToInnerHtml(testDiv));
+<a name="line49"></a>}
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>function testRenderAsFragmentTextNode() {
+<a name="line53"></a>  var fragment = goog.soy.renderAsFragment(
+<a name="line54"></a>      example.textNodeTemplate, {name: &#39;Boo&#39;});
+<a name="line55"></a>  assertEquals(goog.dom.NodeType.TEXT, fragment.nodeType);
+<a name="line56"></a>  assertEquals(&#39;Boo&#39;, fragmentToHtml(fragment));
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>function testRenderAsFragmentInjectedData() {
+<a name="line61"></a>  var fragment = goog.soy.renderAsFragment(example.injectedDataTemplate,
+<a name="line62"></a>      {name: &#39;Boo&#39;}, {name: &#39;ijBoo&#39;});
+<a name="line63"></a>  assertEquals(goog.dom.NodeType.TEXT, fragment.nodeType);
+<a name="line64"></a>  assertEquals(&#39;BooijBoo&#39;, fragmentToHtml(fragment));
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>function testRenderAsFragmentSingleRoot() {
+<a name="line69"></a>  var fragment = goog.soy.renderAsFragment(
+<a name="line70"></a>      example.singleRootTemplate, {name: &#39;Boo&#39;});
+<a name="line71"></a>  assertEquals(goog.dom.NodeType.ELEMENT, fragment.nodeType);
+<a name="line72"></a>  assertEquals(goog.dom.TagName.SPAN, fragment.tagName);
+<a name="line73"></a>  assertEquals(&#39;Boo&#39;, fragment.innerHTML);
+<a name="line74"></a>}
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>function testRenderAsFragmentMultiRoot() {
+<a name="line78"></a>  var fragment = goog.soy.renderAsFragment(
+<a name="line79"></a>      example.multiRootTemplate, {name: &#39;Boo&#39;});
+<a name="line80"></a>  assertEquals(goog.dom.NodeType.DOCUMENT_FRAGMENT, fragment.nodeType);
+<a name="line81"></a>  assertEquals(&#39;&lt;div&gt;Hello&lt;/div&gt;&lt;div&gt;Boo&lt;/div&gt;&#39;, fragmentToHtml(fragment));
+<a name="line82"></a>}
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>function testRenderAsFragmentNoData() {
+<a name="line86"></a>  var fragment = goog.soy.renderAsFragment(example.noDataTemplate);
+<a name="line87"></a>  assertEquals(goog.dom.NodeType.ELEMENT, fragment.nodeType);
+<a name="line88"></a>  assertEquals(&#39;&lt;div&gt;Hello&lt;/div&gt;&#39;, fragmentToHtml(fragment));
+<a name="line89"></a>}
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>function testRenderAsElementTextNode() {
+<a name="line93"></a>  var elem = goog.soy.renderAsElement(example.textNodeTemplate, {name: &#39;Boo&#39;});
+<a name="line94"></a>  assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
+<a name="line95"></a>  assertEquals(goog.dom.TagName.DIV, elem.tagName);
+<a name="line96"></a>  assertEquals(&#39;Boo&#39;, elementToInnerHtml(elem));
+<a name="line97"></a>}
+<a name="line98"></a>
+<a name="line99"></a>function testRenderAsElementInjectedData() {
+<a name="line100"></a>  var elem = goog.soy.renderAsElement(example.injectedDataTemplate,
+<a name="line101"></a>      {name: &#39;Boo&#39;}, {name: &#39;ijBoo&#39;});
+<a name="line102"></a>  assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
+<a name="line103"></a>  assertEquals(goog.dom.TagName.DIV, elem.tagName);
+<a name="line104"></a>  assertEquals(&#39;BooijBoo&#39;, elementToInnerHtml(elem));
+<a name="line105"></a>}
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>function testRenderAsElementSingleRoot() {
+<a name="line109"></a>  var elem = goog.soy.renderAsElement(
+<a name="line110"></a>      example.singleRootTemplate, {name: &#39;Boo&#39;});
+<a name="line111"></a>  assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
+<a name="line112"></a>  assertEquals(goog.dom.TagName.SPAN, elem.tagName);
+<a name="line113"></a>  assertEquals(&#39;Boo&#39;, elementToInnerHtml(elem));
+<a name="line114"></a>}
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>function testRenderAsElementMultiRoot() {
+<a name="line118"></a>  var elem = goog.soy.renderAsElement(example.multiRootTemplate, {name: &#39;Boo&#39;});
+<a name="line119"></a>  assertEquals(goog.dom.NodeType.ELEMENT, elem.nodeType);
+<a name="line120"></a>  assertEquals(goog.dom.TagName.DIV, elem.tagName);
+<a name="line121"></a>  assertEquals(&#39;&lt;div&gt;Hello&lt;/div&gt;&lt;div&gt;Boo&lt;/div&gt;&#39;, elementToInnerHtml(elem));
+<a name="line122"></a>}
+<a name="line123"></a>
+<a name="line124"></a>function testRenderAsElementWithNoData() {
+<a name="line125"></a>  var elem = goog.soy.renderAsElement(example.noDataTemplate);
+<a name="line126"></a>  assertEquals(&#39;Hello&#39;, elementToInnerHtml(elem));
+<a name="line127"></a>}
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Asserts that the function throws an error for unsafe templates.
+<a name="line132"></a> * @param {Function} function Callback to test.
+<a name="line133"></a> */
+<a name="line134"></a>function assertUnsafeTemplateOutputErrorThrown(func) {
+<a name="line135"></a>  stubs.set(goog.asserts, &#39;ENABLE_ASSERTS&#39;, true);
+<a name="line136"></a>  assertContains(&#39;Soy template output is unsafe for use as HTML&#39;,
+<a name="line137"></a>      assertThrows(func).message);
+<a name="line138"></a>  stubs.set(goog.asserts, &#39;ENABLE_ASSERTS&#39;, false);
+<a name="line139"></a>  assertEquals(&#39;zSoyz&#39;, func());
+<a name="line140"></a>}
+<a name="line141"></a>
+<a name="line142"></a>function testAllowButEscapeUnsanitizedText() {
+<a name="line143"></a>  var div = goog.dom.createElement(goog.dom.TagName.DIV);
+<a name="line144"></a>  goog.soy.renderElement(div, example.unsanitizedTextTemplate);
+<a name="line145"></a>  assertEquals(&#39;I &amp;lt;3 Puppies &amp;amp; Kittens&#39;, div.innerHTML);
+<a name="line146"></a>  var fragment = goog.soy.renderAsFragment(example.unsanitizedTextTemplate);
+<a name="line147"></a>  assertEquals(&#39;I &lt;3 Puppies &amp; Kittens&#39;, fragment.nodeValue);
+<a name="line148"></a>  assertEquals(&#39;I &amp;lt;3 Puppies &amp;amp; Kittens&#39;,
+<a name="line149"></a>      goog.soy.renderAsElement(example.unsanitizedTextTemplate).innerHTML);
+<a name="line150"></a>}
+<a name="line151"></a>
+<a name="line152"></a>function testRejectSanitizedCss() {
+<a name="line153"></a>  assertUnsafeTemplateOutputErrorThrown(function() {
+<a name="line154"></a>    goog.soy.renderAsElement(example.sanitizedCssTemplate);
+<a name="line155"></a>  });
+<a name="line156"></a>}
+<a name="line157"></a>
+<a name="line158"></a>function testRejectSanitizedCss() {
+<a name="line159"></a>  assertUnsafeTemplateOutputErrorThrown(function() {
+<a name="line160"></a>    return goog.soy.renderAsElement(
+<a name="line161"></a>        example.templateSpoofingSanitizedContentString).innerHTML;
+<a name="line162"></a>  });
+<a name="line163"></a>}
+<a name="line164"></a>
+<a name="line165"></a>function testRejectStringTemplatesWhenModeIsSet() {
+<a name="line166"></a>  stubs.set(goog.soy, &#39;REQUIRE_STRICT_AUTOESCAPE&#39;, true);
+<a name="line167"></a>  assertUnsafeTemplateOutputErrorThrown(function() {
+<a name="line168"></a>    return goog.soy.renderAsElement(example.noDataTemplate).innerHTML;
+<a name="line169"></a>  });
+<a name="line170"></a>}
+<a name="line171"></a>
+<a name="line172"></a>function testAcceptSanitizedHtml() {
+<a name="line173"></a>  assertEquals(&#39;Hello World&#39;, goog.dom.getTextContent(
+<a name="line174"></a>      goog.soy.renderAsElement(example.sanitizedHtmlTemplate)));
+<a name="line175"></a>}
+<a name="line176"></a>
+<a name="line177"></a>function testRejectSanitizedHtmlAttributes() {
+<a name="line178"></a>  // Attributes context has nothing to do with html.
+<a name="line179"></a>  assertUnsafeTemplateOutputErrorThrown(function() {
+<a name="line180"></a>    return goog.dom.getTextContent(
+<a name="line181"></a>        goog.soy.renderAsElement(example.sanitizedHtmlAttributesTemplate));
+<a name="line182"></a>  });
+<a name="line183"></a>}
+<a name="line184"></a>
+<a name="line185"></a>function testAcceptNonObject() {
+<a name="line186"></a>  // Some templates, or things that spoof templates in unit tests, might return
+<a name="line187"></a>  // non-strings in unusual cases.
+<a name="line188"></a>  assertEquals(&#39;null&#39;, goog.dom.getTextContent(
+<a name="line189"></a>      goog.soy.renderAsElement(goog.functions.constant(null))));
+<a name="line190"></a>}
+<a name="line191"></a>
+<a name="line192"></a>function testDebugAssertionWithBadFirstTag() {
+<a name="line193"></a>  try {
+<a name="line194"></a>    goog.soy.renderAsElement(example.tableRowTemplate);
+<a name="line195"></a>    // Expect no exception in production code.
+<a name="line196"></a>    assert(!goog.DEBUG);
+<a name="line197"></a>  } catch (e) {
+<a name="line198"></a>    // Expect exception in debug code.
+<a name="line199"></a>    assert(goog.DEBUG);
+<a name="line200"></a>    // Make sure to let the developer know which tag caused the problem.
+<a name="line201"></a>    assertContains(&#39;&lt;tr&gt;&#39;, e.message);
+<a name="line202"></a>  }
+<a name="line203"></a>
+<a name="line204"></a>  try {
+<a name="line205"></a>    goog.soy.renderAsFragment(example.tableRowTemplate);
+<a name="line206"></a>    // Expect no exception in production code.
+<a name="line207"></a>    assert(!goog.DEBUG);
+<a name="line208"></a>  } catch (e) {
+<a name="line209"></a>    // Expect exception in debug code.
+<a name="line210"></a>    assert(goog.DEBUG);
+<a name="line211"></a>    // Make sure to let the developer know which tag caused the problem.
+<a name="line212"></a>    assertContains(&#39;&lt;tr&gt;&#39;, e.message);
+<a name="line213"></a>  }
+<a name="line214"></a>
+<a name="line215"></a>  try {
+<a name="line216"></a>    goog.soy.renderAsElement(example.colGroupTemplateCaps);
+<a name="line217"></a>    // Expect no exception in production code.
+<a name="line218"></a>    assert(!goog.DEBUG);
+<a name="line219"></a>  } catch (e) {
+<a name="line220"></a>    // Expect exception in debug code.
+<a name="line221"></a>    assert(goog.DEBUG);
+<a name="line222"></a>    // Make sure to let the developer know which tag caused the problem.
+<a name="line223"></a>    assertContains(&#39;&lt;COLGROUP&gt;&#39;, e.message);
+<a name="line224"></a>  }
+<a name="line225"></a>}
+</pre>
+
+
+</body>
+</html>

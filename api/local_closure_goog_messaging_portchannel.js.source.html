@@ -1,0 +1,453 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>portchannel.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_messaging_portchannel.js.html">portchannel.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A class that wraps several types of HTML5 message-passing
+<a name="line17"></a> * entities ({@link MessagePort}s, {@link WebWorker}s, and {@link Window}s),
+<a name="line18"></a> * providing a unified interface.
+<a name="line19"></a> *
+<a name="line20"></a> * This is tested under Chrome, Safari, and Firefox. Since Firefox 3.6 has an
+<a name="line21"></a> * incomplete implementation of web workers, it doesn&#39;t support sending ports
+<a name="line22"></a> * over Window connections. IE has no web worker support at all, and so is
+<a name="line23"></a> * unsupported by this class.
+<a name="line24"></a> *
+<a name="line25"></a> */
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.messaging.PortChannel&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line30"></a>goog.require(&#39;goog.array&#39;);
+<a name="line31"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line32"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line33"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line34"></a>goog.require(&#39;goog.dom.DomHelper&#39;);
+<a name="line35"></a>goog.require(&#39;goog.events&#39;);
+<a name="line36"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line37"></a>goog.require(&#39;goog.json&#39;);
+<a name="line38"></a>goog.require(&#39;goog.log&#39;);
+<a name="line39"></a>goog.require(&#39;goog.messaging.AbstractChannel&#39;);
+<a name="line40"></a>goog.require(&#39;goog.messaging.DeferredChannel&#39;);
+<a name="line41"></a>goog.require(&#39;goog.object&#39;);
+<a name="line42"></a>goog.require(&#39;goog.string&#39;);
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * A wrapper for several types of HTML5 message-passing entities
+<a name="line48"></a> * ({@link MessagePort}s and {@link WebWorker}s). This class implements the
+<a name="line49"></a> * {@link goog.messaging.MessageChannel} interface.
+<a name="line50"></a> *
+<a name="line51"></a> * This class can be used in conjunction with other communication on the port.
+<a name="line52"></a> * It sets {@link goog.messaging.PortChannel.FLAG} to true on all messages it
+<a name="line53"></a> * sends.
+<a name="line54"></a> *
+<a name="line55"></a> * @param {!MessagePort|!WebWorker} underlyingPort The message-passing
+<a name="line56"></a> *     entity to wrap. If this is a {@link MessagePort}, it should be started.
+<a name="line57"></a> *     The remote end should also be wrapped in a PortChannel. This will be
+<a name="line58"></a> *     disposed along with the PortChannel; this means terminating it if it&#39;s a
+<a name="line59"></a> *     worker or removing it from the DOM if it&#39;s an iframe.
+<a name="line60"></a> * @constructor
+<a name="line61"></a> * @extends {goog.messaging.AbstractChannel}
+<a name="line62"></a> * @final
+<a name="line63"></a> */
+<a name="line64"></a>goog.messaging.PortChannel = function(underlyingPort) {
+<a name="line65"></a>  goog.messaging.PortChannel.base(this, &#39;constructor&#39;);
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * The wrapped message-passing entity.
+<a name="line69"></a>   * @type {!MessagePort|!WebWorker}
+<a name="line70"></a>   * @private
+<a name="line71"></a>   */
+<a name="line72"></a>  this.port_ = underlyingPort;
+<a name="line73"></a>
+<a name="line74"></a>  /**
+<a name="line75"></a>   * The key for the event listener.
+<a name="line76"></a>   * @type {goog.events.Key}
+<a name="line77"></a>   * @private
+<a name="line78"></a>   */
+<a name="line79"></a>  this.listenerKey_ = goog.events.listen(
+<a name="line80"></a>      this.port_, goog.events.EventType.MESSAGE, this.deliver_, false, this);
+<a name="line81"></a>};
+<a name="line82"></a>goog.inherits(goog.messaging.PortChannel, goog.messaging.AbstractChannel);
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Create a PortChannel that communicates with a window embedded in the current
+<a name="line87"></a> * page (e.g. an iframe contentWindow). The code within the window should call
+<a name="line88"></a> * {@link forGlobalWindow} to establish the connection.
+<a name="line89"></a> *
+<a name="line90"></a> * It&#39;s possible to use this channel in conjunction with other messages to the
+<a name="line91"></a> * embedded window. However, only one PortChannel should be used for a given
+<a name="line92"></a> * window at a time.
+<a name="line93"></a> *
+<a name="line94"></a> * @param {!Window} window The window object to communicate with.
+<a name="line95"></a> * @param {string} peerOrigin The expected origin of the window. See
+<a name="line96"></a> *     http://dev.w3.org/html5/postmsg/#dom-window-postmessage.
+<a name="line97"></a> * @param {goog.Timer=} opt_timer The timer that regulates how often the initial
+<a name="line98"></a> *     connection message is attempted. This will be automatically disposed once
+<a name="line99"></a> *     the connection is established, or when the connection is cancelled.
+<a name="line100"></a> * @return {!goog.messaging.DeferredChannel} The PortChannel. Although this is
+<a name="line101"></a> *     not actually an instance of the PortChannel class, it will behave like
+<a name="line102"></a> *     one in that MessagePorts may be sent across it. The DeferredChannel may
+<a name="line103"></a> *     be cancelled before a connection is established in order to abort the
+<a name="line104"></a> *     attempt to make a connection.
+<a name="line105"></a> */
+<a name="line106"></a>goog.messaging.PortChannel.forEmbeddedWindow = function(
+<a name="line107"></a>    window, peerOrigin, opt_timer) {
+<a name="line108"></a>  var timer = opt_timer || new goog.Timer(50);
+<a name="line109"></a>
+<a name="line110"></a>  var disposeTimer = goog.partial(goog.dispose, timer);
+<a name="line111"></a>  var deferred = new goog.async.Deferred(disposeTimer);
+<a name="line112"></a>  deferred.addBoth(disposeTimer);
+<a name="line113"></a>
+<a name="line114"></a>  timer.start();
+<a name="line115"></a>  // Every tick, attempt to set up a connection by sending in one end of an
+<a name="line116"></a>  // HTML5 MessageChannel. If the inner window posts a response along a channel,
+<a name="line117"></a>  // then we&#39;ll use that channel to create the PortChannel.
+<a name="line118"></a>  //
+<a name="line119"></a>  // As per http://dev.w3.org/html5/postmsg/#ports-and-garbage-collection, any
+<a name="line120"></a>  // ports that are not ultimately used to set up the channel will be garbage
+<a name="line121"></a>  // collected (since there are no references in this context, and the remote
+<a name="line122"></a>  // context hasn&#39;t seen them).
+<a name="line123"></a>  goog.events.listen(timer, goog.Timer.TICK, function() {
+<a name="line124"></a>    var channel = new MessageChannel();
+<a name="line125"></a>    var gotMessage = function(e) {
+<a name="line126"></a>      channel.port1.removeEventListener(
+<a name="line127"></a>          goog.events.EventType.MESSAGE, gotMessage, true);
+<a name="line128"></a>      // If the connection has been cancelled, don&#39;t create the channel.
+<a name="line129"></a>      if (!timer.isDisposed()) {
+<a name="line130"></a>        deferred.callback(new goog.messaging.PortChannel(channel.port1));
+<a name="line131"></a>      }
+<a name="line132"></a>    };
+<a name="line133"></a>    channel.port1.start();
+<a name="line134"></a>    // Don&#39;t use goog.events because we don&#39;t want any lingering references to
+<a name="line135"></a>    // the ports to prevent them from getting GCed. Only modern browsers support
+<a name="line136"></a>    // these APIs anyway, so we don&#39;t need to worry about event API
+<a name="line137"></a>    // compatibility.
+<a name="line138"></a>    channel.port1.addEventListener(
+<a name="line139"></a>        goog.events.EventType.MESSAGE, gotMessage, true);
+<a name="line140"></a>
+<a name="line141"></a>    var msg = {};
+<a name="line142"></a>    msg[goog.messaging.PortChannel.FLAG] = true;
+<a name="line143"></a>    window.postMessage(msg, [channel.port2], peerOrigin);
+<a name="line144"></a>  });
+<a name="line145"></a>
+<a name="line146"></a>  return new goog.messaging.DeferredChannel(deferred);
+<a name="line147"></a>};
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Create a PortChannel that communicates with the document in which this window
+<a name="line152"></a> * is embedded (e.g. within an iframe). The enclosing document should call
+<a name="line153"></a> * {@link forEmbeddedWindow} to establish the connection.
+<a name="line154"></a> *
+<a name="line155"></a> * It&#39;s possible to use this channel in conjunction with other messages posted
+<a name="line156"></a> * to the global window. However, only one PortChannel should be used for the
+<a name="line157"></a> * global window at a time.
+<a name="line158"></a> *
+<a name="line159"></a> * @param {string} peerOrigin The expected origin of the enclosing document. See
+<a name="line160"></a> *     http://dev.w3.org/html5/postmsg/#dom-window-postmessage.
+<a name="line161"></a> * @return {!goog.messaging.MessageChannel} The PortChannel. Although this may
+<a name="line162"></a> *     not actually be an instance of the PortChannel class, it will behave like
+<a name="line163"></a> *     one in that MessagePorts may be sent across it.
+<a name="line164"></a> */
+<a name="line165"></a>goog.messaging.PortChannel.forGlobalWindow = function(peerOrigin) {
+<a name="line166"></a>  var deferred = new goog.async.Deferred();
+<a name="line167"></a>  // Wait for the external page to post a message containing the message port
+<a name="line168"></a>  // which we&#39;ll use to set up the PortChannel. Ignore all other messages. Once
+<a name="line169"></a>  // we receive the port, notify the other end and then set up the PortChannel.
+<a name="line170"></a>  var key = goog.events.listen(
+<a name="line171"></a>      window, goog.events.EventType.MESSAGE, function(e) {
+<a name="line172"></a>        var browserEvent = e.getBrowserEvent();
+<a name="line173"></a>        var data = browserEvent.data;
+<a name="line174"></a>        if (!goog.isObject(data) || !data[goog.messaging.PortChannel.FLAG]) {
+<a name="line175"></a>          return;
+<a name="line176"></a>        }
+<a name="line177"></a>
+<a name="line178"></a>        if (peerOrigin != &#39;*&#39; &amp;&amp; peerOrigin != browserEvent.origin) {
+<a name="line179"></a>          return;
+<a name="line180"></a>        }
+<a name="line181"></a>
+<a name="line182"></a>        var port = browserEvent.ports[0];
+<a name="line183"></a>        // Notify the other end of the channel that we&#39;ve received our port
+<a name="line184"></a>        port.postMessage({});
+<a name="line185"></a>
+<a name="line186"></a>        port.start();
+<a name="line187"></a>        deferred.callback(new goog.messaging.PortChannel(port));
+<a name="line188"></a>        goog.events.unlistenByKey(key);
+<a name="line189"></a>      });
+<a name="line190"></a>  return new goog.messaging.DeferredChannel(deferred);
+<a name="line191"></a>};
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>/**
+<a name="line195"></a> * The flag added to messages that are sent by a PortChannel, and are meant to
+<a name="line196"></a> * be handled by one on the other side.
+<a name="line197"></a> * @type {string}
+<a name="line198"></a> */
+<a name="line199"></a>goog.messaging.PortChannel.FLAG = &#39;--goog.messaging.PortChannel&#39;;
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>/**
+<a name="line203"></a> * Whether the messages sent across the channel must be JSON-serialized. This is
+<a name="line204"></a> * required for older versions of Webkit, which can only send string messages.
+<a name="line205"></a> *
+<a name="line206"></a> * Although Safari and Chrome have separate implementations of message passing,
+<a name="line207"></a> * both of them support passing objects by Webkit 533.
+<a name="line208"></a> *
+<a name="line209"></a> * @type {boolean}
+<a name="line210"></a> * @private
+<a name="line211"></a> */
+<a name="line212"></a>goog.messaging.PortChannel.REQUIRES_SERIALIZATION_ = goog.userAgent.WEBKIT &amp;&amp;
+<a name="line213"></a>    goog.string.compareVersions(goog.userAgent.VERSION, &#39;533&#39;) &lt; 0;
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Logger for this class.
+<a name="line218"></a> * @type {goog.log.Logger}
+<a name="line219"></a> * @protected
+<a name="line220"></a> * @override
+<a name="line221"></a> */
+<a name="line222"></a>goog.messaging.PortChannel.prototype.logger =
+<a name="line223"></a>    goog.log.getLogger(&#39;goog.messaging.PortChannel&#39;);
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/**
+<a name="line227"></a> * Sends a message over the channel.
+<a name="line228"></a> *
+<a name="line229"></a> * As an addition to the basic MessageChannel send API, PortChannels can send
+<a name="line230"></a> * objects that contain MessagePorts. Note that only plain Objects and Arrays,
+<a name="line231"></a> * not their subclasses, can contain MessagePorts.
+<a name="line232"></a> *
+<a name="line233"></a> * As per {@link http://www.w3.org/TR/html5/comms.html#clone-a-port}, once a
+<a name="line234"></a> * port is copied to be sent across a channel, the original port will cease
+<a name="line235"></a> * being able to send or receive messages.
+<a name="line236"></a> *
+<a name="line237"></a> * @override
+<a name="line238"></a> * @param {string} serviceName The name of the service this message should be
+<a name="line239"></a> *     delivered to.
+<a name="line240"></a> * @param {string|!Object|!MessagePort} payload The value of the message. May
+<a name="line241"></a> *     contain MessagePorts or be a MessagePort.
+<a name="line242"></a> */
+<a name="line243"></a>goog.messaging.PortChannel.prototype.send = function(serviceName, payload) {
+<a name="line244"></a>  var ports = [];
+<a name="line245"></a>  payload = this.extractPorts_(ports, payload);
+<a name="line246"></a>  var message = {&#39;serviceName&#39;: serviceName, &#39;payload&#39;: payload};
+<a name="line247"></a>  message[goog.messaging.PortChannel.FLAG] = true;
+<a name="line248"></a>
+<a name="line249"></a>  if (goog.messaging.PortChannel.REQUIRES_SERIALIZATION_) {
+<a name="line250"></a>    message = goog.json.serialize(message);
+<a name="line251"></a>  }
+<a name="line252"></a>
+<a name="line253"></a>  this.port_.postMessage(message, ports);
+<a name="line254"></a>};
+<a name="line255"></a>
+<a name="line256"></a>
+<a name="line257"></a>/**
+<a name="line258"></a> * Delivers a message to the appropriate service handler. If this message isn&#39;t
+<a name="line259"></a> * a GearsWorkerChannel message, it&#39;s ignored and passed on to other handlers.
+<a name="line260"></a> *
+<a name="line261"></a> * @param {goog.events.Event} e The event.
+<a name="line262"></a> * @private
+<a name="line263"></a> */
+<a name="line264"></a>goog.messaging.PortChannel.prototype.deliver_ = function(e) {
+<a name="line265"></a>  var browserEvent = e.getBrowserEvent();
+<a name="line266"></a>  var data = browserEvent.data;
+<a name="line267"></a>
+<a name="line268"></a>  if (goog.messaging.PortChannel.REQUIRES_SERIALIZATION_) {
+<a name="line269"></a>    try {
+<a name="line270"></a>      data = goog.json.parse(data);
+<a name="line271"></a>    } catch (error) {
+<a name="line272"></a>      // Ignore any non-JSON messages.
+<a name="line273"></a>      return;
+<a name="line274"></a>    }
+<a name="line275"></a>  }
+<a name="line276"></a>
+<a name="line277"></a>  if (!goog.isObject(data) || !data[goog.messaging.PortChannel.FLAG]) {
+<a name="line278"></a>    return;
+<a name="line279"></a>  }
+<a name="line280"></a>
+<a name="line281"></a>  if (this.validateMessage_(data)) {
+<a name="line282"></a>    var serviceName = data[&#39;serviceName&#39;];
+<a name="line283"></a>    var payload = data[&#39;payload&#39;];
+<a name="line284"></a>    var service = this.getService(serviceName, payload);
+<a name="line285"></a>    if (!service) {
+<a name="line286"></a>      return;
+<a name="line287"></a>    }
+<a name="line288"></a>
+<a name="line289"></a>    payload = this.decodePayload(
+<a name="line290"></a>        serviceName,
+<a name="line291"></a>        this.injectPorts_(browserEvent.ports || [], payload),
+<a name="line292"></a>        service.objectPayload);
+<a name="line293"></a>    if (goog.isDefAndNotNull(payload)) {
+<a name="line294"></a>      service.callback(payload);
+<a name="line295"></a>    }
+<a name="line296"></a>  }
+<a name="line297"></a>};
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * Checks whether the message is invalid in some way.
+<a name="line302"></a> *
+<a name="line303"></a> * @param {Object} data The contents of the message.
+<a name="line304"></a> * @return {boolean} True if the message is valid, false otherwise.
+<a name="line305"></a> * @private
+<a name="line306"></a> */
+<a name="line307"></a>goog.messaging.PortChannel.prototype.validateMessage_ = function(data) {
+<a name="line308"></a>  if (!(&#39;serviceName&#39; in data)) {
+<a name="line309"></a>    goog.log.warning(this.logger,
+<a name="line310"></a>        &#39;Message object doesn\&#39;t contain service name: &#39; +
+<a name="line311"></a>        goog.debug.deepExpose(data));
+<a name="line312"></a>    return false;
+<a name="line313"></a>  }
+<a name="line314"></a>
+<a name="line315"></a>  if (!(&#39;payload&#39; in data)) {
+<a name="line316"></a>    goog.log.warning(this.logger,
+<a name="line317"></a>        &#39;Message object doesn\&#39;t contain payload: &#39; +
+<a name="line318"></a>        goog.debug.deepExpose(data));
+<a name="line319"></a>    return false;
+<a name="line320"></a>  }
+<a name="line321"></a>
+<a name="line322"></a>  return true;
+<a name="line323"></a>};
+<a name="line324"></a>
+<a name="line325"></a>
+<a name="line326"></a>/**
+<a name="line327"></a> * Extracts all MessagePort objects from a message to be sent into an array.
+<a name="line328"></a> *
+<a name="line329"></a> * The message ports are replaced by placeholder objects that will be replaced
+<a name="line330"></a> * with the ports again on the other side of the channel.
+<a name="line331"></a> *
+<a name="line332"></a> * @param {Array.&lt;MessagePort&gt;} ports The array that will contain ports
+<a name="line333"></a> *     extracted from the message. Will be destructively modified. Should be
+<a name="line334"></a> *     empty initially.
+<a name="line335"></a> * @param {string|!Object} message The message from which ports will be
+<a name="line336"></a> *     extracted.
+<a name="line337"></a> * @return {string|!Object} The message with ports extracted.
+<a name="line338"></a> * @private
+<a name="line339"></a> */
+<a name="line340"></a>goog.messaging.PortChannel.prototype.extractPorts_ = function(ports, message) {
+<a name="line341"></a>  // Can&#39;t use instanceof here because MessagePort is undefined in workers
+<a name="line342"></a>  if (message &amp;&amp;
+<a name="line343"></a>      Object.prototype.toString.call(/** @type {!Object} */ (message)) ==
+<a name="line344"></a>      &#39;[object MessagePort]&#39;) {
+<a name="line345"></a>    ports.push(message);
+<a name="line346"></a>    return {&#39;_port&#39;: {&#39;type&#39;: &#39;real&#39;, &#39;index&#39;: ports.length - 1}};
+<a name="line347"></a>  } else if (goog.isArray(message)) {
+<a name="line348"></a>    return goog.array.map(message, goog.bind(this.extractPorts_, this, ports));
+<a name="line349"></a>  // We want to compare the exact constructor here because we only want to
+<a name="line350"></a>  // recurse into object literals, not native objects like Date.
+<a name="line351"></a>  } else if (message &amp;&amp; message.constructor == Object) {
+<a name="line352"></a>    return goog.object.map(/** @type {Object} */ (message), function(val, key) {
+<a name="line353"></a>      val = this.extractPorts_(ports, val);
+<a name="line354"></a>      return key == &#39;_port&#39; ? {&#39;type&#39;: &#39;escaped&#39;, &#39;val&#39;: val} : val;
+<a name="line355"></a>    }, this);
+<a name="line356"></a>  } else {
+<a name="line357"></a>    return message;
+<a name="line358"></a>  }
+<a name="line359"></a>};
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * Injects MessagePorts back into a message received from across the channel.
+<a name="line364"></a> *
+<a name="line365"></a> * @param {Array.&lt;MessagePort&gt;} ports The array of ports to be injected into the
+<a name="line366"></a> *     message.
+<a name="line367"></a> * @param {string|!Object} message The message into which the ports will be
+<a name="line368"></a> *     injected.
+<a name="line369"></a> * @return {string|!Object} The message with ports injected.
+<a name="line370"></a> * @private
+<a name="line371"></a> */
+<a name="line372"></a>goog.messaging.PortChannel.prototype.injectPorts_ = function(ports, message) {
+<a name="line373"></a>  if (goog.isArray(message)) {
+<a name="line374"></a>    return goog.array.map(message, goog.bind(this.injectPorts_, this, ports));
+<a name="line375"></a>  } else if (message &amp;&amp; message.constructor == Object) {
+<a name="line376"></a>    message = /** @type {!Object} */ (message);
+<a name="line377"></a>    if (message[&#39;_port&#39;] &amp;&amp; message[&#39;_port&#39;][&#39;type&#39;] == &#39;real&#39;) {
+<a name="line378"></a>      return /** @type {!MessagePort} */ (ports[message[&#39;_port&#39;][&#39;index&#39;]]);
+<a name="line379"></a>    }
+<a name="line380"></a>    return goog.object.map(message, function(val, key) {
+<a name="line381"></a>      return this.injectPorts_(ports, key == &#39;_port&#39; ? val[&#39;val&#39;] : val);
+<a name="line382"></a>    }, this);
+<a name="line383"></a>  } else {
+<a name="line384"></a>    return message;
+<a name="line385"></a>  }
+<a name="line386"></a>};
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/** @override */
+<a name="line390"></a>goog.messaging.PortChannel.prototype.disposeInternal = function() {
+<a name="line391"></a>  goog.events.unlistenByKey(this.listenerKey_);
+<a name="line392"></a>  // Can&#39;t use instanceof here because MessagePort is undefined in workers and
+<a name="line393"></a>  // in Firefox
+<a name="line394"></a>  if (Object.prototype.toString.call(this.port_) == &#39;[object MessagePort]&#39;) {
+<a name="line395"></a>    this.port_.close();
+<a name="line396"></a>  // Worker is undefined in workers as well as of Chrome 9
+<a name="line397"></a>  } else if (Object.prototype.toString.call(this.port_) == &#39;[object Worker]&#39;) {
+<a name="line398"></a>    this.port_.terminate();
+<a name="line399"></a>  }
+<a name="line400"></a>  delete this.port_;
+<a name="line401"></a>  goog.messaging.PortChannel.base(this, &#39;disposeInternal&#39;);
+<a name="line402"></a>};
+</pre>
+
+
+</body>
+</html>

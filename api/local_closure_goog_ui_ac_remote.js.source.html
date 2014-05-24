@@ -1,0 +1,165 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>remote.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_ac_remote.js.html">remote.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Factory class to create a simple autocomplete that will match
+<a name="line17"></a> * from an array of data provided via ajax.
+<a name="line18"></a> *
+<a name="line19"></a> * @see ../../demos/autocompleteremote.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.ac.Remote&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.ui.ac.AutoComplete&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.ac.InputHandler&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.ac.RemoteArrayMatcher&#39;);
+<a name="line27"></a>goog.require(&#39;goog.ui.ac.Renderer&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * Factory class for building a remote autocomplete widget that autocompletes
+<a name="line33"></a> * an inputbox or text area from a data array provided via ajax.
+<a name="line34"></a> * @param {string} url The Uri which generates the auto complete matches.
+<a name="line35"></a> * @param {Element} input Input element or text area.
+<a name="line36"></a> * @param {boolean=} opt_multi Whether to allow multiple entries; defaults
+<a name="line37"></a> *     to false.
+<a name="line38"></a> * @param {boolean=} opt_useSimilar Whether to use similar matches; e.g.
+<a name="line39"></a> *     &quot;gost&quot; =&gt; &quot;ghost&quot;.
+<a name="line40"></a> * @constructor
+<a name="line41"></a> * @extends {goog.ui.ac.AutoComplete}
+<a name="line42"></a> */
+<a name="line43"></a>goog.ui.ac.Remote = function(url, input, opt_multi, opt_useSimilar) {
+<a name="line44"></a>  var matcher = new goog.ui.ac.RemoteArrayMatcher(url, !opt_useSimilar);
+<a name="line45"></a>  this.matcher_ = matcher;
+<a name="line46"></a>
+<a name="line47"></a>  var renderer = new goog.ui.ac.Renderer();
+<a name="line48"></a>
+<a name="line49"></a>  var inputhandler = new goog.ui.ac.InputHandler(null, null, !!opt_multi, 300);
+<a name="line50"></a>
+<a name="line51"></a>  goog.ui.ac.AutoComplete.call(this, matcher, renderer, inputhandler);
+<a name="line52"></a>
+<a name="line53"></a>  inputhandler.attachAutoComplete(this);
+<a name="line54"></a>  inputhandler.attachInputs(input);
+<a name="line55"></a>};
+<a name="line56"></a>goog.inherits(goog.ui.ac.Remote, goog.ui.ac.AutoComplete);
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Set whether or not standard highlighting should be used when rendering rows.
+<a name="line61"></a> * @param {boolean} useStandardHighlighting true if standard highlighting used.
+<a name="line62"></a> */
+<a name="line63"></a>goog.ui.ac.Remote.prototype.setUseStandardHighlighting =
+<a name="line64"></a>    function(useStandardHighlighting) {
+<a name="line65"></a>  this.renderer_.setUseStandardHighlighting(useStandardHighlighting);
+<a name="line66"></a>};
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * Gets the attached InputHandler object.
+<a name="line71"></a> * @return {goog.ui.ac.InputHandler} The input handler.
+<a name="line72"></a> */
+<a name="line73"></a>goog.ui.ac.Remote.prototype.getInputHandler = function() {
+<a name="line74"></a>  return /** @type {goog.ui.ac.InputHandler} */ (
+<a name="line75"></a>      this.selectionHandler_);
+<a name="line76"></a>};
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Set the send method (&quot;GET&quot;, &quot;POST&quot;) for the matcher.
+<a name="line81"></a> * @param {string} method The send method; default: GET.
+<a name="line82"></a> */
+<a name="line83"></a>goog.ui.ac.Remote.prototype.setMethod = function(method) {
+<a name="line84"></a>  this.matcher_.setMethod(method);
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Set the post data for the matcher.
+<a name="line90"></a> * @param {string} content Post data.
+<a name="line91"></a> */
+<a name="line92"></a>goog.ui.ac.Remote.prototype.setContent = function(content) {
+<a name="line93"></a>  this.matcher_.setContent(content);
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Set the HTTP headers for the matcher.
+<a name="line99"></a> * @param {Object|goog.structs.Map} headers Map of headers to add to the
+<a name="line100"></a> *     request.
+<a name="line101"></a> */
+<a name="line102"></a>goog.ui.ac.Remote.prototype.setHeaders = function(headers) {
+<a name="line103"></a>  this.matcher_.setHeaders(headers);
+<a name="line104"></a>};
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Set the timeout interval for the matcher.
+<a name="line109"></a> * @param {number} interval Number of milliseconds after which an
+<a name="line110"></a> *     incomplete request will be aborted; 0 means no timeout is set.
+<a name="line111"></a> */
+<a name="line112"></a>goog.ui.ac.Remote.prototype.setTimeoutInterval = function(interval) {
+<a name="line113"></a>  this.matcher_.setTimeoutInterval(interval);
+<a name="line114"></a>};
+</pre>
+
+
+</body>
+</html>

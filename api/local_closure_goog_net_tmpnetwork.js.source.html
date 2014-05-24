@@ -1,0 +1,215 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tmpnetwork.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_tmpnetwork.js.html">tmpnetwork.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview tmpnetwork.js contains some temporary networking functions
+<a name="line17"></a> * for browserchannel which will be moved at a later date.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>/**
+<a name="line22"></a> * Namespace for BrowserChannel
+<a name="line23"></a> */
+<a name="line24"></a>goog.provide(&#39;goog.net.tmpnetwork&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line27"></a>goog.require(&#39;goog.net.ChannelDebug&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Default timeout to allow for google.com pings.
+<a name="line32"></a> * @type {number}
+<a name="line33"></a> */
+<a name="line34"></a>goog.net.tmpnetwork.GOOGLECOM_TIMEOUT = 10000;
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * Pings the network to check if an error is a server error or user&#39;s network
+<a name="line39"></a> * error.
+<a name="line40"></a> *
+<a name="line41"></a> * @param {Function} callback The function to call back with results.
+<a name="line42"></a> * @param {goog.Uri?=} opt_imageUri The URI of an image to use for the network
+<a name="line43"></a> *     test. You *must* provide an image URI; the default behavior is provided
+<a name="line44"></a> *     for compatibility with existing code, but the search team does not want
+<a name="line45"></a> *     people using images served off of google.com for this purpose. The
+<a name="line46"></a> *     default will go away when all usages have been changed.
+<a name="line47"></a> */
+<a name="line48"></a>goog.net.tmpnetwork.testGoogleCom = function(callback, opt_imageUri) {
+<a name="line49"></a>  // We need to add a &#39;rand&#39; to make sure the response is not fulfilled
+<a name="line50"></a>  // by browser cache.
+<a name="line51"></a>  var uri = opt_imageUri;
+<a name="line52"></a>  if (!uri) {
+<a name="line53"></a>    uri = new goog.Uri(&#39;//www.google.com/images/cleardot.gif&#39;);
+<a name="line54"></a>    uri.makeUnique();
+<a name="line55"></a>  }
+<a name="line56"></a>  goog.net.tmpnetwork.testLoadImage(uri.toString(),
+<a name="line57"></a>      goog.net.tmpnetwork.GOOGLECOM_TIMEOUT, callback);
+<a name="line58"></a>};
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * Test loading the given image, retrying if necessary.
+<a name="line63"></a> * @param {string} url URL to the iamge.
+<a name="line64"></a> * @param {number} timeout Milliseconds before giving up.
+<a name="line65"></a> * @param {Function} callback Function to call with results.
+<a name="line66"></a> * @param {number} retries The number of times to retry.
+<a name="line67"></a> * @param {number=} opt_pauseBetweenRetriesMS Optional number of milliseconds
+<a name="line68"></a> *     between retries - defaults to 0.
+<a name="line69"></a> */
+<a name="line70"></a>goog.net.tmpnetwork.testLoadImageWithRetries = function(url, timeout, callback,
+<a name="line71"></a>    retries, opt_pauseBetweenRetriesMS) {
+<a name="line72"></a>  var channelDebug = new goog.net.ChannelDebug();
+<a name="line73"></a>  channelDebug.debug(&#39;TestLoadImageWithRetries: &#39; + opt_pauseBetweenRetriesMS);
+<a name="line74"></a>  if (retries == 0) {
+<a name="line75"></a>    // no more retries, give up
+<a name="line76"></a>    callback(false);
+<a name="line77"></a>    return;
+<a name="line78"></a>  }
+<a name="line79"></a>
+<a name="line80"></a>  var pauseBetweenRetries = opt_pauseBetweenRetriesMS || 0;
+<a name="line81"></a>  retries--;
+<a name="line82"></a>  goog.net.tmpnetwork.testLoadImage(url, timeout, function(succeeded) {
+<a name="line83"></a>    if (succeeded) {
+<a name="line84"></a>      callback(true);
+<a name="line85"></a>    } else {
+<a name="line86"></a>      // try again
+<a name="line87"></a>      goog.global.setTimeout(function() {
+<a name="line88"></a>        goog.net.tmpnetwork.testLoadImageWithRetries(url, timeout, callback,
+<a name="line89"></a>            retries, pauseBetweenRetries);
+<a name="line90"></a>      }, pauseBetweenRetries);
+<a name="line91"></a>    }
+<a name="line92"></a>  });
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Test loading the given image.
+<a name="line98"></a> * @param {string} url URL to the iamge.
+<a name="line99"></a> * @param {number} timeout Milliseconds before giving up.
+<a name="line100"></a> * @param {Function} callback Function to call with results.
+<a name="line101"></a> */
+<a name="line102"></a>goog.net.tmpnetwork.testLoadImage = function(url, timeout, callback) {
+<a name="line103"></a>  var channelDebug = new goog.net.ChannelDebug();
+<a name="line104"></a>  channelDebug.debug(&#39;TestLoadImage: loading &#39; + url);
+<a name="line105"></a>  var img = new Image();
+<a name="line106"></a>  img.onload = function() {
+<a name="line107"></a>    try {
+<a name="line108"></a>      channelDebug.debug(&#39;TestLoadImage: loaded&#39;);
+<a name="line109"></a>      goog.net.tmpnetwork.clearImageCallbacks_(img);
+<a name="line110"></a>      callback(true);
+<a name="line111"></a>    } catch (e) {
+<a name="line112"></a>      channelDebug.dumpException(e);
+<a name="line113"></a>    }
+<a name="line114"></a>  };
+<a name="line115"></a>  img.onerror = function() {
+<a name="line116"></a>    try {
+<a name="line117"></a>      channelDebug.debug(&#39;TestLoadImage: error&#39;);
+<a name="line118"></a>      goog.net.tmpnetwork.clearImageCallbacks_(img);
+<a name="line119"></a>      callback(false);
+<a name="line120"></a>    } catch (e) {
+<a name="line121"></a>      channelDebug.dumpException(e);
+<a name="line122"></a>    }
+<a name="line123"></a>  };
+<a name="line124"></a>  img.onabort = function() {
+<a name="line125"></a>    try {
+<a name="line126"></a>      channelDebug.debug(&#39;TestLoadImage: abort&#39;);
+<a name="line127"></a>      goog.net.tmpnetwork.clearImageCallbacks_(img);
+<a name="line128"></a>      callback(false);
+<a name="line129"></a>    } catch (e) {
+<a name="line130"></a>      channelDebug.dumpException(e);
+<a name="line131"></a>    }
+<a name="line132"></a>  };
+<a name="line133"></a>  img.ontimeout = function() {
+<a name="line134"></a>    try {
+<a name="line135"></a>      channelDebug.debug(&#39;TestLoadImage: timeout&#39;);
+<a name="line136"></a>      goog.net.tmpnetwork.clearImageCallbacks_(img);
+<a name="line137"></a>      callback(false);
+<a name="line138"></a>    } catch (e) {
+<a name="line139"></a>      channelDebug.dumpException(e);
+<a name="line140"></a>    }
+<a name="line141"></a>  };
+<a name="line142"></a>
+<a name="line143"></a>  goog.global.setTimeout(function() {
+<a name="line144"></a>    if (img.ontimeout) {
+<a name="line145"></a>      img.ontimeout();
+<a name="line146"></a>    }
+<a name="line147"></a>  }, timeout);
+<a name="line148"></a>  img.src = url;
+<a name="line149"></a>};
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * Clear handlers to avoid memory leaks.
+<a name="line154"></a> * @param {Image} img The image to clear handlers from.
+<a name="line155"></a> * @private
+<a name="line156"></a> */
+<a name="line157"></a>goog.net.tmpnetwork.clearImageCallbacks_ = function(img) {
+<a name="line158"></a>  // NOTE(user): Nullified individually to avoid compiler warnings
+<a name="line159"></a>  // (BUG 658126)
+<a name="line160"></a>  img.onload = null;
+<a name="line161"></a>  img.onerror = null;
+<a name="line162"></a>  img.onabort = null;
+<a name="line163"></a>  img.ontimeout = null;
+<a name="line164"></a>};
+</pre>
+
+
+</body>
+</html>

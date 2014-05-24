@@ -1,0 +1,195 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iframe_xhr_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_iframe_xhr_test.js.html">iframe_xhr_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.iframeXhrTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.iframeXhrTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line19"></a>goog.require(&#39;goog.debug.Console&#39;);
+<a name="line20"></a>goog.require(&#39;goog.debug.LogManager&#39;);
+<a name="line21"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events&#39;);
+<a name="line23"></a>goog.require(&#39;goog.net.IframeIo&#39;);
+<a name="line24"></a>goog.require(&#39;goog.net.XhrIo&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line27"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line28"></a>
+<a name="line29"></a>var c = new goog.debug.Console;
+<a name="line30"></a>c.setCapturing(true);
+<a name="line31"></a>goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+<a name="line32"></a>
+<a name="line33"></a>// Can&#39;t use exportSymbol if we want JsUnit support
+<a name="line34"></a>top.GG_iframeFn = goog.net.IframeIo.handleIncrementalData;
+<a name="line35"></a>
+<a name="line36"></a>// Make the dispose time short enough that it will cause the bug to appear
+<a name="line37"></a>goog.net.IframeIo.IFRAME_DISPOSE_DELAY_MS = 0;
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>var fileName = &#39;iframe_xhr_test_response.html&#39;;
+<a name="line41"></a>var iframeio;
+<a name="line42"></a>
+<a name="line43"></a>// Create an async test case
+<a name="line44"></a>var testCase = new goog.testing.AsyncTestCase(document.title);
+<a name="line45"></a>testCase.stepTimeout = 4 * 1000;
+<a name="line46"></a>testCase.resultCount = 0;
+<a name="line47"></a>testCase.xhrCount = 0;
+<a name="line48"></a>testCase.error = null;
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * Set up the iframe io and request the test response page.
+<a name="line53"></a> * @this {goog.testing.AsyncTestCase}
+<a name="line54"></a> */
+<a name="line55"></a>testCase.setUpPage = function() {
+<a name="line56"></a>  testCase.waitForAsync(&#39;setUpPage&#39;);
+<a name="line57"></a>  iframeio = new goog.net.IframeIo();
+<a name="line58"></a>  goog.events.listen(
+<a name="line59"></a>      iframeio, &#39;incrementaldata&#39;, this.onIframeData, false, this);
+<a name="line60"></a>  goog.events.listen(
+<a name="line61"></a>      iframeio, &#39;ready&#39;, this.onIframeReady, false, this);
+<a name="line62"></a>  iframeio.send(fileName);
+<a name="line63"></a>};
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/** Disposes the iframe object. */
+<a name="line67"></a>testCase.tearDownPage = function() {
+<a name="line68"></a>  iframeio.dispose();
+<a name="line69"></a>};
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Handles the packets received  from the Iframe incremental results.
+<a name="line74"></a> * @this {goog.testing.AsyncTestCase}
+<a name="line75"></a> */
+<a name="line76"></a>testCase.onIframeData = function(e) {
+<a name="line77"></a>  this.log(&#39;Data received  : &#39; + e.data);
+<a name="line78"></a>  this.resultCount++;
+<a name="line79"></a>  goog.net.XhrIo.send(fileName, goog.bind(this.onXhrData, this));
+<a name="line80"></a>};
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Handles the iframe becoming ready.
+<a name="line85"></a> * @this {goog.testing.AsyncTestCase}
+<a name="line86"></a> */
+<a name="line87"></a>testCase.onIframeReady = function(e) {
+<a name="line88"></a>  this.log(&#39;Iframe ready&#39;);
+<a name="line89"></a>  var me = this;
+<a name="line90"></a>  goog.net.XhrIo.send(fileName, goog.bind(this.onXhrData, this));
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Handles the response from an Xhr request.
+<a name="line96"></a> * @this {goog.testing.AsyncTestCase}
+<a name="line97"></a> */
+<a name="line98"></a>testCase.onXhrData = function(e) {
+<a name="line99"></a>  this.xhrCount++;
+<a name="line100"></a>  // We access status directly so that XhrLite doesn&#39;t mask the error that
+<a name="line101"></a>  // would be thrown in FF if this worked correctly.
+<a name="line102"></a>  try {
+<a name="line103"></a>    this.log(&#39;Xhr Received: &#39; + e.target.xhr_.status);
+<a name="line104"></a>  } catch (e) {
+<a name="line105"></a>    this.log(&#39;ERROR: &#39; + e.message);
+<a name="line106"></a>    this.error = e;
+<a name="line107"></a>  }
+<a name="line108"></a>  if (this.xhrCount == 4 &amp;&amp; this.resultCount == 3) {
+<a name="line109"></a>    // Wait for the async iframe disposal to fire.
+<a name="line110"></a>    this.log(&#39;Test set up finished, waiting 500ms for iframe disposal&#39;);
+<a name="line111"></a>    goog.Timer.callOnce(goog.bind(this.continueTesting, this), 0);
+<a name="line112"></a>  }
+<a name="line113"></a>};
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/** The main test function that validates the results were as expected. */
+<a name="line117"></a>testCase.addNewTest(&#39;testResults&#39;, function() {
+<a name="line118"></a>  assertEquals(&#39;There should be 3 data packets&#39;, 3, this.resultCount);
+<a name="line119"></a>  // 3 results + 1 ready
+<a name="line120"></a>  assertEquals(&#39;There should be 4 XHR results&#39;, 4, this.xhrCount);
+<a name="line121"></a>  if (this.error) {
+<a name="line122"></a>    throw this.error;
+<a name="line123"></a>  }
+<a name="line124"></a>
+<a name="line125"></a>  assertEquals(&#39;There should be no iframes left&#39;, 0,
+<a name="line126"></a>      document.getElementsByTagName(&#39;iframe&#39;).length);
+<a name="line127"></a>});
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/** This test only runs on GECKO browsers. */
+<a name="line131"></a>if (goog.userAgent.GECKO) {
+<a name="line132"></a>  /** Used by the JsUnit test runner. */
+<a name="line133"></a>  var testXhrMonitorWorksForIframeIoRequests = function() {
+<a name="line134"></a>    testCase.reset();
+<a name="line135"></a>    testCase.cycleTests();
+<a name="line136"></a>  };
+<a name="line137"></a>}
+<a name="line138"></a>
+<a name="line139"></a>// Standalone Closure Test Runner.
+<a name="line140"></a>if (goog.userAgent.GECKO) {
+<a name="line141"></a>  G_testRunner.initialize(testCase);
+<a name="line142"></a>} else {
+<a name="line143"></a>  G_testRunner.setStrict(false);
+<a name="line144"></a>}
+</pre>
+
+
+</body>
+</html>

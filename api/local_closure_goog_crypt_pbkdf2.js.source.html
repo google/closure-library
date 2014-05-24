@@ -1,0 +1,178 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>pbkdf2.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_crypt_pbkdf2.js.html">pbkdf2.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Implementation of PBKDF2 in JavaScript.
+<a name="line17"></a> * @see http://en.wikipedia.org/wiki/PBKDF2
+<a name="line18"></a> *
+<a name="line19"></a> * Currently we only support HMAC-SHA1 as the underlying hash function. To add a
+<a name="line20"></a> * new hash function, add a static method similar to deriveKeyFromPasswordSha1()
+<a name="line21"></a> * and implement the specific computeBlockCallback() using the hash function.
+<a name="line22"></a> *
+<a name="line23"></a> * Usage:
+<a name="line24"></a> *   var key = pbkdf2.deriveKeySha1(
+<a name="line25"></a> *       stringToByteArray(&#39;password&#39;), stringToByteArray(&#39;salt&#39;), 1000, 128);
+<a name="line26"></a> *
+<a name="line27"></a> */
+<a name="line28"></a>
+<a name="line29"></a>goog.provide(&#39;goog.crypt.pbkdf2&#39;);
+<a name="line30"></a>
+<a name="line31"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line32"></a>goog.require(&#39;goog.crypt&#39;);
+<a name="line33"></a>goog.require(&#39;goog.crypt.Hmac&#39;);
+<a name="line34"></a>goog.require(&#39;goog.crypt.Sha1&#39;);
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * Derives key from password using PBKDF2-SHA1
+<a name="line39"></a> * @param {!Array.&lt;number&gt;} password Byte array representation of the password
+<a name="line40"></a> *     from which the key is derived.
+<a name="line41"></a> * @param {!Array.&lt;number&gt;} initialSalt Byte array representation of the salt.
+<a name="line42"></a> * @param {number} iterations Number of interations when computing the key.
+<a name="line43"></a> * @param {number} keyLength Length of the output key in bits.
+<a name="line44"></a> *     Must be multiple of 8.
+<a name="line45"></a> * @return {!Array.&lt;number&gt;} Byte array representation of the output key.
+<a name="line46"></a> */
+<a name="line47"></a>goog.crypt.pbkdf2.deriveKeySha1 = function(
+<a name="line48"></a>    password, initialSalt, iterations, keyLength) {
+<a name="line49"></a>  // Length of the HMAC-SHA1 output in bits.
+<a name="line50"></a>  var HASH_LENGTH = 160;
+<a name="line51"></a>
+<a name="line52"></a>  /**
+<a name="line53"></a>   * Compute each block of the key using HMAC-SHA1.
+<a name="line54"></a>   * @param {!Array.&lt;number&gt;} index Byte array representation of the index of
+<a name="line55"></a>   *     the block to be computed.
+<a name="line56"></a>   * @return {!Array.&lt;number&gt;} Byte array representation of the output block.
+<a name="line57"></a>   */
+<a name="line58"></a>  var computeBlock = function(index) {
+<a name="line59"></a>    // Initialize the result to be array of 0 such that its xor with the first
+<a name="line60"></a>    // block would be the first block.
+<a name="line61"></a>    var result = goog.array.repeat(0, HASH_LENGTH / 8);
+<a name="line62"></a>    // Initialize the salt of the first iteration to initialSalt || i.
+<a name="line63"></a>    var salt = initialSalt.concat(index);
+<a name="line64"></a>    var hmac = new goog.crypt.Hmac(new goog.crypt.Sha1(), password, 64);
+<a name="line65"></a>    // Compute and XOR each iteration.
+<a name="line66"></a>    for (var i = 0; i &lt; iterations; i++) {
+<a name="line67"></a>      // The salt of the next iteration is the result of the current iteration.
+<a name="line68"></a>      salt = hmac.getHmac(salt);
+<a name="line69"></a>      result = goog.crypt.xorByteArray(result, salt);
+<a name="line70"></a>    }
+<a name="line71"></a>    return result;
+<a name="line72"></a>  };
+<a name="line73"></a>
+<a name="line74"></a>  return goog.crypt.pbkdf2.deriveKeyFromPassword_(
+<a name="line75"></a>      computeBlock, HASH_LENGTH, keyLength);
+<a name="line76"></a>};
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Compute each block of the key using PBKDF2.
+<a name="line81"></a> * @param {Function} computeBlock Function to compute each block of the output
+<a name="line82"></a> *     key.
+<a name="line83"></a> * @param {number} hashLength Length of each block in bits. This is determined
+<a name="line84"></a> *     by the specific hash function used. Must be multiple of 8.
+<a name="line85"></a> * @param {number} keyLength Length of the output key in bits.
+<a name="line86"></a> *     Must be multiple of 8.
+<a name="line87"></a> * @return {!Array.&lt;number&gt;} Byte array representation of the output key.
+<a name="line88"></a> * @private
+<a name="line89"></a> */
+<a name="line90"></a>goog.crypt.pbkdf2.deriveKeyFromPassword_ =
+<a name="line91"></a>    function(computeBlock, hashLength, keyLength) {
+<a name="line92"></a>  goog.asserts.assert(keyLength % 8 == 0, &#39;invalid output key length&#39;);
+<a name="line93"></a>
+<a name="line94"></a>  // Compute and concactate each block of the output key.
+<a name="line95"></a>  var numBlocks = Math.ceil(keyLength / hashLength);
+<a name="line96"></a>  goog.asserts.assert(numBlocks &gt;= 1, &#39;invalid number of blocks&#39;);
+<a name="line97"></a>  var result = [];
+<a name="line98"></a>  for (var i = 1; i &lt;= numBlocks; i++) {
+<a name="line99"></a>    var indexBytes = goog.crypt.pbkdf2.integerToByteArray_(i);
+<a name="line100"></a>    result = result.concat(computeBlock(indexBytes));
+<a name="line101"></a>  }
+<a name="line102"></a>
+<a name="line103"></a>  // Trim the last block if needed.
+<a name="line104"></a>  var lastBlockSize = keyLength % hashLength;
+<a name="line105"></a>  if (lastBlockSize != 0) {
+<a name="line106"></a>    var desiredBytes = ((numBlocks - 1) * hashLength + lastBlockSize) / 8;
+<a name="line107"></a>    result.splice(desiredBytes, (hashLength - lastBlockSize) / 8);
+<a name="line108"></a>  }
+<a name="line109"></a>  return result;
+<a name="line110"></a>};
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Converts an integer number to a 32-bit big endian byte array.
+<a name="line115"></a> * @param {number} n Integer number to be converted.
+<a name="line116"></a> * @return {!Array.&lt;number&gt;} Byte Array representation of the 32-bit big endian
+<a name="line117"></a> *     encoding of n.
+<a name="line118"></a> * @private
+<a name="line119"></a> */
+<a name="line120"></a>goog.crypt.pbkdf2.integerToByteArray_ = function(n) {
+<a name="line121"></a>  var result = new Array(4);
+<a name="line122"></a>  result[0] = n &gt;&gt; 24 &amp; 0xFF;
+<a name="line123"></a>  result[1] = n &gt;&gt; 16 &amp; 0xFF;
+<a name="line124"></a>  result[2] = n &gt;&gt; 8 &amp; 0xFF;
+<a name="line125"></a>  result[3] = n &amp; 0xFF;
+<a name="line126"></a>  return result;
+<a name="line127"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>path_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_math_path_test.js.html">path_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.math.PathTest&#39;);
+<a name="line16"></a>
+<a name="line17"></a>goog.require(&#39;goog.array&#39;);
+<a name="line18"></a>goog.require(&#39;goog.math.AffineTransform&#39;);
+<a name="line19"></a>goog.require(&#39;goog.math.Path&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.setTestOnly(&#39;goog.math.PathTest&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Array mapping numeric segment constant to a descriptive character.
+<a name="line27"></a> * @type {!Array.&lt;string&gt;}
+<a name="line28"></a> * @private
+<a name="line29"></a> */
+<a name="line30"></a>var SEGMENT_NAMES_ = function() {
+<a name="line31"></a>  var arr = [];
+<a name="line32"></a>  arr[goog.math.Path.Segment.MOVETO] = &#39;M&#39;;
+<a name="line33"></a>  arr[goog.math.Path.Segment.LINETO] = &#39;L&#39;;
+<a name="line34"></a>  arr[goog.math.Path.Segment.CURVETO] = &#39;C&#39;;
+<a name="line35"></a>  arr[goog.math.Path.Segment.ARCTO] = &#39;A&#39;;
+<a name="line36"></a>  arr[goog.math.Path.Segment.CLOSE] = &#39;X&#39;;
+<a name="line37"></a>  return arr;
+<a name="line38"></a>}();
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/**
+<a name="line42"></a> * Test if the given path matches the expected array of commands and parameters.
+<a name="line43"></a> * @param {Array.&lt;string|number&gt;} expected The expected array of commands and
+<a name="line44"></a> *     parameters.
+<a name="line45"></a> * @param {goog.math.Path} path The path to test against.
+<a name="line46"></a> */
+<a name="line47"></a>var assertPathEquals = function(expected, path) {
+<a name="line48"></a>  var actual = [];
+<a name="line49"></a>  path.forEachSegment(function(seg, args) {
+<a name="line50"></a>    actual.push(SEGMENT_NAMES_[seg]);
+<a name="line51"></a>    Array.prototype.push.apply(actual, args);
+<a name="line52"></a>  });
+<a name="line53"></a>  assertEquals(expected.length, actual.length);
+<a name="line54"></a>  for (var i = 0; i &lt; expected.length; i++) {
+<a name="line55"></a>    if (goog.isNumber(expected[i])) {
+<a name="line56"></a>      assertTrue(goog.isNumber(actual[i]));
+<a name="line57"></a>      assertRoughlyEquals(expected[i], actual[i], 0.01);
+<a name="line58"></a>    } else {
+<a name="line59"></a>      assertEquals(expected[i], actual[i]);
+<a name="line60"></a>    }
+<a name="line61"></a>  }
+<a name="line62"></a>};
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>function testConstructor() {
+<a name="line66"></a>  var path = new goog.math.Path();
+<a name="line67"></a>  assertTrue(path.isSimple());
+<a name="line68"></a>  assertNull(path.getCurrentPoint());
+<a name="line69"></a>  assertPathEquals([], path);
+<a name="line70"></a>}
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>function testGetSegmentCount() {
+<a name="line74"></a>  assertArrayEquals([2, 2, 6, 6, 0], goog.array.map([
+<a name="line75"></a>    goog.math.Path.Segment.MOVETO,
+<a name="line76"></a>    goog.math.Path.Segment.LINETO,
+<a name="line77"></a>    goog.math.Path.Segment.CURVETO,
+<a name="line78"></a>    goog.math.Path.Segment.ARCTO,
+<a name="line79"></a>    goog.math.Path.Segment.CLOSE
+<a name="line80"></a>  ], goog.math.Path.getSegmentCount));
+<a name="line81"></a>}
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>function testSimpleMoveTo() {
+<a name="line85"></a>  var path = new goog.math.Path();
+<a name="line86"></a>  path.moveTo(30, 50);
+<a name="line87"></a>  assertTrue(path.isSimple());
+<a name="line88"></a>  assertObjectEquals([30, 50], path.getCurrentPoint());
+<a name="line89"></a>  assertPathEquals([&#39;M&#39;, 30, 50], path);
+<a name="line90"></a>}
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>function testRepeatedMoveTo() {
+<a name="line94"></a>  var path = new goog.math.Path();
+<a name="line95"></a>  path.moveTo(30, 50);
+<a name="line96"></a>  path.moveTo(40, 60);
+<a name="line97"></a>  assertTrue(path.isSimple());
+<a name="line98"></a>  assertObjectEquals([40, 60], path.getCurrentPoint());
+<a name="line99"></a>  assertPathEquals([&#39;M&#39;, 40, 60], path);
+<a name="line100"></a>}
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>function testSimpleLineTo_fromArgs() {
+<a name="line104"></a>  var path = new goog.math.Path();
+<a name="line105"></a>  var e = assertThrows(function() {
+<a name="line106"></a>    path.lineTo(30, 50);
+<a name="line107"></a>  });
+<a name="line108"></a>  assertEquals(&#39;Path cannot start with lineTo&#39;, e.message);
+<a name="line109"></a>  path.moveTo(0, 0);
+<a name="line110"></a>  path.lineTo(30, 50);
+<a name="line111"></a>  assertTrue(path.isSimple());
+<a name="line112"></a>  assertObjectEquals([30, 50], path.getCurrentPoint());
+<a name="line113"></a>  assertPathEquals([&#39;M&#39;, 0, 0, &#39;L&#39;, 30, 50], path);
+<a name="line114"></a>}
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>function testSimpleLineTo_fromArray() {
+<a name="line118"></a>  var path = new goog.math.Path();
+<a name="line119"></a>  var e = assertThrows(function() {
+<a name="line120"></a>    path.lineToFromArray([30, 50]);
+<a name="line121"></a>  });
+<a name="line122"></a>  assertEquals(&#39;Path cannot start with lineTo&#39;, e.message);
+<a name="line123"></a>  path.moveTo(0, 0);
+<a name="line124"></a>  path.lineToFromArray([30, 50]);
+<a name="line125"></a>  assertTrue(path.isSimple());
+<a name="line126"></a>  assertObjectEquals([30, 50], path.getCurrentPoint());
+<a name="line127"></a>  assertPathEquals([&#39;M&#39;, 0, 0, &#39;L&#39;, 30, 50], path);
+<a name="line128"></a>}
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>function testMultiArgLineTo_fromArgs() {
+<a name="line132"></a>  var path = new goog.math.Path();
+<a name="line133"></a>  path.moveTo(0, 0);
+<a name="line134"></a>  path.lineTo(30, 50, 40 , 60);
+<a name="line135"></a>  assertTrue(path.isSimple());
+<a name="line136"></a>  assertObjectEquals([40, 60], path.getCurrentPoint());
+<a name="line137"></a>  assertPathEquals([&#39;M&#39;, 0, 0, &#39;L&#39;, 30, 50, 40, 60], path);
+<a name="line138"></a>}
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>function testMultiArgLineTo_fromArray() {
+<a name="line142"></a>  var path = new goog.math.Path();
+<a name="line143"></a>  path.moveTo(0, 0);
+<a name="line144"></a>  path.lineToFromArray([30, 50, 40 , 60]);
+<a name="line145"></a>  assertTrue(path.isSimple());
+<a name="line146"></a>  assertObjectEquals([40, 60], path.getCurrentPoint());
+<a name="line147"></a>  assertPathEquals([&#39;M&#39;, 0, 0, &#39;L&#39;, 30, 50, 40, 60], path);
+<a name="line148"></a>}
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>function testRepeatedLineTo_fromArgs() {
+<a name="line152"></a>  var path = new goog.math.Path();
+<a name="line153"></a>  path.moveTo(0, 0);
+<a name="line154"></a>  path.lineTo(30, 50);
+<a name="line155"></a>  path.lineTo(40, 60);
+<a name="line156"></a>  assertTrue(path.isSimple());
+<a name="line157"></a>  assertObjectEquals([40, 60], path.getCurrentPoint());
+<a name="line158"></a>  assertPathEquals([&#39;M&#39;, 0, 0, &#39;L&#39;, 30, 50, 40, 60], path);
+<a name="line159"></a>}
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>function testRepeatedLineTo_fromArray() {
+<a name="line163"></a>  var path = new goog.math.Path();
+<a name="line164"></a>  path.moveTo(0, 0);
+<a name="line165"></a>  path.lineToFromArray([30, 50]);
+<a name="line166"></a>  path.lineToFromArray([40, 60]);
+<a name="line167"></a>  assertTrue(path.isSimple());
+<a name="line168"></a>  assertObjectEquals([40, 60], path.getCurrentPoint());
+<a name="line169"></a>  assertPathEquals([&#39;M&#39;, 0, 0, &#39;L&#39;, 30, 50, 40, 60], path);
+<a name="line170"></a>}
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>function testSimpleCurveTo_fromArgs() {
+<a name="line174"></a>  var path = new goog.math.Path();
+<a name="line175"></a>  var e = assertThrows(function() {
+<a name="line176"></a>    path.curveTo(10, 20, 30, 40, 50, 60);
+<a name="line177"></a>  });
+<a name="line178"></a>  assertEquals(&#39;Path cannot start with curve&#39;, e.message);
+<a name="line179"></a>  path.moveTo(0, 0);
+<a name="line180"></a>  path.curveTo(10, 20, 30, 40, 50, 60);
+<a name="line181"></a>  assertTrue(path.isSimple());
+<a name="line182"></a>  assertObjectEquals([50, 60], path.getCurrentPoint());
+<a name="line183"></a>  assertPathEquals([&#39;M&#39;, 0, 0, &#39;C&#39;, 10, 20, 30, 40, 50, 60], path);
+<a name="line184"></a>}
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>function testSimpleCurveTo_fromArray() {
+<a name="line188"></a>  var path = new goog.math.Path();
+<a name="line189"></a>  var e = assertThrows(function() {
+<a name="line190"></a>    path.curveToFromArray([10, 20, 30, 40, 50, 60]);
+<a name="line191"></a>  });
+<a name="line192"></a>  assertEquals(&#39;Path cannot start with curve&#39;, e.message);
+<a name="line193"></a>  path.moveTo(0, 0);
+<a name="line194"></a>  path.curveToFromArray([10, 20, 30, 40, 50, 60]);
+<a name="line195"></a>  assertTrue(path.isSimple());
+<a name="line196"></a>  assertObjectEquals([50, 60], path.getCurrentPoint());
+<a name="line197"></a>  assertPathEquals([&#39;M&#39;, 0, 0, &#39;C&#39;, 10, 20, 30, 40, 50, 60], path);
+<a name="line198"></a>}
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>function testMultiCurveTo_fromArgs() {
+<a name="line202"></a>  var path = new goog.math.Path();
+<a name="line203"></a>  path.moveTo(0, 0);
+<a name="line204"></a>  path.curveTo(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120);
+<a name="line205"></a>  assertTrue(path.isSimple());
+<a name="line206"></a>  assertObjectEquals([110, 120], path.getCurrentPoint());
+<a name="line207"></a>  assertPathEquals(
+<a name="line208"></a>      [&#39;M&#39;, 0, 0, &#39;C&#39;, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+<a name="line209"></a>      path);
+<a name="line210"></a>}
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>function testMultiCurveTo_fromArray() {
+<a name="line214"></a>  var path = new goog.math.Path();
+<a name="line215"></a>  path.moveTo(0, 0);
+<a name="line216"></a>  path.curveToFromArray([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]);
+<a name="line217"></a>  assertTrue(path.isSimple());
+<a name="line218"></a>  assertObjectEquals([110, 120], path.getCurrentPoint());
+<a name="line219"></a>  assertPathEquals(
+<a name="line220"></a>      [&#39;M&#39;, 0, 0, &#39;C&#39;, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+<a name="line221"></a>      path);
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>function testRepeatedCurveTo_fromArgs() {
+<a name="line226"></a>  var path = new goog.math.Path();
+<a name="line227"></a>  path.moveTo(0, 0);
+<a name="line228"></a>  path.curveTo(10, 20, 30, 40, 50, 60);
+<a name="line229"></a>  path.curveTo(70, 80, 90, 100, 110, 120);
+<a name="line230"></a>  assertTrue(path.isSimple());
+<a name="line231"></a>  assertObjectEquals([110, 120], path.getCurrentPoint());
+<a name="line232"></a>  assertPathEquals(
+<a name="line233"></a>      [&#39;M&#39;, 0, 0, &#39;C&#39;, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+<a name="line234"></a>      path);
+<a name="line235"></a>}
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>function testRepeatedCurveTo_fromArray() {
+<a name="line239"></a>  var path = new goog.math.Path();
+<a name="line240"></a>  path.moveTo(0, 0);
+<a name="line241"></a>  path.curveToFromArray([10, 20, 30, 40, 50, 60]);
+<a name="line242"></a>  path.curveToFromArray([70, 80, 90, 100, 110, 120]);
+<a name="line243"></a>  assertTrue(path.isSimple());
+<a name="line244"></a>  assertObjectEquals([110, 120], path.getCurrentPoint());
+<a name="line245"></a>  assertPathEquals(
+<a name="line246"></a>      [&#39;M&#39;, 0, 0, &#39;C&#39;, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+<a name="line247"></a>      path);
+<a name="line248"></a>}
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>function testSimpleArc() {
+<a name="line252"></a>  var path = new goog.math.Path();
+<a name="line253"></a>  path.arc(50, 60, 10, 20, 30, 30, false);
+<a name="line254"></a>  assertFalse(path.isSimple());
+<a name="line255"></a>  var p = path.getCurrentPoint();
+<a name="line256"></a>  assertEquals(55, p[0]);
+<a name="line257"></a>  assertRoughlyEquals(77.32, p[1], 0.01);
+<a name="line258"></a>  assertPathEquals(
+<a name="line259"></a>      [&#39;M&#39;, 58.66, 70, &#39;A&#39;, 10, 20, 30, 30, 55, 77.32], path);
+<a name="line260"></a>}
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>function testArcNonConnectClose() {
+<a name="line264"></a>  var path = new goog.math.Path();
+<a name="line265"></a>  path.moveTo(0, 0);
+<a name="line266"></a>  path.arc(10, 10, 10, 10, -90, 180, false);
+<a name="line267"></a>  assertObjectEquals([10, 20], path.getCurrentPoint());
+<a name="line268"></a>  path.close();
+<a name="line269"></a>  assertObjectEquals([10, 0], path.getCurrentPoint());
+<a name="line270"></a>}
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>function testRepeatedArc() {
+<a name="line274"></a>  var path = new goog.math.Path();
+<a name="line275"></a>  path.arc(50, 60, 10, 20, 30, 30, false);
+<a name="line276"></a>  path.arc(50, 60, 10, 20, 60, 30, false);
+<a name="line277"></a>  assertFalse(path.isSimple());
+<a name="line278"></a>  assertObjectEquals([50, 80], path.getCurrentPoint());
+<a name="line279"></a>  assertPathEquals([&#39;M&#39;, 58.66, 70,
+<a name="line280"></a>    &#39;A&#39;, 10, 20, 30, 30, 55, 77.32,
+<a name="line281"></a>    &#39;M&#39;, 55, 77.32,
+<a name="line282"></a>    &#39;A&#39;, 10, 20, 60, 30, 50, 80], path);
+<a name="line283"></a>}
+<a name="line284"></a>
+<a name="line285"></a>
+<a name="line286"></a>function testRepeatedArc2() {
+<a name="line287"></a>  var path = new goog.math.Path();
+<a name="line288"></a>  path.arc(50, 60, 10, 20, 30, 30, false);
+<a name="line289"></a>  path.arc(50, 60, 10, 20, 60, 30, true);
+<a name="line290"></a>  assertPathEquals([&#39;M&#39;, 58.66, 70,
+<a name="line291"></a>    &#39;A&#39;, 10, 20, 30, 30, 55, 77.32,
+<a name="line292"></a>    &#39;A&#39;, 10, 20, 60, 30, 50, 80], path);
+<a name="line293"></a>}
+<a name="line294"></a>
+<a name="line295"></a>
+<a name="line296"></a>function testCompleteCircle() {
+<a name="line297"></a>  var path = new goog.math.Path();
+<a name="line298"></a>  path.arc(0, 0, 10, 10, 0, 360, false);
+<a name="line299"></a>  assertFalse(path.isSimple());
+<a name="line300"></a>  var p = path.getCurrentPoint();
+<a name="line301"></a>  assertRoughlyEquals(10, p[0], 0.01);
+<a name="line302"></a>  assertRoughlyEquals(0, p[1], 0.01);
+<a name="line303"></a>  assertPathEquals(
+<a name="line304"></a>      [&#39;M&#39;, 10, 0, &#39;A&#39;, 10, 10, 0, 360, 10, 0], path);
+<a name="line305"></a>}
+<a name="line306"></a>
+<a name="line307"></a>
+<a name="line308"></a>function testClose() {
+<a name="line309"></a>  var path = new goog.math.Path();
+<a name="line310"></a>  assertThrows(&#39;Path cannot start with close&#39;,
+<a name="line311"></a>      function() {
+<a name="line312"></a>        path.close();
+<a name="line313"></a>      });
+<a name="line314"></a>
+<a name="line315"></a>  path.moveTo(0, 0);
+<a name="line316"></a>  path.lineTo(10, 20, 30, 40, 50, 60);
+<a name="line317"></a>  path.close();
+<a name="line318"></a>  assertTrue(path.isSimple());
+<a name="line319"></a>  assertObjectEquals([0, 0], path.getCurrentPoint());
+<a name="line320"></a>  assertPathEquals(
+<a name="line321"></a>      [&#39;M&#39;, 0, 0, &#39;L&#39;, 10, 20, 30, 40, 50, 60, &#39;X&#39;], path);
+<a name="line322"></a>}
+<a name="line323"></a>
+<a name="line324"></a>
+<a name="line325"></a>function testClear() {
+<a name="line326"></a>  var path = new goog.math.Path();
+<a name="line327"></a>  path.moveTo(0, 0);
+<a name="line328"></a>  path.arc(50, 60, 10, 20, 30, 30, false);
+<a name="line329"></a>  path.clear();
+<a name="line330"></a>  assertTrue(path.isSimple());
+<a name="line331"></a>  assertNull(path.getCurrentPoint());
+<a name="line332"></a>  assertPathEquals([], path);
+<a name="line333"></a>}
+<a name="line334"></a>
+<a name="line335"></a>
+<a name="line336"></a>function testCreateSimplifiedPath() {
+<a name="line337"></a>  var path = new goog.math.Path();
+<a name="line338"></a>  path.moveTo(0, 0);
+<a name="line339"></a>  path.arc(50, 60, 10, 20, 30, 30, false);
+<a name="line340"></a>  assertFalse(path.isSimple());
+<a name="line341"></a>  path = goog.math.Path.createSimplifiedPath(path);
+<a name="line342"></a>  assertTrue(path.isSimple());
+<a name="line343"></a>  var p = path.getCurrentPoint();
+<a name="line344"></a>  assertEquals(55, p[0]);
+<a name="line345"></a>  assertRoughlyEquals(77.32, p[1], 0.01);
+<a name="line346"></a>  assertPathEquals([&#39;M&#39;, 58.66, 70,
+<a name="line347"></a>    &#39;C&#39;, 57.78, 73.04, 56.52, 75.57, 55, 77.32], path);
+<a name="line348"></a>}
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>function testCreateSimplifiedPath2() {
+<a name="line352"></a>  var path = new goog.math.Path();
+<a name="line353"></a>  path.arc(50, 60, 10, 20, 30, 30, false);
+<a name="line354"></a>  path.arc(50, 60, 10, 20, 60, 30, false);
+<a name="line355"></a>  assertFalse(path.isSimple());
+<a name="line356"></a>  path = goog.math.Path.createSimplifiedPath(path);
+<a name="line357"></a>  assertTrue(path.isSimple());
+<a name="line358"></a>  assertPathEquals([&#39;M&#39;, 58.66, 70,
+<a name="line359"></a>    &#39;C&#39;, 57.78, 73.04, 56.52, 75.57, 55, 77.32,
+<a name="line360"></a>    &#39;M&#39;, 55, 77.32,
+<a name="line361"></a>    &#39;C&#39;, 53.48, 79.08, 51.76, 80, 50, 80], path);
+<a name="line362"></a>}
+<a name="line363"></a>
+<a name="line364"></a>
+<a name="line365"></a>function testCreateSimplifiedPath3() {
+<a name="line366"></a>  var path = new goog.math.Path();
+<a name="line367"></a>  path.arc(50, 60, 10, 20, 30, 30, false);
+<a name="line368"></a>  path.arc(50, 60, 10, 20, 60, 30, true);
+<a name="line369"></a>  path.close();
+<a name="line370"></a>  path = goog.math.Path.createSimplifiedPath(path);
+<a name="line371"></a>  assertPathEquals([&#39;M&#39;, 58.66, 70,
+<a name="line372"></a>    &#39;C&#39;, 57.78, 73.04, 56.52, 75.57, 55, 77.32,
+<a name="line373"></a>    53.48, 79.08, 51.76, 80, 50, 80, &#39;X&#39;], path);
+<a name="line374"></a>  var p = path.getCurrentPoint();
+<a name="line375"></a>  assertRoughlyEquals(58.66, p[0], 0.01);
+<a name="line376"></a>  assertRoughlyEquals(70, p[1], 0.01);
+<a name="line377"></a>}
+<a name="line378"></a>
+<a name="line379"></a>
+<a name="line380"></a>function testArcToAsCurves() {
+<a name="line381"></a>  var path = new goog.math.Path();
+<a name="line382"></a>  path.moveTo(58.66, 70);
+<a name="line383"></a>  path.arcToAsCurves(10, 20, 30, 30);
+<a name="line384"></a>  assertPathEquals([&#39;M&#39;, 58.66, 70,
+<a name="line385"></a>    &#39;C&#39;, 57.78, 73.04, 56.52, 75.57, 55, 77.32], path);
+<a name="line386"></a>}
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>function testCreateTransformedPath() {
+<a name="line390"></a>  var path = new goog.math.Path();
+<a name="line391"></a>  path.moveTo(0, 0);
+<a name="line392"></a>  path.lineTo(0, 10, 10, 10, 10, 0);
+<a name="line393"></a>  path.close();
+<a name="line394"></a>  var tx = new goog.math.AffineTransform(2, 0, 0, 3, 10, 20);
+<a name="line395"></a>  var path2 = path.createTransformedPath(tx);
+<a name="line396"></a>  assertPathEquals(
+<a name="line397"></a>      [&#39;M&#39;, 0, 0, &#39;L&#39;, 0, 10, 10, 10, 10, 0, &#39;X&#39;], path);
+<a name="line398"></a>  assertPathEquals(
+<a name="line399"></a>      [&#39;M&#39;, 10, 20, &#39;L&#39;, 10, 50, 30, 50, 30, 20, &#39;X&#39;], path2);
+<a name="line400"></a>}
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>function testTransform() {
+<a name="line404"></a>  var path = new goog.math.Path();
+<a name="line405"></a>  path.moveTo(0, 0);
+<a name="line406"></a>  path.lineTo(0, 10, 10, 10, 10, 0);
+<a name="line407"></a>  path.close();
+<a name="line408"></a>  var tx = new goog.math.AffineTransform(2, 0, 0, 3, 10, 20);
+<a name="line409"></a>  var path2 = path.transform(tx);
+<a name="line410"></a>  assertTrue(path === path2);
+<a name="line411"></a>  assertPathEquals(
+<a name="line412"></a>      [&#39;M&#39;, 10, 20, &#39;L&#39;, 10, 50, 30, 50, 30, 20, &#39;X&#39;], path2);
+<a name="line413"></a>}
+<a name="line414"></a>
+<a name="line415"></a>
+<a name="line416"></a>function testTransformCurrentAndClosePoints() {
+<a name="line417"></a>  var path = new goog.math.Path();
+<a name="line418"></a>  path.moveTo(0, 0);
+<a name="line419"></a>  assertObjectEquals([0, 0], path.getCurrentPoint());
+<a name="line420"></a>  path.transform(new goog.math.AffineTransform(1, 0, 0, 1, 10, 20));
+<a name="line421"></a>  assertObjectEquals([10, 20], path.getCurrentPoint());
+<a name="line422"></a>  path.lineTo(50, 50);
+<a name="line423"></a>  path.close();
+<a name="line424"></a>  assertObjectEquals([10, 20], path.getCurrentPoint());
+<a name="line425"></a>}
+<a name="line426"></a>
+<a name="line427"></a>
+<a name="line428"></a>function testTransformNonSimple() {
+<a name="line429"></a>  var path = new goog.math.Path();
+<a name="line430"></a>  path.arc(50, 60, 10, 20, 30, 30, false);
+<a name="line431"></a>  assertThrows(function() {
+<a name="line432"></a>    path.transform(new goog.math.AffineTransform(1, 0, 0, 1, 10, 20));
+<a name="line433"></a>  });
+<a name="line434"></a>}
+<a name="line435"></a>
+<a name="line436"></a>
+<a name="line437"></a>function testAppendPath() {
+<a name="line438"></a>  var path1 = new goog.math.Path();
+<a name="line439"></a>  path1.moveTo(0, 0);
+<a name="line440"></a>  path1.lineTo(0, 10, 10, 10, 10, 0);
+<a name="line441"></a>  path1.close();
+<a name="line442"></a>
+<a name="line443"></a>  var path2 = new goog.math.Path();
+<a name="line444"></a>  path2.arc(50, 60, 10, 20, 30, 30, false);
+<a name="line445"></a>
+<a name="line446"></a>  assertTrue(path1.isSimple());
+<a name="line447"></a>  path1.appendPath(path2);
+<a name="line448"></a>  assertFalse(path1.isSimple());
+<a name="line449"></a>  assertPathEquals([
+<a name="line450"></a>    &#39;M&#39;, 0, 0, &#39;L&#39;, 0, 10, 10, 10, 10, 0, &#39;X&#39;,
+<a name="line451"></a>    &#39;M&#39;, 58.66, 70, &#39;A&#39;, 10, 20, 30, 30, 55, 77.32
+<a name="line452"></a>  ], path1);
+<a name="line453"></a>}
+<a name="line454"></a>
+<a name="line455"></a>
+<a name="line456"></a>function testIsEmpty() {
+<a name="line457"></a>  var path = new goog.math.Path();
+<a name="line458"></a>  assertTrue(&#39;Initially path is empty&#39;, path.isEmpty());
+<a name="line459"></a>
+<a name="line460"></a>  path.moveTo(0, 0);
+<a name="line461"></a>  assertFalse(&#39;After command addition, path is not empty&#39;, path.isEmpty());
+<a name="line462"></a>
+<a name="line463"></a>  path.clear();
+<a name="line464"></a>  assertTrue(&#39;After clear, path is empty again&#39;, path.isEmpty());
+<a name="line465"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,1820 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mat4d.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_vec_mat4d.js.html">mat4d.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>////////////////////////// NOTE ABOUT EDITING THIS FILE ///////////////////////
+<a name="line17"></a>//                                                                           //
+<a name="line18"></a>// Any edits to this file must be applied to mat4f.js by running:            //
+<a name="line19"></a>//   swap_type.sh mat4d.js &gt; mat4f.js                                        //
+<a name="line20"></a>//                                                                           //
+<a name="line21"></a>////////////////////////// NOTE ABOUT EDITING THIS FILE ///////////////////////
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>/**
+<a name="line25"></a> * @fileoverview Provides functions for operating on 4x4 double (64bit)
+<a name="line26"></a> * matrices.  The matrices are stored in column-major order.
+<a name="line27"></a> *
+<a name="line28"></a> * The last parameter will typically be the output matrix and an
+<a name="line29"></a> * object can be both an input and output parameter to all methods except
+<a name="line30"></a> * where noted.
+<a name="line31"></a> *
+<a name="line32"></a> * See the README for notes about the design and structure of the API
+<a name="line33"></a> * (especially related to performance).
+<a name="line34"></a> *
+<a name="line35"></a> */
+<a name="line36"></a>goog.provide(&#39;goog.vec.mat4d&#39;);
+<a name="line37"></a>goog.provide(&#39;goog.vec.mat4d.Type&#39;);
+<a name="line38"></a>
+<a name="line39"></a>goog.require(&#39;goog.vec&#39;);
+<a name="line40"></a>goog.require(&#39;goog.vec.vec3d&#39;);
+<a name="line41"></a>goog.require(&#39;goog.vec.vec4d&#39;);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/** @typedef {goog.vec.Float64} */ goog.vec.mat4d.Type;
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Creates a mat4d with all elements initialized to zero.
+<a name="line49"></a> *
+<a name="line50"></a> * @return {!goog.vec.mat4d.Type} The new mat4d.
+<a name="line51"></a> */
+<a name="line52"></a>goog.vec.mat4d.create = function() {
+<a name="line53"></a>  return new Float64Array(16);
+<a name="line54"></a>};
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Initializes the matrix from the set of values. Note the values supplied are
+<a name="line59"></a> * in column major order.
+<a name="line60"></a> *
+<a name="line61"></a> * @param {goog.vec.mat4d.Type} mat The matrix to receive the
+<a name="line62"></a> *     values.
+<a name="line63"></a> * @param {number} v00 The values at (0, 0).
+<a name="line64"></a> * @param {number} v10 The values at (1, 0).
+<a name="line65"></a> * @param {number} v20 The values at (2, 0).
+<a name="line66"></a> * @param {number} v30 The values at (3, 0).
+<a name="line67"></a> * @param {number} v01 The values at (0, 1).
+<a name="line68"></a> * @param {number} v11 The values at (1, 1).
+<a name="line69"></a> * @param {number} v21 The values at (2, 1).
+<a name="line70"></a> * @param {number} v31 The values at (3, 1).
+<a name="line71"></a> * @param {number} v02 The values at (0, 2).
+<a name="line72"></a> * @param {number} v12 The values at (1, 2).
+<a name="line73"></a> * @param {number} v22 The values at (2, 2).
+<a name="line74"></a> * @param {number} v32 The values at (3, 2).
+<a name="line75"></a> * @param {number} v03 The values at (0, 3).
+<a name="line76"></a> * @param {number} v13 The values at (1, 3).
+<a name="line77"></a> * @param {number} v23 The values at (2, 3).
+<a name="line78"></a> * @param {number} v33 The values at (3, 3).
+<a name="line79"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line80"></a> *     chained together.
+<a name="line81"></a> */
+<a name="line82"></a>goog.vec.mat4d.setFromValues = function(
+<a name="line83"></a>    mat, v00, v10, v20, v30, v01, v11, v21, v31, v02, v12, v22, v32,
+<a name="line84"></a>    v03, v13, v23, v33) {
+<a name="line85"></a>  mat[0] = v00;
+<a name="line86"></a>  mat[1] = v10;
+<a name="line87"></a>  mat[2] = v20;
+<a name="line88"></a>  mat[3] = v30;
+<a name="line89"></a>  mat[4] = v01;
+<a name="line90"></a>  mat[5] = v11;
+<a name="line91"></a>  mat[6] = v21;
+<a name="line92"></a>  mat[7] = v31;
+<a name="line93"></a>  mat[8] = v02;
+<a name="line94"></a>  mat[9] = v12;
+<a name="line95"></a>  mat[10] = v22;
+<a name="line96"></a>  mat[11] = v32;
+<a name="line97"></a>  mat[12] = v03;
+<a name="line98"></a>  mat[13] = v13;
+<a name="line99"></a>  mat[14] = v23;
+<a name="line100"></a>  mat[15] = v33;
+<a name="line101"></a>  return mat;
+<a name="line102"></a>};
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Initializes mat4d mat from mat4d src.
+<a name="line107"></a> *
+<a name="line108"></a> * @param {goog.vec.mat4d.Type} mat The destination matrix.
+<a name="line109"></a> * @param {goog.vec.mat4d.Type} src The source matrix.
+<a name="line110"></a> * @return {!goog.vec.mat4d.Type} Return mat so that operations can be
+<a name="line111"></a> *     chained together.
+<a name="line112"></a> */
+<a name="line113"></a>goog.vec.mat4d.setFromMat4d = function(mat, src) {
+<a name="line114"></a>  mat[0] = src[0];
+<a name="line115"></a>  mat[1] = src[1];
+<a name="line116"></a>  mat[2] = src[2];
+<a name="line117"></a>  mat[3] = src[3];
+<a name="line118"></a>  mat[4] = src[4];
+<a name="line119"></a>  mat[5] = src[5];
+<a name="line120"></a>  mat[6] = src[6];
+<a name="line121"></a>  mat[7] = src[7];
+<a name="line122"></a>  mat[8] = src[8];
+<a name="line123"></a>  mat[9] = src[9];
+<a name="line124"></a>  mat[10] = src[10];
+<a name="line125"></a>  mat[11] = src[11];
+<a name="line126"></a>  mat[12] = src[12];
+<a name="line127"></a>  mat[13] = src[13];
+<a name="line128"></a>  mat[14] = src[14];
+<a name="line129"></a>  mat[15] = src[15];
+<a name="line130"></a>  return mat;
+<a name="line131"></a>};
+<a name="line132"></a>
+<a name="line133"></a>
+<a name="line134"></a>/**
+<a name="line135"></a> * Initializes mat4d mat from mat4f src (typed as a Float32Array to
+<a name="line136"></a> * avoid circular goog.requires).
+<a name="line137"></a> *
+<a name="line138"></a> * @param {goog.vec.mat4d.Type} mat The destination matrix.
+<a name="line139"></a> * @param {Float32Array} src The source matrix.
+<a name="line140"></a> * @return {!goog.vec.mat4d.Type} Return mat so that operations can be
+<a name="line141"></a> *     chained together.
+<a name="line142"></a> */
+<a name="line143"></a>goog.vec.mat4d.setFromMat4f = function(mat, src) {
+<a name="line144"></a>  mat[0] = src[0];
+<a name="line145"></a>  mat[1] = src[1];
+<a name="line146"></a>  mat[2] = src[2];
+<a name="line147"></a>  mat[3] = src[3];
+<a name="line148"></a>  mat[4] = src[4];
+<a name="line149"></a>  mat[5] = src[5];
+<a name="line150"></a>  mat[6] = src[6];
+<a name="line151"></a>  mat[7] = src[7];
+<a name="line152"></a>  mat[8] = src[8];
+<a name="line153"></a>  mat[9] = src[9];
+<a name="line154"></a>  mat[10] = src[10];
+<a name="line155"></a>  mat[11] = src[11];
+<a name="line156"></a>  mat[12] = src[12];
+<a name="line157"></a>  mat[13] = src[13];
+<a name="line158"></a>  mat[14] = src[14];
+<a name="line159"></a>  mat[15] = src[15];
+<a name="line160"></a>  return mat;
+<a name="line161"></a>};
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>/**
+<a name="line165"></a> * Initializes mat4d mat from Array src.
+<a name="line166"></a> *
+<a name="line167"></a> * @param {goog.vec.mat4d.Type} mat The destination matrix.
+<a name="line168"></a> * @param {Array.&lt;number&gt;} src The source matrix.
+<a name="line169"></a> * @return {!goog.vec.mat4d.Type} Return mat so that operations can be
+<a name="line170"></a> *     chained together.
+<a name="line171"></a> */
+<a name="line172"></a>goog.vec.mat4d.setFromArray = function(mat, src) {
+<a name="line173"></a>  mat[0] = src[0];
+<a name="line174"></a>  mat[1] = src[1];
+<a name="line175"></a>  mat[2] = src[2];
+<a name="line176"></a>  mat[3] = src[3];
+<a name="line177"></a>  mat[4] = src[4];
+<a name="line178"></a>  mat[5] = src[5];
+<a name="line179"></a>  mat[6] = src[6];
+<a name="line180"></a>  mat[7] = src[7];
+<a name="line181"></a>  mat[8] = src[8];
+<a name="line182"></a>  mat[9] = src[9];
+<a name="line183"></a>  mat[10] = src[10];
+<a name="line184"></a>  mat[11] = src[11];
+<a name="line185"></a>  mat[12] = src[12];
+<a name="line186"></a>  mat[13] = src[13];
+<a name="line187"></a>  mat[14] = src[14];
+<a name="line188"></a>  mat[15] = src[15];
+<a name="line189"></a>  return mat;
+<a name="line190"></a>};
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Retrieves the element at the requested row and column.
+<a name="line195"></a> *
+<a name="line196"></a> * @param {goog.vec.mat4d.Type} mat The matrix containing the value to
+<a name="line197"></a> *     retrieve.
+<a name="line198"></a> * @param {number} row The row index.
+<a name="line199"></a> * @param {number} column The column index.
+<a name="line200"></a> * @return {number} The element value at the requested row, column indices.
+<a name="line201"></a> */
+<a name="line202"></a>goog.vec.mat4d.getElement = function(mat, row, column) {
+<a name="line203"></a>  return mat[row + column * 4];
+<a name="line204"></a>};
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * Sets the element at the requested row and column.
+<a name="line209"></a> *
+<a name="line210"></a> * @param {goog.vec.mat4d.Type} mat The matrix containing the value to
+<a name="line211"></a> *     retrieve.
+<a name="line212"></a> * @param {number} row The row index.
+<a name="line213"></a> * @param {number} column The column index.
+<a name="line214"></a> * @param {number} value The value to set at the requested row, column.
+<a name="line215"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line216"></a> *     chained together.
+<a name="line217"></a> */
+<a name="line218"></a>goog.vec.mat4d.setElement = function(mat, row, column, value) {
+<a name="line219"></a>  mat[row + column * 4] = value;
+<a name="line220"></a>  return mat;
+<a name="line221"></a>};
+<a name="line222"></a>
+<a name="line223"></a>
+<a name="line224"></a>/**
+<a name="line225"></a> * Sets the diagonal values of the matrix from the given values.
+<a name="line226"></a> *
+<a name="line227"></a> * @param {goog.vec.mat4d.Type} mat The matrix to receive the values.
+<a name="line228"></a> * @param {number} v00 The values for (0, 0).
+<a name="line229"></a> * @param {number} v11 The values for (1, 1).
+<a name="line230"></a> * @param {number} v22 The values for (2, 2).
+<a name="line231"></a> * @param {number} v33 The values for (3, 3).
+<a name="line232"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line233"></a> *     chained together.
+<a name="line234"></a> */
+<a name="line235"></a>goog.vec.mat4d.setDiagonalValues = function(mat, v00, v11, v22, v33) {
+<a name="line236"></a>  mat[0] = v00;
+<a name="line237"></a>  mat[5] = v11;
+<a name="line238"></a>  mat[10] = v22;
+<a name="line239"></a>  mat[15] = v33;
+<a name="line240"></a>  return mat;
+<a name="line241"></a>};
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Sets the diagonal values of the matrix from the given vector.
+<a name="line246"></a> *
+<a name="line247"></a> * @param {goog.vec.mat4d.Type} mat The matrix to receive the values.
+<a name="line248"></a> * @param {goog.vec.vec4d.Type} vec The vector containing the values.
+<a name="line249"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line250"></a> *     chained together.
+<a name="line251"></a> */
+<a name="line252"></a>goog.vec.mat4d.setDiagonal = function(mat, vec) {
+<a name="line253"></a>  mat[0] = vec[0];
+<a name="line254"></a>  mat[5] = vec[1];
+<a name="line255"></a>  mat[10] = vec[2];
+<a name="line256"></a>  mat[15] = vec[3];
+<a name="line257"></a>  return mat;
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * Gets the diagonal values of the matrix into the given vector.
+<a name="line263"></a> *
+<a name="line264"></a> * @param {goog.vec.mat4d.Type} mat The matrix containing the values.
+<a name="line265"></a> * @param {goog.vec.vec4d.Type} vec The vector to receive the values.
+<a name="line266"></a> * @param {number=} opt_diagonal Which diagonal to get. A value of 0 selects the
+<a name="line267"></a> *     main diagonal, a positive number selects a super diagonal and a negative
+<a name="line268"></a> *     number selects a sub diagonal.
+<a name="line269"></a> * @return {goog.vec.vec4d.Type} return vec so that operations can be
+<a name="line270"></a> *     chained together.
+<a name="line271"></a> */
+<a name="line272"></a>goog.vec.mat4d.getDiagonal = function(mat, vec, opt_diagonal) {
+<a name="line273"></a>  if (!opt_diagonal) {
+<a name="line274"></a>    // This is the most common case, so we avoid the for loop.
+<a name="line275"></a>    vec[0] = mat[0];
+<a name="line276"></a>    vec[1] = mat[5];
+<a name="line277"></a>    vec[2] = mat[10];
+<a name="line278"></a>    vec[3] = mat[15];
+<a name="line279"></a>  } else {
+<a name="line280"></a>    var offset = opt_diagonal &gt; 0 ? 4 * opt_diagonal : -opt_diagonal;
+<a name="line281"></a>    for (var i = 0; i &lt; 4 - Math.abs(opt_diagonal); i++) {
+<a name="line282"></a>      vec[i] = mat[offset + 5 * i];
+<a name="line283"></a>    }
+<a name="line284"></a>  }
+<a name="line285"></a>  return vec;
+<a name="line286"></a>};
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * Sets the specified column with the supplied values.
+<a name="line291"></a> *
+<a name="line292"></a> * @param {goog.vec.mat4d.Type} mat The matrix to recieve the values.
+<a name="line293"></a> * @param {number} column The column index to set the values on.
+<a name="line294"></a> * @param {number} v0 The value for row 0.
+<a name="line295"></a> * @param {number} v1 The value for row 1.
+<a name="line296"></a> * @param {number} v2 The value for row 2.
+<a name="line297"></a> * @param {number} v3 The value for row 3.
+<a name="line298"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line299"></a> *     chained together.
+<a name="line300"></a> */
+<a name="line301"></a>goog.vec.mat4d.setColumnValues = function(mat, column, v0, v1, v2, v3) {
+<a name="line302"></a>  var i = column * 4;
+<a name="line303"></a>  mat[i] = v0;
+<a name="line304"></a>  mat[i + 1] = v1;
+<a name="line305"></a>  mat[i + 2] = v2;
+<a name="line306"></a>  mat[i + 3] = v3;
+<a name="line307"></a>  return mat;
+<a name="line308"></a>};
+<a name="line309"></a>
+<a name="line310"></a>
+<a name="line311"></a>/**
+<a name="line312"></a> * Sets the specified column with the value from the supplied vector.
+<a name="line313"></a> *
+<a name="line314"></a> * @param {goog.vec.mat4d.Type} mat The matrix to receive the values.
+<a name="line315"></a> * @param {number} column The column index to set the values on.
+<a name="line316"></a> * @param {goog.vec.vec4d.Type} vec The vector of elements for the column.
+<a name="line317"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line318"></a> *     chained together.
+<a name="line319"></a> */
+<a name="line320"></a>goog.vec.mat4d.setColumn = function(mat, column, vec) {
+<a name="line321"></a>  var i = column * 4;
+<a name="line322"></a>  mat[i] = vec[0];
+<a name="line323"></a>  mat[i + 1] = vec[1];
+<a name="line324"></a>  mat[i + 2] = vec[2];
+<a name="line325"></a>  mat[i + 3] = vec[3];
+<a name="line326"></a>  return mat;
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Retrieves the specified column from the matrix into the given vector.
+<a name="line332"></a> *
+<a name="line333"></a> * @param {goog.vec.mat4d.Type} mat The matrix supplying the values.
+<a name="line334"></a> * @param {number} column The column to get the values from.
+<a name="line335"></a> * @param {goog.vec.vec4d.Type} vec The vector of elements to
+<a name="line336"></a> *     receive the column.
+<a name="line337"></a> * @return {!goog.vec.vec4d.Type} return vec so that operations can be
+<a name="line338"></a> *     chained together.
+<a name="line339"></a> */
+<a name="line340"></a>goog.vec.mat4d.getColumn = function(mat, column, vec) {
+<a name="line341"></a>  var i = column * 4;
+<a name="line342"></a>  vec[0] = mat[i];
+<a name="line343"></a>  vec[1] = mat[i + 1];
+<a name="line344"></a>  vec[2] = mat[i + 2];
+<a name="line345"></a>  vec[3] = mat[i + 3];
+<a name="line346"></a>  return vec;
+<a name="line347"></a>};
+<a name="line348"></a>
+<a name="line349"></a>
+<a name="line350"></a>/**
+<a name="line351"></a> * Sets the columns of the matrix from the given vectors.
+<a name="line352"></a> *
+<a name="line353"></a> * @param {goog.vec.mat4d.Type} mat The matrix to receive the values.
+<a name="line354"></a> * @param {goog.vec.vec4d.Type} vec0 The values for column 0.
+<a name="line355"></a> * @param {goog.vec.vec4d.Type} vec1 The values for column 1.
+<a name="line356"></a> * @param {goog.vec.vec4d.Type} vec2 The values for column 2.
+<a name="line357"></a> * @param {goog.vec.vec4d.Type} vec3 The values for column 3.
+<a name="line358"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line359"></a> *     chained together.
+<a name="line360"></a> */
+<a name="line361"></a>goog.vec.mat4d.setColumns = function(mat, vec0, vec1, vec2, vec3) {
+<a name="line362"></a>  mat[0] = vec0[0];
+<a name="line363"></a>  mat[1] = vec0[1];
+<a name="line364"></a>  mat[2] = vec0[2];
+<a name="line365"></a>  mat[3] = vec0[3];
+<a name="line366"></a>  mat[4] = vec1[0];
+<a name="line367"></a>  mat[5] = vec1[1];
+<a name="line368"></a>  mat[6] = vec1[2];
+<a name="line369"></a>  mat[7] = vec1[3];
+<a name="line370"></a>  mat[8] = vec2[0];
+<a name="line371"></a>  mat[9] = vec2[1];
+<a name="line372"></a>  mat[10] = vec2[2];
+<a name="line373"></a>  mat[11] = vec2[3];
+<a name="line374"></a>  mat[12] = vec3[0];
+<a name="line375"></a>  mat[13] = vec3[1];
+<a name="line376"></a>  mat[14] = vec3[2];
+<a name="line377"></a>  mat[15] = vec3[3];
+<a name="line378"></a>  return mat;
+<a name="line379"></a>};
+<a name="line380"></a>
+<a name="line381"></a>
+<a name="line382"></a>/**
+<a name="line383"></a> * Retrieves the column values from the given matrix into the given vectors.
+<a name="line384"></a> *
+<a name="line385"></a> * @param {goog.vec.mat4d.Type} mat The matrix supplying the columns.
+<a name="line386"></a> * @param {goog.vec.vec4d.Type} vec0 The vector to receive column 0.
+<a name="line387"></a> * @param {goog.vec.vec4d.Type} vec1 The vector to receive column 1.
+<a name="line388"></a> * @param {goog.vec.vec4d.Type} vec2 The vector to receive column 2.
+<a name="line389"></a> * @param {goog.vec.vec4d.Type} vec3 The vector to receive column 3.
+<a name="line390"></a> */
+<a name="line391"></a>goog.vec.mat4d.getColumns = function(mat, vec0, vec1, vec2, vec3) {
+<a name="line392"></a>  vec0[0] = mat[0];
+<a name="line393"></a>  vec0[1] = mat[1];
+<a name="line394"></a>  vec0[2] = mat[2];
+<a name="line395"></a>  vec0[3] = mat[3];
+<a name="line396"></a>  vec1[0] = mat[4];
+<a name="line397"></a>  vec1[1] = mat[5];
+<a name="line398"></a>  vec1[2] = mat[6];
+<a name="line399"></a>  vec1[3] = mat[7];
+<a name="line400"></a>  vec2[0] = mat[8];
+<a name="line401"></a>  vec2[1] = mat[9];
+<a name="line402"></a>  vec2[2] = mat[10];
+<a name="line403"></a>  vec2[3] = mat[11];
+<a name="line404"></a>  vec3[0] = mat[12];
+<a name="line405"></a>  vec3[1] = mat[13];
+<a name="line406"></a>  vec3[2] = mat[14];
+<a name="line407"></a>  vec3[3] = mat[15];
+<a name="line408"></a>};
+<a name="line409"></a>
+<a name="line410"></a>
+<a name="line411"></a>/**
+<a name="line412"></a> * Sets the row values from the supplied values.
+<a name="line413"></a> *
+<a name="line414"></a> * @param {goog.vec.mat4d.Type} mat The matrix to receive the values.
+<a name="line415"></a> * @param {number} row The index of the row to receive the values.
+<a name="line416"></a> * @param {number} v0 The value for column 0.
+<a name="line417"></a> * @param {number} v1 The value for column 1.
+<a name="line418"></a> * @param {number} v2 The value for column 2.
+<a name="line419"></a> * @param {number} v3 The value for column 3.
+<a name="line420"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line421"></a> *     chained together.
+<a name="line422"></a> */
+<a name="line423"></a>goog.vec.mat4d.setRowValues = function(mat, row, v0, v1, v2, v3) {
+<a name="line424"></a>  mat[row] = v0;
+<a name="line425"></a>  mat[row + 4] = v1;
+<a name="line426"></a>  mat[row + 8] = v2;
+<a name="line427"></a>  mat[row + 12] = v3;
+<a name="line428"></a>  return mat;
+<a name="line429"></a>};
+<a name="line430"></a>
+<a name="line431"></a>
+<a name="line432"></a>/**
+<a name="line433"></a> * Sets the row values from the supplied vector.
+<a name="line434"></a> *
+<a name="line435"></a> * @param {goog.vec.mat4d.Type} mat The matrix to receive the row values.
+<a name="line436"></a> * @param {number} row The index of the row.
+<a name="line437"></a> * @param {goog.vec.vec4d.Type} vec The vector containing the values.
+<a name="line438"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line439"></a> *     chained together.
+<a name="line440"></a> */
+<a name="line441"></a>goog.vec.mat4d.setRow = function(mat, row, vec) {
+<a name="line442"></a>  mat[row] = vec[0];
+<a name="line443"></a>  mat[row + 4] = vec[1];
+<a name="line444"></a>  mat[row + 8] = vec[2];
+<a name="line445"></a>  mat[row + 12] = vec[3];
+<a name="line446"></a>  return mat;
+<a name="line447"></a>};
+<a name="line448"></a>
+<a name="line449"></a>
+<a name="line450"></a>/**
+<a name="line451"></a> * Retrieves the row values into the given vector.
+<a name="line452"></a> *
+<a name="line453"></a> * @param {goog.vec.mat4d.Type} mat The matrix supplying the values.
+<a name="line454"></a> * @param {number} row The index of the row supplying the values.
+<a name="line455"></a> * @param {goog.vec.vec4d.Type} vec The vector to receive the row.
+<a name="line456"></a> * @return {!goog.vec.vec4d.Type} return vec so that operations can be
+<a name="line457"></a> *     chained together.
+<a name="line458"></a> */
+<a name="line459"></a>goog.vec.mat4d.getRow = function(mat, row, vec) {
+<a name="line460"></a>  vec[0] = mat[row];
+<a name="line461"></a>  vec[1] = mat[row + 4];
+<a name="line462"></a>  vec[2] = mat[row + 8];
+<a name="line463"></a>  vec[3] = mat[row + 12];
+<a name="line464"></a>  return vec;
+<a name="line465"></a>};
+<a name="line466"></a>
+<a name="line467"></a>
+<a name="line468"></a>/**
+<a name="line469"></a> * Sets the rows of the matrix from the supplied vectors.
+<a name="line470"></a> *
+<a name="line471"></a> * @param {goog.vec.mat4d.Type} mat The matrix to receive the values.
+<a name="line472"></a> * @param {goog.vec.vec4d.Type} vec0 The values for row 0.
+<a name="line473"></a> * @param {goog.vec.vec4d.Type} vec1 The values for row 1.
+<a name="line474"></a> * @param {goog.vec.vec4d.Type} vec2 The values for row 2.
+<a name="line475"></a> * @param {goog.vec.vec4d.Type} vec3 The values for row 3.
+<a name="line476"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line477"></a> *     chained together.
+<a name="line478"></a> */
+<a name="line479"></a>goog.vec.mat4d.setRows = function(mat, vec0, vec1, vec2, vec3) {
+<a name="line480"></a>  mat[0] = vec0[0];
+<a name="line481"></a>  mat[1] = vec1[0];
+<a name="line482"></a>  mat[2] = vec2[0];
+<a name="line483"></a>  mat[3] = vec3[0];
+<a name="line484"></a>  mat[4] = vec0[1];
+<a name="line485"></a>  mat[5] = vec1[1];
+<a name="line486"></a>  mat[6] = vec2[1];
+<a name="line487"></a>  mat[7] = vec3[1];
+<a name="line488"></a>  mat[8] = vec0[2];
+<a name="line489"></a>  mat[9] = vec1[2];
+<a name="line490"></a>  mat[10] = vec2[2];
+<a name="line491"></a>  mat[11] = vec3[2];
+<a name="line492"></a>  mat[12] = vec0[3];
+<a name="line493"></a>  mat[13] = vec1[3];
+<a name="line494"></a>  mat[14] = vec2[3];
+<a name="line495"></a>  mat[15] = vec3[3];
+<a name="line496"></a>  return mat;
+<a name="line497"></a>};
+<a name="line498"></a>
+<a name="line499"></a>
+<a name="line500"></a>/**
+<a name="line501"></a> * Retrieves the rows of the matrix into the supplied vectors.
+<a name="line502"></a> *
+<a name="line503"></a> * @param {goog.vec.mat4d.Type} mat The matrix to supply the values.
+<a name="line504"></a> * @param {goog.vec.vec4d.Type} vec0 The vector to receive row 0.
+<a name="line505"></a> * @param {goog.vec.vec4d.Type} vec1 The vector to receive row 1.
+<a name="line506"></a> * @param {goog.vec.vec4d.Type} vec2 The vector to receive row 2.
+<a name="line507"></a> * @param {goog.vec.vec4d.Type} vec3 The vector to receive row 3.
+<a name="line508"></a> */
+<a name="line509"></a>goog.vec.mat4d.getRows = function(mat, vec0, vec1, vec2, vec3) {
+<a name="line510"></a>  vec0[0] = mat[0];
+<a name="line511"></a>  vec1[0] = mat[1];
+<a name="line512"></a>  vec2[0] = mat[2];
+<a name="line513"></a>  vec3[0] = mat[3];
+<a name="line514"></a>  vec0[1] = mat[4];
+<a name="line515"></a>  vec1[1] = mat[5];
+<a name="line516"></a>  vec2[1] = mat[6];
+<a name="line517"></a>  vec3[1] = mat[7];
+<a name="line518"></a>  vec0[2] = mat[8];
+<a name="line519"></a>  vec1[2] = mat[9];
+<a name="line520"></a>  vec2[2] = mat[10];
+<a name="line521"></a>  vec3[2] = mat[11];
+<a name="line522"></a>  vec0[3] = mat[12];
+<a name="line523"></a>  vec1[3] = mat[13];
+<a name="line524"></a>  vec2[3] = mat[14];
+<a name="line525"></a>  vec3[3] = mat[15];
+<a name="line526"></a>};
+<a name="line527"></a>
+<a name="line528"></a>
+<a name="line529"></a>/**
+<a name="line530"></a> * Makes the given 4x4 matrix the zero matrix.
+<a name="line531"></a> *
+<a name="line532"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line533"></a> * @return {!goog.vec.mat4d.Type} return mat so operations can be chained.
+<a name="line534"></a> */
+<a name="line535"></a>goog.vec.mat4d.makeZero = function(mat) {
+<a name="line536"></a>  mat[0] = 0;
+<a name="line537"></a>  mat[1] = 0;
+<a name="line538"></a>  mat[2] = 0;
+<a name="line539"></a>  mat[3] = 0;
+<a name="line540"></a>  mat[4] = 0;
+<a name="line541"></a>  mat[5] = 0;
+<a name="line542"></a>  mat[6] = 0;
+<a name="line543"></a>  mat[7] = 0;
+<a name="line544"></a>  mat[8] = 0;
+<a name="line545"></a>  mat[9] = 0;
+<a name="line546"></a>  mat[10] = 0;
+<a name="line547"></a>  mat[11] = 0;
+<a name="line548"></a>  mat[12] = 0;
+<a name="line549"></a>  mat[13] = 0;
+<a name="line550"></a>  mat[14] = 0;
+<a name="line551"></a>  mat[15] = 0;
+<a name="line552"></a>  return mat;
+<a name="line553"></a>};
+<a name="line554"></a>
+<a name="line555"></a>
+<a name="line556"></a>/**
+<a name="line557"></a> * Makes the given 4x4 matrix the identity matrix.
+<a name="line558"></a> *
+<a name="line559"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line560"></a> * @return {!goog.vec.mat4d.Type} return mat so operations can be chained.
+<a name="line561"></a> */
+<a name="line562"></a>goog.vec.mat4d.makeIdentity = function(mat) {
+<a name="line563"></a>  mat[0] = 1;
+<a name="line564"></a>  mat[1] = 0;
+<a name="line565"></a>  mat[2] = 0;
+<a name="line566"></a>  mat[3] = 0;
+<a name="line567"></a>  mat[4] = 0;
+<a name="line568"></a>  mat[5] = 1;
+<a name="line569"></a>  mat[6] = 0;
+<a name="line570"></a>  mat[7] = 0;
+<a name="line571"></a>  mat[8] = 0;
+<a name="line572"></a>  mat[9] = 0;
+<a name="line573"></a>  mat[10] = 1;
+<a name="line574"></a>  mat[11] = 0;
+<a name="line575"></a>  mat[12] = 0;
+<a name="line576"></a>  mat[13] = 0;
+<a name="line577"></a>  mat[14] = 0;
+<a name="line578"></a>  mat[15] = 1;
+<a name="line579"></a>  return mat;
+<a name="line580"></a>};
+<a name="line581"></a>
+<a name="line582"></a>
+<a name="line583"></a>/**
+<a name="line584"></a> * Performs a per-component addition of the matrix mat0 and mat1, storing
+<a name="line585"></a> * the result into resultMat.
+<a name="line586"></a> *
+<a name="line587"></a> * @param {goog.vec.mat4d.Type} mat0 The first addend.
+<a name="line588"></a> * @param {goog.vec.mat4d.Type} mat1 The second addend.
+<a name="line589"></a> * @param {goog.vec.mat4d.Type} resultMat The matrix to
+<a name="line590"></a> *     receive the results (may be either mat0 or mat1).
+<a name="line591"></a> * @return {!goog.vec.mat4d.Type} return resultMat so that operations can be
+<a name="line592"></a> *     chained together.
+<a name="line593"></a> */
+<a name="line594"></a>goog.vec.mat4d.addMat = function(mat0, mat1, resultMat) {
+<a name="line595"></a>  resultMat[0] = mat0[0] + mat1[0];
+<a name="line596"></a>  resultMat[1] = mat0[1] + mat1[1];
+<a name="line597"></a>  resultMat[2] = mat0[2] + mat1[2];
+<a name="line598"></a>  resultMat[3] = mat0[3] + mat1[3];
+<a name="line599"></a>  resultMat[4] = mat0[4] + mat1[4];
+<a name="line600"></a>  resultMat[5] = mat0[5] + mat1[5];
+<a name="line601"></a>  resultMat[6] = mat0[6] + mat1[6];
+<a name="line602"></a>  resultMat[7] = mat0[7] + mat1[7];
+<a name="line603"></a>  resultMat[8] = mat0[8] + mat1[8];
+<a name="line604"></a>  resultMat[9] = mat0[9] + mat1[9];
+<a name="line605"></a>  resultMat[10] = mat0[10] + mat1[10];
+<a name="line606"></a>  resultMat[11] = mat0[11] + mat1[11];
+<a name="line607"></a>  resultMat[12] = mat0[12] + mat1[12];
+<a name="line608"></a>  resultMat[13] = mat0[13] + mat1[13];
+<a name="line609"></a>  resultMat[14] = mat0[14] + mat1[14];
+<a name="line610"></a>  resultMat[15] = mat0[15] + mat1[15];
+<a name="line611"></a>  return resultMat;
+<a name="line612"></a>};
+<a name="line613"></a>
+<a name="line614"></a>
+<a name="line615"></a>/**
+<a name="line616"></a> * Performs a per-component subtraction of the matrix mat0 and mat1,
+<a name="line617"></a> * storing the result into resultMat.
+<a name="line618"></a> *
+<a name="line619"></a> * @param {goog.vec.mat4d.Type} mat0 The minuend.
+<a name="line620"></a> * @param {goog.vec.mat4d.Type} mat1 The subtrahend.
+<a name="line621"></a> * @param {goog.vec.mat4d.Type} resultMat The matrix to receive
+<a name="line622"></a> *     the results (may be either mat0 or mat1).
+<a name="line623"></a> * @return {!goog.vec.mat4d.Type} return resultMat so that operations can be
+<a name="line624"></a> *     chained together.
+<a name="line625"></a> */
+<a name="line626"></a>goog.vec.mat4d.subMat = function(mat0, mat1, resultMat) {
+<a name="line627"></a>  resultMat[0] = mat0[0] - mat1[0];
+<a name="line628"></a>  resultMat[1] = mat0[1] - mat1[1];
+<a name="line629"></a>  resultMat[2] = mat0[2] - mat1[2];
+<a name="line630"></a>  resultMat[3] = mat0[3] - mat1[3];
+<a name="line631"></a>  resultMat[4] = mat0[4] - mat1[4];
+<a name="line632"></a>  resultMat[5] = mat0[5] - mat1[5];
+<a name="line633"></a>  resultMat[6] = mat0[6] - mat1[6];
+<a name="line634"></a>  resultMat[7] = mat0[7] - mat1[7];
+<a name="line635"></a>  resultMat[8] = mat0[8] - mat1[8];
+<a name="line636"></a>  resultMat[9] = mat0[9] - mat1[9];
+<a name="line637"></a>  resultMat[10] = mat0[10] - mat1[10];
+<a name="line638"></a>  resultMat[11] = mat0[11] - mat1[11];
+<a name="line639"></a>  resultMat[12] = mat0[12] - mat1[12];
+<a name="line640"></a>  resultMat[13] = mat0[13] - mat1[13];
+<a name="line641"></a>  resultMat[14] = mat0[14] - mat1[14];
+<a name="line642"></a>  resultMat[15] = mat0[15] - mat1[15];
+<a name="line643"></a>  return resultMat;
+<a name="line644"></a>};
+<a name="line645"></a>
+<a name="line646"></a>
+<a name="line647"></a>/**
+<a name="line648"></a> * Multiplies matrix mat with the given scalar, storing the result
+<a name="line649"></a> * into resultMat.
+<a name="line650"></a> *
+<a name="line651"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line652"></a> * @param {number} scalar The scalar value to multiply to each element of mat.
+<a name="line653"></a> * @param {goog.vec.mat4d.Type} resultMat The matrix to receive
+<a name="line654"></a> *     the results (may be mat).
+<a name="line655"></a> * @return {!goog.vec.mat4d.Type} return resultMat so that operations can be
+<a name="line656"></a> *     chained together.
+<a name="line657"></a> */
+<a name="line658"></a>goog.vec.mat4d.multScalar = function(mat, scalar, resultMat) {
+<a name="line659"></a>  resultMat[0] = mat[0] * scalar;
+<a name="line660"></a>  resultMat[1] = mat[1] * scalar;
+<a name="line661"></a>  resultMat[2] = mat[2] * scalar;
+<a name="line662"></a>  resultMat[3] = mat[3] * scalar;
+<a name="line663"></a>  resultMat[4] = mat[4] * scalar;
+<a name="line664"></a>  resultMat[5] = mat[5] * scalar;
+<a name="line665"></a>  resultMat[6] = mat[6] * scalar;
+<a name="line666"></a>  resultMat[7] = mat[7] * scalar;
+<a name="line667"></a>  resultMat[8] = mat[8] * scalar;
+<a name="line668"></a>  resultMat[9] = mat[9] * scalar;
+<a name="line669"></a>  resultMat[10] = mat[10] * scalar;
+<a name="line670"></a>  resultMat[11] = mat[11] * scalar;
+<a name="line671"></a>  resultMat[12] = mat[12] * scalar;
+<a name="line672"></a>  resultMat[13] = mat[13] * scalar;
+<a name="line673"></a>  resultMat[14] = mat[14] * scalar;
+<a name="line674"></a>  resultMat[15] = mat[15] * scalar;
+<a name="line675"></a>  return resultMat;
+<a name="line676"></a>};
+<a name="line677"></a>
+<a name="line678"></a>
+<a name="line679"></a>/**
+<a name="line680"></a> * Multiplies the two matrices mat0 and mat1 using matrix multiplication,
+<a name="line681"></a> * storing the result into resultMat.
+<a name="line682"></a> *
+<a name="line683"></a> * @param {goog.vec.mat4d.Type} mat0 The first (left hand) matrix.
+<a name="line684"></a> * @param {goog.vec.mat4d.Type} mat1 The second (right hand) matrix.
+<a name="line685"></a> * @param {goog.vec.mat4d.Type} resultMat The matrix to receive
+<a name="line686"></a> *     the results (may be either mat0 or mat1).
+<a name="line687"></a> * @return {!goog.vec.mat4d.Type} return resultMat so that operations can be
+<a name="line688"></a> *     chained together.
+<a name="line689"></a> */
+<a name="line690"></a>goog.vec.mat4d.multMat = function(mat0, mat1, resultMat) {
+<a name="line691"></a>  var a00 = mat0[0], a10 = mat0[1], a20 = mat0[2], a30 = mat0[3];
+<a name="line692"></a>  var a01 = mat0[4], a11 = mat0[5], a21 = mat0[6], a31 = mat0[7];
+<a name="line693"></a>  var a02 = mat0[8], a12 = mat0[9], a22 = mat0[10], a32 = mat0[11];
+<a name="line694"></a>  var a03 = mat0[12], a13 = mat0[13], a23 = mat0[14], a33 = mat0[15];
+<a name="line695"></a>
+<a name="line696"></a>  var b00 = mat1[0], b10 = mat1[1], b20 = mat1[2], b30 = mat1[3];
+<a name="line697"></a>  var b01 = mat1[4], b11 = mat1[5], b21 = mat1[6], b31 = mat1[7];
+<a name="line698"></a>  var b02 = mat1[8], b12 = mat1[9], b22 = mat1[10], b32 = mat1[11];
+<a name="line699"></a>  var b03 = mat1[12], b13 = mat1[13], b23 = mat1[14], b33 = mat1[15];
+<a name="line700"></a>
+<a name="line701"></a>  resultMat[0] = a00 * b00 + a01 * b10 + a02 * b20 + a03 * b30;
+<a name="line702"></a>  resultMat[1] = a10 * b00 + a11 * b10 + a12 * b20 + a13 * b30;
+<a name="line703"></a>  resultMat[2] = a20 * b00 + a21 * b10 + a22 * b20 + a23 * b30;
+<a name="line704"></a>  resultMat[3] = a30 * b00 + a31 * b10 + a32 * b20 + a33 * b30;
+<a name="line705"></a>
+<a name="line706"></a>  resultMat[4] = a00 * b01 + a01 * b11 + a02 * b21 + a03 * b31;
+<a name="line707"></a>  resultMat[5] = a10 * b01 + a11 * b11 + a12 * b21 + a13 * b31;
+<a name="line708"></a>  resultMat[6] = a20 * b01 + a21 * b11 + a22 * b21 + a23 * b31;
+<a name="line709"></a>  resultMat[7] = a30 * b01 + a31 * b11 + a32 * b21 + a33 * b31;
+<a name="line710"></a>
+<a name="line711"></a>  resultMat[8] = a00 * b02 + a01 * b12 + a02 * b22 + a03 * b32;
+<a name="line712"></a>  resultMat[9] = a10 * b02 + a11 * b12 + a12 * b22 + a13 * b32;
+<a name="line713"></a>  resultMat[10] = a20 * b02 + a21 * b12 + a22 * b22 + a23 * b32;
+<a name="line714"></a>  resultMat[11] = a30 * b02 + a31 * b12 + a32 * b22 + a33 * b32;
+<a name="line715"></a>
+<a name="line716"></a>  resultMat[12] = a00 * b03 + a01 * b13 + a02 * b23 + a03 * b33;
+<a name="line717"></a>  resultMat[13] = a10 * b03 + a11 * b13 + a12 * b23 + a13 * b33;
+<a name="line718"></a>  resultMat[14] = a20 * b03 + a21 * b13 + a22 * b23 + a23 * b33;
+<a name="line719"></a>  resultMat[15] = a30 * b03 + a31 * b13 + a32 * b23 + a33 * b33;
+<a name="line720"></a>  return resultMat;
+<a name="line721"></a>};
+<a name="line722"></a>
+<a name="line723"></a>
+<a name="line724"></a>/**
+<a name="line725"></a> * Transposes the given matrix mat storing the result into resultMat.
+<a name="line726"></a> *
+<a name="line727"></a> * @param {goog.vec.mat4d.Type} mat The matrix to transpose.
+<a name="line728"></a> * @param {goog.vec.mat4d.Type} resultMat The matrix to receive
+<a name="line729"></a> *     the results (may be mat).
+<a name="line730"></a> * @return {!goog.vec.mat4d.Type} return resultMat so that operations can be
+<a name="line731"></a> *     chained together.
+<a name="line732"></a> */
+<a name="line733"></a>goog.vec.mat4d.transpose = function(mat, resultMat) {
+<a name="line734"></a>  if (resultMat == mat) {
+<a name="line735"></a>    var a10 = mat[1], a20 = mat[2], a30 = mat[3];
+<a name="line736"></a>    var a21 = mat[6], a31 = mat[7];
+<a name="line737"></a>    var a32 = mat[11];
+<a name="line738"></a>    resultMat[1] = mat[4];
+<a name="line739"></a>    resultMat[2] = mat[8];
+<a name="line740"></a>    resultMat[3] = mat[12];
+<a name="line741"></a>    resultMat[4] = a10;
+<a name="line742"></a>    resultMat[6] = mat[9];
+<a name="line743"></a>    resultMat[7] = mat[13];
+<a name="line744"></a>    resultMat[8] = a20;
+<a name="line745"></a>    resultMat[9] = a21;
+<a name="line746"></a>    resultMat[11] = mat[14];
+<a name="line747"></a>    resultMat[12] = a30;
+<a name="line748"></a>    resultMat[13] = a31;
+<a name="line749"></a>    resultMat[14] = a32;
+<a name="line750"></a>  } else {
+<a name="line751"></a>    resultMat[0] = mat[0];
+<a name="line752"></a>    resultMat[1] = mat[4];
+<a name="line753"></a>    resultMat[2] = mat[8];
+<a name="line754"></a>    resultMat[3] = mat[12];
+<a name="line755"></a>
+<a name="line756"></a>    resultMat[4] = mat[1];
+<a name="line757"></a>    resultMat[5] = mat[5];
+<a name="line758"></a>    resultMat[6] = mat[9];
+<a name="line759"></a>    resultMat[7] = mat[13];
+<a name="line760"></a>
+<a name="line761"></a>    resultMat[8] = mat[2];
+<a name="line762"></a>    resultMat[9] = mat[6];
+<a name="line763"></a>    resultMat[10] = mat[10];
+<a name="line764"></a>    resultMat[11] = mat[14];
+<a name="line765"></a>
+<a name="line766"></a>    resultMat[12] = mat[3];
+<a name="line767"></a>    resultMat[13] = mat[7];
+<a name="line768"></a>    resultMat[14] = mat[11];
+<a name="line769"></a>    resultMat[15] = mat[15];
+<a name="line770"></a>  }
+<a name="line771"></a>  return resultMat;
+<a name="line772"></a>};
+<a name="line773"></a>
+<a name="line774"></a>
+<a name="line775"></a>/**
+<a name="line776"></a> * Computes the determinant of the matrix.
+<a name="line777"></a> *
+<a name="line778"></a> * @param {goog.vec.mat4d.Type} mat The matrix to compute the matrix for.
+<a name="line779"></a> * @return {number} The determinant of the matrix.
+<a name="line780"></a> */
+<a name="line781"></a>goog.vec.mat4d.determinant = function(mat) {
+<a name="line782"></a>  var m00 = mat[0], m10 = mat[1], m20 = mat[2], m30 = mat[3];
+<a name="line783"></a>  var m01 = mat[4], m11 = mat[5], m21 = mat[6], m31 = mat[7];
+<a name="line784"></a>  var m02 = mat[8], m12 = mat[9], m22 = mat[10], m32 = mat[11];
+<a name="line785"></a>  var m03 = mat[12], m13 = mat[13], m23 = mat[14], m33 = mat[15];
+<a name="line786"></a>
+<a name="line787"></a>  var a0 = m00 * m11 - m10 * m01;
+<a name="line788"></a>  var a1 = m00 * m21 - m20 * m01;
+<a name="line789"></a>  var a2 = m00 * m31 - m30 * m01;
+<a name="line790"></a>  var a3 = m10 * m21 - m20 * m11;
+<a name="line791"></a>  var a4 = m10 * m31 - m30 * m11;
+<a name="line792"></a>  var a5 = m20 * m31 - m30 * m21;
+<a name="line793"></a>  var b0 = m02 * m13 - m12 * m03;
+<a name="line794"></a>  var b1 = m02 * m23 - m22 * m03;
+<a name="line795"></a>  var b2 = m02 * m33 - m32 * m03;
+<a name="line796"></a>  var b3 = m12 * m23 - m22 * m13;
+<a name="line797"></a>  var b4 = m12 * m33 - m32 * m13;
+<a name="line798"></a>  var b5 = m22 * m33 - m32 * m23;
+<a name="line799"></a>
+<a name="line800"></a>  return a0 * b5 - a1 * b4 + a2 * b3 + a3 * b2 - a4 * b1 + a5 * b0;
+<a name="line801"></a>};
+<a name="line802"></a>
+<a name="line803"></a>
+<a name="line804"></a>/**
+<a name="line805"></a> * Computes the inverse of mat storing the result into resultMat. If the
+<a name="line806"></a> * inverse is defined, this function returns true, false otherwise.
+<a name="line807"></a> *
+<a name="line808"></a> * @param {goog.vec.mat4d.Type} mat The matrix to invert.
+<a name="line809"></a> * @param {goog.vec.mat4d.Type} resultMat The matrix to receive
+<a name="line810"></a> *     the result (may be mat).
+<a name="line811"></a> * @return {boolean} True if the inverse is defined. If false is returned,
+<a name="line812"></a> *     resultMat is not modified.
+<a name="line813"></a> */
+<a name="line814"></a>goog.vec.mat4d.invert = function(mat, resultMat) {
+<a name="line815"></a>  var m00 = mat[0], m10 = mat[1], m20 = mat[2], m30 = mat[3];
+<a name="line816"></a>  var m01 = mat[4], m11 = mat[5], m21 = mat[6], m31 = mat[7];
+<a name="line817"></a>  var m02 = mat[8], m12 = mat[9], m22 = mat[10], m32 = mat[11];
+<a name="line818"></a>  var m03 = mat[12], m13 = mat[13], m23 = mat[14], m33 = mat[15];
+<a name="line819"></a>
+<a name="line820"></a>  var a0 = m00 * m11 - m10 * m01;
+<a name="line821"></a>  var a1 = m00 * m21 - m20 * m01;
+<a name="line822"></a>  var a2 = m00 * m31 - m30 * m01;
+<a name="line823"></a>  var a3 = m10 * m21 - m20 * m11;
+<a name="line824"></a>  var a4 = m10 * m31 - m30 * m11;
+<a name="line825"></a>  var a5 = m20 * m31 - m30 * m21;
+<a name="line826"></a>  var b0 = m02 * m13 - m12 * m03;
+<a name="line827"></a>  var b1 = m02 * m23 - m22 * m03;
+<a name="line828"></a>  var b2 = m02 * m33 - m32 * m03;
+<a name="line829"></a>  var b3 = m12 * m23 - m22 * m13;
+<a name="line830"></a>  var b4 = m12 * m33 - m32 * m13;
+<a name="line831"></a>  var b5 = m22 * m33 - m32 * m23;
+<a name="line832"></a>
+<a name="line833"></a>  var det = a0 * b5 - a1 * b4 + a2 * b3 + a3 * b2 - a4 * b1 + a5 * b0;
+<a name="line834"></a>  if (det == 0) {
+<a name="line835"></a>    return false;
+<a name="line836"></a>  }
+<a name="line837"></a>
+<a name="line838"></a>  var idet = 1.0 / det;
+<a name="line839"></a>  resultMat[0] = (m11 * b5 - m21 * b4 + m31 * b3) * idet;
+<a name="line840"></a>  resultMat[1] = (-m10 * b5 + m20 * b4 - m30 * b3) * idet;
+<a name="line841"></a>  resultMat[2] = (m13 * a5 - m23 * a4 + m33 * a3) * idet;
+<a name="line842"></a>  resultMat[3] = (-m12 * a5 + m22 * a4 - m32 * a3) * idet;
+<a name="line843"></a>  resultMat[4] = (-m01 * b5 + m21 * b2 - m31 * b1) * idet;
+<a name="line844"></a>  resultMat[5] = (m00 * b5 - m20 * b2 + m30 * b1) * idet;
+<a name="line845"></a>  resultMat[6] = (-m03 * a5 + m23 * a2 - m33 * a1) * idet;
+<a name="line846"></a>  resultMat[7] = (m02 * a5 - m22 * a2 + m32 * a1) * idet;
+<a name="line847"></a>  resultMat[8] = (m01 * b4 - m11 * b2 + m31 * b0) * idet;
+<a name="line848"></a>  resultMat[9] = (-m00 * b4 + m10 * b2 - m30 * b0) * idet;
+<a name="line849"></a>  resultMat[10] = (m03 * a4 - m13 * a2 + m33 * a0) * idet;
+<a name="line850"></a>  resultMat[11] = (-m02 * a4 + m12 * a2 - m32 * a0) * idet;
+<a name="line851"></a>  resultMat[12] = (-m01 * b3 + m11 * b1 - m21 * b0) * idet;
+<a name="line852"></a>  resultMat[13] = (m00 * b3 - m10 * b1 + m20 * b0) * idet;
+<a name="line853"></a>  resultMat[14] = (-m03 * a3 + m13 * a1 - m23 * a0) * idet;
+<a name="line854"></a>  resultMat[15] = (m02 * a3 - m12 * a1 + m22 * a0) * idet;
+<a name="line855"></a>  return true;
+<a name="line856"></a>};
+<a name="line857"></a>
+<a name="line858"></a>
+<a name="line859"></a>/**
+<a name="line860"></a> * Returns true if the components of mat0 are equal to the components of mat1.
+<a name="line861"></a> *
+<a name="line862"></a> * @param {goog.vec.mat4d.Type} mat0 The first matrix.
+<a name="line863"></a> * @param {goog.vec.mat4d.Type} mat1 The second matrix.
+<a name="line864"></a> * @return {boolean} True if the the two matrices are equivalent.
+<a name="line865"></a> */
+<a name="line866"></a>goog.vec.mat4d.equals = function(mat0, mat1) {
+<a name="line867"></a>  return mat0.length == mat1.length &amp;&amp;
+<a name="line868"></a>      mat0[0] == mat1[0] &amp;&amp;
+<a name="line869"></a>      mat0[1] == mat1[1] &amp;&amp;
+<a name="line870"></a>      mat0[2] == mat1[2] &amp;&amp;
+<a name="line871"></a>      mat0[3] == mat1[3] &amp;&amp;
+<a name="line872"></a>      mat0[4] == mat1[4] &amp;&amp;
+<a name="line873"></a>      mat0[5] == mat1[5] &amp;&amp;
+<a name="line874"></a>      mat0[6] == mat1[6] &amp;&amp;
+<a name="line875"></a>      mat0[7] == mat1[7] &amp;&amp;
+<a name="line876"></a>      mat0[8] == mat1[8] &amp;&amp;
+<a name="line877"></a>      mat0[9] == mat1[9] &amp;&amp;
+<a name="line878"></a>      mat0[10] == mat1[10] &amp;&amp;
+<a name="line879"></a>      mat0[11] == mat1[11] &amp;&amp;
+<a name="line880"></a>      mat0[12] == mat1[12] &amp;&amp;
+<a name="line881"></a>      mat0[13] == mat1[13] &amp;&amp;
+<a name="line882"></a>      mat0[14] == mat1[14] &amp;&amp;
+<a name="line883"></a>      mat0[15] == mat1[15];
+<a name="line884"></a>};
+<a name="line885"></a>
+<a name="line886"></a>
+<a name="line887"></a>/**
+<a name="line888"></a> * Transforms the given vector with the given matrix storing the resulting,
+<a name="line889"></a> * transformed vector into resultVec. The input vector is multiplied against the
+<a name="line890"></a> * upper 3x4 matrix omitting the projective component.
+<a name="line891"></a> *
+<a name="line892"></a> * @param {goog.vec.mat4d.Type} mat The matrix supplying the transformation.
+<a name="line893"></a> * @param {goog.vec.vec3d.Type} vec The 3 element vector to transform.
+<a name="line894"></a> * @param {goog.vec.vec3d.Type} resultVec The 3 element vector to
+<a name="line895"></a> *     receive the results (may be vec).
+<a name="line896"></a> * @return {!goog.vec.vec3d.Type} return resultVec so that operations can be
+<a name="line897"></a> *     chained together.
+<a name="line898"></a> */
+<a name="line899"></a>goog.vec.mat4d.multVec3 = function(mat, vec, resultVec) {
+<a name="line900"></a>  var x = vec[0], y = vec[1], z = vec[2];
+<a name="line901"></a>  resultVec[0] = x * mat[0] + y * mat[4] + z * mat[8] + mat[12];
+<a name="line902"></a>  resultVec[1] = x * mat[1] + y * mat[5] + z * mat[9] + mat[13];
+<a name="line903"></a>  resultVec[2] = x * mat[2] + y * mat[6] + z * mat[10] + mat[14];
+<a name="line904"></a>  return resultVec;
+<a name="line905"></a>};
+<a name="line906"></a>
+<a name="line907"></a>
+<a name="line908"></a>/**
+<a name="line909"></a> * Transforms the given vector with the given matrix storing the resulting,
+<a name="line910"></a> * transformed vector into resultVec. The input vector is multiplied against the
+<a name="line911"></a> * upper 3x3 matrix omitting the projective component and translation
+<a name="line912"></a> * components.
+<a name="line913"></a> *
+<a name="line914"></a> * @param {goog.vec.mat4d.Type} mat The matrix supplying the transformation.
+<a name="line915"></a> * @param {goog.vec.vec3d.Type} vec The 3 element vector to transform.
+<a name="line916"></a> * @param {goog.vec.vec3d.Type} resultVec The 3 element vector to
+<a name="line917"></a> *     receive the results (may be vec).
+<a name="line918"></a> * @return {!goog.vec.vec3d.Type} return resultVec so that operations can be
+<a name="line919"></a> *     chained together.
+<a name="line920"></a> */
+<a name="line921"></a>goog.vec.mat4d.multVec3NoTranslate = function(mat, vec, resultVec) {
+<a name="line922"></a>  var x = vec[0], y = vec[1], z = vec[2];
+<a name="line923"></a>  resultVec[0] = x * mat[0] + y * mat[4] + z * mat[8];
+<a name="line924"></a>  resultVec[1] = x * mat[1] + y * mat[5] + z * mat[9];
+<a name="line925"></a>  resultVec[2] = x * mat[2] + y * mat[6] + z * mat[10];
+<a name="line926"></a>  return resultVec;
+<a name="line927"></a>};
+<a name="line928"></a>
+<a name="line929"></a>
+<a name="line930"></a>/**
+<a name="line931"></a> * Transforms the given vector with the given matrix storing the resulting,
+<a name="line932"></a> * transformed vector into resultVec. The input vector is multiplied against the
+<a name="line933"></a> * full 4x4 matrix with the homogeneous divide applied to reduce the 4 element
+<a name="line934"></a> * vector to a 3 element vector.
+<a name="line935"></a> *
+<a name="line936"></a> * @param {goog.vec.mat4d.Type} mat The matrix supplying the transformation.
+<a name="line937"></a> * @param {goog.vec.vec3d.Type} vec The 3 element vector to transform.
+<a name="line938"></a> * @param {goog.vec.vec3d.Type} resultVec The 3 element vector
+<a name="line939"></a> *     to receive the results (may be vec).
+<a name="line940"></a> * @return {!goog.vec.vec3d.Type} return resultVec so that operations can be
+<a name="line941"></a> *     chained together.
+<a name="line942"></a> */
+<a name="line943"></a>goog.vec.mat4d.multVec3Projective = function(mat, vec, resultVec) {
+<a name="line944"></a>  var x = vec[0], y = vec[1], z = vec[2];
+<a name="line945"></a>  var invw = 1 / (x * mat[3] + y * mat[7] + z * mat[11] + mat[15]);
+<a name="line946"></a>  resultVec[0] = (x * mat[0] + y * mat[4] + z * mat[8] + mat[12]) * invw;
+<a name="line947"></a>  resultVec[1] = (x * mat[1] + y * mat[5] + z * mat[9] + mat[13]) * invw;
+<a name="line948"></a>  resultVec[2] = (x * mat[2] + y * mat[6] + z * mat[10] + mat[14]) * invw;
+<a name="line949"></a>  return resultVec;
+<a name="line950"></a>};
+<a name="line951"></a>
+<a name="line952"></a>
+<a name="line953"></a>/**
+<a name="line954"></a> * Transforms the given vector with the given matrix storing the resulting,
+<a name="line955"></a> * transformed vector into resultVec.
+<a name="line956"></a> *
+<a name="line957"></a> * @param {goog.vec.mat4d.Type} mat The matrix supplying the transformation.
+<a name="line958"></a> * @param {goog.vec.vec4d.Type} vec The vector to transform.
+<a name="line959"></a> * @param {goog.vec.vec4d.Type} resultVec The vector to
+<a name="line960"></a> *     receive the results (may be vec).
+<a name="line961"></a> * @return {!goog.vec.vec4d.Type} return resultVec so that operations can be
+<a name="line962"></a> *     chained together.
+<a name="line963"></a> */
+<a name="line964"></a>goog.vec.mat4d.multVec4 = function(mat, vec, resultVec) {
+<a name="line965"></a>  var x = vec[0], y = vec[1], z = vec[2], w = vec[3];
+<a name="line966"></a>  resultVec[0] = x * mat[0] + y * mat[4] + z * mat[8] + w * mat[12];
+<a name="line967"></a>  resultVec[1] = x * mat[1] + y * mat[5] + z * mat[9] + w * mat[13];
+<a name="line968"></a>  resultVec[2] = x * mat[2] + y * mat[6] + z * mat[10] + w * mat[14];
+<a name="line969"></a>  resultVec[3] = x * mat[3] + y * mat[7] + z * mat[11] + w * mat[15];
+<a name="line970"></a>  return resultVec;
+<a name="line971"></a>};
+<a name="line972"></a>
+<a name="line973"></a>
+<a name="line974"></a>/**
+<a name="line975"></a> * Makes the given 4x4 matrix a translation matrix with x, y and z
+<a name="line976"></a> * translation factors.
+<a name="line977"></a> *
+<a name="line978"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line979"></a> * @param {number} x The translation along the x axis.
+<a name="line980"></a> * @param {number} y The translation along the y axis.
+<a name="line981"></a> * @param {number} z The translation along the z axis.
+<a name="line982"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line983"></a> *     chained.
+<a name="line984"></a> */
+<a name="line985"></a>goog.vec.mat4d.makeTranslate = function(mat, x, y, z) {
+<a name="line986"></a>  mat[0] = 1;
+<a name="line987"></a>  mat[1] = 0;
+<a name="line988"></a>  mat[2] = 0;
+<a name="line989"></a>  mat[3] = 0;
+<a name="line990"></a>  mat[4] = 0;
+<a name="line991"></a>  mat[5] = 1;
+<a name="line992"></a>  mat[6] = 0;
+<a name="line993"></a>  mat[7] = 0;
+<a name="line994"></a>  mat[8] = 0;
+<a name="line995"></a>  mat[9] = 0;
+<a name="line996"></a>  mat[10] = 1;
+<a name="line997"></a>  mat[11] = 0;
+<a name="line998"></a>  mat[12] = x;
+<a name="line999"></a>  mat[13] = y;
+<a name="line1000"></a>  mat[14] = z;
+<a name="line1001"></a>  mat[15] = 1;
+<a name="line1002"></a>  return mat;
+<a name="line1003"></a>};
+<a name="line1004"></a>
+<a name="line1005"></a>
+<a name="line1006"></a>/**
+<a name="line1007"></a> * Makes the given 4x4 matrix as a scale matrix with x, y and z scale factors.
+<a name="line1008"></a> *
+<a name="line1009"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1010"></a> * @param {number} x The scale along the x axis.
+<a name="line1011"></a> * @param {number} y The scale along the y axis.
+<a name="line1012"></a> * @param {number} z The scale along the z axis.
+<a name="line1013"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1014"></a> *     chained.
+<a name="line1015"></a> */
+<a name="line1016"></a>goog.vec.mat4d.makeScale = function(mat, x, y, z) {
+<a name="line1017"></a>  mat[0] = x;
+<a name="line1018"></a>  mat[1] = 0;
+<a name="line1019"></a>  mat[2] = 0;
+<a name="line1020"></a>  mat[3] = 0;
+<a name="line1021"></a>  mat[4] = 0;
+<a name="line1022"></a>  mat[5] = y;
+<a name="line1023"></a>  mat[6] = 0;
+<a name="line1024"></a>  mat[7] = 0;
+<a name="line1025"></a>  mat[8] = 0;
+<a name="line1026"></a>  mat[9] = 0;
+<a name="line1027"></a>  mat[10] = z;
+<a name="line1028"></a>  mat[11] = 0;
+<a name="line1029"></a>  mat[12] = 0;
+<a name="line1030"></a>  mat[13] = 0;
+<a name="line1031"></a>  mat[14] = 0;
+<a name="line1032"></a>  mat[15] = 1;
+<a name="line1033"></a>  return mat;
+<a name="line1034"></a>};
+<a name="line1035"></a>
+<a name="line1036"></a>
+<a name="line1037"></a>/**
+<a name="line1038"></a> * Makes the given 4x4 matrix a rotation matrix with the given rotation
+<a name="line1039"></a> * angle about the axis defined by the vector (ax, ay, az).
+<a name="line1040"></a> *
+<a name="line1041"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1042"></a> * @param {number} angle The rotation angle in radians.
+<a name="line1043"></a> * @param {number} ax The x component of the rotation axis.
+<a name="line1044"></a> * @param {number} ay The y component of the rotation axis.
+<a name="line1045"></a> * @param {number} az The z component of the rotation axis.
+<a name="line1046"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1047"></a> *     chained.
+<a name="line1048"></a> */
+<a name="line1049"></a>goog.vec.mat4d.makeRotate = function(mat, angle, ax, ay, az) {
+<a name="line1050"></a>  var c = Math.cos(angle);
+<a name="line1051"></a>  var d = 1 - c;
+<a name="line1052"></a>  var s = Math.sin(angle);
+<a name="line1053"></a>
+<a name="line1054"></a>  mat[0] = ax * ax * d + c;
+<a name="line1055"></a>  mat[1] = ax * ay * d + az * s;
+<a name="line1056"></a>  mat[2] = ax * az * d - ay * s;
+<a name="line1057"></a>  mat[3] = 0;
+<a name="line1058"></a>  mat[4] = ax * ay * d - az * s;
+<a name="line1059"></a>  mat[5] = ay * ay * d + c;
+<a name="line1060"></a>  mat[6] = ay * az * d + ax * s;
+<a name="line1061"></a>  mat[7] = 0;
+<a name="line1062"></a>  mat[8] = ax * az * d + ay * s;
+<a name="line1063"></a>  mat[9] = ay * az * d - ax * s;
+<a name="line1064"></a>  mat[10] = az * az * d + c;
+<a name="line1065"></a>  mat[11] = 0;
+<a name="line1066"></a>  mat[12] = 0;
+<a name="line1067"></a>  mat[13] = 0;
+<a name="line1068"></a>  mat[14] = 0;
+<a name="line1069"></a>  mat[15] = 1;
+<a name="line1070"></a>
+<a name="line1071"></a>  return mat;
+<a name="line1072"></a>};
+<a name="line1073"></a>
+<a name="line1074"></a>
+<a name="line1075"></a>/**
+<a name="line1076"></a> * Makes the given 4x4 matrix a rotation matrix with the given rotation
+<a name="line1077"></a> * angle about the X axis.
+<a name="line1078"></a> *
+<a name="line1079"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1080"></a> * @param {number} angle The rotation angle in radians.
+<a name="line1081"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1082"></a> *     chained.
+<a name="line1083"></a> */
+<a name="line1084"></a>goog.vec.mat4d.makeRotateX = function(mat, angle) {
+<a name="line1085"></a>  var c = Math.cos(angle);
+<a name="line1086"></a>  var s = Math.sin(angle);
+<a name="line1087"></a>
+<a name="line1088"></a>  mat[0] = 1;
+<a name="line1089"></a>  mat[1] = 0;
+<a name="line1090"></a>  mat[2] = 0;
+<a name="line1091"></a>  mat[3] = 0;
+<a name="line1092"></a>  mat[4] = 0;
+<a name="line1093"></a>  mat[5] = c;
+<a name="line1094"></a>  mat[6] = s;
+<a name="line1095"></a>  mat[7] = 0;
+<a name="line1096"></a>  mat[8] = 0;
+<a name="line1097"></a>  mat[9] = -s;
+<a name="line1098"></a>  mat[10] = c;
+<a name="line1099"></a>  mat[11] = 0;
+<a name="line1100"></a>  mat[12] = 0;
+<a name="line1101"></a>  mat[13] = 0;
+<a name="line1102"></a>  mat[14] = 0;
+<a name="line1103"></a>  mat[15] = 1;
+<a name="line1104"></a>
+<a name="line1105"></a>  return mat;
+<a name="line1106"></a>};
+<a name="line1107"></a>
+<a name="line1108"></a>
+<a name="line1109"></a>/**
+<a name="line1110"></a> * Makes the given 4x4 matrix a rotation matrix with the given rotation
+<a name="line1111"></a> * angle about the Y axis.
+<a name="line1112"></a> *
+<a name="line1113"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1114"></a> * @param {number} angle The rotation angle in radians.
+<a name="line1115"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1116"></a> *     chained.
+<a name="line1117"></a> */
+<a name="line1118"></a>goog.vec.mat4d.makeRotateY = function(mat, angle) {
+<a name="line1119"></a>  var c = Math.cos(angle);
+<a name="line1120"></a>  var s = Math.sin(angle);
+<a name="line1121"></a>
+<a name="line1122"></a>  mat[0] = c;
+<a name="line1123"></a>  mat[1] = 0;
+<a name="line1124"></a>  mat[2] = -s;
+<a name="line1125"></a>  mat[3] = 0;
+<a name="line1126"></a>  mat[4] = 0;
+<a name="line1127"></a>  mat[5] = 1;
+<a name="line1128"></a>  mat[6] = 0;
+<a name="line1129"></a>  mat[7] = 0;
+<a name="line1130"></a>  mat[8] = s;
+<a name="line1131"></a>  mat[9] = 0;
+<a name="line1132"></a>  mat[10] = c;
+<a name="line1133"></a>  mat[11] = 0;
+<a name="line1134"></a>  mat[12] = 0;
+<a name="line1135"></a>  mat[13] = 0;
+<a name="line1136"></a>  mat[14] = 0;
+<a name="line1137"></a>  mat[15] = 1;
+<a name="line1138"></a>
+<a name="line1139"></a>  return mat;
+<a name="line1140"></a>};
+<a name="line1141"></a>
+<a name="line1142"></a>
+<a name="line1143"></a>/**
+<a name="line1144"></a> * Makes the given 4x4 matrix a rotation matrix with the given rotation
+<a name="line1145"></a> * angle about the Z axis.
+<a name="line1146"></a> *
+<a name="line1147"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1148"></a> * @param {number} angle The rotation angle in radians.
+<a name="line1149"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1150"></a> *     chained.
+<a name="line1151"></a> */
+<a name="line1152"></a>goog.vec.mat4d.makeRotateZ = function(mat, angle) {
+<a name="line1153"></a>  var c = Math.cos(angle);
+<a name="line1154"></a>  var s = Math.sin(angle);
+<a name="line1155"></a>
+<a name="line1156"></a>  mat[0] = c;
+<a name="line1157"></a>  mat[1] = s;
+<a name="line1158"></a>  mat[2] = 0;
+<a name="line1159"></a>  mat[3] = 0;
+<a name="line1160"></a>  mat[4] = -s;
+<a name="line1161"></a>  mat[5] = c;
+<a name="line1162"></a>  mat[6] = 0;
+<a name="line1163"></a>  mat[7] = 0;
+<a name="line1164"></a>  mat[8] = 0;
+<a name="line1165"></a>  mat[9] = 0;
+<a name="line1166"></a>  mat[10] = 1;
+<a name="line1167"></a>  mat[11] = 0;
+<a name="line1168"></a>  mat[12] = 0;
+<a name="line1169"></a>  mat[13] = 0;
+<a name="line1170"></a>  mat[14] = 0;
+<a name="line1171"></a>  mat[15] = 1;
+<a name="line1172"></a>
+<a name="line1173"></a>  return mat;
+<a name="line1174"></a>};
+<a name="line1175"></a>
+<a name="line1176"></a>
+<a name="line1177"></a>/**
+<a name="line1178"></a> * Makes the given 4x4 matrix a perspective projection matrix.
+<a name="line1179"></a> *
+<a name="line1180"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1181"></a> * @param {number} left The coordinate of the left clipping plane.
+<a name="line1182"></a> * @param {number} right The coordinate of the right clipping plane.
+<a name="line1183"></a> * @param {number} bottom The coordinate of the bottom clipping plane.
+<a name="line1184"></a> * @param {number} top The coordinate of the top clipping plane.
+<a name="line1185"></a> * @param {number} near The distance to the near clipping plane.
+<a name="line1186"></a> * @param {number} far The distance to the far clipping plane.
+<a name="line1187"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1188"></a> *     chained.
+<a name="line1189"></a> */
+<a name="line1190"></a>goog.vec.mat4d.makeFrustum = function(
+<a name="line1191"></a>    mat, left, right, bottom, top, near, far) {
+<a name="line1192"></a>  var x = (2 * near) / (right - left);
+<a name="line1193"></a>  var y = (2 * near) / (top - bottom);
+<a name="line1194"></a>  var a = (right + left) / (right - left);
+<a name="line1195"></a>  var b = (top + bottom) / (top - bottom);
+<a name="line1196"></a>  var c = -(far + near) / (far - near);
+<a name="line1197"></a>  var d = -(2 * far * near) / (far - near);
+<a name="line1198"></a>
+<a name="line1199"></a>  mat[0] = x;
+<a name="line1200"></a>  mat[1] = 0;
+<a name="line1201"></a>  mat[2] = 0;
+<a name="line1202"></a>  mat[3] = 0;
+<a name="line1203"></a>  mat[4] = 0;
+<a name="line1204"></a>  mat[5] = y;
+<a name="line1205"></a>  mat[6] = 0;
+<a name="line1206"></a>  mat[7] = 0;
+<a name="line1207"></a>  mat[8] = a;
+<a name="line1208"></a>  mat[9] = b;
+<a name="line1209"></a>  mat[10] = c;
+<a name="line1210"></a>  mat[11] = -1;
+<a name="line1211"></a>  mat[12] = 0;
+<a name="line1212"></a>  mat[13] = 0;
+<a name="line1213"></a>  mat[14] = d;
+<a name="line1214"></a>  mat[15] = 0;
+<a name="line1215"></a>
+<a name="line1216"></a>  return mat;
+<a name="line1217"></a>};
+<a name="line1218"></a>
+<a name="line1219"></a>
+<a name="line1220"></a>/**
+<a name="line1221"></a> * Makse the given 4x4 matrix  perspective projection matrix given a
+<a name="line1222"></a> * field of view and aspect ratio.
+<a name="line1223"></a> *
+<a name="line1224"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1225"></a> * @param {number} fovy The field of view along the y (vertical) axis in
+<a name="line1226"></a> *     radians.
+<a name="line1227"></a> * @param {number} aspect The x (width) to y (height) aspect ratio.
+<a name="line1228"></a> * @param {number} near The distance to the near clipping plane.
+<a name="line1229"></a> * @param {number} far The distance to the far clipping plane.
+<a name="line1230"></a> * @return {goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1231"></a> *     chained.
+<a name="line1232"></a> */
+<a name="line1233"></a>goog.vec.mat4d.makePerspective = function(mat, fovy, aspect, near, far) {
+<a name="line1234"></a>  var angle = fovy / 2;
+<a name="line1235"></a>  var dz = far - near;
+<a name="line1236"></a>  var sinAngle = Math.sin(angle);
+<a name="line1237"></a>  if (dz == 0 || sinAngle == 0 || aspect == 0) {
+<a name="line1238"></a>    return mat;
+<a name="line1239"></a>  }
+<a name="line1240"></a>
+<a name="line1241"></a>  var cot = Math.cos(angle) / sinAngle;
+<a name="line1242"></a>
+<a name="line1243"></a>  mat[0] = cot / aspect;
+<a name="line1244"></a>  mat[1] = 0;
+<a name="line1245"></a>  mat[2] = 0;
+<a name="line1246"></a>  mat[3] = 0;
+<a name="line1247"></a>  mat[4] = 0;
+<a name="line1248"></a>  mat[5] = cot;
+<a name="line1249"></a>  mat[6] = 0;
+<a name="line1250"></a>  mat[7] = 0;
+<a name="line1251"></a>  mat[8] = 0;
+<a name="line1252"></a>  mat[9] = 0;
+<a name="line1253"></a>  mat[10] = -(far + near) / dz;
+<a name="line1254"></a>  mat[11] = -1;
+<a name="line1255"></a>  mat[12] = 0;
+<a name="line1256"></a>  mat[13] = 0;
+<a name="line1257"></a>  mat[14] = -(2 * near * far) / dz;
+<a name="line1258"></a>  mat[15] = 0;
+<a name="line1259"></a>
+<a name="line1260"></a>  return mat;
+<a name="line1261"></a>};
+<a name="line1262"></a>
+<a name="line1263"></a>
+<a name="line1264"></a>/**
+<a name="line1265"></a> * Makes the given 4x4 matrix an orthographic projection matrix.
+<a name="line1266"></a> *
+<a name="line1267"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1268"></a> * @param {number} left The coordinate of the left clipping plane.
+<a name="line1269"></a> * @param {number} right The coordinate of the right clipping plane.
+<a name="line1270"></a> * @param {number} bottom The coordinate of the bottom clipping plane.
+<a name="line1271"></a> * @param {number} top The coordinate of the top clipping plane.
+<a name="line1272"></a> * @param {number} near The distance to the near clipping plane.
+<a name="line1273"></a> * @param {number} far The distance to the far clipping plane.
+<a name="line1274"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1275"></a> *     chained.
+<a name="line1276"></a> */
+<a name="line1277"></a>goog.vec.mat4d.makeOrtho = function(mat, left, right, bottom, top, near, far) {
+<a name="line1278"></a>  var x = 2 / (right - left);
+<a name="line1279"></a>  var y = 2 / (top - bottom);
+<a name="line1280"></a>  var z = -2 / (far - near);
+<a name="line1281"></a>  var a = -(right + left) / (right - left);
+<a name="line1282"></a>  var b = -(top + bottom) / (top - bottom);
+<a name="line1283"></a>  var c = -(far + near) / (far - near);
+<a name="line1284"></a>
+<a name="line1285"></a>  mat[0] = x;
+<a name="line1286"></a>  mat[1] = 0;
+<a name="line1287"></a>  mat[2] = 0;
+<a name="line1288"></a>  mat[3] = 0;
+<a name="line1289"></a>  mat[4] = 0;
+<a name="line1290"></a>  mat[5] = y;
+<a name="line1291"></a>  mat[6] = 0;
+<a name="line1292"></a>  mat[7] = 0;
+<a name="line1293"></a>  mat[8] = 0;
+<a name="line1294"></a>  mat[9] = 0;
+<a name="line1295"></a>  mat[10] = z;
+<a name="line1296"></a>  mat[11] = 0;
+<a name="line1297"></a>  mat[12] = a;
+<a name="line1298"></a>  mat[13] = b;
+<a name="line1299"></a>  mat[14] = c;
+<a name="line1300"></a>  mat[15] = 1;
+<a name="line1301"></a>
+<a name="line1302"></a>  return mat;
+<a name="line1303"></a>};
+<a name="line1304"></a>
+<a name="line1305"></a>
+<a name="line1306"></a>/**
+<a name="line1307"></a> * Makes the given 4x4 matrix a modelview matrix of a camera so that
+<a name="line1308"></a> * the camera is &#39;looking at&#39; the given center point.
+<a name="line1309"></a> *
+<a name="line1310"></a> * Note that unlike most other goog.vec functions where we inline
+<a name="line1311"></a> * everything, this function does not inline various goog.vec
+<a name="line1312"></a> * functions.  This makes the code more readable, but somewhat
+<a name="line1313"></a> * less efficient.
+<a name="line1314"></a> *
+<a name="line1315"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1316"></a> * @param {goog.vec.vec3d.Type} eyePt The position of the eye point
+<a name="line1317"></a> *     (camera origin).
+<a name="line1318"></a> * @param {goog.vec.vec3d.Type} centerPt The point to aim the camera at.
+<a name="line1319"></a> * @param {goog.vec.vec3d.Type} worldUpVec The vector that identifies
+<a name="line1320"></a> *     the up direction for the camera.
+<a name="line1321"></a> * @return {goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1322"></a> *     chained.
+<a name="line1323"></a> */
+<a name="line1324"></a>goog.vec.mat4d.makeLookAt = function(mat, eyePt, centerPt, worldUpVec) {
+<a name="line1325"></a>  // Compute the direction vector from the eye point to the center point and
+<a name="line1326"></a>  // normalize.
+<a name="line1327"></a>  var fwdVec = goog.vec.mat4d.tmpvec4d_[0];
+<a name="line1328"></a>  goog.vec.vec3d.subtract(centerPt, eyePt, fwdVec);
+<a name="line1329"></a>  goog.vec.vec3d.normalize(fwdVec, fwdVec);
+<a name="line1330"></a>  fwdVec[3] = 0;
+<a name="line1331"></a>
+<a name="line1332"></a>  // Compute the side vector from the forward vector and the input up vector.
+<a name="line1333"></a>  var sideVec = goog.vec.mat4d.tmpvec4d_[1];
+<a name="line1334"></a>  goog.vec.vec3d.cross(fwdVec, worldUpVec, sideVec);
+<a name="line1335"></a>  goog.vec.vec3d.normalize(sideVec, sideVec);
+<a name="line1336"></a>  sideVec[3] = 0;
+<a name="line1337"></a>
+<a name="line1338"></a>  // Now the up vector to form the orthonormal basis.
+<a name="line1339"></a>  var upVec = goog.vec.mat4d.tmpvec4d_[2];
+<a name="line1340"></a>  goog.vec.vec3d.cross(sideVec, fwdVec, upVec);
+<a name="line1341"></a>  goog.vec.vec3d.normalize(upVec, upVec);
+<a name="line1342"></a>  upVec[3] = 0;
+<a name="line1343"></a>
+<a name="line1344"></a>  // Update the view matrix with the new orthonormal basis and position the
+<a name="line1345"></a>  // camera at the given eye point.
+<a name="line1346"></a>  goog.vec.vec3d.negate(fwdVec, fwdVec);
+<a name="line1347"></a>  goog.vec.mat4d.setRow(mat, 0, sideVec);
+<a name="line1348"></a>  goog.vec.mat4d.setRow(mat, 1, upVec);
+<a name="line1349"></a>  goog.vec.mat4d.setRow(mat, 2, fwdVec);
+<a name="line1350"></a>  goog.vec.mat4d.setRowValues(mat, 3, 0, 0, 0, 1);
+<a name="line1351"></a>  goog.vec.mat4d.translate(
+<a name="line1352"></a>      mat, -eyePt[0], -eyePt[1], -eyePt[2]);
+<a name="line1353"></a>
+<a name="line1354"></a>  return mat;
+<a name="line1355"></a>};
+<a name="line1356"></a>
+<a name="line1357"></a>
+<a name="line1358"></a>/**
+<a name="line1359"></a> * Decomposes a matrix into the lookAt vectors eyePt, fwdVec and worldUpVec.
+<a name="line1360"></a> * The matrix represents the modelview matrix of a camera. It is the inverse
+<a name="line1361"></a> * of lookAt except for the output of the fwdVec instead of centerPt.
+<a name="line1362"></a> * The centerPt itself cannot be recovered from a modelview matrix.
+<a name="line1363"></a> *
+<a name="line1364"></a> * Note that unlike most other goog.vec functions where we inline
+<a name="line1365"></a> * everything, this function does not inline various goog.vec
+<a name="line1366"></a> * functions.  This makes the code more readable, but somewhat
+<a name="line1367"></a> * less efficient.
+<a name="line1368"></a> *
+<a name="line1369"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1370"></a> * @param {goog.vec.vec3d.Type} eyePt The position of the eye point
+<a name="line1371"></a> *     (camera origin).
+<a name="line1372"></a> * @param {goog.vec.vec3d.Type} fwdVec The vector describing where
+<a name="line1373"></a> *     the camera points to.
+<a name="line1374"></a> * @param {goog.vec.vec3d.Type} worldUpVec The vector that
+<a name="line1375"></a> *     identifies the up direction for the camera.
+<a name="line1376"></a> * @return {boolean} True if the method succeeds, false otherwise.
+<a name="line1377"></a> *     The method can only fail if the inverse of viewMatrix is not defined.
+<a name="line1378"></a> */
+<a name="line1379"></a>goog.vec.mat4d.toLookAt = function(mat, eyePt, fwdVec, worldUpVec) {
+<a name="line1380"></a>  // Get eye of the camera.
+<a name="line1381"></a>  var matInverse = goog.vec.mat4d.tmpmat4d_[0];
+<a name="line1382"></a>  if (!goog.vec.mat4d.invert(mat, matInverse)) {
+<a name="line1383"></a>    // The input matrix does not have a valid inverse.
+<a name="line1384"></a>    return false;
+<a name="line1385"></a>  }
+<a name="line1386"></a>
+<a name="line1387"></a>  if (eyePt) {
+<a name="line1388"></a>    eyePt[0] = matInverse[12];
+<a name="line1389"></a>    eyePt[1] = matInverse[13];
+<a name="line1390"></a>    eyePt[2] = matInverse[14];
+<a name="line1391"></a>  }
+<a name="line1392"></a>
+<a name="line1393"></a>  // Get forward vector from the definition of lookAt.
+<a name="line1394"></a>  if (fwdVec || worldUpVec) {
+<a name="line1395"></a>    if (!fwdVec) {
+<a name="line1396"></a>      fwdVec = goog.vec.mat4d.tmpvec3d_[0];
+<a name="line1397"></a>    }
+<a name="line1398"></a>    fwdVec[0] = -mat[2];
+<a name="line1399"></a>    fwdVec[1] = -mat[6];
+<a name="line1400"></a>    fwdVec[2] = -mat[10];
+<a name="line1401"></a>    // Normalize forward vector.
+<a name="line1402"></a>    goog.vec.vec3d.normalize(fwdVec, fwdVec);
+<a name="line1403"></a>  }
+<a name="line1404"></a>
+<a name="line1405"></a>  if (worldUpVec) {
+<a name="line1406"></a>    // Get side vector from the definition of gluLookAt.
+<a name="line1407"></a>    var side = goog.vec.mat4d.tmpvec3d_[1];
+<a name="line1408"></a>    side[0] = mat[0];
+<a name="line1409"></a>    side[1] = mat[4];
+<a name="line1410"></a>    side[2] = mat[8];
+<a name="line1411"></a>    // Compute up vector as a up = side x forward.
+<a name="line1412"></a>    goog.vec.vec3d.cross(side, fwdVec, worldUpVec);
+<a name="line1413"></a>    // Normalize up vector.
+<a name="line1414"></a>    goog.vec.vec3d.normalize(worldUpVec, worldUpVec);
+<a name="line1415"></a>  }
+<a name="line1416"></a>  return true;
+<a name="line1417"></a>};
+<a name="line1418"></a>
+<a name="line1419"></a>
+<a name="line1420"></a>/**
+<a name="line1421"></a> * Makes the given 4x4 matrix a rotation matrix given Euler angles using
+<a name="line1422"></a> * the ZXZ convention.
+<a name="line1423"></a> * Given the euler angles [theta1, theta2, theta3], the rotation is defined as
+<a name="line1424"></a> * rotation = rotation_z(theta1) * rotation_x(theta2) * rotation_z(theta3),
+<a name="line1425"></a> * with theta1 in [0, 2 * pi], theta2 in [0, pi] and theta3 in [0, 2 * pi].
+<a name="line1426"></a> * rotation_x(theta) means rotation around the X axis of theta radians,
+<a name="line1427"></a> *
+<a name="line1428"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1429"></a> * @param {number} theta1 The angle of rotation around the Z axis in radians.
+<a name="line1430"></a> * @param {number} theta2 The angle of rotation around the X axis in radians.
+<a name="line1431"></a> * @param {number} theta3 The angle of rotation around the Z axis in radians.
+<a name="line1432"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1433"></a> *     chained.
+<a name="line1434"></a> */
+<a name="line1435"></a>goog.vec.mat4d.makeEulerZXZ = function(mat, theta1, theta2, theta3) {
+<a name="line1436"></a>  var c1 = Math.cos(theta1);
+<a name="line1437"></a>  var s1 = Math.sin(theta1);
+<a name="line1438"></a>
+<a name="line1439"></a>  var c2 = Math.cos(theta2);
+<a name="line1440"></a>  var s2 = Math.sin(theta2);
+<a name="line1441"></a>
+<a name="line1442"></a>  var c3 = Math.cos(theta3);
+<a name="line1443"></a>  var s3 = Math.sin(theta3);
+<a name="line1444"></a>
+<a name="line1445"></a>  mat[0] = c1 * c3 - c2 * s1 * s3;
+<a name="line1446"></a>  mat[1] = c2 * c1 * s3 + c3 * s1;
+<a name="line1447"></a>  mat[2] = s3 * s2;
+<a name="line1448"></a>  mat[3] = 0;
+<a name="line1449"></a>
+<a name="line1450"></a>  mat[4] = -c1 * s3 - c3 * c2 * s1;
+<a name="line1451"></a>  mat[5] = c1 * c2 * c3 - s1 * s3;
+<a name="line1452"></a>  mat[6] = c3 * s2;
+<a name="line1453"></a>  mat[7] = 0;
+<a name="line1454"></a>
+<a name="line1455"></a>  mat[8] = s2 * s1;
+<a name="line1456"></a>  mat[9] = -c1 * s2;
+<a name="line1457"></a>  mat[10] = c2;
+<a name="line1458"></a>  mat[11] = 0;
+<a name="line1459"></a>
+<a name="line1460"></a>  mat[12] = 0;
+<a name="line1461"></a>  mat[13] = 0;
+<a name="line1462"></a>  mat[14] = 0;
+<a name="line1463"></a>  mat[15] = 1;
+<a name="line1464"></a>
+<a name="line1465"></a>  return mat;
+<a name="line1466"></a>};
+<a name="line1467"></a>
+<a name="line1468"></a>
+<a name="line1469"></a>/**
+<a name="line1470"></a> * Decomposes a rotation matrix into Euler angles using the ZXZ convention so
+<a name="line1471"></a> * that rotation = rotation_z(theta1) * rotation_x(theta2) * rotation_z(theta3),
+<a name="line1472"></a> * with theta1 in [0, 2 * pi], theta2 in [0, pi] and theta3 in [0, 2 * pi].
+<a name="line1473"></a> * rotation_x(theta) means rotation around the X axis of theta radians.
+<a name="line1474"></a> *
+<a name="line1475"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1476"></a> * @param {goog.vec.vec3d.Type} euler The ZXZ Euler angles in
+<a name="line1477"></a> *     radians as [theta1, theta2, theta3].
+<a name="line1478"></a> * @param {boolean=} opt_theta2IsNegative Whether theta2 is in [-pi, 0] instead
+<a name="line1479"></a> *     of the default [0, pi].
+<a name="line1480"></a> * @return {!goog.vec.vec4d.Type} return euler so that operations can be
+<a name="line1481"></a> *     chained together.
+<a name="line1482"></a> */
+<a name="line1483"></a>goog.vec.mat4d.toEulerZXZ = function(mat, euler, opt_theta2IsNegative) {
+<a name="line1484"></a>  // There is an ambiguity in the sign of sinTheta2 because of the sqrt.
+<a name="line1485"></a>  var sinTheta2 = Math.sqrt(mat[2] * mat[2] + mat[6] * mat[6]);
+<a name="line1486"></a>
+<a name="line1487"></a>  // By default we explicitely constrain theta2 to be in [0, pi],
+<a name="line1488"></a>  // so sinTheta2 is always positive. We can change the behavior and specify
+<a name="line1489"></a>  // theta2 to be negative in [-pi, 0] with opt_Theta2IsNegative.
+<a name="line1490"></a>  var signTheta2 = opt_theta2IsNegative ? -1 : 1;
+<a name="line1491"></a>
+<a name="line1492"></a>  if (sinTheta2 &gt; goog.vec.EPSILON) {
+<a name="line1493"></a>    euler[2] = Math.atan2(mat[2] * signTheta2, mat[6] * signTheta2);
+<a name="line1494"></a>    euler[1] = Math.atan2(sinTheta2 * signTheta2, mat[10]);
+<a name="line1495"></a>    euler[0] = Math.atan2(mat[8] * signTheta2, -mat[9] * signTheta2);
+<a name="line1496"></a>  } else {
+<a name="line1497"></a>    // There is also an arbitrary choice for theta1 = 0 or theta2 = 0 here.
+<a name="line1498"></a>    // We assume theta1 = 0 as some applications do not allow the camera to roll
+<a name="line1499"></a>    // (i.e. have theta1 != 0).
+<a name="line1500"></a>    euler[0] = 0;
+<a name="line1501"></a>    euler[1] = Math.atan2(sinTheta2 * signTheta2, mat[10]);
+<a name="line1502"></a>    euler[2] = Math.atan2(mat[1], mat[0]);
+<a name="line1503"></a>  }
+<a name="line1504"></a>
+<a name="line1505"></a>  // Atan2 outputs angles in [-pi, pi] so we bring them back to [0, 2 * pi].
+<a name="line1506"></a>  euler[0] = (euler[0] + Math.PI * 2) % (Math.PI * 2);
+<a name="line1507"></a>  euler[2] = (euler[2] + Math.PI * 2) % (Math.PI * 2);
+<a name="line1508"></a>  // For theta2 we want the angle to be in [0, pi] or [-pi, 0] depending on
+<a name="line1509"></a>  // signTheta2.
+<a name="line1510"></a>  euler[1] = ((euler[1] * signTheta2 + Math.PI * 2) % (Math.PI * 2)) *
+<a name="line1511"></a>      signTheta2;
+<a name="line1512"></a>
+<a name="line1513"></a>  return euler;
+<a name="line1514"></a>};
+<a name="line1515"></a>
+<a name="line1516"></a>
+<a name="line1517"></a>/**
+<a name="line1518"></a> * Translates the given matrix by x,y,z.  Equvialent to:
+<a name="line1519"></a> * goog.vec.mat4d.multMat(
+<a name="line1520"></a> *     mat,
+<a name="line1521"></a> *     goog.vec.mat4d.makeTranslate(goog.vec.mat4d.create(), x, y, z),
+<a name="line1522"></a> *     mat);
+<a name="line1523"></a> *
+<a name="line1524"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1525"></a> * @param {number} x The translation along the x axis.
+<a name="line1526"></a> * @param {number} y The translation along the y axis.
+<a name="line1527"></a> * @param {number} z The translation along the z axis.
+<a name="line1528"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1529"></a> *     chained.
+<a name="line1530"></a> */
+<a name="line1531"></a>goog.vec.mat4d.translate = function(mat, x, y, z) {
+<a name="line1532"></a>  mat[12] += mat[0] * x + mat[4] * y + mat[8] * z;
+<a name="line1533"></a>  mat[13] += mat[1] * x + mat[5] * y + mat[9] * z;
+<a name="line1534"></a>  mat[14] += mat[2] * x + mat[6] * y + mat[10] * z;
+<a name="line1535"></a>  mat[15] += mat[3] * x + mat[7] * y + mat[11] * z;
+<a name="line1536"></a>
+<a name="line1537"></a>  return mat;
+<a name="line1538"></a>};
+<a name="line1539"></a>
+<a name="line1540"></a>
+<a name="line1541"></a>/**
+<a name="line1542"></a> * Scales the given matrix by x,y,z.  Equivalent to:
+<a name="line1543"></a> * goog.vec.mat4d.multMat(
+<a name="line1544"></a> *     mat,
+<a name="line1545"></a> *     goog.vec.mat4d.makeScale(goog.vec.mat4d.create(), x, y, z),
+<a name="line1546"></a> *     mat);
+<a name="line1547"></a> *
+<a name="line1548"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1549"></a> * @param {number} x The x scale factor.
+<a name="line1550"></a> * @param {number} y The y scale factor.
+<a name="line1551"></a> * @param {number} z The z scale factor.
+<a name="line1552"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1553"></a> *     chained.
+<a name="line1554"></a> */
+<a name="line1555"></a>goog.vec.mat4d.scale = function(mat, x, y, z) {
+<a name="line1556"></a>  mat[0] = mat[0] * x;
+<a name="line1557"></a>  mat[1] = mat[1] * x;
+<a name="line1558"></a>  mat[2] = mat[2] * x;
+<a name="line1559"></a>  mat[3] = mat[3] * x;
+<a name="line1560"></a>  mat[4] = mat[4] * y;
+<a name="line1561"></a>  mat[5] = mat[5] * y;
+<a name="line1562"></a>  mat[6] = mat[6] * y;
+<a name="line1563"></a>  mat[7] = mat[7] * y;
+<a name="line1564"></a>  mat[8] = mat[8] * z;
+<a name="line1565"></a>  mat[9] = mat[9] * z;
+<a name="line1566"></a>  mat[10] = mat[10] * z;
+<a name="line1567"></a>  mat[11] = mat[11] * z;
+<a name="line1568"></a>  mat[12] = mat[12];
+<a name="line1569"></a>  mat[13] = mat[13];
+<a name="line1570"></a>  mat[14] = mat[14];
+<a name="line1571"></a>  mat[15] = mat[15];
+<a name="line1572"></a>
+<a name="line1573"></a>  return mat;
+<a name="line1574"></a>};
+<a name="line1575"></a>
+<a name="line1576"></a>
+<a name="line1577"></a>/**
+<a name="line1578"></a> * Rotate the given matrix by angle about the x,y,z axis.  Equivalent to:
+<a name="line1579"></a> * goog.vec.mat4d.multMat(
+<a name="line1580"></a> *     mat,
+<a name="line1581"></a> *     goog.vec.mat4d.makeRotate(goog.vec.mat4d.create(), angle, x, y, z),
+<a name="line1582"></a> *     mat);
+<a name="line1583"></a> *
+<a name="line1584"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1585"></a> * @param {number} angle The angle in radians.
+<a name="line1586"></a> * @param {number} x The x component of the rotation axis.
+<a name="line1587"></a> * @param {number} y The y component of the rotation axis.
+<a name="line1588"></a> * @param {number} z The z component of the rotation axis.
+<a name="line1589"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1590"></a> *     chained.
+<a name="line1591"></a> */
+<a name="line1592"></a>goog.vec.mat4d.rotate = function(mat, angle, x, y, z) {
+<a name="line1593"></a>  var m00 = mat[0], m10 = mat[1], m20 = mat[2], m30 = mat[3];
+<a name="line1594"></a>  var m01 = mat[4], m11 = mat[5], m21 = mat[6], m31 = mat[7];
+<a name="line1595"></a>  var m02 = mat[8], m12 = mat[9], m22 = mat[10], m32 = mat[11];
+<a name="line1596"></a>
+<a name="line1597"></a>  var cosAngle = Math.cos(angle);
+<a name="line1598"></a>  var sinAngle = Math.sin(angle);
+<a name="line1599"></a>  var diffCosAngle = 1 - cosAngle;
+<a name="line1600"></a>  var r00 = x * x * diffCosAngle + cosAngle;
+<a name="line1601"></a>  var r10 = x * y * diffCosAngle + z * sinAngle;
+<a name="line1602"></a>  var r20 = x * z * diffCosAngle - y * sinAngle;
+<a name="line1603"></a>
+<a name="line1604"></a>  var r01 = x * y * diffCosAngle - z * sinAngle;
+<a name="line1605"></a>  var r11 = y * y * diffCosAngle + cosAngle;
+<a name="line1606"></a>  var r21 = y * z * diffCosAngle + x * sinAngle;
+<a name="line1607"></a>
+<a name="line1608"></a>  var r02 = x * z * diffCosAngle + y * sinAngle;
+<a name="line1609"></a>  var r12 = y * z * diffCosAngle - x * sinAngle;
+<a name="line1610"></a>  var r22 = z * z * diffCosAngle + cosAngle;
+<a name="line1611"></a>
+<a name="line1612"></a>  mat[0] = m00 * r00 + m01 * r10 + m02 * r20;
+<a name="line1613"></a>  mat[1] = m10 * r00 + m11 * r10 + m12 * r20;
+<a name="line1614"></a>  mat[2] = m20 * r00 + m21 * r10 + m22 * r20;
+<a name="line1615"></a>  mat[3] = m30 * r00 + m31 * r10 + m32 * r20;
+<a name="line1616"></a>  mat[4] = m00 * r01 + m01 * r11 + m02 * r21;
+<a name="line1617"></a>  mat[5] = m10 * r01 + m11 * r11 + m12 * r21;
+<a name="line1618"></a>  mat[6] = m20 * r01 + m21 * r11 + m22 * r21;
+<a name="line1619"></a>  mat[7] = m30 * r01 + m31 * r11 + m32 * r21;
+<a name="line1620"></a>  mat[8] = m00 * r02 + m01 * r12 + m02 * r22;
+<a name="line1621"></a>  mat[9] = m10 * r02 + m11 * r12 + m12 * r22;
+<a name="line1622"></a>  mat[10] = m20 * r02 + m21 * r12 + m22 * r22;
+<a name="line1623"></a>  mat[11] = m30 * r02 + m31 * r12 + m32 * r22;
+<a name="line1624"></a>
+<a name="line1625"></a>  return mat;
+<a name="line1626"></a>};
+<a name="line1627"></a>
+<a name="line1628"></a>
+<a name="line1629"></a>/**
+<a name="line1630"></a> * Rotate the given matrix by angle about the x axis.  Equivalent to:
+<a name="line1631"></a> * goog.vec.mat4d.multMat(
+<a name="line1632"></a> *     mat,
+<a name="line1633"></a> *     goog.vec.mat4d.makeRotateX(goog.vec.mat4d.create(), angle),
+<a name="line1634"></a> *     mat);
+<a name="line1635"></a> *
+<a name="line1636"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1637"></a> * @param {number} angle The angle in radians.
+<a name="line1638"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1639"></a> *     chained.
+<a name="line1640"></a> */
+<a name="line1641"></a>goog.vec.mat4d.rotateX = function(mat, angle) {
+<a name="line1642"></a>  var m01 = mat[4], m11 = mat[5], m21 = mat[6], m31 = mat[7];
+<a name="line1643"></a>  var m02 = mat[8], m12 = mat[9], m22 = mat[10], m32 = mat[11];
+<a name="line1644"></a>
+<a name="line1645"></a>  var c = Math.cos(angle);
+<a name="line1646"></a>  var s = Math.sin(angle);
+<a name="line1647"></a>
+<a name="line1648"></a>  mat[4] = m01 * c + m02 * s;
+<a name="line1649"></a>  mat[5] = m11 * c + m12 * s;
+<a name="line1650"></a>  mat[6] = m21 * c + m22 * s;
+<a name="line1651"></a>  mat[7] = m31 * c + m32 * s;
+<a name="line1652"></a>  mat[8] = m01 * -s + m02 * c;
+<a name="line1653"></a>  mat[9] = m11 * -s + m12 * c;
+<a name="line1654"></a>  mat[10] = m21 * -s + m22 * c;
+<a name="line1655"></a>  mat[11] = m31 * -s + m32 * c;
+<a name="line1656"></a>
+<a name="line1657"></a>  return mat;
+<a name="line1658"></a>};
+<a name="line1659"></a>
+<a name="line1660"></a>
+<a name="line1661"></a>/**
+<a name="line1662"></a> * Rotate the given matrix by angle about the y axis.  Equivalent to:
+<a name="line1663"></a> * goog.vec.mat4d.multMat(
+<a name="line1664"></a> *     mat,
+<a name="line1665"></a> *     goog.vec.mat4d.makeRotateY(goog.vec.mat4d.create(), angle),
+<a name="line1666"></a> *     mat);
+<a name="line1667"></a> *
+<a name="line1668"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1669"></a> * @param {number} angle The angle in radians.
+<a name="line1670"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1671"></a> *     chained.
+<a name="line1672"></a> */
+<a name="line1673"></a>goog.vec.mat4d.rotateY = function(mat, angle) {
+<a name="line1674"></a>  var m00 = mat[0], m10 = mat[1], m20 = mat[2], m30 = mat[3];
+<a name="line1675"></a>  var m02 = mat[8], m12 = mat[9], m22 = mat[10], m32 = mat[11];
+<a name="line1676"></a>
+<a name="line1677"></a>  var c = Math.cos(angle);
+<a name="line1678"></a>  var s = Math.sin(angle);
+<a name="line1679"></a>
+<a name="line1680"></a>  mat[0] = m00 * c + m02 * -s;
+<a name="line1681"></a>  mat[1] = m10 * c + m12 * -s;
+<a name="line1682"></a>  mat[2] = m20 * c + m22 * -s;
+<a name="line1683"></a>  mat[3] = m30 * c + m32 * -s;
+<a name="line1684"></a>  mat[8] = m00 * s + m02 * c;
+<a name="line1685"></a>  mat[9] = m10 * s + m12 * c;
+<a name="line1686"></a>  mat[10] = m20 * s + m22 * c;
+<a name="line1687"></a>  mat[11] = m30 * s + m32 * c;
+<a name="line1688"></a>
+<a name="line1689"></a>  return mat;
+<a name="line1690"></a>};
+<a name="line1691"></a>
+<a name="line1692"></a>
+<a name="line1693"></a>/**
+<a name="line1694"></a> * Rotate the given matrix by angle about the z axis.  Equivalent to:
+<a name="line1695"></a> * goog.vec.mat4d.multMat(
+<a name="line1696"></a> *     mat,
+<a name="line1697"></a> *     goog.vec.mat4d.makeRotateZ(goog.vec.mat4d.create(), angle),
+<a name="line1698"></a> *     mat);
+<a name="line1699"></a> *
+<a name="line1700"></a> * @param {goog.vec.mat4d.Type} mat The matrix.
+<a name="line1701"></a> * @param {number} angle The angle in radians.
+<a name="line1702"></a> * @return {!goog.vec.mat4d.Type} return mat so that operations can be
+<a name="line1703"></a> *     chained.
+<a name="line1704"></a> */
+<a name="line1705"></a>goog.vec.mat4d.rotateZ = function(mat, angle) {
+<a name="line1706"></a>  var m00 = mat[0], m10 = mat[1], m20 = mat[2], m30 = mat[3];
+<a name="line1707"></a>  var m01 = mat[4], m11 = mat[5], m21 = mat[6], m31 = mat[7];
+<a name="line1708"></a>
+<a name="line1709"></a>  var c = Math.cos(angle);
+<a name="line1710"></a>  var s = Math.sin(angle);
+<a name="line1711"></a>
+<a name="line1712"></a>  mat[0] = m00 * c + m01 * s;
+<a name="line1713"></a>  mat[1] = m10 * c + m11 * s;
+<a name="line1714"></a>  mat[2] = m20 * c + m21 * s;
+<a name="line1715"></a>  mat[3] = m30 * c + m31 * s;
+<a name="line1716"></a>  mat[4] = m00 * -s + m01 * c;
+<a name="line1717"></a>  mat[5] = m10 * -s + m11 * c;
+<a name="line1718"></a>  mat[6] = m20 * -s + m21 * c;
+<a name="line1719"></a>  mat[7] = m30 * -s + m31 * c;
+<a name="line1720"></a>
+<a name="line1721"></a>  return mat;
+<a name="line1722"></a>};
+<a name="line1723"></a>
+<a name="line1724"></a>
+<a name="line1725"></a>/**
+<a name="line1726"></a> * Retrieves the translation component of the transformation matrix.
+<a name="line1727"></a> *
+<a name="line1728"></a> * @param {goog.vec.mat4d.Type} mat The transformation matrix.
+<a name="line1729"></a> * @param {goog.vec.vec3d.Type} translation The vector for storing the
+<a name="line1730"></a> *     result.
+<a name="line1731"></a> * @return {!goog.vec.vec3d.Type} return translation so that operations can be
+<a name="line1732"></a> *     chained.
+<a name="line1733"></a> */
+<a name="line1734"></a>goog.vec.mat4d.getTranslation = function(mat, translation) {
+<a name="line1735"></a>  translation[0] = mat[12];
+<a name="line1736"></a>  translation[1] = mat[13];
+<a name="line1737"></a>  translation[2] = mat[14];
+<a name="line1738"></a>  return translation;
+<a name="line1739"></a>};
+<a name="line1740"></a>
+<a name="line1741"></a>
+<a name="line1742"></a>/**
+<a name="line1743"></a> * @type {Array.&lt;goog.vec.vec3d.Type&gt;}
+<a name="line1744"></a> * @private
+<a name="line1745"></a> */
+<a name="line1746"></a>goog.vec.mat4d.tmpvec3d_ = [
+<a name="line1747"></a>  goog.vec.vec3d.create(),
+<a name="line1748"></a>  goog.vec.vec3d.create()
+<a name="line1749"></a>];
+<a name="line1750"></a>
+<a name="line1751"></a>
+<a name="line1752"></a>/**
+<a name="line1753"></a> * @type {Array.&lt;goog.vec.vec4d.Type&gt;}
+<a name="line1754"></a> * @private
+<a name="line1755"></a> */
+<a name="line1756"></a>goog.vec.mat4d.tmpvec4d_ = [
+<a name="line1757"></a>  goog.vec.vec4d.create(),
+<a name="line1758"></a>  goog.vec.vec4d.create(),
+<a name="line1759"></a>  goog.vec.vec4d.create()
+<a name="line1760"></a>];
+<a name="line1761"></a>
+<a name="line1762"></a>
+<a name="line1763"></a>/**
+<a name="line1764"></a> * @type {Array.&lt;goog.vec.mat4d.Type&gt;}
+<a name="line1765"></a> * @private
+<a name="line1766"></a> */
+<a name="line1767"></a>goog.vec.mat4d.tmpmat4d_ = [
+<a name="line1768"></a>  goog.vec.mat4d.create()
+<a name="line1769"></a>];
+</pre>
+
+
+</body>
+</html>

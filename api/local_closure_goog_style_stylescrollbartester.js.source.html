@@ -1,0 +1,129 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>stylescrollbartester.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_style_stylescrollbartester.js.html">stylescrollbartester.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Shared unit tests for scrollbar measurement.
+<a name="line17"></a> *
+<a name="line18"></a> * @author flan@google.com (Ian Flanigan)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.styleScrollbarTester&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line24"></a>goog.require(&#39;goog.style&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line26"></a>goog.setTestOnly(&#39;goog.styleScrollbarTester&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Tests the scrollbar width calculation. Assumes that there is an element with
+<a name="line31"></a> * id &#39;test-scrollbarwidth&#39; in the page.
+<a name="line32"></a> */
+<a name="line33"></a>function testScrollbarWidth() {
+<a name="line34"></a>  var width = goog.style.getScrollbarWidth();
+<a name="line35"></a>  assertTrue(width &gt; 0);
+<a name="line36"></a>
+<a name="line37"></a>  var outer = goog.dom.getElement(&#39;test-scrollbarwidth&#39;);
+<a name="line38"></a>  var inner = goog.dom.getElementsByTagNameAndClass(&#39;div&#39;, null, outer)[0];
+<a name="line39"></a>  assertTrue(&#39;should have a scroll bar&#39;,
+<a name="line40"></a>      hasVerticalScroll(outer));
+<a name="line41"></a>  assertTrue(&#39;should have a scroll bar&#39;,
+<a name="line42"></a>      hasHorizontalScroll(outer));
+<a name="line43"></a>
+<a name="line44"></a>  // Get the inner div absolute width
+<a name="line45"></a>  goog.style.setStyle(outer, &#39;width&#39;, &#39;100%&#39;);
+<a name="line46"></a>  assertTrue(&#39;should have a scroll bar&#39;,
+<a name="line47"></a>      hasVerticalScroll(outer));
+<a name="line48"></a>  assertFalse(&#39;should not have a scroll bar&#39;,
+<a name="line49"></a>      hasHorizontalScroll(outer));
+<a name="line50"></a>  var innerAbsoluteWidth = inner.offsetWidth;
+<a name="line51"></a>
+<a name="line52"></a>  // Leave the vertical scroll and remove the horizontal by using the scroll
+<a name="line53"></a>  // bar width calculation.
+<a name="line54"></a>  goog.style.setStyle(outer, &#39;width&#39;,
+<a name="line55"></a>      (innerAbsoluteWidth + width) + &#39;px&#39;);
+<a name="line56"></a>  assertTrue(&#39;should have a scroll bar&#39;,
+<a name="line57"></a>      hasVerticalScroll(outer));
+<a name="line58"></a>  assertFalse(&#39;should not have a scroll bar&#39;,
+<a name="line59"></a>      hasHorizontalScroll(outer));
+<a name="line60"></a>
+<a name="line61"></a>  // verify by adding 1 more pixel (brings back the vertical scroll bar).
+<a name="line62"></a>  goog.style.setStyle(outer, &#39;width&#39;,
+<a name="line63"></a>      (innerAbsoluteWidth + width - 1) + &#39;px&#39;);
+<a name="line64"></a>  assertTrue(&#39;should have a scroll bar&#39;,
+<a name="line65"></a>      hasVerticalScroll(outer));
+<a name="line66"></a>  assertTrue(&#39;should have a scroll bar&#39;,
+<a name="line67"></a>      hasHorizontalScroll(outer));
+<a name="line68"></a>}
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>function hasVerticalScroll(el) {
+<a name="line72"></a>  return el.clientWidth != 0 &amp;&amp; el.offsetWidth - el.clientWidth &gt; 0;
+<a name="line73"></a>}
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>function hasHorizontalScroll(el) {
+<a name="line77"></a>  return el.clientHeight != 0 &amp;&amp; el.offsetHeight - el.clientHeight &gt; 0;
+<a name="line78"></a>}
+</pre>
+
+
+</body>
+</html>

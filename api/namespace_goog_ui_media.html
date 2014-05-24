@@ -1,0 +1,361 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>media (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">ui.media</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_FlashObject.html">
+          goog.ui.media.FlashObject</a><br/>
+        <div class="class-details">A very simple flash wrapper, that allows you to create flash object
+programmatically, instead of embedding your own HTML. It extends
+<code> goog.ui.Component</code>, which makes it very easy to be embedded on the
+page.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_FlickrSet.html">
+          goog.ui.media.FlickrSet</a><br/>
+        <div class="class-details">Subclasses a goog.ui.media.MediaRenderer to provide a FlickrSet specific
+media renderer.
+
+This class knows how to parse FlickrSet URLs, and render the DOM structure
+of flickr set players. This class is meant to be used as a singleton static
+stateless class, that takes <code> goog.ui.media.Media</code> instances and renders
+it. It expects <code> goog.ui.media.Media.getModel</code> to return a well formed,
+previously constructed, set id ,
+which is the data model this renderer will use to construct the DOM
+structure.  for a example of
+constructing a control with this renderer.
+
+This design is patterned after
+<a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
+
+It uses <code> goog.ui.media.FlashObject</code> to embed the flash object.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_FlickrSetModel.html">
+          goog.ui.media.FlickrSetModel</a><br/>
+        <div class="class-details">The <code> goog.ui.media.FlickrAlbum</code> media data model. It stores a required
+<code> userId</code> and <code> setId</code> fields, sets the flickr Set URL, and
+allows a few optional parameters.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_GoogleVideo.html">
+          goog.ui.media.GoogleVideo</a><br/>
+        <div class="class-details">Subclasses a goog.ui.media.MediaRenderer to provide a GoogleVideo specific
+media renderer.
+
+This class knows how to parse GoogleVideo URLs, and render the DOM structure
+of GoogleVideo video players. This class is meant to be used as a singleton
+static stateless class, that takes <code> goog.ui.media.Media</code> instances and
+renders it. It expects <code> goog.ui.media.Media.getModel</code> to return a well
+formed, previously constructed, GoogleVideo video id, which is the data model
+this renderer will use to construct the DOM structure.
+ for a example of constructing a
+control with this renderer.
+
+This design is patterned after <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
+
+It uses <code> goog.ui.media.FlashObject</code> to embed the flash object.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_GoogleVideoModel.html">
+          goog.ui.media.GoogleVideoModel</a><br/>
+        <div class="class-details">The <code> goog.ui.media.GoogleVideo</code> media data model. It stores a required
+<code> videoId</code> field, sets the GoogleVideo URL, and allows a few optional
+parameters.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_Media.html">
+          goog.ui.media.Media</a><br/>
+        <div class="class-details">Provides the control mechanism of media types.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_MediaModel.html">
+          goog.ui.media.MediaModel</a><br/>
+        <div class="class-details">An base data value class for all media data models.
+
+MediaModels are exact matches to the fields defined in the Yahoo RSS media
+specification <code> <a href="http://search.yahoo.com/mrss/">http://search.yahoo.com/mrss/</a></code>.
+
+The current common data shared by medias is to have URLs, mime types,
+captions, descriptions, thumbnails and players. Some of these may not be
+available, or applications may not want to render them, so <code> null</code>
+values are allowed. <code> goog.ui.media.MediaRenderer</code> checks whether the
+values are available before creating DOMs for them.
+
+TODO(user): support asynchronous data models by subclassing
+<code> goog.events.EventTarget</code> or <code> goog.ds.DataNode</code>. Understand why
+<code> <a href="http://goto/datanode">http://goto/datanode</a></code> is not available in closure. Add setters to
+MediaModel once this is supported.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_MediaRenderer.html">
+          goog.ui.media.MediaRenderer</a><br/>
+        <div class="class-details">Base class of all media renderers. Provides the common renderer functionality
+of medias.
+
+The current common functionality shared by Medias is to have an outer frame
+that gets highlighted on mouse hover.
+
+TODO(user): implement more common UI behavior, as needed.
+
+NOTE(user): I am not enjoying how the subclasses are changing their state
+through setState() ... maybe provide abstract methods like
+goog.ui.media.MediaRenderer.prototype.preview = goog.abstractMethod;
+goog.ui.media.MediaRenderer.prototype.play = goog.abstractMethod;
+goog.ui.media.MediaRenderer.prototype.minimize = goog.abstractMethod;
+goog.ui.media.MediaRenderer.prototype.maximize = goog.abstractMethod;
+and call them on this parent class setState ?
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_Mp3.html">
+          goog.ui.media.Mp3</a><br/>
+        <div class="class-details">Subclasses a goog.ui.media.MediaRenderer to provide a Mp3 specific media
+renderer.
+
+This class knows how to parse mp3 URLs, and render the DOM structure
+of mp3 flash players. This class is meant to be used as a singleton static
+stateless class, that takes <code> goog.ui.media.Media</code> instances and renders
+it. It expects <code> goog.ui.media.Media.getModel</code> to return a well formed,
+previously checked, mp3 URL ,
+which is the data model this renderer will use to construct the DOM
+structure.  for an example of
+constructing a control with this renderer.
+
+This design is patterned after <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
+
+It uses <code> goog.ui.media.FlashObject</code> to embed the flash object.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_Photo.html">
+          goog.ui.media.Photo</a><br/>
+        <div class="class-details">Subclasses a goog.ui.media.MediaRenderer to provide a Photo specific media
+renderer. Provides a base class for any other renderer that wants to display
+photos.
+
+This class is meant to be used as a singleton static stateless class, that
+takes <code> goog.ui.media.Media</code> instances and renders it.
+
+This design is patterned after
+<a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_PicasaAlbum.html">
+          goog.ui.media.PicasaAlbum</a><br/>
+        <div class="class-details">Subclasses a goog.ui.media.MediaRenderer to provide a Picasa specific media
+renderer.
+
+This class knows how to parse picasa URLs, and render the DOM structure
+of picasa album players and previews. This class is meant to be used as a
+singleton static stateless class, that takes <code> goog.ui.media.Media</code>
+instances and renders it. It expects <code> goog.ui.media.Media.getModel</code> to
+return a well formed, previously constructed, object with a user and album
+fields , which is the data model
+this renderer will use to construct the DOM structure.
+ for a example of constructing a
+control with this renderer.
+
+goog.ui.media.PicasaAlbum currently displays a picasa-made flash slideshow
+with the photos, but could possibly display a handwritten js photo viewer,
+in case flash is not available.
+
+This design is patterned after <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
+
+It uses <code> goog.ui.media.FlashObject</code> to embed the flash object.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_PicasaAlbumModel.html">
+          goog.ui.media.PicasaAlbumModel</a><br/>
+        <div class="class-details">The <code> goog.ui.media.PicasaAlbum</code> media data model. It stores a required
+<code> userId</code> and <code> albumId</code> fields, sets the picasa album URL, and
+allows a few optional parameters.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_Vimeo.html">
+          goog.ui.media.Vimeo</a><br/>
+        <div class="class-details">Subclasses a goog.ui.media.MediaRenderer to provide a Vimeo specific media
+renderer.
+
+This class knows how to parse Vimeo URLs, and render the DOM structure
+of vimeo video players. This class is meant to be used as a singleton static
+stateless class, that takes <code> goog.ui.media.Media</code> instances and renders
+it. It expects <code> goog.ui.media.Media.getModel</code> to return a well formed,
+previously constructed, vimeoId , which is
+the data model this renderer will use to construct the DOM structure.
+ for a example of constructing a control
+with this renderer.
+
+This design is patterned after <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
+
+It uses <code> goog.ui.media.FlashObject</code> to embed the flash object.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_VimeoModel.html">
+          goog.ui.media.VimeoModel</a><br/>
+        <div class="class-details">The <code> goog.ui.media.Vimeo</code> media data model. It stores a required
+<code> videoId</code> field, sets the vimeo URL, and allows a few optional
+parameters.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_Youtube.html">
+          goog.ui.media.Youtube</a><br/>
+        <div class="class-details">Subclasses a goog.ui.media.MediaRenderer to provide a Youtube specific media
+renderer.
+
+This class knows how to parse youtube urls, and render the DOM structure
+of youtube video players and previews. This class is meant to be used as a
+singleton static stateless class, that takes <code> goog.ui.media.Media</code>
+instances and renders it. It expects <code> goog.ui.media.Media.getModel</code> to
+return a well formed, previously constructed, youtube video id, which is the
+data model this renderer will use to construct the DOM structure.
+ for a example of constructing a
+control with this renderer.
+
+goog.ui.media.Youtube currently supports all <code> goog.ui.Component.State</code>.
+It will change its DOM structure between SELECTED and !SELECTED, and rely on
+CSS definitions on the others. On !SELECTED, the renderer will render a
+youtube static <img/>, with a thumbnail of the video. On SELECTED, the
+renderer will append to the DOM a flash object, that contains the youtube
+video.
+
+This design is patterned after <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
+
+It uses <code> goog.ui.media.FlashObject</code> to embed the flash object.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_YoutubeModel.html">
+          goog.ui.media.YoutubeModel</a><br/>
+        <div class="class-details">The <code> goog.ui.media.Youtube</code> media data model. It stores a required
+<code> videoId</code> field, sets the youtube URL, and allows a few optional
+parameters.
+
+</div>
+ </div>
+   
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package ui</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="ui.media"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1813 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>AvlTree (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">structs.AvlTree</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Constructs an AVL-Tree, which uses the specified comparator to order its
+values. The values can be accessed efficiently in their sorted order since
+the tree enforces a O(logn) maximum height.
+
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_structs_avltree.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/structs/avltree.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td>goog.structs.AvlTree</td><td></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+</table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.structs.AvlTree(<span><span class="arg">opt_comparator</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_comparator</span>
+        : <span class="type">Function=</span>
+        <div class="entryOverview">Function used to order the tree's nodes.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_structs_AvlTree.html">
+              goog.structs.AvlTree
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.add"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">add<span class="args">(<span class="arg">value</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Inserts a node into the tree with the specified value if the tree does
+not already contain a node with the specified value. If the value is
+inserted, the tree is balanced to enforce the AVL-Tree height property.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type">T</span>
+        <div class="entryOverview">Value to insert into the tree.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether value was inserted into the tree.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line138">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.balance_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">balance_<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Ensures that the specified node and all its ancestors are balanced. If they
+are not, performs left and right tree rotations to achieve a balanced
+tree. This method assumes that at most 2 rotations are necessary to balance
+the tree (which is true for AVL-trees that are balanced after each node is
+added or removed).
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T</span>&gt;
+        <div class="entryOverview">Node to begin balance from.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line544">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.clear"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">clear<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes all nodes from the tree.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line229">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.contains"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">contains<span class="args">(<span class="arg">value</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns true if the tree contains a node with the specified value, false
+otherwise.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type">T</span>
+        <div class="entryOverview">Value to find in the tree.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the tree contains a node with the specified value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line244">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.getCount"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getCount<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the number of values stored in the tree.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The number of values stored in the tree.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line318">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.getHeight"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getHeight<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the height of the tree (the maximum depth). This height should
+always be &lt;= 1.4405*(Math.log(n+2)/Math.log(2))-1.3277, where n is the
+number of nodes in the tree.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The height of the tree.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line366">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.getKthNode_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getKthNode_<span class="args">(<span class="arg">k</span>,&nbsp;<span class="arg">opt_rootNode</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the node in the tree that has k nodes before it in an in-order
+traversal, optionally rooted at <code> opt_rootNode</code>.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">k</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The number of nodes before the node to be returned in an
+    in-order traversal, where 0 &lt;= k &lt; root.count.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_rootNode</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T></span>&gt;
+        <div class="entryOverview">Optional root node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T</span>&gt;&nbsp;
+            The node at the specified index.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line746">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.getKthValue"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getKthValue<span class="args">(<span class="arg">k</span>)</span>
+        </span>
+        &#8658; <span class="type">T</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a k-th smallest value, based on the comparator, where 0 &lt;= k &lt;
+this.getCount().
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">k</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The number k.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">T</span>&nbsp;
+            The k-th smallest value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line329">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.getMaxNode_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getMaxNode_<span class="args">(<span class="arg">opt_rootNode</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the node with the largest value in tree, optionally rooted at
+opt_rootNode.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_rootNode</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T></span>&gt;
+        <div class="entryOverview">Optional root node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T</span>&gt;&nbsp;
+            The node with the largest value in
+    the tree.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line797">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.getMaximum"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getMaximum<span class="args">()</span>
+        </span>
+        &#8658; <span class="type">T</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the value u, such that u is contained in the tree and u &gt; v, for all
+values v in the tree where v != u.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">T</span>&nbsp;
+            The maximum value contained in the tree.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line354">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.getMinNode_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getMinNode_<span class="args">(<span class="arg">opt_rootNode</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the node with the smallest value in tree, optionally rooted at
+<code> opt_rootNode</code>.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_rootNode</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T></span>&gt;
+        <div class="entryOverview">Optional root node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T</span>&gt;&nbsp;
+            The node with the smallest value in
+    the tree.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line769">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.getMinimum"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getMinimum<span class="args">()</span>
+        </span>
+        &#8658; <span class="type">T</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the value u, such that u is contained in the tree and u &lt; v, for all
+values v in the tree where v != u.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">T</span>&nbsp;
+            The minimum value contained in the tree.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line343">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.getValues"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getValues<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">T</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Inserts the values stored in the tree into a new Array and returns the Array.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">T</span>&gt;&nbsp;
+            An array containing all of the trees values in sorted
+    order.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line377">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.inOrderTraverse"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">inOrderTraverse<span class="args">(<span class="arg">func</span>,&nbsp;<span class="arg">opt_startValue</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Performs an in-order traversal of the tree and calls <code> func</code> with each
+traversed node, optionally starting from the smallest node with a value &gt;= to
+the specified start value. The traversal ends after traversing the tree's
+maximum node or when <code> func</code> returns a value that evaluates to true.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">func</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+        <div class="entryOverview">Function to call on each traversed node.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_startValue</span>
+        : <span class="type">Object=</span>
+        <div class="entryOverview">If specified, traversal will begin on the
+   node with the smallest value &gt;= opt_startValue.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line396">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.indexOf"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">indexOf<span class="args">(<span class="arg">value</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the index (in an in-order traversal) of the node in the tree with
+the specified value. For example, the minimum value in the tree will
+return an index of 0 and the maximum will return an index of n - 1 (where
+n is the number of nodes in the tree).  If the value is not found then -1
+is returned.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type">T</span>
+        <div class="entryOverview">Value in the tree whose in-order index is returned.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The in-order index of the given value in the
+    tree or -1 if the value is not found.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line278">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.leftRotate_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">leftRotate_<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Performs a left tree rotation on the specified node.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T</span>&gt;
+        <div class="entryOverview">Pivot node to rotate from.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line586">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.remove"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">remove<span class="args">(<span class="arg">value</span>)</span>
+        </span>
+        &#8658; <span class="type">T</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes a node from the tree with the specified value if the tree contains a
+node with this value. If a node is removed the tree is balanced to enforce
+the AVL-Tree height property. The value of the removed node is returned.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type">T</span>
+        <div class="entryOverview">Value to find and remove from the tree.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">T</span>&nbsp;
+            The value of the removed node or null if the value was not in
+    the tree.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line202">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.removeNode_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">removeNode_<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes the specified node from the tree and ensures the tree still
+maintains the AVL-tree balance.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T</span>&gt;
+        <div class="entryOverview">The node to be removed.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line651">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.reverseOrderTraverse"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">reverseOrderTraverse<span class="args">(<span class="arg">func</span>,&nbsp;<span class="arg">opt_startValue</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Performs a reverse-order traversal of the tree and calls <code> func</code> with
+each traversed node, optionally starting from the largest node with a value
+&lt;= to the specified start value. The traversal ends after traversing the
+tree's minimum node or when func returns a value that evaluates to true.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">func</span>
+        : <span class="type">function(T</span>)<span>:?</span>
+        <div class="entryOverview">Function to call on each traversed node.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_startValue</span>
+        : <span class="type">Object=</span>
+        <div class="entryOverview">If specified, traversal will begin on the
+   node with the largest value &lt;= opt_startValue.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line457">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.rightRotate_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">rightRotate_<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Performs a right tree rotation on the specified node.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T</span>&gt;
+        <div class="entryOverview">Pivot node to rotate from.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line618">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.prototype.traverse_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">traverse_<span class="args">(<span class="arg">traversalFunc</span>,&nbsp;<span class="arg">opt_startNode</span>,&nbsp;<span class="arg">opt_endNode</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Performs a traversal defined by the supplied <code> traversalFunc</code>. The first
+call to <code> traversalFunc</code> is passed the root or the optionally specified
+startNode. After that, calls <code> traversalFunc</code> with the node returned
+by the previous call to <code> traversalFunc</code> until <code> traversalFunc</code>
+returns null or the optionally specified endNode. The first call to
+traversalFunc is passed the root or the optionally specified startNode.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">traversalFunc</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+        <div class="entryOverview">Function used to traverse the tree. Takes a
+    node as a parameter and returns a node.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_startNode</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T></span>&gt;
+        <div class="entryOverview">The node at which the
+    traversal begins.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_endNode</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>.&lt;<span class="type">T></span>&gt;
+        <div class="entryOverview">The node at which the
+    traversal ends.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line524">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_structs_AvlTree.html">
+              goog.structs.AvlTree
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.AvlTree.prototype.comparator_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">comparator_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Comparison function used to compare values in the tree. This function should
+take two values, a and b, and return x where:
+<pre class="lang-js prettyprint">
+ x &lt; 0 if a &lt; b,
+ x &gt; 0 if a &gt; b,
+ x = 0 otherwise
+</pre>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line108">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.AvlTree.prototype.maxNode_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">maxNode_</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       Pointer to the node with the largest value in the tree.
+
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line126">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.AvlTree.prototype.minNode_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">minNode_</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       Pointer to the node with the smallest value in the tree.
+
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line117">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.AvlTree.prototype.root_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">root_</span>
+        : <span class="type"><a href="class_goog_structs_AvlTree_Node.html">goog.structs.AvlTree.Node</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       Pointer to the root node of the tree.
+
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line93">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Static Methods</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.AvlTree.DEFAULT_COMPARATOR_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.structs.AvlTree.</span><span class="entryName">DEFAULT_COMPARATOR_<span class="args">(<span class="arg">a</span>,&nbsp;<span class="arg">b</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       String comparison function used to compare values in the tree. This function
+is used by default if no comparator is specified in the tree's constructor.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">a</span>
+        : <span class="type">T</span>
+        <div class="entryOverview">The first value.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">b</span>
+        : <span class="type">T</span>
+        <div class="entryOverview">The second value.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            -1 if a &lt; b, 1 if a &gt; b, 0 if a = b.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_avltree.js.source.html#line78">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package structs</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="structs.AvlTree"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

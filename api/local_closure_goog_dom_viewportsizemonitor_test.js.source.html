@@ -1,0 +1,188 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>viewportsizemonitor_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_viewportsizemonitor_test.js.html">viewportsizemonitor_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.dom.ViewportSizeMonitorTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.dom.ViewportSizeMonitorTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom.ViewportSizeMonitor&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line23"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line27"></a>
+<a name="line28"></a>var propertyReplacer, fakeWindow, viewportSizeMonitor, mockClock;
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>function FakeWindow() {
+<a name="line32"></a>  goog.base(this);
+<a name="line33"></a>}
+<a name="line34"></a>goog.inherits(FakeWindow, goog.events.EventTarget);
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>FakeWindow.prototype.fireResize = function() {
+<a name="line38"></a>  return this.dispatchEvent(new FakeResizeEvent());
+<a name="line39"></a>};
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>function FakeResizeEvent(obj) {
+<a name="line43"></a>  this.type = goog.events.EventType.RESIZE;
+<a name="line44"></a>}
+<a name="line45"></a>goog.inherits(FakeResizeEvent, goog.events.Event);
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>function getViewportSize() {
+<a name="line49"></a>  return viewportSize;
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>function setViewportSize(w, h, fireEvent) {
+<a name="line54"></a>  this.viewportSize = new goog.math.Size(w, h);
+<a name="line55"></a>  if (fireEvent) {
+<a name="line56"></a>    fakeWindow.fireResize();
+<a name="line57"></a>  }
+<a name="line58"></a>}
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>var eventWasFired = {};
+<a name="line62"></a>function getListenerFn(id) {
+<a name="line63"></a>  return function() {
+<a name="line64"></a>    propertyReplacer.set(eventWasFired, id, true);
+<a name="line65"></a>  };
+<a name="line66"></a>}
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>function listenerWasCalled(id) {
+<a name="line70"></a>  return !!eventWasFired[id];
+<a name="line71"></a>}
+<a name="line72"></a>
+<a name="line73"></a>
+<a name="line74"></a>function setUp() {
+<a name="line75"></a>  propertyReplacer = new goog.testing.PropertyReplacer();
+<a name="line76"></a>  propertyReplacer.set(goog.dom, &#39;getViewportSize&#39;, getViewportSize);
+<a name="line77"></a>  mockClock = new goog.testing.MockClock();
+<a name="line78"></a>  mockClock.install();
+<a name="line79"></a>  fakeWindow = new FakeWindow();
+<a name="line80"></a>  setViewportSize(300, 300);
+<a name="line81"></a>  viewportSizeMonitor = new goog.dom.ViewportSizeMonitor(fakeWindow);
+<a name="line82"></a>}
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>function tearDown() {
+<a name="line86"></a>  propertyReplacer.reset();
+<a name="line87"></a>  mockClock.uninstall();
+<a name="line88"></a>}
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>function testResizeEvent() {
+<a name="line92"></a>  goog.events.listen(viewportSizeMonitor, goog.events.EventType.RESIZE,
+<a name="line93"></a>      getListenerFn(1));
+<a name="line94"></a>  assertFalse(&#39;Listener should not be called if window was not resized&#39;,
+<a name="line95"></a>      listenerWasCalled(1));
+<a name="line96"></a>  setViewportSize(300, 300, true);
+<a name="line97"></a>  assertFalse(&#39;Listener should not be called for bogus resize event&#39;,
+<a name="line98"></a>      listenerWasCalled(1));
+<a name="line99"></a>  setViewportSize(301, 301, true);
+<a name="line100"></a>  assertTrue(&#39;Listener should be called for valid resize event&#39;,
+<a name="line101"></a>      listenerWasCalled(1));
+<a name="line102"></a>}
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>function testInstanceGetter() {
+<a name="line106"></a>  var fakeWindow1 = new FakeWindow();
+<a name="line107"></a>  var monitor1 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
+<a name="line108"></a>      fakeWindow1);
+<a name="line109"></a>  var monitor2 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
+<a name="line110"></a>      fakeWindow1);
+<a name="line111"></a>  assertEquals(&#39;The same window should give us the same instance monitor&#39;,
+<a name="line112"></a>      monitor1, monitor2);
+<a name="line113"></a>
+<a name="line114"></a>  var fakeWindow2 = new FakeWindow();
+<a name="line115"></a>  var monitor3 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
+<a name="line116"></a>      fakeWindow2);
+<a name="line117"></a>  assertNotEquals(&#39;Different windows should give different instances&#39;,
+<a name="line118"></a>      monitor1, monitor3);
+<a name="line119"></a>
+<a name="line120"></a>  assertEquals(&#39;Monitors should match if opt_window is not provided&#39;,
+<a name="line121"></a>      goog.dom.ViewportSizeMonitor.getInstanceForWindow(),
+<a name="line122"></a>      goog.dom.ViewportSizeMonitor.getInstanceForWindow());
+<a name="line123"></a>}
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>function testRemoveInstanceForWindow() {
+<a name="line127"></a>  var fakeWindow1 = new FakeWindow();
+<a name="line128"></a>  var monitor1 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
+<a name="line129"></a>      fakeWindow1);
+<a name="line130"></a>
+<a name="line131"></a>  goog.dom.ViewportSizeMonitor.removeInstanceForWindow(fakeWindow1);
+<a name="line132"></a>  assertTrue(monitor1.isDisposed());
+<a name="line133"></a>
+<a name="line134"></a>  var monitor2 = goog.dom.ViewportSizeMonitor.getInstanceForWindow(
+<a name="line135"></a>      fakeWindow1);
+<a name="line136"></a>  assertNotEquals(monitor1, monitor2);
+<a name="line137"></a>}
+</pre>
+
+
+</body>
+</html>

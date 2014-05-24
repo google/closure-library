@@ -1,0 +1,438 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>entryPointRegistry (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">debug.entryPointRegistry</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.entryPointRegistry.monitorAll"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.entryPointRegistry.</span><span class="entryName">monitorAll<span class="args">(<span class="arg">monitor</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Configures a monitor to wrap all entry points.
+
+Entry points that have already been registered are immediately wrapped by
+the monitor. When an entry point is registered in the future, it will also
+be wrapped by the monitor when it is registered.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">monitor</span>
+        : <span>!</span><span class="type"><a href="interface_goog_debug_EntryPointMonitor.html">goog.debug.EntryPointMonitor</a></span>
+        <div class="entryOverview">An entry point monitor.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_entrypointregistry.js.source.html#line129">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.entryPointRegistry.register"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.entryPointRegistry.</span><span class="entryName">register<span class="args">(<span class="arg">callback</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Register an entry point with this module.
+
+The entry point will be instrumented when a monitor is passed to
+goog.debug.entryPointRegistry.monitorAll. If this has already occurred, the
+entry point is instrumented immediately.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">callback</span>
+        : <span class="type">function(!Function</span>)
+        <div class="entryOverview">A callback function which is called
+    with a transforming function to instrument the entry point. The callback
+    is responsible for wrapping the relevant entry point with the
+    transforming function.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_entrypointregistry.js.source.html#line106">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.debug.entryPointRegistry.unmonitorAllIfPossible"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.entryPointRegistry.</span><span class="entryName">unmonitorAllIfPossible<span class="args">(<span class="arg">monitor</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Try to unmonitor all the entry points that have already been registered. If
+an entry point is registered in the future, it will not be wrapped by the
+monitor when it is registered. Note that this may fail if the entry points
+have additional wrapping.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">monitor</span>
+        : <span>!</span><span class="type"><a href="interface_goog_debug_EntryPointMonitor.html">goog.debug.EntryPointMonitor</a></span>
+        <div class="entryOverview">The last monitor to wrap
+    the entry points.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_entrypointregistry.js.source.html#line149">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.entryPointRegistry.monitorsMayExist_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.entryPointRegistry.</span><span class="entryName">monitorsMayExist_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Whether goog.debug.entryPointRegistry.monitorAll has ever been called.
+Checking this allows the compiler to optimize out the registrations.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_entrypointregistry.js.source.html#line91">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.entryPointRegistry.monitors_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.entryPointRegistry.</span><span class="entryName">monitors_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Monitors that should wrap all the entry points.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_entrypointregistry.js.source.html#line82">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.debug.entryPointRegistry.refList_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.debug.entryPointRegistry.</span><span class="entryName">refList_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       An array of entry point callbacks.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_debug_entrypointregistry.js.source.html#line74">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package debug</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="debug.entryPointRegistry"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

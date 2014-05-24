@@ -1,0 +1,231 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>testhelper.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_editor_testhelper.js.html">testhelper.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Class that allows for simple text editing tests.
+<a name="line17"></a> *
+<a name="line18"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.testing.editor.TestHelper&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.Range&#39;);
+<a name="line26"></a>goog.require(&#39;goog.editor.BrowserFeature&#39;);
+<a name="line27"></a>goog.require(&#39;goog.editor.node&#39;);
+<a name="line28"></a>goog.require(&#39;goog.editor.plugins.AbstractBubblePlugin&#39;);
+<a name="line29"></a>goog.require(&#39;goog.testing.dom&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Create a new test controller.
+<a name="line35"></a> * @param {Element} root The root editable element.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @extends {goog.Disposable}
+<a name="line38"></a> * @final
+<a name="line39"></a> */
+<a name="line40"></a>goog.testing.editor.TestHelper = function(root) {
+<a name="line41"></a>  if (!root) {
+<a name="line42"></a>    throw Error(&#39;Null root&#39;);
+<a name="line43"></a>  }
+<a name="line44"></a>  goog.Disposable.call(this);
+<a name="line45"></a>
+<a name="line46"></a>  /**
+<a name="line47"></a>   * Convenience variable for root DOM element.
+<a name="line48"></a>   * @type {!Element}
+<a name="line49"></a>   * @private
+<a name="line50"></a>   */
+<a name="line51"></a>  this.root_ = root;
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * The starting HTML of the editable element.
+<a name="line55"></a>   * @type {string}
+<a name="line56"></a>   * @private
+<a name="line57"></a>   */
+<a name="line58"></a>  this.savedHtml_ = &#39;&#39;;
+<a name="line59"></a>};
+<a name="line60"></a>goog.inherits(goog.testing.editor.TestHelper, goog.Disposable);
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Selects a new root element.
+<a name="line65"></a> * @param {Element} root The root editable element.
+<a name="line66"></a> */
+<a name="line67"></a>goog.testing.editor.TestHelper.prototype.setRoot = function(root) {
+<a name="line68"></a>  if (!root) {
+<a name="line69"></a>    throw Error(&#39;Null root&#39;);
+<a name="line70"></a>  }
+<a name="line71"></a>  this.root_ = root;
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Make the root element editable.  Alse saves its HTML to be restored
+<a name="line77"></a> * in tearDown.
+<a name="line78"></a> */
+<a name="line79"></a>goog.testing.editor.TestHelper.prototype.setUpEditableElement = function() {
+<a name="line80"></a>  this.savedHtml_ = this.root_.innerHTML;
+<a name="line81"></a>  if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+<a name="line82"></a>    this.root_.contentEditable = true;
+<a name="line83"></a>  } else {
+<a name="line84"></a>    this.root_.ownerDocument.designMode = &#39;on&#39;;
+<a name="line85"></a>  }
+<a name="line86"></a>  this.root_.setAttribute(&#39;g_editable&#39;, &#39;true&#39;);
+<a name="line87"></a>};
+<a name="line88"></a>
+<a name="line89"></a>
+<a name="line90"></a>/**
+<a name="line91"></a> * Reset the element previously initialized, restoring its HTML and making it
+<a name="line92"></a> * non editable.
+<a name="line93"></a> * @suppress {accessControls} Private state of
+<a name="line94"></a> *     {@link goog.editor.plugins.AbstractBubblePlugin} is accessed for test
+<a name="line95"></a> *     purposes.
+<a name="line96"></a> */
+<a name="line97"></a>goog.testing.editor.TestHelper.prototype.tearDownEditableElement = function() {
+<a name="line98"></a>  if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+<a name="line99"></a>    this.root_.contentEditable = false;
+<a name="line100"></a>  } else {
+<a name="line101"></a>    this.root_.ownerDocument.designMode = &#39;off&#39;;
+<a name="line102"></a>  }
+<a name="line103"></a>  goog.dom.removeChildren(this.root_);
+<a name="line104"></a>  this.root_.innerHTML = this.savedHtml_;
+<a name="line105"></a>  this.root_.removeAttribute(&#39;g_editable&#39;);
+<a name="line106"></a>
+<a name="line107"></a>  if (goog.editor.plugins &amp;&amp; goog.editor.plugins.AbstractBubblePlugin) {
+<a name="line108"></a>    // Remove old bubbles.
+<a name="line109"></a>    for (var key in goog.editor.plugins.AbstractBubblePlugin.bubbleMap_) {
+<a name="line110"></a>      goog.editor.plugins.AbstractBubblePlugin.bubbleMap_[key].dispose();
+<a name="line111"></a>    }
+<a name="line112"></a>    // Ensure we get a new bubble for each test.
+<a name="line113"></a>    goog.editor.plugins.AbstractBubblePlugin.bubbleMap_ = {};
+<a name="line114"></a>  }
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * Assert that the html in &#39;root&#39; is substantially similar to htmlPattern.
+<a name="line120"></a> * This method tests for the same set of styles, and for the same order of
+<a name="line121"></a> * nodes.  Breaking whitespace nodes are ignored.  Elements can be annotated
+<a name="line122"></a> * with classnames corresponding to keys in goog.userAgent and will be
+<a name="line123"></a> * expected to show up in that user agent and expected not to show up in
+<a name="line124"></a> * others.
+<a name="line125"></a> * @param {string} htmlPattern The pattern to match.
+<a name="line126"></a> */
+<a name="line127"></a>goog.testing.editor.TestHelper.prototype.assertHtmlMatches = function(
+<a name="line128"></a>    htmlPattern) {
+<a name="line129"></a>  goog.testing.dom.assertHtmlContentsMatch(htmlPattern, this.root_);
+<a name="line130"></a>};
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Finds the first text node descendant of root with the given content.
+<a name="line135"></a> * @param {string|RegExp} textOrRegexp The text to find, or a regular
+<a name="line136"></a> *     expression to find a match of.
+<a name="line137"></a> * @return {Node} The first text node that matches, or null if none is found.
+<a name="line138"></a> */
+<a name="line139"></a>goog.testing.editor.TestHelper.prototype.findTextNode = function(textOrRegexp) {
+<a name="line140"></a>  return goog.testing.dom.findTextNode(textOrRegexp, this.root_);
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Select from the given from offset in the given from node to the given
+<a name="line146"></a> * to offset in the optionally given to node. If nodes are passed in, uses them,
+<a name="line147"></a> * otherwise uses findTextNode to find the nodes to select. Selects a caret
+<a name="line148"></a> * if opt_to and opt_toOffset are not given.
+<a name="line149"></a> * @param {Node|string} from Node or text of the node to start the selection at.
+<a name="line150"></a> * @param {number} fromOffset Offset within the above node to start the
+<a name="line151"></a> *     selection at.
+<a name="line152"></a> * @param {Node|string=} opt_to Node or text of the node to end the selection
+<a name="line153"></a> *     at.
+<a name="line154"></a> * @param {number=} opt_toOffset Offset within the above node to end the
+<a name="line155"></a> *     selection at.
+<a name="line156"></a> */
+<a name="line157"></a>goog.testing.editor.TestHelper.prototype.select = function(from, fromOffset,
+<a name="line158"></a>    opt_to, opt_toOffset) {
+<a name="line159"></a>  var end;
+<a name="line160"></a>  var start = end = goog.isString(from) ? this.findTextNode(from) : from;
+<a name="line161"></a>  var endOffset;
+<a name="line162"></a>  var startOffset = endOffset = fromOffset;
+<a name="line163"></a>
+<a name="line164"></a>  if (opt_to &amp;&amp; goog.isNumber(opt_toOffset)) {
+<a name="line165"></a>    end = goog.isString(opt_to) ? this.findTextNode(opt_to) : opt_to;
+<a name="line166"></a>    endOffset = opt_toOffset;
+<a name="line167"></a>  }
+<a name="line168"></a>
+<a name="line169"></a>  goog.dom.Range.createFromNodes(start, startOffset, end, endOffset).select();
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/** @override */
+<a name="line174"></a>goog.testing.editor.TestHelper.prototype.disposeInternal = function() {
+<a name="line175"></a>  if (goog.editor.node.isEditableContainer(this.root_)) {
+<a name="line176"></a>    this.tearDownEditableElement();
+<a name="line177"></a>  }
+<a name="line178"></a>  delete this.root_;
+<a name="line179"></a>  goog.testing.editor.TestHelper.base(this, &#39;disposeInternal&#39;);
+<a name="line180"></a>};
+</pre>
+
+
+</body>
+</html>

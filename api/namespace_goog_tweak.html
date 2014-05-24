@@ -1,0 +1,1426 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tweak (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">tweak</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_BaseEntry.html">
+          goog.tweak.BaseEntry</a><br/>
+        <div class="class-details">Base class for all Registry entries.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_BasePrimitiveSetting.html">
+          goog.tweak.BasePrimitiveSetting</a><br/>
+        <div class="class-details">Base class for all settings that wrap primitive values.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_BaseSetting.html">
+          goog.tweak.BaseSetting</a><br/>
+        <div class="class-details">Base class for all tweak entries that are settings. Settings are entries
+that are associated with a query parameter.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_BooleanGroup.html">
+          goog.tweak.BooleanGroup</a><br/>
+        <div class="class-details">A registry setting that contains a group of boolean subfield, where all
+entries modify the same query parameter. For example:
+    ?foo=setting1,-setting2
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_BooleanInGroupSetting.html">
+          goog.tweak.BooleanInGroupSetting</a><br/>
+        <div class="class-details">An entry in a BooleanGroup.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_BooleanSetting.html">
+          goog.tweak.BooleanSetting</a><br/>
+        <div class="class-details">A registry setting that can be either true of false.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_ButtonAction.html">
+          goog.tweak.ButtonAction</a><br/>
+        <div class="class-details">A registry action (a button).
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_EntriesPanel.html">
+          goog.tweak.EntriesPanel</a><br/>
+        <div class="class-details">The body of the tweaks UI and also used for BooleanGroup.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_NamespaceEntry_.html">
+          goog.tweak.NamespaceEntry_</a><br/>
+        <div class="class-details">Entries used to represent the collapsible namespace links. These entries are
+never registered with the TweakRegistry, but are contained within the
+collection of entries within TweakPanels.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_NumericSetting.html">
+          goog.tweak.NumericSetting</a><br/>
+        <div class="class-details">A registry setting for numeric values.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_Registry.html">
+          goog.tweak.Registry</a><br/>
+        <div class="class-details">Singleton that manages all tweaks. This should be instantiated only from
+goog.tweak.getRegistry().
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_StringSetting.html">
+          goog.tweak.StringSetting</a><br/>
+        <div class="class-details">A registry setting for string values.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_tweak_TweakUi.html">
+          goog.tweak.TweakUi</a><br/>
+        <div class="class-details">A UI for editing tweak settings / clicking tweak actions.
+</div>
+ </div>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.applyConfigParams_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">applyConfigParams_<span class="args">(<span class="arg">entry</span>,&nbsp;<span class="arg">configParams</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Applies all extra configuration parameters in configParams.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entry</span>
+        : <span>!</span><span class="type"><a href="class_goog_tweak_BaseEntry.html">goog.tweak.BaseEntry</a></span>
+        <div class="entryOverview">The entry to apply them to.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">configParams</span>
+        : <span>!</span><span class="type">goog.tweak.ConfigParams</span>
+        <div class="entryOverview">Extra configuration
+    parameters.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line101">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.beginBooleanGroup"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">beginBooleanGroup<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">description</span>,&nbsp;<span class="arg">opt_configParams</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates and registers a group of BooleanSettings that are all set by a
+single query parameter. A call to goog.tweak.endBooleanGroup() must be used
+to close this group. Only goog.tweak.registerBoolean() calls are allowed with
+the beginBooleanGroup()/endBooleanGroup().
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The unique ID for the setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">description</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A description of what the setting does.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_configParams</span>
+        : <span class="type">goog.tweak.ConfigParams=</span>
+        <div class="entryOverview">Extra configuration
+    parameters.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line180">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.doRegister_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">doRegister_<span class="args">(<span class="arg">entry</span>,&nbsp;<span class="arg">opt_defaultValue</span>,&nbsp;<span class="arg">opt_configParams</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Registers a tweak using the given factoryFunc.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">entry</span>
+        : <span>!</span><span class="type"><a href="class_goog_tweak_BaseEntry.html">goog.tweak.BaseEntry</a></span>
+        <div class="entryOverview">The entry to register.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_defaultValue</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type">number=</span>
+        <div class="entryOverview">Default value.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_configParams</span>
+        : <span class="type">goog.tweak.ConfigParams=</span>
+        <div class="entryOverview">Extra
+    configuration parameters.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line152">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.endBooleanGroup"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">endBooleanGroup<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Stops adding boolean entries to the active boolean group.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line190">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.getBoolean"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">getBoolean<span class="args">(<span class="arg">id</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the value of the boolean setting with the given ID.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The unique string that identifies this entry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            The value of the tweak.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line278">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.getCompilerOverrides_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">getCompilerOverrides_<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Calls to this function are overridden by the compiler by the processTweaks
+pass. It returns the overrides to default values for tweaks set by compiler
+options.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&gt;&nbsp;
+            A map of tweakId -&gt; defaultValue.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line43">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.getNumber"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">getNumber<span class="args">(<span class="arg">id</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the value of the numeric setting with the given ID.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The unique string that identifies this entry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The value of the tweak.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line298">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.getRegistry"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">getRegistry<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_tweak_Registry.html">goog.tweak.Registry</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns/creates the registry singleton.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_tweak_Registry.html">goog.tweak.Registry</a></span>&nbsp;
+            The tweak registry.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line68">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.getString"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">getString<span class="args">(<span class="arg">id</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the value of the string setting with the given ID,
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The unique string that identifies this entry.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The value of the tweak.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line288">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.overrideDefaultValue"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">overrideDefaultValue<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">value</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets a default value to use for the given tweak instead of the one passed
+to the register* function. This function must be called before the tweak is
+registered.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The unique string that identifies the entry.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">The new default value for the tweak.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line268">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.registerBoolean"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">registerBoolean<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">description</span>,&nbsp;<span class="arg">opt_defaultValue</span>,&nbsp;<span class="arg">opt_configParams</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates and registers a BooleanSetting.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The unique ID for the setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">description</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A description of what the setting does.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_defaultValue</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">The default value for the setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_configParams</span>
+        : <span class="type">goog.tweak.ConfigParams=</span>
+        <div class="entryOverview">Extra configuration
+    parameters.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line203">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.registerButton"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">registerButton<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">description</span>,&nbsp;<span class="arg">callback</span>,&nbsp;<span class="arg">opt_label</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates and registers a ButtonAction.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The unique ID for the setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">description</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A description of what the action does.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">callback</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+        <div class="entryOverview">Function to call when the button is clicked.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_label</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">The button text (instead of the ID).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line254">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.registerNumber"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">registerNumber<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">description</span>,&nbsp;<span class="arg">opt_defaultValue</span>,&nbsp;<span class="arg">opt_configParams</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates and registers a NumericSetting.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The unique ID for the setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">description</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A description of what the setting does.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_defaultValue</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">The default value for the setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_configParams</span>
+        : <span class="type">goog.tweak.ConfigParams=</span>
+        <div class="entryOverview">Extra configuration
+    parameters.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line240">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.tweak.registerString"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">registerString<span class="args">(<span class="arg">id</span>,&nbsp;<span class="arg">description</span>,&nbsp;<span class="arg">opt_defaultValue</span>,&nbsp;<span class="arg">opt_configParams</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates and registers a StringSetting.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">id</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The unique ID for the setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">description</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A description of what the setting does.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_defaultValue</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">The default value for the setting.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_configParams</span>
+        : <span class="type">goog.tweak.ConfigParams=</span>
+        <div class="entryOverview">Extra configuration
+    parameters.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line225">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.BaseEntryTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">BaseEntryTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_entries_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.ConfigParams"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">ConfigParams</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Type for configParams.
+TODO(agrieve): Remove |Object when optional fields in struct types are
+    implemented.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line91">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.RegistryTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">RegistryTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_registry_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.TweakUiTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">TweakUiTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweakui_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.activeBooleanGroup_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">activeBooleanGroup_</span>
+        : <span class="type"><a href="class_goog_tweak_BooleanGroup.html">goog.tweak.BooleanGroup</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The boolean group set by beginBooleanGroup and cleared by endBooleanGroup.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line61">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.registry_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">registry_</span>
+        : <span class="type"><a href="class_goog_tweak_Registry.html">goog.tweak.Registry</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       The global reference to the registry, if it exists.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_tweak.js.source.html#line53">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.tweak.testhelpers"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.tweak.</span><span class="entryName">testhelpers</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_tweak_testhelpers.js.source.html#line21">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package tweak</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="tweak"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

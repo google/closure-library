@@ -1,0 +1,351 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tweak.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_tweak_tweak.js.html">tweak.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides facilities for creating and querying tweaks.
+<a name="line17"></a> * @see http://code.google.com/p/closure-library/wiki/UsingTweaks
+<a name="line18"></a> *
+<a name="line19"></a> * @author agrieve@google.com (Andrew Grieve)
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.tweak&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.tweak.ConfigParams&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line26"></a>goog.require(&#39;goog.tweak.BaseSetting&#39;);
+<a name="line27"></a>goog.require(&#39;goog.tweak.BooleanGroup&#39;);
+<a name="line28"></a>goog.require(&#39;goog.tweak.BooleanInGroupSetting&#39;);
+<a name="line29"></a>goog.require(&#39;goog.tweak.BooleanSetting&#39;);
+<a name="line30"></a>goog.require(&#39;goog.tweak.ButtonAction&#39;);
+<a name="line31"></a>goog.require(&#39;goog.tweak.NumericSetting&#39;);
+<a name="line32"></a>goog.require(&#39;goog.tweak.Registry&#39;);
+<a name="line33"></a>goog.require(&#39;goog.tweak.StringSetting&#39;);
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/**
+<a name="line37"></a> * Calls to this function are overridden by the compiler by the processTweaks
+<a name="line38"></a> * pass. It returns the overrides to default values for tweaks set by compiler
+<a name="line39"></a> * options.
+<a name="line40"></a> * @return {!Object.&lt;number|string|boolean&gt;} A map of tweakId -&gt; defaultValue.
+<a name="line41"></a> * @private
+<a name="line42"></a> */
+<a name="line43"></a>goog.tweak.getCompilerOverrides_ = function() {
+<a name="line44"></a>  return {};
+<a name="line45"></a>};
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * The global reference to the registry, if it exists.
+<a name="line50"></a> * @type {goog.tweak.Registry}
+<a name="line51"></a> * @private
+<a name="line52"></a> */
+<a name="line53"></a>goog.tweak.registry_ = null;
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * The boolean group set by beginBooleanGroup and cleared by endBooleanGroup.
+<a name="line58"></a> * @type {goog.tweak.BooleanGroup}
+<a name="line59"></a> * @private
+<a name="line60"></a> */
+<a name="line61"></a>goog.tweak.activeBooleanGroup_ = null;
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * Returns/creates the registry singleton.
+<a name="line66"></a> * @return {!goog.tweak.Registry} The tweak registry.
+<a name="line67"></a> */
+<a name="line68"></a>goog.tweak.getRegistry = function() {
+<a name="line69"></a>  if (!goog.tweak.registry_) {
+<a name="line70"></a>    var queryString = window.location.search;
+<a name="line71"></a>    var overrides = goog.tweak.getCompilerOverrides_();
+<a name="line72"></a>    goog.tweak.registry_ = new goog.tweak.Registry(queryString, overrides);
+<a name="line73"></a>  }
+<a name="line74"></a>  return goog.tweak.registry_;
+<a name="line75"></a>};
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Type for configParams.
+<a name="line80"></a> * TODO(agrieve): Remove |Object when optional fields in struct types are
+<a name="line81"></a> *     implemented.
+<a name="line82"></a> * @typedef {{
+<a name="line83"></a> *     label:(string|undefined),
+<a name="line84"></a> *     validValues:(!Array.&lt;string&gt;|!Array.&lt;number&gt;|undefined),
+<a name="line85"></a> *     paramName:(string|undefined),
+<a name="line86"></a> *     restartRequired:(boolean|undefined),
+<a name="line87"></a> *     callback:(Function|undefined),
+<a name="line88"></a> *     token:(string|undefined)
+<a name="line89"></a> *     }|!Object}
+<a name="line90"></a> */
+<a name="line91"></a>goog.tweak.ConfigParams;
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Applies all extra configuration parameters in configParams.
+<a name="line96"></a> * @param {!goog.tweak.BaseEntry} entry The entry to apply them to.
+<a name="line97"></a> * @param {!goog.tweak.ConfigParams} configParams Extra configuration
+<a name="line98"></a> *     parameters.
+<a name="line99"></a> * @private
+<a name="line100"></a> */
+<a name="line101"></a>goog.tweak.applyConfigParams_ = function(entry, configParams) {
+<a name="line102"></a>  if (configParams.label) {
+<a name="line103"></a>    entry.label = configParams.label;
+<a name="line104"></a>    delete configParams.label;
+<a name="line105"></a>  }
+<a name="line106"></a>  if (configParams.validValues) {
+<a name="line107"></a>    goog.asserts.assert(entry instanceof goog.tweak.StringSetting ||
+<a name="line108"></a>        entry instanceof goog.tweak.NumericSetting,
+<a name="line109"></a>        &#39;Cannot set validValues on tweak: %s&#39;, entry.getId());
+<a name="line110"></a>    entry.setValidValues(configParams.validValues);
+<a name="line111"></a>    delete configParams.validValues;
+<a name="line112"></a>  }
+<a name="line113"></a>  if (goog.isDef(configParams.paramName)) {
+<a name="line114"></a>    goog.asserts.assertInstanceof(entry, goog.tweak.BaseSetting,
+<a name="line115"></a>        &#39;Cannot set paramName on tweak: %s&#39;, entry.getId());
+<a name="line116"></a>    entry.setParamName(configParams.paramName);
+<a name="line117"></a>    delete configParams.paramName;
+<a name="line118"></a>  }
+<a name="line119"></a>  if (goog.isDef(configParams.restartRequired)) {
+<a name="line120"></a>    entry.setRestartRequired(configParams.restartRequired);
+<a name="line121"></a>    delete configParams.restartRequired;
+<a name="line122"></a>  }
+<a name="line123"></a>  if (configParams.callback) {
+<a name="line124"></a>    entry.addCallback(configParams.callback);
+<a name="line125"></a>    delete configParams.callback;
+<a name="line126"></a>    goog.asserts.assert(
+<a name="line127"></a>        !entry.isRestartRequired() || (configParams.restartRequired == false),
+<a name="line128"></a>        &#39;Tweak %s should set restartRequired: false, when adding a callback.&#39;,
+<a name="line129"></a>        entry.getId());
+<a name="line130"></a>  }
+<a name="line131"></a>  if (configParams.token) {
+<a name="line132"></a>    goog.asserts.assertInstanceof(entry, goog.tweak.BooleanInGroupSetting,
+<a name="line133"></a>        &#39;Cannot set token on tweak: %s&#39;, entry.getId());
+<a name="line134"></a>    entry.setToken(configParams.token);
+<a name="line135"></a>    delete configParams.token;
+<a name="line136"></a>  }
+<a name="line137"></a>  for (var key in configParams) {
+<a name="line138"></a>    goog.asserts.fail(&#39;Unknown config options (&#39; + key + &#39;=&#39; +
+<a name="line139"></a>        configParams[key] + &#39;) for tweak &#39; + entry.getId());
+<a name="line140"></a>  }
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Registers a tweak using the given factoryFunc.
+<a name="line146"></a> * @param {!goog.tweak.BaseEntry} entry The entry to register.
+<a name="line147"></a> * @param {boolean|string|number=} opt_defaultValue Default value.
+<a name="line148"></a> * @param {goog.tweak.ConfigParams=} opt_configParams Extra
+<a name="line149"></a> *     configuration parameters.
+<a name="line150"></a> * @private
+<a name="line151"></a> */
+<a name="line152"></a>goog.tweak.doRegister_ = function(entry, opt_defaultValue, opt_configParams) {
+<a name="line153"></a>  if (opt_configParams) {
+<a name="line154"></a>    goog.tweak.applyConfigParams_(entry, opt_configParams);
+<a name="line155"></a>  }
+<a name="line156"></a>  if (opt_defaultValue != undefined) {
+<a name="line157"></a>    entry.setDefaultValue(opt_defaultValue);
+<a name="line158"></a>  }
+<a name="line159"></a>  if (goog.tweak.activeBooleanGroup_) {
+<a name="line160"></a>    goog.asserts.assertInstanceof(entry, goog.tweak.BooleanInGroupSetting,
+<a name="line161"></a>        &#39;Forgot to end Boolean Group: %s&#39;,
+<a name="line162"></a>        goog.tweak.activeBooleanGroup_.getId());
+<a name="line163"></a>    goog.tweak.activeBooleanGroup_.addChild(
+<a name="line164"></a>        /** @type {!goog.tweak.BooleanInGroupSetting} */ (entry));
+<a name="line165"></a>  }
+<a name="line166"></a>  goog.tweak.getRegistry().register(entry);
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Creates and registers a group of BooleanSettings that are all set by a
+<a name="line172"></a> * single query parameter. A call to goog.tweak.endBooleanGroup() must be used
+<a name="line173"></a> * to close this group. Only goog.tweak.registerBoolean() calls are allowed with
+<a name="line174"></a> * the beginBooleanGroup()/endBooleanGroup().
+<a name="line175"></a> * @param {string} id The unique ID for the setting.
+<a name="line176"></a> * @param {string} description A description of what the setting does.
+<a name="line177"></a> * @param {goog.tweak.ConfigParams=} opt_configParams Extra configuration
+<a name="line178"></a> *     parameters.
+<a name="line179"></a> */
+<a name="line180"></a>goog.tweak.beginBooleanGroup = function(id, description, opt_configParams) {
+<a name="line181"></a>  var entry = new goog.tweak.BooleanGroup(id, description);
+<a name="line182"></a>  goog.tweak.doRegister_(entry, undefined, opt_configParams);
+<a name="line183"></a>  goog.tweak.activeBooleanGroup_ = entry;
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Stops adding boolean entries to the active boolean group.
+<a name="line189"></a> */
+<a name="line190"></a>goog.tweak.endBooleanGroup = function() {
+<a name="line191"></a>  goog.tweak.activeBooleanGroup_ = null;
+<a name="line192"></a>};
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * Creates and registers a BooleanSetting.
+<a name="line197"></a> * @param {string} id The unique ID for the setting.
+<a name="line198"></a> * @param {string} description A description of what the setting does.
+<a name="line199"></a> * @param {boolean=} opt_defaultValue The default value for the setting.
+<a name="line200"></a> * @param {goog.tweak.ConfigParams=} opt_configParams Extra configuration
+<a name="line201"></a> *     parameters.
+<a name="line202"></a> */
+<a name="line203"></a>goog.tweak.registerBoolean =
+<a name="line204"></a>    function(id, description, opt_defaultValue, opt_configParams) {
+<a name="line205"></a>  // TODO(agrieve): There is a bug in the compiler that causes these calls not
+<a name="line206"></a>  //     to be stripped without this outer if. Might be Issue #90.
+<a name="line207"></a>  if (goog.tweak.activeBooleanGroup_) {
+<a name="line208"></a>    var entry = new goog.tweak.BooleanInGroupSetting(id, description,
+<a name="line209"></a>        goog.tweak.activeBooleanGroup_);
+<a name="line210"></a>  } else {
+<a name="line211"></a>    entry = new goog.tweak.BooleanSetting(id, description);
+<a name="line212"></a>  }
+<a name="line213"></a>  goog.tweak.doRegister_(entry, opt_defaultValue, opt_configParams);
+<a name="line214"></a>};
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * Creates and registers a StringSetting.
+<a name="line219"></a> * @param {string} id The unique ID for the setting.
+<a name="line220"></a> * @param {string} description A description of what the setting does.
+<a name="line221"></a> * @param {string=} opt_defaultValue The default value for the setting.
+<a name="line222"></a> * @param {goog.tweak.ConfigParams=} opt_configParams Extra configuration
+<a name="line223"></a> *     parameters.
+<a name="line224"></a> */
+<a name="line225"></a>goog.tweak.registerString =
+<a name="line226"></a>    function(id, description, opt_defaultValue, opt_configParams) {
+<a name="line227"></a>  goog.tweak.doRegister_(new goog.tweak.StringSetting(id, description),
+<a name="line228"></a>                         opt_defaultValue, opt_configParams);
+<a name="line229"></a>};
+<a name="line230"></a>
+<a name="line231"></a>
+<a name="line232"></a>/**
+<a name="line233"></a> * Creates and registers a NumericSetting.
+<a name="line234"></a> * @param {string} id The unique ID for the setting.
+<a name="line235"></a> * @param {string} description A description of what the setting does.
+<a name="line236"></a> * @param {number=} opt_defaultValue The default value for the setting.
+<a name="line237"></a> * @param {goog.tweak.ConfigParams=} opt_configParams Extra configuration
+<a name="line238"></a> *     parameters.
+<a name="line239"></a> */
+<a name="line240"></a>goog.tweak.registerNumber =
+<a name="line241"></a>    function(id, description, opt_defaultValue, opt_configParams) {
+<a name="line242"></a>  goog.tweak.doRegister_(new goog.tweak.NumericSetting(id, description),
+<a name="line243"></a>                         opt_defaultValue, opt_configParams);
+<a name="line244"></a>};
+<a name="line245"></a>
+<a name="line246"></a>
+<a name="line247"></a>/**
+<a name="line248"></a> * Creates and registers a ButtonAction.
+<a name="line249"></a> * @param {string} id The unique ID for the setting.
+<a name="line250"></a> * @param {string} description A description of what the action does.
+<a name="line251"></a> * @param {!Function} callback Function to call when the button is clicked.
+<a name="line252"></a> * @param {string=} opt_label The button text (instead of the ID).
+<a name="line253"></a> */
+<a name="line254"></a>goog.tweak.registerButton = function(id, description, callback, opt_label) {
+<a name="line255"></a>  var tweak = new goog.tweak.ButtonAction(id, description, callback);
+<a name="line256"></a>  tweak.label = opt_label || tweak.label;
+<a name="line257"></a>  goog.tweak.doRegister_(tweak);
+<a name="line258"></a>};
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * Sets a default value to use for the given tweak instead of the one passed
+<a name="line263"></a> * to the register* function. This function must be called before the tweak is
+<a name="line264"></a> * registered.
+<a name="line265"></a> * @param {string} id The unique string that identifies the entry.
+<a name="line266"></a> * @param {string|number|boolean} value The new default value for the tweak.
+<a name="line267"></a> */
+<a name="line268"></a>goog.tweak.overrideDefaultValue = function(id, value) {
+<a name="line269"></a>  goog.tweak.getRegistry().overrideDefaultValue(id, value);
+<a name="line270"></a>};
+<a name="line271"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * Returns the value of the boolean setting with the given ID.
+<a name="line275"></a> * @param {string} id The unique string that identifies this entry.
+<a name="line276"></a> * @return {boolean} The value of the tweak.
+<a name="line277"></a> */
+<a name="line278"></a>goog.tweak.getBoolean = function(id) {
+<a name="line279"></a>  return goog.tweak.getRegistry().getBooleanSetting(id).getValue();
+<a name="line280"></a>};
+<a name="line281"></a>
+<a name="line282"></a>
+<a name="line283"></a>/**
+<a name="line284"></a> * Returns the value of the string setting with the given ID,
+<a name="line285"></a> * @param {string} id The unique string that identifies this entry.
+<a name="line286"></a> * @return {string} The value of the tweak.
+<a name="line287"></a> */
+<a name="line288"></a>goog.tweak.getString = function(id) {
+<a name="line289"></a>  return goog.tweak.getRegistry().getStringSetting(id).getValue();
+<a name="line290"></a>};
+<a name="line291"></a>
+<a name="line292"></a>
+<a name="line293"></a>/**
+<a name="line294"></a> * Returns the value of the numeric setting with the given ID.
+<a name="line295"></a> * @param {string} id The unique string that identifies this entry.
+<a name="line296"></a> * @return {number} The value of the tweak.
+<a name="line297"></a> */
+<a name="line298"></a>goog.tweak.getNumber = function(id) {
+<a name="line299"></a>  return goog.tweak.getRegistry().getNumericSetting(id).getValue();
+<a name="line300"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>imageloader_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_imageloader_test.js.html">imageloader_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.ImageLoaderTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.ImageLoaderTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line19"></a>goog.require(&#39;goog.array&#39;);
+<a name="line20"></a>goog.require(&#39;goog.dispose&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line23"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line24"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line25"></a>goog.require(&#39;goog.net.ImageLoader&#39;);
+<a name="line26"></a>goog.require(&#39;goog.object&#39;);
+<a name="line27"></a>goog.require(&#39;goog.string&#39;);
+<a name="line28"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line29"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line30"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line31"></a>
+<a name="line32"></a>var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall(document.title);
+<a name="line33"></a>
+<a name="line34"></a>// Set the AsyncTestCase timeout to larger value to allow more time
+<a name="line35"></a>// for images to load.
+<a name="line36"></a>asyncTestCase.stepTimeout = 5000;
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>var TEST_EVENT_TYPES = [
+<a name="line40"></a>  goog.events.EventType.LOAD,
+<a name="line41"></a>  goog.net.EventType.COMPLETE,
+<a name="line42"></a>  goog.net.EventType.ERROR
+<a name="line43"></a>];
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Mapping from test image file name to:
+<a name="line48"></a> * [expected width, expected height, expected event to be fired].
+<a name="line49"></a> */
+<a name="line50"></a>var TEST_IMAGES = {
+<a name="line51"></a>  &#39;imageloader_testimg1.gif&#39;: [20, 20, goog.events.EventType.LOAD],
+<a name="line52"></a>  &#39;imageloader_testimg2.gif&#39;: [20, 20, goog.events.EventType.LOAD],
+<a name="line53"></a>  &#39;imageloader_testimg3.gif&#39;: [32, 32, goog.events.EventType.LOAD],
+<a name="line54"></a>
+<a name="line55"></a>  &#39;this-is-not-image-1.gif&#39;: [0, 0, goog.net.EventType.ERROR],
+<a name="line56"></a>  &#39;this-is-not-image-2.gif&#39;: [0, 0, goog.net.EventType.ERROR]
+<a name="line57"></a>};
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>var startTime;
+<a name="line61"></a>var loader;
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>function setUp() {
+<a name="line65"></a>  startTime = goog.now();
+<a name="line66"></a>
+<a name="line67"></a>  loader = new goog.net.ImageLoader();
+<a name="line68"></a>
+<a name="line69"></a>  // Adds test images to the loader.
+<a name="line70"></a>  var i = 0;
+<a name="line71"></a>  for (var key in TEST_IMAGES) {
+<a name="line72"></a>    var imageId = &#39;img_&#39; + i++;
+<a name="line73"></a>    loader.addImage(imageId, key);
+<a name="line74"></a>  }
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>function tearDown() {
+<a name="line79"></a>  goog.dispose(loader);
+<a name="line80"></a>}
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Tests loading image and disposing before loading completes.
+<a name="line85"></a> */
+<a name="line86"></a>function testDisposeInTheMiddleOfLoadingWorks() {
+<a name="line87"></a>  goog.events.listen(loader, TEST_EVENT_TYPES,
+<a name="line88"></a>      goog.partial(handleDisposalImageLoaderEvent, loader));
+<a name="line89"></a>  // waitForAsync before starting loader just in case
+<a name="line90"></a>  // handleDisposalImageLoaderEvent is called from within loader.start
+<a name="line91"></a>  // (before we yield control). This may happen in IE7/IE8.
+<a name="line92"></a>  asyncTestCase.waitForAsync(&#39;Waiting for loader handler to fire.&#39;);
+<a name="line93"></a>  loader.start();
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>function handleDisposalImageLoaderEvent(loader, e) {
+<a name="line98"></a>  assertFalse(&#39;Handler is still invoked after loader is disposed.&#39;,
+<a name="line99"></a>      loader.isDisposed());
+<a name="line100"></a>
+<a name="line101"></a>  switch (e.type) {
+<a name="line102"></a>    case goog.net.EventType.COMPLETE:
+<a name="line103"></a>      fail(&#39;This test should never get COMPLETE event.&#39;);
+<a name="line104"></a>      return;
+<a name="line105"></a>
+<a name="line106"></a>    case goog.events.EventType.LOAD:
+<a name="line107"></a>    case goog.net.EventType.ERROR:
+<a name="line108"></a>      loader.dispose();
+<a name="line109"></a>      break;
+<a name="line110"></a>  }
+<a name="line111"></a>
+<a name="line112"></a>  // Make sure that handler is never called again after disposal before
+<a name="line113"></a>  // marking test as successful.
+<a name="line114"></a>  asyncTestCase.waitForAsync(&#39;Wait to ensure that COMPLETE is never fired&#39;);
+<a name="line115"></a>  goog.Timer.callOnce(function() {
+<a name="line116"></a>    asyncTestCase.continueTesting();
+<a name="line117"></a>  }, 500);
+<a name="line118"></a>}
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Tests loading of images until completion.
+<a name="line123"></a> */
+<a name="line124"></a>function testLoadingUntilCompletion() {
+<a name="line125"></a>  var results = {};
+<a name="line126"></a>  goog.events.listen(loader, TEST_EVENT_TYPES,
+<a name="line127"></a>      function(e) {
+<a name="line128"></a>        switch (e.type) {
+<a name="line129"></a>          case goog.events.EventType.LOAD:
+<a name="line130"></a>            var image = e.target;
+<a name="line131"></a>            results[image.src.substring(image.src.lastIndexOf(&#39;/&#39;) + 1)] =
+<a name="line132"></a>                [image.naturalWidth, image.naturalHeight, e.type];
+<a name="line133"></a>            return;
+<a name="line134"></a>
+<a name="line135"></a>          case goog.net.EventType.ERROR:
+<a name="line136"></a>            var image = e.target;
+<a name="line137"></a>            results[image.src.substring(image.src.lastIndexOf(&#39;/&#39;) + 1)] =
+<a name="line138"></a>                [image.naturalWidth, image.naturalHeight, e.type];
+<a name="line139"></a>            return;
+<a name="line140"></a>
+<a name="line141"></a>          case goog.net.EventType.COMPLETE:
+<a name="line142"></a>            // Test completes successfully.
+<a name="line143"></a>            asyncTestCase.continueTesting();
+<a name="line144"></a>
+<a name="line145"></a>            assertImagesAreCorrect(results);
+<a name="line146"></a>            return;
+<a name="line147"></a>        }
+<a name="line148"></a>      });
+<a name="line149"></a>
+<a name="line150"></a>  // waitForAsync before starting loader just in case handleImageLoaderEvent
+<a name="line151"></a>  // is called from within loader.start (before we yield control).
+<a name="line152"></a>  // This may happen in IE7/IE8.
+<a name="line153"></a>  asyncTestCase.waitForAsync(&#39;Waiting for loader handler to fire.&#39;);
+<a name="line154"></a>  loader.start();
+<a name="line155"></a>}
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>function assertImagesAreCorrect(results) {
+<a name="line159"></a>  assertEquals(
+<a name="line160"></a>      goog.object.getCount(TEST_IMAGES), goog.object.getCount(results));
+<a name="line161"></a>  goog.object.forEach(TEST_IMAGES, function(value, key) {
+<a name="line162"></a>    // Check if fires the COMPLETE event.
+<a name="line163"></a>    assertTrue(&#39;Image is not loaded completely.&#39;, key in results);
+<a name="line164"></a>
+<a name="line165"></a>    var image = results[key];
+<a name="line166"></a>
+<a name="line167"></a>    // Check image size.
+<a name="line168"></a>    assertEquals(&#39;Image width is not correct&#39;, value[0], image[0]);
+<a name="line169"></a>    assertEquals(&#39;Image length is not correct&#39;, value[1], image[1]);
+<a name="line170"></a>
+<a name="line171"></a>    // Check if fired the correct event.
+<a name="line172"></a>    assertEquals(&#39;Event *&#39; + value[2] + &#39;* must be fired&#39;, value[2], image[2]);
+<a name="line173"></a>  });
+<a name="line174"></a>}
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * Overrides the loader&#39;s loadImage_ method so that it dispatches an image
+<a name="line179"></a> * loaded event immediately, causing any event listners to receive them
+<a name="line180"></a> * synchronously.  This allows tests to assume synchronous execution.
+<a name="line181"></a> */
+<a name="line182"></a>function makeLoaderSynchronous(loader) {
+<a name="line183"></a>  var originalLoadImage = loader.loadImage_;
+<a name="line184"></a>  loader.loadImage_ = function(request, id) {
+<a name="line185"></a>    originalLoadImage.call(this, request, id);
+<a name="line186"></a>
+<a name="line187"></a>    var event = new goog.events.Event(goog.events.EventType.LOAD);
+<a name="line188"></a>    event.currentTarget = this.imageIdToImageMap_[id];
+<a name="line189"></a>    loader.onNetworkEvent_(event);
+<a name="line190"></a>  };
+<a name="line191"></a>
+<a name="line192"></a>  // Make listen() a no-op.
+<a name="line193"></a>  loader.handler_.listen = goog.nullFunction;
+<a name="line194"></a>}
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * Verifies that if an additional image is added after start() was called, but
+<a name="line199"></a> * before COMPLETE was dispatched, no COMPLETE event is sent.  Verifies COMPLETE
+<a name="line200"></a> * is finally sent when .start() is called again and all images have now
+<a name="line201"></a> * completed loading.
+<a name="line202"></a> */
+<a name="line203"></a>function testImagesAddedAfterStart() {
+<a name="line204"></a>  // Use synchronous image loading.
+<a name="line205"></a>  makeLoaderSynchronous(loader);
+<a name="line206"></a>
+<a name="line207"></a>  // Add another image once the first images finishes loading.
+<a name="line208"></a>  goog.events.listenOnce(loader, goog.events.EventType.LOAD, function() {
+<a name="line209"></a>    loader.addImage(&#39;extra_image&#39;, &#39;extra_image.gif&#39;);
+<a name="line210"></a>  });
+<a name="line211"></a>
+<a name="line212"></a>  // Keep track of the total # of image loads.
+<a name="line213"></a>  var loadRecordFn = goog.testing.recordFunction();
+<a name="line214"></a>  goog.events.listen(loader, goog.events.EventType.LOAD, loadRecordFn);
+<a name="line215"></a>
+<a name="line216"></a>  // Keep track of how many times COMPLETE was dispatched.
+<a name="line217"></a>  var completeRecordFn = goog.testing.recordFunction();
+<a name="line218"></a>  goog.events.listen(loader, goog.net.EventType.COMPLETE, completeRecordFn);
+<a name="line219"></a>
+<a name="line220"></a>  // Start testing.
+<a name="line221"></a>  loader.start();
+<a name="line222"></a>  assertEquals(
+<a name="line223"></a>      &#39;COMPLETE event should not have been dispatched yet: An image was &#39; +
+<a name="line224"></a>          &#39;added after the initial batch was started.&#39;,
+<a name="line225"></a>      0, completeRecordFn.getCallCount());
+<a name="line226"></a>  assertEquals(&#39;Just the test images should have loaded&#39;,
+<a name="line227"></a>      goog.object.getCount(TEST_IMAGES), loadRecordFn.getCallCount());
+<a name="line228"></a>
+<a name="line229"></a>  loader.start();
+<a name="line230"></a>  assertEquals(&#39;COMPLETE should have been dispatched once.&#39;,
+<a name="line231"></a>      1, completeRecordFn.getCallCount());
+<a name="line232"></a>  assertEquals(&#39;All images should have been loaded&#39;,
+<a name="line233"></a>      goog.object.getCount(TEST_IMAGES) + 1, loadRecordFn.getCallCount());
+<a name="line234"></a>}
+<a name="line235"></a>
+<a name="line236"></a>
+<a name="line237"></a>/**
+<a name="line238"></a> * Verifies that more images can be added after an upload starts, and start()
+<a name="line239"></a> * can be called for them, resulting in just one COMPLETE event once all the
+<a name="line240"></a> * images have completed.
+<a name="line241"></a> */
+<a name="line242"></a>function testImagesAddedAndStartedAfterStart() {
+<a name="line243"></a>  // Use synchronous image loading.
+<a name="line244"></a>  makeLoaderSynchronous(loader);
+<a name="line245"></a>
+<a name="line246"></a>  // Keep track of the total # of image loads.
+<a name="line247"></a>  var loadRecordFn = goog.testing.recordFunction();
+<a name="line248"></a>  goog.events.listen(loader, goog.events.EventType.LOAD, loadRecordFn);
+<a name="line249"></a>
+<a name="line250"></a>  // Add more images once the first images finishes loading, and call start()
+<a name="line251"></a>  // to get them going.
+<a name="line252"></a>  goog.events.listenOnce(loader, goog.events.EventType.LOAD, function(e) {
+<a name="line253"></a>    loader.addImage(&#39;extra_image&#39;, &#39;extra_image.gif&#39;);
+<a name="line254"></a>    loader.addImage(&#39;extra_image2&#39;, &#39;extra_image2.gif&#39;);
+<a name="line255"></a>    loader.start();
+<a name="line256"></a>  });
+<a name="line257"></a>
+<a name="line258"></a>  // Keep track of how many times COMPLETE was dispatched.
+<a name="line259"></a>  var completeRecordFn = goog.testing.recordFunction();
+<a name="line260"></a>  goog.events.listen(loader, goog.net.EventType.COMPLETE, completeRecordFn);
+<a name="line261"></a>
+<a name="line262"></a>  // Start testing.  Make sure all 7 images loaded.
+<a name="line263"></a>  loader.start();
+<a name="line264"></a>  assertEquals(&#39;COMPLETE should have been dispatched once.&#39;,
+<a name="line265"></a>      1, completeRecordFn.getCallCount());
+<a name="line266"></a>  assertEquals(&#39;All images should have been loaded&#39;,
+<a name="line267"></a>      goog.object.getCount(TEST_IMAGES) + 2, loadRecordFn.getCallCount());
+<a name="line268"></a>}
+<a name="line269"></a>
+<a name="line270"></a>
+<a name="line271"></a>/**
+<a name="line272"></a> * Verifies that if images are removed after loading has started, COMPLETE
+<a name="line273"></a> * is dispatched once the remaining images have finished.
+<a name="line274"></a> */
+<a name="line275"></a>function testImagesRemovedAfterStart() {
+<a name="line276"></a>  // Use synchronous image loading.
+<a name="line277"></a>  makeLoaderSynchronous(loader);
+<a name="line278"></a>
+<a name="line279"></a>  // Remove 2 images once the first image finishes loading.
+<a name="line280"></a>  goog.events.listenOnce(loader, goog.events.EventType.LOAD, function(e) {
+<a name="line281"></a>    loader.removeImage(
+<a name="line282"></a>        goog.array.peek(goog.object.getKeys(this.imageIdToRequestMap_)));
+<a name="line283"></a>    loader.removeImage(
+<a name="line284"></a>        goog.array.peek(goog.object.getKeys(this.imageIdToRequestMap_)));
+<a name="line285"></a>  });
+<a name="line286"></a>
+<a name="line287"></a>  // Keep track of the total # of image loads.
+<a name="line288"></a>  var loadRecordFn = goog.testing.recordFunction();
+<a name="line289"></a>  goog.events.listen(loader, goog.events.EventType.LOAD, loadRecordFn);
+<a name="line290"></a>
+<a name="line291"></a>  // Keep track of how many times COMPLETE was dispatched.
+<a name="line292"></a>  var completeRecordFn = goog.testing.recordFunction();
+<a name="line293"></a>  goog.events.listen(loader, goog.net.EventType.COMPLETE, completeRecordFn);
+<a name="line294"></a>
+<a name="line295"></a>  // Start testing.  Make sure only the 3 images remaining loaded.
+<a name="line296"></a>  loader.start();
+<a name="line297"></a>  assertEquals(&#39;COMPLETE should have been dispatched once.&#39;,
+<a name="line298"></a>      1, completeRecordFn.getCallCount());
+<a name="line299"></a>  assertEquals(&#39;All images should have been loaded&#39;,
+<a name="line300"></a>      goog.object.getCount(TEST_IMAGES) - 2, loadRecordFn.getCallCount());
+<a name="line301"></a>}
+<a name="line302"></a>
+<a name="line303"></a>
+<a name="line304"></a>/**
+<a name="line305"></a> * Verifies that the correct image attribute is set when using CORS requests.
+<a name="line306"></a> */
+<a name="line307"></a>function testSetsCorsAttribute() {
+<a name="line308"></a>  // Use synchronous image loading.
+<a name="line309"></a>  makeLoaderSynchronous(loader);
+<a name="line310"></a>
+<a name="line311"></a>  // Verify the crossOrigin attribute of the requested images.
+<a name="line312"></a>  goog.events.listen(loader, goog.events.EventType.LOAD, function(e) {
+<a name="line313"></a>    var image = e.target;
+<a name="line314"></a>    if (image.id == &#39;cors_request&#39;) {
+<a name="line315"></a>      assertEquals(
+<a name="line316"></a>          &#39;CORS requested image should have a crossOrigin attribute set&#39;,
+<a name="line317"></a>          &#39;anonymous&#39;, image.crossOrigin);
+<a name="line318"></a>    } else {
+<a name="line319"></a>      assertTrue(
+<a name="line320"></a>          &#39;Non-CORS requested images should not have a crossOrigin attribute&#39;,
+<a name="line321"></a>          goog.string.isEmptySafe(image.crossOrigin));
+<a name="line322"></a>    }
+<a name="line323"></a>  });
+<a name="line324"></a>
+<a name="line325"></a>  // Make a new request for one of the images, this time using CORS.
+<a name="line326"></a>  var srcs = goog.object.getKeys(TEST_IMAGES);
+<a name="line327"></a>  loader.addImage(
+<a name="line328"></a>      &#39;cors_request&#39;, srcs[0], goog.net.ImageLoader.CorsRequestType.ANONYMOUS);
+<a name="line329"></a>  loader.start();
+<a name="line330"></a>}
+</pre>
+
+
+</body>
+</html>

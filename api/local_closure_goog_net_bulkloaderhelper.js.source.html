@@ -1,0 +1,179 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>bulkloaderhelper.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_bulkloaderhelper.js.html">bulkloaderhelper.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Helper class to load a list of URIs in bulk. All URIs
+<a name="line17"></a> * must be a successfully loaded in order for the entire load to be considered
+<a name="line18"></a> * a success.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.net.BulkLoaderHelper&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line25"></a>goog.require(&#39;goog.log&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Helper class used to load multiple URIs.
+<a name="line31"></a> * @param {Array.&lt;string|goog.Uri&gt;} uris The URIs to load.
+<a name="line32"></a> * @constructor
+<a name="line33"></a> * @extends {goog.Disposable}
+<a name="line34"></a> * @final
+<a name="line35"></a> */
+<a name="line36"></a>goog.net.BulkLoaderHelper = function(uris) {
+<a name="line37"></a>  goog.Disposable.call(this);
+<a name="line38"></a>
+<a name="line39"></a>  /**
+<a name="line40"></a>   * The URIs to load.
+<a name="line41"></a>   * @type {Array.&lt;string|goog.Uri&gt;}
+<a name="line42"></a>   * @private
+<a name="line43"></a>   */
+<a name="line44"></a>  this.uris_ = uris;
+<a name="line45"></a>
+<a name="line46"></a>  /**
+<a name="line47"></a>   * The response from the XHR&#39;s.
+<a name="line48"></a>   * @type {Array.&lt;string&gt;}
+<a name="line49"></a>   * @private
+<a name="line50"></a>   */
+<a name="line51"></a>  this.responseTexts_ = [];
+<a name="line52"></a>};
+<a name="line53"></a>goog.inherits(goog.net.BulkLoaderHelper, goog.Disposable);
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * A logger.
+<a name="line58"></a> * @type {goog.log.Logger}
+<a name="line59"></a> * @private
+<a name="line60"></a> */
+<a name="line61"></a>goog.net.BulkLoaderHelper.prototype.logger_ =
+<a name="line62"></a>    goog.log.getLogger(&#39;goog.net.BulkLoaderHelper&#39;);
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Gets the URI by id.
+<a name="line67"></a> * @param {number} id The id.
+<a name="line68"></a> * @return {string|goog.Uri} The URI specified by the id.
+<a name="line69"></a> */
+<a name="line70"></a>goog.net.BulkLoaderHelper.prototype.getUri = function(id) {
+<a name="line71"></a>  return this.uris_[id];
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Gets the URIs.
+<a name="line77"></a> * @return {Array.&lt;string|goog.Uri&gt;} The URIs.
+<a name="line78"></a> */
+<a name="line79"></a>goog.net.BulkLoaderHelper.prototype.getUris = function() {
+<a name="line80"></a>  return this.uris_;
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Gets the response texts.
+<a name="line86"></a> * @return {Array.&lt;string&gt;} The response texts.
+<a name="line87"></a> */
+<a name="line88"></a>goog.net.BulkLoaderHelper.prototype.getResponseTexts = function() {
+<a name="line89"></a>  return this.responseTexts_;
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Sets the response text by id.
+<a name="line95"></a> * @param {number} id The id.
+<a name="line96"></a> * @param {string} responseText The response texts.
+<a name="line97"></a> */
+<a name="line98"></a>goog.net.BulkLoaderHelper.prototype.setResponseText = function(
+<a name="line99"></a>    id, responseText) {
+<a name="line100"></a>  this.responseTexts_[id] = responseText;
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Determines if the load of the URIs is complete.
+<a name="line106"></a> * @return {boolean} TRUE iff the load is complete.
+<a name="line107"></a> */
+<a name="line108"></a>goog.net.BulkLoaderHelper.prototype.isLoadComplete = function() {
+<a name="line109"></a>  var responseTexts = this.responseTexts_;
+<a name="line110"></a>  if (responseTexts.length == this.uris_.length) {
+<a name="line111"></a>    for (var i = 0; i &lt; responseTexts.length; i++) {
+<a name="line112"></a>      if (!goog.isDefAndNotNull(responseTexts[i])) {
+<a name="line113"></a>        return false;
+<a name="line114"></a>      }
+<a name="line115"></a>    }
+<a name="line116"></a>    return true;
+<a name="line117"></a>  }
+<a name="line118"></a>  return false;
+<a name="line119"></a>};
+<a name="line120"></a>
+<a name="line121"></a>
+<a name="line122"></a>/** @override */
+<a name="line123"></a>goog.net.BulkLoaderHelper.prototype.disposeInternal = function() {
+<a name="line124"></a>  goog.net.BulkLoaderHelper.superClass_.disposeInternal.call(this);
+<a name="line125"></a>
+<a name="line126"></a>  this.uris_ = null;
+<a name="line127"></a>  this.responseTexts_ = null;
+<a name="line128"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>hybrid.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_json_hybrid.js.html">hybrid.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Utility to attempt native JSON processing, falling back to
+<a name="line18"></a> *     goog.json if not available.
+<a name="line19"></a> *
+<a name="line20"></a> *     This is intended as a drop-in for current users of goog.json who want
+<a name="line21"></a> *     to take advantage of native JSON if present.
+<a name="line22"></a> *
+<a name="line23"></a> * @author nnaze@google.com (Nathan Naze)
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.json.hybrid&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line29"></a>goog.require(&#39;goog.json&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Attempts to serialize the JSON string natively, falling back to
+<a name="line34"></a> * {@code goog.json.serialize} if unsuccessful.
+<a name="line35"></a> * @param {!Object} obj JavaScript object to serialize to JSON.
+<a name="line36"></a> * @return {string} Resulting JSON string.
+<a name="line37"></a> */
+<a name="line38"></a>goog.json.hybrid.stringify = goog.json.USE_NATIVE_JSON ?
+<a name="line39"></a>    goog.global[&#39;JSON&#39;][&#39;stringify&#39;] :
+<a name="line40"></a>    function(obj) {
+<a name="line41"></a>      if (goog.global.JSON) {
+<a name="line42"></a>        try {
+<a name="line43"></a>          return goog.global.JSON.stringify(obj);
+<a name="line44"></a>        } catch (e) {
+<a name="line45"></a>          // Native serialization failed.  Fall through to retry with
+<a name="line46"></a>          // goog.json.serialize.
+<a name="line47"></a>        }
+<a name="line48"></a>      }
+<a name="line49"></a>
+<a name="line50"></a>      return goog.json.serialize(obj);
+<a name="line51"></a>    };
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Attempts to parse the JSON string natively, falling back to
+<a name="line56"></a> * the supplied {@code fallbackParser} if unsuccessful.
+<a name="line57"></a> * @param {string} jsonString JSON string to parse.
+<a name="line58"></a> * @param {function(string):Object} fallbackParser Fallback JSON parser used
+<a name="line59"></a> *     if native
+<a name="line60"></a> * @return {!Object} Resulting JSON object.
+<a name="line61"></a> * @private
+<a name="line62"></a> */
+<a name="line63"></a>goog.json.hybrid.parse_ = function(jsonString, fallbackParser) {
+<a name="line64"></a>  if (goog.global.JSON) {
+<a name="line65"></a>    try {
+<a name="line66"></a>      var obj = goog.global.JSON.parse(jsonString);
+<a name="line67"></a>      goog.asserts.assertObject(obj);
+<a name="line68"></a>      return obj;
+<a name="line69"></a>    } catch (e) {
+<a name="line70"></a>      // Native parse failed.  Fall through to retry with goog.json.unsafeParse.
+<a name="line71"></a>    }
+<a name="line72"></a>  }
+<a name="line73"></a>
+<a name="line74"></a>  var obj = fallbackParser(jsonString);
+<a name="line75"></a>  goog.asserts.assert(obj);
+<a name="line76"></a>  return obj;
+<a name="line77"></a>};
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * Attempts to parse the JSON string natively, falling back to
+<a name="line82"></a> * {@code goog.json.parse} if unsuccessful.
+<a name="line83"></a> * @param {string} jsonString JSON string to parse.
+<a name="line84"></a> * @return {!Object} Resulting JSON object.
+<a name="line85"></a> */
+<a name="line86"></a>goog.json.hybrid.parse = goog.json.USE_NATIVE_JSON ?
+<a name="line87"></a>    goog.global[&#39;JSON&#39;][&#39;parse&#39;] :
+<a name="line88"></a>    function(jsonString) {
+<a name="line89"></a>      return goog.json.hybrid.parse_(jsonString, goog.json.parse);
+<a name="line90"></a>    };
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Attempts to parse the JSON string natively, falling back to
+<a name="line95"></a> * {@code goog.json.unsafeParse} if unsuccessful.
+<a name="line96"></a> * @param {string} jsonString JSON string to parse.
+<a name="line97"></a> * @return {!Object} Resulting JSON object.
+<a name="line98"></a> */
+<a name="line99"></a>goog.json.hybrid.unsafeParse = goog.json.USE_NATIVE_JSON ?
+<a name="line100"></a>    goog.global[&#39;JSON&#39;][&#39;parse&#39;] :
+<a name="line101"></a>    function(jsonString) {
+<a name="line102"></a>      return goog.json.hybrid.parse_(jsonString, goog.json.unsafeParse);
+<a name="line103"></a>    };
+</pre>
+
+
+</body>
+</html>

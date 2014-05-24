@@ -1,0 +1,2235 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>TreeNode (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">structs.TreeNode</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          <a href="class_goog_structs_Node.html">
+          goog.structs.Node
+</a>
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    Generic tree node data structure with arbitrary number of child nodes.
+It is possible to create a dynamic tree structure by overriding
+<code> #getParent</code> and <code> #getChildren</code> in a subclass. All other getters
+will automatically work.
+
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_structs_treenode.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/structs/treenode.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td><span class="type"><a href="class_goog_structs_Node.html">goog.structs.Node</a></span></td><td></td></tr>
+  <tr><td>goog.structs.TreeNode</td><td><span class="type"><a href="class_goog_structs_Node.html">goog.structs.Node</a></span></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+</table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.structs.TreeNode(<span><span class="arg">key</span>,&nbsp;<span class="arg">value</span></span>)
+  </div>
+
+   <h3>Parameters</h3>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span class="type">KEY</span>
+        <div class="entryOverview">Key.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type">VALUE</span>
+        <div class="entryOverview">Value.</div>
+     </td>
+   </tr>
+  </table>
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_structs_TreeNode.html">
+              goog.structs.TreeNode
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.addChild"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addChild<span class="args">(<span class="arg">child</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Appends a child node to this node.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">child</span>
+        : <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+        <div class="entryOverview">Orphan child node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line359">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.addChildAt"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">addChildAt<span class="args">(<span class="arg">child</span>,&nbsp;<span class="arg">index</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Inserts a child node at the given index.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">child</span>
+        : <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+        <div class="entryOverview">Orphan child node.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">index</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The position to insert at.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line369">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.clone"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">clone<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>&nbsp;
+            Clone of the tree node without its parent
+    and child nodes. The key and the value are copied by reference.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line71">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.contains"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">contains<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Tells whether this node is the ancestor of the given node.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+        <div class="entryOverview">A node.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether this node is the ancestor of <code> node</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line229">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.deepClone"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">deepClone<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>&nbsp;
+            Clone of the subtree with this node as root.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line79">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.forEachChild"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">forEachChild<span class="args">(<span class="arg">f</span>,&nbsp;<span class="arg">opt_this</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Traverses all child nodes.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">function(this:THIS, !goog.structs.TreeNode</span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE></span>,<span class="type"> number</span>,<span class="type">
+       !Array</span>.&lt;<span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">K</span>&gt;&gt;,<span class="type"> VALUE></span>&gt;)
+        <div class="entryOverview">Callback function. It
+    takes the node, its index and the array of all child nodes as arguments.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_this</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of <code> this</code>
+    within <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line303">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.forEachDescendant"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">forEachDescendant<span class="args">(<span class="arg">f</span>,&nbsp;<span class="arg">opt_this</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Traverses all child nodes recursively in preorder.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">function(!goog.structs.TreeNode</span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;)
+        <div class="entryOverview">Callback function.
+    It takes the node as argument.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_this</span>
+        : <span class="type">Object=</span>
+        <div class="entryOverview">The object to be used as the value of <code> this</code>
+    within <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line315">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.getAncestors"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getAncestors<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KE</span>&gt;,<span class="type"> VALUE></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KE</span>&gt;,<span class="type"> VALUE></span>&gt;&nbsp;
+            All ancestor nodes in
+    bottom-up order.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line172">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.getChildAt"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getChildAt<span class="args">(<span class="arg">index</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the child node of this node at the given index.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">index</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Child index.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;&nbsp;
+            The node at the given index or
+    null if not found.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line141">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.getChildCount"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getChildCount<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The number of children.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line149">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.getChildren"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getChildren<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KE</span>&gt;,<span class="type"> VALUE></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KE</span>&gt;,<span class="type"> VALUE></span>&gt;&nbsp;
+            Immutable child nodes.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line130">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.getDepth"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getDepth<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&nbsp;
+            The number of ancestors of the node.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line157">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.getNodeByKey"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getNodeByKey<span class="args">(<span class="arg">key</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Returns a node whose key matches the given one in the hierarchy rooted at
+this node. The hierarchy is searched using an in-order traversal.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">key</span>
+        : <span class="type">KEY</span>
+        <div class="entryOverview">The key to search for.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;&nbsp;
+            The node with the given key, or
+    null if no node with the given key exists in the hierarchy.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line279">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.getParent"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getParent<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;&nbsp;
+            Parent node or null if it has no
+    parent.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line92">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.getRoot"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getRoot<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;&nbsp;
+            The root of the tree structure,
+    i.e. the farthest ancestor of the node or the node itself if it has no
+    parents.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line188">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.getSubtreeKeys"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getSubtreeKeys<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">KEY</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Builds a nested array structure from the node keys in this node's subtree to
+facilitate testing tree operations that change the hierarchy.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">KEY</span>&gt;&nbsp;
+            The structure of this node's descendants as nested
+    array of node keys. The number of unclosed opening brackets up to a
+    particular node is proportional to the indentation of that node in the
+    graphical representation of the tree. Example:
+    <pre class="lang-js prettyprint">
+      this
+      |- child1
+      |  L- grandchild
+      L- child2
+    </pre>
+    is represented as ['child1', ['grandchild'], 'child2'].
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line212">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.isLastChild"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isLastChild<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Tells if the node is the last child of its parent. This method helps how to
+connect the tree nodes with lines: L shapes should be used before the last
+children and |- shapes before the rest. Schematic tree visualization:
+
+<pre class="lang-js prettyprint">
+Node1
+|-Node2
+| L-Node3
+|   |-Node4
+|   L-Node5
+L-Node6
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the node has parent and is the last child of it.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line121">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.isLeaf"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">isLeaf<span class="args">()</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the node is a leaf node.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line100">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.removeChild"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">removeChild<span class="args">(<span class="arg">child</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Removes the given child node of this node.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">child</span>
+        : <span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+        <div class="entryOverview">The node to remove.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;&nbsp;
+            The removed node if any.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line438">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.removeChildAt"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">removeChildAt<span class="args">(<span class="arg">index</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Removes the child node at the given index.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">index</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The position to remove from.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;&nbsp;
+            The removed node if any.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line419">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.removeChildren"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">removeChildren<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes all child nodes of this node.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line446">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.replaceChild"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">replaceChild<span class="args">(<span class="arg">newChild</span>,&nbsp;<span class="arg">oldChild</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Replaces the given child node.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">newChild</span>
+        : <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+        <div class="entryOverview">New node to replace
+    <code> oldChild</code>. It must not have parent node.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">oldChild</span>
+        : <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+        <div class="entryOverview">Existing child node to
+    be replaced.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;&nbsp;
+            The replaced child node
+    detached from its parent.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line408">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.replaceChildAt"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">replaceChildAt<span class="args">(<span class="arg">newChild</span>,&nbsp;<span class="arg">index</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Replaces a child node at the given index.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">newChild</span>
+        : <span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+        <div class="entryOverview">Child node to set. It
+    must not have parent node.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">index</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Valid index of the old child to replace.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;&nbsp;
+            The original child node,
+    detached from its parent.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line386">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry protected">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.setParent"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">setParent<span class="args">(<span class="arg">parent</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Sets the parent node of this node. The callers must ensure that the parent
+node and only that has this node among its children.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">parent</span>
+        : <span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+        <div class="entryOverview">The parent to set. If
+    null, the node will be detached from the tree.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line350">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.prototype.traverse"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">traverse<span class="args">(<span class="arg">f</span>,&nbsp;<span class="arg">opt_this</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Traverses the subtree with the possibility to skip branches. Starts with
+this node, and visits the descendant nodes depth-first, in preorder.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">function(this:THIS, !goog.structs.TreeNode</span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE>):
+       (boolea</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">undefined</span>)
+        <div class="entryOverview">Callback function. It takes the node as argument.
+    The children of this node will be visited if the callback returns true or
+    undefined, and will be skipped if the callback returns false.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_this</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of <code> this</code>
+    within <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line334">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_structs_Node.html">
+              goog.structs.Node
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Node.prototype.clone"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">clone<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_structs_Node.html">goog.structs.Node</a></span>.&lt;<span class="type">K</span>,<span class="type"> V</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Clones a node and returns a new node.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_structs_Node.html">goog.structs.Node</a></span>.&lt;<span class="type">K</span>,<span class="type"> V</span>&gt;&nbsp;
+            A new goog.structs.Node with the same
+    key value pair.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_node.js.source.html#line71">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Node.prototype.getKey"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getKey<span class="args">()</span>
+        </span>
+        &#8658; <span class="type">K</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the key.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">K</span>&nbsp;
+            The key.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_node.js.source.html#line52">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.Node.prototype.getValue"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">getValue<span class="args">()</span>
+        </span>
+        &#8658; <span class="type">V</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Gets the value.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">V</span>&nbsp;
+            The value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_node.js.source.html#line61">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_structs_TreeNode.html">
+              goog.structs.TreeNode
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.TreeNode.prototype.children_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">children_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Child nodes or null in case of leaf node.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line54">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.TreeNode.prototype.constructor"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">constructor</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line41">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.TreeNode.prototype.parent_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">parent_</span>
+        : <span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       Reference to the parent node or null if it has no parent.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line48">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_structs_Node.html">
+              goog.structs.Node
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.Node.prototype.key_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">key_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The key.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_node.js.source.html#line38">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.Node.prototype.value_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">value_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The value.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_node.js.source.html#line44">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Static Methods</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.structs.TreeNode.findCommonAncestor"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.structs.TreeNode.</span><span class="entryName">findCommonAncestor<span class="args">(<span class="arg">var_args</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Finds the deepest common ancestor of the given nodes. The concept of
+ancestor is not strict in this case, it includes the node itself.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">var_args</span>
+        : <span class="type">...!goog.structs.TreeNode</span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;
+        <div class="entryOverview">The nodes.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_structs_TreeNode.html">goog.structs.TreeNode</a></span>.&lt;<span class="type">KEY</span>,<span class="type"> VALUE</span>&gt;&nbsp;
+            The common ancestor of the nodes
+    or null if they are from different trees.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line246">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+<h2>Static Properties</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.TreeNode.EMPTY_ARRAY_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.structs.TreeNode.</span><span class="entryName">EMPTY_ARRAY_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Constant for empty array to avoid unnecessary allocations.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line63">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.structs.TreeNode.superClass_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.structs.TreeNode.</span><span class="entryName">superClass_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_structs_treenode.js.source.html#line41">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package structs</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="structs.TreeNode"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

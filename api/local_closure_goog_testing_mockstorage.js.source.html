@@ -1,0 +1,159 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mockstorage.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_mockstorage.js.html">mockstorage.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides a JS storage class implementing the HTML5 Storage
+<a name="line17"></a> * interface.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.testing.MockStorage&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * A JS storage instance, implementing the HMTL5 Storage interface.
+<a name="line30"></a> * See http://www.w3.org/TR/webstorage/ for details.
+<a name="line31"></a> *
+<a name="line32"></a> * @constructor
+<a name="line33"></a> * @implements {Storage}
+<a name="line34"></a> * @final
+<a name="line35"></a> */
+<a name="line36"></a>goog.testing.MockStorage = function() {
+<a name="line37"></a>  /**
+<a name="line38"></a>   * The underlying storage object.
+<a name="line39"></a>   * @type {goog.structs.Map}
+<a name="line40"></a>   * @private
+<a name="line41"></a>   */
+<a name="line42"></a>  this.store_ = new goog.structs.Map();
+<a name="line43"></a>
+<a name="line44"></a>  /**
+<a name="line45"></a>   * The number of elements in the storage.
+<a name="line46"></a>   * @type {number}
+<a name="line47"></a>   */
+<a name="line48"></a>  this.length = 0;
+<a name="line49"></a>};
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>/**
+<a name="line53"></a> * Sets an item to the storage.
+<a name="line54"></a> * @param {string} key Storage key.
+<a name="line55"></a> * @param {*} value Storage value. Must be convertible to string.
+<a name="line56"></a> * @override
+<a name="line57"></a> */
+<a name="line58"></a>goog.testing.MockStorage.prototype.setItem = function(key, value) {
+<a name="line59"></a>  this.store_.set(key, String(value));
+<a name="line60"></a>  this.length = this.store_.getCount();
+<a name="line61"></a>};
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * Gets an item from the storage.  The item returned is the &quot;structured clone&quot;
+<a name="line66"></a> * of the value from setItem.  In practice this means it&#39;s the value cast to a
+<a name="line67"></a> * string.
+<a name="line68"></a> * @param {string} key Storage key.
+<a name="line69"></a> * @return {?string} Storage value for key; null if does not exist.
+<a name="line70"></a> * @override
+<a name="line71"></a> */
+<a name="line72"></a>goog.testing.MockStorage.prototype.getItem = function(key) {
+<a name="line73"></a>  var val = this.store_.get(key);
+<a name="line74"></a>  // Enforce that getItem returns string values.
+<a name="line75"></a>  return (val != null) ? /** @type {string} */ (val) : null;
+<a name="line76"></a>};
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Removes and item from the storage.
+<a name="line81"></a> * @param {string} key Storage key.
+<a name="line82"></a> * @override
+<a name="line83"></a> */
+<a name="line84"></a>goog.testing.MockStorage.prototype.removeItem = function(key) {
+<a name="line85"></a>  this.store_.remove(key);
+<a name="line86"></a>  this.length = this.store_.getCount();
+<a name="line87"></a>};
+<a name="line88"></a>
+<a name="line89"></a>
+<a name="line90"></a>/**
+<a name="line91"></a> * Clears the storage.
+<a name="line92"></a> * @override
+<a name="line93"></a> */
+<a name="line94"></a>goog.testing.MockStorage.prototype.clear = function() {
+<a name="line95"></a>  this.store_.clear();
+<a name="line96"></a>  this.length = 0;
+<a name="line97"></a>};
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Returns the key at the given index.
+<a name="line102"></a> * @param {number} index The index for the key.
+<a name="line103"></a> * @return {?string} Key at the given index, null if not found.
+<a name="line104"></a> * @override
+<a name="line105"></a> */
+<a name="line106"></a>goog.testing.MockStorage.prototype.key = function(index) {
+<a name="line107"></a>  return this.store_.getKeys()[index] || null;
+<a name="line108"></a>};
+</pre>
+
+
+</body>
+</html>

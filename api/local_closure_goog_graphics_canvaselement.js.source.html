@@ -1,0 +1,848 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>canvaselement.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_graphics_canvaselement.js.html">canvaselement.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Objects representing shapes drawn on a canvas.
+<a name="line18"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.graphics.CanvasEllipseElement&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.graphics.CanvasGroupElement&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.graphics.CanvasImageElement&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.graphics.CanvasPathElement&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.graphics.CanvasRectElement&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.graphics.CanvasTextElement&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.array&#39;);
+<a name="line30"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line31"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line32"></a>goog.require(&#39;goog.graphics.EllipseElement&#39;);
+<a name="line33"></a>goog.require(&#39;goog.graphics.GroupElement&#39;);
+<a name="line34"></a>goog.require(&#39;goog.graphics.ImageElement&#39;);
+<a name="line35"></a>goog.require(&#39;goog.graphics.Path&#39;);
+<a name="line36"></a>goog.require(&#39;goog.graphics.PathElement&#39;);
+<a name="line37"></a>goog.require(&#39;goog.graphics.RectElement&#39;);
+<a name="line38"></a>goog.require(&#39;goog.graphics.TextElement&#39;);
+<a name="line39"></a>goog.require(&#39;goog.math&#39;);
+<a name="line40"></a>goog.require(&#39;goog.string&#39;);
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * Object representing a group of objects in a canvas.
+<a name="line46"></a> * This is an implementation of the goog.graphics.GroupElement interface.
+<a name="line47"></a> * You should not construct objects from this constructor. The graphics
+<a name="line48"></a> * will return the object for you.
+<a name="line49"></a> * @param {goog.graphics.CanvasGraphics} graphics The graphics creating
+<a name="line50"></a> *     this element.
+<a name="line51"></a> * @constructor
+<a name="line52"></a> * @extends {goog.graphics.GroupElement}
+<a name="line53"></a> * @deprecated goog.graphics is deprecated. It existed to abstract over browser
+<a name="line54"></a> *     differences before the canvas tag was widely supported.  See
+<a name="line55"></a> *     http://en.wikipedia.org/wiki/Canvas_element for details.
+<a name="line56"></a> * @final
+<a name="line57"></a> */
+<a name="line58"></a>goog.graphics.CanvasGroupElement = function(graphics) {
+<a name="line59"></a>  goog.graphics.GroupElement.call(this, null, graphics);
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>  /**
+<a name="line63"></a>   * Children contained by this group.
+<a name="line64"></a>   * @type {Array.&lt;goog.graphics.Element&gt;}
+<a name="line65"></a>   * @private
+<a name="line66"></a>   */
+<a name="line67"></a>  this.children_ = [];
+<a name="line68"></a>};
+<a name="line69"></a>goog.inherits(goog.graphics.CanvasGroupElement, goog.graphics.GroupElement);
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Remove all drawing elements from the group.
+<a name="line74"></a> * @override
+<a name="line75"></a> */
+<a name="line76"></a>goog.graphics.CanvasGroupElement.prototype.clear = function() {
+<a name="line77"></a>  if (this.children_.length) {
+<a name="line78"></a>    this.children_.length = 0;
+<a name="line79"></a>    this.getGraphics().redraw();
+<a name="line80"></a>  }
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Set the size of the group element.
+<a name="line86"></a> * @param {number|string} width The width of the group element.
+<a name="line87"></a> * @param {number|string} height The height of the group element.
+<a name="line88"></a> * @override
+<a name="line89"></a> */
+<a name="line90"></a>goog.graphics.CanvasGroupElement.prototype.setSize = function(width, height) {
+<a name="line91"></a>  // Do nothing.
+<a name="line92"></a>};
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * Append a child to the group.  Does not draw it
+<a name="line97"></a> * @param {goog.graphics.Element} element The child to append.
+<a name="line98"></a> */
+<a name="line99"></a>goog.graphics.CanvasGroupElement.prototype.appendChild = function(element) {
+<a name="line100"></a>  this.children_.push(element);
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Draw the group.
+<a name="line106"></a> * @param {CanvasRenderingContext2D} ctx The context to draw the element in.
+<a name="line107"></a> */
+<a name="line108"></a>goog.graphics.CanvasGroupElement.prototype.draw = function(ctx) {
+<a name="line109"></a>  for (var i = 0, len = this.children_.length; i &lt; len; i++) {
+<a name="line110"></a>    this.getGraphics().drawElement(this.children_[i]);
+<a name="line111"></a>  }
+<a name="line112"></a>};
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Thin wrapper for canvas ellipse elements.
+<a name="line118"></a> * This is an implementation of the goog.graphics.EllipseElement interface.
+<a name="line119"></a> * You should not construct objects from this constructor. The graphics
+<a name="line120"></a> * will return the object for you.
+<a name="line121"></a> * @param {Element} element The DOM element to wrap.
+<a name="line122"></a> * @param {goog.graphics.CanvasGraphics} graphics  The graphics creating
+<a name="line123"></a> *     this element.
+<a name="line124"></a> * @param {number} cx Center X coordinate.
+<a name="line125"></a> * @param {number} cy Center Y coordinate.
+<a name="line126"></a> * @param {number} rx Radius length for the x-axis.
+<a name="line127"></a> * @param {number} ry Radius length for the y-axis.
+<a name="line128"></a> * @param {goog.graphics.Stroke} stroke The stroke to use for this element.
+<a name="line129"></a> * @param {goog.graphics.Fill} fill The fill to use for this element.
+<a name="line130"></a> * @constructor
+<a name="line131"></a> * @extends {goog.graphics.EllipseElement}
+<a name="line132"></a> * @final
+<a name="line133"></a> */
+<a name="line134"></a>goog.graphics.CanvasEllipseElement = function(element, graphics,
+<a name="line135"></a>    cx, cy, rx, ry, stroke, fill) {
+<a name="line136"></a>  goog.graphics.EllipseElement.call(this, element, graphics, stroke, fill);
+<a name="line137"></a>
+<a name="line138"></a>  /**
+<a name="line139"></a>   * X coordinate of the ellipse center.
+<a name="line140"></a>   * @type {number}
+<a name="line141"></a>   * @private
+<a name="line142"></a>   */
+<a name="line143"></a>  this.cx_ = cx;
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>  /**
+<a name="line147"></a>   * Y coordinate of the ellipse center.
+<a name="line148"></a>   * @type {number}
+<a name="line149"></a>   * @private
+<a name="line150"></a>   */
+<a name="line151"></a>  this.cy_ = cy;
+<a name="line152"></a>
+<a name="line153"></a>
+<a name="line154"></a>  /**
+<a name="line155"></a>   * Radius length for the x-axis.
+<a name="line156"></a>   * @type {number}
+<a name="line157"></a>   * @private
+<a name="line158"></a>   */
+<a name="line159"></a>  this.rx_ = rx;
+<a name="line160"></a>
+<a name="line161"></a>
+<a name="line162"></a>  /**
+<a name="line163"></a>   * Radius length for the y-axis.
+<a name="line164"></a>   * @type {number}
+<a name="line165"></a>   * @private
+<a name="line166"></a>   */
+<a name="line167"></a>  this.ry_ = ry;
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>  /**
+<a name="line171"></a>   * Internal path approximating an ellipse.
+<a name="line172"></a>   * @type {goog.graphics.Path}
+<a name="line173"></a>   * @private
+<a name="line174"></a>   */
+<a name="line175"></a>  this.path_ = new goog.graphics.Path();
+<a name="line176"></a>  this.setUpPath_();
+<a name="line177"></a>
+<a name="line178"></a>  /**
+<a name="line179"></a>   * Internal path element that actually does the drawing.
+<a name="line180"></a>   * @type {goog.graphics.CanvasPathElement}
+<a name="line181"></a>   * @private
+<a name="line182"></a>   */
+<a name="line183"></a>  this.pathElement_ = new goog.graphics.CanvasPathElement(null, graphics,
+<a name="line184"></a>      this.path_, stroke, fill);
+<a name="line185"></a>};
+<a name="line186"></a>goog.inherits(goog.graphics.CanvasEllipseElement, goog.graphics.EllipseElement);
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Sets up the path.
+<a name="line191"></a> * @private
+<a name="line192"></a> */
+<a name="line193"></a>goog.graphics.CanvasEllipseElement.prototype.setUpPath_ = function() {
+<a name="line194"></a>  this.path_.clear();
+<a name="line195"></a>  this.path_.moveTo(this.cx_ + goog.math.angleDx(0, this.rx_),
+<a name="line196"></a>                    this.cy_ + goog.math.angleDy(0, this.ry_));
+<a name="line197"></a>  this.path_.arcTo(this.rx_, this.ry_, 0, 360);
+<a name="line198"></a>  this.path_.close();
+<a name="line199"></a>};
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>/**
+<a name="line203"></a> * Update the center point of the ellipse.
+<a name="line204"></a> * @param {number} cx Center X coordinate.
+<a name="line205"></a> * @param {number} cy Center Y coordinate.
+<a name="line206"></a> * @override
+<a name="line207"></a> */
+<a name="line208"></a>goog.graphics.CanvasEllipseElement.prototype.setCenter = function(cx, cy) {
+<a name="line209"></a>  this.cx_ = cx;
+<a name="line210"></a>  this.cy_ = cy;
+<a name="line211"></a>  this.setUpPath_();
+<a name="line212"></a>  this.pathElement_.setPath(/** @type {!goog.graphics.Path} */ (this.path_));
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Update the radius of the ellipse.
+<a name="line218"></a> * @param {number} rx Center X coordinate.
+<a name="line219"></a> * @param {number} ry Center Y coordinate.
+<a name="line220"></a> * @override
+<a name="line221"></a> */
+<a name="line222"></a>goog.graphics.CanvasEllipseElement.prototype.setRadius = function(rx, ry) {
+<a name="line223"></a>  this.rx_ = rx;
+<a name="line224"></a>  this.ry_ = ry;
+<a name="line225"></a>  this.setUpPath_();
+<a name="line226"></a>  this.pathElement_.setPath(/** @type {!goog.graphics.Path} */ (this.path_));
+<a name="line227"></a>};
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Draw the ellipse.  Should be treated as package scope.
+<a name="line232"></a> * @param {CanvasRenderingContext2D} ctx The context to draw the element in.
+<a name="line233"></a> */
+<a name="line234"></a>goog.graphics.CanvasEllipseElement.prototype.draw = function(ctx) {
+<a name="line235"></a>  this.pathElement_.draw(ctx);
+<a name="line236"></a>};
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * Thin wrapper for canvas rectangle elements.
+<a name="line242"></a> * This is an implementation of the goog.graphics.RectElement interface.
+<a name="line243"></a> * You should not construct objects from this constructor. The graphics
+<a name="line244"></a> * will return the object for you.
+<a name="line245"></a> * @param {Element} element The DOM element to wrap.
+<a name="line246"></a> * @param {goog.graphics.CanvasGraphics} graphics The graphics creating
+<a name="line247"></a> *     this element.
+<a name="line248"></a> * @param {number} x X coordinate (left).
+<a name="line249"></a> * @param {number} y Y coordinate (top).
+<a name="line250"></a> * @param {number} w Width of rectangle.
+<a name="line251"></a> * @param {number} h Height of rectangle.
+<a name="line252"></a> * @param {goog.graphics.Stroke} stroke The stroke to use for this element.
+<a name="line253"></a> * @param {goog.graphics.Fill} fill The fill to use for this element.
+<a name="line254"></a> * @constructor
+<a name="line255"></a> * @extends {goog.graphics.RectElement}
+<a name="line256"></a> * @final
+<a name="line257"></a> */
+<a name="line258"></a>goog.graphics.CanvasRectElement = function(element, graphics, x, y, w, h,
+<a name="line259"></a>    stroke, fill) {
+<a name="line260"></a>  goog.graphics.RectElement.call(this, element, graphics, stroke, fill);
+<a name="line261"></a>
+<a name="line262"></a>  /**
+<a name="line263"></a>   * X coordinate of the top left corner.
+<a name="line264"></a>   * @type {number}
+<a name="line265"></a>   * @private
+<a name="line266"></a>   */
+<a name="line267"></a>  this.x_ = x;
+<a name="line268"></a>
+<a name="line269"></a>
+<a name="line270"></a>  /**
+<a name="line271"></a>   * Y coordinate of the top left corner.
+<a name="line272"></a>   * @type {number}
+<a name="line273"></a>   * @private
+<a name="line274"></a>   */
+<a name="line275"></a>  this.y_ = y;
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a>  /**
+<a name="line279"></a>   * Width of the rectangle.
+<a name="line280"></a>   * @type {number}
+<a name="line281"></a>   * @private
+<a name="line282"></a>   */
+<a name="line283"></a>  this.w_ = w;
+<a name="line284"></a>
+<a name="line285"></a>
+<a name="line286"></a>  /**
+<a name="line287"></a>   * Height of the rectangle.
+<a name="line288"></a>   * @type {number}
+<a name="line289"></a>   * @private
+<a name="line290"></a>   */
+<a name="line291"></a>  this.h_ = h;
+<a name="line292"></a>};
+<a name="line293"></a>goog.inherits(goog.graphics.CanvasRectElement, goog.graphics.RectElement);
+<a name="line294"></a>
+<a name="line295"></a>
+<a name="line296"></a>/**
+<a name="line297"></a> * Update the position of the rectangle.
+<a name="line298"></a> * @param {number} x X coordinate (left).
+<a name="line299"></a> * @param {number} y Y coordinate (top).
+<a name="line300"></a> * @override
+<a name="line301"></a> */
+<a name="line302"></a>goog.graphics.CanvasRectElement.prototype.setPosition = function(x, y) {
+<a name="line303"></a>  this.x_ = x;
+<a name="line304"></a>  this.y_ = y;
+<a name="line305"></a>  if (this.drawn_) {
+<a name="line306"></a>    this.getGraphics().redraw();
+<a name="line307"></a>  }
+<a name="line308"></a>};
+<a name="line309"></a>
+<a name="line310"></a>
+<a name="line311"></a>/**
+<a name="line312"></a> * Whether the rectangle has been drawn yet.
+<a name="line313"></a> * @type {boolean}
+<a name="line314"></a> * @private
+<a name="line315"></a> */
+<a name="line316"></a>goog.graphics.CanvasRectElement.prototype.drawn_ = false;
+<a name="line317"></a>
+<a name="line318"></a>
+<a name="line319"></a>/**
+<a name="line320"></a> * Update the size of the rectangle.
+<a name="line321"></a> * @param {number} width Width of rectangle.
+<a name="line322"></a> * @param {number} height Height of rectangle.
+<a name="line323"></a> * @override
+<a name="line324"></a> */
+<a name="line325"></a>goog.graphics.CanvasRectElement.prototype.setSize = function(width, height) {
+<a name="line326"></a>  this.w_ = width;
+<a name="line327"></a>  this.h_ = height;
+<a name="line328"></a>  if (this.drawn_) {
+<a name="line329"></a>    this.getGraphics().redraw();
+<a name="line330"></a>  }
+<a name="line331"></a>};
+<a name="line332"></a>
+<a name="line333"></a>
+<a name="line334"></a>/**
+<a name="line335"></a> * Draw the rectangle.  Should be treated as package scope.
+<a name="line336"></a> * @param {CanvasRenderingContext2D} ctx The context to draw the element in.
+<a name="line337"></a> */
+<a name="line338"></a>goog.graphics.CanvasRectElement.prototype.draw = function(ctx) {
+<a name="line339"></a>  this.drawn_ = true;
+<a name="line340"></a>  ctx.beginPath();
+<a name="line341"></a>  ctx.moveTo(this.x_, this.y_);
+<a name="line342"></a>  ctx.lineTo(this.x_, this.y_ + this.h_);
+<a name="line343"></a>  ctx.lineTo(this.x_ + this.w_, this.y_ + this.h_);
+<a name="line344"></a>  ctx.lineTo(this.x_ + this.w_, this.y_);
+<a name="line345"></a>  ctx.closePath();
+<a name="line346"></a>};
+<a name="line347"></a>
+<a name="line348"></a>
+<a name="line349"></a>
+<a name="line350"></a>/**
+<a name="line351"></a> * Thin wrapper for canvas path elements.
+<a name="line352"></a> * This is an implementation of the goog.graphics.PathElement interface.
+<a name="line353"></a> * You should not construct objects from this constructor. The graphics
+<a name="line354"></a> * will return the object for you.
+<a name="line355"></a> * @param {Element} element The DOM element to wrap.
+<a name="line356"></a> * @param {goog.graphics.CanvasGraphics} graphics The graphics creating
+<a name="line357"></a> *     this element.
+<a name="line358"></a> * @param {!goog.graphics.Path} path The path object to draw.
+<a name="line359"></a> * @param {goog.graphics.Stroke} stroke The stroke to use for this element.
+<a name="line360"></a> * @param {goog.graphics.Fill} fill The fill to use for this element.
+<a name="line361"></a> * @constructor
+<a name="line362"></a> * @extends {goog.graphics.PathElement}
+<a name="line363"></a> * @final
+<a name="line364"></a> */
+<a name="line365"></a>goog.graphics.CanvasPathElement = function(element, graphics, path, stroke,
+<a name="line366"></a>    fill) {
+<a name="line367"></a>  goog.graphics.PathElement.call(this, element, graphics, stroke, fill);
+<a name="line368"></a>
+<a name="line369"></a>  this.setPath(path);
+<a name="line370"></a>};
+<a name="line371"></a>goog.inherits(goog.graphics.CanvasPathElement, goog.graphics.PathElement);
+<a name="line372"></a>
+<a name="line373"></a>
+<a name="line374"></a>/**
+<a name="line375"></a> * Whether the shape has been drawn yet.
+<a name="line376"></a> * @type {boolean}
+<a name="line377"></a> * @private
+<a name="line378"></a> */
+<a name="line379"></a>goog.graphics.CanvasPathElement.prototype.drawn_ = false;
+<a name="line380"></a>
+<a name="line381"></a>
+<a name="line382"></a>/**
+<a name="line383"></a> * The path to draw.
+<a name="line384"></a> * @type {goog.graphics.Path}
+<a name="line385"></a> * @private
+<a name="line386"></a> */
+<a name="line387"></a>goog.graphics.CanvasPathElement.prototype.path_;
+<a name="line388"></a>
+<a name="line389"></a>
+<a name="line390"></a>/**
+<a name="line391"></a> * Update the underlying path.
+<a name="line392"></a> * @param {!goog.graphics.Path} path The path object to draw.
+<a name="line393"></a> * @override
+<a name="line394"></a> */
+<a name="line395"></a>goog.graphics.CanvasPathElement.prototype.setPath = function(path) {
+<a name="line396"></a>  this.path_ = path.isSimple() ? path :
+<a name="line397"></a>      goog.graphics.Path.createSimplifiedPath(path);
+<a name="line398"></a>  if (this.drawn_) {
+<a name="line399"></a>    this.getGraphics().redraw();
+<a name="line400"></a>  }
+<a name="line401"></a>};
+<a name="line402"></a>
+<a name="line403"></a>
+<a name="line404"></a>/**
+<a name="line405"></a> * Draw the path.  Should be treated as package scope.
+<a name="line406"></a> * @param {CanvasRenderingContext2D} ctx The context to draw the element in.
+<a name="line407"></a> * @suppress {deprecated} goog.graphics is deprecated.
+<a name="line408"></a> */
+<a name="line409"></a>goog.graphics.CanvasPathElement.prototype.draw = function(ctx) {
+<a name="line410"></a>  this.drawn_ = true;
+<a name="line411"></a>
+<a name="line412"></a>  ctx.beginPath();
+<a name="line413"></a>  this.path_.forEachSegment(function(segment, args) {
+<a name="line414"></a>    switch (segment) {
+<a name="line415"></a>      case goog.graphics.Path.Segment.MOVETO:
+<a name="line416"></a>        ctx.moveTo(args[0], args[1]);
+<a name="line417"></a>        break;
+<a name="line418"></a>      case goog.graphics.Path.Segment.LINETO:
+<a name="line419"></a>        for (var i = 0; i &lt; args.length; i += 2) {
+<a name="line420"></a>          ctx.lineTo(args[i], args[i + 1]);
+<a name="line421"></a>        }
+<a name="line422"></a>        break;
+<a name="line423"></a>      case goog.graphics.Path.Segment.CURVETO:
+<a name="line424"></a>        for (var i = 0; i &lt; args.length; i += 6) {
+<a name="line425"></a>          ctx.bezierCurveTo(args[i], args[i + 1], args[i + 2],
+<a name="line426"></a>              args[i + 3], args[i + 4], args[i + 5]);
+<a name="line427"></a>        }
+<a name="line428"></a>        break;
+<a name="line429"></a>      case goog.graphics.Path.Segment.ARCTO:
+<a name="line430"></a>        throw Error(&#39;Canvas paths cannot contain arcs&#39;);
+<a name="line431"></a>      case goog.graphics.Path.Segment.CLOSE:
+<a name="line432"></a>        ctx.closePath();
+<a name="line433"></a>        break;
+<a name="line434"></a>    }
+<a name="line435"></a>  });
+<a name="line436"></a>};
+<a name="line437"></a>
+<a name="line438"></a>
+<a name="line439"></a>
+<a name="line440"></a>/**
+<a name="line441"></a> * Thin wrapper for canvas text elements.
+<a name="line442"></a> * This is an implementation of the goog.graphics.TextElement interface.
+<a name="line443"></a> * You should not construct objects from this constructor. The graphics
+<a name="line444"></a> * will return the object for you.
+<a name="line445"></a> * @param {!goog.graphics.CanvasGraphics} graphics The graphics creating
+<a name="line446"></a> *     this element.
+<a name="line447"></a> * @param {string} text The text to draw.
+<a name="line448"></a> * @param {number} x1 X coordinate of start of line.
+<a name="line449"></a> * @param {number} y1 Y coordinate of start of line.
+<a name="line450"></a> * @param {number} x2 X coordinate of end of line.
+<a name="line451"></a> * @param {number} y2 Y coordinate of end of line.
+<a name="line452"></a> * @param {?string} align Horizontal alignment: left (default), center, right.
+<a name="line453"></a> * @param {!goog.graphics.Font} font Font describing the font properties.
+<a name="line454"></a> * @param {goog.graphics.Stroke} stroke The stroke to use for this element.
+<a name="line455"></a> * @param {goog.graphics.Fill} fill The fill to use for this element.
+<a name="line456"></a> * @constructor
+<a name="line457"></a> * @extends {goog.graphics.TextElement}
+<a name="line458"></a> * @final
+<a name="line459"></a> */
+<a name="line460"></a>goog.graphics.CanvasTextElement = function(graphics, text, x1, y1, x2, y2,
+<a name="line461"></a>    align, font, stroke, fill) {
+<a name="line462"></a>  var element = goog.dom.createDom(goog.dom.TagName.DIV, {
+<a name="line463"></a>    &#39;style&#39;: &#39;display:table;position:absolute;padding:0;margin:0;border:0&#39;
+<a name="line464"></a>  });
+<a name="line465"></a>  goog.graphics.TextElement.call(this, element, graphics, stroke, fill);
+<a name="line466"></a>
+<a name="line467"></a>  /**
+<a name="line468"></a>   * The text to draw.
+<a name="line469"></a>   * @type {string}
+<a name="line470"></a>   * @private
+<a name="line471"></a>   */
+<a name="line472"></a>  this.text_ = text;
+<a name="line473"></a>
+<a name="line474"></a>  /**
+<a name="line475"></a>   * X coordinate of the start of the line the text is drawn on.
+<a name="line476"></a>   * @type {number}
+<a name="line477"></a>   * @private
+<a name="line478"></a>   */
+<a name="line479"></a>  this.x1_ = x1;
+<a name="line480"></a>
+<a name="line481"></a>  /**
+<a name="line482"></a>   * Y coordinate of the start of the line the text is drawn on.
+<a name="line483"></a>   * @type {number}
+<a name="line484"></a>   * @private
+<a name="line485"></a>   */
+<a name="line486"></a>  this.y1_ = y1;
+<a name="line487"></a>
+<a name="line488"></a>  /**
+<a name="line489"></a>   * X coordinate of the end of the line the text is drawn on.
+<a name="line490"></a>   * @type {number}
+<a name="line491"></a>   * @private
+<a name="line492"></a>   */
+<a name="line493"></a>  this.x2_ = x2;
+<a name="line494"></a>
+<a name="line495"></a>  /**
+<a name="line496"></a>   * Y coordinate of the end of the line the text is drawn on.
+<a name="line497"></a>   * @type {number}
+<a name="line498"></a>   * @private
+<a name="line499"></a>   */
+<a name="line500"></a>  this.y2_ = y2;
+<a name="line501"></a>
+<a name="line502"></a>  /**
+<a name="line503"></a>   * Horizontal alignment: left (default), center, right.
+<a name="line504"></a>   * @type {string}
+<a name="line505"></a>   * @private
+<a name="line506"></a>   */
+<a name="line507"></a>  this.align_ = align || &#39;left&#39;;
+<a name="line508"></a>
+<a name="line509"></a>  /**
+<a name="line510"></a>   * Font object describing the font properties.
+<a name="line511"></a>   * @type {goog.graphics.Font}
+<a name="line512"></a>   * @private
+<a name="line513"></a>   */
+<a name="line514"></a>  this.font_ = font;
+<a name="line515"></a>
+<a name="line516"></a>  /**
+<a name="line517"></a>   * The inner element that contains the text.
+<a name="line518"></a>   * @type {Element}
+<a name="line519"></a>   * @private
+<a name="line520"></a>   */
+<a name="line521"></a>  this.innerElement_ = goog.dom.createDom(&#39;DIV&#39;, {
+<a name="line522"></a>    &#39;style&#39;: &#39;display:table-cell;padding: 0;margin: 0;border: 0&#39;
+<a name="line523"></a>  });
+<a name="line524"></a>
+<a name="line525"></a>  this.updateStyle_();
+<a name="line526"></a>  this.updateText_();
+<a name="line527"></a>
+<a name="line528"></a>  // Append to the DOM.
+<a name="line529"></a>  graphics.getElement().appendChild(element);
+<a name="line530"></a>  element.appendChild(this.innerElement_);
+<a name="line531"></a>};
+<a name="line532"></a>goog.inherits(goog.graphics.CanvasTextElement, goog.graphics.TextElement);
+<a name="line533"></a>
+<a name="line534"></a>
+<a name="line535"></a>/**
+<a name="line536"></a> * Update the displayed text of the element.
+<a name="line537"></a> * @param {string} text The text to draw.
+<a name="line538"></a> * @override
+<a name="line539"></a> */
+<a name="line540"></a>goog.graphics.CanvasTextElement.prototype.setText = function(text) {
+<a name="line541"></a>  this.text_ = text;
+<a name="line542"></a>  this.updateText_();
+<a name="line543"></a>};
+<a name="line544"></a>
+<a name="line545"></a>
+<a name="line546"></a>/**
+<a name="line547"></a> * Sets the fill for this element.
+<a name="line548"></a> * @param {goog.graphics.Fill} fill The fill object.
+<a name="line549"></a> * @override
+<a name="line550"></a> */
+<a name="line551"></a>goog.graphics.CanvasTextElement.prototype.setFill = function(fill) {
+<a name="line552"></a>  this.fill = fill;
+<a name="line553"></a>  var element = this.getElement();
+<a name="line554"></a>  if (element) {
+<a name="line555"></a>    element.style.color = fill.getColor() || fill.getColor1();
+<a name="line556"></a>  }
+<a name="line557"></a>};
+<a name="line558"></a>
+<a name="line559"></a>
+<a name="line560"></a>/**
+<a name="line561"></a> * Sets the stroke for this element.
+<a name="line562"></a> * @param {goog.graphics.Stroke} stroke The stroke object.
+<a name="line563"></a> * @override
+<a name="line564"></a> */
+<a name="line565"></a>goog.graphics.CanvasTextElement.prototype.setStroke = function(stroke) {
+<a name="line566"></a>  // Ignore stroke
+<a name="line567"></a>};
+<a name="line568"></a>
+<a name="line569"></a>
+<a name="line570"></a>/**
+<a name="line571"></a> * Draw the text.  Should be treated as package scope.
+<a name="line572"></a> * @param {CanvasRenderingContext2D} ctx The context to draw the element in.
+<a name="line573"></a> */
+<a name="line574"></a>goog.graphics.CanvasTextElement.prototype.draw = function(ctx) {
+<a name="line575"></a>  // Do nothing - the text is already drawn.
+<a name="line576"></a>};
+<a name="line577"></a>
+<a name="line578"></a>
+<a name="line579"></a>/**
+<a name="line580"></a> * Update the styles of the DIVs.
+<a name="line581"></a> * @private
+<a name="line582"></a> */
+<a name="line583"></a>goog.graphics.CanvasTextElement.prototype.updateStyle_ = function() {
+<a name="line584"></a>  var x1 = this.x1_;
+<a name="line585"></a>  var x2 = this.x2_;
+<a name="line586"></a>  var y1 = this.y1_;
+<a name="line587"></a>  var y2 = this.y2_;
+<a name="line588"></a>  var align = this.align_;
+<a name="line589"></a>  var font = this.font_;
+<a name="line590"></a>  var style = this.getElement().style;
+<a name="line591"></a>  var scaleX = this.getGraphics().getPixelScaleX();
+<a name="line592"></a>  var scaleY = this.getGraphics().getPixelScaleY();
+<a name="line593"></a>
+<a name="line594"></a>  if (x1 == x2) {
+<a name="line595"></a>    // Special case vertical text
+<a name="line596"></a>    style.lineHeight = &#39;90%&#39;;
+<a name="line597"></a>
+<a name="line598"></a>    this.innerElement_.style.verticalAlign = align == &#39;center&#39; ? &#39;middle&#39; :
+<a name="line599"></a>        align == &#39;left&#39; ? (y1 &lt; y2 ? &#39;top&#39; : &#39;bottom&#39;) :
+<a name="line600"></a>        y1 &lt; y2 ? &#39;bottom&#39; : &#39;top&#39;;
+<a name="line601"></a>    style.textAlign = &#39;center&#39;;
+<a name="line602"></a>
+<a name="line603"></a>    var w = font.size * scaleX;
+<a name="line604"></a>    style.top = Math.round(Math.min(y1, y2) * scaleY) + &#39;px&#39;;
+<a name="line605"></a>    style.left = Math.round((x1 - w / 2) * scaleX) + &#39;px&#39;;
+<a name="line606"></a>    style.width = Math.round(w) + &#39;px&#39;;
+<a name="line607"></a>    style.height = Math.abs(y1 - y2) * scaleY + &#39;px&#39;;
+<a name="line608"></a>
+<a name="line609"></a>    style.fontSize = font.size * 0.6 * scaleY + &#39;pt&#39;;
+<a name="line610"></a>  } else {
+<a name="line611"></a>    style.lineHeight = &#39;100%&#39;;
+<a name="line612"></a>    this.innerElement_.style.verticalAlign = &#39;top&#39;;
+<a name="line613"></a>    style.textAlign = align;
+<a name="line614"></a>
+<a name="line615"></a>    style.top = Math.round(((y1 + y2) / 2 - font.size * 2 / 3) * scaleY) + &#39;px&#39;;
+<a name="line616"></a>    style.left = Math.round(x1 * scaleX) + &#39;px&#39;;
+<a name="line617"></a>    style.width = Math.round(Math.abs(x2 - x1) * scaleX) + &#39;px&#39;;
+<a name="line618"></a>    style.height = &#39;auto&#39;;
+<a name="line619"></a>
+<a name="line620"></a>    style.fontSize = font.size * scaleY + &#39;pt&#39;;
+<a name="line621"></a>  }
+<a name="line622"></a>
+<a name="line623"></a>  style.fontWeight = font.bold ? &#39;bold&#39; : &#39;normal&#39;;
+<a name="line624"></a>  style.fontStyle = font.italic ? &#39;italic&#39; : &#39;normal&#39;;
+<a name="line625"></a>  style.fontFamily = font.family;
+<a name="line626"></a>
+<a name="line627"></a>  var fill = this.getFill();
+<a name="line628"></a>  style.color = fill.getColor() || fill.getColor1();
+<a name="line629"></a>};
+<a name="line630"></a>
+<a name="line631"></a>
+<a name="line632"></a>/**
+<a name="line633"></a> * Update the text content.
+<a name="line634"></a> * @private
+<a name="line635"></a> */
+<a name="line636"></a>goog.graphics.CanvasTextElement.prototype.updateText_ = function() {
+<a name="line637"></a>  if (this.x1_ == this.x2_) {
+<a name="line638"></a>    // Special case vertical text
+<a name="line639"></a>    this.innerElement_.innerHTML =
+<a name="line640"></a>        goog.array.map(this.text_.split(&#39;&#39;),
+<a name="line641"></a>            function(entry) { return goog.string.htmlEscape(entry); }).
+<a name="line642"></a>            join(&#39;&lt;br&gt;&#39;);
+<a name="line643"></a>  } else {
+<a name="line644"></a>    this.innerElement_.innerHTML = goog.string.htmlEscape(this.text_);
+<a name="line645"></a>  }
+<a name="line646"></a>};
+<a name="line647"></a>
+<a name="line648"></a>
+<a name="line649"></a>
+<a name="line650"></a>/**
+<a name="line651"></a> * Thin wrapper for canvas image elements.
+<a name="line652"></a> * This is an implementation of the goog.graphics.ImageElement interface.
+<a name="line653"></a> * You should not construct objects from this constructor. The graphics
+<a name="line654"></a> * will return the object for you.
+<a name="line655"></a> * @param {Element} element The DOM element to wrap.
+<a name="line656"></a> * @param {goog.graphics.CanvasGraphics} graphics The graphics creating
+<a name="line657"></a> *     this element.
+<a name="line658"></a> * @param {number} x X coordinate (left).
+<a name="line659"></a> * @param {number} y Y coordinate (top).
+<a name="line660"></a> * @param {number} w Width of rectangle.
+<a name="line661"></a> * @param {number} h Height of rectangle.
+<a name="line662"></a> * @param {string} src Source of the image.
+<a name="line663"></a> * @constructor
+<a name="line664"></a> * @extends {goog.graphics.ImageElement}
+<a name="line665"></a> * @final
+<a name="line666"></a> */
+<a name="line667"></a>goog.graphics.CanvasImageElement = function(element, graphics, x, y, w, h,
+<a name="line668"></a>    src) {
+<a name="line669"></a>  goog.graphics.ImageElement.call(this, element, graphics);
+<a name="line670"></a>
+<a name="line671"></a>  /**
+<a name="line672"></a>   * X coordinate of the top left corner.
+<a name="line673"></a>   * @type {number}
+<a name="line674"></a>   * @private
+<a name="line675"></a>   */
+<a name="line676"></a>  this.x_ = x;
+<a name="line677"></a>
+<a name="line678"></a>
+<a name="line679"></a>  /**
+<a name="line680"></a>   * Y coordinate of the top left corner.
+<a name="line681"></a>   * @type {number}
+<a name="line682"></a>   * @private
+<a name="line683"></a>   */
+<a name="line684"></a>  this.y_ = y;
+<a name="line685"></a>
+<a name="line686"></a>
+<a name="line687"></a>  /**
+<a name="line688"></a>   * Width of the rectangle.
+<a name="line689"></a>   * @type {number}
+<a name="line690"></a>   * @private
+<a name="line691"></a>   */
+<a name="line692"></a>  this.w_ = w;
+<a name="line693"></a>
+<a name="line694"></a>
+<a name="line695"></a>  /**
+<a name="line696"></a>   * Height of the rectangle.
+<a name="line697"></a>   * @type {number}
+<a name="line698"></a>   * @private
+<a name="line699"></a>   */
+<a name="line700"></a>  this.h_ = h;
+<a name="line701"></a>
+<a name="line702"></a>
+<a name="line703"></a>  /**
+<a name="line704"></a>   * URL of the image source.
+<a name="line705"></a>   * @type {string}
+<a name="line706"></a>   * @private
+<a name="line707"></a>   */
+<a name="line708"></a>  this.src_ = src;
+<a name="line709"></a>};
+<a name="line710"></a>goog.inherits(goog.graphics.CanvasImageElement, goog.graphics.ImageElement);
+<a name="line711"></a>
+<a name="line712"></a>
+<a name="line713"></a>/**
+<a name="line714"></a> * Whether the image has been drawn yet.
+<a name="line715"></a> * @type {boolean}
+<a name="line716"></a> * @private
+<a name="line717"></a> */
+<a name="line718"></a>goog.graphics.CanvasImageElement.prototype.drawn_ = false;
+<a name="line719"></a>
+<a name="line720"></a>
+<a name="line721"></a>/**
+<a name="line722"></a> * Update the position of the image.
+<a name="line723"></a> * @param {number} x X coordinate (left).
+<a name="line724"></a> * @param {number} y Y coordinate (top).
+<a name="line725"></a> * @override
+<a name="line726"></a> */
+<a name="line727"></a>goog.graphics.CanvasImageElement.prototype.setPosition = function(x, y) {
+<a name="line728"></a>  this.x_ = x;
+<a name="line729"></a>  this.y_ = y;
+<a name="line730"></a>  if (this.drawn_) {
+<a name="line731"></a>    this.getGraphics().redraw();
+<a name="line732"></a>  }
+<a name="line733"></a>};
+<a name="line734"></a>
+<a name="line735"></a>
+<a name="line736"></a>/**
+<a name="line737"></a> * Update the size of the image.
+<a name="line738"></a> * @param {number} width Width of rectangle.
+<a name="line739"></a> * @param {number} height Height of rectangle.
+<a name="line740"></a> * @override
+<a name="line741"></a> */
+<a name="line742"></a>goog.graphics.CanvasImageElement.prototype.setSize = function(width, height) {
+<a name="line743"></a>  this.w_ = width;
+<a name="line744"></a>  this.h_ = height;
+<a name="line745"></a>  if (this.drawn_) {
+<a name="line746"></a>    this.getGraphics().redraw();
+<a name="line747"></a>  }
+<a name="line748"></a>};
+<a name="line749"></a>
+<a name="line750"></a>
+<a name="line751"></a>/**
+<a name="line752"></a> * Update the source of the image.
+<a name="line753"></a> * @param {string} src Source of the image.
+<a name="line754"></a> * @override
+<a name="line755"></a> */
+<a name="line756"></a>goog.graphics.CanvasImageElement.prototype.setSource = function(src) {
+<a name="line757"></a>  this.src_ = src;
+<a name="line758"></a>  if (this.drawn_) {
+<a name="line759"></a>    // TODO(robbyw): Probably need to reload the image here.
+<a name="line760"></a>    this.getGraphics().redraw();
+<a name="line761"></a>  }
+<a name="line762"></a>};
+<a name="line763"></a>
+<a name="line764"></a>
+<a name="line765"></a>/**
+<a name="line766"></a> * Draw the image.  Should be treated as package scope.
+<a name="line767"></a> * @param {CanvasRenderingContext2D} ctx The context to draw the element in.
+<a name="line768"></a> */
+<a name="line769"></a>goog.graphics.CanvasImageElement.prototype.draw = function(ctx) {
+<a name="line770"></a>  if (this.img_) {
+<a name="line771"></a>    if (this.w_ &amp;&amp; this.h_) {
+<a name="line772"></a>      // If the image is already loaded, draw it.
+<a name="line773"></a>      ctx.drawImage(this.img_, this.x_, this.y_, this.w_, this.h_);
+<a name="line774"></a>    }
+<a name="line775"></a>    this.drawn_ = true;
+<a name="line776"></a>
+<a name="line777"></a>  } else {
+<a name="line778"></a>    // Otherwise, load it.
+<a name="line779"></a>    var img = new Image();
+<a name="line780"></a>    img.onload = goog.bind(this.handleImageLoad_, this, img);
+<a name="line781"></a>    // TODO(robbyw): Handle image load errors.
+<a name="line782"></a>    img.src = this.src_;
+<a name="line783"></a>  }
+<a name="line784"></a>};
+<a name="line785"></a>
+<a name="line786"></a>
+<a name="line787"></a>/**
+<a name="line788"></a> * Handle an image load.
+<a name="line789"></a> * @param {Element} img The image element that finished loading.
+<a name="line790"></a> * @private
+<a name="line791"></a> */
+<a name="line792"></a>goog.graphics.CanvasImageElement.prototype.handleImageLoad_ = function(img) {
+<a name="line793"></a>  this.img_ = img;
+<a name="line794"></a>
+<a name="line795"></a>  // TODO(robbyw): Add a small delay to catch batched images
+<a name="line796"></a>  this.getGraphics().redraw();
+<a name="line797"></a>};
+</pre>
+
+
+</body>
+</html>

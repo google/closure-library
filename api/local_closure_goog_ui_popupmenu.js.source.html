@@ -1,0 +1,608 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>popupmenu.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_popupmenu.js.html">popupmenu.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A menu class for showing popups.  A single popup can be
+<a name="line17"></a> * attached to multiple anchor points.  The menu will try to reposition itself
+<a name="line18"></a> * if it goes outside the viewport.
+<a name="line19"></a> *
+<a name="line20"></a> * Decoration is the same as goog.ui.Menu except that the outer DIV can have a
+<a name="line21"></a> * &#39;for&#39; property, which is the ID of the element which triggers the popup.
+<a name="line22"></a> *
+<a name="line23"></a> * Decorate Example:
+<a name="line24"></a> * &lt;button id=&quot;dButton&quot;&gt;Decorated Popup&lt;/button&gt;
+<a name="line25"></a> * &lt;div id=&quot;dMenu&quot; for=&quot;dButton&quot; class=&quot;goog-menu&quot;&gt;
+<a name="line26"></a> *   &lt;div class=&quot;goog-menuitem&quot;&gt;A a&lt;/div&gt;
+<a name="line27"></a> *   &lt;div class=&quot;goog-menuitem&quot;&gt;B b&lt;/div&gt;
+<a name="line28"></a> *   &lt;div class=&quot;goog-menuitem&quot;&gt;C c&lt;/div&gt;
+<a name="line29"></a> *   &lt;div class=&quot;goog-menuitem&quot;&gt;D d&lt;/div&gt;
+<a name="line30"></a> *   &lt;div class=&quot;goog-menuitem&quot;&gt;E e&lt;/div&gt;
+<a name="line31"></a> *   &lt;div class=&quot;goog-menuitem&quot;&gt;F f&lt;/div&gt;
+<a name="line32"></a> * &lt;/div&gt;
+<a name="line33"></a> *
+<a name="line34"></a> * TESTED=FireFox 2.0, IE6, Opera 9, Chrome.
+<a name="line35"></a> * TODO(user): Key handling is flakey in Opera and Chrome
+<a name="line36"></a> *
+<a name="line37"></a> * @see ../demos/popupmenu.html
+<a name="line38"></a> */
+<a name="line39"></a>
+<a name="line40"></a>goog.provide(&#39;goog.ui.PopupMenu&#39;);
+<a name="line41"></a>
+<a name="line42"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line43"></a>goog.require(&#39;goog.positioning.AnchoredViewportPosition&#39;);
+<a name="line44"></a>goog.require(&#39;goog.positioning.Corner&#39;);
+<a name="line45"></a>goog.require(&#39;goog.positioning.MenuAnchoredPosition&#39;);
+<a name="line46"></a>goog.require(&#39;goog.positioning.Overflow&#39;);
+<a name="line47"></a>goog.require(&#39;goog.positioning.ViewportClientPosition&#39;);
+<a name="line48"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line49"></a>goog.require(&#39;goog.style&#39;);
+<a name="line50"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line51"></a>goog.require(&#39;goog.ui.Menu&#39;);
+<a name="line52"></a>goog.require(&#39;goog.ui.PopupBase&#39;);
+<a name="line53"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * A basic menu class.
+<a name="line59"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+<a name="line60"></a> * @param {goog.ui.MenuRenderer=} opt_renderer Renderer used to render or
+<a name="line61"></a> *     decorate the container; defaults to {@link goog.ui.MenuRenderer}.
+<a name="line62"></a> * @extends {goog.ui.Menu}
+<a name="line63"></a> * @constructor
+<a name="line64"></a> */
+<a name="line65"></a>goog.ui.PopupMenu = function(opt_domHelper, opt_renderer) {
+<a name="line66"></a>  goog.ui.Menu.call(this, opt_domHelper, opt_renderer);
+<a name="line67"></a>
+<a name="line68"></a>  this.setAllowAutoFocus(true);
+<a name="line69"></a>
+<a name="line70"></a>  // Popup menus are hidden by default.
+<a name="line71"></a>  this.setVisible(false, true);
+<a name="line72"></a>
+<a name="line73"></a>  /**
+<a name="line74"></a>   * Map of attachment points for the menu.  Key -&gt; Object
+<a name="line75"></a>   * @type {!goog.structs.Map}
+<a name="line76"></a>   * @private
+<a name="line77"></a>   */
+<a name="line78"></a>  this.targets_ = new goog.structs.Map();
+<a name="line79"></a>};
+<a name="line80"></a>goog.inherits(goog.ui.PopupMenu, goog.ui.Menu);
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * If true, then if the menu will toggle off if it is already visible.
+<a name="line85"></a> * @type {boolean}
+<a name="line86"></a> * @private
+<a name="line87"></a> */
+<a name="line88"></a>goog.ui.PopupMenu.prototype.toggleMode_ = false;
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Time that the menu was last shown.
+<a name="line93"></a> * @type {number}
+<a name="line94"></a> * @private
+<a name="line95"></a> */
+<a name="line96"></a>goog.ui.PopupMenu.prototype.lastHide_ = 0;
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Current element where the popup menu is anchored.
+<a name="line101"></a> * @type {Element}
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.ui.PopupMenu.prototype.currentAnchor_ = null;
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Decorate an existing HTML structure with the menu. Menu items will be
+<a name="line109"></a> * constructed from elements with classname &#39;goog-menuitem&#39;, separators will be
+<a name="line110"></a> * made from HR elements.
+<a name="line111"></a> * @param {Element} element Element to decorate.
+<a name="line112"></a> * @override
+<a name="line113"></a> */
+<a name="line114"></a>goog.ui.PopupMenu.prototype.decorateInternal = function(element) {
+<a name="line115"></a>  goog.ui.PopupMenu.superClass_.decorateInternal.call(this, element);
+<a name="line116"></a>  // &#39;for&#39; is a custom attribute for attaching the menu to a click target
+<a name="line117"></a>  var htmlFor = element.getAttribute(&#39;for&#39;) || element.htmlFor;
+<a name="line118"></a>  if (htmlFor) {
+<a name="line119"></a>    this.attach(
+<a name="line120"></a>        this.getDomHelper().getElement(htmlFor),
+<a name="line121"></a>        goog.positioning.Corner.BOTTOM_LEFT);
+<a name="line122"></a>  }
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/** @override */
+<a name="line127"></a>goog.ui.PopupMenu.prototype.enterDocument = function() {
+<a name="line128"></a>  goog.ui.PopupMenu.superClass_.enterDocument.call(this);
+<a name="line129"></a>
+<a name="line130"></a>  this.targets_.forEach(this.attachEvent_, this);
+<a name="line131"></a>
+<a name="line132"></a>  var handler = this.getHandler();
+<a name="line133"></a>  handler.listen(
+<a name="line134"></a>      this, goog.ui.Component.EventType.ACTION, this.onAction_);
+<a name="line135"></a>  handler.listen(this.getDomHelper().getDocument(),
+<a name="line136"></a>      goog.events.EventType.MOUSEDOWN, this.onDocClick, true);
+<a name="line137"></a>
+<a name="line138"></a>  // Webkit doesn&#39;t fire a mousedown event when opening the context menu,
+<a name="line139"></a>  // but we need one to update menu visibility properly. So in Safari handle
+<a name="line140"></a>  // contextmenu mouse events like mousedown.
+<a name="line141"></a>  // {@link http://bugs.webkit.org/show_bug.cgi?id=6595}
+<a name="line142"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line143"></a>    handler.listen(this.getDomHelper().getDocument(),
+<a name="line144"></a>        goog.events.EventType.CONTEXTMENU, this.onDocClick, true);
+<a name="line145"></a>  }
+<a name="line146"></a>};
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/**
+<a name="line150"></a> * Attaches the menu to a new popup position and anchor element.  A menu can
+<a name="line151"></a> * only be attached to an element once, since attaching the same menu for
+<a name="line152"></a> * multiple positions doesn&#39;t make sense.
+<a name="line153"></a> *
+<a name="line154"></a> * @param {Element} element Element whose click event should trigger the menu.
+<a name="line155"></a> * @param {goog.positioning.Corner=} opt_targetCorner Corner of the target that
+<a name="line156"></a> *     the menu should be anchored to.
+<a name="line157"></a> * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
+<a name="line158"></a> *     should be anchored.
+<a name="line159"></a> * @param {boolean=} opt_contextMenu Whether the menu should show on
+<a name="line160"></a> *     {@link goog.events.EventType.CONTEXTMENU} events, false if it should
+<a name="line161"></a> *     show on {@link goog.events.EventType.MOUSEDOWN} events. Default is
+<a name="line162"></a> *     MOUSEDOWN.
+<a name="line163"></a> * @param {goog.math.Box=} opt_margin Margin for the popup used in positioning
+<a name="line164"></a> *     algorithms.
+<a name="line165"></a> */
+<a name="line166"></a>goog.ui.PopupMenu.prototype.attach = function(
+<a name="line167"></a>    element, opt_targetCorner, opt_menuCorner, opt_contextMenu, opt_margin) {
+<a name="line168"></a>
+<a name="line169"></a>  if (this.isAttachTarget(element)) {
+<a name="line170"></a>    // Already in the popup, so just return.
+<a name="line171"></a>    return;
+<a name="line172"></a>  }
+<a name="line173"></a>
+<a name="line174"></a>  var target = this.createAttachTarget(element, opt_targetCorner,
+<a name="line175"></a>      opt_menuCorner, opt_contextMenu, opt_margin);
+<a name="line176"></a>
+<a name="line177"></a>  if (this.isInDocument()) {
+<a name="line178"></a>    this.attachEvent_(target);
+<a name="line179"></a>  }
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Creates an object describing how the popup menu should be attached to the
+<a name="line185"></a> * anchoring element based on the given parameters. The created object is
+<a name="line186"></a> * stored, keyed by {@code element} and is retrievable later by invoking
+<a name="line187"></a> * {@link #getAttachTarget(element)} at a later point.
+<a name="line188"></a> *
+<a name="line189"></a> * Subclass may add more properties to the returned object, as needed.
+<a name="line190"></a> *
+<a name="line191"></a> * @param {Element} element Element whose click event should trigger the menu.
+<a name="line192"></a> * @param {goog.positioning.Corner=} opt_targetCorner Corner of the target that
+<a name="line193"></a> *     the menu should be anchored to.
+<a name="line194"></a> * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
+<a name="line195"></a> *     should be anchored.
+<a name="line196"></a> * @param {boolean=} opt_contextMenu Whether the menu should show on
+<a name="line197"></a> *     {@link goog.events.EventType.CONTEXTMENU} events, false if it should
+<a name="line198"></a> *     show on {@link goog.events.EventType.MOUSEDOWN} events. Default is
+<a name="line199"></a> *     MOUSEDOWN.
+<a name="line200"></a> * @param {goog.math.Box=} opt_margin Margin for the popup used in positioning
+<a name="line201"></a> *     algorithms.
+<a name="line202"></a> *
+<a name="line203"></a> * @return {Object} An object that describes how the popup menu should be
+<a name="line204"></a> *     attached to the anchoring element.
+<a name="line205"></a> *
+<a name="line206"></a> * @protected
+<a name="line207"></a> */
+<a name="line208"></a>goog.ui.PopupMenu.prototype.createAttachTarget = function(
+<a name="line209"></a>    element, opt_targetCorner, opt_menuCorner, opt_contextMenu, opt_margin) {
+<a name="line210"></a>  if (!element) {
+<a name="line211"></a>    return null;
+<a name="line212"></a>  }
+<a name="line213"></a>
+<a name="line214"></a>  var target = {
+<a name="line215"></a>    element_: element,
+<a name="line216"></a>    targetCorner_: opt_targetCorner,
+<a name="line217"></a>    menuCorner_: opt_menuCorner,
+<a name="line218"></a>    eventType_: opt_contextMenu ? goog.events.EventType.CONTEXTMENU :
+<a name="line219"></a>        goog.events.EventType.MOUSEDOWN,
+<a name="line220"></a>    margin_: opt_margin
+<a name="line221"></a>  };
+<a name="line222"></a>
+<a name="line223"></a>  this.targets_.set(goog.getUid(element), target);
+<a name="line224"></a>
+<a name="line225"></a>  return target;
+<a name="line226"></a>};
+<a name="line227"></a>
+<a name="line228"></a>
+<a name="line229"></a>/**
+<a name="line230"></a> * Returns the object describing how the popup menu should be attach to given
+<a name="line231"></a> * element or {@code null}. The object is created and the association is formed
+<a name="line232"></a> * when {@link #attach} is invoked.
+<a name="line233"></a> *
+<a name="line234"></a> * @param {Element} element DOM element.
+<a name="line235"></a> * @return {Object} The object created when {@link attach} is invoked on
+<a name="line236"></a> *     {@code element}. Returns {@code null} if the element does not trigger
+<a name="line237"></a> *     the menu (i.e. {@link attach} has never been invoked on
+<a name="line238"></a> *     {@code element}).
+<a name="line239"></a> * @protected
+<a name="line240"></a> */
+<a name="line241"></a>goog.ui.PopupMenu.prototype.getAttachTarget = function(element) {
+<a name="line242"></a>  return element ?
+<a name="line243"></a>      /** @type {Object} */(this.targets_.get(goog.getUid(element))) :
+<a name="line244"></a>      null;
+<a name="line245"></a>};
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * @param {Element} element Any DOM element.
+<a name="line250"></a> * @return {boolean} Whether clicking on the given element will trigger the
+<a name="line251"></a> *     menu.
+<a name="line252"></a> *
+<a name="line253"></a> * @protected
+<a name="line254"></a> */
+<a name="line255"></a>goog.ui.PopupMenu.prototype.isAttachTarget = function(element) {
+<a name="line256"></a>  return element ? this.targets_.containsKey(goog.getUid(element)) : false;
+<a name="line257"></a>};
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/**
+<a name="line261"></a> * @return {Element} The current element where the popup is anchored, if it&#39;s
+<a name="line262"></a> *     visible.
+<a name="line263"></a> */
+<a name="line264"></a>goog.ui.PopupMenu.prototype.getAttachedElement = function() {
+<a name="line265"></a>  return this.currentAnchor_;
+<a name="line266"></a>};
+<a name="line267"></a>
+<a name="line268"></a>
+<a name="line269"></a>/**
+<a name="line270"></a> * Attaches an event listener to a target
+<a name="line271"></a> * @param {Object} target The target to attach an event to.
+<a name="line272"></a> * @private
+<a name="line273"></a> */
+<a name="line274"></a>goog.ui.PopupMenu.prototype.attachEvent_ = function(target) {
+<a name="line275"></a>  this.getHandler().listen(
+<a name="line276"></a>      target.element_, target.eventType_, this.onTargetClick_);
+<a name="line277"></a>};
+<a name="line278"></a>
+<a name="line279"></a>
+<a name="line280"></a>/**
+<a name="line281"></a> * Detaches all listeners
+<a name="line282"></a> */
+<a name="line283"></a>goog.ui.PopupMenu.prototype.detachAll = function() {
+<a name="line284"></a>  if (this.isInDocument()) {
+<a name="line285"></a>    var keys = this.targets_.getKeys();
+<a name="line286"></a>    for (var i = 0; i &lt; keys.length; i++) {
+<a name="line287"></a>      this.detachEvent_(/** @type {Object} */ (this.targets_.get(keys[i])));
+<a name="line288"></a>    }
+<a name="line289"></a>  }
+<a name="line290"></a>
+<a name="line291"></a>  this.targets_.clear();
+<a name="line292"></a>};
+<a name="line293"></a>
+<a name="line294"></a>
+<a name="line295"></a>/**
+<a name="line296"></a> * Detaches a menu from a given element.
+<a name="line297"></a> * @param {Element} element Element whose click event should trigger the menu.
+<a name="line298"></a> */
+<a name="line299"></a>goog.ui.PopupMenu.prototype.detach = function(element) {
+<a name="line300"></a>  if (!this.isAttachTarget(element)) {
+<a name="line301"></a>    throw Error(&#39;Menu not attached to provided element, unable to detach.&#39;);
+<a name="line302"></a>  }
+<a name="line303"></a>
+<a name="line304"></a>  var key = goog.getUid(element);
+<a name="line305"></a>  if (this.isInDocument()) {
+<a name="line306"></a>    this.detachEvent_(/** @type {Object} */ (this.targets_.get(key)));
+<a name="line307"></a>  }
+<a name="line308"></a>
+<a name="line309"></a>  this.targets_.remove(key);
+<a name="line310"></a>};
+<a name="line311"></a>
+<a name="line312"></a>
+<a name="line313"></a>/**
+<a name="line314"></a> * Detaches an event listener to a target
+<a name="line315"></a> * @param {Object} target The target to detach events from.
+<a name="line316"></a> * @private
+<a name="line317"></a> */
+<a name="line318"></a>goog.ui.PopupMenu.prototype.detachEvent_ = function(target) {
+<a name="line319"></a>  this.getHandler().unlisten(
+<a name="line320"></a>      target.element_, target.eventType_, this.onTargetClick_);
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Sets whether the menu should toggle if it is already open.  For context
+<a name="line326"></a> * menus this should be false, for toolbar menus it makes more sense to be true.
+<a name="line327"></a> * @param {boolean} toggle The new toggle mode.
+<a name="line328"></a> */
+<a name="line329"></a>goog.ui.PopupMenu.prototype.setToggleMode = function(toggle) {
+<a name="line330"></a>  this.toggleMode_ = toggle;
+<a name="line331"></a>};
+<a name="line332"></a>
+<a name="line333"></a>
+<a name="line334"></a>/**
+<a name="line335"></a> * Gets whether the menu is in toggle mode
+<a name="line336"></a> * @return {boolean} toggle.
+<a name="line337"></a> */
+<a name="line338"></a>goog.ui.PopupMenu.prototype.getToggleMode = function() {
+<a name="line339"></a>  return this.toggleMode_;
+<a name="line340"></a>};
+<a name="line341"></a>
+<a name="line342"></a>
+<a name="line343"></a>/**
+<a name="line344"></a> * Show the menu using given positioning object.
+<a name="line345"></a> * @param {goog.positioning.AbstractPosition} position The positioning instance.
+<a name="line346"></a> * @param {goog.positioning.Corner=} opt_menuCorner The corner of the menu to be
+<a name="line347"></a> *     positioned.
+<a name="line348"></a> * @param {goog.math.Box=} opt_margin A margin specified in pixels.
+<a name="line349"></a> * @param {Element=} opt_anchor The element which acts as visual anchor for this
+<a name="line350"></a> *     menu.
+<a name="line351"></a> */
+<a name="line352"></a>goog.ui.PopupMenu.prototype.showWithPosition = function(position,
+<a name="line353"></a>    opt_menuCorner, opt_margin, opt_anchor) {
+<a name="line354"></a>  var isVisible = this.isVisible();
+<a name="line355"></a>  if (this.isOrWasRecentlyVisible() &amp;&amp; this.toggleMode_) {
+<a name="line356"></a>    this.hide();
+<a name="line357"></a>    return;
+<a name="line358"></a>  }
+<a name="line359"></a>
+<a name="line360"></a>  // Set current anchor before dispatching BEFORE_SHOW. This is typically useful
+<a name="line361"></a>  // when we would need to make modifications based on the current anchor to the
+<a name="line362"></a>  // menu just before displaying it.
+<a name="line363"></a>  this.currentAnchor_ = opt_anchor || null;
+<a name="line364"></a>
+<a name="line365"></a>  // Notify event handlers that the menu is about to be shown.
+<a name="line366"></a>  if (!this.dispatchEvent(goog.ui.Component.EventType.BEFORE_SHOW)) {
+<a name="line367"></a>    return;
+<a name="line368"></a>  }
+<a name="line369"></a>
+<a name="line370"></a>  var menuCorner = typeof opt_menuCorner != &#39;undefined&#39; ?
+<a name="line371"></a>                   opt_menuCorner :
+<a name="line372"></a>                   goog.positioning.Corner.TOP_START;
+<a name="line373"></a>
+<a name="line374"></a>  // This is a little hacky so that we can position the menu with minimal
+<a name="line375"></a>  // flicker.
+<a name="line376"></a>
+<a name="line377"></a>  if (!isVisible) {
+<a name="line378"></a>    // On IE, setting visibility = &#39;hidden&#39; on a visible menu
+<a name="line379"></a>    // will cause a blur, forcing the menu to close immediately.
+<a name="line380"></a>    this.getElement().style.visibility = &#39;hidden&#39;;
+<a name="line381"></a>  }
+<a name="line382"></a>
+<a name="line383"></a>  goog.style.setElementShown(this.getElement(), true);
+<a name="line384"></a>  position.reposition(this.getElement(), menuCorner, opt_margin);
+<a name="line385"></a>
+<a name="line386"></a>  if (!isVisible) {
+<a name="line387"></a>    this.getElement().style.visibility = &#39;visible&#39;;
+<a name="line388"></a>  }
+<a name="line389"></a>
+<a name="line390"></a>  this.setHighlightedIndex(-1);
+<a name="line391"></a>
+<a name="line392"></a>  // setVisible dispatches a goog.ui.Component.EventType.SHOW event, which may
+<a name="line393"></a>  // be canceled to prevent the menu from being shown.
+<a name="line394"></a>  this.setVisible(true);
+<a name="line395"></a>};
+<a name="line396"></a>
+<a name="line397"></a>
+<a name="line398"></a>/**
+<a name="line399"></a> * Show the menu at a given attached target.
+<a name="line400"></a> * @param {Object} target Popup target.
+<a name="line401"></a> * @param {number} x The client-X associated with the show event.
+<a name="line402"></a> * @param {number} y The client-Y associated with the show event.
+<a name="line403"></a> * @protected
+<a name="line404"></a> */
+<a name="line405"></a>goog.ui.PopupMenu.prototype.showMenu = function(target, x, y) {
+<a name="line406"></a>  var position = goog.isDef(target.targetCorner_) ?
+<a name="line407"></a>      new goog.positioning.AnchoredViewportPosition(target.element_,
+<a name="line408"></a>          target.targetCorner_, true) :
+<a name="line409"></a>      new goog.positioning.ViewportClientPosition(x, y);
+<a name="line410"></a>  if (position.setLastResortOverflow) {
+<a name="line411"></a>    // This is a ViewportClientPosition, so we can set the overflow policy.
+<a name="line412"></a>    // Allow the menu to slide from the corner rather than clipping if it is
+<a name="line413"></a>    // completely impossible to fit it otherwise.
+<a name="line414"></a>    position.setLastResortOverflow(goog.positioning.Overflow.ADJUST_X |
+<a name="line415"></a>                                   goog.positioning.Overflow.ADJUST_Y);
+<a name="line416"></a>  }
+<a name="line417"></a>  this.showWithPosition(position, target.menuCorner_, target.margin_,
+<a name="line418"></a>                        target.element_);
+<a name="line419"></a>};
+<a name="line420"></a>
+<a name="line421"></a>
+<a name="line422"></a>/**
+<a name="line423"></a> * Shows the menu immediately at the given client coordinates.
+<a name="line424"></a> * @param {number} x The client-X associated with the show event.
+<a name="line425"></a> * @param {number} y The client-Y associated with the show event.
+<a name="line426"></a> * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
+<a name="line427"></a> *     should be anchored.
+<a name="line428"></a> */
+<a name="line429"></a>goog.ui.PopupMenu.prototype.showAt = function(x, y, opt_menuCorner) {
+<a name="line430"></a>  this.showWithPosition(
+<a name="line431"></a>      new goog.positioning.ViewportClientPosition(x, y), opt_menuCorner);
+<a name="line432"></a>};
+<a name="line433"></a>
+<a name="line434"></a>
+<a name="line435"></a>/**
+<a name="line436"></a> * Shows the menu immediately attached to the given element
+<a name="line437"></a> * @param {Element} element The element to show at.
+<a name="line438"></a> * @param {goog.positioning.Corner} targetCorner The corner of the target to
+<a name="line439"></a> *     anchor to.
+<a name="line440"></a> * @param {goog.positioning.Corner=} opt_menuCorner Corner of the menu that
+<a name="line441"></a> *     should be anchored.
+<a name="line442"></a> */
+<a name="line443"></a>goog.ui.PopupMenu.prototype.showAtElement = function(element, targetCorner,
+<a name="line444"></a>    opt_menuCorner) {
+<a name="line445"></a>  this.showWithPosition(
+<a name="line446"></a>      new goog.positioning.MenuAnchoredPosition(element, targetCorner, true),
+<a name="line447"></a>      opt_menuCorner, null, element);
+<a name="line448"></a>};
+<a name="line449"></a>
+<a name="line450"></a>
+<a name="line451"></a>/**
+<a name="line452"></a> * Hides the menu.
+<a name="line453"></a> */
+<a name="line454"></a>goog.ui.PopupMenu.prototype.hide = function() {
+<a name="line455"></a>  if (!this.isVisible()) {
+<a name="line456"></a>    return;
+<a name="line457"></a>  }
+<a name="line458"></a>
+<a name="line459"></a>  // setVisible dispatches a goog.ui.Component.EventType.HIDE event, which may
+<a name="line460"></a>  // be canceled to prevent the menu from being hidden.
+<a name="line461"></a>  this.setVisible(false);
+<a name="line462"></a>  if (!this.isVisible()) {
+<a name="line463"></a>    // HIDE event wasn&#39;t canceled; the menu is now hidden.
+<a name="line464"></a>    this.lastHide_ = goog.now();
+<a name="line465"></a>    this.currentAnchor_ = null;
+<a name="line466"></a>  }
+<a name="line467"></a>};
+<a name="line468"></a>
+<a name="line469"></a>
+<a name="line470"></a>/**
+<a name="line471"></a> * Returns whether the menu is currently visible or was visible within about
+<a name="line472"></a> * 150 ms ago.  This stops the menu toggling back on if the toggleMode == false.
+<a name="line473"></a> * @return {boolean} Whether the popup is currently visible or was visible
+<a name="line474"></a> *     within about 150 ms ago.
+<a name="line475"></a> */
+<a name="line476"></a>goog.ui.PopupMenu.prototype.isOrWasRecentlyVisible = function() {
+<a name="line477"></a>  return this.isVisible() || this.wasRecentlyHidden();
+<a name="line478"></a>};
+<a name="line479"></a>
+<a name="line480"></a>
+<a name="line481"></a>/**
+<a name="line482"></a> * Used to stop the menu toggling back on if the toggleMode == false.
+<a name="line483"></a> * @return {boolean} Whether the menu was recently hidden.
+<a name="line484"></a> * @protected
+<a name="line485"></a> */
+<a name="line486"></a>goog.ui.PopupMenu.prototype.wasRecentlyHidden = function() {
+<a name="line487"></a>  return goog.now() - this.lastHide_ &lt; goog.ui.PopupBase.DEBOUNCE_DELAY_MS;
+<a name="line488"></a>};
+<a name="line489"></a>
+<a name="line490"></a>
+<a name="line491"></a>/**
+<a name="line492"></a> * Dismiss the popup menu when an action fires.
+<a name="line493"></a> * @param {goog.events.Event=} opt_e The optional event.
+<a name="line494"></a> * @private
+<a name="line495"></a> */
+<a name="line496"></a>goog.ui.PopupMenu.prototype.onAction_ = function(opt_e) {
+<a name="line497"></a>  this.hide();
+<a name="line498"></a>};
+<a name="line499"></a>
+<a name="line500"></a>
+<a name="line501"></a>/**
+<a name="line502"></a> * Handles a browser event on one of the popup targets
+<a name="line503"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line504"></a> * @private
+<a name="line505"></a> */
+<a name="line506"></a>goog.ui.PopupMenu.prototype.onTargetClick_ = function(e) {
+<a name="line507"></a>  var keys = this.targets_.getKeys();
+<a name="line508"></a>  for (var i = 0; i &lt; keys.length; i++) {
+<a name="line509"></a>    var target = /** @type {Object} */(this.targets_.get(keys[i]));
+<a name="line510"></a>    if (target.element_ == e.currentTarget) {
+<a name="line511"></a>      this.showMenu(target,
+<a name="line512"></a>                    /** @type {number} */ (e.clientX),
+<a name="line513"></a>                    /** @type {number} */ (e.clientY));
+<a name="line514"></a>      e.preventDefault();
+<a name="line515"></a>      e.stopPropagation();
+<a name="line516"></a>      return;
+<a name="line517"></a>    }
+<a name="line518"></a>  }
+<a name="line519"></a>};
+<a name="line520"></a>
+<a name="line521"></a>
+<a name="line522"></a>/**
+<a name="line523"></a> * Handles click events that propagate to the document.
+<a name="line524"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line525"></a> * @protected
+<a name="line526"></a> */
+<a name="line527"></a>goog.ui.PopupMenu.prototype.onDocClick = function(e) {
+<a name="line528"></a>  if (this.isVisible() &amp;&amp;
+<a name="line529"></a>      !this.containsElement(/** @type {Element} */ (e.target))) {
+<a name="line530"></a>    this.hide();
+<a name="line531"></a>  }
+<a name="line532"></a>};
+<a name="line533"></a>
+<a name="line534"></a>
+<a name="line535"></a>/**
+<a name="line536"></a> * Handles the key event target loosing focus.
+<a name="line537"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line538"></a> * @protected
+<a name="line539"></a> * @override
+<a name="line540"></a> */
+<a name="line541"></a>goog.ui.PopupMenu.prototype.handleBlur = function(e) {
+<a name="line542"></a>  goog.ui.PopupMenu.superClass_.handleBlur.call(this, e);
+<a name="line543"></a>  this.hide();
+<a name="line544"></a>};
+<a name="line545"></a>
+<a name="line546"></a>
+<a name="line547"></a>/** @override */
+<a name="line548"></a>goog.ui.PopupMenu.prototype.disposeInternal = function() {
+<a name="line549"></a>  // Always call the superclass&#39; disposeInternal() first (Bug 715885).
+<a name="line550"></a>  goog.ui.PopupMenu.superClass_.disposeInternal.call(this);
+<a name="line551"></a>
+<a name="line552"></a>  // Disposes of the attachment target map.
+<a name="line553"></a>  if (this.targets_) {
+<a name="line554"></a>    this.targets_.clear();
+<a name="line555"></a>    delete this.targets_;
+<a name="line556"></a>  }
+<a name="line557"></a>};
+</pre>
+
+
+</body>
+</html>

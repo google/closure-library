@@ -1,0 +1,120 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>assertthat_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_testing_assertthat_test.js.html">assertthat_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.labs.testing.assertThatTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.labs.testing.assertThatTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.labs.testing.MatcherError&#39;);
+<a name="line19"></a>goog.require(&#39;goog.labs.testing.assertThat&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var successMatchesFn, failureMatchesFn, describeFn, successTestMatcher;
+<a name="line24"></a>var failureTestMatcher;
+<a name="line25"></a>
+<a name="line26"></a>function setUp() {
+<a name="line27"></a>  successMatchesFn = new goog.testing.recordFunction(function() {return true;});
+<a name="line28"></a>  failureMatchesFn =
+<a name="line29"></a>      new goog.testing.recordFunction(function() {return false;});
+<a name="line30"></a>  describeFn = new goog.testing.recordFunction();
+<a name="line31"></a>
+<a name="line32"></a>  successTestMatcher = function() {
+<a name="line33"></a>    return { matches: successMatchesFn, describe: describeFn };
+<a name="line34"></a>  };
+<a name="line35"></a>  failureTestMatcher = function() {
+<a name="line36"></a>    return { matches: failureMatchesFn, describe: describeFn };
+<a name="line37"></a>  };
+<a name="line38"></a>}
+<a name="line39"></a>
+<a name="line40"></a>function testAssertthatAlwaysCallsMatches() {
+<a name="line41"></a>  var value = 7;
+<a name="line42"></a>  goog.labs.testing.assertThat(value, successTestMatcher(),
+<a name="line43"></a>      &#39;matches is called on success&#39;);
+<a name="line44"></a>
+<a name="line45"></a>  assertEquals(1, successMatchesFn.getCallCount());
+<a name="line46"></a>  var matchesCall = successMatchesFn.popLastCall();
+<a name="line47"></a>  assertEquals(value, matchesCall.getArgument(0));
+<a name="line48"></a>
+<a name="line49"></a>  var e = assertThrows(goog.bind(goog.labs.testing.assertThat, null,
+<a name="line50"></a>      value, failureTestMatcher(), &#39;matches is called on failure&#39;));
+<a name="line51"></a>
+<a name="line52"></a>  assertTrue(e instanceof goog.labs.testing.MatcherError);
+<a name="line53"></a>
+<a name="line54"></a>  assertEquals(1, failureMatchesFn.getCallCount());
+<a name="line55"></a>}
+<a name="line56"></a>
+<a name="line57"></a>function testAssertthatCallsDescribeOnFailure() {
+<a name="line58"></a>  var value = 7;
+<a name="line59"></a>  var e = assertThrows(goog.bind(goog.labs.testing.assertThat, null,
+<a name="line60"></a>      value, failureTestMatcher(), &#39;describe is called on failure&#39;));
+<a name="line61"></a>
+<a name="line62"></a>  assertTrue(e instanceof goog.labs.testing.MatcherError);
+<a name="line63"></a>
+<a name="line64"></a>  assertEquals(1, failureMatchesFn.getCallCount());
+<a name="line65"></a>  assertEquals(1, describeFn.getCallCount());
+<a name="line66"></a>
+<a name="line67"></a>  var matchesCall = describeFn.popLastCall();
+<a name="line68"></a>  assertEquals(value, matchesCall.getArgument(0));
+<a name="line69"></a>}
+</pre>
+
+
+</body>
+</html>

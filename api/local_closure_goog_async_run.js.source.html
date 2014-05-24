@@ -1,0 +1,156 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>run.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_async_run.js.html">run.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.async.run&#39;);
+<a name="line16"></a>
+<a name="line17"></a>goog.require(&#39;goog.async.nextTick&#39;);
+<a name="line18"></a>goog.require(&#39;goog.async.throwException&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.watchers&#39;);
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>/**
+<a name="line23"></a> * Fires the provided callback just before the current callstack unwinds, or as
+<a name="line24"></a> * soon as possible after the current JS execution context.
+<a name="line25"></a> * @param {function(this:THIS)} callback
+<a name="line26"></a> * @param {THIS=} opt_context Object to use as the &quot;this value&quot; when calling
+<a name="line27"></a> *     the provided function.
+<a name="line28"></a> * @template THIS
+<a name="line29"></a> */
+<a name="line30"></a>goog.async.run = function(callback, opt_context) {
+<a name="line31"></a>  if (!goog.async.run.workQueueScheduled_) {
+<a name="line32"></a>    // Nothing is currently scheduled, schedule it now.
+<a name="line33"></a>    goog.async.nextTick(goog.async.run.processWorkQueue);
+<a name="line34"></a>    goog.async.run.workQueueScheduled_ = true;
+<a name="line35"></a>  }
+<a name="line36"></a>
+<a name="line37"></a>  goog.async.run.workQueue_.push(
+<a name="line38"></a>      new goog.async.run.WorkItem_(callback, opt_context));
+<a name="line39"></a>};
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/** @private {boolean} */
+<a name="line43"></a>goog.async.run.workQueueScheduled_ = false;
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/** @private {!Array.&lt;!goog.async.run.WorkItem_&gt;} */
+<a name="line47"></a>goog.async.run.workQueue_ = [];
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>if (goog.DEBUG) {
+<a name="line51"></a>  /**
+<a name="line52"></a>   * Reset the event queue.
+<a name="line53"></a>   * @private
+<a name="line54"></a>   */
+<a name="line55"></a>  goog.async.run.resetQueue_ = function() {
+<a name="line56"></a>    goog.async.run.workQueueScheduled_ = false;
+<a name="line57"></a>    goog.async.run.workQueue_ = [];
+<a name="line58"></a>  };
+<a name="line59"></a>
+<a name="line60"></a>  // If there is a clock implemenation in use for testing
+<a name="line61"></a>  // and it is reset, reset the queue.
+<a name="line62"></a>  goog.testing.watchers.watchClockReset(goog.async.run.resetQueue_);
+<a name="line63"></a>}
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * Run any pending goog.async.run work items. This function is not intended
+<a name="line68"></a> * for general use, but for use by entry point handlers to run items ahead of
+<a name="line69"></a> * goog.async.nextTick.
+<a name="line70"></a> */
+<a name="line71"></a>goog.async.run.processWorkQueue = function() {
+<a name="line72"></a>  // NOTE: additional work queue items may be pushed while processing.
+<a name="line73"></a>  while (goog.async.run.workQueue_.length) {
+<a name="line74"></a>    // Don&#39;t let the work queue grow indefinitely.
+<a name="line75"></a>    var workItems = goog.async.run.workQueue_;
+<a name="line76"></a>    goog.async.run.workQueue_ = [];
+<a name="line77"></a>    for (var i = 0; i &lt; workItems.length; i++) {
+<a name="line78"></a>      var workItem = workItems[i];
+<a name="line79"></a>      try {
+<a name="line80"></a>        workItem.fn.call(workItem.scope);
+<a name="line81"></a>      } catch (e) {
+<a name="line82"></a>        goog.async.throwException(e);
+<a name="line83"></a>      }
+<a name="line84"></a>    }
+<a name="line85"></a>  }
+<a name="line86"></a>
+<a name="line87"></a>  // There are no more work items, reset the work queue.
+<a name="line88"></a>  goog.async.run.workQueueScheduled_ = false;
+<a name="line89"></a>};
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * @constructor
+<a name="line95"></a> * @final
+<a name="line96"></a> * @struct
+<a name="line97"></a> * @private
+<a name="line98"></a> *
+<a name="line99"></a> * @param {function()} fn
+<a name="line100"></a> * @param {Object|null|undefined} scope
+<a name="line101"></a> */
+<a name="line102"></a>goog.async.run.WorkItem_ = function(fn, scope) {
+<a name="line103"></a>  /** @const */ this.fn = fn;
+<a name="line104"></a>  /** @const */ this.scope = scope;
+<a name="line105"></a>};
+</pre>
+
+
+</body>
+</html>

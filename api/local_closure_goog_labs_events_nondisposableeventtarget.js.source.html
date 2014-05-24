@@ -1,0 +1,356 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>nondisposableeventtarget.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_events_nondisposableeventtarget.js.html">nondisposableeventtarget.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2005 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview An implementation of {@link goog.events.Listenable} that does
+<a name="line17"></a> * not need to be disposed.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.labs.events.NonDisposableEventTarget&#39;);
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.Listenable&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.ListenerMap&#39;);
+<a name="line28"></a>goog.require(&#39;goog.object&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * An implementation of {@code goog.events.Listenable} with full W3C
+<a name="line34"></a> * EventTarget-like support (capture/bubble mechanism, stopping event
+<a name="line35"></a> * propagation, preventing default actions).
+<a name="line36"></a> *
+<a name="line37"></a> * You may subclass this class to turn your class into a Listenable.
+<a name="line38"></a> *
+<a name="line39"></a> * Unlike {@link goog.events.EventTarget}, this class does not implement
+<a name="line40"></a> * {@link goog.disposable.IDisposable}. Instances of this class that have had
+<a name="line41"></a> * It is not necessary to call {@link goog.dispose}
+<a name="line42"></a> * or {@link #removeAllListeners} in order for an instance of this class
+<a name="line43"></a> * to be garbage collected.
+<a name="line44"></a> *
+<a name="line45"></a> * Unless propagation is stopped, an event dispatched by an
+<a name="line46"></a> * EventTarget will bubble to the parent returned by
+<a name="line47"></a> * {@code getParentEventTarget}. To set the parent, call
+<a name="line48"></a> * {@code setParentEventTarget}. Subclasses that don&#39;t support
+<a name="line49"></a> * changing the parent can override the setter to throw an error.
+<a name="line50"></a> *
+<a name="line51"></a> * Example usage:
+<a name="line52"></a> * &lt;pre&gt;
+<a name="line53"></a> *   var source = new goog.labs.events.NonDisposableEventTarget();
+<a name="line54"></a> *   function handleEvent(e) {
+<a name="line55"></a> *     alert(&#39;Type: &#39; + e.type + &#39;; Target: &#39; + e.target);
+<a name="line56"></a> *   }
+<a name="line57"></a> *   source.listen(&#39;foo&#39;, handleEvent);
+<a name="line58"></a> *   source.dispatchEvent(&#39;foo&#39;); // will call handleEvent
+<a name="line59"></a> * &lt;/pre&gt;
+<a name="line60"></a> *
+<a name="line61"></a> * TODO(user|johnlenz): Consider a more modern, less viral
+<a name="line62"></a> * (not based on inheritance) replacement of goog.Disposable, which will allow
+<a name="line63"></a> * goog.events.EventTarget to not be disposable.
+<a name="line64"></a> *
+<a name="line65"></a> * @constructor
+<a name="line66"></a> * @implements {goog.events.Listenable}
+<a name="line67"></a> * @final
+<a name="line68"></a> */
+<a name="line69"></a>goog.labs.events.NonDisposableEventTarget = function() {
+<a name="line70"></a>  /**
+<a name="line71"></a>   * Maps of event type to an array of listeners.
+<a name="line72"></a>   * @private {!goog.events.ListenerMap}
+<a name="line73"></a>   */
+<a name="line74"></a>  this.eventTargetListeners_ = new goog.events.ListenerMap(this);
+<a name="line75"></a>};
+<a name="line76"></a>goog.events.Listenable.addImplementation(
+<a name="line77"></a>    goog.labs.events.NonDisposableEventTarget);
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * An artificial cap on the number of ancestors you can have. This is mainly
+<a name="line82"></a> * for loop detection.
+<a name="line83"></a> * @const {number}
+<a name="line84"></a> * @private
+<a name="line85"></a> */
+<a name="line86"></a>goog.labs.events.NonDisposableEventTarget.MAX_ANCESTORS_ = 1000;
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Parent event target, used during event bubbling.
+<a name="line91"></a> * @private {goog.events.Listenable}
+<a name="line92"></a> */
+<a name="line93"></a>goog.labs.events.NonDisposableEventTarget.prototype.parentEventTarget_ = null;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/** @override */
+<a name="line97"></a>goog.labs.events.NonDisposableEventTarget.prototype.getParentEventTarget =
+<a name="line98"></a>    function() {
+<a name="line99"></a>  return this.parentEventTarget_;
+<a name="line100"></a>};
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Sets the parent of this event target to use for capture/bubble
+<a name="line105"></a> * mechanism.
+<a name="line106"></a> * @param {goog.events.Listenable} parent Parent listenable (null if none).
+<a name="line107"></a> */
+<a name="line108"></a>goog.labs.events.NonDisposableEventTarget.prototype.setParentEventTarget =
+<a name="line109"></a>    function(parent) {
+<a name="line110"></a>  this.parentEventTarget_ = parent;
+<a name="line111"></a>};
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/** @override */
+<a name="line115"></a>goog.labs.events.NonDisposableEventTarget.prototype.dispatchEvent = function(
+<a name="line116"></a>    e) {
+<a name="line117"></a>  this.assertInitialized_();
+<a name="line118"></a>  var ancestorsTree, ancestor = this.getParentEventTarget();
+<a name="line119"></a>  if (ancestor) {
+<a name="line120"></a>    ancestorsTree = [];
+<a name="line121"></a>    var ancestorCount = 1;
+<a name="line122"></a>    for (; ancestor; ancestor = ancestor.getParentEventTarget()) {
+<a name="line123"></a>      ancestorsTree.push(ancestor);
+<a name="line124"></a>      goog.asserts.assert(
+<a name="line125"></a>          (++ancestorCount &lt;
+<a name="line126"></a>                  goog.labs.events.NonDisposableEventTarget.MAX_ANCESTORS_),
+<a name="line127"></a>          &#39;infinite loop&#39;);
+<a name="line128"></a>    }
+<a name="line129"></a>  }
+<a name="line130"></a>
+<a name="line131"></a>  return goog.labs.events.NonDisposableEventTarget.dispatchEventInternal_(
+<a name="line132"></a>      this, e, ancestorsTree);
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/** @override */
+<a name="line137"></a>goog.labs.events.NonDisposableEventTarget.prototype.listen = function(
+<a name="line138"></a>    type, listener, opt_useCapture, opt_listenerScope) {
+<a name="line139"></a>  this.assertInitialized_();
+<a name="line140"></a>  return this.eventTargetListeners_.add(
+<a name="line141"></a>      String(type), listener, false /* callOnce */, opt_useCapture,
+<a name="line142"></a>      opt_listenerScope);
+<a name="line143"></a>};
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>/** @override */
+<a name="line147"></a>goog.labs.events.NonDisposableEventTarget.prototype.listenOnce = function(
+<a name="line148"></a>    type, listener, opt_useCapture, opt_listenerScope) {
+<a name="line149"></a>  return this.eventTargetListeners_.add(
+<a name="line150"></a>      String(type), listener, true /* callOnce */, opt_useCapture,
+<a name="line151"></a>      opt_listenerScope);
+<a name="line152"></a>};
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/** @override */
+<a name="line156"></a>goog.labs.events.NonDisposableEventTarget.prototype.unlisten = function(
+<a name="line157"></a>    type, listener, opt_useCapture, opt_listenerScope) {
+<a name="line158"></a>  return this.eventTargetListeners_.remove(
+<a name="line159"></a>      String(type), listener, opt_useCapture, opt_listenerScope);
+<a name="line160"></a>};
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/** @override */
+<a name="line164"></a>goog.labs.events.NonDisposableEventTarget.prototype.unlistenByKey = function(
+<a name="line165"></a>    key) {
+<a name="line166"></a>  return this.eventTargetListeners_.removeByKey(key);
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/** @override */
+<a name="line171"></a>goog.labs.events.NonDisposableEventTarget.prototype.removeAllListeners =
+<a name="line172"></a>    function(opt_type) {
+<a name="line173"></a>  return this.eventTargetListeners_.removeAll(opt_type);
+<a name="line174"></a>};
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/** @override */
+<a name="line178"></a>goog.labs.events.NonDisposableEventTarget.prototype.fireListeners = function(
+<a name="line179"></a>    type, capture, eventObject) {
+<a name="line180"></a>  // TODO(user): Original code avoids array creation when there
+<a name="line181"></a>  // is no listener, so we do the same. If this optimization turns
+<a name="line182"></a>  // out to be not required, we can replace this with
+<a name="line183"></a>  // getListeners(type, capture) instead, which is simpler.
+<a name="line184"></a>  var listenerArray = this.eventTargetListeners_.listeners[String(type)];
+<a name="line185"></a>  if (!listenerArray) {
+<a name="line186"></a>    return true;
+<a name="line187"></a>  }
+<a name="line188"></a>  listenerArray = goog.array.clone(listenerArray);
+<a name="line189"></a>
+<a name="line190"></a>  var rv = true;
+<a name="line191"></a>  for (var i = 0; i &lt; listenerArray.length; ++i) {
+<a name="line192"></a>    var listener = listenerArray[i];
+<a name="line193"></a>    // We might not have a listener if the listener was removed.
+<a name="line194"></a>    if (listener &amp;&amp; !listener.removed &amp;&amp; listener.capture == capture) {
+<a name="line195"></a>      var listenerFn = listener.listener;
+<a name="line196"></a>      var listenerHandler = listener.handler || listener.src;
+<a name="line197"></a>
+<a name="line198"></a>      if (listener.callOnce) {
+<a name="line199"></a>        this.unlistenByKey(listener);
+<a name="line200"></a>      }
+<a name="line201"></a>      rv = listenerFn.call(listenerHandler, eventObject) !== false &amp;&amp; rv;
+<a name="line202"></a>    }
+<a name="line203"></a>  }
+<a name="line204"></a>
+<a name="line205"></a>  return rv &amp;&amp; eventObject.returnValue_ != false;
+<a name="line206"></a>};
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/** @override */
+<a name="line210"></a>goog.labs.events.NonDisposableEventTarget.prototype.getListeners = function(
+<a name="line211"></a>    type, capture) {
+<a name="line212"></a>  return this.eventTargetListeners_.getListeners(String(type), capture);
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/** @override */
+<a name="line217"></a>goog.labs.events.NonDisposableEventTarget.prototype.getListener = function(
+<a name="line218"></a>    type, listener, capture, opt_listenerScope) {
+<a name="line219"></a>  return this.eventTargetListeners_.getListener(
+<a name="line220"></a>      String(type), listener, capture, opt_listenerScope);
+<a name="line221"></a>};
+<a name="line222"></a>
+<a name="line223"></a>
+<a name="line224"></a>/** @override */
+<a name="line225"></a>goog.labs.events.NonDisposableEventTarget.prototype.hasListener = function(
+<a name="line226"></a>    opt_type, opt_capture) {
+<a name="line227"></a>  var id = goog.isDef(opt_type) ? String(opt_type) : undefined;
+<a name="line228"></a>  return this.eventTargetListeners_.hasListener(id, opt_capture);
+<a name="line229"></a>};
+<a name="line230"></a>
+<a name="line231"></a>
+<a name="line232"></a>/**
+<a name="line233"></a> * Asserts that the event target instance is initialized properly.
+<a name="line234"></a> * @private
+<a name="line235"></a> */
+<a name="line236"></a>goog.labs.events.NonDisposableEventTarget.prototype.assertInitialized_ =
+<a name="line237"></a>    function() {
+<a name="line238"></a>  goog.asserts.assert(
+<a name="line239"></a>      this.eventTargetListeners_,
+<a name="line240"></a>      &#39;Event target is not initialized. Did you call the superclass &#39; +
+<a name="line241"></a>      &#39;(goog.labs.events.NonDisposableEventTarget) constructor?&#39;);
+<a name="line242"></a>};
+<a name="line243"></a>
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * Dispatches the given event on the ancestorsTree.
+<a name="line247"></a> *
+<a name="line248"></a> * TODO(user): Look for a way to reuse this logic in
+<a name="line249"></a> * goog.events, if possible.
+<a name="line250"></a> *
+<a name="line251"></a> * @param {!Object} target The target to dispatch on.
+<a name="line252"></a> * @param {goog.events.Event|Object|string} e The event object.
+<a name="line253"></a> * @param {Array.&lt;goog.events.Listenable&gt;=} opt_ancestorsTree The ancestors
+<a name="line254"></a> *     tree of the target, in reverse order from the closest ancestor
+<a name="line255"></a> *     to the root event target. May be null if the target has no ancestor.
+<a name="line256"></a> * @return {boolean} If anyone called preventDefault on the event object (or
+<a name="line257"></a> *     if any of the listeners returns false) this will also return false.
+<a name="line258"></a> * @private
+<a name="line259"></a> */
+<a name="line260"></a>goog.labs.events.NonDisposableEventTarget.dispatchEventInternal_ = function(
+<a name="line261"></a>    target, e, opt_ancestorsTree) {
+<a name="line262"></a>  var type = e.type || /** @type {string} */ (e);
+<a name="line263"></a>
+<a name="line264"></a>  // If accepting a string or object, create a custom event object so that
+<a name="line265"></a>  // preventDefault and stopPropagation work with the event.
+<a name="line266"></a>  if (goog.isString(e)) {
+<a name="line267"></a>    e = new goog.events.Event(e, target);
+<a name="line268"></a>  } else if (!(e instanceof goog.events.Event)) {
+<a name="line269"></a>    var oldEvent = e;
+<a name="line270"></a>    e = new goog.events.Event(type, target);
+<a name="line271"></a>    goog.object.extend(e, oldEvent);
+<a name="line272"></a>  } else {
+<a name="line273"></a>    e.target = e.target || target;
+<a name="line274"></a>  }
+<a name="line275"></a>
+<a name="line276"></a>  var rv = true, currentTarget;
+<a name="line277"></a>
+<a name="line278"></a>  // Executes all capture listeners on the ancestors, if any.
+<a name="line279"></a>  if (opt_ancestorsTree) {
+<a name="line280"></a>    for (var i = opt_ancestorsTree.length - 1; !e.propagationStopped_ &amp;&amp; i &gt;= 0;
+<a name="line281"></a>         i--) {
+<a name="line282"></a>      currentTarget = e.currentTarget = opt_ancestorsTree[i];
+<a name="line283"></a>      rv = currentTarget.fireListeners(type, true, e) &amp;&amp; rv;
+<a name="line284"></a>    }
+<a name="line285"></a>  }
+<a name="line286"></a>
+<a name="line287"></a>  // Executes capture and bubble listeners on the target.
+<a name="line288"></a>  if (!e.propagationStopped_) {
+<a name="line289"></a>    currentTarget = e.currentTarget = target;
+<a name="line290"></a>    rv = currentTarget.fireListeners(type, true, e) &amp;&amp; rv;
+<a name="line291"></a>    if (!e.propagationStopped_) {
+<a name="line292"></a>      rv = currentTarget.fireListeners(type, false, e) &amp;&amp; rv;
+<a name="line293"></a>    }
+<a name="line294"></a>  }
+<a name="line295"></a>
+<a name="line296"></a>  // Executes all bubble listeners on the ancestors, if any.
+<a name="line297"></a>  if (opt_ancestorsTree) {
+<a name="line298"></a>    for (i = 0; !e.propagationStopped_ &amp;&amp; i &lt; opt_ancestorsTree.length; i++) {
+<a name="line299"></a>      currentTarget = e.currentTarget = opt_ancestorsTree[i];
+<a name="line300"></a>      rv = currentTarget.fireListeners(type, false, e) &amp;&amp; rv;
+<a name="line301"></a>    }
+<a name="line302"></a>  }
+<a name="line303"></a>
+<a name="line304"></a>  return rv;
+<a name="line305"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>webkitrange.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_browserrange_webkitrange.js.html">webkitrange.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the WebKit specific range wrapper.  Inherits most
+<a name="line17"></a> * functionality from W3CRange, but adds exceptions as necessary.
+<a name="line18"></a> *
+<a name="line19"></a> * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
+<a name="line20"></a> *
+<a name="line21"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.dom.browserrange.WebKitRange&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.dom.RangeEndpoint&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom.browserrange.W3cRange&#39;);
+<a name="line29"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * The constructor for WebKit specific browser ranges.
+<a name="line35"></a> * @param {Range} range The range object.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @extends {goog.dom.browserrange.W3cRange}
+<a name="line38"></a> * @final
+<a name="line39"></a> */
+<a name="line40"></a>goog.dom.browserrange.WebKitRange = function(range) {
+<a name="line41"></a>  goog.dom.browserrange.W3cRange.call(this, range);
+<a name="line42"></a>};
+<a name="line43"></a>goog.inherits(goog.dom.browserrange.WebKitRange,
+<a name="line44"></a>              goog.dom.browserrange.W3cRange);
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Creates a range object that selects the given node&#39;s text.
+<a name="line49"></a> * @param {Node} node The node to select.
+<a name="line50"></a> * @return {!goog.dom.browserrange.WebKitRange} A WebKit range wrapper object.
+<a name="line51"></a> */
+<a name="line52"></a>goog.dom.browserrange.WebKitRange.createFromNodeContents = function(node) {
+<a name="line53"></a>  return new goog.dom.browserrange.WebKitRange(
+<a name="line54"></a>      goog.dom.browserrange.W3cRange.getBrowserRangeForNode(node));
+<a name="line55"></a>};
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>/**
+<a name="line59"></a> * Creates a range object that selects between the given nodes.
+<a name="line60"></a> * @param {Node} startNode The node to start with.
+<a name="line61"></a> * @param {number} startOffset The offset within the start node.
+<a name="line62"></a> * @param {Node} endNode The node to end with.
+<a name="line63"></a> * @param {number} endOffset The offset within the end node.
+<a name="line64"></a> * @return {!goog.dom.browserrange.WebKitRange} A wrapper object.
+<a name="line65"></a> */
+<a name="line66"></a>goog.dom.browserrange.WebKitRange.createFromNodes = function(startNode,
+<a name="line67"></a>    startOffset, endNode, endOffset) {
+<a name="line68"></a>  return new goog.dom.browserrange.WebKitRange(
+<a name="line69"></a>      goog.dom.browserrange.W3cRange.getBrowserRangeForNodes(startNode,
+<a name="line70"></a>          startOffset, endNode, endOffset));
+<a name="line71"></a>};
+<a name="line72"></a>
+<a name="line73"></a>
+<a name="line74"></a>/** @override */
+<a name="line75"></a>goog.dom.browserrange.WebKitRange.prototype.compareBrowserRangeEndpoints =
+<a name="line76"></a>    function(range, thisEndpoint, otherEndpoint) {
+<a name="line77"></a>  // Webkit pre-528 has some bugs where compareBoundaryPoints() doesn&#39;t work the
+<a name="line78"></a>  // way it is supposed to, but if we reverse the sense of two comparisons,
+<a name="line79"></a>  // it works fine.
+<a name="line80"></a>  // https://bugs.webkit.org/show_bug.cgi?id=20738
+<a name="line81"></a>  if (goog.userAgent.isVersionOrHigher(&#39;528&#39;)) {
+<a name="line82"></a>    return (goog.dom.browserrange.WebKitRange.superClass_.
+<a name="line83"></a>                compareBrowserRangeEndpoints.call(
+<a name="line84"></a>                    this, range, thisEndpoint, otherEndpoint));
+<a name="line85"></a>  }
+<a name="line86"></a>  return this.range_.compareBoundaryPoints(
+<a name="line87"></a>      otherEndpoint == goog.dom.RangeEndpoint.START ?
+<a name="line88"></a>          (thisEndpoint == goog.dom.RangeEndpoint.START ?
+<a name="line89"></a>              goog.global[&#39;Range&#39;].START_TO_START :
+<a name="line90"></a>              goog.global[&#39;Range&#39;].END_TO_START) : // Sense reversed
+<a name="line91"></a>          (thisEndpoint == goog.dom.RangeEndpoint.START ?
+<a name="line92"></a>              goog.global[&#39;Range&#39;].START_TO_END : // Sense reversed
+<a name="line93"></a>              goog.global[&#39;Range&#39;].END_TO_END),
+<a name="line94"></a>      /** @type {Range} */ (range));
+<a name="line95"></a>};
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/** @override */
+<a name="line99"></a>goog.dom.browserrange.WebKitRange.prototype.selectInternal = function(
+<a name="line100"></a>    selection, reversed) {
+<a name="line101"></a>  // Unselect everything. This addresses a bug in Webkit where it sometimes
+<a name="line102"></a>  // caches the old selection.
+<a name="line103"></a>  // https://bugs.webkit.org/show_bug.cgi?id=20117
+<a name="line104"></a>  selection.removeAllRanges();
+<a name="line105"></a>
+<a name="line106"></a>  if (reversed) {
+<a name="line107"></a>    selection.setBaseAndExtent(this.getEndNode(), this.getEndOffset(),
+<a name="line108"></a>        this.getStartNode(), this.getStartOffset());
+<a name="line109"></a>  } else {
+<a name="line110"></a>    selection.setBaseAndExtent(this.getStartNode(), this.getStartOffset(),
+<a name="line111"></a>        this.getEndNode(), this.getEndOffset());
+<a name="line112"></a>  }
+<a name="line113"></a>};
+</pre>
+
+
+</body>
+</html>

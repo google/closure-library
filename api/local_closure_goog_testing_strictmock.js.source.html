@@ -1,0 +1,179 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>strictmock.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_strictmock.js.html">strictmock.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This file defines a strict mock implementation.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.testing.StrictMock&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.array&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.Mock&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * This is a mock that verifies that methods are called in the order that they
+<a name="line28"></a> * are specified during the recording phase. Since it verifies order, it
+<a name="line29"></a> * follows &#39;fail fast&#39; semantics. If it detects a deviation from the
+<a name="line30"></a> * expectations, it will throw an exception and not wait for verify to be
+<a name="line31"></a> * called.
+<a name="line32"></a> * @param {Object|Function} objectToMock The object that should be mocked, or
+<a name="line33"></a> *    the constructor of an object to mock.
+<a name="line34"></a> * @param {boolean=} opt_mockStaticMethods An optional argument denoting that
+<a name="line35"></a> *     a mock should be constructed from the static functions of a class.
+<a name="line36"></a> * @param {boolean=} opt_createProxy An optional argument denoting that
+<a name="line37"></a> *     a proxy for the target mock should be created.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @extends {goog.testing.Mock}
+<a name="line40"></a> * @final
+<a name="line41"></a> */
+<a name="line42"></a>goog.testing.StrictMock = function(objectToMock, opt_mockStaticMethods,
+<a name="line43"></a>    opt_createProxy) {
+<a name="line44"></a>  goog.testing.Mock.call(this, objectToMock, opt_mockStaticMethods,
+<a name="line45"></a>      opt_createProxy);
+<a name="line46"></a>
+<a name="line47"></a>  /**
+<a name="line48"></a>   * An array of MockExpectations.
+<a name="line49"></a>   * @type {Array.&lt;goog.testing.MockExpectation&gt;}
+<a name="line50"></a>   * @private
+<a name="line51"></a>   */
+<a name="line52"></a>  this.$expectations_ = [];
+<a name="line53"></a>};
+<a name="line54"></a>goog.inherits(goog.testing.StrictMock, goog.testing.Mock);
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/** @override */
+<a name="line58"></a>goog.testing.StrictMock.prototype.$recordExpectation = function() {
+<a name="line59"></a>  this.$expectations_.push(this.$pendingExpectation);
+<a name="line60"></a>};
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/** @override */
+<a name="line64"></a>goog.testing.StrictMock.prototype.$recordCall = function(name, args) {
+<a name="line65"></a>  if (this.$expectations_.length == 0) {
+<a name="line66"></a>    this.$throwCallException(name, args);
+<a name="line67"></a>  }
+<a name="line68"></a>
+<a name="line69"></a>  // If the current expectation has a different name, make sure it was called
+<a name="line70"></a>  // enough and then discard it. We&#39;re through with it.
+<a name="line71"></a>  var currentExpectation = this.$expectations_[0];
+<a name="line72"></a>  while (!this.$verifyCall(currentExpectation, name, args)) {
+<a name="line73"></a>
+<a name="line74"></a>    // This might be an item which has passed its min, and we can now
+<a name="line75"></a>    // look past it, or it might be below its min and generate an error.
+<a name="line76"></a>    if (currentExpectation.actualCalls &lt; currentExpectation.minCalls) {
+<a name="line77"></a>      this.$throwCallException(name, args, currentExpectation);
+<a name="line78"></a>    }
+<a name="line79"></a>
+<a name="line80"></a>    this.$expectations_.shift();
+<a name="line81"></a>    if (this.$expectations_.length &lt; 1) {
+<a name="line82"></a>      // Nothing left, but this may be a failed attempt to call the previous
+<a name="line83"></a>      // item on the list, which may have been between its min and max.
+<a name="line84"></a>      this.$throwCallException(name, args, currentExpectation);
+<a name="line85"></a>    }
+<a name="line86"></a>    currentExpectation = this.$expectations_[0];
+<a name="line87"></a>  }
+<a name="line88"></a>
+<a name="line89"></a>  if (currentExpectation.maxCalls == 0) {
+<a name="line90"></a>    this.$throwCallException(name, args);
+<a name="line91"></a>  }
+<a name="line92"></a>
+<a name="line93"></a>  currentExpectation.actualCalls++;
+<a name="line94"></a>  // If we hit the max number of calls for this expectation, we&#39;re finished
+<a name="line95"></a>  // with it.
+<a name="line96"></a>  if (currentExpectation.actualCalls == currentExpectation.maxCalls) {
+<a name="line97"></a>    this.$expectations_.shift();
+<a name="line98"></a>  }
+<a name="line99"></a>
+<a name="line100"></a>  return this.$do(currentExpectation, args);
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/** @override */
+<a name="line105"></a>goog.testing.StrictMock.prototype.$reset = function() {
+<a name="line106"></a>  goog.testing.StrictMock.superClass_.$reset.call(this);
+<a name="line107"></a>
+<a name="line108"></a>  goog.array.clear(this.$expectations_);
+<a name="line109"></a>};
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/** @override */
+<a name="line113"></a>goog.testing.StrictMock.prototype.$verify = function() {
+<a name="line114"></a>  goog.testing.StrictMock.superClass_.$verify.call(this);
+<a name="line115"></a>
+<a name="line116"></a>  while (this.$expectations_.length &gt; 0) {
+<a name="line117"></a>    var expectation = this.$expectations_[0];
+<a name="line118"></a>    if (expectation.actualCalls &lt; expectation.minCalls) {
+<a name="line119"></a>      this.$throwException(&#39;Missing a call to &#39; + expectation.name +
+<a name="line120"></a>          &#39;\nExpected: &#39; + expectation.minCalls + &#39; but was: &#39; +
+<a name="line121"></a>          expectation.actualCalls);
+<a name="line122"></a>
+<a name="line123"></a>    } else {
+<a name="line124"></a>      // Don&#39;t need to check max, that&#39;s handled when the call is made
+<a name="line125"></a>      this.$expectations_.shift();
+<a name="line126"></a>    }
+<a name="line127"></a>  }
+<a name="line128"></a>};
+</pre>
+
+
+</body>
+</html>

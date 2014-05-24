@@ -1,0 +1,159 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>dataset_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_dataset_test.js.html">dataset_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.dom.datasetTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.dom.datasetTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.dataset&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>var $ = goog.dom.getElement;
+<a name="line23"></a>var dataset = goog.dom.dataset;
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>function setUp() {
+<a name="line27"></a>  var el = $(&#39;el2&#39;);
+<a name="line28"></a>  el.setAttribute(&#39;data-dynamic-key&#39;, &#39;dynamic&#39;);
+<a name="line29"></a>}
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>function testHas() {
+<a name="line33"></a>  var el = $(&#39;el1&#39;);
+<a name="line34"></a>
+<a name="line35"></a>  assertTrue(&#39;Dataset should have an existing key&#39;,
+<a name="line36"></a>             dataset.has(el, &#39;basicKey&#39;));
+<a name="line37"></a>  assertTrue(&#39;Dataset should have an existing (unusual) key&#39;,
+<a name="line38"></a>             dataset.has(el, &#39;UnusualKey1&#39;));
+<a name="line39"></a>  assertTrue(&#39;Dataset should have an existing (unusual) key&#39;,
+<a name="line40"></a>             dataset.has(el, &#39;unusual-Key2&#39;));
+<a name="line41"></a>  assertTrue(&#39;Dataset should have an existing (bizarre) key&#39;,
+<a name="line42"></a>             dataset.has(el, &#39;-Bizarre--Key&#39;));
+<a name="line43"></a>  assertFalse(&#39;Dataset should not have a non-existent key&#39;,
+<a name="line44"></a>              dataset.has(el, &#39;bogusKey&#39;));
+<a name="line45"></a>}
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>function testGet() {
+<a name="line49"></a>  var el = $(&#39;el1&#39;);
+<a name="line50"></a>
+<a name="line51"></a>  assertEquals(&#39;Dataset should return the proper value for an existing key&#39;,
+<a name="line52"></a>               dataset.get(el, &#39;basicKey&#39;), &#39;basic&#39;);
+<a name="line53"></a>  assertEquals(&#39;Dataset should have an existing (unusual) key&#39;,
+<a name="line54"></a>               dataset.get(el, &#39;UnusualKey1&#39;), &#39;unusual1&#39;);
+<a name="line55"></a>  assertEquals(&#39;Dataset should have an existing (unusual) key&#39;,
+<a name="line56"></a>               dataset.get(el, &#39;unusual-Key2&#39;), &#39;unusual2&#39;);
+<a name="line57"></a>  assertEquals(&#39;Dataset should have an existing (bizarre) key&#39;,
+<a name="line58"></a>               dataset.get(el, &#39;-Bizarre--Key&#39;), &#39;bizarre&#39;);
+<a name="line59"></a>  assertFalse(
+<a name="line60"></a>      &#39;Dataset should return null or an empty string for a non-existent key&#39;,
+<a name="line61"></a>      !!dataset.get(el, &#39;bogusKey&#39;));
+<a name="line62"></a>
+<a name="line63"></a>  el = $(&#39;el2&#39;);
+<a name="line64"></a>  assertEquals(&#39;Dataset should return the proper value for an existing key&#39;,
+<a name="line65"></a>               dataset.get(el, &#39;dynamicKey&#39;), &#39;dynamic&#39;);
+<a name="line66"></a>}
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>function testSet() {
+<a name="line70"></a>  var el = $(&#39;el2&#39;);
+<a name="line71"></a>
+<a name="line72"></a>  dataset.set(el, &#39;newKey&#39;, &#39;newValue&#39;);
+<a name="line73"></a>  assertTrue(&#39;Dataset should have a newly created key&#39;,
+<a name="line74"></a>             dataset.has(el, &#39;newKey&#39;));
+<a name="line75"></a>  assertEquals(&#39;Dataset should return the proper value for a newly created key&#39;,
+<a name="line76"></a>               dataset.get(el, &#39;newKey&#39;), &#39;newValue&#39;);
+<a name="line77"></a>
+<a name="line78"></a>  dataset.set(el, &#39;dynamicKey&#39;, &#39;customValue&#39;);
+<a name="line79"></a>  assertTrue(&#39;Dataset should have a modified, existing key&#39;,
+<a name="line80"></a>             dataset.has(el, &#39;dynamicKey&#39;));
+<a name="line81"></a>  assertEquals(&#39;Dataset should return the proper value for a modified key&#39;,
+<a name="line82"></a>               dataset.get(el, &#39;dynamicKey&#39;), &#39;customValue&#39;);
+<a name="line83"></a>}
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>function testRemove() {
+<a name="line87"></a>  var el = $(&#39;el2&#39;);
+<a name="line88"></a>
+<a name="line89"></a>  dataset.remove(el, &#39;dynamicKey&#39;);
+<a name="line90"></a>  assertFalse(&#39;Dataset should not have a removed key&#39;,
+<a name="line91"></a>              dataset.has(el, &#39;dynamicKey&#39;));
+<a name="line92"></a>  assertFalse(&#39;Dataset should return null or an empty string for removed key&#39;,
+<a name="line93"></a>              !!dataset.get(el, &#39;dynamicKey&#39;));
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>function testGetAll() {
+<a name="line98"></a>  var el = $(&#39;el1&#39;);
+<a name="line99"></a>  var expectedDataset = {
+<a name="line100"></a>    &#39;basicKey&#39;: &#39;basic&#39;,
+<a name="line101"></a>    &#39;UnusualKey1&#39;: &#39;unusual1&#39;,
+<a name="line102"></a>    &#39;unusual-Key2&#39;: &#39;unusual2&#39;,
+<a name="line103"></a>    &#39;-Bizarre--Key&#39;: &#39;bizarre&#39;
+<a name="line104"></a>  };
+<a name="line105"></a>  assertHashEquals(&#39;Dataset should have basicKey, UnusualKey1, &#39; +
+<a name="line106"></a>                   &#39;unusual-Key2, and -Bizarre--Key&#39;,
+<a name="line107"></a>                   expectedDataset, dataset.getAll(el));
+<a name="line108"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>window.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_window_window.js.html">window.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities for window manipulation.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.window&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.string&#39;);
+<a name="line23"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>/**
+<a name="line27"></a> * Default height for popup windows
+<a name="line28"></a> * @type {number}
+<a name="line29"></a> */
+<a name="line30"></a>goog.window.DEFAULT_POPUP_HEIGHT = 500;
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Default width for popup windows
+<a name="line35"></a> * @type {number}
+<a name="line36"></a> */
+<a name="line37"></a>goog.window.DEFAULT_POPUP_WIDTH = 690;
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Default target for popup windows
+<a name="line42"></a> * @type {string}
+<a name="line43"></a> */
+<a name="line44"></a>goog.window.DEFAULT_POPUP_TARGET = &#39;google_popup&#39;;
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Opens a new window.
+<a name="line49"></a> *
+<a name="line50"></a> * @param {string|Object} linkRef A string or an object that supports toString,
+<a name="line51"></a> *     for example goog.Uri.  If this is an object with a &#39;href&#39; attribute, such
+<a name="line52"></a> *     as HTMLAnchorElement, it will be used instead.
+<a name="line53"></a> *
+<a name="line54"></a> * @param {Object=} opt_options supports the following options:
+<a name="line55"></a> *  &#39;target&#39;: (string) target (window name). If null, linkRef.target will
+<a name="line56"></a> *          be used.
+<a name="line57"></a> *  &#39;width&#39;: (number) window width.
+<a name="line58"></a> *  &#39;height&#39;: (number) window height.
+<a name="line59"></a> *  &#39;top&#39;: (number) distance from top of screen
+<a name="line60"></a> *  &#39;left&#39;: (number) distance from left of screen
+<a name="line61"></a> *  &#39;toolbar&#39;: (boolean) show toolbar
+<a name="line62"></a> *  &#39;scrollbars&#39;: (boolean) show scrollbars
+<a name="line63"></a> *  &#39;location&#39;: (boolean) show location
+<a name="line64"></a> *  &#39;statusbar&#39;: (boolean) show statusbar
+<a name="line65"></a> *  &#39;menubar&#39;: (boolean) show menubar
+<a name="line66"></a> *  &#39;resizable&#39;: (boolean) resizable
+<a name="line67"></a> *  &#39;noreferrer&#39;: (boolean) whether to attempt to remove the referrer header
+<a name="line68"></a> *      from the request headers. Does this by opening a blank window that
+<a name="line69"></a> *      then redirects to the target url, so users may see some flickering.
+<a name="line70"></a> *
+<a name="line71"></a> * @param {Window=} opt_parentWin Parent window that should be used to open the
+<a name="line72"></a> *                 new window.
+<a name="line73"></a> *
+<a name="line74"></a> * @return {Window} Returns the window object that was opened. This returns
+<a name="line75"></a> *                  null if a popup blocker prevented the window from being
+<a name="line76"></a> *                  opened.
+<a name="line77"></a> */
+<a name="line78"></a>goog.window.open = function(linkRef, opt_options, opt_parentWin) {
+<a name="line79"></a>  if (!opt_options) {
+<a name="line80"></a>    opt_options = {};
+<a name="line81"></a>  }
+<a name="line82"></a>  var parentWin = opt_parentWin || window;
+<a name="line83"></a>
+<a name="line84"></a>  // HTMLAnchorElement has a toString() method with the same behavior as
+<a name="line85"></a>  // goog.Uri in all browsers except for Safari, which returns
+<a name="line86"></a>  // &#39;[object HTMLAnchorElement]&#39;.  We check for the href first, then
+<a name="line87"></a>  // assume that it&#39;s a goog.Uri or String otherwise.
+<a name="line88"></a>  var href = typeof linkRef.href != &#39;undefined&#39; ? linkRef.href :
+<a name="line89"></a>      String(linkRef);
+<a name="line90"></a>  var target = opt_options.target || linkRef.target;
+<a name="line91"></a>
+<a name="line92"></a>  var sb = [];
+<a name="line93"></a>  for (var option in opt_options) {
+<a name="line94"></a>    switch (option) {
+<a name="line95"></a>      case &#39;width&#39;:
+<a name="line96"></a>      case &#39;height&#39;:
+<a name="line97"></a>      case &#39;top&#39;:
+<a name="line98"></a>      case &#39;left&#39;:
+<a name="line99"></a>        sb.push(option + &#39;=&#39; + opt_options[option]);
+<a name="line100"></a>        break;
+<a name="line101"></a>      case &#39;target&#39;:
+<a name="line102"></a>      case &#39;noreferrer&#39;:
+<a name="line103"></a>        break;
+<a name="line104"></a>      default:
+<a name="line105"></a>        sb.push(option + &#39;=&#39; + (opt_options[option] ? 1 : 0));
+<a name="line106"></a>    }
+<a name="line107"></a>  }
+<a name="line108"></a>  var optionString = sb.join(&#39;,&#39;);
+<a name="line109"></a>
+<a name="line110"></a>  var newWin;
+<a name="line111"></a>  if (opt_options[&#39;noreferrer&#39;]) {
+<a name="line112"></a>    // Use a meta-refresh to stop the referrer from being included in the
+<a name="line113"></a>    // request headers.
+<a name="line114"></a>    newWin = parentWin.open(&#39;&#39;, target, optionString);
+<a name="line115"></a>    if (newWin) {
+<a name="line116"></a>      if (goog.userAgent.IE) {
+<a name="line117"></a>        // IE has problems parsing the content attribute if the url contains
+<a name="line118"></a>        // a semicolon. We can fix this by adding quotes around the url, but
+<a name="line119"></a>        // then we can&#39;t parse quotes in the URL correctly. We take a
+<a name="line120"></a>        // best-effort approach.
+<a name="line121"></a>        //
+<a name="line122"></a>        // If the URL has semicolons, wrap it in single quotes to protect
+<a name="line123"></a>        // the semicolons.
+<a name="line124"></a>        // If the URL has semicolons and single quotes, url-encode the single
+<a name="line125"></a>        // quotes as well.
+<a name="line126"></a>        //
+<a name="line127"></a>        // This is imperfect. Notice that both &#39; and ; are reserved characters
+<a name="line128"></a>        // in URIs, so this could do the wrong thing, but at least it will
+<a name="line129"></a>        // do the wrong thing in only rare cases.
+<a name="line130"></a>        // ugh.
+<a name="line131"></a>        if (href.indexOf(&#39;;&#39;) != -1) {
+<a name="line132"></a>          href = &quot;&#39;&quot; + href.replace(/&#39;/g, &#39;%27&#39;) + &quot;&#39;&quot;;
+<a name="line133"></a>        }
+<a name="line134"></a>      }
+<a name="line135"></a>      newWin.opener = null;
+<a name="line136"></a>      href = goog.string.htmlEscape(href);
+<a name="line137"></a>      newWin.document.write(&#39;&lt;META HTTP-EQUIV=&quot;refresh&quot; content=&quot;0; url=&#39; +
+<a name="line138"></a>                            href + &#39;&quot;&gt;&#39;);
+<a name="line139"></a>      newWin.document.close();
+<a name="line140"></a>    }
+<a name="line141"></a>  } else {
+<a name="line142"></a>    newWin = parentWin.open(href, target, optionString);
+<a name="line143"></a>  }
+<a name="line144"></a>  // newWin is null if a popup blocker prevented the window open.
+<a name="line145"></a>  return newWin;
+<a name="line146"></a>};
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>/**
+<a name="line150"></a> * Opens a new window without any real content in it.
+<a name="line151"></a> *
+<a name="line152"></a> * This can be used to get around popup blockers if you need to open a window
+<a name="line153"></a> * in response to a user event, but need to do asynchronous work to determine
+<a name="line154"></a> * the URL to open, and then set the URL later.
+<a name="line155"></a> *
+<a name="line156"></a> * Example usage:
+<a name="line157"></a> *
+<a name="line158"></a> * var newWin = goog.window.openBlank(&#39;Loading...&#39;);
+<a name="line159"></a> * setTimeout(
+<a name="line160"></a> *     function() {
+<a name="line161"></a> *       newWin.location.href = &#39;http://www.google.com&#39;;
+<a name="line162"></a> *     }, 100);
+<a name="line163"></a> *
+<a name="line164"></a> * @param {string=} opt_message String to show in the new window. This string
+<a name="line165"></a> *     will be HTML-escaped to avoid XSS issues.
+<a name="line166"></a> * @param {Object=} opt_options Options to open window with.
+<a name="line167"></a> *     {@see goog.window.open for exact option semantics}.
+<a name="line168"></a> * @param {Window=} opt_parentWin Parent window that should be used to open the
+<a name="line169"></a> *                 new window.
+<a name="line170"></a> * @return {Window} Returns the window object that was opened. This returns
+<a name="line171"></a> *                  null if a popup blocker prevented the window from being
+<a name="line172"></a> *                  opened.
+<a name="line173"></a> */
+<a name="line174"></a>goog.window.openBlank = function(opt_message, opt_options, opt_parentWin) {
+<a name="line175"></a>
+<a name="line176"></a>  // Open up a window with the loading message and nothing else.
+<a name="line177"></a>  // This will be interpreted as HTML content type with a missing doctype
+<a name="line178"></a>  // and html/body tags, but is otherwise acceptable.
+<a name="line179"></a>  var loadingMessage = opt_message ? goog.string.htmlEscape(opt_message) : &#39;&#39;;
+<a name="line180"></a>  return /** @type {Window} */ (goog.window.open(
+<a name="line181"></a>      &#39;javascript:&quot;&#39; + encodeURI(loadingMessage) + &#39;&quot;&#39;,
+<a name="line182"></a>      opt_options, opt_parentWin));
+<a name="line183"></a>};
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * Raise a help popup window, defaulting to &quot;Google standard&quot; size and name.
+<a name="line188"></a> *
+<a name="line189"></a> * (If your project is using GXPs, consider using {@link PopUpLink.gxp}.)
+<a name="line190"></a> *
+<a name="line191"></a> * @param {string|Object} linkRef if this is a string, it will be used as the
+<a name="line192"></a> * URL of the popped window; otherwise it&#39;s assumed to be an HTMLAnchorElement
+<a name="line193"></a> * (or some other object with &quot;target&quot; and &quot;href&quot; properties).
+<a name="line194"></a> *
+<a name="line195"></a> * @param {Object=} opt_options Options to open window with.
+<a name="line196"></a> *     {@see goog.window.open for exact option semantics}
+<a name="line197"></a> *     Additional wrinkles to the options:
+<a name="line198"></a> *     - if &#39;target&#39; field is null, linkRef.target will be used. If *that&#39;s*
+<a name="line199"></a> *     null, the default is &quot;google_popup&quot;.
+<a name="line200"></a> *     - if &#39;width&#39; field is not specified, the default is 690.
+<a name="line201"></a> *     - if &#39;height&#39; field is not specified, the default is 500.
+<a name="line202"></a> *
+<a name="line203"></a> * @return {boolean} true if the window was not popped up, false if it was.
+<a name="line204"></a> */
+<a name="line205"></a>goog.window.popup = function(linkRef, opt_options) {
+<a name="line206"></a>  if (!opt_options) {
+<a name="line207"></a>    opt_options = {};
+<a name="line208"></a>  }
+<a name="line209"></a>
+<a name="line210"></a>  // set default properties
+<a name="line211"></a>  opt_options[&#39;target&#39;] = opt_options[&#39;target&#39;] ||
+<a name="line212"></a>      linkRef[&#39;target&#39;] || goog.window.DEFAULT_POPUP_TARGET;
+<a name="line213"></a>  opt_options[&#39;width&#39;] = opt_options[&#39;width&#39;] ||
+<a name="line214"></a>      goog.window.DEFAULT_POPUP_WIDTH;
+<a name="line215"></a>  opt_options[&#39;height&#39;] = opt_options[&#39;height&#39;] ||
+<a name="line216"></a>      goog.window.DEFAULT_POPUP_HEIGHT;
+<a name="line217"></a>
+<a name="line218"></a>  var newWin = goog.window.open(linkRef, opt_options);
+<a name="line219"></a>  if (!newWin) {
+<a name="line220"></a>    return true;
+<a name="line221"></a>  }
+<a name="line222"></a>  newWin.focus();
+<a name="line223"></a>
+<a name="line224"></a>  return false;
+<a name="line225"></a>};
+</pre>
+
+
+</body>
+</html>

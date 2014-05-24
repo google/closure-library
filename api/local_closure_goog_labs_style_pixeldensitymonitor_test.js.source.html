@@ -1,0 +1,197 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>pixeldensitymonitor_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_style_pixeldensitymonitor_test.js.html">pixeldensitymonitor_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Tests for goog.labs.style.PixelDensityMonitor.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.labs.style.PixelDensityMonitorTest&#39;);
+<a name="line21"></a>goog.setTestOnly(&#39;goog.labs.style.PixelDensityMonitorTest&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.DomHelper&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events&#39;);
+<a name="line26"></a>goog.require(&#39;goog.labs.style.PixelDensityMonitor&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.MockControl&#39;);
+<a name="line28"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line29"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line30"></a>
+<a name="line31"></a>var fakeWindow;
+<a name="line32"></a>var recordFunction;
+<a name="line33"></a>var monitor;
+<a name="line34"></a>var mockControl;
+<a name="line35"></a>var mediaQueryLists;
+<a name="line36"></a>
+<a name="line37"></a>function setUp() {
+<a name="line38"></a>  recordFunction = goog.testing.recordFunction();
+<a name="line39"></a>  mediaQueryLists = [];
+<a name="line40"></a>  mockControl = new goog.testing.MockControl();
+<a name="line41"></a>}
+<a name="line42"></a>
+<a name="line43"></a>function tearDown() {
+<a name="line44"></a>  mockControl.$verifyAll();
+<a name="line45"></a>  goog.dispose(monitor);
+<a name="line46"></a>  goog.dispose(recordFunction);
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>function setUpMonitor(initialRatio, hasMatchMedia) {
+<a name="line50"></a>  fakeWindow = {
+<a name="line51"></a>    devicePixelRatio: initialRatio
+<a name="line52"></a>  };
+<a name="line53"></a>
+<a name="line54"></a>  if (hasMatchMedia) {
+<a name="line55"></a>    // Every call to matchMedia should return a new media query list with its
+<a name="line56"></a>    // own set of listeners.
+<a name="line57"></a>    fakeWindow.matchMedia = function(query) {
+<a name="line58"></a>      var listeners = [];
+<a name="line59"></a>      var newList = {
+<a name="line60"></a>        addListener: function(listener) {
+<a name="line61"></a>          listeners.push(listener);
+<a name="line62"></a>        },
+<a name="line63"></a>        removeListener: function(listener) {
+<a name="line64"></a>          goog.array.remove(listeners, listener);
+<a name="line65"></a>        },
+<a name="line66"></a>        callListeners: function() {
+<a name="line67"></a>          for (var i = 0; i &lt; listeners.length; i++) {
+<a name="line68"></a>            listeners[i]();
+<a name="line69"></a>          }
+<a name="line70"></a>        },
+<a name="line71"></a>        getListenerCount: function() {
+<a name="line72"></a>          return listeners.length;
+<a name="line73"></a>        }
+<a name="line74"></a>      };
+<a name="line75"></a>      mediaQueryLists.push(newList);
+<a name="line76"></a>      return newList;
+<a name="line77"></a>    };
+<a name="line78"></a>  }
+<a name="line79"></a>
+<a name="line80"></a>  var domHelper = mockControl.createStrictMock(goog.dom.DomHelper);
+<a name="line81"></a>  domHelper.getWindow().$returns(fakeWindow);
+<a name="line82"></a>  mockControl.$replayAll();
+<a name="line83"></a>
+<a name="line84"></a>  monitor = new goog.labs.style.PixelDensityMonitor(domHelper);
+<a name="line85"></a>  goog.events.listen(monitor,
+<a name="line86"></a>      goog.labs.style.PixelDensityMonitor.EventType.CHANGE, recordFunction);
+<a name="line87"></a>}
+<a name="line88"></a>
+<a name="line89"></a>function setNewRatio(newRatio) {
+<a name="line90"></a>  fakeWindow.devicePixelRatio = newRatio;
+<a name="line91"></a>  for (var i = 0; i &lt; mediaQueryLists.length; i++) {
+<a name="line92"></a>    mediaQueryLists[i].callListeners();
+<a name="line93"></a>  }
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>function testNormalDensity() {
+<a name="line97"></a>  setUpMonitor(1, false);
+<a name="line98"></a>  assertEquals(goog.labs.style.PixelDensityMonitor.Density.NORMAL,
+<a name="line99"></a>      monitor.getDensity());
+<a name="line100"></a>}
+<a name="line101"></a>
+<a name="line102"></a>function testHighDensity() {
+<a name="line103"></a>  setUpMonitor(1.5, false);
+<a name="line104"></a>  assertEquals(goog.labs.style.PixelDensityMonitor.Density.HIGH,
+<a name="line105"></a>      monitor.getDensity());
+<a name="line106"></a>}
+<a name="line107"></a>
+<a name="line108"></a>function testNormalDensityIfUndefined() {
+<a name="line109"></a>  setUpMonitor(undefined, false);
+<a name="line110"></a>  assertEquals(goog.labs.style.PixelDensityMonitor.Density.NORMAL,
+<a name="line111"></a>      monitor.getDensity());
+<a name="line112"></a>}
+<a name="line113"></a>
+<a name="line114"></a>function testChangeEvent() {
+<a name="line115"></a>  setUpMonitor(1, true);
+<a name="line116"></a>  assertEquals(goog.labs.style.PixelDensityMonitor.Density.NORMAL,
+<a name="line117"></a>      monitor.getDensity());
+<a name="line118"></a>  monitor.start();
+<a name="line119"></a>
+<a name="line120"></a>  setNewRatio(2);
+<a name="line121"></a>  var call = recordFunction.popLastCall();
+<a name="line122"></a>  assertEquals(goog.labs.style.PixelDensityMonitor.Density.HIGH,
+<a name="line123"></a>      call.getArgument(0).target.getDensity());
+<a name="line124"></a>  assertEquals(goog.labs.style.PixelDensityMonitor.Density.HIGH,
+<a name="line125"></a>      monitor.getDensity());
+<a name="line126"></a>
+<a name="line127"></a>  setNewRatio(1);
+<a name="line128"></a>  call = recordFunction.popLastCall();
+<a name="line129"></a>  assertEquals(goog.labs.style.PixelDensityMonitor.Density.NORMAL,
+<a name="line130"></a>      call.getArgument(0).target.getDensity());
+<a name="line131"></a>  assertEquals(goog.labs.style.PixelDensityMonitor.Density.NORMAL,
+<a name="line132"></a>      monitor.getDensity());
+<a name="line133"></a>}
+<a name="line134"></a>
+<a name="line135"></a>function testListenerIsDisposed() {
+<a name="line136"></a>  setUpMonitor(1, true);
+<a name="line137"></a>  monitor.start();
+<a name="line138"></a>
+<a name="line139"></a>  assertEquals(1, mediaQueryLists.length);
+<a name="line140"></a>  assertEquals(1, mediaQueryLists[0].getListenerCount());
+<a name="line141"></a>
+<a name="line142"></a>  goog.dispose(monitor);
+<a name="line143"></a>
+<a name="line144"></a>  assertEquals(1, mediaQueryLists.length);
+<a name="line145"></a>  assertEquals(0, mediaQueryLists[0].getListenerCount());
+<a name="line146"></a>}
+</pre>
+
+
+</body>
+</html>

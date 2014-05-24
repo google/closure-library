@@ -1,0 +1,125 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>nativejsonprocessor.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_json_nativejsonprocessor.js.html">nativejsonprocessor.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Defines a class for parsing JSON using the browser&#39;s built in
+<a name="line18"></a> * JSON library.
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.json.NativeJsonProcessor&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line24"></a>goog.require(&#39;goog.json&#39;);
+<a name="line25"></a>goog.require(&#39;goog.json.Processor&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * A class that parses and stringifies JSON using the browser&#39;s built-in JSON
+<a name="line31"></a> * library, if it is avaliable.
+<a name="line32"></a> *
+<a name="line33"></a> * Note that the native JSON api has subtle differences across browsers, so
+<a name="line34"></a> * use this implementation with care.  See json_test#assertSerialize
+<a name="line35"></a> * for details on the differences from goog.json.
+<a name="line36"></a> *
+<a name="line37"></a> * This implementation is signficantly faster than goog.json, at least on
+<a name="line38"></a> * Chrome.  See json_perf.html for a perf test showing the difference.
+<a name="line39"></a> *
+<a name="line40"></a> * @param {?goog.json.Replacer=} opt_replacer An optional replacer to use during
+<a name="line41"></a> *     serialization.
+<a name="line42"></a> * @param {?goog.json.Reviver=} opt_reviver An optional reviver to use during
+<a name="line43"></a> *     parsing.
+<a name="line44"></a> * @constructor
+<a name="line45"></a> * @implements {goog.json.Processor}
+<a name="line46"></a> * @final
+<a name="line47"></a> */
+<a name="line48"></a>goog.json.NativeJsonProcessor = function(opt_replacer, opt_reviver) {
+<a name="line49"></a>  goog.asserts.assert(goog.isDef(goog.global[&#39;JSON&#39;]), &#39;JSON not defined&#39;);
+<a name="line50"></a>
+<a name="line51"></a>  /**
+<a name="line52"></a>   * @type {goog.json.Replacer|null|undefined}
+<a name="line53"></a>   * @private
+<a name="line54"></a>   */
+<a name="line55"></a>  this.replacer_ = opt_replacer;
+<a name="line56"></a>
+<a name="line57"></a>  /**
+<a name="line58"></a>   * @type {goog.json.Reviver|null|undefined}
+<a name="line59"></a>   * @private
+<a name="line60"></a>   */
+<a name="line61"></a>  this.reviver_ = opt_reviver;
+<a name="line62"></a>};
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/** @override */
+<a name="line66"></a>goog.json.NativeJsonProcessor.prototype.stringify = function(object) {
+<a name="line67"></a>  return goog.global[&#39;JSON&#39;].stringify(object, this.replacer_);
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/** @override */
+<a name="line72"></a>goog.json.NativeJsonProcessor.prototype.parse = function(s) {
+<a name="line73"></a>  return goog.global[&#39;JSON&#39;].parse(s, this.reviver_);
+<a name="line74"></a>};
+</pre>
+
+
+</body>
+</html>

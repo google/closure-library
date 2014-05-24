@@ -1,0 +1,448 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>draglistgroup_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_fx_draglistgroup_test.js.html">draglistgroup_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.fx.DragListGroupTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.fx.DragListGroupTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line20"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
+<a name="line23"></a>goog.require(&#39;goog.events.BrowserFeature&#39;);
+<a name="line24"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line26"></a>goog.require(&#39;goog.fx.DragEvent&#39;);
+<a name="line27"></a>goog.require(&#39;goog.fx.DragListDirection&#39;);
+<a name="line28"></a>goog.require(&#39;goog.fx.DragListGroup&#39;);
+<a name="line29"></a>goog.require(&#39;goog.fx.Dragger&#39;);
+<a name="line30"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line31"></a>goog.require(&#39;goog.object&#39;);
+<a name="line32"></a>goog.require(&#39;goog.testing.events&#39;);
+<a name="line33"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>/** @type {goog.fx.DragListGroup} */
+<a name="line37"></a>var dlg;
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/** @type {goog.dom.Element} */
+<a name="line41"></a>var list;
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/** @type {goog.events.BrowserEvent} */
+<a name="line45"></a>var event;
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>/**
+<a name="line49"></a> * The number of event listeners registered by the DragListGroup after the
+<a name="line50"></a> * init() call.
+<a name="line51"></a> * @type {number}
+<a name="line52"></a> */
+<a name="line53"></a>var initialListenerCount;
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * Type of events fired by the DragListGroup.
+<a name="line58"></a> * @type {!Array.&lt;string&gt;}
+<a name="line59"></a> */
+<a name="line60"></a>var firedEventTypes;
+<a name="line61"></a>
+<a name="line62"></a>function setUp() {
+<a name="line63"></a>  var sandbox = goog.dom.getElement(&#39;sandbox&#39;);
+<a name="line64"></a>  list = goog.dom.createDom(&#39;div&#39;, {&#39;id&#39;: &#39;horiz_div&#39;});
+<a name="line65"></a>  list.appendChild(
+<a name="line66"></a>      goog.dom.createDom(&#39;div&#39;, null, goog.dom.createTextNode(&#39;1&#39;)));
+<a name="line67"></a>  list.appendChild(
+<a name="line68"></a>      goog.dom.createDom(&#39;div&#39;, null, goog.dom.createTextNode(&#39;2&#39;)));
+<a name="line69"></a>  list.appendChild(
+<a name="line70"></a>      goog.dom.createDom(&#39;div&#39;, null, goog.dom.createTextNode(&#39;3&#39;)));
+<a name="line71"></a>  sandbox.appendChild(list);
+<a name="line72"></a>
+<a name="line73"></a>  dlg = new goog.fx.DragListGroup();
+<a name="line74"></a>  dlg.setDragItemHoverClass(&#39;opacity_40&#39;, &#39;cursor_move&#39;);
+<a name="line75"></a>  dlg.setDragItemHandleHoverClass(&#39;opacity_40&#39;, &#39;cursor_pointer&#39;);
+<a name="line76"></a>  dlg.setCurrDragItemClass(&#39;blue_bg&#39;, &#39;opacity_40&#39;);
+<a name="line77"></a>  dlg.setDraggerElClass(&#39;cursor_move&#39;, &#39;blue_bg&#39;);
+<a name="line78"></a>  dlg.addDragList(list, goog.fx.DragListDirection.RIGHT);
+<a name="line79"></a>  dlg.init();
+<a name="line80"></a>
+<a name="line81"></a>  initialListenerCount = goog.object.getCount(dlg.eventHandler_.keys_);
+<a name="line82"></a>
+<a name="line83"></a>  event = new goog.events.BrowserEvent();
+<a name="line84"></a>  event.currentTarget = list.getElementsByTagName(&#39;div&#39;)[0];
+<a name="line85"></a>
+<a name="line86"></a>  firedEventTypes = [];
+<a name="line87"></a>  goog.events.listen(dlg,
+<a name="line88"></a>      goog.object.getValues(goog.fx.DragListGroup.EventType),
+<a name="line89"></a>      function(e) {
+<a name="line90"></a>        firedEventTypes.push(e.type);
+<a name="line91"></a>      });
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>function tearDown() {
+<a name="line95"></a>  dlg.dispose();
+<a name="line96"></a>  goog.dom.getElement(&#39;sandbox&#39;).innerHTML = &#39;&#39;;
+<a name="line97"></a>}
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Test the initial assumptions.
+<a name="line102"></a> *
+<a name="line103"></a> * Verify that the setter methods work properly, i.e., the CSS classes are
+<a name="line104"></a> * stored in the private arrays after init() but are not added yet to target.
+<a name="line105"></a> * (Since initially, we are not yet hovering over any list, in particular,
+<a name="line106"></a> * over this target.)
+<a name="line107"></a> */
+<a name="line108"></a>function testSettersAfterInit() {
+<a name="line109"></a>  assertTrue(goog.array.equals(dlg.dragItemHoverClasses_,
+<a name="line110"></a>      [&#39;opacity_40&#39;, &#39;cursor_move&#39;]));
+<a name="line111"></a>  assertTrue(goog.array.equals(dlg.dragItemHandleHoverClasses_,
+<a name="line112"></a>      [&#39;opacity_40&#39;, &#39;cursor_pointer&#39;]));
+<a name="line113"></a>  assertTrue(goog.array.equals(dlg.currDragItemClasses_,
+<a name="line114"></a>      [&#39;blue_bg&#39;, &#39;opacity_40&#39;]));
+<a name="line115"></a>
+<a name="line116"></a>  assertFalse(&#39;Should have no cursor_move class after init&#39;,
+<a name="line117"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;cursor_move&#39;));
+<a name="line118"></a>  assertFalse(&#39;Should have no cursor_pointer class after init&#39;,
+<a name="line119"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;cursor_pointer&#39;));
+<a name="line120"></a>  assertFalse(&#39;Should have no opacity_40 class after init&#39;,
+<a name="line121"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;opacity_40&#39;));
+<a name="line122"></a>  assertFalse(&#39;Should not have blue_bg class after init&#39;,
+<a name="line123"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;blue_bg&#39;));
+<a name="line124"></a>}
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Test the effect of hovering over a list.
+<a name="line129"></a> *
+<a name="line130"></a> * Check that after the MOUSEOVER browser event these classes are added to
+<a name="line131"></a> * the current target of the event.
+<a name="line132"></a> */
+<a name="line133"></a>function testAddDragItemHoverClasses() {
+<a name="line134"></a>  dlg.handleDragItemMouseover_(event);
+<a name="line135"></a>
+<a name="line136"></a>  assertTrue(&#39;Should have cursor_move class after MOUSEOVER&#39;,
+<a name="line137"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;cursor_move&#39;));
+<a name="line138"></a>  assertTrue(&#39;Should have opacity_40 class after MOUSEOVER&#39;,
+<a name="line139"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;opacity_40&#39;));
+<a name="line140"></a>  assertFalse(&#39;Should not have cursor_pointer class after MOUSEOVER&#39;,
+<a name="line141"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;cursor_pointer&#39;));
+<a name="line142"></a>  assertFalse(&#39;Should not have blue_bg class after MOUSEOVER&#39;,
+<a name="line143"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;blue_bg&#39;));
+<a name="line144"></a>}
+<a name="line145"></a>
+<a name="line146"></a>function testAddDragItemHandleHoverClasses() {
+<a name="line147"></a>  dlg.handleDragItemHandleMouseover_(event);
+<a name="line148"></a>
+<a name="line149"></a>  assertFalse(&#39;Should not have cursor_move class after MOUSEOVER&#39;,
+<a name="line150"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;cursor_move&#39;));
+<a name="line151"></a>  assertTrue(&#39;Should have opacity_40 class after MOUSEOVER&#39;,
+<a name="line152"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;opacity_40&#39;));
+<a name="line153"></a>  assertTrue(&#39;Should have cursor_pointer class after MOUSEOVER&#39;,
+<a name="line154"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;cursor_pointer&#39;));
+<a name="line155"></a>  assertFalse(&#39;Should not have blue_bg class after MOUSEOVER&#39;,
+<a name="line156"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;blue_bg&#39;));
+<a name="line157"></a>}
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Test the effect of stopping hovering over a list.
+<a name="line162"></a> *
+<a name="line163"></a> * Check that after the MOUSEOUT browser event all CSS classes are removed
+<a name="line164"></a> * from the target (as we are no longer hovering over the it).
+<a name="line165"></a> */
+<a name="line166"></a>function testRemoveDragItemHoverClasses() {
+<a name="line167"></a>  dlg.handleDragItemMouseover_(event);
+<a name="line168"></a>  dlg.handleDragItemMouseout_(event);
+<a name="line169"></a>
+<a name="line170"></a>  assertFalse(&#39;Should have no cursor_move class after MOUSEOUT&#39;,
+<a name="line171"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;cursor_move&#39;));
+<a name="line172"></a>  assertFalse(&#39;Should have no cursor_pointer class after MOUSEOUT&#39;,
+<a name="line173"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;cursor_pointer&#39;));
+<a name="line174"></a>  assertFalse(&#39;Should have no opacity_40 class after MOUSEOUT&#39;,
+<a name="line175"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;opacity_40&#39;));
+<a name="line176"></a>  assertFalse(&#39;Should have no blue_bg class after MOUSEOUT&#39;,
+<a name="line177"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;blue_bg&#39;));
+<a name="line178"></a>}
+<a name="line179"></a>
+<a name="line180"></a>function testRemoveDragItemHandleHoverClasses() {
+<a name="line181"></a>  dlg.handleDragItemHandleMouseover_(event);
+<a name="line182"></a>  dlg.handleDragItemHandleMouseout_(event);
+<a name="line183"></a>
+<a name="line184"></a>  assertFalse(&#39;Should have no cursor_move class after MOUSEOUT&#39;,
+<a name="line185"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;cursor_move&#39;));
+<a name="line186"></a>  assertFalse(&#39;Should have no cursor_pointer class after MOUSEOUT&#39;,
+<a name="line187"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;cursor_pointer&#39;));
+<a name="line188"></a>  assertFalse(&#39;Should have no opacity_40 class after MOUSEOUT&#39;,
+<a name="line189"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;opacity_40&#39;));
+<a name="line190"></a>  assertFalse(&#39;Should have no blue_bg class after MOUSEOUT&#39;,
+<a name="line191"></a>      goog.dom.classlist.contains(event.currentTarget, &#39;blue_bg&#39;));
+<a name="line192"></a>}
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * Test the effect of dragging an item. (DRAGSTART event.)
+<a name="line197"></a> *
+<a name="line198"></a> * Check that after the MOUSEDOWN browser event is handled by the
+<a name="line199"></a> * handlePotentialDragStart_() method the currDragItem has the CSS classes
+<a name="line200"></a> * set by the setter method.
+<a name="line201"></a> */
+<a name="line202"></a>function testAddCurrentDragItemClasses() {
+<a name="line203"></a>  var be = new goog.events.BrowserEvent({
+<a name="line204"></a>    type: goog.events.EventType.MOUSEDOWN,
+<a name="line205"></a>    button: goog.events.BrowserFeature.HAS_W3C_BUTTON ? 0 : 1
+<a name="line206"></a>  });
+<a name="line207"></a>  event.event_ = be;
+<a name="line208"></a>
+<a name="line209"></a>  dlg.handlePotentialDragStart_(event);
+<a name="line210"></a>
+<a name="line211"></a>  assertFalse(&#39;Should have no cursor_move class after MOUSEDOWN&#39;,
+<a name="line212"></a>      goog.dom.classlist.contains(dlg.currDragItem_, &#39;cursor_move&#39;));
+<a name="line213"></a>  assertFalse(&#39;Should have no cursor_pointer class after MOUSEDOWN&#39;,
+<a name="line214"></a>      goog.dom.classlist.contains(dlg.currDragItem_, &#39;cursor_pointer&#39;));
+<a name="line215"></a>  assertTrue(&#39;Should have opacity_40 class after MOUSEDOWN&#39;,
+<a name="line216"></a>      goog.dom.classlist.contains(dlg.currDragItem_, &#39;opacity_40&#39;));
+<a name="line217"></a>  assertTrue(&#39;Should have blue_bg class after MOUSEDOWN&#39;,
+<a name="line218"></a>      goog.dom.classlist.contains(dlg.currDragItem_, &#39;blue_bg&#39;));
+<a name="line219"></a>}
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * Test the effect of dragging an item. (DRAGEND event.)
+<a name="line224"></a> *
+<a name="line225"></a> * Check that after the MOUSEUP browser event handled by the handleDragEnd_()
+<a name="line226"></a> * method the currDragItem has no CSS classes set in the dispatched event.
+<a name="line227"></a> */
+<a name="line228"></a>function testRemoveCurrentDragItemClasses() {
+<a name="line229"></a>  var be = new goog.events.BrowserEvent({
+<a name="line230"></a>    type: goog.events.EventType.MOUSEDOWN,
+<a name="line231"></a>    button: goog.events.BrowserFeature.HAS_W3C_BUTTON ? 0 : 1
+<a name="line232"></a>  });
+<a name="line233"></a>  event.event_ = be;
+<a name="line234"></a>  dlg.handlePotentialDragStart_(event);
+<a name="line235"></a>
+<a name="line236"></a>  // Need to catch the dispatched event because the temporary fields
+<a name="line237"></a>  // including dlg.currentDragItem_ are cleared after the dragging has ended.
+<a name="line238"></a>  var currDragItem = goog.dom.createDom(
+<a name="line239"></a>      &#39;div&#39;, [&#39;cursor_move&#39;, &#39;blue_bg&#39;], goog.dom.createTextNode(&#39;4&#39;));
+<a name="line240"></a>  goog.events.listen(dlg, goog.fx.DragListGroup.EventType.DRAGEND,
+<a name="line241"></a>      function(e) {currDragItem = dlg.currDragItem_;});
+<a name="line242"></a>
+<a name="line243"></a>  var dragger = new goog.fx.Dragger(event.currentTarget);
+<a name="line244"></a>  be.type = goog.events.EventType.MOUSEUP;
+<a name="line245"></a>  be.clientX = 1;
+<a name="line246"></a>  be.clientY = 2;
+<a name="line247"></a>  var dragEvent = new goog.fx.DragEvent(
+<a name="line248"></a>      goog.fx.Dragger.EventType.END, dragger, be.clientX, be.clientY, be);
+<a name="line249"></a>  dlg.handleDragEnd_(dragEvent); // this method dispatches the DRAGEND event
+<a name="line250"></a>  dragger.dispose();
+<a name="line251"></a>
+<a name="line252"></a>  assertFalse(&#39;Should have no cursor_move class after MOUSEUP&#39;,
+<a name="line253"></a>      goog.dom.classlist.contains(currDragItem, &#39;cursor_move&#39;));
+<a name="line254"></a>  assertFalse(&#39;Should have no cursor_pointer class after MOUSEUP&#39;,
+<a name="line255"></a>      goog.dom.classlist.contains(currDragItem, &#39;cursor_pointer&#39;));
+<a name="line256"></a>  assertFalse(&#39;Should have no opacity_40 class after MOUSEUP&#39;,
+<a name="line257"></a>      goog.dom.classlist.contains(currDragItem, &#39;opacity_40&#39;));
+<a name="line258"></a>  assertFalse(&#39;Should have no blue_bg class after MOUSEUP&#39;,
+<a name="line259"></a>      goog.dom.classlist.contains(currDragItem, &#39;blue_bg&#39;));
+<a name="line260"></a>}
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * Asserts that the DragListGroup is in idle state.
+<a name="line265"></a> * @param {!goog.fx.DragListGroup} dlg The DragListGroup to examine.
+<a name="line266"></a> */
+<a name="line267"></a>function assertIdle(dlg) {
+<a name="line268"></a>  assertNull(&#39;dragger element has been cleaned up&#39;, dlg.draggerEl_);
+<a name="line269"></a>  assertNull(&#39;dragger has been cleaned up&#39;, dlg.dragger_);
+<a name="line270"></a>  assertEquals(&#39;the additional event listeners have been removed&#39;,
+<a name="line271"></a>      initialListenerCount, goog.object.getCount(dlg.eventHandler_.keys_));
+<a name="line272"></a>}
+<a name="line273"></a>
+<a name="line274"></a>function testFiredEvents() {
+<a name="line275"></a>  goog.testing.events.fireClickSequence(list.firstChild);
+<a name="line276"></a>  assertArrayEquals(&#39;event types in case of zero distance dragging&#39;, [
+<a name="line277"></a>    goog.fx.DragListGroup.EventType.BEFOREDRAGSTART,
+<a name="line278"></a>    goog.fx.DragListGroup.EventType.DRAGSTART,
+<a name="line279"></a>    goog.fx.DragListGroup.EventType.BEFOREDRAGEND,
+<a name="line280"></a>    goog.fx.DragListGroup.EventType.DRAGEND
+<a name="line281"></a>  ], firedEventTypes);
+<a name="line282"></a>  assertIdle(dlg);
+<a name="line283"></a>}
+<a name="line284"></a>
+<a name="line285"></a>function testFiredEventsWithHysteresis() {
+<a name="line286"></a>  dlg.setHysteresis(2);
+<a name="line287"></a>
+<a name="line288"></a>  goog.testing.events.fireClickSequence(list.firstChild);
+<a name="line289"></a>  assertArrayEquals(&#39;no events fired on click if hysteresis is enabled&#39;, [],
+<a name="line290"></a>      firedEventTypes);
+<a name="line291"></a>  assertIdle(dlg);
+<a name="line292"></a>
+<a name="line293"></a>  goog.testing.events.fireMouseDownEvent(list.firstChild, null,
+<a name="line294"></a>      new goog.math.Coordinate(0, 0));
+<a name="line295"></a>  goog.testing.events.fireMouseMoveEvent(list.firstChild,
+<a name="line296"></a>      new goog.math.Coordinate(1, 0));
+<a name="line297"></a>  assertArrayEquals(&#39;no events fired below hysteresis distance&#39;, [],
+<a name="line298"></a>      firedEventTypes);
+<a name="line299"></a>
+<a name="line300"></a>  goog.testing.events.fireMouseMoveEvent(list.firstChild,
+<a name="line301"></a>      new goog.math.Coordinate(3, 0));
+<a name="line302"></a>  assertArrayEquals(&#39;start+move events are fired over hysteresis distance&#39;, [
+<a name="line303"></a>    goog.fx.DragListGroup.EventType.BEFOREDRAGSTART,
+<a name="line304"></a>    goog.fx.DragListGroup.EventType.DRAGSTART,
+<a name="line305"></a>    goog.fx.DragListGroup.EventType.BEFOREDRAGMOVE,
+<a name="line306"></a>    goog.fx.DragListGroup.EventType.DRAGMOVE
+<a name="line307"></a>  ], firedEventTypes);
+<a name="line308"></a>
+<a name="line309"></a>  firedEventTypes.length = 0;
+<a name="line310"></a>  goog.testing.events.fireMouseUpEvent(list.firstChild, null,
+<a name="line311"></a>      new goog.math.Coordinate(3, 0));
+<a name="line312"></a>  assertArrayEquals(&#39;end events are fired on mouseup&#39;, [
+<a name="line313"></a>    goog.fx.DragListGroup.EventType.BEFOREDRAGEND,
+<a name="line314"></a>    goog.fx.DragListGroup.EventType.DRAGEND
+<a name="line315"></a>  ], firedEventTypes);
+<a name="line316"></a>  assertIdle(dlg);
+<a name="line317"></a>}
+<a name="line318"></a>
+<a name="line319"></a>function testPreventDefaultBeforeDragStart() {
+<a name="line320"></a>  goog.events.listen(dlg, goog.fx.DragListGroup.EventType.BEFOREDRAGSTART,
+<a name="line321"></a>      goog.events.Event.preventDefault);
+<a name="line322"></a>
+<a name="line323"></a>  goog.testing.events.fireMouseDownEvent(list.firstChild);
+<a name="line324"></a>  assertArrayEquals(&#39;event types if dragging is prevented&#39;,
+<a name="line325"></a>      [goog.fx.DragListGroup.EventType.BEFOREDRAGSTART], firedEventTypes);
+<a name="line326"></a>  assertIdle(dlg);
+<a name="line327"></a>}
+<a name="line328"></a>
+<a name="line329"></a>function testPreventDefaultBeforeDragStartWithHysteresis() {
+<a name="line330"></a>  dlg.setHysteresis(5);
+<a name="line331"></a>  goog.events.listen(dlg, goog.fx.DragListGroup.EventType.BEFOREDRAGSTART,
+<a name="line332"></a>      goog.events.Event.preventDefault);
+<a name="line333"></a>
+<a name="line334"></a>  goog.testing.events.fireMouseDownEvent(list.firstChild, null,
+<a name="line335"></a>      new goog.math.Coordinate(0, 0));
+<a name="line336"></a>  goog.testing.events.fireMouseMoveEvent(list.firstChild,
+<a name="line337"></a>      new goog.math.Coordinate(10, 0));
+<a name="line338"></a>  assertArrayEquals(&#39;event types if dragging is prevented&#39;,
+<a name="line339"></a>      [goog.fx.DragListGroup.EventType.BEFOREDRAGSTART], firedEventTypes);
+<a name="line340"></a>  assertIdle(dlg);
+<a name="line341"></a>}
+<a name="line342"></a>
+<a name="line343"></a>function testRightClick() {
+<a name="line344"></a>  goog.testing.events.fireMouseDownEvent(list.firstChild,
+<a name="line345"></a>      goog.events.BrowserEvent.MouseButton.RIGHT);
+<a name="line346"></a>  goog.testing.events.fireMouseUpEvent(list.firstChild,
+<a name="line347"></a>      goog.events.BrowserEvent.MouseButton.RIGHT);
+<a name="line348"></a>
+<a name="line349"></a>  assertArrayEquals(&#39;no events fired&#39;, [], firedEventTypes);
+<a name="line350"></a>  assertIdle(dlg);
+<a name="line351"></a>}
+<a name="line352"></a>
+<a name="line353"></a>
+<a name="line354"></a>/**
+<a name="line355"></a> * Tests that a new item can be added to a drag list after the control has
+<a name="line356"></a> * been initialized.
+<a name="line357"></a> */
+<a name="line358"></a>function testAddItemToDragList() {
+<a name="line359"></a>  var item =
+<a name="line360"></a>      goog.dom.createDom(&#39;div&#39;, null, goog.dom.createTextNode(&#39;newItem&#39;));
+<a name="line361"></a>
+<a name="line362"></a>  dlg.addItemToDragList(list, item);
+<a name="line363"></a>
+<a name="line364"></a>  assertEquals(item, list.lastChild);
+<a name="line365"></a>  assertEquals(4, goog.dom.getChildren(list).length);
+<a name="line366"></a>
+<a name="line367"></a>  goog.events.listen(dlg, goog.fx.DragListGroup.EventType.BEFOREDRAGSTART,
+<a name="line368"></a>      goog.events.Event.preventDefault);
+<a name="line369"></a>
+<a name="line370"></a>  goog.testing.events.fireMouseDownEvent(item);
+<a name="line371"></a>  assertTrue(&#39;Should fire beforedragstart event when clicked&#39;,
+<a name="line372"></a>      goog.array.equals([goog.fx.DragListGroup.EventType.BEFOREDRAGSTART],
+<a name="line373"></a>      firedEventTypes));
+<a name="line374"></a>}
+<a name="line375"></a>
+<a name="line376"></a>
+<a name="line377"></a>/**
+<a name="line378"></a> * Tests that a new item added to a drag list after the control has been
+<a name="line379"></a> * initialized is inserted at the correct position.
+<a name="line380"></a> */
+<a name="line381"></a>function testInsertItemInDragList() {
+<a name="line382"></a>  var item =
+<a name="line383"></a>      goog.dom.createDom(&#39;div&#39;, null, goog.dom.createTextNode(&#39;newItem&#39;));
+<a name="line384"></a>
+<a name="line385"></a>  dlg.addItemToDragList(list, item, 0);
+<a name="line386"></a>
+<a name="line387"></a>  assertEquals(item, list.firstChild);
+<a name="line388"></a>  assertEquals(4, goog.dom.getChildren(list).length);
+<a name="line389"></a>
+<a name="line390"></a>  goog.events.listen(dlg, goog.fx.DragListGroup.EventType.BEFOREDRAGSTART,
+<a name="line391"></a>      goog.events.Event.preventDefault);
+<a name="line392"></a>
+<a name="line393"></a>  goog.testing.events.fireMouseDownEvent(item);
+<a name="line394"></a>  assertTrue(&#39;Should fire beforedragstart event when clicked&#39;,
+<a name="line395"></a>      goog.array.equals([goog.fx.DragListGroup.EventType.BEFOREDRAGSTART],
+<a name="line396"></a>      firedEventTypes));
+<a name="line397"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>xml_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_xml_test.js.html">xml_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.dom.xmlTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.dom.xmlTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom.xml&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line21"></a>
+<a name="line22"></a>function testSerialize() {
+<a name="line23"></a>  var doc = goog.dom.xml.createDocument();
+<a name="line24"></a>  var node = doc.createElement(&#39;root&#39;);
+<a name="line25"></a>  doc.appendChild(node);
+<a name="line26"></a>
+<a name="line27"></a>  var serializedNode = goog.dom.xml.serialize(node);
+<a name="line28"></a>  assertTrue(/&lt;root ?\/&gt;/.test(serializedNode));
+<a name="line29"></a>
+<a name="line30"></a>  var serializedDoc = goog.dom.xml.serialize(doc);
+<a name="line31"></a>  assertTrue(/(&lt;\?xml version=&quot;1.0&quot;\?&gt;)?&lt;root ?\/&gt;/.test(serializedDoc));
+<a name="line32"></a>}
+<a name="line33"></a>
+<a name="line34"></a>function testBelowMaxDepthInIE() {
+<a name="line35"></a>  if (goog.userAgent.IE) {
+<a name="line36"></a>    goog.dom.xml.MAX_ELEMENT_DEPTH = 5;
+<a name="line37"></a>    var junk = &#39;&lt;a&gt;&lt;b&gt;&lt;c&gt;&lt;d&gt;&lt;e&gt;Hello&lt;/e&gt;&lt;/d&gt;&lt;/c&gt;&lt;/b&gt;&lt;/a&gt;&#39;;
+<a name="line38"></a>    var doc = goog.dom.xml.loadXml(junk);
+<a name="line39"></a>    assertEquals(&#39;Should not have caused a parse error&#39;, 0,
+<a name="line40"></a>        Number(doc.parseError));
+<a name="line41"></a>  }
+<a name="line42"></a>}
+<a name="line43"></a>
+<a name="line44"></a>function testAboveMaxDepthInIE() {
+<a name="line45"></a>  if (goog.userAgent.IE) {
+<a name="line46"></a>    goog.dom.xml.MAX_ELEMENT_DEPTH = 4;
+<a name="line47"></a>    var junk = &#39;&lt;a&gt;&lt;b&gt;&lt;c&gt;&lt;d&gt;&lt;e&gt;Hello&lt;/e&gt;&lt;/d&gt;&lt;/c&gt;&lt;/b&gt;&lt;/a&gt;&#39;;
+<a name="line48"></a>    var doc = goog.dom.xml.loadXml(junk);
+<a name="line49"></a>    assertNotEquals(&#39;Should have caused a parse error&#39;, 0,
+<a name="line50"></a>        Number(doc.parseError));
+<a name="line51"></a>  }
+<a name="line52"></a>}
+<a name="line53"></a>
+<a name="line54"></a>function testBelowMaxSizeInIE() {
+<a name="line55"></a>  if (goog.userAgent.IE) {
+<a name="line56"></a>    goog.dom.xml.MAX_XML_SIZE_KB = 1;
+<a name="line57"></a>    var junk = &#39;&lt;a&gt;&#39; + new Array(50).join(&#39;&lt;b&gt;junk&lt;/b&gt;&#39;) + &#39;&lt;/a&gt;&#39;;
+<a name="line58"></a>    var doc = goog.dom.xml.loadXml(junk);
+<a name="line59"></a>    assertEquals(&#39;Should not have caused a parse error&#39;,
+<a name="line60"></a>        0, Number(doc.parseError));
+<a name="line61"></a>  }
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>function testMaxSizeInIE() {
+<a name="line65"></a>  if (goog.userAgent.IE) {
+<a name="line66"></a>    goog.dom.xml.MAX_XML_SIZE_KB = 1;
+<a name="line67"></a>    var junk = &#39;&lt;a&gt;&#39; + new Array(1000).join(&#39;&lt;b&gt;junk&lt;/b&gt;&#39;) + &#39;&lt;/a&gt;&#39;;
+<a name="line68"></a>    var doc = goog.dom.xml.loadXml(junk);
+<a name="line69"></a>    assertNotEquals(&#39;Should have caused a parse error&#39;, 0,
+<a name="line70"></a>        Number(doc.parseError));
+<a name="line71"></a>  }
+<a name="line72"></a>}
+<a name="line73"></a>
+<a name="line74"></a>function testSetAttributes() {
+<a name="line75"></a>  var xmlElement = goog.dom.xml.createDocument().createElement(&#39;root&#39;);
+<a name="line76"></a>  var domElement = document.createElement(&#39;div&#39;);
+<a name="line77"></a>  var attrs = {
+<a name="line78"></a>    name: &#39;test3&#39;,
+<a name="line79"></a>    title: &#39;A title&#39;,
+<a name="line80"></a>    random: &#39;woop&#39;,
+<a name="line81"></a>    cellpadding: &#39;123&#39;
+<a name="line82"></a>  };
+<a name="line83"></a>
+<a name="line84"></a>  goog.dom.xml.setAttributes(xmlElement, attrs);
+<a name="line85"></a>  goog.dom.xml.setAttributes(domElement, attrs);
+<a name="line86"></a>
+<a name="line87"></a>  assertEquals(&#39;test3&#39;, xmlElement.getAttribute(&#39;name&#39;));
+<a name="line88"></a>  assertEquals(&#39;test3&#39;, domElement.getAttribute(&#39;name&#39;));
+<a name="line89"></a>
+<a name="line90"></a>  assertEquals(&#39;A title&#39;, xmlElement.getAttribute(&#39;title&#39;));
+<a name="line91"></a>  assertEquals(&#39;A title&#39;, domElement.getAttribute(&#39;title&#39;));
+<a name="line92"></a>
+<a name="line93"></a>  assertEquals(&#39;woop&#39;, xmlElement.getAttribute(&#39;random&#39;));
+<a name="line94"></a>  assertEquals(&#39;woop&#39;, domElement.getAttribute(&#39;random&#39;));
+<a name="line95"></a>
+<a name="line96"></a>  assertEquals(&#39;123&#39;, xmlElement.getAttribute(&#39;cellpadding&#39;));
+<a name="line97"></a>  assertEquals(&#39;123&#39;, domElement.getAttribute(&#39;cellpadding&#39;));
+<a name="line98"></a>}
+</pre>
+
+
+</body>
+</html>

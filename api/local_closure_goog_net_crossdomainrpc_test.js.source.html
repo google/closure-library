@@ -1,0 +1,158 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>crossdomainrpc_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_crossdomainrpc_test.js.html">crossdomainrpc_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.CrossDomainRpcTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.CrossDomainRpcTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.log&#39;);
+<a name="line19"></a>goog.require(&#39;goog.log.Level&#39;);
+<a name="line20"></a>goog.require(&#39;goog.net.CrossDomainRpc&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>// TODO(user): These tests are in fact async since the send command makes a
+<a name="line24"></a>// request for a file, the reason they do not fail is that the JsUnit test
+<a name="line25"></a>// runner reports completion after the testFoo functions are finished, and
+<a name="line26"></a>// does not catch any errors after this point.  These tests need updating so
+<a name="line27"></a>// that they either mock out the async part of the test, or they should be
+<a name="line28"></a>// written as an async test case.
+<a name="line29"></a>
+<a name="line30"></a>function print(o) {
+<a name="line31"></a>  if (Object.prototype.toSource) {
+<a name="line32"></a>    return o.toSource();
+<a name="line33"></a>  } else {
+<a name="line34"></a>    var fragments = [];
+<a name="line35"></a>    fragments.push(&#39;{&#39;);
+<a name="line36"></a>    var first = true;
+<a name="line37"></a>    for (var p in o) {
+<a name="line38"></a>      if (!first) fragments.push(&#39;,&#39;);
+<a name="line39"></a>      fragments.push(p);
+<a name="line40"></a>      fragments.push(&#39;:&quot;&#39;);
+<a name="line41"></a>      fragments.push(o[p]);
+<a name="line42"></a>      fragments.push(&#39;&quot;&#39;);
+<a name="line43"></a>      first = false;
+<a name="line44"></a>    }
+<a name="line45"></a>    return fragments.join(&#39;&#39;);
+<a name="line46"></a>  }
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>function testNormalRequest() {
+<a name="line51"></a>  var start = new Date();
+<a name="line52"></a>  goog.net.CrossDomainRpc.send(
+<a name="line53"></a>      &#39;crossdomainrpc_test_response.html&#39;,
+<a name="line54"></a>      function(e) {
+<a name="line55"></a>        if (e.target.status &lt; 300) {
+<a name="line56"></a>          var elapsed = new Date() - start;
+<a name="line57"></a>          var responseData = eval(e.target.responseText);
+<a name="line58"></a>          goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
+<a name="line59"></a>              elapsed + &#39;ms: [&#39; + responseData.result.length + &#39;] &#39; +
+<a name="line60"></a>              print(responseData)
+<a name="line61"></a>          );
+<a name="line62"></a>          assertEquals(16 * 1024, responseData.result.length);
+<a name="line63"></a>          assertEquals(e.target.status, 123);
+<a name="line64"></a>          assertEquals(e.target.responseHeaders.a, 1);
+<a name="line65"></a>          assertEquals(e.target.responseHeaders.b, &#39;2&#39;);
+<a name="line66"></a>        } else {
+<a name="line67"></a>          goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
+<a name="line68"></a>              print(e));
+<a name="line69"></a>          fail();
+<a name="line70"></a>        }
+<a name="line71"></a>      },
+<a name="line72"></a>      &#39;POST&#39;,
+<a name="line73"></a>      {xyz: &#39;01234567891123456789&#39;}
+<a name="line74"></a>  );
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>function testErrorRequest() {
+<a name="line79"></a>  goog.net.CrossDomainRpc.send(
+<a name="line80"></a>      &#39;http://hoodjimcwaadji.google.com/index.html&#39;,
+<a name="line81"></a>      function(e) {
+<a name="line82"></a>        if (e.target.status &lt; 300) {
+<a name="line83"></a>          fail(&#39;should have failed requesting a non-existent URI&#39;);
+<a name="line84"></a>        } else {
+<a name="line85"></a>          goog.log.log(goog.net.CrossDomainRpc.logger_, goog.log.Level.FINE,
+<a name="line86"></a>              &#39;expected error seen; event=&#39; + print(e));
+<a name="line87"></a>        }
+<a name="line88"></a>      },
+<a name="line89"></a>      &#39;POST&#39;,
+<a name="line90"></a>      {xyz: &#39;01234567891123456789&#39;}
+<a name="line91"></a>  );
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>function testGetDummyResourceUri() {
+<a name="line96"></a>  var url = goog.net.CrossDomainRpc.getDummyResourceUri_();
+<a name="line97"></a>  assertTrue(
+<a name="line98"></a>      &#39;dummy resource URL should not contain &quot;?&quot;&#39;, url.indexOf(&#39;?&#39;) &lt; 0);
+<a name="line99"></a>  assertTrue(
+<a name="line100"></a>      &#39;dummy resource URL should not contain &quot;#&quot;&#39;, url.indexOf(&#39;#&#39;) &lt; 0);
+<a name="line101"></a>}
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>function testRemoveHash() {
+<a name="line105"></a>  assertEquals(&#39;abc&#39;, goog.net.CrossDomainRpc.removeHash_(&#39;abc#123&#39;));
+<a name="line106"></a>  assertEquals(&#39;abc&#39;, goog.net.CrossDomainRpc.removeHash_(&#39;abc#12#3&#39;));
+<a name="line107"></a>}
+</pre>
+
+
+</body>
+</html>

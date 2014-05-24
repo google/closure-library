@@ -1,0 +1,341 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>dom_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_editor_dom_test.js.html">dom_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.editor.domTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.editor.domTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line20"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.editor.dom&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var root;
+<a name="line25"></a>var parentNode, childNode1, childNode2, childNode3;
+<a name="line26"></a>var first, middle, last;
+<a name="line27"></a>
+<a name="line28"></a>function setUpPage() {
+<a name="line29"></a>  root = goog.dom.getElement(&#39;root&#39;);
+<a name="line30"></a>}
+<a name="line31"></a>
+<a name="line32"></a>function tearDown() {
+<a name="line33"></a>  root.innerHTML = &#39;&#39;;
+<a name="line34"></a>}
+<a name="line35"></a>
+<a name="line36"></a>function setUpNonEmptyTests() {
+<a name="line37"></a>  childNode1 = goog.dom.createElement(goog.dom.TagName.DIV);
+<a name="line38"></a>  childNode2 = goog.dom.createElement(goog.dom.TagName.DIV);
+<a name="line39"></a>  childNode3 = goog.dom.createElement(goog.dom.TagName.DIV);
+<a name="line40"></a>  parentNode = goog.dom.createDom(goog.dom.TagName.DIV,
+<a name="line41"></a>      null,
+<a name="line42"></a>      childNode1,
+<a name="line43"></a>      childNode2,
+<a name="line44"></a>      childNode3);
+<a name="line45"></a>  goog.dom.appendChild(root, parentNode);
+<a name="line46"></a>
+<a name="line47"></a>  childNode1.appendChild(goog.dom.createTextNode(&#39;One&#39;));
+<a name="line48"></a>  childNode1.appendChild(goog.dom.createTextNode(&#39;&#39;));
+<a name="line49"></a>
+<a name="line50"></a>  childNode2.appendChild(goog.dom.createElement(goog.dom.TagName.BR));
+<a name="line51"></a>  childNode2.appendChild(goog.dom.createTextNode(&#39;TwoA&#39;));
+<a name="line52"></a>  childNode2.appendChild(goog.dom.createTextNode(&#39;TwoB&#39;));
+<a name="line53"></a>  childNode2.appendChild(goog.dom.createElement(goog.dom.TagName.BR));
+<a name="line54"></a>
+<a name="line55"></a>  childNode3.appendChild(goog.dom.createTextNode(&#39;&#39;));
+<a name="line56"></a>  childNode3.appendChild(goog.dom.createTextNode(&#39;Three&#39;));
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>function testGetNextNonEmptyTextNode() {
+<a name="line60"></a>  setUpNonEmptyTests();
+<a name="line61"></a>
+<a name="line62"></a>  var nodeOne =
+<a name="line63"></a>      goog.testing.editor.dom.getNextNonEmptyTextNode(parentNode);
+<a name="line64"></a>  assertEquals(&#39;Should have found the next non-empty text node&#39;,
+<a name="line65"></a>               &#39;One&#39;,
+<a name="line66"></a>               nodeOne.nodeValue);
+<a name="line67"></a>  var nodeTwoA =
+<a name="line68"></a>      goog.testing.editor.dom.getNextNonEmptyTextNode(nodeOne);
+<a name="line69"></a>  assertEquals(&#39;Should have found the next non-empty text node&#39;,
+<a name="line70"></a>               &#39;TwoA&#39;,
+<a name="line71"></a>               nodeTwoA.nodeValue);
+<a name="line72"></a>  var nodeTwoB =
+<a name="line73"></a>      goog.testing.editor.dom.getNextNonEmptyTextNode(nodeTwoA);
+<a name="line74"></a>  assertEquals(&#39;Should have found the next non-empty text node&#39;,
+<a name="line75"></a>               &#39;TwoB&#39;,
+<a name="line76"></a>               nodeTwoB.nodeValue);
+<a name="line77"></a>  var nodeThree =
+<a name="line78"></a>      goog.testing.editor.dom.getNextNonEmptyTextNode(nodeTwoB);
+<a name="line79"></a>  assertEquals(&#39;Should have found the next non-empty text node&#39;,
+<a name="line80"></a>               &#39;Three&#39;,
+<a name="line81"></a>               nodeThree.nodeValue);
+<a name="line82"></a>  var nodeNull =
+<a name="line83"></a>      goog.testing.editor.dom.getNextNonEmptyTextNode(nodeThree, parentNode);
+<a name="line84"></a>  assertNull(&#39;Should not have found any non-empty text node&#39;, nodeNull);
+<a name="line85"></a>
+<a name="line86"></a>  var nodeStop =
+<a name="line87"></a>      goog.testing.editor.dom.getNextNonEmptyTextNode(nodeOne, childNode1);
+<a name="line88"></a>  assertNull(&#39;Should have stopped before finding a node&#39;, nodeStop);
+<a name="line89"></a>
+<a name="line90"></a>  var nodeBeforeStop =
+<a name="line91"></a>      goog.testing.editor.dom.getNextNonEmptyTextNode(nodeTwoA, childNode2);
+<a name="line92"></a>  assertEquals(&#39;Should have found the next non-empty text node&#39;,
+<a name="line93"></a>               &#39;TwoB&#39;,
+<a name="line94"></a>               nodeBeforeStop.nodeValue);
+<a name="line95"></a>}
+<a name="line96"></a>
+<a name="line97"></a>function testGetPreviousNonEmptyTextNode() {
+<a name="line98"></a>  setUpNonEmptyTests();
+<a name="line99"></a>
+<a name="line100"></a>  var nodeThree =
+<a name="line101"></a>      goog.testing.editor.dom.getPreviousNonEmptyTextNode(parentNode);
+<a name="line102"></a>  assertEquals(&#39;Should have found the previous non-empty text node&#39;,
+<a name="line103"></a>               &#39;Three&#39;,
+<a name="line104"></a>               nodeThree.nodeValue);
+<a name="line105"></a>  var nodeTwoB =
+<a name="line106"></a>      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeThree);
+<a name="line107"></a>  assertEquals(&#39;Should have found the previous non-empty text node&#39;,
+<a name="line108"></a>               &#39;TwoB&#39;,
+<a name="line109"></a>               nodeTwoB.nodeValue);
+<a name="line110"></a>  var nodeTwoA =
+<a name="line111"></a>      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeTwoB);
+<a name="line112"></a>  assertEquals(&#39;Should have found the previous non-empty text node&#39;,
+<a name="line113"></a>               &#39;TwoA&#39;,
+<a name="line114"></a>               nodeTwoA.nodeValue);
+<a name="line115"></a>  var nodeOne =
+<a name="line116"></a>      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeTwoA);
+<a name="line117"></a>  assertEquals(&#39;Should have found the previous non-empty text node&#39;,
+<a name="line118"></a>               &#39;One&#39;,
+<a name="line119"></a>               nodeOne.nodeValue);
+<a name="line120"></a>  var nodeNull =
+<a name="line121"></a>      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeOne,
+<a name="line122"></a>                                                          parentNode);
+<a name="line123"></a>  assertNull(&#39;Should not have found any non-empty text node&#39;, nodeNull);
+<a name="line124"></a>
+<a name="line125"></a>  var nodeStop =
+<a name="line126"></a>      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeThree,
+<a name="line127"></a>                                                          childNode3);
+<a name="line128"></a>  assertNull(&#39;Should have stopped before finding a node&#39;, nodeStop);
+<a name="line129"></a>
+<a name="line130"></a>  var nodeBeforeStop =
+<a name="line131"></a>      goog.testing.editor.dom.getPreviousNonEmptyTextNode(nodeTwoB,
+<a name="line132"></a>                                                          childNode2);
+<a name="line133"></a>  assertEquals(&#39;Should have found the previous non-empty text node&#39;,
+<a name="line134"></a>               &#39;TwoA&#39;,
+<a name="line135"></a>               nodeBeforeStop.nodeValue);
+<a name="line136"></a>}
+<a name="line137"></a>
+<a name="line138"></a>
+<a name="line139"></a>function setUpAssertRangeBetweenText() {
+<a name="line140"></a>  // Create the following structure: &lt;[01]&gt;&lt;[]&gt;&lt;[23]&gt;
+<a name="line141"></a>  // Where &lt;&gt; delimits spans, [] delimits text nodes, 01 and 23 are text.
+<a name="line142"></a>  // We will test all 10 positions in between 0 and 2. All should pass.
+<a name="line143"></a>  first = goog.dom.createDom(goog.dom.TagName.SPAN, null, &#39;01&#39;);
+<a name="line144"></a>  middle = goog.dom.createElement(goog.dom.TagName.SPAN);
+<a name="line145"></a>  var emptyTextNode = goog.dom.createTextNode(&#39;&#39;);
+<a name="line146"></a>  goog.dom.appendChild(middle, emptyTextNode);
+<a name="line147"></a>  last = goog.dom.createDom(goog.dom.TagName.SPAN, null, &#39;23&#39;);
+<a name="line148"></a>  goog.dom.appendChild(root, first);
+<a name="line149"></a>  goog.dom.appendChild(root, middle);
+<a name="line150"></a>  goog.dom.appendChild(root, last);
+<a name="line151"></a>}
+<a name="line152"></a>
+<a name="line153"></a>function createFakeRange(startNode, startOffset, opt_endNode, opt_endOffset) {
+<a name="line154"></a>  opt_endNode = opt_endNode || startNode;
+<a name="line155"></a>  opt_endOffset = opt_endOffset || startOffset;
+<a name="line156"></a>  return {
+<a name="line157"></a>    getStartNode: goog.functions.constant(startNode),
+<a name="line158"></a>    getStartOffset: goog.functions.constant(startOffset),
+<a name="line159"></a>    getEndNode: goog.functions.constant(opt_endNode),
+<a name="line160"></a>    getEndOffset: goog.functions.constant(opt_endOffset)
+<a name="line161"></a>  };
+<a name="line162"></a>}
+<a name="line163"></a>
+<a name="line164"></a>function testAssertRangeBetweenText0() {
+<a name="line165"></a>  setUpAssertRangeBetweenText();
+<a name="line166"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;0&#39;, &#39;1&#39;,
+<a name="line167"></a>      createFakeRange(first.firstChild, 1));
+<a name="line168"></a>}
+<a name="line169"></a>
+<a name="line170"></a>function testAssertRangeBetweenText1() {
+<a name="line171"></a>  setUpAssertRangeBetweenText();
+<a name="line172"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;2&#39;,
+<a name="line173"></a>      createFakeRange(first.firstChild, 2));
+<a name="line174"></a>}
+<a name="line175"></a>
+<a name="line176"></a>function testAssertRangeBetweenText2() {
+<a name="line177"></a>  setUpAssertRangeBetweenText();
+<a name="line178"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;2&#39;,
+<a name="line179"></a>      createFakeRange(first, 1));
+<a name="line180"></a>}
+<a name="line181"></a>
+<a name="line182"></a>function testAssertRangeBetweenText3() {
+<a name="line183"></a>  setUpAssertRangeBetweenText();
+<a name="line184"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;2&#39;,
+<a name="line185"></a>      createFakeRange(root, 1));
+<a name="line186"></a>}
+<a name="line187"></a>
+<a name="line188"></a>function testAssertRangeBetweenText4() {
+<a name="line189"></a>  setUpAssertRangeBetweenText();
+<a name="line190"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;2&#39;,
+<a name="line191"></a>      createFakeRange(middle, 0));
+<a name="line192"></a>}
+<a name="line193"></a>
+<a name="line194"></a>function testAssertRangeBetweenText5() {
+<a name="line195"></a>  setUpAssertRangeBetweenText();
+<a name="line196"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;2&#39;,
+<a name="line197"></a>      createFakeRange(middle.firstChild, 0));
+<a name="line198"></a>}
+<a name="line199"></a>
+<a name="line200"></a>function testAssertRangeBetweenText6() {
+<a name="line201"></a>  setUpAssertRangeBetweenText();
+<a name="line202"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;2&#39;,
+<a name="line203"></a>      createFakeRange(middle, 1));
+<a name="line204"></a>}
+<a name="line205"></a>
+<a name="line206"></a>function testAssertRangeBetweenText7() {
+<a name="line207"></a>  setUpAssertRangeBetweenText();
+<a name="line208"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;2&#39;,
+<a name="line209"></a>      createFakeRange(root, 2));
+<a name="line210"></a>}
+<a name="line211"></a>
+<a name="line212"></a>function testAssertRangeBetweenText8() {
+<a name="line213"></a>  setUpAssertRangeBetweenText();
+<a name="line214"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;2&#39;,
+<a name="line215"></a>      createFakeRange(last, 0));
+<a name="line216"></a>}
+<a name="line217"></a>
+<a name="line218"></a>function testAssertRangeBetweenText9() {
+<a name="line219"></a>  setUpAssertRangeBetweenText();
+<a name="line220"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;2&#39;,
+<a name="line221"></a>      createFakeRange(last.firstChild, 0));
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>function testAssertRangeBetweenTextBefore() {
+<a name="line226"></a>  setUpAssertRangeBetweenText();
+<a name="line227"></a>  // Test that it works when the cursor is at the beginning of all text.
+<a name="line228"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;&#39;, &#39;0&#39;,
+<a name="line229"></a>      createFakeRange(first.firstChild, 0),
+<a name="line230"></a>      root); // Restrict to root div so it won&#39;t find /n&#39;s and script.
+<a name="line231"></a>}
+<a name="line232"></a>
+<a name="line233"></a>function testAssertRangeBetweenTextAfter() {
+<a name="line234"></a>  setUpAssertRangeBetweenText();
+<a name="line235"></a>  // Test that it works when the cursor is at the end of all text.
+<a name="line236"></a>  goog.testing.editor.dom.assertRangeBetweenText(&#39;3&#39;, &#39;&#39;,
+<a name="line237"></a>      createFakeRange(last.firstChild, 2),
+<a name="line238"></a>      root); // Restrict to root div so it won&#39;t find /n&#39;s and script.
+<a name="line239"></a>}
+<a name="line240"></a>
+<a name="line241"></a>
+<a name="line242"></a>function testAssertRangeBetweenTextFail1() {
+<a name="line243"></a>  setUpAssertRangeBetweenText();
+<a name="line244"></a>  var e = assertThrows(&#39;assertRangeBetweenText should have failed&#39;,
+<a name="line245"></a>      function() {
+<a name="line246"></a>        goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;3&#39;,
+<a name="line247"></a>            createFakeRange(first.firstChild, 2));
+<a name="line248"></a>      });
+<a name="line249"></a>  assertContains(&#39;Assert reason incorrect&#39;,
+<a name="line250"></a>      &#39;Expected &lt;3&gt; after range but found &lt;23&gt;&#39;, e.message);
+<a name="line251"></a>}
+<a name="line252"></a>
+<a name="line253"></a>function testAssertRangeBetweenTextFail2() {
+<a name="line254"></a>  setUpAssertRangeBetweenText();
+<a name="line255"></a>  var e = assertThrows(&#39;assertRangeBetweenText should have failed&#39;,
+<a name="line256"></a>      function() {
+<a name="line257"></a>        goog.testing.editor.dom.assertRangeBetweenText(&#39;1&#39;, &#39;2&#39;,
+<a name="line258"></a>            createFakeRange(first.firstChild, 2, last.firstChild, 1));
+<a name="line259"></a>      });
+<a name="line260"></a>  assertContains(&#39;Assert reason incorrect&#39;,
+<a name="line261"></a>      &#39;Expected &lt;2&gt; after range but found &lt;3&gt;&#39;, e.message);
+<a name="line262"></a>}
+<a name="line263"></a>
+<a name="line264"></a>function testAssertRangeBetweenTextBeforeFail() {
+<a name="line265"></a>  setUpAssertRangeBetweenText();
+<a name="line266"></a>  // Test that it gives the right message when the cursor is at the beginning
+<a name="line267"></a>  // of all text but you&#39;re expecting something before it.
+<a name="line268"></a>  var e = assertThrows(&#39;assertRangeBetweenText should have failed&#39;,
+<a name="line269"></a>      function() {
+<a name="line270"></a>        goog.testing.editor.dom.assertRangeBetweenText(&#39;-1&#39;, &#39;0&#39;,
+<a name="line271"></a>            createFakeRange(first.firstChild, 0),
+<a name="line272"></a>            root); // Restrict to root div so it won&#39;t find /n&#39;s and script.
+<a name="line273"></a>      });
+<a name="line274"></a>  assertContains(&#39;Assert reason incorrect&#39;,
+<a name="line275"></a>      &#39;Expected &lt;-1&gt; before range but found nothing&#39;, e.message);
+<a name="line276"></a>}
+<a name="line277"></a>
+<a name="line278"></a>function testAssertRangeBetweenTextAfterFail() {
+<a name="line279"></a>  setUpAssertRangeBetweenText();
+<a name="line280"></a>  // Test that it gives the right message when the cursor is at the end
+<a name="line281"></a>  // of all text but you&#39;re expecting something after it.
+<a name="line282"></a>  var e = assertThrows(&#39;assertRangeBetweenText should have failed&#39;,
+<a name="line283"></a>      function() {
+<a name="line284"></a>        goog.testing.editor.dom.assertRangeBetweenText(&#39;3&#39;, &#39;4&#39;,
+<a name="line285"></a>            createFakeRange(last.firstChild, 2),
+<a name="line286"></a>            root); // Restrict to root div so it won&#39;t find /n&#39;s and script.
+<a name="line287"></a>      });
+<a name="line288"></a>  assertContains(&#39;Assert reason incorrect&#39;,
+<a name="line289"></a>      &#39;Expected &lt;4&gt; after range but found nothing&#39;, e.message);
+<a name="line290"></a>}
+</pre>
+
+
+</body>
+</html>

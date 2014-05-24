@@ -1,0 +1,209 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>netutils.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_net_webchannel_netutils.js.html">netutils.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utility functions for managing networking, such as
+<a name="line17"></a> * testing network connectivity.
+<a name="line18"></a> *
+<a name="line19"></a> * @visibility {:internal}
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.labs.net.webChannel.netUtils&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line26"></a>goog.require(&#39;goog.labs.net.webChannel.WebChannelDebug&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.scope(function() {
+<a name="line29"></a>var netUtils = goog.labs.net.webChannel.netUtils;
+<a name="line30"></a>var WebChannelDebug = goog.labs.net.webChannel.WebChannelDebug;
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Default timeout to allow for URI pings.
+<a name="line35"></a> * @type {number}
+<a name="line36"></a> */
+<a name="line37"></a>netUtils.NETWORK_TIMEOUT = 10000;
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Pings the network with an image URI to check if an error is a server error
+<a name="line42"></a> * or user&#39;s network error.
+<a name="line43"></a> *
+<a name="line44"></a> * The caller needs to add a &#39;rand&#39; parameter to make sure the response is
+<a name="line45"></a> * not fulfilled by browser cache.
+<a name="line46"></a> *
+<a name="line47"></a> * @param {function(boolean)} callback The function to call back with results.
+<a name="line48"></a> * @param {goog.Uri=} opt_imageUri The URI (of an image) to use for the network
+<a name="line49"></a> *     test.
+<a name="line50"></a> */
+<a name="line51"></a>netUtils.testNetwork = function(callback, opt_imageUri) {
+<a name="line52"></a>  var uri = opt_imageUri;
+<a name="line53"></a>  if (!uri) {
+<a name="line54"></a>    // default google.com image
+<a name="line55"></a>    uri = new goog.Uri(&#39;//www.google.com/images/cleardot.gif&#39;);
+<a name="line56"></a>    uri.makeUnique();
+<a name="line57"></a>  }
+<a name="line58"></a>
+<a name="line59"></a>  netUtils.testLoadImage(uri.toString(), netUtils.NETWORK_TIMEOUT, callback);
+<a name="line60"></a>};
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * Test loading the given image, retrying if necessary.
+<a name="line65"></a> * @param {string} url URL to the image.
+<a name="line66"></a> * @param {number} timeout Milliseconds before giving up.
+<a name="line67"></a> * @param {function(boolean)} callback Function to call with results.
+<a name="line68"></a> * @param {number} retries The number of times to retry.
+<a name="line69"></a> * @param {number=} opt_pauseBetweenRetriesMS Optional number of milliseconds
+<a name="line70"></a> *     between retries - defaults to 0.
+<a name="line71"></a> */
+<a name="line72"></a>netUtils.testLoadImageWithRetries = function(url, timeout, callback,
+<a name="line73"></a>    retries, opt_pauseBetweenRetriesMS) {
+<a name="line74"></a>  var channelDebug = new WebChannelDebug();
+<a name="line75"></a>  channelDebug.debug(&#39;TestLoadImageWithRetries: &#39; + opt_pauseBetweenRetriesMS);
+<a name="line76"></a>  if (retries == 0) {
+<a name="line77"></a>    // no more retries, give up
+<a name="line78"></a>    callback(false);
+<a name="line79"></a>    return;
+<a name="line80"></a>  }
+<a name="line81"></a>
+<a name="line82"></a>  var pauseBetweenRetries = opt_pauseBetweenRetriesMS || 0;
+<a name="line83"></a>  retries--;
+<a name="line84"></a>  netUtils.testLoadImage(url, timeout, function(succeeded) {
+<a name="line85"></a>    if (succeeded) {
+<a name="line86"></a>      callback(true);
+<a name="line87"></a>    } else {
+<a name="line88"></a>      // try again
+<a name="line89"></a>      goog.global.setTimeout(function() {
+<a name="line90"></a>        netUtils.testLoadImageWithRetries(url, timeout, callback,
+<a name="line91"></a>            retries, pauseBetweenRetries);
+<a name="line92"></a>      }, pauseBetweenRetries);
+<a name="line93"></a>    }
+<a name="line94"></a>  });
+<a name="line95"></a>};
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/**
+<a name="line99"></a> * Test loading the given image.
+<a name="line100"></a> * @param {string} url URL to the image.
+<a name="line101"></a> * @param {number} timeout Milliseconds before giving up.
+<a name="line102"></a> * @param {function(boolean)} callback Function to call with results.
+<a name="line103"></a> */
+<a name="line104"></a>netUtils.testLoadImage = function(url, timeout, callback) {
+<a name="line105"></a>  var channelDebug = new WebChannelDebug();
+<a name="line106"></a>  channelDebug.debug(&#39;TestLoadImage: loading &#39; + url);
+<a name="line107"></a>  var img = new Image();
+<a name="line108"></a>  img.onload = goog.partial(netUtils.imageCallback_, channelDebug, img,
+<a name="line109"></a>      &#39;TestLoadImage: loaded&#39;, true, callback);
+<a name="line110"></a>  img.onerror = goog.partial(netUtils.imageCallback_, channelDebug, img,
+<a name="line111"></a>      &#39;TestLoadImage: error&#39;, false, callback);
+<a name="line112"></a>  img.onabort = goog.partial(netUtils.imageCallback_, channelDebug, img,
+<a name="line113"></a>      &#39;TestLoadImage: abort&#39;, false, callback);
+<a name="line114"></a>  img.ontimeout = goog.partial(netUtils.imageCallback_, channelDebug, img,
+<a name="line115"></a>      &#39;TestLoadImage: timeout&#39;, false, callback);
+<a name="line116"></a>
+<a name="line117"></a>  goog.global.setTimeout(function() {
+<a name="line118"></a>    if (img.ontimeout) {
+<a name="line119"></a>      img.ontimeout();
+<a name="line120"></a>    }
+<a name="line121"></a>  }, timeout);
+<a name="line122"></a>  img.src = url;
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * Wrap the image callback with debug and cleanup logic.
+<a name="line128"></a> * @param {!WebChannelDebug} channelDebug The WebChannelDebug object.
+<a name="line129"></a> * @param {!Image} img The image element.
+<a name="line130"></a> * @param {string} debugText The debug text.
+<a name="line131"></a> * @param {boolean} result The result of image loading.
+<a name="line132"></a> * @param {function(boolean)} callback The image callback.
+<a name="line133"></a> * @private
+<a name="line134"></a> */
+<a name="line135"></a>netUtils.imageCallback_ = function(channelDebug, img, debugText, result,
+<a name="line136"></a>    callback) {
+<a name="line137"></a>  try {
+<a name="line138"></a>    channelDebug.debug(debugText);
+<a name="line139"></a>    netUtils.clearImageCallbacks_(img);
+<a name="line140"></a>    callback(result);
+<a name="line141"></a>  } catch (e) {
+<a name="line142"></a>    channelDebug.dumpException(e);
+<a name="line143"></a>  }
+<a name="line144"></a>};
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>/**
+<a name="line148"></a> * Clears handlers to avoid memory leaks.
+<a name="line149"></a> * @param {Image} img The image to clear handlers from.
+<a name="line150"></a> * @private
+<a name="line151"></a> */
+<a name="line152"></a>netUtils.clearImageCallbacks_ = function(img) {
+<a name="line153"></a>  img.onload = null;
+<a name="line154"></a>  img.onerror = null;
+<a name="line155"></a>  img.onabort = null;
+<a name="line156"></a>  img.ontimeout = null;
+<a name="line157"></a>};
+<a name="line158"></a>});  // goog.scope
+</pre>
+
+
+</body>
+</html>

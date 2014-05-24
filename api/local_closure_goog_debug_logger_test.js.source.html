@@ -1,0 +1,275 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>logger_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_debug_logger_test.js.html">logger_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.debug.LoggerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.debug.LoggerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.debug.LogManager&#39;);
+<a name="line19"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>function getDebug(sb, logger, level) {
+<a name="line23"></a>  var spacer = &#39;&#39;;
+<a name="line24"></a>  if (level) {
+<a name="line25"></a>    spacer = (new Array(level + 1)).join(&#39; &#39;);
+<a name="line26"></a>  }
+<a name="line27"></a>  sb[sb.length] = spacer;
+<a name="line28"></a>  var name = logger.getName();
+<a name="line29"></a>  if (name) {
+<a name="line30"></a>    sb[sb.length] = name;
+<a name="line31"></a>  } else {
+<a name="line32"></a>    sb[sb.length] = &#39;ROOT&#39;;
+<a name="line33"></a>  }
+<a name="line34"></a>  sb[sb.length] = &#39;\n&#39;;
+<a name="line35"></a>  var children = logger.getChildren();
+<a name="line36"></a>  for (var key in children) {
+<a name="line37"></a>    getDebug(sb, children[key], level + 1);
+<a name="line38"></a>  }
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>function testParents() {
+<a name="line43"></a>  var l1 = goog.debug.Logger.getLogger(&#39;goog.test&#39;);
+<a name="line44"></a>  var l2 = goog.debug.Logger.getLogger(&#39;goog.bar&#39;);
+<a name="line45"></a>  var l3 = goog.debug.Logger.getLogger(&#39;goog.bar.foo&#39;);
+<a name="line46"></a>  var l4 = goog.debug.Logger.getLogger(&#39;goog.bar.baaz&#39;);
+<a name="line47"></a>  var rootLogger = goog.debug.LogManager.getRoot();
+<a name="line48"></a>  var googLogger = goog.debug.Logger.getLogger(&#39;goog&#39;);
+<a name="line49"></a>  assertEquals(rootLogger, googLogger.getParent());
+<a name="line50"></a>  assertEquals(googLogger, l1.getParent());
+<a name="line51"></a>  assertEquals(googLogger, l2.getParent());
+<a name="line52"></a>  assertEquals(l2, l3.getParent());
+<a name="line53"></a>  assertEquals(l2, l4.getParent());
+<a name="line54"></a>}
+<a name="line55"></a>
+<a name="line56"></a>function testLogging() {
+<a name="line57"></a>  var root = goog.debug.LogManager.getRoot();
+<a name="line58"></a>  var handler = new TestHandler();
+<a name="line59"></a>  var f = goog.bind(handler.onPublish, handler);
+<a name="line60"></a>  root.addHandler(f);
+<a name="line61"></a>  var l4 = goog.debug.Logger.getLogger(&#39;goog.bar.baaz&#39;);
+<a name="line62"></a>  l4.log(goog.debug.Logger.Level.WARNING, &#39;foo&#39;);
+<a name="line63"></a>  assertNotNull(handler.logRecord);
+<a name="line64"></a>  assertEquals(goog.debug.Logger.Level.WARNING, handler.logRecord.getLevel());
+<a name="line65"></a>  assertEquals(&#39;foo&#39;, handler.logRecord.getMessage());
+<a name="line66"></a>  handler.logRecord = null;
+<a name="line67"></a>  root.removeHandler(f);
+<a name="line68"></a>  l4.log(goog.debug.Logger.Level.WARNING, &#39;foo&#39;);
+<a name="line69"></a>  assertNull(handler.logRecord);
+<a name="line70"></a>}
+<a name="line71"></a>
+<a name="line72"></a>function testFiltering() {
+<a name="line73"></a>  var root = goog.debug.LogManager.getRoot();
+<a name="line74"></a>  var handler = new TestHandler();
+<a name="line75"></a>  var f = goog.bind(handler.onPublish, handler);
+<a name="line76"></a>  root.addHandler(f);
+<a name="line77"></a>  var l3 = goog.debug.Logger.getLogger(&#39;goog.bar.foo&#39;);
+<a name="line78"></a>  l3.setLevel(goog.debug.Logger.Level.WARNING);
+<a name="line79"></a>  var l4 = goog.debug.Logger.getLogger(&#39;goog.bar.baaz&#39;);
+<a name="line80"></a>  l4.setLevel(goog.debug.Logger.Level.INFO);
+<a name="line81"></a>  l4.log(goog.debug.Logger.Level.WARNING, &#39;foo&#39;);
+<a name="line82"></a>  assertNotNull(handler.logRecord);
+<a name="line83"></a>  assertEquals(goog.debug.Logger.Level.WARNING, handler.logRecord.getLevel());
+<a name="line84"></a>  assertEquals(&#39;foo&#39;, handler.logRecord.getMessage());
+<a name="line85"></a>  handler.reset();
+<a name="line86"></a>  l3.log(goog.debug.Logger.Level.INFO, &#39;bar&#39;);
+<a name="line87"></a>  assertNull(handler.logRecord);
+<a name="line88"></a>  l3.log(goog.debug.Logger.Level.WARNING, &#39;baaz&#39;);
+<a name="line89"></a>  assertNotNull(handler.logRecord);
+<a name="line90"></a>  handler.reset();
+<a name="line91"></a>  l3.log(goog.debug.Logger.Level.SEVERE, &#39;baaz&#39;);
+<a name="line92"></a>  assertNotNull(handler.logRecord);
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>function testException() {
+<a name="line96"></a>  var root = goog.debug.LogManager.getRoot();
+<a name="line97"></a>  var handler = new TestHandler();
+<a name="line98"></a>  var f = goog.bind(handler.onPublish, handler);
+<a name="line99"></a>  root.addHandler(f);
+<a name="line100"></a>  var logger = goog.debug.Logger.getLogger(&#39;goog.debug.logger_test&#39;);
+<a name="line101"></a>  var ex = Error(&#39;boo!&#39;);
+<a name="line102"></a>  logger.severe(&#39;hello&#39;, ex);
+<a name="line103"></a>  assertNotNull(handler.logRecord);
+<a name="line104"></a>  assertEquals(goog.debug.Logger.Level.SEVERE, handler.logRecord.getLevel());
+<a name="line105"></a>  assertEquals(&#39;hello&#39;, handler.logRecord.getMessage());
+<a name="line106"></a>  assertEquals(ex, handler.logRecord.getException());
+<a name="line107"></a>  assertEquals(&#39;Message: boo!&#39;,
+<a name="line108"></a>      handler.logRecord.getExceptionText().substring(0, 13));
+<a name="line109"></a>}
+<a name="line110"></a>
+<a name="line111"></a>function testMessageCallbacks() {
+<a name="line112"></a>  var root = goog.debug.LogManager.getRoot();
+<a name="line113"></a>  var handler = new TestHandler();
+<a name="line114"></a>  var f = goog.bind(handler.onPublish, handler);
+<a name="line115"></a>  root.addHandler(f);
+<a name="line116"></a>  var l3 = goog.debug.Logger.getLogger(&#39;goog.bar.foo&#39;);
+<a name="line117"></a>  l3.setLevel(goog.debug.Logger.Level.WARNING);
+<a name="line118"></a>
+<a name="line119"></a>  l3.log(goog.debug.Logger.Level.INFO, function() {
+<a name="line120"></a>    throw &quot;Message callback shouldn&#39;t be called when below logger&#39;s level!&quot;;
+<a name="line121"></a>  });
+<a name="line122"></a>  assertNull(handler.logRecord);
+<a name="line123"></a>
+<a name="line124"></a>  l3.log(goog.debug.Logger.Level.WARNING, function() {return &#39;heya&#39;});
+<a name="line125"></a>  assertNotNull(handler.logRecord);
+<a name="line126"></a>  assertEquals(goog.debug.Logger.Level.WARNING, handler.logRecord.getLevel());
+<a name="line127"></a>  assertEquals(&#39;heya&#39;, handler.logRecord.getMessage());
+<a name="line128"></a>}
+<a name="line129"></a>
+<a name="line130"></a>function testGetPredefinedLevel() {
+<a name="line131"></a>  assertEquals(goog.debug.Logger.Level.OFF,
+<a name="line132"></a>      goog.debug.Logger.Level.getPredefinedLevel(&#39;OFF&#39;));
+<a name="line133"></a>  assertEquals(goog.debug.Logger.Level.SHOUT,
+<a name="line134"></a>      goog.debug.Logger.Level.getPredefinedLevel(&#39;SHOUT&#39;));
+<a name="line135"></a>  assertEquals(goog.debug.Logger.Level.SEVERE,
+<a name="line136"></a>      goog.debug.Logger.Level.getPredefinedLevel(&#39;SEVERE&#39;));
+<a name="line137"></a>  assertEquals(goog.debug.Logger.Level.WARNING,
+<a name="line138"></a>      goog.debug.Logger.Level.getPredefinedLevel(&#39;WARNING&#39;));
+<a name="line139"></a>  assertEquals(goog.debug.Logger.Level.INFO,
+<a name="line140"></a>      goog.debug.Logger.Level.getPredefinedLevel(&#39;INFO&#39;));
+<a name="line141"></a>  assertEquals(goog.debug.Logger.Level.CONFIG,
+<a name="line142"></a>      goog.debug.Logger.Level.getPredefinedLevel(&#39;CONFIG&#39;));
+<a name="line143"></a>  assertEquals(goog.debug.Logger.Level.FINE,
+<a name="line144"></a>      goog.debug.Logger.Level.getPredefinedLevel(&#39;FINE&#39;));
+<a name="line145"></a>  assertEquals(goog.debug.Logger.Level.FINER,
+<a name="line146"></a>      goog.debug.Logger.Level.getPredefinedLevel(&#39;FINER&#39;));
+<a name="line147"></a>  assertEquals(goog.debug.Logger.Level.FINEST,
+<a name="line148"></a>      goog.debug.Logger.Level.getPredefinedLevel(&#39;FINEST&#39;));
+<a name="line149"></a>  assertEquals(goog.debug.Logger.Level.ALL,
+<a name="line150"></a>      goog.debug.Logger.Level.getPredefinedLevel(&#39;ALL&#39;));
+<a name="line151"></a>}
+<a name="line152"></a>
+<a name="line153"></a>function testGetPredefinedLevelByValue() {
+<a name="line154"></a>  assertEquals(goog.debug.Logger.Level.OFF,
+<a name="line155"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(Infinity));
+<a name="line156"></a>  assertEquals(goog.debug.Logger.Level.SHOUT,
+<a name="line157"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(1300));
+<a name="line158"></a>  assertEquals(goog.debug.Logger.Level.SHOUT,
+<a name="line159"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(1200));
+<a name="line160"></a>  assertEquals(goog.debug.Logger.Level.SEVERE,
+<a name="line161"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(1150));
+<a name="line162"></a>  assertEquals(goog.debug.Logger.Level.SEVERE,
+<a name="line163"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(1000));
+<a name="line164"></a>  assertEquals(goog.debug.Logger.Level.WARNING,
+<a name="line165"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(900));
+<a name="line166"></a>  assertEquals(goog.debug.Logger.Level.INFO,
+<a name="line167"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(800));
+<a name="line168"></a>  assertEquals(goog.debug.Logger.Level.CONFIG,
+<a name="line169"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(701));
+<a name="line170"></a>  assertEquals(goog.debug.Logger.Level.CONFIG,
+<a name="line171"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(700));
+<a name="line172"></a>  assertEquals(goog.debug.Logger.Level.FINE,
+<a name="line173"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(500));
+<a name="line174"></a>  assertEquals(goog.debug.Logger.Level.FINER,
+<a name="line175"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(400));
+<a name="line176"></a>  assertEquals(goog.debug.Logger.Level.FINEST,
+<a name="line177"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(300));
+<a name="line178"></a>  assertEquals(goog.debug.Logger.Level.ALL,
+<a name="line179"></a>      goog.debug.Logger.Level.getPredefinedLevelByValue(0));
+<a name="line180"></a>  assertNull(goog.debug.Logger.Level.getPredefinedLevelByValue(-1));
+<a name="line181"></a>}
+<a name="line182"></a>
+<a name="line183"></a>function TestHandler() {
+<a name="line184"></a>  this.logRecord = null;
+<a name="line185"></a>}
+<a name="line186"></a>
+<a name="line187"></a>TestHandler.prototype.onPublish = function(logRecord) {
+<a name="line188"></a>  this.logRecord = logRecord;
+<a name="line189"></a>};
+<a name="line190"></a>
+<a name="line191"></a>
+<a name="line192"></a>TestHandler.prototype.reset = function() {
+<a name="line193"></a>  this.logRecord = null;
+<a name="line194"></a>};
+<a name="line195"></a>
+<a name="line196"></a>function testGetLogRecord() {
+<a name="line197"></a>  var name = &#39;test.get.log.record&#39;;
+<a name="line198"></a>  var level = 1;
+<a name="line199"></a>  var msg = &#39;msg&#39;;
+<a name="line200"></a>
+<a name="line201"></a>  var logger = goog.debug.Logger.getLogger(name);
+<a name="line202"></a>  var logRecord = logger.getLogRecord(level, msg);
+<a name="line203"></a>
+<a name="line204"></a>  assertEquals(name, logRecord.getLoggerName());
+<a name="line205"></a>  assertEquals(level, logRecord.getLevel());
+<a name="line206"></a>  assertEquals(msg, logRecord.getMessage());
+<a name="line207"></a>
+<a name="line208"></a>  assertNull(logRecord.getException());
+<a name="line209"></a>}
+<a name="line210"></a>
+<a name="line211"></a>function testGetLogRecordWithException() {
+<a name="line212"></a>  var name = &#39;test.get.log.record&#39;;
+<a name="line213"></a>  var level = 1;
+<a name="line214"></a>  var msg = &#39;msg&#39;;
+<a name="line215"></a>  var ex = Error(&#39;Hi&#39;);
+<a name="line216"></a>
+<a name="line217"></a>  var logger = goog.debug.Logger.getLogger(name);
+<a name="line218"></a>  var logRecord = logger.getLogRecord(level, msg, ex);
+<a name="line219"></a>
+<a name="line220"></a>  assertEquals(name, logRecord.getLoggerName());
+<a name="line221"></a>  assertEquals(level, logRecord.getLevel());
+<a name="line222"></a>  assertEquals(msg, logRecord.getMessage());
+<a name="line223"></a>  assertEquals(ex, logRecord.getException());
+<a name="line224"></a>}
+</pre>
+
+
+</body>
+</html>

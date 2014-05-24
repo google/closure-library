@@ -1,0 +1,162 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>httpstatus.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_httpstatus.js.html">httpstatus.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Constants for HTTP status codes.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.net.HttpStatus&#39;);
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>/**
+<a name="line23"></a> * HTTP Status Codes defined in RFC 2616.
+<a name="line24"></a> * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+<a name="line25"></a> * @enum {number}
+<a name="line26"></a> */
+<a name="line27"></a>goog.net.HttpStatus = {
+<a name="line28"></a>  // Informational 1xx
+<a name="line29"></a>  CONTINUE: 100,
+<a name="line30"></a>  SWITCHING_PROTOCOLS: 101,
+<a name="line31"></a>
+<a name="line32"></a>  // Successful 2xx
+<a name="line33"></a>  OK: 200,
+<a name="line34"></a>  CREATED: 201,
+<a name="line35"></a>  ACCEPTED: 202,
+<a name="line36"></a>  NON_AUTHORITATIVE_INFORMATION: 203,
+<a name="line37"></a>  NO_CONTENT: 204,
+<a name="line38"></a>  RESET_CONTENT: 205,
+<a name="line39"></a>  PARTIAL_CONTENT: 206,
+<a name="line40"></a>
+<a name="line41"></a>  // Redirection 3xx
+<a name="line42"></a>  MULTIPLE_CHOICES: 300,
+<a name="line43"></a>  MOVED_PERMANENTLY: 301,
+<a name="line44"></a>  FOUND: 302,
+<a name="line45"></a>  SEE_OTHER: 303,
+<a name="line46"></a>  NOT_MODIFIED: 304,
+<a name="line47"></a>  USE_PROXY: 305,
+<a name="line48"></a>  TEMPORARY_REDIRECT: 307,
+<a name="line49"></a>
+<a name="line50"></a>  // Client Error 4xx
+<a name="line51"></a>  BAD_REQUEST: 400,
+<a name="line52"></a>  UNAUTHORIZED: 401,
+<a name="line53"></a>  PAYMENT_REQUIRED: 402,
+<a name="line54"></a>  FORBIDDEN: 403,
+<a name="line55"></a>  NOT_FOUND: 404,
+<a name="line56"></a>  METHOD_NOT_ALLOWED: 405,
+<a name="line57"></a>  NOT_ACCEPTABLE: 406,
+<a name="line58"></a>  PROXY_AUTHENTICATION_REQUIRED: 407,
+<a name="line59"></a>  REQUEST_TIMEOUT: 408,
+<a name="line60"></a>  CONFLICT: 409,
+<a name="line61"></a>  GONE: 410,
+<a name="line62"></a>  LENGTH_REQUIRED: 411,
+<a name="line63"></a>  PRECONDITION_FAILED: 412,
+<a name="line64"></a>  REQUEST_ENTITY_TOO_LARGE: 413,
+<a name="line65"></a>  REQUEST_URI_TOO_LONG: 414,
+<a name="line66"></a>  UNSUPPORTED_MEDIA_TYPE: 415,
+<a name="line67"></a>  REQUEST_RANGE_NOT_SATISFIABLE: 416,
+<a name="line68"></a>  EXPECTATION_FAILED: 417,
+<a name="line69"></a>
+<a name="line70"></a>  // Server Error 5xx
+<a name="line71"></a>  INTERNAL_SERVER_ERROR: 500,
+<a name="line72"></a>  NOT_IMPLEMENTED: 501,
+<a name="line73"></a>  BAD_GATEWAY: 502,
+<a name="line74"></a>  SERVICE_UNAVAILABLE: 503,
+<a name="line75"></a>  GATEWAY_TIMEOUT: 504,
+<a name="line76"></a>  HTTP_VERSION_NOT_SUPPORTED: 505,
+<a name="line77"></a>
+<a name="line78"></a>  /*
+<a name="line79"></a>   * IE returns this code for 204 due to its use of URLMon, which returns this
+<a name="line80"></a>   * code for &#39;Operation Aborted&#39;. The status text is &#39;Unknown&#39;, the response
+<a name="line81"></a>   * headers are &#39;&#39;. Known to occur on IE 6 on XP through IE9 on Win7.
+<a name="line82"></a>   */
+<a name="line83"></a>  QUIRK_IE_NO_CONTENT: 1223
+<a name="line84"></a>};
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * Returns whether the given status should be considered successful.
+<a name="line89"></a> *
+<a name="line90"></a> * Successful codes are OK (200), CREATED (201), ACCEPTED (202),
+<a name="line91"></a> * NO CONTENT (204), PARTIAL CONTENT (206), NOT MODIFIED (304),
+<a name="line92"></a> * and IE&#39;s no content code (1223).
+<a name="line93"></a> *
+<a name="line94"></a> * @param {number} status The status code to test.
+<a name="line95"></a> * @return {boolean} Whether the status code should be considered successful.
+<a name="line96"></a> */
+<a name="line97"></a>goog.net.HttpStatus.isSuccess = function(status) {
+<a name="line98"></a>  switch (status) {
+<a name="line99"></a>    case goog.net.HttpStatus.OK:
+<a name="line100"></a>    case goog.net.HttpStatus.CREATED:
+<a name="line101"></a>    case goog.net.HttpStatus.ACCEPTED:
+<a name="line102"></a>    case goog.net.HttpStatus.NO_CONTENT:
+<a name="line103"></a>    case goog.net.HttpStatus.PARTIAL_CONTENT:
+<a name="line104"></a>    case goog.net.HttpStatus.NOT_MODIFIED:
+<a name="line105"></a>    case goog.net.HttpStatus.QUIRK_IE_NO_CONTENT:
+<a name="line106"></a>      return true;
+<a name="line107"></a>
+<a name="line108"></a>    default:
+<a name="line109"></a>      return false;
+<a name="line110"></a>  }
+<a name="line111"></a>};
+</pre>
+
+
+</body>
+</html>

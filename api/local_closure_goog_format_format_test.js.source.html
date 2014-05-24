@@ -1,0 +1,354 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>format_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_format_format_test.js.html">format_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.formatTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.formatTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.format&#39;);
+<a name="line20"></a>goog.require(&#39;goog.string&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var propertyReplacer = new goog.testing.PropertyReplacer();
+<a name="line25"></a>
+<a name="line26"></a>function tearDown() {
+<a name="line27"></a>  // set wordBreakHtml back to the original value (some tests edit this member).
+<a name="line28"></a>  propertyReplacer.reset();
+<a name="line29"></a>}
+<a name="line30"></a>
+<a name="line31"></a>function testFormatFileSize() {
+<a name="line32"></a>  var fileSize = goog.format.fileSize;
+<a name="line33"></a>
+<a name="line34"></a>  assertEquals(&#39;45&#39;, fileSize(45));
+<a name="line35"></a>  assertEquals(&#39;45&#39;, fileSize(45, 0));
+<a name="line36"></a>  assertEquals(&#39;45&#39;, fileSize(45, 1));
+<a name="line37"></a>  assertEquals(&#39;45&#39;, fileSize(45, 3));
+<a name="line38"></a>  assertEquals(&#39;454&#39;, fileSize(454));
+<a name="line39"></a>  assertEquals(&#39;600&#39;, fileSize(600));
+<a name="line40"></a>
+<a name="line41"></a>  assertEquals(&#39;1K&#39;, fileSize(1024));
+<a name="line42"></a>  assertEquals(&#39;2K&#39;, fileSize(2 * 1024));
+<a name="line43"></a>  assertEquals(&#39;5K&#39;, fileSize(5 * 1024));
+<a name="line44"></a>  assertEquals(&#39;5.123K&#39;, fileSize(5.12345 * 1024, 3));
+<a name="line45"></a>  assertEquals(&#39;5.68K&#39;, fileSize(5.678 * 1024, 2));
+<a name="line46"></a>
+<a name="line47"></a>  assertEquals(&#39;1M&#39;, fileSize(1024 * 1024));
+<a name="line48"></a>  assertEquals(&#39;1.5M&#39;, fileSize(1.5 * 1024 * 1024));
+<a name="line49"></a>  assertEquals(&#39;2M&#39;, fileSize(1.5 * 1024 * 1024, 0));
+<a name="line50"></a>  assertEquals(&#39;1.5M&#39;, fileSize(1.51 * 1024 * 1024, 1));
+<a name="line51"></a>  assertEquals(&#39;1.56M&#39;, fileSize(1.56 * 1024 * 1024, 2));
+<a name="line52"></a>
+<a name="line53"></a>  assertEquals(&#39;1G&#39;, fileSize(1024 * 1024 * 1024));
+<a name="line54"></a>  assertEquals(&#39;6G&#39;, fileSize(6 * 1024 * 1024 * 1024));
+<a name="line55"></a>  assertEquals(&#39;12.06T&#39;, fileSize(12345.6789 * 1024 * 1024 * 1024));
+<a name="line56"></a>}
+<a name="line57"></a>
+<a name="line58"></a>function testIsConvertableScaledNumber() {
+<a name="line59"></a>  var isConvertableScaledNumber = goog.format.isConvertableScaledNumber;
+<a name="line60"></a>
+<a name="line61"></a>  assertTrue(isConvertableScaledNumber(&#39;0&#39;));
+<a name="line62"></a>  assertTrue(isConvertableScaledNumber(&#39;45&#39;));
+<a name="line63"></a>  assertTrue(isConvertableScaledNumber(&#39;45K&#39;));
+<a name="line64"></a>  assertTrue(isConvertableScaledNumber(&#39;45MB&#39;));
+<a name="line65"></a>  assertTrue(isConvertableScaledNumber(&#39;45GB&#39;));
+<a name="line66"></a>  assertTrue(isConvertableScaledNumber(&#39;45T&#39;));
+<a name="line67"></a>  assertTrue(isConvertableScaledNumber(&#39;2.33P&#39;));
+<a name="line68"></a>  assertTrue(isConvertableScaledNumber(&#39;45m&#39;));
+<a name="line69"></a>  assertTrue(isConvertableScaledNumber(&#39;45u&#39;));
+<a name="line70"></a>  assertTrue(isConvertableScaledNumber(&#39;-5.0n&#39;));
+<a name="line71"></a>
+<a name="line72"></a>  assertFalse(isConvertableScaledNumber(&#39;45x&#39;));
+<a name="line73"></a>  assertFalse(isConvertableScaledNumber(&#39;ux&#39;));
+<a name="line74"></a>  assertFalse(isConvertableScaledNumber(&#39;K&#39;));
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>function testNumericValueToString() {
+<a name="line78"></a>  var numericValueToString = goog.format.numericValueToString;
+<a name="line79"></a>
+<a name="line80"></a>  assertEquals(&#39;0&#39;, numericValueToString(0.0));
+<a name="line81"></a>  assertEquals(&#39;45&#39;, numericValueToString(45));
+<a name="line82"></a>  assertEquals(&#39;454&#39;, numericValueToString(454));
+<a name="line83"></a>  assertEquals(&#39;600&#39;, numericValueToString(600));
+<a name="line84"></a>
+<a name="line85"></a>  assertEquals(&#39;1.02K&#39;, numericValueToString(1024));
+<a name="line86"></a>  assertEquals(&#39;2.05K&#39;, numericValueToString(2 * 1024));
+<a name="line87"></a>  assertEquals(&#39;5.12K&#39;, numericValueToString(5 * 1024));
+<a name="line88"></a>  assertEquals(&#39;5.246K&#39;, numericValueToString(5.12345 * 1024, 3));
+<a name="line89"></a>  assertEquals(&#39;5.81K&#39;, numericValueToString(5.678 * 1024, 2));
+<a name="line90"></a>
+<a name="line91"></a>  assertEquals(&#39;1.05M&#39;, numericValueToString(1024 * 1024));
+<a name="line92"></a>  assertEquals(&#39;1.57M&#39;, numericValueToString(1.5 * 1024 * 1024));
+<a name="line93"></a>  assertEquals(&#39;2M&#39;, numericValueToString(1.5 * 1024 * 1024, 0));
+<a name="line94"></a>  assertEquals(&#39;1.6M&#39;, numericValueToString(1.51 * 1024 * 1024, 1));
+<a name="line95"></a>  assertEquals(&#39;1.64M&#39;, numericValueToString(1.56 * 1024 * 1024, 2));
+<a name="line96"></a>
+<a name="line97"></a>  assertEquals(&#39;1.07G&#39;, numericValueToString(1024 * 1024 * 1024));
+<a name="line98"></a>  assertEquals(&#39;6.44G&#39;, numericValueToString(6 * 1024 * 1024 * 1024));
+<a name="line99"></a>  assertEquals(&#39;13.26T&#39;, numericValueToString(12345.6789 * 1024 * 1024 * 1024));
+<a name="line100"></a>
+<a name="line101"></a>  assertEquals(&#39;23.4m&#39;, numericValueToString(0.0234));
+<a name="line102"></a>  assertEquals(&#39;1.23u&#39;, numericValueToString(0.00000123));
+<a name="line103"></a>  assertEquals(&#39;15.78n&#39;, numericValueToString(0.000000015784));
+<a name="line104"></a>  assertEquals(&#39;0.58u&#39;, numericValueToString(0.0000005784));
+<a name="line105"></a>  assertEquals(&#39;0.5&#39;, numericValueToString(0.5));
+<a name="line106"></a>
+<a name="line107"></a>  assertEquals(&#39;-45&#39;, numericValueToString(-45.3, 0));
+<a name="line108"></a>  assertEquals(&#39;-45&#39;, numericValueToString(-45.5, 0));
+<a name="line109"></a>  assertEquals(&#39;-46&#39;, numericValueToString(-45.51, 0));
+<a name="line110"></a>}
+<a name="line111"></a>
+<a name="line112"></a>function testFormatNumBytes() {
+<a name="line113"></a>  var numBytesToString = goog.format.numBytesToString;
+<a name="line114"></a>
+<a name="line115"></a>  assertEquals(&#39;45&#39;, numBytesToString(45));
+<a name="line116"></a>  assertEquals(&#39;454&#39;, numBytesToString(454));
+<a name="line117"></a>
+<a name="line118"></a>  assertEquals(&#39;5KB&#39;, numBytesToString(5 * 1024));
+<a name="line119"></a>  assertEquals(&#39;1MB&#39;, numBytesToString(1024 * 1024));
+<a name="line120"></a>  assertEquals(&#39;6GB&#39;, numBytesToString(6 * 1024 * 1024 * 1024));
+<a name="line121"></a>  assertEquals(&#39;12.06TB&#39;, numBytesToString(12345.6789 * 1024 * 1024 * 1024));
+<a name="line122"></a>
+<a name="line123"></a>  assertEquals(&#39;454&#39;, numBytesToString(454, 2, true, true));
+<a name="line124"></a>  assertEquals(&#39;5 KB&#39;, numBytesToString(5 * 1024, 2, true, true));
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>function testStringToNumeric() {
+<a name="line128"></a>  var stringToNumericValue = goog.format.stringToNumericValue;
+<a name="line129"></a>  var epsilon = Math.pow(10, -10);
+<a name="line130"></a>
+<a name="line131"></a>  assertNaN(stringToNumericValue(&#39;foo&#39;));
+<a name="line132"></a>
+<a name="line133"></a>  assertEquals(45, stringToNumericValue(&#39;45&#39;));
+<a name="line134"></a>  assertEquals(-45, stringToNumericValue(&#39;-45&#39;));
+<a name="line135"></a>  assertEquals(-45, stringToNumericValue(&#39;-45&#39;));
+<a name="line136"></a>  assertEquals(454, stringToNumericValue(&#39;454&#39;));
+<a name="line137"></a>
+<a name="line138"></a>  assertEquals(5 * 1024, stringToNumericValue(&#39;5KB&#39;));
+<a name="line139"></a>  assertEquals(1024 * 1024, stringToNumericValue(&#39;1MB&#39;));
+<a name="line140"></a>  assertEquals(6 * 1024 * 1024 * 1024, stringToNumericValue(&#39;6GB&#39;));
+<a name="line141"></a>  assertEquals(13260110230978.56, stringToNumericValue(&#39;12.06TB&#39;));
+<a name="line142"></a>
+<a name="line143"></a>  assertEquals(5010, stringToNumericValue(&#39;5.01K&#39;));
+<a name="line144"></a>  assertEquals(5100000, stringToNumericValue(&#39;5.1M&#39;));
+<a name="line145"></a>  assertTrue(Math.abs(0.051 - stringToNumericValue(&#39;51.0m&#39;)) &lt; epsilon);
+<a name="line146"></a>  assertTrue(Math.abs(0.000051 - stringToNumericValue(&#39;51.0u&#39;)) &lt; epsilon);
+<a name="line147"></a>}
+<a name="line148"></a>
+<a name="line149"></a>function testStringToNumBytes() {
+<a name="line150"></a>  var stringToNumBytes = goog.format.stringToNumBytes;
+<a name="line151"></a>
+<a name="line152"></a>  assertEquals(45, stringToNumBytes(&#39;45&#39;));
+<a name="line153"></a>  assertEquals(454, stringToNumBytes(&#39;454&#39;));
+<a name="line154"></a>
+<a name="line155"></a>  assertEquals(5 * 1024, stringToNumBytes(&#39;5K&#39;));
+<a name="line156"></a>  assertEquals(1024 * 1024, stringToNumBytes(&#39;1M&#39;));
+<a name="line157"></a>  assertEquals(6 * 1024 * 1024 * 1024, stringToNumBytes(&#39;6G&#39;));
+<a name="line158"></a>  assertEquals(13260110230978.56, stringToNumBytes(&#39;12.06T&#39;));
+<a name="line159"></a>}
+<a name="line160"></a>
+<a name="line161"></a>function testInsertWordBreaks() {
+<a name="line162"></a>  // HTML that gets inserted is browser dependent, ensure for the test it is
+<a name="line163"></a>  // a constant - browser dependent HTML is for display purposes only.
+<a name="line164"></a>  propertyReplacer.set(goog.format, &#39;WORD_BREAK_HTML&#39;, &#39;&lt;wbr&gt;&#39;);
+<a name="line165"></a>
+<a name="line166"></a>  var insertWordBreaks = goog.format.insertWordBreaks;
+<a name="line167"></a>
+<a name="line168"></a>  assertEquals(&#39;abcdef&#39;, insertWordBreaks(&#39;abcdef&#39;, 10));
+<a name="line169"></a>  assertEquals(&#39;ab&lt;wbr&gt;cd&lt;wbr&gt;ef&#39;, insertWordBreaks(&#39;abcdef&#39;, 2));
+<a name="line170"></a>  assertEquals(
+<a name="line171"></a>      &#39;a&lt;wbr&gt;b&lt;wbr&gt;c&lt;wbr&gt;d&lt;wbr&gt;e&lt;wbr&gt;f&#39;, insertWordBreaks(&#39;abcdef&#39;, 1));
+<a name="line172"></a>
+<a name="line173"></a>  assertEquals(
+<a name="line174"></a>      &#39;a&amp;amp;b=&lt;wbr&gt;=fal&lt;wbr&gt;se&#39;, insertWordBreaks(&#39;a&amp;amp;b==false&#39;, 4));
+<a name="line175"></a>  assertEquals(&#39;&amp;lt;&amp;amp;&amp;gt;&amp;raquo;&lt;wbr&gt;&amp;laquo;&#39;,
+<a name="line176"></a>               insertWordBreaks(&#39;&amp;lt;&amp;amp;&amp;gt;&amp;raquo;&amp;laquo;&#39;, 4));
+<a name="line177"></a>
+<a name="line178"></a>  assertEquals(&#39;a&lt;wbr&gt;b&lt;wbr&gt;c d&lt;wbr&gt;e&lt;wbr&gt;f&#39;, insertWordBreaks(&#39;abc def&#39;, 1));
+<a name="line179"></a>  assertEquals(&#39;ab&lt;wbr&gt;c de&lt;wbr&gt;f&#39;, insertWordBreaks(&#39;abc def&#39;, 2));
+<a name="line180"></a>  assertEquals(&#39;abc def&#39;, insertWordBreaks(&#39;abc def&#39;, 3));
+<a name="line181"></a>  assertEquals(&#39;abc def&#39;, insertWordBreaks(&#39;abc def&#39;, 4));
+<a name="line182"></a>
+<a name="line183"></a>  assertEquals(&#39;a&lt;b&gt;cd&lt;/b&gt;e&lt;wbr&gt;f&#39;, insertWordBreaks(&#39;a&lt;b&gt;cd&lt;/b&gt;ef&#39;, 4));
+<a name="line184"></a>  assertEquals(&#39;Thi&lt;wbr&gt;s is a &lt;a href=&quot;&quot;&gt;lin&lt;wbr&gt;k&lt;/a&gt;.&#39;,
+<a name="line185"></a>               insertWordBreaks(&#39;This is a &lt;a href=&quot;&quot;&gt;link&lt;/a&gt;.&#39;, 3));
+<a name="line186"></a>  assertEquals(&#39;&lt;abc a=&quot;&amp;amp;&amp;amp;&amp;amp;&amp;amp;&amp;amp;&quot;&gt;a&lt;wbr&gt;b&#39;,
+<a name="line187"></a>      insertWordBreaks(&#39;&lt;abc a=&quot;&amp;amp;&amp;amp;&amp;amp;&amp;amp;&amp;amp;&quot;&gt;ab&#39;, 1));
+<a name="line188"></a>
+<a name="line189"></a>  assertEquals(&#39;ab\u0300&lt;wbr&gt;cd&#39;, insertWordBreaks(&#39;ab\u0300cd&#39;, 2));
+<a name="line190"></a>  assertEquals(&#39;ab\u036F&lt;wbr&gt;cd&#39;, insertWordBreaks(&#39;ab\u036Fcd&#39;, 2));
+<a name="line191"></a>  assertEquals(&#39;ab&lt;wbr&gt;\u0370c&lt;wbr&gt;d&#39;, insertWordBreaks(&#39;ab\u0370cd&#39;, 2));
+<a name="line192"></a>  assertEquals(&#39;ab&lt;wbr&gt;\uFE1Fc&lt;wbr&gt;d&#39;, insertWordBreaks(&#39;ab\uFE1Fcd&#39;, 2));
+<a name="line193"></a>  assertEquals(&#39;ab\u0300&lt;wbr&gt;c\u0301&lt;wbr&gt;de&lt;wbr&gt;f&#39;,
+<a name="line194"></a>      insertWordBreaks(&#39;ab\u0300c\u0301def&#39;, 2));
+<a name="line195"></a>}
+<a name="line196"></a>
+<a name="line197"></a>function testInsertWordBreaksWithFormattingCharacters() {
+<a name="line198"></a>  // HTML that gets inserted is browser dependent, ensure for the test it is
+<a name="line199"></a>  // a constant - browser dependent HTML is for display purposes only.
+<a name="line200"></a>  propertyReplacer.set(goog.format, &#39;WORD_BREAK_HTML&#39;, &#39;&lt;wbr&gt;&#39;);
+<a name="line201"></a>  var insertWordBreaks = goog.format.insertWordBreaks;
+<a name="line202"></a>
+<a name="line203"></a>  // A date in Arabic-Indic digits with Right-to-Left Marks (U+200F).
+<a name="line204"></a>  // The date is &quot;11&lt;RLM&gt;/01&lt;RLM&gt;/2012&quot;.
+<a name="line205"></a>  var textWithRLMs = &#39;This is a date - &#39; +
+<a name="line206"></a>      &#39;\u0661\u0661\u200f/\u0660\u0661\u200f/\u0662\u0660\u0661\u0662&#39;;
+<a name="line207"></a>  // A string of 10 Xs with invisible formatting characters in between.
+<a name="line208"></a>  // These characters are in the ranges U+200C to U+200F and U+202A to
+<a name="line209"></a>  // U+202E, inclusive. See: http://unicode.org/charts/PDF/U2000.pdf
+<a name="line210"></a>  var stringWithInvisibleFormatting = &#39;X\u200cX\u200dX\u200eX\u200fX\u202a&#39; +
+<a name="line211"></a>      &#39;X\u202bX\u202cX\u202dX\u202eX&#39;;
+<a name="line212"></a>  // A string formed by concatenating copies of the previous string alternating
+<a name="line213"></a>  // with characters which behave like breaking spaces. Besides the space
+<a name="line214"></a>  // character itself, the other characters are in the range U+2000 to U+200B
+<a name="line215"></a>  // inclusive, except for the exclusion of U+2007 and inclusion of U+2029.
+<a name="line216"></a>  // See: http://unicode.org/charts/PDF/U2000.pdf
+<a name="line217"></a>  var stringWithInvisibleFormattingAndSpacelikeCharacters =
+<a name="line218"></a>      stringWithInvisibleFormatting + &#39; &#39; +
+<a name="line219"></a>      stringWithInvisibleFormatting + &#39;\u2000&#39; +
+<a name="line220"></a>      stringWithInvisibleFormatting + &#39;\u2001&#39; +
+<a name="line221"></a>      stringWithInvisibleFormatting + &#39;\u2002&#39; +
+<a name="line222"></a>      stringWithInvisibleFormatting + &#39;\u2003&#39; +
+<a name="line223"></a>      stringWithInvisibleFormatting + &#39;\u2005&#39; +
+<a name="line224"></a>      stringWithInvisibleFormatting + &#39;\u2006&#39; +
+<a name="line225"></a>      stringWithInvisibleFormatting + &#39;\u2008&#39; +
+<a name="line226"></a>      stringWithInvisibleFormatting + &#39;\u2009&#39; +
+<a name="line227"></a>      stringWithInvisibleFormatting + &#39;\u200A&#39; +
+<a name="line228"></a>      stringWithInvisibleFormatting + &#39;\u200B&#39; +
+<a name="line229"></a>      stringWithInvisibleFormatting + &#39;\u2029&#39; +
+<a name="line230"></a>      stringWithInvisibleFormatting;
+<a name="line231"></a>
+<a name="line232"></a>  // Test that the word break algorithm does not count RLMs towards word
+<a name="line233"></a>  // length, and therefore does not insert word breaks into a typical date
+<a name="line234"></a>  // written in Arabic-Indic digits with RTMs (b/5853915).
+<a name="line235"></a>  assertEquals(textWithRLMs, insertWordBreaks(textWithRLMs, 10));
+<a name="line236"></a>
+<a name="line237"></a>  // Test that invisible formatting characters are not counted towards word
+<a name="line238"></a>  // length, and that characters which are treated as breaking spaces behave as
+<a name="line239"></a>  // breaking spaces.
+<a name="line240"></a>  assertEquals(stringWithInvisibleFormattingAndSpacelikeCharacters,
+<a name="line241"></a>      insertWordBreaks(stringWithInvisibleFormattingAndSpacelikeCharacters,
+<a name="line242"></a>      10));
+<a name="line243"></a>}
+<a name="line244"></a>
+<a name="line245"></a>function testInsertWordBreaksBasic() {
+<a name="line246"></a>  // HTML that gets inserted is browser dependent, ensure for the test it is
+<a name="line247"></a>  // a constant - browser dependent HTML is for display purposes only.
+<a name="line248"></a>  propertyReplacer.set(goog.format, &#39;WORD_BREAK_HTML&#39;, &#39;&lt;wbr&gt;&#39;);
+<a name="line249"></a>  var insertWordBreaksBasic = goog.format.insertWordBreaksBasic;
+<a name="line250"></a>
+<a name="line251"></a>  assertEquals(&#39;abcdef&#39;, insertWordBreaksBasic(&#39;abcdef&#39;, 10));
+<a name="line252"></a>  assertEquals(&#39;ab&lt;wbr&gt;cd&lt;wbr&gt;ef&#39;, insertWordBreaksBasic(&#39;abcdef&#39;, 2));
+<a name="line253"></a>  assertEquals(
+<a name="line254"></a>      &#39;a&lt;wbr&gt;b&lt;wbr&gt;c&lt;wbr&gt;d&lt;wbr&gt;e&lt;wbr&gt;f&#39;, insertWordBreaksBasic(&#39;abcdef&#39;, 1));
+<a name="line255"></a>  assertEquals(&#39;ab\u0300&lt;wbr&gt;c\u0301&lt;wbr&gt;de&lt;wbr&gt;f&#39;,
+<a name="line256"></a>      insertWordBreaksBasic(&#39;ab\u0300c\u0301def&#39;, 2));
+<a name="line257"></a>
+<a name="line258"></a>  assertEquals(
+<a name="line259"></a>      &#39;Inserting word breaks into the word &quot;Russia&quot; should work fine.&#39;,
+<a name="line260"></a>      &#39;\u0420\u043E&lt;wbr&gt;\u0441\u0441&lt;wbr&gt;\u0438\u044F&#39;,
+<a name="line261"></a>      insertWordBreaksBasic(&#39;\u0420\u043E\u0441\u0441\u0438\u044F&#39;, 2));
+<a name="line262"></a>
+<a name="line263"></a>  // The word &#39;Internet&#39; in Hindi.
+<a name="line264"></a>  var hindiInternet = &#39;\u0907\u0902\u091F\u0930\u0928\u0947\u091F&#39;;
+<a name="line265"></a>  assertEquals(&#39;The basic algorithm is not good enough to insert word &#39; +
+<a name="line266"></a>      &#39;breaks into Hindi.&#39;,
+<a name="line267"></a>      hindiInternet, insertWordBreaksBasic(hindiInternet, 2));
+<a name="line268"></a>  // The word &#39;Internet&#39; in Hindi broken into slashes.
+<a name="line269"></a>  assertEquals(&#39;Hindi can have word breaks inserted between slashes&#39;,
+<a name="line270"></a>      hindiInternet + &#39;&lt;wbr&gt;/&#39; + hindiInternet + &#39;&lt;wbr&gt;.&#39; + hindiInternet,
+<a name="line271"></a>      insertWordBreaksBasic(hindiInternet + &#39;/&#39; + hindiInternet + &#39;.&#39; +
+<a name="line272"></a>          hindiInternet, 2));
+<a name="line273"></a>}
+<a name="line274"></a>
+<a name="line275"></a>function testWordBreaksWorking() {
+<a name="line276"></a>  var text = goog.string.repeat(&#39;test&#39;, 20);
+<a name="line277"></a>  var textWbr = goog.string.repeat(&#39;test&#39; + goog.format.WORD_BREAK_HTML, 20);
+<a name="line278"></a>
+<a name="line279"></a>  var overflowEl = goog.dom.createDom(&#39;div&#39;,
+<a name="line280"></a>      {&#39;style&#39;: &#39;width: 100px; overflow: hidden; margin 5px&#39;});
+<a name="line281"></a>  var wbrEl = goog.dom.createDom(&#39;div&#39;,
+<a name="line282"></a>      {&#39;style&#39;: &#39;width: 100px; overflow: hidden; margin-top: 15px&#39;});
+<a name="line283"></a>  goog.dom.appendChild(goog.global.document.body, overflowEl);
+<a name="line284"></a>  goog.dom.appendChild(goog.global.document.body, wbrEl);
+<a name="line285"></a>
+<a name="line286"></a>  overflowEl.innerHTML = text;
+<a name="line287"></a>  wbrEl.innerHTML = textWbr;
+<a name="line288"></a>
+<a name="line289"></a>  assertTrue(&#39;Text should overflow&#39;, overflowEl.scrollWidth &gt; 100);
+<a name="line290"></a>  assertTrue(&#39;Text should not overflow&#39;, wbrEl.scrollWidth &lt;= 100);
+<a name="line291"></a>}
+<a name="line292"></a>
+<a name="line293"></a>function testWordBreaksRemovedFromTextContent() {
+<a name="line294"></a>  var expectedText = goog.string.repeat(&#39;test&#39;, 20);
+<a name="line295"></a>  var textWbr = goog.string.repeat(&#39;test&#39; + goog.format.WORD_BREAK_HTML, 20);
+<a name="line296"></a>
+<a name="line297"></a>  var wbrEl = goog.dom.createDom(&#39;div&#39;, null);
+<a name="line298"></a>  wbrEl.innerHTML = textWbr;
+<a name="line299"></a>
+<a name="line300"></a>  assertEquals(&#39;text content should have wbr character removed&#39;, expectedText,
+<a name="line301"></a>      goog.dom.getTextContent(wbrEl));
+<a name="line302"></a>
+<a name="line303"></a>}
+</pre>
+
+
+</body>
+</html>

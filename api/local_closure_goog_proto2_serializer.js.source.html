@@ -1,0 +1,224 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>serializer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_proto2_serializer.js.html">serializer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Base class for all Protocol Buffer 2 serializers.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.proto2.Serializer&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line22"></a>goog.require(&#39;goog.proto2.FieldDescriptor&#39;);
+<a name="line23"></a>goog.require(&#39;goog.proto2.Message&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Abstract base class for PB2 serializers. A serializer is a class which
+<a name="line29"></a> * implements the serialization and deserialization of a Protocol Buffer Message
+<a name="line30"></a> * to/from a specific format.
+<a name="line31"></a> *
+<a name="line32"></a> * @constructor
+<a name="line33"></a> */
+<a name="line34"></a>goog.proto2.Serializer = function() {};
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * @define {boolean} Whether to decode and convert symbolic enum values to
+<a name="line39"></a> * actual enum values or leave them as strings.
+<a name="line40"></a> */
+<a name="line41"></a>goog.define(&#39;goog.proto2.Serializer.DECODE_SYMBOLIC_ENUMS&#39;, false);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * Serializes a message to the expected format.
+<a name="line46"></a> *
+<a name="line47"></a> * @param {goog.proto2.Message} message The message to be serialized.
+<a name="line48"></a> *
+<a name="line49"></a> * @return {*} The serialized form of the message.
+<a name="line50"></a> */
+<a name="line51"></a>goog.proto2.Serializer.prototype.serialize = goog.abstractMethod;
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Returns the serialized form of the given value for the given field
+<a name="line56"></a> * if the field is a Message or Group and returns the value unchanged
+<a name="line57"></a> * otherwise.
+<a name="line58"></a> *
+<a name="line59"></a> * @param {goog.proto2.FieldDescriptor} field The field from which this
+<a name="line60"></a> *     value came.
+<a name="line61"></a> *
+<a name="line62"></a> * @param {*} value The value of the field.
+<a name="line63"></a> *
+<a name="line64"></a> * @return {*} The value.
+<a name="line65"></a> * @protected
+<a name="line66"></a> */
+<a name="line67"></a>goog.proto2.Serializer.prototype.getSerializedValue = function(field, value) {
+<a name="line68"></a>  if (field.isCompositeType()) {
+<a name="line69"></a>    return this.serialize(/** @type {goog.proto2.Message} */ (value));
+<a name="line70"></a>  } else {
+<a name="line71"></a>    return value;
+<a name="line72"></a>  }
+<a name="line73"></a>};
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * Deserializes a message from the expected format.
+<a name="line78"></a> *
+<a name="line79"></a> * @param {goog.proto2.Descriptor} descriptor The descriptor of the message
+<a name="line80"></a> *     to be created.
+<a name="line81"></a> * @param {*} data The data of the message.
+<a name="line82"></a> *
+<a name="line83"></a> * @return {!goog.proto2.Message} The message created.
+<a name="line84"></a> */
+<a name="line85"></a>goog.proto2.Serializer.prototype.deserialize = function(descriptor, data) {
+<a name="line86"></a>  var message = descriptor.createMessageInstance();
+<a name="line87"></a>  this.deserializeTo(message, data);
+<a name="line88"></a>  goog.asserts.assert(message instanceof goog.proto2.Message);
+<a name="line89"></a>  return message;
+<a name="line90"></a>};
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Deserializes a message from the expected format and places the
+<a name="line95"></a> * data in the message.
+<a name="line96"></a> *
+<a name="line97"></a> * @param {goog.proto2.Message} message The message in which to
+<a name="line98"></a> *     place the information.
+<a name="line99"></a> * @param {*} data The data of the message.
+<a name="line100"></a> */
+<a name="line101"></a>goog.proto2.Serializer.prototype.deserializeTo = goog.abstractMethod;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Returns the deserialized form of the given value for the given field if the
+<a name="line106"></a> * field is a Message or Group and returns the value, converted or unchanged,
+<a name="line107"></a> * for primitive field types otherwise.
+<a name="line108"></a> *
+<a name="line109"></a> * @param {goog.proto2.FieldDescriptor} field The field from which this
+<a name="line110"></a> *     value came.
+<a name="line111"></a> *
+<a name="line112"></a> * @param {*} value The value of the field.
+<a name="line113"></a> *
+<a name="line114"></a> * @return {*} The value.
+<a name="line115"></a> * @protected
+<a name="line116"></a> */
+<a name="line117"></a>goog.proto2.Serializer.prototype.getDeserializedValue = function(field, value) {
+<a name="line118"></a>  // Composite types are deserialized recursively.
+<a name="line119"></a>  if (field.isCompositeType()) {
+<a name="line120"></a>    if (value instanceof goog.proto2.Message) {
+<a name="line121"></a>      return value;
+<a name="line122"></a>    }
+<a name="line123"></a>
+<a name="line124"></a>    return this.deserialize(field.getFieldMessageType(), value);
+<a name="line125"></a>  }
+<a name="line126"></a>
+<a name="line127"></a>  // Decode enum values.
+<a name="line128"></a>  if (field.getFieldType() == goog.proto2.FieldDescriptor.FieldType.ENUM) {
+<a name="line129"></a>    // If it&#39;s a string, get enum value by name.
+<a name="line130"></a>    // NB: In order this feature to work, property renaming should be turned off
+<a name="line131"></a>    // for the respective enums.
+<a name="line132"></a>    if (goog.proto2.Serializer.DECODE_SYMBOLIC_ENUMS &amp;&amp; goog.isString(value)) {
+<a name="line133"></a>      // enumType is a regular Javascript enum as defined in field&#39;s metadata.
+<a name="line134"></a>      var enumType = field.getNativeType();
+<a name="line135"></a>      if (enumType.hasOwnProperty(value)) {
+<a name="line136"></a>        return enumType[value];
+<a name="line137"></a>      }
+<a name="line138"></a>    }
+<a name="line139"></a>    // Return unknown values as is for backward compatibility.
+<a name="line140"></a>    return value;
+<a name="line141"></a>  }
+<a name="line142"></a>
+<a name="line143"></a>  // Return the raw value if the field does not allow the JSON input to be
+<a name="line144"></a>  // converted.
+<a name="line145"></a>  if (!field.deserializationConversionPermitted()) {
+<a name="line146"></a>    return value;
+<a name="line147"></a>  }
+<a name="line148"></a>
+<a name="line149"></a>  // Convert to native type of field.  Return the converted value or fall
+<a name="line150"></a>  // through to return the raw value.  The JSON encoding of int64 value 123
+<a name="line151"></a>  // might be either the number 123 or the string &quot;123&quot;.  The field native type
+<a name="line152"></a>  // could be either Number or String (depending on field options in the .proto
+<a name="line153"></a>  // file).  All four combinations should work correctly.
+<a name="line154"></a>  var nativeType = field.getNativeType();
+<a name="line155"></a>  if (nativeType === String) {
+<a name="line156"></a>    // JSON numbers can be converted to strings.
+<a name="line157"></a>    if (goog.isNumber(value)) {
+<a name="line158"></a>      return String(value);
+<a name="line159"></a>    }
+<a name="line160"></a>  } else if (nativeType === Number) {
+<a name="line161"></a>    // JSON strings are sometimes used for large integer numeric values.
+<a name="line162"></a>    if (goog.isString(value)) {
+<a name="line163"></a>      // Validate the string.  If the string is not an integral number, we would
+<a name="line164"></a>      // rather have an assertion or error in the caller than a mysterious NaN
+<a name="line165"></a>      // value.
+<a name="line166"></a>      if (/^-?[0-9]+$/.test(value)) {
+<a name="line167"></a>        return Number(value);
+<a name="line168"></a>      }
+<a name="line169"></a>    }
+<a name="line170"></a>  }
+<a name="line171"></a>
+<a name="line172"></a>  return value;
+<a name="line173"></a>};
+</pre>
+
+
+</body>
+</html>

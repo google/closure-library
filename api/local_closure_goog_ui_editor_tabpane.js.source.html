@@ -1,0 +1,252 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tabpane.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_editor_tabpane.js.html">tabpane.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Tabbed pane with style and functionality specific to
+<a name="line17"></a> * Editor dialogs.
+<a name="line18"></a> *
+<a name="line19"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.editor.TabPane&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line29"></a>goog.require(&#39;goog.style&#39;);
+<a name="line30"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.Control&#39;);
+<a name="line32"></a>goog.require(&#39;goog.ui.Tab&#39;);
+<a name="line33"></a>goog.require(&#39;goog.ui.TabBar&#39;);
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * Creates a new Editor-style tab pane.
+<a name="line39"></a> * @param {goog.dom.DomHelper} dom The dom helper for the window to create this
+<a name="line40"></a> *     tab pane in.
+<a name="line41"></a> * @param {string=} opt_caption Optional caption of the tab pane.
+<a name="line42"></a> * @constructor
+<a name="line43"></a> * @extends {goog.ui.Component}
+<a name="line44"></a> * @final
+<a name="line45"></a> */
+<a name="line46"></a>goog.ui.editor.TabPane = function(dom, opt_caption) {
+<a name="line47"></a>  goog.ui.editor.TabPane.base(this, &#39;constructor&#39;, dom);
+<a name="line48"></a>
+<a name="line49"></a>  /**
+<a name="line50"></a>   * The event handler used to register events.
+<a name="line51"></a>   * @type {goog.events.EventHandler.&lt;!goog.ui.editor.TabPane&gt;}
+<a name="line52"></a>   * @private
+<a name="line53"></a>   */
+<a name="line54"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line55"></a>  this.registerDisposable(this.eventHandler_);
+<a name="line56"></a>
+<a name="line57"></a>  /**
+<a name="line58"></a>   * The tab bar used to render the tabs.
+<a name="line59"></a>   * @type {goog.ui.TabBar}
+<a name="line60"></a>   * @private
+<a name="line61"></a>   */
+<a name="line62"></a>  this.tabBar_ = new goog.ui.TabBar(goog.ui.TabBar.Location.START,
+<a name="line63"></a>      undefined, this.dom_);
+<a name="line64"></a>  this.tabBar_.setFocusable(false);
+<a name="line65"></a>
+<a name="line66"></a>  /**
+<a name="line67"></a>   * The content element.
+<a name="line68"></a>   * @private
+<a name="line69"></a>   */
+<a name="line70"></a>  this.tabContent_ = this.dom_.createDom(goog.dom.TagName.DIV,
+<a name="line71"></a>      {className: goog.getCssName(&#39;goog-tab-content&#39;)});
+<a name="line72"></a>
+<a name="line73"></a>  /**
+<a name="line74"></a>   * The currently selected radio button.
+<a name="line75"></a>   * @type {Element}
+<a name="line76"></a>   * @private
+<a name="line77"></a>   */
+<a name="line78"></a>  this.selectedRadio_ = null;
+<a name="line79"></a>
+<a name="line80"></a>  /**
+<a name="line81"></a>   * The currently visible tab content.
+<a name="line82"></a>   * @type {Element}
+<a name="line83"></a>   * @private
+<a name="line84"></a>   */
+<a name="line85"></a>  this.visibleContent_ = null;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>  // Add the caption as the first element in the tab bar.
+<a name="line89"></a>  if (opt_caption) {
+<a name="line90"></a>    var captionControl = new goog.ui.Control(opt_caption, undefined,
+<a name="line91"></a>        this.dom_);
+<a name="line92"></a>    captionControl.addClassName(goog.getCssName(&#39;tr-tabpane-caption&#39;));
+<a name="line93"></a>    captionControl.setEnabled(false);
+<a name="line94"></a>    this.tabBar_.addChild(captionControl, true);
+<a name="line95"></a>  }
+<a name="line96"></a>};
+<a name="line97"></a>goog.inherits(goog.ui.editor.TabPane, goog.ui.Component);
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * @return {string} The ID of the content element for the current tab.
+<a name="line102"></a> */
+<a name="line103"></a>goog.ui.editor.TabPane.prototype.getCurrentTabId = function() {
+<a name="line104"></a>  return this.tabBar_.getSelectedTab().getId();
+<a name="line105"></a>};
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * Selects the tab with the given id.
+<a name="line110"></a> * @param {string} id Id of the tab to select.
+<a name="line111"></a> */
+<a name="line112"></a>goog.ui.editor.TabPane.prototype.setSelectedTabId = function(id) {
+<a name="line113"></a>  this.tabBar_.setSelectedTab(this.tabBar_.getChild(id));
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Adds a tab to the tab pane.
+<a name="line119"></a> * @param {string} id The id of the tab to add.
+<a name="line120"></a> * @param {string} caption The caption of the tab.
+<a name="line121"></a> * @param {string} tooltip The tooltip for the tab.
+<a name="line122"></a> * @param {string} groupName for the radio button group.
+<a name="line123"></a> * @param {Element} content The content element to show when this tab is
+<a name="line124"></a> *     selected.
+<a name="line125"></a> */
+<a name="line126"></a>goog.ui.editor.TabPane.prototype.addTab = function(id, caption, tooltip,
+<a name="line127"></a>    groupName, content) {
+<a name="line128"></a>  var radio = this.dom_.createDom(goog.dom.TagName.INPUT,
+<a name="line129"></a>      {
+<a name="line130"></a>        name: groupName,
+<a name="line131"></a>        type: &#39;radio&#39;
+<a name="line132"></a>      });
+<a name="line133"></a>
+<a name="line134"></a>  var tab = new goog.ui.Tab([radio, this.dom_.createTextNode(caption)],
+<a name="line135"></a>      undefined, this.dom_);
+<a name="line136"></a>  tab.setId(id);
+<a name="line137"></a>  tab.setTooltip(tooltip);
+<a name="line138"></a>  this.tabBar_.addChild(tab, true);
+<a name="line139"></a>
+<a name="line140"></a>  // When you navigate the radio buttons with TAB and then the Arrow keys on
+<a name="line141"></a>  // Chrome and FF, you get a CLICK event on them, and the radio button
+<a name="line142"></a>  // is selected.  You don&#39;t get a SELECT at all.  We listen for SELECT
+<a name="line143"></a>  // nonetheless because it&#39;s possible that some browser will issue only
+<a name="line144"></a>  // SELECT.
+<a name="line145"></a>  this.eventHandler_.listen(radio,
+<a name="line146"></a>      [goog.events.EventType.SELECT, goog.events.EventType.CLICK],
+<a name="line147"></a>      goog.bind(this.tabBar_.setSelectedTab, this.tabBar_, tab));
+<a name="line148"></a>
+<a name="line149"></a>  content.id = id + &#39;-tab&#39;;
+<a name="line150"></a>  this.tabContent_.appendChild(content);
+<a name="line151"></a>  goog.style.setElementShown(content, false);
+<a name="line152"></a>};
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/** @override */
+<a name="line156"></a>goog.ui.editor.TabPane.prototype.enterDocument = function() {
+<a name="line157"></a>  goog.ui.editor.TabPane.base(this, &#39;enterDocument&#39;);
+<a name="line158"></a>
+<a name="line159"></a>  // Get the root element and add a class name to it.
+<a name="line160"></a>  var root = this.getElement();
+<a name="line161"></a>  goog.asserts.assert(root);
+<a name="line162"></a>  goog.dom.classlist.add(root, goog.getCssName(&#39;tr-tabpane&#39;));
+<a name="line163"></a>
+<a name="line164"></a>  // Add the tabs.
+<a name="line165"></a>  this.addChild(this.tabBar_, true);
+<a name="line166"></a>  this.eventHandler_.listen(this.tabBar_, goog.ui.Component.EventType.SELECT,
+<a name="line167"></a>      this.handleTabSelect_);
+<a name="line168"></a>
+<a name="line169"></a>  // Add the tab content.
+<a name="line170"></a>  root.appendChild(this.tabContent_);
+<a name="line171"></a>
+<a name="line172"></a>  // Add an element to clear the tab float.
+<a name="line173"></a>  root.appendChild(
+<a name="line174"></a>      this.dom_.createDom(goog.dom.TagName.DIV,
+<a name="line175"></a>          {className: goog.getCssName(&#39;goog-tab-bar-clear&#39;)}));
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Handles a tab change.
+<a name="line181"></a> * @param {goog.events.Event} e The browser change event.
+<a name="line182"></a> * @private
+<a name="line183"></a> */
+<a name="line184"></a>goog.ui.editor.TabPane.prototype.handleTabSelect_ = function(e) {
+<a name="line185"></a>  var tab = /** @type {goog.ui.Tab} */ (e.target);
+<a name="line186"></a>
+<a name="line187"></a>  // Show the tab content.
+<a name="line188"></a>  if (this.visibleContent_) {
+<a name="line189"></a>    goog.style.setElementShown(this.visibleContent_, false);
+<a name="line190"></a>  }
+<a name="line191"></a>  this.visibleContent_ = this.dom_.getElement(tab.getId() + &#39;-tab&#39;);
+<a name="line192"></a>  goog.style.setElementShown(this.visibleContent_, true);
+<a name="line193"></a>
+<a name="line194"></a>  // Select the appropriate radio button (and deselect the current one).
+<a name="line195"></a>  if (this.selectedRadio_) {
+<a name="line196"></a>    this.selectedRadio_.checked = false;
+<a name="line197"></a>  }
+<a name="line198"></a>  this.selectedRadio_ = tab.getElement().getElementsByTagName(
+<a name="line199"></a>      goog.dom.TagName.INPUT)[0];
+<a name="line200"></a>  this.selectedRadio_.checked = true;
+<a name="line201"></a>};
+</pre>
+
+
+</body>
+</html>

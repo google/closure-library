@@ -1,0 +1,2809 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>testing (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">testing</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_AsyncTestCase.html">
+          goog.testing.AsyncTestCase</a><br/>
+        <div class="class-details">A test case that is capable of running tests the contain asynchronous logic.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_ContinuationTestCase.html">
+          goog.testing.ContinuationTestCase</a><br/>
+        <div class="class-details">Constructs a test case that supports tests with continuations. Test functions
+may issue "wait" commands that suspend the test temporarily and continue once
+the wait condition is met.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_DeferredTestCase.html">
+          goog.testing.DeferredTestCase</a><br/>
+        <div class="class-details">A test case that can asynchronously wait on a Deferred object.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_ExpectedFailures.html">
+          goog.testing.ExpectedFailures</a><br/>
+        <div class="class-details">Helper class for allowing some unit tests to fail, particularly designed to
+mark tests that should be fixed on a given browser.
+
+<pre class="lang-js prettyprint">
+var expectedFailures = new goog.testing.ExpectedFailures();
+
+function tearDown() {
+  expectedFailures.handleTearDown();
+}
+
+function testSomethingThatBreaksInWebKit() {
+  expectedFailures.expectFailureFor(goog.userAgent.WEBKIT);
+
+  try {
+    ...
+    assert(somethingThatFailsInWebKit);
+    ...
+  } catch (e) {
+    expectedFailures.handleException(e);
+  }
+}
+</pre></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_FunctionCall.html">
+          goog.testing.FunctionCall</a><br/>
+        <div class="class-details">Struct for a single function call.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_JsUnitException.html">
+          goog.testing.JsUnitException</a><br/>
+        <div class="class-details"><span class='nodesc'>No description.</span></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_LooseExpectationCollection.html">
+          goog.testing.LooseExpectationCollection</a><br/>
+        <div class="class-details">This class is an ordered collection of expectations for one method. Since
+the loose mock does most of its verification at the time of $verify, this
+class is necessary to manage the return/throw behavior when the mock is
+being called.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_LooseMock.html">
+          goog.testing.LooseMock</a><br/>
+        <div class="class-details">This is a mock that does not care about the order of method calls. As a
+result, it won't throw exceptions until verify() is called. The only
+exception is that if a method is called that has no expectations, then an
+exception will be thrown.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_Mock.html">
+          goog.testing.Mock</a><br/>
+        <div class="class-details">The base class for a mock object.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_MockClassFactory.html">
+          goog.testing.MockClassFactory</a><br/>
+        <div class="class-details">A factory used to create new mock class instances.  It is able to generate
+both static and loose mocks.  The MockClassFactory is a singleton since it
+tracks the classes that have been mocked internally.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_MockClassRecord.html">
+          goog.testing.MockClassRecord</a><br/>
+        <div class="class-details">A record that represents all the data associated with a mock replacement of
+a given class.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_MockClock.html">
+          goog.testing.MockClock</a><br/>
+        <div class="class-details">Class for unit testing code that uses setTimeout and clearTimeout.
+
+NOTE: If you are using MockClock to test code that makes use of
+      goog.fx.Animation, then you must either:
+
+1. Install and dispose of the MockClock in setUpPage() and tearDownPage()
+   respectively (rather than setUp()/tearDown()).
+
+or
+
+2. Ensure that every test clears the animation queue by calling
+   mockClock.tick(x) at the end of each test function (where `x` is large
+   enough to complete all animations).
+
+Otherwise, if any animation is left pending at the time that
+MockClock.dispose() is called, that will permanently prevent any future
+animations from playing on the page.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_MockControl.html">
+          goog.testing.MockControl</a><br/>
+        <div class="class-details">Controls a set of mocks.  Controlled mocks are replayed, verified, and
+cleaned-up at the same time.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_MockExpectation.html">
+          goog.testing.MockExpectation</a><br/>
+        <div class="class-details">This is a class that represents an expectation.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="interface_goog_testing_MockInterface.html">
+          goog.testing.MockInterface</a><br/>
+        <div class="class-details"><span class='nodesc'>No description.</span></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_MockRandom.html">
+          goog.testing.MockRandom</a><br/>
+        <div class="class-details">Class for unit testing code that uses Math.random.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_MockRange.html">
+          goog.testing.MockRange</a><br/>
+        <div class="class-details">LooseMock of goog.dom.AbstractRange. Useful because the mock framework cannot
+simply create a mock out of an abstract class, and cannot create a mock out
+of classes that implements __iterator__ because it relies on the default
+behavior of iterating through all of an object's properties.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_MockStorage.html">
+          goog.testing.MockStorage</a><br/>
+        <div class="class-details">A JS storage instance, implementing the HMTL5 Storage interface.
+See <a href="http://www.w3.org/TR/webstorage/">http://www.w3.org/TR/webstorage/</a> for details.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_MockUserAgent.html">
+          goog.testing.MockUserAgent</a><br/>
+        <div class="class-details">Class for unit testing code that uses goog.userAgent.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_MultiTestRunner.html">
+          goog.testing.MultiTestRunner</a><br/>
+        <div class="class-details">A component for running multiple tests within the browser.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_ObjectPropertyString.html">
+          goog.testing.ObjectPropertyString</a><br/>
+        <div class="class-details">Object to pass a property name as a string literal and its containing object
+when the JSCompiler is rewriting these names. This should only be used in
+test code.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_PerformanceTable.html">
+          goog.testing.PerformanceTable</a><br/>
+        <div class="class-details">A UI widget that runs performance tests and displays the results.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_PerformanceTimer.html">
+          goog.testing.PerformanceTimer</a><br/>
+        <div class="class-details">Creates a performance timer that runs test functions a number of times to
+generate timing samples, and provides performance statistics (minimum,
+maximum, average, and standard deviation).
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_PropertyReplacer.html">
+          goog.testing.PropertyReplacer</a><br/>
+        <div class="class-details">Helper class for stubbing out variables and object properties for unit tests.
+This class can change the value of some variables before running the test
+cases, and to reset them in the tearDown phase.
+See googletest.StubOutForTesting as an analogy in Python:
+<a href="http://protobuf.googlecode.com/svn/trunk/python/stubout.py">http://protobuf.googlecode.com/svn/trunk/python/stubout.py</a>
+
+Example usage:
+<pre class="lang-js prettyprint">var stubs = new goog.testing.PropertyReplacer();
+
+function setUp() {
+  // Mock functions used in all test cases.
+  stubs.set(Math, 'random', function() {
+    return 4;  // Chosen by fair dice roll. Guaranteed to be random.
+  });
+}
+
+function tearDown() {
+  stubs.reset();
+}
+
+function testThreeDice() {
+  // Mock a constant used only in this test case.
+  stubs.set(goog.global, 'DICE_COUNT', 3);
+  assertEquals(12, rollAllDice());
+}</pre>
+
+Constraints on altered objects:
+<ul><li>DOM subclasses aren't supported.
+  <li>The value of the objects' constructor property must either be equal to
+      the real constructor or kept untouched.
+</li></li></ul></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_PseudoRandom.html">
+          goog.testing.PseudoRandom</a><br/>
+        <div class="class-details">Class for unit testing code that uses Math.random. Generates deterministic
+random numbers.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_ShardingTestCase.html">
+          goog.testing.ShardingTestCase</a><br/>
+        <div class="class-details">A test case that runs tests in per-file shards.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_StrictMock.html">
+          goog.testing.StrictMock</a><br/>
+        <div class="class-details">This is a mock that verifies that methods are called in the order that they
+are specified during the recording phase. Since it verifies order, it
+follows 'fail fast' semantics. If it detects a deviation from the
+expectations, it will throw an exception and not wait for verify to be
+called.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_TestCase.html">
+          goog.testing.TestCase</a><br/>
+        <div class="class-details">A class representing a JsUnit test case.  A TestCase is made up of a number
+of test functions which can be run.  Individual test cases can override the
+following functions to set up their test environment:
+  - runTests - completely override the test's runner
+  - setUpPage - called before any of the test functions are run
+  - tearDownPage - called after all tests are finished
+  - setUp - called before each of the test functions
+  - tearDown - called after each of the test functions
+  - shouldRunTests - called before a test run, all tests are skipped if it
+                     returns false.  Can be used to disable tests on browsers
+                     where they aren't expected to pass.
+
+Use <code> #autoDiscoverTests</code></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_TestQueue.html">
+          goog.testing.TestQueue</a><br/>
+        <div class="class-details">Generic queue for writing unit tests
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_testing_TestRunner.html">
+          goog.testing.TestRunner</a><br/>
+        <div class="class-details">Construct a test runner.
+
+NOTE(user): This is currently pretty weird, I'm essentially trying to
+create a wrapper that the Selenium test can hook into to query the state of
+the running test case, while making goog.testing.TestCase general.
+
+</div>
+ </div>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.FunctionMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">FunctionMock<span class="args">(<span class="arg">opt_functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Class used to mock a function. Useful for mocking closures and anonymous
+callbacks etc. Creates a function object that extends goog.testing.Mock.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_functionName</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">The optional name of the function to mock.
+    Set to '[anonymous mocked function]' if not passed in.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line46">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.GlobalFunctionMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">GlobalFunctionMock<span class="args">(<span class="arg">functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Mocks a global / top-level function. Creates a goog.testing.MethodMock
+in the global scope with the name specified by functionName.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">functionName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the function we're going to mock.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked global function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line101">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.MethodMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">MethodMock<span class="args">(<span class="arg">scope</span>,&nbsp;<span class="arg">functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Mocks an existing function. Creates a goog.testing.FunctionMock
+and registers it in the given scope with the name specified by functionName.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">scope</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">The scope of the method to be mocked out.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">functionName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the function we're going to mock.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked method.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line69">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.createConstructorMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">createConstructorMock<span class="args">(<span class="arg">scope</span>,&nbsp;<span class="arg">constructorName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Convenience method for creating a mock for a constructor. Copies class
+members to the mock.
+
+<p>When mocking a constructor to return a mocked instance, remember to create
+the instance mock before mocking the constructor. If you mock the constructor
+first, then the mock framework will be unable to examine the prototype chain
+when creating the mock instance.
+</p>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">scope</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">The scope of the constructor to be mocked out.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">constructorName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the constructor we're going to
+    mock.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked constructor.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line147">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.createFunctionMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">createFunctionMock<span class="args">(<span class="arg">opt_functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Convenience method for creating a mock for a function.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_functionName</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">The optional name of the function to mock
+    set to '[anonymous mocked function]' if not passed in.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line114">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.createGlobalFunctionMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">createGlobalFunctionMock<span class="args">(<span class="arg">functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Convenience method for creating a mocks for a global / top-level function.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">functionName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the function we're going to mock.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked global function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line175">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.createMethodMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">createMethodMock<span class="args">(<span class="arg">scope</span>,&nbsp;<span class="arg">functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Convenience method for creating a mock for a method.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">scope</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">The scope of the method to be mocked out.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">functionName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the function we're going to mock.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked global function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line127">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.recordConstructor"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">recordConstructor<span class="args">(<span class="arg">ctor</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Same as <code> goog.testing.recordFunction</code> but the recorded function will
+have the same prototype and static fields as the original one. It can be
+used with constructors.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">ctor</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+        <div class="entryOverview">The function to wrap and record.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>&nbsp;
+            The wrapped function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_recordfunction.js.source.html#line140">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.recordFunction"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">recordFunction<span class="args">(<span class="arg">opt_f</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Wraps the function into another one which calls the inner function and
+records its calls. The recorded function will have 3 static methods:
+<code> getCallCount</code>, <code> getCalls</code> and <code> getLastCall</code> but won't
+inherit the original function's prototype and static fields.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_f</span>
+        : <span>!</span><span class="type">Function=</span>
+        <div class="entryOverview">The function to wrap and record. Defaults to
+    <code> goog.nullFunction</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>&nbsp;
+            The wrapped function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_recordfunction.js.source.html#line61">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.AsyncTestCaseAsyncTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">AsyncTestCaseAsyncTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_asynctestcase_async_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.AsyncTestCaseSyncTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">AsyncTestCaseSyncTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_asynctestcase_noasync_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.AsyncTestCaseTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">AsyncTestCaseTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_asynctestcase_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.ContinuationTestCaseTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">ContinuationTestCaseTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_continuationtestcase_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.DeferredTestCaseTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">DeferredTestCaseTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_deferredtestcase_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.ExpectedFailuresTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">ExpectedFailuresTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_expectedfailures_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.FunctionMockTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">FunctionMockTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.LooseMockTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">LooseMockTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_loosemock_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.MockClassFactoryTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">MockClassFactoryTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_mockclassfactory_test.js.source.html#line21">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.MockClockTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">MockClockTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_mockclock_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.MockControlTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">MockControlTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_mockcontrol_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.MockRandomTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">MockRandomTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_mockrandom_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.MockRangeTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">MockRangeTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_mockrange_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.MockStorageTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">MockStorageTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_mockstorage_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.MockTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">MockTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_mock_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.MockUserAgentTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">MockUserAgentTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_mockuseragent_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.PerformanceTimerTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">PerformanceTimerTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_performancetimer_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.PropertyReplacerTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">PropertyReplacerTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_propertyreplacer_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.PseudoRandomTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">PseudoRandomTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_pseudorandom_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.ShardingTestCaseTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">ShardingTestCaseTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_shardingtestcase_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.StrictMockTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">StrictMockTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_strictmock_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.asserts"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">asserts</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_asserts.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.assertsTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">assertsTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_asserts_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.async"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">async</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_async_mockcontrol.js.source.html#line47">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.benchmark"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">benchmark</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_benchmark.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.dom"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">dom</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_dom.js.source.html#line21">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.domTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">domTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_dom_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.editor"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">editor</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_editor_dom.js.source.html#line20">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.events"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">events</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_events_eventobserver.js.source.html#line35">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.eventsTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">eventsTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_events_events_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.fs"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">fs</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_fs_progressevent.js.source.html#line20">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.fsTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">fsTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_fs_fs_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.graphics"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">graphics</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_graphics.js.source.html#line21">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.i18n"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">i18n</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_i18n_asserts.js.source.html#line43">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.jsunit"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">jsunit</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_jsunit.js.source.html#line24">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.messaging"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">messaging</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_messaging_mockmessagechannel.js.source.html#line22">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.mockmatchers"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">mockmatchers</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_mockmatchers.js.source.html#line25">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.mockmatchersTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">mockmatchersTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_mockmatchers_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.net"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">net</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_net_xhrio.js.source.html#line19">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.proto2"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">proto2</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_proto2_proto2.js.source.html#line20">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.proto2Test"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">proto2Test</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_proto2_proto2_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.recordFunctionTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">recordFunctionTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_recordfunction_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.singleton"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">singleton</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_singleton.js.source.html#line27">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.singletonTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">singletonTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_singleton_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.stacktrace"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">stacktrace</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_stacktrace.js.source.html#line20">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.stacktraceTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">stacktraceTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_stacktrace_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.storage"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">storage</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_storage_fakemechanism.js.source.html#line19">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.style"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">style</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_style_style.js.source.html#line21">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.styleTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">styleTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_style_style_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.ui"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">ui</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_ui_rendererasserts.js.source.html#line21">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.testing.watchers"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">watchers</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_watchers.js.source.html#line21">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package testing</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="testing"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

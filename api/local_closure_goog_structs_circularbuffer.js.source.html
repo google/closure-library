@@ -1,0 +1,267 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>circularbuffer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_structs_circularbuffer.js.html">circularbuffer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Datastructure: Circular Buffer.
+<a name="line18"></a> *
+<a name="line19"></a> * Implements a buffer with a maximum size. New entries override the oldest
+<a name="line20"></a> * entries when the maximum size has been reached.
+<a name="line21"></a> *
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.structs.CircularBuffer&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Class for CircularBuffer.
+<a name="line31"></a> * @param {number=} opt_maxSize The maximum size of the buffer.
+<a name="line32"></a> * @constructor
+<a name="line33"></a> * @template T
+<a name="line34"></a> */
+<a name="line35"></a>goog.structs.CircularBuffer = function(opt_maxSize) {
+<a name="line36"></a>  /**
+<a name="line37"></a>   * Index of the next element in the circular array structure.
+<a name="line38"></a>   * @private {number}
+<a name="line39"></a>   */
+<a name="line40"></a>  this.nextPtr_ = 0;
+<a name="line41"></a>
+<a name="line42"></a>  /**
+<a name="line43"></a>   * Maximum size of the the circular array structure.
+<a name="line44"></a>   * @private {number}
+<a name="line45"></a>   */
+<a name="line46"></a>  this.maxSize_ = opt_maxSize || 100;
+<a name="line47"></a>
+<a name="line48"></a>  /**
+<a name="line49"></a>   * Underlying array for the CircularBuffer.
+<a name="line50"></a>   * @private {!Array.&lt;T&gt;}
+<a name="line51"></a>   */
+<a name="line52"></a>  this.buff_ = [];
+<a name="line53"></a>};
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * Adds an item to the buffer. May remove the oldest item if the buffer is at
+<a name="line58"></a> * max size.
+<a name="line59"></a> * @param {T} item The item to add.
+<a name="line60"></a> * @return {T|undefined} The removed old item, if the buffer is at max size.
+<a name="line61"></a> *     Return undefined, otherwise.
+<a name="line62"></a> */
+<a name="line63"></a>goog.structs.CircularBuffer.prototype.add = function(item) {
+<a name="line64"></a>  var previousItem = this.buff_[this.nextPtr_];
+<a name="line65"></a>  this.buff_[this.nextPtr_] = item;
+<a name="line66"></a>  this.nextPtr_ = (this.nextPtr_ + 1) % this.maxSize_;
+<a name="line67"></a>  return previousItem;
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Returns the item at the specified index.
+<a name="line73"></a> * @param {number} index The index of the item. The index of an item can change
+<a name="line74"></a> *     after calls to {@code add()} if the buffer is at maximum size.
+<a name="line75"></a> * @return {T} The item at the specified index.
+<a name="line76"></a> */
+<a name="line77"></a>goog.structs.CircularBuffer.prototype.get = function(index) {
+<a name="line78"></a>  index = this.normalizeIndex_(index);
+<a name="line79"></a>  return this.buff_[index];
+<a name="line80"></a>};
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Sets the item at the specified index.
+<a name="line85"></a> * @param {number} index The index of the item. The index of an item can change
+<a name="line86"></a> *     after calls to {@code add()} if the buffer is at maximum size.
+<a name="line87"></a> * @param {T} item The item to add.
+<a name="line88"></a> */
+<a name="line89"></a>goog.structs.CircularBuffer.prototype.set = function(index, item) {
+<a name="line90"></a>  index = this.normalizeIndex_(index);
+<a name="line91"></a>  this.buff_[index] = item;
+<a name="line92"></a>};
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * Returns the current number of items in the buffer.
+<a name="line97"></a> * @return {number} The current number of items in the buffer.
+<a name="line98"></a> */
+<a name="line99"></a>goog.structs.CircularBuffer.prototype.getCount = function() {
+<a name="line100"></a>  return this.buff_.length;
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * @return {boolean} Whether the buffer is empty.
+<a name="line106"></a> */
+<a name="line107"></a>goog.structs.CircularBuffer.prototype.isEmpty = function() {
+<a name="line108"></a>  return this.buff_.length == 0;
+<a name="line109"></a>};
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Empties the current buffer.
+<a name="line114"></a> */
+<a name="line115"></a>goog.structs.CircularBuffer.prototype.clear = function() {
+<a name="line116"></a>  this.buff_.length = 0;
+<a name="line117"></a>  this.nextPtr_ = 0;
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/** @return {!Array.&lt;T&gt;} The values in the buffer. */
+<a name="line122"></a>goog.structs.CircularBuffer.prototype.getValues = function() {
+<a name="line123"></a>  // getNewestValues returns all the values if the maxCount parameter is the
+<a name="line124"></a>  // count
+<a name="line125"></a>  return this.getNewestValues(this.getCount());
+<a name="line126"></a>};
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * Returns the newest values in the buffer up to {@code count}.
+<a name="line131"></a> * @param {number} maxCount The maximum number of values to get. Should be a
+<a name="line132"></a> *     positive number.
+<a name="line133"></a> * @return {!Array.&lt;T&gt;} The newest values in the buffer up to {@code count}.
+<a name="line134"></a> */
+<a name="line135"></a>goog.structs.CircularBuffer.prototype.getNewestValues = function(maxCount) {
+<a name="line136"></a>  var l = this.getCount();
+<a name="line137"></a>  var start = this.getCount() - maxCount;
+<a name="line138"></a>  var rv = [];
+<a name="line139"></a>  for (var i = start; i &lt; l; i++) {
+<a name="line140"></a>    rv.push(this.get(i));
+<a name="line141"></a>  }
+<a name="line142"></a>  return rv;
+<a name="line143"></a>};
+<a name="line144"></a>
+<a name="line145"></a>
+<a name="line146"></a>/** @return {!Array.&lt;number&gt;} The indexes in the buffer. */
+<a name="line147"></a>goog.structs.CircularBuffer.prototype.getKeys = function() {
+<a name="line148"></a>  var rv = [];
+<a name="line149"></a>  var l = this.getCount();
+<a name="line150"></a>  for (var i = 0; i &lt; l; i++) {
+<a name="line151"></a>    rv[i] = i;
+<a name="line152"></a>  }
+<a name="line153"></a>  return rv;
+<a name="line154"></a>};
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Whether the buffer contains the key/index.
+<a name="line159"></a> * @param {number} key The key/index to check for.
+<a name="line160"></a> * @return {boolean} Whether the buffer contains the key/index.
+<a name="line161"></a> */
+<a name="line162"></a>goog.structs.CircularBuffer.prototype.containsKey = function(key) {
+<a name="line163"></a>  return key &lt; this.getCount();
+<a name="line164"></a>};
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a>/**
+<a name="line168"></a> * Whether the buffer contains the given value.
+<a name="line169"></a> * @param {T} value The value to check for.
+<a name="line170"></a> * @return {boolean} Whether the buffer contains the given value.
+<a name="line171"></a> */
+<a name="line172"></a>goog.structs.CircularBuffer.prototype.containsValue = function(value) {
+<a name="line173"></a>  var l = this.getCount();
+<a name="line174"></a>  for (var i = 0; i &lt; l; i++) {
+<a name="line175"></a>    if (this.get(i) == value) {
+<a name="line176"></a>      return true;
+<a name="line177"></a>    }
+<a name="line178"></a>  }
+<a name="line179"></a>  return false;
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Returns the last item inserted into the buffer.
+<a name="line185"></a> * @return {T|null} The last item inserted into the buffer,
+<a name="line186"></a> *     or null if the buffer is empty.
+<a name="line187"></a> */
+<a name="line188"></a>goog.structs.CircularBuffer.prototype.getLast = function() {
+<a name="line189"></a>  if (this.getCount() == 0) {
+<a name="line190"></a>    return null;
+<a name="line191"></a>  }
+<a name="line192"></a>  return this.get(this.getCount() - 1);
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Helper function to convert an index in the number space of oldest to
+<a name="line198"></a> * newest items in the array to the position that the element will be at in the
+<a name="line199"></a> * underlying array.
+<a name="line200"></a> * @param {number} index The index of the item in a list ordered from oldest to
+<a name="line201"></a> *     newest.
+<a name="line202"></a> * @return {number} The index of the item in the CircularBuffer&#39;s underlying
+<a name="line203"></a> *     array.
+<a name="line204"></a> * @private
+<a name="line205"></a> */
+<a name="line206"></a>goog.structs.CircularBuffer.prototype.normalizeIndex_ = function(index) {
+<a name="line207"></a>  if (index &gt;= this.buff_.length) {
+<a name="line208"></a>    throw Error(&#39;Out of bounds exception&#39;);
+<a name="line209"></a>  }
+<a name="line210"></a>
+<a name="line211"></a>  if (this.buff_.length &lt; this.maxSize_) {
+<a name="line212"></a>    return index;
+<a name="line213"></a>  }
+<a name="line214"></a>
+<a name="line215"></a>  return (this.nextPtr_ + Number(index)) % this.maxSize_;
+<a name="line216"></a>};
+</pre>
+
+
+</body>
+</html>

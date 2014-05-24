@@ -1,0 +1,170 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>transition_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_style_transition_test.js.html">transition_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.style.transitionTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.style.transitionTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.style&#39;);
+<a name="line19"></a>goog.require(&#39;goog.style.transition&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>/** Fake element. */
+<a name="line25"></a>var element;
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>function setUp() {
+<a name="line29"></a>  element = {&#39;style&#39;: {}};
+<a name="line30"></a>}
+<a name="line31"></a>
+<a name="line32"></a>function getTransitionStyle(element) {
+<a name="line33"></a>  return element.style[&#39;transition&#39;] ||
+<a name="line34"></a>      goog.style.getStyle(element, &#39;transition&#39;);
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>function testSetWithNoProperty() {
+<a name="line39"></a>  try {
+<a name="line40"></a>    goog.style.transition.set(element, []);
+<a name="line41"></a>  } catch (e) {
+<a name="line42"></a>    return;
+<a name="line43"></a>  }
+<a name="line44"></a>  fail(&#39;Should fail when no property is given.&#39;);
+<a name="line45"></a>}
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>function testSetWithString() {
+<a name="line49"></a>  goog.style.transition.set(element, &#39;opacity 1s ease-in 0.125s&#39;);
+<a name="line50"></a>  assertEquals(&#39;opacity 1s ease-in 0.125s&#39;, getTransitionStyle(element));
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>function testSetWithSingleProperty() {
+<a name="line55"></a>  goog.style.transition.set(element,
+<a name="line56"></a>      {property: &#39;opacity&#39;, duration: 1, timing: &#39;ease-in&#39;, delay: 0.125});
+<a name="line57"></a>  assertEquals(&#39;opacity 1s ease-in 0.125s&#39;, getTransitionStyle(element));
+<a name="line58"></a>}
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>function testSetWithMultipleStrings() {
+<a name="line62"></a>  goog.style.transition.set(element, [
+<a name="line63"></a>    &#39;width 1s ease-in&#39;,
+<a name="line64"></a>    &#39;height 0.5s linear 1s&#39;
+<a name="line65"></a>  ]);
+<a name="line66"></a>  assertEquals(&#39;width 1s ease-in,height 0.5s linear 1s&#39;,
+<a name="line67"></a>               getTransitionStyle(element));
+<a name="line68"></a>}
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>function testSetWithMultipleProperty() {
+<a name="line72"></a>  goog.style.transition.set(element, [
+<a name="line73"></a>    {property: &#39;width&#39;, duration: 1, timing: &#39;ease-in&#39;, delay: 0},
+<a name="line74"></a>    {property: &#39;height&#39;, duration: 0.5, timing: &#39;linear&#39;, delay: 1}
+<a name="line75"></a>  ]);
+<a name="line76"></a>  assertEquals(&#39;width 1s ease-in 0s,height 0.5s linear 1s&#39;,
+<a name="line77"></a>      getTransitionStyle(element));
+<a name="line78"></a>}
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>function testRemoveAll() {
+<a name="line82"></a>  goog.style.setStyle(element, &#39;transition&#39;, &#39;opacity 1s ease-in&#39;);
+<a name="line83"></a>  goog.style.transition.removeAll(element);
+<a name="line84"></a>  assertEquals(&#39;&#39;, getTransitionStyle(element));
+<a name="line85"></a>}
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>function testAddAndRemoveOnRealElement() {
+<a name="line89"></a>  if (!goog.style.transition.isSupported()) {
+<a name="line90"></a>    return;
+<a name="line91"></a>  }
+<a name="line92"></a>
+<a name="line93"></a>  var div = document.getElementById(&#39;test&#39;);
+<a name="line94"></a>  goog.style.transition.set(div, &#39;opacity 1s ease-in 0.125s&#39;);
+<a name="line95"></a>  assertEquals(&#39;opacity 1s ease-in 0.125s&#39;, getTransitionStyle(div));
+<a name="line96"></a>  goog.style.transition.removeAll(div);
+<a name="line97"></a>  assertEquals(&#39;&#39;, getTransitionStyle(div));
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>function testSanityDetectionOfCss3Transition() {
+<a name="line102"></a>  var support = goog.style.transition.isSupported();
+<a name="line103"></a>
+<a name="line104"></a>  // IE support starts at IE10.
+<a name="line105"></a>  if (goog.userAgent.IE) {
+<a name="line106"></a>    assertEquals(goog.userAgent.isVersionOrHigher(&#39;10.0&#39;), support);
+<a name="line107"></a>  }
+<a name="line108"></a>
+<a name="line109"></a>  // FF support start at FF4 (Gecko 2.0)
+<a name="line110"></a>  if (goog.userAgent.GECKO) {
+<a name="line111"></a>    assertEquals(goog.userAgent.isVersionOrHigher(&#39;2.0&#39;), support);
+<a name="line112"></a>  }
+<a name="line113"></a>
+<a name="line114"></a>  // Webkit support has existed for a long time, we assume support on
+<a name="line115"></a>  // most webkit version in used today.
+<a name="line116"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line117"></a>    assertTrue(support);
+<a name="line118"></a>  }
+<a name="line119"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,845 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>log (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">log</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_log_Level.html">
+          goog.log.Level</a><br/>
+        <div class="class-details"><span class='nodesc'>No description.</span></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_log_LogRecord.html">
+          goog.log.LogRecord</a><br/>
+        <div class="class-details"><span class='nodesc'>No description.</span></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_log_Logger.html">
+          goog.log.Logger</a><br/>
+        <div class="class-details"><span class='nodesc'>No description.</span></div>
+ </div>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.log.addHandler"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.log.</span><span class="entryName">addHandler<span class="args">(<span class="arg">logger</span>,&nbsp;<span class="arg">handler</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds a handler to the logger. This doesn't use the event system because
+we want to be able to add logging to the event system.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">logger</span>
+        : <span class="type"><a href="class_goog_log_Logger.html">goog.log.Logger</a></span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">handler</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+        <div class="entryOverview">Handler function to add.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_log_log.js.source.html#line100">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.log.error"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.log.</span><span class="entryName">error<span class="args">(<span class="arg">logger</span>,&nbsp;<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Level.SEVERE level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">logger</span>
+        : <span class="type"><a href="class_goog_log_Logger.html">goog.log.Logger</a></span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_log_log.js.source.html#line148">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.log.fine"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.log.</span><span class="entryName">fine<span class="args">(<span class="arg">logger</span>,&nbsp;<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Level.Fine level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">logger</span>
+        : <span class="type"><a href="class_goog_log_Logger.html">goog.log.Logger</a></span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_log_log.js.source.html#line193">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.log.getLogger"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.log.</span><span class="entryName">getLogger<span class="args">(<span class="arg">name</span>,&nbsp;<span class="arg">opt_level</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_log_Logger.html">goog.log.Logger</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Finds or creates a logger for a named subsystem. If a logger has already been
+created with the given name it is returned. Otherwise a new logger is
+created. If a new logger is created its log level will be configured based
+on the goog.debug.LogManager configuration and it will configured to also
+send logging output to its parent's handlers.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">name</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A name for the logger. This should be a dot-separated
+    name and should normally be based on the package name or class name of
+    the subsystem, such as goog.net.BrowserChannel.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_level</span>
+        : <span class="type">goog.log.Level=</span>
+        <div class="entryOverview">If provided, override the
+    default logging level with the provided level.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_log_Logger.html">goog.log.Logger</a></span>&nbsp;
+            The named logger or null if logging is disabled.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_log_log.js.source.html#line80">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.log.info"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.log.</span><span class="entryName">info<span class="args">(<span class="arg">logger</span>,&nbsp;<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Level.INFO level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">logger</span>
+        : <span class="type"><a href="class_goog_log_Logger.html">goog.log.Logger</a></span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_log_log.js.source.html#line178">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.log.log"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.log.</span><span class="entryName">log<span class="args">(<span class="arg">logger</span>,&nbsp;<span class="arg">level</span>,&nbsp;<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message. If the logger is currently enabled for the
+given message level then the given message is forwarded to all the
+registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">logger</span>
+        : <span class="type"><a href="class_goog_log_Logger.html">goog.log.Logger</a></span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">level</span>
+        : <span class="type"><a href="class_goog_log_Level.html">goog.log.Level</a></span>
+        <div class="entryOverview">One of the level identifiers.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error</span><span>&nbsp;|&nbsp;</span><span class="type">Object=</span>
+        <div class="entryOverview">An exception associated with the
+    message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_log_log.js.source.html#line133">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.log.removeHandler"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.log.</span><span class="entryName">removeHandler<span class="args">(<span class="arg">logger</span>,&nbsp;<span class="arg">handler</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Removes a handler from the logger. This doesn't use the event system because
+we want to be able to add logging to the event system.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">logger</span>
+        : <span class="type"><a href="class_goog_log_Logger.html">goog.log.Logger</a></span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">handler</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Function">Function</a></span>
+        <div class="entryOverview">Handler function to remove.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the handler was removed.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_log_log.js.source.html#line114">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.log.warning"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.log.</span><span class="entryName">warning<span class="args">(<span class="arg">logger</span>,&nbsp;<span class="arg">msg</span>,&nbsp;<span class="arg">opt_exception</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Logs a message at the Level.WARNING level.
+If the logger is currently enabled for the given message level then the
+given message is forwarded to all the registered output Handler objects.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">logger</span>
+        : <span class="type"><a href="class_goog_log_Logger.html">goog.log.Logger</a></span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">msg</span>
+        : <span class="type">goog.debug.Loggable</span>
+        <div class="entryOverview">The message to log.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_exception</span>
+        : <span class="type">Error=</span>
+        <div class="entryOverview">An exception associated with the message.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_log_log.js.source.html#line163">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.log.ENABLED"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.log.</span><span class="entryName">ENABLED</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_log_log.js.source.html#line34">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.log.ROOT_LOGGER_NAME"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.log.</span><span class="entryName">ROOT_LOGGER_NAME</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_log_log.js.source.html#line38">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package log</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="log"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

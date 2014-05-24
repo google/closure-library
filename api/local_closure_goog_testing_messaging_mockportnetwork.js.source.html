@@ -1,0 +1,117 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mockportnetwork.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_messaging_mockportnetwork.js.html">mockportnetwork.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A fake PortNetwork implementation that simply produces
+<a name="line17"></a> * MockMessageChannels for all ports.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.testing.messaging.MockPortNetwork&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.messaging.PortNetwork&#39;); // interface
+<a name="line24"></a>goog.require(&#39;goog.testing.messaging.MockMessageChannel&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * The fake PortNetwork.
+<a name="line30"></a> *
+<a name="line31"></a> * @param {!goog.testing.MockControl} mockControl The mock control for creating
+<a name="line32"></a> *     the mock message channels.
+<a name="line33"></a> * @constructor
+<a name="line34"></a> * @implements {goog.messaging.PortNetwork}
+<a name="line35"></a> * @final
+<a name="line36"></a> */
+<a name="line37"></a>goog.testing.messaging.MockPortNetwork = function(mockControl) {
+<a name="line38"></a>  /**
+<a name="line39"></a>   * The mock control for creating mock message channels.
+<a name="line40"></a>   * @type {!goog.testing.MockControl}
+<a name="line41"></a>   * @private
+<a name="line42"></a>   */
+<a name="line43"></a>  this.mockControl_ = mockControl;
+<a name="line44"></a>
+<a name="line45"></a>  /**
+<a name="line46"></a>   * The mock ports that have been created.
+<a name="line47"></a>   * @type {!Object.&lt;!goog.testing.messaging.MockMessageChannel&gt;}
+<a name="line48"></a>   * @private
+<a name="line49"></a>   */
+<a name="line50"></a>  this.ports_ = {};
+<a name="line51"></a>};
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Get the mock port with the given name.
+<a name="line56"></a> * @param {string} name The name of the port to get.
+<a name="line57"></a> * @return {!goog.testing.messaging.MockMessageChannel} The mock port.
+<a name="line58"></a> * @override
+<a name="line59"></a> */
+<a name="line60"></a>goog.testing.messaging.MockPortNetwork.prototype.dial = function(name) {
+<a name="line61"></a>  if (!(name in this.ports_)) {
+<a name="line62"></a>    this.ports_[name] =
+<a name="line63"></a>        new goog.testing.messaging.MockMessageChannel(this.mockControl_);
+<a name="line64"></a>  }
+<a name="line65"></a>  return this.ports_[name];
+<a name="line66"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,1296 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>numberformat.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_numberformat.js.html">numberformat.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Number format/parse library with locale support.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>
+<a name="line20"></a>/**
+<a name="line21"></a> * Namespace for locale number format functions
+<a name="line22"></a> */
+<a name="line23"></a>goog.provide(&#39;goog.i18n.NumberFormat&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.i18n.NumberFormat.CurrencyStyle&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.i18n.NumberFormat.Format&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line28"></a>goog.require(&#39;goog.i18n.CompactNumberFormatSymbols&#39;);
+<a name="line29"></a>goog.require(&#39;goog.i18n.NumberFormatSymbols&#39;);
+<a name="line30"></a>goog.require(&#39;goog.i18n.currency&#39;);
+<a name="line31"></a>goog.require(&#39;goog.math&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Constructor of NumberFormat.
+<a name="line37"></a> * @param {number|string} pattern The number that indicates a predefined
+<a name="line38"></a> *     number format pattern.
+<a name="line39"></a> * @param {string=} opt_currency Optional international currency
+<a name="line40"></a> *     code. This determines the currency code/symbol used in format/parse. If
+<a name="line41"></a> *     not given, the currency code for current locale will be used.
+<a name="line42"></a> * @param {number=} opt_currencyStyle currency style, value defined in
+<a name="line43"></a> *        goog.i18n.NumberFormat.CurrencyStyle.
+<a name="line44"></a> * @constructor
+<a name="line45"></a> */
+<a name="line46"></a>goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
+<a name="line47"></a>  this.intlCurrencyCode_ = opt_currency ||
+<a name="line48"></a>      goog.i18n.NumberFormatSymbols.DEF_CURRENCY_CODE;
+<a name="line49"></a>
+<a name="line50"></a>  this.currencyStyle_ = opt_currencyStyle ||
+<a name="line51"></a>      goog.i18n.NumberFormat.CurrencyStyle.LOCAL;
+<a name="line52"></a>
+<a name="line53"></a>  this.maximumIntegerDigits_ = 40;
+<a name="line54"></a>  this.minimumIntegerDigits_ = 1;
+<a name="line55"></a>  this.significantDigits_ = 0; // invariant, &lt;= maximumFractionDigits
+<a name="line56"></a>  this.maximumFractionDigits_ = 3; // invariant, &gt;= minFractionDigits
+<a name="line57"></a>  this.minimumFractionDigits_ = 0;
+<a name="line58"></a>  this.minExponentDigits_ = 0;
+<a name="line59"></a>  this.useSignForPositiveExponent_ = false;
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * Whether to show trailing zeros in the fraction when significantDigits_ is
+<a name="line63"></a>   * positive.
+<a name="line64"></a>   * @private {boolean}
+<a name="line65"></a>   */
+<a name="line66"></a>  this.showTrailingZeros_ = false;
+<a name="line67"></a>
+<a name="line68"></a>  this.positivePrefix_ = &#39;&#39;;
+<a name="line69"></a>  this.positiveSuffix_ = &#39;&#39;;
+<a name="line70"></a>  this.negativePrefix_ = &#39;-&#39;;
+<a name="line71"></a>  this.negativeSuffix_ = &#39;&#39;;
+<a name="line72"></a>
+<a name="line73"></a>  // The multiplier for use in percent, per mille, etc.
+<a name="line74"></a>  this.multiplier_ = 1;
+<a name="line75"></a>  this.groupingSize_ = 3;
+<a name="line76"></a>  this.decimalSeparatorAlwaysShown_ = false;
+<a name="line77"></a>  this.useExponentialNotation_ = false;
+<a name="line78"></a>  this.compactStyle_ = goog.i18n.NumberFormat.CompactStyle.NONE;
+<a name="line79"></a>
+<a name="line80"></a>  /**
+<a name="line81"></a>   * The number to base the formatting on when using compact styles, or null
+<a name="line82"></a>   * if formatting should not be based on another number.
+<a name="line83"></a>   * @type {?number}
+<a name="line84"></a>   * @private
+<a name="line85"></a>   */
+<a name="line86"></a>  this.baseFormattingNumber_ = null;
+<a name="line87"></a>
+<a name="line88"></a>  if (typeof pattern == &#39;number&#39;) {
+<a name="line89"></a>    this.applyStandardPattern_(pattern);
+<a name="line90"></a>  } else {
+<a name="line91"></a>    this.applyPattern_(pattern);
+<a name="line92"></a>  }
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Standard number formatting patterns.
+<a name="line98"></a> * @enum {number}
+<a name="line99"></a> */
+<a name="line100"></a>goog.i18n.NumberFormat.Format = {
+<a name="line101"></a>  DECIMAL: 1,
+<a name="line102"></a>  SCIENTIFIC: 2,
+<a name="line103"></a>  PERCENT: 3,
+<a name="line104"></a>  CURRENCY: 4,
+<a name="line105"></a>  COMPACT_SHORT: 5,
+<a name="line106"></a>  COMPACT_LONG: 6
+<a name="line107"></a>};
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>/**
+<a name="line111"></a> * Currency styles.
+<a name="line112"></a> * @enum {number}
+<a name="line113"></a> */
+<a name="line114"></a>goog.i18n.NumberFormat.CurrencyStyle = {
+<a name="line115"></a>  LOCAL: 0,     // currency style as it is used in its circulating country.
+<a name="line116"></a>  PORTABLE: 1,  // currency style that differentiate it from other popular ones.
+<a name="line117"></a>  GLOBAL: 2     // currency style that is unique among all currencies.
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Compacting styles.
+<a name="line123"></a> * @enum {number}
+<a name="line124"></a> */
+<a name="line125"></a>goog.i18n.NumberFormat.CompactStyle = {
+<a name="line126"></a>  NONE: 0,  // Don&#39;t compact.
+<a name="line127"></a>  SHORT: 1, // Short compact form, such as 1.2B.
+<a name="line128"></a>  LONG: 2  // Long compact form, such as 1.2 billion.
+<a name="line129"></a>};
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * If the usage of Ascii digits should be enforced.
+<a name="line134"></a> * @type {boolean}
+<a name="line135"></a> * @private
+<a name="line136"></a> */
+<a name="line137"></a>goog.i18n.NumberFormat.enforceAsciiDigits_ = false;
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * Set if the usage of Ascii digits in formatting should be enforced.
+<a name="line142"></a> * @param {boolean} doEnforce Boolean value about if Ascii digits should be
+<a name="line143"></a> *     enforced.
+<a name="line144"></a> */
+<a name="line145"></a>goog.i18n.NumberFormat.setEnforceAsciiDigits = function(doEnforce) {
+<a name="line146"></a>  goog.i18n.NumberFormat.enforceAsciiDigits_ = doEnforce;
+<a name="line147"></a>};
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Return if Ascii digits is enforced.
+<a name="line152"></a> * @return {boolean} If Ascii digits is enforced.
+<a name="line153"></a> */
+<a name="line154"></a>goog.i18n.NumberFormat.isEnforceAsciiDigits = function() {
+<a name="line155"></a>  return goog.i18n.NumberFormat.enforceAsciiDigits_;
+<a name="line156"></a>};
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * Sets minimum number of fraction digits.
+<a name="line161"></a> * @param {number} min the minimum.
+<a name="line162"></a> * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
+<a name="line163"></a> */
+<a name="line164"></a>goog.i18n.NumberFormat.prototype.setMinimumFractionDigits = function(min) {
+<a name="line165"></a>  if (this.significantDigits_ &gt; 0 &amp;&amp; min &gt; 0) {
+<a name="line166"></a>    throw Error(
+<a name="line167"></a>        &#39;Can\&#39;t combine significant digits and minimum fraction digits&#39;);
+<a name="line168"></a>  }
+<a name="line169"></a>  this.minimumFractionDigits_ = min;
+<a name="line170"></a>  return this;
+<a name="line171"></a>};
+<a name="line172"></a>
+<a name="line173"></a>
+<a name="line174"></a>/**
+<a name="line175"></a> * Sets maximum number of fraction digits.
+<a name="line176"></a> * @param {number} max the maximum.
+<a name="line177"></a> * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
+<a name="line178"></a> */
+<a name="line179"></a>goog.i18n.NumberFormat.prototype.setMaximumFractionDigits = function(max) {
+<a name="line180"></a>  this.maximumFractionDigits_ = max;
+<a name="line181"></a>  return this;
+<a name="line182"></a>};
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Sets number of significant digits to show. Only fractions will be rounded.
+<a name="line187"></a> * @param {number} number The number of significant digits to include.
+<a name="line188"></a> * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
+<a name="line189"></a> */
+<a name="line190"></a>goog.i18n.NumberFormat.prototype.setSignificantDigits = function(number) {
+<a name="line191"></a>  if (this.minimumFractionDigits_ &gt; 0 &amp;&amp; number &gt;= 0) {
+<a name="line192"></a>    throw Error(
+<a name="line193"></a>        &#39;Can\&#39;t combine significant digits and minimum fraction digits&#39;);
+<a name="line194"></a>  }
+<a name="line195"></a>  this.significantDigits_ = number;
+<a name="line196"></a>  return this;
+<a name="line197"></a>};
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Gets number of significant digits to show. Only fractions will be rounded.
+<a name="line202"></a> * @return {number} The number of significant digits to include.
+<a name="line203"></a> */
+<a name="line204"></a>goog.i18n.NumberFormat.prototype.getSignificantDigits = function() {
+<a name="line205"></a>  return this.significantDigits_;
+<a name="line206"></a>};
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Sets whether trailing fraction zeros should be shown when significantDigits_
+<a name="line211"></a> * is positive. If this is true and significantDigits_ is 2, 1 will be formatted
+<a name="line212"></a> * as &#39;1.0&#39;.
+<a name="line213"></a> * @param {boolean} showTrailingZeros Whether trailing zeros should be shown.
+<a name="line214"></a> * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
+<a name="line215"></a> */
+<a name="line216"></a>goog.i18n.NumberFormat.prototype.setShowTrailingZeros =
+<a name="line217"></a>    function(showTrailingZeros) {
+<a name="line218"></a>  this.showTrailingZeros_ = showTrailingZeros;
+<a name="line219"></a>  return this;
+<a name="line220"></a>};
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/**
+<a name="line224"></a> * Sets a number to base the formatting on when compact style formatting is
+<a name="line225"></a> * used. If this is null, the formatting should be based only on the number to
+<a name="line226"></a> * be formatting.
+<a name="line227"></a> *
+<a name="line228"></a> * This base formatting number can be used to format the target number as
+<a name="line229"></a> * another number would be formatted. For example, 100,000 is normally formatted
+<a name="line230"></a> * as &quot;100K&quot; in the COMPACT_SHORT format. To instead format it as &#39;0.1M&#39;, the
+<a name="line231"></a> * base number could be set to 1,000,000 in order to force all numbers to be
+<a name="line232"></a> * formatted in millions. Similarly, 1,000,000,000 would normally be formatted
+<a name="line233"></a> * as &#39;1B&#39; and setting the base formatting number to 1,000,000, would cause it
+<a name="line234"></a> * to be formatted instead as &#39;1,000M&#39;.
+<a name="line235"></a> *
+<a name="line236"></a> * @param {?number} baseFormattingNumber The number to base formatting on, or
+<a name="line237"></a> * null if formatting should not be based on another number.
+<a name="line238"></a> * @return {!goog.i18n.NumberFormat} Reference to this NumberFormat object.
+<a name="line239"></a> */
+<a name="line240"></a>goog.i18n.NumberFormat.prototype.setBaseFormatting =
+<a name="line241"></a>    function(baseFormattingNumber) {
+<a name="line242"></a>  goog.asserts.assert(goog.isNull(baseFormattingNumber) ||
+<a name="line243"></a>      isFinite(baseFormattingNumber));
+<a name="line244"></a>  this.baseFormattingNumber_ = baseFormattingNumber;
+<a name="line245"></a>  return this;
+<a name="line246"></a>};
+<a name="line247"></a>
+<a name="line248"></a>
+<a name="line249"></a>/**
+<a name="line250"></a> * Gets the number on which compact formatting is currently based, or null if
+<a name="line251"></a> * no such number is set. See setBaseFormatting() for more information.
+<a name="line252"></a> * @return {?number}
+<a name="line253"></a> */
+<a name="line254"></a>goog.i18n.NumberFormat.prototype.getBaseFormatting = function() {
+<a name="line255"></a>  return this.baseFormattingNumber_;
+<a name="line256"></a>};
+<a name="line257"></a>
+<a name="line258"></a>
+<a name="line259"></a>/**
+<a name="line260"></a> * Apply provided pattern, result are stored in member variables.
+<a name="line261"></a> *
+<a name="line262"></a> * @param {string} pattern String pattern being applied.
+<a name="line263"></a> * @private
+<a name="line264"></a> */
+<a name="line265"></a>goog.i18n.NumberFormat.prototype.applyPattern_ = function(pattern) {
+<a name="line266"></a>  this.pattern_ = pattern.replace(/ /g, &#39;\u00a0&#39;);
+<a name="line267"></a>  var pos = [0];
+<a name="line268"></a>
+<a name="line269"></a>  this.positivePrefix_ = this.parseAffix_(pattern, pos);
+<a name="line270"></a>  var trunkStart = pos[0];
+<a name="line271"></a>  this.parseTrunk_(pattern, pos);
+<a name="line272"></a>  var trunkLen = pos[0] - trunkStart;
+<a name="line273"></a>  this.positiveSuffix_ = this.parseAffix_(pattern, pos);
+<a name="line274"></a>  if (pos[0] &lt; pattern.length &amp;&amp;
+<a name="line275"></a>      pattern.charAt(pos[0]) == goog.i18n.NumberFormat.PATTERN_SEPARATOR_) {
+<a name="line276"></a>    pos[0]++;
+<a name="line277"></a>    this.negativePrefix_ = this.parseAffix_(pattern, pos);
+<a name="line278"></a>    // we assume this part is identical to positive part.
+<a name="line279"></a>    // user must make sure the pattern is correctly constructed.
+<a name="line280"></a>    pos[0] += trunkLen;
+<a name="line281"></a>    this.negativeSuffix_ = this.parseAffix_(pattern, pos);
+<a name="line282"></a>  } else {
+<a name="line283"></a>    // if no negative affix specified, they share the same positive affix
+<a name="line284"></a>    this.negativePrefix_ = this.positivePrefix_ + this.negativePrefix_;
+<a name="line285"></a>    this.negativeSuffix_ += this.positiveSuffix_;
+<a name="line286"></a>  }
+<a name="line287"></a>};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * Apply a predefined pattern to NumberFormat object.
+<a name="line292"></a> * @param {number} patternType The number that indicates a predefined number
+<a name="line293"></a> *     format pattern.
+<a name="line294"></a> * @private
+<a name="line295"></a> */
+<a name="line296"></a>goog.i18n.NumberFormat.prototype.applyStandardPattern_ = function(patternType) {
+<a name="line297"></a>  switch (patternType) {
+<a name="line298"></a>    case goog.i18n.NumberFormat.Format.DECIMAL:
+<a name="line299"></a>      this.applyPattern_(goog.i18n.NumberFormatSymbols.DECIMAL_PATTERN);
+<a name="line300"></a>      break;
+<a name="line301"></a>    case goog.i18n.NumberFormat.Format.SCIENTIFIC:
+<a name="line302"></a>      this.applyPattern_(goog.i18n.NumberFormatSymbols.SCIENTIFIC_PATTERN);
+<a name="line303"></a>      break;
+<a name="line304"></a>    case goog.i18n.NumberFormat.Format.PERCENT:
+<a name="line305"></a>      this.applyPattern_(goog.i18n.NumberFormatSymbols.PERCENT_PATTERN);
+<a name="line306"></a>      break;
+<a name="line307"></a>    case goog.i18n.NumberFormat.Format.CURRENCY:
+<a name="line308"></a>      this.applyPattern_(goog.i18n.currency.adjustPrecision(
+<a name="line309"></a>          goog.i18n.NumberFormatSymbols.CURRENCY_PATTERN,
+<a name="line310"></a>          this.intlCurrencyCode_));
+<a name="line311"></a>      break;
+<a name="line312"></a>    case goog.i18n.NumberFormat.Format.COMPACT_SHORT:
+<a name="line313"></a>      this.applyCompactStyle_(goog.i18n.NumberFormat.CompactStyle.SHORT);
+<a name="line314"></a>      break;
+<a name="line315"></a>    case goog.i18n.NumberFormat.Format.COMPACT_LONG:
+<a name="line316"></a>      this.applyCompactStyle_(goog.i18n.NumberFormat.CompactStyle.LONG);
+<a name="line317"></a>      break;
+<a name="line318"></a>    default:
+<a name="line319"></a>      throw Error(&#39;Unsupported pattern type.&#39;);
+<a name="line320"></a>  }
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Apply a predefined pattern for shorthand formats.
+<a name="line326"></a> * @param {goog.i18n.NumberFormat.CompactStyle} style the compact style to
+<a name="line327"></a> *     set defaults for.
+<a name="line328"></a> * @private
+<a name="line329"></a> */
+<a name="line330"></a>goog.i18n.NumberFormat.prototype.applyCompactStyle_ = function(style) {
+<a name="line331"></a>  this.compactStyle_ = style;
+<a name="line332"></a>  this.applyPattern_(goog.i18n.NumberFormatSymbols.DECIMAL_PATTERN);
+<a name="line333"></a>  this.setMinimumFractionDigits(0);
+<a name="line334"></a>  this.setMaximumFractionDigits(2);
+<a name="line335"></a>  this.setSignificantDigits(2);
+<a name="line336"></a>};
+<a name="line337"></a>
+<a name="line338"></a>
+<a name="line339"></a>/**
+<a name="line340"></a> * Parses text string to produce a Number.
+<a name="line341"></a> *
+<a name="line342"></a> * This method attempts to parse text starting from position &quot;opt_pos&quot; if it
+<a name="line343"></a> * is given. Otherwise the parse will start from the beginning of the text.
+<a name="line344"></a> * When opt_pos presents, opt_pos will be updated to the character next to where
+<a name="line345"></a> * parsing stops after the call. If an error occurs, opt_pos won&#39;t be updated.
+<a name="line346"></a> *
+<a name="line347"></a> * @param {string} text The string to be parsed.
+<a name="line348"></a> * @param {Array.&lt;number&gt;=} opt_pos Position to pass in and get back.
+<a name="line349"></a> * @return {number} Parsed number. This throws an error if the text cannot be
+<a name="line350"></a> *     parsed.
+<a name="line351"></a> */
+<a name="line352"></a>goog.i18n.NumberFormat.prototype.parse = function(text, opt_pos) {
+<a name="line353"></a>  var pos = opt_pos || [0];
+<a name="line354"></a>
+<a name="line355"></a>  if (this.compactStyle_ != goog.i18n.NumberFormat.CompactStyle.NONE) {
+<a name="line356"></a>    throw Error(&#39;Parsing of compact numbers is unimplemented&#39;);
+<a name="line357"></a>  }
+<a name="line358"></a>
+<a name="line359"></a>  var start = pos[0];
+<a name="line360"></a>  var ret = NaN;
+<a name="line361"></a>
+<a name="line362"></a>  // we don&#39;t want to handle 2 kind of space in parsing, normalize it to nbsp
+<a name="line363"></a>  text = text.replace(/ /g, &#39;\u00a0&#39;);
+<a name="line364"></a>
+<a name="line365"></a>  var gotPositive = text.indexOf(this.positivePrefix_, pos[0]) == pos[0];
+<a name="line366"></a>  var gotNegative = text.indexOf(this.negativePrefix_, pos[0]) == pos[0];
+<a name="line367"></a>
+<a name="line368"></a>  // check for the longest match
+<a name="line369"></a>  if (gotPositive &amp;&amp; gotNegative) {
+<a name="line370"></a>    if (this.positivePrefix_.length &gt; this.negativePrefix_.length) {
+<a name="line371"></a>      gotNegative = false;
+<a name="line372"></a>    } else if (this.positivePrefix_.length &lt; this.negativePrefix_.length) {
+<a name="line373"></a>      gotPositive = false;
+<a name="line374"></a>    }
+<a name="line375"></a>  }
+<a name="line376"></a>
+<a name="line377"></a>  if (gotPositive) {
+<a name="line378"></a>    pos[0] += this.positivePrefix_.length;
+<a name="line379"></a>  } else if (gotNegative) {
+<a name="line380"></a>    pos[0] += this.negativePrefix_.length;
+<a name="line381"></a>  }
+<a name="line382"></a>
+<a name="line383"></a>  // process digits or Inf, find decimal position
+<a name="line384"></a>  if (text.indexOf(goog.i18n.NumberFormatSymbols.INFINITY, pos[0]) == pos[0]) {
+<a name="line385"></a>    pos[0] += goog.i18n.NumberFormatSymbols.INFINITY.length;
+<a name="line386"></a>    ret = Infinity;
+<a name="line387"></a>  } else {
+<a name="line388"></a>    ret = this.parseNumber_(text, pos);
+<a name="line389"></a>  }
+<a name="line390"></a>
+<a name="line391"></a>  // check for suffix
+<a name="line392"></a>  if (gotPositive) {
+<a name="line393"></a>    if (!(text.indexOf(this.positiveSuffix_, pos[0]) == pos[0])) {
+<a name="line394"></a>      return NaN;
+<a name="line395"></a>    }
+<a name="line396"></a>    pos[0] += this.positiveSuffix_.length;
+<a name="line397"></a>  } else if (gotNegative) {
+<a name="line398"></a>    if (!(text.indexOf(this.negativeSuffix_, pos[0]) == pos[0])) {
+<a name="line399"></a>      return NaN;
+<a name="line400"></a>    }
+<a name="line401"></a>    pos[0] += this.negativeSuffix_.length;
+<a name="line402"></a>  }
+<a name="line403"></a>
+<a name="line404"></a>  return gotNegative ? -ret : ret;
+<a name="line405"></a>};
+<a name="line406"></a>
+<a name="line407"></a>
+<a name="line408"></a>/**
+<a name="line409"></a> * This function will parse a &quot;localized&quot; text into a Number. It needs to
+<a name="line410"></a> * handle locale specific decimal, grouping, exponent and digits.
+<a name="line411"></a> *
+<a name="line412"></a> * @param {string} text The text that need to be parsed.
+<a name="line413"></a> * @param {Array.&lt;number&gt;} pos  In/out parsing position. In case of failure,
+<a name="line414"></a> *    pos value won&#39;t be changed.
+<a name="line415"></a> * @return {number} Number value, or NaN if nothing can be parsed.
+<a name="line416"></a> * @private
+<a name="line417"></a> */
+<a name="line418"></a>goog.i18n.NumberFormat.prototype.parseNumber_ = function(text, pos) {
+<a name="line419"></a>  var sawDecimal = false;
+<a name="line420"></a>  var sawExponent = false;
+<a name="line421"></a>  var sawDigit = false;
+<a name="line422"></a>  var scale = 1;
+<a name="line423"></a>  var decimal = goog.i18n.NumberFormatSymbols.DECIMAL_SEP;
+<a name="line424"></a>  var grouping = goog.i18n.NumberFormatSymbols.GROUP_SEP;
+<a name="line425"></a>  var exponentChar = goog.i18n.NumberFormatSymbols.EXP_SYMBOL;
+<a name="line426"></a>
+<a name="line427"></a>  if (this.compactStyle_ != goog.i18n.NumberFormat.CompactStyle.NONE) {
+<a name="line428"></a>    throw Error(&#39;Parsing of compact style numbers is not implemented&#39;);
+<a name="line429"></a>  }
+<a name="line430"></a>
+<a name="line431"></a>  var normalizedText = &#39;&#39;;
+<a name="line432"></a>  for (; pos[0] &lt; text.length; pos[0]++) {
+<a name="line433"></a>    var ch = text.charAt(pos[0]);
+<a name="line434"></a>    var digit = this.getDigit_(ch);
+<a name="line435"></a>    if (digit &gt;= 0 &amp;&amp; digit &lt;= 9) {
+<a name="line436"></a>      normalizedText += digit;
+<a name="line437"></a>      sawDigit = true;
+<a name="line438"></a>    } else if (ch == decimal.charAt(0)) {
+<a name="line439"></a>      if (sawDecimal || sawExponent) {
+<a name="line440"></a>        break;
+<a name="line441"></a>      }
+<a name="line442"></a>      normalizedText += &#39;.&#39;;
+<a name="line443"></a>      sawDecimal = true;
+<a name="line444"></a>    } else if (ch == grouping.charAt(0) &amp;&amp;
+<a name="line445"></a>               (&#39;\u00a0&#39; != grouping.charAt(0) ||
+<a name="line446"></a>                pos[0] + 1 &lt; text.length &amp;&amp;
+<a name="line447"></a>                this.getDigit_(text.charAt(pos[0] + 1)) &gt;= 0)) {
+<a name="line448"></a>      // Got a grouping character here. When grouping character is nbsp, need
+<a name="line449"></a>      // to make sure the character following it is a digit.
+<a name="line450"></a>      if (sawDecimal || sawExponent) {
+<a name="line451"></a>        break;
+<a name="line452"></a>      }
+<a name="line453"></a>      continue;
+<a name="line454"></a>    } else if (ch == exponentChar.charAt(0)) {
+<a name="line455"></a>      if (sawExponent) {
+<a name="line456"></a>        break;
+<a name="line457"></a>      }
+<a name="line458"></a>      normalizedText += &#39;E&#39;;
+<a name="line459"></a>      sawExponent = true;
+<a name="line460"></a>    } else if (ch == &#39;+&#39; || ch == &#39;-&#39;) {
+<a name="line461"></a>      normalizedText += ch;
+<a name="line462"></a>    } else if (ch == goog.i18n.NumberFormatSymbols.PERCENT.charAt(0)) {
+<a name="line463"></a>      if (scale != 1) {
+<a name="line464"></a>        break;
+<a name="line465"></a>      }
+<a name="line466"></a>      scale = 100;
+<a name="line467"></a>      if (sawDigit) {
+<a name="line468"></a>        pos[0]++; // eat this character if parse end here
+<a name="line469"></a>        break;
+<a name="line470"></a>      }
+<a name="line471"></a>    } else if (ch == goog.i18n.NumberFormatSymbols.PERMILL.charAt(0)) {
+<a name="line472"></a>      if (scale != 1) {
+<a name="line473"></a>        break;
+<a name="line474"></a>      }
+<a name="line475"></a>      scale = 1000;
+<a name="line476"></a>      if (sawDigit) {
+<a name="line477"></a>        pos[0]++; // eat this character if parse end here
+<a name="line478"></a>        break;
+<a name="line479"></a>      }
+<a name="line480"></a>    } else {
+<a name="line481"></a>      break;
+<a name="line482"></a>    }
+<a name="line483"></a>  }
+<a name="line484"></a>  return parseFloat(normalizedText) / scale;
+<a name="line485"></a>};
+<a name="line486"></a>
+<a name="line487"></a>
+<a name="line488"></a>/**
+<a name="line489"></a> * Formats a Number to produce a string.
+<a name="line490"></a> *
+<a name="line491"></a> * @param {number} number The Number to be formatted.
+<a name="line492"></a> * @return {string} The formatted number string.
+<a name="line493"></a> */
+<a name="line494"></a>goog.i18n.NumberFormat.prototype.format = function(number) {
+<a name="line495"></a>  if (isNaN(number)) {
+<a name="line496"></a>    return goog.i18n.NumberFormatSymbols.NAN;
+<a name="line497"></a>  }
+<a name="line498"></a>
+<a name="line499"></a>  var parts = [];
+<a name="line500"></a>  var baseFormattingNumber = goog.isNull(this.baseFormattingNumber_) ?
+<a name="line501"></a>      number :
+<a name="line502"></a>      this.baseFormattingNumber_;
+<a name="line503"></a>  var unit = this.getUnitAfterRounding_(baseFormattingNumber, number);
+<a name="line504"></a>  number /= Math.pow(10, unit.divisorBase);
+<a name="line505"></a>
+<a name="line506"></a>  parts.push(unit.prefix);
+<a name="line507"></a>
+<a name="line508"></a>  // in icu code, it is commented that certain computation need to keep the
+<a name="line509"></a>  // negative sign for 0.
+<a name="line510"></a>  var isNegative = number &lt; 0.0 || number == 0.0 &amp;&amp; 1 / number &lt; 0.0;
+<a name="line511"></a>
+<a name="line512"></a>  parts.push(isNegative ? this.negativePrefix_ : this.positivePrefix_);
+<a name="line513"></a>
+<a name="line514"></a>  if (!isFinite(number)) {
+<a name="line515"></a>    parts.push(goog.i18n.NumberFormatSymbols.INFINITY);
+<a name="line516"></a>  } else {
+<a name="line517"></a>    // convert number to non-negative value
+<a name="line518"></a>    number *= isNegative ? -1 : 1;
+<a name="line519"></a>
+<a name="line520"></a>    number *= this.multiplier_;
+<a name="line521"></a>    this.useExponentialNotation_ ?
+<a name="line522"></a>        this.subformatExponential_(number, parts) :
+<a name="line523"></a>        this.subformatFixed_(number, this.minimumIntegerDigits_, parts);
+<a name="line524"></a>  }
+<a name="line525"></a>
+<a name="line526"></a>  parts.push(isNegative ? this.negativeSuffix_ : this.positiveSuffix_);
+<a name="line527"></a>  parts.push(unit.suffix);
+<a name="line528"></a>
+<a name="line529"></a>  return parts.join(&#39;&#39;);
+<a name="line530"></a>};
+<a name="line531"></a>
+<a name="line532"></a>
+<a name="line533"></a>/**
+<a name="line534"></a> * Round a number into an integer and fractional part
+<a name="line535"></a> * based on the rounding rules for this NumberFormat.
+<a name="line536"></a> * @param {number} number The number to round.
+<a name="line537"></a> * @return {{intValue: number, fracValue: number}} The integer and fractional
+<a name="line538"></a> *     part after rounding.
+<a name="line539"></a> * @private
+<a name="line540"></a> */
+<a name="line541"></a>goog.i18n.NumberFormat.prototype.roundNumber_ = function(number) {
+<a name="line542"></a>  var power = Math.pow(10, this.maximumFractionDigits_);
+<a name="line543"></a>  var shiftedNumber = this.significantDigits_ &lt;= 0 ?
+<a name="line544"></a>      Math.round(number * power) :
+<a name="line545"></a>      Math.floor(this.roundToSignificantDigits_(
+<a name="line546"></a>          number * power,
+<a name="line547"></a>          this.significantDigits_,
+<a name="line548"></a>          this.maximumFractionDigits_));
+<a name="line549"></a>
+<a name="line550"></a>  var intValue, fracValue;
+<a name="line551"></a>  if (isFinite(shiftedNumber)) {
+<a name="line552"></a>    intValue = Math.floor(shiftedNumber / power);
+<a name="line553"></a>    fracValue = Math.floor(shiftedNumber - intValue * power);
+<a name="line554"></a>  } else {
+<a name="line555"></a>    intValue = number;
+<a name="line556"></a>    fracValue = 0;
+<a name="line557"></a>  }
+<a name="line558"></a>  return {intValue: intValue, fracValue: fracValue};
+<a name="line559"></a>};
+<a name="line560"></a>
+<a name="line561"></a>
+<a name="line562"></a>/**
+<a name="line563"></a> * Formats a Number in fraction format.
+<a name="line564"></a> *
+<a name="line565"></a> * @param {number} number
+<a name="line566"></a> * @param {number} minIntDigits Minimum integer digits.
+<a name="line567"></a> * @param {Array} parts This array holds the pieces of formatted string.
+<a name="line568"></a> *     This function will add its formatted pieces to the array.
+<a name="line569"></a> * @private
+<a name="line570"></a> */
+<a name="line571"></a>goog.i18n.NumberFormat.prototype.subformatFixed_ =
+<a name="line572"></a>    function(number, minIntDigits, parts) {
+<a name="line573"></a>  if (this.minimumFractionDigits_ &gt; this.maximumFractionDigits_) {
+<a name="line574"></a>    throw Error(&#39;Min value must be less than max value&#39;);
+<a name="line575"></a>  }
+<a name="line576"></a>
+<a name="line577"></a>  var rounded = this.roundNumber_(number);
+<a name="line578"></a>  var power = Math.pow(10, this.maximumFractionDigits_);
+<a name="line579"></a>  var intValue = rounded.intValue;
+<a name="line580"></a>  var fracValue = rounded.fracValue;
+<a name="line581"></a>
+<a name="line582"></a>  var numIntDigits = (intValue == 0) ? 0 : this.intLog10_(intValue) + 1;
+<a name="line583"></a>  var fractionPresent = this.minimumFractionDigits_ &gt; 0 || fracValue &gt; 0 ||
+<a name="line584"></a>      (this.showTrailingZeros_ &amp;&amp; numIntDigits &lt; this.significantDigits_);
+<a name="line585"></a>  var minimumFractionDigits = this.minimumFractionDigits_;
+<a name="line586"></a>  if (fractionPresent) {
+<a name="line587"></a>    if (this.showTrailingZeros_ &amp;&amp; this.significantDigits_ &gt; 0) {
+<a name="line588"></a>      minimumFractionDigits = this.significantDigits_ - numIntDigits;
+<a name="line589"></a>    } else {
+<a name="line590"></a>      minimumFractionDigits = this.minimumFractionDigits_;
+<a name="line591"></a>    }
+<a name="line592"></a>  }
+<a name="line593"></a>
+<a name="line594"></a>  var intPart = &#39;&#39;;
+<a name="line595"></a>  var translatableInt = intValue;
+<a name="line596"></a>  while (translatableInt &gt; 1E20) {
+<a name="line597"></a>    // here it goes beyond double precision, add &#39;0&#39; make it look better
+<a name="line598"></a>    intPart = &#39;0&#39; + intPart;
+<a name="line599"></a>    translatableInt = Math.round(translatableInt / 10);
+<a name="line600"></a>  }
+<a name="line601"></a>  intPart = translatableInt + intPart;
+<a name="line602"></a>
+<a name="line603"></a>  var decimal = goog.i18n.NumberFormatSymbols.DECIMAL_SEP;
+<a name="line604"></a>  var grouping = goog.i18n.NumberFormatSymbols.GROUP_SEP;
+<a name="line605"></a>  var zeroCode = goog.i18n.NumberFormat.enforceAsciiDigits_ ?
+<a name="line606"></a>                 48  /* ascii &#39;0&#39; */ :
+<a name="line607"></a>                 goog.i18n.NumberFormatSymbols.ZERO_DIGIT.charCodeAt(0);
+<a name="line608"></a>  var digitLen = intPart.length;
+<a name="line609"></a>
+<a name="line610"></a>  if (intValue &gt; 0 || minIntDigits &gt; 0) {
+<a name="line611"></a>    for (var i = digitLen; i &lt; minIntDigits; i++) {
+<a name="line612"></a>      parts.push(String.fromCharCode(zeroCode));
+<a name="line613"></a>    }
+<a name="line614"></a>
+<a name="line615"></a>    for (var i = 0; i &lt; digitLen; i++) {
+<a name="line616"></a>      parts.push(String.fromCharCode(zeroCode + intPart.charAt(i) * 1));
+<a name="line617"></a>
+<a name="line618"></a>      if (digitLen - i &gt; 1 &amp;&amp; this.groupingSize_ &gt; 0 &amp;&amp;
+<a name="line619"></a>          ((digitLen - i) % this.groupingSize_ == 1)) {
+<a name="line620"></a>        parts.push(grouping);
+<a name="line621"></a>      }
+<a name="line622"></a>    }
+<a name="line623"></a>  } else if (!fractionPresent) {
+<a name="line624"></a>    // If there is no fraction present, and we haven&#39;t printed any
+<a name="line625"></a>    // integer digits, then print a zero.
+<a name="line626"></a>    parts.push(String.fromCharCode(zeroCode));
+<a name="line627"></a>  }
+<a name="line628"></a>
+<a name="line629"></a>  // Output the decimal separator if we always do so.
+<a name="line630"></a>  if (this.decimalSeparatorAlwaysShown_ || fractionPresent) {
+<a name="line631"></a>    parts.push(decimal);
+<a name="line632"></a>  }
+<a name="line633"></a>
+<a name="line634"></a>  var fracPart = &#39;&#39; + (fracValue + power);
+<a name="line635"></a>  var fracLen = fracPart.length;
+<a name="line636"></a>  while (fracPart.charAt(fracLen - 1) == &#39;0&#39; &amp;&amp;
+<a name="line637"></a>      fracLen &gt; minimumFractionDigits + 1) {
+<a name="line638"></a>    fracLen--;
+<a name="line639"></a>  }
+<a name="line640"></a>
+<a name="line641"></a>  for (var i = 1; i &lt; fracLen; i++) {
+<a name="line642"></a>    parts.push(String.fromCharCode(zeroCode + fracPart.charAt(i) * 1));
+<a name="line643"></a>  }
+<a name="line644"></a>};
+<a name="line645"></a>
+<a name="line646"></a>
+<a name="line647"></a>/**
+<a name="line648"></a> * Formats exponent part of a Number.
+<a name="line649"></a> *
+<a name="line650"></a> * @param {number} exponent Exponential value.
+<a name="line651"></a> * @param {Array.&lt;string&gt;} parts The array that holds the pieces of formatted
+<a name="line652"></a> *     string. This function will append more formatted pieces to the array.
+<a name="line653"></a> * @private
+<a name="line654"></a> */
+<a name="line655"></a>goog.i18n.NumberFormat.prototype.addExponentPart_ = function(exponent, parts) {
+<a name="line656"></a>  parts.push(goog.i18n.NumberFormatSymbols.EXP_SYMBOL);
+<a name="line657"></a>
+<a name="line658"></a>  if (exponent &lt; 0) {
+<a name="line659"></a>    exponent = -exponent;
+<a name="line660"></a>    parts.push(goog.i18n.NumberFormatSymbols.MINUS_SIGN);
+<a name="line661"></a>  } else if (this.useSignForPositiveExponent_) {
+<a name="line662"></a>    parts.push(goog.i18n.NumberFormatSymbols.PLUS_SIGN);
+<a name="line663"></a>  }
+<a name="line664"></a>
+<a name="line665"></a>  var exponentDigits = &#39;&#39; + exponent;
+<a name="line666"></a>  var zeroChar = goog.i18n.NumberFormat.enforceAsciiDigits_ ? &#39;0&#39; :
+<a name="line667"></a>                 goog.i18n.NumberFormatSymbols.ZERO_DIGIT;
+<a name="line668"></a>  for (var i = exponentDigits.length; i &lt; this.minExponentDigits_; i++) {
+<a name="line669"></a>    parts.push(zeroChar);
+<a name="line670"></a>  }
+<a name="line671"></a>  parts.push(exponentDigits);
+<a name="line672"></a>};
+<a name="line673"></a>
+<a name="line674"></a>
+<a name="line675"></a>/**
+<a name="line676"></a> * Formats Number in exponential format.
+<a name="line677"></a> *
+<a name="line678"></a> * @param {number} number Value need to be formated.
+<a name="line679"></a> * @param {Array.&lt;string&gt;} parts The array that holds the pieces of formatted
+<a name="line680"></a> *     string. This function will append more formatted pieces to the array.
+<a name="line681"></a> * @private
+<a name="line682"></a> */
+<a name="line683"></a>goog.i18n.NumberFormat.prototype.subformatExponential_ =
+<a name="line684"></a>    function(number, parts) {
+<a name="line685"></a>  if (number == 0.0) {
+<a name="line686"></a>    this.subformatFixed_(number, this.minimumIntegerDigits_, parts);
+<a name="line687"></a>    this.addExponentPart_(0, parts);
+<a name="line688"></a>    return;
+<a name="line689"></a>  }
+<a name="line690"></a>
+<a name="line691"></a>  var exponent = goog.math.safeFloor(Math.log(number) / Math.log(10));
+<a name="line692"></a>  number /= Math.pow(10, exponent);
+<a name="line693"></a>
+<a name="line694"></a>  var minIntDigits = this.minimumIntegerDigits_;
+<a name="line695"></a>  if (this.maximumIntegerDigits_ &gt; 1 &amp;&amp;
+<a name="line696"></a>      this.maximumIntegerDigits_ &gt; this.minimumIntegerDigits_) {
+<a name="line697"></a>    // A repeating range is defined; adjust to it as follows.
+<a name="line698"></a>    // If repeat == 3, we have 6,5,4=&gt;3; 3,2,1=&gt;0; 0,-1,-2=&gt;-3;
+<a name="line699"></a>    // -3,-4,-5=&gt;-6, etc. This takes into account that the
+<a name="line700"></a>    // exponent we have here is off by one from what we expect;
+<a name="line701"></a>    // it is for the format 0.MMMMMx10^n.
+<a name="line702"></a>    while ((exponent % this.maximumIntegerDigits_) != 0) {
+<a name="line703"></a>      number *= 10;
+<a name="line704"></a>      exponent--;
+<a name="line705"></a>    }
+<a name="line706"></a>    minIntDigits = 1;
+<a name="line707"></a>  } else {
+<a name="line708"></a>    // No repeating range is defined; use minimum integer digits.
+<a name="line709"></a>    if (this.minimumIntegerDigits_ &lt; 1) {
+<a name="line710"></a>      exponent++;
+<a name="line711"></a>      number /= 10;
+<a name="line712"></a>    } else {
+<a name="line713"></a>      exponent -= this.minimumIntegerDigits_ - 1;
+<a name="line714"></a>      number *= Math.pow(10, this.minimumIntegerDigits_ - 1);
+<a name="line715"></a>    }
+<a name="line716"></a>  }
+<a name="line717"></a>  this.subformatFixed_(number, minIntDigits, parts);
+<a name="line718"></a>  this.addExponentPart_(exponent, parts);
+<a name="line719"></a>};
+<a name="line720"></a>
+<a name="line721"></a>
+<a name="line722"></a>/**
+<a name="line723"></a> * Returns the digit value of current character. The character could be either
+<a name="line724"></a> * &#39;0&#39; to &#39;9&#39;, or a locale specific digit.
+<a name="line725"></a> *
+<a name="line726"></a> * @param {string} ch Character that represents a digit.
+<a name="line727"></a> * @return {number} The digit value, or -1 on error.
+<a name="line728"></a> * @private
+<a name="line729"></a> */
+<a name="line730"></a>goog.i18n.NumberFormat.prototype.getDigit_ = function(ch) {
+<a name="line731"></a>  var code = ch.charCodeAt(0);
+<a name="line732"></a>  // between &#39;0&#39; to &#39;9&#39;
+<a name="line733"></a>  if (48 &lt;= code &amp;&amp; code &lt; 58) {
+<a name="line734"></a>    return code - 48;
+<a name="line735"></a>  } else {
+<a name="line736"></a>    var zeroCode = goog.i18n.NumberFormatSymbols.ZERO_DIGIT.charCodeAt(0);
+<a name="line737"></a>    return zeroCode &lt;= code &amp;&amp; code &lt; zeroCode + 10 ? code - zeroCode : -1;
+<a name="line738"></a>  }
+<a name="line739"></a>};
+<a name="line740"></a>
+<a name="line741"></a>
+<a name="line742"></a>// ----------------------------------------------------------------------
+<a name="line743"></a>// CONSTANTS
+<a name="line744"></a>// ----------------------------------------------------------------------
+<a name="line745"></a>// Constants for characters used in programmatic (unlocalized) patterns.
+<a name="line746"></a>/**
+<a name="line747"></a> * A zero digit character.
+<a name="line748"></a> * @type {string}
+<a name="line749"></a> * @private
+<a name="line750"></a> */
+<a name="line751"></a>goog.i18n.NumberFormat.PATTERN_ZERO_DIGIT_ = &#39;0&#39;;
+<a name="line752"></a>
+<a name="line753"></a>
+<a name="line754"></a>/**
+<a name="line755"></a> * A grouping separator character.
+<a name="line756"></a> * @type {string}
+<a name="line757"></a> * @private
+<a name="line758"></a> */
+<a name="line759"></a>goog.i18n.NumberFormat.PATTERN_GROUPING_SEPARATOR_ = &#39;,&#39;;
+<a name="line760"></a>
+<a name="line761"></a>
+<a name="line762"></a>/**
+<a name="line763"></a> * A decimal separator character.
+<a name="line764"></a> * @type {string}
+<a name="line765"></a> * @private
+<a name="line766"></a> */
+<a name="line767"></a>goog.i18n.NumberFormat.PATTERN_DECIMAL_SEPARATOR_ = &#39;.&#39;;
+<a name="line768"></a>
+<a name="line769"></a>
+<a name="line770"></a>/**
+<a name="line771"></a> * A per mille character.
+<a name="line772"></a> * @type {string}
+<a name="line773"></a> * @private
+<a name="line774"></a> */
+<a name="line775"></a>goog.i18n.NumberFormat.PATTERN_PER_MILLE_ = &#39;\u2030&#39;;
+<a name="line776"></a>
+<a name="line777"></a>
+<a name="line778"></a>/**
+<a name="line779"></a> * A percent character.
+<a name="line780"></a> * @type {string}
+<a name="line781"></a> * @private
+<a name="line782"></a> */
+<a name="line783"></a>goog.i18n.NumberFormat.PATTERN_PERCENT_ = &#39;%&#39;;
+<a name="line784"></a>
+<a name="line785"></a>
+<a name="line786"></a>/**
+<a name="line787"></a> * A digit character.
+<a name="line788"></a> * @type {string}
+<a name="line789"></a> * @private
+<a name="line790"></a> */
+<a name="line791"></a>goog.i18n.NumberFormat.PATTERN_DIGIT_ = &#39;#&#39;;
+<a name="line792"></a>
+<a name="line793"></a>
+<a name="line794"></a>/**
+<a name="line795"></a> * A separator character.
+<a name="line796"></a> * @type {string}
+<a name="line797"></a> * @private
+<a name="line798"></a> */
+<a name="line799"></a>goog.i18n.NumberFormat.PATTERN_SEPARATOR_ = &#39;;&#39;;
+<a name="line800"></a>
+<a name="line801"></a>
+<a name="line802"></a>/**
+<a name="line803"></a> * An exponent character.
+<a name="line804"></a> * @type {string}
+<a name="line805"></a> * @private
+<a name="line806"></a> */
+<a name="line807"></a>goog.i18n.NumberFormat.PATTERN_EXPONENT_ = &#39;E&#39;;
+<a name="line808"></a>
+<a name="line809"></a>
+<a name="line810"></a>/**
+<a name="line811"></a> * An plus character.
+<a name="line812"></a> * @type {string}
+<a name="line813"></a> * @private
+<a name="line814"></a> */
+<a name="line815"></a>goog.i18n.NumberFormat.PATTERN_PLUS_ = &#39;+&#39;;
+<a name="line816"></a>
+<a name="line817"></a>
+<a name="line818"></a>/**
+<a name="line819"></a> * A minus character.
+<a name="line820"></a> * @type {string}
+<a name="line821"></a> * @private
+<a name="line822"></a> */
+<a name="line823"></a>goog.i18n.NumberFormat.PATTERN_MINUS_ = &#39;-&#39;;
+<a name="line824"></a>
+<a name="line825"></a>
+<a name="line826"></a>/**
+<a name="line827"></a> * A quote character.
+<a name="line828"></a> * @type {string}
+<a name="line829"></a> * @private
+<a name="line830"></a> */
+<a name="line831"></a>goog.i18n.NumberFormat.PATTERN_CURRENCY_SIGN_ = &#39;\u00A4&#39;;
+<a name="line832"></a>
+<a name="line833"></a>
+<a name="line834"></a>/**
+<a name="line835"></a> * A quote character.
+<a name="line836"></a> * @type {string}
+<a name="line837"></a> * @private
+<a name="line838"></a> */
+<a name="line839"></a>goog.i18n.NumberFormat.QUOTE_ = &#39;\&#39;&#39;;
+<a name="line840"></a>
+<a name="line841"></a>
+<a name="line842"></a>/**
+<a name="line843"></a> * Parses affix part of pattern.
+<a name="line844"></a> *
+<a name="line845"></a> * @param {string} pattern Pattern string that need to be parsed.
+<a name="line846"></a> * @param {Array.&lt;number&gt;} pos One element position array to set and receive
+<a name="line847"></a> *     parsing position.
+<a name="line848"></a> *
+<a name="line849"></a> * @return {string} Affix received from parsing.
+<a name="line850"></a> * @private
+<a name="line851"></a> */
+<a name="line852"></a>goog.i18n.NumberFormat.prototype.parseAffix_ = function(pattern, pos) {
+<a name="line853"></a>  var affix = &#39;&#39;;
+<a name="line854"></a>  var inQuote = false;
+<a name="line855"></a>  var len = pattern.length;
+<a name="line856"></a>
+<a name="line857"></a>  for (; pos[0] &lt; len; pos[0]++) {
+<a name="line858"></a>    var ch = pattern.charAt(pos[0]);
+<a name="line859"></a>    if (ch == goog.i18n.NumberFormat.QUOTE_) {
+<a name="line860"></a>      if (pos[0] + 1 &lt; len &amp;&amp;
+<a name="line861"></a>          pattern.charAt(pos[0] + 1) == goog.i18n.NumberFormat.QUOTE_) {
+<a name="line862"></a>        pos[0]++;
+<a name="line863"></a>        affix += &#39;\&#39;&#39;; // &#39;don&#39;&#39;t&#39;
+<a name="line864"></a>      } else {
+<a name="line865"></a>        inQuote = !inQuote;
+<a name="line866"></a>      }
+<a name="line867"></a>      continue;
+<a name="line868"></a>    }
+<a name="line869"></a>
+<a name="line870"></a>    if (inQuote) {
+<a name="line871"></a>      affix += ch;
+<a name="line872"></a>    } else {
+<a name="line873"></a>      switch (ch) {
+<a name="line874"></a>        case goog.i18n.NumberFormat.PATTERN_DIGIT_:
+<a name="line875"></a>        case goog.i18n.NumberFormat.PATTERN_ZERO_DIGIT_:
+<a name="line876"></a>        case goog.i18n.NumberFormat.PATTERN_GROUPING_SEPARATOR_:
+<a name="line877"></a>        case goog.i18n.NumberFormat.PATTERN_DECIMAL_SEPARATOR_:
+<a name="line878"></a>        case goog.i18n.NumberFormat.PATTERN_SEPARATOR_:
+<a name="line879"></a>          return affix;
+<a name="line880"></a>        case goog.i18n.NumberFormat.PATTERN_CURRENCY_SIGN_:
+<a name="line881"></a>          if ((pos[0] + 1) &lt; len &amp;&amp;
+<a name="line882"></a>              pattern.charAt(pos[0] + 1) ==
+<a name="line883"></a>              goog.i18n.NumberFormat.PATTERN_CURRENCY_SIGN_) {
+<a name="line884"></a>            pos[0]++;
+<a name="line885"></a>            affix += this.intlCurrencyCode_;
+<a name="line886"></a>          } else {
+<a name="line887"></a>            switch (this.currencyStyle_) {
+<a name="line888"></a>              case goog.i18n.NumberFormat.CurrencyStyle.LOCAL:
+<a name="line889"></a>                affix += goog.i18n.currency.getLocalCurrencySign(
+<a name="line890"></a>                    this.intlCurrencyCode_);
+<a name="line891"></a>                break;
+<a name="line892"></a>              case goog.i18n.NumberFormat.CurrencyStyle.GLOBAL:
+<a name="line893"></a>                affix += goog.i18n.currency.getGlobalCurrencySign(
+<a name="line894"></a>                    this.intlCurrencyCode_);
+<a name="line895"></a>                break;
+<a name="line896"></a>              case goog.i18n.NumberFormat.CurrencyStyle.PORTABLE:
+<a name="line897"></a>                affix += goog.i18n.currency.getPortableCurrencySign(
+<a name="line898"></a>                    this.intlCurrencyCode_);
+<a name="line899"></a>                break;
+<a name="line900"></a>              default:
+<a name="line901"></a>                break;
+<a name="line902"></a>            }
+<a name="line903"></a>          }
+<a name="line904"></a>          break;
+<a name="line905"></a>        case goog.i18n.NumberFormat.PATTERN_PERCENT_:
+<a name="line906"></a>          if (this.multiplier_ != 1) {
+<a name="line907"></a>            throw Error(&#39;Too many percent/permill&#39;);
+<a name="line908"></a>          }
+<a name="line909"></a>          this.multiplier_ = 100;
+<a name="line910"></a>          affix += goog.i18n.NumberFormatSymbols.PERCENT;
+<a name="line911"></a>          break;
+<a name="line912"></a>        case goog.i18n.NumberFormat.PATTERN_PER_MILLE_:
+<a name="line913"></a>          if (this.multiplier_ != 1) {
+<a name="line914"></a>            throw Error(&#39;Too many percent/permill&#39;);
+<a name="line915"></a>          }
+<a name="line916"></a>          this.multiplier_ = 1000;
+<a name="line917"></a>          affix += goog.i18n.NumberFormatSymbols.PERMILL;
+<a name="line918"></a>          break;
+<a name="line919"></a>        default:
+<a name="line920"></a>          affix += ch;
+<a name="line921"></a>      }
+<a name="line922"></a>    }
+<a name="line923"></a>  }
+<a name="line924"></a>
+<a name="line925"></a>  return affix;
+<a name="line926"></a>};
+<a name="line927"></a>
+<a name="line928"></a>
+<a name="line929"></a>/**
+<a name="line930"></a> * Parses the trunk part of a pattern.
+<a name="line931"></a> *
+<a name="line932"></a> * @param {string} pattern Pattern string that need to be parsed.
+<a name="line933"></a> * @param {Array.&lt;number&gt;} pos One element position array to set and receive
+<a name="line934"></a> *     parsing position.
+<a name="line935"></a> * @private
+<a name="line936"></a> */
+<a name="line937"></a>goog.i18n.NumberFormat.prototype.parseTrunk_ = function(pattern, pos) {
+<a name="line938"></a>  var decimalPos = -1;
+<a name="line939"></a>  var digitLeftCount = 0;
+<a name="line940"></a>  var zeroDigitCount = 0;
+<a name="line941"></a>  var digitRightCount = 0;
+<a name="line942"></a>  var groupingCount = -1;
+<a name="line943"></a>
+<a name="line944"></a>  var len = pattern.length;
+<a name="line945"></a>  for (var loop = true; pos[0] &lt; len &amp;&amp; loop; pos[0]++) {
+<a name="line946"></a>    var ch = pattern.charAt(pos[0]);
+<a name="line947"></a>    switch (ch) {
+<a name="line948"></a>      case goog.i18n.NumberFormat.PATTERN_DIGIT_:
+<a name="line949"></a>        if (zeroDigitCount &gt; 0) {
+<a name="line950"></a>          digitRightCount++;
+<a name="line951"></a>        } else {
+<a name="line952"></a>          digitLeftCount++;
+<a name="line953"></a>        }
+<a name="line954"></a>        if (groupingCount &gt;= 0 &amp;&amp; decimalPos &lt; 0) {
+<a name="line955"></a>          groupingCount++;
+<a name="line956"></a>        }
+<a name="line957"></a>        break;
+<a name="line958"></a>      case goog.i18n.NumberFormat.PATTERN_ZERO_DIGIT_:
+<a name="line959"></a>        if (digitRightCount &gt; 0) {
+<a name="line960"></a>          throw Error(&#39;Unexpected &quot;0&quot; in pattern &quot;&#39; + pattern + &#39;&quot;&#39;);
+<a name="line961"></a>        }
+<a name="line962"></a>        zeroDigitCount++;
+<a name="line963"></a>        if (groupingCount &gt;= 0 &amp;&amp; decimalPos &lt; 0) {
+<a name="line964"></a>          groupingCount++;
+<a name="line965"></a>        }
+<a name="line966"></a>        break;
+<a name="line967"></a>      case goog.i18n.NumberFormat.PATTERN_GROUPING_SEPARATOR_:
+<a name="line968"></a>        groupingCount = 0;
+<a name="line969"></a>        break;
+<a name="line970"></a>      case goog.i18n.NumberFormat.PATTERN_DECIMAL_SEPARATOR_:
+<a name="line971"></a>        if (decimalPos &gt;= 0) {
+<a name="line972"></a>          throw Error(&#39;Multiple decimal separators in pattern &quot;&#39; +
+<a name="line973"></a>                      pattern + &#39;&quot;&#39;);
+<a name="line974"></a>        }
+<a name="line975"></a>        decimalPos = digitLeftCount + zeroDigitCount + digitRightCount;
+<a name="line976"></a>        break;
+<a name="line977"></a>      case goog.i18n.NumberFormat.PATTERN_EXPONENT_:
+<a name="line978"></a>        if (this.useExponentialNotation_) {
+<a name="line979"></a>          throw Error(&#39;Multiple exponential symbols in pattern &quot;&#39; +
+<a name="line980"></a>                      pattern + &#39;&quot;&#39;);
+<a name="line981"></a>        }
+<a name="line982"></a>        this.useExponentialNotation_ = true;
+<a name="line983"></a>        this.minExponentDigits_ = 0;
+<a name="line984"></a>
+<a name="line985"></a>        // exponent pattern can have a optional &#39;+&#39;.
+<a name="line986"></a>        if ((pos[0] + 1) &lt; len &amp;&amp; pattern.charAt(pos[0] + 1) ==
+<a name="line987"></a>            goog.i18n.NumberFormat.PATTERN_PLUS_) {
+<a name="line988"></a>          pos[0]++;
+<a name="line989"></a>          this.useSignForPositiveExponent_ = true;
+<a name="line990"></a>        }
+<a name="line991"></a>
+<a name="line992"></a>        // Use lookahead to parse out the exponential part
+<a name="line993"></a>        // of the pattern, then jump into phase 2.
+<a name="line994"></a>        while ((pos[0] + 1) &lt; len &amp;&amp; pattern.charAt(pos[0] + 1) ==
+<a name="line995"></a>               goog.i18n.NumberFormat.PATTERN_ZERO_DIGIT_) {
+<a name="line996"></a>          pos[0]++;
+<a name="line997"></a>          this.minExponentDigits_++;
+<a name="line998"></a>        }
+<a name="line999"></a>
+<a name="line1000"></a>        if ((digitLeftCount + zeroDigitCount) &lt; 1 ||
+<a name="line1001"></a>            this.minExponentDigits_ &lt; 1) {
+<a name="line1002"></a>          throw Error(&#39;Malformed exponential pattern &quot;&#39; + pattern + &#39;&quot;&#39;);
+<a name="line1003"></a>        }
+<a name="line1004"></a>        loop = false;
+<a name="line1005"></a>        break;
+<a name="line1006"></a>      default:
+<a name="line1007"></a>        pos[0]--;
+<a name="line1008"></a>        loop = false;
+<a name="line1009"></a>        break;
+<a name="line1010"></a>    }
+<a name="line1011"></a>  }
+<a name="line1012"></a>
+<a name="line1013"></a>  if (zeroDigitCount == 0 &amp;&amp; digitLeftCount &gt; 0 &amp;&amp; decimalPos &gt;= 0) {
+<a name="line1014"></a>    // Handle &#39;###.###&#39; and &#39;###.&#39; and &#39;.###&#39;
+<a name="line1015"></a>    var n = decimalPos;
+<a name="line1016"></a>    if (n == 0) { // Handle &#39;.###&#39;
+<a name="line1017"></a>      n++;
+<a name="line1018"></a>    }
+<a name="line1019"></a>    digitRightCount = digitLeftCount - n;
+<a name="line1020"></a>    digitLeftCount = n - 1;
+<a name="line1021"></a>    zeroDigitCount = 1;
+<a name="line1022"></a>  }
+<a name="line1023"></a>
+<a name="line1024"></a>  // Do syntax checking on the digits.
+<a name="line1025"></a>  if (decimalPos &lt; 0 &amp;&amp; digitRightCount &gt; 0 ||
+<a name="line1026"></a>      decimalPos &gt;= 0 &amp;&amp; (decimalPos &lt; digitLeftCount ||
+<a name="line1027"></a>                          decimalPos &gt; digitLeftCount + zeroDigitCount) ||
+<a name="line1028"></a>      groupingCount == 0) {
+<a name="line1029"></a>    throw Error(&#39;Malformed pattern &quot;&#39; + pattern + &#39;&quot;&#39;);
+<a name="line1030"></a>  }
+<a name="line1031"></a>  var totalDigits = digitLeftCount + zeroDigitCount + digitRightCount;
+<a name="line1032"></a>
+<a name="line1033"></a>  this.maximumFractionDigits_ = decimalPos &gt;= 0 ? totalDigits - decimalPos : 0;
+<a name="line1034"></a>  if (decimalPos &gt;= 0) {
+<a name="line1035"></a>    this.minimumFractionDigits_ = digitLeftCount + zeroDigitCount - decimalPos;
+<a name="line1036"></a>    if (this.minimumFractionDigits_ &lt; 0) {
+<a name="line1037"></a>      this.minimumFractionDigits_ = 0;
+<a name="line1038"></a>    }
+<a name="line1039"></a>  }
+<a name="line1040"></a>
+<a name="line1041"></a>  // The effectiveDecimalPos is the position the decimal is at or would be at
+<a name="line1042"></a>  // if there is no decimal. Note that if decimalPos&lt;0, then digitTotalCount ==
+<a name="line1043"></a>  // digitLeftCount + zeroDigitCount.
+<a name="line1044"></a>  var effectiveDecimalPos = decimalPos &gt;= 0 ? decimalPos : totalDigits;
+<a name="line1045"></a>  this.minimumIntegerDigits_ = effectiveDecimalPos - digitLeftCount;
+<a name="line1046"></a>  if (this.useExponentialNotation_) {
+<a name="line1047"></a>    this.maximumIntegerDigits_ = digitLeftCount + this.minimumIntegerDigits_;
+<a name="line1048"></a>
+<a name="line1049"></a>    // in exponential display, we need to at least show something.
+<a name="line1050"></a>    if (this.maximumFractionDigits_ == 0 &amp;&amp; this.minimumIntegerDigits_ == 0) {
+<a name="line1051"></a>      this.minimumIntegerDigits_ = 1;
+<a name="line1052"></a>    }
+<a name="line1053"></a>  }
+<a name="line1054"></a>
+<a name="line1055"></a>  this.groupingSize_ = Math.max(0, groupingCount);
+<a name="line1056"></a>  this.decimalSeparatorAlwaysShown_ = decimalPos == 0 ||
+<a name="line1057"></a>                                      decimalPos == totalDigits;
+<a name="line1058"></a>};
+<a name="line1059"></a>
+<a name="line1060"></a>
+<a name="line1061"></a>/**
+<a name="line1062"></a> * Alias for the compact format &#39;unit&#39; object.
+<a name="line1063"></a> * @typedef {{
+<a name="line1064"></a> *     prefix: string,
+<a name="line1065"></a> *     suffix: string,
+<a name="line1066"></a> *     divisorBase: number
+<a name="line1067"></a> * }}
+<a name="line1068"></a> */
+<a name="line1069"></a>goog.i18n.NumberFormat.CompactNumberUnit;
+<a name="line1070"></a>
+<a name="line1071"></a>
+<a name="line1072"></a>/**
+<a name="line1073"></a> * The empty unit, corresponding to a base of 0.
+<a name="line1074"></a> * @private {!goog.i18n.NumberFormat.CompactNumberUnit}
+<a name="line1075"></a> */
+<a name="line1076"></a>goog.i18n.NumberFormat.NULL_UNIT_ = { prefix: &#39;&#39;, suffix: &#39;&#39;, divisorBase: 0 };
+<a name="line1077"></a>
+<a name="line1078"></a>
+<a name="line1079"></a>/**
+<a name="line1080"></a> * Get compact unit for a certain number of digits
+<a name="line1081"></a> *
+<a name="line1082"></a> * @param {number} base The number of digits to get the unit for.
+<a name="line1083"></a> * @param {string} plurality The plurality of the number.
+<a name="line1084"></a> * @return {!goog.i18n.NumberFormat.CompactNumberUnit} The compact unit.
+<a name="line1085"></a> * @private
+<a name="line1086"></a> */
+<a name="line1087"></a>goog.i18n.NumberFormat.prototype.getUnitFor_ = function(base, plurality) {
+<a name="line1088"></a>  var table = this.compactStyle_ == goog.i18n.NumberFormat.CompactStyle.SHORT ?
+<a name="line1089"></a>      goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_SHORT_PATTERN :
+<a name="line1090"></a>      goog.i18n.CompactNumberFormatSymbols.COMPACT_DECIMAL_LONG_PATTERN;
+<a name="line1091"></a>
+<a name="line1092"></a>  if (base &lt; 3) {
+<a name="line1093"></a>    return goog.i18n.NumberFormat.NULL_UNIT_;
+<a name="line1094"></a>  } else {
+<a name="line1095"></a>    base = Math.min(14, base);
+<a name="line1096"></a>    var patterns = table[Math.pow(10, base)];
+<a name="line1097"></a>    if (!patterns) {
+<a name="line1098"></a>      return goog.i18n.NumberFormat.NULL_UNIT_;
+<a name="line1099"></a>    }
+<a name="line1100"></a>
+<a name="line1101"></a>    var pattern = patterns[plurality];
+<a name="line1102"></a>    if (!pattern || pattern == &#39;0&#39;) {
+<a name="line1103"></a>      return goog.i18n.NumberFormat.NULL_UNIT_;
+<a name="line1104"></a>    }
+<a name="line1105"></a>
+<a name="line1106"></a>    var parts = /([^0]*)(0+)(.*)/.exec(pattern);
+<a name="line1107"></a>    if (!parts) {
+<a name="line1108"></a>      return goog.i18n.NumberFormat.NULL_UNIT_;
+<a name="line1109"></a>    }
+<a name="line1110"></a>
+<a name="line1111"></a>    return {
+<a name="line1112"></a>      prefix: parts[1],
+<a name="line1113"></a>      suffix: parts[3],
+<a name="line1114"></a>      divisorBase: base - (parts[2].length - 1)
+<a name="line1115"></a>    };
+<a name="line1116"></a>  }
+<a name="line1117"></a>};
+<a name="line1118"></a>
+<a name="line1119"></a>
+<a name="line1120"></a>/**
+<a name="line1121"></a> * Get the compact unit divisor, accounting for rounding of the quantity.
+<a name="line1122"></a> *
+<a name="line1123"></a> * @param {number} formattingNumber The number to base the formatting on. The
+<a name="line1124"></a> *     unit will be calculated from this number.
+<a name="line1125"></a> * @param {number} pluralityNumber The number to use for calculating the
+<a name="line1126"></a> *     plurality.
+<a name="line1127"></a> * @return {!goog.i18n.NumberFormat.CompactNumberUnit} The unit after rounding.
+<a name="line1128"></a> * @private
+<a name="line1129"></a> */
+<a name="line1130"></a>goog.i18n.NumberFormat.prototype.getUnitAfterRounding_ =
+<a name="line1131"></a>    function(formattingNumber, pluralityNumber) {
+<a name="line1132"></a>  if (this.compactStyle_ == goog.i18n.NumberFormat.CompactStyle.NONE) {
+<a name="line1133"></a>    return goog.i18n.NumberFormat.NULL_UNIT_;
+<a name="line1134"></a>  }
+<a name="line1135"></a>
+<a name="line1136"></a>  formattingNumber = Math.abs(formattingNumber);
+<a name="line1137"></a>  pluralityNumber = Math.abs(pluralityNumber);
+<a name="line1138"></a>
+<a name="line1139"></a>  var initialPlurality = this.pluralForm_(formattingNumber);
+<a name="line1140"></a>  // Compute the exponent from the formattingNumber, to compute the unit.
+<a name="line1141"></a>  var base = formattingNumber &lt;= 1 ? 0 : this.intLog10_(formattingNumber);
+<a name="line1142"></a>  var initialDivisor = this.getUnitFor_(base, initialPlurality).divisorBase;
+<a name="line1143"></a>  // Round both numbers based on the unit used.
+<a name="line1144"></a>  var pluralityAttempt = pluralityNumber / Math.pow(10, initialDivisor);
+<a name="line1145"></a>  var pluralityRounded = this.roundNumber_(pluralityAttempt);
+<a name="line1146"></a>  var formattingAttempt = formattingNumber / Math.pow(10, initialDivisor);
+<a name="line1147"></a>  var formattingRounded = this.roundNumber_(formattingAttempt);
+<a name="line1148"></a>  // Compute the plurality of the pluralityNumber when formatted using the name
+<a name="line1149"></a>  // units as the formattingNumber.
+<a name="line1150"></a>  var finalPlurality =
+<a name="line1151"></a>      this.pluralForm_(pluralityRounded.intValue + pluralityRounded.fracValue);
+<a name="line1152"></a>  // Get the final unit, using the rounded formatting number to get the correct
+<a name="line1153"></a>  // unit, and the plurality computed from the pluralityNumber.
+<a name="line1154"></a>  return this.getUnitFor_(
+<a name="line1155"></a>      initialDivisor + this.intLog10_(formattingRounded.intValue),
+<a name="line1156"></a>      finalPlurality);
+<a name="line1157"></a>};
+<a name="line1158"></a>
+<a name="line1159"></a>
+<a name="line1160"></a>/**
+<a name="line1161"></a> * Get the integer base 10 logarithm of a number.
+<a name="line1162"></a> *
+<a name="line1163"></a> * @param {number} number The number to log.
+<a name="line1164"></a> * @return {number} The lowest integer n such that 10^n &gt;= number.
+<a name="line1165"></a> * @private
+<a name="line1166"></a> */
+<a name="line1167"></a>goog.i18n.NumberFormat.prototype.intLog10_ = function(number) {
+<a name="line1168"></a>  // Turns out Math.log(1000000)/Math.LN10 is strictly less than 6.
+<a name="line1169"></a>  var i = 0;
+<a name="line1170"></a>  while ((number /= 10) &gt;= 1) i++;
+<a name="line1171"></a>  return i;
+<a name="line1172"></a>};
+<a name="line1173"></a>
+<a name="line1174"></a>
+<a name="line1175"></a>/**
+<a name="line1176"></a> * Round to a certain number of significant digits.
+<a name="line1177"></a> *
+<a name="line1178"></a> * @param {number} number The number to round.
+<a name="line1179"></a> * @param {number} significantDigits The number of significant digits
+<a name="line1180"></a> *     to round to.
+<a name="line1181"></a> * @param {number} scale Treat number as fixed point times 10^scale.
+<a name="line1182"></a> * @return {number} The rounded number.
+<a name="line1183"></a> * @private
+<a name="line1184"></a> */
+<a name="line1185"></a>goog.i18n.NumberFormat.prototype.roundToSignificantDigits_ =
+<a name="line1186"></a>    function(number, significantDigits, scale) {
+<a name="line1187"></a>  if (!number)
+<a name="line1188"></a>    return number;
+<a name="line1189"></a>
+<a name="line1190"></a>  var digits = this.intLog10_(number);
+<a name="line1191"></a>  var magnitude = significantDigits - digits - 1;
+<a name="line1192"></a>
+<a name="line1193"></a>  // Only round fraction, not (potentially shifted) integers.
+<a name="line1194"></a>  if (magnitude &lt; -scale) {
+<a name="line1195"></a>    var point = Math.pow(10, scale);
+<a name="line1196"></a>    return Math.round(number / point) * point;
+<a name="line1197"></a>  }
+<a name="line1198"></a>
+<a name="line1199"></a>  var power = Math.pow(10, magnitude);
+<a name="line1200"></a>  var shifted = Math.round(number * power);
+<a name="line1201"></a>  return shifted / power;
+<a name="line1202"></a>};
+<a name="line1203"></a>
+<a name="line1204"></a>
+<a name="line1205"></a>/**
+<a name="line1206"></a> * Get the plural form of a number.
+<a name="line1207"></a> * @param {number} quantity The quantity to find plurality of.
+<a name="line1208"></a> * @return {string} One of &#39;zero&#39;, &#39;one&#39;, &#39;two&#39;, &#39;few&#39;, &#39;many&#39;, &#39;other&#39;.
+<a name="line1209"></a> * @private
+<a name="line1210"></a> */
+<a name="line1211"></a>goog.i18n.NumberFormat.prototype.pluralForm_ = function(quantity) {
+<a name="line1212"></a>  /* TODO: Implement */
+<a name="line1213"></a>  return &#39;other&#39;;
+<a name="line1214"></a>};
+<a name="line1215"></a>
+<a name="line1216"></a>
+<a name="line1217"></a>/**
+<a name="line1218"></a> * Checks if the currency symbol comes before the value ($12) or after (12$)
+<a name="line1219"></a> * Handy for applications that need to have separate UI fields for the currency
+<a name="line1220"></a> * value and symbol, especially for input: Price: [USD] [123.45]
+<a name="line1221"></a> * The currency symbol might be a combo box, or a label.
+<a name="line1222"></a> *
+<a name="line1223"></a> * @return {boolean} true if currency is before value.
+<a name="line1224"></a> */
+<a name="line1225"></a>goog.i18n.NumberFormat.prototype.isCurrencyCodeBeforeValue = function() {
+<a name="line1226"></a>  var posCurrSymbol = this.pattern_.indexOf(&#39;\u00A4&#39;); // &#39;¤&#39; Currency sign
+<a name="line1227"></a>  var posPound = this.pattern_.indexOf(&#39;#&#39;);
+<a name="line1228"></a>  var posZero = this.pattern_.indexOf(&#39;0&#39;);
+<a name="line1229"></a>
+<a name="line1230"></a>  // posCurrValue is the first &#39;#&#39; or &#39;0&#39; found.
+<a name="line1231"></a>  // If none of them is found (not possible, but still),
+<a name="line1232"></a>  // the result is true (postCurrSymbol &lt; MAX_VALUE)
+<a name="line1233"></a>  // That is OK, matches the en_US and ROOT locales.
+<a name="line1234"></a>  var posCurrValue = Number.MAX_VALUE;
+<a name="line1235"></a>  if (posPound &gt;= 0 &amp;&amp; posPound &lt; posCurrValue) {
+<a name="line1236"></a>    posCurrValue = posPound;
+<a name="line1237"></a>  }
+<a name="line1238"></a>  if (posZero &gt;= 0 &amp;&amp; posZero &lt; posCurrValue) {
+<a name="line1239"></a>    posCurrValue = posZero;
+<a name="line1240"></a>  }
+<a name="line1241"></a>
+<a name="line1242"></a>  // No need to test, it is guaranteed that both these symbols exist.
+<a name="line1243"></a>  // If not, we have bigger problems than this.
+<a name="line1244"></a>  return posCurrSymbol &lt; posCurrValue;
+<a name="line1245"></a>};
+</pre>
+
+
+</body>
+</html>

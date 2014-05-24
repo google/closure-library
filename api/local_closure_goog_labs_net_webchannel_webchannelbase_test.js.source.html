@@ -1,0 +1,1563 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>webchannelbase_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_net_webchannel_webchannelbase_test.js.html">webchannelbase_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Unit tests for goog.labs.net.webChannel.WebChannelBase.
+<a name="line17"></a> * @suppress {accessControls} Private methods are accessed for test purposes.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.labs.net.webChannel.webChannelBaseTest&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line25"></a>goog.require(&#39;goog.array&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line27"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line28"></a>goog.require(&#39;goog.json&#39;);
+<a name="line29"></a>goog.require(&#39;goog.labs.net.webChannel.ChannelRequest&#39;);
+<a name="line30"></a>goog.require(&#39;goog.labs.net.webChannel.ForwardChannelRequestPool&#39;);
+<a name="line31"></a>goog.require(&#39;goog.labs.net.webChannel.WebChannelBase&#39;);
+<a name="line32"></a>goog.require(&#39;goog.labs.net.webChannel.WebChannelBaseTransport&#39;);
+<a name="line33"></a>goog.require(&#39;goog.labs.net.webChannel.WebChannelDebug&#39;);
+<a name="line34"></a>goog.require(&#39;goog.labs.net.webChannel.Wire&#39;);
+<a name="line35"></a>goog.require(&#39;goog.labs.net.webChannel.netUtils&#39;);
+<a name="line36"></a>goog.require(&#39;goog.labs.net.webChannel.requestStats&#39;);
+<a name="line37"></a>goog.require(&#39;goog.labs.net.webChannel.requestStats.Stat&#39;);
+<a name="line38"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line39"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line40"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line41"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line42"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line43"></a>
+<a name="line44"></a>goog.setTestOnly(&#39;goog.labs.net.webChannel.webChannelBaseTest&#39;);
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Delay between a network failure and the next network request.
+<a name="line49"></a> */
+<a name="line50"></a>var RETRY_TIME = 1000;
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * A really long time - used to make sure no more timeouts will fire.
+<a name="line55"></a> */
+<a name="line56"></a>var ALL_DAY_MS = 1000 * 60 * 60 * 24;
+<a name="line57"></a>
+<a name="line58"></a>var stubs = new goog.testing.PropertyReplacer();
+<a name="line59"></a>
+<a name="line60"></a>var channel;
+<a name="line61"></a>var deliveredMaps;
+<a name="line62"></a>var handler;
+<a name="line63"></a>var mockClock;
+<a name="line64"></a>var gotError;
+<a name="line65"></a>var numStatEvents;
+<a name="line66"></a>var lastStatEvent;
+<a name="line67"></a>var numTimingEvents;
+<a name="line68"></a>var lastPostSize;
+<a name="line69"></a>var lastPostRtt;
+<a name="line70"></a>var lastPostRetryCount;
+<a name="line71"></a>
+<a name="line72"></a>// Set to true to see the channel debug output in the browser window.
+<a name="line73"></a>var debug = false;
+<a name="line74"></a>// Debug message to print out when debug is true.
+<a name="line75"></a>var debugMessage = &#39;&#39;;
+<a name="line76"></a>
+<a name="line77"></a>function debugToWindow(message) {
+<a name="line78"></a>  if (debug) {
+<a name="line79"></a>    debugMessage += message + &#39;&lt;br&gt;&#39;;
+<a name="line80"></a>    goog.dom.getElement(&#39;debug&#39;).innerHTML = debugMessage;
+<a name="line81"></a>  }
+<a name="line82"></a>}
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/**
+<a name="line86"></a> * Stubs goog.labs.net.webChannel.netUtils to always time out. It maintains the
+<a name="line87"></a> * contract given by goog.labs.net.webChannel.netUtils.testNetwork, but always
+<a name="line88"></a> * times out (calling callback(false)).
+<a name="line89"></a> *
+<a name="line90"></a> * stubNetUtils should be called in tests that require it before
+<a name="line91"></a> * a call to testNetwork happens. It is reset at tearDown.
+<a name="line92"></a> */
+<a name="line93"></a>function stubNetUtils() {
+<a name="line94"></a>  stubs.set(goog.labs.net.webChannel.netUtils, &#39;testLoadImage&#39;,
+<a name="line95"></a>      function(url, timeout, callback) {
+<a name="line96"></a>        goog.Timer.callOnce(goog.partial(callback, false), timeout);
+<a name="line97"></a>      });
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * Stubs goog.labs.net.webChannel.ForwardChannelRequestPool.isSpdyEnabled_
+<a name="line103"></a> * to manage the max pool size for the forward channel.
+<a name="line104"></a> *
+<a name="line105"></a> * @param {boolean} spdyEnabled Whether SPDY is enabled for the test.
+<a name="line106"></a> */
+<a name="line107"></a>function stubSpdyCheck(spdyEnabled) {
+<a name="line108"></a>  stubs.set(goog.labs.net.webChannel.ForwardChannelRequestPool,
+<a name="line109"></a>      &#39;isSpdyEnabled_&#39;,
+<a name="line110"></a>      function() {
+<a name="line111"></a>        return spdyEnabled;
+<a name="line112"></a>      });
+<a name="line113"></a>}
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Mock ChannelRequest.
+<a name="line119"></a> * @constructor
+<a name="line120"></a> * @struct
+<a name="line121"></a> * @final
+<a name="line122"></a> */
+<a name="line123"></a>var MockChannelRequest = function(channel, channelDebug, opt_sessionId,
+<a name="line124"></a>    opt_requestId, opt_retryId) {
+<a name="line125"></a>  this.channel_ = channel;
+<a name="line126"></a>  this.channelDebug_ = channelDebug;
+<a name="line127"></a>  this.sessionId_ = opt_sessionId;
+<a name="line128"></a>  this.requestId_ = opt_requestId;
+<a name="line129"></a>  this.successful_ = true;
+<a name="line130"></a>  this.lastError_ = null;
+<a name="line131"></a>  this.lastStatusCode_ = 200;
+<a name="line132"></a>
+<a name="line133"></a>  // For debugging, keep track of whether this is a back or forward channel.
+<a name="line134"></a>  this.isBack = !!(opt_requestId == &#39;rpc&#39;);
+<a name="line135"></a>  this.isForward = !this.isBack;
+<a name="line136"></a>};
+<a name="line137"></a>
+<a name="line138"></a>MockChannelRequest.prototype.postData_ = null;
+<a name="line139"></a>
+<a name="line140"></a>MockChannelRequest.prototype.requestStartTime_ = null;
+<a name="line141"></a>
+<a name="line142"></a>MockChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {};
+<a name="line143"></a>
+<a name="line144"></a>MockChannelRequest.prototype.setTimeout = function(timeout) {};
+<a name="line145"></a>
+<a name="line146"></a>MockChannelRequest.prototype.setReadyStateChangeThrottle =
+<a name="line147"></a>    function(throttle) {};
+<a name="line148"></a>
+<a name="line149"></a>MockChannelRequest.prototype.xmlHttpPost = function(uri, postData,
+<a name="line150"></a>    decodeChunks) {
+<a name="line151"></a>  this.channelDebug_.debug(&#39;---&gt; POST: &#39; + uri + &#39;, &#39; + postData + &#39;, &#39; +
+<a name="line152"></a>      decodeChunks);
+<a name="line153"></a>  this.postData_ = postData;
+<a name="line154"></a>  this.requestStartTime_ = goog.now();
+<a name="line155"></a>};
+<a name="line156"></a>
+<a name="line157"></a>MockChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
+<a name="line158"></a>    opt_noClose) {
+<a name="line159"></a>  this.channelDebug_.debug(&#39;&lt;--- GET: &#39; + uri + &#39;, &#39; + decodeChunks + &#39;, &#39; +
+<a name="line160"></a>      opt_noClose);
+<a name="line161"></a>  this.requestStartTime_ = goog.now();
+<a name="line162"></a>};
+<a name="line163"></a>
+<a name="line164"></a>MockChannelRequest.prototype.tridentGet = function(uri, usingSecondaryDomain) {
+<a name="line165"></a>  this.channelDebug_.debug(&#39;&lt;---GET (T): &#39; + uri);
+<a name="line166"></a>  this.requestStartTime_ = goog.now();
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>MockChannelRequest.prototype.sendUsingImgTag = function(uri) {
+<a name="line170"></a>  this.requestStartTime_ = goog.now();
+<a name="line171"></a>};
+<a name="line172"></a>
+<a name="line173"></a>MockChannelRequest.prototype.cancel = function() {
+<a name="line174"></a>  this.successful_ = false;
+<a name="line175"></a>};
+<a name="line176"></a>
+<a name="line177"></a>MockChannelRequest.prototype.getSuccess = function() {
+<a name="line178"></a>  return this.successful_;
+<a name="line179"></a>};
+<a name="line180"></a>
+<a name="line181"></a>MockChannelRequest.prototype.getLastError = function() {
+<a name="line182"></a>  return this.lastError_;
+<a name="line183"></a>};
+<a name="line184"></a>
+<a name="line185"></a>MockChannelRequest.prototype.getLastStatusCode = function() {
+<a name="line186"></a>  return this.lastStatusCode_;
+<a name="line187"></a>};
+<a name="line188"></a>
+<a name="line189"></a>MockChannelRequest.prototype.getSessionId = function() {
+<a name="line190"></a>  return this.sessionId_;
+<a name="line191"></a>};
+<a name="line192"></a>
+<a name="line193"></a>MockChannelRequest.prototype.getRequestId = function() {
+<a name="line194"></a>  return this.requestId_;
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>MockChannelRequest.prototype.getPostData = function() {
+<a name="line198"></a>  return this.postData_;
+<a name="line199"></a>};
+<a name="line200"></a>
+<a name="line201"></a>MockChannelRequest.prototype.getRequestStartTime = function() {
+<a name="line202"></a>  return this.requestStartTime_;
+<a name="line203"></a>};
+<a name="line204"></a>
+<a name="line205"></a>MockChannelRequest.prototype.getXhr = function() {
+<a name="line206"></a>  return null;
+<a name="line207"></a>};
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * @suppress {invalidCasts} The cast from MockChannelRequest to
+<a name="line212"></a> * ChannelRequest is invalid and will not compile.
+<a name="line213"></a> */
+<a name="line214"></a>function setUpPage() {
+<a name="line215"></a>  // Use our MockChannelRequests instead of the real ones.
+<a name="line216"></a>  goog.labs.net.webChannel.ChannelRequest.createChannelRequest = function(
+<a name="line217"></a>      channel, channelDebug, opt_sessionId, opt_requestId, opt_retryId) {
+<a name="line218"></a>    return /** @type {!goog.labs.net.webChannel.ChannelRequest} */ (
+<a name="line219"></a>        new MockChannelRequest(channel, channelDebug, opt_sessionId,
+<a name="line220"></a>            opt_requestId, opt_retryId));
+<a name="line221"></a>  };
+<a name="line222"></a>
+<a name="line223"></a>  // Mock out the stat notification code.
+<a name="line224"></a>  goog.labs.net.webChannel.requestStats.notifyStatEvent = function(
+<a name="line225"></a>      stat) {
+<a name="line226"></a>    numStatEvents++;
+<a name="line227"></a>    lastStatEvent = stat;
+<a name="line228"></a>  };
+<a name="line229"></a>
+<a name="line230"></a>  goog.labs.net.webChannel.requestStats.notifyTimingEvent = function(
+<a name="line231"></a>      size, rtt, retries) {
+<a name="line232"></a>    numTimingEvents++;
+<a name="line233"></a>    lastPostSize = size;
+<a name="line234"></a>    lastPostRtt = rtt;
+<a name="line235"></a>    lastPostRetryCount = retries;
+<a name="line236"></a>  };
+<a name="line237"></a>}
+<a name="line238"></a>
+<a name="line239"></a>function setUp() {
+<a name="line240"></a>  numTimingEvents = 0;
+<a name="line241"></a>  lastPostSize = null;
+<a name="line242"></a>  lastPostRtt = null;
+<a name="line243"></a>  lastPostRetryCount = null;
+<a name="line244"></a>
+<a name="line245"></a>  mockClock = new goog.testing.MockClock(true);
+<a name="line246"></a>  channel = new goog.labs.net.webChannel.WebChannelBase(&#39;1&#39;);
+<a name="line247"></a>  gotError = false;
+<a name="line248"></a>
+<a name="line249"></a>  handler = new goog.labs.net.webChannel.WebChannelBase.Handler();
+<a name="line250"></a>  handler.channelOpened = function() {};
+<a name="line251"></a>  handler.channelError = function(channel, error) {
+<a name="line252"></a>    gotError = true;
+<a name="line253"></a>  };
+<a name="line254"></a>  handler.channelSuccess = function(channel, maps) {
+<a name="line255"></a>    deliveredMaps = goog.array.clone(maps);
+<a name="line256"></a>  };
+<a name="line257"></a>
+<a name="line258"></a>  /**
+<a name="line259"></a>   * @suppress {checkTypes} The callback function type declaration is skipped.
+<a name="line260"></a>   */
+<a name="line261"></a>  handler.channelClosed = function(
+<a name="line262"></a>      channel, opt_pendingMaps, opt_undeliveredMaps) {
+<a name="line263"></a>    // Mock out the handler, and let it set a formatted user readable string
+<a name="line264"></a>    // of the undelivered maps which we can use when verifying our assertions.
+<a name="line265"></a>    if (opt_pendingMaps) {
+<a name="line266"></a>      handler.pendingMapsString = formatArrayOfMaps(opt_pendingMaps);
+<a name="line267"></a>    }
+<a name="line268"></a>    if (opt_undeliveredMaps) {
+<a name="line269"></a>      handler.undeliveredMapsString = formatArrayOfMaps(opt_undeliveredMaps);
+<a name="line270"></a>    }
+<a name="line271"></a>  };
+<a name="line272"></a>  handler.channelHandleMultipleArrays = function() {};
+<a name="line273"></a>  handler.channelHandleArray = function() {};
+<a name="line274"></a>
+<a name="line275"></a>  channel.setHandler(handler);
+<a name="line276"></a>
+<a name="line277"></a>  // Provide a predictable retry time for testing.
+<a name="line278"></a>  channel.getRetryTime_ = function(retryCount) {
+<a name="line279"></a>    return RETRY_TIME;
+<a name="line280"></a>  };
+<a name="line281"></a>
+<a name="line282"></a>  var channelDebug = new goog.labs.net.webChannel.WebChannelDebug();
+<a name="line283"></a>  channelDebug.debug = function(message) {
+<a name="line284"></a>    debugToWindow(message);
+<a name="line285"></a>  };
+<a name="line286"></a>  channel.setChannelDebug(channelDebug);
+<a name="line287"></a>
+<a name="line288"></a>  numStatEvents = 0;
+<a name="line289"></a>  lastStatEvent = null;
+<a name="line290"></a>}
+<a name="line291"></a>
+<a name="line292"></a>
+<a name="line293"></a>function tearDown() {
+<a name="line294"></a>  mockClock.dispose();
+<a name="line295"></a>  stubs.reset();
+<a name="line296"></a>  debugToWindow(&#39;&lt;hr&gt;&#39;);
+<a name="line297"></a>}
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>function getSingleForwardRequest() {
+<a name="line301"></a>  var pool = channel.forwardChannelRequestPool_;
+<a name="line302"></a>  if (!pool.hasPendingRequest()) {
+<a name="line303"></a>    return null;
+<a name="line304"></a>  }
+<a name="line305"></a>  return pool.request_ || pool.requestPool_.getValues()[0];
+<a name="line306"></a>}
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>/**
+<a name="line310"></a> * Helper function to return a formatted string representing an array of maps.
+<a name="line311"></a> */
+<a name="line312"></a>function formatArrayOfMaps(arrayOfMaps) {
+<a name="line313"></a>  var result = [];
+<a name="line314"></a>  for (var i = 0; i &lt; arrayOfMaps.length; i++) {
+<a name="line315"></a>    var map = arrayOfMaps[i];
+<a name="line316"></a>    var keys = map.map.getKeys();
+<a name="line317"></a>    for (var j = 0; j &lt; keys.length; j++) {
+<a name="line318"></a>      var tmp = keys[j] + &#39;:&#39; + map.map.get(keys[j]) + (map.context ?
+<a name="line319"></a>          &#39;:&#39; + map.context : &#39;&#39;);
+<a name="line320"></a>      result.push(tmp);
+<a name="line321"></a>    }
+<a name="line322"></a>  }
+<a name="line323"></a>  return result.join(&#39;, &#39;);
+<a name="line324"></a>}
+<a name="line325"></a>
+<a name="line326"></a>
+<a name="line327"></a>function testFormatArrayOfMaps() {
+<a name="line328"></a>  // This function is used in a non-trivial test, so let&#39;s verify that it works.
+<a name="line329"></a>  var map1 = new goog.structs.Map();
+<a name="line330"></a>  map1.set(&#39;k1&#39;, &#39;v1&#39;);
+<a name="line331"></a>  map1.set(&#39;k2&#39;, &#39;v2&#39;);
+<a name="line332"></a>  var map2 = new goog.structs.Map();
+<a name="line333"></a>  map2.set(&#39;k3&#39;, &#39;v3&#39;);
+<a name="line334"></a>  var map3 = new goog.structs.Map();
+<a name="line335"></a>  map3.set(&#39;k4&#39;, &#39;v4&#39;);
+<a name="line336"></a>  map3.set(&#39;k5&#39;, &#39;v5&#39;);
+<a name="line337"></a>  map3.set(&#39;k6&#39;, &#39;v6&#39;);
+<a name="line338"></a>
+<a name="line339"></a>  // One map.
+<a name="line340"></a>  var a = [];
+<a name="line341"></a>  a.push(new goog.labs.net.webChannel.Wire.QueuedMap(0, map1));
+<a name="line342"></a>  assertEquals(&#39;k1:v1, k2:v2&#39;,
+<a name="line343"></a>      formatArrayOfMaps(a));
+<a name="line344"></a>
+<a name="line345"></a>  // Many maps.
+<a name="line346"></a>  var b = [];
+<a name="line347"></a>  b.push(new goog.labs.net.webChannel.Wire.QueuedMap(0, map1));
+<a name="line348"></a>  b.push(new goog.labs.net.webChannel.Wire.QueuedMap(0, map2));
+<a name="line349"></a>  b.push(new goog.labs.net.webChannel.Wire.QueuedMap(0, map3));
+<a name="line350"></a>  assertEquals(&#39;k1:v1, k2:v2, k3:v3, k4:v4, k5:v5, k6:v6&#39;,
+<a name="line351"></a>      formatArrayOfMaps(b));
+<a name="line352"></a>
+<a name="line353"></a>  // One map with a context.
+<a name="line354"></a>  var c = [];
+<a name="line355"></a>  c.push(new goog.labs.net.webChannel.Wire.QueuedMap(
+<a name="line356"></a>      0, map1, new String(&#39;c1&#39;)));
+<a name="line357"></a>  assertEquals(&#39;k1:v1:c1, k2:v2:c1&#39;,
+<a name="line358"></a>      formatArrayOfMaps(c));
+<a name="line359"></a>}
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>/**
+<a name="line363"></a> * @param {number=} opt_serverVersion
+<a name="line364"></a> * @param {string=} opt_hostPrefix
+<a name="line365"></a> * @param {string=} opt_uriPrefix
+<a name="line366"></a> * @param {boolean=} opt_spdyEnabled
+<a name="line367"></a> */
+<a name="line368"></a>function connectForwardChannel(
+<a name="line369"></a>    opt_serverVersion, opt_hostPrefix, opt_uriPrefix, opt_spdyEnabled) {
+<a name="line370"></a>  stubSpdyCheck(!!opt_spdyEnabled);
+<a name="line371"></a>  var uriPrefix = opt_uriPrefix || &#39;&#39;;
+<a name="line372"></a>  channel.connect(uriPrefix + &#39;/test&#39;, uriPrefix + &#39;/bind&#39;, null);
+<a name="line373"></a>  mockClock.tick(0);
+<a name="line374"></a>  completeTestConnection();
+<a name="line375"></a>  completeForwardChannel(opt_serverVersion, opt_hostPrefix);
+<a name="line376"></a>}
+<a name="line377"></a>
+<a name="line378"></a>
+<a name="line379"></a>/**
+<a name="line380"></a> * @param {number=} opt_serverVersion
+<a name="line381"></a> * @param {string=} opt_hostPrefix
+<a name="line382"></a> * @param {string=} opt_uriPrefix
+<a name="line383"></a> * @param {boolean=} opt_spdyEnabled
+<a name="line384"></a> */
+<a name="line385"></a>function connect(opt_serverVersion, opt_hostPrefix, opt_uriPrefix,
+<a name="line386"></a>    opt_spdyEnabled) {
+<a name="line387"></a>  connectForwardChannel(opt_serverVersion, opt_hostPrefix, opt_uriPrefix,
+<a name="line388"></a>      opt_spdyEnabled);
+<a name="line389"></a>  completeBackChannel();
+<a name="line390"></a>}
+<a name="line391"></a>
+<a name="line392"></a>
+<a name="line393"></a>function disconnect() {
+<a name="line394"></a>  channel.disconnect();
+<a name="line395"></a>  mockClock.tick(0);
+<a name="line396"></a>}
+<a name="line397"></a>
+<a name="line398"></a>
+<a name="line399"></a>function completeTestConnection() {
+<a name="line400"></a>  completeForwardTestConnection();
+<a name="line401"></a>  completeBackTestConnection();
+<a name="line402"></a>  assertEquals(goog.labs.net.webChannel.WebChannelBase.State.OPENING,
+<a name="line403"></a>      channel.getState());
+<a name="line404"></a>}
+<a name="line405"></a>
+<a name="line406"></a>
+<a name="line407"></a>function completeForwardTestConnection() {
+<a name="line408"></a>  channel.connectionTest_.onRequestData(
+<a name="line409"></a>      channel.connectionTest_.request_,
+<a name="line410"></a>      &#39;[&quot;b&quot;]&#39;);
+<a name="line411"></a>  channel.connectionTest_.onRequestComplete(
+<a name="line412"></a>      channel.connectionTest_.request_);
+<a name="line413"></a>  mockClock.tick(0);
+<a name="line414"></a>}
+<a name="line415"></a>
+<a name="line416"></a>
+<a name="line417"></a>function completeBackTestConnection() {
+<a name="line418"></a>  channel.connectionTest_.onRequestData(
+<a name="line419"></a>      channel.connectionTest_.request_,
+<a name="line420"></a>      &#39;11111&#39;);
+<a name="line421"></a>  mockClock.tick(0);
+<a name="line422"></a>}
+<a name="line423"></a>
+<a name="line424"></a>
+<a name="line425"></a>/**
+<a name="line426"></a> * @param {number=} opt_serverVersion
+<a name="line427"></a> * @param {string=} opt_hostPrefix
+<a name="line428"></a> */
+<a name="line429"></a>function completeForwardChannel(opt_serverVersion, opt_hostPrefix) {
+<a name="line430"></a>  var responseData = &#39;[[0,[&quot;c&quot;,&quot;1234567890ABCDEF&quot;,&#39; +
+<a name="line431"></a>      (opt_hostPrefix ? &#39;&quot;&#39; + opt_hostPrefix + &#39;&quot;&#39; : &#39;null&#39;) +
+<a name="line432"></a>      (opt_serverVersion ? &#39;,&#39; + opt_serverVersion : &#39;&#39;) +
+<a name="line433"></a>      &#39;]]]&#39;;
+<a name="line434"></a>  channel.onRequestData(
+<a name="line435"></a>      getSingleForwardRequest(),
+<a name="line436"></a>      responseData);
+<a name="line437"></a>  channel.onRequestComplete(
+<a name="line438"></a>      getSingleForwardRequest());
+<a name="line439"></a>  mockClock.tick(0);
+<a name="line440"></a>}
+<a name="line441"></a>
+<a name="line442"></a>
+<a name="line443"></a>function completeBackChannel() {
+<a name="line444"></a>  channel.onRequestData(
+<a name="line445"></a>      channel.backChannelRequest_,
+<a name="line446"></a>      &#39;[[1,[&quot;foo&quot;]]]&#39;);
+<a name="line447"></a>  channel.onRequestComplete(
+<a name="line448"></a>      channel.backChannelRequest_);
+<a name="line449"></a>  mockClock.tick(0);
+<a name="line450"></a>}
+<a name="line451"></a>
+<a name="line452"></a>
+<a name="line453"></a>function responseDone() {
+<a name="line454"></a>  channel.onRequestData(
+<a name="line455"></a>      getSingleForwardRequest(),
+<a name="line456"></a>      &#39;[1,0,0]&#39;);  // mock data
+<a name="line457"></a>  channel.onRequestComplete(
+<a name="line458"></a>      getSingleForwardRequest());
+<a name="line459"></a>  mockClock.tick(0);
+<a name="line460"></a>}
+<a name="line461"></a>
+<a name="line462"></a>
+<a name="line463"></a>/**
+<a name="line464"></a> *
+<a name="line465"></a> * @param {number=} opt_lastArrayIdSentFromServer
+<a name="line466"></a> * @param {number=} opt_outstandingDataSize
+<a name="line467"></a> */
+<a name="line468"></a>function responseNoBackchannel(
+<a name="line469"></a>    opt_lastArrayIdSentFromServer, opt_outstandingDataSize) {
+<a name="line470"></a>  var responseData = goog.json.serialize(
+<a name="line471"></a>      [0, opt_lastArrayIdSentFromServer, opt_outstandingDataSize]);
+<a name="line472"></a>  channel.onRequestData(
+<a name="line473"></a>      getSingleForwardRequest(),
+<a name="line474"></a>      responseData);
+<a name="line475"></a>  channel.onRequestComplete(
+<a name="line476"></a>      getSingleForwardRequest());
+<a name="line477"></a>  mockClock.tick(0);
+<a name="line478"></a>}
+<a name="line479"></a>
+<a name="line480"></a>function response(lastArrayIdSentFromServer, outstandingDataSize) {
+<a name="line481"></a>  var responseData = goog.json.serialize(
+<a name="line482"></a>      [1, lastArrayIdSentFromServer, outstandingDataSize]);
+<a name="line483"></a>  channel.onRequestData(
+<a name="line484"></a>      getSingleForwardRequest(),
+<a name="line485"></a>      responseData
+<a name="line486"></a>  );
+<a name="line487"></a>  channel.onRequestComplete(
+<a name="line488"></a>      getSingleForwardRequest());
+<a name="line489"></a>  mockClock.tick(0);
+<a name="line490"></a>}
+<a name="line491"></a>
+<a name="line492"></a>
+<a name="line493"></a>function receive(data) {
+<a name="line494"></a>  channel.onRequestData(
+<a name="line495"></a>      channel.backChannelRequest_,
+<a name="line496"></a>      &#39;[[1,&#39; + data + &#39;]]&#39;);
+<a name="line497"></a>  channel.onRequestComplete(
+<a name="line498"></a>      channel.backChannelRequest_);
+<a name="line499"></a>  mockClock.tick(0);
+<a name="line500"></a>}
+<a name="line501"></a>
+<a name="line502"></a>
+<a name="line503"></a>function responseTimeout() {
+<a name="line504"></a>  getSingleForwardRequest().lastError_ =
+<a name="line505"></a>      goog.labs.net.webChannel.ChannelRequest.Error.TIMEOUT;
+<a name="line506"></a>  getSingleForwardRequest().successful_ = false;
+<a name="line507"></a>  channel.onRequestComplete(
+<a name="line508"></a>      getSingleForwardRequest());
+<a name="line509"></a>  mockClock.tick(0);
+<a name="line510"></a>}
+<a name="line511"></a>
+<a name="line512"></a>
+<a name="line513"></a>/**
+<a name="line514"></a> * @param {number=} opt_statusCode
+<a name="line515"></a> */
+<a name="line516"></a>function responseRequestFailed(opt_statusCode) {
+<a name="line517"></a>  getSingleForwardRequest().lastError_ =
+<a name="line518"></a>      goog.labs.net.webChannel.ChannelRequest.Error.STATUS;
+<a name="line519"></a>  getSingleForwardRequest().lastStatusCode_ =
+<a name="line520"></a>      opt_statusCode || 503;
+<a name="line521"></a>  getSingleForwardRequest().successful_ = false;
+<a name="line522"></a>  channel.onRequestComplete(
+<a name="line523"></a>      getSingleForwardRequest());
+<a name="line524"></a>  mockClock.tick(0);
+<a name="line525"></a>}
+<a name="line526"></a>
+<a name="line527"></a>
+<a name="line528"></a>function responseUnknownSessionId() {
+<a name="line529"></a>  getSingleForwardRequest().lastError_ =
+<a name="line530"></a>      goog.labs.net.webChannel.ChannelRequest.Error.UNKNOWN_SESSION_ID;
+<a name="line531"></a>  getSingleForwardRequest().successful_ = false;
+<a name="line532"></a>  channel.onRequestComplete(
+<a name="line533"></a>      getSingleForwardRequest());
+<a name="line534"></a>  mockClock.tick(0);
+<a name="line535"></a>}
+<a name="line536"></a>
+<a name="line537"></a>
+<a name="line538"></a>function responseActiveXBlocked() {
+<a name="line539"></a>  channel.backChannelRequest_.lastError_ =
+<a name="line540"></a>      goog.labs.net.webChannel.ChannelRequest.Error.ACTIVE_X_BLOCKED;
+<a name="line541"></a>  channel.backChannelRequest_.successful_ = false;
+<a name="line542"></a>  channel.onRequestComplete(
+<a name="line543"></a>      channel.backChannelRequest_);
+<a name="line544"></a>  mockClock.tick(0);
+<a name="line545"></a>}
+<a name="line546"></a>
+<a name="line547"></a>
+<a name="line548"></a>/**
+<a name="line549"></a> * @param {string} key
+<a name="line550"></a> * @param {string} value
+<a name="line551"></a> * @param {string=} opt_context
+<a name="line552"></a> */
+<a name="line553"></a>function sendMap(key, value, opt_context) {
+<a name="line554"></a>  var map = new goog.structs.Map();
+<a name="line555"></a>  map.set(key, value);
+<a name="line556"></a>  channel.sendMap(map, opt_context);
+<a name="line557"></a>  mockClock.tick(0);
+<a name="line558"></a>}
+<a name="line559"></a>
+<a name="line560"></a>
+<a name="line561"></a>function hasForwardChannel() {
+<a name="line562"></a>  return !!getSingleForwardRequest();
+<a name="line563"></a>}
+<a name="line564"></a>
+<a name="line565"></a>
+<a name="line566"></a>function hasBackChannel() {
+<a name="line567"></a>  return !!channel.backChannelRequest_;
+<a name="line568"></a>}
+<a name="line569"></a>
+<a name="line570"></a>
+<a name="line571"></a>function hasDeadBackChannelTimer() {
+<a name="line572"></a>  return goog.isDefAndNotNull(channel.deadBackChannelTimerId_);
+<a name="line573"></a>}
+<a name="line574"></a>
+<a name="line575"></a>
+<a name="line576"></a>function assertHasForwardChannel() {
+<a name="line577"></a>  assertTrue(&#39;Forward channel missing.&#39;, hasForwardChannel());
+<a name="line578"></a>}
+<a name="line579"></a>
+<a name="line580"></a>
+<a name="line581"></a>function assertHasBackChannel() {
+<a name="line582"></a>  assertTrue(&#39;Back channel missing.&#39;, hasBackChannel());
+<a name="line583"></a>}
+<a name="line584"></a>
+<a name="line585"></a>
+<a name="line586"></a>function testConnect() {
+<a name="line587"></a>  connect();
+<a name="line588"></a>  assertEquals(goog.labs.net.webChannel.WebChannelBase.State.OPENED,
+<a name="line589"></a>      channel.getState());
+<a name="line590"></a>  // If the server specifies no version, the client assumes the latest version
+<a name="line591"></a>  assertEquals(goog.labs.net.webChannel.Wire.LATEST_CHANNEL_VERSION,
+<a name="line592"></a>               channel.channelVersion_);
+<a name="line593"></a>  assertFalse(channel.isBuffered());
+<a name="line594"></a>}
+<a name="line595"></a>
+<a name="line596"></a>function testConnect_backChannelEstablished() {
+<a name="line597"></a>  connect();
+<a name="line598"></a>  assertHasBackChannel();
+<a name="line599"></a>}
+<a name="line600"></a>
+<a name="line601"></a>function testConnect_withServerHostPrefix() {
+<a name="line602"></a>  connect(undefined, &#39;serverHostPrefix&#39;);
+<a name="line603"></a>  assertEquals(&#39;serverHostPrefix&#39;, channel.hostPrefix_);
+<a name="line604"></a>}
+<a name="line605"></a>
+<a name="line606"></a>function testConnect_withClientHostPrefix() {
+<a name="line607"></a>  handler.correctHostPrefix = function(hostPrefix) {
+<a name="line608"></a>    return &#39;clientHostPrefix&#39;;
+<a name="line609"></a>  };
+<a name="line610"></a>  connect();
+<a name="line611"></a>  assertEquals(&#39;clientHostPrefix&#39;, channel.hostPrefix_);
+<a name="line612"></a>}
+<a name="line613"></a>
+<a name="line614"></a>function testConnect_overrideServerHostPrefix() {
+<a name="line615"></a>  handler.correctHostPrefix = function(hostPrefix) {
+<a name="line616"></a>    return &#39;clientHostPrefix&#39;;
+<a name="line617"></a>  };
+<a name="line618"></a>  connect(undefined, &#39;serverHostPrefix&#39;);
+<a name="line619"></a>  assertEquals(&#39;clientHostPrefix&#39;, channel.hostPrefix_);
+<a name="line620"></a>}
+<a name="line621"></a>
+<a name="line622"></a>function testConnect_withServerVersion() {
+<a name="line623"></a>  connect(8);
+<a name="line624"></a>  assertEquals(8, channel.channelVersion_);
+<a name="line625"></a>}
+<a name="line626"></a>
+<a name="line627"></a>function testConnect_notOkToMakeRequestForTest() {
+<a name="line628"></a>  handler.okToMakeRequest = goog.functions.constant(
+<a name="line629"></a>      goog.labs.net.webChannel.WebChannelBase.Error.NETWORK);
+<a name="line630"></a>  channel.connect(&#39;/test&#39;, &#39;/bind&#39;, null);
+<a name="line631"></a>  mockClock.tick(0);
+<a name="line632"></a>  assertEquals(goog.labs.net.webChannel.WebChannelBase.State.CLOSED,
+<a name="line633"></a>               channel.getState());
+<a name="line634"></a>}
+<a name="line635"></a>
+<a name="line636"></a>function testConnect_notOkToMakeRequestForBind() {
+<a name="line637"></a>  channel.connect(&#39;/test&#39;, &#39;/bind&#39;, null);
+<a name="line638"></a>  mockClock.tick(0);
+<a name="line639"></a>  completeTestConnection();
+<a name="line640"></a>  handler.okToMakeRequest = goog.functions.constant(
+<a name="line641"></a>      goog.labs.net.webChannel.WebChannelBase.Error.NETWORK);
+<a name="line642"></a>  completeForwardChannel();
+<a name="line643"></a>  assertEquals(goog.labs.net.webChannel.WebChannelBase.State.CLOSED,
+<a name="line644"></a>               channel.getState());
+<a name="line645"></a>}
+<a name="line646"></a>
+<a name="line647"></a>
+<a name="line648"></a>function testSendMap() {
+<a name="line649"></a>  connect();
+<a name="line650"></a>  sendMapOnce();
+<a name="line651"></a>}
+<a name="line652"></a>
+<a name="line653"></a>
+<a name="line654"></a>function testSendMapWithSpdyEnabled() {
+<a name="line655"></a>  connect(undefined, undefined, undefined, true);
+<a name="line656"></a>  sendMapOnce();
+<a name="line657"></a>}
+<a name="line658"></a>
+<a name="line659"></a>
+<a name="line660"></a>function sendMapOnce() {
+<a name="line661"></a>  assertEquals(1, numTimingEvents);
+<a name="line662"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line663"></a>  responseDone();
+<a name="line664"></a>  assertEquals(2, numTimingEvents);
+<a name="line665"></a>  assertEquals(&#39;foo:bar&#39;, formatArrayOfMaps(deliveredMaps));
+<a name="line666"></a>}
+<a name="line667"></a>
+<a name="line668"></a>
+<a name="line669"></a>function testSendMap_twice() {
+<a name="line670"></a>  connect();
+<a name="line671"></a>  sendMapTwice();
+<a name="line672"></a>}
+<a name="line673"></a>
+<a name="line674"></a>
+<a name="line675"></a>function testSendMap_twiceWithSpdyEnabled() {
+<a name="line676"></a>  connect(undefined, undefined, undefined, true);
+<a name="line677"></a>  sendMapTwice();
+<a name="line678"></a>}
+<a name="line679"></a>
+<a name="line680"></a>
+<a name="line681"></a>function sendMapTwice() {
+<a name="line682"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line683"></a>  responseDone();
+<a name="line684"></a>  assertEquals(&#39;foo1:bar1&#39;, formatArrayOfMaps(deliveredMaps));
+<a name="line685"></a>  sendMap(&#39;foo2&#39;, &#39;bar2&#39;);
+<a name="line686"></a>  responseDone();
+<a name="line687"></a>  assertEquals(&#39;foo2:bar2&#39;, formatArrayOfMaps(deliveredMaps));
+<a name="line688"></a>}
+<a name="line689"></a>
+<a name="line690"></a>
+<a name="line691"></a>function testSendMap_andReceive() {
+<a name="line692"></a>  connect();
+<a name="line693"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line694"></a>  responseDone();
+<a name="line695"></a>  receive(&#39;[&quot;the server reply&quot;]&#39;);
+<a name="line696"></a>}
+<a name="line697"></a>
+<a name="line698"></a>
+<a name="line699"></a>function testReceive() {
+<a name="line700"></a>  connect();
+<a name="line701"></a>  receive(&#39;[&quot;message from server&quot;]&#39;);
+<a name="line702"></a>  assertHasBackChannel();
+<a name="line703"></a>}
+<a name="line704"></a>
+<a name="line705"></a>
+<a name="line706"></a>function testReceive_twice() {
+<a name="line707"></a>  connect();
+<a name="line708"></a>  receive(&#39;[&quot;message one from server&quot;]&#39;);
+<a name="line709"></a>  receive(&#39;[&quot;message two from server&quot;]&#39;);
+<a name="line710"></a>  assertHasBackChannel();
+<a name="line711"></a>}
+<a name="line712"></a>
+<a name="line713"></a>
+<a name="line714"></a>function testReceive_andSendMap() {
+<a name="line715"></a>  connect();
+<a name="line716"></a>  receive(&#39;[&quot;the server reply&quot;]&#39;);
+<a name="line717"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line718"></a>  responseDone();
+<a name="line719"></a>  assertHasBackChannel();
+<a name="line720"></a>}
+<a name="line721"></a>
+<a name="line722"></a>
+<a name="line723"></a>function testBackChannelRemainsEstablished_afterSingleSendMap() {
+<a name="line724"></a>  connect();
+<a name="line725"></a>
+<a name="line726"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line727"></a>  responseDone();
+<a name="line728"></a>  receive(&#39;[&quot;ack&quot;]&#39;);
+<a name="line729"></a>
+<a name="line730"></a>  assertHasBackChannel();
+<a name="line731"></a>}
+<a name="line732"></a>
+<a name="line733"></a>
+<a name="line734"></a>function testBackChannelRemainsEstablished_afterDoubleSendMap() {
+<a name="line735"></a>  connect();
+<a name="line736"></a>
+<a name="line737"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line738"></a>  sendMap(&#39;foo2&#39;, &#39;bar2&#39;);
+<a name="line739"></a>  responseDone();
+<a name="line740"></a>  receive(&#39;[&quot;ack&quot;]&#39;);
+<a name="line741"></a>
+<a name="line742"></a>  // This assertion would fail prior to CL 13302660.
+<a name="line743"></a>  assertHasBackChannel();
+<a name="line744"></a>}
+<a name="line745"></a>
+<a name="line746"></a>
+<a name="line747"></a>function testTimingEvent() {
+<a name="line748"></a>  connect();
+<a name="line749"></a>  assertEquals(1, numTimingEvents);
+<a name="line750"></a>  sendMap(&#39;&#39;, &#39;&#39;);
+<a name="line751"></a>  assertEquals(1, numTimingEvents);
+<a name="line752"></a>  mockClock.tick(20);
+<a name="line753"></a>  var expSize = getSingleForwardRequest().getPostData().length;
+<a name="line754"></a>  responseDone();
+<a name="line755"></a>
+<a name="line756"></a>  assertEquals(2, numTimingEvents);
+<a name="line757"></a>  assertEquals(expSize, lastPostSize);
+<a name="line758"></a>  assertEquals(20, lastPostRtt);
+<a name="line759"></a>  assertEquals(0, lastPostRetryCount);
+<a name="line760"></a>
+<a name="line761"></a>  sendMap(&#39;abcdefg&#39;, &#39;123456&#39;);
+<a name="line762"></a>  expSize = getSingleForwardRequest().getPostData().length;
+<a name="line763"></a>  responseTimeout();
+<a name="line764"></a>  assertEquals(2, numTimingEvents);
+<a name="line765"></a>  mockClock.tick(RETRY_TIME + 1);
+<a name="line766"></a>  responseDone();
+<a name="line767"></a>  assertEquals(3, numTimingEvents);
+<a name="line768"></a>  assertEquals(expSize, lastPostSize);
+<a name="line769"></a>  assertEquals(1, lastPostRetryCount);
+<a name="line770"></a>  assertEquals(1, lastPostRtt);
+<a name="line771"></a>
+<a name="line772"></a>}
+<a name="line773"></a>
+<a name="line774"></a>
+<a name="line775"></a>/**
+<a name="line776"></a> * Make sure that dropping the forward channel retry limit below the retry count
+<a name="line777"></a> * reports an error, and prevents another request from firing.
+<a name="line778"></a> */
+<a name="line779"></a>function testSetFailFastWhileWaitingForRetry() {
+<a name="line780"></a>  stubNetUtils();
+<a name="line781"></a>
+<a name="line782"></a>  connect();
+<a name="line783"></a>  setFailFastWhileWaitingForRetry();
+<a name="line784"></a>}
+<a name="line785"></a>
+<a name="line786"></a>
+<a name="line787"></a>function testSetFailFastWhileWaitingForRetryWithSpdyEnabled() {
+<a name="line788"></a>  stubNetUtils();
+<a name="line789"></a>
+<a name="line790"></a>  connect(undefined, undefined, undefined, true);
+<a name="line791"></a>  setFailFastWhileWaitingForRetry();
+<a name="line792"></a>}
+<a name="line793"></a>
+<a name="line794"></a>
+<a name="line795"></a>function setFailFastWhileWaitingForRetry() {
+<a name="line796"></a>  assertEquals(1, numTimingEvents);
+<a name="line797"></a>
+<a name="line798"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line799"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line800"></a>  assertNotNull(getSingleForwardRequest());
+<a name="line801"></a>  assertEquals(0, channel.forwardChannelRetryCount_);
+<a name="line802"></a>
+<a name="line803"></a>  // Watchdog timeout.
+<a name="line804"></a>  responseTimeout();
+<a name="line805"></a>  assertNotNull(channel.forwardChannelTimerId_);
+<a name="line806"></a>  assertNull(getSingleForwardRequest());
+<a name="line807"></a>  assertEquals(1, channel.forwardChannelRetryCount_);
+<a name="line808"></a>
+<a name="line809"></a>  // Almost finish the between-retry timeout.
+<a name="line810"></a>  mockClock.tick(RETRY_TIME - 1);
+<a name="line811"></a>  assertNotNull(channel.forwardChannelTimerId_);
+<a name="line812"></a>  assertNull(getSingleForwardRequest());
+<a name="line813"></a>  assertEquals(1, channel.forwardChannelRetryCount_);
+<a name="line814"></a>
+<a name="line815"></a>  // Setting max retries to 0 should cancel the timer and raise an error.
+<a name="line816"></a>  channel.setFailFast(true);
+<a name="line817"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line818"></a>  assertNull(getSingleForwardRequest());
+<a name="line819"></a>  assertEquals(1, channel.forwardChannelRetryCount_);
+<a name="line820"></a>
+<a name="line821"></a>  assertTrue(gotError);
+<a name="line822"></a>  assertEquals(0, deliveredMaps.length);
+<a name="line823"></a>  // We get the error immediately before starting to ping google.com.
+<a name="line824"></a>  // Simulate that timing out. We should get a network error in addition to the
+<a name="line825"></a>  // initial failure.
+<a name="line826"></a>  gotError = false;
+<a name="line827"></a>  mockClock.tick(goog.labs.net.webChannel.netUtils.NETWORK_TIMEOUT);
+<a name="line828"></a>  assertTrue(&#39;No error after network ping timed out.&#39;, gotError);
+<a name="line829"></a>
+<a name="line830"></a>  // Make sure no more retry timers are firing.
+<a name="line831"></a>  mockClock.tick(ALL_DAY_MS);
+<a name="line832"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line833"></a>  assertNull(getSingleForwardRequest());
+<a name="line834"></a>  assertEquals(1, channel.forwardChannelRetryCount_);
+<a name="line835"></a>  assertEquals(1, numTimingEvents);
+<a name="line836"></a>}
+<a name="line837"></a>
+<a name="line838"></a>
+<a name="line839"></a>/**
+<a name="line840"></a> * Make sure that dropping the forward channel retry limit below the retry count
+<a name="line841"></a> * reports an error, and prevents another request from firing.
+<a name="line842"></a> */
+<a name="line843"></a>function testSetFailFastWhileRetryXhrIsInFlight() {
+<a name="line844"></a>  stubNetUtils();
+<a name="line845"></a>
+<a name="line846"></a>  connect();
+<a name="line847"></a>  setFailFastWhileRetryXhrIsInFlight();
+<a name="line848"></a>}
+<a name="line849"></a>
+<a name="line850"></a>
+<a name="line851"></a>function testSetFailFastWhileRetryXhrIsInFlightWithSpdyEnabled() {
+<a name="line852"></a>  stubNetUtils();
+<a name="line853"></a>
+<a name="line854"></a>  connect(undefined, undefined, undefined, true);
+<a name="line855"></a>  setFailFastWhileRetryXhrIsInFlight();
+<a name="line856"></a>}
+<a name="line857"></a>
+<a name="line858"></a>
+<a name="line859"></a>function setFailFastWhileRetryXhrIsInFlight() {
+<a name="line860"></a>  assertEquals(1, numTimingEvents);
+<a name="line861"></a>
+<a name="line862"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line863"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line864"></a>  assertNotNull(getSingleForwardRequest());
+<a name="line865"></a>  assertEquals(0, channel.forwardChannelRetryCount_);
+<a name="line866"></a>
+<a name="line867"></a>  // Watchdog timeout.
+<a name="line868"></a>  responseTimeout();
+<a name="line869"></a>  assertNotNull(channel.forwardChannelTimerId_);
+<a name="line870"></a>  assertNull(getSingleForwardRequest());
+<a name="line871"></a>  assertEquals(1, channel.forwardChannelRetryCount_);
+<a name="line872"></a>
+<a name="line873"></a>  // Wait for the between-retry timeout.
+<a name="line874"></a>  mockClock.tick(RETRY_TIME);
+<a name="line875"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line876"></a>  assertNotNull(getSingleForwardRequest());
+<a name="line877"></a>  assertEquals(1, channel.forwardChannelRetryCount_);
+<a name="line878"></a>
+<a name="line879"></a>  // Simulate a second watchdog timeout.
+<a name="line880"></a>  responseTimeout();
+<a name="line881"></a>  assertNotNull(channel.forwardChannelTimerId_);
+<a name="line882"></a>  assertNull(getSingleForwardRequest());
+<a name="line883"></a>  assertEquals(2, channel.forwardChannelRetryCount_);
+<a name="line884"></a>
+<a name="line885"></a>  // Wait for another between-retry timeout.
+<a name="line886"></a>  mockClock.tick(RETRY_TIME);
+<a name="line887"></a>  // Now the third req is in flight.
+<a name="line888"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line889"></a>  assertNotNull(getSingleForwardRequest());
+<a name="line890"></a>  assertEquals(2, channel.forwardChannelRetryCount_);
+<a name="line891"></a>
+<a name="line892"></a>  // Set fail fast, killing the request
+<a name="line893"></a>  channel.setFailFast(true);
+<a name="line894"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line895"></a>  assertNull(getSingleForwardRequest());
+<a name="line896"></a>  assertEquals(2, channel.forwardChannelRetryCount_);
+<a name="line897"></a>
+<a name="line898"></a>  assertTrue(gotError);
+<a name="line899"></a>  // We get the error immediately before starting to ping google.com.
+<a name="line900"></a>  // Simulate that timing out. We should get a network error in addition to the
+<a name="line901"></a>  gotError = false;
+<a name="line902"></a>  mockClock.tick(goog.labs.net.webChannel.netUtils.NETWORK_TIMEOUT);
+<a name="line903"></a>  assertTrue(&#39;No error after network ping timed out.&#39;, gotError);
+<a name="line904"></a>
+<a name="line905"></a>  // Make sure no more retry timers are firing.
+<a name="line906"></a>  mockClock.tick(ALL_DAY_MS);
+<a name="line907"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line908"></a>  assertNull(getSingleForwardRequest());
+<a name="line909"></a>  assertEquals(2, channel.forwardChannelRetryCount_);
+<a name="line910"></a>  assertEquals(1, numTimingEvents);
+<a name="line911"></a>}
+<a name="line912"></a>
+<a name="line913"></a>
+<a name="line914"></a>/**
+<a name="line915"></a> * Makes sure that setting fail fast while not retrying doesn&#39;t cause a failure.
+<a name="line916"></a> */
+<a name="line917"></a>function testSetFailFastAtRetryCount() {
+<a name="line918"></a>  stubNetUtils();
+<a name="line919"></a>
+<a name="line920"></a>  connect();
+<a name="line921"></a>  assertEquals(1, numTimingEvents);
+<a name="line922"></a>
+<a name="line923"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line924"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line925"></a>  assertNotNull(getSingleForwardRequest());
+<a name="line926"></a>  assertEquals(0, channel.forwardChannelRetryCount_);
+<a name="line927"></a>
+<a name="line928"></a>  // Set fail fast.
+<a name="line929"></a>  channel.setFailFast(true);
+<a name="line930"></a>  // Request should still be alive.
+<a name="line931"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line932"></a>  assertNotNull(getSingleForwardRequest());
+<a name="line933"></a>  assertEquals(0, channel.forwardChannelRetryCount_);
+<a name="line934"></a>
+<a name="line935"></a>  // Watchdog timeout. Now we should get an error.
+<a name="line936"></a>  responseTimeout();
+<a name="line937"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line938"></a>  assertNull(getSingleForwardRequest());
+<a name="line939"></a>  assertEquals(0, channel.forwardChannelRetryCount_);
+<a name="line940"></a>
+<a name="line941"></a>  assertTrue(gotError);
+<a name="line942"></a>  // We get the error immediately before starting to ping google.com.
+<a name="line943"></a>  // Simulate that timing out. We should get a network error in addition to the
+<a name="line944"></a>  // initial failure.
+<a name="line945"></a>  gotError = false;
+<a name="line946"></a>  mockClock.tick(goog.labs.net.webChannel.netUtils.NETWORK_TIMEOUT);
+<a name="line947"></a>  assertTrue(&#39;No error after network ping timed out.&#39;, gotError);
+<a name="line948"></a>
+<a name="line949"></a>  // Make sure no more retry timers are firing.
+<a name="line950"></a>  mockClock.tick(ALL_DAY_MS);
+<a name="line951"></a>  assertNull(channel.forwardChannelTimerId_);
+<a name="line952"></a>  assertNull(getSingleForwardRequest());
+<a name="line953"></a>  assertEquals(0, channel.forwardChannelRetryCount_);
+<a name="line954"></a>  assertEquals(1, numTimingEvents);
+<a name="line955"></a>}
+<a name="line956"></a>
+<a name="line957"></a>
+<a name="line958"></a>function testRequestFailedClosesChannel() {
+<a name="line959"></a>  stubNetUtils();
+<a name="line960"></a>
+<a name="line961"></a>  connect();
+<a name="line962"></a>  requestFailedClosesChannel();
+<a name="line963"></a>}
+<a name="line964"></a>
+<a name="line965"></a>
+<a name="line966"></a>function testRequestFailedClosesChannelWithSpdyEnabled() {
+<a name="line967"></a>  stubNetUtils();
+<a name="line968"></a>
+<a name="line969"></a>  connect(undefined, undefined, undefined, true);
+<a name="line970"></a>  requestFailedClosesChannel();
+<a name="line971"></a>}
+<a name="line972"></a>
+<a name="line973"></a>
+<a name="line974"></a>function requestFailedClosesChannel() {
+<a name="line975"></a>  assertEquals(1, numTimingEvents);
+<a name="line976"></a>
+<a name="line977"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line978"></a>  responseRequestFailed();
+<a name="line979"></a>
+<a name="line980"></a>  assertEquals(&#39;Should be closed immediately after request failed.&#39;,
+<a name="line981"></a>      goog.labs.net.webChannel.WebChannelBase.State.CLOSED, channel.getState());
+<a name="line982"></a>
+<a name="line983"></a>  mockClock.tick(goog.labs.net.webChannel.netUtils.NETWORK_TIMEOUT);
+<a name="line984"></a>
+<a name="line985"></a>  assertEquals(&#39;Should remain closed after the ping timeout.&#39;,
+<a name="line986"></a>      goog.labs.net.webChannel.WebChannelBase.State.CLOSED, channel.getState());
+<a name="line987"></a>  assertEquals(1, numTimingEvents);
+<a name="line988"></a>}
+<a name="line989"></a>
+<a name="line990"></a>
+<a name="line991"></a>function testStatEventReportedOnlyOnce() {
+<a name="line992"></a>  stubNetUtils();
+<a name="line993"></a>
+<a name="line994"></a>  connect();
+<a name="line995"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line996"></a>  numStatEvents = 0;
+<a name="line997"></a>  lastStatEvent = null;
+<a name="line998"></a>  responseUnknownSessionId();
+<a name="line999"></a>
+<a name="line1000"></a>  assertEquals(1, numStatEvents);
+<a name="line1001"></a>  assertEquals(goog.labs.net.webChannel.requestStats.Stat.ERROR_OTHER,
+<a name="line1002"></a>      lastStatEvent);
+<a name="line1003"></a>
+<a name="line1004"></a>  numStatEvents = 0;
+<a name="line1005"></a>  mockClock.tick(goog.labs.net.webChannel.netUtils.NETWORK_TIMEOUT);
+<a name="line1006"></a>  assertEquals(&#39;No new stat events should be reported.&#39;, 0, numStatEvents);
+<a name="line1007"></a>}
+<a name="line1008"></a>
+<a name="line1009"></a>
+<a name="line1010"></a>function testActiveXBlockedEventReportedOnlyOnce() {
+<a name="line1011"></a>  stubNetUtils();
+<a name="line1012"></a>
+<a name="line1013"></a>  connectForwardChannel();
+<a name="line1014"></a>  numStatEvents = 0;
+<a name="line1015"></a>  lastStatEvent = null;
+<a name="line1016"></a>  responseActiveXBlocked();
+<a name="line1017"></a>
+<a name="line1018"></a>  assertEquals(1, numStatEvents);
+<a name="line1019"></a>  assertEquals(goog.labs.net.webChannel.requestStats.Stat.ERROR_OTHER,
+<a name="line1020"></a>      lastStatEvent);
+<a name="line1021"></a>
+<a name="line1022"></a>  mockClock.tick(goog.labs.net.webChannel.netUtils.NETWORK_TIMEOUT);
+<a name="line1023"></a>  assertEquals(&#39;No new stat events should be reported.&#39;, 1, numStatEvents);
+<a name="line1024"></a>}
+<a name="line1025"></a>
+<a name="line1026"></a>
+<a name="line1027"></a>function testStatEventReportedOnlyOnce_onNetworkUp() {
+<a name="line1028"></a>  stubNetUtils();
+<a name="line1029"></a>
+<a name="line1030"></a>  connect();
+<a name="line1031"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line1032"></a>  numStatEvents = 0;
+<a name="line1033"></a>  lastStatEvent = null;
+<a name="line1034"></a>  responseRequestFailed();
+<a name="line1035"></a>
+<a name="line1036"></a>  assertEquals(&#39;No stat event should be reported before we know the reason.&#39;,
+<a name="line1037"></a>      0, numStatEvents);
+<a name="line1038"></a>
+<a name="line1039"></a>  // Let the ping time out.
+<a name="line1040"></a>  mockClock.tick(goog.labs.net.webChannel.netUtils.NETWORK_TIMEOUT);
+<a name="line1041"></a>
+<a name="line1042"></a>  // Assert we report the correct stat event.
+<a name="line1043"></a>  assertEquals(1, numStatEvents);
+<a name="line1044"></a>  assertEquals(
+<a name="line1045"></a>      goog.labs.net.webChannel.requestStats.Stat.ERROR_NETWORK,
+<a name="line1046"></a>      lastStatEvent);
+<a name="line1047"></a>}
+<a name="line1048"></a>
+<a name="line1049"></a>
+<a name="line1050"></a>function testStatEventReportedOnlyOnce_onNetworkDown() {
+<a name="line1051"></a>  stubNetUtils();
+<a name="line1052"></a>
+<a name="line1053"></a>  connect();
+<a name="line1054"></a>  sendMap(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line1055"></a>  numStatEvents = 0;
+<a name="line1056"></a>  lastStatEvent = null;
+<a name="line1057"></a>  responseRequestFailed();
+<a name="line1058"></a>
+<a name="line1059"></a>  assertEquals(&#39;No stat event should be reported before we know the reason.&#39;,
+<a name="line1060"></a>      0, numStatEvents);
+<a name="line1061"></a>
+<a name="line1062"></a>  // Wait half the ping timeout period, and then fake the network being up.
+<a name="line1063"></a>  mockClock.tick(goog.labs.net.webChannel.netUtils.NETWORK_TIMEOUT / 2);
+<a name="line1064"></a>  channel.testNetworkCallback_(true);
+<a name="line1065"></a>
+<a name="line1066"></a>  // Assert we report the correct stat event.
+<a name="line1067"></a>  assertEquals(1, numStatEvents);
+<a name="line1068"></a>  assertEquals(goog.labs.net.webChannel.requestStats.Stat.ERROR_OTHER,
+<a name="line1069"></a>      lastStatEvent);
+<a name="line1070"></a>}
+<a name="line1071"></a>
+<a name="line1072"></a>
+<a name="line1073"></a>function testOutgoingMapsAwaitsResponse() {
+<a name="line1074"></a>  connect();
+<a name="line1075"></a>  outgoingMapsAwaitsResponse();
+<a name="line1076"></a>}
+<a name="line1077"></a>
+<a name="line1078"></a>
+<a name="line1079"></a>function testOutgoingMapsAwaitsResponseWithSpdyEnabled() {
+<a name="line1080"></a>  connect(undefined, undefined, undefined, true);
+<a name="line1081"></a>  outgoingMapsAwaitsResponse();
+<a name="line1082"></a>}
+<a name="line1083"></a>
+<a name="line1084"></a>
+<a name="line1085"></a>function outgoingMapsAwaitsResponse() {
+<a name="line1086"></a>  assertEquals(0, channel.outgoingMaps_.length);
+<a name="line1087"></a>
+<a name="line1088"></a>  sendMap(&#39;foo1&#39;, &#39;bar&#39;);
+<a name="line1089"></a>  assertEquals(0, channel.outgoingMaps_.length);
+<a name="line1090"></a>  sendMap(&#39;foo2&#39;, &#39;bar&#39;);
+<a name="line1091"></a>  assertEquals(1, channel.outgoingMaps_.length);
+<a name="line1092"></a>  sendMap(&#39;foo3&#39;, &#39;bar&#39;);
+<a name="line1093"></a>  assertEquals(2, channel.outgoingMaps_.length);
+<a name="line1094"></a>  sendMap(&#39;foo4&#39;, &#39;bar&#39;);
+<a name="line1095"></a>  assertEquals(3, channel.outgoingMaps_.length);
+<a name="line1096"></a>
+<a name="line1097"></a>  responseDone();
+<a name="line1098"></a>  // Now the forward channel request is completed and a new started, so all maps
+<a name="line1099"></a>  // are dequeued from the array of outgoing maps into this new forward request.
+<a name="line1100"></a>  assertEquals(0, channel.outgoingMaps_.length);
+<a name="line1101"></a>}
+<a name="line1102"></a>
+<a name="line1103"></a>
+<a name="line1104"></a>function testUndeliveredMaps_doesNotNotifyWhenSuccessful() {
+<a name="line1105"></a>  /**
+<a name="line1106"></a>   * @suppress {checkTypes} The callback function type declaration is skipped.
+<a name="line1107"></a>   */
+<a name="line1108"></a>  handler.channelClosed = function(
+<a name="line1109"></a>      channel, opt_pendingMaps, opt_undeliveredMaps) {
+<a name="line1110"></a>    if (opt_pendingMaps || opt_undeliveredMaps) {
+<a name="line1111"></a>      fail(&#39;No pending or undelivered maps should be reported.&#39;);
+<a name="line1112"></a>    }
+<a name="line1113"></a>  };
+<a name="line1114"></a>
+<a name="line1115"></a>  connect();
+<a name="line1116"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1117"></a>  responseDone();
+<a name="line1118"></a>  sendMap(&#39;foo2&#39;, &#39;bar2&#39;);
+<a name="line1119"></a>  responseDone();
+<a name="line1120"></a>  disconnect();
+<a name="line1121"></a>}
+<a name="line1122"></a>
+<a name="line1123"></a>
+<a name="line1124"></a>function testUndeliveredMaps_doesNotNotifyIfNothingWasSent() {
+<a name="line1125"></a>  /**
+<a name="line1126"></a>   * @suppress {checkTypes} The callback function type declaration is skipped.
+<a name="line1127"></a>   */
+<a name="line1128"></a>  handler.channelClosed = function(
+<a name="line1129"></a>      channel, opt_pendingMaps, opt_undeliveredMaps) {
+<a name="line1130"></a>    if (opt_pendingMaps || opt_undeliveredMaps) {
+<a name="line1131"></a>      fail(&#39;No pending or undelivered maps should be reported.&#39;);
+<a name="line1132"></a>    }
+<a name="line1133"></a>  };
+<a name="line1134"></a>
+<a name="line1135"></a>  connect();
+<a name="line1136"></a>  mockClock.tick(ALL_DAY_MS);
+<a name="line1137"></a>  disconnect();
+<a name="line1138"></a>}
+<a name="line1139"></a>
+<a name="line1140"></a>
+<a name="line1141"></a>function testUndeliveredMaps_clearsPendingMapsAfterNotifying() {
+<a name="line1142"></a>  connect();
+<a name="line1143"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1144"></a>  sendMap(&#39;foo2&#39;, &#39;bar2&#39;);
+<a name="line1145"></a>  sendMap(&#39;foo3&#39;, &#39;bar3&#39;);
+<a name="line1146"></a>
+<a name="line1147"></a>  assertEquals(1, channel.pendingMaps_.length);
+<a name="line1148"></a>  assertEquals(2, channel.outgoingMaps_.length);
+<a name="line1149"></a>
+<a name="line1150"></a>  disconnect();
+<a name="line1151"></a>
+<a name="line1152"></a>  assertEquals(0, channel.pendingMaps_.length);
+<a name="line1153"></a>  assertEquals(0, channel.outgoingMaps_.length);
+<a name="line1154"></a>}
+<a name="line1155"></a>
+<a name="line1156"></a>
+<a name="line1157"></a>function testUndeliveredMaps_notifiesWithContext() {
+<a name="line1158"></a>  connect();
+<a name="line1159"></a>
+<a name="line1160"></a>  // First send two messages that succeed.
+<a name="line1161"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;, &#39;context1&#39;);
+<a name="line1162"></a>  responseDone();
+<a name="line1163"></a>  sendMap(&#39;foo2&#39;, &#39;bar2&#39;, &#39;context2&#39;);
+<a name="line1164"></a>  responseDone();
+<a name="line1165"></a>
+<a name="line1166"></a>  // Pretend the server hangs and no longer responds.
+<a name="line1167"></a>  sendMap(&#39;foo3&#39;, &#39;bar3&#39;, &#39;context3&#39;);
+<a name="line1168"></a>  sendMap(&#39;foo4&#39;, &#39;bar4&#39;, &#39;context4&#39;);
+<a name="line1169"></a>  sendMap(&#39;foo5&#39;, &#39;bar5&#39;, &#39;context5&#39;);
+<a name="line1170"></a>
+<a name="line1171"></a>  // Give up.
+<a name="line1172"></a>  disconnect();
+<a name="line1173"></a>
+<a name="line1174"></a>  // Assert that we are informed of any undelivered messages; both about
+<a name="line1175"></a>  // #3 that was sent but which we don&#39;t know if the server received, and
+<a name="line1176"></a>  // #4 and #5 which remain in the outgoing maps and have not yet been sent.
+<a name="line1177"></a>  assertEquals(&#39;foo3:bar3:context3&#39;, handler.pendingMapsString);
+<a name="line1178"></a>  assertEquals(&#39;foo4:bar4:context4, foo5:bar5:context5&#39;,
+<a name="line1179"></a>      handler.undeliveredMapsString);
+<a name="line1180"></a>}
+<a name="line1181"></a>
+<a name="line1182"></a>
+<a name="line1183"></a>function testUndeliveredMaps_serviceUnavailable() {
+<a name="line1184"></a>  // Send a few maps, and let one fail.
+<a name="line1185"></a>  connect();
+<a name="line1186"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1187"></a>  responseDone();
+<a name="line1188"></a>  sendMap(&#39;foo2&#39;, &#39;bar2&#39;);
+<a name="line1189"></a>  responseRequestFailed();
+<a name="line1190"></a>
+<a name="line1191"></a>  // After a failure, the channel should be closed.
+<a name="line1192"></a>  disconnect();
+<a name="line1193"></a>
+<a name="line1194"></a>  assertEquals(&#39;foo2:bar2&#39;, handler.pendingMapsString);
+<a name="line1195"></a>  assertEquals(&#39;&#39;, handler.undeliveredMapsString);
+<a name="line1196"></a>}
+<a name="line1197"></a>
+<a name="line1198"></a>
+<a name="line1199"></a>function testUndeliveredMaps_onPingTimeout() {
+<a name="line1200"></a>  stubNetUtils();
+<a name="line1201"></a>
+<a name="line1202"></a>  connect();
+<a name="line1203"></a>
+<a name="line1204"></a>  // Send a message.
+<a name="line1205"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1206"></a>
+<a name="line1207"></a>  // Fake REQUEST_FAILED, triggering a ping to check the network.
+<a name="line1208"></a>  responseRequestFailed();
+<a name="line1209"></a>
+<a name="line1210"></a>  // Let the ping time out, unsuccessfully.
+<a name="line1211"></a>  mockClock.tick(goog.labs.net.webChannel.netUtils.NETWORK_TIMEOUT);
+<a name="line1212"></a>
+<a name="line1213"></a>  // Assert channel is closed.
+<a name="line1214"></a>  assertEquals(goog.labs.net.webChannel.WebChannelBase.State.CLOSED,
+<a name="line1215"></a>      channel.getState());
+<a name="line1216"></a>
+<a name="line1217"></a>  // Assert that the handler is notified about the undelivered messages.
+<a name="line1218"></a>  assertEquals(&#39;foo1:bar1&#39;, handler.pendingMapsString);
+<a name="line1219"></a>  assertEquals(&#39;&#39;, handler.undeliveredMapsString);
+<a name="line1220"></a>}
+<a name="line1221"></a>
+<a name="line1222"></a>
+<a name="line1223"></a>function testResponseNoBackchannelPostNotBeforeBackchannel() {
+<a name="line1224"></a>  connect(8);
+<a name="line1225"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1226"></a>
+<a name="line1227"></a>  mockClock.tick(10);
+<a name="line1228"></a>  assertFalse(channel.backChannelRequest_.getRequestStartTime() &lt;
+<a name="line1229"></a>      getSingleForwardRequest().getRequestStartTime());
+<a name="line1230"></a>  responseNoBackchannel();
+<a name="line1231"></a>  assertNotEquals(
+<a name="line1232"></a>      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_MISSING,
+<a name="line1233"></a>      lastStatEvent);
+<a name="line1234"></a>}
+<a name="line1235"></a>
+<a name="line1236"></a>
+<a name="line1237"></a>function testResponseNoBackchannel() {
+<a name="line1238"></a>  connect(8);
+<a name="line1239"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1240"></a>  response(-1, 0);
+<a name="line1241"></a>  mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE + 1);
+<a name="line1242"></a>  sendMap(&#39;foo2&#39;, &#39;bar2&#39;);
+<a name="line1243"></a>  assertTrue(channel.backChannelRequest_.getRequestStartTime() +
+<a name="line1244"></a>      goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE &lt;
+<a name="line1245"></a>      getSingleForwardRequest().getRequestStartTime());
+<a name="line1246"></a>  responseNoBackchannel();
+<a name="line1247"></a>  assertEquals(
+<a name="line1248"></a>      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_MISSING,
+<a name="line1249"></a>      lastStatEvent);
+<a name="line1250"></a>}
+<a name="line1251"></a>
+<a name="line1252"></a>
+<a name="line1253"></a>function testResponseNoBackchannelWithNoBackchannel() {
+<a name="line1254"></a>  connect(8);
+<a name="line1255"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1256"></a>  assertNull(channel.backChannelTimerId_);
+<a name="line1257"></a>  channel.backChannelRequest_.cancel();
+<a name="line1258"></a>  channel.backChannelRequest_ = null;
+<a name="line1259"></a>  responseNoBackchannel();
+<a name="line1260"></a>  assertEquals(
+<a name="line1261"></a>      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_MISSING,
+<a name="line1262"></a>      lastStatEvent);
+<a name="line1263"></a>}
+<a name="line1264"></a>
+<a name="line1265"></a>
+<a name="line1266"></a>function testResponseNoBackchannelWithStartTimer() {
+<a name="line1267"></a>  connect(8);
+<a name="line1268"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1269"></a>
+<a name="line1270"></a>  channel.backChannelRequest_.cancel();
+<a name="line1271"></a>  channel.backChannelRequest_ = null;
+<a name="line1272"></a>  channel.backChannelTimerId_ = 123;
+<a name="line1273"></a>  responseNoBackchannel();
+<a name="line1274"></a>  assertNotEquals(
+<a name="line1275"></a>      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_MISSING,
+<a name="line1276"></a>      lastStatEvent);
+<a name="line1277"></a>}
+<a name="line1278"></a>
+<a name="line1279"></a>
+<a name="line1280"></a>function testResponseWithNoArraySent() {
+<a name="line1281"></a>  connect(8);
+<a name="line1282"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1283"></a>
+<a name="line1284"></a>  // Send a response as if the server hasn&#39;t sent down an array.
+<a name="line1285"></a>  response(-1, 0);
+<a name="line1286"></a>
+<a name="line1287"></a>  // POST response with an array ID lower than our last received is OK.
+<a name="line1288"></a>  assertEquals(1, channel.lastArrayId_);
+<a name="line1289"></a>  assertEquals(-1, channel.lastPostResponseArrayId_);
+<a name="line1290"></a>}
+<a name="line1291"></a>
+<a name="line1292"></a>
+<a name="line1293"></a>function testResponseWithArraysMissing() {
+<a name="line1294"></a>  connect(8);
+<a name="line1295"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1296"></a>  assertEquals(-1, channel.lastPostResponseArrayId_);
+<a name="line1297"></a>
+<a name="line1298"></a>  // Send a response as if the server has sent down seven arrays.
+<a name="line1299"></a>  response(7, 111);
+<a name="line1300"></a>
+<a name="line1301"></a>  assertEquals(1, channel.lastArrayId_);
+<a name="line1302"></a>  assertEquals(7, channel.lastPostResponseArrayId_);
+<a name="line1303"></a>  mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE * 2);
+<a name="line1304"></a>  assertEquals(
+<a name="line1305"></a>      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
+<a name="line1306"></a>      lastStatEvent);
+<a name="line1307"></a>}
+<a name="line1308"></a>
+<a name="line1309"></a>
+<a name="line1310"></a>function testMultipleResponsesWithArraysMissing() {
+<a name="line1311"></a>  connect(8);
+<a name="line1312"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1313"></a>  assertEquals(-1, channel.lastPostResponseArrayId_);
+<a name="line1314"></a>
+<a name="line1315"></a>  // Send a response as if the server has sent down seven arrays.
+<a name="line1316"></a>  response(7, 111);
+<a name="line1317"></a>
+<a name="line1318"></a>  assertEquals(1, channel.lastArrayId_);
+<a name="line1319"></a>  assertEquals(7, channel.lastPostResponseArrayId_);
+<a name="line1320"></a>  sendMap(&#39;foo2&#39;, &#39;bar2&#39;);
+<a name="line1321"></a>  mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE);
+<a name="line1322"></a>  response(8, 119);
+<a name="line1323"></a>  mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE);
+<a name="line1324"></a>  // The original timer should still fire.
+<a name="line1325"></a>  assertEquals(
+<a name="line1326"></a>      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
+<a name="line1327"></a>      lastStatEvent);
+<a name="line1328"></a>}
+<a name="line1329"></a>
+<a name="line1330"></a>
+<a name="line1331"></a>function testOnlyRetryOnceBasedOnResponse() {
+<a name="line1332"></a>  connect(8);
+<a name="line1333"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1334"></a>  assertEquals(-1, channel.lastPostResponseArrayId_);
+<a name="line1335"></a>
+<a name="line1336"></a>  // Send a response as if the server has sent down seven arrays.
+<a name="line1337"></a>  response(7, 111);
+<a name="line1338"></a>
+<a name="line1339"></a>  assertEquals(1, channel.lastArrayId_);
+<a name="line1340"></a>  assertEquals(7, channel.lastPostResponseArrayId_);
+<a name="line1341"></a>  assertTrue(hasDeadBackChannelTimer());
+<a name="line1342"></a>  mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE * 2);
+<a name="line1343"></a>  assertEquals(
+<a name="line1344"></a>      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
+<a name="line1345"></a>      lastStatEvent);
+<a name="line1346"></a>  assertEquals(1, channel.backChannelRetryCount_);
+<a name="line1347"></a>  mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE);
+<a name="line1348"></a>  sendMap(&#39;foo2&#39;, &#39;bar2&#39;);
+<a name="line1349"></a>  assertFalse(hasDeadBackChannelTimer());
+<a name="line1350"></a>  response(8, 119);
+<a name="line1351"></a>  assertFalse(hasDeadBackChannelTimer());
+<a name="line1352"></a>}
+<a name="line1353"></a>
+<a name="line1354"></a>
+<a name="line1355"></a>function testResponseWithArraysMissingAndLiveChannel() {
+<a name="line1356"></a>  connect(8);
+<a name="line1357"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1358"></a>  assertEquals(-1, channel.lastPostResponseArrayId_);
+<a name="line1359"></a>
+<a name="line1360"></a>  // Send a response as if the server has sent down seven arrays.
+<a name="line1361"></a>  response(7, 111);
+<a name="line1362"></a>
+<a name="line1363"></a>  assertEquals(1, channel.lastArrayId_);
+<a name="line1364"></a>  assertEquals(7, channel.lastPostResponseArrayId_);
+<a name="line1365"></a>  mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE);
+<a name="line1366"></a>  assertTrue(hasDeadBackChannelTimer());
+<a name="line1367"></a>  receive(&#39;[&quot;ack&quot;]&#39;);
+<a name="line1368"></a>  assertFalse(hasDeadBackChannelTimer());
+<a name="line1369"></a>  mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE);
+<a name="line1370"></a>  assertNotEquals(
+<a name="line1371"></a>      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
+<a name="line1372"></a>      lastStatEvent);
+<a name="line1373"></a>}
+<a name="line1374"></a>
+<a name="line1375"></a>
+<a name="line1376"></a>function testResponseWithBigOutstandingData() {
+<a name="line1377"></a>  connect(8);
+<a name="line1378"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1379"></a>  assertEquals(-1, channel.lastPostResponseArrayId_);
+<a name="line1380"></a>
+<a name="line1381"></a>  // Send a response as if the server has sent down seven arrays and 50kbytes.
+<a name="line1382"></a>  response(7, 50000);
+<a name="line1383"></a>
+<a name="line1384"></a>  assertEquals(1, channel.lastArrayId_);
+<a name="line1385"></a>  assertEquals(7, channel.lastPostResponseArrayId_);
+<a name="line1386"></a>  assertFalse(hasDeadBackChannelTimer());
+<a name="line1387"></a>  mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE * 2);
+<a name="line1388"></a>  assertNotEquals(
+<a name="line1389"></a>      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
+<a name="line1390"></a>      lastStatEvent);
+<a name="line1391"></a>}
+<a name="line1392"></a>
+<a name="line1393"></a>
+<a name="line1394"></a>function testResponseInBufferedMode() {
+<a name="line1395"></a>  connect(8);
+<a name="line1396"></a>  channel.useChunked_ = false;
+<a name="line1397"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1398"></a>  assertEquals(-1, channel.lastPostResponseArrayId_);
+<a name="line1399"></a>  response(7, 111);
+<a name="line1400"></a>
+<a name="line1401"></a>  assertEquals(1, channel.lastArrayId_);
+<a name="line1402"></a>  assertEquals(7, channel.lastPostResponseArrayId_);
+<a name="line1403"></a>  assertFalse(hasDeadBackChannelTimer());
+<a name="line1404"></a>  mockClock.tick(goog.labs.net.webChannel.WebChannelBase.RTT_ESTIMATE * 2);
+<a name="line1405"></a>  assertNotEquals(
+<a name="line1406"></a>      goog.labs.net.webChannel.requestStats.Stat.BACKCHANNEL_DEAD,
+<a name="line1407"></a>      lastStatEvent);
+<a name="line1408"></a>}
+<a name="line1409"></a>
+<a name="line1410"></a>
+<a name="line1411"></a>function testResponseWithGarbage() {
+<a name="line1412"></a>  connect(8);
+<a name="line1413"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1414"></a>  channel.onRequestData(
+<a name="line1415"></a>      getSingleForwardRequest(),
+<a name="line1416"></a>      &#39;garbage&#39;
+<a name="line1417"></a>  );
+<a name="line1418"></a>  assertEquals(goog.labs.net.webChannel.WebChannelBase.State.CLOSED,
+<a name="line1419"></a>      channel.getState());
+<a name="line1420"></a>}
+<a name="line1421"></a>
+<a name="line1422"></a>
+<a name="line1423"></a>function testResponseWithGarbageInArray() {
+<a name="line1424"></a>  connect(8);
+<a name="line1425"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1426"></a>  channel.onRequestData(
+<a name="line1427"></a>      getSingleForwardRequest(),
+<a name="line1428"></a>      &#39;[&quot;garbage&quot;]&#39;
+<a name="line1429"></a>  );
+<a name="line1430"></a>  assertEquals(goog.labs.net.webChannel.WebChannelBase.State.CLOSED,
+<a name="line1431"></a>      channel.getState());
+<a name="line1432"></a>}
+<a name="line1433"></a>
+<a name="line1434"></a>
+<a name="line1435"></a>function testResponseWithEvilData() {
+<a name="line1436"></a>  connect(8);
+<a name="line1437"></a>  sendMap(&#39;foo1&#39;, &#39;bar1&#39;);
+<a name="line1438"></a>  channel.onRequestData(
+<a name="line1439"></a>      getSingleForwardRequest(),
+<a name="line1440"></a>      &#39;foo=&lt;script&gt;evil()\&lt;\/script&gt;&amp;&#39; + &#39;bar=&lt;script&gt;moreEvil()\&lt;\/script&gt;&#39;);
+<a name="line1441"></a>  assertEquals(goog.labs.net.webChannel.WebChannelBase.State.CLOSED,
+<a name="line1442"></a>      channel.getState());
+<a name="line1443"></a>}
+<a name="line1444"></a>
+<a name="line1445"></a>
+<a name="line1446"></a>function testPathAbsolute() {
+<a name="line1447"></a>  connect(8, undefined, &#39;/talkgadget&#39;);
+<a name="line1448"></a>  assertEquals(channel.backChannelUri_.getDomain(),
+<a name="line1449"></a>      window.location.hostname);
+<a name="line1450"></a>  assertEquals(channel.forwardChannelUri_.getDomain(),
+<a name="line1451"></a>      window.location.hostname);
+<a name="line1452"></a>}
+<a name="line1453"></a>
+<a name="line1454"></a>
+<a name="line1455"></a>function testPathRelative() {
+<a name="line1456"></a>  connect(8, undefined, &#39;talkgadget&#39;);
+<a name="line1457"></a>  assertEquals(channel.backChannelUri_.getDomain(),
+<a name="line1458"></a>      window.location.hostname);
+<a name="line1459"></a>  assertEquals(channel.forwardChannelUri_.getDomain(),
+<a name="line1460"></a>      window.location.hostname);
+<a name="line1461"></a>}
+<a name="line1462"></a>
+<a name="line1463"></a>
+<a name="line1464"></a>function testPathWithHost() {
+<a name="line1465"></a>  connect(8, undefined, &#39;https://example.com&#39;);
+<a name="line1466"></a>  assertEquals(channel.backChannelUri_.getScheme(), &#39;https&#39;);
+<a name="line1467"></a>  assertEquals(channel.backChannelUri_.getDomain(), &#39;example.com&#39;);
+<a name="line1468"></a>  assertEquals(channel.forwardChannelUri_.getScheme(), &#39;https&#39;);
+<a name="line1469"></a>  assertEquals(channel.forwardChannelUri_.getDomain(), &#39;example.com&#39;);
+<a name="line1470"></a>}
+<a name="line1471"></a>
+<a name="line1472"></a>function testCreateXhrIo() {
+<a name="line1473"></a>  var xhr = channel.createXhrIo(null);
+<a name="line1474"></a>  assertFalse(xhr.getWithCredentials());
+<a name="line1475"></a>
+<a name="line1476"></a>  assertThrows(
+<a name="line1477"></a>      &#39;Error connection to different host without CORS&#39;,
+<a name="line1478"></a>      goog.bind(channel.createXhrIo, channel, &#39;some_host&#39;));
+<a name="line1479"></a>
+<a name="line1480"></a>  channel.setSupportsCrossDomainXhrs(true);
+<a name="line1481"></a>
+<a name="line1482"></a>  xhr = channel.createXhrIo(null);
+<a name="line1483"></a>  assertTrue(xhr.getWithCredentials());
+<a name="line1484"></a>
+<a name="line1485"></a>  xhr = channel.createXhrIo(&#39;some_host&#39;);
+<a name="line1486"></a>  assertTrue(xhr.getWithCredentials());
+<a name="line1487"></a>}
+<a name="line1488"></a>
+<a name="line1489"></a>function testSpdyLimitOption() {
+<a name="line1490"></a>  var webChannelTransport =
+<a name="line1491"></a>      new goog.labs.net.webChannel.WebChannelBaseTransport();
+<a name="line1492"></a>  stubSpdyCheck(true);
+<a name="line1493"></a>  var webChannelDefault = webChannelTransport.createWebChannel(&#39;/foo&#39;);
+<a name="line1494"></a>  assertEquals(10,
+<a name="line1495"></a>      webChannelDefault.getRuntimeProperties().getConcurrentRequestLimit());
+<a name="line1496"></a>  assertTrue(webChannelDefault.getRuntimeProperties().isSpdyEnabled());
+<a name="line1497"></a>
+<a name="line1498"></a>  var options = {&#39;concurrentRequestLimit&#39;: 100};
+<a name="line1499"></a>
+<a name="line1500"></a>  stubSpdyCheck(false);
+<a name="line1501"></a>  var webChannelDisabled = webChannelTransport.createWebChannel(
+<a name="line1502"></a>      &#39;/foo&#39;, options);
+<a name="line1503"></a>  assertEquals(1,
+<a name="line1504"></a>      webChannelDisabled.getRuntimeProperties().getConcurrentRequestLimit());
+<a name="line1505"></a>  assertFalse(webChannelDisabled.getRuntimeProperties().isSpdyEnabled());
+<a name="line1506"></a>
+<a name="line1507"></a>  stubSpdyCheck(true);
+<a name="line1508"></a>  var webChannelEnabled = webChannelTransport.createWebChannel(&#39;/foo&#39;, options);
+<a name="line1509"></a>  assertEquals(100,
+<a name="line1510"></a>      webChannelEnabled.getRuntimeProperties().getConcurrentRequestLimit());
+<a name="line1511"></a>  assertTrue(webChannelEnabled.getRuntimeProperties().isSpdyEnabled());
+<a name="line1512"></a>}
+</pre>
+
+
+</body>
+</html>

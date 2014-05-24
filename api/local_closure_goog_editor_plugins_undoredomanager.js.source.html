@@ -1,0 +1,388 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>undoredomanager.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_plugins_undoredomanager.js.html">undoredomanager.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Code for managing series of undo-redo actions in the form of
+<a name="line17"></a> * {@link goog.editor.plugins.UndoRedoState}s.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.editor.plugins.UndoRedoManager&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.editor.plugins.UndoRedoManager.EventType&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.editor.plugins.UndoRedoState&#39;);
+<a name="line26"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Manages undo and redo operations through a series of {@code UndoRedoState}s
+<a name="line32"></a> * maintained on undo and redo stacks.
+<a name="line33"></a> *
+<a name="line34"></a> * @constructor
+<a name="line35"></a> * @extends {goog.events.EventTarget}
+<a name="line36"></a> */
+<a name="line37"></a>goog.editor.plugins.UndoRedoManager = function() {
+<a name="line38"></a>  goog.events.EventTarget.call(this);
+<a name="line39"></a>
+<a name="line40"></a>  /**
+<a name="line41"></a>   * The maximum number of states on the undo stack at any time. Used to limit
+<a name="line42"></a>   * the memory footprint of the undo-redo stack.
+<a name="line43"></a>   * TODO(user) have a separate memory size based limit.
+<a name="line44"></a>   * @type {number}
+<a name="line45"></a>   * @private
+<a name="line46"></a>   */
+<a name="line47"></a>  this.maxUndoDepth_ = 100;
+<a name="line48"></a>
+<a name="line49"></a>  /**
+<a name="line50"></a>   * The undo stack.
+<a name="line51"></a>   * @type {Array.&lt;goog.editor.plugins.UndoRedoState&gt;}
+<a name="line52"></a>   * @private
+<a name="line53"></a>   */
+<a name="line54"></a>  this.undoStack_ = [];
+<a name="line55"></a>
+<a name="line56"></a>  /**
+<a name="line57"></a>   * The redo stack.
+<a name="line58"></a>   * @type {Array.&lt;goog.editor.plugins.UndoRedoState&gt;}
+<a name="line59"></a>   * @private
+<a name="line60"></a>   */
+<a name="line61"></a>  this.redoStack_ = [];
+<a name="line62"></a>
+<a name="line63"></a>  /**
+<a name="line64"></a>   * A queue of pending undo or redo actions. Stored as objects with two
+<a name="line65"></a>   * properties: func and state. The func property stores the undo or redo
+<a name="line66"></a>   * function to be called, the state property stores the state that method
+<a name="line67"></a>   * came from.
+<a name="line68"></a>   * @type {Array.&lt;Object&gt;}
+<a name="line69"></a>   * @private
+<a name="line70"></a>   */
+<a name="line71"></a>  this.pendingActions_ = [];
+<a name="line72"></a>};
+<a name="line73"></a>goog.inherits(goog.editor.plugins.UndoRedoManager, goog.events.EventTarget);
+<a name="line74"></a>
+<a name="line75"></a>
+<a name="line76"></a>/**
+<a name="line77"></a> * Event types for the events dispatched by undo-redo manager.
+<a name="line78"></a> * @enum {string}
+<a name="line79"></a> */
+<a name="line80"></a>goog.editor.plugins.UndoRedoManager.EventType = {
+<a name="line81"></a>  /**
+<a name="line82"></a>   * Signifies that he undo or redo stack transitioned between 0 and 1 states,
+<a name="line83"></a>   * meaning that the ability to peform undo or redo operations has changed.
+<a name="line84"></a>   */
+<a name="line85"></a>  STATE_CHANGE: &#39;state_change&#39;,
+<a name="line86"></a>
+<a name="line87"></a>  /**
+<a name="line88"></a>   * Signifies that a state was just added to the undo stack. Events of this
+<a name="line89"></a>   * type will have a {@code state} property whose value is the state that
+<a name="line90"></a>   * was just added.
+<a name="line91"></a>   */
+<a name="line92"></a>  STATE_ADDED: &#39;state_added&#39;,
+<a name="line93"></a>
+<a name="line94"></a>  /**
+<a name="line95"></a>   * Signifies that the undo method of a state is about to be called.
+<a name="line96"></a>   * Events of this type will have a {@code state} property whose value is the
+<a name="line97"></a>   * state whose undo action is about to be performed. If the event is cancelled
+<a name="line98"></a>   * the action does not proceed, but the state will still transition between
+<a name="line99"></a>   * stacks.
+<a name="line100"></a>   */
+<a name="line101"></a>  BEFORE_UNDO: &#39;before_undo&#39;,
+<a name="line102"></a>
+<a name="line103"></a>  /**
+<a name="line104"></a>   * Signifies that the redo method of a state is about to be called.
+<a name="line105"></a>   * Events of this type will have a {@code state} property whose value is the
+<a name="line106"></a>   * state whose redo action is about to be performed. If the event is cancelled
+<a name="line107"></a>   * the action does not proceed, but the state will still transition between
+<a name="line108"></a>   * stacks.
+<a name="line109"></a>   */
+<a name="line110"></a>  BEFORE_REDO: &#39;before_redo&#39;
+<a name="line111"></a>};
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * The key for the listener for the completion of the asynchronous state whose
+<a name="line116"></a> * undo or redo action is in progress. Null if no action is in progress.
+<a name="line117"></a> * @type {goog.events.Key}
+<a name="line118"></a> * @private
+<a name="line119"></a> */
+<a name="line120"></a>goog.editor.plugins.UndoRedoManager.prototype.inProgressActionKey_ = null;
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Set the max undo stack depth (not the real memory usage).
+<a name="line125"></a> * @param {number} depth Depth of the stack.
+<a name="line126"></a> */
+<a name="line127"></a>goog.editor.plugins.UndoRedoManager.prototype.setMaxUndoDepth =
+<a name="line128"></a>    function(depth) {
+<a name="line129"></a>  this.maxUndoDepth_ = depth;
+<a name="line130"></a>};
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Add state to the undo stack. This clears the redo stack.
+<a name="line135"></a> *
+<a name="line136"></a> * @param {goog.editor.plugins.UndoRedoState} state The state to add to the undo
+<a name="line137"></a> *     stack.
+<a name="line138"></a> */
+<a name="line139"></a>goog.editor.plugins.UndoRedoManager.prototype.addState = function(state) {
+<a name="line140"></a>  // TODO: is the state.equals check necessary?
+<a name="line141"></a>  if (this.undoStack_.length == 0 ||
+<a name="line142"></a>      !state.equals(this.undoStack_[this.undoStack_.length - 1])) {
+<a name="line143"></a>    this.undoStack_.push(state);
+<a name="line144"></a>    if (this.undoStack_.length &gt; this.maxUndoDepth_) {
+<a name="line145"></a>      this.undoStack_.shift();
+<a name="line146"></a>    }
+<a name="line147"></a>    // Clobber the redo stack.
+<a name="line148"></a>    var redoLength = this.redoStack_.length;
+<a name="line149"></a>    this.redoStack_.length = 0;
+<a name="line150"></a>
+<a name="line151"></a>    this.dispatchEvent({
+<a name="line152"></a>      type: goog.editor.plugins.UndoRedoManager.EventType.STATE_ADDED,
+<a name="line153"></a>      state: state
+<a name="line154"></a>    });
+<a name="line155"></a>
+<a name="line156"></a>    // If the redo state had states on it, then clobbering the redo stack above
+<a name="line157"></a>    // has caused a state change.
+<a name="line158"></a>    if (this.undoStack_.length == 1 || redoLength) {
+<a name="line159"></a>      this.dispatchStateChange_();
+<a name="line160"></a>    }
+<a name="line161"></a>  }
+<a name="line162"></a>};
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * Dispatches a STATE_CHANGE event with this manager as the target.
+<a name="line167"></a> * @private
+<a name="line168"></a> */
+<a name="line169"></a>goog.editor.plugins.UndoRedoManager.prototype.dispatchStateChange_ =
+<a name="line170"></a>    function() {
+<a name="line171"></a>  this.dispatchEvent(
+<a name="line172"></a>      goog.editor.plugins.UndoRedoManager.EventType.STATE_CHANGE);
+<a name="line173"></a>};
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Performs the undo operation of the state at the top of the undo stack, moving
+<a name="line178"></a> * that state to the top of the redo stack. If the undo stack is empty, does
+<a name="line179"></a> * nothing.
+<a name="line180"></a> */
+<a name="line181"></a>goog.editor.plugins.UndoRedoManager.prototype.undo = function() {
+<a name="line182"></a>  this.shiftState_(this.undoStack_, this.redoStack_);
+<a name="line183"></a>};
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * Performs the redo operation of the state at the top of the redo stack, moving
+<a name="line188"></a> * that state to the top of the undo stack. If redo undo stack is empty, does
+<a name="line189"></a> * nothing.
+<a name="line190"></a> */
+<a name="line191"></a>goog.editor.plugins.UndoRedoManager.prototype.redo = function() {
+<a name="line192"></a>  this.shiftState_(this.redoStack_, this.undoStack_);
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * @return {boolean} Wether the undo stack has items on it, i.e., if it is
+<a name="line198"></a> *     possible to perform an undo operation.
+<a name="line199"></a> */
+<a name="line200"></a>goog.editor.plugins.UndoRedoManager.prototype.hasUndoState = function() {
+<a name="line201"></a>  return this.undoStack_.length &gt; 0;
+<a name="line202"></a>};
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * @return {boolean} Wether the redo stack has items on it, i.e., if it is
+<a name="line207"></a> *     possible to perform a redo operation.
+<a name="line208"></a> */
+<a name="line209"></a>goog.editor.plugins.UndoRedoManager.prototype.hasRedoState = function() {
+<a name="line210"></a>  return this.redoStack_.length &gt; 0;
+<a name="line211"></a>};
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/**
+<a name="line215"></a> * Move a state from one stack to the other, performing the appropriate undo
+<a name="line216"></a> * or redo action.
+<a name="line217"></a> *
+<a name="line218"></a> * @param {Array.&lt;goog.editor.plugins.UndoRedoState&gt;} fromStack Stack to move
+<a name="line219"></a> *     the state from.
+<a name="line220"></a> * @param {Array.&lt;goog.editor.plugins.UndoRedoState&gt;} toStack Stack to move
+<a name="line221"></a> *     the state to.
+<a name="line222"></a> * @private
+<a name="line223"></a> */
+<a name="line224"></a>goog.editor.plugins.UndoRedoManager.prototype.shiftState_ = function(
+<a name="line225"></a>    fromStack, toStack) {
+<a name="line226"></a>  if (fromStack.length) {
+<a name="line227"></a>    var state = fromStack.pop();
+<a name="line228"></a>
+<a name="line229"></a>    // Push the current state into the redo stack.
+<a name="line230"></a>    toStack.push(state);
+<a name="line231"></a>
+<a name="line232"></a>    this.addAction_({
+<a name="line233"></a>      type: fromStack == this.undoStack_ ?
+<a name="line234"></a>          goog.editor.plugins.UndoRedoManager.EventType.BEFORE_UNDO :
+<a name="line235"></a>          goog.editor.plugins.UndoRedoManager.EventType.BEFORE_REDO,
+<a name="line236"></a>      func: fromStack == this.undoStack_ ? state.undo : state.redo,
+<a name="line237"></a>      state: state
+<a name="line238"></a>    });
+<a name="line239"></a>
+<a name="line240"></a>    // If either stack transitioned between 0 and 1 in size then the ability
+<a name="line241"></a>    // to do an undo or redo has changed and we must dispatch a state change.
+<a name="line242"></a>    if (fromStack.length == 0 || toStack.length == 1) {
+<a name="line243"></a>      this.dispatchStateChange_();
+<a name="line244"></a>    }
+<a name="line245"></a>  }
+<a name="line246"></a>};
+<a name="line247"></a>
+<a name="line248"></a>
+<a name="line249"></a>/**
+<a name="line250"></a> * Adds an action to the queue of pending undo or redo actions. If no actions
+<a name="line251"></a> * are pending, immediately performs the action.
+<a name="line252"></a> *
+<a name="line253"></a> * @param {Object} action An undo or redo action. Stored as an object with two
+<a name="line254"></a> *     properties: func and state. The func property stores the undo or redo
+<a name="line255"></a> *     function to be called, the state property stores the state that method
+<a name="line256"></a> *     came from.
+<a name="line257"></a> * @private
+<a name="line258"></a> */
+<a name="line259"></a>goog.editor.plugins.UndoRedoManager.prototype.addAction_ = function(action) {
+<a name="line260"></a>  this.pendingActions_.push(action);
+<a name="line261"></a>  if (this.pendingActions_.length == 1) {
+<a name="line262"></a>    this.doAction_();
+<a name="line263"></a>  }
+<a name="line264"></a>};
+<a name="line265"></a>
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Executes the action at the front of the pending actions queue. If an action
+<a name="line269"></a> * is already in progress or the queue is empty, does nothing.
+<a name="line270"></a> * @private
+<a name="line271"></a> */
+<a name="line272"></a>goog.editor.plugins.UndoRedoManager.prototype.doAction_ = function() {
+<a name="line273"></a>  if (this.inProgressActionKey_ || this.pendingActions_.length == 0) {
+<a name="line274"></a>    return;
+<a name="line275"></a>  }
+<a name="line276"></a>
+<a name="line277"></a>  var action = this.pendingActions_.shift();
+<a name="line278"></a>
+<a name="line279"></a>  var e = {
+<a name="line280"></a>    type: action.type,
+<a name="line281"></a>    state: action.state
+<a name="line282"></a>  };
+<a name="line283"></a>
+<a name="line284"></a>  if (this.dispatchEvent(e)) {
+<a name="line285"></a>    if (action.state.isAsynchronous()) {
+<a name="line286"></a>      this.inProgressActionKey_ = goog.events.listen(action.state,
+<a name="line287"></a>          goog.editor.plugins.UndoRedoState.ACTION_COMPLETED,
+<a name="line288"></a>          this.finishAction_, false, this);
+<a name="line289"></a>      action.func.call(action.state);
+<a name="line290"></a>    } else {
+<a name="line291"></a>      action.func.call(action.state);
+<a name="line292"></a>      this.doAction_();
+<a name="line293"></a>    }
+<a name="line294"></a>  }
+<a name="line295"></a>};
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>/**
+<a name="line299"></a> * Finishes processing the current in progress action, starting the next queued
+<a name="line300"></a> * action if one exists.
+<a name="line301"></a> * @private
+<a name="line302"></a> */
+<a name="line303"></a>goog.editor.plugins.UndoRedoManager.prototype.finishAction_ = function() {
+<a name="line304"></a>  goog.events.unlistenByKey(/** @type {number} */ (this.inProgressActionKey_));
+<a name="line305"></a>  this.inProgressActionKey_ = null;
+<a name="line306"></a>  this.doAction_();
+<a name="line307"></a>};
+<a name="line308"></a>
+<a name="line309"></a>
+<a name="line310"></a>/**
+<a name="line311"></a> * Clears the undo and redo stacks.
+<a name="line312"></a> */
+<a name="line313"></a>goog.editor.plugins.UndoRedoManager.prototype.clearHistory = function() {
+<a name="line314"></a>  if (this.undoStack_.length &gt; 0 || this.redoStack_.length &gt; 0) {
+<a name="line315"></a>    this.undoStack_.length = 0;
+<a name="line316"></a>    this.redoStack_.length = 0;
+<a name="line317"></a>    this.dispatchStateChange_();
+<a name="line318"></a>  }
+<a name="line319"></a>};
+<a name="line320"></a>
+<a name="line321"></a>
+<a name="line322"></a>/**
+<a name="line323"></a> * @return {goog.editor.plugins.UndoRedoState|undefined} The state at the top of
+<a name="line324"></a> *     the undo stack without removing it from the stack.
+<a name="line325"></a> */
+<a name="line326"></a>goog.editor.plugins.UndoRedoManager.prototype.undoPeek = function() {
+<a name="line327"></a>  return this.undoStack_[this.undoStack_.length - 1];
+<a name="line328"></a>};
+<a name="line329"></a>
+<a name="line330"></a>
+<a name="line331"></a>/**
+<a name="line332"></a> * @return {goog.editor.plugins.UndoRedoState|undefined} The state at the top of
+<a name="line333"></a> *     the redo stack without removing it from the stack.
+<a name="line334"></a> */
+<a name="line335"></a>goog.editor.plugins.UndoRedoManager.prototype.redoPeek = function() {
+<a name="line336"></a>  return this.redoStack_[this.redoStack_.length - 1];
+<a name="line337"></a>};
+</pre>
+
+
+</body>
+</html>

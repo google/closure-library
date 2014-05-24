@@ -1,0 +1,136 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>entries_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_tweak_entries_test.js.html">entries_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.tweak.BaseEntryTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.tweak.BaseEntryTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.testing.MockControl&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>/** @suppress {extraRequire} needed for createRegistryEntries. */
+<a name="line21"></a>goog.require(&#39;goog.tweak.testhelpers&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var mockControl;
+<a name="line24"></a>
+<a name="line25"></a>function setUp() {
+<a name="line26"></a>  mockControl = new goog.testing.MockControl();
+<a name="line27"></a>}
+<a name="line28"></a>
+<a name="line29"></a>function tearDown() {
+<a name="line30"></a>  goog.tweak.registry_ = null;
+<a name="line31"></a>  mockControl.$verifyAll();
+<a name="line32"></a>}
+<a name="line33"></a>
+<a name="line34"></a>function testGetValue_defaultValues() {
+<a name="line35"></a>  createRegistryEntries(&#39;&#39;);
+<a name="line36"></a>  assertFalse(&#39;wrong initial value for bool&#39;, boolEntry.getValue());
+<a name="line37"></a>  assertEquals(&#39;wrong initial value for enum&#39;, &#39;A&#39;, strEnumEntry.getValue());
+<a name="line38"></a>  assertEquals(&#39;wrong initial value for str&#39;, &#39;&#39;, strEntry.getValue());
+<a name="line39"></a>
+<a name="line40"></a>  assertEquals(&#39;wrong initial value for bool2&#39;, true, boolEntry2.getValue());
+<a name="line41"></a>  assertEquals(&#39;wrong initial value for enum2&#39;, 1, numEnumEntry.getValue());
+<a name="line42"></a>  assertEquals(&#39;wrong initial value for str2&#39;, &#39;foo&#39;, strEntry2.getValue());
+<a name="line43"></a>
+<a name="line44"></a>  assertFalse(&#39;wrong initial value for BoolOne&#39;, boolOneEntry.getValue());
+<a name="line45"></a>  assertTrue(&#39;wrong initial value for BoolTwo&#39;, boolTwoEntry.getValue());
+<a name="line46"></a>}
+<a name="line47"></a>
+<a name="line48"></a>function testGetValue_nonDefaultValues() {
+<a name="line49"></a>  createRegistryEntries(&#39;?bool=1&amp;enum=C&#39;);
+<a name="line50"></a>  // These have the restartRequired option set.
+<a name="line51"></a>  boolEntry.setValue(false);
+<a name="line52"></a>  strEntry.setValue(&#39;foo&#39;);
+<a name="line53"></a>  numEntry.setValue(5);
+<a name="line54"></a>  assertTrue(&#39;wrong value for boolean&#39;, boolEntry.getValue());
+<a name="line55"></a>  assertEquals(&#39;wrong value for string&#39;, strEntry.getDefaultValue(),
+<a name="line56"></a>      strEntry.getValue());
+<a name="line57"></a>  assertEquals(&#39;wrong value for num&#39;, numEntry.getDefaultValue(),
+<a name="line58"></a>      numEntry.getValue());
+<a name="line59"></a>
+<a name="line60"></a>  // These do not have the restartRequired option set.
+<a name="line61"></a>  strEnumEntry.setValue(&#39;B&#39;);
+<a name="line62"></a>  boolOneEntry.setValue(true);
+<a name="line63"></a>  assertEquals(&#39;wrong value for strEnum&#39;, &#39;B&#39;, strEnumEntry.getValue());
+<a name="line64"></a>  assertEquals(&#39;wrong value for boolOne&#39;, true, boolOneEntry.getValue());
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>function testCallbacks() {
+<a name="line68"></a>  createRegistryEntries(&#39;&#39;);
+<a name="line69"></a>  var mockCallback = mockControl.createFunctionMock();
+<a name="line70"></a>  boolEntry.addCallback(mockCallback);
+<a name="line71"></a>  boolOneEntry.addCallback(mockCallback);
+<a name="line72"></a>  strEnumEntry.addCallback(mockCallback);
+<a name="line73"></a>  numEnumEntry.addCallback(mockCallback);
+<a name="line74"></a>
+<a name="line75"></a>  mockCallback(boolEntry);
+<a name="line76"></a>  mockCallback(boolOneEntry);
+<a name="line77"></a>  mockCallback(strEnumEntry);
+<a name="line78"></a>  mockCallback(numEnumEntry);
+<a name="line79"></a>  mockControl.$replayAll();
+<a name="line80"></a>
+<a name="line81"></a>  boolEntry.setValue(true);
+<a name="line82"></a>  boolOneEntry.setValue(true);
+<a name="line83"></a>  strEnumEntry.setValue(&#39;C&#39;);
+<a name="line84"></a>  numEnumEntry.setValue(3);
+<a name="line85"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,736 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>ds (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">ds</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_AbstractFastDataNode.html">
+          goog.ds.AbstractFastDataNode</a><br/>
+        <div class="class-details">Creates a new abstract data node.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_BaseDataNode.html">
+          goog.ds.BaseDataNode</a><br/>
+        <div class="class-details">Base class for data node functionality, has default implementations for
+many of the functions.
+
+implements {goog.ds.DataNode}
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_BasicNodeList.html">
+          goog.ds.BasicNodeList</a><br/>
+        <div class="class-details">Simple node list implementation with underlying array and map
+implements goog.ds.DataNodeList.
+
+Names that are reserved for system use and shouldn't be used for data node
+names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
+undefined if these names are used.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_DataManager.html">
+          goog.ds.DataManager</a><br/>
+        <div class="class-details">Create a DataManger
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_DataNode.html">
+          goog.ds.DataNode</a><br/>
+        <div class="class-details">Interface for node in rich data tree.
+
+Names that are reserved for system use and shouldn't be used for data node
+names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
+undefined if these names are used.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_DataNodeList.html">
+          goog.ds.DataNodeList</a><br/>
+        <div class="class-details">Interface for node list in rich data tree.
+
+Has both map and list-style accessors
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_EmptyNodeList.html">
+          goog.ds.EmptyNodeList</a><br/>
+        <div class="class-details">Immulatable empty node list
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_Expr.html">
+          goog.ds.Expr</a><br/>
+        <div class="class-details">Create a new expression. An expression uses a string expression language, and
+from this string and a passed in DataNode can evaluate to a value, DataNode,
+or a DataNodeList.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_FastDataNode.html">
+          goog.ds.FastDataNode</a><br/>
+        <div class="class-details">Creates a new fast data node, using the properties of root.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_FastListNode.html">
+          goog.ds.FastListNode</a><br/>
+        <div class="class-details">Creates a new list node from an array.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_JsDataSource.html">
+          goog.ds.JsDataSource</a><br/>
+        <div class="class-details">Data source whose backing is JavaScript data
+
+Names that are reserved for system use and shouldn't be used for data node
+names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
+undefined if these names are used.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_JsPropertyDataSource.html">
+          goog.ds.JsPropertyDataSource</a><br/>
+        <div class="class-details">Data source for JavaScript properties that arent objects. Contains reference
+to parent object so that you can set the vaule
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_JsXmlHttpDataSource.html">
+          goog.ds.JsXmlHttpDataSource</a><br/>
+        <div class="class-details">Similar to JsonDataSource, with using XMLHttpRequest for transport
+Currently requires the result be a JS object that can be evaluated and
+set to a variable and doesn't require strict JSON notation.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_JsonDataSource.html">
+          goog.ds.JsonDataSource</a><br/>
+        <div class="class-details">Data source whose backing is a JSON-like service, in which
+retreiving the resource specified by URL with the additional parameter
+callback. The resource retreived is executable JavaScript that
+makes a call to the named function with a JavaScript object literal
+as the only parameter.
+
+Example URI could be:
+<a href="http://www.google.com/data/search?q=monkey&amp;callback=mycb">http://www.google.com/data/search?q=monkey&amp;callback=mycb</a>
+which might return the JS:
+mycb({searchresults:
+  [{uri: '<a href="http://www.monkey.com">http://www.monkey.com</a>', title: 'Site About Monkeys'}]});
+
+TODO(user): Evaluate using goog.net.Jsonp here.
+
+A URI of an empty string will mean that no request is made
+and the data source will be a data source with no child nodes
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_PrimitiveFastDataNode.html">
+          goog.ds.PrimitiveFastDataNode</a><br/>
+        <div class="class-details">Creates a new data node wrapping a primitive value.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_SortedNodeList.html">
+          goog.ds.SortedNodeList</a><br/>
+        <div class="class-details">Node list implementation which maintains sort order during insertion and
+modification operations based on a comparison function.
+
+The SortedNodeList does not guarantee sort order will be maintained if
+the underlying data nodes are modified externally.
+
+Names that are reserved for system use and shouldn't be used for data node
+names: eval, toSource, toString, unwatch, valueOf, watch. Behavior is
+undefined if these names are used.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_XmlDataSource.html">
+          goog.ds.XmlDataSource</a><br/>
+        <div class="class-details">Data source whose backing is an xml node
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ds_XmlHttpDataSource.html">
+          goog.ds.XmlHttpDataSource</a><br/>
+        <div class="class-details">Data source whose backing is an XMLHttpRequest,
+
+A URI of an empty string will mean that no request is made
+and the data source will be a single, empty node.
+
+</div>
+ </div>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.LoadState"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">LoadState</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Enum for load state of a DataNode.
+
+     </div>
+
+     <div class="entryDetails">
+       <div class="detailsSection">
+          <b>Constants:</b>
+          <table class="horiz-rule">
+            <tbody>
+              <tr><td>
+                <span class="entryName">
+                  FAILED
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  LOADED
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  LOADING
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+              <tr><td>
+                <span class="entryName">
+                  NOT_LOADED
+                </span>
+                <div class="entryOverview">
+                  <span class='nodesc'>No description.</span>
+                </div>
+             </td></tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_datasource.js.source.html#line152">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.ExprTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">ExprTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_expr_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.FastDataNodeTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">FastDataNodeTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_fastdatanode_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.JsDataSourceTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">JsDataSourceTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_datasource_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.JsXmlHttpDataSourceTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">JsXmlHttpDataSourceTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_jsxmlhttpdatasource_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.STR_ALL_CHILDREN_SELECTOR"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">STR_ALL_CHILDREN_SELECTOR</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The character denoting all children.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_datasource.js.source.html#line605">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.STR_ARRAY_START"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">STR_ARRAY_START</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The character denoting the start of an array.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_datasource.js.source.html#line626">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.STR_ATTRIBUTE_START"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">STR_ATTRIBUTE_START</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The character denoting an attribute.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_datasource.js.source.html#line598">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.STR_PATH_SEPARATOR"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">STR_PATH_SEPARATOR</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The character denoting path separation.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_datasource.js.source.html#line619">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.STR_WILDCARD"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">STR_WILDCARD</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       The wildcard character.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_datasource.js.source.html#line612">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.Util"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">Util</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_datasource.js.source.html#line31">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.ds.logger"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ds.</span><span class="entryName">logger</span>
+        : <span class="type"><a href="class_goog_debug_Logger.html">goog.debug.Logger</a></span>
+     </div>
+
+
+     <div class="entryOverview">
+       Shared logger instance for data package
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_datasource_datasource.js.source.html#line633">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package ds</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="ds"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

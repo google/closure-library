@@ -1,0 +1,349 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>icontent.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_icontent.js.html">icontent.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>// All Rights Reserved.
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview Static functions for writing the contents of an iframe-based
+<a name="line18"></a> * editable field. These vary significantly from browser to browser. Uses
+<a name="line19"></a> * strings and document.write instead of DOM manipulation, because
+<a name="line20"></a> * iframe-loading is a performance bottleneck.
+<a name="line21"></a> *
+<a name="line22"></a> * @author nicksantos@google.com (Nick Santos)
+<a name="line23"></a> */
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.editor.icontent&#39;);
+<a name="line26"></a>goog.provide(&#39;goog.editor.icontent.FieldFormatInfo&#39;);
+<a name="line27"></a>goog.provide(&#39;goog.editor.icontent.FieldStyleInfo&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.editor.BrowserFeature&#39;);
+<a name="line30"></a>goog.require(&#39;goog.style&#39;);
+<a name="line31"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * A data structure for storing simple rendering info about a field.
+<a name="line37"></a> *
+<a name="line38"></a> * @param {string} fieldId The id of the field.
+<a name="line39"></a> * @param {boolean} standards Whether the field should be rendered in
+<a name="line40"></a> *     standards mode.
+<a name="line41"></a> * @param {boolean} blended Whether the field is in blended mode.
+<a name="line42"></a> * @param {boolean} fixedHeight Whether the field is in fixedHeight mode.
+<a name="line43"></a> * @param {Object=} opt_extraStyles Other style attributes for the field,
+<a name="line44"></a> *     represented as a map of strings.
+<a name="line45"></a> * @constructor
+<a name="line46"></a> * @final
+<a name="line47"></a> */
+<a name="line48"></a>goog.editor.icontent.FieldFormatInfo = function(fieldId, standards, blended,
+<a name="line49"></a>    fixedHeight, opt_extraStyles) {
+<a name="line50"></a>  this.fieldId_ = fieldId;
+<a name="line51"></a>  this.standards_ = standards;
+<a name="line52"></a>  this.blended_ = blended;
+<a name="line53"></a>  this.fixedHeight_ = fixedHeight;
+<a name="line54"></a>  this.extraStyles_ = opt_extraStyles || {};
+<a name="line55"></a>};
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * A data structure for storing simple info about the styles of a field.
+<a name="line61"></a> * Only needed in Firefox/Blended mode.
+<a name="line62"></a> * @param {Element} wrapper The wrapper div around a field.
+<a name="line63"></a> * @param {string} css The css for a field.
+<a name="line64"></a> * @constructor
+<a name="line65"></a> * @final
+<a name="line66"></a> */
+<a name="line67"></a>goog.editor.icontent.FieldStyleInfo = function(wrapper, css) {
+<a name="line68"></a>  this.wrapper_ = wrapper;
+<a name="line69"></a>  this.css_ = css;
+<a name="line70"></a>};
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * Whether to always use standards-mode iframes.
+<a name="line75"></a> * @type {boolean}
+<a name="line76"></a> * @private
+<a name="line77"></a> */
+<a name="line78"></a>goog.editor.icontent.useStandardsModeIframes_ = false;
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Sets up goog.editor.icontent to always use standards-mode iframes.
+<a name="line83"></a> */
+<a name="line84"></a>goog.editor.icontent.forceStandardsModeIframes = function() {
+<a name="line85"></a>  goog.editor.icontent.useStandardsModeIframes_ = true;
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Generate the initial iframe content.
+<a name="line91"></a> * @param {goog.editor.icontent.FieldFormatInfo} info Formatting info about
+<a name="line92"></a> *     the field.
+<a name="line93"></a> * @param {string} bodyHtml The HTML to insert as the iframe body.
+<a name="line94"></a> * @param {goog.editor.icontent.FieldStyleInfo?} style Style info about
+<a name="line95"></a> *     the field, if needed.
+<a name="line96"></a> * @return {string} The initial IFRAME content HTML.
+<a name="line97"></a> * @private
+<a name="line98"></a> */
+<a name="line99"></a>goog.editor.icontent.getInitialIframeContent_ =
+<a name="line100"></a>    function(info, bodyHtml, style) {
+<a name="line101"></a>  var html = [];
+<a name="line102"></a>
+<a name="line103"></a>  if (info.blended_ &amp;&amp; info.standards_ ||
+<a name="line104"></a>      goog.editor.icontent.useStandardsModeIframes_) {
+<a name="line105"></a>    html.push(&#39;&lt;!DOCTYPE HTML&gt;&#39;);
+<a name="line106"></a>  }
+<a name="line107"></a>
+<a name="line108"></a>  // &lt;HTML&gt;
+<a name="line109"></a>  // NOTE(user): Override min-widths that may be set for all
+<a name="line110"></a>  // HTML/BODY nodes. A similar workaround is below for the &lt;body&gt; tag. This
+<a name="line111"></a>  // can happen if the host page includes a rule like this in its CSS:
+<a name="line112"></a>  //
+<a name="line113"></a>  // html, body {min-width: 500px}
+<a name="line114"></a>  //
+<a name="line115"></a>  // In this case, the iframe&#39;s &lt;html&gt; and/or &lt;body&gt; may be affected. This was
+<a name="line116"></a>  // part of the problem observed in http://b/5674613. (The other part of that
+<a name="line117"></a>  // problem had to do with the presence of a spurious horizontal scrollbar,
+<a name="line118"></a>  // which caused the editor height to be computed incorrectly.)
+<a name="line119"></a>  html.push(&#39;&lt;html style=&quot;background:none transparent;min-width:0;&#39;);
+<a name="line120"></a>
+<a name="line121"></a>  // Make sure that the HTML element&#39;s height has the
+<a name="line122"></a>  // correct value as the body element&#39;s percentage height is made relative
+<a name="line123"></a>  // to the HTML element&#39;s height.
+<a name="line124"></a>  // For fixed-height it should be 100% since we want the body to fill the
+<a name="line125"></a>  // whole height. For growing fields it should be auto since we want the
+<a name="line126"></a>  // body to size to its content.
+<a name="line127"></a>  if (info.blended_) {
+<a name="line128"></a>    html.push(&#39;height:&#39;, info.fixedHeight_ ? &#39;100%&#39; : &#39;auto&#39;);
+<a name="line129"></a>  }
+<a name="line130"></a>  html.push(&#39;&quot;&gt;&#39;);
+<a name="line131"></a>
+<a name="line132"></a>  // &lt;HEAD&gt;&lt;STYLE&gt;
+<a name="line133"></a>
+<a name="line134"></a>  // IE/Safari whitebox need styles set only iff the client specifically
+<a name="line135"></a>  // requested them.
+<a name="line136"></a>  html.push(&#39;&lt;head&gt;&lt;style&gt;&#39;);
+<a name="line137"></a>  if (style &amp;&amp; style.css_) {
+<a name="line138"></a>    html.push(style.css_);
+<a name="line139"></a>  }
+<a name="line140"></a>
+<a name="line141"></a>  // Firefox blended needs to inherit all the css from the original page.
+<a name="line142"></a>  // Firefox standards mode needs to set extra style for images.
+<a name="line143"></a>  if (goog.userAgent.GECKO &amp;&amp; info.standards_) {
+<a name="line144"></a>    // Standards mode will collapse broken images.  This means that they
+<a name="line145"></a>    // can never be removed from the field.  This style forces the images
+<a name="line146"></a>    // to render as a broken image icon, sized based on the width and height
+<a name="line147"></a>    // of the image.
+<a name="line148"></a>    // TODO(user): Make sure we move this into a contentEditable code
+<a name="line149"></a>    // path if there ever is one for FF.
+<a name="line150"></a>    html.push(&#39; img {-moz-force-broken-image-icon: 1;}&#39;);
+<a name="line151"></a>  }
+<a name="line152"></a>
+<a name="line153"></a>  html.push(&#39;&lt;/style&gt;&lt;/head&gt;&#39;);
+<a name="line154"></a>
+<a name="line155"></a>  // &lt;BODY&gt;
+<a name="line156"></a>  // Hidefocus is needed to ensure that IE7 doesn&#39;t show the dotted, focus
+<a name="line157"></a>  // border when you tab into the field.
+<a name="line158"></a>  html.push(&#39;&lt;body g_editable=&quot;true&quot; hidefocus=&quot;true&quot; &#39;);
+<a name="line159"></a>  if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+<a name="line160"></a>    html.push(&#39;contentEditable &#39;);
+<a name="line161"></a>  }
+<a name="line162"></a>
+<a name="line163"></a>  html.push(&#39;class=&quot;editable &#39;);
+<a name="line164"></a>
+<a name="line165"></a>  // TODO: put the field&#39;s original ID on the body and stop using ID as a
+<a name="line166"></a>  // way of getting the pointer to the field in the iframe now that it&#39;s
+<a name="line167"></a>  // always the body.
+<a name="line168"></a>  html.push(&#39;&quot; id=&quot;&#39;, info.fieldId_, &#39;&quot; style=&quot;min-width:0;&#39;);
+<a name="line169"></a>
+<a name="line170"></a>  if (goog.userAgent.GECKO &amp;&amp; info.blended_) {
+<a name="line171"></a>    // IMPORTANT: Apply the css from the body then all of the clearing
+<a name="line172"></a>    // CSS to make sure the clearing CSS overrides (e.g. if the body
+<a name="line173"></a>    // has a 3px margin, we want to make sure to override it with 0px.
+<a name="line174"></a>    html.push(
+<a name="line175"></a>
+<a name="line176"></a>        // margin should not be applied to blended mode because the margin is
+<a name="line177"></a>        // outside the iframe
+<a name="line178"></a>        // In whitebox mode, we want to leave the margin to the default so
+<a name="line179"></a>        // there is a nice margin around the text.
+<a name="line180"></a>        &#39;;width:100%;border:0;margin:0;background:none transparent;&#39;,
+<a name="line181"></a>
+<a name="line182"></a>        // In standards-mode, height 100% makes the body size to its
+<a name="line183"></a>        // parent html element, but in quirks mode, we want auto because
+<a name="line184"></a>        // 100% makes it size to the containing window even if the html
+<a name="line185"></a>        // element is smaller.
+<a name="line186"></a>        // TODO: Fixed height, standards mode, CSS_WRITING, with margins on the
+<a name="line187"></a>        // paragraphs has a scrollbar when it doesn&#39;t need it.  Putting the
+<a name="line188"></a>        // height to auto seems to fix it.  Figure out if we should always
+<a name="line189"></a>        // just use auto?
+<a name="line190"></a>        &#39;;height:&#39;, info.standards_ ? &#39;100%&#39; : &#39;auto&#39;);
+<a name="line191"></a>
+<a name="line192"></a>    // Only do this for mozilla. IE6 standards mode has a rendering bug when
+<a name="line193"></a>    // there are scrollbars and the body&#39;s overflow property is auto
+<a name="line194"></a>    if (info.fixedHeight_) {
+<a name="line195"></a>      html.push(&#39;;overflow:auto&#39;);
+<a name="line196"></a>    } else {
+<a name="line197"></a>      html.push(&#39;;overflow-y:hidden;overflow-x:auto&#39;);
+<a name="line198"></a>    }
+<a name="line199"></a>  }
+<a name="line200"></a>
+<a name="line201"></a>  // Hide the native focus rect in Opera.
+<a name="line202"></a>  if (goog.userAgent.OPERA) {
+<a name="line203"></a>    html.push(&#39;;outline:hidden&#39;);
+<a name="line204"></a>  }
+<a name="line205"></a>
+<a name="line206"></a>  for (var key in info.extraStyles_) {
+<a name="line207"></a>    html.push(&#39;;&#39; + key + &#39;:&#39; + info.extraStyles_[key]);
+<a name="line208"></a>  }
+<a name="line209"></a>
+<a name="line210"></a>  html.push(&#39;&quot;&gt;&#39;, bodyHtml, &#39;&lt;/body&gt;&lt;/html&gt;&#39;);
+<a name="line211"></a>
+<a name="line212"></a>  return html.join(&#39;&#39;);
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Write the initial iframe content in normal mode.
+<a name="line218"></a> * @param {goog.editor.icontent.FieldFormatInfo} info Formatting info about
+<a name="line219"></a> *     the field.
+<a name="line220"></a> * @param {string} bodyHtml The HTML to insert as the iframe body.
+<a name="line221"></a> * @param {goog.editor.icontent.FieldStyleInfo?} style Style info about
+<a name="line222"></a> *     the field, if needed.
+<a name="line223"></a> * @param {HTMLIFrameElement} iframe The iframe.
+<a name="line224"></a> */
+<a name="line225"></a>goog.editor.icontent.writeNormalInitialBlendedIframe =
+<a name="line226"></a>    function(info, bodyHtml, style, iframe) {
+<a name="line227"></a>  // Firefox blended needs to inherit all the css from the original page.
+<a name="line228"></a>  // Firefox standards mode needs to set extra style for images.
+<a name="line229"></a>  if (info.blended_) {
+<a name="line230"></a>    var field = style.wrapper_;
+<a name="line231"></a>    // If there is padding on the original field, then the iFrame will be
+<a name="line232"></a>    // positioned inside the padding by default.  We don&#39;t want this, as it
+<a name="line233"></a>    // causes the contents to appear to shift, and also causes the
+<a name="line234"></a>    // scrollbars to appear inside the padding.
+<a name="line235"></a>    //
+<a name="line236"></a>    // To compensate, we set the iframe margins to offset the padding.
+<a name="line237"></a>    var paddingBox = goog.style.getPaddingBox(field);
+<a name="line238"></a>    if (paddingBox.top || paddingBox.left ||
+<a name="line239"></a>        paddingBox.right || paddingBox.bottom) {
+<a name="line240"></a>      goog.style.setStyle(iframe, &#39;margin&#39;,
+<a name="line241"></a>          (-paddingBox.top) + &#39;px &#39; +
+<a name="line242"></a>          (-paddingBox.right) + &#39;px &#39; +
+<a name="line243"></a>          (-paddingBox.bottom) + &#39;px &#39; +
+<a name="line244"></a>          (-paddingBox.left) + &#39;px&#39;);
+<a name="line245"></a>    }
+<a name="line246"></a>  }
+<a name="line247"></a>
+<a name="line248"></a>  goog.editor.icontent.writeNormalInitialIframe(
+<a name="line249"></a>      info, bodyHtml, style, iframe);
+<a name="line250"></a>};
+<a name="line251"></a>
+<a name="line252"></a>
+<a name="line253"></a>/**
+<a name="line254"></a> * Write the initial iframe content in normal mode.
+<a name="line255"></a> * @param {goog.editor.icontent.FieldFormatInfo} info Formatting info about
+<a name="line256"></a> *     the field.
+<a name="line257"></a> * @param {string} bodyHtml The HTML to insert as the iframe body.
+<a name="line258"></a> * @param {goog.editor.icontent.FieldStyleInfo?} style Style info about
+<a name="line259"></a> *     the field, if needed.
+<a name="line260"></a> * @param {HTMLIFrameElement} iframe The iframe.
+<a name="line261"></a> */
+<a name="line262"></a>goog.editor.icontent.writeNormalInitialIframe =
+<a name="line263"></a>    function(info, bodyHtml, style, iframe) {
+<a name="line264"></a>
+<a name="line265"></a>  var html = goog.editor.icontent.getInitialIframeContent_(
+<a name="line266"></a>      info, bodyHtml, style);
+<a name="line267"></a>
+<a name="line268"></a>  var doc = goog.dom.getFrameContentDocument(iframe);
+<a name="line269"></a>  doc.open();
+<a name="line270"></a>  doc.write(html);
+<a name="line271"></a>  doc.close();
+<a name="line272"></a>};
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * Write the initial iframe content in IE/HTTPS mode.
+<a name="line277"></a> * @param {goog.editor.icontent.FieldFormatInfo} info Formatting info about
+<a name="line278"></a> *     the field.
+<a name="line279"></a> * @param {Document} doc The iframe document.
+<a name="line280"></a> * @param {string} bodyHtml The HTML to insert as the iframe body.
+<a name="line281"></a> */
+<a name="line282"></a>goog.editor.icontent.writeHttpsInitialIframe = function(info, doc, bodyHtml) {
+<a name="line283"></a>  var body = doc.body;
+<a name="line284"></a>
+<a name="line285"></a>  // For HTTPS we already have a document with a doc type and a body element
+<a name="line286"></a>  // and don&#39;t want to create a new history entry which can cause data loss if
+<a name="line287"></a>  // the user clicks the back button.
+<a name="line288"></a>  if (goog.editor.BrowserFeature.HAS_CONTENT_EDITABLE) {
+<a name="line289"></a>    body.contentEditable = true;
+<a name="line290"></a>  }
+<a name="line291"></a>  body.className = &#39;editable&#39;;
+<a name="line292"></a>  body.setAttribute(&#39;g_editable&#39;, true);
+<a name="line293"></a>  body.hideFocus = true;
+<a name="line294"></a>  body.id = info.fieldId_;
+<a name="line295"></a>
+<a name="line296"></a>  goog.style.setStyle(body, info.extraStyles_);
+<a name="line297"></a>  body.innerHTML = bodyHtml;
+<a name="line298"></a>};
+</pre>
+
+
+</body>
+</html>

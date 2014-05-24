@@ -1,0 +1,1227 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>range (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">editor.range</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_range_NormalizedCaretRange_.html">
+          goog.editor.range.NormalizedCaretRange_</a><br/>
+        <div class="class-details">Saves the range using carets, but normalizes text nodes when carets
+are removed.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_editor_range_Point.html">
+          goog.editor.range.Point</a><br/>
+        <div class="class-details">One endpoint of a range, represented as a Node and and offset.
+</div>
+ </div>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.expand"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">expand<span class="args">(<span class="arg">range</span>,&nbsp;<span class="arg">opt_stopNode</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Given a range, expand the range to include outer tags if the full contents of
+those tags are entirely selected.  This essentially changes the dom position,
+but not the visible position of the range.
+Ex. <li>foo</li> if "foo" is selected, instead of returning start and end
+nodes as the foo text node, return the li.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">range</span>
+        : <span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+        <div class="entryOverview">The range.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_stopNode</span>
+        : <span class="type">Node=</span>
+        <div class="entryOverview">Optional node to stop expanding past.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>&nbsp;
+            The expanded range.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line89">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.expandEndPointToContainer_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">expandEndPointToContainer_<span class="args">(<span class="arg">range</span>,&nbsp;<span class="arg">endpoint</span>,&nbsp;<span class="arg">opt_stopNode</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Given a range, expands the start or end points as far out towards the
+range's common container (or stopNode, if provided) as possible, while
+perserving the same visible position.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">range</span>
+        : <span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+        <div class="entryOverview">The range to expand.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">endpoint</span>
+        : <span class="type">goog.dom.RangeEndpoint</span>
+        <div class="entryOverview">The endpoint to expand.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_stopNode</span>
+        : <span class="type">Node=</span>
+        <div class="entryOverview">Optional node to stop expanding past.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>&nbsp;
+            The expanded range.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line132">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.getDeepEndPoint"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">getDeepEndPoint<span class="args">(<span class="arg">range</span>,&nbsp;<span class="arg">atStart</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_editor_range_Point.html">goog.editor.range.Point</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Get the deepest point in the DOM that's equivalent to the endpoint of the
+given range.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">range</span>
+        : <span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+        <div class="entryOverview">A range.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">atStart</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">True for the start point, false for the end point.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_editor_range_Point.html">goog.editor.range.Point</a></span>&nbsp;
+            The end point, expressed as a node
+   and an offset.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line302">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.intersectsTag"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">intersectsTag<span class="args">(<span class="arg">range</span>,&nbsp;<span class="arg">tagName</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns whether the given range intersects with any instance of the given
+tag.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">range</span>
+        : <span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+        <div class="entryOverview">The range to check.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">tagName</span>
+        : <span class="type">goog.dom.TagName</span>
+        <div class="entryOverview">The name of the tag.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the given range intersects with any instance of
+    the given tag.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line452">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.isEditable"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">isEditable<span class="args">(<span class="arg">range</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Checks if a range is completely inside an editable region.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">range</span>
+        : <span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+        <div class="entryOverview">The range to test.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the range is completely inside an editable region.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line426">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.narrow"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">narrow<span class="args">(<span class="arg">range</span>,&nbsp;<span class="arg">el</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Given a range and an element, create a narrower range that is limited to the
+boundaries of the element. If the range starts (or ends) outside the
+element, the narrowed range's start point (or end point) will be the
+leftmost (or rightmost) leaf of the element.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">range</span>
+        : <span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+        <div class="entryOverview">The range.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">el</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The element to limit the range to.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>&nbsp;
+            A new narrowed range, or null if the
+    element does not contain any part of the given range.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line46">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.normalize"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">normalize<span class="args">(<span class="arg">range</span>)</span>
+        </span>
+        &#8658; <span class="type">function(): goog.dom.AbstractRange</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Given a range in the current DOM, create a factory for a range that
+represents the same selection in a normalized DOM. The factory function
+should be invoked after the DOM is normalized.
+
+All browsers do a bad job preserving ranges across DOM normalization.
+The issue is best described in this 5-year-old bug report:
+<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=191864">https://bugzilla.mozilla.org/show_bug.cgi?id=191864</a>
+For most applications, this isn't a problem. The browsers do a good job
+handling un-normalized text, so there's usually no reason to normalize.
+
+The exception to this rule is the rich text editing commands
+execCommand and queryCommandValue, which will fail often if there are
+un-normalized text nodes.
+
+The factory function creates new ranges so that we can normalize the DOM
+without problems. It must be created before any normalization happens,
+and invoked after normalization happens.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">range</span>
+        : <span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+        <div class="entryOverview">The range to normalize. It may
+   become invalid after body.normalize() is called.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">function(): goog.dom.AbstractRange</span>&nbsp;
+            A factory for a normalized
+   range. Should be called after body.normalize() is called.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line335">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.normalizeNode"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">normalizeNode<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Normalizes the given node.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to normalize.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line248">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.normalizeNodeIe_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">normalizeNodeIe_<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Manually normalizes the node in IE, since native normalize in IE causes
+transient problems.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to normalize.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line221">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.normalizePoint_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">normalizePoint_<span class="args">(<span class="arg">point</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_editor_range_Point.html">goog.editor.range.Point</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Given a point in the current DOM, adjust it to represent the same point in
+a normalized DOM.
+
+See the comments on goog.editor.range.normalize for more context.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">point</span>
+        : <span class="type"><a href="class_goog_editor_range_Point.html">goog.editor.range.Point</a></span>
+        <div class="entryOverview">A point in the document.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_editor_range_Point.html">goog.editor.range.Point</a></span>&nbsp;
+            The same point, for easy chaining.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line398">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.placeCursorNextTo"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">placeCursorNextTo<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">toLeft</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Position the cursor immediately to the left or right of "node".
+In Firefox, the selection parent is outside of "node", so the cursor can
+effectively be moved to the end of a link node, without being considered
+inside of it.
+Note: This does not always work in WebKit. In particular, if you try to
+place a cursor to the right of a link, typing still puts you in the link.
+Bug: <a href="http://bugs.webkit.org/show_bug.cgi?id=17697">http://bugs.webkit.org/show_bug.cgi?id=17697</a>
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to position the cursor relative to.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">toLeft</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+        <div class="entryOverview">True to place it to the left, false to the right.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>&nbsp;
+            The newly selected range.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line185">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.rangePreservingNormalize"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">rangePreservingNormalize<span class="args">(<span class="arg">node</span>,&nbsp;<span class="arg">range</span>)</span>
+        </span>
+        &#8658; <span>?</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Normalizes the node, preserving a range of the document.
+
+May also normalize things outside the node, if it is more efficient to do so.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to normalize.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">range</span>
+        : <span>?</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+        <div class="entryOverview">The range to normalize.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>?</span><span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>&nbsp;
+            The range, adjusted for normalization.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line266">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.saveUsingNormalizedCarets"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">saveUsingNormalizedCarets<span class="args">(<span class="arg">range</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_dom_SavedCaretRange.html">goog.dom.SavedCaretRange</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Saves the range by inserting carets into the HTML.
+
+Unlike the regular saveUsingCarets, this SavedRange normalizes text nodes.
+Browsers have other bugs where they don't handle split text nodes in
+contentEditable regions right.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">range</span>
+        : <span class="type"><a href="class_goog_dom_AbstractRange.html">goog.dom.AbstractRange</a></span>
+        <div class="entryOverview">The abstract range object.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_dom_SavedCaretRange.html">goog.dom.SavedCaretRange</a></span>&nbsp;
+            A saved caret range that normalizes
+    text nodes.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line586">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.selectNodeStart"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">selectNodeStart<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Cause the window's selection to be the start of this node.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to select the start of.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line167">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.editor.range.selectionPreservingNormalize"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.editor.range.</span><span class="entryName">selectionPreservingNormalize<span class="args">(<span class="arg">node</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Normalizes the node, preserving the selection of the document.
+
+May also normalize things outside the node, if it is more efficient to do so.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">node</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Node">Node</a></span>
+        <div class="entryOverview">The node to normalize.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_editor_range.js.source.html#line204">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package editor</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="editor.range"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

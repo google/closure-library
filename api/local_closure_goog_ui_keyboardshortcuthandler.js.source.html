@@ -1,0 +1,1111 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>keyboardshortcuthandler.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_keyboardshortcuthandler.js.html">keyboardshortcuthandler.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Generic keyboard shortcut handler.
+<a name="line17"></a> *
+<a name="line18"></a> * @author eae@google.com (Emil A Eklund)
+<a name="line19"></a> * @see ../demos/keyboardshortcuts.html
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.ui.KeyboardShortcutEvent&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.ui.KeyboardShortcutHandler&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.ui.KeyboardShortcutHandler.EventType&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line32"></a>goog.require(&#39;goog.events.KeyNames&#39;);
+<a name="line33"></a>goog.require(&#39;goog.object&#39;);
+<a name="line34"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>/**
+<a name="line39"></a> * Component for handling keyboard shortcuts. A shortcut is registered and bound
+<a name="line40"></a> * to a specific identifier. Once the shortcut is triggered an event is fired
+<a name="line41"></a> * with the identifier for the shortcut. This allows keyboard shortcuts to be
+<a name="line42"></a> * customized without modifying the code that listens for them.
+<a name="line43"></a> *
+<a name="line44"></a> * Supports keyboard shortcuts triggered by a single key, a stroke stroke (key
+<a name="line45"></a> * plus at least one modifier) and a sequence of keys or strokes.
+<a name="line46"></a> *
+<a name="line47"></a> * @param {goog.events.EventTarget|EventTarget} keyTarget Event target that the
+<a name="line48"></a> *     key event listener is attached to, typically the applications root
+<a name="line49"></a> *     container.
+<a name="line50"></a> * @constructor
+<a name="line51"></a> * @extends {goog.events.EventTarget}
+<a name="line52"></a> */
+<a name="line53"></a>goog.ui.KeyboardShortcutHandler = function(keyTarget) {
+<a name="line54"></a>  goog.events.EventTarget.call(this);
+<a name="line55"></a>
+<a name="line56"></a>  /**
+<a name="line57"></a>   * Registered keyboard shortcuts tree. Stored as a map with the keyCode and
+<a name="line58"></a>   * modifier(s) as the key and either a list of further strokes or the shortcut
+<a name="line59"></a>   * task identifier as the value.
+<a name="line60"></a>   * @type {Object}
+<a name="line61"></a>   * @see #makeKey_
+<a name="line62"></a>   * @private
+<a name="line63"></a>   */
+<a name="line64"></a>  this.shortcuts_ = {};
+<a name="line65"></a>
+<a name="line66"></a>  /**
+<a name="line67"></a>   * List of the last sequence of strokes. Object contains time last key was
+<a name="line68"></a>   * pressed and an array of strokes, represented by numeric value.
+<a name="line69"></a>   * @type {Object}
+<a name="line70"></a>   * @private
+<a name="line71"></a>   */
+<a name="line72"></a>  this.lastKeys_ = {
+<a name="line73"></a>    strokes: [],
+<a name="line74"></a>    time: 0
+<a name="line75"></a>  };
+<a name="line76"></a>
+<a name="line77"></a>  /**
+<a name="line78"></a>   * List of numeric key codes for keys that are safe to always regarded as
+<a name="line79"></a>   * shortcuts, even if entered in a textarea or input field.
+<a name="line80"></a>   * @type {Object}
+<a name="line81"></a>   * @private
+<a name="line82"></a>   */
+<a name="line83"></a>  this.globalKeys_ = goog.object.createSet(
+<a name="line84"></a>      goog.ui.KeyboardShortcutHandler.DEFAULT_GLOBAL_KEYS_);
+<a name="line85"></a>
+<a name="line86"></a>  /**
+<a name="line87"></a>   * List of input types that should only accept ENTER as a shortcut.
+<a name="line88"></a>   * @type {Object}
+<a name="line89"></a>   * @private
+<a name="line90"></a>   */
+<a name="line91"></a>  this.textInputs_ = goog.object.createSet(
+<a name="line92"></a>      goog.ui.KeyboardShortcutHandler.DEFAULT_TEXT_INPUTS_);
+<a name="line93"></a>
+<a name="line94"></a>  /**
+<a name="line95"></a>   * Whether to always prevent the default action if a shortcut event is fired.
+<a name="line96"></a>   * @type {boolean}
+<a name="line97"></a>   * @private
+<a name="line98"></a>   */
+<a name="line99"></a>  this.alwaysPreventDefault_ = true;
+<a name="line100"></a>
+<a name="line101"></a>  /**
+<a name="line102"></a>   * Whether to always stop propagation if a shortcut event is fired.
+<a name="line103"></a>   * @type {boolean}
+<a name="line104"></a>   * @private
+<a name="line105"></a>   */
+<a name="line106"></a>  this.alwaysStopPropagation_ = false;
+<a name="line107"></a>
+<a name="line108"></a>  /**
+<a name="line109"></a>   * Whether to treat all shortcuts as if they had been passed
+<a name="line110"></a>   * to setGlobalKeys().
+<a name="line111"></a>   * @type {boolean}
+<a name="line112"></a>   * @private
+<a name="line113"></a>   */
+<a name="line114"></a>  this.allShortcutsAreGlobal_ = false;
+<a name="line115"></a>
+<a name="line116"></a>  /**
+<a name="line117"></a>   * Whether to treat shortcuts with modifiers as if they had been passed
+<a name="line118"></a>   * to setGlobalKeys().  Ignored if allShortcutsAreGlobal_ is true.  Applies
+<a name="line119"></a>   * only to form elements (not content-editable).
+<a name="line120"></a>   * @type {boolean}
+<a name="line121"></a>   * @private
+<a name="line122"></a>   */
+<a name="line123"></a>  this.modifierShortcutsAreGlobal_ = true;
+<a name="line124"></a>
+<a name="line125"></a>  /**
+<a name="line126"></a>   * Whether to treat space key as a shortcut when the focused element is a
+<a name="line127"></a>   * checkbox, radiobutton or button.
+<a name="line128"></a>   * @type {boolean}
+<a name="line129"></a>   * @private
+<a name="line130"></a>   */
+<a name="line131"></a>  this.allowSpaceKeyOnButtons_ = false;
+<a name="line132"></a>
+<a name="line133"></a>  /**
+<a name="line134"></a>   * Tracks the currently pressed shortcut key, for Firefox.
+<a name="line135"></a>   * @type {?number}
+<a name="line136"></a>   * @private
+<a name="line137"></a>   */
+<a name="line138"></a>  this.activeShortcutKeyForGecko_ = null;
+<a name="line139"></a>
+<a name="line140"></a>  this.initializeKeyListener(keyTarget);
+<a name="line141"></a>};
+<a name="line142"></a>goog.inherits(goog.ui.KeyboardShortcutHandler, goog.events.EventTarget);
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * Maximum allowed delay, in milliseconds, allowed between the first and second
+<a name="line147"></a> * key in a key sequence.
+<a name="line148"></a> * @type {number}
+<a name="line149"></a> */
+<a name="line150"></a>goog.ui.KeyboardShortcutHandler.MAX_KEY_SEQUENCE_DELAY = 1500; // 1.5 sec
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * Bit values for modifier keys.
+<a name="line155"></a> * @enum {number}
+<a name="line156"></a> */
+<a name="line157"></a>goog.ui.KeyboardShortcutHandler.Modifiers = {
+<a name="line158"></a>  NONE: 0,
+<a name="line159"></a>  SHIFT: 1,
+<a name="line160"></a>  CTRL: 2,
+<a name="line161"></a>  ALT: 4,
+<a name="line162"></a>  META: 8
+<a name="line163"></a>};
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Keys marked as global by default.
+<a name="line168"></a> * @type {Array.&lt;goog.events.KeyCodes&gt;}
+<a name="line169"></a> * @private
+<a name="line170"></a> */
+<a name="line171"></a>goog.ui.KeyboardShortcutHandler.DEFAULT_GLOBAL_KEYS_ = [
+<a name="line172"></a>  goog.events.KeyCodes.ESC,
+<a name="line173"></a>  goog.events.KeyCodes.F1,
+<a name="line174"></a>  goog.events.KeyCodes.F2,
+<a name="line175"></a>  goog.events.KeyCodes.F3,
+<a name="line176"></a>  goog.events.KeyCodes.F4,
+<a name="line177"></a>  goog.events.KeyCodes.F5,
+<a name="line178"></a>  goog.events.KeyCodes.F6,
+<a name="line179"></a>  goog.events.KeyCodes.F7,
+<a name="line180"></a>  goog.events.KeyCodes.F8,
+<a name="line181"></a>  goog.events.KeyCodes.F9,
+<a name="line182"></a>  goog.events.KeyCodes.F10,
+<a name="line183"></a>  goog.events.KeyCodes.F11,
+<a name="line184"></a>  goog.events.KeyCodes.F12,
+<a name="line185"></a>  goog.events.KeyCodes.PAUSE
+<a name="line186"></a>];
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Text input types to allow only ENTER shortcuts.
+<a name="line191"></a> * Web Forms 2.0 for HTML5: Section 4.10.7 from 29 May 2012.
+<a name="line192"></a> * @type {Array.&lt;string&gt;}
+<a name="line193"></a> * @private
+<a name="line194"></a> */
+<a name="line195"></a>goog.ui.KeyboardShortcutHandler.DEFAULT_TEXT_INPUTS_ = [
+<a name="line196"></a>  &#39;color&#39;,
+<a name="line197"></a>  &#39;date&#39;,
+<a name="line198"></a>  &#39;datetime&#39;,
+<a name="line199"></a>  &#39;datetime-local&#39;,
+<a name="line200"></a>  &#39;email&#39;,
+<a name="line201"></a>  &#39;month&#39;,
+<a name="line202"></a>  &#39;number&#39;,
+<a name="line203"></a>  &#39;password&#39;,
+<a name="line204"></a>  &#39;search&#39;,
+<a name="line205"></a>  &#39;tel&#39;,
+<a name="line206"></a>  &#39;text&#39;,
+<a name="line207"></a>  &#39;time&#39;,
+<a name="line208"></a>  &#39;url&#39;,
+<a name="line209"></a>  &#39;week&#39;
+<a name="line210"></a>];
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>/**
+<a name="line214"></a> * Events.
+<a name="line215"></a> * @enum {string}
+<a name="line216"></a> */
+<a name="line217"></a>goog.ui.KeyboardShortcutHandler.EventType = {
+<a name="line218"></a>  SHORTCUT_TRIGGERED: &#39;shortcut&#39;,
+<a name="line219"></a>  SHORTCUT_PREFIX: &#39;shortcut_&#39;
+<a name="line220"></a>};
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/**
+<a name="line224"></a> * Cache for name to key code lookup.
+<a name="line225"></a> * @type {Object}
+<a name="line226"></a> * @private
+<a name="line227"></a> */
+<a name="line228"></a>goog.ui.KeyboardShortcutHandler.nameToKeyCodeCache_;
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Target on which to listen for key events.
+<a name="line233"></a> * @type {goog.events.EventTarget|EventTarget}
+<a name="line234"></a> * @private
+<a name="line235"></a> */
+<a name="line236"></a>goog.ui.KeyboardShortcutHandler.prototype.keyTarget_;
+<a name="line237"></a>
+<a name="line238"></a>
+<a name="line239"></a>/**
+<a name="line240"></a> * Due to a bug in the way that Gecko on Mac handles cut/copy/paste key events
+<a name="line241"></a> * using the meta key, it is necessary to fake the keyDown for the action key
+<a name="line242"></a> * (C,V,X) by capturing it on keyUp.
+<a name="line243"></a> * Because users will often release the meta key a slight moment before they
+<a name="line244"></a> * release the action key, we need this variable that will store whether the
+<a name="line245"></a> * meta key has been released recently.
+<a name="line246"></a> * It will be cleared after a short delay in the key handling logic.
+<a name="line247"></a> * @type {boolean}
+<a name="line248"></a> * @private
+<a name="line249"></a> */
+<a name="line250"></a>goog.ui.KeyboardShortcutHandler.prototype.metaKeyRecentlyReleased_;
+<a name="line251"></a>
+<a name="line252"></a>
+<a name="line253"></a>/**
+<a name="line254"></a> * Whether a key event is a printable-key event. Windows uses ctrl+alt
+<a name="line255"></a> * (alt-graph) keys to type characters on European keyboards. For such keys, we
+<a name="line256"></a> * cannot identify whether these keys are used for typing characters when
+<a name="line257"></a> * receiving keydown events. Therefore, we set this flag when we receive their
+<a name="line258"></a> * respective keypress events and fire shortcut events only when we do not
+<a name="line259"></a> * receive them.
+<a name="line260"></a> * @type {boolean}
+<a name="line261"></a> * @private
+<a name="line262"></a> */
+<a name="line263"></a>goog.ui.KeyboardShortcutHandler.prototype.isPrintableKey_;
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * Static method for getting the key code for a given key.
+<a name="line268"></a> * @param {string} name Name of key.
+<a name="line269"></a> * @return {number} The key code.
+<a name="line270"></a> */
+<a name="line271"></a>goog.ui.KeyboardShortcutHandler.getKeyCode = function(name) {
+<a name="line272"></a>  // Build reverse lookup object the first time this method is called.
+<a name="line273"></a>  if (!goog.ui.KeyboardShortcutHandler.nameToKeyCodeCache_) {
+<a name="line274"></a>    var map = {};
+<a name="line275"></a>    for (var key in goog.events.KeyNames) {
+<a name="line276"></a>      map[goog.events.KeyNames[key]] = key;
+<a name="line277"></a>    }
+<a name="line278"></a>    goog.ui.KeyboardShortcutHandler.nameToKeyCodeCache_ = map;
+<a name="line279"></a>  }
+<a name="line280"></a>
+<a name="line281"></a>  // Check if key is in cache.
+<a name="line282"></a>  return goog.ui.KeyboardShortcutHandler.nameToKeyCodeCache_[name];
+<a name="line283"></a>};
+<a name="line284"></a>
+<a name="line285"></a>
+<a name="line286"></a>/**
+<a name="line287"></a> * Sets whether to always prevent the default action when a shortcut event is
+<a name="line288"></a> * fired. If false, the default action is prevented only if preventDefault is
+<a name="line289"></a> * called on either of the corresponding SHORTCUT_TRIGGERED or SHORTCUT_PREFIX
+<a name="line290"></a> * events. If true, the default action is prevented whenever a shortcut event
+<a name="line291"></a> * is fired. The default value is true.
+<a name="line292"></a> * @param {boolean} alwaysPreventDefault Whether to always call preventDefault.
+<a name="line293"></a> */
+<a name="line294"></a>goog.ui.KeyboardShortcutHandler.prototype.setAlwaysPreventDefault = function(
+<a name="line295"></a>    alwaysPreventDefault) {
+<a name="line296"></a>  this.alwaysPreventDefault_ = alwaysPreventDefault;
+<a name="line297"></a>};
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * Returns whether the default action will always be prevented when a shortcut
+<a name="line302"></a> * event is fired. The default value is true.
+<a name="line303"></a> * @see #setAlwaysPreventDefault
+<a name="line304"></a> * @return {boolean} Whether preventDefault will always be called.
+<a name="line305"></a> */
+<a name="line306"></a>goog.ui.KeyboardShortcutHandler.prototype.getAlwaysPreventDefault = function() {
+<a name="line307"></a>  return this.alwaysPreventDefault_;
+<a name="line308"></a>};
+<a name="line309"></a>
+<a name="line310"></a>
+<a name="line311"></a>/**
+<a name="line312"></a> * Sets whether to always stop propagation for the event when fired. If false,
+<a name="line313"></a> * the propagation is stopped only if stopPropagation is called on either of the
+<a name="line314"></a> * corresponding SHORT_CUT_TRIGGERED or SHORTCUT_PREFIX events. If true, the
+<a name="line315"></a> * event is prevented from propagating beyond its target whenever it is fired.
+<a name="line316"></a> * The default value is false.
+<a name="line317"></a> * @param {boolean} alwaysStopPropagation Whether to always call
+<a name="line318"></a> *     stopPropagation.
+<a name="line319"></a> */
+<a name="line320"></a>goog.ui.KeyboardShortcutHandler.prototype.setAlwaysStopPropagation = function(
+<a name="line321"></a>    alwaysStopPropagation) {
+<a name="line322"></a>  this.alwaysStopPropagation_ = alwaysStopPropagation;
+<a name="line323"></a>};
+<a name="line324"></a>
+<a name="line325"></a>
+<a name="line326"></a>/**
+<a name="line327"></a> * Returns whether the event will always be stopped from propagating beyond its
+<a name="line328"></a> * target when a shortcut event is fired. The default value is false.
+<a name="line329"></a> * @see #setAlwaysStopPropagation
+<a name="line330"></a> * @return {boolean} Whether stopPropagation will always be called.
+<a name="line331"></a> */
+<a name="line332"></a>goog.ui.KeyboardShortcutHandler.prototype.getAlwaysStopPropagation =
+<a name="line333"></a>    function() {
+<a name="line334"></a>  return this.alwaysStopPropagation_;
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * Sets whether to treat all shortcuts (including modifier shortcuts) as if the
+<a name="line340"></a> * keys had been passed to the setGlobalKeys function.
+<a name="line341"></a> * @param {boolean} allShortcutsGlobal Whether to treat all shortcuts as global.
+<a name="line342"></a> */
+<a name="line343"></a>goog.ui.KeyboardShortcutHandler.prototype.setAllShortcutsAreGlobal = function(
+<a name="line344"></a>    allShortcutsGlobal) {
+<a name="line345"></a>  this.allShortcutsAreGlobal_ = allShortcutsGlobal;
+<a name="line346"></a>};
+<a name="line347"></a>
+<a name="line348"></a>
+<a name="line349"></a>/**
+<a name="line350"></a> * Returns whether all shortcuts (including modifier shortcuts) are treated as
+<a name="line351"></a> * if the keys had been passed to the setGlobalKeys function.
+<a name="line352"></a> * @see #setAllShortcutsAreGlobal
+<a name="line353"></a> * @return {boolean} Whether all shortcuts are treated as globals.
+<a name="line354"></a> */
+<a name="line355"></a>goog.ui.KeyboardShortcutHandler.prototype.getAllShortcutsAreGlobal =
+<a name="line356"></a>    function() {
+<a name="line357"></a>  return this.allShortcutsAreGlobal_;
+<a name="line358"></a>};
+<a name="line359"></a>
+<a name="line360"></a>
+<a name="line361"></a>/**
+<a name="line362"></a> * Sets whether to treat shortcuts with modifiers as if the keys had been
+<a name="line363"></a> * passed to the setGlobalKeys function.  Ignored if you have called
+<a name="line364"></a> * setAllShortcutsAreGlobal(true).  Applies only to form elements (not
+<a name="line365"></a> * content-editable).
+<a name="line366"></a> * @param {boolean} modifierShortcutsGlobal Whether to treat shortcuts with
+<a name="line367"></a> *     modifiers as global.
+<a name="line368"></a> */
+<a name="line369"></a>goog.ui.KeyboardShortcutHandler.prototype.setModifierShortcutsAreGlobal =
+<a name="line370"></a>    function(modifierShortcutsGlobal) {
+<a name="line371"></a>  this.modifierShortcutsAreGlobal_ = modifierShortcutsGlobal;
+<a name="line372"></a>};
+<a name="line373"></a>
+<a name="line374"></a>
+<a name="line375"></a>/**
+<a name="line376"></a> * Returns whether shortcuts with modifiers are treated as if the keys had been
+<a name="line377"></a> * passed to the setGlobalKeys function.  Ignored if you have called
+<a name="line378"></a> * setAllShortcutsAreGlobal(true).  Applies only to form elements (not
+<a name="line379"></a> * content-editable).
+<a name="line380"></a> * @see #setModifierShortcutsAreGlobal
+<a name="line381"></a> * @return {boolean} Whether shortcuts with modifiers are treated as globals.
+<a name="line382"></a> */
+<a name="line383"></a>goog.ui.KeyboardShortcutHandler.prototype.getModifierShortcutsAreGlobal =
+<a name="line384"></a>    function() {
+<a name="line385"></a>  return this.modifierShortcutsAreGlobal_;
+<a name="line386"></a>};
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/**
+<a name="line390"></a> * Sets whether to treat space key as a shortcut when the focused element is a
+<a name="line391"></a> * checkbox, radiobutton or button.
+<a name="line392"></a> * @param {boolean} allowSpaceKeyOnButtons Whether to treat space key as a
+<a name="line393"></a> *     shortcut when the focused element is a checkbox, radiobutton or button.
+<a name="line394"></a> */
+<a name="line395"></a>goog.ui.KeyboardShortcutHandler.prototype.setAllowSpaceKeyOnButtons = function(
+<a name="line396"></a>    allowSpaceKeyOnButtons) {
+<a name="line397"></a>  this.allowSpaceKeyOnButtons_ = allowSpaceKeyOnButtons;
+<a name="line398"></a>};
+<a name="line399"></a>
+<a name="line400"></a>
+<a name="line401"></a>/**
+<a name="line402"></a> * Registers a keyboard shortcut.
+<a name="line403"></a> * @param {string} identifier Identifier for the task performed by the keyboard
+<a name="line404"></a> *                 combination. Multiple shortcuts can be provided for the same
+<a name="line405"></a> *                 task by specifying the same identifier.
+<a name="line406"></a> * @param {...(number|string|Array.&lt;number&gt;)} var_args See below.
+<a name="line407"></a> *
+<a name="line408"></a> * param {number} keyCode Numeric code for key
+<a name="line409"></a> * param {number=} opt_modifiers Bitmap indicating required modifier keys.
+<a name="line410"></a> *                goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
+<a name="line411"></a> *                ALT, or META.
+<a name="line412"></a> *
+<a name="line413"></a> * The last two parameters can be repeated any number of times to create a
+<a name="line414"></a> * shortcut using a sequence of strokes. Instead of varagrs the second parameter
+<a name="line415"></a> * could also be an array where each element would be ragarded as a parameter.
+<a name="line416"></a> *
+<a name="line417"></a> * A string representation of the shortcut can be supplied instead of the last
+<a name="line418"></a> * two parameters. In that case the method only takes two arguments, the
+<a name="line419"></a> * identifier and the string.
+<a name="line420"></a> *
+<a name="line421"></a> * Examples:
+<a name="line422"></a> *   g               registerShortcut(str, G_KEYCODE)
+<a name="line423"></a> *   Ctrl+g          registerShortcut(str, G_KEYCODE, CTRL)
+<a name="line424"></a> *   Ctrl+Shift+g    registerShortcut(str, G_KEYCODE, CTRL | SHIFT)
+<a name="line425"></a> *   Ctrl+g a        registerShortcut(str, G_KEYCODE, CTRL, A_KEYCODE)
+<a name="line426"></a> *   Ctrl+g Shift+a  registerShortcut(str, G_KEYCODE, CTRL, A_KEYCODE, SHIFT)
+<a name="line427"></a> *   g a             registerShortcut(str, G_KEYCODE, NONE, A_KEYCODE)
+<a name="line428"></a> *
+<a name="line429"></a> * Examples using string representation for shortcuts:
+<a name="line430"></a> *   g               registerShortcut(str, &#39;g&#39;)
+<a name="line431"></a> *   Ctrl+g          registerShortcut(str, &#39;ctrl+g&#39;)
+<a name="line432"></a> *   Ctrl+Shift+g    registerShortcut(str, &#39;ctrl+shift+g&#39;)
+<a name="line433"></a> *   Ctrl+g a        registerShortcut(str, &#39;ctrl+g a&#39;)
+<a name="line434"></a> *   Ctrl+g Shift+a  registerShortcut(str, &#39;ctrl+g shift+a&#39;)
+<a name="line435"></a> *   g a             registerShortcut(str, &#39;g a&#39;).
+<a name="line436"></a> */
+<a name="line437"></a>goog.ui.KeyboardShortcutHandler.prototype.registerShortcut = function(
+<a name="line438"></a>    identifier, var_args) {
+<a name="line439"></a>
+<a name="line440"></a>  // Add shortcut to shortcuts_ tree
+<a name="line441"></a>  goog.ui.KeyboardShortcutHandler.setShortcut_(
+<a name="line442"></a>      this.shortcuts_, this.interpretStrokes_(1, arguments), identifier);
+<a name="line443"></a>};
+<a name="line444"></a>
+<a name="line445"></a>
+<a name="line446"></a>/**
+<a name="line447"></a> * Unregisters a keyboard shortcut by keyCode and modifiers or string
+<a name="line448"></a> * representation of sequence.
+<a name="line449"></a> *
+<a name="line450"></a> * param {number} keyCode Numeric code for key
+<a name="line451"></a> * param {number=} opt_modifiers Bitmap indicating required modifier keys.
+<a name="line452"></a> *                 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
+<a name="line453"></a> *                 ALT, or META.
+<a name="line454"></a> *
+<a name="line455"></a> * The two parameters can be repeated any number of times to create a shortcut
+<a name="line456"></a> * using a sequence of strokes.
+<a name="line457"></a> *
+<a name="line458"></a> * A string representation of the shortcut can be supplied instead see
+<a name="line459"></a> * {@link #registerShortcut} for syntax. In that case the method only takes one
+<a name="line460"></a> * argument.
+<a name="line461"></a> *
+<a name="line462"></a> * @param {...(number|string|Array.&lt;number&gt;)} var_args String representation, or
+<a name="line463"></a> *     array or list of alternating key codes and modifiers.
+<a name="line464"></a> */
+<a name="line465"></a>goog.ui.KeyboardShortcutHandler.prototype.unregisterShortcut = function(
+<a name="line466"></a>    var_args) {
+<a name="line467"></a>  // Remove shortcut from tree
+<a name="line468"></a>  goog.ui.KeyboardShortcutHandler.setShortcut_(
+<a name="line469"></a>      this.shortcuts_, this.interpretStrokes_(0, arguments), null);
+<a name="line470"></a>};
+<a name="line471"></a>
+<a name="line472"></a>
+<a name="line473"></a>/**
+<a name="line474"></a> * Verifies if a particular keyboard shortcut is registered already. It has
+<a name="line475"></a> * the same interface as the unregistering of shortcuts.
+<a name="line476"></a> *
+<a name="line477"></a> * param {number} keyCode Numeric code for key
+<a name="line478"></a> * param {number=} opt_modifiers Bitmap indicating required modifier keys.
+<a name="line479"></a> *                 goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT, CONTROL,
+<a name="line480"></a> *                 ALT, or META.
+<a name="line481"></a> *
+<a name="line482"></a> * The two parameters can be repeated any number of times to create a shortcut
+<a name="line483"></a> * using a sequence of strokes.
+<a name="line484"></a> *
+<a name="line485"></a> * A string representation of the shortcut can be supplied instead see
+<a name="line486"></a> * {@link #registerShortcut} for syntax. In that case the method only takes one
+<a name="line487"></a> * argument.
+<a name="line488"></a> *
+<a name="line489"></a> * @param {...(number|string|Array.&lt;number&gt;)} var_args String representation, or
+<a name="line490"></a> *     array or list of alternating key codes and modifiers.
+<a name="line491"></a> * @return {boolean} Whether the specified keyboard shortcut is registered.
+<a name="line492"></a> */
+<a name="line493"></a>goog.ui.KeyboardShortcutHandler.prototype.isShortcutRegistered = function(
+<a name="line494"></a>    var_args) {
+<a name="line495"></a>  return this.checkShortcut_(this.interpretStrokes_(0, arguments));
+<a name="line496"></a>};
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * Parses the variable arguments for registerShortcut and unregisterShortcut.
+<a name="line501"></a> * @param {number} initialIndex The first index of &quot;args&quot; to treat as
+<a name="line502"></a> *     variable arguments.
+<a name="line503"></a> * @param {Object} args The &quot;arguments&quot; array passed
+<a name="line504"></a> *     to registerShortcut or unregisterShortcut.  Please see the comments in
+<a name="line505"></a> *     registerShortcut for list of allowed forms.
+<a name="line506"></a> * @return {!Array.&lt;Object&gt;} The sequence of objects containing the
+<a name="line507"></a> *     keyCode and modifiers of each key in sequence.
+<a name="line508"></a> * @private
+<a name="line509"></a> */
+<a name="line510"></a>goog.ui.KeyboardShortcutHandler.prototype.interpretStrokes_ = function(
+<a name="line511"></a>    initialIndex, args) {
+<a name="line512"></a>  var strokes;
+<a name="line513"></a>
+<a name="line514"></a>  // Build strokes array from string.
+<a name="line515"></a>  if (goog.isString(args[initialIndex])) {
+<a name="line516"></a>    strokes = goog.ui.KeyboardShortcutHandler.parseStringShortcut(
+<a name="line517"></a>        args[initialIndex]);
+<a name="line518"></a>
+<a name="line519"></a>  // Build strokes array from arguments list or from array.
+<a name="line520"></a>  } else {
+<a name="line521"></a>    var strokesArgs = args, i = initialIndex;
+<a name="line522"></a>    if (goog.isArray(args[initialIndex])) {
+<a name="line523"></a>      strokesArgs = args[initialIndex];
+<a name="line524"></a>      i = 0;
+<a name="line525"></a>    }
+<a name="line526"></a>
+<a name="line527"></a>    strokes = [];
+<a name="line528"></a>    for (; i &lt; strokesArgs.length; i += 2) {
+<a name="line529"></a>      strokes.push({
+<a name="line530"></a>        keyCode: strokesArgs[i],
+<a name="line531"></a>        modifiers: strokesArgs[i + 1]
+<a name="line532"></a>      });
+<a name="line533"></a>    }
+<a name="line534"></a>  }
+<a name="line535"></a>
+<a name="line536"></a>  return strokes;
+<a name="line537"></a>};
+<a name="line538"></a>
+<a name="line539"></a>
+<a name="line540"></a>/**
+<a name="line541"></a> * Unregisters all keyboard shortcuts.
+<a name="line542"></a> */
+<a name="line543"></a>goog.ui.KeyboardShortcutHandler.prototype.unregisterAll = function() {
+<a name="line544"></a>  this.shortcuts_ = {};
+<a name="line545"></a>};
+<a name="line546"></a>
+<a name="line547"></a>
+<a name="line548"></a>/**
+<a name="line549"></a> * Sets the global keys; keys that are safe to always regarded as shortcuts,
+<a name="line550"></a> * even if entered in a textarea or input field.
+<a name="line551"></a> * @param {Array.&lt;number&gt;} keys List of keys.
+<a name="line552"></a> */
+<a name="line553"></a>goog.ui.KeyboardShortcutHandler.prototype.setGlobalKeys = function(keys) {
+<a name="line554"></a>  this.globalKeys_ = goog.object.createSet(keys);
+<a name="line555"></a>};
+<a name="line556"></a>
+<a name="line557"></a>
+<a name="line558"></a>/**
+<a name="line559"></a> * @return {!Array.&lt;string&gt;} The global keys, i.e. keys that are safe to always
+<a name="line560"></a> *     regard as shortcuts, even if entered in a textarea or input field.
+<a name="line561"></a> */
+<a name="line562"></a>goog.ui.KeyboardShortcutHandler.prototype.getGlobalKeys = function() {
+<a name="line563"></a>  return goog.object.getKeys(this.globalKeys_);
+<a name="line564"></a>};
+<a name="line565"></a>
+<a name="line566"></a>
+<a name="line567"></a>/** @override */
+<a name="line568"></a>goog.ui.KeyboardShortcutHandler.prototype.disposeInternal = function() {
+<a name="line569"></a>  goog.ui.KeyboardShortcutHandler.superClass_.disposeInternal.call(this);
+<a name="line570"></a>  this.unregisterAll();
+<a name="line571"></a>  this.clearKeyListener();
+<a name="line572"></a>};
+<a name="line573"></a>
+<a name="line574"></a>
+<a name="line575"></a>/**
+<a name="line576"></a> * Returns event type for a specific shortcut.
+<a name="line577"></a> * @param {string} identifier Identifier for the shortcut task.
+<a name="line578"></a> * @return {string} Theh event type.
+<a name="line579"></a> */
+<a name="line580"></a>goog.ui.KeyboardShortcutHandler.prototype.getEventType =
+<a name="line581"></a>    function(identifier) {
+<a name="line582"></a>
+<a name="line583"></a>  return goog.ui.KeyboardShortcutHandler.EventType.SHORTCUT_PREFIX + identifier;
+<a name="line584"></a>};
+<a name="line585"></a>
+<a name="line586"></a>
+<a name="line587"></a>/**
+<a name="line588"></a> * Builds stroke array from string representation of shortcut.
+<a name="line589"></a> * @param {string} s String representation of shortcut.
+<a name="line590"></a> * @return {!Array.&lt;Object&gt;} The stroke array.
+<a name="line591"></a> */
+<a name="line592"></a>goog.ui.KeyboardShortcutHandler.parseStringShortcut = function(s) {
+<a name="line593"></a>  // Normalize whitespace and force to lower case.
+<a name="line594"></a>  s = s.replace(/[ +]*\+[ +]*/g, &#39;+&#39;).replace(/[ ]+/g, &#39; &#39;).toLowerCase();
+<a name="line595"></a>
+<a name="line596"></a>  // Build strokes array from string, space separates strokes, plus separates
+<a name="line597"></a>  // individual keys.
+<a name="line598"></a>  var groups = s.split(&#39; &#39;);
+<a name="line599"></a>  var strokes = [];
+<a name="line600"></a>  for (var group, i = 0; group = groups[i]; i++) {
+<a name="line601"></a>    var keys = group.split(&#39;+&#39;);
+<a name="line602"></a>    var keyCode, modifiers = goog.ui.KeyboardShortcutHandler.Modifiers.NONE;
+<a name="line603"></a>    for (var key, j = 0; key = keys[j]; j++) {
+<a name="line604"></a>      switch (key) {
+<a name="line605"></a>        case &#39;shift&#39;:
+<a name="line606"></a>          modifiers |= goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT;
+<a name="line607"></a>          continue;
+<a name="line608"></a>        case &#39;ctrl&#39;:
+<a name="line609"></a>          modifiers |= goog.ui.KeyboardShortcutHandler.Modifiers.CTRL;
+<a name="line610"></a>          continue;
+<a name="line611"></a>        case &#39;alt&#39;:
+<a name="line612"></a>          modifiers |= goog.ui.KeyboardShortcutHandler.Modifiers.ALT;
+<a name="line613"></a>          continue;
+<a name="line614"></a>        case &#39;meta&#39;:
+<a name="line615"></a>          modifiers |= goog.ui.KeyboardShortcutHandler.Modifiers.META;
+<a name="line616"></a>          continue;
+<a name="line617"></a>      }
+<a name="line618"></a>      keyCode = goog.ui.KeyboardShortcutHandler.getKeyCode(key);
+<a name="line619"></a>      break;
+<a name="line620"></a>    }
+<a name="line621"></a>    strokes.push({keyCode: keyCode, modifiers: modifiers});
+<a name="line622"></a>  }
+<a name="line623"></a>
+<a name="line624"></a>  return strokes;
+<a name="line625"></a>};
+<a name="line626"></a>
+<a name="line627"></a>
+<a name="line628"></a>/**
+<a name="line629"></a> * Adds a key event listener that triggers {@link #handleKeyDown_} when keys
+<a name="line630"></a> * are pressed.
+<a name="line631"></a> * @param {goog.events.EventTarget|EventTarget} keyTarget Event target that the
+<a name="line632"></a> *     event listener should be attached to.
+<a name="line633"></a> * @protected
+<a name="line634"></a> */
+<a name="line635"></a>goog.ui.KeyboardShortcutHandler.prototype.initializeKeyListener =
+<a name="line636"></a>    function(keyTarget) {
+<a name="line637"></a>  this.keyTarget_ = keyTarget;
+<a name="line638"></a>
+<a name="line639"></a>  goog.events.listen(this.keyTarget_, goog.events.EventType.KEYDOWN,
+<a name="line640"></a>      this.handleKeyDown_, false, this);
+<a name="line641"></a>
+<a name="line642"></a>  if (goog.userAgent.GECKO) {
+<a name="line643"></a>    goog.events.listen(this.keyTarget_, goog.events.EventType.KEYUP,
+<a name="line644"></a>        this.handleGeckoKeyUp_, false, this);
+<a name="line645"></a>  }
+<a name="line646"></a>
+<a name="line647"></a>  // Windows uses ctrl+alt keys (a.k.a. alt-graph keys) for typing characters
+<a name="line648"></a>  // on European keyboards (e.g. ctrl+alt+e for an an euro sign.) Unfortunately,
+<a name="line649"></a>  // Windows browsers except Firefox does not have any methods except listening
+<a name="line650"></a>  // keypress and keyup events to identify if ctrl+alt keys are really used for
+<a name="line651"></a>  // inputting characters. Therefore, we listen to these events and prevent
+<a name="line652"></a>  // firing shortcut-key events if ctrl+alt keys are used for typing characters.
+<a name="line653"></a>  if (goog.userAgent.WINDOWS &amp;&amp; !goog.userAgent.GECKO) {
+<a name="line654"></a>    goog.events.listen(this.keyTarget_, goog.events.EventType.KEYPRESS,
+<a name="line655"></a>                       this.handleWindowsKeyPress_, false, this);
+<a name="line656"></a>    goog.events.listen(this.keyTarget_, goog.events.EventType.KEYUP,
+<a name="line657"></a>                       this.handleWindowsKeyUp_, false, this);
+<a name="line658"></a>  }
+<a name="line659"></a>};
+<a name="line660"></a>
+<a name="line661"></a>
+<a name="line662"></a>/**
+<a name="line663"></a> * Handler for when a keyup event is fired in Firefox (Gecko).
+<a name="line664"></a> * @param {goog.events.BrowserEvent} e The key event.
+<a name="line665"></a> * @private
+<a name="line666"></a> */
+<a name="line667"></a>goog.ui.KeyboardShortcutHandler.prototype.handleGeckoKeyUp_ = function(e) {
+<a name="line668"></a>  // Due to a bug in the way that Gecko on Mac handles cut/copy/paste key events
+<a name="line669"></a>  // using the meta key, it is necessary to fake the keyDown for the action keys
+<a name="line670"></a>  // (C,V,X) by capturing it on keyUp.
+<a name="line671"></a>  // This is because the keyDown events themselves are not fired by the browser
+<a name="line672"></a>  // in this case.
+<a name="line673"></a>  // Because users will often release the meta key a slight moment before they
+<a name="line674"></a>  // release the action key, we need to store whether the meta key has been
+<a name="line675"></a>  // released recently to avoid &quot;flaky&quot; cutting/pasting behavior.
+<a name="line676"></a>  if (goog.userAgent.MAC) {
+<a name="line677"></a>    if (e.keyCode == goog.events.KeyCodes.MAC_FF_META) {
+<a name="line678"></a>      this.metaKeyRecentlyReleased_ = true;
+<a name="line679"></a>      goog.Timer.callOnce(function() {
+<a name="line680"></a>        this.metaKeyRecentlyReleased_ = false;
+<a name="line681"></a>      }, 400, this);
+<a name="line682"></a>      return;
+<a name="line683"></a>    }
+<a name="line684"></a>
+<a name="line685"></a>    var metaKey = e.metaKey || this.metaKeyRecentlyReleased_;
+<a name="line686"></a>    if ((e.keyCode == goog.events.KeyCodes.C ||
+<a name="line687"></a>        e.keyCode == goog.events.KeyCodes.X ||
+<a name="line688"></a>        e.keyCode == goog.events.KeyCodes.V) &amp;&amp; metaKey) {
+<a name="line689"></a>      e.metaKey = metaKey;
+<a name="line690"></a>      this.handleKeyDown_(e);
+<a name="line691"></a>    }
+<a name="line692"></a>  }
+<a name="line693"></a>
+<a name="line694"></a>  // Firefox triggers buttons on space keyUp instead of keyDown.  So if space
+<a name="line695"></a>  // keyDown activated a shortcut, do NOT also trigger the focused button.
+<a name="line696"></a>  if (goog.events.KeyCodes.SPACE == this.activeShortcutKeyForGecko_ &amp;&amp;
+<a name="line697"></a>      goog.events.KeyCodes.SPACE == e.keyCode) {
+<a name="line698"></a>    e.preventDefault();
+<a name="line699"></a>  }
+<a name="line700"></a>  this.activeShortcutKeyForGecko_ = null;
+<a name="line701"></a>};
+<a name="line702"></a>
+<a name="line703"></a>
+<a name="line704"></a>/**
+<a name="line705"></a> * Returns whether this event is possibly used for typing a printable character.
+<a name="line706"></a> * Windows uses ctrl+alt (a.k.a. alt-graph) keys for typing characters on
+<a name="line707"></a> * European keyboards. Since only Firefox provides a method that can identify
+<a name="line708"></a> * whether ctrl+alt keys are used for typing characters, we need to check
+<a name="line709"></a> * whether Windows sends a keypress event to prevent firing shortcut event if
+<a name="line710"></a> * this event is used for typing characters.
+<a name="line711"></a> * @param {goog.events.BrowserEvent} e The key event.
+<a name="line712"></a> * @return {boolean} Whether this event is a possible printable-key event.
+<a name="line713"></a> * @private
+<a name="line714"></a> */
+<a name="line715"></a>goog.ui.KeyboardShortcutHandler.prototype.isPossiblePrintableKey_ =
+<a name="line716"></a>    function(e) {
+<a name="line717"></a>  return goog.userAgent.WINDOWS &amp;&amp; !goog.userAgent.GECKO &amp;&amp;
+<a name="line718"></a>      e.ctrlKey &amp;&amp; e.altKey &amp;&amp; !e.shiftKey;
+<a name="line719"></a>};
+<a name="line720"></a>
+<a name="line721"></a>
+<a name="line722"></a>/**
+<a name="line723"></a> * Handler for when a keypress event is fired on Windows.
+<a name="line724"></a> * @param {goog.events.BrowserEvent} e The key event.
+<a name="line725"></a> * @private
+<a name="line726"></a> */
+<a name="line727"></a>goog.ui.KeyboardShortcutHandler.prototype.handleWindowsKeyPress_ = function(e) {
+<a name="line728"></a>  // When this keypress event consists of a printable character, set the flag to
+<a name="line729"></a>  // prevent firing shortcut key events when we receive the succeeding keyup
+<a name="line730"></a>  // event. We accept all Unicode characters except control ones since this
+<a name="line731"></a>  // keyCode may be a non-ASCII character.
+<a name="line732"></a>  if (e.keyCode &gt; 0x20 &amp;&amp; this.isPossiblePrintableKey_(e)) {
+<a name="line733"></a>    this.isPrintableKey_ = true;
+<a name="line734"></a>  }
+<a name="line735"></a>};
+<a name="line736"></a>
+<a name="line737"></a>
+<a name="line738"></a>/**
+<a name="line739"></a> * Handler for when a keyup event is fired on Windows.
+<a name="line740"></a> * @param {goog.events.BrowserEvent} e The key event.
+<a name="line741"></a> * @private
+<a name="line742"></a> */
+<a name="line743"></a>goog.ui.KeyboardShortcutHandler.prototype.handleWindowsKeyUp_ = function(e) {
+<a name="line744"></a>  // For possible printable-key events, try firing a shortcut-key event only
+<a name="line745"></a>  // when this event is not used for typing a character.
+<a name="line746"></a>  if (!this.isPrintableKey_ &amp;&amp; this.isPossiblePrintableKey_(e)) {
+<a name="line747"></a>    this.handleKeyDown_(e);
+<a name="line748"></a>  }
+<a name="line749"></a>};
+<a name="line750"></a>
+<a name="line751"></a>
+<a name="line752"></a>/**
+<a name="line753"></a> * Removes the listener that was added by link {@link #initializeKeyListener}.
+<a name="line754"></a> * @protected
+<a name="line755"></a> */
+<a name="line756"></a>goog.ui.KeyboardShortcutHandler.prototype.clearKeyListener = function() {
+<a name="line757"></a>  goog.events.unlisten(this.keyTarget_, goog.events.EventType.KEYDOWN,
+<a name="line758"></a>      this.handleKeyDown_, false, this);
+<a name="line759"></a>  if (goog.userAgent.GECKO) {
+<a name="line760"></a>    goog.events.unlisten(this.keyTarget_, goog.events.EventType.KEYUP,
+<a name="line761"></a>        this.handleGeckoKeyUp_, false, this);
+<a name="line762"></a>  }
+<a name="line763"></a>  if (goog.userAgent.WINDOWS &amp;&amp; !goog.userAgent.GECKO) {
+<a name="line764"></a>    goog.events.unlisten(this.keyTarget_, goog.events.EventType.KEYPRESS,
+<a name="line765"></a>        this.handleWindowsKeyPress_, false, this);
+<a name="line766"></a>    goog.events.unlisten(this.keyTarget_, goog.events.EventType.KEYUP,
+<a name="line767"></a>        this.handleWindowsKeyUp_, false, this);
+<a name="line768"></a>  }
+<a name="line769"></a>  this.keyTarget_ = null;
+<a name="line770"></a>};
+<a name="line771"></a>
+<a name="line772"></a>
+<a name="line773"></a>/**
+<a name="line774"></a> * Adds or removes a stroke node to/from the given parent node.
+<a name="line775"></a> * @param {Object} parent Parent node to add/remove stroke to/from.
+<a name="line776"></a> * @param {Array.&lt;Object&gt;} strokes Array of strokes for shortcut.
+<a name="line777"></a> * @param {?string} identifier Identifier for the task performed by shortcut or
+<a name="line778"></a> *     null to clear.
+<a name="line779"></a> * @private
+<a name="line780"></a> */
+<a name="line781"></a>goog.ui.KeyboardShortcutHandler.setShortcut_ = function(parent,
+<a name="line782"></a>                                                        strokes,
+<a name="line783"></a>                                                        identifier) {
+<a name="line784"></a>  var stroke = strokes.shift();
+<a name="line785"></a>  var key = goog.ui.KeyboardShortcutHandler.makeKey_(stroke.keyCode,
+<a name="line786"></a>                                                     stroke.modifiers);
+<a name="line787"></a>  var node = parent[key];
+<a name="line788"></a>  if (node &amp;&amp; identifier &amp;&amp; (strokes.length == 0 || goog.isString(node))) {
+<a name="line789"></a>    throw Error(&#39;Keyboard shortcut conflicts with existing shortcut&#39;);
+<a name="line790"></a>  }
+<a name="line791"></a>
+<a name="line792"></a>  if (strokes.length) {
+<a name="line793"></a>    if (!node) {
+<a name="line794"></a>      node = parent[key] = {};
+<a name="line795"></a>    }
+<a name="line796"></a>    goog.ui.KeyboardShortcutHandler.setShortcut_(node,
+<a name="line797"></a>                                                 strokes,
+<a name="line798"></a>                                                 identifier);
+<a name="line799"></a>  }
+<a name="line800"></a>  else {
+<a name="line801"></a>    parent[key] = identifier;
+<a name="line802"></a>  }
+<a name="line803"></a>};
+<a name="line804"></a>
+<a name="line805"></a>
+<a name="line806"></a>/**
+<a name="line807"></a> * Returns shortcut for a specific set of strokes.
+<a name="line808"></a> * @param {Array.&lt;number&gt;} strokes Strokes array.
+<a name="line809"></a> * @param {number=} opt_index Index in array to start with.
+<a name="line810"></a> * @param {Object=} opt_list List to search for shortcut in.
+<a name="line811"></a> * @return {string|Object} The shortcut.
+<a name="line812"></a> * @private
+<a name="line813"></a> */
+<a name="line814"></a>goog.ui.KeyboardShortcutHandler.prototype.getShortcut_ = function(
+<a name="line815"></a>    strokes, opt_index, opt_list) {
+<a name="line816"></a>
+<a name="line817"></a>  var list = opt_list || this.shortcuts_;
+<a name="line818"></a>  var index = opt_index || 0;
+<a name="line819"></a>  var stroke = strokes[index];
+<a name="line820"></a>  var node = list[stroke];
+<a name="line821"></a>
+<a name="line822"></a>  if (node &amp;&amp; !goog.isString(node) &amp;&amp; strokes.length - index &gt; 1) {
+<a name="line823"></a>    return this.getShortcut_(strokes, index + 1, node);
+<a name="line824"></a>  }
+<a name="line825"></a>
+<a name="line826"></a>  return node;
+<a name="line827"></a>};
+<a name="line828"></a>
+<a name="line829"></a>
+<a name="line830"></a>/**
+<a name="line831"></a> * Checks if a particular keyboard shortcut is registered.
+<a name="line832"></a> * @param {Array.&lt;Object&gt;} strokes Strokes array.
+<a name="line833"></a> * @return {boolean} True iff the keyboard is registred.
+<a name="line834"></a> * @private
+<a name="line835"></a> */
+<a name="line836"></a>goog.ui.KeyboardShortcutHandler.prototype.checkShortcut_ = function(strokes) {
+<a name="line837"></a>  var node = this.shortcuts_;
+<a name="line838"></a>  while (strokes.length &gt; 0 &amp;&amp; node) {
+<a name="line839"></a>    var stroke = strokes.shift();
+<a name="line840"></a>    var key = goog.ui.KeyboardShortcutHandler.makeKey_(stroke.keyCode,
+<a name="line841"></a>                                                       stroke.modifiers);
+<a name="line842"></a>    node = node[key];
+<a name="line843"></a>    if (goog.isString(node)) {
+<a name="line844"></a>      return true;
+<a name="line845"></a>    }
+<a name="line846"></a>  }
+<a name="line847"></a>  return false;
+<a name="line848"></a>};
+<a name="line849"></a>
+<a name="line850"></a>
+<a name="line851"></a>/**
+<a name="line852"></a> * Constructs key from key code and modifiers.
+<a name="line853"></a> *
+<a name="line854"></a> * The lower 8 bits are used for the key code, the following 3 for modifiers and
+<a name="line855"></a> * the remaining bits are unused.
+<a name="line856"></a> *
+<a name="line857"></a> * @param {number} keyCode Numeric key code.
+<a name="line858"></a> * @param {number} modifiers Required modifiers.
+<a name="line859"></a> * @return {number} The key.
+<a name="line860"></a> * @private
+<a name="line861"></a> */
+<a name="line862"></a>goog.ui.KeyboardShortcutHandler.makeKey_ = function(keyCode, modifiers) {
+<a name="line863"></a>  // Make sure key code is just 8 bits and OR it with the modifiers left shifted
+<a name="line864"></a>  // 8 bits.
+<a name="line865"></a>  return (keyCode &amp; 255) | (modifiers &lt;&lt; 8);
+<a name="line866"></a>};
+<a name="line867"></a>
+<a name="line868"></a>
+<a name="line869"></a>/**
+<a name="line870"></a> * Keypress handler.
+<a name="line871"></a> * @param {goog.events.BrowserEvent} event Keypress event.
+<a name="line872"></a> * @private
+<a name="line873"></a> */
+<a name="line874"></a>goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
+<a name="line875"></a>  if (!this.isValidShortcut_(event)) {
+<a name="line876"></a>    return;
+<a name="line877"></a>  }
+<a name="line878"></a>  // For possible printable-key events, we cannot identify whether the events
+<a name="line879"></a>  // are used for typing characters until we receive respective keyup events.
+<a name="line880"></a>  // Therefore, we handle this event when we receive a succeeding keyup event
+<a name="line881"></a>  // to verify this event is not used for typing characters.
+<a name="line882"></a>  if (event.type == &#39;keydown&#39; &amp;&amp; this.isPossiblePrintableKey_(event)) {
+<a name="line883"></a>    this.isPrintableKey_ = false;
+<a name="line884"></a>    return;
+<a name="line885"></a>  }
+<a name="line886"></a>
+<a name="line887"></a>  var keyCode = goog.userAgent.GECKO ?
+<a name="line888"></a>      goog.events.KeyCodes.normalizeGeckoKeyCode(event.keyCode) :
+<a name="line889"></a>      event.keyCode;
+<a name="line890"></a>
+<a name="line891"></a>  var modifiers =
+<a name="line892"></a>      (event.shiftKey ? goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT : 0) |
+<a name="line893"></a>      (event.ctrlKey ? goog.ui.KeyboardShortcutHandler.Modifiers.CTRL : 0) |
+<a name="line894"></a>      (event.altKey ? goog.ui.KeyboardShortcutHandler.Modifiers.ALT : 0) |
+<a name="line895"></a>      (event.metaKey ? goog.ui.KeyboardShortcutHandler.Modifiers.META : 0);
+<a name="line896"></a>  var stroke = goog.ui.KeyboardShortcutHandler.makeKey_(keyCode, modifiers);
+<a name="line897"></a>
+<a name="line898"></a>  // Check if any previous strokes where entered within the acceptable time
+<a name="line899"></a>  // period.
+<a name="line900"></a>  var node, shortcut;
+<a name="line901"></a>  var now = goog.now();
+<a name="line902"></a>  if (this.lastKeys_.strokes.length &amp;&amp; now - this.lastKeys_.time &lt;=
+<a name="line903"></a>      goog.ui.KeyboardShortcutHandler.MAX_KEY_SEQUENCE_DELAY) {
+<a name="line904"></a>    node = this.getShortcut_(this.lastKeys_.strokes);
+<a name="line905"></a>  } else {
+<a name="line906"></a>    this.lastKeys_.strokes.length = 0;
+<a name="line907"></a>  }
+<a name="line908"></a>
+<a name="line909"></a>  // Check if this stroke triggers a shortcut, either on its own or combined
+<a name="line910"></a>  // with previous strokes.
+<a name="line911"></a>  node = node ? node[stroke] : this.shortcuts_[stroke];
+<a name="line912"></a>  if (!node) {
+<a name="line913"></a>    node = this.shortcuts_[stroke];
+<a name="line914"></a>    this.lastKeys_.strokes = [];
+<a name="line915"></a>  }
+<a name="line916"></a>  // Check if stroke triggers a node.
+<a name="line917"></a>  if (node &amp;&amp; goog.isString(node)) {
+<a name="line918"></a>    shortcut = node;
+<a name="line919"></a>  }
+<a name="line920"></a>
+<a name="line921"></a>  // Entered stroke(s) are a part of a sequence, store stroke and record
+<a name="line922"></a>  // time to allow the following stroke(s) to trigger the shortcut.
+<a name="line923"></a>  else if (node) {
+<a name="line924"></a>    this.lastKeys_.strokes.push(stroke);
+<a name="line925"></a>    this.lastKeys_.time = now;
+<a name="line926"></a>    // Prevent default action so find-as-you-type doesn&#39;t steal keyboard focus.
+<a name="line927"></a>    if (goog.userAgent.GECKO) {
+<a name="line928"></a>      event.preventDefault();
+<a name="line929"></a>    }
+<a name="line930"></a>  }
+<a name="line931"></a>
+<a name="line932"></a>  // No strokes for sequence, clear stored strokes.
+<a name="line933"></a>  else {
+<a name="line934"></a>    this.lastKeys_.strokes.length = 0;
+<a name="line935"></a>  }
+<a name="line936"></a>
+<a name="line937"></a>  // Dispatch keyboard shortcut event if a shortcut was triggered. In addition
+<a name="line938"></a>  // to the generic keyboard shortcut event a more specific fine grained one,
+<a name="line939"></a>  // specific for the shortcut identifier, is fired.
+<a name="line940"></a>  if (shortcut) {
+<a name="line941"></a>    if (this.alwaysPreventDefault_) {
+<a name="line942"></a>      event.preventDefault();
+<a name="line943"></a>    }
+<a name="line944"></a>
+<a name="line945"></a>    if (this.alwaysStopPropagation_) {
+<a name="line946"></a>      event.stopPropagation();
+<a name="line947"></a>    }
+<a name="line948"></a>
+<a name="line949"></a>    var types = goog.ui.KeyboardShortcutHandler.EventType;
+<a name="line950"></a>
+<a name="line951"></a>    // Dispatch SHORTCUT_TRIGGERED event
+<a name="line952"></a>    var target = /** @type {Node} */ (event.target);
+<a name="line953"></a>    var triggerEvent = new goog.ui.KeyboardShortcutEvent(
+<a name="line954"></a>        types.SHORTCUT_TRIGGERED, shortcut, target);
+<a name="line955"></a>    var retVal = this.dispatchEvent(triggerEvent);
+<a name="line956"></a>
+<a name="line957"></a>    // Dispatch SHORTCUT_PREFIX_&lt;identifier&gt; event
+<a name="line958"></a>    var prefixEvent = new goog.ui.KeyboardShortcutEvent(
+<a name="line959"></a>        types.SHORTCUT_PREFIX + shortcut, shortcut, target);
+<a name="line960"></a>    retVal &amp;= this.dispatchEvent(prefixEvent);
+<a name="line961"></a>
+<a name="line962"></a>    // The default action is prevented if &#39;preventDefault&#39; was
+<a name="line963"></a>    // called on either event, or if a listener returned false.
+<a name="line964"></a>    if (!retVal) {
+<a name="line965"></a>      event.preventDefault();
+<a name="line966"></a>    }
+<a name="line967"></a>
+<a name="line968"></a>    // Clear stored strokes
+<a name="line969"></a>    this.lastKeys_.strokes.length = 0;
+<a name="line970"></a>
+<a name="line971"></a>    // For Firefox, track which shortcut key was pushed.
+<a name="line972"></a>    if (goog.userAgent.GECKO) {
+<a name="line973"></a>      this.activeShortcutKeyForGecko_ = keyCode;
+<a name="line974"></a>    }
+<a name="line975"></a>  }
+<a name="line976"></a>};
+<a name="line977"></a>
+<a name="line978"></a>
+<a name="line979"></a>/**
+<a name="line980"></a> * Checks if a given keypress event may be treated as a shortcut.
+<a name="line981"></a> * @param {goog.events.BrowserEvent} event Keypress event.
+<a name="line982"></a> * @return {boolean} Whether to attempt to process the event as a shortcut.
+<a name="line983"></a> * @private
+<a name="line984"></a> */
+<a name="line985"></a>goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
+<a name="line986"></a>  var keyCode = event.keyCode;
+<a name="line987"></a>
+<a name="line988"></a>  // Ignore Ctrl, Shift and ALT
+<a name="line989"></a>  if (keyCode == goog.events.KeyCodes.SHIFT ||
+<a name="line990"></a>      keyCode == goog.events.KeyCodes.CTRL ||
+<a name="line991"></a>      keyCode == goog.events.KeyCodes.ALT) {
+<a name="line992"></a>    return false;
+<a name="line993"></a>  }
+<a name="line994"></a>  var el = /** @type {Element} */ (event.target);
+<a name="line995"></a>  var isFormElement =
+<a name="line996"></a>      el.tagName == &#39;TEXTAREA&#39; || el.tagName == &#39;INPUT&#39; ||
+<a name="line997"></a>      el.tagName == &#39;BUTTON&#39; || el.tagName == &#39;SELECT&#39;;
+<a name="line998"></a>
+<a name="line999"></a>  var isContentEditable = !isFormElement &amp;&amp; (el.isContentEditable ||
+<a name="line1000"></a>      (el.ownerDocument &amp;&amp; el.ownerDocument.designMode == &#39;on&#39;));
+<a name="line1001"></a>
+<a name="line1002"></a>  if (!isFormElement &amp;&amp; !isContentEditable) {
+<a name="line1003"></a>    return true;
+<a name="line1004"></a>  }
+<a name="line1005"></a>  // Always allow keys registered as global to be used (typically Esc, the
+<a name="line1006"></a>  // F-keys and other keys that are not typically used to manipulate text).
+<a name="line1007"></a>  if (this.globalKeys_[keyCode] || this.allShortcutsAreGlobal_) {
+<a name="line1008"></a>    return true;
+<a name="line1009"></a>  }
+<a name="line1010"></a>  if (isContentEditable) {
+<a name="line1011"></a>    // For events originating from an element in editing mode we only let
+<a name="line1012"></a>    // global key codes through.
+<a name="line1013"></a>    return false;
+<a name="line1014"></a>  }
+<a name="line1015"></a>  // Event target is one of (TEXTAREA, INPUT, BUTTON, SELECT).
+<a name="line1016"></a>  // Allow modifier shortcuts, unless we shouldn&#39;t.
+<a name="line1017"></a>  if (this.modifierShortcutsAreGlobal_ &amp;&amp; (
+<a name="line1018"></a>      event.altKey || event.ctrlKey || event.metaKey)) {
+<a name="line1019"></a>    return true;
+<a name="line1020"></a>  }
+<a name="line1021"></a>  // Allow ENTER to be used as shortcut for text inputs.
+<a name="line1022"></a>  if (el.tagName == &#39;INPUT&#39; &amp;&amp; this.textInputs_[el.type]) {
+<a name="line1023"></a>    return keyCode == goog.events.KeyCodes.ENTER;
+<a name="line1024"></a>  }
+<a name="line1025"></a>  // Checkboxes, radiobuttons and buttons. Allow all but SPACE as shortcut.
+<a name="line1026"></a>  if (el.tagName == &#39;INPUT&#39; || el.tagName == &#39;BUTTON&#39;) {
+<a name="line1027"></a>    // TODO(gboyer): If more flexibility is needed, create protected helper
+<a name="line1028"></a>    // methods for each case (e.g. button, input, etc).
+<a name="line1029"></a>    if (this.allowSpaceKeyOnButtons_) {
+<a name="line1030"></a>      return true;
+<a name="line1031"></a>    } else {
+<a name="line1032"></a>      return keyCode != goog.events.KeyCodes.SPACE;
+<a name="line1033"></a>    }
+<a name="line1034"></a>  }
+<a name="line1035"></a>  // Don&#39;t allow any additional shortcut keys for textareas or selects.
+<a name="line1036"></a>  return false;
+<a name="line1037"></a>};
+<a name="line1038"></a>
+<a name="line1039"></a>
+<a name="line1040"></a>
+<a name="line1041"></a>/**
+<a name="line1042"></a> * Object representing a keyboard shortcut event.
+<a name="line1043"></a> * @param {string} type Event type.
+<a name="line1044"></a> * @param {string} identifier Task identifier for the triggered shortcut.
+<a name="line1045"></a> * @param {Node|goog.events.EventTarget} target Target the original key press
+<a name="line1046"></a> *     event originated from.
+<a name="line1047"></a> * @extends {goog.events.Event}
+<a name="line1048"></a> * @constructor
+<a name="line1049"></a> * @final
+<a name="line1050"></a> */
+<a name="line1051"></a>goog.ui.KeyboardShortcutEvent = function(type, identifier, target) {
+<a name="line1052"></a>  goog.events.Event.call(this, type, target);
+<a name="line1053"></a>
+<a name="line1054"></a>  /**
+<a name="line1055"></a>   * Task identifier for the triggered shortcut
+<a name="line1056"></a>   * @type {string}
+<a name="line1057"></a>   */
+<a name="line1058"></a>  this.identifier = identifier;
+<a name="line1059"></a>};
+<a name="line1060"></a>goog.inherits(goog.ui.KeyboardShortcutEvent, goog.events.Event);
+</pre>
+
+
+</body>
+</html>

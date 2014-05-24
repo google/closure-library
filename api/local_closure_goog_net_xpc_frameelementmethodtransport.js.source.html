@@ -1,0 +1,309 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>frameelementmethodtransport.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_xpc_frameelementmethodtransport.js.html">frameelementmethodtransport.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Contains the frame element method transport for cross-domain
+<a name="line17"></a> * communication. It exploits the fact that FF lets a page in an
+<a name="line18"></a> * iframe call a method on the iframe-element it is contained in, even if the
+<a name="line19"></a> * containing page is from a different domain.
+<a name="line20"></a> *
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.net.xpc.FrameElementMethodTransport&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.log&#39;);
+<a name="line27"></a>goog.require(&#39;goog.net.xpc&#39;);
+<a name="line28"></a>goog.require(&#39;goog.net.xpc.CrossPageChannelRole&#39;);
+<a name="line29"></a>goog.require(&#39;goog.net.xpc.Transport&#39;);
+<a name="line30"></a>goog.require(&#39;goog.net.xpc.TransportTypes&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Frame-element method transport.
+<a name="line36"></a> *
+<a name="line37"></a> * Firefox allows a document within an iframe to call methods on the
+<a name="line38"></a> * iframe-element added by the containing document.
+<a name="line39"></a> * NOTE(user): Tested in all FF versions starting from 1.0
+<a name="line40"></a> *
+<a name="line41"></a> * @param {goog.net.xpc.CrossPageChannel} channel The channel this transport
+<a name="line42"></a> *     belongs to.
+<a name="line43"></a> * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use for finding
+<a name="line44"></a> *     the correct window.
+<a name="line45"></a> * @constructor
+<a name="line46"></a> * @extends {goog.net.xpc.Transport}
+<a name="line47"></a> * @final
+<a name="line48"></a> */
+<a name="line49"></a>goog.net.xpc.FrameElementMethodTransport = function(channel, opt_domHelper) {
+<a name="line50"></a>  goog.net.xpc.FrameElementMethodTransport.base(
+<a name="line51"></a>      this, &#39;constructor&#39;, opt_domHelper);
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * The channel this transport belongs to.
+<a name="line55"></a>   * @type {goog.net.xpc.CrossPageChannel}
+<a name="line56"></a>   * @private
+<a name="line57"></a>   */
+<a name="line58"></a>  this.channel_ = channel;
+<a name="line59"></a>
+<a name="line60"></a>  // To transfer messages, this transport basically uses normal function calls,
+<a name="line61"></a>  // which are synchronous. To avoid endless recursion, the delivery has to
+<a name="line62"></a>  // be artificially made asynchronous.
+<a name="line63"></a>
+<a name="line64"></a>  /**
+<a name="line65"></a>   * Array for queued messages.
+<a name="line66"></a>   * @type {Array}
+<a name="line67"></a>   * @private
+<a name="line68"></a>   */
+<a name="line69"></a>  this.queue_ = [];
+<a name="line70"></a>
+<a name="line71"></a>  /**
+<a name="line72"></a>   * Callback function which wraps deliverQueued_.
+<a name="line73"></a>   * @type {Function}
+<a name="line74"></a>   * @private
+<a name="line75"></a>   */
+<a name="line76"></a>  this.deliverQueuedCb_ = goog.bind(this.deliverQueued_, this);
+<a name="line77"></a>};
+<a name="line78"></a>goog.inherits(goog.net.xpc.FrameElementMethodTransport, goog.net.xpc.Transport);
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * The transport type.
+<a name="line83"></a> * @type {number}
+<a name="line84"></a> * @protected
+<a name="line85"></a> * @override
+<a name="line86"></a> */
+<a name="line87"></a>goog.net.xpc.FrameElementMethodTransport.prototype.transportType =
+<a name="line88"></a>    goog.net.xpc.TransportTypes.FRAME_ELEMENT_METHOD;
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Flag used to enforce asynchronous messaging semantics.
+<a name="line93"></a> * @type {boolean}
+<a name="line94"></a> * @private
+<a name="line95"></a> */
+<a name="line96"></a>goog.net.xpc.FrameElementMethodTransport.prototype.recursive_ = false;
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Timer used to enforce asynchronous message delivery.
+<a name="line101"></a> * @type {number}
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.net.xpc.FrameElementMethodTransport.prototype.timer_ = 0;
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Holds the function to send messages to the peer
+<a name="line109"></a> * (once it becomes available).
+<a name="line110"></a> * @type {Function}
+<a name="line111"></a> * @private
+<a name="line112"></a> */
+<a name="line113"></a>goog.net.xpc.FrameElementMethodTransport.outgoing_ = null;
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Connect this transport.
+<a name="line118"></a> * @override
+<a name="line119"></a> */
+<a name="line120"></a>goog.net.xpc.FrameElementMethodTransport.prototype.connect = function() {
+<a name="line121"></a>  if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.OUTER) {
+<a name="line122"></a>    // get shortcut to iframe-element
+<a name="line123"></a>    this.iframeElm_ = this.channel_.getIframeElement();
+<a name="line124"></a>
+<a name="line125"></a>    // add the gateway function to the iframe-element
+<a name="line126"></a>    // (to be called by the peer)
+<a name="line127"></a>    this.iframeElm_[&#39;XPC_toOuter&#39;] = goog.bind(this.incoming_, this);
+<a name="line128"></a>
+<a name="line129"></a>    // at this point we just have to wait for a notification from the peer...
+<a name="line130"></a>
+<a name="line131"></a>  } else {
+<a name="line132"></a>    this.attemptSetup_();
+<a name="line133"></a>  }
+<a name="line134"></a>};
+<a name="line135"></a>
+<a name="line136"></a>
+<a name="line137"></a>/**
+<a name="line138"></a> * Only used from within an iframe. Attempts to attach the method
+<a name="line139"></a> * to be used for sending messages by the containing document. Has to
+<a name="line140"></a> * wait until the containing document has finished. Therefore calls
+<a name="line141"></a> * itself in a timeout if not successful.
+<a name="line142"></a> * @private
+<a name="line143"></a> */
+<a name="line144"></a>goog.net.xpc.FrameElementMethodTransport.prototype.attemptSetup_ = function() {
+<a name="line145"></a>  var retry = true;
+<a name="line146"></a>  /** @preserveTry */
+<a name="line147"></a>  try {
+<a name="line148"></a>    if (!this.iframeElm_) {
+<a name="line149"></a>      // throws security exception when called too early
+<a name="line150"></a>      this.iframeElm_ = this.getWindow().frameElement;
+<a name="line151"></a>    }
+<a name="line152"></a>    // check if iframe-element and the gateway-function to the
+<a name="line153"></a>    // outer-frame are present
+<a name="line154"></a>    // TODO(user) Make sure the following code doesn&#39;t throw any exceptions
+<a name="line155"></a>    if (this.iframeElm_ &amp;&amp; this.iframeElm_[&#39;XPC_toOuter&#39;]) {
+<a name="line156"></a>      // get a reference to the gateway function
+<a name="line157"></a>      this.outgoing_ = this.iframeElm_[&#39;XPC_toOuter&#39;];
+<a name="line158"></a>      // attach the gateway function the other document will use
+<a name="line159"></a>      this.iframeElm_[&#39;XPC_toOuter&#39;][&#39;XPC_toInner&#39;] =
+<a name="line160"></a>          goog.bind(this.incoming_, this);
+<a name="line161"></a>      // stop retrying
+<a name="line162"></a>      retry = false;
+<a name="line163"></a>      // notify outer frame
+<a name="line164"></a>      this.send(goog.net.xpc.TRANSPORT_SERVICE_, goog.net.xpc.SETUP_ACK_);
+<a name="line165"></a>      // notify channel that the transport is ready
+<a name="line166"></a>      this.channel_.notifyConnected();
+<a name="line167"></a>    }
+<a name="line168"></a>  }
+<a name="line169"></a>  catch (e) {
+<a name="line170"></a>    goog.log.error(goog.net.xpc.logger,
+<a name="line171"></a>        &#39;exception caught while attempting setup: &#39; + e);
+<a name="line172"></a>  }
+<a name="line173"></a>  // retry necessary?
+<a name="line174"></a>  if (retry) {
+<a name="line175"></a>    if (!this.attemptSetupCb_) {
+<a name="line176"></a>      this.attemptSetupCb_ = goog.bind(this.attemptSetup_, this);
+<a name="line177"></a>    }
+<a name="line178"></a>    this.getWindow().setTimeout(this.attemptSetupCb_, 100);
+<a name="line179"></a>  }
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Handles transport service messages.
+<a name="line185"></a> * @param {string} payload The message content.
+<a name="line186"></a> * @override
+<a name="line187"></a> */
+<a name="line188"></a>goog.net.xpc.FrameElementMethodTransport.prototype.transportServiceHandler =
+<a name="line189"></a>    function(payload) {
+<a name="line190"></a>  if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.OUTER &amp;&amp;
+<a name="line191"></a>      !this.channel_.isConnected() &amp;&amp; payload == goog.net.xpc.SETUP_ACK_) {
+<a name="line192"></a>    // get a reference to the gateway function
+<a name="line193"></a>    this.outgoing_ = this.iframeElm_[&#39;XPC_toOuter&#39;][&#39;XPC_toInner&#39;];
+<a name="line194"></a>    // notify the channel we&#39;re ready
+<a name="line195"></a>    this.channel_.notifyConnected();
+<a name="line196"></a>  } else {
+<a name="line197"></a>    throw Error(&#39;Got unexpected transport message.&#39;);
+<a name="line198"></a>  }
+<a name="line199"></a>};
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>/**
+<a name="line203"></a> * Process incoming message.
+<a name="line204"></a> * @param {string} serviceName The name of the service the message is to be
+<a name="line205"></a> * delivered to.
+<a name="line206"></a> * @param {string} payload The message to process.
+<a name="line207"></a> * @private
+<a name="line208"></a> */
+<a name="line209"></a>goog.net.xpc.FrameElementMethodTransport.prototype.incoming_ =
+<a name="line210"></a>    function(serviceName, payload) {
+<a name="line211"></a>  if (!this.recursive_ &amp;&amp; this.queue_.length == 0) {
+<a name="line212"></a>    this.channel_.xpcDeliver(serviceName, payload);
+<a name="line213"></a>  }
+<a name="line214"></a>  else {
+<a name="line215"></a>    this.queue_.push({serviceName: serviceName, payload: payload});
+<a name="line216"></a>    if (this.queue_.length == 1) {
+<a name="line217"></a>      this.timer_ = this.getWindow().setTimeout(this.deliverQueuedCb_, 1);
+<a name="line218"></a>    }
+<a name="line219"></a>  }
+<a name="line220"></a>};
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/**
+<a name="line224"></a> * Delivers queued messages.
+<a name="line225"></a> * @private
+<a name="line226"></a> */
+<a name="line227"></a>goog.net.xpc.FrameElementMethodTransport.prototype.deliverQueued_ =
+<a name="line228"></a>    function() {
+<a name="line229"></a>  while (this.queue_.length) {
+<a name="line230"></a>    var msg = this.queue_.shift();
+<a name="line231"></a>    this.channel_.xpcDeliver(msg.serviceName, msg.payload);
+<a name="line232"></a>  }
+<a name="line233"></a>};
+<a name="line234"></a>
+<a name="line235"></a>
+<a name="line236"></a>/**
+<a name="line237"></a> * Send a message
+<a name="line238"></a> * @param {string} service The name off the service the message is to be
+<a name="line239"></a> * delivered to.
+<a name="line240"></a> * @param {string} payload The message content.
+<a name="line241"></a> * @override
+<a name="line242"></a> */
+<a name="line243"></a>goog.net.xpc.FrameElementMethodTransport.prototype.send =
+<a name="line244"></a>    function(service, payload) {
+<a name="line245"></a>  this.recursive_ = true;
+<a name="line246"></a>  this.outgoing_(service, payload);
+<a name="line247"></a>  this.recursive_ = false;
+<a name="line248"></a>};
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>/** @override */
+<a name="line252"></a>goog.net.xpc.FrameElementMethodTransport.prototype.disposeInternal =
+<a name="line253"></a>    function() {
+<a name="line254"></a>  goog.net.xpc.FrameElementMethodTransport.superClass_.disposeInternal.call(
+<a name="line255"></a>      this);
+<a name="line256"></a>  this.outgoing_ = null;
+<a name="line257"></a>  this.iframeElm_ = null;
+<a name="line258"></a>};
+</pre>
+
+
+</body>
+</html>

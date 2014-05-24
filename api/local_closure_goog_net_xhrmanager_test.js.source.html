@@ -1,0 +1,171 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>xhrmanager_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_xhrmanager_test.js.html">xhrmanager_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.XhrManagerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.XhrManagerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.events&#39;);
+<a name="line19"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line20"></a>goog.require(&#39;goog.net.XhrIo&#39;);
+<a name="line21"></a>goog.require(&#39;goog.net.XhrManager&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.net.XhrIoPool&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/** @type {goog.net.XhrManager} */
+<a name="line28"></a>var xhrManager;
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/** @type {goog.testing.net.XhrIo} */
+<a name="line32"></a>var xhrIo;
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>function setUp() {
+<a name="line36"></a>  xhrManager = new goog.net.XhrManager();
+<a name="line37"></a>  xhrManager.xhrPool_ = new goog.testing.net.XhrIoPool();
+<a name="line38"></a>  xhrIo = xhrManager.xhrPool_.getXhr();
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>function tearDown() {
+<a name="line43"></a>  goog.dispose(xhrManager);
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>function testGetOutstandingRequestIds() {
+<a name="line48"></a>  assertArrayEquals(
+<a name="line49"></a>      &#39;No outstanding requests&#39;, [], xhrManager.getOutstandingRequestIds());
+<a name="line50"></a>
+<a name="line51"></a>  xhrManager.send(&#39;test1&#39;, &#39;/test1&#39;);
+<a name="line52"></a>  assertArrayEquals(
+<a name="line53"></a>      &#39;Single outstanding request&#39;, [&#39;test1&#39;],
+<a name="line54"></a>      xhrManager.getOutstandingRequestIds());
+<a name="line55"></a>
+<a name="line56"></a>  xhrManager.send(&#39;test2&#39;, &#39;/test2&#39;);
+<a name="line57"></a>  assertArrayEquals(
+<a name="line58"></a>      &#39;Two outstanding requests&#39;, [&#39;test1&#39;, &#39;test2&#39;],
+<a name="line59"></a>      xhrManager.getOutstandingRequestIds());
+<a name="line60"></a>
+<a name="line61"></a>  xhrIo.simulateResponse(200, &#39;data&#39;);
+<a name="line62"></a>  assertArrayEquals(
+<a name="line63"></a>      &#39;Single outstanding request&#39;, [&#39;test2&#39;],
+<a name="line64"></a>      xhrManager.getOutstandingRequestIds());
+<a name="line65"></a>
+<a name="line66"></a>  xhrIo.simulateResponse(200, &#39;data&#39;);
+<a name="line67"></a>  assertArrayEquals(
+<a name="line68"></a>      &#39;No outstanding requests&#39;, [], xhrManager.getOutstandingRequestIds());
+<a name="line69"></a>}
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>function testForceAbortQueuedRequest() {
+<a name="line73"></a>  xhrManager.send(&#39;test&#39;, &#39;/test&#39;);
+<a name="line74"></a>  xhrManager.send(&#39;queued&#39;, &#39;/queued&#39;);
+<a name="line75"></a>
+<a name="line76"></a>  assertNotThrows(
+<a name="line77"></a>      &#39;Forced abort of queued request should not throw an error&#39;,
+<a name="line78"></a>      goog.bind(xhrManager.abort, xhrManager, &#39;queued&#39;, true));
+<a name="line79"></a>
+<a name="line80"></a>  assertNotThrows(
+<a name="line81"></a>      &#39;Forced abort of normal request should not throw an error&#39;,
+<a name="line82"></a>      goog.bind(xhrManager.abort, xhrManager, &#39;test&#39;, true));
+<a name="line83"></a>}
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>function testDefaultResponseType() {
+<a name="line87"></a>  var callback = goog.testing.recordFunction(function(e) {
+<a name="line88"></a>    assertEquals(&#39;test1&#39;, e.id);
+<a name="line89"></a>    assertEquals(
+<a name="line90"></a>        goog.net.XhrIo.ResponseType.DEFAULT, e.xhrIo.getResponseType());
+<a name="line91"></a>    eventCalled = true;
+<a name="line92"></a>  });
+<a name="line93"></a>  goog.events.listenOnce(xhrManager, goog.net.EventType.READY, callback);
+<a name="line94"></a>  xhrManager.send(&#39;test1&#39;, &#39;/test2&#39;);
+<a name="line95"></a>  assertEquals(1, callback.getCallCount());
+<a name="line96"></a>
+<a name="line97"></a>  xhrIo.simulateResponse(200, &#39;data&#39;);  // Do this to make tearDown() happy.
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>function testNonDefaultResponseType() {
+<a name="line102"></a>  var callback = goog.testing.recordFunction(function(e) {
+<a name="line103"></a>    assertEquals(&#39;test2&#39;, e.id);
+<a name="line104"></a>    assertEquals(
+<a name="line105"></a>        goog.net.XhrIo.ResponseType.ARRAY_BUFFER, e.xhrIo.getResponseType());
+<a name="line106"></a>    eventCalled = true;
+<a name="line107"></a>  });
+<a name="line108"></a>  goog.events.listenOnce(xhrManager, goog.net.EventType.READY, callback);
+<a name="line109"></a>  xhrManager.send(&#39;test2&#39;, &#39;/test2&#39;,
+<a name="line110"></a>      undefined /* opt_method */,
+<a name="line111"></a>      undefined /* opt_content */,
+<a name="line112"></a>      undefined /* opt_headers */,
+<a name="line113"></a>      undefined /* opt_priority */,
+<a name="line114"></a>      undefined /* opt_callback */,
+<a name="line115"></a>      undefined /* opt_maxRetries */,
+<a name="line116"></a>      goog.net.XhrIo.ResponseType.ARRAY_BUFFER);
+<a name="line117"></a>  assertEquals(1, callback.getCallCount());
+<a name="line118"></a>
+<a name="line119"></a>  xhrIo.simulateResponse(200, &#39;data&#39;);  // Do this to make tearDown() happy.
+<a name="line120"></a>}
+</pre>
+
+
+</body>
+</html>

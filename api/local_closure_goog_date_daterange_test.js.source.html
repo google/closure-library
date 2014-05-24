@@ -1,0 +1,309 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>daterange_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_date_daterange_test.js.html">daterange_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.date.DateRangeTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.date.DateRangeTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.date.Date&#39;);
+<a name="line19"></a>goog.require(&#39;goog.date.DateRange&#39;);
+<a name="line20"></a>goog.require(&#39;goog.date.Interval&#39;);
+<a name="line21"></a>goog.require(&#39;goog.i18n.DateTimeSymbols&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var gd = goog.date.Date;
+<a name="line25"></a>var gdr = goog.date.DateRange;
+<a name="line26"></a>var gdi = goog.date.Interval;
+<a name="line27"></a>
+<a name="line28"></a>function testDateRange() {
+<a name="line29"></a>  var date1 = new gd(2000, 0, 1);
+<a name="line30"></a>  var date2 = new gd(2000, 1, 1);
+<a name="line31"></a>
+<a name="line32"></a>  var range = new gdr(date1, date2);
+<a name="line33"></a>  assertTrue(&#39;startDate matches&#39;, date1.equals(range.getStartDate()));
+<a name="line34"></a>  assertTrue(&#39;endDate matches&#39;, date2.equals(range.getEndDate()));
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function testDateRangeEquals() {
+<a name="line38"></a>  var date1 = new gd(2000, 0, 1);
+<a name="line39"></a>  var date2 = new gd(2000, 1, 1);
+<a name="line40"></a>
+<a name="line41"></a>  var range1 = new gdr(date1, date2);
+<a name="line42"></a>  var range2 = new gdr(date1, date2);
+<a name="line43"></a>  assertTrue(&#39;equals&#39;, gdr.equals(range1, range2));
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>function testDateRangeNotEquals() {
+<a name="line47"></a>  var date1 = new gd(2000, 0, 1);
+<a name="line48"></a>  var date2 = new gd(2000, 1, 1);
+<a name="line49"></a>
+<a name="line50"></a>  var range1 = new gdr(date1, date2);
+<a name="line51"></a>  var range2 = new gdr(date2, date1);
+<a name="line52"></a>  assertFalse(&#39;not equals&#39;, gdr.equals(range1, range2));
+<a name="line53"></a>}
+<a name="line54"></a>
+<a name="line55"></a>function testOffsetInDays() {
+<a name="line56"></a>  var d = new gd(2000, 0, 1);
+<a name="line57"></a>  var f = gdr.offsetInDays_;
+<a name="line58"></a>
+<a name="line59"></a>  assertTrue(&#39;same day&#39;, d.equals(f(d, 0)));
+<a name="line60"></a>  assertTrue(&#39;next day&#39;, new gd(2000, 0, 2).equals(f(d, 1)));
+<a name="line61"></a>  assertTrue(&#39;last day&#39;, new gd(1999, 11, 31).equals(f(d, -1)));
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>function testCurrentOrLastMonday() {
+<a name="line65"></a>  var mon = new gd(2008, 9, 13);
+<a name="line66"></a>  var tue = new gd(2008, 9, 14);
+<a name="line67"></a>  var wed = new gd(2008, 9, 15);
+<a name="line68"></a>  var thu = new gd(2008, 9, 16);
+<a name="line69"></a>  var fri = new gd(2008, 9, 17);
+<a name="line70"></a>  var sat = new gd(2008, 9, 18);
+<a name="line71"></a>  var sun = new gd(2008, 9, 19);
+<a name="line72"></a>  var f = gdr.currentOrLastMonday_;
+<a name="line73"></a>
+<a name="line74"></a>  assertTrue(&#39;mon&#39;, mon.equals(f(mon)));
+<a name="line75"></a>  assertTrue(&#39;tue&#39;, mon.equals(f(tue)));
+<a name="line76"></a>  assertTrue(&#39;wed&#39;, mon.equals(f(wed)));
+<a name="line77"></a>  assertTrue(&#39;thu&#39;, mon.equals(f(thu)));
+<a name="line78"></a>  assertTrue(&#39;fri&#39;, mon.equals(f(fri)));
+<a name="line79"></a>  assertTrue(&#39;sat&#39;, mon.equals(f(sat)));
+<a name="line80"></a>  assertTrue(&#39;sun&#39;, mon.equals(f(sun)));
+<a name="line81"></a>}
+<a name="line82"></a>
+<a name="line83"></a>function testOffsetInMonths() {
+<a name="line84"></a>  var d = new gd(2008, 9, 13);
+<a name="line85"></a>  var f = gdr.offsetInMonths_;
+<a name="line86"></a>
+<a name="line87"></a>  assertTrue(&#39;this month&#39;, new gd(2008, 9, 1).equals(f(d, 0)));
+<a name="line88"></a>  assertTrue(&#39;last month&#39;, new gd(2008, 8, 1).equals(f(d, -1)));
+<a name="line89"></a>  assertTrue(&#39;next month&#39;, new gd(2008, 10, 1).equals(f(d, 1)));
+<a name="line90"></a>  assertTrue(&#39;next year&#39;, new gd(2009, 9, 1).equals(f(d, 12)));
+<a name="line91"></a>  assertTrue(&#39;last year&#39;, new gd(2007, 9, 1).equals(f(d, -12)));
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>function testYesterday() {
+<a name="line95"></a>  var d = new gd(2008, 9, 13);
+<a name="line96"></a>  var s = new gd(2008, 9, 12);
+<a name="line97"></a>  var e = new gd(2008, 9, 12);
+<a name="line98"></a>  assertStartEnd(&#39;yesterday&#39;, s, e, gdr.yesterday(d));
+<a name="line99"></a>}
+<a name="line100"></a>
+<a name="line101"></a>function testToday() {
+<a name="line102"></a>  var d = new gd(2008, 9, 13);
+<a name="line103"></a>  assertStartEnd(&#39;today&#39;, d, d, gdr.today(d));
+<a name="line104"></a>}
+<a name="line105"></a>
+<a name="line106"></a>function testLast7Days() {
+<a name="line107"></a>  var d = new gd(2008, 9, 13);
+<a name="line108"></a>  var s = new gd(2008, 9, 6);
+<a name="line109"></a>  var e = new gd(2008, 9, 12);
+<a name="line110"></a>  assertStartEnd(&#39;last7Days&#39;, s, e, gdr.last7Days(d));
+<a name="line111"></a>  assertStartEnd(&#39;last7Days by key&#39;, s, e,
+<a name="line112"></a>      gdr.standardDateRange(gdr.StandardDateRangeKeys.LAST_7_DAYS, d));
+<a name="line113"></a>}
+<a name="line114"></a>
+<a name="line115"></a>function testThisMonth() {
+<a name="line116"></a>  var d = new gd(2008, 9, 13);
+<a name="line117"></a>  var s = new gd(2008, 9, 1);
+<a name="line118"></a>  var e = new gd(2008, 9, 31);
+<a name="line119"></a>  assertStartEnd(&#39;thisMonth&#39;, s, e, gdr.thisMonth(d));
+<a name="line120"></a>  assertStartEnd(&#39;thisMonth by key&#39;, s, e,
+<a name="line121"></a>      gdr.standardDateRange(gdr.StandardDateRangeKeys.THIS_MONTH, d));
+<a name="line122"></a>}
+<a name="line123"></a>
+<a name="line124"></a>function testLastMonth() {
+<a name="line125"></a>  var d = new gd(2008, 9, 13);
+<a name="line126"></a>  var s = new gd(2008, 8, 1);
+<a name="line127"></a>  var e = new gd(2008, 8, 30);
+<a name="line128"></a>  assertStartEnd(&#39;lastMonth&#39;, s, e, gdr.lastMonth(d));
+<a name="line129"></a>  assertStartEnd(&#39;lastMonth by key&#39;, s, e,
+<a name="line130"></a>      gdr.standardDateRange(gdr.StandardDateRangeKeys.LAST_MONTH, d));
+<a name="line131"></a>}
+<a name="line132"></a>
+<a name="line133"></a>function testThisWeek() {
+<a name="line134"></a>  var startDates = [
+<a name="line135"></a>    new gd(2011, 2, 28),
+<a name="line136"></a>    new gd(2011, 2, 29),
+<a name="line137"></a>    new gd(2011, 2, 30),
+<a name="line138"></a>    new gd(2011, 2, 31),
+<a name="line139"></a>    new gd(2011, 3, 1),
+<a name="line140"></a>    new gd(2011, 2, 26),
+<a name="line141"></a>    new gd(2011, 2, 27)
+<a name="line142"></a>  ];
+<a name="line143"></a>
+<a name="line144"></a>  var endDates = [
+<a name="line145"></a>    new gd(2011, 3, 3),
+<a name="line146"></a>    new gd(2011, 3, 4),
+<a name="line147"></a>    new gd(2011, 3, 5),
+<a name="line148"></a>    new gd(2011, 3, 6),
+<a name="line149"></a>    new gd(2011, 3, 7),
+<a name="line150"></a>    new gd(2011, 3, 1),
+<a name="line151"></a>    new gd(2011, 3, 2)
+<a name="line152"></a>  ];
+<a name="line153"></a>
+<a name="line154"></a>  // 0 - is Monday, 6 is Sunday.
+<a name="line155"></a>  for (var i = 0; i &lt; 7; i++) {
+<a name="line156"></a>    var date = new gd(2011, 3, 1);
+<a name="line157"></a>    date.setFirstDayOfWeek(i);
+<a name="line158"></a>    assertStartEnd(&#39;thisWeek, &#39; + i, startDates[i], endDates[i],
+<a name="line159"></a>        gdr.thisWeek(date));
+<a name="line160"></a>  }
+<a name="line161"></a>
+<a name="line162"></a>  assertStartEnd(&#39;thisWeek by key &#39;,
+<a name="line163"></a>      startDates[goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK],
+<a name="line164"></a>      endDates[goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK],
+<a name="line165"></a>      gdr.standardDateRange(gdr.StandardDateRangeKeys.THIS_WEEK,
+<a name="line166"></a>          new gd(2011, 3, 1)));
+<a name="line167"></a>}
+<a name="line168"></a>
+<a name="line169"></a>function testLastWeek() {
+<a name="line170"></a>  var startDates = [
+<a name="line171"></a>    new gd(2011, 2, 21),
+<a name="line172"></a>    new gd(2011, 2, 22),
+<a name="line173"></a>    new gd(2011, 2, 23),
+<a name="line174"></a>    new gd(2011, 2, 24),
+<a name="line175"></a>    new gd(2011, 2, 25),
+<a name="line176"></a>    new gd(2011, 2, 19),
+<a name="line177"></a>    new gd(2011, 2, 20)
+<a name="line178"></a>  ];
+<a name="line179"></a>
+<a name="line180"></a>  var endDates = [
+<a name="line181"></a>    new gd(2011, 2, 27),
+<a name="line182"></a>    new gd(2011, 2, 28),
+<a name="line183"></a>    new gd(2011, 2, 29),
+<a name="line184"></a>    new gd(2011, 2, 30),
+<a name="line185"></a>    new gd(2011, 2, 31),
+<a name="line186"></a>    new gd(2011, 2, 25),
+<a name="line187"></a>    new gd(2011, 2, 26)
+<a name="line188"></a>  ];
+<a name="line189"></a>
+<a name="line190"></a>  // 0 - is Monday, 6 is Sunday.
+<a name="line191"></a>  for (var i = 0; i &lt; 7; i++) {
+<a name="line192"></a>    var date = new gd(2011, 3, 1);
+<a name="line193"></a>    date.setFirstDayOfWeek(i);
+<a name="line194"></a>    assertStartEnd(&#39;lastWeek, &#39; + i, startDates[i], endDates[i],
+<a name="line195"></a>        gdr.lastWeek(date));
+<a name="line196"></a>  }
+<a name="line197"></a>
+<a name="line198"></a>  assertStartEnd(&#39;lastWeek by key&#39;,
+<a name="line199"></a>      startDates[goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK],
+<a name="line200"></a>      endDates[goog.i18n.DateTimeSymbols.FIRSTDAYOFWEEK],
+<a name="line201"></a>      gdr.standardDateRange(gdr.StandardDateRangeKeys.LAST_WEEK,
+<a name="line202"></a>          new gd(2011, 3, 1)));
+<a name="line203"></a>}
+<a name="line204"></a>
+<a name="line205"></a>function testLastBusinessWeek() {
+<a name="line206"></a>  var d = new gd(2008, 9, 13);
+<a name="line207"></a>  var s = new gd(2008, 9, 6);
+<a name="line208"></a>  var e = new gd(2008, 9, 10);
+<a name="line209"></a>  assertStartEnd(&#39;lastBusinessWeek&#39;, s, e, gdr.lastBusinessWeek(d));
+<a name="line210"></a>  assertStartEnd(&#39;lastBusinessWeek by key&#39;, s, e,
+<a name="line211"></a>      gdr.standardDateRange(gdr.StandardDateRangeKeys.LAST_BUSINESS_WEEK, d));
+<a name="line212"></a>}
+<a name="line213"></a>
+<a name="line214"></a>function testAllTime() {
+<a name="line215"></a>  var s = new gd(0000, 0, 1);
+<a name="line216"></a>  var e = new gd(9999, 11, 31);
+<a name="line217"></a>  assertStartEnd(&#39;allTime&#39;, s, e, gdr.allTime());
+<a name="line218"></a>  assertStartEnd(&#39;allTime by key&#39;, s, e,
+<a name="line219"></a>      gdr.standardDateRange(gdr.StandardDateRangeKeys.ALL_TIME));
+<a name="line220"></a>}
+<a name="line221"></a>
+<a name="line222"></a>function testIterator() {
+<a name="line223"></a>  var s = new gd(2008, 9, 1);
+<a name="line224"></a>  var e = new gd(2008, 9, 10);
+<a name="line225"></a>  var i = new gdr(s, e).iterator();
+<a name="line226"></a>  assertTrue(&#39;day 0&#39;, new gd(2008, 9, 1).equals(i.next()));
+<a name="line227"></a>  assertTrue(&#39;day 1&#39;, new gd(2008, 9, 2).equals(i.next()));
+<a name="line228"></a>  assertTrue(&#39;day 2&#39;, new gd(2008, 9, 3).equals(i.next()));
+<a name="line229"></a>  assertTrue(&#39;day 3&#39;, new gd(2008, 9, 4).equals(i.next()));
+<a name="line230"></a>  assertTrue(&#39;day 4&#39;, new gd(2008, 9, 5).equals(i.next()));
+<a name="line231"></a>  assertTrue(&#39;day 5&#39;, new gd(2008, 9, 6).equals(i.next()));
+<a name="line232"></a>  assertTrue(&#39;day 6&#39;, new gd(2008, 9, 7).equals(i.next()));
+<a name="line233"></a>  assertTrue(&#39;day 7&#39;, new gd(2008, 9, 8).equals(i.next()));
+<a name="line234"></a>  assertTrue(&#39;day 8&#39;, new gd(2008, 9, 9).equals(i.next()));
+<a name="line235"></a>  assertTrue(&#39;day 9&#39;, new gd(2008, 9, 10).equals(i.next()));
+<a name="line236"></a>  assertThrows(&#39;day 10&#39;, goog.bind(i.next, i));
+<a name="line237"></a>}
+<a name="line238"></a>
+<a name="line239"></a>function testContains() {
+<a name="line240"></a>  var r = new gdr(new gd(2008, 9, 10), new gd(2008, 9, 12));
+<a name="line241"></a>  assertFalse(&#39;min date&#39;, r.contains(goog.date.DateRange.MINIMUM_DATE));
+<a name="line242"></a>  assertFalse(&#39;9/10/2007&#39;, r.contains(new gd(2007, 9, 10)));
+<a name="line243"></a>  assertFalse(&#39;9/9/2008&#39;, r.contains(new gd(2008, 9, 9)));
+<a name="line244"></a>  assertTrue(&#39;9/10/2008&#39;, r.contains(new gd(2008, 9, 10)));
+<a name="line245"></a>  assertTrue(&#39;9/11/2008&#39;, r.contains(new gd(2008, 9, 11)));
+<a name="line246"></a>  assertTrue(&#39;9/12/2008&#39;, r.contains(new gd(2008, 9, 12)));
+<a name="line247"></a>  assertFalse(&#39;9/13/2008&#39;, r.contains(new gd(2008, 9, 13)));
+<a name="line248"></a>  assertFalse(&#39;max date&#39;, r.contains(goog.date.DateRange.MAXIMUM_DATE));
+<a name="line249"></a>}
+<a name="line250"></a>
+<a name="line251"></a>function assertStartEnd(name, start, end, actual) {
+<a name="line252"></a>  assertTrue(
+<a name="line253"></a>      name + &#39; start should be &#39; + start + &#39; but was &#39; + actual.getStartDate(),
+<a name="line254"></a>      start.equals(actual.getStartDate()));
+<a name="line255"></a>  assertTrue(
+<a name="line256"></a>      name + &#39; end should be &#39; + end + &#39; but was &#39; + actual.getEndDate(),
+<a name="line257"></a>      end.equals(actual.getEndDate()));
+<a name="line258"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,602 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>youtube.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">youtube.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_ui_media_youtube.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/ui/media/youtube.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/ui/media/youtube.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_Youtube.html">
+          goog.ui.media.Youtube</a><br/>
+        <div class="class-details">Subclasses a goog.ui.media.MediaRenderer to provide a Youtube specific media
+renderer.
+
+This class knows how to parse youtube urls, and render the DOM structure
+of youtube video players and previews. This class is meant to be used as a
+singleton static stateless class, that takes <code> goog.ui.media.Media</code>
+instances and renders it. It expects <code> goog.ui.media.Media.getModel</code> to
+return a well formed, previously constructed, youtube video id, which is the
+data model this renderer will use to construct the DOM structure.
+ for a example of constructing a
+control with this renderer.
+
+goog.ui.media.Youtube currently supports all <code> goog.ui.Component.State</code>.
+It will change its DOM structure between SELECTED and !SELECTED, and rely on
+CSS definitions on the others. On !SELECTED, the renderer will render a
+youtube static <img/>, with a thumbnail of the video. On SELECTED, the
+renderer will append to the DOM a flash object, that contains the youtube
+video.
+
+This design is patterned after <a href="http://go/closure_control_subclassing">http://go/closure_control_subclassing</a>
+
+It uses <code> goog.ui.media.FlashObject</code> to embed the flash object.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_ui_media_YoutubeModel.html">
+          goog.ui.media.YoutubeModel</a><br/>
+        <div class="class-details">The <code> goog.ui.media.Youtube</code> media data model. It stores a required
+<code> videoId</code> field, sets the youtube URL, and allows a few optional
+parameters.
+
+</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.YoutubeModel.buildUrl"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.YoutubeModel.</span><span class="entryName">buildUrl<span class="args">(<span class="arg">videoId</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       The opposite of <code> goog.ui.media.Youtube.newInstance</code>: it takes a videoId
+and returns a youtube URL.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">videoId</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The youtube video ID.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The youtube URL.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_media_youtube.js.source.html#line309">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.YoutubeModel.getFlashUrl"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.YoutubeModel.</span><span class="entryName">getFlashUrl<span class="args">(<span class="arg">videoId</span>,&nbsp;<span class="arg">opt_autoplay</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       A static auxiliary method that builds URL of the flash movie to be embedded,
+out of the youtube video id.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">videoId</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The youtube video ID.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_autoplay</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">Whether the flash movie should start playing
+    as soon as it is shown, or if it should show a 'play' button.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The flash URL to be embedded on the page.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_media_youtube.js.source.html#line341">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.Youtube.getInstance"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.Youtube.</span><span class="entryName">getInstance<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_media_youtube.js.source.html#line109">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.YoutubeModel.getThumbnailUrl"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.YoutubeModel.</span><span class="entryName">getThumbnailUrl<span class="args">(<span class="arg">youtubeId</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       A static auxiliary method that builds a static image URL with a preview of
+the youtube video.
+
+NOTE(user): patterned after Gmail's gadgets/youtube,
+
+TODO(user): how do I specify the width/height of the resulting image on the
+url ? is there an official API for <a href="http://ytimg.com">http://ytimg.com</a> ?
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">youtubeId</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The youtube video ID.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            An URL that contains an image with a preview of the youtube
+    movie.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_media_youtube.js.source.html#line327">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.Youtube.newControl"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.Youtube.</span><span class="entryName">newControl<span class="args">(<span class="arg">youtubeModel</span>,&nbsp;<span class="arg">opt_domHelper</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_media_Media.html">goog.ui.media.Media</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       A static convenient method to construct a goog.ui.media.Media control out of
+a youtube model. It sets it as the data model goog.ui.media.Youtube renderer
+uses, sets the states supported by the renderer, and returns a Control that
+binds everything together. This is what you should be using for constructing
+Youtube videos, except if you need finer control over the configuration.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">youtubeModel</span>
+        : <span class="type"><a href="class_goog_ui_media_YoutubeModel.html">goog.ui.media.YoutubeModel</a></span>
+        <div class="entryOverview">The youtube data model.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_domHelper</span>
+        : <span class="type">goog.dom.DomHelper=</span>
+        <div class="entryOverview">Optional DOM helper, used for
+    document interaction.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_media_Media.html">goog.ui.media.Media</a></span>&nbsp;
+            A Control binded to the youtube renderer.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_media_youtube.js.source.html#line128">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.ui.media.YoutubeModel.newInstance"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.ui.media.YoutubeModel.</span><span class="entryName">newInstance<span class="args">(<span class="arg">youtubeUrl</span>,&nbsp;<span class="arg">opt_caption</span>,&nbsp;<span class="arg">opt_description</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_ui_media_YoutubeModel.html">goog.ui.media.YoutubeModel</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       A auxiliary static method that parses a youtube URL, extracting the ID of the
+video, and builds a YoutubeModel.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">youtubeUrl</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A youtube URL.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_caption</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">An optional caption of the youtube video.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_description</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">An optional description of the youtube
+    video.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_ui_media_YoutubeModel.html">goog.ui.media.YoutubeModel</a></span>&nbsp;
+            The data model that represents the
+    youtube URL.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_ui_media_youtube.js.source.html#line288">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory media</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/ui/media/youtube.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

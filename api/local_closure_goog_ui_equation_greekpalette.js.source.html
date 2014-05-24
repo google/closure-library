@@ -1,0 +1,127 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>greekpalette.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_equation_greekpalette.js.html">greekpalette.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.ui.equation.GreekPalette&#39;);
+<a name="line16"></a>
+<a name="line17"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line18"></a>goog.require(&#39;goog.ui.equation.Palette&#39;);
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>/**
+<a name="line23"></a> * Constructs a new Greek symbols palette.
+<a name="line24"></a> * @param {goog.ui.equation.PaletteManager} paletteManager The
+<a name="line25"></a> *     manager of the palette.
+<a name="line26"></a> * @extends {goog.ui.equation.Palette}
+<a name="line27"></a> * @constructor
+<a name="line28"></a> * @final
+<a name="line29"></a> */
+<a name="line30"></a>goog.ui.equation.GreekPalette = function(paletteManager) {
+<a name="line31"></a>  goog.ui.equation.Palette.call(this, paletteManager,
+<a name="line32"></a>      goog.ui.equation.Palette.Type.GREEK,
+<a name="line33"></a>      0, 30, 18, 18,
+<a name="line34"></a>      [&#39;\\alpha&#39;,
+<a name="line35"></a>       &#39;\\beta&#39;,
+<a name="line36"></a>       &#39;\\gamma&#39;,
+<a name="line37"></a>       &#39;\\delta&#39;,
+<a name="line38"></a>       &#39;\\epsilon&#39;,
+<a name="line39"></a>       &#39;\\varepsilon&#39;,
+<a name="line40"></a>       &#39;\\zeta&#39;,
+<a name="line41"></a>       &#39;\\eta&#39;,
+<a name="line42"></a>       &#39;\\theta&#39;,
+<a name="line43"></a>       &#39;\\vartheta&#39;,
+<a name="line44"></a>       &#39;\\iota&#39;,
+<a name="line45"></a>       &#39;\\kappa&#39;,
+<a name="line46"></a>       &#39;\\lambda&#39;,
+<a name="line47"></a>       &#39;\\mu&#39;,
+<a name="line48"></a>       &#39;\\nu&#39;,
+<a name="line49"></a>       &#39;\\xi&#39;,
+<a name="line50"></a>       &#39;\\pi&#39;,
+<a name="line51"></a>       &#39;\\varpi&#39;,
+<a name="line52"></a>       &#39;\\rho&#39;,
+<a name="line53"></a>       &#39;\\varrho&#39;,
+<a name="line54"></a>       &#39;\\sigma&#39;,
+<a name="line55"></a>       &#39;\\varsigma&#39;,
+<a name="line56"></a>       &#39;\\tau&#39;,
+<a name="line57"></a>       &#39;\\upsilon&#39;,
+<a name="line58"></a>       &#39;\\phi&#39;,
+<a name="line59"></a>       &#39;\\varphi&#39;,
+<a name="line60"></a>       &#39;\\chi&#39;,
+<a name="line61"></a>       &#39;\\psi&#39;,
+<a name="line62"></a>       &#39;\\omega&#39;,
+<a name="line63"></a>       &#39;\\Gamma&#39;,
+<a name="line64"></a>       &#39;\\Delta&#39;,
+<a name="line65"></a>       &#39;\\Theta&#39;,
+<a name="line66"></a>       &#39;\\Lambda&#39;,
+<a name="line67"></a>       &#39;\\Xi&#39;,
+<a name="line68"></a>       &#39;\\Pi&#39;,
+<a name="line69"></a>       &#39;\\Sigma&#39;,
+<a name="line70"></a>       &#39;\\Upsilon&#39;,
+<a name="line71"></a>       &#39;\\Phi&#39;,
+<a name="line72"></a>       &#39;\\Psi&#39;,
+<a name="line73"></a>       &#39;\\Omega&#39;]);
+<a name="line74"></a>  this.setSize(new goog.math.Size(7, 6));
+<a name="line75"></a>};
+<a name="line76"></a>goog.inherits(goog.ui.equation.GreekPalette, goog.ui.equation.Palette);
+</pre>
+
+
+</body>
+</html>

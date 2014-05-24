@@ -1,0 +1,375 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>listformat_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_i18n_listformat_test.js.html">listformat_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.labs.i18n.ListFormatTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.labs.i18n.ListFormatTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.labs.i18n.GenderInfo&#39;);
+<a name="line19"></a>goog.require(&#39;goog.labs.i18n.ListFormat&#39;);
+<a name="line20"></a>goog.require(&#39;goog.labs.i18n.ListFormatSymbols&#39;);
+<a name="line21"></a>goog.require(&#39;goog.labs.i18n.ListFormatSymbols_el&#39;);
+<a name="line22"></a>goog.require(&#39;goog.labs.i18n.ListFormatSymbols_en&#39;);
+<a name="line23"></a>goog.require(&#39;goog.labs.i18n.ListFormatSymbols_fr&#39;);
+<a name="line24"></a>goog.require(&#39;goog.labs.i18n.ListFormatSymbols_ml&#39;);
+<a name="line25"></a>goog.require(&#39;goog.labs.i18n.ListFormatSymbols_zu&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line27"></a>
+<a name="line28"></a>function setUp() {
+<a name="line29"></a>  // Always switch back to English on startup.
+<a name="line30"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
+<a name="line31"></a>}
+<a name="line32"></a>
+<a name="line33"></a>function testListFormatterArrayDirect() {
+<a name="line34"></a>  var fmt = new goog.labs.i18n.ListFormat();
+<a name="line35"></a>  assertEquals(
+<a name="line36"></a>      &#39;One&#39;,
+<a name="line37"></a>      fmt.format([&#39;One&#39;])
+<a name="line38"></a>  );
+<a name="line39"></a>  assertEquals(
+<a name="line40"></a>      &#39;One and Two&#39;,
+<a name="line41"></a>      fmt.format([&#39;One&#39;, &#39;Two&#39;])
+<a name="line42"></a>  );
+<a name="line43"></a>  assertEquals(
+<a name="line44"></a>      &#39;One, Two, and Three&#39;,
+<a name="line45"></a>      fmt.format([&#39;One&#39;, &#39;Two&#39;, &#39;Three&#39;])
+<a name="line46"></a>  );
+<a name="line47"></a>  assertEquals(
+<a name="line48"></a>      &#39;One, Two, Three, Four, Five, and Six&#39;,
+<a name="line49"></a>      fmt.format([&#39;One&#39;, &#39;Two&#39;, &#39;Three&#39;, &#39;Four&#39;, &#39;Five&#39;, &#39;Six&#39;])
+<a name="line50"></a>  );
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>function testListFormatterArrayIndirect() {
+<a name="line54"></a>  var fmt = new goog.labs.i18n.ListFormat();
+<a name="line55"></a>
+<a name="line56"></a>  var items = [];
+<a name="line57"></a>
+<a name="line58"></a>  items.push(&#39;One&#39;);
+<a name="line59"></a>  assertEquals(&#39;One&#39;, fmt.format(items));
+<a name="line60"></a>
+<a name="line61"></a>  items.push(&#39;Two&#39;);
+<a name="line62"></a>  assertEquals(&#39;One and Two&#39;, fmt.format(items));
+<a name="line63"></a>  items.push(&#39;Three&#39;);
+<a name="line64"></a>  assertEquals(&#39;One, Two, and Three&#39;, fmt.format(items));
+<a name="line65"></a>
+<a name="line66"></a>  items.push(&#39;Four&#39;);
+<a name="line67"></a>  items.push(&#39;Five&#39;);
+<a name="line68"></a>  items.push(&#39;Six&#39;);
+<a name="line69"></a>  assertEquals(&#39;One, Two, Three, Four, Five, and Six&#39;, fmt.format(items));
+<a name="line70"></a>}
+<a name="line71"></a>
+<a name="line72"></a>function testListFormatterFrench() {
+<a name="line73"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_fr;
+<a name="line74"></a>
+<a name="line75"></a>  var fmt = new goog.labs.i18n.ListFormat();
+<a name="line76"></a>  assertEquals(
+<a name="line77"></a>      &#39;One&#39;,
+<a name="line78"></a>      fmt.format([&#39;One&#39;])
+<a name="line79"></a>  );
+<a name="line80"></a>  assertEquals(
+<a name="line81"></a>      &#39;One et Two&#39;,
+<a name="line82"></a>      fmt.format([&#39;One&#39;, &#39;Two&#39;])
+<a name="line83"></a>  );
+<a name="line84"></a>  assertEquals(
+<a name="line85"></a>      &#39;One, Two et Three&#39;,
+<a name="line86"></a>      fmt.format([&#39;One&#39;, &#39;Two&#39;, &#39;Three&#39;])
+<a name="line87"></a>  );
+<a name="line88"></a>  assertEquals(
+<a name="line89"></a>      &#39;One, Two, Three, Four, Five et Six&#39;,
+<a name="line90"></a>      fmt.format([&#39;One&#39;, &#39;Two&#39;, &#39;Three&#39;, &#39;Four&#39;, &#39;Five&#39;, &#39;Six&#39;])
+<a name="line91"></a>  );
+<a name="line92"></a>
+<a name="line93"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>// Malayalam and Zulu are the only two locales with pathers
+<a name="line97"></a>// different than &#39;{0} sometext {1}&#39;
+<a name="line98"></a>function testListFormatterSpecialLanguages() {
+<a name="line99"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ml;
+<a name="line100"></a>  var fmt_ml = new goog.labs.i18n.ListFormat();
+<a name="line101"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_zu;
+<a name="line102"></a>  var fmt_zu = new goog.labs.i18n.ListFormat();
+<a name="line103"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
+<a name="line104"></a>
+<a name="line105"></a>  // Only the end pattern is special with Malayalam
+<a name="line106"></a>  // Escaped for safety, the string is &#39;One, Two, Three ??????&#39;
+<a name="line107"></a>  assertEquals(&#39;One, Two, Three \u0D0E\u0D28\u0D4D\u0D28\u0D3F\u0D35&#39;,
+<a name="line108"></a>      fmt_ml.format([&#39;One&#39;, &#39;Two&#39;, &#39;Three&#39;]));
+<a name="line109"></a>
+<a name="line110"></a>  // Only the two items pattern is special with Zulu
+<a name="line111"></a>  assertEquals(&#39;I-One ne-Two&#39;, fmt_zu.format([&#39;One&#39;, &#39;Two&#39;]));
+<a name="line112"></a>}
+<a name="line113"></a>
+<a name="line114"></a>function testVariousObjectTypes() {
+<a name="line115"></a>  var fmt = new goog.labs.i18n.ListFormat();
+<a name="line116"></a>  var booleanObject = new Boolean(1);
+<a name="line117"></a>  var arrayObject = [&#39;black&#39;, &#39;white&#39;];
+<a name="line118"></a>  // Not sure how &quot;flaky&quot; this is. Firefox and Chrome give the same results,
+<a name="line119"></a>  // but I am not sure if the JavaScript standard specifies exactly what
+<a name="line120"></a>  // Array toString does, for instance.
+<a name="line121"></a>  assertEquals(
+<a name="line122"></a>      &#39;One, black,white, 42, true, and Five&#39;,
+<a name="line123"></a>      fmt.format([&#39;One&#39;, arrayObject, 42, booleanObject, &#39;Five&#39;])
+<a name="line124"></a>  );
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>function testListGendersNeutral() {
+<a name="line128"></a>  var Gender = goog.labs.i18n.GenderInfo.Gender;
+<a name="line129"></a>
+<a name="line130"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
+<a name="line131"></a>  var listGen = new goog.labs.i18n.GenderInfo();
+<a name="line132"></a>
+<a name="line133"></a>  assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE]));
+<a name="line134"></a>  assertEquals(Gender.FEMALE, listGen.getListGender([Gender.FEMALE]));
+<a name="line135"></a>  assertEquals(Gender.OTHER, listGen.getListGender([Gender.OTHER]));
+<a name="line136"></a>
+<a name="line137"></a>  assertEquals(Gender.OTHER, listGen.getListGender([Gender.MALE, Gender.MALE]));
+<a name="line138"></a>  assertEquals(
+<a name="line139"></a>      Gender.OTHER, listGen.getListGender([Gender.FEMALE, Gender.FEMALE]));
+<a name="line140"></a>  assertEquals(
+<a name="line141"></a>      Gender.OTHER, listGen.getListGender([Gender.OTHER, Gender.OTHER]));
+<a name="line142"></a>
+<a name="line143"></a>  assertEquals(
+<a name="line144"></a>      Gender.OTHER, listGen.getListGender([Gender.MALE, Gender.OTHER]));
+<a name="line145"></a>  assertEquals(
+<a name="line146"></a>      Gender.OTHER, listGen.getListGender([Gender.OTHER, Gender.MALE]));
+<a name="line147"></a>  assertEquals(
+<a name="line148"></a>      Gender.OTHER, listGen.getListGender([Gender.MALE, Gender.FEMALE]));
+<a name="line149"></a>  assertEquals(
+<a name="line150"></a>      Gender.OTHER, listGen.getListGender([Gender.FEMALE, Gender.MALE]));
+<a name="line151"></a>  assertEquals(
+<a name="line152"></a>      Gender.OTHER, listGen.getListGender([Gender.OTHER, Gender.FEMALE]));
+<a name="line153"></a>  assertEquals(
+<a name="line154"></a>      Gender.OTHER, listGen.getListGender([Gender.FEMALE, Gender.OTHER]));
+<a name="line155"></a>
+<a name="line156"></a>  assertEquals(
+<a name="line157"></a>      Gender.OTHER,
+<a name="line158"></a>      listGen.getListGender([Gender.MALE, Gender.FEMALE, Gender.OTHER]));
+<a name="line159"></a>  assertEquals(
+<a name="line160"></a>      Gender.OTHER,
+<a name="line161"></a>      listGen.getListGender([Gender.MALE, Gender.OTHER, Gender.FEMALE]));
+<a name="line162"></a>  assertEquals(
+<a name="line163"></a>      Gender.OTHER,
+<a name="line164"></a>      listGen.getListGender([Gender.FEMALE, Gender.MALE, Gender.OTHER]));
+<a name="line165"></a>  assertEquals(
+<a name="line166"></a>      Gender.OTHER,
+<a name="line167"></a>      listGen.getListGender([Gender.FEMALE, Gender.OTHER, Gender.MALE]));
+<a name="line168"></a>  assertEquals(
+<a name="line169"></a>      Gender.OTHER,
+<a name="line170"></a>      listGen.getListGender([Gender.OTHER, Gender.MALE, Gender.FEMALE]));
+<a name="line171"></a>  assertEquals(
+<a name="line172"></a>      Gender.OTHER,
+<a name="line173"></a>      listGen.getListGender([Gender.OTHER, Gender.FEMALE, Gender.MALE]));
+<a name="line174"></a>}
+<a name="line175"></a>
+<a name="line176"></a>function testListGendersMaleTaints() {
+<a name="line177"></a>  var Gender = goog.labs.i18n.GenderInfo.Gender;
+<a name="line178"></a>
+<a name="line179"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_fr;
+<a name="line180"></a>  var listGen = new goog.labs.i18n.GenderInfo();
+<a name="line181"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
+<a name="line182"></a>
+<a name="line183"></a>  assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE]));
+<a name="line184"></a>  assertEquals(Gender.FEMALE, listGen.getListGender([Gender.FEMALE]));
+<a name="line185"></a>  assertEquals(Gender.OTHER, listGen.getListGender([Gender.OTHER]));
+<a name="line186"></a>
+<a name="line187"></a>  assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE, Gender.MALE]));
+<a name="line188"></a>  assertEquals(
+<a name="line189"></a>      Gender.FEMALE, listGen.getListGender([Gender.FEMALE, Gender.FEMALE]));
+<a name="line190"></a>  assertEquals(
+<a name="line191"></a>      Gender.MALE, listGen.getListGender([Gender.OTHER, Gender.OTHER]));
+<a name="line192"></a>
+<a name="line193"></a>  assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE, Gender.OTHER]));
+<a name="line194"></a>  assertEquals(Gender.MALE, listGen.getListGender([Gender.OTHER, Gender.MALE]));
+<a name="line195"></a>  assertEquals(
+<a name="line196"></a>      Gender.MALE, listGen.getListGender([Gender.MALE, Gender.FEMALE]));
+<a name="line197"></a>  assertEquals(
+<a name="line198"></a>      Gender.MALE, listGen.getListGender([Gender.FEMALE, Gender.MALE]));
+<a name="line199"></a>  assertEquals(
+<a name="line200"></a>      Gender.MALE, listGen.getListGender([Gender.OTHER, Gender.FEMALE]));
+<a name="line201"></a>  assertEquals(
+<a name="line202"></a>      Gender.MALE, listGen.getListGender([Gender.FEMALE, Gender.OTHER]));
+<a name="line203"></a>
+<a name="line204"></a>  assertEquals(
+<a name="line205"></a>      Gender.MALE,
+<a name="line206"></a>      listGen.getListGender([Gender.MALE, Gender.FEMALE, Gender.OTHER]));
+<a name="line207"></a>  assertEquals(
+<a name="line208"></a>      Gender.MALE,
+<a name="line209"></a>      listGen.getListGender([Gender.MALE, Gender.OTHER, Gender.FEMALE]));
+<a name="line210"></a>  assertEquals(
+<a name="line211"></a>      Gender.MALE,
+<a name="line212"></a>      listGen.getListGender([Gender.FEMALE, Gender.MALE, Gender.OTHER]));
+<a name="line213"></a>  assertEquals(
+<a name="line214"></a>      Gender.MALE,
+<a name="line215"></a>      listGen.getListGender([Gender.FEMALE, Gender.OTHER, Gender.MALE]));
+<a name="line216"></a>  assertEquals(
+<a name="line217"></a>      Gender.MALE,
+<a name="line218"></a>      listGen.getListGender([Gender.OTHER, Gender.MALE, Gender.FEMALE]));
+<a name="line219"></a>  assertEquals(
+<a name="line220"></a>      Gender.MALE,
+<a name="line221"></a>      listGen.getListGender([Gender.OTHER, Gender.FEMALE, Gender.MALE]));
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>function testListGendersMixedNeutral() {
+<a name="line225"></a>  var Gender = goog.labs.i18n.GenderInfo.Gender;
+<a name="line226"></a>
+<a name="line227"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_el;
+<a name="line228"></a>  var listGen = new goog.labs.i18n.GenderInfo();
+<a name="line229"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
+<a name="line230"></a>
+<a name="line231"></a>  assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE]));
+<a name="line232"></a>  assertEquals(Gender.FEMALE, listGen.getListGender([Gender.FEMALE]));
+<a name="line233"></a>  assertEquals(Gender.OTHER, listGen.getListGender([Gender.OTHER]));
+<a name="line234"></a>
+<a name="line235"></a>  assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE, Gender.MALE]));
+<a name="line236"></a>  assertEquals(
+<a name="line237"></a>      Gender.FEMALE, listGen.getListGender([Gender.FEMALE, Gender.FEMALE]));
+<a name="line238"></a>  assertEquals(
+<a name="line239"></a>      Gender.OTHER, listGen.getListGender([Gender.OTHER, Gender.OTHER]));
+<a name="line240"></a>
+<a name="line241"></a>  assertEquals(
+<a name="line242"></a>      Gender.OTHER, listGen.getListGender([Gender.MALE, Gender.OTHER]));
+<a name="line243"></a>  assertEquals(
+<a name="line244"></a>      Gender.OTHER, listGen.getListGender([Gender.OTHER, Gender.MALE]));
+<a name="line245"></a>  assertEquals(
+<a name="line246"></a>      Gender.OTHER, listGen.getListGender([Gender.MALE, Gender.FEMALE]));
+<a name="line247"></a>  assertEquals(
+<a name="line248"></a>      Gender.OTHER, listGen.getListGender([Gender.FEMALE, Gender.MALE]));
+<a name="line249"></a>  assertEquals(
+<a name="line250"></a>      Gender.OTHER, listGen.getListGender([Gender.OTHER, Gender.FEMALE]));
+<a name="line251"></a>  assertEquals(
+<a name="line252"></a>      Gender.OTHER, listGen.getListGender([Gender.FEMALE, Gender.OTHER]));
+<a name="line253"></a>
+<a name="line254"></a>  assertEquals(
+<a name="line255"></a>      Gender.OTHER,
+<a name="line256"></a>      listGen.getListGender([Gender.MALE, Gender.FEMALE, Gender.OTHER]));
+<a name="line257"></a>  assertEquals(
+<a name="line258"></a>      Gender.OTHER,
+<a name="line259"></a>      listGen.getListGender([Gender.MALE, Gender.OTHER, Gender.FEMALE]));
+<a name="line260"></a>  assertEquals(
+<a name="line261"></a>      Gender.OTHER,
+<a name="line262"></a>      listGen.getListGender([Gender.FEMALE, Gender.MALE, Gender.OTHER]));
+<a name="line263"></a>  assertEquals(
+<a name="line264"></a>      Gender.OTHER,
+<a name="line265"></a>      listGen.getListGender([Gender.FEMALE, Gender.OTHER, Gender.MALE]));
+<a name="line266"></a>  assertEquals(
+<a name="line267"></a>      Gender.OTHER,
+<a name="line268"></a>      listGen.getListGender([Gender.OTHER, Gender.MALE, Gender.FEMALE]));
+<a name="line269"></a>  assertEquals(
+<a name="line270"></a>      Gender.OTHER,
+<a name="line271"></a>      listGen.getListGender([Gender.OTHER, Gender.FEMALE, Gender.MALE]));
+<a name="line272"></a>}
+<a name="line273"></a>
+<a name="line274"></a>function testListGendersVariousCallTypes() {
+<a name="line275"></a>  var Gender = goog.labs.i18n.GenderInfo.Gender;
+<a name="line276"></a>
+<a name="line277"></a>  // Using French because with English the results are mostly Gender.OTHER
+<a name="line278"></a>  // so we can detect fewer problems
+<a name="line279"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_fr;
+<a name="line280"></a>  var listGen = new goog.labs.i18n.GenderInfo();
+<a name="line281"></a>  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_en;
+<a name="line282"></a>
+<a name="line283"></a>  // Anynymous Arrays
+<a name="line284"></a>  assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE]));
+<a name="line285"></a>  assertEquals(Gender.FEMALE, listGen.getListGender([Gender.FEMALE]));
+<a name="line286"></a>  assertEquals(Gender.OTHER, listGen.getListGender([Gender.OTHER]));
+<a name="line287"></a>
+<a name="line288"></a>  assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE, Gender.MALE]));
+<a name="line289"></a>  assertEquals(
+<a name="line290"></a>      Gender.FEMALE, listGen.getListGender([Gender.FEMALE, Gender.FEMALE]));
+<a name="line291"></a>  assertEquals(
+<a name="line292"></a>      Gender.MALE, listGen.getListGender([Gender.OTHER, Gender.OTHER]));
+<a name="line293"></a>
+<a name="line294"></a>  assertEquals(
+<a name="line295"></a>      Gender.MALE, listGen.getListGender([Gender.MALE, Gender.FEMALE]));
+<a name="line296"></a>  assertEquals(Gender.MALE, listGen.getListGender([Gender.MALE, Gender.OTHER]));
+<a name="line297"></a>  assertEquals(
+<a name="line298"></a>      Gender.MALE, listGen.getListGender([Gender.FEMALE, Gender.OTHER]));
+<a name="line299"></a>
+<a name="line300"></a>  // Arrays
+<a name="line301"></a>  var arrayM = [Gender.MALE];
+<a name="line302"></a>  var arrayF = [Gender.FEMALE];
+<a name="line303"></a>  var arrayO = [Gender.OTHER];
+<a name="line304"></a>
+<a name="line305"></a>  var arrayMM = [Gender.MALE, Gender.MALE];
+<a name="line306"></a>  var arrayFF = [Gender.FEMALE, Gender.FEMALE];
+<a name="line307"></a>  var arrayOO = [Gender.OTHER, Gender.OTHER];
+<a name="line308"></a>
+<a name="line309"></a>  var arrayMF = [Gender.MALE, Gender.FEMALE];
+<a name="line310"></a>  var arrayMO = [Gender.MALE, Gender.OTHER];
+<a name="line311"></a>  var arrayFO = [Gender.FEMALE, Gender.OTHER];
+<a name="line312"></a>
+<a name="line313"></a>  assertEquals(Gender.MALE, listGen.getListGender(arrayM));
+<a name="line314"></a>  assertEquals(Gender.FEMALE, listGen.getListGender(arrayF));
+<a name="line315"></a>  assertEquals(Gender.OTHER, listGen.getListGender(arrayO));
+<a name="line316"></a>
+<a name="line317"></a>  assertEquals(Gender.MALE, listGen.getListGender(arrayMM));
+<a name="line318"></a>  assertEquals(Gender.FEMALE, listGen.getListGender(arrayFF));
+<a name="line319"></a>  assertEquals(Gender.MALE, listGen.getListGender(arrayOO));
+<a name="line320"></a>
+<a name="line321"></a>  assertEquals(Gender.MALE, listGen.getListGender(arrayMF));
+<a name="line322"></a>  assertEquals(Gender.MALE, listGen.getListGender(arrayMO));
+<a name="line323"></a>  assertEquals(Gender.MALE, listGen.getListGender(arrayFO));
+<a name="line324"></a>}
+</pre>
+
+
+</body>
+</html>

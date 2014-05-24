@@ -1,0 +1,730 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tabpane.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_tabpane.js.html">tabpane.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview TabPane widget implementation.
+<a name="line17"></a> *
+<a name="line18"></a> * @author eae@google.com (Emil A Eklund)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.TabPane&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.ui.TabPane.Events&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.ui.TabPane.TabLocation&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.ui.TabPane.TabPage&#39;);
+<a name="line25"></a>goog.provide(&#39;goog.ui.TabPaneEvent&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line32"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line33"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line34"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line35"></a>goog.require(&#39;goog.style&#39;);
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * TabPane widget. All children already inside the tab pane container element
+<a name="line41"></a> * will be be converted to tabs. Each tab is represented by a goog.ui.TabPane.
+<a name="line42"></a> * TabPage object. Further pages can be constructed either from an existing
+<a name="line43"></a> * container or created from scratch.
+<a name="line44"></a> *
+<a name="line45"></a> * @param {Element} el Container element to create the tab pane out of.
+<a name="line46"></a> * @param {goog.ui.TabPane.TabLocation=} opt_tabLocation Location of the tabs
+<a name="line47"></a> *     in relation to the content container. Default is top.
+<a name="line48"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+<a name="line49"></a> * @param {boolean=} opt_useMouseDown Whether to use MOUSEDOWN instead of CLICK
+<a name="line50"></a> *     for tab changes.
+<a name="line51"></a> * @extends {goog.events.EventTarget}
+<a name="line52"></a> * @constructor
+<a name="line53"></a> * @see ../demos/tabpane.html
+<a name="line54"></a> * @deprecated Use goog.ui.TabBar instead.
+<a name="line55"></a> */
+<a name="line56"></a>goog.ui.TabPane = function(el, opt_tabLocation, opt_domHelper,
+<a name="line57"></a>                           opt_useMouseDown) {
+<a name="line58"></a>  goog.events.EventTarget.call(this);
+<a name="line59"></a>
+<a name="line60"></a>  /**
+<a name="line61"></a>   * DomHelper used to interact with the document, allowing components to be
+<a name="line62"></a>   * created in a different window.  This property is considered protected;
+<a name="line63"></a>   * subclasses of Component may refer to it directly.
+<a name="line64"></a>   * @type {goog.dom.DomHelper}
+<a name="line65"></a>   * @protected
+<a name="line66"></a>   * @suppress {underscore|visibility}
+<a name="line67"></a>   */
+<a name="line68"></a>  this.dom_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line69"></a>
+<a name="line70"></a>  /**
+<a name="line71"></a>   * Tab pane element.
+<a name="line72"></a>   * @type {Element}
+<a name="line73"></a>   * @private
+<a name="line74"></a>   */
+<a name="line75"></a>  this.el_ = el;
+<a name="line76"></a>
+<a name="line77"></a>  /**
+<a name="line78"></a>   * Collection of tab panes.
+<a name="line79"></a>   * @type {Array.&lt;goog.ui.TabPane.TabPage&gt;}
+<a name="line80"></a>   * @private
+<a name="line81"></a>   */
+<a name="line82"></a>  this.pages_ = [];
+<a name="line83"></a>
+<a name="line84"></a>  /**
+<a name="line85"></a>   * Location of the tabs with respect to the content box.
+<a name="line86"></a>   * @type {goog.ui.TabPane.TabLocation}
+<a name="line87"></a>   * @private
+<a name="line88"></a>   */
+<a name="line89"></a>  this.tabLocation_ =
+<a name="line90"></a>      opt_tabLocation ? opt_tabLocation : goog.ui.TabPane.TabLocation.TOP;
+<a name="line91"></a>
+<a name="line92"></a>  /**
+<a name="line93"></a>   * Whether to use MOUSEDOWN instead of CLICK for tab change events. This
+<a name="line94"></a>   * fixes some focus problems on Safari/Chrome.
+<a name="line95"></a>   * @type {boolean}
+<a name="line96"></a>   * @private
+<a name="line97"></a>   */
+<a name="line98"></a>  this.useMouseDown_ = !!opt_useMouseDown;
+<a name="line99"></a>
+<a name="line100"></a>  this.create_();
+<a name="line101"></a>};
+<a name="line102"></a>goog.inherits(goog.ui.TabPane, goog.events.EventTarget);
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Element containing the tab buttons.
+<a name="line107"></a> * @type {Element}
+<a name="line108"></a> * @private
+<a name="line109"></a> */
+<a name="line110"></a>goog.ui.TabPane.prototype.elButtonBar_;
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Element containing the tab pages.
+<a name="line115"></a> * @type {Element}
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.ui.TabPane.prototype.elContent_;
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Selected page.
+<a name="line123"></a> * @type {goog.ui.TabPane.TabPage?}
+<a name="line124"></a> * @private
+<a name="line125"></a> */
+<a name="line126"></a>goog.ui.TabPane.prototype.selected_;
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/**
+<a name="line130"></a> * Constants for event names
+<a name="line131"></a> *
+<a name="line132"></a> * @type {Object}
+<a name="line133"></a> */
+<a name="line134"></a>goog.ui.TabPane.Events = {
+<a name="line135"></a>  CHANGE: &#39;change&#39;
+<a name="line136"></a>};
+<a name="line137"></a>
+<a name="line138"></a>
+<a name="line139"></a>/**
+<a name="line140"></a> * Enum for representing the location of the tabs in relation to the content.
+<a name="line141"></a> *
+<a name="line142"></a> * @enum {number}
+<a name="line143"></a> */
+<a name="line144"></a>goog.ui.TabPane.TabLocation = {
+<a name="line145"></a>  TOP: 0,
+<a name="line146"></a>  BOTTOM: 1,
+<a name="line147"></a>  LEFT: 2,
+<a name="line148"></a>  RIGHT: 3
+<a name="line149"></a>};
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * Creates HTML nodes for tab pane.
+<a name="line154"></a> *
+<a name="line155"></a> * @private
+<a name="line156"></a> */
+<a name="line157"></a>goog.ui.TabPane.prototype.create_ = function() {
+<a name="line158"></a>  this.el_.className = goog.getCssName(&#39;goog-tabpane&#39;);
+<a name="line159"></a>
+<a name="line160"></a>  var nodes = this.getChildNodes_();
+<a name="line161"></a>
+<a name="line162"></a>  // Create tab strip
+<a name="line163"></a>  this.elButtonBar_ = this.dom_.createDom(&#39;ul&#39;,
+<a name="line164"></a>      {&#39;className&#39;: goog.getCssName(&#39;goog-tabpane-tabs&#39;), &#39;tabIndex&#39;: &#39;0&#39;});
+<a name="line165"></a>
+<a name="line166"></a>  // Create content area
+<a name="line167"></a>  this.elContent_ =
+<a name="line168"></a>      this.dom_.createDom(&#39;div&#39;, goog.getCssName(&#39;goog-tabpane-cont&#39;));
+<a name="line169"></a>  this.el_.appendChild(this.elContent_);
+<a name="line170"></a>
+<a name="line171"></a>  var element = goog.asserts.assertElement(this.el_);
+<a name="line172"></a>
+<a name="line173"></a>  switch (this.tabLocation_) {
+<a name="line174"></a>    case goog.ui.TabPane.TabLocation.TOP:
+<a name="line175"></a>      element.insertBefore(this.elButtonBar_, this.elContent_);
+<a name="line176"></a>      element.insertBefore(this.createClear_(), this.elContent_);
+<a name="line177"></a>      goog.dom.classlist.add(element, goog.getCssName(&#39;goog-tabpane-top&#39;));
+<a name="line178"></a>      break;
+<a name="line179"></a>    case goog.ui.TabPane.TabLocation.BOTTOM:
+<a name="line180"></a>      element.appendChild(this.elButtonBar_);
+<a name="line181"></a>      element.appendChild(this.createClear_());
+<a name="line182"></a>      goog.dom.classlist.add(element, goog.getCssName(&#39;goog-tabpane-bottom&#39;));
+<a name="line183"></a>      break;
+<a name="line184"></a>    case goog.ui.TabPane.TabLocation.LEFT:
+<a name="line185"></a>      element.insertBefore(this.elButtonBar_, this.elContent_);
+<a name="line186"></a>      goog.dom.classlist.add(element, goog.getCssName(&#39;goog-tabpane-left&#39;));
+<a name="line187"></a>      break;
+<a name="line188"></a>    case goog.ui.TabPane.TabLocation.RIGHT:
+<a name="line189"></a>      element.insertBefore(this.elButtonBar_, this.elContent_);
+<a name="line190"></a>      goog.dom.classlist.add(element, goog.getCssName(&#39;goog-tabpane-right&#39;));
+<a name="line191"></a>      break;
+<a name="line192"></a>    default:
+<a name="line193"></a>      throw Error(&#39;Invalid tab location&#39;);
+<a name="line194"></a>  }
+<a name="line195"></a>
+<a name="line196"></a>  // Listen for click and keydown events on header
+<a name="line197"></a>  this.elButtonBar_.tabIndex = 0;
+<a name="line198"></a>  goog.events.listen(this.elButtonBar_,
+<a name="line199"></a>      this.useMouseDown_ ?
+<a name="line200"></a>      goog.events.EventType.MOUSEDOWN :
+<a name="line201"></a>      goog.events.EventType.CLICK,
+<a name="line202"></a>      this.onHeaderClick_, false, this);
+<a name="line203"></a>  goog.events.listen(this.elButtonBar_, goog.events.EventType.KEYDOWN,
+<a name="line204"></a>      this.onHeaderKeyDown_, false, this);
+<a name="line205"></a>
+<a name="line206"></a>  this.createPages_(nodes);
+<a name="line207"></a>};
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * Creates the HTML node for the clearing div, and associated style in
+<a name="line212"></a> * the &lt;HEAD&gt;.
+<a name="line213"></a> *
+<a name="line214"></a> * @return {!Element} Reference to a DOM div node.
+<a name="line215"></a> * @private
+<a name="line216"></a> */
+<a name="line217"></a>goog.ui.TabPane.prototype.createClear_ = function() {
+<a name="line218"></a>  var clearFloatStyle = &#39;.&#39; + goog.getCssName(&#39;goog-tabpane-clear&#39;) +
+<a name="line219"></a>      &#39; { clear: both; height: 0px; overflow: hidden }&#39;;
+<a name="line220"></a>  goog.style.installStyles(clearFloatStyle);
+<a name="line221"></a>  return this.dom_.createDom(&#39;div&#39;, goog.getCssName(&#39;goog-tabpane-clear&#39;));
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/** @override */
+<a name="line226"></a>goog.ui.TabPane.prototype.disposeInternal = function() {
+<a name="line227"></a>  goog.ui.TabPane.superClass_.disposeInternal.call(this);
+<a name="line228"></a>  goog.events.unlisten(this.elButtonBar_,
+<a name="line229"></a>      this.useMouseDown_ ?
+<a name="line230"></a>      goog.events.EventType.MOUSEDOWN :
+<a name="line231"></a>      goog.events.EventType.CLICK,
+<a name="line232"></a>      this.onHeaderClick_, false, this);
+<a name="line233"></a>  goog.events.unlisten(this.elButtonBar_, goog.events.EventType.KEYDOWN,
+<a name="line234"></a>      this.onHeaderKeyDown_, false, this);
+<a name="line235"></a>  delete this.el_;
+<a name="line236"></a>  this.elButtonBar_ = null;
+<a name="line237"></a>  this.elContent_ = null;
+<a name="line238"></a>};
+<a name="line239"></a>
+<a name="line240"></a>
+<a name="line241"></a>/**
+<a name="line242"></a> * @return {!Array.&lt;Element&gt;} The element child nodes of tab pane container.
+<a name="line243"></a> * @private
+<a name="line244"></a> */
+<a name="line245"></a>goog.ui.TabPane.prototype.getChildNodes_ = function() {
+<a name="line246"></a>  var nodes = [];
+<a name="line247"></a>
+<a name="line248"></a>  var child = goog.dom.getFirstElementChild(this.el_);
+<a name="line249"></a>  while (child) {
+<a name="line250"></a>    nodes.push(child);
+<a name="line251"></a>    child = goog.dom.getNextElementSibling(child);
+<a name="line252"></a>  }
+<a name="line253"></a>
+<a name="line254"></a>  return nodes;
+<a name="line255"></a>};
+<a name="line256"></a>
+<a name="line257"></a>
+<a name="line258"></a>/**
+<a name="line259"></a> * Creates pages out of a collection of elements.
+<a name="line260"></a> *
+<a name="line261"></a> * @param {Array.&lt;Element&gt;} nodes Array of elements to create pages out of.
+<a name="line262"></a> * @private
+<a name="line263"></a> */
+<a name="line264"></a>goog.ui.TabPane.prototype.createPages_ = function(nodes) {
+<a name="line265"></a>  for (var node, i = 0; node = nodes[i]; i++) {
+<a name="line266"></a>    this.addPage(new goog.ui.TabPane.TabPage(node));
+<a name="line267"></a>  }
+<a name="line268"></a>};
+<a name="line269"></a>
+<a name="line270"></a>
+<a name="line271"></a>/**
+<a name="line272"></a> * Adds a page to the tab pane.
+<a name="line273"></a> *
+<a name="line274"></a> * @param {goog.ui.TabPane.TabPage} page Tab page to add.
+<a name="line275"></a> * @param {number=} opt_index Zero based index to insert tab at. Inserted at the
+<a name="line276"></a> *                           end if not specified.
+<a name="line277"></a> */
+<a name="line278"></a>goog.ui.TabPane.prototype.addPage = function(page, opt_index) {
+<a name="line279"></a>  // If page is already in another tab pane it&#39;s removed from that one before it
+<a name="line280"></a>  // can be added to this one.
+<a name="line281"></a>  if (page.parent_ &amp;&amp; page.parent_ != this &amp;&amp;
+<a name="line282"></a>      page.parent_ instanceof goog.ui.TabPane) {
+<a name="line283"></a>    page.parent_.removePage(page);
+<a name="line284"></a>  }
+<a name="line285"></a>
+<a name="line286"></a>  // Insert page at specified position
+<a name="line287"></a>  var index = this.pages_.length;
+<a name="line288"></a>  if (goog.isDef(opt_index) &amp;&amp; opt_index != index) {
+<a name="line289"></a>    index = opt_index;
+<a name="line290"></a>    this.pages_.splice(index, 0, page);
+<a name="line291"></a>    this.elButtonBar_.insertBefore(page.elTitle_,
+<a name="line292"></a>                                   this.elButtonBar_.childNodes[index]);
+<a name="line293"></a>  }
+<a name="line294"></a>
+<a name="line295"></a>  // Append page to end
+<a name="line296"></a>  else {
+<a name="line297"></a>    this.pages_.push(page);
+<a name="line298"></a>    this.elButtonBar_.appendChild(page.elTitle_);
+<a name="line299"></a>  }
+<a name="line300"></a>
+<a name="line301"></a>  page.setParent_(this, index);
+<a name="line302"></a>
+<a name="line303"></a>  // Select first page and fire change event
+<a name="line304"></a>  if (!this.selected_) {
+<a name="line305"></a>    this.selected_ = page;
+<a name="line306"></a>    this.dispatchEvent(new goog.ui.TabPaneEvent(goog.ui.TabPane.Events.CHANGE,
+<a name="line307"></a>                                                this, this.selected_));
+<a name="line308"></a>  }
+<a name="line309"></a>
+<a name="line310"></a>  // Move page content to the tab pane and update visibility.
+<a name="line311"></a>  this.elContent_.appendChild(page.elContent_);
+<a name="line312"></a>  page.setVisible_(page == this.selected_);
+<a name="line313"></a>
+<a name="line314"></a>  // Update index for following pages
+<a name="line315"></a>  for (var pg, i = index + 1; pg = this.pages_[i]; i++) {
+<a name="line316"></a>    pg.index_ = i;
+<a name="line317"></a>  }
+<a name="line318"></a>};
+<a name="line319"></a>
+<a name="line320"></a>
+<a name="line321"></a>/**
+<a name="line322"></a> * Removes the specified page from the tab pane.
+<a name="line323"></a> *
+<a name="line324"></a> * @param {goog.ui.TabPane.TabPage|number} page Reference to tab page or zero
+<a name="line325"></a> *     based index.
+<a name="line326"></a> */
+<a name="line327"></a>goog.ui.TabPane.prototype.removePage = function(page) {
+<a name="line328"></a>  if (goog.isNumber(page)) {
+<a name="line329"></a>    page = this.pages_[page];
+<a name="line330"></a>  }
+<a name="line331"></a>  this.pages_.splice(page.index_, 1);
+<a name="line332"></a>  page.setParent_(null);
+<a name="line333"></a>
+<a name="line334"></a>  goog.dom.removeNode(page.elTitle_);
+<a name="line335"></a>  goog.dom.removeNode(page.elContent_);
+<a name="line336"></a>
+<a name="line337"></a>  for (var pg, i = 0; pg = this.pages_[i]; i++) {
+<a name="line338"></a>    pg.setParent_(this, i);
+<a name="line339"></a>  }
+<a name="line340"></a>};
+<a name="line341"></a>
+<a name="line342"></a>
+<a name="line343"></a>/**
+<a name="line344"></a> * Gets the tab page by zero based index.
+<a name="line345"></a> *
+<a name="line346"></a> * @param {number} index Index of page to return.
+<a name="line347"></a> * @return {goog.ui.TabPane.TabPage?} page The tab page.
+<a name="line348"></a> */
+<a name="line349"></a>goog.ui.TabPane.prototype.getPage = function(index) {
+<a name="line350"></a>  return this.pages_[index];
+<a name="line351"></a>};
+<a name="line352"></a>
+<a name="line353"></a>
+<a name="line354"></a>/**
+<a name="line355"></a> * Sets the selected tab page by object reference.
+<a name="line356"></a> *
+<a name="line357"></a> * @param {goog.ui.TabPane.TabPage} page Tab page to select.
+<a name="line358"></a> */
+<a name="line359"></a>goog.ui.TabPane.prototype.setSelectedPage = function(page) {
+<a name="line360"></a>  if (page.isEnabled() &amp;&amp;
+<a name="line361"></a>      (!this.selected_ || page != this.selected_)) {
+<a name="line362"></a>    this.selected_.setVisible_(false);
+<a name="line363"></a>    page.setVisible_(true);
+<a name="line364"></a>    this.selected_ = page;
+<a name="line365"></a>
+<a name="line366"></a>    // Fire changed event
+<a name="line367"></a>    this.dispatchEvent(new goog.ui.TabPaneEvent(goog.ui.TabPane.Events.CHANGE,
+<a name="line368"></a>                                                this, this.selected_));
+<a name="line369"></a>  }
+<a name="line370"></a>};
+<a name="line371"></a>
+<a name="line372"></a>
+<a name="line373"></a>/**
+<a name="line374"></a> * Sets the selected tab page by zero based index.
+<a name="line375"></a> *
+<a name="line376"></a> * @param {number} index Index of page to select.
+<a name="line377"></a> */
+<a name="line378"></a>goog.ui.TabPane.prototype.setSelectedIndex = function(index) {
+<a name="line379"></a>  if (index &gt;= 0 &amp;&amp; index &lt; this.pages_.length) {
+<a name="line380"></a>    this.setSelectedPage(this.pages_[index]);
+<a name="line381"></a>  }
+<a name="line382"></a>};
+<a name="line383"></a>
+<a name="line384"></a>
+<a name="line385"></a>/**
+<a name="line386"></a> * @return {number} The index for the selected tab page or -1 if no page is
+<a name="line387"></a> *     selected.
+<a name="line388"></a> */
+<a name="line389"></a>goog.ui.TabPane.prototype.getSelectedIndex = function() {
+<a name="line390"></a>  return this.selected_ ? /** @type {number} */ (this.selected_.index_) : -1;
+<a name="line391"></a>};
+<a name="line392"></a>
+<a name="line393"></a>
+<a name="line394"></a>/**
+<a name="line395"></a> * @return {goog.ui.TabPane.TabPage?} The selected tab page.
+<a name="line396"></a> */
+<a name="line397"></a>goog.ui.TabPane.prototype.getSelectedPage = function() {
+<a name="line398"></a>  return this.selected_ || null;
+<a name="line399"></a>};
+<a name="line400"></a>
+<a name="line401"></a>
+<a name="line402"></a>/**
+<a name="line403"></a> * @return {Element} The element that contains the tab pages.
+<a name="line404"></a> */
+<a name="line405"></a>goog.ui.TabPane.prototype.getContentElement = function() {
+<a name="line406"></a>  return this.elContent_ || null;
+<a name="line407"></a>};
+<a name="line408"></a>
+<a name="line409"></a>
+<a name="line410"></a>/**
+<a name="line411"></a> * @return {Element} The main element for the tabpane.
+<a name="line412"></a> */
+<a name="line413"></a>goog.ui.TabPane.prototype.getElement = function() {
+<a name="line414"></a>  return this.el_ || null;
+<a name="line415"></a>};
+<a name="line416"></a>
+<a name="line417"></a>
+<a name="line418"></a>/**
+<a name="line419"></a> * Click event handler for header element, handles clicks on tabs.
+<a name="line420"></a> *
+<a name="line421"></a> * @param {goog.events.BrowserEvent} event Click event.
+<a name="line422"></a> * @private
+<a name="line423"></a> */
+<a name="line424"></a>goog.ui.TabPane.prototype.onHeaderClick_ = function(event) {
+<a name="line425"></a>  var el = event.target;
+<a name="line426"></a>
+<a name="line427"></a>  // Determine index if a tab (li element) was clicked.
+<a name="line428"></a>  while (el != this.elButtonBar_) {
+<a name="line429"></a>    if (el.tagName == &#39;LI&#39;) {
+<a name="line430"></a>      var i;
+<a name="line431"></a>      // {} prevents compiler warning
+<a name="line432"></a>      for (i = 0; el = el.previousSibling; i++) {}
+<a name="line433"></a>      this.setSelectedIndex(i);
+<a name="line434"></a>      break;
+<a name="line435"></a>    }
+<a name="line436"></a>    el = el.parentNode;
+<a name="line437"></a>  }
+<a name="line438"></a>  event.preventDefault();
+<a name="line439"></a>};
+<a name="line440"></a>
+<a name="line441"></a>
+<a name="line442"></a>/**
+<a name="line443"></a> * KeyDown event handler for header element. Arrow keys moves between pages.
+<a name="line444"></a> * Home and end selects the first/last page.
+<a name="line445"></a> *
+<a name="line446"></a> * @param {goog.events.BrowserEvent} event KeyDown event.
+<a name="line447"></a> * @private
+<a name="line448"></a> */
+<a name="line449"></a>goog.ui.TabPane.prototype.onHeaderKeyDown_ = function(event) {
+<a name="line450"></a>  if (event.altKey || event.metaKey || event.ctrlKey) {
+<a name="line451"></a>    return;
+<a name="line452"></a>  }
+<a name="line453"></a>
+<a name="line454"></a>  switch (event.keyCode) {
+<a name="line455"></a>    case goog.events.KeyCodes.LEFT:
+<a name="line456"></a>      var index = this.selected_.getIndex() - 1;
+<a name="line457"></a>      this.setSelectedIndex(index &lt; 0 ? this.pages_.length - 1 : index);
+<a name="line458"></a>      break;
+<a name="line459"></a>    case goog.events.KeyCodes.RIGHT:
+<a name="line460"></a>      var index = this.selected_.getIndex() + 1;
+<a name="line461"></a>      this.setSelectedIndex(index &gt;= this.pages_.length ? 0 : index);
+<a name="line462"></a>      break;
+<a name="line463"></a>    case goog.events.KeyCodes.HOME:
+<a name="line464"></a>      this.setSelectedIndex(0);
+<a name="line465"></a>      break;
+<a name="line466"></a>    case goog.events.KeyCodes.END:
+<a name="line467"></a>      this.setSelectedIndex(this.pages_.length - 1);
+<a name="line468"></a>      break;
+<a name="line469"></a>  }
+<a name="line470"></a>};
+<a name="line471"></a>
+<a name="line472"></a>
+<a name="line473"></a>
+<a name="line474"></a>/**
+<a name="line475"></a> * Object representing an individual tab pane.
+<a name="line476"></a> *
+<a name="line477"></a> * @param {Element=} opt_el Container element to create the pane out of.
+<a name="line478"></a> * @param {(Element|string)=} opt_title Pane title or element to use as the
+<a name="line479"></a> *     title. If not specified the first element in the container is used as
+<a name="line480"></a> *     the title.
+<a name="line481"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper
+<a name="line482"></a> * The first parameter can be omitted.
+<a name="line483"></a> * @constructor
+<a name="line484"></a> */
+<a name="line485"></a>goog.ui.TabPane.TabPage = function(opt_el, opt_title, opt_domHelper) {
+<a name="line486"></a>  var title, el;
+<a name="line487"></a>  if (goog.isString(opt_el) &amp;&amp; !goog.isDef(opt_title)) {
+<a name="line488"></a>    title = opt_el;
+<a name="line489"></a>  } else if (opt_title) {
+<a name="line490"></a>    title = opt_title;
+<a name="line491"></a>    el = opt_el;
+<a name="line492"></a>  } else if (opt_el) {
+<a name="line493"></a>    var child = goog.dom.getFirstElementChild(opt_el);
+<a name="line494"></a>    if (child) {
+<a name="line495"></a>      title = goog.dom.getTextContent(child);
+<a name="line496"></a>      child.parentNode.removeChild(child);
+<a name="line497"></a>    }
+<a name="line498"></a>    el = opt_el;
+<a name="line499"></a>  }
+<a name="line500"></a>
+<a name="line501"></a>  /**
+<a name="line502"></a>   * DomHelper used to interact with the document, allowing components to be
+<a name="line503"></a>   * created in a different window.  This property is considered protected;
+<a name="line504"></a>   * subclasses of Component may refer to it directly.
+<a name="line505"></a>   * @type {goog.dom.DomHelper}
+<a name="line506"></a>   * @protected
+<a name="line507"></a>   * @suppress {underscore|visibility}
+<a name="line508"></a>   */
+<a name="line509"></a>  this.dom_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line510"></a>
+<a name="line511"></a>  /**
+<a name="line512"></a>   * Content element
+<a name="line513"></a>   * @type {Element}
+<a name="line514"></a>   * @private
+<a name="line515"></a>   */
+<a name="line516"></a>  this.elContent_ = el || this.dom_.createDom(&#39;div&#39;);
+<a name="line517"></a>
+<a name="line518"></a>  /**
+<a name="line519"></a>   * Title element
+<a name="line520"></a>   * @type {Element}
+<a name="line521"></a>   * @private
+<a name="line522"></a>   */
+<a name="line523"></a>  this.elTitle_ = this.dom_.createDom(&#39;li&#39;, null, title);
+<a name="line524"></a>
+<a name="line525"></a>  /**
+<a name="line526"></a>   * Parent TabPane reference.
+<a name="line527"></a>   * @type {goog.ui.TabPane?}
+<a name="line528"></a>   * @private
+<a name="line529"></a>   */
+<a name="line530"></a>  this.parent_ = null;
+<a name="line531"></a>
+<a name="line532"></a>  /**
+<a name="line533"></a>   * Index for page in tab pane.
+<a name="line534"></a>   * @type {?number}
+<a name="line535"></a>   * @private
+<a name="line536"></a>   */
+<a name="line537"></a>  this.index_ = null;
+<a name="line538"></a>
+<a name="line539"></a>  /**
+<a name="line540"></a>   * Flags if this page is enabled and can be selected.
+<a name="line541"></a>   * @type {boolean}
+<a name="line542"></a>   * @private
+<a name="line543"></a>   */
+<a name="line544"></a>  this.enabled_ = true;
+<a name="line545"></a>};
+<a name="line546"></a>
+<a name="line547"></a>
+<a name="line548"></a>/**
+<a name="line549"></a> * @return {string} The title for tab page.
+<a name="line550"></a> */
+<a name="line551"></a>goog.ui.TabPane.TabPage.prototype.getTitle = function() {
+<a name="line552"></a>  return goog.dom.getTextContent(this.elTitle_);
+<a name="line553"></a>};
+<a name="line554"></a>
+<a name="line555"></a>
+<a name="line556"></a>/**
+<a name="line557"></a> * Sets title for tab page.
+<a name="line558"></a> *
+<a name="line559"></a> * @param {string} title Title for tab page.
+<a name="line560"></a> */
+<a name="line561"></a>goog.ui.TabPane.TabPage.prototype.setTitle = function(title) {
+<a name="line562"></a>  goog.dom.setTextContent(this.elTitle_, title);
+<a name="line563"></a>};
+<a name="line564"></a>
+<a name="line565"></a>
+<a name="line566"></a>/**
+<a name="line567"></a> * @return {Element} The title element.
+<a name="line568"></a> */
+<a name="line569"></a>goog.ui.TabPane.TabPage.prototype.getTitleElement = function() {
+<a name="line570"></a>  return this.elTitle_;
+<a name="line571"></a>};
+<a name="line572"></a>
+<a name="line573"></a>
+<a name="line574"></a>/**
+<a name="line575"></a> * @return {Element} The content element.
+<a name="line576"></a> */
+<a name="line577"></a>goog.ui.TabPane.TabPage.prototype.getContentElement = function() {
+<a name="line578"></a>  return this.elContent_;
+<a name="line579"></a>};
+<a name="line580"></a>
+<a name="line581"></a>
+<a name="line582"></a>/**
+<a name="line583"></a> * @return {?number} The index of page in tab pane.
+<a name="line584"></a> */
+<a name="line585"></a>goog.ui.TabPane.TabPage.prototype.getIndex = function() {
+<a name="line586"></a>  return this.index_;
+<a name="line587"></a>};
+<a name="line588"></a>
+<a name="line589"></a>
+<a name="line590"></a>/**
+<a name="line591"></a> * @return {goog.ui.TabPane?} The parent tab pane for page.
+<a name="line592"></a> */
+<a name="line593"></a>goog.ui.TabPane.TabPage.prototype.getParent = function() {
+<a name="line594"></a>  return this.parent_;
+<a name="line595"></a>};
+<a name="line596"></a>
+<a name="line597"></a>
+<a name="line598"></a>/**
+<a name="line599"></a> * Selects page in the associated tab pane.
+<a name="line600"></a> */
+<a name="line601"></a>goog.ui.TabPane.TabPage.prototype.select = function() {
+<a name="line602"></a>  if (this.parent_) {
+<a name="line603"></a>    this.parent_.setSelectedPage(this);
+<a name="line604"></a>  }
+<a name="line605"></a>};
+<a name="line606"></a>
+<a name="line607"></a>
+<a name="line608"></a>/**
+<a name="line609"></a> * Sets the enabled state.
+<a name="line610"></a> *
+<a name="line611"></a> * @param {boolean} enabled Enabled state.
+<a name="line612"></a> */
+<a name="line613"></a>goog.ui.TabPane.TabPage.prototype.setEnabled = function(enabled) {
+<a name="line614"></a>  this.enabled_ = enabled;
+<a name="line615"></a>  this.elTitle_.className = enabled ?
+<a name="line616"></a>      goog.getCssName(&#39;goog-tabpane-tab&#39;) :
+<a name="line617"></a>      goog.getCssName(&#39;goog-tabpane-tab-disabled&#39;);
+<a name="line618"></a>};
+<a name="line619"></a>
+<a name="line620"></a>
+<a name="line621"></a>/**
+<a name="line622"></a> * Returns if the page is enabled.
+<a name="line623"></a> * @return {boolean} Whether the page is enabled or not.
+<a name="line624"></a> */
+<a name="line625"></a>goog.ui.TabPane.TabPage.prototype.isEnabled = function() {
+<a name="line626"></a>  return this.enabled_;
+<a name="line627"></a>};
+<a name="line628"></a>
+<a name="line629"></a>
+<a name="line630"></a>/**
+<a name="line631"></a> * Sets visible state for page content and updates style of tab.
+<a name="line632"></a> *
+<a name="line633"></a> * @param {boolean} visible Visible state.
+<a name="line634"></a> * @private
+<a name="line635"></a> */
+<a name="line636"></a>goog.ui.TabPane.TabPage.prototype.setVisible_ = function(visible) {
+<a name="line637"></a>  if (this.isEnabled()) {
+<a name="line638"></a>    this.elContent_.style.display = visible ? &#39;&#39; : &#39;none&#39;;
+<a name="line639"></a>    this.elTitle_.className = visible ?
+<a name="line640"></a>        goog.getCssName(&#39;goog-tabpane-tab-selected&#39;) :
+<a name="line641"></a>        goog.getCssName(&#39;goog-tabpane-tab&#39;);
+<a name="line642"></a>  }
+<a name="line643"></a>};
+<a name="line644"></a>
+<a name="line645"></a>
+<a name="line646"></a>/**
+<a name="line647"></a> * Sets parent tab pane for tab page.
+<a name="line648"></a> *
+<a name="line649"></a> * @param {goog.ui.TabPane?} tabPane Tab strip object.
+<a name="line650"></a> * @param {number=} opt_index Index of page in pane.
+<a name="line651"></a> * @private
+<a name="line652"></a> */
+<a name="line653"></a>goog.ui.TabPane.TabPage.prototype.setParent_ = function(tabPane, opt_index) {
+<a name="line654"></a>  this.parent_ = tabPane;
+<a name="line655"></a>  this.index_ = goog.isDef(opt_index) ? opt_index : null;
+<a name="line656"></a>};
+<a name="line657"></a>
+<a name="line658"></a>
+<a name="line659"></a>
+<a name="line660"></a>/**
+<a name="line661"></a> * Object representing a tab pane page changed event.
+<a name="line662"></a> *
+<a name="line663"></a> * @param {string} type Event type.
+<a name="line664"></a> * @param {goog.ui.TabPane} target Tab widget initiating event.
+<a name="line665"></a> * @param {goog.ui.TabPane.TabPage} page Selected page in tab pane.
+<a name="line666"></a> * @extends {goog.events.Event}
+<a name="line667"></a> * @constructor
+<a name="line668"></a> * @final
+<a name="line669"></a> */
+<a name="line670"></a>goog.ui.TabPaneEvent = function(type, target, page) {
+<a name="line671"></a>  goog.events.Event.call(this, type, target);
+<a name="line672"></a>
+<a name="line673"></a>  /**
+<a name="line674"></a>   * The selected page.
+<a name="line675"></a>   * @type {goog.ui.TabPane.TabPage}
+<a name="line676"></a>   */
+<a name="line677"></a>  this.page = page;
+<a name="line678"></a>};
+<a name="line679"></a>goog.inherits(goog.ui.TabPaneEvent, goog.events.Event);
+</pre>
+
+
+</body>
+</html>

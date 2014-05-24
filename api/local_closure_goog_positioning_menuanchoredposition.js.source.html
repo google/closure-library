@@ -1,0 +1,121 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>menuanchoredposition.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_positioning_menuanchoredposition.js.html">menuanchoredposition.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Anchored viewport positioning class with both adjust and
+<a name="line17"></a> *     resize options for the popup.
+<a name="line18"></a> *
+<a name="line19"></a> * @author eae@google.com (Emil A Eklund)
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.positioning.MenuAnchoredPosition&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.math.Box&#39;);
+<a name="line25"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line26"></a>goog.require(&#39;goog.positioning&#39;);
+<a name="line27"></a>goog.require(&#39;goog.positioning.AnchoredViewportPosition&#39;);
+<a name="line28"></a>goog.require(&#39;goog.positioning.Corner&#39;);
+<a name="line29"></a>goog.require(&#39;goog.positioning.Overflow&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Encapsulates a popup position where the popup is anchored at a corner of
+<a name="line35"></a> * an element.  The positioning behavior changes based on the values of
+<a name="line36"></a> * opt_adjust and opt_resize.
+<a name="line37"></a> *
+<a name="line38"></a> * When using this positioning object it&#39;s recommended that the movable element
+<a name="line39"></a> * be absolutely positioned.
+<a name="line40"></a> *
+<a name="line41"></a> * @param {Element} anchorElement Element the movable element should be
+<a name="line42"></a> *     anchored against.
+<a name="line43"></a> * @param {goog.positioning.Corner} corner Corner of anchored element the
+<a name="line44"></a> *     movable element should be positioned at.
+<a name="line45"></a> * @param {boolean=} opt_adjust Whether the positioning should be adjusted until
+<a name="line46"></a> *     the element fits inside the viewport even if that means that the anchored
+<a name="line47"></a> *     corners are ignored.
+<a name="line48"></a> * @param {boolean=} opt_resize Whether the positioning should be adjusted until
+<a name="line49"></a> *     the element fits inside the viewport on the X axis and its height is
+<a name="line50"></a> *     resized so if fits in the viewport. This take precedence over opt_adjust.
+<a name="line51"></a> * @constructor
+<a name="line52"></a> * @extends {goog.positioning.AnchoredViewportPosition}
+<a name="line53"></a> */
+<a name="line54"></a>goog.positioning.MenuAnchoredPosition = function(anchorElement,
+<a name="line55"></a>                                                 corner,
+<a name="line56"></a>                                                 opt_adjust,
+<a name="line57"></a>                                                 opt_resize) {
+<a name="line58"></a>  goog.positioning.AnchoredViewportPosition.call(this, anchorElement, corner,
+<a name="line59"></a>                                                 opt_adjust || opt_resize);
+<a name="line60"></a>
+<a name="line61"></a>  if (opt_adjust || opt_resize) {
+<a name="line62"></a>    var overflowX = goog.positioning.Overflow.ADJUST_X_EXCEPT_OFFSCREEN;
+<a name="line63"></a>    var overflowY = opt_resize ?
+<a name="line64"></a>        goog.positioning.Overflow.RESIZE_HEIGHT :
+<a name="line65"></a>        goog.positioning.Overflow.ADJUST_Y_EXCEPT_OFFSCREEN;
+<a name="line66"></a>    this.setLastResortOverflow(overflowX | overflowY);
+<a name="line67"></a>  }
+<a name="line68"></a>};
+<a name="line69"></a>goog.inherits(goog.positioning.MenuAnchoredPosition,
+<a name="line70"></a>              goog.positioning.AnchoredViewportPosition);
+</pre>
+
+
+</body>
+</html>

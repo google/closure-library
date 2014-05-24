@@ -1,0 +1,565 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>xhrio.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">xhrio.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_net_xhrio.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/net/xhrio.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/net/xhrio.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_net_XhrIo.html">
+          goog.net.XhrIo</a><br/>
+        <div class="class-details">Basic class for handling XMLHttpRequests.
+</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.XhrIo.cleanup"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">cleanup<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Disposes all non-disposed instances of goog.net.XhrIo created by
+<code> goog.net.XhrIo.send</code>.
+<code> goog.net.XhrIo.send</code> cleans up the goog.net.XhrIo instance
+it creates when the request completes or fails.  However, if
+the request never completes, then the goog.net.XhrIo is not disposed.
+This can occur if the window is unloaded before the request completes.
+We could have <code> goog.net.XhrIo.send</code> return the goog.net.XhrIo
+it creates and make the client of <code> goog.net.XhrIo.send</code> be
+responsible for disposing it in this case.  However, this makes things
+significantly more complicated for the client, and the whole point
+of <code> goog.net.XhrIo.send</code> is that it's simple and easy to use.
+Clients of <code> goog.net.XhrIo.send</code> should call
+<code> goog.net.XhrIo.cleanup</code> when doing final
+cleanup on window unload.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_xhrio.js.source.html#line337">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.XhrIo.isContentTypeHeader_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">isContentTypeHeader_<span class="args">(<span class="arg">header</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">header</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">An HTTP header key.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the key is a content type header (ignoring
+    case.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_xhrio.js.source.html#line596">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.XhrIo.protectEntryPoints"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">protectEntryPoints<span class="args">(<span class="arg">errorHandler</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Installs exception protection for all entry point introduced by
+goog.net.XhrIo instances which are not protected by
+<code> goog.debug.ErrorHandler#protectWindowSetTimeout</code>,
+<code> goog.debug.ErrorHandler#protectWindowSetInterval</code>, or
+<code> goog.events.protectBrowserEventEntryPoint</code>.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">errorHandler</span>
+        : <span class="type"><a href="class_goog_debug_ErrorHandler.html">goog.debug.ErrorHandler</a></span>
+        <div class="entryOverview">Error handler with which to
+    protect the entry point(s).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_xhrio.js.source.html#line355">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.XhrIo.send"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">send<span class="args">(<span class="arg">url</span>,&nbsp;<span class="arg">opt_callback</span>,&nbsp;<span class="arg">opt_method</span>,&nbsp;<span class="arg">opt_content</span>,&nbsp;<span class="arg">opt_headers</span>,&nbsp;<span class="arg">opt_timeoutInterval</span>,&nbsp;<span class="arg">opt_withCredentials</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Static send that creates a short lived instance of XhrIo to send the
+request.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">url</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="class_goog_Uri.html">goog.Uri</a></span>
+        <div class="entryOverview">Uri to make request to.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_callback</span>
+        : <span class="type">Function=</span>
+        <div class="entryOverview">Callback function for when request is
+    complete.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_method</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">Send method, default: GET.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_content</span>
+        : <span class="type">ArrayBuffer</span><span>&nbsp;|&nbsp;</span><span class="type">ArrayBufferView</span><span>&nbsp;|&nbsp;</span><span class="type">Blob</span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/document">Document</a></span><span>&nbsp;|&nbsp;</span><span class="type">FormData</span><span>&nbsp;|&nbsp;</span><span class="type">string=</span>
+        <div class="entryOverview">Body data.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_headers</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span><span>&nbsp;|&nbsp;</span><span class="type">goog.structs.Map=</span>
+        <div class="entryOverview">Map of headers to add to the
+    request.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_timeoutInterval</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">Number of milliseconds after which an
+    incomplete request will be aborted; 0 means no timeout is set.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_withCredentials</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">Whether to send credentials with the
+    request. Default to false. See <code> goog.net.XhrIo#setWithCredentials</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_xhrio.js.source.html#line302">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.net.XhrIo.shouldUseXhr2Timeout_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.net.XhrIo.</span><span class="entryName">shouldUseXhr2Timeout_<span class="args">(<span class="arg">xhr</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Determines if the argument is an XMLHttpRequest that supports the level 2
+timeout value and event.
+
+Currently, FF 21.0 OS X has the fields but won't actually call the timeout
+handler.  Perhaps the confusion in the bug referenced below hasn't
+entirely been resolved.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">xhr</span>
+        : <span>!</span><span class="type">goog.net.XhrLike.OrNative</span>
+        <div class="entryOverview">The request.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            True if the request supports level 2 timeout.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_xhrio.js.source.html#line582">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+  <h2>Global Variables</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="function%49"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">function%49</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_net_xhrio.js.source.html#line1217">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory net</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/net/xhrio.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

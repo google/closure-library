@@ -1,0 +1,116 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>utils.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_html_utils.js.html">utils.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @fileoverview HTML processing utilities for HTML in string form.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.html.utils&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.string&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Extracts text from HTML.
+<a name="line27"></a> * Block-level elements such as div are surrounded with whitespace,
+<a name="line28"></a> * but inline elements are not. Span is treated as a block level element
+<a name="line29"></a> * because it is often used as a container.
+<a name="line30"></a> * Breaking spaces are compressed and trimmed.
+<a name="line31"></a> *
+<a name="line32"></a> * @param {string} value The input HTML to have tags removed.
+<a name="line33"></a> * @return {string} A representation of value without tags, HTML comments, or
+<a name="line34"></a> *     other non-text content.
+<a name="line35"></a> */
+<a name="line36"></a>goog.html.utils.stripHtmlTags = function(value) {
+<a name="line37"></a>  // TODO(user): Make a version that extracts text attributes such as alt.
+<a name="line38"></a>  return goog.string.unescapeEntities(goog.string.trim(value.replace(
+<a name="line39"></a>      goog.html.utils.HTML_TAG_REGEX_, function(fullMatch, tagName) {
+<a name="line40"></a>        return goog.html.utils.INLINE_HTML_TAG_REGEX_.test(tagName) ? &#39;&#39; : &#39; &#39;;
+<a name="line41"></a>      }).
+<a name="line42"></a>      replace(/[\t\n ]+/g, &#39; &#39;)));
+<a name="line43"></a>};
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Matches all tags that do not require extra space.
+<a name="line48"></a> *
+<a name="line49"></a> * @const
+<a name="line50"></a> * @private {RegExp}
+<a name="line51"></a> */
+<a name="line52"></a>goog.html.utils.INLINE_HTML_TAG_REGEX_ =
+<a name="line53"></a>    /^(?:abbr|acronym|address|b|em|i|small|strong|su[bp]|u)$/i;
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * Matches all tags, HTML comments, and DOCTYPEs in tag soup HTML.
+<a name="line58"></a> * By removing these, and replacing any &#39;&lt;&#39; or &#39;&gt;&#39; characters with
+<a name="line59"></a> * entities we guarantee that the result can be embedded into
+<a name="line60"></a> * an attribute without introducing a tag boundary.
+<a name="line61"></a> *
+<a name="line62"></a> * @private {RegExp}
+<a name="line63"></a> * @const
+<a name="line64"></a> */
+<a name="line65"></a>goog.html.utils.HTML_TAG_REGEX_ = /&lt;[!\/]?([a-z0-9]+)([\/ ][^&gt;]*)?&gt;/gi;
+</pre>
+
+
+</body>
+</html>

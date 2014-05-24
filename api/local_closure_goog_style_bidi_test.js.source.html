@@ -1,0 +1,186 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>bidi_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_style_bidi_test.js.html">bidi_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.style.bidiTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.style.bidiTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.style&#39;);
+<a name="line20"></a>goog.require(&#39;goog.style.bidi&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line23"></a>
+<a name="line24"></a>// Updates the calculated metrics.
+<a name="line25"></a>function updateInfo() {
+<a name="line26"></a>  var element = document.getElementById(&#39;scrolledElementRtl&#39;);
+<a name="line27"></a>  document.getElementById(&#39;elementScrollLeftRtl&#39;).innerHTML =
+<a name="line28"></a>      element.offsetParent.scrollLeft;
+<a name="line29"></a>  document.getElementById(&#39;bidiOffsetStartRtl&#39;).innerHTML =
+<a name="line30"></a>      goog.style.bidi.getOffsetStart(element);
+<a name="line31"></a>  document.getElementById(&#39;bidiScrollLeftRtl&#39;).innerHTML =
+<a name="line32"></a>      goog.style.bidi.getScrollLeft(element.offsetParent);
+<a name="line33"></a>
+<a name="line34"></a>  element = document.getElementById(&#39;scrolledElementLtr&#39;);
+<a name="line35"></a>  document.getElementById(&#39;elementScrollLeftLtr&#39;).innerHTML =
+<a name="line36"></a>      element.offsetParent.scrollLeft;
+<a name="line37"></a>  document.getElementById(&#39;bidiOffsetStartLtr&#39;).innerHTML =
+<a name="line38"></a>      goog.style.bidi.getOffsetStart(element);
+<a name="line39"></a>  document.getElementById(&#39;bidiScrollLeftLtr&#39;).innerHTML =
+<a name="line40"></a>      goog.style.bidi.getScrollLeft(element.offsetParent);
+<a name="line41"></a>}
+<a name="line42"></a>
+<a name="line43"></a>function setUpPage() {
+<a name="line44"></a>  updateInfo();
+<a name="line45"></a>}
+<a name="line46"></a>
+<a name="line47"></a>function tearDown() {
+<a name="line48"></a>  document.documentElement.dir = &#39;ltr&#39;;
+<a name="line49"></a>  document.body.dir = &#39;ltr&#39;;
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>function testGetOffsetStart() {
+<a name="line53"></a>  var elm = document.getElementById(&#39;scrolledElementRtl&#39;);
+<a name="line54"></a>  assertEquals(elm.style[&#39;right&#39;], goog.style.bidi.getOffsetStart(elm) + &#39;px&#39;);
+<a name="line55"></a>  elm = document.getElementById(&#39;scrolledElementLtr&#39;);
+<a name="line56"></a>  assertEquals(elm.style[&#39;left&#39;], goog.style.bidi.getOffsetStart(elm) + &#39;px&#39;);
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>function testSetScrollOffsetRtl() {
+<a name="line60"></a>  var scrollElm = document.getElementById(&#39;scrollDivRtl&#39;);
+<a name="line61"></a>  var scrolledElm = document.getElementById(&#39;scrolledElementRtl&#39;);
+<a name="line62"></a>  var originalDistance =
+<a name="line63"></a>      goog.style.getRelativePosition(scrolledElm, document.body).x;
+<a name="line64"></a>  var scrollAndAssert = function(pixels) {
+<a name="line65"></a>    goog.style.bidi.setScrollOffset(scrollElm, pixels);
+<a name="line66"></a>    assertEquals(originalDistance + pixels,
+<a name="line67"></a>        goog.style.getRelativePosition(scrolledElm, document.body).x);
+<a name="line68"></a>  };
+<a name="line69"></a>  scrollAndAssert(0);
+<a name="line70"></a>  scrollAndAssert(50);
+<a name="line71"></a>  scrollAndAssert(100);
+<a name="line72"></a>  scrollAndAssert(150);
+<a name="line73"></a>  scrollAndAssert(155);
+<a name="line74"></a>  scrollAndAssert(0);
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>function testSetScrollOffsetLtr() {
+<a name="line78"></a>  var scrollElm = document.getElementById(&#39;scrollDivLtr&#39;);
+<a name="line79"></a>  var scrolledElm = document.getElementById(&#39;scrolledElementLtr&#39;);
+<a name="line80"></a>  var originalDistance =
+<a name="line81"></a>      goog.style.getRelativePosition(scrolledElm, document.body).x;
+<a name="line82"></a>  var scrollAndAssert = function(pixels) {
+<a name="line83"></a>    goog.style.bidi.setScrollOffset(scrollElm, pixels);
+<a name="line84"></a>    assertEquals(originalDistance - pixels,
+<a name="line85"></a>        goog.style.getRelativePosition(scrolledElm, document.body).x);
+<a name="line86"></a>  };
+<a name="line87"></a>  scrollAndAssert(0);
+<a name="line88"></a>  scrollAndAssert(50);
+<a name="line89"></a>  scrollAndAssert(100);
+<a name="line90"></a>  scrollAndAssert(150);
+<a name="line91"></a>  scrollAndAssert(155);
+<a name="line92"></a>  scrollAndAssert(0);
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>function testFixedBodyChildLtr() {
+<a name="line96"></a>  var bodyChild = document.getElementById(&#39;bodyChild&#39;);
+<a name="line97"></a>  assertEquals(goog.userAgent.GECKO ? document.body : null,
+<a name="line98"></a>      bodyChild.offsetParent);
+<a name="line99"></a>  assertEquals(60, goog.style.bidi.getOffsetStart(bodyChild));
+<a name="line100"></a>}
+<a name="line101"></a>
+<a name="line102"></a>function testFixedBodyChildRtl() {
+<a name="line103"></a>  document.documentElement.dir = &#39;rtl&#39;;
+<a name="line104"></a>  document.body.dir = &#39;rtl&#39;;
+<a name="line105"></a>
+<a name="line106"></a>  var bodyChild = document.getElementById(&#39;bodyChild&#39;);
+<a name="line107"></a>  assertEquals(goog.userAgent.GECKO ? document.body : null,
+<a name="line108"></a>      bodyChild.offsetParent);
+<a name="line109"></a>
+<a name="line110"></a>  var expectedOffsetStart =
+<a name="line111"></a>      goog.dom.getViewportSize().width - 60 - bodyChild.offsetWidth;
+<a name="line112"></a>
+<a name="line113"></a>  // Gecko seems to also add in the marginbox for the body.
+<a name="line114"></a>  // It&#39;s not really clear to me if this is true in the general case,
+<a name="line115"></a>  // or just under certain conditions.
+<a name="line116"></a>  if (goog.userAgent.GECKO) {
+<a name="line117"></a>    var marginBox = goog.style.getMarginBox(document.body);
+<a name="line118"></a>    expectedOffsetStart -= (marginBox.left + marginBox.right);
+<a name="line119"></a>  }
+<a name="line120"></a>
+<a name="line121"></a>  assertEquals(expectedOffsetStart,
+<a name="line122"></a>      goog.style.bidi.getOffsetStart(bodyChild));
+<a name="line123"></a>}
+<a name="line124"></a>
+<a name="line125"></a>function testGetScrollLeftRTL() {
+<a name="line126"></a>  var scrollLeftDiv = document.getElementById(&#39;scrollLeftRtl&#39;);
+<a name="line127"></a>  scrollLeftDiv.style.overflow = &#39;visible&#39;;
+<a name="line128"></a>  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
+<a name="line129"></a>  scrollLeftDiv.style.overflow = &#39;hidden&#39;;
+<a name="line130"></a>  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
+<a name="line131"></a>  scrollLeftDiv.style.overflow = &#39;scroll&#39;;
+<a name="line132"></a>  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
+<a name="line133"></a>  scrollLeftDiv.style.overflow = &#39;auto&#39;;
+<a name="line134"></a>  assertEquals(0, goog.style.bidi.getScrollLeft(scrollLeftDiv));
+<a name="line135"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iter.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_iter.js.html">iter.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Iterators over DOM nodes.
+<a name="line17"></a> *
+<a name="line18"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.dom.iter.AncestorIterator&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.dom.iter.ChildIterator&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.dom.iter.SiblingIterator&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.iter.Iterator&#39;);
+<a name="line26"></a>goog.require(&#39;goog.iter.StopIteration&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Iterator over a Node&#39;s siblings.
+<a name="line32"></a> * @param {Node} node The node to start with.
+<a name="line33"></a> * @param {boolean=} opt_includeNode Whether to return the given node as the
+<a name="line34"></a> *     first return value from next.
+<a name="line35"></a> * @param {boolean=} opt_reverse Whether to traverse siblings in reverse
+<a name="line36"></a> *     document order.
+<a name="line37"></a> * @constructor
+<a name="line38"></a> * @extends {goog.iter.Iterator}
+<a name="line39"></a> */
+<a name="line40"></a>goog.dom.iter.SiblingIterator = function(node, opt_includeNode, opt_reverse) {
+<a name="line41"></a>  /**
+<a name="line42"></a>   * The current node, or null if iteration is finished.
+<a name="line43"></a>   * @type {Node}
+<a name="line44"></a>   * @private
+<a name="line45"></a>   */
+<a name="line46"></a>  this.node_ = node;
+<a name="line47"></a>
+<a name="line48"></a>  /**
+<a name="line49"></a>   * Whether to iterate in reverse.
+<a name="line50"></a>   * @type {boolean}
+<a name="line51"></a>   * @private
+<a name="line52"></a>   */
+<a name="line53"></a>  this.reverse_ = !!opt_reverse;
+<a name="line54"></a>
+<a name="line55"></a>  if (node &amp;&amp; !opt_includeNode) {
+<a name="line56"></a>    this.next();
+<a name="line57"></a>  }
+<a name="line58"></a>};
+<a name="line59"></a>goog.inherits(goog.dom.iter.SiblingIterator, goog.iter.Iterator);
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/** @override */
+<a name="line63"></a>goog.dom.iter.SiblingIterator.prototype.next = function() {
+<a name="line64"></a>  var node = this.node_;
+<a name="line65"></a>  if (!node) {
+<a name="line66"></a>    throw goog.iter.StopIteration;
+<a name="line67"></a>  }
+<a name="line68"></a>  this.node_ = this.reverse_ ? node.previousSibling : node.nextSibling;
+<a name="line69"></a>  return node;
+<a name="line70"></a>};
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>
+<a name="line74"></a>/**
+<a name="line75"></a> * Iterator over an Element&#39;s children.
+<a name="line76"></a> * @param {Element} element The element to iterate over.
+<a name="line77"></a> * @param {boolean=} opt_reverse Optionally traverse children from last to
+<a name="line78"></a> *     first.
+<a name="line79"></a> * @param {number=} opt_startIndex Optional starting index.
+<a name="line80"></a> * @constructor
+<a name="line81"></a> * @extends {goog.dom.iter.SiblingIterator}
+<a name="line82"></a> * @final
+<a name="line83"></a> */
+<a name="line84"></a>goog.dom.iter.ChildIterator = function(element, opt_reverse, opt_startIndex) {
+<a name="line85"></a>  if (!goog.isDef(opt_startIndex)) {
+<a name="line86"></a>    opt_startIndex = opt_reverse &amp;&amp; element.childNodes.length ?
+<a name="line87"></a>        element.childNodes.length - 1 : 0;
+<a name="line88"></a>  }
+<a name="line89"></a>  goog.dom.iter.SiblingIterator.call(this, element.childNodes[opt_startIndex],
+<a name="line90"></a>      true, opt_reverse);
+<a name="line91"></a>};
+<a name="line92"></a>goog.inherits(goog.dom.iter.ChildIterator, goog.dom.iter.SiblingIterator);
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Iterator over a Node&#39;s ancestors, stopping after the document body.
+<a name="line98"></a> * @param {Node} node The node to start with.
+<a name="line99"></a> * @param {boolean=} opt_includeNode Whether to return the given node as the
+<a name="line100"></a> *     first return value from next.
+<a name="line101"></a> * @constructor
+<a name="line102"></a> * @extends {goog.iter.Iterator}
+<a name="line103"></a> * @final
+<a name="line104"></a> */
+<a name="line105"></a>goog.dom.iter.AncestorIterator = function(node, opt_includeNode) {
+<a name="line106"></a>  /**
+<a name="line107"></a>   * The current node, or null if iteration is finished.
+<a name="line108"></a>   * @type {Node}
+<a name="line109"></a>   * @private
+<a name="line110"></a>   */
+<a name="line111"></a>  this.node_ = node;
+<a name="line112"></a>
+<a name="line113"></a>  if (node &amp;&amp; !opt_includeNode) {
+<a name="line114"></a>    this.next();
+<a name="line115"></a>  }
+<a name="line116"></a>};
+<a name="line117"></a>goog.inherits(goog.dom.iter.AncestorIterator, goog.iter.Iterator);
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/** @override */
+<a name="line121"></a>goog.dom.iter.AncestorIterator.prototype.next = function() {
+<a name="line122"></a>  var node = this.node_;
+<a name="line123"></a>  if (!node) {
+<a name="line124"></a>    throw goog.iter.StopIteration;
+<a name="line125"></a>  }
+<a name="line126"></a>  this.node_ = node.parentNode;
+<a name="line127"></a>  return node;
+<a name="line128"></a>};
+</pre>
+
+
+</body>
+</html>

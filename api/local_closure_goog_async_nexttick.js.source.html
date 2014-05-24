@@ -1,0 +1,259 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>nexttick.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_async_nexttick.js.html">nexttick.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides a function to schedule running a function as soon
+<a name="line17"></a> * as possible after the current JS execution stops and yields to the event
+<a name="line18"></a> * loop.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.async.nextTick&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.async.throwException&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.debug.entryPointRegistry&#39;);
+<a name="line26"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Throw an item without interrupting the current execution context.  For
+<a name="line31"></a> * example, if processing a group of items in a loop, sometimes it is useful
+<a name="line32"></a> * to report an error while still allowing the rest of the batch to be
+<a name="line33"></a> * processed.
+<a name="line34"></a> * @param {*} exception
+<a name="line35"></a> */
+<a name="line36"></a>goog.async.throwException = function(exception) {
+<a name="line37"></a>  // Each throw needs to be in its own context.
+<a name="line38"></a>  goog.global.setTimeout(function() { throw exception; }, 0);
+<a name="line39"></a>};
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * Fires the provided callbacks as soon as possible after the current JS
+<a name="line44"></a> * execution context. setTimeout(?, 0) always takes at least 5ms for legacy
+<a name="line45"></a> * reasons.
+<a name="line46"></a> * @param {function(this:SCOPE)} callback Callback function to fire as soon as
+<a name="line47"></a> *     possible.
+<a name="line48"></a> * @param {SCOPE=} opt_context Object in whose scope to call the listener.
+<a name="line49"></a> * @template SCOPE
+<a name="line50"></a> */
+<a name="line51"></a>goog.async.nextTick = function(callback, opt_context) {
+<a name="line52"></a>  var cb = callback;
+<a name="line53"></a>  if (opt_context) {
+<a name="line54"></a>    cb = goog.bind(callback, opt_context);
+<a name="line55"></a>  }
+<a name="line56"></a>  cb = goog.async.nextTick.wrapCallback_(cb);
+<a name="line57"></a>  // Introduced and currently only supported by IE10.
+<a name="line58"></a>  if (goog.isFunction(goog.global.setImmediate)) {
+<a name="line59"></a>    goog.global.setImmediate(cb);
+<a name="line60"></a>    return;
+<a name="line61"></a>  }
+<a name="line62"></a>  // Look for and cache the custom fallback version of setImmediate.
+<a name="line63"></a>  if (!goog.async.nextTick.setImmediate_) {
+<a name="line64"></a>    goog.async.nextTick.setImmediate_ =
+<a name="line65"></a>        goog.async.nextTick.getSetImmediateEmulator_();
+<a name="line66"></a>  }
+<a name="line67"></a>  goog.async.nextTick.setImmediate_(cb);
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Cache for the setImmediate implementation.
+<a name="line73"></a> * @type {function(function())}
+<a name="line74"></a> * @private
+<a name="line75"></a> */
+<a name="line76"></a>goog.async.nextTick.setImmediate_;
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Determines the best possible implementation to run a function as soon as
+<a name="line81"></a> * the JS event loop is idle.
+<a name="line82"></a> * @return {function(function())} The &quot;setImmediate&quot; implementation.
+<a name="line83"></a> * @private
+<a name="line84"></a> */
+<a name="line85"></a>goog.async.nextTick.getSetImmediateEmulator_ = function() {
+<a name="line86"></a>  // If native Promises are available in the browser, just schedule the callback
+<a name="line87"></a>  // on a fulfilled promise, which is specified to be async, but as fast as
+<a name="line88"></a>  // possible.
+<a name="line89"></a>  if (goog.global.Promise &amp;&amp; goog.global.Promise.resolve) {
+<a name="line90"></a>    var promise = goog.global.Promise.resolve();
+<a name="line91"></a>    return function(cb) {
+<a name="line92"></a>      promise.then(function() {
+<a name="line93"></a>        try {
+<a name="line94"></a>          cb();
+<a name="line95"></a>        } catch (e) {
+<a name="line96"></a>          // If there is an error in the callback, make sure it is reported,
+<a name="line97"></a>          // since there is no chance to attach an error-handler to the
+<a name="line98"></a>          // promise used here.
+<a name="line99"></a>          goog.async.throwException(e);
+<a name="line100"></a>        }
+<a name="line101"></a>      });
+<a name="line102"></a>    };
+<a name="line103"></a>  }
+<a name="line104"></a>  // Create a private message channel and use it to postMessage empty messages
+<a name="line105"></a>  // to ourselves.
+<a name="line106"></a>  var Channel = goog.global[&#39;MessageChannel&#39;];
+<a name="line107"></a>  // If MessageChannel is not available and we are in a browser, implement
+<a name="line108"></a>  // an iframe based polyfill in browsers that have postMessage and
+<a name="line109"></a>  // document.addEventListener. The latter excludes IE8 because it has a
+<a name="line110"></a>  // synchronous postMessage implementation.
+<a name="line111"></a>  if (typeof Channel === &#39;undefined&#39; &amp;&amp; typeof window !== &#39;undefined&#39; &amp;&amp;
+<a name="line112"></a>      window.postMessage &amp;&amp; window.addEventListener) {
+<a name="line113"></a>    /** @constructor */
+<a name="line114"></a>    Channel = function() {
+<a name="line115"></a>      // Make an empty, invisible iframe.
+<a name="line116"></a>      var iframe = document.createElement(&#39;iframe&#39;);
+<a name="line117"></a>      iframe.style.display = &#39;none&#39;;
+<a name="line118"></a>      iframe.src = &#39;&#39;;
+<a name="line119"></a>      document.documentElement.appendChild(iframe);
+<a name="line120"></a>      var win = iframe.contentWindow;
+<a name="line121"></a>      var doc = win.document;
+<a name="line122"></a>      doc.open();
+<a name="line123"></a>      doc.write(&#39;&#39;);
+<a name="line124"></a>      doc.close();
+<a name="line125"></a>      var message = &#39;callImmediate&#39; + Math.random();
+<a name="line126"></a>      var origin = win.location.protocol + &#39;//&#39; + win.location.host;
+<a name="line127"></a>      var onmessage = goog.bind(function(e) {
+<a name="line128"></a>        // Validate origin and message to make sure that this message was
+<a name="line129"></a>        // intended for us.
+<a name="line130"></a>        if (e.origin != origin &amp;&amp; e.data != message) {
+<a name="line131"></a>          return;
+<a name="line132"></a>        }
+<a name="line133"></a>        this[&#39;port1&#39;].onmessage();
+<a name="line134"></a>      }, this);
+<a name="line135"></a>      win.addEventListener(&#39;message&#39;, onmessage, false);
+<a name="line136"></a>      this[&#39;port1&#39;] = {};
+<a name="line137"></a>      this[&#39;port2&#39;] = {
+<a name="line138"></a>        postMessage: function() {
+<a name="line139"></a>          win.postMessage(message, origin);
+<a name="line140"></a>        }
+<a name="line141"></a>      };
+<a name="line142"></a>    };
+<a name="line143"></a>  }
+<a name="line144"></a>  if (typeof Channel !== &#39;undefined&#39;) {
+<a name="line145"></a>    var channel = new Channel();
+<a name="line146"></a>    // Use a fifo linked list to call callbacks in the right order.
+<a name="line147"></a>    var head = {};
+<a name="line148"></a>    var tail = head;
+<a name="line149"></a>    channel[&#39;port1&#39;].onmessage = function() {
+<a name="line150"></a>      head = head.next;
+<a name="line151"></a>      var cb = head.cb;
+<a name="line152"></a>      head.cb = null;
+<a name="line153"></a>      cb();
+<a name="line154"></a>    };
+<a name="line155"></a>    return function(cb) {
+<a name="line156"></a>      tail.next = {
+<a name="line157"></a>        cb: cb
+<a name="line158"></a>      };
+<a name="line159"></a>      tail = tail.next;
+<a name="line160"></a>      channel[&#39;port2&#39;].postMessage(0);
+<a name="line161"></a>    };
+<a name="line162"></a>  }
+<a name="line163"></a>  // Implementation for IE6-8: Script elements fire an asynchronous
+<a name="line164"></a>  // onreadystatechange event when inserted into the DOM.
+<a name="line165"></a>  if (typeof document !== &#39;undefined&#39; &amp;&amp; &#39;onreadystatechange&#39; in
+<a name="line166"></a>      document.createElement(&#39;script&#39;)) {
+<a name="line167"></a>    return function(cb) {
+<a name="line168"></a>      var script = document.createElement(&#39;script&#39;);
+<a name="line169"></a>      script.onreadystatechange = function() {
+<a name="line170"></a>        // Clean up and call the callback.
+<a name="line171"></a>        script.onreadystatechange = null;
+<a name="line172"></a>        script.parentNode.removeChild(script);
+<a name="line173"></a>        script = null;
+<a name="line174"></a>        cb();
+<a name="line175"></a>        cb = null;
+<a name="line176"></a>      };
+<a name="line177"></a>      document.documentElement.appendChild(script);
+<a name="line178"></a>    };
+<a name="line179"></a>  }
+<a name="line180"></a>  // Fall back to setTimeout with 0. In browsers this creates a delay of 5ms
+<a name="line181"></a>  // or more.
+<a name="line182"></a>  return function(cb) {
+<a name="line183"></a>    goog.global.setTimeout(cb, 0);
+<a name="line184"></a>  };
+<a name="line185"></a>};
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Helper function that is overrided to protect callbacks with entry point
+<a name="line190"></a> * monitor if the application monitors entry points.
+<a name="line191"></a> * @param {function()} callback Callback function to fire as soon as possible.
+<a name="line192"></a> * @return {function()} The wrapped callback.
+<a name="line193"></a> * @private
+<a name="line194"></a> */
+<a name="line195"></a>goog.async.nextTick.wrapCallback_ = goog.functions.identity;
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>// Register the callback function as an entry point, so that it can be
+<a name="line199"></a>// monitored for exception handling, etc. This has to be done in this file
+<a name="line200"></a>// since it requires special code to handle all browsers.
+<a name="line201"></a>goog.debug.entryPointRegistry.register(
+<a name="line202"></a>    /**
+<a name="line203"></a>     * @param {function(!Function): !Function} transformer The transforming
+<a name="line204"></a>     *     function.
+<a name="line205"></a>     */
+<a name="line206"></a>    function(transformer) {
+<a name="line207"></a>      goog.async.nextTick.wrapCallback_ = transformer;
+<a name="line208"></a>    });
+</pre>
+
+
+</body>
+</html>

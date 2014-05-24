@@ -1,0 +1,241 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>utcdatetime.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_date_utcdatetime.js.html">utcdatetime.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Locale independent date/time class.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.date.UtcDateTime&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.date&#39;);
+<a name="line23"></a>goog.require(&#39;goog.date.Date&#39;);
+<a name="line24"></a>goog.require(&#39;goog.date.DateTime&#39;);
+<a name="line25"></a>goog.require(&#39;goog.date.Interval&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Class representing a date/time in GMT+0 time zone, without daylight saving.
+<a name="line31"></a> * Defaults to current date and time if none is specified. The get... and the
+<a name="line32"></a> * getUTC... methods are equivalent.
+<a name="line33"></a> *
+<a name="line34"></a> * @param {number|Object=} opt_year Four digit UTC year or a date-like object.
+<a name="line35"></a> *     If not set, the created object will contain the date determined by
+<a name="line36"></a> *     goog.now().
+<a name="line37"></a> * @param {number=} opt_month UTC month, 0 = Jan, 11 = Dec.
+<a name="line38"></a> * @param {number=} opt_date UTC date of month, 1 - 31.
+<a name="line39"></a> * @param {number=} opt_hours UTC hours, 0 - 23.
+<a name="line40"></a> * @param {number=} opt_minutes UTC minutes, 0 - 59.
+<a name="line41"></a> * @param {number=} opt_seconds UTC seconds, 0 - 59.
+<a name="line42"></a> * @param {number=} opt_milliseconds UTC milliseconds, 0 - 999.
+<a name="line43"></a> * @constructor
+<a name="line44"></a> * @extends {goog.date.DateTime}
+<a name="line45"></a> */
+<a name="line46"></a>goog.date.UtcDateTime = function(opt_year, opt_month, opt_date, opt_hours,
+<a name="line47"></a>                                 opt_minutes, opt_seconds, opt_milliseconds) {
+<a name="line48"></a>  var timestamp;
+<a name="line49"></a>  if (goog.isNumber(opt_year)) {
+<a name="line50"></a>    timestamp = Date.UTC(opt_year, opt_month || 0, opt_date || 1,
+<a name="line51"></a>                         opt_hours || 0, opt_minutes || 0, opt_seconds || 0,
+<a name="line52"></a>                         opt_milliseconds || 0);
+<a name="line53"></a>  } else {
+<a name="line54"></a>    timestamp = opt_year ? opt_year.getTime() : goog.now();
+<a name="line55"></a>  }
+<a name="line56"></a>  this.date = new Date(timestamp);
+<a name="line57"></a>};
+<a name="line58"></a>goog.inherits(goog.date.UtcDateTime, goog.date.DateTime);
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * @param {number} timestamp Number of milliseconds since Epoch.
+<a name="line63"></a> * @return {!goog.date.UtcDateTime}
+<a name="line64"></a> */
+<a name="line65"></a>goog.date.UtcDateTime.fromTimestamp = function(timestamp) {
+<a name="line66"></a>  var date = new goog.date.UtcDateTime();
+<a name="line67"></a>  date.setTime(timestamp);
+<a name="line68"></a>  return date;
+<a name="line69"></a>};
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Creates a DateTime from a UTC datetime string expressed in ISO 8601 format.
+<a name="line74"></a> *
+<a name="line75"></a> * @param {string} formatted A date or datetime expressed in ISO 8601 format.
+<a name="line76"></a> * @return {goog.date.UtcDateTime} Parsed date or null if parse fails.
+<a name="line77"></a> */
+<a name="line78"></a>goog.date.UtcDateTime.fromIsoString = function(formatted) {
+<a name="line79"></a>  var ret = new goog.date.UtcDateTime(2000);
+<a name="line80"></a>  return goog.date.setIso8601DateTime(ret, formatted) ? ret : null;
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Clones the UtcDateTime object.
+<a name="line86"></a> *
+<a name="line87"></a> * @return {!goog.date.UtcDateTime} A clone of the datetime object.
+<a name="line88"></a> * @override
+<a name="line89"></a> */
+<a name="line90"></a>goog.date.UtcDateTime.prototype.clone = function() {
+<a name="line91"></a>  var date = new goog.date.UtcDateTime(this.date);
+<a name="line92"></a>  date.setFirstDayOfWeek(this.getFirstDayOfWeek());
+<a name="line93"></a>  date.setFirstWeekCutOffDay(this.getFirstWeekCutOffDay());
+<a name="line94"></a>  return date;
+<a name="line95"></a>};
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/** @override */
+<a name="line99"></a>goog.date.UtcDateTime.prototype.add = function(interval) {
+<a name="line100"></a>  if (interval.years || interval.months) {
+<a name="line101"></a>    var yearsMonths = new goog.date.Interval(interval.years, interval.months);
+<a name="line102"></a>    goog.date.Date.prototype.add.call(this, yearsMonths);
+<a name="line103"></a>  }
+<a name="line104"></a>  var daysAndTimeMillis = 1000 * (
+<a name="line105"></a>      interval.seconds + 60 * (
+<a name="line106"></a>          interval.minutes + 60 * (
+<a name="line107"></a>              interval.hours + 24 * interval.days)));
+<a name="line108"></a>  this.date = new Date(this.date.getTime() + daysAndTimeMillis);
+<a name="line109"></a>};
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/** @override */
+<a name="line113"></a>goog.date.UtcDateTime.prototype.getTimezoneOffset = function() {
+<a name="line114"></a>  return 0;
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/** @override */
+<a name="line119"></a>goog.date.UtcDateTime.prototype.getFullYear =
+<a name="line120"></a>    goog.date.DateTime.prototype.getUTCFullYear;
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/** @override */
+<a name="line124"></a>goog.date.UtcDateTime.prototype.getMonth =
+<a name="line125"></a>    goog.date.DateTime.prototype.getUTCMonth;
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/** @override */
+<a name="line129"></a>goog.date.UtcDateTime.prototype.getDate =
+<a name="line130"></a>    goog.date.DateTime.prototype.getUTCDate;
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/** @override */
+<a name="line134"></a>goog.date.UtcDateTime.prototype.getHours =
+<a name="line135"></a>    goog.date.DateTime.prototype.getUTCHours;
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/** @override */
+<a name="line139"></a>goog.date.UtcDateTime.prototype.getMinutes =
+<a name="line140"></a>    goog.date.DateTime.prototype.getUTCMinutes;
+<a name="line141"></a>
+<a name="line142"></a>
+<a name="line143"></a>/** @override */
+<a name="line144"></a>goog.date.UtcDateTime.prototype.getSeconds =
+<a name="line145"></a>    goog.date.DateTime.prototype.getUTCSeconds;
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/** @override */
+<a name="line149"></a>goog.date.UtcDateTime.prototype.getMilliseconds =
+<a name="line150"></a>    goog.date.DateTime.prototype.getUTCMilliseconds;
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/** @override */
+<a name="line154"></a>goog.date.UtcDateTime.prototype.getDay =
+<a name="line155"></a>    goog.date.DateTime.prototype.getUTCDay;
+<a name="line156"></a>
+<a name="line157"></a>
+<a name="line158"></a>/** @override */
+<a name="line159"></a>goog.date.UtcDateTime.prototype.setFullYear =
+<a name="line160"></a>    goog.date.DateTime.prototype.setUTCFullYear;
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/** @override */
+<a name="line164"></a>goog.date.UtcDateTime.prototype.setMonth =
+<a name="line165"></a>    goog.date.DateTime.prototype.setUTCMonth;
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/** @override */
+<a name="line169"></a>goog.date.UtcDateTime.prototype.setDate =
+<a name="line170"></a>    goog.date.DateTime.prototype.setUTCDate;
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/** @override */
+<a name="line174"></a>goog.date.UtcDateTime.prototype.setHours =
+<a name="line175"></a>    goog.date.DateTime.prototype.setUTCHours;
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/** @override */
+<a name="line179"></a>goog.date.UtcDateTime.prototype.setMinutes =
+<a name="line180"></a>    goog.date.DateTime.prototype.setUTCMinutes;
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/** @override */
+<a name="line184"></a>goog.date.UtcDateTime.prototype.setSeconds =
+<a name="line185"></a>    goog.date.DateTime.prototype.setUTCSeconds;
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/** @override */
+<a name="line189"></a>goog.date.UtcDateTime.prototype.setMilliseconds =
+<a name="line190"></a>    goog.date.DateTime.prototype.setUTCMilliseconds;
+</pre>
+
+
+</body>
+</html>

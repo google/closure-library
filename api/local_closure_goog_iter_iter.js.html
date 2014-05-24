@@ -1,0 +1,3184 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iter.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">iter.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_iter_iter.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/iter/iter.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/iter/iter.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_iter_GroupByIterator_.html">
+          goog.iter.GroupByIterator_</a><br/>
+        <div class="class-details">Implements the <code> goog.iter.groupBy</code> iterator.
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_iter_Iterator.html">
+          goog.iter.Iterator</a><br/>
+        <div class="class-details">Class/interface for iterators.  An iterator needs to implement a <code> next</code>
+method and it needs to throw a <code> goog.iter.StopIteration</code> when the
+iteration passes beyond the end.  Iterators have no <code> hasNext</code> method.
+It is recommended to always use the helper functions to iterate over the
+iterator or in case you are only targeting JavaScript 1.7 for in loops.
+</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.accumulate"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">accumulate<span class="args">(<span class="arg">iterable</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns running totals from the numbers in
+<code> iterable</code>. For example, the array <code> [1, 2, 3, 4, 5]</code> yields
+<code> 1 -&gt; 3 -&gt; 6 -&gt; 10 -&gt; 15</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type">goog.iter.Iterable</span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+        <div class="entryOverview">The iterable of numbers to
+    accumulate.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;&nbsp;
+            A new iterator that returns the
+    numbers in the series.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line774">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.tee&addNextIteratorValueToBuffers"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">tee&addNextIteratorValueToBuffers<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1056">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.chain"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">chain<span class="args">(<span class="arg">var_args</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Takes zero or more iterables and returns one iterator that will iterate over
+them in the order chained.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">var_args</span>
+        : <span class="type">...!goog.iter.Iterator</span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">Any
+    number of iterable objects.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            Returns a new iterator that will
+    iterate over all the given iterables' contents.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line427">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.chainFromIterable"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">chainFromIterable<span class="args">(<span class="arg">iterable</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Takes a single iterable containing zero or more iterables and returns one
+iterator that will iterate over each one in the order given.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterable of iterables to chain.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            Returns a new iterator that will
+    iterate over all the contents of the iterables contained within
+    <code> iterable</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line463">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.combinations"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">combinations<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">length</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns combinations of elements from
+<code> iterable</code>.
+
+Combinations are obtained by taking the  of
+<code> iterable</code> and filtering those whose elements appear in the order they
+are encountered in <code> iterable</code>. For example, the 3-length combinations
+of <code> [0,1,2,3]</code> are <code> [[0,1,2], [0,1,3], [0,2,3], [1,2,3]]</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable from which to generate combinations.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">length</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The length of each combination.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;&nbsp;
+            A new iterator containing
+    combinations from the <code> iterable</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1247">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.combinationsWithReplacement"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">combinationsWithReplacement<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">length</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns combinations of elements from
+<code> iterable</code>, with repeated elements possible.
+
+Combinations are obtained by taking the Cartesian product of <code> length</code>
+iterables and filtering those whose elements appear in the order they are
+encountered in <code> iterable</code>. For example, the 2-length combinations of
+<code> [1,2,3]</code> are <code> [[1,1], [1,2], [1,3], [2,2], [2,3], [3,3]]</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable to combine.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">length</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The length of each combination.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;&nbsp;
+            A new iterator containing
+    combinations from the <code> iterable</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1290">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.compress"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">compress<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">selectors</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that filters <code> iterable</code> based on a series of
+<code> selectors</code>. On each call to <code> next()</code>, one item is taken from
+both the <code> iterable</code> and <code> selectors</code> iterators. If the item from
+<code> selectors</code> evaluates to true, the item from <code> iterable</code> is given.
+Otherwise, it is skipped. Once either <code> iterable</code> or <code> selectors</code>
+is exhausted, subsequent calls to <code> next()</code> will throw
+<code> goog.iter.StopIteration</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable to filter.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">selectors</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">An
+    iterable of items to be evaluated in a boolean context to determine if
+    the corresponding element in <code> iterable</code> should be included in the
+    result.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            A new iterator that returns the
+    filtered values.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line888">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.consume"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">consume<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">count</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that is advanced <code> count</code> steps ahead. Consumed
+values are silently discarded. If <code> count</code> is greater than the number
+of elements in <code> iterable</code>, an empty iterator is returned. Subsequent
+calls to <code> next()</code> will throw <code> goog.iter.StopIteration</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable to consume.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">count</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The number of elements to consume from the iterator.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            An iterator advanced zero or more steps
+    ahead.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1145">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.count"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">count<span class="args">(<span class="arg">opt_start</span>,&nbsp;<span class="arg">opt_step</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that counts indefinitely from a starting value.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_start</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">The starting value. Default is 0.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_step</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">The number to increment with between each call to
+    next. Negative and floating point numbers are allowed. Default is 1.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;&nbsp;
+            A new iterator that returns the values
+    in the series.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line733">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.tee&createIterator"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">tee&createIterator<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1063">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.cycle"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">cycle<span class="args">(<span class="arg">iterable</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Create an iterator to cycle over the iterable's elements indefinitely.
+For example, ([1, 2, 3]) would return : 1, 2, 3, 1, 2, 3, ...
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable object.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            An iterator that iterates indefinitely
+    over the values in <code> iterable</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line676">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.dropWhile"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">dropWhile<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Builds a new iterator that iterates over the original, but skips elements as
+long as a supplied function returns true.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterator
+    object.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">
+       function(this:THIS,VALUE,undefined,goog.iter.Iterator</span>.&lt;<span class="type">VALUE>):boolea</span>&gt;
+        <div class="entryOverview">The function to call for every value. This function takes 3 arguments
+    (the value, undefined, and the iterator) and should return a boolean.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of 'this' within
+    <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            A new iterator that drops elements from
+    the original iterator as long as <code> f</code> is true.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line483">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.enumerate"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">enumerate<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">opt_start</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns arrays containing a count and an element
+obtained from the given <code> iterable</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable to enumerate.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_start</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">Optional starting value. Default is 0.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>&gt;&nbsp;
+            A new iterator containing count/item
+    pairs.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1097">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.equals"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">equals<span class="args">(<span class="arg">iterable1</span>,&nbsp;<span class="arg">iterable2</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Iterates over two iterables and returns true if they contain the same
+sequence of elements and have the same length.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable1</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The first
+    iterable object.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">iterable2</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The second
+    iterable object.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            true if the iterables contain the same sequence of elements
+    and have the same length.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line570">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.every"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">every<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Goes through the values in the iterator. Calls f for each of these and if any
+of them returns false this returns false (without checking the rest). If all
+return true this will return true.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterator
+    object.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">
+       function(this:THIS,VALUE,undefined,goog.iter.Iterator</span>.&lt;<span class="type">VALUE>):boolea</span>&gt;
+        <div class="entryOverview">The function to call for every value. This function takes 3 arguments
+    (the value, undefined, and the iterator) and should return a boolean.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of 'this' within
+    <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            true if every value passes the test.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line400">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.filter"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">filter<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Calls a function for every element in the iterator, and if the function
+returns true adds the element to a new iterator.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterator
+    to iterate over.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">
+       function(this:THIS,VALUE,undefined,goog.iter.Iterator</span>.&lt;<span class="type">VALUE>):boolea</span>&gt;
+        <div class="entryOverview">The function to call for every element. This function takes 3 arguments
+    (the element, undefined, and the iterator) and should return a boolean.
+    If the return value is true the element will be included in the returned
+    iterator.  If it is false the element is not included.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of 'this' within
+    <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            A new iterator in which only elements
+    that passed the test are present.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line201">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.filterFalse"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">filterFalse<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Calls a function for every element in the iterator, and if the function
+returns false adds the element to a new iterator.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterator
+    to iterate over.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">
+       function(this:THIS,VALUE,undefined,goog.iter.Iterator</span>.&lt;<span class="type">VALUE>):boolea</span>&gt;
+        <div class="entryOverview">The function to call for every element. This function takes 3 arguments
+    (the element, undefined, and the iterator) and should return a boolean.
+    If the return value is false the element will be included in the returned
+    iterator.  If it is true the element is not included.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of 'this' within
+    <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            A new iterator in which only elements
+    that did not pass the test are present.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line234">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.forEach"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">forEach<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Calls a function for each element in the iterator with the element of the
+iterator passed as argument.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterator
+    to iterate over. If the iterable is an object <code> toIterator</code> will be
+    called on it.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">function(this:THIS,VALUE,undefined,goog.iter.Iterator</span>.&lt;<span class="type">VALUE</span>&gt;)<span>&nbsp;|&nbsp;</span><span class="type">
+           function(this:THIS,number,undefined,goog.iter.Iterator</span>.&lt;<span class="type">VALUE</span>&gt;)
+        <div class="entryOverview">The function to call for every element.  This function takes 3 arguments
+    (the element, undefined, and the iterator) and the return value is
+    irrelevant.  The reason for passing undefined as the second argument is
+    so that the same function can be used in  as
+    well as others.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of 'this' within
+    <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line154">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.combinations&getIndexFromElements"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">combinations&getIndexFromElements<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1259">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.combinationsWithReplacement&getIndexFromElements"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">combinationsWithReplacement&getIndexFromElements<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1303">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.groupBy"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">groupBy<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">opt_keyFunc</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns arrays containing elements from the
+<code> iterable</code> grouped by a key value. For iterables with repeated
+elements (i.e. sorted according to a particular key function), this function
+has a <code> uniq</code>-like effect. For example, grouping the array:
+<code> [A, B, B, C, C, A]</code> produces
+<code> [A, [A]], [B, [B, B]], [C, [C, C]], [A, [A]]</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable to group.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_keyFunc</span>
+        : <span class="type">function(...[VALUE]): KEY=</span>
+        <div class="entryOverview">Optional function for
+    determining the key value for each group in the <code> iterable</code>. Default
+    is the identity function.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>&gt;&nbsp;
+            A new iterator that returns arrays of
+    consecutive key and groups.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line999">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.hasDuplicates_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">hasDuplicates_<span class="args">(<span class="arg">arr</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Checks an array for duplicate elements.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">arr</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.array.ArrayLike</span>
+        <div class="entryOverview">The array to check for
+    duplicates.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            True, if the array contains duplicates, false otherwise.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1194">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.join"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">join<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">deliminator</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Joins the values in a iterator with a delimiter.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterator
+    to get the values from.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">deliminator</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The text to put between the values.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The joined value string.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line290">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.limit"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">limit<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">limitSize</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns the first <code> limitSize</code> elements from an
+iterable. If this number is greater than the number of elements in the
+iterable, all the elements are returned.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable to limit.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">limitSize</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The maximum number of elements to return.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            A new iterator containing
+    <code> limitSize</code> elements.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1114">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.map"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">map<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">RESULT</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       For every element in the iterator call a function and return a new iterator
+with that value.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterator to iterate over.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">
+       function(this:THIS,VALUE,undefined,!goog.iter.Iterator</span>.&lt;<span class="type">VALUE>):RESUL</span>&gt;
+        <div class="entryOverview">The function to call for every element.  This function takes 3 arguments
+    (the element, undefined, and the iterator) and should return a new value.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of 'this' within
+    <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">RESULT</span>&gt;&nbsp;
+            A new iterator that returns the
+    results of applying the function to each element in the original
+    iterator.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line312">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.nextOrValue"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">nextOrValue<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">defaultValue</span>)</span>
+        </span>
+        &#8658; <span class="type">VALUE</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Advances the iterator to the next position, returning the given default value
+instead of throwing an exception if the iterator has no more entries.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterable
+    object.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">defaultValue</span>
+        : <span class="type">VALUE</span>
+        <div class="entryOverview">The value to return if the iterator is empty.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">VALUE</span>&nbsp;
+            The next item in the iteration, or defaultValue if the
+    iterator was empty.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line589">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.permutations"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">permutations<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">opt_length</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns permutations of elements in
+<code> iterable</code>.
+
+Permutations are obtained by taking the Cartesian product of
+<code> opt_length</code> iterables and filtering out those with repeated
+elements. For example, the permutations of <code> [1,2,3]</code> are
+<code> [[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], [3,2,1]]</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable from which to generate permutations.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_length</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">Length of each permutation. If omitted, defaults
+    to the length of <code> iterable</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;&nbsp;
+            A new iterator containing the
+    permutations of <code> iterable</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1218">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.product"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">product<span class="args">(<span class="arg">var_args</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Cartesian product of zero or more sets.  Gives an iterator that gives every
+combination of one element chosen from each set.  For example,
+([1, 2], [3, 4]) gives ([1, 3], [1, 4], [2, 3], [2, 4]).
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">var_args</span>
+        : <span class="type">...!goog.array.ArrayLike</span>.&lt;<span class="type">VALUE</span>&gt;
+        <div class="entryOverview">Zero or more sets, as
+    arrays.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;&nbsp;
+            An iterator that gives each
+    n-tuple (as an array).
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line612">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.range"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">range<span class="args">(<span class="arg">startOrStop</span>,&nbsp;<span class="arg">opt_stop</span>,&nbsp;<span class="arg">opt_step</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a new iterator that returns the values in a range.  This function
+can take 1, 2 or 3 arguments:
+<pre class="lang-js prettyprint">
+range(5) same as range(0, 5, 1)
+range(2, 5) same as range(2, 5, 1)
+</pre>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">startOrStop</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The stop value if only one argument is provided.
+    The start value if 2 or more arguments are provided.  If only one
+    argument is used the start value is 0.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_stop</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">The stop value.  If left out then the first
+    argument is used as the stop value.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_step</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">The number to increment with between each call to
+    next.  This can be negative.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>&gt;&nbsp;
+            A new iterator that returns the values
+    in the range.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line257">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.reduce"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">reduce<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">val</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+        &#8658; <span class="type">VALUE</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Passes every element of an iterator into a function and accumulates the
+result.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterator
+    to iterate over.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">function(this:THIS,VALUE,VALUE):VALUE</span>
+        <div class="entryOverview">The function to call for
+    every element. This function takes 2 arguments (the function's previous
+    result or the initial value, and the value of the current element).
+    function(previousValue, currentElement) : newValue.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">val</span>
+        : <span class="type">VALUE</span>
+        <div class="entryOverview">The initial value to pass into the function on the first
+    call.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of 'this' within
+    f.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">VALUE</span>&nbsp;
+            Result of evaluating f repeatedly across the values of
+    the iterator.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line341">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.repeat"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">repeat<span class="args">(<span class="arg">value</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns the same object or value repeatedly.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">value</span>
+        : <span class="type">VALUE</span>
+        <div class="entryOverview">Any object or value to repeat.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            A new iterator that returns the
+    repeated value.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line755">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.slice"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">slice<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">start</span>,&nbsp;<span class="arg">opt_end</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns a range of elements from an iterable.
+Similar to  but does not support negative indexes.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable to slice.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">start</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">The index of the first element to return.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_end</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">The index after the last element to return. If
+    defined, must be greater than or equal to <code> start</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            A new iterator containing a slice of
+    the original.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1170">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.some"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">some<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Goes through the values in the iterator. Calls f for each of these, and if
+any of them returns true, this returns true (without checking the rest). If
+all return false this will return false.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterator
+    object.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">
+       function(this:THIS,VALUE,undefined,goog.iter.Iterator</span>.&lt;<span class="type">VALUE>):boolea</span>&gt;
+        <div class="entryOverview">The function to call for every value. This function takes 3 arguments
+    (the value, undefined, and the iterator) and should return a boolean.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of 'this' within
+    <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            true if any value passes the test.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line366">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.starMap"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">starMap<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">RESULT</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Gives an iterator that gives the result of calling the given function
+<code>f</code> with the arguments taken from the next element from
+<code>iterable</code> (the elements are expected to also be iterables).
+
+Similar to  but allows the function to accept multiple
+arguments from the iterable.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type">goog.iter.Iterable</span>.&lt;<span>!</span><span class="type">goog.iter.Iterable</span>&gt;
+        <div class="entryOverview">The iterable of
+    iterables to iterate over.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">function(this:THIS,...[*]):RESULT</span>
+        <div class="entryOverview">The function to call for every
+    element.  This function takes N+2 arguments, where N represents the
+    number of items from the next element of the iterable. The two
+    additional arguments passed to the function are undefined and the
+    iterator itself. The function should return a new value.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">The object to be used as the value of 'this' within
+    <code> f</code>.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">RESULT</span>&gt;&nbsp;
+            A new iterator that returns the
+    results of applying the function to each element in the original
+    iterator.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1026">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.takeWhile"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">takeWhile<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">f</span>,&nbsp;<span class="arg">opt_obj</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Builds a new iterator that iterates over the original, but only as long as a
+supplied function returns true.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterator
+    object.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">
+       function(this:THIS,VALUE,undefined,goog.iter.Iterator</span>.&lt;<span class="type">VALUE>):boolea</span>&gt;
+        <div class="entryOverview">The function to call for every value. This function takes 3 arguments
+    (the value, undefined, and the iterator) and should return a boolean.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_obj</span>
+        : <span class="type">THIS=</span>
+        <div class="entryOverview">This is used as the 'this' object in f when called.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            A new iterator that keeps elements in
+    the original iterator as long as the function is true.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line516">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.tee"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">tee<span class="args">(<span class="arg">iterable</span>,&nbsp;<span class="arg">opt_num</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Returns an array of iterators each of which can iterate over the values in
+<code> iterable</code> without advancing the others.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The
+    iterable to tee.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_num</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">The number of iterators to create. Default is 2.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;&nbsp;
+            An array of iterators.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line1049">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.toArray"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">toArray<span class="args">(<span class="arg">iterable</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Converts the iterator to an array
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">The iterator
+    to convert to an array.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            An array of the elements the iterator iterates over.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line545">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.toIterator"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">toIterator<span class="args">(<span class="arg">iterable</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Returns an iterator that knows how to iterate over the values in the object.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">iterable</span>
+        : <span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">If the
+    object is an iterator it will be returned as is.  If the object has an
+    <code> __iterator__</code> method that will be called to get the value
+    iterator.  If the object is an array-like object we create an iterator
+    for that.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span class="type">VALUE</span>&gt;&nbsp;
+            An iterator that knows how to iterate
+    over the values in <code> iterable</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line104">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.zip"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">zip<span class="args">(<span class="arg">var_args</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns arrays containing the ith elements from the
+provided iterables. The returned arrays will be the same size as the number
+of iterables given in <code> var_args</code>. Once the shortest iterable is
+exhausted, subsequent calls to <code> next()</code> will throw
+<code> goog.iter.StopIteration</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">var_args</span>
+        : <span class="type">...!goog.iter.Iterator</span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">Any
+    number of iterable objects.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;&nbsp;
+            A new iterator that returns
+    arrays of elements from the provided iterables.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line801">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.iter.zipLongest"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.iter.</span><span class="entryName">zipLongest<span class="args">(<span class="arg">fillValue</span>,&nbsp;<span class="arg">var_args</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Creates an iterator that returns arrays containing the ith elements from the
+provided iterables. The returned arrays will be the same size as the number
+of iterables given in <code> var_args</code>. Shorter iterables will be extended
+with <code> fillValue</code>. Once the longest iterable is exhausted, subsequent
+calls to <code> next()</code> will throw <code> goog.iter.StopIteration</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">fillValue</span>
+        : <span class="type">VALUE</span>
+        <div class="entryOverview">The object or value used to fill shorter iterables.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">var_args</span>
+        : <span class="type">...!goog.iter.Iterator</span>.&lt;<span class="type">VALUE</span>&gt;<span>&nbsp;|&nbsp;</span><span>!</span><span class="type">goog.iter.Iterable</span>
+        <div class="entryOverview">Any
+    number of iterable objects.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_iter_Iterator.html">goog.iter.Iterator</a></span>.&lt;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type">VALUE</span>&gt;&gt;&nbsp;
+            A new iterator that returns
+    arrays of elements from the provided iterables.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_iter_iter.js.source.html#line833">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory iter</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/iter/iter.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

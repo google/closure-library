@@ -1,0 +1,340 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iframepollingtransport_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_xpc_iframepollingtransport_test.js.html">iframepollingtransport_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.xpc.IframePollingTransportTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.xpc.IframePollingTransportTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line20"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line21"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line22"></a>goog.require(&#39;goog.net.xpc.CfgFields&#39;);
+<a name="line23"></a>goog.require(&#39;goog.net.xpc.CrossPageChannel&#39;);
+<a name="line24"></a>goog.require(&#39;goog.net.xpc.CrossPageChannelRole&#39;);
+<a name="line25"></a>goog.require(&#39;goog.net.xpc.TransportTypes&#39;);
+<a name="line26"></a>goog.require(&#39;goog.object&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line28"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line29"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line30"></a>
+<a name="line31"></a>var mockClock = null;
+<a name="line32"></a>var outerChannel = null;
+<a name="line33"></a>var innerChannel = null;
+<a name="line34"></a>
+<a name="line35"></a>function setUp() {
+<a name="line36"></a>  mockClock = new goog.testing.MockClock(true /* opt_autoInstall */);
+<a name="line37"></a>
+<a name="line38"></a>  // Create the peer windows.
+<a name="line39"></a>  var outerPeerHostName = &#39;https://www.youtube.com&#39;;
+<a name="line40"></a>  var outerPeerWindow = createMockPeerWindow(outerPeerHostName);
+<a name="line41"></a>
+<a name="line42"></a>  var innerPeerHostName = &#39;https://www.google.com&#39;;
+<a name="line43"></a>  var innerPeerWindow = createMockPeerWindow(innerPeerHostName);
+<a name="line44"></a>
+<a name="line45"></a>  // Create the channels.
+<a name="line46"></a>  outerChannel = createChannel(goog.net.xpc.CrossPageChannelRole.OUTER, &#39;test&#39;,
+<a name="line47"></a>      outerPeerHostName, outerPeerWindow, innerPeerHostName, innerPeerWindow);
+<a name="line48"></a>  innerChannel = createChannel(goog.net.xpc.CrossPageChannelRole.INNER, &#39;test&#39;,
+<a name="line49"></a>      innerPeerHostName, innerPeerWindow, outerPeerHostName, outerPeerWindow);
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>function tearDown() {
+<a name="line54"></a>  outerChannel.dispose();
+<a name="line55"></a>  innerChannel.dispose();
+<a name="line56"></a>  mockClock.uninstall();
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/** Tests that connection happens normally and callbacks are invoked. */
+<a name="line61"></a>function testConnect() {
+<a name="line62"></a>  var outerConnectCallback = goog.testing.recordFunction();
+<a name="line63"></a>  var innerConnectCallback = goog.testing.recordFunction();
+<a name="line64"></a>
+<a name="line65"></a>  // Connect the two channels.
+<a name="line66"></a>  outerChannel.connect(outerConnectCallback);
+<a name="line67"></a>  innerChannel.connect(innerConnectCallback);
+<a name="line68"></a>  mockClock.tick(1000);
+<a name="line69"></a>
+<a name="line70"></a>  // Check that channels were connected and callbacks invoked.
+<a name="line71"></a>  assertEquals(1, outerConnectCallback.getCallCount());
+<a name="line72"></a>  assertEquals(1, innerConnectCallback.getCallCount());
+<a name="line73"></a>  assertTrue(outerChannel.isConnected());
+<a name="line74"></a>  assertTrue(innerChannel.isConnected());
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/** Tests that messages are successfully delivered to the inner peer. */
+<a name="line79"></a>function testSend_outerToInner() {
+<a name="line80"></a>  var serviceCallback = goog.testing.recordFunction();
+<a name="line81"></a>
+<a name="line82"></a>  // Register a service handler in the inner channel.
+<a name="line83"></a>  innerChannel.registerService(&#39;svc&#39;, function(payload) {
+<a name="line84"></a>    assertEquals(&#39;hello&#39;, payload);
+<a name="line85"></a>    serviceCallback();
+<a name="line86"></a>  });
+<a name="line87"></a>
+<a name="line88"></a>  // Connect the two channels.
+<a name="line89"></a>  outerChannel.connect();
+<a name="line90"></a>  innerChannel.connect();
+<a name="line91"></a>  mockClock.tick(1000);
+<a name="line92"></a>
+<a name="line93"></a>  // Send a message.
+<a name="line94"></a>  outerChannel.send(&#39;svc&#39;, &#39;hello&#39;);
+<a name="line95"></a>  mockClock.tick(1000);
+<a name="line96"></a>
+<a name="line97"></a>  // Check that the message was handled.
+<a name="line98"></a>  assertEquals(1, serviceCallback.getCallCount());
+<a name="line99"></a>}
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/** Tests that messages are successfully delivered to the outer peer. */
+<a name="line103"></a>function testSend_innerToOuter() {
+<a name="line104"></a>  var serviceCallback = goog.testing.recordFunction();
+<a name="line105"></a>
+<a name="line106"></a>  // Register a service handler in the inner channel.
+<a name="line107"></a>  outerChannel.registerService(&#39;svc&#39;, function(payload) {
+<a name="line108"></a>    assertEquals(&#39;hello&#39;, payload);
+<a name="line109"></a>    serviceCallback();
+<a name="line110"></a>  });
+<a name="line111"></a>
+<a name="line112"></a>  // Connect the two channels.
+<a name="line113"></a>  outerChannel.connect();
+<a name="line114"></a>  innerChannel.connect();
+<a name="line115"></a>  mockClock.tick(1000);
+<a name="line116"></a>
+<a name="line117"></a>  // Send a message.
+<a name="line118"></a>  innerChannel.send(&#39;svc&#39;, &#39;hello&#39;);
+<a name="line119"></a>  mockClock.tick(1000);
+<a name="line120"></a>
+<a name="line121"></a>  // Check that the message was handled.
+<a name="line122"></a>  assertEquals(1, serviceCallback.getCallCount());
+<a name="line123"></a>}
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/** Tests that closing the outer peer does not cause an error. */
+<a name="line127"></a>function testSend_outerPeerClosed() {
+<a name="line128"></a>  // Connect the inner channel.
+<a name="line129"></a>  innerChannel.connect();
+<a name="line130"></a>  mockClock.tick(1000);
+<a name="line131"></a>
+<a name="line132"></a>  // Close the outer peer before it has a chance to connect.
+<a name="line133"></a>  closeWindow(innerChannel.getPeerWindowObject());
+<a name="line134"></a>
+<a name="line135"></a>  // Allow timers to execute (and fail).
+<a name="line136"></a>  mockClock.tick(1000);
+<a name="line137"></a>}
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/** Tests that closing the inner peer does not cause an error. */
+<a name="line141"></a>function testSend_innerPeerClosed() {
+<a name="line142"></a>  // Connect the outer channel.
+<a name="line143"></a>  outerChannel.connect();
+<a name="line144"></a>  mockClock.tick(1000);
+<a name="line145"></a>
+<a name="line146"></a>  // Close the inner peer before it has a chance to connect.
+<a name="line147"></a>  closeWindow(outerChannel.getPeerWindowObject());
+<a name="line148"></a>
+<a name="line149"></a>  // Allow timers to execute (and fail).
+<a name="line150"></a>  mockClock.tick(1000);
+<a name="line151"></a>}
+<a name="line152"></a>
+<a name="line153"></a>
+<a name="line154"></a>/** Tests that partially closing the outer peer does not cause an error. */
+<a name="line155"></a>function testSend_outerPeerClosing() {
+<a name="line156"></a>  // Connect the inner channel.
+<a name="line157"></a>  innerChannel.connect();
+<a name="line158"></a>  mockClock.tick(1000);
+<a name="line159"></a>
+<a name="line160"></a>  // Close the outer peer before it has a chance to connect, but
+<a name="line161"></a>  // leave closed set to false to simulate a partially closed window.
+<a name="line162"></a>  closeWindow(innerChannel.getPeerWindowObject());
+<a name="line163"></a>  innerChannel.getPeerWindowObject().closed = false;
+<a name="line164"></a>
+<a name="line165"></a>  // Allow timers to execute (and fail).
+<a name="line166"></a>  mockClock.tick(1000);
+<a name="line167"></a>}
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/** Tests that partially closing the inner peer does not cause an error. */
+<a name="line171"></a>function testSend_innerPeerClosing() {
+<a name="line172"></a>  // Connect the outer channel.
+<a name="line173"></a>  outerChannel.connect();
+<a name="line174"></a>  mockClock.tick(1000);
+<a name="line175"></a>
+<a name="line176"></a>  // Close the inner peer before it has a chance to connect, but
+<a name="line177"></a>  // leave closed set to false to simulate a partially closed window.
+<a name="line178"></a>  closeWindow(outerChannel.getPeerWindowObject());
+<a name="line179"></a>  outerChannel.getPeerWindowObject().closed = false;
+<a name="line180"></a>
+<a name="line181"></a>  // Allow timers to execute (and fail).
+<a name="line182"></a>  mockClock.tick(1000);
+<a name="line183"></a>}
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * Creates a channel with the specified configuration, using frame polling.
+<a name="line188"></a> * @param {!goog.net.xpc.CrossPageChannelRole} role The channel role.
+<a name="line189"></a> * @param {string} channelName The channel name.
+<a name="line190"></a> * @param {string} fromHostName The host name of the window hosting the channel.
+<a name="line191"></a> * @param {!Object} fromWindow The window hosting the channel.
+<a name="line192"></a> * @param {string} toHostName The host name of the peer window.
+<a name="line193"></a> * @param {!Object} toWindow The peer window.
+<a name="line194"></a> */
+<a name="line195"></a>function createChannel(role, channelName, fromHostName, fromWindow, toHostName,
+<a name="line196"></a>    toWindow) {
+<a name="line197"></a>
+<a name="line198"></a>  // Build a channel config using frame polling.
+<a name="line199"></a>  var channelConfig = goog.object.create(
+<a name="line200"></a>      goog.net.xpc.CfgFields.ROLE,
+<a name="line201"></a>      role,
+<a name="line202"></a>      goog.net.xpc.CfgFields.PEER_HOSTNAME,
+<a name="line203"></a>      toHostName,
+<a name="line204"></a>      goog.net.xpc.CfgFields.CHANNEL_NAME,
+<a name="line205"></a>      channelName,
+<a name="line206"></a>      goog.net.xpc.CfgFields.LOCAL_POLL_URI,
+<a name="line207"></a>      fromHostName + &#39;/robots.txt&#39;,
+<a name="line208"></a>      goog.net.xpc.CfgFields.PEER_POLL_URI,
+<a name="line209"></a>      toHostName + &#39;/robots.txt&#39;,
+<a name="line210"></a>      goog.net.xpc.CfgFields.TRANSPORT,
+<a name="line211"></a>      goog.net.xpc.TransportTypes.IFRAME_POLLING);
+<a name="line212"></a>
+<a name="line213"></a>  // Build the channel.
+<a name="line214"></a>  var channel = new goog.net.xpc.CrossPageChannel(channelConfig);
+<a name="line215"></a>  channel.setPeerWindowObject(toWindow);
+<a name="line216"></a>
+<a name="line217"></a>  // Update the transport&#39;s getWindow, to return the correct host window.
+<a name="line218"></a>  channel.createTransport_();
+<a name="line219"></a>  channel.transport_.getWindow = goog.functions.constant(fromWindow);
+<a name="line220"></a>  return channel;
+<a name="line221"></a>}
+<a name="line222"></a>
+<a name="line223"></a>
+<a name="line224"></a>/**
+<a name="line225"></a> * Creates a mock window to use as a peer. The peer window will host the frame
+<a name="line226"></a> * elements.
+<a name="line227"></a> * @param {string} url The peer window&#39;s initial URL.
+<a name="line228"></a> */
+<a name="line229"></a>function createMockPeerWindow(url) {
+<a name="line230"></a>  var mockPeer = createMockWindow(url);
+<a name="line231"></a>
+<a name="line232"></a>  // Update the appendChild method to use a mock frame window.
+<a name="line233"></a>  mockPeer.document.body.appendChild = function(el) {
+<a name="line234"></a>    assertEquals(goog.dom.TagName.IFRAME, el.tagName);
+<a name="line235"></a>    mockPeer.frames[el.name] = createMockWindow(el.src);
+<a name="line236"></a>    mockPeer.document.body.element.appendChild(el);
+<a name="line237"></a>  };
+<a name="line238"></a>
+<a name="line239"></a>  return mockPeer;
+<a name="line240"></a>}
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * Creates a mock window.
+<a name="line245"></a> * @param {string} url The window&#39;s initial URL.
+<a name="line246"></a> */
+<a name="line247"></a>function createMockWindow(url) {
+<a name="line248"></a>  // Create the mock window, document and body.
+<a name="line249"></a>  var mockWindow = {};
+<a name="line250"></a>  var mockDocument = {};
+<a name="line251"></a>  var mockBody = {};
+<a name="line252"></a>  var mockLocation = {};
+<a name="line253"></a>
+<a name="line254"></a>  // Configure the mock window&#39;s document body.
+<a name="line255"></a>  mockBody.element = goog.dom.createDom(goog.dom.TagName.BODY);
+<a name="line256"></a>
+<a name="line257"></a>  // Configure the mock window&#39;s document.
+<a name="line258"></a>  mockDocument.body = mockBody;
+<a name="line259"></a>
+<a name="line260"></a>  // Configure the mock window&#39;s location.
+<a name="line261"></a>  mockLocation.href = url;
+<a name="line262"></a>  mockLocation.replace = function(value) { mockLocation.href = value; };
+<a name="line263"></a>
+<a name="line264"></a>  // Configure the mock window.
+<a name="line265"></a>  mockWindow.document = mockDocument;
+<a name="line266"></a>  mockWindow.frames = {};
+<a name="line267"></a>  mockWindow.location = mockLocation;
+<a name="line268"></a>  mockWindow.setTimeout = goog.Timer.callOnce;
+<a name="line269"></a>
+<a name="line270"></a>  return mockWindow;
+<a name="line271"></a>}
+<a name="line272"></a>
+<a name="line273"></a>
+<a name="line274"></a>/**
+<a name="line275"></a> * Emulates closing the specified window by clearing frames, document and
+<a name="line276"></a> * location.
+<a name="line277"></a> */
+<a name="line278"></a>function closeWindow(targetWindow) {
+<a name="line279"></a>  // Close any child frame windows.
+<a name="line280"></a>  for (var frameName in targetWindow.frames) {
+<a name="line281"></a>    closeWindow(targetWindow.frames[frameName]);
+<a name="line282"></a>  }
+<a name="line283"></a>
+<a name="line284"></a>  // Clear the target window, set closed to true.
+<a name="line285"></a>  targetWindow.closed = true;
+<a name="line286"></a>  targetWindow.frames = null;
+<a name="line287"></a>  targetWindow.document = null;
+<a name="line288"></a>  targetWindow.location = null;
+<a name="line289"></a>}
+</pre>
+
+
+</body>
+</html>

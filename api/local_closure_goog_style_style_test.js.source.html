@@ -1,0 +1,2661 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>style_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_style_style_test.js.html">style_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the Licensegg at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Shared unit tests for styles.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>/** @suppress {extraProvide} */
+<a name="line20"></a>goog.provide(&#39;goog.style_test&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.array&#39;);
+<a name="line23"></a>goog.require(&#39;goog.color&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
+<a name="line26"></a>goog.require(&#39;goog.labs.userAgent.util&#39;);
+<a name="line27"></a>goog.require(&#39;goog.math.Box&#39;);
+<a name="line28"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line29"></a>goog.require(&#39;goog.math.Rect&#39;);
+<a name="line30"></a>goog.require(&#39;goog.math.Size&#39;);
+<a name="line31"></a>goog.require(&#39;goog.object&#39;);
+<a name="line32"></a>goog.require(&#39;goog.string&#39;);
+<a name="line33"></a>goog.require(&#39;goog.style&#39;);
+<a name="line34"></a>goog.require(&#39;goog.testing.ExpectedFailures&#39;);
+<a name="line35"></a>goog.require(&#39;goog.testing.MockUserAgent&#39;);
+<a name="line36"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line37"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line38"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line39"></a>goog.require(&#39;goog.userAgent.product&#39;);
+<a name="line40"></a>goog.require(&#39;goog.userAgent.product.isVersion&#39;);
+<a name="line41"></a>goog.require(&#39;goog.userAgentTestUtil&#39;);
+<a name="line42"></a>goog.require(&#39;goog.userAgentTestUtil.UserAgents&#39;);
+<a name="line43"></a>
+<a name="line44"></a>goog.setTestOnly(&#39;goog.style_test&#39;);
+<a name="line45"></a>
+<a name="line46"></a>// IE before version 6 will always be border box in compat mode.
+<a name="line47"></a>var isBorderBox = goog.dom.isCss1CompatMode() ?
+<a name="line48"></a>    (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;6&#39;)) :
+<a name="line49"></a>    true;
+<a name="line50"></a>var EPSILON = 2;
+<a name="line51"></a>var expectedFailures = new goog.testing.ExpectedFailures();
+<a name="line52"></a>var $ = goog.dom.getElement;
+<a name="line53"></a>var mockUserAgent;
+<a name="line54"></a>
+<a name="line55"></a>function setUpPage() {
+<a name="line56"></a>  var viewportSize = goog.dom.getViewportSize();
+<a name="line57"></a>  // When the window is too short or not wide enough, some tests, especially
+<a name="line58"></a>  // those for off-screen elements, fail.  Oddly, the most reliable
+<a name="line59"></a>  // indicator is a width of zero (which is of course erroneous), since
+<a name="line60"></a>  // height sometimes includes a scroll bar.  We can make no assumptions on
+<a name="line61"></a>  // window size on the Selenium farm.
+<a name="line62"></a>  if (goog.userAgent.IE &amp;&amp; viewportSize.width &lt; 300) {
+<a name="line63"></a>    // Move to origin, since IE won&#39;t resize outside the screen.
+<a name="line64"></a>    window.moveTo(0, 0);
+<a name="line65"></a>    window.resizeTo(640, 480);
+<a name="line66"></a>  }
+<a name="line67"></a>}
+<a name="line68"></a>
+<a name="line69"></a>function setUp() {
+<a name="line70"></a>  window.scrollTo(0, 0);
+<a name="line71"></a>  goog.userAgentTestUtil.reinitializeUserAgent();
+<a name="line72"></a>  mockUserAgent = new goog.testing.MockUserAgent();
+<a name="line73"></a>  mockUserAgent.install();
+<a name="line74"></a>}
+<a name="line75"></a>
+<a name="line76"></a>function tearDown() {
+<a name="line77"></a>  expectedFailures.handleTearDown();
+<a name="line78"></a>  var testVisibleDiv2 = goog.dom.getElement(&#39;test-visible2&#39;);
+<a name="line79"></a>  testVisibleDiv2.setAttribute(&#39;style&#39;, &#39;&#39;);
+<a name="line80"></a>  testVisibleDiv2.innerHTML = &#39;&#39;;
+<a name="line81"></a>  var testViewport = goog.dom.getElement(&#39;test-viewport&#39;);
+<a name="line82"></a>  testViewport.setAttribute(&#39;style&#39;, &#39;&#39;);
+<a name="line83"></a>  testViewport.innerHTML = &#39;&#39;;
+<a name="line84"></a>  goog.dispose(mockUserAgent);
+<a name="line85"></a>}
+<a name="line86"></a>
+<a name="line87"></a>function testSetStyle() {
+<a name="line88"></a>  var el = $(&#39;span1&#39;);
+<a name="line89"></a>  goog.style.setStyle(el, &#39;textDecoration&#39;, &#39;underline&#39;);
+<a name="line90"></a>  assertEquals(&#39;Should be underline&#39;, &#39;underline&#39;, el.style.textDecoration);
+<a name="line91"></a>}
+<a name="line92"></a>
+<a name="line93"></a>function testSetStyleMap() {
+<a name="line94"></a>  var el = $(&#39;span6&#39;);
+<a name="line95"></a>
+<a name="line96"></a>  var styles = {
+<a name="line97"></a>    &#39;background-color&#39;: &#39;blue&#39;,
+<a name="line98"></a>    &#39;font-size&#39;: &#39;100px&#39;,
+<a name="line99"></a>    textAlign: &#39;center&#39;
+<a name="line100"></a>  };
+<a name="line101"></a>
+<a name="line102"></a>  goog.style.setStyle(el, styles);
+<a name="line103"></a>
+<a name="line104"></a>  var answers = {
+<a name="line105"></a>    backgroundColor: &#39;blue&#39;,
+<a name="line106"></a>    fontSize: &#39;100px&#39;,
+<a name="line107"></a>    textAlign: &#39;center&#39;
+<a name="line108"></a>  };
+<a name="line109"></a>
+<a name="line110"></a>  goog.object.forEach(answers, function(value, style) {
+<a name="line111"></a>    assertEquals(&#39;Should be &#39; + value, value, el.style[style]);
+<a name="line112"></a>  });
+<a name="line113"></a>}
+<a name="line114"></a>
+<a name="line115"></a>function testSetStyleWithNonCamelizedString() {
+<a name="line116"></a>  var el = $(&#39;span5&#39;);
+<a name="line117"></a>  goog.style.setStyle(el, &#39;text-decoration&#39;, &#39;underline&#39;);
+<a name="line118"></a>  assertEquals(&#39;Should be underline&#39;, &#39;underline&#39;, el.style.textDecoration);
+<a name="line119"></a>}
+<a name="line120"></a>
+<a name="line121"></a>function testGetStyle() {
+<a name="line122"></a>  var el = goog.dom.getElement(&#39;styleTest3&#39;);
+<a name="line123"></a>  goog.style.setStyle(el, &#39;width&#39;, &#39;80px&#39;);
+<a name="line124"></a>  goog.style.setStyle(el, &#39;textDecoration&#39;, &#39;underline&#39;);
+<a name="line125"></a>
+<a name="line126"></a>  assertEquals(&#39;80px&#39;, goog.style.getStyle(el, &#39;width&#39;));
+<a name="line127"></a>  assertEquals(&#39;underline&#39;, goog.style.getStyle(el, &#39;textDecoration&#39;));
+<a name="line128"></a>  assertEquals(&#39;underline&#39;, goog.style.getStyle(el, &#39;text-decoration&#39;));
+<a name="line129"></a>  // Non set properties are always empty strings.
+<a name="line130"></a>  assertEquals(&#39;&#39;, goog.style.getStyle(el, &#39;border&#39;));
+<a name="line131"></a>}
+<a name="line132"></a>
+<a name="line133"></a>function testGetStyleMsFilter() {
+<a name="line134"></a>  // Element with -ms-filter style set.
+<a name="line135"></a>  var e = goog.dom.getElement(&#39;msFilter&#39;);
+<a name="line136"></a>
+<a name="line137"></a>  if (goog.userAgent.IE &amp;&amp; goog.userAgent.isDocumentModeOrHigher(8)) {
+<a name="line138"></a>    // Only IE8 supports -ms-filter and returns it as value for the &quot;filter&quot;
+<a name="line139"></a>    // property. When in compatibility mode, -ms-filter is not supported
+<a name="line140"></a>    // and IE8 behaves as IE7 so the other case will apply.
+<a name="line141"></a>    assertEquals(&#39;alpha(opacity=0)&#39;, goog.style.getStyle(e, &#39;filter&#39;));
+<a name="line142"></a>  } else {
+<a name="line143"></a>    // Any other browser does not support ms-filter so it returns empty string.
+<a name="line144"></a>    assertEquals(&#39;&#39;, goog.style.getStyle(e, &#39;filter&#39;));
+<a name="line145"></a>  }
+<a name="line146"></a>}
+<a name="line147"></a>
+<a name="line148"></a>function testGetStyleFilter() {
+<a name="line149"></a>  // Element with filter style set.
+<a name="line150"></a>  var e = goog.dom.getElement(&#39;filter&#39;);
+<a name="line151"></a>
+<a name="line152"></a>  if (goog.userAgent.IE) {
+<a name="line153"></a>    // Filter supported.
+<a name="line154"></a>    assertEquals(&#39;alpha(opacity=0)&#39;, goog.style.getStyle(e, &#39;filter&#39;));
+<a name="line155"></a>  } else {
+<a name="line156"></a>    assertEquals(&#39;&#39;, goog.style.getStyle(e, &#39;filter&#39;));
+<a name="line157"></a>  }
+<a name="line158"></a>}
+<a name="line159"></a>
+<a name="line160"></a>function testGetComputedStyleMsFilter() {
+<a name="line161"></a>  // Element with -ms-filter style set.
+<a name="line162"></a>  var e = goog.dom.getElement(&#39;msFilter&#39;);
+<a name="line163"></a>
+<a name="line164"></a>  if (goog.userAgent.IE) {
+<a name="line165"></a>    // IE always returns empty string for computed styles.
+<a name="line166"></a>    assertEquals(&#39;&#39;, goog.style.getComputedStyle(e, &#39;filter&#39;));
+<a name="line167"></a>  } else {
+<a name="line168"></a>    // Non IE returns &#39;none&#39; for filter as it is an SVG property
+<a name="line169"></a>    assertEquals(&#39;none&#39;, goog.style.getComputedStyle(e, &#39;filter&#39;));
+<a name="line170"></a>  }
+<a name="line171"></a>}
+<a name="line172"></a>
+<a name="line173"></a>function testGetComputedStyleFilter() {
+<a name="line174"></a>  // Element with filter style set.
+<a name="line175"></a>  var e = goog.dom.getElement(&#39;filter&#39;);
+<a name="line176"></a>
+<a name="line177"></a>  if (goog.userAgent.IE) {
+<a name="line178"></a>    // IE always returns empty string for computed styles.
+<a name="line179"></a>    assertEquals(&#39;&#39;, goog.style.getComputedStyle(e, &#39;filter&#39;));
+<a name="line180"></a>  } else {
+<a name="line181"></a>    // Non IE returns &#39;none&#39; for filter as it is an SVG property
+<a name="line182"></a>    assertEquals(&#39;none&#39;, goog.style.getComputedStyle(e, &#39;filter&#39;));
+<a name="line183"></a>  }
+<a name="line184"></a>}
+<a name="line185"></a>
+<a name="line186"></a>function testGetComputedBoxSizing() {
+<a name="line187"></a>  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(8)) {
+<a name="line188"></a>    var defaultBoxSizing = goog.dom.isCss1CompatMode() ?
+<a name="line189"></a>        &#39;content-box&#39; : &#39;border-box&#39;;
+<a name="line190"></a>    var el = goog.dom.getElement(&#39;box-sizing-unset&#39;);
+<a name="line191"></a>    assertEquals(defaultBoxSizing, goog.style.getComputedBoxSizing(el));
+<a name="line192"></a>
+<a name="line193"></a>    el = goog.dom.getElement(&#39;box-sizing-border-box&#39;);
+<a name="line194"></a>    assertEquals(&#39;border-box&#39;, goog.style.getComputedBoxSizing(el));
+<a name="line195"></a>  } else {
+<a name="line196"></a>    // IE7 and below don&#39;t support box-sizing.
+<a name="line197"></a>    assertNull(goog.style.getComputedBoxSizing(
+<a name="line198"></a>        goog.dom.getElement(&#39;box-sizing-border-box&#39;)));
+<a name="line199"></a>  }
+<a name="line200"></a>}
+<a name="line201"></a>
+<a name="line202"></a>function testGetComputedPosition() {
+<a name="line203"></a>  assertEquals(&#39;position not set&#39;, &#39;static&#39;,
+<a name="line204"></a>               goog.style.getComputedPosition($(&#39;position-unset&#39;)));
+<a name="line205"></a>  assertEquals(&#39;position:relative in style attribute&#39;, &#39;relative&#39;,
+<a name="line206"></a>               goog.style.getComputedPosition($(&#39;style-position-relative&#39;)));
+<a name="line207"></a>  if (goog.userAgent.IE &amp;&amp; !goog.dom.isCss1CompatMode()) {
+<a name="line208"></a>    assertEquals(&#39;position:fixed in style attribute&#39;, &#39;static&#39;,
+<a name="line209"></a>        goog.style.getComputedPosition($(&#39;style-position-fixed&#39;)));
+<a name="line210"></a>  } else {
+<a name="line211"></a>    assertEquals(&#39;position:fixed in style attribute&#39;, &#39;fixed&#39;,
+<a name="line212"></a>        goog.style.getComputedPosition($(&#39;style-position-fixed&#39;)));
+<a name="line213"></a>  }
+<a name="line214"></a>  assertEquals(&#39;position:absolute in css&#39;, &#39;absolute&#39;,
+<a name="line215"></a>               goog.style.getComputedPosition($(&#39;css-position-absolute&#39;)));
+<a name="line216"></a>}
+<a name="line217"></a>
+<a name="line218"></a>function testGetComputedOverflowXAndY() {
+<a name="line219"></a>  assertEquals(&#39;overflow-x:scroll in style attribute&#39;, &#39;scroll&#39;,
+<a name="line220"></a>               goog.style.getComputedOverflowX($(&#39;style-overflow-scroll&#39;)));
+<a name="line221"></a>  assertEquals(&#39;overflow-y:scroll in style attribute&#39;, &#39;scroll&#39;,
+<a name="line222"></a>               goog.style.getComputedOverflowY($(&#39;style-overflow-scroll&#39;)));
+<a name="line223"></a>  assertEquals(&#39;overflow-x:hidden in css&#39;, &#39;hidden&#39;,
+<a name="line224"></a>               goog.style.getComputedOverflowX($(&#39;css-overflow-hidden&#39;)));
+<a name="line225"></a>  assertEquals(&#39;overflow-y:hidden in css&#39;, &#39;hidden&#39;,
+<a name="line226"></a>               goog.style.getComputedOverflowY($(&#39;css-overflow-hidden&#39;)));
+<a name="line227"></a>}
+<a name="line228"></a>
+<a name="line229"></a>function testGetComputedZIndex() {
+<a name="line230"></a>  assertEquals(&#39;z-index:200 in style attribute&#39;, &#39;200&#39;,
+<a name="line231"></a>               &#39;&#39; + goog.style.getComputedZIndex($(&#39;style-z-index-200&#39;)));
+<a name="line232"></a>  assertEquals(&#39;z-index:200 in css&#39;, &#39;200&#39;,
+<a name="line233"></a>               &#39;&#39; + goog.style.getComputedZIndex($(&#39;css-z-index-200&#39;)));
+<a name="line234"></a>}
+<a name="line235"></a>
+<a name="line236"></a>function testGetComputedTextAlign() {
+<a name="line237"></a>  assertEquals(&#39;text-align:right in style attribute&#39;, &#39;right&#39;,
+<a name="line238"></a>               goog.style.getComputedTextAlign($(&#39;style-text-align-right&#39;)));
+<a name="line239"></a>  assertEquals(
+<a name="line240"></a>      &#39;text-align:right inherited from parent&#39;, &#39;right&#39;,
+<a name="line241"></a>      goog.style.getComputedTextAlign($(&#39;style-text-align-right-inner&#39;)));
+<a name="line242"></a>  assertEquals(&#39;text-align:center in css&#39;, &#39;center&#39;,
+<a name="line243"></a>               goog.style.getComputedTextAlign($(&#39;css-text-align-center&#39;)));
+<a name="line244"></a>}
+<a name="line245"></a>
+<a name="line246"></a>function testGetComputedCursor() {
+<a name="line247"></a>  assertEquals(&#39;cursor:move in style attribute&#39;, &#39;move&#39;,
+<a name="line248"></a>               goog.style.getComputedCursor($(&#39;style-cursor-move&#39;)));
+<a name="line249"></a>  assertEquals(&#39;cursor:move inherited from parent&#39;, &#39;move&#39;,
+<a name="line250"></a>               goog.style.getComputedCursor($(&#39;style-cursor-move-inner&#39;)));
+<a name="line251"></a>  assertEquals(&#39;cursor:poiner in css&#39;, &#39;pointer&#39;,
+<a name="line252"></a>               goog.style.getComputedCursor($(&#39;css-cursor-pointer&#39;)));
+<a name="line253"></a>}
+<a name="line254"></a>
+<a name="line255"></a>function testGetBackgroundColor() {
+<a name="line256"></a>  var dest = $(&#39;bgcolorDest&#39;);
+<a name="line257"></a>
+<a name="line258"></a>  for (var i = 0; $(&#39;bgcolorTest&#39; + i); i++) {
+<a name="line259"></a>    var src = $(&#39;bgcolorTest&#39; + i);
+<a name="line260"></a>    var bgColor = goog.style.getBackgroundColor(src);
+<a name="line261"></a>
+<a name="line262"></a>    dest.style.backgroundColor = bgColor;
+<a name="line263"></a>    assertEquals(&#39;Background colors should be equal&#39;,
+<a name="line264"></a>                 goog.style.getBackgroundColor(src),
+<a name="line265"></a>                 goog.style.getBackgroundColor(dest));
+<a name="line266"></a>
+<a name="line267"></a>    try {
+<a name="line268"></a>      // goog.color.parse throws a generic exception if handed input it
+<a name="line269"></a>      // doesn&#39;t understand.
+<a name="line270"></a>      var c = goog.color.parse(bgColor);
+<a name="line271"></a>      assertEquals(&#39;rgb(255,0,0)&#39;, goog.color.hexToRgbStyle(c.hex));
+<a name="line272"></a>    } catch (e) {
+<a name="line273"></a>      // Internet Explorer is unable to parse colors correctly after test 4.
+<a name="line274"></a>      // Other browsers may vary, but all should be able to handle straight
+<a name="line275"></a>      // hex input.
+<a name="line276"></a>      assertFalse(&#39;Should be able to parse color &quot;&#39; + bgColor + &#39;&quot;&#39;, i &lt; 5);
+<a name="line277"></a>    }
+<a name="line278"></a>  }
+<a name="line279"></a>}
+<a name="line280"></a>
+<a name="line281"></a>function testSetPosition() {
+<a name="line282"></a>  var el = $(&#39;testEl&#39;);
+<a name="line283"></a>
+<a name="line284"></a>  goog.style.setPosition(el, 100, 100);
+<a name="line285"></a>  assertEquals(&#39;100px&#39;, el.style.left);
+<a name="line286"></a>  assertEquals(&#39;100px&#39;, el.style.top);
+<a name="line287"></a>
+<a name="line288"></a>  goog.style.setPosition(el, &#39;50px&#39;, &#39;25px&#39;);
+<a name="line289"></a>  assertEquals(&#39;50px&#39;, el.style.left);
+<a name="line290"></a>  assertEquals(&#39;25px&#39;, el.style.top);
+<a name="line291"></a>
+<a name="line292"></a>  goog.style.setPosition(el, &#39;10ex&#39;, &#39;25px&#39;);
+<a name="line293"></a>  assertEquals(&#39;10ex&#39;, el.style.left);
+<a name="line294"></a>  assertEquals(&#39;25px&#39;, el.style.top);
+<a name="line295"></a>
+<a name="line296"></a>  goog.style.setPosition(el, &#39;10%&#39;, &#39;25%&#39;);
+<a name="line297"></a>  assertEquals(&#39;10%&#39;, el.style.left);
+<a name="line298"></a>  assertEquals(&#39;25%&#39;, el.style.top);
+<a name="line299"></a>
+<a name="line300"></a>  // ignores stupid units
+<a name="line301"></a>  goog.style.setPosition(el, 0, 0);
+<a name="line302"></a>  // TODO(user): IE errors if you set these values.  Should we make setStyle
+<a name="line303"></a>  // catch these?  Or leave it up to the app.  Fixing the tests for now.
+<a name="line304"></a>  //goog.style.setPosition(el, &#39;10rainbows&#39;, &#39;25rainbows&#39;);
+<a name="line305"></a>  assertEquals(&#39;0px&#39;, el.style.left);
+<a name="line306"></a>  assertEquals(&#39;0px&#39;, el.style.top);
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>  goog.style.setPosition(el, new goog.math.Coordinate(20, 40));
+<a name="line310"></a>  assertEquals(&#39;20px&#39;, el.style.left);
+<a name="line311"></a>  assertEquals(&#39;40px&#39;, el.style.top);
+<a name="line312"></a>}
+<a name="line313"></a>
+<a name="line314"></a>function testGetClientPositionAbsPositionElement() {
+<a name="line315"></a>  var div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line316"></a>  div.style.position = &#39;absolute&#39;;
+<a name="line317"></a>  div.style.left = &#39;100px&#39;;
+<a name="line318"></a>  div.style.top = &#39;200px&#39;;
+<a name="line319"></a>  document.body.appendChild(div);
+<a name="line320"></a>  var pos = goog.style.getClientPosition(div);
+<a name="line321"></a>  assertEquals(100, pos.x);
+<a name="line322"></a>  assertEquals(200, pos.y);
+<a name="line323"></a>}
+<a name="line324"></a>
+<a name="line325"></a>function testGetClientPositionNestedElements() {
+<a name="line326"></a>  var innerDiv = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line327"></a>  innerDiv.style.position = &#39;relative&#39;;
+<a name="line328"></a>  innerDiv.style.left = &#39;-10px&#39;;
+<a name="line329"></a>  innerDiv.style.top = &#39;-10px&#39;;
+<a name="line330"></a>  var div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line331"></a>  div.style.position = &#39;absolute&#39;;
+<a name="line332"></a>  div.style.left = &#39;150px&#39;;
+<a name="line333"></a>  div.style.top = &#39;250px&#39;;
+<a name="line334"></a>  div.appendChild(innerDiv);
+<a name="line335"></a>  document.body.appendChild(div);
+<a name="line336"></a>  var pos = goog.style.getClientPosition(innerDiv);
+<a name="line337"></a>  assertEquals(140, pos.x);
+<a name="line338"></a>  assertEquals(240, pos.y);
+<a name="line339"></a>}
+<a name="line340"></a>
+<a name="line341"></a>function testGetClientPositionOfOffscreenElement() {
+<a name="line342"></a>  var div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line343"></a>  div.style.position = &#39;absolute&#39;;
+<a name="line344"></a>  div.style.left = &#39;2000px&#39;;
+<a name="line345"></a>  div.style.top = &#39;2000px&#39;;
+<a name="line346"></a>  div.style.width = &#39;10px&#39;;
+<a name="line347"></a>  div.style.height = &#39;10px&#39;;
+<a name="line348"></a>  document.body.appendChild(div);
+<a name="line349"></a>
+<a name="line350"></a>  try {
+<a name="line351"></a>    window.scroll(0, 0);
+<a name="line352"></a>    var pos = goog.style.getClientPosition(div);
+<a name="line353"></a>    assertEquals(2000, pos.x);
+<a name="line354"></a>    assertEquals(2000, pos.y);
+<a name="line355"></a>
+<a name="line356"></a>    // The following tests do not work in Gecko 1.8 and below, due to an
+<a name="line357"></a>    // obscure off-by-one bug in goog.style.getPageOffset.  Same for IE.
+<a name="line358"></a>    if (!goog.userAgent.IE &amp;&amp;
+<a name="line359"></a>        !(goog.userAgent.GECKO &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;1.9&#39;))) {
+<a name="line360"></a>      window.scroll(1, 1);
+<a name="line361"></a>      var pos = goog.style.getClientPosition(div);
+<a name="line362"></a>      assertEquals(1999, pos.x);
+<a name="line363"></a>      assertRoughlyEquals(1999, pos.y, 0.5);
+<a name="line364"></a>
+<a name="line365"></a>      window.scroll(2, 2);
+<a name="line366"></a>      pos = goog.style.getClientPosition(div);
+<a name="line367"></a>      assertEquals(1998, pos.x);
+<a name="line368"></a>      assertRoughlyEquals(1998, pos.y, 0.5);
+<a name="line369"></a>
+<a name="line370"></a>      window.scroll(100, 100);
+<a name="line371"></a>      pos = goog.style.getClientPosition(div);
+<a name="line372"></a>      assertEquals(1900, pos.x);
+<a name="line373"></a>      assertRoughlyEquals(1900, pos.y, 0.5);
+<a name="line374"></a>    }
+<a name="line375"></a>  }
+<a name="line376"></a>  finally {
+<a name="line377"></a>    window.scroll(0, 0);
+<a name="line378"></a>    document.body.removeChild(div);
+<a name="line379"></a>  }
+<a name="line380"></a>}
+<a name="line381"></a>
+<a name="line382"></a>function testGetClientPositionOfOrphanElement() {
+<a name="line383"></a>  var orphanElem = document.createElement(&#39;DIV&#39;);
+<a name="line384"></a>  var pos = goog.style.getClientPosition(orphanElem);
+<a name="line385"></a>  assertEquals(0, pos.x);
+<a name="line386"></a>  assertEquals(0, pos.y);
+<a name="line387"></a>}
+<a name="line388"></a>
+<a name="line389"></a>function testGetClientPositionEvent() {
+<a name="line390"></a>  var mockEvent = {};
+<a name="line391"></a>  mockEvent.clientX = 100;
+<a name="line392"></a>  mockEvent.clientY = 200;
+<a name="line393"></a>  var pos = goog.style.getClientPosition(mockEvent);
+<a name="line394"></a>  assertEquals(100, pos.x);
+<a name="line395"></a>  assertEquals(200, pos.y);
+<a name="line396"></a>}
+<a name="line397"></a>
+<a name="line398"></a>function testGetClientPositionTouchEvent() {
+<a name="line399"></a>  var mockTouchEvent = {};
+<a name="line400"></a>
+<a name="line401"></a>  mockTouchEvent.targetTouches = [{}];
+<a name="line402"></a>  mockTouchEvent.targetTouches[0].clientX = 100;
+<a name="line403"></a>  mockTouchEvent.targetTouches[0].clientY = 200;
+<a name="line404"></a>
+<a name="line405"></a>  mockTouchEvent.touches = [{}];
+<a name="line406"></a>  mockTouchEvent.touches[0].clientX = 100;
+<a name="line407"></a>  mockTouchEvent.touches[0].clientY = 200;
+<a name="line408"></a>
+<a name="line409"></a>  var pos = goog.style.getClientPosition(mockTouchEvent);
+<a name="line410"></a>  assertEquals(100, pos.x);
+<a name="line411"></a>  assertEquals(200, pos.y);
+<a name="line412"></a>}
+<a name="line413"></a>
+<a name="line414"></a>function testGetClientPositionAbstractedTouchEvent() {
+<a name="line415"></a>  var e = new goog.events.BrowserEvent();
+<a name="line416"></a>  e.event_ = {};
+<a name="line417"></a>  e.event_.touches = [{}];
+<a name="line418"></a>  e.event_.touches[0].clientX = 100;
+<a name="line419"></a>  e.event_.touches[0].clientY = 200;
+<a name="line420"></a>  e.event_.targetTouches = [{}];
+<a name="line421"></a>  e.event_.targetTouches[0].clientX = 100;
+<a name="line422"></a>  e.event_.targetTouches[0].clientY = 200;
+<a name="line423"></a>  var pos = goog.style.getClientPosition(e);
+<a name="line424"></a>  assertEquals(100, pos.x);
+<a name="line425"></a>  assertEquals(200, pos.y);
+<a name="line426"></a>}
+<a name="line427"></a>
+<a name="line428"></a>function testGetPageOffsetAbsPositionedElement() {
+<a name="line429"></a>  var div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line430"></a>  div.style.position = &#39;absolute&#39;;
+<a name="line431"></a>  div.style.left = &#39;100px&#39;;
+<a name="line432"></a>  div.style.top = &#39;200px&#39;;
+<a name="line433"></a>  document.body.appendChild(div);
+<a name="line434"></a>  var pos = goog.style.getPageOffset(div);
+<a name="line435"></a>  assertEquals(100, pos.x);
+<a name="line436"></a>  assertEquals(200, pos.y);
+<a name="line437"></a>}
+<a name="line438"></a>
+<a name="line439"></a>function testGetPageOffsetNestedElements() {
+<a name="line440"></a>  var innerDiv = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line441"></a>  innerDiv.style.position = &#39;relative&#39;;
+<a name="line442"></a>  innerDiv.style.left = &#39;-10px&#39;;
+<a name="line443"></a>  innerDiv.style.top = &#39;-10px&#39;;
+<a name="line444"></a>  var div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line445"></a>  div.style.position = &#39;absolute&#39;;
+<a name="line446"></a>  div.style.left = &#39;150px&#39;;
+<a name="line447"></a>  div.style.top = &#39;250px&#39;;
+<a name="line448"></a>  div.appendChild(innerDiv);
+<a name="line449"></a>  document.body.appendChild(div);
+<a name="line450"></a>  var pos = goog.style.getPageOffset(innerDiv);
+<a name="line451"></a>  assertRoughlyEquals(140, pos.x, 0.1);
+<a name="line452"></a>  assertRoughlyEquals(240, pos.y, 0.1);
+<a name="line453"></a>}
+<a name="line454"></a>
+<a name="line455"></a>function testGetPageOffsetWithBodyPadding() {
+<a name="line456"></a>  document.body.style.margin = &#39;40px&#39;;
+<a name="line457"></a>  document.body.style.padding = &#39;60px&#39;;
+<a name="line458"></a>  document.body.style.borderWidth = &#39;70px&#39;;
+<a name="line459"></a>  try {
+<a name="line460"></a>    var div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line461"></a>    div.style.position = &#39;absolute&#39;;
+<a name="line462"></a>    div.style.left = &#39;100px&#39;;
+<a name="line463"></a>    div.style.top = &#39;200px&#39;;
+<a name="line464"></a>    // Margin will affect position, but padding and borders should not.
+<a name="line465"></a>    div.style.margin = &#39;1px&#39;;
+<a name="line466"></a>    div.style.padding = &#39;2px&#39;;
+<a name="line467"></a>    div.style.borderWidth = &#39;3px&#39;;
+<a name="line468"></a>    document.body.appendChild(div);
+<a name="line469"></a>    var pos = goog.style.getPageOffset(div);
+<a name="line470"></a>    assertRoughlyEquals(101, pos.x, 0.1);
+<a name="line471"></a>    assertRoughlyEquals(201, pos.y, 0.1);
+<a name="line472"></a>  }
+<a name="line473"></a>  finally {
+<a name="line474"></a>    document.body.removeChild(div);
+<a name="line475"></a>    document.body.style.margin = &#39;&#39;;
+<a name="line476"></a>    document.body.style.padding = &#39;&#39;;
+<a name="line477"></a>    document.body.style.borderWidth = &#39;&#39;;
+<a name="line478"></a>  }
+<a name="line479"></a>}
+<a name="line480"></a>
+<a name="line481"></a>function testGetPageOffsetWithDocumentElementPadding() {
+<a name="line482"></a>  document.documentElement.style.margin = &#39;40px&#39;;
+<a name="line483"></a>  document.documentElement.style.padding = &#39;60px&#39;;
+<a name="line484"></a>  document.documentElement.style.borderWidth = &#39;70px&#39;;
+<a name="line485"></a>  try {
+<a name="line486"></a>    var div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line487"></a>    div.style.position = &#39;absolute&#39;;
+<a name="line488"></a>    div.style.left = &#39;100px&#39;;
+<a name="line489"></a>    div.style.top = &#39;200px&#39;;
+<a name="line490"></a>    // Margin will affect position, but padding and borders should not.
+<a name="line491"></a>    div.style.margin = &#39;1px&#39;;
+<a name="line492"></a>    div.style.padding = &#39;2px&#39;;
+<a name="line493"></a>    div.style.borderWidth = &#39;3px&#39;;
+<a name="line494"></a>    document.body.appendChild(div);
+<a name="line495"></a>    var pos = goog.style.getPageOffset(div);
+<a name="line496"></a>    // FF3 (but not beyond) gets confused by document margins.
+<a name="line497"></a>    if (goog.userAgent.GECKO &amp;&amp; goog.userAgent.isVersionOrHigher(&#39;1.9&#39;) &amp;&amp;
+<a name="line498"></a>        !goog.userAgent.isVersionOrHigher(&#39;1.9.1&#39;)) {
+<a name="line499"></a>      assertEquals(141, pos.x);
+<a name="line500"></a>      assertEquals(241, pos.y);
+<a name="line501"></a>    } else {
+<a name="line502"></a>      assertRoughlyEquals(101, pos.x, 0.1);
+<a name="line503"></a>      assertRoughlyEquals(201, pos.y, 0.1);
+<a name="line504"></a>    }
+<a name="line505"></a>  }
+<a name="line506"></a>  finally {
+<a name="line507"></a>    document.body.removeChild(div);
+<a name="line508"></a>    document.documentElement.style.margin = &#39;&#39;;
+<a name="line509"></a>    document.documentElement.style.padding = &#39;&#39;;
+<a name="line510"></a>    document.documentElement.style.borderWidth = &#39;&#39;;
+<a name="line511"></a>  }
+<a name="line512"></a>}
+<a name="line513"></a>
+<a name="line514"></a>function testGetPageOffsetElementOffscreen() {
+<a name="line515"></a>  var div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line516"></a>  div.style.position = &#39;absolute&#39;;
+<a name="line517"></a>  div.style.left = &#39;10000px&#39;;
+<a name="line518"></a>  div.style.top = &#39;20000px&#39;;
+<a name="line519"></a>  document.body.appendChild(div);
+<a name="line520"></a>  window.scroll(0, 0);
+<a name="line521"></a>  try {
+<a name="line522"></a>    var pos = goog.style.getPageOffset(div);
+<a name="line523"></a>    assertEquals(10000, pos.x);
+<a name="line524"></a>    assertEquals(20000, pos.y);
+<a name="line525"></a>
+<a name="line526"></a>    // The following tests do not work in Gecko 1.8 and below, due to an
+<a name="line527"></a>    // obscure off-by-one bug in goog.style.getPageOffset.  Same for IE.
+<a name="line528"></a>    if (!(goog.userAgent.IE) &amp;&amp;
+<a name="line529"></a>        !(goog.userAgent.GECKO &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;1.9&#39;))) {
+<a name="line530"></a>      window.scroll(1, 1);
+<a name="line531"></a>      pos = goog.style.getPageOffset(div);
+<a name="line532"></a>      assertEquals(10000, pos.x);
+<a name="line533"></a>      assertRoughlyEquals(20000, pos.y, 0.5);
+<a name="line534"></a>
+<a name="line535"></a>      window.scroll(1000, 2000);
+<a name="line536"></a>      pos = goog.style.getPageOffset(div);
+<a name="line537"></a>      assertEquals(10000, pos.x);
+<a name="line538"></a>      assertRoughlyEquals(20000, pos.y, 1);
+<a name="line539"></a>
+<a name="line540"></a>      window.scroll(10000, 20000);
+<a name="line541"></a>      pos = goog.style.getPageOffset(div);
+<a name="line542"></a>      assertEquals(10000, pos.x);
+<a name="line543"></a>      assertRoughlyEquals(20000, pos.y, 1);
+<a name="line544"></a>    }
+<a name="line545"></a>  }
+<a name="line546"></a>  // Undo changes.
+<a name="line547"></a>  finally {
+<a name="line548"></a>    document.body.removeChild(div);
+<a name="line549"></a>    window.scroll(0, 0);
+<a name="line550"></a>  }
+<a name="line551"></a>}
+<a name="line552"></a>
+<a name="line553"></a>function testGetPageOffsetFixedPositionElements() {
+<a name="line554"></a>  // Skip these tests in certain browsers.
+<a name="line555"></a>  // position:fixed is not supported in IE before version 7
+<a name="line556"></a>  if (!goog.userAgent.IE || !goog.userAgent.isVersionOrHigher(&#39;6&#39;)) {
+<a name="line557"></a>    // Test with a position fixed element
+<a name="line558"></a>    var div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line559"></a>    div.style.position = &#39;fixed&#39;;
+<a name="line560"></a>    div.style.top = &#39;10px&#39;;
+<a name="line561"></a>    div.style.left = &#39;10px&#39;;
+<a name="line562"></a>    document.body.appendChild(div);
+<a name="line563"></a>    var pos = goog.style.getPageOffset(div);
+<a name="line564"></a>    assertEquals(10, pos.x);
+<a name="line565"></a>    assertEquals(10, pos.y);
+<a name="line566"></a>
+<a name="line567"></a>    // Test with a position fixed element as parent
+<a name="line568"></a>    var innerDiv = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line569"></a>    div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line570"></a>    div.style.position = &#39;fixed&#39;;
+<a name="line571"></a>    div.style.top = &#39;10px&#39;;
+<a name="line572"></a>    div.style.left = &#39;10px&#39;;
+<a name="line573"></a>    div.style.padding = &#39;5px&#39;;
+<a name="line574"></a>    div.appendChild(innerDiv);
+<a name="line575"></a>    document.body.appendChild(div);
+<a name="line576"></a>    pos = goog.style.getPageOffset(innerDiv);
+<a name="line577"></a>    assertEquals(15, pos.x);
+<a name="line578"></a>    assertEquals(15, pos.y);
+<a name="line579"></a>  }
+<a name="line580"></a>}
+<a name="line581"></a>
+<a name="line582"></a>function testGetPositionTolerantToNoDocumentElementBorder() {
+<a name="line583"></a>  // In IE, removing the border on the document element undoes the normal
+<a name="line584"></a>  // 2-pixel offset.  Ensure that we&#39;re correctly compensating for both cases.
+<a name="line585"></a>  try {
+<a name="line586"></a>    document.documentElement.style.borderWidth = &#39;0&#39;;
+<a name="line587"></a>    var div = goog.dom.createDom(&#39;DIV&#39;);
+<a name="line588"></a>    div.style.position = &#39;absolute&#39;;
+<a name="line589"></a>    div.style.left = &#39;100px&#39;;
+<a name="line590"></a>    div.style.top = &#39;200px&#39;;
+<a name="line591"></a>    document.body.appendChild(div);
+<a name="line592"></a>
+<a name="line593"></a>    // Test all major positioning methods.
+<a name="line594"></a>    // Disabled for IE8 and below - IE8 returns dimensions multiplied by 100.
+<a name="line595"></a>    expectedFailures.expectFailureFor(
+<a name="line596"></a>        goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(9));
+<a name="line597"></a>    try {
+<a name="line598"></a>      // Test all major positioning methods.
+<a name="line599"></a>      var pos = goog.style.getClientPosition(div);
+<a name="line600"></a>      assertEquals(100, pos.x);
+<a name="line601"></a>      assertRoughlyEquals(200, pos.y, .1);
+<a name="line602"></a>      var offset = goog.style.getPageOffset(div);
+<a name="line603"></a>      assertEquals(100, offset.x);
+<a name="line604"></a>      assertRoughlyEquals(200, offset.y, .1);
+<a name="line605"></a>    } catch (e) {
+<a name="line606"></a>      expectedFailures.handleException(e);
+<a name="line607"></a>    }
+<a name="line608"></a>  } finally {
+<a name="line609"></a>    document.documentElement.style.borderWidth = &#39;&#39;;
+<a name="line610"></a>  }
+<a name="line611"></a>}
+<a name="line612"></a>
+<a name="line613"></a>function testSetSize() {
+<a name="line614"></a>  var el = $(&#39;testEl&#39;);
+<a name="line615"></a>
+<a name="line616"></a>  goog.style.setSize(el, 100, 100);
+<a name="line617"></a>  assertEquals(&#39;100px&#39;, el.style.width);
+<a name="line618"></a>  assertEquals(&#39;100px&#39;, el.style.height);
+<a name="line619"></a>
+<a name="line620"></a>  goog.style.setSize(el, &#39;50px&#39;, &#39;25px&#39;);
+<a name="line621"></a>  assertEquals(&#39;should be &quot;50px&quot;&#39;, &#39;50px&#39;, el.style.width);
+<a name="line622"></a>  assertEquals(&#39;should be &quot;25px&quot;&#39;, &#39;25px&#39;, el.style.height);
+<a name="line623"></a>
+<a name="line624"></a>  goog.style.setSize(el, &#39;10ex&#39;, &#39;25px&#39;);
+<a name="line625"></a>  assertEquals(&#39;10ex&#39;, el.style.width);
+<a name="line626"></a>  assertEquals(&#39;25px&#39;, el.style.height);
+<a name="line627"></a>
+<a name="line628"></a>  goog.style.setSize(el, &#39;10%&#39;, &#39;25%&#39;);
+<a name="line629"></a>  assertEquals(&#39;10%&#39;, el.style.width);
+<a name="line630"></a>  assertEquals(&#39;25%&#39;, el.style.height);
+<a name="line631"></a>
+<a name="line632"></a>  // ignores stupid units
+<a name="line633"></a>  goog.style.setSize(el, 0, 0);
+<a name="line634"></a>  // TODO(user): IE errors if you set these values.  Should we make setStyle
+<a name="line635"></a>  // catch these?  Or leave it up to the app.  Fixing the tests for now.
+<a name="line636"></a>  //goog.style.setSize(el, &#39;10rainbows&#39;, &#39;25rainbows&#39;);
+<a name="line637"></a>  assertEquals(&#39;0px&#39;, el.style.width);
+<a name="line638"></a>  assertEquals(&#39;0px&#39;, el.style.height);
+<a name="line639"></a>
+<a name="line640"></a>  goog.style.setSize(el, new goog.math.Size(20, 40));
+<a name="line641"></a>  assertEquals(&#39;20px&#39;, el.style.width);
+<a name="line642"></a>  assertEquals(&#39;40px&#39;, el.style.height);
+<a name="line643"></a>}
+<a name="line644"></a>
+<a name="line645"></a>function testSetWidthAndHeight() {
+<a name="line646"></a>  var el = $(&#39;testEl&#39;);
+<a name="line647"></a>
+<a name="line648"></a>  // Replicate all of the setSize tests above.
+<a name="line649"></a>
+<a name="line650"></a>  goog.style.setWidth(el, 100);
+<a name="line651"></a>  goog.style.setHeight(el, 100);
+<a name="line652"></a>  assertEquals(&#39;100px&#39;, el.style.width);
+<a name="line653"></a>  assertEquals(&#39;100px&#39;, el.style.height);
+<a name="line654"></a>
+<a name="line655"></a>  goog.style.setWidth(el, &#39;50px&#39;);
+<a name="line656"></a>  goog.style.setHeight(el, &#39;25px&#39;);
+<a name="line657"></a>  assertEquals(&#39;should be &quot;50px&quot;&#39;, &#39;50px&#39;, el.style.width);
+<a name="line658"></a>  assertEquals(&#39;should be &quot;25px&quot;&#39;, &#39;25px&#39;, el.style.height);
+<a name="line659"></a>
+<a name="line660"></a>  goog.style.setWidth(el, &#39;10ex&#39;);
+<a name="line661"></a>  goog.style.setHeight(el, &#39;25px&#39;);
+<a name="line662"></a>  assertEquals(&#39;10ex&#39;, el.style.width);
+<a name="line663"></a>  assertEquals(&#39;25px&#39;, el.style.height);
+<a name="line664"></a>
+<a name="line665"></a>  goog.style.setWidth(el, &#39;10%&#39;);
+<a name="line666"></a>  goog.style.setHeight(el, &#39;25%&#39;);
+<a name="line667"></a>  assertEquals(&#39;10%&#39;, el.style.width);
+<a name="line668"></a>  assertEquals(&#39;25%&#39;, el.style.height);
+<a name="line669"></a>
+<a name="line670"></a>  goog.style.setWidth(el, 0);
+<a name="line671"></a>  goog.style.setHeight(el, 0);
+<a name="line672"></a>  assertEquals(&#39;0px&#39;, el.style.width);
+<a name="line673"></a>  assertEquals(&#39;0px&#39;, el.style.height);
+<a name="line674"></a>
+<a name="line675"></a>  goog.style.setWidth(el, 20);
+<a name="line676"></a>  goog.style.setHeight(el, 40);
+<a name="line677"></a>  assertEquals(&#39;20px&#39;, el.style.width);
+<a name="line678"></a>  assertEquals(&#39;40px&#39;, el.style.height);
+<a name="line679"></a>
+<a name="line680"></a>  // Additional tests testing each separately.
+<a name="line681"></a>  goog.style.setWidth(el, &#39;&#39;);
+<a name="line682"></a>  goog.style.setHeight(el, &#39;&#39;);
+<a name="line683"></a>  assertEquals(&#39;&#39;, el.style.width);
+<a name="line684"></a>  assertEquals(&#39;&#39;, el.style.height);
+<a name="line685"></a>
+<a name="line686"></a>  goog.style.setHeight(el, 20);
+<a name="line687"></a>  assertEquals(&#39;&#39;, el.style.width);
+<a name="line688"></a>  assertEquals(&#39;20px&#39;, el.style.height);
+<a name="line689"></a>
+<a name="line690"></a>  goog.style.setWidth(el, 40);
+<a name="line691"></a>  assertEquals(&#39;40px&#39;, el.style.width);
+<a name="line692"></a>  assertEquals(&#39;20px&#39;, el.style.height);
+<a name="line693"></a>}
+<a name="line694"></a>
+<a name="line695"></a>function testGetSize() {
+<a name="line696"></a>  var el = $(&#39;testEl&#39;);
+<a name="line697"></a>  goog.style.setSize(el, 100, 100);
+<a name="line698"></a>
+<a name="line699"></a>  var dims = goog.style.getSize(el);
+<a name="line700"></a>  assertEquals(100, dims.width);
+<a name="line701"></a>  assertEquals(100, dims.height);
+<a name="line702"></a>
+<a name="line703"></a>  goog.style.setStyle(el, &#39;display&#39;, &#39;none&#39;);
+<a name="line704"></a>  dims = goog.style.getSize(el);
+<a name="line705"></a>  assertEquals(100, dims.width);
+<a name="line706"></a>  assertEquals(100, dims.height);
+<a name="line707"></a>
+<a name="line708"></a>  el = $(&#39;testEl5&#39;);
+<a name="line709"></a>  goog.style.setSize(el, 100, 100);
+<a name="line710"></a>  dims = goog.style.getSize(el);
+<a name="line711"></a>  assertEquals(100, dims.width);
+<a name="line712"></a>  assertEquals(100, dims.height);
+<a name="line713"></a>
+<a name="line714"></a>  el = $(&#39;span0&#39;);
+<a name="line715"></a>  dims = goog.style.getSize(el);
+<a name="line716"></a>  assertNotEquals(0, dims.width);
+<a name="line717"></a>  assertNotEquals(0, dims.height);
+<a name="line718"></a>
+<a name="line719"></a>  el = $(&#39;table1&#39;);
+<a name="line720"></a>  dims = goog.style.getSize(el);
+<a name="line721"></a>  assertNotEquals(0, dims.width);
+<a name="line722"></a>  assertNotEquals(0, dims.height);
+<a name="line723"></a>
+<a name="line724"></a>  el = $(&#39;td1&#39;);
+<a name="line725"></a>  dims = goog.style.getSize(el);
+<a name="line726"></a>  assertNotEquals(0, dims.width);
+<a name="line727"></a>  assertNotEquals(0, dims.height);
+<a name="line728"></a>
+<a name="line729"></a>  el = $(&#39;li1&#39;);
+<a name="line730"></a>  dims = goog.style.getSize(el);
+<a name="line731"></a>  assertNotEquals(0, dims.width);
+<a name="line732"></a>  assertNotEquals(0, dims.height);
+<a name="line733"></a>
+<a name="line734"></a>  el = goog.dom.getElementsByTagNameAndClass(&#39;html&#39;)[0];
+<a name="line735"></a>  dims = goog.style.getSize(el);
+<a name="line736"></a>  assertNotEquals(0, dims.width);
+<a name="line737"></a>  assertNotEquals(0, dims.height);
+<a name="line738"></a>
+<a name="line739"></a>  el = goog.dom.getElementsByTagNameAndClass(&#39;body&#39;)[0];
+<a name="line740"></a>  dims = goog.style.getSize(el);
+<a name="line741"></a>  assertNotEquals(0, dims.width);
+<a name="line742"></a>  assertNotEquals(0, dims.height);
+<a name="line743"></a>}
+<a name="line744"></a>
+<a name="line745"></a>function testGetSizeSvgElements() {
+<a name="line746"></a>  var svgEl = document.createElementNS &amp;&amp;
+<a name="line747"></a>      document.createElementNS(&#39;http://www.w3.org/2000/svg&#39;, &#39;svg&#39;);
+<a name="line748"></a>  if (!svgEl || svgEl.getAttribute(&#39;transform&#39;) == &#39;&#39; ||
+<a name="line749"></a>      (goog.userAgent.WEBKIT &amp;&amp; !goog.userAgent.isVersionOrHigher(534.8))) {
+<a name="line750"></a>    // SVG not supported, or getBoundingClientRect not supported on SVG
+<a name="line751"></a>    // elements.
+<a name="line752"></a>    return;
+<a name="line753"></a>  }
+<a name="line754"></a>
+<a name="line755"></a>  document.body.appendChild(svgEl);
+<a name="line756"></a>  var el = document.createElementNS(&#39;http://www.w3.org/2000/svg&#39;, &#39;rect&#39;);
+<a name="line757"></a>  el.setAttribute(&#39;x&#39;, 10);
+<a name="line758"></a>  el.setAttribute(&#39;y&#39;, 10);
+<a name="line759"></a>  el.setAttribute(&#39;width&#39;, 32);
+<a name="line760"></a>  el.setAttribute(&#39;height&#39;, 21);
+<a name="line761"></a>  el.setAttribute(&#39;fill&#39;, &#39;#000&#39;);
+<a name="line762"></a>
+<a name="line763"></a>  svgEl.appendChild(el);
+<a name="line764"></a>
+<a name="line765"></a>  var dims = goog.style.getSize(el);
+<a name="line766"></a>  assertEquals(32, dims.width);
+<a name="line767"></a>  assertRoughlyEquals(21, dims.height, 0.01);
+<a name="line768"></a>
+<a name="line769"></a>  dims = goog.style.getSize(svgEl);
+<a name="line770"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line771"></a>    // The size of the &lt;svg&gt; will be the viewport size on WebKit browsers.
+<a name="line772"></a>    assertTrue(dims.width &gt;= 32);
+<a name="line773"></a>    assertTrue(dims.height &gt;= 21);
+<a name="line774"></a>  } else {
+<a name="line775"></a>    assertEquals(32, dims.width);
+<a name="line776"></a>    assertRoughlyEquals(21, dims.height, 0.01);
+<a name="line777"></a>  }
+<a name="line778"></a>
+<a name="line779"></a>  el.style.visibility = &#39;none&#39;;
+<a name="line780"></a>
+<a name="line781"></a>  dims = goog.style.getSize(el);
+<a name="line782"></a>  assertEquals(32, dims.width);
+<a name="line783"></a>  assertRoughlyEquals(21, dims.height, 0.01);
+<a name="line784"></a>
+<a name="line785"></a>  dims = goog.style.getSize(svgEl);
+<a name="line786"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line787"></a>    // The size of the &lt;svg&gt; will be the viewport size on WebKit browsers.
+<a name="line788"></a>    assertTrue(dims.width &gt;= 32);
+<a name="line789"></a>    assertTrue(dims.height &gt;= 21);
+<a name="line790"></a>  } else {
+<a name="line791"></a>    assertEquals(32, dims.width);
+<a name="line792"></a>    assertRoughlyEquals(21, dims.height, 0.01);
+<a name="line793"></a>  }
+<a name="line794"></a>}
+<a name="line795"></a>
+<a name="line796"></a>function testGetSizeSvgDocument() {
+<a name="line797"></a>  var svgEl = document.createElementNS &amp;&amp;
+<a name="line798"></a>      document.createElementNS(&#39;http://www.w3.org/2000/svg&#39;, &#39;svg&#39;);
+<a name="line799"></a>  if (!svgEl || svgEl.getAttribute(&#39;transform&#39;) == &#39;&#39; ||
+<a name="line800"></a>      (goog.userAgent.WEBKIT &amp;&amp; !goog.userAgent.isVersionOrHigher(534.8))) {
+<a name="line801"></a>    // SVG not supported, or getBoundingClientRect not supported on SVG
+<a name="line802"></a>    // elements.
+<a name="line803"></a>    return;
+<a name="line804"></a>  }
+<a name="line805"></a>
+<a name="line806"></a>  var frame = goog.dom.getElement(&#39;svg-frame&#39;);
+<a name="line807"></a>  var doc = goog.dom.getFrameContentDocument(frame);
+<a name="line808"></a>  var rect = doc.getElementById(&#39;rect&#39;);
+<a name="line809"></a>  var dims = goog.style.getSize(rect);
+<a name="line810"></a>  assertEquals(50, dims.width);
+<a name="line811"></a>  assertEquals(50, dims.height);
+<a name="line812"></a>}
+<a name="line813"></a>
+<a name="line814"></a>function testGetSizeInlineBlock() {
+<a name="line815"></a>  var el = $(&#39;height-test-inner&#39;);
+<a name="line816"></a>  var dims = goog.style.getSize(el);
+<a name="line817"></a>  assertNotEquals(0, dims.height);
+<a name="line818"></a>}
+<a name="line819"></a>
+<a name="line820"></a>function testGetSizeTransformedRotated() {
+<a name="line821"></a>  if (!hasWebkitTransform()) return;
+<a name="line822"></a>
+<a name="line823"></a>  var el = $(&#39;rotated&#39;);
+<a name="line824"></a>  goog.style.setSize(el, 300, 200);
+<a name="line825"></a>
+<a name="line826"></a>  var noRotateDims = goog.style.getTransformedSize(el);
+<a name="line827"></a>  assertEquals(300, noRotateDims.width);
+<a name="line828"></a>  assertEquals(200, noRotateDims.height);
+<a name="line829"></a>
+<a name="line830"></a>  el.style.webkitTransform = &#39;rotate(180deg)&#39;;
+<a name="line831"></a>  var rotate180Dims = goog.style.getTransformedSize(el);
+<a name="line832"></a>  assertEquals(300, rotate180Dims.width);
+<a name="line833"></a>  assertEquals(200, rotate180Dims.height);
+<a name="line834"></a>
+<a name="line835"></a>  el.style.webkitTransform = &#39;rotate(90deg)&#39;;
+<a name="line836"></a>  var rotate90ClockwiseDims = goog.style.getTransformedSize(el);
+<a name="line837"></a>  assertEquals(200, rotate90ClockwiseDims.width);
+<a name="line838"></a>  assertEquals(300, rotate90ClockwiseDims.height);
+<a name="line839"></a>
+<a name="line840"></a>  el.style.webkitTransform = &#39;rotate(-90deg)&#39;;
+<a name="line841"></a>  var rotate90CounterClockwiseDims = goog.style.getTransformedSize(el);
+<a name="line842"></a>  assertEquals(200, rotate90CounterClockwiseDims.width);
+<a name="line843"></a>  assertEquals(300, rotate90CounterClockwiseDims.height);
+<a name="line844"></a>}
+<a name="line845"></a>
+<a name="line846"></a>function testGetSizeTransformedScaled() {
+<a name="line847"></a>  if (!hasWebkitTransform()) return;
+<a name="line848"></a>
+<a name="line849"></a>  var el = $(&#39;scaled&#39;);
+<a name="line850"></a>  goog.style.setSize(el, 300, 200);
+<a name="line851"></a>
+<a name="line852"></a>  var noScaleDims = goog.style.getTransformedSize(el);
+<a name="line853"></a>  assertEquals(300, noScaleDims.width);
+<a name="line854"></a>  assertEquals(200, noScaleDims.height);
+<a name="line855"></a>
+<a name="line856"></a>  el.style.webkitTransform = &#39;scale(2, 0.5)&#39;;
+<a name="line857"></a>  var scaledDims = goog.style.getTransformedSize(el);
+<a name="line858"></a>  assertEquals(600, scaledDims.width);
+<a name="line859"></a>  assertEquals(100, scaledDims.height);
+<a name="line860"></a>}
+<a name="line861"></a>
+<a name="line862"></a>function hasWebkitTransform() {
+<a name="line863"></a>  return &#39;webkitTransform&#39; in document.body.style;
+<a name="line864"></a>}
+<a name="line865"></a>
+<a name="line866"></a>function testGetSizeOfOrphanElement() {
+<a name="line867"></a>  var orphanElem = document.createElement(&#39;DIV&#39;);
+<a name="line868"></a>  var size = goog.style.getSize(orphanElem);
+<a name="line869"></a>  assertEquals(0, size.width);
+<a name="line870"></a>  assertEquals(0, size.height);
+<a name="line871"></a>}
+<a name="line872"></a>
+<a name="line873"></a>function testGetBounds() {
+<a name="line874"></a>  var el = $(&#39;testEl&#39;);
+<a name="line875"></a>
+<a name="line876"></a>  var dims = goog.style.getSize(el);
+<a name="line877"></a>  var pos = goog.style.getPageOffset(el);
+<a name="line878"></a>
+<a name="line879"></a>  var rect = goog.style.getBounds(el);
+<a name="line880"></a>
+<a name="line881"></a>  // Relies on getSize and getPageOffset being correct.
+<a name="line882"></a>  assertEquals(dims.width, rect.width);
+<a name="line883"></a>  assertEquals(dims.height, rect.height);
+<a name="line884"></a>  assertEquals(pos.x, rect.left);
+<a name="line885"></a>  assertEquals(pos.y, rect.top);
+<a name="line886"></a>}
+<a name="line887"></a>
+<a name="line888"></a>function testInstallStyles() {
+<a name="line889"></a>  var el = $(&#39;installTest0&#39;);
+<a name="line890"></a>  var originalBackground = goog.style.getBackgroundColor(el);
+<a name="line891"></a>
+<a name="line892"></a>  // Uses background-color because it&#39;s easy to get the computed value
+<a name="line893"></a>  var result = goog.style.installStyles(
+<a name="line894"></a>      &#39;#installTest0 { background-color: rgb(255, 192, 203); }&#39;);
+<a name="line895"></a>
+<a name="line896"></a>  // For some odd reason, the change in computed style does not register on
+<a name="line897"></a>  // Chrome 19 unless the style property is touched.  The behavior goes
+<a name="line898"></a>  // away again in Chrome 20.
+<a name="line899"></a>  // TODO(nnaze): Remove special caseing once we switch the testing image
+<a name="line900"></a>  // to Chrome 20 or higher.
+<a name="line901"></a>  if (isChrome19()) {
+<a name="line902"></a>    el.style.display = &#39;&#39;;
+<a name="line903"></a>  }
+<a name="line904"></a>
+<a name="line905"></a>  assertColorRgbEquals(&#39;rgb(255,192,203)&#39;, goog.style.getBackgroundColor(el));
+<a name="line906"></a>
+<a name="line907"></a>  goog.style.uninstallStyles(result);
+<a name="line908"></a>  assertEquals(originalBackground, goog.style.getBackgroundColor(el));
+<a name="line909"></a>}
+<a name="line910"></a>
+<a name="line911"></a>function testSetStyles() {
+<a name="line912"></a>  var el = $(&#39;installTest1&#39;);
+<a name="line913"></a>
+<a name="line914"></a>  // Change to pink
+<a name="line915"></a>  var ss = goog.style.installStyles(
+<a name="line916"></a>      &#39;#installTest1 { background-color: rgb(255, 192, 203); }&#39;);
+<a name="line917"></a>
+<a name="line918"></a>  // For some odd reason, the change in computed style does not register on
+<a name="line919"></a>  // Chrome 19 unless the style property is touched.  The behavior goes
+<a name="line920"></a>  // away again in Chrome 20.
+<a name="line921"></a>  // TODO(nnaze): Remove special caseing once we switch the testing image
+<a name="line922"></a>  // to Chrome 20 or higher.
+<a name="line923"></a>  if (isChrome19()) {
+<a name="line924"></a>    el.style.display = &#39;&#39;;
+<a name="line925"></a>  }
+<a name="line926"></a>
+<a name="line927"></a>  assertColorRgbEquals(&#39;rgb(255,192,203)&#39;, goog.style.getBackgroundColor(el));
+<a name="line928"></a>
+<a name="line929"></a>  // Now change to orange
+<a name="line930"></a>  goog.style.setStyles(ss,
+<a name="line931"></a>      &#39;#installTest1 { background-color: rgb(255, 255, 0); }&#39;);
+<a name="line932"></a>  assertColorRgbEquals(&#39;rgb(255,255,0)&#39;, goog.style.getBackgroundColor(el));
+<a name="line933"></a>}
+<a name="line934"></a>
+<a name="line935"></a>function assertColorRgbEquals(expected, actual) {
+<a name="line936"></a>  assertEquals(expected,
+<a name="line937"></a>      goog.color.hexToRgbStyle(goog.color.parse(actual).hex));
+<a name="line938"></a>}
+<a name="line939"></a>
+<a name="line940"></a>function isChrome19() {
+<a name="line941"></a>  return goog.userAgent.product.CHROME &amp;&amp;
+<a name="line942"></a>         goog.string.startsWith(goog.userAgent.product.VERSION, &#39;19.&#39;);
+<a name="line943"></a>}
+<a name="line944"></a>
+<a name="line945"></a>function testIsRightToLeft() {
+<a name="line946"></a>  assertFalse(goog.style.isRightToLeft($(&#39;rtl1&#39;)));
+<a name="line947"></a>  assertTrue(goog.style.isRightToLeft($(&#39;rtl2&#39;)));
+<a name="line948"></a>  assertFalse(goog.style.isRightToLeft($(&#39;rtl3&#39;)));
+<a name="line949"></a>  assertFalse(goog.style.isRightToLeft($(&#39;rtl4&#39;)));
+<a name="line950"></a>  assertTrue(goog.style.isRightToLeft($(&#39;rtl5&#39;)));
+<a name="line951"></a>  assertFalse(goog.style.isRightToLeft($(&#39;rtl6&#39;)));
+<a name="line952"></a>  assertTrue(goog.style.isRightToLeft($(&#39;rtl7&#39;)));
+<a name="line953"></a>  assertFalse(goog.style.isRightToLeft($(&#39;rtl8&#39;)));
+<a name="line954"></a>  assertTrue(goog.style.isRightToLeft($(&#39;rtl9&#39;)));
+<a name="line955"></a>  assertFalse(goog.style.isRightToLeft($(&#39;rtl10&#39;)));
+<a name="line956"></a>}
+<a name="line957"></a>
+<a name="line958"></a>function testPosWithAbsoluteAndScroll() {
+<a name="line959"></a>  var el = $(&#39;pos-scroll-abs&#39;);
+<a name="line960"></a>  var el1 = $(&#39;pos-scroll-abs-1&#39;);
+<a name="line961"></a>  var el2 = $(&#39;pos-scroll-abs-2&#39;);
+<a name="line962"></a>
+<a name="line963"></a>  el1.scrollTop = 200;
+<a name="line964"></a>  var pos = goog.style.getPageOffset(el2);
+<a name="line965"></a>
+<a name="line966"></a>  assertEquals(200, pos.x);
+<a name="line967"></a>  // Don&#39;t bother with IE in quirks mode
+<a name="line968"></a>  if (!goog.userAgent.IE || document.compatMode == &#39;CSS1Compat&#39;) {
+<a name="line969"></a>    assertRoughlyEquals(300, pos.y, .1);
+<a name="line970"></a>  }
+<a name="line971"></a>}
+<a name="line972"></a>
+<a name="line973"></a>function testPosWithAbsoluteAndWindowScroll() {
+<a name="line974"></a>  window.scrollBy(0, 200);
+<a name="line975"></a>  var el = $(&#39;abs-upper-left&#39;);
+<a name="line976"></a>  var pos = goog.style.getPageOffset(el);
+<a name="line977"></a>  assertRoughlyEquals(&#39;Top should be about 0&#39;, 0, pos.y, 0.1);
+<a name="line978"></a>}
+<a name="line979"></a>
+<a name="line980"></a>function testGetBorderBoxSize() {
+<a name="line981"></a>  // Strict mode
+<a name="line982"></a>  var getBorderBoxSize = goog.style.getBorderBoxSize;
+<a name="line983"></a>
+<a name="line984"></a>  var el = $(&#39;size-a&#39;);
+<a name="line985"></a>  var rect = getBorderBoxSize(el);
+<a name="line986"></a>  assertEquals(&#39;width:100px&#39;, 100, rect.width);
+<a name="line987"></a>  assertEquals(&#39;height:100px&#39;, 100, rect.height);
+<a name="line988"></a>
+<a name="line989"></a>  // with border: 10px
+<a name="line990"></a>  el = $(&#39;size-b&#39;);
+<a name="line991"></a>  rect = getBorderBoxSize(el);
+<a name="line992"></a>  assertEquals(&#39;width:100px;border:10px&#39;, isBorderBox ? 100 : 120, rect.width);
+<a name="line993"></a>  assertEquals(&#39;height:100px;border:10px&#39;, isBorderBox ? 100 : 120,
+<a name="line994"></a>               rect.height);
+<a name="line995"></a>
+<a name="line996"></a>  // with border: 10px; padding: 10px
+<a name="line997"></a>  el = $(&#39;size-c&#39;);
+<a name="line998"></a>  rect = getBorderBoxSize(el);
+<a name="line999"></a>  assertEquals(&#39;width:100px;border:10px;padding:10px&#39;,
+<a name="line1000"></a>               isBorderBox ? 100 : 140, rect.width);
+<a name="line1001"></a>  assertEquals(&#39;height:100px;border:10px;padding:10px&#39;,
+<a name="line1002"></a>               isBorderBox ? 100 : 140, rect.height);
+<a name="line1003"></a>
+<a name="line1004"></a>  // size, padding and borders are all in non pixel units
+<a name="line1005"></a>  // all we test here is that we get a number out
+<a name="line1006"></a>  el = $(&#39;size-d&#39;);
+<a name="line1007"></a>  rect = getBorderBoxSize(el);
+<a name="line1008"></a>  assertEquals(&#39;number&#39;, typeof rect.width);
+<a name="line1009"></a>  assertEquals(&#39;number&#39;, typeof rect.height);
+<a name="line1010"></a>  assertFalse(isNaN(rect.width));
+<a name="line1011"></a>  assertFalse(isNaN(rect.height));
+<a name="line1012"></a>}
+<a name="line1013"></a>
+<a name="line1014"></a>function testGetContentBoxSize() {
+<a name="line1015"></a>  // Strict mode
+<a name="line1016"></a>  var getContentBoxSize = goog.style.getContentBoxSize;
+<a name="line1017"></a>
+<a name="line1018"></a>  var el = $(&#39;size-a&#39;);
+<a name="line1019"></a>  var rect = getContentBoxSize(el);
+<a name="line1020"></a>  assertEquals(&#39;width:100px&#39;, 100, rect.width);
+<a name="line1021"></a>  assertEquals(&#39;height:100px&#39;, 100, rect.height);
+<a name="line1022"></a>
+<a name="line1023"></a>  // with border: 10px
+<a name="line1024"></a>  el = $(&#39;size-b&#39;);
+<a name="line1025"></a>  rect = getContentBoxSize(el);
+<a name="line1026"></a>  assertEquals(&#39;width:100px;border:10px&#39;,
+<a name="line1027"></a>               isBorderBox ? 80 : 100, rect.width);
+<a name="line1028"></a>  assertEquals(&#39;height:100px;border:10px&#39;,
+<a name="line1029"></a>               isBorderBox ? 80 : 100, rect.height);
+<a name="line1030"></a>
+<a name="line1031"></a>  // with border: 10px; padding: 10px
+<a name="line1032"></a>  el = $(&#39;size-c&#39;);
+<a name="line1033"></a>  rect = getContentBoxSize(el);
+<a name="line1034"></a>  assertEquals(&#39;width:100px;border:10px;padding:10px&#39;,
+<a name="line1035"></a>               isBorderBox ? 60 : 100, rect.width);
+<a name="line1036"></a>  assertEquals(&#39;height:100px;border:10px;padding:10px&#39;,
+<a name="line1037"></a>               isBorderBox ? 60 : 100, rect.height);
+<a name="line1038"></a>
+<a name="line1039"></a>  // size, padding and borders are all in non pixel units
+<a name="line1040"></a>  // all we test here is that we get a number out
+<a name="line1041"></a>  el = $(&#39;size-d&#39;);
+<a name="line1042"></a>  rect = getContentBoxSize(el);
+<a name="line1043"></a>  assertEquals(&#39;number&#39;, typeof rect.width);
+<a name="line1044"></a>  assertEquals(&#39;number&#39;, typeof rect.height);
+<a name="line1045"></a>  assertFalse(isNaN(rect.width));
+<a name="line1046"></a>  assertFalse(isNaN(rect.height));
+<a name="line1047"></a>
+<a name="line1048"></a>  // test whether getContentBoxSize works when width and height
+<a name="line1049"></a>  // aren&#39;t explicitly set, but the default of &#39;auto&#39;.
+<a name="line1050"></a>  // &#39;size-f&#39; has no margin, border, or padding, so offsetWidth/Height
+<a name="line1051"></a>  // should match the content box size
+<a name="line1052"></a>  el = $(&#39;size-f&#39;);
+<a name="line1053"></a>  rect = getContentBoxSize(el);
+<a name="line1054"></a>  assertEquals(el.offsetWidth, rect.width);
+<a name="line1055"></a>  assertEquals(el.offsetHeight, rect.height);
+<a name="line1056"></a>}
+<a name="line1057"></a>
+<a name="line1058"></a>function testSetBorderBoxSize() {
+<a name="line1059"></a>  // Strict mode
+<a name="line1060"></a>  var el = $(&#39;size-e&#39;);
+<a name="line1061"></a>  var Size = goog.math.Size;
+<a name="line1062"></a>  var setBorderBoxSize = goog.style.setBorderBoxSize;
+<a name="line1063"></a>
+<a name="line1064"></a>  // Clean up
+<a name="line1065"></a>  // style element has 100x100, no border and no padding
+<a name="line1066"></a>  el.style.padding = &#39;&#39;;
+<a name="line1067"></a>  el.style.margin = &#39;&#39;;
+<a name="line1068"></a>  el.style.borderWidth = &#39;&#39;;
+<a name="line1069"></a>  el.style.width = &#39;&#39;;
+<a name="line1070"></a>  el.style.height = &#39;&#39;;
+<a name="line1071"></a>
+<a name="line1072"></a>  setBorderBoxSize(el, new Size(100, 100));
+<a name="line1073"></a>
+<a name="line1074"></a>  assertEquals(100, el.offsetWidth);
+<a name="line1075"></a>  assertEquals(100, el.offsetHeight);
+<a name="line1076"></a>
+<a name="line1077"></a>  el.style.borderWidth = &#39;10px&#39;;
+<a name="line1078"></a>  setBorderBoxSize(el, new Size(100, 100));
+<a name="line1079"></a>
+<a name="line1080"></a>  assertEquals(&#39;width:100px;border:10px&#39;, 100, el.offsetWidth);
+<a name="line1081"></a>  assertEquals(&#39;height:100px;border:10px&#39;, 100, el.offsetHeight);
+<a name="line1082"></a>
+<a name="line1083"></a>  el.style.padding = &#39;10px&#39;;
+<a name="line1084"></a>  setBorderBoxSize(el, new Size(100, 100));
+<a name="line1085"></a>  assertEquals(100, el.offsetWidth);
+<a name="line1086"></a>  assertEquals(100, el.offsetHeight);
+<a name="line1087"></a>
+<a name="line1088"></a>  el.style.borderWidth = &#39;0&#39;;
+<a name="line1089"></a>  setBorderBoxSize(el, new Size(100, 100));
+<a name="line1090"></a>  assertEquals(100, el.offsetWidth);
+<a name="line1091"></a>  assertEquals(100, el.offsetHeight);
+<a name="line1092"></a>
+<a name="line1093"></a>  if (goog.userAgent.GECKO) {
+<a name="line1094"></a>    assertEquals(&#39;border-box&#39;, el.style.MozBoxSizing);
+<a name="line1095"></a>  } else if (goog.userAgent.WEBKIT) {
+<a name="line1096"></a>    assertEquals(&#39;border-box&#39;, el.style.WebkitBoxSizing);
+<a name="line1097"></a>  } else if (goog.userAgent.OPERA ||
+<a name="line1098"></a>      goog.userAgent.IE &amp;&amp; goog.userAgent.isDocumentModeOrHigher(8)) {
+<a name="line1099"></a>    assertEquals(&#39;border-box&#39;, el.style.boxSizing);
+<a name="line1100"></a>  }
+<a name="line1101"></a>
+<a name="line1102"></a>  // Try a negative width/height.
+<a name="line1103"></a>  setBorderBoxSize(el, new Size(-10, -10));
+<a name="line1104"></a>
+<a name="line1105"></a>  // Setting the border box smaller than the borders will just give you
+<a name="line1106"></a>  // a content box of size 0.
+<a name="line1107"></a>  // NOTE(nicksantos): I&#39;m not really sure why IE7 is special here.
+<a name="line1108"></a>  var isIeLt8Quirks = goog.userAgent.IE &amp;&amp;
+<a name="line1109"></a>      !goog.userAgent.isDocumentModeOrHigher(8) &amp;&amp;
+<a name="line1110"></a>      !goog.dom.isCss1CompatMode();
+<a name="line1111"></a>  assertEquals(20, el.offsetWidth);
+<a name="line1112"></a>  assertEquals(isIeLt8Quirks ? 39 : 20, el.offsetHeight);
+<a name="line1113"></a>}
+<a name="line1114"></a>
+<a name="line1115"></a>function testSetContentBoxSize() {
+<a name="line1116"></a>  // Strict mode
+<a name="line1117"></a>  var el = $(&#39;size-e&#39;);
+<a name="line1118"></a>  var Size = goog.math.Size;
+<a name="line1119"></a>  var setContentBoxSize = goog.style.setContentBoxSize;
+<a name="line1120"></a>
+<a name="line1121"></a>  // Clean up
+<a name="line1122"></a>  // style element has 100x100, no border and no padding
+<a name="line1123"></a>  el.style.padding = &#39;&#39;;
+<a name="line1124"></a>  el.style.margin = &#39;&#39;;
+<a name="line1125"></a>  el.style.borderWidth = &#39;&#39;;
+<a name="line1126"></a>  el.style.width = &#39;&#39;;
+<a name="line1127"></a>  el.style.height = &#39;&#39;;
+<a name="line1128"></a>
+<a name="line1129"></a>  setContentBoxSize(el, new Size(100, 100));
+<a name="line1130"></a>
+<a name="line1131"></a>  assertEquals(100, el.offsetWidth);
+<a name="line1132"></a>  assertEquals(100, el.offsetHeight);
+<a name="line1133"></a>
+<a name="line1134"></a>  el.style.borderWidth = &#39;10px&#39;;
+<a name="line1135"></a>  setContentBoxSize(el, new Size(100, 100));
+<a name="line1136"></a>  assertEquals(&#39;width:100px;border-width:10px&#39;, 120, el.offsetWidth);
+<a name="line1137"></a>  assertEquals(&#39;height:100px;border-width:10px&#39;, 120, el.offsetHeight);
+<a name="line1138"></a>
+<a name="line1139"></a>  el.style.padding = &#39;10px&#39;;
+<a name="line1140"></a>  setContentBoxSize(el, new Size(100, 100));
+<a name="line1141"></a>  assertEquals(&#39;width:100px;border-width:10px;padding:10px&#39;,
+<a name="line1142"></a>               140, el.offsetWidth);
+<a name="line1143"></a>  assertEquals(&#39;height:100px;border-width:10px;padding:10px&#39;,
+<a name="line1144"></a>               140, el.offsetHeight);
+<a name="line1145"></a>
+<a name="line1146"></a>  el.style.borderWidth = &#39;0&#39;;
+<a name="line1147"></a>  setContentBoxSize(el, new Size(100, 100));
+<a name="line1148"></a>  assertEquals(&#39;width:100px;padding:10px&#39;, 120, el.offsetWidth);
+<a name="line1149"></a>  assertEquals(&#39;height:100px;padding:10px&#39;, 120, el.offsetHeight);
+<a name="line1150"></a>
+<a name="line1151"></a>  if (goog.userAgent.GECKO) {
+<a name="line1152"></a>    assertEquals(&#39;content-box&#39;, el.style.MozBoxSizing);
+<a name="line1153"></a>  } else if (goog.userAgent.WEBKIT) {
+<a name="line1154"></a>    assertEquals(&#39;content-box&#39;, el.style.WebkitBoxSizing);
+<a name="line1155"></a>  } else if (goog.userAgent.OPERA ||
+<a name="line1156"></a>      goog.userAgent.IE &amp;&amp; goog.userAgent.isDocumentModeOrHigher(8)) {
+<a name="line1157"></a>    assertEquals(&#39;content-box&#39;, el.style.boxSizing);
+<a name="line1158"></a>  }
+<a name="line1159"></a>
+<a name="line1160"></a>  // Try a negative width/height.
+<a name="line1161"></a>  setContentBoxSize(el, new Size(-10, -10));
+<a name="line1162"></a>
+<a name="line1163"></a>  // NOTE(nicksantos): I&#39;m not really sure why IE7 is special here.
+<a name="line1164"></a>  var isIeLt8Quirks = goog.userAgent.IE &amp;&amp;
+<a name="line1165"></a>      !goog.userAgent.isDocumentModeOrHigher(&#39;8&#39;) &amp;&amp;
+<a name="line1166"></a>      !goog.dom.isCss1CompatMode();
+<a name="line1167"></a>  assertEquals(20, el.offsetWidth);
+<a name="line1168"></a>  assertEquals(isIeLt8Quirks ? 39 : 20, el.offsetHeight);
+<a name="line1169"></a>}
+<a name="line1170"></a>
+<a name="line1171"></a>function testGetPaddingBox() {
+<a name="line1172"></a>  // Strict mode
+<a name="line1173"></a>  var el = $(&#39;size-e&#39;);
+<a name="line1174"></a>  var Size = goog.math.Size;
+<a name="line1175"></a>  var getPaddingBox = goog.style.getPaddingBox;
+<a name="line1176"></a>
+<a name="line1177"></a>  // Clean up
+<a name="line1178"></a>  // style element has 100x100, no border and no padding
+<a name="line1179"></a>  el.style.padding = &#39;&#39;;
+<a name="line1180"></a>  el.style.margin = &#39;&#39;;
+<a name="line1181"></a>  el.style.borderWidth = &#39;&#39;;
+<a name="line1182"></a>  el.style.width = &#39;&#39;;
+<a name="line1183"></a>  el.style.height = &#39;&#39;;
+<a name="line1184"></a>
+<a name="line1185"></a>  el.style.padding = &#39;10px&#39;;
+<a name="line1186"></a>  var rect = getPaddingBox(el);
+<a name="line1187"></a>  assertEquals(10, rect.left);
+<a name="line1188"></a>  assertEquals(10, rect.right);
+<a name="line1189"></a>  assertEquals(10, rect.top);
+<a name="line1190"></a>  assertEquals(10, rect.bottom);
+<a name="line1191"></a>
+<a name="line1192"></a>  el.style.padding = &#39;0&#39;;
+<a name="line1193"></a>  rect = getPaddingBox(el);
+<a name="line1194"></a>  assertEquals(0, rect.left);
+<a name="line1195"></a>  assertEquals(0, rect.right);
+<a name="line1196"></a>  assertEquals(0, rect.top);
+<a name="line1197"></a>  assertEquals(0, rect.bottom);
+<a name="line1198"></a>
+<a name="line1199"></a>  el.style.padding = &#39;1px 2px 3px 4px&#39;;
+<a name="line1200"></a>  rect = getPaddingBox(el);
+<a name="line1201"></a>  assertEquals(1, rect.top);
+<a name="line1202"></a>  assertEquals(2, rect.right);
+<a name="line1203"></a>  assertEquals(3, rect.bottom);
+<a name="line1204"></a>  assertEquals(4, rect.left);
+<a name="line1205"></a>
+<a name="line1206"></a>  el.style.padding = &#39;1mm 2em 3ex 4%&#39;;
+<a name="line1207"></a>  rect = getPaddingBox(el);
+<a name="line1208"></a>  assertFalse(isNaN(rect.top));
+<a name="line1209"></a>  assertFalse(isNaN(rect.right));
+<a name="line1210"></a>  assertFalse(isNaN(rect.bottom));
+<a name="line1211"></a>  assertFalse(isNaN(rect.left));
+<a name="line1212"></a>  assertTrue(rect.top &gt;= 0);
+<a name="line1213"></a>  assertTrue(rect.right &gt;= 0);
+<a name="line1214"></a>  assertTrue(rect.bottom &gt;= 0);
+<a name="line1215"></a>  assertTrue(rect.left &gt;= 0);
+<a name="line1216"></a>}
+<a name="line1217"></a>
+<a name="line1218"></a>function testGetPaddingBoxUnattached() {
+<a name="line1219"></a>  var el = document.createElement(&#39;div&#39;);
+<a name="line1220"></a>  var box = goog.style.getPaddingBox(el);
+<a name="line1221"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line1222"></a>    assertTrue(isNaN(box.top));
+<a name="line1223"></a>    assertTrue(isNaN(box.right));
+<a name="line1224"></a>    assertTrue(isNaN(box.bottom));
+<a name="line1225"></a>    assertTrue(isNaN(box.left));
+<a name="line1226"></a>  } else {
+<a name="line1227"></a>    assertObjectEquals(new goog.math.Box(0, 0, 0, 0), box);
+<a name="line1228"></a>  }
+<a name="line1229"></a>}
+<a name="line1230"></a>
+<a name="line1231"></a>function testGetMarginBox() {
+<a name="line1232"></a>  // Strict mode
+<a name="line1233"></a>  var el = $(&#39;size-e&#39;);
+<a name="line1234"></a>  var Size = goog.math.Size;
+<a name="line1235"></a>  var getMarginBox = goog.style.getMarginBox;
+<a name="line1236"></a>
+<a name="line1237"></a>  // Clean up
+<a name="line1238"></a>  // style element has 100x100, no border and no padding
+<a name="line1239"></a>  el.style.padding = &#39;&#39;;
+<a name="line1240"></a>  el.style.margin = &#39;&#39;;
+<a name="line1241"></a>  el.style.borderWidth = &#39;&#39;;
+<a name="line1242"></a>  el.style.width = &#39;&#39;;
+<a name="line1243"></a>  el.style.height = &#39;&#39;;
+<a name="line1244"></a>
+<a name="line1245"></a>  el.style.margin = &#39;10px&#39;;
+<a name="line1246"></a>  var rect = getMarginBox(el);
+<a name="line1247"></a>  assertEquals(10, rect.left);
+<a name="line1248"></a>  // In webkit the right margin is the calculated distance from right edge and
+<a name="line1249"></a>  // not the computed right margin so it is not reliable.
+<a name="line1250"></a>  // See https://bugs.webkit.org/show_bug.cgi?id=19828
+<a name="line1251"></a>  if (!goog.userAgent.WEBKIT) {
+<a name="line1252"></a>    assertEquals(10, rect.right);
+<a name="line1253"></a>  }
+<a name="line1254"></a>  assertEquals(10, rect.top);
+<a name="line1255"></a>  assertEquals(10, rect.bottom);
+<a name="line1256"></a>
+<a name="line1257"></a>  el.style.margin = &#39;0&#39;;
+<a name="line1258"></a>  rect = getMarginBox(el);
+<a name="line1259"></a>  assertEquals(0, rect.left);
+<a name="line1260"></a>  // In webkit the right margin is the calculated distance from right edge and
+<a name="line1261"></a>  // not the computed right margin so it is not reliable.
+<a name="line1262"></a>  // See https://bugs.webkit.org/show_bug.cgi?id=19828
+<a name="line1263"></a>  if (!goog.userAgent.WEBKIT) {
+<a name="line1264"></a>    assertEquals(0, rect.right);
+<a name="line1265"></a>  }
+<a name="line1266"></a>  assertEquals(0, rect.top);
+<a name="line1267"></a>  assertEquals(0, rect.bottom);
+<a name="line1268"></a>
+<a name="line1269"></a>  el.style.margin = &#39;1px 2px 3px 4px&#39;;
+<a name="line1270"></a>  rect = getMarginBox(el);
+<a name="line1271"></a>  assertEquals(1, rect.top);
+<a name="line1272"></a>  // In webkit the right margin is the calculated distance from right edge and
+<a name="line1273"></a>  // not the computed right margin so it is not reliable.
+<a name="line1274"></a>  // See https://bugs.webkit.org/show_bug.cgi?id=19828
+<a name="line1275"></a>  if (!goog.userAgent.WEBKIT) {
+<a name="line1276"></a>    assertEquals(2, rect.right);
+<a name="line1277"></a>  }
+<a name="line1278"></a>  assertEquals(3, rect.bottom);
+<a name="line1279"></a>  assertEquals(4, rect.left);
+<a name="line1280"></a>
+<a name="line1281"></a>  el.style.margin = &#39;1mm 2em 3ex 4%&#39;;
+<a name="line1282"></a>  rect = getMarginBox(el);
+<a name="line1283"></a>  assertFalse(isNaN(rect.top));
+<a name="line1284"></a>  assertFalse(isNaN(rect.right));
+<a name="line1285"></a>  assertFalse(isNaN(rect.bottom));
+<a name="line1286"></a>  assertFalse(isNaN(rect.left));
+<a name="line1287"></a>  assertTrue(rect.top &gt;= 0);
+<a name="line1288"></a>  // In webkit the right margin is the calculated distance from right edge and
+<a name="line1289"></a>  // not the computed right margin so it is not reliable.
+<a name="line1290"></a>  // See https://bugs.webkit.org/show_bug.cgi?id=19828
+<a name="line1291"></a>  if (!goog.userAgent.WEBKIT) {
+<a name="line1292"></a>    assertTrue(rect.right &gt;= 0);
+<a name="line1293"></a>  }
+<a name="line1294"></a>  assertTrue(rect.bottom &gt;= 0);
+<a name="line1295"></a>  assertTrue(rect.left &gt;= 0);
+<a name="line1296"></a>}
+<a name="line1297"></a>
+<a name="line1298"></a>function testGetBorderBox() {
+<a name="line1299"></a>  // Strict mode
+<a name="line1300"></a>  var el = $(&#39;size-e&#39;);
+<a name="line1301"></a>  var Size = goog.math.Size;
+<a name="line1302"></a>  var getBorderBox = goog.style.getBorderBox;
+<a name="line1303"></a>
+<a name="line1304"></a>  // Clean up
+<a name="line1305"></a>  // style element has 100x100, no border and no padding
+<a name="line1306"></a>  el.style.padding = &#39;&#39;;
+<a name="line1307"></a>  el.style.margin = &#39;&#39;;
+<a name="line1308"></a>  el.style.borderWidth = &#39;&#39;;
+<a name="line1309"></a>  el.style.width = &#39;&#39;;
+<a name="line1310"></a>  el.style.height = &#39;&#39;;
+<a name="line1311"></a>
+<a name="line1312"></a>  el.style.borderWidth = &#39;10px&#39;;
+<a name="line1313"></a>  var rect = getBorderBox(el);
+<a name="line1314"></a>  assertEquals(10, rect.left);
+<a name="line1315"></a>  assertEquals(10, rect.right);
+<a name="line1316"></a>  assertEquals(10, rect.top);
+<a name="line1317"></a>  assertEquals(10, rect.bottom);
+<a name="line1318"></a>
+<a name="line1319"></a>  el.style.borderWidth = &#39;0&#39;;
+<a name="line1320"></a>  rect = getBorderBox(el);
+<a name="line1321"></a>  assertEquals(0, rect.left);
+<a name="line1322"></a>  assertEquals(0, rect.right);
+<a name="line1323"></a>  assertEquals(0, rect.top);
+<a name="line1324"></a>  assertEquals(0, rect.bottom);
+<a name="line1325"></a>
+<a name="line1326"></a>  el.style.borderWidth = &#39;1px 2px 3px 4px&#39;;
+<a name="line1327"></a>  rect = getBorderBox(el);
+<a name="line1328"></a>  assertEquals(1, rect.top);
+<a name="line1329"></a>  assertEquals(2, rect.right);
+<a name="line1330"></a>  assertEquals(3, rect.bottom);
+<a name="line1331"></a>  assertEquals(4, rect.left);
+<a name="line1332"></a>
+<a name="line1333"></a>  // % does not work for border widths in IE
+<a name="line1334"></a>  el.style.borderWidth = &#39;1mm 2em 3ex 4pt&#39;;
+<a name="line1335"></a>  rect = getBorderBox(el);
+<a name="line1336"></a>  assertFalse(isNaN(rect.top));
+<a name="line1337"></a>  assertFalse(isNaN(rect.right));
+<a name="line1338"></a>  assertFalse(isNaN(rect.bottom));
+<a name="line1339"></a>  assertFalse(isNaN(rect.left));
+<a name="line1340"></a>  assertTrue(rect.top &gt;= 0);
+<a name="line1341"></a>  assertTrue(rect.right &gt;= 0);
+<a name="line1342"></a>  assertTrue(rect.bottom &gt;= 0);
+<a name="line1343"></a>  assertTrue(rect.left &gt;= 0);
+<a name="line1344"></a>
+<a name="line1345"></a>  el.style.borderWidth = &#39;thin medium thick 1px&#39;;
+<a name="line1346"></a>  rect = getBorderBox(el);
+<a name="line1347"></a>  assertFalse(isNaN(rect.top));
+<a name="line1348"></a>  assertFalse(isNaN(rect.right));
+<a name="line1349"></a>  assertFalse(isNaN(rect.bottom));
+<a name="line1350"></a>  assertFalse(isNaN(rect.left));
+<a name="line1351"></a>  assertTrue(rect.top &gt;= 0);
+<a name="line1352"></a>  assertTrue(rect.right &gt;= 0);
+<a name="line1353"></a>  assertTrue(rect.bottom &gt;= 0);
+<a name="line1354"></a>  assertTrue(rect.left &gt;= 0);
+<a name="line1355"></a>}
+<a name="line1356"></a>
+<a name="line1357"></a>function testGetFontFamily() {
+<a name="line1358"></a>  // I tried to use common fonts for these tests. It&#39;s possible the test fails
+<a name="line1359"></a>  // because the testing platform doesn&#39;t have one of these fonts installed:
+<a name="line1360"></a>  //   Comic Sans MS or Century Schoolbook L
+<a name="line1361"></a>  //   Times
+<a name="line1362"></a>  //   Helvetica
+<a name="line1363"></a>
+<a name="line1364"></a>  var tmpFont = goog.style.getFontFamily($(&#39;font-tag&#39;));
+<a name="line1365"></a>  assertTrue(&#39;FontFamily should be detectable when set via &lt;font face&gt;&#39;,
+<a name="line1366"></a>             &#39;Times&#39; == tmpFont || &#39;Times New Roman&#39; == tmpFont);
+<a name="line1367"></a>  tmpFont = goog.style.getFontFamily($(&#39;small-text&#39;));
+<a name="line1368"></a>  assertTrue(&#39;Multiword fonts should be reported with quotes stripped.&#39;,
+<a name="line1369"></a>             &#39;Comic Sans MS&#39; == tmpFont ||
+<a name="line1370"></a>                 &#39;Century Schoolbook L&#39; == tmpFont);
+<a name="line1371"></a>  // Firefox fails this test &amp; retuns a generic &#39;monospace&#39; instead of the
+<a name="line1372"></a>  // actually displayed font (e.g., &quot;Times New&quot;).
+<a name="line1373"></a>  //tmpFont = goog.style.getFontFamily($(&#39;pre-font&#39;));
+<a name="line1374"></a>  //assertEquals(&#39;&lt;pre&gt; tags should use a fixed-width font&#39;,
+<a name="line1375"></a>  //             &#39;Times New&#39;,
+<a name="line1376"></a>  //             tmpFont);
+<a name="line1377"></a>  tmpFont = goog.style.getFontFamily($(&#39;inherit-font&#39;));
+<a name="line1378"></a>  assertEquals(&#39;Explicitly inherited fonts should be detectable&#39;,
+<a name="line1379"></a>               &#39;Helvetica&#39;,
+<a name="line1380"></a>               tmpFont);
+<a name="line1381"></a>  tmpFont = goog.style.getFontFamily($(&#39;times-font-family&#39;));
+<a name="line1382"></a>  assertEquals(&#39;Font-family set via style attribute should be detected&#39;,
+<a name="line1383"></a>               &#39;Times&#39;,
+<a name="line1384"></a>               tmpFont);
+<a name="line1385"></a>  tmpFont = goog.style.getFontFamily($(&#39;bold-font&#39;));
+<a name="line1386"></a>  assertEquals(&#39;Implicitly inherited font should be detected&#39;,
+<a name="line1387"></a>               &#39;Helvetica&#39;,
+<a name="line1388"></a>               tmpFont);
+<a name="line1389"></a>  tmpFont = goog.style.getFontFamily($(&#39;css-html-tag-redefinition&#39;));
+<a name="line1390"></a>  assertEquals(&#39;HTML tag CSS rewrites should be detected&#39;,
+<a name="line1391"></a>               &#39;Times&#39;,
+<a name="line1392"></a>               tmpFont);
+<a name="line1393"></a>  tmpFont = goog.style.getFontFamily($(&#39;no-text-font-styles&#39;));
+<a name="line1394"></a>  assertEquals(&#39;Font family should exist even with no text&#39;,
+<a name="line1395"></a>               &#39;Helvetica&#39;,
+<a name="line1396"></a>               tmpFont);
+<a name="line1397"></a>  tmpFont = goog.style.getFontFamily($(&#39;icon-font&#39;));
+<a name="line1398"></a>  assertNotEquals(&#39;icon is a special font-family value&#39;,
+<a name="line1399"></a>                  &#39;icon&#39;,
+<a name="line1400"></a>                  tmpFont.toLowerCase());
+<a name="line1401"></a>  tmpFont = goog.style.getFontFamily($(&#39;font-style-badfont&#39;));
+<a name="line1402"></a>  // Firefox fails this test and reports the specified &quot;badFont&quot;, which is
+<a name="line1403"></a>  // obviously not displayed.
+<a name="line1404"></a>  //assertEquals(&#39;Invalid fonts should not be returned&#39;,
+<a name="line1405"></a>  //             &#39;Helvetica&#39;,
+<a name="line1406"></a>  //             tmpFont);
+<a name="line1407"></a>  tmpFont = goog.style.getFontFamily($(&#39;img-font-test&#39;));
+<a name="line1408"></a>  assertTrue(&#39;Even img tags should inherit the document body\&#39;s font&#39;,
+<a name="line1409"></a>             tmpFont != &#39;&#39;);
+<a name="line1410"></a>  tmpFont = goog.style.getFontFamily($(&#39;nested-font&#39;));
+<a name="line1411"></a>  assertEquals(&#39;An element with nested content should be unaffected.&#39;,
+<a name="line1412"></a>               &#39;Arial&#39;,
+<a name="line1413"></a>               tmpFont);
+<a name="line1414"></a>  // IE raises an &#39;Invalid Argument&#39; error when using the moveToElementText
+<a name="line1415"></a>  // method from the TextRange object with an element that is not attached to
+<a name="line1416"></a>  // a document.
+<a name="line1417"></a>  var element = goog.dom.createDom(&#39;span&#39;,
+<a name="line1418"></a>      {style: &#39;font-family:Times,sans-serif;&#39;}, &#39;some text&#39;);
+<a name="line1419"></a>  tmpFont = goog.style.getFontFamily(element);
+<a name="line1420"></a>  assertEquals(&#39;Font should be correctly retrieved for element not attached&#39; +
+<a name="line1421"></a>               &#39; to a document&#39;,
+<a name="line1422"></a>               &#39;Times&#39;,
+<a name="line1423"></a>               tmpFont);
+<a name="line1424"></a>}
+<a name="line1425"></a>
+<a name="line1426"></a>function testGetFontSize() {
+<a name="line1427"></a>  assertEquals(&#39;Font size should be determined even without any text&#39;,
+<a name="line1428"></a>               30,
+<a name="line1429"></a>               goog.style.getFontSize($(&#39;no-text-font-styles&#39;)));
+<a name="line1430"></a>  assertEquals(&#39;A 5em font should be 5x larger than its parent.&#39;,
+<a name="line1431"></a>               150,
+<a name="line1432"></a>               goog.style.getFontSize($(&#39;css-html-tag-redefinition&#39;)));
+<a name="line1433"></a>  assertTrue(&#39;Setting font size=-1 should result in a positive font size.&#39;,
+<a name="line1434"></a>             goog.style.getFontSize($(&#39;font-tag&#39;)) &gt; 0);
+<a name="line1435"></a>  assertEquals(&#39;Inheriting a 50% font-size should have no additional effect&#39;,
+<a name="line1436"></a>               goog.style.getFontSize($(&#39;font-style-badfont&#39;)),
+<a name="line1437"></a>               goog.style.getFontSize($(&#39;inherit-50pct-font&#39;)));
+<a name="line1438"></a>  assertTrue(&#39;In pretty much any display, 3in should be &gt; 8px&#39;,
+<a name="line1439"></a>             goog.style.getFontSize($(&#39;times-font-family&#39;)) &gt;
+<a name="line1440"></a>                 goog.style.getFontSize($(&#39;no-text-font-styles&#39;)));
+<a name="line1441"></a>  assertTrue(&#39;With no applied styles, font-size should still be defined.&#39;,
+<a name="line1442"></a>             goog.style.getFontSize($(&#39;no-font-style&#39;)) &gt; 0);
+<a name="line1443"></a>  assertEquals(&#39;50% of 30px is 15&#39;,
+<a name="line1444"></a>               15,
+<a name="line1445"></a>               goog.style.getFontSize($(&#39;font-style-badfont&#39;)));
+<a name="line1446"></a>  assertTrue(&#39;x-small text should be smaller than small text&#39;,
+<a name="line1447"></a>             goog.style.getFontSize($(&#39;x-small-text&#39;)) &lt;
+<a name="line1448"></a>                 goog.style.getFontSize($(&#39;small-text&#39;)));
+<a name="line1449"></a>  // IE fails this test, the decimal portion of px lengths isn&#39;t reported
+<a name="line1450"></a>  // by getCascadedStyle. Firefox passes, but only because it ignores the
+<a name="line1451"></a>  // decimals altogether.
+<a name="line1452"></a>  //assertEquals(&#39;12.5px should be the same as 0.5em nested in a 25px node.&#39;,
+<a name="line1453"></a>  //             goog.style.getFontSize($(&#39;font-size-12-point-5-px&#39;)),
+<a name="line1454"></a>  //             goog.style.getFontSize($(&#39;font-size-50-pct-of-25-px&#39;)));
+<a name="line1455"></a>
+<a name="line1456"></a>  assertEquals(&#39;Font size should not doubly count em values&#39;,
+<a name="line1457"></a>      2, goog.style.getFontSize($(&#39;em-font-size&#39;)));
+<a name="line1458"></a>}
+<a name="line1459"></a>
+<a name="line1460"></a>function testGetLengthUnits() {
+<a name="line1461"></a>  assertEquals(&#39;px&#39;, goog.style.getLengthUnits(&#39;15px&#39;));
+<a name="line1462"></a>  assertEquals(&#39;%&#39;, goog.style.getLengthUnits(&#39;99%&#39;));
+<a name="line1463"></a>  assertNull(goog.style.getLengthUnits(&#39;&#39;));
+<a name="line1464"></a>}
+<a name="line1465"></a>
+<a name="line1466"></a>function testParseStyleAttribute() {
+<a name="line1467"></a>  var css = &#39;left: 0px; text-align: center&#39;;
+<a name="line1468"></a>  var expected = {&#39;left&#39;: &#39;0px&#39;, &#39;textAlign&#39;: &#39;center&#39;};
+<a name="line1469"></a>
+<a name="line1470"></a>  assertObjectEquals(expected, goog.style.parseStyleAttribute(css));
+<a name="line1471"></a>}
+<a name="line1472"></a>
+<a name="line1473"></a>function testToStyleAttribute() {
+<a name="line1474"></a>  var object = {&#39;left&#39;: &#39;0px&#39;, &#39;textAlign&#39;: &#39;center&#39;};
+<a name="line1475"></a>  var expected = &#39;left:0px;text-align:center;&#39;;
+<a name="line1476"></a>
+<a name="line1477"></a>  assertEquals(expected, goog.style.toStyleAttribute(object));
+<a name="line1478"></a>}
+<a name="line1479"></a>
+<a name="line1480"></a>function testStyleAttributePassthrough() {
+<a name="line1481"></a>  var object = {&#39;left&#39;: &#39;0px&#39;, &#39;textAlign&#39;: &#39;center&#39;};
+<a name="line1482"></a>
+<a name="line1483"></a>  assertObjectEquals(object,
+<a name="line1484"></a>      goog.style.parseStyleAttribute(goog.style.toStyleAttribute(object)));
+<a name="line1485"></a>}
+<a name="line1486"></a>
+<a name="line1487"></a>function testGetFloat() {
+<a name="line1488"></a>  assertEquals(&#39;&#39;, goog.style.getFloat($(&#39;no-float&#39;)));
+<a name="line1489"></a>  assertEquals(&#39;none&#39;, goog.style.getFloat($(&#39;float-none&#39;)));
+<a name="line1490"></a>  assertEquals(&#39;left&#39;, goog.style.getFloat($(&#39;float-left&#39;)));
+<a name="line1491"></a>}
+<a name="line1492"></a>
+<a name="line1493"></a>function testSetFloat() {
+<a name="line1494"></a>  var el = $(&#39;float-test&#39;);
+<a name="line1495"></a>
+<a name="line1496"></a>  goog.style.setFloat(el, &#39;left&#39;);
+<a name="line1497"></a>  assertEquals(&#39;left&#39;, goog.style.getFloat(el));
+<a name="line1498"></a>
+<a name="line1499"></a>  goog.style.setFloat(el, &#39;right&#39;);
+<a name="line1500"></a>  assertEquals(&#39;right&#39;, goog.style.getFloat(el));
+<a name="line1501"></a>
+<a name="line1502"></a>  goog.style.setFloat(el, &#39;none&#39;);
+<a name="line1503"></a>  assertEquals(&#39;none&#39;, goog.style.getFloat(el));
+<a name="line1504"></a>
+<a name="line1505"></a>  goog.style.setFloat(el, &#39;&#39;);
+<a name="line1506"></a>  assertEquals(&#39;&#39;, goog.style.getFloat(el));
+<a name="line1507"></a>}
+<a name="line1508"></a>
+<a name="line1509"></a>function testIsElementShown() {
+<a name="line1510"></a>  var el = $(&#39;testEl&#39;);
+<a name="line1511"></a>
+<a name="line1512"></a>  goog.style.setElementShown(el, false);
+<a name="line1513"></a>  assertFalse(goog.style.isElementShown(el));
+<a name="line1514"></a>
+<a name="line1515"></a>  goog.style.setElementShown(el, true);
+<a name="line1516"></a>  assertTrue(goog.style.isElementShown(el));
+<a name="line1517"></a>}
+<a name="line1518"></a>
+<a name="line1519"></a>function testGetOpacity() {
+<a name="line1520"></a>  var el1 = {
+<a name="line1521"></a>    style: {
+<a name="line1522"></a>      opacity: &#39;0.3&#39;
+<a name="line1523"></a>    }
+<a name="line1524"></a>  };
+<a name="line1525"></a>
+<a name="line1526"></a>  var el2 = {
+<a name="line1527"></a>    style: {
+<a name="line1528"></a>      MozOpacity: &#39;0.1&#39;
+<a name="line1529"></a>    }
+<a name="line1530"></a>  };
+<a name="line1531"></a>
+<a name="line1532"></a>  var el3 = {
+<a name="line1533"></a>    style: {
+<a name="line1534"></a>      filter: &#39;some:other,filter;alpha(opacity=25.5);alpha(more=100);&#39;
+<a name="line1535"></a>    }
+<a name="line1536"></a>  };
+<a name="line1537"></a>
+<a name="line1538"></a>  assertEquals(0.3, goog.style.getOpacity(el1));
+<a name="line1539"></a>  assertEquals(0.1, goog.style.getOpacity(el2));
+<a name="line1540"></a>  assertEquals(0.255, goog.style.getOpacity(el3));
+<a name="line1541"></a>
+<a name="line1542"></a>  el1.style.opacity = &#39;0&#39;;
+<a name="line1543"></a>  el2.style.MozOpacity = &#39;0&#39;;
+<a name="line1544"></a>  el3.style.filter = &#39;some:other,filter;alpha(opacity=0);alpha(more=100);&#39;;
+<a name="line1545"></a>
+<a name="line1546"></a>  assertEquals(0, goog.style.getOpacity(el1));
+<a name="line1547"></a>  assertEquals(0, goog.style.getOpacity(el2));
+<a name="line1548"></a>  assertEquals(0, goog.style.getOpacity(el3));
+<a name="line1549"></a>
+<a name="line1550"></a>  el1.style.opacity = &#39;&#39;;
+<a name="line1551"></a>  el2.style.MozOpacity = &#39;&#39;;
+<a name="line1552"></a>  el3.style.filter = &#39;&#39;;
+<a name="line1553"></a>
+<a name="line1554"></a>  assertEquals(&#39;&#39;, goog.style.getOpacity(el1));
+<a name="line1555"></a>  assertEquals(&#39;&#39;, goog.style.getOpacity(el2));
+<a name="line1556"></a>  assertEquals(&#39;&#39;, goog.style.getOpacity(el3));
+<a name="line1557"></a>
+<a name="line1558"></a>  var el4 = {
+<a name="line1559"></a>    style: {}
+<a name="line1560"></a>  };
+<a name="line1561"></a>
+<a name="line1562"></a>  assertEquals(&#39;&#39;, goog.style.getOpacity(el4));
+<a name="line1563"></a>  assertEquals(&#39;&#39;, goog.style.getOpacity($(&#39;test-opacity&#39;)));
+<a name="line1564"></a>}
+<a name="line1565"></a>
+<a name="line1566"></a>function testSetOpacity() {
+<a name="line1567"></a>  var el1 = {
+<a name="line1568"></a>    style: {
+<a name="line1569"></a>      opacity: &#39;0.3&#39;
+<a name="line1570"></a>    }
+<a name="line1571"></a>  };
+<a name="line1572"></a>  goog.style.setOpacity(el1, 0.8);
+<a name="line1573"></a>
+<a name="line1574"></a>  var el2 = {
+<a name="line1575"></a>    style: {
+<a name="line1576"></a>      MozOpacity: &#39;0.1&#39;
+<a name="line1577"></a>    }
+<a name="line1578"></a>  };
+<a name="line1579"></a>  goog.style.setOpacity(el2, 0.5);
+<a name="line1580"></a>
+<a name="line1581"></a>  var el3 = {
+<a name="line1582"></a>    style: {
+<a name="line1583"></a>      filter: &#39;alpha(opacity=25)&#39;
+<a name="line1584"></a>    }
+<a name="line1585"></a>  };
+<a name="line1586"></a>  goog.style.setOpacity(el3, 0.1);
+<a name="line1587"></a>
+<a name="line1588"></a>  assertEquals(0.8, Number(el1.style.opacity));
+<a name="line1589"></a>  assertEquals(0.5, Number(el2.style.MozOpacity));
+<a name="line1590"></a>  assertEquals(&#39;alpha(opacity=10)&#39;, el3.style.filter);
+<a name="line1591"></a>
+<a name="line1592"></a>  goog.style.setOpacity(el1, 0);
+<a name="line1593"></a>  goog.style.setOpacity(el2, 0);
+<a name="line1594"></a>  goog.style.setOpacity(el3, 0);
+<a name="line1595"></a>
+<a name="line1596"></a>  assertEquals(0, Number(el1.style.opacity));
+<a name="line1597"></a>  assertEquals(0, Number(el2.style.MozOpacity));
+<a name="line1598"></a>  assertEquals(&#39;alpha(opacity=0)&#39;, el3.style.filter);
+<a name="line1599"></a>
+<a name="line1600"></a>  goog.style.setOpacity(el1, &#39;&#39;);
+<a name="line1601"></a>  goog.style.setOpacity(el2, &#39;&#39;);
+<a name="line1602"></a>  goog.style.setOpacity(el3, &#39;&#39;);
+<a name="line1603"></a>
+<a name="line1604"></a>  assertEquals(&#39;&#39;, el1.style.opacity);
+<a name="line1605"></a>  assertEquals(&#39;&#39;, el2.style.MozOpacity);
+<a name="line1606"></a>  assertEquals(&#39;&#39;, el3.style.filter);
+<a name="line1607"></a>}
+<a name="line1608"></a>
+<a name="line1609"></a>function testFramedPageOffset() {
+<a name="line1610"></a>  // Set up a complicated iframe ancestor chain.
+<a name="line1611"></a>  var iframe = goog.dom.getElement(&#39;test-frame-offset&#39;);
+<a name="line1612"></a>  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
+<a name="line1613"></a>  var iframeWindow = goog.dom.getWindow(iframeDoc);
+<a name="line1614"></a>
+<a name="line1615"></a>  var iframePos = &#39;style=&quot;display:block;position:absolute;&#39; +
+<a name="line1616"></a>      &#39;top:50px;left:50px;width:50px;height:50px;&quot;&#39;;
+<a name="line1617"></a>  iframeDoc.write(&#39;&lt;iframe id=&quot;test-frame-offset-2&quot; &#39; +
+<a name="line1618"></a>      iframePos + &#39;&gt;&lt;/iframe&gt;&#39; +
+<a name="line1619"></a>      &#39;&lt;div id=&quot;test-element-2&quot; &#39; +
+<a name="line1620"></a>      &#39; style=&quot;position:absolute;left:300px;top:300px&quot;&gt;hi mom!&lt;/div&gt;&#39;);
+<a name="line1621"></a>  iframeDoc.close();
+<a name="line1622"></a>  var iframe2 = iframeDoc.getElementById(&#39;test-frame-offset-2&#39;);
+<a name="line1623"></a>  var testElement2 = iframeDoc.getElementById(&#39;test-element-2&#39;);
+<a name="line1624"></a>  var iframeDoc2 = goog.dom.getFrameContentDocument(iframe2);
+<a name="line1625"></a>  var iframeWindow2 = goog.dom.getWindow(iframeDoc2);
+<a name="line1626"></a>
+<a name="line1627"></a>  iframeDoc2.write(
+<a name="line1628"></a>      &#39;&lt;div id=&quot;test-element-3&quot; &#39; +
+<a name="line1629"></a>      &#39; style=&quot;position:absolute;left:500px;top:500px&quot;&gt;hi mom!&lt;/div&gt;&#39;);
+<a name="line1630"></a>  iframeDoc2.close();
+<a name="line1631"></a>  var testElement3 = iframeDoc2.getElementById(&#39;test-element-3&#39;);
+<a name="line1632"></a>
+<a name="line1633"></a>  assertCoordinateApprox(300, 300, 0,
+<a name="line1634"></a>      goog.style.getPageOffset(testElement2));
+<a name="line1635"></a>  assertCoordinateApprox(500, 500, 0,
+<a name="line1636"></a>      goog.style.getPageOffset(testElement3));
+<a name="line1637"></a>
+<a name="line1638"></a>  assertCoordinateApprox(350, 350, 0,
+<a name="line1639"></a>      goog.style.getFramedPageOffset(testElement2, window));
+<a name="line1640"></a>  assertCoordinateApprox(300, 300, 0,
+<a name="line1641"></a>      goog.style.getFramedPageOffset(testElement2, iframeWindow));
+<a name="line1642"></a>
+<a name="line1643"></a>  assertCoordinateApprox(600, 600, 0,
+<a name="line1644"></a>      goog.style.getFramedPageOffset(testElement3, window));
+<a name="line1645"></a>  assertCoordinateApprox(550, 550, 0,
+<a name="line1646"></a>      goog.style.getFramedPageOffset(testElement3, iframeWindow));
+<a name="line1647"></a>  assertCoordinateApprox(500, 500, 0,
+<a name="line1648"></a>      goog.style.getFramedPageOffset(testElement3, iframeWindow2));
+<a name="line1649"></a>
+<a name="line1650"></a>  // Scroll the iframes a bit.
+<a name="line1651"></a>  window.scrollBy(0, 5);
+<a name="line1652"></a>  iframeWindow.scrollBy(0, 11);
+<a name="line1653"></a>  iframeWindow2.scrollBy(0, 18);
+<a name="line1654"></a>
+<a name="line1655"></a>  // On Firefox 2, scrolling inner iframes causes off by one errors
+<a name="line1656"></a>  // in the page position, because we&#39;re using screen coords to compute them.
+<a name="line1657"></a>  assertCoordinateApprox(300, 300, 2,
+<a name="line1658"></a>      goog.style.getPageOffset(testElement2));
+<a name="line1659"></a>  assertCoordinateApprox(500, 500, 2,
+<a name="line1660"></a>      goog.style.getPageOffset(testElement3));
+<a name="line1661"></a>
+<a name="line1662"></a>  assertCoordinateApprox(350, 350 - 11, 2,
+<a name="line1663"></a>      goog.style.getFramedPageOffset(testElement2, window));
+<a name="line1664"></a>  assertCoordinateApprox(300, 300, 2,
+<a name="line1665"></a>      goog.style.getFramedPageOffset(testElement2, iframeWindow));
+<a name="line1666"></a>
+<a name="line1667"></a>  assertCoordinateApprox(600, 600 - 18 - 11, 2,
+<a name="line1668"></a>      goog.style.getFramedPageOffset(testElement3, window));
+<a name="line1669"></a>  assertCoordinateApprox(550, 550 - 18, 2,
+<a name="line1670"></a>      goog.style.getFramedPageOffset(testElement3, iframeWindow));
+<a name="line1671"></a>  assertCoordinateApprox(500, 500, 2,
+<a name="line1672"></a>      goog.style.getFramedPageOffset(testElement3, iframeWindow2));
+<a name="line1673"></a>}
+<a name="line1674"></a>
+<a name="line1675"></a>
+<a name="line1676"></a>/**
+<a name="line1677"></a> * Asserts that the coordinate is approximately equal to the given
+<a name="line1678"></a> * x and y coordinates, give or take delta.
+<a name="line1679"></a> */
+<a name="line1680"></a>function assertCoordinateApprox(x, y, delta, coord) {
+<a name="line1681"></a>  assertTrue(&#39;Expected x: &#39; + x + &#39;, actual x: &#39; + coord.x,
+<a name="line1682"></a>      coord.x &gt;= x - delta &amp;&amp; coord.x &lt;= x + delta);
+<a name="line1683"></a>  assertTrue(&#39;Expected y: &#39; + y + &#39;, actual y: &#39; + coord.y,
+<a name="line1684"></a>      coord.y &gt;= y - delta &amp;&amp; coord.y &lt;= y + delta);
+<a name="line1685"></a>}
+<a name="line1686"></a>
+<a name="line1687"></a>function testTranslateRectForAnotherFrame() {
+<a name="line1688"></a>  var rect = new goog.math.Rect(1, 2, 3, 4);
+<a name="line1689"></a>  var thisDom = goog.dom.getDomHelper();
+<a name="line1690"></a>  goog.style.translateRectForAnotherFrame(rect, thisDom, thisDom);
+<a name="line1691"></a>  assertEquals(1, rect.left);
+<a name="line1692"></a>  assertEquals(2, rect.top);
+<a name="line1693"></a>  assertEquals(3, rect.width);
+<a name="line1694"></a>  assertEquals(4, rect.height);
+<a name="line1695"></a>
+<a name="line1696"></a>  var iframe = $(&#39;test-translate-frame-standard&#39;);
+<a name="line1697"></a>  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
+<a name="line1698"></a>  var iframeDom = goog.dom.getDomHelper(iframeDoc);
+<a name="line1699"></a>  // Cannot rely on iframe starting at origin.
+<a name="line1700"></a>  iframeDom.getWindow().scrollTo(0, 0);
+<a name="line1701"></a>  // iframe is at (100, 150) and its body is not scrolled.
+<a name="line1702"></a>  rect = new goog.math.Rect(1, 2, 3, 4);
+<a name="line1703"></a>  goog.style.translateRectForAnotherFrame(rect, iframeDom, thisDom);
+<a name="line1704"></a>  assertEquals(1 + 100, rect.left);
+<a name="line1705"></a>  assertRoughlyEquals(2 + 150, rect.top, .1);
+<a name="line1706"></a>  assertEquals(3, rect.width);
+<a name="line1707"></a>  assertEquals(4, rect.height);
+<a name="line1708"></a>
+<a name="line1709"></a>  iframeDom.getWindow().scrollTo(11, 13);
+<a name="line1710"></a>  rect = new goog.math.Rect(1, 2, 3, 4);
+<a name="line1711"></a>  goog.style.translateRectForAnotherFrame(rect, iframeDom, thisDom);
+<a name="line1712"></a>  assertEquals(1 + 100 - 11, rect.left);
+<a name="line1713"></a>  assertRoughlyEquals(2 + 150 - 13, rect.top, .1);
+<a name="line1714"></a>  assertEquals(3, rect.width);
+<a name="line1715"></a>  assertEquals(4, rect.height);
+<a name="line1716"></a>
+<a name="line1717"></a>  iframe = $(&#39;test-translate-frame-quirk&#39;);
+<a name="line1718"></a>  iframeDoc = goog.dom.getFrameContentDocument(iframe);
+<a name="line1719"></a>  iframeDom = goog.dom.getDomHelper(iframeDoc);
+<a name="line1720"></a>  // Cannot rely on iframe starting at origin.
+<a name="line1721"></a>  iframeDom.getWindow().scrollTo(0, 0);
+<a name="line1722"></a>  // iframe is at (100, 350) and its body is not scrolled.
+<a name="line1723"></a>  rect = new goog.math.Rect(1, 2, 3, 4);
+<a name="line1724"></a>  goog.style.translateRectForAnotherFrame(rect, iframeDom, thisDom);
+<a name="line1725"></a>  assertEquals(1 + 100, rect.left);
+<a name="line1726"></a>  assertRoughlyEquals(2 + 350, rect.top, .1);
+<a name="line1727"></a>  assertEquals(3, rect.width);
+<a name="line1728"></a>  assertEquals(4, rect.height);
+<a name="line1729"></a>
+<a name="line1730"></a>  iframeDom.getWindow().scrollTo(11, 13);
+<a name="line1731"></a>  rect = new goog.math.Rect(1, 2, 3, 4);
+<a name="line1732"></a>  goog.style.translateRectForAnotherFrame(rect, iframeDom, thisDom);
+<a name="line1733"></a>  assertEquals(1 + 100 - 11, rect.left);
+<a name="line1734"></a>  assertRoughlyEquals(2 + 350 - 13, rect.top, .1);
+<a name="line1735"></a>  assertEquals(3, rect.width);
+<a name="line1736"></a>  assertEquals(4, rect.height);
+<a name="line1737"></a>}
+<a name="line1738"></a>
+<a name="line1739"></a>function testGetVisibleRectForElement() {
+<a name="line1740"></a>  var container = goog.dom.getElement(&#39;test-visible&#39;);
+<a name="line1741"></a>  var el = goog.dom.getElement(&#39;test-visible-el&#39;);
+<a name="line1742"></a>  var dom = goog.dom.getDomHelper(el);
+<a name="line1743"></a>  var winScroll = dom.getDocumentScroll();
+<a name="line1744"></a>  var winSize = dom.getViewportSize();
+<a name="line1745"></a>
+<a name="line1746"></a>  // Skip this test if the window size is small.  Firefox3/Linux in Selenium
+<a name="line1747"></a>  // sometimes fails without this check.
+<a name="line1748"></a>  if (winSize.width &lt; 20 || winSize.height &lt; 20) {
+<a name="line1749"></a>    return;
+<a name="line1750"></a>  }
+<a name="line1751"></a>
+<a name="line1752"></a>  // Move the container element to the window&#39;s viewport.
+<a name="line1753"></a>  var h = winSize.height &lt; 100 ? winSize.height / 2 : 100;
+<a name="line1754"></a>  goog.style.setSize(container, winSize.width / 2, h);
+<a name="line1755"></a>  goog.style.setPosition(container, 8, winScroll.y + winSize.height - h);
+<a name="line1756"></a>  var visible = goog.style.getVisibleRectForElement(el);
+<a name="line1757"></a>  var bounds = goog.style.getBounds(container);
+<a name="line1758"></a>  // VisibleRect == Bounds rect of the offsetParent
+<a name="line1759"></a>  assertNotNull(visible);
+<a name="line1760"></a>  assertEquals(bounds.left, visible.left);
+<a name="line1761"></a>  assertEquals(bounds.top, visible.top);
+<a name="line1762"></a>  assertEquals(bounds.left + bounds.width, visible.right);
+<a name="line1763"></a>  assertEquals(bounds.top + bounds.height, visible.bottom);
+<a name="line1764"></a>
+<a name="line1765"></a>  // Move a part of the container element to outside of the viewpoert.
+<a name="line1766"></a>  goog.style.setPosition(container, 8, winScroll.y + winSize.height - h / 2);
+<a name="line1767"></a>  visible = goog.style.getVisibleRectForElement(el);
+<a name="line1768"></a>  bounds = goog.style.getBounds(container);
+<a name="line1769"></a>  // Confirm VisibleRect == Intersection of the bounds rect of the
+<a name="line1770"></a>  // offsetParent and the viewport.
+<a name="line1771"></a>  assertNotNull(visible);
+<a name="line1772"></a>  assertEquals(bounds.left, visible.left);
+<a name="line1773"></a>  assertEquals(bounds.top, visible.top);
+<a name="line1774"></a>  assertEquals(bounds.left + bounds.width, visible.right);
+<a name="line1775"></a>  assertEquals(winScroll.y + winSize.height, visible.bottom);
+<a name="line1776"></a>
+<a name="line1777"></a>  // Move the container element to outside of the viewpoert.
+<a name="line1778"></a>  goog.style.setPosition(container, 8, winScroll.y + winSize.height * 2);
+<a name="line1779"></a>  visible = goog.style.getVisibleRectForElement(el);
+<a name="line1780"></a>  assertNull(visible);
+<a name="line1781"></a>
+<a name="line1782"></a>  // Test the case with body element of height 0
+<a name="line1783"></a>  var iframe = goog.dom.getElement(&#39;test-visible-frame&#39;);
+<a name="line1784"></a>  var iframeDoc = goog.dom.getFrameContentDocument(iframe);
+<a name="line1785"></a>  el = iframeDoc.getElementById(&#39;test-visible&#39;);
+<a name="line1786"></a>  visible = goog.style.getVisibleRectForElement(el);
+<a name="line1787"></a>
+<a name="line1788"></a>  var iframeViewportSize = goog.dom.getDomHelper(el).getViewportSize();
+<a name="line1789"></a>  // NOTE(user): For iframe, the clipping viewport is always the iframe
+<a name="line1790"></a>  // viewport, and not the actual browser viewport.
+<a name="line1791"></a>  assertNotNull(visible);
+<a name="line1792"></a>  assertEquals(0, visible.top);
+<a name="line1793"></a>  assertEquals(iframeViewportSize.height, visible.bottom);
+<a name="line1794"></a>  assertEquals(0, visible.left);
+<a name="line1795"></a>  assertEquals(iframeViewportSize.width, visible.right);
+<a name="line1796"></a>}
+<a name="line1797"></a>
+<a name="line1798"></a>function testGetVisibleRectForElementWithBodyScrolled() {
+<a name="line1799"></a>  var container = goog.dom.getElement(&#39;test-visible2&#39;);
+<a name="line1800"></a>  var dom = goog.dom.getDomHelper(container);
+<a name="line1801"></a>  var el = dom.createDom(&#39;div&#39;, undefined, &#39;Test&#39;);
+<a name="line1802"></a>  el.style.position = &#39;absolute&#39;;
+<a name="line1803"></a>  dom.append(container, el);
+<a name="line1804"></a>
+<a name="line1805"></a>  container.style.position = &#39;absolute&#39;;
+<a name="line1806"></a>  goog.style.setPosition(container, 20, 500);
+<a name="line1807"></a>  goog.style.setSize(container, 100, 150);
+<a name="line1808"></a>
+<a name="line1809"></a>  // Scroll body container such that container is exactly at top.
+<a name="line1810"></a>  window.scrollTo(0, 500);
+<a name="line1811"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1812"></a>  assertNotNull(visibleRect);
+<a name="line1813"></a>  assertRoughlyEquals(500, visibleRect.top, EPSILON);
+<a name="line1814"></a>  assertRoughlyEquals(20, visibleRect.left, EPSILON);
+<a name="line1815"></a>  assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
+<a name="line1816"></a>  assertRoughlyEquals(120, visibleRect.right, EPSILON);
+<a name="line1817"></a>
+<a name="line1818"></a>  // Top 100px is clipped by window viewport.
+<a name="line1819"></a>  window.scrollTo(0, 600);
+<a name="line1820"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1821"></a>  assertNotNull(visibleRect);
+<a name="line1822"></a>  assertRoughlyEquals(600, visibleRect.top, EPSILON);
+<a name="line1823"></a>  assertRoughlyEquals(20, visibleRect.left, EPSILON);
+<a name="line1824"></a>  assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
+<a name="line1825"></a>  assertRoughlyEquals(120, visibleRect.right, EPSILON);
+<a name="line1826"></a>
+<a name="line1827"></a>  var winSize = dom.getViewportSize();
+<a name="line1828"></a>
+<a name="line1829"></a>  // Left 50px is clipped by window viewport.
+<a name="line1830"></a>  // Right part is clipped by window viewport.
+<a name="line1831"></a>  goog.style.setSize(container, 10000, 150);
+<a name="line1832"></a>  window.scrollTo(70, 500);
+<a name="line1833"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1834"></a>  assertNotNull(visibleRect);
+<a name="line1835"></a>  assertRoughlyEquals(500, visibleRect.top, EPSILON);
+<a name="line1836"></a>  assertRoughlyEquals(70, visibleRect.left, EPSILON);
+<a name="line1837"></a>  assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
+<a name="line1838"></a>  assertRoughlyEquals(70 + winSize.width, visibleRect.right, EPSILON);
+<a name="line1839"></a>
+<a name="line1840"></a>  // Bottom part is clipped by window viewport.
+<a name="line1841"></a>  goog.style.setSize(container, 100, 2000);
+<a name="line1842"></a>  window.scrollTo(0, 500);
+<a name="line1843"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1844"></a>  assertNotNull(visibleRect);
+<a name="line1845"></a>  assertRoughlyEquals(500, visibleRect.top, EPSILON);
+<a name="line1846"></a>  assertRoughlyEquals(20, visibleRect.left, EPSILON);
+<a name="line1847"></a>  assertRoughlyEquals(120, visibleRect.right, EPSILON);
+<a name="line1848"></a>  assertRoughlyEquals(500 + winSize.height, visibleRect.bottom, EPSILON);
+<a name="line1849"></a>
+<a name="line1850"></a>  goog.style.setPosition(container, 10000, 10000);
+<a name="line1851"></a>  assertNull(goog.style.getVisibleRectForElement(el));
+<a name="line1852"></a>}
+<a name="line1853"></a>
+<a name="line1854"></a>function testGetVisibleRectForElementWithNestedAreaAndNonOffsetAncestor() {
+<a name="line1855"></a>  // IE7 quirks mode somehow consider container2 below as offset parent
+<a name="line1856"></a>  // of the element, which is incorrect.
+<a name="line1857"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isDocumentModeOrHigher(8) &amp;&amp;
+<a name="line1858"></a>      !goog.dom.isCss1CompatMode()) {
+<a name="line1859"></a>    return;
+<a name="line1860"></a>  }
+<a name="line1861"></a>
+<a name="line1862"></a>  var container = goog.dom.getElement(&#39;test-visible2&#39;);
+<a name="line1863"></a>  var dom = goog.dom.getDomHelper(container);
+<a name="line1864"></a>  var container2 = dom.createDom(&#39;div&#39;);
+<a name="line1865"></a>  var el = dom.createDom(&#39;div&#39;, undefined, &#39;Test&#39;);
+<a name="line1866"></a>  el.style.position = &#39;absolute&#39;;
+<a name="line1867"></a>  dom.append(container, container2);
+<a name="line1868"></a>  dom.append(container2, el);
+<a name="line1869"></a>
+<a name="line1870"></a>  container.style.position = &#39;absolute&#39;;
+<a name="line1871"></a>  goog.style.setPosition(container, 20, 500);
+<a name="line1872"></a>  goog.style.setSize(container, 100, 150);
+<a name="line1873"></a>
+<a name="line1874"></a>  // container2 is a scrollable container but is not an offsetParent of
+<a name="line1875"></a>  // the element. It is ignored in the computation.
+<a name="line1876"></a>  container2.style.overflow = &#39;hidden&#39;;
+<a name="line1877"></a>  container2.style.marginTop = &#39;50px&#39;;
+<a name="line1878"></a>  container2.style.marginLeft = &#39;100px&#39;;
+<a name="line1879"></a>  goog.style.setSize(container2, 150, 100);
+<a name="line1880"></a>
+<a name="line1881"></a>  // Scroll body container such that container is exactly at top.
+<a name="line1882"></a>  window.scrollTo(0, 500);
+<a name="line1883"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1884"></a>  assertNotNull(visibleRect);
+<a name="line1885"></a>  assertRoughlyEquals(500, visibleRect.top, EPSILON);
+<a name="line1886"></a>  assertRoughlyEquals(20, visibleRect.left, EPSILON);
+<a name="line1887"></a>  assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
+<a name="line1888"></a>  assertRoughlyEquals(120, visibleRect.right, EPSILON);
+<a name="line1889"></a>
+<a name="line1890"></a>  // Top 100px is clipped by window viewport.
+<a name="line1891"></a>  window.scrollTo(0, 600);
+<a name="line1892"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1893"></a>  assertNotNull(visibleRect);
+<a name="line1894"></a>  assertRoughlyEquals(600, visibleRect.top, EPSILON);
+<a name="line1895"></a>  assertRoughlyEquals(20, visibleRect.left, EPSILON);
+<a name="line1896"></a>  assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
+<a name="line1897"></a>  assertRoughlyEquals(120, visibleRect.right, EPSILON);
+<a name="line1898"></a>
+<a name="line1899"></a>  var winSize = dom.getViewportSize();
+<a name="line1900"></a>
+<a name="line1901"></a>  // Left 50px is clipped by window viewport.
+<a name="line1902"></a>  // Right part is clipped by window viewport.
+<a name="line1903"></a>  goog.style.setSize(container, 10000, 150);
+<a name="line1904"></a>  window.scrollTo(70, 500);
+<a name="line1905"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1906"></a>  assertNotNull(visibleRect);
+<a name="line1907"></a>  assertRoughlyEquals(500, visibleRect.top, EPSILON);
+<a name="line1908"></a>  assertRoughlyEquals(70, visibleRect.left, EPSILON);
+<a name="line1909"></a>  assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
+<a name="line1910"></a>  assertRoughlyEquals(70 + winSize.width, visibleRect.right, EPSILON);
+<a name="line1911"></a>
+<a name="line1912"></a>  // Bottom part is clipped by window viewport.
+<a name="line1913"></a>  goog.style.setSize(container, 100, 2000);
+<a name="line1914"></a>  window.scrollTo(0, 500);
+<a name="line1915"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1916"></a>  assertNotNull(visibleRect);
+<a name="line1917"></a>  assertRoughlyEquals(500, visibleRect.top, EPSILON);
+<a name="line1918"></a>  assertRoughlyEquals(20, visibleRect.left, EPSILON);
+<a name="line1919"></a>  assertRoughlyEquals(120, visibleRect.right, EPSILON);
+<a name="line1920"></a>  assertRoughlyEquals(500 + winSize.height, visibleRect.bottom, EPSILON);
+<a name="line1921"></a>
+<a name="line1922"></a>  goog.style.setPosition(container, 10000, 10000);
+<a name="line1923"></a>  assertNull(goog.style.getVisibleRectForElement(el));
+<a name="line1924"></a>}
+<a name="line1925"></a>
+<a name="line1926"></a>function testGetVisibleRectForElementInsideNestedScrollableArea() {
+<a name="line1927"></a>  var container = goog.dom.getElement(&#39;test-visible2&#39;);
+<a name="line1928"></a>  var dom = goog.dom.getDomHelper(container);
+<a name="line1929"></a>  var container2 = dom.createDom(&#39;div&#39;);
+<a name="line1930"></a>  var el = dom.createDom(&#39;div&#39;, undefined, &#39;Test&#39;);
+<a name="line1931"></a>  el.style.position = &#39;absolute&#39;;
+<a name="line1932"></a>  dom.append(container, container2);
+<a name="line1933"></a>  dom.append(container2, el);
+<a name="line1934"></a>
+<a name="line1935"></a>  container.style.position = &#39;absolute&#39;;
+<a name="line1936"></a>  goog.style.setPosition(container, 100 /* left */, 500 /* top */);
+<a name="line1937"></a>  goog.style.setSize(container, 300 /* width */, 300 /* height */);
+<a name="line1938"></a>
+<a name="line1939"></a>  container2.style.overflow = &#39;hidden&#39;;
+<a name="line1940"></a>  container2.style.position = &#39;relative&#39;;
+<a name="line1941"></a>  goog.style.setPosition(container2, 100, 50);
+<a name="line1942"></a>  goog.style.setSize(container2, 150, 100);
+<a name="line1943"></a>
+<a name="line1944"></a>  // Scroll body container such that container is exactly at top.
+<a name="line1945"></a>  window.scrollTo(0, 500);
+<a name="line1946"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1947"></a>  assertNotNull(visibleRect);
+<a name="line1948"></a>  assertRoughlyEquals(550, visibleRect.top, EPSILON);
+<a name="line1949"></a>  assertRoughlyEquals(200, visibleRect.left, EPSILON);
+<a name="line1950"></a>  assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
+<a name="line1951"></a>  assertRoughlyEquals(350, visibleRect.right, EPSILON);
+<a name="line1952"></a>
+<a name="line1953"></a>  // Left 50px is clipped by container.
+<a name="line1954"></a>  goog.style.setPosition(container2, -50, 50);
+<a name="line1955"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1956"></a>  assertNotNull(visibleRect);
+<a name="line1957"></a>  assertRoughlyEquals(550, visibleRect.top, EPSILON);
+<a name="line1958"></a>  assertRoughlyEquals(100, visibleRect.left, EPSILON);
+<a name="line1959"></a>  assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
+<a name="line1960"></a>  assertRoughlyEquals(200, visibleRect.right, EPSILON);
+<a name="line1961"></a>
+<a name="line1962"></a>  // Right part is clipped by container.
+<a name="line1963"></a>  goog.style.setPosition(container2, 100, 50);
+<a name="line1964"></a>  goog.style.setWidth(container2, 1000, 100);
+<a name="line1965"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1966"></a>  assertNotNull(visibleRect);
+<a name="line1967"></a>  assertRoughlyEquals(550, visibleRect.top, EPSILON);
+<a name="line1968"></a>  assertRoughlyEquals(200, visibleRect.left, EPSILON);
+<a name="line1969"></a>  assertRoughlyEquals(650, visibleRect.bottom, EPSILON);
+<a name="line1970"></a>  assertRoughlyEquals(400, visibleRect.right, EPSILON);
+<a name="line1971"></a>
+<a name="line1972"></a>  // Top 50px is clipped by container.
+<a name="line1973"></a>  goog.style.setStyle(container2, &#39;width&#39;, &#39;150px&#39;);
+<a name="line1974"></a>  goog.style.setStyle(container2, &#39;top&#39;, &#39;-50px&#39;);
+<a name="line1975"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1976"></a>  assertNotNull(visibleRect);
+<a name="line1977"></a>  assertRoughlyEquals(500, visibleRect.top, EPSILON);
+<a name="line1978"></a>  assertRoughlyEquals(200, visibleRect.left, EPSILON);
+<a name="line1979"></a>  assertRoughlyEquals(550, visibleRect.bottom, EPSILON);
+<a name="line1980"></a>  assertRoughlyEquals(350, visibleRect.right, EPSILON);
+<a name="line1981"></a>
+<a name="line1982"></a>  // Bottom part is clipped by container.
+<a name="line1983"></a>  goog.style.setStyle(container2, &#39;top&#39;, &#39;50px&#39;);
+<a name="line1984"></a>  goog.style.setStyle(container2, &#39;height&#39;, &#39;1000px&#39;);
+<a name="line1985"></a>  var visibleRect = goog.style.getVisibleRectForElement(el);
+<a name="line1986"></a>  assertNotNull(visibleRect);
+<a name="line1987"></a>  assertRoughlyEquals(550, visibleRect.top, EPSILON);
+<a name="line1988"></a>  assertRoughlyEquals(200, visibleRect.left, EPSILON);
+<a name="line1989"></a>  assertRoughlyEquals(800, visibleRect.bottom, EPSILON);
+<a name="line1990"></a>  assertRoughlyEquals(350, visibleRect.right, EPSILON);
+<a name="line1991"></a>
+<a name="line1992"></a>  // Outside viewport.
+<a name="line1993"></a>  goog.style.setStyle(container2, &#39;top&#39;, &#39;10000px&#39;);
+<a name="line1994"></a>  goog.style.setStyle(container2, &#39;left&#39;, &#39;10000px&#39;);
+<a name="line1995"></a>  assertNull(goog.style.getVisibleRectForElement(el));
+<a name="line1996"></a>}
+<a name="line1997"></a>
+<a name="line1998"></a>function testGeckoMacOrX11RoundPosition() {
+<a name="line1999"></a>  if ((goog.userAgent.MAC || goog.userAgent.X11) &amp;&amp; goog.userAgent.GECKO &amp;&amp;
+<a name="line2000"></a>      goog.userAgent.isVersionOrHigher(&#39;1.9&#39;)) {
+<a name="line2001"></a>
+<a name="line2002"></a>    var pos = new goog.math.Coordinate(1.5, 1.4);
+<a name="line2003"></a>    var el = document.createElement(&#39;div&#39;);
+<a name="line2004"></a>    goog.style.setPosition(el, pos);
+<a name="line2005"></a>    assertEquals(&#39;The left position should have been rounded&#39;,
+<a name="line2006"></a>                 &#39;2px&#39;, el.style.left);
+<a name="line2007"></a>    assertEquals(&#39;The top position should have been rounded&#39;,
+<a name="line2008"></a>                 &#39;1px&#39;, el.style.top);
+<a name="line2009"></a>  }
+<a name="line2010"></a>}
+<a name="line2011"></a>
+<a name="line2012"></a>function testScrollIntoContainerViewQuirks() {
+<a name="line2013"></a>  if (goog.dom.isCss1CompatMode()) return;
+<a name="line2014"></a>
+<a name="line2015"></a>  var container = goog.dom.getElement(&#39;scrollable-container&#39;);
+<a name="line2016"></a>
+<a name="line2017"></a>  // Scroll the minimum amount to make the elements visible.
+<a name="line2018"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item7&#39;), container);
+<a name="line2019"></a>  assertEquals(&#39;scroll to item7&#39;, 79, container.scrollTop);
+<a name="line2020"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item8&#39;), container);
+<a name="line2021"></a>  assertEquals(&#39;scroll to item8&#39;, 100, container.scrollTop);
+<a name="line2022"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item7&#39;), container);
+<a name="line2023"></a>  assertEquals(&#39;item7 still visible&#39;, 100, container.scrollTop);
+<a name="line2024"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item1&#39;), container);
+<a name="line2025"></a>  assertEquals(&#39;scroll to item1&#39;, 17, container.scrollTop);
+<a name="line2026"></a>
+<a name="line2027"></a>  // Center the element in the first argument.
+<a name="line2028"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item1&#39;), container,
+<a name="line2029"></a>                                     true);
+<a name="line2030"></a>  assertEquals(&#39;center item1&#39;, 0, container.scrollTop);
+<a name="line2031"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item4&#39;), container,
+<a name="line2032"></a>                                     true);
+<a name="line2033"></a>  assertEquals(&#39;center item4&#39;, 48, container.scrollTop);
+<a name="line2034"></a>
+<a name="line2035"></a>  // The element is higher than the container.
+<a name="line2036"></a>  goog.dom.getElement(&#39;item3&#39;).style.height = &#39;140px&#39;;
+<a name="line2037"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item3&#39;), container);
+<a name="line2038"></a>  assertEquals(&#39;show item3 with increased height&#39;, 59, container.scrollTop);
+<a name="line2039"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item3&#39;), container,
+<a name="line2040"></a>      true);
+<a name="line2041"></a>  assertEquals(&#39;center item3 with increased height&#39;, 87, container.scrollTop);
+<a name="line2042"></a>  goog.dom.getElement(&#39;item3&#39;).style.height = &#39;&#39;;
+<a name="line2043"></a>
+<a name="line2044"></a>  // Scroll to non-integer position.
+<a name="line2045"></a>  goog.dom.getElement(&#39;item4&#39;).style.height = &#39;21px&#39;;
+<a name="line2046"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item4&#39;), container,
+<a name="line2047"></a>                                     true);
+<a name="line2048"></a>  assertEquals(&#39;scroll position is rounded down&#39;, 48, container.scrollTop);
+<a name="line2049"></a>  goog.dom.getElement(&#39;item4&#39;).style.height = &#39;&#39;;
+<a name="line2050"></a>}
+<a name="line2051"></a>
+<a name="line2052"></a>function testScrollIntoContainerViewStandard() {
+<a name="line2053"></a>  if (!goog.dom.isCss1CompatMode()) return;
+<a name="line2054"></a>
+<a name="line2055"></a>  var container = goog.dom.getElement(&#39;scrollable-container&#39;);
+<a name="line2056"></a>
+<a name="line2057"></a>  // Scroll the minimum amount to make the elements visible.
+<a name="line2058"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item7&#39;), container);
+<a name="line2059"></a>  assertEquals(&#39;scroll to item7&#39;, 115, container.scrollTop);
+<a name="line2060"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item8&#39;), container);
+<a name="line2061"></a>  assertEquals(&#39;scroll to item8&#39;, 148, container.scrollTop);
+<a name="line2062"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item7&#39;), container);
+<a name="line2063"></a>  assertEquals(&#39;item7 still visible&#39;, 148, container.scrollTop);
+<a name="line2064"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item1&#39;), container);
+<a name="line2065"></a>  assertEquals(&#39;scroll to item1&#39;, 17, container.scrollTop);
+<a name="line2066"></a>
+<a name="line2067"></a>  // Center the element in the first argument.
+<a name="line2068"></a>  goog.style.scrollIntoContainerView(
+<a name="line2069"></a>      goog.dom.getElement(&#39;item1&#39;), container, true);
+<a name="line2070"></a>  assertEquals(&#39;center item1&#39;, 0, container.scrollTop);
+<a name="line2071"></a>  goog.style.scrollIntoContainerView(
+<a name="line2072"></a>      goog.dom.getElement(&#39;item4&#39;), container, true);
+<a name="line2073"></a>  assertEquals(&#39;center item4&#39;, 66, container.scrollTop);
+<a name="line2074"></a>
+<a name="line2075"></a>  // The element is higher than the container.
+<a name="line2076"></a>  goog.dom.getElement(&#39;item3&#39;).style.height = &#39;140px&#39;;
+<a name="line2077"></a>  goog.style.scrollIntoContainerView(goog.dom.getElement(&#39;item3&#39;), container);
+<a name="line2078"></a>  assertEquals(&#39;show item3 with increased height&#39;, 83, container.scrollTop);
+<a name="line2079"></a>  goog.style.scrollIntoContainerView(
+<a name="line2080"></a>      goog.dom.getElement(&#39;item3&#39;), container, true);
+<a name="line2081"></a>  assertEquals(&#39;center item3 with increased height&#39;, 93, container.scrollTop);
+<a name="line2082"></a>  goog.dom.getElement(&#39;item3&#39;).style.height = &#39;&#39;;
+<a name="line2083"></a>
+<a name="line2084"></a>  // Scroll to non-integer position.
+<a name="line2085"></a>  goog.dom.getElement(&#39;item4&#39;).style.height = &#39;21px&#39;;
+<a name="line2086"></a>  goog.style.scrollIntoContainerView(
+<a name="line2087"></a>      goog.dom.getElement(&#39;item4&#39;), container, true);
+<a name="line2088"></a>  assertEquals(&#39;scroll position is rounded down&#39;, 66, container.scrollTop);
+<a name="line2089"></a>  goog.dom.getElement(&#39;item4&#39;).style.height = &#39;&#39;;
+<a name="line2090"></a>}
+<a name="line2091"></a>
+<a name="line2092"></a>function testOffsetParent() {
+<a name="line2093"></a>  var parent = goog.dom.getElement(&#39;offset-parent&#39;);
+<a name="line2094"></a>  var child = goog.dom.getElement(&#39;offset-child&#39;);
+<a name="line2095"></a>  assertEquals(parent, goog.style.getOffsetParent(child));
+<a name="line2096"></a>}
+<a name="line2097"></a>
+<a name="line2098"></a>function testOverflowOffsetParent() {
+<a name="line2099"></a>  var parent = goog.dom.getElement(&#39;offset-parent-overflow&#39;);
+<a name="line2100"></a>  var child = goog.dom.getElement(&#39;offset-child-overflow&#39;);
+<a name="line2101"></a>  assertEquals(parent, goog.style.getOffsetParent(child));
+<a name="line2102"></a>}
+<a name="line2103"></a>
+<a name="line2104"></a>function testGetViewportPageOffset() {
+<a name="line2105"></a>  expectedFailures.expectFailureFor(
+<a name="line2106"></a>      goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(9),
+<a name="line2107"></a>      &#39;Test has been flaky for ie8-winxp image. Disabling.&#39;);
+<a name="line2108"></a>
+<a name="line2109"></a>  var testViewport = goog.dom.getElement(&#39;test-viewport&#39;);
+<a name="line2110"></a>  testViewport.style.height = &#39;5000px&#39;;
+<a name="line2111"></a>  testViewport.style.width = &#39;5000px&#39;;
+<a name="line2112"></a>  var offset = goog.style.getViewportPageOffset(document);
+<a name="line2113"></a>  assertEquals(0, offset.x);
+<a name="line2114"></a>  assertEquals(0, offset.y);
+<a name="line2115"></a>
+<a name="line2116"></a>  window.scrollTo(0, 100);
+<a name="line2117"></a>  offset = goog.style.getViewportPageOffset(document);
+<a name="line2118"></a>  assertEquals(0, offset.x);
+<a name="line2119"></a>  assertEquals(100, offset.y);
+<a name="line2120"></a>
+<a name="line2121"></a>  window.scrollTo(100, 0);
+<a name="line2122"></a>  offset = goog.style.getViewportPageOffset(document);
+<a name="line2123"></a>  assertEquals(100, offset.x);
+<a name="line2124"></a>  assertEquals(0, offset.y);
+<a name="line2125"></a>}
+<a name="line2126"></a>
+<a name="line2127"></a>function testGetsTranslation() {
+<a name="line2128"></a>  var element = document.getElementById(&#39;translation&#39;);
+<a name="line2129"></a>
+<a name="line2130"></a>  expectedFailures.expectFailureFor(
+<a name="line2131"></a>      goog.userAgent.IE &amp;&amp; !goog.userAgent.product.isVersion(9),
+<a name="line2132"></a>      &#39;CSS transforms were only introduced in IE9&#39;);
+<a name="line2133"></a>
+<a name="line2134"></a>  // First check the element is actually translated, and we haven&#39;t missed
+<a name="line2135"></a>  // one of the vendor-specific transform properties
+<a name="line2136"></a>  var position = goog.style.getClientPosition(element);
+<a name="line2137"></a>  var translation = goog.style.getCssTranslation(element);
+<a name="line2138"></a>  var expectedTranslation = new goog.math.Coordinate(20, 30);
+<a name="line2139"></a>
+<a name="line2140"></a>  expectedFailures.run(function() {
+<a name="line2141"></a>    assertEquals(30, position.x);
+<a name="line2142"></a>    assertRoughlyEquals(40, position.y, .1);
+<a name="line2143"></a>    assertObjectEquals(expectedTranslation, translation);
+<a name="line2144"></a>  });
+<a name="line2145"></a>}
+<a name="line2146"></a>
+<a name="line2147"></a>
+<a name="line2148"></a>/**
+<a name="line2149"></a> * Test browser detection for a user agent configuration.
+<a name="line2150"></a> * @param {Array.&lt;number&gt;} expectedAgents Array of expected userAgents.
+<a name="line2151"></a> * @param {string} uaString User agent string.
+<a name="line2152"></a> * @param {string=} opt_product Navigator product string.
+<a name="line2153"></a> * @param {string=} opt_vendor Navigator vendor string.
+<a name="line2154"></a> */
+<a name="line2155"></a>function assertUserAgent(expectedAgents, uaString, opt_product, opt_vendor) {
+<a name="line2156"></a>
+<a name="line2157"></a>  var mockNavigator = {
+<a name="line2158"></a>    &#39;userAgent&#39;: uaString,
+<a name="line2159"></a>    &#39;product&#39;: opt_product,
+<a name="line2160"></a>    &#39;vendor&#39;: opt_vendor
+<a name="line2161"></a>  };
+<a name="line2162"></a>
+<a name="line2163"></a>  mockUserAgent.setNavigator(mockNavigator);
+<a name="line2164"></a>  mockUserAgent.setUserAgentString(uaString);
+<a name="line2165"></a>
+<a name="line2166"></a>  // Force User-Agent lib to reread the global userAgent.
+<a name="line2167"></a>  goog.labs.userAgent.util.setUserAgent(null);
+<a name="line2168"></a>
+<a name="line2169"></a>  goog.userAgentTestUtil.reinitializeUserAgent();
+<a name="line2170"></a>  for (var ua in goog.userAgentTestUtil.UserAgents) {
+<a name="line2171"></a>    var isExpected = goog.array.contains(
+<a name="line2172"></a>        expectedAgents,
+<a name="line2173"></a>        goog.userAgentTestUtil.UserAgents[ua]);
+<a name="line2174"></a>    assertEquals(isExpected,
+<a name="line2175"></a>                 goog.userAgentTestUtil.getUserAgentDetected(
+<a name="line2176"></a>                     goog.userAgentTestUtil.UserAgents[ua]));
+<a name="line2177"></a>  }
+<a name="line2178"></a>}
+<a name="line2179"></a>
+<a name="line2180"></a>
+<a name="line2181"></a>/**
+<a name="line2182"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2183"></a> * with a vendor prefix for Webkit.
+<a name="line2184"></a> */
+<a name="line2185"></a>function testGetVendorStyleNameWebkit() {
+<a name="line2186"></a>  var mockElement = {
+<a name="line2187"></a>    &#39;style&#39;: {
+<a name="line2188"></a>      &#39;WebkitTransformOrigin&#39;: &#39;&#39;
+<a name="line2189"></a>    }
+<a name="line2190"></a>  };
+<a name="line2191"></a>
+<a name="line2192"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], &#39;WebKit&#39;);
+<a name="line2193"></a>  assertEquals(&#39;-webkit-transform-origin&#39;,
+<a name="line2194"></a>      goog.style.getVendorStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2195"></a>}
+<a name="line2196"></a>
+<a name="line2197"></a>
+<a name="line2198"></a>/**
+<a name="line2199"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2200"></a> * when it exists without a vendor prefix for Webkit.
+<a name="line2201"></a> */
+<a name="line2202"></a>function testGetVendorStyleNameWebkitNoPrefix() {
+<a name="line2203"></a>  var mockElement = {
+<a name="line2204"></a>    &#39;style&#39;: {
+<a name="line2205"></a>      &#39;WebkitTransformOrigin&#39;: &#39;&#39;,
+<a name="line2206"></a>      &#39;transformOrigin&#39;: &#39;&#39;
+<a name="line2207"></a>    }
+<a name="line2208"></a>  };
+<a name="line2209"></a>
+<a name="line2210"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], &#39;WebKit&#39;);
+<a name="line2211"></a>  assertEquals(
+<a name="line2212"></a>      &#39;transform-origin&#39;,
+<a name="line2213"></a>      goog.style.getVendorStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2214"></a>}
+<a name="line2215"></a>
+<a name="line2216"></a>
+<a name="line2217"></a>/**
+<a name="line2218"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2219"></a> * with a vendor prefix for Gecko.
+<a name="line2220"></a> */
+<a name="line2221"></a>function testGetVendorStyleNameGecko() {
+<a name="line2222"></a>  var mockElement = {
+<a name="line2223"></a>    &#39;style&#39;: {
+<a name="line2224"></a>      &#39;MozTransformOrigin&#39;: &#39;&#39;
+<a name="line2225"></a>    }
+<a name="line2226"></a>  };
+<a name="line2227"></a>
+<a name="line2228"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], &#39;Gecko&#39;, &#39;Gecko&#39;);
+<a name="line2229"></a>  assertEquals(&#39;-moz-transform-origin&#39;,
+<a name="line2230"></a>      goog.style.getVendorStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2231"></a>}
+<a name="line2232"></a>
+<a name="line2233"></a>
+<a name="line2234"></a>/**
+<a name="line2235"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2236"></a> * when it exists without a vendor prefix for Gecko.
+<a name="line2237"></a> */
+<a name="line2238"></a>function testGetVendorStyleNameGeckoNoPrefix() {
+<a name="line2239"></a>  var mockElement = {
+<a name="line2240"></a>    &#39;style&#39;: {
+<a name="line2241"></a>      &#39;MozTransformOrigin&#39;: &#39;&#39;,
+<a name="line2242"></a>      &#39;transformOrigin&#39;: &#39;&#39;
+<a name="line2243"></a>    }
+<a name="line2244"></a>  };
+<a name="line2245"></a>
+<a name="line2246"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], &#39;Gecko&#39;, &#39;Gecko&#39;);
+<a name="line2247"></a>  assertEquals(
+<a name="line2248"></a>      &#39;transform-origin&#39;,
+<a name="line2249"></a>      goog.style.getVendorStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2250"></a>}
+<a name="line2251"></a>
+<a name="line2252"></a>
+<a name="line2253"></a>/**
+<a name="line2254"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2255"></a> * with a vendor prefix for IE.
+<a name="line2256"></a> */
+<a name="line2257"></a>function testGetVendorStyleNameIE() {
+<a name="line2258"></a>  var mockElement = {
+<a name="line2259"></a>    &#39;style&#39;: {
+<a name="line2260"></a>      &#39;msTransformOrigin&#39;: &#39;&#39;
+<a name="line2261"></a>    }
+<a name="line2262"></a>  };
+<a name="line2263"></a>
+<a name="line2264"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], &#39;MSIE&#39;);
+<a name="line2265"></a>  assertEquals(&#39;-ms-transform-origin&#39;,
+<a name="line2266"></a>      goog.style.getVendorStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2267"></a>}
+<a name="line2268"></a>
+<a name="line2269"></a>
+<a name="line2270"></a>/**
+<a name="line2271"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2272"></a> * when it exists without a vendor prefix for IE.
+<a name="line2273"></a> */
+<a name="line2274"></a>function testGetVendorStyleNameIENoPrefix() {
+<a name="line2275"></a>  var mockElement = {
+<a name="line2276"></a>    &#39;style&#39;: {
+<a name="line2277"></a>      &#39;msTransformOrigin&#39;: &#39;&#39;,
+<a name="line2278"></a>      &#39;transformOrigin&#39;: &#39;&#39;
+<a name="line2279"></a>    }
+<a name="line2280"></a>  };
+<a name="line2281"></a>
+<a name="line2282"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], &#39;MSIE&#39;);
+<a name="line2283"></a>  assertEquals(
+<a name="line2284"></a>      &#39;transform-origin&#39;,
+<a name="line2285"></a>      goog.style.getVendorStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2286"></a>}
+<a name="line2287"></a>
+<a name="line2288"></a>
+<a name="line2289"></a>/**
+<a name="line2290"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2291"></a> * with a vendor prefix for Opera.
+<a name="line2292"></a> */
+<a name="line2293"></a>function testGetVendorStyleNameOpera() {
+<a name="line2294"></a>  var mockElement = {
+<a name="line2295"></a>    &#39;style&#39;: {
+<a name="line2296"></a>      &#39;OTransformOrigin&#39;: &#39;&#39;
+<a name="line2297"></a>    }
+<a name="line2298"></a>  };
+<a name="line2299"></a>
+<a name="line2300"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], &#39;Opera&#39;);
+<a name="line2301"></a>  assertEquals(&#39;-o-transform-origin&#39;,
+<a name="line2302"></a>      goog.style.getVendorStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2303"></a>}
+<a name="line2304"></a>
+<a name="line2305"></a>
+<a name="line2306"></a>/**
+<a name="line2307"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2308"></a> * when it exists without a vendor prefix for Opera.
+<a name="line2309"></a> */
+<a name="line2310"></a>function testGetVendorStyleNameOperaNoPrefix() {
+<a name="line2311"></a>  var mockElement = {
+<a name="line2312"></a>    &#39;style&#39;: {
+<a name="line2313"></a>      &#39;OTransformOrigin&#39;: &#39;&#39;,
+<a name="line2314"></a>      &#39;transformOrigin&#39;: &#39;&#39;
+<a name="line2315"></a>    }
+<a name="line2316"></a>  };
+<a name="line2317"></a>
+<a name="line2318"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], &#39;Opera&#39;);
+<a name="line2319"></a>  assertEquals(
+<a name="line2320"></a>      &#39;transform-origin&#39;,
+<a name="line2321"></a>      goog.style.getVendorStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2322"></a>}
+<a name="line2323"></a>
+<a name="line2324"></a>
+<a name="line2325"></a>/**
+<a name="line2326"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2327"></a> * with a vendor prefix for Webkit.
+<a name="line2328"></a> */
+<a name="line2329"></a>function testGetVendorJsStyleNameWebkit() {
+<a name="line2330"></a>  var mockElement = {
+<a name="line2331"></a>    &#39;style&#39;: {
+<a name="line2332"></a>      &#39;WebkitTransformOrigin&#39;: &#39;&#39;
+<a name="line2333"></a>    }
+<a name="line2334"></a>  };
+<a name="line2335"></a>
+<a name="line2336"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], &#39;WebKit&#39;);
+<a name="line2337"></a>  assertEquals(&#39;WebkitTransformOrigin&#39;,
+<a name="line2338"></a>      goog.style.getVendorJsStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2339"></a>}
+<a name="line2340"></a>
+<a name="line2341"></a>
+<a name="line2342"></a>/**
+<a name="line2343"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2344"></a> * when it exists without a vendor prefix for Webkit.
+<a name="line2345"></a> */
+<a name="line2346"></a>function testGetVendorJsStyleNameWebkitNoPrefix() {
+<a name="line2347"></a>  var mockElement = {
+<a name="line2348"></a>    &#39;style&#39;: {
+<a name="line2349"></a>      &#39;WebkitTransformOrigin&#39;: &#39;&#39;,
+<a name="line2350"></a>      &#39;transformOrigin&#39;: &#39;&#39;
+<a name="line2351"></a>    }
+<a name="line2352"></a>  };
+<a name="line2353"></a>
+<a name="line2354"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], &#39;WebKit&#39;);
+<a name="line2355"></a>  assertEquals(
+<a name="line2356"></a>      &#39;transformOrigin&#39;,
+<a name="line2357"></a>      goog.style.getVendorJsStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2358"></a>}
+<a name="line2359"></a>
+<a name="line2360"></a>
+<a name="line2361"></a>/**
+<a name="line2362"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2363"></a> * with a vendor prefix for Gecko.
+<a name="line2364"></a> */
+<a name="line2365"></a>function testGetVendorJsStyleNameGecko() {
+<a name="line2366"></a>  var mockElement = {
+<a name="line2367"></a>    &#39;style&#39;: {
+<a name="line2368"></a>      &#39;MozTransformOrigin&#39;: &#39;&#39;
+<a name="line2369"></a>    }
+<a name="line2370"></a>  };
+<a name="line2371"></a>
+<a name="line2372"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], &#39;Gecko&#39;, &#39;Gecko&#39;);
+<a name="line2373"></a>  assertEquals(&#39;MozTransformOrigin&#39;,
+<a name="line2374"></a>      goog.style.getVendorJsStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2375"></a>}
+<a name="line2376"></a>
+<a name="line2377"></a>
+<a name="line2378"></a>/**
+<a name="line2379"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2380"></a> * when it exists without a vendor prefix for Gecko.
+<a name="line2381"></a> */
+<a name="line2382"></a>function testGetVendorJsStyleNameGeckoNoPrefix() {
+<a name="line2383"></a>  var mockElement = {
+<a name="line2384"></a>    &#39;style&#39;: {
+<a name="line2385"></a>      &#39;MozTransformOrigin&#39;: &#39;&#39;,
+<a name="line2386"></a>      &#39;transformOrigin&#39;: &#39;&#39;
+<a name="line2387"></a>    }
+<a name="line2388"></a>  };
+<a name="line2389"></a>
+<a name="line2390"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], &#39;Gecko&#39;, &#39;Gecko&#39;);
+<a name="line2391"></a>  assertEquals(
+<a name="line2392"></a>      &#39;transformOrigin&#39;,
+<a name="line2393"></a>      goog.style.getVendorJsStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2394"></a>}
+<a name="line2395"></a>
+<a name="line2396"></a>
+<a name="line2397"></a>/**
+<a name="line2398"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2399"></a> * with a vendor prefix for IE.
+<a name="line2400"></a> */
+<a name="line2401"></a>function testGetVendorJsStyleNameIE() {
+<a name="line2402"></a>  var mockElement = {
+<a name="line2403"></a>    &#39;style&#39;: {
+<a name="line2404"></a>      &#39;msTransformOrigin&#39;: &#39;&#39;
+<a name="line2405"></a>    }
+<a name="line2406"></a>  };
+<a name="line2407"></a>
+<a name="line2408"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], &#39;MSIE&#39;);
+<a name="line2409"></a>  assertEquals(&#39;msTransformOrigin&#39;,
+<a name="line2410"></a>      goog.style.getVendorJsStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2411"></a>}
+<a name="line2412"></a>
+<a name="line2413"></a>
+<a name="line2414"></a>/**
+<a name="line2415"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2416"></a> * when it exists without a vendor prefix for IE.
+<a name="line2417"></a> */
+<a name="line2418"></a>function testGetVendorJsStyleNameIENoPrefix() {
+<a name="line2419"></a>  var mockElement = {
+<a name="line2420"></a>    &#39;style&#39;: {
+<a name="line2421"></a>      &#39;msTransformOrigin&#39;: &#39;&#39;,
+<a name="line2422"></a>      &#39;transformOrigin&#39;: &#39;&#39;
+<a name="line2423"></a>    }
+<a name="line2424"></a>  };
+<a name="line2425"></a>
+<a name="line2426"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], &#39;MSIE&#39;);
+<a name="line2427"></a>  assertEquals(
+<a name="line2428"></a>      &#39;transformOrigin&#39;,
+<a name="line2429"></a>      goog.style.getVendorJsStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2430"></a>}
+<a name="line2431"></a>
+<a name="line2432"></a>
+<a name="line2433"></a>/**
+<a name="line2434"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2435"></a> * with a vendor prefix for Opera.
+<a name="line2436"></a> */
+<a name="line2437"></a>function testGetVendorJsStyleNameOpera() {
+<a name="line2438"></a>  var mockElement = {
+<a name="line2439"></a>    &#39;style&#39;: {
+<a name="line2440"></a>      &#39;OTransformOrigin&#39;: &#39;&#39;
+<a name="line2441"></a>    }
+<a name="line2442"></a>  };
+<a name="line2443"></a>
+<a name="line2444"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], &#39;Opera&#39;);
+<a name="line2445"></a>  assertEquals(&#39;OTransformOrigin&#39;,
+<a name="line2446"></a>      goog.style.getVendorJsStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2447"></a>}
+<a name="line2448"></a>
+<a name="line2449"></a>
+<a name="line2450"></a>/**
+<a name="line2451"></a> * Test for the proper vendor style name for a CSS property
+<a name="line2452"></a> * when it exists without a vendor prefix for Opera.
+<a name="line2453"></a> */
+<a name="line2454"></a>function testGetVendorJsStyleNameOperaNoPrefix() {
+<a name="line2455"></a>  var mockElement = {
+<a name="line2456"></a>    &#39;style&#39;: {
+<a name="line2457"></a>      &#39;OTransformOrigin&#39;: &#39;&#39;,
+<a name="line2458"></a>      &#39;transformOrigin&#39;: &#39;&#39;
+<a name="line2459"></a>    }
+<a name="line2460"></a>  };
+<a name="line2461"></a>
+<a name="line2462"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], &#39;Opera&#39;);
+<a name="line2463"></a>  assertEquals(
+<a name="line2464"></a>      &#39;transformOrigin&#39;,
+<a name="line2465"></a>      goog.style.getVendorJsStyleName_(mockElement, &#39;transform-origin&#39;));
+<a name="line2466"></a>}
+<a name="line2467"></a>
+<a name="line2468"></a>
+<a name="line2469"></a>/**
+<a name="line2470"></a> * Test for the setting a style name for a CSS property
+<a name="line2471"></a> * with a vendor prefix for Webkit.
+<a name="line2472"></a> */
+<a name="line2473"></a>function testSetVendorStyleWebkit() {
+<a name="line2474"></a>  var mockElement = {
+<a name="line2475"></a>    &#39;style&#39;: {
+<a name="line2476"></a>      &#39;WebkitTransform&#39;: &#39;&#39;
+<a name="line2477"></a>    }
+<a name="line2478"></a>  };
+<a name="line2479"></a>  var styleValue = &#39;translate3d(0,0,0)&#39;;
+<a name="line2480"></a>
+<a name="line2481"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], &#39;WebKit&#39;);
+<a name="line2482"></a>  goog.style.setStyle(mockElement, &#39;transform&#39;, styleValue);
+<a name="line2483"></a>  assertEquals(styleValue, mockElement.style.WebkitTransform);
+<a name="line2484"></a>}
+<a name="line2485"></a>
+<a name="line2486"></a>
+<a name="line2487"></a>/**
+<a name="line2488"></a> * Test for the setting a style name for a CSS property
+<a name="line2489"></a> * with a vendor prefix for Mozilla.
+<a name="line2490"></a> */
+<a name="line2491"></a>function testSetVendorStyleGecko() {
+<a name="line2492"></a>  var mockElement = {
+<a name="line2493"></a>    &#39;style&#39;: {
+<a name="line2494"></a>      &#39;MozTransform&#39;: &#39;&#39;
+<a name="line2495"></a>    }
+<a name="line2496"></a>  };
+<a name="line2497"></a>  var styleValue = &#39;translate3d(0,0,0)&#39;;
+<a name="line2498"></a>
+<a name="line2499"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], &#39;Gecko&#39;, &#39;Gecko&#39;);
+<a name="line2500"></a>  goog.style.setStyle(mockElement, &#39;transform&#39;, styleValue);
+<a name="line2501"></a>  assertEquals(styleValue, mockElement.style.MozTransform);
+<a name="line2502"></a>}
+<a name="line2503"></a>
+<a name="line2504"></a>
+<a name="line2505"></a>/**
+<a name="line2506"></a> * Test for the setting a style name for a CSS property
+<a name="line2507"></a> * with a vendor prefix for IE.
+<a name="line2508"></a> */
+<a name="line2509"></a>function testSetVendorStyleIE() {
+<a name="line2510"></a>  var mockElement = {
+<a name="line2511"></a>    &#39;style&#39;: {
+<a name="line2512"></a>      &#39;msTransform&#39;: &#39;&#39;
+<a name="line2513"></a>    }
+<a name="line2514"></a>  };
+<a name="line2515"></a>  var styleValue = &#39;translate3d(0,0,0)&#39;;
+<a name="line2516"></a>
+<a name="line2517"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], &#39;MSIE&#39;);
+<a name="line2518"></a>  goog.style.setStyle(mockElement, &#39;transform&#39;, styleValue);
+<a name="line2519"></a>  assertEquals(styleValue, mockElement.style.msTransform);
+<a name="line2520"></a>}
+<a name="line2521"></a>
+<a name="line2522"></a>
+<a name="line2523"></a>/**
+<a name="line2524"></a> * Test for the setting a style name for a CSS property
+<a name="line2525"></a> * with a vendor prefix for Opera.
+<a name="line2526"></a> */
+<a name="line2527"></a>function testSetVendorStyleOpera() {
+<a name="line2528"></a>  var mockElement = {
+<a name="line2529"></a>    &#39;style&#39;: {
+<a name="line2530"></a>      &#39;OTransform&#39;: &#39;&#39;
+<a name="line2531"></a>    }
+<a name="line2532"></a>  };
+<a name="line2533"></a>  var styleValue = &#39;translate3d(0,0,0)&#39;;
+<a name="line2534"></a>
+<a name="line2535"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], &#39;Opera&#39;);
+<a name="line2536"></a>  goog.style.setStyle(mockElement, &#39;transform&#39;, styleValue);
+<a name="line2537"></a>  assertEquals(styleValue, mockElement.style.OTransform);
+<a name="line2538"></a>}
+<a name="line2539"></a>
+<a name="line2540"></a>
+<a name="line2541"></a>/**
+<a name="line2542"></a> * Test for the getting a style name for a CSS property
+<a name="line2543"></a> * with a vendor prefix for Webkit.
+<a name="line2544"></a> */
+<a name="line2545"></a>function testGetVendorStyleWebkit() {
+<a name="line2546"></a>  var mockElement = {
+<a name="line2547"></a>    &#39;style&#39;: {
+<a name="line2548"></a>      &#39;WebkitTransform&#39;: &#39;&#39;
+<a name="line2549"></a>    }
+<a name="line2550"></a>  };
+<a name="line2551"></a>  var styleValue = &#39;translate3d(0,0,0)&#39;;
+<a name="line2552"></a>
+<a name="line2553"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.WEBKIT], &#39;WebKit&#39;);
+<a name="line2554"></a>  goog.style.setStyle(mockElement, &#39;transform&#39;, styleValue);
+<a name="line2555"></a>  assertEquals(styleValue, goog.style.getStyle(mockElement, &#39;transform&#39;));
+<a name="line2556"></a>}
+<a name="line2557"></a>
+<a name="line2558"></a>
+<a name="line2559"></a>/**
+<a name="line2560"></a> * Test for the getting a style name for a CSS property
+<a name="line2561"></a> * with a vendor prefix for Mozilla.
+<a name="line2562"></a> */
+<a name="line2563"></a>function testGetVendorStyleGecko() {
+<a name="line2564"></a>  var mockElement = {
+<a name="line2565"></a>    &#39;style&#39;: {
+<a name="line2566"></a>      &#39;MozTransform&#39;: &#39;&#39;
+<a name="line2567"></a>    }
+<a name="line2568"></a>  };
+<a name="line2569"></a>  var styleValue = &#39;translate3d(0,0,0)&#39;;
+<a name="line2570"></a>
+<a name="line2571"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.GECKO], &#39;Gecko&#39;, &#39;Gecko&#39;);
+<a name="line2572"></a>  goog.style.setStyle(mockElement, &#39;transform&#39;, styleValue);
+<a name="line2573"></a>  assertEquals(styleValue, goog.style.getStyle(mockElement, &#39;transform&#39;));
+<a name="line2574"></a>}
+<a name="line2575"></a>
+<a name="line2576"></a>
+<a name="line2577"></a>/**
+<a name="line2578"></a> * Test for the getting a style name for a CSS property
+<a name="line2579"></a> * with a vendor prefix for IE.
+<a name="line2580"></a> */
+<a name="line2581"></a>function testGetVendorStyleIE() {
+<a name="line2582"></a>  var mockElement = {
+<a name="line2583"></a>    &#39;style&#39;: {
+<a name="line2584"></a>      &#39;msTransform&#39;: &#39;&#39;
+<a name="line2585"></a>    }
+<a name="line2586"></a>  };
+<a name="line2587"></a>  var styleValue = &#39;translate3d(0,0,0)&#39;;
+<a name="line2588"></a>
+<a name="line2589"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.IE], &#39;MSIE&#39;);
+<a name="line2590"></a>  goog.style.setStyle(mockElement, &#39;transform&#39;, styleValue);
+<a name="line2591"></a>  assertEquals(styleValue, goog.style.getStyle(mockElement, &#39;transform&#39;));
+<a name="line2592"></a>}
+<a name="line2593"></a>
+<a name="line2594"></a>
+<a name="line2595"></a>/**
+<a name="line2596"></a> * Test for the getting a style name for a CSS property
+<a name="line2597"></a> * with a vendor prefix for Opera.
+<a name="line2598"></a> */
+<a name="line2599"></a>function testGetVendorStyleOpera() {
+<a name="line2600"></a>  var mockElement = {
+<a name="line2601"></a>    &#39;style&#39;: {
+<a name="line2602"></a>      &#39;OTransform&#39;: &#39;&#39;
+<a name="line2603"></a>    }
+<a name="line2604"></a>  };
+<a name="line2605"></a>  var styleValue = &#39;translate3d(0,0,0)&#39;;
+<a name="line2606"></a>
+<a name="line2607"></a>  assertUserAgent([goog.userAgentTestUtil.UserAgents.OPERA], &#39;Opera&#39;);
+<a name="line2608"></a>  goog.style.setStyle(mockElement, &#39;transform&#39;, styleValue);
+<a name="line2609"></a>  assertEquals(styleValue, goog.style.getStyle(mockElement, &#39;transform&#39;));
+<a name="line2610"></a>}
+</pre>
+
+
+</body>
+</html>

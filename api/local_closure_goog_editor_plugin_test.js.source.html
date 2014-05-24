@@ -1,0 +1,228 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>plugin_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_plugin_test.js.html">plugin_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.editor.PluginTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.editor.PluginTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.editor.Field&#39;);
+<a name="line19"></a>goog.require(&#39;goog.editor.Plugin&#39;);
+<a name="line20"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.StrictMock&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line24"></a>
+<a name="line25"></a>var plugin;
+<a name="line26"></a>var fieldObject;
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>function setUp() {
+<a name="line30"></a>  plugin = new goog.editor.Plugin();
+<a name="line31"></a>  fieldObject = {};
+<a name="line32"></a>}
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>function tearDown() {
+<a name="line36"></a>  plugin.dispose();
+<a name="line37"></a>}
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>function testRegisterFieldObject() {
+<a name="line41"></a>  plugin.registerFieldObject(fieldObject);
+<a name="line42"></a>  assertEquals(&#39;Register field object must be stored in protected field.&#39;,
+<a name="line43"></a>      fieldObject, plugin.fieldObject);
+<a name="line44"></a>
+<a name="line45"></a>  assertFalse(&#39;Newly registered plugin must not be enabled.&#39;,
+<a name="line46"></a>      plugin.isEnabled(fieldObject));
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>function testUnregisterFieldObject() {
+<a name="line51"></a>  plugin.registerFieldObject(fieldObject);
+<a name="line52"></a>  plugin.enable(fieldObject);
+<a name="line53"></a>  plugin.unregisterFieldObject(fieldObject);
+<a name="line54"></a>
+<a name="line55"></a>  assertNull(&#39;fieldObject property must be undefined after &#39; +
+<a name="line56"></a>      &#39;unregistering a field object.&#39;, plugin.fieldObject);
+<a name="line57"></a>  assertFalse(&#39;Unregistered field object must not be enabled&#39;,
+<a name="line58"></a>      plugin.isEnabled(fieldObject));
+<a name="line59"></a>}
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>function testEnable() {
+<a name="line63"></a>  plugin.registerFieldObject(fieldObject);
+<a name="line64"></a>  plugin.enable(fieldObject);
+<a name="line65"></a>
+<a name="line66"></a>  assertTrue(&#39;Enabled field object must be enabled according to isEnabled().&#39;,
+<a name="line67"></a>      plugin.isEnabled(fieldObject));
+<a name="line68"></a>}
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>function testDisable() {
+<a name="line72"></a>  plugin.registerFieldObject(fieldObject);
+<a name="line73"></a>  plugin.enable(fieldObject);
+<a name="line74"></a>  plugin.disable(fieldObject);
+<a name="line75"></a>
+<a name="line76"></a>  assertFalse(&#39;Disabled field object must be disabled according to &#39; +
+<a name="line77"></a>      &#39;isEnabled().&#39;, plugin.isEnabled(fieldObject));
+<a name="line78"></a>}
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>function testIsEnabled() {
+<a name="line82"></a>  // Other base cases covered while testing enable() and disable().
+<a name="line83"></a>
+<a name="line84"></a>  assertFalse(&#39;Unregistered field object must be disabled according &#39; +
+<a name="line85"></a>              &#39;to isEnabled().&#39;, plugin.isEnabled(fieldObject));
+<a name="line86"></a>}
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>function testIsSupportedCommand() {
+<a name="line90"></a>  assertFalse(&#39;Base plugin class must not support any commands.&#39;,
+<a name="line91"></a>      plugin.isSupportedCommand(&#39;+indent&#39;));
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>function testExecCommand() {
+<a name="line95"></a>  var mockField = new goog.testing.StrictMock(goog.editor.Field);
+<a name="line96"></a>  plugin.registerFieldObject(mockField);
+<a name="line97"></a>
+<a name="line98"></a>  if (goog.userAgent.GECKO) {
+<a name="line99"></a>    mockField.stopChangeEvents(true, true);
+<a name="line100"></a>  }
+<a name="line101"></a>  mockField.dispatchBeforeChange();
+<a name="line102"></a>  // Note(user): dispatch change turns back on (delayed) change events.
+<a name="line103"></a>  mockField.dispatchChange();
+<a name="line104"></a>  mockField.dispatchSelectionChangeEvent();
+<a name="line105"></a>  mockField.$replay();
+<a name="line106"></a>
+<a name="line107"></a>  var passedCommand, passedArg;
+<a name="line108"></a>  plugin.execCommandInternal = function(command, arg) {
+<a name="line109"></a>    passedCommand = command;
+<a name="line110"></a>    passedArg = arg;
+<a name="line111"></a>  };
+<a name="line112"></a>  plugin.execCommand(&#39;+indent&#39;, true);
+<a name="line113"></a>
+<a name="line114"></a>  // Verify that execCommand dispatched the expected events.
+<a name="line115"></a>  mockField.$verify();
+<a name="line116"></a>  mockField.$reset();
+<a name="line117"></a>  // Verify that execCommandInternal was called with the correct arguments.
+<a name="line118"></a>  assertEquals(&#39;+indent&#39;, passedCommand);
+<a name="line119"></a>  assertTrue(passedArg);
+<a name="line120"></a>
+<a name="line121"></a>  plugin.isSilentCommand = goog.functions.constant(true);
+<a name="line122"></a>  mockField.$replay();
+<a name="line123"></a>  plugin.execCommand(&#39;+outdent&#39;, false);
+<a name="line124"></a>  // Verify that execCommand on a silent plugin dispatched no events.
+<a name="line125"></a>  mockField.$verify();
+<a name="line126"></a>  // Verify that execCommandInternal was called with the correct arguments.
+<a name="line127"></a>  assertEquals(&#39;+outdent&#39;, passedCommand);
+<a name="line128"></a>  assertFalse(passedArg);
+<a name="line129"></a>}
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Regression test for http://b/issue?id=1471355 .
+<a name="line134"></a> */
+<a name="line135"></a>function testExecCommandException() {
+<a name="line136"></a>  var mockField = new goog.testing.StrictMock(goog.editor.Field);
+<a name="line137"></a>  plugin.registerFieldObject(mockField);
+<a name="line138"></a>  plugin.execCommandInternal = function() {
+<a name="line139"></a>    throw 1;
+<a name="line140"></a>  };
+<a name="line141"></a>
+<a name="line142"></a>  if (goog.userAgent.GECKO) {
+<a name="line143"></a>    mockField.stopChangeEvents(true, true);
+<a name="line144"></a>  }
+<a name="line145"></a>  mockField.dispatchBeforeChange();
+<a name="line146"></a>  // Note(user): dispatch change turns back on (delayed) change events.
+<a name="line147"></a>  mockField.dispatchChange();
+<a name="line148"></a>  mockField.dispatchSelectionChangeEvent();
+<a name="line149"></a>  mockField.$replay();
+<a name="line150"></a>
+<a name="line151"></a>  assertThrows(&#39;Exception should not be swallowed&#39;, function() {
+<a name="line152"></a>    plugin.execCommand();
+<a name="line153"></a>  });
+<a name="line154"></a>
+<a name="line155"></a>  // Verifies that cleanup is done despite the exception.
+<a name="line156"></a>  mockField.$verify();
+<a name="line157"></a>}
+<a name="line158"></a>
+<a name="line159"></a>function testDisposed() {
+<a name="line160"></a>  plugin.registerFieldObject(fieldObject);
+<a name="line161"></a>  plugin.dispose();
+<a name="line162"></a>  assert(plugin.getDisposed());
+<a name="line163"></a>  assertNull(&#39;Disposed plugin must not have a field object.&#39;,
+<a name="line164"></a>      plugin.fieldObject);
+<a name="line165"></a>  assertFalse(&#39;Disposed plugin must not have an enabled field object.&#39;,
+<a name="line166"></a>      plugin.isEnabled(fieldObject));
+<a name="line167"></a>}
+<a name="line168"></a>
+<a name="line169"></a>function testIsAndSetAutoDispose() {
+<a name="line170"></a>  assertTrue(&#39;Plugin must start auto-disposable&#39;, plugin.isAutoDispose());
+<a name="line171"></a>
+<a name="line172"></a>  plugin.setAutoDispose(false);
+<a name="line173"></a>  assertFalse(plugin.isAutoDispose());
+<a name="line174"></a>
+<a name="line175"></a>  plugin.setAutoDispose(true);
+<a name="line176"></a>  assertTrue(plugin.isAutoDispose());
+<a name="line177"></a>}
+</pre>
+
+
+</body>
+</html>

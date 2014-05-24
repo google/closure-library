@@ -1,0 +1,265 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>savedcaretrange_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_savedcaretrange_test.js.html">savedcaretrange_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.dom.SavedCaretRangeTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.dom.SavedCaretRangeTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.Range&#39;);
+<a name="line20"></a>goog.require(&#39;goog.dom.SavedCaretRange&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.dom&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line24"></a>
+<a name="line25"></a>function setUp() {
+<a name="line26"></a>  document.body.normalize();
+<a name="line27"></a>}
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/** @bug 1480638 */
+<a name="line31"></a>function testSavedCaretRangeDoesntChangeSelection() {
+<a name="line32"></a>  // NOTE(nicksantos): We cannot detect this bug programatically. The only
+<a name="line33"></a>  // way to detect it is to run this test manually and look at the selection
+<a name="line34"></a>  // when it ends.
+<a name="line35"></a>  var div = goog.dom.getElement(&#39;bug1480638&#39;);
+<a name="line36"></a>  var range = goog.dom.Range.createFromNodes(
+<a name="line37"></a>      div.firstChild, 0, div.lastChild, 1);
+<a name="line38"></a>  range.select();
+<a name="line39"></a>
+<a name="line40"></a>  // Observe visible selection.  Then move to next line and see it change.
+<a name="line41"></a>  // If the bug exists, it starts with &quot;foo&quot; selected and ends with
+<a name="line42"></a>  // it not selected.
+<a name="line43"></a>  //debugger;
+<a name="line44"></a>  var saved = range.saveUsingCarets();
+<a name="line45"></a>}
+<a name="line46"></a>
+<a name="line47"></a>function testSavedCaretRange() {
+<a name="line48"></a>  var parent = goog.dom.getElement(&#39;caretRangeTest&#39;);
+<a name="line49"></a>  var def = goog.dom.getElement(&#39;def&#39;);
+<a name="line50"></a>  var jkl = goog.dom.getElement(&#39;jkl&#39;);
+<a name="line51"></a>
+<a name="line52"></a>  var range = goog.dom.Range.createFromNodes(
+<a name="line53"></a>      def.firstChild, 1, jkl.firstChild, 2);
+<a name="line54"></a>  assertFalse(range.isReversed());
+<a name="line55"></a>  range.select();
+<a name="line56"></a>
+<a name="line57"></a>  var saved = range.saveUsingCarets();
+<a name="line58"></a>  assertHTMLEquals(
+<a name="line59"></a>      &#39;d&lt;span id=&quot;&#39; + saved.startCaretId_ + &#39;&quot;&gt;&lt;/span&gt;ef&#39;, def.innerHTML);
+<a name="line60"></a>  assertHTMLEquals(
+<a name="line61"></a>      &#39;jk&lt;span id=&quot;&#39; + saved.endCaretId_ + &#39;&quot;&gt;&lt;/span&gt;l&#39;, jkl.innerHTML);
+<a name="line62"></a>
+<a name="line63"></a>  goog.testing.dom.assertRangeEquals(
+<a name="line64"></a>      def.childNodes[1], 0, jkl.childNodes[1], 0,
+<a name="line65"></a>      saved.toAbstractRange());
+<a name="line66"></a>
+<a name="line67"></a>  def = goog.dom.getElement(&#39;def&#39;);
+<a name="line68"></a>  jkl = goog.dom.getElement(&#39;jkl&#39;);
+<a name="line69"></a>
+<a name="line70"></a>  var restoredRange = clearSelectionAndRestoreSaved(parent, saved);
+<a name="line71"></a>  assertFalse(restoredRange.isReversed());
+<a name="line72"></a>  goog.testing.dom.assertRangeEquals(def, 1, jkl, 1, restoredRange);
+<a name="line73"></a>
+<a name="line74"></a>  var selection = goog.dom.Range.createFromWindow(window);
+<a name="line75"></a>  assertHTMLEquals(&#39;def&#39;, def.innerHTML);
+<a name="line76"></a>  assertHTMLEquals(&#39;jkl&#39;, jkl.innerHTML);
+<a name="line77"></a>
+<a name="line78"></a>  // def and jkl now contain fragmented text nodes.
+<a name="line79"></a>  if (goog.userAgent.WEBKIT || goog.userAgent.IE) {
+<a name="line80"></a>    goog.testing.dom.assertRangeEquals(
+<a name="line81"></a>        def.childNodes[1], 0, jkl.childNodes[0], 2, selection);
+<a name="line82"></a>  } else if (goog.userAgent.OPERA) {
+<a name="line83"></a>    goog.testing.dom.assertRangeEquals(
+<a name="line84"></a>        def.childNodes[1], 0, jkl.childNodes[1], 0, selection);
+<a name="line85"></a>  } else {
+<a name="line86"></a>    goog.testing.dom.assertRangeEquals(
+<a name="line87"></a>        def, 1, jkl, 1, selection);
+<a name="line88"></a>  }
+<a name="line89"></a>}
+<a name="line90"></a>
+<a name="line91"></a>function testReversedSavedCaretRange() {
+<a name="line92"></a>  var parent = goog.dom.getElement(&#39;caretRangeTest&#39;);
+<a name="line93"></a>  var def = goog.dom.getElement(&#39;def&#39;);
+<a name="line94"></a>  var jkl = goog.dom.getElement(&#39;jkl&#39;);
+<a name="line95"></a>
+<a name="line96"></a>  var range = goog.dom.Range.createFromNodes(
+<a name="line97"></a>      jkl.firstChild, 1, def.firstChild, 2);
+<a name="line98"></a>  assertTrue(range.isReversed());
+<a name="line99"></a>  range.select();
+<a name="line100"></a>
+<a name="line101"></a>  var saved = range.saveUsingCarets();
+<a name="line102"></a>  var restoredRange = clearSelectionAndRestoreSaved(parent, saved);
+<a name="line103"></a>  assertTrue(restoredRange.isReversed());
+<a name="line104"></a>  goog.testing.dom.assertRangeEquals(def, 1, jkl, 1, restoredRange);
+<a name="line105"></a>}
+<a name="line106"></a>
+<a name="line107"></a>/*
+<a name="line108"></a>   TODO(user): Look into why removeCarets test doesn&#39;t pass.
+<a name="line109"></a>   function testRemoveCarets() {
+<a name="line110"></a>   var def = goog.dom.getElement(&#39;def&#39;);
+<a name="line111"></a>   var jkl = goog.dom.getElement(&#39;jkl&#39;);
+<a name="line112"></a>
+<a name="line113"></a>   var range = goog.dom.Range.createFromNodes(
+<a name="line114"></a>   def.firstChild, 1, jkl.firstChild, 2);
+<a name="line115"></a>   range.select();
+<a name="line116"></a>
+<a name="line117"></a>   var saved = range.saveUsingCarets();
+<a name="line118"></a>   assertHTMLEquals(
+<a name="line119"></a>   &quot;d&lt;span id=&quot;&quot; + saved.startCaretId_ + &quot;&quot;&gt;&lt;/span&gt;ef&quot;, def.innerHTML);
+<a name="line120"></a>   assertHTMLEquals(
+<a name="line121"></a>   &quot;jk&lt;span id=&quot;&quot; + saved.endCaretId_ + &quot;&quot;&gt;&lt;/span&gt;l&quot;, jkl.innerHTML);
+<a name="line122"></a>
+<a name="line123"></a>   saved.removeCarets();
+<a name="line124"></a>   assertHTMLEquals(&quot;def&quot;, def.innerHTML);
+<a name="line125"></a>   assertHTMLEquals(&quot;jkl&quot;, jkl.innerHTML);
+<a name="line126"></a>
+<a name="line127"></a>   var selection = goog.dom.Range.createFromWindow(window);
+<a name="line128"></a>
+<a name="line129"></a>   assertEquals(&#39;Wrong start node&#39;, def.firstChild, selection.getStartNode());
+<a name="line130"></a>   assertEquals(&#39;Wrong end node&#39;, jkl.firstChild, selection.getEndNode());
+<a name="line131"></a>   assertEquals(&#39;Wrong start offset&#39;, 1, selection.getStartOffset());
+<a name="line132"></a>   assertEquals(&#39;Wrong end offset&#39;, 2, selection.getEndOffset());
+<a name="line133"></a>   }
+<a name="line134"></a>   */
+<a name="line135"></a>
+<a name="line136"></a>function testRemoveContents()  {
+<a name="line137"></a>  var def = goog.dom.getElement(&#39;def-4&#39;);
+<a name="line138"></a>  var jkl = goog.dom.getElement(&#39;jkl-4&#39;);
+<a name="line139"></a>
+<a name="line140"></a>  // Sanity check.
+<a name="line141"></a>  var container = goog.dom.getElement(&#39;removeContentsTest&#39;);
+<a name="line142"></a>  assertEquals(7, container.childNodes.length);
+<a name="line143"></a>  assertEquals(&#39;def&#39;, def.innerHTML);
+<a name="line144"></a>  assertEquals(&#39;jkl&#39;, jkl.innerHTML);
+<a name="line145"></a>
+<a name="line146"></a>  var range = goog.dom.Range.createFromNodes(
+<a name="line147"></a>      def.firstChild, 1, jkl.firstChild, 2);
+<a name="line148"></a>  range.select();
+<a name="line149"></a>
+<a name="line150"></a>  var saved = range.saveUsingCarets();
+<a name="line151"></a>  var restored = saved.restore();
+<a name="line152"></a>  restored.removeContents();
+<a name="line153"></a>
+<a name="line154"></a>  assertEquals(6, container.childNodes.length);
+<a name="line155"></a>  assertEquals(&#39;d&#39;, def.innerHTML);
+<a name="line156"></a>  assertEquals(&#39;l&#39;, jkl.innerHTML);
+<a name="line157"></a>}
+<a name="line158"></a>
+<a name="line159"></a>function testHtmlEqual() {
+<a name="line160"></a>  var parent = goog.dom.getElement(&#39;caretRangeTest-2&#39;);
+<a name="line161"></a>  var def = goog.dom.getElement(&#39;def-2&#39;);
+<a name="line162"></a>  var jkl = goog.dom.getElement(&#39;jkl-2&#39;);
+<a name="line163"></a>
+<a name="line164"></a>  var range = goog.dom.Range.createFromNodes(
+<a name="line165"></a>      def.firstChild, 1, jkl.firstChild, 2);
+<a name="line166"></a>  range.select();
+<a name="line167"></a>  var saved = range.saveUsingCarets();
+<a name="line168"></a>  var html1 = parent.innerHTML;
+<a name="line169"></a>  saved.removeCarets();
+<a name="line170"></a>
+<a name="line171"></a>  var saved2 = range.saveUsingCarets();
+<a name="line172"></a>  var html2 = parent.innerHTML;
+<a name="line173"></a>  saved2.removeCarets();
+<a name="line174"></a>
+<a name="line175"></a>  assertNotEquals(&#39;Same selection with different saved caret range carets &#39; +
+<a name="line176"></a>      &#39;must have different html.&#39;, html1, html2);
+<a name="line177"></a>
+<a name="line178"></a>  assertTrue(&#39;Same selection with different saved caret range carets must &#39; +
+<a name="line179"></a>      &#39;be considered equal by htmlEqual&#39;,
+<a name="line180"></a>      goog.dom.SavedCaretRange.htmlEqual(html1, html2));
+<a name="line181"></a>
+<a name="line182"></a>  saved.dispose();
+<a name="line183"></a>  saved2.dispose();
+<a name="line184"></a>}
+<a name="line185"></a>
+<a name="line186"></a>function testStartCaretIsAtEndOfParent() {
+<a name="line187"></a>  var parent = goog.dom.getElement(&#39;caretRangeTest-3&#39;);
+<a name="line188"></a>  var def = goog.dom.getElement(&#39;def-3&#39;);
+<a name="line189"></a>  var jkl = goog.dom.getElement(&#39;jkl-3&#39;);
+<a name="line190"></a>
+<a name="line191"></a>  var range = goog.dom.Range.createFromNodes(
+<a name="line192"></a>      def, 1, jkl, 1);
+<a name="line193"></a>  range.select();
+<a name="line194"></a>  var saved = range.saveUsingCarets();
+<a name="line195"></a>  clearSelectionAndRestoreSaved(parent, saved);
+<a name="line196"></a>  range = goog.dom.Range.createFromWindow();
+<a name="line197"></a>  assertEquals(&#39;ghijkl&#39;, range.getText().replace(/\s/g, &#39;&#39;));
+<a name="line198"></a>}
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * Clear the selection by re-parsing the DOM. Then restore the saved
+<a name="line203"></a> * selection.
+<a name="line204"></a> * @param {Node} parent The node containing the current selection.
+<a name="line205"></a> * @param {goog.dom.SavedRange} saved The saved range.
+<a name="line206"></a> * @return {goog.dom.AbstractRange} Restored range.
+<a name="line207"></a> */
+<a name="line208"></a>function clearSelectionAndRestoreSaved(parent, saved) {
+<a name="line209"></a>  goog.dom.Range.clearSelection();
+<a name="line210"></a>  assertFalse(goog.dom.Range.hasSelection(window));
+<a name="line211"></a>  var range = saved.restore();
+<a name="line212"></a>  assertTrue(goog.dom.Range.hasSelection(window));
+<a name="line213"></a>  return range;
+<a name="line214"></a>}
+</pre>
+
+
+</body>
+</html>

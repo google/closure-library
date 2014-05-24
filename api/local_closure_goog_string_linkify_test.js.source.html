@@ -1,0 +1,506 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>linkify_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_string_linkify_test.js.html">linkify_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.string.linkifyTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.string.linkifyTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.string&#39;);
+<a name="line19"></a>goog.require(&#39;goog.string.linkify&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.dom&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var div = document.createElement(&#39;div&#39;);
+<a name="line24"></a>
+<a name="line25"></a>function assertLinkify(comment, input, expected) {
+<a name="line26"></a>  assertEquals(
+<a name="line27"></a>      comment, expected,
+<a name="line28"></a>      goog.string.linkify.linkifyPlainText(input, {rel: &#39;&#39;, target: &#39;&#39;}));
+<a name="line29"></a>}
+<a name="line30"></a>
+<a name="line31"></a>function testContainsNoLink() {
+<a name="line32"></a>  assertLinkify(
+<a name="line33"></a>      &#39;Text does not contain any links&#39;,
+<a name="line34"></a>      &#39;Text with no links in it.&#39;,
+<a name="line35"></a>      &#39;Text with no links in it.&#39;);
+<a name="line36"></a>}
+<a name="line37"></a>
+<a name="line38"></a>function testContainsALink() {
+<a name="line39"></a>  assertLinkify(
+<a name="line40"></a>      &#39;Text only contains a link&#39;,
+<a name="line41"></a>      &#39;http://www.google.com/&#39;,
+<a name="line42"></a>      &#39;&lt;a href=&quot;http://www.google.com/&quot;&gt;http://www.google.com/&lt;\/a&gt;&#39;);
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>function testStartsWithALink() {
+<a name="line46"></a>  assertLinkify(
+<a name="line47"></a>      &#39;Text starts with a link&#39;,
+<a name="line48"></a>      &#39;http://www.google.com/ is a well known search engine&#39;,
+<a name="line49"></a>      &#39;&lt;a href=&quot;http://www.google.com/&quot;&gt;http://www.google.com/&lt;\/a&gt;&#39; +
+<a name="line50"></a>          &#39; is a well known search engine&#39;);
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>function testEndsWithALink() {
+<a name="line54"></a>  assertLinkify(
+<a name="line55"></a>      &#39;Text ends with a link&#39;,
+<a name="line56"></a>      &#39;Look at this search engine: http://www.google.com/&#39;,
+<a name="line57"></a>      &#39;Look at this search engine: &#39; +
+<a name="line58"></a>          &#39;&lt;a href=&quot;http://www.google.com/&quot;&gt;http://www.google.com/&lt;\/a&gt;&#39;);
+<a name="line59"></a>}
+<a name="line60"></a>
+<a name="line61"></a>function testContainsOnlyEmail() {
+<a name="line62"></a>  assertLinkify(
+<a name="line63"></a>      &#39;Text only contains an email address&#39;,
+<a name="line64"></a>      &#39;bolinfest@google.com&#39;,
+<a name="line65"></a>      &#39;&lt;a href=&quot;mailto:bolinfest@google.com&quot;&gt;bolinfest@google.com&lt;\/a&gt;&#39;);
+<a name="line66"></a>}
+<a name="line67"></a>
+<a name="line68"></a>function testStartsWithAnEmail() {
+<a name="line69"></a>  assertLinkify(
+<a name="line70"></a>      &#39;Text starts with an email address&#39;,
+<a name="line71"></a>      &#39;bolinfest@google.com wrote this test.&#39;,
+<a name="line72"></a>      &#39;&lt;a href=&quot;mailto:bolinfest@google.com&quot;&gt;bolinfest@google.com&lt;\/a&gt;&#39; +
+<a name="line73"></a>          &#39; wrote this test.&#39;);
+<a name="line74"></a>}
+<a name="line75"></a>
+<a name="line76"></a>function testEndsWithAnEmail() {
+<a name="line77"></a>  assertLinkify(
+<a name="line78"></a>      &#39;Text ends with an email address&#39;,
+<a name="line79"></a>      &#39;This test was written by bolinfest@google.com.&#39;,
+<a name="line80"></a>      &#39;This test was written by &#39; +
+<a name="line81"></a>          &#39;&lt;a href=&quot;mailto:bolinfest@google.com&quot;&gt;bolinfest@google.com&lt;\/a&gt;.&#39;);
+<a name="line82"></a>}
+<a name="line83"></a>
+<a name="line84"></a>function testUrlWithPortNumber() {
+<a name="line85"></a>  assertLinkify(
+<a name="line86"></a>      &#39;URL with a port number&#39;,
+<a name="line87"></a>      &#39;http://www.google.com:80/&#39;,
+<a name="line88"></a>      &#39;&lt;a href=&quot;http://www.google.com:80/&quot;&gt;http://www.google.com:80/&lt;\/a&gt;&#39;);
+<a name="line89"></a>}
+<a name="line90"></a>
+<a name="line91"></a>function testUrlWithUserPasswordAndPortNumber() {
+<a name="line92"></a>  assertLinkify(
+<a name="line93"></a>      &#39;URL with a user, a password and a port number&#39;,
+<a name="line94"></a>      &#39;http://lascap:p4ssw0rd@google.com:80/s?q=a&amp;hl=en&#39;,
+<a name="line95"></a>      &#39;&lt;a href=&quot;http://lascap:p4ssw0rd@google.com:80/s?q=a&amp;amp;hl=en&quot;&gt;&#39; +
+<a name="line96"></a>          &#39;http://lascap:p4ssw0rd@google.com:80/s?q=a&amp;amp;hl=en&lt;\/a&gt;&#39;);
+<a name="line97"></a>}
+<a name="line98"></a>
+<a name="line99"></a>function testUrlWithUnderscore() {
+<a name="line100"></a>  assertLinkify(
+<a name="line101"></a>      &#39;URL with an underscore&#39;,
+<a name="line102"></a>      &#39;http://www_foo.google.com/&#39;,
+<a name="line103"></a>      &#39;&lt;a href=&quot;http://www_foo.google.com/&quot;&gt;http://www_foo.google.com/&lt;\/a&gt;&#39;);
+<a name="line104"></a>}
+<a name="line105"></a>
+<a name="line106"></a>function testInternalUrlWithoutDomain() {
+<a name="line107"></a>  assertLinkify(
+<a name="line108"></a>      &#39;Internal URL without a proper domain&#39;,
+<a name="line109"></a>      &#39;http://tracker/1068594&#39;,
+<a name="line110"></a>      &#39;&lt;a href=&quot;http://tracker/1068594&quot;&gt;http://tracker/1068594&lt;\/a&gt;&#39;);
+<a name="line111"></a>}
+<a name="line112"></a>
+<a name="line113"></a>function testInternalUrlOneChar() {
+<a name="line114"></a>  assertLinkify(
+<a name="line115"></a>      &#39;Internal URL with a one char domain&#39;,
+<a name="line116"></a>      &#39;http://b&#39;,
+<a name="line117"></a>      &#39;&lt;a href=&quot;http://b&quot;&gt;http://b&lt;\/a&gt;&#39;);
+<a name="line118"></a>}
+<a name="line119"></a>
+<a name="line120"></a>function testSecureInternalUrlWithoutDomain() {
+<a name="line121"></a>  assertLinkify(
+<a name="line122"></a>      &#39;Secure Internal URL without a proper domain&#39;,
+<a name="line123"></a>      &#39;https://review/6594805&#39;,
+<a name="line124"></a>      &#39;&lt;a href=&quot;https://review/6594805&quot;&gt;https://review/6594805&lt;\/a&gt;&#39;);
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>function testTwoUrls() {
+<a name="line128"></a>  assertLinkify(
+<a name="line129"></a>      &#39;Text with two URLs in it&#39;,
+<a name="line130"></a>      &#39;I use both http://www.google.com and http://yahoo.com, don\&#39;t you?&#39;,
+<a name="line131"></a>      &#39;I use both &lt;a href=&quot;http://www.google.com&quot;&gt;http://www.google.com&lt;\/a&gt; &#39; +
+<a name="line132"></a>          &#39;and &lt;a href=&quot;http://yahoo.com&quot;&gt;http://yahoo.com&lt;\/a&gt;, &#39; +
+<a name="line133"></a>          goog.string.htmlEscape(&#39;don\&#39;t you?&#39;));
+<a name="line134"></a>}
+<a name="line135"></a>
+<a name="line136"></a>function testGetParams() {
+<a name="line137"></a>  assertLinkify(
+<a name="line138"></a>      &#39;URL with GET params&#39;,
+<a name="line139"></a>      &#39;http://google.com/?a=b&amp;c=d&amp;e=f&#39;,
+<a name="line140"></a>      &#39;&lt;a href=&quot;http://google.com/?a=b&amp;amp;c=d&amp;amp;e=f&quot;&gt;&#39; +
+<a name="line141"></a>          &#39;http://google.com/?a=b&amp;amp;c=d&amp;amp;e=f&lt;\/a&gt;&#39;);
+<a name="line142"></a>}
+<a name="line143"></a>
+<a name="line144"></a>function testGoogleCache() {
+<a name="line145"></a>  assertLinkify(
+<a name="line146"></a>      &#39;Google search result from cache&#39;,
+<a name="line147"></a>      &#39;http://66.102.7.104/search?q=cache:I4LoMT6euUUJ:&#39; +
+<a name="line148"></a>          &#39;www.google.com/intl/en/help/features.html+google+cache&amp;hl=en&#39;,
+<a name="line149"></a>      &#39;&lt;a href=&quot;http://66.102.7.104/search?q=cache:I4LoMT6euUUJ:&#39; +
+<a name="line150"></a>          &#39;www.google.com/intl/en/help/features.html+google+cache&amp;amp;hl=en&quot;&gt;&#39; +
+<a name="line151"></a>          &#39;http://66.102.7.104/search?q=cache:I4LoMT6euUUJ:&#39; +
+<a name="line152"></a>          &#39;www.google.com/intl/en/help/features.html+google+cache&amp;amp;hl=en&#39; +
+<a name="line153"></a>          &#39;&lt;\/a&gt;&#39;);
+<a name="line154"></a>}
+<a name="line155"></a>
+<a name="line156"></a>function testUrlWithoutHttp() {
+<a name="line157"></a>  assertLinkify(
+<a name="line158"></a>      &#39;URL without http protocol&#39;,
+<a name="line159"></a>      &#39;It\&#39;s faster to type www.google.com without the http:// in front.&#39;,
+<a name="line160"></a>      goog.string.htmlEscape(&#39;It\&#39;s faster to type &#39;) +
+<a name="line161"></a>          &#39;&lt;a href=&quot;http://www.google.com&quot;&gt;www.google.com&#39; +
+<a name="line162"></a>          &#39;&lt;\/a&gt; without the http:// in front.&#39;);
+<a name="line163"></a>}
+<a name="line164"></a>
+<a name="line165"></a>function testUrlWithCapitalsWithoutHttp() {
+<a name="line166"></a>  assertLinkify(
+<a name="line167"></a>      &#39;URL with capital letters without http protocol&#39;,
+<a name="line168"></a>      &#39;It\&#39;s faster to type Www.google.com without the http:// in front.&#39;,
+<a name="line169"></a>      goog.string.htmlEscape(&#39;It\&#39;s faster to type &#39;) +
+<a name="line170"></a>          &#39;&lt;a href=&quot;http://Www.google.com&quot;&gt;Www.google.com&#39; +
+<a name="line171"></a>          &#39;&lt;\/a&gt; without the http:// in front.&#39;);
+<a name="line172"></a>}
+<a name="line173"></a>
+<a name="line174"></a>function testUrlHashBang() {
+<a name="line175"></a>  assertLinkify(
+<a name="line176"></a>      &#39;URL with #!&#39;,
+<a name="line177"></a>      &#39;Another test URL: &#39; +
+<a name="line178"></a>      &#39;https://www.google.com/testurls/#!/page&#39;,
+<a name="line179"></a>      &#39;Another test URL: &#39; +
+<a name="line180"></a>      &#39;&lt;a href=&quot;https://www.google.com/testurls/#!/page&quot;&gt;&#39; +
+<a name="line181"></a>      &#39;https://www.google.com/testurls/#!/page&lt;\/a&gt;&#39;);
+<a name="line182"></a>}
+<a name="line183"></a>
+<a name="line184"></a>function testTextLooksLikeUrlWithoutHttp() {
+<a name="line185"></a>  assertLinkify(
+<a name="line186"></a>      &#39;Text looks like an url but is not&#39;,
+<a name="line187"></a>      &#39;This showww.is just great: www.is&#39;,
+<a name="line188"></a>      &#39;This showww.is just great: &lt;a href=&quot;http://www.is&quot;&gt;www.is&lt;\/a&gt;&#39;);
+<a name="line189"></a>}
+<a name="line190"></a>
+<a name="line191"></a>function testEmailWithSubdomain() {
+<a name="line192"></a>  assertLinkify(
+<a name="line193"></a>      &#39;Email with a subdomain&#39;,
+<a name="line194"></a>      &#39;Send mail to bolinfest@groups.google.com.&#39;,
+<a name="line195"></a>      &#39;Send mail to &lt;a href=&quot;mailto:bolinfest@groups.google.com&quot;&gt;&#39; +
+<a name="line196"></a>          &#39;bolinfest@groups.google.com&lt;\/a&gt;.&#39;);
+<a name="line197"></a>}
+<a name="line198"></a>
+<a name="line199"></a>function testEmailWithHyphen() {
+<a name="line200"></a>  assertLinkify(
+<a name="line201"></a>      &#39;Email with a hyphen in the domain name&#39;,
+<a name="line202"></a>      &#39;Send mail to bolinfest@google-groups.com.&#39;,
+<a name="line203"></a>      &#39;Send mail to &lt;a href=&quot;mailto:bolinfest@google-groups.com&quot;&gt;&#39; +
+<a name="line204"></a>          &#39;bolinfest@google-groups.com&lt;\/a&gt;.&#39;);
+<a name="line205"></a>}
+<a name="line206"></a>
+<a name="line207"></a>function testEmailUsernameWithSpecialChars() {
+<a name="line208"></a>  assertLinkify(
+<a name="line209"></a>      &#39;Email with a hyphen, period, and + in the user name&#39;,
+<a name="line210"></a>      &#39;Send mail to bolin-fest+for.um@google.com&#39;,
+<a name="line211"></a>      &#39;Send mail to &lt;a href=&quot;mailto:bolin-fest+for.um@google.com&quot;&gt;&#39; +
+<a name="line212"></a>          &#39;bolin-fest+for.um@google.com&lt;\/a&gt;&#39;);
+<a name="line213"></a>}
+<a name="line214"></a>
+<a name="line215"></a>function testEmailWithUnderscoreInvalid() {
+<a name="line216"></a>  assertLinkify(
+<a name="line217"></a>      &#39;Email with an underscore in the domain name, which is invalid&#39;,
+<a name="line218"></a>      &#39;Do not email bolinfest@google_groups.com.&#39;,
+<a name="line219"></a>      &#39;Do not email bolinfest@google_groups.com.&#39;);
+<a name="line220"></a>}
+<a name="line221"></a>
+<a name="line222"></a>function testUrlNotHttp() {
+<a name="line223"></a>  assertLinkify(
+<a name="line224"></a>      &#39;Url using unusual scheme&#39;,
+<a name="line225"></a>      &#39;Looking for some goodies: ftp://ftp.google.com/goodstuff/&#39;,
+<a name="line226"></a>      &#39;Looking for some goodies: &#39; +
+<a name="line227"></a>      &#39;&lt;a href=&quot;ftp://ftp.google.com/goodstuff/&quot;&gt;&#39; +
+<a name="line228"></a>          &#39;ftp://ftp.google.com/goodstuff/&lt;\/a&gt;&#39;);
+<a name="line229"></a>}
+<a name="line230"></a>
+<a name="line231"></a>function testJsInjection() {
+<a name="line232"></a>  assertLinkify(
+<a name="line233"></a>      &#39;Text includes some javascript&#39;,
+<a name="line234"></a>      &#39;Welcome in hell &lt;script&gt;alert(\&#39;this is hell\&#39;)&lt;\/script&gt;&#39;,
+<a name="line235"></a>      goog.string.htmlEscape(
+<a name="line236"></a>          &#39;Welcome in hell &lt;script&gt;alert(\&#39;this is hell\&#39;)&lt;\/script&gt;&#39;));
+<a name="line237"></a>}
+<a name="line238"></a>
+<a name="line239"></a>function testJsInjectionDotIsBlind() {
+<a name="line240"></a>  assertLinkify(
+<a name="line241"></a>      &#39;Javascript injection using regex . blindness to newline chars&#39;,
+<a name="line242"></a>      &#39;&lt;script&gt;malicious_code()&lt;\/script&gt;\nVery nice url: www.google.com&#39;,
+<a name="line243"></a>      &#39;&amp;lt;script&amp;gt;malicious_code()&amp;lt;/script&amp;gt;\nVery nice url: &#39; +
+<a name="line244"></a>          &#39;&lt;a href=&quot;http://www.google.com&quot;&gt;www.google.com&lt;\/a&gt;&#39;);
+<a name="line245"></a>}
+<a name="line246"></a>
+<a name="line247"></a>function testJsInjectionWithUnicodeLineReturn() {
+<a name="line248"></a>  assertLinkify(
+<a name="line249"></a>      &#39;Javascript injection using regex . blindness to newline chars with a &#39; +
+<a name="line250"></a>          &#39;unicode newline character.&#39;,
+<a name="line251"></a>      &#39;&lt;script&gt;malicious_code()&lt;\/script&gt;\u2029Vanilla text&#39;,
+<a name="line252"></a>      &#39;&amp;lt;script&amp;gt;malicious_code()&amp;lt;/script&amp;gt;\u2029Vanilla text&#39;);
+<a name="line253"></a>}
+<a name="line254"></a>
+<a name="line255"></a>function testJsInjectionWithIgnorableNonTagChar() {
+<a name="line256"></a>  assertLinkify(
+<a name="line257"></a>      &#39;Angle brackets are normalized even when followed by an ignorable &#39; +
+<a name="line258"></a>          &#39;non-tag character.&#39;,
+<a name="line259"></a>      &#39;&lt;\u0000img onerror=alert(1337) src=\n&gt;&#39;,
+<a name="line260"></a>      &#39;&amp;lt;&amp;#0;img onerror=alert(1337) src=\n&amp;gt;&#39;);
+<a name="line261"></a>}
+<a name="line262"></a>
+<a name="line263"></a>function testJsInjectionWithTextarea() {
+<a name="line264"></a>  assertLinkify(
+<a name="line265"></a>      &#39;Putting the result in a textarea can\&#39;t cause other textarea text to &#39; +
+<a name="line266"></a>          &#39;be treated as tag content.&#39;,
+<a name="line267"></a>      &#39;&lt;/textarea&#39;,
+<a name="line268"></a>      &#39;&amp;lt;/textarea&#39;);
+<a name="line269"></a>}
+<a name="line270"></a>
+<a name="line271"></a>function testJsInjectionWithNewlineConversion() {
+<a name="line272"></a>  assertLinkify(
+<a name="line273"></a>      &#39;Any newline conversion and whitespace normalization won\&#39;t cause tag &#39; +
+<a name="line274"></a>          &#39;parts to be recombined.&#39;,
+<a name="line275"></a>      &#39;&lt;&lt;br&gt;script&lt;br&gt;&gt;alert(1337)&lt;&lt;br&gt;/&lt;br&gt;script&lt;br&gt;&gt;&#39;,
+<a name="line276"></a>      &#39;&amp;lt;&amp;lt;br&amp;gt;script&amp;lt;br&amp;gt;&amp;gt;alert(1337)&amp;lt;&amp;lt;br&amp;gt;/&amp;lt;&#39; +
+<a name="line277"></a>          &#39;br&amp;gt;script&amp;lt;br&amp;gt;&amp;gt;&#39;);
+<a name="line278"></a>}
+<a name="line279"></a>
+<a name="line280"></a>function testNoProtocolBlacklisting() {
+<a name="line281"></a>  assertLinkify(
+<a name="line282"></a>      &#39;No protocol blacklisting.&#39;,
+<a name="line283"></a>      &#39;Click: jscript:alert%281337%29\nClick: JSscript:alert%281337%29\n&#39; +
+<a name="line284"></a>          &#39;Click: VBscript:alert%281337%29\nClick: Script:alert%281337%29\n&#39; +
+<a name="line285"></a>          &#39;Click: flavascript:alert%281337%29&#39;,
+<a name="line286"></a>      &#39;Click: jscript:alert%281337%29\nClick: JSscript:alert%281337%29\n&#39; +
+<a name="line287"></a>          &#39;Click: VBscript:alert%281337%29\nClick: Script:alert%281337%29\n&#39; +
+<a name="line288"></a>          &#39;Click: flavascript:alert%281337%29&#39;);
+<a name="line289"></a>}
+<a name="line290"></a>
+<a name="line291"></a>function testProtocolWhitelistingEffective() {
+<a name="line292"></a>  assertLinkify(
+<a name="line293"></a>      &#39;Protocol whitelisting is effective.&#39;,
+<a name="line294"></a>      &#39;Click httpscript:alert%281337%29\nClick mailtoscript:alert%281337%29\n&#39; +
+<a name="line295"></a>          &#39;Click j\u00A0avascript:alert%281337%29\n&#39; +
+<a name="line296"></a>          &#39;Click \u00A0javascript:alert%281337%29&#39;,
+<a name="line297"></a>      &#39;Click httpscript:alert%281337%29\nClick mailtoscript:alert%281337%29\n&#39; +
+<a name="line298"></a>          &#39;Click j\u00A0avascript:alert%281337%29\n&#39; +
+<a name="line299"></a>          &#39;Click \u00A0javascript:alert%281337%29&#39;);
+<a name="line300"></a>}
+<a name="line301"></a>
+<a name="line302"></a>function testLinkifyNoOptions() {
+<a name="line303"></a>  div.innerHTML = goog.string.linkify.linkifyPlainText(&#39;http://www.google.com&#39;);
+<a name="line304"></a>  goog.testing.dom.assertHtmlContentsMatch(
+<a name="line305"></a>      &#39;&lt;a href=&quot;http://www.google.com&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;&#39; +
+<a name="line306"></a>      &#39;http://www.google.com&lt;\/a&gt;&#39;,
+<a name="line307"></a>      div, true /* opt_strictAttributes */);
+<a name="line308"></a>}
+<a name="line309"></a>
+<a name="line310"></a>function testLinkifyOptionsNoAttributes() {
+<a name="line311"></a>  div.innerHTML = goog.string.linkify.linkifyPlainText(
+<a name="line312"></a>      &#39;The link for www.google.com is located somewhere in &#39; +
+<a name="line313"></a>      &#39;https://www.google.fr/?hl=en, you should find it easily.&#39;,
+<a name="line314"></a>      {rel: &#39;&#39;, target: &#39;&#39;});
+<a name="line315"></a>  goog.testing.dom.assertHtmlContentsMatch(
+<a name="line316"></a>      &#39;The link for &lt;a href=&quot;http://www.google.com&quot;&gt;www.google.com&lt;\/a&gt; is &#39; +
+<a name="line317"></a>      &#39;located somewhere in &#39; +
+<a name="line318"></a>      &#39;&lt;a href=&quot;https://www.google.fr/?hl=en&quot;&gt;https://www.google.fr/?hl=en&#39; +
+<a name="line319"></a>      &#39;&lt;\/a&gt;, you should find it easily.&#39;,
+<a name="line320"></a>      div, true /* opt_strictAttributes */);
+<a name="line321"></a>}
+<a name="line322"></a>
+<a name="line323"></a>function testLinkifyOptionsClassName() {
+<a name="line324"></a>  div.innerHTML = goog.string.linkify.linkifyPlainText(
+<a name="line325"></a>      &#39;Attribute with &lt;class&gt; name www.w3c.org.&#39;,
+<a name="line326"></a>      {&#39;class&#39;: &#39;link-added&#39;});
+<a name="line327"></a>  goog.testing.dom.assertHtmlContentsMatch(
+<a name="line328"></a>      &#39;Attribute with &amp;lt;class&amp;gt; name &lt;a href=&quot;http://www.w3c.org&quot; &#39; +
+<a name="line329"></a>      &#39;target=&quot;_blank&quot; rel=&quot;nofollow&quot; class=&quot;link-added&quot;&gt;www.w3c.org&lt;\/a&gt;.&#39;,
+<a name="line330"></a>      div, true /* opt_strictAttributes */);
+<a name="line331"></a>}
+<a name="line332"></a>
+<a name="line333"></a>function testFindFirstUrlNoScheme() {
+<a name="line334"></a>  assertEquals(&#39;www.google.com&#39;, goog.string.linkify.findFirstUrl(
+<a name="line335"></a>      &#39;www.google.com&#39;));
+<a name="line336"></a>}
+<a name="line337"></a>
+<a name="line338"></a>function testFindFirstUrlNoSchemeWithText() {
+<a name="line339"></a>  assertEquals(&#39;www.google.com&#39;, goog.string.linkify.findFirstUrl(
+<a name="line340"></a>      &#39;prefix www.google.com something&#39;));
+<a name="line341"></a>}
+<a name="line342"></a>
+<a name="line343"></a>function testFindFirstUrlScheme() {
+<a name="line344"></a>  assertEquals(&#39;http://www.google.com&#39;, goog.string.linkify.findFirstUrl(
+<a name="line345"></a>      &#39;http://www.google.com&#39;));
+<a name="line346"></a>}
+<a name="line347"></a>
+<a name="line348"></a>function testFindFirstUrlSchemeWithText() {
+<a name="line349"></a>  assertEquals(&#39;http://www.google.com&#39;, goog.string.linkify.findFirstUrl(
+<a name="line350"></a>      &#39;prefix http://www.google.com something&#39;));
+<a name="line351"></a>}
+<a name="line352"></a>
+<a name="line353"></a>function testFindFirstUrlNoUrl() {
+<a name="line354"></a>  assertEquals(&#39;&#39;, goog.string.linkify.findFirstUrl(
+<a name="line355"></a>      &#39;ygvtfr676 5v68fk uygbt85F^&amp;%^&amp;I%FVvc .&#39;));
+<a name="line356"></a>}
+<a name="line357"></a>
+<a name="line358"></a>function testFindFirstEmailNoScheme() {
+<a name="line359"></a>  assertEquals(&#39;fake@google.com&#39;, goog.string.linkify.findFirstEmail(
+<a name="line360"></a>      &#39;fake@google.com&#39;));
+<a name="line361"></a>}
+<a name="line362"></a>
+<a name="line363"></a>function testFindFirstEmailNoSchemeWithText() {
+<a name="line364"></a>  assertEquals(&#39;fake@google.com&#39;, goog.string.linkify.findFirstEmail(
+<a name="line365"></a>      &#39;prefix fake@google.com something&#39;));
+<a name="line366"></a>}
+<a name="line367"></a>
+<a name="line368"></a>function testFindFirstEmailScheme() {
+<a name="line369"></a>  assertEquals(&#39;mailto:fake@google.com&#39;, goog.string.linkify.findFirstEmail(
+<a name="line370"></a>      &#39;mailto:fake@google.com&#39;));
+<a name="line371"></a>}
+<a name="line372"></a>
+<a name="line373"></a>function testFindFirstEmailSchemeWithText() {
+<a name="line374"></a>  assertEquals(&#39;mailto:fake@google.com&#39;, goog.string.linkify.findFirstEmail(
+<a name="line375"></a>      &#39;prefix mailto:fake@google.com something&#39;));
+<a name="line376"></a>}
+<a name="line377"></a>
+<a name="line378"></a>function testFindFirstEmailNoUrl() {
+<a name="line379"></a>  assertEquals(&#39;&#39;, goog.string.linkify.findFirstEmail(
+<a name="line380"></a>      &#39;ygvtfr676 5v68fk uygbt85F^&amp;%^&amp;I%FVvc .&#39;));
+<a name="line381"></a>}
+<a name="line382"></a>
+<a name="line383"></a>function testContainsPunctuation_parens() {
+<a name="line384"></a>  assertLinkify(
+<a name="line385"></a>      &#39;Link contains parens, but does not end with them&#39;,
+<a name="line386"></a>      &#39;www.google.com/abc(v1).html&#39;,
+<a name="line387"></a>      &#39;&lt;a href=&quot;http://www.google.com/abc(v1).html&quot;&gt;&#39; +
+<a name="line388"></a>          &#39;www.google.com/abc(v1).html&lt;\/a&gt;&#39;);
+<a name="line389"></a>}
+<a name="line390"></a>
+<a name="line391"></a>function testEndsWithPunctuation() {
+<a name="line392"></a>  assertLinkify(
+<a name="line393"></a>      &#39;Link ends with punctuation&#39;,
+<a name="line394"></a>      &#39;Have you seen www.google.com? It\&#39;s awesome.&#39;,
+<a name="line395"></a>      &#39;Have you seen &lt;a href=&quot;http://www.google.com&quot;&gt;www.google.com&lt;\/a&gt;?&#39; +
+<a name="line396"></a>      goog.string.htmlEscape(&#39; It\&#39;s awesome.&#39;));
+<a name="line397"></a>}
+<a name="line398"></a>
+<a name="line399"></a>function testEndsWithPunctuation_closeParen() {
+<a name="line400"></a>  assertLinkify(
+<a name="line401"></a>      &#39;Link inside parentheses&#39;,
+<a name="line402"></a>      &#39;(For more info see www.googl.com)&#39;,
+<a name="line403"></a>      &#39;(For more info see &lt;a href=&quot;http://www.googl.com&quot;&gt;www.googl.com&lt;\/a&gt;)&#39;);
+<a name="line404"></a>  assertLinkify(
+<a name="line405"></a>      &#39;Parentheses inside link&#39;,
+<a name="line406"></a>      &#39;http://en.wikipedia.org/wiki/Titanic_(1997_film)&#39;,
+<a name="line407"></a>      &#39;&lt;a href=&quot;http://en.wikipedia.org/wiki/Titanic_(1997_film)&quot;&gt;&#39; +
+<a name="line408"></a>          &#39;http://en.wikipedia.org/wiki/Titanic_(1997_film)&lt;\/a&gt;&#39;);
+<a name="line409"></a>}
+<a name="line410"></a>
+<a name="line411"></a>function testEndsWithPunctuation_openParen() {
+<a name="line412"></a>  assertLinkify(
+<a name="line413"></a>      &#39;Link followed by open parenthesis&#39;,
+<a name="line414"></a>      &#39;www.google.com(&#39;,
+<a name="line415"></a>      &#39;&lt;a href=&quot;http://www.google.com(&quot;&gt;www.google.com(&lt;\/a&gt;&#39;);
+<a name="line416"></a>}
+<a name="line417"></a>
+<a name="line418"></a>function testEndsWithPunctuation_angles() {
+<a name="line419"></a>  assertLinkify(
+<a name="line420"></a>      &#39;Link inside angled brackets&#39;,
+<a name="line421"></a>      &#39;Here is a bibliography entry &lt;http://www.google.com/&gt;&#39;,
+<a name="line422"></a>      &#39;Here is a bibliography entry &amp;lt;&lt;a href=&quot;http://www.google.com/&quot;&gt;&#39; +
+<a name="line423"></a>          &#39;http://www.google.com/&lt;\/a&gt;&amp;gt;&#39;);
+<a name="line424"></a>}
+<a name="line425"></a>
+<a name="line426"></a>function testEndsWithPunctuation_closingPairThenSingle() {
+<a name="line427"></a>  assertLinkify(
+<a name="line428"></a>      &#39;Link followed by closing punctuation pair then singular punctuation&#39;,
+<a name="line429"></a>      &#39;Here is a bibliography entry &lt;http://www.google.com/&gt;, PTAL.&#39;,
+<a name="line430"></a>      &#39;Here is a bibliography entry &amp;lt;&lt;a href=&quot;http://www.google.com/&quot;&gt;&#39; +
+<a name="line431"></a>          &#39;http://www.google.com/&lt;\/a&gt;&amp;gt;, PTAL.&#39;);
+<a name="line432"></a>}
+<a name="line433"></a>
+<a name="line434"></a>function testEndsWithPunctuation_ellipses() {
+<a name="line435"></a>  assertLinkify(
+<a name="line436"></a>      &#39;Link followed by three dots&#39;,
+<a name="line437"></a>      &#39;just look it up on www.google.com...&#39;,
+<a name="line438"></a>      &#39;just look it up on &lt;a href=&quot;http://www.google.com&quot;&gt;www.google.com&#39; +
+<a name="line439"></a>          &#39;&lt;\/a&gt;...&#39;);
+<a name="line440"></a>}
+<a name="line441"></a>
+<a name="line442"></a>function testBracketsInUrl() {
+<a name="line443"></a>  assertLinkify(
+<a name="line444"></a>      &#39;Link containing brackets&#39;,
+<a name="line445"></a>      &#39;before http://google.com/details?answer[0]=42 after&#39;,
+<a name="line446"></a>      &#39;before &lt;a href=&quot;http://google.com/details?answer[0]=42&quot;&gt;&#39; +
+<a name="line447"></a>          &#39;http://google.com/details?answer[0]=42&lt;\/a&gt; after&#39;);
+<a name="line448"></a>}
+<a name="line449"></a>
+<a name="line450"></a>function testUrlWithExclamation() {
+<a name="line451"></a>  assertLinkify(
+<a name="line452"></a>      &#39;URL with exclamation points&#39;,
+<a name="line453"></a>      &#39;This is awesome www.google.com!&#39;,
+<a name="line454"></a>      &#39;This is awesome &lt;a href=&quot;http://www.google.com&quot;&gt;www.google.com&lt;\/a&gt;!&#39;);
+<a name="line455"></a>}
+</pre>
+
+
+</body>
+</html>

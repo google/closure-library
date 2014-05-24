@@ -1,0 +1,560 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>websocket.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_websocket.js.html">websocket.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the WebSocket class.  A WebSocket provides a
+<a name="line17"></a> * bi-directional, full-duplex communications channel, over a single TCP socket.
+<a name="line18"></a> *
+<a name="line19"></a> * See http://dev.w3.org/html5/websockets/
+<a name="line20"></a> * for the full HTML5 WebSocket API.
+<a name="line21"></a> *
+<a name="line22"></a> * Typical usage will look like this:
+<a name="line23"></a> *
+<a name="line24"></a> *  var ws = new goog.net.WebSocket();
+<a name="line25"></a> *
+<a name="line26"></a> *  var handler = new goog.events.EventHandler();
+<a name="line27"></a> *  handler.listen(ws, goog.net.WebSocket.EventType.OPENED, onOpen);
+<a name="line28"></a> *  handler.listen(ws, goog.net.WebSocket.EventType.MESSAGE, onMessage);
+<a name="line29"></a> *
+<a name="line30"></a> *  try {
+<a name="line31"></a> *    ws.open(&#39;ws://127.0.0.1:4200&#39;);
+<a name="line32"></a> *  } catch (e) {
+<a name="line33"></a> *    ...
+<a name="line34"></a> *  }
+<a name="line35"></a> *
+<a name="line36"></a> */
+<a name="line37"></a>
+<a name="line38"></a>goog.provide(&#39;goog.net.WebSocket&#39;);
+<a name="line39"></a>goog.provide(&#39;goog.net.WebSocket.ErrorEvent&#39;);
+<a name="line40"></a>goog.provide(&#39;goog.net.WebSocket.EventType&#39;);
+<a name="line41"></a>goog.provide(&#39;goog.net.WebSocket.MessageEvent&#39;);
+<a name="line42"></a>
+<a name="line43"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line44"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line45"></a>goog.require(&#39;goog.debug.entryPointRegistry&#39;);
+<a name="line46"></a>goog.require(&#39;goog.events&#39;);
+<a name="line47"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line48"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line49"></a>goog.require(&#39;goog.log&#39;);
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Class encapsulating the logic for using a WebSocket.
+<a name="line55"></a> *
+<a name="line56"></a> * @param {boolean=} opt_autoReconnect True if the web socket should
+<a name="line57"></a> *     automatically reconnect or not.  This is true by default.
+<a name="line58"></a> * @param {function(number):number=} opt_getNextReconnect A function for
+<a name="line59"></a> *     obtaining the time until the next reconnect attempt. Given the reconnect
+<a name="line60"></a> *     attempt count (which is a positive integer), the function should return a
+<a name="line61"></a> *     positive integer representing the milliseconds to the next reconnect
+<a name="line62"></a> *     attempt.  The default function used is an exponential back-off. Note that
+<a name="line63"></a> *     this function is never called if auto reconnect is disabled.
+<a name="line64"></a> * @constructor
+<a name="line65"></a> * @extends {goog.events.EventTarget}
+<a name="line66"></a> */
+<a name="line67"></a>goog.net.WebSocket = function(opt_autoReconnect, opt_getNextReconnect) {
+<a name="line68"></a>  goog.net.WebSocket.base(this, &#39;constructor&#39;);
+<a name="line69"></a>
+<a name="line70"></a>  /**
+<a name="line71"></a>   * True if the web socket should automatically reconnect or not.
+<a name="line72"></a>   * @type {boolean}
+<a name="line73"></a>   * @private
+<a name="line74"></a>   */
+<a name="line75"></a>  this.autoReconnect_ = goog.isDef(opt_autoReconnect) ?
+<a name="line76"></a>      opt_autoReconnect : true;
+<a name="line77"></a>
+<a name="line78"></a>  /**
+<a name="line79"></a>   * A function for obtaining the time until the next reconnect attempt.
+<a name="line80"></a>   * Given the reconnect attempt count (which is a positive integer), the
+<a name="line81"></a>   * function should return a positive integer representing the milliseconds to
+<a name="line82"></a>   * the next reconnect attempt.
+<a name="line83"></a>   * @type {function(number):number}
+<a name="line84"></a>   * @private
+<a name="line85"></a>   */
+<a name="line86"></a>  this.getNextReconnect_ = opt_getNextReconnect ||
+<a name="line87"></a>      goog.net.WebSocket.EXPONENTIAL_BACKOFF_;
+<a name="line88"></a>
+<a name="line89"></a>  /**
+<a name="line90"></a>   * The time, in milliseconds, that must elapse before the next attempt to
+<a name="line91"></a>   * reconnect.
+<a name="line92"></a>   * @type {number}
+<a name="line93"></a>   * @private
+<a name="line94"></a>   */
+<a name="line95"></a>  this.nextReconnect_ = this.getNextReconnect_(this.reconnectAttempt_);
+<a name="line96"></a>};
+<a name="line97"></a>goog.inherits(goog.net.WebSocket, goog.events.EventTarget);
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * The actual web socket that will be used to send/receive messages.
+<a name="line102"></a> * @type {WebSocket}
+<a name="line103"></a> * @private
+<a name="line104"></a> */
+<a name="line105"></a>goog.net.WebSocket.prototype.webSocket_ = null;
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * The URL to which the web socket will connect.
+<a name="line110"></a> * @type {?string}
+<a name="line111"></a> * @private
+<a name="line112"></a> */
+<a name="line113"></a>goog.net.WebSocket.prototype.url_ = null;
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * The subprotocol name used when establishing the web socket connection.
+<a name="line118"></a> * @type {string|undefined}
+<a name="line119"></a> * @private
+<a name="line120"></a> */
+<a name="line121"></a>goog.net.WebSocket.prototype.protocol_ = undefined;
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * True if a call to the close callback is expected or not.
+<a name="line126"></a> * @type {boolean}
+<a name="line127"></a> * @private
+<a name="line128"></a> */
+<a name="line129"></a>goog.net.WebSocket.prototype.closeExpected_ = false;
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Keeps track of the number of reconnect attempts made since the last
+<a name="line134"></a> * successful connection.
+<a name="line135"></a> * @type {number}
+<a name="line136"></a> * @private
+<a name="line137"></a> */
+<a name="line138"></a>goog.net.WebSocket.prototype.reconnectAttempt_ = 0;
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * The logger for this class.
+<a name="line143"></a> * @type {goog.log.Logger}
+<a name="line144"></a> * @private
+<a name="line145"></a> */
+<a name="line146"></a>goog.net.WebSocket.prototype.logger_ = goog.log.getLogger(
+<a name="line147"></a>    &#39;goog.net.WebSocket&#39;);
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * The events fired by the web socket.
+<a name="line152"></a> * @enum {string} The event types for the web socket.
+<a name="line153"></a> */
+<a name="line154"></a>goog.net.WebSocket.EventType = {
+<a name="line155"></a>
+<a name="line156"></a>  /**
+<a name="line157"></a>   * Fired when an attempt to open the WebSocket fails or there is a connection
+<a name="line158"></a>   * failure after a successful connection has been established.
+<a name="line159"></a>   */
+<a name="line160"></a>  CLOSED: goog.events.getUniqueId(&#39;closed&#39;),
+<a name="line161"></a>
+<a name="line162"></a>  /**
+<a name="line163"></a>   * Fired when the WebSocket encounters an error.
+<a name="line164"></a>   */
+<a name="line165"></a>  ERROR: goog.events.getUniqueId(&#39;error&#39;),
+<a name="line166"></a>
+<a name="line167"></a>  /**
+<a name="line168"></a>   * Fired when a new message arrives from the WebSocket.
+<a name="line169"></a>   */
+<a name="line170"></a>  MESSAGE: goog.events.getUniqueId(&#39;message&#39;),
+<a name="line171"></a>
+<a name="line172"></a>  /**
+<a name="line173"></a>   * Fired when the WebSocket connection has been established.
+<a name="line174"></a>   */
+<a name="line175"></a>  OPENED: goog.events.getUniqueId(&#39;opened&#39;)
+<a name="line176"></a>};
+<a name="line177"></a>
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * The various states of the web socket.
+<a name="line181"></a> * @enum {number} The states of the web socket.
+<a name="line182"></a> * @private
+<a name="line183"></a> */
+<a name="line184"></a>goog.net.WebSocket.ReadyState_ = {
+<a name="line185"></a>  // This is the initial state during construction.
+<a name="line186"></a>  CONNECTING: 0,
+<a name="line187"></a>  // This is when the socket is actually open and ready for data.
+<a name="line188"></a>  OPEN: 1,
+<a name="line189"></a>  // This is when the socket is in the middle of a close handshake.
+<a name="line190"></a>  // Note that this is a valid state even if the OPEN state was never achieved.
+<a name="line191"></a>  CLOSING: 2,
+<a name="line192"></a>  // This is when the socket is actually closed.
+<a name="line193"></a>  CLOSED: 3
+<a name="line194"></a>};
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * The maximum amount of time between reconnect attempts for the exponential
+<a name="line199"></a> * back-off in milliseconds.
+<a name="line200"></a> * @type {number}
+<a name="line201"></a> * @private
+<a name="line202"></a> */
+<a name="line203"></a>goog.net.WebSocket.EXPONENTIAL_BACKOFF_CEILING_ = 60 * 1000;
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>/**
+<a name="line207"></a> * Computes the next reconnect time given the number of reconnect attempts since
+<a name="line208"></a> * the last successful connection.
+<a name="line209"></a> *
+<a name="line210"></a> * @param {number} attempt The number of reconnect attempts since the last
+<a name="line211"></a> *     connection.
+<a name="line212"></a> * @return {number} The time, in milliseconds, until the next reconnect attempt.
+<a name="line213"></a> * @const
+<a name="line214"></a> * @private
+<a name="line215"></a> */
+<a name="line216"></a>goog.net.WebSocket.EXPONENTIAL_BACKOFF_ = function(attempt) {
+<a name="line217"></a>  var time = Math.pow(2, attempt) * 1000;
+<a name="line218"></a>  return Math.min(time, goog.net.WebSocket.EXPONENTIAL_BACKOFF_CEILING_);
+<a name="line219"></a>};
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * Installs exception protection for all entry points introduced by
+<a name="line224"></a> * goog.net.WebSocket instances which are not protected by
+<a name="line225"></a> * {@link goog.debug.ErrorHandler#protectWindowSetTimeout},
+<a name="line226"></a> * {@link goog.debug.ErrorHandler#protectWindowSetInterval}, or
+<a name="line227"></a> * {@link goog.events.protectBrowserEventEntryPoint}.
+<a name="line228"></a> *
+<a name="line229"></a> * @param {!goog.debug.ErrorHandler} errorHandler Error handler with which to
+<a name="line230"></a> *     protect the entry points.
+<a name="line231"></a> */
+<a name="line232"></a>goog.net.WebSocket.protectEntryPoints = function(errorHandler) {
+<a name="line233"></a>  goog.net.WebSocket.prototype.onOpen_ = errorHandler.protectEntryPoint(
+<a name="line234"></a>      goog.net.WebSocket.prototype.onOpen_);
+<a name="line235"></a>  goog.net.WebSocket.prototype.onClose_ = errorHandler.protectEntryPoint(
+<a name="line236"></a>      goog.net.WebSocket.prototype.onClose_);
+<a name="line237"></a>  goog.net.WebSocket.prototype.onMessage_ = errorHandler.protectEntryPoint(
+<a name="line238"></a>      goog.net.WebSocket.prototype.onMessage_);
+<a name="line239"></a>  goog.net.WebSocket.prototype.onError_ = errorHandler.protectEntryPoint(
+<a name="line240"></a>      goog.net.WebSocket.prototype.onError_);
+<a name="line241"></a>};
+<a name="line242"></a>
+<a name="line243"></a>
+<a name="line244"></a>/**
+<a name="line245"></a> * Creates and opens the actual WebSocket.  Only call this after attaching the
+<a name="line246"></a> * appropriate listeners to this object.  If listeners aren&#39;t registered, then
+<a name="line247"></a> * the {@code goog.net.WebSocket.EventType.OPENED} event might be missed.
+<a name="line248"></a> *
+<a name="line249"></a> * @param {string} url The URL to which to connect.
+<a name="line250"></a> * @param {string=} opt_protocol The subprotocol to use.  The connection will
+<a name="line251"></a> *     only be established if the server reports that it has selected this
+<a name="line252"></a> *     subprotocol. The subprotocol name must all be a non-empty ASCII string
+<a name="line253"></a> *     with no control characters and no spaces in them (i.e. only characters
+<a name="line254"></a> *     in the range U+0021 to U+007E).
+<a name="line255"></a> */
+<a name="line256"></a>goog.net.WebSocket.prototype.open = function(url, opt_protocol) {
+<a name="line257"></a>  // Sanity check.  This works only in modern browsers.
+<a name="line258"></a>  goog.asserts.assert(goog.global[&#39;WebSocket&#39;],
+<a name="line259"></a>      &#39;This browser does not support WebSocket&#39;);
+<a name="line260"></a>
+<a name="line261"></a>  // Don&#39;t do anything if the web socket is already open.
+<a name="line262"></a>  goog.asserts.assert(!this.isOpen(), &#39;The WebSocket is already open&#39;);
+<a name="line263"></a>
+<a name="line264"></a>  // Clear any pending attempts to reconnect.
+<a name="line265"></a>  this.clearReconnectTimer_();
+<a name="line266"></a>
+<a name="line267"></a>  // Construct the web socket.
+<a name="line268"></a>  this.url_ = url;
+<a name="line269"></a>  this.protocol_ = opt_protocol;
+<a name="line270"></a>
+<a name="line271"></a>  // This check has to be made otherwise you get protocol mismatch exceptions
+<a name="line272"></a>  // for passing undefined, null, &#39;&#39;, or [].
+<a name="line273"></a>  if (this.protocol_) {
+<a name="line274"></a>    goog.log.info(this.logger_, &#39;Opening the WebSocket on &#39; + this.url_ +
+<a name="line275"></a>        &#39; with protocol &#39; + this.protocol_);
+<a name="line276"></a>    this.webSocket_ = new WebSocket(this.url_, this.protocol_);
+<a name="line277"></a>  } else {
+<a name="line278"></a>    goog.log.info(this.logger_, &#39;Opening the WebSocket on &#39; + this.url_);
+<a name="line279"></a>    this.webSocket_ = new WebSocket(this.url_);
+<a name="line280"></a>  }
+<a name="line281"></a>
+<a name="line282"></a>  // Register the event handlers.  Note that it is not possible for these
+<a name="line283"></a>  // callbacks to be missed because it is registered after the web socket is
+<a name="line284"></a>  // instantiated.  Because of the synchronous nature of JavaScript, this code
+<a name="line285"></a>  // will execute before the browser creates the resource and makes any calls
+<a name="line286"></a>  // to these callbacks.
+<a name="line287"></a>  this.webSocket_.onopen = goog.bind(this.onOpen_, this);
+<a name="line288"></a>  this.webSocket_.onclose = goog.bind(this.onClose_, this);
+<a name="line289"></a>  this.webSocket_.onmessage = goog.bind(this.onMessage_, this);
+<a name="line290"></a>  this.webSocket_.onerror = goog.bind(this.onError_, this);
+<a name="line291"></a>};
+<a name="line292"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * Closes the web socket connection.
+<a name="line296"></a> */
+<a name="line297"></a>goog.net.WebSocket.prototype.close = function() {
+<a name="line298"></a>
+<a name="line299"></a>  // Clear any pending attempts to reconnect.
+<a name="line300"></a>  this.clearReconnectTimer_();
+<a name="line301"></a>
+<a name="line302"></a>  // Attempt to close only if the web socket was created.
+<a name="line303"></a>  if (this.webSocket_) {
+<a name="line304"></a>    goog.log.info(this.logger_, &#39;Closing the WebSocket.&#39;);
+<a name="line305"></a>
+<a name="line306"></a>    // Close is expected here since it was a direct call.  Close is considered
+<a name="line307"></a>    // unexpected when opening the connection fails or there is some other form
+<a name="line308"></a>    // of connection loss after being connected.
+<a name="line309"></a>    this.closeExpected_ = true;
+<a name="line310"></a>    this.webSocket_.close();
+<a name="line311"></a>    this.webSocket_ = null;
+<a name="line312"></a>  }
+<a name="line313"></a>};
+<a name="line314"></a>
+<a name="line315"></a>
+<a name="line316"></a>/**
+<a name="line317"></a> * Sends the message over the web socket.
+<a name="line318"></a> *
+<a name="line319"></a> * @param {string} message The message to send.
+<a name="line320"></a> */
+<a name="line321"></a>goog.net.WebSocket.prototype.send = function(message) {
+<a name="line322"></a>  // Make sure the socket is ready to go before sending a message.
+<a name="line323"></a>  goog.asserts.assert(this.isOpen(), &#39;Cannot send without an open socket&#39;);
+<a name="line324"></a>
+<a name="line325"></a>  // Send the message and let onError_ be called if it fails thereafter.
+<a name="line326"></a>  this.webSocket_.send(message);
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Checks to see if the web socket is open or not.
+<a name="line332"></a> *
+<a name="line333"></a> * @return {boolean} True if the web socket is open, false otherwise.
+<a name="line334"></a> */
+<a name="line335"></a>goog.net.WebSocket.prototype.isOpen = function() {
+<a name="line336"></a>  return !!this.webSocket_ &amp;&amp;
+<a name="line337"></a>      this.webSocket_.readyState == goog.net.WebSocket.ReadyState_.OPEN;
+<a name="line338"></a>};
+<a name="line339"></a>
+<a name="line340"></a>
+<a name="line341"></a>/**
+<a name="line342"></a> * Called when the web socket has connected.
+<a name="line343"></a> *
+<a name="line344"></a> * @private
+<a name="line345"></a> */
+<a name="line346"></a>goog.net.WebSocket.prototype.onOpen_ = function() {
+<a name="line347"></a>  goog.log.info(this.logger_, &#39;WebSocket opened on &#39; + this.url_);
+<a name="line348"></a>  this.dispatchEvent(goog.net.WebSocket.EventType.OPENED);
+<a name="line349"></a>
+<a name="line350"></a>  // Set the next reconnect interval.
+<a name="line351"></a>  this.reconnectAttempt_ = 0;
+<a name="line352"></a>  this.nextReconnect_ = this.getNextReconnect_(this.reconnectAttempt_);
+<a name="line353"></a>};
+<a name="line354"></a>
+<a name="line355"></a>
+<a name="line356"></a>/**
+<a name="line357"></a> * Called when the web socket has closed.
+<a name="line358"></a> *
+<a name="line359"></a> * @param {!Event} event The close event.
+<a name="line360"></a> * @private
+<a name="line361"></a> */
+<a name="line362"></a>goog.net.WebSocket.prototype.onClose_ = function(event) {
+<a name="line363"></a>  goog.log.info(this.logger_, &#39;The WebSocket on &#39; + this.url_ + &#39; closed.&#39;);
+<a name="line364"></a>
+<a name="line365"></a>  // Firing this event allows handlers to query the URL.
+<a name="line366"></a>  this.dispatchEvent(goog.net.WebSocket.EventType.CLOSED);
+<a name="line367"></a>
+<a name="line368"></a>  // Always clear out the web socket on a close event.
+<a name="line369"></a>  this.webSocket_ = null;
+<a name="line370"></a>
+<a name="line371"></a>  // See if this is an expected call to onClose_.
+<a name="line372"></a>  if (this.closeExpected_) {
+<a name="line373"></a>    goog.log.info(this.logger_, &#39;The WebSocket closed normally.&#39;);
+<a name="line374"></a>    // Only clear out the URL if this is a normal close.
+<a name="line375"></a>    this.url_ = null;
+<a name="line376"></a>    this.protocol_ = undefined;
+<a name="line377"></a>  } else {
+<a name="line378"></a>    // Unexpected, so try to reconnect.
+<a name="line379"></a>    goog.log.error(this.logger_, &#39;The WebSocket disconnected unexpectedly: &#39; +
+<a name="line380"></a>        event.data);
+<a name="line381"></a>
+<a name="line382"></a>    // Only try to reconnect if it is enabled.
+<a name="line383"></a>    if (this.autoReconnect_) {
+<a name="line384"></a>      // Log the reconnect attempt.
+<a name="line385"></a>      var seconds = Math.floor(this.nextReconnect_ / 1000);
+<a name="line386"></a>      goog.log.info(this.logger_,
+<a name="line387"></a>          &#39;Seconds until next reconnect attempt: &#39; + seconds);
+<a name="line388"></a>
+<a name="line389"></a>      // Actually schedule the timer.
+<a name="line390"></a>      this.reconnectTimer_ = goog.Timer.callOnce(
+<a name="line391"></a>          goog.bind(this.open, this, this.url_, this.protocol_),
+<a name="line392"></a>          this.nextReconnect_, this);
+<a name="line393"></a>
+<a name="line394"></a>      // Set the next reconnect interval.
+<a name="line395"></a>      this.reconnectAttempt_++;
+<a name="line396"></a>      this.nextReconnect_ = this.getNextReconnect_(this.reconnectAttempt_);
+<a name="line397"></a>    }
+<a name="line398"></a>  }
+<a name="line399"></a>  this.closeExpected_ = false;
+<a name="line400"></a>};
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>/**
+<a name="line404"></a> * Called when a new message arrives from the server.
+<a name="line405"></a> *
+<a name="line406"></a> * @param {MessageEvent.&lt;string&gt;} event The web socket message event.
+<a name="line407"></a> * @private
+<a name="line408"></a> */
+<a name="line409"></a>goog.net.WebSocket.prototype.onMessage_ = function(event) {
+<a name="line410"></a>  var message = event.data;
+<a name="line411"></a>  this.dispatchEvent(new goog.net.WebSocket.MessageEvent(message));
+<a name="line412"></a>};
+<a name="line413"></a>
+<a name="line414"></a>
+<a name="line415"></a>/**
+<a name="line416"></a> * Called when there is any error in communication.
+<a name="line417"></a> *
+<a name="line418"></a> * @param {Event} event The error event containing the error data.
+<a name="line419"></a> * @private
+<a name="line420"></a> */
+<a name="line421"></a>goog.net.WebSocket.prototype.onError_ = function(event) {
+<a name="line422"></a>  var data = /** @type {string} */ (event.data);
+<a name="line423"></a>  goog.log.error(this.logger_, &#39;An error occurred: &#39; + data);
+<a name="line424"></a>  this.dispatchEvent(new goog.net.WebSocket.ErrorEvent(data));
+<a name="line425"></a>};
+<a name="line426"></a>
+<a name="line427"></a>
+<a name="line428"></a>/**
+<a name="line429"></a> * Clears the reconnect timer.
+<a name="line430"></a> *
+<a name="line431"></a> * @private
+<a name="line432"></a> */
+<a name="line433"></a>goog.net.WebSocket.prototype.clearReconnectTimer_ = function() {
+<a name="line434"></a>  if (goog.isDefAndNotNull(this.reconnectTimer_)) {
+<a name="line435"></a>    goog.Timer.clear(this.reconnectTimer_);
+<a name="line436"></a>  }
+<a name="line437"></a>  this.reconnectTimer_ = null;
+<a name="line438"></a>};
+<a name="line439"></a>
+<a name="line440"></a>
+<a name="line441"></a>/** @override */
+<a name="line442"></a>goog.net.WebSocket.prototype.disposeInternal = function() {
+<a name="line443"></a>  goog.net.WebSocket.base(this, &#39;disposeInternal&#39;);
+<a name="line444"></a>  this.close();
+<a name="line445"></a>};
+<a name="line446"></a>
+<a name="line447"></a>
+<a name="line448"></a>
+<a name="line449"></a>/**
+<a name="line450"></a> * Object representing a new incoming message event.
+<a name="line451"></a> *
+<a name="line452"></a> * @param {string} message The raw message coming from the web socket.
+<a name="line453"></a> * @extends {goog.events.Event}
+<a name="line454"></a> * @constructor
+<a name="line455"></a> * @final
+<a name="line456"></a> */
+<a name="line457"></a>goog.net.WebSocket.MessageEvent = function(message) {
+<a name="line458"></a>  goog.net.WebSocket.MessageEvent.base(
+<a name="line459"></a>      this, &#39;constructor&#39;, goog.net.WebSocket.EventType.MESSAGE);
+<a name="line460"></a>
+<a name="line461"></a>  /**
+<a name="line462"></a>   * The new message from the web socket.
+<a name="line463"></a>   * @type {string}
+<a name="line464"></a>   */
+<a name="line465"></a>  this.message = message;
+<a name="line466"></a>};
+<a name="line467"></a>goog.inherits(goog.net.WebSocket.MessageEvent, goog.events.Event);
+<a name="line468"></a>
+<a name="line469"></a>
+<a name="line470"></a>
+<a name="line471"></a>/**
+<a name="line472"></a> * Object representing an error event. This is fired whenever an error occurs
+<a name="line473"></a> * on the web socket.
+<a name="line474"></a> *
+<a name="line475"></a> * @param {string} data The error data.
+<a name="line476"></a> * @extends {goog.events.Event}
+<a name="line477"></a> * @constructor
+<a name="line478"></a> * @final
+<a name="line479"></a> */
+<a name="line480"></a>goog.net.WebSocket.ErrorEvent = function(data) {
+<a name="line481"></a>  goog.net.WebSocket.ErrorEvent.base(
+<a name="line482"></a>      this, &#39;constructor&#39;, goog.net.WebSocket.EventType.ERROR);
+<a name="line483"></a>
+<a name="line484"></a>  /**
+<a name="line485"></a>   * The error data coming from the web socket.
+<a name="line486"></a>   * @type {string}
+<a name="line487"></a>   */
+<a name="line488"></a>  this.data = data;
+<a name="line489"></a>};
+<a name="line490"></a>goog.inherits(goog.net.WebSocket.ErrorEvent, goog.events.Event);
+<a name="line491"></a>
+<a name="line492"></a>
+<a name="line493"></a>// Register the WebSocket as an entry point, so that it can be monitored for
+<a name="line494"></a>// exception handling, etc.
+<a name="line495"></a>goog.debug.entryPointRegistry.register(
+<a name="line496"></a>    /**
+<a name="line497"></a>     * @param {function(!Function): !Function} transformer The transforming
+<a name="line498"></a>     *     function.
+<a name="line499"></a>     */
+<a name="line500"></a>    function(transformer) {
+<a name="line501"></a>      goog.net.WebSocket.prototype.onOpen_ =
+<a name="line502"></a>          transformer(goog.net.WebSocket.prototype.onOpen_);
+<a name="line503"></a>      goog.net.WebSocket.prototype.onClose_ =
+<a name="line504"></a>          transformer(goog.net.WebSocket.prototype.onClose_);
+<a name="line505"></a>      goog.net.WebSocket.prototype.onMessage_ =
+<a name="line506"></a>          transformer(goog.net.WebSocket.prototype.onMessage_);
+<a name="line507"></a>      goog.net.WebSocket.prototype.onError_ =
+<a name="line508"></a>          transformer(goog.net.WebSocket.prototype.onError_);
+<a name="line509"></a>    });
+</pre>
+
+
+</body>
+</html>

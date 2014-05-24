@@ -1,0 +1,480 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>errorreporter.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_debug_errorreporter.js.html">errorreporter.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the ErrorReporter class, which creates an error
+<a name="line17"></a> * handler that reports any errors raised to a URL.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.debug.ErrorReporter&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.debug.ErrorReporter.ExceptionEvent&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line25"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line26"></a>goog.require(&#39;goog.debug.ErrorHandler&#39;);
+<a name="line27"></a>goog.require(&#39;goog.debug.entryPointRegistry&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line31"></a>goog.require(&#39;goog.log&#39;);
+<a name="line32"></a>goog.require(&#39;goog.net.XhrIo&#39;);
+<a name="line33"></a>goog.require(&#39;goog.object&#39;);
+<a name="line34"></a>goog.require(&#39;goog.string&#39;);
+<a name="line35"></a>goog.require(&#39;goog.uri.utils&#39;);
+<a name="line36"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Constructs an error reporter. Internal Use Only. To install an error
+<a name="line42"></a> * reporter see the {@see #install} method below.
+<a name="line43"></a> *
+<a name="line44"></a> * @param {string} handlerUrl The URL to which all errors will be reported.
+<a name="line45"></a> * @param {function(!Error, !Object.&lt;string, string&gt;)=}
+<a name="line46"></a> *     opt_contextProvider When a report is to be sent to the server,
+<a name="line47"></a> *     this method will be called, and given an opportunity to modify the
+<a name="line48"></a> *     context object before submission to the server.
+<a name="line49"></a> * @param {boolean=} opt_noAutoProtect Whether to automatically add handlers for
+<a name="line50"></a> *     onerror and to protect entry points.  If apps have other error reporting
+<a name="line51"></a> *     facilities, it may make sense for them to set these up themselves and use
+<a name="line52"></a> *     the ErrorReporter just for transmission of reports.
+<a name="line53"></a> * @constructor
+<a name="line54"></a> * @extends {goog.events.EventTarget}
+<a name="line55"></a> */
+<a name="line56"></a>goog.debug.ErrorReporter = function(
+<a name="line57"></a>    handlerUrl, opt_contextProvider, opt_noAutoProtect) {
+<a name="line58"></a>  goog.debug.ErrorReporter.base(this, &#39;constructor&#39;);
+<a name="line59"></a>
+<a name="line60"></a>  /**
+<a name="line61"></a>   * Context provider, if one was provided.
+<a name="line62"></a>   * @type {?function(!Error, !Object.&lt;string, string&gt;)}
+<a name="line63"></a>   * @private
+<a name="line64"></a>   */
+<a name="line65"></a>  this.contextProvider_ = opt_contextProvider || null;
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * The string prefix of any optional context parameters logged with the error.
+<a name="line69"></a>   * @private {string}
+<a name="line70"></a>   */
+<a name="line71"></a>  this.contextPrefix_ = &#39;context.&#39;;
+<a name="line72"></a>
+<a name="line73"></a>  /**
+<a name="line74"></a>   * The number of bytes after which the ErrorReporter truncates the POST body.
+<a name="line75"></a>   * If null, the ErrorReporter won&#39;t truncate the body.
+<a name="line76"></a>   * @private {?number}
+<a name="line77"></a>   */
+<a name="line78"></a>  this.truncationLimit_ = null;
+<a name="line79"></a>
+<a name="line80"></a>  /**
+<a name="line81"></a>   * Additional arguments to append to URL before sending XHR.
+<a name="line82"></a>   * @private {!Object.&lt;string,string&gt;}
+<a name="line83"></a>   */
+<a name="line84"></a>  this.additionalArguments_ = {};
+<a name="line85"></a>
+<a name="line86"></a>  /**
+<a name="line87"></a>   * XHR sender.
+<a name="line88"></a>   * @type {function(string, string, string, (Object|goog.structs.Map)=)}
+<a name="line89"></a>   * @private
+<a name="line90"></a>   */
+<a name="line91"></a>  this.xhrSender_ = goog.debug.ErrorReporter.defaultXhrSender;
+<a name="line92"></a>
+<a name="line93"></a>  /**
+<a name="line94"></a>   * The URL at which all errors caught by this handler will be logged.
+<a name="line95"></a>   *
+<a name="line96"></a>   * @type {string}
+<a name="line97"></a>   * @private
+<a name="line98"></a>   */
+<a name="line99"></a>  this.handlerUrl_ = handlerUrl;
+<a name="line100"></a>
+<a name="line101"></a>  if (goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT) {
+<a name="line102"></a>    if (!opt_noAutoProtect) {
+<a name="line103"></a>      /**
+<a name="line104"></a>       * The internal error handler used to catch all errors.
+<a name="line105"></a>       *
+<a name="line106"></a>       * @private {goog.debug.ErrorHandler}
+<a name="line107"></a>       */
+<a name="line108"></a>      this.errorHandler_ = null;
+<a name="line109"></a>
+<a name="line110"></a>      this.setup_();
+<a name="line111"></a>    }
+<a name="line112"></a>  } else if (!opt_noAutoProtect) {
+<a name="line113"></a>    goog.asserts.fail(
+<a name="line114"></a>        &#39;opt_noAutoProtect cannot be false while &#39; +
+<a name="line115"></a>        &#39;goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT is false.  Setting &#39; +
+<a name="line116"></a>        &#39;ALLOW_AUTO_PROTECT to false removes the necessary auto-protect code &#39; +
+<a name="line117"></a>        &#39;in compiled/optimized mode.&#39;);
+<a name="line118"></a>  }
+<a name="line119"></a>};
+<a name="line120"></a>goog.inherits(goog.debug.ErrorReporter, goog.events.EventTarget);
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * @define {boolean} If true, the code that provides additional entry point
+<a name="line125"></a> *     protection and setup is exposed in this file.  Set to false to avoid
+<a name="line126"></a> *     bringing in a lot of code from ErrorHandler and entryPointRegistry in
+<a name="line127"></a> *     compiled mode.
+<a name="line128"></a> */
+<a name="line129"></a>goog.define(&#39;goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT&#39;, true);
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Event broadcast when an exception is logged.
+<a name="line135"></a> * @param {Error} error The exception that was was reported.
+<a name="line136"></a> * @param {!Object.&lt;string, string&gt;} context The context values sent to the
+<a name="line137"></a> *     server alongside this error.
+<a name="line138"></a> * @constructor
+<a name="line139"></a> * @extends {goog.events.Event}
+<a name="line140"></a> * @final
+<a name="line141"></a> */
+<a name="line142"></a>goog.debug.ErrorReporter.ExceptionEvent = function(error, context) {
+<a name="line143"></a>  goog.events.Event.call(this, goog.debug.ErrorReporter.ExceptionEvent.TYPE);
+<a name="line144"></a>
+<a name="line145"></a>  /**
+<a name="line146"></a>   * The error that was reported.
+<a name="line147"></a>   * @type {Error}
+<a name="line148"></a>   */
+<a name="line149"></a>  this.error = error;
+<a name="line150"></a>
+<a name="line151"></a>  /**
+<a name="line152"></a>   * Context values sent to the server alongside this report.
+<a name="line153"></a>   * @type {!Object.&lt;string, string&gt;}
+<a name="line154"></a>   */
+<a name="line155"></a>  this.context = context;
+<a name="line156"></a>};
+<a name="line157"></a>goog.inherits(goog.debug.ErrorReporter.ExceptionEvent, goog.events.Event);
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Event type for notifying of a logged exception.
+<a name="line162"></a> * @type {string}
+<a name="line163"></a> */
+<a name="line164"></a>goog.debug.ErrorReporter.ExceptionEvent.TYPE =
+<a name="line165"></a>    goog.events.getUniqueId(&#39;exception&#39;);
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/**
+<a name="line169"></a> * Extra headers for the error-reporting XHR.
+<a name="line170"></a> * @type {Object|goog.structs.Map|undefined}
+<a name="line171"></a> * @private
+<a name="line172"></a> */
+<a name="line173"></a>goog.debug.ErrorReporter.prototype.extraHeaders_;
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * Logging object.
+<a name="line178"></a> *
+<a name="line179"></a> * @type {goog.log.Logger}
+<a name="line180"></a> * @private
+<a name="line181"></a> */
+<a name="line182"></a>goog.debug.ErrorReporter.logger_ =
+<a name="line183"></a>    goog.log.getLogger(&#39;goog.debug.ErrorReporter&#39;);
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * Installs an error reporter to catch all JavaScript errors raised.
+<a name="line188"></a> *
+<a name="line189"></a> * @param {string} loggingUrl The URL to which the errors caught will be
+<a name="line190"></a> *     reported.
+<a name="line191"></a> * @param {function(!Error, !Object.&lt;string, string&gt;)=}
+<a name="line192"></a> *     opt_contextProvider When a report is to be sent to the server,
+<a name="line193"></a> *     this method will be called, and given an opportunity to modify the
+<a name="line194"></a> *     context object before submission to the server.
+<a name="line195"></a> * @param {boolean=} opt_noAutoProtect Whether to automatically add handlers for
+<a name="line196"></a> *     onerror and to protect entry points.  If apps have other error reporting
+<a name="line197"></a> *     facilities, it may make sense for them to set these up themselves and use
+<a name="line198"></a> *     the ErrorReporter just for transmission of reports.
+<a name="line199"></a> * @return {!goog.debug.ErrorReporter} The error reporter.
+<a name="line200"></a> */
+<a name="line201"></a>goog.debug.ErrorReporter.install = function(
+<a name="line202"></a>    loggingUrl, opt_contextProvider, opt_noAutoProtect) {
+<a name="line203"></a>  var instance = new goog.debug.ErrorReporter(
+<a name="line204"></a>      loggingUrl, opt_contextProvider, opt_noAutoProtect);
+<a name="line205"></a>  return instance;
+<a name="line206"></a>};
+<a name="line207"></a>
+<a name="line208"></a>
+<a name="line209"></a>/**
+<a name="line210"></a> * Default implementation of XHR sender interface.
+<a name="line211"></a> *
+<a name="line212"></a> * @param {string} uri URI to make request to.
+<a name="line213"></a> * @param {string} method Send method.
+<a name="line214"></a> * @param {string} content Post data.
+<a name="line215"></a> * @param {Object|goog.structs.Map=} opt_headers Map of headers to add to the
+<a name="line216"></a> *     request.
+<a name="line217"></a> */
+<a name="line218"></a>goog.debug.ErrorReporter.defaultXhrSender = function(uri, method, content,
+<a name="line219"></a>    opt_headers) {
+<a name="line220"></a>  goog.net.XhrIo.send(uri, null, method, content, opt_headers);
+<a name="line221"></a>};
+<a name="line222"></a>
+<a name="line223"></a>
+<a name="line224"></a>/**
+<a name="line225"></a> * Installs exception protection for an entry point function in addition
+<a name="line226"></a> * to those that are protected by default.
+<a name="line227"></a> * Has no effect in IE because window.onerror is used for reporting
+<a name="line228"></a> * exceptions in that case.
+<a name="line229"></a> *
+<a name="line230"></a> * @this {goog.debug.ErrorReporter}
+<a name="line231"></a> * @param {Function} fn An entry point function to be protected.
+<a name="line232"></a> * @return {Function} A protected wrapper function that calls the entry point
+<a name="line233"></a> *     function or null if the entry point could not be protected.
+<a name="line234"></a> */
+<a name="line235"></a>goog.debug.ErrorReporter.prototype.protectAdditionalEntryPoint =
+<a name="line236"></a>    goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT ?
+<a name="line237"></a>    function(fn) {
+<a name="line238"></a>      if (this.errorHandler_) {
+<a name="line239"></a>        return this.errorHandler_.protectEntryPoint(fn);
+<a name="line240"></a>      }
+<a name="line241"></a>      return null;
+<a name="line242"></a>    } :
+<a name="line243"></a>    function(fn) {
+<a name="line244"></a>      goog.asserts.fail(
+<a name="line245"></a>          &#39;Cannot call protectAdditionalEntryPoint while ALLOW_AUTO_PROTECT &#39; +
+<a name="line246"></a>          &#39;is false.  If ALLOW_AUTO_PROTECT is false, the necessary &#39; +
+<a name="line247"></a>          &#39;auto-protect code in compiled/optimized mode is removed.&#39;);
+<a name="line248"></a>      return null;
+<a name="line249"></a>    };
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>if (goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT) {
+<a name="line253"></a>  /**
+<a name="line254"></a>   * Sets up the error reporter.
+<a name="line255"></a>   *
+<a name="line256"></a>   * @private
+<a name="line257"></a>   */
+<a name="line258"></a>  goog.debug.ErrorReporter.prototype.setup_ = function() {
+<a name="line259"></a>    if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;10&#39;)) {
+<a name="line260"></a>      // Use &quot;onerror&quot; because caught exceptions in IE don&#39;t provide line
+<a name="line261"></a>      // number.
+<a name="line262"></a>      goog.debug.catchErrors(
+<a name="line263"></a>          goog.bind(this.handleException, this), false, null);
+<a name="line264"></a>    } else {
+<a name="line265"></a>      // &quot;onerror&quot; doesn&#39;t work with FF2 or Chrome
+<a name="line266"></a>      this.errorHandler_ = new goog.debug.ErrorHandler(
+<a name="line267"></a>          goog.bind(this.handleException, this));
+<a name="line268"></a>
+<a name="line269"></a>      this.errorHandler_.protectWindowSetTimeout();
+<a name="line270"></a>      this.errorHandler_.protectWindowSetInterval();
+<a name="line271"></a>      this.errorHandler_.protectWindowRequestAnimationFrame();
+<a name="line272"></a>      goog.debug.entryPointRegistry.monitorAll(this.errorHandler_);
+<a name="line273"></a>    }
+<a name="line274"></a>  };
+<a name="line275"></a>}
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a>/**
+<a name="line279"></a> * Add headers to the logging url.
+<a name="line280"></a> * @param {Object|goog.structs.Map} loggingHeaders Extra headers to send
+<a name="line281"></a> *     to the logging URL.
+<a name="line282"></a> */
+<a name="line283"></a>goog.debug.ErrorReporter.prototype.setLoggingHeaders =
+<a name="line284"></a>    function(loggingHeaders) {
+<a name="line285"></a>  this.extraHeaders_ = loggingHeaders;
+<a name="line286"></a>};
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a> * Set the function used to send error reports to the server.
+<a name="line291"></a> * @param {function(string, string, string, (Object|goog.structs.Map)=)}
+<a name="line292"></a> *     xhrSender If provided, this will be used to send a report to the
+<a name="line293"></a> *     server instead of the default method. The function will be given the URI,
+<a name="line294"></a> *     HTTP method request content, and (optionally) request headers to be
+<a name="line295"></a> *     added.
+<a name="line296"></a> */
+<a name="line297"></a>goog.debug.ErrorReporter.prototype.setXhrSender = function(xhrSender) {
+<a name="line298"></a>  this.xhrSender_ = xhrSender;
+<a name="line299"></a>};
+<a name="line300"></a>
+<a name="line301"></a>
+<a name="line302"></a>/**
+<a name="line303"></a> * Handler for caught exceptions. Sends report to the LoggingServlet and
+<a name="line304"></a> * notifies any listeners.
+<a name="line305"></a> *
+<a name="line306"></a> * @param {Object} e The exception.
+<a name="line307"></a> * @param {!Object.&lt;string, string&gt;=} opt_context Context values to optionally
+<a name="line308"></a> *     include in the error report.
+<a name="line309"></a> */
+<a name="line310"></a>goog.debug.ErrorReporter.prototype.handleException = function(e,
+<a name="line311"></a>    opt_context) {
+<a name="line312"></a>  var error = /** @type {!Error} */ (goog.debug.normalizeErrorObject(e));
+<a name="line313"></a>
+<a name="line314"></a>  // Construct the context, possibly from the one provided in the argument, and
+<a name="line315"></a>  // pass it to the context provider if there is one.
+<a name="line316"></a>  var context = opt_context ? goog.object.clone(opt_context) : {};
+<a name="line317"></a>  if (this.contextProvider_) {
+<a name="line318"></a>    try {
+<a name="line319"></a>      this.contextProvider_(error, context);
+<a name="line320"></a>    } catch (err) {
+<a name="line321"></a>      goog.log.error(goog.debug.ErrorReporter.logger_,
+<a name="line322"></a>          &#39;Context provider threw an exception: &#39; + err.message);
+<a name="line323"></a>    }
+<a name="line324"></a>  }
+<a name="line325"></a>  // Truncate message to a reasonable length, since it will be sent in the URL.
+<a name="line326"></a>  var message = error.message.substring(0, 2000);
+<a name="line327"></a>  this.sendErrorReport(message, error.fileName, error.lineNumber, error.stack,
+<a name="line328"></a>      context);
+<a name="line329"></a>
+<a name="line330"></a>  try {
+<a name="line331"></a>    this.dispatchEvent(
+<a name="line332"></a>        new goog.debug.ErrorReporter.ExceptionEvent(error, context));
+<a name="line333"></a>  } catch (ex) {
+<a name="line334"></a>    // Swallow exception to avoid infinite recursion.
+<a name="line335"></a>  }
+<a name="line336"></a>};
+<a name="line337"></a>
+<a name="line338"></a>
+<a name="line339"></a>/**
+<a name="line340"></a> * Sends an error report to the logging URL.  This will not consult the context
+<a name="line341"></a> * provider, the report will be sent exactly as specified.
+<a name="line342"></a> *
+<a name="line343"></a> * @param {string} message Error description.
+<a name="line344"></a> * @param {string} fileName URL of the JavaScript file with the error.
+<a name="line345"></a> * @param {number} line Line number of the error.
+<a name="line346"></a> * @param {string=} opt_trace Call stack trace of the error.
+<a name="line347"></a> * @param {!Object.&lt;string, string&gt;=} opt_context Context information to include
+<a name="line348"></a> *     in the request.
+<a name="line349"></a> */
+<a name="line350"></a>goog.debug.ErrorReporter.prototype.sendErrorReport =
+<a name="line351"></a>    function(message, fileName, line, opt_trace, opt_context) {
+<a name="line352"></a>  try {
+<a name="line353"></a>    // Create the logging URL.
+<a name="line354"></a>    var requestUrl = goog.uri.utils.appendParams(this.handlerUrl_,
+<a name="line355"></a>        &#39;script&#39;, fileName, &#39;error&#39;, message, &#39;line&#39;, line);
+<a name="line356"></a>
+<a name="line357"></a>    if (!goog.object.isEmpty(this.additionalArguments_)) {
+<a name="line358"></a>      requestUrl = goog.uri.utils.appendParamsFromMap(requestUrl,
+<a name="line359"></a>          this.additionalArguments_);
+<a name="line360"></a>    }
+<a name="line361"></a>
+<a name="line362"></a>    var queryMap = {};
+<a name="line363"></a>    queryMap[&#39;trace&#39;] = opt_trace;
+<a name="line364"></a>
+<a name="line365"></a>    // Copy context into query data map
+<a name="line366"></a>    if (opt_context) {
+<a name="line367"></a>      for (var entry in opt_context) {
+<a name="line368"></a>        queryMap[this.contextPrefix_ + entry] = opt_context[entry];
+<a name="line369"></a>      }
+<a name="line370"></a>    }
+<a name="line371"></a>
+<a name="line372"></a>    // Copy query data map into request.
+<a name="line373"></a>    var queryData = goog.uri.utils.buildQueryDataFromMap(queryMap);
+<a name="line374"></a>
+<a name="line375"></a>    // Truncate if truncationLimit set.
+<a name="line376"></a>    if (goog.isNumber(this.truncationLimit_)) {
+<a name="line377"></a>      queryData = queryData.substring(0, this.truncationLimit_);
+<a name="line378"></a>    }
+<a name="line379"></a>
+<a name="line380"></a>    // Send the request with the contents of the error.
+<a name="line381"></a>    this.xhrSender_(requestUrl, &#39;POST&#39;, queryData, this.extraHeaders_);
+<a name="line382"></a>  } catch (e) {
+<a name="line383"></a>    var logMessage = goog.string.buildString(
+<a name="line384"></a>        &#39;Error occurred in sending an error report.\n\n&#39;,
+<a name="line385"></a>        &#39;script:&#39;, fileName, &#39;\n&#39;,
+<a name="line386"></a>        &#39;line:&#39;, line, &#39;\n&#39;,
+<a name="line387"></a>        &#39;error:&#39;, message, &#39;\n&#39;,
+<a name="line388"></a>        &#39;trace:&#39;, opt_trace);
+<a name="line389"></a>    goog.log.info(goog.debug.ErrorReporter.logger_, logMessage);
+<a name="line390"></a>  }
+<a name="line391"></a>};
+<a name="line392"></a>
+<a name="line393"></a>
+<a name="line394"></a>/**
+<a name="line395"></a> * @param {string} prefix The prefix to appear prepended to all context
+<a name="line396"></a> *     variables in the error report body.
+<a name="line397"></a> */
+<a name="line398"></a>goog.debug.ErrorReporter.prototype.setContextPrefix = function(prefix) {
+<a name="line399"></a>  this.contextPrefix_ = prefix;
+<a name="line400"></a>};
+<a name="line401"></a>
+<a name="line402"></a>
+<a name="line403"></a>/**
+<a name="line404"></a> * @param {?number} limit Size in bytes to begin truncating POST body.  Set to
+<a name="line405"></a> *     null to prevent truncation.  The limit must be &gt;= 0.
+<a name="line406"></a> */
+<a name="line407"></a>goog.debug.ErrorReporter.prototype.setTruncationLimit = function(limit) {
+<a name="line408"></a>  goog.asserts.assert(!goog.isNumber(limit) || limit &gt;= 0,
+<a name="line409"></a>      &#39;Body limit must be valid number &gt;= 0 or null&#39;);
+<a name="line410"></a>  this.truncationLimit_ = limit;
+<a name="line411"></a>};
+<a name="line412"></a>
+<a name="line413"></a>
+<a name="line414"></a>/**
+<a name="line415"></a> * @param {!Object.&lt;string,string&gt;} urlArgs Set of key-value pairs to append
+<a name="line416"></a> *     to handlerUrl_ before sending XHR.
+<a name="line417"></a> */
+<a name="line418"></a>goog.debug.ErrorReporter.prototype.setAdditionalArguments = function(urlArgs) {
+<a name="line419"></a>  this.additionalArguments_ = urlArgs;
+<a name="line420"></a>};
+<a name="line421"></a>
+<a name="line422"></a>
+<a name="line423"></a>/** @override */
+<a name="line424"></a>goog.debug.ErrorReporter.prototype.disposeInternal = function() {
+<a name="line425"></a>  if (goog.debug.ErrorReporter.ALLOW_AUTO_PROTECT) {
+<a name="line426"></a>    goog.dispose(this.errorHandler_);
+<a name="line427"></a>  }
+<a name="line428"></a>  goog.debug.ErrorReporter.base(this, &#39;disposeInternal&#39;);
+<a name="line429"></a>};
+</pre>
+
+
+</body>
+</html>

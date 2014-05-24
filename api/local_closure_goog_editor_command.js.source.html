@@ -1,0 +1,127 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>command.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_command.js.html">command.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Commands that the editor can execute.
+<a name="line17"></a> * @see ../demos/editor/editor.html
+<a name="line18"></a> */
+<a name="line19"></a>goog.provide(&#39;goog.editor.Command&#39;);
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>/**
+<a name="line23"></a> * Commands that the editor can excute via execCommand or queryCommandValue.
+<a name="line24"></a> * @enum {string}
+<a name="line25"></a> */
+<a name="line26"></a>goog.editor.Command = {
+<a name="line27"></a>  // Prepend all the strings of built in execCommands with a plus to ensure
+<a name="line28"></a>  // that there&#39;s no conflict if a client wants to use the
+<a name="line29"></a>  // browser&#39;s execCommand.
+<a name="line30"></a>  UNDO: &#39;+undo&#39;,
+<a name="line31"></a>  REDO: &#39;+redo&#39;,
+<a name="line32"></a>  LINK: &#39;+link&#39;,
+<a name="line33"></a>  FORMAT_BLOCK: &#39;+formatBlock&#39;,
+<a name="line34"></a>  INDENT: &#39;+indent&#39;,
+<a name="line35"></a>  OUTDENT: &#39;+outdent&#39;,
+<a name="line36"></a>  REMOVE_FORMAT: &#39;+removeFormat&#39;,
+<a name="line37"></a>  STRIKE_THROUGH: &#39;+strikeThrough&#39;,
+<a name="line38"></a>  HORIZONTAL_RULE: &#39;+insertHorizontalRule&#39;,
+<a name="line39"></a>  SUBSCRIPT: &#39;+subscript&#39;,
+<a name="line40"></a>  SUPERSCRIPT: &#39;+superscript&#39;,
+<a name="line41"></a>  UNDERLINE: &#39;+underline&#39;,
+<a name="line42"></a>  BOLD: &#39;+bold&#39;,
+<a name="line43"></a>  ITALIC: &#39;+italic&#39;,
+<a name="line44"></a>  FONT_SIZE: &#39;+fontSize&#39;,
+<a name="line45"></a>  FONT_FACE: &#39;+fontName&#39;,
+<a name="line46"></a>  FONT_COLOR: &#39;+foreColor&#39;,
+<a name="line47"></a>  EMOTICON: &#39;+emoticon&#39;,
+<a name="line48"></a>  EQUATION: &#39;+equation&#39;,
+<a name="line49"></a>  BACKGROUND_COLOR: &#39;+backColor&#39;,
+<a name="line50"></a>  ORDERED_LIST: &#39;+insertOrderedList&#39;,
+<a name="line51"></a>  UNORDERED_LIST: &#39;+insertUnorderedList&#39;,
+<a name="line52"></a>  TABLE: &#39;+table&#39;,
+<a name="line53"></a>  JUSTIFY_CENTER: &#39;+justifyCenter&#39;,
+<a name="line54"></a>  JUSTIFY_FULL: &#39;+justifyFull&#39;,
+<a name="line55"></a>  JUSTIFY_RIGHT: &#39;+justifyRight&#39;,
+<a name="line56"></a>  JUSTIFY_LEFT: &#39;+justifyLeft&#39;,
+<a name="line57"></a>  BLOCKQUOTE: &#39;+BLOCKQUOTE&#39;, // This is a nodename. Should be all caps.
+<a name="line58"></a>  DIR_LTR: &#39;ltr&#39;, // should be exactly &#39;ltr&#39; as it becomes dir attribute value
+<a name="line59"></a>  DIR_RTL: &#39;rtl&#39;, // same here
+<a name="line60"></a>  IMAGE: &#39;image&#39;,
+<a name="line61"></a>  EDIT_HTML: &#39;editHtml&#39;,
+<a name="line62"></a>  UPDATE_LINK_BUBBLE: &#39;updateLinkBubble&#39;,
+<a name="line63"></a>
+<a name="line64"></a>  // queryCommandValue only: returns the default tag name used in the field.
+<a name="line65"></a>  // DIV should be considered the default if no plugin responds.
+<a name="line66"></a>  DEFAULT_TAG: &#39;+defaultTag&#39;,
+<a name="line67"></a>
+<a name="line68"></a>  // TODO(nicksantos): Try to give clients an API so that they don&#39;t need
+<a name="line69"></a>  // these execCommands.
+<a name="line70"></a>  CLEAR_LOREM: &#39;clearlorem&#39;,
+<a name="line71"></a>  UPDATE_LOREM: &#39;updatelorem&#39;,
+<a name="line72"></a>  USING_LOREM: &#39;usinglorem&#39;,
+<a name="line73"></a>
+<a name="line74"></a>  // Modal editor commands (usually dialogs).
+<a name="line75"></a>  MODAL_LINK_EDITOR: &#39;link&#39;
+<a name="line76"></a>};
+</pre>
+
+
+</body>
+</html>

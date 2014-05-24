@@ -1,0 +1,893 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>fs_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_fs_fs_test.js.html">fs_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.fsTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.fsTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line20"></a>goog.require(&#39;goog.async.DeferredList&#39;);
+<a name="line21"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events&#39;);
+<a name="line23"></a>goog.require(&#39;goog.fs&#39;);
+<a name="line24"></a>goog.require(&#39;goog.fs.DirectoryEntry&#39;);
+<a name="line25"></a>goog.require(&#39;goog.fs.Error&#39;);
+<a name="line26"></a>goog.require(&#39;goog.fs.FileReader&#39;);
+<a name="line27"></a>goog.require(&#39;goog.fs.FileSaver&#39;);
+<a name="line28"></a>goog.require(&#39;goog.string&#39;);
+<a name="line29"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line30"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line31"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line32"></a>
+<a name="line33"></a>var TEST_DIR = &#39;goog-fs-test-dir&#39;;
+<a name="line34"></a>
+<a name="line35"></a>var fsExists = goog.isDef(goog.global.requestFileSystem) ||
+<a name="line36"></a>    goog.isDef(goog.global.webkitRequestFileSystem);
+<a name="line37"></a>var deferredFs = fsExists ? goog.fs.getTemporary() : null;
+<a name="line38"></a>var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+<a name="line39"></a>asyncTestCase.stepTimeout = 5000;
+<a name="line40"></a>var stubs = new goog.testing.PropertyReplacer();
+<a name="line41"></a>
+<a name="line42"></a>function setUpPage() {
+<a name="line43"></a>  if (!fsExists) {
+<a name="line44"></a>    return;
+<a name="line45"></a>  }
+<a name="line46"></a>
+<a name="line47"></a>  loadTestDir().addErrback(function(err) {
+<a name="line48"></a>    var msg;
+<a name="line49"></a>    if (err.code == goog.fs.Error.ErrorCode.QUOTA_EXCEEDED) {
+<a name="line50"></a>      msg = err.message + &#39;. If you\&#39;re using Chrome, you probably need to &#39; +
+<a name="line51"></a>          &#39;pass --unlimited-quota-for-files on the command line.&#39;;
+<a name="line52"></a>    } else if (err.code == goog.fs.Error.ErrorCode.SECURITY &amp;&amp;
+<a name="line53"></a>               window.location.href.match(/^file:/)) {
+<a name="line54"></a>      msg = err.message + &#39;. file:// URLs can\&#39;t access the filesystem API.&#39;;
+<a name="line55"></a>    } else {
+<a name="line56"></a>      msg = err.message;
+<a name="line57"></a>    }
+<a name="line58"></a>    var body = goog.dom.getDocument().body;
+<a name="line59"></a>    goog.dom.insertSiblingBefore(
+<a name="line60"></a>        goog.dom.createDom(&#39;h1&#39;, {}, msg), body.childNodes[0]);
+<a name="line61"></a>  });
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>function tearDown() {
+<a name="line65"></a>  if (!fsExists) {
+<a name="line66"></a>    return;
+<a name="line67"></a>  }
+<a name="line68"></a>
+<a name="line69"></a>  loadTestDir().
+<a name="line70"></a>      addCallback(function(dir) { return dir.removeRecursively(); }).
+<a name="line71"></a>      addBoth(continueTesting);
+<a name="line72"></a>  asyncTestCase.waitForAsync(&#39;removing filesystem&#39;);
+<a name="line73"></a>}
+<a name="line74"></a>
+<a name="line75"></a>function testUnavailableTemporaryFilesystem() {
+<a name="line76"></a>  stubs.set(goog.global, &#39;requestFileSystem&#39;, null);
+<a name="line77"></a>  stubs.set(goog.global, &#39;webkitRequestFileSystem&#39;, null);
+<a name="line78"></a>  asyncTestCase.waitForAsync(&#39;testUnavailableTemporaryFilesystem&#39;);
+<a name="line79"></a>
+<a name="line80"></a>  goog.fs.getTemporary(1024).addErrback(function(e) {
+<a name="line81"></a>    assertEquals(&#39;File API unsupported&#39;, e.message);
+<a name="line82"></a>    continueTesting();
+<a name="line83"></a>  });
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>function testUnavailablePersistentFilesystem() {
+<a name="line88"></a>  stubs.set(goog.global, &#39;requestFileSystem&#39;, null);
+<a name="line89"></a>  stubs.set(goog.global, &#39;webkitRequestFileSystem&#39;, null);
+<a name="line90"></a>  asyncTestCase.waitForAsync(&#39;testUnavailablePersistentFilesystem&#39;);
+<a name="line91"></a>
+<a name="line92"></a>  goog.fs.getPersistent(2048).addErrback(function(e) {
+<a name="line93"></a>    assertEquals(&#39;File API unsupported&#39;, e.message);
+<a name="line94"></a>    continueTesting();
+<a name="line95"></a>  });
+<a name="line96"></a>}
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>function testIsFile() {
+<a name="line100"></a>  if (!fsExists) {
+<a name="line101"></a>    return;
+<a name="line102"></a>  }
+<a name="line103"></a>
+<a name="line104"></a>  loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line105"></a>      addCallback(function(fileEntry) {
+<a name="line106"></a>        assertFalse(fileEntry.isDirectory());
+<a name="line107"></a>        assertTrue(fileEntry.isFile());
+<a name="line108"></a>      }).addBoth(continueTesting);
+<a name="line109"></a>  asyncTestCase.waitForAsync(&#39;testIsFile&#39;);
+<a name="line110"></a>}
+<a name="line111"></a>
+<a name="line112"></a>function testIsDirectory() {
+<a name="line113"></a>  if (!fsExists) {
+<a name="line114"></a>    return;
+<a name="line115"></a>  }
+<a name="line116"></a>
+<a name="line117"></a>  loadDirectory(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line118"></a>      addCallback(function(fileEntry) {
+<a name="line119"></a>        assertTrue(fileEntry.isDirectory());
+<a name="line120"></a>        assertFalse(fileEntry.isFile());
+<a name="line121"></a>      }).addBoth(continueTesting);
+<a name="line122"></a>  asyncTestCase.waitForAsync(&#39;testIsDirectory&#39;);
+<a name="line123"></a>}
+<a name="line124"></a>
+<a name="line125"></a>function testReadFileUtf16() {
+<a name="line126"></a>  if (!fsExists) {
+<a name="line127"></a>    return;
+<a name="line128"></a>  }
+<a name="line129"></a>  var str = &#39;test content&#39;;
+<a name="line130"></a>  var buf = new ArrayBuffer(str.length * 2);
+<a name="line131"></a>  var arr = new Uint16Array(buf);
+<a name="line132"></a>  for (var i = 0; i &lt; str.length; i++) {
+<a name="line133"></a>    arr[i] = str.charCodeAt(i);
+<a name="line134"></a>  }
+<a name="line135"></a>
+<a name="line136"></a>  loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line137"></a>      addCallback(goog.partial(writeToFile, arr.buffer)).
+<a name="line138"></a>      addCallback(goog.partial(checkFileContentWithEncoding, str, &#39;UTF-16&#39;)).
+<a name="line139"></a>      addBoth(continueTesting);
+<a name="line140"></a>  asyncTestCase.waitForAsync(&#39;testReadFile&#39;);
+<a name="line141"></a>}
+<a name="line142"></a>
+<a name="line143"></a>function testReadFileUtf8() {
+<a name="line144"></a>  if (!fsExists) {
+<a name="line145"></a>    return;
+<a name="line146"></a>  }
+<a name="line147"></a>  var str = &#39;test content&#39;;
+<a name="line148"></a>  var buf = new ArrayBuffer(str.length);
+<a name="line149"></a>  var arr = new Uint8Array(buf);
+<a name="line150"></a>  for (var i = 0; i &lt; str.length; i++) {
+<a name="line151"></a>    arr[i] = str.charCodeAt(i) &amp; 0xff;
+<a name="line152"></a>  }
+<a name="line153"></a>
+<a name="line154"></a>  loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line155"></a>      addCallback(goog.partial(writeToFile, arr.buffer)).
+<a name="line156"></a>      addCallback(goog.partial(checkFileContentWithEncoding, str, &#39;UTF-8&#39;)).
+<a name="line157"></a>      addBoth(continueTesting);
+<a name="line158"></a>  asyncTestCase.waitForAsync(&#39;testReadFileUtf8&#39;);
+<a name="line159"></a>}
+<a name="line160"></a>
+<a name="line161"></a>function testReadFileAsArrayBuffer() {
+<a name="line162"></a>  if (!fsExists) {
+<a name="line163"></a>    return;
+<a name="line164"></a>  }
+<a name="line165"></a>  var str = &#39;test content&#39;;
+<a name="line166"></a>  var buf = new ArrayBuffer(str.length);
+<a name="line167"></a>  var arr = new Uint8Array(buf);
+<a name="line168"></a>  for (var i = 0; i &lt; str.length; i++) {
+<a name="line169"></a>    arr[i] = str.charCodeAt(i) &amp; 0xff;
+<a name="line170"></a>  }
+<a name="line171"></a>
+<a name="line172"></a>  loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line173"></a>      addCallback(goog.partial(writeToFile, arr.buffer)).
+<a name="line174"></a>      addCallback(goog.partial(checkFileContentAs, arr.buffer, &#39;ArrayBuffer&#39;,
+<a name="line175"></a>          undefined)).
+<a name="line176"></a>      addBoth(continueTesting);
+<a name="line177"></a>  asyncTestCase.waitForAsync(&#39;testReadFileAsArrayBuffer&#39;);
+<a name="line178"></a>}
+<a name="line179"></a>
+<a name="line180"></a>function testReadFileAsBinaryString() {
+<a name="line181"></a>  if (!fsExists) {
+<a name="line182"></a>    return;
+<a name="line183"></a>  }
+<a name="line184"></a>  var str = &#39;test content&#39;;
+<a name="line185"></a>  var buf = new ArrayBuffer(str.length);
+<a name="line186"></a>  var arr = new Uint8Array(buf);
+<a name="line187"></a>  for (var i = 0; i &lt; str.length; i++) {
+<a name="line188"></a>    arr[i] = str.charCodeAt(i);
+<a name="line189"></a>  }
+<a name="line190"></a>
+<a name="line191"></a>  loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line192"></a>      addCallback(goog.partial(writeToFile, arr.buffer)).
+<a name="line193"></a>      addCallback(goog.partial(checkFileContentAs, str, &#39;BinaryString&#39;,
+<a name="line194"></a>          undefined)).
+<a name="line195"></a>      addBoth(continueTesting);
+<a name="line196"></a>  asyncTestCase.waitForAsync(&#39;testReadFileAsArrayBuffer&#39;);
+<a name="line197"></a>}
+<a name="line198"></a>
+<a name="line199"></a>function testWriteFile() {
+<a name="line200"></a>  if (!fsExists) {
+<a name="line201"></a>    return;
+<a name="line202"></a>  }
+<a name="line203"></a>
+<a name="line204"></a>  loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line205"></a>      addCallback(goog.partial(writeToFile, &#39;test content&#39;)).
+<a name="line206"></a>      addCallback(goog.partial(checkFileContent, &#39;test content&#39;)).
+<a name="line207"></a>      addBoth(continueTesting);
+<a name="line208"></a>  asyncTestCase.waitForAsync(&#39;testWriteFile&#39;);
+<a name="line209"></a>}
+<a name="line210"></a>
+<a name="line211"></a>function testRemoveFile() {
+<a name="line212"></a>  if (!fsExists) {
+<a name="line213"></a>    return;
+<a name="line214"></a>  }
+<a name="line215"></a>
+<a name="line216"></a>  loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line217"></a>      addCallback(goog.partial(writeToFile, &#39;test content&#39;)).
+<a name="line218"></a>      addCallback(function(file) { return file.remove(); }).
+<a name="line219"></a>      addCallback(goog.partial(checkFileRemoved, &#39;test&#39;)).
+<a name="line220"></a>      addBoth(continueTesting);
+<a name="line221"></a>  asyncTestCase.waitForAsync(&#39;testRemoveFile&#39;);
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>function testMoveFile() {
+<a name="line225"></a>  if (!fsExists) {
+<a name="line226"></a>    return;
+<a name="line227"></a>  }
+<a name="line228"></a>
+<a name="line229"></a>  var deferredSubdir = loadDirectory(
+<a name="line230"></a>      &#39;subdir&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line231"></a>  var deferredWrittenFile =
+<a name="line232"></a>      loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line233"></a>      addCallback(goog.partial(writeToFile, &#39;test content&#39;));
+<a name="line234"></a>  goog.async.DeferredList.gatherResults([deferredSubdir, deferredWrittenFile]).
+<a name="line235"></a>      addCallback(splitArgs(function(dir, file) { return file.moveTo(dir); })).
+<a name="line236"></a>      addCallback(goog.partial(checkFileContent, &#39;test content&#39;)).
+<a name="line237"></a>      addCallback(goog.partial(checkFileRemoved, &#39;test&#39;)).
+<a name="line238"></a>      addBoth(continueTesting);
+<a name="line239"></a>  asyncTestCase.waitForAsync(&#39;testMoveFile&#39;);
+<a name="line240"></a>}
+<a name="line241"></a>
+<a name="line242"></a>function testCopyFile() {
+<a name="line243"></a>  if (!fsExists) {
+<a name="line244"></a>    return;
+<a name="line245"></a>  }
+<a name="line246"></a>
+<a name="line247"></a>  var deferredFile = loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line248"></a>  var deferredSubdir = loadDirectory(
+<a name="line249"></a>      &#39;subdir&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line250"></a>  var deferredWrittenFile = deferredFile.branch().
+<a name="line251"></a>      addCallback(goog.partial(writeToFile, &#39;test content&#39;));
+<a name="line252"></a>  goog.async.DeferredList.gatherResults([deferredSubdir, deferredWrittenFile]).
+<a name="line253"></a>      addCallback(splitArgs(function(dir, file) { return file.copyTo(dir); })).
+<a name="line254"></a>      addCallback(goog.partial(checkFileContent, &#39;test content&#39;)).
+<a name="line255"></a>      awaitDeferred(deferredFile).
+<a name="line256"></a>      addCallback(goog.partial(checkFileContent, &#39;test content&#39;)).
+<a name="line257"></a>      addBoth(continueTesting);
+<a name="line258"></a>  asyncTestCase.waitForAsync(&#39;testMoveFile&#39;);
+<a name="line259"></a>}
+<a name="line260"></a>
+<a name="line261"></a>function testAbortWrite() {
+<a name="line262"></a>  // TODO(nicksantos): This test is broken in newer versions of chrome.
+<a name="line263"></a>  // We don&#39;t know why yet.
+<a name="line264"></a>  if (true) return;
+<a name="line265"></a>
+<a name="line266"></a>  if (!fsExists) {
+<a name="line267"></a>    return;
+<a name="line268"></a>  }
+<a name="line269"></a>
+<a name="line270"></a>  var deferredFile = loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line271"></a>  deferredFile.branch().
+<a name="line272"></a>      addCallback(goog.partial(startWrite, &#39;test content&#39;)).
+<a name="line273"></a>      addCallback(function(writer) { writer.abort(); }).
+<a name="line274"></a>      addCallback(
+<a name="line275"></a>          goog.partial(waitForEvent, goog.fs.FileSaver.EventType.ABORT)).
+<a name="line276"></a>      awaitDeferred(deferredFile).
+<a name="line277"></a>      addCallback(goog.partial(checkFileContent, &#39;&#39;)).
+<a name="line278"></a>      addBoth(continueTesting);
+<a name="line279"></a>  asyncTestCase.waitForAsync(&#39;testWriteFile&#39;);
+<a name="line280"></a>}
+<a name="line281"></a>
+<a name="line282"></a>function testSeek() {
+<a name="line283"></a>  if (!fsExists) {
+<a name="line284"></a>    return;
+<a name="line285"></a>  }
+<a name="line286"></a>
+<a name="line287"></a>  var deferredFile = loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line288"></a>  deferredFile.branch().
+<a name="line289"></a>      addCallback(goog.partial(writeToFile, &#39;test content&#39;)).
+<a name="line290"></a>      addCallback(function(file) { return file.createWriter(); }).
+<a name="line291"></a>      addCallback(
+<a name="line292"></a>          goog.partial(checkReadyState, goog.fs.FileSaver.ReadyState.INIT)).
+<a name="line293"></a>      addCallback(function(writer) {
+<a name="line294"></a>        writer.seek(5);
+<a name="line295"></a>        writer.write(goog.fs.getBlob(&#39;stuff and things&#39;));
+<a name="line296"></a>      }).
+<a name="line297"></a>      addCallback(
+<a name="line298"></a>          goog.partial(checkReadyState, goog.fs.FileSaver.ReadyState.WRITING)).
+<a name="line299"></a>      addCallback(
+<a name="line300"></a>          goog.partial(waitForEvent, goog.fs.FileSaver.EventType.WRITE)).
+<a name="line301"></a>      awaitDeferred(deferredFile).
+<a name="line302"></a>      addCallback(goog.partial(checkFileContent, &#39;test stuff and things&#39;)).
+<a name="line303"></a>      addBoth(continueTesting);
+<a name="line304"></a>  asyncTestCase.waitForAsync(&#39;testWriteFile&#39;);
+<a name="line305"></a>}
+<a name="line306"></a>
+<a name="line307"></a>function testTruncate() {
+<a name="line308"></a>  if (!fsExists) {
+<a name="line309"></a>    return;
+<a name="line310"></a>  }
+<a name="line311"></a>
+<a name="line312"></a>  var deferredFile = loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line313"></a>  deferredFile.branch().
+<a name="line314"></a>      addCallback(goog.partial(writeToFile, &#39;test content&#39;)).
+<a name="line315"></a>      addCallback(function(file) { return file.createWriter(); }).
+<a name="line316"></a>      addCallback(
+<a name="line317"></a>          goog.partial(checkReadyState, goog.fs.FileSaver.ReadyState.INIT)).
+<a name="line318"></a>      addCallback(function(writer) { writer.truncate(4); }).
+<a name="line319"></a>      addCallback(
+<a name="line320"></a>          goog.partial(checkReadyState, goog.fs.FileSaver.ReadyState.WRITING)).
+<a name="line321"></a>      addCallback(
+<a name="line322"></a>          goog.partial(waitForEvent, goog.fs.FileSaver.EventType.WRITE)).
+<a name="line323"></a>      awaitDeferred(deferredFile).
+<a name="line324"></a>      addCallback(goog.partial(checkFileContent, &#39;test&#39;)).
+<a name="line325"></a>      addBoth(continueTesting);
+<a name="line326"></a>  asyncTestCase.waitForAsync(&#39;testWriteFile&#39;);
+<a name="line327"></a>}
+<a name="line328"></a>
+<a name="line329"></a>function testGetLastModified() {
+<a name="line330"></a>  if (!fsExists) {
+<a name="line331"></a>    return;
+<a name="line332"></a>  }
+<a name="line333"></a>  var now = goog.now();
+<a name="line334"></a>  loadFile(&#39;test&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line335"></a>      addCallback(function(entry) {
+<a name="line336"></a>        return entry.getLastModified();
+<a name="line337"></a>      }).addCallback(function(date) {
+<a name="line338"></a>        assertRoughlyEquals(&#39;Expected the last modified date to be within &#39; +
+<a name="line339"></a>                            &#39;a few milliseconds of the test start time.&#39;,
+<a name="line340"></a>                            now, date.getTime(), 2000);
+<a name="line341"></a>      }).addCallback(continueTesting);
+<a name="line342"></a>
+<a name="line343"></a>  asyncTestCase.waitForAsync(&#39;testGetLastModified&#39;);
+<a name="line344"></a>}
+<a name="line345"></a>
+<a name="line346"></a>function testCreatePath() {
+<a name="line347"></a>  if (!fsExists) {
+<a name="line348"></a>    return;
+<a name="line349"></a>  }
+<a name="line350"></a>
+<a name="line351"></a>  loadTestDir().
+<a name="line352"></a>      addCallback(function(testDir) {
+<a name="line353"></a>        return testDir.createPath(&#39;foo&#39;);
+<a name="line354"></a>      }).
+<a name="line355"></a>      addCallback(function(fooDir) {
+<a name="line356"></a>        assertEquals(&#39;/goog-fs-test-dir/foo&#39;, fooDir.getFullPath());
+<a name="line357"></a>        return fooDir.createPath(&#39;bar/baz/bat&#39;);
+<a name="line358"></a>      }).
+<a name="line359"></a>      addCallback(function(batDir) {
+<a name="line360"></a>        assertEquals(&#39;/goog-fs-test-dir/foo/bar/baz/bat&#39;, batDir.getFullPath());
+<a name="line361"></a>      }).
+<a name="line362"></a>      addBoth(continueTesting);
+<a name="line363"></a>  asyncTestCase.waitForAsync(&#39;testCreatePath&#39;);
+<a name="line364"></a>}
+<a name="line365"></a>
+<a name="line366"></a>function testCreateAbsolutePath() {
+<a name="line367"></a>  if (!fsExists) {
+<a name="line368"></a>    return;
+<a name="line369"></a>  }
+<a name="line370"></a>
+<a name="line371"></a>  loadTestDir().
+<a name="line372"></a>      addCallback(function(testDir) {
+<a name="line373"></a>        return testDir.createPath(&#39;/&#39; + TEST_DIR + &#39;/fee/fi/fo/fum&#39;);
+<a name="line374"></a>      }).
+<a name="line375"></a>      addCallback(function(absDir) {
+<a name="line376"></a>        assertEquals(&#39;/goog-fs-test-dir/fee/fi/fo/fum&#39;, absDir.getFullPath());
+<a name="line377"></a>      }).
+<a name="line378"></a>      addBoth(continueTesting);
+<a name="line379"></a>  asyncTestCase.waitForAsync(&#39;testCreateAbsolutePath&#39;);
+<a name="line380"></a>}
+<a name="line381"></a>
+<a name="line382"></a>function testCreateRelativePath() {
+<a name="line383"></a>  if (!fsExists) {
+<a name="line384"></a>    return;
+<a name="line385"></a>  }
+<a name="line386"></a>
+<a name="line387"></a>  loadTestDir().
+<a name="line388"></a>      addCallback(function(dir) {
+<a name="line389"></a>        return dir.createPath(&#39;../&#39; + TEST_DIR + &#39;/dir&#39;);
+<a name="line390"></a>      }).
+<a name="line391"></a>      addCallback(function(relDir) {
+<a name="line392"></a>        assertEquals(&#39;/goog-fs-test-dir/dir&#39;, relDir.getFullPath());
+<a name="line393"></a>        return relDir.createPath(&#39;.&#39;);
+<a name="line394"></a>      }).
+<a name="line395"></a>      addCallback(function(sameDir) {
+<a name="line396"></a>        assertEquals(&#39;/goog-fs-test-dir/dir&#39;, sameDir.getFullPath());
+<a name="line397"></a>        return sameDir.createPath(&#39;./././.&#39;);
+<a name="line398"></a>      }).
+<a name="line399"></a>      addCallback(function(reallySameDir) {
+<a name="line400"></a>        assertEquals(&#39;/goog-fs-test-dir/dir&#39;, reallySameDir.getFullPath());
+<a name="line401"></a>        return reallySameDir.createPath(&#39;./new/../..//dir/./new////.&#39;);
+<a name="line402"></a>      }).
+<a name="line403"></a>      addCallback(function(newDir) {
+<a name="line404"></a>        assertEquals(&#39;/goog-fs-test-dir/dir/new&#39;, newDir.getFullPath());
+<a name="line405"></a>      }).
+<a name="line406"></a>      addBoth(continueTesting);
+<a name="line407"></a>  asyncTestCase.waitForAsync(&#39;testCreateRelativePath&#39;);
+<a name="line408"></a>
+<a name="line409"></a>}
+<a name="line410"></a>
+<a name="line411"></a>function testCreateBadPath() {
+<a name="line412"></a>  if (!fsExists) {
+<a name="line413"></a>    return;
+<a name="line414"></a>  }
+<a name="line415"></a>
+<a name="line416"></a>  loadTestDir().
+<a name="line417"></a>      awaitDeferred(loadTestDir()).
+<a name="line418"></a>      addCallback(function(dir) {
+<a name="line419"></a>        // There is only one layer of parent directory from the test dir.
+<a name="line420"></a>        return dir.createPath(&#39;../../../../&#39; + TEST_DIR + &#39;/baz/bat&#39;);
+<a name="line421"></a>      }).
+<a name="line422"></a>      addCallback(function(batDir) {
+<a name="line423"></a>        assertEquals(&#39;The parent directory of the root directory should &#39; +
+<a name="line424"></a>                     &#39;point back to the root directory.&#39;,
+<a name="line425"></a>                     &#39;/goog-fs-test-dir/baz/bat&#39;, batDir.getFullPath());
+<a name="line426"></a>      }).
+<a name="line427"></a>
+<a name="line428"></a>      awaitDeferred(loadTestDir()).
+<a name="line429"></a>      addCallback(function(dir) {
+<a name="line430"></a>        // An empty path should return the same as the input directory.
+<a name="line431"></a>        return dir.createPath(&#39;&#39;);
+<a name="line432"></a>      }).
+<a name="line433"></a>      addCallback(function(testDir) {
+<a name="line434"></a>        assertEquals(&#39;/goog-fs-test-dir&#39;, testDir.getFullPath());
+<a name="line435"></a>      }).
+<a name="line436"></a>      addBoth(continueTesting);
+<a name="line437"></a>  asyncTestCase.waitForAsync(&#39;testCreateBadPath&#39;);
+<a name="line438"></a>}
+<a name="line439"></a>
+<a name="line440"></a>function testGetAbsolutePaths() {
+<a name="line441"></a>  if (!fsExists) {
+<a name="line442"></a>    return;
+<a name="line443"></a>  }
+<a name="line444"></a>
+<a name="line445"></a>  loadFile(&#39;foo&#39;, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line446"></a>      awaitDeferred(loadTestDir()).
+<a name="line447"></a>      addCallback(function(testDir) {
+<a name="line448"></a>        return testDir.getDirectory(&#39;/&#39;);
+<a name="line449"></a>      }).
+<a name="line450"></a>      addCallback(function(root) {
+<a name="line451"></a>        assertEquals(&#39;/&#39;, root.getFullPath());
+<a name="line452"></a>        return root.getDirectory(&#39;/&#39; + TEST_DIR);
+<a name="line453"></a>      }).
+<a name="line454"></a>      addCallback(function(testDir) {
+<a name="line455"></a>        assertEquals(&#39;/goog-fs-test-dir&#39;, testDir.getFullPath());
+<a name="line456"></a>        return testDir.getDirectory(&#39;//&#39; + TEST_DIR + &#39;////&#39;);
+<a name="line457"></a>      }).
+<a name="line458"></a>      addCallback(function(testDir) {
+<a name="line459"></a>        assertEquals(&#39;/goog-fs-test-dir&#39;, testDir.getFullPath());
+<a name="line460"></a>        return testDir.getDirectory(&#39;////&#39;);
+<a name="line461"></a>      }).
+<a name="line462"></a>      addCallback(function(testDir) {
+<a name="line463"></a>        assertEquals(&#39;/&#39;, testDir.getFullPath());
+<a name="line464"></a>      }).
+<a name="line465"></a>      addBoth(continueTesting);
+<a name="line466"></a>  asyncTestCase.waitForAsync(&#39;testGetAbsolutePaths&#39;);
+<a name="line467"></a>}
+<a name="line468"></a>
+<a name="line469"></a>
+<a name="line470"></a>function continueTesting(result) {
+<a name="line471"></a>  asyncTestCase.continueTesting();
+<a name="line472"></a>  if (result instanceof Error) {
+<a name="line473"></a>    throw result;
+<a name="line474"></a>  }
+<a name="line475"></a>}
+<a name="line476"></a>
+<a name="line477"></a>function testListEmptyDirectory() {
+<a name="line478"></a>  if (!fsExists) {
+<a name="line479"></a>    return;
+<a name="line480"></a>  }
+<a name="line481"></a>
+<a name="line482"></a>  loadTestDir().
+<a name="line483"></a>      addCallback(function(dir) { return dir.listDirectory(); }).
+<a name="line484"></a>      addCallback(function(entries) { assertArrayEquals([], entries); }).
+<a name="line485"></a>      addCallback(continueTesting);
+<a name="line486"></a>  asyncTestCase.waitForAsync(&#39;testListEmptyDirectory&#39;);
+<a name="line487"></a>}
+<a name="line488"></a>
+<a name="line489"></a>
+<a name="line490"></a>function testListDirectory() {
+<a name="line491"></a>  if (!fsExists) {
+<a name="line492"></a>    return;
+<a name="line493"></a>  }
+<a name="line494"></a>
+<a name="line495"></a>  goog.async.Deferred.succeed().
+<a name="line496"></a>      // Create the test directory and test entries.
+<a name="line497"></a>      awaitDeferred(
+<a name="line498"></a>          loadDirectory(&#39;testDir&#39;, goog.fs.DirectoryEntry.Behavior.CREATE)).
+<a name="line499"></a>      awaitDeferred(
+<a name="line500"></a>          loadFile(&#39;testFile&#39;, goog.fs.DirectoryEntry.Behavior.CREATE)).
+<a name="line501"></a>      awaitDeferred(loadTestDir()).
+<a name="line502"></a>
+<a name="line503"></a>      // Verify the contents of the directory listing.
+<a name="line504"></a>      addCallback(function(testDir) { return testDir.listDirectory(); }).
+<a name="line505"></a>      addCallback(function(entries) {
+<a name="line506"></a>        assertEquals(2, entries.length);
+<a name="line507"></a>
+<a name="line508"></a>        var dir = goog.array.find(entries, function(entry) {
+<a name="line509"></a>          return entry.getName() == &#39;testDir&#39;;
+<a name="line510"></a>        });
+<a name="line511"></a>        assertNotNull(dir);
+<a name="line512"></a>        assertTrue(dir.isDirectory());
+<a name="line513"></a>
+<a name="line514"></a>        var file = goog.array.find(entries, function(entry) {
+<a name="line515"></a>          return entry.getName() == &#39;testFile&#39;;
+<a name="line516"></a>        });
+<a name="line517"></a>        assertNotNull(file);
+<a name="line518"></a>        assertTrue(file.isFile());
+<a name="line519"></a>      }).
+<a name="line520"></a>      addCallback(continueTesting);
+<a name="line521"></a>
+<a name="line522"></a>  asyncTestCase.waitForAsync(&#39;testListDirectory&#39;);
+<a name="line523"></a>}
+<a name="line524"></a>
+<a name="line525"></a>
+<a name="line526"></a>function testListBigDirectory() {
+<a name="line527"></a>  // TODO(nicksantos): This test is broken in newer versions of chrome.
+<a name="line528"></a>  // We don&#39;t know why yet.
+<a name="line529"></a>  if (true) return;
+<a name="line530"></a>
+<a name="line531"></a>  if (!fsExists) {
+<a name="line532"></a>    return;
+<a name="line533"></a>  }
+<a name="line534"></a>
+<a name="line535"></a>  function getFileName(i) {
+<a name="line536"></a>    return &#39;file&#39; + goog.string.padNumber(i, String(count).length);
+<a name="line537"></a>  }
+<a name="line538"></a>
+<a name="line539"></a>  // NOTE: This was intended to verify that the results from repeated
+<a name="line540"></a>  // DirectoryReader.readEntries() callbacks are appropriately concatenated.
+<a name="line541"></a>  // In current versions of Chrome (March 2011), all results are returned in the
+<a name="line542"></a>  // first callback regardless of directory size. The count can be increased in
+<a name="line543"></a>  // the future to test batched result lists once they are implemented.
+<a name="line544"></a>  var count = 100;
+<a name="line545"></a>
+<a name="line546"></a>  var expectedNames = [];
+<a name="line547"></a>
+<a name="line548"></a>  var def = goog.async.Deferred.succeed();
+<a name="line549"></a>  for (var i = 0; i &lt; count; i++) {
+<a name="line550"></a>    var name = getFileName(i);
+<a name="line551"></a>    expectedNames.push(name);
+<a name="line552"></a>
+<a name="line553"></a>    def.awaitDeferred(
+<a name="line554"></a>        loadFile(name, goog.fs.DirectoryEntry.Behavior.CREATE));
+<a name="line555"></a>  }
+<a name="line556"></a>
+<a name="line557"></a>  def.awaitDeferred(loadTestDir()).
+<a name="line558"></a>      addCallback(function(testDir) { return testDir.listDirectory(); }).
+<a name="line559"></a>      addCallback(function(entries) {
+<a name="line560"></a>        assertEquals(count, entries.length);
+<a name="line561"></a>
+<a name="line562"></a>        assertSameElements(expectedNames,
+<a name="line563"></a>                           goog.array.map(entries, function(entry) {
+<a name="line564"></a>                             return entry.getName();
+<a name="line565"></a>                           }));
+<a name="line566"></a>        assertTrue(goog.array.every(entries, function(entry) {
+<a name="line567"></a>          return entry.isFile();
+<a name="line568"></a>        }));
+<a name="line569"></a>      }).
+<a name="line570"></a>      addCallback(continueTesting);
+<a name="line571"></a>
+<a name="line572"></a>  asyncTestCase.waitForAsync(&#39;testListBigDirectory&#39;);
+<a name="line573"></a>}
+<a name="line574"></a>
+<a name="line575"></a>
+<a name="line576"></a>function testSliceBlob() {
+<a name="line577"></a>  // A mock blob object whose slice returns the parameters it was called with.
+<a name="line578"></a>  var blob = {
+<a name="line579"></a>    &#39;size&#39;: 10,
+<a name="line580"></a>    &#39;slice&#39;: function(start, end) {
+<a name="line581"></a>      return [start, end];
+<a name="line582"></a>    }
+<a name="line583"></a>  };
+<a name="line584"></a>
+<a name="line585"></a>  // Simulate Firefox 13 that implements the new slice.
+<a name="line586"></a>  var tmpStubs = new goog.testing.PropertyReplacer();
+<a name="line587"></a>  tmpStubs.set(goog.userAgent, &#39;GECKO&#39;, true);
+<a name="line588"></a>  tmpStubs.set(goog.userAgent, &#39;WEBKIT&#39;, false);
+<a name="line589"></a>  tmpStubs.set(goog.userAgent, &#39;IE&#39;, false);
+<a name="line590"></a>  tmpStubs.set(goog.userAgent, &#39;VERSION&#39;, &#39;13.0&#39;);
+<a name="line591"></a>  tmpStubs.set(goog.userAgent, &#39;isVersionOrHigherCache_&#39;, {});
+<a name="line592"></a>
+<a name="line593"></a>  // Expect slice to be called with no change to parameters
+<a name="line594"></a>  assertArrayEquals([2, 10], goog.fs.sliceBlob(blob, 2));
+<a name="line595"></a>  assertArrayEquals([-2, 10], goog.fs.sliceBlob(blob, -2));
+<a name="line596"></a>  assertArrayEquals([3, 6], goog.fs.sliceBlob(blob, 3, 6));
+<a name="line597"></a>  assertArrayEquals([3, -6], goog.fs.sliceBlob(blob, 3, -6));
+<a name="line598"></a>
+<a name="line599"></a>  // Simulate IE 10 that implements the new slice.
+<a name="line600"></a>  var tmpStubs = new goog.testing.PropertyReplacer();
+<a name="line601"></a>  tmpStubs.set(goog.userAgent, &#39;GECKO&#39;, false);
+<a name="line602"></a>  tmpStubs.set(goog.userAgent, &#39;WEBKIT&#39;, false);
+<a name="line603"></a>  tmpStubs.set(goog.userAgent, &#39;IE&#39;, true);
+<a name="line604"></a>  tmpStubs.set(goog.userAgent, &#39;VERSION&#39;, &#39;10.0&#39;);
+<a name="line605"></a>  tmpStubs.set(goog.userAgent, &#39;isVersionOrHigherCache_&#39;, {});
+<a name="line606"></a>
+<a name="line607"></a>  // Expect slice to be called with no change to parameters
+<a name="line608"></a>  assertArrayEquals([2, 10], goog.fs.sliceBlob(blob, 2));
+<a name="line609"></a>  assertArrayEquals([-2, 10], goog.fs.sliceBlob(blob, -2));
+<a name="line610"></a>  assertArrayEquals([3, 6], goog.fs.sliceBlob(blob, 3, 6));
+<a name="line611"></a>  assertArrayEquals([3, -6], goog.fs.sliceBlob(blob, 3, -6));
+<a name="line612"></a>
+<a name="line613"></a>  // Simulate Firefox 4 that implements the old slice.
+<a name="line614"></a>  tmpStubs.set(goog.userAgent, &#39;GECKO&#39;, true);
+<a name="line615"></a>  tmpStubs.set(goog.userAgent, &#39;WEBKIT&#39;, false);
+<a name="line616"></a>  tmpStubs.set(goog.userAgent, &#39;IE&#39;, false);
+<a name="line617"></a>  tmpStubs.set(goog.userAgent, &#39;VERSION&#39;, &#39;2.0&#39;);
+<a name="line618"></a>  tmpStubs.set(goog.userAgent, &#39;isVersionOrHigherCache_&#39;, {});
+<a name="line619"></a>
+<a name="line620"></a>  // Expect slice to be called with transformed parameters.
+<a name="line621"></a>  assertArrayEquals([2, 8], goog.fs.sliceBlob(blob, 2));
+<a name="line622"></a>  assertArrayEquals([8, 2], goog.fs.sliceBlob(blob, -2));
+<a name="line623"></a>  assertArrayEquals([3, 3], goog.fs.sliceBlob(blob, 3, 6));
+<a name="line624"></a>  assertArrayEquals([3, 1], goog.fs.sliceBlob(blob, 3, -6));
+<a name="line625"></a>
+<a name="line626"></a>  // Simulate Firefox 5 that implements mozSlice (new spec).
+<a name="line627"></a>  delete blob.slice;
+<a name="line628"></a>  blob.mozSlice = function(start, end) {
+<a name="line629"></a>    return [&#39;moz&#39;, start, end];
+<a name="line630"></a>  };
+<a name="line631"></a>  tmpStubs.set(goog.userAgent, &#39;GECKO&#39;, true);
+<a name="line632"></a>  tmpStubs.set(goog.userAgent, &#39;WEBKIT&#39;, false);
+<a name="line633"></a>  tmpStubs.set(goog.userAgent, &#39;IE&#39;, false);
+<a name="line634"></a>  tmpStubs.set(goog.userAgent, &#39;VERSION&#39;, &#39;5.0&#39;);
+<a name="line635"></a>  tmpStubs.set(goog.userAgent, &#39;isVersionOrHigherCache_&#39;, {});
+<a name="line636"></a>
+<a name="line637"></a>  // Expect mozSlice to be called with no change to parameters.
+<a name="line638"></a>  assertArrayEquals([&#39;moz&#39;, 2, 10], goog.fs.sliceBlob(blob, 2));
+<a name="line639"></a>  assertArrayEquals([&#39;moz&#39;, -2, 10], goog.fs.sliceBlob(blob, -2));
+<a name="line640"></a>  assertArrayEquals([&#39;moz&#39;, 3, 6], goog.fs.sliceBlob(blob, 3, 6));
+<a name="line641"></a>  assertArrayEquals([&#39;moz&#39;, 3, -6], goog.fs.sliceBlob(blob, 3, -6));
+<a name="line642"></a>
+<a name="line643"></a>  // Simulate Chrome 20 that implements webkitSlice (new spec).
+<a name="line644"></a>  delete blob.mozSlice;
+<a name="line645"></a>  blob.webkitSlice = function(start, end) {
+<a name="line646"></a>    return [&#39;webkit&#39;, start, end];
+<a name="line647"></a>  };
+<a name="line648"></a>  tmpStubs.set(goog.userAgent, &#39;GECKO&#39;, false);
+<a name="line649"></a>  tmpStubs.set(goog.userAgent, &#39;WEBKIT&#39;, true);
+<a name="line650"></a>  tmpStubs.set(goog.userAgent, &#39;IE&#39;, false);
+<a name="line651"></a>  tmpStubs.set(goog.userAgent, &#39;VERSION&#39;, &#39;536.10&#39;);
+<a name="line652"></a>  tmpStubs.set(goog.userAgent, &#39;isVersionOrHigherCache_&#39;, {});
+<a name="line653"></a>
+<a name="line654"></a>  // Expect webkitSlice to be called with no change to parameters.
+<a name="line655"></a>  assertArrayEquals([&#39;webkit&#39;, 2, 10], goog.fs.sliceBlob(blob, 2));
+<a name="line656"></a>  assertArrayEquals([&#39;webkit&#39;, -2, 10], goog.fs.sliceBlob(blob, -2));
+<a name="line657"></a>  assertArrayEquals([&#39;webkit&#39;, 3, 6], goog.fs.sliceBlob(blob, 3, 6));
+<a name="line658"></a>  assertArrayEquals([&#39;webkit&#39;, 3, -6], goog.fs.sliceBlob(blob, 3, -6));
+<a name="line659"></a>
+<a name="line660"></a>  tmpStubs.reset();
+<a name="line661"></a>}
+<a name="line662"></a>
+<a name="line663"></a>
+<a name="line664"></a>function testBrowserSupportsObjectUrls() {
+<a name="line665"></a>  stubs.remove(goog.global, &#39;URL&#39;);
+<a name="line666"></a>  stubs.remove(goog.global, &#39;webkitURL&#39;);
+<a name="line667"></a>  stubs.remove(goog.global, &#39;createObjectURL&#39;);
+<a name="line668"></a>
+<a name="line669"></a>  assertFalse(goog.fs.browserSupportsObjectUrls());
+<a name="line670"></a>  try {
+<a name="line671"></a>    goog.fs.createObjectUrl();
+<a name="line672"></a>    fail();
+<a name="line673"></a>  } catch (e) {
+<a name="line674"></a>    assertEquals(&#39;This browser doesn\&#39;t seem to support blob URLs&#39;, e.message);
+<a name="line675"></a>  }
+<a name="line676"></a>
+<a name="line677"></a>  var objectUrl = {};
+<a name="line678"></a>  function createObjectURL() { return objectUrl; }
+<a name="line679"></a>  stubs.set(goog.global, &#39;createObjectURL&#39;, createObjectURL);
+<a name="line680"></a>
+<a name="line681"></a>  assertTrue(goog.fs.browserSupportsObjectUrls());
+<a name="line682"></a>  assertEquals(objectUrl, goog.fs.createObjectUrl());
+<a name="line683"></a>
+<a name="line684"></a>  stubs.reset();
+<a name="line685"></a>}
+<a name="line686"></a>
+<a name="line687"></a>
+<a name="line688"></a>function testGetBlobThrowsError() {
+<a name="line689"></a>  stubs.remove(goog.global, &#39;BlobBuilder&#39;);
+<a name="line690"></a>  stubs.remove(goog.global, &#39;WebKitBlobBuilder&#39;);
+<a name="line691"></a>  stubs.remove(goog.global, &#39;Blob&#39;);
+<a name="line692"></a>
+<a name="line693"></a>  try {
+<a name="line694"></a>    goog.fs.getBlob();
+<a name="line695"></a>    fail();
+<a name="line696"></a>  } catch (e) {
+<a name="line697"></a>    assertEquals(&#39;This browser doesn\&#39;t seem to support creating Blobs&#39;,
+<a name="line698"></a>        e.message);
+<a name="line699"></a>  }
+<a name="line700"></a>
+<a name="line701"></a>  stubs.reset();
+<a name="line702"></a>}
+<a name="line703"></a>
+<a name="line704"></a>
+<a name="line705"></a>function testGetBlobWithProperties() {
+<a name="line706"></a>  // Skip test if browser doesn&#39;t support Blob API.
+<a name="line707"></a>  if (typeof(goog.global.Blob) != &#39;function&#39;) {
+<a name="line708"></a>    return;
+<a name="line709"></a>  }
+<a name="line710"></a>
+<a name="line711"></a>  var blob = goog.fs.getBlobWithProperties([&#39;test&#39;], &#39;text/test&#39;, &#39;native&#39;);
+<a name="line712"></a>  assertEquals(&#39;text/test&#39;, blob.type);
+<a name="line713"></a>}
+<a name="line714"></a>
+<a name="line715"></a>
+<a name="line716"></a>function testGetBlobWithPropertiesThrowsError() {
+<a name="line717"></a>  stubs.remove(goog.global, &#39;BlobBuilder&#39;);
+<a name="line718"></a>  stubs.remove(goog.global, &#39;WebKitBlobBuilder&#39;);
+<a name="line719"></a>  stubs.remove(goog.global, &#39;Blob&#39;);
+<a name="line720"></a>
+<a name="line721"></a>  try {
+<a name="line722"></a>    goog.fs.getBlobWithProperties();
+<a name="line723"></a>    fail();
+<a name="line724"></a>  } catch (e) {
+<a name="line725"></a>    assertEquals(&#39;This browser doesn\&#39;t seem to support creating Blobs&#39;,
+<a name="line726"></a>        e.message);
+<a name="line727"></a>  }
+<a name="line728"></a>
+<a name="line729"></a>  stubs.reset();
+<a name="line730"></a>}
+<a name="line731"></a>
+<a name="line732"></a>
+<a name="line733"></a>function testGetBlobWithPropertiesUsingBlobBuilder() {
+<a name="line734"></a>  function BlobBuilder() {
+<a name="line735"></a>    this.parts = [];
+<a name="line736"></a>    this.append = function(value, endings) {
+<a name="line737"></a>      this.parts.push({value: value, endings: endings});
+<a name="line738"></a>    };
+<a name="line739"></a>    this.getBlob = function(type) {
+<a name="line740"></a>      return {type: type, builder: this};
+<a name="line741"></a>    };
+<a name="line742"></a>  }
+<a name="line743"></a>  stubs.set(goog.global, &#39;BlobBuilder&#39;, BlobBuilder);
+<a name="line744"></a>
+<a name="line745"></a>  var blob = goog.fs.getBlobWithProperties([&#39;test&#39;], &#39;text/test&#39;, &#39;native&#39;);
+<a name="line746"></a>  assertEquals(&#39;text/test&#39;, blob.type);
+<a name="line747"></a>  assertEquals(&#39;test&#39;, blob.builder.parts[0].value);
+<a name="line748"></a>  assertEquals(&#39;native&#39;, blob.builder.parts[0].endings);
+<a name="line749"></a>
+<a name="line750"></a>  stubs.reset();
+<a name="line751"></a>}
+<a name="line752"></a>
+<a name="line753"></a>
+<a name="line754"></a>function loadTestDir() {
+<a name="line755"></a>  return deferredFs.branch().addCallback(function(fs) {
+<a name="line756"></a>    return fs.getRoot().getDirectory(
+<a name="line757"></a>        TEST_DIR, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line758"></a>  });
+<a name="line759"></a>}
+<a name="line760"></a>
+<a name="line761"></a>function loadFile(filename, behavior) {
+<a name="line762"></a>  return loadTestDir().addCallback(function(dir) {
+<a name="line763"></a>    return dir.getFile(filename, behavior);
+<a name="line764"></a>  });
+<a name="line765"></a>}
+<a name="line766"></a>
+<a name="line767"></a>function loadDirectory(filename, behavior) {
+<a name="line768"></a>  return loadTestDir().addCallback(function(dir) {
+<a name="line769"></a>    return dir.getDirectory(filename, behavior);
+<a name="line770"></a>  });
+<a name="line771"></a>}
+<a name="line772"></a>
+<a name="line773"></a>function startWrite(content, file) {
+<a name="line774"></a>  return file.createWriter().
+<a name="line775"></a>      addCallback(
+<a name="line776"></a>          goog.partial(checkReadyState, goog.fs.FileSaver.ReadyState.INIT)).
+<a name="line777"></a>      addCallback(function(writer) {
+<a name="line778"></a>        writer.write(goog.fs.getBlob(content));
+<a name="line779"></a>        return writer;
+<a name="line780"></a>      }).
+<a name="line781"></a>      addCallback(
+<a name="line782"></a>          goog.partial(checkReadyState, goog.fs.FileSaver.ReadyState.WRITING));
+<a name="line783"></a>}
+<a name="line784"></a>
+<a name="line785"></a>function waitForEvent(type, target) {
+<a name="line786"></a>  var d = new goog.async.Deferred();
+<a name="line787"></a>  goog.events.listenOnce(target, type, d.callback, false, d);
+<a name="line788"></a>  return d;
+<a name="line789"></a>}
+<a name="line790"></a>
+<a name="line791"></a>function writeToFile(content, file) {
+<a name="line792"></a>  return startWrite(content, file).
+<a name="line793"></a>      addCallback(
+<a name="line794"></a>          goog.partial(waitForEvent, goog.fs.FileSaver.EventType.WRITE)).
+<a name="line795"></a>      addCallback(function() { return file; });
+<a name="line796"></a>}
+<a name="line797"></a>
+<a name="line798"></a>function checkFileContent(content, file) {
+<a name="line799"></a>  return checkFileContentAs(content, &#39;Text&#39;, undefined, file);
+<a name="line800"></a>}
+<a name="line801"></a>
+<a name="line802"></a>function checkFileContentWithEncoding(content, encoding, file) {
+<a name="line803"></a>  checkFileContentAs(content, &#39;Text&#39;, encoding, file);
+<a name="line804"></a>}
+<a name="line805"></a>
+<a name="line806"></a>function checkFileContentAs(content, filetype, encoding, file) {
+<a name="line807"></a>  return file.file().
+<a name="line808"></a>      addCallback(function(blob) {
+<a name="line809"></a>        return goog.fs.FileReader[&#39;readAs&#39; + filetype](blob, encoding);
+<a name="line810"></a>      }).
+<a name="line811"></a>      addCallback(goog.partial(checkEquals, content));
+<a name="line812"></a>}
+<a name="line813"></a>
+<a name="line814"></a>function checkEquals(a, b) {
+<a name="line815"></a>  if (a instanceof ArrayBuffer &amp;&amp; b instanceof ArrayBuffer) {
+<a name="line816"></a>    assertEquals(a.byteLength, b.byteLength);
+<a name="line817"></a>    var viewA = new DataView(a);
+<a name="line818"></a>    var viewB = new DataView(b);
+<a name="line819"></a>    for (var i = 0; i &lt; a.byteLength; i++) {
+<a name="line820"></a>      assertEquals(viewA.getUint8(i), viewB.getUint8(i));
+<a name="line821"></a>    }
+<a name="line822"></a>  } else {
+<a name="line823"></a>    assertEquals(a, b);
+<a name="line824"></a>  }
+<a name="line825"></a>}
+<a name="line826"></a>
+<a name="line827"></a>function checkFileRemoved(filename) {
+<a name="line828"></a>  return loadFile(filename).
+<a name="line829"></a>      addCallback(goog.partial(fail, &#39;expected file to be removed&#39;)).
+<a name="line830"></a>      addErrback(function(err) {
+<a name="line831"></a>        assertEquals(err.code, goog.fs.Error.ErrorCode.NOT_FOUND);
+<a name="line832"></a>        return true; // Go back to callback path
+<a name="line833"></a>      });
+<a name="line834"></a>}
+<a name="line835"></a>
+<a name="line836"></a>function checkReadyState(expectedState, writer) {
+<a name="line837"></a>  assertEquals(expectedState, writer.getReadyState());
+<a name="line838"></a>}
+<a name="line839"></a>
+<a name="line840"></a>function splitArgs(fn) {
+<a name="line841"></a>  return function(args) { return fn(args[0], args[1]); };
+<a name="line842"></a>}
+</pre>
+
+
+</body>
+</html>

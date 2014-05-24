@@ -1,0 +1,233 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>db.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_db_db.js.html">db.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Wrappers for the HTML5 IndexedDB. The wrappers export nearly
+<a name="line17"></a> * the same interface as the standard API, but return goog.async.Deferred
+<a name="line18"></a> * objects instead of request objects and use Closure events. The wrapper works
+<a name="line19"></a> * and has been tested on Chrome version 22+. It may work on older Chrome
+<a name="line20"></a> * versions, but they aren&#39;t explicitly supported.
+<a name="line21"></a> *
+<a name="line22"></a> * Example usage:
+<a name="line23"></a> *
+<a name="line24"></a> *  &lt;code&gt;
+<a name="line25"></a> *  goog.db.openDatabase(&#39;mydb&#39;, 1, function(ev, db, tx) {
+<a name="line26"></a> *    db.createObjectStore(&#39;mystore&#39;);
+<a name="line27"></a> *  }).addCallback(function(db) {
+<a name="line28"></a> *    var putTx = db.createTransaction(
+<a name="line29"></a> *        [],
+<a name="line30"></a> *        goog.db.Transaction.TransactionMode.READ_WRITE);
+<a name="line31"></a> *    var store = putTx.objectStore(&#39;mystore&#39;);
+<a name="line32"></a> *    store.put(&#39;value&#39;, &#39;key&#39;);
+<a name="line33"></a> *    goog.listen(putTx, goog.db.Transaction.EventTypes.COMPLETE, function() {
+<a name="line34"></a> *      var getTx = db.createTransaction([]);
+<a name="line35"></a> *      var request = getTx.objectStore(&#39;mystore&#39;).get(&#39;key&#39;);
+<a name="line36"></a> *      request.addCallback(function(result) {
+<a name="line37"></a> *        ...
+<a name="line38"></a> *      });
+<a name="line39"></a> *  });
+<a name="line40"></a> *  &lt;/code&gt;
+<a name="line41"></a> *
+<a name="line42"></a> */
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>goog.provide(&#39;goog.db&#39;);
+<a name="line46"></a>
+<a name="line47"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line48"></a>goog.require(&#39;goog.db.Error&#39;);
+<a name="line49"></a>goog.require(&#39;goog.db.IndexedDb&#39;);
+<a name="line50"></a>goog.require(&#39;goog.db.Transaction&#39;);
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * The IndexedDB factory object.
+<a name="line55"></a> *
+<a name="line56"></a> * @type {IDBFactory}
+<a name="line57"></a> * @private
+<a name="line58"></a> */
+<a name="line59"></a>goog.db.indexedDb_ = goog.global.indexedDB || goog.global.mozIndexedDB ||
+<a name="line60"></a>    goog.global.webkitIndexedDB || goog.global.moz_indexedDB;
+<a name="line61"></a>
+<a name="line62"></a>
+<a name="line63"></a>/**
+<a name="line64"></a> * A callback that&#39;s called if a blocked event is received. When a database is
+<a name="line65"></a> * supposed to be deleted or upgraded (i.e. versionchange), and there are open
+<a name="line66"></a> * connections to this database, a block event will be fired to prevent the
+<a name="line67"></a> * operations from going through until all such open connections are closed.
+<a name="line68"></a> * This callback can be used to notify users that they should close other tabs
+<a name="line69"></a> * that have open connections, or to close the connections manually. Databases
+<a name="line70"></a> * can also listen for the {@link goog.db.IndexedDb.EventType.VERSION_CHANGE}
+<a name="line71"></a> * event to automatically close themselves when they&#39;re blocking such
+<a name="line72"></a> * operations.
+<a name="line73"></a> *
+<a name="line74"></a> * This is passed a VersionChangeEvent that has the version of the database
+<a name="line75"></a> * before it was deleted, and &quot;null&quot; as the new version.
+<a name="line76"></a> *
+<a name="line77"></a> * @typedef {function(!goog.db.IndexedDb.VersionChangeEvent)}
+<a name="line78"></a> */
+<a name="line79"></a>goog.db.BlockedCallback;
+<a name="line80"></a>
+<a name="line81"></a>
+<a name="line82"></a>/**
+<a name="line83"></a> * A callback that&#39;s called when opening a database whose internal version is
+<a name="line84"></a> * lower than the version passed to {@link goog.db.openDatabase}.
+<a name="line85"></a> *
+<a name="line86"></a> * This callback is passed three arguments: a VersionChangeEvent with both the
+<a name="line87"></a> * old version and the new version of the database; the database that&#39;s being
+<a name="line88"></a> * opened, for which you can create and delete object stores; and the version
+<a name="line89"></a> * change transaction, with which you can abort the version change.
+<a name="line90"></a> *
+<a name="line91"></a> * Note that the transaction is not active, which means that it can&#39;t be used to
+<a name="line92"></a> * make changes to the database. However, since there is a transaction running,
+<a name="line93"></a> * you can&#39;t create another one via {@link goog.db.IndexedDb.createTransaction}.
+<a name="line94"></a> * This means that it&#39;s not possible to manipulate the database other than
+<a name="line95"></a> * creating or removing object stores in this callback.
+<a name="line96"></a> *
+<a name="line97"></a> * @typedef {function(!goog.db.IndexedDb.VersionChangeEvent,
+<a name="line98"></a> *                    !goog.db.IndexedDb,
+<a name="line99"></a> *                    !goog.db.Transaction)}
+<a name="line100"></a> */
+<a name="line101"></a>goog.db.UpgradeNeededCallback;
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Opens a database connection and wraps it.
+<a name="line106"></a> *
+<a name="line107"></a> * @param {string} name The name of the database to open.
+<a name="line108"></a> * @param {number=} opt_version The expected version of the database. If this is
+<a name="line109"></a> *     larger than the actual version, opt_onUpgradeNeeded will be called
+<a name="line110"></a> *     (possibly after opt_onBlocked; see {@link goog.db.BlockedCallback}). If
+<a name="line111"></a> *     this is passed, opt_onUpgradeNeeded must be passed as well.
+<a name="line112"></a> * @param {goog.db.UpgradeNeededCallback=} opt_onUpgradeNeeded Called if
+<a name="line113"></a> *     opt_version is greater than the old version of the database. If
+<a name="line114"></a> *     opt_version is passed, this must be passed as well.
+<a name="line115"></a> * @param {goog.db.BlockedCallback=} opt_onBlocked Called if there are active
+<a name="line116"></a> *     connections to the database.
+<a name="line117"></a> * @return {!goog.async.Deferred} The deferred database object.
+<a name="line118"></a> */
+<a name="line119"></a>goog.db.openDatabase = function(name, opt_version, opt_onUpgradeNeeded,
+<a name="line120"></a>                                opt_onBlocked) {
+<a name="line121"></a>  goog.asserts.assert(
+<a name="line122"></a>      goog.isDef(opt_version) == goog.isDef(opt_onUpgradeNeeded),
+<a name="line123"></a>      &#39;opt_version must be passed to goog.db.openDatabase if and only if &#39; +
+<a name="line124"></a>          &#39;opt_onUpgradeNeeded is also passed&#39;);
+<a name="line125"></a>
+<a name="line126"></a>  var d = new goog.async.Deferred();
+<a name="line127"></a>  var openRequest = opt_version ?
+<a name="line128"></a>      goog.db.indexedDb_.open(name, opt_version) :
+<a name="line129"></a>      goog.db.indexedDb_.open(name);
+<a name="line130"></a>  openRequest.onsuccess = function(ev) {
+<a name="line131"></a>    var db = new goog.db.IndexedDb(ev.target.result);
+<a name="line132"></a>    d.callback(db);
+<a name="line133"></a>  };
+<a name="line134"></a>  openRequest.onerror = function(ev) {
+<a name="line135"></a>    var msg = &#39;opening database &#39; + name;
+<a name="line136"></a>    d.errback(goog.db.Error.fromRequest(ev.target, msg));
+<a name="line137"></a>  };
+<a name="line138"></a>  openRequest.onupgradeneeded = function(ev) {
+<a name="line139"></a>    if (!opt_onUpgradeNeeded) return;
+<a name="line140"></a>    var db = new goog.db.IndexedDb(ev.target.result);
+<a name="line141"></a>    opt_onUpgradeNeeded(
+<a name="line142"></a>        new goog.db.IndexedDb.VersionChangeEvent(ev.oldVersion, ev.newVersion),
+<a name="line143"></a>        db,
+<a name="line144"></a>        new goog.db.Transaction(ev.target.transaction, db));
+<a name="line145"></a>  };
+<a name="line146"></a>  openRequest.onblocked = function(ev) {
+<a name="line147"></a>    if (opt_onBlocked) {
+<a name="line148"></a>      opt_onBlocked(new goog.db.IndexedDb.VersionChangeEvent(
+<a name="line149"></a>          ev.oldVersion, ev.newVersion));
+<a name="line150"></a>    }
+<a name="line151"></a>  };
+<a name="line152"></a>  return d;
+<a name="line153"></a>};
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>/**
+<a name="line157"></a> * Deletes a database once all open connections have been closed.
+<a name="line158"></a> *
+<a name="line159"></a> * @param {string} name The name of the database to delete.
+<a name="line160"></a> * @param {goog.db.BlockedCallback=} opt_onBlocked Called if there are active
+<a name="line161"></a> *     connections to the database.
+<a name="line162"></a> * @return {!goog.async.Deferred} A deferred object that will fire once the
+<a name="line163"></a> *     database is deleted.
+<a name="line164"></a> */
+<a name="line165"></a>goog.db.deleteDatabase = function(name, opt_onBlocked) {
+<a name="line166"></a>  var d = new goog.async.Deferred();
+<a name="line167"></a>  var deleteRequest = goog.db.indexedDb_.deleteDatabase(name);
+<a name="line168"></a>  deleteRequest.onsuccess = function(ev) {
+<a name="line169"></a>    d.callback();
+<a name="line170"></a>  };
+<a name="line171"></a>  deleteRequest.onerror = function(ev) {
+<a name="line172"></a>    var msg = &#39;deleting database &#39; + name;
+<a name="line173"></a>    d.errback(goog.db.Error.fromRequest(ev.target, msg));
+<a name="line174"></a>  };
+<a name="line175"></a>  deleteRequest.onblocked = function(ev) {
+<a name="line176"></a>    if (opt_onBlocked) {
+<a name="line177"></a>      opt_onBlocked(new goog.db.IndexedDb.VersionChangeEvent(
+<a name="line178"></a>          ev.oldVersion, ev.newVersion));
+<a name="line179"></a>    }
+<a name="line180"></a>  };
+<a name="line181"></a>  return d;
+<a name="line182"></a>};
+</pre>
+
+
+</body>
+</html>

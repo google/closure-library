@@ -1,0 +1,221 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>coordinate_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_math_coordinate_test.js.html">coordinate_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.math.CoordinateTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.math.CoordinateTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>function testCoordinate1() {
+<a name="line22"></a>  var dim1 = new goog.math.Coordinate();
+<a name="line23"></a>  assertEquals(0, dim1.x);
+<a name="line24"></a>  assertEquals(0, dim1.y);
+<a name="line25"></a>  assertEquals(&#39;(0, 0)&#39;, dim1.toString());
+<a name="line26"></a>}
+<a name="line27"></a>
+<a name="line28"></a>function testCoordinate2() {
+<a name="line29"></a>  var dim2 = new goog.math.Coordinate(10);
+<a name="line30"></a>  assertEquals(10, dim2.x);
+<a name="line31"></a>  assertEquals(0, dim2.y);
+<a name="line32"></a>  assertEquals(&#39;(10, 0)&#39;, dim2.toString());
+<a name="line33"></a>}
+<a name="line34"></a>
+<a name="line35"></a>function testCoordinate3() {
+<a name="line36"></a>  var dim3 = new goog.math.Coordinate(10, 20);
+<a name="line37"></a>  assertEquals(10, dim3.x);
+<a name="line38"></a>  assertEquals(20, dim3.y);
+<a name="line39"></a>  assertEquals(&#39;(10, 20)&#39;, dim3.toString());
+<a name="line40"></a>}
+<a name="line41"></a>
+<a name="line42"></a>function testCoordinate4() {
+<a name="line43"></a>  var dim4 = new goog.math.Coordinate(10.5, 20.897);
+<a name="line44"></a>  assertEquals(10.5, dim4.x);
+<a name="line45"></a>  assertEquals(20.897, dim4.y);
+<a name="line46"></a>  assertEquals(&#39;(10.5, 20.897)&#39;, dim4.toString());
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>function testCoordinate5() {
+<a name="line50"></a>  var dim5 = new goog.math.Coordinate(NaN, 1000);
+<a name="line51"></a>  assertTrue(isNaN(dim5.x));
+<a name="line52"></a>  assertEquals(1000, dim5.y);
+<a name="line53"></a>  assertEquals(&#39;(NaN, 1000)&#39;, dim5.toString());
+<a name="line54"></a>}
+<a name="line55"></a>
+<a name="line56"></a>function testCoordinateSquaredDistance() {
+<a name="line57"></a>  var a = new goog.math.Coordinate(7, 11);
+<a name="line58"></a>  var b = new goog.math.Coordinate(3, -1);
+<a name="line59"></a>  assertEquals(160, goog.math.Coordinate.squaredDistance(a, b));
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>function testCoordinateDistance() {
+<a name="line63"></a>  var a = new goog.math.Coordinate(-2, -3);
+<a name="line64"></a>  var b = new goog.math.Coordinate(2, 0);
+<a name="line65"></a>  assertEquals(5, goog.math.Coordinate.distance(a, b));
+<a name="line66"></a>}
+<a name="line67"></a>
+<a name="line68"></a>function testCoordinateMagnitude() {
+<a name="line69"></a>  var a = new goog.math.Coordinate(5, 5);
+<a name="line70"></a>  assertEquals(Math.sqrt(50), goog.math.Coordinate.magnitude(a));
+<a name="line71"></a>}
+<a name="line72"></a>
+<a name="line73"></a>function testCoordinateAzimuth() {
+<a name="line74"></a>  var a = new goog.math.Coordinate(5, 5);
+<a name="line75"></a>  assertEquals(45, goog.math.Coordinate.azimuth(a));
+<a name="line76"></a>}
+<a name="line77"></a>
+<a name="line78"></a>function testCoordinateClone() {
+<a name="line79"></a>  var c = new goog.math.Coordinate();
+<a name="line80"></a>  assertEquals(c.toString(), c.clone().toString());
+<a name="line81"></a>  c.x = -12;
+<a name="line82"></a>  c.y = 13;
+<a name="line83"></a>  assertEquals(c.toString(), c.clone().toString());
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>function testCoordinateDifference() {
+<a name="line87"></a>  assertObjectEquals(new goog.math.Coordinate(3, -40),
+<a name="line88"></a>      goog.math.Coordinate.difference(
+<a name="line89"></a>          new goog.math.Coordinate(5, 10),
+<a name="line90"></a>          new goog.math.Coordinate(2, 50)));
+<a name="line91"></a>}
+<a name="line92"></a>
+<a name="line93"></a>function testCoordinateSum() {
+<a name="line94"></a>  assertObjectEquals(new goog.math.Coordinate(7, 60),
+<a name="line95"></a>      goog.math.Coordinate.sum(
+<a name="line96"></a>          new goog.math.Coordinate(5, 10),
+<a name="line97"></a>          new goog.math.Coordinate(2, 50)));
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>function testCoordinateCeil() {
+<a name="line101"></a>  var c = new goog.math.Coordinate(5.2, 7.6);
+<a name="line102"></a>  assertObjectEquals(new goog.math.Coordinate(6, 8), c.ceil());
+<a name="line103"></a>  c = new goog.math.Coordinate(-1.2, -3.9);
+<a name="line104"></a>  assertObjectEquals(new goog.math.Coordinate(-1, -3), c.ceil());
+<a name="line105"></a>}
+<a name="line106"></a>
+<a name="line107"></a>function testCoordinateFloor() {
+<a name="line108"></a>  var c = new goog.math.Coordinate(5.2, 7.6);
+<a name="line109"></a>  assertObjectEquals(new goog.math.Coordinate(5, 7), c.floor());
+<a name="line110"></a>  c = new goog.math.Coordinate(-1.2, -3.9);
+<a name="line111"></a>  assertObjectEquals(new goog.math.Coordinate(-2, -4), c.floor());
+<a name="line112"></a>}
+<a name="line113"></a>
+<a name="line114"></a>function testCoordinateRound() {
+<a name="line115"></a>  var c = new goog.math.Coordinate(5.2, 7.6);
+<a name="line116"></a>  assertObjectEquals(new goog.math.Coordinate(5, 8), c.round());
+<a name="line117"></a>  c = new goog.math.Coordinate(-1.2, -3.9);
+<a name="line118"></a>  assertObjectEquals(new goog.math.Coordinate(-1, -4), c.round());
+<a name="line119"></a>}
+<a name="line120"></a>
+<a name="line121"></a>function testCoordinateTranslateCoordinate() {
+<a name="line122"></a>  var c = new goog.math.Coordinate(10, 20);
+<a name="line123"></a>  var t = new goog.math.Coordinate(5, 10);
+<a name="line124"></a>  // The translate function modifies the coordinate instead of
+<a name="line125"></a>  // returning a new one.
+<a name="line126"></a>  assertEquals(c, c.translate(t));
+<a name="line127"></a>  assertObjectEquals(new goog.math.Coordinate(15, 30), c);
+<a name="line128"></a>}
+<a name="line129"></a>
+<a name="line130"></a>function testCoordinateTranslateXY() {
+<a name="line131"></a>  var c = new goog.math.Coordinate(10, 20);
+<a name="line132"></a>  // The translate function modifies the coordinate instead of
+<a name="line133"></a>  // returning a new one.
+<a name="line134"></a>  assertEquals(c, c.translate(25, 5));
+<a name="line135"></a>  assertObjectEquals(new goog.math.Coordinate(35, 25), c);
+<a name="line136"></a>}
+<a name="line137"></a>
+<a name="line138"></a>function testCoordinateTranslateX() {
+<a name="line139"></a>  var c = new goog.math.Coordinate(10, 20);
+<a name="line140"></a>  // The translate function modifies the coordinate instead of
+<a name="line141"></a>  // returning a new one.
+<a name="line142"></a>  assertEquals(c, c.translate(5));
+<a name="line143"></a>  assertObjectEquals(new goog.math.Coordinate(15, 20), c);
+<a name="line144"></a>}
+<a name="line145"></a>
+<a name="line146"></a>function testCoordinateScaleXY() {
+<a name="line147"></a>  var c = new goog.math.Coordinate(10, 15);
+<a name="line148"></a>  // The scale function modifies the coordinate instead of returning a new one.
+<a name="line149"></a>  assertEquals(c, c.scale(2, 3));
+<a name="line150"></a>  assertObjectEquals(new goog.math.Coordinate(20, 45), c);
+<a name="line151"></a>}
+<a name="line152"></a>
+<a name="line153"></a>function testCoordinateScaleFactor() {
+<a name="line154"></a>  var c = new goog.math.Coordinate(10, 15);
+<a name="line155"></a>  // The scale function modifies the coordinate instead of returning a new one.
+<a name="line156"></a>  assertEquals(c, c.scale(2));
+<a name="line157"></a>  assertObjectEquals(new goog.math.Coordinate(20, 30), c);
+<a name="line158"></a>}
+<a name="line159"></a>
+<a name="line160"></a>function testCoordinateRotateRadians() {
+<a name="line161"></a>  var c = new goog.math.Coordinate(15, 75);
+<a name="line162"></a>  c.rotateRadians(Math.PI / 2, new goog.math.Coordinate(10, 70));
+<a name="line163"></a>  assertObjectEquals(new goog.math.Coordinate(5, 75), c);
+<a name="line164"></a>}
+<a name="line165"></a>
+<a name="line166"></a>function testCoordinateRotateDegrees() {
+<a name="line167"></a>  var c = new goog.math.Coordinate(15, 75);
+<a name="line168"></a>  c.rotateDegrees(90, new goog.math.Coordinate(10, 70));
+<a name="line169"></a>  assertObjectEquals(new goog.math.Coordinate(5, 75), c);
+<a name="line170"></a>}
+</pre>
+
+
+</body>
+</html>

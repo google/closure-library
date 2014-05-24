@@ -1,0 +1,937 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>positioning.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">positioning.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_positioning_positioning.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/positioning/positioning.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/positioning/positioning.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+<h2>Enumerations</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.positioning.adjustForViewport_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.positioning.</span><span class="entryName">adjustForViewport_<span class="args">(<span class="arg">pos</span>,&nbsp;<span class="arg">size</span>,&nbsp;<span class="arg">viewport</span>,&nbsp;<span class="arg">overflow</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.positioning.OverflowStatus</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adjusts the position and/or size of an element, identified by its position
+and size, to fit inside the viewport. If the position or size of the element
+is adjusted the pos or size objects, respectively, are modified.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">pos</span>
+        : <span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span>
+        <div class="entryOverview">Position of element, updated if the
+    position is adjusted.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">size</span>
+        : <span class="type"><a href="class_goog_math_Size.html">goog.math.Size</a></span>
+        <div class="entryOverview">Size of element, updated if the size is
+    adjusted.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">viewport</span>
+        : <span class="type"><a href="class_goog_math_Box.html">goog.math.Box</a></span>
+        <div class="entryOverview">Bounding box describing the viewport.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">overflow</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Number">number</a></span>
+        <div class="entryOverview">Overflow handling mode,
+    .</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.positioning.OverflowStatus</span>&nbsp;
+            Status bitmap,
+    .
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_positioning_positioning.js.source.html#line415">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.positioning.flipCorner"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.positioning.</span><span class="entryName">flipCorner<span class="args">(<span class="arg">corner</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.positioning.Corner</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the corner opposite the given one horizontally and vertically.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">corner</span>
+        : <span class="type">goog.positioning.Corner</span>
+        <div class="entryOverview">The popup corner used to flip.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.positioning.Corner</span>&nbsp;
+            The opposite corner horizontally and
+    vertically.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_positioning_positioning.js.source.html#line553">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.positioning.flipCornerHorizontal"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.positioning.</span><span class="entryName">flipCornerHorizontal<span class="args">(<span class="arg">corner</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.positioning.Corner</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the corner opposite the given one horizontally.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">corner</span>
+        : <span class="type">goog.positioning.Corner</span>
+        <div class="entryOverview">The popup corner used to flip.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.positioning.Corner</span>&nbsp;
+            The opposite corner horizontally.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_positioning_positioning.js.source.html#line530">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.positioning.flipCornerVertical"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.positioning.</span><span class="entryName">flipCornerVertical<span class="args">(<span class="arg">corner</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.positioning.Corner</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the corner opposite the given one vertically.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">corner</span>
+        : <span class="type">goog.positioning.Corner</span>
+        <div class="entryOverview">The popup corner used to flip.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.positioning.Corner</span>&nbsp;
+            The opposite corner vertically.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_positioning_positioning.js.source.html#line541">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.positioning.getEffectiveCorner"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.positioning.</span><span class="entryName">getEffectiveCorner<span class="args">(<span class="arg">element</span>,&nbsp;<span class="arg">corner</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.positioning.Corner</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns an absolute corner (top/bottom left/right) given an absolute
+or relative (top/bottom start/end) corner and the direction of an element.
+Absolute corners remain unchanged.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">element</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">DOM element to test for RTL direction.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">corner</span>
+        : <span class="type">goog.positioning.Corner</span>
+        <div class="entryOverview">The popup corner used for
+    positioning.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.positioning.Corner</span>&nbsp;
+            Effective corner.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_positioning_positioning.js.source.html#line515">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.positioning.getOffsetParentPageOffset"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.positioning.</span><span class="entryName">getOffsetParentPageOffset<span class="args">(<span class="arg">movableElement</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Calculates the page offset of the given element's
+offsetParent. This value can be used to translate any x- and
+y-offset relative to the page to an offset relative to the
+offsetParent, which can then be used directly with as position
+coordinate for <code> positionWithCoordinate</code>.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">movableElement</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The element to calculate.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span>&nbsp;
+            The page offset, may be (0, 0).
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_positioning_positioning.js.source.html#line279">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.positioning.getVisiblePart_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.positioning.</span><span class="entryName">getVisiblePart_<span class="args">(<span class="arg">el</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_math_Rect.html">goog.math.Rect</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns intersection of the specified element and
+goog.style.getVisibleRectForElement for it.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">el</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The target element.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_math_Rect.html">goog.math.Rect</a></span>&nbsp;
+            Intersection of getVisibleRectForElement
+    and the current bounding rectangle of the element.  If the
+    intersection is empty, returns the bounding rectangle.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_positioning_positioning.js.source.html#line317">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.positioning.positionAtAnchor"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.positioning.</span><span class="entryName">positionAtAnchor<span class="args">(<span class="arg">anchorElement</span>,&nbsp;<span class="arg">anchorElementCorner</span>,&nbsp;<span class="arg">movableElement</span>,&nbsp;<span class="arg">movableElementCorner</span>,&nbsp;<span class="arg">opt_offset</span>,&nbsp;<span class="arg">opt_margin</span>,&nbsp;<span class="arg">opt_overflow</span>,&nbsp;<span class="arg">opt_preferredSize</span>,&nbsp;<span class="arg">opt_viewport</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.positioning.OverflowStatus</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Positions a movable element relative to an anchor element. The caller
+specifies the corners that should touch. This functions then moves the
+movable element accordingly.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">anchorElement</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The element that is the anchor for where
+   the movable element should position itself.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">anchorElementCorner</span>
+        : <span class="type">goog.positioning.Corner</span>
+        <div class="entryOverview">The corner of the
+    anchorElement for positioning the movable element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">movableElement</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The element to move.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">movableElementCorner</span>
+        : <span class="type">goog.positioning.Corner</span>
+        <div class="entryOverview">The corner of the
+    movableElement that that should be positioned adjacent to the anchor
+    element.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_offset</span>
+        : <span class="type">goog.math.Coordinate=</span>
+        <div class="entryOverview">An offset specified in pixels.
+   After the normal positioning algorithm is applied, the offset is then
+   applied. Positive coordinates move the popup closer to the center of the
+   anchor element. Negative coordinates move the popup away from the center
+   of the anchor element.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_margin</span>
+        : <span class="type">goog.math.Box=</span>
+        <div class="entryOverview">A margin specified in pixels.
+   After the normal positioning algorithm is applied and any offset, the
+   margin is then applied. Positive coordinates move the popup away from the
+   spot it was positioned towards its center. Negative coordinates move it
+   towards the spot it was positioned away from its center.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_overflow</span>
+        : <span>?</span><span class="type">number=</span>
+        <div class="entryOverview">Overflow handling mode. Defaults to IGNORE if
+    not specified. Bitmap, .</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_preferredSize</span>
+        : <span class="type">goog.math.Size=</span>
+        <div class="entryOverview">The preferred size of the
+    movableElement.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_viewport</span>
+        : <span class="type">goog.math.Box=</span>
+        <div class="entryOverview">Box object describing the dimensions of
+    the viewport. The viewport is specified relative to offsetParent of
+    <code> movableElement</code>. In other words, the viewport can be thought of as
+    describing a "position: absolute" element contained in the offsetParent.
+    It defaults to visible area of nearest scrollable ancestor of
+    <code> movableElement</code> (see <code> goog.style.getVisibleRectForElement</code>).</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.positioning.OverflowStatus</span>&nbsp;
+            Status bitmap,
+    .
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_positioning_positioning.js.source.html#line197">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.positioning.positionAtCoordinate"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.positioning.</span><span class="entryName">positionAtCoordinate<span class="args">(<span class="arg">absolutePos</span>,&nbsp;<span class="arg">movableElement</span>,&nbsp;<span class="arg">movableElementCorner</span>,&nbsp;<span class="arg">opt_margin</span>,&nbsp;<span class="arg">opt_viewport</span>,&nbsp;<span class="arg">opt_overflow</span>,&nbsp;<span class="arg">opt_preferredSize</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.positioning.OverflowStatus</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Positions the specified corner of the movable element at the
+specified coordinate.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">absolutePos</span>
+        : <span class="type"><a href="class_goog_math_Coordinate.html">goog.math.Coordinate</a></span>
+        <div class="entryOverview">The coordinate to position the
+    element at.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">movableElement</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The element to be positioned.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">movableElementCorner</span>
+        : <span class="type">goog.positioning.Corner</span>
+        <div class="entryOverview">The corner of the
+    movableElement that that should be positioned.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_margin</span>
+        : <span class="type">goog.math.Box=</span>
+        <div class="entryOverview">A margin specified in pixels.
+   After the normal positioning algorithm is applied and any offset, the
+   margin is then applied. Positive coordinates move the popup away from the
+   spot it was positioned towards its center. Negative coordinates move it
+   towards the spot it was positioned away from its center.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_viewport</span>
+        : <span class="type">goog.math.Box=</span>
+        <div class="entryOverview">Box object describing the dimensions of
+    the viewport. Required if opt_overflow is specified.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_overflow</span>
+        : <span>?</span><span class="type">number=</span>
+        <div class="entryOverview">Overflow handling mode. Defaults to IGNORE if
+    not specified, .</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_preferredSize</span>
+        : <span class="type">goog.math.Size=</span>
+        <div class="entryOverview">The preferred size of the
+    movableElement. Defaults to the current size.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.positioning.OverflowStatus</span>&nbsp;
+            Status bitmap.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_positioning_positioning.js.source.html#line349">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory positioning</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/positioning/positioning.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

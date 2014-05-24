@@ -1,0 +1,242 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>console_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_debug_console_test.js.html">console_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.debug.ConsoleTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.debug.ConsoleTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.debug.Console&#39;);
+<a name="line19"></a>goog.require(&#39;goog.debug.LogRecord&#39;);
+<a name="line20"></a>goog.require(&#39;goog.debug.Logger&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var debugConsole;
+<a name="line25"></a>var mockConsole;
+<a name="line26"></a>var loggerName1;
+<a name="line27"></a>var logRecord1;
+<a name="line28"></a>var loggerName2;
+<a name="line29"></a>var logRecord2;
+<a name="line30"></a>var loggerName3;
+<a name="line31"></a>var logRecord3;
+<a name="line32"></a>
+<a name="line33"></a>function setUp() {
+<a name="line34"></a>  debugConsole = new goog.debug.Console();
+<a name="line35"></a>
+<a name="line36"></a>  // Set up a recorder for mockConsole.log
+<a name="line37"></a>  mockConsole = { log: goog.testing.recordFunction() };
+<a name="line38"></a>  goog.debug.Console.console_ = mockConsole;
+<a name="line39"></a>
+<a name="line40"></a>  // Test logger 1.
+<a name="line41"></a>  loggerName1 = &#39;this.is.a.logger&#39;;
+<a name="line42"></a>  logRecord1 = new goog.debug.LogRecord(goog.debug.Logger.Level.INFO,
+<a name="line43"></a>      &#39;this is a statement&#39;, loggerName1);
+<a name="line44"></a>
+<a name="line45"></a>  // Test logger 2.
+<a name="line46"></a>  loggerName2 = &#39;name.of.logger&#39;;
+<a name="line47"></a>  logRecord2 = new goog.debug.LogRecord(goog.debug.Logger.Level.WARNING,
+<a name="line48"></a>      &#39;hey, this is a warning&#39;, loggerName2);
+<a name="line49"></a>
+<a name="line50"></a>  // Test logger 3.
+<a name="line51"></a>  loggerName3 = &#39;third.logger&#39;;
+<a name="line52"></a>  logRecord3 = new goog.debug.LogRecord(goog.debug.Logger.Level.SEVERE,
+<a name="line53"></a>      &#39;seriously, this statement is serious&#39;, loggerName3);
+<a name="line54"></a>}
+<a name="line55"></a>
+<a name="line56"></a>function testLoggingWithSimpleConsole() {
+<a name="line57"></a>  // Make sure all messages use the log function.
+<a name="line58"></a>  logAtAllLevels(&#39;test message&#39;);
+<a name="line59"></a>  assertEquals(9, mockConsole.log.getCallCount());
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>function testLoggingWithInfoSupported() {
+<a name="line63"></a>  // Make sure the log function is the default when only &#39;info&#39; is available.
+<a name="line64"></a>  mockConsole[&#39;info&#39;] = goog.testing.recordFunction();
+<a name="line65"></a>  logAtAllLevels(&#39;test message&#39;);
+<a name="line66"></a>  assertEquals(1, mockConsole.info.getCallCount());
+<a name="line67"></a>  assertEquals(8, mockConsole.log.getCallCount());
+<a name="line68"></a>}
+<a name="line69"></a>
+<a name="line70"></a>function testLoggingWithErrorSupported() {
+<a name="line71"></a>  // Make sure the log function is the default when only &#39;error&#39; is available.
+<a name="line72"></a>  mockConsole[&#39;error&#39;] = goog.testing.recordFunction();
+<a name="line73"></a>  logAtAllLevels(&#39;test message&#39;);
+<a name="line74"></a>  assertEquals(1, mockConsole.error.getCallCount());
+<a name="line75"></a>  assertEquals(8, mockConsole.log.getCallCount());
+<a name="line76"></a>}
+<a name="line77"></a>
+<a name="line78"></a>function testLoggingWithWarningSupported() {
+<a name="line79"></a>  // Make sure the log function is the default when only &#39;warn&#39; is available.
+<a name="line80"></a>  mockConsole[&#39;warn&#39;] = goog.testing.recordFunction();
+<a name="line81"></a>  logAtAllLevels(&#39;test message&#39;);
+<a name="line82"></a>  assertEquals(1, mockConsole.warn.getCallCount());
+<a name="line83"></a>  assertEquals(8, mockConsole.log.getCallCount());
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>function testLoggingWithDebugSupported() {
+<a name="line87"></a>  // Make sure the log function is the default when only &#39;debug&#39; is available.
+<a name="line88"></a>  mockConsole[&#39;debug&#39;] = goog.testing.recordFunction();
+<a name="line89"></a>  logAtAllLevels(&#39;test message&#39;);
+<a name="line90"></a>  assertEquals(6, mockConsole.debug.getCallCount());
+<a name="line91"></a>  assertEquals(3, mockConsole.log.getCallCount());
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>function testLoggingWithEverythingSupported() {
+<a name="line95"></a>  mockConsole[&#39;info&#39;] = goog.testing.recordFunction();
+<a name="line96"></a>  mockConsole[&#39;error&#39;] = goog.testing.recordFunction();
+<a name="line97"></a>  mockConsole[&#39;warn&#39;] = goog.testing.recordFunction();
+<a name="line98"></a>  mockConsole[&#39;debug&#39;] = goog.testing.recordFunction();
+<a name="line99"></a>  logAtAllLevels(&#39;test message&#39;);
+<a name="line100"></a>  assertEquals(1, mockConsole.info.getCallCount());
+<a name="line101"></a>  assertEquals(1, mockConsole.error.getCallCount());
+<a name="line102"></a>  assertEquals(1, mockConsole.warn.getCallCount());
+<a name="line103"></a>  assertEquals(6, mockConsole.debug.getCallCount());
+<a name="line104"></a>}
+<a name="line105"></a>
+<a name="line106"></a>function testAddLogRecordWithoutFilters() {
+<a name="line107"></a>  // Make sure none are filtered.
+<a name="line108"></a>  debugConsole.addLogRecord(logRecord1);
+<a name="line109"></a>  assertEquals(1, mockConsole.log.getCallCount());
+<a name="line110"></a>  debugConsole.addLogRecord(logRecord2);
+<a name="line111"></a>  assertEquals(2, mockConsole.log.getCallCount());
+<a name="line112"></a>  debugConsole.addLogRecord(logRecord3);
+<a name="line113"></a>  assertEquals(3, mockConsole.log.getCallCount());
+<a name="line114"></a>}
+<a name="line115"></a>
+<a name="line116"></a>function testAddLogRecordWithOneFilter() {
+<a name="line117"></a>  // Filter #2 and make sure the filtering is correct for all records.
+<a name="line118"></a>  debugConsole.addFilter(loggerName2);
+<a name="line119"></a>  debugConsole.addLogRecord(logRecord1);
+<a name="line120"></a>  assertEquals(1, mockConsole.log.getCallCount());
+<a name="line121"></a>  debugConsole.addLogRecord(logRecord2);
+<a name="line122"></a>  assertEquals(1, mockConsole.log.getCallCount());
+<a name="line123"></a>  debugConsole.addLogRecord(logRecord3);
+<a name="line124"></a>  assertEquals(2, mockConsole.log.getCallCount());
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>function testAddLogRecordWithMoreThanOneFilter() {
+<a name="line128"></a>  // Filter #1 and #3 and check.
+<a name="line129"></a>  debugConsole.addFilter(loggerName1);
+<a name="line130"></a>  debugConsole.addFilter(loggerName3);
+<a name="line131"></a>  debugConsole.addLogRecord(logRecord1);
+<a name="line132"></a>  assertEquals(0, mockConsole.log.getCallCount());
+<a name="line133"></a>  debugConsole.addLogRecord(logRecord2);
+<a name="line134"></a>  assertEquals(1, mockConsole.log.getCallCount());
+<a name="line135"></a>  debugConsole.addLogRecord(logRecord3);
+<a name="line136"></a>  assertEquals(1, mockConsole.log.getCallCount());
+<a name="line137"></a>}
+<a name="line138"></a>
+<a name="line139"></a>function testAddLogRecordWithAddAndRemoveFilter() {
+<a name="line140"></a>  debugConsole.addFilter(loggerName1);
+<a name="line141"></a>  debugConsole.addFilter(loggerName2);
+<a name="line142"></a>  debugConsole.removeFilter(loggerName1);
+<a name="line143"></a>  debugConsole.removeFilter(loggerName2);
+<a name="line144"></a>  debugConsole.addLogRecord(logRecord1);
+<a name="line145"></a>  assertEquals(1, mockConsole.log.getCallCount());
+<a name="line146"></a>  debugConsole.addLogRecord(logRecord2);
+<a name="line147"></a>  assertEquals(2, mockConsole.log.getCallCount());
+<a name="line148"></a>  debugConsole.addLogRecord(logRecord3);
+<a name="line149"></a>  assertEquals(3, mockConsole.log.getCallCount());
+<a name="line150"></a>}
+<a name="line151"></a>
+<a name="line152"></a>function testSetConsole() {
+<a name="line153"></a>  var fakeConsole = {log: goog.testing.recordFunction()};
+<a name="line154"></a>
+<a name="line155"></a>  logAtLevel(goog.debug.Logger.Level.INFO, &#39;test message 1&#39;);
+<a name="line156"></a>  logAtAllLevels(&#39;test message 1&#39;);
+<a name="line157"></a>  assertEquals(0, fakeConsole.log.getCallCount());
+<a name="line158"></a>
+<a name="line159"></a>  goog.debug.Console.setConsole(fakeConsole);
+<a name="line160"></a>
+<a name="line161"></a>  logAtLevel(goog.debug.Logger.Level.INFO, &#39;test message 2&#39;);
+<a name="line162"></a>  assertEquals(1, fakeConsole.log.getCallCount());
+<a name="line163"></a>}
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>/**
+<a name="line167"></a> * Logs the message at all log levels.
+<a name="line168"></a> * @param {string} message The message to log.
+<a name="line169"></a> */
+<a name="line170"></a>function logAtAllLevels(message) {
+<a name="line171"></a>  logAtLevel(goog.debug.Logger.Level.SHOUT, message);
+<a name="line172"></a>  logAtLevel(goog.debug.Logger.Level.SEVERE, message);
+<a name="line173"></a>  logAtLevel(goog.debug.Logger.Level.WARNING, message);
+<a name="line174"></a>  logAtLevel(goog.debug.Logger.Level.INFO, message);
+<a name="line175"></a>  logAtLevel(goog.debug.Logger.Level.CONFIG, message);
+<a name="line176"></a>  logAtLevel(goog.debug.Logger.Level.FINE, message);
+<a name="line177"></a>  logAtLevel(goog.debug.Logger.Level.FINER, message);
+<a name="line178"></a>  logAtLevel(goog.debug.Logger.Level.FINEST, message);
+<a name="line179"></a>  logAtLevel(goog.debug.Logger.Level.ALL, message);
+<a name="line180"></a>}
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Adds a log record to the debug console.
+<a name="line185"></a> * @param {!goog.debug.Logger.Level} level The level at which to log.
+<a name="line186"></a> * @param {string} message The message to log.
+<a name="line187"></a> */
+<a name="line188"></a>function logAtLevel(level, message) {
+<a name="line189"></a>  debugConsole.addLogRecord(
+<a name="line190"></a>      new goog.debug.LogRecord(level, message, loggerName1));
+<a name="line191"></a>}
+</pre>
+
+
+</body>
+</html>

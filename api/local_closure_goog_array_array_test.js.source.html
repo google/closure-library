@@ -1,0 +1,1747 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>array_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_array_array_test.js.html">array_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.arrayTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.arrayTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line23"></a>
+<a name="line24"></a>function testArrayLast() {
+<a name="line25"></a>  assertEquals(goog.array.last([1, 2, 3]), 3);
+<a name="line26"></a>  assertEquals(goog.array.last([1]), 1);
+<a name="line27"></a>  assertUndefined(goog.array.last([]));
+<a name="line28"></a>}
+<a name="line29"></a>
+<a name="line30"></a>function testArrayLastWhenDeleted() {
+<a name="line31"></a>  var a = [1, 2, 3];
+<a name="line32"></a>  delete a[2];
+<a name="line33"></a>  assertUndefined(goog.array.last(a));
+<a name="line34"></a>}
+<a name="line35"></a>
+<a name="line36"></a>function testArrayIndexOf() {
+<a name="line37"></a>  assertEquals(goog.array.indexOf([0, 1, 2, 3], 1), 1);
+<a name="line38"></a>  assertEquals(goog.array.indexOf([0, 1, 1, 1], 1), 1);
+<a name="line39"></a>  assertEquals(goog.array.indexOf([0, 1, 2, 3], 4), -1);
+<a name="line40"></a>  assertEquals(goog.array.indexOf([0, 1, 2, 3], 1, 1), 1);
+<a name="line41"></a>  assertEquals(goog.array.indexOf([0, 1, 2, 3], 1, 2), -1);
+<a name="line42"></a>  assertEquals(goog.array.indexOf([0, 1, 2, 3], 1, -3), 1);
+<a name="line43"></a>  assertEquals(goog.array.indexOf([0, 1, 2, 3], 1, -2), -1);
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>function testArrayIndexOfOmitsDeleted() {
+<a name="line47"></a>  var a = [0, 1, 2, 3];
+<a name="line48"></a>  delete a[1];
+<a name="line49"></a>  delete a[3];
+<a name="line50"></a>  assertEquals(goog.array.indexOf(a, undefined), -1);
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>function testArrayIndexOfString() {
+<a name="line54"></a>  assertEquals(goog.array.indexOf(&#39;abcd&#39;, &#39;d&#39;), 3);
+<a name="line55"></a>  assertEquals(goog.array.indexOf(&#39;abbb&#39;, &#39;b&#39;, 2), 2);
+<a name="line56"></a>  assertEquals(goog.array.indexOf(&#39;abcd&#39;, &#39;e&#39;), -1);
+<a name="line57"></a>  assertEquals(goog.array.indexOf(&#39;abcd&#39;, &#39;cd&#39;), -1);
+<a name="line58"></a>  assertEquals(goog.array.indexOf(&#39;0123&#39;, 1), -1);
+<a name="line59"></a>}
+<a name="line60"></a>
+<a name="line61"></a>function testArrayLastIndexOf() {
+<a name="line62"></a>  assertEquals(goog.array.lastIndexOf([0, 1, 2, 3], 1), 1);
+<a name="line63"></a>  assertEquals(goog.array.lastIndexOf([0, 1, 1, 1], 1), 3);
+<a name="line64"></a>  assertEquals(goog.array.lastIndexOf([0, 1, 1, 1], 1, 2), 2);
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>function testArrayLastIndexOfOmitsDeleted() {
+<a name="line68"></a>  var a = [0, 1, 2, 3];
+<a name="line69"></a>  delete a[1];
+<a name="line70"></a>  delete a[3];
+<a name="line71"></a>  assertEquals(goog.array.lastIndexOf(a, undefined), -1);
+<a name="line72"></a>}
+<a name="line73"></a>
+<a name="line74"></a>function testArrayLastIndexOfString() {
+<a name="line75"></a>  assertEquals(goog.array.lastIndexOf(&#39;abcd&#39;, &#39;b&#39;), 1);
+<a name="line76"></a>  assertEquals(goog.array.lastIndexOf(&#39;abbb&#39;, &#39;b&#39;), 3);
+<a name="line77"></a>  assertEquals(goog.array.lastIndexOf(&#39;abbb&#39;, &#39;b&#39;, 2), 2);
+<a name="line78"></a>  assertEquals(goog.array.lastIndexOf(&#39;abcd&#39;, &#39;cd&#39;), -1);
+<a name="line79"></a>  assertEquals(goog.array.lastIndexOf(&#39;0123&#39;, 1), -1);
+<a name="line80"></a>}
+<a name="line81"></a>
+<a name="line82"></a>function testArrayForEachBasic() {
+<a name="line83"></a>  var s = &#39;&#39;;
+<a name="line84"></a>  var a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line85"></a>  goog.array.forEach(a, function(val, index, a2) {
+<a name="line86"></a>    assertEquals(a, a2);
+<a name="line87"></a>    assertEquals(&#39;Index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line88"></a>    s += val + index;
+<a name="line89"></a>  });
+<a name="line90"></a>  assertEquals(&#39;a0b1c2d3&#39;, s);
+<a name="line91"></a>}
+<a name="line92"></a>
+<a name="line93"></a>function testArrayForEachWithEmptyArray() {
+<a name="line94"></a>  var a = new Array(100);
+<a name="line95"></a>  goog.array.forEach(a, function(val, index, a2) {
+<a name="line96"></a>    fail(&#39;The function should not be called since no values were assigned.&#39;);
+<a name="line97"></a>  });
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>function testArrayForEachWithOnlySomeValuesAsigned() {
+<a name="line101"></a>  var count = 0;
+<a name="line102"></a>  var a = new Array(1000);
+<a name="line103"></a>  a[100] = undefined;
+<a name="line104"></a>  goog.array.forEach(a, function(val, index, a2) {
+<a name="line105"></a>    assertEquals(100, index);
+<a name="line106"></a>    count++;
+<a name="line107"></a>  });
+<a name="line108"></a>  assertEquals(&#39;Should only call function when a value of array was assigned.&#39;,
+<a name="line109"></a>      1, count);
+<a name="line110"></a>}
+<a name="line111"></a>
+<a name="line112"></a>function testArrayForEachWithArrayLikeObject() {
+<a name="line113"></a>  var counter = goog.testing.recordFunction();
+<a name="line114"></a>  var a = {
+<a name="line115"></a>    &#39;length&#39;: 1,
+<a name="line116"></a>    &#39;0&#39;: 0,
+<a name="line117"></a>    &#39;100&#39;: 100,
+<a name="line118"></a>    &#39;101&#39;: 102
+<a name="line119"></a>  };
+<a name="line120"></a>  goog.array.forEach(a, counter);
+<a name="line121"></a>  assertEquals(&#39;Number of calls should not exceed the value of its length&#39;, 1,
+<a name="line122"></a>      counter.getCallCount());
+<a name="line123"></a>}
+<a name="line124"></a>
+<a name="line125"></a>function testArrayForEachOmitsDeleted() {
+<a name="line126"></a>  var s = &#39;&#39;;
+<a name="line127"></a>  var a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line128"></a>  delete a[1];
+<a name="line129"></a>  delete a[3];
+<a name="line130"></a>  goog.array.forEach(a, function(val, index, a2) {
+<a name="line131"></a>    assertEquals(a, a2);
+<a name="line132"></a>    assertEquals(&#39;number&#39;, typeof index);
+<a name="line133"></a>    s += val + index;
+<a name="line134"></a>  });
+<a name="line135"></a>  assertEquals(&#39;a0c2&#39;, s);
+<a name="line136"></a>}
+<a name="line137"></a>
+<a name="line138"></a>function testArrayForEachScope() {
+<a name="line139"></a>  var scope = {};
+<a name="line140"></a>  var a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line141"></a>  goog.array.forEach(a, function(val, index, a2) {
+<a name="line142"></a>    assertEquals(a, a2);
+<a name="line143"></a>    assertEquals(&#39;number&#39;, typeof index);
+<a name="line144"></a>    assertEquals(this, scope);
+<a name="line145"></a>  }, scope);
+<a name="line146"></a>}
+<a name="line147"></a>
+<a name="line148"></a>function testArrayForEachRight() {
+<a name="line149"></a>  var s = &#39;&#39;;
+<a name="line150"></a>  var a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line151"></a>  goog.array.forEachRight(a, function(val, index, a2) {
+<a name="line152"></a>    assertEquals(a, a2);
+<a name="line153"></a>    assertEquals(&#39;number&#39;, typeof index);
+<a name="line154"></a>    s += val + String(index);
+<a name="line155"></a>  });
+<a name="line156"></a>  assertEquals(&#39;d3c2b1a0&#39;, s);
+<a name="line157"></a>}
+<a name="line158"></a>
+<a name="line159"></a>function testArrayForEachRightOmitsDeleted() {
+<a name="line160"></a>  var s = &#39;&#39;;
+<a name="line161"></a>  var a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line162"></a>  delete a[1];
+<a name="line163"></a>  delete a[3];
+<a name="line164"></a>  goog.array.forEachRight(a, function(val, index, a2) {
+<a name="line165"></a>    assertEquals(a, a2);
+<a name="line166"></a>    assertEquals(&#39;number&#39;, typeof index);
+<a name="line167"></a>    assertEquals(&#39;string&#39;, typeof val);
+<a name="line168"></a>    s += val + String(index);
+<a name="line169"></a>  });
+<a name="line170"></a>  assertEquals(&#39;c2a0&#39;, s);
+<a name="line171"></a>}
+<a name="line172"></a>
+<a name="line173"></a>function testArrayFilter() {
+<a name="line174"></a>  var a = [0, 1, 2, 3];
+<a name="line175"></a>  a = goog.array.filter(a, function(val, index, a2) {
+<a name="line176"></a>    assertEquals(a, a2);
+<a name="line177"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line178"></a>    return val &gt; 1;
+<a name="line179"></a>  });
+<a name="line180"></a>  assertArrayEquals([2, 3], a);
+<a name="line181"></a>}
+<a name="line182"></a>
+<a name="line183"></a>function testArrayFilterOmitsDeleted() {
+<a name="line184"></a>  var a = [0, 1, 2, 3];
+<a name="line185"></a>  delete a[1];
+<a name="line186"></a>  delete a[3];
+<a name="line187"></a>  a = goog.array.filter(a, function(val, index, a2) {
+<a name="line188"></a>    assertEquals(a, a2);
+<a name="line189"></a>    assertEquals(&#39;number&#39;, typeof val);
+<a name="line190"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line191"></a>    return val &gt; 1;
+<a name="line192"></a>  });
+<a name="line193"></a>  assertArrayEquals([2], a);
+<a name="line194"></a>}
+<a name="line195"></a>
+<a name="line196"></a>function testArrayFilterPreservesValues() {
+<a name="line197"></a>  var a = [0, 1, 2, 3];
+<a name="line198"></a>  a = goog.array.filter(a, function(val, index, a2) {
+<a name="line199"></a>    assertEquals(a, a2);
+<a name="line200"></a>    // sometimes functions might be evil and do something like this, but we
+<a name="line201"></a>    // should still use the original values when returning the filtered array
+<a name="line202"></a>    a2[index] = a2[index] - 1;
+<a name="line203"></a>    return a2[index] &gt;= 1;
+<a name="line204"></a>  });
+<a name="line205"></a>  assertArrayEquals([2, 3], a);
+<a name="line206"></a>}
+<a name="line207"></a>
+<a name="line208"></a>function testArrayMap() {
+<a name="line209"></a>  var a = [0, 1, 2, 3];
+<a name="line210"></a>  var result = goog.array.map(a, function(val, index, a2) {
+<a name="line211"></a>    assertEquals(a, a2);
+<a name="line212"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line213"></a>    return val * val;
+<a name="line214"></a>  });
+<a name="line215"></a>  assertArrayEquals([0, 1, 4, 9], result);
+<a name="line216"></a>}
+<a name="line217"></a>
+<a name="line218"></a>function testArrayMapOmitsDeleted() {
+<a name="line219"></a>  var a = [0, 1, 2, 3];
+<a name="line220"></a>  delete a[1];
+<a name="line221"></a>  delete a[3];
+<a name="line222"></a>  var result = goog.array.map(a, function(val, index, a2) {
+<a name="line223"></a>    assertEquals(a, a2);
+<a name="line224"></a>    assertEquals(&#39;number&#39;, typeof val);
+<a name="line225"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line226"></a>    return val * val;
+<a name="line227"></a>  });
+<a name="line228"></a>  var expected = [0, 1, 4, 9];
+<a name="line229"></a>  delete expected[1];
+<a name="line230"></a>  delete expected[3];
+<a name="line231"></a>
+<a name="line232"></a>  assertArrayEquals(expected, result);
+<a name="line233"></a>  assertFalse(&#39;1&#39; in result);
+<a name="line234"></a>  assertFalse(&#39;3&#39; in result);
+<a name="line235"></a>}
+<a name="line236"></a>
+<a name="line237"></a>function testArrayReduce() {
+<a name="line238"></a>  var a = [0, 1, 2, 3];
+<a name="line239"></a>  assertEquals(6, goog.array.reduce(a, function(rval, val, i, arr) {
+<a name="line240"></a>    assertEquals(&#39;number&#39;, typeof i);
+<a name="line241"></a>    assertEquals(a, arr);
+<a name="line242"></a>    return rval + val;
+<a name="line243"></a>  }, 0));
+<a name="line244"></a>
+<a name="line245"></a>  var scope = {
+<a name="line246"></a>    last: 0,
+<a name="line247"></a>    testFn: function(r, v, i, arr) {
+<a name="line248"></a>      assertEquals(&#39;number&#39;, typeof i);
+<a name="line249"></a>      assertEquals(a, arr);
+<a name="line250"></a>      var l = this.last;
+<a name="line251"></a>      this.last = r + v;
+<a name="line252"></a>      return this.last + l;
+<a name="line253"></a>    }
+<a name="line254"></a>  };
+<a name="line255"></a>
+<a name="line256"></a>  assertEquals(10, goog.array.reduce(a, scope.testFn, 0, scope));
+<a name="line257"></a>}
+<a name="line258"></a>
+<a name="line259"></a>function testArrayReduceOmitDeleted() {
+<a name="line260"></a>  var a = [0, 1, 2, 3];
+<a name="line261"></a>  delete a[1];
+<a name="line262"></a>  delete a[3];
+<a name="line263"></a>  assertEquals(2, goog.array.reduce(a, function(rval, val, i, arr) {
+<a name="line264"></a>    assertEquals(&#39;number&#39;, typeof i);
+<a name="line265"></a>    assertEquals(a, arr);
+<a name="line266"></a>    return rval + val;
+<a name="line267"></a>  }, 0));
+<a name="line268"></a>
+<a name="line269"></a>  var scope = {
+<a name="line270"></a>    last: 0,
+<a name="line271"></a>    testFn: function(r, v, i, arr) {
+<a name="line272"></a>      assertEquals(&#39;number&#39;, typeof i);
+<a name="line273"></a>      assertEquals(a, arr);
+<a name="line274"></a>      var l = this.last;
+<a name="line275"></a>      this.last = r + v;
+<a name="line276"></a>      return this.last + l;
+<a name="line277"></a>    }
+<a name="line278"></a>  };
+<a name="line279"></a>
+<a name="line280"></a>  assertEquals(2, goog.array.reduce(a, scope.testFn, 0, scope));
+<a name="line281"></a>}
+<a name="line282"></a>
+<a name="line283"></a>function testArrayReduceRight() {
+<a name="line284"></a>  var a = [0, 1, 2, 3, 4];
+<a name="line285"></a>  assertEquals(&#39;43210&#39;, goog.array.reduceRight(a, function(rval, val, i, arr) {
+<a name="line286"></a>    assertEquals(&#39;number&#39;, typeof i);
+<a name="line287"></a>    assertEquals(a, arr);
+<a name="line288"></a>    return rval + val;
+<a name="line289"></a>  }, &#39;&#39;));
+<a name="line290"></a>
+<a name="line291"></a>  var scope = {
+<a name="line292"></a>    last: &#39;&#39;,
+<a name="line293"></a>    testFn: function(r, v, i, arr) {
+<a name="line294"></a>      assertEquals(&#39;number&#39;, typeof i);
+<a name="line295"></a>      assertEquals(a, arr);
+<a name="line296"></a>      var l = this.last;
+<a name="line297"></a>      this.last = v;
+<a name="line298"></a>      return r + v + l;
+<a name="line299"></a>    }
+<a name="line300"></a>  };
+<a name="line301"></a>
+<a name="line302"></a>  a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;];
+<a name="line303"></a>  assertEquals(&#39;_cbcab&#39;, goog.array.reduceRight(a, scope.testFn, &#39;_&#39;, scope));
+<a name="line304"></a>}
+<a name="line305"></a>
+<a name="line306"></a>function testArrayReduceRightOmitsDeleted() {
+<a name="line307"></a>  var a = [0, 1, 2, 3, 4];
+<a name="line308"></a>  delete a[1];
+<a name="line309"></a>  delete a[4];
+<a name="line310"></a>  assertEquals(&#39;320&#39;, goog.array.reduceRight(a, function(rval, val, i, arr) {
+<a name="line311"></a>    assertEquals(&#39;number&#39;, typeof i);
+<a name="line312"></a>    assertEquals(a, arr);
+<a name="line313"></a>    return rval + val;
+<a name="line314"></a>  }, &#39;&#39;));
+<a name="line315"></a>
+<a name="line316"></a>  scope = {
+<a name="line317"></a>    last: &#39;&#39;,
+<a name="line318"></a>    testFn: function(r, v, i, arr) {
+<a name="line319"></a>      assertEquals(&#39;number&#39;, typeof i);
+<a name="line320"></a>      assertEquals(a, arr);
+<a name="line321"></a>      var l = this.last;
+<a name="line322"></a>      this.last = v;
+<a name="line323"></a>      return r + v + l;
+<a name="line324"></a>    }
+<a name="line325"></a>  };
+<a name="line326"></a>
+<a name="line327"></a>  a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line328"></a>  delete a[1];
+<a name="line329"></a>  delete a[3];
+<a name="line330"></a>  assertEquals(&#39;_cac&#39;, goog.array.reduceRight(a, scope.testFn, &#39;_&#39;, scope));
+<a name="line331"></a>}
+<a name="line332"></a>
+<a name="line333"></a>function testArrayFind() {
+<a name="line334"></a>  var a = [0, 1, 2, 3];
+<a name="line335"></a>  var b = goog.array.find(a, function(val, index, a2) {
+<a name="line336"></a>    assertEquals(a, a2);
+<a name="line337"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line338"></a>    return val &gt; 1;
+<a name="line339"></a>  });
+<a name="line340"></a>  assertEquals(2, b);
+<a name="line341"></a>
+<a name="line342"></a>  b = goog.array.find(a, function(val, index, a2) {
+<a name="line343"></a>    assertEquals(a, a2);
+<a name="line344"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line345"></a>    return val &gt; 100;
+<a name="line346"></a>  });
+<a name="line347"></a>  assertNull(b);
+<a name="line348"></a>
+<a name="line349"></a>  a = &#39;abCD&#39;;
+<a name="line350"></a>  b = goog.array.find(a, function(val, index, a2) {
+<a name="line351"></a>    assertEquals(a, a2);
+<a name="line352"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line353"></a>    return val &gt;= &#39;A&#39; &amp;&amp; val &lt;= &#39;Z&#39;;
+<a name="line354"></a>  });
+<a name="line355"></a>  assertEquals(&#39;C&#39;, b);
+<a name="line356"></a>
+<a name="line357"></a>  a = &#39;abcd&#39;;
+<a name="line358"></a>  b = goog.array.find(a, function(val, index, a2) {
+<a name="line359"></a>    assertEquals(a, a2);
+<a name="line360"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line361"></a>    return val &gt;= &#39;A&#39; &amp;&amp; val &lt;= &#39;Z&#39;;
+<a name="line362"></a>  });
+<a name="line363"></a>  assertNull(b);
+<a name="line364"></a>}
+<a name="line365"></a>
+<a name="line366"></a>function testArrayFindOmitsDeleted() {
+<a name="line367"></a>  var a = [0, 1, 2, 3];
+<a name="line368"></a>  delete a[1];
+<a name="line369"></a>  delete a[3];
+<a name="line370"></a>  var b = goog.array.find(a, function(val, index, a2) {
+<a name="line371"></a>    assertEquals(a, a2);
+<a name="line372"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line373"></a>    return val &gt; 1;
+<a name="line374"></a>  });
+<a name="line375"></a>
+<a name="line376"></a>  assertEquals(2, b);
+<a name="line377"></a>  b = goog.array.find(a, function(val, index, a2) {
+<a name="line378"></a>    assertEquals(a, a2);
+<a name="line379"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line380"></a>    return val &gt; 100;
+<a name="line381"></a>  });
+<a name="line382"></a>  assertNull(b);
+<a name="line383"></a>}
+<a name="line384"></a>
+<a name="line385"></a>function testArrayFindIndex() {
+<a name="line386"></a>  var a = [0, 1, 2, 3];
+<a name="line387"></a>  var b = goog.array.findIndex(a, function(val, index, a2) {
+<a name="line388"></a>    assertEquals(a, a2);
+<a name="line389"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line390"></a>    return val &gt; 1;
+<a name="line391"></a>  });
+<a name="line392"></a>  assertEquals(2, b);
+<a name="line393"></a>
+<a name="line394"></a>  b = goog.array.findIndex(a, function(val, index, a2) {
+<a name="line395"></a>    assertEquals(a, a2);
+<a name="line396"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line397"></a>    return val &gt; 100;
+<a name="line398"></a>  });
+<a name="line399"></a>  assertEquals(-1, b);
+<a name="line400"></a>
+<a name="line401"></a>  a = &#39;abCD&#39;;
+<a name="line402"></a>  b = goog.array.findIndex(a, function(val, index, a2) {
+<a name="line403"></a>    assertEquals(a, a2);
+<a name="line404"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line405"></a>    return val &gt;= &#39;A&#39; &amp;&amp; val &lt;= &#39;Z&#39;;
+<a name="line406"></a>  });
+<a name="line407"></a>  assertEquals(2, b);
+<a name="line408"></a>
+<a name="line409"></a>  a = &#39;abcd&#39;;
+<a name="line410"></a>  b = goog.array.findIndex(a, function(val, index, a2) {
+<a name="line411"></a>    assertEquals(a, a2);
+<a name="line412"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line413"></a>    return val &gt;= &#39;A&#39; &amp;&amp; val &lt;= &#39;Z&#39;;
+<a name="line414"></a>  });
+<a name="line415"></a>  assertEquals(-1, b);
+<a name="line416"></a>}
+<a name="line417"></a>
+<a name="line418"></a>function testArrayFindIndexOmitsDeleted() {
+<a name="line419"></a>  var a = [0, 1, 2, 3];
+<a name="line420"></a>  delete a[1];
+<a name="line421"></a>  delete a[3];
+<a name="line422"></a>  var b = goog.array.findIndex(a, function(val, index, a2) {
+<a name="line423"></a>    assertEquals(a, a2);
+<a name="line424"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line425"></a>    return val &gt; 1;
+<a name="line426"></a>  });
+<a name="line427"></a>  assertEquals(2, b);
+<a name="line428"></a>
+<a name="line429"></a>  b = goog.array.findIndex(a, function(val, index, a2) {
+<a name="line430"></a>    assertEquals(a, a2);
+<a name="line431"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line432"></a>    return val &gt; 100;
+<a name="line433"></a>  });
+<a name="line434"></a>  assertEquals(-1, b);
+<a name="line435"></a>}
+<a name="line436"></a>
+<a name="line437"></a>function testArrayFindRight() {
+<a name="line438"></a>  var a = [0, 1, 2, 3];
+<a name="line439"></a>  var b = goog.array.findRight(a, function(val, index, a2) {
+<a name="line440"></a>    assertEquals(a, a2);
+<a name="line441"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line442"></a>    return val &lt; 3;
+<a name="line443"></a>  });
+<a name="line444"></a>  assertEquals(2, b);
+<a name="line445"></a>  b = goog.array.findRight(a, function(val, index, a2) {
+<a name="line446"></a>    assertEquals(a, a2);
+<a name="line447"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line448"></a>    return val &gt; 100;
+<a name="line449"></a>  });
+<a name="line450"></a>  assertNull(b);
+<a name="line451"></a>}
+<a name="line452"></a>
+<a name="line453"></a>function testArrayFindRightOmitsDeleted() {
+<a name="line454"></a>  var a = [0, 1, 2, 3];
+<a name="line455"></a>  delete a[1];
+<a name="line456"></a>  delete a[3];
+<a name="line457"></a>  var b = goog.array.findRight(a, function(val, index, a2) {
+<a name="line458"></a>    assertEquals(a, a2);
+<a name="line459"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line460"></a>    return val &lt; 3;
+<a name="line461"></a>  });
+<a name="line462"></a>  assertEquals(2, b);
+<a name="line463"></a>  b = goog.array.findRight(a, function(val, index, a2) {
+<a name="line464"></a>    assertEquals(a, a2);
+<a name="line465"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line466"></a>    return val &gt; 100;
+<a name="line467"></a>  });
+<a name="line468"></a>  assertNull(b);
+<a name="line469"></a>}
+<a name="line470"></a>
+<a name="line471"></a>function testArrayFindIndexRight() {
+<a name="line472"></a>  var a = [0, 1, 2, 3];
+<a name="line473"></a>  var b = goog.array.findIndexRight(a, function(val, index, a2) {
+<a name="line474"></a>    assertEquals(a, a2);
+<a name="line475"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line476"></a>    return val &lt; 3;
+<a name="line477"></a>  });
+<a name="line478"></a>  assertEquals(2, b);
+<a name="line479"></a>
+<a name="line480"></a>  b = goog.array.findIndexRight(a, function(val, index, a2) {
+<a name="line481"></a>    assertEquals(a, a2);
+<a name="line482"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line483"></a>    return val &gt; 100;
+<a name="line484"></a>  });
+<a name="line485"></a>  assertEquals(-1, b);
+<a name="line486"></a>
+<a name="line487"></a>  a = &#39;abCD&#39;;
+<a name="line488"></a>  b = goog.array.findIndexRight(a, function(val, index, a2) {
+<a name="line489"></a>    assertEquals(a, a2);
+<a name="line490"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line491"></a>    return val &gt;= &#39;a&#39; &amp;&amp; val &lt;= &#39;z&#39;;
+<a name="line492"></a>  });
+<a name="line493"></a>  assertEquals(1, b);
+<a name="line494"></a>
+<a name="line495"></a>  a = &#39;abcd&#39;;
+<a name="line496"></a>  b = goog.array.findIndexRight(a, function(val, index, a2) {
+<a name="line497"></a>    assertEquals(a, a2);
+<a name="line498"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line499"></a>    return val &gt;= &#39;A&#39; &amp;&amp; val &lt;= &#39;Z&#39;;
+<a name="line500"></a>  });
+<a name="line501"></a>  assertEquals(-1, b);
+<a name="line502"></a>}
+<a name="line503"></a>
+<a name="line504"></a>function testArrayFindIndexRightOmitsDeleted() {
+<a name="line505"></a>  var a = [0, 1, 2, 3];
+<a name="line506"></a>  delete a[1];
+<a name="line507"></a>  delete a[3];
+<a name="line508"></a>  var b = goog.array.findIndexRight(a, function(val, index, a2) {
+<a name="line509"></a>    assertEquals(a, a2);
+<a name="line510"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line511"></a>    return val &lt; 3;
+<a name="line512"></a>  });
+<a name="line513"></a>  assertEquals(2, b);
+<a name="line514"></a>  b = goog.array.findIndexRight(a, function(val, index, a2) {
+<a name="line515"></a>    assertEquals(a, a2);
+<a name="line516"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line517"></a>    return val &gt; 100;
+<a name="line518"></a>  });
+<a name="line519"></a>  assertEquals(-1, b);
+<a name="line520"></a>}
+<a name="line521"></a>
+<a name="line522"></a>function testArraySome() {
+<a name="line523"></a>  var a = [0, 1, 2, 3];
+<a name="line524"></a>  var b = goog.array.some(a, function(val, index, a2) {
+<a name="line525"></a>    assertEquals(a, a2);
+<a name="line526"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line527"></a>    return val &gt; 1;
+<a name="line528"></a>  });
+<a name="line529"></a>  assertTrue(b);
+<a name="line530"></a>  b = goog.array.some(a, function(val, index, a2) {
+<a name="line531"></a>    assertEquals(a, a2);
+<a name="line532"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line533"></a>    return val &gt; 100;
+<a name="line534"></a>  });
+<a name="line535"></a>  assertFalse(b);
+<a name="line536"></a>}
+<a name="line537"></a>
+<a name="line538"></a>function testArraySomeOmitsDeleted() {
+<a name="line539"></a>  var a = [0, 1, 2, 3];
+<a name="line540"></a>  delete a[1];
+<a name="line541"></a>  delete a[3];
+<a name="line542"></a>  var b = goog.array.some(a, function(val, index, a2) {
+<a name="line543"></a>    assertEquals(a, a2);
+<a name="line544"></a>    assertEquals(&#39;number&#39;, typeof val);
+<a name="line545"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line546"></a>    return val &gt; 1;
+<a name="line547"></a>  });
+<a name="line548"></a>  assertTrue(b);
+<a name="line549"></a>  b = goog.array.some(a, function(val, index, a2) {
+<a name="line550"></a>    assertEquals(a, a2);
+<a name="line551"></a>    assertEquals(&#39;number&#39;, typeof val);
+<a name="line552"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line553"></a>    return val &gt; 100;
+<a name="line554"></a>  });
+<a name="line555"></a>  assertFalse(b);
+<a name="line556"></a>}
+<a name="line557"></a>
+<a name="line558"></a>function testArrayEvery() {
+<a name="line559"></a>  var a = [0, 1, 2, 3];
+<a name="line560"></a>  var b = goog.array.every(a, function(val, index, a2) {
+<a name="line561"></a>    assertEquals(a, a2);
+<a name="line562"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line563"></a>    return val &gt;= 0;
+<a name="line564"></a>  });
+<a name="line565"></a>  assertTrue(b);
+<a name="line566"></a>  b = goog.array.every(a, function(val, index, a2) {
+<a name="line567"></a>    assertEquals(a, a2);
+<a name="line568"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line569"></a>    return val &gt; 1;
+<a name="line570"></a>  });
+<a name="line571"></a>  assertFalse(b);
+<a name="line572"></a>}
+<a name="line573"></a>
+<a name="line574"></a>function testArrayEveryOmitsDeleted() {
+<a name="line575"></a>  var a = [0, 1, 2, 3];
+<a name="line576"></a>  delete a[1];
+<a name="line577"></a>  delete a[3];
+<a name="line578"></a>  var b = goog.array.every(a, function(val, index, a2) {
+<a name="line579"></a>    assertEquals(a, a2);
+<a name="line580"></a>    assertEquals(&#39;number&#39;, typeof val);
+<a name="line581"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line582"></a>    return val &gt;= 0;
+<a name="line583"></a>  });
+<a name="line584"></a>  assertTrue(b);
+<a name="line585"></a>  b = goog.array.every(a, function(val, index, a2) {
+<a name="line586"></a>    assertEquals(a, a2);
+<a name="line587"></a>    assertEquals(&#39;number&#39;, typeof val);
+<a name="line588"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line589"></a>    return val &gt; 1;
+<a name="line590"></a>  });
+<a name="line591"></a>  assertFalse(b);
+<a name="line592"></a>}
+<a name="line593"></a>
+<a name="line594"></a>function testArrayCount() {
+<a name="line595"></a>  var a = [0, 1, 2, 3, 4];
+<a name="line596"></a>  var context = {};
+<a name="line597"></a>  assertEquals(3, goog.array.count(a, function(element, index, array) {
+<a name="line598"></a>    assertTrue(goog.isNumber(index));
+<a name="line599"></a>    assertEquals(a, array);
+<a name="line600"></a>    assertEquals(context, this);
+<a name="line601"></a>    return element % 2 == 0;
+<a name="line602"></a>  }, context));
+<a name="line603"></a>
+<a name="line604"></a>  delete a[2];
+<a name="line605"></a>  assertEquals(&#39;deleted element is ignored&#39;, 4,
+<a name="line606"></a>      goog.array.count(a, function() {
+<a name="line607"></a>        return true;
+<a name="line608"></a>      }));
+<a name="line609"></a>}
+<a name="line610"></a>
+<a name="line611"></a>function testArrayContains() {
+<a name="line612"></a>  var a = [0, 1, 2, 3];
+<a name="line613"></a>  assertTrue(&#39;contain, Should contain 3&#39;, goog.array.contains(a, 3));
+<a name="line614"></a>  assertFalse(&#39;contain, Should not contain 4&#39;, goog.array.contains(a, 4));
+<a name="line615"></a>
+<a name="line616"></a>  var s = &#39;abcd&#39;;
+<a name="line617"></a>  assertTrue(&#39;contain, Should contain d&#39;, goog.array.contains(s, &#39;d&#39;));
+<a name="line618"></a>  assertFalse(&#39;contain, Should not contain e&#39;, goog.array.contains(s, &#39;e&#39;));
+<a name="line619"></a>}
+<a name="line620"></a>
+<a name="line621"></a>function testArrayContainsOmitsDeleted() {
+<a name="line622"></a>  var a = [0, 1, 2, 3];
+<a name="line623"></a>  delete a[1];
+<a name="line624"></a>  delete a[3];
+<a name="line625"></a>  assertFalse(&#39;should not contain undefined&#39;,
+<a name="line626"></a>      goog.array.contains(a, undefined));
+<a name="line627"></a>}
+<a name="line628"></a>
+<a name="line629"></a>function testArrayInsert() {
+<a name="line630"></a>  var a = [0, 1, 2, 3];
+<a name="line631"></a>
+<a name="line632"></a>  goog.array.insert(a, 4);
+<a name="line633"></a>  assertEquals(&#39;insert, Should append 4&#39;, a[4], 4);
+<a name="line634"></a>  goog.array.insert(a, 3);
+<a name="line635"></a>  assertEquals(&#39;insert, Should not append 3&#39;, a.length, 5);
+<a name="line636"></a>  assertNotEquals(&#39;insert, Should not append 3&#39;, a[a.length - 1], 3);
+<a name="line637"></a>}
+<a name="line638"></a>
+<a name="line639"></a>function testArrayInsertAt() {
+<a name="line640"></a>  var a = [0, 1, 2, 3];
+<a name="line641"></a>
+<a name="line642"></a>  goog.array.insertAt(a, 4, 2);
+<a name="line643"></a>  assertArrayEquals(&#39;insertAt, insert in middle&#39;, [0, 1, 4, 2, 3], a);
+<a name="line644"></a>  goog.array.insertAt(a, 5, 10);
+<a name="line645"></a>  assertArrayEquals(&#39;insertAt, too large value should append&#39;,
+<a name="line646"></a>                    [0, 1, 4, 2, 3, 5], a);
+<a name="line647"></a>  goog.array.insertAt(a, 6);
+<a name="line648"></a>  assertArrayEquals(&#39;insertAt, null/undefined value should insert at 0&#39;,
+<a name="line649"></a>                    [6, 0, 1, 4, 2, 3, 5], a);
+<a name="line650"></a>  goog.array.insertAt(a, 7, -2);
+<a name="line651"></a>  assertArrayEquals(&#39;insertAt, negative values start from end&#39;,
+<a name="line652"></a>                    [6, 0, 1, 4, 2, 7, 3, 5], a);
+<a name="line653"></a>}
+<a name="line654"></a>
+<a name="line655"></a>function testArrayInsertArrayAt() {
+<a name="line656"></a>  var a = [2, 5];
+<a name="line657"></a>  goog.array.insertArrayAt(a, [3, 4], 1);
+<a name="line658"></a>  assertArrayEquals(&#39;insertArrayAt, insert in middle&#39;, [2, 3, 4, 5], a);
+<a name="line659"></a>  goog.array.insertArrayAt(a, [0, 1], 0);
+<a name="line660"></a>  assertArrayEquals(&#39;insertArrayAt, insert at beginning&#39;,
+<a name="line661"></a>                    [0, 1, 2, 3, 4, 5], a);
+<a name="line662"></a>  goog.array.insertArrayAt(a, [6, 7], 6);
+<a name="line663"></a>  assertArrayEquals(&#39;insertArrayAt, insert at end&#39;,
+<a name="line664"></a>                    [0, 1, 2, 3, 4, 5, 6, 7], a);
+<a name="line665"></a>  goog.array.insertArrayAt(a, [&#39;x&#39;], 4);
+<a name="line666"></a>  assertArrayEquals(&#39;insertArrayAt, insert one element&#39;,
+<a name="line667"></a>                    [0, 1, 2, 3, &#39;x&#39;, 4, 5, 6, 7], a);
+<a name="line668"></a>  goog.array.insertArrayAt(a, [], 4);
+<a name="line669"></a>  assertArrayEquals(&#39;insertArrayAt, insert 0 elements&#39;,
+<a name="line670"></a>                    [0, 1, 2, 3, &#39;x&#39;, 4, 5, 6, 7], a);
+<a name="line671"></a>  goog.array.insertArrayAt(a, [&#39;y&#39;, &#39;z&#39;]);
+<a name="line672"></a>  assertArrayEquals(&#39;insertArrayAt, undefined value should insert at 0&#39;,
+<a name="line673"></a>      [&#39;y&#39;, &#39;z&#39;, 0, 1, 2, 3, &#39;x&#39;, 4, 5, 6, 7], a);
+<a name="line674"></a>  goog.array.insertArrayAt(a, [&#39;a&#39;], null);
+<a name="line675"></a>  assertArrayEquals(&#39;insertArrayAt, null value should insert at 0&#39;,
+<a name="line676"></a>      [&#39;a&#39;, &#39;y&#39;, &#39;z&#39;, 0, 1, 2, 3, &#39;x&#39;, 4, 5, 6, 7], a);
+<a name="line677"></a>  goog.array.insertArrayAt(a, [&#39;b&#39;], 100);
+<a name="line678"></a>  assertArrayEquals(&#39;insertArrayAt, too large value should append&#39;,
+<a name="line679"></a>      [&#39;a&#39;, &#39;y&#39;, &#39;z&#39;, 0, 1, 2, 3, &#39;x&#39;, 4, 5, 6, 7, &#39;b&#39;], a);
+<a name="line680"></a>  goog.array.insertArrayAt(a, [&#39;c&#39;, &#39;d&#39;], -2);
+<a name="line681"></a>  assertArrayEquals(&#39;insertArrayAt, negative values start from end&#39;,
+<a name="line682"></a>      [&#39;a&#39;, &#39;y&#39;, &#39;z&#39;, 0, 1, 2, 3, &#39;x&#39;, 4, 5, 6, &#39;c&#39;, &#39;d&#39;, 7, &#39;b&#39;], a);
+<a name="line683"></a>}
+<a name="line684"></a>
+<a name="line685"></a>function testArrayInsertBefore() {
+<a name="line686"></a>  var a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line687"></a>  goog.array.insertBefore(a, &#39;e&#39;, &#39;b&#39;);
+<a name="line688"></a>  assertArrayEquals(&#39;insertBefore, with existing element&#39;,
+<a name="line689"></a>                    [&#39;a&#39;, &#39;e&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;], a);
+<a name="line690"></a>  goog.array.insertBefore(a, &#39;f&#39;, &#39;x&#39;);
+<a name="line691"></a>  assertArrayEquals(&#39;insertBefore, with non existing element&#39;,
+<a name="line692"></a>                    [&#39;a&#39;, &#39;e&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;f&#39;], a);
+<a name="line693"></a>}
+<a name="line694"></a>
+<a name="line695"></a>function testArrayRemove() {
+<a name="line696"></a>  var a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;];
+<a name="line697"></a>  goog.array.remove(a, &#39;c&#39;);
+<a name="line698"></a>  assertArrayEquals(&#39;remove, remove existing element&#39;, [&#39;a&#39;, &#39;b&#39;, &#39;d&#39;], a);
+<a name="line699"></a>  goog.array.remove(a, &#39;x&#39;);
+<a name="line700"></a>  assertArrayEquals(&#39;remove, remove non existing element&#39;, [&#39;a&#39;, &#39;b&#39;, &#39;d&#39;], a);
+<a name="line701"></a>}
+<a name="line702"></a>
+<a name="line703"></a>function testArrayRemoveAt() {
+<a name="line704"></a>  var a = [0, 1, 2, 3];
+<a name="line705"></a>  goog.array.removeAt(a, 2);
+<a name="line706"></a>  assertArrayEquals(&#39;removeAt, remove existing index&#39;, [0, 1, 3], a);
+<a name="line707"></a>  a = [0, 1, 2, 3];
+<a name="line708"></a>  goog.array.removeAt(a, 10);
+<a name="line709"></a>  assertArrayEquals(&#39;removeAt, remove non existing index&#39;, [0, 1, 2, 3], a);
+<a name="line710"></a>  a = [0, 1, 2, 3];
+<a name="line711"></a>  goog.array.removeAt(a, -2);
+<a name="line712"></a>  assertArrayEquals(&#39;removeAt, remove with negative index&#39;, [0, 1, 3], a);
+<a name="line713"></a>}
+<a name="line714"></a>
+<a name="line715"></a>function testArrayRemoveIf() {
+<a name="line716"></a>  var a = [0, 1, 2, 3];
+<a name="line717"></a>  var b = goog.array.removeIf(a, function(val, index, a2) {
+<a name="line718"></a>    assertEquals(a, a2);
+<a name="line719"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line720"></a>    return val &gt; 1;
+<a name="line721"></a>  });
+<a name="line722"></a>  assertArrayEquals(&#39;removeIf, remove existing element&#39;, [0, 1, 3], a);
+<a name="line723"></a>
+<a name="line724"></a>  a = [0, 1, 2, 3];
+<a name="line725"></a>  var b = goog.array.removeIf(a, function(val, index, a2) {
+<a name="line726"></a>    assertEquals(a, a2);
+<a name="line727"></a>    assertEquals(&#39;index is not a number&#39;, &#39;number&#39;, typeof index);
+<a name="line728"></a>    return val &gt; 100;
+<a name="line729"></a>  });
+<a name="line730"></a>  assertArrayEquals(&#39;removeIf, remove non-existing element&#39;, [0, 1, 2, 3], a);
+<a name="line731"></a>}
+<a name="line732"></a>
+<a name="line733"></a>function testArrayClone() {
+<a name="line734"></a>  var a = [0, 1, 2, 3];
+<a name="line735"></a>  var a2 = goog.array.clone(a);
+<a name="line736"></a>  assertArrayEquals(&#39;clone, should be equal&#39;, a, a2);
+<a name="line737"></a>
+<a name="line738"></a>  var b = {0: 0, 1: 1, 2: 2, 3: 3, length: 4};
+<a name="line739"></a>  var b2 = goog.array.clone(b);
+<a name="line740"></a>  for (var i = 0; i &lt; b.length; i++) {
+<a name="line741"></a>    assertEquals(&#39;clone, should be equal&#39;, b[i], b2[i]);
+<a name="line742"></a>  }
+<a name="line743"></a>}
+<a name="line744"></a>
+<a name="line745"></a>function testToArray() {
+<a name="line746"></a>  var a = [0, 1, 2, 3];
+<a name="line747"></a>  var a2 = goog.array.toArray(a);
+<a name="line748"></a>  assertArrayEquals(&#39;toArray, should be equal&#39;, a, a2);
+<a name="line749"></a>
+<a name="line750"></a>  var b = {0: 0, 1: 1, 2: 2, 3: 3, length: 4};
+<a name="line751"></a>  var b2 = goog.array.toArray(b);
+<a name="line752"></a>  for (var i = 0; i &lt; b.length; i++) {
+<a name="line753"></a>    assertEquals(&#39;toArray, should be equal&#39;, b[i], b2[i]);
+<a name="line754"></a>  }
+<a name="line755"></a>}
+<a name="line756"></a>
+<a name="line757"></a>function testToArrayOnNonArrayLike() {
+<a name="line758"></a>  var nonArrayLike = {};
+<a name="line759"></a>  assertArrayEquals(&#39;toArray on non ArrayLike should return an empty array&#39;,
+<a name="line760"></a>                    [], goog.array.toArray(nonArrayLike));
+<a name="line761"></a>
+<a name="line762"></a>  var nonArrayLike2 = {length: &#39;hello world&#39;};
+<a name="line763"></a>  assertArrayEquals(&#39;toArray on non ArrayLike should return an empty array&#39;,
+<a name="line764"></a>                    [], goog.array.toArray(nonArrayLike2));
+<a name="line765"></a>}
+<a name="line766"></a>
+<a name="line767"></a>function testExtend() {
+<a name="line768"></a>  var a = [0, 1];
+<a name="line769"></a>  goog.array.extend(a, [2, 3]);
+<a name="line770"></a>  var a2 = [0, 1, 2, 3];
+<a name="line771"></a>  assertArrayEquals(&#39;extend, should be equal&#39;, a, a2);
+<a name="line772"></a>
+<a name="line773"></a>  var b = [0, 1];
+<a name="line774"></a>  goog.array.extend(b, 2);
+<a name="line775"></a>  var b2 = [0, 1, 2];
+<a name="line776"></a>  assertArrayEquals(&#39;extend, should be equal&#39;, b, b2);
+<a name="line777"></a>
+<a name="line778"></a>  a = [0, 1];
+<a name="line779"></a>  goog.array.extend(a, [2, 3], [4, 5]);
+<a name="line780"></a>  a2 = [0, 1, 2, 3, 4, 5];
+<a name="line781"></a>  assertArrayEquals(&#39;extend, should be equal&#39;, a, a2);
+<a name="line782"></a>
+<a name="line783"></a>  b = [0, 1];
+<a name="line784"></a>  goog.array.extend(b, 2, 3);
+<a name="line785"></a>  b2 = [0, 1, 2, 3];
+<a name="line786"></a>  assertArrayEquals(&#39;extend, should be equal&#39;, b, b2);
+<a name="line787"></a>
+<a name="line788"></a>  var c = [0, 1];
+<a name="line789"></a>  goog.array.extend(c, 2, [3, 4], 5, [6]);
+<a name="line790"></a>  var c2 = [0, 1, 2, 3, 4, 5, 6];
+<a name="line791"></a>  assertArrayEquals(&#39;extend, should be equal&#39;, c, c2);
+<a name="line792"></a>
+<a name="line793"></a>  var d = [0, 1];
+<a name="line794"></a>  var arrayLikeObject = {0: 2, 1: 3, length: 2};
+<a name="line795"></a>  goog.array.extend(d, arrayLikeObject);
+<a name="line796"></a>  var d2 = [0, 1, 2, 3];
+<a name="line797"></a>  assertArrayEquals(&#39;extend, should be equal&#39;, d, d2);
+<a name="line798"></a>
+<a name="line799"></a>  var e = [0, 1];
+<a name="line800"></a>  var emptyArrayLikeObject = {length: 0};
+<a name="line801"></a>  goog.array.extend(e, emptyArrayLikeObject);
+<a name="line802"></a>  assertArrayEquals(&#39;extend, should be equal&#39;, e, e);
+<a name="line803"></a>
+<a name="line804"></a>  var f = [0, 1];
+<a name="line805"></a>  var length3ArrayLikeObject = {0: 2, 1: 4, 2: 8, length: 3};
+<a name="line806"></a>  goog.array.extend(f, length3ArrayLikeObject, length3ArrayLikeObject);
+<a name="line807"></a>  var f2 = [0, 1, 2, 4, 8, 2, 4, 8];
+<a name="line808"></a>  assertArrayEquals(&#39;extend, should be equal&#39;, f2, f);
+<a name="line809"></a>}
+<a name="line810"></a>
+<a name="line811"></a>function testExtendWithArguments() {
+<a name="line812"></a>  function f() {
+<a name="line813"></a>    return arguments;
+<a name="line814"></a>  }
+<a name="line815"></a>  var a = [0];
+<a name="line816"></a>  var a2 = [0, 1, 2, 3, 4, 5];
+<a name="line817"></a>  goog.array.extend(a, f(1, 2, 3), f(4, 5));
+<a name="line818"></a>  assertArrayEquals(&#39;extend, should be equal&#39;, a, a2);
+<a name="line819"></a>}
+<a name="line820"></a>
+<a name="line821"></a>function testExtendWithQuerySelector() {
+<a name="line822"></a>  var a = [0];
+<a name="line823"></a>  var d = goog.dom.getElementsByTagNameAndClass(&#39;div&#39;, &#39;foo&#39;);
+<a name="line824"></a>  goog.array.extend(a, d);
+<a name="line825"></a>  assertEquals(2, a.length);
+<a name="line826"></a>}
+<a name="line827"></a>
+<a name="line828"></a>function testArraySplice() {
+<a name="line829"></a>  var a = [0, 1, 2, 3];
+<a name="line830"></a>  goog.array.splice(a, 1, 0, 4);
+<a name="line831"></a>  assertArrayEquals([0, 4, 1, 2, 3], a);
+<a name="line832"></a>  goog.array.splice(a, 1, 1, 5);
+<a name="line833"></a>  assertArrayEquals([0, 5, 1, 2, 3], a);
+<a name="line834"></a>  goog.array.splice(a, 1, 1);
+<a name="line835"></a>  assertArrayEquals([0, 1, 2, 3], a);
+<a name="line836"></a>  // var args
+<a name="line837"></a>  goog.array.splice(a, 1, 1, 4, 5, 6);
+<a name="line838"></a>  assertArrayEquals([0, 4, 5, 6, 2, 3], a);
+<a name="line839"></a>}
+<a name="line840"></a>
+<a name="line841"></a>function testArraySlice() {
+<a name="line842"></a>  var a = [0, 1, 2, 3];
+<a name="line843"></a>  a = goog.array.slice(a, 1, 3);
+<a name="line844"></a>  assertArrayEquals([1, 2], a);
+<a name="line845"></a>  a = [0, 1, 2, 3];
+<a name="line846"></a>  a = goog.array.slice(a, 1, 6);
+<a name="line847"></a>  assertArrayEquals(&#39;slice, with too large end&#39;, [1, 2, 3], a);
+<a name="line848"></a>  a = [0, 1, 2, 3];
+<a name="line849"></a>  a = goog.array.slice(a, 1, -1);
+<a name="line850"></a>  assertArrayEquals(&#39;slice, with negative end&#39;, [1, 2], a);
+<a name="line851"></a>  a = [0, 1, 2, 3];
+<a name="line852"></a>  a = goog.array.slice(a, -2, 3);
+<a name="line853"></a>  assertArrayEquals(&#39;slice, with negative start&#39;, [2], a);
+<a name="line854"></a>}
+<a name="line855"></a>
+<a name="line856"></a>function assertRemovedDuplicates(expected, original) {
+<a name="line857"></a>  var tempArr = goog.array.clone(original);
+<a name="line858"></a>  goog.array.removeDuplicates(tempArr);
+<a name="line859"></a>  assertArrayEquals(expected, tempArr);
+<a name="line860"></a>}
+<a name="line861"></a>
+<a name="line862"></a>function testRemoveDuplicates() {
+<a name="line863"></a>  assertRemovedDuplicates([1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6]);
+<a name="line864"></a>  assertRemovedDuplicates([9, 4, 2, 1, 3, 6, 0, -9],
+<a name="line865"></a>                          [9, 4, 2, 4, 4, 2, 9, 1, 3, 6, 0, -9]);
+<a name="line866"></a>  assertRemovedDuplicates([&#39;four&#39;, &#39;one&#39;, &#39;two&#39;, &#39;three&#39;, &#39;THREE&#39;],
+<a name="line867"></a>      [&#39;four&#39;, &#39;one&#39;, &#39;two&#39;, &#39;one&#39;, &#39;three&#39;, &#39;THREE&#39;, &#39;four&#39;, &#39;two&#39;]);
+<a name="line868"></a>  assertRemovedDuplicates([], []);
+<a name="line869"></a>  assertRemovedDuplicates(
+<a name="line870"></a>      [&#39;abc&#39;, &#39;hasOwnProperty&#39;, &#39;toString&#39;],
+<a name="line871"></a>      [&#39;abc&#39;, &#39;hasOwnProperty&#39;, &#39;toString&#39;, &#39;abc&#39;]);
+<a name="line872"></a>
+<a name="line873"></a>  var o1 = {}, o2 = {}, o3 = {}, o4 = {};
+<a name="line874"></a>  assertRemovedDuplicates([o1, o2, o3, o4], [o1, o1, o2, o3, o2, o4]);
+<a name="line875"></a>
+<a name="line876"></a>  // Mixed object types.
+<a name="line877"></a>  assertRemovedDuplicates([1, &#39;1&#39;, 2, &#39;2&#39;], [1, &#39;1&#39;, 2, &#39;2&#39;]);
+<a name="line878"></a>  assertRemovedDuplicates([true, &#39;true&#39;, false, &#39;false&#39;],
+<a name="line879"></a>                          [true, &#39;true&#39;, false, &#39;false&#39;]);
+<a name="line880"></a>  assertRemovedDuplicates([&#39;foo&#39;], [String(&#39;foo&#39;), &#39;foo&#39;]);
+<a name="line881"></a>  assertRemovedDuplicates([12], [Number(12), 12]);
+<a name="line882"></a>
+<a name="line883"></a>  var obj = {};
+<a name="line884"></a>  var uid = goog.getUid(obj);
+<a name="line885"></a>  assertRemovedDuplicates([obj, uid], [obj, uid]);
+<a name="line886"></a>}
+<a name="line887"></a>
+<a name="line888"></a>function testRemoveDuplicates_customHashFn() {
+<a name="line889"></a>  var object1 = {key: &#39;foo&#39;};
+<a name="line890"></a>  var object2 = {key: &#39;bar&#39;};
+<a name="line891"></a>  var dupeObject = {key: &#39;foo&#39;};
+<a name="line892"></a>  var array = [object1, object2, dupeObject, &#39;bar&#39;];
+<a name="line893"></a>  var hashFn = function(object) {
+<a name="line894"></a>    return goog.isObject(object) ? object.key :
+<a name="line895"></a>        (typeof object).charAt(0) + object;
+<a name="line896"></a>  };
+<a name="line897"></a>  goog.array.removeDuplicates(array, /* opt_rv */ undefined, hashFn);
+<a name="line898"></a>  assertArrayEquals([object1, object2, &#39;bar&#39;], array);
+<a name="line899"></a>}
+<a name="line900"></a>
+<a name="line901"></a>function testBinaryInsertRemove() {
+<a name="line902"></a>  var makeChecker = function(array, fn, opt_compareFn) {
+<a name="line903"></a>    return function(value, expectResult, expectArray) {
+<a name="line904"></a>      var result = fn(array, value, opt_compareFn);
+<a name="line905"></a>      assertEquals(expectResult, result);
+<a name="line906"></a>      assertArrayEquals(expectArray, array);
+<a name="line907"></a>    }
+<a name="line908"></a>  };
+<a name="line909"></a>
+<a name="line910"></a>  var a = [];
+<a name="line911"></a>  var check = makeChecker(a, goog.array.binaryInsert);
+<a name="line912"></a>  check(3, true, [3]);
+<a name="line913"></a>  check(3, false, [3]);
+<a name="line914"></a>  check(1, true, [1, 3]);
+<a name="line915"></a>  check(5, true, [1, 3, 5]);
+<a name="line916"></a>  check(2, true, [1, 2, 3, 5]);
+<a name="line917"></a>  check(2, false, [1, 2, 3, 5]);
+<a name="line918"></a>
+<a name="line919"></a>  check = makeChecker(a, goog.array.binaryRemove);
+<a name="line920"></a>  check(0, false, [1, 2, 3, 5]);
+<a name="line921"></a>  check(3, true, [1, 2, 5]);
+<a name="line922"></a>  check(1, true, [2, 5]);
+<a name="line923"></a>  check(5, true, [2]);
+<a name="line924"></a>  check(2, true, []);
+<a name="line925"></a>  check(2, false, []);
+<a name="line926"></a>
+<a name="line927"></a>  // test with custom comparison function, which reverse orders numbers
+<a name="line928"></a>  var revNumCompare = function(a, b) { return b - a; };
+<a name="line929"></a>
+<a name="line930"></a>  check = makeChecker(a, goog.array.binaryInsert, revNumCompare);
+<a name="line931"></a>  check(3, true, [3]);
+<a name="line932"></a>  check(3, false, [3]);
+<a name="line933"></a>  check(1, true, [3, 1]);
+<a name="line934"></a>  check(5, true, [5, 3, 1]);
+<a name="line935"></a>  check(2, true, [5, 3, 2, 1]);
+<a name="line936"></a>  check(2, false, [5, 3, 2, 1]);
+<a name="line937"></a>
+<a name="line938"></a>  check = makeChecker(a, goog.array.binaryRemove, revNumCompare);
+<a name="line939"></a>  check(0, false, [5, 3, 2, 1]);
+<a name="line940"></a>  check(3, true, [5, 2, 1]);
+<a name="line941"></a>  check(1, true, [5, 2]);
+<a name="line942"></a>  check(5, true, [2]);
+<a name="line943"></a>  check(2, true, []);
+<a name="line944"></a>  check(2, false, []);
+<a name="line945"></a>}
+<a name="line946"></a>
+<a name="line947"></a>function testBinarySearch() {
+<a name="line948"></a>  var insertionPoint = function(position) { return -(position + 1)};
+<a name="line949"></a>  var pos;
+<a name="line950"></a>
+<a name="line951"></a>  // test default comparison on array of String(s)
+<a name="line952"></a>  var a = [&#39;1000&#39;, &#39;9&#39;, &#39;AB&#39;, &#39;ABC&#39;, &#39;ABCABC&#39;, &#39;ABD&#39;, &#39;ABDA&#39;, &#39;B&#39;, &#39;B&#39;, &#39;B&#39;,
+<a name="line953"></a>           &#39;C&#39;, &#39;CA&#39;, &#39;CC&#39;, &#39;ZZZ&#39;, &#39;ab&#39;, &#39;abc&#39;, &#39;abcabc&#39;, &#39;abd&#39;, &#39;abda&#39;, &#39;b&#39;,
+<a name="line954"></a>           &#39;c&#39;, &#39;ca&#39;, &#39;cc&#39;, &#39;zzz&#39;];
+<a name="line955"></a>
+<a name="line956"></a>  assertEquals(&#39;\&#39;1000\&#39; should be found at index 0&#39;, 0,
+<a name="line957"></a>               goog.array.binarySearch(a, &#39;1000&#39;));
+<a name="line958"></a>  assertEquals(&#39;\&#39;zzz\&#39; should be found at index &#39; + (a.length - 1),
+<a name="line959"></a>      a.length - 1, goog.array.binarySearch(a, &#39;zzz&#39;));
+<a name="line960"></a>  assertEquals(&#39;\&#39;C\&#39; should be found at index 10&#39;, 10,
+<a name="line961"></a>               goog.array.binarySearch(a, &#39;C&#39;));
+<a name="line962"></a>  pos = goog.array.binarySearch(a, &#39;B&#39;);
+<a name="line963"></a>  assertTrue(&#39;\&#39;B\&#39; should be found at index 7 || 8 || 9&#39;, pos == 7 ||
+<a name="line964"></a>      pos == 8 || pos == 9);
+<a name="line965"></a>  pos = goog.array.binarySearch(a, &#39;100&#39;);
+<a name="line966"></a>  assertTrue(&#39;\&#39;100\&#39; should not be found&#39;, pos &lt; 0);
+<a name="line967"></a>  assertEquals(&#39;\&#39;100\&#39; should have an insertion point of 0&#39;, 0,
+<a name="line968"></a>      insertionPoint(pos));
+<a name="line969"></a>  pos = goog.array.binarySearch(a, &#39;zzz0&#39;);
+<a name="line970"></a>  assertTrue(&#39;\&#39;zzz0\&#39; should not be found&#39;, pos &lt; 0);
+<a name="line971"></a>  assertEquals(&#39;\&#39;zzz0\&#39; should have an insertion point of &#39; + (a.length),
+<a name="line972"></a>      a.length, insertionPoint(pos));
+<a name="line973"></a>  pos = goog.array.binarySearch(a, &#39;BA&#39;);
+<a name="line974"></a>  assertTrue(&#39;\&#39;BA\&#39; should not be found&#39;, pos &lt; 0);
+<a name="line975"></a>  assertEquals(&#39;\&#39;BA\&#39; should have an insertion point of 10&#39;, 10,
+<a name="line976"></a>      insertionPoint(pos));
+<a name="line977"></a>
+<a name="line978"></a>  // test 0 length array with default comparison
+<a name="line979"></a>  var b = [];
+<a name="line980"></a>
+<a name="line981"></a>  pos = goog.array.binarySearch(b, &#39;a&#39;);
+<a name="line982"></a>  assertTrue(&#39;\&#39;a\&#39; should not be found&#39;, pos &lt; 0);
+<a name="line983"></a>  assertEquals(&#39;\&#39;a\&#39; should have an insertion point of 0&#39;, 0,
+<a name="line984"></a>      insertionPoint(pos));
+<a name="line985"></a>
+<a name="line986"></a>  // test single element array with default lexiographical comparison
+<a name="line987"></a>  var c = [&#39;only item&#39;];
+<a name="line988"></a>
+<a name="line989"></a>  assertEquals(&#39;\&#39;only item\&#39; should be found at index 0&#39;, 0,
+<a name="line990"></a>      goog.array.binarySearch(c, &#39;only item&#39;));
+<a name="line991"></a>  pos = goog.array.binarySearch(c, &#39;a&#39;);
+<a name="line992"></a>  assertTrue(&#39;\&#39;a\&#39; should not be found&#39;, pos &lt; 0);
+<a name="line993"></a>  assertEquals(&#39;\&#39;a\&#39; should have an insertion point of 0&#39;, 0,
+<a name="line994"></a>      insertionPoint(pos));
+<a name="line995"></a>  pos = goog.array.binarySearch(c, &#39;z&#39;);
+<a name="line996"></a>  assertTrue(&#39;\&#39;z\&#39; should not be found&#39;, pos &lt; 0);
+<a name="line997"></a>  assertEquals(&#39;\&#39;z\&#39; should have an insertion point of 1&#39;, 1,
+<a name="line998"></a>      insertionPoint(pos));
+<a name="line999"></a>
+<a name="line1000"></a>  // test default comparison on array of Number(s)
+<a name="line1001"></a>  var d = [-897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0, 0, 0,
+<a name="line1002"></a>           0.31255, 5, 142.88888708, 334, 342, 453, 54254];
+<a name="line1003"></a>
+<a name="line1004"></a>  assertEquals(&#39;-897123.9 should be found at index 0&#39;, 0,
+<a name="line1005"></a>      goog.array.binarySearch(d, -897123.9));
+<a name="line1006"></a>  assertEquals(&#39;54254 should be found at index &#39; + (a.length - 1),
+<a name="line1007"></a>      d.length - 1, goog.array.binarySearch(d, 54254));
+<a name="line1008"></a>  assertEquals(
+<a name="line1009"></a>      &#39;-3 should be found at index 5&#39;, 5, goog.array.binarySearch(d, -3));
+<a name="line1010"></a>  pos = goog.array.binarySearch(d, 0);
+<a name="line1011"></a>  assertTrue(&#39;0 should be found at index 6 || 7 || 8&#39;, pos == 6 ||
+<a name="line1012"></a>      pos == 7 || pos == 8);
+<a name="line1013"></a>  pos = goog.array.binarySearch(d, -900000);
+<a name="line1014"></a>  assertTrue(&#39;-900000 should not be found&#39;, pos &lt; 0);
+<a name="line1015"></a>  assertEquals(&#39;-900000 should have an insertion point of 0&#39;, 0,
+<a name="line1016"></a>      insertionPoint(pos));
+<a name="line1017"></a>  pos = goog.array.binarySearch(d, &#39;54255&#39;);
+<a name="line1018"></a>  assertTrue(&#39;54255 should not be found&#39;, pos &lt; 0);
+<a name="line1019"></a>  assertEquals(&#39;54255 should have an insertion point of &#39; + (d.length),
+<a name="line1020"></a>      d.length, insertionPoint(pos));
+<a name="line1021"></a>  pos = goog.array.binarySearch(d, 1.1);
+<a name="line1022"></a>  assertTrue(&#39;1.1 should not be found&#39;, pos &lt; 0);
+<a name="line1023"></a>  assertEquals(&#39;1.1 should have an insertion point of 10&#39;, 10,
+<a name="line1024"></a>      insertionPoint(pos));
+<a name="line1025"></a>
+<a name="line1026"></a>  // test with custom comparison function, which reverse orders numbers
+<a name="line1027"></a>  var revNumCompare = function(a, b) { return b - a; };
+<a name="line1028"></a>
+<a name="line1029"></a>  var e = [54254, 453, 342, 334, 142.88888708, 5, 0.31255, 0, 0, 0, -3,
+<a name="line1030"></a>           -9, -324, -1321.3124, -321434.58758, -897123.9];
+<a name="line1031"></a>
+<a name="line1032"></a>  assertEquals(&#39;54254 should be found at index 0&#39;, 0,
+<a name="line1033"></a>               goog.array.binarySearch(e, 54254, revNumCompare));
+<a name="line1034"></a>  assertEquals(&#39;-897123.9 should be found at index &#39; + (e.length - 1),
+<a name="line1035"></a>      e.length - 1, goog.array.binarySearch(e, -897123.9, revNumCompare));
+<a name="line1036"></a>  assertEquals(&#39;-3 should be found at index 10&#39;, 10,
+<a name="line1037"></a>               goog.array.binarySearch(e, -3, revNumCompare));
+<a name="line1038"></a>  pos = goog.array.binarySearch(e, 0, revNumCompare);
+<a name="line1039"></a>  assertTrue(&#39;0 should be found at index  || 10&#39;, pos == 7 ||
+<a name="line1040"></a>      pos == 9 || pos == 10);
+<a name="line1041"></a>  pos = goog.array.binarySearch(e, 54254.1, revNumCompare);
+<a name="line1042"></a>  assertTrue(&#39;54254.1 should not be found&#39;, pos &lt; 0);
+<a name="line1043"></a>  assertEquals(&#39;54254.1 should have an insertion point of 0&#39;, 0,
+<a name="line1044"></a>      insertionPoint(pos));
+<a name="line1045"></a>  pos = goog.array.binarySearch(e, -897124, revNumCompare);
+<a name="line1046"></a>  assertTrue(&#39;-897124 should not be found&#39;, pos &lt; 0);
+<a name="line1047"></a>  assertEquals(&#39;-897124 should have an insertion point of &#39; + (e.length),
+<a name="line1048"></a>      e.length, insertionPoint(pos));
+<a name="line1049"></a>  pos = goog.array.binarySearch(e, 1.1, revNumCompare);
+<a name="line1050"></a>  assertTrue(&#39;1.1 should not be found&#39;, pos &lt; 0);
+<a name="line1051"></a>  assertEquals(&#39;1.1 should have an insertion point of 6&#39;, 6,
+<a name="line1052"></a>      insertionPoint(pos));
+<a name="line1053"></a>
+<a name="line1054"></a>  // test 0 length array with custom comparison function
+<a name="line1055"></a>  var f = [];
+<a name="line1056"></a>
+<a name="line1057"></a>  pos = goog.array.binarySearch(f, 0, revNumCompare);
+<a name="line1058"></a>  assertTrue(&#39;0 should not be found&#39;, pos &lt; 0);
+<a name="line1059"></a>  assertEquals(&#39;0 should have an insertion point of 0&#39;, 0,
+<a name="line1060"></a>      insertionPoint(pos));
+<a name="line1061"></a>
+<a name="line1062"></a>  // test single element array with custom comparison function
+<a name="line1063"></a>  var g = [1];
+<a name="line1064"></a>
+<a name="line1065"></a>  assertEquals(&#39;1 should be found at index 0&#39;, 0, goog.array.binarySearch(g, 1,
+<a name="line1066"></a>      revNumCompare));
+<a name="line1067"></a>  pos = goog.array.binarySearch(g, 2, revNumCompare);
+<a name="line1068"></a>  assertTrue(&#39;2 should not be found&#39;, pos &lt; 0);
+<a name="line1069"></a>  assertEquals(&#39;2 should have an insertion point of 0&#39;, 0,
+<a name="line1070"></a>      insertionPoint(pos));
+<a name="line1071"></a>  pos = goog.array.binarySearch(g, 0, revNumCompare);
+<a name="line1072"></a>  assertTrue(&#39;0 should not be found&#39;, pos &lt; 0);
+<a name="line1073"></a>  assertEquals(&#39;0 should have an insertion point of 1&#39;, 1,
+<a name="line1074"></a>      insertionPoint(pos));
+<a name="line1075"></a>
+<a name="line1076"></a>  assertEquals(&#39;binarySearch should find the index of the first 0&#39;,
+<a name="line1077"></a>      0, goog.array.binarySearch([0, 0, 1], 0));
+<a name="line1078"></a>  assertEquals(&#39;binarySearch should find the index of the first 1&#39;,
+<a name="line1079"></a>      1, goog.array.binarySearch([0, 1, 1], 1));
+<a name="line1080"></a>}
+<a name="line1081"></a>
+<a name="line1082"></a>
+<a name="line1083"></a>function testBinarySearchPerformance() {
+<a name="line1084"></a>  // Ensure that Array#slice, Function#apply and Function#call are not called
+<a name="line1085"></a>  // from within binarySearch, since they have performance implications in IE.
+<a name="line1086"></a>
+<a name="line1087"></a>  var propertyReplacer = new goog.testing.PropertyReplacer();
+<a name="line1088"></a>  propertyReplacer.replace(Array.prototype, &#39;slice&#39;, function() {
+<a name="line1089"></a>    fail(&#39;Should not call Array#slice from binary search.&#39;);
+<a name="line1090"></a>  });
+<a name="line1091"></a>  propertyReplacer.replace(Function.prototype, &#39;apply&#39;, function() {
+<a name="line1092"></a>    fail(&#39;Should not call Function#apply from binary search.&#39;);
+<a name="line1093"></a>  });
+<a name="line1094"></a>  propertyReplacer.replace(Function.prototype, &#39;call&#39;, function() {
+<a name="line1095"></a>    fail(&#39;Should not call Function#call from binary search.&#39;);
+<a name="line1096"></a>  });
+<a name="line1097"></a>
+<a name="line1098"></a>  try {
+<a name="line1099"></a>    var array = [1, 5, 7, 11, 13, 16, 19, 24, 28, 31, 33, 36, 40, 50, 52, 55];
+<a name="line1100"></a>    // Test with the default comparison function.
+<a name="line1101"></a>    goog.array.binarySearch(array, 48);
+<a name="line1102"></a>    // Test with a custom comparison function.
+<a name="line1103"></a>    goog.array.binarySearch(array, 13, function(a, b) {
+<a name="line1104"></a>      return a &gt; b ? 1 : a &lt; b ? -1 : 0;
+<a name="line1105"></a>    });
+<a name="line1106"></a>  } finally {
+<a name="line1107"></a>    // The test runner uses Function.prototype.apply to call tearDown in the
+<a name="line1108"></a>    // global context so it has to be reset here.
+<a name="line1109"></a>    propertyReplacer.reset();
+<a name="line1110"></a>  }
+<a name="line1111"></a>}
+<a name="line1112"></a>
+<a name="line1113"></a>
+<a name="line1114"></a>function testBinarySelect() {
+<a name="line1115"></a>  var insertionPoint = function(position) { return -(position + 1)};
+<a name="line1116"></a>  var numbers = [-897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0, 0, 0,
+<a name="line1117"></a>                 0.31255, 5, 142.88888708, 334, 342, 453, 54254];
+<a name="line1118"></a>  var objects = goog.array.map(numbers, function(n) {return {n: n};});
+<a name="line1119"></a>  function makeEvaluator(target) {
+<a name="line1120"></a>    return function(obj, i, arr) {
+<a name="line1121"></a>      assertEquals(objects, arr);
+<a name="line1122"></a>      assertEquals(obj, arr[i]);
+<a name="line1123"></a>      return target - obj.n;
+<a name="line1124"></a>    };
+<a name="line1125"></a>  }
+<a name="line1126"></a>  assertEquals(&#39;{n:-897123.9} should be found at index 0&#39;, 0,
+<a name="line1127"></a>      goog.array.binarySelect(objects, makeEvaluator(-897123.9)));
+<a name="line1128"></a>  assertEquals(&#39;{n:54254} should be found at index &#39; + (objects.length - 1),
+<a name="line1129"></a>      objects.length - 1,
+<a name="line1130"></a>      goog.array.binarySelect(objects, makeEvaluator(54254)));
+<a name="line1131"></a>  assertEquals(&#39;{n:-3} should be found at index 5&#39;, 5,
+<a name="line1132"></a>      goog.array.binarySelect(objects, makeEvaluator(-3)));
+<a name="line1133"></a>  pos = goog.array.binarySelect(objects, makeEvaluator(0));
+<a name="line1134"></a>  assertTrue(&#39;{n:0} should be found at index 6 || 7 || 8&#39;, pos == 6 ||
+<a name="line1135"></a>      pos == 7 || pos == 8);
+<a name="line1136"></a>  pos = goog.array.binarySelect(objects, makeEvaluator(-900000));
+<a name="line1137"></a>  assertTrue(&#39;{n:-900000} should not be found&#39;, pos &lt; 0);
+<a name="line1138"></a>  assertEquals(&#39;{n:-900000} should have an insertion point of 0&#39;, 0,
+<a name="line1139"></a>      insertionPoint(pos));
+<a name="line1140"></a>  pos = goog.array.binarySelect(objects, makeEvaluator(&#39;54255&#39;));
+<a name="line1141"></a>  assertTrue(&#39;{n:54255} should not be found&#39;, pos &lt; 0);
+<a name="line1142"></a>  assertEquals(&#39;{n:54255} should have an insertion point of &#39; +
+<a name="line1143"></a>      (objects.length), objects.length, insertionPoint(pos));
+<a name="line1144"></a>  pos = goog.array.binarySelect(objects, makeEvaluator(1.1));
+<a name="line1145"></a>  assertTrue(&#39;{n:1.1} should not be found&#39;, pos &lt; 0);
+<a name="line1146"></a>  assertEquals(&#39;{n:1.1} should have an insertion point of 10&#39;, 10,
+<a name="line1147"></a>      insertionPoint(pos));
+<a name="line1148"></a>}
+<a name="line1149"></a>
+<a name="line1150"></a>
+<a name="line1151"></a>function testArrayEquals() {
+<a name="line1152"></a>  // Test argument types.
+<a name="line1153"></a>  assertFalse(&#39;array == not array&#39;, goog.array.equals([], null));
+<a name="line1154"></a>  assertFalse(&#39;not array == array&#39;, goog.array.equals(null, []));
+<a name="line1155"></a>  assertFalse(&#39;not array == not array&#39;, goog.array.equals(null, null));
+<a name="line1156"></a>
+<a name="line1157"></a>  // Test with default comparison function.
+<a name="line1158"></a>  assertTrue(&#39;[] == []&#39;, goog.array.equals([], []));
+<a name="line1159"></a>  assertTrue(&#39;[1] == [1]&#39;, goog.array.equals([1], [1]));
+<a name="line1160"></a>  assertTrue(&#39;[&quot;1&quot;] == [&quot;1&quot;]&#39;, goog.array.equals([&#39;1&#39;], [&#39;1&#39;]));
+<a name="line1161"></a>  assertFalse(&#39;[1] == [&quot;1&quot;]&#39;, goog.array.equals([1], [&#39;1&#39;]));
+<a name="line1162"></a>  assertTrue(&#39;[null] == [null]&#39;, goog.array.equals([null], [null]));
+<a name="line1163"></a>  assertFalse(&#39;[null] == [undefined]&#39;, goog.array.equals([null], [undefined]));
+<a name="line1164"></a>  assertTrue(&#39;[1, 2] == [1, 2]&#39;, goog.array.equals([1, 2], [1, 2]));
+<a name="line1165"></a>  assertFalse(&#39;[1, 2] == [2, 1]&#39;, goog.array.equals([1, 2], [2, 1]));
+<a name="line1166"></a>  assertFalse(&#39;[1, 2] == [1]&#39;, goog.array.equals([1, 2], [1]));
+<a name="line1167"></a>  assertFalse(&#39;[1] == [1, 2]&#39;, goog.array.equals([1], [1, 2]));
+<a name="line1168"></a>  assertFalse(&#39;[{}] == [{}]&#39;, goog.array.equals([{}], [{}]));
+<a name="line1169"></a>
+<a name="line1170"></a>  // Test with custom comparison function.
+<a name="line1171"></a>  var cmp = function(a, b) { return typeof a == typeof b; };
+<a name="line1172"></a>  assertTrue(&#39;[] cmp []&#39;, goog.array.equals([], [], cmp));
+<a name="line1173"></a>  assertTrue(&#39;[1] cmp [1]&#39;, goog.array.equals([1], [1], cmp));
+<a name="line1174"></a>  assertTrue(&#39;[1] cmp [2]&#39;, goog.array.equals([1], [2], cmp));
+<a name="line1175"></a>  assertTrue(&#39;[&quot;1&quot;] cmp [&quot;1&quot;]&#39;, goog.array.equals([&#39;1&#39;], [&#39;1&#39;], cmp));
+<a name="line1176"></a>  assertTrue(&#39;[&quot;1&quot;] cmp [&quot;2&quot;]&#39;, goog.array.equals([&#39;1&#39;], [&#39;2&#39;], cmp));
+<a name="line1177"></a>  assertFalse(&#39;[1] cmp [&quot;1&quot;]&#39;, goog.array.equals([1], [&#39;1&#39;], cmp));
+<a name="line1178"></a>  assertTrue(&#39;[1, 2] cmp [3, 4]&#39;, goog.array.equals([1, 2], [3, 4], cmp));
+<a name="line1179"></a>  assertFalse(&#39;[1] cmp [2, 3]&#39;, goog.array.equals([1], [2, 3], cmp));
+<a name="line1180"></a>  assertTrue(&#39;[{}] cmp [{}]&#39;, goog.array.equals([{}], [{}], cmp));
+<a name="line1181"></a>  assertTrue(&#39;[{}] cmp [{a: 1}]&#39;, goog.array.equals([{}], [{a: 1}], cmp));
+<a name="line1182"></a>
+<a name="line1183"></a>  // Test with array-like objects.
+<a name="line1184"></a>  assertTrue(&#39;[5] == obj [5]&#39;,
+<a name="line1185"></a>      goog.array.equals([5], {0: 5, length: 1}));
+<a name="line1186"></a>  assertTrue(&#39;obj [5] == [5]&#39;,
+<a name="line1187"></a>      goog.array.equals({0: 5, length: 1}, [5]));
+<a name="line1188"></a>  assertTrue(&#39;[&quot;x&quot;] == obj [&quot;x&quot;]&#39;,
+<a name="line1189"></a>      goog.array.equals([&#39;x&#39;], {0: &#39;x&#39;, length: 1}));
+<a name="line1190"></a>  assertTrue(&#39;obj [&quot;x&quot;] == [&quot;x&quot;]&#39;,
+<a name="line1191"></a>      goog.array.equals({0: &#39;x&#39;, length: 1}, [&#39;x&#39;]));
+<a name="line1192"></a>  assertTrue(&#39;[5] == {0: 5, 1: 6, length: 1}&#39;,
+<a name="line1193"></a>      goog.array.equals([5], {0: 5, 1: 6, length: 1}));
+<a name="line1194"></a>  assertTrue(&#39;{0: 5, 1: 6, length: 1} == [5]&#39;,
+<a name="line1195"></a>      goog.array.equals({0: 5, 1: 6, length: 1}, [5]));
+<a name="line1196"></a>  assertFalse(&#39;[5, 6] == {0: 5, 1: 6, length: 1}&#39;,
+<a name="line1197"></a>      goog.array.equals([5, 6], {0: 5, 1: 6, length: 1}));
+<a name="line1198"></a>  assertFalse(&#39;{0: 5, 1: 6, length: 1}, [5, 6]&#39;,
+<a name="line1199"></a>      goog.array.equals({0: 5, 1: 6, length: 1}, [5, 6]));
+<a name="line1200"></a>  assertTrue(&#39;[5, 6] == obj [5, 6]&#39;,
+<a name="line1201"></a>      goog.array.equals([5, 6], {0: 5, 1: 6, length: 2}));
+<a name="line1202"></a>  assertTrue(&#39;obj [5, 6] == [5, 6]&#39;,
+<a name="line1203"></a>      goog.array.equals({0: 5, 1: 6, length: 2}, [5, 6]));
+<a name="line1204"></a>  assertFalse(&#39;{0: 5, 1: 6} == [5, 6]&#39;,
+<a name="line1205"></a>      goog.array.equals({0: 5, 1: 6}, [5, 6]));
+<a name="line1206"></a>}
+<a name="line1207"></a>
+<a name="line1208"></a>
+<a name="line1209"></a>function testArrayCompare3Basic() {
+<a name="line1210"></a>  assertEquals(0, goog.array.compare3([], []));
+<a name="line1211"></a>  assertEquals(0, goog.array.compare3([&#39;111&#39;, &#39;222&#39;], [&#39;111&#39;, &#39;222&#39;]));
+<a name="line1212"></a>  assertEquals(-1, goog.array.compare3([&#39;111&#39;, &#39;222&#39;], [&#39;1111&#39;, &#39;&#39;]));
+<a name="line1213"></a>  assertEquals(1, goog.array.compare3([&#39;111&#39;, &#39;222&#39;], [&#39;111&#39;]));
+<a name="line1214"></a>  assertEquals(1, goog.array.compare3([&#39;11&#39;, &#39;222&#39;, &#39;333&#39;], []));
+<a name="line1215"></a>  assertEquals(-1, goog.array.compare3([], [&#39;11&#39;, &#39;222&#39;, &#39;333&#39;]));
+<a name="line1216"></a>}
+<a name="line1217"></a>
+<a name="line1218"></a>
+<a name="line1219"></a>function testArrayCompare3ComparatorFn() {
+<a name="line1220"></a>  function cmp(a, b) {
+<a name="line1221"></a>    return a - b;
+<a name="line1222"></a>  };
+<a name="line1223"></a>  assertEquals(0, goog.array.compare3([], [], cmp));
+<a name="line1224"></a>  assertEquals(0, goog.array.compare3([8, 4], [8, 4], cmp));
+<a name="line1225"></a>  assertEquals(-1, goog.array.compare3([4, 3], [5, 0]));
+<a name="line1226"></a>  assertEquals(1, goog.array.compare3([6, 2], [6]));
+<a name="line1227"></a>  assertEquals(1, goog.array.compare3([1, 2, 3], []));
+<a name="line1228"></a>  assertEquals(-1, goog.array.compare3([], [1, 2, 3]));
+<a name="line1229"></a>}
+<a name="line1230"></a>
+<a name="line1231"></a>
+<a name="line1232"></a>function testSort() {
+<a name="line1233"></a>  // Test sorting empty array
+<a name="line1234"></a>  var a = [];
+<a name="line1235"></a>  goog.array.sort(a);
+<a name="line1236"></a>  assertEquals(&#39;Sorted empty array is still an empty array (length 0)&#39;, 0,
+<a name="line1237"></a>      a.length);
+<a name="line1238"></a>
+<a name="line1239"></a>  // Test sorting homogenous array of String(s) of length &gt; 1
+<a name="line1240"></a>  var b = [&#39;JUST&#39;, &#39;1&#39;, &#39;test&#39;, &#39;Array&#39;, &#39;to&#39;, &#39;test&#39;, &#39;array&#39;, &#39;Sort&#39;,
+<a name="line1241"></a>           &#39;about&#39;, &#39;NOW&#39;, &#39;!!&#39;];
+<a name="line1242"></a>  var bSorted = [&#39;!!&#39;, &#39;1&#39;, &#39;Array&#39;, &#39;JUST&#39;, &#39;NOW&#39;, &#39;Sort&#39;, &#39;about&#39;, &#39;array&#39;,
+<a name="line1243"></a>                 &#39;test&#39;, &#39;test&#39;, &#39;to&#39;];
+<a name="line1244"></a>  goog.array.sort(b);
+<a name="line1245"></a>  assertArrayEquals(bSorted, b);
+<a name="line1246"></a>
+<a name="line1247"></a>  // Test sorting already sorted array of String(s) of length &gt; 1
+<a name="line1248"></a>  goog.array.sort(b);
+<a name="line1249"></a>  assertArrayEquals(bSorted, b);
+<a name="line1250"></a>
+<a name="line1251"></a>  // Test sorting homogenous array of integer Number(s) of length &gt; 1
+<a name="line1252"></a>  var c = [100, 1, 2000, -1, 0, 1000023, 12312512, -12331, 123, 54325,
+<a name="line1253"></a>           -38104783, 93708, 908, -213, -4, 5423, 0];
+<a name="line1254"></a>  var cSorted = [-38104783, -12331, -213, -4, -1, 0, 0, 1, 100, 123, 908,
+<a name="line1255"></a>                 2000, 5423, 54325, 93708, 1000023, 12312512];
+<a name="line1256"></a>  goog.array.sort(c);
+<a name="line1257"></a>  assertArrayEquals(cSorted, c);
+<a name="line1258"></a>
+<a name="line1259"></a>  // Test sorting already sorted array of integer Number(s) of length &gt; 1
+<a name="line1260"></a>  goog.array.sort(c);
+<a name="line1261"></a>  assertArrayEquals(cSorted, c);
+<a name="line1262"></a>
+<a name="line1263"></a>  // Test sorting homogenous array of Number(s) of length &gt; 1
+<a name="line1264"></a>  var e = [-1321.3124, 0.31255, 54254, 0, 142.88888708, -321434.58758, -324,
+<a name="line1265"></a>           453, 334, -3, 5, -9, 342, -897123.9];
+<a name="line1266"></a>  var eSorted = [-897123.9, -321434.58758, -1321.3124, -324, -9, -3, 0,
+<a name="line1267"></a>                 0.31255, 5, 142.88888708, 334, 342, 453, 54254];
+<a name="line1268"></a>  goog.array.sort(e);
+<a name="line1269"></a>  assertArrayEquals(eSorted, e);
+<a name="line1270"></a>
+<a name="line1271"></a>  // Test sorting already sorted array of Number(s) of length &gt; 1
+<a name="line1272"></a>  goog.array.sort(e);
+<a name="line1273"></a>  assertArrayEquals(eSorted, e);
+<a name="line1274"></a>
+<a name="line1275"></a>  // Test sorting array of Number(s) of length &gt; 1,
+<a name="line1276"></a>  // using custom comparison function which does reverse ordering
+<a name="line1277"></a>  var f = [-1321.3124, 0.31255, 54254, 0, 142.88888708, -321434.58758,
+<a name="line1278"></a>           -324, 453, 334, -3, 5, -9, 342, -897123.9];
+<a name="line1279"></a>  var fSorted = [54254, 453, 342, 334, 142.88888708, 5, 0.31255, 0, -3, -9,
+<a name="line1280"></a>                 -324, -1321.3124, -321434.58758, -897123.9];
+<a name="line1281"></a>  goog.array.sort(f, function(a, b) { return b - a; });
+<a name="line1282"></a>  assertArrayEquals(fSorted, f);
+<a name="line1283"></a>
+<a name="line1284"></a>  // Test sorting already sorted array of Number(s) of length &gt; 1
+<a name="line1285"></a>  // using custom comparison function which does reverse ordering
+<a name="line1286"></a>  goog.array.sort(f, function(a, b) {return b - a; });
+<a name="line1287"></a>  assertArrayEquals(fSorted, f);
+<a name="line1288"></a>
+<a name="line1289"></a>  // Test sorting array of custom Object(s) of length &gt; 1 that have
+<a name="line1290"></a>  // an overriden toString
+<a name="line1291"></a>  function ComparedObject(value) {
+<a name="line1292"></a>    this.value = value;
+<a name="line1293"></a>  };
+<a name="line1294"></a>
+<a name="line1295"></a>  ComparedObject.prototype.toString = function() {
+<a name="line1296"></a>    return this.value;
+<a name="line1297"></a>  };
+<a name="line1298"></a>
+<a name="line1299"></a>  var co1 = new ComparedObject(&#39;a&#39;);
+<a name="line1300"></a>  var co2 = new ComparedObject(&#39;b&#39;);
+<a name="line1301"></a>  var co3 = new ComparedObject(&#39;c&#39;);
+<a name="line1302"></a>  var co4 = new ComparedObject(&#39;d&#39;);
+<a name="line1303"></a>
+<a name="line1304"></a>  var g = [co3, co4, co2, co1];
+<a name="line1305"></a>  var gSorted = [co1, co2, co3, co4];
+<a name="line1306"></a>  goog.array.sort(g);
+<a name="line1307"></a>  assertArrayEquals(gSorted, g);
+<a name="line1308"></a>
+<a name="line1309"></a>  // Test sorting already sorted array of custom Object(s) of length &gt; 1
+<a name="line1310"></a>  // that have an overriden toString
+<a name="line1311"></a>  goog.array.sort(g);
+<a name="line1312"></a>  assertArrayEquals(gSorted, g);
+<a name="line1313"></a>
+<a name="line1314"></a>  // Test sorting an array of custom Object(s) of length &gt; 1 using
+<a name="line1315"></a>  // a custom comparison function
+<a name="line1316"></a>  var h = [co4, co2, co1, co3];
+<a name="line1317"></a>  var hSorted = [co1, co2, co3, co4];
+<a name="line1318"></a>  goog.array.sort(h, function(a, b) {
+<a name="line1319"></a>    return a.value &gt; b.value ? 1 : a.value &lt; b.value ? -1 : 0;
+<a name="line1320"></a>  });
+<a name="line1321"></a>  assertArrayEquals(hSorted, h);
+<a name="line1322"></a>
+<a name="line1323"></a>  // Test sorting already sorted array of custom Object(s) of length &gt; 1
+<a name="line1324"></a>  // using a custom comparison function
+<a name="line1325"></a>  goog.array.sort(h);
+<a name="line1326"></a>  assertArrayEquals(hSorted, h);
+<a name="line1327"></a>
+<a name="line1328"></a>  // Test sorting arrays of length 1
+<a name="line1329"></a>  var i = [&#39;one&#39;];
+<a name="line1330"></a>  var iSorted = [&#39;one&#39;];
+<a name="line1331"></a>  goog.array.sort(i);
+<a name="line1332"></a>  assertArrayEquals(iSorted, i);
+<a name="line1333"></a>
+<a name="line1334"></a>  var j = [1];
+<a name="line1335"></a>  var jSorted = [1];
+<a name="line1336"></a>  goog.array.sort(j);
+<a name="line1337"></a>  assertArrayEquals(jSorted, j);
+<a name="line1338"></a>
+<a name="line1339"></a>  var k = [1.1];
+<a name="line1340"></a>  var kSorted = [1.1];
+<a name="line1341"></a>  goog.array.sort(k);
+<a name="line1342"></a>  assertArrayEquals(kSorted, k);
+<a name="line1343"></a>
+<a name="line1344"></a>  var l = [co3];
+<a name="line1345"></a>  var lSorted = [co3];
+<a name="line1346"></a>  goog.array.sort(l);
+<a name="line1347"></a>  assertArrayEquals(lSorted, l);
+<a name="line1348"></a>
+<a name="line1349"></a>  var m = [co2];
+<a name="line1350"></a>  var mSorted = [co2];
+<a name="line1351"></a>  goog.array.sort(m, function(a, b) {
+<a name="line1352"></a>    return a.value &gt; b.value ? 1 : a.value &lt; b.value ? -1 : 0;
+<a name="line1353"></a>  });
+<a name="line1354"></a>  assertArrayEquals(mSorted, m);
+<a name="line1355"></a>}
+<a name="line1356"></a>
+<a name="line1357"></a>function testStableSort() {
+<a name="line1358"></a>  // Test array with custom comparison function
+<a name="line1359"></a>  var arr = [{key: 3, val: &#39;a&#39;}, {key: 2, val: &#39;b&#39;}, {key: 3, val: &#39;c&#39;},
+<a name="line1360"></a>             {key: 4, val: &#39;d&#39;}, {key: 3, val: &#39;e&#39;}];
+<a name="line1361"></a>  var arrClone = goog.array.clone(arr);
+<a name="line1362"></a>
+<a name="line1363"></a>  function comparisonFn(obj1, obj2) {
+<a name="line1364"></a>    return obj1.key - obj2.key;
+<a name="line1365"></a>  }
+<a name="line1366"></a>  goog.array.stableSort(arr, comparisonFn);
+<a name="line1367"></a>  var sortedValues = [];
+<a name="line1368"></a>  for (var i = 0; i &lt; arr.length; i++) {
+<a name="line1369"></a>    sortedValues.push(arr[i].val);
+<a name="line1370"></a>  }
+<a name="line1371"></a>  var wantedSortedValues = [&#39;b&#39;, &#39;a&#39;, &#39;c&#39;, &#39;e&#39;, &#39;d&#39;];
+<a name="line1372"></a>  assertArrayEquals(wantedSortedValues, sortedValues);
+<a name="line1373"></a>
+<a name="line1374"></a>  // Test array without custom comparison function
+<a name="line1375"></a>  var arr2 = [];
+<a name="line1376"></a>  for (var i = 0; i &lt; arrClone.length; i++) {
+<a name="line1377"></a>    arr2.push({val: arrClone[i].val, toString:
+<a name="line1378"></a>          goog.partial(function(index) {
+<a name="line1379"></a>            return arrClone[index].key;
+<a name="line1380"></a>          }, i)});
+<a name="line1381"></a>  }
+<a name="line1382"></a>  goog.array.stableSort(arr2);
+<a name="line1383"></a>  var sortedValues2 = [];
+<a name="line1384"></a>  for (var i = 0; i &lt; arr2.length; i++) {
+<a name="line1385"></a>    sortedValues2.push(arr2[i].val);
+<a name="line1386"></a>  }
+<a name="line1387"></a>  assertArrayEquals(wantedSortedValues, sortedValues2);
+<a name="line1388"></a>}
+<a name="line1389"></a>
+<a name="line1390"></a>function testArrayBucketModulus() {
+<a name="line1391"></a>  // bucket things by modulus
+<a name="line1392"></a>  var a = {};
+<a name="line1393"></a>  var b = [];
+<a name="line1394"></a>
+<a name="line1395"></a>  function modFive(num) {
+<a name="line1396"></a>    return num % 5;
+<a name="line1397"></a>  }
+<a name="line1398"></a>
+<a name="line1399"></a>  for (var i = 0; i &lt; 20; i++) {
+<a name="line1400"></a>    var mod = modFive(i);
+<a name="line1401"></a>    a[mod] = a[mod] || [];
+<a name="line1402"></a>    a[mod].push(i);
+<a name="line1403"></a>    b.push(i);
+<a name="line1404"></a>  }
+<a name="line1405"></a>
+<a name="line1406"></a>  var buckets = goog.array.bucket(b, modFive);
+<a name="line1407"></a>
+<a name="line1408"></a>  for (var i = 0; i &lt; 5; i++) {
+<a name="line1409"></a>    // The order isn&#39;t defined, but they should be the same sorted.
+<a name="line1410"></a>    goog.array.sort(a[i]);
+<a name="line1411"></a>    goog.array.sort(buckets[i]);
+<a name="line1412"></a>    assertArrayEquals(a[i], buckets[i]);
+<a name="line1413"></a>  }
+<a name="line1414"></a>}
+<a name="line1415"></a>
+<a name="line1416"></a>function testArrayBucketEvenOdd() {
+<a name="line1417"></a>  var a = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+<a name="line1418"></a>
+<a name="line1419"></a>  // test even/odd
+<a name="line1420"></a>  function isEven(value, index, array) {
+<a name="line1421"></a>    assertEquals(value, array[index]);
+<a name="line1422"></a>    assertEquals(&#39;number&#39;, typeof index);
+<a name="line1423"></a>    assertEquals(a, array);
+<a name="line1424"></a>    return value % 2 == 0;
+<a name="line1425"></a>  }
+<a name="line1426"></a>
+<a name="line1427"></a>  var b = goog.array.bucket(a, isEven);
+<a name="line1428"></a>
+<a name="line1429"></a>  assertArrayEquals(b[true], [2, 4, 6, 8]);
+<a name="line1430"></a>  assertArrayEquals(b[false], [1, 3, 5, 7, 9]);
+<a name="line1431"></a>}
+<a name="line1432"></a>
+<a name="line1433"></a>function testArrayBucketUsingThisObject() {
+<a name="line1434"></a>  var a = [1, 2, 3, 4, 5];
+<a name="line1435"></a>
+<a name="line1436"></a>  var obj = {
+<a name="line1437"></a>    specialValue: 2
+<a name="line1438"></a>  };
+<a name="line1439"></a>
+<a name="line1440"></a>  function isSpecialValue(value, index, array) {
+<a name="line1441"></a>    return value == this.specialValue ? 1 : 0;
+<a name="line1442"></a>  }
+<a name="line1443"></a>
+<a name="line1444"></a>  var b = goog.array.bucket(a, isSpecialValue, obj);
+<a name="line1445"></a>  assertArrayEquals(b[0], [1, 3, 4, 5]);
+<a name="line1446"></a>  assertArrayEquals(b[1], [2]);
+<a name="line1447"></a>}
+<a name="line1448"></a>
+<a name="line1449"></a>function testArrayToObject() {
+<a name="line1450"></a>  var a = [
+<a name="line1451"></a>    {name: &#39;a&#39;},
+<a name="line1452"></a>    {name: &#39;b&#39;},
+<a name="line1453"></a>    {name: &#39;c&#39;},
+<a name="line1454"></a>    {name: &#39;d&#39;}];
+<a name="line1455"></a>
+<a name="line1456"></a>  function getName(value, index, array) {
+<a name="line1457"></a>    assertEquals(value, array[index]);
+<a name="line1458"></a>    assertEquals(&#39;number&#39;, typeof index);
+<a name="line1459"></a>    assertEquals(a, array);
+<a name="line1460"></a>    return value.name;
+<a name="line1461"></a>  }
+<a name="line1462"></a>
+<a name="line1463"></a>  var b = goog.array.toObject(a, getName);
+<a name="line1464"></a>
+<a name="line1465"></a>  for (var i = 0; i &lt; a.length; i++) {
+<a name="line1466"></a>    assertEquals(a[i], b[a[i].name]);
+<a name="line1467"></a>  }
+<a name="line1468"></a>}
+<a name="line1469"></a>
+<a name="line1470"></a>function testRange() {
+<a name="line1471"></a>  assertArrayEquals([], goog.array.range(0));
+<a name="line1472"></a>  assertArrayEquals([], goog.array.range(5, 5, 5));
+<a name="line1473"></a>  assertArrayEquals([], goog.array.range(-3, -3));
+<a name="line1474"></a>  assertArrayEquals([], goog.array.range(10, undefined, -1));
+<a name="line1475"></a>  assertArrayEquals([], goog.array.range(8, 0));
+<a name="line1476"></a>  assertArrayEquals([], goog.array.range(-5, -10, 3));
+<a name="line1477"></a>
+<a name="line1478"></a>  assertArrayEquals([0], goog.array.range(1));
+<a name="line1479"></a>  assertArrayEquals([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], goog.array.range(10));
+<a name="line1480"></a>
+<a name="line1481"></a>  assertArrayEquals([1], goog.array.range(1, 2));
+<a name="line1482"></a>  assertArrayEquals([-3, -2, -1, 0, 1, 2], goog.array.range(-3, 3));
+<a name="line1483"></a>
+<a name="line1484"></a>  assertArrayEquals([4], goog.array.range(4, 40, 400));
+<a name="line1485"></a>  assertArrayEquals([5, 8, 11, 14], goog.array.range(5, 15, 3));
+<a name="line1486"></a>  assertArrayEquals([1, -1, -3], goog.array.range(1, -5, -2));
+<a name="line1487"></a>  assertElementsRoughlyEqual([.2, .3, .4], goog.array.range(.2, .5, .1), 0.001);
+<a name="line1488"></a>
+<a name="line1489"></a>  assertArrayEquals([0], goog.array.range(7, undefined, 9));
+<a name="line1490"></a>  assertArrayEquals([0, 2, 4, 6], goog.array.range(8, undefined, 2));
+<a name="line1491"></a>}
+<a name="line1492"></a>
+<a name="line1493"></a>function testArrayRepeat() {
+<a name="line1494"></a>  assertArrayEquals([], goog.array.repeat(3, 0));
+<a name="line1495"></a>  assertArrayEquals([], goog.array.repeat(3, -1));
+<a name="line1496"></a>  assertArrayEquals([3], goog.array.repeat(3, 1));
+<a name="line1497"></a>  assertArrayEquals([3, 3, 3], goog.array.repeat(3, 3));
+<a name="line1498"></a>  assertArrayEquals([null, null], goog.array.repeat(null, 2));
+<a name="line1499"></a>}
+<a name="line1500"></a>
+<a name="line1501"></a>function testArrayFlatten() {
+<a name="line1502"></a>  assertArrayEquals([1, 2, 3, 4, 5], goog.array.flatten(1, 2, 3, 4, 5));
+<a name="line1503"></a>  assertArrayEquals([1, 2, 3, 4, 5], goog.array.flatten(1, [2, [3, [4, 5]]]));
+<a name="line1504"></a>  assertArrayEquals([1, 2, 3, 4], goog.array.flatten(1, [2, [3, [4]]]));
+<a name="line1505"></a>  assertArrayEquals([1, 2, 3, 4], goog.array.flatten([[[1], 2], 3], 4));
+<a name="line1506"></a>  assertArrayEquals([1], goog.array.flatten([[1]]));
+<a name="line1507"></a>  assertArrayEquals([], goog.array.flatten());
+<a name="line1508"></a>  assertArrayEquals([], goog.array.flatten([]));
+<a name="line1509"></a>}
+<a name="line1510"></a>
+<a name="line1511"></a>function testSortObjectsByKey() {
+<a name="line1512"></a>  var sortedArray = buildSortedObjectArray(4);
+<a name="line1513"></a>  var objects =
+<a name="line1514"></a>      [sortedArray[1], sortedArray[2], sortedArray[0], sortedArray[3]];
+<a name="line1515"></a>
+<a name="line1516"></a>  goog.array.sortObjectsByKey(objects, &#39;name&#39;);
+<a name="line1517"></a>  validateObjectArray(sortedArray, objects);
+<a name="line1518"></a>}
+<a name="line1519"></a>
+<a name="line1520"></a>function testSortObjectsByKeyWithCompareFunction() {
+<a name="line1521"></a>  var sortedArray = buildSortedObjectArray(4);
+<a name="line1522"></a>  var objects =
+<a name="line1523"></a>      [sortedArray[1], sortedArray[2], sortedArray[0], sortedArray[3]];
+<a name="line1524"></a>  var descSortedArray =
+<a name="line1525"></a>      [sortedArray[3], sortedArray[2], sortedArray[1], sortedArray[0]];
+<a name="line1526"></a>
+<a name="line1527"></a>  function descCompare(a, b) {
+<a name="line1528"></a>    return a &lt; b ? 1 : a &gt; b ? -1 : 0;
+<a name="line1529"></a>  };
+<a name="line1530"></a>
+<a name="line1531"></a>  goog.array.sortObjectsByKey(objects, &#39;name&#39;, descCompare);
+<a name="line1532"></a>  validateObjectArray(descSortedArray, objects);
+<a name="line1533"></a>}
+<a name="line1534"></a>
+<a name="line1535"></a>function buildSortedObjectArray(size) {
+<a name="line1536"></a>  var objectArray = [];
+<a name="line1537"></a>  for (var i = 0; i &lt; size; i++) {
+<a name="line1538"></a>    objectArray.push({
+<a name="line1539"></a>      &#39;name&#39;: &#39;name_&#39; + i,
+<a name="line1540"></a>      &#39;id&#39;: &#39;id_&#39; + (size - i)
+<a name="line1541"></a>    });
+<a name="line1542"></a>  }
+<a name="line1543"></a>
+<a name="line1544"></a>  return objectArray;
+<a name="line1545"></a>}
+<a name="line1546"></a>
+<a name="line1547"></a>function validateObjectArray(expected, actual) {
+<a name="line1548"></a>  assertEquals(expected.length, actual.length);
+<a name="line1549"></a>  for (var i = 0; i &lt; expected.length; i++) {
+<a name="line1550"></a>    assertEquals(expected[i].name, actual[i].name);
+<a name="line1551"></a>    assertEquals(expected[i].id, actual[i].id);
+<a name="line1552"></a>  }
+<a name="line1553"></a>}
+<a name="line1554"></a>
+<a name="line1555"></a>function testIsSorted() {
+<a name="line1556"></a>  assertTrue(goog.array.isSorted([1, 2, 3]));
+<a name="line1557"></a>  assertTrue(goog.array.isSorted([1, 2, 2]));
+<a name="line1558"></a>  assertFalse(goog.array.isSorted([1, 2, 1]));
+<a name="line1559"></a>
+<a name="line1560"></a>  assertTrue(goog.array.isSorted([1, 2, 3], null, true));
+<a name="line1561"></a>  assertFalse(goog.array.isSorted([1, 2, 2], null, true));
+<a name="line1562"></a>  assertFalse(goog.array.isSorted([1, 2, 1], null, true));
+<a name="line1563"></a>
+<a name="line1564"></a>  function compare(a, b) {
+<a name="line1565"></a>    return b - a;
+<a name="line1566"></a>  }
+<a name="line1567"></a>
+<a name="line1568"></a>  assertFalse(goog.array.isSorted([1, 2, 3], compare));
+<a name="line1569"></a>  assertTrue(goog.array.isSorted([3, 2, 2], compare));
+<a name="line1570"></a>}
+<a name="line1571"></a>
+<a name="line1572"></a>function assertRotated(expect, array, rotate) {
+<a name="line1573"></a>  assertArrayEquals(expect, goog.array.rotate(array, rotate));
+<a name="line1574"></a>}
+<a name="line1575"></a>
+<a name="line1576"></a>function testRotate() {
+<a name="line1577"></a>  assertRotated([], [], 3);
+<a name="line1578"></a>  assertRotated([1], [1], 3);
+<a name="line1579"></a>  assertRotated([1, 2, 3, 4, 0], [0, 1, 2, 3, 4], -6);
+<a name="line1580"></a>  assertRotated([0, 1, 2, 3, 4], [0, 1, 2, 3, 4], -5);
+<a name="line1581"></a>  assertRotated([4, 0, 1, 2, 3], [0, 1, 2, 3, 4], -4);
+<a name="line1582"></a>  assertRotated([3, 4, 0, 1, 2], [0, 1, 2, 3, 4], -3);
+<a name="line1583"></a>  assertRotated([2, 3, 4, 0, 1], [0, 1, 2, 3, 4], -2);
+<a name="line1584"></a>  assertRotated([1, 2, 3, 4, 0], [0, 1, 2, 3, 4], -1);
+<a name="line1585"></a>  assertRotated([0, 1, 2, 3, 4], [0, 1, 2, 3, 4], 0);
+<a name="line1586"></a>  assertRotated([4, 0, 1, 2, 3], [0, 1, 2, 3, 4], 1);
+<a name="line1587"></a>  assertRotated([3, 4, 0, 1, 2], [0, 1, 2, 3, 4], 2);
+<a name="line1588"></a>  assertRotated([2, 3, 4, 0, 1], [0, 1, 2, 3, 4], 3);
+<a name="line1589"></a>  assertRotated([1, 2, 3, 4, 0], [0, 1, 2, 3, 4], 4);
+<a name="line1590"></a>  assertRotated([0, 1, 2, 3, 4], [0, 1, 2, 3, 4], 5);
+<a name="line1591"></a>  assertRotated([4, 0, 1, 2, 3], [0, 1, 2, 3, 4], 6);
+<a name="line1592"></a>}
+<a name="line1593"></a>
+<a name="line1594"></a>function testMoveItemWithArray() {
+<a name="line1595"></a>  var arr = [0, 1, 2, 3];
+<a name="line1596"></a>  goog.array.moveItem(arr, 1, 3);  // toIndex &gt; fromIndex
+<a name="line1597"></a>  assertArrayEquals([0, 2, 3, 1], arr);
+<a name="line1598"></a>  goog.array.moveItem(arr, 2, 0);  // toIndex &lt; fromIndex
+<a name="line1599"></a>  assertArrayEquals([3, 0, 2, 1], arr);
+<a name="line1600"></a>  goog.array.moveItem(arr, 1, 1);  // toIndex == fromIndex
+<a name="line1601"></a>  assertArrayEquals([3, 0, 2, 1], arr);
+<a name="line1602"></a>  // Out-of-bounds indexes throw assertion errors.
+<a name="line1603"></a>  assertThrows(function() {
+<a name="line1604"></a>    goog.array.moveItem(arr, -1, 1);
+<a name="line1605"></a>  });
+<a name="line1606"></a>  assertThrows(function() {
+<a name="line1607"></a>    goog.array.moveItem(arr, 4, 1);
+<a name="line1608"></a>  });
+<a name="line1609"></a>  assertThrows(function() {
+<a name="line1610"></a>    goog.array.moveItem(arr, 1, -1);
+<a name="line1611"></a>  });
+<a name="line1612"></a>  assertThrows(function() {
+<a name="line1613"></a>    goog.array.moveItem(arr, 1, 4);
+<a name="line1614"></a>  });
+<a name="line1615"></a>  // The array should not be modified by the out-of-bound calls.
+<a name="line1616"></a>  assertArrayEquals([3, 0, 2, 1], arr);
+<a name="line1617"></a>}
+<a name="line1618"></a>
+<a name="line1619"></a>function testMoveItemWithArgumentsObject() {
+<a name="line1620"></a>  var f = function() {
+<a name="line1621"></a>    goog.array.moveItem(arguments, 0, 1);
+<a name="line1622"></a>    return arguments;
+<a name="line1623"></a>  };
+<a name="line1624"></a>  assertArrayEquals([1, 0], goog.array.toArray(f(0, 1)));
+<a name="line1625"></a>}
+<a name="line1626"></a>
+<a name="line1627"></a>function testConcat() {
+<a name="line1628"></a>  var a1 = [1, 2, 3];
+<a name="line1629"></a>  var a2 = [4, 5, 6];
+<a name="line1630"></a>  var a3 = goog.array.concat(a1, a2);
+<a name="line1631"></a>  a1.push(1);
+<a name="line1632"></a>  a2.push(5);
+<a name="line1633"></a>  assertArrayEquals([1, 2, 3, 4, 5, 6], a3);
+<a name="line1634"></a>}
+<a name="line1635"></a>
+<a name="line1636"></a>function testConcatWithNoSecondArg() {
+<a name="line1637"></a>  var a1 = [1, 2, 3, 4];
+<a name="line1638"></a>  var a2 = goog.array.concat(a1);
+<a name="line1639"></a>  a1.push(5);
+<a name="line1640"></a>  assertArrayEquals([1, 2, 3, 4], a2);
+<a name="line1641"></a>}
+<a name="line1642"></a>
+<a name="line1643"></a>function testConcatWithNonArrayArgs() {
+<a name="line1644"></a>  var a1 = [1, 2, 3, 4];
+<a name="line1645"></a>  var o = {0: &#39;a&#39;, 1: &#39;b&#39;, length: 2};
+<a name="line1646"></a>  var a2 = goog.array.concat(a1, 5, &#39;10&#39;, o);
+<a name="line1647"></a>  assertArrayEquals([1, 2, 3, 4, 5, &#39;10&#39;, o], a2);
+<a name="line1648"></a>}
+<a name="line1649"></a>
+<a name="line1650"></a>function testConcatWithNull() {
+<a name="line1651"></a>  var a1 = goog.array.concat(null, [1, 2, 3]);
+<a name="line1652"></a>  var a2 = goog.array.concat([1, 2, 3], null);
+<a name="line1653"></a>  assertArrayEquals([null, 1, 2, 3], a1);
+<a name="line1654"></a>  assertArrayEquals([1, 2, 3, null], a2);
+<a name="line1655"></a>}
+<a name="line1656"></a>
+<a name="line1657"></a>function testZip() {
+<a name="line1658"></a>  var a1 = goog.array.zip([1, 2, 3], [3, 2, 1]);
+<a name="line1659"></a>  var a2 = goog.array.zip([1, 2], [3, 2, 1]);
+<a name="line1660"></a>  var a3 = goog.array.zip();
+<a name="line1661"></a>  assertArrayEquals([[1, 3], [2, 2], [3, 1]], a1);
+<a name="line1662"></a>  assertArrayEquals([[1, 3], [2, 2]], a2);
+<a name="line1663"></a>  assertArrayEquals([], a3);
+<a name="line1664"></a>}
+<a name="line1665"></a>
+<a name="line1666"></a>function testShuffle() {
+<a name="line1667"></a>  // Test array. This array should have unique values for the purposes of this
+<a name="line1668"></a>  // test case.
+<a name="line1669"></a>  var testArray = [1, 2, 3, 4, 5];
+<a name="line1670"></a>  var testArrayCopy = goog.array.clone(testArray);
+<a name="line1671"></a>
+<a name="line1672"></a>  // Custom random function, which always returns a value approaching 1,
+<a name="line1673"></a>  // resulting in a &quot;shuffle&quot; that preserves the order of original array
+<a name="line1674"></a>  // (for array sizes that we work with here).
+<a name="line1675"></a>  var noChangeShuffleFunction = function() {
+<a name="line1676"></a>    return .999999;
+<a name="line1677"></a>  };
+<a name="line1678"></a>  goog.array.shuffle(testArray, noChangeShuffleFunction);
+<a name="line1679"></a>  assertArrayEquals(testArrayCopy, testArray);
+<a name="line1680"></a>
+<a name="line1681"></a>  // Custom random function, which always returns 0, resulting in a
+<a name="line1682"></a>  // deterministic &quot;shuffle&quot; that is predictable but differs from the
+<a name="line1683"></a>  // original order of the array.
+<a name="line1684"></a>  var testShuffleFunction = function() {
+<a name="line1685"></a>    return 0;
+<a name="line1686"></a>  };
+<a name="line1687"></a>  goog.array.shuffle(testArray, testShuffleFunction);
+<a name="line1688"></a>  assertArrayEquals([2, 3, 4, 5, 1], testArray);
+<a name="line1689"></a>
+<a name="line1690"></a>  // Test the use of a real random function(no optional RNG is specified).
+<a name="line1691"></a>  goog.array.shuffle(testArray);
+<a name="line1692"></a>
+<a name="line1693"></a>  // Ensure the shuffled array comprises the same elements (without regard to
+<a name="line1694"></a>  // order).
+<a name="line1695"></a>  assertSameElements(testArrayCopy, testArray);
+<a name="line1696"></a>}
+</pre>
+
+
+</body>
+</html>

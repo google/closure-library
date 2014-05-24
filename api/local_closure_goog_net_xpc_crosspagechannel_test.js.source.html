@@ -1,0 +1,1083 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>crosspagechannel_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_xpc_crosspagechannel_test.js.html">crosspagechannel_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.xpc.CrossPageChannelTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.xpc.CrossPageChannelTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line19"></a>goog.require(&#39;goog.Uri&#39;);
+<a name="line20"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line21"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line22"></a>goog.require(&#39;goog.log&#39;);
+<a name="line23"></a>goog.require(&#39;goog.log.Level&#39;);
+<a name="line24"></a>goog.require(&#39;goog.net.xpc&#39;);
+<a name="line25"></a>goog.require(&#39;goog.net.xpc.CfgFields&#39;);
+<a name="line26"></a>goog.require(&#39;goog.net.xpc.CrossPageChannel&#39;);
+<a name="line27"></a>goog.require(&#39;goog.net.xpc.CrossPageChannelRole&#39;);
+<a name="line28"></a>goog.require(&#39;goog.net.xpc.TransportTypes&#39;);
+<a name="line29"></a>goog.require(&#39;goog.object&#39;);
+<a name="line30"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line31"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line32"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line33"></a>
+<a name="line34"></a>// Set this to false when working on this test.  It needs to be true for
+<a name="line35"></a>// automated testing, as some browsers (eg IE8) choke on the large numbers of
+<a name="line36"></a>// iframes this test would otherwise leave active.
+<a name="line37"></a>var CLEAN_UP_IFRAMES = true;
+<a name="line38"></a>
+<a name="line39"></a>var IFRAME_LOAD_WAIT_MS = 1000;
+<a name="line40"></a>var stubs = new goog.testing.PropertyReplacer();
+<a name="line41"></a>var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall(
+<a name="line42"></a>    document.title);
+<a name="line43"></a>var uniqueId = 0;
+<a name="line44"></a>var driver;
+<a name="line45"></a>var canAccessSameDomainIframe = true;
+<a name="line46"></a>var accessCheckIframes = [];
+<a name="line47"></a>
+<a name="line48"></a>function setUpPage() {
+<a name="line49"></a>  // This test is insanely slow on IE8 for some reason.
+<a name="line50"></a>  asyncTestCase.stepTimeout = 20 * 1000;
+<a name="line51"></a>
+<a name="line52"></a>  // Show debug log
+<a name="line53"></a>  var debugDiv = goog.dom.getElement(&#39;debugDiv&#39;);
+<a name="line54"></a>  var logger = goog.log.getLogger(&#39;goog.net.xpc&#39;);
+<a name="line55"></a>  logger.setLevel(goog.log.Level.ALL);
+<a name="line56"></a>  goog.log.addHandler(logger, function(logRecord) {
+<a name="line57"></a>    var msgElm = goog.dom.createDom(&#39;div&#39;);
+<a name="line58"></a>    msgElm.innerHTML = logRecord.getMessage();
+<a name="line59"></a>    goog.dom.appendChild(debugDiv, msgElm);
+<a name="line60"></a>  });
+<a name="line61"></a>  asyncTestCase.waitForAsync(&#39;Checking if we can access same domain iframes&#39;);
+<a name="line62"></a>  checkSameDomainIframeAccess();
+<a name="line63"></a>}
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>function setUp() {
+<a name="line67"></a>  driver = new Driver();
+<a name="line68"></a>}
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>function tearDown() {
+<a name="line72"></a>  stubs.reset();
+<a name="line73"></a>  driver.dispose();
+<a name="line74"></a>}
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>function checkSameDomainIframeAccess() {
+<a name="line78"></a>  accessCheckIframes.push(
+<a name="line79"></a>      create1x1Iframe(&#39;nonexistant&#39;, &#39;testdata/i_am_non_existant.html&#39;));
+<a name="line80"></a>  window.setTimeout(function() {
+<a name="line81"></a>    accessCheckIframes.push(
+<a name="line82"></a>        create1x1Iframe(&#39;existant&#39;, &#39;testdata/access_checker.html&#39;));
+<a name="line83"></a>  }, 10);
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>function create1x1Iframe(iframeId, src) {
+<a name="line88"></a>  var iframeAccessChecker = goog.dom.createElement(&#39;IFRAME&#39;);
+<a name="line89"></a>  iframeAccessChecker.id = iframeAccessChecker.name = iframeId;
+<a name="line90"></a>  iframeAccessChecker.style.width = iframeAccessChecker.style.height = &#39;1px&#39;;
+<a name="line91"></a>  iframeAccessChecker.src = src;
+<a name="line92"></a>  document.body.insertBefore(iframeAccessChecker, document.body.firstChild);
+<a name="line93"></a>  return iframeAccessChecker;
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>function sameDomainIframeAccessComplete(canAccess) {
+<a name="line98"></a>  canAccessSameDomainIframe = canAccess;
+<a name="line99"></a>  for (var i = 0; i &lt; accessCheckIframes.length; i++) {
+<a name="line100"></a>    document.body.removeChild(accessCheckIframes[i]);
+<a name="line101"></a>  }
+<a name="line102"></a>  asyncTestCase.continueTesting();
+<a name="line103"></a>}
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>function testCreateIframeSpecifyId() {
+<a name="line107"></a>  driver.createPeerIframe(&#39;new_iframe&#39;);
+<a name="line108"></a>
+<a name="line109"></a>  asyncTestCase.waitForAsync(&#39;iframe load&#39;);
+<a name="line110"></a>  window.setTimeout(function() {
+<a name="line111"></a>    driver.checkPeerIframe();
+<a name="line112"></a>    asyncTestCase.continueTesting();
+<a name="line113"></a>  }, IFRAME_LOAD_WAIT_MS);
+<a name="line114"></a>}
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>function testCreateIframeRandomId() {
+<a name="line118"></a>  driver.createPeerIframe();
+<a name="line119"></a>
+<a name="line120"></a>  asyncTestCase.waitForAsync(&#39;iframe load&#39;);
+<a name="line121"></a>  window.setTimeout(function() {
+<a name="line122"></a>    driver.checkPeerIframe();
+<a name="line123"></a>    asyncTestCase.continueTesting();
+<a name="line124"></a>  }, IFRAME_LOAD_WAIT_MS);
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>function testGetRole() {
+<a name="line129"></a>  var cfg = {};
+<a name="line130"></a>  cfg[goog.net.xpc.CfgFields.ROLE] = goog.net.xpc.CrossPageChannelRole.OUTER;
+<a name="line131"></a>  var channel = new goog.net.xpc.CrossPageChannel(cfg);
+<a name="line132"></a>  // If the configured role is ignored, this will cause the dynamicly
+<a name="line133"></a>  // determined role to become INNER.
+<a name="line134"></a>  channel.peerWindowObject_ = window.parent;
+<a name="line135"></a>  assertEquals(&#39;Channel should use role from the config.&#39;,
+<a name="line136"></a>      goog.net.xpc.CrossPageChannelRole.OUTER, channel.getRole());
+<a name="line137"></a>  channel.dispose();
+<a name="line138"></a>}
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>// The following batch of tests:
+<a name="line142"></a>// * Establishes a peer iframe
+<a name="line143"></a>// * Connects an XPC channel between the frames
+<a name="line144"></a>// * From the connection callback in each frame, sends an &#39;echo&#39; request, and
+<a name="line145"></a>//   expects a &#39;response&#39; response.
+<a name="line146"></a>// * Reconnects the inner frame, sends an &#39;echo&#39;, expects a &#39;response&#39;.
+<a name="line147"></a>// * Optionally, reconnects the outer frame, sends an &#39;echo&#39;, expects a
+<a name="line148"></a>//   &#39;response&#39;.
+<a name="line149"></a>// * Optionally, reconnects the inner frame, but first reconfigures it to the
+<a name="line150"></a>//   alternate protocol version, simulating an inner frame navigation that
+<a name="line151"></a>//   picks up a new/old version.
+<a name="line152"></a>//
+<a name="line153"></a>// Every valid combination of protocol versions is tested, with both single and
+<a name="line154"></a>// double ended handshakes.  Two timing scenarios are tested per combination,
+<a name="line155"></a>// which is what the &#39;reverse&#39; parameter distinguishes.
+<a name="line156"></a>//
+<a name="line157"></a>// Where single sided handshake is in use, reconnection by the outer frame is
+<a name="line158"></a>// not supported, and therefore is not tested.
+<a name="line159"></a>//
+<a name="line160"></a>// The only known issue migrating to V2 is that once two V2 peers have
+<a name="line161"></a>// connected, replacing either peer with a V1 peer will not work.  Upgrading V1
+<a name="line162"></a>// peers to v2 is supported, as is replacing the only v2 peer in a connection
+<a name="line163"></a>// with a v1.
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>function testLifeCycle_v1_v1() {
+<a name="line167"></a>  checkLifeCycle(
+<a name="line168"></a>      false /* oneSidedHandshake */,
+<a name="line169"></a>      1 /* innerProtocolVersion */,
+<a name="line170"></a>      1 /* outerProtocolVersion */,
+<a name="line171"></a>      true /* outerFrameReconnectSupported */,
+<a name="line172"></a>      true /* innerFrameMigrationSupported */,
+<a name="line173"></a>      false /* reverse */);
+<a name="line174"></a>}
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>function testLifeCycle_v1_v1_rev() {
+<a name="line178"></a>  checkLifeCycle(
+<a name="line179"></a>      false /* oneSidedHandshake */,
+<a name="line180"></a>      1 /* innerProtocolVersion */,
+<a name="line181"></a>      1 /* outerProtocolVersion */,
+<a name="line182"></a>      true /* outerFrameReconnectSupported */,
+<a name="line183"></a>      true /* innerFrameMigrationSupported */,
+<a name="line184"></a>      true /* reverse */);
+<a name="line185"></a>}
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>function testLifeCycle_v1_v1_onesided() {
+<a name="line189"></a>  checkLifeCycle(
+<a name="line190"></a>      true /* oneSidedHandshake */,
+<a name="line191"></a>      1 /* innerProtocolVersion */,
+<a name="line192"></a>      1 /* outerProtocolVersion */,
+<a name="line193"></a>      false /* outerFrameReconnectSupported */,
+<a name="line194"></a>      true /* innerFrameMigrationSupported */,
+<a name="line195"></a>      false /* reverse */);
+<a name="line196"></a>}
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>function testLifeCycle_v1_v1_onesided_rev() {
+<a name="line200"></a>  checkLifeCycle(
+<a name="line201"></a>      true /* oneSidedHandshake */,
+<a name="line202"></a>      1 /* innerProtocolVersion */,
+<a name="line203"></a>      1 /* outerProtocolVersion */,
+<a name="line204"></a>      false /* outerFrameReconnectSupported */,
+<a name="line205"></a>      true /* innerFrameMigrationSupported */,
+<a name="line206"></a>      true /* reverse */);
+<a name="line207"></a>}
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>function testLifeCycle_v1_v2() {
+<a name="line211"></a>  checkLifeCycle(
+<a name="line212"></a>      false /* oneSidedHandshake */,
+<a name="line213"></a>      1 /* innerProtocolVersion */,
+<a name="line214"></a>      2 /* outerProtocolVersion */,
+<a name="line215"></a>      true /* outerFrameReconnectSupported */,
+<a name="line216"></a>      true /* innerFrameMigrationSupported */,
+<a name="line217"></a>      false /* reverse */);
+<a name="line218"></a>}
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>function testLifeCycle_v1_v2_rev() {
+<a name="line222"></a>  checkLifeCycle(
+<a name="line223"></a>      false /* oneSidedHandshake */,
+<a name="line224"></a>      1 /* innerProtocolVersion */,
+<a name="line225"></a>      2 /* outerProtocolVersion */,
+<a name="line226"></a>      true /* outerFrameReconnectSupported */,
+<a name="line227"></a>      true /* innerFrameMigrationSupported */,
+<a name="line228"></a>      true /* reverse */);
+<a name="line229"></a>}
+<a name="line230"></a>
+<a name="line231"></a>
+<a name="line232"></a>function testLifeCycle_v1_v2_onesided() {
+<a name="line233"></a>  checkLifeCycle(
+<a name="line234"></a>      true /* oneSidedHandshake */,
+<a name="line235"></a>      1 /* innerProtocolVersion */,
+<a name="line236"></a>      2 /* outerProtocolVersion */,
+<a name="line237"></a>      false /* outerFrameReconnectSupported */,
+<a name="line238"></a>      true /* innerFrameMigrationSupported */,
+<a name="line239"></a>      false /* reverse */);
+<a name="line240"></a>}
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>function testLifeCycle_v1_v2_onesided_rev() {
+<a name="line244"></a>  checkLifeCycle(
+<a name="line245"></a>      true /* oneSidedHandshake */,
+<a name="line246"></a>      1 /* innerProtocolVersion */,
+<a name="line247"></a>      2 /* outerProtocolVersion */,
+<a name="line248"></a>      false /* outerFrameReconnectSupported */,
+<a name="line249"></a>      true /* innerFrameMigrationSupported */,
+<a name="line250"></a>      true /* reverse */);
+<a name="line251"></a>}
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>function testLifeCycle_v2_v1() {
+<a name="line255"></a>  checkLifeCycle(
+<a name="line256"></a>      false /* oneSidedHandshake */,
+<a name="line257"></a>      2 /* innerProtocolVersion */,
+<a name="line258"></a>      1 /* outerProtocolVersion */,
+<a name="line259"></a>      true /* outerFrameReconnectSupported */,
+<a name="line260"></a>      true /* innerFrameMigrationSupported */,
+<a name="line261"></a>      false /* reverse */);
+<a name="line262"></a>}
+<a name="line263"></a>
+<a name="line264"></a>
+<a name="line265"></a>function testLifeCycle_v2_v1_rev() {
+<a name="line266"></a>  checkLifeCycle(
+<a name="line267"></a>      false /* oneSidedHandshake */,
+<a name="line268"></a>      2 /* innerProtocolVersion */,
+<a name="line269"></a>      1 /* outerProtocolVersion */,
+<a name="line270"></a>      true /* outerFrameReconnectSupported */,
+<a name="line271"></a>      true /* innerFrameMigrationSupported */,
+<a name="line272"></a>      true /* reverse */);
+<a name="line273"></a>}
+<a name="line274"></a>
+<a name="line275"></a>
+<a name="line276"></a>function testLifeCycle_v2_v1_onesided() {
+<a name="line277"></a>  checkLifeCycle(
+<a name="line278"></a>      true /* oneSidedHandshake */,
+<a name="line279"></a>      2 /* innerProtocolVersion */,
+<a name="line280"></a>      1 /* outerProtocolVersion */,
+<a name="line281"></a>      false /* outerFrameReconnectSupported */,
+<a name="line282"></a>      true /* innerFrameMigrationSupported */,
+<a name="line283"></a>      false /* reverse */);
+<a name="line284"></a>}
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>function testLifeCycle_v2_v1_onesided_rev() {
+<a name="line288"></a>  checkLifeCycle(
+<a name="line289"></a>      true /* oneSidedHandshake */,
+<a name="line290"></a>      2 /* innerProtocolVersion */,
+<a name="line291"></a>      1 /* outerProtocolVersion */,
+<a name="line292"></a>      false /* outerFrameReconnectSupported */,
+<a name="line293"></a>      true /* innerFrameMigrationSupported */,
+<a name="line294"></a>      true /* reverse */);
+<a name="line295"></a>}
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>function testLifeCycle_v2_v2() {
+<a name="line299"></a>  checkLifeCycle(
+<a name="line300"></a>      false /* oneSidedHandshake */,
+<a name="line301"></a>      2 /* innerProtocolVersion */,
+<a name="line302"></a>      2 /* outerProtocolVersion */,
+<a name="line303"></a>      true /* outerFrameReconnectSupported */,
+<a name="line304"></a>      false /* innerFrameMigrationSupported */,
+<a name="line305"></a>      false /* reverse */);
+<a name="line306"></a>}
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>function testLifeCycle_v2_v2_rev() {
+<a name="line310"></a>  checkLifeCycle(
+<a name="line311"></a>      false /* oneSidedHandshake */,
+<a name="line312"></a>      2 /* innerProtocolVersion */,
+<a name="line313"></a>      2 /* outerProtocolVersion */,
+<a name="line314"></a>      true /* outerFrameReconnectSupported */,
+<a name="line315"></a>      false /* innerFrameMigrationSupported */,
+<a name="line316"></a>      true /* reverse */);
+<a name="line317"></a>}
+<a name="line318"></a>
+<a name="line319"></a>
+<a name="line320"></a>function testLifeCycle_v2_v2_onesided() {
+<a name="line321"></a>  checkLifeCycle(
+<a name="line322"></a>      true /* oneSidedHandshake */,
+<a name="line323"></a>      2 /* innerProtocolVersion */,
+<a name="line324"></a>      2 /* outerProtocolVersion */,
+<a name="line325"></a>      false /* outerFrameReconnectSupported */,
+<a name="line326"></a>      false /* innerFrameMigrationSupported */,
+<a name="line327"></a>      false /* reverse */);
+<a name="line328"></a>}
+<a name="line329"></a>
+<a name="line330"></a>
+<a name="line331"></a>function testLifeCycle_v2_v2_onesided_rev() {
+<a name="line332"></a>  checkLifeCycle(
+<a name="line333"></a>      true /* oneSidedHandshake */,
+<a name="line334"></a>      2 /* innerProtocolVersion */,
+<a name="line335"></a>      2 /* outerProtocolVersion */,
+<a name="line336"></a>      false /* outerFrameReconnectSupported */,
+<a name="line337"></a>      false /* innerFrameMigrationSupported */,
+<a name="line338"></a>      true /* reverse */);
+<a name="line339"></a>}
+<a name="line340"></a>
+<a name="line341"></a>
+<a name="line342"></a>function checkLifeCycle(oneSidedHandshake, innerProtocolVersion,
+<a name="line343"></a>    outerProtocolVersion, outerFrameReconnectSupported,
+<a name="line344"></a>    innerFrameMigrationSupported, reverse) {
+<a name="line345"></a>  driver.createPeerIframe(&#39;new_iframe&#39;, oneSidedHandshake,
+<a name="line346"></a>      innerProtocolVersion, outerProtocolVersion);
+<a name="line347"></a>  driver.connect(true /* fullLifeCycleTest */, outerFrameReconnectSupported,
+<a name="line348"></a>      innerFrameMigrationSupported, reverse);
+<a name="line349"></a>}
+<a name="line350"></a>
+<a name="line351"></a>
+<a name="line352"></a>function testConnectMismatchedNames_v1_v1() {
+<a name="line353"></a>  checkConnectMismatchedNames(
+<a name="line354"></a>      1 /* innerProtocolVersion */,
+<a name="line355"></a>      1 /* outerProtocolVersion */,
+<a name="line356"></a>      false /* reverse */);
+<a name="line357"></a>}
+<a name="line358"></a>
+<a name="line359"></a>
+<a name="line360"></a>function testConnectMismatchedNames_v1_v1_rev() {
+<a name="line361"></a>  checkConnectMismatchedNames(
+<a name="line362"></a>      1 /* innerProtocolVersion */,
+<a name="line363"></a>      1 /* outerProtocolVersion */,
+<a name="line364"></a>      true /* reverse */);
+<a name="line365"></a>}
+<a name="line366"></a>
+<a name="line367"></a>
+<a name="line368"></a>function testConnectMismatchedNames_v1_v2() {
+<a name="line369"></a>  checkConnectMismatchedNames(
+<a name="line370"></a>      1 /* innerProtocolVersion */,
+<a name="line371"></a>      2 /* outerProtocolVersion */,
+<a name="line372"></a>      false /* reverse */);
+<a name="line373"></a>}
+<a name="line374"></a>
+<a name="line375"></a>
+<a name="line376"></a>function testConnectMismatchedNames_v1_v2_rev() {
+<a name="line377"></a>  checkConnectMismatchedNames(
+<a name="line378"></a>      1 /* innerProtocolVersion */,
+<a name="line379"></a>      2 /* outerProtocolVersion */,
+<a name="line380"></a>      true /* reverse */);
+<a name="line381"></a>}
+<a name="line382"></a>
+<a name="line383"></a>
+<a name="line384"></a>function testConnectMismatchedNames_v2_v1() {
+<a name="line385"></a>  checkConnectMismatchedNames(
+<a name="line386"></a>      2 /* innerProtocolVersion */,
+<a name="line387"></a>      1 /* outerProtocolVersion */,
+<a name="line388"></a>      false /* reverse */);
+<a name="line389"></a>}
+<a name="line390"></a>
+<a name="line391"></a>
+<a name="line392"></a>function testConnectMismatchedNames_v2_v1_rev() {
+<a name="line393"></a>  checkConnectMismatchedNames(
+<a name="line394"></a>      2 /* innerProtocolVersion */,
+<a name="line395"></a>      1 /* outerProtocolVersion */,
+<a name="line396"></a>      true /* reverse */);
+<a name="line397"></a>}
+<a name="line398"></a>
+<a name="line399"></a>
+<a name="line400"></a>function testConnectMismatchedNames_v2_v2() {
+<a name="line401"></a>  checkConnectMismatchedNames(
+<a name="line402"></a>      2 /* innerProtocolVersion */,
+<a name="line403"></a>      2 /* outerProtocolVersion */,
+<a name="line404"></a>      false /* reverse */);
+<a name="line405"></a>}
+<a name="line406"></a>
+<a name="line407"></a>
+<a name="line408"></a>function testConnectMismatchedNames_v2_v2_rev() {
+<a name="line409"></a>  checkConnectMismatchedNames(
+<a name="line410"></a>      2 /* innerProtocolVersion */,
+<a name="line411"></a>      2 /* outerProtocolVersion */,
+<a name="line412"></a>      true /* reverse */);
+<a name="line413"></a>}
+<a name="line414"></a>
+<a name="line415"></a>
+<a name="line416"></a>function checkConnectMismatchedNames(innerProtocolVersion,
+<a name="line417"></a>    outerProtocolVersion, reverse) {
+<a name="line418"></a>  driver.createPeerIframe(&#39;new_iframe&#39;, false /* oneSidedHandshake */,
+<a name="line419"></a>      innerProtocolVersion,
+<a name="line420"></a>      outerProtocolVersion, true /* opt_randomChannelNames */);
+<a name="line421"></a>  driver.connect(false /* fullLifeCycleTest */,
+<a name="line422"></a>      false /* outerFrameReconnectSupported */,
+<a name="line423"></a>      false /* innerFrameMigrationSupported */,
+<a name="line424"></a>      false /* reverse */);
+<a name="line425"></a>}
+<a name="line426"></a>
+<a name="line427"></a>
+<a name="line428"></a>function testEscapeServiceName() {
+<a name="line429"></a>  var escape = goog.net.xpc.CrossPageChannel.prototype.escapeServiceName_;
+<a name="line430"></a>  assertEquals(&#39;Shouldn\&#39;t escape alphanumeric name&#39;,
+<a name="line431"></a>               &#39;fooBar123&#39;, escape(&#39;fooBar123&#39;));
+<a name="line432"></a>  assertEquals(&#39;Shouldn\&#39;t escape most non-alphanumeric characters&#39;,
+<a name="line433"></a>               &#39;`~!@#$^&amp;*()_-=+ []{}\&#39;&quot;;,&lt;.&gt;/?\\&#39;,
+<a name="line434"></a>               escape(&#39;`~!@#$^&amp;*()_-=+ []{}\&#39;&quot;;,&lt;.&gt;/?\\&#39;));
+<a name="line435"></a>  assertEquals(&#39;Should escape %, |, and :&#39;,
+<a name="line436"></a>               &#39;foo%3ABar%7C123%25&#39;, escape(&#39;foo:Bar|123%&#39;));
+<a name="line437"></a>  assertEquals(&#39;Should escape tp&#39;, &#39;%25tp&#39;, escape(&#39;tp&#39;));
+<a name="line438"></a>  assertEquals(&#39;Should escape %tp&#39;, &#39;%25%25tp&#39;, escape(&#39;%tp&#39;));
+<a name="line439"></a>  assertEquals(&#39;Should not escape stp&#39;, &#39;stp&#39;, escape(&#39;stp&#39;));
+<a name="line440"></a>  assertEquals(&#39;Should not escape s%tp&#39;, &#39;s%25tp&#39;, escape(&#39;s%tp&#39;));
+<a name="line441"></a>}
+<a name="line442"></a>
+<a name="line443"></a>
+<a name="line444"></a>function testSameDomainCheck_noMessageOrigin() {
+<a name="line445"></a>  var channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
+<a name="line446"></a>      goog.net.xpc.CfgFields.PEER_HOSTNAME, &#39;http://foo.com&#39;));
+<a name="line447"></a>  assertTrue(channel.isMessageOriginAcceptable_(undefined));
+<a name="line448"></a>}
+<a name="line449"></a>
+<a name="line450"></a>
+<a name="line451"></a>function testSameDomainCheck_noPeerHostname() {
+<a name="line452"></a>  var channel = new goog.net.xpc.CrossPageChannel({});
+<a name="line453"></a>  assertTrue(channel.isMessageOriginAcceptable_(&#39;http://foo.com&#39;));
+<a name="line454"></a>}
+<a name="line455"></a>
+<a name="line456"></a>
+<a name="line457"></a>function testSameDomainCheck_unconfigured() {
+<a name="line458"></a>  var channel = new goog.net.xpc.CrossPageChannel({});
+<a name="line459"></a>  assertTrue(channel.isMessageOriginAcceptable_(undefined));
+<a name="line460"></a>}
+<a name="line461"></a>
+<a name="line462"></a>
+<a name="line463"></a>function testSameDomainCheck_originsMatch() {
+<a name="line464"></a>  var channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
+<a name="line465"></a>      goog.net.xpc.CfgFields.PEER_HOSTNAME, &#39;http://foo.com&#39;));
+<a name="line466"></a>  assertTrue(channel.isMessageOriginAcceptable_(&#39;http://foo.com&#39;));
+<a name="line467"></a>}
+<a name="line468"></a>
+<a name="line469"></a>
+<a name="line470"></a>function testSameDomainCheck_originsMismatch() {
+<a name="line471"></a>  var channel = new goog.net.xpc.CrossPageChannel(goog.object.create(
+<a name="line472"></a>      goog.net.xpc.CfgFields.PEER_HOSTNAME, &#39;http://foo.com&#39;));
+<a name="line473"></a>  assertFalse(channel.isMessageOriginAcceptable_(&#39;http://nasty.com&#39;));
+<a name="line474"></a>}
+<a name="line475"></a>
+<a name="line476"></a>
+<a name="line477"></a>function testUnescapeServiceName() {
+<a name="line478"></a>  var unescape = goog.net.xpc.CrossPageChannel.prototype.unescapeServiceName_;
+<a name="line479"></a>  assertEquals(&#39;Shouldn\&#39;t modify alphanumeric name&#39;,
+<a name="line480"></a>               &#39;fooBar123&#39;, unescape(&#39;fooBar123&#39;));
+<a name="line481"></a>  assertEquals(&#39;Shouldn\&#39;t modify most non-alphanumeric characters&#39;,
+<a name="line482"></a>               &#39;`~!@#$^&amp;*()_-=+ []{}\&#39;&quot;;,&lt;.&gt;/?\\&#39;,
+<a name="line483"></a>               unescape(&#39;`~!@#$^&amp;*()_-=+ []{}\&#39;&quot;;,&lt;.&gt;/?\\&#39;));
+<a name="line484"></a>  assertEquals(&#39;Should unescape URL-escapes&#39;,
+<a name="line485"></a>               &#39;foo:Bar|123%&#39;, unescape(&#39;foo%3ABar%7C123%25&#39;));
+<a name="line486"></a>  assertEquals(&#39;Should unescape tp&#39;, &#39;tp&#39;, unescape(&#39;%25tp&#39;));
+<a name="line487"></a>  assertEquals(&#39;Should unescape %tp&#39;, &#39;%tp&#39;, unescape(&#39;%25%25tp&#39;));
+<a name="line488"></a>  assertEquals(&#39;Should not escape stp&#39;, &#39;stp&#39;, unescape(&#39;stp&#39;));
+<a name="line489"></a>  assertEquals(&#39;Should not escape s%tp&#39;, &#39;s%tp&#39;, unescape(&#39;s%25tp&#39;));
+<a name="line490"></a>}
+<a name="line491"></a>
+<a name="line492"></a>
+<a name="line493"></a>/**
+<a name="line494"></a> * Tests the case where the channel is disposed before it is fully connected.
+<a name="line495"></a> */
+<a name="line496"></a>function testDisposeBeforeConnect() {
+<a name="line497"></a>  asyncTestCase.waitForAsync(&#39;Checking disposal before connection.&#39;);
+<a name="line498"></a>  driver.createPeerIframe(&#39;new_iframe&#39;, false /* oneSidedHandshake */,
+<a name="line499"></a>      2 /* innerProtocolVersion */, 2 /* outerProtocolVersion */,
+<a name="line500"></a>      true /* opt_randomChannelNames */);
+<a name="line501"></a>  driver.connectOuterAndDispose();
+<a name="line502"></a>}
+<a name="line503"></a>
+<a name="line504"></a>
+<a name="line505"></a>
+<a name="line506"></a>/**
+<a name="line507"></a> * Driver for the tests for CrossPageChannel.
+<a name="line508"></a> *
+<a name="line509"></a> * @constructor
+<a name="line510"></a> * @extends {goog.Disposable}
+<a name="line511"></a> */
+<a name="line512"></a>Driver = function() {
+<a name="line513"></a>  goog.Disposable.call(this);
+<a name="line514"></a>
+<a name="line515"></a>  /**
+<a name="line516"></a>   * The peer iframe.
+<a name="line517"></a>   * @type {!Element}
+<a name="line518"></a>   * @private
+<a name="line519"></a>   */
+<a name="line520"></a>  this.iframe_ = null;
+<a name="line521"></a>
+<a name="line522"></a>  /**
+<a name="line523"></a>   * The channel to use.
+<a name="line524"></a>   * @type {goog.net.xpc.CrossPageChannel}
+<a name="line525"></a>   * @private
+<a name="line526"></a>   */
+<a name="line527"></a>  this.channel_ = null;
+<a name="line528"></a>
+<a name="line529"></a>  /**
+<a name="line530"></a>   * Outer frame configuration object.
+<a name="line531"></a>   * @type {Object}
+<a name="line532"></a>   * @private
+<a name="line533"></a>   */
+<a name="line534"></a>  this.outerFrameCfg_ = null;
+<a name="line535"></a>
+<a name="line536"></a>  /**
+<a name="line537"></a>   * The initial name of the outer channel.
+<a name="line538"></a>   * @type {?string}
+<a name="line539"></a>   * @private
+<a name="line540"></a>   */
+<a name="line541"></a>  this.initialOuterChannelName_ = null;
+<a name="line542"></a>
+<a name="line543"></a>  /**
+<a name="line544"></a>   * Inner frame configuration object.
+<a name="line545"></a>   * @type {Object}
+<a name="line546"></a>   * @private
+<a name="line547"></a>   */
+<a name="line548"></a>  this.innerFrameCfg_ = null;
+<a name="line549"></a>
+<a name="line550"></a>  /**
+<a name="line551"></a>   * The contents of the payload of the &#39;echo&#39; request sent by the inner frame.
+<a name="line552"></a>   * @type {?string}
+<a name="line553"></a>   * @private
+<a name="line554"></a>   */
+<a name="line555"></a>  this.innerFrameEchoPayload_ = null;
+<a name="line556"></a>
+<a name="line557"></a>  /**
+<a name="line558"></a>   * The contents of the payload of the &#39;echo&#39; request sent by the outer frame.
+<a name="line559"></a>   * @type {?string}
+<a name="line560"></a>   * @private
+<a name="line561"></a>   */
+<a name="line562"></a>  this.outerFrameEchoPayload_ = null;
+<a name="line563"></a>
+<a name="line564"></a>  /**
+<a name="line565"></a>   * A deferred which fires when the inner frame receives its echo response.
+<a name="line566"></a>   * @type {goog.async.Deferred}
+<a name="line567"></a>   * @private
+<a name="line568"></a>   */
+<a name="line569"></a>  this.innerFrameResponseReceived_ = new goog.async.Deferred();
+<a name="line570"></a>
+<a name="line571"></a>  /**
+<a name="line572"></a>   * A deferred which fires when the outer frame receives its echo response.
+<a name="line573"></a>   * @type {goog.async.Deferred}
+<a name="line574"></a>   * @private
+<a name="line575"></a>   */
+<a name="line576"></a>  this.outerFrameResponseReceived_ = new goog.async.Deferred();
+<a name="line577"></a>
+<a name="line578"></a>};
+<a name="line579"></a>goog.inherits(Driver, goog.Disposable);
+<a name="line580"></a>
+<a name="line581"></a>
+<a name="line582"></a>/** @override */
+<a name="line583"></a>Driver.prototype.disposeInternal = function() {
+<a name="line584"></a>  // Required to make this test perform acceptably (and pass) on slow browsers,
+<a name="line585"></a>  // esp IE8.
+<a name="line586"></a>  if (CLEAN_UP_IFRAMES) {
+<a name="line587"></a>    goog.dom.removeNode(this.iframe_);
+<a name="line588"></a>    delete this.iframe_;
+<a name="line589"></a>  }
+<a name="line590"></a>  goog.dispose(this.channel_);
+<a name="line591"></a>  this.innerFrameResponseReceived_.cancel();
+<a name="line592"></a>  this.innerFrameResponseReceived_ = null;
+<a name="line593"></a>  this.outerFrameResponseReceived_.cancel();
+<a name="line594"></a>  this.outerFrameResponseReceived_ = null;
+<a name="line595"></a>  goog.base(this, &#39;disposeInternal&#39;);
+<a name="line596"></a>};
+<a name="line597"></a>
+<a name="line598"></a>
+<a name="line599"></a>/**
+<a name="line600"></a> * Returns the child peer&#39;s window object.
+<a name="line601"></a> * @return {Window} Child peer&#39;s window.
+<a name="line602"></a> * @private
+<a name="line603"></a> */
+<a name="line604"></a>Driver.prototype.getInnerPeer_ = function() {
+<a name="line605"></a>  return this.iframe_.contentWindow;
+<a name="line606"></a>};
+<a name="line607"></a>
+<a name="line608"></a>
+<a name="line609"></a>/**
+<a name="line610"></a> * Sets up the configuration objects for the inner and outer frames.
+<a name="line611"></a> * @param {string=} opt_iframeId If present, the ID of the iframe to use,
+<a name="line612"></a> *     otherwise, tells the channel to generate an iframe ID.
+<a name="line613"></a> * @param {boolean=} opt_oneSidedHandshake Whether the one sided handshake
+<a name="line614"></a> *     config option should be set.
+<a name="line615"></a> * @param {string=} opt_channelName The name of the channel to use, or null
+<a name="line616"></a> *     to generate one.
+<a name="line617"></a> * @param {number=} opt_innerProtocolVersion The native transport protocol
+<a name="line618"></a> *     version used in the inner iframe.
+<a name="line619"></a> * @param {number=} opt_outerProtocolVersion The native transport protocol
+<a name="line620"></a> *     version used in the outer iframe.
+<a name="line621"></a> * @param {boolean=} opt_randomChannelNames Whether the different ends of the
+<a name="line622"></a> *     channel should be allowed to pick differing, random names.
+<a name="line623"></a> * @return {string} The name of the created channel.
+<a name="line624"></a> * @private
+<a name="line625"></a> */
+<a name="line626"></a>Driver.prototype.setConfiguration_ = function(opt_iframeId,
+<a name="line627"></a>    opt_oneSidedHandshake, opt_channelName, opt_innerProtocolVersion,
+<a name="line628"></a>    opt_outerProtocolVersion, opt_randomChannelNames) {
+<a name="line629"></a>  var cfg = {};
+<a name="line630"></a>  if (opt_iframeId) {
+<a name="line631"></a>    cfg[goog.net.xpc.CfgFields.IFRAME_ID] = opt_iframeId;
+<a name="line632"></a>  }
+<a name="line633"></a>  cfg[goog.net.xpc.CfgFields.PEER_URI] = &#39;testdata/inner_peer.html&#39;;
+<a name="line634"></a>  if (!opt_randomChannelNames) {
+<a name="line635"></a>    var channelName = opt_channelName || &#39;test_channel&#39; + uniqueId++;
+<a name="line636"></a>    cfg[goog.net.xpc.CfgFields.CHANNEL_NAME] = channelName;
+<a name="line637"></a>  }
+<a name="line638"></a>  cfg[goog.net.xpc.CfgFields.LOCAL_POLL_URI] = &#39;does-not-exist.html&#39;;
+<a name="line639"></a>  cfg[goog.net.xpc.CfgFields.PEER_POLL_URI] = &#39;does-not-exist.html&#39;;
+<a name="line640"></a>  cfg[goog.net.xpc.CfgFields.ONE_SIDED_HANDSHAKE] = !!opt_oneSidedHandshake;
+<a name="line641"></a>  cfg[goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
+<a name="line642"></a>      opt_outerProtocolVersion;
+<a name="line643"></a>  function resolveUri(fieldName) {
+<a name="line644"></a>    cfg[fieldName] =
+<a name="line645"></a>        goog.Uri.resolve(window.location.href, cfg[fieldName]).toString();
+<a name="line646"></a>  }
+<a name="line647"></a>  resolveUri(goog.net.xpc.CfgFields.PEER_URI);
+<a name="line648"></a>  resolveUri(goog.net.xpc.CfgFields.LOCAL_POLL_URI);
+<a name="line649"></a>  resolveUri(goog.net.xpc.CfgFields.PEER_POLL_URI);
+<a name="line650"></a>  this.outerFrameCfg_ = cfg;
+<a name="line651"></a>  this.innerFrameCfg_ = goog.object.clone(cfg);
+<a name="line652"></a>  this.innerFrameCfg_[
+<a name="line653"></a>      goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
+<a name="line654"></a>      opt_innerProtocolVersion;
+<a name="line655"></a>};
+<a name="line656"></a>
+<a name="line657"></a>
+<a name="line658"></a>/**
+<a name="line659"></a> * Creates an outer frame channel object.
+<a name="line660"></a> * @private
+<a name="line661"></a> */
+<a name="line662"></a>Driver.prototype.createChannel_ = function() {
+<a name="line663"></a>  if (this.channel_) {
+<a name="line664"></a>    this.channel_.dispose();
+<a name="line665"></a>  }
+<a name="line666"></a>  this.channel_ = new goog.net.xpc.CrossPageChannel(this.outerFrameCfg_);
+<a name="line667"></a>  this.channel_.registerService(&#39;echo&#39;,
+<a name="line668"></a>      goog.bind(this.echoHandler_, this));
+<a name="line669"></a>  this.channel_.registerService(&#39;response&#39;,
+<a name="line670"></a>      goog.bind(this.responseHandler_, this));
+<a name="line671"></a>
+<a name="line672"></a>  return this.channel_.name;
+<a name="line673"></a>};
+<a name="line674"></a>
+<a name="line675"></a>
+<a name="line676"></a>/**
+<a name="line677"></a> * Checks the names of the inner and outer frames meet expectations.
+<a name="line678"></a> * @private
+<a name="line679"></a> */
+<a name="line680"></a>Driver.prototype.checkChannelNames_ = function() {
+<a name="line681"></a>  var outerName = this.channel_.name;
+<a name="line682"></a>  var innerName = this.getInnerPeer_().channel.name;
+<a name="line683"></a>  var configName = this.innerFrameCfg_[goog.net.xpc.CfgFields.CHANNEL_NAME] ||
+<a name="line684"></a>      null;
+<a name="line685"></a>
+<a name="line686"></a>  // The outer channel never changes its name.
+<a name="line687"></a>  assertEquals(this.initialOuterChannelName_, outerName);
+<a name="line688"></a>  // The name should be as configured, if it was configured.
+<a name="line689"></a>  if (configName) {
+<a name="line690"></a>    assertEquals(configName, innerName);
+<a name="line691"></a>  }
+<a name="line692"></a>  // The names of both ends of the channel should match.
+<a name="line693"></a>  assertEquals(innerName, outerName);
+<a name="line694"></a>  G_testRunner.log(&#39;Channel name: &#39; + innerName);
+<a name="line695"></a>};
+<a name="line696"></a>
+<a name="line697"></a>
+<a name="line698"></a>/**
+<a name="line699"></a> * Returns the configuration of the xpc.
+<a name="line700"></a> * @return {?Object} The configuration of the xpc.
+<a name="line701"></a> */
+<a name="line702"></a>Driver.prototype.getInnerFrameConfiguration = function() {
+<a name="line703"></a>  return this.innerFrameCfg_;
+<a name="line704"></a>};
+<a name="line705"></a>
+<a name="line706"></a>
+<a name="line707"></a>/**
+<a name="line708"></a> * Creates the peer iframe.
+<a name="line709"></a> * @param {string=} opt_iframeId If present, the ID of the iframe to create,
+<a name="line710"></a> *     otherwise, generates an iframe ID.
+<a name="line711"></a> * @param {boolean=} opt_oneSidedHandshake Whether a one sided handshake is
+<a name="line712"></a> *     specified.
+<a name="line713"></a> * @param {number=} opt_innerProtocolVersion The native transport protocol
+<a name="line714"></a> *     version used in the inner iframe.
+<a name="line715"></a> * @param {number=} opt_outerProtocolVersion The native transport protocol
+<a name="line716"></a> *     version used in the outer iframe.
+<a name="line717"></a> * @param {boolean=} opt_randomChannelNames Whether the ends of the channel
+<a name="line718"></a> *     should be allowed to pick differing, random names.
+<a name="line719"></a> * @return {!Array.&lt;string&gt;} The id of the created iframe and the name of the
+<a name="line720"></a> *     created channel.
+<a name="line721"></a> */
+<a name="line722"></a>Driver.prototype.createPeerIframe = function(opt_iframeId,
+<a name="line723"></a>    opt_oneSidedHandshake, opt_innerProtocolVersion, opt_outerProtocolVersion,
+<a name="line724"></a>    opt_randomChannelNames) {
+<a name="line725"></a>  var expectedIframeId;
+<a name="line726"></a>
+<a name="line727"></a>  if (opt_iframeId) {
+<a name="line728"></a>    expectedIframeId = opt_iframeId = opt_iframeId + uniqueId++;
+<a name="line729"></a>  } else {
+<a name="line730"></a>    // Have createPeerIframe() generate an ID
+<a name="line731"></a>    stubs.set(goog.net.xpc, &#39;getRandomString&#39;, function(length) {
+<a name="line732"></a>      return &#39;&#39; + length;
+<a name="line733"></a>    });
+<a name="line734"></a>    expectedIframeId = &#39;xpcpeer4&#39;;
+<a name="line735"></a>  }
+<a name="line736"></a>  assertNull(&#39;element[id=&#39; + expectedIframeId + &#39;] exists&#39;,
+<a name="line737"></a>      goog.dom.getElement(expectedIframeId));
+<a name="line738"></a>
+<a name="line739"></a>  this.setConfiguration_(opt_iframeId, opt_oneSidedHandshake,
+<a name="line740"></a>      undefined /* opt_channelName */, opt_innerProtocolVersion,
+<a name="line741"></a>      opt_outerProtocolVersion, opt_randomChannelNames);
+<a name="line742"></a>  var channelName = this.createChannel_();
+<a name="line743"></a>  this.initialOuterChannelName_ = channelName;
+<a name="line744"></a>  this.iframe_ = this.channel_.createPeerIframe(document.body);
+<a name="line745"></a>
+<a name="line746"></a>  assertEquals(expectedIframeId, this.iframe_.id);
+<a name="line747"></a>};
+<a name="line748"></a>
+<a name="line749"></a>
+<a name="line750"></a>/**
+<a name="line751"></a> * Checks if the peer iframe has been created.
+<a name="line752"></a> */
+<a name="line753"></a>Driver.prototype.checkPeerIframe = function() {
+<a name="line754"></a>  assertNotNull(this.iframe_);
+<a name="line755"></a>  var peer = this.getInnerPeer_();
+<a name="line756"></a>  assertNotNull(peer);
+<a name="line757"></a>  assertNotNull(peer.document);
+<a name="line758"></a>};
+<a name="line759"></a>
+<a name="line760"></a>
+<a name="line761"></a>/**
+<a name="line762"></a> * Starts the connection. The connection happens asynchronously.
+<a name="line763"></a> */
+<a name="line764"></a>Driver.prototype.connect = function(fullLifeCycleTest,
+<a name="line765"></a>    outerFrameReconnectSupported, innerFrameMigrationSupported, reverse) {
+<a name="line766"></a>  if (!this.isTransportTestable_()) {
+<a name="line767"></a>    asyncTestCase.continueTesting();
+<a name="line768"></a>    return;
+<a name="line769"></a>  }
+<a name="line770"></a>
+<a name="line771"></a>  asyncTestCase.waitForAsync(&#39;parent and child connect&#39;);
+<a name="line772"></a>
+<a name="line773"></a>  // Set the criteria for the initial handshake portion of the test.
+<a name="line774"></a>  this.reinitializeDeferreds_();
+<a name="line775"></a>  this.innerFrameResponseReceived_.awaitDeferred(
+<a name="line776"></a>      this.outerFrameResponseReceived_);
+<a name="line777"></a>  this.innerFrameResponseReceived_.addCallback(
+<a name="line778"></a>      goog.bind(this.checkChannelNames_, this));
+<a name="line779"></a>
+<a name="line780"></a>  if (fullLifeCycleTest) {
+<a name="line781"></a>    this.innerFrameResponseReceived_.addCallback(
+<a name="line782"></a>        goog.bind(this.testReconnects_, this,
+<a name="line783"></a>            outerFrameReconnectSupported, innerFrameMigrationSupported));
+<a name="line784"></a>  } else {
+<a name="line785"></a>    this.innerFrameResponseReceived_.addCallback(
+<a name="line786"></a>        goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+<a name="line787"></a>  }
+<a name="line788"></a>
+<a name="line789"></a>  this.continueConnect_(reverse);
+<a name="line790"></a>};
+<a name="line791"></a>
+<a name="line792"></a>
+<a name="line793"></a>Driver.prototype.continueConnect_ = function(reverse) {
+<a name="line794"></a>  // Wait until the peer is fully established.  Establishment is sometimes very
+<a name="line795"></a>  // slow indeed, especially on virtual machines, so a fixed timeout is not
+<a name="line796"></a>  // suitable.  This wait is required because we want to take precise control
+<a name="line797"></a>  // of the channel startup timing, and shouldn&#39;t be needed in production use,
+<a name="line798"></a>  // where the inner frame&#39;s channel is typically not started by a DOM call as
+<a name="line799"></a>  // it is here.
+<a name="line800"></a>  if (!this.getInnerPeer_() || !this.getInnerPeer_().instantiateChannel) {
+<a name="line801"></a>    window.setTimeout(goog.bind(this.continueConnect_, this, reverse), 100);
+<a name="line802"></a>    return;
+<a name="line803"></a>  }
+<a name="line804"></a>
+<a name="line805"></a>  var connectFromOuterFrame = goog.bind(this.channel_.connect, this.channel_,
+<a name="line806"></a>      goog.bind(this.outerFrameConnected_, this));
+<a name="line807"></a>  var innerConfig = this.innerFrameCfg_;
+<a name="line808"></a>  var connectFromInnerFrame = goog.bind(this.getInnerPeer_().instantiateChannel,
+<a name="line809"></a>      this.getInnerPeer_(), innerConfig);
+<a name="line810"></a>
+<a name="line811"></a>  // Take control of the timing and reverse of each frame&#39;s first SETUP call. If
+<a name="line812"></a>  // these happen to fire right on top of each other, that tends to mask
+<a name="line813"></a>  // problems that reliably occur when there is a short delay.
+<a name="line814"></a>  window.setTimeout(connectFromOuterFrame, reverse ? 1 : 10);
+<a name="line815"></a>  window.setTimeout(connectFromInnerFrame, reverse ? 10 : 1);
+<a name="line816"></a>};
+<a name="line817"></a>
+<a name="line818"></a>
+<a name="line819"></a>/**
+<a name="line820"></a> * Called by the outer frame connection callback.
+<a name="line821"></a> * @private
+<a name="line822"></a> */
+<a name="line823"></a>Driver.prototype.outerFrameConnected_ = function() {
+<a name="line824"></a>  var payload = this.outerFrameEchoPayload_ =
+<a name="line825"></a>      goog.net.xpc.getRandomString(10);
+<a name="line826"></a>  this.channel_.send(&#39;echo&#39;, payload);
+<a name="line827"></a>};
+<a name="line828"></a>
+<a name="line829"></a>
+<a name="line830"></a>/**
+<a name="line831"></a> * Called by the inner frame connection callback.
+<a name="line832"></a> */
+<a name="line833"></a>Driver.prototype.innerFrameConnected = function() {
+<a name="line834"></a>  var payload = this.innerFrameEchoPayload_ =
+<a name="line835"></a>      goog.net.xpc.getRandomString(10);
+<a name="line836"></a>  this.getInnerPeer_().sendEcho(payload);
+<a name="line837"></a>};
+<a name="line838"></a>
+<a name="line839"></a>
+<a name="line840"></a>/**
+<a name="line841"></a> * The handler function for incoming echo requests.
+<a name="line842"></a> * @param {string} payload The message payload.
+<a name="line843"></a> * @private
+<a name="line844"></a> */
+<a name="line845"></a>Driver.prototype.echoHandler_ = function(payload) {
+<a name="line846"></a>  assertTrue(&#39;outer frame should be connected&#39;, this.channel_.isConnected());
+<a name="line847"></a>  var peer = this.getInnerPeer_();
+<a name="line848"></a>  assertTrue(&#39;child should be connected&#39;, peer.isConnected());
+<a name="line849"></a>  this.channel_.send(&#39;response&#39;, payload);
+<a name="line850"></a>};
+<a name="line851"></a>
+<a name="line852"></a>
+<a name="line853"></a>/**
+<a name="line854"></a> * The handler function for incoming echo responses.
+<a name="line855"></a> * @param {string} payload The message payload.
+<a name="line856"></a> * @private
+<a name="line857"></a> */
+<a name="line858"></a>Driver.prototype.responseHandler_ = function(payload) {
+<a name="line859"></a>  assertTrue(&#39;outer frame should be connected&#39;, this.channel_.isConnected());
+<a name="line860"></a>  var peer = this.getInnerPeer_();
+<a name="line861"></a>  assertTrue(&#39;child should be connected&#39;, peer.isConnected());
+<a name="line862"></a>  assertEquals(this.outerFrameEchoPayload_, payload);
+<a name="line863"></a>  this.outerFrameResponseReceived_.callback(true);
+<a name="line864"></a>};
+<a name="line865"></a>
+<a name="line866"></a>
+<a name="line867"></a>/**
+<a name="line868"></a> * The handler function for incoming echo replies.
+<a name="line869"></a> * @param {string} payload The message payload.
+<a name="line870"></a> */
+<a name="line871"></a>Driver.prototype.innerFrameGotResponse = function(payload) {
+<a name="line872"></a>  assertTrue(&#39;outer frame should be connected&#39;, this.channel_.isConnected());
+<a name="line873"></a>  var peer = this.getInnerPeer_();
+<a name="line874"></a>  assertTrue(&#39;child should be connected&#39;, peer.isConnected());
+<a name="line875"></a>  assertEquals(this.innerFrameEchoPayload_, payload);
+<a name="line876"></a>  this.innerFrameResponseReceived_.callback(true);
+<a name="line877"></a>};
+<a name="line878"></a>
+<a name="line879"></a>
+<a name="line880"></a>/**
+<a name="line881"></a> * The second phase of the standard test, where reconnections of both the inner
+<a name="line882"></a> * and outer frames are performed.
+<a name="line883"></a> * @param {boolean} outerFrameReconnectSupported Whether outer frame reconnects
+<a name="line884"></a> *     are supported, and should be tested.
+<a name="line885"></a> * @private
+<a name="line886"></a> */
+<a name="line887"></a>Driver.prototype.testReconnects_ = function(outerFrameReconnectSupported,
+<a name="line888"></a>    innerFrameMigrationSupported) {
+<a name="line889"></a>  G_testRunner.log(&#39;Performing inner frame reconnect&#39;);
+<a name="line890"></a>  this.reinitializeDeferreds_();
+<a name="line891"></a>  this.innerFrameResponseReceived_.addCallback(
+<a name="line892"></a>      goog.bind(this.checkChannelNames_, this));
+<a name="line893"></a>
+<a name="line894"></a>  if (outerFrameReconnectSupported) {
+<a name="line895"></a>    this.innerFrameResponseReceived_.addCallback(
+<a name="line896"></a>        goog.bind(this.performOuterFrameReconnect_, this,
+<a name="line897"></a>            innerFrameMigrationSupported));
+<a name="line898"></a>  } else if (innerFrameMigrationSupported) {
+<a name="line899"></a>    this.innerFrameResponseReceived_.addCallback(
+<a name="line900"></a>        goog.bind(this.migrateInnerFrame_, this));
+<a name="line901"></a>  } else {
+<a name="line902"></a>    this.innerFrameResponseReceived_.addCallback(
+<a name="line903"></a>        goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+<a name="line904"></a>  }
+<a name="line905"></a>
+<a name="line906"></a>  this.performInnerFrameReconnect_();
+<a name="line907"></a>};
+<a name="line908"></a>
+<a name="line909"></a>
+<a name="line910"></a>/**
+<a name="line911"></a> * Initializes the deferreds and clears the echo payloads, ready for another
+<a name="line912"></a> * sub-test.
+<a name="line913"></a> * @private
+<a name="line914"></a> */
+<a name="line915"></a>Driver.prototype.reinitializeDeferreds_ = function() {
+<a name="line916"></a>  this.innerFrameEchoPayload_ = null;
+<a name="line917"></a>  this.outerFrameEchoPayload_ = null;
+<a name="line918"></a>  this.innerFrameResponseReceived_.cancel();
+<a name="line919"></a>  this.innerFrameResponseReceived_ = new goog.async.Deferred();
+<a name="line920"></a>  this.outerFrameResponseReceived_.cancel();
+<a name="line921"></a>  this.outerFrameResponseReceived_ = new goog.async.Deferred();
+<a name="line922"></a>};
+<a name="line923"></a>
+<a name="line924"></a>
+<a name="line925"></a>/**
+<a name="line926"></a> * Get the inner frame to reconnect, and repeat the echo test.
+<a name="line927"></a> * @private
+<a name="line928"></a> */
+<a name="line929"></a>Driver.prototype.performInnerFrameReconnect_ = function() {
+<a name="line930"></a>  var peer = this.getInnerPeer_();
+<a name="line931"></a>  peer.instantiateChannel(this.innerFrameCfg_);
+<a name="line932"></a>};
+<a name="line933"></a>
+<a name="line934"></a>
+<a name="line935"></a>/**
+<a name="line936"></a> * Get the outer frame to reconnect, and repeat the echo test.
+<a name="line937"></a> * @private
+<a name="line938"></a> */
+<a name="line939"></a>Driver.prototype.performOuterFrameReconnect_ = function(
+<a name="line940"></a>    innerFrameMigrationSupported) {
+<a name="line941"></a>  G_testRunner.log(&#39;Reconnecting outer frame&#39;);
+<a name="line942"></a>  this.reinitializeDeferreds_();
+<a name="line943"></a>  this.innerFrameResponseReceived_.addCallback(
+<a name="line944"></a>      goog.bind(this.checkChannelNames_, this));
+<a name="line945"></a>  if (innerFrameMigrationSupported) {
+<a name="line946"></a>    this.outerFrameResponseReceived_.addCallback(
+<a name="line947"></a>        goog.bind(this.migrateInnerFrame_, this));
+<a name="line948"></a>  } else {
+<a name="line949"></a>    this.outerFrameResponseReceived_.addCallback(
+<a name="line950"></a>        goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+<a name="line951"></a>  }
+<a name="line952"></a>  this.createChannel_();
+<a name="line953"></a>  this.channel_.connect(goog.bind(this.outerFrameConnected_, this));
+<a name="line954"></a>};
+<a name="line955"></a>
+<a name="line956"></a>
+<a name="line957"></a>/**
+<a name="line958"></a> * Migrate the inner frame to the alternate protocol version and reconnect it.
+<a name="line959"></a> * @private
+<a name="line960"></a> */
+<a name="line961"></a>Driver.prototype.migrateInnerFrame_ = function() {
+<a name="line962"></a>  G_testRunner.log(&#39;Migrating inner frame&#39;);
+<a name="line963"></a>  this.reinitializeDeferreds_();
+<a name="line964"></a>  var innerFrameProtoVersion = this.innerFrameCfg_[
+<a name="line965"></a>      goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION];
+<a name="line966"></a>  this.innerFrameResponseReceived_.addCallback(
+<a name="line967"></a>      goog.bind(this.checkChannelNames_, this));
+<a name="line968"></a>  this.innerFrameResponseReceived_.addCallback(
+<a name="line969"></a>      goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+<a name="line970"></a>  this.innerFrameCfg_[
+<a name="line971"></a>      goog.net.xpc.CfgFields.NATIVE_TRANSPORT_PROTOCOL_VERSION] =
+<a name="line972"></a>      innerFrameProtoVersion == 1 ? 2 : 1;
+<a name="line973"></a>  this.performInnerFrameReconnect_();
+<a name="line974"></a>};
+<a name="line975"></a>
+<a name="line976"></a>
+<a name="line977"></a>/**
+<a name="line978"></a> * Determines if the transport type for the channel is testable.
+<a name="line979"></a> * Some transports are misusing global state or making other
+<a name="line980"></a> * assumptions that cause connections to fail.
+<a name="line981"></a> * @return {boolean} Whether the transport is testable.
+<a name="line982"></a> * @private
+<a name="line983"></a> */
+<a name="line984"></a>Driver.prototype.isTransportTestable_ = function() {
+<a name="line985"></a>  var testable = false;
+<a name="line986"></a>
+<a name="line987"></a>  var transportType = this.channel_.determineTransportType_();
+<a name="line988"></a>  switch (transportType) {
+<a name="line989"></a>    case goog.net.xpc.TransportTypes.IFRAME_RELAY:
+<a name="line990"></a>    case goog.net.xpc.TransportTypes.IFRAME_POLLING:
+<a name="line991"></a>      testable = canAccessSameDomainIframe;
+<a name="line992"></a>      break;
+<a name="line993"></a>    case goog.net.xpc.TransportTypes.NATIVE_MESSAGING:
+<a name="line994"></a>    case goog.net.xpc.TransportTypes.FLASH:
+<a name="line995"></a>    case goog.net.xpc.TransportTypes.DIRECT:
+<a name="line996"></a>    case goog.net.xpc.TransportTypes.NIX:
+<a name="line997"></a>      testable = true;
+<a name="line998"></a>      break;
+<a name="line999"></a>  }
+<a name="line1000"></a>
+<a name="line1001"></a>  return testable;
+<a name="line1002"></a>};
+<a name="line1003"></a>
+<a name="line1004"></a>
+<a name="line1005"></a>/**
+<a name="line1006"></a> * Connect the outer channel but not the inner one.  Wait a short time, then
+<a name="line1007"></a> * dispose the outer channel and make sure it was torn down properly.
+<a name="line1008"></a> */
+<a name="line1009"></a>Driver.prototype.connectOuterAndDispose = function() {
+<a name="line1010"></a>  this.channel_.connect();
+<a name="line1011"></a>  window.setTimeout(goog.bind(this.disposeAndCheck_, this), 2000);
+<a name="line1012"></a>};
+<a name="line1013"></a>
+<a name="line1014"></a>
+<a name="line1015"></a>/**
+<a name="line1016"></a> * Dispose the cross-page channel. Check that the transport was also
+<a name="line1017"></a> * disposed, and allow to run briefly to make sure no timers which will cause
+<a name="line1018"></a> * failures are still running.
+<a name="line1019"></a> * @private
+<a name="line1020"></a> */
+<a name="line1021"></a>Driver.prototype.disposeAndCheck_ = function() {
+<a name="line1022"></a>  assertFalse(this.channel_.isConnected());
+<a name="line1023"></a>  var transport = this.channel_.transport_;
+<a name="line1024"></a>  this.channel_.dispose();
+<a name="line1025"></a>  assertNull(this.channel_.transport_);
+<a name="line1026"></a>  assertTrue(this.channel_.isDisposed());
+<a name="line1027"></a>  assertTrue(transport.isDisposed());
+<a name="line1028"></a>
+<a name="line1029"></a>  // Let any errors caused by erroneous retries happen.
+<a name="line1030"></a>  window.setTimeout(goog.bind(asyncTestCase.continueTesting, asyncTestCase),
+<a name="line1031"></a>      2000);
+<a name="line1032"></a>};
+</pre>
+
+
+</body>
+</html>

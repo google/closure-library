@@ -1,0 +1,423 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>product_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_useragent_product_test.js.html">product_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.userAgent.productTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.userAgent.productTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.labs.userAgent.util&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.MockUserAgent&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line24"></a>goog.require(&#39;goog.userAgent.product&#39;);
+<a name="line25"></a>goog.require(&#39;goog.userAgent.product.isVersion&#39;);
+<a name="line26"></a>goog.require(&#39;goog.userAgentTestUtil&#39;);
+<a name="line27"></a>
+<a name="line28"></a>var mockAgent;
+<a name="line29"></a>var replacer;
+<a name="line30"></a>
+<a name="line31"></a>function setUp() {
+<a name="line32"></a>  mockAgent = new goog.testing.MockUserAgent();
+<a name="line33"></a>  mockAgent.install();
+<a name="line34"></a>  replacer = new goog.testing.PropertyReplacer();
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function tearDown() {
+<a name="line38"></a>  replacer.reset();
+<a name="line39"></a>  mockAgent.dispose();
+<a name="line40"></a>  updateUserAgentUtils();
+<a name="line41"></a>}
+<a name="line42"></a>
+<a name="line43"></a>function updateUserAgentUtils() {
+<a name="line44"></a>  goog.labs.userAgent.util.setUserAgent(null);
+<a name="line45"></a>  goog.userAgentTestUtil.reinitializeUserAgent();
+<a name="line46"></a>
+<a name="line47"></a>  goog.userAgent.product.init_();
+<a name="line48"></a>  // In an ideal world, this assignment would be just a function in
+<a name="line49"></a>  // product.js that we could call, but putting it into a function causes
+<a name="line50"></a>  // the compiler to fail to compile product.js to nothing when one of
+<a name="line51"></a>  // the ASSUME flags is set.
+<a name="line52"></a>  goog.userAgent.product.OPERA = goog.userAgent.OPERA;
+<a name="line53"></a>  goog.userAgent.product.IE = goog.userAgent.IE;
+<a name="line54"></a>  goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
+<a name="line55"></a>  goog.userAgent.product.CAMINO = goog.userAgent.product.detectedCamino_;
+<a name="line56"></a>  goog.userAgent.product.IPHONE = goog.userAgent.product.detectedIphone_;
+<a name="line57"></a>  goog.userAgent.product.IPAD = goog.userAgent.product.detectedIpad_;
+<a name="line58"></a>  goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
+<a name="line59"></a>  goog.userAgent.product.CHROME = goog.userAgent.product.detectedChrome_;
+<a name="line60"></a>  goog.userAgent.product.SAFARI = goog.userAgent.product.detectedSafari_;
+<a name="line61"></a>  goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>// The set of products whose corresponding goog.userAgent.product value is set
+<a name="line65"></a>// in goog.userAgent.product.init_().
+<a name="line66"></a>var DETECTED_BROWSER_KEYS =
+<a name="line67"></a>    [&#39;FIREFOX&#39;, &#39;CAMINO&#39;, &#39;IPHONE&#39;, &#39;IPAD&#39;, &#39;ANDROID&#39;, &#39;CHROME&#39;, &#39;SAFARI&#39;];
+<a name="line68"></a>
+<a name="line69"></a>function assertIsBrowser(browser) {
+<a name="line70"></a>  function createDetectedBrowserKey(browser) {
+<a name="line71"></a>    switch (browser) {
+<a name="line72"></a>      case &#39;FIREFOX&#39;: return &#39;detectedFirefox_&#39;;
+<a name="line73"></a>      case &#39;CAMINO&#39;: return &#39;detectedCamino_&#39;;
+<a name="line74"></a>      case &#39;IPHONE&#39;: return &#39;detectedIphone_&#39;;
+<a name="line75"></a>      case &#39;IPAD&#39;: return &#39;detectedIpad_&#39;;
+<a name="line76"></a>      case &#39;ANDROID&#39;: return &#39;detectedAndroid_&#39;;
+<a name="line77"></a>      case &#39;CHROME&#39;: return &#39;detectedChrome_&#39;;
+<a name="line78"></a>      case &#39;SAFARI&#39;: return &#39;detectedSafari_&#39;;
+<a name="line79"></a>      case &#39;IE&#39;: return &#39;IE&#39;;
+<a name="line80"></a>      case &#39;OPERA&#39;: return &#39;OPERA&#39;;
+<a name="line81"></a>    }
+<a name="line82"></a>    throw Error(&#39;Unknown browser: &#39; + browser);
+<a name="line83"></a>  }
+<a name="line84"></a>
+<a name="line85"></a>  var productKey = createDetectedBrowserKey(browser);
+<a name="line86"></a>  assertTrue(goog.userAgent.product[productKey]);
+<a name="line87"></a>  // Make sure we don&#39;t have any false positives for other browsers.
+<a name="line88"></a>  goog.array.forEach(DETECTED_BROWSER_KEYS, function(el) {
+<a name="line89"></a>    if (el != browser) {
+<a name="line90"></a>      assertFalse(&#39;useragent should not match: &#39; + el,
+<a name="line91"></a>          goog.userAgent.product[createDetectedBrowserKey(el)]);
+<a name="line92"></a>    }
+<a name="line93"></a>  });
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>function assertBrowserAndVersion(userAgent, browser, version) {
+<a name="line97"></a>  mockAgent.setUserAgentString(userAgent);
+<a name="line98"></a>  updateUserAgentUtils();
+<a name="line99"></a>  assertIsBrowser(browser);
+<a name="line100"></a>  assertEquals(&#39;User agent should have this version&#39;,
+<a name="line101"></a>               version, goog.userAgent.VERSION);
+<a name="line102"></a>}
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * @param {Array.&lt;{
+<a name="line107"></a> *           ua: string,
+<a name="line108"></a> *           versions: Array.&lt;{
+<a name="line109"></a> *             num: {string|number}, truth: boolean}&gt;}&gt;} userAgents
+<a name="line110"></a> * @param {string} browser
+<a name="line111"></a> */
+<a name="line112"></a>function checkEachUserAgentDetected(userAgents, browser) {
+<a name="line113"></a>  goog.array.forEach(userAgents, function(ua) {
+<a name="line114"></a>    mockAgent.setUserAgentString(ua.ua);
+<a name="line115"></a>    updateUserAgentUtils();
+<a name="line116"></a>    assertIsBrowser(browser);
+<a name="line117"></a>    goog.array.forEach(ua.versions, function(v) {
+<a name="line118"></a>      assertEquals(
+<a name="line119"></a>          &#39;Expected version &#39; + v.num + &#39; from &#39; + ua.ua + &#39; but got &#39; +
+<a name="line120"></a>              goog.userAgent.product.VERSION,
+<a name="line121"></a>          v.truth, goog.userAgent.product.isVersion(v.num));
+<a name="line122"></a>    });
+<a name="line123"></a>  });
+<a name="line124"></a>}
+<a name="line125"></a>
+<a name="line126"></a>function testInternetExplorer() {
+<a name="line127"></a>  var userAgents = [
+<a name="line128"></a>    {ua: &#39;Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB6; &#39; +
+<a name="line129"></a>          &#39;chromeframe; .NET CLR 1.1.4322; InfoPath.1; &#39; +
+<a name="line130"></a>          &#39;.NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; &#39; +
+<a name="line131"></a>          &#39;.NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 2.0.50727)&#39;,
+<a name="line132"></a>      versions: [
+<a name="line133"></a>        {num: 6, truth: true},
+<a name="line134"></a>        {num: &#39;7.0&#39;, truth: true},
+<a name="line135"></a>        {num: 7.1, truth: false},
+<a name="line136"></a>        {num: 8, truth: false}
+<a name="line137"></a>      ]
+<a name="line138"></a>    },
+<a name="line139"></a>    {ua: &#39;Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko&#39;,
+<a name="line140"></a>      versions: [
+<a name="line141"></a>        {num: 10, truth: true},
+<a name="line142"></a>        {num: 11, truth: true},
+<a name="line143"></a>        {num: &#39;11.0&#39;, truth: true},
+<a name="line144"></a>        {num: &#39;12&#39;, truth: false}
+<a name="line145"></a>      ]
+<a name="line146"></a>    }
+<a name="line147"></a>  ];
+<a name="line148"></a>  // hide any navigator.product value by putting in a navigator with no
+<a name="line149"></a>  // properties.
+<a name="line150"></a>  mockAgent.setNavigator({});
+<a name="line151"></a>  checkEachUserAgentDetected(userAgents, &#39;IE&#39;);
+<a name="line152"></a>}
+<a name="line153"></a>
+<a name="line154"></a>function testOpera() {
+<a name="line155"></a>  var opera = {};
+<a name="line156"></a>  var userAgents = [
+<a name="line157"></a>    {ua: &#39;Opera/9.80 (Windows NT 5.1; U; en) Presto/2.2.15 Version/10.01&#39;,
+<a name="line158"></a>      versions: [
+<a name="line159"></a>        {num: 9, truth: true},
+<a name="line160"></a>        {num: &#39;10.1&#39;, truth: true},
+<a name="line161"></a>        {num: 11, truth: false}
+<a name="line162"></a>      ]}
+<a name="line163"></a>  ];
+<a name="line164"></a>  replacer.set(goog.global, &#39;opera&#39;, opera);
+<a name="line165"></a>  opera.version = &#39;10.01&#39;;
+<a name="line166"></a>  checkEachUserAgentDetected(userAgents, &#39;OPERA&#39;);
+<a name="line167"></a>  userAgents = [
+<a name="line168"></a>    {ua: &#39;Opera/9.63 (Windows NT 5.1; U; en) Presto/2.1.1&#39;,
+<a name="line169"></a>      versions: [
+<a name="line170"></a>        {num: 9, truth: true},
+<a name="line171"></a>        {num: &#39;10.1&#39;, truth: false},
+<a name="line172"></a>        {num: &#39;9.80&#39;, truth: false},
+<a name="line173"></a>        {num: &#39;9.60&#39;, truth: true}
+<a name="line174"></a>      ]}
+<a name="line175"></a>  ];
+<a name="line176"></a>  opera.version = &#39;9.63&#39;;
+<a name="line177"></a>  checkEachUserAgentDetected(userAgents, &#39;OPERA&#39;);
+<a name="line178"></a>}
+<a name="line179"></a>
+<a name="line180"></a>function testFirefox() {
+<a name="line181"></a>  var userAgents = [
+<a name="line182"></a>    {ua: &#39;Mozilla/6.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; &#39; +
+<a name="line183"></a>          &#39;rv:2.0.0.0) Gecko/20061028 Firefox/3.0&#39;,
+<a name="line184"></a>      versions: [
+<a name="line185"></a>        {num: 2, truth: true},
+<a name="line186"></a>        {num: &#39;3.0&#39;, truth: true},
+<a name="line187"></a>        {num: &#39;3.5.3&#39;, truth: false}
+<a name="line188"></a>      ]},
+<a name="line189"></a>    {ua: &#39;Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; &#39; +
+<a name="line190"></a>          &#39;rv:1.8.1.4) Gecko/20070515 Firefox/2.0.4&#39;,
+<a name="line191"></a>      versions: [
+<a name="line192"></a>        {num: 2, truth: true},
+<a name="line193"></a>        {num: &#39;2.0.4&#39;, truth: true},
+<a name="line194"></a>        {num: 3, truth: false},
+<a name="line195"></a>        {num: &#39;3.5.3&#39;, truth: false}
+<a name="line196"></a>      ]},
+<a name="line197"></a>    {ua: &#39;Mozilla/5.0 (X11; Linux i686; rv:6.0) Gecko/6.0 Firefox/6.0&#39;,
+<a name="line198"></a>      versions: [
+<a name="line199"></a>        {num: 6, truth: true},
+<a name="line200"></a>        {num: &#39;6.0&#39;, truth: true},
+<a name="line201"></a>        {num: 7, truth: false},
+<a name="line202"></a>        {num: &#39;7.0&#39;, truth: false}
+<a name="line203"></a>      ]}
+<a name="line204"></a>  ];
+<a name="line205"></a>
+<a name="line206"></a>  checkEachUserAgentDetected(userAgents, &#39;FIREFOX&#39;);
+<a name="line207"></a>
+<a name="line208"></a>  // Mozilla reported to us that they plan this UA format starting
+<a name="line209"></a>  // in Firefox 13.
+<a name="line210"></a>  // See bug at https://bugzilla.mozilla.org/show_bug.cgi?id=588909
+<a name="line211"></a>  // and thread at http://goto.google.com/pfltz
+<a name="line212"></a>  mockAgent.setNavigator({product: &#39;Gecko&#39;});
+<a name="line213"></a>  assertBrowserAndVersion(
+<a name="line214"></a>      &#39;Mozilla/5.0 (X11; Linux i686; rv:6.0) Gecko/6.0 Firefox/6.0&#39;,
+<a name="line215"></a>      &#39;FIREFOX&#39;, &#39;6.0&#39;);
+<a name="line216"></a>}
+<a name="line217"></a>
+<a name="line218"></a>function testCamino() {
+<a name="line219"></a>  var userAgents = [
+<a name="line220"></a>    {ua: &#39;Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en; rv:1.8.1.11) &#39; +
+<a name="line221"></a>          &#39;Gecko/20071128 Camino/1.5.4&#39;,
+<a name="line222"></a>      versions: [
+<a name="line223"></a>        {num: &#39;1.5.4&#39;, truth: true},
+<a name="line224"></a>        {num: 1, truth: true},
+<a name="line225"></a>        {num: &#39;2.0&#39;, truth: false}
+<a name="line226"></a>      ]},
+<a name="line227"></a>    {ua: &#39;Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.0.10) &#39; +
+<a name="line228"></a>          &#39;Gecko/20070228 Camino/1.0.4&#39;,
+<a name="line229"></a>      versions: [
+<a name="line230"></a>        {num: &#39;1.5.4&#39;, truth: false},
+<a name="line231"></a>        {num: 1, truth: true},
+<a name="line232"></a>        {num: &#39;2.0&#39;, truth: false}
+<a name="line233"></a>      ]}
+<a name="line234"></a>  ];
+<a name="line235"></a>  mockAgent.setNavigator({vendor: &#39;Camino&#39;, product: &#39;Gecko&#39;});
+<a name="line236"></a>  checkEachUserAgentDetected(userAgents, &#39;CAMINO&#39;);
+<a name="line237"></a>}
+<a name="line238"></a>
+<a name="line239"></a>function testChrome() {
+<a name="line240"></a>  var userAgents = [
+<a name="line241"></a>    {ua: &#39;Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) &#39; +
+<a name="line242"></a>          &#39;AppleWebKit/525.19 (KHTML, like Gecko) Chrome/0.2.153.0 &#39; +
+<a name="line243"></a>          &#39;Safari/525.19&#39;,
+<a name="line244"></a>      versions: [
+<a name="line245"></a>        {num: &#39;0.2.153&#39;, truth: true},
+<a name="line246"></a>        {num: 1, truth: false}
+<a name="line247"></a>      ]},
+<a name="line248"></a>    {ua: &#39;Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) &#39; +
+<a name="line249"></a>          &#39;AppleWebKit/532.3 (KHTML, like Gecko) Chrome/4.0.223.11 &#39; +
+<a name="line250"></a>          &#39;Safari/532.3&#39;,
+<a name="line251"></a>      versions: [
+<a name="line252"></a>        {num: 4, truth: true},
+<a name="line253"></a>        {num: &#39;0.2.153&#39;, truth: true},
+<a name="line254"></a>        {num: &#39;4.1.223.13&#39;, truth: false},
+<a name="line255"></a>        {num: &#39;4.0.223.10&#39;, truth: true}
+<a name="line256"></a>      ]},
+<a name="line257"></a>    {ua: &#39;Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B)&#39; +
+<a name="line258"></a>          &#39;AppleWebKit/535.19 (KHTML, like Gecko) &#39; +
+<a name="line259"></a>          &#39;Chrome/18.0.1025.133 Mobile&#39; +
+<a name="line260"></a>          &#39;Safari/535.19&#39;,
+<a name="line261"></a>      versions: [
+<a name="line262"></a>        {num: 18, truth: true},
+<a name="line263"></a>        {num: &#39;0.2.153&#39;, truth: true},
+<a name="line264"></a>        {num: 29, truth: false},
+<a name="line265"></a>        {num: &#39;18.0.1025.133&#39;, truth: true}
+<a name="line266"></a>      ]}
+<a name="line267"></a>  ];
+<a name="line268"></a>  checkEachUserAgentDetected(userAgents, &#39;CHROME&#39;);
+<a name="line269"></a>}
+<a name="line270"></a>
+<a name="line271"></a>function testSafari() {
+<a name="line272"></a>  var userAgents = [
+<a name="line273"></a>    {ua: &#39;Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; de-de) &#39; +
+<a name="line274"></a>          &#39;AppleWebKit/534.16+ (KHTML, like Gecko) Version/5.0.3 &#39; +
+<a name="line275"></a>          &#39;Safari/533.19.4&#39;,
+<a name="line276"></a>      versions: [
+<a name="line277"></a>        {num: 5, truth: true},
+<a name="line278"></a>        {num: &#39;5.0.3&#39;, truth: true},
+<a name="line279"></a>        {num: &#39;5.0.4&#39;, truth: false},
+<a name="line280"></a>        {num: &#39;533&#39;, truth: false}
+<a name="line281"></a>      ]},
+<a name="line282"></a>    {ua: &#39;Mozilla/5.0 (Windows; U; Windows NT 6.0; pl-PL) &#39; +
+<a name="line283"></a>          &#39;AppleWebKit/525.19 (KHTML, like Gecko) Version/3.1.2 Safari/525.21&#39;,
+<a name="line284"></a>      versions: [
+<a name="line285"></a>        {num: 3, truth: true},
+<a name="line286"></a>        {num: &#39;3.0&#39;, truth: true},
+<a name="line287"></a>        {num: &#39;3.1.2&#39;, truth: true}
+<a name="line288"></a>      ]},
+<a name="line289"></a>    {ua: &#39;Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10_5_3; en-us) &#39; +
+<a name="line290"></a>          &#39;AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.20&#39;,
+<a name="line291"></a>      versions: [
+<a name="line292"></a>        {num: 3, truth: true},
+<a name="line293"></a>        {num: &#39;3.1.1&#39;, truth: true},
+<a name="line294"></a>        {num: &#39;3.1.2&#39;, truth: false},
+<a name="line295"></a>        {num: &#39;525.21&#39;, truth: false}
+<a name="line296"></a>      ]},
+<a name="line297"></a>
+<a name="line298"></a>    // Safari 1 and 2 do not report product version numbers in their
+<a name="line299"></a>    // user-agent strings. VERSION for these browsers will be set to &#39;&#39;.
+<a name="line300"></a>    {ua: &#39;Mozilla/5.0 (Macintosh; U; PPC Mac OS X; ja-jp) &#39; +
+<a name="line301"></a>          &#39;AppleWebKit/418.9.1 (KHTML, like Gecko) Safari/419.3&#39;,
+<a name="line302"></a>      versions: [
+<a name="line303"></a>        {num: 3, truth: false},
+<a name="line304"></a>        {num: 2, truth: false},
+<a name="line305"></a>        {num: 1, truth: false},
+<a name="line306"></a>        {num: 0, truth: true},
+<a name="line307"></a>        {num: &#39;0&#39;, truth: true},
+<a name="line308"></a>        {num: &#39;&#39;, truth: true}
+<a name="line309"></a>      ]}
+<a name="line310"></a>  ];
+<a name="line311"></a>  checkEachUserAgentDetected(userAgents, &#39;SAFARI&#39;);
+<a name="line312"></a>}
+<a name="line313"></a>
+<a name="line314"></a>function testIphone() {
+<a name="line315"></a>  var userAgents = [
+<a name="line316"></a>    {ua: &#39;Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ &#39; +
+<a name="line317"></a>          &#39;(KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3&#39;,
+<a name="line318"></a>      versions: [
+<a name="line319"></a>        {num: &#39;3.0.1A543a&#39;, truth: true},
+<a name="line320"></a>        {num: &#39;3.0&#39;, truth: true},
+<a name="line321"></a>        {num: &#39;3.0.1B543a&#39;, truth: false},
+<a name="line322"></a>        {num: &#39;3.1.1A543a&#39;, truth: false},
+<a name="line323"></a>        {num: &#39;3.0.1A320c&#39;, truth: true},
+<a name="line324"></a>        {num: &#39;3.0.3A100a&#39;, truth: false}
+<a name="line325"></a>      ]},
+<a name="line326"></a>    {ua: &#39;Mozilla/5.0 (iPod; U; CPU like Mac OS X; en) AppleWebKit/420.1 &#39; +
+<a name="line327"></a>          &#39;(KHTML, like Gecko) Version/3.0 Mobile/3A100a Safari/419.3&#39;,
+<a name="line328"></a>      versions: [
+<a name="line329"></a>        {num: &#39;3.0.1A543a&#39;, truth: true},
+<a name="line330"></a>        {num: &#39;3.0.3A100a&#39;, truth: true}
+<a name="line331"></a>      ]}
+<a name="line332"></a>  ];
+<a name="line333"></a>  checkEachUserAgentDetected(userAgents, &#39;IPHONE&#39;);
+<a name="line334"></a>}
+<a name="line335"></a>
+<a name="line336"></a>function testIpad() {
+<a name="line337"></a>  var userAgents = [
+<a name="line338"></a>    {ua: &#39;Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) &#39; +
+<a name="line339"></a>          &#39;AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 &#39; +
+<a name="line340"></a>          &#39;Mobile/7B334b Safari/531.21.10&#39;,
+<a name="line341"></a>      versions: [
+<a name="line342"></a>        {num: &#39;4.0.4.7B334b&#39;, truth: true},
+<a name="line343"></a>        {num: &#39;4.0&#39;, truth: true},
+<a name="line344"></a>        {num: &#39;4.0.4.7C334b&#39;, truth: false},
+<a name="line345"></a>        {num: &#39;4.1.7B334b&#39;, truth: false},
+<a name="line346"></a>        {num: &#39;4.0.4.7B320c&#39;, truth: true},
+<a name="line347"></a>        {num: &#39;4.0.4.8B334b&#39;, truth: false}
+<a name="line348"></a>      ]}
+<a name="line349"></a>  ];
+<a name="line350"></a>  checkEachUserAgentDetected(userAgents, &#39;IPAD&#39;);
+<a name="line351"></a>}
+<a name="line352"></a>
+<a name="line353"></a>function testAndroid() {
+<a name="line354"></a>  var userAgents = [
+<a name="line355"></a>    {ua: &#39;Mozilla/5.0 (Linux; U; Android 0.5; en-us) AppleWebKit/522+ &#39; +
+<a name="line356"></a>          &#39;(KHTML, like Gecko) Safari/419.3&#39;,
+<a name="line357"></a>      versions: [
+<a name="line358"></a>        {num: 0.5, truth: true},
+<a name="line359"></a>        {num: &#39;1.0&#39;, truth: false}
+<a name="line360"></a>      ]},
+<a name="line361"></a>    {ua: &#39;Mozilla/5.0 (Linux; U; Android 1.0; en-us; dream) &#39; +
+<a name="line362"></a>          &#39;AppleWebKit/525.10+ (KHTML, like Gecko) Version/3.0.4 Mobile &#39; +
+<a name="line363"></a>          &#39;Safari/523.12.2&#39;,
+<a name="line364"></a>      versions: [
+<a name="line365"></a>        {num: 0.5, truth: true},
+<a name="line366"></a>        {num: 1, truth: true},
+<a name="line367"></a>        {num: &#39;1.0&#39;, truth: true},
+<a name="line368"></a>        {num: &#39;3.0.12&#39;, truth: false}
+<a name="line369"></a>      ]}
+<a name="line370"></a>  ];
+<a name="line371"></a>  checkEachUserAgentDetected(userAgents, &#39;ANDROID&#39;);
+<a name="line372"></a>}
+</pre>
+
+
+</body>
+</html>

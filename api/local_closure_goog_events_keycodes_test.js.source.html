@@ -1,0 +1,225 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>keycodes_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_events_keycodes_test.js.html">keycodes_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.events.KeyCodesTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.events.KeyCodesTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line20"></a>goog.require(&#39;goog.object&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line24"></a>
+<a name="line25"></a>var KeyCodes;
+<a name="line26"></a>var stubs;
+<a name="line27"></a>
+<a name="line28"></a>function setUpPage() {
+<a name="line29"></a>  KeyCodes = goog.events.KeyCodes;
+<a name="line30"></a>  stubs = new goog.testing.PropertyReplacer();
+<a name="line31"></a>}
+<a name="line32"></a>
+<a name="line33"></a>function tearDown() {
+<a name="line34"></a>  stubs.reset();
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function testTextModifyingKeys() {
+<a name="line38"></a>  var specialTextModifiers = goog.object.createSet(
+<a name="line39"></a>      KeyCodes.BACKSPACE,
+<a name="line40"></a>      KeyCodes.DELETE,
+<a name="line41"></a>      KeyCodes.ENTER,
+<a name="line42"></a>      KeyCodes.MAC_ENTER,
+<a name="line43"></a>      KeyCodes.TAB,
+<a name="line44"></a>      KeyCodes.WIN_IME);
+<a name="line45"></a>
+<a name="line46"></a>  if (!goog.userAgent.GECKO) {
+<a name="line47"></a>    specialTextModifiers[KeyCodes.WIN_KEY_FF_LINUX] = 1;
+<a name="line48"></a>  }
+<a name="line49"></a>
+<a name="line50"></a>  for (var keyId in KeyCodes) {
+<a name="line51"></a>    var key = KeyCodes[keyId];
+<a name="line52"></a>    if (goog.isFunction(key)) {
+<a name="line53"></a>      // skip static methods
+<a name="line54"></a>      continue;
+<a name="line55"></a>    }
+<a name="line56"></a>
+<a name="line57"></a>    var fakeEvent = createEventWithKeyCode(key);
+<a name="line58"></a>
+<a name="line59"></a>    if (KeyCodes.isCharacterKey(key) || (key in specialTextModifiers)) {
+<a name="line60"></a>      assertTrue(&#39;Expected key to modify text: &#39; + keyId,
+<a name="line61"></a>          KeyCodes.isTextModifyingKeyEvent(fakeEvent));
+<a name="line62"></a>    } else {
+<a name="line63"></a>      assertFalse(&#39;Expected key to not modify text: &#39; + keyId,
+<a name="line64"></a>          KeyCodes.isTextModifyingKeyEvent(fakeEvent));
+<a name="line65"></a>    }
+<a name="line66"></a>  }
+<a name="line67"></a>
+<a name="line68"></a>  for (var i = KeyCodes.FIRST_MEDIA_KEY; i &lt;= KeyCodes.LAST_MEDIA_KEY; i++) {
+<a name="line69"></a>    var fakeEvent = createEventWithKeyCode(i);
+<a name="line70"></a>    assertFalse(&#39;Expected key to not modify text: &#39; + i,
+<a name="line71"></a>        KeyCodes.isTextModifyingKeyEvent(fakeEvent));
+<a name="line72"></a>  }
+<a name="line73"></a>}
+<a name="line74"></a>
+<a name="line75"></a>function testKeyCodeZero() {
+<a name="line76"></a>  var zeroEvent = createEventWithKeyCode(0);
+<a name="line77"></a>  assertEquals(
+<a name="line78"></a>      !goog.userAgent.GECKO,
+<a name="line79"></a>      KeyCodes.isTextModifyingKeyEvent(zeroEvent));
+<a name="line80"></a>  assertEquals(
+<a name="line81"></a>      goog.userAgent.WEBKIT,
+<a name="line82"></a>      KeyCodes.isCharacterKey(0));
+<a name="line83"></a>}
+<a name="line84"></a>
+<a name="line85"></a>function testPhantomKey() {
+<a name="line86"></a>  // KeyCode 255 deserves its own test to make sure this does not regress,
+<a name="line87"></a>  // because it&#39;s so weird. See the comments in the KeyCode enum.
+<a name="line88"></a>  var fakeEvent = createEventWithKeyCode(goog.events.KeyCodes.PHANTOM);
+<a name="line89"></a>  assertFalse(&#39;Expected phantom key to not modify text&#39;,
+<a name="line90"></a>      KeyCodes.isTextModifyingKeyEvent(fakeEvent));
+<a name="line91"></a>  assertFalse(KeyCodes.isCharacterKey(fakeEvent));
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>function testNonUsKeyboards() {
+<a name="line95"></a>  var fakeEvent = createEventWithKeyCode(1092 /* Russian a */);
+<a name="line96"></a>  assertTrue(&#39;Expected key to not modify text: 1092&#39;,
+<a name="line97"></a>      KeyCodes.isTextModifyingKeyEvent(fakeEvent));
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>function createEventWithKeyCode(i) {
+<a name="line101"></a>  var fakeEvent = new goog.events.BrowserEvent(&#39;keydown&#39;);
+<a name="line102"></a>  fakeEvent.keyCode = i;
+<a name="line103"></a>  return fakeEvent;
+<a name="line104"></a>}
+<a name="line105"></a>
+<a name="line106"></a>function testNormalizeGeckoKeyCode() {
+<a name="line107"></a>  stubs.set(goog.userAgent, &#39;GECKO&#39;, true);
+<a name="line108"></a>
+<a name="line109"></a>  // Test Gecko-specific key codes.
+<a name="line110"></a>  assertEquals(
+<a name="line111"></a>      goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.FF_EQUALS),
+<a name="line112"></a>      KeyCodes.EQUALS);
+<a name="line113"></a>  assertEquals(
+<a name="line114"></a>      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.FF_EQUALS),
+<a name="line115"></a>      KeyCodes.EQUALS);
+<a name="line116"></a>
+<a name="line117"></a>  assertEquals(
+<a name="line118"></a>      goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.FF_SEMICOLON),
+<a name="line119"></a>      KeyCodes.SEMICOLON);
+<a name="line120"></a>  assertEquals(
+<a name="line121"></a>      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.FF_SEMICOLON),
+<a name="line122"></a>      KeyCodes.SEMICOLON);
+<a name="line123"></a>
+<a name="line124"></a>  assertEquals(
+<a name="line125"></a>      goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.MAC_FF_META),
+<a name="line126"></a>      KeyCodes.META);
+<a name="line127"></a>  assertEquals(
+<a name="line128"></a>      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.MAC_FF_META),
+<a name="line129"></a>      KeyCodes.META);
+<a name="line130"></a>
+<a name="line131"></a>  assertEquals(
+<a name="line132"></a>      goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.WIN_KEY_FF_LINUX),
+<a name="line133"></a>      KeyCodes.WIN_KEY);
+<a name="line134"></a>  assertEquals(
+<a name="line135"></a>      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.WIN_KEY_FF_LINUX),
+<a name="line136"></a>      KeyCodes.WIN_KEY);
+<a name="line137"></a>
+<a name="line138"></a>  // Test general key codes.
+<a name="line139"></a>  assertEquals(
+<a name="line140"></a>      goog.events.KeyCodes.normalizeGeckoKeyCode(KeyCodes.COMMA),
+<a name="line141"></a>      KeyCodes.COMMA);
+<a name="line142"></a>  assertEquals(
+<a name="line143"></a>      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.COMMA),
+<a name="line144"></a>      KeyCodes.COMMA);
+<a name="line145"></a>}
+<a name="line146"></a>
+<a name="line147"></a>function testNormalizeMacWebKitKeyCode() {
+<a name="line148"></a>  stubs.set(goog.userAgent, &#39;GECKO&#39;, false);
+<a name="line149"></a>  stubs.set(goog.userAgent, &#39;MAC&#39;, true);
+<a name="line150"></a>  stubs.set(goog.userAgent, &#39;WEBKIT&#39;, true);
+<a name="line151"></a>
+<a name="line152"></a>  // Test Mac WebKit specific key codes.
+<a name="line153"></a>  assertEquals(
+<a name="line154"></a>      goog.events.KeyCodes.normalizeMacWebKitKeyCode(KeyCodes.MAC_WK_CMD_LEFT),
+<a name="line155"></a>      KeyCodes.META);
+<a name="line156"></a>  assertEquals(
+<a name="line157"></a>      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.MAC_WK_CMD_LEFT),
+<a name="line158"></a>      KeyCodes.META);
+<a name="line159"></a>
+<a name="line160"></a>  assertEquals(
+<a name="line161"></a>      goog.events.KeyCodes.normalizeMacWebKitKeyCode(KeyCodes.MAC_WK_CMD_RIGHT),
+<a name="line162"></a>      KeyCodes.META);
+<a name="line163"></a>  assertEquals(
+<a name="line164"></a>      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.MAC_WK_CMD_RIGHT),
+<a name="line165"></a>      KeyCodes.META);
+<a name="line166"></a>
+<a name="line167"></a>  // Test general key codes.
+<a name="line168"></a>  assertEquals(
+<a name="line169"></a>      goog.events.KeyCodes.normalizeMacWebKitKeyCode(KeyCodes.COMMA),
+<a name="line170"></a>      KeyCodes.COMMA);
+<a name="line171"></a>  assertEquals(
+<a name="line172"></a>      goog.events.KeyCodes.normalizeKeyCode(KeyCodes.COMMA),
+<a name="line173"></a>      KeyCodes.COMMA);
+<a name="line174"></a>}
+</pre>
+
+
+</body>
+</html>

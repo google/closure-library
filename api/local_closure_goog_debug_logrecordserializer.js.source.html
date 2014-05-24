@@ -1,0 +1,172 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>logrecordserializer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_debug_logrecordserializer.js.html">logrecordserializer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Static methods for serializing and deserializing log
+<a name="line17"></a> * messages.  These methods are deliberately kept separate from logrecord.js
+<a name="line18"></a> * and logger.js because they add dependencies on goog.json and goog.object.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.debug.logRecordSerializer&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.debug.LogRecord&#39;);
+<a name="line25"></a>goog.require(&#39;goog.debug.Logger.Level&#39;);
+<a name="line26"></a>goog.require(&#39;goog.json&#39;);
+<a name="line27"></a>goog.require(&#39;goog.object&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Enumeration of object keys used when serializing a log message.
+<a name="line32"></a> * @enum {string}
+<a name="line33"></a> * @private
+<a name="line34"></a> */
+<a name="line35"></a>goog.debug.logRecordSerializer.Param_ = {
+<a name="line36"></a>  TIME: &#39;t&#39;,
+<a name="line37"></a>  LEVEL_NAME: &#39;ln&#39;,
+<a name="line38"></a>  LEVEL_VALUE: &#39;lv&#39;,
+<a name="line39"></a>  MSG: &#39;m&#39;,
+<a name="line40"></a>  LOGGER_NAME: &#39;n&#39;,
+<a name="line41"></a>  SEQUENCE_NUMBER: &#39;s&#39;,
+<a name="line42"></a>  EXCEPTION: &#39;e&#39;,
+<a name="line43"></a>  EXCEPTION_TEXT: &#39;et&#39;
+<a name="line44"></a>};
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Serializes a LogRecord to a JSON string.  Note that any associated
+<a name="line49"></a> * exception is likely to be lost.
+<a name="line50"></a> * @param {goog.debug.LogRecord} record The record to serialize.
+<a name="line51"></a> * @return {string} Serialized JSON string of the log message.
+<a name="line52"></a> */
+<a name="line53"></a>goog.debug.logRecordSerializer.serialize = function(record) {
+<a name="line54"></a>  var param = goog.debug.logRecordSerializer.Param_;
+<a name="line55"></a>  return goog.json.serialize(goog.object.create(
+<a name="line56"></a>      param.TIME, record.getMillis(),
+<a name="line57"></a>      param.LEVEL_NAME, record.getLevel().name,
+<a name="line58"></a>      param.LEVEL_VALUE, record.getLevel().value,
+<a name="line59"></a>      param.MSG, record.getMessage(),
+<a name="line60"></a>      param.LOGGER_NAME, record.getLoggerName(),
+<a name="line61"></a>      param.SEQUENCE_NUMBER, record.getSequenceNumber(),
+<a name="line62"></a>      param.EXCEPTION, record.getException(),
+<a name="line63"></a>      param.EXCEPTION_TEXT, record.getExceptionText()));
+<a name="line64"></a>};
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/**
+<a name="line68"></a> * Deserializes a JSON-serialized LogRecord.
+<a name="line69"></a> * @param {string} s The JSON serialized record.
+<a name="line70"></a> * @return {!goog.debug.LogRecord} The deserialized record.
+<a name="line71"></a> */
+<a name="line72"></a>goog.debug.logRecordSerializer.parse = function(s) {
+<a name="line73"></a>  return goog.debug.logRecordSerializer.reconstitute_(goog.json.parse(s));
+<a name="line74"></a>};
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * Deserializes a JSON-serialized LogRecord.  Use this only if you&#39;re
+<a name="line79"></a> * naive enough to blindly trust any JSON formatted input that comes
+<a name="line80"></a> * your way.
+<a name="line81"></a> * @param {string} s The JSON serialized record.
+<a name="line82"></a> * @return {!goog.debug.LogRecord} The deserialized record.
+<a name="line83"></a> */
+<a name="line84"></a>goog.debug.logRecordSerializer.unsafeParse = function(s) {
+<a name="line85"></a>  return goog.debug.logRecordSerializer.reconstitute_(goog.json.unsafeParse(s));
+<a name="line86"></a>};
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * Common reconsitution method for for parse and unsafeParse.
+<a name="line91"></a> * @param {Object} o The JSON object.
+<a name="line92"></a> * @return {!goog.debug.LogRecord} The reconstituted record.
+<a name="line93"></a> * @private
+<a name="line94"></a> */
+<a name="line95"></a>goog.debug.logRecordSerializer.reconstitute_ = function(o) {
+<a name="line96"></a>  var param = goog.debug.logRecordSerializer.Param_;
+<a name="line97"></a>  var level = goog.debug.logRecordSerializer.getLevel_(
+<a name="line98"></a>      o[param.LEVEL_NAME], o[param.LEVEL_VALUE]);
+<a name="line99"></a>
+<a name="line100"></a>  var ret = new goog.debug.LogRecord(level, o[param.MSG],
+<a name="line101"></a>      o[param.LOGGER_NAME], o[param.TIME], o[param.SEQUENCE_NUMBER]);
+<a name="line102"></a>  ret.setException(o[param.EXCEPTION]);
+<a name="line103"></a>  ret.setExceptionText(o[param.EXCEPTION_TEXT]);
+<a name="line104"></a>  return ret;
+<a name="line105"></a>};
+<a name="line106"></a>
+<a name="line107"></a>
+<a name="line108"></a>/**
+<a name="line109"></a> * @param {string} name The name of the log level to return.
+<a name="line110"></a> * @param {number} value The numeric value of the log level to return.
+<a name="line111"></a> * @return {!goog.debug.Logger.Level} Returns a goog.debug.Logger.Level with
+<a name="line112"></a> *     the specified name and value.  If the name and value match a predefined
+<a name="line113"></a> *     log level, that instance will be returned, otherwise a new one will be
+<a name="line114"></a> *     created.
+<a name="line115"></a> * @private
+<a name="line116"></a> */
+<a name="line117"></a>goog.debug.logRecordSerializer.getLevel_ = function(name, value) {
+<a name="line118"></a>  var level = goog.debug.Logger.Level.getPredefinedLevel(name);
+<a name="line119"></a>  return level &amp;&amp; level.value == value ?
+<a name="line120"></a>      level : new goog.debug.Logger.Level(name, value);
+<a name="line121"></a>};
+</pre>
+
+
+</body>
+</html>

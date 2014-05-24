@@ -1,0 +1,344 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>box_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_math_box_test.js.html">box_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.math.BoxTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.math.BoxTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.math.Box&#39;);
+<a name="line19"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>function testBoxClone() {
+<a name="line23"></a>  var b = new goog.math.Box(0, 0, 0, 0);
+<a name="line24"></a>  assertTrue(goog.math.Box.equals(b, b.clone()));
+<a name="line25"></a>
+<a name="line26"></a>  b.left = 0;
+<a name="line27"></a>  b.top = 1;
+<a name="line28"></a>  b.right = 2;
+<a name="line29"></a>  b.bottom = 3;
+<a name="line30"></a>  assertTrue(goog.math.Box.equals(b, b.clone()));
+<a name="line31"></a>}
+<a name="line32"></a>
+<a name="line33"></a>function testBoxRelativePositionX() {
+<a name="line34"></a>  var box = new goog.math.Box(50, 100, 100, 50);
+<a name="line35"></a>
+<a name="line36"></a>  assertEquals(0,
+<a name="line37"></a>      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(75, 0)));
+<a name="line38"></a>  assertEquals(0,
+<a name="line39"></a>      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(75, 75)));
+<a name="line40"></a>  assertEquals(0,
+<a name="line41"></a>      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(75, 105)));
+<a name="line42"></a>  assertEquals(-5,
+<a name="line43"></a>      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(45, 75)));
+<a name="line44"></a>  assertEquals(5,
+<a name="line45"></a>      goog.math.Box.relativePositionX(box, new goog.math.Coordinate(105, 75)));
+<a name="line46"></a>}
+<a name="line47"></a>
+<a name="line48"></a>function testBoxRelativePositionY() {
+<a name="line49"></a>  var box = new goog.math.Box(50, 100, 100, 50);
+<a name="line50"></a>
+<a name="line51"></a>  assertEquals(0,
+<a name="line52"></a>      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(0, 75)));
+<a name="line53"></a>  assertEquals(0,
+<a name="line54"></a>      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(75, 75)));
+<a name="line55"></a>  assertEquals(0,
+<a name="line56"></a>      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(105, 75)));
+<a name="line57"></a>  assertEquals(-5,
+<a name="line58"></a>      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(75, 45)));
+<a name="line59"></a>  assertEquals(5,
+<a name="line60"></a>      goog.math.Box.relativePositionY(box, new goog.math.Coordinate(75, 105)));
+<a name="line61"></a>}
+<a name="line62"></a>
+<a name="line63"></a>function testBoxDistance() {
+<a name="line64"></a>  var box = new goog.math.Box(50, 100, 100, 50);
+<a name="line65"></a>
+<a name="line66"></a>  assertEquals(0,
+<a name="line67"></a>               goog.math.Box.distance(box, new goog.math.Coordinate(75, 75)));
+<a name="line68"></a>  assertEquals(25,
+<a name="line69"></a>               goog.math.Box.distance(box, new goog.math.Coordinate(75, 25)));
+<a name="line70"></a>  assertEquals(10,
+<a name="line71"></a>               goog.math.Box.distance(box, new goog.math.Coordinate(40, 80)));
+<a name="line72"></a>  assertEquals(5,
+<a name="line73"></a>               goog.math.Box.distance(box, new goog.math.Coordinate(46, 47)));
+<a name="line74"></a>  assertEquals(10,
+<a name="line75"></a>               goog.math.Box.distance(box, new goog.math.Coordinate(106, 108)));
+<a name="line76"></a>}
+<a name="line77"></a>
+<a name="line78"></a>function testBoxContains() {
+<a name="line79"></a>  var box = new goog.math.Box(50, 100, 100, 50);
+<a name="line80"></a>
+<a name="line81"></a>  assertTrue(goog.math.Box.contains(box, new goog.math.Coordinate(75, 75)));
+<a name="line82"></a>  assertTrue(goog.math.Box.contains(box, new goog.math.Coordinate(50, 100)));
+<a name="line83"></a>  assertTrue(goog.math.Box.contains(box, new goog.math.Coordinate(100, 99)));
+<a name="line84"></a>  assertFalse(goog.math.Box.contains(box, new goog.math.Coordinate(100, 101)));
+<a name="line85"></a>  assertFalse(goog.math.Box.contains(box, new goog.math.Coordinate(49, 50)));
+<a name="line86"></a>  assertFalse(goog.math.Box.contains(box, new goog.math.Coordinate(25, 25)));
+<a name="line87"></a>}
+<a name="line88"></a>
+<a name="line89"></a>function testBoxContainsBox() {
+<a name="line90"></a>  var box = new goog.math.Box(50, 100, 100, 50);
+<a name="line91"></a>
+<a name="line92"></a>  function assertContains(boxB) {
+<a name="line93"></a>    assertTrue(box + &#39; expected to contain &#39; + boxB,
+<a name="line94"></a>        goog.math.Box.contains(box, boxB));
+<a name="line95"></a>  }
+<a name="line96"></a>
+<a name="line97"></a>  function assertNotContains(boxB) {
+<a name="line98"></a>    assertFalse(box + &#39; expected to not contain &#39; + boxB,
+<a name="line99"></a>        goog.math.Box.contains(box, boxB));
+<a name="line100"></a>  }
+<a name="line101"></a>
+<a name="line102"></a>  assertContains(new goog.math.Box(60, 90, 90, 60));
+<a name="line103"></a>  assertNotContains(new goog.math.Box(1, 3, 4, 2));
+<a name="line104"></a>  assertNotContains(new goog.math.Box(30, 90, 60, 60));
+<a name="line105"></a>  assertNotContains(new goog.math.Box(60, 110, 60, 60));
+<a name="line106"></a>  assertNotContains(new goog.math.Box(60, 90, 110, 60));
+<a name="line107"></a>  assertNotContains(new goog.math.Box(60, 90, 60, 40));
+<a name="line108"></a>}
+<a name="line109"></a>
+<a name="line110"></a>function testBoxesIntersect() {
+<a name="line111"></a>  var box = new goog.math.Box(50, 100, 100, 50);
+<a name="line112"></a>
+<a name="line113"></a>  function assertIntersects(boxB) {
+<a name="line114"></a>    assertTrue(box + &#39; expected to intersect &#39; + boxB,
+<a name="line115"></a>        goog.math.Box.intersects(box, boxB));
+<a name="line116"></a>  }
+<a name="line117"></a>  function assertNotIntersects(boxB) {
+<a name="line118"></a>    assertFalse(box + &#39; expected to not intersect &#39; + boxB,
+<a name="line119"></a>        goog.math.Box.intersects(box, boxB));
+<a name="line120"></a>  }
+<a name="line121"></a>
+<a name="line122"></a>  assertIntersects(box);
+<a name="line123"></a>  assertIntersects(new goog.math.Box(20, 80, 80, 20));
+<a name="line124"></a>  assertIntersects(new goog.math.Box(50, 80, 100, 20));
+<a name="line125"></a>  assertIntersects(new goog.math.Box(80, 80, 120, 20));
+<a name="line126"></a>  assertIntersects(new goog.math.Box(20, 100, 80, 50));
+<a name="line127"></a>  assertIntersects(new goog.math.Box(80, 100, 120, 50));
+<a name="line128"></a>  assertIntersects(new goog.math.Box(20, 120, 80, 80));
+<a name="line129"></a>  assertIntersects(new goog.math.Box(50, 120, 100, 80));
+<a name="line130"></a>  assertIntersects(new goog.math.Box(80, 120, 120, 80));
+<a name="line131"></a>  assertIntersects(new goog.math.Box(20, 120, 120, 20));
+<a name="line132"></a>  assertIntersects(new goog.math.Box(70, 80, 80, 70));
+<a name="line133"></a>  assertNotIntersects(new goog.math.Box(10, 30, 30, 10));
+<a name="line134"></a>  assertNotIntersects(new goog.math.Box(10, 70, 30, 30));
+<a name="line135"></a>  assertNotIntersects(new goog.math.Box(10, 100, 30, 50));
+<a name="line136"></a>  assertNotIntersects(new goog.math.Box(10, 120, 30, 80));
+<a name="line137"></a>  assertNotIntersects(new goog.math.Box(10, 140, 30, 120));
+<a name="line138"></a>  assertNotIntersects(new goog.math.Box(30, 30, 70, 10));
+<a name="line139"></a>  assertNotIntersects(new goog.math.Box(30, 140, 70, 120));
+<a name="line140"></a>  assertNotIntersects(new goog.math.Box(50, 30, 100, 10));
+<a name="line141"></a>  assertNotIntersects(new goog.math.Box(50, 140, 100, 120));
+<a name="line142"></a>  assertNotIntersects(new goog.math.Box(80, 30, 120, 10));
+<a name="line143"></a>  assertNotIntersects(new goog.math.Box(80, 140, 120, 120));
+<a name="line144"></a>  assertNotIntersects(new goog.math.Box(120, 30, 140, 10));
+<a name="line145"></a>  assertNotIntersects(new goog.math.Box(120, 70, 140, 30));
+<a name="line146"></a>  assertNotIntersects(new goog.math.Box(120, 100, 140, 50));
+<a name="line147"></a>  assertNotIntersects(new goog.math.Box(120, 120, 140, 80));
+<a name="line148"></a>  assertNotIntersects(new goog.math.Box(120, 140, 140, 120));
+<a name="line149"></a>}
+<a name="line150"></a>
+<a name="line151"></a>function testBoxesIntersectWithPadding() {
+<a name="line152"></a>  var box = new goog.math.Box(50, 100, 100, 50);
+<a name="line153"></a>
+<a name="line154"></a>  function assertIntersects(boxB, padding) {
+<a name="line155"></a>    assertTrue(box + &#39; expected to intersect &#39; + boxB + &#39; with padding &#39; +
+<a name="line156"></a>        padding, goog.math.Box.intersectsWithPadding(box, boxB, padding));
+<a name="line157"></a>  }
+<a name="line158"></a>  function assertNotIntersects(boxB, padding) {
+<a name="line159"></a>    assertFalse(box + &#39; expected to not intersect &#39; + boxB + &#39; with padding &#39; +
+<a name="line160"></a>        padding, goog.math.Box.intersectsWithPadding(box, boxB, padding));
+<a name="line161"></a>  }
+<a name="line162"></a>
+<a name="line163"></a>  assertIntersects(box, 10);
+<a name="line164"></a>  assertIntersects(new goog.math.Box(20, 80, 80, 20), 10);
+<a name="line165"></a>  assertIntersects(new goog.math.Box(50, 80, 100, 20), 10);
+<a name="line166"></a>  assertIntersects(new goog.math.Box(80, 80, 120, 20), 10);
+<a name="line167"></a>  assertIntersects(new goog.math.Box(20, 100, 80, 50), 10);
+<a name="line168"></a>  assertIntersects(new goog.math.Box(80, 100, 120, 50), 10);
+<a name="line169"></a>  assertIntersects(new goog.math.Box(20, 120, 80, 80), 10);
+<a name="line170"></a>  assertIntersects(new goog.math.Box(50, 120, 100, 80), 10);
+<a name="line171"></a>  assertIntersects(new goog.math.Box(80, 120, 120, 80), 10);
+<a name="line172"></a>  assertIntersects(new goog.math.Box(20, 120, 120, 20), 10);
+<a name="line173"></a>  assertIntersects(new goog.math.Box(70, 80, 80, 70), 10);
+<a name="line174"></a>  assertIntersects(new goog.math.Box(10, 30, 30, 10), 20);
+<a name="line175"></a>  assertIntersects(new goog.math.Box(10, 70, 30, 30), 20);
+<a name="line176"></a>  assertIntersects(new goog.math.Box(10, 100, 30, 50), 20);
+<a name="line177"></a>  assertIntersects(new goog.math.Box(10, 120, 30, 80), 20);
+<a name="line178"></a>  assertIntersects(new goog.math.Box(10, 140, 30, 120), 20);
+<a name="line179"></a>  assertIntersects(new goog.math.Box(30, 30, 70, 10), 20);
+<a name="line180"></a>  assertIntersects(new goog.math.Box(30, 140, 70, 120), 20);
+<a name="line181"></a>  assertIntersects(new goog.math.Box(50, 30, 100, 10), 20);
+<a name="line182"></a>  assertIntersects(new goog.math.Box(50, 140, 100, 120), 20);
+<a name="line183"></a>  assertIntersects(new goog.math.Box(80, 30, 120, 10), 20);
+<a name="line184"></a>  assertIntersects(new goog.math.Box(80, 140, 120, 120), 20);
+<a name="line185"></a>  assertIntersects(new goog.math.Box(120, 30, 140, 10), 20);
+<a name="line186"></a>  assertIntersects(new goog.math.Box(120, 70, 140, 30), 20);
+<a name="line187"></a>  assertIntersects(new goog.math.Box(120, 100, 140, 50), 20);
+<a name="line188"></a>  assertIntersects(new goog.math.Box(120, 120, 140, 80), 20);
+<a name="line189"></a>  assertIntersects(new goog.math.Box(120, 140, 140, 120), 20);
+<a name="line190"></a>  assertNotIntersects(new goog.math.Box(10, 30, 30, 10), 10);
+<a name="line191"></a>  assertNotIntersects(new goog.math.Box(10, 70, 30, 30), 10);
+<a name="line192"></a>  assertNotIntersects(new goog.math.Box(10, 100, 30, 50), 10);
+<a name="line193"></a>  assertNotIntersects(new goog.math.Box(10, 120, 30, 80), 10);
+<a name="line194"></a>  assertNotIntersects(new goog.math.Box(10, 140, 30, 120), 10);
+<a name="line195"></a>  assertNotIntersects(new goog.math.Box(30, 30, 70, 10), 10);
+<a name="line196"></a>  assertNotIntersects(new goog.math.Box(30, 140, 70, 120), 10);
+<a name="line197"></a>  assertNotIntersects(new goog.math.Box(50, 30, 100, 10), 10);
+<a name="line198"></a>  assertNotIntersects(new goog.math.Box(50, 140, 100, 120), 10);
+<a name="line199"></a>  assertNotIntersects(new goog.math.Box(80, 30, 120, 10), 10);
+<a name="line200"></a>  assertNotIntersects(new goog.math.Box(80, 140, 120, 120), 10);
+<a name="line201"></a>  assertNotIntersects(new goog.math.Box(120, 30, 140, 10), 10);
+<a name="line202"></a>  assertNotIntersects(new goog.math.Box(120, 70, 140, 30), 10);
+<a name="line203"></a>  assertNotIntersects(new goog.math.Box(120, 100, 140, 50), 10);
+<a name="line204"></a>  assertNotIntersects(new goog.math.Box(120, 120, 140, 80), 10);
+<a name="line205"></a>  assertNotIntersects(new goog.math.Box(120, 140, 140, 120), 10);
+<a name="line206"></a>}
+<a name="line207"></a>
+<a name="line208"></a>function testExpandToInclude() {
+<a name="line209"></a>  var box = new goog.math.Box(10, 50, 50, 10);
+<a name="line210"></a>  box.expandToInclude(new goog.math.Box(60, 70, 70, 60));
+<a name="line211"></a>  assertEquals(10, box.left);
+<a name="line212"></a>  assertEquals(10, box.top);
+<a name="line213"></a>  assertEquals(70, box.right);
+<a name="line214"></a>  assertEquals(70, box.bottom);
+<a name="line215"></a>  box.expandToInclude(new goog.math.Box(30, 40, 40, 30));
+<a name="line216"></a>  assertEquals(10, box.left);
+<a name="line217"></a>  assertEquals(10, box.top);
+<a name="line218"></a>  assertEquals(70, box.right);
+<a name="line219"></a>  assertEquals(70, box.bottom);
+<a name="line220"></a>  box.expandToInclude(new goog.math.Box(0, 100, 100, 0));
+<a name="line221"></a>  assertEquals(0, box.left);
+<a name="line222"></a>  assertEquals(0, box.top);
+<a name="line223"></a>  assertEquals(100, box.right);
+<a name="line224"></a>  assertEquals(100, box.bottom);
+<a name="line225"></a>}
+<a name="line226"></a>
+<a name="line227"></a>function testBoundingBox() {
+<a name="line228"></a>  assertObjectEquals(
+<a name="line229"></a>      new goog.math.Box(1, 10, 11, 0),
+<a name="line230"></a>      goog.math.Box.boundingBox(
+<a name="line231"></a>          new goog.math.Coordinate(5, 5),
+<a name="line232"></a>          new goog.math.Coordinate(5, 11),
+<a name="line233"></a>          new goog.math.Coordinate(0, 5),
+<a name="line234"></a>          new goog.math.Coordinate(5, 1),
+<a name="line235"></a>          new goog.math.Coordinate(10, 5)));
+<a name="line236"></a>}
+<a name="line237"></a>
+<a name="line238"></a>function testBoxCeil() {
+<a name="line239"></a>  var box = new goog.math.Box(11.4, 26.6, 17.8, 9.2);
+<a name="line240"></a>  assertEquals(&#39;The function should return the target instance&#39;,
+<a name="line241"></a>      box, box.ceil());
+<a name="line242"></a>  assertObjectEquals(new goog.math.Box(12, 27, 18, 10), box);
+<a name="line243"></a>}
+<a name="line244"></a>
+<a name="line245"></a>function testBoxFloor() {
+<a name="line246"></a>  var box = new goog.math.Box(11.4, 26.6, 17.8, 9.2);
+<a name="line247"></a>  assertEquals(&#39;The function should return the target instance&#39;,
+<a name="line248"></a>      box, box.floor());
+<a name="line249"></a>  assertObjectEquals(new goog.math.Box(11, 26, 17, 9), box);
+<a name="line250"></a>}
+<a name="line251"></a>
+<a name="line252"></a>function testBoxRound() {
+<a name="line253"></a>  var box = new goog.math.Box(11.4, 26.6, 17.8, 9.2);
+<a name="line254"></a>  assertEquals(&#39;The function should return the target instance&#39;,
+<a name="line255"></a>      box, box.round());
+<a name="line256"></a>  assertObjectEquals(new goog.math.Box(11, 27, 18, 9), box);
+<a name="line257"></a>}
+<a name="line258"></a>
+<a name="line259"></a>function testBoxTranslateCoordinate() {
+<a name="line260"></a>  var box = new goog.math.Box(10, 30, 20, 5);
+<a name="line261"></a>  var c = new goog.math.Coordinate(10, 5);
+<a name="line262"></a>  assertEquals(&#39;The function should return the target instance&#39;,
+<a name="line263"></a>      box, box.translate(c));
+<a name="line264"></a>  assertObjectEquals(new goog.math.Box(15, 40, 25, 15), box);
+<a name="line265"></a>}
+<a name="line266"></a>
+<a name="line267"></a>function testBoxTranslateXY() {
+<a name="line268"></a>  var box = new goog.math.Box(10, 30, 20, 5);
+<a name="line269"></a>  assertEquals(&#39;The function should return the target instance&#39;,
+<a name="line270"></a>      box, box.translate(5, 2));
+<a name="line271"></a>  assertObjectEquals(new goog.math.Box(12, 35, 22, 10), box);
+<a name="line272"></a>}
+<a name="line273"></a>
+<a name="line274"></a>function testBoxTranslateX() {
+<a name="line275"></a>  var box = new goog.math.Box(10, 30, 20, 5);
+<a name="line276"></a>  assertEquals(&#39;The function should return the target instance&#39;,
+<a name="line277"></a>      box, box.translate(3));
+<a name="line278"></a>  assertObjectEquals(new goog.math.Box(10, 33, 20, 8), box);
+<a name="line279"></a>}
+<a name="line280"></a>
+<a name="line281"></a>function testBoxScaleXY() {
+<a name="line282"></a>  var box = new goog.math.Box(10, 20, 30, 5);
+<a name="line283"></a>  assertEquals(&#39;The function should return the target instance&#39;,
+<a name="line284"></a>      box, box.scale(2, 3));
+<a name="line285"></a>  assertObjectEquals(new goog.math.Box(30, 40, 90, 10), box);
+<a name="line286"></a>}
+<a name="line287"></a>
+<a name="line288"></a>function testBoxScaleFactor() {
+<a name="line289"></a>  var box = new goog.math.Box(10, 20, 30, 5);
+<a name="line290"></a>  assertEquals(&#39;The function should return the target instance&#39;,
+<a name="line291"></a>      box, box.scale(2));
+<a name="line292"></a>  assertObjectEquals(new goog.math.Box(20, 40, 60, 10), box);
+<a name="line293"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>forms_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_forms_test.js.html">forms_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.dom.formsTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.dom.formsTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.forms&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>function testGetFormDataString() {
+<a name="line23"></a>  var el = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line24"></a>  var result = goog.dom.forms.getFormDataString(el);
+<a name="line25"></a>  assertEquals(
+<a name="line26"></a>      &#39;in1=foo&amp;in2=bar&amp;in2=baaz&amp;in3=&amp;pass=bar&amp;textarea=foo%20bar%20baz&amp;&#39; +
+<a name="line27"></a>      &#39;select1=1&amp;select2=a&amp;select2=c&amp;select3=&amp;checkbox1=on&amp;radio=X&amp;radio2=Y&#39;,
+<a name="line28"></a>      result);
+<a name="line29"></a>}
+<a name="line30"></a>
+<a name="line31"></a>function testGetFormDataMap() {
+<a name="line32"></a>  var el = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line33"></a>  var result = goog.dom.forms.getFormDataMap(el);
+<a name="line34"></a>
+<a name="line35"></a>  assertArrayEquals([&#39;foo&#39;], result.get(&#39;in1&#39;));
+<a name="line36"></a>  assertArrayEquals([&#39;bar&#39;, &#39;baaz&#39;], result.get(&#39;in2&#39;));
+<a name="line37"></a>  assertArrayEquals([&#39;1&#39;], result.get(&#39;select1&#39;));
+<a name="line38"></a>  assertArrayEquals([&#39;a&#39;, &#39;c&#39;], result.get(&#39;select2&#39;));
+<a name="line39"></a>  assertArrayEquals([&#39;on&#39;], result.get(&#39;checkbox1&#39;));
+<a name="line40"></a>  assertUndefined(result.get(&#39;select6&#39;));
+<a name="line41"></a>  assertUndefined(result.get(&#39;checkbox2&#39;));
+<a name="line42"></a>  assertArrayEquals([&#39;X&#39;], result.get(&#39;radio&#39;));
+<a name="line43"></a>  assertArrayEquals([&#39;Y&#39;], result.get(&#39;radio2&#39;));
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>function testHasFileInput() {
+<a name="line47"></a>  var el = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line48"></a>  assertFalse(goog.dom.forms.hasFileInput(el));
+<a name="line49"></a>  el = goog.dom.getElement(&#39;testform2&#39;);
+<a name="line50"></a>  assertTrue(goog.dom.forms.hasFileInput(el));
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>function testGetValueOnAtypicalValueElements() {
+<a name="line55"></a>  var el = goog.dom.getElement(&#39;testdiv1&#39;);
+<a name="line56"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line57"></a>  assertNull(result);
+<a name="line58"></a>  var el = goog.dom.getElement(&#39;testfieldset1&#39;);
+<a name="line59"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line60"></a>  assertNull(result);
+<a name="line61"></a>  var el = goog.dom.getElement(&#39;testlegend1&#39;);
+<a name="line62"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line63"></a>  assertNull(result);
+<a name="line64"></a>}
+<a name="line65"></a>
+<a name="line66"></a>function testHasValueInput() {
+<a name="line67"></a>  var el = goog.dom.getElement(&#39;in1&#39;);
+<a name="line68"></a>  var result = goog.dom.forms.hasValue(el);
+<a name="line69"></a>  assertTrue(result);
+<a name="line70"></a>}
+<a name="line71"></a>
+<a name="line72"></a>function testGetValueByNameForNonExistentElement() {
+<a name="line73"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line74"></a>  var result = goog.dom.forms.getValueByName(form, &#39;non_existent&#39;);
+<a name="line75"></a>  assertNull(result);
+<a name="line76"></a>}
+<a name="line77"></a>
+<a name="line78"></a>function testHasValueByNameInput() {
+<a name="line79"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line80"></a>  var result = goog.dom.forms.hasValueByName(form, &#39;in1&#39;);
+<a name="line81"></a>  assertTrue(result);
+<a name="line82"></a>}
+<a name="line83"></a>
+<a name="line84"></a>function testHasValueInputEmpty() {
+<a name="line85"></a>  var el = goog.dom.getElement(&#39;in3&#39;);
+<a name="line86"></a>  var result = goog.dom.forms.hasValue(el);
+<a name="line87"></a>  assertFalse(result);
+<a name="line88"></a>}
+<a name="line89"></a>
+<a name="line90"></a>function testHasValueByNameEmpty() {
+<a name="line91"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line92"></a>  var result = goog.dom.forms.hasValueByName(form, &#39;in3&#39;);
+<a name="line93"></a>  assertFalse(result);
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>function testHasValueRadio() {
+<a name="line97"></a>  var el = goog.dom.getElement(&#39;radio1&#39;);
+<a name="line98"></a>  var result = goog.dom.forms.hasValue(el);
+<a name="line99"></a>  assertTrue(result);
+<a name="line100"></a>}
+<a name="line101"></a>
+<a name="line102"></a>function testHasValueByNameRadio() {
+<a name="line103"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line104"></a>  var result = goog.dom.forms.hasValueByName(form, &#39;radio&#39;);
+<a name="line105"></a>  assertTrue(result);
+<a name="line106"></a>}
+<a name="line107"></a>
+<a name="line108"></a>function testHasValueRadioNotChecked() {
+<a name="line109"></a>  var el = goog.dom.getElement(&#39;radio2&#39;);
+<a name="line110"></a>  var result = goog.dom.forms.hasValue(el);
+<a name="line111"></a>  assertFalse(result);
+<a name="line112"></a>}
+<a name="line113"></a>
+<a name="line114"></a>function testHasValueByNameRadioNotChecked() {
+<a name="line115"></a>  var form = goog.dom.getElement(&#39;testform3&#39;);
+<a name="line116"></a>  var result = goog.dom.forms.hasValueByName(form, &#39;radio3&#39;);
+<a name="line117"></a>  assertFalse(result);
+<a name="line118"></a>}
+<a name="line119"></a>
+<a name="line120"></a>function testHasValueSelectSingle() {
+<a name="line121"></a>  var el = goog.dom.getElement(&#39;select1&#39;);
+<a name="line122"></a>  var result = goog.dom.forms.hasValue(el);
+<a name="line123"></a>  assertTrue(result);
+<a name="line124"></a>}
+<a name="line125"></a>
+<a name="line126"></a>function testHasValueByNameSelectSingle() {
+<a name="line127"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line128"></a>  var result = goog.dom.forms.hasValueByName(form, &#39;select1&#39;);
+<a name="line129"></a>  assertTrue(result);
+<a name="line130"></a>}
+<a name="line131"></a>
+<a name="line132"></a>function testHasValueSelectMultiple() {
+<a name="line133"></a>  var el = goog.dom.getElement(&#39;select2&#39;);
+<a name="line134"></a>  var result = goog.dom.forms.hasValue(el);
+<a name="line135"></a>  assertTrue(result);
+<a name="line136"></a>}
+<a name="line137"></a>
+<a name="line138"></a>function testHasValueByNameSelectMultiple() {
+<a name="line139"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line140"></a>  var result = goog.dom.forms.hasValueByName(form, &#39;select2&#39;);
+<a name="line141"></a>  assertTrue(result);
+<a name="line142"></a>}
+<a name="line143"></a>
+<a name="line144"></a>function testHasValueSelectNotSelected() {
+<a name="line145"></a>  // select without value
+<a name="line146"></a>  var el = goog.dom.getElement(&#39;select3&#39;);
+<a name="line147"></a>  var result = goog.dom.forms.hasValue(el);
+<a name="line148"></a>  assertFalse(result);
+<a name="line149"></a>}
+<a name="line150"></a>
+<a name="line151"></a>function testHasValueByNameSelectNotSelected() {
+<a name="line152"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line153"></a>  var result = goog.dom.forms.hasValueByName(form, &#39;select3&#39;);
+<a name="line154"></a>  assertFalse(result);
+<a name="line155"></a>}
+<a name="line156"></a>
+<a name="line157"></a>function testHasValueSelectMultipleNotSelected() {
+<a name="line158"></a>  var el = goog.dom.getElement(&#39;select6&#39;);
+<a name="line159"></a>  var result = goog.dom.forms.hasValue(el);
+<a name="line160"></a>  assertFalse(result);
+<a name="line161"></a>}
+<a name="line162"></a>
+<a name="line163"></a>function testHasValueByNameSelectMultipleNotSelected() {
+<a name="line164"></a>  var form = goog.dom.getElement(&#39;testform3&#39;);
+<a name="line165"></a>  var result = goog.dom.forms.hasValueByName(form, &#39;select6&#39;);
+<a name="line166"></a>  assertFalse(result);
+<a name="line167"></a>}
+<a name="line168"></a>
+<a name="line169"></a>// TODO(user): make this a meaningful selenium test
+<a name="line170"></a>function testSetDisabledFalse() {
+<a name="line171"></a>}
+<a name="line172"></a>function testSetDisabledTrue() {
+<a name="line173"></a>}
+<a name="line174"></a>
+<a name="line175"></a>// TODO(user): make this a meaningful selenium test
+<a name="line176"></a>function testFocusAndSelect() {
+<a name="line177"></a>  var el = goog.dom.getElement(&#39;in1&#39;);
+<a name="line178"></a>  goog.dom.forms.focusAndSelect(el);
+<a name="line179"></a>}
+<a name="line180"></a>
+<a name="line181"></a>function testGetValueInput() {
+<a name="line182"></a>  var el = goog.dom.getElement(&#39;in1&#39;);
+<a name="line183"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line184"></a>  assertEquals(&#39;foo&#39;, result);
+<a name="line185"></a>}
+<a name="line186"></a>
+<a name="line187"></a>function testSetValueInput() {
+<a name="line188"></a>  var el = goog.dom.getElement(&#39;in3&#39;);
+<a name="line189"></a>  goog.dom.forms.setValue(el, &#39;foo&#39;);
+<a name="line190"></a>  assertEquals(&#39;foo&#39;, goog.dom.forms.getValue(el));
+<a name="line191"></a>
+<a name="line192"></a>  goog.dom.forms.setValue(el, 3500);
+<a name="line193"></a>  assertEquals(&#39;3500&#39;, goog.dom.forms.getValue(el));
+<a name="line194"></a>
+<a name="line195"></a>  goog.dom.forms.setValue(el, 0);
+<a name="line196"></a>  assertEquals(&#39;0&#39;, goog.dom.forms.getValue(el));
+<a name="line197"></a>
+<a name="line198"></a>  goog.dom.forms.setValue(el, null);
+<a name="line199"></a>  assertEquals(&#39;&#39;, goog.dom.forms.getValue(el));
+<a name="line200"></a>
+<a name="line201"></a>  goog.dom.forms.setValue(el, undefined);
+<a name="line202"></a>  assertEquals(&#39;&#39;, goog.dom.forms.getValue(el));
+<a name="line203"></a>
+<a name="line204"></a>  goog.dom.forms.setValue(el, false);
+<a name="line205"></a>  assertEquals(&#39;false&#39;, goog.dom.forms.getValue(el));
+<a name="line206"></a>
+<a name="line207"></a>  goog.dom.forms.setValue(el, {});
+<a name="line208"></a>  assertEquals({}.toString(), goog.dom.forms.getValue(el));
+<a name="line209"></a>
+<a name="line210"></a>  goog.dom.forms.setValue(el, {
+<a name="line211"></a>    toString: function() {
+<a name="line212"></a>      return &#39;test&#39;;
+<a name="line213"></a>    }
+<a name="line214"></a>  });
+<a name="line215"></a>  assertEquals(&#39;test&#39;, goog.dom.forms.getValue(el));
+<a name="line216"></a>
+<a name="line217"></a>  // unset
+<a name="line218"></a>  goog.dom.forms.setValue(el);
+<a name="line219"></a>  assertEquals(&#39;&#39;, goog.dom.forms.getValue(el));
+<a name="line220"></a>}
+<a name="line221"></a>
+<a name="line222"></a>function testGetValuePassword() {
+<a name="line223"></a>  var el = goog.dom.getElement(&#39;pass&#39;);
+<a name="line224"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line225"></a>  assertEquals(&#39;bar&#39;, result);
+<a name="line226"></a>}
+<a name="line227"></a>
+<a name="line228"></a>function testGetValueByNamePassword() {
+<a name="line229"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line230"></a>  var result = goog.dom.forms.getValueByName(form, &#39;pass&#39;);
+<a name="line231"></a>  assertEquals(&#39;bar&#39;, result);
+<a name="line232"></a>}
+<a name="line233"></a>
+<a name="line234"></a>function testGetValueTextarea() {
+<a name="line235"></a>  var el = goog.dom.getElement(&#39;textarea1&#39;);
+<a name="line236"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line237"></a>  assertEquals(&#39;foo bar baz&#39;, result);
+<a name="line238"></a>}
+<a name="line239"></a>
+<a name="line240"></a>function testGetValueByNameTextarea() {
+<a name="line241"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line242"></a>  var result = goog.dom.forms.getValueByName(form, &#39;textarea1&#39;);
+<a name="line243"></a>  assertEquals(&#39;foo bar baz&#39;, result);
+<a name="line244"></a>}
+<a name="line245"></a>
+<a name="line246"></a>function testSetValueTextarea() {
+<a name="line247"></a>  var el = goog.dom.getElement(&#39;textarea2&#39;);
+<a name="line248"></a>  goog.dom.forms.setValue(el, &#39;foo bar baz&#39;);
+<a name="line249"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line250"></a>  assertEquals(&#39;foo bar baz&#39;, result);
+<a name="line251"></a>}
+<a name="line252"></a>
+<a name="line253"></a>function testGetValueSelectSingle() {
+<a name="line254"></a>  var el = goog.dom.getElement(&#39;select1&#39;);
+<a name="line255"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line256"></a>  assertEquals(&#39;1&#39;, result);
+<a name="line257"></a>}
+<a name="line258"></a>
+<a name="line259"></a>function testGetValueByNameSelectSingle() {
+<a name="line260"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line261"></a>  var result = goog.dom.forms.getValueByName(form, &#39;select1&#39;);
+<a name="line262"></a>  assertEquals(&#39;1&#39;, result);
+<a name="line263"></a>}
+<a name="line264"></a>
+<a name="line265"></a>function testSetValueSelectSingle() {
+<a name="line266"></a>  var el = goog.dom.getElement(&#39;select4&#39;);
+<a name="line267"></a>  goog.dom.forms.setValue(el, &#39;2&#39;);
+<a name="line268"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line269"></a>  assertEquals(&#39;2&#39;, result);
+<a name="line270"></a>  // unset
+<a name="line271"></a>  goog.dom.forms.setValue(el);
+<a name="line272"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line273"></a>  assertNull(result);
+<a name="line274"></a>}
+<a name="line275"></a>
+<a name="line276"></a>function testSetValueSelectSingleEmptyString() {
+<a name="line277"></a>  var el = goog.dom.getElement(&#39;select7&#39;);
+<a name="line278"></a>  // unset
+<a name="line279"></a>  goog.dom.forms.setValue(el);
+<a name="line280"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line281"></a>  assertNull(result);
+<a name="line282"></a>  goog.dom.forms.setValue(el, &#39;&#39;);
+<a name="line283"></a>  result = goog.dom.forms.getValue(el);
+<a name="line284"></a>  assertEquals(&#39;&#39;, result);
+<a name="line285"></a>}
+<a name="line286"></a>
+<a name="line287"></a>function testGetValueSelectMultiple() {
+<a name="line288"></a>  var el = goog.dom.getElement(&#39;select2&#39;);
+<a name="line289"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line290"></a>  assertArrayEquals([&#39;a&#39;, &#39;c&#39;], result);
+<a name="line291"></a>}
+<a name="line292"></a>
+<a name="line293"></a>function testGetValueSelectMultipleNotSelected() {
+<a name="line294"></a>  var el = goog.dom.getElement(&#39;select6&#39;);
+<a name="line295"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line296"></a>  assertNull(result);
+<a name="line297"></a>}
+<a name="line298"></a>
+<a name="line299"></a>function testGetValueByNameSelectMultiple() {
+<a name="line300"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line301"></a>  var result = goog.dom.forms.getValueByName(form, &#39;select2&#39;);
+<a name="line302"></a>  assertArrayEquals([&#39;a&#39;, &#39;c&#39;], result);
+<a name="line303"></a>}
+<a name="line304"></a>
+<a name="line305"></a>function testSetValueSelectMultiple() {
+<a name="line306"></a>  var el = goog.dom.getElement(&#39;select5&#39;);
+<a name="line307"></a>  goog.dom.forms.setValue(el, [&#39;a&#39;, &#39;c&#39;]);
+<a name="line308"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line309"></a>  assertArrayEquals([&#39;a&#39;, &#39;c&#39;], result);
+<a name="line310"></a>
+<a name="line311"></a>  goog.dom.forms.setValue(el, &#39;a&#39;);
+<a name="line312"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line313"></a>  assertArrayEquals([&#39;a&#39;], result);
+<a name="line314"></a>
+<a name="line315"></a>  // unset
+<a name="line316"></a>  goog.dom.forms.setValue(el);
+<a name="line317"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line318"></a>  assertNull(result);
+<a name="line319"></a>}
+<a name="line320"></a>
+<a name="line321"></a>function testGetValueCheckbox() {
+<a name="line322"></a>  var el = goog.dom.getElement(&#39;checkbox1&#39;);
+<a name="line323"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line324"></a>  assertEquals(&#39;on&#39;, result);
+<a name="line325"></a>  var el = goog.dom.getElement(&#39;checkbox2&#39;);
+<a name="line326"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line327"></a>  assertNull(result);
+<a name="line328"></a>}
+<a name="line329"></a>
+<a name="line330"></a>function testGetValueByNameCheckbox() {
+<a name="line331"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line332"></a>  var result = goog.dom.forms.getValueByName(form, &#39;checkbox1&#39;);
+<a name="line333"></a>  assertEquals(&#39;on&#39;, result);
+<a name="line334"></a>  result = goog.dom.forms.getValueByName(form, &#39;checkbox2&#39;);
+<a name="line335"></a>  assertNull(result);
+<a name="line336"></a>}
+<a name="line337"></a>
+<a name="line338"></a>function testGetValueRadio() {
+<a name="line339"></a>  var el = goog.dom.getElement(&#39;radio1&#39;);
+<a name="line340"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line341"></a>  assertEquals(&#39;X&#39;, result);
+<a name="line342"></a>  var el = goog.dom.getElement(&#39;radio2&#39;);
+<a name="line343"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line344"></a>  assertNull(result);
+<a name="line345"></a>}
+<a name="line346"></a>
+<a name="line347"></a>function testGetValueByNameRadio() {
+<a name="line348"></a>  var form = goog.dom.getElement(&#39;testform1&#39;);
+<a name="line349"></a>  var result = goog.dom.forms.getValueByName(form, &#39;radio&#39;);
+<a name="line350"></a>  assertEquals(&#39;X&#39;, result);
+<a name="line351"></a>
+<a name="line352"></a>  result = goog.dom.forms.getValueByName(form, &#39;radio2&#39;);
+<a name="line353"></a>  assertEquals(&#39;Y&#39;, result);
+<a name="line354"></a>}
+<a name="line355"></a>
+<a name="line356"></a>function testGetValueButton() {
+<a name="line357"></a>  var el = goog.dom.getElement(&#39;button&#39;);
+<a name="line358"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line359"></a>  assertEquals(&#39;button&#39;, result);
+<a name="line360"></a>}
+<a name="line361"></a>
+<a name="line362"></a>function testGetValueSubmit() {
+<a name="line363"></a>  var el = goog.dom.getElement(&#39;submit&#39;);
+<a name="line364"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line365"></a>  assertEquals(&#39;submit&#39;, result);
+<a name="line366"></a>}
+<a name="line367"></a>
+<a name="line368"></a>function testGetValueReset() {
+<a name="line369"></a>  var el = goog.dom.getElement(&#39;reset&#39;);
+<a name="line370"></a>  var result = goog.dom.forms.getValue(el);
+<a name="line371"></a>  assertEquals(&#39;reset&#39;, result);
+<a name="line372"></a>}
+<a name="line373"></a>
+<a name="line374"></a>function testGetFormDataHelperAndNonInputElements() {
+<a name="line375"></a>  var el = goog.dom.getElement(&#39;testform4&#39;);
+<a name="line376"></a>  goog.dom.forms.getFormDataHelper_(el, {}, goog.nullFunction);
+<a name="line377"></a>}
+</pre>
+
+
+</body>
+</html>

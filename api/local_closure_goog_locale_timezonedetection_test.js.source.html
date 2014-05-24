@@ -1,0 +1,181 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>timezonedetection_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_locale_timezonedetection_test.js.html">timezonedetection_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>goog.provide(&#39;goog.locale.timeZoneDetectionTest&#39;);
+<a name="line17"></a>goog.setTestOnly(&#39;goog.locale.timeZoneDetectionTest&#39;);
+<a name="line18"></a>
+<a name="line19"></a>goog.require(&#39;goog.locale.timeZoneDetection&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>/**
+<a name="line25"></a> * Mock date class with simplified properties of Date class for testing.
+<a name="line26"></a> * @constructor
+<a name="line27"></a> */
+<a name="line28"></a>function MockDate() {
+<a name="line29"></a>  /**
+<a name="line30"></a>   * Time zone offset. For time zones with daylight saving, the different
+<a name="line31"></a>   * offsets are represented as array of offsets.
+<a name="line32"></a>   * @type {Array.&lt;number&gt;}
+<a name="line33"></a>   * @private
+<a name="line34"></a>   */
+<a name="line35"></a>  this.timezoneOffset_ = [];
+<a name="line36"></a>  /**
+<a name="line37"></a>   * Counter storing the index of next offset value to be returned from the
+<a name="line38"></a>   * array of offset values.
+<a name="line39"></a>   * @type {number}
+<a name="line40"></a>   * @private
+<a name="line41"></a>   */
+<a name="line42"></a>  this.offsetArrayCounter_ = 0;
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * Does nothing because setting the time to calculate offset is not needed
+<a name="line48"></a> * in the mock class.
+<a name="line49"></a> * @param {number} ms Ignored.
+<a name="line50"></a> */
+<a name="line51"></a>MockDate.prototype.setTime = function(ms) {
+<a name="line52"></a>  // Do nothing.
+<a name="line53"></a>};
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * Sets the time zone offset.
+<a name="line58"></a> * @param {Array.&lt;number&gt;} offset Time zone offset.
+<a name="line59"></a> */
+<a name="line60"></a>MockDate.prototype.setTimezoneOffset = function(offset) {
+<a name="line61"></a>  this.timezoneOffset_ = offset;
+<a name="line62"></a>};
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Returns consecutive offsets from array of time zone offsets on each call.
+<a name="line67"></a> * @return {number} Time zone offset.
+<a name="line68"></a> */
+<a name="line69"></a>MockDate.prototype.getTimezoneOffset = function() {
+<a name="line70"></a>  return this.timezoneOffset_.length &gt; 1 ?
+<a name="line71"></a>      this.timezoneOffset_[this.offsetArrayCounter_++] :
+<a name="line72"></a>      this.timezoneOffset_[0];
+<a name="line73"></a>};
+<a name="line74"></a>
+<a name="line75"></a>function testGetFingerprint() {
+<a name="line76"></a>  var mockDate = new MockDate();
+<a name="line77"></a>  mockDate.setTimezoneOffset([-480]);
+<a name="line78"></a>  var fingerprint = goog.locale.timeZoneDetection.getFingerprint(mockDate);
+<a name="line79"></a>  assertEquals(32, fingerprint);
+<a name="line80"></a>
+<a name="line81"></a>  mockDate = new MockDate();
+<a name="line82"></a>  mockDate.setTimezoneOffset(
+<a name="line83"></a>      [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+<a name="line84"></a>  fingerprint = goog.locale.timeZoneDetection.getFingerprint(mockDate);
+<a name="line85"></a>  assertEquals(1294772902, fingerprint);
+<a name="line86"></a>}
+<a name="line87"></a>
+<a name="line88"></a>function testDetectTimeZone() {
+<a name="line89"></a>  var mockDate = new MockDate();
+<a name="line90"></a>  mockDate.setTimezoneOffset([-480]);
+<a name="line91"></a>  var timeZoneId =
+<a name="line92"></a>      goog.locale.timeZoneDetection.detectTimeZone(undefined, mockDate);
+<a name="line93"></a>  assertEquals(&#39;Asia/Hong_Kong&#39;, timeZoneId);
+<a name="line94"></a>
+<a name="line95"></a>  mockDate = new MockDate();
+<a name="line96"></a>  mockDate.setTimezoneOffset(
+<a name="line97"></a>      [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+<a name="line98"></a>  timeZoneId = goog.locale.timeZoneDetection.detectTimeZone(&#39;US&#39;, mockDate);
+<a name="line99"></a>  assertEquals(&#39;America/Los_Angeles&#39;, timeZoneId);
+<a name="line100"></a>
+<a name="line101"></a>  mockDate = new MockDate();
+<a name="line102"></a>  mockDate.setTimezoneOffset(
+<a name="line103"></a>      [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+<a name="line104"></a>  timeZoneId = goog.locale.timeZoneDetection.detectTimeZone(&#39;CA&#39;, mockDate);
+<a name="line105"></a>  assertEquals(&#39;America/Dawson&#39;, timeZoneId);
+<a name="line106"></a>}
+<a name="line107"></a>
+<a name="line108"></a>function testGetTimeZoneList() {
+<a name="line109"></a>  var mockDate = new MockDate();
+<a name="line110"></a>  mockDate.setTimezoneOffset(
+<a name="line111"></a>      [480, 420, 420, 480, 480, 420, 420, 420, 420, 420, 420, 420, 420]);
+<a name="line112"></a>  var timeZoneList =
+<a name="line113"></a>      goog.locale.timeZoneDetection.getTimeZoneList(undefined, mockDate);
+<a name="line114"></a>  assertEquals(&#39;America/Los_Angeles&#39;, timeZoneList[0]);
+<a name="line115"></a>  assertEquals(&#39;America/Whitehorse&#39;, timeZoneList[4]);
+<a name="line116"></a>  assertEquals(5, timeZoneList.length);
+<a name="line117"></a>
+<a name="line118"></a>  mockDate = new MockDate();
+<a name="line119"></a>  mockDate.setTimezoneOffset([-480]);
+<a name="line120"></a>  timeZoneList =
+<a name="line121"></a>      goog.locale.timeZoneDetection.getTimeZoneList(undefined, mockDate);
+<a name="line122"></a>  assertEquals(&#39;Asia/Hong_Kong&#39;, timeZoneList[0]);
+<a name="line123"></a>  assertEquals(&#39;Asia/Chongqing&#39;, timeZoneList[7]);
+<a name="line124"></a>  assertEquals(16, timeZoneList.length);
+<a name="line125"></a>
+<a name="line126"></a>  timeZoneList =
+<a name="line127"></a>      goog.locale.timeZoneDetection.getTimeZoneList(&#39;AU&#39;, mockDate);
+<a name="line128"></a>  assertEquals(1, timeZoneList.length);
+<a name="line129"></a>  assertEquals(&#39;Australia/Perth&#39;, timeZoneList[0]);
+<a name="line130"></a>}
+</pre>
+
+
+</body>
+</html>

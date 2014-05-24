@@ -1,0 +1,536 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>objectserializer_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_proto2_objectserializer_test.js.html">objectserializer_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.proto2.ObjectSerializerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.proto2.ObjectSerializerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.proto2.ObjectSerializer&#39;);
+<a name="line19"></a>goog.require(&#39;goog.proto2.Serializer&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>goog.require(&#39;proto2.TestAllTypes&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var propertyReplacer = new goog.testing.PropertyReplacer();
+<a name="line25"></a>
+<a name="line26"></a>function tearDown() {
+<a name="line27"></a>  propertyReplacer.reset();
+<a name="line28"></a>}
+<a name="line29"></a>
+<a name="line30"></a>function testSerialization() {
+<a name="line31"></a>  var message = new proto2.TestAllTypes();
+<a name="line32"></a>
+<a name="line33"></a>  // Set the fields.
+<a name="line34"></a>  // Singular.
+<a name="line35"></a>  message.setOptionalInt32(101);
+<a name="line36"></a>  message.setOptionalInt64(&#39;102&#39;);
+<a name="line37"></a>  message.setOptionalUint32(103);
+<a name="line38"></a>  message.setOptionalUint64(&#39;104&#39;);
+<a name="line39"></a>  message.setOptionalSint32(105);
+<a name="line40"></a>  message.setOptionalSint64(&#39;106&#39;);
+<a name="line41"></a>  message.setOptionalFixed32(107);
+<a name="line42"></a>  message.setOptionalFixed64(&#39;108&#39;);
+<a name="line43"></a>  message.setOptionalSfixed32(109);
+<a name="line44"></a>  message.setOptionalSfixed64(&#39;110&#39;);
+<a name="line45"></a>  message.setOptionalFloat(111.5);
+<a name="line46"></a>  message.setOptionalDouble(112.5);
+<a name="line47"></a>  message.setOptionalBool(true);
+<a name="line48"></a>  message.setOptionalString(&#39;test&#39;);
+<a name="line49"></a>  message.setOptionalBytes(&#39;abcd&#39;);
+<a name="line50"></a>
+<a name="line51"></a>  var group = new proto2.TestAllTypes.OptionalGroup();
+<a name="line52"></a>  group.setA(111);
+<a name="line53"></a>
+<a name="line54"></a>  message.setOptionalgroup(group);
+<a name="line55"></a>
+<a name="line56"></a>  var nestedMessage = new proto2.TestAllTypes.NestedMessage();
+<a name="line57"></a>  nestedMessage.setB(112);
+<a name="line58"></a>
+<a name="line59"></a>  message.setOptionalNestedMessage(nestedMessage);
+<a name="line60"></a>
+<a name="line61"></a>  message.setOptionalNestedEnum(proto2.TestAllTypes.NestedEnum.FOO);
+<a name="line62"></a>
+<a name="line63"></a>  // Repeated.
+<a name="line64"></a>  message.addRepeatedInt32(201);
+<a name="line65"></a>  message.addRepeatedInt32(202);
+<a name="line66"></a>
+<a name="line67"></a>  // Serialize to a simplified object.
+<a name="line68"></a>  var simplified = new goog.proto2.ObjectSerializer().serialize(message);
+<a name="line69"></a>
+<a name="line70"></a>  // Assert that everything serialized properly.
+<a name="line71"></a>  assertEquals(101, simplified[1]);
+<a name="line72"></a>  assertEquals(&#39;102&#39;, simplified[2]);
+<a name="line73"></a>  assertEquals(103, simplified[3]);
+<a name="line74"></a>  assertEquals(&#39;104&#39;, simplified[4]);
+<a name="line75"></a>  assertEquals(105, simplified[5]);
+<a name="line76"></a>  assertEquals(&#39;106&#39;, simplified[6]);
+<a name="line77"></a>  assertEquals(107, simplified[7]);
+<a name="line78"></a>  assertEquals(&#39;108&#39;, simplified[8]);
+<a name="line79"></a>  assertEquals(109, simplified[9]);
+<a name="line80"></a>  assertEquals(&#39;110&#39;, simplified[10]);
+<a name="line81"></a>  assertEquals(111.5, simplified[11]);
+<a name="line82"></a>  assertEquals(112.5, simplified[12]);
+<a name="line83"></a>  assertEquals(true, simplified[13]);
+<a name="line84"></a>  assertEquals(&#39;test&#39;, simplified[14]);
+<a name="line85"></a>  assertEquals(&#39;abcd&#39;, simplified[15]);
+<a name="line86"></a>
+<a name="line87"></a>  assertEquals(111, simplified[16][17]);
+<a name="line88"></a>  assertEquals(112, simplified[18][1]);
+<a name="line89"></a>  assertEquals(proto2.TestAllTypes.NestedEnum.FOO, simplified[21]);
+<a name="line90"></a>
+<a name="line91"></a>  assertEquals(201, simplified[31][0]);
+<a name="line92"></a>  assertEquals(202, simplified[31][1]);
+<a name="line93"></a>
+<a name="line94"></a>  // Serialize to a simplified object (with key as name).
+<a name="line95"></a>  simplified = new goog.proto2.ObjectSerializer(
+<a name="line96"></a>      goog.proto2.ObjectSerializer.KeyOption.NAME).serialize(message);
+<a name="line97"></a>
+<a name="line98"></a>  // Assert that everything serialized properly.
+<a name="line99"></a>  assertEquals(101, simplified[&#39;optional_int32&#39;]);
+<a name="line100"></a>  assertEquals(&#39;102&#39;, simplified[&#39;optional_int64&#39;]);
+<a name="line101"></a>  assertEquals(103, simplified[&#39;optional_uint32&#39;]);
+<a name="line102"></a>  assertEquals(&#39;104&#39;, simplified[&#39;optional_uint64&#39;]);
+<a name="line103"></a>  assertEquals(105, simplified[&#39;optional_sint32&#39;]);
+<a name="line104"></a>  assertEquals(&#39;106&#39;, simplified[&#39;optional_sint64&#39;]);
+<a name="line105"></a>  assertEquals(107, simplified[&#39;optional_fixed32&#39;]);
+<a name="line106"></a>  assertEquals(&#39;108&#39;, simplified[&#39;optional_fixed64&#39;]);
+<a name="line107"></a>  assertEquals(109, simplified[&#39;optional_sfixed32&#39;]);
+<a name="line108"></a>  assertEquals(&#39;110&#39;, simplified[&#39;optional_sfixed64&#39;]);
+<a name="line109"></a>  assertEquals(111.5, simplified[&#39;optional_float&#39;]);
+<a name="line110"></a>  assertEquals(112.5, simplified[&#39;optional_double&#39;]);
+<a name="line111"></a>  assertEquals(true, simplified[&#39;optional_bool&#39;]);
+<a name="line112"></a>  assertEquals(&#39;test&#39;, simplified[&#39;optional_string&#39;]);
+<a name="line113"></a>  assertEquals(&#39;abcd&#39;, simplified[&#39;optional_bytes&#39;]);
+<a name="line114"></a>
+<a name="line115"></a>  assertEquals(111, simplified[&#39;optionalgroup&#39;][&#39;a&#39;]);
+<a name="line116"></a>  assertEquals(112, simplified[&#39;optional_nested_message&#39;][&#39;b&#39;]);
+<a name="line117"></a>
+<a name="line118"></a>  assertEquals(proto2.TestAllTypes.NestedEnum.FOO,
+<a name="line119"></a>      simplified[&#39;optional_nested_enum&#39;]);
+<a name="line120"></a>
+<a name="line121"></a>  assertEquals(201, simplified[&#39;repeated_int32&#39;][0]);
+<a name="line122"></a>  assertEquals(202, simplified[&#39;repeated_int32&#39;][1]);
+<a name="line123"></a>}
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>function testSerializationOfUnknown() {
+<a name="line127"></a>  var message = new proto2.TestAllTypes();
+<a name="line128"></a>
+<a name="line129"></a>  // Set the fields.
+<a name="line130"></a>  // Known.
+<a name="line131"></a>  message.setOptionalInt32(101);
+<a name="line132"></a>  message.setOptionalInt64(&#39;102&#39;);
+<a name="line133"></a>  message.addRepeatedInt32(201);
+<a name="line134"></a>  message.addRepeatedInt32(202);
+<a name="line135"></a>
+<a name="line136"></a>  // Unknown.
+<a name="line137"></a>  message.setUnknown(1000, 301);
+<a name="line138"></a>  message.setUnknown(1001, 302);
+<a name="line139"></a>
+<a name="line140"></a>  // Serialize.
+<a name="line141"></a>  var simplified = new goog.proto2.ObjectSerializer().serialize(message);
+<a name="line142"></a>
+<a name="line143"></a>  assertEquals(101, simplified[&#39;1&#39;]);
+<a name="line144"></a>  assertEquals(&#39;102&#39;, simplified[&#39;2&#39;]);
+<a name="line145"></a>
+<a name="line146"></a>  assertEquals(201, simplified[&#39;31&#39;][0]);
+<a name="line147"></a>  assertEquals(202, simplified[&#39;31&#39;][1]);
+<a name="line148"></a>
+<a name="line149"></a>  assertEquals(301, simplified[&#39;1000&#39;]);
+<a name="line150"></a>  assertEquals(302, simplified[&#39;1001&#39;]);
+<a name="line151"></a>}
+<a name="line152"></a>
+<a name="line153"></a>function testDeserializationOfUnknown() {
+<a name="line154"></a>  var simplified = {
+<a name="line155"></a>    1: 101,
+<a name="line156"></a>    2: &#39;102&#39;,
+<a name="line157"></a>    1000: 103,
+<a name="line158"></a>    1001: 104
+<a name="line159"></a>  };
+<a name="line160"></a>
+<a name="line161"></a>  var serializer = new goog.proto2.ObjectSerializer();
+<a name="line162"></a>
+<a name="line163"></a>  var message = serializer.deserialize(
+<a name="line164"></a>      proto2.TestAllTypes.getDescriptor(), simplified);
+<a name="line165"></a>
+<a name="line166"></a>  assertNotNull(message);
+<a name="line167"></a>  assertTrue(message.hasOptionalInt32());
+<a name="line168"></a>  assertTrue(message.hasOptionalInt64());
+<a name="line169"></a>
+<a name="line170"></a>  assertEquals(101, message.getOptionalInt32());
+<a name="line171"></a>  assertEquals(&#39;102&#39;, message.getOptionalInt64());
+<a name="line172"></a>
+<a name="line173"></a>  var count = 0;
+<a name="line174"></a>
+<a name="line175"></a>  message.forEachUnknown(function(tag, value) {
+<a name="line176"></a>    if (tag == 1000) {
+<a name="line177"></a>      assertEquals(103, value);
+<a name="line178"></a>    }
+<a name="line179"></a>
+<a name="line180"></a>    if (tag == 1001) {
+<a name="line181"></a>      assertEquals(104, value);
+<a name="line182"></a>    }
+<a name="line183"></a>
+<a name="line184"></a>    ++count;
+<a name="line185"></a>  });
+<a name="line186"></a>
+<a name="line187"></a>  assertEquals(2, count);
+<a name="line188"></a>}
+<a name="line189"></a>
+<a name="line190"></a>function testDeserializationRepeated() {
+<a name="line191"></a>  var simplified = {
+<a name="line192"></a>    31: [101, 102],
+<a name="line193"></a>    41: [201.5, 202.5, 203.5],
+<a name="line194"></a>    42: [],
+<a name="line195"></a>    43: [true, false],
+<a name="line196"></a>    44: [&#39;he&#39;, &#39;llo&#39;],
+<a name="line197"></a>    46: [{ 47: [101] } , { 47: [102] }],
+<a name="line198"></a>    48: [{ 1: 201 }, { 1: 202 }]
+<a name="line199"></a>  };
+<a name="line200"></a>
+<a name="line201"></a>  var serializer = new goog.proto2.ObjectSerializer();
+<a name="line202"></a>
+<a name="line203"></a>  var message = serializer.deserialize(
+<a name="line204"></a>      proto2.TestAllTypes.getDescriptor(), simplified);
+<a name="line205"></a>
+<a name="line206"></a>  assertNotNull(message);
+<a name="line207"></a>
+<a name="line208"></a>  // Ensure the fields are set as expected.
+<a name="line209"></a>  assertTrue(message.hasRepeatedInt32());
+<a name="line210"></a>  assertTrue(message.hasRepeatedFloat());
+<a name="line211"></a>
+<a name="line212"></a>  assertFalse(message.hasRepeatedDouble());
+<a name="line213"></a>
+<a name="line214"></a>  assertTrue(message.hasRepeatedBool());
+<a name="line215"></a>  assertTrue(message.hasRepeatedgroup());
+<a name="line216"></a>  assertTrue(message.hasRepeatedNestedMessage());
+<a name="line217"></a>
+<a name="line218"></a>  // Ensure the counts match.
+<a name="line219"></a>  assertEquals(2, message.repeatedInt32Count());
+<a name="line220"></a>  assertEquals(3, message.repeatedFloatCount());
+<a name="line221"></a>
+<a name="line222"></a>  assertEquals(0, message.repeatedDoubleCount());
+<a name="line223"></a>
+<a name="line224"></a>  assertEquals(2, message.repeatedBoolCount());
+<a name="line225"></a>  assertEquals(2, message.repeatedStringCount());
+<a name="line226"></a>  assertEquals(2, message.repeatedgroupCount());
+<a name="line227"></a>  assertEquals(2, message.repeatedNestedMessageCount());
+<a name="line228"></a>
+<a name="line229"></a>  // Ensure the values match.
+<a name="line230"></a>  assertEquals(101, message.getRepeatedInt32(0));
+<a name="line231"></a>  assertEquals(102, message.getRepeatedInt32(1));
+<a name="line232"></a>
+<a name="line233"></a>  assertEquals(201.5, message.getRepeatedFloat(0));
+<a name="line234"></a>  assertEquals(202.5, message.getRepeatedFloat(1));
+<a name="line235"></a>  assertEquals(203.5, message.getRepeatedFloat(2));
+<a name="line236"></a>
+<a name="line237"></a>  assertEquals(true, message.getRepeatedBool(0));
+<a name="line238"></a>  assertEquals(false, message.getRepeatedBool(1));
+<a name="line239"></a>
+<a name="line240"></a>  assertEquals(&#39;he&#39;, message.getRepeatedString(0));
+<a name="line241"></a>  assertEquals(&#39;llo&#39;, message.getRepeatedString(1));
+<a name="line242"></a>
+<a name="line243"></a>  assertEquals(101, message.getRepeatedgroup(0).getA(0));
+<a name="line244"></a>  assertEquals(102, message.getRepeatedgroup(1).getA(0));
+<a name="line245"></a>
+<a name="line246"></a>  assertEquals(201, message.getRepeatedNestedMessage(0).getB());
+<a name="line247"></a>  assertEquals(202, message.getRepeatedNestedMessage(1).getB());
+<a name="line248"></a>}
+<a name="line249"></a>
+<a name="line250"></a>function testDeserialization() {
+<a name="line251"></a>  var simplified = {
+<a name="line252"></a>    1: 101,
+<a name="line253"></a>    2: &#39;102&#39;,
+<a name="line254"></a>    3: 103,
+<a name="line255"></a>    4: &#39;104&#39;,
+<a name="line256"></a>    5: 105,
+<a name="line257"></a>    6: &#39;106&#39;,
+<a name="line258"></a>    7: 107,
+<a name="line259"></a>    8: &#39;108&#39;,
+<a name="line260"></a>    9: 109,
+<a name="line261"></a>    10: &#39;110&#39;,
+<a name="line262"></a>    11: 111.5,
+<a name="line263"></a>    12: 112.5,
+<a name="line264"></a>    13: true,
+<a name="line265"></a>    14: &#39;test&#39;,
+<a name="line266"></a>    15: &#39;abcd&#39;,
+<a name="line267"></a>    16: { 17 : 113 },
+<a name="line268"></a>    18: { 1 : 114 },
+<a name="line269"></a>    21: proto2.TestAllTypes.NestedEnum.FOO
+<a name="line270"></a>  };
+<a name="line271"></a>
+<a name="line272"></a>  var serializer = new goog.proto2.ObjectSerializer();
+<a name="line273"></a>
+<a name="line274"></a>  var message = serializer.deserialize(
+<a name="line275"></a>      proto2.TestAllTypes.getDescriptor(), simplified);
+<a name="line276"></a>
+<a name="line277"></a>  assertNotNull(message);
+<a name="line278"></a>
+<a name="line279"></a>  assertTrue(message.hasOptionalInt32());
+<a name="line280"></a>  assertTrue(message.hasOptionalInt64());
+<a name="line281"></a>  assertTrue(message.hasOptionalUint32());
+<a name="line282"></a>  assertTrue(message.hasOptionalUint64());
+<a name="line283"></a>  assertTrue(message.hasOptionalSint32());
+<a name="line284"></a>  assertTrue(message.hasOptionalSint64());
+<a name="line285"></a>  assertTrue(message.hasOptionalFixed32());
+<a name="line286"></a>  assertTrue(message.hasOptionalFixed64());
+<a name="line287"></a>  assertTrue(message.hasOptionalSfixed32());
+<a name="line288"></a>  assertTrue(message.hasOptionalSfixed64());
+<a name="line289"></a>  assertTrue(message.hasOptionalFloat());
+<a name="line290"></a>  assertTrue(message.hasOptionalDouble());
+<a name="line291"></a>  assertTrue(message.hasOptionalBool());
+<a name="line292"></a>  assertTrue(message.hasOptionalString());
+<a name="line293"></a>  assertTrue(message.hasOptionalBytes());
+<a name="line294"></a>  assertTrue(message.hasOptionalgroup());
+<a name="line295"></a>  assertTrue(message.hasOptionalNestedMessage());
+<a name="line296"></a>  assertTrue(message.hasOptionalNestedEnum());
+<a name="line297"></a>
+<a name="line298"></a>  assertEquals(1, message.optionalInt32Count());
+<a name="line299"></a>  assertEquals(1, message.optionalInt64Count());
+<a name="line300"></a>  assertEquals(1, message.optionalUint32Count());
+<a name="line301"></a>  assertEquals(1, message.optionalUint64Count());
+<a name="line302"></a>  assertEquals(1, message.optionalSint32Count());
+<a name="line303"></a>  assertEquals(1, message.optionalSint64Count());
+<a name="line304"></a>  assertEquals(1, message.optionalFixed32Count());
+<a name="line305"></a>  assertEquals(1, message.optionalFixed64Count());
+<a name="line306"></a>  assertEquals(1, message.optionalSfixed32Count());
+<a name="line307"></a>  assertEquals(1, message.optionalSfixed64Count());
+<a name="line308"></a>  assertEquals(1, message.optionalFloatCount());
+<a name="line309"></a>  assertEquals(1, message.optionalDoubleCount());
+<a name="line310"></a>  assertEquals(1, message.optionalBoolCount());
+<a name="line311"></a>  assertEquals(1, message.optionalStringCount());
+<a name="line312"></a>  assertEquals(1, message.optionalBytesCount());
+<a name="line313"></a>  assertEquals(1, message.optionalgroupCount());
+<a name="line314"></a>  assertEquals(1, message.optionalNestedMessageCount());
+<a name="line315"></a>  assertEquals(1, message.optionalNestedEnumCount());
+<a name="line316"></a>
+<a name="line317"></a>  assertEquals(101, message.getOptionalInt32());
+<a name="line318"></a>  assertEquals(&#39;102&#39;, message.getOptionalInt64());
+<a name="line319"></a>  assertEquals(103, message.getOptionalUint32());
+<a name="line320"></a>  assertEquals(&#39;104&#39;, message.getOptionalUint64());
+<a name="line321"></a>  assertEquals(105, message.getOptionalSint32());
+<a name="line322"></a>  assertEquals(&#39;106&#39;, message.getOptionalSint64());
+<a name="line323"></a>  assertEquals(107, message.getOptionalFixed32());
+<a name="line324"></a>  assertEquals(&#39;108&#39;, message.getOptionalFixed64());
+<a name="line325"></a>  assertEquals(109, message.getOptionalSfixed32());
+<a name="line326"></a>  assertEquals(&#39;110&#39;, message.getOptionalSfixed64());
+<a name="line327"></a>  assertEquals(111.5, message.getOptionalFloat());
+<a name="line328"></a>  assertEquals(112.5, message.getOptionalDouble());
+<a name="line329"></a>  assertEquals(true, message.getOptionalBool());
+<a name="line330"></a>  assertEquals(&#39;test&#39;, message.getOptionalString());
+<a name="line331"></a>  assertEquals(&#39;abcd&#39;, message.getOptionalBytes());
+<a name="line332"></a>  assertEquals(113, message.getOptionalgroup().getA());
+<a name="line333"></a>  assertEquals(114, message.getOptionalNestedMessage().getB());
+<a name="line334"></a>
+<a name="line335"></a>  assertEquals(proto2.TestAllTypes.NestedEnum.FOO,
+<a name="line336"></a>      message.getOptionalNestedEnum());
+<a name="line337"></a>}
+<a name="line338"></a>
+<a name="line339"></a>function testDeserializationUnknownEnumValue() {
+<a name="line340"></a>  var simplified = {
+<a name="line341"></a>    21: 1001
+<a name="line342"></a>  };
+<a name="line343"></a>
+<a name="line344"></a>  var serializer = new goog.proto2.ObjectSerializer();
+<a name="line345"></a>
+<a name="line346"></a>  var message = serializer.deserialize(
+<a name="line347"></a>      proto2.TestAllTypes.getDescriptor(), simplified);
+<a name="line348"></a>
+<a name="line349"></a>  assertNotNull(message);
+<a name="line350"></a>
+<a name="line351"></a>  assertEquals(1001, message.getOptionalNestedEnum());
+<a name="line352"></a>}
+<a name="line353"></a>
+<a name="line354"></a>function testDeserializationSymbolicEnumValue() {
+<a name="line355"></a>  var simplified = {
+<a name="line356"></a>    21: &#39;BAR&#39;
+<a name="line357"></a>  };
+<a name="line358"></a>
+<a name="line359"></a>  propertyReplacer.set(goog.proto2.Serializer, &#39;DECODE_SYMBOLIC_ENUMS&#39;, true);
+<a name="line360"></a>
+<a name="line361"></a>  var serializer = new goog.proto2.ObjectSerializer();
+<a name="line362"></a>
+<a name="line363"></a>  var message = serializer.deserialize(
+<a name="line364"></a>      proto2.TestAllTypes.getDescriptor(), simplified);
+<a name="line365"></a>
+<a name="line366"></a>  assertNotNull(message);
+<a name="line367"></a>
+<a name="line368"></a>  assertEquals(proto2.TestAllTypes.NestedEnum.BAR,
+<a name="line369"></a>      message.getOptionalNestedEnum());
+<a name="line370"></a>}
+<a name="line371"></a>
+<a name="line372"></a>function testDeserializationSymbolicEnumValueTurnedOff() {
+<a name="line373"></a>  var simplified = {
+<a name="line374"></a>    21: &#39;BAR&#39;
+<a name="line375"></a>  };
+<a name="line376"></a>
+<a name="line377"></a>  var serializer = new goog.proto2.ObjectSerializer();
+<a name="line378"></a>
+<a name="line379"></a>  assertThrows(&#39;Should have an assertion failure in deserialization&#39;,
+<a name="line380"></a>      function() {
+<a name="line381"></a>        serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+<a name="line382"></a>      });
+<a name="line383"></a>}
+<a name="line384"></a>
+<a name="line385"></a>function testDeserializationUnknownSymbolicEnumValue() {
+<a name="line386"></a>  var simplified = {
+<a name="line387"></a>    21: &#39;BARRED&#39;
+<a name="line388"></a>  };
+<a name="line389"></a>
+<a name="line390"></a>  var serializer = new goog.proto2.ObjectSerializer();
+<a name="line391"></a>
+<a name="line392"></a>  assertThrows(&#39;Should have an assertion failure in deserialization&#39;,
+<a name="line393"></a>      function() {
+<a name="line394"></a>        serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+<a name="line395"></a>      });
+<a name="line396"></a>}
+<a name="line397"></a>
+<a name="line398"></a>function testDeserializationNumbersOrStrings() {
+<a name="line399"></a>  // 64-bit types may have been serialized as numbers or strings.
+<a name="line400"></a>  // Deserialization should be able to handle either.
+<a name="line401"></a>
+<a name="line402"></a>  var simplifiedWithNumbers = {
+<a name="line403"></a>    50: 5000,
+<a name="line404"></a>    51: 5100,
+<a name="line405"></a>    52: [5200, 5201],
+<a name="line406"></a>    53: [5300, 5301]
+<a name="line407"></a>  };
+<a name="line408"></a>
+<a name="line409"></a>  var simplifiedWithStrings = {
+<a name="line410"></a>    50: &#39;5000&#39;,
+<a name="line411"></a>    51: &#39;5100&#39;,
+<a name="line412"></a>    52: [&#39;5200&#39;, &#39;5201&#39;],
+<a name="line413"></a>    53: [&#39;5300&#39;, &#39;5301&#39;]
+<a name="line414"></a>  };
+<a name="line415"></a>
+<a name="line416"></a>  var serializer = new goog.proto2.ObjectSerializer();
+<a name="line417"></a>
+<a name="line418"></a>  var message = serializer.deserialize(
+<a name="line419"></a>      proto2.TestAllTypes.getDescriptor(), simplifiedWithNumbers);
+<a name="line420"></a>
+<a name="line421"></a>  assertNotNull(message);
+<a name="line422"></a>
+<a name="line423"></a>  assertEquals(5000, message.getOptionalInt64Number());
+<a name="line424"></a>  assertEquals(&#39;5100&#39;, message.getOptionalInt64String());
+<a name="line425"></a>  assertEquals(5200, message.getRepeatedInt64Number(0));
+<a name="line426"></a>  assertEquals(5201, message.getRepeatedInt64Number(1));
+<a name="line427"></a>  assertEquals(&#39;5300&#39;, message.getRepeatedInt64String(0));
+<a name="line428"></a>  assertEquals(&#39;5301&#39;, message.getRepeatedInt64String(1));
+<a name="line429"></a>
+<a name="line430"></a>  assertArrayEquals([5200, 5201], message.repeatedInt64NumberArray());
+<a name="line431"></a>  assertArrayEquals([&#39;5300&#39;, &#39;5301&#39;], message.repeatedInt64StringArray());
+<a name="line432"></a>
+<a name="line433"></a>  message = serializer.deserialize(
+<a name="line434"></a>      proto2.TestAllTypes.getDescriptor(), simplifiedWithStrings);
+<a name="line435"></a>
+<a name="line436"></a>  assertNotNull(message);
+<a name="line437"></a>
+<a name="line438"></a>  assertEquals(5000, message.getOptionalInt64Number());
+<a name="line439"></a>  assertEquals(&#39;5100&#39;, message.getOptionalInt64String());
+<a name="line440"></a>  assertEquals(5200, message.getRepeatedInt64Number(0));
+<a name="line441"></a>  assertEquals(5201, message.getRepeatedInt64Number(1));
+<a name="line442"></a>  assertEquals(&#39;5300&#39;, message.getRepeatedInt64String(0));
+<a name="line443"></a>  assertEquals(&#39;5301&#39;, message.getRepeatedInt64String(1));
+<a name="line444"></a>
+<a name="line445"></a>  assertArrayEquals([5200, 5201], message.repeatedInt64NumberArray());
+<a name="line446"></a>  assertArrayEquals([&#39;5300&#39;, &#39;5301&#39;], message.repeatedInt64StringArray());
+<a name="line447"></a>}
+<a name="line448"></a>
+<a name="line449"></a>function testDeserializationConversionProhibited() {
+<a name="line450"></a>  // 64-bit types may have been serialized as numbers or strings.
+<a name="line451"></a>  // But 32-bit types must be serialized as numbers.
+<a name="line452"></a>  // Test deserialization fails on 32-bit numbers as strings.
+<a name="line453"></a>
+<a name="line454"></a>  var simplified = {
+<a name="line455"></a>    1: &#39;1000&#39;   // optionalInt32
+<a name="line456"></a>  };
+<a name="line457"></a>  var serializer = new goog.proto2.ObjectSerializer();
+<a name="line458"></a>
+<a name="line459"></a>  assertThrows(&#39;Should have an assertion failure in deserialization&#39;,
+<a name="line460"></a>      function() {
+<a name="line461"></a>        serializer.deserialize(proto2.TestAllTypes.getDescriptor(), simplified);
+<a name="line462"></a>      });
+<a name="line463"></a>}
+<a name="line464"></a>
+<a name="line465"></a>function testDefaultValueNumbersOrStrings() {
+<a name="line466"></a>  // 64-bit types may have been serialized as numbers or strings.
+<a name="line467"></a>  // The default values should have the correct type.
+<a name="line468"></a>
+<a name="line469"></a>  var serializer = new goog.proto2.ObjectSerializer();
+<a name="line470"></a>  var message = serializer.deserialize(proto2.TestAllTypes.getDescriptor(), {});
+<a name="line471"></a>
+<a name="line472"></a>  assertNotNull(message);
+<a name="line473"></a>
+<a name="line474"></a>  // Default when using Number is a number, and precision is lost.
+<a name="line475"></a>  var value = message.getOptionalInt64NumberOrDefault();
+<a name="line476"></a>  assertTrue(&#39;Expecting a number&#39;, typeof value === &#39;number&#39;);
+<a name="line477"></a>  assertEquals(1000000000000000000, value);
+<a name="line478"></a>  assertEquals(1000000000000000001, value);
+<a name="line479"></a>  assertEquals(1000000000000000002, value);
+<a name="line480"></a>  assertEquals(&#39;1000000000000000000&#39;, String(value));  // Value is rounded!
+<a name="line481"></a>
+<a name="line482"></a>  // When using a String, the value is preserved.
+<a name="line483"></a>  assertEquals(&#39;1000000000000000001&#39;,
+<a name="line484"></a>               message.getOptionalInt64StringOrDefault());
+<a name="line485"></a>}
+</pre>
+
+
+</body>
+</html>

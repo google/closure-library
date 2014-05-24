@@ -1,0 +1,210 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tagname.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_tagname.js.html">tagname.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Defines the goog.dom.TagName enum.  This enumerates
+<a name="line17"></a> * all HTML tag names specified in either the the W3C HTML 4.01 index of
+<a name="line18"></a> * elements or the HTML5 draft specification.
+<a name="line19"></a> *
+<a name="line20"></a> * References:
+<a name="line21"></a> * http://www.w3.org/TR/html401/index/elements.html
+<a name="line22"></a> * http://dev.w3.org/html5/spec/section-index.html
+<a name="line23"></a> *
+<a name="line24"></a> */
+<a name="line25"></a>goog.provide(&#39;goog.dom.TagName&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Enum of all html tag names specified by the W3C HTML4.01 and HTML5
+<a name="line30"></a> * specifications.
+<a name="line31"></a> * @enum {string}
+<a name="line32"></a> */
+<a name="line33"></a>goog.dom.TagName = {
+<a name="line34"></a>  A: &#39;A&#39;,
+<a name="line35"></a>  ABBR: &#39;ABBR&#39;,
+<a name="line36"></a>  ACRONYM: &#39;ACRONYM&#39;,
+<a name="line37"></a>  ADDRESS: &#39;ADDRESS&#39;,
+<a name="line38"></a>  APPLET: &#39;APPLET&#39;,
+<a name="line39"></a>  AREA: &#39;AREA&#39;,
+<a name="line40"></a>  ARTICLE: &#39;ARTICLE&#39;,
+<a name="line41"></a>  ASIDE: &#39;ASIDE&#39;,
+<a name="line42"></a>  AUDIO: &#39;AUDIO&#39;,
+<a name="line43"></a>  B: &#39;B&#39;,
+<a name="line44"></a>  BASE: &#39;BASE&#39;,
+<a name="line45"></a>  BASEFONT: &#39;BASEFONT&#39;,
+<a name="line46"></a>  BDI: &#39;BDI&#39;,
+<a name="line47"></a>  BDO: &#39;BDO&#39;,
+<a name="line48"></a>  BIG: &#39;BIG&#39;,
+<a name="line49"></a>  BLOCKQUOTE: &#39;BLOCKQUOTE&#39;,
+<a name="line50"></a>  BODY: &#39;BODY&#39;,
+<a name="line51"></a>  BR: &#39;BR&#39;,
+<a name="line52"></a>  BUTTON: &#39;BUTTON&#39;,
+<a name="line53"></a>  CANVAS: &#39;CANVAS&#39;,
+<a name="line54"></a>  CAPTION: &#39;CAPTION&#39;,
+<a name="line55"></a>  CENTER: &#39;CENTER&#39;,
+<a name="line56"></a>  CITE: &#39;CITE&#39;,
+<a name="line57"></a>  CODE: &#39;CODE&#39;,
+<a name="line58"></a>  COL: &#39;COL&#39;,
+<a name="line59"></a>  COLGROUP: &#39;COLGROUP&#39;,
+<a name="line60"></a>  COMMAND: &#39;COMMAND&#39;,
+<a name="line61"></a>  DATA: &#39;DATA&#39;,
+<a name="line62"></a>  DATALIST: &#39;DATALIST&#39;,
+<a name="line63"></a>  DD: &#39;DD&#39;,
+<a name="line64"></a>  DEL: &#39;DEL&#39;,
+<a name="line65"></a>  DETAILS: &#39;DETAILS&#39;,
+<a name="line66"></a>  DFN: &#39;DFN&#39;,
+<a name="line67"></a>  DIALOG: &#39;DIALOG&#39;,
+<a name="line68"></a>  DIR: &#39;DIR&#39;,
+<a name="line69"></a>  DIV: &#39;DIV&#39;,
+<a name="line70"></a>  DL: &#39;DL&#39;,
+<a name="line71"></a>  DT: &#39;DT&#39;,
+<a name="line72"></a>  EM: &#39;EM&#39;,
+<a name="line73"></a>  EMBED: &#39;EMBED&#39;,
+<a name="line74"></a>  FIELDSET: &#39;FIELDSET&#39;,
+<a name="line75"></a>  FIGCAPTION: &#39;FIGCAPTION&#39;,
+<a name="line76"></a>  FIGURE: &#39;FIGURE&#39;,
+<a name="line77"></a>  FONT: &#39;FONT&#39;,
+<a name="line78"></a>  FOOTER: &#39;FOOTER&#39;,
+<a name="line79"></a>  FORM: &#39;FORM&#39;,
+<a name="line80"></a>  FRAME: &#39;FRAME&#39;,
+<a name="line81"></a>  FRAMESET: &#39;FRAMESET&#39;,
+<a name="line82"></a>  H1: &#39;H1&#39;,
+<a name="line83"></a>  H2: &#39;H2&#39;,
+<a name="line84"></a>  H3: &#39;H3&#39;,
+<a name="line85"></a>  H4: &#39;H4&#39;,
+<a name="line86"></a>  H5: &#39;H5&#39;,
+<a name="line87"></a>  H6: &#39;H6&#39;,
+<a name="line88"></a>  HEAD: &#39;HEAD&#39;,
+<a name="line89"></a>  HEADER: &#39;HEADER&#39;,
+<a name="line90"></a>  HGROUP: &#39;HGROUP&#39;,
+<a name="line91"></a>  HR: &#39;HR&#39;,
+<a name="line92"></a>  HTML: &#39;HTML&#39;,
+<a name="line93"></a>  I: &#39;I&#39;,
+<a name="line94"></a>  IFRAME: &#39;IFRAME&#39;,
+<a name="line95"></a>  IMG: &#39;IMG&#39;,
+<a name="line96"></a>  INPUT: &#39;INPUT&#39;,
+<a name="line97"></a>  INS: &#39;INS&#39;,
+<a name="line98"></a>  ISINDEX: &#39;ISINDEX&#39;,
+<a name="line99"></a>  KBD: &#39;KBD&#39;,
+<a name="line100"></a>  KEYGEN: &#39;KEYGEN&#39;,
+<a name="line101"></a>  LABEL: &#39;LABEL&#39;,
+<a name="line102"></a>  LEGEND: &#39;LEGEND&#39;,
+<a name="line103"></a>  LI: &#39;LI&#39;,
+<a name="line104"></a>  LINK: &#39;LINK&#39;,
+<a name="line105"></a>  MAP: &#39;MAP&#39;,
+<a name="line106"></a>  MARK: &#39;MARK&#39;,
+<a name="line107"></a>  MATH: &#39;MATH&#39;,
+<a name="line108"></a>  MENU: &#39;MENU&#39;,
+<a name="line109"></a>  META: &#39;META&#39;,
+<a name="line110"></a>  METER: &#39;METER&#39;,
+<a name="line111"></a>  NAV: &#39;NAV&#39;,
+<a name="line112"></a>  NOFRAMES: &#39;NOFRAMES&#39;,
+<a name="line113"></a>  NOSCRIPT: &#39;NOSCRIPT&#39;,
+<a name="line114"></a>  OBJECT: &#39;OBJECT&#39;,
+<a name="line115"></a>  OL: &#39;OL&#39;,
+<a name="line116"></a>  OPTGROUP: &#39;OPTGROUP&#39;,
+<a name="line117"></a>  OPTION: &#39;OPTION&#39;,
+<a name="line118"></a>  OUTPUT: &#39;OUTPUT&#39;,
+<a name="line119"></a>  P: &#39;P&#39;,
+<a name="line120"></a>  PARAM: &#39;PARAM&#39;,
+<a name="line121"></a>  PRE: &#39;PRE&#39;,
+<a name="line122"></a>  PROGRESS: &#39;PROGRESS&#39;,
+<a name="line123"></a>  Q: &#39;Q&#39;,
+<a name="line124"></a>  RP: &#39;RP&#39;,
+<a name="line125"></a>  RT: &#39;RT&#39;,
+<a name="line126"></a>  RUBY: &#39;RUBY&#39;,
+<a name="line127"></a>  S: &#39;S&#39;,
+<a name="line128"></a>  SAMP: &#39;SAMP&#39;,
+<a name="line129"></a>  SCRIPT: &#39;SCRIPT&#39;,
+<a name="line130"></a>  SECTION: &#39;SECTION&#39;,
+<a name="line131"></a>  SELECT: &#39;SELECT&#39;,
+<a name="line132"></a>  SMALL: &#39;SMALL&#39;,
+<a name="line133"></a>  SOURCE: &#39;SOURCE&#39;,
+<a name="line134"></a>  SPAN: &#39;SPAN&#39;,
+<a name="line135"></a>  STRIKE: &#39;STRIKE&#39;,
+<a name="line136"></a>  STRONG: &#39;STRONG&#39;,
+<a name="line137"></a>  STYLE: &#39;STYLE&#39;,
+<a name="line138"></a>  SUB: &#39;SUB&#39;,
+<a name="line139"></a>  SUMMARY: &#39;SUMMARY&#39;,
+<a name="line140"></a>  SUP: &#39;SUP&#39;,
+<a name="line141"></a>  SVG: &#39;SVG&#39;,
+<a name="line142"></a>  TABLE: &#39;TABLE&#39;,
+<a name="line143"></a>  TBODY: &#39;TBODY&#39;,
+<a name="line144"></a>  TD: &#39;TD&#39;,
+<a name="line145"></a>  TEXTAREA: &#39;TEXTAREA&#39;,
+<a name="line146"></a>  TFOOT: &#39;TFOOT&#39;,
+<a name="line147"></a>  TH: &#39;TH&#39;,
+<a name="line148"></a>  THEAD: &#39;THEAD&#39;,
+<a name="line149"></a>  TIME: &#39;TIME&#39;,
+<a name="line150"></a>  TITLE: &#39;TITLE&#39;,
+<a name="line151"></a>  TR: &#39;TR&#39;,
+<a name="line152"></a>  TRACK: &#39;TRACK&#39;,
+<a name="line153"></a>  TT: &#39;TT&#39;,
+<a name="line154"></a>  U: &#39;U&#39;,
+<a name="line155"></a>  UL: &#39;UL&#39;,
+<a name="line156"></a>  VAR: &#39;VAR&#39;,
+<a name="line157"></a>  VIDEO: &#39;VIDEO&#39;,
+<a name="line158"></a>  WBR: &#39;WBR&#39;
+<a name="line159"></a>};
+</pre>
+
+
+</body>
+</html>

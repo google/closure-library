@@ -1,0 +1,110 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>localnamefetcher_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_uchar_localnamefetcher_test.js.html">localnamefetcher_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>goog.provide(&#39;goog.i18n.uChar.LocalNameFetcherTest&#39;);
+<a name="line17"></a>goog.setTestOnly(&#39;goog.i18n.uChar.LocalNameFetcherTest&#39;);
+<a name="line18"></a>
+<a name="line19"></a>goog.require(&#39;goog.i18n.uChar.LocalNameFetcher&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var nameFetcher = null;
+<a name="line24"></a>
+<a name="line25"></a>function setUp() {
+<a name="line26"></a>  nameFetcher = new goog.i18n.uChar.LocalNameFetcher();
+<a name="line27"></a>}
+<a name="line28"></a>
+<a name="line29"></a>function testGetName_exists() {
+<a name="line30"></a>  var callback = goog.testing.recordFunction(function(name) {
+<a name="line31"></a>    assertEquals(&#39;Space&#39;, name);
+<a name="line32"></a>  });
+<a name="line33"></a>  nameFetcher.getName(&#39; &#39;, callback);
+<a name="line34"></a>  assertEquals(1, callback.getCallCount());
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function testGetName_variationSelector() {
+<a name="line38"></a>  var callback = goog.testing.recordFunction(function(name) {
+<a name="line39"></a>    assertEquals(&#39;Variation Selector - 1&#39;, name);
+<a name="line40"></a>  });
+<a name="line41"></a>  nameFetcher.getName(&#39;\ufe00&#39;, callback);
+<a name="line42"></a>  assertEquals(1, callback.getCallCount());
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>function testGetName_missing() {
+<a name="line46"></a>  var callback = goog.testing.recordFunction(function(name) {
+<a name="line47"></a>    assertNull(name);
+<a name="line48"></a>  });
+<a name="line49"></a>  nameFetcher.getName(&#39;P&#39;, callback);
+<a name="line50"></a>  assertEquals(1, callback.getCallCount());
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>function testIsNameAvailable_withAvailableName() {
+<a name="line54"></a>  assertTrue(nameFetcher.isNameAvailable(&#39; &#39;));
+<a name="line55"></a>}
+<a name="line56"></a>
+<a name="line57"></a>function testIsNameAvailable_withoutAvailableName() {
+<a name="line58"></a>  assertFalse(nameFetcher.isNameAvailable(&#39;a&#39;));
+<a name="line59"></a>}
+</pre>
+
+
+</body>
+</html>

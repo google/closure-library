@@ -1,0 +1,794 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>tagonenterhandler.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_plugins_tagonenterhandler.js.html">tagonenterhandler.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview TrogEdit plugin to handle enter keys by inserting the
+<a name="line17"></a> * specified block level tag.
+<a name="line18"></a> *
+<a name="line19"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.editor.plugins.TagOnEnterHandler&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.Range&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line28"></a>goog.require(&#39;goog.editor.Command&#39;);
+<a name="line29"></a>goog.require(&#39;goog.editor.node&#39;);
+<a name="line30"></a>goog.require(&#39;goog.editor.plugins.EnterHandler&#39;);
+<a name="line31"></a>goog.require(&#39;goog.editor.range&#39;);
+<a name="line32"></a>goog.require(&#39;goog.editor.style&#39;);
+<a name="line33"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line34"></a>goog.require(&#39;goog.string&#39;);
+<a name="line35"></a>goog.require(&#39;goog.style&#39;);
+<a name="line36"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Plugin to handle enter keys. This subclass normalizes all browsers to use
+<a name="line42"></a> * the given block tag on enter.
+<a name="line43"></a> * @param {goog.dom.TagName} tag The type of tag to add on enter.
+<a name="line44"></a> * @constructor
+<a name="line45"></a> * @extends {goog.editor.plugins.EnterHandler}
+<a name="line46"></a> */
+<a name="line47"></a>goog.editor.plugins.TagOnEnterHandler = function(tag) {
+<a name="line48"></a>  this.tag = tag;
+<a name="line49"></a>
+<a name="line50"></a>  goog.editor.plugins.EnterHandler.call(this);
+<a name="line51"></a>};
+<a name="line52"></a>goog.inherits(goog.editor.plugins.TagOnEnterHandler,
+<a name="line53"></a>    goog.editor.plugins.EnterHandler);
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/** @override */
+<a name="line57"></a>goog.editor.plugins.TagOnEnterHandler.prototype.getTrogClassId = function() {
+<a name="line58"></a>  return &#39;TagOnEnterHandler&#39;;
+<a name="line59"></a>};
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/** @override */
+<a name="line63"></a>goog.editor.plugins.TagOnEnterHandler.prototype.getNonCollapsingBlankHtml =
+<a name="line64"></a>    function() {
+<a name="line65"></a>  if (this.tag == goog.dom.TagName.P) {
+<a name="line66"></a>    return &#39;&lt;p&gt;&amp;nbsp;&lt;/p&gt;&#39;;
+<a name="line67"></a>  } else if (this.tag == goog.dom.TagName.DIV) {
+<a name="line68"></a>    return &#39;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&#39;;
+<a name="line69"></a>  }
+<a name="line70"></a>  return &#39;&lt;br&gt;&#39;;
+<a name="line71"></a>};
+<a name="line72"></a>
+<a name="line73"></a>
+<a name="line74"></a>/**
+<a name="line75"></a> * This plugin is active on uneditable fields so it can provide a value for
+<a name="line76"></a> * queryCommandValue calls asking for goog.editor.Command.BLOCKQUOTE.
+<a name="line77"></a> * @return {boolean} True.
+<a name="line78"></a> * @override
+<a name="line79"></a> */
+<a name="line80"></a>goog.editor.plugins.TagOnEnterHandler.prototype.activeOnUneditableFields =
+<a name="line81"></a>    goog.functions.TRUE;
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/** @override */
+<a name="line85"></a>goog.editor.plugins.TagOnEnterHandler.prototype.isSupportedCommand = function(
+<a name="line86"></a>    command) {
+<a name="line87"></a>  return command == goog.editor.Command.DEFAULT_TAG;
+<a name="line88"></a>};
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/** @override */
+<a name="line92"></a>goog.editor.plugins.TagOnEnterHandler.prototype.queryCommandValue = function(
+<a name="line93"></a>    command) {
+<a name="line94"></a>  return command == goog.editor.Command.DEFAULT_TAG ? this.tag : null;
+<a name="line95"></a>};
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/** @override */
+<a name="line99"></a>goog.editor.plugins.TagOnEnterHandler.prototype.handleBackspaceInternal =
+<a name="line100"></a>    function(e, range) {
+<a name="line101"></a>  goog.editor.plugins.TagOnEnterHandler.superClass_.handleBackspaceInternal.
+<a name="line102"></a>      call(this, e, range);
+<a name="line103"></a>
+<a name="line104"></a>  if (goog.userAgent.GECKO) {
+<a name="line105"></a>    this.markBrToNotBeRemoved_(range, true);
+<a name="line106"></a>  }
+<a name="line107"></a>};
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>/** @override */
+<a name="line111"></a>goog.editor.plugins.TagOnEnterHandler.prototype.processParagraphTagsInternal =
+<a name="line112"></a>    function(e, split) {
+<a name="line113"></a>  if ((goog.userAgent.OPERA || goog.userAgent.IE) &amp;&amp;
+<a name="line114"></a>      this.tag != goog.dom.TagName.P) {
+<a name="line115"></a>    this.ensureBlockIeOpera(this.tag);
+<a name="line116"></a>  }
+<a name="line117"></a>};
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/** @override */
+<a name="line121"></a>goog.editor.plugins.TagOnEnterHandler.prototype.handleDeleteGecko = function(
+<a name="line122"></a>    e) {
+<a name="line123"></a>  var range = this.getFieldObject().getRange();
+<a name="line124"></a>  var container = goog.editor.style.getContainer(
+<a name="line125"></a>      range &amp;&amp; range.getContainerElement());
+<a name="line126"></a>  if (this.getFieldObject().getElement().lastChild == container &amp;&amp;
+<a name="line127"></a>      goog.editor.plugins.EnterHandler.isBrElem(container)) {
+<a name="line128"></a>    // Don&#39;t delete if it&#39;s the last node in the field and just has a BR.
+<a name="line129"></a>    e.preventDefault();
+<a name="line130"></a>    // TODO(user): I think we probably don&#39;t need to stopPropagation here
+<a name="line131"></a>    e.stopPropagation();
+<a name="line132"></a>  } else {
+<a name="line133"></a>    // Go ahead with deletion.
+<a name="line134"></a>    // Prevent an existing BR immediately following the selection being deleted
+<a name="line135"></a>    // from being removed in the keyup stage (as opposed to a BR added by FF
+<a name="line136"></a>    // after deletion, which we do remove).
+<a name="line137"></a>    this.markBrToNotBeRemoved_(range, false);
+<a name="line138"></a>    // Manually delete the selection if it&#39;s at a BR.
+<a name="line139"></a>    this.deleteBrGecko(e);
+<a name="line140"></a>  }
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/** @override */
+<a name="line145"></a>goog.editor.plugins.TagOnEnterHandler.prototype.handleKeyUpInternal = function(
+<a name="line146"></a>    e) {
+<a name="line147"></a>  if (goog.userAgent.GECKO) {
+<a name="line148"></a>    if (e.keyCode == goog.events.KeyCodes.DELETE) {
+<a name="line149"></a>      this.removeBrIfNecessary_(false);
+<a name="line150"></a>    } else if (e.keyCode == goog.events.KeyCodes.BACKSPACE) {
+<a name="line151"></a>      this.removeBrIfNecessary_(true);
+<a name="line152"></a>    }
+<a name="line153"></a>  } else if ((goog.userAgent.IE || goog.userAgent.OPERA) &amp;&amp;
+<a name="line154"></a>             e.keyCode == goog.events.KeyCodes.ENTER) {
+<a name="line155"></a>    this.ensureBlockIeOpera(this.tag, true);
+<a name="line156"></a>  }
+<a name="line157"></a>  // Safari uses DIVs by default.
+<a name="line158"></a>};
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * String that matches a single BR tag or NBSP surrounded by non-breaking
+<a name="line163"></a> * whitespace
+<a name="line164"></a> * @type {string}
+<a name="line165"></a> * @private
+<a name="line166"></a> */
+<a name="line167"></a>goog.editor.plugins.TagOnEnterHandler.BrOrNbspSurroundedWithWhiteSpace_ =
+<a name="line168"></a>    &#39;[\t\n\r ]*(&lt;br[^&gt;]*\/?&gt;|&amp;nbsp;)[\t\n\r ]*&#39;;
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * String that matches a single BR tag or NBSP surrounded by non-breaking
+<a name="line173"></a> * whitespace
+<a name="line174"></a> * @type {RegExp}
+<a name="line175"></a> * @private
+<a name="line176"></a> */
+<a name="line177"></a>goog.editor.plugins.TagOnEnterHandler.emptyLiRegExp_ = new RegExp(&#39;^&#39; +
+<a name="line178"></a>    goog.editor.plugins.TagOnEnterHandler.BrOrNbspSurroundedWithWhiteSpace_ +
+<a name="line179"></a>    &#39;$&#39;);
+<a name="line180"></a>
+<a name="line181"></a>
+<a name="line182"></a>/**
+<a name="line183"></a> * Ensures the current node is wrapped in the tag.
+<a name="line184"></a> * @param {Node} node The node to ensure gets wrapped.
+<a name="line185"></a> * @param {Element} container Element containing the selection.
+<a name="line186"></a> * @return {Element} Element containing the selection, after the wrapping.
+<a name="line187"></a>  * @private
+<a name="line188"></a> */
+<a name="line189"></a>goog.editor.plugins.TagOnEnterHandler.prototype.ensureNodeIsWrappedW3c_ =
+<a name="line190"></a>    function(node, container) {
+<a name="line191"></a>  if (container == this.getFieldObject().getElement()) {
+<a name="line192"></a>    // If the first block-level ancestor of cursor is the field,
+<a name="line193"></a>    // don&#39;t split the tree. Find all the text from the cursor
+<a name="line194"></a>    // to both block-level elements surrounding it (if they exist)
+<a name="line195"></a>    // and split the text into two elements.
+<a name="line196"></a>    // This is the IE contentEditable behavior.
+<a name="line197"></a>
+<a name="line198"></a>    // The easy way to do this is to wrap all the text in an element
+<a name="line199"></a>    // and then split the element as if the user had hit enter
+<a name="line200"></a>    // in the paragraph
+<a name="line201"></a>
+<a name="line202"></a>    // However, simply wrapping the text into an element creates problems
+<a name="line203"></a>    // if the text was already wrapped using some other element such as an
+<a name="line204"></a>    // anchor.  For example, wrapping the text of
+<a name="line205"></a>    //   &lt;a href=&quot;&quot;&gt;Text&lt;/a&gt;
+<a name="line206"></a>    // would produce
+<a name="line207"></a>    //   &lt;a href=&quot;&quot;&gt;&lt;p&gt;Text&lt;/p&gt;&lt;/a&gt;
+<a name="line208"></a>    // which is not what we want.  What we really want is
+<a name="line209"></a>    //   &lt;p&gt;&lt;a href=&quot;&quot;&gt;Text&lt;/a&gt;&lt;/p&gt;
+<a name="line210"></a>    // So we need to search for an ancestor of position.node to be wrapped.
+<a name="line211"></a>    // We do this by iterating up the hierarchy of postiion.node until we&#39;ve
+<a name="line212"></a>    // reached the node that&#39;s just under the container.
+<a name="line213"></a>    var isChildOfFn = function(child) {
+<a name="line214"></a>      return container == child.parentNode; };
+<a name="line215"></a>    var nodeToWrap = goog.dom.getAncestor(node, isChildOfFn, true);
+<a name="line216"></a>    container = goog.editor.plugins.TagOnEnterHandler.wrapInContainerW3c_(
+<a name="line217"></a>        this.tag, {node: nodeToWrap, offset: 0}, container);
+<a name="line218"></a>  }
+<a name="line219"></a>  return container;
+<a name="line220"></a>};
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/** @override */
+<a name="line224"></a>goog.editor.plugins.TagOnEnterHandler.prototype.handleEnterWebkitInternal =
+<a name="line225"></a>    function(e) {
+<a name="line226"></a>  if (this.tag == goog.dom.TagName.DIV) {
+<a name="line227"></a>    var range = this.getFieldObject().getRange();
+<a name="line228"></a>    var container =
+<a name="line229"></a>        goog.editor.style.getContainer(range.getContainerElement());
+<a name="line230"></a>
+<a name="line231"></a>    var position = goog.editor.range.getDeepEndPoint(range, true);
+<a name="line232"></a>    container = this.ensureNodeIsWrappedW3c_(position.node, container);
+<a name="line233"></a>    goog.dom.Range.createCaret(position.node, position.offset).select();
+<a name="line234"></a>  }
+<a name="line235"></a>};
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>/** @override */
+<a name="line239"></a>goog.editor.plugins.TagOnEnterHandler.prototype.
+<a name="line240"></a>    handleEnterAtCursorGeckoInternal = function(e, wasCollapsed, range) {
+<a name="line241"></a>  // We use this because there are a few cases where FF default
+<a name="line242"></a>  // implementation doesn&#39;t follow IE&#39;s:
+<a name="line243"></a>  //   -Inserts BRs into empty elements instead of NBSP which has nasty
+<a name="line244"></a>  //    side effects w/ making/deleting selections
+<a name="line245"></a>  //   -Hitting enter when your cursor is in the field itself. IE will
+<a name="line246"></a>  //    create two elements. FF just inserts a BR.
+<a name="line247"></a>  //   -Hitting enter inside an empty list-item doesn&#39;t create a block
+<a name="line248"></a>  //    tag. It just splits the list and puts your cursor in the middle.
+<a name="line249"></a>  var li = null;
+<a name="line250"></a>  if (wasCollapsed) {
+<a name="line251"></a>    // Only break out of lists for collapsed selections.
+<a name="line252"></a>    li = goog.dom.getAncestorByTagNameAndClass(
+<a name="line253"></a>        range &amp;&amp; range.getContainerElement(), goog.dom.TagName.LI);
+<a name="line254"></a>  }
+<a name="line255"></a>  var isEmptyLi = (li &amp;&amp;
+<a name="line256"></a>      li.innerHTML.match(
+<a name="line257"></a>          goog.editor.plugins.TagOnEnterHandler.emptyLiRegExp_));
+<a name="line258"></a>  var elementAfterCursor = isEmptyLi ?
+<a name="line259"></a>      this.breakOutOfEmptyListItemGecko_(li) :
+<a name="line260"></a>      this.handleRegularEnterGecko_();
+<a name="line261"></a>
+<a name="line262"></a>  // Move the cursor in front of &quot;nodeAfterCursor&quot;, and make sure it
+<a name="line263"></a>  // is visible
+<a name="line264"></a>  this.scrollCursorIntoViewGecko_(elementAfterCursor);
+<a name="line265"></a>
+<a name="line266"></a>  // Fix for http://b/1991234 :
+<a name="line267"></a>  if (goog.editor.plugins.EnterHandler.isBrElem(elementAfterCursor)) {
+<a name="line268"></a>    // The first element in the new line is a line with just a BR and maybe some
+<a name="line269"></a>    // whitespace.
+<a name="line270"></a>    // Calling normalize() is needed because there might be empty text nodes
+<a name="line271"></a>    // before BR and empty text nodes cause the cursor position bug in Firefox.
+<a name="line272"></a>    // See http://b/5220858
+<a name="line273"></a>    elementAfterCursor.normalize();
+<a name="line274"></a>    var br = elementAfterCursor.getElementsByTagName(goog.dom.TagName.BR)[0];
+<a name="line275"></a>    if (br.previousSibling &amp;&amp;
+<a name="line276"></a>        br.previousSibling.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line277"></a>      // If there is some whitespace before the BR, don&#39;t put the selection on
+<a name="line278"></a>      // the BR, put it in the text node that&#39;s there, otherwise when you type
+<a name="line279"></a>      // it will create adjacent text nodes.
+<a name="line280"></a>      elementAfterCursor = br.previousSibling;
+<a name="line281"></a>    }
+<a name="line282"></a>  }
+<a name="line283"></a>
+<a name="line284"></a>  goog.editor.range.selectNodeStart(elementAfterCursor);
+<a name="line285"></a>
+<a name="line286"></a>  e.preventDefault();
+<a name="line287"></a>  // TODO(user): I think we probably don&#39;t need to stopPropagation here
+<a name="line288"></a>  e.stopPropagation();
+<a name="line289"></a>};
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * If The cursor is in an empty LI then break out of the list like in IE
+<a name="line294"></a> * @param {Node} li LI to break out of.
+<a name="line295"></a> * @return {!Element} Element to put the cursor after.
+<a name="line296"></a> * @private
+<a name="line297"></a> */
+<a name="line298"></a>goog.editor.plugins.TagOnEnterHandler.prototype.breakOutOfEmptyListItemGecko_ =
+<a name="line299"></a>    function(li) {
+<a name="line300"></a>  // Do this as follows:
+<a name="line301"></a>  // 1. &lt;ul&gt;...&lt;li&gt;&amp;nbsp;&lt;/li&gt;...&lt;/ul&gt;
+<a name="line302"></a>  // 2. &lt;ul id=&#39;foo1&#39;&gt;...&lt;li id=&#39;foo2&#39;&gt;&amp;nbsp;&lt;/li&gt;...&lt;/ul&gt;
+<a name="line303"></a>  // 3. &lt;ul id=&#39;foo1&#39;&gt;...&lt;/ul&gt;&lt;p id=&#39;foo3&#39;&gt;&amp;nbsp;&lt;/p&gt;&lt;ul id=&#39;foo2&#39;&gt;...&lt;/ul&gt;
+<a name="line304"></a>  // 4. &lt;ul&gt;...&lt;/ul&gt;&lt;p&gt;&amp;nbsp;&lt;/p&gt;&lt;ul&gt;...&lt;/ul&gt;
+<a name="line305"></a>  //
+<a name="line306"></a>  // There are a couple caveats to the above. If the UL is contained in
+<a name="line307"></a>  // a list, then the new node inserted is an LI, not a P.
+<a name="line308"></a>  // For an OL, it&#39;s all the same, except the tagname of course.
+<a name="line309"></a>  // Finally, it&#39;s possible that with the LI at the beginning or the end
+<a name="line310"></a>  // of the list that we&#39;ll end up with an empty list. So we special case
+<a name="line311"></a>  // those cases.
+<a name="line312"></a>
+<a name="line313"></a>  var listNode = li.parentNode;
+<a name="line314"></a>  var grandparent = listNode.parentNode;
+<a name="line315"></a>  var inSubList = grandparent.tagName == goog.dom.TagName.OL ||
+<a name="line316"></a>      grandparent.tagName == goog.dom.TagName.UL;
+<a name="line317"></a>
+<a name="line318"></a>  // TODO(robbyw): Should we apply the list or list item styles to the new node?
+<a name="line319"></a>  var newNode = goog.dom.getDomHelper(li).createElement(
+<a name="line320"></a>      inSubList ? goog.dom.TagName.LI : this.tag);
+<a name="line321"></a>
+<a name="line322"></a>  if (!li.previousSibling) {
+<a name="line323"></a>    goog.dom.insertSiblingBefore(newNode, listNode);
+<a name="line324"></a>  } else {
+<a name="line325"></a>    if (li.nextSibling) {
+<a name="line326"></a>      var listClone = listNode.cloneNode(false);
+<a name="line327"></a>      while (li.nextSibling) {
+<a name="line328"></a>        listClone.appendChild(li.nextSibling);
+<a name="line329"></a>      }
+<a name="line330"></a>      goog.dom.insertSiblingAfter(listClone, listNode);
+<a name="line331"></a>    }
+<a name="line332"></a>    goog.dom.insertSiblingAfter(newNode, listNode);
+<a name="line333"></a>  }
+<a name="line334"></a>  if (goog.editor.node.isEmpty(listNode)) {
+<a name="line335"></a>    goog.dom.removeNode(listNode);
+<a name="line336"></a>  }
+<a name="line337"></a>  goog.dom.removeNode(li);
+<a name="line338"></a>  newNode.innerHTML = &#39;&amp;nbsp;&#39;;
+<a name="line339"></a>
+<a name="line340"></a>  return newNode;
+<a name="line341"></a>};
+<a name="line342"></a>
+<a name="line343"></a>
+<a name="line344"></a>/**
+<a name="line345"></a> * Wrap the text indicated by &quot;position&quot; in an HTML container of type
+<a name="line346"></a> * &quot;nodeName&quot;.
+<a name="line347"></a> * @param {string} nodeName Type of container, e.g. &quot;p&quot; (paragraph).
+<a name="line348"></a> * @param {Object} position The W3C cursor position object
+<a name="line349"></a> *     (from getCursorPositionW3c).
+<a name="line350"></a> * @param {Node} container The field containing position.
+<a name="line351"></a> * @return {!Element} The container element that holds the contents from
+<a name="line352"></a> *     position.
+<a name="line353"></a> * @private
+<a name="line354"></a> */
+<a name="line355"></a>goog.editor.plugins.TagOnEnterHandler.wrapInContainerW3c_ = function(nodeName,
+<a name="line356"></a>    position, container) {
+<a name="line357"></a>  var start = position.node;
+<a name="line358"></a>  while (start.previousSibling &amp;&amp;
+<a name="line359"></a>         !goog.editor.style.isContainer(start.previousSibling)) {
+<a name="line360"></a>    start = start.previousSibling;
+<a name="line361"></a>  }
+<a name="line362"></a>
+<a name="line363"></a>  var end = position.node;
+<a name="line364"></a>  while (end.nextSibling &amp;&amp;
+<a name="line365"></a>         !goog.editor.style.isContainer(end.nextSibling)) {
+<a name="line366"></a>    end = end.nextSibling;
+<a name="line367"></a>  }
+<a name="line368"></a>
+<a name="line369"></a>  var para = container.ownerDocument.createElement(nodeName);
+<a name="line370"></a>  while (start != end) {
+<a name="line371"></a>    var newStart = start.nextSibling;
+<a name="line372"></a>    goog.dom.appendChild(para, start);
+<a name="line373"></a>    start = newStart;
+<a name="line374"></a>  }
+<a name="line375"></a>  var nextSibling = end.nextSibling;
+<a name="line376"></a>  goog.dom.appendChild(para, end);
+<a name="line377"></a>  container.insertBefore(para, nextSibling);
+<a name="line378"></a>
+<a name="line379"></a>  return para;
+<a name="line380"></a>};
+<a name="line381"></a>
+<a name="line382"></a>
+<a name="line383"></a>/**
+<a name="line384"></a> * When we delete an element, FF inserts a BR. We want to strip that
+<a name="line385"></a> * BR after the fact, but in the case where your cursor is at a character
+<a name="line386"></a> * right before a BR and you delete that character, we don&#39;t want to
+<a name="line387"></a> * strip it. So we detect this case on keydown and mark the BR as not needing
+<a name="line388"></a> * removal.
+<a name="line389"></a> * @param {goog.dom.AbstractRange} range The closure range object.
+<a name="line390"></a> * @param {boolean} isBackspace Whether this is handling the backspace key.
+<a name="line391"></a> * @private
+<a name="line392"></a> */
+<a name="line393"></a>goog.editor.plugins.TagOnEnterHandler.prototype.markBrToNotBeRemoved_ =
+<a name="line394"></a>    function(range, isBackspace) {
+<a name="line395"></a>  var focusNode = range.getFocusNode();
+<a name="line396"></a>  var focusOffset = range.getFocusOffset();
+<a name="line397"></a>  var newEndOffset = isBackspace ? focusOffset : focusOffset + 1;
+<a name="line398"></a>
+<a name="line399"></a>  if (goog.editor.node.getLength(focusNode) == newEndOffset) {
+<a name="line400"></a>    var sibling = focusNode.nextSibling;
+<a name="line401"></a>    if (sibling &amp;&amp; sibling.tagName == goog.dom.TagName.BR) {
+<a name="line402"></a>      this.brToKeep_ = sibling;
+<a name="line403"></a>    }
+<a name="line404"></a>  }
+<a name="line405"></a>};
+<a name="line406"></a>
+<a name="line407"></a>
+<a name="line408"></a>/**
+<a name="line409"></a> * If we hit delete/backspace to merge elements, FF inserts a BR.
+<a name="line410"></a> * We want to strip that BR. In markBrToNotBeRemoved, we detect if
+<a name="line411"></a> * there was already a BR there before the delete/backspace so that
+<a name="line412"></a> * we don&#39;t accidentally remove a user-inserted BR.
+<a name="line413"></a> * @param {boolean} isBackSpace Whether this is handling the backspace key.
+<a name="line414"></a> * @private
+<a name="line415"></a> */
+<a name="line416"></a>goog.editor.plugins.TagOnEnterHandler.prototype.removeBrIfNecessary_ = function(
+<a name="line417"></a>    isBackSpace) {
+<a name="line418"></a>  var range = this.getFieldObject().getRange();
+<a name="line419"></a>  var focusNode = range.getFocusNode();
+<a name="line420"></a>  var focusOffset = range.getFocusOffset();
+<a name="line421"></a>
+<a name="line422"></a>  var sibling;
+<a name="line423"></a>  if (isBackSpace &amp;&amp; focusNode.data == &#39;&#39;) {
+<a name="line424"></a>    // nasty hack. sometimes firefox will backspace a paragraph and put
+<a name="line425"></a>    // the cursor before the BR. when it does this, the focusNode is
+<a name="line426"></a>    // an empty textnode.
+<a name="line427"></a>    sibling = focusNode.nextSibling;
+<a name="line428"></a>  } else if (isBackSpace &amp;&amp; focusOffset == 0) {
+<a name="line429"></a>    var node = focusNode;
+<a name="line430"></a>    while (node &amp;&amp; !node.previousSibling &amp;&amp;
+<a name="line431"></a>           node.parentNode != this.getFieldObject().getElement()) {
+<a name="line432"></a>      node = node.parentNode;
+<a name="line433"></a>    }
+<a name="line434"></a>    sibling = node.previousSibling;
+<a name="line435"></a>  } else if (focusNode.length == focusOffset) {
+<a name="line436"></a>    sibling = focusNode.nextSibling;
+<a name="line437"></a>  }
+<a name="line438"></a>
+<a name="line439"></a>  if (!sibling || sibling.tagName != goog.dom.TagName.BR ||
+<a name="line440"></a>      this.brToKeep_ == sibling) {
+<a name="line441"></a>    return;
+<a name="line442"></a>  }
+<a name="line443"></a>
+<a name="line444"></a>  goog.dom.removeNode(sibling);
+<a name="line445"></a>  if (focusNode.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line446"></a>    // Sometimes firefox inserts extra whitespace. Do our best to deal.
+<a name="line447"></a>    // This is buggy though.
+<a name="line448"></a>    focusNode.data =
+<a name="line449"></a>        goog.editor.plugins.TagOnEnterHandler.trimTabsAndLineBreaks_(
+<a name="line450"></a>            focusNode.data);
+<a name="line451"></a>    // When we strip whitespace, make sure that our cursor is still at
+<a name="line452"></a>    // the end of the textnode.
+<a name="line453"></a>    goog.dom.Range.createCaret(focusNode,
+<a name="line454"></a>        Math.min(focusOffset, focusNode.length)).select();
+<a name="line455"></a>  }
+<a name="line456"></a>};
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>/**
+<a name="line460"></a> * Trim the tabs and line breaks from a string.
+<a name="line461"></a> * @param {string} string String to trim.
+<a name="line462"></a> * @return {string} Trimmed string.
+<a name="line463"></a> * @private
+<a name="line464"></a> */
+<a name="line465"></a>goog.editor.plugins.TagOnEnterHandler.trimTabsAndLineBreaks_ = function(
+<a name="line466"></a>    string) {
+<a name="line467"></a>  return string.replace(/^[\t\n\r]|[\t\n\r]$/g, &#39;&#39;);
+<a name="line468"></a>};
+<a name="line469"></a>
+<a name="line470"></a>
+<a name="line471"></a>/**
+<a name="line472"></a> * Called in response to a normal enter keystroke. It has the action of
+<a name="line473"></a> * splitting elements.
+<a name="line474"></a> * @return {Element} The node that the cursor should be before.
+<a name="line475"></a> * @private
+<a name="line476"></a> */
+<a name="line477"></a>goog.editor.plugins.TagOnEnterHandler.prototype.handleRegularEnterGecko_ =
+<a name="line478"></a>    function() {
+<a name="line479"></a>  var range = this.getFieldObject().getRange();
+<a name="line480"></a>  var container =
+<a name="line481"></a>      goog.editor.style.getContainer(range.getContainerElement());
+<a name="line482"></a>  var newNode;
+<a name="line483"></a>  if (goog.editor.plugins.EnterHandler.isBrElem(container)) {
+<a name="line484"></a>    if (container.tagName == goog.dom.TagName.BODY) {
+<a name="line485"></a>      // If the field contains only a single BR, this code ensures we don&#39;t
+<a name="line486"></a>      // try to clone the body tag.
+<a name="line487"></a>      container = this.ensureNodeIsWrappedW3c_(
+<a name="line488"></a>          container.getElementsByTagName(goog.dom.TagName.BR)[0],
+<a name="line489"></a>          container);
+<a name="line490"></a>    }
+<a name="line491"></a>
+<a name="line492"></a>    newNode = container.cloneNode(true);
+<a name="line493"></a>    goog.dom.insertSiblingAfter(newNode, container);
+<a name="line494"></a>  } else {
+<a name="line495"></a>    if (!container.firstChild) {
+<a name="line496"></a>      container.innerHTML = &#39;&amp;nbsp;&#39;;
+<a name="line497"></a>    }
+<a name="line498"></a>
+<a name="line499"></a>    var position = goog.editor.range.getDeepEndPoint(range, true);
+<a name="line500"></a>    container = this.ensureNodeIsWrappedW3c_(position.node, container);
+<a name="line501"></a>
+<a name="line502"></a>    newNode = goog.editor.plugins.TagOnEnterHandler.splitDomAndAppend_(
+<a name="line503"></a>        position.node, position.offset, container);
+<a name="line504"></a>
+<a name="line505"></a>    // If the left half and right half of the splitted node are anchors then
+<a name="line506"></a>    // that means the user pressed enter while the caret was inside
+<a name="line507"></a>    // an anchor tag and split it.  The left half is the first anchor
+<a name="line508"></a>    // found while traversing the right branch of container.  The right half
+<a name="line509"></a>    // is the first anchor found while traversing the left branch of newNode.
+<a name="line510"></a>    var leftAnchor =
+<a name="line511"></a>        goog.editor.plugins.TagOnEnterHandler.findAnchorInTraversal_(
+<a name="line512"></a>            container);
+<a name="line513"></a>    var rightAnchor =
+<a name="line514"></a>        goog.editor.plugins.TagOnEnterHandler.findAnchorInTraversal_(
+<a name="line515"></a>            newNode, true);
+<a name="line516"></a>    if (leftAnchor &amp;&amp; rightAnchor &amp;&amp;
+<a name="line517"></a>        leftAnchor.tagName == goog.dom.TagName.A &amp;&amp;
+<a name="line518"></a>        rightAnchor.tagName == goog.dom.TagName.A) {
+<a name="line519"></a>      // If the original anchor (left anchor) is now empty, that means
+<a name="line520"></a>      // the user pressed [Enter] at the beginning of the anchor,
+<a name="line521"></a>      // in which case we we
+<a name="line522"></a>      // want to replace that anchor with its child nodes
+<a name="line523"></a>      // Otherwise, we take the second half of the splitted text and break
+<a name="line524"></a>      // it out of the anchor.
+<a name="line525"></a>      var anchorToRemove = goog.editor.node.isEmpty(leftAnchor, false) ?
+<a name="line526"></a>          leftAnchor : rightAnchor;
+<a name="line527"></a>      goog.dom.flattenElement(/** @type {Element} */ (anchorToRemove));
+<a name="line528"></a>    }
+<a name="line529"></a>  }
+<a name="line530"></a>  return /** @type {Element} */ (newNode);
+<a name="line531"></a>};
+<a name="line532"></a>
+<a name="line533"></a>
+<a name="line534"></a>/**
+<a name="line535"></a> * Scroll the cursor into view, resulting from splitting the paragraph/adding
+<a name="line536"></a> * a br. It behaves differently than scrollIntoView
+<a name="line537"></a> * @param {Element} element The element immediately following the cursor. Will
+<a name="line538"></a> *     be used to determine how to scroll in order to make the cursor visible.
+<a name="line539"></a> *     CANNOT be a BR, as they do not have offsetHeight/offsetTop.
+<a name="line540"></a> * @private
+<a name="line541"></a> */
+<a name="line542"></a>goog.editor.plugins.TagOnEnterHandler.prototype.scrollCursorIntoViewGecko_ =
+<a name="line543"></a>    function(element) {
+<a name="line544"></a>  if (!this.getFieldObject().isFixedHeight()) {
+<a name="line545"></a>    return; // Only need to scroll fixed height fields.
+<a name="line546"></a>  }
+<a name="line547"></a>
+<a name="line548"></a>  var field = this.getFieldObject().getElement();
+<a name="line549"></a>
+<a name="line550"></a>  // Get the y position of the element we want to scroll to
+<a name="line551"></a>  var elementY = goog.style.getPageOffsetTop(element);
+<a name="line552"></a>
+<a name="line553"></a>  // Determine the height of that element, since we want the bottom of the
+<a name="line554"></a>  // element to be in view.
+<a name="line555"></a>  var bottomOfNode = elementY + element.offsetHeight;
+<a name="line556"></a>
+<a name="line557"></a>  var dom = this.getFieldDomHelper();
+<a name="line558"></a>  var win = this.getFieldDomHelper().getWindow();
+<a name="line559"></a>  var scrollY = dom.getDocumentScroll().y;
+<a name="line560"></a>  var viewportHeight = goog.dom.getViewportSize(win).height;
+<a name="line561"></a>
+<a name="line562"></a>  // If the botom of the element is outside the viewport, move it into view
+<a name="line563"></a>  if (bottomOfNode &gt; viewportHeight + scrollY) {
+<a name="line564"></a>    // In standards mode, use the html element and not the body
+<a name="line565"></a>    if (field.tagName == goog.dom.TagName.BODY &amp;&amp;
+<a name="line566"></a>        goog.editor.node.isStandardsMode(field)) {
+<a name="line567"></a>      field = field.parentNode;
+<a name="line568"></a>    }
+<a name="line569"></a>    field.scrollTop = bottomOfNode - viewportHeight;
+<a name="line570"></a>  }
+<a name="line571"></a>};
+<a name="line572"></a>
+<a name="line573"></a>
+<a name="line574"></a>/**
+<a name="line575"></a> * Splits the DOM tree around the given node and returns the node
+<a name="line576"></a> * containing the second half of the tree. The first half of the tree
+<a name="line577"></a> * is modified, but not removed from the DOM.
+<a name="line578"></a> * @param {Node} positionNode Node to split at.
+<a name="line579"></a> * @param {number} positionOffset Offset into positionNode to split at.  If
+<a name="line580"></a> *     positionNode is a text node, this offset is an offset in to the text
+<a name="line581"></a> *     content of that node.  Otherwise, positionOffset is an offset in to
+<a name="line582"></a> *     the childNodes array.  All elements with child index of  positionOffset
+<a name="line583"></a> *     or greater will be moved to the second half.  If positionNode is an
+<a name="line584"></a> *     empty element, the dom will be split at that element, with positionNode
+<a name="line585"></a> *     ending up in the second half.  positionOffset must be 0 in this case.
+<a name="line586"></a> * @param {Node=} opt_root Node at which to stop splitting the dom (the root
+<a name="line587"></a> *     is also split).
+<a name="line588"></a> * @return {!Node} The node containing the second half of the tree.
+<a name="line589"></a> * @private
+<a name="line590"></a> */
+<a name="line591"></a>goog.editor.plugins.TagOnEnterHandler.splitDom_ = function(
+<a name="line592"></a>    positionNode, positionOffset, opt_root) {
+<a name="line593"></a>  if (!opt_root) opt_root = positionNode.ownerDocument.body;
+<a name="line594"></a>
+<a name="line595"></a>  // Split the node.
+<a name="line596"></a>  var textSplit = positionNode.nodeType == goog.dom.NodeType.TEXT;
+<a name="line597"></a>  var secondHalfOfSplitNode;
+<a name="line598"></a>  if (textSplit) {
+<a name="line599"></a>    if (goog.userAgent.IE &amp;&amp;
+<a name="line600"></a>        positionOffset == positionNode.nodeValue.length) {
+<a name="line601"></a>      // Since splitText fails in IE at the end of a node, we split it manually.
+<a name="line602"></a>      secondHalfOfSplitNode = goog.dom.getDomHelper(positionNode).
+<a name="line603"></a>          createTextNode(&#39;&#39;);
+<a name="line604"></a>      goog.dom.insertSiblingAfter(secondHalfOfSplitNode, positionNode);
+<a name="line605"></a>    } else {
+<a name="line606"></a>      secondHalfOfSplitNode = positionNode.splitText(positionOffset);
+<a name="line607"></a>    }
+<a name="line608"></a>  } else {
+<a name="line609"></a>    // Here we ensure positionNode is the last node in the first half of the
+<a name="line610"></a>    // resulting tree.
+<a name="line611"></a>    if (positionOffset) {
+<a name="line612"></a>      // Use offset as an index in to childNodes.
+<a name="line613"></a>      positionNode = positionNode.childNodes[positionOffset - 1];
+<a name="line614"></a>    } else {
+<a name="line615"></a>      // In this case, positionNode would be the last node in the first half
+<a name="line616"></a>      // of the tree, but we actually want to move it to the second half.
+<a name="line617"></a>      // Therefore we set secondHalfOfSplitNode to the same node.
+<a name="line618"></a>      positionNode = secondHalfOfSplitNode = positionNode.firstChild ||
+<a name="line619"></a>          positionNode;
+<a name="line620"></a>    }
+<a name="line621"></a>  }
+<a name="line622"></a>
+<a name="line623"></a>  // Create second half of the tree.
+<a name="line624"></a>  var secondHalf = goog.editor.node.splitDomTreeAt(
+<a name="line625"></a>      positionNode, secondHalfOfSplitNode, opt_root);
+<a name="line626"></a>
+<a name="line627"></a>  if (textSplit) {
+<a name="line628"></a>    // Join secondHalfOfSplitNode and its right text siblings together and
+<a name="line629"></a>    // then replace leading NonNbspWhiteSpace with a Nbsp.  If
+<a name="line630"></a>    // secondHalfOfSplitNode has a right sibling that isn&#39;t a text node,
+<a name="line631"></a>    // then we can leave secondHalfOfSplitNode empty.
+<a name="line632"></a>    secondHalfOfSplitNode =
+<a name="line633"></a>        goog.editor.plugins.TagOnEnterHandler.joinTextNodes_(
+<a name="line634"></a>            secondHalfOfSplitNode, true);
+<a name="line635"></a>    goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_(
+<a name="line636"></a>        secondHalfOfSplitNode, true, !!secondHalfOfSplitNode.nextSibling);
+<a name="line637"></a>
+<a name="line638"></a>    // Join positionNode and its left text siblings together and then replace
+<a name="line639"></a>    // trailing NonNbspWhiteSpace with a Nbsp.
+<a name="line640"></a>    var firstHalf = goog.editor.plugins.TagOnEnterHandler.joinTextNodes_(
+<a name="line641"></a>        positionNode, false);
+<a name="line642"></a>    goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_(
+<a name="line643"></a>        firstHalf, false, false);
+<a name="line644"></a>  }
+<a name="line645"></a>
+<a name="line646"></a>  return secondHalf;
+<a name="line647"></a>};
+<a name="line648"></a>
+<a name="line649"></a>
+<a name="line650"></a>/**
+<a name="line651"></a> * Splits the DOM tree around the given node and returns the node containing
+<a name="line652"></a> * second half of the tree, which is appended after the old node.  The first
+<a name="line653"></a> * half of the tree is modified, but not removed from the DOM.
+<a name="line654"></a> * @param {Node} positionNode Node to split at.
+<a name="line655"></a> * @param {number} positionOffset Offset into positionNode to split at.  If
+<a name="line656"></a> *     positionNode is a text node, this offset is an offset in to the text
+<a name="line657"></a> *     content of that node.  Otherwise, positionOffset is an offset in to
+<a name="line658"></a> *     the childNodes array.  All elements with child index of  positionOffset
+<a name="line659"></a> *     or greater will be moved to the second half.  If positionNode is an
+<a name="line660"></a> *     empty element, the dom will be split at that element, with positionNode
+<a name="line661"></a> *     ending up in the second half.  positionOffset must be 0 in this case.
+<a name="line662"></a> * @param {Node} node Node to split.
+<a name="line663"></a> * @return {!Node} The node containing the second half of the tree.
+<a name="line664"></a> * @private
+<a name="line665"></a> */
+<a name="line666"></a>goog.editor.plugins.TagOnEnterHandler.splitDomAndAppend_ = function(
+<a name="line667"></a>    positionNode, positionOffset, node) {
+<a name="line668"></a>  var newNode = goog.editor.plugins.TagOnEnterHandler.splitDom_(
+<a name="line669"></a>      positionNode, positionOffset, node);
+<a name="line670"></a>  goog.dom.insertSiblingAfter(newNode, node);
+<a name="line671"></a>  return newNode;
+<a name="line672"></a>};
+<a name="line673"></a>
+<a name="line674"></a>
+<a name="line675"></a>/**
+<a name="line676"></a> * Joins node and its adjacent text nodes together.
+<a name="line677"></a> * @param {Node} node The node to start joining.
+<a name="line678"></a> * @param {boolean} moveForward Determines whether to join left siblings (false)
+<a name="line679"></a> *     or right siblings (true).
+<a name="line680"></a> * @return {Node} The joined text node.
+<a name="line681"></a> * @private
+<a name="line682"></a> */
+<a name="line683"></a>goog.editor.plugins.TagOnEnterHandler.joinTextNodes_ = function(node,
+<a name="line684"></a>    moveForward) {
+<a name="line685"></a>  if (node &amp;&amp; node.nodeName == &#39;#text&#39;) {
+<a name="line686"></a>    var nextNodeFn = moveForward ? &#39;nextSibling&#39; : &#39;previousSibling&#39;;
+<a name="line687"></a>    var prevNodeFn = moveForward ? &#39;previousSibling&#39; : &#39;nextSibling&#39;;
+<a name="line688"></a>    var nodeValues = [node.nodeValue];
+<a name="line689"></a>    while (node[nextNodeFn] &amp;&amp;
+<a name="line690"></a>           node[nextNodeFn].nodeType == goog.dom.NodeType.TEXT) {
+<a name="line691"></a>      node = node[nextNodeFn];
+<a name="line692"></a>      nodeValues.push(node.nodeValue);
+<a name="line693"></a>      goog.dom.removeNode(node[prevNodeFn]);
+<a name="line694"></a>    }
+<a name="line695"></a>    if (!moveForward) {
+<a name="line696"></a>      nodeValues.reverse();
+<a name="line697"></a>    }
+<a name="line698"></a>    node.nodeValue = nodeValues.join(&#39;&#39;);
+<a name="line699"></a>  }
+<a name="line700"></a>  return node;
+<a name="line701"></a>};
+<a name="line702"></a>
+<a name="line703"></a>
+<a name="line704"></a>/**
+<a name="line705"></a> * Replaces leading or trailing spaces of a text node to a single Nbsp.
+<a name="line706"></a> * @param {Node} textNode The text node to search and replace white spaces.
+<a name="line707"></a> * @param {boolean} fromStart Set to true to replace leading spaces, false to
+<a name="line708"></a> *     replace trailing spaces.
+<a name="line709"></a> * @param {boolean} isLeaveEmpty Set to true to leave the node empty if the
+<a name="line710"></a> *     text node was empty in the first place, otherwise put a Nbsp into the
+<a name="line711"></a> *     text node.
+<a name="line712"></a> * @private
+<a name="line713"></a> */
+<a name="line714"></a>goog.editor.plugins.TagOnEnterHandler.replaceWhiteSpaceWithNbsp_ = function(
+<a name="line715"></a>    textNode, fromStart, isLeaveEmpty) {
+<a name="line716"></a>  var regExp = fromStart ? /^[ \t\r\n]+/ : /[ \t\r\n]+$/;
+<a name="line717"></a>  textNode.nodeValue = textNode.nodeValue.replace(regExp,
+<a name="line718"></a>                                                  goog.string.Unicode.NBSP);
+<a name="line719"></a>
+<a name="line720"></a>  if (!isLeaveEmpty &amp;&amp; textNode.nodeValue == &#39;&#39;) {
+<a name="line721"></a>    textNode.nodeValue = goog.string.Unicode.NBSP;
+<a name="line722"></a>  }
+<a name="line723"></a>};
+<a name="line724"></a>
+<a name="line725"></a>
+<a name="line726"></a>/**
+<a name="line727"></a> * Finds the first A element in a traversal from the input node.  The input
+<a name="line728"></a> * node itself is not included in the search.
+<a name="line729"></a> * @param {Node} node The node to start searching from.
+<a name="line730"></a> * @param {boolean=} opt_useFirstChild Whether to traverse along the first child
+<a name="line731"></a> *     (true) or last child (false).
+<a name="line732"></a> * @return {Node} The first anchor node found in the search, or null if none
+<a name="line733"></a> *     was found.
+<a name="line734"></a> * @private
+<a name="line735"></a> */
+<a name="line736"></a>goog.editor.plugins.TagOnEnterHandler.findAnchorInTraversal_ = function(node,
+<a name="line737"></a>    opt_useFirstChild) {
+<a name="line738"></a>  while ((node = opt_useFirstChild ? node.firstChild : node.lastChild) &amp;&amp;
+<a name="line739"></a>         node.tagName != goog.dom.TagName.A) {
+<a name="line740"></a>    // Do nothing - advancement is handled in the condition.
+<a name="line741"></a>  }
+<a name="line742"></a>  return node;
+<a name="line743"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>safestyle.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_html_safestyle.js.html">safestyle.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2014 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview The SafeStyle type and its builders.
+<a name="line17"></a> *
+<a name="line18"></a> * TODO(user): Link to document stating type contract.
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.html.SafeStyle&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line25"></a>goog.require(&#39;goog.string&#39;);
+<a name="line26"></a>goog.require(&#39;goog.string.Const&#39;);
+<a name="line27"></a>goog.require(&#39;goog.string.TypedString&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * A string-like object which represents a sequence of CSS declarations
+<a name="line33"></a> * ({@code propertyName1: propertyvalue1; propertyName2: propertyValue2; ...})
+<a name="line34"></a> * and that carries the security type contract that its value, as a string,
+<a name="line35"></a> * will not cause untrusted script execution (XSS) when evaluated as CSS in a
+<a name="line36"></a> * browser.
+<a name="line37"></a> *
+<a name="line38"></a> * Instances of this type must be created via the factory methods
+<a name="line39"></a> * ({@code goog.html.SafeStyle.create} or
+<a name="line40"></a> * {@code goog.html.SafeStyle.fromConstant}) and not by invoking its
+<a name="line41"></a> * constructor. The constructor intentionally takes no parameters and the type
+<a name="line42"></a> * is immutable; hence only a default instance corresponding to the empty string
+<a name="line43"></a> * can be obtained via constructor invocation.
+<a name="line44"></a> *
+<a name="line45"></a> * A SafeStyle&#39;s string representation ({@link #getSafeStyleString()}) can
+<a name="line46"></a> * safely:
+<a name="line47"></a> * &lt;ul&gt;
+<a name="line48"></a> *   &lt;li&gt;Be interpolated as the entire content of a *quoted* HTML style
+<a name="line49"></a> *       attribute, or before already existing properties. The SafeStyle string
+<a name="line50"></a> *       *must be HTML-attribute-escaped* (where &quot; and &#39; are escaped) before
+<a name="line51"></a> *       interpolation.
+<a name="line52"></a> *   &lt;li&gt;Be interpolated as the entire content of a {}-wrapped block within a
+<a name="line53"></a> *       stylesheet, or before already existing properties. The SafeStyle string
+<a name="line54"></a> *       should not be escaped before interpolation. SafeStyle&#39;s contract also
+<a name="line55"></a> *       guarantees that the string will not be able to introduce new properties
+<a name="line56"></a> *       or elide existing ones.
+<a name="line57"></a> *   &lt;li&gt;Be assigned to the style property of a DOM node. The SafeStyle string
+<a name="line58"></a> *       should not be escaped before being assigned to the property.
+<a name="line59"></a> * &lt;/ul&gt;
+<a name="line60"></a> *
+<a name="line61"></a> * A SafeStyle may never contain literal angle brackets. Otherwise, it could
+<a name="line62"></a> * be unsafe to place a SafeStyle into a &amp;lt;style&amp;gt; tag (where it can&#39;t
+<a name="line63"></a> * be HTML escaped). For example, if the SafeStyle containing
+<a name="line64"></a> * &quot;{@code font: &#39;foo &amp;lt;style/&amp;gt;&amp;lt;script&amp;gt;evil&amp;lt;/script&amp;gt;&#39;}&quot; were
+<a name="line65"></a> * interpolated within a &amp;lt;style&amp;gt; tag, this would then break out of the
+<a name="line66"></a> * style context into HTML.
+<a name="line67"></a> *
+<a name="line68"></a> * A SafeStyle may contain literal single or double quotes, and as such the
+<a name="line69"></a> * entire style string must be escaped when used in a style attribute (if
+<a name="line70"></a> * this were not the case, the string could contain a matching quote that
+<a name="line71"></a> * would escape from the style attribute).
+<a name="line72"></a> *
+<a name="line73"></a> * Values of this type must be composable, i.e. for any two values
+<a name="line74"></a> * {@code style1} and {@code style2} of this type,
+<a name="line75"></a> * {@code style1.getSafeStyleString() + style2.getSafeStyleString()} must
+<a name="line76"></a> * itself be a value that satisfies the SafeStyle type constraint. This
+<a name="line77"></a> * requirement implies that for any value {@code style} of this type,
+<a name="line78"></a> * {@code style.getSafeStyleString()} must not end in a &quot;property value&quot; or
+<a name="line79"></a> * &quot;property name&quot; context. For example, a value of {@code background:url(&quot;}
+<a name="line80"></a> * or {@code font-} would not satisfy the SafeStyle contract. This is because
+<a name="line81"></a> * concatenating such strings with a second value that itself does not contain
+<a name="line82"></a> * unsafe CSS can result in an overall string that does. For example, if
+<a name="line83"></a> * {@code javascript:evil())&quot;} is appended to {@code background:url(&quot;}, the
+<a name="line84"></a> * resulting string may result in the execution of a malicious script.
+<a name="line85"></a> *
+<a name="line86"></a> * TODO(user): Consider whether we should implement UTF-8 interchange
+<a name="line87"></a> * validity checks and blacklisting of newlines (including Unicode ones) and
+<a name="line88"></a> * other whitespace characters (\t, \f). Document here if so and also update
+<a name="line89"></a> * SafeStyle.fromConstant().
+<a name="line90"></a> *
+<a name="line91"></a> * The following example values comply with this type&#39;s contract:
+<a name="line92"></a> * &lt;ul&gt;
+<a name="line93"></a> *   &lt;li&gt;&lt;pre&gt;width: 1em;&lt;/pre&gt;
+<a name="line94"></a> *   &lt;li&gt;&lt;pre&gt;height:1em;&lt;/pre&gt;
+<a name="line95"></a> *   &lt;li&gt;&lt;pre&gt;width: 1em;height: 1em;&lt;/pre&gt;
+<a name="line96"></a> *   &lt;li&gt;&lt;pre&gt;background:url(&#39;http://url&#39;);&lt;/pre&gt;
+<a name="line97"></a> * &lt;/ul&gt;
+<a name="line98"></a> * In addition, the empty string is safe for use in a CSS attribute.
+<a name="line99"></a> *
+<a name="line100"></a> * The following example values do NOT comply with this type&#39;s contract:
+<a name="line101"></a> * &lt;ul&gt;
+<a name="line102"></a> *   &lt;li&gt;&lt;pre&gt;background: red&lt;/pre&gt; (missing a trailing semi-colon)
+<a name="line103"></a> *   &lt;li&gt;&lt;pre&gt;background:&lt;/pre&gt; (missing a value and a trailing semi-colon)
+<a name="line104"></a> *   &lt;li&gt;&lt;pre&gt;1em&lt;/pre&gt; (missing an attribute name, which provides context for
+<a name="line105"></a> *       the value)
+<a name="line106"></a> * &lt;/ul&gt;
+<a name="line107"></a> *
+<a name="line108"></a> * @see goog.html.SafeStyle#create
+<a name="line109"></a> * @see goog.html.SafeStyle#fromConstant
+<a name="line110"></a> * @see http://www.w3.org/TR/css3-syntax/
+<a name="line111"></a> * @constructor
+<a name="line112"></a> * @final
+<a name="line113"></a> * @struct
+<a name="line114"></a> * @implements {goog.string.TypedString}
+<a name="line115"></a> */
+<a name="line116"></a>goog.html.SafeStyle = function() {
+<a name="line117"></a>  /**
+<a name="line118"></a>   * The contained value of this SafeStyle.  The field has a purposely
+<a name="line119"></a>   * ugly name to make (non-compiled) code that attempts to directly access this
+<a name="line120"></a>   * field stand out.
+<a name="line121"></a>   * @private {string}
+<a name="line122"></a>   */
+<a name="line123"></a>  this.privateDoNotAccessOrElseSafeStyleWrappedValue_ = &#39;&#39;;
+<a name="line124"></a>
+<a name="line125"></a>  /**
+<a name="line126"></a>   * A type marker used to implement additional run-time type checking.
+<a name="line127"></a>   * @see goog.html.SafeStyle#unwrap
+<a name="line128"></a>   * @const
+<a name="line129"></a>   * @private
+<a name="line130"></a>   */
+<a name="line131"></a>  this.SAFE_STYLE_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ =
+<a name="line132"></a>      goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_;
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * @override
+<a name="line138"></a> * @const
+<a name="line139"></a> */
+<a name="line140"></a>goog.html.SafeStyle.prototype.implementsGoogStringTypedString = true;
+<a name="line141"></a>
+<a name="line142"></a>
+<a name="line143"></a>/**
+<a name="line144"></a> * Type marker for the SafeStyle type, used to implement additional
+<a name="line145"></a> * run-time type checking.
+<a name="line146"></a> * @const
+<a name="line147"></a> * @private
+<a name="line148"></a> */
+<a name="line149"></a>goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
+<a name="line150"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * Creates a SafeStyle object from a compile-time constant string.
+<a name="line154"></a> *
+<a name="line155"></a> * {@code style} should be in the format
+<a name="line156"></a> * {@code name: value; [name: value; ...]} and must not have any &lt; or &gt;
+<a name="line157"></a> * characters in it. This is so that SafeStyle&#39;s contract is preserved,
+<a name="line158"></a> * allowing the SafeStyle to correctly be interpreted as a sequence of CSS
+<a name="line159"></a> * declarations and without affecting the syntactic structure of any
+<a name="line160"></a> * surrounding CSS and HTML.
+<a name="line161"></a> *
+<a name="line162"></a> * This method performs basic sanity checks on the format of {@code style}
+<a name="line163"></a> * but does not constrain the format of {@code name} and {@code value}, except
+<a name="line164"></a> * for disallowing tag characters.
+<a name="line165"></a> *
+<a name="line166"></a> * @param {!goog.string.Const} style A compile-time-constant string from which
+<a name="line167"></a> *     to create a SafeStyle.
+<a name="line168"></a> * @return {!goog.html.SafeStyle} A SafeStyle object initialized to
+<a name="line169"></a> *     {@code style}.
+<a name="line170"></a> */
+<a name="line171"></a>goog.html.SafeStyle.fromConstant = function(style) {
+<a name="line172"></a>  var styleString = goog.string.Const.unwrap(style);
+<a name="line173"></a>  if (styleString.length === 0) {
+<a name="line174"></a>    return goog.html.SafeStyle.EMPTY;
+<a name="line175"></a>  }
+<a name="line176"></a>  goog.html.SafeStyle.checkStyle_(styleString);
+<a name="line177"></a>  goog.asserts.assert(goog.string.endsWith(styleString, &#39;;&#39;),
+<a name="line178"></a>      &#39;Last character of style string is not \&#39;;\&#39;: &#39; + styleString);
+<a name="line179"></a>  goog.asserts.assert(goog.string.contains(styleString, &#39;:&#39;),
+<a name="line180"></a>      &#39;Style string must contain at least one \&#39;:\&#39;, to &#39; +
+<a name="line181"></a>      &#39;specify a &quot;name: value&quot; pair: &#39; + styleString);
+<a name="line182"></a>  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_(
+<a name="line183"></a>      styleString);
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Checks if the style definition is valid.
+<a name="line189"></a> * @param {string} style
+<a name="line190"></a> * @private
+<a name="line191"></a> */
+<a name="line192"></a>goog.html.SafeStyle.checkStyle_ = function(style) {
+<a name="line193"></a>  goog.asserts.assert(!/[&lt;&gt;]/.test(style),
+<a name="line194"></a>      &#39;Forbidden characters in style string: &#39; + style);
+<a name="line195"></a>};
+<a name="line196"></a>
+<a name="line197"></a>
+<a name="line198"></a>/**
+<a name="line199"></a> * Returns this SafeStyle&#39;s value as a string.
+<a name="line200"></a> *
+<a name="line201"></a> * IMPORTANT: In code where it is security relevant that an object&#39;s type is
+<a name="line202"></a> * indeed {@code SafeStyle}, use {@code goog.html.SafeStyle.unwrap} instead of
+<a name="line203"></a> * this method. If in doubt, assume that it&#39;s security relevant. In particular,
+<a name="line204"></a> * note that goog.html functions which return a goog.html type do not guarantee
+<a name="line205"></a> * the returned instance is of the right type. For example:
+<a name="line206"></a> *
+<a name="line207"></a> * &lt;pre&gt;
+<a name="line208"></a> * var fakeSafeHtml = new String(&#39;fake&#39;);
+<a name="line209"></a> * fakeSafeHtml.__proto__ = goog.html.SafeHtml.prototype;
+<a name="line210"></a> * var newSafeHtml = goog.html.SafeHtml.htmlEscape(fakeSafeHtml);
+<a name="line211"></a> * // newSafeHtml is just an alias for fakeSafeHtml, it&#39;s passed through by
+<a name="line212"></a> * // goog.html.SafeHtml.htmlEscape() as fakeSafeHtml
+<a name="line213"></a> * // instanceof goog.html.SafeHtml.
+<a name="line214"></a> * &lt;/pre&gt;
+<a name="line215"></a> *
+<a name="line216"></a> * @see goog.html.SafeStyle#unwrap
+<a name="line217"></a> * @override
+<a name="line218"></a> */
+<a name="line219"></a>goog.html.SafeStyle.prototype.getTypedStringValue = function() {
+<a name="line220"></a>  return this.privateDoNotAccessOrElseSafeStyleWrappedValue_;
+<a name="line221"></a>};
+<a name="line222"></a>
+<a name="line223"></a>
+<a name="line224"></a>if (goog.DEBUG) {
+<a name="line225"></a>  /**
+<a name="line226"></a>   * Returns a debug string-representation of this value.
+<a name="line227"></a>   *
+<a name="line228"></a>   * To obtain the actual string value wrapped in a SafeStyle, use
+<a name="line229"></a>   * {@code goog.html.SafeStyle.unwrap}.
+<a name="line230"></a>   *
+<a name="line231"></a>   * @see goog.html.SafeStyle#unwrap
+<a name="line232"></a>   * @override
+<a name="line233"></a>   */
+<a name="line234"></a>  goog.html.SafeStyle.prototype.toString = function() {
+<a name="line235"></a>    return &#39;SafeStyle{&#39; +
+<a name="line236"></a>        this.privateDoNotAccessOrElseSafeStyleWrappedValue_ + &#39;}&#39;;
+<a name="line237"></a>  };
+<a name="line238"></a>}
+<a name="line239"></a>
+<a name="line240"></a>
+<a name="line241"></a>/**
+<a name="line242"></a> * Performs a runtime check that the provided object is indeed a
+<a name="line243"></a> * SafeStyle object, and returns its value.
+<a name="line244"></a> *
+<a name="line245"></a> * @param {!goog.html.SafeStyle} safeStyle The object to extract from.
+<a name="line246"></a> * @return {string} The safeStyle object&#39;s contained string, unless
+<a name="line247"></a> *     the run-time type check fails. In that case, {@code unwrap} returns an
+<a name="line248"></a> *     innocuous string, or, if assertions are enabled, throws
+<a name="line249"></a> *     {@code goog.asserts.AssertionError}.
+<a name="line250"></a> */
+<a name="line251"></a>goog.html.SafeStyle.unwrap = function(safeStyle) {
+<a name="line252"></a>  // Perform additional Run-time type-checking to ensure that
+<a name="line253"></a>  // safeStyle is indeed an instance of the expected type.  This
+<a name="line254"></a>  // provides some additional protection against security bugs due to
+<a name="line255"></a>  // application code that disables type checks.
+<a name="line256"></a>  // Specifically, the following checks are performed:
+<a name="line257"></a>  // 1. The object is an instance of the expected type.
+<a name="line258"></a>  // 2. The object is not an instance of a subclass.
+<a name="line259"></a>  // 3. The object carries a type marker for the expected type. &quot;Faking&quot; an
+<a name="line260"></a>  // object requires a reference to the type marker, which has names intended
+<a name="line261"></a>  // to stand out in code reviews.
+<a name="line262"></a>  if (safeStyle instanceof goog.html.SafeStyle &amp;&amp;
+<a name="line263"></a>      safeStyle.constructor === goog.html.SafeStyle &amp;&amp;
+<a name="line264"></a>      safeStyle.SAFE_STYLE_TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ ===
+<a name="line265"></a>          goog.html.SafeStyle.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_) {
+<a name="line266"></a>    return safeStyle.privateDoNotAccessOrElseSafeStyleWrappedValue_;
+<a name="line267"></a>  } else {
+<a name="line268"></a>    goog.asserts.fail(
+<a name="line269"></a>        &#39;expected object of type SafeStyle, got \&#39;&#39; + safeStyle + &#39;\&#39;&#39;);
+<a name="line270"></a>    return &#39;type_error:SafeStyle&#39;;
+<a name="line271"></a>  }
+<a name="line272"></a>};
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * Utility method to create SafeStyle instances.
+<a name="line277"></a> *
+<a name="line278"></a> * This function is considered &quot;package private&quot;, i.e. calls (using &quot;suppress
+<a name="line279"></a> * visibility&quot;) from other files within this package are considered acceptable.
+<a name="line280"></a> * DO NOT call this function from outside the goog.html package; use appropriate
+<a name="line281"></a> * wrappers instead.
+<a name="line282"></a> *
+<a name="line283"></a> * @param {string} style The string to initialize the SafeStyle object with.
+<a name="line284"></a> * @return {!goog.html.SafeStyle} The initialized SafeStyle object.
+<a name="line285"></a> * @private
+<a name="line286"></a> */
+<a name="line287"></a>goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_ =
+<a name="line288"></a>    function(style) {
+<a name="line289"></a>  var safeStyle = new goog.html.SafeStyle();
+<a name="line290"></a>  safeStyle.privateDoNotAccessOrElseSafeStyleWrappedValue_ = style;
+<a name="line291"></a>  return safeStyle;
+<a name="line292"></a>};
+<a name="line293"></a>
+<a name="line294"></a>
+<a name="line295"></a>/**
+<a name="line296"></a> * A SafeStyle instance corresponding to the empty string.
+<a name="line297"></a> * @const {!goog.html.SafeStyle}
+<a name="line298"></a> */
+<a name="line299"></a>goog.html.SafeStyle.EMPTY =
+<a name="line300"></a>    goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_(&#39;&#39;);
+<a name="line301"></a>
+<a name="line302"></a>
+<a name="line303"></a>/**
+<a name="line304"></a> * The innocuous string generated by goog.html.SafeUrl.create when passed
+<a name="line305"></a> * an unsafe value.
+<a name="line306"></a> * @const {string}
+<a name="line307"></a> */
+<a name="line308"></a>goog.html.SafeStyle.INNOCUOUS_STRING = &#39;zClosurez&#39;;
+<a name="line309"></a>
+<a name="line310"></a>
+<a name="line311"></a>/**
+<a name="line312"></a> * Mapping of property names to their values.
+<a name="line313"></a> * @typedef {!Object.&lt;string, goog.string.Const|string&gt;}
+<a name="line314"></a> */
+<a name="line315"></a>goog.html.SafeStyle.PropertyMap;
+<a name="line316"></a>
+<a name="line317"></a>
+<a name="line318"></a>/**
+<a name="line319"></a> * Creates a new SafeStyle object from the properties specified in the map.
+<a name="line320"></a> * @param {goog.html.SafeStyle.PropertyMap} map Mapping of property names to
+<a name="line321"></a> *     their values, for example {&#39;margin&#39;: &#39;1px&#39;}. Names must consist of
+<a name="line322"></a> *     [-_a-zA-Z0-9]. Values might be strings consisting of [-.%_!# a-zA-Z0-9].
+<a name="line323"></a> *     Other values must be wrapped in goog.string.Const. Null value causes
+<a name="line324"></a> *     skipping the property.
+<a name="line325"></a> * @return {!goog.html.SafeStyle}
+<a name="line326"></a> * @throws {Error} If invalid name is provided.
+<a name="line327"></a> * @throws {goog.asserts.AssertionError} If invalid value is provided. With
+<a name="line328"></a> *     disabled assertions, invalid value is replaced by
+<a name="line329"></a> *     goog.html.SafeStyle.INNOCUOUS_STRING.
+<a name="line330"></a> */
+<a name="line331"></a>goog.html.SafeStyle.create = function(map) {
+<a name="line332"></a>  var style = &#39;&#39;;
+<a name="line333"></a>  for (var name in map) {
+<a name="line334"></a>    if (!/^[-_a-zA-Z0-9]+$/.test(name)) {
+<a name="line335"></a>      throw Error(&#39;Name allows only [-_a-zA-Z0-9], got: &#39; + name);
+<a name="line336"></a>    }
+<a name="line337"></a>    var value = map[name];
+<a name="line338"></a>    if (value == null) {
+<a name="line339"></a>      continue;
+<a name="line340"></a>    }
+<a name="line341"></a>    if (value instanceof goog.string.Const) {
+<a name="line342"></a>      value = goog.string.Const.unwrap(value);
+<a name="line343"></a>      // These characters can be used to change context and we don&#39;t want that
+<a name="line344"></a>      // even with const values.
+<a name="line345"></a>      goog.asserts.assert(!/[{;}]/.test(value), &#39;Value does not allow [{;}].&#39;);
+<a name="line346"></a>    } else if (!goog.html.SafeStyle.VALUE_RE_.test(value)) {
+<a name="line347"></a>      goog.asserts.fail(
+<a name="line348"></a>          &#39;String value allows only [-.%_!# a-zA-Z0-9], got: &#39; + value);
+<a name="line349"></a>      value = goog.html.SafeStyle.INNOCUOUS_STRING;
+<a name="line350"></a>    }
+<a name="line351"></a>    style += name + &#39;:&#39; + value + &#39;;&#39;;
+<a name="line352"></a>  }
+<a name="line353"></a>  if (!style) {
+<a name="line354"></a>    return goog.html.SafeStyle.EMPTY;
+<a name="line355"></a>  }
+<a name="line356"></a>  goog.html.SafeStyle.checkStyle_(style);
+<a name="line357"></a>  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_(
+<a name="line358"></a>      style);
+<a name="line359"></a>};
+<a name="line360"></a>
+<a name="line361"></a>
+<a name="line362"></a>// Keep in sync with the error string in create().
+<a name="line363"></a>/**
+<a name="line364"></a> * Regular expression for safe values.
+<a name="line365"></a> * @const {!RegExp}
+<a name="line366"></a> * @private
+<a name="line367"></a> */
+<a name="line368"></a>goog.html.SafeStyle.VALUE_RE_ = /^[-.%_!# a-zA-Z0-9]+$/;
+<a name="line369"></a>
+<a name="line370"></a>
+<a name="line371"></a>/**
+<a name="line372"></a> * Creates a new SafeStyle object by concatenating the values.
+<a name="line373"></a> * @param {...(!goog.html.SafeStyle|!Array.&lt;!goog.html.SafeStyle&gt;)} var_args
+<a name="line374"></a> *     SafeStyles to concatenate.
+<a name="line375"></a> * @return {!goog.html.SafeStyle}
+<a name="line376"></a> */
+<a name="line377"></a>goog.html.SafeStyle.concat = function(var_args) {
+<a name="line378"></a>  var style = &#39;&#39;;
+<a name="line379"></a>
+<a name="line380"></a>  /**
+<a name="line381"></a>   * @param {!goog.html.SafeStyle|!Array.&lt;!goog.html.SafeStyle&gt;} argument
+<a name="line382"></a>   */
+<a name="line383"></a>  var addArgument = function(argument) {
+<a name="line384"></a>    if (goog.isArray(argument)) {
+<a name="line385"></a>      goog.array.forEach(argument, addArgument);
+<a name="line386"></a>    } else {
+<a name="line387"></a>      style += goog.html.SafeStyle.unwrap(argument);
+<a name="line388"></a>    }
+<a name="line389"></a>  };
+<a name="line390"></a>
+<a name="line391"></a>  goog.array.forEach(arguments, addArgument);
+<a name="line392"></a>  if (!style) {
+<a name="line393"></a>    return goog.html.SafeStyle.EMPTY;
+<a name="line394"></a>  }
+<a name="line395"></a>  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_(
+<a name="line396"></a>      style);
+<a name="line397"></a>};
+</pre>
+
+
+</body>
+</html>

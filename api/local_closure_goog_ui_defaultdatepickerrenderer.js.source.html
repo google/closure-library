@@ -1,0 +1,253 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>defaultdatepickerrenderer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_defaultdatepickerrenderer.js.html">defaultdatepickerrenderer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview The default renderer for {@link goog.ui.DatePicker}.
+<a name="line17"></a> *
+<a name="line18"></a> * @see ../demos/datepicker.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.DefaultDatePickerRenderer&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line25"></a>/** @suppress {extraRequire} Interface. */
+<a name="line26"></a>goog.require(&#39;goog.ui.DatePickerRenderer&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Default renderer for {@link goog.ui.DatePicker}. Renders the date picker&#39;s
+<a name="line32"></a> * navigation header and footer.
+<a name="line33"></a> *
+<a name="line34"></a> * @param {string} baseCssClass Name of base CSS class of the date picker.
+<a name="line35"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @implements {goog.ui.DatePickerRenderer}
+<a name="line38"></a> */
+<a name="line39"></a>goog.ui.DefaultDatePickerRenderer = function(baseCssClass, opt_domHelper) {
+<a name="line40"></a>  /**
+<a name="line41"></a>   * Name of base CSS class of datepicker
+<a name="line42"></a>   * @type {string}
+<a name="line43"></a>   * @private
+<a name="line44"></a>   */
+<a name="line45"></a>  this.baseCssClass_ = baseCssClass;
+<a name="line46"></a>
+<a name="line47"></a>  /**
+<a name="line48"></a>   * @type {!goog.dom.DomHelper}
+<a name="line49"></a>   * @private
+<a name="line50"></a>   */
+<a name="line51"></a>  this.dom_ = opt_domHelper || goog.dom.getDomHelper();
+<a name="line52"></a>};
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * Returns the dom helper that is being used on this component.
+<a name="line57"></a> * @return {!goog.dom.DomHelper} The dom helper used on this component.
+<a name="line58"></a> */
+<a name="line59"></a>goog.ui.DefaultDatePickerRenderer.prototype.getDomHelper = function() {
+<a name="line60"></a>  return this.dom_;
+<a name="line61"></a>};
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * Returns base CSS class. This getter is used to get base CSS class part.
+<a name="line66"></a> * All CSS class names in component are created as:
+<a name="line67"></a> *   goog.getCssName(this.getBaseCssClass(), &#39;CLASS_NAME&#39;)
+<a name="line68"></a> * @return {string} Base CSS class.
+<a name="line69"></a> */
+<a name="line70"></a>goog.ui.DefaultDatePickerRenderer.prototype.getBaseCssClass = function() {
+<a name="line71"></a>  return this.baseCssClass_;
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Render the navigation row (navigating months and maybe years).
+<a name="line77"></a> *
+<a name="line78"></a> * @param {!Element} row The parent element to render the component into.
+<a name="line79"></a> * @param {boolean} simpleNavigation Whether the picker should render a simple
+<a name="line80"></a> *     navigation menu that only contains controls for navigating to the next
+<a name="line81"></a> *     and previous month. The default navigation menu contains controls for
+<a name="line82"></a> *     navigating to the next/previous month, next/previous year, and menus for
+<a name="line83"></a> *     jumping to specific months and years.
+<a name="line84"></a> * @param {boolean} showWeekNum Whether week numbers should be shown.
+<a name="line85"></a> * @param {string} fullDateFormat The full date format.
+<a name="line86"></a> *     {@see goog.i18n.DateTimeSymbols}.
+<a name="line87"></a> * @override
+<a name="line88"></a> */
+<a name="line89"></a>goog.ui.DefaultDatePickerRenderer.prototype.renderNavigationRow =
+<a name="line90"></a>    function(row, simpleNavigation, showWeekNum, fullDateFormat) {
+<a name="line91"></a>  // Populate the navigation row according to the configured navigation mode.
+<a name="line92"></a>  var cell, monthCell, yearCell;
+<a name="line93"></a>
+<a name="line94"></a>  if (simpleNavigation) {
+<a name="line95"></a>    cell = this.getDomHelper().createElement(goog.dom.TagName.TD);
+<a name="line96"></a>    cell.colSpan = showWeekNum ? 1 : 2;
+<a name="line97"></a>    this.createButton_(cell, &#39;\u00AB&#39;,
+<a name="line98"></a>        goog.getCssName(this.getBaseCssClass(), &#39;previousMonth&#39;));  // &lt;&lt;
+<a name="line99"></a>    row.appendChild(cell);
+<a name="line100"></a>
+<a name="line101"></a>    cell = this.getDomHelper().createElement(goog.dom.TagName.TD);
+<a name="line102"></a>    cell.colSpan = showWeekNum ? 6 : 5;
+<a name="line103"></a>    cell.className = goog.getCssName(this.getBaseCssClass(), &#39;monthyear&#39;);
+<a name="line104"></a>    row.appendChild(cell);
+<a name="line105"></a>
+<a name="line106"></a>    cell = this.getDomHelper().createElement(goog.dom.TagName.TD);
+<a name="line107"></a>    this.createButton_(cell, &#39;\u00BB&#39;,
+<a name="line108"></a>        goog.getCssName(this.getBaseCssClass(), &#39;nextMonth&#39;));  // &gt;&gt;
+<a name="line109"></a>    row.appendChild(cell);
+<a name="line110"></a>
+<a name="line111"></a>  } else {
+<a name="line112"></a>    monthCell = this.getDomHelper().createElement(goog.dom.TagName.TD);
+<a name="line113"></a>    monthCell.colSpan = 5;
+<a name="line114"></a>    this.createButton_(monthCell, &#39;\u00AB&#39;,
+<a name="line115"></a>        goog.getCssName(this.getBaseCssClass(), &#39;previousMonth&#39;));  // &lt;&lt;
+<a name="line116"></a>    this.createButton_(monthCell, &#39;&#39;,
+<a name="line117"></a>        goog.getCssName(this.getBaseCssClass(), &#39;month&#39;));
+<a name="line118"></a>    this.createButton_(monthCell, &#39;\u00BB&#39;,
+<a name="line119"></a>        goog.getCssName(this.getBaseCssClass(), &#39;nextMonth&#39;));  // &gt;&gt;
+<a name="line120"></a>
+<a name="line121"></a>    yearCell = this.getDomHelper().createElement(goog.dom.TagName.TD);
+<a name="line122"></a>    yearCell.colSpan = 3;
+<a name="line123"></a>    this.createButton_(yearCell, &#39;\u00AB&#39;,
+<a name="line124"></a>        goog.getCssName(this.getBaseCssClass(), &#39;previousYear&#39;));  // &lt;&lt;
+<a name="line125"></a>    this.createButton_(yearCell, &#39;&#39;,
+<a name="line126"></a>        goog.getCssName(this.getBaseCssClass(), &#39;year&#39;));
+<a name="line127"></a>    this.createButton_(yearCell, &#39;\u00BB&#39;,
+<a name="line128"></a>        goog.getCssName(this.getBaseCssClass(), &#39;nextYear&#39;));  // &lt;&lt;
+<a name="line129"></a>
+<a name="line130"></a>    // If the date format has year (&#39;y&#39;) appearing first before month (&#39;m&#39;),
+<a name="line131"></a>    // show the year on the left hand side of the datepicker popup.  Otherwise,
+<a name="line132"></a>    // show the month on the left side.  This check assumes the data to be
+<a name="line133"></a>    // valid, and that all date formats contain month and year.
+<a name="line134"></a>    if (fullDateFormat.indexOf(&#39;y&#39;) &lt; fullDateFormat.indexOf(&#39;m&#39;)) {
+<a name="line135"></a>      row.appendChild(yearCell);
+<a name="line136"></a>      row.appendChild(monthCell);
+<a name="line137"></a>    } else {
+<a name="line138"></a>      row.appendChild(monthCell);
+<a name="line139"></a>      row.appendChild(yearCell);
+<a name="line140"></a>    }
+<a name="line141"></a>  }
+<a name="line142"></a>};
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * Render the footer row (with select buttons).
+<a name="line147"></a> *
+<a name="line148"></a> * @param {!Element} row The parent element to render the component into.
+<a name="line149"></a> * @param {boolean} showWeekNum Whether week numbers should be shown.
+<a name="line150"></a> * @override
+<a name="line151"></a> */
+<a name="line152"></a>goog.ui.DefaultDatePickerRenderer.prototype.renderFooterRow =
+<a name="line153"></a>    function(row, showWeekNum) {
+<a name="line154"></a>  // Populate the footer row with buttons for Today and None.
+<a name="line155"></a>  var cell = this.getDomHelper().createElement(goog.dom.TagName.TD);
+<a name="line156"></a>  cell.colSpan = showWeekNum ? 2 : 3;
+<a name="line157"></a>  cell.className = goog.getCssName(this.getBaseCssClass(), &#39;today-cont&#39;);
+<a name="line158"></a>
+<a name="line159"></a>  /** @desc Label for button that selects the current date. */
+<a name="line160"></a>  var MSG_DATEPICKER_TODAY_BUTTON_LABEL = goog.getMsg(&#39;Today&#39;);
+<a name="line161"></a>  this.createButton_(cell, MSG_DATEPICKER_TODAY_BUTTON_LABEL,
+<a name="line162"></a>      goog.getCssName(this.getBaseCssClass(), &#39;today-btn&#39;));
+<a name="line163"></a>  row.appendChild(cell);
+<a name="line164"></a>
+<a name="line165"></a>  cell = this.getDomHelper().createElement(goog.dom.TagName.TD);
+<a name="line166"></a>  cell.colSpan = showWeekNum ? 4 : 3;
+<a name="line167"></a>  row.appendChild(cell);
+<a name="line168"></a>
+<a name="line169"></a>  cell = this.getDomHelper().createElement(goog.dom.TagName.TD);
+<a name="line170"></a>  cell.colSpan = 2;
+<a name="line171"></a>  cell.className = goog.getCssName(this.getBaseCssClass(), &#39;none-cont&#39;);
+<a name="line172"></a>
+<a name="line173"></a>  /** @desc Label for button that clears the selection. */
+<a name="line174"></a>  var MSG_DATEPICKER_NONE = goog.getMsg(&#39;None&#39;);
+<a name="line175"></a>  this.createButton_(cell, MSG_DATEPICKER_NONE,
+<a name="line176"></a>      goog.getCssName(this.getBaseCssClass(), &#39;none-btn&#39;));
+<a name="line177"></a>  row.appendChild(cell);
+<a name="line178"></a>};
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Support function for button creation.
+<a name="line183"></a> *
+<a name="line184"></a> * @param {Element} parentNode Container the button should be added to.
+<a name="line185"></a> * @param {string} label Button label.
+<a name="line186"></a> * @param {string=} opt_className Class name for button, which will be used
+<a name="line187"></a> *    in addition to &quot;goog-date-picker-btn&quot;.
+<a name="line188"></a> * @private
+<a name="line189"></a> * @return {!Element} The created button element.
+<a name="line190"></a> */
+<a name="line191"></a>goog.ui.DefaultDatePickerRenderer.prototype.createButton_ =
+<a name="line192"></a>    function(parentNode, label, opt_className) {
+<a name="line193"></a>  var classes = [goog.getCssName(this.getBaseCssClass(), &#39;btn&#39;)];
+<a name="line194"></a>  if (opt_className) {
+<a name="line195"></a>    classes.push(opt_className);
+<a name="line196"></a>  }
+<a name="line197"></a>  var el = this.getDomHelper().createElement(goog.dom.TagName.BUTTON);
+<a name="line198"></a>  el.className = classes.join(&#39; &#39;);
+<a name="line199"></a>  el.appendChild(this.getDomHelper().createTextNode(label));
+<a name="line200"></a>  parentNode.appendChild(el);
+<a name="line201"></a>  return el;
+<a name="line202"></a>};
+</pre>
+
+
+</body>
+</html>

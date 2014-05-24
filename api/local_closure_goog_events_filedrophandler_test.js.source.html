@@ -1,0 +1,301 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>filedrophandler_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_events_filedrophandler_test.js.html">filedrophandler_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.events.FileDropHandlerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.events.FileDropHandlerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.events&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events.FileDropHandler&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line24"></a>
+<a name="line25"></a>var textarea;
+<a name="line26"></a>var doc;
+<a name="line27"></a>var handler;
+<a name="line28"></a>var dnd;
+<a name="line29"></a>var files;
+<a name="line30"></a>
+<a name="line31"></a>function setUp() {
+<a name="line32"></a>  textarea = new goog.events.EventTarget();
+<a name="line33"></a>  doc = new goog.events.EventTarget();
+<a name="line34"></a>  textarea.ownerDocument = doc;
+<a name="line35"></a>  handler = new goog.events.FileDropHandler(textarea);
+<a name="line36"></a>  dnd = false;
+<a name="line37"></a>  files = null;
+<a name="line38"></a>  goog.events.listen(handler, goog.events.FileDropHandler.EventType.DROP,
+<a name="line39"></a>      function(e) {
+<a name="line40"></a>        dnd = true;
+<a name="line41"></a>        files =
+<a name="line42"></a>            e.getBrowserEvent().dataTransfer.files;
+<a name="line43"></a>      });
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>function tearDown() {
+<a name="line47"></a>  textarea.dispose();
+<a name="line48"></a>  doc.dispose();
+<a name="line49"></a>  handler.dispose();
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>function testOneFile() {
+<a name="line53"></a>  var preventDefault = false;
+<a name="line54"></a>  var expectedfiles = [{ fileName: &#39;file1.jpg&#39; }];
+<a name="line55"></a>  var dt = { types: [&#39;Files&#39;], files: expectedfiles };
+<a name="line56"></a>
+<a name="line57"></a>  // Assert that default actions are prevented on dragenter.
+<a name="line58"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line59"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line60"></a>    type: goog.events.EventType.DRAGENTER,
+<a name="line61"></a>    dataTransfer: dt
+<a name="line62"></a>  }));
+<a name="line63"></a>  assertTrue(preventDefault);
+<a name="line64"></a>  preventDefault = false;
+<a name="line65"></a>
+<a name="line66"></a>  // Assert that default actions are prevented on dragover.
+<a name="line67"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line68"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line69"></a>    type: goog.events.EventType.DRAGOVER,
+<a name="line70"></a>    dataTransfer: dt
+<a name="line71"></a>  }));
+<a name="line72"></a>  assertTrue(preventDefault);
+<a name="line73"></a>  preventDefault = false;
+<a name="line74"></a>  // Assert that the drop effect is set to &#39;copy&#39;.
+<a name="line75"></a>  assertEquals(&#39;copy&#39;, dt.dropEffect);
+<a name="line76"></a>
+<a name="line77"></a>  // Assert that default actions are prevented on drop.
+<a name="line78"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line79"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line80"></a>    type: goog.events.EventType.DROP,
+<a name="line81"></a>    dataTransfer: dt
+<a name="line82"></a>  }));
+<a name="line83"></a>  assertTrue(preventDefault);
+<a name="line84"></a>
+<a name="line85"></a>  // Assert that DROP has been fired.
+<a name="line86"></a>  assertTrue(dnd);
+<a name="line87"></a>  assertEquals(1, files.length);
+<a name="line88"></a>  assertEquals(expectedfiles[0].fileName, files[0].fileName);
+<a name="line89"></a>}
+<a name="line90"></a>
+<a name="line91"></a>function testMultipleFiles() {
+<a name="line92"></a>  var preventDefault = false;
+<a name="line93"></a>  var expectedfiles = [{ fileName: &#39;file1.jpg&#39; }, { fileName: &#39;file2.jpg&#39; }];
+<a name="line94"></a>  var dt = { types: [&#39;Files&#39;, &#39;text&#39;], files: expectedfiles };
+<a name="line95"></a>
+<a name="line96"></a>  // Assert that default actions are prevented on dragenter.
+<a name="line97"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line98"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line99"></a>    type: goog.events.EventType.DRAGENTER,
+<a name="line100"></a>    dataTransfer: dt
+<a name="line101"></a>  }));
+<a name="line102"></a>  assertTrue(preventDefault);
+<a name="line103"></a>  preventDefault = false;
+<a name="line104"></a>
+<a name="line105"></a>  // Assert that default actions are prevented on dragover.
+<a name="line106"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line107"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line108"></a>    type: goog.events.EventType.DRAGOVER,
+<a name="line109"></a>    dataTransfer: dt
+<a name="line110"></a>  }));
+<a name="line111"></a>  assertTrue(preventDefault);
+<a name="line112"></a>  preventDefault = false;
+<a name="line113"></a>  // Assert that the drop effect is set to &#39;copy&#39;.
+<a name="line114"></a>  assertEquals(&#39;copy&#39;, dt.dropEffect);
+<a name="line115"></a>
+<a name="line116"></a>  // Assert that default actions are prevented on drop.
+<a name="line117"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line118"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line119"></a>    type: goog.events.EventType.DROP,
+<a name="line120"></a>    dataTransfer: dt
+<a name="line121"></a>  }));
+<a name="line122"></a>  assertTrue(preventDefault);
+<a name="line123"></a>
+<a name="line124"></a>  // Assert that DROP has been fired.
+<a name="line125"></a>  assertTrue(dnd);
+<a name="line126"></a>  assertEquals(2, files.length);
+<a name="line127"></a>  assertEquals(expectedfiles[0].fileName, files[0].fileName);
+<a name="line128"></a>  assertEquals(expectedfiles[1].fileName, files[1].fileName);
+<a name="line129"></a>}
+<a name="line130"></a>
+<a name="line131"></a>function testNoFiles() {
+<a name="line132"></a>  var preventDefault = false;
+<a name="line133"></a>  var dt = { types: [&#39;text&#39;] };
+<a name="line134"></a>
+<a name="line135"></a>  // Assert that default actions are not prevented on dragenter.
+<a name="line136"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line137"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line138"></a>    type: goog.events.EventType.DRAGENTER,
+<a name="line139"></a>    dataTransfer: dt
+<a name="line140"></a>  }));
+<a name="line141"></a>  assertFalse(preventDefault);
+<a name="line142"></a>  preventDefault = false;
+<a name="line143"></a>
+<a name="line144"></a>  // Assert that default actions are not prevented on dragover.
+<a name="line145"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line146"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line147"></a>    type: goog.events.EventType.DRAGOVER,
+<a name="line148"></a>    dataTransfer: dt
+<a name="line149"></a>  }));
+<a name="line150"></a>  assertFalse(preventDefault);
+<a name="line151"></a>  preventDefault = false;
+<a name="line152"></a>
+<a name="line153"></a>  // Assert that default actions are not prevented on drop.
+<a name="line154"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line155"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line156"></a>    type: goog.events.EventType.DROP,
+<a name="line157"></a>    dataTransfer: dt
+<a name="line158"></a>  }));
+<a name="line159"></a>  assertFalse(preventDefault);
+<a name="line160"></a>
+<a name="line161"></a>  // Assert that DROP has not been fired.
+<a name="line162"></a>  assertFalse(dnd);
+<a name="line163"></a>  assertNull(files);
+<a name="line164"></a>}
+<a name="line165"></a>
+<a name="line166"></a>function testDragEnter() {
+<a name="line167"></a>  var preventDefault = false;
+<a name="line168"></a>
+<a name="line169"></a>  // Assert that default actions are prevented on dragenter.
+<a name="line170"></a>  // In Chrome the dragenter event has an empty file list and the types is
+<a name="line171"></a>  // set to &#39;Files&#39;.
+<a name="line172"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line173"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line174"></a>    type: goog.events.EventType.DRAGENTER,
+<a name="line175"></a>    dataTransfer: { types: [&#39;Files&#39;], files: [] }
+<a name="line176"></a>  }));
+<a name="line177"></a>  assertTrue(preventDefault);
+<a name="line178"></a>  preventDefault = false;
+<a name="line179"></a>
+<a name="line180"></a>  // Assert that default actions are prevented on dragenter.
+<a name="line181"></a>  // In Safari 4 the dragenter event has an empty file list and the types is
+<a name="line182"></a>  // set to &#39;public.file-url&#39;.
+<a name="line183"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line184"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line185"></a>    type: goog.events.EventType.DRAGENTER,
+<a name="line186"></a>    dataTransfer: { types: [&#39;public.file-url&#39;], files: [] }
+<a name="line187"></a>  }));
+<a name="line188"></a>  assertTrue(preventDefault);
+<a name="line189"></a>  preventDefault = false;
+<a name="line190"></a>
+<a name="line191"></a>  // Assert that default actions are not prevented on dragenter
+<a name="line192"></a>  // when the drag contains no files.
+<a name="line193"></a>  textarea.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line194"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line195"></a>    type: goog.events.EventType.DRAGENTER,
+<a name="line196"></a>    dataTransfer: { types: [&#39;text&#39;], files: [] }
+<a name="line197"></a>  }));
+<a name="line198"></a>  assertFalse(preventDefault);
+<a name="line199"></a>}
+<a name="line200"></a>
+<a name="line201"></a>function testPreventDropOutside() {
+<a name="line202"></a>  var preventDefault = false;
+<a name="line203"></a>  var dt = { types: [&#39;Files&#39;], files: [{ fileName: &#39;file1.jpg&#39; }] };
+<a name="line204"></a>
+<a name="line205"></a>  // Assert that default actions are not prevented on dragenter on the
+<a name="line206"></a>  // document outside the text area.
+<a name="line207"></a>  doc.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line208"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line209"></a>    type: goog.events.EventType.DRAGENTER,
+<a name="line210"></a>    dataTransfer: dt
+<a name="line211"></a>  }));
+<a name="line212"></a>  assertFalse(preventDefault);
+<a name="line213"></a>  preventDefault = false;
+<a name="line214"></a>
+<a name="line215"></a>  // Assert that default actions are not prevented on dragover on the
+<a name="line216"></a>  // document outside the text area.
+<a name="line217"></a>  doc.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line218"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line219"></a>    type: goog.events.EventType.DRAGOVER,
+<a name="line220"></a>    dataTransfer: dt
+<a name="line221"></a>  }));
+<a name="line222"></a>  assertFalse(preventDefault);
+<a name="line223"></a>  preventDefault = false;
+<a name="line224"></a>
+<a name="line225"></a>  handler.dispose();
+<a name="line226"></a>  // Create a new FileDropHandler that prevents drops outside the text area.
+<a name="line227"></a>  handler = new goog.events.FileDropHandler(textarea, true);
+<a name="line228"></a>
+<a name="line229"></a>  // Assert that default actions are now prevented on dragenter on the
+<a name="line230"></a>  // document outside the text area.
+<a name="line231"></a>  doc.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line232"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line233"></a>    type: goog.events.EventType.DRAGENTER,
+<a name="line234"></a>    dataTransfer: dt
+<a name="line235"></a>  }));
+<a name="line236"></a>  assertTrue(preventDefault);
+<a name="line237"></a>  preventDefault = false;
+<a name="line238"></a>
+<a name="line239"></a>  // Assert that default actions are now prevented on dragover on the
+<a name="line240"></a>  // document outside the text area.
+<a name="line241"></a>  doc.dispatchEvent(new goog.events.BrowserEvent({
+<a name="line242"></a>    preventDefault: function() { preventDefault = true; },
+<a name="line243"></a>    type: goog.events.EventType.DRAGOVER,
+<a name="line244"></a>    dataTransfer: dt
+<a name="line245"></a>  }));
+<a name="line246"></a>  assertTrue(preventDefault);
+<a name="line247"></a>  preventDefault = false;
+<a name="line248"></a>  // Assert also that the drop effect is set to &#39;none&#39;.
+<a name="line249"></a>  assertEquals(&#39;none&#39;, dt.dropEffect);
+<a name="line250"></a>}
+</pre>
+
+
+</body>
+</html>

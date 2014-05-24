@@ -1,0 +1,297 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>propertyreplacer.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_propertyreplacer.js.html">propertyreplacer.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Helper class for creating stubs for testing.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line21"></a>
+<a name="line22"></a>/** @suppress {extraRequire} Needed for some tests to compile. */
+<a name="line23"></a>goog.require(&#39;goog.testing.ObjectPropertyString&#39;);
+<a name="line24"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Helper class for stubbing out variables and object properties for unit tests.
+<a name="line30"></a> * This class can change the value of some variables before running the test
+<a name="line31"></a> * cases, and to reset them in the tearDown phase.
+<a name="line32"></a> * See googletest.StubOutForTesting as an analogy in Python:
+<a name="line33"></a> * http://protobuf.googlecode.com/svn/trunk/python/stubout.py
+<a name="line34"></a> *
+<a name="line35"></a> * Example usage:
+<a name="line36"></a> * &lt;pre&gt;var stubs = new goog.testing.PropertyReplacer();
+<a name="line37"></a> *
+<a name="line38"></a> * function setUp() {
+<a name="line39"></a> *   // Mock functions used in all test cases.
+<a name="line40"></a> *   stubs.set(Math, &#39;random&#39;, function() {
+<a name="line41"></a> *     return 4;  // Chosen by fair dice roll. Guaranteed to be random.
+<a name="line42"></a> *   });
+<a name="line43"></a> * }
+<a name="line44"></a> *
+<a name="line45"></a> * function tearDown() {
+<a name="line46"></a> *   stubs.reset();
+<a name="line47"></a> * }
+<a name="line48"></a> *
+<a name="line49"></a> * function testThreeDice() {
+<a name="line50"></a> *   // Mock a constant used only in this test case.
+<a name="line51"></a> *   stubs.set(goog.global, &#39;DICE_COUNT&#39;, 3);
+<a name="line52"></a> *   assertEquals(12, rollAllDice());
+<a name="line53"></a> * }&lt;/pre&gt;
+<a name="line54"></a> *
+<a name="line55"></a> * Constraints on altered objects:
+<a name="line56"></a> * &lt;ul&gt;
+<a name="line57"></a> *   &lt;li&gt;DOM subclasses aren&#39;t supported.
+<a name="line58"></a> *   &lt;li&gt;The value of the objects&#39; constructor property must either be equal to
+<a name="line59"></a> *       the real constructor or kept untouched.
+<a name="line60"></a> * &lt;/ul&gt;
+<a name="line61"></a> *
+<a name="line62"></a> * @constructor
+<a name="line63"></a> * @final
+<a name="line64"></a> */
+<a name="line65"></a>goog.testing.PropertyReplacer = function() {
+<a name="line66"></a>  /**
+<a name="line67"></a>   * Stores the values changed by the set() method in chronological order.
+<a name="line68"></a>   * Its items are objects with 3 fields: &#39;object&#39;, &#39;key&#39;, &#39;value&#39;. The
+<a name="line69"></a>   * original value for the given key in the given object is stored under the
+<a name="line70"></a>   * &#39;value&#39; key.
+<a name="line71"></a>   * @type {Array.&lt;Object&gt;}
+<a name="line72"></a>   * @private
+<a name="line73"></a>   */
+<a name="line74"></a>  this.original_ = [];
+<a name="line75"></a>};
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Indicates that a key didn&#39;t exist before having been set by the set() method.
+<a name="line80"></a> * @type {Object}
+<a name="line81"></a> * @private
+<a name="line82"></a> */
+<a name="line83"></a>goog.testing.PropertyReplacer.NO_SUCH_KEY_ = {};
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Tells if the given key exists in the object. Ignores inherited fields.
+<a name="line88"></a> * @param {Object|Function} obj The JavaScript or native object or function
+<a name="line89"></a> *     whose key is to be checked.
+<a name="line90"></a> * @param {string} key The key to check.
+<a name="line91"></a> * @return {boolean} Whether the object has the key as own key.
+<a name="line92"></a> * @private
+<a name="line93"></a> */
+<a name="line94"></a>goog.testing.PropertyReplacer.hasKey_ = function(obj, key) {
+<a name="line95"></a>  if (!(key in obj)) {
+<a name="line96"></a>    return false;
+<a name="line97"></a>  }
+<a name="line98"></a>  // hasOwnProperty is only reliable with JavaScript objects. It returns false
+<a name="line99"></a>  // for built-in DOM attributes.
+<a name="line100"></a>  if (Object.prototype.hasOwnProperty.call(obj, key)) {
+<a name="line101"></a>    return true;
+<a name="line102"></a>  }
+<a name="line103"></a>  // In all browsers except Opera obj.constructor never equals to Object if
+<a name="line104"></a>  // obj is an instance of a native class. In Opera we have to fall back on
+<a name="line105"></a>  // examining obj.toString().
+<a name="line106"></a>  if (obj.constructor == Object &amp;&amp;
+<a name="line107"></a>      (!goog.userAgent.OPERA ||
+<a name="line108"></a>          Object.prototype.toString.call(obj) == &#39;[object Object]&#39;)) {
+<a name="line109"></a>    return false;
+<a name="line110"></a>  }
+<a name="line111"></a>  try {
+<a name="line112"></a>    // Firefox hack to consider &quot;className&quot; part of the HTML elements or
+<a name="line113"></a>    // &quot;body&quot; part of document. Although they are defined in the prototype of
+<a name="line114"></a>    // HTMLElement or Document, accessing them this way throws an exception.
+<a name="line115"></a>    // &lt;pre&gt;
+<a name="line116"></a>    //   var dummy = document.body.constructor.prototype.className
+<a name="line117"></a>    //   [Exception... &quot;Cannot modify properties of a WrappedNative&quot;]
+<a name="line118"></a>    // &lt;/pre&gt;
+<a name="line119"></a>    var dummy = obj.constructor.prototype[key];
+<a name="line120"></a>  } catch (e) {
+<a name="line121"></a>    return true;
+<a name="line122"></a>  }
+<a name="line123"></a>  return !(key in obj.constructor.prototype);
+<a name="line124"></a>};
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Deletes a key from an object. Sets it to undefined or empty string if the
+<a name="line129"></a> * delete failed.
+<a name="line130"></a> * @param {Object|Function} obj The object or function to delete a key from.
+<a name="line131"></a> * @param {string} key The key to delete.
+<a name="line132"></a> * @private
+<a name="line133"></a> */
+<a name="line134"></a>goog.testing.PropertyReplacer.deleteKey_ = function(obj, key) {
+<a name="line135"></a>  try {
+<a name="line136"></a>    delete obj[key];
+<a name="line137"></a>    // Delete has no effect for built-in properties of DOM nodes in FF.
+<a name="line138"></a>    if (!goog.testing.PropertyReplacer.hasKey_(obj, key)) {
+<a name="line139"></a>      return;
+<a name="line140"></a>    }
+<a name="line141"></a>  } catch (e) {
+<a name="line142"></a>    // IE throws TypeError when trying to delete properties of native objects
+<a name="line143"></a>    // (e.g. DOM nodes or window), even if they have been added by JavaScript.
+<a name="line144"></a>  }
+<a name="line145"></a>
+<a name="line146"></a>  obj[key] = undefined;
+<a name="line147"></a>  if (obj[key] == &#39;undefined&#39;) {
+<a name="line148"></a>    // Some properties such as className in IE are always evaluated as string
+<a name="line149"></a>    // so undefined will become &#39;undefined&#39;.
+<a name="line150"></a>    obj[key] = &#39;&#39;;
+<a name="line151"></a>  }
+<a name="line152"></a>};
+<a name="line153"></a>
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * Adds or changes a value in an object while saving its original state.
+<a name="line157"></a> * @param {Object|Function} obj The JavaScript or native object or function to
+<a name="line158"></a> *     alter. See the constraints in the class description.
+<a name="line159"></a> * @param {string} key The key to change the value for.
+<a name="line160"></a> * @param {*} value The new value to set.
+<a name="line161"></a> */
+<a name="line162"></a>goog.testing.PropertyReplacer.prototype.set = function(obj, key, value) {
+<a name="line163"></a>  var origValue = goog.testing.PropertyReplacer.hasKey_(obj, key) ? obj[key] :
+<a name="line164"></a>                  goog.testing.PropertyReplacer.NO_SUCH_KEY_;
+<a name="line165"></a>  this.original_.push({object: obj, key: key, value: origValue});
+<a name="line166"></a>  obj[key] = value;
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Changes an existing value in an object to another one of the same type while
+<a name="line172"></a> * saving its original state. The advantage of {@code replace} over {@link #set}
+<a name="line173"></a> * is that {@code replace} protects against typos and erroneously passing tests
+<a name="line174"></a> * after some members have been renamed during a refactoring.
+<a name="line175"></a> * @param {Object|Function} obj The JavaScript or native object or function to
+<a name="line176"></a> *     alter. See the constraints in the class description.
+<a name="line177"></a> * @param {string} key The key to change the value for. It has to be present
+<a name="line178"></a> *     either in {@code obj} or in its prototype chain.
+<a name="line179"></a> * @param {*} value The new value to set. It has to have the same type as the
+<a name="line180"></a> *     original value. The types are compared with {@link goog.typeOf}.
+<a name="line181"></a> * @throws {Error} In case of missing key or type mismatch.
+<a name="line182"></a> */
+<a name="line183"></a>goog.testing.PropertyReplacer.prototype.replace = function(obj, key, value) {
+<a name="line184"></a>  if (!(key in obj)) {
+<a name="line185"></a>    throw Error(&#39;Cannot replace missing property &quot;&#39; + key + &#39;&quot; in &#39; + obj);
+<a name="line186"></a>  }
+<a name="line187"></a>  if (goog.typeOf(obj[key]) != goog.typeOf(value)) {
+<a name="line188"></a>    throw Error(&#39;Cannot replace property &quot;&#39; + key + &#39;&quot; in &#39; + obj +
+<a name="line189"></a>        &#39; with a value of different type&#39;);
+<a name="line190"></a>  }
+<a name="line191"></a>  this.set(obj, key, value);
+<a name="line192"></a>};
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * Builds an object structure for the provided namespace path.  Doesn&#39;t
+<a name="line197"></a> * overwrite those prefixes of the path that are already objects or functions.
+<a name="line198"></a> * @param {string} path The path to create or alter, e.g. &#39;goog.ui.Menu&#39;.
+<a name="line199"></a> * @param {*} value The value to set.
+<a name="line200"></a> */
+<a name="line201"></a>goog.testing.PropertyReplacer.prototype.setPath = function(path, value) {
+<a name="line202"></a>  var parts = path.split(&#39;.&#39;);
+<a name="line203"></a>  var obj = goog.global;
+<a name="line204"></a>  for (var i = 0; i &lt; parts.length - 1; i++) {
+<a name="line205"></a>    var part = parts[i];
+<a name="line206"></a>    if (part == &#39;prototype&#39; &amp;&amp; !obj[part]) {
+<a name="line207"></a>      throw Error(&#39;Cannot set the prototype of &#39; + parts.slice(0, i).join(&#39;.&#39;));
+<a name="line208"></a>    }
+<a name="line209"></a>    if (!goog.isObject(obj[part]) &amp;&amp; !goog.isFunction(obj[part])) {
+<a name="line210"></a>      this.set(obj, part, {});
+<a name="line211"></a>    }
+<a name="line212"></a>    obj = obj[part];
+<a name="line213"></a>  }
+<a name="line214"></a>  this.set(obj, parts[parts.length - 1], value);
+<a name="line215"></a>};
+<a name="line216"></a>
+<a name="line217"></a>
+<a name="line218"></a>/**
+<a name="line219"></a> * Deletes the key from the object while saving its original value.
+<a name="line220"></a> * @param {Object|Function} obj The JavaScript or native object or function to
+<a name="line221"></a> *     alter. See the constraints in the class description.
+<a name="line222"></a> * @param {string} key The key to delete.
+<a name="line223"></a> */
+<a name="line224"></a>goog.testing.PropertyReplacer.prototype.remove = function(obj, key) {
+<a name="line225"></a>  if (goog.testing.PropertyReplacer.hasKey_(obj, key)) {
+<a name="line226"></a>    this.original_.push({object: obj, key: key, value: obj[key]});
+<a name="line227"></a>    goog.testing.PropertyReplacer.deleteKey_(obj, key);
+<a name="line228"></a>  }
+<a name="line229"></a>};
+<a name="line230"></a>
+<a name="line231"></a>
+<a name="line232"></a>/**
+<a name="line233"></a> * Resets all changes made by goog.testing.PropertyReplacer.prototype.set.
+<a name="line234"></a> */
+<a name="line235"></a>goog.testing.PropertyReplacer.prototype.reset = function() {
+<a name="line236"></a>  for (var i = this.original_.length - 1; i &gt;= 0; i--) {
+<a name="line237"></a>    var original = this.original_[i];
+<a name="line238"></a>    if (original.value == goog.testing.PropertyReplacer.NO_SUCH_KEY_) {
+<a name="line239"></a>      goog.testing.PropertyReplacer.deleteKey_(original.object, original.key);
+<a name="line240"></a>    } else {
+<a name="line241"></a>      original.object[original.key] = original.value;
+<a name="line242"></a>    }
+<a name="line243"></a>    delete this.original_[i];
+<a name="line244"></a>  }
+<a name="line245"></a>  this.original_.length = 0;
+<a name="line246"></a>};
+</pre>
+
+
+</body>
+</html>

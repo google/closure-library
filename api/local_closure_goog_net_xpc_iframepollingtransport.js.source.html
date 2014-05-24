@@ -1,0 +1,979 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iframepollingtransport.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_xpc_iframepollingtransport.js.html">iframepollingtransport.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Contains the iframe polling transport.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.net.xpc.IframePollingTransport&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.net.xpc.IframePollingTransport.Receiver&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.net.xpc.IframePollingTransport.Sender&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.array&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line26"></a>goog.require(&#39;goog.log&#39;);
+<a name="line27"></a>goog.require(&#39;goog.log.Level&#39;);
+<a name="line28"></a>goog.require(&#39;goog.net.xpc&#39;);
+<a name="line29"></a>goog.require(&#39;goog.net.xpc.CfgFields&#39;);
+<a name="line30"></a>goog.require(&#39;goog.net.xpc.CrossPageChannelRole&#39;);
+<a name="line31"></a>goog.require(&#39;goog.net.xpc.Transport&#39;);
+<a name="line32"></a>goog.require(&#39;goog.net.xpc.TransportTypes&#39;);
+<a name="line33"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * Iframe polling transport. Uses hidden iframes to transfer data
+<a name="line39"></a> * in the fragment identifier of the URL. The peer polls the iframe&#39;s location
+<a name="line40"></a> * for changes.
+<a name="line41"></a> * Unfortunately, in Safari this screws up the history, because Safari doesn&#39;t
+<a name="line42"></a> * allow to call location.replace() on a window containing a document from a
+<a name="line43"></a> * different domain (last version tested: 2.0.4).
+<a name="line44"></a> *
+<a name="line45"></a> * @param {goog.net.xpc.CrossPageChannel} channel The channel this
+<a name="line46"></a> *     transport belongs to.
+<a name="line47"></a> * @param {goog.dom.DomHelper=} opt_domHelper The dom helper to use for finding
+<a name="line48"></a> *     the correct window.
+<a name="line49"></a> * @constructor
+<a name="line50"></a> * @extends {goog.net.xpc.Transport}
+<a name="line51"></a> * @final
+<a name="line52"></a> */
+<a name="line53"></a>goog.net.xpc.IframePollingTransport = function(channel, opt_domHelper) {
+<a name="line54"></a>  goog.net.xpc.IframePollingTransport.base(this, &#39;constructor&#39;, opt_domHelper);
+<a name="line55"></a>
+<a name="line56"></a>  /**
+<a name="line57"></a>   * The channel this transport belongs to.
+<a name="line58"></a>   * @type {goog.net.xpc.CrossPageChannel}
+<a name="line59"></a>   * @private
+<a name="line60"></a>   */
+<a name="line61"></a>  this.channel_ = channel;
+<a name="line62"></a>
+<a name="line63"></a>  /**
+<a name="line64"></a>   * The URI used to send messages.
+<a name="line65"></a>   * @type {string}
+<a name="line66"></a>   * @private
+<a name="line67"></a>   */
+<a name="line68"></a>  this.sendUri_ =
+<a name="line69"></a>      this.channel_.getConfig()[goog.net.xpc.CfgFields.PEER_POLL_URI];
+<a name="line70"></a>
+<a name="line71"></a>  /**
+<a name="line72"></a>   * The URI which is polled for incoming messages.
+<a name="line73"></a>   * @type {string}
+<a name="line74"></a>   * @private
+<a name="line75"></a>   */
+<a name="line76"></a>  this.rcvUri_ =
+<a name="line77"></a>      this.channel_.getConfig()[goog.net.xpc.CfgFields.LOCAL_POLL_URI];
+<a name="line78"></a>
+<a name="line79"></a>  /**
+<a name="line80"></a>   * The queue to hold messages which can&#39;t be sent immediately.
+<a name="line81"></a>   * @type {Array}
+<a name="line82"></a>   * @private
+<a name="line83"></a>   */
+<a name="line84"></a>  this.sendQueue_ = [];
+<a name="line85"></a>};
+<a name="line86"></a>goog.inherits(goog.net.xpc.IframePollingTransport, goog.net.xpc.Transport);
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a> * The number of times the inner frame will check for evidence of the outer
+<a name="line91"></a> * frame before it tries its reconnection sequence.  These occur at 100ms
+<a name="line92"></a> * intervals, making this an effective max waiting period of 500ms.
+<a name="line93"></a> * @type {number}
+<a name="line94"></a> * @private
+<a name="line95"></a> */
+<a name="line96"></a>goog.net.xpc.IframePollingTransport.prototype.pollsBeforeReconnect_ = 5;
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * The transport type.
+<a name="line101"></a> * @type {number}
+<a name="line102"></a> * @protected
+<a name="line103"></a> * @override
+<a name="line104"></a> */
+<a name="line105"></a>goog.net.xpc.IframePollingTransport.prototype.transportType =
+<a name="line106"></a>    goog.net.xpc.TransportTypes.IFRAME_POLLING;
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Sequence counter.
+<a name="line111"></a> * @type {number}
+<a name="line112"></a> * @private
+<a name="line113"></a> */
+<a name="line114"></a>goog.net.xpc.IframePollingTransport.prototype.sequence_ = 0;
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Flag indicating whether we are waiting for an acknoledgement.
+<a name="line119"></a> * @type {boolean}
+<a name="line120"></a> * @private
+<a name="line121"></a> */
+<a name="line122"></a>goog.net.xpc.IframePollingTransport.prototype.waitForAck_ = false;
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Flag indicating if channel has been initialized.
+<a name="line127"></a> * @type {boolean}
+<a name="line128"></a> * @private
+<a name="line129"></a> */
+<a name="line130"></a>goog.net.xpc.IframePollingTransport.prototype.initialized_ = false;
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Reconnection iframe created by inner peer.
+<a name="line135"></a> * @type {Element}
+<a name="line136"></a> * @private
+<a name="line137"></a> */
+<a name="line138"></a>goog.net.xpc.IframePollingTransport.prototype.reconnectFrame_ = null;
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * The string used to prefix all iframe names and IDs.
+<a name="line143"></a> * @type {string}
+<a name="line144"></a> */
+<a name="line145"></a>goog.net.xpc.IframePollingTransport.IFRAME_PREFIX = &#39;googlexpc&#39;;
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Returns the name/ID of the message frame.
+<a name="line150"></a> * @return {string} Name of message frame.
+<a name="line151"></a> * @private
+<a name="line152"></a> */
+<a name="line153"></a>goog.net.xpc.IframePollingTransport.prototype.getMsgFrameName_ = function() {
+<a name="line154"></a>  return goog.net.xpc.IframePollingTransport.IFRAME_PREFIX + &#39;_&#39; +
+<a name="line155"></a>      this.channel_.name + &#39;_msg&#39;;
+<a name="line156"></a>};
+<a name="line157"></a>
+<a name="line158"></a>
+<a name="line159"></a>/**
+<a name="line160"></a> * Returns the name/ID of the ack frame.
+<a name="line161"></a> * @return {string} Name of ack frame.
+<a name="line162"></a> * @private
+<a name="line163"></a> */
+<a name="line164"></a>goog.net.xpc.IframePollingTransport.prototype.getAckFrameName_ = function() {
+<a name="line165"></a>  return goog.net.xpc.IframePollingTransport.IFRAME_PREFIX + &#39;_&#39; +
+<a name="line166"></a>      this.channel_.name + &#39;_ack&#39;;
+<a name="line167"></a>};
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Determines whether the channel is still available. The channel is
+<a name="line172"></a> * unavailable if the transport was disposed or the peer is no longer
+<a name="line173"></a> * available.
+<a name="line174"></a> * @return {boolean} Whether the channel is available.
+<a name="line175"></a> */
+<a name="line176"></a>goog.net.xpc.IframePollingTransport.prototype.isChannelAvailable = function() {
+<a name="line177"></a>  return !this.isDisposed() &amp;&amp; this.channel_.isPeerAvailable();
+<a name="line178"></a>};
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Safely retrieves the frames from the peer window. If an error is thrown
+<a name="line183"></a> * (e.g. the window is closing) an empty frame object is returned.
+<a name="line184"></a> * @return {!Object.&lt;!Window&gt;} The frames from the peer window.
+<a name="line185"></a> * @private
+<a name="line186"></a> */
+<a name="line187"></a>goog.net.xpc.IframePollingTransport.prototype.getPeerFrames_ = function() {
+<a name="line188"></a>  try {
+<a name="line189"></a>    if (this.isChannelAvailable()) {
+<a name="line190"></a>      return this.channel_.getPeerWindowObject().frames || {};
+<a name="line191"></a>    }
+<a name="line192"></a>  } catch (e) {
+<a name="line193"></a>    // An error may be thrown if the window is closing.
+<a name="line194"></a>    goog.log.fine(goog.net.xpc.logger, &#39;error retrieving peer frames&#39;);
+<a name="line195"></a>  }
+<a name="line196"></a>  return {};
+<a name="line197"></a>};
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Safely retrieves the peer frame with the specified name.
+<a name="line202"></a> * @param {string} frameName The name of the peer frame to retrieve.
+<a name="line203"></a> * @return {!Window} The peer frame with the specified name.
+<a name="line204"></a> * @private
+<a name="line205"></a> */
+<a name="line206"></a>goog.net.xpc.IframePollingTransport.prototype.getPeerFrame_ = function(
+<a name="line207"></a>    frameName) {
+<a name="line208"></a>  return this.getPeerFrames_()[frameName];
+<a name="line209"></a>};
+<a name="line210"></a>
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a> * Connects this transport.
+<a name="line214"></a> * @override
+<a name="line215"></a> */
+<a name="line216"></a>goog.net.xpc.IframePollingTransport.prototype.connect = function() {
+<a name="line217"></a>  if (!this.isChannelAvailable()) {
+<a name="line218"></a>    // When the channel is unavailable there is no peer to poll so stop trying
+<a name="line219"></a>    // to connect.
+<a name="line220"></a>    return;
+<a name="line221"></a>  }
+<a name="line222"></a>
+<a name="line223"></a>  goog.log.fine(goog.net.xpc.logger, &#39;transport connect called&#39;);
+<a name="line224"></a>  if (!this.initialized_) {
+<a name="line225"></a>    goog.log.fine(goog.net.xpc.logger, &#39;initializing...&#39;);
+<a name="line226"></a>    this.constructSenderFrames_();
+<a name="line227"></a>    this.initialized_ = true;
+<a name="line228"></a>  }
+<a name="line229"></a>  this.checkForeignFramesReady_();
+<a name="line230"></a>};
+<a name="line231"></a>
+<a name="line232"></a>
+<a name="line233"></a>/**
+<a name="line234"></a> * Creates the iframes which are used to send messages (and acknowledgements)
+<a name="line235"></a> * to the peer. Sender iframes contain a document from a different origin and
+<a name="line236"></a> * therefore their content can&#39;t be accessed.
+<a name="line237"></a> * @private
+<a name="line238"></a> */
+<a name="line239"></a>goog.net.xpc.IframePollingTransport.prototype.constructSenderFrames_ =
+<a name="line240"></a>    function() {
+<a name="line241"></a>  var name = this.getMsgFrameName_();
+<a name="line242"></a>  this.msgIframeElm_ = this.constructSenderFrame_(name);
+<a name="line243"></a>  this.msgWinObj_ = this.getWindow().frames[name];
+<a name="line244"></a>
+<a name="line245"></a>  name = this.getAckFrameName_();
+<a name="line246"></a>  this.ackIframeElm_ = this.constructSenderFrame_(name);
+<a name="line247"></a>  this.ackWinObj_ = this.getWindow().frames[name];
+<a name="line248"></a>};
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>/**
+<a name="line252"></a> * Constructs a sending frame the the given id.
+<a name="line253"></a> * @param {string} id The id.
+<a name="line254"></a> * @return {!Element} The constructed frame.
+<a name="line255"></a> * @private
+<a name="line256"></a> */
+<a name="line257"></a>goog.net.xpc.IframePollingTransport.prototype.constructSenderFrame_ =
+<a name="line258"></a>    function(id) {
+<a name="line259"></a>  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line260"></a>      &#39;constructing sender frame: &#39; + id);
+<a name="line261"></a>  var ifr = goog.dom.createElement(&#39;iframe&#39;);
+<a name="line262"></a>  var s = ifr.style;
+<a name="line263"></a>  s.position = &#39;absolute&#39;;
+<a name="line264"></a>  s.top = &#39;-10px&#39;; s.left = &#39;10px&#39;; s.width = &#39;1px&#39;; s.height = &#39;1px&#39;;
+<a name="line265"></a>  ifr.id = ifr.name = id;
+<a name="line266"></a>  ifr.src = this.sendUri_ + &#39;#INITIAL&#39;;
+<a name="line267"></a>  this.getWindow().document.body.appendChild(ifr);
+<a name="line268"></a>  return ifr;
+<a name="line269"></a>};
+<a name="line270"></a>
+<a name="line271"></a>
+<a name="line272"></a>/**
+<a name="line273"></a> * The protocol for reconnecting is for the inner frame to change channel
+<a name="line274"></a> * names, and then communicate the new channel name to the outer peer.
+<a name="line275"></a> * The outer peer looks in a predefined location for the channel name
+<a name="line276"></a> * upate. It is important to use a completely new channel name, as this
+<a name="line277"></a> * will ensure that all messaging iframes are not in the bfcache.
+<a name="line278"></a> * Otherwise, Safari may pollute the history when modifying the location
+<a name="line279"></a> * of bfcached iframes.
+<a name="line280"></a> * @private
+<a name="line281"></a> */
+<a name="line282"></a>goog.net.xpc.IframePollingTransport.prototype.maybeInnerPeerReconnect_ =
+<a name="line283"></a>    function() {
+<a name="line284"></a>  // Reconnection has been found to not function on some browsers (eg IE7), so
+<a name="line285"></a>  // it&#39;s important that the mechanism only be triggered as a last resort.  As
+<a name="line286"></a>  // such, we poll a number of times to find the outer iframe before triggering
+<a name="line287"></a>  // it.
+<a name="line288"></a>  if (this.reconnectFrame_ || this.pollsBeforeReconnect_-- &gt; 0) {
+<a name="line289"></a>    return;
+<a name="line290"></a>  }
+<a name="line291"></a>
+<a name="line292"></a>  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line293"></a>      &#39;Inner peer reconnect triggered.&#39;);
+<a name="line294"></a>  this.channel_.updateChannelNameAndCatalog(goog.net.xpc.getRandomString(10));
+<a name="line295"></a>  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line296"></a>      &#39;switching channels: &#39; + this.channel_.name);
+<a name="line297"></a>  this.deconstructSenderFrames_();
+<a name="line298"></a>  this.initialized_ = false;
+<a name="line299"></a>  // Communicate new channel name to outer peer.
+<a name="line300"></a>  this.reconnectFrame_ = this.constructSenderFrame_(
+<a name="line301"></a>      goog.net.xpc.IframePollingTransport.IFRAME_PREFIX +
+<a name="line302"></a>          &#39;_reconnect_&#39; + this.channel_.name);
+<a name="line303"></a>};
+<a name="line304"></a>
+<a name="line305"></a>
+<a name="line306"></a>/**
+<a name="line307"></a> * Scans inner peer for a reconnect message, which will be used to update
+<a name="line308"></a> * the outer peer&#39;s channel name. If a reconnect message is found, the
+<a name="line309"></a> * sender frames will be cleaned up to make way for the new sender frames.
+<a name="line310"></a> * Only called by the outer peer.
+<a name="line311"></a> * @private
+<a name="line312"></a> */
+<a name="line313"></a>goog.net.xpc.IframePollingTransport.prototype.outerPeerReconnect_ = function() {
+<a name="line314"></a>  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line315"></a>      &#39;outerPeerReconnect called&#39;);
+<a name="line316"></a>  var frames = this.getPeerFrames_();
+<a name="line317"></a>  var length = frames.length;
+<a name="line318"></a>  for (var i = 0; i &lt; length; i++) {
+<a name="line319"></a>    var frameName;
+<a name="line320"></a>    try {
+<a name="line321"></a>      if (frames[i] &amp;&amp; frames[i].name) {
+<a name="line322"></a>        frameName = frames[i].name;
+<a name="line323"></a>      }
+<a name="line324"></a>    } catch (e) {
+<a name="line325"></a>      // Do nothing.
+<a name="line326"></a>    }
+<a name="line327"></a>    if (!frameName) {
+<a name="line328"></a>      continue;
+<a name="line329"></a>    }
+<a name="line330"></a>    var message = frameName.split(&#39;_&#39;);
+<a name="line331"></a>    if (message.length == 3 &amp;&amp;
+<a name="line332"></a>        message[0] == goog.net.xpc.IframePollingTransport.IFRAME_PREFIX &amp;&amp;
+<a name="line333"></a>        message[1] == &#39;reconnect&#39;) {
+<a name="line334"></a>      // This is a legitimate reconnect message from the peer. Start using
+<a name="line335"></a>      // the peer provided channel name, and start a connection over from
+<a name="line336"></a>      // scratch.
+<a name="line337"></a>      this.channel_.name = message[2];
+<a name="line338"></a>      this.deconstructSenderFrames_();
+<a name="line339"></a>      this.initialized_ = false;
+<a name="line340"></a>      break;
+<a name="line341"></a>    }
+<a name="line342"></a>  }
+<a name="line343"></a>};
+<a name="line344"></a>
+<a name="line345"></a>
+<a name="line346"></a>/**
+<a name="line347"></a> * Cleans up the existing sender frames owned by this peer. Only called by
+<a name="line348"></a> * the outer peer.
+<a name="line349"></a> * @private
+<a name="line350"></a> */
+<a name="line351"></a>goog.net.xpc.IframePollingTransport.prototype.deconstructSenderFrames_ =
+<a name="line352"></a>    function() {
+<a name="line353"></a>  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line354"></a>      &#39;deconstructSenderFrames called&#39;);
+<a name="line355"></a>  if (this.msgIframeElm_) {
+<a name="line356"></a>    this.msgIframeElm_.parentNode.removeChild(this.msgIframeElm_);
+<a name="line357"></a>    this.msgIframeElm_ = null;
+<a name="line358"></a>    this.msgWinObj_ = null;
+<a name="line359"></a>  }
+<a name="line360"></a>  if (this.ackIframeElm_) {
+<a name="line361"></a>    this.ackIframeElm_.parentNode.removeChild(this.ackIframeElm_);
+<a name="line362"></a>    this.ackIframeElm_ = null;
+<a name="line363"></a>    this.ackWinObj_ = null;
+<a name="line364"></a>  }
+<a name="line365"></a>};
+<a name="line366"></a>
+<a name="line367"></a>
+<a name="line368"></a>/**
+<a name="line369"></a> * Checks if the frames in the peer&#39;s page are ready. These contain a
+<a name="line370"></a> * document from the own domain and are the ones messages are received through.
+<a name="line371"></a> * @private
+<a name="line372"></a> */
+<a name="line373"></a>goog.net.xpc.IframePollingTransport.prototype.checkForeignFramesReady_ =
+<a name="line374"></a>    function() {
+<a name="line375"></a>  // check if the connected iframe ready
+<a name="line376"></a>  if (!(this.isRcvFrameReady_(this.getMsgFrameName_()) &amp;&amp;
+<a name="line377"></a>        this.isRcvFrameReady_(this.getAckFrameName_()))) {
+<a name="line378"></a>    goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line379"></a>        &#39;foreign frames not (yet) present&#39;);
+<a name="line380"></a>
+<a name="line381"></a>    if (this.channel_.getRole() == goog.net.xpc.CrossPageChannelRole.INNER) {
+<a name="line382"></a>      // The outer peer might need a short time to get its frames ready, as
+<a name="line383"></a>      // CrossPageChannel prevents them from getting created until the inner
+<a name="line384"></a>      // peer&#39;s frame has thrown its loaded event.  This method is a noop for
+<a name="line385"></a>      // the first few times it&#39;s called, and then allows the reconnection
+<a name="line386"></a>      // sequence to begin.
+<a name="line387"></a>      this.maybeInnerPeerReconnect_();
+<a name="line388"></a>    } else if (this.channel_.getRole() ==
+<a name="line389"></a>               goog.net.xpc.CrossPageChannelRole.OUTER) {
+<a name="line390"></a>      // The inner peer is either not loaded yet, or the receiving
+<a name="line391"></a>      // frames are simply missing. Since we cannot discern the two cases, we
+<a name="line392"></a>      // should scan for a reconnect message from the inner peer.
+<a name="line393"></a>      this.outerPeerReconnect_();
+<a name="line394"></a>    }
+<a name="line395"></a>
+<a name="line396"></a>    // start a timer to check again
+<a name="line397"></a>    this.getWindow().setTimeout(goog.bind(this.connect, this), 100);
+<a name="line398"></a>  } else {
+<a name="line399"></a>    goog.log.fine(goog.net.xpc.logger, &#39;foreign frames present&#39;);
+<a name="line400"></a>
+<a name="line401"></a>    // Create receivers.
+<a name="line402"></a>    this.msgReceiver_ = new goog.net.xpc.IframePollingTransport.Receiver(
+<a name="line403"></a>        this,
+<a name="line404"></a>        this.getPeerFrame_(this.getMsgFrameName_()),
+<a name="line405"></a>        goog.bind(this.processIncomingMsg, this));
+<a name="line406"></a>    this.ackReceiver_ = new goog.net.xpc.IframePollingTransport.Receiver(
+<a name="line407"></a>        this,
+<a name="line408"></a>        this.getPeerFrame_(this.getAckFrameName_()),
+<a name="line409"></a>        goog.bind(this.processIncomingAck, this));
+<a name="line410"></a>
+<a name="line411"></a>    this.checkLocalFramesPresent_();
+<a name="line412"></a>  }
+<a name="line413"></a>};
+<a name="line414"></a>
+<a name="line415"></a>
+<a name="line416"></a>/**
+<a name="line417"></a> * Checks if the receiving frame is ready.
+<a name="line418"></a> * @param {string} frameName Which receiving frame to check.
+<a name="line419"></a> * @return {boolean} Whether the receiving frame is ready.
+<a name="line420"></a> * @private
+<a name="line421"></a> */
+<a name="line422"></a>goog.net.xpc.IframePollingTransport.prototype.isRcvFrameReady_ =
+<a name="line423"></a>    function(frameName) {
+<a name="line424"></a>  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line425"></a>      &#39;checking for receive frame: &#39; + frameName);
+<a name="line426"></a>  /** @preserveTry */
+<a name="line427"></a>  try {
+<a name="line428"></a>    var winObj = this.getPeerFrame_(frameName);
+<a name="line429"></a>    if (!winObj || winObj.location.href.indexOf(this.rcvUri_) != 0) {
+<a name="line430"></a>      return false;
+<a name="line431"></a>    }
+<a name="line432"></a>  } catch (e) {
+<a name="line433"></a>    return false;
+<a name="line434"></a>  }
+<a name="line435"></a>  return true;
+<a name="line436"></a>};
+<a name="line437"></a>
+<a name="line438"></a>
+<a name="line439"></a>/**
+<a name="line440"></a> * Checks if the iframes created in the own document are ready.
+<a name="line441"></a> * @private
+<a name="line442"></a> */
+<a name="line443"></a>goog.net.xpc.IframePollingTransport.prototype.checkLocalFramesPresent_ =
+<a name="line444"></a>    function() {
+<a name="line445"></a>
+<a name="line446"></a>  // Are the sender frames ready?
+<a name="line447"></a>  // These contain a document from the peer&#39;s domain, therefore we can only
+<a name="line448"></a>  // check if the frame itself is present.
+<a name="line449"></a>  var frames = this.getPeerFrames_();
+<a name="line450"></a>  if (!(frames[this.getAckFrameName_()] &amp;&amp;
+<a name="line451"></a>        frames[this.getMsgFrameName_()])) {
+<a name="line452"></a>    // start a timer to check again
+<a name="line453"></a>    if (!this.checkLocalFramesPresentCb_) {
+<a name="line454"></a>      this.checkLocalFramesPresentCb_ = goog.bind(
+<a name="line455"></a>          this.checkLocalFramesPresent_, this);
+<a name="line456"></a>    }
+<a name="line457"></a>    this.getWindow().setTimeout(this.checkLocalFramesPresentCb_, 100);
+<a name="line458"></a>    goog.log.fine(goog.net.xpc.logger, &#39;local frames not (yet) present&#39;);
+<a name="line459"></a>  } else {
+<a name="line460"></a>    // Create senders.
+<a name="line461"></a>    this.msgSender_ = new goog.net.xpc.IframePollingTransport.Sender(
+<a name="line462"></a>        this.sendUri_, this.msgWinObj_);
+<a name="line463"></a>    this.ackSender_ = new goog.net.xpc.IframePollingTransport.Sender(
+<a name="line464"></a>        this.sendUri_, this.ackWinObj_);
+<a name="line465"></a>
+<a name="line466"></a>    goog.log.fine(goog.net.xpc.logger, &#39;local frames ready&#39;);
+<a name="line467"></a>
+<a name="line468"></a>    this.getWindow().setTimeout(goog.bind(function() {
+<a name="line469"></a>      this.msgSender_.send(goog.net.xpc.SETUP);
+<a name="line470"></a>      this.sentConnectionSetup_ = true;
+<a name="line471"></a>      this.waitForAck_ = true;
+<a name="line472"></a>      goog.log.fine(goog.net.xpc.logger, &#39;SETUP sent&#39;);
+<a name="line473"></a>    }, this), 100);
+<a name="line474"></a>  }
+<a name="line475"></a>};
+<a name="line476"></a>
+<a name="line477"></a>
+<a name="line478"></a>/**
+<a name="line479"></a> * Check if connection is ready.
+<a name="line480"></a> * @private
+<a name="line481"></a> */
+<a name="line482"></a>goog.net.xpc.IframePollingTransport.prototype.checkIfConnected_ = function() {
+<a name="line483"></a>  if (this.sentConnectionSetupAck_ &amp;&amp; this.rcvdConnectionSetupAck_) {
+<a name="line484"></a>    this.channel_.notifyConnected();
+<a name="line485"></a>
+<a name="line486"></a>    if (this.deliveryQueue_) {
+<a name="line487"></a>      goog.log.fine(goog.net.xpc.logger, &#39;delivering queued messages &#39; +
+<a name="line488"></a>          &#39;(&#39; + this.deliveryQueue_.length + &#39;)&#39;);
+<a name="line489"></a>
+<a name="line490"></a>      for (var i = 0, m; i &lt; this.deliveryQueue_.length; i++) {
+<a name="line491"></a>        m = this.deliveryQueue_[i];
+<a name="line492"></a>        this.channel_.xpcDeliver(m.service, m.payload);
+<a name="line493"></a>      }
+<a name="line494"></a>      delete this.deliveryQueue_;
+<a name="line495"></a>    }
+<a name="line496"></a>  } else {
+<a name="line497"></a>    goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line498"></a>        &#39;checking if connected: &#39; +
+<a name="line499"></a>        &#39;ack sent:&#39; + this.sentConnectionSetupAck_ +
+<a name="line500"></a>        &#39;, ack rcvd: &#39; + this.rcvdConnectionSetupAck_);
+<a name="line501"></a>  }
+<a name="line502"></a>};
+<a name="line503"></a>
+<a name="line504"></a>
+<a name="line505"></a>/**
+<a name="line506"></a> * Processes an incoming message.
+<a name="line507"></a> * @param {string} raw The complete received string.
+<a name="line508"></a> */
+<a name="line509"></a>goog.net.xpc.IframePollingTransport.prototype.processIncomingMsg =
+<a name="line510"></a>    function(raw) {
+<a name="line511"></a>  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line512"></a>      &#39;msg received: &#39; + raw);
+<a name="line513"></a>
+<a name="line514"></a>  if (raw == goog.net.xpc.SETUP) {
+<a name="line515"></a>    if (!this.ackSender_) {
+<a name="line516"></a>      // Got SETUP msg, but we can&#39;t send an ack.
+<a name="line517"></a>      return;
+<a name="line518"></a>    }
+<a name="line519"></a>
+<a name="line520"></a>    this.ackSender_.send(goog.net.xpc.SETUP_ACK_);
+<a name="line521"></a>    goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST, &#39;SETUP_ACK sent&#39;);
+<a name="line522"></a>
+<a name="line523"></a>    this.sentConnectionSetupAck_ = true;
+<a name="line524"></a>    this.checkIfConnected_();
+<a name="line525"></a>
+<a name="line526"></a>  } else if (this.channel_.isConnected() || this.sentConnectionSetupAck_) {
+<a name="line527"></a>
+<a name="line528"></a>    var pos = raw.indexOf(&#39;|&#39;);
+<a name="line529"></a>    var head = raw.substring(0, pos);
+<a name="line530"></a>    var frame = raw.substring(pos + 1);
+<a name="line531"></a>
+<a name="line532"></a>    // check if it is a framed message
+<a name="line533"></a>    pos = head.indexOf(&#39;,&#39;);
+<a name="line534"></a>    if (pos == -1) {
+<a name="line535"></a>      var seq = head;
+<a name="line536"></a>      // send acknowledgement
+<a name="line537"></a>      this.ackSender_.send(&#39;ACK:&#39; + seq);
+<a name="line538"></a>      this.deliverPayload_(frame);
+<a name="line539"></a>    } else {
+<a name="line540"></a>      var seq = head.substring(0, pos);
+<a name="line541"></a>      // send acknowledgement
+<a name="line542"></a>      this.ackSender_.send(&#39;ACK:&#39; + seq);
+<a name="line543"></a>
+<a name="line544"></a>      var partInfo = head.substring(pos + 1).split(&#39;/&#39;);
+<a name="line545"></a>      var part0 = parseInt(partInfo[0], 10);
+<a name="line546"></a>      var part1 = parseInt(partInfo[1], 10);
+<a name="line547"></a>      // create an array to accumulate the parts if this is the
+<a name="line548"></a>      // first frame of a message
+<a name="line549"></a>      if (part0 == 1) {
+<a name="line550"></a>        this.parts_ = [];
+<a name="line551"></a>      }
+<a name="line552"></a>      this.parts_.push(frame);
+<a name="line553"></a>      // deliver the message if this was the last frame of a message
+<a name="line554"></a>      if (part0 == part1) {
+<a name="line555"></a>        this.deliverPayload_(this.parts_.join(&#39;&#39;));
+<a name="line556"></a>        delete this.parts_;
+<a name="line557"></a>      }
+<a name="line558"></a>    }
+<a name="line559"></a>  } else {
+<a name="line560"></a>    goog.log.warning(goog.net.xpc.logger,
+<a name="line561"></a>        &#39;received msg, but channel is not connected&#39;);
+<a name="line562"></a>  }
+<a name="line563"></a>};
+<a name="line564"></a>
+<a name="line565"></a>
+<a name="line566"></a>/**
+<a name="line567"></a> * Process an incoming acknowdedgement.
+<a name="line568"></a> * @param {string} msgStr The incoming ack string to process.
+<a name="line569"></a> */
+<a name="line570"></a>goog.net.xpc.IframePollingTransport.prototype.processIncomingAck =
+<a name="line571"></a>    function(msgStr) {
+<a name="line572"></a>  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line573"></a>      &#39;ack received: &#39; + msgStr);
+<a name="line574"></a>
+<a name="line575"></a>  if (msgStr == goog.net.xpc.SETUP_ACK_) {
+<a name="line576"></a>    this.waitForAck_ = false;
+<a name="line577"></a>    this.rcvdConnectionSetupAck_ = true;
+<a name="line578"></a>    // send the next frame
+<a name="line579"></a>    this.checkIfConnected_();
+<a name="line580"></a>
+<a name="line581"></a>  } else if (this.channel_.isConnected()) {
+<a name="line582"></a>    if (!this.waitForAck_) {
+<a name="line583"></a>      goog.log.warning(goog.net.xpc.logger, &#39;got unexpected ack&#39;);
+<a name="line584"></a>      return;
+<a name="line585"></a>    }
+<a name="line586"></a>
+<a name="line587"></a>    var seq = parseInt(msgStr.split(&#39;:&#39;)[1], 10);
+<a name="line588"></a>    if (seq == this.sequence_) {
+<a name="line589"></a>      this.waitForAck_ = false;
+<a name="line590"></a>      this.sendNextFrame_();
+<a name="line591"></a>    } else {
+<a name="line592"></a>      goog.log.warning(goog.net.xpc.logger, &#39;got ack with wrong sequence&#39;);
+<a name="line593"></a>    }
+<a name="line594"></a>  } else {
+<a name="line595"></a>    goog.log.warning(goog.net.xpc.logger,
+<a name="line596"></a>        &#39;received ack, but channel not connected&#39;);
+<a name="line597"></a>  }
+<a name="line598"></a>};
+<a name="line599"></a>
+<a name="line600"></a>
+<a name="line601"></a>/**
+<a name="line602"></a> * Sends a frame (message part).
+<a name="line603"></a> * @private
+<a name="line604"></a> */
+<a name="line605"></a>goog.net.xpc.IframePollingTransport.prototype.sendNextFrame_ = function() {
+<a name="line606"></a>  // do nothing if we are waiting for an acknowledgement or the
+<a name="line607"></a>  // queue is emtpy
+<a name="line608"></a>  if (this.waitForAck_ || !this.sendQueue_.length) {
+<a name="line609"></a>    return;
+<a name="line610"></a>  }
+<a name="line611"></a>
+<a name="line612"></a>  var s = this.sendQueue_.shift();
+<a name="line613"></a>  ++this.sequence_;
+<a name="line614"></a>  this.msgSender_.send(this.sequence_ + s);
+<a name="line615"></a>  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line616"></a>      &#39;msg sent: &#39; + this.sequence_ + s);
+<a name="line617"></a>
+<a name="line618"></a>
+<a name="line619"></a>  this.waitForAck_ = true;
+<a name="line620"></a>};
+<a name="line621"></a>
+<a name="line622"></a>
+<a name="line623"></a>/**
+<a name="line624"></a> * Delivers a message.
+<a name="line625"></a> * @param {string} s The complete message string (&quot;&lt;service_name&gt;:&lt;payload&gt;&quot;).
+<a name="line626"></a> * @private
+<a name="line627"></a> */
+<a name="line628"></a>goog.net.xpc.IframePollingTransport.prototype.deliverPayload_ = function(s) {
+<a name="line629"></a>  // determine the service name and the payload
+<a name="line630"></a>  var pos = s.indexOf(&#39;:&#39;);
+<a name="line631"></a>  var service = s.substr(0, pos);
+<a name="line632"></a>  var payload = s.substring(pos + 1);
+<a name="line633"></a>
+<a name="line634"></a>  // deliver the message
+<a name="line635"></a>  if (!this.channel_.isConnected()) {
+<a name="line636"></a>    // as valid messages can come in before a SETUP_ACK has
+<a name="line637"></a>    // been received (because subchannels for msgs and acks are independent),
+<a name="line638"></a>    // delay delivery of early messages until after &#39;connect&#39;-event
+<a name="line639"></a>    (this.deliveryQueue_ || (this.deliveryQueue_ = [])).
+<a name="line640"></a>        push({service: service, payload: payload});
+<a name="line641"></a>    goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+<a name="line642"></a>        &#39;queued delivery&#39;);
+<a name="line643"></a>  } else {
+<a name="line644"></a>    this.channel_.xpcDeliver(service, payload);
+<a name="line645"></a>  }
+<a name="line646"></a>};
+<a name="line647"></a>
+<a name="line648"></a>
+<a name="line649"></a>// ---- send message ----
+<a name="line650"></a>
+<a name="line651"></a>
+<a name="line652"></a>/**
+<a name="line653"></a> * Maximal frame length.
+<a name="line654"></a> * @type {number}
+<a name="line655"></a> * @private
+<a name="line656"></a> */
+<a name="line657"></a>goog.net.xpc.IframePollingTransport.prototype.MAX_FRAME_LENGTH_ = 3800;
+<a name="line658"></a>
+<a name="line659"></a>
+<a name="line660"></a>/**
+<a name="line661"></a> * Sends a message. Splits it in multiple frames if too long (exceeds IE&#39;s
+<a name="line662"></a> * URL-length maximum.
+<a name="line663"></a> * Wireformat: &lt;seq&gt;[,&lt;frame_no&gt;/&lt;#frames&gt;]|&lt;frame_content&gt;
+<a name="line664"></a> *
+<a name="line665"></a> * @param {string} service Name of service this the message has to be delivered.
+<a name="line666"></a> * @param {string} payload The message content.
+<a name="line667"></a> * @override
+<a name="line668"></a> */
+<a name="line669"></a>goog.net.xpc.IframePollingTransport.prototype.send =
+<a name="line670"></a>    function(service, payload) {
+<a name="line671"></a>  var frame = service + &#39;:&#39; + payload;
+<a name="line672"></a>  // put in queue
+<a name="line673"></a>  if (!goog.userAgent.IE || payload.length &lt;= this.MAX_FRAME_LENGTH_) {
+<a name="line674"></a>    this.sendQueue_.push(&#39;|&#39; + frame);
+<a name="line675"></a>  }
+<a name="line676"></a>  else {
+<a name="line677"></a>    var l = payload.length;
+<a name="line678"></a>    var num = Math.ceil(l / this.MAX_FRAME_LENGTH_); // number of frames
+<a name="line679"></a>    var pos = 0;
+<a name="line680"></a>    var i = 1;
+<a name="line681"></a>    while (pos &lt; l) {
+<a name="line682"></a>      this.sendQueue_.push(&#39;,&#39; + i + &#39;/&#39; + num + &#39;|&#39; +
+<a name="line683"></a>                           frame.substr(pos, this.MAX_FRAME_LENGTH_));
+<a name="line684"></a>      i++;
+<a name="line685"></a>      pos += this.MAX_FRAME_LENGTH_;
+<a name="line686"></a>    }
+<a name="line687"></a>  }
+<a name="line688"></a>  this.sendNextFrame_();
+<a name="line689"></a>};
+<a name="line690"></a>
+<a name="line691"></a>
+<a name="line692"></a>/** @override */
+<a name="line693"></a>goog.net.xpc.IframePollingTransport.prototype.disposeInternal = function() {
+<a name="line694"></a>  goog.net.xpc.IframePollingTransport.base(this, &#39;disposeInternal&#39;);
+<a name="line695"></a>
+<a name="line696"></a>  var receivers = goog.net.xpc.IframePollingTransport.receivers_;
+<a name="line697"></a>  goog.array.remove(receivers, this.msgReceiver_);
+<a name="line698"></a>  goog.array.remove(receivers, this.ackReceiver_);
+<a name="line699"></a>  this.msgReceiver_ = this.ackReceiver_ = null;
+<a name="line700"></a>
+<a name="line701"></a>  goog.dom.removeNode(this.msgIframeElm_);
+<a name="line702"></a>  goog.dom.removeNode(this.ackIframeElm_);
+<a name="line703"></a>  this.msgIframeElm_ = this.ackIframeElm_ = null;
+<a name="line704"></a>  this.msgWinObj_ = this.ackWinObj_ = null;
+<a name="line705"></a>};
+<a name="line706"></a>
+<a name="line707"></a>
+<a name="line708"></a>/**
+<a name="line709"></a> * Array holding all Receiver-instances.
+<a name="line710"></a> * @type {Array.&lt;goog.net.xpc.IframePollingTransport.Receiver&gt;}
+<a name="line711"></a> * @private
+<a name="line712"></a> */
+<a name="line713"></a>goog.net.xpc.IframePollingTransport.receivers_ = [];
+<a name="line714"></a>
+<a name="line715"></a>
+<a name="line716"></a>/**
+<a name="line717"></a> * Short polling interval.
+<a name="line718"></a> * @type {number}
+<a name="line719"></a> * @private
+<a name="line720"></a> */
+<a name="line721"></a>goog.net.xpc.IframePollingTransport.TIME_POLL_SHORT_ = 10;
+<a name="line722"></a>
+<a name="line723"></a>
+<a name="line724"></a>/**
+<a name="line725"></a> * Long polling interval.
+<a name="line726"></a> * @type {number}
+<a name="line727"></a> * @private
+<a name="line728"></a> */
+<a name="line729"></a>goog.net.xpc.IframePollingTransport.TIME_POLL_LONG_ = 100;
+<a name="line730"></a>
+<a name="line731"></a>
+<a name="line732"></a>/**
+<a name="line733"></a> * Period how long to use TIME_POLL_SHORT_ before raising polling-interval
+<a name="line734"></a> * to TIME_POLL_LONG_ after an activity.
+<a name="line735"></a> * @type {number}
+<a name="line736"></a> * @private
+<a name="line737"></a> */
+<a name="line738"></a>goog.net.xpc.IframePollingTransport.TIME_SHORT_POLL_AFTER_ACTIVITY_ =
+<a name="line739"></a>    1000;
+<a name="line740"></a>
+<a name="line741"></a>
+<a name="line742"></a>/**
+<a name="line743"></a> * Polls all receivers.
+<a name="line744"></a> * @private
+<a name="line745"></a> */
+<a name="line746"></a>goog.net.xpc.IframePollingTransport.receive_ = function() {
+<a name="line747"></a>  var receivers = goog.net.xpc.IframePollingTransport.receivers_;
+<a name="line748"></a>  var receiver;
+<a name="line749"></a>  var rcvd = false;
+<a name="line750"></a>
+<a name="line751"></a>  /** @preserveTry */
+<a name="line752"></a>  try {
+<a name="line753"></a>    for (var i = 0; receiver = receivers[i]; i++) {
+<a name="line754"></a>      rcvd = rcvd || receiver.receive();
+<a name="line755"></a>    }
+<a name="line756"></a>  } catch (e) {
+<a name="line757"></a>    goog.log.info(goog.net.xpc.logger, &#39;receive_() failed: &#39; + e);
+<a name="line758"></a>
+<a name="line759"></a>    // Notify the channel that the transport had an error.
+<a name="line760"></a>    receiver.transport_.channel_.notifyTransportError();
+<a name="line761"></a>
+<a name="line762"></a>    // notifyTransportError() closes the channel and disposes the transport.
+<a name="line763"></a>    // If there are no other channels present, this.receivers_ will now be empty
+<a name="line764"></a>    // and there is no need to keep polling.
+<a name="line765"></a>    if (!receivers.length) {
+<a name="line766"></a>      return;
+<a name="line767"></a>    }
+<a name="line768"></a>  }
+<a name="line769"></a>
+<a name="line770"></a>  var now = goog.now();
+<a name="line771"></a>  if (rcvd) {
+<a name="line772"></a>    goog.net.xpc.IframePollingTransport.lastActivity_ = now;
+<a name="line773"></a>  }
+<a name="line774"></a>
+<a name="line775"></a>  // Schedule next check.
+<a name="line776"></a>  var t = now - goog.net.xpc.IframePollingTransport.lastActivity_ &lt;
+<a name="line777"></a>      goog.net.xpc.IframePollingTransport.TIME_SHORT_POLL_AFTER_ACTIVITY_ ?
+<a name="line778"></a>      goog.net.xpc.IframePollingTransport.TIME_POLL_SHORT_ :
+<a name="line779"></a>      goog.net.xpc.IframePollingTransport.TIME_POLL_LONG_;
+<a name="line780"></a>  goog.net.xpc.IframePollingTransport.rcvTimer_ = window.setTimeout(
+<a name="line781"></a>      goog.net.xpc.IframePollingTransport.receiveCb_, t);
+<a name="line782"></a>};
+<a name="line783"></a>
+<a name="line784"></a>
+<a name="line785"></a>/**
+<a name="line786"></a> * Callback that wraps receive_ to be used in timers.
+<a name="line787"></a> * @type {Function}
+<a name="line788"></a> * @private
+<a name="line789"></a> */
+<a name="line790"></a>goog.net.xpc.IframePollingTransport.receiveCb_ = goog.bind(
+<a name="line791"></a>    goog.net.xpc.IframePollingTransport.receive_,
+<a name="line792"></a>    goog.net.xpc.IframePollingTransport);
+<a name="line793"></a>
+<a name="line794"></a>
+<a name="line795"></a>/**
+<a name="line796"></a> * Starts the polling loop.
+<a name="line797"></a> * @private
+<a name="line798"></a> */
+<a name="line799"></a>goog.net.xpc.IframePollingTransport.startRcvTimer_ = function() {
+<a name="line800"></a>  goog.log.fine(goog.net.xpc.logger, &#39;starting receive-timer&#39;);
+<a name="line801"></a>  goog.net.xpc.IframePollingTransport.lastActivity_ = goog.now();
+<a name="line802"></a>  if (goog.net.xpc.IframePollingTransport.rcvTimer_) {
+<a name="line803"></a>    window.clearTimeout(goog.net.xpc.IframePollingTransport.rcvTimer_);
+<a name="line804"></a>  }
+<a name="line805"></a>  goog.net.xpc.IframePollingTransport.rcvTimer_ = window.setTimeout(
+<a name="line806"></a>      goog.net.xpc.IframePollingTransport.receiveCb_,
+<a name="line807"></a>      goog.net.xpc.IframePollingTransport.TIME_POLL_SHORT_);
+<a name="line808"></a>};
+<a name="line809"></a>
+<a name="line810"></a>
+<a name="line811"></a>
+<a name="line812"></a>/**
+<a name="line813"></a> * goog.net.xpc.IframePollingTransport.Sender
+<a name="line814"></a> *
+<a name="line815"></a> * Utility class to send message-parts to a document from a different origin.
+<a name="line816"></a> *
+<a name="line817"></a> * @constructor
+<a name="line818"></a> * @param {string} url The url the other document will use for polling.
+<a name="line819"></a> * @param {Object} windowObj The frame used for sending information to.
+<a name="line820"></a> * @final
+<a name="line821"></a> */
+<a name="line822"></a>goog.net.xpc.IframePollingTransport.Sender = function(url, windowObj) {
+<a name="line823"></a>  /**
+<a name="line824"></a>   * The URI used to sending messages.
+<a name="line825"></a>   * @type {string}
+<a name="line826"></a>   * @private
+<a name="line827"></a>   */
+<a name="line828"></a>  this.sendUri_ = url;
+<a name="line829"></a>
+<a name="line830"></a>  /**
+<a name="line831"></a>   * The window object of the iframe used to send messages.
+<a name="line832"></a>   * The script instantiating the Sender won&#39;t have access to
+<a name="line833"></a>   * the content of sendFrame_.
+<a name="line834"></a>   * @type {Object}
+<a name="line835"></a>   * @private
+<a name="line836"></a>   */
+<a name="line837"></a>  this.sendFrame_ = windowObj;
+<a name="line838"></a>
+<a name="line839"></a>  /**
+<a name="line840"></a>   * Cycle counter (used to make sure that sending two identical messages sent
+<a name="line841"></a>   * in direct succession can be recognized as such by the receiver).
+<a name="line842"></a>   * @type {number}
+<a name="line843"></a>   * @private
+<a name="line844"></a>   */
+<a name="line845"></a>  this.cycle_ = 0;
+<a name="line846"></a>};
+<a name="line847"></a>
+<a name="line848"></a>
+<a name="line849"></a>/**
+<a name="line850"></a> * Sends a message-part (frame) to the peer.
+<a name="line851"></a> * The message-part is encoded and put in the fragment identifier
+<a name="line852"></a> * of the URL used for sending (and belongs to the origin/domain of the peer).
+<a name="line853"></a> * @param {string} payload The message to send.
+<a name="line854"></a> */
+<a name="line855"></a>goog.net.xpc.IframePollingTransport.Sender.prototype.send = function(payload) {
+<a name="line856"></a>  this.cycle_ = ++this.cycle_ % 2;
+<a name="line857"></a>
+<a name="line858"></a>  var url = this.sendUri_ + &#39;#&#39; + this.cycle_ + encodeURIComponent(payload);
+<a name="line859"></a>
+<a name="line860"></a>  // TODO(user) Find out if try/catch is still needed
+<a name="line861"></a>  /** @preserveTry */
+<a name="line862"></a>  try {
+<a name="line863"></a>    // safari doesn&#39;t allow to call location.replace()
+<a name="line864"></a>    if (goog.userAgent.WEBKIT) {
+<a name="line865"></a>      this.sendFrame_.location.href = url;
+<a name="line866"></a>    } else {
+<a name="line867"></a>      this.sendFrame_.location.replace(url);
+<a name="line868"></a>    }
+<a name="line869"></a>  } catch (e) {
+<a name="line870"></a>    goog.log.error(goog.net.xpc.logger, &#39;sending failed&#39;, e);
+<a name="line871"></a>  }
+<a name="line872"></a>
+<a name="line873"></a>  // Restart receiver timer on short polling interval, to support use-cases
+<a name="line874"></a>  // where we need to capture responses quickly.
+<a name="line875"></a>  goog.net.xpc.IframePollingTransport.startRcvTimer_();
+<a name="line876"></a>};
+<a name="line877"></a>
+<a name="line878"></a>
+<a name="line879"></a>
+<a name="line880"></a>/**
+<a name="line881"></a> * goog.net.xpc.IframePollingTransport.Receiver
+<a name="line882"></a> *
+<a name="line883"></a> * @constructor
+<a name="line884"></a> * @param {goog.net.xpc.IframePollingTransport} transport The transport to
+<a name="line885"></a> *     receive from.
+<a name="line886"></a> * @param {Object} windowObj The window-object to poll for location-changes.
+<a name="line887"></a> * @param {Function} callback The callback-function to be called when
+<a name="line888"></a> *     location has changed.
+<a name="line889"></a> * @final
+<a name="line890"></a> */
+<a name="line891"></a>goog.net.xpc.IframePollingTransport.Receiver = function(transport,
+<a name="line892"></a>                                                        windowObj,
+<a name="line893"></a>                                                        callback) {
+<a name="line894"></a>  /**
+<a name="line895"></a>   * The transport to receive from.
+<a name="line896"></a>   * @type {goog.net.xpc.IframePollingTransport}
+<a name="line897"></a>   * @private
+<a name="line898"></a>   */
+<a name="line899"></a>  this.transport_ = transport;
+<a name="line900"></a>  this.rcvFrame_ = windowObj;
+<a name="line901"></a>
+<a name="line902"></a>  this.cb_ = callback;
+<a name="line903"></a>  this.currentLoc_ = this.rcvFrame_.location.href.split(&#39;#&#39;)[0] + &#39;#INITIAL&#39;;
+<a name="line904"></a>
+<a name="line905"></a>  goog.net.xpc.IframePollingTransport.receivers_.push(this);
+<a name="line906"></a>  goog.net.xpc.IframePollingTransport.startRcvTimer_();
+<a name="line907"></a>};
+<a name="line908"></a>
+<a name="line909"></a>
+<a name="line910"></a>/**
+<a name="line911"></a> * Polls the location of the receiver-frame for changes.
+<a name="line912"></a> * @return {boolean} Whether a change has been detected.
+<a name="line913"></a> */
+<a name="line914"></a>goog.net.xpc.IframePollingTransport.Receiver.prototype.receive = function() {
+<a name="line915"></a>  var loc = this.rcvFrame_.location.href;
+<a name="line916"></a>
+<a name="line917"></a>  if (loc != this.currentLoc_) {
+<a name="line918"></a>    this.currentLoc_ = loc;
+<a name="line919"></a>    var payload = loc.split(&#39;#&#39;)[1];
+<a name="line920"></a>    if (payload) {
+<a name="line921"></a>      payload = payload.substr(1); // discard first character (cycle)
+<a name="line922"></a>      this.cb_(decodeURIComponent(payload));
+<a name="line923"></a>    }
+<a name="line924"></a>    return true;
+<a name="line925"></a>  } else {
+<a name="line926"></a>    return false;
+<a name="line927"></a>  }
+<a name="line928"></a>};
+</pre>
+
+
+</body>
+</html>

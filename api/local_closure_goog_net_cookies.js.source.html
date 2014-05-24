@@ -1,0 +1,422 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>cookies.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_cookies.js.html">cookies.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Functions for setting, getting and deleting cookies.
+<a name="line17"></a> *
+<a name="line18"></a> * @author arv@google.com (Erik Arvidsson)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.net.Cookies&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.net.cookies&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * A class for handling browser cookies.
+<a name="line29"></a> * @param {Document} context The context document to get/set cookies on.
+<a name="line30"></a> * @constructor
+<a name="line31"></a> * @final
+<a name="line32"></a> */
+<a name="line33"></a>goog.net.Cookies = function(context) {
+<a name="line34"></a>  /**
+<a name="line35"></a>   * The context document to get/set cookies on
+<a name="line36"></a>   * @type {Document}
+<a name="line37"></a>   * @private
+<a name="line38"></a>   */
+<a name="line39"></a>  this.document_ = context;
+<a name="line40"></a>};
+<a name="line41"></a>
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * Static constant for the size of cookies. Per the spec, there&#39;s a 4K limit
+<a name="line45"></a> * to the size of a cookie. To make sure users can&#39;t break this limit, we
+<a name="line46"></a> * should truncate long cookies at 3950 bytes, to be extra careful with dumb
+<a name="line47"></a> * browsers/proxies that interpret 4K as 4000 rather than 4096.
+<a name="line48"></a> * @type {number}
+<a name="line49"></a> */
+<a name="line50"></a>goog.net.Cookies.MAX_COOKIE_LENGTH = 3950;
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * RegExp used to split the cookies string.
+<a name="line55"></a> * @type {RegExp}
+<a name="line56"></a> * @private
+<a name="line57"></a> */
+<a name="line58"></a>goog.net.Cookies.SPLIT_RE_ = /\s*;\s*/;
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * Returns true if cookies are enabled.
+<a name="line63"></a> * @return {boolean} True if cookies are enabled.
+<a name="line64"></a> */
+<a name="line65"></a>goog.net.Cookies.prototype.isEnabled = function() {
+<a name="line66"></a>  return navigator.cookieEnabled;
+<a name="line67"></a>};
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>/**
+<a name="line71"></a> * We do not allow &#39;=&#39;, &#39;;&#39;, or white space in the name.
+<a name="line72"></a> *
+<a name="line73"></a> * NOTE: The following are allowed by this method, but should be avoided for
+<a name="line74"></a> * cookies handled by the server.
+<a name="line75"></a> * - any name starting with &#39;$&#39;
+<a name="line76"></a> * - &#39;Comment&#39;
+<a name="line77"></a> * - &#39;Domain&#39;
+<a name="line78"></a> * - &#39;Expires&#39;
+<a name="line79"></a> * - &#39;Max-Age&#39;
+<a name="line80"></a> * - &#39;Path&#39;
+<a name="line81"></a> * - &#39;Secure&#39;
+<a name="line82"></a> * - &#39;Version&#39;
+<a name="line83"></a> *
+<a name="line84"></a> * @param {string} name Cookie name.
+<a name="line85"></a> * @return {boolean} Whether name is valid.
+<a name="line86"></a> *
+<a name="line87"></a> * @see &lt;a href=&quot;http://tools.ietf.org/html/rfc2109&quot;&gt;RFC 2109&lt;/a&gt;
+<a name="line88"></a> * @see &lt;a href=&quot;http://tools.ietf.org/html/rfc2965&quot;&gt;RFC 2965&lt;/a&gt;
+<a name="line89"></a> */
+<a name="line90"></a>goog.net.Cookies.prototype.isValidName = function(name) {
+<a name="line91"></a>  return !(/[;=\s]/.test(name));
+<a name="line92"></a>};
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * We do not allow &#39;;&#39; or line break in the value.
+<a name="line97"></a> *
+<a name="line98"></a> * Spec does not mention any illegal characters, but in practice semi-colons
+<a name="line99"></a> * break parsing and line breaks truncate the name.
+<a name="line100"></a> *
+<a name="line101"></a> * @param {string} value Cookie value.
+<a name="line102"></a> * @return {boolean} Whether value is valid.
+<a name="line103"></a> *
+<a name="line104"></a> * @see &lt;a href=&quot;http://tools.ietf.org/html/rfc2109&quot;&gt;RFC 2109&lt;/a&gt;
+<a name="line105"></a> * @see &lt;a href=&quot;http://tools.ietf.org/html/rfc2965&quot;&gt;RFC 2965&lt;/a&gt;
+<a name="line106"></a> */
+<a name="line107"></a>goog.net.Cookies.prototype.isValidValue = function(value) {
+<a name="line108"></a>  return !(/[;\r\n]/.test(value));
+<a name="line109"></a>};
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * Sets a cookie.  The max_age can be -1 to set a session cookie. To remove and
+<a name="line114"></a> * expire cookies, use remove() instead.
+<a name="line115"></a> *
+<a name="line116"></a> * Neither the {@code name} nor the {@code value} are encoded in any way. It is
+<a name="line117"></a> * up to the callers of {@code get} and {@code set} (as well as all the other
+<a name="line118"></a> * methods) to handle any possible encoding and decoding.
+<a name="line119"></a> *
+<a name="line120"></a> * @throws {!Error} If the {@code name} fails #goog.net.cookies.isValidName.
+<a name="line121"></a> * @throws {!Error} If the {@code value} fails #goog.net.cookies.isValidValue.
+<a name="line122"></a> *
+<a name="line123"></a> * @param {string} name  The cookie name.
+<a name="line124"></a> * @param {string} value  The cookie value.
+<a name="line125"></a> * @param {number=} opt_maxAge  The max age in seconds (from now). Use -1 to
+<a name="line126"></a> *     set a session cookie. If not provided, the default is -1
+<a name="line127"></a> *     (i.e. set a session cookie).
+<a name="line128"></a> * @param {?string=} opt_path  The path of the cookie. If not present then this
+<a name="line129"></a> *     uses the full request path.
+<a name="line130"></a> * @param {?string=} opt_domain  The domain of the cookie, or null to not
+<a name="line131"></a> *     specify a domain attribute (browser will use the full request host name).
+<a name="line132"></a> *     If not provided, the default is null (i.e. let browser use full request
+<a name="line133"></a> *     host name).
+<a name="line134"></a> * @param {boolean=} opt_secure Whether the cookie should only be sent over
+<a name="line135"></a> *     a secure channel.
+<a name="line136"></a> */
+<a name="line137"></a>goog.net.Cookies.prototype.set = function(
+<a name="line138"></a>    name, value, opt_maxAge, opt_path, opt_domain, opt_secure) {
+<a name="line139"></a>  if (!this.isValidName(name)) {
+<a name="line140"></a>    throw Error(&#39;Invalid cookie name &quot;&#39; + name + &#39;&quot;&#39;);
+<a name="line141"></a>  }
+<a name="line142"></a>  if (!this.isValidValue(value)) {
+<a name="line143"></a>    throw Error(&#39;Invalid cookie value &quot;&#39; + value + &#39;&quot;&#39;);
+<a name="line144"></a>  }
+<a name="line145"></a>
+<a name="line146"></a>  if (!goog.isDef(opt_maxAge)) {
+<a name="line147"></a>    opt_maxAge = -1;
+<a name="line148"></a>  }
+<a name="line149"></a>
+<a name="line150"></a>  var domainStr = opt_domain ? &#39;;domain=&#39; + opt_domain : &#39;&#39;;
+<a name="line151"></a>  var pathStr = opt_path ? &#39;;path=&#39; + opt_path : &#39;&#39;;
+<a name="line152"></a>  var secureStr = opt_secure ? &#39;;secure&#39; : &#39;&#39;;
+<a name="line153"></a>
+<a name="line154"></a>  var expiresStr;
+<a name="line155"></a>
+<a name="line156"></a>  // Case 1: Set a session cookie.
+<a name="line157"></a>  if (opt_maxAge &lt; 0) {
+<a name="line158"></a>    expiresStr = &#39;&#39;;
+<a name="line159"></a>
+<a name="line160"></a>  // Case 2: Remove the cookie.
+<a name="line161"></a>  // Note: We don&#39;t tell people about this option in the function doc because
+<a name="line162"></a>  // we prefer people to use remove() to remove cookies.
+<a name="line163"></a>  } else if (opt_maxAge == 0) {
+<a name="line164"></a>    // Note: Don&#39;t use Jan 1, 1970 for date because NS 4.76 will try to convert
+<a name="line165"></a>    // it to local time, and if the local time is before Jan 1, 1970, then the
+<a name="line166"></a>    // browser will ignore the Expires attribute altogether.
+<a name="line167"></a>    var pastDate = new Date(1970, 1 /*Feb*/, 1);  // Feb 1, 1970
+<a name="line168"></a>    expiresStr = &#39;;expires=&#39; + pastDate.toUTCString();
+<a name="line169"></a>
+<a name="line170"></a>  // Case 3: Set a persistent cookie.
+<a name="line171"></a>  } else {
+<a name="line172"></a>    var futureDate = new Date(goog.now() + opt_maxAge * 1000);
+<a name="line173"></a>    expiresStr = &#39;;expires=&#39; + futureDate.toUTCString();
+<a name="line174"></a>  }
+<a name="line175"></a>
+<a name="line176"></a>  this.setCookie_(name + &#39;=&#39; + value + domainStr + pathStr +
+<a name="line177"></a>                  expiresStr + secureStr);
+<a name="line178"></a>};
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Returns the value for the first cookie with the given name.
+<a name="line183"></a> * @param {string} name  The name of the cookie to get.
+<a name="line184"></a> * @param {string=} opt_default  If not found this is returned instead.
+<a name="line185"></a> * @return {string|undefined}  The value of the cookie. If no cookie is set this
+<a name="line186"></a> *     returns opt_default or undefined if opt_default is not provided.
+<a name="line187"></a> */
+<a name="line188"></a>goog.net.Cookies.prototype.get = function(name, opt_default) {
+<a name="line189"></a>  var nameEq = name + &#39;=&#39;;
+<a name="line190"></a>  var parts = this.getParts_();
+<a name="line191"></a>  for (var i = 0, part; part = parts[i]; i++) {
+<a name="line192"></a>    // startsWith
+<a name="line193"></a>    if (part.lastIndexOf(nameEq, 0) == 0) {
+<a name="line194"></a>      return part.substr(nameEq.length);
+<a name="line195"></a>    }
+<a name="line196"></a>    if (part == name) {
+<a name="line197"></a>      return &#39;&#39;;
+<a name="line198"></a>    }
+<a name="line199"></a>  }
+<a name="line200"></a>  return opt_default;
+<a name="line201"></a>};
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Removes and expires a cookie.
+<a name="line206"></a> * @param {string} name  The cookie name.
+<a name="line207"></a> * @param {string=} opt_path  The path of the cookie, or null to expire a cookie
+<a name="line208"></a> *     set at the full request path. If not provided, the default is &#39;/&#39;
+<a name="line209"></a> *     (i.e. path=/).
+<a name="line210"></a> * @param {string=} opt_domain  The domain of the cookie, or null to expire a
+<a name="line211"></a> *     cookie set at the full request host name. If not provided, the default is
+<a name="line212"></a> *     null (i.e. cookie at full request host name).
+<a name="line213"></a> * @return {boolean} Whether the cookie existed before it was removed.
+<a name="line214"></a> */
+<a name="line215"></a>goog.net.Cookies.prototype.remove = function(name, opt_path, opt_domain) {
+<a name="line216"></a>  var rv = this.containsKey(name);
+<a name="line217"></a>  this.set(name, &#39;&#39;, 0, opt_path, opt_domain);
+<a name="line218"></a>  return rv;
+<a name="line219"></a>};
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * Gets the names for all the cookies.
+<a name="line224"></a> * @return {Array.&lt;string&gt;} An array with the names of the cookies.
+<a name="line225"></a> */
+<a name="line226"></a>goog.net.Cookies.prototype.getKeys = function() {
+<a name="line227"></a>  return this.getKeyValues_().keys;
+<a name="line228"></a>};
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Gets the values for all the cookies.
+<a name="line233"></a> * @return {Array.&lt;string&gt;} An array with the values of the cookies.
+<a name="line234"></a> */
+<a name="line235"></a>goog.net.Cookies.prototype.getValues = function() {
+<a name="line236"></a>  return this.getKeyValues_().values;
+<a name="line237"></a>};
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * @return {boolean} Whether there are any cookies for this document.
+<a name="line242"></a> */
+<a name="line243"></a>goog.net.Cookies.prototype.isEmpty = function() {
+<a name="line244"></a>  return !this.getCookie_();
+<a name="line245"></a>};
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>/**
+<a name="line249"></a> * @return {number} The number of cookies for this document.
+<a name="line250"></a> */
+<a name="line251"></a>goog.net.Cookies.prototype.getCount = function() {
+<a name="line252"></a>  var cookie = this.getCookie_();
+<a name="line253"></a>  if (!cookie) {
+<a name="line254"></a>    return 0;
+<a name="line255"></a>  }
+<a name="line256"></a>  return this.getParts_().length;
+<a name="line257"></a>};
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/**
+<a name="line261"></a> * Returns whether there is a cookie with the given name.
+<a name="line262"></a> * @param {string} key The name of the cookie to test for.
+<a name="line263"></a> * @return {boolean} Whether there is a cookie by that name.
+<a name="line264"></a> */
+<a name="line265"></a>goog.net.Cookies.prototype.containsKey = function(key) {
+<a name="line266"></a>  // substring will return empty string if the key is not found, so the get
+<a name="line267"></a>  // function will only return undefined
+<a name="line268"></a>  return goog.isDef(this.get(key));
+<a name="line269"></a>};
+<a name="line270"></a>
+<a name="line271"></a>
+<a name="line272"></a>/**
+<a name="line273"></a> * Returns whether there is a cookie with the given value. (This is an O(n)
+<a name="line274"></a> * operation.)
+<a name="line275"></a> * @param {string} value  The value to check for.
+<a name="line276"></a> * @return {boolean} Whether there is a cookie with that value.
+<a name="line277"></a> */
+<a name="line278"></a>goog.net.Cookies.prototype.containsValue = function(value) {
+<a name="line279"></a>  // this O(n) in any case so lets do the trivial thing.
+<a name="line280"></a>  var values = this.getKeyValues_().values;
+<a name="line281"></a>  for (var i = 0; i &lt; values.length; i++) {
+<a name="line282"></a>    if (values[i] == value) {
+<a name="line283"></a>      return true;
+<a name="line284"></a>    }
+<a name="line285"></a>  }
+<a name="line286"></a>  return false;
+<a name="line287"></a>};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * Removes all cookies for this document.  Note that this will only remove
+<a name="line292"></a> * cookies from the current path and domain.  If there are cookies set using a
+<a name="line293"></a> * subpath and/or another domain these will still be there.
+<a name="line294"></a> */
+<a name="line295"></a>goog.net.Cookies.prototype.clear = function() {
+<a name="line296"></a>  var keys = this.getKeyValues_().keys;
+<a name="line297"></a>  for (var i = keys.length - 1; i &gt;= 0; i--) {
+<a name="line298"></a>    this.remove(keys[i]);
+<a name="line299"></a>  }
+<a name="line300"></a>};
+<a name="line301"></a>
+<a name="line302"></a>
+<a name="line303"></a>/**
+<a name="line304"></a> * Private helper function to allow testing cookies without depending on the
+<a name="line305"></a> * browser.
+<a name="line306"></a> * @param {string} s The cookie string to set.
+<a name="line307"></a> * @private
+<a name="line308"></a> */
+<a name="line309"></a>goog.net.Cookies.prototype.setCookie_ = function(s) {
+<a name="line310"></a>  this.document_.cookie = s;
+<a name="line311"></a>};
+<a name="line312"></a>
+<a name="line313"></a>
+<a name="line314"></a>/**
+<a name="line315"></a> * Private helper function to allow testing cookies without depending on the
+<a name="line316"></a> * browser. IE6 can return null here.
+<a name="line317"></a> * @return {string} Returns the {@code document.cookie}.
+<a name="line318"></a> * @private
+<a name="line319"></a> */
+<a name="line320"></a>goog.net.Cookies.prototype.getCookie_ = function() {
+<a name="line321"></a>  return this.document_.cookie;
+<a name="line322"></a>};
+<a name="line323"></a>
+<a name="line324"></a>
+<a name="line325"></a>/**
+<a name="line326"></a> * @return {!Array.&lt;string&gt;} The cookie split on semi colons.
+<a name="line327"></a> * @private
+<a name="line328"></a> */
+<a name="line329"></a>goog.net.Cookies.prototype.getParts_ = function() {
+<a name="line330"></a>  return (this.getCookie_() || &#39;&#39;).
+<a name="line331"></a>      split(goog.net.Cookies.SPLIT_RE_);
+<a name="line332"></a>};
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * Gets the names and values for all the cookies.
+<a name="line337"></a> * @return {!Object} An object with keys and values.
+<a name="line338"></a> * @private
+<a name="line339"></a> */
+<a name="line340"></a>goog.net.Cookies.prototype.getKeyValues_ = function() {
+<a name="line341"></a>  var parts = this.getParts_();
+<a name="line342"></a>  var keys = [], values = [], index, part;
+<a name="line343"></a>  for (var i = 0; part = parts[i]; i++) {
+<a name="line344"></a>    index = part.indexOf(&#39;=&#39;);
+<a name="line345"></a>
+<a name="line346"></a>    if (index == -1) { // empty name
+<a name="line347"></a>      keys.push(&#39;&#39;);
+<a name="line348"></a>      values.push(part);
+<a name="line349"></a>    } else {
+<a name="line350"></a>      keys.push(part.substring(0, index));
+<a name="line351"></a>      values.push(part.substring(index + 1));
+<a name="line352"></a>    }
+<a name="line353"></a>  }
+<a name="line354"></a>  return {keys: keys, values: values};
+<a name="line355"></a>};
+<a name="line356"></a>
+<a name="line357"></a>
+<a name="line358"></a>/**
+<a name="line359"></a> * A static default instance.
+<a name="line360"></a> * @type {goog.net.Cookies}
+<a name="line361"></a> */
+<a name="line362"></a>goog.net.cookies = new goog.net.Cookies(document);
+<a name="line363"></a>
+<a name="line364"></a>
+<a name="line365"></a>/**
+<a name="line366"></a> * Define the constant on the instance in order not to break many references to
+<a name="line367"></a> * it.
+<a name="line368"></a> * @type {number}
+<a name="line369"></a> * @deprecated Use goog.net.Cookies.MAX_COOKIE_LENGTH instead.
+<a name="line370"></a> */
+<a name="line371"></a>goog.net.cookies.MAX_COOKIE_LENGTH = goog.net.Cookies.MAX_COOKIE_LENGTH;
+</pre>
+
+
+</body>
+</html>

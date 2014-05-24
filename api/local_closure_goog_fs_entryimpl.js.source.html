@@ -1,0 +1,452 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>entryimpl.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_fs_entryimpl.js.html">entryimpl.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Concrete implementations of the
+<a name="line17"></a> *     goog.fs.DirectoryEntry, and goog.fs.FileEntry interfaces.
+<a name="line18"></a> */
+<a name="line19"></a>goog.provide(&#39;goog.fs.DirectoryEntryImpl&#39;);
+<a name="line20"></a>goog.provide(&#39;goog.fs.EntryImpl&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.fs.FileEntryImpl&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.array&#39;);
+<a name="line24"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line25"></a>goog.require(&#39;goog.fs.DirectoryEntry&#39;);
+<a name="line26"></a>goog.require(&#39;goog.fs.Entry&#39;);
+<a name="line27"></a>goog.require(&#39;goog.fs.Error&#39;);
+<a name="line28"></a>goog.require(&#39;goog.fs.FileEntry&#39;);
+<a name="line29"></a>goog.require(&#39;goog.fs.FileWriter&#39;);
+<a name="line30"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line31"></a>goog.require(&#39;goog.string&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Base class for concrete implementations of goog.fs.Entry.
+<a name="line37"></a> * @param {!goog.fs.FileSystem} fs The wrapped filesystem.
+<a name="line38"></a> * @param {!Entry} entry The underlying Entry object.
+<a name="line39"></a> * @constructor
+<a name="line40"></a> * @implements {goog.fs.Entry}
+<a name="line41"></a> */
+<a name="line42"></a>goog.fs.EntryImpl = function(fs, entry) {
+<a name="line43"></a>  /**
+<a name="line44"></a>   * The wrapped filesystem.
+<a name="line45"></a>   *
+<a name="line46"></a>   * @type {!goog.fs.FileSystem}
+<a name="line47"></a>   * @private
+<a name="line48"></a>   */
+<a name="line49"></a>  this.fs_ = fs;
+<a name="line50"></a>
+<a name="line51"></a>  /**
+<a name="line52"></a>   * The underlying Entry object.
+<a name="line53"></a>   *
+<a name="line54"></a>   * @type {!Entry}
+<a name="line55"></a>   * @private
+<a name="line56"></a>   */
+<a name="line57"></a>  this.entry_ = entry;
+<a name="line58"></a>};
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/** @override */
+<a name="line62"></a>goog.fs.EntryImpl.prototype.isFile = function() {
+<a name="line63"></a>  return this.entry_.isFile;
+<a name="line64"></a>};
+<a name="line65"></a>
+<a name="line66"></a>
+<a name="line67"></a>/** @override */
+<a name="line68"></a>goog.fs.EntryImpl.prototype.isDirectory = function() {
+<a name="line69"></a>  return this.entry_.isDirectory;
+<a name="line70"></a>};
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/** @override */
+<a name="line74"></a>goog.fs.EntryImpl.prototype.getName = function() {
+<a name="line75"></a>  return this.entry_.name;
+<a name="line76"></a>};
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/** @override */
+<a name="line80"></a>goog.fs.EntryImpl.prototype.getFullPath = function() {
+<a name="line81"></a>  return this.entry_.fullPath;
+<a name="line82"></a>};
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>/** @override */
+<a name="line86"></a>goog.fs.EntryImpl.prototype.getFileSystem = function() {
+<a name="line87"></a>  return this.fs_;
+<a name="line88"></a>};
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/** @override */
+<a name="line92"></a>goog.fs.EntryImpl.prototype.getLastModified = function() {
+<a name="line93"></a>  return this.getMetadata().addCallback(function(metadata) {
+<a name="line94"></a>    return metadata.modificationTime;
+<a name="line95"></a>  });
+<a name="line96"></a>};
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/** @override */
+<a name="line100"></a>goog.fs.EntryImpl.prototype.getMetadata = function() {
+<a name="line101"></a>  var d = new goog.async.Deferred();
+<a name="line102"></a>
+<a name="line103"></a>  this.entry_.getMetadata(
+<a name="line104"></a>      function(metadata) { d.callback(metadata); },
+<a name="line105"></a>      goog.bind(function(err) {
+<a name="line106"></a>        var msg = &#39;retrieving metadata for &#39; + this.getFullPath();
+<a name="line107"></a>        d.errback(new goog.fs.Error(err, msg));
+<a name="line108"></a>      }, this));
+<a name="line109"></a>  return d;
+<a name="line110"></a>};
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/** @override */
+<a name="line114"></a>goog.fs.EntryImpl.prototype.moveTo = function(parent, opt_newName) {
+<a name="line115"></a>  var d = new goog.async.Deferred();
+<a name="line116"></a>  this.entry_.moveTo(
+<a name="line117"></a>      parent.dir_, opt_newName,
+<a name="line118"></a>      goog.bind(function(entry) { d.callback(this.wrapEntry(entry)); }, this),
+<a name="line119"></a>      goog.bind(function(err) {
+<a name="line120"></a>        var msg = &#39;moving &#39; + this.getFullPath() + &#39; into &#39; +
+<a name="line121"></a>            parent.getFullPath() +
+<a name="line122"></a>            (opt_newName ? &#39;, renaming to &#39; + opt_newName : &#39;&#39;);
+<a name="line123"></a>        d.errback(new goog.fs.Error(err, msg));
+<a name="line124"></a>      }, this));
+<a name="line125"></a>  return d;
+<a name="line126"></a>};
+<a name="line127"></a>
+<a name="line128"></a>
+<a name="line129"></a>/** @override */
+<a name="line130"></a>goog.fs.EntryImpl.prototype.copyTo = function(parent, opt_newName) {
+<a name="line131"></a>  var d = new goog.async.Deferred();
+<a name="line132"></a>  this.entry_.copyTo(
+<a name="line133"></a>      parent.dir_, opt_newName,
+<a name="line134"></a>      goog.bind(function(entry) { d.callback(this.wrapEntry(entry)); }, this),
+<a name="line135"></a>      goog.bind(function(err) {
+<a name="line136"></a>        var msg = &#39;copying &#39; + this.getFullPath() + &#39; into &#39; +
+<a name="line137"></a>            parent.getFullPath() +
+<a name="line138"></a>            (opt_newName ? &#39;, renaming to &#39; + opt_newName : &#39;&#39;);
+<a name="line139"></a>        d.errback(new goog.fs.Error(err, msg));
+<a name="line140"></a>      }, this));
+<a name="line141"></a>  return d;
+<a name="line142"></a>};
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/** @override */
+<a name="line146"></a>goog.fs.EntryImpl.prototype.wrapEntry = function(entry) {
+<a name="line147"></a>  return entry.isFile ?
+<a name="line148"></a>      new goog.fs.FileEntryImpl(this.fs_, /** @type {!FileEntry} */ (entry)) :
+<a name="line149"></a>      new goog.fs.DirectoryEntryImpl(
+<a name="line150"></a>          this.fs_, /** @type {!DirectoryEntry} */ (entry));
+<a name="line151"></a>};
+<a name="line152"></a>
+<a name="line153"></a>
+<a name="line154"></a>/** @override */
+<a name="line155"></a>goog.fs.EntryImpl.prototype.toUrl = function(opt_mimeType) {
+<a name="line156"></a>  return this.entry_.toURL(opt_mimeType);
+<a name="line157"></a>};
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/** @override */
+<a name="line161"></a>goog.fs.EntryImpl.prototype.toUri = goog.fs.EntryImpl.prototype.toUrl;
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>/** @override */
+<a name="line165"></a>goog.fs.EntryImpl.prototype.remove = function() {
+<a name="line166"></a>  var d = new goog.async.Deferred();
+<a name="line167"></a>  this.entry_.remove(
+<a name="line168"></a>      goog.bind(d.callback, d, true /* result */),
+<a name="line169"></a>      goog.bind(function(err) {
+<a name="line170"></a>        var msg = &#39;removing &#39; + this.getFullPath();
+<a name="line171"></a>        d.errback(new goog.fs.Error(err, msg));
+<a name="line172"></a>      }, this));
+<a name="line173"></a>  return d;
+<a name="line174"></a>};
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/** @override */
+<a name="line178"></a>goog.fs.EntryImpl.prototype.getParent = function() {
+<a name="line179"></a>  var d = new goog.async.Deferred();
+<a name="line180"></a>  this.entry_.getParent(
+<a name="line181"></a>      goog.bind(function(parent) {
+<a name="line182"></a>        d.callback(new goog.fs.DirectoryEntryImpl(this.fs_, parent));
+<a name="line183"></a>      }, this),
+<a name="line184"></a>      goog.bind(function(err) {
+<a name="line185"></a>        var msg = &#39;getting parent of &#39; + this.getFullPath();
+<a name="line186"></a>        d.errback(new goog.fs.Error(err, msg));
+<a name="line187"></a>      }, this));
+<a name="line188"></a>  return d;
+<a name="line189"></a>};
+<a name="line190"></a>
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * A directory in a local FileSystem.
+<a name="line195"></a> *
+<a name="line196"></a> * This should not be instantiated directly. Instead, it should be accessed via
+<a name="line197"></a> * {@link goog.fs.FileSystem#getRoot} or
+<a name="line198"></a> * {@link goog.fs.DirectoryEntry#getDirectoryEntry}.
+<a name="line199"></a> *
+<a name="line200"></a> * @param {!goog.fs.FileSystem} fs The wrapped filesystem.
+<a name="line201"></a> * @param {!DirectoryEntry} dir The underlying DirectoryEntry object.
+<a name="line202"></a> * @constructor
+<a name="line203"></a> * @extends {goog.fs.EntryImpl}
+<a name="line204"></a> * @implements {goog.fs.DirectoryEntry}
+<a name="line205"></a> * @final
+<a name="line206"></a> */
+<a name="line207"></a>goog.fs.DirectoryEntryImpl = function(fs, dir) {
+<a name="line208"></a>  goog.fs.DirectoryEntryImpl.base(this, &#39;constructor&#39;, fs, dir);
+<a name="line209"></a>
+<a name="line210"></a>  /**
+<a name="line211"></a>   * The underlying DirectoryEntry object.
+<a name="line212"></a>   *
+<a name="line213"></a>   * @type {!DirectoryEntry}
+<a name="line214"></a>   * @private
+<a name="line215"></a>   */
+<a name="line216"></a>  this.dir_ = dir;
+<a name="line217"></a>};
+<a name="line218"></a>goog.inherits(goog.fs.DirectoryEntryImpl, goog.fs.EntryImpl);
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/** @override */
+<a name="line222"></a>goog.fs.DirectoryEntryImpl.prototype.getFile = function(path, opt_behavior) {
+<a name="line223"></a>  var d = new goog.async.Deferred();
+<a name="line224"></a>  this.dir_.getFile(
+<a name="line225"></a>      path, this.getOptions_(opt_behavior),
+<a name="line226"></a>      goog.bind(function(entry) {
+<a name="line227"></a>        d.callback(new goog.fs.FileEntryImpl(this.fs_, entry));
+<a name="line228"></a>      }, this),
+<a name="line229"></a>      goog.bind(function(err) {
+<a name="line230"></a>        var msg = &#39;loading file &#39; + path + &#39; from &#39; + this.getFullPath();
+<a name="line231"></a>        d.errback(new goog.fs.Error(err, msg));
+<a name="line232"></a>      }, this));
+<a name="line233"></a>  return d;
+<a name="line234"></a>};
+<a name="line235"></a>
+<a name="line236"></a>
+<a name="line237"></a>/** @override */
+<a name="line238"></a>goog.fs.DirectoryEntryImpl.prototype.getDirectory =
+<a name="line239"></a>    function(path, opt_behavior) {
+<a name="line240"></a>  var d = new goog.async.Deferred();
+<a name="line241"></a>  this.dir_.getDirectory(
+<a name="line242"></a>      path, this.getOptions_(opt_behavior),
+<a name="line243"></a>      goog.bind(function(entry) {
+<a name="line244"></a>        d.callback(new goog.fs.DirectoryEntryImpl(this.fs_, entry));
+<a name="line245"></a>      }, this),
+<a name="line246"></a>      goog.bind(function(err) {
+<a name="line247"></a>        var msg = &#39;loading directory &#39; + path + &#39; from &#39; + this.getFullPath();
+<a name="line248"></a>        d.errback(new goog.fs.Error(err, msg));
+<a name="line249"></a>      }, this));
+<a name="line250"></a>  return d;
+<a name="line251"></a>};
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>/** @override */
+<a name="line255"></a>goog.fs.DirectoryEntryImpl.prototype.createPath = function(path) {
+<a name="line256"></a>  // If the path begins at the root, reinvoke createPath on the root directory.
+<a name="line257"></a>  if (goog.string.startsWith(path, &#39;/&#39;)) {
+<a name="line258"></a>    var root = this.getFileSystem().getRoot();
+<a name="line259"></a>    if (this.getFullPath() != root.getFullPath()) {
+<a name="line260"></a>      return root.createPath(path);
+<a name="line261"></a>    }
+<a name="line262"></a>  }
+<a name="line263"></a>
+<a name="line264"></a>  // Filter out any empty path components caused by &#39;//&#39; or a leading slash.
+<a name="line265"></a>  var parts = goog.array.filter(path.split(&#39;/&#39;), goog.functions.identity);
+<a name="line266"></a>  var existed = [];
+<a name="line267"></a>
+<a name="line268"></a>  function getNextDirectory(dir) {
+<a name="line269"></a>    if (!parts.length) {
+<a name="line270"></a>      return goog.async.Deferred.succeed(dir);
+<a name="line271"></a>    }
+<a name="line272"></a>
+<a name="line273"></a>    var def;
+<a name="line274"></a>    var nextDir = parts.shift();
+<a name="line275"></a>
+<a name="line276"></a>    if (nextDir == &#39;..&#39;) {
+<a name="line277"></a>      def = dir.getParent();
+<a name="line278"></a>    } else if (nextDir == &#39;.&#39;) {
+<a name="line279"></a>      def = goog.async.Deferred.succeed(dir);
+<a name="line280"></a>    } else {
+<a name="line281"></a>      def = dir.getDirectory(nextDir, goog.fs.DirectoryEntry.Behavior.CREATE);
+<a name="line282"></a>    }
+<a name="line283"></a>    return def.addCallback(getNextDirectory);
+<a name="line284"></a>  }
+<a name="line285"></a>
+<a name="line286"></a>  return getNextDirectory(this);
+<a name="line287"></a>};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/** @override */
+<a name="line291"></a>goog.fs.DirectoryEntryImpl.prototype.listDirectory = function() {
+<a name="line292"></a>  var d = new goog.async.Deferred();
+<a name="line293"></a>  var reader = this.dir_.createReader();
+<a name="line294"></a>  var results = [];
+<a name="line295"></a>
+<a name="line296"></a>  var errorCallback = goog.bind(function(err) {
+<a name="line297"></a>    var msg = &#39;listing directory &#39; + this.getFullPath();
+<a name="line298"></a>    d.errback(new goog.fs.Error(err, msg));
+<a name="line299"></a>  }, this);
+<a name="line300"></a>
+<a name="line301"></a>  var successCallback = goog.bind(function(entries) {
+<a name="line302"></a>    if (entries.length) {
+<a name="line303"></a>      for (var i = 0, entry; entry = entries[i]; i++) {
+<a name="line304"></a>        results.push(this.wrapEntry(entry));
+<a name="line305"></a>      }
+<a name="line306"></a>      reader.readEntries(successCallback, errorCallback);
+<a name="line307"></a>    } else {
+<a name="line308"></a>      d.callback(results);
+<a name="line309"></a>    }
+<a name="line310"></a>  }, this);
+<a name="line311"></a>
+<a name="line312"></a>  reader.readEntries(successCallback, errorCallback);
+<a name="line313"></a>  return d;
+<a name="line314"></a>};
+<a name="line315"></a>
+<a name="line316"></a>
+<a name="line317"></a>/** @override */
+<a name="line318"></a>goog.fs.DirectoryEntryImpl.prototype.removeRecursively = function() {
+<a name="line319"></a>  var d = new goog.async.Deferred();
+<a name="line320"></a>  this.dir_.removeRecursively(
+<a name="line321"></a>      goog.bind(d.callback, d, true /* result */),
+<a name="line322"></a>      goog.bind(function(err) {
+<a name="line323"></a>        var msg = &#39;removing &#39; + this.getFullPath() + &#39; recursively&#39;;
+<a name="line324"></a>        d.errback(new goog.fs.Error(err, msg));
+<a name="line325"></a>      }, this));
+<a name="line326"></a>  return d;
+<a name="line327"></a>};
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Converts a value in the Behavior enum into an options object expected by the
+<a name="line332"></a> * File API.
+<a name="line333"></a> *
+<a name="line334"></a> * @param {goog.fs.DirectoryEntry.Behavior=} opt_behavior The behavior for
+<a name="line335"></a> *     existing files.
+<a name="line336"></a> * @return {!Object.&lt;boolean&gt;} The options object expected by the File API.
+<a name="line337"></a> * @private
+<a name="line338"></a> */
+<a name="line339"></a>goog.fs.DirectoryEntryImpl.prototype.getOptions_ = function(opt_behavior) {
+<a name="line340"></a>  if (opt_behavior == goog.fs.DirectoryEntry.Behavior.CREATE) {
+<a name="line341"></a>    return {&#39;create&#39;: true};
+<a name="line342"></a>  } else if (opt_behavior == goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE) {
+<a name="line343"></a>    return {&#39;create&#39;: true, &#39;exclusive&#39;: true};
+<a name="line344"></a>  } else {
+<a name="line345"></a>    return {};
+<a name="line346"></a>  }
+<a name="line347"></a>};
+<a name="line348"></a>
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>/**
+<a name="line352"></a> * A file in a local filesystem.
+<a name="line353"></a> *
+<a name="line354"></a> * This should not be instantiated directly. Instead, it should be accessed via
+<a name="line355"></a> * {@link goog.fs.DirectoryEntry#getFile}.
+<a name="line356"></a> *
+<a name="line357"></a> * @param {!goog.fs.FileSystem} fs The wrapped filesystem.
+<a name="line358"></a> * @param {!FileEntry} file The underlying FileEntry object.
+<a name="line359"></a> * @constructor
+<a name="line360"></a> * @extends {goog.fs.EntryImpl}
+<a name="line361"></a> * @implements {goog.fs.FileEntry}
+<a name="line362"></a> * @final
+<a name="line363"></a> */
+<a name="line364"></a>goog.fs.FileEntryImpl = function(fs, file) {
+<a name="line365"></a>  goog.fs.FileEntryImpl.base(this, &#39;constructor&#39;, fs, file);
+<a name="line366"></a>
+<a name="line367"></a>  /**
+<a name="line368"></a>   * The underlying FileEntry object.
+<a name="line369"></a>   *
+<a name="line370"></a>   * @type {!FileEntry}
+<a name="line371"></a>   * @private
+<a name="line372"></a>   */
+<a name="line373"></a>  this.file_ = file;
+<a name="line374"></a>};
+<a name="line375"></a>goog.inherits(goog.fs.FileEntryImpl, goog.fs.EntryImpl);
+<a name="line376"></a>
+<a name="line377"></a>
+<a name="line378"></a>/** @override */
+<a name="line379"></a>goog.fs.FileEntryImpl.prototype.createWriter = function() {
+<a name="line380"></a>  var d = new goog.async.Deferred();
+<a name="line381"></a>  this.file_.createWriter(
+<a name="line382"></a>      function(w) { d.callback(new goog.fs.FileWriter(w)); },
+<a name="line383"></a>      goog.bind(function(err) {
+<a name="line384"></a>        var msg = &#39;creating writer for &#39; + this.getFullPath();
+<a name="line385"></a>        d.errback(new goog.fs.Error(err, msg));
+<a name="line386"></a>      }, this));
+<a name="line387"></a>  return d;
+<a name="line388"></a>};
+<a name="line389"></a>
+<a name="line390"></a>
+<a name="line391"></a>/** @override */
+<a name="line392"></a>goog.fs.FileEntryImpl.prototype.file = function() {
+<a name="line393"></a>  var d = new goog.async.Deferred();
+<a name="line394"></a>  this.file_.file(
+<a name="line395"></a>      function(f) { d.callback(f); },
+<a name="line396"></a>      goog.bind(function(err) {
+<a name="line397"></a>        var msg = &#39;getting file for &#39; + this.getFullPath();
+<a name="line398"></a>        d.errback(new goog.fs.Error(err, msg));
+<a name="line399"></a>      }, this));
+<a name="line400"></a>  return d;
+<a name="line401"></a>};
+</pre>
+
+
+</body>
+</html>

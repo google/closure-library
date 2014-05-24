@@ -1,0 +1,335 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>hash32_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_crypt_hash32_test.js.html">hash32_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.crypt.hash32Test&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.crypt.hash32Test&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.crypt.hash32&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.TestCase&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>
+<a name="line22"></a>// NOTE: This test uses a custom test case, see end of script block
+<a name="line23"></a>
+<a name="line24"></a>// Test data based on known input/output pairs generated using
+<a name="line25"></a>// http://go/hash.java
+<a name="line26"></a>
+<a name="line27"></a>function testEncodeInteger() {
+<a name="line28"></a>  assertEquals(898813988, goog.crypt.hash32.encodeInteger(305419896));
+<a name="line29"></a>}
+<a name="line30"></a>
+<a name="line31"></a>function testEncodeByteArray() {
+<a name="line32"></a>  assertEquals(-1497024495,
+<a name="line33"></a>      goog.crypt.hash32.encodeByteArray([10, 20, 30, 40]));
+<a name="line34"></a>  assertEquals(-961586214,
+<a name="line35"></a>      goog.crypt.hash32.encodeByteArray([3, 1, 4, 1, 5, 9]));
+<a name="line36"></a>  assertEquals(-1482202299,
+<a name="line37"></a>      goog.crypt.hash32.encodeByteArray([127, 0, 0, 0, 123, 45]));
+<a name="line38"></a>  assertEquals(170907881,
+<a name="line39"></a>      goog.crypt.hash32.encodeByteArray([9, 1, 1]));
+<a name="line40"></a>}
+<a name="line41"></a>
+<a name="line42"></a>function testKnownByteArrays() {
+<a name="line43"></a>  for (var i = 0; i &lt; byteArrays.length; i++) {
+<a name="line44"></a>    assertEquals(byteArrays[i],
+<a name="line45"></a>        goog.crypt.hash32.encodeByteArray(createByteArray(i)));
+<a name="line46"></a>  }
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>function testEncodeString() {
+<a name="line50"></a>  assertEquals(-937588052, goog.crypt.hash32.encodeString(&#39;Hello, world&#39;));
+<a name="line51"></a>  assertEquals(62382810, goog.crypt.hash32.encodeString(&#39;Sch\xF6n&#39;));
+<a name="line52"></a>}
+<a name="line53"></a>
+<a name="line54"></a>function testEncodeStringUtf8() {
+<a name="line55"></a>  assertEquals(-937588052,
+<a name="line56"></a>      goog.crypt.hash32.encodeStringUtf8(&#39;Hello, world&#39;));
+<a name="line57"></a>  assertEquals(-833263351, goog.crypt.hash32.encodeStringUtf8(&#39;Sch\xF6n&#39;));
+<a name="line58"></a>
+<a name="line59"></a>  assertEquals(-1771620293, goog.crypt.hash32.encodeStringUtf8(
+<a name="line60"></a>      &#39;\u043A\u0440&#39;));
+<a name="line61"></a>}
+<a name="line62"></a>
+<a name="line63"></a>function testEncodeString_ascii() {
+<a name="line64"></a>  assertEquals(&#39;For ascii characters UTF8 should be the same&#39;,
+<a name="line65"></a>      goog.crypt.hash32.encodeStringUtf8(&#39;abc123&#39;),
+<a name="line66"></a>      goog.crypt.hash32.encodeString(&#39;abc123&#39;));
+<a name="line67"></a>
+<a name="line68"></a>  assertEquals(&#39;For ascii characters UTF8 should be the same&#39;,
+<a name="line69"></a>      goog.crypt.hash32.encodeStringUtf8(&#39;The,quick.brown-fox&#39;),
+<a name="line70"></a>      goog.crypt.hash32.encodeString(&#39;The,quick.brown-fox&#39;));
+<a name="line71"></a>
+<a name="line72"></a>  assertNotEquals(&#39;For non-ascii characters UTF-8 encoding is different&#39;,
+<a name="line73"></a>      goog.crypt.hash32.encodeStringUtf8(&#39;Sch\xF6n&#39;),
+<a name="line74"></a>      goog.crypt.hash32.encodeString(&#39;Sch\xF6n&#39;));
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>function testEncodeString_poe() {
+<a name="line78"></a>  var poe = &quot;Once upon a midnight dreary, while I pondered weak and weary,&quot; +
+<a name="line79"></a>      &quot;Over many a quaint and curious volume of forgotten lore,&quot; +
+<a name="line80"></a>      &quot;While I nodded, nearly napping, suddenly there came a tapping,&quot; +
+<a name="line81"></a>      &quot;As of some one gently rapping, rapping at my chamber door.&quot; +
+<a name="line82"></a>      &quot;`&#39;Tis some visitor,&#39; I muttered, `tapping at my chamber door -&quot; +
+<a name="line83"></a>      &quot;Only this, and nothing more.&#39;&quot; +
+<a name="line84"></a>      &quot;Ah, distinctly I remember it was in the bleak December,&quot; +
+<a name="line85"></a>      &quot;And each separate dying ember wrought its ghost upon the floor.&quot; +
+<a name="line86"></a>      &quot;Eagerly I wished the morrow; - vainly I had sought to borrow&quot; +
+<a name="line87"></a>      &quot;From my books surcease of sorrow - sorrow for the lost Lenore -&quot; +
+<a name="line88"></a>      &quot;For the rare and radiant maiden whom the angels named Lenore -&quot; +
+<a name="line89"></a>      &quot;Nameless here for evermore.&quot; +
+<a name="line90"></a>      &quot;And the silken sad uncertain rustling of each purple curtain&quot; +
+<a name="line91"></a>      &quot;Thrilled me - filled me with fantastic terrors never felt before;&quot; +
+<a name="line92"></a>      &quot;So that now, to still the beating of my heart, I stood repeating&quot; +
+<a name="line93"></a>      &quot;`&#39;Tis some visitor entreating entrance at my chamber door -&quot; +
+<a name="line94"></a>      &quot;Some late visitor entreating entrance at my chamber door; -&quot; +
+<a name="line95"></a>      &quot;This it is, and nothing more,&#39;&quot; +
+<a name="line96"></a>      &quot;Presently my soul grew stronger; hesitating then no longer,&quot; +
+<a name="line97"></a>      &quot;`Sir,&#39; said I, `or Madam, truly your forgiveness I implore;&quot; +
+<a name="line98"></a>      &quot;But the fact is I was napping, and so gently you came rapping,&quot; +
+<a name="line99"></a>      &quot;And so faintly you came tapping, tapping at my chamber door,&quot; +
+<a name="line100"></a>      &quot;That I scarce was sure I heard you&#39; - here I opened wide the door; -&quot; +
+<a name="line101"></a>      &quot;Darkness there, and nothing more.&quot; +
+<a name="line102"></a>      &quot;Deep into that darkness peering, long I stood there wondering, &quot; +
+<a name="line103"></a>      &quot;fearing,&quot; +
+<a name="line104"></a>      &quot;Doubting, dreaming dreams no mortal ever dared to dream before&quot; +
+<a name="line105"></a>      &quot;But the silence was unbroken, and the darkness gave no token,&quot; +
+<a name="line106"></a>      &quot;And the only word there spoken was the whispered word, `Lenore!&#39;&quot; +
+<a name="line107"></a>      &quot;This I whispered, and an echo murmured back the word, `Lenore!&#39;&quot; +
+<a name="line108"></a>      &quot;Merely this and nothing more.&quot; +
+<a name="line109"></a>      &quot;Back into the chamber turning, all my soul within me burning,&quot; +
+<a name="line110"></a>      &quot;Soon again I heard a tapping somewhat louder than before.&quot; +
+<a name="line111"></a>      &quot;`Surely,\&#39; said I, `surely that is something at my window lattice;&quot; +
+<a name="line112"></a>      &quot;Let me see then, what thereat is, and this mystery explore -&quot; +
+<a name="line113"></a>      &quot;Let my heart be still a moment and this mystery explore; -&quot; +
+<a name="line114"></a>      &quot;&#39;Tis the wind and nothing more!&#39;&quot;;
+<a name="line115"></a>
+<a name="line116"></a>  assertEquals(147608747, goog.crypt.hash32.encodeString(poe));
+<a name="line117"></a>  assertEquals(147608747, goog.crypt.hash32.encodeStringUtf8(poe));
+<a name="line118"></a>}
+<a name="line119"></a>
+<a name="line120"></a>function testBenchmarking() {
+<a name="line121"></a>  if (!testCase) return;
+<a name="line122"></a>  // Not a real test, just outputs some timing
+<a name="line123"></a>  function makeString(n) {
+<a name="line124"></a>    var str = [];
+<a name="line125"></a>    for (var i = 0; i &lt; n; i++) {
+<a name="line126"></a>      str.push(String.fromCharCode(Math.round(Math.random() * 500)));
+<a name="line127"></a>    }
+<a name="line128"></a>    return str.join(&#39;&#39;);
+<a name="line129"></a>  }
+<a name="line130"></a>  for (var i = 0; i &lt; 50000; i += 10000) {
+<a name="line131"></a>    var str = makeString(i);
+<a name="line132"></a>    var start = goog.now();
+<a name="line133"></a>    var hash = goog.crypt.hash32.encodeString(str);
+<a name="line134"></a>    var diff = goog.now() - start;
+<a name="line135"></a>    testCase.saveMessage(
+<a name="line136"></a>        &#39;testBenchmarking : hashing &#39; + i + &#39; chars in &#39; + diff + &#39;ms&#39;);
+<a name="line137"></a>  }
+<a name="line138"></a>}
+<a name="line139"></a>
+<a name="line140"></a>function createByteArray(n) {
+<a name="line141"></a>  var arr = [];
+<a name="line142"></a>  for (var i = 0; i &lt; n; i++) {
+<a name="line143"></a>    arr.push(i);
+<a name="line144"></a>  }
+<a name="line145"></a>  return arr;
+<a name="line146"></a>}
+<a name="line147"></a>
+<a name="line148"></a>var byteArrays = {
+<a name="line149"></a>  0: 1539411136,
+<a name="line150"></a>  1: 1773524747,
+<a name="line151"></a>  2: -254958930,
+<a name="line152"></a>  3: 1532114172,
+<a name="line153"></a>  4: 1923165449,
+<a name="line154"></a>  5: 1611874589,
+<a name="line155"></a>  6: 1502126780,
+<a name="line156"></a>  7: -751745251,
+<a name="line157"></a>  8: -292491321,
+<a name="line158"></a>  9: 1106193218,
+<a name="line159"></a>  10: -722791438,
+<a name="line160"></a>  11: -2130666060,
+<a name="line161"></a>  12: -259304553,
+<a name="line162"></a>  13: 871461192,
+<a name="line163"></a>  14: 865773084,
+<a name="line164"></a>  15: 1615738330,
+<a name="line165"></a>  16: -1836636447,
+<a name="line166"></a>  17: -485722519,
+<a name="line167"></a>  18: -120832227,
+<a name="line168"></a>  19: 1954449704,
+<a name="line169"></a>  20: 491312921,
+<a name="line170"></a>  21: -1955462668,
+<a name="line171"></a>  22: 168565425,
+<a name="line172"></a>  23: -105893922,
+<a name="line173"></a>  24: 620486614,
+<a name="line174"></a>  25: -1789602428,
+<a name="line175"></a>  26: 1765793554,
+<a name="line176"></a>  27: 1723370948,
+<a name="line177"></a>  28: -1275405721,
+<a name="line178"></a>  29: 140421019,
+<a name="line179"></a>  30: -1438726307,
+<a name="line180"></a>  31: 538438903,
+<a name="line181"></a>  32: -729123980,
+<a name="line182"></a>  33: 1213490939,
+<a name="line183"></a>  34: -1814248478,
+<a name="line184"></a>  35: 1943703398,
+<a name="line185"></a>  36: 1603073219,
+<a name="line186"></a>  37: -2139639543,
+<a name="line187"></a>  38: -694153941,
+<a name="line188"></a>  39: 137511516,
+<a name="line189"></a>  40: -249943726,
+<a name="line190"></a>  41: -1166126060,
+<a name="line191"></a>  42: 53464833,
+<a name="line192"></a>  43: -915350862,
+<a name="line193"></a>  44: 1306585409,
+<a name="line194"></a>  45: 1064798289,
+<a name="line195"></a>  46: 335555913,
+<a name="line196"></a>  47: 224485496,
+<a name="line197"></a>  48: 275599760,
+<a name="line198"></a>  49: 409559869,
+<a name="line199"></a>  50: 673770580,
+<a name="line200"></a>  51: -2113819879,
+<a name="line201"></a>  52: -791338727,
+<a name="line202"></a>  53: -1716479479,
+<a name="line203"></a>  54: 1795018816,
+<a name="line204"></a>  55: 2020139343,
+<a name="line205"></a>  56: -1652827750,
+<a name="line206"></a>  57: -1509632558,
+<a name="line207"></a>  58: 751641995,
+<a name="line208"></a>  59: -217881377,
+<a name="line209"></a>  60: -476546900,
+<a name="line210"></a>  61: -1893349644,
+<a name="line211"></a>  62: -729290332,
+<a name="line212"></a>  63: 1359899321,
+<a name="line213"></a>  64: 1811814306,
+<a name="line214"></a>  65: 2100363086,
+<a name="line215"></a>  66: -794920327,
+<a name="line216"></a>  67: -1667555017,
+<a name="line217"></a>  68: -549980099,
+<a name="line218"></a>  69: -21170740,
+<a name="line219"></a>  70: -1324143722,
+<a name="line220"></a>  71: 1406730195,
+<a name="line221"></a>  72: 2111381574,
+<a name="line222"></a>  73: -1667480052,
+<a name="line223"></a>  74: 1071811178,
+<a name="line224"></a>  75: -1080194099,
+<a name="line225"></a>  76: -181186882,
+<a name="line226"></a>  77: 268677507,
+<a name="line227"></a>  78: -546766334,
+<a name="line228"></a>  79: 555953522,
+<a name="line229"></a>  80: -981311675,
+<a name="line230"></a>  81: 1988867392,
+<a name="line231"></a>  82: 773172547,
+<a name="line232"></a>  83: 1160806722,
+<a name="line233"></a>  84: -1455460187,
+<a name="line234"></a>  85: 83493600,
+<a name="line235"></a>  86: 155365142,
+<a name="line236"></a>  87: 1714618071,
+<a name="line237"></a>  88: 1487712615,
+<a name="line238"></a>  89: -810670278,
+<a name="line239"></a>  90: 2031655097,
+<a name="line240"></a>  91: 1286349470,
+<a name="line241"></a>  92: -1873594211,
+<a name="line242"></a>  93: 1875867480,
+<a name="line243"></a>  94: -1096259787,
+<a name="line244"></a>  95: -1054968610,
+<a name="line245"></a>  96: -1723043458,
+<a name="line246"></a>  97: 1278708307,
+<a name="line247"></a>  98: -601104085,
+<a name="line248"></a>  99: 1497928579,
+<a name="line249"></a>  100: 1329732615,
+<a name="line250"></a>  101: -1281696190,
+<a name="line251"></a>  102: 1471511953,
+<a name="line252"></a>  103: -62666299,
+<a name="line253"></a>  104: 807569747,
+<a name="line254"></a>  105: -1927974759,
+<a name="line255"></a>  106: 1462243717,
+<a name="line256"></a>  107: -862975602,
+<a name="line257"></a>  108: 824369927,
+<a name="line258"></a>  109: -1448816781,
+<a name="line259"></a>  110: 1434162022,
+<a name="line260"></a>  111: -881501413,
+<a name="line261"></a>  112: -1554381107,
+<a name="line262"></a>  113: -1730883204,
+<a name="line263"></a>  114: 431236217,
+<a name="line264"></a>  115: 1877278608,
+<a name="line265"></a>  116: -673864625,
+<a name="line266"></a>  117: 143000665,
+<a name="line267"></a>  118: -596902829,
+<a name="line268"></a>  119: 1038860559,
+<a name="line269"></a>  120: 805884326,
+<a name="line270"></a>  121: -1536181710,
+<a name="line271"></a>  122: -1357373256,
+<a name="line272"></a>  123: 1405134250,
+<a name="line273"></a>  124: -860816481,
+<a name="line274"></a>  125: 1393578269,
+<a name="line275"></a>  126: -810682545,
+<a name="line276"></a>  127: -635515639
+<a name="line277"></a>};
+<a name="line278"></a>
+<a name="line279"></a>var testCase;
+<a name="line280"></a>if (G_testRunner) {
+<a name="line281"></a>  testCase = new goog.testing.TestCase(document.title);
+<a name="line282"></a>  testCase.autoDiscoverTests();
+<a name="line283"></a>  G_testRunner.initialize(testCase);
+<a name="line284"></a>}
+</pre>
+
+
+</body>
+</html>

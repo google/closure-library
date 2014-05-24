@@ -1,0 +1,1068 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>Sanitizer (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+  <script type="text/javascript" src="//www.google.com/jsapi"></script>
+  <script type="text/javascript">
+     google.load("visualization", "1", {packages:["orgchart"]});
+     var _loadingVisualizations = true;
+  </script>
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+        <span class="fn">labs.html.Sanitizer</span>
+        <span>Extends</span>
+        <span class="fn-name">
+          
+        </span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    A sanitizer that converts untrusted, messy HTML into more regular HTML
+that cannot abuse high-authority constructs like the ability to execute
+arbitrary JavaScript.
+
+  </div>
+
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_labs_html_sanitizer.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/labs/html/sanitizer.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+
+
+
+
+
+<h2 class="g-first">Inheritance</h2>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+  <tr><td>goog.labs.html.Sanitizer</td><td></td></tr>
+</table>
+</div>
+<div class='gviz-org-chart-container goog-inline-block'>
+<table class='gviz-org-chart' style='display:none'>
+</table>
+</div>
+
+
+
+
+  <h2>Constructor</h2>
+      <div class="fn-constructor">
+    goog.labs.html.Sanitizer(<span></span>)
+  </div>
+
+
+
+<h2>Instance Methods</h2>
+
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_labs_html_Sanitizer.html">
+              goog.labs.html.Sanitizer
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.html.Sanitizer.prototype.allowAttributes"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">allowAttributes<span class="args">(<span class="arg">elementNames</span>,&nbsp;<span class="arg">attrNames</span>,&nbsp;<span class="arg">opt_rewriteValue</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_labs_html_Sanitizer.html">goog.labs.html.Sanitizer</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Allows in the sanitized output
+<tt>&lt;<i>element</i><i>attr</i>="..."&gt;</tt>
+when <i>element</i> is in <code> elementNames</code> and
+<i>attrNames</i> is in <code> attrNames</code>.
+
+If specified, <code> opt_valueXform</code> is a function that takes the
+HTML-entity-decoded attribute value, and can choose to disallow the
+attribute by returning <code> null</code> or substitute a new value
+by returning a string with the new value.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">elementNames</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&gt;<span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">names (or name) on which the
+    attributes are allowed.
+
+    Element names should be allowed via <code> allowElements(...)</code> prior
+    to white-listing attributes.
+
+    The special element name <code> "*"</code> has the same meaning as in CSS
+    selectors: it can be used to white-list attributes like <code> title</code>
+    and <code> id</code> which are widely available with element-agnostic
+    meanings.
+
+    It should not be used for attributes like <code> type</code> whose meaning
+    differs based on the element on which it appears:
+    e.g. <code> &lt;input type=text&gt;</code> vs <code> &lt;style type=text/css&gt;</code>.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">attrNames</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&gt;<span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">names (or name) of the attribute
+    that should be allowed.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_rewriteValue</span>
+        : <span class="type">goog.labs.html.AttributeRewriter=</span>
+        <div class="entryOverview">A function
+    that receives the HTML-entity-decoded attribute value and can return
+    <code> null</code> to disallow the attribute entirely or the value for the
+    attribute as a string.
+    <p>
+    The default is the identity function (<code> function(x){return x}</code>),
+    and the value rewriter is composed with an attribute specific handler:
+    <table><tr><th>href, src</th><td>Requires that the value be an absolute URL with a protocol in
+           (http, https, mailto) or a protocol relative URL.
+     </td></tr></table></p></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_labs_html_Sanitizer.html">goog.labs.html.Sanitizer</a></span>&nbsp;
+            <code> this</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line194">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.html.Sanitizer.prototype.allowElements"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">allowElements<span class="args">(<span class="arg">var_args</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_labs_html_Sanitizer.html">goog.labs.html.Sanitizer</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds the element names to the white-list of elements that are allowed
+in the safe HTML output.
+<p>
+Allowing elements does not, by itself, allow any attributes on
+those elements.
+
+</p>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">var_args</span>
+        : <span class="type">...!string</span>
+        <div class="entryOverview">element names that should be allowed in the
+    safe HTML output.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_labs_html_Sanitizer.html">goog.labs.html.Sanitizer</a></span>&nbsp;
+            <code> this</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line131">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.html.Sanitizer.prototype.sanitize"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">sanitize<span class="args">(<span class="arg">unsafeHtml</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Yields a string of safe HTML that contains all and only the safe
+text-nodes and elements in the input.
+
+<p>
+For the purposes of this function, "safe" is defined thus:
+<ul><li>Contains only elements explicitly allowed via <code> this.allow*</code>.
+  <li>Contains only attributes explicitly allowed via <code> this.allow*</code>
+      and having had all relevant transformations applied.
+  <li>Contains an end tag for all and only non-void open tags.
+  <li>Tags nest per XHTML rules.
+  <li>Tags do not nest beyond a finite but fairly large level.
+</li></li></li></li></li></ul></p>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">unsafeHtml</span>
+        : <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">A string of HTML which need not originate with
+   a trusted source.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            A string of HTML that contains only tags and attributes
+   explicitly allowed by this sanitizer, and with end tags for all and only
+   non-void elements.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line101">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Instance Properties</h2>
+
+
+
+
+
+
+
+<div>
+       <div class="desc">
+         Defined in
+         <span class="fn-name">
+            <a href="class_goog_labs_html_Sanitizer.html">
+              goog.labs.html.Sanitizer
+            </a>
+         </span>
+       </div>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.html.Sanitizer.prototype.allowedElementSet_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">allowedElementSet_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Maps element names to <code> true</code> so the scrubber does not have to do
+own property checks for every tag filtered.
+
+Built lazily and invalidated when the white-list is modified.
+
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line73">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.labs.html.Sanitizer.prototype.whitelist_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">whitelist_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Maps the lower-case names of allowed elements to attribute white-lists.
+An attribute white-list maps lower-case attribute names to functions
+from values to values or undefined to disallow.
+
+The special element name <code> "*"</code> contains a white-list of attributes
+allowed on any tag, which is useful for attributes like <code> title</code> and
+<code> id</code> which are widely available with element-agnostic meanings.
+It should not be used for attributes like <code> type</code> whose meaning
+differs based on the element on which it appears:
+e.g. <code> &lt;input type=text&gt;</code> vs <code> &lt;style type=text/css&gt;</code>.
+
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line57">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+</div>
+
+
+
+
+<h2>Static Methods</h2>
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.html.Sanitizer.chain_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.html.Sanitizer.</span><span class="entryName">chain_<span class="args">(<span class="arg">f</span>,&nbsp;<span class="arg">g</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.labs.html.AttributeRewriter</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Chains attribute rewriters.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">f</span>
+        : <span class="type">goog.labs.html.AttributeRewriter</span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">g</span>
+        : <span class="type">goog.labs.html.AttributeRewriter</span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.labs.html.AttributeRewriter</span>&nbsp;
+            a function that return g(f(x)) or null if f(x) is null.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line306">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.html.Sanitizer.checkUrl_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.html.Sanitizer.</span><span class="entryName">checkUrl_<span class="args">(<span class="arg">attrValue</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.html.SafeUrl </span><span>&nbsp;|&nbsp;</span><span class="type"> null</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Applied automatically to URL attributes to check that they are safe as per
+<code> SafeUrl</code>.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">attrValue</span>
+        : <span class="type">goog.labs.html.AttributeValue</span>
+        <div class="entryOverview">a decoded attribute value.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.html.SafeUrl </span><span>&nbsp;|&nbsp;</span><span class="type"> null</span>&nbsp;
+            a URL that is equivalent to the
+   input or <code> null</code> if the input is not a safe URL.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line368">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.html.Sanitizer.createBlankObject_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.html.Sanitizer.</span><span class="entryName">createBlankObject_<span class="args">()</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>,<span>?</span><span class="type"> </span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       A new object that is as blank as possible.
+
+Using <code> Object.create</code> to create an object with
+no prototype speeds up whitelist access since there's fewer prototypes
+to fall-back to for a common case where an element is not in the
+white-list, and reduces the chance of confusing a member of
+<code> Object.prototype</code> with a whitelist entry.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>,<span>?</span><span class="type"> </span>&gt;&nbsp;
+            a reference to a newly allocated object that
+   does not alias any reference that existed prior.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line254">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.html.Sanitizer.defaultRewriterForAttr_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.html.Sanitizer.</span><span class="entryName">defaultRewriterForAttr_<span class="args">(<span class="arg">attrName</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.labs.html.AttributeRewriter</span>
+      </div>
+
+
+     <div class="entryOverview">
+       Given an attribute name, returns a value rewriter that enforces some
+minimal safety properties.
+
+<p>
+For url atributes, it checks that any protocol is on a safe set that
+doesn't allow script execution.
+<p>
+It also blanket disallows CSS and event handler attributes.
+
+</p></p>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">attrName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">lower-cased attribute name.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.labs.html.AttributeRewriter</span>&nbsp;
+            <span class='nodesc'>No description.</span>
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line348">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.html.Sanitizer.disallow_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.html.Sanitizer.</span><span class="entryName">disallow_<span class="args">(<span class="arg">x</span>)</span>
+        </span>
+        &#8658; <span class="type">null</span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">x</span>
+        : <span class="type">goog.labs.html.AttributeValue</span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">null</span>&nbsp;
+            <span class='nodesc'>No description.</span>
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line292">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.html.Sanitizer.isValidHtmlName_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.html.Sanitizer.</span><span class="entryName">isValidHtmlName_<span class="args">(<span class="arg">name</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       HTML element and attribute names may be almost arbitrary strings, but the
+sanitizer is more restrictive as to what can be white-listed.
+
+Since HTML is case-insensitive, only lower-case identifiers composed of
+ASCII letters, digits, and select punctuation are allowed.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">name</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            true iff name is a valid white-list key.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line270">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.labs.html.Sanitizer.valueIdentity_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.labs.html.Sanitizer.</span><span class="entryName">valueIdentity_<span class="args">(<span class="arg">x</span>)</span>
+        </span>
+        &#8658; <span class="type">goog.labs.html.AttributeValue</span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">x</span>
+        : <span class="type">goog.labs.html.AttributeValue</span>
+        <div class="entryOverview"><span class='nodesc'>No description.</span></div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type">goog.labs.html.AttributeValue</span>&nbsp;
+            <span class='nodesc'>No description.</span>
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_labs_html_sanitizer.js.source.html#line282">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package labs.html</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="labs.html.Sanitizer"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

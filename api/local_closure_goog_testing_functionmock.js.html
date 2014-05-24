@@ -1,0 +1,775 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>functionmock.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">functionmock.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_testing_functionmock.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/testing/functionmock.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/testing/functionmock.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.MethodMock.$tearDown"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.MethodMock.</span><span class="entryName">$tearDown<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Resets the global function that we mocked back to its original state.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line88">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.FunctionMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">FunctionMock<span class="args">(<span class="arg">opt_functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Class used to mock a function. Useful for mocking closures and anonymous
+callbacks etc. Creates a function object that extends goog.testing.Mock.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_functionName</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">The optional name of the function to mock.
+    Set to '[anonymous mocked function]' if not passed in.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line46">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.GlobalFunctionMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">GlobalFunctionMock<span class="args">(<span class="arg">functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Mocks a global / top-level function. Creates a goog.testing.MethodMock
+in the global scope with the name specified by functionName.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">functionName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the function we're going to mock.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked global function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line101">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.MethodMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">MethodMock<span class="args">(<span class="arg">scope</span>,&nbsp;<span class="arg">functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Mocks an existing function. Creates a goog.testing.FunctionMock
+and registers it in the given scope with the name specified by functionName.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">scope</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">The scope of the method to be mocked out.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">functionName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the function we're going to mock.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked method.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line69">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.createConstructorMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">createConstructorMock<span class="args">(<span class="arg">scope</span>,&nbsp;<span class="arg">constructorName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Convenience method for creating a mock for a constructor. Copies class
+members to the mock.
+
+<p>When mocking a constructor to return a mocked instance, remember to create
+the instance mock before mocking the constructor. If you mock the constructor
+first, then the mock framework will be unable to examine the prototype chain
+when creating the mock instance.
+</p>
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">scope</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">The scope of the constructor to be mocked out.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">constructorName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the constructor we're going to
+    mock.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked constructor.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line147">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.createFunctionMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">createFunctionMock<span class="args">(<span class="arg">opt_functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Convenience method for creating a mock for a function.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_functionName</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">The optional name of the function to mock
+    set to '[anonymous mocked function]' if not passed in.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line114">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.createGlobalFunctionMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">createGlobalFunctionMock<span class="args">(<span class="arg">functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Convenience method for creating a mocks for a global / top-level function.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">functionName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the function we're going to mock.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked global function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line175">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.createMethodMock"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">createMethodMock<span class="args">(<span class="arg">scope</span>,&nbsp;<span class="arg">functionName</span>,&nbsp;<span class="arg">opt_strictness</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Convenience method for creating a mock for a method.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">scope</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">The scope of the method to be mocked out.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">functionName</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The name of the function we're going to mock.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_strictness</span>
+        : <span class="type">number=</span>
+        <div class="entryOverview">One of goog.testing.Mock.LOOSE or
+    goog.testing.Mock.STRICT. The default is STRICT.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="interface_goog_testing_MockInterface.html">goog.testing.MockInterface</a></span>&nbsp;
+            The mocked global function.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line127">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.FunctionMock&fn"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.testing.</span><span class="entryName">FunctionMock&fn<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_functionmock.js.source.html#line47">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory testing</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/testing/functionmock.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

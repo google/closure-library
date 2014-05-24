@@ -1,0 +1,271 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>ipaddress_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_ipaddress_test.js.html">ipaddress_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.IpAddressTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.IpAddressTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.math.Integer&#39;);
+<a name="line19"></a>goog.require(&#39;goog.net.IpAddress&#39;);
+<a name="line20"></a>goog.require(&#39;goog.net.Ipv4Address&#39;);
+<a name="line21"></a>goog.require(&#39;goog.net.Ipv6Address&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>
+<a name="line24"></a>function testInvalidStrings() {
+<a name="line25"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;&#39;));
+<a name="line26"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;016.016.016.016&#39;));
+<a name="line27"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;016.016.016&#39;));
+<a name="line28"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;016.016&#39;));
+<a name="line29"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;016&#39;));
+<a name="line30"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;000.000.000.000&#39;));
+<a name="line31"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;000&#39;));
+<a name="line32"></a>  assertEquals(null,
+<a name="line33"></a>      goog.net.IpAddress.fromString(&#39;0x0a.0x0a.0x0a.0x0a&#39;));
+<a name="line34"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;0x0a.0x0a.0x0a&#39;));
+<a name="line35"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;0x0a.0x0a&#39;));
+<a name="line36"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;0x0a&#39;));
+<a name="line37"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42.42.42.42.42&#39;));
+<a name="line38"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42.42.42&#39;));
+<a name="line39"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42.42&#39;));
+<a name="line40"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42&#39;));
+<a name="line41"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42..42.42&#39;));
+<a name="line42"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42..42.42.42&#39;));
+<a name="line43"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42.42.42.42.&#39;));
+<a name="line44"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42.42.42.42...&#39;));
+<a name="line45"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;.42.42.42.42&#39;));
+<a name="line46"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;...42.42.42.42&#39;));
+<a name="line47"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42.42.42.-0&#39;));
+<a name="line48"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42.42.42.+0&#39;));
+<a name="line49"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;.&#39;));
+<a name="line50"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;...&#39;));
+<a name="line51"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;bogus&#39;));
+<a name="line52"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;bogus.com&#39;));
+<a name="line53"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;192.168.0.1.com&#39;));
+<a name="line54"></a>  assertEquals(null,
+<a name="line55"></a>      goog.net.IpAddress.fromString(&#39;12345.67899.-54321.-98765&#39;));
+<a name="line56"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;257.0.0.0&#39;));
+<a name="line57"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;42.42.42.-42&#39;));
+<a name="line58"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;3ff3:::1&#39;));
+<a name="line59"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;3ffe::1.net&#39;));
+<a name="line60"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;3ffe::1::1&#39;));
+<a name="line61"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;1::2::3::4:5&#39;));
+<a name="line62"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;::7:6:5:4:3:2:&#39;));
+<a name="line63"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;:6:5:4:3:2:1::&#39;));
+<a name="line64"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;2001::db:::1&#39;));
+<a name="line65"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;FEDC:9878&#39;));
+<a name="line66"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;+1.+2.+3.4&#39;));
+<a name="line67"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;1.2.3.4e0&#39;));
+<a name="line68"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;::7:6:5:4:3:2:1:0&#39;));
+<a name="line69"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;7:6:5:4:3:2:1:0::&#39;));
+<a name="line70"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;9:8:7:6:5:4:3::2:1&#39;));
+<a name="line71"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;0:1:2:3::4:5:6:7&#39;));
+<a name="line72"></a>  assertEquals(null,
+<a name="line73"></a>      goog.net.IpAddress.fromString(&#39;3ffe:0:0:0:0:0:0:0:1&#39;));
+<a name="line74"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;3ffe::10000&#39;));
+<a name="line75"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;3ffe::goog&#39;));
+<a name="line76"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;3ffe::-0&#39;));
+<a name="line77"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;3ffe::+0&#39;));
+<a name="line78"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;3ffe::-1&#39;));
+<a name="line79"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;:&#39;));
+<a name="line80"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;:::&#39;));
+<a name="line81"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;a:&#39;));
+<a name="line82"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;::a:&#39;));
+<a name="line83"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;0xa::&#39;));
+<a name="line84"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;::1.2.3&#39;));
+<a name="line85"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;::1.2.3.4.5&#39;));
+<a name="line86"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;::1.2.3.4:&#39;));
+<a name="line87"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;1.2.3.4::&#39;));
+<a name="line88"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;2001:db8::1:&#39;));
+<a name="line89"></a>  assertEquals(null, goog.net.IpAddress.fromString(&#39;:2001:db8::1&#39;));
+<a name="line90"></a>}
+<a name="line91"></a>
+<a name="line92"></a>function testVersion() {
+<a name="line93"></a>  var ip4 = goog.net.IpAddress.fromString(&#39;1.2.3.4&#39;);
+<a name="line94"></a>  assertEquals(ip4.getVersion(), 4);
+<a name="line95"></a>
+<a name="line96"></a>  var ip6 = goog.net.IpAddress.fromString(&#39;2001:dead::beef:1&#39;);
+<a name="line97"></a>  assertEquals(ip6.getVersion(), 6);
+<a name="line98"></a>
+<a name="line99"></a>  ip6 = goog.net.IpAddress.fromString(&#39;::192.168.1.1&#39;);
+<a name="line100"></a>  assertEquals(ip6.getVersion(), 6);
+<a name="line101"></a>}
+<a name="line102"></a>
+<a name="line103"></a>function testStringIpv4Address() {
+<a name="line104"></a>  assertEquals(&#39;192.168.1.1&#39;,
+<a name="line105"></a>      new goog.net.Ipv4Address(&#39;192.168.1.1&#39;).toString());
+<a name="line106"></a>  assertEquals(&#39;1.1.1.1&#39;,
+<a name="line107"></a>      new goog.net.Ipv4Address(&#39;1.1.1.1&#39;).toString());
+<a name="line108"></a>  assertEquals(&#39;224.56.33.2&#39;,
+<a name="line109"></a>      new goog.net.Ipv4Address(&#39;224.56.33.2&#39;).toString());
+<a name="line110"></a>  assertEquals(&#39;255.255.255.255&#39;,
+<a name="line111"></a>      new goog.net.Ipv4Address(&#39;255.255.255.255&#39;).toString());
+<a name="line112"></a>  assertEquals(&#39;0.0.0.0&#39;,
+<a name="line113"></a>      new goog.net.Ipv4Address(&#39;0.0.0.0&#39;).toString());
+<a name="line114"></a>}
+<a name="line115"></a>
+<a name="line116"></a>function testIntIpv4Address() {
+<a name="line117"></a>  var ip4Str = new goog.net.Ipv4Address(&#39;1.1.1.1&#39;);
+<a name="line118"></a>  var ip4Int = new goog.net.Ipv4Address(
+<a name="line119"></a>      new goog.math.Integer([16843009], 0));
+<a name="line120"></a>
+<a name="line121"></a>  assertTrue(ip4Str.equals(ip4Int));
+<a name="line122"></a>  assertEquals(ip4Str.toString(), ip4Int.toString());
+<a name="line123"></a>
+<a name="line124"></a>  assertThrows(&#39;Ipv4(-1)&#39;, goog.partial(goog.net.Ipv4Address,
+<a name="line125"></a>                                        goog.math.Integer.fromInt(-1)));
+<a name="line126"></a>  assertThrows(&#39;Ipv4(2**32)&#39;,
+<a name="line127"></a>               goog.partial(goog.net.Ipv4Address,
+<a name="line128"></a>                            goog.math.Integer.ONE.shiftLeft(32)));
+<a name="line129"></a>}
+<a name="line130"></a>
+<a name="line131"></a>function testStringIpv6Address() {
+<a name="line132"></a>  assertEquals(&#39;1:2:3:4:5:6:7:8&#39;,
+<a name="line133"></a>      new goog.net.Ipv6Address(&#39;1:2:3:4:5:6:7:8&#39;).toString());
+<a name="line134"></a>  assertEquals(&#39;::1:2:3:4:5:6:7&#39;,
+<a name="line135"></a>      new goog.net.Ipv6Address(&#39;::1:2:3:4:5:6:7&#39;).toString());
+<a name="line136"></a>  assertEquals(&#39;1:2:3:4:5:6:7::&#39;,
+<a name="line137"></a>      new goog.net.Ipv6Address(&#39;1:2:3:4:5:6:7:0&#39;).toString());
+<a name="line138"></a>  assertEquals(&#39;2001:0:0:4::8&#39;,
+<a name="line139"></a>      new goog.net.Ipv6Address(&#39;2001:0:0:4:0:0:0:8&#39;).toString());
+<a name="line140"></a>  assertEquals(&#39;2001::4:5:6:7:8&#39;,
+<a name="line141"></a>      new goog.net.Ipv6Address(&#39;2001:0:0:4:5:6:7:8&#39;).toString());
+<a name="line142"></a>  assertEquals(&#39;2001::3:4:5:6:7:8&#39;,
+<a name="line143"></a>      new goog.net.Ipv6Address(&#39;2001:0:3:4:5:6:7:8&#39;).toString());
+<a name="line144"></a>  assertEquals(&#39;0:0:3::ffff&#39;,
+<a name="line145"></a>      new goog.net.Ipv6Address(&#39;0:0:3:0:0:0:0:ffff&#39;).toString());
+<a name="line146"></a>  assertEquals(&#39;::4:0:0:0:ffff&#39;,
+<a name="line147"></a>      new goog.net.Ipv6Address(&#39;0:0:0:4:0:0:0:ffff&#39;).toString());
+<a name="line148"></a>  assertEquals(&#39;::5:0:0:ffff&#39;,
+<a name="line149"></a>      new goog.net.Ipv6Address(&#39;0:0:0:0:5:0:0:ffff&#39;).toString());
+<a name="line150"></a>  assertEquals(&#39;1::4:0:0:7:8&#39;,
+<a name="line151"></a>      new goog.net.Ipv6Address(&#39;1:0:0:4:0:0:7:8&#39;).toString());
+<a name="line152"></a>  assertEquals(&#39;::&#39;,
+<a name="line153"></a>      new goog.net.Ipv6Address(&#39;0:0:0:0:0:0:0:0&#39;).toString());
+<a name="line154"></a>  assertEquals(&#39;::1&#39;,
+<a name="line155"></a>      new goog.net.Ipv6Address(&#39;0:0:0:0:0:0:0:1&#39;).toString());
+<a name="line156"></a>  assertEquals(&#39;2001:658:22a:cafe::&#39;,
+<a name="line157"></a>      new goog.net.Ipv6Address(
+<a name="line158"></a>          &#39;2001:0658:022a:cafe:0000:0000:0000:0000&#39;).toString());
+<a name="line159"></a>  assertEquals(&#39;::102:304&#39;,
+<a name="line160"></a>      new goog.net.Ipv6Address(&#39;::1.2.3.4&#39;).toString());
+<a name="line161"></a>  assertEquals(&#39;::ffff:303:303&#39;,
+<a name="line162"></a>      new goog.net.Ipv6Address(&#39;::ffff:3.3.3.3&#39;).toString());
+<a name="line163"></a>  assertEquals(&#39;::ffff:ffff&#39;,
+<a name="line164"></a>      new goog.net.Ipv6Address(&#39;::255.255.255.255&#39;).toString());
+<a name="line165"></a>}
+<a name="line166"></a>
+<a name="line167"></a>function testIntIpv6Address() {
+<a name="line168"></a>  var ip6Str = new goog.net.Ipv6Address(&#39;2001::dead:beef:1&#39;);
+<a name="line169"></a>  var ip6Int = new goog.net.Ipv6Address(
+<a name="line170"></a>      new goog.math.Integer([3203334145, 57005, 0, 536936448], 0));
+<a name="line171"></a>
+<a name="line172"></a>  assertTrue(ip6Str.equals(ip6Int));
+<a name="line173"></a>  assertEquals(ip6Str.toString(), ip6Int.toString());
+<a name="line174"></a>
+<a name="line175"></a>  assertThrows(&#39;Ipv6(-1)&#39;, goog.partial(goog.net.Ipv6Address,
+<a name="line176"></a>                                        goog.math.Integer.fromInt(-1)));
+<a name="line177"></a>  assertThrows(&#39;Ipv6(2**128)&#39;,
+<a name="line178"></a>               goog.partial(goog.net.Ipv6Address,
+<a name="line179"></a>                            goog.math.Integer.ONE.shiftLeft(128)));
+<a name="line180"></a>
+<a name="line181"></a>}
+<a name="line182"></a>
+<a name="line183"></a>function testDottedQuadIpv6() {
+<a name="line184"></a>  var ip6 = new goog.net.Ipv6Address(&#39;7::0.128.0.127&#39;);
+<a name="line185"></a>  ip6 = new goog.net.Ipv6Address(&#39;7::0.128.0.128&#39;);
+<a name="line186"></a>  ip6 = new goog.net.Ipv6Address(&#39;7::128.128.0.127&#39;);
+<a name="line187"></a>  ip6 = new goog.net.Ipv6Address(&#39;7::0.128.128.127&#39;);
+<a name="line188"></a>}
+<a name="line189"></a>
+<a name="line190"></a>function testMappedIpv4Address() {
+<a name="line191"></a>  var testAddresses = [&#39;::ffff:1.2.3.4&#39;, &#39;::FFFF:102:304&#39;];
+<a name="line192"></a>  var ipv4Str = &#39;1.2.3.4&#39;;
+<a name="line193"></a>
+<a name="line194"></a>  var ip1 = new goog.net.Ipv6Address(testAddresses[0]);
+<a name="line195"></a>  var ip2 = new goog.net.Ipv6Address(testAddresses[1]);
+<a name="line196"></a>  var ipv4 = new goog.net.Ipv4Address(ipv4Str);
+<a name="line197"></a>
+<a name="line198"></a>  assertTrue(ip1.isMappedIpv4Address());
+<a name="line199"></a>  assertTrue(ip2.isMappedIpv4Address());
+<a name="line200"></a>  assertTrue(ip1.equals(ip2));
+<a name="line201"></a>  assertTrue(ipv4.equals(ip1.getMappedIpv4Address()));
+<a name="line202"></a>  assertTrue(ipv4.equals(ip2.getMappedIpv4Address()));
+<a name="line203"></a>}
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>function testUriString() {
+<a name="line207"></a>  var ip4Str = &#39;192.168.1.1&#39;;
+<a name="line208"></a>  var ip4Uri = goog.net.IpAddress.fromUriString(ip4Str);
+<a name="line209"></a>  var ip4 = goog.net.IpAddress.fromString(ip4Str);
+<a name="line210"></a>  assertTrue(ip4Uri.equals(ip4));
+<a name="line211"></a>
+<a name="line212"></a>  var ip6Str = &#39;2001:dead::beef:1&#39;;
+<a name="line213"></a>  assertEquals(null, goog.net.IpAddress.fromUriString(ip6Str));
+<a name="line214"></a>
+<a name="line215"></a>  var ip6Uri = goog.net.IpAddress.fromUriString(&#39;[&#39; + ip6Str + &#39;]&#39;);
+<a name="line216"></a>  var ip6 = goog.net.IpAddress.fromString(ip6Str);
+<a name="line217"></a>  assertTrue(ip6Uri.equals(ip6));
+<a name="line218"></a>  assertEquals(ip6Uri.toString(), ip6Str);
+<a name="line219"></a>  assertEquals(ip6Uri.toUriString(), &#39;[&#39; + ip6Str + &#39;]&#39;);
+<a name="line220"></a>}
+</pre>
+
+
+</body>
+</html>

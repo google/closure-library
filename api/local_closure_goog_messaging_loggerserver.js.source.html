@@ -1,0 +1,150 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>loggerserver.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_messaging_loggerserver.js.html">loggerserver.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview This class listens on a message channel for logger commands and
+<a name="line17"></a> * logs them on the local page. This is useful when dealing with message
+<a name="line18"></a> * channels to contexts that don&#39;t have access to their own logging facilities.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.messaging.LoggerServer&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line25"></a>goog.require(&#39;goog.log&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Creates a logger server that logs messages on behalf of the remote end of a
+<a name="line31"></a> * message channel. The remote end of the channel should use a
+<a name="line32"></a> * {goog.messaging.LoggerClient} with the same service name.
+<a name="line33"></a> *
+<a name="line34"></a> * @param {!goog.messaging.MessageChannel} channel The channel that is sending
+<a name="line35"></a> *     the log messages.
+<a name="line36"></a> * @param {string} serviceName The name of the logging service to listen for.
+<a name="line37"></a> * @param {string=} opt_channelName The name of this channel. Used to help
+<a name="line38"></a> *     distinguish this client&#39;s messages.
+<a name="line39"></a> * @constructor
+<a name="line40"></a> * @extends {goog.Disposable}
+<a name="line41"></a> * @final
+<a name="line42"></a> */
+<a name="line43"></a>goog.messaging.LoggerServer = function(channel, serviceName, opt_channelName) {
+<a name="line44"></a>  goog.messaging.LoggerServer.base(this, &#39;constructor&#39;);
+<a name="line45"></a>
+<a name="line46"></a>  /**
+<a name="line47"></a>   * The channel that is sending the log messages.
+<a name="line48"></a>   * @type {!goog.messaging.MessageChannel}
+<a name="line49"></a>   * @private
+<a name="line50"></a>   */
+<a name="line51"></a>  this.channel_ = channel;
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * The name of the logging service to listen for.
+<a name="line55"></a>   * @type {string}
+<a name="line56"></a>   * @private
+<a name="line57"></a>   */
+<a name="line58"></a>  this.serviceName_ = serviceName;
+<a name="line59"></a>
+<a name="line60"></a>  /**
+<a name="line61"></a>   * The name of the channel.
+<a name="line62"></a>   * @type {string}
+<a name="line63"></a>   * @private
+<a name="line64"></a>   */
+<a name="line65"></a>  this.channelName_ = opt_channelName || &#39;remote logger&#39;;
+<a name="line66"></a>
+<a name="line67"></a>  this.channel_.registerService(
+<a name="line68"></a>      this.serviceName_, goog.bind(this.log_, this), true /* opt_json */);
+<a name="line69"></a>};
+<a name="line70"></a>goog.inherits(goog.messaging.LoggerServer, goog.Disposable);
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * Handles logging messages from the client.
+<a name="line75"></a> * @param {!Object|string} message
+<a name="line76"></a> *     The logging information from the client.
+<a name="line77"></a> * @private
+<a name="line78"></a> */
+<a name="line79"></a>goog.messaging.LoggerServer.prototype.log_ = function(message) {
+<a name="line80"></a>  var args =
+<a name="line81"></a>      /**
+<a name="line82"></a>       * @type {!{level: number, message: string,
+<a name="line83"></a>       *           name: string, exception: Object}}
+<a name="line84"></a>       */ (message);
+<a name="line85"></a>  var level = goog.log.Level.getPredefinedLevelByValue(args[&#39;level&#39;]);
+<a name="line86"></a>  if (level) {
+<a name="line87"></a>    var msg = &#39;[&#39; + this.channelName_ + &#39;] &#39; + args[&#39;message&#39;];
+<a name="line88"></a>    goog.log.getLogger(args[&#39;name&#39;])
+<a name="line89"></a>        .log(level, msg, args[&#39;exception&#39;]);
+<a name="line90"></a>  }
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/** @override */
+<a name="line95"></a>goog.messaging.LoggerServer.prototype.disposeInternal = function() {
+<a name="line96"></a>  goog.messaging.LoggerServer.base(this, &#39;disposeInternal&#39;);
+<a name="line97"></a>  this.channel_.registerService(this.serviceName_, goog.nullFunction, true);
+<a name="line98"></a>  delete this.channel_;
+<a name="line99"></a>};
+</pre>
+
+
+</body>
+</html>

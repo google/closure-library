@@ -1,0 +1,599 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>messaging (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">messaging</span>
+</div>
+
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_messaging_AbstractChannel.html">
+          goog.messaging.AbstractChannel</a><br/>
+        <div class="class-details">Creates an abstract message channel.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_messaging_BufferedChannel.html">
+          goog.messaging.BufferedChannel</a><br/>
+        <div class="class-details">Creates a new BufferedChannel, which operates like its underlying channel
+except that it buffers calls to send until it receives a message from its
+peer claiming that the peer is ready to receive.  The peer is also expected
+to be a BufferedChannel, though this is not enforced.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_messaging_DeferredChannel.html">
+          goog.messaging.DeferredChannel</a><br/>
+        <div class="class-details">Creates a new DeferredChannel, which wraps a deferred MessageChannel and
+enqueues messages to be sent once the wrapped channel is resolved.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_messaging_LoggerClient.html">
+          goog.messaging.LoggerClient</a><br/>
+        <div class="class-details">Creates a logger client that sends messages along a message channel for the
+remote end to log. The remote end of the channel should use a
+{goog.messaging.LoggerServer} with the same service name.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_messaging_LoggerServer.html">
+          goog.messaging.LoggerServer</a><br/>
+        <div class="class-details">Creates a logger server that logs messages on behalf of the remote end of a
+message channel. The remote end of the channel should use a
+{goog.messaging.LoggerClient} with the same service name.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="interface_goog_messaging_MessageChannel.html">
+          goog.messaging.MessageChannel</a><br/>
+        <div class="class-details"><span class='nodesc'>No description.</span></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_messaging_MultiChannel.html">
+          goog.messaging.MultiChannel</a><br/>
+        <div class="class-details">Creates a new MultiChannel wrapping a single MessageChannel. The
+underlying channel shouldn't have any other listeners registered, but it
+should be connected.
+
+Note that the other side of the channel should also be connected to a
+MultiChannel with the same number of virtual channels.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_messaging_PortCaller.html">
+          goog.messaging.PortCaller</a><br/>
+        <div class="class-details">The leaf node of a network.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_messaging_PortChannel.html">
+          goog.messaging.PortChannel</a><br/>
+        <div class="class-details">A wrapper for several types of HTML5 message-passing entities
+(<code> MessagePort</code>s and <code> WebWorker</code>s). This class implements the
+<code> goog.messaging.MessageChannel</code> interface.
+
+This class can be used in conjunction with other communication on the port.
+It sets <code> goog.messaging.PortChannel.FLAG</code> to true on all messages it
+sends.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="interface_goog_messaging_PortNetwork.html">
+          goog.messaging.PortNetwork</a><br/>
+        <div class="class-details"><span class='nodesc'>No description.</span></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_messaging_PortOperator.html">
+          goog.messaging.PortOperator</a><br/>
+        <div class="class-details">The central node of a PortNetwork.
+
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_messaging_RespondingChannel.html">
+          goog.messaging.RespondingChannel</a><br/>
+        <div class="class-details">Creates a new RespondingChannel wrapping a single MessageChannel.
+</div>
+ </div>
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.messaging.pipe"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.messaging.</span><span class="entryName">pipe<span class="args">(<span class="arg">channel1</span>,&nbsp;<span class="arg">channel2</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a bidirectional pipe between two message channels.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">channel1</span>
+        : <span class="type"><a href="interface_goog_messaging_MessageChannel.html">goog.messaging.MessageChannel</a></span>
+        <div class="entryOverview">The first channel.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">channel2</span>
+        : <span class="type"><a href="interface_goog_messaging_MessageChannel.html">goog.messaging.MessageChannel</a></span>
+        <div class="entryOverview">The second channel.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_messaging_messaging.js.source.html#line31">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+  <h2>Global Properties</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.messaging.AbstractChannelTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.messaging.</span><span class="entryName">AbstractChannelTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_messaging_abstractchannel_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.messaging.BufferedChannelTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.messaging.</span><span class="entryName">BufferedChannelTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_messaging_bufferedchannel_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.messaging.DeferredChannelTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.messaging.</span><span class="entryName">DeferredChannelTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_messaging_deferredchannel_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.messaging.LoggerClientTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.messaging.</span><span class="entryName">LoggerClientTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_messaging_loggerclient_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.messaging.LoggerServerTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.messaging.</span><span class="entryName">LoggerServerTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_messaging_loggerserver_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.messaging.MultiChannelTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.messaging.</span><span class="entryName">MultiChannelTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_messaging_multichannel_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.messaging.PortCallerTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.messaging.</span><span class="entryName">PortCallerTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_messaging_portcaller_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.messaging.PortOperatorTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.messaging.</span><span class="entryName">PortOperatorTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_messaging_portoperator_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.messaging.RespondingChannelTest"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.messaging.</span><span class="entryName">RespondingChannelTest</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       <span class='nodesc'>No description.</span>
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_messaging_respondingchannel_test.js.source.html#line15">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Package messaging</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">Package Reference</h2>
+            <div id="sideTypeIndex" rootPath="" current="messaging"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

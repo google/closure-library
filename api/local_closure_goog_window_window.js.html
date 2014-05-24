@@ -1,0 +1,433 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>window.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">window.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_window_window.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/window/window.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/window/window.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.window.open"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.window.</span><span class="entryName">open<span class="args">(<span class="arg">linkRef</span>,&nbsp;<span class="arg">opt_options</span>,&nbsp;<span class="arg">opt_parentWin</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/window">Window</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Opens a new window.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">linkRef</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">A string or an object that supports toString,
+    for example goog.Uri.  If this is an object with a 'href' attribute, such
+    as HTMLAnchorElement, it will be used instead.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_options</span>
+        : <span class="type">Object=</span>
+        <div class="entryOverview">supports the following options:
+ 'target': (string) target (window name). If null, linkRef.target will
+         be used.
+ 'width': (number) window width.
+ 'height': (number) window height.
+ 'top': (number) distance from top of screen
+ 'left': (number) distance from left of screen
+ 'toolbar': (boolean) show toolbar
+ 'scrollbars': (boolean) show scrollbars
+ 'location': (boolean) show location
+ 'statusbar': (boolean) show statusbar
+ 'menubar': (boolean) show menubar
+ 'resizable': (boolean) resizable
+ 'noreferrer': (boolean) whether to attempt to remove the referrer header
+     from the request headers. Does this by opening a blank window that
+     then redirects to the target url, so users may see some flickering.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_parentWin</span>
+        : <span class="type">Window=</span>
+        <div class="entryOverview">Parent window that should be used to open the
+                new window.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/window">Window</a></span>&nbsp;
+            Returns the window object that was opened. This returns
+                 null if a popup blocker prevented the window from being
+                 opened.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_window_window.js.source.html#line78">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.window.openBlank"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.window.</span><span class="entryName">openBlank<span class="args">(<span class="arg">opt_message</span>,&nbsp;<span class="arg">opt_options</span>,&nbsp;<span class="arg">opt_parentWin</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/DOM/window">Window</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Opens a new window without any real content in it.
+
+This can be used to get around popup blockers if you need to open a window
+in response to a user event, but need to do asynchronous work to determine
+the URL to open, and then set the URL later.
+
+Example usage:
+
+var newWin = goog.window.openBlank('Loading...');
+setTimeout(
+    function() {
+      newWin.location.href = '<a href="http://www.google.com">http://www.google.com</a>';
+    }, 100);
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_message</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">String to show in the new window. This string
+    will be HTML-escaped to avoid XSS issues.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_options</span>
+        : <span class="type">Object=</span>
+        <div class="entryOverview">Options to open window with.
+    .</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_parentWin</span>
+        : <span class="type">Window=</span>
+        <div class="entryOverview">Parent window that should be used to open the
+                new window.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/DOM/window">Window</a></span>&nbsp;
+            Returns the window object that was opened. This returns
+                 null if a popup blocker prevented the window from being
+                 opened.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_window_window.js.source.html#line174">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.window.popup"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.window.</span><span class="entryName">popup<span class="args">(<span class="arg">linkRef</span>,&nbsp;<span class="arg">opt_options</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Raise a help popup window, defaulting to "Google standard" size and name.
+
+(If your project is using GXPs, consider using <code> PopUpLink.gxp</code>.)
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">linkRef</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span><span>&nbsp;|&nbsp;</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">if this is a string, it will be used as the
+URL of the popped window; otherwise it's assumed to be an HTMLAnchorElement
+(or some other object with "target" and "href" properties).</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_options</span>
+        : <span class="type">Object=</span>
+        <div class="entryOverview">Options to open window with.
+    
+    Additional wrinkles to the options:
+    - if 'target' field is null, linkRef.target will be used. If *that's*
+    null, the default is "google_popup".
+    - if 'width' field is not specified, the default is 690.
+    - if 'height' field is not specified, the default is 500.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            true if the window was not popped up, false if it was.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_window_window.js.source.html#line205">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory window</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/window/window.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

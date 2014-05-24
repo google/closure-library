@@ -1,0 +1,1113 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>eventtargettester.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_events_eventtargettester.js.html">eventtargettester.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview goog.events.EventTarget tester.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.events.eventTargetTester&#39;);
+<a name="line20"></a>goog.setTestOnly(&#39;goog.events.eventTargetTester&#39;);
+<a name="line21"></a>goog.provide(&#39;goog.events.eventTargetTester.KeyType&#39;);
+<a name="line22"></a>goog.setTestOnly(&#39;goog.events.eventTargetTester.KeyType&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.events.eventTargetTester.UnlistenReturnType&#39;);
+<a name="line24"></a>goog.setTestOnly(&#39;goog.events.eventTargetTester.UnlistenReturnType&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.array&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line30"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line31"></a>goog.require(&#39;goog.testing.recordFunction&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Setup step for the test functions. This needs to be called from the
+<a name="line36"></a> * test setUp.
+<a name="line37"></a> * @param {function():!goog.events.Listenable} listenableFactoryFn Function
+<a name="line38"></a> *     that will return a new Listenable instance each time it is called.
+<a name="line39"></a> * @param {Function} listenFn Function that, given the same signature
+<a name="line40"></a> *     as goog.events.listen, will add listener to the given event
+<a name="line41"></a> *     target.
+<a name="line42"></a> * @param {Function} unlistenFn Function that, given the same
+<a name="line43"></a> *     signature as goog.events.unlisten, will remove listener from
+<a name="line44"></a> *     the given event target.
+<a name="line45"></a> * @param {Function} unlistenByKeyFn Function that, given 2
+<a name="line46"></a> *     parameters: src and key, will remove the corresponding
+<a name="line47"></a> *     listener.
+<a name="line48"></a> * @param {Function} listenOnceFn Function that, given the same
+<a name="line49"></a> *     signature as goog.events.listenOnce, will add a one-time
+<a name="line50"></a> *     listener to the given event target.
+<a name="line51"></a> * @param {Function} dispatchEventFn Function that, given the same
+<a name="line52"></a> *     signature as goog.events.dispatchEvent, will dispatch the event
+<a name="line53"></a> *     on the given event target.
+<a name="line54"></a> * @param {Function} removeAllFn Function that, given the same
+<a name="line55"></a> *     signature as goog.events.removeAll, will remove all listeners
+<a name="line56"></a> *     according to the contract of goog.events.removeAll.
+<a name="line57"></a> * @param {Function} getListenersFn Function that, given the same
+<a name="line58"></a> *     signature as goog.events.getListeners, will retrieve listeners.
+<a name="line59"></a> * @param {Function} getListenerFn Function that, given the same
+<a name="line60"></a> *     signature as goog.events.getListener, will retrieve the
+<a name="line61"></a> *     listener object.
+<a name="line62"></a> * @param {Function} hasListenerFn Function that, given the same
+<a name="line63"></a> *     signature as goog.events.hasListener, will determine whether
+<a name="line64"></a> *     listeners exist.
+<a name="line65"></a> * @param {goog.events.eventTargetTester.KeyType} listenKeyType The
+<a name="line66"></a> *     key type returned by listen call.
+<a name="line67"></a> * @param {goog.events.eventTargetTester.UnlistenReturnType}
+<a name="line68"></a> *     unlistenFnReturnType
+<a name="line69"></a> *     Whether we should check return value from
+<a name="line70"></a> *     unlisten call. If unlisten does not return a value, this should
+<a name="line71"></a> *     be set to false.
+<a name="line72"></a> * @param {boolean} objectListenerSupported Whether listener of type
+<a name="line73"></a> *     Object is supported.
+<a name="line74"></a> */
+<a name="line75"></a>goog.events.eventTargetTester.setUp = function(
+<a name="line76"></a>    listenableFactoryFn,
+<a name="line77"></a>    listenFn, unlistenFn, unlistenByKeyFn, listenOnceFn,
+<a name="line78"></a>    dispatchEventFn, removeAllFn,
+<a name="line79"></a>    getListenersFn, getListenerFn, hasListenerFn,
+<a name="line80"></a>    listenKeyType, unlistenFnReturnType, objectListenerSupported) {
+<a name="line81"></a>  listenableFactory = listenableFactoryFn;
+<a name="line82"></a>  listen = listenFn;
+<a name="line83"></a>  unlisten = unlistenFn;
+<a name="line84"></a>  unlistenByKey = unlistenByKeyFn;
+<a name="line85"></a>  listenOnce = listenOnceFn;
+<a name="line86"></a>  dispatchEvent = dispatchEventFn;
+<a name="line87"></a>  removeAll = removeAllFn;
+<a name="line88"></a>  getListeners = getListenersFn;
+<a name="line89"></a>  getListener = getListenerFn;
+<a name="line90"></a>  hasListener = hasListenerFn;
+<a name="line91"></a>  keyType = listenKeyType;
+<a name="line92"></a>  unlistenReturnType = unlistenFnReturnType;
+<a name="line93"></a>  objectTypeListenerSupported = objectListenerSupported;
+<a name="line94"></a>
+<a name="line95"></a>  listeners = [];
+<a name="line96"></a>  for (var i = 0; i &lt; goog.events.eventTargetTester.MAX_; i++) {
+<a name="line97"></a>    listeners[i] = createListener();
+<a name="line98"></a>  }
+<a name="line99"></a>
+<a name="line100"></a>  eventTargets = [];
+<a name="line101"></a>  for (i = 0; i &lt; goog.events.eventTargetTester.MAX_; i++) {
+<a name="line102"></a>    eventTargets[i] = listenableFactory();
+<a name="line103"></a>  }
+<a name="line104"></a>};
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Teardown step for the test functions. This needs to be called from
+<a name="line109"></a> * test teardown.
+<a name="line110"></a> */
+<a name="line111"></a>goog.events.eventTargetTester.tearDown = function() {
+<a name="line112"></a>  for (var i = 0; i &lt; goog.events.eventTargetTester.MAX_; i++) {
+<a name="line113"></a>    goog.dispose(eventTargets[i]);
+<a name="line114"></a>  }
+<a name="line115"></a>};
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * The type of key returned by key-returning functions (listen).
+<a name="line120"></a> * @enum {number}
+<a name="line121"></a> */
+<a name="line122"></a>goog.events.eventTargetTester.KeyType = {
+<a name="line123"></a>  /**
+<a name="line124"></a>   * Returns number for key.
+<a name="line125"></a>   */
+<a name="line126"></a>  NUMBER: 0,
+<a name="line127"></a>
+<a name="line128"></a>  /**
+<a name="line129"></a>   * Returns undefined (no return value).
+<a name="line130"></a>   */
+<a name="line131"></a>  UNDEFINED: 1
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * The type of unlisten function&#39;s return value.
+<a name="line137"></a> */
+<a name="line138"></a>goog.events.eventTargetTester.UnlistenReturnType = {
+<a name="line139"></a>  /**
+<a name="line140"></a>   * Returns boolean indicating whether unlisten is successful.
+<a name="line141"></a>   */
+<a name="line142"></a>  BOOLEAN: 0,
+<a name="line143"></a>
+<a name="line144"></a>  /**
+<a name="line145"></a>   * Returns undefind (no return value).
+<a name="line146"></a>   */
+<a name="line147"></a>  UNDEFINED: 1
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Expando property used on &quot;listener&quot; function to determine if a
+<a name="line153"></a> * listener has already been checked. This is what allows us to
+<a name="line154"></a> * implement assertNoOtherListenerIsCalled.
+<a name="line155"></a> * @type {string}
+<a name="line156"></a> */
+<a name="line157"></a>goog.events.eventTargetTester.ALREADY_CHECKED_PROP = &#39;__alreadyChecked&#39;;
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Expando property used on &quot;listener&quot; function to record the number
+<a name="line162"></a> * of times it has been called the last time assertListenerIsCalled is
+<a name="line163"></a> * done. This allows us to verify that it has not been called more
+<a name="line164"></a> * times in assertNoOtherListenerIsCalled.
+<a name="line165"></a> */
+<a name="line166"></a>goog.events.eventTargetTester.NUM_CALLED_PROP = &#39;__numCalled&#39;;
+<a name="line167"></a>
+<a name="line168"></a>
+<a name="line169"></a>/**
+<a name="line170"></a> * The maximum number of initialized event targets (in eventTargets
+<a name="line171"></a> * array) and listeners (in listeners array).
+<a name="line172"></a> * @type {number}
+<a name="line173"></a> * @private
+<a name="line174"></a> */
+<a name="line175"></a>goog.events.eventTargetTester.MAX_ = 10;
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * Contains test event types.
+<a name="line180"></a> * @enum {string}
+<a name="line181"></a> */
+<a name="line182"></a>var EventType = {
+<a name="line183"></a>  A: goog.events.getUniqueId(&#39;a&#39;),
+<a name="line184"></a>  B: goog.events.getUniqueId(&#39;b&#39;),
+<a name="line185"></a>  C: goog.events.getUniqueId(&#39;c&#39;)
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>var listen, unlisten, unlistenByKey, listenOnce, dispatchEvent;
+<a name="line190"></a>var removeAll, getListeners, getListener, hasListener;
+<a name="line191"></a>var keyType, unlistenReturnType, objectTypeListenerSupported;
+<a name="line192"></a>var eventTargets, listeners;
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Custom event object for testing.
+<a name="line198"></a> * @constructor
+<a name="line199"></a> * @extends {goog.events.Event}
+<a name="line200"></a> * @final
+<a name="line201"></a> */
+<a name="line202"></a>var TestEvent = function() {
+<a name="line203"></a>  goog.base(this, EventType.A);
+<a name="line204"></a>};
+<a name="line205"></a>goog.inherits(TestEvent, goog.events.Event);
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * Creates a listener that executes the given function (optional).
+<a name="line210"></a> * @param {!Function=} opt_listenerFn The optional function to execute.
+<a name="line211"></a> * @return {!Function} The listener function.
+<a name="line212"></a> */
+<a name="line213"></a>function createListener(opt_listenerFn) {
+<a name="line214"></a>  return goog.testing.recordFunction(opt_listenerFn);
+<a name="line215"></a>}
+<a name="line216"></a>
+<a name="line217"></a>
+<a name="line218"></a>/**
+<a name="line219"></a> * Asserts that the given listener is called numCount number of times.
+<a name="line220"></a> * @param {!Function} listener The listener to check.
+<a name="line221"></a> * @param {number} numCount The number of times. See also the times()
+<a name="line222"></a> *     function below.
+<a name="line223"></a> */
+<a name="line224"></a>function assertListenerIsCalled(listener, numCount) {
+<a name="line225"></a>  assertEquals(&#39;Listeners is not called the correct number of times.&#39;,
+<a name="line226"></a>               numCount, listener.getCallCount());
+<a name="line227"></a>  listener[goog.events.eventTargetTester.ALREADY_CHECKED_PROP] = true;
+<a name="line228"></a>  listener[goog.events.eventTargetTester.NUM_CALLED_PROP] = numCount;
+<a name="line229"></a>}
+<a name="line230"></a>
+<a name="line231"></a>
+<a name="line232"></a>/**
+<a name="line233"></a> * Asserts that no other listeners, other than those verified via
+<a name="line234"></a> * assertListenerIsCalled, have been called since the last
+<a name="line235"></a> * resetListeners().
+<a name="line236"></a> */
+<a name="line237"></a>function assertNoOtherListenerIsCalled() {
+<a name="line238"></a>  goog.array.forEach(listeners, function(l, index) {
+<a name="line239"></a>    if (!l[goog.events.eventTargetTester.ALREADY_CHECKED_PROP]) {
+<a name="line240"></a>      assertEquals(
+<a name="line241"></a>          &#39;Listeners &#39; + index + &#39; is unexpectedly called.&#39;,
+<a name="line242"></a>          0, l.getCallCount());
+<a name="line243"></a>    } else {
+<a name="line244"></a>      assertEquals(
+<a name="line245"></a>          &#39;Listeners &#39; + index + &#39; is unexpectedly called.&#39;,
+<a name="line246"></a>          l[goog.events.eventTargetTester.NUM_CALLED_PROP], l.getCallCount());
+<a name="line247"></a>    }
+<a name="line248"></a>  });
+<a name="line249"></a>}
+<a name="line250"></a>
+<a name="line251"></a>
+<a name="line252"></a>/**
+<a name="line253"></a> * Resets all listeners call count to 0.
+<a name="line254"></a> */
+<a name="line255"></a>function resetListeners() {
+<a name="line256"></a>  goog.array.forEach(listeners, function(l) {
+<a name="line257"></a>    l.reset();
+<a name="line258"></a>    l[goog.events.eventTargetTester.ALREADY_CHECKED_PROP] = false;
+<a name="line259"></a>  });
+<a name="line260"></a>}
+<a name="line261"></a>
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a> * The number of times a listener should have been executed. This
+<a name="line265"></a> * exists to make assertListenerIsCalled more readable.  This is used
+<a name="line266"></a> * like so: assertListenerIsCalled(listener, times(2));
+<a name="line267"></a> * @param {number} n The number of times a listener should have been
+<a name="line268"></a> *     executed.
+<a name="line269"></a> * @return {number} The number n.
+<a name="line270"></a> */
+<a name="line271"></a>function times(n) {
+<a name="line272"></a>  return n;
+<a name="line273"></a>}
+<a name="line274"></a>
+<a name="line275"></a>
+<a name="line276"></a>function testNoListener() {
+<a name="line277"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line278"></a>  assertNoOtherListenerIsCalled();
+<a name="line279"></a>}
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>function testOneListener() {
+<a name="line283"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line284"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line285"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line286"></a>  assertNoOtherListenerIsCalled();
+<a name="line287"></a>
+<a name="line288"></a>  resetListeners();
+<a name="line289"></a>
+<a name="line290"></a>  dispatchEvent(eventTargets[0], EventType.B);
+<a name="line291"></a>  dispatchEvent(eventTargets[0], EventType.C);
+<a name="line292"></a>  assertNoOtherListenerIsCalled();
+<a name="line293"></a>}
+<a name="line294"></a>
+<a name="line295"></a>
+<a name="line296"></a>function testTwoListenersOfSameType() {
+<a name="line297"></a>  var key1 = listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line298"></a>  var key2 = listen(eventTargets[0], EventType.A, listeners[1]);
+<a name="line299"></a>
+<a name="line300"></a>  if (keyType == goog.events.eventTargetTester.KeyType.NUMBER) {
+<a name="line301"></a>    assertNotEquals(key1, key2);
+<a name="line302"></a>  } else {
+<a name="line303"></a>    assertUndefined(key1);
+<a name="line304"></a>    assertUndefined(key2);
+<a name="line305"></a>  }
+<a name="line306"></a>
+<a name="line307"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line308"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line309"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line310"></a>  assertNoOtherListenerIsCalled();
+<a name="line311"></a>}
+<a name="line312"></a>
+<a name="line313"></a>
+<a name="line314"></a>function testInstallingSameListeners() {
+<a name="line315"></a>  var key1 = listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line316"></a>  var key2 = listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line317"></a>  var key3 = listen(eventTargets[0], EventType.B, listeners[0]);
+<a name="line318"></a>
+<a name="line319"></a>  if (keyType == goog.events.eventTargetTester.KeyType.NUMBER) {
+<a name="line320"></a>    assertEquals(key1, key2);
+<a name="line321"></a>    assertNotEquals(key1, key3);
+<a name="line322"></a>  } else {
+<a name="line323"></a>    assertUndefined(key1);
+<a name="line324"></a>    assertUndefined(key2);
+<a name="line325"></a>    assertUndefined(key3);
+<a name="line326"></a>  }
+<a name="line327"></a>
+<a name="line328"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line329"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line330"></a>
+<a name="line331"></a>  dispatchEvent(eventTargets[0], EventType.B);
+<a name="line332"></a>  assertListenerIsCalled(listeners[0], times(2));
+<a name="line333"></a>
+<a name="line334"></a>  assertNoOtherListenerIsCalled();
+<a name="line335"></a>}
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>function testScope() {
+<a name="line339"></a>  listeners[0] = createListener(function(e) {
+<a name="line340"></a>    assertEquals(&#39;Wrong scope with undefined scope&#39;, eventTargets[0], this);
+<a name="line341"></a>  });
+<a name="line342"></a>  listeners[1] = createListener(function(e) {
+<a name="line343"></a>    assertEquals(&#39;Wrong scope with null scope&#39;, eventTargets[0], this);
+<a name="line344"></a>  });
+<a name="line345"></a>  var scope = {};
+<a name="line346"></a>  listeners[2] = createListener(function(e) {
+<a name="line347"></a>    assertEquals(&#39;Wrong scope with specific scope object&#39;, scope, this);
+<a name="line348"></a>  });
+<a name="line349"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line350"></a>  listen(eventTargets[0], EventType.A, listeners[1], false, null);
+<a name="line351"></a>  listen(eventTargets[0], EventType.A, listeners[2], false, scope);
+<a name="line352"></a>
+<a name="line353"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line354"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line355"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line356"></a>  assertListenerIsCalled(listeners[2], times(1));
+<a name="line357"></a>}
+<a name="line358"></a>
+<a name="line359"></a>
+<a name="line360"></a>function testDispatchEventDoesNotThrowWithDisposedEventTarget() {
+<a name="line361"></a>  goog.dispose(eventTargets[0]);
+<a name="line362"></a>  assertTrue(dispatchEvent(eventTargets[0], EventType.A));
+<a name="line363"></a>}
+<a name="line364"></a>
+<a name="line365"></a>
+<a name="line366"></a>function testDispatchEventWithObjectLiteral() {
+<a name="line367"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line368"></a>
+<a name="line369"></a>  assertTrue(dispatchEvent(eventTargets[0], {type: EventType.A}));
+<a name="line370"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line371"></a>  assertNoOtherListenerIsCalled();
+<a name="line372"></a>}
+<a name="line373"></a>
+<a name="line374"></a>
+<a name="line375"></a>function testDispatchEventWithCustomEventObject() {
+<a name="line376"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line377"></a>
+<a name="line378"></a>  var e = new TestEvent();
+<a name="line379"></a>  assertTrue(dispatchEvent(eventTargets[0], e));
+<a name="line380"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line381"></a>  assertNoOtherListenerIsCalled();
+<a name="line382"></a>
+<a name="line383"></a>  var actualEvent = listeners[0].getLastCall().getArgument(0);
+<a name="line384"></a>
+<a name="line385"></a>  assertEquals(e, actualEvent);
+<a name="line386"></a>  assertEquals(eventTargets[0], actualEvent.target);
+<a name="line387"></a>}
+<a name="line388"></a>
+<a name="line389"></a>
+<a name="line390"></a>function testDisposingEventTargetRemovesListeners() {
+<a name="line391"></a>  if (!(listenableFactory() instanceof goog.events.EventTarget)) {
+<a name="line392"></a>    return;
+<a name="line393"></a>  }
+<a name="line394"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line395"></a>  goog.dispose(eventTargets[0]);
+<a name="line396"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line397"></a>
+<a name="line398"></a>  assertNoOtherListenerIsCalled();
+<a name="line399"></a>}
+<a name="line400"></a>
+<a name="line401"></a>
+<a name="line402"></a>/**
+<a name="line403"></a> * Unlisten/unlistenByKey should still work after disposal. There are
+<a name="line404"></a> * many circumstances when this is actually necessary. For example, a
+<a name="line405"></a> * user may have listened to an event target and stored the key
+<a name="line406"></a> * (e.g. in a goog.events.EventHandler) and only unlisten after the
+<a name="line407"></a> * target has been disposed.
+<a name="line408"></a> */
+<a name="line409"></a>function testUnlistenWorksAfterDisposal() {
+<a name="line410"></a>  var key = listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line411"></a>  goog.dispose(eventTargets[0]);
+<a name="line412"></a>  unlisten(eventTargets[0], EventType.A, listeners[1]);
+<a name="line413"></a>  if (unlistenByKey) {
+<a name="line414"></a>    unlistenByKey(eventTargets[0], key);
+<a name="line415"></a>  }
+<a name="line416"></a>}
+<a name="line417"></a>
+<a name="line418"></a>
+<a name="line419"></a>function testRemovingListener() {
+<a name="line420"></a>  var ret1 = unlisten(eventTargets[0], EventType.A, listeners[0]);
+<a name="line421"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line422"></a>  var ret2 = unlisten(eventTargets[0], EventType.A, listeners[1]);
+<a name="line423"></a>  var ret3 = unlisten(eventTargets[0], EventType.B, listeners[0]);
+<a name="line424"></a>  var ret4 = unlisten(eventTargets[1], EventType.A, listeners[0]);
+<a name="line425"></a>
+<a name="line426"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line427"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line428"></a>
+<a name="line429"></a>  var ret5 = unlisten(eventTargets[0], EventType.A, listeners[0]);
+<a name="line430"></a>  var ret6 = unlisten(eventTargets[0], EventType.A, listeners[0]);
+<a name="line431"></a>
+<a name="line432"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line433"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line434"></a>
+<a name="line435"></a>  assertNoOtherListenerIsCalled();
+<a name="line436"></a>
+<a name="line437"></a>  if (unlistenReturnType ==
+<a name="line438"></a>      goog.events.eventTargetTester.UnlistenReturnType.BOOLEAN) {
+<a name="line439"></a>    assertFalse(ret1);
+<a name="line440"></a>    assertFalse(ret2);
+<a name="line441"></a>    assertFalse(ret3);
+<a name="line442"></a>    assertFalse(ret4);
+<a name="line443"></a>    assertTrue(ret5);
+<a name="line444"></a>    assertFalse(ret6);
+<a name="line445"></a>  } else {
+<a name="line446"></a>    assertUndefined(ret1);
+<a name="line447"></a>    assertUndefined(ret2);
+<a name="line448"></a>    assertUndefined(ret3);
+<a name="line449"></a>    assertUndefined(ret4);
+<a name="line450"></a>    assertUndefined(ret5);
+<a name="line451"></a>    assertUndefined(ret6);
+<a name="line452"></a>  }
+<a name="line453"></a>}
+<a name="line454"></a>
+<a name="line455"></a>
+<a name="line456"></a>function testCapture() {
+<a name="line457"></a>  eventTargets[0].setParentEventTarget(eventTargets[1]);
+<a name="line458"></a>  eventTargets[1].setParentEventTarget(eventTargets[2]);
+<a name="line459"></a>
+<a name="line460"></a>  eventTargets[9].setParentEventTarget(eventTargets[0]);
+<a name="line461"></a>
+<a name="line462"></a>  var ordering = 0;
+<a name="line463"></a>  listeners[0] = createListener(
+<a name="line464"></a>      function(e) {
+<a name="line465"></a>        assertEquals(eventTargets[2], e.currentTarget);
+<a name="line466"></a>        assertEquals(eventTargets[0], e.target);
+<a name="line467"></a>        assertEquals(&#39;First capture listener is not called first&#39;, 0, ordering);
+<a name="line468"></a>        ordering++;
+<a name="line469"></a>      });
+<a name="line470"></a>  listeners[1] = createListener(
+<a name="line471"></a>      function(e) {
+<a name="line472"></a>        assertEquals(eventTargets[1], e.currentTarget);
+<a name="line473"></a>        assertEquals(eventTargets[0], e.target);
+<a name="line474"></a>        assertEquals(&#39;2nd capture listener is not called 2nd&#39;, 1, ordering);
+<a name="line475"></a>        ordering++;
+<a name="line476"></a>      });
+<a name="line477"></a>  listeners[2] = createListener(
+<a name="line478"></a>      function(e) {
+<a name="line479"></a>        assertEquals(eventTargets[0], e.currentTarget);
+<a name="line480"></a>        assertEquals(eventTargets[0], e.target);
+<a name="line481"></a>        assertEquals(&#39;3rd capture listener is not called 3rd&#39;, 2, ordering);
+<a name="line482"></a>        ordering++;
+<a name="line483"></a>      });
+<a name="line484"></a>
+<a name="line485"></a>  listen(eventTargets[2], EventType.A, listeners[0], true);
+<a name="line486"></a>  listen(eventTargets[1], EventType.A, listeners[1], true);
+<a name="line487"></a>  listen(eventTargets[0], EventType.A, listeners[2], true);
+<a name="line488"></a>
+<a name="line489"></a>  // These should not be called.
+<a name="line490"></a>  listen(eventTargets[3], EventType.A, listeners[3], true);
+<a name="line491"></a>
+<a name="line492"></a>  listen(eventTargets[0], EventType.B, listeners[4], true);
+<a name="line493"></a>  listen(eventTargets[0], EventType.C, listeners[5], true);
+<a name="line494"></a>  listen(eventTargets[1], EventType.B, listeners[6], true);
+<a name="line495"></a>  listen(eventTargets[1], EventType.C, listeners[7], true);
+<a name="line496"></a>  listen(eventTargets[2], EventType.B, listeners[8], true);
+<a name="line497"></a>  listen(eventTargets[2], EventType.C, listeners[9], true);
+<a name="line498"></a>
+<a name="line499"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line500"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line501"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line502"></a>  assertListenerIsCalled(listeners[2], times(1));
+<a name="line503"></a>  assertNoOtherListenerIsCalled();
+<a name="line504"></a>}
+<a name="line505"></a>
+<a name="line506"></a>
+<a name="line507"></a>function testBubble() {
+<a name="line508"></a>  eventTargets[0].setParentEventTarget(eventTargets[1]);
+<a name="line509"></a>  eventTargets[1].setParentEventTarget(eventTargets[2]);
+<a name="line510"></a>
+<a name="line511"></a>  eventTargets[9].setParentEventTarget(eventTargets[0]);
+<a name="line512"></a>
+<a name="line513"></a>  var ordering = 0;
+<a name="line514"></a>  listeners[0] = createListener(
+<a name="line515"></a>      function(e) {
+<a name="line516"></a>        assertEquals(eventTargets[0], e.currentTarget);
+<a name="line517"></a>        assertEquals(eventTargets[0], e.target);
+<a name="line518"></a>        assertEquals(&#39;First bubble listener is not called first&#39;, 0, ordering);
+<a name="line519"></a>        ordering++;
+<a name="line520"></a>      });
+<a name="line521"></a>  listeners[1] = createListener(
+<a name="line522"></a>      function(e) {
+<a name="line523"></a>        assertEquals(eventTargets[1], e.currentTarget);
+<a name="line524"></a>        assertEquals(eventTargets[0], e.target);
+<a name="line525"></a>        assertEquals(&#39;2nd bubble listener is not called 2nd&#39;, 1, ordering);
+<a name="line526"></a>        ordering++;
+<a name="line527"></a>      });
+<a name="line528"></a>  listeners[2] = createListener(
+<a name="line529"></a>      function(e) {
+<a name="line530"></a>        assertEquals(eventTargets[2], e.currentTarget);
+<a name="line531"></a>        assertEquals(eventTargets[0], e.target);
+<a name="line532"></a>        assertEquals(&#39;3rd bubble listener is not called 3rd&#39;, 2, ordering);
+<a name="line533"></a>        ordering++;
+<a name="line534"></a>      });
+<a name="line535"></a>
+<a name="line536"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line537"></a>  listen(eventTargets[1], EventType.A, listeners[1]);
+<a name="line538"></a>  listen(eventTargets[2], EventType.A, listeners[2]);
+<a name="line539"></a>
+<a name="line540"></a>  // These should not be called.
+<a name="line541"></a>  listen(eventTargets[3], EventType.A, listeners[3]);
+<a name="line542"></a>
+<a name="line543"></a>  listen(eventTargets[0], EventType.B, listeners[4]);
+<a name="line544"></a>  listen(eventTargets[0], EventType.C, listeners[5]);
+<a name="line545"></a>  listen(eventTargets[1], EventType.B, listeners[6]);
+<a name="line546"></a>  listen(eventTargets[1], EventType.C, listeners[7]);
+<a name="line547"></a>  listen(eventTargets[2], EventType.B, listeners[8]);
+<a name="line548"></a>  listen(eventTargets[2], EventType.C, listeners[9]);
+<a name="line549"></a>
+<a name="line550"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line551"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line552"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line553"></a>  assertListenerIsCalled(listeners[2], times(1));
+<a name="line554"></a>  assertNoOtherListenerIsCalled();
+<a name="line555"></a>}
+<a name="line556"></a>
+<a name="line557"></a>
+<a name="line558"></a>function testCaptureAndBubble() {
+<a name="line559"></a>  eventTargets[0].setParentEventTarget(eventTargets[1]);
+<a name="line560"></a>  eventTargets[1].setParentEventTarget(eventTargets[2]);
+<a name="line561"></a>
+<a name="line562"></a>  listen(eventTargets[0], EventType.A, listeners[0], true);
+<a name="line563"></a>  listen(eventTargets[1], EventType.A, listeners[1], true);
+<a name="line564"></a>  listen(eventTargets[2], EventType.A, listeners[2], true);
+<a name="line565"></a>
+<a name="line566"></a>  listen(eventTargets[0], EventType.A, listeners[3]);
+<a name="line567"></a>  listen(eventTargets[1], EventType.A, listeners[4]);
+<a name="line568"></a>  listen(eventTargets[2], EventType.A, listeners[5]);
+<a name="line569"></a>
+<a name="line570"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line571"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line572"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line573"></a>  assertListenerIsCalled(listeners[2], times(1));
+<a name="line574"></a>  assertListenerIsCalled(listeners[3], times(1));
+<a name="line575"></a>  assertListenerIsCalled(listeners[4], times(1));
+<a name="line576"></a>  assertListenerIsCalled(listeners[5], times(1));
+<a name="line577"></a>  assertNoOtherListenerIsCalled();
+<a name="line578"></a>}
+<a name="line579"></a>
+<a name="line580"></a>
+<a name="line581"></a>function testPreventDefaultByReturningFalse() {
+<a name="line582"></a>  listeners[0] = createListener(function(e) { return false; });
+<a name="line583"></a>  listeners[1] = createListener(function(e) { return true; });
+<a name="line584"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line585"></a>  listen(eventTargets[0], EventType.A, listeners[1]);
+<a name="line586"></a>
+<a name="line587"></a>  var result = dispatchEvent(eventTargets[0], EventType.A);
+<a name="line588"></a>  assertFalse(result);
+<a name="line589"></a>}
+<a name="line590"></a>
+<a name="line591"></a>
+<a name="line592"></a>function testPreventDefault() {
+<a name="line593"></a>  listeners[0] = createListener(function(e) { e.preventDefault(); });
+<a name="line594"></a>  listeners[1] = createListener(function(e) { return true; });
+<a name="line595"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line596"></a>  listen(eventTargets[0], EventType.A, listeners[1]);
+<a name="line597"></a>
+<a name="line598"></a>  var result = dispatchEvent(eventTargets[0], EventType.A);
+<a name="line599"></a>  assertFalse(result);
+<a name="line600"></a>}
+<a name="line601"></a>
+<a name="line602"></a>
+<a name="line603"></a>function testPreventDefaultAtCapture() {
+<a name="line604"></a>  listeners[0] = createListener(function(e) { e.preventDefault(); });
+<a name="line605"></a>  listeners[1] = createListener(function(e) { return true; });
+<a name="line606"></a>  listen(eventTargets[0], EventType.A, listeners[0], true);
+<a name="line607"></a>  listen(eventTargets[0], EventType.A, listeners[1], true);
+<a name="line608"></a>
+<a name="line609"></a>  var result = dispatchEvent(eventTargets[0], EventType.A);
+<a name="line610"></a>  assertFalse(result);
+<a name="line611"></a>}
+<a name="line612"></a>
+<a name="line613"></a>
+<a name="line614"></a>function testStopPropagation() {
+<a name="line615"></a>  eventTargets[0].setParentEventTarget(eventTargets[1]);
+<a name="line616"></a>  eventTargets[1].setParentEventTarget(eventTargets[2]);
+<a name="line617"></a>
+<a name="line618"></a>  listeners[0] = createListener(function(e) { e.stopPropagation(); });
+<a name="line619"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line620"></a>  listen(eventTargets[0], EventType.A, listeners[1]);
+<a name="line621"></a>  listen(eventTargets[1], EventType.A, listeners[2]);
+<a name="line622"></a>  listen(eventTargets[2], EventType.A, listeners[3]);
+<a name="line623"></a>
+<a name="line624"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line625"></a>
+<a name="line626"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line627"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line628"></a>  assertNoOtherListenerIsCalled();
+<a name="line629"></a>}
+<a name="line630"></a>
+<a name="line631"></a>
+<a name="line632"></a>function testStopPropagation2() {
+<a name="line633"></a>  eventTargets[0].setParentEventTarget(eventTargets[1]);
+<a name="line634"></a>  eventTargets[1].setParentEventTarget(eventTargets[2]);
+<a name="line635"></a>
+<a name="line636"></a>  listeners[1] = createListener(function(e) { e.stopPropagation(); });
+<a name="line637"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line638"></a>  listen(eventTargets[0], EventType.A, listeners[1]);
+<a name="line639"></a>  listen(eventTargets[1], EventType.A, listeners[2]);
+<a name="line640"></a>  listen(eventTargets[2], EventType.A, listeners[3]);
+<a name="line641"></a>
+<a name="line642"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line643"></a>
+<a name="line644"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line645"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line646"></a>  assertNoOtherListenerIsCalled();
+<a name="line647"></a>}
+<a name="line648"></a>
+<a name="line649"></a>
+<a name="line650"></a>function testStopPropagation3() {
+<a name="line651"></a>  eventTargets[0].setParentEventTarget(eventTargets[1]);
+<a name="line652"></a>  eventTargets[1].setParentEventTarget(eventTargets[2]);
+<a name="line653"></a>
+<a name="line654"></a>  listeners[2] = createListener(function(e) { e.stopPropagation(); });
+<a name="line655"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line656"></a>  listen(eventTargets[0], EventType.A, listeners[1]);
+<a name="line657"></a>  listen(eventTargets[1], EventType.A, listeners[2]);
+<a name="line658"></a>  listen(eventTargets[2], EventType.A, listeners[3]);
+<a name="line659"></a>
+<a name="line660"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line661"></a>
+<a name="line662"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line663"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line664"></a>  assertListenerIsCalled(listeners[2], times(1));
+<a name="line665"></a>  assertNoOtherListenerIsCalled();
+<a name="line666"></a>}
+<a name="line667"></a>
+<a name="line668"></a>
+<a name="line669"></a>function testStopPropagationAtCapture() {
+<a name="line670"></a>  eventTargets[0].setParentEventTarget(eventTargets[1]);
+<a name="line671"></a>  eventTargets[1].setParentEventTarget(eventTargets[2]);
+<a name="line672"></a>
+<a name="line673"></a>  listeners[0] = createListener(function(e) { e.stopPropagation(); });
+<a name="line674"></a>  listen(eventTargets[2], EventType.A, listeners[0], true);
+<a name="line675"></a>  listen(eventTargets[1], EventType.A, listeners[1], true);
+<a name="line676"></a>  listen(eventTargets[0], EventType.A, listeners[2], true);
+<a name="line677"></a>  listen(eventTargets[0], EventType.A, listeners[3]);
+<a name="line678"></a>  listen(eventTargets[1], EventType.A, listeners[4]);
+<a name="line679"></a>  listen(eventTargets[2], EventType.A, listeners[5]);
+<a name="line680"></a>
+<a name="line681"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line682"></a>
+<a name="line683"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line684"></a>  assertNoOtherListenerIsCalled();
+<a name="line685"></a>}
+<a name="line686"></a>
+<a name="line687"></a>
+<a name="line688"></a>function testHandleEvent() {
+<a name="line689"></a>  if (!objectTypeListenerSupported) {
+<a name="line690"></a>    return;
+<a name="line691"></a>  }
+<a name="line692"></a>
+<a name="line693"></a>  var obj = {};
+<a name="line694"></a>  obj.handleEvent = goog.testing.recordFunction();
+<a name="line695"></a>
+<a name="line696"></a>  listen(eventTargets[0], EventType.A, obj);
+<a name="line697"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line698"></a>
+<a name="line699"></a>  assertEquals(1, obj.handleEvent.getCallCount());
+<a name="line700"></a>}
+<a name="line701"></a>
+<a name="line702"></a>
+<a name="line703"></a>function testListenOnce() {
+<a name="line704"></a>  if (!listenOnce) {
+<a name="line705"></a>    return;
+<a name="line706"></a>  }
+<a name="line707"></a>
+<a name="line708"></a>  listenOnce(eventTargets[0], EventType.A, listeners[0], true);
+<a name="line709"></a>  listenOnce(eventTargets[0], EventType.A, listeners[1]);
+<a name="line710"></a>  listenOnce(eventTargets[0], EventType.B, listeners[2]);
+<a name="line711"></a>
+<a name="line712"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line713"></a>
+<a name="line714"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line715"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line716"></a>  assertListenerIsCalled(listeners[2], times(0));
+<a name="line717"></a>  assertNoOtherListenerIsCalled();
+<a name="line718"></a>  resetListeners();
+<a name="line719"></a>
+<a name="line720"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line721"></a>
+<a name="line722"></a>  assertListenerIsCalled(listeners[0], times(0));
+<a name="line723"></a>  assertListenerIsCalled(listeners[1], times(0));
+<a name="line724"></a>  assertListenerIsCalled(listeners[2], times(0));
+<a name="line725"></a>
+<a name="line726"></a>  dispatchEvent(eventTargets[0], EventType.B);
+<a name="line727"></a>  assertListenerIsCalled(listeners[2], times(1));
+<a name="line728"></a>  assertNoOtherListenerIsCalled();
+<a name="line729"></a>}
+<a name="line730"></a>
+<a name="line731"></a>
+<a name="line732"></a>function testUnlistenInListen() {
+<a name="line733"></a>  listeners[1] = createListener(
+<a name="line734"></a>      function(e) {
+<a name="line735"></a>        unlisten(eventTargets[0], EventType.A, listeners[1]);
+<a name="line736"></a>        unlisten(eventTargets[0], EventType.A, listeners[2]);
+<a name="line737"></a>      });
+<a name="line738"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line739"></a>  listen(eventTargets[0], EventType.A, listeners[1]);
+<a name="line740"></a>  listen(eventTargets[0], EventType.A, listeners[2]);
+<a name="line741"></a>  listen(eventTargets[0], EventType.A, listeners[3]);
+<a name="line742"></a>
+<a name="line743"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line744"></a>
+<a name="line745"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line746"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line747"></a>  assertListenerIsCalled(listeners[2], times(0));
+<a name="line748"></a>  assertListenerIsCalled(listeners[3], times(1));
+<a name="line749"></a>  assertNoOtherListenerIsCalled();
+<a name="line750"></a>  resetListeners();
+<a name="line751"></a>
+<a name="line752"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line753"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line754"></a>  assertListenerIsCalled(listeners[1], times(0));
+<a name="line755"></a>  assertListenerIsCalled(listeners[2], times(0));
+<a name="line756"></a>  assertListenerIsCalled(listeners[3], times(1));
+<a name="line757"></a>  assertNoOtherListenerIsCalled();
+<a name="line758"></a>}
+<a name="line759"></a>
+<a name="line760"></a>
+<a name="line761"></a>function testUnlistenByKeyInListen() {
+<a name="line762"></a>  if (!unlistenByKey) {
+<a name="line763"></a>    return;
+<a name="line764"></a>  }
+<a name="line765"></a>
+<a name="line766"></a>  var key1, key2;
+<a name="line767"></a>  listeners[1] = createListener(
+<a name="line768"></a>      function(e) {
+<a name="line769"></a>        unlistenByKey(eventTargets[0], key1);
+<a name="line770"></a>        unlistenByKey(eventTargets[0], key2);
+<a name="line771"></a>      });
+<a name="line772"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line773"></a>  key1 = listen(eventTargets[0], EventType.A, listeners[1]);
+<a name="line774"></a>  key2 = listen(eventTargets[0], EventType.A, listeners[2]);
+<a name="line775"></a>  listen(eventTargets[0], EventType.A, listeners[3]);
+<a name="line776"></a>
+<a name="line777"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line778"></a>
+<a name="line779"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line780"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line781"></a>  assertListenerIsCalled(listeners[2], times(0));
+<a name="line782"></a>  assertListenerIsCalled(listeners[3], times(1));
+<a name="line783"></a>  assertNoOtherListenerIsCalled();
+<a name="line784"></a>  resetListeners();
+<a name="line785"></a>
+<a name="line786"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line787"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line788"></a>  assertListenerIsCalled(listeners[1], times(0));
+<a name="line789"></a>  assertListenerIsCalled(listeners[2], times(0));
+<a name="line790"></a>  assertListenerIsCalled(listeners[3], times(1));
+<a name="line791"></a>  assertNoOtherListenerIsCalled();
+<a name="line792"></a>}
+<a name="line793"></a>
+<a name="line794"></a>
+<a name="line795"></a>function testSetParentEventTarget() {
+<a name="line796"></a>  assertNull(eventTargets[0].getParentEventTarget());
+<a name="line797"></a>
+<a name="line798"></a>  eventTargets[0].setParentEventTarget(eventTargets[1]);
+<a name="line799"></a>  assertEquals(eventTargets[1], eventTargets[0].getParentEventTarget());
+<a name="line800"></a>  assertNull(eventTargets[1].getParentEventTarget());
+<a name="line801"></a>
+<a name="line802"></a>  eventTargets[0].setParentEventTarget(null);
+<a name="line803"></a>  assertNull(eventTargets[0].getParentEventTarget());
+<a name="line804"></a>}
+<a name="line805"></a>
+<a name="line806"></a>
+<a name="line807"></a>function testListenOnceAfterListenDoesNotChangeExistingListener() {
+<a name="line808"></a>  if (!listenOnce) {
+<a name="line809"></a>    return;
+<a name="line810"></a>  }
+<a name="line811"></a>
+<a name="line812"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line813"></a>  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+<a name="line814"></a>
+<a name="line815"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line816"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line817"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line818"></a>
+<a name="line819"></a>  assertListenerIsCalled(listeners[0], times(3));
+<a name="line820"></a>  assertNoOtherListenerIsCalled();
+<a name="line821"></a>}
+<a name="line822"></a>
+<a name="line823"></a>
+<a name="line824"></a>function testListenOnceAfterListenOnceDoesNotChangeExistingListener() {
+<a name="line825"></a>  if (!listenOnce) {
+<a name="line826"></a>    return;
+<a name="line827"></a>  }
+<a name="line828"></a>
+<a name="line829"></a>  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+<a name="line830"></a>  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+<a name="line831"></a>
+<a name="line832"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line833"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line834"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line835"></a>
+<a name="line836"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line837"></a>  assertNoOtherListenerIsCalled();
+<a name="line838"></a>}
+<a name="line839"></a>
+<a name="line840"></a>
+<a name="line841"></a>function testListenAfterListenOnceRemoveOnceness() {
+<a name="line842"></a>  if (!listenOnce) {
+<a name="line843"></a>    return;
+<a name="line844"></a>  }
+<a name="line845"></a>
+<a name="line846"></a>  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+<a name="line847"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line848"></a>
+<a name="line849"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line850"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line851"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line852"></a>
+<a name="line853"></a>  assertListenerIsCalled(listeners[0], times(3));
+<a name="line854"></a>  assertNoOtherListenerIsCalled();
+<a name="line855"></a>}
+<a name="line856"></a>
+<a name="line857"></a>
+<a name="line858"></a>function testUnlistenAfterListenOnce() {
+<a name="line859"></a>  if (!listenOnce) {
+<a name="line860"></a>    return;
+<a name="line861"></a>  }
+<a name="line862"></a>
+<a name="line863"></a>  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+<a name="line864"></a>  unlisten(eventTargets[0], EventType.A, listeners[0]);
+<a name="line865"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line866"></a>
+<a name="line867"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line868"></a>  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+<a name="line869"></a>  unlisten(eventTargets[0], EventType.A, listeners[0]);
+<a name="line870"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line871"></a>
+<a name="line872"></a>  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+<a name="line873"></a>  listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line874"></a>  unlisten(eventTargets[0], EventType.A, listeners[0]);
+<a name="line875"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line876"></a>
+<a name="line877"></a>  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+<a name="line878"></a>  listenOnce(eventTargets[0], EventType.A, listeners[0]);
+<a name="line879"></a>  unlisten(eventTargets[0], EventType.A, listeners[0]);
+<a name="line880"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line881"></a>
+<a name="line882"></a>  assertNoOtherListenerIsCalled();
+<a name="line883"></a>}
+<a name="line884"></a>
+<a name="line885"></a>
+<a name="line886"></a>function testRemoveAllWithType() {
+<a name="line887"></a>  if (!removeAll) {
+<a name="line888"></a>    return;
+<a name="line889"></a>  }
+<a name="line890"></a>
+<a name="line891"></a>  listen(eventTargets[0], EventType.A, listeners[0], true);
+<a name="line892"></a>  listen(eventTargets[0], EventType.A, listeners[1]);
+<a name="line893"></a>  listen(eventTargets[0], EventType.C, listeners[2], true);
+<a name="line894"></a>  listen(eventTargets[0], EventType.C, listeners[3]);
+<a name="line895"></a>  listen(eventTargets[0], EventType.B, listeners[4], true);
+<a name="line896"></a>  listen(eventTargets[0], EventType.B, listeners[5], true);
+<a name="line897"></a>  listen(eventTargets[0], EventType.B, listeners[6]);
+<a name="line898"></a>  listen(eventTargets[0], EventType.B, listeners[7]);
+<a name="line899"></a>
+<a name="line900"></a>  assertEquals(4, removeAll(eventTargets[0], EventType.B));
+<a name="line901"></a>
+<a name="line902"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line903"></a>  dispatchEvent(eventTargets[0], EventType.B);
+<a name="line904"></a>  dispatchEvent(eventTargets[0], EventType.C);
+<a name="line905"></a>
+<a name="line906"></a>  assertListenerIsCalled(listeners[0], times(1));
+<a name="line907"></a>  assertListenerIsCalled(listeners[1], times(1));
+<a name="line908"></a>  assertListenerIsCalled(listeners[2], times(1));
+<a name="line909"></a>  assertListenerIsCalled(listeners[3], times(1));
+<a name="line910"></a>  assertNoOtherListenerIsCalled();
+<a name="line911"></a>}
+<a name="line912"></a>
+<a name="line913"></a>
+<a name="line914"></a>function testRemoveAll() {
+<a name="line915"></a>  if (!removeAll) {
+<a name="line916"></a>    return;
+<a name="line917"></a>  }
+<a name="line918"></a>
+<a name="line919"></a>  listen(eventTargets[0], EventType.A, listeners[0], true);
+<a name="line920"></a>  listen(eventTargets[0], EventType.A, listeners[1]);
+<a name="line921"></a>  listen(eventTargets[0], EventType.C, listeners[2], true);
+<a name="line922"></a>  listen(eventTargets[0], EventType.C, listeners[3]);
+<a name="line923"></a>  listen(eventTargets[0], EventType.B, listeners[4], true);
+<a name="line924"></a>  listen(eventTargets[0], EventType.B, listeners[5], true);
+<a name="line925"></a>  listen(eventTargets[0], EventType.B, listeners[6]);
+<a name="line926"></a>  listen(eventTargets[0], EventType.B, listeners[7]);
+<a name="line927"></a>
+<a name="line928"></a>  assertEquals(8, removeAll(eventTargets[0]));
+<a name="line929"></a>
+<a name="line930"></a>  dispatchEvent(eventTargets[0], EventType.A);
+<a name="line931"></a>  dispatchEvent(eventTargets[0], EventType.B);
+<a name="line932"></a>  dispatchEvent(eventTargets[0], EventType.C);
+<a name="line933"></a>
+<a name="line934"></a>  assertNoOtherListenerIsCalled();
+<a name="line935"></a>}
+<a name="line936"></a>
+<a name="line937"></a>
+<a name="line938"></a>function testRemoveAllCallsMarkAsRemoved() {
+<a name="line939"></a>  if (!removeAll) {
+<a name="line940"></a>    return;
+<a name="line941"></a>  }
+<a name="line942"></a>
+<a name="line943"></a>  var key0 = listen(eventTargets[0], EventType.A, listeners[0]);
+<a name="line944"></a>  var key1 = listen(eventTargets[1], EventType.A, listeners[1]);
+<a name="line945"></a>
+<a name="line946"></a>  assertNotNullNorUndefined(key0.listener);
+<a name="line947"></a>  assertFalse(key0.removed);
+<a name="line948"></a>  assertNotNullNorUndefined(key1.listener);
+<a name="line949"></a>  assertFalse(key1.removed);
+<a name="line950"></a>
+<a name="line951"></a>  assertEquals(1, removeAll(eventTargets[0]));
+<a name="line952"></a>  assertNull(key0.listener);
+<a name="line953"></a>  assertTrue(key0.removed);
+<a name="line954"></a>  assertNotNullNorUndefined(key1.listener);
+<a name="line955"></a>  assertFalse(key1.removed);
+<a name="line956"></a>
+<a name="line957"></a>  assertEquals(1, removeAll(eventTargets[1]));
+<a name="line958"></a>  assertNull(key1.listener);
+<a name="line959"></a>  assertTrue(key1.removed);
+<a name="line960"></a>}
+<a name="line961"></a>
+<a name="line962"></a>
+<a name="line963"></a>function testGetListeners() {
+<a name="line964"></a>  if (!getListeners) {
+<a name="line965"></a>    return;
+<a name="line966"></a>  }
+<a name="line967"></a>
+<a name="line968"></a>  listen(eventTargets[0], EventType.A, listeners[0], true);
+<a name="line969"></a>  listen(eventTargets[0], EventType.A, listeners[1], true);
+<a name="line970"></a>  listen(eventTargets[0], EventType.A, listeners[2]);
+<a name="line971"></a>  listen(eventTargets[0], EventType.A, listeners[3]);
+<a name="line972"></a>
+<a name="line973"></a>  var l = getListeners(eventTargets[0], EventType.A, true);
+<a name="line974"></a>  assertEquals(2, l.length);
+<a name="line975"></a>  assertEquals(listeners[0], l[0].listener);
+<a name="line976"></a>  assertEquals(listeners[1], l[1].listener);
+<a name="line977"></a>
+<a name="line978"></a>  l = getListeners(eventTargets[0], EventType.A, false);
+<a name="line979"></a>  assertEquals(2, l.length);
+<a name="line980"></a>  assertEquals(listeners[2], l[0].listener);
+<a name="line981"></a>  assertEquals(listeners[3], l[1].listener);
+<a name="line982"></a>
+<a name="line983"></a>  l = getListeners(eventTargets[0], EventType.B, true);
+<a name="line984"></a>  assertEquals(0, l.length);
+<a name="line985"></a>}
+<a name="line986"></a>
+<a name="line987"></a>
+<a name="line988"></a>function testGetListener() {
+<a name="line989"></a>  if (!getListener) {
+<a name="line990"></a>    return;
+<a name="line991"></a>  }
+<a name="line992"></a>
+<a name="line993"></a>  listen(eventTargets[0], EventType.A, listeners[0], true);
+<a name="line994"></a>
+<a name="line995"></a>  assertNotNull(getListener(eventTargets[0], EventType.A, listeners[0], true));
+<a name="line996"></a>  assertNull(
+<a name="line997"></a>      getListener(eventTargets[0], EventType.A, listeners[0], true, {}));
+<a name="line998"></a>  assertNull(getListener(eventTargets[1], EventType.A, listeners[0], true));
+<a name="line999"></a>  assertNull(getListener(eventTargets[0], EventType.B, listeners[0], true));
+<a name="line1000"></a>  assertNull(getListener(eventTargets[0], EventType.A, listeners[1], true));
+<a name="line1001"></a>}
+<a name="line1002"></a>
+<a name="line1003"></a>
+<a name="line1004"></a>function testHasListener() {
+<a name="line1005"></a>  if (!hasListener) {
+<a name="line1006"></a>    return;
+<a name="line1007"></a>  }
+<a name="line1008"></a>
+<a name="line1009"></a>  assertFalse(hasListener(eventTargets[0]));
+<a name="line1010"></a>
+<a name="line1011"></a>  listen(eventTargets[0], EventType.A, listeners[0], true);
+<a name="line1012"></a>
+<a name="line1013"></a>  assertTrue(hasListener(eventTargets[0]));
+<a name="line1014"></a>  assertTrue(hasListener(eventTargets[0], EventType.A));
+<a name="line1015"></a>  assertTrue(hasListener(eventTargets[0], EventType.A, true));
+<a name="line1016"></a>  assertTrue(hasListener(eventTargets[0], undefined, true));
+<a name="line1017"></a>  assertFalse(hasListener(eventTargets[0], EventType.A, false));
+<a name="line1018"></a>  assertFalse(hasListener(eventTargets[0], undefined, false));
+<a name="line1019"></a>  assertFalse(hasListener(eventTargets[0], EventType.B));
+<a name="line1020"></a>  assertFalse(hasListener(eventTargets[0], EventType.B, true));
+<a name="line1021"></a>  assertFalse(hasListener(eventTargets[1]));
+<a name="line1022"></a>}
+<a name="line1023"></a>
+<a name="line1024"></a>
+<a name="line1025"></a>function testFiringEventBeforeDisposeInternalWorks() {
+<a name="line1026"></a>  /**
+<a name="line1027"></a>   * @extends {goog.events.EventTarget}
+<a name="line1028"></a>   * @constructor
+<a name="line1029"></a>   * @final
+<a name="line1030"></a>   */
+<a name="line1031"></a>  var MockTarget = function() {
+<a name="line1032"></a>    goog.base(this);
+<a name="line1033"></a>  };
+<a name="line1034"></a>  goog.inherits(MockTarget, goog.events.EventTarget);
+<a name="line1035"></a>
+<a name="line1036"></a>  MockTarget.prototype.disposeInternal = function() {
+<a name="line1037"></a>    dispatchEvent(this, EventType.A);
+<a name="line1038"></a>    goog.base(this, &#39;disposeInternal&#39;);
+<a name="line1039"></a>  };
+<a name="line1040"></a>
+<a name="line1041"></a>  var t = new MockTarget();
+<a name="line1042"></a>  try {
+<a name="line1043"></a>    listen(t, EventType.A, listeners[0]);
+<a name="line1044"></a>    t.dispose();
+<a name="line1045"></a>    assertListenerIsCalled(listeners[0], times(1));
+<a name="line1046"></a>  } catch (e) {
+<a name="line1047"></a>    goog.dispose(t);
+<a name="line1048"></a>  }
+<a name="line1049"></a>}
+<a name="line1050"></a>
+<a name="line1051"></a>
+<a name="line1052"></a>function testLoopDetection() {
+<a name="line1053"></a>  var target = listenableFactory();
+<a name="line1054"></a>  target.setParentEventTarget(target);
+<a name="line1055"></a>
+<a name="line1056"></a>  try {
+<a name="line1057"></a>    target.dispatchEvent(&#39;string&#39;);
+<a name="line1058"></a>    fail(&#39;expected error&#39;);
+<a name="line1059"></a>  } catch (e) {
+<a name="line1060"></a>    assertContains(&#39;infinite&#39;, e.message);
+<a name="line1061"></a>  }
+<a name="line1062"></a>}
+</pre>
+
+
+</body>
+</html>

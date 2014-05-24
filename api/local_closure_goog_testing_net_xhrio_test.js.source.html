@@ -1,0 +1,473 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>xhrio_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_net_xhrio_test.js.html">xhrio_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.net.XhrIoTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.net.XhrIoTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom.xml&#39;);
+<a name="line19"></a>goog.require(&#39;goog.events&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line21"></a>goog.require(&#39;goog.net.ErrorCode&#39;);
+<a name="line22"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line23"></a>goog.require(&#39;goog.net.XmlHttp&#39;);
+<a name="line24"></a>goog.require(&#39;goog.object&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.MockControl&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line28"></a>goog.require(&#39;goog.testing.mockmatchers.InstanceOf&#39;);
+<a name="line29"></a>goog.require(&#39;goog.testing.net.XhrIo&#39;);
+<a name="line30"></a>
+<a name="line31"></a>var mockControl;
+<a name="line32"></a>
+<a name="line33"></a>function setUp() {
+<a name="line34"></a>  mockControl = new goog.testing.MockControl();
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function testStaticSend() {
+<a name="line38"></a>  sendInstances = goog.testing.net.XhrIo.getSendInstances();
+<a name="line39"></a>  goog.testing.net.XhrIo.send(&#39;url&#39;);
+<a name="line40"></a>  assertEquals(&#39;sendInstances_ after send&#39;,
+<a name="line41"></a>               1, sendInstances.length);
+<a name="line42"></a>  xhr = sendInstances[sendInstances.length - 1];
+<a name="line43"></a>  assertTrue(&#39;isActive after request&#39;, xhr.isActive());
+<a name="line44"></a>  assertEquals(&#39;readyState after request&#39;,
+<a name="line45"></a>               goog.net.XmlHttp.ReadyState.LOADING,
+<a name="line46"></a>               xhr.getReadyState());
+<a name="line47"></a>
+<a name="line48"></a>  xhr.simulateResponse(200, &#39;&#39;);
+<a name="line49"></a>  assertFalse(&#39;isActive after response&#39;, xhr.isActive());
+<a name="line50"></a>  assertEquals(&#39;readyState after response&#39;,
+<a name="line51"></a>               goog.net.XmlHttp.ReadyState.COMPLETE,
+<a name="line52"></a>               xhr.getReadyState());
+<a name="line53"></a>
+<a name="line54"></a>  xhr.simulateReady();
+<a name="line55"></a>  assertEquals(&#39;sendInstances_ after READY&#39;,
+<a name="line56"></a>               0, sendInstances.length);
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>function testStaticSendWithException() {
+<a name="line60"></a>  goog.testing.net.XhrIo.send(&#39;url&#39;, function() {
+<a name="line61"></a>    if (!this.isSuccess()) {
+<a name="line62"></a>      throw Error(&#39;The xhr did not complete successfully!&#39;);
+<a name="line63"></a>    }
+<a name="line64"></a>  });
+<a name="line65"></a>  var sendInstances = goog.testing.net.XhrIo.getSendInstances();
+<a name="line66"></a>  var xhr = sendInstances[sendInstances.length - 1];
+<a name="line67"></a>  try {
+<a name="line68"></a>    xhr.simulateResponse(400, &#39;&#39;);
+<a name="line69"></a>  } catch (e) {
+<a name="line70"></a>    // Do nothing with the exception; we just want to make sure
+<a name="line71"></a>    // the class cleans itself up properly when an exception is
+<a name="line72"></a>    // thrown.
+<a name="line73"></a>  }
+<a name="line74"></a>  assertEquals(&#39;Send instance array not cleaned up properly!&#39;,
+<a name="line75"></a>               0, sendInstances.length);
+<a name="line76"></a>}
+<a name="line77"></a>
+<a name="line78"></a>function testMultipleSend() {
+<a name="line79"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line80"></a>  assertFalse(&#39;isActive before first request&#39;, xhr.isActive());
+<a name="line81"></a>  assertEquals(&#39;readyState before first request&#39;,
+<a name="line82"></a>               goog.net.XmlHttp.ReadyState.UNINITIALIZED,
+<a name="line83"></a>               xhr.getReadyState());
+<a name="line84"></a>
+<a name="line85"></a>  xhr.send(&#39;url&#39;);
+<a name="line86"></a>  assertTrue(&#39;isActive after first request&#39;, xhr.isActive());
+<a name="line87"></a>  assertEquals(&#39;readyState after first request&#39;,
+<a name="line88"></a>               goog.net.XmlHttp.ReadyState.LOADING,
+<a name="line89"></a>               xhr.getReadyState());
+<a name="line90"></a>
+<a name="line91"></a>  xhr.simulateResponse(200, &#39;&#39;);
+<a name="line92"></a>  assertFalse(&#39;isActive after first response&#39;, xhr.isActive());
+<a name="line93"></a>  assertEquals(&#39;readyState after first response&#39;,
+<a name="line94"></a>               goog.net.XmlHttp.ReadyState.COMPLETE,
+<a name="line95"></a>               xhr.getReadyState());
+<a name="line96"></a>
+<a name="line97"></a>  xhr.send(&#39;url&#39;);
+<a name="line98"></a>  assertTrue(&#39;isActive after second request&#39;, xhr.isActive());
+<a name="line99"></a>  assertEquals(&#39;readyState after second request&#39;,
+<a name="line100"></a>               goog.net.XmlHttp.ReadyState.LOADING,
+<a name="line101"></a>               xhr.getReadyState());
+<a name="line102"></a>}
+<a name="line103"></a>
+<a name="line104"></a>function testGetLastUri() {
+<a name="line105"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line106"></a>  assertEquals(&#39;nothing sent yet, empty URI&#39;, &#39;&#39;, xhr.getLastUri());
+<a name="line107"></a>
+<a name="line108"></a>  var requestUrl = &#39;http://www.example.com/&#39;;
+<a name="line109"></a>  xhr.send(requestUrl);
+<a name="line110"></a>  assertEquals(&#39;message sent, URI saved&#39;, requestUrl, xhr.getLastUri());
+<a name="line111"></a>}
+<a name="line112"></a>
+<a name="line113"></a>function testGetLastMethod() {
+<a name="line114"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line115"></a>  assertUndefined(&#39;nothing sent yet, empty method&#39;, xhr.getLastMethod());
+<a name="line116"></a>
+<a name="line117"></a>  var method = &#39;POKE&#39;;
+<a name="line118"></a>  xhr.send(&#39;http://www.example.com/&#39;, method);
+<a name="line119"></a>  assertEquals(&#39;message sent, method saved&#39;, method, xhr.getLastMethod());
+<a name="line120"></a>  xhr.simulateResponse(200, &#39;&#39;);
+<a name="line121"></a>
+<a name="line122"></a>  xhr.send(&#39;http://www.example.com/&#39;);
+<a name="line123"></a>  assertEquals(&#39;message sent, method saved&#39;, &#39;GET&#39;, xhr.getLastMethod());
+<a name="line124"></a>}
+<a name="line125"></a>
+<a name="line126"></a>function testGetLastContent() {
+<a name="line127"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line128"></a>  assertUndefined(&#39;nothing sent yet, empty content&#39;, xhr.getLastContent());
+<a name="line129"></a>
+<a name="line130"></a>  var postContent = &#39;var=value&amp;var2=value2&#39;;
+<a name="line131"></a>  xhr.send(&#39;http://www.example.com/&#39;, undefined, postContent);
+<a name="line132"></a>  assertEquals(&#39;POST message sent, content saved&#39;,
+<a name="line133"></a>               postContent, xhr.getLastContent());
+<a name="line134"></a>  xhr.simulateResponse(200, &#39;&#39;);
+<a name="line135"></a>
+<a name="line136"></a>  xhr.send(&#39;http://www.example.com/&#39;);
+<a name="line137"></a>  assertUndefined(&#39;GET message sent, content cleaned&#39;, xhr.getLastContent());
+<a name="line138"></a>}
+<a name="line139"></a>
+<a name="line140"></a>function testGetLastRequestHeaders() {
+<a name="line141"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line142"></a>  assertUndefined(&#39;nothing sent yet, empty headers&#39;,
+<a name="line143"></a>                  xhr.getLastRequestHeaders());
+<a name="line144"></a>
+<a name="line145"></a>  xhr.send(&#39;http://www.example.com/&#39;, undefined, undefined,
+<a name="line146"></a>      {&#39;From&#39;: &#39;page@google.com&#39;});
+<a name="line147"></a>  assertObjectEquals(&#39;Request sent with extra headers, headers saved&#39;,
+<a name="line148"></a>      {&#39;From&#39;: &#39;page@google.com&#39;},
+<a name="line149"></a>      xhr.getLastRequestHeaders());
+<a name="line150"></a>  xhr.simulateResponse(200, &#39;&#39;);
+<a name="line151"></a>
+<a name="line152"></a>  xhr.send(&#39;http://www.example.com&#39;);
+<a name="line153"></a>  assertUndefined(&#39;New request sent without extra headers&#39;,
+<a name="line154"></a>      xhr.getLastRequestHeaders());
+<a name="line155"></a>}
+<a name="line156"></a>
+<a name="line157"></a>function testGetResponseText() {
+<a name="line158"></a>  // Text response came.
+<a name="line159"></a>  var called = false;
+<a name="line160"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line161"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, function(e) {
+<a name="line162"></a>    called = true;
+<a name="line163"></a>    assertEquals(&#39;text&#39;, e.target.getResponseText());
+<a name="line164"></a>  });
+<a name="line165"></a>  xhr.simulateResponse(200, &#39;text&#39;);
+<a name="line166"></a>  assertTrue(called);
+<a name="line167"></a>
+<a name="line168"></a>  // XML response came.
+<a name="line169"></a>  var called = false;
+<a name="line170"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line171"></a>  var xml = goog.dom.xml.createDocument();
+<a name="line172"></a>  xml.appendChild(xml.createElement(&#39;root&#39;));
+<a name="line173"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, function(e) {
+<a name="line174"></a>    called = true;
+<a name="line175"></a>    var text = e.target.getResponseText();
+<a name="line176"></a>    assertTrue(/&lt;root ?\/&gt;/.test(text));
+<a name="line177"></a>  });
+<a name="line178"></a>  xhr.simulateResponse(200, xml);
+<a name="line179"></a>  assertTrue(called);
+<a name="line180"></a>}
+<a name="line181"></a>
+<a name="line182"></a>function testGetResponseJson() {
+<a name="line183"></a>  // Valid JSON response came.
+<a name="line184"></a>  var called = false;
+<a name="line185"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line186"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, function(e) {
+<a name="line187"></a>    called = true;
+<a name="line188"></a>    assertArrayEquals([0, 1], e.target.getResponseJson());
+<a name="line189"></a>  });
+<a name="line190"></a>  xhr.simulateResponse(200, &#39;[0, 1]&#39;);
+<a name="line191"></a>  assertTrue(called);
+<a name="line192"></a>
+<a name="line193"></a>  // Valid JSON response with XSSI prefix encoded came.
+<a name="line194"></a>  var called = false;
+<a name="line195"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line196"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, function(e) {
+<a name="line197"></a>    called = true;
+<a name="line198"></a>    assertArrayEquals([0, 1], e.target.getResponseJson(&#39;)]}\&#39;, \n&#39;));
+<a name="line199"></a>  });
+<a name="line200"></a>  xhr.simulateResponse(200, &#39;)]}\&#39;, \n[0, 1]&#39;);
+<a name="line201"></a>  assertTrue(called);
+<a name="line202"></a>
+<a name="line203"></a>  // Invalid JSON response came.
+<a name="line204"></a>  var called = false;
+<a name="line205"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line206"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, function(e) {
+<a name="line207"></a>    called = true;
+<a name="line208"></a>    assertThrows(e.target.getResponseJson);
+<a name="line209"></a>  });
+<a name="line210"></a>  xhr.simulateResponse(200, &#39;[0, 1&#39;);
+<a name="line211"></a>  assertTrue(called);
+<a name="line212"></a>
+<a name="line213"></a>  // XML response came.
+<a name="line214"></a>  var called = false;
+<a name="line215"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line216"></a>  var xml = goog.dom.xml.createDocument();
+<a name="line217"></a>  xml.appendChild(xml.createElement(&#39;root&#39;));
+<a name="line218"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, function(e) {
+<a name="line219"></a>    called = true;
+<a name="line220"></a>    assertThrows(e.target.getResponseJson);
+<a name="line221"></a>  });
+<a name="line222"></a>  xhr.simulateResponse(200, xml);
+<a name="line223"></a>  assertTrue(called);
+<a name="line224"></a>}
+<a name="line225"></a>
+<a name="line226"></a>function testGetResponseXml() {
+<a name="line227"></a>  // Text response came.
+<a name="line228"></a>  var called = false;
+<a name="line229"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line230"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, function(e) {
+<a name="line231"></a>    called = true;
+<a name="line232"></a>    assertNull(e.target.getResponseXml());
+<a name="line233"></a>  });
+<a name="line234"></a>  xhr.simulateResponse(200, &#39;text&#39;);
+<a name="line235"></a>  assertTrue(called);
+<a name="line236"></a>
+<a name="line237"></a>  // XML response came.
+<a name="line238"></a>  var called = false;
+<a name="line239"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line240"></a>  var xml = goog.dom.xml.createDocument();
+<a name="line241"></a>  xml.appendChild(xml.createElement(&#39;root&#39;));
+<a name="line242"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, function(e) {
+<a name="line243"></a>    called = true;
+<a name="line244"></a>    assertEquals(xml, e.target.getResponseXml());
+<a name="line245"></a>  });
+<a name="line246"></a>  xhr.simulateResponse(200, xml);
+<a name="line247"></a>  assertTrue(called);
+<a name="line248"></a>}
+<a name="line249"></a>
+<a name="line250"></a>function testGetResponseHeaders_noHeadersPresent() {
+<a name="line251"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line252"></a>  var mockListener = mockControl.createFunctionMock();
+<a name="line253"></a>  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+<a name="line254"></a>      .$does(function(e) {
+<a name="line255"></a>        assertTrue(e.type == goog.net.EventType.SUCCESS);
+<a name="line256"></a>        assertUndefined(e.target.getResponseHeader(&#39;XHR&#39;));
+<a name="line257"></a>      });
+<a name="line258"></a>  mockControl.$replayAll();
+<a name="line259"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, mockListener);
+<a name="line260"></a>  xhr.simulateResponse(200, &#39;&#39;);
+<a name="line261"></a>
+<a name="line262"></a>  mockControl.$verifyAll();
+<a name="line263"></a>  mockControl.$resetAll();
+<a name="line264"></a>}
+<a name="line265"></a>
+<a name="line266"></a>function testGetResponseHeaders_headersPresent() {
+<a name="line267"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line268"></a>  var mockListener = mockControl.createFunctionMock();
+<a name="line269"></a>  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+<a name="line270"></a>      .$does(function(e) {
+<a name="line271"></a>        assertTrue(e.type == goog.net.EventType.SUCCESS);
+<a name="line272"></a>        assertUndefined(e.target.getResponseHeader(&#39;XHR&#39;));
+<a name="line273"></a>        assertEquals(e.target.getResponseHeader(&#39;Pragma&#39;), &#39;no-cache&#39;);
+<a name="line274"></a>      });
+<a name="line275"></a>  mockControl.$replayAll();
+<a name="line276"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, mockListener);
+<a name="line277"></a>  xhr.simulateResponse(200, &#39;&#39;, {&#39;Pragma&#39;: &#39;no-cache&#39;});
+<a name="line278"></a>
+<a name="line279"></a>  mockControl.$verifyAll();
+<a name="line280"></a>  mockControl.$resetAll();
+<a name="line281"></a>}
+<a name="line282"></a>
+<a name="line283"></a>function testAbort_WhenNoPendingSentRequests() {
+<a name="line284"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line285"></a>  var eventListener = mockControl.createFunctionMock();
+<a name="line286"></a>  mockControl.$replayAll();
+<a name="line287"></a>
+<a name="line288"></a>  goog.events.listen(xhr, goog.net.EventType.COMPLETE, eventListener);
+<a name="line289"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, eventListener);
+<a name="line290"></a>  goog.events.listen(xhr, goog.net.EventType.ABORT, eventListener);
+<a name="line291"></a>  goog.events.listen(xhr, goog.net.EventType.ERROR, eventListener);
+<a name="line292"></a>  goog.events.listen(xhr, goog.net.EventType.READY, eventListener);
+<a name="line293"></a>
+<a name="line294"></a>  xhr.abort();
+<a name="line295"></a>
+<a name="line296"></a>  mockControl.$verifyAll();
+<a name="line297"></a>  mockControl.$resetAll();
+<a name="line298"></a>}
+<a name="line299"></a>
+<a name="line300"></a>function testAbort_PendingSentRequest() {
+<a name="line301"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line302"></a>  var mockListener = mockControl.createFunctionMock();
+<a name="line303"></a>
+<a name="line304"></a>  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+<a name="line305"></a>  .$does(function(e) {
+<a name="line306"></a>        assertTrue(e.type == goog.net.EventType.COMPLETE);
+<a name="line307"></a>        assertObjectEquals(e.target, xhr);
+<a name="line308"></a>        assertEquals(e.target.getLastErrorCode(), goog.net.ErrorCode.ABORT);
+<a name="line309"></a>        assertTrue(e.target.isActive());
+<a name="line310"></a>      });
+<a name="line311"></a>  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+<a name="line312"></a>  .$does(function(e) {
+<a name="line313"></a>        assertTrue(e.type == goog.net.EventType.ABORT);
+<a name="line314"></a>        assertObjectEquals(e.target, xhr);
+<a name="line315"></a>        assertTrue(e.target.isActive());
+<a name="line316"></a>      });
+<a name="line317"></a>  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+<a name="line318"></a>  .$does(function(e) {
+<a name="line319"></a>        assertTrue(e.type == goog.net.EventType.READY);
+<a name="line320"></a>        assertObjectEquals(e.target, xhr);
+<a name="line321"></a>        assertFalse(e.target.isActive());
+<a name="line322"></a>      });
+<a name="line323"></a>  mockControl.$replayAll();
+<a name="line324"></a>
+<a name="line325"></a>  goog.events.listen(xhr, goog.net.EventType.COMPLETE, mockListener);
+<a name="line326"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, mockListener);
+<a name="line327"></a>  goog.events.listen(xhr, goog.net.EventType.ABORT, mockListener);
+<a name="line328"></a>  goog.events.listen(xhr, goog.net.EventType.ERROR, mockListener);
+<a name="line329"></a>  goog.events.listen(xhr, goog.net.EventType.READY, mockListener);
+<a name="line330"></a>  xhr.send(&#39;dummyurl&#39;);
+<a name="line331"></a>  xhr.abort();
+<a name="line332"></a>
+<a name="line333"></a>  mockControl.$verifyAll();
+<a name="line334"></a>  mockControl.$resetAll();
+<a name="line335"></a>}
+<a name="line336"></a>
+<a name="line337"></a>function testEvents_Success() {
+<a name="line338"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line339"></a>  var mockListener = mockControl.createFunctionMock();
+<a name="line340"></a>
+<a name="line341"></a>  var readyState = goog.net.XmlHttp.ReadyState.UNINITIALIZED;
+<a name="line342"></a>  function readyStateListener(e) {
+<a name="line343"></a>    assertEquals(e.type, goog.net.EventType.READY_STATE_CHANGE);
+<a name="line344"></a>    assertObjectEquals(e.target, xhr);
+<a name="line345"></a>    readyState++;
+<a name="line346"></a>    assertEquals(e.target.getReadyState(), readyState);
+<a name="line347"></a>    assertTrue(e.target.isActive());
+<a name="line348"></a>  }
+<a name="line349"></a>
+<a name="line350"></a>  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+<a name="line351"></a>  .$does(function(e) {
+<a name="line352"></a>        assertEquals(e.type, goog.net.EventType.COMPLETE);
+<a name="line353"></a>        assertObjectEquals(e.target, xhr);
+<a name="line354"></a>        assertEquals(e.target.getLastErrorCode(), goog.net.ErrorCode.NO_ERROR);
+<a name="line355"></a>        assertTrue(e.target.isActive());
+<a name="line356"></a>      });
+<a name="line357"></a>  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+<a name="line358"></a>  .$does(function(e) {
+<a name="line359"></a>        assertEquals(e.type, goog.net.EventType.SUCCESS);
+<a name="line360"></a>        assertObjectEquals(e.target, xhr);
+<a name="line361"></a>        assertTrue(e.target.isActive());
+<a name="line362"></a>      });
+<a name="line363"></a>  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+<a name="line364"></a>  .$does(function(e) {
+<a name="line365"></a>        assertEquals(e.type, goog.net.EventType.READY);
+<a name="line366"></a>        assertObjectEquals(e.target, xhr);
+<a name="line367"></a>        assertFalse(e.target.isActive());
+<a name="line368"></a>      });
+<a name="line369"></a>  mockControl.$replayAll();
+<a name="line370"></a>
+<a name="line371"></a>  goog.events.listen(xhr, goog.net.EventType.READY_STATE_CHANGE,
+<a name="line372"></a>      readyStateListener);
+<a name="line373"></a>  goog.events.listen(xhr, goog.net.EventType.COMPLETE, mockListener);
+<a name="line374"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, mockListener);
+<a name="line375"></a>  goog.events.listen(xhr, goog.net.EventType.ABORT, mockListener);
+<a name="line376"></a>  goog.events.listen(xhr, goog.net.EventType.ERROR, mockListener);
+<a name="line377"></a>  goog.events.listen(xhr, goog.net.EventType.READY, mockListener);
+<a name="line378"></a>  xhr.send(&#39;dummyurl&#39;);
+<a name="line379"></a>  xhr.simulateResponse(200, null);
+<a name="line380"></a>
+<a name="line381"></a>  mockControl.$verifyAll();
+<a name="line382"></a>  mockControl.$resetAll();
+<a name="line383"></a>}
+<a name="line384"></a>
+<a name="line385"></a>function testGetResponseHeaders() {
+<a name="line386"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line387"></a>  var mockListener = mockControl.createFunctionMock();
+<a name="line388"></a>  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+<a name="line389"></a>      .$does(function(e) {
+<a name="line390"></a>        var headers = e.target.getResponseHeaders();
+<a name="line391"></a>        assertEquals(2, goog.object.getCount(headers));
+<a name="line392"></a>        assertEquals(&#39;foo&#39;, headers[&#39;test1&#39;]);
+<a name="line393"></a>        assertEquals(&#39;bar&#39;, headers[&#39;test2&#39;]);
+<a name="line394"></a>      });
+<a name="line395"></a>  mockControl.$replayAll();
+<a name="line396"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, mockListener);
+<a name="line397"></a>
+<a name="line398"></a>  // Simulate an XHR with 2 headers.
+<a name="line399"></a>  xhr.simulateResponse(200, &#39;&#39;, {&#39;test1&#39;: &#39;foo&#39;, &#39;test2&#39;: &#39;bar&#39;});
+<a name="line400"></a>
+<a name="line401"></a>  mockControl.$verifyAll();
+<a name="line402"></a>  mockControl.$resetAll();
+<a name="line403"></a>}
+<a name="line404"></a>
+<a name="line405"></a>function testGetResponseHeadersWithColonInValue() {
+<a name="line406"></a>  var xhr = new goog.testing.net.XhrIo();
+<a name="line407"></a>  var mockListener = mockControl.createFunctionMock();
+<a name="line408"></a>  mockListener(new goog.testing.mockmatchers.InstanceOf(goog.events.Event))
+<a name="line409"></a>      .$does(function(e) {
+<a name="line410"></a>        var headers = e.target.getResponseHeaders();
+<a name="line411"></a>        assertEquals(1, goog.object.getCount(headers));
+<a name="line412"></a>        assertEquals(&#39;f:o:o&#39;, headers[&#39;test1&#39;]);
+<a name="line413"></a>      });
+<a name="line414"></a>  mockControl.$replayAll();
+<a name="line415"></a>  goog.events.listen(xhr, goog.net.EventType.SUCCESS, mockListener);
+<a name="line416"></a>
+<a name="line417"></a>  // Simulate an XHR with a colon in the http header value.
+<a name="line418"></a>  xhr.simulateResponse(200, &#39;&#39;, {&#39;test1&#39;: &#39;f:o:o&#39;});
+<a name="line419"></a>
+<a name="line420"></a>  mockControl.$verifyAll();
+<a name="line421"></a>  mockControl.$resetAll();
+<a name="line422"></a>}
+</pre>
+
+
+</body>
+</html>

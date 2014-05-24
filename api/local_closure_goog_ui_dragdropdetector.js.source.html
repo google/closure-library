@@ -1,0 +1,697 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>dragdropdetector.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_dragdropdetector.js.html">dragdropdetector.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Detects images dragged and dropped on to the window.
+<a name="line17"></a> *
+<a name="line18"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.DragDropDetector&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.ui.DragDropDetector.EventType&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.ui.DragDropDetector.ImageDropEvent&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.ui.DragDropDetector.LinkDropEvent&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line32"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line33"></a>goog.require(&#39;goog.string&#39;);
+<a name="line34"></a>goog.require(&#39;goog.style&#39;);
+<a name="line35"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * Creates a new drag and drop detector.
+<a name="line41"></a> * @param {string=} opt_filePath The URL of the page to use for the detector.
+<a name="line42"></a> *     It should contain the same contents as dragdropdetector_target.html in
+<a name="line43"></a> *     the demos directory.
+<a name="line44"></a> * @constructor
+<a name="line45"></a> * @extends {goog.events.EventTarget}
+<a name="line46"></a> * @final
+<a name="line47"></a> */
+<a name="line48"></a>goog.ui.DragDropDetector = function(opt_filePath) {
+<a name="line49"></a>  goog.ui.DragDropDetector.base(this, &#39;constructor&#39;);
+<a name="line50"></a>
+<a name="line51"></a>  var iframe = goog.dom.createDom(goog.dom.TagName.IFRAME, {
+<a name="line52"></a>    &#39;frameborder&#39;: 0
+<a name="line53"></a>  });
+<a name="line54"></a>  // In Firefox, we do all drop detection with an IFRAME.  In IE, we only use
+<a name="line55"></a>  // the IFRAME to capture copied, non-linked images.  (When we don&#39;t need it,
+<a name="line56"></a>  // we put a text INPUT before it and push it off screen.)
+<a name="line57"></a>  iframe.className = goog.userAgent.IE ?
+<a name="line58"></a>      goog.getCssName(
+<a name="line59"></a>          goog.ui.DragDropDetector.BASE_CSS_NAME_, &#39;ie-editable-iframe&#39;) :
+<a name="line60"></a>      goog.getCssName(
+<a name="line61"></a>          goog.ui.DragDropDetector.BASE_CSS_NAME_, &#39;w3c-editable-iframe&#39;);
+<a name="line62"></a>  iframe.src = opt_filePath || goog.ui.DragDropDetector.DEFAULT_FILE_PATH_;
+<a name="line63"></a>
+<a name="line64"></a>  this.element_ = /** @type {HTMLIFrameElement} */ (iframe);
+<a name="line65"></a>
+<a name="line66"></a>  this.handler_ = new goog.events.EventHandler(this);
+<a name="line67"></a>  this.handler_.listen(iframe, goog.events.EventType.LOAD, this.initIframe_);
+<a name="line68"></a>
+<a name="line69"></a>  if (goog.userAgent.IE) {
+<a name="line70"></a>    // In IE, we have to bounce between an INPUT for catching links and an
+<a name="line71"></a>    // IFRAME for catching images.
+<a name="line72"></a>    this.textInput_ = goog.dom.createDom(goog.dom.TagName.INPUT, {
+<a name="line73"></a>      &#39;type&#39;: &#39;text&#39;,
+<a name="line74"></a>      &#39;className&#39;: goog.getCssName(
+<a name="line75"></a>          goog.ui.DragDropDetector.BASE_CSS_NAME_, &#39;ie-input&#39;)
+<a name="line76"></a>    });
+<a name="line77"></a>
+<a name="line78"></a>    this.root_ = goog.dom.createDom(goog.dom.TagName.DIV,
+<a name="line79"></a>        goog.getCssName(goog.ui.DragDropDetector.BASE_CSS_NAME_, &#39;ie-div&#39;),
+<a name="line80"></a>        this.textInput_, iframe);
+<a name="line81"></a>  } else {
+<a name="line82"></a>    this.root_ = iframe;
+<a name="line83"></a>  }
+<a name="line84"></a>
+<a name="line85"></a>  document.body.appendChild(this.root_);
+<a name="line86"></a>};
+<a name="line87"></a>goog.inherits(goog.ui.DragDropDetector, goog.events.EventTarget);
+<a name="line88"></a>
+<a name="line89"></a>
+<a name="line90"></a>/**
+<a name="line91"></a> * Drag and drop event types.
+<a name="line92"></a> * @enum {string}
+<a name="line93"></a> */
+<a name="line94"></a>goog.ui.DragDropDetector.EventType = {
+<a name="line95"></a>  IMAGE_DROPPED: &#39;onimagedrop&#39;,
+<a name="line96"></a>  LINK_DROPPED: &#39;onlinkdrop&#39;
+<a name="line97"></a>};
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Browser specific drop event type.
+<a name="line102"></a> * @type {string}
+<a name="line103"></a> * @private
+<a name="line104"></a> */
+<a name="line105"></a>goog.ui.DragDropDetector.DROP_EVENT_TYPE_ = goog.userAgent.IE ?
+<a name="line106"></a>    goog.events.EventType.DROP : &#39;dragdrop&#39;;
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Initial value for clientX and clientY indicating that the location has
+<a name="line111"></a> * never been updated.
+<a name="line112"></a> */
+<a name="line113"></a>goog.ui.DragDropDetector.INIT_POSITION = -10000;
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Prefix for all CSS names.
+<a name="line118"></a> * @type {string}
+<a name="line119"></a> * @private
+<a name="line120"></a> */
+<a name="line121"></a>goog.ui.DragDropDetector.BASE_CSS_NAME_ = goog.getCssName(&#39;goog-dragdrop&#39;);
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * @desc Message shown to users to inform them that they can&#39;t drag and drop
+<a name="line126"></a> *     local files.
+<a name="line127"></a> */
+<a name="line128"></a>var MSG_DRAG_DROP_LOCAL_FILE_ERROR = goog.getMsg(&#39;It is not possible to drag &#39; +
+<a name="line129"></a>    &#39;and drop image files at this time.\nPlease drag an image from your web &#39; +
+<a name="line130"></a>    &#39;browser.&#39;);
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * @desc Message shown to users trying to drag and drop protected images from
+<a name="line135"></a> *     Flickr, etc.
+<a name="line136"></a> */
+<a name="line137"></a>var MSG_DRAG_DROP_PROTECTED_FILE_ERROR = goog.getMsg(&#39;The image you are &#39; +
+<a name="line138"></a>    &#39;trying to drag has been blocked by the hosting site.&#39;);
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * A map of special case information for URLs that cannot be dropped.  Each
+<a name="line143"></a> * entry is of the form:
+<a name="line144"></a> *     regex: url regex
+<a name="line145"></a> *     message: user visible message about this special case
+<a name="line146"></a> * @type {Array.&lt;{regex: RegExp, message: string}&gt;}
+<a name="line147"></a> * @private
+<a name="line148"></a> */
+<a name="line149"></a>goog.ui.DragDropDetector.SPECIAL_CASE_URLS_ = [
+<a name="line150"></a>  {
+<a name="line151"></a>    regex: /^file:\/\/\//,
+<a name="line152"></a>    message: MSG_DRAG_DROP_LOCAL_FILE_ERROR
+<a name="line153"></a>  },
+<a name="line154"></a>  {
+<a name="line155"></a>    regex: /flickr(.*)spaceball.gif$/,
+<a name="line156"></a>    message: MSG_DRAG_DROP_PROTECTED_FILE_ERROR
+<a name="line157"></a>  }
+<a name="line158"></a>];
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Regex that matches anything that looks kind of like a URL.  It matches
+<a name="line163"></a> * nonspacechars://nonspacechars
+<a name="line164"></a> * @type {RegExp}
+<a name="line165"></a> * @private
+<a name="line166"></a> */
+<a name="line167"></a>goog.ui.DragDropDetector.URL_LIKE_REGEX_ = /^\S+:\/\/\S*$/;
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>/**
+<a name="line171"></a> * Path to the dragdrop.html file.
+<a name="line172"></a> * @type {string}
+<a name="line173"></a> * @private
+<a name="line174"></a> */
+<a name="line175"></a>goog.ui.DragDropDetector.DEFAULT_FILE_PATH_ = &#39;dragdropdetector_target.html&#39;;
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * Our event handler object.
+<a name="line180"></a> * @type {goog.events.EventHandler}
+<a name="line181"></a> * @private
+<a name="line182"></a> */
+<a name="line183"></a>goog.ui.DragDropDetector.prototype.handler_;
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * The root element (the IFRAME on most browsers, the DIV on IE).
+<a name="line188"></a> * @type {Element}
+<a name="line189"></a> * @private
+<a name="line190"></a> */
+<a name="line191"></a>goog.ui.DragDropDetector.prototype.root_;
+<a name="line192"></a>
+<a name="line193"></a>
+<a name="line194"></a>/**
+<a name="line195"></a> * The text INPUT element used to detect link drops on IE.  null on Firefox.
+<a name="line196"></a> * @type {Element}
+<a name="line197"></a> * @private
+<a name="line198"></a> */
+<a name="line199"></a>goog.ui.DragDropDetector.prototype.textInput_;
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>/**
+<a name="line203"></a> * The iframe element.
+<a name="line204"></a> * @type {HTMLIFrameElement}
+<a name="line205"></a> * @private
+<a name="line206"></a> */
+<a name="line207"></a>goog.ui.DragDropDetector.prototype.element_;
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * The iframe&#39;s window, null if the iframe hasn&#39;t loaded yet.
+<a name="line212"></a> * @type {Window}
+<a name="line213"></a> * @private
+<a name="line214"></a> */
+<a name="line215"></a>goog.ui.DragDropDetector.prototype.window_ = null;
+<a name="line216"></a>
+<a name="line217"></a>
+<a name="line218"></a>/**
+<a name="line219"></a> * The iframe&#39;s document, null if the iframe hasn&#39;t loaded yet.
+<a name="line220"></a> * @type {Document}
+<a name="line221"></a> * @private
+<a name="line222"></a> */
+<a name="line223"></a>goog.ui.DragDropDetector.prototype.document_ = null;
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>/**
+<a name="line227"></a> * The iframe&#39;s body, null if the iframe hasn&#39;t loaded yet.
+<a name="line228"></a> * @type {HTMLBodyElement}
+<a name="line229"></a> * @private
+<a name="line230"></a> */
+<a name="line231"></a>goog.ui.DragDropDetector.prototype.body_ = null;
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>/**
+<a name="line235"></a> * Whether we are in &quot;screen cover&quot; mode in which the iframe or div is
+<a name="line236"></a> * covering the entire screen.
+<a name="line237"></a> * @type {boolean}
+<a name="line238"></a> * @private
+<a name="line239"></a> */
+<a name="line240"></a>goog.ui.DragDropDetector.prototype.isCoveringScreen_ = false;
+<a name="line241"></a>
+<a name="line242"></a>
+<a name="line243"></a>/**
+<a name="line244"></a> * The last position of the mouse while dragging.
+<a name="line245"></a> * @type {goog.math.Coordinate}
+<a name="line246"></a> * @private
+<a name="line247"></a> */
+<a name="line248"></a>goog.ui.DragDropDetector.prototype.mousePosition_ = null;
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>/**
+<a name="line252"></a> * Initialize the iframe after it has loaded.
+<a name="line253"></a> * @private
+<a name="line254"></a> */
+<a name="line255"></a>goog.ui.DragDropDetector.prototype.initIframe_ = function() {
+<a name="line256"></a>  // Set up a holder for position data.
+<a name="line257"></a>  this.mousePosition_ = new goog.math.Coordinate(
+<a name="line258"></a>      goog.ui.DragDropDetector.INIT_POSITION,
+<a name="line259"></a>      goog.ui.DragDropDetector.INIT_POSITION);
+<a name="line260"></a>
+<a name="line261"></a>  // Set up pointers to the important parts of the IFrame.
+<a name="line262"></a>  this.window_ = this.element_.contentWindow;
+<a name="line263"></a>  this.document_ = this.window_.document;
+<a name="line264"></a>  this.body_ = this.document_.body;
+<a name="line265"></a>
+<a name="line266"></a>  if (goog.userAgent.GECKO) {
+<a name="line267"></a>    this.document_.designMode = &#39;on&#39;;
+<a name="line268"></a>  } else if (!goog.userAgent.IE) {
+<a name="line269"></a>    // Bug 1667110
+<a name="line270"></a>    // In IE, we only set the IFrame body as content-editable when we bring it
+<a name="line271"></a>    // into view at the top of the page.  Otherwise it may take focus when the
+<a name="line272"></a>    // page is loaded, scrolling the user far offscreen.
+<a name="line273"></a>    // Note that this isn&#39;t easily unit-testable, since it depends on a
+<a name="line274"></a>    // browser-specific behavior with content-editable areas.
+<a name="line275"></a>    this.body_.contentEditable = true;
+<a name="line276"></a>  }
+<a name="line277"></a>
+<a name="line278"></a>  this.handler_.listen(document.body, goog.events.EventType.DRAGENTER,
+<a name="line279"></a>      this.coverScreen_);
+<a name="line280"></a>
+<a name="line281"></a>  if (goog.userAgent.IE) {
+<a name="line282"></a>    // IE only events.
+<a name="line283"></a>    // Set up events on the IFrame.
+<a name="line284"></a>    this.handler_.
+<a name="line285"></a>        listen(this.body_,
+<a name="line286"></a>            [goog.events.EventType.DRAGENTER, goog.events.EventType.DRAGOVER],
+<a name="line287"></a>            goog.ui.DragDropDetector.enforceCopyEffect_).
+<a name="line288"></a>        listen(this.body_, goog.events.EventType.MOUSEOUT,
+<a name="line289"></a>            this.switchToInput_).
+<a name="line290"></a>        listen(this.body_, goog.events.EventType.DRAGLEAVE,
+<a name="line291"></a>            this.uncoverScreen_).
+<a name="line292"></a>        listen(this.body_, goog.ui.DragDropDetector.DROP_EVENT_TYPE_,
+<a name="line293"></a>            function(e) {
+<a name="line294"></a>              this.trackMouse_(e);
+<a name="line295"></a>
+<a name="line296"></a>              // The drop event occurs before the content is added to the
+<a name="line297"></a>              // iframe.  We setTimeout so that handleNodeInserted_ is called
+<a name="line298"></a>              //  after the content is in the document.
+<a name="line299"></a>              goog.global.setTimeout(
+<a name="line300"></a>                  goog.bind(this.handleNodeInserted_, this, e), 0);
+<a name="line301"></a>              return true;
+<a name="line302"></a>            }).
+<a name="line303"></a>
+<a name="line304"></a>        // Set up events on the DIV.
+<a name="line305"></a>        listen(this.root_,
+<a name="line306"></a>            [goog.events.EventType.DRAGENTER, goog.events.EventType.DRAGOVER],
+<a name="line307"></a>            this.handleNewDrag_).
+<a name="line308"></a>        listen(this.root_,
+<a name="line309"></a>            [
+<a name="line310"></a>              goog.events.EventType.MOUSEMOVE,
+<a name="line311"></a>              goog.events.EventType.KEYPRESS
+<a name="line312"></a>            ], this.uncoverScreen_).
+<a name="line313"></a>
+<a name="line314"></a>        // Set up events on the text INPUT.
+<a name="line315"></a>        listen(this.textInput_, goog.events.EventType.DRAGOVER,
+<a name="line316"></a>            goog.events.Event.preventDefault).
+<a name="line317"></a>        listen(this.textInput_, goog.ui.DragDropDetector.DROP_EVENT_TYPE_,
+<a name="line318"></a>            this.handleInputDrop_);
+<a name="line319"></a>  } else {
+<a name="line320"></a>    // W3C events.
+<a name="line321"></a>    this.handler_.
+<a name="line322"></a>        listen(this.body_, goog.ui.DragDropDetector.DROP_EVENT_TYPE_,
+<a name="line323"></a>            function(e) {
+<a name="line324"></a>              this.trackMouse_(e);
+<a name="line325"></a>              this.uncoverScreen_();
+<a name="line326"></a>            }).
+<a name="line327"></a>        listen(this.body_,
+<a name="line328"></a>            [goog.events.EventType.MOUSEMOVE, goog.events.EventType.KEYPRESS],
+<a name="line329"></a>            this.uncoverScreen_).
+<a name="line330"></a>
+<a name="line331"></a>        // Detect content insertion.
+<a name="line332"></a>        listen(this.document_, &#39;DOMNodeInserted&#39;,
+<a name="line333"></a>            this.handleNodeInserted_);
+<a name="line334"></a>  }
+<a name="line335"></a>};
+<a name="line336"></a>
+<a name="line337"></a>
+<a name="line338"></a>/**
+<a name="line339"></a> * Enforce that anything dragged over the IFRAME is copied in to it, rather
+<a name="line340"></a> * than making it navigate to a different URL.
+<a name="line341"></a> * @param {goog.events.BrowserEvent} e The event to enforce copying on.
+<a name="line342"></a> * @private
+<a name="line343"></a> */
+<a name="line344"></a>goog.ui.DragDropDetector.enforceCopyEffect_ = function(e) {
+<a name="line345"></a>  var event = e.getBrowserEvent();
+<a name="line346"></a>  // This function is only called on IE.
+<a name="line347"></a>  if (event.dataTransfer.dropEffect.toLowerCase() != &#39;copy&#39;) {
+<a name="line348"></a>    event.dataTransfer.dropEffect = &#39;copy&#39;;
+<a name="line349"></a>  }
+<a name="line350"></a>};
+<a name="line351"></a>
+<a name="line352"></a>
+<a name="line353"></a>/**
+<a name="line354"></a> * Cover the screen with the iframe.
+<a name="line355"></a> * @param {goog.events.BrowserEvent} e The event that caused this function call.
+<a name="line356"></a> * @private
+<a name="line357"></a> */
+<a name="line358"></a>goog.ui.DragDropDetector.prototype.coverScreen_ = function(e) {
+<a name="line359"></a>  // Don&#39;t do anything if the drop effect is &#39;none&#39; and we are in IE.
+<a name="line360"></a>  // It is set to &#39;none&#39; in cases like dragging text inside a text area.
+<a name="line361"></a>  if (goog.userAgent.IE &amp;&amp;
+<a name="line362"></a>      e.getBrowserEvent().dataTransfer.dropEffect == &#39;none&#39;) {
+<a name="line363"></a>    return;
+<a name="line364"></a>  }
+<a name="line365"></a>
+<a name="line366"></a>  if (!this.isCoveringScreen_) {
+<a name="line367"></a>    this.isCoveringScreen_ = true;
+<a name="line368"></a>    if (goog.userAgent.IE) {
+<a name="line369"></a>      goog.style.setStyle(this.root_, &#39;top&#39;, &#39;0&#39;);
+<a name="line370"></a>      this.body_.contentEditable = true;
+<a name="line371"></a>      this.switchToInput_(e);
+<a name="line372"></a>    } else {
+<a name="line373"></a>      goog.style.setStyle(this.root_, &#39;height&#39;, &#39;5000px&#39;);
+<a name="line374"></a>    }
+<a name="line375"></a>  }
+<a name="line376"></a>};
+<a name="line377"></a>
+<a name="line378"></a>
+<a name="line379"></a>/**
+<a name="line380"></a> * Uncover the screen.
+<a name="line381"></a> * @private
+<a name="line382"></a> */
+<a name="line383"></a>goog.ui.DragDropDetector.prototype.uncoverScreen_ = function() {
+<a name="line384"></a>  if (this.isCoveringScreen_) {
+<a name="line385"></a>    this.isCoveringScreen_ = false;
+<a name="line386"></a>    if (goog.userAgent.IE) {
+<a name="line387"></a>      this.body_.contentEditable = false;
+<a name="line388"></a>      goog.style.setStyle(this.root_, &#39;top&#39;, &#39;-5000px&#39;);
+<a name="line389"></a>    } else {
+<a name="line390"></a>      goog.style.setStyle(this.root_, &#39;height&#39;, &#39;10px&#39;);
+<a name="line391"></a>    }
+<a name="line392"></a>  }
+<a name="line393"></a>};
+<a name="line394"></a>
+<a name="line395"></a>
+<a name="line396"></a>/**
+<a name="line397"></a> * Re-insert the INPUT into the DIV.  Does nothing when the DIV is off screen.
+<a name="line398"></a> * @param {goog.events.BrowserEvent} e The event that caused this function call.
+<a name="line399"></a> * @private
+<a name="line400"></a> */
+<a name="line401"></a>goog.ui.DragDropDetector.prototype.switchToInput_ = function(e) {
+<a name="line402"></a>  // This is only called on IE.
+<a name="line403"></a>  if (this.isCoveringScreen_) {
+<a name="line404"></a>    goog.style.setElementShown(this.textInput_, true);
+<a name="line405"></a>  }
+<a name="line406"></a>};
+<a name="line407"></a>
+<a name="line408"></a>
+<a name="line409"></a>/**
+<a name="line410"></a> * Remove the text INPUT so the IFRAME is showing.  Does nothing when the DIV is
+<a name="line411"></a> * off screen.
+<a name="line412"></a> * @param {goog.events.BrowserEvent} e The event that caused this function call.
+<a name="line413"></a> * @private
+<a name="line414"></a> */
+<a name="line415"></a>goog.ui.DragDropDetector.prototype.switchToIframe_ = function(e) {
+<a name="line416"></a>  // This is only called on IE.
+<a name="line417"></a>  if (this.isCoveringScreen_) {
+<a name="line418"></a>    goog.style.setElementShown(this.textInput_, false);
+<a name="line419"></a>    this.isShowingInput_ = false;
+<a name="line420"></a>  }
+<a name="line421"></a>};
+<a name="line422"></a>
+<a name="line423"></a>
+<a name="line424"></a>/**
+<a name="line425"></a> * Handle a new drag event.
+<a name="line426"></a> * @param {goog.events.BrowserEvent} e The event object.
+<a name="line427"></a> * @return {boolean|undefined} Returns false in IE to cancel the event.
+<a name="line428"></a> * @private
+<a name="line429"></a> */
+<a name="line430"></a>goog.ui.DragDropDetector.prototype.handleNewDrag_ = function(e) {
+<a name="line431"></a>  var event = e.getBrowserEvent();
+<a name="line432"></a>
+<a name="line433"></a>  // This is only called on IE.
+<a name="line434"></a>  if (event.dataTransfer.dropEffect == &#39;link&#39;) {
+<a name="line435"></a>    this.switchToInput_(e);
+<a name="line436"></a>    e.preventDefault();
+<a name="line437"></a>    return false;
+<a name="line438"></a>  }
+<a name="line439"></a>
+<a name="line440"></a>  // Things that aren&#39;t links can be placed in the contentEditable iframe.
+<a name="line441"></a>  this.switchToIframe_(e);
+<a name="line442"></a>
+<a name="line443"></a>  // No need to return true since for events return true is the same as no
+<a name="line444"></a>  // return.
+<a name="line445"></a>};
+<a name="line446"></a>
+<a name="line447"></a>
+<a name="line448"></a>/**
+<a name="line449"></a> * Handle mouse tracking.
+<a name="line450"></a> * @param {goog.events.BrowserEvent} e The event object.
+<a name="line451"></a> * @private
+<a name="line452"></a> */
+<a name="line453"></a>goog.ui.DragDropDetector.prototype.trackMouse_ = function(e) {
+<a name="line454"></a>  this.mousePosition_.x = e.clientX;
+<a name="line455"></a>  this.mousePosition_.y = e.clientY;
+<a name="line456"></a>
+<a name="line457"></a>  // Check if the event is coming from within the iframe.
+<a name="line458"></a>  if (goog.dom.getOwnerDocument(/** @type {Node} */ (e.target)) != document) {
+<a name="line459"></a>    var iframePosition = goog.style.getClientPosition(this.element_);
+<a name="line460"></a>    this.mousePosition_.x += iframePosition.x;
+<a name="line461"></a>    this.mousePosition_.y += iframePosition.y;
+<a name="line462"></a>  }
+<a name="line463"></a>};
+<a name="line464"></a>
+<a name="line465"></a>
+<a name="line466"></a>/**
+<a name="line467"></a> * Handle a drop on the IE text INPUT.
+<a name="line468"></a> * @param {goog.events.BrowserEvent} e The event object.
+<a name="line469"></a> * @private
+<a name="line470"></a> */
+<a name="line471"></a>goog.ui.DragDropDetector.prototype.handleInputDrop_ = function(e) {
+<a name="line472"></a>  this.dispatchEvent(
+<a name="line473"></a>      new goog.ui.DragDropDetector.LinkDropEvent(
+<a name="line474"></a>          e.getBrowserEvent().dataTransfer.getData(&#39;Text&#39;)));
+<a name="line475"></a>  this.uncoverScreen_();
+<a name="line476"></a>  e.preventDefault();
+<a name="line477"></a>};
+<a name="line478"></a>
+<a name="line479"></a>
+<a name="line480"></a>/**
+<a name="line481"></a> * Clear the contents of the iframe.
+<a name="line482"></a> * @private
+<a name="line483"></a> */
+<a name="line484"></a>goog.ui.DragDropDetector.prototype.clearContents_ = function() {
+<a name="line485"></a>  if (goog.userAgent.WEBKIT) {
+<a name="line486"></a>    // Since this is called on a mutation event for the nodes we are going to
+<a name="line487"></a>    // clear, calling this right away crashes some versions of WebKit.  Wait
+<a name="line488"></a>    // until the events are finished.
+<a name="line489"></a>    goog.global.setTimeout(goog.bind(function() {
+<a name="line490"></a>      this.innerHTML = &#39;&#39;;
+<a name="line491"></a>    }, this.body_), 0);
+<a name="line492"></a>  } else {
+<a name="line493"></a>    this.document_.execCommand(&#39;selectAll&#39;, false, null);
+<a name="line494"></a>    this.document_.execCommand(&#39;delete&#39;, false, null);
+<a name="line495"></a>    this.document_.execCommand(&#39;selectAll&#39;, false, null);
+<a name="line496"></a>  }
+<a name="line497"></a>};
+<a name="line498"></a>
+<a name="line499"></a>
+<a name="line500"></a>/**
+<a name="line501"></a> * Event handler called when the content of the iframe changes.
+<a name="line502"></a> * @param {goog.events.BrowserEvent} e The event that caused this function call.
+<a name="line503"></a> * @private
+<a name="line504"></a> */
+<a name="line505"></a>goog.ui.DragDropDetector.prototype.handleNodeInserted_ = function(e) {
+<a name="line506"></a>  var uri;
+<a name="line507"></a>
+<a name="line508"></a>  if (this.body_.innerHTML.indexOf(&#39;&lt;&#39;) == -1) {
+<a name="line509"></a>    // If the document contains no tags (i.e. is just text), try it out.
+<a name="line510"></a>    uri = goog.string.trim(goog.dom.getTextContent(this.body_));
+<a name="line511"></a>
+<a name="line512"></a>    // See if it looks kind of like a url.
+<a name="line513"></a>    if (!uri.match(goog.ui.DragDropDetector.URL_LIKE_REGEX_)) {
+<a name="line514"></a>      uri = null;
+<a name="line515"></a>    }
+<a name="line516"></a>  }
+<a name="line517"></a>
+<a name="line518"></a>  if (!uri) {
+<a name="line519"></a>    var imgs = this.body_.getElementsByTagName(goog.dom.TagName.IMG);
+<a name="line520"></a>    if (imgs &amp;&amp; imgs.length) {
+<a name="line521"></a>      // TODO(robbyw): Grab all the images, instead of just the first.
+<a name="line522"></a>      var img = imgs[0];
+<a name="line523"></a>      uri = img.src;
+<a name="line524"></a>    }
+<a name="line525"></a>  }
+<a name="line526"></a>
+<a name="line527"></a>  if (uri) {
+<a name="line528"></a>    var specialCases = goog.ui.DragDropDetector.SPECIAL_CASE_URLS_;
+<a name="line529"></a>    var len = specialCases.length;
+<a name="line530"></a>    for (var i = 0; i &lt; len; i++) {
+<a name="line531"></a>      var specialCase = specialCases[i];
+<a name="line532"></a>      if (uri.match(specialCase.regex)) {
+<a name="line533"></a>        alert(specialCase.message);
+<a name="line534"></a>        break;
+<a name="line535"></a>      }
+<a name="line536"></a>    }
+<a name="line537"></a>
+<a name="line538"></a>    // If no special cases matched, add the image.
+<a name="line539"></a>    if (i == len) {
+<a name="line540"></a>      this.dispatchEvent(
+<a name="line541"></a>          new goog.ui.DragDropDetector.ImageDropEvent(
+<a name="line542"></a>              uri, this.mousePosition_));
+<a name="line543"></a>      return;
+<a name="line544"></a>    }
+<a name="line545"></a>  }
+<a name="line546"></a>
+<a name="line547"></a>  var links = this.body_.getElementsByTagName(goog.dom.TagName.A);
+<a name="line548"></a>  if (links) {
+<a name="line549"></a>    for (i = 0, len = links.length; i &lt; len; i++) {
+<a name="line550"></a>      this.dispatchEvent(
+<a name="line551"></a>          new goog.ui.DragDropDetector.LinkDropEvent(links[i].href));
+<a name="line552"></a>    }
+<a name="line553"></a>  }
+<a name="line554"></a>
+<a name="line555"></a>  this.clearContents_();
+<a name="line556"></a>  this.uncoverScreen_();
+<a name="line557"></a>};
+<a name="line558"></a>
+<a name="line559"></a>
+<a name="line560"></a>/** @override */
+<a name="line561"></a>goog.ui.DragDropDetector.prototype.disposeInternal = function() {
+<a name="line562"></a>  goog.ui.DragDropDetector.base(this, &#39;disposeInternal&#39;);
+<a name="line563"></a>  this.handler_.dispose();
+<a name="line564"></a>  this.handler_ = null;
+<a name="line565"></a>};
+<a name="line566"></a>
+<a name="line567"></a>
+<a name="line568"></a>
+<a name="line569"></a>/**
+<a name="line570"></a> * Creates a new image drop event object.
+<a name="line571"></a> * @param {string} url The url of the dropped image.
+<a name="line572"></a> * @param {goog.math.Coordinate} position The screen position where the drop
+<a name="line573"></a> *     occurred.
+<a name="line574"></a> * @constructor
+<a name="line575"></a> * @extends {goog.events.Event}
+<a name="line576"></a> * @final
+<a name="line577"></a> */
+<a name="line578"></a>goog.ui.DragDropDetector.ImageDropEvent = function(url, position) {
+<a name="line579"></a>  goog.ui.DragDropDetector.ImageDropEvent.base(this, &#39;constructor&#39;,
+<a name="line580"></a>      goog.ui.DragDropDetector.EventType.IMAGE_DROPPED);
+<a name="line581"></a>
+<a name="line582"></a>  /**
+<a name="line583"></a>   * The url of the image that was dropped.
+<a name="line584"></a>   * @type {string}
+<a name="line585"></a>   * @private
+<a name="line586"></a>   */
+<a name="line587"></a>  this.url_ = url;
+<a name="line588"></a>
+<a name="line589"></a>  /**
+<a name="line590"></a>   * The screen position where the drop occurred.
+<a name="line591"></a>   * @type {goog.math.Coordinate}
+<a name="line592"></a>   * @private
+<a name="line593"></a>   */
+<a name="line594"></a>  this.position_ = position;
+<a name="line595"></a>};
+<a name="line596"></a>goog.inherits(goog.ui.DragDropDetector.ImageDropEvent,
+<a name="line597"></a>    goog.events.Event);
+<a name="line598"></a>
+<a name="line599"></a>
+<a name="line600"></a>/**
+<a name="line601"></a> * @return {string} The url of the image that was dropped.
+<a name="line602"></a> */
+<a name="line603"></a>goog.ui.DragDropDetector.ImageDropEvent.prototype.getUrl = function() {
+<a name="line604"></a>  return this.url_;
+<a name="line605"></a>};
+<a name="line606"></a>
+<a name="line607"></a>
+<a name="line608"></a>/**
+<a name="line609"></a> * @return {goog.math.Coordinate} The screen position where the drop occurred.
+<a name="line610"></a> *     This may be have x and y of goog.ui.DragDropDetector.INIT_POSITION,
+<a name="line611"></a> *     indicating the drop position is unknown.
+<a name="line612"></a> */
+<a name="line613"></a>goog.ui.DragDropDetector.ImageDropEvent.prototype.getPosition = function() {
+<a name="line614"></a>  return this.position_;
+<a name="line615"></a>};
+<a name="line616"></a>
+<a name="line617"></a>
+<a name="line618"></a>
+<a name="line619"></a>/**
+<a name="line620"></a> * Creates a new link drop event object.
+<a name="line621"></a> * @param {string} url The url of the dropped link.
+<a name="line622"></a> * @constructor
+<a name="line623"></a> * @extends {goog.events.Event}
+<a name="line624"></a> * @final
+<a name="line625"></a> */
+<a name="line626"></a>goog.ui.DragDropDetector.LinkDropEvent = function(url) {
+<a name="line627"></a>  goog.ui.DragDropDetector.LinkDropEvent.base(this, &#39;constructor&#39;,
+<a name="line628"></a>      goog.ui.DragDropDetector.EventType.LINK_DROPPED);
+<a name="line629"></a>
+<a name="line630"></a>  /**
+<a name="line631"></a>   * The url of the link that was dropped.
+<a name="line632"></a>   * @type {string}
+<a name="line633"></a>   * @private
+<a name="line634"></a>   */
+<a name="line635"></a>  this.url_ = url;
+<a name="line636"></a>};
+<a name="line637"></a>goog.inherits(goog.ui.DragDropDetector.LinkDropEvent,
+<a name="line638"></a>    goog.events.Event);
+<a name="line639"></a>
+<a name="line640"></a>
+<a name="line641"></a>/**
+<a name="line642"></a> * @return {string} The url of the link that was dropped.
+<a name="line643"></a> */
+<a name="line644"></a>goog.ui.DragDropDetector.LinkDropEvent.prototype.getUrl = function() {
+<a name="line645"></a>  return this.url_;
+<a name="line646"></a>};
+</pre>
+
+
+</body>
+</html>

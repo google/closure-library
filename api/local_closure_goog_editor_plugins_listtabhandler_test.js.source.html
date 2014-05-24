@@ -1,0 +1,218 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>listtabhandler_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_plugins_listtabhandler_test.js.html">listtabhandler_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.editor.plugins.ListTabHandlerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.editor.plugins.ListTabHandlerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.editor.Command&#39;);
+<a name="line20"></a>goog.require(&#39;goog.editor.plugins.ListTabHandler&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events.BrowserEvent&#39;);
+<a name="line22"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line23"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.StrictMock&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.editor.FieldMock&#39;);
+<a name="line26"></a>goog.require(&#39;goog.testing.editor.TestHelper&#39;);
+<a name="line27"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line28"></a>
+<a name="line29"></a>var field;
+<a name="line30"></a>var editableField;
+<a name="line31"></a>var tabHandler;
+<a name="line32"></a>var testHelper;
+<a name="line33"></a>
+<a name="line34"></a>function setUpPage() {
+<a name="line35"></a>  field = goog.dom.getElement(&#39;field&#39;);
+<a name="line36"></a>}
+<a name="line37"></a>
+<a name="line38"></a>function setUp() {
+<a name="line39"></a>  editableField = new goog.testing.editor.FieldMock();
+<a name="line40"></a>  // Modal mode behavior tested as part of AbstractTabHandler tests.
+<a name="line41"></a>  editableField.inModalMode = goog.functions.FALSE;
+<a name="line42"></a>
+<a name="line43"></a>  tabHandler = new goog.editor.plugins.ListTabHandler();
+<a name="line44"></a>  tabHandler.registerFieldObject(editableField);
+<a name="line45"></a>
+<a name="line46"></a>  testHelper = new goog.testing.editor.TestHelper(field);
+<a name="line47"></a>  testHelper.setUpEditableElement();
+<a name="line48"></a>}
+<a name="line49"></a>
+<a name="line50"></a>function tearDown() {
+<a name="line51"></a>  editableField = null;
+<a name="line52"></a>  testHelper.tearDownEditableElement();
+<a name="line53"></a>  tabHandler.dispose();
+<a name="line54"></a>}
+<a name="line55"></a>
+<a name="line56"></a>function testListIndentInLi() {
+<a name="line57"></a>  field.innerHTML = &#39;&lt;ul&gt;&lt;li&gt;Text&lt;/li&gt;&lt;/ul&gt;&#39;;
+<a name="line58"></a>
+<a name="line59"></a>  var testText = field.firstChild.firstChild.firstChild; // div ul li Test
+<a name="line60"></a>  testHelper.select(testText, 0, testText, 4);
+<a name="line61"></a>
+<a name="line62"></a>  var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line63"></a>  event.keyCode = goog.events.KeyCodes.TAB;
+<a name="line64"></a>  event.shiftKey = false;
+<a name="line65"></a>
+<a name="line66"></a>  editableField.execCommand(goog.editor.Command.INDENT);
+<a name="line67"></a>  event.preventDefault();
+<a name="line68"></a>
+<a name="line69"></a>  editableField.$replay();
+<a name="line70"></a>  event.$replay();
+<a name="line71"></a>
+<a name="line72"></a>  assertTrue(&#39;Event must be handled&#39;,
+<a name="line73"></a>      tabHandler.handleKeyboardShortcut(event, &#39;&#39;, false));
+<a name="line74"></a>
+<a name="line75"></a>  editableField.$verify();
+<a name="line76"></a>  event.$verify();
+<a name="line77"></a>}
+<a name="line78"></a>
+<a name="line79"></a>function testListIndentContainLi() {
+<a name="line80"></a>  field.innerHTML = &#39;&lt;ul&gt;&lt;li&gt;Text&lt;/li&gt;&lt;/ul&gt;&#39;;
+<a name="line81"></a>
+<a name="line82"></a>  var testText = field.firstChild.firstChild.firstChild; // div ul li Test
+<a name="line83"></a>  testHelper.select(field.firstChild, 0, testText, 4);
+<a name="line84"></a>
+<a name="line85"></a>  var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line86"></a>  event.keyCode = goog.events.KeyCodes.TAB;
+<a name="line87"></a>  event.shiftKey = false;
+<a name="line88"></a>
+<a name="line89"></a>  editableField.execCommand(goog.editor.Command.INDENT);
+<a name="line90"></a>  event.preventDefault();
+<a name="line91"></a>
+<a name="line92"></a>  editableField.$replay();
+<a name="line93"></a>  event.$replay();
+<a name="line94"></a>
+<a name="line95"></a>  assertTrue(&#39;Event must be handled&#39;,
+<a name="line96"></a>      tabHandler.handleKeyboardShortcut(event, &#39;&#39;, false));
+<a name="line97"></a>
+<a name="line98"></a>  editableField.$verify();
+<a name="line99"></a>  event.$verify();
+<a name="line100"></a>}
+<a name="line101"></a>
+<a name="line102"></a>function testListOutdentInLi() {
+<a name="line103"></a>  field.innerHTML = &#39;&lt;ul&gt;&lt;li&gt;Text&lt;/li&gt;&lt;/ul&gt;&#39;;
+<a name="line104"></a>
+<a name="line105"></a>  var testText = field.firstChild.firstChild.firstChild; // div ul li Test
+<a name="line106"></a>  testHelper.select(testText, 0, testText, 4);
+<a name="line107"></a>
+<a name="line108"></a>  var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line109"></a>  event.keyCode = goog.events.KeyCodes.TAB;
+<a name="line110"></a>  event.shiftKey = true;
+<a name="line111"></a>
+<a name="line112"></a>  editableField.execCommand(goog.editor.Command.OUTDENT);
+<a name="line113"></a>  event.preventDefault();
+<a name="line114"></a>
+<a name="line115"></a>  editableField.$replay();
+<a name="line116"></a>  event.$replay();
+<a name="line117"></a>
+<a name="line118"></a>  assertTrue(&#39;Event must be handled&#39;,
+<a name="line119"></a>      tabHandler.handleKeyboardShortcut(event, &#39;&#39;, false));
+<a name="line120"></a>
+<a name="line121"></a>  editableField.$verify();
+<a name="line122"></a>  event.$verify();
+<a name="line123"></a>}
+<a name="line124"></a>
+<a name="line125"></a>function testListOutdentContainLi() {
+<a name="line126"></a>  field.innerHTML = &#39;&lt;ul&gt;&lt;li&gt;Text&lt;/li&gt;&lt;/ul&gt;&#39;;
+<a name="line127"></a>
+<a name="line128"></a>  var testText = field.firstChild.firstChild.firstChild; // div ul li Test
+<a name="line129"></a>  testHelper.select(field.firstChild, 0, testText, 4);
+<a name="line130"></a>
+<a name="line131"></a>  var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line132"></a>  event.keyCode = goog.events.KeyCodes.TAB;
+<a name="line133"></a>  event.shiftKey = true;
+<a name="line134"></a>
+<a name="line135"></a>  editableField.execCommand(goog.editor.Command.OUTDENT);
+<a name="line136"></a>  event.preventDefault();
+<a name="line137"></a>
+<a name="line138"></a>  editableField.$replay();
+<a name="line139"></a>  event.$replay();
+<a name="line140"></a>
+<a name="line141"></a>  assertTrue(&#39;Event must be handled&#39;,
+<a name="line142"></a>      tabHandler.handleKeyboardShortcut(event, &#39;&#39;, false));
+<a name="line143"></a>
+<a name="line144"></a>  editableField.$verify();
+<a name="line145"></a>  event.$verify();
+<a name="line146"></a>}
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>function testNoOp() {
+<a name="line150"></a>  field.innerHTML = &#39;Text&#39;;
+<a name="line151"></a>
+<a name="line152"></a>  var testText = field.firstChild;
+<a name="line153"></a>  testHelper.select(testText, 0, testText, 4);
+<a name="line154"></a>
+<a name="line155"></a>  var event = new goog.testing.StrictMock(goog.events.BrowserEvent);
+<a name="line156"></a>  event.keyCode = goog.events.KeyCodes.TAB;
+<a name="line157"></a>  event.shiftKey = true;
+<a name="line158"></a>
+<a name="line159"></a>  editableField.$replay();
+<a name="line160"></a>  event.$replay();
+<a name="line161"></a>
+<a name="line162"></a>  assertFalse(&#39;Event must not be handled&#39;,
+<a name="line163"></a>      tabHandler.handleKeyboardShortcut(event, &#39;&#39;, false));
+<a name="line164"></a>
+<a name="line165"></a>  editableField.$verify();
+<a name="line166"></a>  event.$verify();
+<a name="line167"></a>}
+</pre>
+
+
+</body>
+</html>

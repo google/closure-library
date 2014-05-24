@@ -1,0 +1,212 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>listenermap_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_events_listenermap_test.js.html">listenermap_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Tests for listenermap.js.
+<a name="line17"></a> *
+<a name="line18"></a> * Most of this class functionality is already tested by
+<a name="line19"></a> * goog.events.EventTarget tests. This test file only provides tests
+<a name="line20"></a> * for features that are not direct duplicates of tests in
+<a name="line21"></a> * goog.events.EventTarget.
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.events.ListenerMapTest&#39;);
+<a name="line25"></a>goog.setTestOnly(&#39;goog.events.ListenerMapTest&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.dispose&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events.EventId&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events.ListenerMap&#39;);
+<a name="line32"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>var et, map;
+<a name="line36"></a>var handler1 = function() {};
+<a name="line37"></a>var handler2 = function() {};
+<a name="line38"></a>var handler3 = function() {};
+<a name="line39"></a>var CLICK_EVENT_ID = new goog.events.EventId(goog.events.getUniqueId(&#39;click&#39;));
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>function setUp() {
+<a name="line43"></a>  et = new goog.events.EventTarget();
+<a name="line44"></a>  map = new goog.events.ListenerMap(et);
+<a name="line45"></a>}
+<a name="line46"></a>
+<a name="line47"></a>
+<a name="line48"></a>function tearDown() {
+<a name="line49"></a>  goog.dispose(et);
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>function testGetTypeCount() {
+<a name="line54"></a>  assertEquals(0, map.getTypeCount());
+<a name="line55"></a>
+<a name="line56"></a>  map.add(&#39;click&#39;, handler1, false);
+<a name="line57"></a>  assertEquals(1, map.getTypeCount());
+<a name="line58"></a>  map.remove(&#39;click&#39;, handler1);
+<a name="line59"></a>  assertEquals(0, map.getTypeCount());
+<a name="line60"></a>
+<a name="line61"></a>  map.add(CLICK_EVENT_ID, handler1, false);
+<a name="line62"></a>  assertEquals(1, map.getTypeCount());
+<a name="line63"></a>  map.remove(CLICK_EVENT_ID, handler1);
+<a name="line64"></a>  assertEquals(0, map.getTypeCount());
+<a name="line65"></a>
+<a name="line66"></a>  map.add(&#39;click&#39;, handler1, false, true);
+<a name="line67"></a>  assertEquals(1, map.getTypeCount());
+<a name="line68"></a>  map.remove(&#39;click&#39;, handler1, true);
+<a name="line69"></a>  assertEquals(0, map.getTypeCount());
+<a name="line70"></a>
+<a name="line71"></a>  map.add(CLICK_EVENT_ID, handler1, false, true);
+<a name="line72"></a>  assertEquals(1, map.getTypeCount());
+<a name="line73"></a>  map.remove(CLICK_EVENT_ID, handler1, true);
+<a name="line74"></a>  assertEquals(0, map.getTypeCount());
+<a name="line75"></a>
+<a name="line76"></a>  map.add(&#39;click&#39;, handler1, false);
+<a name="line77"></a>  map.add(&#39;click&#39;, handler1, false, true);
+<a name="line78"></a>  assertEquals(1, map.getTypeCount());
+<a name="line79"></a>  map.remove(&#39;click&#39;, handler1);
+<a name="line80"></a>  assertEquals(1, map.getTypeCount());
+<a name="line81"></a>  map.remove(&#39;click&#39;, handler1, true);
+<a name="line82"></a>  assertEquals(0, map.getTypeCount());
+<a name="line83"></a>
+<a name="line84"></a>  map.add(CLICK_EVENT_ID, handler1, false);
+<a name="line85"></a>  map.add(CLICK_EVENT_ID, handler1, false, true);
+<a name="line86"></a>  assertEquals(1, map.getTypeCount());
+<a name="line87"></a>  map.remove(CLICK_EVENT_ID, handler1);
+<a name="line88"></a>  assertEquals(1, map.getTypeCount());
+<a name="line89"></a>  map.remove(CLICK_EVENT_ID, handler1, true);
+<a name="line90"></a>  assertEquals(0, map.getTypeCount());
+<a name="line91"></a>
+<a name="line92"></a>  map.add(&#39;click&#39;, handler1, false);
+<a name="line93"></a>  map.add(&#39;touchstart&#39;, handler2, false);
+<a name="line94"></a>  map.add(CLICK_EVENT_ID, handler3, false);
+<a name="line95"></a>  assertEquals(3, map.getTypeCount());
+<a name="line96"></a>  map.remove(CLICK_EVENT_ID, handler3);
+<a name="line97"></a>  assertEquals(2, map.getTypeCount());
+<a name="line98"></a>  map.remove(&#39;touchstart&#39;, handler2);
+<a name="line99"></a>  assertEquals(1, map.getTypeCount());
+<a name="line100"></a>  map.remove(&#39;click&#39;, handler1);
+<a name="line101"></a>  assertEquals(0, map.getTypeCount());
+<a name="line102"></a>}
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>function testGetListenerCount() {
+<a name="line106"></a>  assertEquals(0, map.getListenerCount());
+<a name="line107"></a>
+<a name="line108"></a>  map.add(&#39;click&#39;, handler1, false);
+<a name="line109"></a>  assertEquals(1, map.getListenerCount());
+<a name="line110"></a>  map.remove(&#39;click&#39;, handler1);
+<a name="line111"></a>  assertEquals(0, map.getListenerCount());
+<a name="line112"></a>
+<a name="line113"></a>  map.add(CLICK_EVENT_ID, handler1, false);
+<a name="line114"></a>  assertEquals(1, map.getListenerCount());
+<a name="line115"></a>  map.remove(CLICK_EVENT_ID, handler1);
+<a name="line116"></a>  assertEquals(0, map.getListenerCount());
+<a name="line117"></a>
+<a name="line118"></a>  map.add(&#39;click&#39;, handler1, false, true);
+<a name="line119"></a>  assertEquals(1, map.getListenerCount());
+<a name="line120"></a>  map.remove(&#39;click&#39;, handler1, true);
+<a name="line121"></a>  assertEquals(0, map.getListenerCount());
+<a name="line122"></a>
+<a name="line123"></a>  map.add(CLICK_EVENT_ID, handler1, false, true);
+<a name="line124"></a>  assertEquals(1, map.getListenerCount());
+<a name="line125"></a>  map.remove(CLICK_EVENT_ID, handler1, true);
+<a name="line126"></a>  assertEquals(0, map.getListenerCount());
+<a name="line127"></a>
+<a name="line128"></a>  map.add(&#39;click&#39;, handler1, false);
+<a name="line129"></a>  map.add(&#39;click&#39;, handler1, false, true);
+<a name="line130"></a>  assertEquals(2, map.getListenerCount());
+<a name="line131"></a>  map.remove(&#39;click&#39;, handler1);
+<a name="line132"></a>  map.remove(&#39;click&#39;, handler1, true);
+<a name="line133"></a>  assertEquals(0, map.getListenerCount());
+<a name="line134"></a>
+<a name="line135"></a>  map.add(CLICK_EVENT_ID, handler1, false);
+<a name="line136"></a>  map.add(CLICK_EVENT_ID, handler1, false, true);
+<a name="line137"></a>  assertEquals(2, map.getListenerCount());
+<a name="line138"></a>  map.remove(CLICK_EVENT_ID, handler1);
+<a name="line139"></a>  map.remove(CLICK_EVENT_ID, handler1, true);
+<a name="line140"></a>  assertEquals(0, map.getListenerCount());
+<a name="line141"></a>
+<a name="line142"></a>  map.add(&#39;click&#39;, handler1, false);
+<a name="line143"></a>  map.add(&#39;touchstart&#39;, handler2, false);
+<a name="line144"></a>  map.add(CLICK_EVENT_ID, handler3, false);
+<a name="line145"></a>  assertEquals(3, map.getListenerCount());
+<a name="line146"></a>  map.remove(CLICK_EVENT_ID, handler3);
+<a name="line147"></a>  map.remove(&#39;touchstart&#39;, handler2);
+<a name="line148"></a>  map.remove(&#39;click&#39;, handler1);
+<a name="line149"></a>  assertEquals(0, map.getListenerCount());
+<a name="line150"></a>}
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>function testListenerSourceIsSetCorrectly() {
+<a name="line154"></a>  map.add(&#39;click&#39;, handler1, false);
+<a name="line155"></a>  var listener = map.getListener(&#39;click&#39;, handler1);
+<a name="line156"></a>  assertEquals(et, listener.src);
+<a name="line157"></a>
+<a name="line158"></a>  map.add(CLICK_EVENT_ID, handler2, false);
+<a name="line159"></a>  listener = map.getListener(CLICK_EVENT_ID, handler2);
+<a name="line160"></a>  assertEquals(et, listener.src);
+<a name="line161"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,559 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>ratings.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_ratings.js.html">ratings.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A base ratings widget that allows the user to select a rating,
+<a name="line17"></a> * like &quot;star video&quot; in Google Video. This fires a &quot;change&quot; event when the user
+<a name="line18"></a> * selects a rating.
+<a name="line19"></a> *
+<a name="line20"></a> * Keyboard:
+<a name="line21"></a> * ESC = Clear (if supported)
+<a name="line22"></a> * Home = 1 star
+<a name="line23"></a> * End = Full rating
+<a name="line24"></a> * Left arrow = Decrease rating
+<a name="line25"></a> * Right arrow = Increase rating
+<a name="line26"></a> * 0 = Clear (if supported)
+<a name="line27"></a> * 1 - 9 = nth star
+<a name="line28"></a> *
+<a name="line29"></a> * @see ../demos/ratings.html
+<a name="line30"></a> */
+<a name="line31"></a>
+<a name="line32"></a>goog.provide(&#39;goog.ui.Ratings&#39;);
+<a name="line33"></a>goog.provide(&#39;goog.ui.Ratings.EventType&#39;);
+<a name="line34"></a>
+<a name="line35"></a>goog.require(&#39;goog.a11y.aria&#39;);
+<a name="line36"></a>goog.require(&#39;goog.a11y.aria.Role&#39;);
+<a name="line37"></a>goog.require(&#39;goog.a11y.aria.State&#39;);
+<a name="line38"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line39"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line40"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line41"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * A UI Control used for rating things, i.e. videos on Google Video.
+<a name="line47"></a> * @param {Array.&lt;string&gt;=} opt_ratings Ratings. Default: [1,2,3,4,5].
+<a name="line48"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+<a name="line49"></a> * @constructor
+<a name="line50"></a> * @extends {goog.ui.Component}
+<a name="line51"></a> */
+<a name="line52"></a>goog.ui.Ratings = function(opt_ratings, opt_domHelper) {
+<a name="line53"></a>  goog.ui.Component.call(this, opt_domHelper);
+<a name="line54"></a>
+<a name="line55"></a>  /**
+<a name="line56"></a>   * Ordered ratings that can be picked, Default: [1,2,3,4,5]
+<a name="line57"></a>   * @type {Array.&lt;string&gt;}
+<a name="line58"></a>   * @private
+<a name="line59"></a>   */
+<a name="line60"></a>  this.ratings_ = opt_ratings || [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;];
+<a name="line61"></a>
+<a name="line62"></a>  /**
+<a name="line63"></a>   * Array containing references to the star elements
+<a name="line64"></a>   * @type {Array.&lt;Element&gt;}
+<a name="line65"></a>   * @private
+<a name="line66"></a>   */
+<a name="line67"></a>  this.stars_ = [];
+<a name="line68"></a>
+<a name="line69"></a>
+<a name="line70"></a>  // Awkward name because the obvious name is taken by subclasses already.
+<a name="line71"></a>  /**
+<a name="line72"></a>   * Whether the control is enabled.
+<a name="line73"></a>   * @type {boolean}
+<a name="line74"></a>   * @private
+<a name="line75"></a>   */
+<a name="line76"></a>  this.isEnabled_ = true;
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>  /**
+<a name="line80"></a>   * The last index to be highlighted
+<a name="line81"></a>   * @type {number}
+<a name="line82"></a>   * @private
+<a name="line83"></a>   */
+<a name="line84"></a>  this.highlightedIndex_ = -1;
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>  /**
+<a name="line88"></a>   * The currently selected index
+<a name="line89"></a>   * @type {number}
+<a name="line90"></a>   * @private
+<a name="line91"></a>   */
+<a name="line92"></a>  this.selectedIndex_ = -1;
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>  /**
+<a name="line96"></a>   * An attached form field to set the value to
+<a name="line97"></a>   * @type {HTMLInputElement|HTMLSelectElement|null}
+<a name="line98"></a>   * @private
+<a name="line99"></a>   */
+<a name="line100"></a>  this.attachedFormField_ = null;
+<a name="line101"></a>};
+<a name="line102"></a>goog.inherits(goog.ui.Ratings, goog.ui.Component);
+<a name="line103"></a>
+<a name="line104"></a>
+<a name="line105"></a>/**
+<a name="line106"></a> * Default CSS class to be applied to the root element of components rendered
+<a name="line107"></a> * by this renderer.
+<a name="line108"></a> * @type {string}
+<a name="line109"></a> */
+<a name="line110"></a>goog.ui.Ratings.CSS_CLASS = goog.getCssName(&#39;goog-ratings&#39;);
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Enums for Ratings event type.
+<a name="line115"></a> * @enum {string}
+<a name="line116"></a> */
+<a name="line117"></a>goog.ui.Ratings.EventType = {
+<a name="line118"></a>  CHANGE: &#39;change&#39;,
+<a name="line119"></a>  HIGHLIGHT_CHANGE: &#39;highlightchange&#39;,
+<a name="line120"></a>  HIGHLIGHT: &#39;highlight&#39;,
+<a name="line121"></a>  UNHIGHLIGHT: &#39;unhighlight&#39;
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Decorate a HTML structure already in the document.  Expects the structure:
+<a name="line127"></a> * &lt;pre&gt;
+<a name="line128"></a> * - div
+<a name="line129"></a> *   - select
+<a name="line130"></a> *       - option 1 #text = 1 star
+<a name="line131"></a> *       - option 2 #text = 2 stars
+<a name="line132"></a> *       - option 3 #text = 3 stars
+<a name="line133"></a> *       - option N (where N is max number of ratings)
+<a name="line134"></a> * &lt;/pre&gt;
+<a name="line135"></a> *
+<a name="line136"></a> * The div can contain other elements for graceful degredation, but they will be
+<a name="line137"></a> * hidden when the decoration occurs.
+<a name="line138"></a> *
+<a name="line139"></a> * @param {Element} el Div element to decorate.
+<a name="line140"></a> * @override
+<a name="line141"></a> */
+<a name="line142"></a>goog.ui.Ratings.prototype.decorateInternal = function(el) {
+<a name="line143"></a>  var select = el.getElementsByTagName(&#39;select&#39;)[0];
+<a name="line144"></a>  if (!select) {
+<a name="line145"></a>    throw Error(&#39;Can not decorate &#39; + el + &#39;, with Ratings. Must &#39; +
+<a name="line146"></a>                &#39;contain select box&#39;);
+<a name="line147"></a>  }
+<a name="line148"></a>  this.ratings_.length = 0;
+<a name="line149"></a>  for (var i = 0, n = select.options.length; i &lt; n; i++) {
+<a name="line150"></a>    var option = select.options[i];
+<a name="line151"></a>    this.ratings_.push(option.text);
+<a name="line152"></a>  }
+<a name="line153"></a>  this.setSelectedIndex(select.selectedIndex);
+<a name="line154"></a>  select.style.display = &#39;none&#39;;
+<a name="line155"></a>  this.attachedFormField_ = select;
+<a name="line156"></a>  this.createDom();
+<a name="line157"></a>  el.insertBefore(this.getElement(), select);
+<a name="line158"></a>};
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Render the rating widget inside the provided element. This will override the
+<a name="line163"></a> * current content of the element.
+<a name="line164"></a> * @override
+<a name="line165"></a> */
+<a name="line166"></a>goog.ui.Ratings.prototype.enterDocument = function() {
+<a name="line167"></a>  var el = this.getElement();
+<a name="line168"></a>  goog.asserts.assert(el, &#39;The DOM element for ratings cannot be null.&#39;);
+<a name="line169"></a>  el.tabIndex = 0;
+<a name="line170"></a>  goog.dom.classlist.add(el, this.getCssClass());
+<a name="line171"></a>  goog.a11y.aria.setRole(el, goog.a11y.aria.Role.SLIDER);
+<a name="line172"></a>  goog.a11y.aria.setState(el, goog.a11y.aria.State.VALUEMIN, 0);
+<a name="line173"></a>  var max = this.ratings_.length - 1;
+<a name="line174"></a>  goog.a11y.aria.setState(el, goog.a11y.aria.State.VALUEMAX, max);
+<a name="line175"></a>  var handler = this.getHandler();
+<a name="line176"></a>  handler.listen(el, &#39;keydown&#39;, this.onKeyDown_);
+<a name="line177"></a>
+<a name="line178"></a>  // Create the elements for the stars
+<a name="line179"></a>  for (var i = 0; i &lt; this.ratings_.length; i++) {
+<a name="line180"></a>    var star = this.getDomHelper().createDom(&#39;span&#39;, {
+<a name="line181"></a>      &#39;title&#39;: this.ratings_[i],
+<a name="line182"></a>      &#39;class&#39;: this.getClassName_(i, false),
+<a name="line183"></a>      &#39;index&#39;: i});
+<a name="line184"></a>    this.stars_.push(star);
+<a name="line185"></a>    el.appendChild(star);
+<a name="line186"></a>  }
+<a name="line187"></a>
+<a name="line188"></a>  handler.listen(el, goog.events.EventType.CLICK, this.onClick_);
+<a name="line189"></a>  handler.listen(el, goog.events.EventType.MOUSEOUT, this.onMouseOut_);
+<a name="line190"></a>  handler.listen(el, goog.events.EventType.MOUSEOVER, this.onMouseOver_);
+<a name="line191"></a>
+<a name="line192"></a>  this.highlightIndex_(this.selectedIndex_);
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * Should be called when the widget is removed from the document but may be
+<a name="line198"></a> * reused.  This removes all the listeners the widget has attached and destroys
+<a name="line199"></a> * the DOM nodes it uses.
+<a name="line200"></a> * @override
+<a name="line201"></a> */
+<a name="line202"></a>goog.ui.Ratings.prototype.exitDocument = function() {
+<a name="line203"></a>  goog.ui.Ratings.superClass_.exitDocument.call(this);
+<a name="line204"></a>  for (var i = 0; i &lt; this.stars_.length; i++) {
+<a name="line205"></a>    this.getDomHelper().removeNode(this.stars_[i]);
+<a name="line206"></a>  }
+<a name="line207"></a>  this.stars_.length = 0;
+<a name="line208"></a>};
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/** @override */
+<a name="line212"></a>goog.ui.Ratings.prototype.disposeInternal = function() {
+<a name="line213"></a>  goog.ui.Ratings.superClass_.disposeInternal.call(this);
+<a name="line214"></a>  this.ratings_.length = 0;
+<a name="line215"></a>  this.rendered_ = false;
+<a name="line216"></a>};
+<a name="line217"></a>
+<a name="line218"></a>
+<a name="line219"></a>/**
+<a name="line220"></a> * Returns the base CSS class used by subcomponents of this component.
+<a name="line221"></a> * @return {string} Component-specific CSS class.
+<a name="line222"></a> */
+<a name="line223"></a>goog.ui.Ratings.prototype.getCssClass = function() {
+<a name="line224"></a>  return goog.ui.Ratings.CSS_CLASS;
+<a name="line225"></a>};
+<a name="line226"></a>
+<a name="line227"></a>
+<a name="line228"></a>/**
+<a name="line229"></a> * Sets the selected index. If the provided index is greater than the number of
+<a name="line230"></a> * ratings then the max is set.  0 is the first item, -1 is no selection.
+<a name="line231"></a> * @param {number} index The index of the rating to select.
+<a name="line232"></a> */
+<a name="line233"></a>goog.ui.Ratings.prototype.setSelectedIndex = function(index) {
+<a name="line234"></a>  index = Math.max(-1, Math.min(index, this.ratings_.length - 1));
+<a name="line235"></a>  if (index != this.selectedIndex_) {
+<a name="line236"></a>    this.selectedIndex_ = index;
+<a name="line237"></a>    this.highlightIndex_(this.selectedIndex_);
+<a name="line238"></a>    if (this.attachedFormField_) {
+<a name="line239"></a>      if (this.attachedFormField_.tagName == &#39;SELECT&#39;) {
+<a name="line240"></a>        this.attachedFormField_.selectedIndex = index;
+<a name="line241"></a>      } else {
+<a name="line242"></a>        this.attachedFormField_.value =
+<a name="line243"></a>            /** @type {string} */ (this.getValue());
+<a name="line244"></a>      }
+<a name="line245"></a>      var ratingsElement = this.getElement();
+<a name="line246"></a>      goog.asserts.assert(ratingsElement,
+<a name="line247"></a>          &#39;The DOM ratings element cannot be null.&#39;);
+<a name="line248"></a>      goog.a11y.aria.setState(ratingsElement,
+<a name="line249"></a>          goog.a11y.aria.State.VALUENOW,
+<a name="line250"></a>          this.ratings_[index]);
+<a name="line251"></a>    }
+<a name="line252"></a>    this.dispatchEvent(goog.ui.Ratings.EventType.CHANGE);
+<a name="line253"></a>  }
+<a name="line254"></a>};
+<a name="line255"></a>
+<a name="line256"></a>
+<a name="line257"></a>/**
+<a name="line258"></a> * @return {number} The index of the currently selected rating.
+<a name="line259"></a> */
+<a name="line260"></a>goog.ui.Ratings.prototype.getSelectedIndex = function() {
+<a name="line261"></a>  return this.selectedIndex_;
+<a name="line262"></a>};
+<a name="line263"></a>
+<a name="line264"></a>
+<a name="line265"></a>/**
+<a name="line266"></a> * Returns the rating value of the currently selected rating
+<a name="line267"></a> * @return {?string} The value of the currently selected rating (or null).
+<a name="line268"></a> */
+<a name="line269"></a>goog.ui.Ratings.prototype.getValue = function() {
+<a name="line270"></a>  return this.selectedIndex_ == -1 ? null : this.ratings_[this.selectedIndex_];
+<a name="line271"></a>};
+<a name="line272"></a>
+<a name="line273"></a>
+<a name="line274"></a>/**
+<a name="line275"></a> * Returns the index of the currently highlighted rating, -1 if the mouse isn&#39;t
+<a name="line276"></a> * currently over the widget
+<a name="line277"></a> * @return {number} The index of the currently highlighted rating.
+<a name="line278"></a> */
+<a name="line279"></a>goog.ui.Ratings.prototype.getHighlightedIndex = function() {
+<a name="line280"></a>  return this.highlightedIndex_;
+<a name="line281"></a>};
+<a name="line282"></a>
+<a name="line283"></a>
+<a name="line284"></a>/**
+<a name="line285"></a> * Returns the value of the currently highlighted rating, null if the mouse
+<a name="line286"></a> * isn&#39;t currently over the widget
+<a name="line287"></a> * @return {?string} The value of the currently highlighted rating, or null.
+<a name="line288"></a> */
+<a name="line289"></a>goog.ui.Ratings.prototype.getHighlightedValue = function() {
+<a name="line290"></a>  return this.highlightedIndex_ == -1 ? null :
+<a name="line291"></a>      this.ratings_[this.highlightedIndex_];
+<a name="line292"></a>};
+<a name="line293"></a>
+<a name="line294"></a>
+<a name="line295"></a>/**
+<a name="line296"></a> * Sets the array of ratings that the comonent
+<a name="line297"></a> * @param {Array.&lt;string&gt;} ratings Array of value to use as ratings.
+<a name="line298"></a> */
+<a name="line299"></a>goog.ui.Ratings.prototype.setRatings = function(ratings) {
+<a name="line300"></a>  this.ratings_ = ratings;
+<a name="line301"></a>  // TODO(user): If rendered update stars
+<a name="line302"></a>};
+<a name="line303"></a>
+<a name="line304"></a>
+<a name="line305"></a>/**
+<a name="line306"></a> * Gets the array of ratings that the component
+<a name="line307"></a> * @return {Array.&lt;string&gt;} Array of ratings.
+<a name="line308"></a> */
+<a name="line309"></a>goog.ui.Ratings.prototype.getRatings = function() {
+<a name="line310"></a>  return this.ratings_;
+<a name="line311"></a>};
+<a name="line312"></a>
+<a name="line313"></a>
+<a name="line314"></a>/**
+<a name="line315"></a> * Attaches an input or select element to the ratings widget. The value or
+<a name="line316"></a> * index of the field will be updated along with the ratings widget.
+<a name="line317"></a> * @param {HTMLSelectElement|HTMLInputElement} field The field to attach to.
+<a name="line318"></a> */
+<a name="line319"></a>goog.ui.Ratings.prototype.setAttachedFormField = function(field) {
+<a name="line320"></a>  this.attachedFormField_ = field;
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Returns the attached input or select element to the ratings widget.
+<a name="line326"></a> * @return {HTMLSelectElement|HTMLInputElement|null} The attached form field.
+<a name="line327"></a> */
+<a name="line328"></a>goog.ui.Ratings.prototype.getAttachedFormField = function() {
+<a name="line329"></a>  return this.attachedFormField_;
+<a name="line330"></a>};
+<a name="line331"></a>
+<a name="line332"></a>
+<a name="line333"></a>/**
+<a name="line334"></a> * Enables or disables the ratings control.
+<a name="line335"></a> * @param {boolean} enable Whether to enable or disable the control.
+<a name="line336"></a> */
+<a name="line337"></a>goog.ui.Ratings.prototype.setEnabled = function(enable) {
+<a name="line338"></a>  this.isEnabled_ = enable;
+<a name="line339"></a>  if (!enable) {
+<a name="line340"></a>    // Undo any highlighting done during mouseover when disabling the control
+<a name="line341"></a>    // and highlight the last selected rating.
+<a name="line342"></a>    this.resetHighlights_();
+<a name="line343"></a>  }
+<a name="line344"></a>};
+<a name="line345"></a>
+<a name="line346"></a>
+<a name="line347"></a>/**
+<a name="line348"></a> * @return {boolean} Whether the ratings control is enabled.
+<a name="line349"></a> */
+<a name="line350"></a>goog.ui.Ratings.prototype.isEnabled = function() {
+<a name="line351"></a>  return this.isEnabled_;
+<a name="line352"></a>};
+<a name="line353"></a>
+<a name="line354"></a>
+<a name="line355"></a>/**
+<a name="line356"></a> * Handle the mouse moving over a star.
+<a name="line357"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line358"></a> * @private
+<a name="line359"></a> */
+<a name="line360"></a>goog.ui.Ratings.prototype.onMouseOver_ = function(e) {
+<a name="line361"></a>  if (!this.isEnabled()) {
+<a name="line362"></a>    return;
+<a name="line363"></a>  }
+<a name="line364"></a>  if (goog.isDef(e.target.index)) {
+<a name="line365"></a>    var n = e.target.index;
+<a name="line366"></a>    if (this.highlightedIndex_ != n) {
+<a name="line367"></a>      this.highlightIndex_(n);
+<a name="line368"></a>      this.highlightedIndex_ = n;
+<a name="line369"></a>      this.dispatchEvent(goog.ui.Ratings.EventType.HIGHLIGHT_CHANGE);
+<a name="line370"></a>      this.dispatchEvent(goog.ui.Ratings.EventType.HIGHLIGHT);
+<a name="line371"></a>    }
+<a name="line372"></a>  }
+<a name="line373"></a>};
+<a name="line374"></a>
+<a name="line375"></a>
+<a name="line376"></a>/**
+<a name="line377"></a> * Handle the mouse moving over a star.
+<a name="line378"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line379"></a> * @private
+<a name="line380"></a> */
+<a name="line381"></a>goog.ui.Ratings.prototype.onMouseOut_ = function(e) {
+<a name="line382"></a>  // Only remove the highlight if the mouse is not moving to another star
+<a name="line383"></a>  if (e.relatedTarget &amp;&amp; !goog.isDef(e.relatedTarget.index)) {
+<a name="line384"></a>    this.resetHighlights_();
+<a name="line385"></a>  }
+<a name="line386"></a>};
+<a name="line387"></a>
+<a name="line388"></a>
+<a name="line389"></a>/**
+<a name="line390"></a> * Handle the mouse moving over a star.
+<a name="line391"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line392"></a> * @private
+<a name="line393"></a> */
+<a name="line394"></a>goog.ui.Ratings.prototype.onClick_ = function(e) {
+<a name="line395"></a>  if (!this.isEnabled()) {
+<a name="line396"></a>    return;
+<a name="line397"></a>  }
+<a name="line398"></a>
+<a name="line399"></a>  if (goog.isDef(e.target.index)) {
+<a name="line400"></a>    this.setSelectedIndex(e.target.index);
+<a name="line401"></a>  }
+<a name="line402"></a>};
+<a name="line403"></a>
+<a name="line404"></a>
+<a name="line405"></a>/**
+<a name="line406"></a> * Handle the key down event. 0 = unselected in this case, 1 = the first rating
+<a name="line407"></a> * @param {goog.events.BrowserEvent} e The browser event.
+<a name="line408"></a> * @private
+<a name="line409"></a> */
+<a name="line410"></a>goog.ui.Ratings.prototype.onKeyDown_ = function(e) {
+<a name="line411"></a>  if (!this.isEnabled()) {
+<a name="line412"></a>    return;
+<a name="line413"></a>  }
+<a name="line414"></a>  switch (e.keyCode) {
+<a name="line415"></a>    case 27: // esc
+<a name="line416"></a>      this.setSelectedIndex(-1);
+<a name="line417"></a>      break;
+<a name="line418"></a>    case 36: // home
+<a name="line419"></a>      this.setSelectedIndex(0);
+<a name="line420"></a>      break;
+<a name="line421"></a>    case 35: // end
+<a name="line422"></a>      this.setSelectedIndex(this.ratings_.length);
+<a name="line423"></a>      break;
+<a name="line424"></a>    case 37: // left arrow
+<a name="line425"></a>      this.setSelectedIndex(this.getSelectedIndex() - 1);
+<a name="line426"></a>      break;
+<a name="line427"></a>    case 39: // right arrow
+<a name="line428"></a>      this.setSelectedIndex(this.getSelectedIndex() + 1);
+<a name="line429"></a>      break;
+<a name="line430"></a>    default:
+<a name="line431"></a>      // Detected a numeric key stroke, such as 0 - 9.  0 clears, 1 is first
+<a name="line432"></a>      // star, 9 is 9th star or last if there are less than 9 stars.
+<a name="line433"></a>      var num = parseInt(String.fromCharCode(e.keyCode), 10);
+<a name="line434"></a>      if (!isNaN(num)) {
+<a name="line435"></a>        this.setSelectedIndex(num - 1);
+<a name="line436"></a>      }
+<a name="line437"></a>  }
+<a name="line438"></a>};
+<a name="line439"></a>
+<a name="line440"></a>
+<a name="line441"></a>/**
+<a name="line442"></a> * Resets the highlights to the selected rating to undo highlights due to hover
+<a name="line443"></a> * effects.
+<a name="line444"></a> * @private
+<a name="line445"></a> */
+<a name="line446"></a>goog.ui.Ratings.prototype.resetHighlights_ = function() {
+<a name="line447"></a>  this.highlightIndex_(this.selectedIndex_);
+<a name="line448"></a>  this.highlightedIndex_ = -1;
+<a name="line449"></a>  this.dispatchEvent(goog.ui.Ratings.EventType.HIGHLIGHT_CHANGE);
+<a name="line450"></a>  this.dispatchEvent(goog.ui.Ratings.EventType.UNHIGHLIGHT);
+<a name="line451"></a>};
+<a name="line452"></a>
+<a name="line453"></a>
+<a name="line454"></a>/**
+<a name="line455"></a> * Highlights the ratings up to a specific index
+<a name="line456"></a> * @param {number} n Index to highlight.
+<a name="line457"></a> * @private
+<a name="line458"></a> */
+<a name="line459"></a>goog.ui.Ratings.prototype.highlightIndex_ = function(n) {
+<a name="line460"></a>  for (var i = 0, star; star = this.stars_[i]; i++) {
+<a name="line461"></a>    goog.dom.classlist.set(star, this.getClassName_(i, i &lt;= n));
+<a name="line462"></a>  }
+<a name="line463"></a>};
+<a name="line464"></a>
+<a name="line465"></a>
+<a name="line466"></a>/**
+<a name="line467"></a> * Get the class name for a given rating.  All stars have the class:
+<a name="line468"></a> * goog-ratings-star.
+<a name="line469"></a> * Other possible classnames dependent on position and state are:
+<a name="line470"></a> * goog-ratings-firststar-on
+<a name="line471"></a> * goog-ratings-firststar-off
+<a name="line472"></a> * goog-ratings-midstar-on
+<a name="line473"></a> * goog-ratings-midstar-off
+<a name="line474"></a> * goog-ratings-laststar-on
+<a name="line475"></a> * goog-ratings-laststar-off
+<a name="line476"></a> * @param {number} i Index to get class name for.
+<a name="line477"></a> * @param {boolean} on Whether it should be on.
+<a name="line478"></a> * @return {string} The class name.
+<a name="line479"></a> * @private
+<a name="line480"></a> */
+<a name="line481"></a>goog.ui.Ratings.prototype.getClassName_ = function(i, on) {
+<a name="line482"></a>  var className;
+<a name="line483"></a>  var enabledClassName;
+<a name="line484"></a>  var baseClass = this.getCssClass();
+<a name="line485"></a>
+<a name="line486"></a>  if (i === 0) {
+<a name="line487"></a>    className = goog.getCssName(baseClass, &#39;firststar&#39;);
+<a name="line488"></a>  } else if (i == this.ratings_.length - 1) {
+<a name="line489"></a>    className = goog.getCssName(baseClass, &#39;laststar&#39;);
+<a name="line490"></a>  } else {
+<a name="line491"></a>    className = goog.getCssName(baseClass, &#39;midstar&#39;);
+<a name="line492"></a>  }
+<a name="line493"></a>
+<a name="line494"></a>  if (on) {
+<a name="line495"></a>    className = goog.getCssName(className, &#39;on&#39;);
+<a name="line496"></a>  } else {
+<a name="line497"></a>    className = goog.getCssName(className, &#39;off&#39;);
+<a name="line498"></a>  }
+<a name="line499"></a>
+<a name="line500"></a>  if (this.isEnabled_) {
+<a name="line501"></a>    enabledClassName = goog.getCssName(baseClass, &#39;enabled&#39;);
+<a name="line502"></a>  } else {
+<a name="line503"></a>    enabledClassName = goog.getCssName(baseClass, &#39;disabled&#39;);
+<a name="line504"></a>  }
+<a name="line505"></a>
+<a name="line506"></a>  return goog.getCssName(baseClass, &#39;star&#39;) + &#39; &#39; + className +
+<a name="line507"></a>      &#39; &#39; + enabledClassName;
+<a name="line508"></a>};
+</pre>
+
+
+</body>
+</html>

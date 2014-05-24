@@ -1,0 +1,401 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>abstractrange.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_browserrange_abstractrange.js.html">abstractrange.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the browser range interface.
+<a name="line17"></a> *
+<a name="line18"></a> * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
+<a name="line19"></a> *
+<a name="line20"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.dom.browserrange.AbstractRange&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.array&#39;);
+<a name="line27"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line29"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line30"></a>goog.require(&#39;goog.dom.RangeEndpoint&#39;);
+<a name="line31"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line32"></a>goog.require(&#39;goog.dom.TextRangeIterator&#39;);
+<a name="line33"></a>goog.require(&#39;goog.iter&#39;);
+<a name="line34"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line35"></a>goog.require(&#39;goog.string&#39;);
+<a name="line36"></a>goog.require(&#39;goog.string.StringBuffer&#39;);
+<a name="line37"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>
+<a name="line41"></a>/**
+<a name="line42"></a> * The constructor for abstract ranges.  Don&#39;t call this from subclasses.
+<a name="line43"></a> * @constructor
+<a name="line44"></a> */
+<a name="line45"></a>goog.dom.browserrange.AbstractRange = function() {
+<a name="line46"></a>};
+<a name="line47"></a>
+<a name="line48"></a>
+<a name="line49"></a>/**
+<a name="line50"></a> * @return {goog.dom.browserrange.AbstractRange} A clone of this range.
+<a name="line51"></a> */
+<a name="line52"></a>goog.dom.browserrange.AbstractRange.prototype.clone = goog.abstractMethod;
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * Returns the browser native implementation of the range.  Please refrain from
+<a name="line57"></a> * using this function - if you find you need the range please add wrappers for
+<a name="line58"></a> * the functionality you need rather than just using the native range.
+<a name="line59"></a> * @return {Range|TextRange} The browser native range object.
+<a name="line60"></a> */
+<a name="line61"></a>goog.dom.browserrange.AbstractRange.prototype.getBrowserRange =
+<a name="line62"></a>    goog.abstractMethod;
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Returns the deepest node in the tree that contains the entire range.
+<a name="line67"></a> * @return {Node} The deepest node that contains the entire range.
+<a name="line68"></a> */
+<a name="line69"></a>goog.dom.browserrange.AbstractRange.prototype.getContainer =
+<a name="line70"></a>    goog.abstractMethod;
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * Returns the node the range starts in.
+<a name="line75"></a> * @return {Node} The element or text node the range starts in.
+<a name="line76"></a> */
+<a name="line77"></a>goog.dom.browserrange.AbstractRange.prototype.getStartNode =
+<a name="line78"></a>    goog.abstractMethod;
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>/**
+<a name="line82"></a> * Returns the offset into the node the range starts in.
+<a name="line83"></a> * @return {number} The offset into the node the range starts in.  For text
+<a name="line84"></a> *     nodes, this is an offset into the node value.  For elements, this is
+<a name="line85"></a> *     an offset into the childNodes array.
+<a name="line86"></a> */
+<a name="line87"></a>goog.dom.browserrange.AbstractRange.prototype.getStartOffset =
+<a name="line88"></a>    goog.abstractMethod;
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * @return {goog.math.Coordinate} The coordinate of the selection start node
+<a name="line93"></a> *     and offset.
+<a name="line94"></a> */
+<a name="line95"></a>goog.dom.browserrange.AbstractRange.prototype.getStartPosition = function() {
+<a name="line96"></a>  goog.asserts.assert(this.range_.getClientRects,
+<a name="line97"></a>      &#39;Getting selection coordinates is not supported.&#39;);
+<a name="line98"></a>
+<a name="line99"></a>  var rects = this.range_.getClientRects();
+<a name="line100"></a>  if (rects.length) {
+<a name="line101"></a>    return new goog.math.Coordinate(rects[0][&#39;left&#39;], rects[0][&#39;top&#39;]);
+<a name="line102"></a>  }
+<a name="line103"></a>  return null;
+<a name="line104"></a>};
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Returns the node the range ends in.
+<a name="line109"></a> * @return {Node} The element or text node the range ends in.
+<a name="line110"></a> */
+<a name="line111"></a>goog.dom.browserrange.AbstractRange.prototype.getEndNode =
+<a name="line112"></a>    goog.abstractMethod;
+<a name="line113"></a>
+<a name="line114"></a>
+<a name="line115"></a>/**
+<a name="line116"></a> * Returns the offset into the node the range ends in.
+<a name="line117"></a> * @return {number} The offset into the node the range ends in.  For text
+<a name="line118"></a> *     nodes, this is an offset into the node value.  For elements, this is
+<a name="line119"></a> *     an offset into the childNodes array.
+<a name="line120"></a> */
+<a name="line121"></a>goog.dom.browserrange.AbstractRange.prototype.getEndOffset =
+<a name="line122"></a>    goog.abstractMethod;
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * @return {goog.math.Coordinate} The coordinate of the selection end node
+<a name="line127"></a> *     and offset.
+<a name="line128"></a> */
+<a name="line129"></a>goog.dom.browserrange.AbstractRange.prototype.getEndPosition = function() {
+<a name="line130"></a>  goog.asserts.assert(this.range_.getClientRects,
+<a name="line131"></a>      &#39;Getting selection coordinates is not supported.&#39;);
+<a name="line132"></a>
+<a name="line133"></a>  var rects = this.range_.getClientRects();
+<a name="line134"></a>  if (rects.length) {
+<a name="line135"></a>    var lastRect = goog.array.peek(rects);
+<a name="line136"></a>    return new goog.math.Coordinate(lastRect[&#39;right&#39;], lastRect[&#39;bottom&#39;]);
+<a name="line137"></a>  }
+<a name="line138"></a>  return null;
+<a name="line139"></a>};
+<a name="line140"></a>
+<a name="line141"></a>
+<a name="line142"></a>/**
+<a name="line143"></a> * Compares one endpoint of this range with the endpoint of another browser
+<a name="line144"></a> * native range object.
+<a name="line145"></a> * @param {Range|TextRange} range The browser native range to compare against.
+<a name="line146"></a> * @param {goog.dom.RangeEndpoint} thisEndpoint The endpoint of this range
+<a name="line147"></a> *     to compare with.
+<a name="line148"></a> * @param {goog.dom.RangeEndpoint} otherEndpoint The endpoint of the other
+<a name="line149"></a> *     range to compare with.
+<a name="line150"></a> * @return {number} 0 if the endpoints are equal, negative if this range
+<a name="line151"></a> *     endpoint comes before the other range endpoint, and positive otherwise.
+<a name="line152"></a> */
+<a name="line153"></a>goog.dom.browserrange.AbstractRange.prototype.compareBrowserRangeEndpoints =
+<a name="line154"></a>    goog.abstractMethod;
+<a name="line155"></a>
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * Tests if this range contains the given range.
+<a name="line159"></a> * @param {goog.dom.browserrange.AbstractRange} abstractRange The range to test.
+<a name="line160"></a> * @param {boolean=} opt_allowPartial If not set or false, the range must be
+<a name="line161"></a> *     entirely contained in the selection for this function to return true.
+<a name="line162"></a> * @return {boolean} Whether this range contains the given range.
+<a name="line163"></a> */
+<a name="line164"></a>goog.dom.browserrange.AbstractRange.prototype.containsRange =
+<a name="line165"></a>    function(abstractRange, opt_allowPartial) {
+<a name="line166"></a>  // IE sometimes misreports the boundaries for collapsed ranges. So if the
+<a name="line167"></a>  // other range is collapsed, make sure the whole range is contained. This is
+<a name="line168"></a>  // logically equivalent, and works around IE&#39;s bug.
+<a name="line169"></a>  var checkPartial = opt_allowPartial &amp;&amp; !abstractRange.isCollapsed();
+<a name="line170"></a>
+<a name="line171"></a>  var range = abstractRange.getBrowserRange();
+<a name="line172"></a>  var start = goog.dom.RangeEndpoint.START, end = goog.dom.RangeEndpoint.END;
+<a name="line173"></a>  /** @preserveTry */
+<a name="line174"></a>  try {
+<a name="line175"></a>    if (checkPartial) {
+<a name="line176"></a>      // There are two ways to not overlap.  Being before, and being after.
+<a name="line177"></a>      // Before is represented by this.end before range.start: comparison &lt; 0.
+<a name="line178"></a>      // After is represented by this.start after range.end: comparison &gt; 0.
+<a name="line179"></a>      // The below is the negation of not overlapping.
+<a name="line180"></a>      return this.compareBrowserRangeEndpoints(range, end, start) &gt;= 0 &amp;&amp;
+<a name="line181"></a>             this.compareBrowserRangeEndpoints(range, start, end) &lt;= 0;
+<a name="line182"></a>
+<a name="line183"></a>    } else {
+<a name="line184"></a>      // Return true if this range bounds the parameter range from both sides.
+<a name="line185"></a>      return this.compareBrowserRangeEndpoints(range, end, end) &gt;= 0 &amp;&amp;
+<a name="line186"></a>          this.compareBrowserRangeEndpoints(range, start, start) &lt;= 0;
+<a name="line187"></a>    }
+<a name="line188"></a>  } catch (e) {
+<a name="line189"></a>    if (!goog.userAgent.IE) {
+<a name="line190"></a>      throw e;
+<a name="line191"></a>    }
+<a name="line192"></a>    // IE sometimes throws exceptions when one range is invalid, i.e. points
+<a name="line193"></a>    // to a node that has been removed from the document.  Return false in this
+<a name="line194"></a>    // case.
+<a name="line195"></a>    return false;
+<a name="line196"></a>  }
+<a name="line197"></a>};
+<a name="line198"></a>
+<a name="line199"></a>
+<a name="line200"></a>/**
+<a name="line201"></a> * Tests if this range contains the given node.
+<a name="line202"></a> * @param {Node} node The node to test.
+<a name="line203"></a> * @param {boolean=} opt_allowPartial If not set or false, the node must be
+<a name="line204"></a> *     entirely contained in the selection for this function to return true.
+<a name="line205"></a> * @return {boolean} Whether this range contains the given node.
+<a name="line206"></a> */
+<a name="line207"></a>goog.dom.browserrange.AbstractRange.prototype.containsNode = function(node,
+<a name="line208"></a>    opt_allowPartial) {
+<a name="line209"></a>  return this.containsRange(
+<a name="line210"></a>      goog.dom.browserrange.createRangeFromNodeContents(node),
+<a name="line211"></a>      opt_allowPartial);
+<a name="line212"></a>};
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * Tests if the selection is collapsed - i.e. is just a caret.
+<a name="line217"></a> * @return {boolean} Whether the range is collapsed.
+<a name="line218"></a> */
+<a name="line219"></a>goog.dom.browserrange.AbstractRange.prototype.isCollapsed =
+<a name="line220"></a>    goog.abstractMethod;
+<a name="line221"></a>
+<a name="line222"></a>
+<a name="line223"></a>/**
+<a name="line224"></a> * @return {string} The text content of the range.
+<a name="line225"></a> */
+<a name="line226"></a>goog.dom.browserrange.AbstractRange.prototype.getText =
+<a name="line227"></a>    goog.abstractMethod;
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * Returns the HTML fragment this range selects.  This is slow on all browsers.
+<a name="line232"></a> * @return {string} HTML fragment of the range, does not include context
+<a name="line233"></a> *     containing elements.
+<a name="line234"></a> */
+<a name="line235"></a>goog.dom.browserrange.AbstractRange.prototype.getHtmlFragment = function() {
+<a name="line236"></a>  var output = new goog.string.StringBuffer();
+<a name="line237"></a>  goog.iter.forEach(this, function(node, ignore, it) {
+<a name="line238"></a>    if (node.nodeType == goog.dom.NodeType.TEXT) {
+<a name="line239"></a>      output.append(goog.string.htmlEscape(node.nodeValue.substring(
+<a name="line240"></a>          it.getStartTextOffset(), it.getEndTextOffset())));
+<a name="line241"></a>    } else if (node.nodeType == goog.dom.NodeType.ELEMENT) {
+<a name="line242"></a>      if (it.isEndTag()) {
+<a name="line243"></a>        if (goog.dom.canHaveChildren(node)) {
+<a name="line244"></a>          output.append(&#39;&lt;/&#39; + node.tagName + &#39;&gt;&#39;);
+<a name="line245"></a>        }
+<a name="line246"></a>      } else {
+<a name="line247"></a>        var shallow = node.cloneNode(false);
+<a name="line248"></a>        var html = goog.dom.getOuterHtml(shallow);
+<a name="line249"></a>        if (goog.userAgent.IE &amp;&amp; node.tagName == goog.dom.TagName.LI) {
+<a name="line250"></a>          // For an LI, IE just returns &quot;&lt;li&gt;&quot; with no closing tag
+<a name="line251"></a>          output.append(html);
+<a name="line252"></a>        } else {
+<a name="line253"></a>          var index = html.lastIndexOf(&#39;&lt;&#39;);
+<a name="line254"></a>          output.append(index ? html.substr(0, index) : html);
+<a name="line255"></a>        }
+<a name="line256"></a>      }
+<a name="line257"></a>    }
+<a name="line258"></a>  }, this);
+<a name="line259"></a>
+<a name="line260"></a>  return output.toString();
+<a name="line261"></a>};
+<a name="line262"></a>
+<a name="line263"></a>
+<a name="line264"></a>/**
+<a name="line265"></a> * Returns valid HTML for this range.  This is fast on IE, and semi-fast on
+<a name="line266"></a> * other browsers.
+<a name="line267"></a> * @return {string} Valid HTML of the range, including context containing
+<a name="line268"></a> *     elements.
+<a name="line269"></a> */
+<a name="line270"></a>goog.dom.browserrange.AbstractRange.prototype.getValidHtml =
+<a name="line271"></a>    goog.abstractMethod;
+<a name="line272"></a>
+<a name="line273"></a>
+<a name="line274"></a>/**
+<a name="line275"></a> * Returns a RangeIterator over the contents of the range.  Regardless of the
+<a name="line276"></a> * direction of the range, the iterator will move in document order.
+<a name="line277"></a> * @param {boolean=} opt_keys Unused for this iterator.
+<a name="line278"></a> * @return {!goog.dom.RangeIterator} An iterator over tags in the range.
+<a name="line279"></a> */
+<a name="line280"></a>goog.dom.browserrange.AbstractRange.prototype.__iterator__ = function(
+<a name="line281"></a>    opt_keys) {
+<a name="line282"></a>  return new goog.dom.TextRangeIterator(this.getStartNode(),
+<a name="line283"></a>      this.getStartOffset(), this.getEndNode(), this.getEndOffset());
+<a name="line284"></a>};
+<a name="line285"></a>
+<a name="line286"></a>
+<a name="line287"></a>// SELECTION MODIFICATION
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * Set this range as the selection in its window.
+<a name="line292"></a> * @param {boolean=} opt_reverse Whether to select the range in reverse,
+<a name="line293"></a> *     if possible.
+<a name="line294"></a> */
+<a name="line295"></a>goog.dom.browserrange.AbstractRange.prototype.select =
+<a name="line296"></a>    goog.abstractMethod;
+<a name="line297"></a>
+<a name="line298"></a>
+<a name="line299"></a>/**
+<a name="line300"></a> * Removes the contents of the range from the document.  As a side effect, the
+<a name="line301"></a> * selection will be collapsed.  The behavior of content removal is normalized
+<a name="line302"></a> * across browsers.  For instance, IE sometimes creates extra text nodes that
+<a name="line303"></a> * a W3C browser does not.  That behavior is corrected for.
+<a name="line304"></a> */
+<a name="line305"></a>goog.dom.browserrange.AbstractRange.prototype.removeContents =
+<a name="line306"></a>    goog.abstractMethod;
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>/**
+<a name="line310"></a> * Surrounds the text range with the specified element (on Mozilla) or with a
+<a name="line311"></a> * clone of the specified element (on IE).  Returns a reference to the
+<a name="line312"></a> * surrounding element if the operation was successful; returns null if the
+<a name="line313"></a> * operation failed.
+<a name="line314"></a> * @param {Element} element The element with which the selection is to be
+<a name="line315"></a> *    surrounded.
+<a name="line316"></a> * @return {Element} The surrounding element (same as the argument on Mozilla,
+<a name="line317"></a> *    but not on IE), or null if unsuccessful.
+<a name="line318"></a> */
+<a name="line319"></a>goog.dom.browserrange.AbstractRange.prototype.surroundContents =
+<a name="line320"></a>    goog.abstractMethod;
+<a name="line321"></a>
+<a name="line322"></a>
+<a name="line323"></a>/**
+<a name="line324"></a> * Inserts a node before (or after) the range.  The range may be disrupted
+<a name="line325"></a> * beyond recovery because of the way this splits nodes.
+<a name="line326"></a> * @param {Node} node The node to insert.
+<a name="line327"></a> * @param {boolean} before True to insert before, false to insert after.
+<a name="line328"></a> * @return {Node} The node added to the document.  This may be different
+<a name="line329"></a> *     than the node parameter because on IE we have to clone it.
+<a name="line330"></a> */
+<a name="line331"></a>goog.dom.browserrange.AbstractRange.prototype.insertNode =
+<a name="line332"></a>    goog.abstractMethod;
+<a name="line333"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * Surrounds this range with the two given nodes.  The range may be disrupted
+<a name="line337"></a> * beyond recovery because of the way this splits nodes.
+<a name="line338"></a> * @param {Element} startNode The node to insert at the start.
+<a name="line339"></a> * @param {Element} endNode The node to insert at the end.
+<a name="line340"></a> */
+<a name="line341"></a>goog.dom.browserrange.AbstractRange.prototype.surroundWithNodes =
+<a name="line342"></a>    goog.abstractMethod;
+<a name="line343"></a>
+<a name="line344"></a>
+<a name="line345"></a>/**
+<a name="line346"></a> * Collapses the range to one of its boundary points.
+<a name="line347"></a> * @param {boolean} toStart Whether to collapse to the start of the range.
+<a name="line348"></a> */
+<a name="line349"></a>goog.dom.browserrange.AbstractRange.prototype.collapse =
+<a name="line350"></a>    goog.abstractMethod;
+</pre>
+
+
+</body>
+</html>

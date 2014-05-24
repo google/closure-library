@@ -1,0 +1,120 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>namefetcher.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_uchar_namefetcher.js.html">namefetcher.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the goog.i18n.CharNameFetcher interface. This
+<a name="line17"></a> * interface is used to retrieve individual character names.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.i18n.uChar.NameFetcher&#39;);
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>/**
+<a name="line25"></a> * NameFetcher interface. Implementations of this interface are used to retrieve
+<a name="line26"></a> * Unicode character names.
+<a name="line27"></a> *
+<a name="line28"></a> * @interface
+<a name="line29"></a> */
+<a name="line30"></a>goog.i18n.uChar.NameFetcher = function() {
+<a name="line31"></a>};
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Retrieves the names of a given set of characters and stores them in a cache
+<a name="line36"></a> * for fast retrieval. Offline implementations can simply provide an empty
+<a name="line37"></a> * implementation.
+<a name="line38"></a> *
+<a name="line39"></a> * @param {string} characters The list of characters in base 88 to fetch. These
+<a name="line40"></a> *     lists are stored by category and subcategory in the
+<a name="line41"></a> *     goog.i18n.charpickerdata class.
+<a name="line42"></a> */
+<a name="line43"></a>goog.i18n.uChar.NameFetcher.prototype.prefetch = function(characters) {
+<a name="line44"></a>};
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Retrieves the name of a particular character.
+<a name="line49"></a> *
+<a name="line50"></a> * @param {string} character The character to retrieve.
+<a name="line51"></a> * @param {function(?string)} callback The callback function called when the
+<a name="line52"></a> *     name retrieval is complete, contains a single string parameter with the
+<a name="line53"></a> *     codepoint name, this parameter will be null if the character name is not
+<a name="line54"></a> *     defined.
+<a name="line55"></a> */
+<a name="line56"></a>goog.i18n.uChar.NameFetcher.prototype.getName = function(character, callback) {
+<a name="line57"></a>};
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * Tests whether the name of a given character is available to be retrieved by
+<a name="line62"></a> * the getName() function.
+<a name="line63"></a> *
+<a name="line64"></a> * @param {string} character The character to test.
+<a name="line65"></a> * @return {boolean} True if the fetcher can retrieve or has a name available
+<a name="line66"></a> *     for the given character.
+<a name="line67"></a> */
+<a name="line68"></a>goog.i18n.uChar.NameFetcher.prototype.isNameAvailable = function(character) {
+<a name="line69"></a>};
+</pre>
+
+
+</body>
+</html>

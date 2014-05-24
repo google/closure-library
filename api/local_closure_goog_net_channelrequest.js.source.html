@@ -1,0 +1,1363 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>channelrequest.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_channelrequest.js.html">channelrequest.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the ChannelRequest class. The ChannelRequest
+<a name="line17"></a> * object encapsulates the logic for making a single request, either for the
+<a name="line18"></a> * forward channel, back channel, or test channel, to the server. It contains
+<a name="line19"></a> * the logic for the three types of transports we use in the BrowserChannel:
+<a name="line20"></a> * XMLHTTP, Trident ActiveX (ie only), and Image request. It provides timeout
+<a name="line21"></a> * detection. This class is part of the BrowserChannel implementation and is not
+<a name="line22"></a> * for use by normal application code.
+<a name="line23"></a> *
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.net.ChannelRequest&#39;);
+<a name="line28"></a>goog.provide(&#39;goog.net.ChannelRequest.Error&#39;);
+<a name="line29"></a>
+<a name="line30"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line31"></a>goog.require(&#39;goog.async.Throttle&#39;);
+<a name="line32"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line33"></a>goog.require(&#39;goog.net.ErrorCode&#39;);
+<a name="line34"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line35"></a>goog.require(&#39;goog.net.XmlHttp&#39;);
+<a name="line36"></a>goog.require(&#39;goog.object&#39;);
+<a name="line37"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line38"></a>
+<a name="line39"></a>// TODO(nnaze): This file depends on goog.net.BrowserChannel and vice versa (a
+<a name="line40"></a>// circular dependency).  Usages of BrowserChannel are marked as
+<a name="line41"></a>// &quot;missingRequire&quot; below for now.  This should be fixed through refactoring.
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * Creates a ChannelRequest object which encapsulates a request to the server.
+<a name="line47"></a> * A new ChannelRequest is created for each request to the server.
+<a name="line48"></a> *
+<a name="line49"></a> * @param {goog.net.BrowserChannel|goog.net.BrowserTestChannel} channel
+<a name="line50"></a> *     The BrowserChannel that owns this request.
+<a name="line51"></a> * @param {goog.net.ChannelDebug} channelDebug A ChannelDebug to use for
+<a name="line52"></a> *     logging.
+<a name="line53"></a> * @param {string=} opt_sessionId  The session id for the channel.
+<a name="line54"></a> * @param {string|number=} opt_requestId  The request id for this request.
+<a name="line55"></a> * @param {number=} opt_retryId  The retry id for this request.
+<a name="line56"></a> * @constructor
+<a name="line57"></a> */
+<a name="line58"></a>goog.net.ChannelRequest = function(channel, channelDebug, opt_sessionId,
+<a name="line59"></a>    opt_requestId, opt_retryId) {
+<a name="line60"></a>  /**
+<a name="line61"></a>   * The BrowserChannel object that owns the request.
+<a name="line62"></a>   * @type {goog.net.BrowserChannel|goog.net.BrowserTestChannel}
+<a name="line63"></a>   * @private
+<a name="line64"></a>   */
+<a name="line65"></a>  this.channel_ = channel;
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * The channel debug to use for logging
+<a name="line69"></a>   * @type {goog.net.ChannelDebug}
+<a name="line70"></a>   * @private
+<a name="line71"></a>   */
+<a name="line72"></a>  this.channelDebug_ = channelDebug;
+<a name="line73"></a>
+<a name="line74"></a>  /**
+<a name="line75"></a>   * The Session ID for the channel.
+<a name="line76"></a>   * @type {string|undefined}
+<a name="line77"></a>   * @private
+<a name="line78"></a>   */
+<a name="line79"></a>  this.sid_ = opt_sessionId;
+<a name="line80"></a>
+<a name="line81"></a>  /**
+<a name="line82"></a>   * The RID (request ID) for the request.
+<a name="line83"></a>   * @type {string|number|undefined}
+<a name="line84"></a>   * @private
+<a name="line85"></a>   */
+<a name="line86"></a>  this.rid_ = opt_requestId;
+<a name="line87"></a>
+<a name="line88"></a>
+<a name="line89"></a>  /**
+<a name="line90"></a>   * The attempt number of the current request.
+<a name="line91"></a>   * @type {number}
+<a name="line92"></a>   * @private
+<a name="line93"></a>   */
+<a name="line94"></a>  this.retryId_ = opt_retryId || 1;
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>  /**
+<a name="line98"></a>   * The timeout in ms before failing the request.
+<a name="line99"></a>   * @type {number}
+<a name="line100"></a>   * @private
+<a name="line101"></a>   */
+<a name="line102"></a>  this.timeout_ = goog.net.ChannelRequest.TIMEOUT_MS;
+<a name="line103"></a>
+<a name="line104"></a>  /**
+<a name="line105"></a>   * An object to keep track of the channel request event listeners.
+<a name="line106"></a>   * @type {!goog.events.EventHandler.&lt;!goog.net.ChannelRequest&gt;}
+<a name="line107"></a>   * @private
+<a name="line108"></a>   */
+<a name="line109"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line110"></a>
+<a name="line111"></a>  /**
+<a name="line112"></a>   * A timer for polling responseText in browsers that don&#39;t fire
+<a name="line113"></a>   * onreadystatechange during incremental loading of responseText.
+<a name="line114"></a>   * @type {goog.Timer}
+<a name="line115"></a>   * @private
+<a name="line116"></a>   */
+<a name="line117"></a>  this.pollingTimer_ = new goog.Timer();
+<a name="line118"></a>
+<a name="line119"></a>  this.pollingTimer_.setInterval(goog.net.ChannelRequest.POLLING_INTERVAL_MS);
+<a name="line120"></a>};
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>/**
+<a name="line124"></a> * Extra HTTP headers to add to all the requests sent to the server.
+<a name="line125"></a> * @type {Object}
+<a name="line126"></a> * @private
+<a name="line127"></a> */
+<a name="line128"></a>goog.net.ChannelRequest.prototype.extraHeaders_ = null;
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>/**
+<a name="line132"></a> * Whether the request was successful. This is only set to true after the
+<a name="line133"></a> * request successfuly completes.
+<a name="line134"></a> * @type {boolean}
+<a name="line135"></a> * @private
+<a name="line136"></a> */
+<a name="line137"></a>goog.net.ChannelRequest.prototype.successful_ = false;
+<a name="line138"></a>
+<a name="line139"></a>
+<a name="line140"></a>/**
+<a name="line141"></a> * The TimerID of the timer used to detect if the request has timed-out.
+<a name="line142"></a> * @type {?number}
+<a name="line143"></a> * @private
+<a name="line144"></a> */
+<a name="line145"></a>goog.net.ChannelRequest.prototype.watchDogTimerId_ = null;
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * The time in the future when the request will timeout.
+<a name="line150"></a> * @type {?number}
+<a name="line151"></a> * @private
+<a name="line152"></a> */
+<a name="line153"></a>goog.net.ChannelRequest.prototype.watchDogTimeoutTime_ = null;
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>/**
+<a name="line157"></a> * The time the request started.
+<a name="line158"></a> * @type {?number}
+<a name="line159"></a> * @private
+<a name="line160"></a> */
+<a name="line161"></a>goog.net.ChannelRequest.prototype.requestStartTime_ = null;
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>/**
+<a name="line165"></a> * The type of request (XMLHTTP, IMG, Trident)
+<a name="line166"></a> * @type {?number}
+<a name="line167"></a> * @private
+<a name="line168"></a> */
+<a name="line169"></a>goog.net.ChannelRequest.prototype.type_ = null;
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * The base Uri for the request. The includes all the parameters except the
+<a name="line174"></a> * one that indicates the retry number.
+<a name="line175"></a> * @type {goog.Uri?}
+<a name="line176"></a> * @private
+<a name="line177"></a> */
+<a name="line178"></a>goog.net.ChannelRequest.prototype.baseUri_ = null;
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * The request Uri that was actually used for the most recent request attempt.
+<a name="line183"></a> * @type {goog.Uri?}
+<a name="line184"></a> * @private
+<a name="line185"></a> */
+<a name="line186"></a>goog.net.ChannelRequest.prototype.requestUri_ = null;
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * The post data, if the request is a post.
+<a name="line191"></a> * @type {?string}
+<a name="line192"></a> * @private
+<a name="line193"></a> */
+<a name="line194"></a>goog.net.ChannelRequest.prototype.postData_ = null;
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/**
+<a name="line198"></a> * The XhrLte request if the request is using XMLHTTP
+<a name="line199"></a> * @type {goog.net.XhrIo}
+<a name="line200"></a> * @private
+<a name="line201"></a> */
+<a name="line202"></a>goog.net.ChannelRequest.prototype.xmlHttp_ = null;
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/**
+<a name="line206"></a> * The position of where the next unprocessed chunk starts in the response
+<a name="line207"></a> * text.
+<a name="line208"></a> * @type {number}
+<a name="line209"></a> * @private
+<a name="line210"></a> */
+<a name="line211"></a>goog.net.ChannelRequest.prototype.xmlHttpChunkStart_ = 0;
+<a name="line212"></a>
+<a name="line213"></a>
+<a name="line214"></a>/**
+<a name="line215"></a> * The Trident instance if the request is using Trident.
+<a name="line216"></a> * @type {ActiveXObject}
+<a name="line217"></a> * @private
+<a name="line218"></a> */
+<a name="line219"></a>goog.net.ChannelRequest.prototype.trident_ = null;
+<a name="line220"></a>
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * The verb (Get or Post) for the request.
+<a name="line224"></a> * @type {?string}
+<a name="line225"></a> * @private
+<a name="line226"></a> */
+<a name="line227"></a>goog.net.ChannelRequest.prototype.verb_ = null;
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>/**
+<a name="line231"></a> * The last error if the request failed.
+<a name="line232"></a> * @type {?goog.net.ChannelRequest.Error}
+<a name="line233"></a> * @private
+<a name="line234"></a> */
+<a name="line235"></a>goog.net.ChannelRequest.prototype.lastError_ = null;
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>/**
+<a name="line239"></a> * The last status code received.
+<a name="line240"></a> * @type {number}
+<a name="line241"></a> * @private
+<a name="line242"></a> */
+<a name="line243"></a>goog.net.ChannelRequest.prototype.lastStatusCode_ = -1;
+<a name="line244"></a>
+<a name="line245"></a>
+<a name="line246"></a>/**
+<a name="line247"></a> * Whether to send the Connection:close header as part of the request.
+<a name="line248"></a> * @type {boolean}
+<a name="line249"></a> * @private
+<a name="line250"></a> */
+<a name="line251"></a>goog.net.ChannelRequest.prototype.sendClose_ = true;
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>/**
+<a name="line255"></a> * Whether the request has been cancelled due to a call to cancel.
+<a name="line256"></a> * @type {boolean}
+<a name="line257"></a> * @private
+<a name="line258"></a> */
+<a name="line259"></a>goog.net.ChannelRequest.prototype.cancelled_ = false;
+<a name="line260"></a>
+<a name="line261"></a>
+<a name="line262"></a>/**
+<a name="line263"></a> * A throttle time in ms for readystatechange events for the backchannel.
+<a name="line264"></a> * Useful for throttling when ready state is INTERACTIVE (partial data).
+<a name="line265"></a> * If set to zero no throttle is used.
+<a name="line266"></a> *
+<a name="line267"></a> * @see goog.net.BrowserChannel.prototype.readyStateChangeThrottleMs_
+<a name="line268"></a> *
+<a name="line269"></a> * @type {number}
+<a name="line270"></a> * @private
+<a name="line271"></a> */
+<a name="line272"></a>goog.net.ChannelRequest.prototype.readyStateChangeThrottleMs_ = 0;
+<a name="line273"></a>
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * The throttle for readystatechange events for the current request, or null
+<a name="line277"></a> * if there is none.
+<a name="line278"></a> * @type {goog.async.Throttle}
+<a name="line279"></a> * @private
+<a name="line280"></a> */
+<a name="line281"></a>goog.net.ChannelRequest.prototype.readyStateChangeThrottle_ = null;
+<a name="line282"></a>
+<a name="line283"></a>
+<a name="line284"></a>/**
+<a name="line285"></a> * Default timeout in MS for a request. The server must return data within this
+<a name="line286"></a> * time limit for the request to not timeout.
+<a name="line287"></a> * @type {number}
+<a name="line288"></a> */
+<a name="line289"></a>goog.net.ChannelRequest.TIMEOUT_MS = 45 * 1000;
+<a name="line290"></a>
+<a name="line291"></a>
+<a name="line292"></a>/**
+<a name="line293"></a> * How often to poll (in MS) for changes to responseText in browsers that don&#39;t
+<a name="line294"></a> * fire onreadystatechange during incremental loading of responseText.
+<a name="line295"></a> * @type {number}
+<a name="line296"></a> */
+<a name="line297"></a>goog.net.ChannelRequest.POLLING_INTERVAL_MS = 250;
+<a name="line298"></a>
+<a name="line299"></a>
+<a name="line300"></a>/**
+<a name="line301"></a> * Minimum version of Safari that receives a non-null responseText in ready
+<a name="line302"></a> * state interactive.
+<a name="line303"></a> * @type {string}
+<a name="line304"></a> * @private
+<a name="line305"></a> */
+<a name="line306"></a>goog.net.ChannelRequest.MIN_WEBKIT_FOR_INTERACTIVE_ = &#39;420+&#39;;
+<a name="line307"></a>
+<a name="line308"></a>
+<a name="line309"></a>/**
+<a name="line310"></a> * Enum for channel requests type
+<a name="line311"></a> * @enum {number}
+<a name="line312"></a> * @private
+<a name="line313"></a> */
+<a name="line314"></a>goog.net.ChannelRequest.Type_ = {
+<a name="line315"></a>  /**
+<a name="line316"></a>   * XMLHTTP requests.
+<a name="line317"></a>   */
+<a name="line318"></a>  XML_HTTP: 1,
+<a name="line319"></a>
+<a name="line320"></a>  /**
+<a name="line321"></a>   * IMG requests.
+<a name="line322"></a>   */
+<a name="line323"></a>  IMG: 2,
+<a name="line324"></a>
+<a name="line325"></a>  /**
+<a name="line326"></a>   * Requests that use the MSHTML ActiveX control.
+<a name="line327"></a>   */
+<a name="line328"></a>  TRIDENT: 3
+<a name="line329"></a>};
+<a name="line330"></a>
+<a name="line331"></a>
+<a name="line332"></a>/**
+<a name="line333"></a> * Enum type for identifying a ChannelRequest error.
+<a name="line334"></a> * @enum {number}
+<a name="line335"></a> */
+<a name="line336"></a>goog.net.ChannelRequest.Error = {
+<a name="line337"></a>  /**
+<a name="line338"></a>   * Errors due to a non-200 status code.
+<a name="line339"></a>   */
+<a name="line340"></a>  STATUS: 0,
+<a name="line341"></a>
+<a name="line342"></a>  /**
+<a name="line343"></a>   * Errors due to no data being returned.
+<a name="line344"></a>   */
+<a name="line345"></a>  NO_DATA: 1,
+<a name="line346"></a>
+<a name="line347"></a>  /**
+<a name="line348"></a>   * Errors due to a timeout.
+<a name="line349"></a>   */
+<a name="line350"></a>  TIMEOUT: 2,
+<a name="line351"></a>
+<a name="line352"></a>  /**
+<a name="line353"></a>   * Errors due to the server returning an unknown.
+<a name="line354"></a>   */
+<a name="line355"></a>  UNKNOWN_SESSION_ID: 3,
+<a name="line356"></a>
+<a name="line357"></a>  /**
+<a name="line358"></a>   * Errors due to bad data being received.
+<a name="line359"></a>   */
+<a name="line360"></a>  BAD_DATA: 4,
+<a name="line361"></a>
+<a name="line362"></a>  /**
+<a name="line363"></a>   * Errors due to the handler throwing an exception.
+<a name="line364"></a>   */
+<a name="line365"></a>  HANDLER_EXCEPTION: 5,
+<a name="line366"></a>
+<a name="line367"></a>  /**
+<a name="line368"></a>   * The browser declared itself offline during the request.
+<a name="line369"></a>   */
+<a name="line370"></a>  BROWSER_OFFLINE: 6,
+<a name="line371"></a>
+<a name="line372"></a>  /**
+<a name="line373"></a>   * IE is blocking ActiveX streaming.
+<a name="line374"></a>   */
+<a name="line375"></a>  ACTIVE_X_BLOCKED: 7
+<a name="line376"></a>};
+<a name="line377"></a>
+<a name="line378"></a>
+<a name="line379"></a>/**
+<a name="line380"></a> * Returns a useful error string for debugging based on the specified error
+<a name="line381"></a> * code.
+<a name="line382"></a> * @param {goog.net.ChannelRequest.Error} errorCode The error code.
+<a name="line383"></a> * @param {number} statusCode The HTTP status code.
+<a name="line384"></a> * @return {string} The error string for the given code combination.
+<a name="line385"></a> */
+<a name="line386"></a>goog.net.ChannelRequest.errorStringFromCode = function(errorCode, statusCode) {
+<a name="line387"></a>  switch (errorCode) {
+<a name="line388"></a>    case goog.net.ChannelRequest.Error.STATUS:
+<a name="line389"></a>      return &#39;Non-200 return code (&#39; + statusCode + &#39;)&#39;;
+<a name="line390"></a>    case goog.net.ChannelRequest.Error.NO_DATA:
+<a name="line391"></a>      return &#39;XMLHTTP failure (no data)&#39;;
+<a name="line392"></a>    case goog.net.ChannelRequest.Error.TIMEOUT:
+<a name="line393"></a>      return &#39;HttpConnection timeout&#39;;
+<a name="line394"></a>    default:
+<a name="line395"></a>      return &#39;Unknown error&#39;;
+<a name="line396"></a>  }
+<a name="line397"></a>};
+<a name="line398"></a>
+<a name="line399"></a>
+<a name="line400"></a>/**
+<a name="line401"></a> * Sentinel value used to indicate an invalid chunk in a multi-chunk response.
+<a name="line402"></a> * @type {Object}
+<a name="line403"></a> * @private
+<a name="line404"></a> */
+<a name="line405"></a>goog.net.ChannelRequest.INVALID_CHUNK_ = {};
+<a name="line406"></a>
+<a name="line407"></a>
+<a name="line408"></a>/**
+<a name="line409"></a> * Sentinel value used to indicate an incomplete chunk in a multi-chunk
+<a name="line410"></a> * response.
+<a name="line411"></a> * @type {Object}
+<a name="line412"></a> * @private
+<a name="line413"></a> */
+<a name="line414"></a>goog.net.ChannelRequest.INCOMPLETE_CHUNK_ = {};
+<a name="line415"></a>
+<a name="line416"></a>
+<a name="line417"></a>/**
+<a name="line418"></a> * Returns whether XHR streaming is supported on this browser.
+<a name="line419"></a> *
+<a name="line420"></a> * If XHR streaming is not supported, we will try to use an ActiveXObject
+<a name="line421"></a> * to create a Forever IFrame.
+<a name="line422"></a> *
+<a name="line423"></a> * @return {boolean} Whether XHR streaming is supported.
+<a name="line424"></a> * @see http://code.google.com/p/closure-library/issues/detail?id=346
+<a name="line425"></a> */
+<a name="line426"></a>goog.net.ChannelRequest.supportsXhrStreaming = function() {
+<a name="line427"></a>  return !goog.userAgent.IE || goog.userAgent.isDocumentModeOrHigher(10);
+<a name="line428"></a>};
+<a name="line429"></a>
+<a name="line430"></a>
+<a name="line431"></a>/**
+<a name="line432"></a> * Sets extra HTTP headers to add to all the requests sent to the server.
+<a name="line433"></a> *
+<a name="line434"></a> * @param {Object} extraHeaders The HTTP headers.
+<a name="line435"></a> */
+<a name="line436"></a>goog.net.ChannelRequest.prototype.setExtraHeaders = function(extraHeaders) {
+<a name="line437"></a>  this.extraHeaders_ = extraHeaders;
+<a name="line438"></a>};
+<a name="line439"></a>
+<a name="line440"></a>
+<a name="line441"></a>/**
+<a name="line442"></a> * Sets the timeout for a request
+<a name="line443"></a> *
+<a name="line444"></a> * @param {number} timeout   The timeout in MS for when we fail the request.
+<a name="line445"></a> */
+<a name="line446"></a>goog.net.ChannelRequest.prototype.setTimeout = function(timeout) {
+<a name="line447"></a>  this.timeout_ = timeout;
+<a name="line448"></a>};
+<a name="line449"></a>
+<a name="line450"></a>
+<a name="line451"></a>/**
+<a name="line452"></a> * Sets the throttle for handling onreadystatechange events for the request.
+<a name="line453"></a> *
+<a name="line454"></a> * @param {number} throttle The throttle in ms.  A value of zero indicates
+<a name="line455"></a> *     no throttle.
+<a name="line456"></a> */
+<a name="line457"></a>goog.net.ChannelRequest.prototype.setReadyStateChangeThrottle = function(
+<a name="line458"></a>    throttle) {
+<a name="line459"></a>  this.readyStateChangeThrottleMs_ = throttle;
+<a name="line460"></a>};
+<a name="line461"></a>
+<a name="line462"></a>
+<a name="line463"></a>/**
+<a name="line464"></a> * Uses XMLHTTP to send an HTTP POST to the server.
+<a name="line465"></a> *
+<a name="line466"></a> * @param {goog.Uri} uri  The uri of the request.
+<a name="line467"></a> * @param {string} postData  The data for the post body.
+<a name="line468"></a> * @param {boolean} decodeChunks  Whether to the result is expected to be
+<a name="line469"></a> *     encoded for chunking and thus requires decoding.
+<a name="line470"></a> */
+<a name="line471"></a>goog.net.ChannelRequest.prototype.xmlHttpPost = function(uri, postData,
+<a name="line472"></a>                                                         decodeChunks) {
+<a name="line473"></a>  this.type_ = goog.net.ChannelRequest.Type_.XML_HTTP;
+<a name="line474"></a>  this.baseUri_ = uri.clone().makeUnique();
+<a name="line475"></a>  this.postData_ = postData;
+<a name="line476"></a>  this.decodeChunks_ = decodeChunks;
+<a name="line477"></a>  this.sendXmlHttp_(null /* hostPrefix */);
+<a name="line478"></a>};
+<a name="line479"></a>
+<a name="line480"></a>
+<a name="line481"></a>/**
+<a name="line482"></a> * Uses XMLHTTP to send an HTTP GET to the server.
+<a name="line483"></a> *
+<a name="line484"></a> * @param {goog.Uri} uri  The uri of the request.
+<a name="line485"></a> * @param {boolean} decodeChunks  Whether to the result is expected to be
+<a name="line486"></a> *     encoded for chunking and thus requires decoding.
+<a name="line487"></a> * @param {?string} hostPrefix  The host prefix, if we might be using a
+<a name="line488"></a> *     secondary domain.  Note that it should also be in the URL, adding this
+<a name="line489"></a> *     won&#39;t cause it to be added to the URL.
+<a name="line490"></a> * @param {boolean=} opt_noClose   Whether to request that the tcp/ip connection
+<a name="line491"></a> *     should be closed.
+<a name="line492"></a> */
+<a name="line493"></a>goog.net.ChannelRequest.prototype.xmlHttpGet = function(uri, decodeChunks,
+<a name="line494"></a>    hostPrefix, opt_noClose) {
+<a name="line495"></a>  this.type_ = goog.net.ChannelRequest.Type_.XML_HTTP;
+<a name="line496"></a>  this.baseUri_ = uri.clone().makeUnique();
+<a name="line497"></a>  this.postData_ = null;
+<a name="line498"></a>  this.decodeChunks_ = decodeChunks;
+<a name="line499"></a>  if (opt_noClose) {
+<a name="line500"></a>    this.sendClose_ = false;
+<a name="line501"></a>  }
+<a name="line502"></a>  this.sendXmlHttp_(hostPrefix);
+<a name="line503"></a>};
+<a name="line504"></a>
+<a name="line505"></a>
+<a name="line506"></a>/**
+<a name="line507"></a> * Sends a request via XMLHTTP according to the current state of the
+<a name="line508"></a> * ChannelRequest object.
+<a name="line509"></a> *
+<a name="line510"></a> * @param {?string} hostPrefix The host prefix, if we might be using a secondary
+<a name="line511"></a> *     domain.
+<a name="line512"></a> * @private
+<a name="line513"></a> */
+<a name="line514"></a>goog.net.ChannelRequest.prototype.sendXmlHttp_ = function(hostPrefix) {
+<a name="line515"></a>  this.requestStartTime_ = goog.now();
+<a name="line516"></a>  this.ensureWatchDogTimer_();
+<a name="line517"></a>
+<a name="line518"></a>  // clone the base URI to create the request URI. The request uri has the
+<a name="line519"></a>  // attempt number as a parameter which helps in debugging.
+<a name="line520"></a>  this.requestUri_ = this.baseUri_.clone();
+<a name="line521"></a>  this.requestUri_.setParameterValues(&#39;t&#39;, this.retryId_);
+<a name="line522"></a>
+<a name="line523"></a>  // send the request either as a POST or GET
+<a name="line524"></a>  this.xmlHttpChunkStart_ = 0;
+<a name="line525"></a>  var useSecondaryDomains = this.channel_.shouldUseSecondaryDomains();
+<a name="line526"></a>  this.xmlHttp_ = this.channel_.createXhrIo(useSecondaryDomains ?
+<a name="line527"></a>      hostPrefix : null);
+<a name="line528"></a>
+<a name="line529"></a>  if (this.readyStateChangeThrottleMs_ &gt; 0) {
+<a name="line530"></a>    this.readyStateChangeThrottle_ = new goog.async.Throttle(
+<a name="line531"></a>        goog.bind(this.xmlHttpHandler_, this, this.xmlHttp_),
+<a name="line532"></a>        this.readyStateChangeThrottleMs_);
+<a name="line533"></a>  }
+<a name="line534"></a>
+<a name="line535"></a>  this.eventHandler_.listen(this.xmlHttp_,
+<a name="line536"></a>      goog.net.EventType.READY_STATE_CHANGE,
+<a name="line537"></a>      this.readyStateChangeHandler_);
+<a name="line538"></a>
+<a name="line539"></a>  var headers = this.extraHeaders_ ? goog.object.clone(this.extraHeaders_) : {};
+<a name="line540"></a>  if (this.postData_) {
+<a name="line541"></a>    // todo (jonp) - use POST constant when Dan defines it
+<a name="line542"></a>    this.verb_ = &#39;POST&#39;;
+<a name="line543"></a>    headers[&#39;Content-Type&#39;] = &#39;application/x-www-form-urlencoded&#39;;
+<a name="line544"></a>    this.xmlHttp_.send(this.requestUri_, this.verb_, this.postData_, headers);
+<a name="line545"></a>  } else {
+<a name="line546"></a>    // todo (jonp) - use GET constant when Dan defines it
+<a name="line547"></a>    this.verb_ = &#39;GET&#39;;
+<a name="line548"></a>
+<a name="line549"></a>    // If the user agent is webkit, we cannot send the close header since it is
+<a name="line550"></a>    // disallowed by the browser.  If we attempt to set the &quot;Connection: close&quot;
+<a name="line551"></a>    // header in WEBKIT browser, it will actually causes an error message.
+<a name="line552"></a>    if (this.sendClose_ &amp;&amp; !goog.userAgent.WEBKIT) {
+<a name="line553"></a>      headers[&#39;Connection&#39;] = &#39;close&#39;;
+<a name="line554"></a>    }
+<a name="line555"></a>    this.xmlHttp_.send(this.requestUri_, this.verb_, null, headers);
+<a name="line556"></a>  }
+<a name="line557"></a>  this.channel_.notifyServerReachabilityEvent(
+<a name="line558"></a>      /** @suppress {missingRequire} */ (
+<a name="line559"></a>      goog.net.BrowserChannel.ServerReachability.REQUEST_MADE));
+<a name="line560"></a>  this.channelDebug_.xmlHttpChannelRequest(this.verb_,
+<a name="line561"></a>      this.requestUri_, this.rid_, this.retryId_,
+<a name="line562"></a>      this.postData_);
+<a name="line563"></a>};
+<a name="line564"></a>
+<a name="line565"></a>
+<a name="line566"></a>/**
+<a name="line567"></a> * Handles a readystatechange event.
+<a name="line568"></a> * @param {goog.events.Event} evt The event.
+<a name="line569"></a> * @private
+<a name="line570"></a> */
+<a name="line571"></a>goog.net.ChannelRequest.prototype.readyStateChangeHandler_ = function(evt) {
+<a name="line572"></a>  var xhr = /** @type {goog.net.XhrIo} */ (evt.target);
+<a name="line573"></a>  var throttle = this.readyStateChangeThrottle_;
+<a name="line574"></a>  if (throttle &amp;&amp;
+<a name="line575"></a>      xhr.getReadyState() == goog.net.XmlHttp.ReadyState.INTERACTIVE) {
+<a name="line576"></a>    // Only throttle in the partial data case.
+<a name="line577"></a>    this.channelDebug_.debug(&#39;Throttling readystatechange.&#39;);
+<a name="line578"></a>    throttle.fire();
+<a name="line579"></a>  } else {
+<a name="line580"></a>    // If we haven&#39;t throttled, just handle response directly.
+<a name="line581"></a>    this.xmlHttpHandler_(xhr);
+<a name="line582"></a>  }
+<a name="line583"></a>};
+<a name="line584"></a>
+<a name="line585"></a>
+<a name="line586"></a>/**
+<a name="line587"></a> * XmlHttp handler
+<a name="line588"></a> * @param {goog.net.XhrIo} xmlhttp The XhrIo object for the current request.
+<a name="line589"></a> * @private
+<a name="line590"></a> */
+<a name="line591"></a>goog.net.ChannelRequest.prototype.xmlHttpHandler_ = function(xmlhttp) {
+<a name="line592"></a>  /** @suppress {missingRequire} */
+<a name="line593"></a>  goog.net.BrowserChannel.onStartExecution();
+<a name="line594"></a>
+<a name="line595"></a>  /** @preserveTry */
+<a name="line596"></a>  try {
+<a name="line597"></a>    if (xmlhttp == this.xmlHttp_) {
+<a name="line598"></a>      this.onXmlHttpReadyStateChanged_();
+<a name="line599"></a>    } else {
+<a name="line600"></a>      this.channelDebug_.warning(&#39;Called back with an &#39; +
+<a name="line601"></a>                                     &#39;unexpected xmlhttp&#39;);
+<a name="line602"></a>    }
+<a name="line603"></a>  } catch (ex) {
+<a name="line604"></a>    this.channelDebug_.debug(&#39;Failed call to OnXmlHttpReadyStateChanged_&#39;);
+<a name="line605"></a>    if (this.xmlHttp_ &amp;&amp; this.xmlHttp_.getResponseText()) {
+<a name="line606"></a>      this.channelDebug_.dumpException(ex,
+<a name="line607"></a>          &#39;ResponseText: &#39; + this.xmlHttp_.getResponseText());
+<a name="line608"></a>    } else {
+<a name="line609"></a>      this.channelDebug_.dumpException(ex, &#39;No response text&#39;);
+<a name="line610"></a>    }
+<a name="line611"></a>  } finally {
+<a name="line612"></a>    /** @suppress {missingRequire} */
+<a name="line613"></a>    goog.net.BrowserChannel.onEndExecution();
+<a name="line614"></a>  }
+<a name="line615"></a>};
+<a name="line616"></a>
+<a name="line617"></a>
+<a name="line618"></a>/**
+<a name="line619"></a> * Called by the readystate handler for XMLHTTP requests.
+<a name="line620"></a> *
+<a name="line621"></a> * @private
+<a name="line622"></a> */
+<a name="line623"></a>goog.net.ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
+<a name="line624"></a>  var readyState = this.xmlHttp_.getReadyState();
+<a name="line625"></a>  var errorCode = this.xmlHttp_.getLastErrorCode();
+<a name="line626"></a>  var statusCode = this.xmlHttp_.getStatus();
+<a name="line627"></a>  // If it is Safari less than 420+, there is a bug that causes null to be
+<a name="line628"></a>  // in the responseText on ready state interactive so we must wait for
+<a name="line629"></a>  // ready state complete.
+<a name="line630"></a>  if (!goog.net.ChannelRequest.supportsXhrStreaming() ||
+<a name="line631"></a>      (goog.userAgent.WEBKIT &amp;&amp;
+<a name="line632"></a>       !goog.userAgent.isVersionOrHigher(
+<a name="line633"></a>           goog.net.ChannelRequest.MIN_WEBKIT_FOR_INTERACTIVE_))) {
+<a name="line634"></a>    if (readyState &lt; goog.net.XmlHttp.ReadyState.COMPLETE) {
+<a name="line635"></a>      // not yet ready
+<a name="line636"></a>      return;
+<a name="line637"></a>    }
+<a name="line638"></a>  } else {
+<a name="line639"></a>    // we get partial results in browsers that support ready state interactive.
+<a name="line640"></a>    // We also make sure that getResponseText is not null in interactive mode
+<a name="line641"></a>    // before we continue.  However, we don&#39;t do it in Opera because it only
+<a name="line642"></a>    // fire readyState == INTERACTIVE once.  We need the following code to poll
+<a name="line643"></a>    if (readyState &lt; goog.net.XmlHttp.ReadyState.INTERACTIVE ||
+<a name="line644"></a>        readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE &amp;&amp;
+<a name="line645"></a>        !goog.userAgent.OPERA &amp;&amp; !this.xmlHttp_.getResponseText()) {
+<a name="line646"></a>      // not yet ready
+<a name="line647"></a>      return;
+<a name="line648"></a>    }
+<a name="line649"></a>  }
+<a name="line650"></a>
+<a name="line651"></a>  // Dispatch any appropriate network events.
+<a name="line652"></a>  if (!this.cancelled_ &amp;&amp; readyState == goog.net.XmlHttp.ReadyState.COMPLETE &amp;&amp;
+<a name="line653"></a>      errorCode != goog.net.ErrorCode.ABORT) {
+<a name="line654"></a>
+<a name="line655"></a>    // Pretty conservative, these are the only known scenarios which we&#39;d
+<a name="line656"></a>    // consider indicative of a truly non-functional network connection.
+<a name="line657"></a>    if (errorCode == goog.net.ErrorCode.TIMEOUT ||
+<a name="line658"></a>        statusCode &lt;= 0) {
+<a name="line659"></a>      this.channel_.notifyServerReachabilityEvent(
+<a name="line660"></a>          /** @suppress {missingRequire} */
+<a name="line661"></a>          goog.net.BrowserChannel.ServerReachability.REQUEST_FAILED);
+<a name="line662"></a>    } else {
+<a name="line663"></a>      this.channel_.notifyServerReachabilityEvent(
+<a name="line664"></a>          /** @suppress {missingRequire} */
+<a name="line665"></a>          goog.net.BrowserChannel.ServerReachability.REQUEST_SUCCEEDED);
+<a name="line666"></a>    }
+<a name="line667"></a>  }
+<a name="line668"></a>
+<a name="line669"></a>  // got some data so cancel the watchdog timer
+<a name="line670"></a>  this.cancelWatchDogTimer_();
+<a name="line671"></a>
+<a name="line672"></a>  var status = this.xmlHttp_.getStatus();
+<a name="line673"></a>  this.lastStatusCode_ = status;
+<a name="line674"></a>  var responseText = this.xmlHttp_.getResponseText();
+<a name="line675"></a>  if (!responseText) {
+<a name="line676"></a>    this.channelDebug_.debug(&#39;No response text for uri &#39; +
+<a name="line677"></a>        this.requestUri_ + &#39; status &#39; + status);
+<a name="line678"></a>  }
+<a name="line679"></a>  this.successful_ = (status == 200);
+<a name="line680"></a>
+<a name="line681"></a>  this.channelDebug_.xmlHttpChannelResponseMetaData(
+<a name="line682"></a>      /** @type {string} */ (this.verb_),
+<a name="line683"></a>      this.requestUri_, this.rid_, this.retryId_, readyState,
+<a name="line684"></a>      status);
+<a name="line685"></a>
+<a name="line686"></a>  if (!this.successful_) {
+<a name="line687"></a>    if (status == 400 &amp;&amp;
+<a name="line688"></a>        responseText.indexOf(&#39;Unknown SID&#39;) &gt; 0) {
+<a name="line689"></a>      // the server error string will include &#39;Unknown SID&#39; which indicates the
+<a name="line690"></a>      // server doesn&#39;t know about the session (maybe it got restarted, maybe
+<a name="line691"></a>      // the user got moved to another server, etc.,). Handlers can special
+<a name="line692"></a>      // case this error
+<a name="line693"></a>      this.lastError_ = goog.net.ChannelRequest.Error.UNKNOWN_SESSION_ID;
+<a name="line694"></a>      /** @suppress {missingRequire} */
+<a name="line695"></a>      goog.net.BrowserChannel.notifyStatEvent(
+<a name="line696"></a>          /** @suppress {missingRequire} */
+<a name="line697"></a>          goog.net.BrowserChannel.Stat.REQUEST_UNKNOWN_SESSION_ID);
+<a name="line698"></a>      this.channelDebug_.warning(&#39;XMLHTTP Unknown SID (&#39; + this.rid_ + &#39;)&#39;);
+<a name="line699"></a>    } else {
+<a name="line700"></a>      this.lastError_ = goog.net.ChannelRequest.Error.STATUS;
+<a name="line701"></a>      /** @suppress {missingRequire} */
+<a name="line702"></a>      goog.net.BrowserChannel.notifyStatEvent(
+<a name="line703"></a>          /** @suppress {missingRequire} */
+<a name="line704"></a>          goog.net.BrowserChannel.Stat.REQUEST_BAD_STATUS);
+<a name="line705"></a>      this.channelDebug_.warning(
+<a name="line706"></a>          &#39;XMLHTTP Bad status &#39; + status + &#39; (&#39; + this.rid_ + &#39;)&#39;);
+<a name="line707"></a>    }
+<a name="line708"></a>    this.cleanup_();
+<a name="line709"></a>    this.dispatchFailure_();
+<a name="line710"></a>    return;
+<a name="line711"></a>  }
+<a name="line712"></a>
+<a name="line713"></a>  if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
+<a name="line714"></a>    this.cleanup_();
+<a name="line715"></a>  }
+<a name="line716"></a>
+<a name="line717"></a>  if (this.decodeChunks_) {
+<a name="line718"></a>    this.decodeNextChunks_(readyState, responseText);
+<a name="line719"></a>    if (goog.userAgent.OPERA &amp;&amp; this.successful_ &amp;&amp;
+<a name="line720"></a>        readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE) {
+<a name="line721"></a>      this.startPolling_();
+<a name="line722"></a>    }
+<a name="line723"></a>  } else {
+<a name="line724"></a>    this.channelDebug_.xmlHttpChannelResponseText(
+<a name="line725"></a>        this.rid_, responseText, null);
+<a name="line726"></a>    this.safeOnRequestData_(responseText);
+<a name="line727"></a>  }
+<a name="line728"></a>
+<a name="line729"></a>  if (!this.successful_) {
+<a name="line730"></a>    return;
+<a name="line731"></a>  }
+<a name="line732"></a>
+<a name="line733"></a>  if (!this.cancelled_) {
+<a name="line734"></a>    if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
+<a name="line735"></a>      this.channel_.onRequestComplete(this);
+<a name="line736"></a>    } else {
+<a name="line737"></a>      // The default is false, the result from this callback shouldn&#39;t carry
+<a name="line738"></a>      // over to the next callback, otherwise the request looks successful if
+<a name="line739"></a>      // the watchdog timer gets called
+<a name="line740"></a>      this.successful_ = false;
+<a name="line741"></a>      this.ensureWatchDogTimer_();
+<a name="line742"></a>    }
+<a name="line743"></a>  }
+<a name="line744"></a>};
+<a name="line745"></a>
+<a name="line746"></a>
+<a name="line747"></a>/**
+<a name="line748"></a> * Decodes the next set of available chunks in the response.
+<a name="line749"></a> * @param {number} readyState The value of readyState.
+<a name="line750"></a> * @param {string} responseText The value of responseText.
+<a name="line751"></a> * @private
+<a name="line752"></a> */
+<a name="line753"></a>goog.net.ChannelRequest.prototype.decodeNextChunks_ = function(readyState,
+<a name="line754"></a>        responseText) {
+<a name="line755"></a>  var decodeNextChunksSuccessful = true;
+<a name="line756"></a>  while (!this.cancelled_ &amp;&amp;
+<a name="line757"></a>         this.xmlHttpChunkStart_ &lt; responseText.length) {
+<a name="line758"></a>    var chunkText = this.getNextChunk_(responseText);
+<a name="line759"></a>    if (chunkText == goog.net.ChannelRequest.INCOMPLETE_CHUNK_) {
+<a name="line760"></a>      if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
+<a name="line761"></a>        // should have consumed entire response when the request is done
+<a name="line762"></a>        this.lastError_ = goog.net.ChannelRequest.Error.BAD_DATA;
+<a name="line763"></a>        /** @suppress {missingRequire} */
+<a name="line764"></a>        goog.net.BrowserChannel.notifyStatEvent(
+<a name="line765"></a>            /** @suppress {missingRequire} */
+<a name="line766"></a>            goog.net.BrowserChannel.Stat.REQUEST_INCOMPLETE_DATA);
+<a name="line767"></a>        decodeNextChunksSuccessful = false;
+<a name="line768"></a>      }
+<a name="line769"></a>      this.channelDebug_.xmlHttpChannelResponseText(
+<a name="line770"></a>          this.rid_, null, &#39;[Incomplete Response]&#39;);
+<a name="line771"></a>      break;
+<a name="line772"></a>    } else if (chunkText == goog.net.ChannelRequest.INVALID_CHUNK_) {
+<a name="line773"></a>      this.lastError_ = goog.net.ChannelRequest.Error.BAD_DATA;
+<a name="line774"></a>      /** @suppress {missingRequire} */
+<a name="line775"></a>      goog.net.BrowserChannel.notifyStatEvent(
+<a name="line776"></a>          /** @suppress {missingRequire} */
+<a name="line777"></a>          goog.net.BrowserChannel.Stat.REQUEST_BAD_DATA);
+<a name="line778"></a>      this.channelDebug_.xmlHttpChannelResponseText(
+<a name="line779"></a>          this.rid_, responseText, &#39;[Invalid Chunk]&#39;);
+<a name="line780"></a>      decodeNextChunksSuccessful = false;
+<a name="line781"></a>      break;
+<a name="line782"></a>    } else {
+<a name="line783"></a>      this.channelDebug_.xmlHttpChannelResponseText(
+<a name="line784"></a>          this.rid_, /** @type {string} */ (chunkText), null);
+<a name="line785"></a>      this.safeOnRequestData_(/** @type {string} */ (chunkText));
+<a name="line786"></a>    }
+<a name="line787"></a>  }
+<a name="line788"></a>  if (readyState == goog.net.XmlHttp.ReadyState.COMPLETE &amp;&amp;
+<a name="line789"></a>      responseText.length == 0) {
+<a name="line790"></a>    // also an error if we didn&#39;t get any response
+<a name="line791"></a>    this.lastError_ = goog.net.ChannelRequest.Error.NO_DATA;
+<a name="line792"></a>    /** @suppress {missingRequire} */
+<a name="line793"></a>    goog.net.BrowserChannel.notifyStatEvent(
+<a name="line794"></a>        /** @suppress {missingRequire} */
+<a name="line795"></a>        goog.net.BrowserChannel.Stat.REQUEST_NO_DATA);
+<a name="line796"></a>    decodeNextChunksSuccessful = false;
+<a name="line797"></a>  }
+<a name="line798"></a>  this.successful_ = this.successful_ &amp;&amp; decodeNextChunksSuccessful;
+<a name="line799"></a>  if (!decodeNextChunksSuccessful) {
+<a name="line800"></a>    // malformed response - we make this trigger retry logic
+<a name="line801"></a>    this.channelDebug_.xmlHttpChannelResponseText(
+<a name="line802"></a>        this.rid_, responseText, &#39;[Invalid Chunked Response]&#39;);
+<a name="line803"></a>    this.cleanup_();
+<a name="line804"></a>    this.dispatchFailure_();
+<a name="line805"></a>  }
+<a name="line806"></a>};
+<a name="line807"></a>
+<a name="line808"></a>
+<a name="line809"></a>/**
+<a name="line810"></a> * Polls the response for new data.
+<a name="line811"></a> * @private
+<a name="line812"></a> */
+<a name="line813"></a>goog.net.ChannelRequest.prototype.pollResponse_ = function() {
+<a name="line814"></a>  var readyState = this.xmlHttp_.getReadyState();
+<a name="line815"></a>  var responseText = this.xmlHttp_.getResponseText();
+<a name="line816"></a>  if (this.xmlHttpChunkStart_ &lt; responseText.length) {
+<a name="line817"></a>    this.cancelWatchDogTimer_();
+<a name="line818"></a>    this.decodeNextChunks_(readyState, responseText);
+<a name="line819"></a>    if (this.successful_ &amp;&amp;
+<a name="line820"></a>        readyState != goog.net.XmlHttp.ReadyState.COMPLETE) {
+<a name="line821"></a>      this.ensureWatchDogTimer_();
+<a name="line822"></a>    }
+<a name="line823"></a>  }
+<a name="line824"></a>};
+<a name="line825"></a>
+<a name="line826"></a>
+<a name="line827"></a>/**
+<a name="line828"></a> * Starts a polling interval for changes to responseText of the
+<a name="line829"></a> * XMLHttpRequest, for browsers that don&#39;t fire onreadystatechange
+<a name="line830"></a> * as data comes in incrementally.  This timer is disabled in
+<a name="line831"></a> * cleanup_().
+<a name="line832"></a> * @private
+<a name="line833"></a> */
+<a name="line834"></a>goog.net.ChannelRequest.prototype.startPolling_ = function() {
+<a name="line835"></a>  this.eventHandler_.listen(this.pollingTimer_, goog.Timer.TICK,
+<a name="line836"></a>      this.pollResponse_);
+<a name="line837"></a>  this.pollingTimer_.start();
+<a name="line838"></a>};
+<a name="line839"></a>
+<a name="line840"></a>
+<a name="line841"></a>/**
+<a name="line842"></a> * Called when the browser declares itself offline at the start of a request or
+<a name="line843"></a> * during its lifetime.  Abandons that request.
+<a name="line844"></a> * @private
+<a name="line845"></a> */
+<a name="line846"></a>goog.net.ChannelRequest.prototype.cancelRequestAsBrowserIsOffline_ =
+<a name="line847"></a>    function() {
+<a name="line848"></a>  if (this.successful_) {
+<a name="line849"></a>    // Should never happen.
+<a name="line850"></a>    this.channelDebug_.severe(
+<a name="line851"></a>        &#39;Received browser offline event even though request completed &#39; +
+<a name="line852"></a>        &#39;successfully&#39;);
+<a name="line853"></a>  }
+<a name="line854"></a>
+<a name="line855"></a>  this.channelDebug_.browserOfflineResponse(this.requestUri_);
+<a name="line856"></a>  this.cleanup_();
+<a name="line857"></a>
+<a name="line858"></a>  // set error and dispatch failure
+<a name="line859"></a>  this.lastError_ = goog.net.ChannelRequest.Error.BROWSER_OFFLINE;
+<a name="line860"></a>  /** @suppress {missingRequire} */
+<a name="line861"></a>  goog.net.BrowserChannel.notifyStatEvent(
+<a name="line862"></a>      /** @suppress {missingRequire} */
+<a name="line863"></a>      goog.net.BrowserChannel.Stat.BROWSER_OFFLINE);
+<a name="line864"></a>  this.dispatchFailure_();
+<a name="line865"></a>};
+<a name="line866"></a>
+<a name="line867"></a>
+<a name="line868"></a>/**
+<a name="line869"></a> * Returns the next chunk of a chunk-encoded response. This is not standard
+<a name="line870"></a> * HTTP chunked encoding because browsers don&#39;t expose the chunk boundaries to
+<a name="line871"></a> * the application through XMLHTTP. So we have an additional chunk encoding at
+<a name="line872"></a> * the application level that lets us tell where the beginning and end of
+<a name="line873"></a> * individual responses are so that we can only try to eval a complete JS array.
+<a name="line874"></a> *
+<a name="line875"></a> * The encoding is the size of the chunk encoded as a decimal string followed
+<a name="line876"></a> * by a newline followed by the data.
+<a name="line877"></a> *
+<a name="line878"></a> * @param {string} responseText The response text from the XMLHTTP response.
+<a name="line879"></a> * @return {string|Object} The next chunk string or a sentinel object
+<a name="line880"></a> *                         indicating a special condition.
+<a name="line881"></a> * @private
+<a name="line882"></a> */
+<a name="line883"></a>goog.net.ChannelRequest.prototype.getNextChunk_ = function(responseText) {
+<a name="line884"></a>  var sizeStartIndex = this.xmlHttpChunkStart_;
+<a name="line885"></a>  var sizeEndIndex = responseText.indexOf(&#39;\n&#39;, sizeStartIndex);
+<a name="line886"></a>  if (sizeEndIndex == -1) {
+<a name="line887"></a>    return goog.net.ChannelRequest.INCOMPLETE_CHUNK_;
+<a name="line888"></a>  }
+<a name="line889"></a>
+<a name="line890"></a>  var sizeAsString = responseText.substring(sizeStartIndex, sizeEndIndex);
+<a name="line891"></a>  var size = Number(sizeAsString);
+<a name="line892"></a>  if (isNaN(size)) {
+<a name="line893"></a>    return goog.net.ChannelRequest.INVALID_CHUNK_;
+<a name="line894"></a>  }
+<a name="line895"></a>
+<a name="line896"></a>  var chunkStartIndex = sizeEndIndex + 1;
+<a name="line897"></a>  if (chunkStartIndex + size &gt; responseText.length) {
+<a name="line898"></a>    return goog.net.ChannelRequest.INCOMPLETE_CHUNK_;
+<a name="line899"></a>  }
+<a name="line900"></a>
+<a name="line901"></a>  var chunkText = responseText.substr(chunkStartIndex, size);
+<a name="line902"></a>  this.xmlHttpChunkStart_ = chunkStartIndex + size;
+<a name="line903"></a>  return chunkText;
+<a name="line904"></a>};
+<a name="line905"></a>
+<a name="line906"></a>
+<a name="line907"></a>/**
+<a name="line908"></a> * Uses the Trident htmlfile ActiveX control to send a GET request in IE. This
+<a name="line909"></a> * is the innovation discovered that lets us get intermediate results in
+<a name="line910"></a> * Internet Explorer.  Thanks to http://go/kev
+<a name="line911"></a> * @param {goog.Uri} uri The uri to request from.
+<a name="line912"></a> * @param {boolean} usingSecondaryDomain Whether to use a secondary domain.
+<a name="line913"></a> */
+<a name="line914"></a>goog.net.ChannelRequest.prototype.tridentGet = function(uri,
+<a name="line915"></a>    usingSecondaryDomain) {
+<a name="line916"></a>  this.type_ = goog.net.ChannelRequest.Type_.TRIDENT;
+<a name="line917"></a>  this.baseUri_ = uri.clone().makeUnique();
+<a name="line918"></a>  this.tridentGet_(usingSecondaryDomain);
+<a name="line919"></a>};
+<a name="line920"></a>
+<a name="line921"></a>
+<a name="line922"></a>/**
+<a name="line923"></a> * Starts the Trident request.
+<a name="line924"></a> * @param {boolean} usingSecondaryDomain Whether to use a secondary domain.
+<a name="line925"></a> * @private
+<a name="line926"></a> */
+<a name="line927"></a>goog.net.ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
+<a name="line928"></a>  this.requestStartTime_ = goog.now();
+<a name="line929"></a>  this.ensureWatchDogTimer_();
+<a name="line930"></a>
+<a name="line931"></a>  var hostname = usingSecondaryDomain ? window.location.hostname : &#39;&#39;;
+<a name="line932"></a>  this.requestUri_ = this.baseUri_.clone();
+<a name="line933"></a>  this.requestUri_.setParameterValue(&#39;DOMAIN&#39;, hostname);
+<a name="line934"></a>  this.requestUri_.setParameterValue(&#39;t&#39;, this.retryId_);
+<a name="line935"></a>
+<a name="line936"></a>  try {
+<a name="line937"></a>    this.trident_ = new ActiveXObject(&#39;htmlfile&#39;);
+<a name="line938"></a>  } catch (e) {
+<a name="line939"></a>    this.channelDebug_.severe(&#39;ActiveX blocked&#39;);
+<a name="line940"></a>    this.cleanup_();
+<a name="line941"></a>
+<a name="line942"></a>    this.lastError_ = goog.net.ChannelRequest.Error.ACTIVE_X_BLOCKED;
+<a name="line943"></a>    /** @suppress {missingRequire} */
+<a name="line944"></a>    goog.net.BrowserChannel.notifyStatEvent(
+<a name="line945"></a>        /** @suppress {missingRequire} */
+<a name="line946"></a>        goog.net.BrowserChannel.Stat.ACTIVE_X_BLOCKED);
+<a name="line947"></a>    this.dispatchFailure_();
+<a name="line948"></a>    return;
+<a name="line949"></a>  }
+<a name="line950"></a>
+<a name="line951"></a>  var body = &#39;&lt;html&gt;&lt;body&gt;&#39;;
+<a name="line952"></a>  if (usingSecondaryDomain) {
+<a name="line953"></a>    body += &#39;&lt;script&gt;document.domain=&quot;&#39; + hostname + &#39;&quot;&lt;/scr&#39; + &#39;ipt&gt;&#39;;
+<a name="line954"></a>  }
+<a name="line955"></a>  body += &#39;&lt;/body&gt;&lt;/html&gt;&#39;;
+<a name="line956"></a>
+<a name="line957"></a>  this.trident_.open();
+<a name="line958"></a>  this.trident_.write(body);
+<a name="line959"></a>  this.trident_.close();
+<a name="line960"></a>
+<a name="line961"></a>  this.trident_.parentWindow[&#39;m&#39;] = goog.bind(this.onTridentRpcMessage_, this);
+<a name="line962"></a>  this.trident_.parentWindow[&#39;d&#39;] = goog.bind(this.onTridentDone_, this, true);
+<a name="line963"></a>  this.trident_.parentWindow[&#39;rpcClose&#39;] =
+<a name="line964"></a>      goog.bind(this.onTridentDone_, this, false);
+<a name="line965"></a>
+<a name="line966"></a>  var div = this.trident_.createElement(&#39;div&#39;);
+<a name="line967"></a>  this.trident_.parentWindow.document.body.appendChild(div);
+<a name="line968"></a>  div.innerHTML = &#39;&lt;iframe src=&quot;&#39; + this.requestUri_ + &#39;&quot;&gt;&lt;/iframe&gt;&#39;;
+<a name="line969"></a>  this.channelDebug_.tridentChannelRequest(&#39;GET&#39;,
+<a name="line970"></a>      this.requestUri_, this.rid_, this.retryId_);
+<a name="line971"></a>  this.channel_.notifyServerReachabilityEvent(
+<a name="line972"></a>      /** @suppress {missingRequire} */
+<a name="line973"></a>      goog.net.BrowserChannel.ServerReachability.REQUEST_MADE);
+<a name="line974"></a>};
+<a name="line975"></a>
+<a name="line976"></a>
+<a name="line977"></a>/**
+<a name="line978"></a> * Callback from the Trident htmlfile ActiveX control for when a new message
+<a name="line979"></a> * is received.
+<a name="line980"></a> *
+<a name="line981"></a> * @param {string} msg The data payload.
+<a name="line982"></a> * @private
+<a name="line983"></a> */
+<a name="line984"></a>goog.net.ChannelRequest.prototype.onTridentRpcMessage_ = function(msg) {
+<a name="line985"></a>  // need to do async b/c this gets called off of the context of the ActiveX
+<a name="line986"></a>  /** @suppress {missingRequire} */
+<a name="line987"></a>  goog.net.BrowserChannel.setTimeout(
+<a name="line988"></a>      goog.bind(this.onTridentRpcMessageAsync_, this, msg), 0);
+<a name="line989"></a>};
+<a name="line990"></a>
+<a name="line991"></a>
+<a name="line992"></a>/**
+<a name="line993"></a> * Callback from the Trident htmlfile ActiveX control for when a new message
+<a name="line994"></a> * is received.
+<a name="line995"></a> *
+<a name="line996"></a> * @param {string} msg  The data payload.
+<a name="line997"></a> * @private
+<a name="line998"></a> */
+<a name="line999"></a>goog.net.ChannelRequest.prototype.onTridentRpcMessageAsync_ = function(msg) {
+<a name="line1000"></a>  if (this.cancelled_) {
+<a name="line1001"></a>    return;
+<a name="line1002"></a>  }
+<a name="line1003"></a>  this.channelDebug_.tridentChannelResponseText(this.rid_, msg);
+<a name="line1004"></a>  this.cancelWatchDogTimer_();
+<a name="line1005"></a>  this.safeOnRequestData_(msg);
+<a name="line1006"></a>  this.ensureWatchDogTimer_();
+<a name="line1007"></a>};
+<a name="line1008"></a>
+<a name="line1009"></a>
+<a name="line1010"></a>/**
+<a name="line1011"></a> * Callback from the Trident htmlfile ActiveX control for when the request
+<a name="line1012"></a> * is complete
+<a name="line1013"></a> *
+<a name="line1014"></a> * @param {boolean} successful Whether the request successfully completed.
+<a name="line1015"></a> * @private
+<a name="line1016"></a> */
+<a name="line1017"></a>goog.net.ChannelRequest.prototype.onTridentDone_ = function(successful) {
+<a name="line1018"></a>  // need to do async b/c this gets called off of the context of the ActiveX
+<a name="line1019"></a>  /** @suppress {missingRequire} */
+<a name="line1020"></a>  goog.net.BrowserChannel.setTimeout(
+<a name="line1021"></a>      goog.bind(this.onTridentDoneAsync_, this, successful), 0);
+<a name="line1022"></a>};
+<a name="line1023"></a>
+<a name="line1024"></a>
+<a name="line1025"></a>/**
+<a name="line1026"></a> * Callback from the Trident htmlfile ActiveX control for when the request
+<a name="line1027"></a> * is complete
+<a name="line1028"></a> *
+<a name="line1029"></a> * @param {boolean} successful Whether the request successfully completed.
+<a name="line1030"></a> * @private
+<a name="line1031"></a> */
+<a name="line1032"></a>goog.net.ChannelRequest.prototype.onTridentDoneAsync_ = function(successful) {
+<a name="line1033"></a>  if (this.cancelled_) {
+<a name="line1034"></a>    return;
+<a name="line1035"></a>  }
+<a name="line1036"></a>  this.channelDebug_.tridentChannelResponseDone(
+<a name="line1037"></a>      this.rid_, successful);
+<a name="line1038"></a>  this.cleanup_();
+<a name="line1039"></a>  this.successful_ = successful;
+<a name="line1040"></a>  this.channel_.onRequestComplete(this);
+<a name="line1041"></a>  this.channel_.notifyServerReachabilityEvent(
+<a name="line1042"></a>      /** @suppress {missingRequire} */
+<a name="line1043"></a>      goog.net.BrowserChannel.ServerReachability.BACK_CHANNEL_ACTIVITY);
+<a name="line1044"></a>};
+<a name="line1045"></a>
+<a name="line1046"></a>
+<a name="line1047"></a>/**
+<a name="line1048"></a> * Uses an IMG tag to send an HTTP get to the server. This is only currently
+<a name="line1049"></a> * used to terminate the connection, as an IMG tag is the most reliable way to
+<a name="line1050"></a> * send something to the server while the page is getting torn down.
+<a name="line1051"></a> * @param {goog.Uri} uri The uri to send a request to.
+<a name="line1052"></a> */
+<a name="line1053"></a>goog.net.ChannelRequest.prototype.sendUsingImgTag = function(uri) {
+<a name="line1054"></a>  this.type_ = goog.net.ChannelRequest.Type_.IMG;
+<a name="line1055"></a>  this.baseUri_ = uri.clone().makeUnique();
+<a name="line1056"></a>  this.imgTagGet_();
+<a name="line1057"></a>};
+<a name="line1058"></a>
+<a name="line1059"></a>
+<a name="line1060"></a>/**
+<a name="line1061"></a> * Starts the IMG request.
+<a name="line1062"></a> *
+<a name="line1063"></a> * @private
+<a name="line1064"></a> */
+<a name="line1065"></a>goog.net.ChannelRequest.prototype.imgTagGet_ = function() {
+<a name="line1066"></a>  var eltImg = new Image();
+<a name="line1067"></a>  eltImg.src = this.baseUri_;
+<a name="line1068"></a>  this.requestStartTime_ = goog.now();
+<a name="line1069"></a>  this.ensureWatchDogTimer_();
+<a name="line1070"></a>};
+<a name="line1071"></a>
+<a name="line1072"></a>
+<a name="line1073"></a>/**
+<a name="line1074"></a> * Cancels the request no matter what the underlying transport is.
+<a name="line1075"></a> */
+<a name="line1076"></a>goog.net.ChannelRequest.prototype.cancel = function() {
+<a name="line1077"></a>  this.cancelled_ = true;
+<a name="line1078"></a>  this.cleanup_();
+<a name="line1079"></a>};
+<a name="line1080"></a>
+<a name="line1081"></a>
+<a name="line1082"></a>/**
+<a name="line1083"></a> * Ensures that there is watchdog timeout which is used to ensure that
+<a name="line1084"></a> * the connection completes in time.
+<a name="line1085"></a> *
+<a name="line1086"></a> * @private
+<a name="line1087"></a> */
+<a name="line1088"></a>goog.net.ChannelRequest.prototype.ensureWatchDogTimer_ = function() {
+<a name="line1089"></a>  this.watchDogTimeoutTime_ = goog.now() + this.timeout_;
+<a name="line1090"></a>  this.startWatchDogTimer_(this.timeout_);
+<a name="line1091"></a>};
+<a name="line1092"></a>
+<a name="line1093"></a>
+<a name="line1094"></a>/**
+<a name="line1095"></a> * Starts the watchdog timer which is used to ensure that the connection
+<a name="line1096"></a> * completes in time.
+<a name="line1097"></a> * @param {number} time The number of milliseconds to wait.
+<a name="line1098"></a> * @private
+<a name="line1099"></a> */
+<a name="line1100"></a>goog.net.ChannelRequest.prototype.startWatchDogTimer_ = function(time) {
+<a name="line1101"></a>  if (this.watchDogTimerId_ != null) {
+<a name="line1102"></a>    // assertion
+<a name="line1103"></a>    throw Error(&#39;WatchDog timer not null&#39;);
+<a name="line1104"></a>  }
+<a name="line1105"></a>  this.watchDogTimerId_ =   /** @suppress {missingRequire} */ (
+<a name="line1106"></a>      goog.net.BrowserChannel.setTimeout(
+<a name="line1107"></a>          goog.bind(this.onWatchDogTimeout_, this), time));
+<a name="line1108"></a>};
+<a name="line1109"></a>
+<a name="line1110"></a>
+<a name="line1111"></a>/**
+<a name="line1112"></a> * Cancels the watchdog timer if it has been started.
+<a name="line1113"></a> *
+<a name="line1114"></a> * @private
+<a name="line1115"></a> */
+<a name="line1116"></a>goog.net.ChannelRequest.prototype.cancelWatchDogTimer_ = function() {
+<a name="line1117"></a>  if (this.watchDogTimerId_) {
+<a name="line1118"></a>    goog.global.clearTimeout(this.watchDogTimerId_);
+<a name="line1119"></a>    this.watchDogTimerId_ = null;
+<a name="line1120"></a>  }
+<a name="line1121"></a>};
+<a name="line1122"></a>
+<a name="line1123"></a>
+<a name="line1124"></a>/**
+<a name="line1125"></a> * Called when the watchdog timer is triggered. It also handles a case where it
+<a name="line1126"></a> * is called too early which we suspect may be happening sometimes
+<a name="line1127"></a> * (not sure why)
+<a name="line1128"></a> *
+<a name="line1129"></a> * @private
+<a name="line1130"></a> */
+<a name="line1131"></a>goog.net.ChannelRequest.prototype.onWatchDogTimeout_ = function() {
+<a name="line1132"></a>  this.watchDogTimerId_ = null;
+<a name="line1133"></a>  var now = goog.now();
+<a name="line1134"></a>  if (now - this.watchDogTimeoutTime_ &gt;= 0) {
+<a name="line1135"></a>    this.handleTimeout_();
+<a name="line1136"></a>  } else {
+<a name="line1137"></a>    // got called too early for some reason
+<a name="line1138"></a>    this.channelDebug_.warning(&#39;WatchDog timer called too early&#39;);
+<a name="line1139"></a>    this.startWatchDogTimer_(this.watchDogTimeoutTime_ - now);
+<a name="line1140"></a>  }
+<a name="line1141"></a>};
+<a name="line1142"></a>
+<a name="line1143"></a>
+<a name="line1144"></a>/**
+<a name="line1145"></a> * Called when the request has actually timed out. Will cleanup and notify the
+<a name="line1146"></a> * channel of the failure.
+<a name="line1147"></a> *
+<a name="line1148"></a> * @private
+<a name="line1149"></a> */
+<a name="line1150"></a>goog.net.ChannelRequest.prototype.handleTimeout_ = function() {
+<a name="line1151"></a>  if (this.successful_) {
+<a name="line1152"></a>    // Should never happen.
+<a name="line1153"></a>    this.channelDebug_.severe(
+<a name="line1154"></a>        &#39;Received watchdog timeout even though request loaded successfully&#39;);
+<a name="line1155"></a>  }
+<a name="line1156"></a>
+<a name="line1157"></a>  this.channelDebug_.timeoutResponse(this.requestUri_);
+<a name="line1158"></a>  // IMG requests never notice if they were successful, and always &#39;time out&#39;.
+<a name="line1159"></a>  // This fact says nothing about reachability.
+<a name="line1160"></a>  if (this.type_ != goog.net.ChannelRequest.Type_.IMG) {
+<a name="line1161"></a>    this.channel_.notifyServerReachabilityEvent(
+<a name="line1162"></a>        /** @suppress {missingRequire} */
+<a name="line1163"></a>        goog.net.BrowserChannel.ServerReachability.REQUEST_FAILED);
+<a name="line1164"></a>  }
+<a name="line1165"></a>  this.cleanup_();
+<a name="line1166"></a>
+<a name="line1167"></a>  // set error and dispatch failure
+<a name="line1168"></a>  this.lastError_ = goog.net.ChannelRequest.Error.TIMEOUT;
+<a name="line1169"></a>  /** @suppress {missingRequire} */
+<a name="line1170"></a>  goog.net.BrowserChannel.notifyStatEvent(
+<a name="line1171"></a>      /** @suppress {missingRequire} */
+<a name="line1172"></a>      goog.net.BrowserChannel.Stat.REQUEST_TIMEOUT);
+<a name="line1173"></a>  this.dispatchFailure_();
+<a name="line1174"></a>};
+<a name="line1175"></a>
+<a name="line1176"></a>
+<a name="line1177"></a>/**
+<a name="line1178"></a> * Notifies the channel that this request failed.
+<a name="line1179"></a> * @private
+<a name="line1180"></a> */
+<a name="line1181"></a>goog.net.ChannelRequest.prototype.dispatchFailure_ = function() {
+<a name="line1182"></a>  if (this.channel_.isClosed() || this.cancelled_) {
+<a name="line1183"></a>    return;
+<a name="line1184"></a>  }
+<a name="line1185"></a>
+<a name="line1186"></a>  this.channel_.onRequestComplete(this);
+<a name="line1187"></a>};
+<a name="line1188"></a>
+<a name="line1189"></a>
+<a name="line1190"></a>/**
+<a name="line1191"></a> * Cleans up the objects used to make the request. This function is
+<a name="line1192"></a> * idempotent.
+<a name="line1193"></a> *
+<a name="line1194"></a> * @private
+<a name="line1195"></a> */
+<a name="line1196"></a>goog.net.ChannelRequest.prototype.cleanup_ = function() {
+<a name="line1197"></a>  this.cancelWatchDogTimer_();
+<a name="line1198"></a>
+<a name="line1199"></a>  goog.dispose(this.readyStateChangeThrottle_);
+<a name="line1200"></a>  this.readyStateChangeThrottle_ = null;
+<a name="line1201"></a>
+<a name="line1202"></a>  // Stop the polling timer, if necessary.
+<a name="line1203"></a>  this.pollingTimer_.stop();
+<a name="line1204"></a>
+<a name="line1205"></a>  // Unhook all event handlers.
+<a name="line1206"></a>  this.eventHandler_.removeAll();
+<a name="line1207"></a>
+<a name="line1208"></a>  if (this.xmlHttp_) {
+<a name="line1209"></a>    // clear out this.xmlHttp_ before aborting so we handle getting reentered
+<a name="line1210"></a>    // inside abort
+<a name="line1211"></a>    var xmlhttp = this.xmlHttp_;
+<a name="line1212"></a>    this.xmlHttp_ = null;
+<a name="line1213"></a>    xmlhttp.abort();
+<a name="line1214"></a>    xmlhttp.dispose();
+<a name="line1215"></a>  }
+<a name="line1216"></a>
+<a name="line1217"></a>  if (this.trident_) {
+<a name="line1218"></a>    this.trident_ = null;
+<a name="line1219"></a>  }
+<a name="line1220"></a>};
+<a name="line1221"></a>
+<a name="line1222"></a>
+<a name="line1223"></a>/**
+<a name="line1224"></a> * Indicates whether the request was successful. Only valid after the handler
+<a name="line1225"></a> * is called to indicate completion of the request.
+<a name="line1226"></a> *
+<a name="line1227"></a> * @return {boolean} True if the request succeeded.
+<a name="line1228"></a> */
+<a name="line1229"></a>goog.net.ChannelRequest.prototype.getSuccess = function() {
+<a name="line1230"></a>  return this.successful_;
+<a name="line1231"></a>};
+<a name="line1232"></a>
+<a name="line1233"></a>
+<a name="line1234"></a>/**
+<a name="line1235"></a> * If the request was not successful, returns the reason.
+<a name="line1236"></a> *
+<a name="line1237"></a> * @return {?goog.net.ChannelRequest.Error}  The last error.
+<a name="line1238"></a> */
+<a name="line1239"></a>goog.net.ChannelRequest.prototype.getLastError = function() {
+<a name="line1240"></a>  return this.lastError_;
+<a name="line1241"></a>};
+<a name="line1242"></a>
+<a name="line1243"></a>
+<a name="line1244"></a>/**
+<a name="line1245"></a> * Returns the status code of the last request.
+<a name="line1246"></a> * @return {number} The status code of the last request.
+<a name="line1247"></a> */
+<a name="line1248"></a>goog.net.ChannelRequest.prototype.getLastStatusCode = function() {
+<a name="line1249"></a>  return this.lastStatusCode_;
+<a name="line1250"></a>};
+<a name="line1251"></a>
+<a name="line1252"></a>
+<a name="line1253"></a>/**
+<a name="line1254"></a> * Returns the session id for this channel.
+<a name="line1255"></a> *
+<a name="line1256"></a> * @return {string|undefined} The session ID.
+<a name="line1257"></a> */
+<a name="line1258"></a>goog.net.ChannelRequest.prototype.getSessionId = function() {
+<a name="line1259"></a>  return this.sid_;
+<a name="line1260"></a>};
+<a name="line1261"></a>
+<a name="line1262"></a>
+<a name="line1263"></a>/**
+<a name="line1264"></a> * Returns the request id for this request. Each request has a unique request
+<a name="line1265"></a> * id and the request IDs are a sequential increasing count.
+<a name="line1266"></a> *
+<a name="line1267"></a> * @return {string|number|undefined} The request ID.
+<a name="line1268"></a> */
+<a name="line1269"></a>goog.net.ChannelRequest.prototype.getRequestId = function() {
+<a name="line1270"></a>  return this.rid_;
+<a name="line1271"></a>};
+<a name="line1272"></a>
+<a name="line1273"></a>
+<a name="line1274"></a>/**
+<a name="line1275"></a> * Returns the data for a post, if this request is a post.
+<a name="line1276"></a> *
+<a name="line1277"></a> * @return {?string} The POST data provided by the request initiator.
+<a name="line1278"></a> */
+<a name="line1279"></a>goog.net.ChannelRequest.prototype.getPostData = function() {
+<a name="line1280"></a>  return this.postData_;
+<a name="line1281"></a>};
+<a name="line1282"></a>
+<a name="line1283"></a>
+<a name="line1284"></a>/**
+<a name="line1285"></a> * Returns the time that the request started, if it has started.
+<a name="line1286"></a> *
+<a name="line1287"></a> * @return {?number} The time the request started, as returned by goog.now().
+<a name="line1288"></a> */
+<a name="line1289"></a>goog.net.ChannelRequest.prototype.getRequestStartTime = function() {
+<a name="line1290"></a>  return this.requestStartTime_;
+<a name="line1291"></a>};
+<a name="line1292"></a>
+<a name="line1293"></a>
+<a name="line1294"></a>/**
+<a name="line1295"></a> * Helper to call the callback&#39;s onRequestData, which catches any
+<a name="line1296"></a> * exception and cleans up the request.
+<a name="line1297"></a> * @param {string} data The request data.
+<a name="line1298"></a> * @private
+<a name="line1299"></a> */
+<a name="line1300"></a>goog.net.ChannelRequest.prototype.safeOnRequestData_ = function(data) {
+<a name="line1301"></a>  /** @preserveTry */
+<a name="line1302"></a>  try {
+<a name="line1303"></a>    this.channel_.onRequestData(this, data);
+<a name="line1304"></a>    this.channel_.notifyServerReachabilityEvent(
+<a name="line1305"></a>        /** @suppress {missingRequire} */
+<a name="line1306"></a>        goog.net.BrowserChannel.ServerReachability.BACK_CHANNEL_ACTIVITY);
+<a name="line1307"></a>  } catch (e) {
+<a name="line1308"></a>    // Dump debug info, but keep going without closing the channel.
+<a name="line1309"></a>    this.channelDebug_.dumpException(
+<a name="line1310"></a>        e, &#39;Error in httprequest callback&#39;);
+<a name="line1311"></a>  }
+<a name="line1312"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,896 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>style.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">style.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_cssom_iframe_style.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/cssom/iframe/style.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/cssom/iframe/style.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_cssom_iframe_style_CssRuleSet_.html">
+          goog.cssom.iframe.style.CssRuleSet_</a><br/>
+        <div class="class-details">Class representing a CSS rule set. A rule set is something like this:
+h1, h2 { font-family: Arial; color: red; }
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_cssom_iframe_style_CssSelectorPart_.html">
+          goog.cssom.iframe.style.CssSelectorPart_</a><br/>
+        <div class="class-details">Represents one part of a CSS Selector. For example in the selector
+'body #foo .bar', body, #foo, and .bar would be considered selector parts.
+In the official CSS spec these are called "simple selectors".
+</div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_cssom_iframe_style_CssSelector_.html">
+          goog.cssom.iframe.style.CssSelector_</a><br/>
+        <div class="class-details">Represents a single CSS selector, as described in
+<a href="http://www.w3.org/TR/REC-CSS2/selector.html">http://www.w3.org/TR/REC-CSS2/selector.html</a>
+Currently UNSUPPORTED are the following selector features:
+<ul><li>pseudo-classes (:hover)
+  <li>child selectors (div &gt; h1)
+  <li>adjacent sibling selectors (div + h1)
+  <li>attribute selectors (input[type=submit])
+</li></li></li></li></ul></div>
+ </div>
+ <div class="fn-constructor">
+        <a href="class_goog_cssom_iframe_style_NodeAncestry_.html">
+          goog.cssom.iframe.style.NodeAncestry_</a><br/>
+        <div class="class-details">Represents an element and all its parent/ancestor nodes.
+This class exists as an optimization so we run tests on an element
+hierarchy multiple times without walking the dom each time.
+</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.cssom.iframe.style.getBackgroundContext"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.cssom.iframe.style.</span><span class="entryName">getBackgroundContext<span class="args">(<span class="arg">element</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Generates a set of CSS properties that can be used to make another
+element's background look like the background of a given element.
+This is useful when you want to copy the CSS context of an element,
+but the element's background is transparent. In the original context
+you would see the ancestor's backround color/image showing through,
+but in the new context there might be a something different underneath.
+Note that this assumes the element you're copying context from has a
+fairly standard positioning/layout - it assumes that when the element
+has a transparent background what you're going to see through it is its
+ancestors.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">element</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The element from which to copy background styles.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>&nbsp;
+            Object containing background* properties.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line928">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.cssom.iframe.style.getBackgroundXYValues_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.cssom.iframe.style.</span><span class="entryName">getBackgroundXYValues_<span class="args">(<span class="arg">styleObject</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Given an object containing a set of styles, returns a two-element array
+containing the values of background-position-x and background-position-y.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">styleObject</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+        <div class="entryOverview">Object from which to read style properties.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&gt;&nbsp;
+            The background-position values in the order [x, y].
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line901">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.cssom.iframe.style.getComputedStyleObject_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.cssom.iframe.style.</span><span class="entryName">getComputedStyleObject_<span class="args">(<span class="arg">element</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns an object containing the set of computedStyle/currentStyle
+values for the given element. Note that this should be used with
+caution as it ignores the fact that currentStyle and computedStyle
+are not the same for certain properties.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">element</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The element whose computed style to return.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Object">Object</a></span>&nbsp;
+            Object containing style properties and values.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line876">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.cssom.iframe.style.getElementContext"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.cssom.iframe.style.</span><span class="entryName">getElementContext<span class="args">(<span class="arg">element</span>,&nbsp;<span class="arg">opt_forceRuleSetCacheUpdate</span>,&nbsp;<span class="arg">opt_copyBackgroundContext</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Reads the current css rules from element's document, and returns them
+rewriting selectors so that any rules that formerly applied to element will
+be applied to doc.body. This makes it possible to replace a block in a page
+with an iframe and preserve the css styling of the contents.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">element</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/Element">Element</a></span>
+        <div class="entryOverview">The element for which context should be calculated.</div>
+     </td>
+   </tr>
+     
+   <tr class="odd">
+     <td>
+        <span class="entryName">opt_forceRuleSetCacheUpdate</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">Flag to force the internal
+    cache of rulesets to refresh itself before we read the same.</div>
+     </td>
+   </tr>
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_copyBackgroundContext</span>
+        : <span class="type">boolean=</span>
+        <div class="entryOverview">Flag indicating that if the
+    <code> element</code> has a transparent background, background rules
+    from the nearest ancestor element(s) that have background-color
+    and/or background-image set should be copied.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            String containing all CSS rules present in the original
+    document, with modified selectors.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line720">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.cssom.iframe.style.ruleSetCache_.getRuleSetsForDocument"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.cssom.iframe.style.ruleSetCache_.</span><span class="entryName">getRuleSetsForDocument<span class="args">(<span class="arg">doc</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="class_goog_cssom_iframe_style_CssRuleSet_.html">goog.cssom.iframe.style.CssRuleSet_</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Retrieves the array of css rulesets for this document. A cached
+version will be used when possible.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">doc</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/document">Document</a></span>
+        <div class="entryOverview">The document for which to get rulesets.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="class_goog_cssom_iframe_style_CssRuleSet_.html">goog.cssom.iframe.style.CssRuleSet_</a></span>&gt;&nbsp;
+            An array of CssRuleSet
+    objects representing the css rule sets in the supplied document.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line629">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.cssom.iframe.style.getRuleSetsFromDocument_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.cssom.iframe.style.</span><span class="entryName">getRuleSetsFromDocument_<span class="args">(<span class="arg">doc</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="class_goog_cssom_iframe_style_CssRuleSet_.html">goog.cssom.iframe.style.CssRuleSet_</a></span>&gt;
+      </div>
+
+
+     <div class="entryOverview">
+       Inspects a document and returns all active rule sets
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">doc</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/document">Document</a></span>
+        <div class="entryOverview">The document from which to read CSS rules.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Array">Array</a></span>.&lt;<span class="type"><a href="class_goog_cssom_iframe_style_CssRuleSet_.html">goog.cssom.iframe.style.CssRuleSet_</a></span>&gt;&nbsp;
+            An array of CssRuleSet
+    objects representing all the active rule sets in the document.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line574">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.cssom.iframe.style.isTransparentValue_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.cssom.iframe.style.</span><span class="entryName">isTransparentValue_<span class="args">(<span class="arg">colorValue</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Tests whether a value is equivalent to 'transparent'.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">colorValue</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The value to test.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Boolean">boolean</a></span>&nbsp;
+            Whether the value is transparent.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line861">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.cssom.iframe.style.ruleSetCache_.</span><span class="entryName">loadRuleSetsForDocument<span class="args">(<span class="arg">doc</span>)</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Loads ruleset definitions from a document. If the cache already
+has rulesets for this document the cached version will be replaced.
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">doc</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/DOM/document">Document</a></span>
+        <div class="entryOverview">The document from which to load rulesets.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line615">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.cssom.iframe.style.makeColorRuleImportant_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.cssom.iframe.style.</span><span class="entryName">makeColorRuleImportant_<span class="args">(<span class="arg">cssText</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds !important to a css color: rule
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">cssText</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">Text of the CSS rule(s) to modify.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            Text with !important added to the color: rule if found.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line285">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.cssom.iframe.style.resetDomCache"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.cssom.iframe.style.</span><span class="entryName">resetDomCache<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Throw away all cached dom information. Call this if you've modified
+the structure or class/id attributes of your document and you want
+to recalculate the currently applied CSS rules.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line562">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+  <h2>Global Variables</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+  <a name="goog.cssom.iframe.style.ruleSetCache_.ruleSetCache_"></a>
+
+  <td>
+
+
+     <div class="arg">
+        <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">ruleSetCache_</span>
+        : 
+     </div>
+
+
+     <div class="entryOverview">
+       Cache of ruleset objects keyed by document unique ID.
+
+     </div>
+
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_cssom_iframe_style.js.source.html#line607">Code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory iframe</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/cssom/iframe/style.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>checkbox.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_checkbox.js.html">checkbox.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Tristate checkbox widget.
+<a name="line17"></a> *
+<a name="line18"></a> * @see ../demos/checkbox.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.Checkbox&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.ui.Checkbox.State&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.a11y.aria&#39;);
+<a name="line25"></a>goog.require(&#39;goog.a11y.aria.State&#39;);
+<a name="line26"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line27"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line29"></a>goog.require(&#39;goog.ui.CheckboxRenderer&#39;);
+<a name="line30"></a>goog.require(&#39;goog.ui.Component.EventType&#39;);
+<a name="line31"></a>goog.require(&#39;goog.ui.Component.State&#39;);
+<a name="line32"></a>goog.require(&#39;goog.ui.Control&#39;);
+<a name="line33"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * 3-state checkbox widget. Fires CHECK or UNCHECK events before toggled and
+<a name="line39"></a> * CHANGE event after toggled by user.
+<a name="line40"></a> * The checkbox can also be enabled/disabled and get focused and highlighted.
+<a name="line41"></a> *
+<a name="line42"></a> * @param {goog.ui.Checkbox.State=} opt_checked Checked state to set.
+<a name="line43"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
+<a name="line44"></a> *     document interaction.
+<a name="line45"></a> * @param {goog.ui.CheckboxRenderer=} opt_renderer Renderer used to render or
+<a name="line46"></a> *     decorate the checkbox; defaults to {@link goog.ui.CheckboxRenderer}.
+<a name="line47"></a> * @constructor
+<a name="line48"></a> * @extends {goog.ui.Control}
+<a name="line49"></a> */
+<a name="line50"></a>goog.ui.Checkbox = function(opt_checked, opt_domHelper, opt_renderer) {
+<a name="line51"></a>  var renderer = opt_renderer || goog.ui.CheckboxRenderer.getInstance();
+<a name="line52"></a>  goog.ui.Control.call(this, null, renderer, opt_domHelper);
+<a name="line53"></a>  // The checkbox maintains its own tri-state CHECKED state.
+<a name="line54"></a>  // The control class maintains DISABLED, ACTIVE, and FOCUSED (which enable tab
+<a name="line55"></a>  // navigation, and keyHandling with SPACE).
+<a name="line56"></a>
+<a name="line57"></a>  /**
+<a name="line58"></a>   * Checked state of the checkbox.
+<a name="line59"></a>   * @type {goog.ui.Checkbox.State}
+<a name="line60"></a>   * @private
+<a name="line61"></a>   */
+<a name="line62"></a>  this.checked_ = goog.isDef(opt_checked) ?
+<a name="line63"></a>      opt_checked : goog.ui.Checkbox.State.UNCHECKED;
+<a name="line64"></a>};
+<a name="line65"></a>goog.inherits(goog.ui.Checkbox, goog.ui.Control);
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * Possible checkbox states.
+<a name="line70"></a> * @enum {?boolean}
+<a name="line71"></a> */
+<a name="line72"></a>goog.ui.Checkbox.State = {
+<a name="line73"></a>  CHECKED: true,
+<a name="line74"></a>  UNCHECKED: false,
+<a name="line75"></a>  UNDETERMINED: null
+<a name="line76"></a>};
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Label element bound to the checkbox.
+<a name="line81"></a> * @type {Element}
+<a name="line82"></a> * @private
+<a name="line83"></a> */
+<a name="line84"></a>goog.ui.Checkbox.prototype.label_ = null;
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * @return {goog.ui.Checkbox.State} Checked state of the checkbox.
+<a name="line89"></a> */
+<a name="line90"></a>goog.ui.Checkbox.prototype.getChecked = function() {
+<a name="line91"></a>  return this.checked_;
+<a name="line92"></a>};
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * @return {boolean} Whether the checkbox is checked.
+<a name="line97"></a> * @override
+<a name="line98"></a> */
+<a name="line99"></a>goog.ui.Checkbox.prototype.isChecked = function() {
+<a name="line100"></a>  return this.checked_ == goog.ui.Checkbox.State.CHECKED;
+<a name="line101"></a>};
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * @return {boolean} Whether the checkbox is not checked.
+<a name="line106"></a> */
+<a name="line107"></a>goog.ui.Checkbox.prototype.isUnchecked = function() {
+<a name="line108"></a>  return this.checked_ == goog.ui.Checkbox.State.UNCHECKED;
+<a name="line109"></a>};
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * @return {boolean} Whether the checkbox is in partially checked state.
+<a name="line114"></a> */
+<a name="line115"></a>goog.ui.Checkbox.prototype.isUndetermined = function() {
+<a name="line116"></a>  return this.checked_ == goog.ui.Checkbox.State.UNDETERMINED;
+<a name="line117"></a>};
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * Sets the checked state of the checkbox.
+<a name="line122"></a> * @param {?boolean} checked The checked state to set.
+<a name="line123"></a> * @override
+<a name="line124"></a> */
+<a name="line125"></a>goog.ui.Checkbox.prototype.setChecked = function(checked) {
+<a name="line126"></a>  if (checked != this.checked_) {
+<a name="line127"></a>    this.checked_ = /** @type {goog.ui.Checkbox.State} */ (checked);
+<a name="line128"></a>    this.getRenderer().setCheckboxState(this.getElement(), this.checked_);
+<a name="line129"></a>  }
+<a name="line130"></a>};
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Sets the checked state for the checkbox.  Unlike {@link #setChecked},
+<a name="line135"></a> * doesn&#39;t update the checkbox&#39;s DOM.  Considered protected; to be called
+<a name="line136"></a> * only by renderer code during element decoration.
+<a name="line137"></a> * @param {goog.ui.Checkbox.State} checked New checkbox state.
+<a name="line138"></a> */
+<a name="line139"></a>goog.ui.Checkbox.prototype.setCheckedInternal = function(checked) {
+<a name="line140"></a>  this.checked_ = checked;
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Binds an HTML element to the checkbox which if clicked toggles the checkbox.
+<a name="line146"></a> * Behaves the same way as the &#39;label&#39; HTML tag. The label element has to be the
+<a name="line147"></a> * direct or non-direct ancestor of the checkbox element because it will get the
+<a name="line148"></a> * focus when keyboard support is implemented.
+<a name="line149"></a> *
+<a name="line150"></a> * @param {Element} label The label control to set. If null, only the checkbox
+<a name="line151"></a> *     reacts to clicks.
+<a name="line152"></a> */
+<a name="line153"></a>goog.ui.Checkbox.prototype.setLabel = function(label) {
+<a name="line154"></a>  if (this.isInDocument()) {
+<a name="line155"></a>    this.exitDocument();
+<a name="line156"></a>    this.label_ = label;
+<a name="line157"></a>    this.enterDocument();
+<a name="line158"></a>  } else {
+<a name="line159"></a>    this.label_ = label;
+<a name="line160"></a>  }
+<a name="line161"></a>};
+<a name="line162"></a>
+<a name="line163"></a>
+<a name="line164"></a>/**
+<a name="line165"></a> * Toggles the checkbox. State transitions:
+<a name="line166"></a> * &lt;ul&gt;
+<a name="line167"></a> *   &lt;li&gt;unchecked -&gt; checked
+<a name="line168"></a> *   &lt;li&gt;undetermined -&gt; checked
+<a name="line169"></a> *   &lt;li&gt;checked -&gt; unchecked
+<a name="line170"></a> * &lt;/ul&gt;
+<a name="line171"></a> */
+<a name="line172"></a>goog.ui.Checkbox.prototype.toggle = function() {
+<a name="line173"></a>  this.setChecked(this.checked_ ? goog.ui.Checkbox.State.UNCHECKED :
+<a name="line174"></a>      goog.ui.Checkbox.State.CHECKED);
+<a name="line175"></a>};
+<a name="line176"></a>
+<a name="line177"></a>
+<a name="line178"></a>/** @override */
+<a name="line179"></a>goog.ui.Checkbox.prototype.enterDocument = function() {
+<a name="line180"></a>  goog.ui.Checkbox.base(this, &#39;enterDocument&#39;);
+<a name="line181"></a>  if (this.isHandleMouseEvents()) {
+<a name="line182"></a>    var handler = this.getHandler();
+<a name="line183"></a>    // Listen to the label, if it was set.
+<a name="line184"></a>    if (this.label_) {
+<a name="line185"></a>      // Any mouse events that happen to the associated label should have the
+<a name="line186"></a>      // same effect on the checkbox as if they were happening to the checkbox
+<a name="line187"></a>      // itself.
+<a name="line188"></a>      handler.
+<a name="line189"></a>          listen(this.label_, goog.events.EventType.CLICK,
+<a name="line190"></a>              this.handleClickOrSpace_).
+<a name="line191"></a>          listen(this.label_, goog.events.EventType.MOUSEOVER,
+<a name="line192"></a>              this.handleMouseOver).
+<a name="line193"></a>          listen(this.label_, goog.events.EventType.MOUSEOUT,
+<a name="line194"></a>              this.handleMouseOut).
+<a name="line195"></a>          listen(this.label_, goog.events.EventType.MOUSEDOWN,
+<a name="line196"></a>              this.handleMouseDown).
+<a name="line197"></a>          listen(this.label_, goog.events.EventType.MOUSEUP,
+<a name="line198"></a>              this.handleMouseUp);
+<a name="line199"></a>    }
+<a name="line200"></a>    // Checkbox needs to explicitly listen for click event.
+<a name="line201"></a>    handler.listen(this.getElement(),
+<a name="line202"></a>        goog.events.EventType.CLICK, this.handleClickOrSpace_);
+<a name="line203"></a>  }
+<a name="line204"></a>
+<a name="line205"></a>  // Set aria label.
+<a name="line206"></a>  if (this.label_) {
+<a name="line207"></a>    if (!this.label_.id) {
+<a name="line208"></a>      this.label_.id = this.makeId(&#39;lbl&#39;);
+<a name="line209"></a>    }
+<a name="line210"></a>    var checkboxElement = this.getElement();
+<a name="line211"></a>    goog.asserts.assert(checkboxElement,
+<a name="line212"></a>        &#39;The checkbox DOM element cannot be null.&#39;);
+<a name="line213"></a>    goog.a11y.aria.setState(checkboxElement,
+<a name="line214"></a>        goog.a11y.aria.State.LABELLEDBY,
+<a name="line215"></a>        this.label_.id);
+<a name="line216"></a>  }
+<a name="line217"></a>};
+<a name="line218"></a>
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * Fix for tabindex not being updated so that disabled checkbox is not
+<a name="line222"></a> * focusable. In particular this fails in Chrome.
+<a name="line223"></a> * Note: in general tabIndex=-1 will prevent from keyboard focus but enables
+<a name="line224"></a> * mouse focus, however in this case the control class prevents mouse focus.
+<a name="line225"></a> * @override
+<a name="line226"></a> */
+<a name="line227"></a>goog.ui.Checkbox.prototype.setEnabled = function(enabled) {
+<a name="line228"></a>  goog.ui.Checkbox.base(this, &#39;setEnabled&#39;, enabled);
+<a name="line229"></a>  var el = this.getElement();
+<a name="line230"></a>  if (el) {
+<a name="line231"></a>    el.tabIndex = this.isEnabled() ? 0 : -1;
+<a name="line232"></a>  }
+<a name="line233"></a>};
+<a name="line234"></a>
+<a name="line235"></a>
+<a name="line236"></a>/**
+<a name="line237"></a> * Handles the click event.
+<a name="line238"></a> * @param {!goog.events.BrowserEvent} e The event.
+<a name="line239"></a> * @private
+<a name="line240"></a> */
+<a name="line241"></a>goog.ui.Checkbox.prototype.handleClickOrSpace_ = function(e) {
+<a name="line242"></a>  e.stopPropagation();
+<a name="line243"></a>  var eventType = this.checked_ ? goog.ui.Component.EventType.UNCHECK :
+<a name="line244"></a>      goog.ui.Component.EventType.CHECK;
+<a name="line245"></a>  if (this.isEnabled() &amp;&amp; !e.target.href &amp;&amp; this.dispatchEvent(eventType)) {
+<a name="line246"></a>    e.preventDefault();  // Prevent scrolling in Chrome if SPACE is pressed.
+<a name="line247"></a>    this.toggle();
+<a name="line248"></a>    this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line249"></a>  }
+<a name="line250"></a>};
+<a name="line251"></a>
+<a name="line252"></a>
+<a name="line253"></a>/** @override */
+<a name="line254"></a>goog.ui.Checkbox.prototype.handleKeyEventInternal = function(e) {
+<a name="line255"></a>  if (e.keyCode == goog.events.KeyCodes.SPACE) {
+<a name="line256"></a>    this.handleClickOrSpace_(e);
+<a name="line257"></a>  }
+<a name="line258"></a>  return false;
+<a name="line259"></a>};
+<a name="line260"></a>
+<a name="line261"></a>
+<a name="line262"></a>/**
+<a name="line263"></a> * Register this control so it can be created from markup.
+<a name="line264"></a> */
+<a name="line265"></a>goog.ui.registry.setDecoratorByClassName(
+<a name="line266"></a>    goog.ui.CheckboxRenderer.CSS_CLASS,
+<a name="line267"></a>    function() {
+<a name="line268"></a>      return new goog.ui.Checkbox();
+<a name="line269"></a>    });
+</pre>
+
+
+</body>
+</html>

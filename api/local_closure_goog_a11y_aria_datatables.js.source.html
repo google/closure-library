@@ -1,0 +1,119 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>datatables.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_a11y_aria_datatables.js.html">datatables.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>
+<a name="line16"></a>
+<a name="line17"></a>/**
+<a name="line18"></a> * @fileoverview The file contains data tables generated from the ARIA
+<a name="line19"></a> * standard schema http://www.w3.org/TR/wai-aria/.
+<a name="line20"></a> *
+<a name="line21"></a> * This is auto-generated code. Do not manually edit!
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.a11y.aria.datatables&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.a11y.aria.State&#39;);
+<a name="line27"></a>goog.require(&#39;goog.object&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * A map that contains mapping between an ARIA state and the default value
+<a name="line32"></a> * for it. Note that not all ARIA states have default values.
+<a name="line33"></a> *
+<a name="line34"></a> * @type {Object.&lt;!(goog.a11y.aria.State|string), (string|boolean|number)&gt;}
+<a name="line35"></a> */
+<a name="line36"></a>goog.a11y.aria.DefaultStateValueMap_;
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>/**
+<a name="line40"></a> * A method that creates a map that contains mapping between an ARIA state and
+<a name="line41"></a> * the default value for it. Note that not all ARIA states have default values.
+<a name="line42"></a> *
+<a name="line43"></a> * @return {!Object.&lt;!(goog.a11y.aria.State|string), (string|boolean|number)&gt;}
+<a name="line44"></a> *      The names for each of the notification methods.
+<a name="line45"></a> */
+<a name="line46"></a>goog.a11y.aria.datatables.getDefaultValuesMap = function() {
+<a name="line47"></a>  if (!goog.a11y.aria.DefaultStateValueMap_) {
+<a name="line48"></a>    goog.a11y.aria.DefaultStateValueMap_ = goog.object.create(
+<a name="line49"></a>        goog.a11y.aria.State.ATOMIC, false,
+<a name="line50"></a>        goog.a11y.aria.State.AUTOCOMPLETE, &#39;none&#39;,
+<a name="line51"></a>        goog.a11y.aria.State.DROPEFFECT, &#39;none&#39;,
+<a name="line52"></a>        goog.a11y.aria.State.HASPOPUP, false,
+<a name="line53"></a>        goog.a11y.aria.State.LIVE, &#39;off&#39;,
+<a name="line54"></a>        goog.a11y.aria.State.MULTILINE, false,
+<a name="line55"></a>        goog.a11y.aria.State.MULTISELECTABLE, false,
+<a name="line56"></a>        goog.a11y.aria.State.ORIENTATION, &#39;vertical&#39;,
+<a name="line57"></a>        goog.a11y.aria.State.READONLY, false,
+<a name="line58"></a>        goog.a11y.aria.State.RELEVANT, &#39;additions text&#39;,
+<a name="line59"></a>        goog.a11y.aria.State.REQUIRED, false,
+<a name="line60"></a>        goog.a11y.aria.State.SORT, &#39;none&#39;,
+<a name="line61"></a>        goog.a11y.aria.State.BUSY, false,
+<a name="line62"></a>        goog.a11y.aria.State.DISABLED, false,
+<a name="line63"></a>        goog.a11y.aria.State.HIDDEN, false,
+<a name="line64"></a>        goog.a11y.aria.State.INVALID, &#39;false&#39;);
+<a name="line65"></a>  }
+<a name="line66"></a>
+<a name="line67"></a>  return goog.a11y.aria.DefaultStateValueMap_;
+<a name="line68"></a>};
+</pre>
+
+
+</body>
+</html>

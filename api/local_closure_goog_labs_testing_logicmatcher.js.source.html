@@ -1,0 +1,263 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>logicmatcher.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_testing_logicmatcher.js.html">logicmatcher.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides the built-in logic matchers: anyOf, allOf, and isNot.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.labs.testing.AllOfMatcher&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.labs.testing.AnyOfMatcher&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.labs.testing.IsNotMatcher&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.array&#39;);
+<a name="line27"></a>goog.require(&#39;goog.labs.testing.Matcher&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>/**
+<a name="line32"></a> * The AllOf matcher.
+<a name="line33"></a> *
+<a name="line34"></a> * @param {!Array.&lt;!goog.labs.testing.Matcher&gt;} matchers Input matchers.
+<a name="line35"></a> *
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @struct
+<a name="line38"></a> * @implements {goog.labs.testing.Matcher}
+<a name="line39"></a> * @final
+<a name="line40"></a> */
+<a name="line41"></a>goog.labs.testing.AllOfMatcher = function(matchers) {
+<a name="line42"></a>  /**
+<a name="line43"></a>   * @type {!Array.&lt;!goog.labs.testing.Matcher&gt;}
+<a name="line44"></a>   * @private
+<a name="line45"></a>   */
+<a name="line46"></a>  this.matchers_ = matchers;
+<a name="line47"></a>};
+<a name="line48"></a>
+<a name="line49"></a>
+<a name="line50"></a>/**
+<a name="line51"></a> * Determines if all of the matchers match the input value.
+<a name="line52"></a> *
+<a name="line53"></a> * @override
+<a name="line54"></a> */
+<a name="line55"></a>goog.labs.testing.AllOfMatcher.prototype.matches = function(actualValue) {
+<a name="line56"></a>  return goog.array.every(this.matchers_, function(matcher) {
+<a name="line57"></a>    return matcher.matches(actualValue);
+<a name="line58"></a>  });
+<a name="line59"></a>};
+<a name="line60"></a>
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Describes why the matcher failed. The returned string is a concatenation of
+<a name="line64"></a> * all the failed matchers&#39; error strings.
+<a name="line65"></a> *
+<a name="line66"></a> * @override
+<a name="line67"></a> */
+<a name="line68"></a>goog.labs.testing.AllOfMatcher.prototype.describe =
+<a name="line69"></a>    function(actualValue) {
+<a name="line70"></a>  // TODO(user) : Optimize this to remove duplication with matches ?
+<a name="line71"></a>  var errorString = &#39;&#39;;
+<a name="line72"></a>  goog.array.forEach(this.matchers_, function(matcher) {
+<a name="line73"></a>    if (!matcher.matches(actualValue)) {
+<a name="line74"></a>      errorString += matcher.describe(actualValue) + &#39;\n&#39;;
+<a name="line75"></a>    }
+<a name="line76"></a>  });
+<a name="line77"></a>  return errorString;
+<a name="line78"></a>};
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>
+<a name="line82"></a>/**
+<a name="line83"></a> * The AnyOf matcher.
+<a name="line84"></a> *
+<a name="line85"></a> * @param {!Array.&lt;!goog.labs.testing.Matcher&gt;} matchers Input matchers.
+<a name="line86"></a> *
+<a name="line87"></a> * @constructor
+<a name="line88"></a> * @struct
+<a name="line89"></a> * @implements {goog.labs.testing.Matcher}
+<a name="line90"></a> * @final
+<a name="line91"></a> */
+<a name="line92"></a>goog.labs.testing.AnyOfMatcher = function(matchers) {
+<a name="line93"></a>  /**
+<a name="line94"></a>   * @type {!Array.&lt;!goog.labs.testing.Matcher&gt;}
+<a name="line95"></a>   * @private
+<a name="line96"></a>   */
+<a name="line97"></a>  this.matchers_ = matchers;
+<a name="line98"></a>};
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * Determines if any of the matchers matches the input value.
+<a name="line103"></a> *
+<a name="line104"></a> * @override
+<a name="line105"></a> */
+<a name="line106"></a>goog.labs.testing.AnyOfMatcher.prototype.matches = function(actualValue) {
+<a name="line107"></a>  return goog.array.some(this.matchers_, function(matcher) {
+<a name="line108"></a>    return matcher.matches(actualValue);
+<a name="line109"></a>  });
+<a name="line110"></a>};
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * Describes why the matcher failed.
+<a name="line115"></a> *
+<a name="line116"></a> * @override
+<a name="line117"></a> */
+<a name="line118"></a>goog.labs.testing.AnyOfMatcher.prototype.describe =
+<a name="line119"></a>    function(actualValue) {
+<a name="line120"></a>  // TODO(user) : Optimize this to remove duplication with matches ?
+<a name="line121"></a>  var errorString = &#39;&#39;;
+<a name="line122"></a>  goog.array.forEach(this.matchers_, function(matcher) {
+<a name="line123"></a>    if (!matcher.matches(actualValue)) {
+<a name="line124"></a>      errorString += matcher.describe(actualValue) + &#39;\n&#39;;
+<a name="line125"></a>    }
+<a name="line126"></a>  });
+<a name="line127"></a>  return errorString;
+<a name="line128"></a>};
+<a name="line129"></a>
+<a name="line130"></a>
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * The IsNot matcher.
+<a name="line134"></a> *
+<a name="line135"></a> * @param {!goog.labs.testing.Matcher} matcher The matcher to negate.
+<a name="line136"></a> *
+<a name="line137"></a> * @constructor
+<a name="line138"></a> * @struct
+<a name="line139"></a> * @implements {goog.labs.testing.Matcher}
+<a name="line140"></a> * @final
+<a name="line141"></a> */
+<a name="line142"></a>goog.labs.testing.IsNotMatcher = function(matcher) {
+<a name="line143"></a>  /**
+<a name="line144"></a>   * @type {!goog.labs.testing.Matcher}
+<a name="line145"></a>   * @private
+<a name="line146"></a>   */
+<a name="line147"></a>  this.matcher_ = matcher;
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Determines if the input value doesn&#39;t satisfy a matcher.
+<a name="line153"></a> *
+<a name="line154"></a> * @override
+<a name="line155"></a> */
+<a name="line156"></a>goog.labs.testing.IsNotMatcher.prototype.matches = function(actualValue) {
+<a name="line157"></a>  return !this.matcher_.matches(actualValue);
+<a name="line158"></a>};
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Describes why the matcher failed.
+<a name="line163"></a> *
+<a name="line164"></a> * @override
+<a name="line165"></a> */
+<a name="line166"></a>goog.labs.testing.IsNotMatcher.prototype.describe =
+<a name="line167"></a>    function(actualValue) {
+<a name="line168"></a>  return &#39;The following is false: &#39; + this.matcher_.describe(actualValue);
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Creates a matcher that will succeed only if all of the given matchers
+<a name="line174"></a> * succeed.
+<a name="line175"></a> *
+<a name="line176"></a> * @param {...goog.labs.testing.Matcher} var_args The matchers to test
+<a name="line177"></a> *     against.
+<a name="line178"></a> *
+<a name="line179"></a> * @return {!goog.labs.testing.AllOfMatcher} The AllOf matcher.
+<a name="line180"></a> */
+<a name="line181"></a>function allOf(var_args) {
+<a name="line182"></a>  var matchers = goog.array.toArray(arguments);
+<a name="line183"></a>  return new goog.labs.testing.AllOfMatcher(matchers);
+<a name="line184"></a>}
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Accepts a set of matchers and returns a matcher which matches
+<a name="line189"></a> * values which satisfy the constraints of any of the given matchers.
+<a name="line190"></a> *
+<a name="line191"></a> * @param {...goog.labs.testing.Matcher} var_args The matchers to test
+<a name="line192"></a> *     against.
+<a name="line193"></a> *
+<a name="line194"></a> * @return {!goog.labs.testing.AnyOfMatcher} The AnyOf matcher.
+<a name="line195"></a> */
+<a name="line196"></a>function anyOf(var_args) {
+<a name="line197"></a>  var matchers = goog.array.toArray(arguments);
+<a name="line198"></a>  return new goog.labs.testing.AnyOfMatcher(matchers);
+<a name="line199"></a>}
+<a name="line200"></a>
+<a name="line201"></a>
+<a name="line202"></a>/**
+<a name="line203"></a> * Returns a matcher that negates the input matcher. The returned
+<a name="line204"></a> * matcher matches the values not matched by the input matcher and vice-versa.
+<a name="line205"></a> *
+<a name="line206"></a> * @param {!goog.labs.testing.Matcher} matcher The matcher to test against.
+<a name="line207"></a> *
+<a name="line208"></a> * @return {!goog.labs.testing.IsNotMatcher} The IsNot matcher.
+<a name="line209"></a> */
+<a name="line210"></a>function isNot(matcher) {
+<a name="line211"></a>  return new goog.labs.testing.IsNotMatcher(matcher);
+<a name="line212"></a>}
+</pre>
+
+
+</body>
+</html>

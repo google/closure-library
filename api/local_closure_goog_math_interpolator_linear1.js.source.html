@@ -1,0 +1,134 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>linear1.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_math_interpolator_linear1.js.html">linear1.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A one dimensional linear interpolator.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.math.interpolator.Linear1&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.array&#39;);
+<a name="line23"></a>goog.require(&#39;goog.math&#39;);
+<a name="line24"></a>goog.require(&#39;goog.math.interpolator.Interpolator1&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * A one dimensional linear interpolator.
+<a name="line30"></a> * @implements {goog.math.interpolator.Interpolator1}
+<a name="line31"></a> * @constructor
+<a name="line32"></a> * @final
+<a name="line33"></a> */
+<a name="line34"></a>goog.math.interpolator.Linear1 = function() {
+<a name="line35"></a>  /**
+<a name="line36"></a>   * The abscissa of the data points.
+<a name="line37"></a>   * @type {!Array.&lt;number&gt;}
+<a name="line38"></a>   * @private
+<a name="line39"></a>   */
+<a name="line40"></a>  this.x_ = [];
+<a name="line41"></a>
+<a name="line42"></a>  /**
+<a name="line43"></a>   * The ordinate of the data points.
+<a name="line44"></a>   * @type {!Array.&lt;number&gt;}
+<a name="line45"></a>   * @private
+<a name="line46"></a>   */
+<a name="line47"></a>  this.y_ = [];
+<a name="line48"></a>};
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/** @override */
+<a name="line52"></a>goog.math.interpolator.Linear1.prototype.setData = function(x, y) {
+<a name="line53"></a>  goog.asserts.assert(x.length == y.length,
+<a name="line54"></a>      &#39;input arrays to setData should have the same length&#39;);
+<a name="line55"></a>  if (x.length == 1) {
+<a name="line56"></a>    this.x_ = [x[0], x[0] + 1];
+<a name="line57"></a>    this.y_ = [y[0], y[0]];
+<a name="line58"></a>  } else {
+<a name="line59"></a>    this.x_ = x.slice();
+<a name="line60"></a>    this.y_ = y.slice();
+<a name="line61"></a>  }
+<a name="line62"></a>};
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/** @override */
+<a name="line66"></a>goog.math.interpolator.Linear1.prototype.interpolate = function(x) {
+<a name="line67"></a>  var pos = goog.array.binarySearch(this.x_, x);
+<a name="line68"></a>  if (pos &lt; 0) {
+<a name="line69"></a>    pos = -pos - 2;
+<a name="line70"></a>  }
+<a name="line71"></a>  pos = goog.math.clamp(pos, 0, this.x_.length - 2);
+<a name="line72"></a>
+<a name="line73"></a>  var progress = (x - this.x_[pos]) / (this.x_[pos + 1] - this.x_[pos]);
+<a name="line74"></a>  return goog.math.lerp(this.y_[pos], this.y_[pos + 1], progress);
+<a name="line75"></a>};
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>/** @override */
+<a name="line79"></a>goog.math.interpolator.Linear1.prototype.getInverse = function() {
+<a name="line80"></a>  var interpolator = new goog.math.interpolator.Linear1();
+<a name="line81"></a>  interpolator.setData(this.y_, this.x_);
+<a name="line82"></a>  return interpolator;
+<a name="line83"></a>};
+</pre>
+
+
+</body>
+</html>

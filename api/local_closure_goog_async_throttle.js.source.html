@@ -1,0 +1,244 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>throttle.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_async_throttle.js.html">throttle.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Definition of the goog.async.Throttle class.
+<a name="line17"></a> *
+<a name="line18"></a> * @see ../demos/timers.html
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.Throttle&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.async.Throttle&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line25"></a>goog.require(&#39;goog.Timer&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Throttle will perform an action that is passed in no more than once
+<a name="line31"></a> * per interval (specified in milliseconds). If it gets multiple signals
+<a name="line32"></a> * to perform the action while it is waiting, it will only perform the action
+<a name="line33"></a> * once at the end of the interval.
+<a name="line34"></a> * @param {function(this: T)} listener Function to callback when the action is
+<a name="line35"></a> *     triggered.
+<a name="line36"></a> * @param {number} interval Interval over which to throttle. The listener can
+<a name="line37"></a> *     only be called once per interval.
+<a name="line38"></a> * @param {T=} opt_handler Object in whose scope to call the listener.
+<a name="line39"></a> * @constructor
+<a name="line40"></a> * @extends {goog.Disposable}
+<a name="line41"></a> * @final
+<a name="line42"></a> * @template T
+<a name="line43"></a> */
+<a name="line44"></a>goog.async.Throttle = function(listener, interval, opt_handler) {
+<a name="line45"></a>  goog.Disposable.call(this);
+<a name="line46"></a>
+<a name="line47"></a>  /**
+<a name="line48"></a>   * Function to callback
+<a name="line49"></a>   * @type {function(this: T)}
+<a name="line50"></a>   * @private
+<a name="line51"></a>   */
+<a name="line52"></a>  this.listener_ = listener;
+<a name="line53"></a>
+<a name="line54"></a>  /**
+<a name="line55"></a>   * Interval for the throttle time
+<a name="line56"></a>   * @type {number}
+<a name="line57"></a>   * @private
+<a name="line58"></a>   */
+<a name="line59"></a>  this.interval_ = interval;
+<a name="line60"></a>
+<a name="line61"></a>  /**
+<a name="line62"></a>   * &quot;this&quot; context for the listener
+<a name="line63"></a>   * @type {Object|undefined}
+<a name="line64"></a>   * @private
+<a name="line65"></a>   */
+<a name="line66"></a>  this.handler_ = opt_handler;
+<a name="line67"></a>
+<a name="line68"></a>  /**
+<a name="line69"></a>   * Cached callback function invoked after the throttle timeout completes
+<a name="line70"></a>   * @type {Function}
+<a name="line71"></a>   * @private
+<a name="line72"></a>   */
+<a name="line73"></a>  this.callback_ = goog.bind(this.onTimer_, this);
+<a name="line74"></a>};
+<a name="line75"></a>goog.inherits(goog.async.Throttle, goog.Disposable);
+<a name="line76"></a>
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * A deprecated alias.
+<a name="line81"></a> * @deprecated Use goog.async.Throttle instead.
+<a name="line82"></a> * @constructor
+<a name="line83"></a> * @final
+<a name="line84"></a> */
+<a name="line85"></a>goog.Throttle = goog.async.Throttle;
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Indicates that the action is pending and needs to be fired.
+<a name="line90"></a> * @type {boolean}
+<a name="line91"></a> * @private
+<a name="line92"></a> */
+<a name="line93"></a>goog.async.Throttle.prototype.shouldFire_ = false;
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Indicates the count of nested pauses currently in effect on the throttle.
+<a name="line98"></a> * When this count is not zero, fired actions will be postponed until the
+<a name="line99"></a> * throttle is resumed enough times to drop the pause count to zero.
+<a name="line100"></a> * @type {number}
+<a name="line101"></a> * @private
+<a name="line102"></a> */
+<a name="line103"></a>goog.async.Throttle.prototype.pauseCount_ = 0;
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Timer for scheduling the next callback
+<a name="line108"></a> * @type {?number}
+<a name="line109"></a> * @private
+<a name="line110"></a> */
+<a name="line111"></a>goog.async.Throttle.prototype.timer_ = null;
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>/**
+<a name="line115"></a> * Notifies the throttle that the action has happened. It will throttle the call
+<a name="line116"></a> * so that the callback is not called too often according to the interval
+<a name="line117"></a> * parameter passed to the constructor.
+<a name="line118"></a> */
+<a name="line119"></a>goog.async.Throttle.prototype.fire = function() {
+<a name="line120"></a>  if (!this.timer_ &amp;&amp; !this.pauseCount_) {
+<a name="line121"></a>    this.doAction_();
+<a name="line122"></a>  } else {
+<a name="line123"></a>    this.shouldFire_ = true;
+<a name="line124"></a>  }
+<a name="line125"></a>};
+<a name="line126"></a>
+<a name="line127"></a>
+<a name="line128"></a>/**
+<a name="line129"></a> * Cancels any pending action callback. The throttle can be restarted by
+<a name="line130"></a> * calling {@link #fire}.
+<a name="line131"></a> */
+<a name="line132"></a>goog.async.Throttle.prototype.stop = function() {
+<a name="line133"></a>  if (this.timer_) {
+<a name="line134"></a>    goog.Timer.clear(this.timer_);
+<a name="line135"></a>    this.timer_ = null;
+<a name="line136"></a>    this.shouldFire_ = false;
+<a name="line137"></a>  }
+<a name="line138"></a>};
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * Pauses the throttle.  All pending and future action callbacks will be
+<a name="line143"></a> * delayed until the throttle is resumed.  Pauses can be nested.
+<a name="line144"></a> */
+<a name="line145"></a>goog.async.Throttle.prototype.pause = function() {
+<a name="line146"></a>  this.pauseCount_++;
+<a name="line147"></a>};
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Resumes the throttle.  If doing so drops the pausing count to zero, pending
+<a name="line152"></a> * action callbacks will be executed as soon as possible, but still no sooner
+<a name="line153"></a> * than an interval&#39;s delay after the previous call.  Future action callbacks
+<a name="line154"></a> * will be executed as normal.
+<a name="line155"></a> */
+<a name="line156"></a>goog.async.Throttle.prototype.resume = function() {
+<a name="line157"></a>  this.pauseCount_--;
+<a name="line158"></a>  if (!this.pauseCount_ &amp;&amp; this.shouldFire_ &amp;&amp; !this.timer_) {
+<a name="line159"></a>    this.shouldFire_ = false;
+<a name="line160"></a>    this.doAction_();
+<a name="line161"></a>  }
+<a name="line162"></a>};
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/** @override */
+<a name="line166"></a>goog.async.Throttle.prototype.disposeInternal = function() {
+<a name="line167"></a>  goog.async.Throttle.superClass_.disposeInternal.call(this);
+<a name="line168"></a>  this.stop();
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Handler for the timer to fire the throttle
+<a name="line174"></a> * @private
+<a name="line175"></a> */
+<a name="line176"></a>goog.async.Throttle.prototype.onTimer_ = function() {
+<a name="line177"></a>  this.timer_ = null;
+<a name="line178"></a>
+<a name="line179"></a>  if (this.shouldFire_ &amp;&amp; !this.pauseCount_) {
+<a name="line180"></a>    this.shouldFire_ = false;
+<a name="line181"></a>    this.doAction_();
+<a name="line182"></a>  }
+<a name="line183"></a>};
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>/**
+<a name="line187"></a> * Calls the callback
+<a name="line188"></a> * @private
+<a name="line189"></a> */
+<a name="line190"></a>goog.async.Throttle.prototype.doAction_ = function() {
+<a name="line191"></a>  this.timer_ = goog.Timer.callOnce(this.callback_, this.interval_);
+<a name="line192"></a>  this.listener_.call(this.handler_);
+<a name="line193"></a>};
+</pre>
+
+
+</body>
+</html>

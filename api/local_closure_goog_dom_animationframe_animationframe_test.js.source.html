@@ -1,0 +1,297 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>animationframe_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_animationframe_animationframe_test.js.html">animationframe_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2014 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Tests for goog.dom.animationFrame.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.setTestOnly();
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.dom.animationFrame&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.MockClock&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>var NEXT_FRAME = goog.testing.MockClock.REQUEST_ANIMATION_FRAME_TIMEOUT;
+<a name="line27"></a>var mockClock;
+<a name="line28"></a>var t0, t1;
+<a name="line29"></a>var result;
+<a name="line30"></a>
+<a name="line31"></a>function setUp() {
+<a name="line32"></a>  mockClock = new goog.testing.MockClock(true);
+<a name="line33"></a>  result = &#39;&#39;;
+<a name="line34"></a>  t0 = goog.dom.animationFrame.createTask({
+<a name="line35"></a>    measure: function() {
+<a name="line36"></a>      result += &#39;me0&#39;;
+<a name="line37"></a>    },
+<a name="line38"></a>    mutate: function() {
+<a name="line39"></a>      result += &#39;mu0&#39;;
+<a name="line40"></a>    }
+<a name="line41"></a>  });
+<a name="line42"></a>  t1 = goog.dom.animationFrame.createTask({
+<a name="line43"></a>    measure: function() {
+<a name="line44"></a>      result += &#39;me1&#39;;
+<a name="line45"></a>    },
+<a name="line46"></a>    mutate: function() {
+<a name="line47"></a>      result += &#39;mu1&#39;;
+<a name="line48"></a>    }
+<a name="line49"></a>  });
+<a name="line50"></a>  assertEquals(&#39;&#39;, result);
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>function tearDown() {
+<a name="line54"></a>  mockClock.dispose();
+<a name="line55"></a>}
+<a name="line56"></a>
+<a name="line57"></a>function testCreateTask_one() {
+<a name="line58"></a>  t0();
+<a name="line59"></a>  assertEquals(&#39;&#39;, result);
+<a name="line60"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line61"></a>  assertEquals(&#39;me0mu0&#39;, result);
+<a name="line62"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line63"></a>  assertEquals(&#39;me0mu0&#39;, result);
+<a name="line64"></a>  t0();
+<a name="line65"></a>  t0(); // Should do nothing.
+<a name="line66"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line67"></a>  assertEquals(&#39;me0mu0me0mu0&#39;, result);
+<a name="line68"></a>}
+<a name="line69"></a>
+<a name="line70"></a>function testCreateTask_onlyMutate() {
+<a name="line71"></a>  t0 = goog.dom.animationFrame.createTask({
+<a name="line72"></a>    mutate: function() {
+<a name="line73"></a>      result += &#39;mu0&#39;;
+<a name="line74"></a>    }
+<a name="line75"></a>  });
+<a name="line76"></a>  t0();
+<a name="line77"></a>  assertEquals(&#39;&#39;, result);
+<a name="line78"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line79"></a>  assertEquals(&#39;mu0&#39;, result);
+<a name="line80"></a>}
+<a name="line81"></a>
+<a name="line82"></a>function testCreateTask_onlyMeasure() {
+<a name="line83"></a>  t0 = goog.dom.animationFrame.createTask({
+<a name="line84"></a>    mutate: function() {
+<a name="line85"></a>      result += &#39;me0&#39;;
+<a name="line86"></a>    }
+<a name="line87"></a>  });
+<a name="line88"></a>  t0();
+<a name="line89"></a>  assertEquals(&#39;&#39;, result);
+<a name="line90"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line91"></a>  assertEquals(&#39;me0&#39;, result);
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>function testCreateTask_two() {
+<a name="line95"></a>  t0();
+<a name="line96"></a>  t1();
+<a name="line97"></a>  assertEquals(&#39;&#39;, result);
+<a name="line98"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line99"></a>  assertEquals(&#39;me0me1mu0mu1&#39;, result);
+<a name="line100"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line101"></a>  assertEquals(&#39;me0me1mu0mu1&#39;, result);
+<a name="line102"></a>  t0();
+<a name="line103"></a>  t1();
+<a name="line104"></a>  t0();
+<a name="line105"></a>  t1();
+<a name="line106"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line107"></a>  assertEquals(&#39;me0me1mu0mu1me0me1mu0mu1&#39;, result);
+<a name="line108"></a>}
+<a name="line109"></a>
+<a name="line110"></a>function testCreateTask_recurse() {
+<a name="line111"></a>  var stop = false;
+<a name="line112"></a>  var recurse = goog.dom.animationFrame.createTask({
+<a name="line113"></a>    measure: function() {
+<a name="line114"></a>      if (!stop) {
+<a name="line115"></a>        recurse();
+<a name="line116"></a>      }
+<a name="line117"></a>      result += &#39;re0&#39;;
+<a name="line118"></a>    },
+<a name="line119"></a>    mutate: function() {
+<a name="line120"></a>      result += &#39;ru0&#39;;
+<a name="line121"></a>    }
+<a name="line122"></a>  });
+<a name="line123"></a>  recurse();
+<a name="line124"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line125"></a>  assertEquals(&#39;re0ru0&#39;, result);
+<a name="line126"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line127"></a>  assertEquals(&#39;re0ru0re0ru0&#39;, result);
+<a name="line128"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line129"></a>  assertEquals(&#39;re0ru0re0ru0re0ru0&#39;, result);
+<a name="line130"></a>  t0();
+<a name="line131"></a>  stop = true;
+<a name="line132"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line133"></a>  assertEquals(&#39;re0ru0re0ru0re0ru0re0me0ru0mu0&#39;, result);
+<a name="line134"></a>
+<a name="line135"></a>  // Recursion should have stopped now.
+<a name="line136"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line137"></a>  assertEquals(&#39;re0ru0re0ru0re0ru0re0me0ru0mu0&#39;, result);
+<a name="line138"></a>  assertFalse(goog.dom.animationFrame.requestedFrame_);
+<a name="line139"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line140"></a>  assertEquals(&#39;re0ru0re0ru0re0ru0re0me0ru0mu0&#39;, result);
+<a name="line141"></a>  assertFalse(goog.dom.animationFrame.requestedFrame_);
+<a name="line142"></a>}
+<a name="line143"></a>
+<a name="line144"></a>function testCreateTask_recurseTwoMethodsWithState() {
+<a name="line145"></a>  var stop = false;
+<a name="line146"></a>  var recurse1 = goog.dom.animationFrame.createTask({
+<a name="line147"></a>    measure: function(state) {
+<a name="line148"></a>      if (!stop) {
+<a name="line149"></a>        recurse2();
+<a name="line150"></a>      }
+<a name="line151"></a>      result += &#39;r1e0&#39;;
+<a name="line152"></a>      state.text = &#39;T0&#39;;
+<a name="line153"></a>    },
+<a name="line154"></a>    mutate: function(state) {
+<a name="line155"></a>      result += &#39;r1u0&#39; + state.text;
+<a name="line156"></a>    }
+<a name="line157"></a>  });
+<a name="line158"></a>  var recurse2 = goog.dom.animationFrame.createTask({
+<a name="line159"></a>    measure: function(state) {
+<a name="line160"></a>      if (!stop) {
+<a name="line161"></a>        recurse1();
+<a name="line162"></a>      }
+<a name="line163"></a>      result += &#39;r2e0&#39;;
+<a name="line164"></a>      state.text = &#39;T1&#39;;
+<a name="line165"></a>    },
+<a name="line166"></a>    mutate: function(state) {
+<a name="line167"></a>      result += &#39;r2u0&#39; + state.text;
+<a name="line168"></a>    }
+<a name="line169"></a>  });
+<a name="line170"></a>
+<a name="line171"></a>  var taskLength = goog.dom.animationFrame.tasks_[0].length;
+<a name="line172"></a>
+<a name="line173"></a>  recurse1();
+<a name="line174"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line175"></a>  // Only recurse1 executed.
+<a name="line176"></a>  assertEquals(&#39;r1e0r1u0T0&#39;, result);
+<a name="line177"></a>
+<a name="line178"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line179"></a>  // Recurse2 executed and queueup recurse1.
+<a name="line180"></a>  assertEquals(&#39;r1e0r1u0T0r2e0r2u0T1&#39;, result);
+<a name="line181"></a>
+<a name="line182"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line183"></a>  // Recurse1 executed and queueup recurse2.
+<a name="line184"></a>  assertEquals(&#39;r1e0r1u0T0r2e0r2u0T1r1e0r1u0T0&#39;, result);
+<a name="line185"></a>
+<a name="line186"></a>  stop = true;
+<a name="line187"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line188"></a>  // Recurse2 executed and should have stopped.
+<a name="line189"></a>  assertEquals(&#39;r1e0r1u0T0r2e0r2u0T1r1e0r1u0T0r2e0r2u0T1&#39;, result);
+<a name="line190"></a>  assertFalse(goog.dom.animationFrame.requestedFrame_);
+<a name="line191"></a>
+<a name="line192"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line193"></a>  assertEquals(&#39;r1e0r1u0T0r2e0r2u0T1r1e0r1u0T0r2e0r2u0T1&#39;, result);
+<a name="line194"></a>  assertFalse(goog.dom.animationFrame.requestedFrame_);
+<a name="line195"></a>
+<a name="line196"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line197"></a>  assertEquals(&#39;r1e0r1u0T0r2e0r2u0T1r1e0r1u0T0r2e0r2u0T1&#39;, result);
+<a name="line198"></a>  assertFalse(goog.dom.animationFrame.requestedFrame_);
+<a name="line199"></a>}
+<a name="line200"></a>
+<a name="line201"></a>function testCreateTask_args() {
+<a name="line202"></a>  var context = {context: true};
+<a name="line203"></a>  var s = goog.dom.animationFrame.createTask({
+<a name="line204"></a>    measure: function(state) {
+<a name="line205"></a>      assertEquals(context, this);
+<a name="line206"></a>      assertUndefined(state.foo);
+<a name="line207"></a>      state.foo = &#39;foo&#39;;
+<a name="line208"></a>    },
+<a name="line209"></a>    mutate: function(state) {
+<a name="line210"></a>      assertEquals(context, this);
+<a name="line211"></a>      result += state.foo;
+<a name="line212"></a>    }
+<a name="line213"></a>  }, context);
+<a name="line214"></a>  s();
+<a name="line215"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line216"></a>  assertEquals(&#39;foo&#39;, result);
+<a name="line217"></a>
+<a name="line218"></a>  var dynamicContext = goog.dom.animationFrame.createTask({
+<a name="line219"></a>    measure: function(state) {
+<a name="line220"></a>      assertEquals(context, this);
+<a name="line221"></a>    },
+<a name="line222"></a>    mutate: function(state) {
+<a name="line223"></a>      assertEquals(context, this);
+<a name="line224"></a>      result += &#39;bar&#39;;
+<a name="line225"></a>    }
+<a name="line226"></a>  });
+<a name="line227"></a>  dynamicContext.call(context);
+<a name="line228"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line229"></a>  assertEquals(&#39;foobar&#39;, result);
+<a name="line230"></a>
+<a name="line231"></a>  var moreArgs = goog.dom.animationFrame.createTask({
+<a name="line232"></a>    measure: function(event, state) {
+<a name="line233"></a>      assertEquals(context, this);
+<a name="line234"></a>      assertEquals(&#39;event&#39;, event);
+<a name="line235"></a>      state.baz = &#39;baz&#39;;
+<a name="line236"></a>    },
+<a name="line237"></a>    mutate: function(event, state) {
+<a name="line238"></a>      assertEquals(&#39;event&#39;, event);
+<a name="line239"></a>      assertEquals(context, this);
+<a name="line240"></a>      result += state.baz;
+<a name="line241"></a>    }
+<a name="line242"></a>  });
+<a name="line243"></a>  moreArgs.call(context, &#39;event&#39;);
+<a name="line244"></a>  mockClock.tick(NEXT_FRAME);
+<a name="line245"></a>  assertEquals(&#39;foobarbaz&#39;, result);
+<a name="line246"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>topicid.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_pubsub_topicid.js.html">topicid.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2014 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.pubsub.TopicId&#39;);
+<a name="line16"></a>
+<a name="line17"></a>
+<a name="line18"></a>
+<a name="line19"></a>/**
+<a name="line20"></a> * A templated class that is used to register {@code goog.pubsub.PubSub}
+<a name="line21"></a> * subscribers.
+<a name="line22"></a> *
+<a name="line23"></a> * Typical usage for a publisher:
+<a name="line24"></a> * &lt;code&gt;
+<a name="line25"></a> *   /** @type {!goog.pubsub.TopicId.&lt;!zorg.State&gt;}
+<a name="line26"></a> *   zorg.TopicId.STATE_CHANGE = new goog.pubsub.TopicId(
+<a name="line27"></a> *       goog.events.getUniqueId(&#39;state-change&#39;));
+<a name="line28"></a> *
+<a name="line29"></a> *   // Compiler enforces that these types are correct.
+<a name="line30"></a> *   pubSub.publish(zorg.TopicId.STATE_CHANGE, zorg.State.STARTED);
+<a name="line31"></a> * &lt;/code&gt;
+<a name="line32"></a> *
+<a name="line33"></a> * Typical usage for a subscriber:
+<a name="line34"></a> * &lt;code&gt;
+<a name="line35"></a> *   // Compiler enforces the callback parameter type.
+<a name="line36"></a> *   pubSub.subscribe(zorg.TopicId.STATE_CHANGE, function(state) {
+<a name="line37"></a> *     if (state == zorg.State.STARTED) {
+<a name="line38"></a> *       // Handle STARTED state.
+<a name="line39"></a> *     }
+<a name="line40"></a> *   });
+<a name="line41"></a> * &lt;/code&gt;
+<a name="line42"></a> *
+<a name="line43"></a> * @param {string} topicId
+<a name="line44"></a> * @template PAYLOAD
+<a name="line45"></a> * @constructor
+<a name="line46"></a> * @final
+<a name="line47"></a> * @struct
+<a name="line48"></a> */
+<a name="line49"></a>goog.pubsub.TopicId = function(topicId) {
+<a name="line50"></a>  /**
+<a name="line51"></a>   * @const
+<a name="line52"></a>   * @private
+<a name="line53"></a>   */
+<a name="line54"></a>  this.topicId_ = topicId;
+<a name="line55"></a>};
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>/** @override */
+<a name="line59"></a>goog.pubsub.TopicId.prototype.toString = function() {
+<a name="line60"></a>  return this.topicId_;
+<a name="line61"></a>};
+</pre>
+
+
+</body>
+</html>

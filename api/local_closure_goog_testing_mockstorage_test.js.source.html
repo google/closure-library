@@ -1,0 +1,124 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mockstorage_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_mockstorage_test.js.html">mockstorage_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.MockStorageTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.MockStorageTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.testing.MockStorage&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>var instance;
+<a name="line22"></a>
+<a name="line23"></a>function setUp() {
+<a name="line24"></a>  instance = new goog.testing.MockStorage();
+<a name="line25"></a>}
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Tests the MockStorage interface.
+<a name="line30"></a> */
+<a name="line31"></a>function testMockStorage() {
+<a name="line32"></a>  assertEquals(0, instance.length);
+<a name="line33"></a>
+<a name="line34"></a>  instance.setItem(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line35"></a>  assertEquals(1, instance.length);
+<a name="line36"></a>  assertEquals(&#39;bar&#39;, instance.getItem(&#39;foo&#39;));
+<a name="line37"></a>  assertEquals(&#39;foo&#39;, instance.key(0));
+<a name="line38"></a>
+<a name="line39"></a>  instance.setItem(&#39;foo&#39;, &#39;baz&#39;);
+<a name="line40"></a>  assertEquals(&#39;baz&#39;, instance.getItem(&#39;foo&#39;));
+<a name="line41"></a>
+<a name="line42"></a>  instance.setItem(&#39;goo&#39;, &#39;gl&#39;);
+<a name="line43"></a>  assertEquals(2, instance.length);
+<a name="line44"></a>  assertEquals(&#39;gl&#39;, instance.getItem(&#39;goo&#39;));
+<a name="line45"></a>  assertEquals(&#39;goo&#39;, instance.key(1));
+<a name="line46"></a>
+<a name="line47"></a>  assertNull(instance.getItem(&#39;poogle&#39;));
+<a name="line48"></a>
+<a name="line49"></a>  instance.removeItem(&#39;foo&#39;);
+<a name="line50"></a>  assertEquals(1, instance.length);
+<a name="line51"></a>  assertEquals(&#39;goo&#39;, instance.key(0));
+<a name="line52"></a>
+<a name="line53"></a>  instance.setItem(&#39;a&#39;, 12);
+<a name="line54"></a>  assertEquals(&#39;12&#39;, instance.getItem(&#39;a&#39;));
+<a name="line55"></a>  instance.setItem(&#39;b&#39;, false);
+<a name="line56"></a>  assertEquals(&#39;false&#39;, instance.getItem(&#39;b&#39;));
+<a name="line57"></a>  instance.setItem(&#39;c&#39;, {a: 1, b: 12});
+<a name="line58"></a>  assertEquals(&#39;[object Object]&#39;, instance.getItem(&#39;c&#39;));
+<a name="line59"></a>
+<a name="line60"></a>  instance.clear();
+<a name="line61"></a>  assertEquals(0, instance.length);
+<a name="line62"></a>
+<a name="line63"></a>  // Test some special cases.
+<a name="line64"></a>  instance.setItem(&#39;emptyString&#39;, &#39;&#39;);
+<a name="line65"></a>  assertEquals(&#39;&#39;, instance.getItem(&#39;emptyString&#39;));
+<a name="line66"></a>  instance.setItem(&#39;isNull&#39;, null);
+<a name="line67"></a>  assertEquals(&#39;null&#39;, instance.getItem(&#39;isNull&#39;));
+<a name="line68"></a>  instance.setItem(&#39;isUndefined&#39;, undefined);
+<a name="line69"></a>  assertEquals(&#39;undefined&#39;, instance.getItem(&#39;isUndefined&#39;));
+<a name="line70"></a>  instance.setItem(&#39;&#39;, &#39;empty key&#39;);
+<a name="line71"></a>  assertEquals(&#39;empty key&#39;, instance.getItem(&#39;&#39;));
+<a name="line72"></a>  assertEquals(4, instance.length);
+<a name="line73"></a>}
+</pre>
+
+
+</body>
+</html>

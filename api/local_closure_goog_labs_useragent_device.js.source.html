@@ -1,0 +1,115 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>device.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_useragent_device.js.html">device.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Closure user device detection (based on user agent).
+<a name="line17"></a> * @see http://en.wikipedia.org/wiki/User_agent
+<a name="line18"></a> * For more information on browser brand, platform, or engine see the other
+<a name="line19"></a> * sub-namespaces in goog.labs.userAgent (browser, platform, and engine).
+<a name="line20"></a> *
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.labs.userAgent.device&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.labs.userAgent.util&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Currently we detect the iPhone, iPod and Android mobiles (devices that have
+<a name="line30"></a> * both Android and Mobile in the user agent string).
+<a name="line31"></a> *
+<a name="line32"></a> * @return {boolean} Whether the user is using a mobile device.
+<a name="line33"></a> */
+<a name="line34"></a>goog.labs.userAgent.device.isMobile = function() {
+<a name="line35"></a>  return !goog.labs.userAgent.device.isTablet() &amp;&amp;
+<a name="line36"></a>      (goog.labs.userAgent.util.matchUserAgent(&#39;iPod&#39;) ||
+<a name="line37"></a>       goog.labs.userAgent.util.matchUserAgent(&#39;iPhone&#39;) ||
+<a name="line38"></a>       goog.labs.userAgent.util.matchUserAgent(&#39;Android&#39;));
+<a name="line39"></a>};
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * Currently we detect Kindle Fire, iPad, and Android tablets (devices that have
+<a name="line44"></a> * Android but not Mobile in the user agent string).
+<a name="line45"></a> *
+<a name="line46"></a> * @return {boolean} Whether the user is using a tablet.
+<a name="line47"></a> */
+<a name="line48"></a>goog.labs.userAgent.device.isTablet = function() {
+<a name="line49"></a>  return goog.labs.userAgent.util.matchUserAgent(&#39;iPad&#39;) ||
+<a name="line50"></a>      (goog.labs.userAgent.util.matchUserAgent(&#39;Android&#39;) &amp;&amp;
+<a name="line51"></a>       !goog.labs.userAgent.util.matchUserAgent(&#39;Mobile&#39;)) ||
+<a name="line52"></a>      goog.labs.userAgent.util.matchUserAgent(&#39;Silk&#39;);
+<a name="line53"></a>};
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>/**
+<a name="line57"></a> * @return {boolean} Whether the user is using a desktop computer (which we
+<a name="line58"></a> *     assume to be the case if they are not using either a mobile or tablet
+<a name="line59"></a> *     device).
+<a name="line60"></a> */
+<a name="line61"></a>goog.labs.userAgent.device.isDesktop = function() {
+<a name="line62"></a>  return !goog.labs.userAgent.device.isMobile() &amp;&amp;
+<a name="line63"></a>      !goog.labs.userAgent.device.isTablet();
+<a name="line64"></a>};
+</pre>
+
+
+</body>
+</html>

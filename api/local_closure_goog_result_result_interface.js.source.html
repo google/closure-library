@@ -1,0 +1,170 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>result_interface.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_result_result_interface.js.html">result_interface.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Defines an interface that represents a Result.
+<a name="line17"></a> *
+<a name="line18"></a> * NOTE: goog.result is soft deprecated - we expect to replace this and
+<a name="line19"></a> * {@link goog.async.Deferred} with {@link goog.Promise}.
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.result.Result&#39;);
+<a name="line23"></a>
+<a name="line24"></a>goog.require(&#39;goog.Thenable&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * A Result object represents a value returned by an asynchronous
+<a name="line30"></a> * operation at some point in the future (e.g. a network fetch). This is akin
+<a name="line31"></a> * to a &#39;Promise&#39; or a &#39;Future&#39; in other languages and frameworks.
+<a name="line32"></a> *
+<a name="line33"></a> * @interface
+<a name="line34"></a> * @extends {goog.Thenable}
+<a name="line35"></a> * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
+<a name="line36"></a> */
+<a name="line37"></a>goog.result.Result = function() {};
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>/**
+<a name="line41"></a> * Attaches handlers to be called when the value of this Result is available.
+<a name="line42"></a> * Handlers are called in the order they were added by wait.
+<a name="line43"></a> *
+<a name="line44"></a> * @param {!function(this:T, !goog.result.Result)} handler The function called
+<a name="line45"></a> *     when the value is available. The function is passed the Result object as
+<a name="line46"></a> *     the only argument.
+<a name="line47"></a> * @param {T=} opt_scope Optional scope for the handler.
+<a name="line48"></a> * @template T
+<a name="line49"></a> */
+<a name="line50"></a>goog.result.Result.prototype.wait = function(handler, opt_scope) {};
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * The States this object can be in.
+<a name="line55"></a> *
+<a name="line56"></a> * @enum {string}
+<a name="line57"></a> * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
+<a name="line58"></a> */
+<a name="line59"></a>goog.result.Result.State = {
+<a name="line60"></a>  /** The operation was a success and the value is available. */
+<a name="line61"></a>  SUCCESS: &#39;success&#39;,
+<a name="line62"></a>
+<a name="line63"></a>  /** The operation resulted in an error. */
+<a name="line64"></a>  ERROR: &#39;error&#39;,
+<a name="line65"></a>
+<a name="line66"></a>  /** The operation is incomplete and the value is not yet available. */
+<a name="line67"></a>  PENDING: &#39;pending&#39;
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * @return {!goog.result.Result.State} The state of this Result.
+<a name="line73"></a> */
+<a name="line74"></a>goog.result.Result.prototype.getState = function() {};
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * @return {*} The value of this Result. Will return undefined if the Result is
+<a name="line79"></a> *     pending or was an error.
+<a name="line80"></a> */
+<a name="line81"></a>goog.result.Result.prototype.getValue = function() {};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * @return {*} The error slug for this Result. Will return undefined if the
+<a name="line86"></a> *     Result was a success, the error slug was not set, or if the Result is
+<a name="line87"></a> *     pending.
+<a name="line88"></a> */
+<a name="line89"></a>goog.result.Result.prototype.getError = function() {};
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * Cancels the current Result, invoking the canceler function, if set.
+<a name="line94"></a> *
+<a name="line95"></a> * @return {boolean} Whether the Result was canceled.
+<a name="line96"></a> */
+<a name="line97"></a>goog.result.Result.prototype.cancel = function() {};
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * @return {boolean} Whether this Result was canceled.
+<a name="line102"></a> */
+<a name="line103"></a>goog.result.Result.prototype.isCanceled = function() {};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * The value to be passed to the error handlers invoked upon cancellation.
+<a name="line109"></a> * @constructor
+<a name="line110"></a> * @extends {Error}
+<a name="line111"></a> * @final
+<a name="line112"></a> * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
+<a name="line113"></a> */
+<a name="line114"></a>goog.result.Result.CancelError = function() {
+<a name="line115"></a>  // Note that this does not derive from goog.debug.Error in order to prevent
+<a name="line116"></a>  // stack trace capture and reduce the amount of garbage generated during a
+<a name="line117"></a>  // cancel() operation.
+<a name="line118"></a>};
+<a name="line119"></a>goog.inherits(goog.result.Result.CancelError, Error);
+</pre>
+
+
+</body>
+</html>

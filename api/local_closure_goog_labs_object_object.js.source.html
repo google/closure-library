@@ -1,0 +1,97 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>object.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_object_object.js.html">object.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A labs location for functions destined for Closure&#39;s
+<a name="line17"></a> * {@code goog.object} namespace.
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.labs.object&#39;);
+<a name="line21"></a>
+<a name="line22"></a>
+<a name="line23"></a>/**
+<a name="line24"></a> * Whether two values are not observably distinguishable. This
+<a name="line25"></a> * correctly detects that 0 is not the same as -0 and two NaNs are
+<a name="line26"></a> * practically equivalent.
+<a name="line27"></a> *
+<a name="line28"></a> * The implementation is as suggested by harmony:egal proposal.
+<a name="line29"></a> *
+<a name="line30"></a> * @param {*} v The first value to compare.
+<a name="line31"></a> * @param {*} v2 The second value to compare.
+<a name="line32"></a> * @return {boolean} Whether two values are not observably distinguishable.
+<a name="line33"></a> * @see http://wiki.ecmascript.org/doku.php?id=harmony:egal
+<a name="line34"></a> */
+<a name="line35"></a>goog.labs.object.is = function(v, v2) {
+<a name="line36"></a>  if (v === v2) {
+<a name="line37"></a>    // 0 === -0, but they are not identical.
+<a name="line38"></a>    // We need the cast because the compiler requires that v2 is a
+<a name="line39"></a>    // number (although 1/v2 works with non-number). We cast to ? to
+<a name="line40"></a>    // stop the compiler from type-checking this statement.
+<a name="line41"></a>    return v !== 0 || 1 / v === 1 / /** @type {?} */ (v2);
+<a name="line42"></a>  }
+<a name="line43"></a>
+<a name="line44"></a>  // NaN is non-reflexive: NaN !== NaN, although they are identical.
+<a name="line45"></a>  return v !== v &amp;&amp; v2 !== v2;
+<a name="line46"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>toolbarcolormenubutton.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_ui_toolbarcolormenubutton.js.html">toolbarcolormenubutton.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A toolbar color menu button control.
+<a name="line17"></a> *
+<a name="line18"></a> * @author attila@google.com (Attila Bodis)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.ui.ToolbarColorMenuButton&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.ui.ColorMenuButton&#39;);
+<a name="line24"></a>goog.require(&#39;goog.ui.ToolbarColorMenuButtonRenderer&#39;);
+<a name="line25"></a>goog.require(&#39;goog.ui.registry&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * A color menu button control for a toolbar.
+<a name="line31"></a> *
+<a name="line32"></a> * @param {goog.ui.ControlContent} content Text caption or existing DOM
+<a name="line33"></a> *     structure to display as the button&#39;s caption.
+<a name="line34"></a> * @param {goog.ui.Menu=} opt_menu Menu to render under the button when clicked;
+<a name="line35"></a> *     should contain at least one {@link goog.ui.ColorPalette} if present.
+<a name="line36"></a> * @param {goog.ui.ColorMenuButtonRenderer=} opt_renderer Optional
+<a name="line37"></a> *     renderer used to render or decorate the button; defaults to
+<a name="line38"></a> *     {@link goog.ui.ToolbarColorMenuButtonRenderer}.
+<a name="line39"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
+<a name="line40"></a> *     document interaction.
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @extends {goog.ui.ColorMenuButton}
+<a name="line43"></a> */
+<a name="line44"></a>goog.ui.ToolbarColorMenuButton = function(
+<a name="line45"></a>    content, opt_menu, opt_renderer, opt_domHelper) {
+<a name="line46"></a>  goog.ui.ColorMenuButton.call(this, content, opt_menu, opt_renderer ||
+<a name="line47"></a>      goog.ui.ToolbarColorMenuButtonRenderer.getInstance(), opt_domHelper);
+<a name="line48"></a>};
+<a name="line49"></a>goog.inherits(goog.ui.ToolbarColorMenuButton, goog.ui.ColorMenuButton);
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>// Registers a decorator factory function for toolbar color menu buttons.
+<a name="line53"></a>goog.ui.registry.setDecoratorByClassName(
+<a name="line54"></a>    goog.getCssName(&#39;goog-toolbar-color-menu-button&#39;),
+<a name="line55"></a>    function() {
+<a name="line56"></a>      return new goog.ui.ToolbarColorMenuButton(null);
+<a name="line57"></a>    });
+</pre>
+
+
+</body>
+</html>

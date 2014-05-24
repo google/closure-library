@@ -1,0 +1,249 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>samplecomponent.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_demos_samplecomponent.js.html">samplecomponent.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A simple, sample component.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>goog.provide(&#39;goog.demos.SampleComponent&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line22"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line23"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line24"></a>goog.require(&#39;goog.events.KeyCodes&#39;);
+<a name="line25"></a>goog.require(&#39;goog.events.KeyHandler&#39;);
+<a name="line26"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * A simple box that changes colour when clicked. This class demonstrates the
+<a name="line32"></a> * goog.ui.Component API, and is keyboard accessible, as per
+<a name="line33"></a> * http://wiki/Main/ClosureKeyboardAccessible
+<a name="line34"></a> *
+<a name="line35"></a> * @param {string=} opt_label A label to display. Defaults to &quot;Click Me&quot; if none
+<a name="line36"></a> *     provided.
+<a name="line37"></a> * @param {goog.dom.DomHelper=} opt_domHelper DOM helper to use.
+<a name="line38"></a> *
+<a name="line39"></a> * @extends {goog.ui.Component}
+<a name="line40"></a> * @constructor
+<a name="line41"></a> * @final
+<a name="line42"></a> */
+<a name="line43"></a>goog.demos.SampleComponent = function(opt_label, opt_domHelper) {
+<a name="line44"></a>  goog.base(this, opt_domHelper);
+<a name="line45"></a>
+<a name="line46"></a>  /**
+<a name="line47"></a>   * The label to display.
+<a name="line48"></a>   * @type {string}
+<a name="line49"></a>   * @private
+<a name="line50"></a>   */
+<a name="line51"></a>  this.initialLabel_ = opt_label || &#39;Click Me&#39;;
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * The current color.
+<a name="line55"></a>   * @type {string}
+<a name="line56"></a>   * @private
+<a name="line57"></a>   */
+<a name="line58"></a>  this.color_ = &#39;red&#39;;
+<a name="line59"></a>
+<a name="line60"></a>  /**
+<a name="line61"></a>   * Keyboard handler for this object. This object is created once the
+<a name="line62"></a>   * component&#39;s DOM element is known.
+<a name="line63"></a>   *
+<a name="line64"></a>   * @type {goog.events.KeyHandler?}
+<a name="line65"></a>   * @private
+<a name="line66"></a>   */
+<a name="line67"></a>  this.kh_ = null;
+<a name="line68"></a>};
+<a name="line69"></a>goog.inherits(goog.demos.SampleComponent, goog.ui.Component);
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Changes the color of the element.
+<a name="line74"></a> * @private
+<a name="line75"></a> */
+<a name="line76"></a>goog.demos.SampleComponent.prototype.changeColor_ = function() {
+<a name="line77"></a>  if (this.color_ == &#39;red&#39;) {
+<a name="line78"></a>    this.color_ = &#39;green&#39;;
+<a name="line79"></a>  } else if (this.color_ == &#39;green&#39;) {
+<a name="line80"></a>    this.color_ = &#39;blue&#39;;
+<a name="line81"></a>  } else {
+<a name="line82"></a>    this.color_ = &#39;red&#39;;
+<a name="line83"></a>  }
+<a name="line84"></a>  this.getElement().style.backgroundColor = this.color_;
+<a name="line85"></a>};
+<a name="line86"></a>
+<a name="line87"></a>
+<a name="line88"></a>/**
+<a name="line89"></a> * Creates an initial DOM representation for the component.
+<a name="line90"></a> * @override
+<a name="line91"></a> */
+<a name="line92"></a>goog.demos.SampleComponent.prototype.createDom = function() {
+<a name="line93"></a>  this.decorateInternal(this.dom_.createElement(&#39;div&#39;));
+<a name="line94"></a>};
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * Decorates an existing HTML DIV element as a SampleComponent.
+<a name="line99"></a> *
+<a name="line100"></a> * @param {Element} element The DIV element to decorate. The element&#39;s
+<a name="line101"></a> *    text, if any will be used as the component&#39;s label.
+<a name="line102"></a> * @override
+<a name="line103"></a> */
+<a name="line104"></a>goog.demos.SampleComponent.prototype.decorateInternal = function(element) {
+<a name="line105"></a>  goog.base(this, &#39;decorateInternal&#39;, element);
+<a name="line106"></a>  if (!this.getLabelText()) {
+<a name="line107"></a>    this.setLabelText(this.initialLabel_);
+<a name="line108"></a>  }
+<a name="line109"></a>
+<a name="line110"></a>  var elem = this.getElement();
+<a name="line111"></a>  goog.dom.classlist.add(elem, goog.getCssName(&#39;goog-sample-component&#39;));
+<a name="line112"></a>  elem.style.backgroundColor = this.color_;
+<a name="line113"></a>  elem.tabIndex = 0;
+<a name="line114"></a>
+<a name="line115"></a>  this.kh_ = new goog.events.KeyHandler(elem);
+<a name="line116"></a>  this.getHandler().listen(this.kh_, goog.events.KeyHandler.EventType.KEY,
+<a name="line117"></a>      this.onKey_);
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/** @override */
+<a name="line122"></a>goog.demos.SampleComponent.prototype.disposeInternal = function() {
+<a name="line123"></a>  goog.base(this, &#39;disposeInternal&#39;);
+<a name="line124"></a>  if (this.kh_) {
+<a name="line125"></a>    this.kh_.dispose();
+<a name="line126"></a>  }
+<a name="line127"></a>};
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Called when component&#39;s element is known to be in the document.
+<a name="line132"></a> * @override
+<a name="line133"></a> */
+<a name="line134"></a>goog.demos.SampleComponent.prototype.enterDocument = function() {
+<a name="line135"></a>  goog.base(this, &#39;enterDocument&#39;);
+<a name="line136"></a>  this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK,
+<a name="line137"></a>      this.onDivClicked_);
+<a name="line138"></a>};
+<a name="line139"></a>
+<a name="line140"></a>
+<a name="line141"></a>/**
+<a name="line142"></a> * Called when component&#39;s element is known to have been removed from the
+<a name="line143"></a> * document.
+<a name="line144"></a> * @override
+<a name="line145"></a> */
+<a name="line146"></a>goog.demos.SampleComponent.prototype.exitDocument = function() {
+<a name="line147"></a>  goog.base(this, &#39;exitDocument&#39;);
+<a name="line148"></a>};
+<a name="line149"></a>
+<a name="line150"></a>
+<a name="line151"></a>/**
+<a name="line152"></a> * Gets the current label text.
+<a name="line153"></a> *
+<a name="line154"></a> * @return {string} The current text set into the label, or empty string if
+<a name="line155"></a> *     none set.
+<a name="line156"></a> */
+<a name="line157"></a>goog.demos.SampleComponent.prototype.getLabelText = function() {
+<a name="line158"></a>  if (!this.getElement()) {
+<a name="line159"></a>    return &#39;&#39;;
+<a name="line160"></a>  }
+<a name="line161"></a>  return goog.dom.getTextContent(this.getElement());
+<a name="line162"></a>};
+<a name="line163"></a>
+<a name="line164"></a>
+<a name="line165"></a>/**
+<a name="line166"></a> * Handles DIV element clicks, causing the DIV&#39;s colour to change.
+<a name="line167"></a> * @param {goog.events.Event} event The click event.
+<a name="line168"></a> * @private
+<a name="line169"></a> */
+<a name="line170"></a>goog.demos.SampleComponent.prototype.onDivClicked_ = function(event) {
+<a name="line171"></a>  this.changeColor_();
+<a name="line172"></a>};
+<a name="line173"></a>
+<a name="line174"></a>
+<a name="line175"></a>/**
+<a name="line176"></a> * Fired when user presses a key while the DIV has focus. If the user presses
+<a name="line177"></a> * space or enter, the color will be changed.
+<a name="line178"></a> * @param {goog.events.Event} event The key event.
+<a name="line179"></a> * @private
+<a name="line180"></a> */
+<a name="line181"></a>goog.demos.SampleComponent.prototype.onKey_ = function(event) {
+<a name="line182"></a>  var keyCodes = goog.events.KeyCodes;
+<a name="line183"></a>  if (event.keyCode == keyCodes.SPACE || event.keyCode == keyCodes.ENTER) {
+<a name="line184"></a>    this.changeColor_();
+<a name="line185"></a>  }
+<a name="line186"></a>};
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>/**
+<a name="line190"></a> * Sets the current label text. Has no effect if component is not rendered.
+<a name="line191"></a> *
+<a name="line192"></a> * @param {string} text The text to set as the label.
+<a name="line193"></a> */
+<a name="line194"></a>goog.demos.SampleComponent.prototype.setLabelText = function(text) {
+<a name="line195"></a>  if (this.getElement()) {
+<a name="line196"></a>    goog.dom.setTextContent(this.getElement(), text);
+<a name="line197"></a>  }
+<a name="line198"></a>};
+</pre>
+
+
+</body>
+</html>

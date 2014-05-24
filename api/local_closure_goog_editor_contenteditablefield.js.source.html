@@ -1,0 +1,159 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>contenteditablefield.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_contenteditablefield.js.html">contenteditablefield.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Class to encapsulate an editable field that blends into the
+<a name="line17"></a> * style of the page and never uses an iframe.  The field&#39;s height can be
+<a name="line18"></a> * controlled by CSS styles like min-height, max-height, and overflow.  This is
+<a name="line19"></a> * a goog.editor.Field, but overrides everything iframe related to use
+<a name="line20"></a> * contentEditable divs.  This is essentially a much lighter alternative to
+<a name="line21"></a> * goog.editor.SeamlessField, but only works in Firefox 3+, and only works
+<a name="line22"></a> * *well* in Firefox 12+ due to
+<a name="line23"></a> * https://bugzilla.mozilla.org/show_bug.cgi?id=669026.
+<a name="line24"></a> *
+<a name="line25"></a> * @author gboyer@google.com (Garrett Boyer)
+<a name="line26"></a> * @author nicksantos@google.com (Nick Santos)
+<a name="line27"></a> */
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>goog.provide(&#39;goog.editor.ContentEditableField&#39;);
+<a name="line31"></a>
+<a name="line32"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line33"></a>goog.require(&#39;goog.editor.Field&#39;);
+<a name="line34"></a>goog.require(&#39;goog.log&#39;);
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>/**
+<a name="line39"></a> * This class encapsulates an editable field that is just a contentEditable
+<a name="line40"></a> * div.
+<a name="line41"></a> *
+<a name="line42"></a> * To see events fired by this object, please see the base class.
+<a name="line43"></a> *
+<a name="line44"></a> * @param {string} id An identifer for the field. This is used to find the
+<a name="line45"></a> *     field and the element associated with this field.
+<a name="line46"></a> * @param {Document=} opt_doc The document that the element with the given
+<a name="line47"></a> *     id can be found in.
+<a name="line48"></a> * @constructor
+<a name="line49"></a> * @extends {goog.editor.Field}
+<a name="line50"></a> */
+<a name="line51"></a>goog.editor.ContentEditableField = function(id, opt_doc) {
+<a name="line52"></a>  goog.editor.Field.call(this, id, opt_doc);
+<a name="line53"></a>};
+<a name="line54"></a>goog.inherits(goog.editor.ContentEditableField, goog.editor.Field);
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * @override
+<a name="line59"></a> */
+<a name="line60"></a>goog.editor.ContentEditableField.prototype.logger =
+<a name="line61"></a>    goog.log.getLogger(&#39;goog.editor.ContentEditableField&#39;);
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/** @override */
+<a name="line65"></a>goog.editor.ContentEditableField.prototype.usesIframe = function() {
+<a name="line66"></a>  // Never uses an iframe in any browser.
+<a name="line67"></a>  return false;
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>// Overridden to improve dead code elimination only.
+<a name="line72"></a>/** @override */
+<a name="line73"></a>goog.editor.ContentEditableField.prototype.turnOnDesignModeGecko =
+<a name="line74"></a>    goog.nullFunction;
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/** @override */
+<a name="line78"></a>goog.editor.ContentEditableField.prototype.installStyles = function() {
+<a name="line79"></a>  goog.asserts.assert(!this.cssStyles, &#39;ContentEditableField does not support&#39; +
+<a name="line80"></a>      &#39; CSS styles; instead just write plain old CSS on the main page.&#39;);
+<a name="line81"></a>};
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/** @override */
+<a name="line85"></a>goog.editor.ContentEditableField.prototype.makeEditableInternal = function(
+<a name="line86"></a>    opt_iframeSrc) {
+<a name="line87"></a>  var field = this.getOriginalElement();
+<a name="line88"></a>  if (field) {
+<a name="line89"></a>    this.setupFieldObject(field);
+<a name="line90"></a>    // TODO(gboyer): Allow clients/plugins to override with &#39;plaintext-only&#39;
+<a name="line91"></a>    // for WebKit.
+<a name="line92"></a>    field.contentEditable = true;
+<a name="line93"></a>
+<a name="line94"></a>    this.injectContents(field.innerHTML, field);
+<a name="line95"></a>
+<a name="line96"></a>    this.handleFieldLoad();
+<a name="line97"></a>  }
+<a name="line98"></a>};
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * @override
+<a name="line103"></a> *
+<a name="line104"></a> * ContentEditableField does not make any changes to the DOM when it is made
+<a name="line105"></a> * editable other than setting contentEditable to true.
+<a name="line106"></a> */
+<a name="line107"></a>goog.editor.ContentEditableField.prototype.restoreDom =
+<a name="line108"></a>    goog.nullFunction;
+</pre>
+
+
+</body>
+</html>

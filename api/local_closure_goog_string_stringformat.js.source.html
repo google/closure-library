@@ -1,0 +1,301 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>stringformat.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_string_stringformat.js.html">stringformat.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Implementation of sprintf-like, python-%-operator-like,
+<a name="line17"></a> * .NET-String.Format-like functionality. Uses JS string&#39;s replace method to
+<a name="line18"></a> * extract format specifiers and sends those specifiers to a handler function,
+<a name="line19"></a> * which then, based on conversion type part of the specifier, calls the
+<a name="line20"></a> * appropriate function to handle the specific conversion.
+<a name="line21"></a> * For specific functionality implemented, look at formatRe below, or look
+<a name="line22"></a> * at the tests.
+<a name="line23"></a> */
+<a name="line24"></a>
+<a name="line25"></a>goog.provide(&#39;goog.string.format&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.require(&#39;goog.string&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Performs sprintf-like conversion, ie. puts the values in a template.
+<a name="line32"></a> * DO NOT use it instead of built-in conversions in simple cases such as
+<a name="line33"></a> * &#39;Cost: %.2f&#39; as it would introduce unneccessary latency oposed to
+<a name="line34"></a> * &#39;Cost: &#39; + cost.toFixed(2).
+<a name="line35"></a> * @param {string} formatString Template string containing % specifiers.
+<a name="line36"></a> * @param {...string|number} var_args Values formatString is to be filled with.
+<a name="line37"></a> * @return {string} Formatted string.
+<a name="line38"></a> */
+<a name="line39"></a>goog.string.format = function(formatString, var_args) {
+<a name="line40"></a>
+<a name="line41"></a>  // Convert the arguments to an array (MDC recommended way).
+<a name="line42"></a>  var args = Array.prototype.slice.call(arguments);
+<a name="line43"></a>
+<a name="line44"></a>  // Try to get the template.
+<a name="line45"></a>  var template = args.shift();
+<a name="line46"></a>  if (typeof template == &#39;undefined&#39;) {
+<a name="line47"></a>    throw Error(&#39;[goog.string.format] Template required&#39;);
+<a name="line48"></a>  }
+<a name="line49"></a>
+<a name="line50"></a>  // This re is used for matching, it also defines what is supported.
+<a name="line51"></a>  var formatRe = /%([0\-\ \+]*)(\d+)?(\.(\d+))?([%sfdiu])/g;
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * Chooses which conversion function to call based on type conversion
+<a name="line55"></a>   * specifier.
+<a name="line56"></a>   * @param {string} match Contains the re matched string.
+<a name="line57"></a>   * @param {string} flags Formatting flags.
+<a name="line58"></a>   * @param {string} width Replacement string minimum width.
+<a name="line59"></a>   * @param {string} dotp Matched precision including a dot.
+<a name="line60"></a>   * @param {string} precision Specifies floating point precision.
+<a name="line61"></a>   * @param {string} type Type conversion specifier.
+<a name="line62"></a>   * @param {string} offset Matching location in the original string.
+<a name="line63"></a>   * @param {string} wholeString Has the actualString being searched.
+<a name="line64"></a>   * @return {string} Formatted parameter.
+<a name="line65"></a>   */
+<a name="line66"></a>  function replacerDemuxer(match,
+<a name="line67"></a>                           flags,
+<a name="line68"></a>                           width,
+<a name="line69"></a>                           dotp,
+<a name="line70"></a>                           precision,
+<a name="line71"></a>                           type,
+<a name="line72"></a>                           offset,
+<a name="line73"></a>                           wholeString) {
+<a name="line74"></a>
+<a name="line75"></a>    // The % is too simple and doesn&#39;t take an argument.
+<a name="line76"></a>    if (type == &#39;%&#39;) {
+<a name="line77"></a>      return &#39;%&#39;;
+<a name="line78"></a>    }
+<a name="line79"></a>
+<a name="line80"></a>    // Try to get the actual value from parent function.
+<a name="line81"></a>    var value = args.shift();
+<a name="line82"></a>
+<a name="line83"></a>    // If we didn&#39;t get any arguments, fail.
+<a name="line84"></a>    if (typeof value == &#39;undefined&#39;) {
+<a name="line85"></a>      throw Error(&#39;[goog.string.format] Not enough arguments&#39;);
+<a name="line86"></a>    }
+<a name="line87"></a>
+<a name="line88"></a>    // Patch the value argument to the beginning of our type specific call.
+<a name="line89"></a>    arguments[0] = value;
+<a name="line90"></a>
+<a name="line91"></a>    return goog.string.format.demuxes_[type].apply(null, arguments);
+<a name="line92"></a>
+<a name="line93"></a>  }
+<a name="line94"></a>
+<a name="line95"></a>  return template.replace(formatRe, replacerDemuxer);
+<a name="line96"></a>};
+<a name="line97"></a>
+<a name="line98"></a>
+<a name="line99"></a>/**
+<a name="line100"></a> * Contains various conversion functions (to be filled in later on).
+<a name="line101"></a> * @type {Object}
+<a name="line102"></a> * @private
+<a name="line103"></a> */
+<a name="line104"></a>goog.string.format.demuxes_ = {};
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * Processes %s conversion specifier.
+<a name="line109"></a> * @param {string} value Contains the formatRe matched string.
+<a name="line110"></a> * @param {string} flags Formatting flags.
+<a name="line111"></a> * @param {string} width Replacement string minimum width.
+<a name="line112"></a> * @param {string} dotp Matched precision including a dot.
+<a name="line113"></a> * @param {string} precision Specifies floating point precision.
+<a name="line114"></a> * @param {string} type Type conversion specifier.
+<a name="line115"></a> * @param {string} offset Matching location in the original string.
+<a name="line116"></a> * @param {string} wholeString Has the actualString being searched.
+<a name="line117"></a> * @return {string} Replacement string.
+<a name="line118"></a> */
+<a name="line119"></a>goog.string.format.demuxes_[&#39;s&#39;] = function(value,
+<a name="line120"></a>                                            flags,
+<a name="line121"></a>                                            width,
+<a name="line122"></a>                                            dotp,
+<a name="line123"></a>                                            precision,
+<a name="line124"></a>                                            type,
+<a name="line125"></a>                                            offset,
+<a name="line126"></a>                                            wholeString) {
+<a name="line127"></a>  var replacement = value;
+<a name="line128"></a>  // If no padding is necessary we&#39;re done.
+<a name="line129"></a>  // The check for &#39;&#39; is necessary because Firefox incorrectly provides the
+<a name="line130"></a>  // empty string instead of undefined for non-participating capture groups,
+<a name="line131"></a>  // and isNaN(&#39;&#39;) == false.
+<a name="line132"></a>  if (isNaN(width) || width == &#39;&#39; || replacement.length &gt;= width) {
+<a name="line133"></a>    return replacement;
+<a name="line134"></a>  }
+<a name="line135"></a>
+<a name="line136"></a>  // Otherwise we should find out where to put spaces.
+<a name="line137"></a>  if (flags.indexOf(&#39;-&#39;, 0) &gt; -1) {
+<a name="line138"></a>    replacement =
+<a name="line139"></a>        replacement + goog.string.repeat(&#39; &#39;, width - replacement.length);
+<a name="line140"></a>  } else {
+<a name="line141"></a>    replacement =
+<a name="line142"></a>        goog.string.repeat(&#39; &#39;, width - replacement.length) + replacement;
+<a name="line143"></a>  }
+<a name="line144"></a>  return replacement;
+<a name="line145"></a>};
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>/**
+<a name="line149"></a> * Processes %f conversion specifier.
+<a name="line150"></a> * @param {number} value Contains the formatRe matched string.
+<a name="line151"></a> * @param {string} flags Formatting flags.
+<a name="line152"></a> * @param {string} width Replacement string minimum width.
+<a name="line153"></a> * @param {string} dotp Matched precision including a dot.
+<a name="line154"></a> * @param {string} precision Specifies floating point precision.
+<a name="line155"></a> * @param {string} type Type conversion specifier.
+<a name="line156"></a> * @param {string} offset Matching location in the original string.
+<a name="line157"></a> * @param {string} wholeString Has the actualString being searched.
+<a name="line158"></a> * @return {string} Replacement string.
+<a name="line159"></a> */
+<a name="line160"></a>goog.string.format.demuxes_[&#39;f&#39;] = function(value,
+<a name="line161"></a>                                            flags,
+<a name="line162"></a>                                            width,
+<a name="line163"></a>                                            dotp,
+<a name="line164"></a>                                            precision,
+<a name="line165"></a>                                            type,
+<a name="line166"></a>                                            offset,
+<a name="line167"></a>                                            wholeString) {
+<a name="line168"></a>
+<a name="line169"></a>  var replacement = value.toString();
+<a name="line170"></a>
+<a name="line171"></a>  // The check for &#39;&#39; is necessary because Firefox incorrectly provides the
+<a name="line172"></a>  // empty string instead of undefined for non-participating capture groups,
+<a name="line173"></a>  // and isNaN(&#39;&#39;) == false.
+<a name="line174"></a>  if (!(isNaN(precision) || precision == &#39;&#39;)) {
+<a name="line175"></a>    replacement = value.toFixed(precision);
+<a name="line176"></a>  }
+<a name="line177"></a>
+<a name="line178"></a>  // Generates sign string that will be attached to the replacement.
+<a name="line179"></a>  var sign;
+<a name="line180"></a>  if (value &lt; 0) {
+<a name="line181"></a>    sign = &#39;-&#39;;
+<a name="line182"></a>  } else if (flags.indexOf(&#39;+&#39;) &gt;= 0) {
+<a name="line183"></a>    sign = &#39;+&#39;;
+<a name="line184"></a>  } else if (flags.indexOf(&#39; &#39;) &gt;= 0) {
+<a name="line185"></a>    sign = &#39; &#39;;
+<a name="line186"></a>  } else {
+<a name="line187"></a>    sign = &#39;&#39;;
+<a name="line188"></a>  }
+<a name="line189"></a>
+<a name="line190"></a>  if (value &gt;= 0) {
+<a name="line191"></a>    replacement = sign + replacement;
+<a name="line192"></a>  }
+<a name="line193"></a>
+<a name="line194"></a>  // If no padding is neccessary we&#39;re done.
+<a name="line195"></a>  if (isNaN(width) || replacement.length &gt;= width) {
+<a name="line196"></a>    return replacement;
+<a name="line197"></a>  }
+<a name="line198"></a>
+<a name="line199"></a>  // We need a clean signless replacement to start with
+<a name="line200"></a>  replacement = isNaN(precision) ?
+<a name="line201"></a>      Math.abs(value).toString() :
+<a name="line202"></a>      Math.abs(value).toFixed(precision);
+<a name="line203"></a>
+<a name="line204"></a>  var padCount = width - replacement.length - sign.length;
+<a name="line205"></a>
+<a name="line206"></a>  // Find out which side to pad, and if it&#39;s left side, then which character to
+<a name="line207"></a>  // pad, and set the sign on the left and padding in the middle.
+<a name="line208"></a>  if (flags.indexOf(&#39;-&#39;, 0) &gt;= 0) {
+<a name="line209"></a>    replacement = sign + replacement + goog.string.repeat(&#39; &#39;, padCount);
+<a name="line210"></a>  } else {
+<a name="line211"></a>    // Decides which character to pad.
+<a name="line212"></a>    var paddingChar = (flags.indexOf(&#39;0&#39;, 0) &gt;= 0) ? &#39;0&#39; : &#39; &#39;;
+<a name="line213"></a>    replacement =
+<a name="line214"></a>        sign + goog.string.repeat(paddingChar, padCount) + replacement;
+<a name="line215"></a>  }
+<a name="line216"></a>
+<a name="line217"></a>  return replacement;
+<a name="line218"></a>};
+<a name="line219"></a>
+<a name="line220"></a>
+<a name="line221"></a>/**
+<a name="line222"></a> * Processes %d conversion specifier.
+<a name="line223"></a> * @param {string} value Contains the formatRe matched string.
+<a name="line224"></a> * @param {string} flags Formatting flags.
+<a name="line225"></a> * @param {string} width Replacement string minimum width.
+<a name="line226"></a> * @param {string} dotp Matched precision including a dot.
+<a name="line227"></a> * @param {string} precision Specifies floating point precision.
+<a name="line228"></a> * @param {string} type Type conversion specifier.
+<a name="line229"></a> * @param {string} offset Matching location in the original string.
+<a name="line230"></a> * @param {string} wholeString Has the actualString being searched.
+<a name="line231"></a> * @return {string} Replacement string.
+<a name="line232"></a> */
+<a name="line233"></a>goog.string.format.demuxes_[&#39;d&#39;] = function(value,
+<a name="line234"></a>                                            flags,
+<a name="line235"></a>                                            width,
+<a name="line236"></a>                                            dotp,
+<a name="line237"></a>                                            precision,
+<a name="line238"></a>                                            type,
+<a name="line239"></a>                                            offset,
+<a name="line240"></a>                                            wholeString) {
+<a name="line241"></a>  return goog.string.format.demuxes_[&#39;f&#39;](
+<a name="line242"></a>      parseInt(value, 10) /* value */,
+<a name="line243"></a>      flags, width, dotp, 0 /* precision */,
+<a name="line244"></a>      type, offset, wholeString);
+<a name="line245"></a>};
+<a name="line246"></a>
+<a name="line247"></a>
+<a name="line248"></a>// These are additional aliases, for integer conversion.
+<a name="line249"></a>goog.string.format.demuxes_[&#39;i&#39;] = goog.string.format.demuxes_[&#39;d&#39;];
+<a name="line250"></a>goog.string.format.demuxes_[&#39;u&#39;] = goog.string.format.demuxes_[&#39;d&#39;];
+</pre>
+
+
+</body>
+</html>

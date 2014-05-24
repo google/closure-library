@@ -1,0 +1,385 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>trustedresourceurl.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">trustedresourceurl.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_html_trustedresourceurl.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/html/trustedresourceurl.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/html/trustedresourceurl.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+  <h2>Classes</h2>
+ <div class="fn-constructor">
+        <a href="class_goog_html_TrustedResourceUrl.html">
+          goog.html.TrustedResourceUrl</a><br/>
+        <div class="class-details">A URL which is under application control and from which script, CSS, and
+other resources that represent executable code, can be fetched.
+
+Given that the URL can only be constructed from strings under application
+control and is used to load resources, bugs resulting in a malformed URL
+should not have a security impact and are likely to be easily detectable
+during testing. Given the wide number of non-RFC compliant URLs in use,
+stricter validation could prevent some applications from being able to use
+this type.
+
+Instances of this type must be created via the factory method,
+(<code> goog.html.TrustedResourceUrl.fromConstant</code>), and not by invoking its
+constructor. The constructor intentionally takes no parameters and the type
+is immutable; hence only a default instance corresponding to the empty
+string can be obtained via constructor invocation.
+
+</div>
+ </div>
+      
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry private">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.html.TrustedResourceUrl.createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.html.TrustedResourceUrl.</span><span class="entryName">createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_<span class="args">(<span class="arg">url</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_html_TrustedResourceUrl.html">goog.html.TrustedResourceUrl</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Utility method to create TrustedResourceUrl instances.
+
+This function is considered "package private", i.e. calls (using "suppress
+visibility") from other files within this package are considered acceptable.
+DO NOT call this function from outside the goog.html package; use appropriate
+wrappers instead.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">url</span>
+        : <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+        <div class="entryOverview">The string to initialize the TrustedResourceUrl object
+    with.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_html_TrustedResourceUrl.html">goog.html.TrustedResourceUrl</a></span>&nbsp;
+            The initialized TrustedResourceUrl
+    object.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_html_trustedresourceurl.js.source.html#line224">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.html.TrustedResourceUrl.fromConstant"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.html.TrustedResourceUrl.</span><span class="entryName">fromConstant<span class="args">(<span class="arg">url</span>)</span>
+        </span>
+        &#8658; <span>!</span><span class="type"><a href="class_goog_html_TrustedResourceUrl.html">goog.html.TrustedResourceUrl</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Creates a TrustedResourceUrl object from a compile-time constant string.
+
+Compile-time constant strings are inherently program-controlled and hence
+trusted.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">url</span>
+        : <span>!</span><span class="type"><a href="class_goog_string_Const.html">goog.string.Const</a></span>
+        <div class="entryOverview">A compile-time-constant string from which to
+    create a TrustedResourceUrl.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span>!</span><span class="type"><a href="class_goog_html_TrustedResourceUrl.html">goog.html.TrustedResourceUrl</a></span>&nbsp;
+            A TrustedResourceUrl object
+    initialized to <code> url</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_html_trustedresourceurl.js.source.html#line193">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.html.TrustedResourceUrl.unwrap"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.html.TrustedResourceUrl.</span><span class="entryName">unwrap<span class="args">(<span class="arg">trustedResourceUrl</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Performs a runtime check that the provided object is indeed a
+TrustedResourceUrl object, and returns its value.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">trustedResourceUrl</span>
+        : <span>!</span><span class="type"><a href="class_goog_html_TrustedResourceUrl.html">goog.html.TrustedResourceUrl</a></span>
+        <div class="entryOverview">The object to
+    extract from.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String">string</a></span>&nbsp;
+            The trustedResourceUrl object's contained string, unless
+    the run-time type check fails. In that case, <code> unwrap</code> returns an
+    innocuous string, or, if assertions are enabled, throws
+    <code> goog.asserts.AssertionError</code>.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_html_trustedresourceurl.js.source.html#line154">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory html</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/html/trustedresourceurl.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

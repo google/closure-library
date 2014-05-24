@@ -1,0 +1,427 @@
+<!doctype html>
+
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mechanismfactory.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="colmask rightmenu">
+<div class="colleft">
+    <div class="col1">
+      <!-- Column 1 start -->
+
+<div id="title">
+       <span class="fn">mechanismfactory.js</span>
+</div>
+
+<div class="g-section g-tpl-75-25">
+  <div class="g-unit g-first" id="description">
+    <span class='nodesc'>No description.</span>
+  </div>
+  
+
+        <div class="g-unit" id="useful-links">
+          <div class="title">Useful links</div>
+          <ol>
+            <li><a href="local_closure_goog_storage_mechanism_mechanismfactory.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
+            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/storage/mechanism/mechanismfactory.js">Git</a></li>
+          </ol>
+        </div>
+</div>
+
+<h2 class="g-first">File Location</h2>
+  <div class="g-section g-tpl-20-80">
+    <div class="g-unit g-first">
+      <div class="g-c-cell code-label">/goog/storage/mechanism/mechanismfactory.js</div>
+    </div>
+  </div>
+<hr/>
+
+
+   
+<br/>
+
+  <div class="legend">
+        <span class="key publickey"></span><span>Public</span>
+        <span class="key protectedkey"></span><span>Protected</span>
+        <span class="key privatekey"></span><span>Private</span>
+  </div>
+
+
+
+
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+  </table>
+</div>
+
+
+
+
+  <h2>Global Functions</h2>
+
+
+
+
+
+<div class="section">
+  <table class="horiz-rule">
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.storage.mechanism.mechanismfactory.create"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.storage.mechanism.mechanismfactory.</span><span class="entryName">create<span class="args">(<span class="arg">opt_namespace</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_storage_mechanism_IterableMechanism.html">goog.storage.mechanism.IterableMechanism</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns the best local storage mechanism, or null if unavailable.
+Local storage means that the database is placed on user's computer.
+The key-value database is normally shared between all the code paths
+that request it, so using an optional namespace is recommended. This
+provides separation and makes key collisions unlikely.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_namespace</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">Restricts the visibility to given namespace.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_storage_mechanism_IterableMechanism.html">goog.storage.mechanism.IterableMechanism</a></span>&nbsp;
+            Created mechanism or null.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_storage_mechanism_mechanismfactory.js.source.html#line48">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.storage.mechanism.mechanismfactory.createHTML5LocalStorage"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.storage.mechanism.mechanismfactory.</span><span class="entryName">createHTML5LocalStorage<span class="args">(<span class="arg">opt_namespace</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_storage_mechanism_IterableMechanism.html">goog.storage.mechanism.IterableMechanism</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns an HTML5 local storage mechanism, or null if unavailable.
+Since the HTML5 local storage does not support namespaces natively,
+and the key-value database is shared between all the code paths
+that request it, it is recommended that an optional namespace is
+used to provide key separation employing a prefix.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_namespace</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">Restricts the visibility to given namespace.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_storage_mechanism_IterableMechanism.html">goog.storage.mechanism.IterableMechanism</a></span>&nbsp;
+            Created mechanism or null.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_storage_mechanism_mechanismfactory.js.source.html#line65">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.storage.mechanism.mechanismfactory.createHTML5SessionStorage"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.storage.mechanism.mechanismfactory.</span><span class="entryName">createHTML5SessionStorage<span class="args">(<span class="arg">opt_namespace</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_storage_mechanism_IterableMechanism.html">goog.storage.mechanism.IterableMechanism</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns an HTML5 session storage mechanism, or null if unavailable.
+Since the HTML5 session storage does not support namespaces natively,
+and the key-value database is shared between all the code paths
+that request it, it is recommended that an optional namespace is
+used to provide key separation employing a prefix.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_namespace</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">Restricts the visibility to given namespace.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_storage_mechanism_IterableMechanism.html">goog.storage.mechanism.IterableMechanism</a></span>&nbsp;
+            Created mechanism or null.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_storage_mechanism_mechanismfactory.js.source.html#line86">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.storage.mechanism.mechanismfactory.createIEUserData"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryNamespace">goog.storage.mechanism.mechanismfactory.</span><span class="entryName">createIEUserData<span class="args">(<span class="arg">opt_namespace</span>)</span>
+        </span>
+        &#8658; <span class="type"><a href="class_goog_storage_mechanism_IterableMechanism.html">goog.storage.mechanism.IterableMechanism</a></span>
+      </div>
+
+
+     <div class="entryOverview">
+       Returns an IE userData local storage mechanism, or null if unavailable.
+Using an optional namespace is recommended to provide separation and
+avoid key collisions.
+
+
+     </div>
+
+
+    <! -- Method details -->
+    <div class="entryDetails">
+
+      <div class="detailsSection">
+        <b>Arguments: </b>
+
+
+
+
+
+
+<table class="horiz-rule">
+     
+   <tr class="even">
+     <td>
+        <span class="entryName">opt_namespace</span>
+        : <span class="type">string=</span>
+        <div class="entryOverview">Restricts the visibility to given namespace.</div>
+     </td>
+   </tr>
+  </table>
+      </div>
+   
+      <div class="detailsSection">
+        <b>Returns:</b>&nbsp;<span class="type"><a href="class_goog_storage_mechanism_IterableMechanism.html">goog.storage.mechanism.IterableMechanism</a></span>&nbsp;
+            Created mechanism or null.
+      </div>
+  
+    </div>
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_storage_mechanism_mechanismfactory.js.source.html#line105">code &raquo;</a>
+  </td>
+     </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+      <!-- Column 1 end -->
+    </div>
+
+        <div class="col2">
+          <!-- Column 2 start -->
+          <div class="col2-c">
+            <h2 id="ref-head">Directory mechanism</h2>
+            <div id="localView"></div>
+          </div>
+
+          <div class="col2-c">
+            <h2 id="ref-head">File Reference</h2>
+            <div id="sideFileIndex" rootPath="" current="/goog/storage/mechanism/mechanismfactory.js"></div>
+          </div>
+          <!-- Column 2 end -->
+        </div>
+</div>
+</div>
+
+</body>
+</html>

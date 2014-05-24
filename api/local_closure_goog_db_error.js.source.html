@@ -1,0 +1,415 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>error.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_db_error.js.html">error.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Error classes for the IndexedDB wrapper.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.db.Error&#39;);
+<a name="line22"></a>goog.provide(&#39;goog.db.Error.ErrorCode&#39;);
+<a name="line23"></a>goog.provide(&#39;goog.db.Error.ErrorName&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.db.Error.VersionChangeBlockedError&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.debug.Error&#39;);
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * A database error. Since the stack trace can be unhelpful in an asynchronous
+<a name="line32"></a> * context, the error provides a message about where it was produced.
+<a name="line33"></a> *
+<a name="line34"></a> * @param {number|!DOMError} error The DOMError instance returned by the
+<a name="line35"></a> *     browser for Chrome22+, or an error code for previous versions.
+<a name="line36"></a> * @param {string} context A description of where the error occured.
+<a name="line37"></a> * @param {string=} opt_message Additional message.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @extends {goog.debug.Error}
+<a name="line40"></a> * @final
+<a name="line41"></a> */
+<a name="line42"></a>goog.db.Error = function(error, context, opt_message) {
+<a name="line43"></a>  var errorCode = null;
+<a name="line44"></a>  var internalError = null;
+<a name="line45"></a>  if (goog.isNumber(error)) {
+<a name="line46"></a>    errorCode = error;
+<a name="line47"></a>    internalError = {name: goog.db.Error.getName(errorCode)};
+<a name="line48"></a>  } else {
+<a name="line49"></a>    internalError = error;
+<a name="line50"></a>    errorCode = goog.db.Error.getCode(error.name);
+<a name="line51"></a>  }
+<a name="line52"></a>
+<a name="line53"></a>  /**
+<a name="line54"></a>   * The code for this error.
+<a name="line55"></a>   *
+<a name="line56"></a>   * @type {number}
+<a name="line57"></a>   */
+<a name="line58"></a>  this.code = errorCode;
+<a name="line59"></a>
+<a name="line60"></a>  /**
+<a name="line61"></a>   * The DOMException as returned by the browser.
+<a name="line62"></a>   *
+<a name="line63"></a>   * @type {!DOMError}
+<a name="line64"></a>   * @private
+<a name="line65"></a>   */
+<a name="line66"></a>  this.error_ = /** @type {!DOMError} */ (internalError);
+<a name="line67"></a>
+<a name="line68"></a>  var msg = &#39;Error &#39; + context + &#39;: &#39; + this.getName();
+<a name="line69"></a>  if (opt_message) {
+<a name="line70"></a>    msg += &#39;, &#39; + opt_message;
+<a name="line71"></a>  }
+<a name="line72"></a>  goog.db.Error.base(this, &#39;constructor&#39;, msg);
+<a name="line73"></a>};
+<a name="line74"></a>goog.inherits(goog.db.Error, goog.debug.Error);
+<a name="line75"></a>
+<a name="line76"></a>
+<a name="line77"></a>/**
+<a name="line78"></a> * @return {string} The name of the error.
+<a name="line79"></a> */
+<a name="line80"></a>goog.db.Error.prototype.getName = function()  {
+<a name="line81"></a>  return this.error_.name;
+<a name="line82"></a>};
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * A specific kind of database error. If a Version Change is unable to proceed
+<a name="line88"></a> * due to other open database connections, it will block and this error will be
+<a name="line89"></a> * thrown.
+<a name="line90"></a> *
+<a name="line91"></a> * @constructor
+<a name="line92"></a> * @extends {goog.debug.Error}
+<a name="line93"></a> * @final
+<a name="line94"></a> */
+<a name="line95"></a>goog.db.Error.VersionChangeBlockedError = function() {
+<a name="line96"></a>  goog.db.Error.VersionChangeBlockedError.base(
+<a name="line97"></a>      this, &#39;constructor&#39;, &#39;Version change blocked&#39;);
+<a name="line98"></a>};
+<a name="line99"></a>goog.inherits(goog.db.Error.VersionChangeBlockedError, goog.debug.Error);
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a> * Synthetic error codes for database errors, for use when IndexedDB
+<a name="line104"></a> * support is not available. This numbering differs in practice
+<a name="line105"></a> * from the browser implementations, but it is not meant to be reliable:
+<a name="line106"></a> * this object merely ensures that goog.db.Error is loadable on platforms
+<a name="line107"></a> * that do not support IndexedDB.
+<a name="line108"></a> *
+<a name="line109"></a> * @enum {number}
+<a name="line110"></a> * @private
+<a name="line111"></a> */
+<a name="line112"></a>goog.db.Error.DatabaseErrorCode_ = {
+<a name="line113"></a>  UNKNOWN_ERR: 1,
+<a name="line114"></a>  NON_TRANSIENT_ERR: 2,
+<a name="line115"></a>  NOT_FOUND_ERR: 3,
+<a name="line116"></a>  CONSTRAINT_ERR: 4,
+<a name="line117"></a>  DATA_ERR: 5,
+<a name="line118"></a>  NOT_ALLOWED_ERR: 6,
+<a name="line119"></a>  TRANSACTION_INACTIVE_ERR: 7,
+<a name="line120"></a>  ABORT_ERR: 8,
+<a name="line121"></a>  READ_ONLY_ERR: 9,
+<a name="line122"></a>  TRANSIENT_ERR: 11,
+<a name="line123"></a>  TIMEOUT_ERR: 10,
+<a name="line124"></a>  QUOTA_ERR: 11,
+<a name="line125"></a>  INVALID_ACCESS_ERR: 12,
+<a name="line126"></a>  INVALID_STATE_ERR: 13
+<a name="line127"></a>};
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Error codes for database errors.
+<a name="line132"></a> * @see http://www.w3.org/TR/IndexedDB/#idl-def-IDBDatabaseException
+<a name="line133"></a> *
+<a name="line134"></a> * @enum {number}
+<a name="line135"></a> */
+<a name="line136"></a>goog.db.Error.ErrorCode = {
+<a name="line137"></a>  UNKNOWN_ERR: (goog.global.IDBDatabaseException ||
+<a name="line138"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line139"></a>      goog.db.Error.DatabaseErrorCode_).UNKNOWN_ERR,
+<a name="line140"></a>  NON_TRANSIENT_ERR: (goog.global.IDBDatabaseException ||
+<a name="line141"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line142"></a>      goog.db.Error.DatabaseErrorCode_).NON_TRANSIENT_ERR,
+<a name="line143"></a>  NOT_FOUND_ERR: (goog.global.IDBDatabaseException ||
+<a name="line144"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line145"></a>      goog.db.Error.DatabaseErrorCode_).NOT_FOUND_ERR,
+<a name="line146"></a>  CONSTRAINT_ERR: (goog.global.IDBDatabaseException ||
+<a name="line147"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line148"></a>      goog.db.Error.DatabaseErrorCode_).CONSTRAINT_ERR,
+<a name="line149"></a>  DATA_ERR: (goog.global.IDBDatabaseException ||
+<a name="line150"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line151"></a>      goog.db.Error.DatabaseErrorCode_).DATA_ERR,
+<a name="line152"></a>  NOT_ALLOWED_ERR: (goog.global.IDBDatabaseException ||
+<a name="line153"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line154"></a>      goog.db.Error.DatabaseErrorCode_).NOT_ALLOWED_ERR,
+<a name="line155"></a>  TRANSACTION_INACTIVE_ERR: (goog.global.IDBDatabaseException ||
+<a name="line156"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line157"></a>      goog.db.Error.DatabaseErrorCode_).TRANSACTION_INACTIVE_ERR,
+<a name="line158"></a>  ABORT_ERR: (goog.global.IDBDatabaseException ||
+<a name="line159"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line160"></a>      goog.db.Error.DatabaseErrorCode_).ABORT_ERR,
+<a name="line161"></a>  READ_ONLY_ERR: (goog.global.IDBDatabaseException ||
+<a name="line162"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line163"></a>      goog.db.Error.DatabaseErrorCode_).READ_ONLY_ERR,
+<a name="line164"></a>  TIMEOUT_ERR: (goog.global.IDBDatabaseException ||
+<a name="line165"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line166"></a>      goog.db.Error.DatabaseErrorCode_).TIMEOUT_ERR,
+<a name="line167"></a>  QUOTA_ERR: (goog.global.IDBDatabaseException ||
+<a name="line168"></a>      goog.global.webkitIDBDatabaseException ||
+<a name="line169"></a>      goog.db.Error.DatabaseErrorCode_).QUOTA_ERR,
+<a name="line170"></a>  INVALID_ACCESS_ERR: (goog.global.DOMException ||
+<a name="line171"></a>      goog.db.Error.DatabaseErrorCode_).INVALID_ACCESS_ERR,
+<a name="line172"></a>  INVALID_STATE_ERR: (goog.global.DOMException ||
+<a name="line173"></a>      goog.db.Error.DatabaseErrorCode_).INVALID_STATE_ERR
+<a name="line174"></a>};
+<a name="line175"></a>
+<a name="line176"></a>
+<a name="line177"></a>/**
+<a name="line178"></a> * Translates an error code into a more useful message.
+<a name="line179"></a> *
+<a name="line180"></a> * @param {number} code Error code.
+<a name="line181"></a> * @return {string} A debug message.
+<a name="line182"></a> */
+<a name="line183"></a>goog.db.Error.getMessage = function(code) {
+<a name="line184"></a>  switch (code) {
+<a name="line185"></a>    case goog.db.Error.ErrorCode.UNKNOWN_ERR:
+<a name="line186"></a>      return &#39;Unknown error&#39;;
+<a name="line187"></a>    case goog.db.Error.ErrorCode.NON_TRANSIENT_ERR:
+<a name="line188"></a>      return &#39;Invalid operation&#39;;
+<a name="line189"></a>    case goog.db.Error.ErrorCode.NOT_FOUND_ERR:
+<a name="line190"></a>      return &#39;Required database object not found&#39;;
+<a name="line191"></a>    case goog.db.Error.ErrorCode.CONSTRAINT_ERR:
+<a name="line192"></a>      return &#39;Constraint unsatisfied&#39;;
+<a name="line193"></a>    case goog.db.Error.ErrorCode.DATA_ERR:
+<a name="line194"></a>      return &#39;Invalid data&#39;;
+<a name="line195"></a>    case goog.db.Error.ErrorCode.NOT_ALLOWED_ERR:
+<a name="line196"></a>      return &#39;Operation disallowed&#39;;
+<a name="line197"></a>    case goog.db.Error.ErrorCode.TRANSACTION_INACTIVE_ERR:
+<a name="line198"></a>      return &#39;Transaction not active&#39;;
+<a name="line199"></a>    case goog.db.Error.ErrorCode.ABORT_ERR:
+<a name="line200"></a>      return &#39;Request aborted&#39;;
+<a name="line201"></a>    case goog.db.Error.ErrorCode.READ_ONLY_ERR:
+<a name="line202"></a>      return &#39;Modifying operation not allowed in a read-only transaction&#39;;
+<a name="line203"></a>    case goog.db.Error.ErrorCode.TIMEOUT_ERR:
+<a name="line204"></a>      return &#39;Transaction timed out&#39;;
+<a name="line205"></a>    case goog.db.Error.ErrorCode.QUOTA_ERR:
+<a name="line206"></a>      return &#39;Database storage space quota exceeded&#39;;
+<a name="line207"></a>    case goog.db.Error.ErrorCode.INVALID_ACCESS_ERR:
+<a name="line208"></a>      return &#39;Invalid operation&#39;;
+<a name="line209"></a>    case goog.db.Error.ErrorCode.INVALID_STATE_ERR:
+<a name="line210"></a>      return &#39;Invalid state&#39;;
+<a name="line211"></a>    default:
+<a name="line212"></a>      return &#39;Unrecognized exception with code &#39; + code;
+<a name="line213"></a>  }
+<a name="line214"></a>};
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a>/**
+<a name="line218"></a> * Names of all possible errors as returned from the browser.
+<a name="line219"></a> * @see http://www.w3.org/TR/IndexedDB/#exceptions
+<a name="line220"></a> * @enum {string}
+<a name="line221"></a> */
+<a name="line222"></a>goog.db.Error.ErrorName = {
+<a name="line223"></a>  ABORT_ERR: &#39;AbortError&#39;,
+<a name="line224"></a>  CONSTRAINT_ERR: &#39;ConstraintError&#39;,
+<a name="line225"></a>  DATA_CLONE_ERR: &#39;DataCloneError&#39;,
+<a name="line226"></a>  DATA_ERR: &#39;DataError&#39;,
+<a name="line227"></a>  INVALID_ACCESS_ERR: &#39;InvalidAccessError&#39;,
+<a name="line228"></a>  INVALID_STATE_ERR: &#39;InvalidStateError&#39;,
+<a name="line229"></a>  NOT_FOUND_ERR: &#39;NotFoundError&#39;,
+<a name="line230"></a>  QUOTA_EXCEEDED_ERR: &#39;QuotaExceededError&#39;,
+<a name="line231"></a>  READ_ONLY_ERR: &#39;ReadOnlyError&#39;,
+<a name="line232"></a>  SYNTAX_ERROR: &#39;SyntaxError&#39;,
+<a name="line233"></a>  TIMEOUT_ERR: &#39;TimeoutError&#39;,
+<a name="line234"></a>  TRANSACTION_INACTIVE_ERR: &#39;TransactionInactiveError&#39;,
+<a name="line235"></a>  UNKNOWN_ERR: &#39;UnknownError&#39;,
+<a name="line236"></a>  VERSION_ERR: &#39;VersionError&#39;
+<a name="line237"></a>};
+<a name="line238"></a>
+<a name="line239"></a>
+<a name="line240"></a>/**
+<a name="line241"></a> * Translates an error name to an error code. This is purely kept for backwards
+<a name="line242"></a> * compatibility with Chrome21.
+<a name="line243"></a> *
+<a name="line244"></a> * @param {string} name The name of the erorr.
+<a name="line245"></a> * @return {number} The error code corresponding to the error.
+<a name="line246"></a> */
+<a name="line247"></a>goog.db.Error.getCode = function(name) {
+<a name="line248"></a>  switch (name) {
+<a name="line249"></a>    case goog.db.Error.ErrorName.UNKNOWN_ERR:
+<a name="line250"></a>      return goog.db.Error.ErrorCode.UNKNOWN_ERR;
+<a name="line251"></a>    case goog.db.Error.ErrorName.NOT_FOUND_ERR:
+<a name="line252"></a>      return goog.db.Error.ErrorCode.NOT_FOUND_ERR;
+<a name="line253"></a>    case goog.db.Error.ErrorName.CONSTRAINT_ERR:
+<a name="line254"></a>      return goog.db.Error.ErrorCode.CONSTRAINT_ERR;
+<a name="line255"></a>    case goog.db.Error.ErrorName.DATA_ERR:
+<a name="line256"></a>      return goog.db.Error.ErrorCode.DATA_ERR;
+<a name="line257"></a>    case goog.db.Error.ErrorName.TRANSACTION_INACTIVE_ERR:
+<a name="line258"></a>      return goog.db.Error.ErrorCode.TRANSACTION_INACTIVE_ERR;
+<a name="line259"></a>    case goog.db.Error.ErrorName.ABORT_ERR:
+<a name="line260"></a>      return goog.db.Error.ErrorCode.ABORT_ERR;
+<a name="line261"></a>    case goog.db.Error.ErrorName.READ_ONLY_ERR:
+<a name="line262"></a>      return goog.db.Error.ErrorCode.READ_ONLY_ERR;
+<a name="line263"></a>    case goog.db.Error.ErrorName.TIMEOUT_ERR:
+<a name="line264"></a>      return goog.db.Error.ErrorCode.TIMEOUT_ERR;
+<a name="line265"></a>    case goog.db.Error.ErrorName.QUOTA_EXCEEDED_ERR:
+<a name="line266"></a>      return goog.db.Error.ErrorCode.QUOTA_ERR;
+<a name="line267"></a>    case goog.db.Error.ErrorName.INVALID_ACCESS_ERR:
+<a name="line268"></a>      return goog.db.Error.ErrorCode.INVALID_ACCESS_ERR;
+<a name="line269"></a>    case goog.db.Error.ErrorName.INVALID_STATE_ERR:
+<a name="line270"></a>      return goog.db.Error.ErrorCode.INVALID_STATE_ERR;
+<a name="line271"></a>    default:
+<a name="line272"></a>      return goog.db.Error.ErrorCode.UNKNOWN_ERR;
+<a name="line273"></a>  }
+<a name="line274"></a>};
+<a name="line275"></a>
+<a name="line276"></a>
+<a name="line277"></a>/**
+<a name="line278"></a> * Converts an error code used by the old spec, to an error name used by the
+<a name="line279"></a> * latest spec.
+<a name="line280"></a> * @see http://www.w3.org/TR/IndexedDB/#exceptions
+<a name="line281"></a> *
+<a name="line282"></a> * @param {!goog.db.Error.ErrorCode|number} code The error code to convert.
+<a name="line283"></a> * @return {!goog.db.Error.ErrorName} The corresponding name of the error.
+<a name="line284"></a> */
+<a name="line285"></a>goog.db.Error.getName = function(code) {
+<a name="line286"></a>  switch (code) {
+<a name="line287"></a>    case goog.db.Error.ErrorCode.UNKNOWN_ERR:
+<a name="line288"></a>      return goog.db.Error.ErrorName.UNKNOWN_ERR;
+<a name="line289"></a>    case goog.db.Error.ErrorCode.NOT_FOUND_ERR:
+<a name="line290"></a>      return goog.db.Error.ErrorName.NOT_FOUND_ERR;
+<a name="line291"></a>    case goog.db.Error.ErrorCode.CONSTRAINT_ERR:
+<a name="line292"></a>      return goog.db.Error.ErrorName.CONSTRAINT_ERR;
+<a name="line293"></a>    case goog.db.Error.ErrorCode.DATA_ERR:
+<a name="line294"></a>      return goog.db.Error.ErrorName.DATA_ERR;
+<a name="line295"></a>    case goog.db.Error.ErrorCode.TRANSACTION_INACTIVE_ERR:
+<a name="line296"></a>      return goog.db.Error.ErrorName.TRANSACTION_INACTIVE_ERR;
+<a name="line297"></a>    case goog.db.Error.ErrorCode.ABORT_ERR:
+<a name="line298"></a>      return goog.db.Error.ErrorName.ABORT_ERR;
+<a name="line299"></a>    case goog.db.Error.ErrorCode.READ_ONLY_ERR:
+<a name="line300"></a>      return goog.db.Error.ErrorName.READ_ONLY_ERR;
+<a name="line301"></a>    case goog.db.Error.ErrorCode.TIMEOUT_ERR:
+<a name="line302"></a>      return goog.db.Error.ErrorName.TIMEOUT_ERR;
+<a name="line303"></a>    case goog.db.Error.ErrorCode.QUOTA_ERR:
+<a name="line304"></a>      return goog.db.Error.ErrorName.QUOTA_EXCEEDED_ERR;
+<a name="line305"></a>    case goog.db.Error.ErrorCode.INVALID_ACCESS_ERR:
+<a name="line306"></a>      return goog.db.Error.ErrorName.INVALID_ACCESS_ERR;
+<a name="line307"></a>    case goog.db.Error.ErrorCode.INVALID_STATE_ERR:
+<a name="line308"></a>      return goog.db.Error.ErrorName.INVALID_STATE_ERR;
+<a name="line309"></a>    default:
+<a name="line310"></a>      return goog.db.Error.ErrorName.UNKNOWN_ERR;
+<a name="line311"></a>  }
+<a name="line312"></a>};
+<a name="line313"></a>
+<a name="line314"></a>
+<a name="line315"></a>/**
+<a name="line316"></a> * Constructs an goog.db.Error instance from an IDBRequest. This abstraction is
+<a name="line317"></a> * necessary to provide backwards compatibility with Chrome21.
+<a name="line318"></a> *
+<a name="line319"></a> * @param {!IDBRequest} request The request that failed.
+<a name="line320"></a> * @param {string} message The error message to add to err if it&#39;s wrapped.
+<a name="line321"></a> * @return {!goog.db.Error} The error that caused the failure.
+<a name="line322"></a> */
+<a name="line323"></a>goog.db.Error.fromRequest = function(request, message) {
+<a name="line324"></a>  if (&#39;error&#39; in request) {
+<a name="line325"></a>    // Chrome 21 and before.
+<a name="line326"></a>    return new goog.db.Error(request.error, message);
+<a name="line327"></a>  } else if (&#39;name&#39; in request) {
+<a name="line328"></a>    // Chrome 22+.
+<a name="line329"></a>    var errorName = goog.db.Error.getName(request.errorCode);
+<a name="line330"></a>    return new goog.db.Error(
+<a name="line331"></a>        /**@type {!DOMError} */ ({name: errorName}), message);
+<a name="line332"></a>  } else {
+<a name="line333"></a>    return new goog.db.Error(/** @type {!DOMError} */ (
+<a name="line334"></a>        {name: goog.db.Error.ErrorName.UNKNOWN_ERR}), message);
+<a name="line335"></a>  }
+<a name="line336"></a>};
+<a name="line337"></a>
+<a name="line338"></a>
+<a name="line339"></a>/**
+<a name="line340"></a> * Constructs an goog.db.Error instance from an DOMException. This abstraction
+<a name="line341"></a> * is necessary to provide backwards compatibility with Chrome21.
+<a name="line342"></a> *
+<a name="line343"></a> * @param {!IDBDatabaseException} ex The exception that was thrown.
+<a name="line344"></a> * @param {string} message The error message to add to err if it&#39;s wrapped.
+<a name="line345"></a> * @return {!goog.db.Error} The error that caused the failure.
+<a name="line346"></a> * @suppress {invalidCasts} The cast from IDBDatabaseException to DOMError
+<a name="line347"></a> *     is invalid and will not compile.
+<a name="line348"></a> */
+<a name="line349"></a>goog.db.Error.fromException = function(ex, message) {
+<a name="line350"></a>  if (&#39;name&#39; in ex) {
+<a name="line351"></a>    // Chrome 22+.
+<a name="line352"></a>    var errorMessage = message + &#39;: &#39; + ex.message;
+<a name="line353"></a>    return new goog.db.Error(/** @type {!DOMError} */ (ex), errorMessage);
+<a name="line354"></a>  } else if (&#39;code&#39; in ex) {
+<a name="line355"></a>    // Chrome 21 and before.
+<a name="line356"></a>    var errorName = goog.db.Error.getName(ex.code);
+<a name="line357"></a>    var errorMessage = message + &#39;: &#39; + ex.message;
+<a name="line358"></a>    return new goog.db.Error(
+<a name="line359"></a>        /** @type {!DOMError} */ ({name: errorName}), errorMessage);
+<a name="line360"></a>  } else {
+<a name="line361"></a>    return new goog.db.Error(/** @type {!DOMError} */ (
+<a name="line362"></a>        {name: goog.db.Error.ErrorName.UNKNOWN_ERR}), message);
+<a name="line363"></a>  }
+<a name="line364"></a>};
+</pre>
+
+
+</body>
+</html>

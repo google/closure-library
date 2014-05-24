@@ -1,0 +1,116 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>onlinehandler.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_events_onlinehandler.js.html">onlinehandler.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview NetworkStatusMonitor test double.
+<a name="line17"></a> * @author dbk@google.com (David Barrett-Kahn)
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.testing.events.OnlineHandler&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.events.EventTarget&#39;);
+<a name="line23"></a>goog.require(&#39;goog.net.NetworkStatusMonitor&#39;);
+<a name="line24"></a>
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * NetworkStatusMonitor test double.
+<a name="line29"></a> * @param {boolean} initialState The initial online state of the mock.
+<a name="line30"></a> * @constructor
+<a name="line31"></a> * @extends {goog.events.EventTarget}
+<a name="line32"></a> * @implements {goog.net.NetworkStatusMonitor}
+<a name="line33"></a> * @final
+<a name="line34"></a> */
+<a name="line35"></a>goog.testing.events.OnlineHandler = function(initialState) {
+<a name="line36"></a>  goog.testing.events.OnlineHandler.base(this, &#39;constructor&#39;);
+<a name="line37"></a>
+<a name="line38"></a>  /**
+<a name="line39"></a>   * Whether the mock is online.
+<a name="line40"></a>   * @private {boolean}
+<a name="line41"></a>   */
+<a name="line42"></a>  this.online_ = initialState;
+<a name="line43"></a>};
+<a name="line44"></a>goog.inherits(goog.testing.events.OnlineHandler, goog.events.EventTarget);
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/** @override */
+<a name="line48"></a>goog.testing.events.OnlineHandler.prototype.isOnline = function() {
+<a name="line49"></a>  return this.online_;
+<a name="line50"></a>};
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Sets the online state.
+<a name="line55"></a> * @param {boolean} newOnlineState The new online state.
+<a name="line56"></a> */
+<a name="line57"></a>goog.testing.events.OnlineHandler.prototype.setOnline =
+<a name="line58"></a>    function(newOnlineState) {
+<a name="line59"></a>  if (newOnlineState != this.online_) {
+<a name="line60"></a>    this.online_ = newOnlineState;
+<a name="line61"></a>    this.dispatchEvent(newOnlineState ?
+<a name="line62"></a>        goog.net.NetworkStatusMonitor.EventType.ONLINE :
+<a name="line63"></a>        goog.net.NetworkStatusMonitor.EventType.OFFLINE);
+<a name="line64"></a>  }
+<a name="line65"></a>};
+</pre>
+
+
+</body>
+</html>

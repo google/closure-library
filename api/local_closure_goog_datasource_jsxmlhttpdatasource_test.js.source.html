@@ -1,0 +1,144 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>jsxmlhttpdatasource_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_datasource_jsxmlhttpdatasource_test.js.html">jsxmlhttpdatasource_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.ds.JsXmlHttpDataSourceTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.ds.JsXmlHttpDataSourceTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.ds.JsXmlHttpDataSource&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.TestQueue&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.net.XhrIo&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var TEXT_PREFIX = null;
+<a name="line24"></a>var TEXT_POSTFIX = null;
+<a name="line25"></a>
+<a name="line26"></a>var INDEX_OF_URI_ENTRY = 1;
+<a name="line27"></a>var INDEX_OF_CONTENT_ENTRY = 3;
+<a name="line28"></a>
+<a name="line29"></a>function setUp() {
+<a name="line30"></a>}
+<a name="line31"></a>
+<a name="line32"></a>function tearDown() {
+<a name="line33"></a>}
+<a name="line34"></a>
+<a name="line35"></a>function testLoad_WithPostAndQueryDataSet() {
+<a name="line36"></a>
+<a name="line37"></a>  var USE_POST = true;
+<a name="line38"></a>  var dataSource =
+<a name="line39"></a>      new goog.ds.JsXmlHttpDataSource(
+<a name="line40"></a>          &#39;uri&#39;, &#39;namne&#39;, TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
+<a name="line41"></a>
+<a name="line42"></a>  var testQueue = new goog.testing.TestQueue();
+<a name="line43"></a>  dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
+<a name="line44"></a>
+<a name="line45"></a>  var expectedContent = &#39;Some test content&#39;;
+<a name="line46"></a>  dataSource.setQueryData(expectedContent);
+<a name="line47"></a>  dataSource.load();
+<a name="line48"></a>
+<a name="line49"></a>  assertFalse(testQueue.isEmpty());
+<a name="line50"></a>
+<a name="line51"></a>  var actualRequest = testQueue.dequeue();
+<a name="line52"></a>  assertEquals(expectedContent, actualRequest[INDEX_OF_CONTENT_ENTRY]);
+<a name="line53"></a>  assertTrue(testQueue.isEmpty());
+<a name="line54"></a>}
+<a name="line55"></a>
+<a name="line56"></a>function testLoad_WithPostAndNoQueryDataSet() {
+<a name="line57"></a>
+<a name="line58"></a>  var USE_POST = true;
+<a name="line59"></a>  var dataSource =
+<a name="line60"></a>      new goog.ds.JsXmlHttpDataSource(
+<a name="line61"></a>          &#39;uri?a=1&amp;b=2&#39;, &#39;namne&#39;, TEXT_PREFIX, TEXT_POSTFIX, USE_POST);
+<a name="line62"></a>
+<a name="line63"></a>  var testQueue = new goog.testing.TestQueue();
+<a name="line64"></a>  dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
+<a name="line65"></a>
+<a name="line66"></a>  dataSource.load();
+<a name="line67"></a>
+<a name="line68"></a>  assertFalse(testQueue.isEmpty());
+<a name="line69"></a>
+<a name="line70"></a>  var actualRequest = testQueue.dequeue();
+<a name="line71"></a>  assertEquals(&#39;a=1&amp;b=2&#39;, actualRequest[INDEX_OF_CONTENT_ENTRY].toString());
+<a name="line72"></a>  assertTrue(testQueue.isEmpty());
+<a name="line73"></a>}
+<a name="line74"></a>
+<a name="line75"></a>function testLoad_WithGet() {
+<a name="line76"></a>
+<a name="line77"></a>  var USE_GET = false;
+<a name="line78"></a>  var expectedUri = &#39;uri?a=1&amp;b=2&#39;;
+<a name="line79"></a>  var dataSource =
+<a name="line80"></a>      new goog.ds.JsXmlHttpDataSource(
+<a name="line81"></a>          expectedUri, &#39;namne&#39;, TEXT_PREFIX, TEXT_POSTFIX, USE_GET);
+<a name="line82"></a>
+<a name="line83"></a>  var testQueue = new goog.testing.TestQueue();
+<a name="line84"></a>  dataSource.xhr_ = new goog.testing.net.XhrIo(testQueue);
+<a name="line85"></a>
+<a name="line86"></a>  dataSource.load();
+<a name="line87"></a>
+<a name="line88"></a>  assertFalse(testQueue.isEmpty());
+<a name="line89"></a>
+<a name="line90"></a>  var actualRequest = testQueue.dequeue();
+<a name="line91"></a>  assertEquals(expectedUri, actualRequest[INDEX_OF_URI_ENTRY].toString());
+<a name="line92"></a>  assertTrue(testQueue.isEmpty());
+<a name="line93"></a>}
+</pre>
+
+
+</body>
+</html>

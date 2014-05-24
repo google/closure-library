@@ -1,0 +1,164 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>transform.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_style_transform.js.html">transform.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2014 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utility methods to deal with CSS3 transforms programmatically.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.style.transform&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line22"></a>goog.require(&#39;goog.math.Coordinate&#39;);
+<a name="line23"></a>goog.require(&#39;goog.style&#39;);
+<a name="line24"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line25"></a>goog.require(&#39;goog.userAgent.product.isVersion&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Whether CSS3 transform translate() is supported. IE 9 supports 2D transforms
+<a name="line30"></a> * and IE 10 supports 3D transforms. IE 8 supports neither.
+<a name="line31"></a> * @return {boolean} Whether the current environment supports CSS3 transforms.
+<a name="line32"></a> */
+<a name="line33"></a>goog.style.transform.isSupported = goog.functions.cacheReturnValue(function() {
+<a name="line34"></a>  return !goog.userAgent.IE || goog.userAgent.product.isVersion(9);
+<a name="line35"></a>});
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>/**
+<a name="line39"></a> * Whether CSS3 transform translate3d() is supported. If the current browser
+<a name="line40"></a> * supports this transform strategy.
+<a name="line41"></a> * @return {boolean} Whether the current environment supports CSS3 transforms.
+<a name="line42"></a> */
+<a name="line43"></a>goog.style.transform.is3dSupported =
+<a name="line44"></a>    goog.functions.cacheReturnValue(function() {
+<a name="line45"></a>  return goog.userAgent.WEBKIT ||
+<a name="line46"></a>      (goog.userAgent.GECKO &amp;&amp; goog.userAgent.product.isVersion(10)) ||
+<a name="line47"></a>      (goog.userAgent.IE &amp;&amp; goog.userAgent.product.isVersion(10));
+<a name="line48"></a>});
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * Returns the x,y translation component of any CSS transforms applied to the
+<a name="line53"></a> * element, in pixels.
+<a name="line54"></a> *
+<a name="line55"></a> * @param {!Element} element The element to get the translation of.
+<a name="line56"></a> * @return {!goog.math.Coordinate} The CSS translation of the element in px.
+<a name="line57"></a> */
+<a name="line58"></a>goog.style.transform.getTranslation = function(element) {
+<a name="line59"></a>  var transform = goog.style.getComputedTransform(element);
+<a name="line60"></a>  var matrixConstructor = goog.style.transform.matrixConstructor_();
+<a name="line61"></a>  if (transform &amp;&amp; matrixConstructor) {
+<a name="line62"></a>    var matrix = new matrixConstructor(transform);
+<a name="line63"></a>    if (matrix) {
+<a name="line64"></a>      return new goog.math.Coordinate(matrix.m41, matrix.m42);
+<a name="line65"></a>    }
+<a name="line66"></a>  }
+<a name="line67"></a>  return new goog.math.Coordinate(0, 0);
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Translates an element&#39;s position using the CSS3 transform property.
+<a name="line73"></a> * @param {Element} element The element to translate.
+<a name="line74"></a> * @param {number} x The horizontal translation.
+<a name="line75"></a> * @param {number} y The vertical translation.
+<a name="line76"></a> * @return {boolean} Whether the CSS translation was set.
+<a name="line77"></a> */
+<a name="line78"></a>goog.style.transform.setTranslation = function(element, x, y) {
+<a name="line79"></a>  if (!goog.style.transform.isSupported()) {
+<a name="line80"></a>    return false;
+<a name="line81"></a>  }
+<a name="line82"></a>  // TODO(user): After http://crbug.com/324107 is fixed, it will be faster to
+<a name="line83"></a>  // use something like: translation = new CSSMatrix().translate(x, y, 0);
+<a name="line84"></a>  var translation = goog.style.transform.is3dSupported() ?
+<a name="line85"></a>      &#39;translate3d(&#39; + x + &#39;px,&#39; + y + &#39;px,&#39; + &#39;0px)&#39; :
+<a name="line86"></a>      &#39;translate(&#39; + x + &#39;px,&#39; + y + &#39;px)&#39;;
+<a name="line87"></a>  goog.style.setStyle(element, &#39;transform&#39;, translation);
+<a name="line88"></a>  return true;
+<a name="line89"></a>};
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>/**
+<a name="line93"></a> * Gets the constructor for a CSSMatrix object.
+<a name="line94"></a> * @return {function(new:CSSMatrix, string)?} A constructor for a CSSMatrix
+<a name="line95"></a> *     object (or null).
+<a name="line96"></a> * @private
+<a name="line97"></a> */
+<a name="line98"></a>goog.style.transform.matrixConstructor_ =
+<a name="line99"></a>    goog.functions.cacheReturnValue(function() {
+<a name="line100"></a>  // TODO(user): Unless these are accessed from the default namespace the
+<a name="line101"></a>  // compiler will rename them. A better way is to use goog.global and prevent
+<a name="line102"></a>  // renaming.
+<a name="line103"></a>  if (typeof WebKitCSSMatrix !== undefined) {
+<a name="line104"></a>    return WebKitCSSMatrix;
+<a name="line105"></a>  }
+<a name="line106"></a>  if (typeof MSCSSMatrix !== undefined) {
+<a name="line107"></a>    return MSCSSMatrix;
+<a name="line108"></a>  }
+<a name="line109"></a>  if (typeof CSSMatrix !== undefined) {
+<a name="line110"></a>    return CSSMatrix;
+<a name="line111"></a>  }
+<a name="line112"></a>  return null;
+<a name="line113"></a>});
+</pre>
+
+
+</body>
+</html>

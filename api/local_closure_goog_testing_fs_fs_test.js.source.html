@@ -1,0 +1,99 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>fs_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_fs_fs_test.js.html">fs_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.fsTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.fsTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.fs&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.fs.Blob&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
+<a name="line24"></a>
+<a name="line25"></a>function testObjectUrls() {
+<a name="line26"></a>  var blob = goog.testing.fs.getBlob(&#39;foo&#39;);
+<a name="line27"></a>  var url = goog.testing.fs.createObjectUrl(blob);
+<a name="line28"></a>  assertTrue(goog.testing.fs.isObjectUrlGranted(blob));
+<a name="line29"></a>  goog.testing.fs.revokeObjectUrl(url);
+<a name="line30"></a>  assertFalse(goog.testing.fs.isObjectUrlGranted(blob));
+<a name="line31"></a>}
+<a name="line32"></a>
+<a name="line33"></a>function testGetBlob() {
+<a name="line34"></a>  assertEquals(
+<a name="line35"></a>      new goog.testing.fs.Blob(&#39;foobarbaz&#39;).toString(),
+<a name="line36"></a>      goog.testing.fs.getBlob(&#39;foo&#39;, &#39;bar&#39;, &#39;baz&#39;).toString());
+<a name="line37"></a>  assertEquals(
+<a name="line38"></a>      new goog.testing.fs.Blob(&#39;foobarbaz&#39;).toString(),
+<a name="line39"></a>      goog.testing.fs.getBlob(&#39;foo&#39;, new goog.testing.fs.Blob(&#39;bar&#39;), &#39;baz&#39;).
+<a name="line40"></a>      toString());
+<a name="line41"></a>}
+<a name="line42"></a>
+<a name="line43"></a>function testBlobToString() {
+<a name="line44"></a>  goog.testing.fs.blobToString(new goog.testing.fs.Blob(&#39;foobarbaz&#39;)).
+<a name="line45"></a>      addCallback(goog.partial(assertEquals, &#39;foobarbaz&#39;)).
+<a name="line46"></a>      addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase));
+<a name="line47"></a>  asyncTestCase.waitForAsync(&#39;testBlobToString&#39;);
+<a name="line48"></a>}
+</pre>
+
+
+</body>
+</html>

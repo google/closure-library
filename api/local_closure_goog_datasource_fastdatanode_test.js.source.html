@@ -1,0 +1,300 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>fastdatanode_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_datasource_fastdatanode_test.js.html">fastdatanode_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.ds.FastDataNodeTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.ds.FastDataNodeTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.ds.DataManager&#39;);
+<a name="line20"></a>goog.require(&#39;goog.ds.Expr&#39;);
+<a name="line21"></a>goog.require(&#39;goog.ds.FastDataNode&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var simpleObject;
+<a name="line25"></a>var complexObject;
+<a name="line26"></a>var dataChangeEvents;
+<a name="line27"></a>
+<a name="line28"></a>function setUp() {
+<a name="line29"></a>  simpleObject = {Name: &#39;Jon Doe&#39;, Email: &#39;jon.doe@gmail.com&#39;};
+<a name="line30"></a>  complexObject = {Name: &#39;Jon Doe&#39;, Email: &#39;jon.doe@gmail.com&#39;,
+<a name="line31"></a>    Emails: [{Address: &#39;jon.doe@gmail.com&#39;, Type: &#39;Home&#39;},
+<a name="line32"></a>             {Address: &#39;jon.doe@workplace.com&#39;, Type: &#39;Work&#39;}],
+<a name="line33"></a>    GroupIds: [23, 42]};
+<a name="line34"></a>  var dm = goog.ds.DataManager.getInstance();
+<a name="line35"></a>  dataChangeEvents = [];
+<a name="line36"></a>  dm.fireDataChange = function(dataPath) {
+<a name="line37"></a>    dataChangeEvents.push(dataPath);
+<a name="line38"></a>  };
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>function tearDown() {
+<a name="line42"></a>  goog.ds.DataManager.clearInstance();
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>function testGetChildNodeValue() {
+<a name="line46"></a>  var node = new goog.ds.FastDataNode(simpleObject, &#39;Simple&#39;);
+<a name="line47"></a>  var value = node.getChildNodeValue(&#39;Name&#39;);
+<a name="line48"></a>  assert(goog.isString(value));
+<a name="line49"></a>  assertEquals(&#39;Jon Doe&#39;, value);
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>function testDataNameAndPath() {
+<a name="line53"></a>  var node = new goog.ds.FastDataNode(simpleObject, &#39;Simple&#39;);
+<a name="line54"></a>  assertEquals(&#39;DataName should be \&#39;Simple\&#39;&#39;, &#39;Simple&#39;, node.getDataName());
+<a name="line55"></a>  assertEquals(&#39;DataPath should be \&#39;Simple\&#39;&#39;, &#39;Simple&#39;, node.getDataPath());
+<a name="line56"></a>}
+<a name="line57"></a>
+<a name="line58"></a>function testStringChildNode() {
+<a name="line59"></a>  var node = goog.ds.FastDataNode.fromJs(simpleObject, &#39;Simple&#39;);
+<a name="line60"></a>  var name = node.getChildNode(&#39;Name&#39;);
+<a name="line61"></a>  var email = node.getChildNode(&#39;Email&#39;);
+<a name="line62"></a>  assertEquals(&#39;Jon Doe&#39;, name.get());
+<a name="line63"></a>  assertEquals(&#39;jon.doe@gmail.com&#39;, email.get());
+<a name="line64"></a>
+<a name="line65"></a>  assertEquals(&#39;Name&#39;, name.getDataName());
+<a name="line66"></a>  assertEquals(&#39;Simple/Name&#39;, name.getDataPath());
+<a name="line67"></a>
+<a name="line68"></a>  assertEquals(&#39;Email&#39;, email.getDataName());
+<a name="line69"></a>  assertEquals(&#39;Simple/Email&#39;, email.getDataPath());
+<a name="line70"></a>}
+<a name="line71"></a>
+<a name="line72"></a>function testGetChildNodes() {
+<a name="line73"></a>  var node = goog.ds.FastDataNode.fromJs(simpleObject, &#39;Simple&#39;);
+<a name="line74"></a>  var children = node.getChildNodes();
+<a name="line75"></a>  assertEquals(2, children.getCount());
+<a name="line76"></a>  var childValues = [];
+<a name="line77"></a>  for (var i = 0; i &lt; 2; ++i) {
+<a name="line78"></a>    childValues.push(children.getByIndex(i).get());
+<a name="line79"></a>  }
+<a name="line80"></a>  goog.array.sort(childValues);
+<a name="line81"></a>  assertEquals(&#39;Jon Doe&#39;, childValues[0]);
+<a name="line82"></a>  assertEquals(&#39;jon.doe@gmail.com&#39;, childValues[1]);
+<a name="line83"></a>}
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>function testGetDistinguishesBetweenOverloads() {
+<a name="line87"></a>  var node = goog.ds.FastDataNode.fromJs(simpleObject, &#39;Simple&#39;);
+<a name="line88"></a>  assertEquals(node, node.get());
+<a name="line89"></a>  assertEquals(&#39;Jon Doe&#39;, node.getChildNodes().get(&#39;Name&#39;).get());
+<a name="line90"></a>}
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>function testGetChildNodesForPrimitiveNodes() {
+<a name="line94"></a>  var node = goog.ds.FastDataNode.fromJs(simpleObject, &#39;Simple&#39;);
+<a name="line95"></a>  var children = node.getChildNode(&#39;Name&#39;).getChildNodes();
+<a name="line96"></a>  assertEquals(0, children.getCount());
+<a name="line97"></a>}
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>function testFastListNode() {
+<a name="line101"></a>  var node = goog.ds.FastDataNode.fromJs(complexObject, &#39;Object&#39;);
+<a name="line102"></a>  assertEquals(&#39;Jon Doe&#39;, node.getChildNodeValue(&#39;Name&#39;));
+<a name="line103"></a>  var emails = node.getChildNode(&#39;Emails&#39;);
+<a name="line104"></a>  assertEquals(&#39;jon.doe@gmail.com&#39;,
+<a name="line105"></a>      emails.getChildNode(&#39;[0]&#39;).getChildNodeValue(&#39;Address&#39;));
+<a name="line106"></a>  assertEquals(&#39;jon.doe@workplace.com&#39;,
+<a name="line107"></a>      emails.getChildNode(&#39;[1]&#39;).getChildNodeValue(&#39;Address&#39;));
+<a name="line108"></a>
+<a name="line109"></a>  assertEquals(&#39;Object/Emails/[0]/Address&#39;,
+<a name="line110"></a>      emails.getChildNode(&#39;[0]&#39;).getChildNode(&#39;Address&#39;).getDataPath());
+<a name="line111"></a>
+<a name="line112"></a>  var groups = node.getChildNode(&#39;GroupIds&#39;);
+<a name="line113"></a>  assertEquals(23, groups.getChildNode(&#39;[0]&#39;).get());
+<a name="line114"></a>  assertEquals(42, groups.getChildNodeValue(&#39;[1]&#39;));
+<a name="line115"></a>
+<a name="line116"></a>  var childValues = emails.getChildNodes();
+<a name="line117"></a>  assertEquals(2, childValues.getCount());
+<a name="line118"></a>  assertEquals(&#39;jon.doe@gmail.com&#39;,
+<a name="line119"></a>      childValues.getByIndex(0).getChildNodeValue(&#39;Address&#39;));
+<a name="line120"></a>}
+<a name="line121"></a>
+<a name="line122"></a>
+<a name="line123"></a>function testChildNodeValueForNonexistantAttribute() {
+<a name="line124"></a>  var node = goog.ds.FastDataNode.fromJs(complexObject, &#39;Object&#39;);
+<a name="line125"></a>  assertNull(node.getChildNodeValue(&#39;DoesNotExist&#39;));
+<a name="line126"></a>  assertNull(node.getChildNode(&#39;Emails&#39;).getChildNodeValue(&#39;[666]&#39;));
+<a name="line127"></a>}
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>function testAllChildrenSelector() {
+<a name="line131"></a>  var node = goog.ds.FastDataNode.fromJs(complexObject, &#39;Object&#39;);
+<a name="line132"></a>  var allChildren = node.getChildNodes(&#39;*&#39;);
+<a name="line133"></a>  assertEquals(4, allChildren.getCount());
+<a name="line134"></a>
+<a name="line135"></a>  // not implemented, yet
+<a name="line136"></a>  // var nameChild = node.getChildNodes(&#39;Name&#39;);
+<a name="line137"></a>  // assertEquals(1, allChildren.getCount());
+<a name="line138"></a>}
+<a name="line139"></a>
+<a name="line140"></a>function testExpression() {
+<a name="line141"></a>  var node = goog.ds.FastDataNode.fromJs(complexObject, &#39;Object&#39;);
+<a name="line142"></a>  assertEquals(&#39;Jon Doe&#39;,
+<a name="line143"></a>      goog.ds.Expr.create(&#39;Name&#39;).getValue(node));
+<a name="line144"></a>  assertEquals(&#39;jon.doe@workplace.com&#39;,
+<a name="line145"></a>      goog.ds.Expr.create(&#39;Emails/[1]/Address&#39;).getNode(node).get());
+<a name="line146"></a>  var emails = goog.ds.Expr.create(&#39;Emails/*&#39;).getNodes(node);
+<a name="line147"></a>  assertEquals(2, emails.getCount());
+<a name="line148"></a>  assertEquals(&#39;jon.doe@workplace.com&#39;,
+<a name="line149"></a>      emails.getByIndex(1).getChildNodeValue(&#39;Address&#39;));
+<a name="line150"></a>}
+<a name="line151"></a>
+<a name="line152"></a>function testModifyNode() {
+<a name="line153"></a>  var node = goog.ds.FastDataNode.fromJs(complexObject, &#39;Object&#39;);
+<a name="line154"></a>  node.getChildNode(&#39;Name&#39;).set(&#39;Foo Bar&#39;);
+<a name="line155"></a>  assertEquals(&#39;Foo Bar&#39;, node.getChildNodeValue(&#39;Name&#39;));
+<a name="line156"></a>}
+<a name="line157"></a>
+<a name="line158"></a>function testClone() {
+<a name="line159"></a>  var node = goog.ds.FastDataNode.fromJs(complexObject, &#39;Object&#39;);
+<a name="line160"></a>  var clone = node.clone();
+<a name="line161"></a>  node.getChildNode(&#39;Name&#39;).set(&#39;Foo Bar&#39;);
+<a name="line162"></a>  assertEquals(&#39;Jon Doe&#39;, clone.getChildNodeValue(&#39;Name&#39;));
+<a name="line163"></a>  var expr = goog.ds.Expr.create(&#39;Emails/[1]/Address&#39;);
+<a name="line164"></a>  expr.getNode(clone).set(&#39;jon@doe.com&#39;);
+<a name="line165"></a>  assertEquals(&#39;jon.doe@workplace.com&#39;, expr.getValue(node));
+<a name="line166"></a>  assertEquals(&#39;jon@doe.com&#39;, expr.getValue(clone));
+<a name="line167"></a>}
+<a name="line168"></a>
+<a name="line169"></a>function testSetChildNodeOnList() {
+<a name="line170"></a>  var list = goog.ds.FastDataNode.fromJs([], &#39;list&#39;);
+<a name="line171"></a>  var node = goog.ds.FastDataNode.fromJs({Id: &#39;42&#39;, Name: &#39;Foo&#39;}, &#39;42&#39;, list);
+<a name="line172"></a>  list.setChildNode(&#39;42&#39;, node);
+<a name="line173"></a>
+<a name="line174"></a>  assertEquals(node, list.getChildNode(&#39;42&#39;));
+<a name="line175"></a>  assertEquals(node, list.getChildNodes().getByIndex(0));
+<a name="line176"></a>  assertEquals(node, list.getChildNodes().get(&#39;42&#39;));
+<a name="line177"></a>}
+<a name="line178"></a>
+<a name="line179"></a>function testCreateNewValueWithSetChildNode() {
+<a name="line180"></a>  var node = goog.ds.FastDataNode.fromJs({}, &#39;object&#39;);
+<a name="line181"></a>  node.setChildNode(&#39;Foo&#39;, &#39;Bar&#39;);
+<a name="line182"></a>  assertEquals(&#39;Bar&#39;, node.getChildNodeValue(&#39;Foo&#39;));
+<a name="line183"></a>}
+<a name="line184"></a>
+<a name="line185"></a>
+<a name="line186"></a>function testSetChildNotWithNull_object() {
+<a name="line187"></a>  var node = new goog.ds.FastDataNode({Foo: &#39;Bar&#39;}, &#39;test&#39;);
+<a name="line188"></a>  node.setChildNode(&#39;Foo&#39;, null);
+<a name="line189"></a>  assertNull(&#39;node should not have a Foo child&#39;, node.getChildNode(&#39;Foo&#39;));
+<a name="line190"></a>  assertEquals(&#39;node should not have any children&#39;,
+<a name="line191"></a>      0, node.getChildNodes().getCount());
+<a name="line192"></a>}
+<a name="line193"></a>
+<a name="line194"></a>function testSetChildNotWithNull_list() {
+<a name="line195"></a>  var list = goog.ds.FastDataNode.fromJs([], &#39;list&#39;);
+<a name="line196"></a>  list.setChildNode(&#39;foo&#39;, &#39;bar&#39;);
+<a name="line197"></a>  list.setChildNode(&#39;gee&#39;, &#39;wizz&#39;);
+<a name="line198"></a>  assertEquals(&#39;bar&#39;, list.getChildNodeValue(&#39;foo&#39;));
+<a name="line199"></a>  assertEquals(&#39;wizz&#39;, list.getChildNodes().getByIndex(1).get());
+<a name="line200"></a>  list.setChildNode(&#39;foo&#39;, null);
+<a name="line201"></a>  assertEquals(1, list.getChildNodes().getCount());
+<a name="line202"></a>  assertEquals(&#39;wizz&#39;, list.getChildNodeValue(&#39;gee&#39;));
+<a name="line203"></a>  assertEquals(&#39;wizz&#39;, list.getChildNodes().getByIndex(0).get());
+<a name="line204"></a>}
+<a name="line205"></a>
+<a name="line206"></a>function testNodeListIndexesOnId() {
+<a name="line207"></a>  var list = goog.ds.FastDataNode.fromJs([
+<a name="line208"></a>    {id: &#39;^Freq&#39;, value: &#39;foo&#39;}], &#39;list&#39;);
+<a name="line209"></a>  assertEquals(&#39;foo&#39;,
+<a name="line210"></a>      list.getChildNode(&#39;^Freq&#39;).getChildNodeValue(&#39;value&#39;));
+<a name="line211"></a>  list.setChildNode(&#39;^Temp&#39;, {id: &#39;^Temp&#39;, value: &#39;bar&#39;});
+<a name="line212"></a>  assertEquals(&#39;bar&#39;,
+<a name="line213"></a>      list.getChildNode(&#39;^Temp&#39;).getChildNodeValue(&#39;value&#39;));
+<a name="line214"></a>}
+<a name="line215"></a>
+<a name="line216"></a>function verifyDataChangeEvents(expected) {
+<a name="line217"></a>  assertEquals(expected.length, dataChangeEvents.length);
+<a name="line218"></a>  for (var i = 0; i &lt; expected.length; ++i) {
+<a name="line219"></a>    assertEquals(expected[i], dataChangeEvents[i]);
+<a name="line220"></a>  }
+<a name="line221"></a>  dataChangeEvents = [];
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>function testFireDataChangeOnSet() {
+<a name="line225"></a>  var node = new goog.ds.FastDataNode(simpleObject, &#39;Simple&#39;);
+<a name="line226"></a>  node.getChildNode(&#39;Name&#39;).set(&#39;Foo Bar&#39;);
+<a name="line227"></a>  verifyDataChangeEvents([&#39;Simple/Name&#39;]);
+<a name="line228"></a>}
+<a name="line229"></a>
+<a name="line230"></a>function testFireDataChangeOnSetChildNode_object() {
+<a name="line231"></a>  var node = new goog.ds.FastDataNode(simpleObject, &#39;Simple&#39;);
+<a name="line232"></a>  node.setChildNode(&#39;Name&#39;, &#39;Foo Bar&#39;);
+<a name="line233"></a>  node.setChildNode(&#39;Email&#39;, null);
+<a name="line234"></a>  verifyDataChangeEvents([&#39;Simple/Name&#39;, &#39;Simple/Email&#39;]);
+<a name="line235"></a>}
+<a name="line236"></a>
+<a name="line237"></a>function testFireDataChangeOnSetChildNode_list() {
+<a name="line238"></a>  var node = new goog.ds.FastDataNode(complexObject, &#39;Node&#39;);
+<a name="line239"></a>  node.getChildNode(&#39;GroupIds&#39;).setChildNode(&#39;[0]&#39;, 1001);
+<a name="line240"></a>  verifyDataChangeEvents([&#39;Node/GroupIds/[0]&#39;]);
+<a name="line241"></a>
+<a name="line242"></a>  node.getChildNode(&#39;GroupIds&#39;).getChildNodes().add(1002);
+<a name="line243"></a>  verifyDataChangeEvents([&#39;Node/GroupIds/[2]&#39;, &#39;Node/GroupIds&#39;,
+<a name="line244"></a>    &#39;Node/GroupIds/count()&#39;]);
+<a name="line245"></a>
+<a name="line246"></a>  node.getChildNode(&#39;GroupIds&#39;).setChildNode(&#39;foo&#39;, 1003);
+<a name="line247"></a>  verifyDataChangeEvents([&#39;Node/GroupIds/foo&#39;, &#39;Node/GroupIds&#39;,
+<a name="line248"></a>    &#39;Node/GroupIds/count()&#39;]);
+<a name="line249"></a>}
+</pre>
+
+
+</body>
+</html>

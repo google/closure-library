@@ -1,0 +1,156 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>util_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_useragent_util_test.js.html">util_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file frexcept in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Unit tests for goog.labs.userAgent.engine.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.labs.userAgent.utilTest&#39;);
+<a name="line20"></a>
+<a name="line21"></a>goog.require(&#39;goog.functions&#39;);
+<a name="line22"></a>goog.require(&#39;goog.labs.userAgent.testAgents&#39;);
+<a name="line23"></a>goog.require(&#39;goog.labs.userAgent.util&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line25"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line26"></a>
+<a name="line27"></a>goog.setTestOnly(&#39;goog.labs.userAgent.utilTest&#39;);
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>var stubs = new goog.testing.PropertyReplacer();
+<a name="line31"></a>
+<a name="line32"></a>function tearDown() {
+<a name="line33"></a>  stubs.reset();
+<a name="line34"></a>}
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>/**
+<a name="line38"></a> * Tests parsing a few example UA strings.
+<a name="line39"></a> */
+<a name="line40"></a>function testExtractVersionTuples() {
+<a name="line41"></a>  // Old Android
+<a name="line42"></a>  var tuples = goog.labs.userAgent.util.extractVersionTuples(
+<a name="line43"></a>      goog.labs.userAgent.testAgents.ANDROID_BROWSER_235);
+<a name="line44"></a>
+<a name="line45"></a>  assertEquals(4, tuples.length);
+<a name="line46"></a>  assertSameElements(
+<a name="line47"></a>      [&#39;Mozilla&#39;, &#39;5.0&#39;,
+<a name="line48"></a>       &#39;Linux; U; Android 2.3.5; en-us; HTC Vision Build/GRI40&#39;], tuples[0]);
+<a name="line49"></a>  assertSameElements([&#39;AppleWebKit&#39;, &#39;533.1&#39;, &#39;KHTML, like Gecko&#39;], tuples[1]);
+<a name="line50"></a>  assertSameElements([&#39;Version&#39;, &#39;4.0&#39;, undefined], tuples[2]);
+<a name="line51"></a>  assertSameElements([&#39;Mobile Safari&#39;, &#39;533.1&#39;, undefined], tuples[3]);
+<a name="line52"></a>
+<a name="line53"></a>  // IE 9
+<a name="line54"></a>  tuples = goog.labs.userAgent.util.extractVersionTuples(
+<a name="line55"></a>      goog.labs.userAgent.testAgents.IE_9);
+<a name="line56"></a>  assertEquals(1, tuples.length);
+<a name="line57"></a>  assertSameElements(
+<a name="line58"></a>      [&#39;Mozilla&#39;, &#39;5.0&#39;,
+<a name="line59"></a>       &#39;compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0&#39;], tuples[0]);
+<a name="line60"></a>
+<a name="line61"></a>  // Opera
+<a name="line62"></a>  tuples = goog.labs.userAgent.util.extractVersionTuples(
+<a name="line63"></a>      goog.labs.userAgent.testAgents.OPERA_10);
+<a name="line64"></a>  assertEquals(3, tuples.length);
+<a name="line65"></a>  assertSameElements([&#39;Opera&#39;, &#39;9.80&#39;, &#39;S60; SymbOS; Opera Mobi/447; U; en&#39;],
+<a name="line66"></a>                     tuples[0]);
+<a name="line67"></a>  assertSameElements([&#39;Presto&#39;, &#39;2.4.18&#39;, undefined], tuples[1]);
+<a name="line68"></a>  assertSameElements([&#39;Version&#39;, &#39;10.00&#39;, undefined], tuples[2]);
+<a name="line69"></a>}
+<a name="line70"></a>
+<a name="line71"></a>function testSetUserAgent() {
+<a name="line72"></a>  var ua = &#39;Five Finger Death Punch&#39;;
+<a name="line73"></a>  goog.labs.userAgent.util.setUserAgent(ua);
+<a name="line74"></a>  assertEquals(ua, goog.labs.userAgent.util.getUserAgent());
+<a name="line75"></a>  assertTrue(goog.labs.userAgent.util.matchUserAgent(&#39;Punch&#39;));
+<a name="line76"></a>  assertFalse(goog.labs.userAgent.util.matchUserAgent(&#39;punch&#39;));
+<a name="line77"></a>  assertFalse(goog.labs.userAgent.util.matchUserAgent(&#39;Mozilla&#39;));
+<a name="line78"></a>}
+<a name="line79"></a>
+<a name="line80"></a>function testSetUserAgentIgnoreCase() {
+<a name="line81"></a>  var ua = &#39;Five Finger Death Punch&#39;;
+<a name="line82"></a>  goog.labs.userAgent.util.setUserAgent(ua);
+<a name="line83"></a>  assertEquals(ua, goog.labs.userAgent.util.getUserAgent());
+<a name="line84"></a>  assertTrue(goog.labs.userAgent.util.matchUserAgentIgnoreCase(&#39;Punch&#39;));
+<a name="line85"></a>  assertTrue(goog.labs.userAgent.util.matchUserAgentIgnoreCase(&#39;punch&#39;));
+<a name="line86"></a>  assertFalse(goog.labs.userAgent.util.matchUserAgentIgnoreCase(&#39;Mozilla&#39;));
+<a name="line87"></a>}
+<a name="line88"></a>
+<a name="line89"></a>function testNoNavigator() {
+<a name="line90"></a>  stubs.set(goog.labs.userAgent.util, &#39;getNavigator_&#39;,
+<a name="line91"></a>            goog.functions.constant(undefined));
+<a name="line92"></a>  assertEquals(&#39;&#39;, goog.labs.userAgent.util.getNativeUserAgentString_());
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>function testNavigatorWithNoUserAgent() {
+<a name="line96"></a>  stubs.set(goog.labs.userAgent.util, &#39;getNavigator_&#39;,
+<a name="line97"></a>            goog.functions.constant(undefined));
+<a name="line98"></a>  assertEquals(&#39;&#39;, goog.labs.userAgent.util.getNativeUserAgentString_());
+<a name="line99"></a>}
+<a name="line100"></a>
+<a name="line101"></a>function testNavigatorWithUserAgent() {
+<a name="line102"></a>  stubs.set(goog.labs.userAgent.util, &#39;getNavigator_&#39;,
+<a name="line103"></a>            goog.functions.constant({&#39;userAgent&#39;: &#39;moose&#39;}));
+<a name="line104"></a>  assertEquals(&#39;moose&#39;, goog.labs.userAgent.util.getNativeUserAgentString_());
+<a name="line105"></a>}
+</pre>
+
+
+</body>
+</html>

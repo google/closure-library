@@ -1,0 +1,308 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>fontsizemonitor_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_fontsizemonitor_test.js.html">fontsizemonitor_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.dom.FontSizeMonitorTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.dom.FontSizeMonitorTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom.FontSizeMonitor&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events&#39;);
+<a name="line21"></a>goog.require(&#39;goog.events.Event&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.PropertyReplacer&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.events&#39;);
+<a name="line24"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line25"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line26"></a>
+<a name="line27"></a>function isBuggyGecko() {
+<a name="line28"></a>  return goog.userAgent.GECKO &amp;&amp; !goog.userAgent.isVersionOrHigher(&#39;1.9&#39;);
+<a name="line29"></a>}
+<a name="line30"></a>
+<a name="line31"></a>var monitor;
+<a name="line32"></a>
+<a name="line33"></a>function setUp() {
+<a name="line34"></a>  monitor = new goog.dom.FontSizeMonitor();
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function tearDown() {
+<a name="line38"></a>  monitor.dispose();
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>function getResizeTarget() {
+<a name="line42"></a>  return goog.userAgent.IE ? monitor.sizeElement_ :
+<a name="line43"></a>      goog.dom.getFrameContentWindow(monitor.sizeElement_);
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>function testFontSizeNoChange() {
+<a name="line47"></a>  // This tests that firing the resize event without changing the font-size
+<a name="line48"></a>  // does not trigger the event.
+<a name="line49"></a>
+<a name="line50"></a>  var fired = false;
+<a name="line51"></a>  goog.events.listen(monitor, goog.dom.FontSizeMonitor.EventType.CHANGE,
+<a name="line52"></a>                     function(e) {
+<a name="line53"></a>                       fired = true;
+<a name="line54"></a>                     });
+<a name="line55"></a>
+<a name="line56"></a>  var resizeEvent = new goog.events.Event(&#39;resize&#39;, getResizeTarget());
+<a name="line57"></a>  goog.testing.events.fireBrowserEvent(resizeEvent);
+<a name="line58"></a>
+<a name="line59"></a>  assertFalse(&#39;The font size should not have changed&#39;, fired);
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>function testFontSizeChanged() {
+<a name="line63"></a>  // One can trigger the iframe resize by changing the
+<a name="line64"></a>  // document.body.style.fontSize but the event is fired asynchronously in
+<a name="line65"></a>  // Firefox.  Instead, we just override the lastWidth_ to simulate that the
+<a name="line66"></a>  // size changed.
+<a name="line67"></a>
+<a name="line68"></a>  var fired = false;
+<a name="line69"></a>  goog.events.listen(monitor, goog.dom.FontSizeMonitor.EventType.CHANGE,
+<a name="line70"></a>                     function(e) {
+<a name="line71"></a>                       fired = true;
+<a name="line72"></a>                     });
+<a name="line73"></a>
+<a name="line74"></a>  monitor.lastWidth_--;
+<a name="line75"></a>
+<a name="line76"></a>  var resizeEvent = new goog.events.Event(&#39;resize&#39;, getResizeTarget());
+<a name="line77"></a>  goog.testing.events.fireBrowserEvent(resizeEvent);
+<a name="line78"></a>
+<a name="line79"></a>  assertTrue(&#39;The font size should have changed&#39;, fired);
+<a name="line80"></a>}
+<a name="line81"></a>
+<a name="line82"></a>function testCreateAndDispose() {
+<a name="line83"></a>  var frameCount = window.frames.length;
+<a name="line84"></a>  var iframeElementCount = document.getElementsByTagName(&#39;iframe&#39;).length;
+<a name="line85"></a>  var divElementCount = document.getElementsByTagName(&#39;div&#39;).length;
+<a name="line86"></a>
+<a name="line87"></a>  var monitor = new goog.dom.FontSizeMonitor();
+<a name="line88"></a>  monitor.dispose();
+<a name="line89"></a>
+<a name="line90"></a>  var newFrameCount = window.frames.length;
+<a name="line91"></a>  var newIframeElementCount = document.getElementsByTagName(&#39;iframe&#39;).length;
+<a name="line92"></a>  var newDivElementCount = document.getElementsByTagName(&#39;div&#39;).length;
+<a name="line93"></a>
+<a name="line94"></a>  assertEquals(&#39;There should be no trailing frames&#39;,
+<a name="line95"></a>               frameCount + isBuggyGecko(), newFrameCount);
+<a name="line96"></a>  assertEquals(&#39;There should be no trailing iframe elements&#39;,
+<a name="line97"></a>               iframeElementCount + isBuggyGecko(),
+<a name="line98"></a>               newIframeElementCount);
+<a name="line99"></a>  assertEquals(&#39;There should be no trailing div elements&#39;,
+<a name="line100"></a>               divElementCount, newDivElementCount);
+<a name="line101"></a>}
+<a name="line102"></a>
+<a name="line103"></a>function testWithDomHelper() {
+<a name="line104"></a>  var frameCount = window.frames.length;
+<a name="line105"></a>  var iframeElementCount = document.getElementsByTagName(&#39;iframe&#39;).length;
+<a name="line106"></a>  var divElementCount = document.getElementsByTagName(&#39;div&#39;).length;
+<a name="line107"></a>
+<a name="line108"></a>  var monitor = new goog.dom.FontSizeMonitor(goog.dom.getDomHelper());
+<a name="line109"></a>
+<a name="line110"></a>  var newFrameCount = window.frames.length;
+<a name="line111"></a>  var newIframeElementCount = document.getElementsByTagName(&#39;iframe&#39;).length;
+<a name="line112"></a>  var newDivElementCount = document.getElementsByTagName(&#39;div&#39;).length;
+<a name="line113"></a>
+<a name="line114"></a>  if (goog.userAgent.IE) {
+<a name="line115"></a>    assertEquals(&#39;There should be one new div element&#39;,
+<a name="line116"></a>                 divElementCount + 1, newDivElementCount);
+<a name="line117"></a>  } else {
+<a name="line118"></a>    assertEquals(&#39;There should be one new frame&#39;,
+<a name="line119"></a>                 frameCount + 1, newFrameCount);
+<a name="line120"></a>    assertEquals(&#39;There should be one new iframe element&#39;,
+<a name="line121"></a>                 iframeElementCount + 1, newIframeElementCount);
+<a name="line122"></a>  }
+<a name="line123"></a>
+<a name="line124"></a>  // Use the first iframe in the doc.  This is added in the HTML markup.
+<a name="line125"></a>  var win = window.frames[0];
+<a name="line126"></a>  var doc = win.document;
+<a name="line127"></a>  doc.open();
+<a name="line128"></a>  doc.write(&#39;&lt;html&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;&#39;);
+<a name="line129"></a>  doc.close();
+<a name="line130"></a>  var domHelper = goog.dom.getDomHelper(doc);
+<a name="line131"></a>
+<a name="line132"></a>  var frameCount2 = win.frames.length;
+<a name="line133"></a>  var iframeElementCount2 = doc.getElementsByTagName(&#39;iframe&#39;).length;
+<a name="line134"></a>  var divElementCount2 = doc.getElementsByTagName(&#39;div&#39;).length;
+<a name="line135"></a>
+<a name="line136"></a>  var monitor2 = new goog.dom.FontSizeMonitor(domHelper);
+<a name="line137"></a>
+<a name="line138"></a>  var newFrameCount2 = win.frames.length;
+<a name="line139"></a>  var newIframeElementCount2 = doc.getElementsByTagName(&#39;iframe&#39;).length;
+<a name="line140"></a>  var newDivElementCount2 = doc.getElementsByTagName(&#39;div&#39;).length;
+<a name="line141"></a>
+<a name="line142"></a>  if (goog.userAgent.IE) {
+<a name="line143"></a>    assertEquals(&#39;There should be one new div element&#39;,
+<a name="line144"></a>                 divElementCount2 + 1, newDivElementCount2);
+<a name="line145"></a>  } else {
+<a name="line146"></a>    assertEquals(&#39;There should be one new frame&#39;, frameCount2 + 1,
+<a name="line147"></a>                 newFrameCount2);
+<a name="line148"></a>    assertEquals(&#39;There should be one new iframe element&#39;,
+<a name="line149"></a>                 iframeElementCount2 + 1, newIframeElementCount2);
+<a name="line150"></a>  }
+<a name="line151"></a>
+<a name="line152"></a>  monitor.dispose();
+<a name="line153"></a>  monitor2.dispose();
+<a name="line154"></a>}
+<a name="line155"></a>
+<a name="line156"></a>function testEnsureThatDocIsOpenedForGecko() {
+<a name="line157"></a>
+<a name="line158"></a>  var pr = new goog.testing.PropertyReplacer();
+<a name="line159"></a>  pr.set(goog.userAgent, &#39;GECKO&#39;, true);
+<a name="line160"></a>  pr.set(goog.userAgent, &#39;IE&#39;, false);
+<a name="line161"></a>
+<a name="line162"></a>  var openCalled = false;
+<a name="line163"></a>  var closeCalled = false;
+<a name="line164"></a>  var instance = {
+<a name="line165"></a>    document: {
+<a name="line166"></a>      open: function() {
+<a name="line167"></a>        openCalled = true;
+<a name="line168"></a>      },
+<a name="line169"></a>      close: function() {
+<a name="line170"></a>        closeCalled = true;
+<a name="line171"></a>      }
+<a name="line172"></a>    },
+<a name="line173"></a>    attachEvent: function() {}
+<a name="line174"></a>  };
+<a name="line175"></a>
+<a name="line176"></a>  pr.set(goog.dom, &#39;getFrameContentWindow&#39;, function() {
+<a name="line177"></a>    return instance;
+<a name="line178"></a>  });
+<a name="line179"></a>
+<a name="line180"></a>  try {
+<a name="line181"></a>    var monitor = new goog.dom.FontSizeMonitor();
+<a name="line182"></a>
+<a name="line183"></a>    assertTrue(&#39;doc.open should have been called&#39;, openCalled);
+<a name="line184"></a>    assertTrue(&#39;doc.close should have been called&#39;, closeCalled);
+<a name="line185"></a>
+<a name="line186"></a>    monitor.dispose();
+<a name="line187"></a>  } finally {
+<a name="line188"></a>    pr.reset();
+<a name="line189"></a>  }
+<a name="line190"></a>}
+<a name="line191"></a>
+<a name="line192"></a>function testFirefox2WorkAroundFirefox3() {
+<a name="line193"></a>  var pr = new goog.testing.PropertyReplacer();
+<a name="line194"></a>  pr.set(goog.userAgent, &#39;GECKO&#39;, true);
+<a name="line195"></a>  pr.set(goog.userAgent, &#39;IE&#39;, false);
+<a name="line196"></a>
+<a name="line197"></a>  try {
+<a name="line198"></a>    // 1.9 should clear iframes
+<a name="line199"></a>    pr.set(goog.userAgent, &#39;VERSION&#39;, &#39;1.9&#39;);
+<a name="line200"></a>    goog.userAgent.isVersionOrHigherCache_ = {};
+<a name="line201"></a>
+<a name="line202"></a>    var frameCount = window.frames.length;
+<a name="line203"></a>    var iframeElementCount = document.getElementsByTagName(&#39;iframe&#39;).length;
+<a name="line204"></a>    var divElementCount = document.getElementsByTagName(&#39;div&#39;).length;
+<a name="line205"></a>
+<a name="line206"></a>    var monitor = new goog.dom.FontSizeMonitor();
+<a name="line207"></a>    monitor.dispose();
+<a name="line208"></a>
+<a name="line209"></a>    var newFrameCount = window.frames.length;
+<a name="line210"></a>    var newIframeElementCount = document.getElementsByTagName(&#39;iframe&#39;).length;
+<a name="line211"></a>    var newDivElementCount = document.getElementsByTagName(&#39;div&#39;).length;
+<a name="line212"></a>
+<a name="line213"></a>    assertEquals(&#39;There should be no trailing frames&#39;,
+<a name="line214"></a>                 frameCount, newFrameCount);
+<a name="line215"></a>    assertEquals(&#39;There should be no trailing iframe elements&#39;,
+<a name="line216"></a>                 iframeElementCount,
+<a name="line217"></a>                 newIframeElementCount);
+<a name="line218"></a>    assertEquals(&#39;There should be no trailing div elements&#39;,
+<a name="line219"></a>                 divElementCount, newDivElementCount);
+<a name="line220"></a>  } finally {
+<a name="line221"></a>    pr.reset();
+<a name="line222"></a>  }
+<a name="line223"></a>}
+<a name="line224"></a>
+<a name="line225"></a>
+<a name="line226"></a>function testFirefox2WorkAroundFirefox2() {
+<a name="line227"></a>  var pr = new goog.testing.PropertyReplacer();
+<a name="line228"></a>  pr.set(goog.userAgent, &#39;GECKO&#39;, true);
+<a name="line229"></a>  pr.set(goog.userAgent, &#39;IE&#39;, false);
+<a name="line230"></a>
+<a name="line231"></a>  try {
+<a name="line232"></a>    // 1.8 should NOT clear iframes
+<a name="line233"></a>    pr.set(goog.userAgent, &#39;VERSION&#39;, &#39;1.8&#39;);
+<a name="line234"></a>    goog.userAgent.isVersionOrHigherCache_ = {};
+<a name="line235"></a>
+<a name="line236"></a>    var frameCount = window.frames.length;
+<a name="line237"></a>    var iframeElementCount = document.getElementsByTagName(&#39;iframe&#39;).length;
+<a name="line238"></a>    var divElementCount = document.getElementsByTagName(&#39;div&#39;).length;
+<a name="line239"></a>
+<a name="line240"></a>    var monitor = new goog.dom.FontSizeMonitor();
+<a name="line241"></a>    monitor.dispose();
+<a name="line242"></a>
+<a name="line243"></a>    var newFrameCount = window.frames.length;
+<a name="line244"></a>    var newIframeElementCount = document.getElementsByTagName(&#39;iframe&#39;).length;
+<a name="line245"></a>    var newDivElementCount = document.getElementsByTagName(&#39;div&#39;).length;
+<a name="line246"></a>
+<a name="line247"></a>    assertEquals(&#39;There should be no trailing frames&#39;,
+<a name="line248"></a>                 frameCount + 1, newFrameCount);
+<a name="line249"></a>    assertEquals(&#39;There should be no trailing iframe elements&#39;,
+<a name="line250"></a>                 iframeElementCount + 1,
+<a name="line251"></a>                 newIframeElementCount);
+<a name="line252"></a>    assertEquals(&#39;There should be no trailing div elements&#39;,
+<a name="line253"></a>                 divElementCount, newDivElementCount);
+<a name="line254"></a>  } finally {
+<a name="line255"></a>    pr.reset();
+<a name="line256"></a>  }
+<a name="line257"></a>}
+</pre>
+
+
+</body>
+</html>

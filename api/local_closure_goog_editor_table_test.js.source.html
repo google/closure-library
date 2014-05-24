@@ -1,0 +1,533 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>table_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_table_test.js.html">table_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.editor.TableTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.editor.TableTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line19"></a>goog.require(&#39;goog.editor.Table&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line21"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line22"></a>
+<a name="line23"></a>function setUp() {
+<a name="line24"></a>  var inputTables = document.getElementsByTagName(&#39;table&#39;);
+<a name="line25"></a>  testElements = {};
+<a name="line26"></a>  testObjects = {};
+<a name="line27"></a>  for (var i = 0; i &lt; inputTables.length; i++) {
+<a name="line28"></a>    var originalTable = inputTables[i];
+<a name="line29"></a>    if (originalTable.id.substring(0, 5) == &#39;test-&#39;) {
+<a name="line30"></a>      var tableName = originalTable.id.substring(5);
+<a name="line31"></a>      var testTable = originalTable.cloneNode(true);
+<a name="line32"></a>      testTable.id = tableName;
+<a name="line33"></a>      testElements[tableName] = testTable;
+<a name="line34"></a>      document.body.appendChild(testTable);
+<a name="line35"></a>      testObjects[tableName] = new goog.editor.Table(testTable);
+<a name="line36"></a>    }
+<a name="line37"></a>  }
+<a name="line38"></a>}
+<a name="line39"></a>
+<a name="line40"></a>function tearDown() {
+<a name="line41"></a>  for (var tableName in testElements) {
+<a name="line42"></a>    document.body.removeChild(testElements[tableName]);
+<a name="line43"></a>    delete testElements[tableName];
+<a name="line44"></a>    delete testObjects[tableName];
+<a name="line45"></a>  }
+<a name="line46"></a>  testElements = null;
+<a name="line47"></a>  testObjects = null;
+<a name="line48"></a>}
+<a name="line49"></a>
+<a name="line50"></a>// These tests don&#39;t pass on Safari, because the table editor only works
+<a name="line51"></a>// on IE and FF right now.
+<a name="line52"></a>// TODO(nicksantos): Fix this.
+<a name="line53"></a>if (!goog.userAgent.WEBKIT) {
+<a name="line54"></a>
+<a name="line55"></a>  function tableSanityCheck(editableTable, rowCount, colCount) {
+<a name="line56"></a>    assertEquals(&#39;Table has expected number of rows&#39;,
+<a name="line57"></a>        rowCount, editableTable.rows.length);
+<a name="line58"></a>    for (var i = 0, row; row = editableTable.rows[i]; i++) {
+<a name="line59"></a>      assertEquals(&#39;Row &#39; + i + &#39; has expected number of columns&#39;,
+<a name="line60"></a>          colCount, row.columns.length);
+<a name="line61"></a>    }
+<a name="line62"></a>  }
+<a name="line63"></a>
+<a name="line64"></a>  function testBasicTable() {
+<a name="line65"></a>    // Do some basic sanity checking on the editable table structure
+<a name="line66"></a>    tableSanityCheck(testObjects.basic, 4, 3);
+<a name="line67"></a>    var originalRows = testElements.basic.getElementsByTagName(&#39;tr&#39;);
+<a name="line68"></a>    assertEquals(&#39;Basic table row count, compared to source&#39;,
+<a name="line69"></a>        originalRows.length, testObjects.basic.rows.length);
+<a name="line70"></a>    assertEquals(&#39;Basic table row count, known value&#39;,
+<a name="line71"></a>        4, testObjects.basic.rows.length);
+<a name="line72"></a>    assertEquals(&#39;Basic table first row element&#39;,
+<a name="line73"></a>        originalRows[0], testObjects.basic.rows[0].element);
+<a name="line74"></a>    assertEquals(&#39;Basic table last row element&#39;,
+<a name="line75"></a>        originalRows[3], testObjects.basic.rows[3].element);
+<a name="line76"></a>    assertEquals(&#39;Basic table first row length&#39;,
+<a name="line77"></a>        3, testObjects.basic.rows[0].columns.length);
+<a name="line78"></a>    assertEquals(&#39;Basic table last row length&#39;,
+<a name="line79"></a>        3, testObjects.basic.rows[3].columns.length);
+<a name="line80"></a>  }
+<a name="line81"></a>
+<a name="line82"></a>  function testTortureTable() {
+<a name="line83"></a>    // Do basic sanity checking on torture table structure
+<a name="line84"></a>    tableSanityCheck(testObjects.torture, 9, 3);
+<a name="line85"></a>    var originalRows = testElements.torture.getElementsByTagName(&#39;tr&#39;);
+<a name="line86"></a>    assertEquals(&#39;Torture table row count, compared to source&#39;,
+<a name="line87"></a>        originalRows.length, testObjects.torture.rows.length);
+<a name="line88"></a>    assertEquals(&#39;Torture table row count, known value&#39;,
+<a name="line89"></a>        9, testObjects.torture.rows.length);
+<a name="line90"></a>  }
+<a name="line91"></a>
+<a name="line92"></a>  function _testInsertRowResult(element, editableTable,  newTr, index) {
+<a name="line93"></a>    if (element == testElements.basic) {
+<a name="line94"></a>      originalRowCount = 4;
+<a name="line95"></a>    } else if (element == testElements.torture) {
+<a name="line96"></a>      originalRowCount = 9;
+<a name="line97"></a>    }
+<a name="line98"></a>
+<a name="line99"></a>    assertEquals(&#39;Row was added to table&#39;,
+<a name="line100"></a>        originalRowCount + 1, element.getElementsByTagName(&#39;tr&#39;).length);
+<a name="line101"></a>    assertEquals(&#39;Row was added at position &#39; + index,
+<a name="line102"></a>        element.getElementsByTagName(&#39;tr&#39;)[index], newTr);
+<a name="line103"></a>    assertEquals(&#39;Row knows its own position&#39;,
+<a name="line104"></a>        index, editableTable.rows[index].index);
+<a name="line105"></a>    assertEquals(&#39;EditableTable shows row at position &#39; + index,
+<a name="line106"></a>        newTr, editableTable.rows[index].element);
+<a name="line107"></a>    assertEquals(&#39;New row has correct number of TDs&#39;,
+<a name="line108"></a>        3, newTr.getElementsByTagName(&#39;td&#39;).length);
+<a name="line109"></a>  }
+<a name="line110"></a>
+<a name="line111"></a>  function testInsertRowAtBeginning() {
+<a name="line112"></a>    var tr = testObjects.basic.insertRow(0);
+<a name="line113"></a>    _testInsertRowResult(testElements.basic, testObjects.basic, tr, 0);
+<a name="line114"></a>  }
+<a name="line115"></a>
+<a name="line116"></a>  function testInsertRowInMiddle() {
+<a name="line117"></a>    var tr = testObjects.basic.insertRow(2);
+<a name="line118"></a>    _testInsertRowResult(testElements.basic, testObjects.basic, tr, 2);
+<a name="line119"></a>  }
+<a name="line120"></a>
+<a name="line121"></a>  function testInsertRowAtEnd() {
+<a name="line122"></a>    assertEquals(&#39;Table has expected number of existing rows&#39;,
+<a name="line123"></a>        4, testObjects.basic.rows.length);
+<a name="line124"></a>    var tr = testObjects.basic.insertRow(4);
+<a name="line125"></a>    _testInsertRowResult(testElements.basic, testObjects.basic, tr, 4);
+<a name="line126"></a>  }
+<a name="line127"></a>
+<a name="line128"></a>  function testInsertRowAtEndNoIndexArgument() {
+<a name="line129"></a>    assertEquals(&#39;Table has expected number of existing rows&#39;,
+<a name="line130"></a>        4, testObjects.basic.rows.length);
+<a name="line131"></a>    var tr = testObjects.basic.insertRow();
+<a name="line132"></a>    _testInsertRowResult(testElements.basic, testObjects.basic, tr, 4);
+<a name="line133"></a>  }
+<a name="line134"></a>
+<a name="line135"></a>  function testInsertRowAtBeginningRowspan() {
+<a name="line136"></a>    // Test inserting a row when the existing DOM row at that index has
+<a name="line137"></a>    // a cell with a rowspan. This should be just like a regular insert -
+<a name="line138"></a>    // the rowspan shouldn&#39;t have any effect.
+<a name="line139"></a>    assertEquals(&#39;Cell has starting rowspan&#39;,
+<a name="line140"></a>        2,
+<a name="line141"></a>        goog.dom.getFirstElementChild(
+<a name="line142"></a>        testElements.torture.getElementsByTagName(&#39;tr&#39;)[0]).rowSpan);
+<a name="line143"></a>    var tr = testObjects.torture.insertRow(0);
+<a name="line144"></a>    // Among other things this verifies that the new row has 3 child TDs.
+<a name="line145"></a>    _testInsertRowResult(testElements.torture, testObjects.torture, tr, 0);
+<a name="line146"></a>  }
+<a name="line147"></a>
+<a name="line148"></a>  function testInsertRowAtEndingRowspan() {
+<a name="line149"></a>    // Test inserting a row when there&#39;s a cell in a previous DOM row
+<a name="line150"></a>    // with a rowspan that extends into the row with the given index
+<a name="line151"></a>    // and ends there. This should be just like a regular insert -
+<a name="line152"></a>    // the rowspan shouldn&#39;t have any effect.
+<a name="line153"></a>    assertEquals(&#39;Cell has ending rowspan&#39;,
+<a name="line154"></a>        4,
+<a name="line155"></a>        goog.dom.getLastElementChild(
+<a name="line156"></a>        testElements.torture.getElementsByTagName(&#39;tr&#39;)[5]).rowSpan);
+<a name="line157"></a>    var tr = testObjects.torture.insertRow();
+<a name="line158"></a>    // Among other things this verifies that the new row has 3 child TDs.
+<a name="line159"></a>    _testInsertRowResult(testElements.torture, testObjects.torture, tr, 9);
+<a name="line160"></a>  }
+<a name="line161"></a>
+<a name="line162"></a>  function testInsertRowAtSpanningRowspan() {
+<a name="line163"></a>    // Test inserting a row at an index where there&#39;s a cell with a rowspan
+<a name="line164"></a>    // that begins in a previous row and continues into the next row. In this
+<a name="line165"></a>    // case the existing cell&#39;s rowspan should be extended, and the new
+<a name="line166"></a>    // tr should have one less child element.
+<a name="line167"></a>    var rowSpannedCell = testObjects.torture.rows[7].columns[2];
+<a name="line168"></a>    assertTrue(&#39;Existing cell has overlapping rowspan&#39;,
+<a name="line169"></a>        rowSpannedCell.startRow == 5 &amp;&amp; rowSpannedCell.endRow == 8);
+<a name="line170"></a>    var tr = testObjects.torture.insertRow(7);
+<a name="line171"></a>    assertEquals(&#39;New DOM row has one less cell&#39;,
+<a name="line172"></a>        2, tr.getElementsByTagName(&#39;td&#39;).length);
+<a name="line173"></a>    assertEquals(&#39;Rowspanned cell listed in new EditableRow\&#39;s columns&#39;,
+<a name="line174"></a>        testObjects.torture.rows[6].columns[2].element,
+<a name="line175"></a>        testObjects.torture.rows[7].columns[2].element);
+<a name="line176"></a>  }
+<a name="line177"></a>
+<a name="line178"></a>  function _testInsertColumnResult(newCells, element, editableTable, index) {
+<a name="line179"></a>    for (var rowNo = 0, row; row = editableTable.rows[rowNo]; rowNo++) {
+<a name="line180"></a>      assertEquals(&#39;Row includes new column&#39;,
+<a name="line181"></a>          4, row.columns.length);
+<a name="line182"></a>    }
+<a name="line183"></a>    assertEquals(&#39;New cell in correct position&#39;,
+<a name="line184"></a>        newCells[0], editableTable.rows[0].columns[index].element);
+<a name="line185"></a>  }
+<a name="line186"></a>
+<a name="line187"></a>  function testInsertColumnAtBeginning() {
+<a name="line188"></a>    var startColCount = testObjects.basic.rows[0].columns.length;
+<a name="line189"></a>    var newCells = testObjects.basic.insertColumn(0);
+<a name="line190"></a>    assertEquals(&#39;New cell added for each row&#39;,
+<a name="line191"></a>        testObjects.basic.rows.length, newCells.length);
+<a name="line192"></a>    assertEquals(&#39;Insert column incremented column length&#39;,
+<a name="line193"></a>        startColCount + 1, testObjects.basic.rows[0].columns.length);
+<a name="line194"></a>    _testInsertColumnResult(newCells, testElements.basic, testObjects.basic, 0);
+<a name="line195"></a>  }
+<a name="line196"></a>
+<a name="line197"></a>  function testInsertColumnAtEnd() {
+<a name="line198"></a>    var startColCount = testObjects.basic.rows[0].columns.length;
+<a name="line199"></a>    var newCells = testObjects.basic.insertColumn(3);
+<a name="line200"></a>    assertEquals(&#39;New cell added for each row&#39;,
+<a name="line201"></a>        testObjects.basic.rows.length, newCells.length);
+<a name="line202"></a>    assertEquals(&#39;Insert column incremented column length&#39;,
+<a name="line203"></a>        startColCount + 1, testObjects.basic.rows[0].columns.length);
+<a name="line204"></a>    _testInsertColumnResult(newCells, testElements.basic, testObjects.basic, 3);
+<a name="line205"></a>  }
+<a name="line206"></a>
+<a name="line207"></a>  function testInsertColumnAtEndNoIndexArgument() {
+<a name="line208"></a>    var startColCount = testObjects.basic.rows[0].columns.length;
+<a name="line209"></a>    var newCells = testObjects.basic.insertColumn();
+<a name="line210"></a>    assertEquals(&#39;New cell added for each row&#39;,
+<a name="line211"></a>        testObjects.basic.rows.length, newCells.length);
+<a name="line212"></a>    assertEquals(&#39;Insert column incremented column length&#39;,
+<a name="line213"></a>        startColCount + 1, testObjects.basic.rows[0].columns.length);
+<a name="line214"></a>    _testInsertColumnResult(newCells, testElements.basic, testObjects.basic, 3);
+<a name="line215"></a>  }
+<a name="line216"></a>
+<a name="line217"></a>  function testInsertColumnInMiddle() {
+<a name="line218"></a>    var startColCount = testObjects.basic.rows[0].columns.length;
+<a name="line219"></a>    var newCells = testObjects.basic.insertColumn(2);
+<a name="line220"></a>    assertEquals(&#39;New cell added for each row&#39;,
+<a name="line221"></a>        testObjects.basic.rows.length, newCells.length);
+<a name="line222"></a>    assertEquals(&#39;Insert column incremented column length&#39;,
+<a name="line223"></a>        startColCount + 1, testObjects.basic.rows[0].columns.length);
+<a name="line224"></a>    _testInsertColumnResult(newCells, testElements.basic, testObjects.basic, 2);
+<a name="line225"></a>  }
+<a name="line226"></a>
+<a name="line227"></a>  function testInsertColumnAtBeginning() {
+<a name="line228"></a>    var startColCount = testObjects.basic.rows[0].columns.length;
+<a name="line229"></a>    var newCells = testObjects.basic.insertColumn(0);
+<a name="line230"></a>    assertEquals(&#39;Insert column incremented column length&#39;,
+<a name="line231"></a>        startColCount + 1, testObjects.basic.rows[0].columns.length);
+<a name="line232"></a>    _testInsertColumnResult(newCells, testElements.basic, testObjects.basic, 0);
+<a name="line233"></a>  }
+<a name="line234"></a>
+<a name="line235"></a>  function testInsertColumnAtBeginningColSpan() {
+<a name="line236"></a>    var cells = testObjects.torture.insertColumn(0);
+<a name="line237"></a>    tableSanityCheck(testObjects.torture, 9, 4);
+<a name="line238"></a>    assertEquals(&#39;New cell was added before colspanned cell&#39;,
+<a name="line239"></a>        1, testObjects.torture.rows[3].columns[0].colSpan);
+<a name="line240"></a>    assertEquals(&#39;New cell was added and returned&#39;,
+<a name="line241"></a>        testObjects.torture.rows[3].columns[0].element,
+<a name="line242"></a>        cells[3]);
+<a name="line243"></a>  }
+<a name="line244"></a>
+<a name="line245"></a>  function testInsertColumnAtEndingColSpan() {
+<a name="line246"></a>    var cells = testObjects.torture.insertColumn();
+<a name="line247"></a>    tableSanityCheck(testObjects.torture, 9, 4);
+<a name="line248"></a>    assertEquals(&#39;New cell was added after colspanned cell&#39;,
+<a name="line249"></a>        1, testObjects.torture.rows[0].columns[3].colSpan);
+<a name="line250"></a>    assertEquals(&#39;New cell was added and returned&#39;,
+<a name="line251"></a>        testObjects.torture.rows[0].columns[3].element,
+<a name="line252"></a>        cells[0]);
+<a name="line253"></a>  }
+<a name="line254"></a>
+<a name="line255"></a>  function testInsertColumnAtSpanningColSpan() {
+<a name="line256"></a>    assertEquals(&#39;Existing cell has expected colspan&#39;,
+<a name="line257"></a>        3, testObjects.torture.rows[4].columns[1].colSpan);
+<a name="line258"></a>    var cells = testObjects.torture.insertColumn(1);
+<a name="line259"></a>    tableSanityCheck(testObjects.torture, 9, 4);
+<a name="line260"></a>    assertEquals(&#39;Existing cell increased colspan&#39;,
+<a name="line261"></a>        4, testObjects.torture.rows[4].columns[1].colSpan);
+<a name="line262"></a>    assertEquals(&#39;3 cells weren\&#39;t created due to existing colspans&#39;,
+<a name="line263"></a>        6, cells.length);
+<a name="line264"></a>  }
+<a name="line265"></a>
+<a name="line266"></a>  function testRemoveFirstRow() {
+<a name="line267"></a>    var originalRow = testElements.basic.getElementsByTagName(&#39;tr&#39;)[0];
+<a name="line268"></a>    testObjects.basic.removeRow(0);
+<a name="line269"></a>    tableSanityCheck(testObjects.basic, 3, 3);
+<a name="line270"></a>    assertNotEquals(&#39;Row was removed from table element&#39;,
+<a name="line271"></a>        originalRow, testElements.basic.getElementsByTagName(&#39;tr&#39;)[0]);
+<a name="line272"></a>  }
+<a name="line273"></a>
+<a name="line274"></a>  function testRemoveLastRow() {
+<a name="line275"></a>    var originalRow = testElements.basic.getElementsByTagName(&#39;tr&#39;)[3];
+<a name="line276"></a>    testObjects.basic.removeRow(3);
+<a name="line277"></a>    tableSanityCheck(testObjects.basic, 3, 3);
+<a name="line278"></a>    assertNotEquals(&#39;Row was removed from table element&#39;,
+<a name="line279"></a>        originalRow, testElements.basic.getElementsByTagName(&#39;tr&#39;)[3]);
+<a name="line280"></a>  }
+<a name="line281"></a>
+<a name="line282"></a>  function testRemoveMiddleRow() {
+<a name="line283"></a>    var originalRow = testElements.basic.getElementsByTagName(&#39;tr&#39;)[2];
+<a name="line284"></a>    testObjects.basic.removeRow(2);
+<a name="line285"></a>    tableSanityCheck(testObjects.basic, 3, 3);
+<a name="line286"></a>    assertNotEquals(&#39;Row was removed from table element&#39;,
+<a name="line287"></a>        originalRow, testElements.basic.getElementsByTagName(&#39;tr&#39;)[2]);
+<a name="line288"></a>  }
+<a name="line289"></a>
+<a name="line290"></a>  function testRemoveRowAtBeginingRowSpan() {
+<a name="line291"></a>    var originalRow = testObjects.torture.removeRow(0);
+<a name="line292"></a>    tableSanityCheck(testObjects.torture, 8, 3);
+<a name="line293"></a>    assertNotEquals(&#39;Row was removed from table element&#39;,
+<a name="line294"></a>        originalRow, testElements.basic.getElementsByTagName(&#39;tr&#39;)[0]);
+<a name="line295"></a>    assertEquals(&#39;Rowspan correctly adjusted&#39;,
+<a name="line296"></a>        1, testObjects.torture.rows[0].columns[0].rowSpan);
+<a name="line297"></a>  }
+<a name="line298"></a>
+<a name="line299"></a>  function testRemoveRowAtEndingRowSpan() {
+<a name="line300"></a>    var originalRow = testElements.torture.getElementsByTagName(&#39;tr&#39;)[8];
+<a name="line301"></a>    testObjects.torture.removeRow(8);
+<a name="line302"></a>    tableSanityCheck(testObjects.torture, 8, 3);
+<a name="line303"></a>    assertNotEquals(&#39;Row was removed from table element&#39;,
+<a name="line304"></a>        originalRow, testElements.basic.getElementsByTagName(&#39;tr&#39;)[8]);
+<a name="line305"></a>    assertEquals(&#39;Rowspan correctly adjusted&#39;,
+<a name="line306"></a>        3, testObjects.torture.rows[7].columns[2].rowSpan);
+<a name="line307"></a>  }
+<a name="line308"></a>
+<a name="line309"></a>  function testRemoveRowAtSpanningRowSpan() {
+<a name="line310"></a>    var originalRow = testElements.torture.getElementsByTagName(&#39;tr&#39;)[7];
+<a name="line311"></a>    testObjects.torture.removeRow(7);
+<a name="line312"></a>    tableSanityCheck(testObjects.torture, 8, 3);
+<a name="line313"></a>    assertNotEquals(&#39;Row was removed from table element&#39;,
+<a name="line314"></a>        originalRow, testElements.basic.getElementsByTagName(&#39;tr&#39;)[7]);
+<a name="line315"></a>    assertEquals(&#39;Rowspan correctly adjusted&#39;,
+<a name="line316"></a>        3, testObjects.torture.rows[6].columns[2].rowSpan);
+<a name="line317"></a>  }
+<a name="line318"></a>
+<a name="line319"></a>  function _testRemoveColumn(index) {
+<a name="line320"></a>    var sampleCell = testElements.basic.getElementsByTagName(
+<a name="line321"></a>        &#39;tr&#39;)[0].getElementsByTagName(&#39;th&#39;)[index];
+<a name="line322"></a>    testObjects.basic.removeColumn(index);
+<a name="line323"></a>    tableSanityCheck(testObjects.basic, 4, 2);
+<a name="line324"></a>    assertNotEquals(
+<a name="line325"></a>        &#39;Test cell removed from column&#39;,
+<a name="line326"></a>        sampleCell,
+<a name="line327"></a>        testElements.basic.getElementsByTagName(
+<a name="line328"></a>        &#39;tr&#39;)[0].getElementsByTagName(&#39;th&#39;)[index]);
+<a name="line329"></a>  }
+<a name="line330"></a>
+<a name="line331"></a>  function testRemoveFirstColumn() {
+<a name="line332"></a>    _testRemoveColumn(0);
+<a name="line333"></a>  }
+<a name="line334"></a>
+<a name="line335"></a>  function testRemoveMiddleColumn() {
+<a name="line336"></a>    _testRemoveColumn(1);
+<a name="line337"></a>  }
+<a name="line338"></a>
+<a name="line339"></a>  function testRemoveLastColumn() {
+<a name="line340"></a>    _testRemoveColumn(2);
+<a name="line341"></a>  }
+<a name="line342"></a>
+<a name="line343"></a>  function testRemoveColumnAtStartingColSpan() {
+<a name="line344"></a>    testObjects.torture.removeColumn(0);
+<a name="line345"></a>    tableSanityCheck(testObjects.torture, 9, 2);
+<a name="line346"></a>    assertEquals(&#39;Colspan was decremented correctly&#39;,
+<a name="line347"></a>        1,
+<a name="line348"></a>        testElements.torture.getElementsByTagName(
+<a name="line349"></a>        &#39;tr&#39;)[5].getElementsByTagName(&#39;th&#39;)[0].colSpan);
+<a name="line350"></a>  }
+<a name="line351"></a>
+<a name="line352"></a>  function testRemoveColumnAtEndingColSpan() {
+<a name="line353"></a>    testObjects.torture.removeColumn(2);
+<a name="line354"></a>    tableSanityCheck(testObjects.torture, 9, 2);
+<a name="line355"></a>    assertEquals(&#39;Colspan was decremented correctly&#39;,
+<a name="line356"></a>        1,
+<a name="line357"></a>        testElements.torture.getElementsByTagName(
+<a name="line358"></a>        &#39;tr&#39;)[1].getElementsByTagName(&#39;td&#39;)[0].colSpan);
+<a name="line359"></a>  }
+<a name="line360"></a>
+<a name="line361"></a>  function testRemoveColumnAtSpanningColSpan() {
+<a name="line362"></a>    testObjects.torture.removeColumn(2);
+<a name="line363"></a>    tableSanityCheck(testObjects.torture, 9, 2);
+<a name="line364"></a>    assertEquals(&#39;Colspan was decremented correctly&#39;,
+<a name="line365"></a>        2,
+<a name="line366"></a>        testElements.torture.getElementsByTagName(
+<a name="line367"></a>        &#39;tr&#39;)[4].getElementsByTagName(&#39;th&#39;)[0].colSpan);
+<a name="line368"></a>  }
+<a name="line369"></a>
+<a name="line370"></a>  function testMergeCellsInRow() {
+<a name="line371"></a>    testObjects.basic.mergeCells(0, 0, 0, 2);
+<a name="line372"></a>    tableSanityCheck(testObjects.basic, 4, 3);
+<a name="line373"></a>    var trs = testElements.basic.getElementsByTagName(&#39;tr&#39;);
+<a name="line374"></a>    assertEquals(&#39;Cells merged&#39;,
+<a name="line375"></a>        1, trs[0].getElementsByTagName(&#39;th&#39;).length);
+<a name="line376"></a>    assertEquals(&#39;Merged cell has correct colspan&#39;,
+<a name="line377"></a>        3, trs[0].getElementsByTagName(&#39;th&#39;)[0].colSpan);
+<a name="line378"></a>    assertEquals(&#39;Merged cell has correct rowspan&#39;,
+<a name="line379"></a>        1, trs[0].getElementsByTagName(&#39;th&#39;)[0].rowSpan);
+<a name="line380"></a>  }
+<a name="line381"></a>
+<a name="line382"></a>  function testMergeCellsInColumn() {
+<a name="line383"></a>    testObjects.basic.mergeCells(0, 0, 2, 0);
+<a name="line384"></a>    tableSanityCheck(testObjects.basic, 4, 3);
+<a name="line385"></a>    var trs = testElements.basic.getElementsByTagName(&#39;tr&#39;);
+<a name="line386"></a>    assertEquals(&#39;Other cells still in row&#39;,
+<a name="line387"></a>        3, trs[0].getElementsByTagName(&#39;th&#39;).length);
+<a name="line388"></a>    assertEquals(&#39;Merged cell has correct colspan&#39;,
+<a name="line389"></a>        1, trs[0].getElementsByTagName(&#39;th&#39;)[0].colSpan);
+<a name="line390"></a>    assertEquals(&#39;Merged cell has correct rowspan&#39;,
+<a name="line391"></a>        3, trs[0].getElementsByTagName(&#39;th&#39;)[0].rowSpan);
+<a name="line392"></a>    assert(&#39;Cell appears in multiple rows after merge&#39;,
+<a name="line393"></a>        testObjects.basic.rows[0].columns[0] ==
+<a name="line394"></a>        testObjects.basic.rows[2].columns[0]);
+<a name="line395"></a>  }
+<a name="line396"></a>
+<a name="line397"></a>  function testMergeCellsInRowAndColumn() {
+<a name="line398"></a>    testObjects.basic.mergeCells(1, 1, 3, 2);
+<a name="line399"></a>    tableSanityCheck(testObjects.basic, 4, 3);
+<a name="line400"></a>    var trs = testElements.basic.getElementsByTagName(&#39;tr&#39;);
+<a name="line401"></a>    var mergedCell = trs[1].getElementsByTagName(&#39;td&#39;)[1];
+<a name="line402"></a>    assertEquals(&#39;Merged cell has correct rowspan&#39;,
+<a name="line403"></a>        3, mergedCell.rowSpan);
+<a name="line404"></a>    assertEquals(&#39;Merged cell has correct colspan&#39;,
+<a name="line405"></a>        2, mergedCell.colSpan);
+<a name="line406"></a>  }
+<a name="line407"></a>
+<a name="line408"></a>  function testMergeCellsAlreadyMerged() {
+<a name="line409"></a>    testObjects.torture.mergeCells(5, 0, 8, 2);
+<a name="line410"></a>    tableSanityCheck(testObjects.torture, 9, 3);
+<a name="line411"></a>    var trs = testElements.torture.getElementsByTagName(&#39;tr&#39;);
+<a name="line412"></a>    var mergedCell = trs[5].getElementsByTagName(&#39;th&#39;)[0];
+<a name="line413"></a>    assertEquals(&#39;Merged cell has correct rowspan&#39;,
+<a name="line414"></a>        4, mergedCell.rowSpan);
+<a name="line415"></a>    assertEquals(&#39;Merged cell has correct colspan&#39;,
+<a name="line416"></a>        3, mergedCell.colSpan);
+<a name="line417"></a>  }
+<a name="line418"></a>
+<a name="line419"></a>  function testIllegalMergeNonRectangular() {
+<a name="line420"></a>    // This should fail because it involves trying to merge two parts
+<a name="line421"></a>    // of a 3-colspan cell with other cells
+<a name="line422"></a>    var mergeSucceeded = testObjects.torture.mergeCells(3, 1, 5, 2);
+<a name="line423"></a>    if (mergeSucceeded) {
+<a name="line424"></a>      throw &#39;EditableTable allowed impossible merge!&#39;;
+<a name="line425"></a>    }
+<a name="line426"></a>    tableSanityCheck(testObjects.torture, 9, 3);
+<a name="line427"></a>  }
+<a name="line428"></a>
+<a name="line429"></a>  function testIllegalMergeSingleCell() {
+<a name="line430"></a>    // This should fail because it involves merging a single cell
+<a name="line431"></a>    var mergeSucceeded = testObjects.torture.mergeCells(0, 1, 0, 1);
+<a name="line432"></a>    if (mergeSucceeded) {
+<a name="line433"></a>      throw &#39;EditableTable allowed impossible merge!&#39;;
+<a name="line434"></a>    }
+<a name="line435"></a>    tableSanityCheck(testObjects.torture, 9, 3);
+<a name="line436"></a>  }
+<a name="line437"></a>
+<a name="line438"></a>  function testSplitCell() {
+<a name="line439"></a>    testObjects.torture.splitCell(1, 1);
+<a name="line440"></a>    tableSanityCheck(testObjects.torture, 9, 3);
+<a name="line441"></a>    var trs = testElements.torture.getElementsByTagName(&#39;tr&#39;);
+<a name="line442"></a>    assertEquals(&#39;Cell was split into multiple columns in row 1&#39;,
+<a name="line443"></a>        3, trs[1].getElementsByTagName(&#39;*&#39;).length);
+<a name="line444"></a>    assertEquals(&#39;Cell was split into multiple columns in row 2&#39;,
+<a name="line445"></a>        3, trs[2].getElementsByTagName(&#39;*&#39;).length);
+<a name="line446"></a>  }
+<a name="line447"></a>
+<a name="line448"></a>  function testChildTableRowsNotCountedInParentTable() {
+<a name="line449"></a>    tableSanityCheck(testObjects.nested, 2, 3);
+<a name="line450"></a>    for (var i = 0; i &lt; testObjects.nested.rows.length; i++) {
+<a name="line451"></a>      var tr = testObjects.nested.rows[i].element;
+<a name="line452"></a>      // A tr&#39;s parent is tbody, parent of that is table - check to
+<a name="line453"></a>      // make sure the ancestor table is as expected. This means
+<a name="line454"></a>      // that none of the child table&#39;s rows have been erroneously
+<a name="line455"></a>      // loaded into the EditableTable.
+<a name="line456"></a>      assertEquals(&#39;Row is child of parent table&#39;,
+<a name="line457"></a>          testElements.nested,
+<a name="line458"></a>          tr.parentNode.parentNode);
+<a name="line459"></a>    }
+<a name="line460"></a>  }
+<a name="line461"></a>
+<a name="line462"></a>}
+<a name="line463"></a>/*
+<a name="line464"></a>  // TODO(user): write more unit tests for selection stuff.
+<a name="line465"></a>  // The following code is left in here for reference in implementing
+<a name="line466"></a>  // this TODO.
+<a name="line467"></a>
+<a name="line468"></a>    var tds = goog.dom.getElement(&#39;test1&#39;).getElementsByTagName(&#39;td&#39;);
+<a name="line469"></a>    var range = goog.dom.Range.createFromNodes(tds[7], tds[9]);
+<a name="line470"></a>    range.select();
+<a name="line471"></a>    var cellSelection = new goog.editor.Table.CellSelection(range);
+<a name="line472"></a>    assertEquals(0, cellSelection.getFirstColumnIndex());
+<a name="line473"></a>    assertEquals(2, cellSelection.getLastColumnIndex());
+<a name="line474"></a>    assertEquals(2, cellSelection.getFirstRowIndex());
+<a name="line475"></a>    assertEquals(2, cellSelection.getLastRowIndex());
+<a name="line476"></a>    assertTrue(cellSelection.isRectangle());
+<a name="line477"></a>
+<a name="line478"></a>    range = goog.dom.Range.createFromNodes(tds[7], tds[12]);
+<a name="line479"></a>    range.select();
+<a name="line480"></a>    var cellSelection2 = new goog.editor.Table.CellSelection(range);
+<a name="line481"></a>    assertFalse(cellSelection2.isRectangle());
+<a name="line482"></a>*/
+</pre>
+
+
+</body>
+</html>

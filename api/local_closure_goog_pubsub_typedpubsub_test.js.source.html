@@ -1,0 +1,714 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>typedpubsub_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_pubsub_typedpubsub_test.js.html">typedpubsub_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2014 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.pubsub.TypedPubSubTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.pubsub.TypedPubSubTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.pubsub.TopicId&#39;);
+<a name="line20"></a>goog.require(&#39;goog.pubsub.TypedPubSub&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var pubsub;
+<a name="line24"></a>
+<a name="line25"></a>function setUp() {
+<a name="line26"></a>  pubsub = new goog.pubsub.TypedPubSub();
+<a name="line27"></a>}
+<a name="line28"></a>
+<a name="line29"></a>function tearDown() {
+<a name="line30"></a>  pubsub.dispose();
+<a name="line31"></a>}
+<a name="line32"></a>
+<a name="line33"></a>function testConstructor() {
+<a name="line34"></a>  assertNotNull(&#39;PubSub instance must not be null&#39;, pubsub);
+<a name="line35"></a>  assertTrue(&#39;PubSub instance must have the expected type&#39;,
+<a name="line36"></a>      pubsub instanceof goog.pubsub.TypedPubSub);
+<a name="line37"></a>}
+<a name="line38"></a>
+<a name="line39"></a>function testDispose() {
+<a name="line40"></a>  assertFalse(&#39;PubSub instance must not have been disposed of&#39;,
+<a name="line41"></a>      pubsub.isDisposed());
+<a name="line42"></a>  pubsub.dispose();
+<a name="line43"></a>  assertTrue(&#39;PubSub instance must have been disposed of&#39;,
+<a name="line44"></a>      pubsub.isDisposed());
+<a name="line45"></a>}
+<a name="line46"></a>
+<a name="line47"></a>function testSubscribeUnsubscribe() {
+<a name="line48"></a>  function foo1() {
+<a name="line49"></a>  }
+<a name="line50"></a>  function bar1() {
+<a name="line51"></a>  }
+<a name="line52"></a>  function foo2() {
+<a name="line53"></a>  }
+<a name="line54"></a>  function bar2() {
+<a name="line55"></a>  }
+<a name="line56"></a>
+<a name="line57"></a>  /** const */ var FOO = new goog.pubsub.TopicId(&#39;foo&#39;);
+<a name="line58"></a>  /** const */ var BAR = new goog.pubsub.TopicId(&#39;bar&#39;);
+<a name="line59"></a>  /** const */ var BAZ = new goog.pubsub.TopicId(&#39;baz&#39;);
+<a name="line60"></a>
+<a name="line61"></a>  assertEquals(&#39;Topic &quot;foo&quot; must not have any subscribers&#39;, 0,
+<a name="line62"></a>      pubsub.getCount(FOO));
+<a name="line63"></a>  assertEquals(&#39;Topic &quot;bar&quot; must not have any subscribers&#39;, 0,
+<a name="line64"></a>      pubsub.getCount(BAR));
+<a name="line65"></a>
+<a name="line66"></a>  pubsub.subscribe(FOO, foo1);
+<a name="line67"></a>  assertEquals(&#39;Topic &quot;foo&quot; must have 1 subscriber&#39;, 1,
+<a name="line68"></a>      pubsub.getCount(FOO));
+<a name="line69"></a>  assertEquals(&#39;Topic &quot;bar&quot; must not have any subscribers&#39;, 0,
+<a name="line70"></a>      pubsub.getCount(BAR));
+<a name="line71"></a>
+<a name="line72"></a>  pubsub.subscribe(BAR, bar1);
+<a name="line73"></a>  assertEquals(&#39;Topic &quot;foo&quot; must have 1 subscriber&#39;, 1,
+<a name="line74"></a>      pubsub.getCount(FOO));
+<a name="line75"></a>  assertEquals(&#39;Topic &quot;bar&quot; must have 1 subscriber&#39;, 1,
+<a name="line76"></a>      pubsub.getCount(BAR));
+<a name="line77"></a>
+<a name="line78"></a>  pubsub.subscribe(FOO, foo2);
+<a name="line79"></a>  assertEquals(&#39;Topic &quot;foo&quot; must have 2 subscribers&#39;, 2,
+<a name="line80"></a>      pubsub.getCount(FOO));
+<a name="line81"></a>  assertEquals(&#39;Topic &quot;bar&quot; must have 1 subscriber&#39;, 1,
+<a name="line82"></a>      pubsub.getCount(BAR));
+<a name="line83"></a>
+<a name="line84"></a>  pubsub.subscribe(BAR, bar2);
+<a name="line85"></a>  assertEquals(&#39;Topic &quot;foo&quot; must have 2 subscribers&#39;, 2,
+<a name="line86"></a>      pubsub.getCount(FOO));
+<a name="line87"></a>  assertEquals(&#39;Topic &quot;bar&quot; must have 2 subscribers&#39;, 2,
+<a name="line88"></a>      pubsub.getCount(BAR));
+<a name="line89"></a>
+<a name="line90"></a>  assertTrue(pubsub.unsubscribe(FOO, foo1));
+<a name="line91"></a>  assertEquals(&#39;Topic &quot;foo&quot; must have 1 subscriber&#39;, 1,
+<a name="line92"></a>      pubsub.getCount(FOO));
+<a name="line93"></a>  assertEquals(&#39;Topic &quot;bar&quot; must have 2 subscribers&#39;, 2,
+<a name="line94"></a>      pubsub.getCount(BAR));
+<a name="line95"></a>
+<a name="line96"></a>  assertTrue(pubsub.unsubscribe(FOO, foo2));
+<a name="line97"></a>  assertEquals(&#39;Topic &quot;foo&quot; must have no subscribers&#39;, 0,
+<a name="line98"></a>      pubsub.getCount(FOO));
+<a name="line99"></a>  assertEquals(&#39;Topic &quot;bar&quot; must have 2 subscribers&#39;, 2,
+<a name="line100"></a>      pubsub.getCount(BAR));
+<a name="line101"></a>
+<a name="line102"></a>  assertTrue(pubsub.unsubscribe(BAR, bar1));
+<a name="line103"></a>  assertEquals(&#39;Topic &quot;foo&quot; must have no subscribers&#39;, 0,
+<a name="line104"></a>      pubsub.getCount(FOO));
+<a name="line105"></a>  assertEquals(&#39;Topic &quot;bar&quot; must have 1 subscriber&#39;, 1,
+<a name="line106"></a>      pubsub.getCount(BAR));
+<a name="line107"></a>
+<a name="line108"></a>  assertTrue(pubsub.unsubscribe(BAR, bar2));
+<a name="line109"></a>  assertEquals(&#39;Topic &quot;foo&quot; must have no subscribers&#39;, 0,
+<a name="line110"></a>      pubsub.getCount(FOO));
+<a name="line111"></a>  assertEquals(&#39;Topic &quot;bar&quot; must have no subscribers&#39;, 0,
+<a name="line112"></a>      pubsub.getCount(BAR));
+<a name="line113"></a>
+<a name="line114"></a>  assertFalse(&#39;Unsubscribing a nonexistent topic must return false&#39;,
+<a name="line115"></a>      pubsub.unsubscribe(BAZ, foo1));
+<a name="line116"></a>
+<a name="line117"></a>  assertFalse(&#39;Unsubscribing a nonexistent function must return false&#39;,
+<a name="line118"></a>      pubsub.unsubscribe(FOO, function() {}));
+<a name="line119"></a>}
+<a name="line120"></a>
+<a name="line121"></a>function testSubscribeUnsubscribeWithContext() {
+<a name="line122"></a>  function foo() {
+<a name="line123"></a>  }
+<a name="line124"></a>  function bar() {
+<a name="line125"></a>  }
+<a name="line126"></a>
+<a name="line127"></a>  var contextA = {};
+<a name="line128"></a>  var contextB = {};
+<a name="line129"></a>
+<a name="line130"></a>  /** const */ var TOPIC_X = new goog.pubsub.TopicId(&#39;X&#39;);
+<a name="line131"></a>
+<a name="line132"></a>  assertEquals(&#39;Topic &quot;X&quot; must not have any subscribers&#39;, 0,
+<a name="line133"></a>      pubsub.getCount(TOPIC_X));
+<a name="line134"></a>
+<a name="line135"></a>  pubsub.subscribe(TOPIC_X, foo, contextA);
+<a name="line136"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 1 subscriber&#39;, 1,
+<a name="line137"></a>      pubsub.getCount(TOPIC_X));
+<a name="line138"></a>
+<a name="line139"></a>  pubsub.subscribe(TOPIC_X, bar);
+<a name="line140"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 2 subscribers&#39;, 2,
+<a name="line141"></a>      pubsub.getCount(TOPIC_X));
+<a name="line142"></a>
+<a name="line143"></a>  pubsub.subscribe(TOPIC_X, bar, contextB);
+<a name="line144"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 3 subscribers&#39;, 3,
+<a name="line145"></a>      pubsub.getCount(TOPIC_X));
+<a name="line146"></a>
+<a name="line147"></a>  assertFalse(&#39;Unknown function/context combination return false&#39;,
+<a name="line148"></a>      pubsub.unsubscribe(TOPIC_X, foo, contextB));
+<a name="line149"></a>
+<a name="line150"></a>  assertTrue(pubsub.unsubscribe(TOPIC_X, foo, contextA));
+<a name="line151"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 2 subscribers&#39;, 2,
+<a name="line152"></a>      pubsub.getCount(TOPIC_X));
+<a name="line153"></a>
+<a name="line154"></a>  assertTrue(pubsub.unsubscribe(TOPIC_X, bar));
+<a name="line155"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 1 subscriber&#39;, 1,
+<a name="line156"></a>      pubsub.getCount(TOPIC_X));
+<a name="line157"></a>
+<a name="line158"></a>  assertTrue(pubsub.unsubscribe(TOPIC_X, bar, contextB));
+<a name="line159"></a>  assertEquals(&#39;Topic &quot;X&quot; must have no subscribers&#39;, 0,
+<a name="line160"></a>      pubsub.getCount(TOPIC_X));
+<a name="line161"></a>}
+<a name="line162"></a>
+<a name="line163"></a>function testSubscribeOnce() {
+<a name="line164"></a>  var called, context;
+<a name="line165"></a>
+<a name="line166"></a>  /** @const */ SOME_TOPIC = new goog.pubsub.TopicId(&#39;someTopic&#39;);
+<a name="line167"></a>
+<a name="line168"></a>  called = false;
+<a name="line169"></a>  pubsub.subscribeOnce(SOME_TOPIC, function() {
+<a name="line170"></a>    called = true;
+<a name="line171"></a>  });
+<a name="line172"></a>  assertEquals(&#39;Topic must have one subscriber&#39;, 1,
+<a name="line173"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line174"></a>  assertFalse(&#39;Subscriber must not have been called yet&#39;, called);
+<a name="line175"></a>
+<a name="line176"></a>  pubsub.publish(SOME_TOPIC);
+<a name="line177"></a>  assertEquals(&#39;Topic must have no subscribers&#39;, 0,
+<a name="line178"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line179"></a>  assertTrue(&#39;Subscriber must have been called&#39;, called);
+<a name="line180"></a>
+<a name="line181"></a>  context = {called: false};
+<a name="line182"></a>  pubsub.subscribeOnce(SOME_TOPIC, function() {
+<a name="line183"></a>    this.called = true;
+<a name="line184"></a>  }, context);
+<a name="line185"></a>  assertEquals(&#39;Topic must have one subscriber&#39;, 1,
+<a name="line186"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line187"></a>  assertFalse(&#39;Subscriber must not have been called yet&#39;, context.called);
+<a name="line188"></a>
+<a name="line189"></a>  pubsub.publish(SOME_TOPIC);
+<a name="line190"></a>  assertEquals(&#39;Topic must have no subscribers&#39;, 0,
+<a name="line191"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line192"></a>  assertTrue(&#39;Subscriber must have been called&#39;, context.called);
+<a name="line193"></a>
+<a name="line194"></a>  context = {called: false, value: 0};
+<a name="line195"></a>  pubsub.subscribeOnce(SOME_TOPIC, function(value) {
+<a name="line196"></a>    this.called = true;
+<a name="line197"></a>    this.value = value;
+<a name="line198"></a>  }, context);
+<a name="line199"></a>  assertEquals(&#39;Topic must have one subscriber&#39;, 1,
+<a name="line200"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line201"></a>  assertFalse(&#39;Subscriber must not have been called yet&#39;, context.called);
+<a name="line202"></a>  assertEquals(&#39;Value must have expected value&#39;, 0, context.value);
+<a name="line203"></a>
+<a name="line204"></a>  pubsub.publish(SOME_TOPIC, 17);
+<a name="line205"></a>  assertEquals(&#39;Topic must have no subscribers&#39;, 0,
+<a name="line206"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line207"></a>  assertTrue(&#39;Subscriber must have been called&#39;, context.called);
+<a name="line208"></a>  assertEquals(&#39;Value must have been updated&#39;, 17, context.value);
+<a name="line209"></a>}
+<a name="line210"></a>
+<a name="line211"></a>function testSubscribeOnce_boundFn() {
+<a name="line212"></a>  var context = {called: false, value: 0};
+<a name="line213"></a>
+<a name="line214"></a>  /** @const */ SOME_TOPIC = new goog.pubsub.TopicId(&#39;someTopic&#39;);
+<a name="line215"></a>
+<a name="line216"></a>  function subscriber(value) {
+<a name="line217"></a>    this.called = true;
+<a name="line218"></a>    this.value = value;
+<a name="line219"></a>  }
+<a name="line220"></a>
+<a name="line221"></a>  pubsub.subscribeOnce(SOME_TOPIC, goog.bind(subscriber, context));
+<a name="line222"></a>  assertEquals(&#39;Topic must have one subscriber&#39;, 1,
+<a name="line223"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line224"></a>  assertFalse(&#39;Subscriber must not have been called yet&#39;, context.called);
+<a name="line225"></a>  assertEquals(&#39;Value must have expected value&#39;, 0, context.value);
+<a name="line226"></a>
+<a name="line227"></a>  pubsub.publish(SOME_TOPIC, 17);
+<a name="line228"></a>  assertEquals(&#39;Topic must have no subscribers&#39;, 0,
+<a name="line229"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line230"></a>  assertTrue(&#39;Subscriber must have been called&#39;, context.called);
+<a name="line231"></a>  assertEquals(&#39;Value must have been updated&#39;, 17, context.value);
+<a name="line232"></a>}
+<a name="line233"></a>
+<a name="line234"></a>function testSubscribeOnce_partialFn() {
+<a name="line235"></a>  var called = false;
+<a name="line236"></a>  var value = 0;
+<a name="line237"></a>
+<a name="line238"></a>  /** @const */ SOME_TOPIC = new goog.pubsub.TopicId(&#39;someTopic&#39;);
+<a name="line239"></a>
+<a name="line240"></a>  function subscriber(hasBeenCalled, newValue) {
+<a name="line241"></a>    called = hasBeenCalled;
+<a name="line242"></a>    value = newValue;
+<a name="line243"></a>  }
+<a name="line244"></a>
+<a name="line245"></a>  pubsub.subscribeOnce(SOME_TOPIC, goog.partial(subscriber, true));
+<a name="line246"></a>  assertEquals(&#39;Topic must have one subscriber&#39;, 1,
+<a name="line247"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line248"></a>  assertFalse(&#39;Subscriber must not have been called yet&#39;, called);
+<a name="line249"></a>  assertEquals(&#39;Value must have expected value&#39;, 0, value);
+<a name="line250"></a>
+<a name="line251"></a>  pubsub.publish(SOME_TOPIC, 17);
+<a name="line252"></a>  assertEquals(&#39;Topic must have no subscribers&#39;, 0,
+<a name="line253"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line254"></a>  assertTrue(&#39;Subscriber must have been called&#39;, called);
+<a name="line255"></a>  assertEquals(&#39;Value must have been updated&#39;, 17, value);
+<a name="line256"></a>}
+<a name="line257"></a>
+<a name="line258"></a>function testSelfResubscribe() {
+<a name="line259"></a>  var value = null;
+<a name="line260"></a>
+<a name="line261"></a>  /** @const */ SOME_TOPIC = new goog.pubsub.TopicId(&#39;someTopic&#39;);
+<a name="line262"></a>
+<a name="line263"></a>  function resubscribe(iteration, newValue) {
+<a name="line264"></a>    pubsub.subscribeOnce(SOME_TOPIC,
+<a name="line265"></a>        goog.partial(resubscribe, iteration + 1));
+<a name="line266"></a>    value = newValue + &#39;:&#39; + iteration;
+<a name="line267"></a>  }
+<a name="line268"></a>
+<a name="line269"></a>  pubsub.subscribeOnce(SOME_TOPIC, goog.partial(resubscribe, 0));
+<a name="line270"></a>  assertEquals(&#39;Topic must have 1 subscriber&#39;, 1,
+<a name="line271"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line272"></a>  assertNull(&#39;Value must be null&#39;, value);
+<a name="line273"></a>
+<a name="line274"></a>  pubsub.publish(SOME_TOPIC, &#39;foo&#39;);
+<a name="line275"></a>  assertEquals(&#39;Topic must have 1 subscriber&#39;, 1,
+<a name="line276"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line277"></a>  assertEquals(&#39;Value be as expected&#39;, &#39;foo:0&#39;, value);
+<a name="line278"></a>
+<a name="line279"></a>  pubsub.publish(SOME_TOPIC, &#39;bar&#39;);
+<a name="line280"></a>  assertEquals(&#39;Topic must have 1 subscriber&#39;, 1,
+<a name="line281"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line282"></a>  assertEquals(&#39;Value be as expected&#39;, &#39;bar:1&#39;, value);
+<a name="line283"></a>
+<a name="line284"></a>  pubsub.publish(SOME_TOPIC, &#39;baz&#39;);
+<a name="line285"></a>  assertEquals(&#39;Topic must have 1 subscriber&#39;, 1,
+<a name="line286"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line287"></a>  assertEquals(&#39;Value be as expected&#39;, &#39;baz:2&#39;, value);
+<a name="line288"></a>}
+<a name="line289"></a>
+<a name="line290"></a>function testUnsubscribeByKey() {
+<a name="line291"></a>  var key1, key2, key3;
+<a name="line292"></a>
+<a name="line293"></a>  /** const */ var TOPIC_X = new goog.pubsub.TopicId(&#39;X&#39;);
+<a name="line294"></a>  /** const */ var TOPIC_Y = new goog.pubsub.TopicId(&#39;Y&#39;);
+<a name="line295"></a>
+<a name="line296"></a>  key1 = pubsub.subscribe(TOPIC_X, function() {});
+<a name="line297"></a>  key2 = pubsub.subscribe(TOPIC_Y, function() {});
+<a name="line298"></a>
+<a name="line299"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 1 subscriber&#39;, 1,
+<a name="line300"></a>      pubsub.getCount(TOPIC_X));
+<a name="line301"></a>  assertEquals(&#39;Topic &quot;Y&quot; must have 1 subscriber&#39;, 1,
+<a name="line302"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line303"></a>  assertNotEquals(&#39;Subscription keys must be distinct&#39;, key1, key2);
+<a name="line304"></a>
+<a name="line305"></a>  pubsub.unsubscribeByKey(key1);
+<a name="line306"></a>  assertEquals(&#39;Topic &quot;X&quot; must have no subscribers&#39;, 0,
+<a name="line307"></a>      pubsub.getCount(TOPIC_X));
+<a name="line308"></a>  assertEquals(&#39;Topic &quot;Y&quot; must have 1 subscriber&#39;, 1,
+<a name="line309"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line310"></a>
+<a name="line311"></a>  key3 = pubsub.subscribe(TOPIC_X, function() {});
+<a name="line312"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 1 subscriber&#39;, 1,
+<a name="line313"></a>      pubsub.getCount(TOPIC_X));
+<a name="line314"></a>  assertEquals(&#39;Topic &quot;Y&quot; must have 1 subscriber&#39;, 1,
+<a name="line315"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line316"></a>  assertNotEquals(&#39;Subscription keys must be distinct&#39;, key1, key3);
+<a name="line317"></a>  assertNotEquals(&#39;Subscription keys must be distinct&#39;, key2, key3);
+<a name="line318"></a>
+<a name="line319"></a>  pubsub.unsubscribeByKey(key1); // Obsolete key; should be no-op.
+<a name="line320"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 1 subscriber&#39;, 1,
+<a name="line321"></a>      pubsub.getCount(TOPIC_X));
+<a name="line322"></a>  assertEquals(&#39;Topic &quot;Y&quot; must have 1 subscriber&#39;, 1,
+<a name="line323"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line324"></a>
+<a name="line325"></a>  pubsub.unsubscribeByKey(key2);
+<a name="line326"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 1 subscriber&#39;, 1,
+<a name="line327"></a>      pubsub.getCount(TOPIC_X));
+<a name="line328"></a>  assertEquals(&#39;Topic &quot;Y&quot; must have no subscribers&#39;, 0,
+<a name="line329"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line330"></a>
+<a name="line331"></a>  pubsub.unsubscribeByKey(key3);
+<a name="line332"></a>  assertEquals(&#39;Topic &quot;X&quot; must have no subscribers&#39;, 0,
+<a name="line333"></a>      pubsub.getCount(TOPIC_X));
+<a name="line334"></a>  assertEquals(&#39;Topic &quot;Y&quot; must have no subscribers&#39;, 0,
+<a name="line335"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line336"></a>}
+<a name="line337"></a>
+<a name="line338"></a>function testSubscribeUnsubscribeMultiple() {
+<a name="line339"></a>  function foo() {
+<a name="line340"></a>  }
+<a name="line341"></a>  function bar() {
+<a name="line342"></a>  }
+<a name="line343"></a>
+<a name="line344"></a>  var context = {};
+<a name="line345"></a>
+<a name="line346"></a>  /** const */ var TOPIC_X = new goog.pubsub.TopicId(&#39;X&#39;);
+<a name="line347"></a>  /** const */ var TOPIC_Y = new goog.pubsub.TopicId(&#39;Y&#39;);
+<a name="line348"></a>  /** const */ var TOPIC_Z = new goog.pubsub.TopicId(&#39;Z&#39;);
+<a name="line349"></a>
+<a name="line350"></a>  assertEquals(&#39;Pubsub channel must not have any subscribers&#39;, 0,
+<a name="line351"></a>      pubsub.getCount());
+<a name="line352"></a>
+<a name="line353"></a>  assertEquals(&#39;Topic &quot;X&quot; must not have any subscribers&#39;, 0,
+<a name="line354"></a>      pubsub.getCount(TOPIC_X));
+<a name="line355"></a>  assertEquals(&#39;Topic &quot;Y&quot; must not have any subscribers&#39;, 0,
+<a name="line356"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line357"></a>  assertEquals(&#39;Topic &quot;Z&quot; must not have any subscribers&#39;, 0,
+<a name="line358"></a>      pubsub.getCount(TOPIC_Z));
+<a name="line359"></a>
+<a name="line360"></a>  goog.array.forEach([TOPIC_X, TOPIC_Y, TOPIC_Z], function(topic) {
+<a name="line361"></a>    pubsub.subscribe(topic, foo);
+<a name="line362"></a>  });
+<a name="line363"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 1 subscriber&#39;, 1,
+<a name="line364"></a>      pubsub.getCount(TOPIC_X));
+<a name="line365"></a>  assertEquals(&#39;Topic &quot;Y&quot; must have 1 subscriber&#39;, 1,
+<a name="line366"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line367"></a>  assertEquals(&#39;Topic &quot;Z&quot; must have 1 subscriber&#39;, 1,
+<a name="line368"></a>      pubsub.getCount(TOPIC_Z));
+<a name="line369"></a>
+<a name="line370"></a>  goog.array.forEach([TOPIC_X, TOPIC_Y, TOPIC_Z], function(topic) {
+<a name="line371"></a>    pubsub.subscribe(topic, bar, context);
+<a name="line372"></a>  });
+<a name="line373"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 2 subscribers&#39;, 2,
+<a name="line374"></a>      pubsub.getCount(TOPIC_X));
+<a name="line375"></a>  assertEquals(&#39;Topic &quot;Y&quot; must have 2 subscribers&#39;, 2,
+<a name="line376"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line377"></a>  assertEquals(&#39;Topic &quot;Z&quot; must have 2 subscribers&#39;, 2,
+<a name="line378"></a>      pubsub.getCount(TOPIC_Z));
+<a name="line379"></a>
+<a name="line380"></a>  assertEquals(&#39;Pubsub channel must have a total of 6 subscribers&#39;, 6,
+<a name="line381"></a>      pubsub.getCount());
+<a name="line382"></a>
+<a name="line383"></a>  goog.array.forEach([TOPIC_X, TOPIC_Y, TOPIC_Z], function(topic) {
+<a name="line384"></a>    pubsub.unsubscribe(topic, foo);
+<a name="line385"></a>  });
+<a name="line386"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 1 subscriber&#39;, 1,
+<a name="line387"></a>      pubsub.getCount(TOPIC_X));
+<a name="line388"></a>  assertEquals(&#39;Topic &quot;Y&quot; must have 1 subscriber&#39;, 1,
+<a name="line389"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line390"></a>  assertEquals(&#39;Topic &quot;Z&quot; must have 1 subscriber&#39;, 1,
+<a name="line391"></a>      pubsub.getCount(TOPIC_Z));
+<a name="line392"></a>
+<a name="line393"></a>  goog.array.forEach([TOPIC_X, TOPIC_Y, TOPIC_Z], function(topic) {
+<a name="line394"></a>    pubsub.unsubscribe(topic, bar, context);
+<a name="line395"></a>  });
+<a name="line396"></a>  assertEquals(&#39;Topic &quot;X&quot; must not have any subscribers&#39;, 0,
+<a name="line397"></a>      pubsub.getCount(TOPIC_X));
+<a name="line398"></a>  assertEquals(&#39;Topic &quot;Y&quot; must not have any subscribers&#39;, 0,
+<a name="line399"></a>      pubsub.getCount(TOPIC_Y));
+<a name="line400"></a>  assertEquals(&#39;Topic &quot;Z&quot; must not have any subscribers&#39;, 0,
+<a name="line401"></a>      pubsub.getCount(TOPIC_Z));
+<a name="line402"></a>
+<a name="line403"></a>  assertEquals(&#39;Pubsub channel must not have any subscribers&#39;, 0,
+<a name="line404"></a>      pubsub.getCount());
+<a name="line405"></a>}
+<a name="line406"></a>
+<a name="line407"></a>function testPublish() {
+<a name="line408"></a>  var context = {};
+<a name="line409"></a>  var fooCalled = false;
+<a name="line410"></a>  var barCalled = false;
+<a name="line411"></a>
+<a name="line412"></a>  /** @const */ SOME_TOPIC = new goog.pubsub.TopicId(&#39;someTopic&#39;);
+<a name="line413"></a>
+<a name="line414"></a>  function foo(record) {
+<a name="line415"></a>    fooCalled = true;
+<a name="line416"></a>    assertEquals(&#39;x must have expected value&#39;, &#39;x&#39;, record.x);
+<a name="line417"></a>    assertEquals(&#39;y must have expected value&#39;, &#39;y&#39;, record.y);
+<a name="line418"></a>  }
+<a name="line419"></a>
+<a name="line420"></a>  function bar(record) {
+<a name="line421"></a>    barCalled = true;
+<a name="line422"></a>    assertEquals(&#39;Context must have expected value&#39;, context, this);
+<a name="line423"></a>    assertEquals(&#39;x must have expected value&#39;, &#39;x&#39;, record.x);
+<a name="line424"></a>    assertEquals(&#39;y must have expected value&#39;, &#39;y&#39;, record.y);
+<a name="line425"></a>  }
+<a name="line426"></a>
+<a name="line427"></a>  pubsub.subscribe(SOME_TOPIC, foo);
+<a name="line428"></a>  pubsub.subscribe(SOME_TOPIC, bar, context);
+<a name="line429"></a>
+<a name="line430"></a>  assertTrue(pubsub.publish(SOME_TOPIC, {x: &#39;x&#39;, y: &#39;y&#39;}));
+<a name="line431"></a>  assertTrue(&#39;foo() must have been called&#39;, fooCalled);
+<a name="line432"></a>  assertTrue(&#39;bar() must have been called&#39;, barCalled);
+<a name="line433"></a>
+<a name="line434"></a>  fooCalled = false;
+<a name="line435"></a>  barCalled = false;
+<a name="line436"></a>  assertTrue(pubsub.unsubscribe(SOME_TOPIC, foo));
+<a name="line437"></a>
+<a name="line438"></a>  assertTrue(pubsub.publish(SOME_TOPIC, {x: &#39;x&#39;, y: &#39;y&#39;}));
+<a name="line439"></a>  assertFalse(&#39;foo() must not have been called&#39;, fooCalled);
+<a name="line440"></a>  assertTrue(&#39;bar() must have been called&#39;, barCalled);
+<a name="line441"></a>
+<a name="line442"></a>  fooCalled = false;
+<a name="line443"></a>  barCalled = false;
+<a name="line444"></a>  pubsub.subscribe(&#39;differentTopic&#39;, foo);
+<a name="line445"></a>
+<a name="line446"></a>  assertTrue(pubsub.publish(SOME_TOPIC, {x: &#39;x&#39;, y: &#39;y&#39;}));
+<a name="line447"></a>  assertFalse(&#39;foo() must not have been called&#39;, fooCalled);
+<a name="line448"></a>  assertTrue(&#39;bar() must have been called&#39;, barCalled);
+<a name="line449"></a>}
+<a name="line450"></a>
+<a name="line451"></a>function testPublishEmptyTopic() {
+<a name="line452"></a>  var fooCalled = false;
+<a name="line453"></a>  function foo() {
+<a name="line454"></a>    fooCalled = true;
+<a name="line455"></a>  }
+<a name="line456"></a>
+<a name="line457"></a>  /** @const */ SOME_TOPIC = new goog.pubsub.TopicId(&#39;someTopic&#39;);
+<a name="line458"></a>
+<a name="line459"></a>  assertFalse(&#39;Publishing to nonexistent topic must return false&#39;,
+<a name="line460"></a>      pubsub.publish(SOME_TOPIC));
+<a name="line461"></a>
+<a name="line462"></a>  pubsub.subscribe(SOME_TOPIC, foo);
+<a name="line463"></a>  assertTrue(&#39;Publishing to topic with subscriber must return true&#39;,
+<a name="line464"></a>      pubsub.publish(SOME_TOPIC));
+<a name="line465"></a>  assertTrue(&#39;Foo must have been called&#39;, fooCalled);
+<a name="line466"></a>
+<a name="line467"></a>  pubsub.unsubscribe(SOME_TOPIC, foo);
+<a name="line468"></a>  fooCalled = false;
+<a name="line469"></a>  assertFalse(&#39;Publishing to topic without subscribers must return false&#39;,
+<a name="line470"></a>      pubsub.publish(SOME_TOPIC));
+<a name="line471"></a>  assertFalse(&#39;Foo must nothave been called&#39;, fooCalled);
+<a name="line472"></a>}
+<a name="line473"></a>
+<a name="line474"></a>function testSubscribeWhilePublishing() {
+<a name="line475"></a>  // It&#39;s OK for a subscriber to add a new subscriber to its own topic,
+<a name="line476"></a>  // but the newly added subscriber shouldn&#39;t be called until the next
+<a name="line477"></a>  // publish cycle.
+<a name="line478"></a>
+<a name="line479"></a>  var firstCalled = false;
+<a name="line480"></a>  var secondCalled = false;
+<a name="line481"></a>
+<a name="line482"></a>  /** @const */ SOME_TOPIC = new goog.pubsub.TopicId(&#39;someTopic&#39;);
+<a name="line483"></a>
+<a name="line484"></a>  pubsub.subscribe(SOME_TOPIC, function() {
+<a name="line485"></a>    pubsub.subscribe(SOME_TOPIC, function() {
+<a name="line486"></a>      secondCalled = true;
+<a name="line487"></a>    });
+<a name="line488"></a>    firstCalled = true;
+<a name="line489"></a>  });
+<a name="line490"></a>  assertEquals(&#39;Topic must have one subscriber&#39;, 1,
+<a name="line491"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line492"></a>  assertFalse(&#39;No subscriber must have been called yet&#39;,
+<a name="line493"></a>      firstCalled || secondCalled);
+<a name="line494"></a>
+<a name="line495"></a>  pubsub.publish(SOME_TOPIC);
+<a name="line496"></a>  assertEquals(&#39;Topic must have two subscribers&#39;, 2,
+<a name="line497"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line498"></a>  assertTrue(&#39;The first subscriber must have been called&#39;,
+<a name="line499"></a>      firstCalled);
+<a name="line500"></a>  assertFalse(&#39;The second subscriber must not have been called yet&#39;,
+<a name="line501"></a>      secondCalled);
+<a name="line502"></a>
+<a name="line503"></a>  pubsub.publish(SOME_TOPIC);
+<a name="line504"></a>  assertEquals(&#39;Topic must have three subscribers&#39;, 3,
+<a name="line505"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line506"></a>  assertTrue(&#39;The first subscriber must have been called&#39;,
+<a name="line507"></a>      firstCalled);
+<a name="line508"></a>  assertTrue(&#39;The second subscriber must also have been called&#39;,
+<a name="line509"></a>      secondCalled);
+<a name="line510"></a>}
+<a name="line511"></a>
+<a name="line512"></a>function testUnsubscribeWhilePublishing() {
+<a name="line513"></a>  // It&#39;s OK for a subscriber to unsubscribe another subscriber from its
+<a name="line514"></a>  // own topic, but the subscriber in question won&#39;t actually be removed
+<a name="line515"></a>  // until after publishing is complete.
+<a name="line516"></a>
+<a name="line517"></a>  var firstCalled = false;
+<a name="line518"></a>  var secondCalled = false;
+<a name="line519"></a>  var thirdCalled = false;
+<a name="line520"></a>
+<a name="line521"></a>  /** const */ var TOPIC_X = new goog.pubsub.TopicId(&#39;X&#39;);
+<a name="line522"></a>
+<a name="line523"></a>  function first() {
+<a name="line524"></a>    assertFalse(&#39;unsubscribe() must return false during publishing&#39;,
+<a name="line525"></a>        pubsub.unsubscribe(TOPIC_X, second));
+<a name="line526"></a>    assertEquals(&#39;Topic &quot;X&quot; must still have 3 subscribers&#39;, 3,
+<a name="line527"></a>        pubsub.getCount(TOPIC_X));
+<a name="line528"></a>    firstCalled = true;
+<a name="line529"></a>  }
+<a name="line530"></a>  pubsub.subscribe(TOPIC_X, first);
+<a name="line531"></a>
+<a name="line532"></a>  function second() {
+<a name="line533"></a>    assertEquals(&#39;Topic &quot;X&quot; must still have 3 subscribers&#39;, 3,
+<a name="line534"></a>        pubsub.getCount(TOPIC_X));
+<a name="line535"></a>    secondCalled = true;
+<a name="line536"></a>  }
+<a name="line537"></a>  pubsub.subscribe(TOPIC_X, second);
+<a name="line538"></a>
+<a name="line539"></a>  function third() {
+<a name="line540"></a>    assertFalse(&#39;unsubscribe() must return false during publishing&#39;,
+<a name="line541"></a>        pubsub.unsubscribe(TOPIC_X, first));
+<a name="line542"></a>    assertEquals(&#39;Topic &quot;X&quot; must still have 3 subscribers&#39;, 3,
+<a name="line543"></a>        pubsub.getCount(TOPIC_X));
+<a name="line544"></a>    thirdCalled = true;
+<a name="line545"></a>  }
+<a name="line546"></a>  pubsub.subscribe(TOPIC_X, third);
+<a name="line547"></a>
+<a name="line548"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 3 subscribers&#39;, 3,
+<a name="line549"></a>      pubsub.getCount(TOPIC_X));
+<a name="line550"></a>  assertFalse(&#39;No subscribers must have been called yet&#39;,
+<a name="line551"></a>      firstCalled || secondCalled || thirdCalled);
+<a name="line552"></a>
+<a name="line553"></a>  assertTrue(pubsub.publish(TOPIC_X));
+<a name="line554"></a>  assertTrue(&#39;First function must have been called&#39;, firstCalled);
+<a name="line555"></a>  assertTrue(&#39;Second function must have been called&#39;, secondCalled);
+<a name="line556"></a>  assertTrue(&#39;Third function must have been called&#39;, thirdCalled);
+<a name="line557"></a>  assertEquals(&#39;Topic &quot;X&quot; must have 1 subscriber after publishing&#39;, 1,
+<a name="line558"></a>      pubsub.getCount(TOPIC_X));
+<a name="line559"></a>}
+<a name="line560"></a>
+<a name="line561"></a>function testUnsubscribeSelfWhilePublishing() {
+<a name="line562"></a>  // It&#39;s OK for a subscriber to unsubscribe itself, but it won&#39;t actually
+<a name="line563"></a>  // be removed until after publishing is complete.
+<a name="line564"></a>
+<a name="line565"></a>  var selfDestructCalled = false;
+<a name="line566"></a>
+<a name="line567"></a>  /** @const */ SOME_TOPIC = new goog.pubsub.TopicId(&#39;someTopic&#39;);
+<a name="line568"></a>
+<a name="line569"></a>  function selfDestruct() {
+<a name="line570"></a>    assertFalse(&#39;unsubscribe() must return false during publishing&#39;,
+<a name="line571"></a>        pubsub.unsubscribe(SOME_TOPIC, arguments.callee));
+<a name="line572"></a>    assertEquals(&#39;Topic must still have 1 subscriber&#39;, 1,
+<a name="line573"></a>        pubsub.getCount(SOME_TOPIC));
+<a name="line574"></a>    selfDestructCalled = true;
+<a name="line575"></a>  }
+<a name="line576"></a>
+<a name="line577"></a>  pubsub.subscribe(SOME_TOPIC, selfDestruct);
+<a name="line578"></a>  assertEquals(&#39;Topic must have 1 subscriber&#39;, 1,
+<a name="line579"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line580"></a>  assertFalse(&#39;selfDestruct() must not have been called yet&#39;,
+<a name="line581"></a>      selfDestructCalled);
+<a name="line582"></a>
+<a name="line583"></a>  pubsub.publish(SOME_TOPIC);
+<a name="line584"></a>  assertTrue(&#39;selfDestruct() must have been called&#39;, selfDestructCalled);
+<a name="line585"></a>  assertEquals(&#39;Topic must have no subscribers after publishing&#39;, 0,
+<a name="line586"></a>      pubsub.getCount(SOME_TOPIC));
+<a name="line587"></a>}
+<a name="line588"></a>
+<a name="line589"></a>function testPublishReturnValue() {
+<a name="line590"></a>  /** @const */ SOME_TOPIC = new goog.pubsub.TopicId(&#39;someTopic&#39;);
+<a name="line591"></a>  pubsub.subscribe(SOME_TOPIC, function() {
+<a name="line592"></a>    pubsub.unsubscribe(SOME_TOPIC, arguments.callee);
+<a name="line593"></a>  });
+<a name="line594"></a>  assertTrue(&#39;publish() must return true even if the only subscriber &#39; +
+<a name="line595"></a>      &#39;removes itself during publishing&#39;, pubsub.publish(SOME_TOPIC));
+<a name="line596"></a>}
+<a name="line597"></a>
+<a name="line598"></a>function testNestedPublish() {
+<a name="line599"></a>  var x1 = false;
+<a name="line600"></a>  var x2 = false;
+<a name="line601"></a>  var y1 = false;
+<a name="line602"></a>  var y2 = false;
+<a name="line603"></a>
+<a name="line604"></a>  /** @const */ TOPIC_X = new goog.pubsub.TopicId(&#39;X&#39;);
+<a name="line605"></a>  /** @const */ TOPIC_Y = new goog.pubsub.TopicId(&#39;Y&#39;);
+<a name="line606"></a>
+<a name="line607"></a>  pubsub.subscribe(TOPIC_X, function() {
+<a name="line608"></a>    pubsub.publish(TOPIC_Y);
+<a name="line609"></a>    pubsub.unsubscribe(TOPIC_X, arguments.callee);
+<a name="line610"></a>    x1 = true;
+<a name="line611"></a>  });
+<a name="line612"></a>
+<a name="line613"></a>  pubsub.subscribe(TOPIC_X, function() {
+<a name="line614"></a>    x2 = true;
+<a name="line615"></a>  });
+<a name="line616"></a>
+<a name="line617"></a>  pubsub.subscribe(TOPIC_Y, function() {
+<a name="line618"></a>    pubsub.unsubscribe(TOPIC_Y, arguments.callee);
+<a name="line619"></a>    y1 = true;
+<a name="line620"></a>  });
+<a name="line621"></a>
+<a name="line622"></a>  pubsub.subscribe(TOPIC_Y, function() {
+<a name="line623"></a>    y2 = true;
+<a name="line624"></a>  });
+<a name="line625"></a>
+<a name="line626"></a>  pubsub.publish(TOPIC_X);
+<a name="line627"></a>
+<a name="line628"></a>  assertTrue(&#39;x1 must be true&#39;, x1);
+<a name="line629"></a>  assertTrue(&#39;x2 must be true&#39;, x2);
+<a name="line630"></a>  assertTrue(&#39;y1 must be true&#39;, y1);
+<a name="line631"></a>  assertTrue(&#39;y2 must be true&#39;, y2);
+<a name="line632"></a>}
+<a name="line633"></a>
+<a name="line634"></a>function testClear() {
+<a name="line635"></a>  function fn() {
+<a name="line636"></a>  }
+<a name="line637"></a>
+<a name="line638"></a>  var topics = [
+<a name="line639"></a>    new goog.pubsub.TopicId(&#39;W&#39;),
+<a name="line640"></a>    new goog.pubsub.TopicId(&#39;X&#39;),
+<a name="line641"></a>    new goog.pubsub.TopicId(&#39;Y&#39;),
+<a name="line642"></a>    new goog.pubsub.TopicId(&#39;Z&#39;)
+<a name="line643"></a>  ];
+<a name="line644"></a>
+<a name="line645"></a>  goog.array.forEach(topics, function(topic) {
+<a name="line646"></a>    pubsub.subscribe(topic, fn);
+<a name="line647"></a>  });
+<a name="line648"></a>  assertEquals(&#39;Pubsub channel must have 4 subscribers&#39;, 4,
+<a name="line649"></a>      pubsub.getCount());
+<a name="line650"></a>
+<a name="line651"></a>  pubsub.clear(topics[0]);
+<a name="line652"></a>  assertEquals(&#39;Pubsub channel must have 3 subscribers&#39;, 3,
+<a name="line653"></a>      pubsub.getCount());
+<a name="line654"></a>
+<a name="line655"></a>  pubsub.clear(topics[1]);
+<a name="line656"></a>  pubsub.clear(topics[2]);
+<a name="line657"></a>  assertEquals(&#39;Pubsub channel must have 1 subscriber&#39;, 1,
+<a name="line658"></a>      pubsub.getCount());
+<a name="line659"></a>
+<a name="line660"></a>  pubsub.clear();
+<a name="line661"></a>  assertEquals(&#39;Pubsub channel must have no subscribers&#39;, 0,
+<a name="line662"></a>      pubsub.getCount());
+<a name="line663"></a>}
+</pre>
+
+
+</body>
+</html>

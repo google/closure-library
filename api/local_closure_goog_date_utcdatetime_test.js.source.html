@@ -1,0 +1,178 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>utcdatetime_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_date_utcdatetime_test.js.html">utcdatetime_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2009 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.date.UtcDateTimeTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.date.UtcDateTimeTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.date.Interval&#39;);
+<a name="line19"></a>goog.require(&#39;goog.date.UtcDateTime&#39;);
+<a name="line20"></a>goog.require(&#39;goog.date.month&#39;);
+<a name="line21"></a>goog.require(&#39;goog.date.weekDay&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>
+<a name="line24"></a>function testConstructor() {
+<a name="line25"></a>  goog.now = function() {
+<a name="line26"></a>    return new Date(2001, 2, 3, 4).getTime();
+<a name="line27"></a>  };
+<a name="line28"></a>
+<a name="line29"></a>  var d = new goog.date.UtcDateTime();
+<a name="line30"></a>  assertTrue(&#39;default constructor&#39;, d.equals(new Date(goog.now())));
+<a name="line31"></a>
+<a name="line32"></a>  var d = new goog.date.UtcDateTime(2001);
+<a name="line33"></a>  assertTrue(&#39;year only&#39;, d.equals(new Date(Date.UTC(2001, 0, 1, 0, 0, 0))));
+<a name="line34"></a>
+<a name="line35"></a>  var d = new goog.date.UtcDateTime(2001, 2, 3, 4, 5, 6, 7);
+<a name="line36"></a>  assertTrue(&#39;full date/time&#39;,
+<a name="line37"></a>             d.equals(new Date(Date.UTC(2001, 2, 3, 4, 5, 6, 7))));
+<a name="line38"></a>
+<a name="line39"></a>  var d = new goog.date.UtcDateTime(new Date(0));
+<a name="line40"></a>  assertTrue(&#39;copy constructor&#39;,
+<a name="line41"></a>             d.equals(new Date(Date.UTC(1970, 0, 1, 0, 0, 0))));
+<a name="line42"></a>}
+<a name="line43"></a>
+<a name="line44"></a>function testClone() {
+<a name="line45"></a>  var d = new goog.date.UtcDateTime(2001, 2, 3, 4, 5, 6, 7);
+<a name="line46"></a>  assertTrue(&#39;clone of UtcDateTime&#39;, d.equals(d.clone()));
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>function testAdd() {
+<a name="line50"></a>  var date = new goog.date.UtcDateTime(2007, goog.date.month.OCT, 5);
+<a name="line51"></a>  date.add(new goog.date.Interval(-1, 2));
+<a name="line52"></a>  var expected = new goog.date.UtcDateTime(2006, goog.date.month.DEC, 5);
+<a name="line53"></a>  assertTrue(&#39;UTC date + years + months&#39;, expected.equals(date));
+<a name="line54"></a>
+<a name="line55"></a>  var date = new goog.date.UtcDateTime(2007, goog.date.month.OCT, 1);
+<a name="line56"></a>  date.add(new goog.date.Interval(0, 0, 60));
+<a name="line57"></a>  var expected = new goog.date.UtcDateTime(2007, goog.date.month.NOV, 30);
+<a name="line58"></a>  assertTrue(&#39;UTC date + days&#39;, expected.equals(date));
+<a name="line59"></a>
+<a name="line60"></a>  var date = new goog.date.UtcDateTime(2007, goog.date.month.OCT, 1);
+<a name="line61"></a>  date.add(new goog.date.Interval(0, 0, 0, 60 * 24 - 12, -30, -30.5));
+<a name="line62"></a>  var expected = new goog.date.UtcDateTime(2007, goog.date.month.NOV, 29,
+<a name="line63"></a>                                           11, 29, 29, 500);
+<a name="line64"></a>  assertTrue(&#39;UTC date + time, daylight saving ignored&#39;, expected.equals(date));
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>function testGetYear() {
+<a name="line68"></a>  var date = new goog.date.UtcDateTime(2000, goog.date.month.JAN, 1);
+<a name="line69"></a>  assertEquals(&#39;year of 2000-01-01 00:00:00&#39;, 2000, date.getYear());
+<a name="line70"></a>
+<a name="line71"></a>  var date = new goog.date.UtcDateTime(1999, goog.date.month.DEC, 31, 23, 59);
+<a name="line72"></a>  assertEquals(&#39;year of 1999-12-31 23:59:00&#39;, 1999, date.getYear());
+<a name="line73"></a>}
+<a name="line74"></a>
+<a name="line75"></a>function testGetDay() {
+<a name="line76"></a>  var date = new goog.date.UtcDateTime(2000, goog.date.month.JAN, 1);
+<a name="line77"></a>  assertEquals(&#39;2000-01-01 00:00:00 is Saturday (UTC + ISO)&#39;,
+<a name="line78"></a>               goog.date.weekDay.SAT, date.getUTCIsoWeekday());
+<a name="line79"></a>  assertEquals(&#39;2000-01-01 00:00:00 is Saturday (ISO)&#39;,
+<a name="line80"></a>               goog.date.weekDay.SAT, date.getIsoWeekday());
+<a name="line81"></a>  assertEquals(&#39;2000-01-01 00:00:00 is Saturday (UTC)&#39;,
+<a name="line82"></a>               6, date.getUTCDay());
+<a name="line83"></a>  assertEquals(&#39;2000-01-01 00:00:00 is Saturday&#39;,
+<a name="line84"></a>               6, date.getDay());
+<a name="line85"></a>
+<a name="line86"></a>  var date = new goog.date.UtcDateTime(2000, goog.date.month.JAN, 1, 23, 59);
+<a name="line87"></a>  assertEquals(&#39;2000-01-01 23:59:00 is Saturday (UTC + ISO)&#39;,
+<a name="line88"></a>               goog.date.weekDay.SAT, date.getUTCIsoWeekday());
+<a name="line89"></a>  assertEquals(&#39;2000-01-01 23:59:00 is Saturday (ISO)&#39;,
+<a name="line90"></a>               goog.date.weekDay.SAT, date.getIsoWeekday());
+<a name="line91"></a>  assertEquals(&#39;2000-01-01 23:59:00 is Saturday (UTC)&#39;,
+<a name="line92"></a>               6, date.getUTCDay());
+<a name="line93"></a>  assertEquals(&#39;2000-01-01 23:59:00 is Saturday&#39;,
+<a name="line94"></a>               6, date.getDay());
+<a name="line95"></a>}
+<a name="line96"></a>
+<a name="line97"></a>function testFromIsoString() {
+<a name="line98"></a>  var dateString = &#39;2000-01-02&#39;;
+<a name="line99"></a>  var date = goog.date.UtcDateTime.fromIsoString(dateString);
+<a name="line100"></a>  var exp = new goog.date.UtcDateTime(2000, goog.date.month.JAN, 2);
+<a name="line101"></a>  assertTrue(&#39;parsed ISO date&#39;, exp.equals(date));
+<a name="line102"></a>
+<a name="line103"></a>  var dateTimeString = &#39;2000-01-02 03:04:05&#39;;
+<a name="line104"></a>  var dateTime = goog.date.UtcDateTime.fromIsoString(dateTimeString);
+<a name="line105"></a>  var exp = new goog.date.UtcDateTime(2000, goog.date.month.JAN, 2, 3, 4, 5);
+<a name="line106"></a>  assertTrue(&#39;parsed ISO date/time&#39;, exp.equals(dateTime));
+<a name="line107"></a>}
+<a name="line108"></a>
+<a name="line109"></a>function testToIsoString() {
+<a name="line110"></a>  var date = new goog.date.UtcDateTime(2000, goog.date.month.JAN, 2, 3, 4, 5);
+<a name="line111"></a>  assertEquals(&#39;serialize date/time&#39;,
+<a name="line112"></a>               &#39;2000-01-02 03:04:05&#39;, date.toIsoString(true));
+<a name="line113"></a>  assertEquals(&#39;serialize time only&#39;,
+<a name="line114"></a>               &#39;03:04:05&#39;, date.toIsoTimeString(true));
+<a name="line115"></a>  assertEquals(&#39;serialize date/time to XML&#39;,
+<a name="line116"></a>               &#39;2000-01-02T03:04:05&#39;, date.toXmlDateTime());
+<a name="line117"></a>}
+<a name="line118"></a>
+<a name="line119"></a>function testIsMidnight() {
+<a name="line120"></a>  assertTrue(new goog.date.UtcDateTime(2000, 0, 1).isMidnight());
+<a name="line121"></a>  assertFalse(new goog.date.UtcDateTime(2000, 0, 1, 0, 0, 0, 1).isMidnight());
+<a name="line122"></a>}
+<a name="line123"></a>
+<a name="line124"></a>function testFromTimestamp() {
+<a name="line125"></a>  assertEquals(0, goog.date.UtcDateTime.fromTimestamp(0).getTime());
+<a name="line126"></a>  assertEquals(1234, goog.date.UtcDateTime.fromTimestamp(1234).getTime());
+<a name="line127"></a>}
+</pre>
+
+
+</body>
+</html>

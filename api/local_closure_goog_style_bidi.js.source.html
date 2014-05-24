@@ -1,0 +1,233 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>bidi.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_style_bidi.js.html">bidi.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2012 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Bidi utility functions.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.style.bidi&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line23"></a>goog.require(&#39;goog.style&#39;);
+<a name="line24"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * Returns the normalized scrollLeft position for a scrolled element.
+<a name="line29"></a> * @param {Element} element The scrolled element.
+<a name="line30"></a> * @return {number} The number of pixels the element is scrolled. 0 indicates
+<a name="line31"></a> *     that the element is not scrolled at all (which, in general, is the
+<a name="line32"></a> *     left-most position in ltr and the right-most position in rtl).
+<a name="line33"></a> */
+<a name="line34"></a>goog.style.bidi.getScrollLeft = function(element) {
+<a name="line35"></a>  var isRtl = goog.style.isRightToLeft(element);
+<a name="line36"></a>  if (isRtl &amp;&amp; goog.userAgent.GECKO) {
+<a name="line37"></a>    // ScrollLeft starts at 0 and then goes negative as the element is scrolled
+<a name="line38"></a>    // towards the left.
+<a name="line39"></a>    return -element.scrollLeft;
+<a name="line40"></a>  } else if (isRtl &amp;&amp;
+<a name="line41"></a>             !(goog.userAgent.IE &amp;&amp; goog.userAgent.isVersionOrHigher(&#39;8&#39;))) {
+<a name="line42"></a>    // ScrollLeft starts at the maximum positive value and decreases towards
+<a name="line43"></a>    // 0 as the element is scrolled towards the left. However, for overflow
+<a name="line44"></a>    // visible, there is no scrollLeft and the value always stays correctly at 0
+<a name="line45"></a>    var overflowX = goog.style.getComputedOverflowX(element);
+<a name="line46"></a>    if (overflowX == &#39;visible&#39;) {
+<a name="line47"></a>      return element.scrollLeft;
+<a name="line48"></a>    } else {
+<a name="line49"></a>      return element.scrollWidth - element.clientWidth - element.scrollLeft;
+<a name="line50"></a>    }
+<a name="line51"></a>  }
+<a name="line52"></a>  // ScrollLeft behavior is identical in rtl and ltr, it starts at 0 and
+<a name="line53"></a>  // increases as the element is scrolled away from the start.
+<a name="line54"></a>  return element.scrollLeft;
+<a name="line55"></a>};
+<a name="line56"></a>
+<a name="line57"></a>
+<a name="line58"></a>/**
+<a name="line59"></a> * Returns the &quot;offsetStart&quot; of an element, analagous to offsetLeft but
+<a name="line60"></a> * normalized for right-to-left environments and various browser
+<a name="line61"></a> * inconsistencies. This value returned can always be passed to setScrollOffset
+<a name="line62"></a> * to scroll to an element&#39;s left edge in a left-to-right offsetParent or
+<a name="line63"></a> * right edge in a right-to-left offsetParent.
+<a name="line64"></a> *
+<a name="line65"></a> * For example, here offsetStart is 10px in an LTR environment and 5px in RTL:
+<a name="line66"></a> *
+<a name="line67"></a> * &lt;pre&gt;
+<a name="line68"></a> * |          xxxxxxxxxx     |
+<a name="line69"></a> *  ^^^^^^^^^^   ^^^^   ^^^^^
+<a name="line70"></a> *     10px      elem    5px
+<a name="line71"></a> * &lt;/pre&gt;
+<a name="line72"></a> *
+<a name="line73"></a> * If an element is positioned before the start of its offsetParent, the
+<a name="line74"></a> * startOffset may be negative.  This can be used with setScrollOffset to
+<a name="line75"></a> * reliably scroll to an element:
+<a name="line76"></a> *
+<a name="line77"></a> * &lt;pre&gt;
+<a name="line78"></a> * var scrollOffset = goog.style.bidi.getOffsetStart(element);
+<a name="line79"></a> * goog.style.bidi.setScrollOffset(element.offsetParent, scrollOffset);
+<a name="line80"></a> * &lt;/pre&gt;
+<a name="line81"></a> *
+<a name="line82"></a> * @see setScrollOffset
+<a name="line83"></a> *
+<a name="line84"></a> * @param {Element} element The element for which we need to determine the
+<a name="line85"></a> *     offsetStart position.
+<a name="line86"></a> * @return {number} The offsetStart for that element.
+<a name="line87"></a> */
+<a name="line88"></a>goog.style.bidi.getOffsetStart = function(element) {
+<a name="line89"></a>  var offsetLeftForReal = element.offsetLeft;
+<a name="line90"></a>
+<a name="line91"></a>  // The element might not have an offsetParent.
+<a name="line92"></a>  // For example, the node might not be attached to the DOM tree,
+<a name="line93"></a>  // and position:fixed children do not have an offset parent.
+<a name="line94"></a>  // Just try to do the best we can with what we have.
+<a name="line95"></a>  var bestParent = element.offsetParent;
+<a name="line96"></a>
+<a name="line97"></a>  if (!bestParent &amp;&amp; goog.style.getComputedPosition(element) == &#39;fixed&#39;) {
+<a name="line98"></a>    bestParent = goog.dom.getOwnerDocument(element).documentElement;
+<a name="line99"></a>  }
+<a name="line100"></a>
+<a name="line101"></a>  // Just give up in this case.
+<a name="line102"></a>  if (!bestParent) {
+<a name="line103"></a>    return offsetLeftForReal;
+<a name="line104"></a>  }
+<a name="line105"></a>
+<a name="line106"></a>  if (goog.userAgent.GECKO) {
+<a name="line107"></a>    // When calculating an element&#39;s offsetLeft, Firefox erroneously subtracts
+<a name="line108"></a>    // the border width from the actual distance.  So we need to add it back.
+<a name="line109"></a>    var borderWidths = goog.style.getBorderBox(bestParent);
+<a name="line110"></a>    offsetLeftForReal += borderWidths.left;
+<a name="line111"></a>  } else if (goog.userAgent.isDocumentModeOrHigher(8)) {
+<a name="line112"></a>    // When calculating an element&#39;s offsetLeft, IE8-Standards Mode erroneously
+<a name="line113"></a>    // adds the border width to the actual distance.  So we need to subtract it.
+<a name="line114"></a>    var borderWidths = goog.style.getBorderBox(bestParent);
+<a name="line115"></a>    offsetLeftForReal -= borderWidths.left;
+<a name="line116"></a>  }
+<a name="line117"></a>
+<a name="line118"></a>  if (goog.style.isRightToLeft(bestParent)) {
+<a name="line119"></a>    // Right edge of the element relative to the left edge of its parent.
+<a name="line120"></a>    var elementRightOffset = offsetLeftForReal + element.offsetWidth;
+<a name="line121"></a>
+<a name="line122"></a>    // Distance from the parent&#39;s right edge to the element&#39;s right edge.
+<a name="line123"></a>    return bestParent.clientWidth - elementRightOffset;
+<a name="line124"></a>  }
+<a name="line125"></a>
+<a name="line126"></a>  return offsetLeftForReal;
+<a name="line127"></a>};
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Sets the element&#39;s scrollLeft attribute so it is correctly scrolled by
+<a name="line132"></a> * offsetStart pixels.  This takes into account whether the element is RTL and
+<a name="line133"></a> * the nuances of different browsers.  To scroll to the &quot;beginning&quot; of an
+<a name="line134"></a> * element use getOffsetStart to obtain the element&#39;s offsetStart value and then
+<a name="line135"></a> * pass the value to setScrollOffset.
+<a name="line136"></a> * @see getOffsetStart
+<a name="line137"></a> * @param {Element} element The element to set scrollLeft on.
+<a name="line138"></a> * @param {number} offsetStart The number of pixels to scroll the element.
+<a name="line139"></a> *     If this value is &lt; 0, 0 is used.
+<a name="line140"></a> */
+<a name="line141"></a>goog.style.bidi.setScrollOffset = function(element, offsetStart) {
+<a name="line142"></a>  offsetStart = Math.max(offsetStart, 0);
+<a name="line143"></a>  // In LTR and in &quot;mirrored&quot; browser RTL (such as IE), we set scrollLeft to
+<a name="line144"></a>  // the number of pixels to scroll.
+<a name="line145"></a>  // Otherwise, in RTL, we need to account for different browser behavior.
+<a name="line146"></a>  if (!goog.style.isRightToLeft(element)) {
+<a name="line147"></a>    element.scrollLeft = offsetStart;
+<a name="line148"></a>  } else if (goog.userAgent.GECKO) {
+<a name="line149"></a>    // Negative scroll-left positions in RTL.
+<a name="line150"></a>    element.scrollLeft = -offsetStart;
+<a name="line151"></a>  } else if (!(goog.userAgent.IE &amp;&amp; goog.userAgent.isVersionOrHigher(&#39;8&#39;))) {
+<a name="line152"></a>    // Take the current scrollLeft value and move to the right by the
+<a name="line153"></a>    // offsetStart to get to the left edge of the element, and then by
+<a name="line154"></a>    // the clientWidth of the element to get to the right edge.
+<a name="line155"></a>    element.scrollLeft =
+<a name="line156"></a>        element.scrollWidth - offsetStart - element.clientWidth;
+<a name="line157"></a>  } else {
+<a name="line158"></a>    element.scrollLeft = offsetStart;
+<a name="line159"></a>  }
+<a name="line160"></a>};
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * Sets the element&#39;s left style attribute in LTR or right style attribute in
+<a name="line165"></a> * RTL.  Also clears the left attribute in RTL and the right attribute in LTR.
+<a name="line166"></a> * @param {Element} elem The element to position.
+<a name="line167"></a> * @param {number} left The left position in LTR; will be set as right in RTL.
+<a name="line168"></a> * @param {?number} top The top position.  If null only the left/right is set.
+<a name="line169"></a> * @param {boolean} isRtl Whether we are in RTL mode.
+<a name="line170"></a> */
+<a name="line171"></a>goog.style.bidi.setPosition = function(elem, left, top, isRtl) {
+<a name="line172"></a>  if (!goog.isNull(top)) {
+<a name="line173"></a>    elem.style.top = top + &#39;px&#39;;
+<a name="line174"></a>  }
+<a name="line175"></a>  if (isRtl) {
+<a name="line176"></a>    elem.style.right = left + &#39;px&#39;;
+<a name="line177"></a>    elem.style.left = &#39;&#39;;
+<a name="line178"></a>  } else {
+<a name="line179"></a>    elem.style.left = left + &#39;px&#39;;
+<a name="line180"></a>    elem.style.right = &#39;&#39;;
+<a name="line181"></a>  }
+<a name="line182"></a>};
+</pre>
+
+
+</body>
+</html>

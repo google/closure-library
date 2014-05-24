@@ -1,0 +1,204 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>memoize_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_memoize_memoize_test.js.html">memoize_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.memoizeTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.memoizeTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.memoize&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>function testNoArgs() {
+<a name="line22"></a>  var called = 0;
+<a name="line23"></a>  var f = goog.memoize(function() {
+<a name="line24"></a>    called++;
+<a name="line25"></a>    return 10;
+<a name="line26"></a>  });
+<a name="line27"></a>
+<a name="line28"></a>  assertEquals(&#39;f() 1st call&#39;, 10, f());
+<a name="line29"></a>  assertEquals(&#39;f() 2nd call&#39;, 10, f());
+<a name="line30"></a>  assertEquals(&#39;f() 3rd call&#39;, 10, f.call());
+<a name="line31"></a>  assertEquals(&#39;f() called once&#39;, 1, called);
+<a name="line32"></a>}
+<a name="line33"></a>
+<a name="line34"></a>function testOneOptionalArgSimple() {
+<a name="line35"></a>  var called = 0;
+<a name="line36"></a>  var f = goog.memoize(function(opt_x) {
+<a name="line37"></a>    called++;
+<a name="line38"></a>    return arguments.length == 0 ? &#39;no args&#39; : opt_x;
+<a name="line39"></a>  });
+<a name="line40"></a>
+<a name="line41"></a>  assertEquals(&#39;f() 1st call&#39;, &#39;no args&#39;, f());
+<a name="line42"></a>  assertEquals(&#39;f() 2nd call&#39;, &#39;no args&#39;, f());
+<a name="line43"></a>  assertEquals(&#39;f(0) 1st call&#39;, 0, f(0));
+<a name="line44"></a>  assertEquals(&#39;f(0) 2nd call&#39;, 0, f(0));
+<a name="line45"></a>  assertEquals(&#39;f(&quot;&quot;) 1st call&#39;, &#39;&#39;, f(&#39;&#39;));
+<a name="line46"></a>  assertEquals(&#39;f(&quot;&quot;) 2nd call&#39;, &#39;&#39;, f(&#39;&#39;));
+<a name="line47"></a>  assertEquals(&#39;f(&quot;0&quot;) 1st call&#39;, &#39;0&#39;, f(&#39;0&#39;));
+<a name="line48"></a>  assertEquals(&#39;f(&quot;0&quot;) 1st call&#39;, &#39;0&#39;, f(&#39;0&#39;));
+<a name="line49"></a>  assertEquals(&#39;f(null) 1st call&#39;, null, f(null));
+<a name="line50"></a>  assertEquals(&#39;f(null) 2nd call&#39;, null, f(null));
+<a name="line51"></a>  assertEquals(&#39;f(undefined) 1st call&#39;, undefined, f(undefined));
+<a name="line52"></a>  assertEquals(&#39;f(undefined) 2nd call&#39;, undefined, f(undefined));
+<a name="line53"></a>
+<a name="line54"></a>  assertEquals(&#39;f(opt_x) called 6 times&#39;, 6, called);
+<a name="line55"></a>}
+<a name="line56"></a>
+<a name="line57"></a>function testProtoFunctions() {
+<a name="line58"></a>  var fcalled = 0;
+<a name="line59"></a>  var gcalled = 0;
+<a name="line60"></a>  var Class = function(x) {
+<a name="line61"></a>    this.x = x;
+<a name="line62"></a>    this.f = goog.memoize(function(y) {
+<a name="line63"></a>      fcalled++;
+<a name="line64"></a>      return this.x + y;
+<a name="line65"></a>    });
+<a name="line66"></a>  };
+<a name="line67"></a>  Class.prototype.g = goog.memoize(function(z) {
+<a name="line68"></a>    gcalled++;
+<a name="line69"></a>    return this.x - z;
+<a name="line70"></a>  });
+<a name="line71"></a>
+<a name="line72"></a>  var obj1 = new Class(10);
+<a name="line73"></a>  var obj2 = new Class(20);
+<a name="line74"></a>
+<a name="line75"></a>  assertEquals(&#39;10+1&#39;, 11, obj1.f(1));
+<a name="line76"></a>  assertEquals(&#39;10+2&#39;, 12, obj1.f(2));
+<a name="line77"></a>  assertEquals(&#39;10+2 again&#39;, 12, obj1.f(2));
+<a name="line78"></a>  assertEquals(&#39;f called twice&#39;, 2, fcalled);
+<a name="line79"></a>
+<a name="line80"></a>  assertEquals(&#39;10-1&#39;, 9, obj1.g(1));
+<a name="line81"></a>  assertEquals(&#39;10-2&#39;, 8, obj1.g(2));
+<a name="line82"></a>  assertEquals(&#39;10-2 again&#39;, 8, obj1.g(2));
+<a name="line83"></a>  assertEquals(&#39;g called twice&#39;, 2, gcalled);
+<a name="line84"></a>
+<a name="line85"></a>  assertEquals(&#39;20+1&#39;, 21, obj2.f(1));
+<a name="line86"></a>  assertEquals(&#39;20+2&#39;, 22, obj2.f(2));
+<a name="line87"></a>  assertEquals(&#39;20+2 again&#39;, 22, obj2.f(2));
+<a name="line88"></a>  assertEquals(&#39;f called 4 times&#39;, 4, fcalled);
+<a name="line89"></a>
+<a name="line90"></a>  assertEquals(&#39;20-1&#39;, 19, obj2.g(1));
+<a name="line91"></a>  assertEquals(&#39;20-2&#39;, 18, obj2.g(2));
+<a name="line92"></a>  assertEquals(&#39;20-2 again&#39;, 18, obj2.g(2));
+<a name="line93"></a>  assertEquals(&#39;g called 4 times&#39;, 4, gcalled);
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>function testCustomSerializer() {
+<a name="line97"></a>  var called = 0;
+<a name="line98"></a>  var serializer = function(this_context, args) {
+<a name="line99"></a>    return String(args[0].getTime());
+<a name="line100"></a>  };
+<a name="line101"></a>  var getYear = goog.memoize(function(date) {
+<a name="line102"></a>    called++;
+<a name="line103"></a>    return date.getFullYear();
+<a name="line104"></a>  }, serializer);
+<a name="line105"></a>
+<a name="line106"></a>  assertEquals(&#39;getYear(2008, 0, 1), 1st&#39;, 2008, getYear(new Date(2008, 0, 1)));
+<a name="line107"></a>  assertEquals(&#39;getYear(2008, 0, 1), 2nd&#39;, 2008, getYear(new Date(2008, 0, 1)));
+<a name="line108"></a>  assertEquals(&#39;getYear called once&#39;, 1, called);
+<a name="line109"></a>
+<a name="line110"></a>  assertEquals(&#39;getYear(2007, 0, 1)&#39;, 2007, getYear(new Date(2007, 0, 1)));
+<a name="line111"></a>  assertEquals(&#39;getYear called twice&#39;, 2, called);
+<a name="line112"></a>}
+<a name="line113"></a>
+<a name="line114"></a>function testClearCache() {
+<a name="line115"></a>  var computed = 0;
+<a name="line116"></a>  var identity = goog.memoize(function(x) {
+<a name="line117"></a>    computed++;
+<a name="line118"></a>    return x;
+<a name="line119"></a>  });
+<a name="line120"></a>  assertEquals(&#39;identity(1)==1&#39;, 1, identity(1));
+<a name="line121"></a>  assertEquals(&#39;identity(1)==1&#39;, 1, identity(1));
+<a name="line122"></a>  assertEquals(&#39;identity(1)==1&#39;, 1, identity(1));
+<a name="line123"></a>  assertEquals(&#39;Expected memozation&#39;, 1, computed);
+<a name="line124"></a>
+<a name="line125"></a>  goog.memoize.clearCache(goog.global);
+<a name="line126"></a>  assertEquals(&#39;identity(1)==1&#39;, 1, identity(1));
+<a name="line127"></a>  assertEquals(&#39;identity(1)==1&#39;, 1, identity(1));
+<a name="line128"></a>  assertEquals(&#39;Expected cleared memoization cache&#39;, 2, computed);
+<a name="line129"></a>}
+<a name="line130"></a>
+<a name="line131"></a>function testDisableMemoize() {
+<a name="line132"></a>  var computed = 0;
+<a name="line133"></a>  var identity = goog.memoize(function(x) {
+<a name="line134"></a>    computed++;
+<a name="line135"></a>    return x;
+<a name="line136"></a>  });
+<a name="line137"></a>
+<a name="line138"></a>  assertEquals(&#39;return value on first call&#39;, 1, identity(1));
+<a name="line139"></a>  assertEquals(&#39;return value on second call (memoized)&#39;, 1, identity(1));
+<a name="line140"></a>  assertEquals(&#39;computed once&#39;, 1, computed);
+<a name="line141"></a>
+<a name="line142"></a>  goog.memoize.ENABLE_MEMOIZE = false;
+<a name="line143"></a>
+<a name="line144"></a>  try {
+<a name="line145"></a>    assertEquals(&#39;return value after disabled memoization&#39;, 1, identity(1));
+<a name="line146"></a>    assertEquals(&#39;computed again&#39;, 2, computed);
+<a name="line147"></a>  } finally {
+<a name="line148"></a>    goog.memoize.ENABLE_MEMOIZE = true;
+<a name="line149"></a>  }
+<a name="line150"></a>
+<a name="line151"></a>  assertEquals(&#39;return value after reenabled memoization&#39;, 1, identity(1));
+<a name="line152"></a>  assertEquals(&#39;not computed again&#39;, 2, computed);
+<a name="line153"></a>}
+</pre>
+
+
+</body>
+</html>

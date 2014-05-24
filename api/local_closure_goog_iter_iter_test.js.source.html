@@ -1,0 +1,904 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>iter_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_iter_iter_test.js.html">iter_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.iterTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.iterTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.iter&#39;);
+<a name="line19"></a>goog.require(&#39;goog.iter.Iterator&#39;);
+<a name="line20"></a>goog.require(&#39;goog.iter.StopIteration&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>function ArrayIterator(array) {
+<a name="line24"></a>  this.array_ = array;
+<a name="line25"></a>  this.current_ = 0;
+<a name="line26"></a>}
+<a name="line27"></a>goog.inherits(ArrayIterator, goog.iter.Iterator);
+<a name="line28"></a>
+<a name="line29"></a>ArrayIterator.prototype.next = function() {
+<a name="line30"></a>  if (this.current_ &gt;= this.array_.length) {
+<a name="line31"></a>    throw goog.iter.StopIteration;
+<a name="line32"></a>  }
+<a name="line33"></a>  return this.array_[this.current_++];
+<a name="line34"></a>};
+<a name="line35"></a>
+<a name="line36"></a>function testForEach() {
+<a name="line37"></a>  var s = &#39;&#39;;
+<a name="line38"></a>  var iter = new ArrayIterator([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;]);
+<a name="line39"></a>  goog.iter.forEach(iter, function(val, index, iter2) {
+<a name="line40"></a>    assertEquals(iter, iter2);
+<a name="line41"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line42"></a>    s += val;
+<a name="line43"></a>  });
+<a name="line44"></a>  assertEquals(&#39;abcd&#39;, s);
+<a name="line45"></a>}
+<a name="line46"></a>
+<a name="line47"></a>function testJoin() {
+<a name="line48"></a>  var iter = new ArrayIterator([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;]);
+<a name="line49"></a>  assertEquals(&#39;abcd&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line50"></a>
+<a name="line51"></a>  iter = new ArrayIterator([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;]);
+<a name="line52"></a>  assertEquals(&#39;a,b,c,d&#39;, goog.iter.join(iter, &#39;,&#39;));
+<a name="line53"></a>
+<a name="line54"></a>  // make sure everything is treated as strings
+<a name="line55"></a>  iter = new ArrayIterator([0, 1, 2, 3]);
+<a name="line56"></a>  assertEquals(&#39;0123&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line57"></a>
+<a name="line58"></a>  iter = new ArrayIterator([0, 1, 2, 3]);
+<a name="line59"></a>  assertEquals(&#39;0919293&#39;, goog.iter.join(iter, 9));
+<a name="line60"></a>
+<a name="line61"></a>  // Joining an empty iterator should result in an empty string
+<a name="line62"></a>  iter = new ArrayIterator([]);
+<a name="line63"></a>  assertEquals(&#39;&#39;, goog.iter.join(iter, &#39;,&#39;));
+<a name="line64"></a>
+<a name="line65"></a>}
+<a name="line66"></a>
+<a name="line67"></a>function testRange() {
+<a name="line68"></a>  var iter = goog.iter.range(0, 5, 1);
+<a name="line69"></a>  assertEquals(&#39;01234&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line70"></a>
+<a name="line71"></a>  iter = goog.iter.range(0, 5, 2);
+<a name="line72"></a>  assertEquals(&#39;024&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line73"></a>
+<a name="line74"></a>  iter = goog.iter.range(0, 5, 5);
+<a name="line75"></a>  assertEquals(&#39;0&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line76"></a>
+<a name="line77"></a>  iter = goog.iter.range(0, 5, 10);
+<a name="line78"></a>  assertEquals(&#39;0&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line79"></a>
+<a name="line80"></a>  // negative step
+<a name="line81"></a>  var iter = goog.iter.range(5, 0, -1);
+<a name="line82"></a>  assertEquals(&#39;54321&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line83"></a>
+<a name="line84"></a>
+<a name="line85"></a>  iter = goog.iter.range(5, 0, -2);
+<a name="line86"></a>  assertEquals(&#39;531&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line87"></a>
+<a name="line88"></a>  iter = goog.iter.range(5, 0, -5);
+<a name="line89"></a>  assertEquals(&#39;5&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line90"></a>
+<a name="line91"></a>  iter = goog.iter.range(5, 0, -10);
+<a name="line92"></a>  assertEquals(&#39;5&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line93"></a>
+<a name="line94"></a>  // wrong direction should result in empty iterator
+<a name="line95"></a>  iter = goog.iter.range(0, 5, -1);
+<a name="line96"></a>  assertEquals(&#39;&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line97"></a>
+<a name="line98"></a>  iter = goog.iter.range(5, 0, 1);
+<a name="line99"></a>  assertEquals(&#39;&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line100"></a>
+<a name="line101"></a>  // a step of 0 is not allowed
+<a name="line102"></a>  goog.iter.range(0, 5, 0);
+<a name="line103"></a>
+<a name="line104"></a>  // test the opt args
+<a name="line105"></a>  iter = goog.iter.range(0, 5);
+<a name="line106"></a>  assertEquals(&#39;01234&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line107"></a>
+<a name="line108"></a>  iter = goog.iter.range(5);
+<a name="line109"></a>  assertEquals(&#39;01234&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line110"></a>
+<a name="line111"></a>}
+<a name="line112"></a>
+<a name="line113"></a>function testFilter() {
+<a name="line114"></a>  var iter = goog.iter.range(5);
+<a name="line115"></a>  var iter2 = goog.iter.filter(iter, function(val, index, iter3) {
+<a name="line116"></a>    assertEquals(iter, iter3);
+<a name="line117"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line118"></a>    return val &gt; 1;
+<a name="line119"></a>  });
+<a name="line120"></a>
+<a name="line121"></a>  assertEquals(&#39;234&#39;, goog.iter.join(iter2, &#39;&#39;));
+<a name="line122"></a>
+<a name="line123"></a>  // Chaining filters
+<a name="line124"></a>  iter = goog.iter.range(10);
+<a name="line125"></a>  var sb = [];
+<a name="line126"></a>  var evens = goog.iter.filter(iter, function(v) {
+<a name="line127"></a>    sb.push(&#39;a&#39; + v);
+<a name="line128"></a>    return v % 2 == 0;
+<a name="line129"></a>  });
+<a name="line130"></a>  var evens2 = goog.iter.filter(evens, function(v) {
+<a name="line131"></a>    sb.push(&#39;b&#39; + v);
+<a name="line132"></a>    return v &gt;= 5;
+<a name="line133"></a>  });
+<a name="line134"></a>
+<a name="line135"></a>  assertEquals(&#39;68&#39;, goog.iter.join(evens2, &#39;&#39;));
+<a name="line136"></a>  // Note the order here. The next calls are done lazily.
+<a name="line137"></a>  assertEquals(&#39;a0b0a1a2b2a3a4b4a5a6b6a7a8b8a9&#39;, sb.join(&#39;&#39;));
+<a name="line138"></a>
+<a name="line139"></a>}
+<a name="line140"></a>
+<a name="line141"></a>function testFilterFalse() {
+<a name="line142"></a>  var iter = goog.iter.range(5);
+<a name="line143"></a>  var iter2 = goog.iter.filterFalse(iter, function(val, index, iter3) {
+<a name="line144"></a>    assertEquals(iter, iter3);
+<a name="line145"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line146"></a>    return val &lt; 2;
+<a name="line147"></a>  });
+<a name="line148"></a>
+<a name="line149"></a>  assertEquals(&#39;234&#39;, goog.iter.join(iter2, &#39;&#39;));
+<a name="line150"></a>
+<a name="line151"></a>  // Chaining filters
+<a name="line152"></a>  iter = goog.iter.range(10);
+<a name="line153"></a>  var sb = [];
+<a name="line154"></a>  var odds = goog.iter.filterFalse(iter, function(v) {
+<a name="line155"></a>    sb.push(&#39;a&#39; + v);
+<a name="line156"></a>    return v % 2 == 0;
+<a name="line157"></a>  });
+<a name="line158"></a>  var odds2 = goog.iter.filterFalse(odds, function(v) {
+<a name="line159"></a>    sb.push(&#39;b&#39; + v);
+<a name="line160"></a>    return v &lt;= 5;
+<a name="line161"></a>  });
+<a name="line162"></a>
+<a name="line163"></a>  assertEquals(&#39;79&#39;, goog.iter.join(odds2, &#39;&#39;));
+<a name="line164"></a>  // Note the order here. The next calls are done lazily.
+<a name="line165"></a>  assertEquals(&#39;a0a1b1a2a3b3a4a5b5a6a7b7a8a9b9&#39;, sb.join(&#39;&#39;));
+<a name="line166"></a>
+<a name="line167"></a>}
+<a name="line168"></a>
+<a name="line169"></a>function testMap() {
+<a name="line170"></a>  var iter = goog.iter.range(4);
+<a name="line171"></a>  var iter2 = goog.iter.map(iter, function(val, index, iter3) {
+<a name="line172"></a>    assertEquals(iter, iter3);
+<a name="line173"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line174"></a>    return val * val;
+<a name="line175"></a>  });
+<a name="line176"></a>  assertEquals(&#39;0149&#39;, goog.iter.join(iter2, &#39;&#39;));
+<a name="line177"></a>}
+<a name="line178"></a>
+<a name="line179"></a>function testReduce() {
+<a name="line180"></a>  var iter = goog.iter.range(1, 5);
+<a name="line181"></a>  assertEquals(
+<a name="line182"></a>      10, // 1 + 2 + 3 + 4
+<a name="line183"></a>      goog.iter.reduce(iter, function(val, el) {
+<a name="line184"></a>        return val + el;
+<a name="line185"></a>      }, 0));
+<a name="line186"></a>}
+<a name="line187"></a>
+<a name="line188"></a>function testReduce2() {
+<a name="line189"></a>  var iter = goog.iter.range(1, 5);
+<a name="line190"></a>  assertEquals(
+<a name="line191"></a>      24, // 4!
+<a name="line192"></a>      goog.iter.reduce(iter, function(val, el) {
+<a name="line193"></a>        return val * el;
+<a name="line194"></a>      }, 1));
+<a name="line195"></a>}
+<a name="line196"></a>
+<a name="line197"></a>function testSome() {
+<a name="line198"></a>  var iter = goog.iter.range(5);
+<a name="line199"></a>  var b = goog.iter.some(iter, function(val, index, iter3) {
+<a name="line200"></a>    assertEquals(iter, iter3);
+<a name="line201"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line202"></a>    return val &gt; 1;
+<a name="line203"></a>  });
+<a name="line204"></a>  assertTrue(b);
+<a name="line205"></a>  iter = goog.iter.range(5);
+<a name="line206"></a>  b = goog.iter.some(iter, function(val, index, iter3) {
+<a name="line207"></a>    assertEquals(iter, iter3);
+<a name="line208"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line209"></a>    return val &gt; 100;
+<a name="line210"></a>  });
+<a name="line211"></a>  assertFalse(b);
+<a name="line212"></a>}
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>function testEvery() {
+<a name="line216"></a>  var iter = goog.iter.range(5);
+<a name="line217"></a>  var b = goog.iter.every(iter, function(val, index, iter3) {
+<a name="line218"></a>    assertEquals(iter, iter3);
+<a name="line219"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line220"></a>    return val &gt;= 0;
+<a name="line221"></a>  });
+<a name="line222"></a>  assertTrue(b);
+<a name="line223"></a>  iter = goog.iter.range(5);
+<a name="line224"></a>  b = goog.iter.every(iter, function(val, index, iter3) {
+<a name="line225"></a>    assertEquals(iter, iter3);
+<a name="line226"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line227"></a>    return val &gt; 1;
+<a name="line228"></a>  });
+<a name="line229"></a>  assertFalse(b);
+<a name="line230"></a>}
+<a name="line231"></a>
+<a name="line232"></a>function testChain() {
+<a name="line233"></a>  var iter = goog.iter.range(0, 2);
+<a name="line234"></a>  var iter2 = goog.iter.range(2, 4);
+<a name="line235"></a>  var iter3 = goog.iter.range(4, 6);
+<a name="line236"></a>  var iter4 = goog.iter.chain(iter, iter2, iter3);
+<a name="line237"></a>
+<a name="line238"></a>  assertEquals(&#39;012345&#39;, goog.iter.join(iter4, &#39;&#39;));
+<a name="line239"></a>
+<a name="line240"></a>  // empty iter
+<a name="line241"></a>  iter = new goog.iter.Iterator;
+<a name="line242"></a>  iter2 = goog.iter.chain(iter);
+<a name="line243"></a>  assertEquals(&#39;&#39;, goog.iter.join(iter2, &#39;&#39;));
+<a name="line244"></a>
+<a name="line245"></a>  // no args
+<a name="line246"></a>  iter2 = goog.iter.chain();
+<a name="line247"></a>  assertEquals(&#39;&#39;, goog.iter.join(iter2, &#39;&#39;));
+<a name="line248"></a>
+<a name="line249"></a>  // arrays
+<a name="line250"></a>  var arr = [0, 1];
+<a name="line251"></a>  var arr2 = [2, 3];
+<a name="line252"></a>  var arr3 = [4, 5];
+<a name="line253"></a>  iter = goog.iter.chain(arr, arr2, arr3);
+<a name="line254"></a>  assertEquals(&#39;012345&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line255"></a>}
+<a name="line256"></a>
+<a name="line257"></a>function testChainFromIterable() {
+<a name="line258"></a>  var arg = [0, 1];
+<a name="line259"></a>  var arg2 = [2, 3];
+<a name="line260"></a>  var arg3 = goog.iter.range(4, 6);
+<a name="line261"></a>  var iter = goog.iter.chainFromIterable([arg, arg2, arg3]);
+<a name="line262"></a>  assertEquals(&#39;012345&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line263"></a>}
+<a name="line264"></a>
+<a name="line265"></a>function testDropWhile() {
+<a name="line266"></a>  var iter = goog.iter.range(10);
+<a name="line267"></a>  var iter2 = goog.iter.dropWhile(iter, function(val, index, iter3) {
+<a name="line268"></a>    assertEquals(iter, iter3);
+<a name="line269"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line270"></a>    return val &lt; 5;
+<a name="line271"></a>  });
+<a name="line272"></a>
+<a name="line273"></a>  assertEquals(&#39;56789&#39;, goog.iter.join(iter2, &#39;&#39;));
+<a name="line274"></a>}
+<a name="line275"></a>
+<a name="line276"></a>function testDropWhile2() {
+<a name="line277"></a>  var iter = goog.iter.range(10);
+<a name="line278"></a>  var iter2 = goog.iter.dropWhile(iter, function(val, index, iter3) {
+<a name="line279"></a>    assertEquals(iter, iter3);
+<a name="line280"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line281"></a>    return val != 5;
+<a name="line282"></a>  });
+<a name="line283"></a>
+<a name="line284"></a>  assertEquals(&#39;56789&#39;, goog.iter.join(iter2, &#39;&#39;));
+<a name="line285"></a>}
+<a name="line286"></a>
+<a name="line287"></a>
+<a name="line288"></a>function testTakeWhile() {
+<a name="line289"></a>  var iter = goog.iter.range(10);
+<a name="line290"></a>  var iter2 = goog.iter.takeWhile(iter, function(val, index, iter3) {
+<a name="line291"></a>    assertEquals(iter, iter3);
+<a name="line292"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line293"></a>    return val &lt; 5;
+<a name="line294"></a>  });
+<a name="line295"></a>
+<a name="line296"></a>  assertEquals(&#39;01234&#39;, goog.iter.join(iter2, &#39;&#39;));
+<a name="line297"></a>
+<a name="line298"></a>  // next() should not have been called on iter after the first failure and
+<a name="line299"></a>  // therefore it should contain some elements.  5 failed so we should have
+<a name="line300"></a>  // the rest
+<a name="line301"></a>  assertEquals(&#39;6789&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line302"></a>}
+<a name="line303"></a>
+<a name="line304"></a>function testTakeWhile2() {
+<a name="line305"></a>  var iter = goog.iter.range(10);
+<a name="line306"></a>  var iter2 = goog.iter.takeWhile(iter, function(val, index, iter3) {
+<a name="line307"></a>    assertEquals(iter, iter3);
+<a name="line308"></a>    assertEquals(&#39;index should be undefined&#39;, &#39;undefined&#39;, typeof index);
+<a name="line309"></a>    return val != 5;
+<a name="line310"></a>  });
+<a name="line311"></a>
+<a name="line312"></a>  assertEquals(&#39;01234&#39;, goog.iter.join(iter2, &#39;&#39;));
+<a name="line313"></a>
+<a name="line314"></a>  // next() should not have been called on iter after the first failure and
+<a name="line315"></a>  // therefore it should contain some elements.  5 failed so we should have
+<a name="line316"></a>  // the rest
+<a name="line317"></a>  assertEquals(&#39;6789&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line318"></a>}
+<a name="line319"></a>
+<a name="line320"></a>function testToArray() {
+<a name="line321"></a>  var iter = goog.iter.range(5);
+<a name="line322"></a>  var array = goog.iter.toArray(iter);
+<a name="line323"></a>  assertEquals(&#39;01234&#39;, array.join(&#39;&#39;));
+<a name="line324"></a>
+<a name="line325"></a>  // Empty
+<a name="line326"></a>  iter = new goog.iter.Iterator;
+<a name="line327"></a>  array = goog.iter.toArray(iter);
+<a name="line328"></a>  assertEquals(&#39;Empty iterator to array&#39;, &#39;&#39;, array.join(&#39;&#39;));
+<a name="line329"></a>}
+<a name="line330"></a>
+<a name="line331"></a>function testToArray2() {
+<a name="line332"></a>  var iterable = [0, 1, 2, 3, 4];
+<a name="line333"></a>  var array = goog.iter.toArray(iterable);
+<a name="line334"></a>  assertEquals(&#39;01234&#39;, array.join(&#39;&#39;));
+<a name="line335"></a>
+<a name="line336"></a>  // Empty
+<a name="line337"></a>  iterable = [];
+<a name="line338"></a>  array = goog.iter.toArray(iterable);
+<a name="line339"></a>  assertEquals(&#39;Empty iterator to array&#39;, &#39;&#39;, array.join(&#39;&#39;));
+<a name="line340"></a>}
+<a name="line341"></a>
+<a name="line342"></a>function testEquals() {
+<a name="line343"></a>  var iter = goog.iter.range(5);
+<a name="line344"></a>  var iter2 = goog.iter.range(5);
+<a name="line345"></a>  assertTrue(&#39;Equal iterators&#39;, goog.iter.equals(iter, iter2));
+<a name="line346"></a>
+<a name="line347"></a>  iter = goog.iter.range(4);
+<a name="line348"></a>  iter2 = goog.iter.range(5);
+<a name="line349"></a>  assertFalse(&#39;Second one is longer&#39;, goog.iter.equals(iter, iter2));
+<a name="line350"></a>
+<a name="line351"></a>  iter = goog.iter.range(5);
+<a name="line352"></a>  iter2 = goog.iter.range(4);
+<a name="line353"></a>  assertFalse(&#39;First one is longer&#39;, goog.iter.equals(iter, iter2));
+<a name="line354"></a>
+<a name="line355"></a>  // 2 empty iterators
+<a name="line356"></a>  iter = new goog.iter.Iterator;
+<a name="line357"></a>  iter2 = new goog.iter.Iterator;
+<a name="line358"></a>  assertTrue(&#39;Two empty iterators are equal&#39;, goog.iter.equals(iter, iter2));
+<a name="line359"></a>
+<a name="line360"></a>  iter = goog.iter.range(4);
+<a name="line361"></a>  assertFalse(&#39;Same iterator&#39;, goog.iter.equals(iter, iter));
+<a name="line362"></a>}
+<a name="line363"></a>
+<a name="line364"></a>
+<a name="line365"></a>function testToIterator() {
+<a name="line366"></a>  var iter = new goog.iter.range(5);
+<a name="line367"></a>  var iter2 = goog.iter.toIterator(iter);
+<a name="line368"></a>  assertEquals(&#39;toIterator on an iterator should return the same obejct&#39;,
+<a name="line369"></a>               iter, iter2);
+<a name="line370"></a>
+<a name="line371"></a>  var iterLikeObject = {
+<a name="line372"></a>    next: function() {
+<a name="line373"></a>      throw goog.iter.StopIteration;
+<a name="line374"></a>    }
+<a name="line375"></a>  };
+<a name="line376"></a>  var obj = {
+<a name="line377"></a>    __iterator__: function(opt_keys) {
+<a name="line378"></a>      assertFalse(
+<a name="line379"></a>          &#39;__iterator__ should always be called with false in toIterator&#39;,
+<a name="line380"></a>          opt_keys);
+<a name="line381"></a>      return iterLikeObject;
+<a name="line382"></a>    }
+<a name="line383"></a>  };
+<a name="line384"></a>
+<a name="line385"></a>  assertEquals(&#39;Should return the return value of __iterator_(false)&#39;,
+<a name="line386"></a>               iterLikeObject, goog.iter.toIterator(obj));
+<a name="line387"></a>
+<a name="line388"></a>  // Array
+<a name="line389"></a>  var array = [0, 1, 2, 3, 4];
+<a name="line390"></a>  iter = goog.iter.toIterator(array);
+<a name="line391"></a>  assertEquals(&#39;01234&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line392"></a>
+<a name="line393"></a>  // Array like
+<a name="line394"></a>  var arrayLike = {&#39;0&#39;: 0, &#39;1&#39;: 1, &#39;2&#39;: 2, length: 3};
+<a name="line395"></a>  iter = goog.iter.toIterator(arrayLike);
+<a name="line396"></a>  assertEquals(&#39;012&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line397"></a>
+<a name="line398"></a>  // DOM
+<a name="line399"></a>  var dom = document.getElementById(&#39;t1&#39;).childNodes;
+<a name="line400"></a>  iter = goog.iter.toIterator(dom);
+<a name="line401"></a>  iter2 = goog.iter.map(iter, function(el) {
+<a name="line402"></a>    return el.innerHTML;
+<a name="line403"></a>  });
+<a name="line404"></a>  assertEquals(&#39;012&#39;, goog.iter.join(iter2, &#39;&#39;));
+<a name="line405"></a>}
+<a name="line406"></a>
+<a name="line407"></a>
+<a name="line408"></a>function testNextOrValue() {
+<a name="line409"></a>  var iter = goog.iter.toIterator([1]);
+<a name="line410"></a>
+<a name="line411"></a>  assertEquals(&#39;Should return value when iterator is non-empty&#39;,
+<a name="line412"></a>      1, goog.iter.nextOrValue(iter, null));
+<a name="line413"></a>  assertNull(&#39;Should return given default when iterator is empty&#39;,
+<a name="line414"></a>      goog.iter.nextOrValue(iter, null));
+<a name="line415"></a>  assertEquals(&#39;Should return given default when iterator is (still) empty&#39;,
+<a name="line416"></a>      -1, goog.iter.nextOrValue(iter, -1));
+<a name="line417"></a>}
+<a name="line418"></a>
+<a name="line419"></a>// Return the product of several arrays as an array
+<a name="line420"></a>function productAsArray(var_args) {
+<a name="line421"></a>  var iter = goog.iter.product.apply(null, arguments);
+<a name="line422"></a>  return goog.iter.toArray(iter);
+<a name="line423"></a>}
+<a name="line424"></a>
+<a name="line425"></a>function testProduct() {
+<a name="line426"></a>  assertArrayEquals([[1, 3], [1, 4], [2, 3], [2, 4]],
+<a name="line427"></a>      productAsArray([1, 2], [3, 4]));
+<a name="line428"></a>
+<a name="line429"></a>  assertArrayEquals([
+<a name="line430"></a>    [1, 3, 5], [1, 3, 6], [1, 4, 5], [1, 4, 6],
+<a name="line431"></a>    [2, 3, 5], [2, 3, 6], [2, 4, 5], [2, 4, 6]
+<a name="line432"></a>  ], productAsArray([1, 2], [3, 4], [5, 6]));
+<a name="line433"></a>
+<a name="line434"></a>  assertArrayEquals([[1]], productAsArray([1]));
+<a name="line435"></a>  assertArrayEquals([], productAsArray([1], []));
+<a name="line436"></a>  assertArrayEquals([], productAsArray());
+<a name="line437"></a>
+<a name="line438"></a>  var expectedResult = [];
+<a name="line439"></a>  var a = [1, 2, 3];
+<a name="line440"></a>  var b = [4, 5, 6];
+<a name="line441"></a>  var c = [7, 8, 9];
+<a name="line442"></a>  for (var i = 0; i &lt; a.length; i++) {
+<a name="line443"></a>    for (var j = 0; j &lt; b.length; j++) {
+<a name="line444"></a>      for (var k = 0; k &lt; c.length; k++) {
+<a name="line445"></a>        expectedResult.push([a[i], b[j], c[k]]);
+<a name="line446"></a>      }
+<a name="line447"></a>    }
+<a name="line448"></a>  }
+<a name="line449"></a>
+<a name="line450"></a>  assertArrayEquals(expectedResult, productAsArray(a, b, c));
+<a name="line451"></a>}
+<a name="line452"></a>
+<a name="line453"></a>function testProductIteration() {
+<a name="line454"></a>  var iter = goog.iter.product([1, 2], [3, 4]);
+<a name="line455"></a>
+<a name="line456"></a>  assertArrayEquals([1, 3], iter.next());
+<a name="line457"></a>  assertArrayEquals([1, 4], iter.next());
+<a name="line458"></a>  assertArrayEquals([2, 3], iter.next());
+<a name="line459"></a>  assertArrayEquals([2, 4], iter.next());
+<a name="line460"></a>
+<a name="line461"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line462"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line463"></a>
+<a name="line464"></a>  // Ensure the iterator forever throws StopIteration.
+<a name="line465"></a>  for (var i = 0; i &lt; 5; i++) {
+<a name="line466"></a>    var ex = assertThrows(function() { iter.next() });
+<a name="line467"></a>    assertEquals(goog.iter.StopIteration, ex);
+<a name="line468"></a>  }
+<a name="line469"></a>
+<a name="line470"></a>  iter = goog.iter.product();
+<a name="line471"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line472"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line473"></a>
+<a name="line474"></a>  iter = goog.iter.product([]);
+<a name="line475"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line476"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line477"></a>}
+<a name="line478"></a>
+<a name="line479"></a>function testCycle() {
+<a name="line480"></a>
+<a name="line481"></a>  var regularArray = [1, 2, 3];
+<a name="line482"></a>  var iter = goog.iter.cycle(regularArray);
+<a name="line483"></a>
+<a name="line484"></a>  // Test 3 cycles to ensure proper cache behavior
+<a name="line485"></a>  var values = [];
+<a name="line486"></a>  for (var i = 0; i &lt; 9; i++) {
+<a name="line487"></a>    values.push(iter.next());
+<a name="line488"></a>  }
+<a name="line489"></a>
+<a name="line490"></a>  assertArrayEquals([1, 2, 3, 1, 2, 3, 1, 2, 3], values);
+<a name="line491"></a>}
+<a name="line492"></a>
+<a name="line493"></a>function testCycleSingleItemIterable() {
+<a name="line494"></a>  var singleItemArray = [1];
+<a name="line495"></a>
+<a name="line496"></a>  var iter = goog.iter.cycle(singleItemArray);
+<a name="line497"></a>  var values = [];
+<a name="line498"></a>
+<a name="line499"></a>  for (var i = 0; i &lt; 5; i++) {
+<a name="line500"></a>    values.push(iter.next());
+<a name="line501"></a>  }
+<a name="line502"></a>
+<a name="line503"></a>  assertArrayEquals([1, 1, 1, 1, 1], values);
+<a name="line504"></a>}
+<a name="line505"></a>
+<a name="line506"></a>function testCycleEmptyIterable() {
+<a name="line507"></a>
+<a name="line508"></a>  var emptyArray = [];
+<a name="line509"></a>
+<a name="line510"></a>  var iter = goog.iter.cycle(emptyArray);
+<a name="line511"></a>  var ex = assertThrows(function() { iter.next(); });
+<a name="line512"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line513"></a>}
+<a name="line514"></a>
+<a name="line515"></a>function testCountNoArgs() {
+<a name="line516"></a>  var iter = goog.iter.count();
+<a name="line517"></a>  var values = goog.iter.limit(iter, 5);
+<a name="line518"></a>  assertArrayEquals([0, 1, 2, 3, 4], goog.iter.toArray(values));
+<a name="line519"></a>}
+<a name="line520"></a>
+<a name="line521"></a>function testCountStart() {
+<a name="line522"></a>  var iter = goog.iter.count(10);
+<a name="line523"></a>  var values = goog.iter.limit(iter, 5);
+<a name="line524"></a>  assertArrayEquals([10, 11, 12, 13, 14], goog.iter.toArray(values));
+<a name="line525"></a>}
+<a name="line526"></a>
+<a name="line527"></a>function testCountStep() {
+<a name="line528"></a>  var iter = goog.iter.count(10, 2);
+<a name="line529"></a>  var values = goog.iter.limit(iter, 5);
+<a name="line530"></a>  assertArrayEquals([10, 12, 14, 16, 18], goog.iter.toArray(values));
+<a name="line531"></a>}
+<a name="line532"></a>
+<a name="line533"></a>function testCountNegativeStep() {
+<a name="line534"></a>  var iter = goog.iter.count(10, -2);
+<a name="line535"></a>  var values = goog.iter.limit(iter, 5);
+<a name="line536"></a>  assertArrayEquals([10, 8, 6, 4, 2], goog.iter.toArray(values));
+<a name="line537"></a>}
+<a name="line538"></a>
+<a name="line539"></a>function testCountZeroStep() {
+<a name="line540"></a>  var iter = goog.iter.count(42, 0);
+<a name="line541"></a>  assertEquals(42, iter.next());
+<a name="line542"></a>  assertEquals(42, iter.next());
+<a name="line543"></a>  assertEquals(42, iter.next());
+<a name="line544"></a>}
+<a name="line545"></a>
+<a name="line546"></a>function testCountFloat() {
+<a name="line547"></a>  var iter = goog.iter.count(1.5, 0.5);
+<a name="line548"></a>  var values = goog.iter.limit(iter, 5);
+<a name="line549"></a>  assertArrayEquals([1.5, 2.0, 2.5, 3.0, 3.5], goog.iter.toArray(values));
+<a name="line550"></a>}
+<a name="line551"></a>
+<a name="line552"></a>function testRepeat() {
+<a name="line553"></a>  var obj = {foo: &#39;bar&#39;};
+<a name="line554"></a>  var iter = goog.iter.repeat(obj);
+<a name="line555"></a>  assertEquals(obj, iter.next());
+<a name="line556"></a>  assertEquals(obj, iter.next());
+<a name="line557"></a>  assertEquals(obj, iter.next());
+<a name="line558"></a>}
+<a name="line559"></a>
+<a name="line560"></a>function testAccumulateArray() {
+<a name="line561"></a>  var iter = goog.iter.accumulate([1, 2, 3, 4, 5]);
+<a name="line562"></a>  assertArrayEquals([1, 3, 6, 10, 15], goog.iter.toArray(iter));
+<a name="line563"></a>}
+<a name="line564"></a>
+<a name="line565"></a>function testAccumulateIterator() {
+<a name="line566"></a>  var iter = goog.iter.accumulate(goog.iter.range(1, 6));
+<a name="line567"></a>  assertArrayEquals([1, 3, 6, 10, 15], goog.iter.toArray(iter));
+<a name="line568"></a>}
+<a name="line569"></a>
+<a name="line570"></a>function testAccumulateFloat() {
+<a name="line571"></a>  var iter = goog.iter.accumulate([1.0, 2.5, 0.5, 1.5, 0.5]);
+<a name="line572"></a>  assertArrayEquals([1.0, 3.5, 4.0, 5.5, 6.0], goog.iter.toArray(iter));
+<a name="line573"></a>}
+<a name="line574"></a>
+<a name="line575"></a>function testZipArrays() {
+<a name="line576"></a>  var iter = goog.iter.zip([1, 2, 3], [4, 5, 6], [7, 8, 9]);
+<a name="line577"></a>  assertArrayEquals([1, 4, 7], iter.next());
+<a name="line578"></a>  assertArrayEquals([2, 5, 8], iter.next());
+<a name="line579"></a>  assertArrayEquals([3, 6, 9], iter.next());
+<a name="line580"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line581"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line582"></a>}
+<a name="line583"></a>
+<a name="line584"></a>function testZipSingleArg() {
+<a name="line585"></a>  var iter = goog.iter.zip([1, 2, 3]);
+<a name="line586"></a>  assertArrayEquals([1], iter.next());
+<a name="line587"></a>  assertArrayEquals([2], iter.next());
+<a name="line588"></a>  assertArrayEquals([3], iter.next());
+<a name="line589"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line590"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line591"></a>}
+<a name="line592"></a>
+<a name="line593"></a>function testZipUnevenArgs() {
+<a name="line594"></a>  var iter = goog.iter.zip([1, 2, 3], [4, 5], [7]);
+<a name="line595"></a>  assertArrayEquals([1, 4, 7], iter.next());
+<a name="line596"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line597"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line598"></a>}
+<a name="line599"></a>
+<a name="line600"></a>function testZipNoArgs() {
+<a name="line601"></a>  var iter = goog.iter.zip();
+<a name="line602"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line603"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line604"></a>}
+<a name="line605"></a>
+<a name="line606"></a>function testZipIterators() {
+<a name="line607"></a>  var iter = goog.iter.zip(goog.iter.count(), goog.iter.repeat(&#39;foo&#39;));
+<a name="line608"></a>  assertArrayEquals([0, &#39;foo&#39;], iter.next());
+<a name="line609"></a>  assertArrayEquals([1, &#39;foo&#39;], iter.next());
+<a name="line610"></a>  assertArrayEquals([2, &#39;foo&#39;], iter.next());
+<a name="line611"></a>  assertArrayEquals([3, &#39;foo&#39;], iter.next());
+<a name="line612"></a>}
+<a name="line613"></a>
+<a name="line614"></a>function testZipLongestArrays() {
+<a name="line615"></a>  var iter = goog.iter.zipLongest(&#39;-&#39;, &#39;ABCD&#39;.split(&#39;&#39;), &#39;xy&#39;.split(&#39;&#39;));
+<a name="line616"></a>  assertArrayEquals([&#39;A&#39;, &#39;x&#39;], iter.next());
+<a name="line617"></a>  assertArrayEquals([&#39;B&#39;, &#39;y&#39;], iter.next());
+<a name="line618"></a>  assertArrayEquals([&#39;C&#39;, &#39;-&#39;], iter.next());
+<a name="line619"></a>  assertArrayEquals([&#39;D&#39;, &#39;-&#39;], iter.next());
+<a name="line620"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line621"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line622"></a>}
+<a name="line623"></a>
+<a name="line624"></a>function testZipLongestSingleArg() {
+<a name="line625"></a>  var iter = goog.iter.zipLongest(&#39;-&#39;, &#39;ABCD&#39;.split(&#39;&#39;));
+<a name="line626"></a>  assertArrayEquals([&#39;A&#39;], iter.next());
+<a name="line627"></a>  assertArrayEquals([&#39;B&#39;], iter.next());
+<a name="line628"></a>  assertArrayEquals([&#39;C&#39;], iter.next());
+<a name="line629"></a>  assertArrayEquals([&#39;D&#39;], iter.next());
+<a name="line630"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line631"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line632"></a>}
+<a name="line633"></a>
+<a name="line634"></a>function testZipLongestNoArgs() {
+<a name="line635"></a>  var iter = goog.iter.zipLongest();
+<a name="line636"></a>  assertArrayEquals([], goog.iter.toArray(iter));
+<a name="line637"></a>  var iter = goog.iter.zipLongest(&#39;fill&#39;);
+<a name="line638"></a>  assertArrayEquals([], goog.iter.toArray(iter));
+<a name="line639"></a>}
+<a name="line640"></a>
+<a name="line641"></a>function testZipLongestIterators() {
+<a name="line642"></a>  var iter = goog.iter.zipLongest(null, goog.iter.range(3), goog.iter.range(5));
+<a name="line643"></a>  assertArrayEquals([0, 0], iter.next());
+<a name="line644"></a>  assertArrayEquals([1, 1], iter.next());
+<a name="line645"></a>  assertArrayEquals([2, 2], iter.next());
+<a name="line646"></a>  assertArrayEquals([null, 3], iter.next());
+<a name="line647"></a>  assertArrayEquals([null, 4], iter.next());
+<a name="line648"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line649"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line650"></a>}
+<a name="line651"></a>
+<a name="line652"></a>function testCompressArray() {
+<a name="line653"></a>  var iter = goog.iter.compress(&#39;ABCDEF&#39;.split(&#39;&#39;), [1, 0, 1, 0, 1, 1]);
+<a name="line654"></a>  assertEquals(&#39;ACEF&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line655"></a>}
+<a name="line656"></a>
+<a name="line657"></a>function testCompressUnevenArgs() {
+<a name="line658"></a>  var iter = goog.iter.compress(&#39;ABCDEF&#39;.split(&#39;&#39;), [false, true, true]);
+<a name="line659"></a>  assertEquals(&#39;BC&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line660"></a>}
+<a name="line661"></a>
+<a name="line662"></a>function testCompressIterators() {
+<a name="line663"></a>  var iter = goog.iter.compress(goog.iter.range(10), goog.iter.cycle([0, 1]));
+<a name="line664"></a>  assertArrayEquals([1, 3, 5, 7, 9], goog.iter.toArray(iter));
+<a name="line665"></a>}
+<a name="line666"></a>
+<a name="line667"></a>function testGroupByNoKeyFunc() {
+<a name="line668"></a>  var iter = goog.iter.groupBy(&#39;AAABBBBCDD&#39;.split(&#39;&#39;));
+<a name="line669"></a>  assertArrayEquals([&#39;A&#39;, [&#39;A&#39;, &#39;A&#39;, &#39;A&#39;]], iter.next());
+<a name="line670"></a>  assertArrayEquals([&#39;B&#39;, [&#39;B&#39;, &#39;B&#39;, &#39;B&#39;, &#39;B&#39;]], iter.next());
+<a name="line671"></a>  assertArrayEquals([&#39;C&#39;, [&#39;C&#39;]], iter.next());
+<a name="line672"></a>  assertArrayEquals([&#39;D&#39;, [&#39;D&#39;, &#39;D&#39;]], iter.next());
+<a name="line673"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line674"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line675"></a>}
+<a name="line676"></a>
+<a name="line677"></a>function testGroupByKeyFunc() {
+<a name="line678"></a>  var keyFunc = function(x) { return x.toLowerCase(); };
+<a name="line679"></a>  var iter = goog.iter.groupBy(&#39;AaAABBbbBCccddDD&#39;.split(&#39;&#39;), keyFunc);
+<a name="line680"></a>  assertArrayEquals([&#39;a&#39;, [&#39;A&#39;, &#39;a&#39;, &#39;A&#39;, &#39;A&#39;]], iter.next());
+<a name="line681"></a>  assertArrayEquals([&#39;b&#39;, [&#39;B&#39;, &#39;B&#39;, &#39;b&#39;, &#39;b&#39;, &#39;B&#39;]], iter.next());
+<a name="line682"></a>  assertArrayEquals([&#39;c&#39;, [&#39;C&#39;, &#39;c&#39;, &#39;c&#39;]], iter.next());
+<a name="line683"></a>  assertArrayEquals([&#39;d&#39;, [&#39;d&#39;, &#39;d&#39;, &#39;D&#39;, &#39;D&#39;]], iter.next());
+<a name="line684"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line685"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line686"></a>}
+<a name="line687"></a>
+<a name="line688"></a>function testStarMap() {
+<a name="line689"></a>  var iter = goog.iter.starMap([[2, 5], [3, 2], [10, 3]], Math.pow);
+<a name="line690"></a>  assertEquals(32, iter.next());
+<a name="line691"></a>  assertEquals(9, iter.next());
+<a name="line692"></a>  assertEquals(1000, iter.next());
+<a name="line693"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line694"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line695"></a>}
+<a name="line696"></a>
+<a name="line697"></a>function testStarMapExtraArgs() {
+<a name="line698"></a>  var func = function(string, radix, undef, iterator) {
+<a name="line699"></a>    assertEquals(&#39;undef should be undefined&#39;, &#39;undefined&#39;, typeof undef);
+<a name="line700"></a>    assertTrue(iterator instanceof goog.iter.Iterator);
+<a name="line701"></a>    return parseInt(string, radix);
+<a name="line702"></a>  };
+<a name="line703"></a>  var iter = goog.iter.starMap([[&#39;42&#39;, 10], [&#39;0xFF&#39;, 16], [&#39;101&#39;, 2]], func);
+<a name="line704"></a>  assertEquals(42, iter.next());
+<a name="line705"></a>  assertEquals(255, iter.next());
+<a name="line706"></a>  assertEquals(5, iter.next());
+<a name="line707"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line708"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line709"></a>}
+<a name="line710"></a>
+<a name="line711"></a>function testTeeArray() {
+<a name="line712"></a>  var iters = goog.iter.tee(&#39;ABC&#39;.split(&#39;&#39;));
+<a name="line713"></a>  assertEquals(2, iters.length);
+<a name="line714"></a>  var it0 = iters[0], it1 = iters[1];
+<a name="line715"></a>  assertEquals(&#39;A&#39;, it0.next());
+<a name="line716"></a>  assertEquals(&#39;A&#39;, it1.next());
+<a name="line717"></a>  assertEquals(&#39;B&#39;, it0.next());
+<a name="line718"></a>  assertEquals(&#39;B&#39;, it1.next());
+<a name="line719"></a>  assertEquals(&#39;C&#39;, it0.next());
+<a name="line720"></a>  assertEquals(&#39;C&#39;, it1.next());
+<a name="line721"></a>  var ex = assertThrows(function() { it0.next() });
+<a name="line722"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line723"></a>  ex = assertThrows(function() { it1.next() });
+<a name="line724"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line725"></a>}
+<a name="line726"></a>
+<a name="line727"></a>function testTeeIterator() {
+<a name="line728"></a>  var iters = goog.iter.tee(goog.iter.count(), 3);
+<a name="line729"></a>  assertEquals(3, iters.length);
+<a name="line730"></a>  var it0 = iters[0], it1 = iters[1], it2 = iters[2];
+<a name="line731"></a>  assertEquals(0, it0.next());
+<a name="line732"></a>  assertEquals(1, it0.next());
+<a name="line733"></a>  assertEquals(0, it1.next());
+<a name="line734"></a>  assertEquals(1, it1.next());
+<a name="line735"></a>  assertEquals(2, it1.next());
+<a name="line736"></a>  assertEquals(2, it0.next());
+<a name="line737"></a>  assertEquals(0, it2.next());
+<a name="line738"></a>  assertEquals(1, it2.next());
+<a name="line739"></a>  assertEquals(2, it2.next());
+<a name="line740"></a>  assertEquals(3, it0.next());
+<a name="line741"></a>  assertEquals(3, it1.next());
+<a name="line742"></a>  assertEquals(3, it2.next());
+<a name="line743"></a>}
+<a name="line744"></a>
+<a name="line745"></a>function testEnumerateNoStart() {
+<a name="line746"></a>  var iter = goog.iter.enumerate(&#39;ABC&#39;.split(&#39;&#39;));
+<a name="line747"></a>  assertArrayEquals([0, &#39;A&#39;], iter.next());
+<a name="line748"></a>  assertArrayEquals([1, &#39;B&#39;], iter.next());
+<a name="line749"></a>  assertArrayEquals([2, &#39;C&#39;], iter.next());
+<a name="line750"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line751"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line752"></a>}
+<a name="line753"></a>
+<a name="line754"></a>function testEnumerateStart() {
+<a name="line755"></a>  var iter = goog.iter.enumerate(&#39;DEF&#39;.split(&#39;&#39;), 3);
+<a name="line756"></a>  assertArrayEquals([3, &#39;D&#39;], iter.next());
+<a name="line757"></a>  assertArrayEquals([4, &#39;E&#39;], iter.next());
+<a name="line758"></a>  assertArrayEquals([5, &#39;F&#39;], iter.next());
+<a name="line759"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line760"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line761"></a>}
+<a name="line762"></a>
+<a name="line763"></a>function testLimitLess() {
+<a name="line764"></a>  var iter = goog.iter.limit(&#39;ABCDEFG&#39;.split(&#39;&#39;), 3);
+<a name="line765"></a>  assertEquals(&#39;ABC&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line766"></a>}
+<a name="line767"></a>
+<a name="line768"></a>function testLimitGreater() {
+<a name="line769"></a>  var iter = goog.iter.limit(&#39;ABCDEFG&#39;.split(&#39;&#39;), 10);
+<a name="line770"></a>  assertEquals(&#39;ABCDEFG&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line771"></a>}
+<a name="line772"></a>
+<a name="line773"></a>function testConsumeLess() {
+<a name="line774"></a>  var iter = goog.iter.consume(&#39;ABCDEFG&#39;.split(&#39;&#39;), 3);
+<a name="line775"></a>  assertEquals(&#39;DEFG&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line776"></a>}
+<a name="line777"></a>
+<a name="line778"></a>function testConsumeGreater() {
+<a name="line779"></a>  var iter = goog.iter.consume(&#39;ABCDEFG&#39;.split(&#39;&#39;), 10);
+<a name="line780"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line781"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line782"></a>}
+<a name="line783"></a>
+<a name="line784"></a>function testSliceStart() {
+<a name="line785"></a>  var iter = goog.iter.slice(&#39;ABCDEFG&#39;.split(&#39;&#39;), 2);
+<a name="line786"></a>  assertEquals(&#39;CDEFG&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line787"></a>}
+<a name="line788"></a>
+<a name="line789"></a>function testSliceStop() {
+<a name="line790"></a>  var iter = goog.iter.slice(&#39;ABCDEFG&#39;.split(&#39;&#39;), 2, 4);
+<a name="line791"></a>  assertEquals(&#39;CD&#39;, goog.iter.join(iter, &#39;&#39;));
+<a name="line792"></a>}
+<a name="line793"></a>
+<a name="line794"></a>function testSliceStartStopEqual() {
+<a name="line795"></a>  var iter = goog.iter.slice(&#39;ABCDEFG&#39;.split(&#39;&#39;), 1, 1);
+<a name="line796"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line797"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line798"></a>}
+<a name="line799"></a>
+<a name="line800"></a>function testSliceIterator() {
+<a name="line801"></a>  var iter = goog.iter.slice(goog.iter.count(20), 0, 5);
+<a name="line802"></a>  assertArrayEquals([20, 21, 22, 23, 24], goog.iter.toArray(iter));
+<a name="line803"></a>}
+<a name="line804"></a>
+<a name="line805"></a>function testSliceStartGreater() {
+<a name="line806"></a>  var iter = goog.iter.slice(&#39;ABCDEFG&#39;.split(&#39;&#39;), 10);
+<a name="line807"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line808"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line809"></a>}
+<a name="line810"></a>
+<a name="line811"></a>function testPermutationsNoLength() {
+<a name="line812"></a>  var iter = goog.iter.permutations(goog.iter.range(3));
+<a name="line813"></a>  assertArrayEquals([0, 1, 2], iter.next());
+<a name="line814"></a>  assertArrayEquals([0, 2, 1], iter.next());
+<a name="line815"></a>  assertArrayEquals([1, 0, 2], iter.next());
+<a name="line816"></a>  assertArrayEquals([1, 2, 0], iter.next());
+<a name="line817"></a>  assertArrayEquals([2, 0, 1], iter.next());
+<a name="line818"></a>  assertArrayEquals([2, 1, 0], iter.next());
+<a name="line819"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line820"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line821"></a>}
+<a name="line822"></a>
+<a name="line823"></a>function testPermutationsLength() {
+<a name="line824"></a>  var iter = goog.iter.permutations(&#39;ABC&#39;.split(&#39;&#39;), 2);
+<a name="line825"></a>  assertArrayEquals([&#39;A&#39;, &#39;B&#39;], iter.next());
+<a name="line826"></a>  assertArrayEquals([&#39;A&#39;, &#39;C&#39;], iter.next());
+<a name="line827"></a>  assertArrayEquals([&#39;B&#39;, &#39;A&#39;], iter.next());
+<a name="line828"></a>  assertArrayEquals([&#39;B&#39;, &#39;C&#39;], iter.next());
+<a name="line829"></a>  assertArrayEquals([&#39;C&#39;, &#39;A&#39;], iter.next());
+<a name="line830"></a>  assertArrayEquals([&#39;C&#39;, &#39;B&#39;], iter.next());
+<a name="line831"></a>}
+<a name="line832"></a>
+<a name="line833"></a>function testCombinations() {
+<a name="line834"></a>  var iter = goog.iter.combinations(goog.iter.range(4), 3);
+<a name="line835"></a>  assertArrayEquals([0, 1, 2], iter.next());
+<a name="line836"></a>  assertArrayEquals([0, 1, 3], iter.next());
+<a name="line837"></a>  assertArrayEquals([0, 2, 3], iter.next());
+<a name="line838"></a>  assertArrayEquals([1, 2, 3], iter.next());
+<a name="line839"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line840"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line841"></a>}
+<a name="line842"></a>
+<a name="line843"></a>function testCombinationsWithReplacement() {
+<a name="line844"></a>  var iter = goog.iter.combinationsWithReplacement(&#39;ABC&#39;.split(&#39;&#39;), 2);
+<a name="line845"></a>  assertArrayEquals([&#39;A&#39;, &#39;A&#39;], iter.next());
+<a name="line846"></a>  assertArrayEquals([&#39;A&#39;, &#39;B&#39;], iter.next());
+<a name="line847"></a>  assertArrayEquals([&#39;A&#39;, &#39;C&#39;], iter.next());
+<a name="line848"></a>  assertArrayEquals([&#39;B&#39;, &#39;B&#39;], iter.next());
+<a name="line849"></a>  assertArrayEquals([&#39;B&#39;, &#39;C&#39;], iter.next());
+<a name="line850"></a>  assertArrayEquals([&#39;C&#39;, &#39;C&#39;], iter.next());
+<a name="line851"></a>  var ex = assertThrows(function() { iter.next() });
+<a name="line852"></a>  assertEquals(goog.iter.StopIteration, ex);
+<a name="line853"></a>}
+</pre>
+
+
+</body>
+</html>

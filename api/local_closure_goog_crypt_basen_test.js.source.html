@@ -1,0 +1,216 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>basen_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_crypt_basen_test.js.html">basen_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Tests for arbitrary base conversion library baseconversion.js.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>goog.provide(&#39;goog.crypt.baseNTest&#39;);
+<a name="line20"></a>goog.setTestOnly(&#39;goog.crypt.baseNTest&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.crypt.baseN&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line24"></a>
+<a name="line25"></a>function testDecToHex() {
+<a name="line26"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL, &#39;0&#39;,
+<a name="line27"></a>                   goog.crypt.baseN.BASE_LOWERCASE_HEXADECIMAL, &#39;0&#39;);
+<a name="line28"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL, &#39;9&#39;,
+<a name="line29"></a>                   goog.crypt.baseN.BASE_UPPERCASE_HEXADECIMAL, &#39;9&#39;);
+<a name="line30"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL, &#39;13&#39;,
+<a name="line31"></a>                   goog.crypt.baseN.BASE_LOWERCASE_HEXADECIMAL, &#39;d&#39;);
+<a name="line32"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL, &#39;255&#39;,
+<a name="line33"></a>                   goog.crypt.baseN.BASE_UPPERCASE_HEXADECIMAL, &#39;FF&#39;);
+<a name="line34"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL,
+<a name="line35"></a>                   &#39;53425987345897&#39;,
+<a name="line36"></a>                   goog.crypt.baseN.BASE_LOWERCASE_HEXADECIMAL,
+<a name="line37"></a>                   &#39;309734ff5de9&#39;);
+<a name="line38"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL,
+<a name="line39"></a>                   &#39;987080888&#39;,
+<a name="line40"></a>                   goog.crypt.baseN.BASE_UPPERCASE_HEXADECIMAL,
+<a name="line41"></a>                   &#39;3AD5A8B8&#39;);
+<a name="line42"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL,
+<a name="line43"></a>                   &#39;009341587237&#39;,
+<a name="line44"></a>                   goog.crypt.baseN.BASE_LOWERCASE_HEXADECIMAL,
+<a name="line45"></a>                   &#39;22ccd4f25&#39;);
+<a name="line46"></a>}
+<a name="line47"></a>
+<a name="line48"></a>function testBinToDec() {
+<a name="line49"></a>  verifyConversion(
+<a name="line50"></a>      goog.crypt.baseN.BASE_BINARY,
+<a name="line51"></a>      &#39;11101010101000100010010000010010010000111101000100110111000000100001&#39; +
+<a name="line52"></a>      &#39;01100100111110110010000010110100111101000010010100001011111011111100&#39; +
+<a name="line53"></a>      &#39;00000010000010000101010101000000000101100000000100011111011101111001&#39; +
+<a name="line54"></a>      &#39;10000001000000000100101110001001001101101001101111010101111100010001&#39; +
+<a name="line55"></a>      &#39;11011100000110111000000100111011100100010010011001111011001111001011&#39; +
+<a name="line56"></a>      &#39;10001000101111001010011101101100110110011110010000011100101011110010&#39; +
+<a name="line57"></a>      &#39;11010001001111110011000000001001011011111011010000110011010000010111&#39; +
+<a name="line58"></a>      &#39;10111100000001100010111100000100000000110001011101011110100000011010&#39; +
+<a name="line59"></a>      &#39;0110000100011111&#39;,
+<a name="line60"></a>      goog.crypt.baseN.BASE_DECIMAL,
+<a name="line61"></a>      &#39;34589745906769047354795784390596748934723904739085568907689045723489&#39; +
+<a name="line62"></a>      &#39;05745789789078907890789023447892365623589745678902348976234598723459&#39; +
+<a name="line63"></a>      &#39;087523496723486089723459078349087&#39;);
+<a name="line64"></a>}
+<a name="line65"></a>
+<a name="line66"></a>function testDecToBin() {
+<a name="line67"></a>  verifyConversion(
+<a name="line68"></a>      goog.crypt.baseN.BASE_DECIMAL,
+<a name="line69"></a>      &#39;00342589674590347859734908573490568347534805468907960579056785605496&#39; +
+<a name="line70"></a>      &#39;83475873465859072390486756098742380573908572390463805745656623475234&#39; +
+<a name="line71"></a>      &#39;82345670247851902784123897349486238502378940637925807378946358964328&#39; +
+<a name="line72"></a>      &#39;57906148572346857346409823758034763928401296023947234784623765456367&#39; +
+<a name="line73"></a>      &#39;764623627623574&#39;,
+<a name="line74"></a>      goog.crypt.baseN.BASE_BINARY,
+<a name="line75"></a>      &#39;10010011011100101010001111100111001100110000110111111110010110101000&#39; +
+<a name="line76"></a>      &#39;01010110110010000111000001100110100101010000101001100001011000101111&#39; +
+<a name="line77"></a>      &#39;01011101111100101101010010000111011110011110010101111001110010100100&#39; +
+<a name="line78"></a>      &#39;10111110000101111011010000000111111011110010011110101011100101000001&#39; +
+<a name="line79"></a>      &#39;00011000101010011001101000011101001010001101011110101001011011100101&#39; +
+<a name="line80"></a>      &#39;11100000101000010010101001011001100100101110111101010000011010001010&#39; +
+<a name="line81"></a>      &#39;01011100100111110001100111100100011001001001100011011100100111011111&#39; +
+<a name="line82"></a>      &#39;01000100101001000100110001011010010000011010111101111111111111110100&#39; +
+<a name="line83"></a>      &#39;01100101001111001111100110101000001100100000111111100101110010111011&#39; +
+<a name="line84"></a>      &#39;10110110001100100011101010110110100001001000101011001001100011010110&#39; +
+<a name="line85"></a>      &#39;10110100000110000110010111110100000100110110010010010101111001001111&#39; +
+<a name="line86"></a>      &#39;11100100000010101111110100011010011101011010001101110011100110111111&#39; +
+<a name="line87"></a>      &#39;11000100001111010000000101011011000010010000000100111111010110111100&#39; +
+<a name="line88"></a>      &#39;00101111010011011010011010010001000101100001111001110010010110&#39;);
+<a name="line89"></a>}
+<a name="line90"></a>
+<a name="line91"></a>function test7To9() {
+<a name="line92"></a>  verifyConversion(
+<a name="line93"></a>      &#39;0123456&#39;,    // Base 7.
+<a name="line94"></a>      &#39;60625646056660665666066534602566346056634560665606666656465634265434&#39; +
+<a name="line95"></a>      &#39;66563465664566346406366534664656650660665623456663456654360665&#39;,
+<a name="line96"></a>      &#39;012345678&#39;,  // Base 9.
+<a name="line97"></a>      &#39;11451222686557606458341381287142358175337801548087003804852781764284&#39; +
+<a name="line98"></a>      &#39;273762357630423116743334671762638240652740158536&#39;);
+<a name="line99"></a>}
+<a name="line100"></a>
+<a name="line101"></a>function testZeros() {
+<a name="line102"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL, &#39;0&#39;,
+<a name="line103"></a>                   goog.crypt.baseN.BASE_LOWERCASE_HEXADECIMAL, &#39;0&#39;);
+<a name="line104"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL, &#39;000&#39;,
+<a name="line105"></a>                   goog.crypt.baseN.BASE_LOWERCASE_HEXADECIMAL, &#39;0&#39;);
+<a name="line106"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL, &#39;0000007&#39;,
+<a name="line107"></a>                   goog.crypt.baseN.BASE_LOWERCASE_HEXADECIMAL, &#39;7&#39;);
+<a name="line108"></a>}
+<a name="line109"></a>
+<a name="line110"></a>function testArbitraryBases() {
+<a name="line111"></a>  verifyConversion(&#39;X9(&#39;,    // Base 3.
+<a name="line112"></a>                   &#39;9(XX((9X(XX9(9X9(X9(&#39;,
+<a name="line113"></a>                   &#39;a:*o9&#39;,  // Base 5.
+<a name="line114"></a>                   &#39;:oa**:9o9**9oo&#39;);
+<a name="line115"></a>}
+<a name="line116"></a>
+<a name="line117"></a>function testEmptyBases() {
+<a name="line118"></a>  var e = assertThrows(function() {
+<a name="line119"></a>    goog.crypt.baseN.recodeString(&#39;1230&#39;, &#39;&#39;, &#39;0123&#39;);
+<a name="line120"></a>  });
+<a name="line121"></a>  assertEquals(&#39;Exception message&#39;, &#39;Number 1230 contains a character &#39; +
+<a name="line122"></a>      &#39;not found in base , which is 0&#39;, e.message);
+<a name="line123"></a>
+<a name="line124"></a>  e = assertThrows(function() {
+<a name="line125"></a>    goog.crypt.baseN.recodeString(&#39;1230&#39;, &#39;0123&#39;, &#39;&#39;);
+<a name="line126"></a>  });
+<a name="line127"></a>  assertEquals(&#39;Exception message&#39;, &#39;Empty output base&#39;, e.message);
+<a name="line128"></a>}
+<a name="line129"></a>
+<a name="line130"></a>function testInvalidDigits() {
+<a name="line131"></a>  var e = assertThrows(function() {
+<a name="line132"></a>    goog.crypt.baseN.recodeString(&#39;123x456&#39;, &#39;01234567&#39;, &#39;01234567&#39;);
+<a name="line133"></a>  });
+<a name="line134"></a>  assertEquals(&#39;Exception message&#39;, &#39;Number 123x456 contains a character &#39; +
+<a name="line135"></a>      &#39;not found in base 01234567, which is x&#39;, e.message);
+<a name="line136"></a>}
+<a name="line137"></a>
+<a name="line138"></a>function makeHugeBase() {
+<a name="line139"></a>  // Number of digits in the base.
+<a name="line140"></a>  // Tests break if this is set to 200&#39;000.  The reason for that is
+<a name="line141"></a>  // String.fromCharCode(196609) == String.fromCharCode(1).
+<a name="line142"></a>  var baseSize = 20000;
+<a name="line143"></a>  var tab = [];
+<a name="line144"></a>  for (var i = 0; i &lt; baseSize; i++) {
+<a name="line145"></a>    tab.push(String.fromCharCode(i));
+<a name="line146"></a>  }
+<a name="line147"></a>  return tab.join(&#39;&#39;);
+<a name="line148"></a>}
+<a name="line149"></a>
+<a name="line150"></a>function testHugeInputBase() {
+<a name="line151"></a>  verifyConversion(makeHugeBase(), String.fromCharCode(12345),
+<a name="line152"></a>                   goog.crypt.baseN.BASE_DECIMAL, &#39;12345&#39;);
+<a name="line153"></a>}
+<a name="line154"></a>
+<a name="line155"></a>function testHugeOutputBase() {
+<a name="line156"></a>  verifyConversion(goog.crypt.baseN.BASE_DECIMAL, &#39;12345&#39;,
+<a name="line157"></a>                   makeHugeBase(), String.fromCharCode(12345));
+<a name="line158"></a>}
+<a name="line159"></a>
+<a name="line160"></a>function verifyConversion(inputBase, inputNumber, outputBase, outputNumber) {
+<a name="line161"></a>  assertEquals(outputNumber,
+<a name="line162"></a>               goog.crypt.baseN.recodeString(inputNumber,
+<a name="line163"></a>                                             inputBase,
+<a name="line164"></a>                                             outputBase));
+<a name="line165"></a>}
+</pre>
+
+
+</body>
+</html>

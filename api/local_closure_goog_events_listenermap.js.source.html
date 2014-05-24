@@ -1,0 +1,359 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>listenermap.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_events_listenermap.js.html">listenermap.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A map of listeners that provides utility functions to
+<a name="line17"></a> * deal with listeners on an event target. Used by
+<a name="line18"></a> * {@code goog.events.EventTarget}.
+<a name="line19"></a> *
+<a name="line20"></a> * WARNING: Do not use this class from outside goog.events package.
+<a name="line21"></a> *
+<a name="line22"></a> * @visibility {//closure/goog/bin/sizetests:__pkg__}
+<a name="line23"></a> * @visibility {//closure/goog/events:__pkg__}
+<a name="line24"></a> * @visibility {//closure/goog/labs/events:__pkg__}
+<a name="line25"></a> */
+<a name="line26"></a>
+<a name="line27"></a>goog.provide(&#39;goog.events.ListenerMap&#39;);
+<a name="line28"></a>
+<a name="line29"></a>goog.require(&#39;goog.array&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.Listener&#39;);
+<a name="line31"></a>goog.require(&#39;goog.object&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Creates a new listener map.
+<a name="line37"></a> * @param {EventTarget|goog.events.Listenable} src The src object.
+<a name="line38"></a> * @constructor
+<a name="line39"></a> * @final
+<a name="line40"></a> */
+<a name="line41"></a>goog.events.ListenerMap = function(src) {
+<a name="line42"></a>  /** @type {EventTarget|goog.events.Listenable} */
+<a name="line43"></a>  this.src = src;
+<a name="line44"></a>
+<a name="line45"></a>  /**
+<a name="line46"></a>   * Maps of event type to an array of listeners.
+<a name="line47"></a>   * @type {Object.&lt;string, !Array.&lt;!goog.events.Listener&gt;&gt;}
+<a name="line48"></a>   */
+<a name="line49"></a>  this.listeners = {};
+<a name="line50"></a>
+<a name="line51"></a>  /**
+<a name="line52"></a>   * The count of types in this map that have registered listeners.
+<a name="line53"></a>   * @private {number}
+<a name="line54"></a>   */
+<a name="line55"></a>  this.typeCount_ = 0;
+<a name="line56"></a>};
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * @return {number} The count of event types in this map that actually
+<a name="line61"></a> *     have registered listeners.
+<a name="line62"></a> */
+<a name="line63"></a>goog.events.ListenerMap.prototype.getTypeCount = function() {
+<a name="line64"></a>  return this.typeCount_;
+<a name="line65"></a>};
+<a name="line66"></a>
+<a name="line67"></a>
+<a name="line68"></a>/**
+<a name="line69"></a> * @return {number} Total number of registered listeners.
+<a name="line70"></a> */
+<a name="line71"></a>goog.events.ListenerMap.prototype.getListenerCount = function() {
+<a name="line72"></a>  var count = 0;
+<a name="line73"></a>  for (var type in this.listeners) {
+<a name="line74"></a>    count += this.listeners[type].length;
+<a name="line75"></a>  }
+<a name="line76"></a>  return count;
+<a name="line77"></a>};
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>/**
+<a name="line81"></a> * Adds an event listener. A listener can only be added once to an
+<a name="line82"></a> * object and if it is added again the key for the listener is
+<a name="line83"></a> * returned.
+<a name="line84"></a> *
+<a name="line85"></a> * Note that a one-off listener will not change an existing listener,
+<a name="line86"></a> * if any. On the other hand a normal listener will change existing
+<a name="line87"></a> * one-off listener to become a normal listener.
+<a name="line88"></a> *
+<a name="line89"></a> * @param {string|!goog.events.EventId} type The listener event type.
+<a name="line90"></a> * @param {!Function} listener This listener callback method.
+<a name="line91"></a> * @param {boolean} callOnce Whether the listener is a one-off
+<a name="line92"></a> *     listener.
+<a name="line93"></a> * @param {boolean=} opt_useCapture The capture mode of the listener.
+<a name="line94"></a> * @param {Object=} opt_listenerScope Object in whose scope to call the
+<a name="line95"></a> *     listener.
+<a name="line96"></a> * @return {goog.events.ListenableKey} Unique key for the listener.
+<a name="line97"></a> */
+<a name="line98"></a>goog.events.ListenerMap.prototype.add = function(
+<a name="line99"></a>    type, listener, callOnce, opt_useCapture, opt_listenerScope) {
+<a name="line100"></a>  var typeStr = type.toString();
+<a name="line101"></a>  var listenerArray = this.listeners[typeStr];
+<a name="line102"></a>  if (!listenerArray) {
+<a name="line103"></a>    listenerArray = this.listeners[typeStr] = [];
+<a name="line104"></a>    this.typeCount_++;
+<a name="line105"></a>  }
+<a name="line106"></a>
+<a name="line107"></a>  var listenerObj;
+<a name="line108"></a>  var index = goog.events.ListenerMap.findListenerIndex_(
+<a name="line109"></a>      listenerArray, listener, opt_useCapture, opt_listenerScope);
+<a name="line110"></a>  if (index &gt; -1) {
+<a name="line111"></a>    listenerObj = listenerArray[index];
+<a name="line112"></a>    if (!callOnce) {
+<a name="line113"></a>      // Ensure that, if there is an existing callOnce listener, it is no
+<a name="line114"></a>      // longer a callOnce listener.
+<a name="line115"></a>      listenerObj.callOnce = false;
+<a name="line116"></a>    }
+<a name="line117"></a>  } else {
+<a name="line118"></a>    listenerObj = new goog.events.Listener(
+<a name="line119"></a>        listener, null, this.src, typeStr, !!opt_useCapture, opt_listenerScope);
+<a name="line120"></a>    listenerObj.callOnce = callOnce;
+<a name="line121"></a>    listenerArray.push(listenerObj);
+<a name="line122"></a>  }
+<a name="line123"></a>  return listenerObj;
+<a name="line124"></a>};
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * Removes a matching listener.
+<a name="line129"></a> * @param {string|!goog.events.EventId} type The listener event type.
+<a name="line130"></a> * @param {!Function} listener This listener callback method.
+<a name="line131"></a> * @param {boolean=} opt_useCapture The capture mode of the listener.
+<a name="line132"></a> * @param {Object=} opt_listenerScope Object in whose scope to call the
+<a name="line133"></a> *     listener.
+<a name="line134"></a> * @return {boolean} Whether any listener was removed.
+<a name="line135"></a> */
+<a name="line136"></a>goog.events.ListenerMap.prototype.remove = function(
+<a name="line137"></a>    type, listener, opt_useCapture, opt_listenerScope) {
+<a name="line138"></a>  var typeStr = type.toString();
+<a name="line139"></a>  if (!(typeStr in this.listeners)) {
+<a name="line140"></a>    return false;
+<a name="line141"></a>  }
+<a name="line142"></a>
+<a name="line143"></a>  var listenerArray = this.listeners[typeStr];
+<a name="line144"></a>  var index = goog.events.ListenerMap.findListenerIndex_(
+<a name="line145"></a>      listenerArray, listener, opt_useCapture, opt_listenerScope);
+<a name="line146"></a>  if (index &gt; -1) {
+<a name="line147"></a>    var listenerObj = listenerArray[index];
+<a name="line148"></a>    listenerObj.markAsRemoved();
+<a name="line149"></a>    goog.array.removeAt(listenerArray, index);
+<a name="line150"></a>    if (listenerArray.length == 0) {
+<a name="line151"></a>      delete this.listeners[typeStr];
+<a name="line152"></a>      this.typeCount_--;
+<a name="line153"></a>    }
+<a name="line154"></a>    return true;
+<a name="line155"></a>  }
+<a name="line156"></a>  return false;
+<a name="line157"></a>};
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Removes the given listener object.
+<a name="line162"></a> * @param {goog.events.ListenableKey} listener The listener to remove.
+<a name="line163"></a> * @return {boolean} Whether the listener is removed.
+<a name="line164"></a> */
+<a name="line165"></a>goog.events.ListenerMap.prototype.removeByKey = function(listener) {
+<a name="line166"></a>  var type = listener.type;
+<a name="line167"></a>  if (!(type in this.listeners)) {
+<a name="line168"></a>    return false;
+<a name="line169"></a>  }
+<a name="line170"></a>
+<a name="line171"></a>  var removed = goog.array.remove(this.listeners[type], listener);
+<a name="line172"></a>  if (removed) {
+<a name="line173"></a>    listener.markAsRemoved();
+<a name="line174"></a>    if (this.listeners[type].length == 0) {
+<a name="line175"></a>      delete this.listeners[type];
+<a name="line176"></a>      this.typeCount_--;
+<a name="line177"></a>    }
+<a name="line178"></a>  }
+<a name="line179"></a>  return removed;
+<a name="line180"></a>};
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>/**
+<a name="line184"></a> * Removes all listeners from this map. If opt_type is provided, only
+<a name="line185"></a> * listeners that match the given type are removed.
+<a name="line186"></a> * @param {string|!goog.events.EventId=} opt_type Type of event to remove.
+<a name="line187"></a> * @return {number} Number of listeners removed.
+<a name="line188"></a> */
+<a name="line189"></a>goog.events.ListenerMap.prototype.removeAll = function(opt_type) {
+<a name="line190"></a>  var typeStr = opt_type &amp;&amp; opt_type.toString();
+<a name="line191"></a>  var count = 0;
+<a name="line192"></a>  for (var type in this.listeners) {
+<a name="line193"></a>    if (!typeStr || type == typeStr) {
+<a name="line194"></a>      var listenerArray = this.listeners[type];
+<a name="line195"></a>      for (var i = 0; i &lt; listenerArray.length; i++) {
+<a name="line196"></a>        ++count;
+<a name="line197"></a>        listenerArray[i].markAsRemoved();
+<a name="line198"></a>      }
+<a name="line199"></a>      delete this.listeners[type];
+<a name="line200"></a>      this.typeCount_--;
+<a name="line201"></a>    }
+<a name="line202"></a>  }
+<a name="line203"></a>  return count;
+<a name="line204"></a>};
+<a name="line205"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * Gets all listeners that match the given type and capture mode. The
+<a name="line209"></a> * returned array is a copy (but the listener objects are not).
+<a name="line210"></a> * @param {string|!goog.events.EventId} type The type of the listeners
+<a name="line211"></a> *     to retrieve.
+<a name="line212"></a> * @param {boolean} capture The capture mode of the listeners to retrieve.
+<a name="line213"></a> * @return {!Array.&lt;goog.events.ListenableKey&gt;} An array of matching
+<a name="line214"></a> *     listeners.
+<a name="line215"></a> */
+<a name="line216"></a>goog.events.ListenerMap.prototype.getListeners = function(type, capture) {
+<a name="line217"></a>  var listenerArray = this.listeners[type.toString()];
+<a name="line218"></a>  var rv = [];
+<a name="line219"></a>  if (listenerArray) {
+<a name="line220"></a>    for (var i = 0; i &lt; listenerArray.length; ++i) {
+<a name="line221"></a>      var listenerObj = listenerArray[i];
+<a name="line222"></a>      if (listenerObj.capture == capture) {
+<a name="line223"></a>        rv.push(listenerObj);
+<a name="line224"></a>      }
+<a name="line225"></a>    }
+<a name="line226"></a>  }
+<a name="line227"></a>  return rv;
+<a name="line228"></a>};
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>/**
+<a name="line232"></a> * Gets the goog.events.ListenableKey for the event or null if no such
+<a name="line233"></a> * listener is in use.
+<a name="line234"></a> *
+<a name="line235"></a> * @param {string|!goog.events.EventId} type The type of the listener
+<a name="line236"></a> *     to retrieve.
+<a name="line237"></a> * @param {!Function} listener The listener function to get.
+<a name="line238"></a> * @param {boolean} capture Whether the listener is a capturing listener.
+<a name="line239"></a> * @param {Object=} opt_listenerScope Object in whose scope to call the
+<a name="line240"></a> *     listener.
+<a name="line241"></a> * @return {goog.events.ListenableKey} the found listener or null if not found.
+<a name="line242"></a> */
+<a name="line243"></a>goog.events.ListenerMap.prototype.getListener = function(
+<a name="line244"></a>    type, listener, capture, opt_listenerScope) {
+<a name="line245"></a>  var listenerArray = this.listeners[type.toString()];
+<a name="line246"></a>  var i = -1;
+<a name="line247"></a>  if (listenerArray) {
+<a name="line248"></a>    i = goog.events.ListenerMap.findListenerIndex_(
+<a name="line249"></a>        listenerArray, listener, capture, opt_listenerScope);
+<a name="line250"></a>  }
+<a name="line251"></a>  return i &gt; -1 ? listenerArray[i] : null;
+<a name="line252"></a>};
+<a name="line253"></a>
+<a name="line254"></a>
+<a name="line255"></a>/**
+<a name="line256"></a> * Whether there is a matching listener. If either the type or capture
+<a name="line257"></a> * parameters are unspecified, the function will match on the
+<a name="line258"></a> * remaining criteria.
+<a name="line259"></a> *
+<a name="line260"></a> * @param {string|!goog.events.EventId=} opt_type The type of the listener.
+<a name="line261"></a> * @param {boolean=} opt_capture The capture mode of the listener.
+<a name="line262"></a> * @return {boolean} Whether there is an active listener matching
+<a name="line263"></a> *     the requested type and/or capture phase.
+<a name="line264"></a> */
+<a name="line265"></a>goog.events.ListenerMap.prototype.hasListener = function(
+<a name="line266"></a>    opt_type, opt_capture) {
+<a name="line267"></a>  var hasType = goog.isDef(opt_type);
+<a name="line268"></a>  var typeStr = hasType ? opt_type.toString() : &#39;&#39;;
+<a name="line269"></a>  var hasCapture = goog.isDef(opt_capture);
+<a name="line270"></a>
+<a name="line271"></a>  return goog.object.some(
+<a name="line272"></a>      this.listeners, function(listenerArray, type) {
+<a name="line273"></a>        for (var i = 0; i &lt; listenerArray.length; ++i) {
+<a name="line274"></a>          if ((!hasType || listenerArray[i].type == typeStr) &amp;&amp;
+<a name="line275"></a>              (!hasCapture || listenerArray[i].capture == opt_capture)) {
+<a name="line276"></a>            return true;
+<a name="line277"></a>          }
+<a name="line278"></a>        }
+<a name="line279"></a>
+<a name="line280"></a>        return false;
+<a name="line281"></a>      });
+<a name="line282"></a>};
+<a name="line283"></a>
+<a name="line284"></a>
+<a name="line285"></a>/**
+<a name="line286"></a> * Finds the index of a matching goog.events.Listener in the given
+<a name="line287"></a> * listenerArray.
+<a name="line288"></a> * @param {!Array.&lt;!goog.events.Listener&gt;} listenerArray Array of listener.
+<a name="line289"></a> * @param {!Function} listener The listener function.
+<a name="line290"></a> * @param {boolean=} opt_useCapture The capture flag for the listener.
+<a name="line291"></a> * @param {Object=} opt_listenerScope The listener scope.
+<a name="line292"></a> * @return {number} The index of the matching listener within the
+<a name="line293"></a> *     listenerArray.
+<a name="line294"></a> * @private
+<a name="line295"></a> */
+<a name="line296"></a>goog.events.ListenerMap.findListenerIndex_ = function(
+<a name="line297"></a>    listenerArray, listener, opt_useCapture, opt_listenerScope) {
+<a name="line298"></a>  for (var i = 0; i &lt; listenerArray.length; ++i) {
+<a name="line299"></a>    var listenerObj = listenerArray[i];
+<a name="line300"></a>    if (!listenerObj.removed &amp;&amp;
+<a name="line301"></a>        listenerObj.listener == listener &amp;&amp;
+<a name="line302"></a>        listenerObj.capture == !!opt_useCapture &amp;&amp;
+<a name="line303"></a>        listenerObj.handler == opt_listenerScope) {
+<a name="line304"></a>      return i;
+<a name="line305"></a>    }
+<a name="line306"></a>  }
+<a name="line307"></a>  return -1;
+<a name="line308"></a>};
+</pre>
+
+
+</body>
+</html>

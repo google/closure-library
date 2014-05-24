@@ -1,0 +1,268 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mockcontrol_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_testing_async_mockcontrol_test.js.html">mockcontrol_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2010 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.testing.async.MockControlTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.testing.async.MockControlTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.MockControl&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.asserts&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.async.MockControl&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var mockControl;
+<a name="line25"></a>var asyncMockControl;
+<a name="line26"></a>
+<a name="line27"></a>var mockControl2;
+<a name="line28"></a>var asyncMockControl2;
+<a name="line29"></a>
+<a name="line30"></a>function setUp() {
+<a name="line31"></a>  mockControl = new goog.testing.MockControl();
+<a name="line32"></a>  asyncMockControl = new goog.testing.async.MockControl(mockControl);
+<a name="line33"></a>
+<a name="line34"></a>  // We need two of these for the tests where we need to verify our meta-test
+<a name="line35"></a>  // assertions without verifying our tested assertions.
+<a name="line36"></a>  mockControl2 = new goog.testing.MockControl();
+<a name="line37"></a>  asyncMockControl2 = new goog.testing.async.MockControl(mockControl2);
+<a name="line38"></a>}
+<a name="line39"></a>
+<a name="line40"></a>function assertVerifyFails() {
+<a name="line41"></a>  assertThrowsJsUnitException(function() { mockControl.$verifyAll(); });
+<a name="line42"></a>}
+<a name="line43"></a>
+<a name="line44"></a>function testCreateCallbackMockFailure() {
+<a name="line45"></a>  asyncMockControl.createCallbackMock(&#39;failingCallbackMock&#39;, function() {});
+<a name="line46"></a>  assertVerifyFails();
+<a name="line47"></a>}
+<a name="line48"></a>
+<a name="line49"></a>function testCreateCallbackMockSuccess() {
+<a name="line50"></a>  var callback = asyncMockControl.createCallbackMock(
+<a name="line51"></a>      &#39;succeedingCallbackMock&#39;, function() {});
+<a name="line52"></a>  callback();
+<a name="line53"></a>  mockControl.$verifyAll();
+<a name="line54"></a>}
+<a name="line55"></a>
+<a name="line56"></a>function testCreateCallbackMockSuccessWithArg() {
+<a name="line57"></a>  var callback = asyncMockControl.createCallbackMock(
+<a name="line58"></a>      &#39;succeedingCallbackMockWithArg&#39;,
+<a name="line59"></a>      asyncMockControl.createCallbackMock(
+<a name="line60"></a>          &#39;metaCallbackMock&#39;,
+<a name="line61"></a>          function(val) { assertEquals(10, val); }));
+<a name="line62"></a>  callback(10);
+<a name="line63"></a>  mockControl.$verifyAll();
+<a name="line64"></a>}
+<a name="line65"></a>
+<a name="line66"></a>function testCreateCallbackMockSuccessWithArgs() {
+<a name="line67"></a>  var callback = asyncMockControl.createCallbackMock(
+<a name="line68"></a>      &#39;succeedingCallbackMockWithArgs&#39;,
+<a name="line69"></a>      asyncMockControl.createCallbackMock(
+<a name="line70"></a>          &#39;metaCallbackMock&#39;, function(val1, val2, val3) {
+<a name="line71"></a>            assertEquals(10, val1);
+<a name="line72"></a>            assertEquals(&#39;foo&#39;, val2);
+<a name="line73"></a>            assertObjectEquals({foo: &#39;bar&#39;}, val3);
+<a name="line74"></a>          }));
+<a name="line75"></a>  callback(10, &#39;foo&#39;, {foo: &#39;bar&#39;});
+<a name="line76"></a>  mockControl.$verifyAll();
+<a name="line77"></a>}
+<a name="line78"></a>
+<a name="line79"></a>function testAsyncAssertEqualsFailureNeverCalled() {
+<a name="line80"></a>  asyncMockControl.asyncAssertEquals(&#39;never called&#39;, 12);
+<a name="line81"></a>  assertVerifyFails();
+<a name="line82"></a>}
+<a name="line83"></a>
+<a name="line84"></a>function testAsyncAssertEqualsFailureNumberOfArgs() {
+<a name="line85"></a>  assertThrowsJsUnitException(function() {
+<a name="line86"></a>    asyncMockControl.asyncAssertEquals(&#39;wrong number of args&#39;, 12)();
+<a name="line87"></a>  });
+<a name="line88"></a>}
+<a name="line89"></a>
+<a name="line90"></a>function testAsyncAssertEqualsFailureOneArg() {
+<a name="line91"></a>  assertThrowsJsUnitException(function() {
+<a name="line92"></a>    asyncMockControl.asyncAssertEquals(&#39;wrong arg value&#39;, 12)(13);
+<a name="line93"></a>  });
+<a name="line94"></a>}
+<a name="line95"></a>
+<a name="line96"></a>function testAsyncAssertEqualsFailureThreeArgs() {
+<a name="line97"></a>  assertThrowsJsUnitException(function() {
+<a name="line98"></a>    asyncMockControl.asyncAssertEquals(&#39;wrong arg values&#39;, 1, 2, 15)(2, 2, 15);
+<a name="line99"></a>  });
+<a name="line100"></a>}
+<a name="line101"></a>
+<a name="line102"></a>function testAsyncAssertEqualsSuccessNoArgs() {
+<a name="line103"></a>  asyncMockControl.asyncAssertEquals(&#39;should be called&#39;)();
+<a name="line104"></a>  mockControl.$verifyAll();
+<a name="line105"></a>}
+<a name="line106"></a>
+<a name="line107"></a>function testAsyncAssertEqualsSuccessThreeArgs() {
+<a name="line108"></a>  asyncMockControl.asyncAssertEquals(&#39;should have args&#39;, 1, 2, 3)(1, 2, 3);
+<a name="line109"></a>  mockControl.$verifyAll();
+<a name="line110"></a>}
+<a name="line111"></a>
+<a name="line112"></a>function testAssertDeferredErrorFailureNoError() {
+<a name="line113"></a>  var deferred = new goog.async.Deferred();
+<a name="line114"></a>  asyncMockControl.assertDeferredError(deferred, function() {});
+<a name="line115"></a>  assertVerifyFails();
+<a name="line116"></a>}
+<a name="line117"></a>
+<a name="line118"></a>function testAssertDeferredErrorSuccess() {
+<a name="line119"></a>  var deferred = new goog.async.Deferred();
+<a name="line120"></a>  asyncMockControl.assertDeferredError(deferred, function() {
+<a name="line121"></a>    deferred.errback(new Error(&#39;FAIL&#39;));
+<a name="line122"></a>  });
+<a name="line123"></a>  mockControl.$verifyAll();
+<a name="line124"></a>}
+<a name="line125"></a>
+<a name="line126"></a>function testAssertDeferredEqualsFailureActualDeferredNeverResolves() {
+<a name="line127"></a>  var actual = new goog.async.Deferred();
+<a name="line128"></a>  asyncMockControl.assertDeferredEquals(&#39;doesn\&#39;t resolve&#39;, 12, actual);
+<a name="line129"></a>  assertVerifyFails();
+<a name="line130"></a>}
+<a name="line131"></a>
+<a name="line132"></a>function testAssertDeferredEqualsFailureActualDeferredNeverResolvesBoth() {
+<a name="line133"></a>  var actualDeferred = new goog.async.Deferred();
+<a name="line134"></a>  var expectedDeferred = new goog.async.Deferred();
+<a name="line135"></a>  expectedDeferred.callback(12);
+<a name="line136"></a>  asyncMockControl.assertDeferredEquals(
+<a name="line137"></a>      &#39;doesn\&#39;t resolve&#39;, expectedDeferred, actualDeferred);
+<a name="line138"></a>  assertVerifyFails();
+<a name="line139"></a>}
+<a name="line140"></a>
+<a name="line141"></a>function testAssertDeferredEqualsFailureExpectedDeferredNeverResolves() {
+<a name="line142"></a>  var expected = new goog.async.Deferred();
+<a name="line143"></a>  asyncMockControl.assertDeferredEquals(&#39;doesn\&#39;t resolve&#39;, expected, 12);
+<a name="line144"></a>  assertVerifyFails();
+<a name="line145"></a>}
+<a name="line146"></a>
+<a name="line147"></a>function testAssertDeferredEqualsFailureExpectedDeferredNeverResolvesBoth() {
+<a name="line148"></a>  var actualDeferred = new goog.async.Deferred();
+<a name="line149"></a>  var expectedDeferred = new goog.async.Deferred();
+<a name="line150"></a>  actualDeferred.callback(12);
+<a name="line151"></a>  asyncMockControl.assertDeferredEquals(
+<a name="line152"></a>      &#39;doesn\&#39;t resolve&#39;, expectedDeferred, actualDeferred);
+<a name="line153"></a>  assertVerifyFails();
+<a name="line154"></a>}
+<a name="line155"></a>
+<a name="line156"></a>function testAssertDeferredEqualsFailureWrongValueActualDeferred() {
+<a name="line157"></a>  var actual = new goog.async.Deferred();
+<a name="line158"></a>  asyncMockControl.assertDeferredEquals(&#39;doesn\&#39;t resolve&#39;, 12, actual);
+<a name="line159"></a>  asyncMockControl2.assertDeferredError(actual, function() {
+<a name="line160"></a>    actual.callback(13);
+<a name="line161"></a>  });
+<a name="line162"></a>  mockControl2.$verifyAll();
+<a name="line163"></a>}
+<a name="line164"></a>
+<a name="line165"></a>function testAssertDeferredEqualsFailureWrongValueExpectedDeferred() {
+<a name="line166"></a>  var expected = new goog.async.Deferred();
+<a name="line167"></a>  asyncMockControl.assertDeferredEquals(&#39;doesn\&#39;t resolve&#39;, expected, 12);
+<a name="line168"></a>  asyncMockControl2.assertDeferredError(expected, function() {
+<a name="line169"></a>    expected.callback(13);
+<a name="line170"></a>  });
+<a name="line171"></a>  mockControl2.$verifyAll();
+<a name="line172"></a>}
+<a name="line173"></a>
+<a name="line174"></a>function testAssertDeferredEqualsFailureWongValueBothDeferred() {
+<a name="line175"></a>  var actualDeferred = new goog.async.Deferred();
+<a name="line176"></a>  var expectedDeferred = new goog.async.Deferred();
+<a name="line177"></a>  asyncMockControl.assertDeferredEquals(
+<a name="line178"></a>      &#39;different values&#39;, expectedDeferred, actualDeferred);
+<a name="line179"></a>  expectedDeferred.callback(12);
+<a name="line180"></a>  asyncMockControl2.assertDeferredError(actualDeferred, function() {
+<a name="line181"></a>    actualDeferred.callback(13);
+<a name="line182"></a>  });
+<a name="line183"></a>  assertVerifyFails();
+<a name="line184"></a>  mockControl2.$verifyAll();
+<a name="line185"></a>}
+<a name="line186"></a>
+<a name="line187"></a>function testAssertDeferredEqualsFailureNeitherDeferredEverResolves() {
+<a name="line188"></a>  var actualDeferred = new goog.async.Deferred();
+<a name="line189"></a>  var expectedDeferred = new goog.async.Deferred();
+<a name="line190"></a>  asyncMockControl.assertDeferredEquals(
+<a name="line191"></a>      &#39;doesn\&#39;t resolve&#39;, expectedDeferred, actualDeferred);
+<a name="line192"></a>  assertVerifyFails();
+<a name="line193"></a>}
+<a name="line194"></a>
+<a name="line195"></a>function testAssertDeferredEqualsSuccessActualDeferred() {
+<a name="line196"></a>  var actual = new goog.async.Deferred();
+<a name="line197"></a>  asyncMockControl.assertDeferredEquals(&#39;should succeed&#39;, 12, actual);
+<a name="line198"></a>  actual.callback(12);
+<a name="line199"></a>  mockControl.$verifyAll();
+<a name="line200"></a>}
+<a name="line201"></a>
+<a name="line202"></a>function testAssertDeferredEqualsSuccessExpectedDeferred() {
+<a name="line203"></a>  var expected = new goog.async.Deferred();
+<a name="line204"></a>  asyncMockControl.assertDeferredEquals(&#39;should succeed&#39;, expected, 12);
+<a name="line205"></a>  expected.callback(12);
+<a name="line206"></a>  mockControl.$verifyAll();
+<a name="line207"></a>}
+<a name="line208"></a>
+<a name="line209"></a>function testAssertDeferredEqualsSuccessBothDeferred() {
+<a name="line210"></a>  var actualDeferred = new goog.async.Deferred();
+<a name="line211"></a>  var expectedDeferred = new goog.async.Deferred();
+<a name="line212"></a>  asyncMockControl.assertDeferredEquals(
+<a name="line213"></a>      &#39;should succeed&#39;, expectedDeferred, actualDeferred);
+<a name="line214"></a>  expectedDeferred.callback(12);
+<a name="line215"></a>  actualDeferred.callback(12);
+<a name="line216"></a>  mockControl.$verifyAll();
+<a name="line217"></a>}
+</pre>
+
+
+</body>
+</html>

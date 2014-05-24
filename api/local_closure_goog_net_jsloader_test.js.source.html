@@ -1,0 +1,188 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>jsloader_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_jsloader_test.js.html">jsloader_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.net.jsloaderTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.net.jsloaderTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.array&#39;);
+<a name="line19"></a>goog.require(&#39;goog.dom&#39;);
+<a name="line20"></a>goog.require(&#39;goog.net.jsloader&#39;);
+<a name="line21"></a>goog.require(&#39;goog.net.jsloader.ErrorCode&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.AsyncTestCase&#39;);
+<a name="line23"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line24"></a>
+<a name="line25"></a>// Initialize the AsyncTestCase.
+<a name="line26"></a>var testCase = goog.testing.AsyncTestCase.createAndInstall(document.title);
+<a name="line27"></a>testCase.stepTimeout = 5 * 1000; // 5 seconds
+<a name="line28"></a>
+<a name="line29"></a>
+<a name="line30"></a>testCase.setUp = function() {
+<a name="line31"></a>  goog.provide = goog.nullFunction;
+<a name="line32"></a>};
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>testCase.tearDown = function() {
+<a name="line36"></a>  // Remove all the fake scripts.
+<a name="line37"></a>  var scripts = goog.array.clone(
+<a name="line38"></a>      document.getElementsByTagName(&#39;SCRIPT&#39;));
+<a name="line39"></a>  for (var i = 0; i &lt; scripts.length; i++) {
+<a name="line40"></a>    if (scripts[i].src.indexOf(&#39;testdata&#39;) != -1) {
+<a name="line41"></a>      goog.dom.removeNode(scripts[i]);
+<a name="line42"></a>    }
+<a name="line43"></a>  }
+<a name="line44"></a>};
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>// Sunny day scenario for load function.
+<a name="line48"></a>function testLoad() {
+<a name="line49"></a>  testCase.waitForAsync(&#39;testLoad&#39;);
+<a name="line50"></a>
+<a name="line51"></a>  window.test1 = null;
+<a name="line52"></a>  var testUrl = &#39;testdata/jsloader_test1.js&#39;;
+<a name="line53"></a>  var result = goog.net.jsloader.load(testUrl);
+<a name="line54"></a>  result.addCallback(function() {
+<a name="line55"></a>    testCase.continueTesting();
+<a name="line56"></a>
+<a name="line57"></a>    var script = result.defaultScope_.script_;
+<a name="line58"></a>
+<a name="line59"></a>    assertNotNull(&#39;script created&#39;, script);
+<a name="line60"></a>    assertEquals(&#39;encoding is utf-8&#39;, &#39;UTF-8&#39;, script.charset);
+<a name="line61"></a>
+<a name="line62"></a>    // Check that the URI matches ours.
+<a name="line63"></a>    assertTrue(&#39;server URI&#39;, script.src.indexOf(testUrl) &gt;= 0);
+<a name="line64"></a>
+<a name="line65"></a>    // Check that the script was really loaded.
+<a name="line66"></a>    assertEquals(&#39;verification object&#39;, &#39;Test #1 loaded&#39;, window.test1);
+<a name="line67"></a>  });
+<a name="line68"></a>}
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>// Sunny day scenario for loadAndVerify function.
+<a name="line72"></a>function testLoadAndVerify() {
+<a name="line73"></a>  testCase.waitForAsync(&#39;testLoadAndVerify&#39;);
+<a name="line74"></a>
+<a name="line75"></a>  var testUrl = &#39;testdata/jsloader_test2.js&#39;;
+<a name="line76"></a>  var result = goog.net.jsloader.loadAndVerify(testUrl, &#39;test2&#39;);
+<a name="line77"></a>  result.addCallback(function(verifyObj) {
+<a name="line78"></a>    testCase.continueTesting();
+<a name="line79"></a>
+<a name="line80"></a>    // Check that the verification object has passed ok.
+<a name="line81"></a>    assertEquals(&#39;verification object&#39;, &#39;Test #2 loaded&#39;, verifyObj);
+<a name="line82"></a>  });
+<a name="line83"></a>}
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>// What happens when the verification object is not set by the loaded script?
+<a name="line87"></a>function testLoadAndVerifyError() {
+<a name="line88"></a>  testCase.waitForAsync(&#39;testLoadAndVerifyError&#39;);
+<a name="line89"></a>
+<a name="line90"></a>  var testUrl = &#39;testdata/jsloader_test2.js&#39;;
+<a name="line91"></a>  var result = goog.net.jsloader.loadAndVerify(testUrl, &#39;fake&#39;);
+<a name="line92"></a>  result.addErrback(function(error) {
+<a name="line93"></a>    testCase.continueTesting();
+<a name="line94"></a>
+<a name="line95"></a>    // Check that the error code is right.
+<a name="line96"></a>    assertEquals(&#39;verification error&#39;, goog.net.jsloader.ErrorCode.VERIFY_ERROR,
+<a name="line97"></a>        error.code);
+<a name="line98"></a>  });
+<a name="line99"></a>}
+<a name="line100"></a>
+<a name="line101"></a>
+<a name="line102"></a>// Tests that callers can cancel the deferred without error.
+<a name="line103"></a>function testLoadAndVerifyCancelled() {
+<a name="line104"></a>  var testUrl = &#39;testdata/jsloader_test2.js&#39;;
+<a name="line105"></a>  var result = goog.net.jsloader.loadAndVerify(testUrl, &#39;test2&#39;);
+<a name="line106"></a>  result.cancel();
+<a name="line107"></a>}
+<a name="line108"></a>
+<a name="line109"></a>
+<a name="line110"></a>// Test the loadMany function.
+<a name="line111"></a>function testLoadMany() {
+<a name="line112"></a>  testCase.waitForAsync(&#39;testLoadMany&#39;);
+<a name="line113"></a>
+<a name="line114"></a>  // Load test #3 and then #1.
+<a name="line115"></a>  window.test1 = null;
+<a name="line116"></a>  var testUrls1 = [&#39;testdata/jsloader_test3.js&#39;, &#39;testdata/jsloader_test1.js&#39;];
+<a name="line117"></a>  goog.net.jsloader.loadMany(testUrls1);
+<a name="line118"></a>
+<a name="line119"></a>  window.test3Callback = function(msg) {
+<a name="line120"></a>    testCase.continueTesting();
+<a name="line121"></a>
+<a name="line122"></a>    // Check that the 1st test was not loaded yet.
+<a name="line123"></a>    assertEquals(&#39;verification object&#39;, null, window.test1);
+<a name="line124"></a>
+<a name="line125"></a>    // Load test #4, which is supposed to wait for #1 to load.
+<a name="line126"></a>    testCase.waitForAsync(&#39;testLoadMany&#39;);
+<a name="line127"></a>    var testUrls2 = [&#39;testdata/jsloader_test4.js&#39;];
+<a name="line128"></a>    goog.net.jsloader.loadMany(testUrls2);
+<a name="line129"></a>  };
+<a name="line130"></a>
+<a name="line131"></a>  window.test4Callback = function(msg) {
+<a name="line132"></a>    testCase.continueTesting();
+<a name="line133"></a>
+<a name="line134"></a>    // Check that the 1st test was already loaded.
+<a name="line135"></a>    assertEquals(&#39;verification object&#39;, &#39;Test #1 loaded&#39;, window.test1);
+<a name="line136"></a>  };
+<a name="line137"></a>}
+</pre>
+
+
+</body>
+</html>

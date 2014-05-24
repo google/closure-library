@@ -1,0 +1,383 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>math_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_math_math_test.js.html">math_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.mathTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.mathTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.math&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>function testRandomInt() {
+<a name="line22"></a>  assertEquals(0, goog.math.randomInt(0));
+<a name="line23"></a>  assertEquals(0, goog.math.randomInt(1));
+<a name="line24"></a>
+<a name="line25"></a>  var r = goog.math.randomInt(3);
+<a name="line26"></a>  assertTrue(0 &lt;= r &amp;&amp; r &lt; 3);
+<a name="line27"></a>}
+<a name="line28"></a>
+<a name="line29"></a>function testUniformRandom() {
+<a name="line30"></a>  assertEquals(5.2, goog.math.uniformRandom(5.2, 5.2));
+<a name="line31"></a>  assertEquals(-6, goog.math.uniformRandom(-6, -6));
+<a name="line32"></a>
+<a name="line33"></a>  var r = goog.math.uniformRandom(-0.5, 0.5);
+<a name="line34"></a>  assertTrue(-0.5 &lt;= r &amp;&amp; r &lt; 0.5);
+<a name="line35"></a>}
+<a name="line36"></a>
+<a name="line37"></a>function testClamp() {
+<a name="line38"></a>  assertEquals(3, goog.math.clamp(3, -5, 5));
+<a name="line39"></a>  assertEquals(5, goog.math.clamp(5, -5, 5));
+<a name="line40"></a>  assertEquals(-5, goog.math.clamp(-5, -5, 5));
+<a name="line41"></a>
+<a name="line42"></a>  assertEquals(-5, goog.math.clamp(-22, -5, 5));
+<a name="line43"></a>  assertEquals(5, goog.math.clamp(6, -5, 5));
+<a name="line44"></a>}
+<a name="line45"></a>
+<a name="line46"></a>function testModulo() {
+<a name="line47"></a>  assertEquals(0, goog.math.modulo(256, 8));
+<a name="line48"></a>
+<a name="line49"></a>  assertEquals(7, goog.math.modulo(7, 8));
+<a name="line50"></a>  assertEquals(7, goog.math.modulo(23, 8));
+<a name="line51"></a>  assertEquals(7, goog.math.modulo(-1, 8));
+<a name="line52"></a>
+<a name="line53"></a>  // Safari 5.1.7 has a bug in its JS engine where modulo is computed
+<a name="line54"></a>  // incorrectly when using variables. We avoid using
+<a name="line55"></a>  // goog.testing.ExpectedFailure here since it pulls in a bunch of
+<a name="line56"></a>  // extra dependencies for maintaining a DOM console.
+<a name="line57"></a>  var a = 1;
+<a name="line58"></a>  var b = -5;
+<a name="line59"></a>  if (a % b === 1 % -5) {
+<a name="line60"></a>    assertEquals(-4, goog.math.modulo(1, -5));
+<a name="line61"></a>    assertEquals(-4, goog.math.modulo(6, -5));
+<a name="line62"></a>  }
+<a name="line63"></a>  assertEquals(-4, goog.math.modulo(-4, -5));
+<a name="line64"></a>}
+<a name="line65"></a>
+<a name="line66"></a>function testLerp() {
+<a name="line67"></a>  assertEquals(0, goog.math.lerp(0, 0, 0));
+<a name="line68"></a>  assertEquals(3, goog.math.lerp(0, 6, 0.5));
+<a name="line69"></a>  assertEquals(3, goog.math.lerp(-1, 1, 2));
+<a name="line70"></a>}
+<a name="line71"></a>
+<a name="line72"></a>function testNearlyEquals() {
+<a name="line73"></a>  assertTrue(&#39;Numbers inside default tolerance should be equal&#39;,
+<a name="line74"></a>             goog.math.nearlyEquals(0.000001, 0.000001001));
+<a name="line75"></a>  assertFalse(&#39;Numbers outside default tolerance should be unequal&#39;,
+<a name="line76"></a>              goog.math.nearlyEquals(0.000001, 0.000003));
+<a name="line77"></a>  assertTrue(&#39;Numbers inside custom tolerance should be equal&#39;,
+<a name="line78"></a>             goog.math.nearlyEquals(0.001, 0.002, 0.1));
+<a name="line79"></a>  assertFalse(&#39;Numbers outside custom tolerance should be unequal&#39;,
+<a name="line80"></a>              goog.math.nearlyEquals(0.001, -0.1, 0.1));
+<a name="line81"></a>  assertTrue(&#39;Integer tolerance greater than one should succeed&#39;,
+<a name="line82"></a>             goog.math.nearlyEquals(87, 85, 3));
+<a name="line83"></a>}
+<a name="line84"></a>
+<a name="line85"></a>function testStandardAngleInRadians() {
+<a name="line86"></a>  assertRoughlyEquals(0, goog.math.standardAngleInRadians(2 * Math.PI), 1e-10);
+<a name="line87"></a>  assertRoughlyEquals(
+<a name="line88"></a>      Math.PI, goog.math.standardAngleInRadians(Math.PI), 1e-10);
+<a name="line89"></a>  assertRoughlyEquals(
+<a name="line90"></a>      Math.PI, goog.math.standardAngleInRadians(-1 * Math.PI), 1e-10);
+<a name="line91"></a>  assertRoughlyEquals(
+<a name="line92"></a>      Math.PI / 2, goog.math.standardAngleInRadians(-1.5 * Math.PI), 1e-10);
+<a name="line93"></a>  assertRoughlyEquals(
+<a name="line94"></a>      Math.PI, goog.math.standardAngleInRadians(5 * Math.PI), 1e-10);
+<a name="line95"></a>  assertEquals(0.01, goog.math.standardAngleInRadians(0.01));
+<a name="line96"></a>  assertEquals(0, goog.math.standardAngleInRadians(0));
+<a name="line97"></a>}
+<a name="line98"></a>
+<a name="line99"></a>function testStandardAngle() {
+<a name="line100"></a>  assertEquals(359.5, goog.math.standardAngle(-360.5));
+<a name="line101"></a>  assertEquals(0, goog.math.standardAngle(-360));
+<a name="line102"></a>  assertEquals(359.5, goog.math.standardAngle(-0.5));
+<a name="line103"></a>  assertEquals(0, goog.math.standardAngle(0));
+<a name="line104"></a>  assertEquals(0.5, goog.math.standardAngle(0.5));
+<a name="line105"></a>  assertEquals(0, goog.math.standardAngle(360));
+<a name="line106"></a>  assertEquals(1, goog.math.standardAngle(721));
+<a name="line107"></a>}
+<a name="line108"></a>
+<a name="line109"></a>function testToRadians() {
+<a name="line110"></a>  assertEquals(-Math.PI, goog.math.toRadians(-180));
+<a name="line111"></a>  assertEquals(0, goog.math.toRadians(0));
+<a name="line112"></a>  assertEquals(Math.PI, goog.math.toRadians(180));
+<a name="line113"></a>}
+<a name="line114"></a>
+<a name="line115"></a>function testToDegrees() {
+<a name="line116"></a>  assertEquals(-180, goog.math.toDegrees(-Math.PI));
+<a name="line117"></a>  assertEquals(0, goog.math.toDegrees(0));
+<a name="line118"></a>  assertEquals(180, goog.math.toDegrees(Math.PI));
+<a name="line119"></a>}
+<a name="line120"></a>
+<a name="line121"></a>function testAngleDx() {
+<a name="line122"></a>  assertRoughlyEquals(0, goog.math.angleDx(0, 0), 1e-10);
+<a name="line123"></a>  assertRoughlyEquals(0, goog.math.angleDx(90, 0), 1e-10);
+<a name="line124"></a>  assertRoughlyEquals(100, goog.math.angleDx(0, 100), 1e-10);
+<a name="line125"></a>  assertRoughlyEquals(0, goog.math.angleDx(90, 100), 1e-10);
+<a name="line126"></a>  assertRoughlyEquals(-100, goog.math.angleDx(180, 100), 1e-10);
+<a name="line127"></a>  assertRoughlyEquals(0, goog.math.angleDx(270, 100), 1e-10);
+<a name="line128"></a>}
+<a name="line129"></a>
+<a name="line130"></a>function testAngleDy() {
+<a name="line131"></a>  assertRoughlyEquals(0, goog.math.angleDy(0, 0), 1e-10);
+<a name="line132"></a>  assertRoughlyEquals(0, goog.math.angleDy(90, 0), 1e-10);
+<a name="line133"></a>  assertRoughlyEquals(0, goog.math.angleDy(0, 100), 1e-10);
+<a name="line134"></a>  assertRoughlyEquals(100, goog.math.angleDy(90, 100), 1e-10);
+<a name="line135"></a>  assertRoughlyEquals(0, goog.math.angleDy(180, 100), 1e-10);
+<a name="line136"></a>  assertRoughlyEquals(-100, goog.math.angleDy(270, 100), 1e-10);
+<a name="line137"></a>}
+<a name="line138"></a>
+<a name="line139"></a>function testAngle() {
+<a name="line140"></a>  assertRoughlyEquals(0, goog.math.angle(10, 10, 20, 10), 1e-10);
+<a name="line141"></a>  assertRoughlyEquals(90, goog.math.angle(10, 10, 10, 20), 1e-10);
+<a name="line142"></a>  assertRoughlyEquals(225, goog.math.angle(10, 10, 0, 0), 1e-10);
+<a name="line143"></a>  assertRoughlyEquals(270, goog.math.angle(10, 10, 10, 0), 1e-10);
+<a name="line144"></a>
+<a name="line145"></a>  // 0 is the conventional result, but mathematically this is undefined.
+<a name="line146"></a>  assertEquals(0, goog.math.angle(10, 10, 10, 10));
+<a name="line147"></a>}
+<a name="line148"></a>
+<a name="line149"></a>function testAngleDifference() {
+<a name="line150"></a>  assertEquals(10, goog.math.angleDifference(30, 40));
+<a name="line151"></a>  assertEquals(-10, goog.math.angleDifference(40, 30));
+<a name="line152"></a>  assertEquals(180, goog.math.angleDifference(10, 190));
+<a name="line153"></a>  assertEquals(180, goog.math.angleDifference(190, 10));
+<a name="line154"></a>  assertEquals(20, goog.math.angleDifference(350, 10));
+<a name="line155"></a>  assertEquals(-20, goog.math.angleDifference(10, 350));
+<a name="line156"></a>  assertEquals(100, goog.math.angleDifference(350, 90));
+<a name="line157"></a>  assertEquals(-80, goog.math.angleDifference(350, 270));
+<a name="line158"></a>  assertEquals(0, goog.math.angleDifference(15, 15));
+<a name="line159"></a>}
+<a name="line160"></a>
+<a name="line161"></a>function testSign() {
+<a name="line162"></a>  assertEquals(-1, goog.math.sign(-1));
+<a name="line163"></a>  assertEquals(1, goog.math.sign(1));
+<a name="line164"></a>  assertEquals(0, goog.math.sign(0));
+<a name="line165"></a>  assertEquals(0, goog.math.sign(-0));
+<a name="line166"></a>  assertEquals(1, goog.math.sign(0.0001));
+<a name="line167"></a>  assertEquals(-1, goog.math.sign(-0.0001));
+<a name="line168"></a>  assertEquals(-1, goog.math.sign(-Infinity));
+<a name="line169"></a>  assertEquals(1, goog.math.sign(Infinity));
+<a name="line170"></a>  assertEquals(1, goog.math.sign(3141592653589793));
+<a name="line171"></a>}
+<a name="line172"></a>
+<a name="line173"></a>function testLongestCommonSubsequence() {
+<a name="line174"></a>  var func = goog.math.longestCommonSubsequence;
+<a name="line175"></a>
+<a name="line176"></a>  assertArrayEquals([2], func([1, 2], [2, 1]));
+<a name="line177"></a>  assertArrayEquals([1, 2], func([1, 2, 5], [2, 1, 2]));
+<a name="line178"></a>  assertArrayEquals([1, 2, 3, 4, 5],
+<a name="line179"></a>      func([1, 0, 2, 3, 8, 4, 9, 5], [8, 1, 2, 4, 3, 6, 4, 5]));
+<a name="line180"></a>  assertArrayEquals([1, 1, 1, 1, 1], func([1, 1, 1, 1, 1], [1, 1, 1, 1, 1]));
+<a name="line181"></a>  assertArrayEquals([5], func([1, 2, 3, 4, 5], [5, 4, 3, 2, 1]));
+<a name="line182"></a>  assertArrayEquals([1, 8, 11],
+<a name="line183"></a>      func([1, 6, 8, 11, 13], [1, 3, 5, 8, 9, 11, 12]));
+<a name="line184"></a>}
+<a name="line185"></a>
+<a name="line186"></a>function testLongestCommonSubsequenceWithCustomComparator() {
+<a name="line187"></a>  var func = goog.math.longestCommonSubsequence;
+<a name="line188"></a>
+<a name="line189"></a>  var compareFn = function(a, b) {
+<a name="line190"></a>    return a.field == b.field;
+<a name="line191"></a>  };
+<a name="line192"></a>
+<a name="line193"></a>  var a1 = {field: &#39;a1&#39;, field2: &#39;hello&#39;};
+<a name="line194"></a>  var a2 = {field: &#39;a2&#39;, field2: 33};
+<a name="line195"></a>  var a3 = {field: &#39;a3&#39;};
+<a name="line196"></a>  var a4 = {field: &#39;a3&#39;};
+<a name="line197"></a>
+<a name="line198"></a>  assertArrayEquals([a1, a2], func([a1, a2, a3], [a3, a1, a2], compareFn));
+<a name="line199"></a>  assertArrayEquals([a1, a3], func([a1, a3], [a1, a4], compareFn));
+<a name="line200"></a>  // testing the same arrays without compare function
+<a name="line201"></a>  assertArrayEquals([a1], func([a1, a3], [a1, a4]));
+<a name="line202"></a>}
+<a name="line203"></a>
+<a name="line204"></a>function testLongestCommonSubsequenceWithCustomCollector() {
+<a name="line205"></a>  var func = goog.math.longestCommonSubsequence;
+<a name="line206"></a>
+<a name="line207"></a>  var collectorFn = function(a, b) {
+<a name="line208"></a>    return b;
+<a name="line209"></a>  };
+<a name="line210"></a>
+<a name="line211"></a>  assertArrayEquals([1, 2, 4, 6, 7],
+<a name="line212"></a>      func([1, 0, 2, 3, 8, 4, 9, 5], [8, 1, 2, 4, 3, 6, 4, 5],
+<a name="line213"></a>      null, collectorFn));
+<a name="line214"></a>}
+<a name="line215"></a>
+<a name="line216"></a>function testSum() {
+<a name="line217"></a>  assertEquals(&#39;sum() must return 0 if there are no arguments&#39;,
+<a name="line218"></a>      0, goog.math.sum());
+<a name="line219"></a>  assertEquals(&#39;sum() must return its argument if there is only one&#39;,
+<a name="line220"></a>      17, goog.math.sum(17));
+<a name="line221"></a>  assertEquals(&#39;sum() must handle positive integers&#39;,
+<a name="line222"></a>      10, goog.math.sum(1, 2, 3, 4));
+<a name="line223"></a>  assertEquals(&#39;sum() must handle real numbers&#39;,
+<a name="line224"></a>      -2.5, goog.math.sum(1, -2, 3, -4.5));
+<a name="line225"></a>  assertTrue(&#39;sum() must return NaN if one of the arguments isn\&#39;t numeric&#39;,
+<a name="line226"></a>      isNaN(goog.math.sum(1, 2, &#39;foo&#39;, 3)));
+<a name="line227"></a>}
+<a name="line228"></a>
+<a name="line229"></a>function testAverage() {
+<a name="line230"></a>  assertTrue(&#39;average() must return NaN if there are no arguments&#39;,
+<a name="line231"></a>      isNaN(goog.math.average()));
+<a name="line232"></a>  assertEquals(&#39;average() must return its argument if there is only one&#39;,
+<a name="line233"></a>      17, goog.math.average(17));
+<a name="line234"></a>  assertEquals(&#39;average() must handle positive integers&#39;,
+<a name="line235"></a>      3, goog.math.average(1, 2, 3, 4, 5));
+<a name="line236"></a>  assertEquals(&#39;average() must handle real numbers&#39;,
+<a name="line237"></a>      -0.625, goog.math.average(1, -2, 3, -4.5));
+<a name="line238"></a>  assertTrue(&#39;average() must return NaN if one of the arguments isn\&#39;t &#39; +
+<a name="line239"></a>      &#39;numeric&#39;, isNaN(goog.math.average(1, 2, &#39;foo&#39;, 3)));
+<a name="line240"></a>}
+<a name="line241"></a>
+<a name="line242"></a>function testSampleVariance() {
+<a name="line243"></a>  assertEquals(&#39;sampleVariance() must return 0 if there are no samples&#39;,
+<a name="line244"></a>      0, goog.math.sampleVariance());
+<a name="line245"></a>  assertEquals(&#39;sampleVariance() must return 0 if there is only one &#39; +
+<a name="line246"></a>      &#39;sample&#39;, 0, goog.math.sampleVariance(17));
+<a name="line247"></a>  assertRoughlyEquals(&#39;sampleVariance() must handle positive integers&#39;,
+<a name="line248"></a>      48, goog.math.sampleVariance(3, 7, 7, 19),
+<a name="line249"></a>      0.0001);
+<a name="line250"></a>  assertRoughlyEquals(&#39;sampleVariance() must handle real numbers&#39;,
+<a name="line251"></a>      12.0138, goog.math.sampleVariance(1.23, -2.34, 3.14, -4.56),
+<a name="line252"></a>      0.0001);
+<a name="line253"></a>}
+<a name="line254"></a>
+<a name="line255"></a>function testStandardDeviation() {
+<a name="line256"></a>  assertEquals(&#39;standardDeviation() must return 0 if there are no samples&#39;,
+<a name="line257"></a>      0, goog.math.standardDeviation());
+<a name="line258"></a>  assertEquals(&#39;standardDeviation() must return 0 if there is only one &#39; +
+<a name="line259"></a>      &#39;sample&#39;, 0, goog.math.standardDeviation(17));
+<a name="line260"></a>  assertRoughlyEquals(&#39;standardDeviation() must handle positive integers&#39;,
+<a name="line261"></a>      6.9282, goog.math.standardDeviation(3, 7, 7, 19),
+<a name="line262"></a>      0.0001);
+<a name="line263"></a>  assertRoughlyEquals(&#39;standardDeviation() must handle real numbers&#39;,
+<a name="line264"></a>      3.4660, goog.math.standardDeviation(1.23, -2.34, 3.14, -4.56),
+<a name="line265"></a>      0.0001);
+<a name="line266"></a>}
+<a name="line267"></a>
+<a name="line268"></a>function testIsInt() {
+<a name="line269"></a>  assertFalse(goog.math.isInt(12345.67));
+<a name="line270"></a>  assertFalse(goog.math.isInt(0.123));
+<a name="line271"></a>  assertFalse(goog.math.isInt(.1));
+<a name="line272"></a>  assertFalse(goog.math.isInt(-23.43));
+<a name="line273"></a>  assertFalse(goog.math.isInt(-.1));
+<a name="line274"></a>  assertFalse(goog.math.isInt(1e-1));
+<a name="line275"></a>  assertTrue(goog.math.isInt(1));
+<a name="line276"></a>  assertTrue(goog.math.isInt(0));
+<a name="line277"></a>  assertTrue(goog.math.isInt(-2));
+<a name="line278"></a>  assertTrue(goog.math.isInt(-2.0));
+<a name="line279"></a>  assertTrue(goog.math.isInt(10324231));
+<a name="line280"></a>  assertTrue(goog.math.isInt(1.));
+<a name="line281"></a>  assertTrue(goog.math.isInt(1e3));
+<a name="line282"></a>}
+<a name="line283"></a>
+<a name="line284"></a>function testIsFiniteNumber() {
+<a name="line285"></a>  assertFalse(goog.math.isFiniteNumber(NaN));
+<a name="line286"></a>  assertFalse(goog.math.isFiniteNumber(-Infinity));
+<a name="line287"></a>  assertFalse(goog.math.isFiniteNumber(+Infinity));
+<a name="line288"></a>  assertTrue(goog.math.isFiniteNumber(0));
+<a name="line289"></a>  assertTrue(goog.math.isFiniteNumber(1));
+<a name="line290"></a>  assertTrue(goog.math.isFiniteNumber(Math.PI));
+<a name="line291"></a>}
+<a name="line292"></a>
+<a name="line293"></a>function testLog10Floor() {
+<a name="line294"></a>  // The greatest floating point number that is less than 1.
+<a name="line295"></a>  var oneMinusEpsilon = 1 - Math.pow(2, -53);
+<a name="line296"></a>  for (var i = -30; i &lt;= 30; i++) {
+<a name="line297"></a>    assertEquals(i, goog.math.log10Floor(parseFloat(&#39;1e&#39; + i)));
+<a name="line298"></a>    assertEquals(i - 1,
+<a name="line299"></a>        goog.math.log10Floor(parseFloat(&#39;1e&#39; + i) * oneMinusEpsilon));
+<a name="line300"></a>  }
+<a name="line301"></a>  assertEquals(-Infinity, goog.math.log10Floor(0));
+<a name="line302"></a>  assertTrue(isNaN(goog.math.log10Floor(-1)));
+<a name="line303"></a>}
+<a name="line304"></a>
+<a name="line305"></a>function testSafeFloor() {
+<a name="line306"></a>  assertEquals(0, goog.math.safeFloor(0));
+<a name="line307"></a>  assertEquals(0, goog.math.safeFloor(1e-15));
+<a name="line308"></a>  assertEquals(0, goog.math.safeFloor(-1e-15));
+<a name="line309"></a>  assertEquals(-1, goog.math.safeFloor(-3e-15));
+<a name="line310"></a>  assertEquals(4, goog.math.safeFloor(5 - 3e-15));
+<a name="line311"></a>  assertEquals(5, goog.math.safeFloor(5 - 1e-15));
+<a name="line312"></a>  assertEquals(-5, goog.math.safeFloor(-5 - 1e-15));
+<a name="line313"></a>  assertEquals(-6, goog.math.safeFloor(-5 - 3e-15));
+<a name="line314"></a>  assertEquals(3, goog.math.safeFloor(2.91, 0.1));
+<a name="line315"></a>  assertEquals(2, goog.math.safeFloor(2.89, 0.1));
+<a name="line316"></a>  // Tests some real life examples with the default epsilon value.
+<a name="line317"></a>  assertEquals(0, goog.math.safeFloor(Math.log(1000) / Math.LN10 - 3));
+<a name="line318"></a>  assertEquals(21, goog.math.safeFloor(Math.log(1e+21) / Math.LN10));
+<a name="line319"></a>}
+<a name="line320"></a>
+<a name="line321"></a>function testSafeCeil() {
+<a name="line322"></a>  assertEquals(0, goog.math.safeCeil(0));
+<a name="line323"></a>  assertEquals(0, goog.math.safeCeil(1e-15));
+<a name="line324"></a>  assertEquals(0, goog.math.safeCeil(-1e-15));
+<a name="line325"></a>  assertEquals(1, goog.math.safeCeil(3e-15));
+<a name="line326"></a>  assertEquals(6, goog.math.safeCeil(5 + 3e-15));
+<a name="line327"></a>  assertEquals(5, goog.math.safeCeil(5 + 1e-15));
+<a name="line328"></a>  assertEquals(-4, goog.math.safeCeil(-5 + 3e-15));
+<a name="line329"></a>  assertEquals(-5, goog.math.safeCeil(-5 + 1e-15));
+<a name="line330"></a>  assertEquals(3, goog.math.safeCeil(3.09, 0.1));
+<a name="line331"></a>  assertEquals(4, goog.math.safeCeil(3.11, 0.1));
+<a name="line332"></a>}
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>enhanceerror_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_debug_enhanceerror_test.js.html">enhanceerror_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.debugEnhanceErrorTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.debugEnhanceErrorTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>var THROW_STRING = 1;
+<a name="line22"></a>var THROW_NPE = 2;
+<a name="line23"></a>var THROW_ERROR = 3;
+<a name="line24"></a>var THROW_ENHANCED_ERROR = 4;
+<a name="line25"></a>var THROW_ENHANCED_STRING = 5;
+<a name="line26"></a>
+<a name="line27"></a>if (typeof debug == &#39;undefined&#39;) {
+<a name="line28"></a>  function debug(str) {
+<a name="line29"></a>    if (window.console) window.console.log(str);
+<a name="line30"></a>  }
+<a name="line31"></a>}
+<a name="line32"></a>
+<a name="line33"></a>function testEnhanceError() {
+<a name="line34"></a>  // Tests are like this:
+<a name="line35"></a>  // [test num, expect something in the stack, expect an extra message]
+<a name="line36"></a>  var tests = [
+<a name="line37"></a>    [THROW_STRING],
+<a name="line38"></a>    [THROW_NPE],
+<a name="line39"></a>    [THROW_ERROR],
+<a name="line40"></a>    [THROW_ENHANCED_ERROR, &#39;throwEnhancedError&#39;, &#39;an enhanced error&#39;],
+<a name="line41"></a>    [THROW_ENHANCED_STRING, &#39;throwEnhancedString&#39;]
+<a name="line42"></a>  ];
+<a name="line43"></a>  for (var i = 0; i &lt; tests.length; ++i) {
+<a name="line44"></a>    var test = tests[i];
+<a name="line45"></a>    var testNum = test[0];
+<a name="line46"></a>    var testInStack = test[1];
+<a name="line47"></a>    var testExtraMessage = test[2] || null;
+<a name="line48"></a>    try {
+<a name="line49"></a>      foo(testNum);
+<a name="line50"></a>    } catch (e) {
+<a name="line51"></a>      debug(goog.debug.expose(e));
+<a name="line52"></a>      var s = e.stack.split(&#39;\n&#39;);
+<a name="line53"></a>      for (var j = 0; j &lt; s.length; ++j) {
+<a name="line54"></a>        debug(s[j]);
+<a name="line55"></a>      }
+<a name="line56"></a>      // &#39;baz&#39; is always in the stack
+<a name="line57"></a>      assertTrue(&#39;stack should contain &quot;baz&quot;&#39;,
+<a name="line58"></a>                 e.stack.indexOf(&#39;baz&#39;) != -1);
+<a name="line59"></a>
+<a name="line60"></a>      if (testInStack) {
+<a name="line61"></a>        assertTrue(&#39;stack should contain &quot;&#39; + testInStack + &#39;&quot;&#39;,
+<a name="line62"></a>                   e.stack.indexOf(testInStack) != -1);
+<a name="line63"></a>      }
+<a name="line64"></a>      if (testExtraMessage) {
+<a name="line65"></a>        // 2 messages
+<a name="line66"></a>        assertTrue(&#39;message0 should contain &quot;&#39; + testExtraMessage + &#39;&quot;&#39;,
+<a name="line67"></a>                   e.message0.indexOf(testExtraMessage) != -1);
+<a name="line68"></a>        assertTrue(&#39;message1 should contain &quot;message from baz&quot;&#39;,
+<a name="line69"></a>                   e.message1.indexOf(&#39;message from baz&#39;) != -1);
+<a name="line70"></a>      } else {
+<a name="line71"></a>        // 1 message
+<a name="line72"></a>        assertTrue(&#39;message0 should contain &quot;message from baz&quot;&#39;,
+<a name="line73"></a>                   e.message0.indexOf(&#39;message from baz&#39;) != -1);
+<a name="line74"></a>      }
+<a name="line75"></a>      continue;
+<a name="line76"></a>    }
+<a name="line77"></a>    fail(&#39;expected to catch an exception&#39;);
+<a name="line78"></a>  }
+<a name="line79"></a>}
+<a name="line80"></a>
+<a name="line81"></a>
+<a name="line82"></a>function foo(testNum) {
+<a name="line83"></a>  bar(testNum);
+<a name="line84"></a>}
+<a name="line85"></a>
+<a name="line86"></a>function bar(testNum) {
+<a name="line87"></a>  baz(testNum);
+<a name="line88"></a>}
+<a name="line89"></a>
+<a name="line90"></a>function baz(testNum) {
+<a name="line91"></a>  try {
+<a name="line92"></a>    switch (testNum) {
+<a name="line93"></a>      case THROW_STRING:
+<a name="line94"></a>        throwString();
+<a name="line95"></a>        break;
+<a name="line96"></a>      case THROW_NPE:
+<a name="line97"></a>        throwNpe();
+<a name="line98"></a>        break;
+<a name="line99"></a>      case THROW_ERROR:
+<a name="line100"></a>        throwError();
+<a name="line101"></a>        break;
+<a name="line102"></a>      case THROW_ENHANCED_ERROR:
+<a name="line103"></a>        throwEnhancedError();
+<a name="line104"></a>        break;
+<a name="line105"></a>      case THROW_ENHANCED_STRING:
+<a name="line106"></a>        throwEnhancedString();
+<a name="line107"></a>        break;
+<a name="line108"></a>    }
+<a name="line109"></a>  } catch (e) {
+<a name="line110"></a>    throw goog.debug.enhanceError(e, &#39;message from baz&#39;);
+<a name="line111"></a>  }
+<a name="line112"></a>}
+<a name="line113"></a>
+<a name="line114"></a>function throwString() {
+<a name="line115"></a>  throw &#39;a string&#39;;
+<a name="line116"></a>}
+<a name="line117"></a>
+<a name="line118"></a>function throwNpe() {
+<a name="line119"></a>  var nada = null;
+<a name="line120"></a>  nada.noSuchFunction();
+<a name="line121"></a>}
+<a name="line122"></a>
+<a name="line123"></a>function throwError() {
+<a name="line124"></a>  throw Error(&#39;an error&#39;);
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>function throwEnhancedError() {
+<a name="line128"></a>  throw goog.debug.enhanceError(Error(&#39;dang!&#39;), &#39;an enhanced error&#39;);
+<a name="line129"></a>}
+<a name="line130"></a>
+<a name="line131"></a>function throwEnhancedString() {
+<a name="line132"></a>  throw goog.debug.enhanceError(&#39;oh nos!&#39;);
+<a name="line133"></a>}
+</pre>
+
+
+</body>
+</html>

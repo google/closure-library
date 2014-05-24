@@ -1,0 +1,229 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>reflect.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_debug_reflect.js.html">reflect.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview JavaScript reflection tools. They should only be used for
+<a name="line17"></a> * debugging non-compiled code or tests, because there is no guarantee that
+<a name="line18"></a> * they work consistently in all browsers.
+<a name="line19"></a> *
+<a name="line20"></a> */
+<a name="line21"></a>
+<a name="line22"></a>goog.provide(&#39;goog.debug.reflect&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Maps the unique id of the known constructors to their full names.
+<a name="line27"></a> * Initialized lazily.
+<a name="line28"></a> * @type {Object.&lt;number, string&gt;}
+<a name="line29"></a> * @private
+<a name="line30"></a> */
+<a name="line31"></a>goog.debug.reflect.typeMap_ = null;
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * List of all known constructors. Initialized lazily.
+<a name="line36"></a> * @type {Array.&lt;!Function&gt;}
+<a name="line37"></a> * @private
+<a name="line38"></a> */
+<a name="line39"></a>goog.debug.reflect.constructors_ = null;
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * Copy of {@code Object.prototype.toString} to use if it is overridden later.
+<a name="line44"></a> * Although saving the original {@code toString} somewhat protects against
+<a name="line45"></a> * third-party libraries which touch {@code Object.prototype}, the actual goal
+<a name="line46"></a> * of this assignment is to allow overriding that method, thus more debug
+<a name="line47"></a> * information can be exposed about objects.
+<a name="line48"></a> * See {@link goog.debug.reflect.typeOf}.
+<a name="line49"></a> * @private
+<a name="line50"></a> */
+<a name="line51"></a>goog.debug.reflect.toString_ = Object.prototype.toString;
+<a name="line52"></a>
+<a name="line53"></a>
+<a name="line54"></a>/**
+<a name="line55"></a> * Registers a type which will be recognized by goog.debug.reflect.typeOf.
+<a name="line56"></a> * @param {string} name Full name of the type.
+<a name="line57"></a> * @param {!Function} ctor The constructor.
+<a name="line58"></a> * @private
+<a name="line59"></a> */
+<a name="line60"></a>goog.debug.reflect.registerType_ = function(name, ctor) {
+<a name="line61"></a>  goog.debug.reflect.constructors_.push(ctor);
+<a name="line62"></a>  goog.debug.reflect.typeMap_[goog.getUid(ctor)] = name;
+<a name="line63"></a>};
+<a name="line64"></a>
+<a name="line65"></a>
+<a name="line66"></a>/**
+<a name="line67"></a> * Adds all known constructors to the type registry.
+<a name="line68"></a> * @private
+<a name="line69"></a> */
+<a name="line70"></a>goog.debug.reflect.init_ = function() {
+<a name="line71"></a>  if (goog.debug.reflect.typeMap_) {
+<a name="line72"></a>    return;
+<a name="line73"></a>  }
+<a name="line74"></a>
+<a name="line75"></a>  goog.debug.reflect.typeMap_ = {};
+<a name="line76"></a>  goog.debug.reflect.constructors_ = [];
+<a name="line77"></a>  var implicitNs = goog.getObjectByName(&#39;goog.implicitNamespaces_&#39;) || {};
+<a name="line78"></a>
+<a name="line79"></a>  for (var ns in implicitNs) {
+<a name="line80"></a>    if (implicitNs.hasOwnProperty(ns)) {
+<a name="line81"></a>      var nsObj = goog.getObjectByName(ns);
+<a name="line82"></a>      for (var name in nsObj) {
+<a name="line83"></a>        if (nsObj.hasOwnProperty(name) &amp;&amp; goog.isFunction(nsObj[name])) {
+<a name="line84"></a>          goog.debug.reflect.registerType_(ns + &#39;.&#39; + name, nsObj[name]);
+<a name="line85"></a>        }
+<a name="line86"></a>      }
+<a name="line87"></a>    }
+<a name="line88"></a>  }
+<a name="line89"></a>
+<a name="line90"></a>  goog.debug.reflect.registerType_(&#39;Array&#39;, Array);
+<a name="line91"></a>  goog.debug.reflect.registerType_(&#39;Boolean&#39;, Boolean);
+<a name="line92"></a>  goog.debug.reflect.registerType_(&#39;Date&#39;, Date);
+<a name="line93"></a>  goog.debug.reflect.registerType_(&#39;Error&#39;, Error);
+<a name="line94"></a>  goog.debug.reflect.registerType_(&#39;Function&#39;, Function);
+<a name="line95"></a>  goog.debug.reflect.registerType_(&#39;Number&#39;, Number);
+<a name="line96"></a>  goog.debug.reflect.registerType_(&#39;Object&#39;, Object);
+<a name="line97"></a>  goog.debug.reflect.registerType_(&#39;String&#39;, String);
+<a name="line98"></a>
+<a name="line99"></a>  // The compiler gets upset if we alias regexp directly, because
+<a name="line100"></a>  // then it can&#39;t optimize regexps as well. Just be sneaky about it,
+<a name="line101"></a>  // because this is only for debugging.
+<a name="line102"></a>  goog.debug.reflect.registerType_(&#39;RegExp&#39;, goog.global[&#39;RegExp&#39;]);
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Returns the name of a type of object.
+<a name="line108"></a> * @param {!Function} classConstructor A object constructor to get the name of.
+<a name="line109"></a> * @return {string|undefined} The string name of the class.
+<a name="line110"></a> */
+<a name="line111"></a>goog.debug.reflect.className = function(classConstructor) {
+<a name="line112"></a>  goog.debug.reflect.init_();
+<a name="line113"></a>  if (goog.isDefAndNotNull(classConstructor)) {
+<a name="line114"></a>    return goog.debug.reflect.typeMap_[goog.getUid(classConstructor)];
+<a name="line115"></a>  } else {
+<a name="line116"></a>    return undefined;
+<a name="line117"></a>  }
+<a name="line118"></a>};
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * Guesses the real type of the object, even if its {@code toString} method is
+<a name="line123"></a> * overridden. Gives exact result for all goog.provided classes in non-compiled
+<a name="line124"></a> * code, and some often used native classes in compiled code too. Not tested in
+<a name="line125"></a> * multi-frame environment.
+<a name="line126"></a> *
+<a name="line127"></a> * Example use case to get better type information in the Watch tab of FireBug:
+<a name="line128"></a> * &lt;pre&gt;
+<a name="line129"></a> * Object.prototype.toString = function() {
+<a name="line130"></a> *   return goog.debug.reflect.typeOf(this);
+<a name="line131"></a> * };
+<a name="line132"></a> * &lt;/pre&gt;
+<a name="line133"></a> *
+<a name="line134"></a> * @param {*} obj An arbitrary variable to get the type of.
+<a name="line135"></a> * @return {string} The namespaced type of the argument or &#39;Object&#39; if didn&#39;t
+<a name="line136"></a> *     manage to determine it. Warning: in IE7 ActiveX (including DOM) objects
+<a name="line137"></a> *     don&#39;t expose their type to JavaScript. Their {@code constructor}
+<a name="line138"></a> *     property is undefined and they are not even the instances of the
+<a name="line139"></a> *     {@code Object} type. This method will recognize them as &#39;ActiveXObject&#39;.
+<a name="line140"></a> */
+<a name="line141"></a>goog.debug.reflect.typeOf = function(obj) {
+<a name="line142"></a>  // Check primitive types.
+<a name="line143"></a>  if (!obj || goog.isNumber(obj) || goog.isString(obj) || goog.isBoolean(obj)) {
+<a name="line144"></a>    return goog.typeOf(obj);
+<a name="line145"></a>  }
+<a name="line146"></a>
+<a name="line147"></a>  // Check if the type is present in the registry.
+<a name="line148"></a>  goog.debug.reflect.init_();
+<a name="line149"></a>  if (obj.constructor) {
+<a name="line150"></a>    // Some DOM objects such as document don&#39;t have constructor in IE7.
+<a name="line151"></a>    var type = goog.debug.reflect.typeMap_[goog.getUid(obj.constructor)];
+<a name="line152"></a>    if (type) {
+<a name="line153"></a>      return type;
+<a name="line154"></a>    }
+<a name="line155"></a>  }
+<a name="line156"></a>
+<a name="line157"></a>  // In IE8 the internal &#39;class&#39; property of ActiveXObjects is Object, but
+<a name="line158"></a>  // String(obj) tells their real type.
+<a name="line159"></a>  var isActiveXObject = goog.global.ActiveXObject &amp;&amp;
+<a name="line160"></a>      obj instanceof ActiveXObject;
+<a name="line161"></a>  var typeString = isActiveXObject ? String(obj) :
+<a name="line162"></a>      goog.debug.reflect.toString_.call(/** @type {Object} */ (obj));
+<a name="line163"></a>  var match = typeString.match(/^\[object (\w+)\]$/);
+<a name="line164"></a>  if (match) {
+<a name="line165"></a>    var name = match[1];
+<a name="line166"></a>    var ctor = goog.global[name];
+<a name="line167"></a>    try {
+<a name="line168"></a>      if (obj instanceof ctor) {
+<a name="line169"></a>        return name;
+<a name="line170"></a>      }
+<a name="line171"></a>    } catch (e) {
+<a name="line172"></a>      // instanceof may fail if the guessed name is not a real type.
+<a name="line173"></a>    }
+<a name="line174"></a>  }
+<a name="line175"></a>
+<a name="line176"></a>  // Fall back to Object or ActiveXObject.
+<a name="line177"></a>  return isActiveXObject ? &#39;ActiveXObject&#39; : &#39;Object&#39;;
+<a name="line178"></a>};
+</pre>
+
+
+</body>
+</html>

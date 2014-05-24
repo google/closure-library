@@ -1,0 +1,107 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>mechanism.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_storage_mechanism_mechanism.js.html">mechanism.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Abstract interface for storing and retrieving data using
+<a name="line17"></a> * some persistence mechanism.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.storage.mechanism.Mechanism&#39;);
+<a name="line22"></a>
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Basic interface for all storage mechanisms.
+<a name="line27"></a> *
+<a name="line28"></a> * @constructor
+<a name="line29"></a> */
+<a name="line30"></a>goog.storage.mechanism.Mechanism = function() {};
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Set a value for a key.
+<a name="line35"></a> *
+<a name="line36"></a> * @param {string} key The key to set.
+<a name="line37"></a> * @param {string} value The string to save.
+<a name="line38"></a> */
+<a name="line39"></a>goog.storage.mechanism.Mechanism.prototype.set = goog.abstractMethod;
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * Get the value stored under a key.
+<a name="line44"></a> *
+<a name="line45"></a> * @param {string} key The key to get.
+<a name="line46"></a> * @return {?string} The corresponding value, null if not found.
+<a name="line47"></a> */
+<a name="line48"></a>goog.storage.mechanism.Mechanism.prototype.get = goog.abstractMethod;
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * Remove a key and its value.
+<a name="line53"></a> *
+<a name="line54"></a> * @param {string} key The key to remove.
+<a name="line55"></a> */
+<a name="line56"></a>goog.storage.mechanism.Mechanism.prototype.remove = goog.abstractMethod;
+</pre>
+
+
+</body>
+</html>

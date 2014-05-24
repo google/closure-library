@@ -1,0 +1,193 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>expiringstorage.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_storage_expiringstorage.js.html">expiringstorage.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides a convenient API for data persistence with expiration.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>goog.provide(&#39;goog.storage.ExpiringStorage&#39;);
+<a name="line21"></a>
+<a name="line22"></a>goog.require(&#39;goog.storage.RichStorage&#39;);
+<a name="line23"></a>goog.require(&#39;goog.storage.RichStorage.Wrapper&#39;);
+<a name="line24"></a>goog.require(&#39;goog.storage.mechanism.Mechanism&#39;);
+<a name="line25"></a>
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Provides a storage with expirning keys.
+<a name="line30"></a> *
+<a name="line31"></a> * @param {!goog.storage.mechanism.Mechanism} mechanism The underlying
+<a name="line32"></a> *     storage mechanism.
+<a name="line33"></a> * @constructor
+<a name="line34"></a> * @extends {goog.storage.RichStorage}
+<a name="line35"></a> */
+<a name="line36"></a>goog.storage.ExpiringStorage = function(mechanism) {
+<a name="line37"></a>  goog.storage.ExpiringStorage.base(this, &#39;constructor&#39;, mechanism);
+<a name="line38"></a>};
+<a name="line39"></a>goog.inherits(goog.storage.ExpiringStorage, goog.storage.RichStorage);
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * Metadata key under which the expiration time is stored.
+<a name="line44"></a> *
+<a name="line45"></a> * @type {string}
+<a name="line46"></a> * @protected
+<a name="line47"></a> */
+<a name="line48"></a>goog.storage.ExpiringStorage.EXPIRATION_TIME_KEY = &#39;expiration&#39;;
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>/**
+<a name="line52"></a> * Metadata key under which the creation time is stored.
+<a name="line53"></a> *
+<a name="line54"></a> * @type {string}
+<a name="line55"></a> * @protected
+<a name="line56"></a> */
+<a name="line57"></a>goog.storage.ExpiringStorage.CREATION_TIME_KEY = &#39;creation&#39;;
+<a name="line58"></a>
+<a name="line59"></a>
+<a name="line60"></a>/**
+<a name="line61"></a> * Returns the wrapper creation time.
+<a name="line62"></a> *
+<a name="line63"></a> * @param {!Object} wrapper The wrapper.
+<a name="line64"></a> * @return {number|undefined} Wrapper creation time.
+<a name="line65"></a> */
+<a name="line66"></a>goog.storage.ExpiringStorage.getCreationTime = function(wrapper) {
+<a name="line67"></a>  return wrapper[goog.storage.ExpiringStorage.CREATION_TIME_KEY];
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Returns the wrapper expiration time.
+<a name="line73"></a> *
+<a name="line74"></a> * @param {!Object} wrapper The wrapper.
+<a name="line75"></a> * @return {number|undefined} Wrapper expiration time.
+<a name="line76"></a> */
+<a name="line77"></a>goog.storage.ExpiringStorage.getExpirationTime = function(wrapper) {
+<a name="line78"></a>  return wrapper[goog.storage.ExpiringStorage.EXPIRATION_TIME_KEY];
+<a name="line79"></a>};
+<a name="line80"></a>
+<a name="line81"></a>
+<a name="line82"></a>/**
+<a name="line83"></a> * Checks if the data item has expired.
+<a name="line84"></a> *
+<a name="line85"></a> * @param {!Object} wrapper The wrapper.
+<a name="line86"></a> * @return {boolean} True if the item has expired.
+<a name="line87"></a> */
+<a name="line88"></a>goog.storage.ExpiringStorage.isExpired = function(wrapper) {
+<a name="line89"></a>  var creation = goog.storage.ExpiringStorage.getCreationTime(wrapper);
+<a name="line90"></a>  var expiration = goog.storage.ExpiringStorage.getExpirationTime(wrapper);
+<a name="line91"></a>  return !!expiration &amp;&amp; expiration &lt; goog.now() ||
+<a name="line92"></a>         !!creation &amp;&amp; creation &gt; goog.now();
+<a name="line93"></a>};
+<a name="line94"></a>
+<a name="line95"></a>
+<a name="line96"></a>/**
+<a name="line97"></a> * Set an item in the storage.
+<a name="line98"></a> *
+<a name="line99"></a> * @param {string} key The key to set.
+<a name="line100"></a> * @param {*} value The value to serialize to a string and save.
+<a name="line101"></a> * @param {number=} opt_expiration The number of miliseconds since epoch
+<a name="line102"></a> *     (as in goog.now()) when the value is to expire. If the expiration
+<a name="line103"></a> *     time is not provided, the value will persist as long as possible.
+<a name="line104"></a> * @override
+<a name="line105"></a> */
+<a name="line106"></a>goog.storage.ExpiringStorage.prototype.set = function(
+<a name="line107"></a>    key, value, opt_expiration) {
+<a name="line108"></a>  var wrapper = goog.storage.RichStorage.Wrapper.wrapIfNecessary(value);
+<a name="line109"></a>  if (wrapper) {
+<a name="line110"></a>    if (opt_expiration) {
+<a name="line111"></a>      if (opt_expiration &lt; goog.now()) {
+<a name="line112"></a>        goog.storage.ExpiringStorage.prototype.remove.call(this, key);
+<a name="line113"></a>        return;
+<a name="line114"></a>      }
+<a name="line115"></a>      wrapper[goog.storage.ExpiringStorage.EXPIRATION_TIME_KEY] =
+<a name="line116"></a>          opt_expiration;
+<a name="line117"></a>    }
+<a name="line118"></a>    wrapper[goog.storage.ExpiringStorage.CREATION_TIME_KEY] = goog.now();
+<a name="line119"></a>  }
+<a name="line120"></a>  goog.storage.ExpiringStorage.base(this, &#39;set&#39;, key, wrapper);
+<a name="line121"></a>};
+<a name="line122"></a>
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Get an item wrapper (the item and its metadata) from the storage.
+<a name="line126"></a> *
+<a name="line127"></a> * @param {string} key The key to get.
+<a name="line128"></a> * @param {boolean=} opt_expired If true, return expired wrappers as well.
+<a name="line129"></a> * @return {(!Object|undefined)} The wrapper, or undefined if not found.
+<a name="line130"></a> * @override
+<a name="line131"></a> */
+<a name="line132"></a>goog.storage.ExpiringStorage.prototype.getWrapper = function(key, opt_expired) {
+<a name="line133"></a>  var wrapper = goog.storage.ExpiringStorage.base(this, &#39;getWrapper&#39;, key);
+<a name="line134"></a>  if (!wrapper) {
+<a name="line135"></a>    return undefined;
+<a name="line136"></a>  }
+<a name="line137"></a>  if (!opt_expired &amp;&amp; goog.storage.ExpiringStorage.isExpired(wrapper)) {
+<a name="line138"></a>    goog.storage.ExpiringStorage.prototype.remove.call(this, key);
+<a name="line139"></a>    return undefined;
+<a name="line140"></a>  }
+<a name="line141"></a>  return wrapper;
+<a name="line142"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>undoredomanager_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_editor_plugins_undoredomanager_test.js.html">undoredomanager_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.editor.plugins.UndoRedoManagerTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.editor.plugins.UndoRedoManagerTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.editor.plugins.UndoRedoManager&#39;);
+<a name="line19"></a>goog.require(&#39;goog.editor.plugins.UndoRedoState&#39;);
+<a name="line20"></a>goog.require(&#39;goog.events&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.StrictMock&#39;);
+<a name="line22"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line23"></a>
+<a name="line24"></a>var mockState1;
+<a name="line25"></a>var mockState2;
+<a name="line26"></a>var mockState3;
+<a name="line27"></a>var states;
+<a name="line28"></a>var manager;
+<a name="line29"></a>var stateChangeCount;
+<a name="line30"></a>var beforeUndoCount;
+<a name="line31"></a>var beforeRedoCount;
+<a name="line32"></a>var preventDefault;
+<a name="line33"></a>
+<a name="line34"></a>function setUp() {
+<a name="line35"></a>  manager = new goog.editor.plugins.UndoRedoManager();
+<a name="line36"></a>  stateChangeCount = 0;
+<a name="line37"></a>  goog.events.listen(manager,
+<a name="line38"></a>      goog.editor.plugins.UndoRedoManager.EventType.STATE_CHANGE,
+<a name="line39"></a>      function() {
+<a name="line40"></a>        stateChangeCount++;
+<a name="line41"></a>      });
+<a name="line42"></a>
+<a name="line43"></a>  beforeUndoCount = 0;
+<a name="line44"></a>  preventDefault = false;
+<a name="line45"></a>  goog.events.listen(manager,
+<a name="line46"></a>      goog.editor.plugins.UndoRedoManager.EventType.BEFORE_UNDO,
+<a name="line47"></a>      function(e) {
+<a name="line48"></a>        beforeUndoCount++;
+<a name="line49"></a>        if (preventDefault) {
+<a name="line50"></a>          e.preventDefault();
+<a name="line51"></a>        }
+<a name="line52"></a>      });
+<a name="line53"></a>
+<a name="line54"></a>  beforeRedoCount = 0;
+<a name="line55"></a>  goog.events.listen(manager,
+<a name="line56"></a>      goog.editor.plugins.UndoRedoManager.EventType.BEFORE_REDO,
+<a name="line57"></a>      function(e) {
+<a name="line58"></a>        beforeRedoCount++;
+<a name="line59"></a>        if (preventDefault) {
+<a name="line60"></a>          e.preventDefault();
+<a name="line61"></a>        }
+<a name="line62"></a>      });
+<a name="line63"></a>
+<a name="line64"></a>  mockState1 = new goog.testing.StrictMock(goog.editor.plugins.UndoRedoState);
+<a name="line65"></a>  mockState2 = new goog.testing.StrictMock(goog.editor.plugins.UndoRedoState);
+<a name="line66"></a>  mockState3 = new goog.testing.StrictMock(goog.editor.plugins.UndoRedoState);
+<a name="line67"></a>  states = [mockState1, mockState2, mockState3];
+<a name="line68"></a>
+<a name="line69"></a>  mockState1.equals = mockState2.equals = mockState3.equals = function(state) {
+<a name="line70"></a>    return this == state;
+<a name="line71"></a>  };
+<a name="line72"></a>
+<a name="line73"></a>  mockState1.isAsynchronous = mockState2.isAsynchronous =
+<a name="line74"></a>      mockState3.isAsynchronous = function() {
+<a name="line75"></a>    return false;
+<a name="line76"></a>  };
+<a name="line77"></a>}
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>function tearDown() {
+<a name="line81"></a>  goog.events.removeAll(manager);
+<a name="line82"></a>  manager.dispose();
+<a name="line83"></a>}
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Adds all the mock states to the undo-redo manager.
+<a name="line88"></a> */
+<a name="line89"></a>function addStatesToManager() {
+<a name="line90"></a>  manager.addState(states[0]);
+<a name="line91"></a>
+<a name="line92"></a>  for (var i = 1; i &lt; states.length; i++) {
+<a name="line93"></a>    var state = states[i];
+<a name="line94"></a>    manager.addState(state);
+<a name="line95"></a>  }
+<a name="line96"></a>
+<a name="line97"></a>  stateChangeCount = 0;
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>
+<a name="line101"></a>/**
+<a name="line102"></a> * Resets all mock states so that they are ready for testing.
+<a name="line103"></a> */
+<a name="line104"></a>function resetStates() {
+<a name="line105"></a>  for (var i = 0; i &lt; states.length; i++) {
+<a name="line106"></a>    states[i].$reset();
+<a name="line107"></a>  }
+<a name="line108"></a>}
+<a name="line109"></a>
+<a name="line110"></a>
+<a name="line111"></a>function testSetMaxUndoDepth() {
+<a name="line112"></a>  manager.setMaxUndoDepth(2);
+<a name="line113"></a>  addStatesToManager();
+<a name="line114"></a>  assertArrayEquals(&#39;Undo stack must contain only the two most recent states.&#39;,
+<a name="line115"></a>      [mockState2, mockState3], manager.undoStack_);
+<a name="line116"></a>}
+<a name="line117"></a>
+<a name="line118"></a>
+<a name="line119"></a>function testAddState() {
+<a name="line120"></a>  var stateAddedCount = 0;
+<a name="line121"></a>  goog.events.listen(manager,
+<a name="line122"></a>      goog.editor.plugins.UndoRedoManager.EventType.STATE_ADDED,
+<a name="line123"></a>      function() {
+<a name="line124"></a>        stateAddedCount++;
+<a name="line125"></a>      });
+<a name="line126"></a>
+<a name="line127"></a>  manager.addState(mockState1);
+<a name="line128"></a>  assertArrayEquals(&#39;Undo stack must contain added state.&#39;,
+<a name="line129"></a>      [mockState1], manager.undoStack_);
+<a name="line130"></a>  assertEquals(&#39;Manager must dispatch one state change event on &#39; +
+<a name="line131"></a>      &#39;undo stack 0-&gt;1 transition.&#39;, 1, stateChangeCount);
+<a name="line132"></a>  assertEquals(&#39;State added must have dispatched once.&#39;, 1, stateAddedCount);
+<a name="line133"></a>  mockState1.$reset();
+<a name="line134"></a>
+<a name="line135"></a>  // Test adding same state twice.
+<a name="line136"></a>  manager.addState(mockState1);
+<a name="line137"></a>  assertArrayEquals(&#39;Undo stack must not contain two equal, sequential states.&#39;,
+<a name="line138"></a>      [mockState1], manager.undoStack_);
+<a name="line139"></a>  assertEquals(&#39;Manager must not dispatch state change event when nothing is &#39; +
+<a name="line140"></a>      &#39;added to the stack.&#39;, 1, stateChangeCount);
+<a name="line141"></a>  assertEquals(&#39;State added must have dispatched once.&#39;, 1, stateAddedCount);
+<a name="line142"></a>
+<a name="line143"></a>  // Test adding a second state.
+<a name="line144"></a>  manager.addState(mockState2);
+<a name="line145"></a>  assertArrayEquals(&#39;Undo stack must contain both states.&#39;,
+<a name="line146"></a>      [mockState1, mockState2], manager.undoStack_);
+<a name="line147"></a>  assertEquals(&#39;Manager must not dispatch state change event when second &#39; +
+<a name="line148"></a>      &#39;state is added to the stack.&#39;, 1, stateChangeCount);
+<a name="line149"></a>  assertEquals(&#39;State added must have dispatched twice.&#39;, 2, stateAddedCount);
+<a name="line150"></a>
+<a name="line151"></a>  // Test adding a state when there is state on the redo stack.
+<a name="line152"></a>  manager.undo();
+<a name="line153"></a>  assertEquals(&#39;Manager must dispatch state change when redo stack goes to 1.&#39;,
+<a name="line154"></a>      2, stateChangeCount);
+<a name="line155"></a>
+<a name="line156"></a>  manager.addState(mockState3);
+<a name="line157"></a>  assertArrayEquals(&#39;Undo stack must contain states 1 and 3.&#39;,
+<a name="line158"></a>      [mockState1, mockState3], manager.undoStack_);
+<a name="line159"></a>  assertEquals(&#39;Manager must dispatch state change event when redo stack &#39; +
+<a name="line160"></a>      &#39;goes to zero.&#39;, 3, stateChangeCount);
+<a name="line161"></a>  assertEquals(&#39;State added must have dispatched three times.&#39;,
+<a name="line162"></a>      3, stateAddedCount);
+<a name="line163"></a>}
+<a name="line164"></a>
+<a name="line165"></a>
+<a name="line166"></a>function testHasState() {
+<a name="line167"></a>  assertFalse(&#39;New manager must have no undo state.&#39;, manager.hasUndoState());
+<a name="line168"></a>  assertFalse(&#39;New manager must have no redo state.&#39;, manager.hasRedoState());
+<a name="line169"></a>
+<a name="line170"></a>  manager.addState(mockState1);
+<a name="line171"></a>  assertTrue(&#39;Manager must have only undo state.&#39;, manager.hasUndoState());
+<a name="line172"></a>  assertFalse(&#39;Manager must have no redo state.&#39;, manager.hasRedoState());
+<a name="line173"></a>
+<a name="line174"></a>  manager.undo();
+<a name="line175"></a>  assertFalse(&#39;Manager must have no undo state.&#39;, manager.hasUndoState());
+<a name="line176"></a>  assertTrue(&#39;Manager must have only redo state.&#39;, manager.hasRedoState());
+<a name="line177"></a>}
+<a name="line178"></a>
+<a name="line179"></a>
+<a name="line180"></a>function testClearHistory() {
+<a name="line181"></a>  addStatesToManager();
+<a name="line182"></a>  manager.undo();
+<a name="line183"></a>  stateChangeCount = 0;
+<a name="line184"></a>
+<a name="line185"></a>  manager.clearHistory();
+<a name="line186"></a>  assertFalse(&#39;Undo stack must be empty.&#39;, manager.hasUndoState());
+<a name="line187"></a>  assertFalse(&#39;Redo stack must be empty.&#39;, manager.hasRedoState());
+<a name="line188"></a>  assertEquals(&#39;State change count must be 1 after clear history.&#39;,
+<a name="line189"></a>      1, stateChangeCount);
+<a name="line190"></a>
+<a name="line191"></a>  manager.clearHistory();
+<a name="line192"></a>  assertEquals(&#39;Repeated clearHistory must not change state change count.&#39;,
+<a name="line193"></a>      1, stateChangeCount);
+<a name="line194"></a>}
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>function testUndo() {
+<a name="line198"></a>  addStatesToManager();
+<a name="line199"></a>
+<a name="line200"></a>  mockState3.undo();
+<a name="line201"></a>  mockState3.$replay();
+<a name="line202"></a>  manager.undo();
+<a name="line203"></a>  assertEquals(&#39;Adding first item to redo stack must dispatch state change.&#39;,
+<a name="line204"></a>      1, stateChangeCount);
+<a name="line205"></a>  assertEquals(&#39;Undo must cause before action to dispatch&#39;,
+<a name="line206"></a>      1, beforeUndoCount);
+<a name="line207"></a>  mockState3.$verify();
+<a name="line208"></a>
+<a name="line209"></a>  preventDefault = true;
+<a name="line210"></a>  mockState2.$replay();
+<a name="line211"></a>  manager.undo();
+<a name="line212"></a>  assertEquals(&#39;No stack transitions between 0 and 1, must not dispatch &#39; +
+<a name="line213"></a>      &#39;state change.&#39;, 1, stateChangeCount);
+<a name="line214"></a>  assertEquals(&#39;Undo must cause before action to dispatch&#39;,
+<a name="line215"></a>      2, beforeUndoCount);
+<a name="line216"></a>  mockState2.$verify(); // Verify that undo was prevented.
+<a name="line217"></a>
+<a name="line218"></a>  preventDefault = false;
+<a name="line219"></a>  mockState1.undo();
+<a name="line220"></a>  mockState1.$replay();
+<a name="line221"></a>  manager.undo();
+<a name="line222"></a>  assertEquals(&#39;Doing last undo operation must dispatch state change.&#39;,
+<a name="line223"></a>      2, stateChangeCount);
+<a name="line224"></a>  assertEquals(&#39;Undo must cause before action to dispatch&#39;,
+<a name="line225"></a>      3, beforeUndoCount);
+<a name="line226"></a>  mockState1.$verify();
+<a name="line227"></a>}
+<a name="line228"></a>
+<a name="line229"></a>
+<a name="line230"></a>function testUndo_Asynchronous() {
+<a name="line231"></a>  // Using a stub instead of a mock here so that the state can behave as an
+<a name="line232"></a>  // EventTarget and dispatch events.
+<a name="line233"></a>  var stubState = new goog.editor.plugins.UndoRedoState(true);
+<a name="line234"></a>  var undoCalled = false;
+<a name="line235"></a>  stubState.undo = function() {
+<a name="line236"></a>    undoCalled = true;
+<a name="line237"></a>  };
+<a name="line238"></a>  stubState.redo = goog.nullFunction;
+<a name="line239"></a>  stubState.equals = function() {
+<a name="line240"></a>    return false;
+<a name="line241"></a>  };
+<a name="line242"></a>
+<a name="line243"></a>  manager.addState(mockState2);
+<a name="line244"></a>  manager.addState(mockState1);
+<a name="line245"></a>  manager.addState(stubState);
+<a name="line246"></a>
+<a name="line247"></a>  manager.undo();
+<a name="line248"></a>  assertTrue(&#39;undoCalled must be true (undo must be called).&#39;, undoCalled);
+<a name="line249"></a>  assertEquals(&#39;Undo must cause before action to dispatch&#39;,
+<a name="line250"></a>      1, beforeUndoCount);
+<a name="line251"></a>
+<a name="line252"></a>  // Calling undo shouldn&#39;t actually undo since the first async undo hasn&#39;t
+<a name="line253"></a>  // fired an event yet.
+<a name="line254"></a>  mockState1.$replay();
+<a name="line255"></a>  manager.undo();
+<a name="line256"></a>  mockState1.$verify();
+<a name="line257"></a>  assertEquals(&#39;Before action must not dispatch for pending undo.&#39;,
+<a name="line258"></a>      1, beforeUndoCount);
+<a name="line259"></a>
+<a name="line260"></a>  // Dispatching undo completed on first undo, should cause the second pending
+<a name="line261"></a>  // undo to happen.
+<a name="line262"></a>  mockState1.$reset();
+<a name="line263"></a>  mockState1.undo();
+<a name="line264"></a>  mockState1.$replay();
+<a name="line265"></a>  mockState2.$replay(); // Nothing should happen to mockState2.
+<a name="line266"></a>  stubState.dispatchEvent(goog.editor.plugins.UndoRedoState.ACTION_COMPLETED);
+<a name="line267"></a>  mockState1.$verify();
+<a name="line268"></a>  mockState2.$verify();
+<a name="line269"></a>  assertEquals(&#39;Second undo must cause before action to dispatch&#39;,
+<a name="line270"></a>      2, beforeUndoCount);
+<a name="line271"></a>
+<a name="line272"></a>  // Test last undo.
+<a name="line273"></a>  mockState2.$reset();
+<a name="line274"></a>  mockState2.undo();
+<a name="line275"></a>  mockState2.$replay();
+<a name="line276"></a>  manager.undo();
+<a name="line277"></a>  mockState2.$verify();
+<a name="line278"></a>  assertEquals(&#39;Third undo must cause before action to dispatch&#39;,
+<a name="line279"></a>      3, beforeUndoCount);
+<a name="line280"></a>}
+<a name="line281"></a>
+<a name="line282"></a>
+<a name="line283"></a>function testRedo() {
+<a name="line284"></a>  addStatesToManager();
+<a name="line285"></a>  manager.undo();
+<a name="line286"></a>  manager.undo();
+<a name="line287"></a>  manager.undo();
+<a name="line288"></a>  resetStates();
+<a name="line289"></a>  stateChangeCount = 0;
+<a name="line290"></a>
+<a name="line291"></a>  mockState1.redo();
+<a name="line292"></a>  mockState1.$replay();
+<a name="line293"></a>  manager.redo();
+<a name="line294"></a>  assertEquals(&#39;Pushing first item onto undo stack during redo must dispatch &#39; +
+<a name="line295"></a>               &#39;state change.&#39;, 1, stateChangeCount);
+<a name="line296"></a>  assertEquals(&#39;First redo must cause before action to dispatch&#39;,
+<a name="line297"></a>      1, beforeRedoCount);
+<a name="line298"></a>  mockState1.$verify();
+<a name="line299"></a>
+<a name="line300"></a>  preventDefault = true;
+<a name="line301"></a>  mockState2.$replay();
+<a name="line302"></a>  manager.redo();
+<a name="line303"></a>  assertEquals(&#39;No stack transitions between 0 and 1, must not dispatch &#39; +
+<a name="line304"></a>      &#39;state change.&#39;, 1, stateChangeCount);
+<a name="line305"></a>  assertEquals(&#39;Second redo must cause before action to dispatch&#39;,
+<a name="line306"></a>      2, beforeRedoCount);
+<a name="line307"></a>  mockState2.$verify(); // Verify that redo was prevented.
+<a name="line308"></a>
+<a name="line309"></a>  preventDefault = false;
+<a name="line310"></a>  mockState3.redo();
+<a name="line311"></a>  mockState3.$replay();
+<a name="line312"></a>  manager.redo();
+<a name="line313"></a>  assertEquals(&#39;Removing last item from redo stack must dispatch state change.&#39;,
+<a name="line314"></a>      2, stateChangeCount);
+<a name="line315"></a>  assertEquals(&#39;Third redo must cause before action to dispatch&#39;,
+<a name="line316"></a>      3, beforeRedoCount);
+<a name="line317"></a>  mockState3.$verify();
+<a name="line318"></a>  mockState3.$reset();
+<a name="line319"></a>
+<a name="line320"></a>  mockState3.undo();
+<a name="line321"></a>  mockState3.$replay();
+<a name="line322"></a>  manager.undo();
+<a name="line323"></a>  assertEquals(&#39;Putting item on redo stack must dispatch state change.&#39;,
+<a name="line324"></a>      3, stateChangeCount);
+<a name="line325"></a>  assertEquals(&#39;Undo must cause before action to dispatch&#39;,
+<a name="line326"></a>      4, beforeUndoCount);
+<a name="line327"></a>  mockState3.$verify();
+<a name="line328"></a>}
+<a name="line329"></a>
+<a name="line330"></a>
+<a name="line331"></a>function testRedo_Asynchronous() {
+<a name="line332"></a>  var stubState = new goog.editor.plugins.UndoRedoState(true);
+<a name="line333"></a>  var redoCalled = false;
+<a name="line334"></a>  stubState.redo = function() {
+<a name="line335"></a>    redoCalled = true;
+<a name="line336"></a>  };
+<a name="line337"></a>  stubState.undo = goog.nullFunction;
+<a name="line338"></a>  stubState.equals = function() {
+<a name="line339"></a>    return false;
+<a name="line340"></a>  };
+<a name="line341"></a>
+<a name="line342"></a>  manager.addState(stubState);
+<a name="line343"></a>  manager.addState(mockState1);
+<a name="line344"></a>  manager.addState(mockState2);
+<a name="line345"></a>
+<a name="line346"></a>  manager.undo();
+<a name="line347"></a>  manager.undo();
+<a name="line348"></a>  manager.undo();
+<a name="line349"></a>  stubState.dispatchEvent(goog.editor.plugins.UndoRedoState.ACTION_COMPLETED);
+<a name="line350"></a>  resetStates();
+<a name="line351"></a>
+<a name="line352"></a>  manager.redo();
+<a name="line353"></a>  assertTrue(&#39;redoCalled must be true (redo must be called).&#39;, redoCalled);
+<a name="line354"></a>
+<a name="line355"></a>  // Calling redo shouldn&#39;t actually redo since the first async redo hasn&#39;t
+<a name="line356"></a>  // fired an event yet.
+<a name="line357"></a>  mockState1.$replay();
+<a name="line358"></a>  manager.redo();
+<a name="line359"></a>  mockState1.$verify();
+<a name="line360"></a>
+<a name="line361"></a>  // Dispatching redo completed on first redo, should cause the second pending
+<a name="line362"></a>  // redo to happen.
+<a name="line363"></a>  mockState1.$reset();
+<a name="line364"></a>  mockState1.redo();
+<a name="line365"></a>  mockState1.$replay();
+<a name="line366"></a>  mockState2.$replay(); // Nothing should happen to mockState1.
+<a name="line367"></a>  stubState.dispatchEvent(goog.editor.plugins.UndoRedoState.ACTION_COMPLETED);
+<a name="line368"></a>  mockState1.$verify();
+<a name="line369"></a>  mockState2.$verify();
+<a name="line370"></a>
+<a name="line371"></a>  // Test last redo.
+<a name="line372"></a>  mockState2.$reset();
+<a name="line373"></a>  mockState2.redo();
+<a name="line374"></a>  mockState2.$replay();
+<a name="line375"></a>  manager.redo();
+<a name="line376"></a>  mockState2.$verify();
+<a name="line377"></a>}
+<a name="line378"></a>
+<a name="line379"></a>function testUndoAndRedoPeek() {
+<a name="line380"></a>  addStatesToManager();
+<a name="line381"></a>  manager.undo();
+<a name="line382"></a>
+<a name="line383"></a>  assertEquals(&#39;redoPeek must return the top of the redo stack.&#39;,
+<a name="line384"></a>      manager.redoStack_[manager.redoStack_.length - 1], manager.redoPeek());
+<a name="line385"></a>  assertEquals(&#39;undoPeek must return the top of the undo stack.&#39;,
+<a name="line386"></a>      manager.undoStack_[manager.undoStack_.length - 1], manager.undoPeek());
+<a name="line387"></a>}
+</pre>
+
+
+</body>
+</html>

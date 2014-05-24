@@ -1,0 +1,279 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>classes.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_classes.js.html">classes.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Utilities for adding, removing and setting classes.  Prefer
+<a name="line17"></a> * {@link goog.dom.classlist} over these utilities since goog.dom.classlist
+<a name="line18"></a> * conforms closer to the semantics of Element.classList, is faster (uses
+<a name="line19"></a> * native methods rather than parsing strings on every call) and compiles
+<a name="line20"></a> * to smaller code as a result.
+<a name="line21"></a> *
+<a name="line22"></a> * Note: these utilities are meant to operate on HTMLElements and
+<a name="line23"></a> * will not work on elements with differing interfaces (such as SVGElements).
+<a name="line24"></a> *
+<a name="line25"></a> * @author arv@google.com (Erik Arvidsson)
+<a name="line26"></a> */
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>goog.provide(&#39;goog.dom.classes&#39;);
+<a name="line30"></a>
+<a name="line31"></a>goog.require(&#39;goog.array&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>/**
+<a name="line35"></a> * Sets the entire class name of an element.
+<a name="line36"></a> * @param {Node} element DOM node to set class of.
+<a name="line37"></a> * @param {string} className Class name(s) to apply to element.
+<a name="line38"></a> */
+<a name="line39"></a>goog.dom.classes.set = function(element, className) {
+<a name="line40"></a>  element.className = className;
+<a name="line41"></a>};
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>/**
+<a name="line45"></a> * Gets an array of class names on an element
+<a name="line46"></a> * @param {Node} element DOM node to get class of.
+<a name="line47"></a> * @return {!Array} Class names on {@code element}. Some browsers add extra
+<a name="line48"></a> *     properties to the array. Do not depend on any of these!
+<a name="line49"></a> */
+<a name="line50"></a>goog.dom.classes.get = function(element) {
+<a name="line51"></a>  var className = element.className;
+<a name="line52"></a>  // Some types of elements don&#39;t have a className in IE (e.g. iframes).
+<a name="line53"></a>  // Furthermore, in Firefox, className is not a string when the element is
+<a name="line54"></a>  // an SVG element.
+<a name="line55"></a>  return goog.isString(className) &amp;&amp; className.match(/\S+/g) || [];
+<a name="line56"></a>};
+<a name="line57"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Adds a class or classes to an element. Does not add multiples of class names.
+<a name="line61"></a> * @param {Node} element DOM node to add class to.
+<a name="line62"></a> * @param {...string} var_args Class names to add.
+<a name="line63"></a> * @return {boolean} Whether class was added (or all classes were added).
+<a name="line64"></a> */
+<a name="line65"></a>goog.dom.classes.add = function(element, var_args) {
+<a name="line66"></a>  var classes = goog.dom.classes.get(element);
+<a name="line67"></a>  var args = goog.array.slice(arguments, 1);
+<a name="line68"></a>  var expectedCount = classes.length + args.length;
+<a name="line69"></a>  goog.dom.classes.add_(classes, args);
+<a name="line70"></a>  goog.dom.classes.set(element, classes.join(&#39; &#39;));
+<a name="line71"></a>  return classes.length == expectedCount;
+<a name="line72"></a>};
+<a name="line73"></a>
+<a name="line74"></a>
+<a name="line75"></a>/**
+<a name="line76"></a> * Removes a class or classes from an element.
+<a name="line77"></a> * @param {Node} element DOM node to remove class from.
+<a name="line78"></a> * @param {...string} var_args Class name(s) to remove.
+<a name="line79"></a> * @return {boolean} Whether all classes in {@code var_args} were found and
+<a name="line80"></a> *     removed.
+<a name="line81"></a> */
+<a name="line82"></a>goog.dom.classes.remove = function(element, var_args) {
+<a name="line83"></a>  var classes = goog.dom.classes.get(element);
+<a name="line84"></a>  var args = goog.array.slice(arguments, 1);
+<a name="line85"></a>  var newClasses = goog.dom.classes.getDifference_(classes, args);
+<a name="line86"></a>  goog.dom.classes.set(element, newClasses.join(&#39; &#39;));
+<a name="line87"></a>  return newClasses.length == classes.length - args.length;
+<a name="line88"></a>};
+<a name="line89"></a>
+<a name="line90"></a>
+<a name="line91"></a>/**
+<a name="line92"></a> * Helper method for {@link goog.dom.classes.add} and
+<a name="line93"></a> * {@link goog.dom.classes.addRemove}. Adds one or more classes to the supplied
+<a name="line94"></a> * classes array.
+<a name="line95"></a> * @param {Array.&lt;string&gt;} classes All class names for the element, will be
+<a name="line96"></a> *     updated to have the classes supplied in {@code args} added.
+<a name="line97"></a> * @param {Array.&lt;string&gt;} args Class names to add.
+<a name="line98"></a> * @private
+<a name="line99"></a> */
+<a name="line100"></a>goog.dom.classes.add_ = function(classes, args) {
+<a name="line101"></a>  for (var i = 0; i &lt; args.length; i++) {
+<a name="line102"></a>    if (!goog.array.contains(classes, args[i])) {
+<a name="line103"></a>      classes.push(args[i]);
+<a name="line104"></a>    }
+<a name="line105"></a>  }
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Helper method for {@link goog.dom.classes.remove} and
+<a name="line111"></a> * {@link goog.dom.classes.addRemove}. Calculates the difference of two arrays.
+<a name="line112"></a> * @param {!Array.&lt;string&gt;} arr1 First array.
+<a name="line113"></a> * @param {!Array.&lt;string&gt;} arr2 Second array.
+<a name="line114"></a> * @return {!Array.&lt;string&gt;} The first array without the elements of the second
+<a name="line115"></a> *     array.
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.dom.classes.getDifference_ = function(arr1, arr2) {
+<a name="line119"></a>  return goog.array.filter(arr1, function(item) {
+<a name="line120"></a>    return !goog.array.contains(arr2, item);
+<a name="line121"></a>  });
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Switches a class on an element from one to another without disturbing other
+<a name="line127"></a> * classes. If the fromClass isn&#39;t removed, the toClass won&#39;t be added.
+<a name="line128"></a> * @param {Node} element DOM node to swap classes on.
+<a name="line129"></a> * @param {string} fromClass Class to remove.
+<a name="line130"></a> * @param {string} toClass Class to add.
+<a name="line131"></a> * @return {boolean} Whether classes were switched.
+<a name="line132"></a> */
+<a name="line133"></a>goog.dom.classes.swap = function(element, fromClass, toClass) {
+<a name="line134"></a>  var classes = goog.dom.classes.get(element);
+<a name="line135"></a>
+<a name="line136"></a>  var removed = false;
+<a name="line137"></a>  for (var i = 0; i &lt; classes.length; i++) {
+<a name="line138"></a>    if (classes[i] == fromClass) {
+<a name="line139"></a>      goog.array.splice(classes, i--, 1);
+<a name="line140"></a>      removed = true;
+<a name="line141"></a>    }
+<a name="line142"></a>  }
+<a name="line143"></a>
+<a name="line144"></a>  if (removed) {
+<a name="line145"></a>    classes.push(toClass);
+<a name="line146"></a>    goog.dom.classes.set(element, classes.join(&#39; &#39;));
+<a name="line147"></a>  }
+<a name="line148"></a>
+<a name="line149"></a>  return removed;
+<a name="line150"></a>};
+<a name="line151"></a>
+<a name="line152"></a>
+<a name="line153"></a>/**
+<a name="line154"></a> * Adds zero or more classes to an element and removes zero or more as a single
+<a name="line155"></a> * operation. Unlike calling {@link goog.dom.classes.add} and
+<a name="line156"></a> * {@link goog.dom.classes.remove} separately, this is more efficient as it only
+<a name="line157"></a> * parses the class property once.
+<a name="line158"></a> *
+<a name="line159"></a> * If a class is in both the remove and add lists, it will be added. Thus,
+<a name="line160"></a> * you can use this instead of {@link goog.dom.classes.swap} when you have
+<a name="line161"></a> * more than two class names that you want to swap.
+<a name="line162"></a> *
+<a name="line163"></a> * @param {Node} element DOM node to swap classes on.
+<a name="line164"></a> * @param {?(string|Array.&lt;string&gt;)} classesToRemove Class or classes to
+<a name="line165"></a> *     remove, if null no classes are removed.
+<a name="line166"></a> * @param {?(string|Array.&lt;string&gt;)} classesToAdd Class or classes to add, if
+<a name="line167"></a> *     null no classes are added.
+<a name="line168"></a> */
+<a name="line169"></a>goog.dom.classes.addRemove = function(element, classesToRemove, classesToAdd) {
+<a name="line170"></a>  var classes = goog.dom.classes.get(element);
+<a name="line171"></a>  if (goog.isString(classesToRemove)) {
+<a name="line172"></a>    goog.array.remove(classes, classesToRemove);
+<a name="line173"></a>  } else if (goog.isArray(classesToRemove)) {
+<a name="line174"></a>    classes = goog.dom.classes.getDifference_(classes, classesToRemove);
+<a name="line175"></a>  }
+<a name="line176"></a>
+<a name="line177"></a>  if (goog.isString(classesToAdd) &amp;&amp;
+<a name="line178"></a>      !goog.array.contains(classes, classesToAdd)) {
+<a name="line179"></a>    classes.push(classesToAdd);
+<a name="line180"></a>  } else if (goog.isArray(classesToAdd)) {
+<a name="line181"></a>    goog.dom.classes.add_(classes, classesToAdd);
+<a name="line182"></a>  }
+<a name="line183"></a>
+<a name="line184"></a>  goog.dom.classes.set(element, classes.join(&#39; &#39;));
+<a name="line185"></a>};
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Returns true if an element has a class.
+<a name="line190"></a> * @param {Node} element DOM node to test.
+<a name="line191"></a> * @param {string} className Class name to test for.
+<a name="line192"></a> * @return {boolean} Whether element has the class.
+<a name="line193"></a> */
+<a name="line194"></a>goog.dom.classes.has = function(element, className) {
+<a name="line195"></a>  return goog.array.contains(goog.dom.classes.get(element), className);
+<a name="line196"></a>};
+<a name="line197"></a>
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * Adds or removes a class depending on the enabled argument.
+<a name="line201"></a> * @param {Node} element DOM node to add or remove the class on.
+<a name="line202"></a> * @param {string} className Class name to add or remove.
+<a name="line203"></a> * @param {boolean} enabled Whether to add or remove the class (true adds,
+<a name="line204"></a> *     false removes).
+<a name="line205"></a> */
+<a name="line206"></a>goog.dom.classes.enable = function(element, className, enabled) {
+<a name="line207"></a>  if (enabled) {
+<a name="line208"></a>    goog.dom.classes.add(element, className);
+<a name="line209"></a>  } else {
+<a name="line210"></a>    goog.dom.classes.remove(element, className);
+<a name="line211"></a>  }
+<a name="line212"></a>};
+<a name="line213"></a>
+<a name="line214"></a>
+<a name="line215"></a>/**
+<a name="line216"></a> * Removes a class if an element has it, and adds it the element doesn&#39;t have
+<a name="line217"></a> * it.  Won&#39;t affect other classes on the node.
+<a name="line218"></a> * @param {Node} element DOM node to toggle class on.
+<a name="line219"></a> * @param {string} className Class to toggle.
+<a name="line220"></a> * @return {boolean} True if class was added, false if it was removed
+<a name="line221"></a> *     (in other words, whether element has the class after this function has
+<a name="line222"></a> *     been called).
+<a name="line223"></a> */
+<a name="line224"></a>goog.dom.classes.toggle = function(element, className) {
+<a name="line225"></a>  var add = !goog.dom.classes.has(element, className);
+<a name="line226"></a>  goog.dom.classes.enable(element, className, add);
+<a name="line227"></a>  return add;
+<a name="line228"></a>};
+</pre>
+
+
+</body>
+</html>

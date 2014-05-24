@@ -1,0 +1,238 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>queue.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_structs_queue.js.html">queue.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Datastructure: Queue.
+<a name="line17"></a> *
+<a name="line18"></a> *
+<a name="line19"></a> * This file provides the implementation of a FIFO Queue structure.
+<a name="line20"></a> * API is similar to that of com.google.common.collect.IntQueue
+<a name="line21"></a> *
+<a name="line22"></a> * The implementation is a classic 2-stack queue.
+<a name="line23"></a> * There&#39;s a &quot;front&quot; stack and a &quot;back&quot; stack.
+<a name="line24"></a> * Items are pushed onto &quot;back&quot; and popped from &quot;front&quot;.
+<a name="line25"></a> * When &quot;front&quot; is empty, we replace &quot;front&quot; with reverse(back).
+<a name="line26"></a> *
+<a name="line27"></a> * Example:
+<a name="line28"></a> * front                         back            op
+<a name="line29"></a> * []                            []              enqueue 1
+<a name="line30"></a> * []                            [1]             enqueue 2
+<a name="line31"></a> * []                            [1,2]           enqueue 3
+<a name="line32"></a> * []                            [1,2,3]         dequeue -&gt; ...
+<a name="line33"></a> * [3,2,1]                       []              ... -&gt; 1
+<a name="line34"></a> * [3,2]                         []              enqueue 4
+<a name="line35"></a> * [3,2]                         [4]             dequeue -&gt; 2
+<a name="line36"></a> * [3]                           [4]
+<a name="line37"></a> *
+<a name="line38"></a> * Front and back are simple javascript arrays. We rely on
+<a name="line39"></a> * Array.push and Array.pop being O(1) amortized.
+<a name="line40"></a> *
+<a name="line41"></a> * Note: In V8, queues, up to a certain size, can be implemented
+<a name="line42"></a> * just fine using Array.push and Array.shift, but other JavaScript
+<a name="line43"></a> * engines do not have the optimization of Array.shift.
+<a name="line44"></a> *
+<a name="line45"></a> */
+<a name="line46"></a>
+<a name="line47"></a>goog.provide(&#39;goog.structs.Queue&#39;);
+<a name="line48"></a>
+<a name="line49"></a>goog.require(&#39;goog.array&#39;);
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a>/**
+<a name="line54"></a> * Class for FIFO Queue data structure.
+<a name="line55"></a> *
+<a name="line56"></a> * @constructor
+<a name="line57"></a> * @template T
+<a name="line58"></a> */
+<a name="line59"></a>goog.structs.Queue = function() {
+<a name="line60"></a>  /**
+<a name="line61"></a>   * @private {!Array.&lt;T&gt;} Front stack. Items are pop()&#39;ed from here.
+<a name="line62"></a>   */
+<a name="line63"></a>  this.front_ = [];
+<a name="line64"></a>  /**
+<a name="line65"></a>   * @private {!Array.&lt;T&gt;} Back stack. Items are push()&#39;ed here.
+<a name="line66"></a>   */
+<a name="line67"></a>  this.back_ = [];
+<a name="line68"></a>};
+<a name="line69"></a>
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Flips the back stack onto the front stack if front is empty,
+<a name="line73"></a> * to prepare for peek() or dequeue().
+<a name="line74"></a> *
+<a name="line75"></a> * @private
+<a name="line76"></a> */
+<a name="line77"></a>goog.structs.Queue.prototype.maybeFlip_ = function() {
+<a name="line78"></a>  if (goog.array.isEmpty(this.front_)) {
+<a name="line79"></a>    this.front_ = this.back_;
+<a name="line80"></a>    this.front_.reverse();
+<a name="line81"></a>    this.back_ = [];
+<a name="line82"></a>  }
+<a name="line83"></a>};
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>/**
+<a name="line87"></a> * Puts the specified element on this queue.
+<a name="line88"></a> * @param {T} element The element to be added to the queue.
+<a name="line89"></a> */
+<a name="line90"></a>goog.structs.Queue.prototype.enqueue = function(element) {
+<a name="line91"></a>  this.back_.push(element);
+<a name="line92"></a>};
+<a name="line93"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * Retrieves and removes the head of this queue.
+<a name="line97"></a> * @return {T} The element at the head of this queue. Returns undefined if the
+<a name="line98"></a> *     queue is empty.
+<a name="line99"></a> */
+<a name="line100"></a>goog.structs.Queue.prototype.dequeue = function() {
+<a name="line101"></a>  this.maybeFlip_();
+<a name="line102"></a>  return this.front_.pop();
+<a name="line103"></a>};
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * Retrieves but does not remove the head of this queue.
+<a name="line108"></a> * @return {T} The element at the head of this queue. Returns undefined if the
+<a name="line109"></a> *     queue is empty.
+<a name="line110"></a> */
+<a name="line111"></a>goog.structs.Queue.prototype.peek = function() {
+<a name="line112"></a>  this.maybeFlip_();
+<a name="line113"></a>  return goog.array.peek(this.front_);
+<a name="line114"></a>};
+<a name="line115"></a>
+<a name="line116"></a>
+<a name="line117"></a>/**
+<a name="line118"></a> * Returns the number of elements in this queue.
+<a name="line119"></a> * @return {number} The number of elements in this queue.
+<a name="line120"></a> */
+<a name="line121"></a>goog.structs.Queue.prototype.getCount = function() {
+<a name="line122"></a>  return this.front_.length + this.back_.length;
+<a name="line123"></a>};
+<a name="line124"></a>
+<a name="line125"></a>
+<a name="line126"></a>/**
+<a name="line127"></a> * Returns true if this queue contains no elements.
+<a name="line128"></a> * @return {boolean} true if this queue contains no elements.
+<a name="line129"></a> */
+<a name="line130"></a>goog.structs.Queue.prototype.isEmpty = function() {
+<a name="line131"></a>  return goog.array.isEmpty(this.front_) &amp;&amp;
+<a name="line132"></a>         goog.array.isEmpty(this.back_);
+<a name="line133"></a>};
+<a name="line134"></a>
+<a name="line135"></a>
+<a name="line136"></a>/**
+<a name="line137"></a> * Removes all elements from the queue.
+<a name="line138"></a> */
+<a name="line139"></a>goog.structs.Queue.prototype.clear = function() {
+<a name="line140"></a>  this.front_ = [];
+<a name="line141"></a>  this.back_ = [];
+<a name="line142"></a>};
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * Returns true if the given value is in the queue.
+<a name="line147"></a> * @param {T} obj The value to look for.
+<a name="line148"></a> * @return {boolean} Whether the object is in the queue.
+<a name="line149"></a> */
+<a name="line150"></a>goog.structs.Queue.prototype.contains = function(obj) {
+<a name="line151"></a>  return goog.array.contains(this.front_, obj) ||
+<a name="line152"></a>         goog.array.contains(this.back_, obj);
+<a name="line153"></a>};
+<a name="line154"></a>
+<a name="line155"></a>
+<a name="line156"></a>/**
+<a name="line157"></a> * Removes the first occurrence of a particular value from the queue.
+<a name="line158"></a> * @param {T} obj Object to remove.
+<a name="line159"></a> * @return {boolean} True if an element was removed.
+<a name="line160"></a> */
+<a name="line161"></a>goog.structs.Queue.prototype.remove = function(obj) {
+<a name="line162"></a>  // TODO(user): Implement goog.array.removeLast() and use it here.
+<a name="line163"></a>  var index = goog.array.lastIndexOf(this.front_, obj);
+<a name="line164"></a>  if (index &lt; 0) {
+<a name="line165"></a>    return goog.array.remove(this.back_, obj);
+<a name="line166"></a>  }
+<a name="line167"></a>  goog.array.removeAt(this.front_, index);
+<a name="line168"></a>  return true;
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Returns all the values in the queue.
+<a name="line174"></a> * @return {!Array.&lt;T&gt;} An array of the values in the queue.
+<a name="line175"></a> */
+<a name="line176"></a>goog.structs.Queue.prototype.getValues = function() {
+<a name="line177"></a>  var res = [];
+<a name="line178"></a>  // Add the front array in reverse, then the back array.
+<a name="line179"></a>  for (var i = this.front_.length - 1; i &gt;= 0; --i) {
+<a name="line180"></a>    res.push(this.front_[i]);
+<a name="line181"></a>  }
+<a name="line182"></a>  var len = this.back_.length;
+<a name="line183"></a>  for (var i = 0; i &lt; len; ++i) {
+<a name="line184"></a>    res.push(this.back_[i]);
+<a name="line185"></a>  }
+<a name="line186"></a>  return res;
+<a name="line187"></a>};
+</pre>
+
+
+</body>
+</html>

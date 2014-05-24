@@ -1,0 +1,193 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>sequence.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_dom_pattern_sequence.js.html">sequence.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2007 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview DOM pattern to match a sequence of other patterns.
+<a name="line17"></a> *
+<a name="line18"></a> * @author robbyw@google.com (Robby Walker)
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.dom.pattern.Sequence&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.dom.NodeType&#39;);
+<a name="line24"></a>goog.require(&#39;goog.dom.pattern.AbstractPattern&#39;);
+<a name="line25"></a>goog.require(&#39;goog.dom.pattern.MatchType&#39;);
+<a name="line26"></a>
+<a name="line27"></a>
+<a name="line28"></a>
+<a name="line29"></a>/**
+<a name="line30"></a> * Pattern object that matches a sequence of other patterns.
+<a name="line31"></a> *
+<a name="line32"></a> * @param {Array.&lt;goog.dom.pattern.AbstractPattern&gt;} patterns Ordered array of
+<a name="line33"></a> *     patterns to match.
+<a name="line34"></a> * @param {boolean=} opt_ignoreWhitespace Optional flag to ignore text nodes
+<a name="line35"></a> *     consisting entirely of whitespace.  The default is to not ignore them.
+<a name="line36"></a> * @constructor
+<a name="line37"></a> * @extends {goog.dom.pattern.AbstractPattern}
+<a name="line38"></a> * @final
+<a name="line39"></a> */
+<a name="line40"></a>goog.dom.pattern.Sequence = function(patterns, opt_ignoreWhitespace) {
+<a name="line41"></a>  this.patterns = patterns;
+<a name="line42"></a>  this.ignoreWhitespace_ = !!opt_ignoreWhitespace;
+<a name="line43"></a>};
+<a name="line44"></a>goog.inherits(goog.dom.pattern.Sequence, goog.dom.pattern.AbstractPattern);
+<a name="line45"></a>
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Ordered array of patterns to match.
+<a name="line49"></a> *
+<a name="line50"></a> * @type {Array.&lt;goog.dom.pattern.AbstractPattern&gt;}
+<a name="line51"></a> */
+<a name="line52"></a>goog.dom.pattern.Sequence.prototype.patterns;
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * Position in the patterns array we have reached by successful matches.
+<a name="line57"></a> *
+<a name="line58"></a> * @type {number}
+<a name="line59"></a> * @private
+<a name="line60"></a> */
+<a name="line61"></a>goog.dom.pattern.Sequence.prototype.currentPosition_ = 0;
+<a name="line62"></a>
+<a name="line63"></a>
+<a name="line64"></a>/**
+<a name="line65"></a> * Whether or not to ignore whitespace only Text nodes.
+<a name="line66"></a> *
+<a name="line67"></a> * @type {boolean}
+<a name="line68"></a> * @private
+<a name="line69"></a> */
+<a name="line70"></a>goog.dom.pattern.Sequence.prototype.ignoreWhitespace_ = false;
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * Test whether the given token starts, continues, or finishes the sequence
+<a name="line75"></a> * of patterns given in the constructor.
+<a name="line76"></a> *
+<a name="line77"></a> * @param {Node} token Token to match against.
+<a name="line78"></a> * @param {goog.dom.TagWalkType} type The type of token.
+<a name="line79"></a> * @return {goog.dom.pattern.MatchType} &lt;code&gt;MATCH&lt;/code&gt; if the pattern
+<a name="line80"></a> *     matches, &lt;code&gt;MATCHING&lt;/code&gt; if the pattern starts a match, and
+<a name="line81"></a> *     &lt;code&gt;NO_MATCH&lt;/code&gt; if the pattern does not match.
+<a name="line82"></a> * @override
+<a name="line83"></a> */
+<a name="line84"></a>goog.dom.pattern.Sequence.prototype.matchToken = function(token, type) {
+<a name="line85"></a>  // If the option is set, ignore any whitespace only text nodes
+<a name="line86"></a>  if (this.ignoreWhitespace_ &amp;&amp; token.nodeType == goog.dom.NodeType.TEXT &amp;&amp;
+<a name="line87"></a>      goog.dom.pattern.BREAKING_TEXTNODE_RE.test(token.nodeValue)) {
+<a name="line88"></a>    return goog.dom.pattern.MatchType.MATCHING;
+<a name="line89"></a>  }
+<a name="line90"></a>
+<a name="line91"></a>  switch (this.patterns[this.currentPosition_].matchToken(token, type)) {
+<a name="line92"></a>    case goog.dom.pattern.MatchType.MATCH:
+<a name="line93"></a>      // Record the first token we match.
+<a name="line94"></a>      if (this.currentPosition_ == 0) {
+<a name="line95"></a>        this.matchedNode = token;
+<a name="line96"></a>      }
+<a name="line97"></a>
+<a name="line98"></a>      // Move forward one position.
+<a name="line99"></a>      this.currentPosition_++;
+<a name="line100"></a>
+<a name="line101"></a>      // Check if this is the last position.
+<a name="line102"></a>      if (this.currentPosition_ == this.patterns.length) {
+<a name="line103"></a>        this.reset();
+<a name="line104"></a>        return goog.dom.pattern.MatchType.MATCH;
+<a name="line105"></a>      } else {
+<a name="line106"></a>        return goog.dom.pattern.MatchType.MATCHING;
+<a name="line107"></a>      }
+<a name="line108"></a>
+<a name="line109"></a>    case goog.dom.pattern.MatchType.MATCHING:
+<a name="line110"></a>      // This can happen when our child pattern is a sequence or a repetition.
+<a name="line111"></a>      return goog.dom.pattern.MatchType.MATCHING;
+<a name="line112"></a>
+<a name="line113"></a>    case goog.dom.pattern.MatchType.BACKTRACK_MATCH:
+<a name="line114"></a>      // This means a repetitive match succeeded 1 token ago.
+<a name="line115"></a>      // TODO(robbyw): Backtrack further if necessary.
+<a name="line116"></a>      this.currentPosition_++;
+<a name="line117"></a>
+<a name="line118"></a>      if (this.currentPosition_ == this.patterns.length) {
+<a name="line119"></a>        this.reset();
+<a name="line120"></a>        return goog.dom.pattern.MatchType.BACKTRACK_MATCH;
+<a name="line121"></a>      } else {
+<a name="line122"></a>        // Retry the same token on the next pattern.
+<a name="line123"></a>        return this.matchToken(token, type);
+<a name="line124"></a>      }
+<a name="line125"></a>
+<a name="line126"></a>    default:
+<a name="line127"></a>      this.reset();
+<a name="line128"></a>      return goog.dom.pattern.MatchType.NO_MATCH;
+<a name="line129"></a>  }
+<a name="line130"></a>};
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>/**
+<a name="line134"></a> * Reset any internal state this pattern keeps.
+<a name="line135"></a> * @override
+<a name="line136"></a> */
+<a name="line137"></a>goog.dom.pattern.Sequence.prototype.reset = function() {
+<a name="line138"></a>  if (this.patterns[this.currentPosition_]) {
+<a name="line139"></a>    this.patterns[this.currentPosition_].reset();
+<a name="line140"></a>  }
+<a name="line141"></a>  this.currentPosition_ = 0;
+<a name="line142"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>ieuserdata.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_storage_mechanism_ieuserdata.js.html">ieuserdata.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Provides data persistence using IE userData mechanism.
+<a name="line17"></a> * UserData uses proprietary Element.addBehavior(), Element.load(),
+<a name="line18"></a> * Element.save(), and Element.XMLDocument() methods, see:
+<a name="line19"></a> * http://msdn.microsoft.com/en-us/library/ms531424(v=vs.85).aspx.
+<a name="line20"></a> *
+<a name="line21"></a> */
+<a name="line22"></a>
+<a name="line23"></a>goog.provide(&#39;goog.storage.mechanism.IEUserData&#39;);
+<a name="line24"></a>
+<a name="line25"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line26"></a>goog.require(&#39;goog.iter.Iterator&#39;);
+<a name="line27"></a>goog.require(&#39;goog.iter.StopIteration&#39;);
+<a name="line28"></a>goog.require(&#39;goog.storage.mechanism.ErrorCode&#39;);
+<a name="line29"></a>goog.require(&#39;goog.storage.mechanism.IterableMechanism&#39;);
+<a name="line30"></a>goog.require(&#39;goog.structs.Map&#39;);
+<a name="line31"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>
+<a name="line35"></a>/**
+<a name="line36"></a> * Provides a storage mechanism using IE userData.
+<a name="line37"></a> *
+<a name="line38"></a> * @param {string} storageKey The key (store name) to store the data under.
+<a name="line39"></a> * @param {string=} opt_storageNodeId The ID of the associated HTML element,
+<a name="line40"></a> *     one will be created if not provided.
+<a name="line41"></a> * @constructor
+<a name="line42"></a> * @extends {goog.storage.mechanism.IterableMechanism}
+<a name="line43"></a> * @final
+<a name="line44"></a> */
+<a name="line45"></a>goog.storage.mechanism.IEUserData = function(storageKey, opt_storageNodeId) {
+<a name="line46"></a>  goog.storage.mechanism.IEUserData.base(this, &#39;constructor&#39;);
+<a name="line47"></a>
+<a name="line48"></a>  // Tested on IE6, IE7 and IE8. It seems that IE9 introduces some security
+<a name="line49"></a>  // features which make persistent (loaded) node attributes invisible from
+<a name="line50"></a>  // JavaScript.
+<a name="line51"></a>  if (goog.userAgent.IE &amp;&amp; !goog.userAgent.isDocumentModeOrHigher(9)) {
+<a name="line52"></a>    if (!goog.storage.mechanism.IEUserData.storageMap_) {
+<a name="line53"></a>      goog.storage.mechanism.IEUserData.storageMap_ = new goog.structs.Map();
+<a name="line54"></a>    }
+<a name="line55"></a>    this.storageNode_ = /** @type {Element} */ (
+<a name="line56"></a>        goog.storage.mechanism.IEUserData.storageMap_.get(storageKey));
+<a name="line57"></a>    if (!this.storageNode_) {
+<a name="line58"></a>      if (opt_storageNodeId) {
+<a name="line59"></a>        this.storageNode_ = document.getElementById(opt_storageNodeId);
+<a name="line60"></a>      } else {
+<a name="line61"></a>        this.storageNode_ = document.createElement(&#39;userdata&#39;);
+<a name="line62"></a>        // This is a special IE-only method letting us persist data.
+<a name="line63"></a>        this.storageNode_[&#39;addBehavior&#39;](&#39;#default#userData&#39;);
+<a name="line64"></a>        document.body.appendChild(this.storageNode_);
+<a name="line65"></a>      }
+<a name="line66"></a>      goog.storage.mechanism.IEUserData.storageMap_.set(
+<a name="line67"></a>          storageKey, this.storageNode_);
+<a name="line68"></a>    }
+<a name="line69"></a>    this.storageKey_ = storageKey;
+<a name="line70"></a>
+<a name="line71"></a>    /** @preserveTry */
+<a name="line72"></a>    try {
+<a name="line73"></a>      // Availability check.
+<a name="line74"></a>      this.loadNode_();
+<a name="line75"></a>    } catch (e) {
+<a name="line76"></a>      this.storageNode_ = null;
+<a name="line77"></a>    }
+<a name="line78"></a>  }
+<a name="line79"></a>};
+<a name="line80"></a>goog.inherits(goog.storage.mechanism.IEUserData,
+<a name="line81"></a>              goog.storage.mechanism.IterableMechanism);
+<a name="line82"></a>
+<a name="line83"></a>
+<a name="line84"></a>/**
+<a name="line85"></a> * Encoding map for characters which are not encoded by encodeURIComponent().
+<a name="line86"></a> * See encodeKey_ documentation for encoding details.
+<a name="line87"></a> *
+<a name="line88"></a> * @type {!Object}
+<a name="line89"></a> * @const
+<a name="line90"></a> */
+<a name="line91"></a>goog.storage.mechanism.IEUserData.ENCODE_MAP = {
+<a name="line92"></a>  &#39;.&#39;: &#39;.2E&#39;,
+<a name="line93"></a>  &#39;!&#39;: &#39;.21&#39;,
+<a name="line94"></a>  &#39;~&#39;: &#39;.7E&#39;,
+<a name="line95"></a>  &#39;*&#39;: &#39;.2A&#39;,
+<a name="line96"></a>  &#39;\&#39;&#39;: &#39;.27&#39;,
+<a name="line97"></a>  &#39;(&#39;: &#39;.28&#39;,
+<a name="line98"></a>  &#39;)&#39;: &#39;.29&#39;,
+<a name="line99"></a>  &#39;%&#39;: &#39;.&#39;
+<a name="line100"></a>};
+<a name="line101"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Global storageKey to storageNode map, so we save on reloading the storage.
+<a name="line105"></a> *
+<a name="line106"></a> * @type {goog.structs.Map}
+<a name="line107"></a> * @private
+<a name="line108"></a> */
+<a name="line109"></a>goog.storage.mechanism.IEUserData.storageMap_ = null;
+<a name="line110"></a>
+<a name="line111"></a>
+<a name="line112"></a>/**
+<a name="line113"></a> * The document element used for storing data.
+<a name="line114"></a> *
+<a name="line115"></a> * @type {Element}
+<a name="line116"></a> * @private
+<a name="line117"></a> */
+<a name="line118"></a>goog.storage.mechanism.IEUserData.prototype.storageNode_ = null;
+<a name="line119"></a>
+<a name="line120"></a>
+<a name="line121"></a>/**
+<a name="line122"></a> * The key to store the data under.
+<a name="line123"></a> *
+<a name="line124"></a> * @type {?string}
+<a name="line125"></a> * @private
+<a name="line126"></a> */
+<a name="line127"></a>goog.storage.mechanism.IEUserData.prototype.storageKey_ = null;
+<a name="line128"></a>
+<a name="line129"></a>
+<a name="line130"></a>/**
+<a name="line131"></a> * Encodes anything other than [-a-zA-Z0-9_] using a dot followed by hex,
+<a name="line132"></a> * and prefixes with underscore to form a valid and safe HTML attribute name.
+<a name="line133"></a> *
+<a name="line134"></a> * We use URI encoding to do the initial heavy lifting, then escape the
+<a name="line135"></a> * remaining characters that we can&#39;t use. Since a valid attribute name can&#39;t
+<a name="line136"></a> * contain the percent sign (%), we use a dot (.) as an escape character.
+<a name="line137"></a> *
+<a name="line138"></a> * @param {string} key The key to be encoded.
+<a name="line139"></a> * @return {string} The encoded key.
+<a name="line140"></a> * @private
+<a name="line141"></a> */
+<a name="line142"></a>goog.storage.mechanism.IEUserData.encodeKey_ = function(key) {
+<a name="line143"></a>  // encodeURIComponent leaves - _ . ! ~ * &#39; ( ) unencoded.
+<a name="line144"></a>  return &#39;_&#39; + encodeURIComponent(key).replace(/[.!~*&#39;()%]/g, function(c) {
+<a name="line145"></a>    return goog.storage.mechanism.IEUserData.ENCODE_MAP[c];
+<a name="line146"></a>  });
+<a name="line147"></a>};
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Decodes a dot-encoded and character-prefixed key.
+<a name="line152"></a> * See encodeKey_ documentation for encoding details.
+<a name="line153"></a> *
+<a name="line154"></a> * @param {string} key The key to be decoded.
+<a name="line155"></a> * @return {string} The decoded key.
+<a name="line156"></a> * @private
+<a name="line157"></a> */
+<a name="line158"></a>goog.storage.mechanism.IEUserData.decodeKey_ = function(key) {
+<a name="line159"></a>  return decodeURIComponent(key.replace(/\./g, &#39;%&#39;)).substr(1);
+<a name="line160"></a>};
+<a name="line161"></a>
+<a name="line162"></a>
+<a name="line163"></a>/**
+<a name="line164"></a> * Determines whether or not the mechanism is available.
+<a name="line165"></a> *
+<a name="line166"></a> * @return {boolean} True if the mechanism is available.
+<a name="line167"></a> */
+<a name="line168"></a>goog.storage.mechanism.IEUserData.prototype.isAvailable = function() {
+<a name="line169"></a>  return !!this.storageNode_;
+<a name="line170"></a>};
+<a name="line171"></a>
+<a name="line172"></a>
+<a name="line173"></a>/** @override */
+<a name="line174"></a>goog.storage.mechanism.IEUserData.prototype.set = function(key, value) {
+<a name="line175"></a>  this.storageNode_.setAttribute(
+<a name="line176"></a>      goog.storage.mechanism.IEUserData.encodeKey_(key), value);
+<a name="line177"></a>  this.saveNode_();
+<a name="line178"></a>};
+<a name="line179"></a>
+<a name="line180"></a>
+<a name="line181"></a>/** @override */
+<a name="line182"></a>goog.storage.mechanism.IEUserData.prototype.get = function(key) {
+<a name="line183"></a>  // According to Microsoft, values can be strings, numbers or booleans. Since
+<a name="line184"></a>  // we only save strings, any other type is a storage error. If we returned
+<a name="line185"></a>  // nulls for such keys, i.e., treated them as non-existent, this would lead
+<a name="line186"></a>  // to a paradox where a key exists, but it does not when it is retrieved.
+<a name="line187"></a>  // http://msdn.microsoft.com/en-us/library/ms531348(v=vs.85).aspx
+<a name="line188"></a>  var value = this.storageNode_.getAttribute(
+<a name="line189"></a>      goog.storage.mechanism.IEUserData.encodeKey_(key));
+<a name="line190"></a>  if (!goog.isString(value) &amp;&amp; !goog.isNull(value)) {
+<a name="line191"></a>    throw goog.storage.mechanism.ErrorCode.INVALID_VALUE;
+<a name="line192"></a>  }
+<a name="line193"></a>  return value;
+<a name="line194"></a>};
+<a name="line195"></a>
+<a name="line196"></a>
+<a name="line197"></a>/** @override */
+<a name="line198"></a>goog.storage.mechanism.IEUserData.prototype.remove = function(key) {
+<a name="line199"></a>  this.storageNode_.removeAttribute(
+<a name="line200"></a>      goog.storage.mechanism.IEUserData.encodeKey_(key));
+<a name="line201"></a>  this.saveNode_();
+<a name="line202"></a>};
+<a name="line203"></a>
+<a name="line204"></a>
+<a name="line205"></a>/** @override */
+<a name="line206"></a>goog.storage.mechanism.IEUserData.prototype.getCount = function() {
+<a name="line207"></a>  return this.getNode_().attributes.length;
+<a name="line208"></a>};
+<a name="line209"></a>
+<a name="line210"></a>
+<a name="line211"></a>/** @override */
+<a name="line212"></a>goog.storage.mechanism.IEUserData.prototype.__iterator__ = function(opt_keys) {
+<a name="line213"></a>  var i = 0;
+<a name="line214"></a>  var attributes = this.getNode_().attributes;
+<a name="line215"></a>  var newIter = new goog.iter.Iterator();
+<a name="line216"></a>  newIter.next = function() {
+<a name="line217"></a>    if (i &gt;= attributes.length) {
+<a name="line218"></a>      throw goog.iter.StopIteration;
+<a name="line219"></a>    }
+<a name="line220"></a>    var item = goog.asserts.assert(attributes[i++]);
+<a name="line221"></a>    if (opt_keys) {
+<a name="line222"></a>      return goog.storage.mechanism.IEUserData.decodeKey_(item.nodeName);
+<a name="line223"></a>    }
+<a name="line224"></a>    var value = item.nodeValue;
+<a name="line225"></a>    // The value must exist and be a string, otherwise it is a storage error.
+<a name="line226"></a>    if (!goog.isString(value)) {
+<a name="line227"></a>      throw goog.storage.mechanism.ErrorCode.INVALID_VALUE;
+<a name="line228"></a>    }
+<a name="line229"></a>    return value;
+<a name="line230"></a>  };
+<a name="line231"></a>  return newIter;
+<a name="line232"></a>};
+<a name="line233"></a>
+<a name="line234"></a>
+<a name="line235"></a>/** @override */
+<a name="line236"></a>goog.storage.mechanism.IEUserData.prototype.clear = function() {
+<a name="line237"></a>  var node = this.getNode_();
+<a name="line238"></a>  for (var left = node.attributes.length; left &gt; 0; left--) {
+<a name="line239"></a>    node.removeAttribute(node.attributes[left - 1].nodeName);
+<a name="line240"></a>  }
+<a name="line241"></a>  this.saveNode_();
+<a name="line242"></a>};
+<a name="line243"></a>
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * Loads the underlying storage node to the state we saved it to before.
+<a name="line247"></a> *
+<a name="line248"></a> * @private
+<a name="line249"></a> */
+<a name="line250"></a>goog.storage.mechanism.IEUserData.prototype.loadNode_ = function() {
+<a name="line251"></a>  // This is a special IE-only method on Elements letting us persist data.
+<a name="line252"></a>  this.storageNode_[&#39;load&#39;](this.storageKey_);
+<a name="line253"></a>};
+<a name="line254"></a>
+<a name="line255"></a>
+<a name="line256"></a>/**
+<a name="line257"></a> * Saves the underlying storage node.
+<a name="line258"></a> *
+<a name="line259"></a> * @private
+<a name="line260"></a> */
+<a name="line261"></a>goog.storage.mechanism.IEUserData.prototype.saveNode_ = function() {
+<a name="line262"></a>  /** @preserveTry */
+<a name="line263"></a>  try {
+<a name="line264"></a>    // This is a special IE-only method on Elements letting us persist data.
+<a name="line265"></a>    // Do not try to assign this.storageNode_[&#39;save&#39;] to a variable, it does
+<a name="line266"></a>    // not work. May throw an exception when the quota is exceeded.
+<a name="line267"></a>    this.storageNode_[&#39;save&#39;](this.storageKey_);
+<a name="line268"></a>  } catch (e) {
+<a name="line269"></a>    throw goog.storage.mechanism.ErrorCode.QUOTA_EXCEEDED;
+<a name="line270"></a>  }
+<a name="line271"></a>};
+<a name="line272"></a>
+<a name="line273"></a>
+<a name="line274"></a>/**
+<a name="line275"></a> * Returns the storage node.
+<a name="line276"></a> *
+<a name="line277"></a> * @return {!Element} Storage DOM Element.
+<a name="line278"></a> * @private
+<a name="line279"></a> */
+<a name="line280"></a>goog.storage.mechanism.IEUserData.prototype.getNode_ = function() {
+<a name="line281"></a>  // This is a special IE-only property letting us browse persistent data.
+<a name="line282"></a>  var doc = /** @type {Document} */ (this.storageNode_[&#39;XMLDocument&#39;]);
+<a name="line283"></a>  return doc.documentElement;
+<a name="line284"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,808 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>datetimeformat.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_datetimeformat.js.html">datetimeformat.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Functions for dealing with date/time formatting.
+<a name="line17"></a> */
+<a name="line18"></a>
+<a name="line19"></a>
+<a name="line20"></a>/**
+<a name="line21"></a> * Namespace for i18n date/time formatting functions
+<a name="line22"></a> */
+<a name="line23"></a>goog.provide(&#39;goog.i18n.DateTimeFormat&#39;);
+<a name="line24"></a>goog.provide(&#39;goog.i18n.DateTimeFormat.Format&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line27"></a>goog.require(&#39;goog.date&#39;);
+<a name="line28"></a>goog.require(&#39;goog.i18n.DateTimeSymbols&#39;);
+<a name="line29"></a>goog.require(&#39;goog.i18n.TimeZone&#39;);
+<a name="line30"></a>goog.require(&#39;goog.string&#39;);
+<a name="line31"></a>
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Datetime formatting functions following the pattern specification as defined
+<a name="line35"></a> * in JDK, ICU and CLDR, with minor modification for typical usage in JS.
+<a name="line36"></a> * Pattern specification: (Refer to JDK/ICU/CLDR)
+<a name="line37"></a> * &lt;pre&gt;
+<a name="line38"></a> * Symbol Meaning Presentation        Example
+<a name="line39"></a> * ------   -------                 ------------        -------
+<a name="line40"></a> * G        era designator          (Text)              AD
+<a name="line41"></a> * y#       year                    (Number)            1996
+<a name="line42"></a> * Y*       year (week of year)     (Number)            1997
+<a name="line43"></a> * u*       extended year           (Number)            4601
+<a name="line44"></a> * M        month in year           (Text &amp; Number)     July &amp; 07
+<a name="line45"></a> * d        day in month            (Number)            10
+<a name="line46"></a> * h        hour in am/pm (1~12)    (Number)            12
+<a name="line47"></a> * H        hour in day (0~23)      (Number)            0
+<a name="line48"></a> * m        minute in hour          (Number)            30
+<a name="line49"></a> * s        second in minute        (Number)            55
+<a name="line50"></a> * S        fractional second       (Number)            978
+<a name="line51"></a> * E        day of week             (Text)              Tuesday
+<a name="line52"></a> * e*       day of week (local 1~7) (Number)            2
+<a name="line53"></a> * D*       day in year             (Number)            189
+<a name="line54"></a> * F*       day of week in month    (Number)            2 (2nd Wed in July)
+<a name="line55"></a> * w        week in year            (Number)            27
+<a name="line56"></a> * W*       week in month           (Number)            2
+<a name="line57"></a> * a        am/pm marker            (Text)              PM
+<a name="line58"></a> * k        hour in day (1~24)      (Number)            24
+<a name="line59"></a> * K        hour in am/pm (0~11)    (Number)            0
+<a name="line60"></a> * z        time zone               (Text)              Pacific Standard Time
+<a name="line61"></a> * Z        time zone (RFC 822)     (Number)            -0800
+<a name="line62"></a> * v        time zone (generic)     (Text)              Pacific Time
+<a name="line63"></a> * g*       Julian day              (Number)            2451334
+<a name="line64"></a> * A*       milliseconds in day     (Number)            69540000
+<a name="line65"></a> * &#39;        escape for text         (Delimiter)         &#39;Date=&#39;
+<a name="line66"></a> * &#39;&#39;       single quote            (Literal)           &#39;o&#39;&#39;clock&#39;
+<a name="line67"></a> *
+<a name="line68"></a> * Item marked with &#39;*&#39; are not supported yet.
+<a name="line69"></a> * Item marked with &#39;#&#39; works different than java
+<a name="line70"></a> *
+<a name="line71"></a> * The count of pattern letters determine the format.
+<a name="line72"></a> * (Text): 4 or more, use full form, &lt;4, use short or abbreviated form if it
+<a name="line73"></a> * exists. (e.g., &quot;EEEE&quot; produces &quot;Monday&quot;, &quot;EEE&quot; produces &quot;Mon&quot;)
+<a name="line74"></a> *
+<a name="line75"></a> * (Number): the minimum number of digits. Shorter numbers are zero-padded to
+<a name="line76"></a> * this amount (e.g. if &quot;m&quot; produces &quot;6&quot;, &quot;mm&quot; produces &quot;06&quot;). Year is handled
+<a name="line77"></a> * specially; that is, if the count of &#39;y&#39; is 2, the Year will be truncated to
+<a name="line78"></a> * 2 digits. (e.g., if &quot;yyyy&quot; produces &quot;1997&quot;, &quot;yy&quot; produces &quot;97&quot;.) Unlike other
+<a name="line79"></a> * fields, fractional seconds are padded on the right with zero.
+<a name="line80"></a> *
+<a name="line81"></a> * (Text &amp; Number): 3 or over, use text, otherwise use number. (e.g., &quot;M&quot;
+<a name="line82"></a> * produces &quot;1&quot;, &quot;MM&quot; produces &quot;01&quot;, &quot;MMM&quot; produces &quot;Jan&quot;, and &quot;MMMM&quot; produces
+<a name="line83"></a> * &quot;January&quot;.)
+<a name="line84"></a> *
+<a name="line85"></a> * Any characters in the pattern that are not in the ranges of [&#39;a&#39;..&#39;z&#39;] and
+<a name="line86"></a> * [&#39;A&#39;..&#39;Z&#39;] will be treated as quoted text. For instance, characters like &#39;:&#39;,
+<a name="line87"></a> * &#39;.&#39;, &#39; &#39;, &#39;#&#39; and &#39;@&#39; will appear in the resulting time text even they are
+<a name="line88"></a> * not embraced within single quotes.
+<a name="line89"></a> * &lt;/pre&gt;
+<a name="line90"></a> */
+<a name="line91"></a>
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * Construct a DateTimeFormat object based on current locale.
+<a name="line96"></a> * @constructor
+<a name="line97"></a> * @param {string|number} pattern pattern specification or pattern type.
+<a name="line98"></a> * @param {!Object=} opt_dateTimeSymbols Optional symbols to use use for this
+<a name="line99"></a> *     instance rather than the global symbols.
+<a name="line100"></a> * @final
+<a name="line101"></a> */
+<a name="line102"></a>goog.i18n.DateTimeFormat = function(pattern, opt_dateTimeSymbols) {
+<a name="line103"></a>  goog.asserts.assert(goog.isDef(pattern), &#39;Pattern must be defined&#39;);
+<a name="line104"></a>  goog.asserts.assert(
+<a name="line105"></a>      goog.isDef(opt_dateTimeSymbols) || goog.isDef(goog.i18n.DateTimeSymbols),
+<a name="line106"></a>      &#39;goog.i18n.DateTimeSymbols or explicit symbols must be defined&#39;);
+<a name="line107"></a>
+<a name="line108"></a>  this.patternParts_ = [];
+<a name="line109"></a>
+<a name="line110"></a>  /**
+<a name="line111"></a>   * Data structure that with all the locale info needed for date formatting.
+<a name="line112"></a>   * (day/month names, most common patterns, rules for week-end, etc.)
+<a name="line113"></a>   * @type {!Object}
+<a name="line114"></a>   * @private
+<a name="line115"></a>   */
+<a name="line116"></a>  this.dateTimeSymbols_ = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
+<a name="line117"></a>  if (typeof pattern == &#39;number&#39;) {
+<a name="line118"></a>    this.applyStandardPattern_(pattern);
+<a name="line119"></a>  } else {
+<a name="line120"></a>    this.applyPattern_(pattern);
+<a name="line121"></a>  }
+<a name="line122"></a>};
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>/**
+<a name="line126"></a> * Enum to identify predefined Date/Time format pattern.
+<a name="line127"></a> * @enum {number}
+<a name="line128"></a> */
+<a name="line129"></a>goog.i18n.DateTimeFormat.Format = {
+<a name="line130"></a>  FULL_DATE: 0,
+<a name="line131"></a>  LONG_DATE: 1,
+<a name="line132"></a>  MEDIUM_DATE: 2,
+<a name="line133"></a>  SHORT_DATE: 3,
+<a name="line134"></a>  FULL_TIME: 4,
+<a name="line135"></a>  LONG_TIME: 5,
+<a name="line136"></a>  MEDIUM_TIME: 6,
+<a name="line137"></a>  SHORT_TIME: 7,
+<a name="line138"></a>  FULL_DATETIME: 8,
+<a name="line139"></a>  LONG_DATETIME: 9,
+<a name="line140"></a>  MEDIUM_DATETIME: 10,
+<a name="line141"></a>  SHORT_DATETIME: 11
+<a name="line142"></a>};
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a>/**
+<a name="line146"></a> * regular expression pattern for parsing pattern string
+<a name="line147"></a> * @type {Array.&lt;RegExp&gt;}
+<a name="line148"></a> * @private
+<a name="line149"></a> */
+<a name="line150"></a>goog.i18n.DateTimeFormat.TOKENS_ = [
+<a name="line151"></a>  //quote string
+<a name="line152"></a>  /^\&#39;(?:[^\&#39;]|\&#39;\&#39;)*\&#39;/,
+<a name="line153"></a>  // pattern chars
+<a name="line154"></a>  /^(?:G+|y+|M+|k+|S+|E+|a+|h+|K+|H+|c+|L+|Q+|d+|m+|s+|v+|w+|z+|Z+)/,
+<a name="line155"></a>  // and all the other chars
+<a name="line156"></a>  /^[^\&#39;GyMkSEahKHcLQdmsvwzZ]+/  // and all the other chars
+<a name="line157"></a>];
+<a name="line158"></a>
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * These are token types, corresponding to above token definitions.
+<a name="line162"></a> * @enum {number}
+<a name="line163"></a> * @private
+<a name="line164"></a> */
+<a name="line165"></a>goog.i18n.DateTimeFormat.PartTypes_ = {
+<a name="line166"></a>  QUOTED_STRING: 0,
+<a name="line167"></a>  FIELD: 1,
+<a name="line168"></a>  LITERAL: 2
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Apply specified pattern to this formatter object.
+<a name="line174"></a> * @param {string} pattern String specifying how the date should be formatted.
+<a name="line175"></a> * @private
+<a name="line176"></a> */
+<a name="line177"></a>goog.i18n.DateTimeFormat.prototype.applyPattern_ = function(pattern) {
+<a name="line178"></a>  // lex the pattern, once for all uses
+<a name="line179"></a>  while (pattern) {
+<a name="line180"></a>    for (var i = 0; i &lt; goog.i18n.DateTimeFormat.TOKENS_.length; ++i) {
+<a name="line181"></a>      var m = pattern.match(goog.i18n.DateTimeFormat.TOKENS_[i]);
+<a name="line182"></a>      if (m) {
+<a name="line183"></a>        var part = m[0];
+<a name="line184"></a>        pattern = pattern.substring(part.length);
+<a name="line185"></a>        if (i == goog.i18n.DateTimeFormat.PartTypes_.QUOTED_STRING) {
+<a name="line186"></a>          if (part == &quot;&#39;&#39;&quot;) {
+<a name="line187"></a>            part = &quot;&#39;&quot;;  // &#39;&#39; -&gt; &#39;
+<a name="line188"></a>          } else {
+<a name="line189"></a>            part = part.substring(1, part.length - 1); // strip quotes
+<a name="line190"></a>            part = part.replace(/\&#39;\&#39;/, &quot;&#39;&quot;);
+<a name="line191"></a>          }
+<a name="line192"></a>        }
+<a name="line193"></a>        this.patternParts_.push({ text: part, type: i });
+<a name="line194"></a>        break;
+<a name="line195"></a>      }
+<a name="line196"></a>    }
+<a name="line197"></a>  }
+<a name="line198"></a>};
+<a name="line199"></a>
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * Format the given date object according to preset pattern and current lcoale.
+<a name="line203"></a> * @param {goog.date.DateLike} date The Date object that is being formatted.
+<a name="line204"></a> * @param {goog.i18n.TimeZone=} opt_timeZone optional, if specified, time
+<a name="line205"></a> *    related fields will be formatted based on its setting. When this field
+<a name="line206"></a> *    is not specified, &quot;undefined&quot; will be pass around and those function
+<a name="line207"></a> *    that really need time zone service will create a default one.
+<a name="line208"></a> * @return {string} Formatted string for the given date.
+<a name="line209"></a> *    Throws an error if the date is null or if one tries to format a date-only
+<a name="line210"></a> *    object (for instance goog.date.Date) using a pattern with time fields.
+<a name="line211"></a> */
+<a name="line212"></a>goog.i18n.DateTimeFormat.prototype.format = function(date, opt_timeZone) {
+<a name="line213"></a>  if (!date)
+<a name="line214"></a>    throw Error(&#39;The date to format must be non-null.&#39;);
+<a name="line215"></a>
+<a name="line216"></a>  // We don&#39;t want to write code to calculate each date field because we
+<a name="line217"></a>  // want to maximize performance and minimize code size.
+<a name="line218"></a>  // JavaScript only provide API to render local time.
+<a name="line219"></a>  // Suppose target date is: 16:00 GMT-0400
+<a name="line220"></a>  // OS local time is:       12:00 GMT-0800
+<a name="line221"></a>  // We want to create a Local Date Object : 16:00 GMT-0800, and fix the
+<a name="line222"></a>  // time zone display ourselves.
+<a name="line223"></a>  // Thing get a little bit tricky when daylight time transition happens. For
+<a name="line224"></a>  // example, suppose OS timeZone is America/Los_Angeles, it is impossible to
+<a name="line225"></a>  // represent &quot;2006/4/2 02:30&quot; even for those timeZone that has no transition
+<a name="line226"></a>  // at this time. Because 2:00 to 3:00 on that day does not exising in
+<a name="line227"></a>  // America/Los_Angeles time zone. To avoid calculating date field through
+<a name="line228"></a>  // our own code, we uses 3 Date object instead, one for &quot;Year, month, day&quot;,
+<a name="line229"></a>  // one for time within that day, and one for timeZone object since it need
+<a name="line230"></a>  // the real time to figure out actual time zone offset.
+<a name="line231"></a>  var diff = opt_timeZone ?
+<a name="line232"></a>      (date.getTimezoneOffset() - opt_timeZone.getOffset(date)) * 60000 : 0;
+<a name="line233"></a>  var dateForDate = diff ? new Date(date.getTime() + diff) : date;
+<a name="line234"></a>  var dateForTime = dateForDate;
+<a name="line235"></a>  // in daylight time switch on/off hour, diff adjustment could alter time
+<a name="line236"></a>  // because of timeZone offset change, move 1 day forward or backward.
+<a name="line237"></a>  if (opt_timeZone &amp;&amp;
+<a name="line238"></a>      dateForDate.getTimezoneOffset() != date.getTimezoneOffset()) {
+<a name="line239"></a>    diff += diff &gt; 0 ? -24 * 60 * 60000 : 24 * 60 * 60000;
+<a name="line240"></a>    dateForTime = new Date(date.getTime() + diff);
+<a name="line241"></a>  }
+<a name="line242"></a>
+<a name="line243"></a>  var out = [];
+<a name="line244"></a>  for (var i = 0; i &lt; this.patternParts_.length; ++i) {
+<a name="line245"></a>    var text = this.patternParts_[i].text;
+<a name="line246"></a>    if (goog.i18n.DateTimeFormat.PartTypes_.FIELD ==
+<a name="line247"></a>        this.patternParts_[i].type) {
+<a name="line248"></a>      out.push(this.formatField_(text, date, dateForDate, dateForTime,
+<a name="line249"></a>                                 opt_timeZone));
+<a name="line250"></a>    } else {
+<a name="line251"></a>      out.push(text);
+<a name="line252"></a>    }
+<a name="line253"></a>  }
+<a name="line254"></a>  return out.join(&#39;&#39;);
+<a name="line255"></a>};
+<a name="line256"></a>
+<a name="line257"></a>
+<a name="line258"></a>/**
+<a name="line259"></a> * Apply a predefined pattern as identified by formatType, which is stored in
+<a name="line260"></a> * locale specific repository.
+<a name="line261"></a> * @param {number} formatType A number that identified the predefined pattern.
+<a name="line262"></a> * @private
+<a name="line263"></a> */
+<a name="line264"></a>goog.i18n.DateTimeFormat.prototype.applyStandardPattern_ =
+<a name="line265"></a>    function(formatType) {
+<a name="line266"></a>  var pattern;
+<a name="line267"></a>  if (formatType &lt; 4) {
+<a name="line268"></a>    pattern = this.dateTimeSymbols_.DATEFORMATS[formatType];
+<a name="line269"></a>  } else if (formatType &lt; 8) {
+<a name="line270"></a>    pattern = this.dateTimeSymbols_.TIMEFORMATS[formatType - 4];
+<a name="line271"></a>  } else if (formatType &lt; 12) {
+<a name="line272"></a>    pattern = this.dateTimeSymbols_.DATETIMEFORMATS[formatType - 8];
+<a name="line273"></a>    pattern = pattern.replace(&#39;{1}&#39;,
+<a name="line274"></a>        this.dateTimeSymbols_.DATEFORMATS[formatType - 8]);
+<a name="line275"></a>    pattern = pattern.replace(&#39;{0}&#39;,
+<a name="line276"></a>        this.dateTimeSymbols_.TIMEFORMATS[formatType - 8]);
+<a name="line277"></a>  } else {
+<a name="line278"></a>    this.applyStandardPattern_(goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
+<a name="line279"></a>    return;
+<a name="line280"></a>  }
+<a name="line281"></a>  this.applyPattern_(pattern);
+<a name="line282"></a>};
+<a name="line283"></a>
+<a name="line284"></a>
+<a name="line285"></a>/**
+<a name="line286"></a> * Localizes a string potentially containing numbers, replacing ASCII digits
+<a name="line287"></a> * with native digits if specified so by the locale. Leaves other characters.
+<a name="line288"></a> * @param {string} input the string to be localized, using ASCII digits.
+<a name="line289"></a> * @return {string} localized string, potentially using native digits.
+<a name="line290"></a> * @private
+<a name="line291"></a> */
+<a name="line292"></a>goog.i18n.DateTimeFormat.prototype.localizeNumbers_ = function(input) {
+<a name="line293"></a>  return goog.i18n.DateTimeFormat.localizeNumbers(input, this.dateTimeSymbols_);
+<a name="line294"></a>};
+<a name="line295"></a>
+<a name="line296"></a>
+<a name="line297"></a>/**
+<a name="line298"></a> * Localizes a string potentially containing numbers, replacing ASCII digits
+<a name="line299"></a> * with native digits if specified so by the locale. Leaves other characters.
+<a name="line300"></a> * @param {number|string} input the string to be localized, using ASCII digits.
+<a name="line301"></a> * @param {!Object=} opt_dateTimeSymbols Optional symbols to use use rather than
+<a name="line302"></a> *     the global symbols.
+<a name="line303"></a> * @return {string} localized string, potentially using native digits.
+<a name="line304"></a> */
+<a name="line305"></a>goog.i18n.DateTimeFormat.localizeNumbers =
+<a name="line306"></a>    function(input, opt_dateTimeSymbols) {
+<a name="line307"></a>  input = String(input);
+<a name="line308"></a>  var dateTimeSymbols = opt_dateTimeSymbols || goog.i18n.DateTimeSymbols;
+<a name="line309"></a>  if (dateTimeSymbols.ZERODIGIT === undefined) {
+<a name="line310"></a>    return input;
+<a name="line311"></a>  }
+<a name="line312"></a>
+<a name="line313"></a>  var parts = [];
+<a name="line314"></a>  for (var i = 0; i &lt; input.length; i++) {
+<a name="line315"></a>    var c = input.charCodeAt(i);
+<a name="line316"></a>    parts.push((0x30 &lt;= c &amp;&amp; c &lt;= 0x39) ? // &#39;0&#39; &lt;= c &lt;= &#39;9&#39;
+<a name="line317"></a>        String.fromCharCode(dateTimeSymbols.ZERODIGIT + c - 0x30) :
+<a name="line318"></a>        input.charAt(i));
+<a name="line319"></a>  }
+<a name="line320"></a>  return parts.join(&#39;&#39;);
+<a name="line321"></a>};
+<a name="line322"></a>
+<a name="line323"></a>
+<a name="line324"></a>/**
+<a name="line325"></a> * Formats Era field according to pattern specified.
+<a name="line326"></a> *
+<a name="line327"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line328"></a> *     how a field should be formatted.
+<a name="line329"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line330"></a> * @return {string} Formatted string that represent this field.
+<a name="line331"></a> * @private
+<a name="line332"></a> */
+<a name="line333"></a>goog.i18n.DateTimeFormat.prototype.formatEra_ = function(count, date) {
+<a name="line334"></a>  var value = date.getFullYear() &gt; 0 ? 1 : 0;
+<a name="line335"></a>  return count &gt;= 4 ? this.dateTimeSymbols_.ERANAMES[value] :
+<a name="line336"></a>                      this.dateTimeSymbols_.ERAS[value];
+<a name="line337"></a>};
+<a name="line338"></a>
+<a name="line339"></a>
+<a name="line340"></a>/**
+<a name="line341"></a> * Formats Year field according to pattern specified
+<a name="line342"></a> *   Javascript Date object seems incapable handling 1BC and
+<a name="line343"></a> *   year before. It can show you year 0 which does not exists.
+<a name="line344"></a> *   following we just keep consistent with javascript&#39;s
+<a name="line345"></a> *   toString method. But keep in mind those things should be
+<a name="line346"></a> *   unsupported.
+<a name="line347"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line348"></a> *     how a field should be formatted.
+<a name="line349"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line350"></a> * @return {string} Formatted string that represent this field.
+<a name="line351"></a> * @private
+<a name="line352"></a> */
+<a name="line353"></a>goog.i18n.DateTimeFormat.prototype.formatYear_ = function(count, date) {
+<a name="line354"></a>  var value = date.getFullYear();
+<a name="line355"></a>  if (value &lt; 0) {
+<a name="line356"></a>    value = -value;
+<a name="line357"></a>  }
+<a name="line358"></a>  if (count == 2) {
+<a name="line359"></a>    // See comment about special casing &#39;yy&#39; at the start of the file, this
+<a name="line360"></a>    // matches ICU and CLDR behaviour. See also:
+<a name="line361"></a>    // http://icu-project.org/apiref/icu4j/com/ibm/icu/text/SimpleDateFormat.html
+<a name="line362"></a>    // http://www.unicode.org/reports/tr35/tr35-dates.html
+<a name="line363"></a>    value = value % 100;
+<a name="line364"></a>  }
+<a name="line365"></a>  return this.localizeNumbers_(goog.string.padNumber(value, count));
+<a name="line366"></a>};
+<a name="line367"></a>
+<a name="line368"></a>
+<a name="line369"></a>/**
+<a name="line370"></a> * Formats Month field according to pattern specified
+<a name="line371"></a> *
+<a name="line372"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line373"></a> *     how a field should be formatted.
+<a name="line374"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line375"></a> * @return {string} Formatted string that represent this field.
+<a name="line376"></a> * @private
+<a name="line377"></a> */
+<a name="line378"></a>goog.i18n.DateTimeFormat.prototype.formatMonth_ = function(count, date) {
+<a name="line379"></a>  var value = date.getMonth();
+<a name="line380"></a>  switch (count) {
+<a name="line381"></a>    case 5: return this.dateTimeSymbols_.NARROWMONTHS[value];
+<a name="line382"></a>    case 4: return this.dateTimeSymbols_.MONTHS[value];
+<a name="line383"></a>    case 3: return this.dateTimeSymbols_.SHORTMONTHS[value];
+<a name="line384"></a>    default:
+<a name="line385"></a>      return this.localizeNumbers_(goog.string.padNumber(value + 1, count));
+<a name="line386"></a>  }
+<a name="line387"></a>};
+<a name="line388"></a>
+<a name="line389"></a>
+<a name="line390"></a>/**
+<a name="line391"></a> * Validates is the goog.date.DateLike object to format has a time.
+<a name="line392"></a> * DateLike means Date|goog.date.Date, and goog.date.DateTime inherits
+<a name="line393"></a> * from goog.date.Date. But goog.date.Date does not have time related
+<a name="line394"></a> * members (getHours, getMinutes, getSeconds).
+<a name="line395"></a> * Formatting can be done, if there are no time placeholders in the pattern.
+<a name="line396"></a> *
+<a name="line397"></a> * @param {!goog.date.DateLike} date the object to validate.
+<a name="line398"></a> * @private
+<a name="line399"></a> */
+<a name="line400"></a>goog.i18n.DateTimeFormat.validateDateHasTime_ = function(date) {
+<a name="line401"></a>  if (date.getHours &amp;&amp; date.getSeconds &amp;&amp; date.getMinutes)
+<a name="line402"></a>    return;
+<a name="line403"></a>  // if (date instanceof Date || date instanceof goog.date.DateTime)
+<a name="line404"></a>  throw Error(&#39;The date to format has no time (probably a goog.date.Date). &#39; +
+<a name="line405"></a>      &#39;Use Date or goog.date.DateTime, or use a pattern without time fields.&#39;);
+<a name="line406"></a>};
+<a name="line407"></a>
+<a name="line408"></a>
+<a name="line409"></a>/**
+<a name="line410"></a> * Formats (1..24) Hours field according to pattern specified
+<a name="line411"></a> *
+<a name="line412"></a> * @param {number} count Number of time pattern char repeats. This controls
+<a name="line413"></a> *     how a field should be formatted.
+<a name="line414"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line415"></a> * @return {string} Formatted string that represent this field.
+<a name="line416"></a> * @private
+<a name="line417"></a> */
+<a name="line418"></a>goog.i18n.DateTimeFormat.prototype.format24Hours_ =
+<a name="line419"></a>    function(count, date) {
+<a name="line420"></a>  goog.i18n.DateTimeFormat.validateDateHasTime_(date);
+<a name="line421"></a>  return this.localizeNumbers_(
+<a name="line422"></a>      goog.string.padNumber(date.getHours() || 24, count));
+<a name="line423"></a>};
+<a name="line424"></a>
+<a name="line425"></a>
+<a name="line426"></a>/**
+<a name="line427"></a> * Formats Fractional seconds field according to pattern
+<a name="line428"></a> * specified
+<a name="line429"></a> *
+<a name="line430"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line431"></a> *     how a field should be formatted.
+<a name="line432"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line433"></a> *
+<a name="line434"></a> * @return {string} Formatted string that represent this field.
+<a name="line435"></a> * @private
+<a name="line436"></a> */
+<a name="line437"></a>goog.i18n.DateTimeFormat.prototype.formatFractionalSeconds_ =
+<a name="line438"></a>    function(count, date) {
+<a name="line439"></a>  // Fractional seconds left-justify, append 0 for precision beyond 3
+<a name="line440"></a>  var value = date.getTime() % 1000 / 1000;
+<a name="line441"></a>  return this.localizeNumbers_(
+<a name="line442"></a>      value.toFixed(Math.min(3, count)).substr(2) +
+<a name="line443"></a>      (count &gt; 3 ? goog.string.padNumber(0, count - 3) : &#39;&#39;));
+<a name="line444"></a>};
+<a name="line445"></a>
+<a name="line446"></a>
+<a name="line447"></a>/**
+<a name="line448"></a> * Formats Day of week field according to pattern specified
+<a name="line449"></a> *
+<a name="line450"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line451"></a> *     how a field should be formatted.
+<a name="line452"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line453"></a> * @return {string} Formatted string that represent this field.
+<a name="line454"></a> * @private
+<a name="line455"></a> */
+<a name="line456"></a>goog.i18n.DateTimeFormat.prototype.formatDayOfWeek_ =
+<a name="line457"></a>    function(count, date) {
+<a name="line458"></a>  var value = date.getDay();
+<a name="line459"></a>  return count &gt;= 4 ? this.dateTimeSymbols_.WEEKDAYS[value] :
+<a name="line460"></a>                      this.dateTimeSymbols_.SHORTWEEKDAYS[value];
+<a name="line461"></a>};
+<a name="line462"></a>
+<a name="line463"></a>
+<a name="line464"></a>/**
+<a name="line465"></a> * Formats Am/Pm field according to pattern specified
+<a name="line466"></a> *
+<a name="line467"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line468"></a> *     how a field should be formatted.
+<a name="line469"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line470"></a> * @return {string} Formatted string that represent this field.
+<a name="line471"></a> * @private
+<a name="line472"></a> */
+<a name="line473"></a>goog.i18n.DateTimeFormat.prototype.formatAmPm_ = function(count, date) {
+<a name="line474"></a>  goog.i18n.DateTimeFormat.validateDateHasTime_(date);
+<a name="line475"></a>  var hours = date.getHours();
+<a name="line476"></a>  return this.dateTimeSymbols_.AMPMS[hours &gt;= 12 &amp;&amp; hours &lt; 24 ? 1 : 0];
+<a name="line477"></a>};
+<a name="line478"></a>
+<a name="line479"></a>
+<a name="line480"></a>/**
+<a name="line481"></a> * Formats (1..12) Hours field according to pattern specified
+<a name="line482"></a> *
+<a name="line483"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line484"></a> *     how a field should be formatted.
+<a name="line485"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line486"></a> * @return {string} formatted string that represent this field.
+<a name="line487"></a> * @private
+<a name="line488"></a> */
+<a name="line489"></a>goog.i18n.DateTimeFormat.prototype.format1To12Hours_ =
+<a name="line490"></a>    function(count, date) {
+<a name="line491"></a>  goog.i18n.DateTimeFormat.validateDateHasTime_(date);
+<a name="line492"></a>  return this.localizeNumbers_(
+<a name="line493"></a>      goog.string.padNumber(date.getHours() % 12 || 12, count));
+<a name="line494"></a>};
+<a name="line495"></a>
+<a name="line496"></a>
+<a name="line497"></a>/**
+<a name="line498"></a> * Formats (0..11) Hours field according to pattern specified
+<a name="line499"></a> *
+<a name="line500"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line501"></a> *     how a field should be formatted.
+<a name="line502"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line503"></a> * @return {string} formatted string that represent this field.
+<a name="line504"></a> * @private
+<a name="line505"></a> */
+<a name="line506"></a>goog.i18n.DateTimeFormat.prototype.format0To11Hours_ =
+<a name="line507"></a>    function(count, date) {
+<a name="line508"></a>  goog.i18n.DateTimeFormat.validateDateHasTime_(date);
+<a name="line509"></a>  return this.localizeNumbers_(
+<a name="line510"></a>      goog.string.padNumber(date.getHours() % 12, count));
+<a name="line511"></a>};
+<a name="line512"></a>
+<a name="line513"></a>
+<a name="line514"></a>/**
+<a name="line515"></a> * Formats (0..23) Hours field according to pattern specified
+<a name="line516"></a> *
+<a name="line517"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line518"></a> *     how a field should be formatted.
+<a name="line519"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line520"></a> * @return {string} formatted string that represent this field.
+<a name="line521"></a> * @private
+<a name="line522"></a> */
+<a name="line523"></a>goog.i18n.DateTimeFormat.prototype.format0To23Hours_ =
+<a name="line524"></a>    function(count, date) {
+<a name="line525"></a>  goog.i18n.DateTimeFormat.validateDateHasTime_(date);
+<a name="line526"></a>  return this.localizeNumbers_(goog.string.padNumber(date.getHours(), count));
+<a name="line527"></a>};
+<a name="line528"></a>
+<a name="line529"></a>
+<a name="line530"></a>/**
+<a name="line531"></a> * Formats Standalone weekday field according to pattern specified
+<a name="line532"></a> *
+<a name="line533"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line534"></a> *     how a field should be formatted.
+<a name="line535"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line536"></a> * @return {string} formatted string that represent this field.
+<a name="line537"></a> * @private
+<a name="line538"></a> */
+<a name="line539"></a>goog.i18n.DateTimeFormat.prototype.formatStandaloneDay_ =
+<a name="line540"></a>    function(count, date) {
+<a name="line541"></a>  var value = date.getDay();
+<a name="line542"></a>  switch (count) {
+<a name="line543"></a>    case 5:
+<a name="line544"></a>      return this.dateTimeSymbols_.STANDALONENARROWWEEKDAYS[value];
+<a name="line545"></a>    case 4:
+<a name="line546"></a>      return this.dateTimeSymbols_.STANDALONEWEEKDAYS[value];
+<a name="line547"></a>    case 3:
+<a name="line548"></a>      return this.dateTimeSymbols_.STANDALONESHORTWEEKDAYS[value];
+<a name="line549"></a>    default:
+<a name="line550"></a>      return this.localizeNumbers_(goog.string.padNumber(value, 1));
+<a name="line551"></a>  }
+<a name="line552"></a>};
+<a name="line553"></a>
+<a name="line554"></a>
+<a name="line555"></a>/**
+<a name="line556"></a> * Formats Standalone Month field according to pattern specified
+<a name="line557"></a> *
+<a name="line558"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line559"></a> *     how a field should be formatted.
+<a name="line560"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line561"></a> * @return {string} formatted string that represent this field.
+<a name="line562"></a> * @private
+<a name="line563"></a> */
+<a name="line564"></a>goog.i18n.DateTimeFormat.prototype.formatStandaloneMonth_ =
+<a name="line565"></a>    function(count, date) {
+<a name="line566"></a>  var value = date.getMonth();
+<a name="line567"></a>  switch (count) {
+<a name="line568"></a>    case 5:
+<a name="line569"></a>      return this.dateTimeSymbols_.STANDALONENARROWMONTHS[value];
+<a name="line570"></a>    case 4:
+<a name="line571"></a>      return this.dateTimeSymbols_.STANDALONEMONTHS[value];
+<a name="line572"></a>    case 3:
+<a name="line573"></a>      return this.dateTimeSymbols_.STANDALONESHORTMONTHS[value];
+<a name="line574"></a>    default:
+<a name="line575"></a>      return this.localizeNumbers_(goog.string.padNumber(value + 1, count));
+<a name="line576"></a>  }
+<a name="line577"></a>};
+<a name="line578"></a>
+<a name="line579"></a>
+<a name="line580"></a>/**
+<a name="line581"></a> * Formats Quarter field according to pattern specified
+<a name="line582"></a> *
+<a name="line583"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line584"></a> *     how a field should be formatted.
+<a name="line585"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line586"></a> * @return {string} Formatted string that represent this field.
+<a name="line587"></a> * @private
+<a name="line588"></a> */
+<a name="line589"></a>goog.i18n.DateTimeFormat.prototype.formatQuarter_ =
+<a name="line590"></a>    function(count, date) {
+<a name="line591"></a>  var value = Math.floor(date.getMonth() / 3);
+<a name="line592"></a>  return count &lt; 4 ? this.dateTimeSymbols_.SHORTQUARTERS[value] :
+<a name="line593"></a>                     this.dateTimeSymbols_.QUARTERS[value];
+<a name="line594"></a>};
+<a name="line595"></a>
+<a name="line596"></a>
+<a name="line597"></a>/**
+<a name="line598"></a> * Formats Date field according to pattern specified
+<a name="line599"></a> *
+<a name="line600"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line601"></a> *     how a field should be formatted.
+<a name="line602"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line603"></a> * @return {string} Formatted string that represent this field.
+<a name="line604"></a> * @private
+<a name="line605"></a> */
+<a name="line606"></a>goog.i18n.DateTimeFormat.prototype.formatDate_ = function(count, date) {
+<a name="line607"></a>  return this.localizeNumbers_(goog.string.padNumber(date.getDate(), count));
+<a name="line608"></a>};
+<a name="line609"></a>
+<a name="line610"></a>
+<a name="line611"></a>/**
+<a name="line612"></a> * Formats Minutes field according to pattern specified
+<a name="line613"></a> *
+<a name="line614"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line615"></a> *     how a field should be formatted.
+<a name="line616"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line617"></a> * @return {string} Formatted string that represent this field.
+<a name="line618"></a> * @private
+<a name="line619"></a> */
+<a name="line620"></a>goog.i18n.DateTimeFormat.prototype.formatMinutes_ =
+<a name="line621"></a>    function(count, date) {
+<a name="line622"></a>  goog.i18n.DateTimeFormat.validateDateHasTime_(date);
+<a name="line623"></a>  return this.localizeNumbers_(goog.string.padNumber(date.getMinutes(), count));
+<a name="line624"></a>};
+<a name="line625"></a>
+<a name="line626"></a>
+<a name="line627"></a>/**
+<a name="line628"></a> * Formats Seconds field according to pattern specified
+<a name="line629"></a> *
+<a name="line630"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line631"></a> *     how a field should be formatted.
+<a name="line632"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line633"></a> * @return {string} Formatted string that represent this field.
+<a name="line634"></a> * @private
+<a name="line635"></a> */
+<a name="line636"></a>goog.i18n.DateTimeFormat.prototype.formatSeconds_ =
+<a name="line637"></a>    function(count, date) {
+<a name="line638"></a>  goog.i18n.DateTimeFormat.validateDateHasTime_(date);
+<a name="line639"></a>  return this.localizeNumbers_(goog.string.padNumber(date.getSeconds(), count));
+<a name="line640"></a>};
+<a name="line641"></a>
+<a name="line642"></a>
+<a name="line643"></a>/**
+<a name="line644"></a> * Formats the week of year field according to pattern specified
+<a name="line645"></a> *
+<a name="line646"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line647"></a> *     how a field should be formatted.
+<a name="line648"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line649"></a> * @return {string} Formatted string that represent this field.
+<a name="line650"></a> * @private
+<a name="line651"></a> */
+<a name="line652"></a>goog.i18n.DateTimeFormat.prototype.formatWeekOfYear_ = function(count, date) {
+<a name="line653"></a>
+<a name="line654"></a>
+<a name="line655"></a>  var weekNum = goog.date.getWeekNumber(
+<a name="line656"></a>      date.getFullYear(), date.getMonth(), date.getDate(),
+<a name="line657"></a>      this.dateTimeSymbols_.FIRSTWEEKCUTOFFDAY,
+<a name="line658"></a>      this.dateTimeSymbols_.FIRSTDAYOFWEEK);
+<a name="line659"></a>
+<a name="line660"></a>  return this.localizeNumbers_(goog.string.padNumber(weekNum, count));
+<a name="line661"></a>};
+<a name="line662"></a>
+<a name="line663"></a>
+<a name="line664"></a>/**
+<a name="line665"></a> * Formats TimeZone field following RFC
+<a name="line666"></a> *
+<a name="line667"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line668"></a> *     how a field should be formatted.
+<a name="line669"></a> * @param {!goog.date.DateLike} date It holds the date object to be formatted.
+<a name="line670"></a> * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
+<a name="line671"></a> * @return {string} Formatted string that represent this field.
+<a name="line672"></a> * @private
+<a name="line673"></a> */
+<a name="line674"></a>goog.i18n.DateTimeFormat.prototype.formatTimeZoneRFC_ =
+<a name="line675"></a>    function(count, date, opt_timeZone) {
+<a name="line676"></a>  opt_timeZone = opt_timeZone ||
+<a name="line677"></a>      goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
+<a name="line678"></a>
+<a name="line679"></a>  // RFC 822 formats should be kept in ASCII, but localized GMT formats may need
+<a name="line680"></a>  // to use native digits.
+<a name="line681"></a>  return count &lt; 4 ? opt_timeZone.getRFCTimeZoneString(date) :
+<a name="line682"></a>                     this.localizeNumbers_(opt_timeZone.getGMTString(date));
+<a name="line683"></a>};
+<a name="line684"></a>
+<a name="line685"></a>
+<a name="line686"></a>/**
+<a name="line687"></a> * Generate GMT timeZone string for given date
+<a name="line688"></a> * @param {number} count Number of time pattern char repeats, it controls
+<a name="line689"></a> *     how a field should be formatted.
+<a name="line690"></a> * @param {!goog.date.DateLike} date Whose value being evaluated.
+<a name="line691"></a> * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
+<a name="line692"></a> * @return {string} GMT timeZone string.
+<a name="line693"></a> * @private
+<a name="line694"></a> */
+<a name="line695"></a>goog.i18n.DateTimeFormat.prototype.formatTimeZone_ =
+<a name="line696"></a>    function(count, date, opt_timeZone) {
+<a name="line697"></a>  opt_timeZone = opt_timeZone ||
+<a name="line698"></a>      goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
+<a name="line699"></a>  return count &lt; 4 ? opt_timeZone.getShortName(date) :
+<a name="line700"></a>             opt_timeZone.getLongName(date);
+<a name="line701"></a>};
+<a name="line702"></a>
+<a name="line703"></a>
+<a name="line704"></a>/**
+<a name="line705"></a> * Generate GMT timeZone string for given date
+<a name="line706"></a> * @param {!goog.date.DateLike} date Whose value being evaluated.
+<a name="line707"></a> * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
+<a name="line708"></a> * @return {string} GMT timeZone string.
+<a name="line709"></a> * @private
+<a name="line710"></a> */
+<a name="line711"></a>goog.i18n.DateTimeFormat.prototype.formatTimeZoneId_ =
+<a name="line712"></a>    function(date, opt_timeZone) {
+<a name="line713"></a>  opt_timeZone = opt_timeZone ||
+<a name="line714"></a>      goog.i18n.TimeZone.createTimeZone(date.getTimezoneOffset());
+<a name="line715"></a>  return opt_timeZone.getTimeZoneId();
+<a name="line716"></a>};
+<a name="line717"></a>
+<a name="line718"></a>
+<a name="line719"></a>/**
+<a name="line720"></a> * Formatting one date field.
+<a name="line721"></a> * @param {string} patternStr The pattern string for the field being formatted.
+<a name="line722"></a> * @param {!goog.date.DateLike} date represents the real date to be formatted.
+<a name="line723"></a> * @param {!goog.date.DateLike} dateForDate used to resolve date fields
+<a name="line724"></a> *     for formatting.
+<a name="line725"></a> * @param {!goog.date.DateLike} dateForTime used to resolve time fields
+<a name="line726"></a> *     for formatting.
+<a name="line727"></a> * @param {goog.i18n.TimeZone=} opt_timeZone This holds current time zone info.
+<a name="line728"></a> * @return {string} string representation for the given field.
+<a name="line729"></a> * @private
+<a name="line730"></a> */
+<a name="line731"></a>goog.i18n.DateTimeFormat.prototype.formatField_ =
+<a name="line732"></a>    function(patternStr, date, dateForDate, dateForTime, opt_timeZone) {
+<a name="line733"></a>  var count = patternStr.length;
+<a name="line734"></a>  switch (patternStr.charAt(0)) {
+<a name="line735"></a>    case &#39;G&#39;: return this.formatEra_(count, dateForDate);
+<a name="line736"></a>    case &#39;y&#39;: return this.formatYear_(count, dateForDate);
+<a name="line737"></a>    case &#39;M&#39;: return this.formatMonth_(count, dateForDate);
+<a name="line738"></a>    case &#39;k&#39;: return this.format24Hours_(count, dateForTime);
+<a name="line739"></a>    case &#39;S&#39;: return this.formatFractionalSeconds_(count, dateForTime);
+<a name="line740"></a>    case &#39;E&#39;: return this.formatDayOfWeek_(count, dateForDate);
+<a name="line741"></a>    case &#39;a&#39;: return this.formatAmPm_(count, dateForTime);
+<a name="line742"></a>    case &#39;h&#39;: return this.format1To12Hours_(count, dateForTime);
+<a name="line743"></a>    case &#39;K&#39;: return this.format0To11Hours_(count, dateForTime);
+<a name="line744"></a>    case &#39;H&#39;: return this.format0To23Hours_(count, dateForTime);
+<a name="line745"></a>    case &#39;c&#39;: return this.formatStandaloneDay_(count, dateForDate);
+<a name="line746"></a>    case &#39;L&#39;: return this.formatStandaloneMonth_(count, dateForDate);
+<a name="line747"></a>    case &#39;Q&#39;: return this.formatQuarter_(count, dateForDate);
+<a name="line748"></a>    case &#39;d&#39;: return this.formatDate_(count, dateForDate);
+<a name="line749"></a>    case &#39;m&#39;: return this.formatMinutes_(count, dateForTime);
+<a name="line750"></a>    case &#39;s&#39;: return this.formatSeconds_(count, dateForTime);
+<a name="line751"></a>    case &#39;v&#39;: return this.formatTimeZoneId_(date, opt_timeZone);
+<a name="line752"></a>    case &#39;w&#39;: return this.formatWeekOfYear_(count, dateForTime);
+<a name="line753"></a>    case &#39;z&#39;: return this.formatTimeZone_(count, date, opt_timeZone);
+<a name="line754"></a>    case &#39;Z&#39;: return this.formatTimeZoneRFC_(count, date, opt_timeZone);
+<a name="line755"></a>    default: return &#39;&#39;;
+<a name="line756"></a>  }
+<a name="line757"></a>};
+</pre>
+
+
+</body>
+</html>

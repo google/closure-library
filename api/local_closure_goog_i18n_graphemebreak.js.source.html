@@ -1,0 +1,265 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>graphemebreak.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_graphemebreak.js.html">graphemebreak.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Detect Grapheme Cluster Break in a pair of codepoints. Follows
+<a name="line17"></a> * Unicode 5.1 UAX#29. Tailoring for Virama × Indic Consonants is used.
+<a name="line18"></a> *
+<a name="line19"></a> */
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.i18n.GraphemeBreak&#39;);
+<a name="line22"></a>goog.require(&#39;goog.structs.InversionMap&#39;);
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Enum for all Grapheme Cluster Break properties.
+<a name="line27"></a> * These enums directly corresponds to Grapheme_Cluster_Break property values
+<a name="line28"></a> * mentioned in http://unicode.org/reports/tr29 table 2. VIRAMA and
+<a name="line29"></a> * INDIC_CONSONANT are for the Virama × Base tailoring mentioned in the notes.
+<a name="line30"></a> *
+<a name="line31"></a> * CR and LF are moved to the bottom of the list because they occur only once
+<a name="line32"></a> * and so good candidates to take 2 decimal digit values.
+<a name="line33"></a> * @enum {number}
+<a name="line34"></a> * @protected
+<a name="line35"></a> */
+<a name="line36"></a>goog.i18n.GraphemeBreak.property = {
+<a name="line37"></a>  ANY: 0,
+<a name="line38"></a>  CONTROL: 1,
+<a name="line39"></a>  EXTEND: 2,
+<a name="line40"></a>  PREPEND: 3,
+<a name="line41"></a>  SPACING_MARK: 4,
+<a name="line42"></a>  INDIC_CONSONANT: 5,
+<a name="line43"></a>  VIRAMA: 6,
+<a name="line44"></a>  L: 7,
+<a name="line45"></a>  V: 8,
+<a name="line46"></a>  T: 9,
+<a name="line47"></a>  LV: 10,
+<a name="line48"></a>  LVT: 11,
+<a name="line49"></a>  CR: 12,
+<a name="line50"></a>  LF: 13,
+<a name="line51"></a>  REGIONAL_INDICATOR: 14
+<a name="line52"></a>};
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a>/**
+<a name="line56"></a> * Grapheme Cluster Break property values for all codepoints as inversion map.
+<a name="line57"></a> * Constructed lazily.
+<a name="line58"></a> *
+<a name="line59"></a> * @type {goog.structs.InversionMap}
+<a name="line60"></a> * @private
+<a name="line61"></a> */
+<a name="line62"></a>goog.i18n.GraphemeBreak.inversions_ = null;
+<a name="line63"></a>
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * There are two kinds of grapheme clusters: 1) Legacy 2)Extended. This method
+<a name="line67"></a> * is to check for legacy rules.
+<a name="line68"></a> *
+<a name="line69"></a> * @param {number} prop_a The property enum value of the first character.
+<a name="line70"></a> * @param {number} prop_b The property enum value of the second character.
+<a name="line71"></a> * @return {boolean} True if a &amp; b do not form a cluster; False otherwise.
+<a name="line72"></a> * @private
+<a name="line73"></a> */
+<a name="line74"></a>goog.i18n.GraphemeBreak.applyLegacyBreakRules_ = function(prop_a, prop_b) {
+<a name="line75"></a>
+<a name="line76"></a>  var prop = goog.i18n.GraphemeBreak.property;
+<a name="line77"></a>
+<a name="line78"></a>  if (prop_a == prop.CR &amp;&amp; prop_b == prop.LF) {
+<a name="line79"></a>    return false;
+<a name="line80"></a>  }
+<a name="line81"></a>  if (prop_a == prop.CONTROL || prop_a == prop.CR || prop_a == prop.LF) {
+<a name="line82"></a>    return true;
+<a name="line83"></a>  }
+<a name="line84"></a>  if (prop_b == prop.CONTROL || prop_b == prop.CR || prop_b == prop.LF) {
+<a name="line85"></a>    return true;
+<a name="line86"></a>  }
+<a name="line87"></a>  if ((prop_a == prop.L) &amp;&amp;
+<a name="line88"></a>      (prop_b == prop.L || prop_b == prop.V ||
+<a name="line89"></a>      prop_b == prop.LV || prop_b == prop.LVT)) {
+<a name="line90"></a>    return false;
+<a name="line91"></a>  }
+<a name="line92"></a>  if ((prop_a == prop.LV || prop_a == prop.V) &amp;&amp;
+<a name="line93"></a>      (prop_b == prop.V || prop_b == prop.T)) {
+<a name="line94"></a>    return false;
+<a name="line95"></a>  }
+<a name="line96"></a>  if ((prop_a == prop.LVT || prop_a == prop.T) &amp;&amp; (prop_b == prop.T)) {
+<a name="line97"></a>    return false;
+<a name="line98"></a>  }
+<a name="line99"></a>  if (prop_b == prop.EXTEND || prop_b == prop.VIRAMA) {
+<a name="line100"></a>    return false;
+<a name="line101"></a>  }
+<a name="line102"></a>  if (prop_a == prop.VIRAMA &amp;&amp; prop_b == prop.INDIC_CONSONANT) {
+<a name="line103"></a>    return false;
+<a name="line104"></a>  }
+<a name="line105"></a>  return true;
+<a name="line106"></a>};
+<a name="line107"></a>
+<a name="line108"></a>
+<a name="line109"></a>/**
+<a name="line110"></a> * Method to return property enum value of the codepoint. If it is Hangul LV or
+<a name="line111"></a> * LVT, then it is computed; for the rest it is picked from the inversion map.
+<a name="line112"></a> * @param {number} acode The code point value of the character.
+<a name="line113"></a> * @return {number} Property enum value of codepoint.
+<a name="line114"></a> * @private
+<a name="line115"></a> */
+<a name="line116"></a>goog.i18n.GraphemeBreak.getBreakProp_ = function(acode) {
+<a name="line117"></a>  if (0xAC00 &lt;= acode &amp;&amp; acode &lt;= 0xD7A3) {
+<a name="line118"></a>    var prop = goog.i18n.GraphemeBreak.property;
+<a name="line119"></a>    if (acode % 0x1C == 0x10) {
+<a name="line120"></a>      return prop.LV;
+<a name="line121"></a>    }
+<a name="line122"></a>    return prop.LVT;
+<a name="line123"></a>  } else {
+<a name="line124"></a>    if (!goog.i18n.GraphemeBreak.inversions_) {
+<a name="line125"></a>      goog.i18n.GraphemeBreak.inversions_ = new goog.structs.InversionMap(
+<a name="line126"></a>          [0, 10, 1, 2, 1, 18, 95, 33, 13, 1, 594, 112, 275, 7, 263, 45, 1, 1,
+<a name="line127"></a>           1, 2, 1, 2, 1, 1, 56, 5, 11, 11, 48, 21, 16, 1, 101, 7, 1, 1, 6, 2,
+<a name="line128"></a>           2, 1, 4, 33, 1, 1, 1, 30, 27, 91, 11, 58, 9, 34, 4, 1, 9, 1, 3, 1,
+<a name="line129"></a>           5, 43, 3, 136, 31, 1, 17, 37, 1, 1, 1, 1, 3, 8, 4, 1, 2, 1, 7, 8, 2,
+<a name="line130"></a>           2, 21, 8, 1, 2, 17, 39, 1, 1, 1, 2, 6, 6, 1, 9, 5, 4, 2, 2, 12, 2,
+<a name="line131"></a>           15, 2, 1, 17, 39, 2, 3, 12, 4, 8, 6, 17, 2, 3, 14, 1, 17, 39, 1, 1,
+<a name="line132"></a>           3, 8, 4, 1, 20, 2, 29, 1, 2, 17, 39, 1, 1, 2, 1, 6, 6, 9, 6, 4, 2,
+<a name="line133"></a>           2, 13, 1, 16, 1, 18, 41, 1, 1, 1, 12, 1, 9, 1, 41, 3, 17, 37, 4, 3,
+<a name="line134"></a>           5, 7, 8, 3, 2, 8, 2, 30, 2, 17, 39, 1, 1, 1, 1, 2, 1, 3, 1, 5, 1, 8,
+<a name="line135"></a>           9, 1, 3, 2, 30, 2, 17, 38, 3, 1, 2, 5, 7, 1, 9, 1, 10, 2, 30, 2, 22,
+<a name="line136"></a>           48, 5, 1, 2, 6, 7, 19, 2, 13, 46, 2, 1, 1, 1, 6, 1, 12, 8, 50, 46,
+<a name="line137"></a>           2, 1, 1, 1, 9, 11, 6, 14, 2, 58, 2, 27, 1, 1, 1, 1, 1, 4, 2, 49, 14,
+<a name="line138"></a>           1, 4, 1, 1, 2, 5, 48, 9, 1, 57, 33, 12, 4, 1, 6, 1, 2, 2, 2, 1, 16,
+<a name="line139"></a>           2, 4, 2, 2, 4, 3, 1, 3, 2, 7, 3, 4, 13, 1, 1, 1, 2, 6, 1, 1, 14, 1,
+<a name="line140"></a>           98, 96, 72, 88, 349, 3, 931, 15, 2, 1, 14, 15, 2, 1, 14, 15, 2, 15,
+<a name="line141"></a>           15, 14, 35, 17, 2, 1, 7, 8, 1, 2, 9, 1, 1, 9, 1, 45, 3, 155, 1, 87,
+<a name="line142"></a>           31, 3, 4, 2, 9, 1, 6, 3, 20, 19, 29, 44, 9, 3, 2, 1, 69, 23, 2, 3,
+<a name="line143"></a>           4, 45, 6, 2, 1, 1, 1, 8, 1, 1, 1, 2, 8, 6, 13, 128, 4, 1, 14, 33, 1,
+<a name="line144"></a>           1, 5, 1, 1, 5, 1, 1, 1, 7, 31, 9, 12, 2, 1, 7, 23, 1, 4, 2, 2, 2, 2,
+<a name="line145"></a>           2, 11, 3, 2, 36, 2, 1, 1, 2, 3, 1, 1, 3, 2, 12, 36, 8, 8, 2, 2, 21,
+<a name="line146"></a>           3, 128, 3, 1, 13, 1, 7, 4, 1, 4, 2, 1, 203, 64, 523, 1, 2, 2, 24, 7,
+<a name="line147"></a>           49, 16, 96, 33, 3070, 3, 141, 1, 96, 32, 554, 6, 105, 2, 30164, 4,
+<a name="line148"></a>           1, 10, 33, 1, 80, 2, 272, 1, 3, 1, 4, 1, 23, 2, 2, 1, 24, 30, 4, 4,
+<a name="line149"></a>           3, 8, 1, 1, 13, 2, 16, 34, 16, 1, 27, 18, 24, 24, 4, 8, 2, 23, 11,
+<a name="line150"></a>           1, 1, 12, 32, 3, 1, 5, 3, 3, 36, 1, 2, 4, 2, 1, 3, 1, 69, 35, 6, 2,
+<a name="line151"></a>           2, 2, 2, 12, 1, 8, 1, 1, 18, 16, 1, 3, 6, 1, 5, 48, 1, 1, 3, 2, 2,
+<a name="line152"></a>           5, 2, 1, 1, 32, 9, 1, 2, 2, 5, 1, 1, 201, 14, 2, 1, 1, 9, 8, 2, 1,
+<a name="line153"></a>           2, 1, 2, 1, 1, 1, 18, 11184, 27, 49, 1028, 1024, 6942, 1, 737, 16,
+<a name="line154"></a>           16, 7, 216, 1, 158, 2, 89, 3, 513, 1, 2051, 15, 40, 7, 1, 1472, 1,
+<a name="line155"></a>           1, 1, 53, 14, 1, 57, 2, 1, 45, 3, 4, 2, 1, 1, 2, 1, 66, 3, 36, 5, 1,
+<a name="line156"></a>           6, 2, 75, 2, 1, 48, 3, 9, 1, 1, 1258, 1, 1, 1, 2, 6, 1, 1, 22681,
+<a name="line157"></a>           62, 4, 25042, 1, 1, 3, 3, 1, 5, 8, 8, 2, 7, 30, 4, 148, 3, 8097, 26,
+<a name="line158"></a>           790017, 255],
+<a name="line159"></a>          [1, 13, 1, 12, 1, 0, 1, 0, 1, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0,
+<a name="line160"></a>           2, 0, 1, 0, 2, 0, 2, 0, 2, 0, 2, 1, 0, 2, 0, 2, 0, 2, 0, 1, 0, 2, 0,
+<a name="line161"></a>           2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 4, 0, 5, 2, 4, 2,
+<a name="line162"></a>           0, 4, 2, 4, 6, 4, 0, 2, 5, 0, 2, 0, 5, 2, 4, 0, 5, 2, 0, 2, 4, 2, 4,
+<a name="line163"></a>           6, 0, 2, 5, 0, 2, 0, 5, 0, 2, 4, 0, 5, 2, 4, 2, 6, 2, 5, 0, 2, 0, 2,
+<a name="line164"></a>           4, 0, 5, 2, 0, 4, 2, 4, 6, 0, 2, 0, 2, 4, 0, 5, 2, 0, 2, 4, 2, 4, 6,
+<a name="line165"></a>           2, 5, 0, 2, 0, 5, 0, 2, 0, 5, 2, 4, 2, 4, 6, 0, 2, 0, 4, 0, 5, 0, 2,
+<a name="line166"></a>           4, 2, 6, 2, 5, 0, 2, 0, 4, 0, 5, 2, 0, 4, 2, 4, 2, 4, 2, 4, 2, 6, 2,
+<a name="line167"></a>           5, 0, 2, 0, 4, 0, 5, 0, 2, 4, 2, 4, 6, 0, 2, 0, 2, 0, 4, 0, 5, 6, 2,
+<a name="line168"></a>           4, 2, 4, 2, 4, 0, 5, 0, 2, 0, 4, 2, 6, 0, 2, 0, 5, 0, 2, 0, 4, 2, 0,
+<a name="line169"></a>           2, 0, 5, 0, 2, 0, 2, 0, 2, 0, 2, 0, 4, 5, 2, 4, 2, 6, 0, 2, 0, 2, 0,
+<a name="line170"></a>           2, 0, 5, 0, 2, 4, 2, 0, 6, 4, 2, 5, 0, 5, 0, 4, 2, 5, 2, 5, 0, 5, 0,
+<a name="line171"></a>           5, 2, 5, 2, 0, 4, 2, 0, 2, 5, 0, 2, 0, 7, 8, 9, 0, 2, 0, 5, 2, 6, 0,
+<a name="line172"></a>           5, 2, 6, 0, 5, 2, 0, 5, 2, 5, 0, 2, 4, 2, 4, 2, 4, 2, 6, 2, 0, 2, 0,
+<a name="line173"></a>           2, 0, 2, 0, 5, 2, 4, 2, 4, 2, 4, 2, 0, 5, 0, 5, 0, 4, 0, 4, 0, 5, 2,
+<a name="line174"></a>           4, 0, 5, 0, 5, 4, 2, 4, 2, 6, 0, 2, 0, 2, 4, 2, 0, 2, 4, 0, 5, 2, 4,
+<a name="line175"></a>           2, 4, 2, 4, 2, 4, 6, 5, 0, 2, 0, 2, 4, 0, 5, 4, 2, 4, 2, 6, 4, 5, 0,
+<a name="line176"></a>           5, 0, 5, 0, 2, 4, 2, 4, 2, 4, 2, 6, 0, 5, 4, 2, 4, 2, 0, 5, 0, 2, 0,
+<a name="line177"></a>           2, 4, 2, 0, 2, 0, 4, 2, 0, 2, 0, 1, 2, 1, 0, 1, 0, 1, 0, 2, 0, 2, 0,
+<a name="line178"></a>           6, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 6, 5, 2, 5, 4,
+<a name="line179"></a>           2, 4, 0, 5, 0, 5, 0, 5, 0, 5, 0, 4, 0, 5, 4, 6, 0, 2, 0, 5, 0, 2, 0,
+<a name="line180"></a>           5, 2, 4, 6, 0, 7, 2, 4, 0, 5, 0, 5, 2, 4, 2, 4, 2, 4, 6, 0, 5, 2, 4,
+<a name="line181"></a>           2, 4, 2, 0, 2, 0, 2, 4, 0, 5, 0, 5, 0, 5, 0, 5, 2, 0, 2, 0, 2, 0, 2,
+<a name="line182"></a>           0, 2, 0, 5, 4, 2, 4, 0, 4, 6, 0, 5, 0, 5, 0, 5, 0, 4, 2, 4, 2, 4, 0,
+<a name="line183"></a>           4, 6, 0, 11, 8, 9, 0, 2, 0, 2, 0, 2, 0, 2, 0, 1, 0, 2, 0, 1, 0, 2,
+<a name="line184"></a>           0, 2, 0, 2, 6, 0, 4, 2, 4, 0, 2, 6, 0, 2, 4, 0, 4, 2, 4, 6, 2, 0, 1,
+<a name="line185"></a>           0, 2, 0, 2, 4, 2, 6, 0, 2, 4, 0, 4, 2, 4, 6, 0, 2, 4, 2, 4, 2, 6, 2,
+<a name="line186"></a>           0, 4, 2, 0, 2, 4, 2, 0, 4, 2, 1, 2, 0, 2, 0, 2, 0, 2, 0, 14, 0, 1,
+<a name="line187"></a>           2],
+<a name="line188"></a>          true);
+<a name="line189"></a>    }
+<a name="line190"></a>    return /** @type {number} */ (
+<a name="line191"></a>        goog.i18n.GraphemeBreak.inversions_.at(acode));
+<a name="line192"></a>  }
+<a name="line193"></a>};
+<a name="line194"></a>
+<a name="line195"></a>
+<a name="line196"></a>/**
+<a name="line197"></a> * There are two kinds of grapheme clusters: 1) Legacy 2)Extended. This method
+<a name="line198"></a> * is to check for both using a boolean flag to switch between them.
+<a name="line199"></a> * @param {number} a The code point value of the first character.
+<a name="line200"></a> * @param {number} b The code point value of the second character.
+<a name="line201"></a> * @param {boolean=} opt_extended If true, indicates extended grapheme cluster;
+<a name="line202"></a> *     If false, indicates legacy cluster.
+<a name="line203"></a> * @return {boolean} True if a &amp; b do not form a cluster; False otherwise.
+<a name="line204"></a> */
+<a name="line205"></a>goog.i18n.GraphemeBreak.hasGraphemeBreak = function(a, b, opt_extended) {
+<a name="line206"></a>
+<a name="line207"></a>  var prop_a = goog.i18n.GraphemeBreak.getBreakProp_(a);
+<a name="line208"></a>  var prop_b = goog.i18n.GraphemeBreak.getBreakProp_(b);
+<a name="line209"></a>  var prop = goog.i18n.GraphemeBreak.property;
+<a name="line210"></a>
+<a name="line211"></a>  return goog.i18n.GraphemeBreak.applyLegacyBreakRules_(prop_a, prop_b) &amp;&amp;
+<a name="line212"></a>      !(opt_extended &amp;&amp;
+<a name="line213"></a>          (prop_a == prop.PREPEND || prop_b == prop.SPACING_MARK));
+<a name="line214"></a>};
+</pre>
+
+
+</body>
+</html>

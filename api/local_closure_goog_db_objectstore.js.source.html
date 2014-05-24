@@ -1,0 +1,450 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>objectstore.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_db_objectstore.js.html">objectstore.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Wrapper for an IndexedDB object store.
+<a name="line17"></a> *
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>
+<a name="line21"></a>goog.provide(&#39;goog.db.ObjectStore&#39;);
+<a name="line22"></a>
+<a name="line23"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line24"></a>goog.require(&#39;goog.db.Cursor&#39;);
+<a name="line25"></a>goog.require(&#39;goog.db.Error&#39;);
+<a name="line26"></a>goog.require(&#39;goog.db.Index&#39;);
+<a name="line27"></a>goog.require(&#39;goog.debug&#39;);
+<a name="line28"></a>goog.require(&#39;goog.events&#39;);
+<a name="line29"></a>
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Creates an IDBObjectStore wrapper object. Object stores have methods for
+<a name="line34"></a> * storing and retrieving records, and are accessed through a transaction
+<a name="line35"></a> * object. They also have methods for creating indexes associated with the
+<a name="line36"></a> * object store. They can only be created when setting the version of the
+<a name="line37"></a> * database. Should not be created directly, access object stores through
+<a name="line38"></a> * transactions.
+<a name="line39"></a> * @see goog.db.IndexedDb#setVersion
+<a name="line40"></a> * @see goog.db.Transaction#objectStore
+<a name="line41"></a> *
+<a name="line42"></a> * @param {!IDBObjectStore} store The backing IndexedDb object.
+<a name="line43"></a> * @constructor
+<a name="line44"></a> *
+<a name="line45"></a> * TODO(user): revisit msg in exception and errors in this class. In newer
+<a name="line46"></a> *     Chrome (v22+) the error/request come with a DOM error string that is
+<a name="line47"></a> *     already very descriptive.
+<a name="line48"></a> * @final
+<a name="line49"></a> */
+<a name="line50"></a>goog.db.ObjectStore = function(store) {
+<a name="line51"></a>  /**
+<a name="line52"></a>   * Underlying IndexedDB object store object.
+<a name="line53"></a>   *
+<a name="line54"></a>   * @type {!IDBObjectStore}
+<a name="line55"></a>   * @private
+<a name="line56"></a>   */
+<a name="line57"></a>  this.store_ = store;
+<a name="line58"></a>};
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * @return {string} The name of the object store.
+<a name="line63"></a> */
+<a name="line64"></a>goog.db.ObjectStore.prototype.getName = function() {
+<a name="line65"></a>  return this.store_.name;
+<a name="line66"></a>};
+<a name="line67"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * Helper function for put and add.
+<a name="line71"></a> *
+<a name="line72"></a> * @param {string} fn Function name to call on the object store.
+<a name="line73"></a> * @param {string} msg Message to give to the error.
+<a name="line74"></a> * @param {*} value Value to insert into the object store.
+<a name="line75"></a> * @param {IDBKeyType=} opt_key The key to use.
+<a name="line76"></a> * @return {!goog.async.Deferred} The resulting deferred request.
+<a name="line77"></a> * @private
+<a name="line78"></a> */
+<a name="line79"></a>goog.db.ObjectStore.prototype.insert_ = function(fn, msg, value, opt_key) {
+<a name="line80"></a>  // TODO(user): refactor wrapping an IndexedDB request in a Deferred by
+<a name="line81"></a>  // creating a higher-level abstraction for it (mostly affects here and
+<a name="line82"></a>  // goog.db.Index)
+<a name="line83"></a>  var d = new goog.async.Deferred();
+<a name="line84"></a>  var request;
+<a name="line85"></a>  try {
+<a name="line86"></a>    // put or add with (value, undefined) throws an error, so we need to check
+<a name="line87"></a>    // for undefined ourselves
+<a name="line88"></a>    if (opt_key) {
+<a name="line89"></a>      request = this.store_[fn](value, opt_key);
+<a name="line90"></a>    } else {
+<a name="line91"></a>      request = this.store_[fn](value);
+<a name="line92"></a>    }
+<a name="line93"></a>  } catch (ex) {
+<a name="line94"></a>    msg += goog.debug.deepExpose(value);
+<a name="line95"></a>    if (opt_key) {
+<a name="line96"></a>      msg += &#39;, with key &#39; + goog.debug.deepExpose(opt_key);
+<a name="line97"></a>    }
+<a name="line98"></a>    d.errback(goog.db.Error.fromException(ex, msg));
+<a name="line99"></a>    return d;
+<a name="line100"></a>  }
+<a name="line101"></a>  request.onsuccess = function(ev) {
+<a name="line102"></a>    d.callback();
+<a name="line103"></a>  };
+<a name="line104"></a>  var self = this;
+<a name="line105"></a>  request.onerror = function(ev) {
+<a name="line106"></a>    msg += goog.debug.deepExpose(value);
+<a name="line107"></a>    if (opt_key) {
+<a name="line108"></a>      msg += &#39;, with key &#39; + goog.debug.deepExpose(opt_key);
+<a name="line109"></a>    }
+<a name="line110"></a>    d.errback(goog.db.Error.fromRequest(ev.target, msg));
+<a name="line111"></a>  };
+<a name="line112"></a>  return d;
+<a name="line113"></a>};
+<a name="line114"></a>
+<a name="line115"></a>
+<a name="line116"></a>/**
+<a name="line117"></a> * Adds an object to the object store. Replaces existing objects with the
+<a name="line118"></a> * same key.
+<a name="line119"></a> *
+<a name="line120"></a> * @param {*} value The value to put.
+<a name="line121"></a> * @param {IDBKeyType=} opt_key The key to use. Cannot be used if the
+<a name="line122"></a> *     keyPath was specified for the object store. If the keyPath was not
+<a name="line123"></a> *     specified but autoIncrement was not enabled, it must be used.
+<a name="line124"></a> * @return {!goog.async.Deferred} The deferred put request.
+<a name="line125"></a> */
+<a name="line126"></a>goog.db.ObjectStore.prototype.put = function(value, opt_key) {
+<a name="line127"></a>  return this.insert_(
+<a name="line128"></a>      &#39;put&#39;,
+<a name="line129"></a>      &#39;putting into &#39; + this.getName() + &#39; with value&#39;,
+<a name="line130"></a>      value,
+<a name="line131"></a>      opt_key);
+<a name="line132"></a>};
+<a name="line133"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Adds an object to the object store. Requires that there is no object with
+<a name="line137"></a> * the same key already present.
+<a name="line138"></a> *
+<a name="line139"></a> * @param {*} value The value to add.
+<a name="line140"></a> * @param {IDBKeyType=} opt_key The key to use. Cannot be used if the
+<a name="line141"></a> *     keyPath was specified for the object store. If the keyPath was not
+<a name="line142"></a> *     specified but autoIncrement was not enabled, it must be used.
+<a name="line143"></a> * @return {!goog.async.Deferred} The deferred add request.
+<a name="line144"></a> */
+<a name="line145"></a>goog.db.ObjectStore.prototype.add = function(value, opt_key) {
+<a name="line146"></a>  return this.insert_(
+<a name="line147"></a>      &#39;add&#39;,
+<a name="line148"></a>      &#39;adding into &#39; + this.getName() + &#39; with value &#39;,
+<a name="line149"></a>      value,
+<a name="line150"></a>      opt_key);
+<a name="line151"></a>};
+<a name="line152"></a>
+<a name="line153"></a>
+<a name="line154"></a>/**
+<a name="line155"></a> * Removes an object from the store. No-op if there is no object present with
+<a name="line156"></a> * the given key.
+<a name="line157"></a> *
+<a name="line158"></a> * @param {IDBKeyType} key The key to remove objects under.
+<a name="line159"></a> * @return {!goog.async.Deferred} The deferred remove request.
+<a name="line160"></a> */
+<a name="line161"></a>goog.db.ObjectStore.prototype.remove = function(key) {
+<a name="line162"></a>  var d = new goog.async.Deferred();
+<a name="line163"></a>  var request;
+<a name="line164"></a>  try {
+<a name="line165"></a>    request = this.store_[&#39;delete&#39;](key);
+<a name="line166"></a>  } catch (err) {
+<a name="line167"></a>    var msg = &#39;removing from &#39; + this.getName() + &#39; with key &#39; +
+<a name="line168"></a>        goog.debug.deepExpose(key);
+<a name="line169"></a>    d.errback(goog.db.Error.fromException(err, msg));
+<a name="line170"></a>    return d;
+<a name="line171"></a>  }
+<a name="line172"></a>  request.onsuccess = function(ev) {
+<a name="line173"></a>    d.callback();
+<a name="line174"></a>  };
+<a name="line175"></a>  var self = this;
+<a name="line176"></a>  request.onerror = function(ev) {
+<a name="line177"></a>    var msg = &#39;removing from &#39; + self.getName() + &#39; with key &#39; +
+<a name="line178"></a>        goog.debug.deepExpose(key);
+<a name="line179"></a>    d.errback(goog.db.Error.fromRequest(ev.target, msg));
+<a name="line180"></a>  };
+<a name="line181"></a>  return d;
+<a name="line182"></a>};
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Gets an object from the store. If no object is present with that key
+<a name="line187"></a> * the result is {@code undefined}.
+<a name="line188"></a> *
+<a name="line189"></a> * @param {IDBKeyType} key The key to look up.
+<a name="line190"></a> * @return {!goog.async.Deferred} The deferred get request.
+<a name="line191"></a> */
+<a name="line192"></a>goog.db.ObjectStore.prototype.get = function(key) {
+<a name="line193"></a>  var d = new goog.async.Deferred();
+<a name="line194"></a>  var request;
+<a name="line195"></a>  try {
+<a name="line196"></a>    request = this.store_.get(key);
+<a name="line197"></a>  } catch (err) {
+<a name="line198"></a>    var msg = &#39;getting from &#39; + this.getName() + &#39; with key &#39; +
+<a name="line199"></a>        goog.debug.deepExpose(key);
+<a name="line200"></a>    d.errback(goog.db.Error.fromException(err, msg));
+<a name="line201"></a>    return d;
+<a name="line202"></a>  }
+<a name="line203"></a>  request.onsuccess = function(ev) {
+<a name="line204"></a>    d.callback(ev.target.result);
+<a name="line205"></a>  };
+<a name="line206"></a>  var self = this;
+<a name="line207"></a>  request.onerror = function(ev) {
+<a name="line208"></a>    var msg = &#39;getting from &#39; + self.getName() + &#39; with key &#39; +
+<a name="line209"></a>        goog.debug.deepExpose(key);
+<a name="line210"></a>    d.errback(goog.db.Error.fromRequest(ev.target, msg));
+<a name="line211"></a>  };
+<a name="line212"></a>  return d;
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/**
+<a name="line217"></a> * Gets all objects from the store and returns them as an array.
+<a name="line218"></a> *
+<a name="line219"></a> * @param {!goog.db.KeyRange=} opt_range The key range. If undefined iterates
+<a name="line220"></a> *     over the whole object store.
+<a name="line221"></a> * @param {!goog.db.Cursor.Direction=} opt_direction The direction. If undefined
+<a name="line222"></a> *     moves in a forward direction with duplicates.
+<a name="line223"></a> * @return {!goog.async.Deferred} The deferred getAll request.
+<a name="line224"></a> */
+<a name="line225"></a>goog.db.ObjectStore.prototype.getAll = function(opt_range, opt_direction) {
+<a name="line226"></a>  var d = new goog.async.Deferred();
+<a name="line227"></a>  var cursor;
+<a name="line228"></a>  try {
+<a name="line229"></a>    cursor = this.openCursor(opt_range, opt_direction);
+<a name="line230"></a>  } catch (err) {
+<a name="line231"></a>    d.errback(err);
+<a name="line232"></a>    return d;
+<a name="line233"></a>  }
+<a name="line234"></a>
+<a name="line235"></a>  var result = [];
+<a name="line236"></a>  var key = goog.events.listen(
+<a name="line237"></a>      cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
+<a name="line238"></a>        result.push(cursor.getValue());
+<a name="line239"></a>        cursor.next();
+<a name="line240"></a>      });
+<a name="line241"></a>
+<a name="line242"></a>  goog.events.listenOnce(cursor, [
+<a name="line243"></a>    goog.db.Cursor.EventType.ERROR,
+<a name="line244"></a>    goog.db.Cursor.EventType.COMPLETE
+<a name="line245"></a>  ], function(evt) {
+<a name="line246"></a>    cursor.dispose();
+<a name="line247"></a>    if (evt.type == goog.db.Cursor.EventType.COMPLETE) {
+<a name="line248"></a>      d.callback(result);
+<a name="line249"></a>    } else {
+<a name="line250"></a>      d.errback();
+<a name="line251"></a>    }
+<a name="line252"></a>  });
+<a name="line253"></a>  return d;
+<a name="line254"></a>};
+<a name="line255"></a>
+<a name="line256"></a>
+<a name="line257"></a>/**
+<a name="line258"></a> * Opens a cursor over the specified key range. Returns a cursor object which is
+<a name="line259"></a> * able to iterate over the given range.
+<a name="line260"></a> *
+<a name="line261"></a> * Example usage:
+<a name="line262"></a> *
+<a name="line263"></a> * &lt;code&gt;
+<a name="line264"></a> *  var cursor = objectStore.openCursor(goog.db.Range.bound(&#39;a&#39;, &#39;c&#39;));
+<a name="line265"></a> *
+<a name="line266"></a> *  var key = goog.events.listen(
+<a name="line267"></a> *      cursor, goog.db.Cursor.EventType.NEW_DATA, function() {
+<a name="line268"></a> *    // Do something with data.
+<a name="line269"></a> *    cursor.next();
+<a name="line270"></a> *  });
+<a name="line271"></a> *
+<a name="line272"></a> *  goog.events.listenOnce(
+<a name="line273"></a> *      cursor, goog.db.Cursor.EventType.COMPLETE, function() {
+<a name="line274"></a> *    // Clean up listener, and perform a finishing operation on the data.
+<a name="line275"></a> *    goog.events.unlistenByKey(key);
+<a name="line276"></a> *  });
+<a name="line277"></a> * &lt;/code&gt;
+<a name="line278"></a> *
+<a name="line279"></a> * @param {!goog.db.KeyRange=} opt_range The key range. If undefined iterates
+<a name="line280"></a> *     over the whole object store.
+<a name="line281"></a> * @param {!goog.db.Cursor.Direction=} opt_direction The direction. If undefined
+<a name="line282"></a> *     moves in a forward direction with duplicates.
+<a name="line283"></a> * @return {!goog.db.Cursor} The cursor.
+<a name="line284"></a> * @throws {goog.db.Error} If there was a problem opening the cursor.
+<a name="line285"></a> */
+<a name="line286"></a>goog.db.ObjectStore.prototype.openCursor = function(opt_range, opt_direction) {
+<a name="line287"></a>  return goog.db.Cursor.openCursor(this.store_, opt_range, opt_direction);
+<a name="line288"></a>};
+<a name="line289"></a>
+<a name="line290"></a>
+<a name="line291"></a>/**
+<a name="line292"></a> * Deletes all objects from the store.
+<a name="line293"></a> *
+<a name="line294"></a> * @return {!goog.async.Deferred} The deferred clear request.
+<a name="line295"></a> */
+<a name="line296"></a>goog.db.ObjectStore.prototype.clear = function() {
+<a name="line297"></a>  var msg = &#39;clearing store &#39; + this.getName();
+<a name="line298"></a>  var d = new goog.async.Deferred();
+<a name="line299"></a>  var request;
+<a name="line300"></a>  try {
+<a name="line301"></a>    request = this.store_.clear();
+<a name="line302"></a>  } catch (err) {
+<a name="line303"></a>    d.errback(goog.db.Error.fromException(err, msg));
+<a name="line304"></a>    return d;
+<a name="line305"></a>  }
+<a name="line306"></a>  request.onsuccess = function(ev) {
+<a name="line307"></a>    d.callback();
+<a name="line308"></a>  };
+<a name="line309"></a>  request.onerror = function(ev) {
+<a name="line310"></a>    d.errback(goog.db.Error.fromRequest(ev.target, msg));
+<a name="line311"></a>  };
+<a name="line312"></a>  return d;
+<a name="line313"></a>};
+<a name="line314"></a>
+<a name="line315"></a>
+<a name="line316"></a>/**
+<a name="line317"></a> * Creates an index in this object store. Can only be called inside the callback
+<a name="line318"></a> * for the Deferred returned from goog.db.IndexedDb#setVersion.
+<a name="line319"></a> *
+<a name="line320"></a> * @param {string} name Name of the index to create.
+<a name="line321"></a> * @param {string} keyPath Attribute to index on.
+<a name="line322"></a> * @param {!Object=} opt_parameters Optional parameters object. The only
+<a name="line323"></a> *     available option is unique, which defaults to false. If unique is true,
+<a name="line324"></a> *     the index will enforce that there is only ever one object in the object
+<a name="line325"></a> *     store for each unique value it indexes on.
+<a name="line326"></a> * @return {!goog.db.Index} The newly created, wrapped index.
+<a name="line327"></a> * @throws {goog.db.Error} In case of an error creating the index.
+<a name="line328"></a> */
+<a name="line329"></a>goog.db.ObjectStore.prototype.createIndex = function(
+<a name="line330"></a>    name, keyPath, opt_parameters) {
+<a name="line331"></a>  try {
+<a name="line332"></a>    return new goog.db.Index(this.store_.createIndex(
+<a name="line333"></a>        name, keyPath, opt_parameters));
+<a name="line334"></a>  } catch (ex) {
+<a name="line335"></a>    var msg = &#39;creating new index &#39; + name + &#39; with key path &#39; + keyPath;
+<a name="line336"></a>    throw goog.db.Error.fromException(ex, msg);
+<a name="line337"></a>  }
+<a name="line338"></a>};
+<a name="line339"></a>
+<a name="line340"></a>
+<a name="line341"></a>/**
+<a name="line342"></a> * Gets an index.
+<a name="line343"></a> *
+<a name="line344"></a> * @param {string} name Name of the index to fetch.
+<a name="line345"></a> * @return {!goog.db.Index} The requested wrapped index.
+<a name="line346"></a> * @throws {goog.db.Error} In case of an error getting the index.
+<a name="line347"></a> */
+<a name="line348"></a>goog.db.ObjectStore.prototype.getIndex = function(name) {
+<a name="line349"></a>  try {
+<a name="line350"></a>    return new goog.db.Index(this.store_.index(name));
+<a name="line351"></a>  } catch (ex) {
+<a name="line352"></a>    var msg = &#39;getting index &#39; + name;
+<a name="line353"></a>    throw goog.db.Error.fromException(ex, msg);
+<a name="line354"></a>  }
+<a name="line355"></a>};
+<a name="line356"></a>
+<a name="line357"></a>
+<a name="line358"></a>/**
+<a name="line359"></a> * Deletes an index from the object store. Can only be called inside the
+<a name="line360"></a> * callback for the Deferred returned from goog.db.IndexedDb#setVersion.
+<a name="line361"></a> *
+<a name="line362"></a> * @param {string} name Name of the index to delete.
+<a name="line363"></a> * @throws {goog.db.Error} In case of an error deleting the index.
+<a name="line364"></a> */
+<a name="line365"></a>goog.db.ObjectStore.prototype.deleteIndex = function(name) {
+<a name="line366"></a>  try {
+<a name="line367"></a>    this.store_.deleteIndex(name);
+<a name="line368"></a>  } catch (ex) {
+<a name="line369"></a>    var msg = &#39;deleting index &#39; + name;
+<a name="line370"></a>    throw goog.db.Error.fromException(ex, msg);
+<a name="line371"></a>  }
+<a name="line372"></a>};
+<a name="line373"></a>
+<a name="line374"></a>
+<a name="line375"></a>/**
+<a name="line376"></a> * Gets number of records within a key range.
+<a name="line377"></a> *
+<a name="line378"></a> * @param {!goog.db.KeyRange=} opt_range The key range. If undefined, this will
+<a name="line379"></a> *     count all records in the object store.
+<a name="line380"></a> * @return {!goog.async.Deferred} The deferred number of records.
+<a name="line381"></a> */
+<a name="line382"></a>goog.db.ObjectStore.prototype.count = function(opt_range) {
+<a name="line383"></a>  var request;
+<a name="line384"></a>  var d = new goog.async.Deferred();
+<a name="line385"></a>
+<a name="line386"></a>  try {
+<a name="line387"></a>    var range = opt_range ? opt_range.range() : null;
+<a name="line388"></a>    request = this.store_.count(range);
+<a name="line389"></a>  } catch (ex) {
+<a name="line390"></a>    d.errback(goog.db.Error.fromException(ex, this.getName()));
+<a name="line391"></a>  }
+<a name="line392"></a>  request.onsuccess = function(ev) {
+<a name="line393"></a>    d.callback(ev.target.result);
+<a name="line394"></a>  };
+<a name="line395"></a>  request.onerror = function(ev) {
+<a name="line396"></a>    d.errback(goog.db.Error.fromRequest(ev.target, this.getName()));
+<a name="line397"></a>  };
+<a name="line398"></a>  return d;
+<a name="line399"></a>};
+</pre>
+
+
+</body>
+</html>

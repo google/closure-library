@@ -1,0 +1,797 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>filedownloader.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_net_filedownloader.js.html">filedownloader.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2011 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview A class for downloading remote files and storing them
+<a name="line17"></a> * locally using the HTML5 FileSystem API.
+<a name="line18"></a> *
+<a name="line19"></a> * The directory structure is of the form /HASH/URL/BASENAME:
+<a name="line20"></a> *
+<a name="line21"></a> * The HASH portion is a three-character slice of the hash of the URL. Since the
+<a name="line22"></a> * filesystem has a limit of about 5000 files per directory, this should divide
+<a name="line23"></a> * the downloads roughly evenly among about 5000 directories, thus allowing for
+<a name="line24"></a> * at most 5000^2 downloads.
+<a name="line25"></a> *
+<a name="line26"></a> * The URL portion is the (sanitized) full URL used for downloading the file.
+<a name="line27"></a> * This is used to ensure that each file ends up in a different location, even
+<a name="line28"></a> * if the HASH and BASENAME are the same.
+<a name="line29"></a> *
+<a name="line30"></a> * The BASENAME portion is the basename of the URL. It&#39;s used for the filename
+<a name="line31"></a> * proper so that the local filesystem: URL will be downloaded to a file with a
+<a name="line32"></a> * recognizable name.
+<a name="line33"></a> *
+<a name="line34"></a> */
+<a name="line35"></a>
+<a name="line36"></a>goog.provide(&#39;goog.net.FileDownloader&#39;);
+<a name="line37"></a>goog.provide(&#39;goog.net.FileDownloader.Error&#39;);
+<a name="line38"></a>
+<a name="line39"></a>goog.require(&#39;goog.Disposable&#39;);
+<a name="line40"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line41"></a>goog.require(&#39;goog.async.Deferred&#39;);
+<a name="line42"></a>goog.require(&#39;goog.crypt.hash32&#39;);
+<a name="line43"></a>goog.require(&#39;goog.debug.Error&#39;);
+<a name="line44"></a>goog.require(&#39;goog.events&#39;);
+<a name="line45"></a>goog.require(&#39;goog.events.EventHandler&#39;);
+<a name="line46"></a>goog.require(&#39;goog.fs&#39;);
+<a name="line47"></a>goog.require(&#39;goog.fs.DirectoryEntry&#39;);
+<a name="line48"></a>goog.require(&#39;goog.fs.Error&#39;);
+<a name="line49"></a>goog.require(&#39;goog.fs.FileSaver&#39;);
+<a name="line50"></a>goog.require(&#39;goog.net.EventType&#39;);
+<a name="line51"></a>goog.require(&#39;goog.net.XhrIo&#39;);
+<a name="line52"></a>goog.require(&#39;goog.net.XhrIoPool&#39;);
+<a name="line53"></a>goog.require(&#39;goog.object&#39;);
+<a name="line54"></a>
+<a name="line55"></a>
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * A class for downloading remote files and storing them locally using the
+<a name="line59"></a> * HTML5 filesystem API.
+<a name="line60"></a> *
+<a name="line61"></a> * @param {!goog.fs.DirectoryEntry} dir The directory in which the downloaded
+<a name="line62"></a> *     files are stored. This directory should be solely managed by
+<a name="line63"></a> *     FileDownloader.
+<a name="line64"></a> * @param {goog.net.XhrIoPool=} opt_pool The pool of XhrIo objects to use for
+<a name="line65"></a> *     downloading files.
+<a name="line66"></a> * @constructor
+<a name="line67"></a> * @extends {goog.Disposable}
+<a name="line68"></a> * @final
+<a name="line69"></a> */
+<a name="line70"></a>goog.net.FileDownloader = function(dir, opt_pool) {
+<a name="line71"></a>  goog.net.FileDownloader.base(this, &#39;constructor&#39;);
+<a name="line72"></a>
+<a name="line73"></a>  /**
+<a name="line74"></a>   * The directory in which the downloaded files are stored.
+<a name="line75"></a>   * @type {!goog.fs.DirectoryEntry}
+<a name="line76"></a>   * @private
+<a name="line77"></a>   */
+<a name="line78"></a>  this.dir_ = dir;
+<a name="line79"></a>
+<a name="line80"></a>  /**
+<a name="line81"></a>   * The pool of XHRs to use for capturing.
+<a name="line82"></a>   * @type {!goog.net.XhrIoPool}
+<a name="line83"></a>   * @private
+<a name="line84"></a>   */
+<a name="line85"></a>  this.pool_ = opt_pool || new goog.net.XhrIoPool();
+<a name="line86"></a>
+<a name="line87"></a>  /**
+<a name="line88"></a>   * A map from URLs to active downloads running for those URLs.
+<a name="line89"></a>   * @type {!Object.&lt;!goog.net.FileDownloader.Download_&gt;}
+<a name="line90"></a>   * @private
+<a name="line91"></a>   */
+<a name="line92"></a>  this.downloads_ = {};
+<a name="line93"></a>
+<a name="line94"></a>  /**
+<a name="line95"></a>   * The handler for URL capturing events.
+<a name="line96"></a>   * @type {!goog.events.EventHandler.&lt;!goog.net.FileDownloader&gt;}
+<a name="line97"></a>   * @private
+<a name="line98"></a>   */
+<a name="line99"></a>  this.eventHandler_ = new goog.events.EventHandler(this);
+<a name="line100"></a>};
+<a name="line101"></a>goog.inherits(goog.net.FileDownloader, goog.Disposable);
+<a name="line102"></a>
+<a name="line103"></a>
+<a name="line104"></a>/**
+<a name="line105"></a> * Download a remote file and save its contents to the filesystem. A given file
+<a name="line106"></a> * is uniquely identified by its URL string; this means that the relative and
+<a name="line107"></a> * absolute URLs for a single file are considered different for the purposes of
+<a name="line108"></a> * the FileDownloader.
+<a name="line109"></a> *
+<a name="line110"></a> * Returns a Deferred that will contain the downloaded blob. If there&#39;s an error
+<a name="line111"></a> * while downloading the URL, this Deferred will be passed the
+<a name="line112"></a> * {@link goog.net.FileDownloader.Error} object as an errback.
+<a name="line113"></a> *
+<a name="line114"></a> * If a download is already in progress for the given URL, this will return the
+<a name="line115"></a> * deferred blob for that download. If the URL has already been downloaded, this
+<a name="line116"></a> * will fail once it tries to save the downloaded blob.
+<a name="line117"></a> *
+<a name="line118"></a> * When a download is in progress, all Deferreds returned for that download will
+<a name="line119"></a> * be branches of a single parent. If all such branches are cancelled, or if one
+<a name="line120"></a> * is cancelled with opt_deepCancel set, then the download will be cancelled as
+<a name="line121"></a> * well.
+<a name="line122"></a> *
+<a name="line123"></a> * @param {string} url The URL of the file to download.
+<a name="line124"></a> * @return {!goog.async.Deferred} The deferred result blob.
+<a name="line125"></a> */
+<a name="line126"></a>goog.net.FileDownloader.prototype.download = function(url) {
+<a name="line127"></a>  if (this.isDownloading(url)) {
+<a name="line128"></a>    return this.downloads_[url].deferred.branch(true /* opt_propagateCancel */);
+<a name="line129"></a>  }
+<a name="line130"></a>
+<a name="line131"></a>  var download = new goog.net.FileDownloader.Download_(url, this);
+<a name="line132"></a>  this.downloads_[url] = download;
+<a name="line133"></a>  this.pool_.getObject(goog.bind(this.gotXhr_, this, download));
+<a name="line134"></a>  return download.deferred.branch(true /* opt_propagateCancel */);
+<a name="line135"></a>};
+<a name="line136"></a>
+<a name="line137"></a>
+<a name="line138"></a>/**
+<a name="line139"></a> * Return a Deferred that will fire once no download is active for a given URL.
+<a name="line140"></a> * If there&#39;s no download active for that URL when this is called, the deferred
+<a name="line141"></a> * will fire immediately; otherwise, it will fire once the download is complete,
+<a name="line142"></a> * whether or not it succeeds.
+<a name="line143"></a> *
+<a name="line144"></a> * @param {string} url The URL of the download to wait for.
+<a name="line145"></a> * @return {!goog.async.Deferred} The Deferred that will fire when the download
+<a name="line146"></a> *     is complete.
+<a name="line147"></a> */
+<a name="line148"></a>goog.net.FileDownloader.prototype.waitForDownload = function(url) {
+<a name="line149"></a>  var deferred = new goog.async.Deferred();
+<a name="line150"></a>  if (this.isDownloading(url)) {
+<a name="line151"></a>    this.downloads_[url].deferred.addBoth(function() {
+<a name="line152"></a>      deferred.callback(null);
+<a name="line153"></a>    }, this);
+<a name="line154"></a>  } else {
+<a name="line155"></a>    deferred.callback(null);
+<a name="line156"></a>  }
+<a name="line157"></a>  return deferred;
+<a name="line158"></a>};
+<a name="line159"></a>
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * Returns whether or not there is an active download for a given URL.
+<a name="line163"></a> *
+<a name="line164"></a> * @param {string} url The URL of the download to check.
+<a name="line165"></a> * @return {boolean} Whether or not there is an active download for the URL.
+<a name="line166"></a> */
+<a name="line167"></a>goog.net.FileDownloader.prototype.isDownloading = function(url) {
+<a name="line168"></a>  return url in this.downloads_;
+<a name="line169"></a>};
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Load a downloaded blob from the filesystem. Will fire a deferred error if the
+<a name="line174"></a> * given URL has not yet been downloaded.
+<a name="line175"></a> *
+<a name="line176"></a> * @param {string} url The URL of the blob to load.
+<a name="line177"></a> * @return {!goog.async.Deferred} The deferred Blob object. The callback will be
+<a name="line178"></a> *     passed the blob. If a file API error occurs while loading the blob, that
+<a name="line179"></a> *     error will be passed to the errback.
+<a name="line180"></a> */
+<a name="line181"></a>goog.net.FileDownloader.prototype.getDownloadedBlob = function(url) {
+<a name="line182"></a>  return this.getFile_(url).
+<a name="line183"></a>      addCallback(function(fileEntry) { return fileEntry.file(); });
+<a name="line184"></a>};
+<a name="line185"></a>
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * Get the local filesystem: URL for a downloaded file. This is different from
+<a name="line189"></a> * the blob: URL that&#39;s available from getDownloadedBlob(). If the end user
+<a name="line190"></a> * accesses the filesystem: URL, the resulting file&#39;s name will be determined by
+<a name="line191"></a> * the download filename as opposed to an arbitrary GUID. In addition, the
+<a name="line192"></a> * filesystem: URL is connected to a filesystem location, so if the download is
+<a name="line193"></a> * removed then that URL will become invalid.
+<a name="line194"></a> *
+<a name="line195"></a> * Warning: in Chrome 12, some filesystem: URLs are opened inline. This means
+<a name="line196"></a> * that e.g. HTML pages given to the user via filesystem: URLs will be opened
+<a name="line197"></a> * and processed by the browser.
+<a name="line198"></a> *
+<a name="line199"></a> * @param {string} url The URL of the file to get the URL of.
+<a name="line200"></a> * @return {!goog.async.Deferred} The deferred filesystem: URL. The callback
+<a name="line201"></a> *     will be passed the URL. If a file API error occurs while loading the
+<a name="line202"></a> *     blob, that error will be passed to the errback.
+<a name="line203"></a> */
+<a name="line204"></a>goog.net.FileDownloader.prototype.getLocalUrl = function(url) {
+<a name="line205"></a>  return this.getFile_(url).
+<a name="line206"></a>      addCallback(function(fileEntry) { return fileEntry.toUrl(); });
+<a name="line207"></a>};
+<a name="line208"></a>
+<a name="line209"></a>
+<a name="line210"></a>/**
+<a name="line211"></a> * Return (deferred) whether or not a URL has been downloaded. Will fire a
+<a name="line212"></a> * deferred error if something goes wrong when determining this.
+<a name="line213"></a> *
+<a name="line214"></a> * @param {string} url The URL to check.
+<a name="line215"></a> * @return {!goog.async.Deferred} The deferred boolean. The callback will be
+<a name="line216"></a> *     passed the boolean. If a file API error occurs while checking the
+<a name="line217"></a> *     existence of the downloaded URL, that error will be passed to the
+<a name="line218"></a> *     errback.
+<a name="line219"></a> */
+<a name="line220"></a>goog.net.FileDownloader.prototype.isDownloaded = function(url) {
+<a name="line221"></a>  var deferred = new goog.async.Deferred();
+<a name="line222"></a>  var blobDeferred = this.getDownloadedBlob(url);
+<a name="line223"></a>  blobDeferred.addCallback(function() {
+<a name="line224"></a>    deferred.callback(true);
+<a name="line225"></a>  });
+<a name="line226"></a>  blobDeferred.addErrback(function(err) {
+<a name="line227"></a>    if (err.code == goog.fs.Error.ErrorCode.NOT_FOUND) {
+<a name="line228"></a>      deferred.callback(false);
+<a name="line229"></a>    } else {
+<a name="line230"></a>      deferred.errback(err);
+<a name="line231"></a>    }
+<a name="line232"></a>  });
+<a name="line233"></a>  return deferred;
+<a name="line234"></a>};
+<a name="line235"></a>
+<a name="line236"></a>
+<a name="line237"></a>/**
+<a name="line238"></a> * Remove a URL from the FileDownloader.
+<a name="line239"></a> *
+<a name="line240"></a> * This returns a Deferred. If the removal is completed successfully, its
+<a name="line241"></a> * callback will be called without any value. If the removal fails, its errback
+<a name="line242"></a> * will be called with the {@link goog.fs.Error}.
+<a name="line243"></a> *
+<a name="line244"></a> * @param {string} url The URL to remove.
+<a name="line245"></a> * @return {!goog.async.Deferred} The deferred used for registering callbacks on
+<a name="line246"></a> *     success or on error.
+<a name="line247"></a> */
+<a name="line248"></a>goog.net.FileDownloader.prototype.remove = function(url) {
+<a name="line249"></a>  return this.getDir_(url, goog.fs.DirectoryEntry.Behavior.DEFAULT).
+<a name="line250"></a>      addCallback(function(dir) { return dir.removeRecursively(); });
+<a name="line251"></a>};
+<a name="line252"></a>
+<a name="line253"></a>
+<a name="line254"></a>/**
+<a name="line255"></a> * Save a blob for a given URL. This works just as through the blob were
+<a name="line256"></a> * downloaded form that URL, except you specify the blob and no HTTP request is
+<a name="line257"></a> * made.
+<a name="line258"></a> *
+<a name="line259"></a> * If the URL is currently being downloaded, it&#39;s indeterminate whether the blob
+<a name="line260"></a> * being set or the blob being downloaded will end up in the filesystem.
+<a name="line261"></a> * Whichever one doesn&#39;t get saved will have an error. To ensure that one or the
+<a name="line262"></a> * other takes precedence, use {@link #waitForDownload} to allow the download to
+<a name="line263"></a> * complete before setting the blob.
+<a name="line264"></a> *
+<a name="line265"></a> * @param {string} url The URL at which to set the blob.
+<a name="line266"></a> * @param {!Blob} blob The blob to set.
+<a name="line267"></a> * @param {string=} opt_name The name of the file. If this isn&#39;t given, it&#39;s
+<a name="line268"></a> *     determined from the URL.
+<a name="line269"></a> * @return {!goog.async.Deferred} The deferred used for registering callbacks on
+<a name="line270"></a> *     success or on error. This can be cancelled just like a {@link #download}
+<a name="line271"></a> *     Deferred. The objects passed to the errback will be
+<a name="line272"></a> *     {@link goog.net.FileDownloader.Error}s.
+<a name="line273"></a> */
+<a name="line274"></a>goog.net.FileDownloader.prototype.setBlob = function(url, blob, opt_name) {
+<a name="line275"></a>  var name = this.sanitize_(opt_name || this.urlToName_(url));
+<a name="line276"></a>  var download = new goog.net.FileDownloader.Download_(url, this);
+<a name="line277"></a>  this.downloads_[url] = download;
+<a name="line278"></a>  download.blob = blob;
+<a name="line279"></a>  this.getDir_(download.url, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE).
+<a name="line280"></a>      addCallback(function(dir) {
+<a name="line281"></a>        return dir.getFile(
+<a name="line282"></a>            name, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE);
+<a name="line283"></a>      }).
+<a name="line284"></a>      addCallback(goog.bind(this.fileSuccess_, this, download)).
+<a name="line285"></a>      addErrback(goog.bind(this.error_, this, download));
+<a name="line286"></a>  return download.deferred.branch(true /* opt_propagateCancel */);
+<a name="line287"></a>};
+<a name="line288"></a>
+<a name="line289"></a>
+<a name="line290"></a>/**
+<a name="line291"></a> * The callback called when an XHR becomes available from the XHR pool.
+<a name="line292"></a> *
+<a name="line293"></a> * @param {!goog.net.FileDownloader.Download_} download The download object for
+<a name="line294"></a> *     this download.
+<a name="line295"></a> * @param {!goog.net.XhrIo} xhr The XhrIo object for downloading the page.
+<a name="line296"></a> * @private
+<a name="line297"></a> */
+<a name="line298"></a>goog.net.FileDownloader.prototype.gotXhr_ = function(download, xhr) {
+<a name="line299"></a>  if (download.cancelled) {
+<a name="line300"></a>    this.freeXhr_(xhr);
+<a name="line301"></a>    return;
+<a name="line302"></a>  }
+<a name="line303"></a>
+<a name="line304"></a>  this.eventHandler_.listen(
+<a name="line305"></a>      xhr, goog.net.EventType.SUCCESS,
+<a name="line306"></a>      goog.bind(this.xhrSuccess_, this, download));
+<a name="line307"></a>  this.eventHandler_.listen(
+<a name="line308"></a>      xhr, [goog.net.EventType.ERROR, goog.net.EventType.ABORT],
+<a name="line309"></a>      goog.bind(this.error_, this, download));
+<a name="line310"></a>  this.eventHandler_.listen(
+<a name="line311"></a>      xhr, goog.net.EventType.READY,
+<a name="line312"></a>      goog.bind(this.freeXhr_, this, xhr));
+<a name="line313"></a>
+<a name="line314"></a>  download.xhr = xhr;
+<a name="line315"></a>  xhr.setResponseType(goog.net.XhrIo.ResponseType.ARRAY_BUFFER);
+<a name="line316"></a>  xhr.send(download.url);
+<a name="line317"></a>};
+<a name="line318"></a>
+<a name="line319"></a>
+<a name="line320"></a>/**
+<a name="line321"></a> * The callback called when an XHR succeeds in downloading a remote file.
+<a name="line322"></a> *
+<a name="line323"></a> * @param {!goog.net.FileDownloader.Download_} download The download object for
+<a name="line324"></a> *     this download.
+<a name="line325"></a> * @private
+<a name="line326"></a> */
+<a name="line327"></a>goog.net.FileDownloader.prototype.xhrSuccess_ = function(download) {
+<a name="line328"></a>  if (download.cancelled) {
+<a name="line329"></a>    return;
+<a name="line330"></a>  }
+<a name="line331"></a>
+<a name="line332"></a>  var name = this.sanitize_(this.getName_(
+<a name="line333"></a>      /** @type {!goog.net.XhrIo} */ (download.xhr)));
+<a name="line334"></a>  var resp = /** @type {ArrayBuffer} */ (download.xhr.getResponse());
+<a name="line335"></a>  if (!resp) {
+<a name="line336"></a>    // This should never happen - it indicates the XHR hasn&#39;t completed, has
+<a name="line337"></a>    // failed or has been cleaned up.  If it does happen (eg. due to a bug
+<a name="line338"></a>    // somewhere) we don&#39;t want to pass null to getBlob - it&#39;s not valid and
+<a name="line339"></a>    // triggers a bug in some versions of WebKit causing it to crash.
+<a name="line340"></a>    this.error_(download);
+<a name="line341"></a>    return;
+<a name="line342"></a>  }
+<a name="line343"></a>
+<a name="line344"></a>  download.blob = goog.fs.getBlob(resp);
+<a name="line345"></a>  delete download.xhr;
+<a name="line346"></a>
+<a name="line347"></a>  this.getDir_(download.url, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE).
+<a name="line348"></a>      addCallback(function(dir) {
+<a name="line349"></a>        return dir.getFile(
+<a name="line350"></a>            name, goog.fs.DirectoryEntry.Behavior.CREATE_EXCLUSIVE);
+<a name="line351"></a>      }).
+<a name="line352"></a>      addCallback(goog.bind(this.fileSuccess_, this, download)).
+<a name="line353"></a>      addErrback(goog.bind(this.error_, this, download));
+<a name="line354"></a>};
+<a name="line355"></a>
+<a name="line356"></a>
+<a name="line357"></a>/**
+<a name="line358"></a> * The callback called when a file that will be used for saving a file is
+<a name="line359"></a> * successfully opened.
+<a name="line360"></a> *
+<a name="line361"></a> * @param {!goog.net.FileDownloader.Download_} download The download object for
+<a name="line362"></a> *     this download.
+<a name="line363"></a> * @param {!goog.fs.FileEntry} file The newly-opened file object.
+<a name="line364"></a> * @private
+<a name="line365"></a> */
+<a name="line366"></a>goog.net.FileDownloader.prototype.fileSuccess_ = function(download, file) {
+<a name="line367"></a>  if (download.cancelled) {
+<a name="line368"></a>    file.remove();
+<a name="line369"></a>    return;
+<a name="line370"></a>  }
+<a name="line371"></a>
+<a name="line372"></a>  download.file = file;
+<a name="line373"></a>  file.createWriter().
+<a name="line374"></a>      addCallback(goog.bind(this.fileWriterSuccess_, this, download)).
+<a name="line375"></a>      addErrback(goog.bind(this.error_, this, download));
+<a name="line376"></a>};
+<a name="line377"></a>
+<a name="line378"></a>
+<a name="line379"></a>/**
+<a name="line380"></a> * The callback called when a file writer is succesfully created for writing a
+<a name="line381"></a> * file to the filesystem.
+<a name="line382"></a> *
+<a name="line383"></a> * @param {!goog.net.FileDownloader.Download_} download The download object for
+<a name="line384"></a> *     this download.
+<a name="line385"></a> * @param {!goog.fs.FileWriter} writer The newly-created file writer object.
+<a name="line386"></a> * @private
+<a name="line387"></a> */
+<a name="line388"></a>goog.net.FileDownloader.prototype.fileWriterSuccess_ = function(
+<a name="line389"></a>    download, writer) {
+<a name="line390"></a>  if (download.cancelled) {
+<a name="line391"></a>    download.file.remove();
+<a name="line392"></a>    return;
+<a name="line393"></a>  }
+<a name="line394"></a>
+<a name="line395"></a>  download.writer = writer;
+<a name="line396"></a>  writer.write(/** @type {!Blob} */ (download.blob));
+<a name="line397"></a>  this.eventHandler_.listenOnce(
+<a name="line398"></a>      writer,
+<a name="line399"></a>      goog.fs.FileSaver.EventType.WRITE_END,
+<a name="line400"></a>      goog.bind(this.writeEnd_, this, download));
+<a name="line401"></a>};
+<a name="line402"></a>
+<a name="line403"></a>
+<a name="line404"></a>/**
+<a name="line405"></a> * The callback called when file writing ends, whether or not it&#39;s successful.
+<a name="line406"></a> *
+<a name="line407"></a> * @param {!goog.net.FileDownloader.Download_} download The download object for
+<a name="line408"></a> *     this download.
+<a name="line409"></a> * @private
+<a name="line410"></a> */
+<a name="line411"></a>goog.net.FileDownloader.prototype.writeEnd_ = function(download) {
+<a name="line412"></a>  if (download.cancelled || download.writer.getError()) {
+<a name="line413"></a>    this.error_(download, download.writer.getError());
+<a name="line414"></a>    return;
+<a name="line415"></a>  }
+<a name="line416"></a>
+<a name="line417"></a>  delete this.downloads_[download.url];
+<a name="line418"></a>  download.deferred.callback(download.blob);
+<a name="line419"></a>};
+<a name="line420"></a>
+<a name="line421"></a>
+<a name="line422"></a>/**
+<a name="line423"></a> * The error callback for all asynchronous operations. Ensures that all stages
+<a name="line424"></a> * of a given download are cleaned up, and emits the error event.
+<a name="line425"></a> *
+<a name="line426"></a> * @param {!goog.net.FileDownloader.Download_} download The download object for
+<a name="line427"></a> *     this download.
+<a name="line428"></a> * @param {goog.fs.Error=} opt_err The file error object. Only defined if the
+<a name="line429"></a> *     error was raised by the file API.
+<a name="line430"></a> * @private
+<a name="line431"></a> */
+<a name="line432"></a>goog.net.FileDownloader.prototype.error_ = function(download, opt_err) {
+<a name="line433"></a>  if (download.file) {
+<a name="line434"></a>    download.file.remove();
+<a name="line435"></a>  }
+<a name="line436"></a>
+<a name="line437"></a>  if (download.cancelled) {
+<a name="line438"></a>    return;
+<a name="line439"></a>  }
+<a name="line440"></a>
+<a name="line441"></a>  delete this.downloads_[download.url];
+<a name="line442"></a>  download.deferred.errback(
+<a name="line443"></a>      new goog.net.FileDownloader.Error(download, opt_err));
+<a name="line444"></a>};
+<a name="line445"></a>
+<a name="line446"></a>
+<a name="line447"></a>/**
+<a name="line448"></a> * Abort the download of the given URL.
+<a name="line449"></a> *
+<a name="line450"></a> * @param {!goog.net.FileDownloader.Download_} download The download to abort.
+<a name="line451"></a> * @private
+<a name="line452"></a> */
+<a name="line453"></a>goog.net.FileDownloader.prototype.cancel_ = function(download) {
+<a name="line454"></a>  goog.dispose(download);
+<a name="line455"></a>  delete this.downloads_[download.url];
+<a name="line456"></a>};
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>/**
+<a name="line460"></a> * Get the directory for a given URL. If the directory already exists when this
+<a name="line461"></a> * is called, it will contain exactly one file: the downloaded file.
+<a name="line462"></a> *
+<a name="line463"></a> * This not only calls the FileSystem API&#39;s getFile method, but attempts to
+<a name="line464"></a> * distribute the files so that they don&#39;t overload the filesystem. The spec
+<a name="line465"></a> * says directories can&#39;t contain more than 5000 files
+<a name="line466"></a> * (http://www.w3.org/TR/file-system-api/#directories), so this ensures that
+<a name="line467"></a> * each file is put into a subdirectory based on its SHA1 hash.
+<a name="line468"></a> *
+<a name="line469"></a> * All parameters are the same as in the FileSystem API&#39;s Entry#getFile method.
+<a name="line470"></a> *
+<a name="line471"></a> * @param {string} url The URL corresponding to the directory to get.
+<a name="line472"></a> * @param {goog.fs.DirectoryEntry.Behavior} behavior The behavior to pass to the
+<a name="line473"></a> *     underlying method.
+<a name="line474"></a> * @return {!goog.async.Deferred} The deferred DirectoryEntry object.
+<a name="line475"></a> * @private
+<a name="line476"></a> */
+<a name="line477"></a>goog.net.FileDownloader.prototype.getDir_ = function(url, behavior) {
+<a name="line478"></a>  // 3 hex digits provide 16**3 = 4096 different possible dirnames, which is
+<a name="line479"></a>  // less than the maximum of 5000 entries. Downloaded files should be
+<a name="line480"></a>  // distributed roughly evenly throughout the directories due to the hash
+<a name="line481"></a>  // function, allowing many more than 5000 files to be downloaded.
+<a name="line482"></a>  //
+<a name="line483"></a>  // The leading ` ensures that no illegal dirnames are accidentally used. % was
+<a name="line484"></a>  // previously used, but Chrome has a bug (as of 12.0.725.0 dev) where
+<a name="line485"></a>  // filenames are URL-decoded before checking their validity, so filenames
+<a name="line486"></a>  // containing e.g. &#39;%3f&#39; (the URL-encoding of :, an invalid character) are
+<a name="line487"></a>  // rejected.
+<a name="line488"></a>  var dirname = &#39;`&#39; + Math.abs(goog.crypt.hash32.encodeString(url)).
+<a name="line489"></a>      toString(16).substring(0, 3);
+<a name="line490"></a>
+<a name="line491"></a>  return this.dir_.
+<a name="line492"></a>      getDirectory(dirname, goog.fs.DirectoryEntry.Behavior.CREATE).
+<a name="line493"></a>      addCallback(function(dir) {
+<a name="line494"></a>        return dir.getDirectory(this.sanitize_(url), behavior);
+<a name="line495"></a>      }, this);
+<a name="line496"></a>};
+<a name="line497"></a>
+<a name="line498"></a>
+<a name="line499"></a>/**
+<a name="line500"></a> * Get the file for a given URL. This will only retrieve files that have already
+<a name="line501"></a> * been saved; it shouldn&#39;t be used for creating the file in the first place.
+<a name="line502"></a> * This is because the filename isn&#39;t necessarily determined by the URL, but by
+<a name="line503"></a> * the headers of the XHR response.
+<a name="line504"></a> *
+<a name="line505"></a> * @param {string} url The URL corresponding to the file to get.
+<a name="line506"></a> * @return {!goog.async.Deferred} The deferred FileEntry object.
+<a name="line507"></a> * @private
+<a name="line508"></a> */
+<a name="line509"></a>goog.net.FileDownloader.prototype.getFile_ = function(url) {
+<a name="line510"></a>  return this.getDir_(url, goog.fs.DirectoryEntry.Behavior.DEFAULT).
+<a name="line511"></a>      addCallback(function(dir) {
+<a name="line512"></a>        return dir.listDirectory().addCallback(function(files) {
+<a name="line513"></a>          goog.asserts.assert(files.length == 1);
+<a name="line514"></a>          // If the filesystem somehow gets corrupted and we end up with an
+<a name="line515"></a>          // empty directory here, it makes sense to just return the normal
+<a name="line516"></a>          // file-not-found error.
+<a name="line517"></a>          return files[0] || dir.getFile(&#39;file&#39;);
+<a name="line518"></a>        });
+<a name="line519"></a>      });
+<a name="line520"></a>};
+<a name="line521"></a>
+<a name="line522"></a>
+<a name="line523"></a>/**
+<a name="line524"></a> * Sanitize a string so it can be safely used as a file or directory name for
+<a name="line525"></a> * the FileSystem API.
+<a name="line526"></a> *
+<a name="line527"></a> * @param {string} str The string to sanitize.
+<a name="line528"></a> * @return {string} The sanitized string.
+<a name="line529"></a> * @private
+<a name="line530"></a> */
+<a name="line531"></a>goog.net.FileDownloader.prototype.sanitize_ = function(str) {
+<a name="line532"></a>  // Add a prefix, since certain prefixes are disallowed for paths. None of the
+<a name="line533"></a>  // disallowed prefixes start with &#39;`&#39;. We use ` rather than % for escaping the
+<a name="line534"></a>  // filename due to a Chrome bug (as of 12.0.725.0 dev) where filenames are
+<a name="line535"></a>  // URL-decoded before checking their validity, so filenames containing e.g.
+<a name="line536"></a>  // &#39;%3f&#39; (the URL-encoding of :, an invalid character) are rejected.
+<a name="line537"></a>  return &#39;`&#39; + str.replace(/[\/\\&lt;&gt;:?*&quot;|%`]/g, encodeURIComponent).
+<a name="line538"></a>      replace(/%/g, &#39;`&#39;);
+<a name="line539"></a>};
+<a name="line540"></a>
+<a name="line541"></a>
+<a name="line542"></a>/**
+<a name="line543"></a> * Gets the filename specified by the XHR. This first attempts to parse the
+<a name="line544"></a> * Content-Disposition header for a filename and, failing that, falls back on
+<a name="line545"></a> * deriving the filename from the URL.
+<a name="line546"></a> *
+<a name="line547"></a> * @param {!goog.net.XhrIo} xhr The XHR containing the response headers.
+<a name="line548"></a> * @return {string} The filename.
+<a name="line549"></a> * @private
+<a name="line550"></a> */
+<a name="line551"></a>goog.net.FileDownloader.prototype.getName_ = function(xhr) {
+<a name="line552"></a>  var disposition = xhr.getResponseHeader(&#39;Content-Disposition&#39;);
+<a name="line553"></a>  var match = disposition &amp;&amp;
+<a name="line554"></a>      disposition.match(/^attachment *; *filename=&quot;(.*)&quot;$/i);
+<a name="line555"></a>  if (match) {
+<a name="line556"></a>    // The Content-Disposition header allows for arbitrary backslash-escaped
+<a name="line557"></a>    // characters (usually &quot; and \). We want to unescape them before using them
+<a name="line558"></a>    // in the filename.
+<a name="line559"></a>    return match[1].replace(/\\(.)/g, &#39;$1&#39;);
+<a name="line560"></a>  }
+<a name="line561"></a>
+<a name="line562"></a>  return this.urlToName_(xhr.getLastUri());
+<a name="line563"></a>};
+<a name="line564"></a>
+<a name="line565"></a>
+<a name="line566"></a>/**
+<a name="line567"></a> * Extracts the basename from a URL.
+<a name="line568"></a> *
+<a name="line569"></a> * @param {string} url The URL.
+<a name="line570"></a> * @return {string} The basename.
+<a name="line571"></a> * @private
+<a name="line572"></a> */
+<a name="line573"></a>goog.net.FileDownloader.prototype.urlToName_ = function(url) {
+<a name="line574"></a>  var segments = url.split(&#39;/&#39;);
+<a name="line575"></a>  return segments[segments.length - 1];
+<a name="line576"></a>};
+<a name="line577"></a>
+<a name="line578"></a>
+<a name="line579"></a>/**
+<a name="line580"></a> * Remove all event listeners for an XHR and release it back into the pool.
+<a name="line581"></a> *
+<a name="line582"></a> * @param {!goog.net.XhrIo} xhr The XHR to free.
+<a name="line583"></a> * @private
+<a name="line584"></a> */
+<a name="line585"></a>goog.net.FileDownloader.prototype.freeXhr_ = function(xhr) {
+<a name="line586"></a>  goog.events.removeAll(xhr);
+<a name="line587"></a>  this.pool_.addFreeObject(xhr);
+<a name="line588"></a>};
+<a name="line589"></a>
+<a name="line590"></a>
+<a name="line591"></a>/** @override */
+<a name="line592"></a>goog.net.FileDownloader.prototype.disposeInternal = function() {
+<a name="line593"></a>  delete this.dir_;
+<a name="line594"></a>  goog.dispose(this.eventHandler_);
+<a name="line595"></a>  delete this.eventHandler_;
+<a name="line596"></a>  goog.object.forEach(this.downloads_, function(download) {
+<a name="line597"></a>    download.deferred.cancel();
+<a name="line598"></a>  }, this);
+<a name="line599"></a>  delete this.downloads_;
+<a name="line600"></a>  goog.dispose(this.pool_);
+<a name="line601"></a>  delete this.pool_;
+<a name="line602"></a>
+<a name="line603"></a>  goog.net.FileDownloader.base(this, &#39;disposeInternal&#39;);
+<a name="line604"></a>};
+<a name="line605"></a>
+<a name="line606"></a>
+<a name="line607"></a>
+<a name="line608"></a>/**
+<a name="line609"></a> * The error object for FileDownloader download errors.
+<a name="line610"></a> *
+<a name="line611"></a> * @param {!goog.net.FileDownloader.Download_} download The download object for
+<a name="line612"></a> *     the download in question.
+<a name="line613"></a> * @param {goog.fs.Error=} opt_fsErr The file error object, if this was a file
+<a name="line614"></a> *     error.
+<a name="line615"></a> *
+<a name="line616"></a> * @constructor
+<a name="line617"></a> * @extends {goog.debug.Error}
+<a name="line618"></a> * @final
+<a name="line619"></a> */
+<a name="line620"></a>goog.net.FileDownloader.Error = function(download, opt_fsErr) {
+<a name="line621"></a>  goog.net.FileDownloader.Error.base(
+<a name="line622"></a>      this, &#39;constructor&#39;, &#39;Error capturing URL &#39; + download.url);
+<a name="line623"></a>
+<a name="line624"></a>  /**
+<a name="line625"></a>   * The URL the event relates to.
+<a name="line626"></a>   * @type {string}
+<a name="line627"></a>   */
+<a name="line628"></a>  this.url = download.url;
+<a name="line629"></a>
+<a name="line630"></a>  if (download.xhr) {
+<a name="line631"></a>    this.xhrStatus = download.xhr.getStatus();
+<a name="line632"></a>    this.xhrErrorCode = download.xhr.getLastErrorCode();
+<a name="line633"></a>    this.message += &#39;: XHR failed with status &#39; + this.xhrStatus +
+<a name="line634"></a>        &#39; (error code &#39; + this.xhrErrorCode + &#39;)&#39;;
+<a name="line635"></a>  } else if (opt_fsErr) {
+<a name="line636"></a>    this.fileError = opt_fsErr;
+<a name="line637"></a>    this.message += &#39;: file API failed (&#39; + opt_fsErr.message + &#39;)&#39;;
+<a name="line638"></a>  }
+<a name="line639"></a>};
+<a name="line640"></a>goog.inherits(goog.net.FileDownloader.Error, goog.debug.Error);
+<a name="line641"></a>
+<a name="line642"></a>
+<a name="line643"></a>/**
+<a name="line644"></a> * The status of the XHR. Only set if the error was caused by an XHR failure.
+<a name="line645"></a> * @type {number|undefined}
+<a name="line646"></a> */
+<a name="line647"></a>goog.net.FileDownloader.Error.prototype.xhrStatus;
+<a name="line648"></a>
+<a name="line649"></a>
+<a name="line650"></a>/**
+<a name="line651"></a> * The error code of the XHR. Only set if the error was caused by an XHR
+<a name="line652"></a> * failure.
+<a name="line653"></a> * @type {goog.net.ErrorCode|undefined}
+<a name="line654"></a> */
+<a name="line655"></a>goog.net.FileDownloader.Error.prototype.xhrErrorCode;
+<a name="line656"></a>
+<a name="line657"></a>
+<a name="line658"></a>/**
+<a name="line659"></a> * The file API error. Only set if the error was caused by the file API.
+<a name="line660"></a> * @type {goog.fs.Error|undefined}
+<a name="line661"></a> */
+<a name="line662"></a>goog.net.FileDownloader.Error.prototype.fileError;
+<a name="line663"></a>
+<a name="line664"></a>
+<a name="line665"></a>
+<a name="line666"></a>/**
+<a name="line667"></a> * A struct containing the data for a single download.
+<a name="line668"></a> *
+<a name="line669"></a> * @param {string} url The URL for the file being downloaded.
+<a name="line670"></a> * @param {!goog.net.FileDownloader} downloader The parent FileDownloader.
+<a name="line671"></a> * @extends {goog.Disposable}
+<a name="line672"></a> * @constructor
+<a name="line673"></a> * @private
+<a name="line674"></a> */
+<a name="line675"></a>goog.net.FileDownloader.Download_ = function(url, downloader) {
+<a name="line676"></a>  goog.net.FileDownloader.Download_.base(this, &#39;constructor&#39;);
+<a name="line677"></a>
+<a name="line678"></a>  /**
+<a name="line679"></a>   * The URL for the file being downloaded.
+<a name="line680"></a>   * @type {string}
+<a name="line681"></a>   */
+<a name="line682"></a>  this.url = url;
+<a name="line683"></a>
+<a name="line684"></a>  /**
+<a name="line685"></a>   * The Deferred that will be fired when the download is complete.
+<a name="line686"></a>   * @type {!goog.async.Deferred}
+<a name="line687"></a>   */
+<a name="line688"></a>  this.deferred = new goog.async.Deferred(
+<a name="line689"></a>      goog.bind(downloader.cancel_, downloader, this));
+<a name="line690"></a>
+<a name="line691"></a>  /**
+<a name="line692"></a>   * Whether this download has been cancelled by the user.
+<a name="line693"></a>   * @type {boolean}
+<a name="line694"></a>   */
+<a name="line695"></a>  this.cancelled = false;
+<a name="line696"></a>
+<a name="line697"></a>  /**
+<a name="line698"></a>   * The XhrIo object for downloading the file. Only set once it&#39;s been
+<a name="line699"></a>   * retrieved from the pool.
+<a name="line700"></a>   * @type {goog.net.XhrIo}
+<a name="line701"></a>   */
+<a name="line702"></a>  this.xhr = null;
+<a name="line703"></a>
+<a name="line704"></a>  /**
+<a name="line705"></a>   * The name of the blob being downloaded. Only sey once the XHR has completed,
+<a name="line706"></a>   * if it completed successfully.
+<a name="line707"></a>   * @type {?string}
+<a name="line708"></a>   */
+<a name="line709"></a>  this.name = null;
+<a name="line710"></a>
+<a name="line711"></a>  /**
+<a name="line712"></a>   * The downloaded blob. Only set once the XHR has completed, if it completed
+<a name="line713"></a>   * successfully.
+<a name="line714"></a>   * @type {Blob}
+<a name="line715"></a>   */
+<a name="line716"></a>  this.blob = null;
+<a name="line717"></a>
+<a name="line718"></a>  /**
+<a name="line719"></a>   * The file entry where the blob is to be stored. Only set once it&#39;s been
+<a name="line720"></a>   * loaded from the filesystem.
+<a name="line721"></a>   * @type {goog.fs.FileEntry}
+<a name="line722"></a>   */
+<a name="line723"></a>  this.file = null;
+<a name="line724"></a>
+<a name="line725"></a>  /**
+<a name="line726"></a>   * The file writer for writing the blob to the filesystem. Only set once it&#39;s
+<a name="line727"></a>   * been loaded from the filesystem.
+<a name="line728"></a>   * @type {goog.fs.FileWriter}
+<a name="line729"></a>   */
+<a name="line730"></a>  this.writer = null;
+<a name="line731"></a>};
+<a name="line732"></a>goog.inherits(goog.net.FileDownloader.Download_, goog.Disposable);
+<a name="line733"></a>
+<a name="line734"></a>
+<a name="line735"></a>/** @override */
+<a name="line736"></a>goog.net.FileDownloader.Download_.prototype.disposeInternal = function() {
+<a name="line737"></a>  this.cancelled = true;
+<a name="line738"></a>  if (this.xhr) {
+<a name="line739"></a>    this.xhr.abort();
+<a name="line740"></a>  } else if (this.writer &amp;&amp; this.writer.getReadyState() ==
+<a name="line741"></a>             goog.fs.FileSaver.ReadyState.WRITING) {
+<a name="line742"></a>    this.writer.abort();
+<a name="line743"></a>  }
+<a name="line744"></a>
+<a name="line745"></a>  goog.net.FileDownloader.Download_.base(this, &#39;disposeInternal&#39;);
+<a name="line746"></a>};
+</pre>
+
+
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>browser.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_useragent_browser.js.html">browser.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2013 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>/**
+<a name="line16"></a> * @fileoverview Closure user agent detection (Browser).
+<a name="line17"></a> * @see &lt;a href=&quot;http://www.useragentstring.com/&quot;&gt;User agent strings&lt;/a&gt;
+<a name="line18"></a> * For more information on rendering engine, platform, or device see the other
+<a name="line19"></a> * sub-namespaces in goog.labs.userAgent, goog.labs.userAgent.platform,
+<a name="line20"></a> * goog.labs.userAgent.device respectively.)
+<a name="line21"></a> *
+<a name="line22"></a> */
+<a name="line23"></a>
+<a name="line24"></a>goog.provide(&#39;goog.labs.userAgent.browser&#39;);
+<a name="line25"></a>
+<a name="line26"></a>goog.require(&#39;goog.array&#39;);
+<a name="line27"></a>goog.require(&#39;goog.asserts&#39;);
+<a name="line28"></a>goog.require(&#39;goog.labs.userAgent.util&#39;);
+<a name="line29"></a>goog.require(&#39;goog.string&#39;);
+<a name="line30"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * @return {boolean} Whether the user&#39;s browser is Opera.
+<a name="line34"></a> * @private
+<a name="line35"></a> */
+<a name="line36"></a>goog.labs.userAgent.browser.matchOpera_ = function() {
+<a name="line37"></a>  return goog.labs.userAgent.util.matchUserAgent(&#39;Opera&#39;) ||
+<a name="line38"></a>      goog.labs.userAgent.util.matchUserAgent(&#39;OPR&#39;);
+<a name="line39"></a>};
+<a name="line40"></a>
+<a name="line41"></a>
+<a name="line42"></a>/**
+<a name="line43"></a> * @return {boolean} Whether the user&#39;s browser is IE.
+<a name="line44"></a> * @private
+<a name="line45"></a> */
+<a name="line46"></a>goog.labs.userAgent.browser.matchIE_ = function() {
+<a name="line47"></a>  return goog.labs.userAgent.util.matchUserAgent(&#39;Trident&#39;) ||
+<a name="line48"></a>      goog.labs.userAgent.util.matchUserAgent(&#39;MSIE&#39;);
+<a name="line49"></a>};
+<a name="line50"></a>
+<a name="line51"></a>
+<a name="line52"></a>/**
+<a name="line53"></a> * @return {boolean} Whether the user&#39;s browser is Firefox.
+<a name="line54"></a> * @private
+<a name="line55"></a> */
+<a name="line56"></a>goog.labs.userAgent.browser.matchFirefox_ = function() {
+<a name="line57"></a>  return goog.labs.userAgent.util.matchUserAgent(&#39;Firefox&#39;);
+<a name="line58"></a>};
+<a name="line59"></a>
+<a name="line60"></a>
+<a name="line61"></a>/**
+<a name="line62"></a> * @return {boolean} Whether the user&#39;s browser is Safari.
+<a name="line63"></a> * @private
+<a name="line64"></a> */
+<a name="line65"></a>goog.labs.userAgent.browser.matchSafari_ = function() {
+<a name="line66"></a>  return goog.labs.userAgent.util.matchUserAgent(&#39;Safari&#39;) &amp;&amp;
+<a name="line67"></a>      !goog.labs.userAgent.util.matchUserAgent(&#39;Chrome&#39;) &amp;&amp;
+<a name="line68"></a>      !goog.labs.userAgent.util.matchUserAgent(&#39;CriOS&#39;) &amp;&amp;
+<a name="line69"></a>      !goog.labs.userAgent.util.matchUserAgent(&#39;Android&#39;);
+<a name="line70"></a>};
+<a name="line71"></a>
+<a name="line72"></a>
+<a name="line73"></a>/**
+<a name="line74"></a> * @return {boolean} Whether the user&#39;s browser is Chrome.
+<a name="line75"></a> * @private
+<a name="line76"></a> */
+<a name="line77"></a>goog.labs.userAgent.browser.matchChrome_ = function() {
+<a name="line78"></a>  return goog.labs.userAgent.util.matchUserAgent(&#39;Chrome&#39;) ||
+<a name="line79"></a>      goog.labs.userAgent.util.matchUserAgent(&#39;CriOS&#39;);
+<a name="line80"></a>};
+<a name="line81"></a>
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * @return {boolean} Whether the user&#39;s browser is the Android browser.
+<a name="line85"></a> * @private
+<a name="line86"></a> */
+<a name="line87"></a>goog.labs.userAgent.browser.matchAndroidBrowser_ = function() {
+<a name="line88"></a>  return goog.labs.userAgent.util.matchUserAgent(&#39;Android&#39;) &amp;&amp;
+<a name="line89"></a>      !goog.labs.userAgent.util.matchUserAgent(&#39;Chrome&#39;) &amp;&amp;
+<a name="line90"></a>      !goog.labs.userAgent.util.matchUserAgent(&#39;CriOS&#39;);
+<a name="line91"></a>};
+<a name="line92"></a>
+<a name="line93"></a>
+<a name="line94"></a>/**
+<a name="line95"></a> * @return {boolean} Whether the user&#39;s browser is Opera.
+<a name="line96"></a> */
+<a name="line97"></a>goog.labs.userAgent.browser.isOpera = goog.labs.userAgent.browser.matchOpera_;
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * @return {boolean} Whether the user&#39;s browser is IE.
+<a name="line102"></a> */
+<a name="line103"></a>goog.labs.userAgent.browser.isIE = goog.labs.userAgent.browser.matchIE_;
+<a name="line104"></a>
+<a name="line105"></a>
+<a name="line106"></a>/**
+<a name="line107"></a> * @return {boolean} Whether the user&#39;s browser is Firefox.
+<a name="line108"></a> */
+<a name="line109"></a>goog.labs.userAgent.browser.isFirefox =
+<a name="line110"></a>    goog.labs.userAgent.browser.matchFirefox_;
+<a name="line111"></a>
+<a name="line112"></a>
+<a name="line113"></a>/**
+<a name="line114"></a> * @return {boolean} Whether the user&#39;s browser is Safari.
+<a name="line115"></a> */
+<a name="line116"></a>goog.labs.userAgent.browser.isSafari =
+<a name="line117"></a>    goog.labs.userAgent.browser.matchSafari_;
+<a name="line118"></a>
+<a name="line119"></a>
+<a name="line120"></a>/**
+<a name="line121"></a> * @return {boolean} Whether the user&#39;s browser is Chrome.
+<a name="line122"></a> */
+<a name="line123"></a>goog.labs.userAgent.browser.isChrome =
+<a name="line124"></a>    goog.labs.userAgent.browser.matchChrome_;
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * @return {boolean} Whether the user&#39;s browser is the Android browser.
+<a name="line129"></a> */
+<a name="line130"></a>goog.labs.userAgent.browser.isAndroidBrowser =
+<a name="line131"></a>    goog.labs.userAgent.browser.matchAndroidBrowser_;
+<a name="line132"></a>
+<a name="line133"></a>
+<a name="line134"></a>/**
+<a name="line135"></a> * For more information, see:
+<a name="line136"></a> * http://docs.aws.amazon.com/silk/latest/developerguide/user-agent.html
+<a name="line137"></a> * @return {boolean} Whether the user&#39;s browser is Silk.
+<a name="line138"></a> */
+<a name="line139"></a>goog.labs.userAgent.browser.isSilk = function() {
+<a name="line140"></a>  return goog.labs.userAgent.util.matchUserAgent(&#39;Silk&#39;);
+<a name="line141"></a>};
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * @return {string} The browser version or empty string if version cannot be
+<a name="line146"></a> *     determined. Note that for Internet Explorer, this returns the version of
+<a name="line147"></a> *     the browser, not the version of the rendering engine. (IE 8 in
+<a name="line148"></a> *     compatibility mode will return 8.0 rather than 7.0. To determine the
+<a name="line149"></a> *     rendering engine version, look at document.documentMode instead. See
+<a name="line150"></a> *     http://msdn.microsoft.com/en-us/library/cc196988(v=vs.85).aspx for more
+<a name="line151"></a> *     details.)
+<a name="line152"></a> */
+<a name="line153"></a>goog.labs.userAgent.browser.getVersion = function() {
+<a name="line154"></a>  var userAgentString = goog.labs.userAgent.util.getUserAgent();
+<a name="line155"></a>  // Special case IE since IE&#39;s version is inside the parenthesis and
+<a name="line156"></a>  // without the &#39;/&#39;.
+<a name="line157"></a>  if (goog.labs.userAgent.browser.isIE()) {
+<a name="line158"></a>    return goog.labs.userAgent.browser.getIEVersion_(userAgentString);
+<a name="line159"></a>  }
+<a name="line160"></a>
+<a name="line161"></a>  if (goog.labs.userAgent.browser.isOpera()) {
+<a name="line162"></a>    return goog.labs.userAgent.browser.getOperaVersion_(userAgentString);
+<a name="line163"></a>  }
+<a name="line164"></a>
+<a name="line165"></a>  var versionTuples =
+<a name="line166"></a>      goog.labs.userAgent.util.extractVersionTuples(userAgentString);
+<a name="line167"></a>  return goog.labs.userAgent.browser.getVersionFromTuples_(versionTuples);
+<a name="line168"></a>};
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>/**
+<a name="line172"></a> * @param {string|number} version The version to check.
+<a name="line173"></a> * @return {boolean} Whether the browser version is higher or the same as the
+<a name="line174"></a> *     given version.
+<a name="line175"></a> */
+<a name="line176"></a>goog.labs.userAgent.browser.isVersionOrHigher = function(version) {
+<a name="line177"></a>  return goog.string.compareVersions(goog.labs.userAgent.browser.getVersion(),
+<a name="line178"></a>                                     version) &gt;= 0;
+<a name="line179"></a>};
+<a name="line180"></a>
+<a name="line181"></a>
+<a name="line182"></a>/**
+<a name="line183"></a> * Determines IE version. More information:
+<a name="line184"></a> * http://msdn.microsoft.com/en-us/library/ie/bg182625(v=vs.85).aspx#uaString
+<a name="line185"></a> * http://msdn.microsoft.com/en-us/library/hh869301(v=vs.85).aspx
+<a name="line186"></a> * http://blogs.msdn.com/b/ie/archive/2010/03/23/introducing-ie9-s-user-agent-string.aspx
+<a name="line187"></a> * http://blogs.msdn.com/b/ie/archive/2009/01/09/the-internet-explorer-8-user-agent-string-updated-edition.aspx
+<a name="line188"></a> *
+<a name="line189"></a> * @param {string} userAgent the User-Agent.
+<a name="line190"></a> * @return {string}
+<a name="line191"></a> * @private
+<a name="line192"></a> */
+<a name="line193"></a>goog.labs.userAgent.browser.getIEVersion_ = function(userAgent) {
+<a name="line194"></a>  // IE11 may identify itself as MSIE 9.0 or MSIE 10.0 due to an IE 11 upgrade
+<a name="line195"></a>  // bug. Example UA:
+<a name="line196"></a>  // Mozilla/5.0 (MSIE 9.0; Windows NT 6.1; WOW64; Trident/7.0; rv:11.0)
+<a name="line197"></a>  // like Gecko.
+<a name="line198"></a>  // See http://www.whatismybrowser.com/developers/unknown-user-agent-fragments.
+<a name="line199"></a>  var rv = /rv: *([\d\.]*)/.exec(userAgent);
+<a name="line200"></a>  if (rv &amp;&amp; rv[1]) {
+<a name="line201"></a>    return rv[1];
+<a name="line202"></a>  }
+<a name="line203"></a>
+<a name="line204"></a>  var version = &#39;&#39;;
+<a name="line205"></a>  var msie = /MSIE +([\d\.]+)/.exec(userAgent);
+<a name="line206"></a>  if (msie &amp;&amp; msie[1]) {
+<a name="line207"></a>    // IE in compatibility mode usually identifies itself as MSIE 7.0; in this
+<a name="line208"></a>    // case, use the Trident version to determine the version of IE. For more
+<a name="line209"></a>    // details, see the links above.
+<a name="line210"></a>    var tridentVersion = /Trident\/(\d.\d)/.exec(userAgent);
+<a name="line211"></a>    if (msie[1] == &#39;7.0&#39;) {
+<a name="line212"></a>      if (tridentVersion &amp;&amp; tridentVersion[1]) {
+<a name="line213"></a>        switch (tridentVersion[1]) {
+<a name="line214"></a>          case &#39;4.0&#39;:
+<a name="line215"></a>            version = &#39;8.0&#39;;
+<a name="line216"></a>            break;
+<a name="line217"></a>          case &#39;5.0&#39;:
+<a name="line218"></a>            version = &#39;9.0&#39;;
+<a name="line219"></a>            break;
+<a name="line220"></a>          case &#39;6.0&#39;:
+<a name="line221"></a>            version = &#39;10.0&#39;;
+<a name="line222"></a>            break;
+<a name="line223"></a>          case &#39;7.0&#39;:
+<a name="line224"></a>            version = &#39;11.0&#39;;
+<a name="line225"></a>            break;
+<a name="line226"></a>        }
+<a name="line227"></a>      } else {
+<a name="line228"></a>        version = &#39;7.0&#39;;
+<a name="line229"></a>      }
+<a name="line230"></a>    } else {
+<a name="line231"></a>      version = msie[1];
+<a name="line232"></a>    }
+<a name="line233"></a>  }
+<a name="line234"></a>  return version;
+<a name="line235"></a>};
+<a name="line236"></a>
+<a name="line237"></a>
+<a name="line238"></a>/**
+<a name="line239"></a> * Determines Opera version. More information:
+<a name="line240"></a> * http://my.opera.com/ODIN/blog/2013/07/15/opera-user-agent-strings-opera-15-and-beyond
+<a name="line241"></a> *
+<a name="line242"></a> * @param {string} userAgent The User-Agent.
+<a name="line243"></a> * @return {string}
+<a name="line244"></a> * @private
+<a name="line245"></a> */
+<a name="line246"></a>goog.labs.userAgent.browser.getOperaVersion_ = function(userAgent) {
+<a name="line247"></a>  var versionTuples =
+<a name="line248"></a>      goog.labs.userAgent.util.extractVersionTuples(userAgent);
+<a name="line249"></a>  var lastTuple = goog.array.peek(versionTuples);
+<a name="line250"></a>  if (lastTuple[0] == &#39;OPR&#39; &amp;&amp; lastTuple[1]) {
+<a name="line251"></a>    return lastTuple[1];
+<a name="line252"></a>  }
+<a name="line253"></a>
+<a name="line254"></a>  return goog.labs.userAgent.browser.getVersionFromTuples_(versionTuples);
+<a name="line255"></a>};
+<a name="line256"></a>
+<a name="line257"></a>
+<a name="line258"></a>/**
+<a name="line259"></a> * Nearly all User-Agents start with Mozilla/N.0. This looks at the second tuple
+<a name="line260"></a> * for the actual browser version number.
+<a name="line261"></a> * @param {!Array.&lt;!Array.&lt;string&gt;&gt;} versionTuples
+<a name="line262"></a> * @return {string} The version or empty string if it cannot be determined.
+<a name="line263"></a> * @private
+<a name="line264"></a> */
+<a name="line265"></a>goog.labs.userAgent.browser.getVersionFromTuples_ = function(versionTuples) {
+<a name="line266"></a>  // versionTuples[2] (The first X/Y tuple after the parenthesis) contains the
+<a name="line267"></a>  // browser version number.
+<a name="line268"></a>  goog.asserts.assert(versionTuples.length &gt; 2,
+<a name="line269"></a>      &#39;Couldn\&#39;t extract version tuple from user agent string&#39;);
+<a name="line270"></a>  return versionTuples[2] &amp;&amp; versionTuples[2][1] ? versionTuples[2][1] : &#39;&#39;;
+<a name="line271"></a>};
+</pre>
+
+
+</body>
+</html>

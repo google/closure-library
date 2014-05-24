@@ -1,0 +1,129 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>graphemebreak_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_i18n_graphemebreak_test.js.html">graphemebreak_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2008 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.i18n.GraphemeBreakTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.i18n.GraphemeBreakTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.i18n.GraphemeBreak&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line20"></a>
+<a name="line21"></a>function testBreakNormalAscii() {
+<a name="line22"></a>  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(&#39;a&#39;.charCodeAt(0),
+<a name="line23"></a>      &#39;b&#39;.charCodeAt(0), true));
+<a name="line24"></a>}
+<a name="line25"></a>
+<a name="line26"></a>function testBreakAsciiWithExtendedChar() {
+<a name="line27"></a>  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(&#39;a&#39;.charCodeAt(0),
+<a name="line28"></a>      0x0300, true));
+<a name="line29"></a>}
+<a name="line30"></a>
+<a name="line31"></a>function testBreakSurrogates() {
+<a name="line32"></a>  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xDA00, 0xDC00, true));
+<a name="line33"></a>  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xDBFF, 0xDFFF, true));
+<a name="line34"></a>}
+<a name="line35"></a>
+<a name="line36"></a>function testBreakHangLxL() {
+<a name="line37"></a>  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x1100, 0x1100, true));
+<a name="line38"></a>}
+<a name="line39"></a>
+<a name="line40"></a>function testBreakHangL_T() {
+<a name="line41"></a>  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x1100, 0x11A8));
+<a name="line42"></a>}
+<a name="line43"></a>
+<a name="line44"></a>function testBreakHangLVxV() {
+<a name="line45"></a>  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xAC00, 0x1160, true));
+<a name="line46"></a>}
+<a name="line47"></a>
+<a name="line48"></a>function testBreakHangLV_L() {
+<a name="line49"></a>  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xAC00, 0x1100, true));
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>function testBreakHangLVTxT() {
+<a name="line53"></a>  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0xAC01, 0x11A8, true));
+<a name="line54"></a>}
+<a name="line55"></a>
+<a name="line56"></a>function testBreakThaiPrependLegacy() {
+<a name="line57"></a>  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x0E40, 0x0E01));
+<a name="line58"></a>}
+<a name="line59"></a>
+<a name="line60"></a>function testBreakThaiPrependExtended() {
+<a name="line61"></a>  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x0E40, 0x0E01, true));
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>function testBreakDevaSpacingMarkLegacy() {
+<a name="line65"></a>  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x0915, 0x093E));
+<a name="line66"></a>}
+<a name="line67"></a>
+<a name="line68"></a>function testBreakDevaSpacingMarkExtended() {
+<a name="line69"></a>  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x0915, 0x093E, true));
+<a name="line70"></a>}
+<a name="line71"></a>
+<a name="line72"></a>function testBreakDevaViramaSpace() {
+<a name="line73"></a>  assertTrue(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x094D, 0x0020));
+<a name="line74"></a>}
+<a name="line75"></a>
+<a name="line76"></a>function testBreakDevaViramaConsonant() {
+<a name="line77"></a>  assertFalse(goog.i18n.GraphemeBreak.hasGraphemeBreak(0x094D, 0x0915));
+<a name="line78"></a>}
+</pre>
+
+
+</body>
+</html>
