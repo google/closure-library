@@ -201,7 +201,7 @@ goog.ui.PlainTextSpellChecker.prototype.check = function() {
   this.getElement().readOnly = true;
 
   // Prepare and position correction UI.
-  this.overlay_.innerHTML = '';
+  goog.dom.removeChildren(this.overlay_);
   this.overlay_.className = this.correctionPaneClassName;
   if (this.getElement().parentNode != this.overlay_.parentNode) {
     this.getElement().parentNode.appendChild(this.overlay_);
@@ -426,7 +426,7 @@ goog.ui.PlainTextSpellChecker.prototype.resume = function() {
 
   if (wasVisible) {
     this.getElement().value = goog.dom.getRawTextContent(this.overlay_);
-    this.overlay_.innerHTML = '';
+    goog.dom.removeChildren(this.overlay_);
 
     var eh = this.eventHandler_;
     eh.unlisten(this.overlay_, goog.events.EventType.CLICK, this.onWordClick_);
