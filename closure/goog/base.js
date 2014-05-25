@@ -277,7 +277,7 @@ goog.setTestOnly = function(opt_message) {
   if (COMPILED && !goog.DEBUG) {
     opt_message = opt_message || '';
     throw Error('Importing test-only code into non-debug environment' +
-                opt_message ? ': ' + opt_message : '.');
+                (opt_message ? ': ' + opt_message : '.'));
   }
 };
 
