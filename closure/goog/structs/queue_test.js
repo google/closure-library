@@ -32,6 +32,11 @@ function createQueue() {
   q.enqueue('a');
   q.enqueue('b');
   q.enqueue('c');
+  q.enqueue('a');
+  q.dequeue();
+  q.enqueue('b');
+  q.enqueue('c');
+  // q is now: bcabc
   return q;
 }
 
@@ -45,11 +50,11 @@ function testConstructor() {
 
 function testCount() {
   var q = createQueue();
-  assertEquals('testCount(), count should be 3', q.getCount(), 3);
+  assertEquals('testCount(), count should be 5', q.getCount(), 5);
   q.enqueue('d');
-  assertEquals('testCount(), count should be 4', q.getCount(), 4);
+  assertEquals('testCount(), count should be 6', q.getCount(), 6);
   q.dequeue();
-  assertEquals('testCount(), count should be 3', q.getCount(), 3);
+  assertEquals('testCount(), count should be 5', q.getCount(), 5);
   q.clear();
   assertEquals('testCount(), count should be 0', q.getCount(), 0);
 }
@@ -68,29 +73,25 @@ function testEnqueue() {
 
 function testDequeue() {
   var q = createQueue();
-  var head = q.dequeue();
-  assertEquals('testDequeue(), should return a', head, 'a');
-  q.dequeue();
-  head = q.dequeue();
-  assertEquals('testDequeue(), should return c', head, 'c');
+  assertEquals('testDequeue(), should return b', q.dequeue(), 'b');
+  assertEquals('testDequeue(), should return b', q.dequeue(), 'c');
+  assertEquals('testDequeue(), should return b', q.dequeue(), 'a');
+  assertEquals('testDequeue(), should return b', q.dequeue(), 'b');
+  assertEquals('testDequeue(), should return b', q.dequeue(), 'c');
   assertTrue('testDequeue(), queue should be empty', q.isEmpty());
-  head = q.dequeue();
-  assertEquals('testDequeue(), should return undefined for empty queue', head,
-      undefined);
+  assertEquals('testDequeue(), should return undefined for empty queue',
+      q.dequeue(), undefined);
 }
 
 function testPeek() {
   var q = createQueue();
-  var head = q.peek();
-  assertEquals('testPeek(), should return a', head, 'a');
-  var head2 = q.dequeue();
-  assertEquals('testPeek(), dequeue should return peek() result', head, head2);
-  head = q.peek();
-  assertEquals('testPeek(), should return b', head, 'b');
+  assertEquals('testPeek(), should return b', q.peek(), 'b');
+  assertEquals('testPeek(), dequeue should return peek() result',
+      q.dequeue(), 'b');
+  assertEquals('testPeek(), should return b', q.peek(), 'c');
   q.clear();
-  head = q.peek();
-  assertEquals('testPeek(), should return undefined for empty queue', head,
-      undefined);
+  assertEquals('testPeek(), should return undefined for empty queue',
+      q.peek(), undefined);
 }
 
 function testClear() {
@@ -101,30 +102,54 @@ function testClear() {
 
 function testQueue() {
   var q = createQueue();
-  assertEquals('testQueue(), contents must be abc', stringifyQueue(q), 'abc');
+  assertEquals('testQueue(), contents must be bcabc',
+      stringifyQueue(q), 'bcabc');
 }
 
 function testRemove() {
   var q = createQueue();
-  assertEquals('testRemove(), contents must be abc', stringifyQueue(q), 'abc');
+  assertEquals('testRemove(), contents must be bcabc',
+      stringifyQueue(q), 'bcabc');
 
   q.dequeue();
-  assertEquals('testRemove(), contents must be bc', stringifyQueue(q), 'bc');
+  assertEquals('testRemove(), contents must be cabc',
+      stringifyQueue(q), 'cabc');
 
   q.enqueue('a');
-  assertEquals('testRemove(), contents must be bca', stringifyQueue(q), 'bca');
+  assertEquals('testRemove(), contents must be cabca',
+      stringifyQueue(q), 'cabca');
 
   assertTrue('testRemove(), remove should have returned true', q.remove('c'));
-  assertEquals('testRemove(), contents must be ba', stringifyQueue(q), 'ba');
+  assertEquals('testRemove(), contents must be abca',
+      stringifyQueue(q), 'abca');
 
   assertTrue('testRemove(), remove should have returned true', q.remove('b'));
-  assertEquals('testRemove(), contents must be a', stringifyQueue(q), 'a');
+  assertEquals('testRemove(), contents must be aca', stringifyQueue(q), 'aca');
 
   assertFalse('testRemove(), remove should have returned false', q.remove('b'));
-  assertEquals('testRemove(), contents must be a', stringifyQueue(q), 'a');
+  assertEquals('testRemove(), contents must be aca', stringifyQueue(q), 'aca');
 
   assertTrue('testRemove(), remove should have returned true', q.remove('a'));
+  assertEquals('testRemove(), contents must be ca', stringifyQueue(q), 'ca');
+
+  assertTrue('testRemove(), remove should have returned true', q.remove('a'));
+  assertEquals('testRemove(), contents must be c', stringifyQueue(q), 'c');
+
+  assertTrue('testRemove(), remove should have returned true', q.remove('c'));
   assertEquals('testRemove(), contents must be empty', stringifyQueue(q), '');
+
+  q.enqueue('a');
+  q.enqueue('b');
+  q.enqueue('c');
+  q.enqueue('a');
+  q.dequeue();
+  q.enqueue('b');
+  q.enqueue('c');
+  assertEquals('testRemove(), contents must be bcabc',
+      stringifyQueue(q), 'bcabc');
+  assertTrue('testRemove(), remove should have returned true', q.remove('c'));
+  assertEquals('testRemove(), contents must be babc',
+      stringifyQueue(q), 'babc');
 }
 
 function testContains() {
