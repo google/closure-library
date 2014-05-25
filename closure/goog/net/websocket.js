@@ -403,11 +403,11 @@ goog.net.WebSocket.prototype.onClose_ = function(event) {
 /**
  * Called when a new message arrives from the server.
  *
- * @param {MessageEvent} event The web socket message event.
+ * @param {MessageEvent.<string>} event The web socket message event.
  * @private
  */
 goog.net.WebSocket.prototype.onMessage_ = function(event) {
-  var message = /** @type {string} */ (event.data);
+  var message = event.data;
   this.dispatchEvent(new goog.net.WebSocket.MessageEvent(message));
 };
 
