@@ -228,7 +228,7 @@ goog.Disposable.prototype.addOnDisposeCallback = function(callback, opt_scope) {
  * For example:
  * <pre>
  *   mypackage.MyClass = function() {
- *     mypackage.MyClass.base(this);
+ *     mypackage.MyClass.base(this, 'constructor');
  *     // Constructor logic specific to MyClass.
  *     ...
  *   };
