@@ -430,7 +430,7 @@ goog.html.SafeHtml.concat = function(var_args) {
     if (goog.isArray(argument)) {
       goog.array.forEach(argument, addArgument);
     } else {
-      var html = goog.html.SafeHtml.from(argument);
+      var html = goog.html.SafeHtml.htmlEscape(argument);
       content += goog.html.SafeHtml.unwrap(html);
       var htmlDir = html.getDirection();
       if (dir == goog.i18n.bidi.Dir.NEUTRAL) {
