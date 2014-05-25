@@ -323,7 +323,10 @@ goog.html.SafeStyle.PropertyMap;
  *     Other values must be wrapped in goog.string.Const. Null value causes
  *     skipping the property.
  * @return {!goog.html.SafeStyle}
- * @throws {Error} If invalid name or value is provided.
+ * @throws {Error} If invalid name is provided.
+ * @throws {goog.asserts.AssertionError} If invalid value is provided. With
+ *     disabled assertions, invalid value is replaced by
+ *     goog.html.SafeStyle.INNOCUOUS_STRING.
  */
 goog.html.SafeStyle.create = function(map) {
   var style = '';
@@ -337,6 +340,9 @@ goog.html.SafeStyle.create = function(map) {
     }
     if (value instanceof goog.string.Const) {
       value = goog.string.Const.unwrap(value);
+      // These characters can be used to change context and we don't want that
+      // even with const values.
+      goog.asserts.assert(!/[;}]/.test(value), 'Value does not allow [;}].');
     } else if (!goog.html.SafeStyle.VALUE_RE_.test(value)) {
       goog.asserts.fail(
           'String value allows only [-.%_!# a-zA-Z0-9], got: ' + value);
@@ -353,9 +359,9 @@ goog.html.SafeStyle.create = function(map) {
 };
 
 
+// Keep in sync with the error string in create().
 /**
- * Regular expression for safe values. Keep in sync with the error string in
- * create().
+ * Regular expression for safe values.
  * @const {!RegExp}
  * @private
  */

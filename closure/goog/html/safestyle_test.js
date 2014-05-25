@@ -144,7 +144,8 @@ function testCreate_values() {
   var invalids = [
     '',
     'expression(alert(1))',
-    'url(i.png)'
+    'url(i.png)',
+    goog.string.Const.from('red;')
   ];
   for (var i = 0; i < invalids.length; i++) {
     var value = invalids[i];
