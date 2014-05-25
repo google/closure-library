@@ -28,10 +28,6 @@
  * event only once (when created or when it is changed) so if you move the DOM
  * node to another form it will not be cleared correctly before submitting.
  *
- * Known issue: Where the placeholder attribute isn't supported, screen reader
- * users encounter trouble because the label is deleted upon focus. For now we
- * set the "aria-label" attribute.
- *
  * @author arv@google.com (Erik Arvidsson)
  * @see ../demos/labelinput.html
  */
@@ -146,7 +142,6 @@ goog.ui.LabelInput.prototype.decorateInternal = function(element) {
 
   if (goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_) {
     this.getElement().placeholder = this.label_;
-    return;
   }
   var labelInputElement = this.getElement();
   goog.asserts.assert(labelInputElement,
@@ -443,23 +438,27 @@ goog.ui.LabelInput.prototype.getValue = function() {
 
 
 /**
- * Sets the label text.
+ * Sets the label text as aria-label, and placeholder when supported.
  * @param {string} label The text to show as the label.
  */
 goog.ui.LabelInput.prototype.setLabel = function(label) {
-  if (goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_) {
-    this.label_ = label;
-    if (this.getElement()) {
-      this.getElement().placeholder = this.label_;
-    }
-    return;
-  }
-  if (this.getElement() && !this.hasChanged()) {
-    this.getElement().value = '';
-  }
-  this.label_ = label;
-  this.restoreLabel_();
   var labelInputElement = this.getElement();
+
+  if (goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_) {
+    if (labelInputElement) {
+      labelInputElement.placeholder = label;
+    }
+    this.label_ = label;
+  } else if (!this.hasChanged()) {
+    // The this.hasChanged() call relies on non-placeholder behavior checking
+    // prior to setting this.label_ - it also needs to happen prior to the
+    // this.restoreLabel_() call.
+    if (labelInputElement) {
+      labelInputElement.value = '';
+    }
+    this.label_ = label;
+    this.restoreLabel_();
+  }
   // Check if this has been called before DOM structure building
   if (labelInputElement) {
     goog.a11y.aria.setState(labelInputElement,
@@ -488,12 +487,12 @@ goog.ui.LabelInput.prototype.check_ = function() {
   if (!goog.ui.LabelInput.SUPPORTS_PLACEHOLDER_) {
     // if we haven't got a form yet try now
     this.attachEventsToForm_();
-    goog.a11y.aria.setState(labelInputElement,
-        goog.a11y.aria.State.LABEL,
-        this.label_);
   } else if (this.getElement().placeholder != this.label_) {
     this.getElement().placeholder = this.label_;
   }
+  goog.a11y.aria.setState(labelInputElement,
+      goog.a11y.aria.State.LABEL,
+      this.label_);
 
   if (!this.hasChanged()) {
     if (!this.inFocusAndSelect_ && !this.hasFocus_) {
