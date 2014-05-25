@@ -13,8 +13,10 @@ See the COPYING file for details.
   <title>Closure Unit Tests - goog.ui.FormPost</title>
   <script src="../base.js"></script>
   <script>
+    goog.require('goog.array');
     goog.require('goog.dom');
     goog.require('goog.dom.TagName');
+    goog.require('goog.object');
     goog.require('goog.testing.jsunit');
     goog.require('goog.ui.FormPost');
     goog.require('goog.userAgent');
@@ -52,7 +54,7 @@ See the COPYING file for details.
 
         this.getElement().submit = function() { submits++ };
       }
-      parameters = {'foo': 'bar', 'baz': 'blah', 'array': ['no', 'yes']};
+      parameters = {'foo': 'bar', 'baz': 1, 'array': [0, 'yes']};
     }
 
     function tearDown() {
@@ -97,7 +99,15 @@ See the COPYING file for details.
           formValues[input.name] = input.value;
         }
       }
-      assertObjectEquals('form values must match', parameters, formValues);
+      var expected = goog.object.map(parameters, valueToString);
+      assertObjectEquals('form values must match', expected, formValues);
+    }
+
+    function valueToString(value) {
+      if (goog.isArray(value)) {
+        return goog.array.map(value, valueToString);
+      }
+      return String(value);
     }
 
   </script>
