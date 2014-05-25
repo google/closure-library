@@ -19,6 +19,7 @@
 goog.provide('goog.html.safeHtmlTest');
 
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.testing');
 goog.require('goog.i18n.bidi.Dir');
@@ -162,6 +163,19 @@ function testSafeHtmlCreate() {
   assertThrows(function() {
     goog.html.SafeHtml.create('a', {'title="" href': ''});
   });
+}
+
+
+function testSafeHtmlCreate_supportsStyle() {
+  var style = 'color:red;';
+  var expected = '<hr style="' + style + '">';
+  assertSameHtml(expected, goog.html.SafeHtml.create('hr', {'style': style}));
+  assertSameHtml(expected, goog.html.SafeHtml.create('hr', {
+    'style': goog.html.SafeStyle.fromConstant(goog.string.Const.from(style))
+  }));
+  assertSameHtml(expected, goog.html.SafeHtml.create('hr', {
+    'style': {'color': 'red'}
+  }));
 }
 
 

@@ -290,7 +290,8 @@ goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet('link',
 
 /**
  * @private
- * @typedef {string|goog.string.Const|goog.html.SafeUrl|goog.html.SafeStyle}
+ * @typedef {string|goog.string.Const|goog.html.SafeUrl|goog.html.SafeStyle|
+ *     goog.html.SafeStyle.PropertyMap}
  */
 goog.html.SafeHtml.AttributeValue_;
 
@@ -305,6 +306,17 @@ goog.html.SafeHtml.AttributeValue_;
  * syntactically validated at runtime, and invalid values will result in
  * an exception.
  *
+ * Example usage:
+ *
+ * goog.html.SafeHtml.create('br');
+ * goog.html.SafeHtml.create('div', {'class': 'a'});
+ * goog.html.SafeHtml.create('p', {}, 'a');
+ * goog.html.SafeHtml.create('p', {}, goog.html.SafeHtml.create('br'));
+ *
+ * goog.html.SafeHtml.create('span', {
+ *   'style': {'margin': '0'}
+ * });
+ *
  * @param {string} tagName The name of the tag. Only tag names consisting of
  *     [a-zA-Z0-9-] are allowed. <link>, <script> and <style> tags are not
  *     supported.
@@ -312,9 +324,10 @@ goog.html.SafeHtml.AttributeValue_;
  *     opt_attributes Mapping from attribute names to their values. Only
  *     attribute names consisting of [a-zA-Z0-9-] are allowed. Attributes with
  *     a special meaning (e.g. on*) require goog.string.Const value, attributes
- *     containing URL require goog.string.Const or goog.html.SafeUrl. Value of
- *     null or undefined causes the attribute to be omitted. Values are
- *     HTML-escaped before usage.
+ *     containing URL require goog.string.Const or goog.html.SafeUrl. The
+ *     "style" attribute accepts goog.html.SafeStyle or a map which will be
+ *     passed to goog.html.SafeStyle.create. Value of null or undefined causes
+ *     the attribute to be omitted. Values are HTML-escaped before usage.
  * @param {!goog.html.SafeHtml.TextOrHtml_|
  *     !Array.<!goog.html.SafeHtml.TextOrHtml_>=} opt_content Content to put
  *     inside the tag. This must be empty for void tags like <br>. Array
@@ -346,6 +359,8 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
       if (value instanceof goog.string.Const) {
         // If it's goog.string.Const, allow any valid attribute name.
         value = goog.string.Const.unwrap(value);
+      } else if (name.toLowerCase() == 'style') {
+        value = goog.html.SafeHtml.getStyleValue_(value);
       } else if (/^on/i.test(name)) {
         // TODO(user): Disallow more attributes with a special meaning.
         throw Error('Attribute "' + name +
@@ -357,13 +372,9 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
         throw Error('Attribute "' + name +
             '" requires goog.string.Const or goog.html.SafeUrl value, "' +
             value + '" given.');
-      } else if (value instanceof goog.html.SafeStyle) {
-        // TODO(user): Allow "style" only with SafeStyle when it supports
-        // dynamic construction.
-        goog.asserts.assert(name.toLowerCase() == 'style',
-            'goog.html.SafeStyle is only supported in "style" attribute.');
-        value = goog.html.SafeStyle.unwrap(value);
       }
+      goog.asserts.assert(goog.isString(value), 'String value expected, got ' +
+          (typeof value) + ' with value: ' + value);
       result += ' ' + name + '="' + goog.string.htmlEscape(value) + '"';
     }
   }
@@ -398,6 +409,27 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
 
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
       result, dir);
+};
+
+
+/**
+ * Gets value allowed in "style" attribute.
+ * @param {!goog.html.SafeHtml.AttributeValue_} value It could be SafeStyle or
+ *     a map which will be passed to goog.html.SafeStyle.create.
+ * @return {string} Unwrapped value.
+ * @private
+ */
+goog.html.SafeHtml.getStyleValue_ = function(value) {
+  if (!goog.isObject(value)) {
+    // TODO(user): Disallow "style" with strings once all call sites are
+    // removed.
+    return value;
+  }
+  if (!(value instanceof goog.html.SafeStyle)) {
+    // Process the property bag into a style object.
+    value = goog.html.SafeStyle.create(value);
+  }
+  return goog.html.SafeStyle.unwrap(value);
 };
 
 
