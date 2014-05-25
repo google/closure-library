@@ -54,11 +54,12 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
 
   /**
    * A chunk holding the currently processed message bytes. Once the chunk has
-   * {@code this.blocksize} bytes, we feed it into [@code computeChunk_}
-   * and reset {@code this.chunk_}.
-   * @private {!Array.<number>}
+   * {@code this.blocksize} bytes, we feed it into [@code computeChunk_}.
+   * @private {!Uint8Array|Array}
    */
-  this.chunk_ = [];
+  this.chunk_ = goog.isDef(goog.global.Uint8Array) ?
+      new Uint8Array(goog.crypt.Sha2_64bit.BLOCK_SIZE_) :
+      new Array(goog.crypt.Sha2_64bit.BLOCK_SIZE_);
 
   /**
    * Current number of bytes in {@code this.chunk_}.
@@ -136,7 +137,6 @@ goog.crypt.Sha2_64bit.PADDING_ = goog.array.concat(
  * @override
  */
 goog.crypt.Sha2_64bit.prototype.reset = function() {
-  this.chunk_ = [];
   this.chunkBytes_ = 0;
   this.total_ = 0;
   this.hash_ = goog.array.clone(this.initHashBlocks_);
@@ -168,7 +168,7 @@ goog.crypt.Sha2_64bit.prototype.update = function(message, opt_length) {
       if (b > 255) {
         throw Error('Characters must be in range [0,255]');
       }
-      this.chunk_[chunkBytes++] = message.charCodeAt(i);
+      this.chunk_[chunkBytes++] = b;
       if (chunkBytes == this.blockSize) {
         this.computeChunk_();
         chunkBytes = 0;
@@ -205,7 +205,6 @@ goog.crypt.Sha2_64bit.prototype.digest = function() {
   if (this.needsReset_) {
     throw Error('this hasher needs to be reset');
   }
-  var digest = [];
   var totalBits = this.total_ * 8;
 
   // Append pad 0x80 0x00* until this.chunkBytes_ == 112
@@ -226,6 +225,7 @@ goog.crypt.Sha2_64bit.prototype.digest = function() {
 
   // Finally, output the result digest.
   var n = 0;
+  var digest = new Array(8 * this.numHashBlocks_);
   for (var i = 0; i < this.numHashBlocks_; i++) {
     var block = this.hash_[i];
     var high = block.getHighBits();

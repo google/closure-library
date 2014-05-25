@@ -87,6 +87,26 @@ var TEST_VECTOR = [
 
 
 /**
+ * For each integer key N, the value is the SHA-512 value of a string
+ * consisting of N repetitions of the character 'a'.
+ */
+var TEST_FENCEPOST_VECTOR = {
+  110:
+      'c825949632e509824543f7eaf159fb6041722fce3c1cdcbb613b3d37ff107c51' +
+      '9417baac32f8e74fe29d7f4823bf6886956603dca5354a6ed6e4a542e06b7d28',
+  111:
+      'fa9121c7b32b9e01733d034cfc78cbf67f926c7ed83e82200ef8681819692176' +
+      '0b4beff48404df811b953828274461673c68d04e297b0eb7b2b4d60fc6b566a2',
+  112:
+      'c01d080efd492776a1c43bd23dd99d0a2e626d481e16782e75d54c2503b5dc32' +
+      'bd05f0f1ba33e568b88fd2d970929b719ecbb152f58f130a407c8830604b70ca',
+  113:
+      '55ddd8ac210a6e18ba1ee055af84c966e0dbff091c43580ae1be703bdb85da31' +
+      'acf6948cf5bd90c55a20e5450f22fb89bd8d0085e39f85a86cc46abbca75e24d'
+};
+
+
+/**
  * Simple sanity tests for hash functions.
  */
 function testBasicOperations() {
@@ -157,6 +177,25 @@ function testHashing_optLength() {
   hasher.update('12345678901234567890', 10);
   var digest2 = hasher.digest();
   assertElementsEquals(digest1, digest2);
+}
+
+
+/**
+ * Make sure that we correctly handle strings whose length is 110-113.
+ * This is the area where we are likely to hit fencepost errors in the padding
+ * code.
+ */
+function testFencepostErrors() {
+  var hasher = new goog.crypt.Sha512();
+  A64 = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+  A128 = A64 + A64;
+  for (var i = 110; i <= 113; i++) {
+    hasher.update(A128, i);
+    var digest = hasher.digest();
+    var expected = goog.crypt.hexToByteArray(TEST_FENCEPOST_VECTOR[i]);
+    assertElementsEquals('Fencepost ' + i, expected, digest);
+    hasher.reset();
+  }
 }
 
 
