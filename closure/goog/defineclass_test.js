@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.labs.classdefTest');
-goog.setTestOnly('goog.labs.classdefTest');
+goog.provide('goog.defineClassTest');
+goog.setTestOnly('goog.defineClassTest');
 
-goog.require('goog.labs.classdef');
 goog.require('goog.testing.jsunit');
 
 function testSuper() {
   /** @constructor */
   function SomeSuper() {};
 
-  var SomeClass = goog.labs.classdef.defineClass(SomeSuper, {
+  var SomeClass = goog.defineClass(SomeSuper, {
     /** @constructor */
     constructor: function() {}
   });
@@ -32,7 +31,7 @@ function testSuper() {
 }
 
 function testPrototypeProp() {
-  var SomeClass = goog.labs.classdef.defineClass(null, {
+  var SomeClass = goog.defineClass(null, {
     /** @constructor */
     constructor: function() {
     },
@@ -44,7 +43,7 @@ function testPrototypeProp() {
 }
 
 function testInstanceProp() {
-  var SomeClass = goog.labs.classdef.defineClass(null, {
+  var SomeClass = goog.defineClass(null, {
     /** @constructor */
     constructor: function() {
       this.falseProp = false;
@@ -55,7 +54,7 @@ function testInstanceProp() {
 }
 
 function testPrototypeProp() {
-  var SomeClass = goog.labs.classdef.defineClass(null, {
+  var SomeClass = goog.defineClass(null, {
     /** @constructor */
     constructor: function() {
     },
@@ -69,7 +68,7 @@ function testPrototypeProp() {
 }
 
 function testStaticProp() {
-  var SomeClass = goog.labs.classdef.defineClass(null, {
+  var SomeClass = goog.defineClass(null, {
     /** @constructor */
     constructor: function() {
     },
@@ -84,7 +83,7 @@ function testStaticProp() {
 }
 
 function testStaticPropFn() {
-  var SomeClass = goog.labs.classdef.defineClass(null, {
+  var SomeClass = goog.defineClass(null, {
     /** @constructor */
     constructor: function() {
     },
