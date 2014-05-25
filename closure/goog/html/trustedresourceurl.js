@@ -92,9 +92,10 @@ goog.html.TrustedResourceUrl.prototype.implementsGoogStringTypedString = true;
  * <pre>
  * var fakeSafeHtml = new String('fake');
  * fakeSafeHtml.__proto__ = goog.html.SafeHtml.prototype;
- * var newSafeHtml = goog.html.SafeHtml.from(fakeSafeHtml);
+ * var newSafeHtml = goog.html.SafeHtml.htmlEscape(fakeSafeHtml);
  * // newSafeHtml is just an alias for fakeSafeHtml, it's passed through by
- * // goog.html.SafeHtml.from() as fakeSafeHtml instanceof goog.html.SafeHtml.
+ * // goog.html.SafeHtml.htmlEscape() as fakeSafeHtml instanceof
+ * // goog.html.SafeHtml.
  * </pre>
  *
  * @see goog.html.TrustedResourceUrl#unwrap

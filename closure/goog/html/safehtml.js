@@ -48,12 +48,12 @@ goog.require('goog.string.TypedString');
  * result in a Cross-Site-Scripting vulnerability.
  *
  * Instances of this type must be created via the factory methods
- * ({@code goog.html.SafeHtml.from}, {@code goog.html.SafeHtml.htmlEscape}), etc
- * and not by invoking its constructor.  The constructor intentionally takes no
- * parameters and the type is immutable; hence only a default instance
+ * ({@code goog.html.SafeHtml.create}, {@code goog.html.SafeHtml.htmlEscape}),
+ * etc and not by invoking its constructor.  The constructor intentionally
+ * takes no parameters and the type is immutable; hence only a default instance
  * corresponding to the empty string can be obtained via constructor invocation.
  *
- * @see goog.html.SafeHtml#from
+ * @see goog.html.SafeHtml#create
  * @see goog.html.SafeHtml#htmlEscape
  * @constructor
  * @final
@@ -119,9 +119,10 @@ goog.html.SafeHtml.prototype.implementsGoogStringTypedString = true;
  * <pre>
  * var fakeSafeHtml = new String('fake');
  * fakeSafeHtml.__proto__ = goog.html.SafeHtml.prototype;
- * var newSafeHtml = goog.html.SafeHtml.from(fakeSafeHtml);
+ * var newSafeHtml = goog.html.SafeHtml.htmlEscape(fakeSafeHtml);
  * // newSafeHtml is just an alias for fakeSafeHtml, it's passed through by
- * // goog.html.SafeHtml.from() as fakeSafeHtml instanceof goog.html.SafeHtml.
+ * // goog.html.SafeHtml.htmlEscape() as fakeSafeHtml
+ * // instanceof goog.html.SafeHtml.
  * </pre>
  *
  * @see goog.html.SafeHtml#unwrap
