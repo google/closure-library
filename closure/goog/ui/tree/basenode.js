@@ -34,6 +34,7 @@ goog.require('goog.dom.safe');
 goog.require('goog.events.Event');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.legacyconversions');
 goog.require('goog.string');
 goog.require('goog.string.StringBuffer');
@@ -853,10 +854,12 @@ goog.ui.tree.BaseNode.prototype.getPixelIndent_ = function() {
  * @protected
  */
 goog.ui.tree.BaseNode.prototype.getRowSafeHtml = function() {
-  var paddingKey = 'padding-' + (this.isRightToLeft() ? 'right:' : 'left:');
+  var style = {};
+  style['padding-' + (this.isRightToLeft() ? 'right' : 'left')] =
+      this.getPixelIndent_() + 'px';
   var attributes = {
     'class': this.getRowClassName(),
-    'style': paddingKey + this.getPixelIndent_() + 'px'
+    'style': style
   };
   var content = [
     this.getExpandIconSafeHtml(),
@@ -952,7 +955,7 @@ goog.ui.tree.BaseNode.prototype.setAfterLabelSafeHtml = function(html) {
  */
 goog.ui.tree.BaseNode.prototype.getIconSafeHtml = function() {
   return goog.html.SafeHtml.create('span', {
-    'style': 'display:inline-block',
+    'style': {'display': 'inline-block'},
     'class': this.getCalculatedIconClass()
   });
 };
@@ -972,7 +975,7 @@ goog.ui.tree.BaseNode.prototype.getCalculatedIconClass = goog.abstractMethod;
 goog.ui.tree.BaseNode.prototype.getExpandIconSafeHtml = function() {
   return goog.html.SafeHtml.create('span', {
     'type': 'expand',
-    'style': 'display:inline-block',
+    'style': {'display': 'inline-block'},
     'class': this.getExpandIconClass()
   });
 };
@@ -1059,19 +1062,21 @@ goog.ui.tree.BaseNode.prototype.getExpandIconClass = function() {
 
 
 /**
- * @return {string} The line style.
+ * @return {!goog.html.SafeStyle} The line style.
  */
 goog.ui.tree.BaseNode.prototype.getLineStyle = function() {
   var nonEmptyAndExpanded = this.getExpanded() && this.hasChildren();
-  return 'background-position:' + this.getLineStyle2() + ';' +
-      (nonEmptyAndExpanded ? '' : 'display:none;');
+  return goog.html.SafeStyle.create({
+    'background-position': this.getBackgroundPosition(),
+    'display': nonEmptyAndExpanded ? null : 'none'
+  });
 };
 
 
 /**
- * @return {string} The line style.
+ * @return {string} The background position style value.
  */
-goog.ui.tree.BaseNode.prototype.getLineStyle2 = function() {
+goog.ui.tree.BaseNode.prototype.getBackgroundPosition = function() {
   return (this.isLastSibling() ? '-100' :
           (this.getDepth() - 1) * this.config_.indentWidth) + 'px 0';
 };
@@ -1304,7 +1309,7 @@ goog.ui.tree.BaseNode.prototype.updateExpandIcon = function() {
   }
   var cel = this.getChildrenElement();
   if (cel) {
-    cel.style.backgroundPosition = this.getLineStyle2();
+    cel.style.backgroundPosition = this.getBackgroundPosition();
   }
 };
 
