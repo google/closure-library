@@ -515,10 +515,16 @@ goog.dom.getDocumentHeight_ = function(win) {
     // But there are patterns.  It just takes a lot of time and persistence
     // to figure out.
 
-    // Get the height of the viewport
-    var vh = goog.dom.getViewportSize_(win).height;
+    // If the window has no contents, it has no height. (In IE10,
+    // document.body & document.documentElement are null in an empty iFrame.)
     var body = doc.body;
     var docEl = doc.documentElement;
+    if (!body && !docEl) {
+      return 0;
+    }
+
+    // Get the height of the viewport
+    var vh = goog.dom.getViewportSize_(win).height;
     if (goog.dom.isCss1CompatMode_(doc) && docEl.scrollHeight) {
       // In Strict mode:
       // The inner content height is contained in either:
