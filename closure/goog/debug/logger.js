@@ -355,7 +355,7 @@ goog.debug.Logger.getLogger = function(name) {
 
 /**
  * Logs a message to profiling tools, if available.
- * {@see http://code.google.com/webtoolkit/speedtracer/logging-api.html}
+ * {@see https://developers.google.com/web-toolkit/speedtracer/logging-api}
  * {@see http://msdn.microsoft.com/en-us/library/dd433074(VS.85).aspx}
  * @param {string} msg The message to log.
  */
