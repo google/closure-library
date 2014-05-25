@@ -212,7 +212,7 @@ goog.ui.ComboBox.prototype.createDom = function() {
   this.setElementInternal(this.getDomHelper().createDom('span',
       goog.getCssName('goog-combobox'), this.input_, this.button_));
   if (this.useDropdownArrow_) {
-    this.button_.innerHTML = '&#x25BC;';
+    goog.dom.setTextContent(this.button_, '\u25BC');
     goog.style.setUnselectable(this.button_, true /* unselectable */);
   }
   this.input_.setAttribute('label', this.defaultText_);
