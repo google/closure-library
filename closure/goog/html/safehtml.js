@@ -414,16 +414,16 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
 
 /**
  * Gets value allowed in "style" attribute.
- * @param {!goog.html.SafeHtml.AttributeValue_} value It could be SafeStyle or
- *     a map which will be passed to goog.html.SafeStyle.create.
+ * @param {goog.html.SafeHtml.AttributeValue_} value It could be SafeStyle or a
+ *     map which will be passed to goog.html.SafeStyle.create.
  * @return {string} Unwrapped value.
+ * @throws {Error} If string value is given.
  * @private
  */
 goog.html.SafeHtml.getStyleValue_ = function(value) {
   if (!goog.isObject(value)) {
-    // TODO(user): Disallow "style" with strings once all call sites are
-    // removed.
-    return value;
+    throw Error('The "style" attribute requires goog.html.SafeStyle or map ' +
+        'of style properties, ' + (typeof value) + ' given: ' + value);
   }
   if (!(value instanceof goog.html.SafeStyle)) {
     // Process the property bag into a style object.

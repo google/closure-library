@@ -169,7 +169,9 @@ function testSafeHtmlCreate() {
 function testSafeHtmlCreate_supportsStyle() {
   var style = 'color:red;';
   var expected = '<hr style="' + style + '">';
-  assertSameHtml(expected, goog.html.SafeHtml.create('hr', {'style': style}));
+  assertThrows(function() {
+    goog.html.SafeHtml.create('hr', {'style': style});
+  });
   assertSameHtml(expected, goog.html.SafeHtml.create('hr', {
     'style': goog.html.SafeStyle.fromConstant(goog.string.Const.from(style))
   }));
