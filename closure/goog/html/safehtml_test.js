@@ -68,29 +68,22 @@ function testUnwrap() {
 }
 
 
-function testSafeHtmlFromEscapedText() {
-  // TODO(user): goog.string.htmlEscape currently doesn't escape single-quotes.
-  // It should.  Include that in the test once it does.
-  var safeHtml = goog.html.SafeHtml.htmlEscape('Hello <em>"&World</em>');
-  assertSameHtml('Hello &lt;em&gt;&quot;&amp;World&lt;/em&gt;', safeHtml);
-  assertEquals('SafeHtml{Hello &lt;em&gt;&quot;&amp;World&lt;/em&gt;}',
-      String(safeHtml));
-}
-
-
-function testSafeHtmlFrom() {
-  // goog.html.SafeHtml passes through .from unchanged.
+function testHtmlEscape() {
+  // goog.html.SafeHtml passes through unchanged.
   var safeHtmlIn = goog.html.SafeHtml.htmlEscape('<b>in</b>');
-  assertTrue(safeHtmlIn === goog.html.SafeHtml.from(safeHtmlIn));
+  assertTrue(safeHtmlIn === goog.html.SafeHtml.htmlEscape(safeHtmlIn));
 
   // Plain strings are escaped.
-  assertSameHtml('this &amp; that', goog.html.SafeHtml.from('this & that'));
+  var safeHtml = goog.html.SafeHtml.htmlEscape('Hello <em>"\'&World</em>');
+  assertSameHtml('Hello &lt;em&gt;&quot;&#39;&amp;World&lt;/em&gt;', safeHtml);
+  assertEquals('SafeHtml{Hello &lt;em&gt;&quot;&#39;&amp;World&lt;/em&gt;}',
+      String(safeHtml));
 
   // Creating from a SafeUrl escapes and retains the known direction (which is
   // fixed to RTL for URLs).
   var safeUrl = goog.html.SafeUrl.fromConstant(
       goog.string.Const.from('http://example.com/?foo&bar'));
-  var escapedUrl = goog.html.SafeHtml.from(safeUrl);
+  var escapedUrl = goog.html.SafeHtml.htmlEscape(safeUrl);
   assertSameHtml('http://example.com/?foo&amp;bar', escapedUrl);
   assertEquals(goog.i18n.bidi.Dir.LTR, escapedUrl.getDirection());
 
@@ -98,8 +91,7 @@ function testSafeHtmlFrom() {
   // value is treated like any other string). To create HTML markup from
   // program literals, SafeHtmlBuilder should be used.
   assertSameHtml('this &amp; that',
-      goog.html.SafeHtml.from(
-          goog.string.Const.from('this & that')));
+      goog.html.SafeHtml.htmlEscape(goog.string.Const.from('this & that')));
 }
 
 
@@ -212,6 +204,11 @@ function testSafeHtmlConcat() {
 
 
 function testHtmlEscapePreservingNewlines() {
+  // goog.html.SafeHtml passes through unchanged.
+  var safeHtmlIn = goog.html.SafeHtml.htmlEscapePreservingNewlines('<b>in</b>');
+  assertTrue(safeHtmlIn ===
+      goog.html.SafeHtml.htmlEscapePreservingNewlines(safeHtmlIn));
+
   assertSameHtml('a<br>c',
       goog.html.SafeHtml.htmlEscapePreservingNewlines('a\nc'));
   assertSameHtml('&lt;<br>',

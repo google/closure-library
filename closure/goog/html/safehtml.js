@@ -182,18 +182,11 @@ goog.html.SafeHtml.unwrap = function(safeHtml) {
 
 
 /**
- * Shorthand for union of types that can be sensibly converted to strings.
+ * Shorthand for union of types that can sensibly be converted to strings
+ * or might already be SafeHtml (as SafeHtml is a goog.string.TypedString).
  * @private
  * @typedef {string|number|boolean|!goog.string.TypedString|
  *           !goog.i18n.bidi.DirectionalString}
- */
-goog.html.SafeHtml.StringLike_;
-
-
-/**
- * Shorthand for union of types that can be sensibly converted to SafeHtml.
- * @private
- * @typedef {!goog.html.SafeHtml.StringLike_|!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.TextOrHtml_;
 
@@ -207,19 +200,24 @@ goog.html.SafeHtml.TextOrHtml_;
  * Otherwise, the directionality of the resulting SafeHtml is unknown (i.e.,
  * {@code null}).
  *
- * @param {!goog.html.SafeHtml.StringLike_} text The string to escape.
- * @return {!goog.html.SafeHtml} The escaped string, wrapped as a SafeHtml.
+ * @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml The text to escape. If
+ *     the parameter is of type SafeHtml it is returned directly (no escaping
+ *     is done).
+ * @return {!goog.html.SafeHtml} The escaped text, wrapped as a SafeHtml.
  */
-goog.html.SafeHtml.htmlEscape = function(text) {
+goog.html.SafeHtml.htmlEscape = function(textOrHtml) {
+  if (textOrHtml instanceof goog.html.SafeHtml) {
+    return textOrHtml;
+  }
   var dir = null;
-  if (text.implementsGoogI18nBidiDirectionalString) {
-    dir = text.getDirection();
+  if (textOrHtml.implementsGoogI18nBidiDirectionalString) {
+    dir = textOrHtml.getDirection();
   }
   var textAsString;
-  if (text.implementsGoogStringTypedString) {
-    textAsString = text.getTypedStringValue();
+  if (textOrHtml.implementsGoogStringTypedString) {
+    textAsString = textOrHtml.getTypedStringValue();
   } else {
-    textAsString = String(text);
+    textAsString = String(textOrHtml);
   }
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
       goog.string.htmlEscape(textAsString), dir);
@@ -227,12 +225,18 @@ goog.html.SafeHtml.htmlEscape = function(text) {
 
 
 /**
- * Returns HTML-escaped text as a SafeHtml object with newlines changed to <br>.
- * @param {!goog.html.SafeHtml.StringLike_} text The string to escape.
- * @return {!goog.html.SafeHtml} The escaped string, wrapped as a SafeHtml.
+ * Returns HTML-escaped text as a SafeHtml object, with newlines changed to
+ * &lt;br&gt;.
+ * @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml The text to escape. If
+ *     the parameter is of type SafeHtml it is returned directly (no escaping
+ *     is done).
+ * @return {!goog.html.SafeHtml} The escaped text, wrapped as a SafeHtml.
  */
-goog.html.SafeHtml.htmlEscapePreservingNewlines = function(text) {
-  var html = goog.html.SafeHtml.htmlEscape(text);
+goog.html.SafeHtml.htmlEscapePreservingNewlines = function(textOrHtml) {
+  if (textOrHtml instanceof goog.html.SafeHtml) {
+    return textOrHtml;
+  }
+  var html = goog.html.SafeHtml.htmlEscape(textOrHtml);
   return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
       goog.string.newLineToBr(goog.html.SafeHtml.unwrap(html)),
       html.getDirection());
@@ -251,19 +255,9 @@ goog.html.SafeHtml.htmlEscapePreservingNewlines = function(text) {
  * @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml The text or SafeHtml to
  *     coerce.
  * @return {!goog.html.SafeHtml} The resulting SafeHtml object.
+ * @deprecated Use goog.html.SafeHtml.htmlEscape.
  */
-goog.html.SafeHtml.from = function(textOrHtml) {
-  if (textOrHtml instanceof goog.html.SafeHtml) {
-    return textOrHtml;
-  } else if (textOrHtml.implementsGoogI18nBidiDirectionalString) {
-    // Do not coerce to string, to preserve directionality.
-    return goog.html.SafeHtml.htmlEscape(textOrHtml);
-  } else if (textOrHtml.implementsGoogStringTypedString) {
-    return goog.html.SafeHtml.htmlEscape(textOrHtml.getTypedStringValue());
-  } else {
-    return goog.html.SafeHtml.htmlEscape(String(textOrHtml));
-  }
-};
+goog.html.SafeHtml.from = goog.html.SafeHtml.htmlEscape;
 
 
 /**
