@@ -44,6 +44,26 @@ function testInsertsWithDefaultComparator() {
     i += 1;
   });
   assertEquals(i, values.length);
+
+  // Verify that no nodes are visited if the start value is larger than all
+  // values
+  tree.inOrderTraverse(function(value) {
+    fail();
+  }, 'zed');
+
+  // Verify strings are stored in sorted order
+  i = values.length;
+  tree.reverseOrderTraverse(function(value) {
+    i--;
+    assertEquals(values[i], value);
+  });
+  assertEquals(i, 0);
+
+  // Verify that no nodes are visited if the start value is smaller than all
+  // values
+  tree.reverseOrderTraverse(function(value) {
+    fail();
+  }, 'aardvark');
 }
 
 
@@ -181,6 +201,41 @@ function testAvlTreeContains() {
   assertFalse(tree.contains('samwise'));
   assertFalse(tree.contains('pippin'));
   assertFalse(tree.contains('frodo'));
+}
+
+
+/**
+ * This test verifies that we can insert values into and remove values from
+ * the AvlTree and have its indexOf method correctly determine the in-order
+ * index of the values it contains.
+ */
+function testAvlTreeIndexOf() {
+  var tree = new goog.structs.AvlTree();
+  var values = ['bill', 'blake', 'elliot', 'jacob', 'john', 'myles', 'ted'];
+
+  // Insert strings into tree out of order
+  tree.add('frodo');
+  tree.add(values[4]);
+  tree.add(values[3]);
+  tree.add(values[0]);
+  tree.add(values[6]);
+  tree.add('samwise');
+  tree.add(values[5]);
+  tree.add(values[1]);
+  tree.add(values[2]);
+  tree.add('pippin');
+
+  // Remove strings from tree
+  assertEquals('samwise', tree.remove('samwise'));
+  assertEquals('pippin', tree.remove('pippin'));
+  assertEquals('frodo', tree.remove('frodo'));
+
+  for (var i = 0; i < values.length; i += 1) {
+    assertEquals(i, tree.indexOf(values[i]));
+  }
+  assertEquals(-1, tree.indexOf('samwise'));
+  assertEquals(-1, tree.indexOf('pippin'));
+  assertEquals(-1, tree.indexOf('frodo'));
 }
 
 
