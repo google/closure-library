@@ -342,7 +342,7 @@ goog.html.SafeStyle.create = function(map) {
       value = goog.string.Const.unwrap(value);
       // These characters can be used to change context and we don't want that
       // even with const values.
-      goog.asserts.assert(!/[;}]/.test(value), 'Value does not allow [;}].');
+      goog.asserts.assert(!/[{;}]/.test(value), 'Value does not allow [{;}].');
     } else if (!goog.html.SafeStyle.VALUE_RE_.test(value)) {
       goog.asserts.fail(
           'String value allows only [-.%_!# a-zA-Z0-9], got: ' + value);
