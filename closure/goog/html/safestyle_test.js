@@ -84,3 +84,98 @@ function testFromConstant_throwsIfNoColon() {
 function testEmpty() {
   assertEquals('', goog.html.SafeStyle.unwrap(goog.html.SafeStyle.EMPTY));
 }
+
+
+function testCreate() {
+  var style = goog.html.SafeStyle.create({
+    'background': goog.string.Const.from('url(i.png)'),
+    'margin': '0'
+  });
+  assertEquals('background:url(i.png);margin:0;',
+      goog.html.SafeStyle.unwrap(style));
+}
+
+
+function testCreate_allowsEmpty() {
+  assertEquals(goog.html.SafeStyle.EMPTY, goog.html.SafeStyle.create({}));
+}
+
+
+function testCreate_skipsNull() {
+  var style = goog.html.SafeStyle.create({'background': null});
+  assertEquals(goog.html.SafeStyle.EMPTY, style);
+}
+
+
+function testCreate_allowsLengths() {
+  var style = goog.html.SafeStyle.create({'padding': '0 1px .2% 3.4em'});
+  assertEquals('padding:0 1px .2% 3.4em;', goog.html.SafeStyle.unwrap(style));
+}
+
+
+function testCreate_throwsOnForbiddenCharacters() {
+  assertThrows(function() {
+    goog.html.SafeStyle.create({'<': '0'});
+  });
+  assertThrows(function() {
+    goog.html.SafeStyle.create({'color': goog.string.Const.from('<')});
+  });
+}
+
+
+function testCreate_values() {
+  var valids = [
+    '0',
+    '0 0',
+    '1px',
+    '100%',
+    '2.3px',
+    '.1em',
+    'red',
+    '#f00',
+    'red !important'
+  ];
+  for (var i = 0; i < valids.length; i++) {
+    var value = valids[i];
+    assertEquals('background:' + value + ';', goog.html.SafeStyle.unwrap(
+        goog.html.SafeStyle.create({'background': value})));
+  }
+
+  var invalids = [
+    '',
+    'expression(alert(1))',
+    'url(i.png)'
+  ];
+  for (var i = 0; i < invalids.length; i++) {
+    var value = invalids[i];
+    assertThrows(function() {
+      goog.html.SafeStyle.create({'background': value});
+    });
+  }
+}
+
+
+function testConcat() {
+  var width = goog.html.SafeStyle.fromConstant(
+      goog.string.Const.from('width: 1em;'));
+  var margin = goog.html.SafeStyle.create({'margin': '0'});
+  var padding = goog.html.SafeStyle.create({'padding': '0'});
+
+  var style = goog.html.SafeStyle.concat(width, margin);
+  assertEquals('width: 1em;margin:0;', goog.html.SafeStyle.unwrap(style));
+
+  style = goog.html.SafeStyle.concat([width, margin]);
+  assertEquals('width: 1em;margin:0;', goog.html.SafeStyle.unwrap(style));
+
+  style = goog.html.SafeStyle.concat([width], [padding, margin]);
+  assertEquals('width: 1em;padding:0;margin:0;',
+      goog.html.SafeStyle.unwrap(style));
+}
+
+
+function testConcat_allowsEmpty() {
+  var empty = goog.html.SafeStyle.EMPTY;
+  assertEquals(empty, goog.html.SafeStyle.concat());
+  assertEquals(empty, goog.html.SafeStyle.concat([]));
+  assertEquals(empty, goog.html.SafeStyle.concat(empty));
+}
