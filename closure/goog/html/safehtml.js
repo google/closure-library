@@ -298,6 +298,13 @@ goog.html.SafeHtml.AttributeValue_;
 /**
  * Creates a SafeHtml content consisting of a tag with optional attributes and
  * optional content.
+ *
+ * For convenience tag names and attribute names are accepted as regular
+ * strings, instead of goog.string.Const. Nevertheless, you should not pass
+ * user-controlled values to these parameters. Note that these parameters are
+ * syntactically validated at runtime, and invalid values will result in
+ * an exception.
+ *
  * @param {string} tagName The name of the tag. Only tag names consisting of
  *     [a-zA-Z0-9-] are allowed. <link>, <script> and <style> tags are not
  *     supported.
