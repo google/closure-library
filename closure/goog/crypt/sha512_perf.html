@@ -28,9 +28,11 @@ See the COPYING file for details.
 <script>
 
 function testHashing() {
-  goog.crypt.hashTester.runPerfTests(function() {
-    return new goog.crypt.Sha512();
-  }, 'SHA512');
+  goog.crypt.hashTester.runPerfTests(
+    function() {
+      return new goog.crypt.Sha512();
+    }  /* hashFactory */,
+    'SHA512'  /* hashName */);
 }
 
 </script>
