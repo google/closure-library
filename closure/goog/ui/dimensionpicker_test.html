@@ -152,6 +152,71 @@ See the COPYING file for details.
       assertEquals('Should have 2 rows highlighted', 2, size.height);
     }
 
+    function testHandleKeyboardEvents() {
+      picker.render(render);
+
+      picker.rightToLeft_ = false;
+
+      var result = picker.handleKeyEvent({keyCode: goog.events.KeyCodes.DOWN});
+      var size = picker.getValue();
+      assertEquals('Should have 1 column highlighted', 1, size.width);
+      assertEquals('Should have 2 rows highlighted', 2, size.height);
+      assertTrue('Should handle DOWN key event', result);
+
+      result = picker.handleKeyEvent({keyCode: goog.events.KeyCodes.RIGHT});
+      size = picker.getValue();
+      assertEquals('Should have 2 column highlighted', 2, size.width);
+      assertEquals('Should have 2 rows highlighted', 2, size.height);
+      assertTrue('Should handle RIGHT key event', result);
+
+      result = picker.handleKeyEvent({keyCode: goog.events.KeyCodes.UP});
+      size = picker.getValue();
+      assertEquals('Should have 2 column highlighted', 2, size.width);
+      assertEquals('Should have 1 rows highlighted', 1, size.height);
+      assertTrue('Should handle UP key event', result);
+
+      // Pressing UP when there is only 1 row should be handled but has no
+      // effect.
+      result = picker.handleKeyEvent({keyCode: goog.events.KeyCodes.UP});
+      size = picker.getValue();
+      assertEquals('Should have 2 column highlighted', 2, size.width);
+      assertEquals('Should have 1 rows highlighted', 1, size.height);
+      assertTrue('Should handle UP key event', result);
+
+      result = picker.handleKeyEvent({keyCode: goog.events.KeyCodes.LEFT});
+      size = picker.getValue();
+      assertEquals('Should have 2 column highlighted', 1, size.width);
+      assertEquals('Should have 1 rows highlighted', 1, size.height);
+      assertTrue('Should handle LEFT key event', result);
+
+      // Pressing LEFT when there is only 1 row should not be handled
+      //allowing SubMenu to close.
+      result = picker.handleKeyEvent({keyCode: goog.events.KeyCodes.LEFT});
+      assertFalse(
+        'Should not handle LEFT key event when there is only one column',
+        result);
+
+      picker.rightToLeft_ = true;
+
+      // In RTL the roles of the LEFT and RIGHT keys are swapped.
+      result = picker.handleKeyEvent({keyCode: goog.events.KeyCodes.LEFT});
+      size = picker.getValue();
+      assertEquals('Should have 2 column highlighted', 2, size.width);
+      assertEquals('Should have 2 rows highlighted', 1, size.height);
+      assertTrue('Should handle LEFT key event', result);
+
+      result = picker.handleKeyEvent({keyCode: goog.events.KeyCodes.RIGHT});
+      size = picker.getValue();
+      assertEquals('Should have 2 column highlighted', 1, size.width);
+      assertEquals('Should have 1 rows highlighted', 1, size.height);
+      assertTrue('Should handle RIGHT key event', result);
+
+      result = picker.handleKeyEvent({keyCode: goog.events.KeyCodes.RIGHT});
+      assertFalse(
+        'Should not handle RIGHT key event when there is only one column',
+        result);
+    }
+
     function testDispose() {
       var element = picker.getElement();
       picker.render(render);
