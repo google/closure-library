@@ -97,6 +97,10 @@ goog.debug.Logger = function(name) {
 };
 
 
+/** @const */
+goog.debug.Logger.ROOT_LOGGER_NAME = '';
+
+
 /**
  * @define {boolean} Toggles whether loggers other than the root logger can have
  *     log handlers attached to them and whether they can have their log level
@@ -793,8 +797,10 @@ goog.debug.LogManager.rootLogger_ = null;
  */
 goog.debug.LogManager.initialize = function() {
   if (!goog.debug.LogManager.rootLogger_) {
-    goog.debug.LogManager.rootLogger_ = new goog.debug.Logger('');
-    goog.debug.LogManager.loggers_[''] = goog.debug.LogManager.rootLogger_;
+    goog.debug.LogManager.rootLogger_ = new goog.debug.Logger(
+        goog.debug.Logger.ROOT_LOGGER_NAME);
+    goog.debug.LogManager.loggers_[goog.debug.Logger.ROOT_LOGGER_NAME] =
+        goog.debug.LogManager.rootLogger_;
     goog.debug.LogManager.rootLogger_.setLevel(goog.debug.Logger.Level.CONFIG);
   }
 };
