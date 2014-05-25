@@ -26,7 +26,6 @@
 goog.provide('goog.events.EventTarget');
 
 goog.require('goog.Disposable');
-goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.events');
 goog.require('goog.events.Event');
@@ -272,7 +271,7 @@ goog.events.EventTarget.prototype.fireListeners = function(
   if (!listenerArray) {
     return true;
   }
-  listenerArray = goog.array.clone(listenerArray);
+  listenerArray = listenerArray.concat();
 
   var rv = true;
   for (var i = 0; i < listenerArray.length; ++i) {
