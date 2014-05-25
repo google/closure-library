@@ -358,6 +358,12 @@ goog.testing.MockClock.prototype.runFunctionsWithinRange_ = function(
  */
 goog.testing.MockClock.prototype.scheduleFunction_ = function(
     timeoutKey, funcToCall, millis, recurring) {
+  if (!goog.isFunction(funcToCall)) {
+    // Early error for debuggability rather than dying in the next .tick()
+    throw new TypeError('The provided callback must be a function, not a ' +
+        typeof funcToCall);
+  }
+
   var timeout = {
     runAtMillis: this.nowMillis_ + millis,
     funcToCall: funcToCall,

@@ -499,3 +499,26 @@ function testClearBeforeSet() {
   assertEquals(1, fn.getCallCount());
   clock.dispose();
 }
+
+
+function testNonFunctionArguments() {
+  var clock = new goog.testing.MockClock(true);
+
+  // Unlike normal setTimeout and friends, we only accept functions (not
+  // strings, not undefined, etc). Make sure that if we get a non-function, we
+  // fail early rather than on the next .tick() operation.
+
+  assertThrows('setTimeout with a non-function value should fail',
+      function() {
+        window.setTimeout(undefined, 0);
+      });
+  clock.tick(1);
+
+  assertThrows('setTimeout with a string should fail',
+      function() {
+        window.setTimeout('throw new Error("setTimeout string eval!");', 0);
+      });
+  clock.tick(1);
+
+  clock.dispose();
+}
