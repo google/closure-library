@@ -456,6 +456,7 @@ goog.proto2.Message.prototype.mergeFrom = function(message) {
  *     the known fields.
  */
 goog.proto2.Message.prototype.clone = function() {
+  /** @type {!goog.proto2.Message} */
   var clone = new this.constructor;
   clone.copyFrom(this);
   return clone;
