@@ -169,7 +169,8 @@ function testIsValid() {
   var invalid = [
     'e', '', 'e @c.com', 'a@b', 'foo.com', 'foo@c..com', 'test@gma=il.com',
     'aaa@gmail', 'has some spaces@gmail.com', 'has@three@at@signs.com',
-    '@no-local-part.com'];
+    '@no-local-part.com', 'み.ん-あ@みんあ.みんあ',
+    'みんあ@test.com', 'test@test.みんあ', 'test@みんあ.com'];
   doIsValidTest(goog.format.EmailAddress.isValidAddress, valid, invalid);
 }
 
