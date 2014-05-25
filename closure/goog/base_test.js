@@ -601,7 +601,7 @@ function testClonePrimitive() {
 function testCloneObjectThatHasACloneMethod() {
   var original = {
     name: 'original',
-    clone: function() { return { name: 'clone' } }
+    clone: function() { return { name: 'clone' }; }
   };
 
   var clone = goog.cloneObject(original);
