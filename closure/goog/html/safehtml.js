@@ -290,8 +290,8 @@ goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet('link',
 
 /**
  * @private
- * @typedef {string|goog.string.Const|goog.html.SafeUrl|goog.html.SafeStyle|
- *     goog.html.SafeStyle.PropertyMap}
+ * @typedef {string|number|goog.string.Const|goog.html.SafeUrl|
+ *     goog.html.SafeStyle|goog.html.SafeStyle.PropertyMap}
  */
 goog.html.SafeHtml.AttributeValue_;
 
@@ -373,9 +373,10 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
             '" requires goog.string.Const or goog.html.SafeUrl value, "' +
             value + '" given.');
       }
-      goog.asserts.assert(goog.isString(value), 'String value expected, got ' +
+      goog.asserts.assert(goog.isString(value) || goog.isNumber(value),
+          'String or number value expected, got ' +
           (typeof value) + ' with value: ' + value);
-      result += ' ' + name + '="' + goog.string.htmlEscape(value) + '"';
+      result += ' ' + name + '="' + goog.string.htmlEscape(String(value)) + '"';
     }
   }
 

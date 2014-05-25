@@ -118,6 +118,9 @@ function testSafeHtmlCreate() {
   assertSameHtml('<span>x<br>y</span>',
       goog.html.SafeHtml.create('span', {}, ['x', br, 'y']));
 
+  assertSameHtml('<table border="0"></table>',
+      goog.html.SafeHtml.create('table', {'border': 0}));
+
   var onclick = goog.string.Const.from('alert(/"/)');
   assertSameHtml('<span onclick="alert(/&quot;/)"></span>',
       goog.html.SafeHtml.create('span', {'onclick': onclick}));
