@@ -454,8 +454,8 @@ goog.ui.ModalPopup.prototype.show_ = function() {
     // Focus-related actions often throw exceptions.
     // Sample past issue: https://bugzilla.mozilla.org/show_bug.cgi?id=656283
   }
-  this.resizeBackground_();
-  this.reposition();
+  var viewSize = this.resizeBackground_();
+  this.reposition(viewSize);
 
   // Listen for keyboard and resize events while the modal popup is visible.
   this.getHandler().listen(
@@ -586,6 +586,8 @@ goog.ui.ModalPopup.prototype.focus = function() {
  * document, otherwise the size of the background will stop the document from
  * shrinking to fit a smaller window.  This does cause a slight flicker in Linux
  * browsers, but should not be a common scenario.
+ *
+ * @return {!goog.math.Size} The viewport size, to be reused for efficiency.
  * @private
  */
 goog.ui.ModalPopup.prototype.resizeBackground_ = function() {
@@ -617,13 +619,18 @@ goog.ui.ModalPopup.prototype.resizeBackground_ = function() {
     goog.style.setElementShown(this.bgEl_, true);
     goog.style.setSize(this.bgEl_, w, h);
   }
+  return viewSize;
 };
 
 
 /**
  * Centers the modal popup in the viewport, taking scrolling into account.
+ *
+ * @param {goog.math.Size=} opt_viewSize Optional viewport size to be used
+ *     instead of measure the viewport size again. To avoid unnecessary layout
+ *     thrashing.
  */
-goog.ui.ModalPopup.prototype.reposition = function() {
+goog.ui.ModalPopup.prototype.reposition = function(opt_viewSize) {
   // TODO(user): Make this use goog.positioning as in goog.ui.PopupBase?
 
   // Get the current viewport to obtain the scroll offset.
@@ -639,7 +646,7 @@ goog.ui.ModalPopup.prototype.reposition = function() {
   }
 
   var popupSize = goog.style.getSize(this.getElement());
-  var viewSize = goog.dom.getViewportSize(win);
+  var viewSize = opt_viewSize || goog.dom.getViewportSize(win);
 
   // Make sure left and top are non-negatives.
   var left = Math.max(x + viewSize.width / 2 - popupSize.width / 2, 0);
