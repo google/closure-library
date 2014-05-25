@@ -450,7 +450,7 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.getCurrent = function() {
 
 /**
  * An enumeration of all the token types.
- * @enum {*}
+ * @enum {!RegExp}
  */
 goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes = {
   END: /---end---/,
