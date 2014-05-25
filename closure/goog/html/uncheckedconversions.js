@@ -23,6 +23,7 @@
  * prefer to create instances of goog.html types using inherently safe builders
  * or template systems.
  *
+ *
  * @visibility {//closure/goog/html:approved_for_unchecked_conversion}
  * @visibility {//closure/goog/bin/sizetests:__pkg__}
  */
@@ -47,7 +48,6 @@ goog.require('goog.string.Const');
  * that the value of {@code html} satisfies the SafeHtml type contract in all
  * possible program states.
  *
- * TODO(user): Link to guidelines on appropriate uses.
  *
  * @param {!goog.string.Const} justification A constant string explaining why
  *     this use of this method is safe. May include a security review ticket
@@ -86,7 +86,6 @@ goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract =
  * that the value of {@code style} satisfies the SafeUrl type contract in all
  * possible program states.
  *
- * TODO(user): Link to guidelines on appropriate uses.
  *
  * @param {!goog.string.Const} justification A constant string explaining why
  *     this use of this method is safe. May include a security review ticket
@@ -122,7 +121,6 @@ goog.html.uncheckedconversions.safeStyleFromStringKnownToSatisfyTypeContract =
  * that the value of {@code url} satisfies the SafeUrl type contract in all
  * possible program states.
  *
- * TODO(user): Link to guidelines on appropriate uses.
  *
  * @param {!goog.string.Const} justification A constant string explaining why
  *     this use of this method is safe. May include a security review ticket
@@ -157,7 +155,6 @@ goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract =
  * that the value of {@code url} satisfies the TrustedResourceUrl type contract
  * in all possible program states.
  *
- * TODO(user): Link to guidelines on appropriate uses.
  *
  * @param {!goog.string.Const} justification A constant string explaining why
  *     this use of this method is safe. May include a security review ticket
