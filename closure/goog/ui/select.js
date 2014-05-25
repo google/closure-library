@@ -25,10 +25,8 @@ goog.provide('goog.ui.Select');
 
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
-goog.require('goog.a11y.aria.State');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.IdGenerator');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.MenuRenderer');
@@ -444,22 +442,6 @@ goog.ui.Select.prototype.updateCaption = function() {
     var itemElement = item ? item.getElement() : null;
     goog.a11y.aria.setLabel(contentElement, itemElement ?
         goog.a11y.aria.getLabel(itemElement) : this.initialAriaLabel_);
-
-    var buttonElement = this.getElement();
-    // In order for all screenreaders to correctly read the value of the select
-    // we add the child containing the value text as the labelledby value
-    // of the outer div.  We need to be careful here because there may also
-    // be other values in the labelledby attribute that need to be preserved.
-    if (!contentElement.id && buttonElement) {
-      contentElement.id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
-      var labelledBy = goog.a11y.aria.getState(buttonElement,
-          goog.a11y.aria.State.LABELLEDBY);
-      if (labelledBy.indexOf(contentElement.id) == -1) {
-        labelledBy += ' ' + contentElement.id;
-        goog.a11y.aria.setState(buttonElement, goog.a11y.aria.State.LABELLEDBY,
-            labelledBy);
-      }
-    }
   }
 };
 
