@@ -53,30 +53,26 @@ function testSetLabel() {
   labelInput.setLabel('search');
   assertEquals('label is set', 'search', labelInput.getLabel());
 
+  // When browsers support the placeholder attribute, we use that instead of
+  // the value property - and this test will fail.
+  if (isPlaceholderSupported()) {
+    return;
+  }
+
   labelInput.createDom();
   labelInput.enterDocument();
   mockClock.tick(10);
+  assertEquals('label is rendered', 'search', labelInput.getElement().value);
+  assertNotNull(labelInput.getElement());
   assertEquals('label should have aria-label attribute \'search\'', 'search',
       goog.a11y.aria.getState(labelInput.getElement(),
           goog.a11y.aria.State.LABEL));
 
-  // When browsers support the placeholder attribute, we use that instead of
-  // the value property - and this test will fail.
-  if (!isPlaceholderSupported()) {
-    assertEquals('label is rendered', 'search', labelInput.getElement().value);
-    assertNotNull(labelInput.getElement());
-  }
-
   labelInput.setLabel('new label');
+  assertEquals('label is updated', 'new label', labelInput.getElement().value);
   assertEquals('label should have aria-label attribute \'new label\'',
       'new label', goog.a11y.aria.getState(labelInput.getElement(),
           goog.a11y.aria.State.LABEL));
-
-  // When browsers support the placeholder attribute, we use that instead of
-  // the value property - and this test will fail.
-  if (!isPlaceholderSupported()) {
-    assertEquals('label is updated', 'new label', labelInput.getElement().value);
-  }
 }
 
 function testPlaceholderAttribute() {
