@@ -389,3 +389,19 @@ goog.events.BrowserEvent.prototype.getBrowserEvent = function() {
 /** @override */
 goog.events.BrowserEvent.prototype.disposeInternal = function() {
 };
+
+
+if (goog.DEBUG) {
+  /**
+   * This toString method returns a string with the event's timestamp
+   * and type e.g. 'click'
+   *
+   * @return {string} A string representation of this object.
+   */
+  goog.events.BrowserEvent.prototype.toString = function() {
+    return "(" + this.timestamp  + ")" + "BrowserEvent: " + this.type;
+  }
+
+}
+
+
