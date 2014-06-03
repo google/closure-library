@@ -99,6 +99,18 @@ See the COPYING file for details.
           goog.a11y.aria.getState(element, goog.a11y.aria.State.PRESSED));
     }
 
+    function testSetTooltip() {
+      button.createDom();
+      button.setTooltip('tooltip');
+      assertEquals('tooltip', button.getElement().title);
+      button.setTooltip('');
+      assertEquals('', button.getElement().title);
+      // IE7 doesn't support hasAttribute.
+      if (button.getElement().hasAttribute) {
+        assertFalse(button.getElement().hasAttribute('title'));
+      }
+    }
+
     function testCreateDomAriaState() {
       button.setSupportedState(goog.ui.Component.State.CHECKED, true);
       button.setChecked(true);
