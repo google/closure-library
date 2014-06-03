@@ -37,6 +37,7 @@ goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.FilterObservingMenuItem');
 goog.require('goog.ui.Menu');
+goog.require('goog.ui.MenuItem');
 goog.require('goog.userAgent');
 
 
@@ -467,17 +468,7 @@ goog.ui.FilteredMenu.prototype.filterItems_ = function(str) {
           if (pos) {
             pos++;
           }
-
-          if (str == '') {
-            child.setContent(caption);
-          } else {
-            child.setContent(this.getDomHelper().createDom('span', null,
-                caption.substr(0, pos),
-                this.getDomHelper().createDom(
-                    'b', null, caption.substr(pos, str.length)),
-                caption.substr(pos + str.length,
-                    caption.length - str.length - pos)));
-          }
+          this.boldContent_(child, pos, str.length);
         } else {
           child.setVisible(false);
         }
@@ -490,6 +481,40 @@ goog.ui.FilteredMenu.prototype.filterItems_ = function(str) {
     }
   }
   this.filterStr_ = str;
+};
+
+
+/**
+ * Updates the content of the given menu item, bolding the part of its caption
+ * from start and through the next len characters.
+ * @param {!goog.ui.Control} child The control to bold content on.
+ * @param {number} start The index at which to start bolding.
+ * @param {number} len How many characters to bold.
+ * @private
+ */
+goog.ui.FilteredMenu.prototype.boldContent_ = function(child, start, len) {
+  var caption = child.getCaption();
+  var boldedCaption;
+  if (len == 0) {
+    boldedCaption = this.getDomHelper().createTextNode(caption);
+  } else {
+    var preMatch = caption.substr(0, start);
+    var match = caption.substr(start, len);
+    var postMatch = caption.substr(start + len);
+    boldedCaption = this.getDomHelper().createDom(
+        'span',
+        null,
+        preMatch,
+        this.getDomHelper().createDom('b', null, match),
+        postMatch);
+  }
+  var accelerator = child.getAccelerator && child.getAccelerator();
+  if (accelerator) {
+    child.setContent([boldedCaption, this.getDomHelper().createDom('span',
+        goog.ui.MenuItem.ACCELERATOR_CLASS, accelerator)]);
+  } else {
+    child.setContent(boldedCaption);
+  }
 };
 
 

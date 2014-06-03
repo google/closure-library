@@ -84,9 +84,8 @@ goog.ui.MenuItem.MNEMONIC_WRAPPER_CLASS_ =
 /**
  * The class set on an element that contains a keyboard accelerator hint.
  * @type {string}
- * @private
  */
-goog.ui.MenuItem.ACCELERATOR_CLASS_ = goog.getCssName('goog-menuitem-accel');
+goog.ui.MenuItem.ACCELERATOR_CLASS = goog.getCssName('goog-menuitem-accel');
 
 
 // goog.ui.Component and goog.ui.Control implementation.
@@ -153,7 +152,7 @@ goog.ui.MenuItem.prototype.setCheckable = function(checkable) {
 goog.ui.MenuItem.prototype.getCaption = function() {
   var content = this.getContent();
   if (goog.isArray(content)) {
-    var acceleratorClass = goog.ui.MenuItem.ACCELERATOR_CLASS_;
+    var acceleratorClass = goog.ui.MenuItem.ACCELERATOR_CLASS;
     var mnemonicWrapClass = goog.ui.MenuItem.MNEMONIC_WRAPPER_CLASS_;
     var caption = goog.array.map(content, function(node) {
       if (goog.dom.isElement(node) &&
@@ -169,6 +168,26 @@ goog.ui.MenuItem.prototype.getCaption = function() {
     return goog.string.collapseBreakingSpaces(caption);
   }
   return goog.ui.MenuItem.superClass_.getCaption.call(this);
+};
+
+
+/**
+ * @return {?string} The keyboard accelerator text, or null if the menu item
+ *     doesn't have one.
+ */
+goog.ui.MenuItem.prototype.getAccelerator = function() {
+  var dom = this.getDomHelper();
+  var content = this.getContent();
+  if (goog.isArray(content)) {
+    var acceleratorEl = goog.array.find(content, function(e) {
+      return goog.dom.classlist.contains(/** @type {!Element} */ (e),
+          goog.ui.MenuItem.ACCELERATOR_CLASS);
+    });
+    if (acceleratorEl) {
+      return dom.getTextContent(acceleratorEl);
+    }
+  }
+  return null;
 };
 
 

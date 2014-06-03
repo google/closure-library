@@ -313,9 +313,14 @@ Author: attila@google.com (Attila Bodis)
       assertEquals('getCaption() must not return the accelerator', 'Hello',
           item.getCaption());
 
-      item.setCaption('');
+      item.setCaption([
+        goog.dom.createDom('span',goog.getCssName('goog-menuitem-accel'), 'Ctrl+1')
+      ]);
       assertEquals('getCaption() must return empty string', '',
           item.getCaption());
+
+      assertEquals('getAccelerator() should return the accelerator', 'Ctrl+1',
+          item.getAccelerator());
     }
 
     function testGetSetCaptionForItemWithMnemonics() {
