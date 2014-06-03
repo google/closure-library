@@ -17,6 +17,7 @@ goog.setTestOnly('goog.dom.annotateTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.annotate');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.testing.jsunit');
 
 var $ = goog.dom.getElement;
@@ -24,7 +25,8 @@ var $ = goog.dom.getElement;
 var TEXT = 'This little piggy cried "Wee! Wee! Wee!" all the way home.';
 
 function doAnnotation(termIndex, termHtml) {
-  return '<span class="c' + termIndex + '">' + termHtml + '</span>';
+  return goog.html.SafeHtml.create('span', {'class': 'c' + termIndex},
+      termHtml);
 }
 
 // goog.dom.annotate.annotateText tests
@@ -36,6 +38,7 @@ function testAnnotateText() {
 
   terms = [['pig', false]];
   html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
+  html = goog.html.SafeHtml.unwrap(html);
   assertEquals('This little <span class="c0">pig</span>gy cried ' +
                '&quot;Wee! Wee! Wee!&quot; all the way home.', html);
 
@@ -45,11 +48,13 @@ function testAnnotateText() {
 
   terms = [[' piggy ', false]];
   html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
+  html = goog.html.SafeHtml.unwrap(html);
   assertEquals('This little<span class="c0"> piggy </span>cried ' +
                '&quot;Wee! Wee! Wee!&quot; all the way home.', html);
 
   terms = [['goose', true], ['piggy', true]];
   html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
+  html = goog.html.SafeHtml.unwrap(html);
   assertEquals('This little <span class="c1">piggy</span> cried ' +
                '&quot;Wee! Wee! Wee!&quot; all the way home.', html);
 }
@@ -57,26 +62,31 @@ function testAnnotateText() {
 function testAnnotateTextHtmlEscaping() {
   var terms = [['a', false]];
   var html = goog.dom.annotate.annotateText('&a', terms, doAnnotation);
+  html = goog.html.SafeHtml.unwrap(html);
   assertEquals('&amp;<span class="c0">a</span>', html);
 
   terms = [['a', false]];
   html = goog.dom.annotate.annotateText('a&', terms, doAnnotation);
+  html = goog.html.SafeHtml.unwrap(html);
   assertEquals('<span class="c0">a</span>&amp;', html);
 
   terms = [['&', false]];
   html = goog.dom.annotate.annotateText('&', terms, doAnnotation);
+  html = goog.html.SafeHtml.unwrap(html);
   assertEquals('<span class="c0">&amp;</span>', html);
 }
 
 function testAnnotateTextIgnoreCase() {
   var terms = [['wEe', true]];
   var html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation, true);
+  html = goog.html.SafeHtml.unwrap(html);
   assertEquals('This little piggy cried &quot;<span class="c0">Wee</span>! ' +
                '<span class="c0">Wee</span>! <span class="c0">Wee</span>!' +
                '&quot; all the way home.', html);
 
   terms = [['WEE!', true], ['HE', false]];
   html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation, true);
+  html = goog.html.SafeHtml.unwrap(html);
   assertEquals('This little piggy cried &quot;<span class="c0">Wee!</span> ' +
                '<span class="c0">Wee!</span> <span class="c0">Wee!</span>' +
                '&quot; all t<span class="c1">he</span> way home.', html);
@@ -85,6 +95,7 @@ function testAnnotateTextIgnoreCase() {
 function testAnnotateTextOverlappingTerms() {
   var terms = [['tt', false], ['little', false]];
   var html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
+  html = goog.html.SafeHtml.unwrap(html);
   assertEquals('This <span class="c1">little</span> piggy cried &quot;Wee! ' +
                'Wee! Wee!&quot; all the way home.', html);
 }
