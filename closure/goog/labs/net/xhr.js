@@ -183,7 +183,7 @@ _.send = function(method, url, data, opt_options) {
     // So sad that IE doesn't support onload and onerror.
     xhr.onreadystatechange = function() {
       if (xhr.readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
-        window.clearTimeout(timer);
+        goog.global.clearTimeout(timer);
         // Note: When developing locally, XHRs to file:// schemes return
         // a status code of 0. We mark that case as a success too.
         if (HttpStatus.isSuccess(xhr.status) ||
@@ -229,7 +229,7 @@ _.send = function(method, url, data, opt_options) {
 
     // Handle timeouts, if requested.
     if (options.timeoutMs > 0) {
-      timer = window.setTimeout(function() {
+      timer = goog.global.setTimeout(function() {
         // Clear event listener before aborting so the errback will not be
         // called twice.
         xhr.onreadystatechange = goog.nullFunction;
@@ -245,7 +245,7 @@ _.send = function(method, url, data, opt_options) {
       // XMLHttpRequest.send is known to throw on some versions of FF,
       // for example if a cross-origin request is disallowed.
       xhr.onreadystatechange = goog.nullFunction;
-      window.clearTimeout(timer);
+      goog.global.clearTimeout(timer);
       reject(new _.Error('Error sending XHR: ' + e.message, url, xhr));
     }
   });
