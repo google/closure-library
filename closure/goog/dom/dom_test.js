@@ -394,9 +394,6 @@ function testCreateDomWithTypeAttribute() {
 function testCreateDomWithClassList() {
   var el = goog.dom.createDom('div', ['foo', 'bar']);
   assertEquals('foo bar', el.className);
-
-  el = goog.dom.createDom('div', ['foo', 'foo']);
-  assertEquals('foo', el.className);
 }
 
 function testContains() {
