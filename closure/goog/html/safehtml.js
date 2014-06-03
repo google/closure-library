@@ -540,4 +540,6 @@ goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_ = function(
  * A SafeHtml instance corresponding to the empty string.
  * @const {!goog.html.SafeHtml}
  */
-goog.html.SafeHtml.EMPTY = goog.html.SafeHtml.htmlEscape('');
+goog.html.SafeHtml.EMPTY =
+    goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+        '', goog.i18n.bidi.Dir.NEUTRAL);
