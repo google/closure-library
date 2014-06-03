@@ -20,6 +20,9 @@
 
 goog.provide('goog.ui.editor.messages');
 
+goog.require('goog.html.uncheckedconversions');
+goog.require('goog.string.Const');
+
 
 /** @desc Link button / bubble caption. */
 goog.ui.editor.messages.MSG_LINK_CAPTION = goog.getMsg('Link');
@@ -67,6 +70,17 @@ goog.ui.editor.messages.MSG_TR_LINK_EXPLANATION = goog.getMsg(
       'endBold': '</b>',
       'searchEngineLink': "<a href='http://www.google.com/' target='_new'>",
       'endLink': '</a>'});
+
+
+/**
+ * @return {!goog.html.SafeHtml} SafeHtml version of MSG_TR_LINK_EXPLANATION.
+ */
+goog.ui.editor.messages.getTrLinkExplanationSafeHtml = function() {
+  return goog.html.uncheckedconversions.
+      safeHtmlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from('Parameterless translation'),
+          goog.ui.editor.messages.MSG_TR_LINK_EXPLANATION);
+};
 
 
 /** @desc Prompt for the URL of a link that the user is creating. */
