@@ -48,7 +48,7 @@ goog.require('goog.testing.stacktrace');
  *                      returns false.  Can be used to disable tests on browsers
  *                      where they aren't expected to pass.
  *
- * Use {@link #autoDiscoverTests}
+ * Use {@link #autoDiscoverLifecycle} and {@link #autoDiscoverTests}
  *
  * @param {string=} opt_name The name of the test case, defaults to
  *     'Untitled Test Case'.
@@ -736,9 +736,35 @@ goog.testing.TestCase.prototype.createTestFromAutoDiscoveredFunction =
 
 
 /**
+ * Adds any functions defined in the global scope that correspond to
+ * lifecycle events for the test case. Overrides setUp, tearDown, setUpPage,
+ * tearDownPage and runTests if they are defined.
+ */
+goog.testing.TestCase.prototype.autoDiscoverLifecycle = function() {
+  if (goog.global['setUp']) {
+    this.setUp = goog.bind(goog.global['setUp'], goog.global);
+  }
+  if (goog.global['tearDown']) {
+    this.tearDown = goog.bind(goog.global['tearDown'], goog.global);
+  }
+  if (goog.global['setUpPage']) {
+    this.setUpPage = goog.bind(goog.global['setUpPage'], goog.global);
+  }
+  if (goog.global['tearDownPage']) {
+    this.tearDownPage = goog.bind(goog.global['tearDownPage'], goog.global);
+  }
+  if (goog.global['runTests']) {
+    this.runTests = goog.bind(goog.global['runTests'], goog.global);
+  }
+  if (goog.global['shouldRunTests']) {
+    this.shouldRunTests = goog.bind(goog.global['shouldRunTests'], goog.global);
+  }
+};
+
+
+/**
  * Adds any functions defined in the global scope that are prefixed with "test"
- * to the test case.  Also overrides setUp, tearDown, setUpPage, tearDownPage
- * and runTests if they are defined.
+ * to the test case.
  */
 goog.testing.TestCase.prototype.autoDiscoverTests = function() {
   var prefix = this.getAutoDiscoveryPrefix();
@@ -770,24 +796,10 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
 
   this.log(this.getCount() + ' tests auto-discovered');
 
-  if (goog.global['setUp']) {
-    this.setUp = goog.bind(goog.global['setUp'], goog.global);
-  }
-  if (goog.global['tearDown']) {
-    this.tearDown = goog.bind(goog.global['tearDown'], goog.global);
-  }
-  if (goog.global['setUpPage']) {
-    this.setUpPage = goog.bind(goog.global['setUpPage'], goog.global);
-  }
-  if (goog.global['tearDownPage']) {
-    this.tearDownPage = goog.bind(goog.global['tearDownPage'], goog.global);
-  }
-  if (goog.global['runTests']) {
-    this.runTests = goog.bind(goog.global['runTests'], goog.global);
-  }
-  if (goog.global['shouldRunTests']) {
-    this.shouldRunTests = goog.bind(goog.global['shouldRunTests'], goog.global);
-  }
+  // TODO(user): Do this as a separate call. Unfortunately, a lot of projects
+  // currently override autoDiscoverTests and expect lifecycle events to be
+  // registered as a part of this call.
+  this.autoDiscoverLifecycle();
 };
 
 
