@@ -37,12 +37,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-/**
- * TODO: Fix the projects that use goog.dom.classes but only depend on goog.dom.
- * @suppress {extraRequire}
- */
 goog.require('goog.dom.classes');
-goog.require('goog.dom.classlist');
 goog.require('goog.functions');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
@@ -738,7 +733,7 @@ goog.dom.createDom_ = function(doc, args) {
     if (goog.isString(attributes)) {
       element.className = attributes;
     } else if (goog.isArray(attributes)) {
-      goog.dom.classlist.addAll(element, attributes);
+      goog.dom.classes.add.apply(null, [element].concat(attributes));
     } else {
       goog.dom.setProperties(element, attributes);
     }
@@ -2029,10 +2024,8 @@ goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
   var tagName = opt_tag ? opt_tag.toUpperCase() : null;
   return /** @type {Element} */ (goog.dom.getAncestor(element,
       function(node) {
-        return node.nodeType == goog.dom.NodeType.ELEMENT &&
-               (!tagName || node.nodeName == tagName) &&
-               (!opt_class || goog.dom.classlist.contains(
-                   /** @type {!Element} */ (node), opt_class));
+        return (!tagName || node.nodeName == tagName) &&
+               (!opt_class || goog.dom.classes.has(node, opt_class));
       }, true));
 };
 
