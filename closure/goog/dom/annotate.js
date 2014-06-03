@@ -34,7 +34,7 @@ goog.require('goog.html.SafeHtml');
  *   (1) the number of the term that is "hit",
  *   (2) the HTML (search term) to be annotated,
  * and returns the annotated term as an HTML.
- * @typedef {Function}
+ * @typedef {function(number, !goog.html.SafeHtml): !goog.html.SafeHtml}
  */
 goog.dom.annotate.AnnotateFn;
 
