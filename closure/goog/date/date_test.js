@@ -1432,3 +1432,26 @@ function testMinMax() {
   assertEquals(date1, goog.date.min(date1, jsDate2));
   assertEquals(jsDate2, goog.date.max(dateTime1, jsDate2));
 }
+
+function testParseTimezoneFromTimeString() {
+  var dateTime = new goog.date.DateTime();
+
+  var webkit5Character = dateTime.parseTimezoneFromTimeString_('11:43:28 GMT-0500 (EASST)');
+  assertEquals('EASST', webkit5Character);
+
+  var webkit4Character = dateTime.parseTimezoneFromTimeString_('11:43:28 GMT-0500 (HADT)');
+  assertEquals('HADT', webkit4Character);
+
+  var webkit3Character = dateTime.parseTimezoneFromTimeString_('11:43:28 GMT-0500 (CDT)');
+  assertEquals('CDT', webkit3Character);
+
+
+  var ie5Character = dateTime.parseTimezoneFromTimeString_('13:43:34 EASST');
+  assertEquals('EASST', ie5Character);
+
+  var ie4Character = dateTime.parseTimezoneFromTimeString_('13:43:34 HADT');
+  assertEquals('HADT', ie4Character);
+
+  var ie3Character = dateTime.parseTimezoneFromTimeString_('13:43:34 PDT');
+  assertEquals('PDT', ie3Character);
+};
