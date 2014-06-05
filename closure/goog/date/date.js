@@ -1455,6 +1455,34 @@ goog.date.DateTime.prototype.getUTCMilliseconds = function() {
 
 
 /**
+ * Returns the short name for the current timezone.
+ *
+ * @return {string} The three or four character timezone short name.
+ */
+goog.date.DateTime.prototype.getTimezoneShortName = function() {
+  return this.parseTimezoneFromTimeString_(this.date.toTimeString());
+};
+
+
+/**
+ * Returns the short name parsed out of the time string.
+ *
+ * @param {string} timeString The result of the toTimeString() method provided
+ * by the native JavaScript Date object.
+ * @return {?string} The three or four character timezone short name.
+ * @private
+ */
+goog.date.DateTime.prototype.parseTimezoneFromTimeString_ = function(timeString) {
+  var matches = timeString.match(/[A-Z]{3,5}/g);
+  if (matches) {
+      return matches[matches.length - 1];
+  }
+
+  return null;
+};
+
+
+/**
  * Sets the hours part of the datetime.
  *
  * @param {number} hours An integer between 0 and 23, representing the hour.
