@@ -1477,7 +1477,6 @@ goog.date.DateTime.prototype.parseTimezoneFromTimeString_ = function(timeString)
   if (matches) {
       return matches[matches.length - 1];
   }
-
   return null;
 };
 
