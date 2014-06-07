@@ -76,7 +76,7 @@ following functions to set up their test environment:
                      returns false.  Can be used to disable tests on browsers
                      where they aren't expected to pass.
 
-Use <code> #autoDiscoverTests</code>
+Use <code> #autoDiscoverLifecycle</code> and <code> #autoDiscoverTests</code>
   </div>
 
 
@@ -84,7 +84,7 @@ Use <code> #autoDiscoverTests</code>
           <div class="title">Useful links</div>
           <ol>
             <li><a href="local_closure_goog_testing_testcase.js.source.html"><span class='source-code-link'>Source Code</span></a></li>
-            <li><a href="http://code.google.com/p/closure-library/source/browse/local/closure/goog/testing/testcase.js">Git</a></li>
+            <li><a href="https://github.com/google/closure-library/tree/master/local/closure/goog/testing/testcase.js">Git</a></li>
           </ol>
         </div>
 </div>
@@ -105,6 +105,7 @@ Use <code> #autoDiscoverTests</code>
       <tr><td><span class="type"><a href="class_goog_testing_DeferredTestCase.html">goog.testing.DeferredTestCase</a></span></td><td><span class="type"><a href="class_goog_testing_AsyncTestCase.html">goog.testing.AsyncTestCase</a></span></td></tr>
         <tr><td><span class="type"><a href="class_goog_testing_ContinuationTestCase.html">goog.testing.ContinuationTestCase</a></span></td><td>goog.testing.TestCase</td></tr>
       <tr><td><span class="type"><a href="class_goog_testing_AsyncTestCase.html">goog.testing.AsyncTestCase</a></span></td><td>goog.testing.TestCase</td></tr>
+      <tr><td><span class="type"><a href="class_goog_labs_testing_EnvironmentTestCase_.html">goog.labs.testing.EnvironmentTestCase_</a></span></td><td>goog.testing.TestCase</td></tr>
       <tr><td><span class="type"><a href="class_goog_testing_ShardingTestCase.html">goog.testing.ShardingTestCase</a></span></td><td>goog.testing.TestCase</td></tr>
   </table>
 </div>
@@ -323,21 +324,21 @@ test discovery.
 
 
   <td>
-    <a name="goog.testing.TestCase.prototype.autoDiscoverTests"></a>
+    <a name="goog.testing.TestCase.prototype.autoDiscoverLifecycle"></a>
 
 
      <div class="arg">
        <img align="left" src="static/images/blank.gif">
 
-        <span class="entryName">autoDiscoverTests<span class="args">()</span>
+        <span class="entryName">autoDiscoverLifecycle<span class="args">()</span>
         </span>
       </div>
 
 
      <div class="entryOverview">
-       Adds any functions defined in the global scope that are prefixed with "test"
-to the test case.  Also overrides setUp, tearDown, setUpPage, tearDownPage
-and runTests if they are defined.
+       Adds any functions defined in the global scope that correspond to
+lifecycle events for the test case. Overrides setUp, tearDown, setUpPage,
+tearDownPage and runTests if they are defined.
 
      </div>
 
@@ -351,7 +352,43 @@ and runTests if they are defined.
      </tr>
 
 
-     <tr class="odd entry protected">
+     <tr class="odd entry public">
+       <td class="access"></td>
+
+
+
+
+
+
+  <td>
+    <a name="goog.testing.TestCase.prototype.autoDiscoverTests"></a>
+
+
+     <div class="arg">
+       <img align="left" src="static/images/blank.gif">
+
+        <span class="entryName">autoDiscoverTests<span class="args">()</span>
+        </span>
+      </div>
+
+
+     <div class="entryOverview">
+       Adds any functions defined in the global scope that are prefixed with "test"
+to the test case.
+
+     </div>
+
+   
+  </td>
+
+
+  <td class="view-code">
+     <a href="local_closure_goog_testing_testcase.js.source.html#line769">code &raquo;</a>
+  </td>
+     </tr>
+
+
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
@@ -407,12 +444,12 @@ and runTests if they are defined.
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line907">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line919">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -455,12 +492,12 @@ required to run the test.
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line874">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line886">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry protected">
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
@@ -535,7 +572,7 @@ required to run the test.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -566,12 +603,12 @@ time has execeeded <code> #maxRunTime</code>.
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line819">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line831">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry protected">
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
@@ -636,12 +673,12 @@ time has execeeded <code> #maxRunTime</code>.
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line992">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line1004">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry protected">
+     <tr class="odd entry protected">
        <td class="access"></td>
 
 
@@ -697,12 +734,12 @@ time has execeeded <code> #maxRunTime</code>.
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line972">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line984">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -737,7 +774,7 @@ time has execeeded <code> #maxRunTime</code>.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -772,7 +809,7 @@ time has execeeded <code> #maxRunTime</code>.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -820,7 +857,7 @@ any which are skipped.
      </tr>
 
 
-     <tr class="even entry protected">
+     <tr class="odd entry protected">
        <td class="access"></td>
 
 
@@ -866,7 +903,7 @@ any which are skipped.
      </tr>
 
 
-     <tr class="odd entry protected">
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
@@ -912,7 +949,7 @@ any which are skipped.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -959,7 +996,7 @@ any which are skipped.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1029,7 +1066,7 @@ any which are skipped.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1075,7 +1112,7 @@ any which are skipped.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1122,7 +1159,7 @@ any which are skipped.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1189,7 +1226,7 @@ any which are skipped.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1236,7 +1273,7 @@ any which are skipped.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1284,7 +1321,7 @@ failures (if any exist).
      </tr>
 
 
-     <tr class="odd entry protected">
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
@@ -1331,7 +1368,7 @@ failures (if any exist).
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -1373,12 +1410,12 @@ failures (if any exist).
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line931">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line943">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1425,7 +1462,7 @@ failures (if any exist).
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1471,7 +1508,7 @@ failures (if any exist).
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1532,7 +1569,7 @@ failures (if any exist).
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1601,12 +1638,12 @@ failures (if any exist).
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line1012">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line1024">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="odd entry protected">
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
@@ -1671,12 +1708,12 @@ and mark them all as having failed.
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line804">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line816">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1723,7 +1760,7 @@ and mark them all as having failed.
      </tr>
 
 
-     <tr class="odd entry protected">
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
@@ -1765,12 +1802,12 @@ and mark them all as having failed.
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line919">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line931">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -1832,7 +1869,7 @@ and mark them all as having failed.
      </tr>
 
 
-     <tr class="odd entry private">
+     <tr class="even entry private">
        <td class="access"></td>
 
 
@@ -1893,12 +1930,12 @@ and mark them all as having failed.
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line951">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line963">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -1933,7 +1970,7 @@ and mark them all as having failed.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -1971,7 +2008,7 @@ by the test to indicate it has finished.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2032,7 +2069,7 @@ by the test to indicate it has finished.
      </tr>
 
 
-     <tr class="odd entry protected">
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
@@ -2092,7 +2129,7 @@ by the test to indicate it has finished.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2154,7 +2191,7 @@ completed.
      </tr>
 
 
-     <tr class="odd entry protected">
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
@@ -2215,7 +2252,7 @@ completed.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2251,7 +2288,7 @@ overridden to add set up functionality to each test.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2287,7 +2324,7 @@ environment for the whole test case.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2337,7 +2374,7 @@ the class under test was absent.
      </tr>
 
 
-     <tr class="odd entry public">
+     <tr class="even entry public">
        <td class="access"></td>
 
 
@@ -2373,7 +2410,7 @@ overriden to add tear down functionality to each test.
      </tr>
 
 
-     <tr class="even entry public">
+     <tr class="odd entry public">
        <td class="access"></td>
 
 
@@ -2409,7 +2446,7 @@ down the entire test case.
      </tr>
 
 
-     <tr class="odd entry protected">
+     <tr class="even entry protected">
        <td class="access"></td>
 
 
@@ -2478,12 +2515,12 @@ down the entire test case.
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line893">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line905">code &raquo;</a>
   </td>
      </tr>
 
 
-     <tr class="even entry private">
+     <tr class="odd entry private">
        <td class="access"></td>
 
 
@@ -2544,7 +2581,7 @@ down the entire test case.
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line962">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line974">code &raquo;</a>
   </td>
      </tr>
 
@@ -3150,7 +3187,7 @@ Example valid values:
 
 
   <td class="view-code">
-     <a href="local_closure_goog_testing_testcase.js.source.html#line1201">code &raquo;</a>
+     <a href="local_closure_goog_testing_testcase.js.source.html#line1213">code &raquo;</a>
   </td>
      </tr>
 

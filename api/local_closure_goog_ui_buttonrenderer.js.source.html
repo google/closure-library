@@ -224,41 +224,45 @@
 <a name="line178"></a> * @protected
 <a name="line179"></a> */
 <a name="line180"></a>goog.ui.ButtonRenderer.prototype.setTooltip = function(element, tooltip) {
-<a name="line181"></a>  // Don&#39;t set a title attribute if there isn&#39;t a tooltip. Blank title
-<a name="line182"></a>  // attributes can be interpreted incorrectly by screen readers.
-<a name="line183"></a>  if (element &amp;&amp; tooltip) {
-<a name="line184"></a>    element.title = tooltip;
-<a name="line185"></a>  }
-<a name="line186"></a>};
-<a name="line187"></a>
-<a name="line188"></a>
-<a name="line189"></a>/**
-<a name="line190"></a> * Collapses the border on one or both sides of the button, allowing it to be
-<a name="line191"></a> * combined with the adjacent button(s), forming a single UI componenet with
-<a name="line192"></a> * multiple targets.
-<a name="line193"></a> * @param {goog.ui.Button} button Button to update.
-<a name="line194"></a> * @param {number} sides Bitmap of one or more {@link goog.ui.ButtonSide}s for
-<a name="line195"></a> *     which borders should be collapsed.
-<a name="line196"></a> * @protected
-<a name="line197"></a> */
-<a name="line198"></a>goog.ui.ButtonRenderer.prototype.setCollapsed = function(button, sides) {
-<a name="line199"></a>  var isRtl = button.isRightToLeft();
-<a name="line200"></a>  var collapseLeftClassName =
-<a name="line201"></a>      goog.getCssName(this.getStructuralCssClass(), &#39;collapse-left&#39;);
-<a name="line202"></a>  var collapseRightClassName =
-<a name="line203"></a>      goog.getCssName(this.getStructuralCssClass(), &#39;collapse-right&#39;);
-<a name="line204"></a>
-<a name="line205"></a>  button.enableClassName(isRtl ? collapseRightClassName : collapseLeftClassName,
-<a name="line206"></a>      !!(sides &amp; goog.ui.ButtonSide.START));
-<a name="line207"></a>  button.enableClassName(isRtl ? collapseLeftClassName : collapseRightClassName,
-<a name="line208"></a>      !!(sides &amp; goog.ui.ButtonSide.END));
-<a name="line209"></a>};
-<a name="line210"></a>
-<a name="line211"></a>
-<a name="line212"></a>/** @override */
-<a name="line213"></a>goog.ui.ButtonRenderer.prototype.getCssClass = function() {
-<a name="line214"></a>  return goog.ui.ButtonRenderer.CSS_CLASS;
-<a name="line215"></a>};
+<a name="line181"></a>  if (element) {
+<a name="line182"></a>    // Don&#39;t set a title attribute if there isn&#39;t a tooltip. Blank title
+<a name="line183"></a>    // attributes can be interpreted incorrectly by screen readers.
+<a name="line184"></a>    if (tooltip) {
+<a name="line185"></a>      element.title = tooltip;
+<a name="line186"></a>    } else {
+<a name="line187"></a>      element.removeAttribute(&#39;title&#39;);
+<a name="line188"></a>    }
+<a name="line189"></a>  }
+<a name="line190"></a>};
+<a name="line191"></a>
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * Collapses the border on one or both sides of the button, allowing it to be
+<a name="line195"></a> * combined with the adjacent button(s), forming a single UI componenet with
+<a name="line196"></a> * multiple targets.
+<a name="line197"></a> * @param {goog.ui.Button} button Button to update.
+<a name="line198"></a> * @param {number} sides Bitmap of one or more {@link goog.ui.ButtonSide}s for
+<a name="line199"></a> *     which borders should be collapsed.
+<a name="line200"></a> * @protected
+<a name="line201"></a> */
+<a name="line202"></a>goog.ui.ButtonRenderer.prototype.setCollapsed = function(button, sides) {
+<a name="line203"></a>  var isRtl = button.isRightToLeft();
+<a name="line204"></a>  var collapseLeftClassName =
+<a name="line205"></a>      goog.getCssName(this.getStructuralCssClass(), &#39;collapse-left&#39;);
+<a name="line206"></a>  var collapseRightClassName =
+<a name="line207"></a>      goog.getCssName(this.getStructuralCssClass(), &#39;collapse-right&#39;);
+<a name="line208"></a>
+<a name="line209"></a>  button.enableClassName(isRtl ? collapseRightClassName : collapseLeftClassName,
+<a name="line210"></a>      !!(sides &amp; goog.ui.ButtonSide.START));
+<a name="line211"></a>  button.enableClassName(isRtl ? collapseLeftClassName : collapseRightClassName,
+<a name="line212"></a>      !!(sides &amp; goog.ui.ButtonSide.END));
+<a name="line213"></a>};
+<a name="line214"></a>
+<a name="line215"></a>
+<a name="line216"></a>/** @override */
+<a name="line217"></a>goog.ui.ButtonRenderer.prototype.getCssClass = function() {
+<a name="line218"></a>  return goog.ui.ButtonRenderer.CSS_CLASS;
+<a name="line219"></a>};
 </pre>
 
 

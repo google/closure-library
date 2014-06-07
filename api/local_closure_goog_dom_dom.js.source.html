@@ -780,7 +780,7 @@
 <a name="line734"></a>    if (goog.isString(attributes)) {
 <a name="line735"></a>      element.className = attributes;
 <a name="line736"></a>    } else if (goog.isArray(attributes)) {
-<a name="line737"></a>      goog.dom.classes.add.apply(null, [element].concat(attributes));
+<a name="line737"></a>      element.className = attributes.join(&#39; &#39;);
 <a name="line738"></a>    } else {
 <a name="line739"></a>      goog.dom.setProperties(element, attributes);
 <a name="line740"></a>    }

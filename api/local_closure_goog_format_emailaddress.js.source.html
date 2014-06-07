@@ -389,7 +389,7 @@
 <a name="line343"></a>
 <a name="line344"></a>  for (var i = 0; i &lt; str.length; ) {
 <a name="line345"></a>    token = goog.format.EmailAddress.getToken_(str, i);
-<a name="line346"></a>    if (token == &#39;,&#39; || token == &#39;;&#39; ||
+<a name="line346"></a>    if (token == &#39;,&#39; || token == &#39;;&#39; || token == &#39;\u3001&#39; ||
 <a name="line347"></a>        (token == &#39; &#39; &amp;&amp; parser(email).isValid())) {
 <a name="line348"></a>      if (!goog.string.isEmpty(email)) {
 <a name="line349"></a>        result.push(parser(email));

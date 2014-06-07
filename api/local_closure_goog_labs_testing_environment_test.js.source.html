@@ -1,0 +1,163 @@
+<!doctype html>
+
+<html>
+<head>
+  <link rel="shortcut icon" href="static/images/favicon.ico" type="image/x-icon">
+  <title>environment_test.js (Closure Library API Documentation - JavaScript)</title>
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/doc.css">
+  <link rel="stylesheet" href="static/css/sidetree.css">
+  <link rel="stylesheet" href="static/css/prettify.css">
+
+  <script>
+     var _staticFilePath = "static/";
+     var _typeTreeName = "goog";
+     var _fileTreeName = "Source";
+  </script>
+
+  <script src="static/js/doc.js">
+  </script>
+
+
+  <meta charset="utf8">
+</head>
+
+<body onload="grokdoc.onLoad();">
+
+<div id="header">
+  <div class="g-section g-tpl-50-50 g-split">
+    <div class="g-unit g-first">
+      <a id="logo" href="index.html">Closure Library API Documentation</a>
+    </div>
+
+    <div class="g-unit">
+      <div class="g-c">
+        <strong>Go to class or file:</strong>
+        <input type="text" id="ac">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<h2><a href="local_closure_goog_labs_testing_environment_test.js.html">environment_test.js</a></h2>
+
+<pre class="prettyprint lang-js">
+<a name="line1"></a>// Copyright 2014 The Closure Library Authors. All Rights Reserved.
+<a name="line2"></a>//
+<a name="line3"></a>// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<a name="line4"></a>// you may not use this file except in compliance with the License.
+<a name="line5"></a>// You may obtain a copy of the License at
+<a name="line6"></a>//
+<a name="line7"></a>//      http://www.apache.org/licenses/LICENSE-2.0
+<a name="line8"></a>//
+<a name="line9"></a>// Unless required by applicable law or agreed to in writing, software
+<a name="line10"></a>// distributed under the License is distributed on an &quot;AS-IS&quot; BASIS,
+<a name="line11"></a>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<a name="line12"></a>// See the License for the specific language governing permissions and
+<a name="line13"></a>// limitations under the License.
+<a name="line14"></a>
+<a name="line15"></a>goog.provide(&#39;goog.labs.testing.environmentTest&#39;);
+<a name="line16"></a>goog.setTestOnly(&#39;goog.labs.testing.environmentTest&#39;);
+<a name="line17"></a>
+<a name="line18"></a>goog.require(&#39;goog.labs.testing.Environment&#39;);
+<a name="line19"></a>goog.require(&#39;goog.testing.MockControl&#39;);
+<a name="line20"></a>goog.require(&#39;goog.testing.TestCase&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var testCase = null;
+<a name="line24"></a>var mockControl = null;
+<a name="line25"></a>
+<a name="line26"></a>// Use this flag to control whether the global JsUnit lifecycle events are being
+<a name="line27"></a>// called as part of the test lifecycle or as part of the &quot;mocked&quot; environment.
+<a name="line28"></a>var testing = false;
+<a name="line29"></a>
+<a name="line30"></a>function setUp() {
+<a name="line31"></a>  if (testing) {
+<a name="line32"></a>    return;
+<a name="line33"></a>  }
+<a name="line34"></a>
+<a name="line35"></a>  // Temporarily override the initializeTestRunner method to avoid installing
+<a name="line36"></a>  // our &quot;test&quot; TestCase.
+<a name="line37"></a>  var initFn = goog.testing.TestCase.initializeTestRunner;
+<a name="line38"></a>  goog.testing.TestCase.initializeTestRunner = function() {};
+<a name="line39"></a>  testCase = new goog.labs.testing.EnvironmentTestCase_();
+<a name="line40"></a>  goog.testing.TestCase.initializeTestRunner = initFn;
+<a name="line41"></a>
+<a name="line42"></a>  mockControl = new goog.testing.MockControl();
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>function tearDown() {
+<a name="line46"></a>  if (testing) {
+<a name="line47"></a>    return;
+<a name="line48"></a>  }
+<a name="line49"></a>
+<a name="line50"></a>  mockControl.$tearDown();
+<a name="line51"></a>}
+<a name="line52"></a>
+<a name="line53"></a>function testLifecycle() {
+<a name="line54"></a>  testing = true;
+<a name="line55"></a>
+<a name="line56"></a>  var envOne = mockControl.createStrictMock(goog.labs.testing.Environment);
+<a name="line57"></a>  var envTwo = mockControl.createStrictMock(goog.labs.testing.Environment);
+<a name="line58"></a>  var envThree = mockControl.createStrictMock(goog.labs.testing.Environment);
+<a name="line59"></a>  var testMethod = mockControl.createFunctionMock(&#39;testMethod&#39;);
+<a name="line60"></a>
+<a name="line61"></a>  testCase.addNewTest(&#39;testFake&#39;, testMethod);
+<a name="line62"></a>
+<a name="line63"></a>  testCase.registerEnvironment_(envOne);
+<a name="line64"></a>  testCase.registerEnvironment_(envTwo);
+<a name="line65"></a>  testCase.registerEnvironment_(envThree);
+<a name="line66"></a>
+<a name="line67"></a>  envOne.setUpPage();
+<a name="line68"></a>  envTwo.setUpPage();
+<a name="line69"></a>  envThree.setUpPage();
+<a name="line70"></a>
+<a name="line71"></a>  envOne.setUp();
+<a name="line72"></a>  envTwo.setUp();
+<a name="line73"></a>  envThree.setUp();
+<a name="line74"></a>
+<a name="line75"></a>  testMethod();
+<a name="line76"></a>
+<a name="line77"></a>  envThree.tearDown();
+<a name="line78"></a>  envTwo.tearDown();
+<a name="line79"></a>  envOne.tearDown();
+<a name="line80"></a>
+<a name="line81"></a>  envThree.tearDownPage();
+<a name="line82"></a>  envTwo.tearDownPage();
+<a name="line83"></a>  envOne.tearDownPage();
+<a name="line84"></a>
+<a name="line85"></a>  mockControl.$replayAll();
+<a name="line86"></a>  testCase.runTests();
+<a name="line87"></a>  mockControl.$verifyAll();
+<a name="line88"></a>
+<a name="line89"></a>  testing = false;
+<a name="line90"></a>}
+<a name="line91"></a>
+<a name="line92"></a>function testAutoDiscoverTests() {
+<a name="line93"></a>  testing = true;
+<a name="line94"></a>
+<a name="line95"></a>  var setUpPageFn = testCase.setUpPage;
+<a name="line96"></a>  var setUpFn = testCase.setUp;
+<a name="line97"></a>  var tearDownFn = testCase.tearDownFn;
+<a name="line98"></a>  var tearDownPageFn = testCase.tearDownPageFn;
+<a name="line99"></a>
+<a name="line100"></a>  testCase.autoDiscoverTests();
+<a name="line101"></a>
+<a name="line102"></a>  assertEquals(setUpPageFn, testCase.setUpPage);
+<a name="line103"></a>  assertEquals(setUpFn, testCase.setUp);
+<a name="line104"></a>  assertEquals(tearDownFn, testCase.tearDownFn);
+<a name="line105"></a>  assertEquals(tearDownPageFn, testCase.tearDownPageFn);
+<a name="line106"></a>
+<a name="line107"></a>  // Note that this number changes when more tests are added this file as
+<a name="line108"></a>  // the environment reflects on the window global scope for JsUnit.
+<a name="line109"></a>  assertEquals(2, testCase.tests_.length);
+<a name="line110"></a>
+<a name="line111"></a>  testing = false;
+<a name="line112"></a>}
+</pre>
+
+
+</body>
+</html>

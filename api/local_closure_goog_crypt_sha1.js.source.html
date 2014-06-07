@@ -97,32 +97,32 @@
 <a name="line51"></a>  /**
 <a name="line52"></a>   * Holds the previous values of accumulated variables a-e in the compress_
 <a name="line53"></a>   * function.
-<a name="line54"></a>   * @type {!Array.&lt;number&gt;|Uint32Array}
+<a name="line54"></a>   * @type {Array.&lt;number&gt;}
 <a name="line55"></a>   * @private
 <a name="line56"></a>   */
-<a name="line57"></a>  this.chain_ = goog.global[&#39;Uint32Array&#39;] ? new Uint32Array(5) : [];
+<a name="line57"></a>  this.chain_ = [];
 <a name="line58"></a>
 <a name="line59"></a>  /**
 <a name="line60"></a>   * A buffer holding the partially computed hash result.
-<a name="line61"></a>   * @type {!Array.&lt;number&gt;|Uint8Array}
+<a name="line61"></a>   * @type {Array.&lt;number&gt;}
 <a name="line62"></a>   * @private
 <a name="line63"></a>   */
-<a name="line64"></a>  this.buf_ = goog.global[&#39;Uint8Array&#39;] ? new Uint8Array(64) : [];
+<a name="line64"></a>  this.buf_ = [];
 <a name="line65"></a>
 <a name="line66"></a>  /**
-<a name="line67"></a>   * An array of 80 words, each a part of the message to be hashed.  Referred to
+<a name="line67"></a>   * An array of 80 bytes, each a part of the message to be hashed.  Referred to
 <a name="line68"></a>   * as the message schedule in the docs.
-<a name="line69"></a>   * @type {!Array.&lt;number&gt;|Uint32Array}
+<a name="line69"></a>   * @type {Array.&lt;number&gt;}
 <a name="line70"></a>   * @private
 <a name="line71"></a>   */
-<a name="line72"></a>  this.W_ = goog.global[&#39;Uint32Array&#39;] ? new Uint32Array(80) : [];
+<a name="line72"></a>  this.W_ = [];
 <a name="line73"></a>
 <a name="line74"></a>  /**
 <a name="line75"></a>   * Contains data needed to pad messages less than 64 bytes.
-<a name="line76"></a>   * @type {!Array.&lt;number&gt;|Uint8Array}
+<a name="line76"></a>   * @type {Array.&lt;number&gt;}
 <a name="line77"></a>   * @private
 <a name="line78"></a>   */
-<a name="line79"></a>  this.pad_ = goog.global[&#39;Uint8Array&#39;] ? new Uint8Array(this.blockSize) : [];
+<a name="line79"></a>  this.pad_ = [];
 <a name="line80"></a>
 <a name="line81"></a>  this.pad_[0] = 128;
 <a name="line82"></a>  for (var i = 1; i &lt; this.blockSize; ++i) {
@@ -159,146 +159,180 @@
 <a name="line113"></a>
 <a name="line114"></a>/**
 <a name="line115"></a> * Internal compress helper function.
-<a name="line116"></a> * @param {Array.&lt;number&gt;|Uint8Array} buf Block to compress.
-<a name="line117"></a> * @private
-<a name="line118"></a> */
-<a name="line119"></a>goog.crypt.Sha1.prototype.compress_ = function(buf) {
-<a name="line120"></a>  var W = this.W_;
-<a name="line121"></a>  var offset = 0;
-<a name="line122"></a>  for (var i = 0; i &lt; 16; i++) {
-<a name="line123"></a>    W[i] = (buf[offset] &lt;&lt; 24) |
-<a name="line124"></a>        (buf[offset + 1] &lt;&lt; 16) |
-<a name="line125"></a>        (buf[offset + 2] &lt;&lt; 8) |
-<a name="line126"></a>        (buf[offset + 3]);
-<a name="line127"></a>    offset += 4;
-<a name="line128"></a>  }
-<a name="line129"></a>
-<a name="line130"></a>  // expand to 80 words
-<a name="line131"></a>  for (var i = 16; i &lt; 80; i++) {
-<a name="line132"></a>    var t = W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16];
-<a name="line133"></a>    W[i] = ((t &lt;&lt; 1) | (t &gt;&gt;&gt; 31)) | 0;
-<a name="line134"></a>  }
-<a name="line135"></a>
-<a name="line136"></a>  var a = this.chain_[0] | 0;
-<a name="line137"></a>  var b = this.chain_[1] | 0;
-<a name="line138"></a>  var c = this.chain_[2] | 0;
-<a name="line139"></a>  var d = this.chain_[3] | 0;
-<a name="line140"></a>  var e = this.chain_[4] | 0;
-<a name="line141"></a>  var f = 0;
-<a name="line142"></a>  var k = 0;
-<a name="line143"></a>
-<a name="line144"></a>  for (var i = 0; i &lt; 80; i++) {
-<a name="line145"></a>    if (i &lt; 40) {
-<a name="line146"></a>      if (i &lt; 20) {
-<a name="line147"></a>        f = d ^ (b &amp; (c ^ d));
-<a name="line148"></a>        k = 0x5a827999;
-<a name="line149"></a>      } else {
-<a name="line150"></a>        f = b ^ c ^ d;
-<a name="line151"></a>        k = 0x6ed9eba1;
-<a name="line152"></a>      }
-<a name="line153"></a>    } else {
-<a name="line154"></a>      if (i &lt; 60) {
-<a name="line155"></a>        f = (b &amp; c) | (d &amp; (b | c));
-<a name="line156"></a>        k = 0x8f1bbcdc;
-<a name="line157"></a>      } else {
-<a name="line158"></a>        f = b ^ c ^ d;
-<a name="line159"></a>        k = 0xca62c1d6;
-<a name="line160"></a>      }
-<a name="line161"></a>    }
-<a name="line162"></a>
-<a name="line163"></a>    // As a performance optimization, construct the sum a pair at a time
-<a name="line164"></a>    // with casting to integer (bitwise OR) to eliminate unnecessary
-<a name="line165"></a>    // double&lt;-&gt;integer conversions.  Original statement is:
-<a name="line166"></a>    //    var t = (((a &lt;&lt; 5) | (a &gt;&gt;&gt; 27)) + f + e + k + W[i]) | 0;
-<a name="line167"></a>    var partialSum1 = (((a &lt;&lt; 5) | (a &gt;&gt;&gt; 27)) + f) | 0;
-<a name="line168"></a>    var partialSum2 = (e + (k | 0)) | 0;
-<a name="line169"></a>    var partialSum3 = (partialSum2 + (W[i] | 0)) | 0;
-<a name="line170"></a>    var t = (partialSum1 + partialSum3) | 0;
-<a name="line171"></a>
-<a name="line172"></a>    e = d;
-<a name="line173"></a>    d = c;
-<a name="line174"></a>    c = ((b &lt;&lt; 30) | (b &gt;&gt;&gt; 2)) | 0;
-<a name="line175"></a>    b = a;
-<a name="line176"></a>    a = t;
-<a name="line177"></a>  }
-<a name="line178"></a>
-<a name="line179"></a>  this.chain_[0] = (this.chain_[0] + a) | 0;
-<a name="line180"></a>  this.chain_[1] = (this.chain_[1] + b) | 0;
-<a name="line181"></a>  this.chain_[2] = (this.chain_[2] + c) | 0;
-<a name="line182"></a>  this.chain_[3] = (this.chain_[3] + d) | 0;
-<a name="line183"></a>  this.chain_[4] = (this.chain_[4] + e) | 0;
-<a name="line184"></a>};
-<a name="line185"></a>
+<a name="line116"></a> * @param {Array.&lt;number&gt;|Uint8Array|string} buf Block to compress.
+<a name="line117"></a> * @param {number=} opt_offset Offset of the block in the buffer.
+<a name="line118"></a> * @private
+<a name="line119"></a> */
+<a name="line120"></a>goog.crypt.Sha1.prototype.compress_ = function(buf, opt_offset) {
+<a name="line121"></a>  if (!opt_offset) {
+<a name="line122"></a>    opt_offset = 0;
+<a name="line123"></a>  }
+<a name="line124"></a>
+<a name="line125"></a>  var W = this.W_;
+<a name="line126"></a>
+<a name="line127"></a>  // get 16 big endian words
+<a name="line128"></a>  if (goog.isString(buf)) {
+<a name="line129"></a>    for (var i = 0; i &lt; 16; i++) {
+<a name="line130"></a>      // TODO(user): [bug 8140122] Recent versions of Safari for Mac OS and iOS
+<a name="line131"></a>      // have a bug that turns the post-increment ++ operator into pre-increment
+<a name="line132"></a>      // during JIT compilation.  We have code that depends heavily on SHA-1 for
+<a name="line133"></a>      // correctness and which is affected by this bug, so I&#39;ve removed all uses
+<a name="line134"></a>      // of post-increment ++ in which the result value is used.  We can revert
+<a name="line135"></a>      // this change once the Safari bug
+<a name="line136"></a>      // (https://bugs.webkit.org/show_bug.cgi?id=109036) has been fixed and
+<a name="line137"></a>      // most clients have been updated.
+<a name="line138"></a>      W[i] = (buf.charCodeAt(opt_offset) &lt;&lt; 24) |
+<a name="line139"></a>             (buf.charCodeAt(opt_offset + 1) &lt;&lt; 16) |
+<a name="line140"></a>             (buf.charCodeAt(opt_offset + 2) &lt;&lt; 8) |
+<a name="line141"></a>             (buf.charCodeAt(opt_offset + 3));
+<a name="line142"></a>      opt_offset += 4;
+<a name="line143"></a>    }
+<a name="line144"></a>  } else {
+<a name="line145"></a>    for (var i = 0; i &lt; 16; i++) {
+<a name="line146"></a>      W[i] = (buf[opt_offset] &lt;&lt; 24) |
+<a name="line147"></a>             (buf[opt_offset + 1] &lt;&lt; 16) |
+<a name="line148"></a>             (buf[opt_offset + 2] &lt;&lt; 8) |
+<a name="line149"></a>             (buf[opt_offset + 3]);
+<a name="line150"></a>      opt_offset += 4;
+<a name="line151"></a>    }
+<a name="line152"></a>  }
+<a name="line153"></a>
+<a name="line154"></a>  // expand to 80 words
+<a name="line155"></a>  for (var i = 16; i &lt; 80; i++) {
+<a name="line156"></a>    var t = W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16];
+<a name="line157"></a>    W[i] = ((t &lt;&lt; 1) | (t &gt;&gt;&gt; 31)) &amp; 0xffffffff;
+<a name="line158"></a>  }
+<a name="line159"></a>
+<a name="line160"></a>  var a = this.chain_[0];
+<a name="line161"></a>  var b = this.chain_[1];
+<a name="line162"></a>  var c = this.chain_[2];
+<a name="line163"></a>  var d = this.chain_[3];
+<a name="line164"></a>  var e = this.chain_[4];
+<a name="line165"></a>  var f, k;
+<a name="line166"></a>
+<a name="line167"></a>  // TODO(user): Try to unroll this loop to speed up the computation.
+<a name="line168"></a>  for (var i = 0; i &lt; 80; i++) {
+<a name="line169"></a>    if (i &lt; 40) {
+<a name="line170"></a>      if (i &lt; 20) {
+<a name="line171"></a>        f = d ^ (b &amp; (c ^ d));
+<a name="line172"></a>        k = 0x5a827999;
+<a name="line173"></a>      } else {
+<a name="line174"></a>        f = b ^ c ^ d;
+<a name="line175"></a>        k = 0x6ed9eba1;
+<a name="line176"></a>      }
+<a name="line177"></a>    } else {
+<a name="line178"></a>      if (i &lt; 60) {
+<a name="line179"></a>        f = (b &amp; c) | (d &amp; (b | c));
+<a name="line180"></a>        k = 0x8f1bbcdc;
+<a name="line181"></a>      } else {
+<a name="line182"></a>        f = b ^ c ^ d;
+<a name="line183"></a>        k = 0xca62c1d6;
+<a name="line184"></a>      }
+<a name="line185"></a>    }
 <a name="line186"></a>
-<a name="line187"></a>/** @override */
-<a name="line188"></a>goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
-<a name="line189"></a>  if (!goog.isDef(opt_length)) {
-<a name="line190"></a>    opt_length = bytes.length;
-<a name="line191"></a>  }
-<a name="line192"></a>
-<a name="line193"></a>  var n = 0;
-<a name="line194"></a>  var buf = this.buf_;
-<a name="line195"></a>  var inbuf = this.inbuf_;
-<a name="line196"></a>
-<a name="line197"></a>  while (n &lt; opt_length) {
-<a name="line198"></a>    if (goog.isString(bytes)) {
-<a name="line199"></a>      while (n &lt; opt_length) {
-<a name="line200"></a>        buf[inbuf] = bytes.charCodeAt(n);
-<a name="line201"></a>        ++inbuf;
-<a name="line202"></a>        ++n;
-<a name="line203"></a>        if (inbuf == this.blockSize) {
-<a name="line204"></a>          this.compress_(buf);
-<a name="line205"></a>          inbuf = 0;
-<a name="line206"></a>        }
-<a name="line207"></a>      }
-<a name="line208"></a>    } else {
-<a name="line209"></a>      while (n &lt; opt_length) {
-<a name="line210"></a>        buf[inbuf] = bytes[n];
-<a name="line211"></a>        ++inbuf;
-<a name="line212"></a>        ++n;
-<a name="line213"></a>        if (inbuf == this.blockSize) {
-<a name="line214"></a>          this.compress_(buf);
-<a name="line215"></a>          inbuf = 0;
-<a name="line216"></a>        }
-<a name="line217"></a>      }
-<a name="line218"></a>    }
-<a name="line219"></a>  }
-<a name="line220"></a>
-<a name="line221"></a>  this.inbuf_ = inbuf;
-<a name="line222"></a>  this.total_ += opt_length;
-<a name="line223"></a>};
-<a name="line224"></a>
-<a name="line225"></a>
-<a name="line226"></a>/** @override */
-<a name="line227"></a>goog.crypt.Sha1.prototype.digest = function() {
-<a name="line228"></a>  var digest = [];
-<a name="line229"></a>  var totalBits = this.total_ * 8;
-<a name="line230"></a>
-<a name="line231"></a>  // Add pad 0x80 0x00*.
-<a name="line232"></a>  if (this.inbuf_ &lt; 56) {
-<a name="line233"></a>    this.update(this.pad_, 56 - this.inbuf_);
-<a name="line234"></a>  } else {
-<a name="line235"></a>    this.update(this.pad_, this.blockSize - (this.inbuf_ - 56));
-<a name="line236"></a>  }
-<a name="line237"></a>
-<a name="line238"></a>  // Add # bits.
-<a name="line239"></a>  for (var i = this.blockSize - 1; i &gt;= 56; i--) {
-<a name="line240"></a>    this.buf_[i] = totalBits &amp; 255;
-<a name="line241"></a>    totalBits /= 256; // Don&#39;t use bit-shifting here!
-<a name="line242"></a>  }
-<a name="line243"></a>
-<a name="line244"></a>  this.compress_(this.buf_);
-<a name="line245"></a>
-<a name="line246"></a>  var n = 0;
-<a name="line247"></a>  for (var i = 0; i &lt; 5; i++) {
-<a name="line248"></a>    for (var j = 24; j &gt;= 0; j -= 8) {
-<a name="line249"></a>      digest[n] = (this.chain_[i] &gt;&gt; j) &amp; 255;
-<a name="line250"></a>      ++n;
-<a name="line251"></a>    }
-<a name="line252"></a>  }
-<a name="line253"></a>
-<a name="line254"></a>  return digest;
-<a name="line255"></a>};
+<a name="line187"></a>    var t = (((a &lt;&lt; 5) | (a &gt;&gt;&gt; 27)) + f + e + k + W[i]) &amp; 0xffffffff;
+<a name="line188"></a>    e = d;
+<a name="line189"></a>    d = c;
+<a name="line190"></a>    c = ((b &lt;&lt; 30) | (b &gt;&gt;&gt; 2)) &amp; 0xffffffff;
+<a name="line191"></a>    b = a;
+<a name="line192"></a>    a = t;
+<a name="line193"></a>  }
+<a name="line194"></a>
+<a name="line195"></a>  this.chain_[0] = (this.chain_[0] + a) &amp; 0xffffffff;
+<a name="line196"></a>  this.chain_[1] = (this.chain_[1] + b) &amp; 0xffffffff;
+<a name="line197"></a>  this.chain_[2] = (this.chain_[2] + c) &amp; 0xffffffff;
+<a name="line198"></a>  this.chain_[3] = (this.chain_[3] + d) &amp; 0xffffffff;
+<a name="line199"></a>  this.chain_[4] = (this.chain_[4] + e) &amp; 0xffffffff;
+<a name="line200"></a>};
+<a name="line201"></a>
+<a name="line202"></a>
+<a name="line203"></a>/** @override */
+<a name="line204"></a>goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
+<a name="line205"></a>  if (!goog.isDef(opt_length)) {
+<a name="line206"></a>    opt_length = bytes.length;
+<a name="line207"></a>  }
+<a name="line208"></a>
+<a name="line209"></a>  var lengthMinusBlock = opt_length - this.blockSize;
+<a name="line210"></a>  var n = 0;
+<a name="line211"></a>  // Using local instead of member variables gives ~5% speedup on Firefox 16.
+<a name="line212"></a>  var buf = this.buf_;
+<a name="line213"></a>  var inbuf = this.inbuf_;
+<a name="line214"></a>
+<a name="line215"></a>  // The outer while loop should execute at most twice.
+<a name="line216"></a>  while (n &lt; opt_length) {
+<a name="line217"></a>    // When we have no data in the block to top up, we can directly process the
+<a name="line218"></a>    // input buffer (assuming it contains sufficient data). This gives ~25%
+<a name="line219"></a>    // speedup on Chrome 23 and ~15% speedup on Firefox 16, but requires that
+<a name="line220"></a>    // the data is provided in large chunks (or in multiples of 64 bytes).
+<a name="line221"></a>    if (inbuf == 0) {
+<a name="line222"></a>      while (n &lt;= lengthMinusBlock) {
+<a name="line223"></a>        this.compress_(bytes, n);
+<a name="line224"></a>        n += this.blockSize;
+<a name="line225"></a>      }
+<a name="line226"></a>    }
+<a name="line227"></a>
+<a name="line228"></a>    if (goog.isString(bytes)) {
+<a name="line229"></a>      while (n &lt; opt_length) {
+<a name="line230"></a>        buf[inbuf] = bytes.charCodeAt(n);
+<a name="line231"></a>        ++inbuf;
+<a name="line232"></a>        ++n;
+<a name="line233"></a>        if (inbuf == this.blockSize) {
+<a name="line234"></a>          this.compress_(buf);
+<a name="line235"></a>          inbuf = 0;
+<a name="line236"></a>          // Jump to the outer loop so we use the full-block optimization.
+<a name="line237"></a>          break;
+<a name="line238"></a>        }
+<a name="line239"></a>      }
+<a name="line240"></a>    } else {
+<a name="line241"></a>      while (n &lt; opt_length) {
+<a name="line242"></a>        buf[inbuf] = bytes[n];
+<a name="line243"></a>        ++inbuf;
+<a name="line244"></a>        ++n;
+<a name="line245"></a>        if (inbuf == this.blockSize) {
+<a name="line246"></a>          this.compress_(buf);
+<a name="line247"></a>          inbuf = 0;
+<a name="line248"></a>          // Jump to the outer loop so we use the full-block optimization.
+<a name="line249"></a>          break;
+<a name="line250"></a>        }
+<a name="line251"></a>      }
+<a name="line252"></a>    }
+<a name="line253"></a>  }
+<a name="line254"></a>
+<a name="line255"></a>  this.inbuf_ = inbuf;
+<a name="line256"></a>  this.total_ += opt_length;
+<a name="line257"></a>};
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/** @override */
+<a name="line261"></a>goog.crypt.Sha1.prototype.digest = function() {
+<a name="line262"></a>  var digest = [];
+<a name="line263"></a>  var totalBits = this.total_ * 8;
+<a name="line264"></a>
+<a name="line265"></a>  // Add pad 0x80 0x00*.
+<a name="line266"></a>  if (this.inbuf_ &lt; 56) {
+<a name="line267"></a>    this.update(this.pad_, 56 - this.inbuf_);
+<a name="line268"></a>  } else {
+<a name="line269"></a>    this.update(this.pad_, this.blockSize - (this.inbuf_ - 56));
+<a name="line270"></a>  }
+<a name="line271"></a>
+<a name="line272"></a>  // Add # bits.
+<a name="line273"></a>  for (var i = this.blockSize - 1; i &gt;= 56; i--) {
+<a name="line274"></a>    this.buf_[i] = totalBits &amp; 255;
+<a name="line275"></a>    totalBits /= 256; // Don&#39;t use bit-shifting here!
+<a name="line276"></a>  }
+<a name="line277"></a>
+<a name="line278"></a>  this.compress_(this.buf_);
+<a name="line279"></a>
+<a name="line280"></a>  var n = 0;
+<a name="line281"></a>  for (var i = 0; i &lt; 5; i++) {
+<a name="line282"></a>    for (var j = 24; j &gt;= 0; j -= 8) {
+<a name="line283"></a>      digest[n] = (this.chain_[i] &gt;&gt; j) &amp; 255;
+<a name="line284"></a>      ++n;
+<a name="line285"></a>    }
+<a name="line286"></a>  }
+<a name="line287"></a>
+<a name="line288"></a>  return digest;
+<a name="line289"></a>};
 </pre>
 
 

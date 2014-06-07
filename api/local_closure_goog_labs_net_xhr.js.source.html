@@ -229,7 +229,7 @@
 <a name="line183"></a>    // So sad that IE doesn&#39;t support onload and onerror.
 <a name="line184"></a>    xhr.onreadystatechange = function() {
 <a name="line185"></a>      if (xhr.readyState == goog.net.XmlHttp.ReadyState.COMPLETE) {
-<a name="line186"></a>        window.clearTimeout(timer);
+<a name="line186"></a>        goog.global.clearTimeout(timer);
 <a name="line187"></a>        // Note: When developing locally, XHRs to file:// schemes return
 <a name="line188"></a>        // a status code of 0. We mark that case as a success too.
 <a name="line189"></a>        if (HttpStatus.isSuccess(xhr.status) ||
@@ -275,7 +275,7 @@
 <a name="line229"></a>
 <a name="line230"></a>    // Handle timeouts, if requested.
 <a name="line231"></a>    if (options.timeoutMs &gt; 0) {
-<a name="line232"></a>      timer = window.setTimeout(function() {
+<a name="line232"></a>      timer = goog.global.setTimeout(function() {
 <a name="line233"></a>        // Clear event listener before aborting so the errback will not be
 <a name="line234"></a>        // called twice.
 <a name="line235"></a>        xhr.onreadystatechange = goog.nullFunction;
@@ -291,7 +291,7 @@
 <a name="line245"></a>      // XMLHttpRequest.send is known to throw on some versions of FF,
 <a name="line246"></a>      // for example if a cross-origin request is disallowed.
 <a name="line247"></a>      xhr.onreadystatechange = goog.nullFunction;
-<a name="line248"></a>      window.clearTimeout(timer);
+<a name="line248"></a>      goog.global.clearTimeout(timer);
 <a name="line249"></a>      reject(new _.Error(&#39;Error sending XHR: &#39; + e.message, url, xhr));
 <a name="line250"></a>    }
 <a name="line251"></a>  });

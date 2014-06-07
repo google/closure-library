@@ -66,42 +66,43 @@
 <a name="line20"></a> *   sha512.update(bytes);
 <a name="line21"></a> *   var hash = sha512.digest();
 <a name="line22"></a> *
-<a name="line23"></a> */
-<a name="line24"></a>
-<a name="line25"></a>goog.provide(&#39;goog.crypt.Sha512&#39;);
-<a name="line26"></a>
-<a name="line27"></a>goog.require(&#39;goog.crypt.Sha2_64bit&#39;);
-<a name="line28"></a>
+<a name="line23"></a> * @author fy@google.com (Frank Yellin)
+<a name="line24"></a> */
+<a name="line25"></a>
+<a name="line26"></a>goog.provide(&#39;goog.crypt.Sha512&#39;);
+<a name="line27"></a>
+<a name="line28"></a>goog.require(&#39;goog.crypt.Sha2_64bit&#39;);
 <a name="line29"></a>
 <a name="line30"></a>
-<a name="line31"></a>/**
-<a name="line32"></a> * Constructs a SHA-512 cryptographic hash.
-<a name="line33"></a> *
-<a name="line34"></a> * @constructor
-<a name="line35"></a> * @extends {goog.crypt.Sha2_64bit}
-<a name="line36"></a> * @final
-<a name="line37"></a> * @struct
-<a name="line38"></a> */
-<a name="line39"></a>goog.crypt.Sha512 = function() {
-<a name="line40"></a>  goog.crypt.Sha512.base(this, &#39;constructor&#39;, 8  /* numHashBlocks */,
-<a name="line41"></a>      goog.crypt.Sha512.INIT_HASH_BLOCK_);
-<a name="line42"></a>};
-<a name="line43"></a>goog.inherits(goog.crypt.Sha512, goog.crypt.Sha2_64bit);
-<a name="line44"></a>
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * Constructs a SHA-512 cryptographic hash.
+<a name="line34"></a> *
+<a name="line35"></a> * @constructor
+<a name="line36"></a> * @extends {goog.crypt.Sha2_64bit}
+<a name="line37"></a> * @final
+<a name="line38"></a> * @struct
+<a name="line39"></a> */
+<a name="line40"></a>goog.crypt.Sha512 = function() {
+<a name="line41"></a>  goog.crypt.Sha512.base(this, &#39;constructor&#39;, 8  /* numHashBlocks */,
+<a name="line42"></a>      goog.crypt.Sha512.INIT_HASH_BLOCK_);
+<a name="line43"></a>};
+<a name="line44"></a>goog.inherits(goog.crypt.Sha512, goog.crypt.Sha2_64bit);
 <a name="line45"></a>
-<a name="line46"></a>/** @private {!Array.&lt;number&gt;} */
-<a name="line47"></a>goog.crypt.Sha512.INIT_HASH_BLOCK_ = [
-<a name="line48"></a>  // Section 5.3.5 of
-<a name="line49"></a>  // csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
-<a name="line50"></a>  0x6a09e667, 0xf3bcc908,  // H0
-<a name="line51"></a>  0xbb67ae85, 0x84caa73b,  // H1
-<a name="line52"></a>  0x3c6ef372, 0xfe94f82b,  // H2
-<a name="line53"></a>  0xa54ff53a, 0x5f1d36f1,  // H3
-<a name="line54"></a>  0x510e527f, 0xade682d1,  // H4
-<a name="line55"></a>  0x9b05688c, 0x2b3e6c1f,  // H5
-<a name="line56"></a>  0x1f83d9ab, 0xfb41bd6b,  // H6
-<a name="line57"></a>  0x5be0cd19, 0x137e2179   // H7
-<a name="line58"></a>];
+<a name="line46"></a>
+<a name="line47"></a>/** @private {!Array.&lt;number&gt;} */
+<a name="line48"></a>goog.crypt.Sha512.INIT_HASH_BLOCK_ = [
+<a name="line49"></a>  // Section 5.3.5 of
+<a name="line50"></a>  // csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
+<a name="line51"></a>  0x6a09e667, 0xf3bcc908,  // H0
+<a name="line52"></a>  0xbb67ae85, 0x84caa73b,  // H1
+<a name="line53"></a>  0x3c6ef372, 0xfe94f82b,  // H2
+<a name="line54"></a>  0xa54ff53a, 0x5f1d36f1,  // H3
+<a name="line55"></a>  0x510e527f, 0xade682d1,  // H4
+<a name="line56"></a>  0x9b05688c, 0x2b3e6c1f,  // H5
+<a name="line57"></a>  0x1f83d9ab, 0xfb41bd6b,  // H6
+<a name="line58"></a>  0x5be0cd19, 0x137e2179   // H7
+<a name="line59"></a>];
 </pre>
 
 

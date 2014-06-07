@@ -69,699 +69,705 @@
 <a name="line23"></a>goog.require(&#39;goog.a11y.aria.State&#39;);
 <a name="line24"></a>goog.require(&#39;goog.asserts&#39;);
 <a name="line25"></a>goog.require(&#39;goog.dom&#39;);
-<a name="line26"></a>goog.require(&#39;goog.dom.NodeType&#39;);
-<a name="line27"></a>goog.require(&#39;goog.dom.TagName&#39;);
-<a name="line28"></a>goog.require(&#39;goog.dom.classlist&#39;);
-<a name="line29"></a>goog.require(&#39;goog.dom.iframe&#39;);
-<a name="line30"></a>goog.require(&#39;goog.events&#39;);
-<a name="line31"></a>goog.require(&#39;goog.events.EventType&#39;);
-<a name="line32"></a>goog.require(&#39;goog.events.FocusHandler&#39;);
-<a name="line33"></a>goog.require(&#39;goog.fx.Transition&#39;);
-<a name="line34"></a>goog.require(&#39;goog.string&#39;);
-<a name="line35"></a>goog.require(&#39;goog.style&#39;);
-<a name="line36"></a>goog.require(&#39;goog.ui.Component&#39;);
-<a name="line37"></a>goog.require(&#39;goog.ui.PopupBase&#39;);
-<a name="line38"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line26"></a>goog.require(&#39;goog.dom.TagName&#39;);
+<a name="line27"></a>goog.require(&#39;goog.dom.classlist&#39;);
+<a name="line28"></a>goog.require(&#39;goog.dom.iframe&#39;);
+<a name="line29"></a>goog.require(&#39;goog.events&#39;);
+<a name="line30"></a>goog.require(&#39;goog.events.EventType&#39;);
+<a name="line31"></a>goog.require(&#39;goog.events.FocusHandler&#39;);
+<a name="line32"></a>goog.require(&#39;goog.fx.Transition&#39;);
+<a name="line33"></a>goog.require(&#39;goog.string&#39;);
+<a name="line34"></a>goog.require(&#39;goog.style&#39;);
+<a name="line35"></a>goog.require(&#39;goog.ui.Component&#39;);
+<a name="line36"></a>goog.require(&#39;goog.ui.PopupBase&#39;);
+<a name="line37"></a>goog.require(&#39;goog.userAgent&#39;);
+<a name="line38"></a>
 <a name="line39"></a>
 <a name="line40"></a>
-<a name="line41"></a>
-<a name="line42"></a>/**
-<a name="line43"></a> * Base class for modal popup UI components. This can also be used as
-<a name="line44"></a> * a standalone component to render a modal popup with an empty div.
-<a name="line45"></a> *
-<a name="line46"></a> * WARNING: goog.ui.ModalPopup is only guaranteed to work when it is rendered
-<a name="line47"></a> * directly in the &#39;body&#39; element.
-<a name="line48"></a> *
-<a name="line49"></a> * The Html structure of the modal popup is:
-<a name="line50"></a> * &lt;pre&gt;
-<a name="line51"></a> *  Element         Function              Class-name, goog-modalpopup = default
-<a name="line52"></a> * ----------------------------------------------------------------------------
-<a name="line53"></a> * - iframe         Iframe mask           goog-modalpopup-bg
-<a name="line54"></a> * - div            Background mask       goog-modalpopup-bg
-<a name="line55"></a> * - div            Modal popup area      goog-modalpopup
-<a name="line56"></a> * - span           Tab catcher
-<a name="line57"></a> * &lt;/pre&gt;
-<a name="line58"></a> * @constructor
-<a name="line59"></a> * @param {boolean=} opt_useIframeMask Work around windowed controls z-index
-<a name="line60"></a> *     issue by using an iframe instead of a div for bg element.
-<a name="line61"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
-<a name="line62"></a> *     goog.ui.Component} for semantics.
-<a name="line63"></a> * @extends {goog.ui.Component}
-<a name="line64"></a> */
-<a name="line65"></a>goog.ui.ModalPopup = function(opt_useIframeMask, opt_domHelper) {
-<a name="line66"></a>  goog.ui.ModalPopup.base(this, &#39;constructor&#39;, opt_domHelper);
-<a name="line67"></a>
-<a name="line68"></a>  /**
-<a name="line69"></a>   * Whether the modal popup should use an iframe as the background
-<a name="line70"></a>   * element to work around z-order issues.
-<a name="line71"></a>   * @type {boolean}
-<a name="line72"></a>   * @private
-<a name="line73"></a>   */
-<a name="line74"></a>  this.useIframeMask_ = !!opt_useIframeMask;
-<a name="line75"></a>
-<a name="line76"></a>  /**
-<a name="line77"></a>   * The element that had focus before the popup was displayed.
-<a name="line78"></a>   * @type {Element}
-<a name="line79"></a>   * @private
-<a name="line80"></a>   */
-<a name="line81"></a>  this.lastFocus_ = null;
-<a name="line82"></a>};
-<a name="line83"></a>goog.inherits(goog.ui.ModalPopup, goog.ui.Component);
+<a name="line41"></a>/**
+<a name="line42"></a> * Base class for modal popup UI components. This can also be used as
+<a name="line43"></a> * a standalone component to render a modal popup with an empty div.
+<a name="line44"></a> *
+<a name="line45"></a> * WARNING: goog.ui.ModalPopup is only guaranteed to work when it is rendered
+<a name="line46"></a> * directly in the &#39;body&#39; element.
+<a name="line47"></a> *
+<a name="line48"></a> * The Html structure of the modal popup is:
+<a name="line49"></a> * &lt;pre&gt;
+<a name="line50"></a> *  Element         Function              Class-name, goog-modalpopup = default
+<a name="line51"></a> * ----------------------------------------------------------------------------
+<a name="line52"></a> * - iframe         Iframe mask           goog-modalpopup-bg
+<a name="line53"></a> * - div            Background mask       goog-modalpopup-bg
+<a name="line54"></a> * - div            Modal popup area      goog-modalpopup
+<a name="line55"></a> * - span           Tab catcher
+<a name="line56"></a> * &lt;/pre&gt;
+<a name="line57"></a> * @constructor
+<a name="line58"></a> * @param {boolean=} opt_useIframeMask Work around windowed controls z-index
+<a name="line59"></a> *     issue by using an iframe instead of a div for bg element.
+<a name="line60"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper; see {@link
+<a name="line61"></a> *     goog.ui.Component} for semantics.
+<a name="line62"></a> * @extends {goog.ui.Component}
+<a name="line63"></a> */
+<a name="line64"></a>goog.ui.ModalPopup = function(opt_useIframeMask, opt_domHelper) {
+<a name="line65"></a>  goog.ui.ModalPopup.base(this, &#39;constructor&#39;, opt_domHelper);
+<a name="line66"></a>
+<a name="line67"></a>  /**
+<a name="line68"></a>   * Whether the modal popup should use an iframe as the background
+<a name="line69"></a>   * element to work around z-order issues.
+<a name="line70"></a>   * @type {boolean}
+<a name="line71"></a>   * @private
+<a name="line72"></a>   */
+<a name="line73"></a>  this.useIframeMask_ = !!opt_useIframeMask;
+<a name="line74"></a>
+<a name="line75"></a>  /**
+<a name="line76"></a>   * The element that had focus before the popup was displayed.
+<a name="line77"></a>   * @type {Element}
+<a name="line78"></a>   * @private
+<a name="line79"></a>   */
+<a name="line80"></a>  this.lastFocus_ = null;
+<a name="line81"></a>};
+<a name="line82"></a>goog.inherits(goog.ui.ModalPopup, goog.ui.Component);
+<a name="line83"></a>
 <a name="line84"></a>
-<a name="line85"></a>
-<a name="line86"></a>/**
-<a name="line87"></a> * Focus handler. It will be initialized in enterDocument.
-<a name="line88"></a> * @type {goog.events.FocusHandler}
-<a name="line89"></a> * @private
-<a name="line90"></a> */
-<a name="line91"></a>goog.ui.ModalPopup.prototype.focusHandler_ = null;
+<a name="line85"></a>/**
+<a name="line86"></a> * Focus handler. It will be initialized in enterDocument.
+<a name="line87"></a> * @type {goog.events.FocusHandler}
+<a name="line88"></a> * @private
+<a name="line89"></a> */
+<a name="line90"></a>goog.ui.ModalPopup.prototype.focusHandler_ = null;
+<a name="line91"></a>
 <a name="line92"></a>
-<a name="line93"></a>
-<a name="line94"></a>/**
-<a name="line95"></a> * Whether the modal popup is visible.
-<a name="line96"></a> * @type {boolean}
-<a name="line97"></a> * @private
-<a name="line98"></a> */
-<a name="line99"></a>goog.ui.ModalPopup.prototype.visible_ = false;
+<a name="line93"></a>/**
+<a name="line94"></a> * Whether the modal popup is visible.
+<a name="line95"></a> * @type {boolean}
+<a name="line96"></a> * @private
+<a name="line97"></a> */
+<a name="line98"></a>goog.ui.ModalPopup.prototype.visible_ = false;
+<a name="line99"></a>
 <a name="line100"></a>
-<a name="line101"></a>
-<a name="line102"></a>/**
-<a name="line103"></a> * Element for the background which obscures the UI and blocks events.
-<a name="line104"></a> * @type {Element}
-<a name="line105"></a> * @private
-<a name="line106"></a> */
-<a name="line107"></a>goog.ui.ModalPopup.prototype.bgEl_ = null;
+<a name="line101"></a>/**
+<a name="line102"></a> * Element for the background which obscures the UI and blocks events.
+<a name="line103"></a> * @type {Element}
+<a name="line104"></a> * @private
+<a name="line105"></a> */
+<a name="line106"></a>goog.ui.ModalPopup.prototype.bgEl_ = null;
+<a name="line107"></a>
 <a name="line108"></a>
-<a name="line109"></a>
-<a name="line110"></a>/**
-<a name="line111"></a> * Iframe element that is only used for IE as a workaround to keep select-type
-<a name="line112"></a> * elements from burning through background.
-<a name="line113"></a> * @type {Element}
-<a name="line114"></a> * @private
-<a name="line115"></a> */
-<a name="line116"></a>goog.ui.ModalPopup.prototype.bgIframeEl_ = null;
+<a name="line109"></a>/**
+<a name="line110"></a> * Iframe element that is only used for IE as a workaround to keep select-type
+<a name="line111"></a> * elements from burning through background.
+<a name="line112"></a> * @type {Element}
+<a name="line113"></a> * @private
+<a name="line114"></a> */
+<a name="line115"></a>goog.ui.ModalPopup.prototype.bgIframeEl_ = null;
+<a name="line116"></a>
 <a name="line117"></a>
-<a name="line118"></a>
-<a name="line119"></a>/**
-<a name="line120"></a> * Element used to catch focus and prevent the user from tabbing out
-<a name="line121"></a> * of the popup.
-<a name="line122"></a> * @type {Element}
-<a name="line123"></a> * @private
-<a name="line124"></a> */
-<a name="line125"></a>goog.ui.ModalPopup.prototype.tabCatcherElement_ = null;
+<a name="line118"></a>/**
+<a name="line119"></a> * Element used to catch focus and prevent the user from tabbing out
+<a name="line120"></a> * of the popup.
+<a name="line121"></a> * @type {Element}
+<a name="line122"></a> * @private
+<a name="line123"></a> */
+<a name="line124"></a>goog.ui.ModalPopup.prototype.tabCatcherElement_ = null;
+<a name="line125"></a>
 <a name="line126"></a>
-<a name="line127"></a>
-<a name="line128"></a>/**
-<a name="line129"></a> * Whether the modal popup is in the process of wrapping focus from the top of
-<a name="line130"></a> * the popup to the last tabbable element.
-<a name="line131"></a> * @type {boolean}
-<a name="line132"></a> * @private
-<a name="line133"></a> */
-<a name="line134"></a>goog.ui.ModalPopup.prototype.backwardTabWrapInProgress_ = false;
+<a name="line127"></a>/**
+<a name="line128"></a> * Whether the modal popup is in the process of wrapping focus from the top of
+<a name="line129"></a> * the popup to the last tabbable element.
+<a name="line130"></a> * @type {boolean}
+<a name="line131"></a> * @private
+<a name="line132"></a> */
+<a name="line133"></a>goog.ui.ModalPopup.prototype.backwardTabWrapInProgress_ = false;
+<a name="line134"></a>
 <a name="line135"></a>
-<a name="line136"></a>
-<a name="line137"></a>/**
-<a name="line138"></a> * Transition to show the popup.
-<a name="line139"></a> * @type {goog.fx.Transition}
-<a name="line140"></a> * @private
-<a name="line141"></a> */
-<a name="line142"></a>goog.ui.ModalPopup.prototype.popupShowTransition_;
+<a name="line136"></a>/**
+<a name="line137"></a> * Transition to show the popup.
+<a name="line138"></a> * @type {goog.fx.Transition}
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.ui.ModalPopup.prototype.popupShowTransition_;
+<a name="line142"></a>
 <a name="line143"></a>
-<a name="line144"></a>
-<a name="line145"></a>/**
-<a name="line146"></a> * Transition to hide the popup.
-<a name="line147"></a> * @type {goog.fx.Transition}
-<a name="line148"></a> * @private
-<a name="line149"></a> */
-<a name="line150"></a>goog.ui.ModalPopup.prototype.popupHideTransition_;
+<a name="line144"></a>/**
+<a name="line145"></a> * Transition to hide the popup.
+<a name="line146"></a> * @type {goog.fx.Transition}
+<a name="line147"></a> * @private
+<a name="line148"></a> */
+<a name="line149"></a>goog.ui.ModalPopup.prototype.popupHideTransition_;
+<a name="line150"></a>
 <a name="line151"></a>
-<a name="line152"></a>
-<a name="line153"></a>/**
-<a name="line154"></a> * Transition to show the background.
-<a name="line155"></a> * @type {goog.fx.Transition}
-<a name="line156"></a> * @private
-<a name="line157"></a> */
-<a name="line158"></a>goog.ui.ModalPopup.prototype.bgShowTransition_;
+<a name="line152"></a>/**
+<a name="line153"></a> * Transition to show the background.
+<a name="line154"></a> * @type {goog.fx.Transition}
+<a name="line155"></a> * @private
+<a name="line156"></a> */
+<a name="line157"></a>goog.ui.ModalPopup.prototype.bgShowTransition_;
+<a name="line158"></a>
 <a name="line159"></a>
-<a name="line160"></a>
-<a name="line161"></a>/**
-<a name="line162"></a> * Transition to hide the background.
-<a name="line163"></a> * @type {goog.fx.Transition}
-<a name="line164"></a> * @private
-<a name="line165"></a> */
-<a name="line166"></a>goog.ui.ModalPopup.prototype.bgHideTransition_;
+<a name="line160"></a>/**
+<a name="line161"></a> * Transition to hide the background.
+<a name="line162"></a> * @type {goog.fx.Transition}
+<a name="line163"></a> * @private
+<a name="line164"></a> */
+<a name="line165"></a>goog.ui.ModalPopup.prototype.bgHideTransition_;
+<a name="line166"></a>
 <a name="line167"></a>
-<a name="line168"></a>
-<a name="line169"></a>/**
-<a name="line170"></a> * @return {string} Base CSS class for this component.
-<a name="line171"></a> * @protected
+<a name="line168"></a>/**
+<a name="line169"></a> * The elements set to aria-hidden when the popup was made visible.
+<a name="line170"></a> * @type {Array.&lt;!Element&gt;}
+<a name="line171"></a> * @private
 <a name="line172"></a> */
-<a name="line173"></a>goog.ui.ModalPopup.prototype.getCssClass = function() {
-<a name="line174"></a>  return goog.getCssName(&#39;goog-modalpopup&#39;);
-<a name="line175"></a>};
-<a name="line176"></a>
-<a name="line177"></a>
-<a name="line178"></a>/**
-<a name="line179"></a> * Returns the background iframe mask element, if any.
-<a name="line180"></a> * @return {Element} The background iframe mask element, may return
-<a name="line181"></a> *     null/undefined if the modal popup does not use iframe mask.
-<a name="line182"></a> */
-<a name="line183"></a>goog.ui.ModalPopup.prototype.getBackgroundIframe = function() {
-<a name="line184"></a>  return this.bgIframeEl_;
-<a name="line185"></a>};
-<a name="line186"></a>
-<a name="line187"></a>
-<a name="line188"></a>/**
-<a name="line189"></a> * Returns the background mask element.
-<a name="line190"></a> * @return {Element} The background mask element.
-<a name="line191"></a> */
-<a name="line192"></a>goog.ui.ModalPopup.prototype.getBackgroundElement = function() {
-<a name="line193"></a>  return this.bgEl_;
-<a name="line194"></a>};
-<a name="line195"></a>
-<a name="line196"></a>
-<a name="line197"></a>/**
-<a name="line198"></a> * Creates the initial DOM representation for the modal popup.
-<a name="line199"></a> * @override
-<a name="line200"></a> */
-<a name="line201"></a>goog.ui.ModalPopup.prototype.createDom = function() {
-<a name="line202"></a>  // Create the modal popup element, and make sure it&#39;s hidden.
-<a name="line203"></a>  goog.ui.ModalPopup.base(this, &#39;createDom&#39;);
-<a name="line204"></a>
-<a name="line205"></a>  var element = this.getElement();
-<a name="line206"></a>  goog.asserts.assert(element);
-<a name="line207"></a>  var allClasses = goog.string.trim(this.getCssClass()).split(&#39; &#39;);
-<a name="line208"></a>  goog.dom.classlist.addAll(element, allClasses);
-<a name="line209"></a>  goog.dom.setFocusableTabIndex(element, true);
-<a name="line210"></a>  goog.style.setElementShown(element, false);
+<a name="line173"></a>goog.ui.ModalPopup.prototype.hiddenElements_;
+<a name="line174"></a>
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * @return {string} Base CSS class for this component.
+<a name="line178"></a> * @protected
+<a name="line179"></a> */
+<a name="line180"></a>goog.ui.ModalPopup.prototype.getCssClass = function() {
+<a name="line181"></a>  return goog.getCssName(&#39;goog-modalpopup&#39;);
+<a name="line182"></a>};
+<a name="line183"></a>
+<a name="line184"></a>
+<a name="line185"></a>/**
+<a name="line186"></a> * Returns the background iframe mask element, if any.
+<a name="line187"></a> * @return {Element} The background iframe mask element, may return
+<a name="line188"></a> *     null/undefined if the modal popup does not use iframe mask.
+<a name="line189"></a> */
+<a name="line190"></a>goog.ui.ModalPopup.prototype.getBackgroundIframe = function() {
+<a name="line191"></a>  return this.bgIframeEl_;
+<a name="line192"></a>};
+<a name="line193"></a>
+<a name="line194"></a>
+<a name="line195"></a>/**
+<a name="line196"></a> * Returns the background mask element.
+<a name="line197"></a> * @return {Element} The background mask element.
+<a name="line198"></a> */
+<a name="line199"></a>goog.ui.ModalPopup.prototype.getBackgroundElement = function() {
+<a name="line200"></a>  return this.bgEl_;
+<a name="line201"></a>};
+<a name="line202"></a>
+<a name="line203"></a>
+<a name="line204"></a>/**
+<a name="line205"></a> * Creates the initial DOM representation for the modal popup.
+<a name="line206"></a> * @override
+<a name="line207"></a> */
+<a name="line208"></a>goog.ui.ModalPopup.prototype.createDom = function() {
+<a name="line209"></a>  // Create the modal popup element, and make sure it&#39;s hidden.
+<a name="line210"></a>  goog.ui.ModalPopup.base(this, &#39;createDom&#39;);
 <a name="line211"></a>
-<a name="line212"></a>  // Manages the DOM for background mask elements.
-<a name="line213"></a>  this.manageBackgroundDom_();
-<a name="line214"></a>  this.createTabCatcher_();
-<a name="line215"></a>};
-<a name="line216"></a>
-<a name="line217"></a>
-<a name="line218"></a>/**
-<a name="line219"></a> * Creates and disposes of the DOM for background mask elements.
-<a name="line220"></a> * @private
-<a name="line221"></a> */
-<a name="line222"></a>goog.ui.ModalPopup.prototype.manageBackgroundDom_ = function() {
-<a name="line223"></a>  if (this.useIframeMask_ &amp;&amp; !this.bgIframeEl_) {
-<a name="line224"></a>    // IE renders the iframe on top of the select elements while still
-<a name="line225"></a>    // respecting the z-index of the other elements on the page.  See
-<a name="line226"></a>    // http://support.microsoft.com/kb/177378 for more information.
-<a name="line227"></a>    // Flash and other controls behave in similar ways for other browsers
-<a name="line228"></a>    this.bgIframeEl_ = goog.dom.iframe.createBlank(this.getDomHelper());
-<a name="line229"></a>    this.bgIframeEl_.className = goog.getCssName(this.getCssClass(), &#39;bg&#39;);
-<a name="line230"></a>    goog.style.setElementShown(this.bgIframeEl_, false);
-<a name="line231"></a>    goog.style.setOpacity(this.bgIframeEl_, 0);
-<a name="line232"></a>  }
-<a name="line233"></a>
-<a name="line234"></a>  // Create the backgound mask, initialize its opacity, and make sure it&#39;s
-<a name="line235"></a>  // hidden.
-<a name="line236"></a>  if (!this.bgEl_) {
-<a name="line237"></a>    this.bgEl_ = this.getDomHelper().createDom(
-<a name="line238"></a>        &#39;div&#39;, goog.getCssName(this.getCssClass(), &#39;bg&#39;));
-<a name="line239"></a>    goog.style.setElementShown(this.bgEl_, false);
-<a name="line240"></a>  }
-<a name="line241"></a>};
-<a name="line242"></a>
-<a name="line243"></a>
-<a name="line244"></a>/**
-<a name="line245"></a> * Creates the tab catcher element.
-<a name="line246"></a> * @private
-<a name="line247"></a> */
-<a name="line248"></a>goog.ui.ModalPopup.prototype.createTabCatcher_ = function() {
-<a name="line249"></a>  // Creates tab catcher element.
-<a name="line250"></a>  if (!this.tabCatcherElement_) {
-<a name="line251"></a>    this.tabCatcherElement_ = this.getDomHelper().createElement(&#39;span&#39;);
-<a name="line252"></a>    goog.style.setElementShown(this.tabCatcherElement_, false);
-<a name="line253"></a>    goog.dom.setFocusableTabIndex(this.tabCatcherElement_, true);
-<a name="line254"></a>    this.tabCatcherElement_.style.position = &#39;absolute&#39;;
-<a name="line255"></a>  }
-<a name="line256"></a>};
-<a name="line257"></a>
-<a name="line258"></a>
-<a name="line259"></a>/**
-<a name="line260"></a> * Allow a shift-tab from the top of the modal popup to the last tabbable
-<a name="line261"></a> * element by moving focus to the tab catcher. This should be called after
-<a name="line262"></a> * catching a wrapping shift-tab event and before allowing it to propagate, so
-<a name="line263"></a> * that focus will land on the last tabbable element before the tab catcher.
-<a name="line264"></a> * @protected
-<a name="line265"></a> */
-<a name="line266"></a>goog.ui.ModalPopup.prototype.setupBackwardTabWrap = function() {
-<a name="line267"></a>  this.backwardTabWrapInProgress_ = true;
-<a name="line268"></a>  try {
-<a name="line269"></a>    this.tabCatcherElement_.focus();
-<a name="line270"></a>  } catch (e) {
-<a name="line271"></a>    // Swallow this. IE can throw an error if the element can not be focused.
-<a name="line272"></a>  }
-<a name="line273"></a>  // Reset the flag on a timer in case anything goes wrong with the followup
-<a name="line274"></a>  // event.
-<a name="line275"></a>  goog.Timer.callOnce(this.resetBackwardTabWrap_, 0, this);
-<a name="line276"></a>};
-<a name="line277"></a>
-<a name="line278"></a>
-<a name="line279"></a>/**
-<a name="line280"></a> * Resets the backward tab wrap flag.
-<a name="line281"></a> * @private
-<a name="line282"></a> */
-<a name="line283"></a>goog.ui.ModalPopup.prototype.resetBackwardTabWrap_ = function() {
-<a name="line284"></a>  this.backwardTabWrapInProgress_ = false;
-<a name="line285"></a>};
-<a name="line286"></a>
-<a name="line287"></a>
-<a name="line288"></a>/**
-<a name="line289"></a> * Renders the background mask.
-<a name="line290"></a> * @private
-<a name="line291"></a> */
-<a name="line292"></a>goog.ui.ModalPopup.prototype.renderBackground_ = function() {
-<a name="line293"></a>  goog.asserts.assert(!!this.bgEl_, &#39;Background element must not be null.&#39;);
-<a name="line294"></a>  if (this.bgIframeEl_) {
-<a name="line295"></a>    goog.dom.insertSiblingBefore(this.bgIframeEl_, this.getElement());
-<a name="line296"></a>  }
-<a name="line297"></a>  goog.dom.insertSiblingBefore(this.bgEl_, this.getElement());
-<a name="line298"></a>};
-<a name="line299"></a>
-<a name="line300"></a>
-<a name="line301"></a>/** @override */
-<a name="line302"></a>goog.ui.ModalPopup.prototype.canDecorate = function(element) {
-<a name="line303"></a>  // Assume we can decorate any DIV.
-<a name="line304"></a>  return !!element &amp;&amp; element.tagName == goog.dom.TagName.DIV;
+<a name="line212"></a>  var element = this.getElement();
+<a name="line213"></a>  goog.asserts.assert(element);
+<a name="line214"></a>  var allClasses = goog.string.trim(this.getCssClass()).split(&#39; &#39;);
+<a name="line215"></a>  goog.dom.classlist.addAll(element, allClasses);
+<a name="line216"></a>  goog.dom.setFocusableTabIndex(element, true);
+<a name="line217"></a>  goog.style.setElementShown(element, false);
+<a name="line218"></a>
+<a name="line219"></a>  // Manages the DOM for background mask elements.
+<a name="line220"></a>  this.manageBackgroundDom_();
+<a name="line221"></a>  this.createTabCatcher_();
+<a name="line222"></a>};
+<a name="line223"></a>
+<a name="line224"></a>
+<a name="line225"></a>/**
+<a name="line226"></a> * Creates and disposes of the DOM for background mask elements.
+<a name="line227"></a> * @private
+<a name="line228"></a> */
+<a name="line229"></a>goog.ui.ModalPopup.prototype.manageBackgroundDom_ = function() {
+<a name="line230"></a>  if (this.useIframeMask_ &amp;&amp; !this.bgIframeEl_) {
+<a name="line231"></a>    // IE renders the iframe on top of the select elements while still
+<a name="line232"></a>    // respecting the z-index of the other elements on the page.  See
+<a name="line233"></a>    // http://support.microsoft.com/kb/177378 for more information.
+<a name="line234"></a>    // Flash and other controls behave in similar ways for other browsers
+<a name="line235"></a>    this.bgIframeEl_ = goog.dom.iframe.createBlank(this.getDomHelper());
+<a name="line236"></a>    this.bgIframeEl_.className = goog.getCssName(this.getCssClass(), &#39;bg&#39;);
+<a name="line237"></a>    goog.style.setElementShown(this.bgIframeEl_, false);
+<a name="line238"></a>    goog.style.setOpacity(this.bgIframeEl_, 0);
+<a name="line239"></a>  }
+<a name="line240"></a>
+<a name="line241"></a>  // Create the backgound mask, initialize its opacity, and make sure it&#39;s
+<a name="line242"></a>  // hidden.
+<a name="line243"></a>  if (!this.bgEl_) {
+<a name="line244"></a>    this.bgEl_ = this.getDomHelper().createDom(
+<a name="line245"></a>        &#39;div&#39;, goog.getCssName(this.getCssClass(), &#39;bg&#39;));
+<a name="line246"></a>    goog.style.setElementShown(this.bgEl_, false);
+<a name="line247"></a>  }
+<a name="line248"></a>};
+<a name="line249"></a>
+<a name="line250"></a>
+<a name="line251"></a>/**
+<a name="line252"></a> * Creates the tab catcher element.
+<a name="line253"></a> * @private
+<a name="line254"></a> */
+<a name="line255"></a>goog.ui.ModalPopup.prototype.createTabCatcher_ = function() {
+<a name="line256"></a>  // Creates tab catcher element.
+<a name="line257"></a>  if (!this.tabCatcherElement_) {
+<a name="line258"></a>    this.tabCatcherElement_ = this.getDomHelper().createElement(&#39;span&#39;);
+<a name="line259"></a>    goog.style.setElementShown(this.tabCatcherElement_, false);
+<a name="line260"></a>    goog.dom.setFocusableTabIndex(this.tabCatcherElement_, true);
+<a name="line261"></a>    this.tabCatcherElement_.style.position = &#39;absolute&#39;;
+<a name="line262"></a>  }
+<a name="line263"></a>};
+<a name="line264"></a>
+<a name="line265"></a>
+<a name="line266"></a>/**
+<a name="line267"></a> * Allow a shift-tab from the top of the modal popup to the last tabbable
+<a name="line268"></a> * element by moving focus to the tab catcher. This should be called after
+<a name="line269"></a> * catching a wrapping shift-tab event and before allowing it to propagate, so
+<a name="line270"></a> * that focus will land on the last tabbable element before the tab catcher.
+<a name="line271"></a> * @protected
+<a name="line272"></a> */
+<a name="line273"></a>goog.ui.ModalPopup.prototype.setupBackwardTabWrap = function() {
+<a name="line274"></a>  this.backwardTabWrapInProgress_ = true;
+<a name="line275"></a>  try {
+<a name="line276"></a>    this.tabCatcherElement_.focus();
+<a name="line277"></a>  } catch (e) {
+<a name="line278"></a>    // Swallow this. IE can throw an error if the element can not be focused.
+<a name="line279"></a>  }
+<a name="line280"></a>  // Reset the flag on a timer in case anything goes wrong with the followup
+<a name="line281"></a>  // event.
+<a name="line282"></a>  goog.Timer.callOnce(this.resetBackwardTabWrap_, 0, this);
+<a name="line283"></a>};
+<a name="line284"></a>
+<a name="line285"></a>
+<a name="line286"></a>/**
+<a name="line287"></a> * Resets the backward tab wrap flag.
+<a name="line288"></a> * @private
+<a name="line289"></a> */
+<a name="line290"></a>goog.ui.ModalPopup.prototype.resetBackwardTabWrap_ = function() {
+<a name="line291"></a>  this.backwardTabWrapInProgress_ = false;
+<a name="line292"></a>};
+<a name="line293"></a>
+<a name="line294"></a>
+<a name="line295"></a>/**
+<a name="line296"></a> * Renders the background mask.
+<a name="line297"></a> * @private
+<a name="line298"></a> */
+<a name="line299"></a>goog.ui.ModalPopup.prototype.renderBackground_ = function() {
+<a name="line300"></a>  goog.asserts.assert(!!this.bgEl_, &#39;Background element must not be null.&#39;);
+<a name="line301"></a>  if (this.bgIframeEl_) {
+<a name="line302"></a>    goog.dom.insertSiblingBefore(this.bgIframeEl_, this.getElement());
+<a name="line303"></a>  }
+<a name="line304"></a>  goog.dom.insertSiblingBefore(this.bgEl_, this.getElement());
 <a name="line305"></a>};
 <a name="line306"></a>
 <a name="line307"></a>
 <a name="line308"></a>/** @override */
-<a name="line309"></a>goog.ui.ModalPopup.prototype.decorateInternal = function(element) {
-<a name="line310"></a>  // Decorate the modal popup area element.
-<a name="line311"></a>  goog.ui.ModalPopup.base(this, &#39;decorateInternal&#39;, element);
-<a name="line312"></a>  var allClasses = goog.string.trim(this.getCssClass()).split(&#39; &#39;);
+<a name="line309"></a>goog.ui.ModalPopup.prototype.canDecorate = function(element) {
+<a name="line310"></a>  // Assume we can decorate any DIV.
+<a name="line311"></a>  return !!element &amp;&amp; element.tagName == goog.dom.TagName.DIV;
+<a name="line312"></a>};
 <a name="line313"></a>
-<a name="line314"></a>  goog.dom.classlist.addAll(
-<a name="line315"></a>      goog.asserts.assert(this.getElement()),
-<a name="line316"></a>      allClasses);
-<a name="line317"></a>
-<a name="line318"></a>  // Create the background mask...
-<a name="line319"></a>  this.manageBackgroundDom_();
-<a name="line320"></a>  this.createTabCatcher_();
-<a name="line321"></a>
-<a name="line322"></a>  // Make sure the decorated modal popup is hidden.
-<a name="line323"></a>  goog.style.setElementShown(this.getElement(), false);
-<a name="line324"></a>};
-<a name="line325"></a>
-<a name="line326"></a>
-<a name="line327"></a>/** @override */
-<a name="line328"></a>goog.ui.ModalPopup.prototype.enterDocument = function() {
-<a name="line329"></a>  this.renderBackground_();
-<a name="line330"></a>  goog.ui.ModalPopup.base(this, &#39;enterDocument&#39;);
-<a name="line331"></a>
-<a name="line332"></a>  goog.dom.insertSiblingAfter(this.tabCatcherElement_, this.getElement());
+<a name="line314"></a>
+<a name="line315"></a>/** @override */
+<a name="line316"></a>goog.ui.ModalPopup.prototype.decorateInternal = function(element) {
+<a name="line317"></a>  // Decorate the modal popup area element.
+<a name="line318"></a>  goog.ui.ModalPopup.base(this, &#39;decorateInternal&#39;, element);
+<a name="line319"></a>  var allClasses = goog.string.trim(this.getCssClass()).split(&#39; &#39;);
+<a name="line320"></a>
+<a name="line321"></a>  goog.dom.classlist.addAll(
+<a name="line322"></a>      goog.asserts.assert(this.getElement()),
+<a name="line323"></a>      allClasses);
+<a name="line324"></a>
+<a name="line325"></a>  // Create the background mask...
+<a name="line326"></a>  this.manageBackgroundDom_();
+<a name="line327"></a>  this.createTabCatcher_();
+<a name="line328"></a>
+<a name="line329"></a>  // Make sure the decorated modal popup is hidden.
+<a name="line330"></a>  goog.style.setElementShown(this.getElement(), false);
+<a name="line331"></a>};
+<a name="line332"></a>
 <a name="line333"></a>
-<a name="line334"></a>  this.focusHandler_ = new goog.events.FocusHandler(
-<a name="line335"></a>      this.getDomHelper().getDocument());
-<a name="line336"></a>
-<a name="line337"></a>  // We need to watch the entire document so that we can detect when the
-<a name="line338"></a>  // focus is moved out of this modal popup.
-<a name="line339"></a>  this.getHandler().listen(
-<a name="line340"></a>      this.focusHandler_, goog.events.FocusHandler.EventType.FOCUSIN,
-<a name="line341"></a>      this.onFocus);
-<a name="line342"></a>  this.setA11YDetectBackground(false);
-<a name="line343"></a>};
-<a name="line344"></a>
-<a name="line345"></a>
-<a name="line346"></a>/** @override */
-<a name="line347"></a>goog.ui.ModalPopup.prototype.exitDocument = function() {
-<a name="line348"></a>  if (this.isVisible()) {
-<a name="line349"></a>    this.setVisible(false);
-<a name="line350"></a>  }
+<a name="line334"></a>/** @override */
+<a name="line335"></a>goog.ui.ModalPopup.prototype.enterDocument = function() {
+<a name="line336"></a>  this.renderBackground_();
+<a name="line337"></a>  goog.ui.ModalPopup.base(this, &#39;enterDocument&#39;);
+<a name="line338"></a>
+<a name="line339"></a>  goog.dom.insertSiblingAfter(this.tabCatcherElement_, this.getElement());
+<a name="line340"></a>
+<a name="line341"></a>  this.focusHandler_ = new goog.events.FocusHandler(
+<a name="line342"></a>      this.getDomHelper().getDocument());
+<a name="line343"></a>
+<a name="line344"></a>  // We need to watch the entire document so that we can detect when the
+<a name="line345"></a>  // focus is moved out of this modal popup.
+<a name="line346"></a>  this.getHandler().listen(
+<a name="line347"></a>      this.focusHandler_, goog.events.FocusHandler.EventType.FOCUSIN,
+<a name="line348"></a>      this.onFocus);
+<a name="line349"></a>  this.setA11YDetectBackground(false);
+<a name="line350"></a>};
 <a name="line351"></a>
-<a name="line352"></a>  goog.dispose(this.focusHandler_);
-<a name="line353"></a>
-<a name="line354"></a>  goog.ui.ModalPopup.base(this, &#39;exitDocument&#39;);
-<a name="line355"></a>  goog.dom.removeNode(this.bgIframeEl_);
-<a name="line356"></a>  goog.dom.removeNode(this.bgEl_);
-<a name="line357"></a>  goog.dom.removeNode(this.tabCatcherElement_);
-<a name="line358"></a>};
-<a name="line359"></a>
+<a name="line352"></a>
+<a name="line353"></a>/** @override */
+<a name="line354"></a>goog.ui.ModalPopup.prototype.exitDocument = function() {
+<a name="line355"></a>  if (this.isVisible()) {
+<a name="line356"></a>    this.setVisible(false);
+<a name="line357"></a>  }
+<a name="line358"></a>
+<a name="line359"></a>  goog.dispose(this.focusHandler_);
 <a name="line360"></a>
-<a name="line361"></a>/**
-<a name="line362"></a> * Sets the visibility of the modal popup box and focus to the popup.
-<a name="line363"></a> * Lazily renders the component if needed.
-<a name="line364"></a> * @param {boolean} visible Whether the modal popup should be visible.
-<a name="line365"></a> */
-<a name="line366"></a>goog.ui.ModalPopup.prototype.setVisible = function(visible) {
-<a name="line367"></a>  goog.asserts.assert(
-<a name="line368"></a>      this.isInDocument(), &#39;ModalPopup must be rendered first.&#39;);
-<a name="line369"></a>
-<a name="line370"></a>  if (visible == this.visible_) {
-<a name="line371"></a>    return;
-<a name="line372"></a>  }
-<a name="line373"></a>
-<a name="line374"></a>  if (this.popupShowTransition_) this.popupShowTransition_.stop();
-<a name="line375"></a>  if (this.bgShowTransition_) this.bgShowTransition_.stop();
-<a name="line376"></a>  if (this.popupHideTransition_) this.popupHideTransition_.stop();
-<a name="line377"></a>  if (this.bgHideTransition_) this.bgHideTransition_.stop();
-<a name="line378"></a>
-<a name="line379"></a>  if (this.isInDocument()) {
-<a name="line380"></a>    this.setA11YDetectBackground(visible);
-<a name="line381"></a>  }
-<a name="line382"></a>  if (visible) {
-<a name="line383"></a>    this.show_();
-<a name="line384"></a>  } else {
-<a name="line385"></a>    this.hide_();
-<a name="line386"></a>  }
-<a name="line387"></a>};
-<a name="line388"></a>
-<a name="line389"></a>
-<a name="line390"></a>/**
-<a name="line391"></a> * Sets the aria-hidden value for an element.
-<a name="line392"></a> * Removes the aria-hidden attribute if false.
-<a name="line393"></a> * @param {!Element} element DOM node to set aria-hidden to.
-<a name="line394"></a> * @param {boolean} hide Boolean being set as aria-hidden.
-<a name="line395"></a> * @private
-<a name="line396"></a> */
-<a name="line397"></a>goog.ui.ModalPopup.setAriaHidden_ = function(element, hide) {
-<a name="line398"></a>  if (hide) {
-<a name="line399"></a>    goog.a11y.aria.setState(element, goog.a11y.aria.State.HIDDEN, hide);
-<a name="line400"></a>  } else {
-<a name="line401"></a>    goog.a11y.aria.removeState(element, goog.a11y.aria.State.HIDDEN);
-<a name="line402"></a>  }
-<a name="line403"></a>};
-<a name="line404"></a>
-<a name="line405"></a>
-<a name="line406"></a>/**
-<a name="line407"></a> * Sets aria-hidden of the rest of the page to restrict keyboard focus.
-<a name="line408"></a> * @param {boolean} hide Whether to hide or show the rest of the page.
-<a name="line409"></a> * @protected
-<a name="line410"></a> */
-<a name="line411"></a>goog.ui.ModalPopup.prototype.setA11YDetectBackground = function(hide) {
-<a name="line412"></a>  for (var child = this.getDomHelper().getDocument().body.firstChild; child;
-<a name="line413"></a>      child = child.nextSibling) {
-<a name="line414"></a>    if (child.nodeType == goog.dom.NodeType.ELEMENT) {
-<a name="line415"></a>      goog.ui.ModalPopup.setAriaHidden_(/** @type {!Element}*/ (child), hide);
-<a name="line416"></a>    }
-<a name="line417"></a>  }
-<a name="line418"></a>  goog.ui.ModalPopup.setAriaHidden_(this.getElementStrict(), !hide);
-<a name="line419"></a>};
-<a name="line420"></a>
-<a name="line421"></a>
-<a name="line422"></a>/**
-<a name="line423"></a> * Sets the transitions to show and hide the popup and background.
-<a name="line424"></a> * @param {!goog.fx.Transition} popupShowTransition Transition to show the
-<a name="line425"></a> *     popup.
-<a name="line426"></a> * @param {!goog.fx.Transition} popupHideTransition Transition to hide the
-<a name="line427"></a> *     popup.
-<a name="line428"></a> * @param {!goog.fx.Transition} bgShowTransition Transition to show
-<a name="line429"></a> *     the background.
-<a name="line430"></a> * @param {!goog.fx.Transition} bgHideTransition Transition to hide
-<a name="line431"></a> *     the background.
-<a name="line432"></a> */
-<a name="line433"></a>goog.ui.ModalPopup.prototype.setTransition = function(popupShowTransition,
-<a name="line434"></a>    popupHideTransition, bgShowTransition, bgHideTransition) {
-<a name="line435"></a>  this.popupShowTransition_ = popupShowTransition;
-<a name="line436"></a>  this.popupHideTransition_ = popupHideTransition;
-<a name="line437"></a>  this.bgShowTransition_ = bgShowTransition;
-<a name="line438"></a>  this.bgHideTransition_ = bgHideTransition;
-<a name="line439"></a>};
-<a name="line440"></a>
-<a name="line441"></a>
-<a name="line442"></a>/**
-<a name="line443"></a> * Shows the popup.
-<a name="line444"></a> * @private
-<a name="line445"></a> */
-<a name="line446"></a>goog.ui.ModalPopup.prototype.show_ = function() {
-<a name="line447"></a>  if (!this.dispatchEvent(goog.ui.PopupBase.EventType.BEFORE_SHOW)) {
-<a name="line448"></a>    return;
-<a name="line449"></a>  }
-<a name="line450"></a>
-<a name="line451"></a>  try {
-<a name="line452"></a>    this.lastFocus_ = this.getDomHelper().getDocument().activeElement;
-<a name="line453"></a>  } catch (e) {
-<a name="line454"></a>    // Focus-related actions often throw exceptions.
-<a name="line455"></a>    // Sample past issue: https://bugzilla.mozilla.org/show_bug.cgi?id=656283
-<a name="line456"></a>  }
-<a name="line457"></a>  this.resizeBackground_();
-<a name="line458"></a>  this.reposition();
-<a name="line459"></a>
-<a name="line460"></a>  // Listen for keyboard and resize events while the modal popup is visible.
-<a name="line461"></a>  this.getHandler().listen(
-<a name="line462"></a>      this.getDomHelper().getWindow(), goog.events.EventType.RESIZE,
-<a name="line463"></a>      this.resizeBackground_);
-<a name="line464"></a>
-<a name="line465"></a>  this.showPopupElement_(true);
-<a name="line466"></a>  this.focus();
-<a name="line467"></a>  this.visible_ = true;
-<a name="line468"></a>
-<a name="line469"></a>  if (this.popupShowTransition_ &amp;&amp; this.bgShowTransition_) {
-<a name="line470"></a>    goog.events.listenOnce(
-<a name="line471"></a>        /** @type {goog.events.EventTarget} */ (this.popupShowTransition_),
-<a name="line472"></a>        goog.fx.Transition.EventType.END, this.onShow, false, this);
-<a name="line473"></a>    this.bgShowTransition_.play();
-<a name="line474"></a>    this.popupShowTransition_.play();
-<a name="line475"></a>  } else {
-<a name="line476"></a>    this.onShow();
-<a name="line477"></a>  }
-<a name="line478"></a>};
-<a name="line479"></a>
-<a name="line480"></a>
-<a name="line481"></a>/**
-<a name="line482"></a> * Hides the popup.
-<a name="line483"></a> * @private
-<a name="line484"></a> */
-<a name="line485"></a>goog.ui.ModalPopup.prototype.hide_ = function() {
-<a name="line486"></a>  if (!this.dispatchEvent(goog.ui.PopupBase.EventType.BEFORE_HIDE)) {
-<a name="line487"></a>    return;
-<a name="line488"></a>  }
-<a name="line489"></a>
-<a name="line490"></a>  // Stop listening for keyboard and resize events while the modal
-<a name="line491"></a>  // popup is hidden.
-<a name="line492"></a>  this.getHandler().unlisten(
-<a name="line493"></a>      this.getDomHelper().getWindow(), goog.events.EventType.RESIZE,
-<a name="line494"></a>      this.resizeBackground_);
+<a name="line361"></a>  goog.ui.ModalPopup.base(this, &#39;exitDocument&#39;);
+<a name="line362"></a>  goog.dom.removeNode(this.bgIframeEl_);
+<a name="line363"></a>  goog.dom.removeNode(this.bgEl_);
+<a name="line364"></a>  goog.dom.removeNode(this.tabCatcherElement_);
+<a name="line365"></a>};
+<a name="line366"></a>
+<a name="line367"></a>
+<a name="line368"></a>/**
+<a name="line369"></a> * Sets the visibility of the modal popup box and focus to the popup.
+<a name="line370"></a> * Lazily renders the component if needed.
+<a name="line371"></a> * @param {boolean} visible Whether the modal popup should be visible.
+<a name="line372"></a> */
+<a name="line373"></a>goog.ui.ModalPopup.prototype.setVisible = function(visible) {
+<a name="line374"></a>  goog.asserts.assert(
+<a name="line375"></a>      this.isInDocument(), &#39;ModalPopup must be rendered first.&#39;);
+<a name="line376"></a>
+<a name="line377"></a>  if (visible == this.visible_) {
+<a name="line378"></a>    return;
+<a name="line379"></a>  }
+<a name="line380"></a>
+<a name="line381"></a>  if (this.popupShowTransition_) this.popupShowTransition_.stop();
+<a name="line382"></a>  if (this.bgShowTransition_) this.bgShowTransition_.stop();
+<a name="line383"></a>  if (this.popupHideTransition_) this.popupHideTransition_.stop();
+<a name="line384"></a>  if (this.bgHideTransition_) this.bgHideTransition_.stop();
+<a name="line385"></a>
+<a name="line386"></a>  if (this.isInDocument()) {
+<a name="line387"></a>    this.setA11YDetectBackground(visible);
+<a name="line388"></a>  }
+<a name="line389"></a>  if (visible) {
+<a name="line390"></a>    this.show_();
+<a name="line391"></a>  } else {
+<a name="line392"></a>    this.hide_();
+<a name="line393"></a>  }
+<a name="line394"></a>};
+<a name="line395"></a>
+<a name="line396"></a>
+<a name="line397"></a>/**
+<a name="line398"></a> * Sets aria-hidden on the rest of the page to restrict screen reader focus.
+<a name="line399"></a> * Top-level elements with an explicit aria-hidden state are not altered.
+<a name="line400"></a> * @param {boolean} hide Whether to hide or show the rest of the page.
+<a name="line401"></a> * @protected
+<a name="line402"></a> */
+<a name="line403"></a>goog.ui.ModalPopup.prototype.setA11YDetectBackground = function(hide) {
+<a name="line404"></a>  if (hide) {
+<a name="line405"></a>    if (!this.hiddenElements_) {
+<a name="line406"></a>      this.hiddenElements_ = [];
+<a name="line407"></a>    }
+<a name="line408"></a>    var dom = this.getDomHelper();
+<a name="line409"></a>    var topLevelChildren = dom.getChildren(dom.getDocument().body);
+<a name="line410"></a>    for (var i = 0; i &lt; topLevelChildren.length; i++) {
+<a name="line411"></a>      var child = topLevelChildren[i];
+<a name="line412"></a>      if (child != this.getElementStrict() &amp;&amp;
+<a name="line413"></a>          !goog.a11y.aria.getState(child, goog.a11y.aria.State.HIDDEN)) {
+<a name="line414"></a>        goog.a11y.aria.setState(child, goog.a11y.aria.State.HIDDEN, true);
+<a name="line415"></a>        this.hiddenElements_.push(child);
+<a name="line416"></a>      }
+<a name="line417"></a>    }
+<a name="line418"></a>  } else if (this.hiddenElements_) {
+<a name="line419"></a>    for (var i = 0; i &lt; this.hiddenElements_.length; i++) {
+<a name="line420"></a>      goog.a11y.aria.removeState(
+<a name="line421"></a>          this.hiddenElements_[i], goog.a11y.aria.State.HIDDEN);
+<a name="line422"></a>    }
+<a name="line423"></a>    this.hiddenElements_ = null;
+<a name="line424"></a>  }
+<a name="line425"></a>};
+<a name="line426"></a>
+<a name="line427"></a>
+<a name="line428"></a>/**
+<a name="line429"></a> * Sets the transitions to show and hide the popup and background.
+<a name="line430"></a> * @param {!goog.fx.Transition} popupShowTransition Transition to show the
+<a name="line431"></a> *     popup.
+<a name="line432"></a> * @param {!goog.fx.Transition} popupHideTransition Transition to hide the
+<a name="line433"></a> *     popup.
+<a name="line434"></a> * @param {!goog.fx.Transition} bgShowTransition Transition to show
+<a name="line435"></a> *     the background.
+<a name="line436"></a> * @param {!goog.fx.Transition} bgHideTransition Transition to hide
+<a name="line437"></a> *     the background.
+<a name="line438"></a> */
+<a name="line439"></a>goog.ui.ModalPopup.prototype.setTransition = function(popupShowTransition,
+<a name="line440"></a>    popupHideTransition, bgShowTransition, bgHideTransition) {
+<a name="line441"></a>  this.popupShowTransition_ = popupShowTransition;
+<a name="line442"></a>  this.popupHideTransition_ = popupHideTransition;
+<a name="line443"></a>  this.bgShowTransition_ = bgShowTransition;
+<a name="line444"></a>  this.bgHideTransition_ = bgHideTransition;
+<a name="line445"></a>};
+<a name="line446"></a>
+<a name="line447"></a>
+<a name="line448"></a>/**
+<a name="line449"></a> * Shows the popup.
+<a name="line450"></a> * @private
+<a name="line451"></a> */
+<a name="line452"></a>goog.ui.ModalPopup.prototype.show_ = function() {
+<a name="line453"></a>  if (!this.dispatchEvent(goog.ui.PopupBase.EventType.BEFORE_SHOW)) {
+<a name="line454"></a>    return;
+<a name="line455"></a>  }
+<a name="line456"></a>
+<a name="line457"></a>  try {
+<a name="line458"></a>    this.lastFocus_ = this.getDomHelper().getDocument().activeElement;
+<a name="line459"></a>  } catch (e) {
+<a name="line460"></a>    // Focus-related actions often throw exceptions.
+<a name="line461"></a>    // Sample past issue: https://bugzilla.mozilla.org/show_bug.cgi?id=656283
+<a name="line462"></a>  }
+<a name="line463"></a>  this.resizeBackground_();
+<a name="line464"></a>  this.reposition();
+<a name="line465"></a>
+<a name="line466"></a>  // Listen for keyboard and resize events while the modal popup is visible.
+<a name="line467"></a>  this.getHandler().listen(
+<a name="line468"></a>      this.getDomHelper().getWindow(), goog.events.EventType.RESIZE,
+<a name="line469"></a>      this.resizeBackground_);
+<a name="line470"></a>
+<a name="line471"></a>  this.showPopupElement_(true);
+<a name="line472"></a>  this.focus();
+<a name="line473"></a>  this.visible_ = true;
+<a name="line474"></a>
+<a name="line475"></a>  if (this.popupShowTransition_ &amp;&amp; this.bgShowTransition_) {
+<a name="line476"></a>    goog.events.listenOnce(
+<a name="line477"></a>        /** @type {goog.events.EventTarget} */ (this.popupShowTransition_),
+<a name="line478"></a>        goog.fx.Transition.EventType.END, this.onShow, false, this);
+<a name="line479"></a>    this.bgShowTransition_.play();
+<a name="line480"></a>    this.popupShowTransition_.play();
+<a name="line481"></a>  } else {
+<a name="line482"></a>    this.onShow();
+<a name="line483"></a>  }
+<a name="line484"></a>};
+<a name="line485"></a>
+<a name="line486"></a>
+<a name="line487"></a>/**
+<a name="line488"></a> * Hides the popup.
+<a name="line489"></a> * @private
+<a name="line490"></a> */
+<a name="line491"></a>goog.ui.ModalPopup.prototype.hide_ = function() {
+<a name="line492"></a>  if (!this.dispatchEvent(goog.ui.PopupBase.EventType.BEFORE_HIDE)) {
+<a name="line493"></a>    return;
+<a name="line494"></a>  }
 <a name="line495"></a>
-<a name="line496"></a>  // Set visibility to hidden even if there is a transition. This
-<a name="line497"></a>  // reduces complexity in subclasses who may want to override
-<a name="line498"></a>  // setVisible (such as goog.ui.Dialog).
-<a name="line499"></a>  this.visible_ = false;
-<a name="line500"></a>
-<a name="line501"></a>  if (this.popupHideTransition_ &amp;&amp; this.bgHideTransition_) {
-<a name="line502"></a>    goog.events.listenOnce(
-<a name="line503"></a>        /** @type {goog.events.EventTarget} */ (this.popupHideTransition_),
-<a name="line504"></a>        goog.fx.Transition.EventType.END, this.onHide, false, this);
-<a name="line505"></a>    this.bgHideTransition_.play();
-<a name="line506"></a>    // The transition whose END event you are listening to must be played last
-<a name="line507"></a>    // to prevent errors when disposing on hide event, which occur on browsers
-<a name="line508"></a>    // that do not support CSS3 transitions.
-<a name="line509"></a>    this.popupHideTransition_.play();
-<a name="line510"></a>  } else {
-<a name="line511"></a>    this.onHide();
-<a name="line512"></a>  }
-<a name="line513"></a>  try {
-<a name="line514"></a>    var body = this.getDomHelper().getDocument().body;
-<a name="line515"></a>    var active = this.getDomHelper().getDocument().activeElement || body;
-<a name="line516"></a>    if (this.lastFocus_ &amp;&amp; active == body &amp;&amp; this.lastFocus_ != body) {
-<a name="line517"></a>      this.lastFocus_.focus();
-<a name="line518"></a>    }
-<a name="line519"></a>  } catch (e) {
-<a name="line520"></a>    // Swallow this. IE can throw an error if the element can not be focused.
-<a name="line521"></a>  }
-<a name="line522"></a>  // Explicitly want to null this out even if there was an error focusing to
-<a name="line523"></a>  // avoid bleed over between dialog invocations.
-<a name="line524"></a>  this.lastFocus_ = null;
-<a name="line525"></a>};
-<a name="line526"></a>
-<a name="line527"></a>
-<a name="line528"></a>/**
-<a name="line529"></a> * Shows or hides the popup element.
-<a name="line530"></a> * @param {boolean} visible Shows the popup element if true, hides if false.
-<a name="line531"></a> * @private
-<a name="line532"></a> */
-<a name="line533"></a>goog.ui.ModalPopup.prototype.showPopupElement_ = function(visible) {
-<a name="line534"></a>  if (this.bgIframeEl_) {
-<a name="line535"></a>    goog.style.setElementShown(this.bgIframeEl_, visible);
-<a name="line536"></a>  }
-<a name="line537"></a>  if (this.bgEl_) {
-<a name="line538"></a>    goog.style.setElementShown(this.bgEl_, visible);
-<a name="line539"></a>  }
-<a name="line540"></a>  goog.style.setElementShown(this.getElement(), visible);
-<a name="line541"></a>  goog.style.setElementShown(this.tabCatcherElement_, visible);
-<a name="line542"></a>};
-<a name="line543"></a>
-<a name="line544"></a>
-<a name="line545"></a>/**
-<a name="line546"></a> * Called after the popup is shown. If there is a transition, this
-<a name="line547"></a> * will be called after the transition completed or stopped.
-<a name="line548"></a> * @protected
-<a name="line549"></a> */
-<a name="line550"></a>goog.ui.ModalPopup.prototype.onShow = function() {
-<a name="line551"></a>  this.dispatchEvent(goog.ui.PopupBase.EventType.SHOW);
-<a name="line552"></a>};
-<a name="line553"></a>
-<a name="line554"></a>
-<a name="line555"></a>/**
-<a name="line556"></a> * Called after the popup is hidden. If there is a transition, this
-<a name="line557"></a> * will be called after the transition completed or stopped.
-<a name="line558"></a> * @protected
-<a name="line559"></a> */
-<a name="line560"></a>goog.ui.ModalPopup.prototype.onHide = function() {
-<a name="line561"></a>  this.showPopupElement_(false);
-<a name="line562"></a>  this.dispatchEvent(goog.ui.PopupBase.EventType.HIDE);
-<a name="line563"></a>};
-<a name="line564"></a>
-<a name="line565"></a>
-<a name="line566"></a>/**
-<a name="line567"></a> * @return {boolean} Whether the modal popup is visible.
-<a name="line568"></a> */
-<a name="line569"></a>goog.ui.ModalPopup.prototype.isVisible = function() {
-<a name="line570"></a>  return this.visible_;
-<a name="line571"></a>};
-<a name="line572"></a>
-<a name="line573"></a>
-<a name="line574"></a>/**
-<a name="line575"></a> * Focuses on the modal popup.
-<a name="line576"></a> */
-<a name="line577"></a>goog.ui.ModalPopup.prototype.focus = function() {
-<a name="line578"></a>  this.focusElement_();
-<a name="line579"></a>};
-<a name="line580"></a>
-<a name="line581"></a>
-<a name="line582"></a>/**
-<a name="line583"></a> * Make the background element the size of the document.
-<a name="line584"></a> *
-<a name="line585"></a> * NOTE(user): We must hide the background element before measuring the
-<a name="line586"></a> * document, otherwise the size of the background will stop the document from
-<a name="line587"></a> * shrinking to fit a smaller window.  This does cause a slight flicker in Linux
-<a name="line588"></a> * browsers, but should not be a common scenario.
-<a name="line589"></a> * @private
-<a name="line590"></a> */
-<a name="line591"></a>goog.ui.ModalPopup.prototype.resizeBackground_ = function() {
-<a name="line592"></a>  if (this.bgIframeEl_) {
-<a name="line593"></a>    goog.style.setElementShown(this.bgIframeEl_, false);
-<a name="line594"></a>  }
-<a name="line595"></a>  if (this.bgEl_) {
-<a name="line596"></a>    goog.style.setElementShown(this.bgEl_, false);
-<a name="line597"></a>  }
-<a name="line598"></a>
-<a name="line599"></a>  var doc = this.getDomHelper().getDocument();
-<a name="line600"></a>  var win = goog.dom.getWindow(doc) || window;
-<a name="line601"></a>
-<a name="line602"></a>  // Take the max of document height and view height, in case the document does
-<a name="line603"></a>  // not fill the viewport. Read from both the body element and the html element
-<a name="line604"></a>  // to account for browser differences in treatment of absolutely-positioned
-<a name="line605"></a>  // content.
-<a name="line606"></a>  var viewSize = goog.dom.getViewportSize(win);
-<a name="line607"></a>  var w = Math.max(viewSize.width,
-<a name="line608"></a>      Math.max(doc.body.scrollWidth, doc.documentElement.scrollWidth));
-<a name="line609"></a>  var h = Math.max(viewSize.height,
-<a name="line610"></a>      Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight));
-<a name="line611"></a>
-<a name="line612"></a>  if (this.bgIframeEl_) {
-<a name="line613"></a>    goog.style.setElementShown(this.bgIframeEl_, true);
-<a name="line614"></a>    goog.style.setSize(this.bgIframeEl_, w, h);
-<a name="line615"></a>  }
-<a name="line616"></a>  if (this.bgEl_) {
-<a name="line617"></a>    goog.style.setElementShown(this.bgEl_, true);
-<a name="line618"></a>    goog.style.setSize(this.bgEl_, w, h);
-<a name="line619"></a>  }
-<a name="line620"></a>};
-<a name="line621"></a>
-<a name="line622"></a>
-<a name="line623"></a>/**
-<a name="line624"></a> * Centers the modal popup in the viewport, taking scrolling into account.
-<a name="line625"></a> */
-<a name="line626"></a>goog.ui.ModalPopup.prototype.reposition = function() {
-<a name="line627"></a>  // TODO(user): Make this use goog.positioning as in goog.ui.PopupBase?
+<a name="line496"></a>  // Stop listening for keyboard and resize events while the modal
+<a name="line497"></a>  // popup is hidden.
+<a name="line498"></a>  this.getHandler().unlisten(
+<a name="line499"></a>      this.getDomHelper().getWindow(), goog.events.EventType.RESIZE,
+<a name="line500"></a>      this.resizeBackground_);
+<a name="line501"></a>
+<a name="line502"></a>  // Set visibility to hidden even if there is a transition. This
+<a name="line503"></a>  // reduces complexity in subclasses who may want to override
+<a name="line504"></a>  // setVisible (such as goog.ui.Dialog).
+<a name="line505"></a>  this.visible_ = false;
+<a name="line506"></a>
+<a name="line507"></a>  if (this.popupHideTransition_ &amp;&amp; this.bgHideTransition_) {
+<a name="line508"></a>    goog.events.listenOnce(
+<a name="line509"></a>        /** @type {goog.events.EventTarget} */ (this.popupHideTransition_),
+<a name="line510"></a>        goog.fx.Transition.EventType.END, this.onHide, false, this);
+<a name="line511"></a>    this.bgHideTransition_.play();
+<a name="line512"></a>    // The transition whose END event you are listening to must be played last
+<a name="line513"></a>    // to prevent errors when disposing on hide event, which occur on browsers
+<a name="line514"></a>    // that do not support CSS3 transitions.
+<a name="line515"></a>    this.popupHideTransition_.play();
+<a name="line516"></a>  } else {
+<a name="line517"></a>    this.onHide();
+<a name="line518"></a>  }
+<a name="line519"></a>  try {
+<a name="line520"></a>    var body = this.getDomHelper().getDocument().body;
+<a name="line521"></a>    var active = this.getDomHelper().getDocument().activeElement || body;
+<a name="line522"></a>    if (this.lastFocus_ &amp;&amp; active == body &amp;&amp; this.lastFocus_ != body) {
+<a name="line523"></a>      this.lastFocus_.focus();
+<a name="line524"></a>    }
+<a name="line525"></a>  } catch (e) {
+<a name="line526"></a>    // Swallow this. IE can throw an error if the element can not be focused.
+<a name="line527"></a>  }
+<a name="line528"></a>  // Explicitly want to null this out even if there was an error focusing to
+<a name="line529"></a>  // avoid bleed over between dialog invocations.
+<a name="line530"></a>  this.lastFocus_ = null;
+<a name="line531"></a>};
+<a name="line532"></a>
+<a name="line533"></a>
+<a name="line534"></a>/**
+<a name="line535"></a> * Shows or hides the popup element.
+<a name="line536"></a> * @param {boolean} visible Shows the popup element if true, hides if false.
+<a name="line537"></a> * @private
+<a name="line538"></a> */
+<a name="line539"></a>goog.ui.ModalPopup.prototype.showPopupElement_ = function(visible) {
+<a name="line540"></a>  if (this.bgIframeEl_) {
+<a name="line541"></a>    goog.style.setElementShown(this.bgIframeEl_, visible);
+<a name="line542"></a>  }
+<a name="line543"></a>  if (this.bgEl_) {
+<a name="line544"></a>    goog.style.setElementShown(this.bgEl_, visible);
+<a name="line545"></a>  }
+<a name="line546"></a>  goog.style.setElementShown(this.getElement(), visible);
+<a name="line547"></a>  goog.style.setElementShown(this.tabCatcherElement_, visible);
+<a name="line548"></a>};
+<a name="line549"></a>
+<a name="line550"></a>
+<a name="line551"></a>/**
+<a name="line552"></a> * Called after the popup is shown. If there is a transition, this
+<a name="line553"></a> * will be called after the transition completed or stopped.
+<a name="line554"></a> * @protected
+<a name="line555"></a> */
+<a name="line556"></a>goog.ui.ModalPopup.prototype.onShow = function() {
+<a name="line557"></a>  this.dispatchEvent(goog.ui.PopupBase.EventType.SHOW);
+<a name="line558"></a>};
+<a name="line559"></a>
+<a name="line560"></a>
+<a name="line561"></a>/**
+<a name="line562"></a> * Called after the popup is hidden. If there is a transition, this
+<a name="line563"></a> * will be called after the transition completed or stopped.
+<a name="line564"></a> * @protected
+<a name="line565"></a> */
+<a name="line566"></a>goog.ui.ModalPopup.prototype.onHide = function() {
+<a name="line567"></a>  this.showPopupElement_(false);
+<a name="line568"></a>  this.dispatchEvent(goog.ui.PopupBase.EventType.HIDE);
+<a name="line569"></a>};
+<a name="line570"></a>
+<a name="line571"></a>
+<a name="line572"></a>/**
+<a name="line573"></a> * @return {boolean} Whether the modal popup is visible.
+<a name="line574"></a> */
+<a name="line575"></a>goog.ui.ModalPopup.prototype.isVisible = function() {
+<a name="line576"></a>  return this.visible_;
+<a name="line577"></a>};
+<a name="line578"></a>
+<a name="line579"></a>
+<a name="line580"></a>/**
+<a name="line581"></a> * Focuses on the modal popup.
+<a name="line582"></a> */
+<a name="line583"></a>goog.ui.ModalPopup.prototype.focus = function() {
+<a name="line584"></a>  this.focusElement_();
+<a name="line585"></a>};
+<a name="line586"></a>
+<a name="line587"></a>
+<a name="line588"></a>/**
+<a name="line589"></a> * Make the background element the size of the document.
+<a name="line590"></a> *
+<a name="line591"></a> * NOTE(user): We must hide the background element before measuring the
+<a name="line592"></a> * document, otherwise the size of the background will stop the document from
+<a name="line593"></a> * shrinking to fit a smaller window.  This does cause a slight flicker in Linux
+<a name="line594"></a> * browsers, but should not be a common scenario.
+<a name="line595"></a> * @private
+<a name="line596"></a> */
+<a name="line597"></a>goog.ui.ModalPopup.prototype.resizeBackground_ = function() {
+<a name="line598"></a>  if (this.bgIframeEl_) {
+<a name="line599"></a>    goog.style.setElementShown(this.bgIframeEl_, false);
+<a name="line600"></a>  }
+<a name="line601"></a>  if (this.bgEl_) {
+<a name="line602"></a>    goog.style.setElementShown(this.bgEl_, false);
+<a name="line603"></a>  }
+<a name="line604"></a>
+<a name="line605"></a>  var doc = this.getDomHelper().getDocument();
+<a name="line606"></a>  var win = goog.dom.getWindow(doc) || window;
+<a name="line607"></a>
+<a name="line608"></a>  // Take the max of document height and view height, in case the document does
+<a name="line609"></a>  // not fill the viewport. Read from both the body element and the html element
+<a name="line610"></a>  // to account for browser differences in treatment of absolutely-positioned
+<a name="line611"></a>  // content.
+<a name="line612"></a>  var viewSize = goog.dom.getViewportSize(win);
+<a name="line613"></a>  var w = Math.max(viewSize.width,
+<a name="line614"></a>      Math.max(doc.body.scrollWidth, doc.documentElement.scrollWidth));
+<a name="line615"></a>  var h = Math.max(viewSize.height,
+<a name="line616"></a>      Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight));
+<a name="line617"></a>
+<a name="line618"></a>  if (this.bgIframeEl_) {
+<a name="line619"></a>    goog.style.setElementShown(this.bgIframeEl_, true);
+<a name="line620"></a>    goog.style.setSize(this.bgIframeEl_, w, h);
+<a name="line621"></a>  }
+<a name="line622"></a>  if (this.bgEl_) {
+<a name="line623"></a>    goog.style.setElementShown(this.bgEl_, true);
+<a name="line624"></a>    goog.style.setSize(this.bgEl_, w, h);
+<a name="line625"></a>  }
+<a name="line626"></a>};
+<a name="line627"></a>
 <a name="line628"></a>
-<a name="line629"></a>  // Get the current viewport to obtain the scroll offset.
-<a name="line630"></a>  var doc = this.getDomHelper().getDocument();
-<a name="line631"></a>  var win = goog.dom.getWindow(doc) || window;
-<a name="line632"></a>  if (goog.style.getComputedPosition(this.getElement()) == &#39;fixed&#39;) {
-<a name="line633"></a>    var x = 0;
-<a name="line634"></a>    var y = 0;
-<a name="line635"></a>  } else {
-<a name="line636"></a>    var scroll = this.getDomHelper().getDocumentScroll();
-<a name="line637"></a>    var x = scroll.x;
-<a name="line638"></a>    var y = scroll.y;
-<a name="line639"></a>  }
-<a name="line640"></a>
-<a name="line641"></a>  var popupSize = goog.style.getSize(this.getElement());
-<a name="line642"></a>  var viewSize = goog.dom.getViewportSize(win);
-<a name="line643"></a>
-<a name="line644"></a>  // Make sure left and top are non-negatives.
-<a name="line645"></a>  var left = Math.max(x + viewSize.width / 2 - popupSize.width / 2, 0);
-<a name="line646"></a>  var top = Math.max(y + viewSize.height / 2 - popupSize.height / 2, 0);
-<a name="line647"></a>  goog.style.setPosition(this.getElement(), left, top);
-<a name="line648"></a>
-<a name="line649"></a>  // We place the tab catcher at the same position as the dialog to
-<a name="line650"></a>  // prevent IE from scrolling when users try to tab out of the dialog.
-<a name="line651"></a>  goog.style.setPosition(this.tabCatcherElement_, left, top);
-<a name="line652"></a>};
-<a name="line653"></a>
+<a name="line629"></a>/**
+<a name="line630"></a> * Centers the modal popup in the viewport, taking scrolling into account.
+<a name="line631"></a> */
+<a name="line632"></a>goog.ui.ModalPopup.prototype.reposition = function() {
+<a name="line633"></a>  // TODO(user): Make this use goog.positioning as in goog.ui.PopupBase?
+<a name="line634"></a>
+<a name="line635"></a>  // Get the current viewport to obtain the scroll offset.
+<a name="line636"></a>  var doc = this.getDomHelper().getDocument();
+<a name="line637"></a>  var win = goog.dom.getWindow(doc) || window;
+<a name="line638"></a>  if (goog.style.getComputedPosition(this.getElement()) == &#39;fixed&#39;) {
+<a name="line639"></a>    var x = 0;
+<a name="line640"></a>    var y = 0;
+<a name="line641"></a>  } else {
+<a name="line642"></a>    var scroll = this.getDomHelper().getDocumentScroll();
+<a name="line643"></a>    var x = scroll.x;
+<a name="line644"></a>    var y = scroll.y;
+<a name="line645"></a>  }
+<a name="line646"></a>
+<a name="line647"></a>  var popupSize = goog.style.getSize(this.getElement());
+<a name="line648"></a>  var viewSize = goog.dom.getViewportSize(win);
+<a name="line649"></a>
+<a name="line650"></a>  // Make sure left and top are non-negatives.
+<a name="line651"></a>  var left = Math.max(x + viewSize.width / 2 - popupSize.width / 2, 0);
+<a name="line652"></a>  var top = Math.max(y + viewSize.height / 2 - popupSize.height / 2, 0);
+<a name="line653"></a>  goog.style.setPosition(this.getElement(), left, top);
 <a name="line654"></a>
-<a name="line655"></a>/**
-<a name="line656"></a> * Handles focus events.  Makes sure that if the user tabs past the
-<a name="line657"></a> * elements in the modal popup, the focus wraps back to the beginning, and that
-<a name="line658"></a> * if the user shift-tabs past the front of the modal popup, focus wraps around
-<a name="line659"></a> * to the end.
-<a name="line660"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
-<a name="line661"></a> * @protected
-<a name="line662"></a> */
-<a name="line663"></a>goog.ui.ModalPopup.prototype.onFocus = function(e) {
-<a name="line664"></a>  if (this.backwardTabWrapInProgress_) {
-<a name="line665"></a>    this.resetBackwardTabWrap_();
-<a name="line666"></a>  } else if (e.target == this.tabCatcherElement_) {
-<a name="line667"></a>    goog.Timer.callOnce(this.focusElement_, 0, this);
-<a name="line668"></a>  }
-<a name="line669"></a>};
-<a name="line670"></a>
-<a name="line671"></a>
-<a name="line672"></a>/**
-<a name="line673"></a> * Returns the magic tab catcher element used to detect when the user has
-<a name="line674"></a> * rolled focus off of the popup content.  It is automatically created during
-<a name="line675"></a> * the createDom method() and can be used by subclasses to implement custom
-<a name="line676"></a> * tab-loop behavior.
-<a name="line677"></a> * @return {Element} The tab catcher element.
-<a name="line678"></a> * @protected
-<a name="line679"></a> */
-<a name="line680"></a>goog.ui.ModalPopup.prototype.getTabCatcherElement = function() {
-<a name="line681"></a>  return this.tabCatcherElement_;
-<a name="line682"></a>};
-<a name="line683"></a>
-<a name="line684"></a>
-<a name="line685"></a>/**
-<a name="line686"></a> * Moves the focus to the modal popup.
-<a name="line687"></a> * @private
-<a name="line688"></a> */
-<a name="line689"></a>goog.ui.ModalPopup.prototype.focusElement_ = function() {
-<a name="line690"></a>  try {
-<a name="line691"></a>    if (goog.userAgent.IE) {
-<a name="line692"></a>      // In IE, we must first focus on the body or else focussing on a
-<a name="line693"></a>      // sub-element will not work.
-<a name="line694"></a>      this.getDomHelper().getDocument().body.focus();
-<a name="line695"></a>    }
-<a name="line696"></a>    this.getElement().focus();
-<a name="line697"></a>  } catch (e) {
-<a name="line698"></a>    // Swallow this. IE can throw an error if the element can not be focused.
-<a name="line699"></a>  }
-<a name="line700"></a>};
-<a name="line701"></a>
-<a name="line702"></a>
-<a name="line703"></a>/** @override */
-<a name="line704"></a>goog.ui.ModalPopup.prototype.disposeInternal = function() {
-<a name="line705"></a>  goog.dispose(this.popupShowTransition_);
-<a name="line706"></a>  this.popupShowTransition_ = null;
+<a name="line655"></a>  // We place the tab catcher at the same position as the dialog to
+<a name="line656"></a>  // prevent IE from scrolling when users try to tab out of the dialog.
+<a name="line657"></a>  goog.style.setPosition(this.tabCatcherElement_, left, top);
+<a name="line658"></a>};
+<a name="line659"></a>
+<a name="line660"></a>
+<a name="line661"></a>/**
+<a name="line662"></a> * Handles focus events.  Makes sure that if the user tabs past the
+<a name="line663"></a> * elements in the modal popup, the focus wraps back to the beginning, and that
+<a name="line664"></a> * if the user shift-tabs past the front of the modal popup, focus wraps around
+<a name="line665"></a> * to the end.
+<a name="line666"></a> * @param {goog.events.BrowserEvent} e Browser&#39;s event object.
+<a name="line667"></a> * @protected
+<a name="line668"></a> */
+<a name="line669"></a>goog.ui.ModalPopup.prototype.onFocus = function(e) {
+<a name="line670"></a>  if (this.backwardTabWrapInProgress_) {
+<a name="line671"></a>    this.resetBackwardTabWrap_();
+<a name="line672"></a>  } else if (e.target == this.tabCatcherElement_) {
+<a name="line673"></a>    goog.Timer.callOnce(this.focusElement_, 0, this);
+<a name="line674"></a>  }
+<a name="line675"></a>};
+<a name="line676"></a>
+<a name="line677"></a>
+<a name="line678"></a>/**
+<a name="line679"></a> * Returns the magic tab catcher element used to detect when the user has
+<a name="line680"></a> * rolled focus off of the popup content.  It is automatically created during
+<a name="line681"></a> * the createDom method() and can be used by subclasses to implement custom
+<a name="line682"></a> * tab-loop behavior.
+<a name="line683"></a> * @return {Element} The tab catcher element.
+<a name="line684"></a> * @protected
+<a name="line685"></a> */
+<a name="line686"></a>goog.ui.ModalPopup.prototype.getTabCatcherElement = function() {
+<a name="line687"></a>  return this.tabCatcherElement_;
+<a name="line688"></a>};
+<a name="line689"></a>
+<a name="line690"></a>
+<a name="line691"></a>/**
+<a name="line692"></a> * Moves the focus to the modal popup.
+<a name="line693"></a> * @private
+<a name="line694"></a> */
+<a name="line695"></a>goog.ui.ModalPopup.prototype.focusElement_ = function() {
+<a name="line696"></a>  try {
+<a name="line697"></a>    if (goog.userAgent.IE) {
+<a name="line698"></a>      // In IE, we must first focus on the body or else focussing on a
+<a name="line699"></a>      // sub-element will not work.
+<a name="line700"></a>      this.getDomHelper().getDocument().body.focus();
+<a name="line701"></a>    }
+<a name="line702"></a>    this.getElement().focus();
+<a name="line703"></a>  } catch (e) {
+<a name="line704"></a>    // Swallow this. IE can throw an error if the element can not be focused.
+<a name="line705"></a>  }
+<a name="line706"></a>};
 <a name="line707"></a>
-<a name="line708"></a>  goog.dispose(this.popupHideTransition_);
-<a name="line709"></a>  this.popupHideTransition_ = null;
-<a name="line710"></a>
-<a name="line711"></a>  goog.dispose(this.bgShowTransition_);
-<a name="line712"></a>  this.bgShowTransition_ = null;
+<a name="line708"></a>
+<a name="line709"></a>/** @override */
+<a name="line710"></a>goog.ui.ModalPopup.prototype.disposeInternal = function() {
+<a name="line711"></a>  goog.dispose(this.popupShowTransition_);
+<a name="line712"></a>  this.popupShowTransition_ = null;
 <a name="line713"></a>
-<a name="line714"></a>  goog.dispose(this.bgHideTransition_);
-<a name="line715"></a>  this.bgHideTransition_ = null;
+<a name="line714"></a>  goog.dispose(this.popupHideTransition_);
+<a name="line715"></a>  this.popupHideTransition_ = null;
 <a name="line716"></a>
-<a name="line717"></a>  goog.ui.ModalPopup.base(this, &#39;disposeInternal&#39;);
-<a name="line718"></a>};
+<a name="line717"></a>  goog.dispose(this.bgShowTransition_);
+<a name="line718"></a>  this.bgShowTransition_ = null;
+<a name="line719"></a>
+<a name="line720"></a>  goog.dispose(this.bgHideTransition_);
+<a name="line721"></a>  this.bgHideTransition_ = null;
+<a name="line722"></a>
+<a name="line723"></a>  goog.ui.ModalPopup.base(this, &#39;disposeInternal&#39;);
+<a name="line724"></a>};
 </pre>
 
 

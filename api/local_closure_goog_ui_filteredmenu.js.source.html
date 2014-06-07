@@ -83,568 +83,593 @@
 <a name="line37"></a>goog.require(&#39;goog.ui.Component&#39;);
 <a name="line38"></a>goog.require(&#39;goog.ui.FilterObservingMenuItem&#39;);
 <a name="line39"></a>goog.require(&#39;goog.ui.Menu&#39;);
-<a name="line40"></a>goog.require(&#39;goog.userAgent&#39;);
-<a name="line41"></a>
+<a name="line40"></a>goog.require(&#39;goog.ui.MenuItem&#39;);
+<a name="line41"></a>goog.require(&#39;goog.userAgent&#39;);
 <a name="line42"></a>
 <a name="line43"></a>
-<a name="line44"></a>/**
-<a name="line45"></a> * Filtered menu class.
-<a name="line46"></a> * @param {goog.ui.MenuRenderer=} opt_renderer Renderer used to render filtered
-<a name="line47"></a> *     menu; defaults to {@link goog.ui.MenuRenderer}.
-<a name="line48"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
-<a name="line49"></a> * @constructor
-<a name="line50"></a> * @extends {goog.ui.Menu}
-<a name="line51"></a> */
-<a name="line52"></a>goog.ui.FilteredMenu = function(opt_renderer, opt_domHelper) {
-<a name="line53"></a>  goog.ui.Menu.call(this, opt_domHelper, opt_renderer);
-<a name="line54"></a>};
-<a name="line55"></a>goog.inherits(goog.ui.FilteredMenu, goog.ui.Menu);
-<a name="line56"></a>
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * Filtered menu class.
+<a name="line47"></a> * @param {goog.ui.MenuRenderer=} opt_renderer Renderer used to render filtered
+<a name="line48"></a> *     menu; defaults to {@link goog.ui.MenuRenderer}.
+<a name="line49"></a> * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+<a name="line50"></a> * @constructor
+<a name="line51"></a> * @extends {goog.ui.Menu}
+<a name="line52"></a> */
+<a name="line53"></a>goog.ui.FilteredMenu = function(opt_renderer, opt_domHelper) {
+<a name="line54"></a>  goog.ui.Menu.call(this, opt_domHelper, opt_renderer);
+<a name="line55"></a>};
+<a name="line56"></a>goog.inherits(goog.ui.FilteredMenu, goog.ui.Menu);
 <a name="line57"></a>
-<a name="line58"></a>/**
-<a name="line59"></a> * Events fired by component.
-<a name="line60"></a> * @enum {string}
-<a name="line61"></a> */
-<a name="line62"></a>goog.ui.FilteredMenu.EventType = {
-<a name="line63"></a>  /** Dispatched after the component filter criteria has been changed. */
-<a name="line64"></a>  FILTER_CHANGED: &#39;filterchange&#39;
-<a name="line65"></a>};
-<a name="line66"></a>
+<a name="line58"></a>
+<a name="line59"></a>/**
+<a name="line60"></a> * Events fired by component.
+<a name="line61"></a> * @enum {string}
+<a name="line62"></a> */
+<a name="line63"></a>goog.ui.FilteredMenu.EventType = {
+<a name="line64"></a>  /** Dispatched after the component filter criteria has been changed. */
+<a name="line65"></a>  FILTER_CHANGED: &#39;filterchange&#39;
+<a name="line66"></a>};
 <a name="line67"></a>
-<a name="line68"></a>/**
-<a name="line69"></a> * Filter menu element ids.
-<a name="line70"></a> * @enum {string}
-<a name="line71"></a> * @private
-<a name="line72"></a> */
-<a name="line73"></a>goog.ui.FilteredMenu.Id_ = {
-<a name="line74"></a>  CONTENT_ELEMENT: &#39;content-el&#39;
-<a name="line75"></a>};
-<a name="line76"></a>
+<a name="line68"></a>
+<a name="line69"></a>/**
+<a name="line70"></a> * Filter menu element ids.
+<a name="line71"></a> * @enum {string}
+<a name="line72"></a> * @private
+<a name="line73"></a> */
+<a name="line74"></a>goog.ui.FilteredMenu.Id_ = {
+<a name="line75"></a>  CONTENT_ELEMENT: &#39;content-el&#39;
+<a name="line76"></a>};
 <a name="line77"></a>
-<a name="line78"></a>/**
-<a name="line79"></a> * Filter input element.
-<a name="line80"></a> * @type {Element|undefined}
-<a name="line81"></a> * @private
-<a name="line82"></a> */
-<a name="line83"></a>goog.ui.FilteredMenu.prototype.filterInput_;
-<a name="line84"></a>
+<a name="line78"></a>
+<a name="line79"></a>/**
+<a name="line80"></a> * Filter input element.
+<a name="line81"></a> * @type {Element|undefined}
+<a name="line82"></a> * @private
+<a name="line83"></a> */
+<a name="line84"></a>goog.ui.FilteredMenu.prototype.filterInput_;
 <a name="line85"></a>
-<a name="line86"></a>/**
-<a name="line87"></a> * The input handler that provides the input event.
-<a name="line88"></a> * @type {goog.events.InputHandler|undefined}
-<a name="line89"></a> * @private
-<a name="line90"></a> */
-<a name="line91"></a>goog.ui.FilteredMenu.prototype.inputHandler_;
-<a name="line92"></a>
+<a name="line86"></a>
+<a name="line87"></a>/**
+<a name="line88"></a> * The input handler that provides the input event.
+<a name="line89"></a> * @type {goog.events.InputHandler|undefined}
+<a name="line90"></a> * @private
+<a name="line91"></a> */
+<a name="line92"></a>goog.ui.FilteredMenu.prototype.inputHandler_;
 <a name="line93"></a>
-<a name="line94"></a>/**
-<a name="line95"></a> * Maximum number of characters for filter input.
-<a name="line96"></a> * @type {number}
-<a name="line97"></a> * @private
-<a name="line98"></a> */
-<a name="line99"></a>goog.ui.FilteredMenu.prototype.maxLength_ = 0;
-<a name="line100"></a>
+<a name="line94"></a>
+<a name="line95"></a>/**
+<a name="line96"></a> * Maximum number of characters for filter input.
+<a name="line97"></a> * @type {number}
+<a name="line98"></a> * @private
+<a name="line99"></a> */
+<a name="line100"></a>goog.ui.FilteredMenu.prototype.maxLength_ = 0;
 <a name="line101"></a>
-<a name="line102"></a>/**
-<a name="line103"></a> * Label displayed in the filter input when no text has been entered.
-<a name="line104"></a> * @type {string}
-<a name="line105"></a> * @private
-<a name="line106"></a> */
-<a name="line107"></a>goog.ui.FilteredMenu.prototype.label_ = &#39;&#39;;
-<a name="line108"></a>
+<a name="line102"></a>
+<a name="line103"></a>/**
+<a name="line104"></a> * Label displayed in the filter input when no text has been entered.
+<a name="line105"></a> * @type {string}
+<a name="line106"></a> * @private
+<a name="line107"></a> */
+<a name="line108"></a>goog.ui.FilteredMenu.prototype.label_ = &#39;&#39;;
 <a name="line109"></a>
-<a name="line110"></a>/**
-<a name="line111"></a> * Label element.
-<a name="line112"></a> * @type {Element|undefined}
-<a name="line113"></a> * @private
-<a name="line114"></a> */
-<a name="line115"></a>goog.ui.FilteredMenu.prototype.labelEl_;
-<a name="line116"></a>
+<a name="line110"></a>
+<a name="line111"></a>/**
+<a name="line112"></a> * Label element.
+<a name="line113"></a> * @type {Element|undefined}
+<a name="line114"></a> * @private
+<a name="line115"></a> */
+<a name="line116"></a>goog.ui.FilteredMenu.prototype.labelEl_;
 <a name="line117"></a>
-<a name="line118"></a>/**
-<a name="line119"></a> * Whether multiple items can be entered comma separated.
-<a name="line120"></a> * @type {boolean}
-<a name="line121"></a> * @private
-<a name="line122"></a> */
-<a name="line123"></a>goog.ui.FilteredMenu.prototype.allowMultiple_ = false;
-<a name="line124"></a>
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> * Whether multiple items can be entered comma separated.
+<a name="line121"></a> * @type {boolean}
+<a name="line122"></a> * @private
+<a name="line123"></a> */
+<a name="line124"></a>goog.ui.FilteredMenu.prototype.allowMultiple_ = false;
 <a name="line125"></a>
-<a name="line126"></a>/**
-<a name="line127"></a> * List of items entered in the search box if multiple entries are allowed.
-<a name="line128"></a> * @type {Array.&lt;string&gt;|undefined}
-<a name="line129"></a> * @private
-<a name="line130"></a> */
-<a name="line131"></a>goog.ui.FilteredMenu.prototype.enteredItems_;
-<a name="line132"></a>
+<a name="line126"></a>
+<a name="line127"></a>/**
+<a name="line128"></a> * List of items entered in the search box if multiple entries are allowed.
+<a name="line129"></a> * @type {Array.&lt;string&gt;|undefined}
+<a name="line130"></a> * @private
+<a name="line131"></a> */
+<a name="line132"></a>goog.ui.FilteredMenu.prototype.enteredItems_;
 <a name="line133"></a>
-<a name="line134"></a>/**
-<a name="line135"></a> * Index of first item that should be affected by the filter. Menu items with
-<a name="line136"></a> * a lower index will not be affected by the filter.
-<a name="line137"></a> * @type {number}
-<a name="line138"></a> * @private
-<a name="line139"></a> */
-<a name="line140"></a>goog.ui.FilteredMenu.prototype.filterFromIndex_ = 0;
-<a name="line141"></a>
+<a name="line134"></a>
+<a name="line135"></a>/**
+<a name="line136"></a> * Index of first item that should be affected by the filter. Menu items with
+<a name="line137"></a> * a lower index will not be affected by the filter.
+<a name="line138"></a> * @type {number}
+<a name="line139"></a> * @private
+<a name="line140"></a> */
+<a name="line141"></a>goog.ui.FilteredMenu.prototype.filterFromIndex_ = 0;
 <a name="line142"></a>
-<a name="line143"></a>/**
-<a name="line144"></a> * Filter applied to the menu.
-<a name="line145"></a> * @type {string|undefined|null}
-<a name="line146"></a> * @private
-<a name="line147"></a> */
-<a name="line148"></a>goog.ui.FilteredMenu.prototype.filterStr_;
-<a name="line149"></a>
+<a name="line143"></a>
+<a name="line144"></a>/**
+<a name="line145"></a> * Filter applied to the menu.
+<a name="line146"></a> * @type {string|undefined|null}
+<a name="line147"></a> * @private
+<a name="line148"></a> */
+<a name="line149"></a>goog.ui.FilteredMenu.prototype.filterStr_;
 <a name="line150"></a>
-<a name="line151"></a>/**
-<a name="line152"></a> * Map of child nodes that shouldn&#39;t be affected by filtering.
-<a name="line153"></a> * @type {Object|undefined}
-<a name="line154"></a> * @private
-<a name="line155"></a> */
-<a name="line156"></a>goog.ui.FilteredMenu.prototype.persistentChildren_;
-<a name="line157"></a>
+<a name="line151"></a>
+<a name="line152"></a>/**
+<a name="line153"></a> * Map of child nodes that shouldn&#39;t be affected by filtering.
+<a name="line154"></a> * @type {Object|undefined}
+<a name="line155"></a> * @private
+<a name="line156"></a> */
+<a name="line157"></a>goog.ui.FilteredMenu.prototype.persistentChildren_;
 <a name="line158"></a>
-<a name="line159"></a>/** @override */
-<a name="line160"></a>goog.ui.FilteredMenu.prototype.createDom = function() {
-<a name="line161"></a>  goog.ui.FilteredMenu.superClass_.createDom.call(this);
-<a name="line162"></a>
-<a name="line163"></a>  var dom = this.getDomHelper();
-<a name="line164"></a>  var el = dom.createDom(&#39;div&#39;,
-<a name="line165"></a>      goog.getCssName(this.getRenderer().getCssClass(), &#39;filter&#39;),
-<a name="line166"></a>      this.labelEl_ = dom.createDom(&#39;div&#39;, null, this.label_),
-<a name="line167"></a>      this.filterInput_ = dom.createDom(&#39;input&#39;, {&#39;type&#39;: &#39;text&#39;}));
-<a name="line168"></a>  var element = this.getElement();
-<a name="line169"></a>  dom.appendChild(element, el);
-<a name="line170"></a>  var contentElementId = this.makeId(goog.ui.FilteredMenu.Id_.CONTENT_ELEMENT);
-<a name="line171"></a>  this.contentElement_ = dom.createDom(&#39;div&#39;, goog.object.create(
-<a name="line172"></a>      &#39;class&#39;, goog.getCssName(this.getRenderer().getCssClass(), &#39;content&#39;),
-<a name="line173"></a>      &#39;id&#39;, contentElementId));
-<a name="line174"></a>  dom.appendChild(element, this.contentElement_);
-<a name="line175"></a>
-<a name="line176"></a>  this.initFilterInput_();
-<a name="line177"></a>
-<a name="line178"></a>  goog.a11y.aria.setState(this.filterInput_, goog.a11y.aria.State.AUTOCOMPLETE,
-<a name="line179"></a>      goog.a11y.aria.AutoCompleteValues.LIST);
-<a name="line180"></a>  goog.a11y.aria.setState(this.filterInput_, goog.a11y.aria.State.OWNS,
-<a name="line181"></a>      contentElementId);
-<a name="line182"></a>  goog.a11y.aria.setState(this.filterInput_, goog.a11y.aria.State.EXPANDED,
-<a name="line183"></a>      true);
-<a name="line184"></a>};
-<a name="line185"></a>
+<a name="line159"></a>
+<a name="line160"></a>/** @override */
+<a name="line161"></a>goog.ui.FilteredMenu.prototype.createDom = function() {
+<a name="line162"></a>  goog.ui.FilteredMenu.superClass_.createDom.call(this);
+<a name="line163"></a>
+<a name="line164"></a>  var dom = this.getDomHelper();
+<a name="line165"></a>  var el = dom.createDom(&#39;div&#39;,
+<a name="line166"></a>      goog.getCssName(this.getRenderer().getCssClass(), &#39;filter&#39;),
+<a name="line167"></a>      this.labelEl_ = dom.createDom(&#39;div&#39;, null, this.label_),
+<a name="line168"></a>      this.filterInput_ = dom.createDom(&#39;input&#39;, {&#39;type&#39;: &#39;text&#39;}));
+<a name="line169"></a>  var element = this.getElement();
+<a name="line170"></a>  dom.appendChild(element, el);
+<a name="line171"></a>  var contentElementId = this.makeId(goog.ui.FilteredMenu.Id_.CONTENT_ELEMENT);
+<a name="line172"></a>  this.contentElement_ = dom.createDom(&#39;div&#39;, goog.object.create(
+<a name="line173"></a>      &#39;class&#39;, goog.getCssName(this.getRenderer().getCssClass(), &#39;content&#39;),
+<a name="line174"></a>      &#39;id&#39;, contentElementId));
+<a name="line175"></a>  dom.appendChild(element, this.contentElement_);
+<a name="line176"></a>
+<a name="line177"></a>  this.initFilterInput_();
+<a name="line178"></a>
+<a name="line179"></a>  goog.a11y.aria.setState(this.filterInput_, goog.a11y.aria.State.AUTOCOMPLETE,
+<a name="line180"></a>      goog.a11y.aria.AutoCompleteValues.LIST);
+<a name="line181"></a>  goog.a11y.aria.setState(this.filterInput_, goog.a11y.aria.State.OWNS,
+<a name="line182"></a>      contentElementId);
+<a name="line183"></a>  goog.a11y.aria.setState(this.filterInput_, goog.a11y.aria.State.EXPANDED,
+<a name="line184"></a>      true);
+<a name="line185"></a>};
 <a name="line186"></a>
-<a name="line187"></a>/**
-<a name="line188"></a> * Helper method that initializes the filter input element.
-<a name="line189"></a> * @private
-<a name="line190"></a> */
-<a name="line191"></a>goog.ui.FilteredMenu.prototype.initFilterInput_ = function() {
-<a name="line192"></a>  this.setFocusable(true);
-<a name="line193"></a>  this.setKeyEventTarget(this.filterInput_);
-<a name="line194"></a>
-<a name="line195"></a>  // Workaround for mozilla bug #236791.
-<a name="line196"></a>  if (goog.userAgent.GECKO) {
-<a name="line197"></a>    this.filterInput_.setAttribute(&#39;autocomplete&#39;, &#39;off&#39;);
-<a name="line198"></a>  }
-<a name="line199"></a>
-<a name="line200"></a>  if (this.maxLength_) {
-<a name="line201"></a>    this.filterInput_.maxLength = this.maxLength_;
-<a name="line202"></a>  }
-<a name="line203"></a>};
-<a name="line204"></a>
+<a name="line187"></a>
+<a name="line188"></a>/**
+<a name="line189"></a> * Helper method that initializes the filter input element.
+<a name="line190"></a> * @private
+<a name="line191"></a> */
+<a name="line192"></a>goog.ui.FilteredMenu.prototype.initFilterInput_ = function() {
+<a name="line193"></a>  this.setFocusable(true);
+<a name="line194"></a>  this.setKeyEventTarget(this.filterInput_);
+<a name="line195"></a>
+<a name="line196"></a>  // Workaround for mozilla bug #236791.
+<a name="line197"></a>  if (goog.userAgent.GECKO) {
+<a name="line198"></a>    this.filterInput_.setAttribute(&#39;autocomplete&#39;, &#39;off&#39;);
+<a name="line199"></a>  }
+<a name="line200"></a>
+<a name="line201"></a>  if (this.maxLength_) {
+<a name="line202"></a>    this.filterInput_.maxLength = this.maxLength_;
+<a name="line203"></a>  }
+<a name="line204"></a>};
 <a name="line205"></a>
-<a name="line206"></a>/**
-<a name="line207"></a> * Sets up listeners and prepares the filter functionality.
-<a name="line208"></a> * @private
-<a name="line209"></a> */
-<a name="line210"></a>goog.ui.FilteredMenu.prototype.setUpFilterListeners_ = function() {
-<a name="line211"></a>  if (!this.inputHandler_ &amp;&amp; this.filterInput_) {
-<a name="line212"></a>    this.inputHandler_ = new goog.events.InputHandler(
-<a name="line213"></a>        /** @type {Element} */ (this.filterInput_));
-<a name="line214"></a>    goog.style.setUnselectable(this.filterInput_, false);
-<a name="line215"></a>    goog.events.listen(this.inputHandler_,
-<a name="line216"></a>                       goog.events.InputHandler.EventType.INPUT,
-<a name="line217"></a>                       this.handleFilterEvent, false, this);
-<a name="line218"></a>    goog.events.listen(this.filterInput_.parentNode,
-<a name="line219"></a>                       goog.events.EventType.CLICK,
-<a name="line220"></a>                       this.onFilterLabelClick_, false, this);
-<a name="line221"></a>    if (this.allowMultiple_) {
-<a name="line222"></a>      this.enteredItems_ = [];
-<a name="line223"></a>    }
-<a name="line224"></a>  }
-<a name="line225"></a>};
-<a name="line226"></a>
+<a name="line206"></a>
+<a name="line207"></a>/**
+<a name="line208"></a> * Sets up listeners and prepares the filter functionality.
+<a name="line209"></a> * @private
+<a name="line210"></a> */
+<a name="line211"></a>goog.ui.FilteredMenu.prototype.setUpFilterListeners_ = function() {
+<a name="line212"></a>  if (!this.inputHandler_ &amp;&amp; this.filterInput_) {
+<a name="line213"></a>    this.inputHandler_ = new goog.events.InputHandler(
+<a name="line214"></a>        /** @type {Element} */ (this.filterInput_));
+<a name="line215"></a>    goog.style.setUnselectable(this.filterInput_, false);
+<a name="line216"></a>    goog.events.listen(this.inputHandler_,
+<a name="line217"></a>                       goog.events.InputHandler.EventType.INPUT,
+<a name="line218"></a>                       this.handleFilterEvent, false, this);
+<a name="line219"></a>    goog.events.listen(this.filterInput_.parentNode,
+<a name="line220"></a>                       goog.events.EventType.CLICK,
+<a name="line221"></a>                       this.onFilterLabelClick_, false, this);
+<a name="line222"></a>    if (this.allowMultiple_) {
+<a name="line223"></a>      this.enteredItems_ = [];
+<a name="line224"></a>    }
+<a name="line225"></a>  }
+<a name="line226"></a>};
 <a name="line227"></a>
-<a name="line228"></a>/**
-<a name="line229"></a> * Tears down listeners and resets the filter functionality.
-<a name="line230"></a> * @private
-<a name="line231"></a> */
-<a name="line232"></a>goog.ui.FilteredMenu.prototype.tearDownFilterListeners_ = function() {
-<a name="line233"></a>  if (this.inputHandler_) {
-<a name="line234"></a>    goog.events.unlisten(this.inputHandler_,
-<a name="line235"></a>                         goog.events.InputHandler.EventType.INPUT,
-<a name="line236"></a>                         this.handleFilterEvent, false, this);
-<a name="line237"></a>    goog.events.unlisten(this.filterInput_.parentNode,
-<a name="line238"></a>                         goog.events.EventType.CLICK,
-<a name="line239"></a>                         this.onFilterLabelClick_, false, this);
-<a name="line240"></a>
-<a name="line241"></a>    this.inputHandler_.dispose();
-<a name="line242"></a>    this.inputHandler_ = undefined;
-<a name="line243"></a>    this.enteredItems_ = undefined;
-<a name="line244"></a>  }
-<a name="line245"></a>};
-<a name="line246"></a>
+<a name="line228"></a>
+<a name="line229"></a>/**
+<a name="line230"></a> * Tears down listeners and resets the filter functionality.
+<a name="line231"></a> * @private
+<a name="line232"></a> */
+<a name="line233"></a>goog.ui.FilteredMenu.prototype.tearDownFilterListeners_ = function() {
+<a name="line234"></a>  if (this.inputHandler_) {
+<a name="line235"></a>    goog.events.unlisten(this.inputHandler_,
+<a name="line236"></a>                         goog.events.InputHandler.EventType.INPUT,
+<a name="line237"></a>                         this.handleFilterEvent, false, this);
+<a name="line238"></a>    goog.events.unlisten(this.filterInput_.parentNode,
+<a name="line239"></a>                         goog.events.EventType.CLICK,
+<a name="line240"></a>                         this.onFilterLabelClick_, false, this);
+<a name="line241"></a>
+<a name="line242"></a>    this.inputHandler_.dispose();
+<a name="line243"></a>    this.inputHandler_ = undefined;
+<a name="line244"></a>    this.enteredItems_ = undefined;
+<a name="line245"></a>  }
+<a name="line246"></a>};
 <a name="line247"></a>
-<a name="line248"></a>/** @override */
-<a name="line249"></a>goog.ui.FilteredMenu.prototype.setVisible = function(show, opt_force, opt_e) {
-<a name="line250"></a>  var visibilityChanged = goog.ui.FilteredMenu.superClass_.setVisible.call(this,
-<a name="line251"></a>      show, opt_force, opt_e);
-<a name="line252"></a>  if (visibilityChanged &amp;&amp; show &amp;&amp; this.isInDocument()) {
-<a name="line253"></a>    this.setFilter(&#39;&#39;);
-<a name="line254"></a>    this.setUpFilterListeners_();
-<a name="line255"></a>  } else if (visibilityChanged &amp;&amp; !show) {
-<a name="line256"></a>    this.tearDownFilterListeners_();
-<a name="line257"></a>  }
-<a name="line258"></a>
-<a name="line259"></a>  return visibilityChanged;
-<a name="line260"></a>};
-<a name="line261"></a>
+<a name="line248"></a>
+<a name="line249"></a>/** @override */
+<a name="line250"></a>goog.ui.FilteredMenu.prototype.setVisible = function(show, opt_force, opt_e) {
+<a name="line251"></a>  var visibilityChanged = goog.ui.FilteredMenu.superClass_.setVisible.call(this,
+<a name="line252"></a>      show, opt_force, opt_e);
+<a name="line253"></a>  if (visibilityChanged &amp;&amp; show &amp;&amp; this.isInDocument()) {
+<a name="line254"></a>    this.setFilter(&#39;&#39;);
+<a name="line255"></a>    this.setUpFilterListeners_();
+<a name="line256"></a>  } else if (visibilityChanged &amp;&amp; !show) {
+<a name="line257"></a>    this.tearDownFilterListeners_();
+<a name="line258"></a>  }
+<a name="line259"></a>
+<a name="line260"></a>  return visibilityChanged;
+<a name="line261"></a>};
 <a name="line262"></a>
-<a name="line263"></a>/** @override */
-<a name="line264"></a>goog.ui.FilteredMenu.prototype.disposeInternal = function() {
-<a name="line265"></a>  this.tearDownFilterListeners_();
-<a name="line266"></a>  this.filterInput_ = undefined;
-<a name="line267"></a>  this.labelEl_ = undefined;
-<a name="line268"></a>  goog.ui.FilteredMenu.superClass_.disposeInternal.call(this);
-<a name="line269"></a>};
-<a name="line270"></a>
+<a name="line263"></a>
+<a name="line264"></a>/** @override */
+<a name="line265"></a>goog.ui.FilteredMenu.prototype.disposeInternal = function() {
+<a name="line266"></a>  this.tearDownFilterListeners_();
+<a name="line267"></a>  this.filterInput_ = undefined;
+<a name="line268"></a>  this.labelEl_ = undefined;
+<a name="line269"></a>  goog.ui.FilteredMenu.superClass_.disposeInternal.call(this);
+<a name="line270"></a>};
 <a name="line271"></a>
-<a name="line272"></a>/**
-<a name="line273"></a> * Sets the filter label (the label displayed in the filter input element if no
-<a name="line274"></a> * text has been entered).
-<a name="line275"></a> * @param {?string} label Label text.
-<a name="line276"></a> */
-<a name="line277"></a>goog.ui.FilteredMenu.prototype.setFilterLabel = function(label) {
-<a name="line278"></a>  this.label_ = label || &#39;&#39;;
-<a name="line279"></a>  if (this.labelEl_) {
-<a name="line280"></a>    goog.dom.setTextContent(this.labelEl_, this.label_);
-<a name="line281"></a>  }
-<a name="line282"></a>};
-<a name="line283"></a>
+<a name="line272"></a>
+<a name="line273"></a>/**
+<a name="line274"></a> * Sets the filter label (the label displayed in the filter input element if no
+<a name="line275"></a> * text has been entered).
+<a name="line276"></a> * @param {?string} label Label text.
+<a name="line277"></a> */
+<a name="line278"></a>goog.ui.FilteredMenu.prototype.setFilterLabel = function(label) {
+<a name="line279"></a>  this.label_ = label || &#39;&#39;;
+<a name="line280"></a>  if (this.labelEl_) {
+<a name="line281"></a>    goog.dom.setTextContent(this.labelEl_, this.label_);
+<a name="line282"></a>  }
+<a name="line283"></a>};
 <a name="line284"></a>
-<a name="line285"></a>/**
-<a name="line286"></a> * @return {string} The filter label.
-<a name="line287"></a> */
-<a name="line288"></a>goog.ui.FilteredMenu.prototype.getFilterLabel = function() {
-<a name="line289"></a>  return this.label_;
-<a name="line290"></a>};
-<a name="line291"></a>
+<a name="line285"></a>
+<a name="line286"></a>/**
+<a name="line287"></a> * @return {string} The filter label.
+<a name="line288"></a> */
+<a name="line289"></a>goog.ui.FilteredMenu.prototype.getFilterLabel = function() {
+<a name="line290"></a>  return this.label_;
+<a name="line291"></a>};
 <a name="line292"></a>
-<a name="line293"></a>/**
-<a name="line294"></a> * Sets the filter string.
-<a name="line295"></a> * @param {?string} str Filter string.
-<a name="line296"></a> */
-<a name="line297"></a>goog.ui.FilteredMenu.prototype.setFilter = function(str) {
-<a name="line298"></a>  if (this.filterInput_) {
-<a name="line299"></a>    this.filterInput_.value = str;
-<a name="line300"></a>    this.filterItems_(str);
-<a name="line301"></a>  }
-<a name="line302"></a>};
-<a name="line303"></a>
+<a name="line293"></a>
+<a name="line294"></a>/**
+<a name="line295"></a> * Sets the filter string.
+<a name="line296"></a> * @param {?string} str Filter string.
+<a name="line297"></a> */
+<a name="line298"></a>goog.ui.FilteredMenu.prototype.setFilter = function(str) {
+<a name="line299"></a>  if (this.filterInput_) {
+<a name="line300"></a>    this.filterInput_.value = str;
+<a name="line301"></a>    this.filterItems_(str);
+<a name="line302"></a>  }
+<a name="line303"></a>};
 <a name="line304"></a>
-<a name="line305"></a>/**
-<a name="line306"></a> * Returns the filter string.
-<a name="line307"></a> * @return {string} Current filter or an an empty string.
-<a name="line308"></a> */
-<a name="line309"></a>goog.ui.FilteredMenu.prototype.getFilter = function() {
-<a name="line310"></a>  return this.filterInput_ &amp;&amp; goog.isString(this.filterInput_.value) ?
-<a name="line311"></a>      this.filterInput_.value : &#39;&#39;;
-<a name="line312"></a>};
-<a name="line313"></a>
+<a name="line305"></a>
+<a name="line306"></a>/**
+<a name="line307"></a> * Returns the filter string.
+<a name="line308"></a> * @return {string} Current filter or an an empty string.
+<a name="line309"></a> */
+<a name="line310"></a>goog.ui.FilteredMenu.prototype.getFilter = function() {
+<a name="line311"></a>  return this.filterInput_ &amp;&amp; goog.isString(this.filterInput_.value) ?
+<a name="line312"></a>      this.filterInput_.value : &#39;&#39;;
+<a name="line313"></a>};
 <a name="line314"></a>
-<a name="line315"></a>/**
-<a name="line316"></a> * Sets the index of first item that should be affected by the filter. Menu
-<a name="line317"></a> * items with a lower index will not be affected by the filter.
-<a name="line318"></a> * @param {number} index Index of first item that should be affected by filter.
-<a name="line319"></a> */
-<a name="line320"></a>goog.ui.FilteredMenu.prototype.setFilterFromIndex = function(index) {
-<a name="line321"></a>  this.filterFromIndex_ = index;
-<a name="line322"></a>};
-<a name="line323"></a>
+<a name="line315"></a>
+<a name="line316"></a>/**
+<a name="line317"></a> * Sets the index of first item that should be affected by the filter. Menu
+<a name="line318"></a> * items with a lower index will not be affected by the filter.
+<a name="line319"></a> * @param {number} index Index of first item that should be affected by filter.
+<a name="line320"></a> */
+<a name="line321"></a>goog.ui.FilteredMenu.prototype.setFilterFromIndex = function(index) {
+<a name="line322"></a>  this.filterFromIndex_ = index;
+<a name="line323"></a>};
 <a name="line324"></a>
-<a name="line325"></a>/**
-<a name="line326"></a> * Returns the index of first item that is affected by the filter.
-<a name="line327"></a> * @return {number} Index of first item that is affected by filter.
-<a name="line328"></a> */
-<a name="line329"></a>goog.ui.FilteredMenu.prototype.getFilterFromIndex = function() {
-<a name="line330"></a>  return this.filterFromIndex_;
-<a name="line331"></a>};
-<a name="line332"></a>
+<a name="line325"></a>
+<a name="line326"></a>/**
+<a name="line327"></a> * Returns the index of first item that is affected by the filter.
+<a name="line328"></a> * @return {number} Index of first item that is affected by filter.
+<a name="line329"></a> */
+<a name="line330"></a>goog.ui.FilteredMenu.prototype.getFilterFromIndex = function() {
+<a name="line331"></a>  return this.filterFromIndex_;
+<a name="line332"></a>};
 <a name="line333"></a>
-<a name="line334"></a>/**
-<a name="line335"></a> * Gets a list of items entered in the search box.
-<a name="line336"></a> * @return {!Array.&lt;string&gt;} The entered items.
-<a name="line337"></a> */
-<a name="line338"></a>goog.ui.FilteredMenu.prototype.getEnteredItems = function() {
-<a name="line339"></a>  return this.enteredItems_ || [];
-<a name="line340"></a>};
-<a name="line341"></a>
+<a name="line334"></a>
+<a name="line335"></a>/**
+<a name="line336"></a> * Gets a list of items entered in the search box.
+<a name="line337"></a> * @return {!Array.&lt;string&gt;} The entered items.
+<a name="line338"></a> */
+<a name="line339"></a>goog.ui.FilteredMenu.prototype.getEnteredItems = function() {
+<a name="line340"></a>  return this.enteredItems_ || [];
+<a name="line341"></a>};
 <a name="line342"></a>
-<a name="line343"></a>/**
-<a name="line344"></a> * Sets whether multiple items can be entered comma separated.
-<a name="line345"></a> * @param {boolean} b Whether multiple items can be entered.
-<a name="line346"></a> */
-<a name="line347"></a>goog.ui.FilteredMenu.prototype.setAllowMultiple = function(b) {
-<a name="line348"></a>  this.allowMultiple_ = b;
-<a name="line349"></a>};
-<a name="line350"></a>
+<a name="line343"></a>
+<a name="line344"></a>/**
+<a name="line345"></a> * Sets whether multiple items can be entered comma separated.
+<a name="line346"></a> * @param {boolean} b Whether multiple items can be entered.
+<a name="line347"></a> */
+<a name="line348"></a>goog.ui.FilteredMenu.prototype.setAllowMultiple = function(b) {
+<a name="line349"></a>  this.allowMultiple_ = b;
+<a name="line350"></a>};
 <a name="line351"></a>
-<a name="line352"></a>/**
-<a name="line353"></a> * @return {boolean} Whether multiple items can be entered comma separated.
-<a name="line354"></a> */
-<a name="line355"></a>goog.ui.FilteredMenu.prototype.getAllowMultiple = function() {
-<a name="line356"></a>  return this.allowMultiple_;
-<a name="line357"></a>};
-<a name="line358"></a>
+<a name="line352"></a>
+<a name="line353"></a>/**
+<a name="line354"></a> * @return {boolean} Whether multiple items can be entered comma separated.
+<a name="line355"></a> */
+<a name="line356"></a>goog.ui.FilteredMenu.prototype.getAllowMultiple = function() {
+<a name="line357"></a>  return this.allowMultiple_;
+<a name="line358"></a>};
 <a name="line359"></a>
-<a name="line360"></a>/**
-<a name="line361"></a> * Sets whether the specified child should be affected (shown/hidden) by the
-<a name="line362"></a> * filter criteria.
-<a name="line363"></a> * @param {goog.ui.Component} child Child to change.
-<a name="line364"></a> * @param {boolean} persistent Whether the child should be persistent.
-<a name="line365"></a> */
-<a name="line366"></a>goog.ui.FilteredMenu.prototype.setPersistentVisibility = function(child,
-<a name="line367"></a>                                                                  persistent) {
-<a name="line368"></a>  if (!this.persistentChildren_) {
-<a name="line369"></a>    this.persistentChildren_ = {};
-<a name="line370"></a>  }
-<a name="line371"></a>  this.persistentChildren_[child.getId()] = persistent;
-<a name="line372"></a>};
-<a name="line373"></a>
+<a name="line360"></a>
+<a name="line361"></a>/**
+<a name="line362"></a> * Sets whether the specified child should be affected (shown/hidden) by the
+<a name="line363"></a> * filter criteria.
+<a name="line364"></a> * @param {goog.ui.Component} child Child to change.
+<a name="line365"></a> * @param {boolean} persistent Whether the child should be persistent.
+<a name="line366"></a> */
+<a name="line367"></a>goog.ui.FilteredMenu.prototype.setPersistentVisibility = function(child,
+<a name="line368"></a>                                                                  persistent) {
+<a name="line369"></a>  if (!this.persistentChildren_) {
+<a name="line370"></a>    this.persistentChildren_ = {};
+<a name="line371"></a>  }
+<a name="line372"></a>  this.persistentChildren_[child.getId()] = persistent;
+<a name="line373"></a>};
 <a name="line374"></a>
-<a name="line375"></a>/**
-<a name="line376"></a> * Returns whether the specified child should be affected (shown/hidden) by the
-<a name="line377"></a> * filter criteria.
-<a name="line378"></a> * @param {goog.ui.Component} child Menu item to check.
-<a name="line379"></a> * @return {boolean} Whether the menu item is persistent.
-<a name="line380"></a> */
-<a name="line381"></a>goog.ui.FilteredMenu.prototype.hasPersistentVisibility = function(child) {
-<a name="line382"></a>  return !!(this.persistentChildren_ &amp;&amp;
-<a name="line383"></a>            this.persistentChildren_[child.getId()]);
-<a name="line384"></a>};
-<a name="line385"></a>
+<a name="line375"></a>
+<a name="line376"></a>/**
+<a name="line377"></a> * Returns whether the specified child should be affected (shown/hidden) by the
+<a name="line378"></a> * filter criteria.
+<a name="line379"></a> * @param {goog.ui.Component} child Menu item to check.
+<a name="line380"></a> * @return {boolean} Whether the menu item is persistent.
+<a name="line381"></a> */
+<a name="line382"></a>goog.ui.FilteredMenu.prototype.hasPersistentVisibility = function(child) {
+<a name="line383"></a>  return !!(this.persistentChildren_ &amp;&amp;
+<a name="line384"></a>            this.persistentChildren_[child.getId()]);
+<a name="line385"></a>};
 <a name="line386"></a>
-<a name="line387"></a>/**
-<a name="line388"></a> * Handles filter input events.
-<a name="line389"></a> * @param {goog.events.BrowserEvent} e The event object.
-<a name="line390"></a> */
-<a name="line391"></a>goog.ui.FilteredMenu.prototype.handleFilterEvent = function(e) {
-<a name="line392"></a>  this.filterItems_(this.filterInput_.value);
-<a name="line393"></a>
-<a name="line394"></a>  // Highlight the first visible item unless there&#39;s already a highlighted item.
-<a name="line395"></a>  var highlighted = this.getHighlighted();
-<a name="line396"></a>  if (!highlighted || !highlighted.isVisible()) {
-<a name="line397"></a>    this.highlightFirst();
-<a name="line398"></a>  }
-<a name="line399"></a>  this.dispatchEvent(goog.ui.FilteredMenu.EventType.FILTER_CHANGED);
-<a name="line400"></a>};
-<a name="line401"></a>
+<a name="line387"></a>
+<a name="line388"></a>/**
+<a name="line389"></a> * Handles filter input events.
+<a name="line390"></a> * @param {goog.events.BrowserEvent} e The event object.
+<a name="line391"></a> */
+<a name="line392"></a>goog.ui.FilteredMenu.prototype.handleFilterEvent = function(e) {
+<a name="line393"></a>  this.filterItems_(this.filterInput_.value);
+<a name="line394"></a>
+<a name="line395"></a>  // Highlight the first visible item unless there&#39;s already a highlighted item.
+<a name="line396"></a>  var highlighted = this.getHighlighted();
+<a name="line397"></a>  if (!highlighted || !highlighted.isVisible()) {
+<a name="line398"></a>    this.highlightFirst();
+<a name="line399"></a>  }
+<a name="line400"></a>  this.dispatchEvent(goog.ui.FilteredMenu.EventType.FILTER_CHANGED);
+<a name="line401"></a>};
 <a name="line402"></a>
-<a name="line403"></a>/**
-<a name="line404"></a> * Shows/hides elements based on the supplied filter.
-<a name="line405"></a> * @param {?string} str Filter string.
-<a name="line406"></a> * @private
-<a name="line407"></a> */
-<a name="line408"></a>goog.ui.FilteredMenu.prototype.filterItems_ = function(str) {
-<a name="line409"></a>  // Do nothing unless the filter string has changed.
-<a name="line410"></a>  if (this.filterStr_ == str) {
-<a name="line411"></a>    return;
-<a name="line412"></a>  }
-<a name="line413"></a>
-<a name="line414"></a>  if (this.labelEl_) {
-<a name="line415"></a>    this.labelEl_.style.visibility = str == &#39;&#39; ? &#39;visible&#39; : &#39;hidden&#39;;
-<a name="line416"></a>  }
-<a name="line417"></a>
-<a name="line418"></a>  if (this.allowMultiple_ &amp;&amp; this.enteredItems_) {
-<a name="line419"></a>    // Matches all non space characters after the last comma.
-<a name="line420"></a>    var lastWordRegExp = /^(.+),[ ]*([^,]*)$/;
-<a name="line421"></a>    var matches = str.match(lastWordRegExp);
-<a name="line422"></a>    // matches[1] is the string up to, but not including, the last comma and
-<a name="line423"></a>    // matches[2] the part after the last comma. If there are no non-space
-<a name="line424"></a>    // characters after the last comma matches[2] is undefined.
-<a name="line425"></a>    var items = matches &amp;&amp; matches[1] ? matches[1].split(&#39;,&#39;) : [];
-<a name="line426"></a>
-<a name="line427"></a>    // If the number of comma separated items has changes recreate the
-<a name="line428"></a>    // entered items array and fire a change event.
-<a name="line429"></a>    if (str.substr(str.length - 1, 1) == &#39;,&#39; ||
-<a name="line430"></a>        items.length != this.enteredItems_.length) {
-<a name="line431"></a>      var lastItem = items[items.length - 1] || &#39;&#39;;
-<a name="line432"></a>
-<a name="line433"></a>      // Auto complete text in input box based on the highlighted item.
-<a name="line434"></a>      if (this.getHighlighted() &amp;&amp; lastItem != &#39;&#39;) {
-<a name="line435"></a>        var caption = this.getHighlighted().getCaption();
-<a name="line436"></a>        if (caption.toLowerCase().indexOf(lastItem.toLowerCase()) == 0) {
-<a name="line437"></a>          items[items.length - 1] = caption;
-<a name="line438"></a>          this.filterInput_.value = items.join(&#39;,&#39;) + &#39;,&#39;;
-<a name="line439"></a>        }
-<a name="line440"></a>      }
-<a name="line441"></a>      this.enteredItems_ = items;
-<a name="line442"></a>      this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
-<a name="line443"></a>      this.setHighlightedIndex(-1);
-<a name="line444"></a>    }
-<a name="line445"></a>
-<a name="line446"></a>    if (matches) {
-<a name="line447"></a>      str = matches.length &gt; 2 ? goog.string.trim(matches[2]) : &#39;&#39;;
-<a name="line448"></a>    }
-<a name="line449"></a>  }
-<a name="line450"></a>
-<a name="line451"></a>  var matcher = new RegExp(&#39;(^|[- ,_/.:])&#39; +
-<a name="line452"></a>      goog.string.regExpEscape(str), &#39;i&#39;);
-<a name="line453"></a>  for (var child, i = this.filterFromIndex_; child = this.getChildAt(i); i++) {
-<a name="line454"></a>    if (child instanceof goog.ui.FilterObservingMenuItem) {
-<a name="line455"></a>      child.callObserver(str);
-<a name="line456"></a>    } else if (!this.hasPersistentVisibility(child)) {
-<a name="line457"></a>      // Only show items matching the filter and highlight the part of the
-<a name="line458"></a>      // caption that matches.
-<a name="line459"></a>      var caption = child.getCaption();
-<a name="line460"></a>      if (caption) {
-<a name="line461"></a>        var matchArray = caption.match(matcher);
-<a name="line462"></a>        if (str == &#39;&#39; || matchArray) {
-<a name="line463"></a>          child.setVisible(true);
-<a name="line464"></a>          var pos = caption.indexOf(matchArray[0]);
-<a name="line465"></a>
-<a name="line466"></a>          // If position is non zero increase by one to skip the separator.
-<a name="line467"></a>          if (pos) {
-<a name="line468"></a>            pos++;
-<a name="line469"></a>          }
-<a name="line470"></a>
-<a name="line471"></a>          if (str == &#39;&#39;) {
-<a name="line472"></a>            child.setContent(caption);
-<a name="line473"></a>          } else {
-<a name="line474"></a>            child.setContent(this.getDomHelper().createDom(&#39;span&#39;, null,
-<a name="line475"></a>                caption.substr(0, pos),
-<a name="line476"></a>                this.getDomHelper().createDom(
-<a name="line477"></a>                    &#39;b&#39;, null, caption.substr(pos, str.length)),
-<a name="line478"></a>                caption.substr(pos + str.length,
-<a name="line479"></a>                    caption.length - str.length - pos)));
-<a name="line480"></a>          }
-<a name="line481"></a>        } else {
-<a name="line482"></a>          child.setVisible(false);
-<a name="line483"></a>        }
-<a name="line484"></a>      } else {
+<a name="line403"></a>
+<a name="line404"></a>/**
+<a name="line405"></a> * Shows/hides elements based on the supplied filter.
+<a name="line406"></a> * @param {?string} str Filter string.
+<a name="line407"></a> * @private
+<a name="line408"></a> */
+<a name="line409"></a>goog.ui.FilteredMenu.prototype.filterItems_ = function(str) {
+<a name="line410"></a>  // Do nothing unless the filter string has changed.
+<a name="line411"></a>  if (this.filterStr_ == str) {
+<a name="line412"></a>    return;
+<a name="line413"></a>  }
+<a name="line414"></a>
+<a name="line415"></a>  if (this.labelEl_) {
+<a name="line416"></a>    this.labelEl_.style.visibility = str == &#39;&#39; ? &#39;visible&#39; : &#39;hidden&#39;;
+<a name="line417"></a>  }
+<a name="line418"></a>
+<a name="line419"></a>  if (this.allowMultiple_ &amp;&amp; this.enteredItems_) {
+<a name="line420"></a>    // Matches all non space characters after the last comma.
+<a name="line421"></a>    var lastWordRegExp = /^(.+),[ ]*([^,]*)$/;
+<a name="line422"></a>    var matches = str.match(lastWordRegExp);
+<a name="line423"></a>    // matches[1] is the string up to, but not including, the last comma and
+<a name="line424"></a>    // matches[2] the part after the last comma. If there are no non-space
+<a name="line425"></a>    // characters after the last comma matches[2] is undefined.
+<a name="line426"></a>    var items = matches &amp;&amp; matches[1] ? matches[1].split(&#39;,&#39;) : [];
+<a name="line427"></a>
+<a name="line428"></a>    // If the number of comma separated items has changes recreate the
+<a name="line429"></a>    // entered items array and fire a change event.
+<a name="line430"></a>    if (str.substr(str.length - 1, 1) == &#39;,&#39; ||
+<a name="line431"></a>        items.length != this.enteredItems_.length) {
+<a name="line432"></a>      var lastItem = items[items.length - 1] || &#39;&#39;;
+<a name="line433"></a>
+<a name="line434"></a>      // Auto complete text in input box based on the highlighted item.
+<a name="line435"></a>      if (this.getHighlighted() &amp;&amp; lastItem != &#39;&#39;) {
+<a name="line436"></a>        var caption = this.getHighlighted().getCaption();
+<a name="line437"></a>        if (caption.toLowerCase().indexOf(lastItem.toLowerCase()) == 0) {
+<a name="line438"></a>          items[items.length - 1] = caption;
+<a name="line439"></a>          this.filterInput_.value = items.join(&#39;,&#39;) + &#39;,&#39;;
+<a name="line440"></a>        }
+<a name="line441"></a>      }
+<a name="line442"></a>      this.enteredItems_ = items;
+<a name="line443"></a>      this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
+<a name="line444"></a>      this.setHighlightedIndex(-1);
+<a name="line445"></a>    }
+<a name="line446"></a>
+<a name="line447"></a>    if (matches) {
+<a name="line448"></a>      str = matches.length &gt; 2 ? goog.string.trim(matches[2]) : &#39;&#39;;
+<a name="line449"></a>    }
+<a name="line450"></a>  }
+<a name="line451"></a>
+<a name="line452"></a>  var matcher = new RegExp(&#39;(^|[- ,_/.:])&#39; +
+<a name="line453"></a>      goog.string.regExpEscape(str), &#39;i&#39;);
+<a name="line454"></a>  for (var child, i = this.filterFromIndex_; child = this.getChildAt(i); i++) {
+<a name="line455"></a>    if (child instanceof goog.ui.FilterObservingMenuItem) {
+<a name="line456"></a>      child.callObserver(str);
+<a name="line457"></a>    } else if (!this.hasPersistentVisibility(child)) {
+<a name="line458"></a>      // Only show items matching the filter and highlight the part of the
+<a name="line459"></a>      // caption that matches.
+<a name="line460"></a>      var caption = child.getCaption();
+<a name="line461"></a>      if (caption) {
+<a name="line462"></a>        var matchArray = caption.match(matcher);
+<a name="line463"></a>        if (str == &#39;&#39; || matchArray) {
+<a name="line464"></a>          child.setVisible(true);
+<a name="line465"></a>          var pos = caption.indexOf(matchArray[0]);
+<a name="line466"></a>
+<a name="line467"></a>          // If position is non zero increase by one to skip the separator.
+<a name="line468"></a>          if (pos) {
+<a name="line469"></a>            pos++;
+<a name="line470"></a>          }
+<a name="line471"></a>          this.boldContent_(child, pos, str.length);
+<a name="line472"></a>        } else {
+<a name="line473"></a>          child.setVisible(false);
+<a name="line474"></a>        }
+<a name="line475"></a>      } else {
+<a name="line476"></a>
+<a name="line477"></a>        // Hide separators and other items without a caption if a filter string
+<a name="line478"></a>        // has been entered.
+<a name="line479"></a>        child.setVisible(str == &#39;&#39;);
+<a name="line480"></a>      }
+<a name="line481"></a>    }
+<a name="line482"></a>  }
+<a name="line483"></a>  this.filterStr_ = str;
+<a name="line484"></a>};
 <a name="line485"></a>
-<a name="line486"></a>        // Hide separators and other items without a caption if a filter string
-<a name="line487"></a>        // has been entered.
-<a name="line488"></a>        child.setVisible(str == &#39;&#39;);
-<a name="line489"></a>      }
-<a name="line490"></a>    }
-<a name="line491"></a>  }
-<a name="line492"></a>  this.filterStr_ = str;
-<a name="line493"></a>};
-<a name="line494"></a>
-<a name="line495"></a>
-<a name="line496"></a>/**
-<a name="line497"></a> * Handles the menu&#39;s behavior for a key event. The highlighted menu item will
-<a name="line498"></a> * be given the opportunity to handle the key behavior.
-<a name="line499"></a> * @param {goog.events.KeyEvent} e A browser event.
-<a name="line500"></a> * @return {boolean} Whether the event was handled.
-<a name="line501"></a> * @override
-<a name="line502"></a> */
-<a name="line503"></a>goog.ui.FilteredMenu.prototype.handleKeyEventInternal = function(e) {
-<a name="line504"></a>  // Home, end and the arrow keys are normally used to change the selected menu
-<a name="line505"></a>  // item. Return false here to prevent the menu from preventing the default
-<a name="line506"></a>  // behavior for HOME, END and any key press with a modifier.
-<a name="line507"></a>  if (e.shiftKey || e.ctrlKey || e.altKey ||
-<a name="line508"></a>      e.keyCode == goog.events.KeyCodes.HOME ||
-<a name="line509"></a>      e.keyCode == goog.events.KeyCodes.END) {
-<a name="line510"></a>    return false;
-<a name="line511"></a>  }
-<a name="line512"></a>
-<a name="line513"></a>  if (e.keyCode == goog.events.KeyCodes.ESC) {
-<a name="line514"></a>    this.dispatchEvent(goog.ui.Component.EventType.BLUR);
-<a name="line515"></a>    return true;
-<a name="line516"></a>  }
-<a name="line517"></a>
-<a name="line518"></a>  return goog.ui.FilteredMenu.superClass_.handleKeyEventInternal.call(this, e);
-<a name="line519"></a>};
+<a name="line486"></a>
+<a name="line487"></a>/**
+<a name="line488"></a> * Updates the content of the given menu item, bolding the part of its caption
+<a name="line489"></a> * from start and through the next len characters.
+<a name="line490"></a> * @param {!goog.ui.Control} child The control to bold content on.
+<a name="line491"></a> * @param {number} start The index at which to start bolding.
+<a name="line492"></a> * @param {number} len How many characters to bold.
+<a name="line493"></a> * @private
+<a name="line494"></a> */
+<a name="line495"></a>goog.ui.FilteredMenu.prototype.boldContent_ = function(child, start, len) {
+<a name="line496"></a>  var caption = child.getCaption();
+<a name="line497"></a>  var boldedCaption;
+<a name="line498"></a>  if (len == 0) {
+<a name="line499"></a>    boldedCaption = this.getDomHelper().createTextNode(caption);
+<a name="line500"></a>  } else {
+<a name="line501"></a>    var preMatch = caption.substr(0, start);
+<a name="line502"></a>    var match = caption.substr(start, len);
+<a name="line503"></a>    var postMatch = caption.substr(start + len);
+<a name="line504"></a>    boldedCaption = this.getDomHelper().createDom(
+<a name="line505"></a>        &#39;span&#39;,
+<a name="line506"></a>        null,
+<a name="line507"></a>        preMatch,
+<a name="line508"></a>        this.getDomHelper().createDom(&#39;b&#39;, null, match),
+<a name="line509"></a>        postMatch);
+<a name="line510"></a>  }
+<a name="line511"></a>  var accelerator = child.getAccelerator &amp;&amp; child.getAccelerator();
+<a name="line512"></a>  if (accelerator) {
+<a name="line513"></a>    child.setContent([boldedCaption, this.getDomHelper().createDom(&#39;span&#39;,
+<a name="line514"></a>        goog.ui.MenuItem.ACCELERATOR_CLASS, accelerator)]);
+<a name="line515"></a>  } else {
+<a name="line516"></a>    child.setContent(boldedCaption);
+<a name="line517"></a>  }
+<a name="line518"></a>};
+<a name="line519"></a>
 <a name="line520"></a>
-<a name="line521"></a>
-<a name="line522"></a>/**
-<a name="line523"></a> * Sets the highlighted index, unless the HIGHLIGHT event is intercepted and
-<a name="line524"></a> * cancelled.  -1 = no highlight. Also scrolls the menu item into view.
-<a name="line525"></a> * @param {number} index Index of menu item to highlight.
+<a name="line521"></a>/**
+<a name="line522"></a> * Handles the menu&#39;s behavior for a key event. The highlighted menu item will
+<a name="line523"></a> * be given the opportunity to handle the key behavior.
+<a name="line524"></a> * @param {goog.events.KeyEvent} e A browser event.
+<a name="line525"></a> * @return {boolean} Whether the event was handled.
 <a name="line526"></a> * @override
 <a name="line527"></a> */
-<a name="line528"></a>goog.ui.FilteredMenu.prototype.setHighlightedIndex = function(index) {
-<a name="line529"></a>  goog.ui.FilteredMenu.superClass_.setHighlightedIndex.call(this, index);
-<a name="line530"></a>  var contentEl = this.getContentElement();
-<a name="line531"></a>  var el = this.getHighlighted() ? this.getHighlighted().getElement() : null;
-<a name="line532"></a>  if (this.filterInput_) {
-<a name="line533"></a>    goog.a11y.aria.setActiveDescendant(this.filterInput_, el);
-<a name="line534"></a>  }
-<a name="line535"></a>
-<a name="line536"></a>  if (el &amp;&amp; goog.dom.contains(contentEl, el)) {
-<a name="line537"></a>    var contentTop = goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(8) ?
-<a name="line538"></a>        0 : contentEl.offsetTop;
-<a name="line539"></a>
-<a name="line540"></a>    // IE (tested on IE8) sometime does not scroll enough by about
-<a name="line541"></a>    // 1px. So we add 1px to the scroll amount. This still looks ok in
-<a name="line542"></a>    // other browser except for the most degenerate case (menu height &lt;=
-<a name="line543"></a>    // item height).
-<a name="line544"></a>
-<a name="line545"></a>    // Scroll down if the highlighted item is below the bottom edge.
-<a name="line546"></a>    var diff = (el.offsetTop + el.offsetHeight - contentTop) -
-<a name="line547"></a>        (contentEl.clientHeight + contentEl.scrollTop) + 1;
-<a name="line548"></a>    contentEl.scrollTop += Math.max(diff, 0);
-<a name="line549"></a>
-<a name="line550"></a>    // Scroll up if the highlighted item is above the top edge.
-<a name="line551"></a>    diff = contentEl.scrollTop - (el.offsetTop - contentTop) + 1;
-<a name="line552"></a>    contentEl.scrollTop -= Math.max(diff, 0);
-<a name="line553"></a>  }
-<a name="line554"></a>};
-<a name="line555"></a>
-<a name="line556"></a>
-<a name="line557"></a>/**
-<a name="line558"></a> * Handles clicks on the filter label. Focuses the input element.
-<a name="line559"></a> * @param {goog.events.BrowserEvent} e A browser event.
-<a name="line560"></a> * @private
-<a name="line561"></a> */
-<a name="line562"></a>goog.ui.FilteredMenu.prototype.onFilterLabelClick_ = function(e) {
-<a name="line563"></a>  this.filterInput_.focus();
-<a name="line564"></a>};
-<a name="line565"></a>
-<a name="line566"></a>
-<a name="line567"></a>/** @override */
-<a name="line568"></a>goog.ui.FilteredMenu.prototype.getContentElement = function() {
-<a name="line569"></a>  return this.contentElement_ || this.getElement();
-<a name="line570"></a>};
-<a name="line571"></a>
-<a name="line572"></a>
-<a name="line573"></a>/**
-<a name="line574"></a> * Returns the filter input element.
-<a name="line575"></a> * @return {Element} Input element.
-<a name="line576"></a> */
-<a name="line577"></a>goog.ui.FilteredMenu.prototype.getFilterInputElement = function() {
-<a name="line578"></a>  return this.filterInput_ || null;
+<a name="line528"></a>goog.ui.FilteredMenu.prototype.handleKeyEventInternal = function(e) {
+<a name="line529"></a>  // Home, end and the arrow keys are normally used to change the selected menu
+<a name="line530"></a>  // item. Return false here to prevent the menu from preventing the default
+<a name="line531"></a>  // behavior for HOME, END and any key press with a modifier.
+<a name="line532"></a>  if (e.shiftKey || e.ctrlKey || e.altKey ||
+<a name="line533"></a>      e.keyCode == goog.events.KeyCodes.HOME ||
+<a name="line534"></a>      e.keyCode == goog.events.KeyCodes.END) {
+<a name="line535"></a>    return false;
+<a name="line536"></a>  }
+<a name="line537"></a>
+<a name="line538"></a>  if (e.keyCode == goog.events.KeyCodes.ESC) {
+<a name="line539"></a>    this.dispatchEvent(goog.ui.Component.EventType.BLUR);
+<a name="line540"></a>    return true;
+<a name="line541"></a>  }
+<a name="line542"></a>
+<a name="line543"></a>  return goog.ui.FilteredMenu.superClass_.handleKeyEventInternal.call(this, e);
+<a name="line544"></a>};
+<a name="line545"></a>
+<a name="line546"></a>
+<a name="line547"></a>/**
+<a name="line548"></a> * Sets the highlighted index, unless the HIGHLIGHT event is intercepted and
+<a name="line549"></a> * cancelled.  -1 = no highlight. Also scrolls the menu item into view.
+<a name="line550"></a> * @param {number} index Index of menu item to highlight.
+<a name="line551"></a> * @override
+<a name="line552"></a> */
+<a name="line553"></a>goog.ui.FilteredMenu.prototype.setHighlightedIndex = function(index) {
+<a name="line554"></a>  goog.ui.FilteredMenu.superClass_.setHighlightedIndex.call(this, index);
+<a name="line555"></a>  var contentEl = this.getContentElement();
+<a name="line556"></a>  var el = this.getHighlighted() ? this.getHighlighted().getElement() : null;
+<a name="line557"></a>  if (this.filterInput_) {
+<a name="line558"></a>    goog.a11y.aria.setActiveDescendant(this.filterInput_, el);
+<a name="line559"></a>  }
+<a name="line560"></a>
+<a name="line561"></a>  if (el &amp;&amp; goog.dom.contains(contentEl, el)) {
+<a name="line562"></a>    var contentTop = goog.userAgent.IE &amp;&amp; !goog.userAgent.isVersionOrHigher(8) ?
+<a name="line563"></a>        0 : contentEl.offsetTop;
+<a name="line564"></a>
+<a name="line565"></a>    // IE (tested on IE8) sometime does not scroll enough by about
+<a name="line566"></a>    // 1px. So we add 1px to the scroll amount. This still looks ok in
+<a name="line567"></a>    // other browser except for the most degenerate case (menu height &lt;=
+<a name="line568"></a>    // item height).
+<a name="line569"></a>
+<a name="line570"></a>    // Scroll down if the highlighted item is below the bottom edge.
+<a name="line571"></a>    var diff = (el.offsetTop + el.offsetHeight - contentTop) -
+<a name="line572"></a>        (contentEl.clientHeight + contentEl.scrollTop) + 1;
+<a name="line573"></a>    contentEl.scrollTop += Math.max(diff, 0);
+<a name="line574"></a>
+<a name="line575"></a>    // Scroll up if the highlighted item is above the top edge.
+<a name="line576"></a>    diff = contentEl.scrollTop - (el.offsetTop - contentTop) + 1;
+<a name="line577"></a>    contentEl.scrollTop -= Math.max(diff, 0);
+<a name="line578"></a>  }
 <a name="line579"></a>};
 <a name="line580"></a>
 <a name="line581"></a>
-<a name="line582"></a>/** @override */
-<a name="line583"></a>goog.ui.FilteredMenu.prototype.decorateInternal = function(element) {
-<a name="line584"></a>  this.setElementInternal(element);
-<a name="line585"></a>
-<a name="line586"></a>  // Decorate the menu content.
-<a name="line587"></a>  this.decorateContent(element);
-<a name="line588"></a>
-<a name="line589"></a>  // Locate internally managed elements.
-<a name="line590"></a>  var el = this.getDomHelper().getElementsByTagNameAndClass(&#39;div&#39;,
-<a name="line591"></a>      goog.getCssName(this.getRenderer().getCssClass(), &#39;filter&#39;), element)[0];
-<a name="line592"></a>  this.labelEl_ = goog.dom.getFirstElementChild(el);
-<a name="line593"></a>  this.filterInput_ = goog.dom.getNextElementSibling(this.labelEl_);
-<a name="line594"></a>  this.contentElement_ = goog.dom.getNextElementSibling(el);
-<a name="line595"></a>
-<a name="line596"></a>  // Decorate additional menu items (like &#39;apply&#39;).
-<a name="line597"></a>  this.getRenderer().decorateChildren(this, el.parentNode,
-<a name="line598"></a>      this.contentElement_);
-<a name="line599"></a>
-<a name="line600"></a>  this.initFilterInput_();
-<a name="line601"></a>};
+<a name="line582"></a>/**
+<a name="line583"></a> * Handles clicks on the filter label. Focuses the input element.
+<a name="line584"></a> * @param {goog.events.BrowserEvent} e A browser event.
+<a name="line585"></a> * @private
+<a name="line586"></a> */
+<a name="line587"></a>goog.ui.FilteredMenu.prototype.onFilterLabelClick_ = function(e) {
+<a name="line588"></a>  this.filterInput_.focus();
+<a name="line589"></a>};
+<a name="line590"></a>
+<a name="line591"></a>
+<a name="line592"></a>/** @override */
+<a name="line593"></a>goog.ui.FilteredMenu.prototype.getContentElement = function() {
+<a name="line594"></a>  return this.contentElement_ || this.getElement();
+<a name="line595"></a>};
+<a name="line596"></a>
+<a name="line597"></a>
+<a name="line598"></a>/**
+<a name="line599"></a> * Returns the filter input element.
+<a name="line600"></a> * @return {Element} Input element.
+<a name="line601"></a> */
+<a name="line602"></a>goog.ui.FilteredMenu.prototype.getFilterInputElement = function() {
+<a name="line603"></a>  return this.filterInput_ || null;
+<a name="line604"></a>};
+<a name="line605"></a>
+<a name="line606"></a>
+<a name="line607"></a>/** @override */
+<a name="line608"></a>goog.ui.FilteredMenu.prototype.decorateInternal = function(element) {
+<a name="line609"></a>  this.setElementInternal(element);
+<a name="line610"></a>
+<a name="line611"></a>  // Decorate the menu content.
+<a name="line612"></a>  this.decorateContent(element);
+<a name="line613"></a>
+<a name="line614"></a>  // Locate internally managed elements.
+<a name="line615"></a>  var el = this.getDomHelper().getElementsByTagNameAndClass(&#39;div&#39;,
+<a name="line616"></a>      goog.getCssName(this.getRenderer().getCssClass(), &#39;filter&#39;), element)[0];
+<a name="line617"></a>  this.labelEl_ = goog.dom.getFirstElementChild(el);
+<a name="line618"></a>  this.filterInput_ = goog.dom.getNextElementSibling(this.labelEl_);
+<a name="line619"></a>  this.contentElement_ = goog.dom.getNextElementSibling(el);
+<a name="line620"></a>
+<a name="line621"></a>  // Decorate additional menu items (like &#39;apply&#39;).
+<a name="line622"></a>  this.getRenderer().decorateChildren(this, el.parentNode,
+<a name="line623"></a>      this.contentElement_);
+<a name="line624"></a>
+<a name="line625"></a>  this.initFilterInput_();
+<a name="line626"></a>};
 </pre>
 
 

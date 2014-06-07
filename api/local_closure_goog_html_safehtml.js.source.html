@@ -586,7 +586,9 @@
 <a name="line540"></a> * A SafeHtml instance corresponding to the empty string.
 <a name="line541"></a> * @const {!goog.html.SafeHtml}
 <a name="line542"></a> */
-<a name="line543"></a>goog.html.SafeHtml.EMPTY = goog.html.SafeHtml.htmlEscape(&#39;&#39;);
+<a name="line543"></a>goog.html.SafeHtml.EMPTY =
+<a name="line544"></a>    goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+<a name="line545"></a>        &#39;&#39;, goog.i18n.bidi.Dir.NEUTRAL);
 </pre>
 
 

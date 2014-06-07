@@ -63,160 +63,171 @@
 <a name="line17"></a>
 <a name="line18"></a>goog.require(&#39;goog.dom&#39;);
 <a name="line19"></a>goog.require(&#39;goog.dom.annotate&#39;);
-<a name="line20"></a>goog.require(&#39;goog.testing.jsunit&#39;);
-<a name="line21"></a>
-<a name="line22"></a>var $ = goog.dom.getElement;
-<a name="line23"></a>
-<a name="line24"></a>var TEXT = &#39;This little piggy cried &quot;Wee! Wee! Wee!&quot; all the way home.&#39;;
-<a name="line25"></a>
-<a name="line26"></a>function doAnnotation(termIndex, termHtml) {
-<a name="line27"></a>  return &#39;&lt;span class=&quot;c&#39; + termIndex + &#39;&quot;&gt;&#39; + termHtml + &#39;&lt;/span&gt;&#39;;
-<a name="line28"></a>}
-<a name="line29"></a>
-<a name="line30"></a>// goog.dom.annotate.annotateText tests
+<a name="line20"></a>goog.require(&#39;goog.html.SafeHtml&#39;);
+<a name="line21"></a>goog.require(&#39;goog.testing.jsunit&#39;);
+<a name="line22"></a>
+<a name="line23"></a>var $ = goog.dom.getElement;
+<a name="line24"></a>
+<a name="line25"></a>var TEXT = &#39;This little piggy cried &quot;Wee! Wee! Wee!&quot; all the way home.&#39;;
+<a name="line26"></a>
+<a name="line27"></a>function doAnnotation(termIndex, termHtml) {
+<a name="line28"></a>  return goog.html.SafeHtml.create(&#39;span&#39;, {&#39;class&#39;: &#39;c&#39; + termIndex},
+<a name="line29"></a>      termHtml);
+<a name="line30"></a>}
 <a name="line31"></a>
-<a name="line32"></a>function testAnnotateText() {
-<a name="line33"></a>  var terms = [[&#39;pig&#39;, true]];
-<a name="line34"></a>  var html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
-<a name="line35"></a>  assertEquals(null, html);
-<a name="line36"></a>
-<a name="line37"></a>  terms = [[&#39;pig&#39;, false]];
-<a name="line38"></a>  html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
-<a name="line39"></a>  assertEquals(&#39;This little &lt;span class=&quot;c0&quot;&gt;pig&lt;/span&gt;gy cried &#39; +
-<a name="line40"></a>               &#39;&amp;quot;Wee! Wee! Wee!&amp;quot; all the way home.&#39;, html);
-<a name="line41"></a>
-<a name="line42"></a>  terms = [[&#39; piggy &#39;, true]];
-<a name="line43"></a>  html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
-<a name="line44"></a>  assertEquals(null, html);
-<a name="line45"></a>
-<a name="line46"></a>  terms = [[&#39; piggy &#39;, false]];
-<a name="line47"></a>  html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
-<a name="line48"></a>  assertEquals(&#39;This little&lt;span class=&quot;c0&quot;&gt; piggy &lt;/span&gt;cried &#39; +
-<a name="line49"></a>               &#39;&amp;quot;Wee! Wee! Wee!&amp;quot; all the way home.&#39;, html);
-<a name="line50"></a>
-<a name="line51"></a>  terms = [[&#39;goose&#39;, true], [&#39;piggy&#39;, true]];
-<a name="line52"></a>  html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
-<a name="line53"></a>  assertEquals(&#39;This little &lt;span class=&quot;c1&quot;&gt;piggy&lt;/span&gt; cried &#39; +
-<a name="line54"></a>               &#39;&amp;quot;Wee! Wee! Wee!&amp;quot; all the way home.&#39;, html);
-<a name="line55"></a>}
-<a name="line56"></a>
-<a name="line57"></a>function testAnnotateTextHtmlEscaping() {
-<a name="line58"></a>  var terms = [[&#39;a&#39;, false]];
-<a name="line59"></a>  var html = goog.dom.annotate.annotateText(&#39;&amp;a&#39;, terms, doAnnotation);
-<a name="line60"></a>  assertEquals(&#39;&amp;amp;&lt;span class=&quot;c0&quot;&gt;a&lt;/span&gt;&#39;, html);
+<a name="line32"></a>// goog.dom.annotate.annotateText tests
+<a name="line33"></a>
+<a name="line34"></a>function testAnnotateText() {
+<a name="line35"></a>  var terms = [[&#39;pig&#39;, true]];
+<a name="line36"></a>  var html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
+<a name="line37"></a>  assertEquals(null, html);
+<a name="line38"></a>
+<a name="line39"></a>  terms = [[&#39;pig&#39;, false]];
+<a name="line40"></a>  html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
+<a name="line41"></a>  html = goog.html.SafeHtml.unwrap(html);
+<a name="line42"></a>  assertEquals(&#39;This little &lt;span class=&quot;c0&quot;&gt;pig&lt;/span&gt;gy cried &#39; +
+<a name="line43"></a>               &#39;&amp;quot;Wee! Wee! Wee!&amp;quot; all the way home.&#39;, html);
+<a name="line44"></a>
+<a name="line45"></a>  terms = [[&#39; piggy &#39;, true]];
+<a name="line46"></a>  html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
+<a name="line47"></a>  assertEquals(null, html);
+<a name="line48"></a>
+<a name="line49"></a>  terms = [[&#39; piggy &#39;, false]];
+<a name="line50"></a>  html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
+<a name="line51"></a>  html = goog.html.SafeHtml.unwrap(html);
+<a name="line52"></a>  assertEquals(&#39;This little&lt;span class=&quot;c0&quot;&gt; piggy &lt;/span&gt;cried &#39; +
+<a name="line53"></a>               &#39;&amp;quot;Wee! Wee! Wee!&amp;quot; all the way home.&#39;, html);
+<a name="line54"></a>
+<a name="line55"></a>  terms = [[&#39;goose&#39;, true], [&#39;piggy&#39;, true]];
+<a name="line56"></a>  html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
+<a name="line57"></a>  html = goog.html.SafeHtml.unwrap(html);
+<a name="line58"></a>  assertEquals(&#39;This little &lt;span class=&quot;c1&quot;&gt;piggy&lt;/span&gt; cried &#39; +
+<a name="line59"></a>               &#39;&amp;quot;Wee! Wee! Wee!&amp;quot; all the way home.&#39;, html);
+<a name="line60"></a>}
 <a name="line61"></a>
-<a name="line62"></a>  terms = [[&#39;a&#39;, false]];
-<a name="line63"></a>  html = goog.dom.annotate.annotateText(&#39;a&amp;&#39;, terms, doAnnotation);
-<a name="line64"></a>  assertEquals(&#39;&lt;span class=&quot;c0&quot;&gt;a&lt;/span&gt;&amp;amp;&#39;, html);
-<a name="line65"></a>
-<a name="line66"></a>  terms = [[&#39;&amp;&#39;, false]];
-<a name="line67"></a>  html = goog.dom.annotate.annotateText(&#39;&amp;&#39;, terms, doAnnotation);
-<a name="line68"></a>  assertEquals(&#39;&lt;span class=&quot;c0&quot;&gt;&amp;amp;&lt;/span&gt;&#39;, html);
-<a name="line69"></a>}
-<a name="line70"></a>
-<a name="line71"></a>function testAnnotateTextIgnoreCase() {
-<a name="line72"></a>  var terms = [[&#39;wEe&#39;, true]];
-<a name="line73"></a>  var html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation, true);
-<a name="line74"></a>  assertEquals(&#39;This little piggy cried &amp;quot;&lt;span class=&quot;c0&quot;&gt;Wee&lt;/span&gt;! &#39; +
-<a name="line75"></a>               &#39;&lt;span class=&quot;c0&quot;&gt;Wee&lt;/span&gt;! &lt;span class=&quot;c0&quot;&gt;Wee&lt;/span&gt;!&#39; +
-<a name="line76"></a>               &#39;&amp;quot; all the way home.&#39;, html);
-<a name="line77"></a>
-<a name="line78"></a>  terms = [[&#39;WEE!&#39;, true], [&#39;HE&#39;, false]];
-<a name="line79"></a>  html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation, true);
-<a name="line80"></a>  assertEquals(&#39;This little piggy cried &amp;quot;&lt;span class=&quot;c0&quot;&gt;Wee!&lt;/span&gt; &#39; +
-<a name="line81"></a>               &#39;&lt;span class=&quot;c0&quot;&gt;Wee!&lt;/span&gt; &lt;span class=&quot;c0&quot;&gt;Wee!&lt;/span&gt;&#39; +
-<a name="line82"></a>               &#39;&amp;quot; all t&lt;span class=&quot;c1&quot;&gt;he&lt;/span&gt; way home.&#39;, html);
-<a name="line83"></a>}
-<a name="line84"></a>
-<a name="line85"></a>function testAnnotateTextOverlappingTerms() {
-<a name="line86"></a>  var terms = [[&#39;tt&#39;, false], [&#39;little&#39;, false]];
-<a name="line87"></a>  var html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
-<a name="line88"></a>  assertEquals(&#39;This &lt;span class=&quot;c1&quot;&gt;little&lt;/span&gt; piggy cried &amp;quot;Wee! &#39; +
-<a name="line89"></a>               &#39;Wee! Wee!&amp;quot; all the way home.&#39;, html);
-<a name="line90"></a>}
-<a name="line91"></a>
-<a name="line92"></a>// goog.dom.annotate.annotateTerms tests
-<a name="line93"></a>
-<a name="line94"></a>function testAnnotateTerms() {
-<a name="line95"></a>  var terms = [[&#39;pig&#39;, true]];
-<a name="line96"></a>  assertFalse(goog.dom.annotate.annotateTerms($(&#39;p&#39;), terms, doAnnotation));
-<a name="line97"></a>  assertEquals(&#39;Tom &amp;amp; Jerry&#39;, $(&#39;p&#39;).innerHTML);
-<a name="line98"></a>
-<a name="line99"></a>  terms = [[&#39;Tom&#39;, true]];
-<a name="line100"></a>  assertTrue(goog.dom.annotate.annotateTerms($(&#39;p&#39;), terms, doAnnotation));
-<a name="line101"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;p&#39;));
-<a name="line102"></a>  assertEquals(1, spans.length);
-<a name="line103"></a>  assertEquals(&#39;Tom&#39;, spans[0].innerHTML);
-<a name="line104"></a>  assertEquals(&#39; &amp; Jerry&#39;, spans[0].nextSibling.nodeValue);
-<a name="line105"></a>}
-<a name="line106"></a>
-<a name="line107"></a>function testAnnotateTermsInTable() {
-<a name="line108"></a>  var terms = [[&#39;pig&#39;, false]];
-<a name="line109"></a>  assertTrue(goog.dom.annotate.annotateTerms($(&#39;q&#39;), terms, doAnnotation));
-<a name="line110"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;q&#39;));
-<a name="line111"></a>  assertEquals(2, spans.length);
-<a name="line112"></a>  assertEquals(&#39;pig&#39;, spans[0].innerHTML);
-<a name="line113"></a>  assertEquals(&#39;gy&#39;, spans[0].nextSibling.nodeValue);
-<a name="line114"></a>  assertEquals(&#39;pig&#39;, spans[1].innerHTML);
-<a name="line115"></a>  assertEquals(&#39;I&#39;, spans[1].parentNode.tagName);
+<a name="line62"></a>function testAnnotateTextHtmlEscaping() {
+<a name="line63"></a>  var terms = [[&#39;a&#39;, false]];
+<a name="line64"></a>  var html = goog.dom.annotate.annotateText(&#39;&amp;a&#39;, terms, doAnnotation);
+<a name="line65"></a>  html = goog.html.SafeHtml.unwrap(html);
+<a name="line66"></a>  assertEquals(&#39;&amp;amp;&lt;span class=&quot;c0&quot;&gt;a&lt;/span&gt;&#39;, html);
+<a name="line67"></a>
+<a name="line68"></a>  terms = [[&#39;a&#39;, false]];
+<a name="line69"></a>  html = goog.dom.annotate.annotateText(&#39;a&amp;&#39;, terms, doAnnotation);
+<a name="line70"></a>  html = goog.html.SafeHtml.unwrap(html);
+<a name="line71"></a>  assertEquals(&#39;&lt;span class=&quot;c0&quot;&gt;a&lt;/span&gt;&amp;amp;&#39;, html);
+<a name="line72"></a>
+<a name="line73"></a>  terms = [[&#39;&amp;&#39;, false]];
+<a name="line74"></a>  html = goog.dom.annotate.annotateText(&#39;&amp;&#39;, terms, doAnnotation);
+<a name="line75"></a>  html = goog.html.SafeHtml.unwrap(html);
+<a name="line76"></a>  assertEquals(&#39;&lt;span class=&quot;c0&quot;&gt;&amp;amp;&lt;/span&gt;&#39;, html);
+<a name="line77"></a>}
+<a name="line78"></a>
+<a name="line79"></a>function testAnnotateTextIgnoreCase() {
+<a name="line80"></a>  var terms = [[&#39;wEe&#39;, true]];
+<a name="line81"></a>  var html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation, true);
+<a name="line82"></a>  html = goog.html.SafeHtml.unwrap(html);
+<a name="line83"></a>  assertEquals(&#39;This little piggy cried &amp;quot;&lt;span class=&quot;c0&quot;&gt;Wee&lt;/span&gt;! &#39; +
+<a name="line84"></a>               &#39;&lt;span class=&quot;c0&quot;&gt;Wee&lt;/span&gt;! &lt;span class=&quot;c0&quot;&gt;Wee&lt;/span&gt;!&#39; +
+<a name="line85"></a>               &#39;&amp;quot; all the way home.&#39;, html);
+<a name="line86"></a>
+<a name="line87"></a>  terms = [[&#39;WEE!&#39;, true], [&#39;HE&#39;, false]];
+<a name="line88"></a>  html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation, true);
+<a name="line89"></a>  html = goog.html.SafeHtml.unwrap(html);
+<a name="line90"></a>  assertEquals(&#39;This little piggy cried &amp;quot;&lt;span class=&quot;c0&quot;&gt;Wee!&lt;/span&gt; &#39; +
+<a name="line91"></a>               &#39;&lt;span class=&quot;c0&quot;&gt;Wee!&lt;/span&gt; &lt;span class=&quot;c0&quot;&gt;Wee!&lt;/span&gt;&#39; +
+<a name="line92"></a>               &#39;&amp;quot; all t&lt;span class=&quot;c1&quot;&gt;he&lt;/span&gt; way home.&#39;, html);
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>function testAnnotateTextOverlappingTerms() {
+<a name="line96"></a>  var terms = [[&#39;tt&#39;, false], [&#39;little&#39;, false]];
+<a name="line97"></a>  var html = goog.dom.annotate.annotateText(TEXT, terms, doAnnotation);
+<a name="line98"></a>  html = goog.html.SafeHtml.unwrap(html);
+<a name="line99"></a>  assertEquals(&#39;This &lt;span class=&quot;c1&quot;&gt;little&lt;/span&gt; piggy cried &amp;quot;Wee! &#39; +
+<a name="line100"></a>               &#39;Wee! Wee!&amp;quot; all the way home.&#39;, html);
+<a name="line101"></a>}
+<a name="line102"></a>
+<a name="line103"></a>// goog.dom.annotate.annotateTerms tests
+<a name="line104"></a>
+<a name="line105"></a>function testAnnotateTerms() {
+<a name="line106"></a>  var terms = [[&#39;pig&#39;, true]];
+<a name="line107"></a>  assertFalse(goog.dom.annotate.annotateTerms($(&#39;p&#39;), terms, doAnnotation));
+<a name="line108"></a>  assertEquals(&#39;Tom &amp;amp; Jerry&#39;, $(&#39;p&#39;).innerHTML);
+<a name="line109"></a>
+<a name="line110"></a>  terms = [[&#39;Tom&#39;, true]];
+<a name="line111"></a>  assertTrue(goog.dom.annotate.annotateTerms($(&#39;p&#39;), terms, doAnnotation));
+<a name="line112"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;p&#39;));
+<a name="line113"></a>  assertEquals(1, spans.length);
+<a name="line114"></a>  assertEquals(&#39;Tom&#39;, spans[0].innerHTML);
+<a name="line115"></a>  assertEquals(&#39; &amp; Jerry&#39;, spans[0].nextSibling.nodeValue);
 <a name="line116"></a>}
 <a name="line117"></a>
-<a name="line118"></a>function testAnnotateTermsWithClassExclusions() {
+<a name="line118"></a>function testAnnotateTermsInTable() {
 <a name="line119"></a>  var terms = [[&#39;pig&#39;, false]];
-<a name="line120"></a>  var classesToIgnore = [&#39;s&#39;];
-<a name="line121"></a>  assertTrue(goog.dom.annotate.annotateTerms($(&#39;r&#39;), terms, doAnnotation,
-<a name="line122"></a>                                             false, classesToIgnore));
-<a name="line123"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;r&#39;));
-<a name="line124"></a>  assertEquals(1, spans.length);
-<a name="line125"></a>  assertEquals(&#39;pig&#39;, spans[0].innerHTML);
-<a name="line126"></a>  assertEquals(&#39;gy&#39;, spans[0].nextSibling.nodeValue);
+<a name="line120"></a>  assertTrue(goog.dom.annotate.annotateTerms($(&#39;q&#39;), terms, doAnnotation));
+<a name="line121"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;q&#39;));
+<a name="line122"></a>  assertEquals(2, spans.length);
+<a name="line123"></a>  assertEquals(&#39;pig&#39;, spans[0].innerHTML);
+<a name="line124"></a>  assertEquals(&#39;gy&#39;, spans[0].nextSibling.nodeValue);
+<a name="line125"></a>  assertEquals(&#39;pig&#39;, spans[1].innerHTML);
+<a name="line126"></a>  assertEquals(&#39;I&#39;, spans[1].parentNode.tagName);
 <a name="line127"></a>}
 <a name="line128"></a>
-<a name="line129"></a>function testAnnotateTermsIgnoreCase() {
-<a name="line130"></a>  var terms1 = [[&#39;pig&#39;, false]];
-<a name="line131"></a>  assertTrue(goog.dom.annotate.annotateTerms(
-<a name="line132"></a>      $(&#39;t&#39;), terms1, doAnnotation, true));
-<a name="line133"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;t&#39;));
-<a name="line134"></a>  assertEquals(2, spans.length);
-<a name="line135"></a>  assertEquals(&#39;pig&#39;, spans[0].innerHTML);
-<a name="line136"></a>  assertEquals(&#39;gy&#39;, spans[0].nextSibling.nodeValue);
-<a name="line137"></a>  assertEquals(&#39;Pig&#39;, spans[1].innerHTML);
-<a name="line138"></a>
-<a name="line139"></a>  var terms2 = [[&#39;Pig&#39;, false]];
-<a name="line140"></a>  assertTrue(goog.dom.annotate.annotateTerms(
-<a name="line141"></a>      $(&#39;u&#39;), terms2, doAnnotation, true));
-<a name="line142"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;u&#39;));
-<a name="line143"></a>  assertEquals(2, spans.length);
-<a name="line144"></a>  assertEquals(&#39;pig&#39;, spans[0].innerHTML);
-<a name="line145"></a>  assertEquals(&#39;gy&#39;, spans[0].nextSibling.nodeValue);
-<a name="line146"></a>  assertEquals(&#39;Pig&#39;, spans[1].innerHTML);
-<a name="line147"></a>}
-<a name="line148"></a>
-<a name="line149"></a>function testAnnotateTermsInObject() {
-<a name="line150"></a>  var terms = [[&#39;object&#39;, true]];
-<a name="line151"></a>  assertTrue(goog.dom.annotate.annotateTerms($(&#39;o&#39;), terms, doAnnotation));
-<a name="line152"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;o&#39;));
-<a name="line153"></a>  assertEquals(1, spans.length);
-<a name="line154"></a>  assertEquals(&#39;object&#39;, spans[0].innerHTML);
-<a name="line155"></a>}
-<a name="line156"></a>
-<a name="line157"></a>function testAnnotateTermsInScript() {
-<a name="line158"></a>  var terms = [[&#39;variable&#39;, true]];
-<a name="line159"></a>  assertFalse(goog.dom.annotate.annotateTerms($(&#39;script&#39;), terms,
-<a name="line160"></a>                                              doAnnotation));
-<a name="line161"></a>}
-<a name="line162"></a>
-<a name="line163"></a>function testAnnotateTermsInStyle() {
-<a name="line164"></a>  var terms = [[&#39;color&#39;, true]];
-<a name="line165"></a>  assertFalse(goog.dom.annotate.annotateTerms($(&#39;style&#39;), terms,
-<a name="line166"></a>                                              doAnnotation));
-<a name="line167"></a>}
-<a name="line168"></a>
-<a name="line169"></a>function testAnnotateTermsInHtmlComment() {
-<a name="line170"></a>  var terms = [[&#39;note&#39;, true]];
-<a name="line171"></a>  assertFalse(goog.dom.annotate.annotateTerms($(&#39;comment&#39;), terms,
-<a name="line172"></a>                                              doAnnotation));
-<a name="line173"></a>}
+<a name="line129"></a>function testAnnotateTermsWithClassExclusions() {
+<a name="line130"></a>  var terms = [[&#39;pig&#39;, false]];
+<a name="line131"></a>  var classesToIgnore = [&#39;s&#39;];
+<a name="line132"></a>  assertTrue(goog.dom.annotate.annotateTerms($(&#39;r&#39;), terms, doAnnotation,
+<a name="line133"></a>                                             false, classesToIgnore));
+<a name="line134"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;r&#39;));
+<a name="line135"></a>  assertEquals(1, spans.length);
+<a name="line136"></a>  assertEquals(&#39;pig&#39;, spans[0].innerHTML);
+<a name="line137"></a>  assertEquals(&#39;gy&#39;, spans[0].nextSibling.nodeValue);
+<a name="line138"></a>}
+<a name="line139"></a>
+<a name="line140"></a>function testAnnotateTermsIgnoreCase() {
+<a name="line141"></a>  var terms1 = [[&#39;pig&#39;, false]];
+<a name="line142"></a>  assertTrue(goog.dom.annotate.annotateTerms(
+<a name="line143"></a>      $(&#39;t&#39;), terms1, doAnnotation, true));
+<a name="line144"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;t&#39;));
+<a name="line145"></a>  assertEquals(2, spans.length);
+<a name="line146"></a>  assertEquals(&#39;pig&#39;, spans[0].innerHTML);
+<a name="line147"></a>  assertEquals(&#39;gy&#39;, spans[0].nextSibling.nodeValue);
+<a name="line148"></a>  assertEquals(&#39;Pig&#39;, spans[1].innerHTML);
+<a name="line149"></a>
+<a name="line150"></a>  var terms2 = [[&#39;Pig&#39;, false]];
+<a name="line151"></a>  assertTrue(goog.dom.annotate.annotateTerms(
+<a name="line152"></a>      $(&#39;u&#39;), terms2, doAnnotation, true));
+<a name="line153"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;u&#39;));
+<a name="line154"></a>  assertEquals(2, spans.length);
+<a name="line155"></a>  assertEquals(&#39;pig&#39;, spans[0].innerHTML);
+<a name="line156"></a>  assertEquals(&#39;gy&#39;, spans[0].nextSibling.nodeValue);
+<a name="line157"></a>  assertEquals(&#39;Pig&#39;, spans[1].innerHTML);
+<a name="line158"></a>}
+<a name="line159"></a>
+<a name="line160"></a>function testAnnotateTermsInObject() {
+<a name="line161"></a>  var terms = [[&#39;object&#39;, true]];
+<a name="line162"></a>  assertTrue(goog.dom.annotate.annotateTerms($(&#39;o&#39;), terms, doAnnotation));
+<a name="line163"></a>  var spans = goog.dom.getElementsByTagNameAndClass(&#39;SPAN&#39;, &#39;c0&#39;, $(&#39;o&#39;));
+<a name="line164"></a>  assertEquals(1, spans.length);
+<a name="line165"></a>  assertEquals(&#39;object&#39;, spans[0].innerHTML);
+<a name="line166"></a>}
+<a name="line167"></a>
+<a name="line168"></a>function testAnnotateTermsInScript() {
+<a name="line169"></a>  var terms = [[&#39;variable&#39;, true]];
+<a name="line170"></a>  assertFalse(goog.dom.annotate.annotateTerms($(&#39;script&#39;), terms,
+<a name="line171"></a>                                              doAnnotation));
+<a name="line172"></a>}
+<a name="line173"></a>
+<a name="line174"></a>function testAnnotateTermsInStyle() {
+<a name="line175"></a>  var terms = [[&#39;color&#39;, true]];
+<a name="line176"></a>  assertFalse(goog.dom.annotate.annotateTerms($(&#39;style&#39;), terms,
+<a name="line177"></a>                                              doAnnotation));
+<a name="line178"></a>}
+<a name="line179"></a>
+<a name="line180"></a>function testAnnotateTermsInHtmlComment() {
+<a name="line181"></a>  var terms = [[&#39;note&#39;, true]];
+<a name="line182"></a>  assertFalse(goog.dom.annotate.annotateTerms($(&#39;comment&#39;), terms,
+<a name="line183"></a>                                              doAnnotation));
+<a name="line184"></a>}
 </pre>
 
 
