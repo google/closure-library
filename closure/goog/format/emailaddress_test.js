@@ -178,7 +178,10 @@ function testIsValid() {
     'e', '', 'e @c.com', 'a@b', 'foo.com', 'foo@c..com', 'test@gma=il.com',
     'aaa@gmail', 'has some spaces@gmail.com', 'has@three@at@signs.com',
     '@no-local-part.com', 'み.ん-あ@みんあ.みんあ',
-    'みんあ@test.com', 'test@test.みんあ', 'test@みんあ.com'];
+    'みんあ@test.com', 'test@test.みんあ', 'test@みんあ.com',
+    'fullwidthfullstop@sld' + '\uff0e' + 'tld',
+    'ideographicfullstop@sld' + '\u3002' + 'tld',
+    'halfwidthideographicfullstop@sld' + '\uff61' + 'tld'];
   doIsValidTest(goog.format.EmailAddress.isValidAddress, valid, invalid);
 }
 
@@ -196,7 +199,8 @@ function testIsValidDomainPart() {
   var valid = [
     'example.com', 'dept.example.org', 'long.domain.with.lots.of.dots'];
   var invalid = ['', '@has.an.at.sign', '..has.leading.dots', 'gma=il.com',
-    'DoesNotHaveADot'];
+    'DoesNotHaveADot', 'sld' + '\uff0e' + 'tld', 'sld' + '\u3002' + 'tld',
+    'sld' + '\uff61' + 'tld'];
   doIsValidTest(goog.format.EmailAddress.isValidDomainPartSpec, valid, invalid);
 }
 

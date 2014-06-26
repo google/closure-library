@@ -82,7 +82,10 @@ function testIsEaiValid() {
     'test@test.みんあ',
     'test@みんあ.com',
     'me.みんあ@me.xn--l8jtg9b',
-    'みんあ@me.xn--l8jtg9b'
+    'みんあ@me.xn--l8jtg9b',
+    'fullwidthfullstop@sld' + '\uff0e' + 'tld',
+    'ideographicfullstop@sld' + '\u3002' + 'tld',
+    'halfwidthideographicfullstop@sld' + '\uff61' + 'tld'
   ];
   var invalid = [
     null,
@@ -135,7 +138,10 @@ function testIsValidDomainPart() {
     'long.domain.with.lots.of.dots',
     'me.xn--l8jtg9b',
     'me.みんあ',
-    'sld.looooooongtld'
+    'sld.looooooongtld',
+    'sld' + '\uff0e' + 'tld',
+    'sld' + '\u3002' + 'tld',
+    'sld' + '\uff61' + 'tld'
   ];
   var invalid = [
     null,

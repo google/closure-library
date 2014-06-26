@@ -50,12 +50,26 @@ goog.format.InternationalizedEmailAddress.EAI_LOCAL_PART_REGEXP_STR_ =
 
 
 /**
+ * A string representing the RegExp for a label in the domain part of an EAI
+ * email address.
+ * @private
+ */
+goog.format.InternationalizedEmailAddress.EAI_LABEL_CHAR_REGEXP_STR_ =
+    '(?!\\s)[a-zA-Z0-9\u0080-\u3001\u3003-\uFF0D\uFF0F-\uFF60\uFF62-\uFFFFFF-]';
+
+
+/**
  * A string representing the RegExp for the domain part of an EAI email address.
  * @private
  */
 goog.format.InternationalizedEmailAddress.EAI_DOMAIN_PART_REGEXP_STR_ =
-    '((?!\\s)[a-zA-Z0-9\u0080-\uFFFFFF-]+\\.)+' +
-    '((?!\\s)[a-zA-Z0-9\u0080-\uFFFFFF-]){2,63}';
+    // A unicode character (ASCII or Unicode excluding periods)
+    '(' + goog.format.InternationalizedEmailAddress.EAI_LABEL_CHAR_REGEXP_STR_ +
+    // Such character 1+ times, followed by a Unicode period. All 1+ times.
+    '+[\\.\\uFF0E\\u3002\\uFF61])+' +
+    // And same thing but without a period in the end
+    goog.format.InternationalizedEmailAddress.EAI_LABEL_CHAR_REGEXP_STR_ +
+    '{2,63}';
 
 
 /**
