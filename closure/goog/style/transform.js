@@ -84,9 +84,7 @@ goog.style.transform.setTranslation = function(element, x, y) {
   var translation = goog.style.transform.is3dSupported() ?
       'translate3d(' + x + 'px,' + y + 'px,' + '0px)' :
       'translate(' + x + 'px,' + y + 'px)';
-  var property = goog.userAgent.IE && goog.userAgent.DOCUMENT_MODE == 9 ?
-      '-ms-transform' : 'transform';
-  goog.style.setStyle(element, property, translation);
+  goog.style.setStyle(element, 'transform', translation);
   return true;
 };
 
@@ -99,14 +97,17 @@ goog.style.transform.setTranslation = function(element, x, y) {
  */
 goog.style.transform.matrixConstructor_ =
     goog.functions.cacheReturnValue(function() {
-  if ('WebKitCSSMatrix' in goog.global) {
-    return goog.global['WebKitCSSMatrix'];
+  // TODO(user): Unless these are accessed from the default namespace the
+  // compiler will rename them. A better way is to use goog.global and prevent
+  // renaming.
+  if (typeof WebKitCSSMatrix !== undefined) {
+    return WebKitCSSMatrix;
   }
-  if ('MSCSSMatrix' in goog.global) {
-    return goog.global['MSCSSMatrix'];
+  if (typeof MSCSSMatrix !== undefined) {
+    return MSCSSMatrix;
   }
-  if ('CSSMatrix' in goog.global) {
-    return goog.global['CSSMatrix'];
+  if (typeof CSSMatrix !== undefined) {
+    return CSSMatrix;
   }
   return null;
 });
