@@ -213,7 +213,7 @@ goog.testing.net.XhrIo.prototype.lastError_ = '';
 
 /**
  * The response object.
- * @type {string|Document}
+ * @type {string|Document|ArrayBuffer}
  * @private
  */
 goog.testing.net.XhrIo.prototype.response_ = '';
@@ -461,7 +461,7 @@ goog.testing.net.XhrIo.prototype.simulatePartialResponse =
 /**
  * Simulates receiving a response.
  * @param {number} statusCode Simulated status code.
- * @param {string|Document|null} response Simulated response.
+ * @param {string|Document|ArrayBuffer|null} response Simulated response.
  * @param {Object=} opt_headers Simulated response headers.
  */
 goog.testing.net.XhrIo.prototype.simulateResponse = function(statusCode,
@@ -621,8 +621,14 @@ goog.testing.net.XhrIo.prototype.getLastRequestHeaders = function() {
  * @return {string} Result from the server.
  */
 goog.testing.net.XhrIo.prototype.getResponseText = function() {
-  return goog.isString(this.response_) ? this.response_ :
-         goog.dom.xml.serialize(this.response_);
+  if (goog.isString(this.response_)) {
+    return this.response_;
+  } else if (goog.global['ArrayBuffer'] &&
+      this.response_ instanceof ArrayBuffer) {
+    return '';
+  } else {
+    return goog.dom.xml.serialize(/** @type {Document} */ (this.response_));
+  }
 };
 
 
@@ -662,7 +668,9 @@ goog.testing.net.XhrIo.prototype.getResponseJson = function(opt_xssiPrefix) {
 goog.testing.net.XhrIo.prototype.getResponseXml = function() {
   // NOTE(user): I haven't found out how to check in Internet Explorer
   // whether the response is XML document, so I do it the other way around.
-  return goog.isString(this.response_) ? null : this.response_;
+  return goog.isString(this.response_) ||
+      (goog.global['ArrayBuffer'] && this.response_ instanceof ArrayBuffer) ?
+      null : /** @type {Document} */ (this.response_);
 };
 
 
