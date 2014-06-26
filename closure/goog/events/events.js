@@ -499,27 +499,26 @@ goog.events.unlistenWithWrapper = function(src, wrapper, listener, opt_capt,
  * Removes all listeners from an object. You can also optionally
  * remove listeners of a particular type.
  *
- * @param {Object=} opt_obj Object to remove listeners from. Not
- *     specifying opt_obj is now DEPRECATED (it used to remove all
- *     registered listeners).
+ * @param {Object|undefined} obj Object to remove listeners from. Must be an
+ *     EventTarget or a goog.events.Listenable.
  * @param {string|!goog.events.EventId=} opt_type Type of event to remove.
  *     Default is all types.
  * @return {number} Number of listeners removed.
  */
-goog.events.removeAll = function(opt_obj, opt_type) {
-  // TODO(user): Change the type of opt_obj from Object= to
-  // !EventTarget|goog.events.Listenable). And replace this with an
-  // assertion.
-  if (!opt_obj) {
+goog.events.removeAll = function(obj, opt_type) {
+  // TODO(user): Change the type of obj to
+  // (!EventTarget|!goog.events.Listenable).
+
+  if (!obj) {
     return 0;
   }
 
-  if (goog.events.Listenable.isImplementedBy(opt_obj)) {
-    return opt_obj.removeAllListeners(opt_type);
+  if (goog.events.Listenable.isImplementedBy(obj)) {
+    return obj.removeAllListeners(opt_type);
   }
 
   var listenerMap = goog.events.getListenerMap_(
-      /** @type {EventTarget} */ (opt_obj));
+      /** @type {EventTarget} */ (obj));
   if (!listenerMap) {
     return 0;
   }
