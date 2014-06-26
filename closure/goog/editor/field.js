@@ -1068,8 +1068,9 @@ goog.editor.Field.prototype.handleBeforeChangeKeyEvent_ = function(e) {
       // #2: to block a Firefox-specific bug where Macs try to navigate
       // back a page when you hit command+left arrow or comamnd-right arrow.
       // See https://bugzilla.mozilla.org/show_bug.cgi?id=341886
-      // TODO(nicksantos): Get Firefox to fix this.
+      // This was fixed in Firefox 29, but still exists in older versions.
       (goog.userAgent.GECKO && e.metaKey &&
+       !goog.userAgent.isVersionOrHigher(29) &&
        (e.keyCode == goog.events.KeyCodes.LEFT ||
         e.keyCode == goog.events.KeyCodes.RIGHT));
 
