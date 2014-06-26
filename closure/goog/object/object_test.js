@@ -432,7 +432,9 @@ function testGetValueByKeysArraySyntax() {
 }
 
 function testImmutableView() {
-  if (!Object.isFrozen) return;
+  if (!Object.isFrozen) {
+    return;
+  }
   var x = {propA: 3};
   var y = goog.object.createImmutableView(x);
   x.propA = 4;
@@ -456,7 +458,13 @@ function testImmutableView() {
 function testImmutableViewStrict() {
   'use strict';
 
-  if (!Object.isFrozen) return;
+  // IE9 supports isFrozen, but does not support strict mode. Exit early if we
+  // are not actually running in strict mode.
+  var isStrict = (function() { return !this; })();
+
+  if (!Object.isFrozen || !isStrict) {
+    return;
+  }
   var x = {propA: 3};
   var y = goog.object.createImmutableView(x);
   assertThrows(function() {
