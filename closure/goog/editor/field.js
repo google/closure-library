@@ -48,6 +48,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.functions');
 goog.require('goog.log');
+goog.require('goog.log.Level');
 goog.require('goog.string');
 goog.require('goog.string.Unicode');
 goog.require('goog.style');
@@ -176,6 +177,12 @@ goog.editor.Field = function(id, opt_doc) {
    * @protected
    */
   this.originalElement = this.originalDomHelper.getElement(this.id);
+
+  /**
+   * @private {boolean}
+   */
+  this.followLinkInNewWindow_ =
+      goog.editor.BrowserFeature.FOLLOWS_EDITABLE_LINKS;
 
   // Default to the same window as the field is in.
   this.appWindow_ = this.originalDomHelper.getWindow();
@@ -880,7 +887,7 @@ goog.editor.Field.prototype.setupChangeListeners_ = function() {
       new goog.async.Delay(this.handleSelectionChangeTimer_,
                            goog.editor.Field.SELECTION_CHANGE_FREQUENCY_, this);
 
-  if (goog.editor.BrowserFeature.FOLLOWS_EDITABLE_LINKS) {
+  if (this.followLinkInNewWindow_) {
     this.addListener(
         goog.events.EventType.CLICK, goog.editor.Field.cancelLinkClick_);
   }
@@ -1007,6 +1014,17 @@ goog.editor.Field.prototype.removeAllWrappers = function() {
   while (wrapper = this.wrappers_.pop()) {
     wrapper.dispose();
   }
+};
+
+
+/**
+ * Sets whether activating a hyperlink in this editable field will open a new
+ *     window or not.
+ * @param {boolean} followLinkInNewWindow
+ */
+goog.editor.Field.prototype.setFollowLinkInNewWindow =
+    function(followLinkInNewWindow) {
+  this.followLinkInNewWindow_ = followLinkInNewWindow;
 };
 
 
