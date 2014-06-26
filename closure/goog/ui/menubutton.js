@@ -38,6 +38,7 @@ goog.require('goog.positioning.Overflow');
 goog.require('goog.style');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.IdGenerator');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.MenuRenderer');
@@ -883,13 +884,25 @@ goog.ui.MenuButton.prototype.attachKeyDownEventListener_ = function(attach) {
 goog.ui.MenuButton.prototype.handleHighlightItem = function(e) {
   var element = this.getElement();
   goog.asserts.assert(element, 'The menu button DOM element cannot be null.');
-  if (e.target.getElement() != null) {
-    goog.a11y.aria.setState(element,
-        goog.a11y.aria.State.ACTIVEDESCENDANT,
-        e.target.getElement().id);
-    goog.a11y.aria.setState(element,
-        goog.a11y.aria.State.OWNS,
-        e.target.getElement().id);
+
+  var targetEl = e.target.getElement();
+  if (targetEl) {
+    // If target element has an activedescendant, then set this control's
+    // activedescendant to that, otherwise set it to the target element. This is
+    // a workaround for some screen readers which do not handle
+    // aria-activedescendant redirection properly.
+    var targetActiveDescendant = goog.a11y.aria.getActiveDescendant(targetEl);
+    var activeDescendant = targetActiveDescendant || targetEl;
+
+    if (!activeDescendant.id) {
+      // Create an id if there isn't one already.
+      var idGenerator = goog.ui.IdGenerator.getInstance();
+      activeDescendant.id = idGenerator.getNextUniqueId();
+    }
+
+    goog.a11y.aria.setActiveDescendant(element, activeDescendant);
+    goog.a11y.aria.setState(
+        element, goog.a11y.aria.State.OWNS, activeDescendant.id);
   }
 };
 
