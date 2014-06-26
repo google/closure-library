@@ -996,6 +996,15 @@ function testGetMsgWithDollarSigns() {
 }
 
 
+function testGetMsgWithPlaceholders() {
+  var msg = goog.getMsg('{$a} has {$b}', {a: '{$b}', b: 1});
+  assertEquals('{$b} has 1', msg);
+
+  msg = goog.getMsg('{$a}{$b}', {b: ''});
+  assertEquals('{$a}', msg);
+}
+
+
 //=== miscellaneous tests ===
 
 function testIdentity() {
