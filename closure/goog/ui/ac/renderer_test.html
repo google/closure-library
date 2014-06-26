@@ -612,7 +612,10 @@ See the COPYING file for details.
     var viewportOffset = goog.style.getPageOffset(viewport);
     var viewportSize = goog.style.getSize(viewport);
 
-    assertEquals(viewportOffset.y + viewportSize.height, rendererSize.height + rendererOffset.y);
+    assertRoughlyEquals(
+        viewportOffset.y + viewportSize.height,
+        rendererSize.height + rendererOffset.y,
+        1);
 
     // Remove the huge row, and make sure that the dropdown element gets shrunk.
     renderer.getElement().removeChild(hugeRow);
