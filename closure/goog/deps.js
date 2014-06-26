@@ -163,8 +163,6 @@ goog.addDependency('debug/logger_test.js', ['goog.debug.LoggerTest'], ['goog.deb
 goog.addDependency('debug/logrecord.js', ['goog.debug.LogRecord'], []);
 goog.addDependency('debug/logrecordserializer.js', ['goog.debug.logRecordSerializer'], ['goog.debug.LogRecord', 'goog.debug.Logger.Level', 'goog.json', 'goog.object']);
 goog.addDependency('debug/logrecordserializer_test.js', ['goog.debug.logRecordSerializerTest'], ['goog.debug.LogRecord', 'goog.debug.Logger', 'goog.debug.logRecordSerializer', 'goog.testing.jsunit']);
-goog.addDependency('debug/reflect.js', ['goog.debug.reflect'], []);
-goog.addDependency('debug/reflect_test.js', ['goog.debug.reflectTest', 'x.a'], ['goog.debug.reflect', 'goog.testing.jsunit', 'goog.userAgent']);
 goog.addDependency('debug/relativetimeprovider.js', ['goog.debug.RelativeTimeProvider'], []);
 goog.addDependency('debug/tracer.js', ['goog.debug.Trace'], ['goog.array', 'goog.iter', 'goog.log', 'goog.structs.Map', 'goog.structs.SimplePool']);
 goog.addDependency('debug/tracer_test.js', ['goog.debug.TraceTest'], ['goog.debug.Trace', 'goog.testing.jsunit']);

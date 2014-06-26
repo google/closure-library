@@ -10,7 +10,6 @@ See the COPYING file for details.
   <title>goog.ui.PopupMenu</title>
   <script src="../base.js"></script>
   <script>
-    goog.require('goog.debug.reflect');
     goog.require('goog.positioning.Corner');
     goog.require('goog.object');
     goog.require('goog.ui.MenuItem');
@@ -98,7 +97,7 @@ See the COPYING file for details.
     function logEvent(e) {
       var entry = goog.dom.createDom('div', null,
           'type: ' + e.type +
-          ', target: ' + goog.debug.reflect.typeOf(e.target) +
+          ', target: ' + e.target.constructor.name +
           (e.target.getCaption ? ', caption: ' + e.target.getCaption() : ''));
       var eventLog = goog.dom.getElement('event-log');
       eventLog.appendChild(entry);
