@@ -110,23 +110,22 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
     // Add an error handler to report errors that may occur during
     // initialization of the page.
     var onerror = window.onerror;
-    window.onerror = function(message, url, line, column, error) {
+    window.onerror = function(error, url, line) {
       // Call any existing onerror handlers.
       if (onerror) {
-        onerror(message, url, line, column, error);
+        onerror(error, url, line);
       }
-      if (typeof message == 'object') {
+      if (typeof error == 'object') {
         // Webkit started passing an event object as the only argument to
         // window.onerror.  It doesn't contain an error message, url or line
         // number.  We therefore log as much info as we can.
-        if (message.target && message.target.tagName == 'SCRIPT') {
-          tr.logError('UNKNOWN ERROR: Script ' + message.target.src);
+        if (error.target && error.target.tagName == 'SCRIPT') {
+          tr.logError('UNKNOWN ERROR: Script ' + error.target.src);
         } else {
           tr.logError('UNKNOWN ERROR: No error information available.');
         }
       } else {
-        tr.logError('JS ERROR: ' + message + '\nURL: ' + url + '\n' +
-            (error && error.stack ? error.stack : 'Line: ' + line));
+        tr.logError('JS ERROR: ' + error + '\nURL: ' + url + '\nLine: ' + line);
       }
     };
 
