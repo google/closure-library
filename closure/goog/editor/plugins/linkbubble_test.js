@@ -356,6 +356,26 @@ function testOverridingCreateBubbleContentsDoesntNpeGetTargetUrl() {
   FIELDMOCK.$verify();
 }
 
+
+/**
+ * @bug 15379294
+ */
+function testUpdateLinkCommandDoesNotTriggerAnException() {
+  FIELDMOCK.$replay();
+  linkBubble.enable(FIELDMOCK);
+
+  // At this point, the bubble was not created yet using its createBubble
+  // public method.
+  assertNotThrows(
+      'Executing goog.editor.Command.UPDATE_LINK_BUBBLE should not trigger ' +
+      'an exception even if the bubble was not created yet using its ' +
+      'createBubble method.',
+      goog.bind(linkBubble.execCommandInternal, linkBubble,
+                goog.editor.Command.UPDATE_LINK_BUBBLE));
+
+  FIELDMOCK.$verify();
+}
+
 function assertBubble() {
   assertTrue('Link bubble visible', linkBubble.isVisible());
   assertNotNull('Link bubble created',
