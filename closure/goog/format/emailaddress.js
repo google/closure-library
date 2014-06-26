@@ -343,7 +343,7 @@ goog.format.EmailAddress.parseListInternal = function(str, parser) {
 
   for (var i = 0; i < str.length; ) {
     token = goog.format.EmailAddress.getToken_(str, i);
-    if (token == ',' || token == ';' ||
+    if (token == ',' || token == ';' || token == '\u3001' ||
         (token == ' ' && parser(email).isValid())) {
       if (!goog.string.isEmpty(email)) {
         result.push(parser(email));
