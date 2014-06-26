@@ -46,38 +46,27 @@ goog.require('goog.testing.mockmatchers');
 goog.testing.editor.FieldMock =
     function(opt_window, opt_appWindow, opt_range) {
   goog.testing.LooseMock.call(this, goog.editor.Field);
-  opt_window = opt_window || window;
-  opt_appWindow = opt_appWindow || opt_window;
 
-  this.getAppWindow();
-  this.$anyTimes();
-  this.$returns(opt_appWindow);
+  /**
+   * @private {!Window} Window the field would edit. Defaults to {@code window}.
+   */
+  this.window_ = opt_window || window;
 
-  this.getRange();
-  this.$anyTimes();
-  this.$does(function() {
-    return opt_range || goog.dom.Range.createFromWindow(opt_window);
-  });
+  /**
+   * @private {!Window} "AppWindow" of the field, which can be different from
+   *     {@code opt_window} when mocking a field that uses an iframe. Defaults
+   *     to {@code opt_window}.
+   */
+  this.appWindow_ = opt_appWindow || this.window_;
 
-  this.getEditableDomHelper();
-  this.$anyTimes();
-  this.$returns(goog.dom.getDomHelper(opt_window.document));
+  /**
+   * @private {goog.dom.AbstractRange|undefined} An object (mock or real) to be
+   *     returned by getRange(). If ommitted, a new goog.dom.Range is created
+   *     from the window every time getRange() is called.
+   */
+  this.range_ = opt_range;
 
-  this.usesIframe();
-  this.$anyTimes();
-
-  this.getBaseZindex();
-  this.$anyTimes();
-  this.$returns(0);
-
-  this.restoreSavedRange(goog.testing.mockmatchers.ignoreArgument);
-  this.$anyTimes();
-  this.$does(function(range) {
-    if (range) {
-      range.restore();
-    }
-    this.focus();
-  });
+  this.setUnlimitedExpectations_();
 
   // These methods cannot be set on the prototype, because the prototype
   // gets stepped on by the mock framework.
@@ -98,3 +87,52 @@ goog.testing.editor.FieldMock =
   };
 };
 goog.inherits(goog.testing.editor.FieldMock, goog.testing.LooseMock);
+
+
+/**
+ * Sets various expectations with $anyTimes for "boilerplate" field methods that
+ * most tests don't need to verify explicitly.
+ * @private
+ */
+goog.testing.editor.FieldMock.prototype.setUnlimitedExpectations_ = function() {
+  this.getAppWindow();
+  this.$anyTimes();
+  this.$returns(this.appWindow_);
+
+  this.getRange();
+  this.$anyTimes();
+  this.$does(function() {
+    return this.range_ || goog.dom.Range.createFromWindow(this.window_);
+  });
+
+  this.getEditableDomHelper();
+  this.$anyTimes();
+  this.$returns(goog.dom.getDomHelper(this.window_.document));
+
+  this.usesIframe();
+  this.$anyTimes();
+
+  this.getBaseZindex();
+  this.$anyTimes();
+  this.$returns(0);
+
+  this.restoreSavedRange(goog.testing.mockmatchers.ignoreArgument);
+  this.$anyTimes();
+  this.$does(function(range) {
+    if (range) {
+      range.restore();
+    }
+    this.focus();
+  });
+};
+
+
+/**
+ * Resets expectations added by client test, but keeps "boiletplate", $anyTime
+ * expectations that this class sets by default.
+ */
+goog.testing.editor.FieldMock.prototype.resetClientTestExpectations =
+    function() {
+  this.$reset();
+  this.setUnlimitedExpectations_();
+};
