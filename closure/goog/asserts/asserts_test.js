@@ -183,3 +183,39 @@ function testAssertionError() {
   assertEquals('Wrong message', 'foo 1 two', error.message);
   assertEquals('Wrong messagePattern', 'foo %s %s', error.messagePattern);
 }
+
+function testFailWithCustomErrorHandler() {
+  try {
+    var handledException;
+    goog.asserts.setErrorHandler(
+        function(e) { handledException = e; });
+
+    var expectedMessage = 'Failure: Gevalt!';
+
+    goog.asserts.fail('Gevalt!');
+    assertTrue('handledException is null.', handledException != null);
+    assertTrue('Message check failed.  Expected: ' + expectedMessage +
+        ' Actual: ' + handledException.message,
+        goog.string.startsWith(expectedMessage, handledException.message));
+  } finally {
+    goog.asserts.setErrorHandler(goog.asserts.DEFAULT_ERROR_HANDLER);
+  }
+}
+
+function testAssertWithCustomErrorHandler() {
+  try {
+    var handledException;
+    goog.asserts.setErrorHandler(
+        function(e) { handledException = e; });
+
+    var expectedMessage = 'Assertion failed: Gevalt!';
+
+    goog.asserts.assert(false, 'Gevalt!');
+    assertTrue('handledException is null.', handledException != null);
+    assertTrue('Message check failed.  Expected: ' + expectedMessage +
+        ' Actual: ' + handledException.message,
+        goog.string.startsWith(expectedMessage, handledException.message));
+  } finally {
+    goog.asserts.setErrorHandler(goog.asserts.DEFAULT_ERROR_HANDLER);
+  }
+}
