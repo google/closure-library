@@ -788,14 +788,20 @@ goog.ui.Dialog.prototype.setVisible = function(visible) {
 };
 
 
-/** @override */
+/**
+ * @override
+ * @suppress {deprecated} AFTER_SHOW is deprecated earlier in this file.
+ */
 goog.ui.Dialog.prototype.onShow = function() {
   goog.ui.Dialog.base(this, 'onShow');
   this.dispatchEvent(goog.ui.Dialog.EventType.AFTER_SHOW);
 };
 
 
-/** @override */
+/**
+ * @override
+ * @suppress {deprecated} AFTER_HIDE is deprecated earlier in this file.
+ */
 goog.ui.Dialog.prototype.onHide = function() {
   goog.ui.Dialog.base(this, 'onHide');
   this.dispatchEvent(goog.ui.Dialog.EventType.AFTER_HIDE);
