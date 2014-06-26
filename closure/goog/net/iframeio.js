@@ -137,6 +137,7 @@ goog.provide('goog.net.IframeIo.IncrementalDataEvent');
 
 goog.require('goog.Timer');
 goog.require('goog.Uri');
+goog.require('goog.asserts');
 goog.require('goog.debug');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -145,6 +146,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.json');
 goog.require('goog.log');
+goog.require('goog.log.Level');
 goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.reflect');
@@ -619,7 +621,9 @@ goog.net.IframeIo.prototype.sendFromForm = function(form, opt_uri,
 goog.net.IframeIo.prototype.abort = function(opt_failureCode) {
   if (this.active_) {
     goog.log.info(this.logger_, 'Request aborted');
-    goog.events.removeAll(this.getRequestIframe());
+    var requestIframe = this.getRequestIframe();
+    goog.asserts.assert(requestIframe);
+    goog.events.removeAll(requestIframe);
     this.complete_ = false;
     this.active_ = false;
     this.success_ = false;

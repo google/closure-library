@@ -24,6 +24,7 @@
 
 goog.provide('goog.graphics.Element');
 
+goog.require('goog.asserts');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.Listenable');
@@ -147,5 +148,6 @@ goog.graphics.Element.prototype.removeEventListener = function(
 /** @override */
 goog.graphics.Element.prototype.disposeInternal = function() {
   goog.graphics.Element.superClass_.disposeInternal.call(this);
+  goog.asserts.assert(this.element_);
   goog.events.removeAll(this.element_);
 };

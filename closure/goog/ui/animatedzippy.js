@@ -185,7 +185,7 @@ goog.ui.AnimatedZippy.prototype.onAnimationCompleted_ = function(expanded) {
     this.getContentElement().style.marginTop = '0';
   }
 
-  goog.events.removeAll(this.anim_);
+  goog.events.removeAll(/** @type {!goog.fx.Animation} */ (this.anim_));
   this.setExpandedInternal(expanded);
   this.anim_ = null;
 
