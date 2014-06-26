@@ -77,8 +77,6 @@ function testRenderWithoutIframeMask() {
 
   assertTrue(goog.dom.compareNodeOrder(bg[0], content) < 0);
   assertTrue(goog.dom.compareNodeOrder(content, tabCatcher[0]) < 0);
-  assertEquals('true', goog.a11y.aria.getState(
-      popup.getElementStrict(), goog.a11y.aria.State.HIDDEN));
   assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
       main, goog.a11y.aria.State.HIDDEN)));
   popup.setVisible(true);
@@ -86,6 +84,9 @@ function testRenderWithoutIframeMask() {
       popup.getElementStrict(), goog.a11y.aria.State.HIDDEN)));
   assertEquals('true', goog.a11y.aria.getState(
       main, goog.a11y.aria.State.HIDDEN));
+  popup.setVisible(false);
+  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
+      main, goog.a11y.aria.State.HIDDEN)));
 }
 
 
@@ -106,8 +107,6 @@ function testRenderWithIframeMask() {
   assertTrue(goog.dom.compareNodeOrder(iframe[0], bg[0]) < 0);
   assertTrue(goog.dom.compareNodeOrder(bg[0], content) < 0);
   assertTrue(goog.dom.compareNodeOrder(content, tabCatcher[0]) < 0);
-  assertEquals('true', goog.a11y.aria.getState(
-      popup.getElementStrict(), goog.a11y.aria.State.HIDDEN));
   assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
       main, goog.a11y.aria.State.HIDDEN)));
   popup.setVisible(true);
@@ -115,6 +114,31 @@ function testRenderWithIframeMask() {
       popup.getElementStrict(), goog.a11y.aria.State.HIDDEN)));
   assertEquals('true', goog.a11y.aria.getState(
       main, goog.a11y.aria.State.HIDDEN));
+  popup.setVisible(false);
+  assertTrue(goog.string.isEmptySafe(goog.a11y.aria.getState(
+      main, goog.a11y.aria.State.HIDDEN)));
+}
+
+
+function testRenderWithAriaState() {
+  popup = new goog.ui.ModalPopup();
+  popup.render();
+
+  goog.a11y.aria.setState(main, goog.a11y.aria.State.HIDDEN, true);
+  popup.setVisible(true);
+  assertEquals(
+      'true', goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
+  popup.setVisible(false);
+  assertEquals(
+      'true', goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
+
+  goog.a11y.aria.setState(main, goog.a11y.aria.State.HIDDEN, false);
+  popup.setVisible(true);
+  assertEquals(
+      'false', goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
+  popup.setVisible(false);
+  assertEquals(
+      'false', goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
 }
 
 
@@ -401,7 +425,7 @@ function testSetupBackwardTabWrapResetsFlagAfterTimeout() {
  * @extends {goog.events.EventTarget}
  */
 var MockTransition = function() {
-  goog.base(this);
+  MockTransition.base(this, 'constructor');
   this.wasPlayed = false;
 };
 goog.inherits(MockTransition, goog.events.EventTarget);
