@@ -126,6 +126,17 @@ goog.ui.editor.messages.MSG_EMAIL_EXPLANATION = goog.getMsg(
 
 
 /**
+ * @return {!goog.html.SafeHtml} SafeHtml version of MSG_EMAIL_EXPLANATION.
+ */
+goog.ui.editor.messages.getEmailExplanationSafeHtml = function() {
+  return goog.html.uncheckedconversions.
+      safeHtmlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from('Parameterless translation'),
+          goog.ui.editor.messages.MSG_EMAIL_EXPLANATION);
+};
+
+
+/**
  * @desc Label for the checkbox that allows the user to specify what when this
  *     link is clicked, it should be opened in a new window.
  */

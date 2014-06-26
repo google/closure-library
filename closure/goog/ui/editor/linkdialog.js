@@ -149,7 +149,7 @@ goog.inherits(goog.ui.editor.LinkDialog.BeforeTestLinkEvent, goog.events.Event);
 
 /**
  * Optional warning to show about email addresses.
- * @type {string|undefined}
+ * @type {string|goog.html.SafeHtml}
  * @private
  */
 goog.ui.editor.LinkDialog.prototype.emailWarning_;
@@ -186,8 +186,8 @@ goog.ui.editor.LinkDialog.prototype.showRelNoFollow_ = false;
 /**
  * Sets the warning message to show to users about including email addresses on
  * public web pages.
- * @param {string} emailWarning Warning message to show users about including
- *     email addresses on the web.
+ * @param {string|!goog.html.SafeHtml} emailWarning Warning message to show
+ *     users about including email addresses on the web.
  */
 goog.ui.editor.LinkDialog.prototype.setEmailWarning = function(
     emailWarning) {
@@ -695,10 +695,13 @@ goog.ui.editor.LinkDialog.prototype.buildTabEmailAddress_ = function() {
 
   if (this.emailWarning_) {
     var explanationDiv = this.dom.createDom(goog.dom.TagName.DIV,
-        {
-          className: goog.ui.editor.LinkDialog.EXPLANATION_TEXT_CLASSNAME_,
-          innerHTML: this.emailWarning_
-        });
+        goog.ui.editor.LinkDialog.EXPLANATION_TEXT_CLASSNAME_);
+    if (this.emailWarning_ instanceof goog.html.SafeHtml) {
+      goog.dom.safe.setInnerHtml(explanationDiv, this.emailWarning_);
+    } else {
+      // TODO(user): Delete when all callsites are converted to SafeHtml.
+      explanationDiv.innerHTML = this.emailWarning_;
+    }
     goog.dom.appendChild(emailTab, explanationDiv);
   }
   return emailTab;
