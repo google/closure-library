@@ -733,7 +733,7 @@ goog.dom.createDom_ = function(doc, args) {
     if (goog.isString(attributes)) {
       element.className = attributes;
     } else if (goog.isArray(attributes)) {
-      goog.dom.classes.add.apply(null, [element].concat(attributes));
+      element.className = attributes.join(' ');
     } else {
       goog.dom.setProperties(element, attributes);
     }
