@@ -15,6 +15,7 @@
 goog.provide('goog.i18n.BidiFormatterTest');
 goog.setTestOnly('goog.i18n.BidiFormatterTest');
 
+goog.require('goog.html.SafeHtml');
 goog.require('goog.i18n.BidiFormatter');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.i18n.bidi.Format');
@@ -214,6 +215,13 @@ function testSpanWrap() {
       ltrAlwaysSpanFmt.spanWrap('', true, true));
 }
 
+function testSpanWrapSafeHtml() {
+  var html = goog.html.SafeHtml.htmlEscape('a');
+  var wrapped = rtlFmt.spanWrapSafeHtml(html, false);
+  assertHtmlEquals('<span dir="ltr">a</span>', wrapped);
+  assertEquals(NEUTRAL, wrapped.getDirection());
+}
+
 function testSpanWrapWithKnownDir() {
   assertEquals('known LTR in LTR context',
       en, ltrFmt.spanWrapWithKnownDir(LTR, en));
@@ -289,6 +297,12 @@ function testSpanWrapWithKnownDir() {
       he, unkFmt.spanWrapWithKnownDir(NEUTRAL, he));
   assertEquals('overall neutral but exit RTL in unknown context',
       en, unkFmt.spanWrapWithKnownDir(NEUTRAL, en));
+}
+
+function testSpanWrapSafeHtmlWithKnownDir() {
+  var html = goog.html.SafeHtml.htmlEscape('a');
+  assertHtmlEquals('<span dir="ltr">a</span>',
+      rtlFmt.spanWrapSafeHtmlWithKnownDir(LTR, html, false));
 }
 
 function testUnicodeWrap() {
@@ -514,4 +528,8 @@ function testEndEdge() {
   assertEquals('right', ltrFmt.endEdge());
   assertEquals('right', unkFmt.endEdge());
   assertEquals('left', rtlFmt.endEdge());
+}
+
+function assertHtmlEquals(expected, html) {
+  assertEquals(expected, goog.html.SafeHtml.unwrap(html));
 }
