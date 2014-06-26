@@ -69,22 +69,40 @@ Author: attila@google.com (Attila Bodis)
 
     function testCreateDomForCheckableItem() {
       item.setSupportedState(goog.ui.Component.State.CHECKED, true);
-      var element = renderer.createDom(item);
+      item.render();
+      var element = item.getElement();
       assertNotNull(element);
       assertSameElements('Element must have the expected class names',
           ['goog-menuitem', 'goog-option'],
           goog.dom.classlist.get(element));
       assertEquals('Element must have ARIA role menuitemcheckbox',
-      goog.a11y.aria.Role.MENU_ITEM_CHECKBOX,
-      goog.a11y.aria.getRole(element));
-      assertHTMLEquals('Child element must have the expected structure',
-          '<div class="goog-menuitem-content">' +
-              '<div class="goog-menuitem-checkbox"></div>Hello</div>',
-          element.innerHTML);
+          goog.a11y.aria.Role.MENU_ITEM_CHECKBOX,
+          goog.a11y.aria.getRole(element));
 
       item.setChecked(true);
-      element = renderer.createDom(item);
+      assertTrue('Item must be checked', item.isChecked());
+      assertSameElements('Checked item must have the expected class names',
+          ['goog-menuitem', 'goog-option', 'goog-option-selected'],
+          goog.dom.classlist.get(element));
+      assertEquals('Item must have checked ARIA state', 'true',
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
+    }
+
+    function testCreateUpdateDomForCheckableItem() {
+      // Render the item first, then update its supported states to include CHECKED.
+      item.render();
+      var element = item.getElement();
+      item.setSupportedState(goog.ui.Component.State.CHECKED, true);
       assertNotNull(element);
+      assertSameElements('Element must have the expected class names',
+          ['goog-menuitem', 'goog-option'],
+          goog.dom.classlist.get(element));
+      assertEquals('Element must have ARIA role menuitemcheckbox',
+          goog.a11y.aria.Role.MENU_ITEM_CHECKBOX,
+          goog.a11y.aria.getRole(element));
+
+      // Now actually check the item.
+      item.setChecked(true);
       assertTrue('Item must be checked', item.isChecked());
       assertSameElements('Checked item must have the expected class names',
           ['goog-menuitem', 'goog-option', 'goog-option-selected'],
@@ -95,27 +113,46 @@ Author: attila@google.com (Attila Bodis)
 
     function testCreateDomForSelectableItem() {
       item.setSupportedState(goog.ui.Component.State.SELECTED, true);
-      var element = renderer.createDom(item);
+      item.render();
+      var element = item.getElement();
       assertNotNull(element);
       assertSameElements('Element must have the expected class names',
           ['goog-menuitem', 'goog-option'],
           goog.dom.classlist.get(element));
       assertEquals('Element must have ARIA role menuitemradio',
-      goog.a11y.aria.Role.MENU_ITEM_RADIO,
-      goog.a11y.aria.getRole(element));
-      assertHTMLEquals('Child element must have the expected structure',
-          '<div class="goog-menuitem-content">' +
-              '<div class="goog-menuitem-checkbox"></div>Hello</div>',
-          element.innerHTML);
+          goog.a11y.aria.Role.MENU_ITEM_RADIO,
+          goog.a11y.aria.getRole(element));
 
       item.setSelected(true);
-      element = renderer.createDom(item);
       assertTrue('Item must be selected', item.isSelected());
       assertSameElements('Selected item must have the expected class names',
           ['goog-menuitem', 'goog-option', 'goog-option-selected'],
           goog.dom.classlist.get(element));
       assertEquals('Item must have selected ARIA state', 'true',
-          goog.a11y.aria.getState(element, goog.a11y.aria.State.SELECTED));
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
+    }
+
+    function testCreateUpdateDomForSelectableItem() {
+      // Render the item first, then update its supported states to include SELECTED.
+      item.render();
+      var element = item.getElement();
+      item.setSupportedState(goog.ui.Component.State.SELECTED, true);
+      assertNotNull(element);
+      assertSameElements('Element must have the expected class names',
+          ['goog-menuitem', 'goog-option'],
+          goog.dom.classlist.get(element));
+      assertEquals('Element must have ARIA role menuitemradio',
+          goog.a11y.aria.Role.MENU_ITEM_RADIO,
+          goog.a11y.aria.getRole(element));
+
+      // Now actually select the item.
+      item.setSelected(true);
+      assertTrue('Item must be selected', item.isSelected());
+      assertSameElements('Selected item must have the expected class names',
+          ['goog-menuitem', 'goog-option', 'goog-option-selected'],
+          goog.dom.classlist.get(element));
+      assertEquals('Item must have selected ARIA state', 'true',
+          goog.a11y.aria.getState(element, goog.a11y.aria.State.CHECKED));
     }
 
     function testGetContentElement() {

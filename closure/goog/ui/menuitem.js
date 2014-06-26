@@ -112,6 +112,20 @@ goog.ui.MenuItem.prototype.setValue = function(value) {
 };
 
 
+/** @override */
+goog.ui.MenuItem.prototype.setSupportedState = function(state, support) {
+  goog.ui.MenuItem.base(this, 'setSupportedState', state, support);
+  switch (state) {
+    case goog.ui.Component.State.SELECTED:
+      this.setSelectableInternal_(support);
+      break;
+    case goog.ui.Component.State.CHECKED:
+      this.setCheckableInternal_(support);
+      break;
+  }
+};
+
+
 /**
  * Sets the menu item to be selectable or not.  Set to true for menu items
  * that represent selectable options.
@@ -119,6 +133,15 @@ goog.ui.MenuItem.prototype.setValue = function(value) {
  */
 goog.ui.MenuItem.prototype.setSelectable = function(selectable) {
   this.setSupportedState(goog.ui.Component.State.SELECTED, selectable);
+};
+
+
+/**
+ * Sets the menu item to be selectable or not.
+ * @param {boolean} selectable  Whether the menu item is selectable.
+ * @private
+ */
+goog.ui.MenuItem.prototype.setSelectableInternal_ = function(selectable) {
   if (this.isChecked() && !selectable) {
     this.setChecked(false);
   }
@@ -137,7 +160,15 @@ goog.ui.MenuItem.prototype.setSelectable = function(selectable) {
  */
 goog.ui.MenuItem.prototype.setCheckable = function(checkable) {
   this.setSupportedState(goog.ui.Component.State.CHECKED, checkable);
+};
 
+
+/**
+ * Sets the menu item to be checkable or not.
+ * @param {boolean} checkable Whether the menu item is checkable.
+ * @private
+ */
+goog.ui.MenuItem.prototype.setCheckableInternal_ = function(checkable) {
   var element = this.getElement();
   if (element) {
     this.getRenderer().setCheckable(this, element, checkable);
@@ -253,15 +284,6 @@ goog.ui.registry.setDecoratorByClassName(goog.ui.MenuItemRenderer.CSS_CLASS,
       // MenuItem defaults to using MenuItemRenderer.
       return new goog.ui.MenuItem(null);
     });
-
-
-/**
- * @override
- */
-goog.ui.MenuItem.prototype.createDom = function() {
-  goog.ui.MenuItem.base(this, 'createDom');
-  this.getRenderer().correctAriaRole(this, this.getElement());
-};
 
 
 /**
