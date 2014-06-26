@@ -11,8 +11,7 @@ See the COPYING file for details.
 <title>Closure Unit Tests for DimensionPickerRenderer</title>
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.a11y.aria');
-  goog.require('goog.a11y.aria.State');
+  goog.require('goog.a11y.aria.LivePriority');
   goog.require('goog.dom');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.DimensionPicker');
@@ -38,11 +37,12 @@ See the COPYING file for details.
    * Tests that the right aria label is added when the highlighted
    * size changes.
    */
-  function testSetHighlightedSizeChangesAriaLabel() {
+  function testSetHighlightedSizeUpdatesLiveRegion() {
     picker.render();
     renderer.setHighlightedSize(picker, 3, 7);
-    assertEquals('3 by 7', goog.a11y.aria.getState(
-        picker.getElement(), goog.a11y.aria.State.LABEL));
+    var liveRegion = renderer.announcer_.getLiveRegion_(
+        goog.a11y.aria.LivePriority.ASSERTIVE);
+    assertEquals('3 by 7', goog.dom.getTextContent(liveRegion));
   }
 </script>
 </body>
