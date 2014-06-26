@@ -164,7 +164,7 @@ function testAddCssRuleAtPos() {
   var styleSheets = goog.cssom.getAllCssStyleSheets();
   var styleSheet = styleSheets[3];
   var newCssRule = '.css-addCssRulePos { display: block; }';
-  var rules = styleSheet.cssRules || styleSheet.rules;
+  var rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
   var origNumberOfRules = rules.length;
 
   // Firefox croaks if we try to insert a CSSRule at an index that
@@ -185,14 +185,14 @@ function testAddCssRuleAtPos() {
   }
   goog.cssom.addCssRule(styleSheet, newCssRule, pos);
 
-  rules = styleSheet.cssRules || styleSheet.rules;
+  rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
   var newNumberOfRules = rules.length;
   assertEquals(newNumberOfRules, origNumberOfRules + 1);
 
   // Remove the added rule so we don't mess up other tests.
   goog.cssom.removeCssRule(styleSheet, pos);
 
-  rules = styleSheet.cssRules || styleSheet.rules;
+  rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
   assertEquals(origNumberOfRules, rules.length);
 }
 
@@ -201,7 +201,7 @@ function testAddCssRuleNoIndex() {
   //  not passed in?
   var styleSheets = goog.cssom.getAllCssStyleSheets();
   var styleSheet = styleSheets[3];
-  var rules = styleSheet.cssRules || styleSheet.rules;
+  var rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
   var origNumberOfRules = rules.length;
   var newCssRule = '.css-addCssRuleNoIndex { display: block; }';
 
@@ -210,14 +210,14 @@ function testAddCssRuleNoIndex() {
   // the entry.
   goog.cssom.addCssRule(styleSheet, newCssRule);
 
-  rules = styleSheet.cssRules || styleSheet.rules;
+  rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
   var newNumberOfRules = rules.length;
   assertEquals(newNumberOfRules, origNumberOfRules + 1);
 
   // Remove the added rule so we don't mess up the other tests.
   goog.cssom.removeCssRule(styleSheet, newNumberOfRules - 1);
 
-  rules = styleSheet.cssRules || styleSheet.rules;
+  rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
   assertEquals(origNumberOfRules, rules.length);
 }
 
@@ -238,7 +238,8 @@ function testGetCssRuleIndexInParentStyleSheetAfterGetAllCssStyleRules() {
   // contain references to anything but CSSStyleRules while FF and others
   // include anything that inherits from the CSSRule interface.
   // See http://dev.w3.org/csswg/cssom/#cssrule.
-  var ruleIndex = goog.userAgent.IE ? 1 : 2;
+  var parentStyleSheet = goog.cssom.getParentStyleSheet(cssRule);
+  var ruleIndex = goog.isDefAndNotNull(parentStyleSheet.cssRules) ? 2 : 1;
   assertEquals(ruleIndex,
       goog.cssom.getCssRuleIndexInParentStyleSheet(cssRule));
 }
@@ -298,7 +299,7 @@ function testReplaceCssRuleUsingGetAllCssStyleRules() {
   var styleSheets = goog.cssom.getAllCssStyleSheets();
   var styleSheet = styleSheets[3];
   var rules = goog.cssom.getCssRulesFromStyleSheet(styleSheet);
-  var index = goog.userAgent.IE ? 1 : 2;
+  var index = goog.isDefAndNotNull(styleSheet.cssRules) ? 2 : 1;
   var newCssRule = rules[index];
   var newCssText =
       fixCssTextForIe(goog.cssom.getCssTextFromCssRule(newCssRule));
