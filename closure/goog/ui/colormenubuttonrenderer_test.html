@@ -74,7 +74,8 @@ function testSetCaptionValue() {
       goog.dom.getDomHelper());
   goog.ui.ColorMenuButtonRenderer.setCaptionValue(wrappedCaption, 'red');
 
-  var expectedColor = goog.userAgent.IE ? '#ff0000' : 'rgb(255, 0, 0)';
+  var expectedColor = goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9) ?
+      '#ff0000' : 'rgb(255, 0, 0)';
   assertEquals(expectedColor, caption.style.borderBottomColor);
 }
 
