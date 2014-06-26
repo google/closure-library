@@ -546,7 +546,7 @@ goog.ui.Dialog.prototype.getDraggable = function() {
 /**
  * Enables or disables dragging.
  * @param {boolean} enabled Whether to enable it.
- * @private.
+ * @private
  */
 goog.ui.Dialog.prototype.setDraggingEnabled_ = function(enabled) {
   // This isn't ideal, but the quickest and easiest way to append
@@ -1226,7 +1226,7 @@ goog.ui.Dialog.ButtonSet.prototype.set = function(key, caption,
  * Adds a button (an object with a key and caption) to this button set. Buttons
  * will be displayed in the order they are added.
  * @see goog.ui.Dialog.DefaultButtons
- * @param {!{key: string, caption: string}} button The button key and caption.
+ * @param {{key: string, caption: string}} button The button key and caption.
  * @param {boolean=} opt_isDefault Whether this button is the default button.
  *     Dialog will dispatch for this button if enter is pressed.
  * @param {boolean=} opt_isCancel Whether this button has the same behavior as
@@ -1489,7 +1489,7 @@ goog.ui.Dialog.DefaultButtonCaptions = {
 
 /**
  * The standard buttons (keys associated with captions).
- * @enum {!{key: string, caption: string}}
+ * @enum {{key: string, caption: string}}
  */
 goog.ui.Dialog.ButtonSet.DefaultButtons = {
   OK: {

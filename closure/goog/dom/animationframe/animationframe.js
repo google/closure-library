@@ -141,7 +141,7 @@ goog.dom.animationFrame.taskId_ = 0;
  * other functions scheduled under this key and the function under "mutate" will
  * run after that.
  *
- * @param {!{
+ * @param {{
  *   measure: (function(this:THIS, !goog.dom.animationFrame.State)|undefined),
  *   mutate: (function(this:THIS, !goog.dom.animationFrame.State)|undefined)
  * }} spec
