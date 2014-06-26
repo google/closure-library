@@ -78,6 +78,23 @@ See the COPYING file for details.
     assertEquals('Children are traversed to find labels',
         'child-title-3', goog.a11y.aria.getLabel(cells[3]));
   }
+
+  function testA11yActiveDescendant() {
+    palette.render();
+    var cells = palette.getElementStrict().getElementsByTagName('td');
+
+    renderer.highlightCell(palette, cells[1].firstChild, true);
+    assertEquals(cells[1].id, goog.a11y.aria.getState(
+        palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
+
+    renderer.highlightCell(palette, cells[0].firstChild, false);
+    assertEquals(cells[1].id, goog.a11y.aria.getState(
+        palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
+
+    renderer.highlightCell(palette, cells[1].firstChild, false);
+    assertNotEquals(cells[1].id, goog.a11y.aria.getState(
+        palette.getElementStrict(), goog.a11y.aria.State.ACTIVEDESCENDANT));
+  }
 </script>
 </body>
 </html>
