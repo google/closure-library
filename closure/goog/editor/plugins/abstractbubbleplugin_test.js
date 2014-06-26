@@ -18,17 +18,14 @@ goog.setTestOnly('goog.editor.plugins.AbstractBubblePluginTest');
 goog.require('goog.dom');
 goog.require('goog.editor.plugins.AbstractBubblePlugin');
 goog.require('goog.events.BrowserEvent');
-goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.functions');
 goog.require('goog.style');
 goog.require('goog.testing.editor.FieldMock');
 goog.require('goog.testing.editor.TestHelper');
 goog.require('goog.testing.events');
-goog.require('goog.testing.events.Event');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.editor.Bubble');
-goog.require('goog.userAgent');
 
 var testHelper;
 var fieldDiv;
@@ -51,6 +48,7 @@ function setUpPage() {
 function setUp() {
   testHelper = new goog.testing.editor.TestHelper(fieldDiv);
   testHelper.setUpEditableElement();
+
   FIELDMOCK = new goog.testing.editor.FieldMock();
 
   bubblePlugin = new goog.editor.plugins.AbstractBubblePlugin(COMMAND);
@@ -215,84 +213,65 @@ function testSelectOneTextCharacterNoError() {
 }
 
 function testTabKeyEvents() {
+  FIELDMOCK.focus();
   FIELDMOCK.$replay();
   bubblePlugin.enableKeyboardNavigation(true /* enable link tabbing */);
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var bubbleLink1, bubbleLink2;
   bubblePlugin.createBubbleContents = function(container) {
-    bubbleLink1 = this.createLink('linkInBubble1', 'Foo', false, container);
-    bubbleLink2 = this.createLink('linkInBubble2', 'Bar', false, container);
+    this.createLink('linkInBubble0', 'Foo', false, container);
+    this.createLink('linkInBubble1', 'Bar', false, container);
   };
   bubblePlugin.handleSelectionChangeInternal(link);
 
+  goog.testing.events.fireKeySequence(fieldDiv,
+      goog.events.KeyCodes.TAB);
   assertTrue('Bubble should be visible', bubblePlugin.isVisible());
 
-  var tabHandledByBubble = simulateTabKeyOnBubble();
-  assertTrue('The action should be handled by the plugin', tabHandledByBubble);
-  assertFocused(bubbleLink1);
-
-  // Tab on the first link. The test framework doesn't easily let us verify
-  // the desired behavior - namely, that the second link gets focused - but at
-  // least we verify that the field doesn't get the focused.
-  goog.testing.events.fireKeySequence(bubbleLink1, goog.events.KeyCodes.TAB);
-
-  FIELDMOCK.$verify();
-
-  // Tabbing on the last link should trigger focus() of the target field.
-  FIELDMOCK.resetClientTestExpectations();
-  FIELDMOCK.focus();
-  FIELDMOCK.$replay();
-  goog.testing.events.fireKeySequence(bubbleLink2, goog.events.KeyCodes.TAB);
+  var linkEls = goog.dom.getElementsByClass(
+      goog.editor.plugins.AbstractBubblePlugin.LINK_CLASSNAME_,
+      bubblePlugin.getSharedBubble_().getContentElement());
+  goog.testing.events.fireKeySequence(linkEls[0], goog.events.KeyCodes.TAB);
+  goog.testing.events.fireKeySequence(linkEls[1], goog.events.KeyCodes.TAB);
   FIELDMOCK.$verify();
 }
 
 function testTabKeyEventsWithShiftKey() {
+  FIELDMOCK.focus();
   FIELDMOCK.$replay();
   bubblePlugin.enableKeyboardNavigation(true /* enable link tabbing */);
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var bubbleLink1;
   bubblePlugin.createBubbleContents = function(container) {
-    bubbleLink1 = this.createLink('linkInBubble1', 'Foo', false, container);
-    // The test acts only on one link, but we give another one to make sure
-    // that the link we act on is not also the last.
-    this.createLink('linkInBubble2', 'Bar', false, container);
+    this.createLink('linkInBubble0', 'Foo', false, container);
+    this.createLink('linkInBubble1', 'Bar', false, container);
   };
   bubblePlugin.handleSelectionChangeInternal(link);
 
+  goog.testing.events.fireKeySequence(fieldDiv,
+      goog.events.KeyCodes.TAB);
   assertTrue('Bubble should be visible', bubblePlugin.isVisible());
 
-  var tabHandledByBubble = simulateTabKeyOnBubble();
-  assertTrue('The action should be handled by the plugin', tabHandledByBubble);
-  assertFocused(bubbleLink1);
-  FIELDMOCK.$verify();
-
-  // Shift-tabbing on the first link should trigger focus() of the target field.
-  FIELDMOCK.resetClientTestExpectations();
-  FIELDMOCK.focus();
-  FIELDMOCK.$replay();
-  goog.testing.events.fireKeySequence(
-      bubbleLink1, goog.events.KeyCodes.TAB, {shiftKey: true});
+  var linkEls = goog.dom.getElementsByClass(
+      goog.editor.plugins.AbstractBubblePlugin.LINK_CLASSNAME_,
+      bubblePlugin.getSharedBubble_().getContentElement());
+  goog.testing.events.fireKeySequence(linkEls[0], goog.events.KeyCodes.TAB,
+      {shiftKey: true});
   FIELDMOCK.$verify();
 }
 
 function testTabKeyNoEffectKeyboardNavDisabled() {
   FIELDMOCK.$replay();
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var bubbleLink;
   bubblePlugin.createBubbleContents = function(container) {
-    bubbleLink = this.createLink('linkInBubble', 'Foo', false, container);
+    this.createLink('linkInBubble0', 'Foo', false, container);
+    this.createLink('linkInBubble1', 'Bar', false, container);
   };
   bubblePlugin.handleSelectionChangeInternal(link);
 
-  assertTrue('Bubble should be visible', bubblePlugin.isVisible());
-
-  var tabHandledByBubble = simulateTabKeyOnBubble();
   assertFalse('The action should not be handled by the plugin',
-      tabHandledByBubble);
-  assertNotFocused(bubbleLink);
-
-  // Verify that tabbing the link doesn't cause focus of the field.
-  goog.testing.events.fireKeySequence(bubbleLink, goog.events.KeyCodes.TAB);
+      bubblePlugin.handleKeyDown({
+        keyCode: goog.events.KeyCodes.TAB,
+        shiftKey: false
+      }));
 
   FIELDMOCK.$verify();
 }
@@ -301,68 +280,23 @@ function testOtherKeyEventNoEffectKeyboardNavEnabled() {
   FIELDMOCK.$replay();
   bubblePlugin.enableKeyboardNavigation(true /* enable link tabbing */);
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var bubbleLink;
   bubblePlugin.createBubbleContents = function(container) {
-    bubbleLink = this.createLink('linkInBubble', 'Foo', false, container);
+    this.createLink('linkInBubble0', 'Foo', false, container);
+    this.createLink('linkInBubble1', 'Bar', false, container);
   };
   bubblePlugin.handleSelectionChangeInternal(link);
 
+  // Test pressing CTRL + B: this should not have any effect.
+  goog.testing.events.fireKeySequence(fieldDiv,
+      goog.events.KeyCodes.B, {ctrlKey: true});
   assertTrue('Bubble should be visible', bubblePlugin.isVisible());
 
-  // Test pressing CTRL + B: this should not have any effect.
-  var keyHandledByBubble =
-      simulateKeyDownOnBubble(goog.events.KeyCodes.B, true);
-
   assertFalse('The action should not be handled by the plugin',
-      keyHandledByBubble);
-  assertNotFocused(bubbleLink);
+      bubblePlugin.handleKeyDown({
+        keyCode: goog.events.KeyCodes.B,
+        shiftKey: false,
+        ctrlKey: true
+      }));
 
   FIELDMOCK.$verify();
-}
-
-
-/**
- * Sends a tab key event to the bubble.
- * @return {boolean} whether the bubble hanlded the event.
- */
-function simulateTabKeyOnBubble() {
-  return simulateKeyDownOnBubble(goog.events.KeyCodes.TAB, false);
-}
-
-
-/**
- * Sends a key event to the bubble.
- * @param {number} keyCode
- * @param {boolean} isCtrl
- * @return {boolean} whether the bubble hanlded the event.
- */
-function simulateKeyDownOnBubble(keyCode, isCtrl) {
-  // In some browsers (e.g. FireFox) the editable field is marked with
-  // designMode on. In the test setting (and not in production setting), the
-  // bubble element shares the same window and hence the designMode. In this
-  // mode, activeElement remains the <body> and isn't changed along with the
-  // focus as a result of tab key.
-  bubblePlugin.getSharedBubble_().getContentElement().
-      ownerDocument.designMode = 'off';
-
-  var event =
-      new goog.testing.events.Event(goog.events.EventType.KEYDOWN, null);
-  event.keyCode = keyCode;
-  event.ctrlKey = isCtrl;
-  return bubblePlugin.handleKeyDown(event);
-}
-
-
-function assertFocused(element) {
-  // The activeElement assertion below doesn't work in IE7. At this time IE7 is
-  // no longer supported by any client product, so we don't care.
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(8)) {
-    return;
-  }
-  assertEquals('unexpected focus', element, document.activeElement);
-}
-
-
-function assertNotFocused(element) {
-  assertNotEquals('unexpected focus', element, document.activeElement);
 }
