@@ -166,7 +166,7 @@ goog.Promise = function(resolver, opt_context) {
  * @define {boolean} Whether traces of {@code then} calls should be included in
  * exceptions thrown
  */
-goog.define('goog.Promise.LONG_STACK_TRACES', goog.DEBUG);
+goog.define('goog.Promise.LONG_STACK_TRACES', false);
 
 
 /**
