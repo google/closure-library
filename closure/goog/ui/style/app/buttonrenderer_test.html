@@ -102,7 +102,7 @@ See the COPYING file for details.
       button.decorate(goog.dom.getElement('button-box-with-space-in-content'));
       goog.testing.ui.style.assertStructureMatchesReference(button.getElement(),
         'normal-resting');
-      if (goog.userAgent.IE) {
+      if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
         assertEquals('Hello Decorated Box with space ',
             button.getContentElement().innerHTML);
       } else {
