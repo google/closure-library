@@ -86,7 +86,7 @@ function testApplyOpacity() {
   iframeMask.setOpacity(0.3);
   iframeMask.applyMask();
 
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
     assertContains('Expected opactity to be set in the CSS style',
         '30', findOneAndOnlyIframe().style.cssText);
   } else {
