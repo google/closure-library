@@ -37,6 +37,11 @@ goog.require('goog.asserts');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
+/**
+ * Some projects use goog.dom.classes but only directly depend on goog.dom.
+ * TODO: Notify the owners then remove goog.require('goog.dom.classes').
+ * @suppress {extraRequire}
+ */
 goog.require('goog.dom.classes');
 goog.require('goog.functions');
 goog.require('goog.math.Coordinate');
@@ -2025,7 +2030,8 @@ goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
   return /** @type {Element} */ (goog.dom.getAncestor(element,
       function(node) {
         return (!tagName || node.nodeName == tagName) &&
-               (!opt_class || goog.dom.classes.has(node, opt_class));
+               (!opt_class || goog.isString(node.className) &&
+                   goog.array.contains(node.className.split(/\s+/), opt_class));
       }, true));
 };
 
