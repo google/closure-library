@@ -20,6 +20,8 @@
 goog.provide('goog.HistoryTest');
 
 goog.require('goog.History');
+goog.require('goog.dispose');
+goog.require('goog.dom');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
@@ -28,15 +30,14 @@ goog.setTestOnly('goog.HistoryTest');
 
 // Mimimal function to exercise construction.
 function testCreation() {
+  var input = goog.dom.getElement('hidden-input');
+  var iframe = goog.dom.getElement('hidden-iframe');
 
-  // Running goog.History in tests on older browsers simply hangs them in TAP.
-  if (goog.userAgent.GECKO ||
-      (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9))) {
-    return;
+  try {
+    var history = new goog.History(undefined, undefined, input, iframe);
+  } finally {
+    goog.dispose(history);
   }
-
-  var history = new goog.History();
-
 }
 
 function testIsHashChangeSupported() {
