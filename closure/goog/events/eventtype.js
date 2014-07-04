@@ -55,6 +55,7 @@ goog.events.EventType = {
   MOUSEMOVE: 'mousemove',
   MOUSEENTER: 'mouseenter',
   MOUSELEAVE: 'mouseleave',
+  MOUSEWHEEL: goog.userAgent.GECKO ? 'DOMMouseScroll' : 'mousewheel',
   // Select start is non-standard.
   // See http://msdn.microsoft.com/en-us/library/ie/ms536969(v=vs.85).aspx.
   SELECTSTART: 'selectstart', // IE, Safari, Chrome
