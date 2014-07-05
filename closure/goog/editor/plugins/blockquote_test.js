@@ -55,9 +55,9 @@ function execCommand() {
   // With splitPoint we try to mimic the behavior of EnterHandler's
   // deleteCursorSelection_.
   var splitPoint = goog.dom.getElement('split-point');
-  var position = goog.userAgent.IE ?
-      splitPoint : {node: splitPoint.nextSibling, offset: 0};
-  if (!goog.userAgent.IE) {
+  var position = goog.editor.BrowserFeature.HAS_W3C_RANGES ?
+      {node: splitPoint.nextSibling, offset: 0} : splitPoint;
+  if (goog.editor.BrowserFeature.HAS_W3C_RANGES) {
     goog.dom.removeNode(splitPoint);
     goog.dom.Range.createCaret(position.node, 0).select();
   } else {
@@ -66,7 +66,7 @@ function execCommand() {
 
   var result = plugin.execCommand(goog.editor.plugins.Blockquote.SPLIT_COMMAND,
       position);
-  if (goog.userAgent.IE) {
+  if (!goog.editor.BrowserFeature.HAS_W3C_RANGES) {
     goog.dom.removeNode(splitPoint);
   }
 
@@ -96,7 +96,9 @@ function testSplitBlockquoteInBlockquoteWithoutClass() {
   assertTrue(execCommand());
   helper.assertHtmlMatches(
       '<blockquote>Test</blockquote>' +
-      '<div>[[!IE]]&nbsp;</div>' +
+      '<div>' +
+      (goog.editor.BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') +
+      '</div>' +
       '<blockquote>ing</blockquote>');
 }
 
@@ -107,7 +109,9 @@ function testSplitBlockquoteInBlockquoteWithoutClassInParagraphMode() {
   assertTrue(execCommand());
   helper.assertHtmlMatches(
       '<blockquote>Test</blockquote>' +
-      '<p>[[!IE]]&nbsp;</p>' +
+      '<p>' +
+      (goog.editor.BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') +
+      '</p>' +
       '<blockquote>ing</blockquote>');
 }
 
@@ -117,9 +121,12 @@ function testSplitBlockquoteInBlockquoteWithClass() {
 
   createPlugin(true);
   assertTrue(execCommand());
+
   helper.assertHtmlMatches(
       '<blockquote class="tr_bq">Test</blockquote>' +
-      '<div>[[!IE]]&nbsp;</div>' +
+      '<div>' +
+      (goog.editor.BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') +
+      '</div>' +
       '<blockquote class="tr_bq">ing</blockquote>');
 }
 
@@ -131,7 +138,9 @@ function testSplitBlockquoteInBlockquoteWithClassInParagraphMode() {
   assertTrue(execCommand());
   helper.assertHtmlMatches(
       '<blockquote class="tr_bq">Test</blockquote>' +
-      '<p>[[!IE]]&nbsp;</p>' +
+      '<p>' +
+      (goog.editor.BrowserFeature.HAS_W3C_RANGES ? '&nbsp;' : '') +
+      '</p>' +
       '<blockquote class="tr_bq">ing</blockquote>');
 }
 
