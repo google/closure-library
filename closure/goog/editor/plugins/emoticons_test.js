@@ -65,10 +65,6 @@ function runEmojiTestWithPlugin(plugin) {
   if (goog.userAgent.WEBKIT) {
     assertEquals('range starts after image',
         2, range.getStartOffset());
-  } else if (goog.userAgent.IE) {
-    assertEquals('range starts after image',
-        1, goog.array.indexOf(range.getContainerElement().childNodes,
-                              range.getStartNode()));
   } else if (goog.userAgent.GECKO) {
     assertEquals('range starts after image',
         2, goog.array.indexOf(range.getContainerElement().childNodes,
