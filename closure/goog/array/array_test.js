@@ -1508,6 +1508,24 @@ function testArrayFlatten() {
   assertArrayEquals([], goog.array.flatten([]));
 }
 
+function testSortBy() {
+  var array = ['foo', 'bar', 'FooBar'];
+  goog.array.sortBy(array, function(str) {
+    return str.toLowerCase();
+  });
+  assertArrayEquals(['bar', 'foo', 'FooBar'], array);
+}
+
+function testSortByWithCompareFunction() {
+  var array = ['foo', 'bar', 'FooBar'];
+  goog.array.sortBy(array, function(str) {
+    return str.toLowerCase();
+  }, function(a, b) {
+    return -goog.array.defaultCompare(a, b);
+  });
+  assertArrayEquals(['FooBar', 'foo', 'bar'], array);
+}
+
 function testSortObjectsByKey() {
   var sortedArray = buildSortedObjectArray(4);
   var objects =
