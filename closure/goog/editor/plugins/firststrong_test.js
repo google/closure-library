@@ -55,6 +55,8 @@ function setUp() {
 }
 
 function tearDown() {
+  goog.dispose(field);
+  goog.dispose(helper);
   triggeredCommand = null;
 }
 
