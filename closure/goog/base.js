@@ -25,8 +25,8 @@
 
 
 /**
- * @define {boolean} Overridden to true by the compiler when --closure_pass
- *     or --mark_as_compiled is specified.
+ * @define {boolean} Overridden to true by the compiler when
+ *     --process_closure_primitives is specified.
  */
 var COMPILED = false;
 
@@ -434,7 +434,8 @@ goog.define('goog.ENABLE_DEBUG_LOADER', true);
 /**
  * Implements a system for the dynamic resolution of dependencies that works in
  * parallel with the BUILD system. Note that all calls to goog.require will be
- * stripped by the JSCompiler when the --closure_pass option is used.
+ * stripped by the JSCompiler when the --process_closure_primitives option is
+ * used.
  * @see goog.provide
  * @param {string} name Namespace to include (as was given in goog.provide()) in
  *     the form "goog.package.part".
@@ -1425,7 +1426,7 @@ goog.getCssName = function(className, opt_modifier) {
  * </pre>
  * When declared as a map of string literals to string literals, the JSCompiler
  * will replace all calls to goog.getCssName() using the supplied map if the
- * --closure_pass flag is set.
+ * --process_closure_primitives flag is set.
  *
  * @param {!Object} mapping A map of strings to strings where keys are possible
  *     arguments to goog.getCssName() and values are the corresponding values
