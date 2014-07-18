@@ -991,12 +991,19 @@ function testQueryCommandValue() {
   editableField.makeEditable();
   assertFalse(editableField.queryCommandValue('boo'));
 
-  editableField.getElement().focus();
-  editableField.dispatchSelectionChangeEvent();
+  focusFieldSync(editableField);
   assertNull(editableField.queryCommandValue('boo'));
   assertObjectEquals({'boo': null, 'aieee': null},
       editableField.queryCommandValue(['boo', 'aieee']));
   editableField.dispose();
+}
+
+function focusFieldSync(field) {
+  field.focus();
+
+  // IE fires focus events async, so create a fake focus event
+  // synchronously.
+  goog.testing.events.fireFocusEvent(field.getElement());
 }
 
 
