@@ -35,8 +35,9 @@ var element;
  * @param {number} y The vertical translation
  */
 var setAndAssertTranslation = function(x, y) {
-  if (goog.userAgent.GECKO) {
-    // Mozilla does not support CSSMatrix.
+  if (goog.userAgent.GECKO ||
+      goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
+    // Mozilla and <IE10 do not support CSSMatrix.
     return;
   }
   var success = goog.style.transform.setTranslation(element, x, y);
