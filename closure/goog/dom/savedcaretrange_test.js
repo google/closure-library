@@ -99,8 +99,8 @@ function testSavedCaretRange() {
 
 function testReversedSavedCaretRange() {
   var parent = goog.dom.getElement('caretRangeTest');
-  var def = goog.dom.getElement('def');
-  var jkl = goog.dom.getElement('jkl');
+  var def = goog.dom.getElement('def-5');
+  var jkl = goog.dom.getElement('jkl-5');
 
   var range = goog.dom.Range.createFromNodes(
       jkl.firstChild, 1, def.firstChild, 2);
