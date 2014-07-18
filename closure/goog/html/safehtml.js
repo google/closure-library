@@ -220,7 +220,7 @@ goog.html.SafeHtml.htmlEscape = function(textOrHtml) {
   } else {
     textAsString = String(textOrHtml);
   }
-  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       goog.string.htmlEscape(textAsString), dir);
 };
 
@@ -238,7 +238,7 @@ goog.html.SafeHtml.htmlEscapePreservingNewlines = function(textOrHtml) {
     return textOrHtml;
   }
   var html = goog.html.SafeHtml.htmlEscape(textOrHtml);
-  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       goog.string.newLineToBr(goog.html.SafeHtml.unwrap(html)),
       html.getDirection());
 };
@@ -408,7 +408,7 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
     }
   }
 
-  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       result, dir);
 };
 
@@ -483,7 +483,7 @@ goog.html.SafeHtml.concat = function(var_args) {
   };
 
   goog.array.forEach(arguments, addArgument);
-  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       content, dir);
 };
 
@@ -514,20 +514,15 @@ goog.html.SafeHtml.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
 
 /**
- * Utility method to create SafeHtml instances.
- *
- * This function is considered "package private", i.e. calls (using "suppress
- * visibility") from other files within this package are considered acceptable.
- * DO NOT call this function from outside the goog.html package; use appropriate
- * wrappers instead.
+ * Package-internal utility method to create SafeHtml instances.
  *
  * @param {string} html The string to initialize the SafeHtml object with.
  * @param {?goog.i18n.bidi.Dir} dir The directionality of the SafeHtml to be
  *     constructed, or null if unknown.
  * @return {!goog.html.SafeHtml} The initialized SafeHtml object.
- * @private
+ * @package
  */
-goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_ = function(
+goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse = function(
     html, dir) {
   var safeHtml = new goog.html.SafeHtml();
   safeHtml.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = html;
@@ -541,5 +536,5 @@ goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_ = function(
  * @const {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.EMPTY =
-    goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+    goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
         '', goog.i18n.bidi.Dir.NEUTRAL);

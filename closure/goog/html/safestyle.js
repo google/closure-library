@@ -179,7 +179,7 @@ goog.html.SafeStyle.fromConstant = function(style) {
   goog.asserts.assert(goog.string.contains(styleString, ':'),
       'Style string must contain at least one \':\', to ' +
       'specify a "name: value" pair: ' + styleString);
-  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       styleString);
 };
 
@@ -273,18 +273,13 @@ goog.html.SafeStyle.unwrap = function(safeStyle) {
 
 
 /**
- * Utility method to create SafeStyle instances.
- *
- * This function is considered "package private", i.e. calls (using "suppress
- * visibility") from other files within this package are considered acceptable.
- * DO NOT call this function from outside the goog.html package; use appropriate
- * wrappers instead.
+ * Package-internal utility method to create SafeStyle instances.
  *
  * @param {string} style The string to initialize the SafeStyle object with.
  * @return {!goog.html.SafeStyle} The initialized SafeStyle object.
- * @private
+ * @package
  */
-goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_ =
+goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse =
     function(style) {
   var safeStyle = new goog.html.SafeStyle();
   safeStyle.privateDoNotAccessOrElseSafeStyleWrappedValue_ = style;
@@ -297,7 +292,7 @@ goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_ =
  * @const {!goog.html.SafeStyle}
  */
 goog.html.SafeStyle.EMPTY =
-    goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_('');
+    goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse('');
 
 
 /**
@@ -354,7 +349,7 @@ goog.html.SafeStyle.create = function(map) {
     return goog.html.SafeStyle.EMPTY;
   }
   goog.html.SafeStyle.checkStyle_(style);
-  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       style);
 };
 
@@ -392,6 +387,6 @@ goog.html.SafeStyle.concat = function(var_args) {
   if (!style) {
     return goog.html.SafeStyle.EMPTY;
   }
-  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       style);
 };

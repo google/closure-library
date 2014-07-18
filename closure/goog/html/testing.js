@@ -44,13 +44,9 @@ goog.require('goog.html.TrustedResourceUrl');
  *     SafeHtml to be constructed. A null or undefined value signifies an
  *     unknown directionality.
  * @return {!goog.html.SafeHtml}
- * @suppress {visibility} For access to SafeHtml.create...  Note that this
- *     use is appropriate since this method is intended to be "package private"
- *     within goog.html.  DO NOT call SafeHtml.create... from outside this
- *     package; use appropriate wrappers instead.
  */
 goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
-  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       html, (opt_dir == undefined ? null : opt_dir));
 };
 
@@ -63,13 +59,9 @@ goog.html.testing.newSafeHtmlForTest = function(html, opt_dir) {
  *
  * @param {string} style String to wrap into a SafeStyle.
  * @return {!goog.html.SafeStyle}
- * @suppress {visibility} For access to SafeStyle.create...  Note that this
- *     use is appropriate since this method is intended to be "package private"
- *     within goog.html.  DO NOT call SafeStyle.create... from outside this
- *     package; use appropriate wrappers instead.
  */
 goog.html.testing.newSafeStyleForTest = function(style) {
-  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       style);
 };
 
@@ -82,13 +74,9 @@ goog.html.testing.newSafeStyleForTest = function(style) {
  *
  * @param {string} url String to wrap into a SafeUrl.
  * @return {!goog.html.SafeUrl}
- * @suppress {visibility} For access to SafeUrl.create...  Note that this
- *     use is appropriate since this method is intended to be "package private"
- *     within goog.html.  DO NOT call SafeUrl.create... from outside this
- *     package; use appropriate wrappers instead.
  */
 goog.html.testing.newSafeUrlForTest = function(url) {
-  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(url);
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
 
 
@@ -101,13 +89,8 @@ goog.html.testing.newSafeUrlForTest = function(url) {
  *
  * @param {string} url String to wrap into a TrustedResourceUrl.
  * @return {!goog.html.TrustedResourceUrl}
- * @suppress {visibility} For access to TrustedResourceUrl.create...  Note that
- *     this use is appropriate since this method is intended to be
- *     "package private" within goog.html.  DO NOT call
- *     TrustedResourceUrl.create... from outside this package; use appropriate
- *     wrappers instead.
  */
 goog.html.testing.newTrustedResourceUrlForTest = function(url) {
   return goog.html.TrustedResourceUrl.
-      createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_(url);
+      createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(url);
 };

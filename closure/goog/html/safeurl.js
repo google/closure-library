@@ -237,7 +237,7 @@ goog.html.SafeUrl.unwrap = function(safeUrl) {
  * @return {!goog.html.SafeUrl} A SafeUrl object initialized to {@code url}.
  */
 goog.html.SafeUrl.fromConstant = function(url) {
-  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(
       goog.string.Const.unwrap(url));
 };
 
@@ -314,8 +314,7 @@ goog.html.SafeUrl.sanitize = function(url) {
   } else {
     url = goog.html.SafeUrl.normalize_(url);
   }
-  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(
-      url);
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
 
 
@@ -389,18 +388,13 @@ goog.html.SafeUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
 
 /**
- * Utility method to create SafeUrl instances.
- *
- * This function is considered "package private", i.e. calls (using "suppress
- * visibility") from other files within this package are considered acceptable.
- * DO NOT call this function from outside the goog.html package; use appropriate
- * wrappers instead.
+ * Package-internal utility method to create SafeUrl instances.
  *
  * @param {string} url The string to initialize the SafeUrl object with.
  * @return {!goog.html.SafeUrl} The initialized SafeUrl object.
- * @private
+ * @package
  */
-goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_ = function(
+goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse = function(
     url) {
   var safeUrl = new goog.html.SafeUrl();
   safeUrl.privateDoNotAccessOrElseSafeHtmlWrappedValue_ = url;

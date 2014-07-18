@@ -192,7 +192,7 @@ goog.html.TrustedResourceUrl.unwrap = function(trustedResourceUrl) {
  */
 goog.html.TrustedResourceUrl.fromConstant = function(url) {
   return goog.html.TrustedResourceUrl
-      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_(
+      .createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(
           goog.string.Const.unwrap(url));
 };
 
@@ -207,21 +207,16 @@ goog.html.TrustedResourceUrl.TYPE_MARKER_GOOG_HTML_SECURITY_PRIVATE_ = {};
 
 
 /**
- * Utility method to create TrustedResourceUrl instances.
- *
- * This function is considered "package private", i.e. calls (using "suppress
- * visibility") from other files within this package are considered acceptable.
- * DO NOT call this function from outside the goog.html package; use appropriate
- * wrappers instead.
+ * Package-internal utility method to create TrustedResourceUrl instances.
  *
  * @param {string} url The string to initialize the TrustedResourceUrl object
  *     with.
  * @return {!goog.html.TrustedResourceUrl} The initialized TrustedResourceUrl
  *     object.
- * @private
+ * @package
  */
 goog.html.TrustedResourceUrl.
-    createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_ = function(url) {
+    createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse = function(url) {
   var trustedResourceUrl = new goog.html.TrustedResourceUrl();
   trustedResourceUrl.privateDoNotAccessOrElseTrustedResourceUrlWrappedValue_ =
       url;

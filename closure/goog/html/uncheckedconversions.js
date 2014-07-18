@@ -73,7 +73,7 @@ goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract =
   goog.asserts.assert(
       goog.string.trim(goog.string.Const.unwrap(justification)).length > 0,
       'must provide non-empty justification');
-  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
       html, opt_dir || null);
 };
 
@@ -94,10 +94,6 @@ goog.html.uncheckedconversions.safeHtmlFromStringKnownToSatisfyTypeContract =
  *     contract.
  * @return {!goog.html.SafeStyle} The value of {@code style}, wrapped in a
  *     SafeStyle object.
- * @suppress {visibility} For access to SafeStyle.create...  Note that this
- *     use is appropriate since this method is intended to be "package private"
- *     withing goog.html.  DO NOT call SafeStyle.create... from outside this
- *     package; use appropriate wrappers instead.
  */
 goog.html.uncheckedconversions.safeStyleFromStringKnownToSatisfyTypeContract =
     function(justification, style) {
@@ -108,7 +104,7 @@ goog.html.uncheckedconversions.safeStyleFromStringKnownToSatisfyTypeContract =
   goog.asserts.assert(
       goog.string.trim(goog.string.Const.unwrap(justification)).length > 0,
       'must provide non-empty justification');
-  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse_(
+  return goog.html.SafeStyle.createSafeStyleSecurityPrivateDoNotAccessOrElse(
       style);
 };
 
@@ -129,10 +125,6 @@ goog.html.uncheckedconversions.safeStyleFromStringKnownToSatisfyTypeContract =
  *     contract.
  * @return {!goog.html.SafeUrl} The value of {@code url}, wrapped in a SafeUrl
  *     object.
- * @suppress {visibility} For access to SafeUrl.create...  Note that this
- *     use is appropriate since this method is intended to be "package private"
- *     withing goog.html.  DO NOT call SafeUrl.create... from outside this
- *     package; use appropriate wrappers instead.
  */
 goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract =
     function(justification, url) {
@@ -143,7 +135,7 @@ goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract =
   goog.asserts.assert(
       goog.string.trim(goog.string.Const.unwrap(justification)).length > 0,
       'must provide non-empty justification');
-  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse_(url);
+  return goog.html.SafeUrl.createSafeUrlSecurityPrivateDoNotAccessOrElse(url);
 };
 
 
@@ -163,10 +155,6 @@ goog.html.uncheckedconversions.safeUrlFromStringKnownToSatisfyTypeContract =
  *     contract.
  * @return {!goog.html.TrustedResourceUrl} The value of {@code url}, wrapped in
  *     a TrustedResourceUrl object.
- * @suppress {visibility} For access to TrustedResourceUrl.create...  Note that
- *     this use is appropriate since this method is intended to be
- *     "package private" withing goog.html.  DO NOT call SafeUrl.create... from
- *     outside this package; use appropriate wrappers instead.
  */
 goog.html.uncheckedconversions.
     trustedResourceUrlFromStringKnownToSatisfyTypeContract =
@@ -179,5 +167,5 @@ goog.html.uncheckedconversions.
       goog.string.trim(goog.string.Const.unwrap(justification)).length > 0,
       'must provide non-empty justification');
   return goog.html.TrustedResourceUrl.
-      createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse_(url);
+      createTrustedResourceUrlSecurityPrivateDoNotAccessOrElse(url);
 };
