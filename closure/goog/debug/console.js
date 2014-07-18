@@ -43,6 +43,8 @@ goog.debug.Console = function() {
   this.formatter_ = new goog.debug.TextFormatter();
   this.formatter_.showAbsoluteTime = false;
   this.formatter_.showExceptionText = false;
+  // The console logging methods automatically append a newline.
+  this.formatter_.appendNewline = false;
 
   this.isCapturing_ = false;
   this.logBuffer_ = '';
