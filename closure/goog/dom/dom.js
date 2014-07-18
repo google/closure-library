@@ -37,12 +37,6 @@ goog.require('goog.asserts');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-/**
- * Some projects use goog.dom.classes but only directly depend on goog.dom.
- * TODO: Notify the owners then remove goog.require('goog.dom.classes').
- * @suppress {extraRequire}
- */
-goog.require('goog.dom.classes');
 goog.require('goog.functions');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
