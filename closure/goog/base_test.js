@@ -1333,3 +1333,71 @@ function testLateRequireProtection() {
 
   assertContains('after document load', e.message);
 }
+
+function testDefineClass() {
+  var Base = goog.defineClass(null, {
+    constructor: function(foo) {
+      this.foo = foo;
+    },
+    statics: {
+      x: 42
+    },
+    frobnicate: function() {
+      return this.foo + this.foo;
+    }
+  });
+  var Derived = goog.defineClass(Base, {
+    constructor: function() {
+      Derived.base(this, 'constructor', 'bar');
+    },
+    frozzle: function(foo) {
+      this.foo = foo;
+    }
+  });
+
+  assertEquals(42, Base.x);
+  var der = new Derived();
+  assertEquals('barbar', der.frobnicate());
+  der.frozzle('qux');
+  assertEquals('quxqux', der.frobnicate());
+}
+
+function testDefineClass_interface() {
+  var Interface = goog.defineClass(null, {
+    statics: {
+      foo: 'bar'
+    },
+    qux: function() {}
+  });
+  assertEquals('bar', Interface.foo);
+  assertThrows(function() { new Interface(); });
+}
+
+function testDefineClass_seals() {
+  if (!(Object.seal instanceof Function)) return; // IE<9 doesn't have seal
+  var A = goog.defineClass(null, {
+    constructor: function() {}
+  });
+  var a = new A();
+  try {
+    a.foo = 'bar';
+  } catch (expectedInStrictModeOnly) { /* ignored */ }
+  assertEquals(undefined, a.foo);
+}
+
+function testDefineClass_unsealable() {
+  var LegacyBase = function() {};
+  LegacyBase.prototype.foo = null;
+  LegacyBase.prototype.setFoo = function(foo) {
+    this.foo = foo;
+  };
+  goog.tagUnsealableClass(LegacyBase);
+
+  var Derived = goog.defineClass(LegacyBase, {
+    constructor: function() {}
+  });
+
+  var der = new Derived();
+  der.setFoo('bar');
+  assertEquals('bar', der.foo);
+}

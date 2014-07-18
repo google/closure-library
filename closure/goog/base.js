@@ -1733,7 +1733,7 @@ goog.defineClass = function(superClass, def) {
     };
   }
 
-  var cls = goog.defineClass.createSealingConstructor_(constructor);
+  var cls = goog.defineClass.createSealingConstructor_(constructor, superClass);
   if (superClass) {
     goog.inherits(cls, superClass);
   }
@@ -1777,12 +1777,18 @@ goog.define('goog.defineClass.SEAL_CLASS_INSTANCES', goog.DEBUG);
  * results of the provided constructor function.
  *
  * @param {!Function} ctr The constructor whose results maybe be sealed.
+ * @param {Function} superClass The superclass constructor.
  * @return {!Function} The replacement constructor.
  * @private
  */
-goog.defineClass.createSealingConstructor_ = function(ctr) {
+goog.defineClass.createSealingConstructor_ = function(ctr, superClass) {
   if (goog.defineClass.SEAL_CLASS_INSTANCES &&
       Object.seal instanceof Function) {
+    // Don't seal subclasses of unsealable-tagged legacy classes.
+    if (superClass && superClass.prototype &&
+        superClass.prototype[goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_]) {
+      return ctr;
+    }
     /** @this {*} */
     var wrappedCtr = function() {
       // Don't seal an instance of a subclass when it calls the constructor of
@@ -1846,3 +1852,24 @@ goog.defineClass.applyProperties_ = function(target, source) {
   }
 };
 
+
+/**
+ * Sealing classes breaks the older idiom of assigning properties on the
+ * prototype rather than in the constructor.  As such, goog.defineClass
+ * must not seal subclasses of these old-style classes until they are fixed.
+ * Until then, this marks a class as "broken", instructing defineClass
+ * not to seal subclasses.
+ * @param {!Function} ctr The legacy constructor to tag as unsealable.
+ */
+goog.tagUnsealableClass = function(ctr) {
+  if (!COMPILED && goog.defineClass.SEAL_CLASS_INSTANCES) {
+    ctr.prototype[goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_] = true;
+  }
+};
+
+
+/**
+ * Name for unsealable tag property.
+ * @const @private {string}
+ */
+goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = 'goog_defineClass_legacy_unsealable';
