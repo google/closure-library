@@ -58,6 +58,8 @@ goog.require('goog.structs.Map');
 goog.require('goog.uri.utils');
 goog.require('goog.userAgent');
 
+goog.forwardDeclare('goog.Uri');
+
 
 
 /**
