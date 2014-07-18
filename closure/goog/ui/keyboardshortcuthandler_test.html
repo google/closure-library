@@ -539,8 +539,14 @@ See the COPYING file for details.
     }
 
     function testIgnoreNonGlobalShortcutsInContentEditable() {
+      // Don't set design mode in later IE as javascripts don't run when in
+      // that mode.
+      var setDesignMode = !goog.userAgent.IE || 
+        !goog.userAgent.isVersionOrHigher('9')
       try {
-        document.designMode = 'on';
+        if (setDesignMode) {
+          document.designMode = 'on';
+        }
         targetDiv.contentEditable = 'true';
 
         // Expect only global shortcuts.
@@ -552,7 +558,9 @@ See the COPYING file for details.
 
         listener.$verify();
       } finally {
-        document.designMode = 'off';
+        if (setDesignMode) {
+          document.designMode = 'off';
+        }
         targetDiv.contentEditable = 'false';
       }
     }
