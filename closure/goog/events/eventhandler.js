@@ -61,6 +61,8 @@ goog.require('goog.Disposable');
 goog.require('goog.events');
 goog.require('goog.object');
 
+goog.forwardDeclare('goog.events.EventWrapper');
+
 
 
 /**

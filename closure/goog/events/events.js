@@ -62,6 +62,9 @@ goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Listenable');
 goog.require('goog.events.ListenerMap');
 
+goog.forwardDeclare('goog.debug.ErrorHandler');
+goog.forwardDeclare('goog.events.EventWrapper');
+
 
 /**
  * @typedef {number|goog.events.ListenableKey}
@@ -983,10 +986,11 @@ goog.events.wrapListener = function(listener) {
 
   goog.asserts.assert(
       listener.handleEvent, 'An object listener must have handleEvent method.');
-  return listener[goog.events.LISTENER_WRAPPER_PROP_] ||
-      (listener[goog.events.LISTENER_WRAPPER_PROP_] = function(e) {
-        return listener.handleEvent(e);
-      });
+  if (!listener[goog.events.LISTENER_WRAPPER_PROP_]) {
+    listener[goog.events.LISTENER_WRAPPER_PROP_] =
+        function(e) { return listener.handleEvent(e); };
+  }
+  return listener[goog.events.LISTENER_WRAPPER_PROP_];
 };
 
 
