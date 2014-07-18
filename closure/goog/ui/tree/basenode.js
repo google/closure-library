@@ -48,7 +48,7 @@ goog.require('goog.ui.Component');
  *
  * @param {string|!goog.html.SafeHtml} html The html content of the node label.
  * @param {Object=} opt_config The configuration for the tree. See
- *    {@link goog.ui.tree.TreeControl.defaultConfig}. If not specified the
+ *    {@link goog.ui.tree.BaseNode.defaultConfig}. If not specified the
  *    default config will be used.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
@@ -62,7 +62,7 @@ goog.ui.tree.BaseNode = function(html, opt_config, opt_domHelper) {
    * @type {Object}
    * @private
    */
-  this.config_ = opt_config || goog.ui.tree.TreeControl.defaultConfig;
+  this.config_ = opt_config || goog.ui.tree.BaseNode.defaultConfig;
 
   /**
    * HTML content of the node label.
@@ -1502,6 +1502,10 @@ goog.ui.tree.BaseNode.prototype.getPreviousShownNode = function() {
   if (!tree.getShowRootNode() && parent == tree) {
     return null;
   }
+  // The root is the first node.
+  if (this == tree) {
+    return null;
+  }
   return /** @type {goog.ui.tree.BaseNode} */ (parent);
 };
 
@@ -1544,4 +1548,37 @@ goog.ui.tree.BaseNode.prototype.setTreeInternal = function(tree) {
       child.setTreeInternal(tree);
     });
   }
+};
+
+
+/**
+ * A default configuration for the tree.
+ */
+goog.ui.tree.BaseNode.defaultConfig = {
+  indentWidth: 19,
+  cssRoot: goog.getCssName('goog-tree-root') + ' ' +
+      goog.getCssName('goog-tree-item'),
+  cssHideRoot: goog.getCssName('goog-tree-hide-root'),
+  cssItem: goog.getCssName('goog-tree-item'),
+  cssChildren: goog.getCssName('goog-tree-children'),
+  cssChildrenNoLines: goog.getCssName('goog-tree-children-nolines'),
+  cssTreeRow: goog.getCssName('goog-tree-row'),
+  cssItemLabel: goog.getCssName('goog-tree-item-label'),
+  cssTreeIcon: goog.getCssName('goog-tree-icon'),
+  cssExpandTreeIcon: goog.getCssName('goog-tree-expand-icon'),
+  cssExpandTreeIconPlus: goog.getCssName('goog-tree-expand-icon-plus'),
+  cssExpandTreeIconMinus: goog.getCssName('goog-tree-expand-icon-minus'),
+  cssExpandTreeIconTPlus: goog.getCssName('goog-tree-expand-icon-tplus'),
+  cssExpandTreeIconTMinus: goog.getCssName('goog-tree-expand-icon-tminus'),
+  cssExpandTreeIconLPlus: goog.getCssName('goog-tree-expand-icon-lplus'),
+  cssExpandTreeIconLMinus: goog.getCssName('goog-tree-expand-icon-lminus'),
+  cssExpandTreeIconT: goog.getCssName('goog-tree-expand-icon-t'),
+  cssExpandTreeIconL: goog.getCssName('goog-tree-expand-icon-l'),
+  cssExpandTreeIconBlank: goog.getCssName('goog-tree-expand-icon-blank'),
+  cssExpandedFolderIcon: goog.getCssName('goog-tree-expanded-folder-icon'),
+  cssCollapsedFolderIcon: goog.getCssName('goog-tree-collapsed-folder-icon'),
+  cssFileIcon: goog.getCssName('goog-tree-file-icon'),
+  cssExpandedRootIcon: goog.getCssName('goog-tree-expanded-folder-icon'),
+  cssCollapsedRootIcon: goog.getCssName('goog-tree-collapsed-folder-icon'),
+  cssSelectedRow: goog.getCssName('selected')
 };

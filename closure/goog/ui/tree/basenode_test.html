@@ -65,8 +65,8 @@ function testAdd() {
 
 function testExpandIconAfterAddChild() {
   var tree = new goog.ui.tree.TreeControl('root');
-  var node1 = new goog.ui.tree.TreeNode('node1')
-  var node2 = new goog.ui.tree.TreeNode('node2')
+  var node1 = new goog.ui.tree.TreeNode('node1');
+  var node2 = new goog.ui.tree.TreeNode('node2');
   tree.render(goog.dom.createDom('div'));
   tree.addChild(node1);
 
@@ -188,6 +188,36 @@ function testGetNextShownNode() {
   component.addChild(tree);
   assertNull('next node for node3 inside the tree if the tree has parent',
       node3.getNextShownNode());
+}
+
+function testGetPreviousShownNode() {
+  var tree = new goog.ui.tree.TreeControl('tree');
+  assertNull('next node for unpopulated tree', tree.getPreviousShownNode());
+
+  var node1 = new goog.ui.tree.TreeNode('node1');
+  var node2 = new goog.ui.tree.TreeNode('node2');
+  var node3 = new goog.ui.tree.TreeNode('node3');
+  tree.add(node1);
+  node1.add(node2);
+  tree.add(node3);
+
+  assertEquals('prev node for node3 when node1 is unexpanded',
+               node1, node3.getPreviousShownNode());
+  node1.expand();
+  assertEquals('prev node for node3 when node1 is expanded',
+               node2, node3.getPreviousShownNode());
+  assertEquals('prev node for node2 when node1 is expanded',
+               node1, node2.getPreviousShownNode());
+  assertEquals('prev node for node1 when root is shown', tree,
+               node1.getPreviousShownNode());
+  tree.setShowRootNode(false);
+  assertNull('next node for node1 when root is not shown',
+             node1.getPreviousShownNode());
+
+  var component = new goog.ui.Component();
+  component.addChild(tree);
+  assertNull('prev node for root if the tree has parent',
+             tree.getPreviousShownNode());
 }
 
 function testInvisibleNodesInUnrenderedTree() {
