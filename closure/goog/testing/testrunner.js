@@ -369,6 +369,7 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
 
     div.style.color = color;
     div.style.font = 'normal 100% monospace';
+    div.style.wordWrap = 'break-word';
     if (i == 0) {
       // Highlight the first line as a header that indicates the test outcome.
       div.style.padding = '20px';
