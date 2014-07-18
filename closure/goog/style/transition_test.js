@@ -91,8 +91,8 @@ function testAddAndRemoveOnRealElement() {
   }
 
   var div = document.getElementById('test');
-  goog.style.transition.set(div, 'opacity 1s ease-in 0.125s');
-  assertEquals('opacity 1s ease-in 0.125s', getTransitionStyle(div));
+  goog.style.transition.set(div, 'opacity 1s ease-in 125ms');
+  assertEquals('opacity 1s ease-in 125ms', getTransitionStyle(div));
   goog.style.transition.removeAll(div);
   assertEquals('', getTransitionStyle(div));
 }
