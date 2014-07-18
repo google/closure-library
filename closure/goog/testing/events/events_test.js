@@ -338,11 +338,7 @@ function testKeySequenceCancellingKeydown() {
   preventDefaultEventType('keydown');
   assertFalse(goog.testing.events.fireKeySequence(
       root, goog.events.KeyCodes.ZERO));
-  if (goog.userAgent.IE) {
-    assertEventTypes(['keydown', 'keyup']);
-  } else {
-    assertEventTypes(['keydown', 'keypress', 'keyup']);
-  }
+  assertEventTypes(['keydown', 'keyup']);
 }
 
 function testKeySequenceCancellingKeypress() {

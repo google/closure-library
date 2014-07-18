@@ -198,7 +198,7 @@ function testIe9StyleKeyHandling() {
       function(e) { keyEvent = e; });
 
   fireKeyDown(keyHandler, goog.events.KeyCodes.ENTER);
-  fireKeyUp(keyHandler, goog.events.KeyCodes.ENTER);
+  fireKeyPress(keyHandler, goog.events.KeyCodes.ENTER);
   assertEquals('Enter should fire a key event with the keycode 13',
                goog.events.KeyCodes.ENTER,
                keyEvent.keyCode);
