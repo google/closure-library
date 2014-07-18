@@ -1670,6 +1670,8 @@ goog.base = function(me, opt_methodName, var_args) {
  * uncompiled code - in compiled code the calls will be inlined and the aliases
  * applied.  In uncompiled code the function is simply run since the aliases as
  * written are valid JavaScript.
+ *
+ *
  * @param {function()} fn Function to call.  This function can contain aliases
  *     to namespaces (e.g. "var dom = goog.dom") or classes
  *     (e.g. "var Timer = goog.Timer").
