@@ -79,18 +79,6 @@ goog.events.ListenableType;
 
 
 /**
- * Container for storing event listeners and their proxies
- *
- * TODO(user): Remove this when all external usage is
- * purged. goog.events no longer use goog.events.listeners_ for
- * anything meaningful.
- *
- * @private {!Object.<goog.events.ListenableKey>}
- */
-goog.events.listeners_ = {};
-
-
-/**
  * Property name on a native event target for the listener map
  * associated with the event target.
  * @const

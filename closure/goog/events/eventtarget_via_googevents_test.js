@@ -20,7 +20,6 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.eventTargetTester');
 goog.require('goog.events.eventTargetTester.KeyType');
 goog.require('goog.events.eventTargetTester.UnlistenReturnType');
-goog.require('goog.object');
 goog.require('goog.testing');
 goog.require('goog.testing.jsunit');
 
@@ -48,25 +47,18 @@ function testUnlistenProperCleanup() {
   goog.events.listen(eventTargets[0], EventType.A, listeners[0]);
   goog.events.unlisten(eventTargets[0], EventType.A, listeners[0]);
 
-  assertEquals(0, goog.object.getCount(goog.events.listeners_));
-
   goog.events.listen(eventTargets[0], EventType.A, listeners[0]);
   eventTargets[0].unlisten(EventType.A, listeners[0]);
-
-  assertEquals(0, goog.object.getCount(goog.events.listeners_));
 }
 
 function testUnlistenByKeyProperCleanup() {
   var keyNum = goog.events.listen(eventTargets[0], EventType.A, listeners[0]);
   goog.events.unlistenByKey(keyNum);
-
-  assertEquals(0, goog.object.getCount(goog.events.listeners_));
 }
 
 function testListenOnceProperCleanup() {
   goog.events.listenOnce(eventTargets[0], EventType.A, listeners[0]);
   eventTargets[0].dispatchEvent(EventType.A);
-  assertEquals(0, goog.object.getCount(goog.events.listeners_));
 }
 
 function testListenWithObject() {
