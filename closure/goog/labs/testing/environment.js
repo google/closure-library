@@ -72,15 +72,6 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
   /** Runs immediately after the tearDown phase of JsUnit tests. */
   tearDown: function() {
-    // Make sure the user did not forget to call $verifyAll in their test.
-    // This is a noop if they did.
-    if (this.mockControl) {
-      this.mockControl.$verifyAll();
-      // If we created the mockControl, we'll also tear it down.
-      if (this.shouldMakeMockControl_) {
-        this.mockControl.$tearDown();
-      }
-    }
     // Make sure promises and other stuff that may still be scheduled, get a
     // chance to run (and throw errors).
     if (this.mockClock) {
@@ -92,12 +83,24 @@ goog.labs.testing.Environment = goog.defineClass(null, {
         this.mockClock.dispose();
       }
     }
+    // Make sure the user did not forget to call $verifyAll in their test.
+    // This is a noop if they did.
+    if (this.mockControl) {
+      this.mockControl.$verifyAll();
+      // If we created the mockControl, we'll also tear it down.
+      if (this.shouldMakeMockControl_) {
+        this.mockControl.$tearDown();
+      }
+    }
+    // Verifying the mockControl may throw, so if cleanup needs to happen,
+    // add it further up in the function.
   },
 
 
   /**
    * Create a new {@see goog.testing.MockControl} accessible via
-   * {@code env.mockControl} for each test.
+   * {@code env.mockControl} for each test. If your test has more than one
+   * testing environment, don't call this on more than one of them.
    * @return {goog.labs.testing.Environment} For chaining.
    */
   withMockControl: function() {
@@ -109,7 +112,8 @@ goog.labs.testing.Environment = goog.defineClass(null, {
   /**
    * Create a {@see goog.testing.MockClock} for each test. The clock will be
    * installed (override i.e. setTimeout) by default. It can be accessed
-   * using {@code env.mockClock}.
+   * using {@code env.mockClock}. If your test has more than one testing
+   * environment, don't call this on more than one of them.
    * @return {goog.labs.testing.Environment} For chaining.
    */
   withMockClock: function() {
@@ -199,16 +203,34 @@ goog.labs.testing.EnvironmentTestCase_.prototype.setUp = function() {
 
 /** @override */
 goog.labs.testing.EnvironmentTestCase_.prototype.tearDown = function() {
+  var firstException;
   // User defined tearDown method.
   if (goog.global['tearDown']) {
-    goog.global['tearDown']();
+    try {
+      goog.global['tearDown']();
+    } catch (e) {
+      if (!firstException) {
+        firstException = e;
+      }
+    }
   }
 
   // Execute the tearDown methods for the environment in the reverse order
   // in which they were registered to "unfold" the setUp.
   goog.array.forEachRight(this.environments_, function(env) {
-    env.tearDown();
+    // For tearDowns between tests make sure they run as much as possible to
+    // avoid interference between tests.
+    try {
+      env.tearDown();
+    } catch (e) {
+      if (!firstException) {
+        firstException = e;
+      }
+    }
   });
+  if (firstException) {
+    throw firstException;
+  }
 };
 
 
