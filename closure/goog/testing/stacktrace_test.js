@@ -196,20 +196,6 @@ function testCanonicalizeFrame() {
       '[as bar] at http://x?a=1&amp;b=2:1', frame.toCanonicalString());
 }
 
-function testCanonicalizeFrameWithClosureInspector() {
-  stubs.set(goog.testing.stacktrace, 'isClosureInspectorActive_', function() {
-    return true;
-  });
-
-  var frame = new goog.testing.stacktrace.Frame('', 'foo', '', '()',
-      'http://x?a=1&b=2:1');
-  assertEquals('canonical stack frame with closure inspector link',
-      'foo() at <a href="" onclick="CLOSURE_INSPECTOR___.showLine(' +
-      '\'http://x?a=1&amp;b=2:1\', \'1\'); return false">' +
-      'http://x?a=1&amp;b=2:1<' + '/a>',
-      frame.toCanonicalString());
-}
-
 function testDeobfuscateFunctionName() {
   goog.testing.stacktrace.setDeobfuscateFunctionName(function(name) {
     return name.replace(/\$/g, '.');

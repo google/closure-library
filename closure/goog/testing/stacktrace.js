@@ -79,16 +79,7 @@ goog.testing.stacktrace.Frame.prototype.toCanonicalString = function() {
 
   if (this.path_) {
     canonical.push(' at ');
-    // If Closure Inspector is installed and running, then convert the line
-    // into a source link for displaying the code in Firebug.
-    if (goog.testing.stacktrace.isClosureInspectorActive_()) {
-      var lineNumber = this.path_.match(/\d+$/)[0];
-      canonical.push('<a href="" onclick="CLOSURE_INSPECTOR___.showLine(\'',
-          htmlEscape(this.path_), '\', \'', lineNumber, '\'); return false">',
-          htmlEscape(this.path_), '</a>');
-    } else {
-      canonical.push(htmlEscape(this.path_));
-    }
+    canonical.push(htmlEscape(this.path_));
   }
   return canonical.join('');
 };
@@ -435,16 +426,6 @@ goog.testing.stacktrace.setDeobfuscateFunctionName = function(fn) {
 goog.testing.stacktrace.maybeDeobfuscateFunctionName_ = function(name) {
   return goog.testing.stacktrace.deobfuscateFunctionName_ ?
       goog.testing.stacktrace.deobfuscateFunctionName_(name) : name;
-};
-
-
-/**
- * @return {boolean} Whether the Closure Inspector is active.
- * @private
- */
-goog.testing.stacktrace.isClosureInspectorActive_ = function() {
-  return Boolean(goog.global['CLOSURE_INSPECTOR___'] &&
-      goog.global['CLOSURE_INSPECTOR___']['supportsJSUnit']);
 };
 
 
