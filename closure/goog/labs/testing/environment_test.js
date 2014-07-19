@@ -37,6 +37,9 @@ function setUp() {
   var initFn = goog.testing.TestCase.initializeTestRunner;
   goog.testing.TestCase.initializeTestRunner = function() {};
   testCase = new goog.labs.testing.EnvironmentTestCase_();
+  goog.labs.testing.EnvironmentTestCase_.getInstance = function() {
+    return testCase;
+  };
   goog.testing.TestCase.initializeTestRunner = initFn;
 
   mockControl = new goog.testing.MockControl();
@@ -106,7 +109,50 @@ function testAutoDiscoverTests() {
 
   // Note that this number changes when more tests are added this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(2, testCase.tests_.length);
+  assertEquals(4, testCase.tests_.length);
 
   testing = false;
+}
+
+function testMockClock() {
+  testing = true;
+
+  var env = new goog.labs.testing.Environment().withMockClock();
+  assertNull(env.mockClock); // Not created before test runs.
+
+  testCase.addNewTest('testThatThrowsEventually', function() {
+    setTimeout(function() {
+      throw new Error('LateErrorMessage');
+    }, 200);
+  });
+
+  testCase.runTests();
+  assertTestFailure(testCase, 'testThatThrowsEventually', 'LateErrorMessage');
+  assertTrue(env.mockClock.isDisposed());
+  assertNull(env.mockControl);
+
+  testing = false;
+}
+
+function testMockControl() {
+  testing = true;
+
+  var env = new goog.labs.testing.Environment().withMockControl();
+  assertNull(env.mockControl);
+
+  testCase.addNewTest('testWithoutVerify', function() {
+    var test = env.mockControl.createFunctionMock('test');
+    test();
+    env.mockControl.$replayAll();
+  });
+
+  testCase.runTests();
+  assertTestFailure(testCase, 'testWithoutVerify', 'Missing a call to test');
+  assertNull(env.mockClock);
+
+  testing = false;
+}
+
+function assertTestFailure(testCase, name,  message) {
+  assertContains(message, testCase.result_.resultsByName[name][0]);
 }

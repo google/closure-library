@@ -15,6 +15,8 @@
 goog.provide('goog.labs.testing.Environment');
 
 goog.require('goog.array');
+goog.require('goog.testing.MockClock');
+goog.require('goog.testing.MockControl');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
@@ -34,6 +36,18 @@ goog.labs.testing.Environment = goog.defineClass(null, {
   constructor: function() {
     goog.labs.testing.EnvironmentTestCase_.getInstance().
         registerEnvironment_(this);
+
+    /** @type {goog.testing.MockControl} */
+    this.mockControl = null;
+
+    /** @type {goog.testing.MockClock} */
+    this.mockClock = null;
+
+    /** @private {boolean} */
+    this.shouldMakeMockControl_ = false;
+
+    /** @private {boolean} */
+    this.shouldMakeMockClock_ = false;
   },
 
 
@@ -46,11 +60,62 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
 
   /** Runs immediately before the setUp phase of JsUnit tests. */
-  setUp: goog.nullFunction,
+  setUp: function() {
+    if (this.shouldMakeMockClock_) {
+      this.mockClock = new goog.testing.MockClock(true);
+    }
+    if (this.shouldMakeMockControl_) {
+      this.mockControl = new goog.testing.MockControl();
+    }
+  },
 
 
   /** Runs immediately after the tearDown phase of JsUnit tests. */
-  tearDown: goog.nullFunction
+  tearDown: function() {
+    // Make sure the user did not forget to call $verifyAll in their test.
+    // This is a noop if they did.
+    if (this.mockControl) {
+      this.mockControl.$verifyAll();
+      // If we created the mockControl, we'll also tear it down.
+      if (this.shouldMakeMockControl_) {
+        this.mockControl.$tearDown();
+      }
+    }
+    // Make sure promises and other stuff that may still be scheduled, get a
+    // chance to run (and throw errors).
+    if (this.mockClock) {
+      for (var i = 0; i < 100; i++) {
+        this.mockClock.tick(1000);
+      }
+      // If we created the mockClock, we'll also dispose it.
+      if (this.shouldMakeMockClock_) {
+        this.mockClock.dispose();
+      }
+    }
+  },
+
+
+  /**
+   * Create a new {@see goog.testing.MockControl} accessible via
+   * {@code env.mockControl} for each test.
+   * @return {goog.labs.testing.Environment} For chaining.
+   */
+  withMockControl: function() {
+    this.shouldMakeMockControl_ = true;
+    return this;
+  },
+
+
+  /**
+   * Create a {@see goog.testing.MockClock} for each test. The clock will be
+   * installed (override i.e. setTimeout) by default. It can be accessed
+   * using {@code env.mockClock}.
+   * @return {goog.labs.testing.Environment} For chaining.
+   */
+  withMockClock: function() {
+    this.shouldMakeMockClock_ = true;
+    return this;
+  }
 });
 
 
