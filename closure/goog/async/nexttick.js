@@ -43,6 +43,12 @@ goog.async.throwException = function(exception) {
  * Fires the provided callbacks as soon as possible after the current JS
  * execution context. setTimeout(…, 0) always takes at least 5ms for legacy
  * reasons.
+ *
+ * This will not schedule the callback as a microtask (i.e. a task that can
+ * preempt user input or networking callbacks). It is meant to emulate what
+ * setTimeout(_, 0) would do if it were not throttled. If you desire microtask
+ * behavior, use {@see goog.Promise} instead.
+ *
  * @param {function(this:SCOPE)} callback Callback function to fire as soon as
  *     possible.
  * @param {SCOPE=} opt_context Object in whose scope to call the listener.
@@ -83,24 +89,6 @@ goog.async.nextTick.setImmediate_;
  * @private
  */
 goog.async.nextTick.getSetImmediateEmulator_ = function() {
-  // If native Promises are available in the browser, just schedule the callback
-  // on a fulfilled promise, which is specified to be async, but as fast as
-  // possible.
-  if (goog.global.Promise && goog.global.Promise.resolve) {
-    var promise = goog.global.Promise.resolve();
-    return function(cb) {
-      promise.then(function() {
-        try {
-          cb();
-        } catch (e) {
-          // If there is an error in the callback, make sure it is reported,
-          // since there is no chance to attach an error-handler to the
-          // promise used here.
-          goog.async.throwException(e);
-        }
-      });
-    };
-  }
   // Create a private message channel and use it to postMessage empty messages
   // to ourselves.
   var Channel = goog.global['MessageChannel'];
