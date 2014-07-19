@@ -11,8 +11,12 @@ See the COPYING file for details.
 <title>Closure Unit Tests - goog.ui.RichTextSpellChecker</title>
 <script src="../base.js"></script>
 <script>
-  goog.require('goog.dom');
+  goog.require('goog.dom.Range');
+  goog.require('goog.dom.classlist');
   goog.require('goog.events.KeyCodes');
+  goog.require('goog.object');
+  goog.require('goog.spell.SpellCheck');
+  goog.require('goog.testing.MockClock');
   goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
   goog.require('goog.ui.RichTextSpellChecker');
@@ -31,28 +35,81 @@ See the COPYING file for details.
 
 <script>
 
-var attributeSet = ['b', 'u', 'del', 'i'];
-var vocabulary = ['test', 'words', 'a', 'few', 'missspelling', 'iggnore'];
+var VOCABULARY = ['test', 'words', 'a', 'few'];
+var SUGGESTIONS = ['foo', 'bar'];
+var EXCLUDED_DATA = ['DIV.goog-quote', 'goog-comment', 'SPAN.goog-note'];
+/**
+ * Delay in ms needed for the spell check word lookup to finish. Finishing the
+ * lookup also finishes the spell checking.
+ * @see goog.spell.SpellCheck.LOOKUP_DELAY_
+ */
+var SPELL_CHECK_LOOKUP_DELAY = 100;
 
-// We don't use Math.random() to make test predictable. Math.random is not
-// repeatable, so a success on the dev machine != success in the lab (or on
-// other dev machines). This is the same pseudorandom logic that CRT rand()
-// uses.
-var rseed = 1;
-function random(range) {
-  rseed = (rseed * 1103515245 + 12345) & 0xffffffff;
-  return ((rseed >> 16) & 0x7fff) % range;
-};
+var TEST_TEXT1 = 'this test is longer than a few words now';
+var TEST_TEXT2 = 'test another simple text with misspelled words';
+var TEST_TEXT3 = 'test another simple text with misspelled words' +
+    '<b class="goog-quote">test another simple text with misspelled words<u> ' +
+    'test another simple text with misspelled words<del class="goog-quote"> ' +
+    'test another simple text with misspelled words<i>this test is longer ' +
+    'than a few words now</i>test another simple text with misspelled words ' +
+    '<i>this test is longer than a few words now</i></del>test another ' +
+    'simple text with misspelled words<del class="goog-quote">test another ' +
+    'simple text with misspelled words<i>this test is longer than a few ' +
+    'words now</i>test another simple text with misspelled words<i>this test ' +
+    'is longer than a few words now</i></del></u>test another simple text ' +
+    'with misspelled words<u>test another simple text with misspelled words' +
+    '<del class="goog-quote">test another simple text with misspelled words' +
+    '<i> thistest is longer than a few words now</i>test another simple text ' +
+    'with misspelled words<i>this test is longer than a few words ' +
+    'now</i></del>test another simple text with misspelled words' +
+    '<del class="goog-quote">test another simple text with misspelled words' +
+    '<i>this test is longer than a few words now</i>test another simple text ' +
+    'with misspelled words<i>this test is longer than a few words ' +
+    'now</i></del></u></b>';
 
+var spellChecker;
+var handler;
+var mockClock;
+
+function setUp() {
+  mockClock = new goog.testing.MockClock(true /* install */);
+  handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
+  spellChecker = new goog.ui.RichTextSpellChecker(handler);
+}
+
+function tearDown() {
+  spellChecker.dispose();
+  handler.dispose();
+  mockClock.dispose();
+}
+
+function waitForSpellCheckToFinish() {
+  mockClock.tick(SPELL_CHECK_LOOKUP_DELAY);
+}
+
+
+/**
+ * @typedef {!Array.<string|goog.spell.SpellCheck.WordStatus|!Array.<string>>}
+ * @suppress {missingProvide}
+ */
+var lookupWordEntry;
+
+/**
+ * Function to use for word lookup by the spell check handler. This function is
+ * supplied as a constructor parameter for the spell check handler.
+ * @param {!Array.<string>} words Unknown words that need to be looked up.
+ * @param {!goog.spell.SpellCheck} spellChecker The spell check handler.
+ * @param {function(!Array.<!lookupWordEntry>)} callback The lookup callback
+ *     function.
+ */
 function localSpellCheckingFunction(words, spellChecker, callback) {
   var len = words.length;
   var results = [];
   for (var i = 0; i < len; i++) {
     var word = words[i];
     var found = false;
-    // Last two words are considered misspellings
-    for (var j = 0 ; j < vocabulary.length - 2 ; ++j) {
-      if (vocabulary[j] == word) {
+    for (var j = 0; j < VOCABULARY.length; ++j) {
+      if (VOCABULARY[j] == word) {
         found = true;
         break;
       }
@@ -61,210 +118,95 @@ function localSpellCheckingFunction(words, spellChecker, callback) {
       results.push([word, goog.spell.SpellCheck.WordStatus.VALID]);
     } else {
       results.push([word, goog.spell.SpellCheck.WordStatus.INVALID,
-          ['foo','bar']]);
+          SUGGESTIONS]);
     }
   }
   callback.call(spellChecker, results);
-};
-
-function generateRandomSpace() {
-  var string = '';
-  var nSpace = 1 + random(4);
-  for (var i = 0; i < nSpace ; ++i) {
-    string += ' ';
-  }
-  return string;
-};
-
-function generateRandomString(maxWords) {
-  var string = '';
-  var nWords = 1 + random(maxWords);
-  for (var i = 0; i < nWords ; ++i) {
-    string += vocabulary[random(vocabulary.length)];
-    string += generateRandomSpace();
-  }
-  return string;
-};
-
-function generateRandomHtml(rootNode, branchFactor, attributes, numAttr) {
-  if (numAttr == 0) {
-    var text = document.createTextNode(generateRandomString(10));
-    rootNode.appendChild(text);
-    return;
-  }
-
-  var lastElementWasText = false;
-  for (var i = 0; i < branchFactor; ++i) {
-    var rand = random(10);
-    if (rand < 8 && !lastElementWasText) {
-      lastElementWasText = true;
-      var text = document.createTextNode(generateRandomString(10));
-      rootNode.appendChild(text);
-    } else {
-      lastElementWasText = false;
-
-      var rand = random(numAttr);
-      var index = 0;
-      for (;;) {
-        while (attributes[index] == null) {
-          ++index;
-        }
-        if (rand == 0)
-          break;
-        ++index;
-        --rand;
-      };
-
-      var attr = attributes[index];
-      var el = document.createElement(attr);
-      rootNode.appendChild(el);
-      rand = random(10);
-      if (rand == 0) {
-        el.className = 'goog-quote';
-      }
-      attributes[index] = null;
-      generateRandomHtml(el, branchFactor, attributes, numAttr-1);
-      attributes[index] = attr;
-    }
-  }
-};
-
-var timerQueue = [];
-function processTimerQueue() {
-  while (timerQueue.length > 0) {
-    var fn = timerQueue.shift();
-    fn();
-  }
-};
-
-function localTimer(fn, delay, obj) {
-  if (obj) {
-    fn = goog.bind(fn, obj);
-  }
-  timerQueue.push(fn);
-  return timerQueue.length;
-};
+}
 
 function testDocumentIntegrity() {
-  var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
-  var s = new goog.ui.RichTextSpellChecker(handler);
-  s.asyncWordsPerBatch_ = 100;
   var el = document.getElementById('test1');
-  s.decorate(el);
-  generateRandomHtml(el, 4, attributeSet, attributeSet.length);
+  spellChecker.decorate(el);
+  el.appendChild(document.createTextNode(TEST_TEXT3));
   var el2 = el.cloneNode(true);
 
-  var timerSav = goog.Timer.callOnce;
-  goog.Timer.callOnce = localTimer;
-
-  s.setExcludeMarker('goog-quote');
-  s.check();
-  processTimerQueue();
-  s.ignoreWord('iggnore');
-  processTimerQueue();
-  s.check();
-  processTimerQueue();
-  s.resume();
-  processTimerQueue();
-
-  goog.Timer.callOnce = timerSav;
+  spellChecker.setExcludeMarker('goog-quote');
+  spellChecker.check();
+  waitForSpellCheckToFinish();
+  spellChecker.ignoreWord('iggnore');
+  waitForSpellCheckToFinish();
+  spellChecker.check();
+  waitForSpellCheckToFinish();
+  spellChecker.resume();
+  waitForSpellCheckToFinish();
 
   assertEquals('Spell checker run should not change the underlying element.',
                el2.innerHTML, el.innerHTML);
-  s.dispose();
-};
+}
 
 function testExcludeMarkers() {
-  var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
-  var s = new goog.ui.RichTextSpellChecker(handler);
-  s.setExcludeMarker(['DIV.goog-quote', 'goog-comment', 'SPAN.goog-note']);
-  assertArrayEquals(['goog-quote', 'goog-comment', 'goog-note'],
-      s.excludeMarker);
-  assertArrayEquals(['DIV', undefined, 'SPAN'], s.excludeTags);
   var el = document.getElementById('test1');
-  el.innerHTML = '<div class="goog-quote"></div>' +
-      '<div class="goog-yes">skip</div>' +
-      '<div class="goog-note"></div>' +
-      '<div class="goog-comment"></div>' +
-      '<br>';
-  var children = el.childNodes;
-  var length = children.length;
-  assertEquals(5, length);
+  spellChecker.decorate(el);
+  spellChecker.setExcludeMarker(
+      ['DIV.goog-quote', 'goog-comment', 'SPAN.goog-note']);
+  assertArrayEquals(['goog-quote', 'goog-comment', 'goog-note'],
+      spellChecker.excludeMarker);
+  assertArrayEquals(['DIV', undefined, 'SPAN'],
+      spellChecker.excludeTags);
+  el.innerHTML = '<div class="goog-quote">misspelling</div>' +
+      '<div class="goog-yes">misspelling</div>' +
+      '<div class="goog-note">misspelling</div>' +
+      '<div class="goog-comment">misspelling</div>' +
+      '<span>misspelling<span>';
 
-  assertTrue(s.isExcluded_(children[0]));
-  assertFalse(s.isExcluded_(children[1]));
-  assertFalse(s.isExcluded_(children[2]));
-  assertTrue(s.isExcluded_(children[3]));
-  assertFalse(s.isExcluded_(children[4]));
+  spellChecker.check();
+  waitForSpellCheckToFinish();
+  assertEquals(3, spellChecker.getLastIndex());
 }
 
 function testBiggerDocument() {
-  var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
-  var s = new goog.ui.RichTextSpellChecker(handler);
   var el = document.getElementById('test2');
-  s.decorate(el);
-  generateRandomHtml(el, 4, attributeSet, attributeSet.length);
+  spellChecker.decorate(el);
+  el.appendChild(document.createTextNode(TEST_TEXT3));
   var el2 = el.cloneNode(true);
 
-  var timerSav = goog.Timer.callOnce;
-  goog.Timer.callOnce = localTimer;
-
-  s.check();
-  processTimerQueue();
-  s.resume();
-  processTimerQueue();
-
-  goog.Timer.callOnce = timerSav;
+  spellChecker.check();
+  waitForSpellCheckToFinish();
+  spellChecker.resume();
+  waitForSpellCheckToFinish();
 
   assertEquals('Spell checker run should not change the underlying element.',
                el2.innerHTML, el.innerHTML);
-  s.dispose();
-};
+}
 
 function testElementOverflow() {
-  var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
-  var s = new goog.ui.RichTextSpellChecker(handler);
-  s.asyncWordsPerBatch_ = 100;
   var el = document.getElementById('test3');
-  s.decorate(el);
-  var text = generateRandomString(200);
-  el.appendChild(document.createTextNode(text));
+  spellChecker.decorate(el);
+  el.appendChild(document.createTextNode(TEST_TEXT3));
 
   var el2 = el.cloneNode(true);
 
-  var timerSav = goog.Timer.callOnce;
-  goog.Timer.callOnce = localTimer;
-
-  s.check();
-  processTimerQueue();
-  s.check();
-  processTimerQueue();
-  s.resume();
-  processTimerQueue();
-
-  goog.Timer.callOnce = timerSav;
+  spellChecker.check();
+  waitForSpellCheckToFinish();
+  spellChecker.check();
+  waitForSpellCheckToFinish();
+  spellChecker.resume();
+  waitForSpellCheckToFinish();
 
   assertEquals('Spell checker run should not change the underlying element.',
                el2.innerHTML, el.innerHTML);
-  s.dispose();
-};
+}
 
-function testKeyboardNavigateNext () {
-  var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
-  var s = new goog.ui.RichTextSpellChecker(handler);
+function testKeyboardNavigateNext() {
   var el = document.getElementById('test4');
-  s.decorate(el);
+  spellChecker.decorate(el);
   var text = 'a unit test for keyboard test';
   el.appendChild(document.createTextNode(text));
-  var keyEventProperties = {};
-  keyEventProperties.ctrlKey = true;
-  keyEventProperties.shiftKey = false;
+  var keyEventProperties =
+      goog.object.create('ctrlKey', true, 'shiftKey', false);
 
-  var timerSav = goog.Timer.callOnce;
-  goog.Timer.callOnce = localTimer;
-
-  s.check();
-  processTimerQueue();
+  spellChecker.check();
+  waitForSpellCheckToFinish();
 
   // First call just moves focus to first misspelled word.
   goog.testing.events.fireKeySequence(el, goog.events.KeyCodes.RIGHT,
@@ -276,30 +218,21 @@ function testKeyboardNavigateNext () {
 
   assertFalse('The default action should be prevented for the key event',
       defaultExecuted);
-  assertCursorAtElement(s.makeElementId(2));
+  assertCursorAtElement(spellChecker.makeElementId(2));
 
-  s.resume();
-  processTimerQueue();
-  s.dispose();
-};
+  spellChecker.resume();
+}
 
-
-function testKeyboardNavigateNextOnLastWord () {
-  var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
-  var s = new goog.ui.RichTextSpellChecker(handler);
+function testKeyboardNavigateNextOnLastWord() {
   var el = document.getElementById('test5');
-  s.decorate(el);
+  spellChecker.decorate(el);
   var text = 'a unit test for keyboard test';
   el.appendChild(document.createTextNode(text));
-  var keyEventProperties = {};
-  keyEventProperties.ctrlKey = true;
-  keyEventProperties.shiftKey = false;
+  var keyEventProperties =
+      goog.object.create('ctrlKey', true, 'shiftKey', false);
 
-  var timerSav = goog.Timer.callOnce;
-  goog.Timer.callOnce = localTimer;
-
-  s.check();
-  processTimerQueue();
+  spellChecker.check();
+  waitForSpellCheckToFinish();
 
   // Move to the last invalid word.
   goog.testing.events.fireKeySequence(el, goog.events.KeyCodes.RIGHT,
@@ -315,32 +248,23 @@ function testKeyboardNavigateNextOnLastWord () {
 
   assertFalse('The default action should be prevented for the key event',
       defaultExecuted);
-  assertCursorAtElement(s.makeElementId(3));
+  assertCursorAtElement(spellChecker.makeElementId(3));
 
-  s.resume();
-  processTimerQueue();
-  s.dispose();
-};
+  spellChecker.resume();
+}
 
-
-function testKeyboardNavigateOpenSuggestions () {
-  var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
-  var s = new goog.ui.RichTextSpellChecker(handler);
+function testKeyboardNavigateOpenSuggestions() {
   var el = document.getElementById('test6');
-  s.decorate(el);
+  spellChecker.decorate(el);
   var text = 'unit';
   el.appendChild(document.createTextNode(text));
-  var keyEventProperties = {};
-  keyEventProperties.ctrlKey = true;
-  keyEventProperties.shiftKey = false;
+  var keyEventProperties =
+      goog.object.create('ctrlKey', true, 'shiftKey', false);
 
-  var timerSav = goog.Timer.callOnce;
-  goog.Timer.callOnce = localTimer;
+  spellChecker.check();
+  waitForSpellCheckToFinish();
 
-  s.check();
-  processTimerQueue();
-
-  var suggestionMenu = s.getMenu();
+  var suggestionMenu = spellChecker.getMenu();
 
   goog.testing.events.fireKeySequence(el, goog.events.KeyCodes.RIGHT,
       keyEventProperties);
@@ -357,28 +281,19 @@ function testKeyboardNavigateOpenSuggestions () {
   assertTrue('The suggestion menu should be visible after the key event.',
     suggestionMenu.isVisible());
 
-  s.resume();
-  processTimerQueue();
-  s.dispose();
-};
+  spellChecker.resume();
+}
 
-
-function testKeyboardNavigatePrevious () {
-  var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
-  var s = new goog.ui.RichTextSpellChecker(handler);
+function testKeyboardNavigatePrevious() {
   var el = document.getElementById('test7');
-  s.decorate(el);
+  spellChecker.decorate(el);
   var text = 'a unit test for keyboard test';
   el.appendChild(document.createTextNode(text));
-  var keyEventProperties = {};
-  keyEventProperties.ctrlKey = true;
-  keyEventProperties.shiftKey = false;
+  var keyEventProperties =
+      goog.object.create('ctrlKey', true, 'shiftKey', false);
 
-  var timerSav = goog.Timer.callOnce;
-  goog.Timer.callOnce = localTimer;
-
-  s.check();
-  processTimerQueue();
+  spellChecker.check();
+  waitForSpellCheckToFinish();
 
   // Move to the third element, so we can test the move back to the second.
   goog.testing.events.fireKeySequence(el, goog.events.KeyCodes.RIGHT,
@@ -393,30 +308,21 @@ function testKeyboardNavigatePrevious () {
 
   assertFalse('The default action should be prevented for the key event',
       defaultExecuted);
-  assertCursorAtElement(s.makeElementId(2));
+  assertCursorAtElement(spellChecker.makeElementId(2));
 
-  s.resume();
-  processTimerQueue();
-  s.dispose();
-};
+  spellChecker.resume();
+}
 
-
-function testKeyboardNavigatePreviousOnLastWord () {
-  var handler = new goog.spell.SpellCheck(localSpellCheckingFunction);
-  var s = new goog.ui.RichTextSpellChecker(handler);
+function testKeyboardNavigatePreviousOnLastWord() {
   var el = document.getElementById('test8');
-  s.decorate(el);
+  spellChecker.decorate(el);
   var text = 'a unit test for keyboard test';
   el.appendChild(document.createTextNode(text));
-  var keyEventProperties = {};
-  keyEventProperties.ctrlKey = true;
-  keyEventProperties.shiftKey = false;
+  var keyEventProperties =
+      goog.object.create('ctrlKey', true, 'shiftKey', false);
 
-  var timerSav = goog.Timer.callOnce;
-  goog.Timer.callOnce = localTimer;
-
-  s.check();
-  processTimerQueue();
+  spellChecker.check();
+  waitForSpellCheckToFinish();
 
   // Move to the first invalid word.
   goog.testing.events.fireKeySequence(el, goog.events.KeyCodes.RIGHT,
@@ -428,13 +334,10 @@ function testKeyboardNavigatePreviousOnLastWord () {
 
   assertFalse('The default action should be prevented for the key event',
       defaultExecuted);
-  assertCursorAtElement(s.makeElementId(1));
+  assertCursorAtElement(spellChecker.makeElementId(1));
 
-  s.resume();
-  processTimerQueue();
-  s.dispose();
-};
-
+  spellChecker.resume();
+}
 
 function assertCursorAtElement(expectedId) {
   var range = goog.dom.Range.createFromWindow();
@@ -455,25 +358,20 @@ function assertCursorAtElement(expectedId) {
 
   assertEquals('The cursor is not at the expected misspelled word.',
       expectedId, focusedElementId);
-};
-
+}
 
 function isCaret(range) {
   return range.getStartNode() == range.getEndNode();
-};
-
+}
 
 function isMisspelledWordElement(element) {
   return goog.dom.classlist.contains(
           element, 'goog-spellcheck-word');
-};
-
+}
 
 function isCursorAtEndOfStartNode(range) {
   return range.getStartNode().length == range.getStartOffset();
-};
-
-
+}
 </script>
 </body>
 </html>
