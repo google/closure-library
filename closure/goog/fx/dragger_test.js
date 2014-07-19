@@ -258,11 +258,11 @@ function testHandleMove_Cancel() {
 
 
 /**
- * @bug 1714667 IE built in drag and drop handling stops dragging.
+ * @bug 1714667 IE<9 built in drag and drop handling stops dragging.
  */
 function testIeDragStartCancelling() {
-  // Testing only IE.
-  if (!goog.userAgent.IE) {
+  // Testing only IE<9.
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher(9)) {
     return;
   }
 
