@@ -206,6 +206,11 @@ function testWindows() {
   assertTrue(goog.labs.userAgent.platform.isWindows());
   assertVersion('6.3');
   assertVersionBetween('6', '6.5');
+
+  uaString = goog.labs.userAgent.testAgents.IE_10_MOBILE;
+  goog.labs.userAgent.util.setUserAgent(uaString);
+  assertTrue(goog.labs.userAgent.platform.isWindows());
+  assertVersion('8.0');
 }
 
 function testChromeOS() {

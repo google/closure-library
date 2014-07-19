@@ -83,6 +83,11 @@ function testTrident() {
   assertFalse(goog.labs.userAgent.engine.isGecko());
   assertVersion('7.0');
   assertLowAndHighVersions('6.0', '8.0');
+
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.IE_10_MOBILE);
+  assertTrue(goog.labs.userAgent.engine.isTrident());
+  assertVersion('6.0');
 }
 
 function testWebKit() {

@@ -100,6 +100,15 @@ testAgents.IE_10_COMPATIBILITY =
     'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/6.0)';
 
 
+/**
+ * http://blogs.windows.com/windows_phone/b/wpdev/archive/2012/10/17/getting-websites-ready-for-internet-explorer-10-on-windows-phone-8.aspx
+ * @const {string}
+ */
+testAgents.IE_10_MOBILE =
+    'Mozilla/5.0 (compatible; MSIE 10.0; Windows Phone 8.0; Trident/6.0; ' +
+    'IEMobile/10.0; ARM; Touch; NOKIA; Lumia 820)';
+
+
 /** @const {string} */
 testAgents.IE_11 =
     'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';

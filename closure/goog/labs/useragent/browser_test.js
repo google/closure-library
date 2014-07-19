@@ -116,6 +116,13 @@ function testIE10Compatibility() {
   assertVersion('10.0');
 }
 
+function testIE10Mobile() {
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.IE_10_MOBILE);
+  assertTrue(goog.labs.userAgent.browser.isIE());
+  assertVersion('10.0');
+}
+
 function testIE11() {
   goog.labs.userAgent.util.setUserAgent(goog.labs.userAgent.testAgents.IE_11);
   assertTrue(goog.labs.userAgent.browser.isIE());
