@@ -64,7 +64,7 @@ goog.structs.weak.SUPPORTED_BROWSER = Object.defineProperty &&
 goog.structs.weak.USE_NATIVE_WEAKMAP = 'WeakMap' in goog.global &&
     // Firefox<24 WeakMap disallows some objects as keys
     // See https://github.com/Polymer/WeakMap/issues/3
-    !(goog.userAgent.FIREFOX && !goog.userAgent.isVersionOrHigher('24'));
+    !(goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('24'));
 
 
 /**
