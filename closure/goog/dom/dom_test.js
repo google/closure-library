@@ -977,6 +977,12 @@ function testIsFocusableTabIndex() {
   assertFalse('isFocusableTabIndex() must be false for tab index -1',
       goog.dom.isFocusableTabIndex(goog.dom.getElement('tabIndexNegative1')));
 
+  // Test null and undefined.
+  assertFalse('isFocusableTabIndex() must be false for null Element',
+      goog.dom.isFocusableTabIndex(goog.dom.getElement('doesNotExist')));
+  assertFalse('isFocusableTabIndex() must be false for undefined Element',
+      goog.dom.isFocusableTabIndex(undefined));
+
   // WebKit on Mac doesn't support focusable DIVs until version 526 and later.
   if (!goog.userAgent.WEBKIT || !goog.userAgent.MAC ||
       goog.userAgent.isVersionOrHigher('526')) {
@@ -1069,6 +1075,12 @@ function testIsFocusable() {
   assertFalse('isFocusable() must be false for disabled form elements with ' +
       'positive tab index',
       goog.dom.isFocusable(goog.dom.getElement('disabledPosTabIndexButton')));
+
+  // Test null and undefined.
+  assertFalse('isFocusable() must be false for null Element',
+      goog.dom.isFocusable(goog.dom.getElement('doesNotExist')));
+  assertFalse('isFocusable() must be false for undefined Element',
+      goog.dom.isFocusable(undefined));
 
   // Test non-form types should return same value as isFocusableTabIndex()
   assertEquals('isFocusable() and isFocusableTabIndex() must agree for ' +

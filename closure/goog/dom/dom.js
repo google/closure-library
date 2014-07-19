@@ -1697,7 +1697,7 @@ goog.dom.PREDEFINED_TAG_VALUES_ = {'IMG': ' ', 'BR': '\n'};
  * @see http://fluidproject.org/blog/2008/01/09/getting-setting-and-removing-tabindex-values-with-javascript/
  */
 goog.dom.isFocusableTabIndex = function(element) {
-  return goog.dom.hasSpecifiedTabIndex_(element) &&
+  return !!element && goog.dom.hasSpecifiedTabIndex_(element) &&
          goog.dom.isTabIndexFocusable_(element);
 };
 
@@ -1735,7 +1735,7 @@ goog.dom.setFocusableTabIndex = function(element, enable) {
 goog.dom.isFocusable = function(element) {
   var focusable;
   // Some elements can have unspecified tab index and still receive focus.
-  if (goog.dom.nativelySupportsFocus_(element)) {
+  if (!!element && goog.dom.nativelySupportsFocus_(element)) {
     // Make sure the element is not disabled ...
     focusable = !element.disabled &&
         // ... and if a tab index is specified, it allows focus.
@@ -1753,7 +1753,7 @@ goog.dom.isFocusable = function(element) {
 
 /**
  * Returns true if the element has a specified tab index.
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element has a specified tab index.
  * @private
  */
@@ -1768,7 +1768,7 @@ goog.dom.hasSpecifiedTabIndex_ = function(element) {
 
 /**
  * Returns true if the element's tab index allows the element to be focused.
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element's tab index allows focus.
  * @private
  */
@@ -1781,7 +1781,7 @@ goog.dom.isTabIndexFocusable_ = function(element) {
 
 /**
  * Returns true if the element is focusable even when tabIndex is not set.
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element natively supports focus.
  * @private
  */
@@ -1797,7 +1797,7 @@ goog.dom.nativelySupportsFocus_ = function(element) {
 /**
  * Returns true if the element has a bounding rectangle that would be visible
  * (i.e. its width and height are greater than zero).
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element has a non-zero bounding rectangle.
  * @private
  */
