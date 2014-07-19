@@ -656,6 +656,7 @@ goog.ui.AbstractSpellChecker.prototype.initSuggestionsMenu = function() {
       new goog.ui.MenuItem(MSG_SPELL_EDIT_WORD, '', this.getDomHelper());
   this.menuEdit_.setVisible(false);
   this.menu_.addChild(this.menuEdit_, true);
+  this.menu_.setParent(this);
   this.menu_.render();
 
   var menuElement = this.menu_.getElement();
