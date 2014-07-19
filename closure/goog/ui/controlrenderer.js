@@ -58,6 +58,7 @@ goog.require('goog.userAgent');
 goog.ui.ControlRenderer = function() {
 };
 goog.addSingletonGetter(goog.ui.ControlRenderer);
+goog.tagUnsealableClass(goog.ui.ControlRenderer);
 
 
 /**

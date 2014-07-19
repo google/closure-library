@@ -54,6 +54,7 @@ goog.ui.ProgressBar = function(opt_domHelper) {
                      this.handleChange_, false, this);
 };
 goog.inherits(goog.ui.ProgressBar, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.ProgressBar);
 
 
 /**

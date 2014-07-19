@@ -135,6 +135,7 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols, opt_domHelper,
   this.keyHandlers_ = {};
 };
 goog.inherits(goog.ui.DatePicker, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.DatePicker);
 
 
 /**

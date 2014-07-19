@@ -65,6 +65,7 @@ goog.ui.LabelInput = function(opt_label, opt_domHelper) {
   this.label_ = opt_label || '';
 };
 goog.inherits(goog.ui.LabelInput, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.LabelInput);
 
 
 /**

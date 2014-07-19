@@ -100,6 +100,7 @@ goog.ui.MenuButton = function(opt_content, opt_menu, opt_renderer,
   this.menuRenderer_ = opt_menuRenderer || goog.ui.MenuRenderer.getInstance();
 };
 goog.inherits(goog.ui.MenuButton, goog.ui.Button);
+goog.tagUnsealableClass(goog.ui.MenuButton);
 
 
 /**

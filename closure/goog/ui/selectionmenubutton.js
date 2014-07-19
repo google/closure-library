@@ -63,6 +63,7 @@ goog.ui.SelectionMenuButton = function(opt_renderer,
   this.initialItemRenderer_ = opt_itemRenderer || null;
 };
 goog.inherits(goog.ui.SelectionMenuButton, goog.ui.MenuButton);
+goog.tagUnsealableClass(goog.ui.SelectionMenuButton);
 
 
 /**

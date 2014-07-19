@@ -99,6 +99,7 @@ goog.ui.Dialog = function(opt_class, opt_useIframeMask, opt_domHelper) {
   this.buttons_ = goog.ui.Dialog.ButtonSet.createOkCancel();
 };
 goog.inherits(goog.ui.Dialog, goog.ui.ModalPopup);
+goog.tagUnsealableClass(goog.ui.Dialog);
 
 
 /**
@@ -1157,6 +1158,7 @@ goog.ui.Dialog.ButtonSet = function(opt_domHelper) {
   goog.structs.Map.call(this);
 };
 goog.inherits(goog.ui.Dialog.ButtonSet, goog.structs.Map);
+goog.tagUnsealableClass(goog.ui.Dialog.ButtonSet);
 
 
 /**

@@ -80,6 +80,7 @@ goog.ui.Select = function(opt_caption, opt_menu, opt_renderer, opt_domHelper,
   this.setPreferredAriaRole(goog.a11y.aria.Role.LISTBOX);
 };
 goog.inherits(goog.ui.Select, goog.ui.MenuButton);
+goog.tagUnsealableClass(goog.ui.Select);
 
 
 /**

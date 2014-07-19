@@ -79,6 +79,7 @@ goog.ui.Control = function(opt_content, opt_renderer, opt_domHelper) {
   this.setContentInternal(goog.isDef(opt_content) ? opt_content : null);
 };
 goog.inherits(goog.ui.Control, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.Control);
 
 
 // Renderer registry.

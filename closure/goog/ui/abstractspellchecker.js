@@ -110,6 +110,7 @@ goog.ui.AbstractSpellChecker = function(spellCheck, opt_domHelper) {
       false, this);
 };
 goog.inherits(goog.ui.AbstractSpellChecker, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.AbstractSpellChecker);
 
 
 /**

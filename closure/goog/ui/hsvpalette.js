@@ -72,6 +72,7 @@ goog.ui.HsvPalette = function(opt_domHelper, opt_color, opt_class) {
 goog.inherits(goog.ui.HsvPalette, goog.ui.Component);
 // TODO(user): Make this inherit from goog.ui.Control and split this into
 // a control and a renderer.
+goog.tagUnsealableClass(goog.ui.HsvPalette);
 
 
 /**

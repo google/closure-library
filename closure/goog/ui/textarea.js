@@ -59,6 +59,7 @@ goog.ui.Textarea = function(content, opt_renderer, opt_domHelper) {
   }
 };
 goog.inherits(goog.ui.Textarea, goog.ui.Control);
+goog.tagUnsealableClass(goog.ui.Textarea);
 
 
 /**

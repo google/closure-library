@@ -92,6 +92,7 @@ goog.ui.SplitPane = function(firstComponent, secondComponent, orientation,
   this.splitpaneHandle_ = null;
 };
 goog.inherits(goog.ui.SplitPane, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.SplitPane);
 
 
 /**

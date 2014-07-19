@@ -50,6 +50,7 @@ goog.ui.PopupColorPicker = function(opt_domHelper, opt_colorPicker) {
   }
 };
 goog.inherits(goog.ui.PopupColorPicker, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.PopupColorPicker);
 
 
 /**

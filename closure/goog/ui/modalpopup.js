@@ -80,6 +80,7 @@ goog.ui.ModalPopup = function(opt_useIframeMask, opt_domHelper) {
   this.lastFocus_ = null;
 };
 goog.inherits(goog.ui.ModalPopup, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.ModalPopup);
 
 
 /**

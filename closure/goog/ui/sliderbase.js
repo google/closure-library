@@ -109,6 +109,7 @@ goog.ui.SliderBase = function(opt_domHelper, opt_labelFn) {
       this.handleRangeModelChange, false, this);
 };
 goog.inherits(goog.ui.SliderBase, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.SliderBase);
 
 
 /**

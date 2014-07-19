@@ -52,6 +52,7 @@ goog.ui.Button = function(opt_content, opt_renderer, opt_domHelper) {
       goog.ui.NativeButtonRenderer.getInstance(), opt_domHelper);
 };
 goog.inherits(goog.ui.Button, goog.ui.Control);
+goog.tagUnsealableClass(goog.ui.Button);
 
 
 /**
