@@ -110,8 +110,15 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       doc.open();
       doc.write('');
       doc.close();
+      // Do not post anything sensitive over this channel, as the workaround for
+      // pages with file: origin could allow that information to be modified or
+      // intercepted.
       var message = 'callImmediate' + Math.random();
-      var origin = win.location.protocol + '//' + win.location.host;
+      // The same origin policy rejects attempts to postMessage from file: urls
+      // unless the origin is '*'.
+      // TODO(b/16335441): Use '*' origin for data: and other similar protocols.
+      var origin = win.location.protocol == 'file:' ?
+          '*' : win.location.protocol + '//' + win.location.host;
       var onmessage = goog.bind(function(e) {
         // Validate origin and message to make sure that this message was
         // intended for us.
