@@ -634,13 +634,17 @@ goog.testing.TestCase.prototype.orderTests_ = function(tests) {
 
 
 /**
- * Gets the object with all globals.
+ * Gets list of objects that potentially contain test cases. For IE 8 and below,
+ * this is the global "this" (for properties set directly on the global this or
+ * window) and the RuntimeObject (for global variables and functions). For all
+ * other browsers, the array simply contains the global this.
+ *
  * @param {string=} opt_prefix An optional prefix. If specified, only get things
  *     under this prefix. Note that the prefix is only honored in IE, since it
  *     supports the RuntimeObject:
  *     http://msdn.microsoft.com/en-us/library/ff521039%28VS.85%29.aspx
- *     TODO: Fix this method to honor the prefix in all browsers.
- * @return {Object} An object with all globals starting with the prefix.
+ *     TODO: Remove this option.
+ * @return {!Array.<!Object>} A list of objects that should be inspected.
  */
 goog.testing.TestCase.prototype.getGlobals = function(opt_prefix) {
   return goog.testing.TestCase.getGlobals(opt_prefix);
@@ -648,13 +652,17 @@ goog.testing.TestCase.prototype.getGlobals = function(opt_prefix) {
 
 
 /**
- * Gets the object with all globals.
+ * Gets list of objects that potentially contain test cases. For IE 8 and below,
+ * this is the global "this" (for properties set directly on the global this or
+ * window) and the RuntimeObject (for global variables and functions). For all
+ * other browsers, the array simply contains the global this.
+ *
  * @param {string=} opt_prefix An optional prefix. If specified, only get things
  *     under this prefix. Note that the prefix is only honored in IE, since it
  *     supports the RuntimeObject:
  *     http://msdn.microsoft.com/en-us/library/ff521039%28VS.85%29.aspx
- *     TODO: Fix this method to honor the prefix in all browsers.
- * @return {Object} An object with all globals starting with the prefix.
+ *     TODO: Remove this option.
+ * @return {!Array.<!Object>} A list of objects that should be inspected.
  */
 goog.testing.TestCase.getGlobals = function(opt_prefix) {
   // Look in the global scope for most browsers, on IE we use the little known
@@ -662,7 +670,8 @@ goog.testing.TestCase.getGlobals = function(opt_prefix) {
   // via goog.global so that there isn't an aliasing that throws an exception
   // in Firefox.
   return typeof goog.global['RuntimeObject'] != 'undefined' ?
-      goog.global['RuntimeObject']((opt_prefix || '') + '*') : goog.global;
+      [goog.global['RuntimeObject']((opt_prefix || '') + '*'), goog.global] :
+      [goog.global];
 };
 
 
@@ -768,23 +777,29 @@ goog.testing.TestCase.prototype.autoDiscoverLifecycle = function() {
  */
 goog.testing.TestCase.prototype.autoDiscoverTests = function() {
   var prefix = this.getAutoDiscoveryPrefix();
-  var testSource = this.getGlobals(prefix);
+  var testSources = this.getGlobals(prefix);
 
   var foundTests = [];
 
-  for (var name in testSource) {
+  for (var i = 0; i < testSources.length; i++) {
+    var testSource = testSources[i];
+    for (var name in testSource) {
+      if ((new RegExp('^' + prefix)).test(name)) {
+        var ref;
+        try {
+          ref = testSource[name];
+        } catch (ex) {
+          // NOTE(brenneman): When running tests from a file:// URL on Firefox
+          // 3.5 for Windows, any reference to goog.global.sessionStorage raises
+          // an "Operation is not supported" exception. Ignore any exceptions
+          // raised by simply accessing global properties.
+          ref = undefined;
+        }
 
-    try {
-      var ref = testSource[name];
-    } catch (ex) {
-      // NOTE(brenneman): When running tests from a file:// URL on Firefox 3.5
-      // for Windows, any reference to goog.global.sessionStorage raises
-      // an "Operation is not supported" exception. Ignore any exceptions raised
-      // by simply accessing global properties.
-    }
-
-    if ((new RegExp('^' + prefix)).test(name) && goog.isFunction(ref)) {
-      foundTests.push(this.createTestFromAutoDiscoveredFunction(name, ref));
+        if (goog.isFunction(ref)) {
+          foundTests.push(this.createTestFromAutoDiscoveredFunction(name, ref));
+        }
+      }
     }
   }
 
