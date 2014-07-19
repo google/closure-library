@@ -1155,8 +1155,8 @@ goog.ui.AbstractSpellChecker.prototype.navigate = function(direction) {
   } while (!(el = this.getElementByIndex(focusedIndex)));
 
   if (el) {
-    this.focusOnElement(el);
     this.setFocusedElementIndex(focusedIndex);
+    this.focusOnElement(el);
     handled = true;
   }
 
