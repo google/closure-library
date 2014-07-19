@@ -227,12 +227,55 @@ function testSelectOneTextCharacterNoError() {
 
 function testTabKeyEvents() {
   fieldMock.$replay();
-  bubblePlugin.enableKeyboardNavigation(true /* enable link tabbing */);
+  bubblePlugin.enableKeyboardNavigation(true);
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var bubbleLink1, bubbleLink2;
+  var nonTabbable1, tabbable1, tabbable2, nonTabbable2;
   bubblePlugin.createBubbleContents = function(container) {
-    bubbleLink1 = this.createLink('linkInBubble1', 'Foo', false, container);
-    bubbleLink2 = this.createLink('linkInBubble2', 'Bar', false, container);
+    nonTabbable1 = goog.dom.createDom('div');
+    tabbable1 = goog.dom.createDom('div');
+    tabbable2 = goog.dom.createDom('div');
+    nonTabbable2 = goog.dom.createDom('div');
+    goog.dom.append(
+        container, nonTabbable1, tabbable1, tabbable2, nonTabbable2);
+    bubblePlugin.setTabbable(tabbable1);
+    bubblePlugin.setTabbable(tabbable2);
+  };
+  bubblePlugin.handleSelectionChangeInternal(link);
+  assertTrue('Bubble should be visible', bubblePlugin.isVisible());
+
+  var tabHandledByBubble = simulateTabKeyOnBubble();
+  assertTrue('The action should be handled by the plugin', tabHandledByBubble);
+  assertFocused(tabbable1);
+
+  // Tab on the first tabbable. The test framework doesn't easily let us verify
+  // the desired behavior - namely, that the second tabbable gets focused - but
+  // we verify that the field doesn't get the focus.
+  goog.testing.events.fireKeySequence(tabbable1, goog.events.KeyCodes.TAB);
+
+  fieldMock.$verify();
+
+  // Tabbing on the last tabbable should trigger focus() of the target field.
+  resetFieldMock();
+  fieldMock.focus();
+  fieldMock.$replay();
+  goog.testing.events.fireKeySequence(tabbable2, goog.events.KeyCodes.TAB);
+  fieldMock.$verify();
+}
+
+function testTabKeyEventsWithShiftKey() {
+  fieldMock.$replay();
+  bubblePlugin.enableKeyboardNavigation(true);
+  bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
+  var nonTabbable, tabbable1, tabbable2;
+  bubblePlugin.createBubbleContents = function(container) {
+    nonTabbable = goog.dom.createDom('div');
+    tabbable1 = goog.dom.createDom('div');
+    // The test acts only on one tabbable, but we give another one to make sure
+    // that the tabbable we act on is not also the last.
+    tabbable2 = goog.dom.createDom('div');
+    goog.dom.append(container, nonTabbable, tabbable1, tabbable2);
+    bubblePlugin.setTabbable(tabbable1);
+    bubblePlugin.setTabbable(tabbable2);
   };
   bubblePlugin.handleSelectionChangeInternal(link);
 
@@ -240,12 +283,39 @@ function testTabKeyEvents() {
 
   var tabHandledByBubble = simulateTabKeyOnBubble();
   assertTrue('The action should be handled by the plugin', tabHandledByBubble);
+  assertFocused(tabbable1);
+  fieldMock.$verify();
+
+  // Shift-tabbing on the first tabbable should trigger focus() of the target
+  // field.
+  resetFieldMock();
+  fieldMock.focus();
+  fieldMock.$replay();
+  goog.testing.events.fireKeySequence(
+      tabbable1, goog.events.KeyCodes.TAB, {shiftKey: true});
+  fieldMock.$verify();
+}
+
+function testLinksAreTabbable() {
+  fieldMock.$replay();
+  bubblePlugin.enableKeyboardNavigation(true);
+  bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
+  var nonTabbable1, link1, link2, nonTabbable2;
+  bubblePlugin.createBubbleContents = function(container) {
+    nonTabbable1 = goog.dom.createDom('div');
+    goog.dom.appendChild(container, nonTabbable1);
+    bubbleLink1 = this.createLink('linkInBubble1', 'Foo', false, container);
+    bubbleLink2 = this.createLink('linkInBubble2', 'Bar', false, container);
+    nonTabbable2 = goog.dom.createDom('div');
+    goog.dom.appendChild(container, nonTabbable2);
+  };
+  bubblePlugin.handleSelectionChangeInternal(link);
+  assertTrue('Bubble should be visible', bubblePlugin.isVisible());
+
+  var tabHandledByBubble = simulateTabKeyOnBubble();
+  assertTrue('The action should be handled by the plugin', tabHandledByBubble);
   assertFocused(bubbleLink1);
 
-  // Tab on the first link. The test framework doesn't easily let us verify
-  // the desired behavior - namely, that the second link gets focused - but at
-  // least we verify that the field doesn't get the focused.
-  goog.testing.events.fireKeySequence(bubbleLink1, goog.events.KeyCodes.TAB);
   fieldMock.$verify();
 
   // Tabbing on the last link should trigger focus() of the target field.
@@ -253,35 +323,6 @@ function testTabKeyEvents() {
   fieldMock.focus();
   fieldMock.$replay();
   goog.testing.events.fireKeySequence(bubbleLink2, goog.events.KeyCodes.TAB);
-  fieldMock.$verify();
-}
-
-function testTabKeyEventsWithShiftKey() {
-  fieldMock.$replay();
-  bubblePlugin.enableKeyboardNavigation(true /* enable link tabbing */);
-  bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
-  var bubbleLink1;
-  bubblePlugin.createBubbleContents = function(container) {
-    bubbleLink1 = this.createLink('linkInBubble1', 'Foo', false, container);
-    // The test acts only on one link, but we give another one to make sure
-    // that the link we act on is not also the last.
-    this.createLink('linkInBubble2', 'Bar', false, container);
-  };
-  bubblePlugin.handleSelectionChangeInternal(link);
-
-  assertTrue('Bubble should be visible', bubblePlugin.isVisible());
-
-  var tabHandledByBubble = simulateTabKeyOnBubble();
-  assertTrue('The action should be handled by the plugin', tabHandledByBubble);
-  assertFocused(bubbleLink1);
-  fieldMock.$verify();
-
-  // Shift-tabbing on the first link should trigger focus() of the target field.
-  resetFieldMock();
-  fieldMock.focus();
-  fieldMock.$replay();
-  goog.testing.events.fireKeySequence(
-      bubbleLink1, goog.events.KeyCodes.TAB, {shiftKey: true});
   fieldMock.$verify();
 }
 
@@ -309,7 +350,7 @@ function testTabKeyNoEffectKeyboardNavDisabled() {
 
 function testOtherKeyEventNoEffectKeyboardNavEnabled() {
   fieldMock.$replay();
-  bubblePlugin.enableKeyboardNavigation(true /* enable link tabbing */);
+  bubblePlugin.enableKeyboardNavigation(true);
   bubblePlugin.getBubbleTargetFromSelection = goog.functions.identity;
   var bubbleLink;
   bubblePlugin.createBubbleContents = function(container) {
@@ -328,6 +369,18 @@ function testOtherKeyEventNoEffectKeyboardNavEnabled() {
   assertNotFocused(bubbleLink);
 
   fieldMock.$verify();
+}
+
+function testSetTabbableSetsTabIndex() {
+  var element1 = goog.dom.createDom('div');
+  var element2 = goog.dom.createDom('div');
+  element1.setAttribute('tabIndex', '1');
+
+  bubblePlugin.setTabbable(element1);
+  bubblePlugin.setTabbable(element2);
+
+  assertEquals('1', element1.getAttribute('tabIndex'));
+  assertEquals('0', element2.getAttribute('tabIndex'));
 }
 
 
