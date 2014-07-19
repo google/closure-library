@@ -329,42 +329,42 @@ goog.testing.TestRunner.prototype.writeLog = function(log) {
       div.appendChild(document.createTextNode(line));
     }
 
-    if (isFailOrError) {
-      var testNameMatch = /(\S+) (\[[^\]]*] )?: (FAILED|ERROR)/.exec(line);
-      if (testNameMatch) {
-        // Build a URL to run the test individually.  If this test was already
-        // part of another subset test, we need to overwrite the old runTests
-        // query parameter.  We also need to do this without bringing in any
-        // extra dependencies, otherwise we could mask missing dependency bugs.
-        var newSearch = 'runTests=' + testNameMatch[1];
-        var search = window.location.search;
-        if (search) {
-          var oldTests = /runTests=([^&]*)/.exec(search);
-          if (oldTests) {
-            newSearch = search.substr(0, oldTests.index) +
-                        newSearch +
-                        search.substr(oldTests.index + oldTests[0].length);
-          } else {
-            newSearch = search + '&' + newSearch;
-          }
+    var testNameMatch =
+        /(\S+) (\[[^\]]*] )?: (FAILED|ERROR|PASSED)/.exec(line);
+    if (testNameMatch) {
+      // Build a URL to run the test individually.  If this test was already
+      // part of another subset test, we need to overwrite the old runTests
+      // query parameter.  We also need to do this without bringing in any
+      // extra dependencies, otherwise we could mask missing dependency bugs.
+      var newSearch = 'runTests=' + testNameMatch[1];
+      var search = window.location.search;
+      if (search) {
+        var oldTests = /runTests=([^&]*)/.exec(search);
+        if (oldTests) {
+          newSearch = search.substr(0, oldTests.index) +
+                      newSearch +
+                      search.substr(oldTests.index + oldTests[0].length);
         } else {
-          newSearch = '?' + newSearch;
+          newSearch = search + '&' + newSearch;
         }
-        var href = window.location.href;
-        var hash = window.location.hash;
-        if (hash && hash.charAt(0) != '#') {
-          hash = '#' + hash;
-        }
-        href = href.split('#')[0].split('?')[0] + newSearch + hash;
-
-        // Add the link.
-        var a = document.createElement('A');
-        a.innerHTML = '(run individually)';
-        a.style.fontSize = '0.8em';
-        a.href = href;
-        div.appendChild(document.createTextNode(' '));
-        div.appendChild(a);
+      } else {
+        newSearch = '?' + newSearch;
       }
+      var href = window.location.href;
+      var hash = window.location.hash;
+      if (hash && hash.charAt(0) != '#') {
+        hash = '#' + hash;
+      }
+      href = href.split('#')[0].split('?')[0] + newSearch + hash;
+
+      // Add the link.
+      var a = document.createElement('A');
+      a.innerHTML = '(run individually)';
+      a.style.fontSize = '0.8em';
+      a.style.color = '#888';
+      a.href = href;
+      div.appendChild(document.createTextNode(' '));
+      div.appendChild(a);
     }
 
     div.style.color = color;
