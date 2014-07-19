@@ -224,6 +224,16 @@ function testExpandToInclude() {
   assertEquals(100, box.bottom);
 }
 
+function testGetWidth() {
+  var box = new goog.math.Box(10, 50, 30, 25);
+  assertEquals(25, box.getWidth());
+}
+
+function testGetHeight() {
+  var box = new goog.math.Box(10, 50, 30, 25);
+  assertEquals(20, box.getHeight());
+}
+
 function testBoundingBox() {
   assertObjectEquals(
       new goog.math.Box(1, 10, 11, 0),
