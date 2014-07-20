@@ -392,7 +392,7 @@ def GetJavaVersion():
   proc = subprocess.Popen(['java', '-version'], stderr=subprocess.PIPE)
   proc.wait()
   version_line = proc.stderr.read().splitlines()[0]
-  return version_regex.search(version_line).group()
+  return version_regex.search(version_line.decode('utf-8')).group()
 
 
 def FilterByExcludes(options, files):
@@ -470,7 +470,7 @@ def Compile(compiler_jar_path, source_paths, out, flags=None):
     logging.error('JavaScript compilation failed.')
     sys.exit(1)
   else:
-    out.write(stdoutdata)
+    out.write(stdoutdata.decode('utf-8'))
 
 
 def main():
