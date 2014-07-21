@@ -60,20 +60,3 @@ function testHashing() {
           'a33ce45964ff2167f6ecedd419db06c1'),
       sha256.digest());
 }
-
-
-/** Check that the code checks for bad input */
-function testBadInput() {
-  assertThrows('Bad input', function() {
-    new goog.crypt.Sha256().update({});
-  });
-  assertThrows('Floating point not allows', function() {
-    new goog.crypt.Sha256().update([1, 2, 3, 4, 4.5]);
-  });
-  assertThrows('Negative not allowed', function() {
-    new goog.crypt.Sha256().update([1, 2, 3, 4, -10]);
-  });
-  assertThrows('Must be byte array', function() {
-    new goog.crypt.Sha256().update([1, 2, 3, 4, {}]);
-  });
-}

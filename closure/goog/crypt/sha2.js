@@ -155,24 +155,6 @@ goog.crypt.Sha2.prototype.computeChunk_ = function() {
     offset = index * 4;
   }
 
-  // Extend the w[] array to be the number of rounds.
-  for (var i = 16; i < rounds; i++) {
-    var w_15 = w[i - 15] | 0;
-    var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
-             ((w_15 >>> 18) | (w_15 << 14)) ^
-             (w_15 >>> 3);
-    var w_2 = w[i - 2] | 0;
-    var s1 = ((w_2 >>> 17) | (w_2 << 15)) ^
-             ((w_2 >>> 19) | (w_2 << 13)) ^
-             (w_2 >>> 10);
-
-    // As a performance optimization, construct the sum a pair at a time
-    // with casting to integer (bitwise OR) to eliminate unnecessary
-    // double<->integer conversions.
-    var partialSum1 = ((w[i - 16] | 0) + s0) | 0;
-    var partialSum2 = ((w[i - 7] | 0) + s1) | 0;
-    w[i] = (partialSum1 + partialSum2) | 0;
-  }
 
   var a = this.hash_[0] | 0;
   var b = this.hash_[1] | 0;
@@ -182,7 +164,8 @@ goog.crypt.Sha2.prototype.computeChunk_ = function() {
   var f = this.hash_[5] | 0;
   var g = this.hash_[6] | 0;
   var h = this.hash_[7] | 0;
-  for (var i = 0; i < rounds; i++) {
+  // Steps 0-16
+  for (var i = 0; i < 16; i++) {
     var S0 = ((a >>> 2) | (a << 30)) ^
              ((a >>> 13) | (a << 19)) ^
              ((a >>> 22) | (a << 10));
@@ -210,6 +193,49 @@ goog.crypt.Sha2.prototype.computeChunk_ = function() {
     b = a;
     a = (t1 + t2) | 0;
   }
+  // Steps 16-64
+  for (var i = 16; i < rounds; i++) {
+    // Update the message schedule.
+    var w_15 = w[(i - 15)&15] | 0;
+    var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
+             ((w_15 >>> 18) | (w_15 << 14)) ^
+             ^ (w_15 >>> 3);
+    var w_2 = w[(i - 2)&15] | 0;
+    var s1 = ((w_2 >>> 17) | (w_2 << 15)) ^
+             ((w_2 >>> 19) | (w_2 << 13)) ^
+             (w_2 >>> 10);
+    var partialSum1 = ((w[(i - 16)&15] | 0) + s0) | 0;
+    var partialSum2 = ((w[(i - 7)&15] | 0) + s1) | 0;
+    w[i&15] = (partialSum1 + partialSum2) | 0;
+
+    var S0 = ((a >>> 2) | (a << 30)) ^
+             ((a >>> 13) | (a << 19)) ^
+             ((a >>> 22) | (a << 10));
+    var maj = ((a & b) ^ (a & c) ^ (b & c));
+    var t2 = (S0 + maj) | 0;
+    var S1 = ((e >>> 6) | (e << 26)) ^
+             ((e >>> 11) | (e << 21)) ^
+             ((e >>> 25) | (e << 7));
+    var ch = ((e & f) ^ ((~ e) & g));
+
+    // Do the step.
+    // As a performance optimization, construct the sum a pair at a time
+    // with casting to integer (bitwise OR) to eliminate unnecessary
+    // double<->integer conversions.
+    var partialSum1 = (h + S1) | 0;
+    var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
+    var partialSum3 = (partialSum2 + (w[i&15] | 0)) | 0;
+    var t1 = (partialSum1 + partialSum3) | 0;
+
+    h = g;
+    g = f;
+    f = e;
+    e = (d + t1) | 0;
+    d = c;
+    c = b;
+    b = a;
+    a = (t1 + t2) | 0;
+  }
 
   this.hash_[0] = (this.hash_[0] + a) | 0;
   this.hash_[1] = (this.hash_[1] + b) | 0;
@@ -223,48 +249,64 @@ goog.crypt.Sha2.prototype.computeChunk_ = function() {
 
 
 /** @override */
-goog.crypt.Sha2.prototype.update = function(message, opt_length) {
-  if (!goog.isDef(opt_length)) {
-    opt_length = message.length;
-  }
+goog.crypt.Sha2.prototype.update = function(bytes, opt_length) {
   // Process the message from left to right up to |opt_length| bytes.
   // When we get a 512-bit chunk, compute the hash of it and reset
   // this.chunk_. The message might not be multiple of 512 bits so we
   // might end up with a chunk that is less than 512 bits. We store
   // such partial chunk in this.chunk_ and it will be filled up later
   // in digest().
-  var n = 0;
-  var inChunk = this.inChunk_;
-
-  // The input message could be either byte array of string.
-  if (goog.isString(message)) {
-    while (n < opt_length) {
-      this.chunk_[inChunk++] = message.charCodeAt(n++);
-      if (inChunk == this.blockSize) {
-        this.computeChunk_();
-        inChunk = 0;
-      }
-    }
-  } else if (goog.isArray(message)) {
-    while (n < opt_length) {
-      var b = message[n++];
-      if (!('number' == typeof b && 0 <= b && 255 >= b && b == (b | 0))) {
-        throw Error('message must be a byte array');
-      }
-      this.chunk_[inChunk++] = b;
-      if (inChunk == this.blockSize) {
-        this.computeChunk_();
-        inChunk = 0;
-      }
-    }
-  } else {
-    throw Error('message must be string or array');
+  if (!goog.isDef(opt_length)) {
+    opt_length = bytes.length;
   }
 
-  // Record the current bytes in chunk to support partial update.
-  this.inChunk_ = inChunk;
+  var lengthMinusBlock = opt_length - this.blockSize;
+  var n = 0;
+  // Using local instead of member variables gives ~5% speedup on Firefox 16.
+  var buf = this.chunk_;
+  var inbuf = this.inChunk_;
 
-  // Record total message bytes we have processed so far.
+  if (!goog.isString(bytes)) {
+    if (!goog.isArray(bytes)) {
+      throw("Error: input must be a string or byte array.");
+    }
+  }
+  // The outer while loop should execute at most twice.
+  while (n < opt_length) {
+    // Applied optimization from sha1.js
+    if (inbuf == 0) {
+      while (n <= lengthMinusBlock) {
+        this.computeChunk_(bytes, n);
+        n += this.blockSize;
+      }
+    }
+    if (goog.isString(bytes)) {
+      while (n < opt_length) {
+        buf[inbuf] = bytes.charCodeAt(n);
+        ++inbuf;
+        ++n;
+        if (inbuf == this.blockSize) {
+          this.computeChunk_(buf);
+          inbuf = 0;
+          // Jump to the outer loop so we use the full-block optimization.
+          break;
+        }
+      }
+    } else {
+      while (n < opt_length) {
+        buf[inbuf] = bytes[n];
+        ++inbuf;
+        ++n;
+        if (inbuf == this.blockSize) {
+          this.computeChunk_(buf);
+          inbuf = 0;
+          // Jump to the outer loop so we use the full-block optimization.
+          break;
+        }
+      }
+    }
+  }
+  this.inChunk_ = inbuf;
   this.total_ += opt_length;
 };
 

@@ -151,21 +151,31 @@ goog.crypt.Sha1.prototype.compress_ = function(buf, opt_offset) {
     }
   }
 
-  // expand to 80 words
-  for (var i = 16; i < 80; i++) {
-    var t = W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16];
-    W[i] = ((t << 1) | (t >>> 31)) & 0xffffffff;
-  }
-
   var a = this.chain_[0];
   var b = this.chain_[1];
   var c = this.chain_[2];
   var d = this.chain_[3];
   var e = this.chain_[4];
-  var f, k;
+  var f, k, t;
 
-  // TODO(user): Try to unroll this loop to speed up the computation.
-  for (var i = 0; i < 80; i++) {
+  // Steps 0-16
+  for (var i = 0; i < 16; i++) {
+    f = d ^ (b & (c ^ d));
+    k = 0x5a827999;
+
+    var t = (((a << 5) | (a >>> 27)) + f + e + k + W[i]) & 0xffffffff;
+    e = d;
+    d = c;
+    c = ((b << 30) | (b >>> 2)) & 0xffffffff;
+    b = a;
+    a = t;
+  }
+  // Steps 16-80. Calculate the message schedule on the fly;  we only
+  // need 16 words of it. This improves performance by about 10%
+  // on Chrome 35. -dlg
+  for (var i = 16; i < 80; i++) {
+    t = W[(i-3)&15] ^ W[(i-8)&15] ^ W[(i-14)&15] ^ W[i&15];
+    W[i&15] = ((t << 1) | (t >>> 31)) & 0xffffffff;
     if (i < 40) {
       if (i < 20) {
         f = d ^ (b & (c ^ d));
@@ -184,7 +194,7 @@ goog.crypt.Sha1.prototype.compress_ = function(buf, opt_offset) {
       }
     }
 
-    var t = (((a << 5) | (a >>> 27)) + f + e + k + W[i]) & 0xffffffff;
+    var t = (((a << 5) | (a >>> 27)) + f + e + k + W[i&15]) & 0xffffffff;
     e = d;
     d = c;
     c = ((b << 30) | (b >>> 2)) & 0xffffffff;
