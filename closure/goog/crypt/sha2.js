@@ -134,29 +134,42 @@ goog.crypt.Sha2.prototype.reset = function() {
 };
 
 
-/**
- * Helper function to compute the hashes for a given 512-bit message chunk.
- * @private
+/** Helper function to precompute a message schedule.
+ *
+ * TODO(dlg): This is essentially static...
+ *
+ * @param {!Array|Uint8Array|string} buf Data used for the update.
+ * @param {number=} opt_offset Optional offset into the data.
+ *
+ * @return {!Array|Int32Array} w A 64-element array of uint32s, representing the
+ * prescheduled message, with round constants already added.
  */
-goog.crypt.Sha2.prototype.computeChunk_ = function() {
-  var chunk = this.chunk_;
-  goog.asserts.assert(chunk.length == this.blockSize);
-  var rounds = 64;
-
-  // Divide the chunk into 16 32-bit-words.
-  var w = this.w_;
-  var index = 0;
-  var offset = 0;
-  while (offset < chunk.length) {
-    w[index++] = (chunk[offset] << 24) |
-                 (chunk[offset + 1] << 16) |
-                 (chunk[offset + 2] << 8) |
-                 (chunk[offset + 3]);
-    offset = index * 4;
+goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
+  if (!opt_offset) {
+    opt_offset = 0;
   }
 
-  // Extend the w[] array to be the number of rounds.
-  for (var i = 16; i < rounds; i++) {
+  // Divide the chunk into 16 32-bit-words.
+  var w = goog.global['Int32Array'] ? new Int32Array(64) : new Array(64);
+  // get 16 big endian words
+  if (goog.isString(buf)) {
+    for (var i = 0; i < 16; i++) {
+      w[i] = (buf.charCodeAt(opt_offset) << 24) |
+             (buf.charCodeAt(opt_offset + 1) << 16) |
+             (buf.charCodeAt(opt_offset + 2) << 8) |
+             (buf.charCodeAt(opt_offset + 3));
+      opt_offset += 4;
+    }
+  } else {
+    for (var i = 0; i < 16; i++) {
+      w[i] = (buf[opt_offset] << 24) |
+             (buf[opt_offset + 1] << 16) |
+             (buf[opt_offset + 2] << 8) |
+             (buf[opt_offset + 3]);
+      opt_offset += 4;
+    }
+  }
+  for (var i = 16; i < 64; i++) {
     var w_15 = w[i - 15] | 0;
     var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
              ((w_15 >>> 18) | (w_15 << 14)) ^
@@ -173,6 +186,22 @@ goog.crypt.Sha2.prototype.computeChunk_ = function() {
     var partialSum2 = ((w[i - 7] | 0) + s1) | 0;
     w[i] = (partialSum1 + partialSum2) | 0;
   }
+  for (var i = 0; i < 64; i++) {
+    w[i] = (w[i] + (goog.crypt.Sha2.Kx_[i] | 0) | 0);
+  }
+  return w;
+};
+
+
+/**
+ *  Update this goog.crypt.Sha2 instance's chaining value using a precomputed
+ *  schedule. Increment the total digested bytes by 64.
+ *
+ *  @param {Array.<Uint32Array[80]>} precomputed_schedule An SHA2-32b schedule
+ *  precomputed by goog.crypt.Sha2.preschedule.
+ */
+goog.crypt.Sha2.prototype.scheduledUpdate = function(precomputed_schedule) {
+  var w = precomputed_schedule;
 
   var a = this.hash_[0] | 0;
   var b = this.hash_[1] | 0;
@@ -182,7 +211,7 @@ goog.crypt.Sha2.prototype.computeChunk_ = function() {
   var f = this.hash_[5] | 0;
   var g = this.hash_[6] | 0;
   var h = this.hash_[7] | 0;
-  for (var i = 0; i < rounds; i++) {
+  for (var i = 0; i < 64; i++) {
     var S0 = ((a >>> 2) | (a << 30)) ^
              ((a >>> 13) | (a << 19)) ^
              ((a >>> 22) | (a << 10));
@@ -193,12 +222,142 @@ goog.crypt.Sha2.prototype.computeChunk_ = function() {
              ((e >>> 25) | (e << 7));
     var ch = ((e & f) ^ ((~ e) & g));
 
-    // As a performance optimization, construct the sum a pair at a time
-    // with casting to integer (bitwise OR) to eliminate unnecessary
-    // double<->integer conversions.
+    var partialSum1 = (h + S1) | 0;
+    var partialSum3 = (ch + (w[i] | 0)) | 0;
+    var t1 = (partialSum1 + partialSum3) | 0;
+
+    h = g;
+    g = f;
+    f = e;
+    e = (d + t1) | 0;
+    d = c;
+    c = b;
+    b = a;
+    a = (t1 + t2) | 0;
+  }
+  this.total_ += this.blockSize;
+
+  this.hash_[0] = (this.hash_[0] + a) | 0;
+  this.hash_[1] = (this.hash_[1] + b) | 0;
+  this.hash_[2] = (this.hash_[2] + c) | 0;
+  this.hash_[3] = (this.hash_[3] + d) | 0;
+  this.hash_[4] = (this.hash_[4] + e) | 0;
+  this.hash_[5] = (this.hash_[5] + f) | 0;
+  this.hash_[6] = (this.hash_[6] + g) | 0;
+  this.hash_[7] = (this.hash_[7] + h) | 0;
+};
+
+
+/**
+ * Helper function to compute the hashes for a given 512-bit message chunk.
+ * @param {!Array|Uint8Array|string} buf Data used for the update.
+ * @param {number=} opt_offset Optional offset into the data.
+ *
+ * @private
+ */
+goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
+  // Performance notes:
+  // - Sum numbers pairwise and cast to integer using | after to avoid
+  //   unnecessary double<->integer conversions.
+  // - The message schedule is updated "in-place" to reduce the amount
+  //   of garbage that has to be collected.
+
+  if (!opt_offset) {
+    opt_offset = 0;
+  }
+
+  // The message schedule.
+  var w = this.w_;
+  // Divide the chunk into 16 32-bit-words.
+  if (goog.isString(buf)) {
+    for (var i = 0; i < 16; i++) {
+      // TODO(user): [bug 8140122] Recent versions of Safari for Mac OS and iOS
+      // have a bug that turns the post-increment ++ operator into pre-increment
+      // during JIT compilation.
+      // TODO(someone): Bug resolved 2013-02-27 at:
+      //   https://bugs.webkit.org/show_bug.cgi?id=109036,
+      //   https://bugs.webkit.org/show_bug.cgi?id=110991
+      // (Is this still needed? If there's no significant performance advantage,
+      // current code is clearer.)
+      w[i] = (buf.charCodeAt(opt_offset) << 24) |
+             (buf.charCodeAt(opt_offset + 1) << 16) |
+             (buf.charCodeAt(opt_offset + 2) << 8) |
+             (buf.charCodeAt(opt_offset + 3));
+      opt_offset += 4;
+    }
+  } else {
+    for (var i = 0; i < 16; i++) {
+      w[i] = (buf[opt_offset] << 24) |
+             (buf[opt_offset + 1] << 16) |
+             (buf[opt_offset + 2] << 8) |
+             (buf[opt_offset + 3]);
+      opt_offset += 4;
+    }
+  }
+
+  var a = this.hash_[0] | 0;
+  var b = this.hash_[1] | 0;
+  var c = this.hash_[2] | 0;
+  var d = this.hash_[3] | 0;
+  var e = this.hash_[4] | 0;
+  var f = this.hash_[5] | 0;
+  var g = this.hash_[6] | 0;
+  var h = this.hash_[7] | 0;
+  // Do steps 0-16.
+  for (var i = 0; i < 16; i++) {
+    var S0 = ((a >>> 2) | (a << 30)) ^
+             ((a >>> 13) | (a << 19)) ^
+             ((a >>> 22) | (a << 10));
+    var maj = ((a & b) ^ (a & c) ^ (b & c));
+    var t2 = (S0 + maj) | 0;
+    var S1 = ((e >>> 6) | (e << 26)) ^
+             ((e >>> 11) | (e << 21)) ^
+             ((e >>> 25) | (e << 7));
+    var ch = ((e & f) ^ ((~ e) & g));
+
     var partialSum1 = (h + S1) | 0;
     var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
     var partialSum3 = (partialSum2 + (w[i] | 0)) | 0;
+    var t1 = (partialSum1 + partialSum3) | 0;
+
+    h = g;
+    g = f;
+    f = e;
+    e = (d + t1) | 0;
+    d = c;
+    c = b;
+    b = a;
+    a = (t1 + t2) | 0;
+  }
+
+  // Do steps 16-64.
+  for (var i = 16; i < 64; i++) {
+    var w_15 = w[(i - 15) & 15] | 0;
+    var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
+             ((w_15 >>> 18) | (w_15 << 14)) ^
+             (w_15 >>> 3);
+    var w_2 = w[(i - 2) & 15] | 0;
+    var s1 = ((w_2 >>> 17) | (w_2 << 15)) ^
+             ((w_2 >>> 19) | (w_2 << 13)) ^
+             (w_2 >>> 10);
+
+    var partialSum1 = ((w[(i - 16) & 15] | 0) + s0) | 0;
+    var partialSum2 = ((w[(i - 7) & 15] | 0) + s1) | 0;
+    w[i & 15] = (partialSum1 + partialSum2) | 0;
+
+    var S0 = ((a >>> 2) | (a << 30)) ^
+             ((a >>> 13) | (a << 19)) ^
+             ((a >>> 22) | (a << 10));
+    var maj = ((a & b) ^ (a & c) ^ (b & c));
+    var t2 = (S0 + maj) | 0;
+    var S1 = ((e >>> 6) | (e << 26)) ^
+             ((e >>> 11) | (e << 21)) ^
+             ((e >>> 25) | (e << 7));
+    var ch = ((e & f) ^ ((~ e) & g));
+
+    var partialSum1 = (h + S1) | 0;
+    var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
+    var partialSum3 = (partialSum2 + (w[i & 15] | 0)) | 0;
     var t1 = (partialSum1 + partialSum3) | 0;
 
     h = g;
@@ -223,48 +382,64 @@ goog.crypt.Sha2.prototype.computeChunk_ = function() {
 
 
 /** @override */
-goog.crypt.Sha2.prototype.update = function(message, opt_length) {
+goog.crypt.Sha2.prototype.update = function(bytes, opt_length) {
   if (!goog.isDef(opt_length)) {
-    opt_length = message.length;
+    opt_length = bytes.length;
   }
+  opt_length = (bytes.length < opt_length) ? bytes.length : opt_length;
   // Process the message from left to right up to |opt_length| bytes.
   // When we get a 512-bit chunk, compute the hash of it and reset
-  // this.chunk_. The message might not be multiple of 512 bits so we
-  // might end up with a chunk that is less than 512 bits. We store
-  // such partial chunk in this.chunk_ and it will be filled up later
-  // in digest().
+  // this.chunk_. If the message isn't a multiple of 64 bytes (512 bits)
+  // we store the partial chunk in this.chunk_, and the index of the end
+  // of the partial chunk into this.inChunk_.
   var n = 0;
-  var inChunk = this.inChunk_;
+  var inbuf = this.inChunk_;
+  var buf = this.chunk_;
+  var lengthMinusBlock = opt_length - this.blockSize;
+  // The outer while loop should execute at most twice.
+  while (n < opt_length) {
+    // When we have no data in the block to top up, we can directly process the
+    // input buffer (assuming it contains sufficient data). This gives ~25%
+    // speedup on Chrome 23 and ~15% speedup on Firefox 16, but requires that
+    // the data is provided in large chunks (or in multiples of 64 bytes).
+    if (inbuf == 0) {
+      while (n <= lengthMinusBlock) {
+        this.computeChunk_(bytes, n);
+        n += this.blockSize;
+      }
+    }
 
-  // The input message could be either byte array of string.
-  if (goog.isString(message)) {
-    while (n < opt_length) {
-      this.chunk_[inChunk++] = message.charCodeAt(n++);
-      if (inChunk == this.blockSize) {
-        this.computeChunk_();
-        inChunk = 0;
+    if (goog.isString(bytes)) {
+      while (n < opt_length) {
+        buf[inbuf] = bytes.charCodeAt(n);
+        ++inbuf;
+        ++n;
+        if (inbuf == this.blockSize) {
+          this.computeChunk_(buf);
+          inbuf = 0;
+          // Jump to the outer loop so we use the full-block optimization.
+          break;
+        }
+      }
+    } else {
+      while (n < opt_length) {
+        buf[inbuf] = bytes[n];
+        ++inbuf;
+        ++n;
+        if (inbuf == this.blockSize) {
+          this.computeChunk_(buf);
+          inbuf = 0;
+          // Jump to the outer loop so we use the full-block optimization.
+          break;
+        }
       }
     }
-  } else if (goog.isArray(message)) {
-    while (n < opt_length) {
-      var b = message[n++];
-      if (!('number' == typeof b && 0 <= b && 255 >= b && b == (b | 0))) {
-        throw Error('message must be a byte array');
-      }
-      this.chunk_[inChunk++] = b;
-      if (inChunk == this.blockSize) {
-        this.computeChunk_();
-        inChunk = 0;
-      }
-    }
-  } else {
-    throw Error('message must be string or array');
   }
 
-  // Record the current bytes in chunk to support partial update.
-  this.inChunk_ = inChunk;
+  // Save the current position in this.chunk_ to support partial updates.
+  this.inChunk_ = inbuf;
 
-  // Record total message bytes we have processed so far.
+  // Update the total message bytes processed.
   this.total_ += opt_length;
 };
 
@@ -282,14 +457,14 @@ goog.crypt.Sha2.prototype.digest = function() {
         this.blockSize - (this.inChunk_ - 56));
   }
 
-  // Append # bits in the 64-bit big-endian format.
+  // Append number of bits as a big-endian 64-bit uint.
   for (var i = 63; i >= 56; i--) {
     this.chunk_[i] = totalBits & 255;
     totalBits /= 256; // Don't use bit-shifting here!
   }
-  this.computeChunk_();
+  this.computeChunk_(this.chunk_);
 
-  // Finally, output the result digest.
+  // Finally, output the result's digest.
   var n = 0;
   for (var i = 0; i < this.numHashBlocks_; i++) {
     for (var j = 24; j >= 0; j -= 8) {
@@ -331,7 +506,7 @@ goog.crypt.Sha2.K_ = [
  *
  * The compiler cannot remove an Int32Array, even if it is not needed
  * (There are certain cases where creating an Int32Array is not
- * side-effect free).  Instead, the first time we construct a Sha2
+ * side-effect free). Instead, the first time we construct a Sha2
  * instance, we convert or assign Sha2.K as appropriate.
  * @private {undefined|!Array<number>|!Int32Array}
  */
