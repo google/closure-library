@@ -272,6 +272,7 @@ goog.crypt.Sha2.prototype.update = function(bytes, opt_length) {
   if (!goog.isDef(opt_length)) {
     opt_length = bytes.length;
   }
+  opt_length = (bytes.length < opt_length) ? bytes.length : opt_length;
   // Process the message from left to right up to |opt_length| bytes.
   // When we get a 512-bit chunk, compute the hash of it and reset
   // this.chunk_. The message might not be multiple of 512 bits so we

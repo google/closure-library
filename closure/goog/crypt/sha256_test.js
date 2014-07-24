@@ -81,42 +81,48 @@ function testHashing() {
   sha256.reset();
 }
 
-function testOffset() {
-  var sha256 = new goog.crypt.Sha256();
+function testLength() {
+  var sha = new goog.crypt.Sha256();
 
-  // Test that offsets work correctly.
-  var message = goog.crypt.stringToByteArray(goog.string.repeat('a', 64));
-  var expected = goog.crypt.hexToByteArray(
-    '3de53b4923d85706b5a9fa5492ee38ab25314bf42203ac22adb15b4e63960c19');
+  // Test that lengths work correctly.
+  var message = goog.crypt.hexToByteArray(
+    'd9b28b643d16efc8a17a532c05deb79069421bf4cda67f58310ae3bc956e4720f9d2ab845d360fe8c19a734c25fed7b089623b14edc69f78512a03dcb58e6740');
 
-  // Offsets from 0 to 64.
-  sha256.reset();
-  for (var i = 0; i < 65; i++) {
-     sha256.update(message, i);
+  // Lengths from 0 to 64.
+  sha.reset();
+  for (var i = 0; i < 64; i++) {
+     sha.update(message, i);
   }
-  assertElementsEquals(expected, sha256.digest());
+  assertElementsEquals(goog.crypt.hexToByteArray(
+    '6011bfb853f860ae65e32d2ad16323a2c34cac39404415cc946820526055060f'),
+    sha.digest());
 
-  // Offsets from 0 to 70 to include empty message cases.
-  sha256.reset();
-  for (var i = 0; i < 65; i++) {
-     sha256.update(message, i);
+  // Lengths from 0 to 71 to include message overrun cases.
+  sha.reset();
+  for (var i = 0; i < 71; i++) {
+     sha.update(message, i);
    }
-  assertElementsEquals(expected, sha256.digest());
+  assertElementsEquals(goog.crypt.hexToByteArray(
+    '8e586a48e640619400a2ea428256a091c06f3597c9e8a343528c5efd8b62db8f'),
+    sha.digest());
 }
 
 function testShortMonteCarlo() {
   // A Monte Carlo test for short message.
   var sha256 = new goog.crypt.Sha256();
 
-  var expected = goog.crypt.hexToByteArray(
-    'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855');
+  var t = goog.crypt.hexToByteArray(
+    '02df179ad95607e1cef33be31fac9030da6b2ed260f19e61773d046610fde14d');
   sha256.reset();
   var t = goog.array.repeat(0, 32);
   for (var i = 0; i < 16384; i++) {
-    var offset = (t[0] & 31) + 1;
+    var offset = (t[0] & 31);
     sha256.update(t, offset);
     t = sha256.digest();
     sha256.reset();
   }
-  assertElementsEquals(expected, sha256.digest());
+  assertElementsEquals(
+    goog.crypt.hexToByteArray(
+      '6a9513334da3e141517d28e3115de6a44fe9026e0b1da030c0acc85b4a475ef9'),
+    t);
 }

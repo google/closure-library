@@ -215,6 +215,7 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
   if (!goog.isDef(opt_length)) {
     opt_length = bytes.length;
   }
+  opt_length = (bytes.length < opt_length) ? bytes.length : opt_length;
 
   var lengthMinusBlock = opt_length - this.blockSize;
   var n = 0;
