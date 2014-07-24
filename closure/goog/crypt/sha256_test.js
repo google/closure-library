@@ -61,24 +61,26 @@ function testHashing() {
           'a33ce45964ff2167f6ecedd419db06c1'),
       sha256.digest());
 
+
+  // Some additional tests.
+
+  // A longer message KAT.
   sha256.reset();
   sha256.update(goog.string.repeat('a', 1024));
   assertEquals('2edc986847e209b4016e141a6dc8716d3207350f416969382d431539bf292e4a',
                goog.crypt.byteArrayToHex(sha256.digest()));
 
+  // (Near-)boundary values:
+  // 55B + ubint64 == 63 < 64
   sha256.reset();
   sha256.update(goog.string.repeat('a', 55));
   assertEquals('9f4390f8d30c2dd92ec9f095b65e2b9ae9b0a925a5258e241c9f1e910f734318',
                goog.crypt.byteArrayToHex(sha256.digest()));
-
+  // 56B + ubint64 == 64
   sha256.reset();
-  sha256.update(goog.crypt.stringToByteArray(goog.string.repeat('a', 1024)));
-  assertElementsEquals(
-    goog.crypt.hexToByteArray(
-        '2edc986847e209b4016e141a6dc8716d' +
-        '3207350f416969382d431539bf292e4a'),
-    sha256.digest());
-  sha256.reset();
+  sha256.update(goog.string.repeat('a', 56));
+  assertEquals('b35439a4ac6f0948b6d6f9e3c6af0f5f590ce20f1bde7090ef7970686ec6738a',
+               goog.crypt.byteArrayToHex(sha256.digest()));
 }
 
 function testLength() {
@@ -125,4 +127,22 @@ function testShortMonteCarlo() {
     goog.crypt.hexToByteArray(
       '6a9513334da3e141517d28e3115de6a44fe9026e0b1da030c0acc85b4a475ef9'),
     t);
+}
+
+function testPreschedule() {
+  // Test using prescheduled messages.
+  var sha = new goog.crypt.Sha256();
+  var message = goog.crypt.hexToByteArray(
+    'd9b28b643d16efc8a17a532c05deb79069421bf4cda67f58310ae3bc956e4720f9d2ab845d360fe8c19a734c25fed7b089623b14edc69f78512a03dcb58e6740');
+
+  var scheduled = sha.preschedule(message);
+  sha.scheduledUpdate(scheduled);
+  var w_scheduled = goog.array.toArray(sha.hash_);
+  var digest_scheduled = sha.digest();
+
+  sha.reset();
+  sha.update(message);
+  var w_afterupdate = goog.array.toArray(sha.hash_);
+  assertElementsEquals(w_scheduled, w_afterupdate);
+  assertElementsEquals(sha.digest(), digest_scheduled);
 }

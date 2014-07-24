@@ -133,6 +133,116 @@ goog.crypt.Sha2.prototype.reset = function() {
       goog.array.clone(this.initHashBlocks_);
 };
 
+/** Helper function to precompute a message schedule.
+ */
+goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
+  if (!opt_offset) {
+    opt_offset = 0;
+  }
+  var rounds = 64;
+
+  // Divide the chunk into 16 32-bit-words.
+  var w = goog.global['Int32Array'] ? new Int32Array(64) : new Array(64);
+  var offset = 0;
+  // get 16 big endian words
+  if (goog.isString(buf)) {
+    for (var i = 0; i < 16; i++) {
+      // TODO(user): [bug 8140122] Recent versions of Safari for Mac OS and iOS
+      // have a bug that turns the post-increment ++ operator into pre-increment
+      // during JIT compilation.  We have code that depends heavily on SHA-1 for
+      // correctness and which is affected by this bug, so I've removed all uses
+      // of post-increment ++ in which the result value is used.  We can revert
+      // this change once the Safari bug
+      // (https://bugs.webkit.org/show_bug.cgi?id=109036) has been fixed and
+      // most clients have been updated.
+      w[i] = (buf.charCodeAt(opt_offset) << 24) |
+             (buf.charCodeAt(opt_offset + 1) << 16) |
+             (buf.charCodeAt(opt_offset + 2) << 8) |
+             (buf.charCodeAt(opt_offset + 3));
+      opt_offset += 4;
+    }
+  } else {
+    for (var i = 0; i < 16; i++) {
+      w[i] = (buf[opt_offset] << 24) |
+             (buf[opt_offset + 1] << 16) |
+             (buf[opt_offset + 2] << 8) |
+             (buf[opt_offset + 3]);
+      opt_offset += 4;
+    }
+  }
+  for (var i = 16; i < rounds; i++) {
+    var w_15 = w[i - 15] | 0;
+    var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
+             ((w_15 >>> 18) | (w_15 << 14)) ^
+             (w_15 >>> 3);
+    var w_2 = w[i - 2] | 0;
+    var s1 = ((w_2 >>> 17) | (w_2 << 15)) ^
+             ((w_2 >>> 19) | (w_2 << 13)) ^
+             (w_2 >>> 10);
+
+    // As a performance optimization, construct the sum a pair at a time
+    // with casting to integer (bitwise OR) to eliminate unnecessary
+    // double<->integer conversions.
+    var partialSum1 = ((w[i - 16] | 0) + s0) | 0;
+    var partialSum2 = ((w[i - 7] | 0) + s1) | 0;
+    w[i] = (partialSum1 + partialSum2) | 0;
+  }
+  return w;
+};
+
+/** Helper function to update the digest using a schedule precomputed
+ *  by preschedule. (It increments .total_ by one block.)
+ */
+goog.crypt.Sha2.prototype.scheduledUpdate = function(w) {
+  var rounds = 64;
+
+  var a = this.hash_[0] | 0;
+  var b = this.hash_[1] | 0;
+  var c = this.hash_[2] | 0;
+  var d = this.hash_[3] | 0;
+  var e = this.hash_[4] | 0;
+  var f = this.hash_[5] | 0;
+  var g = this.hash_[6] | 0;
+  var h = this.hash_[7] | 0;
+  for (var i = 0; i < rounds; i++) {
+    var S0 = ((a >>> 2) | (a << 30)) ^
+             ((a >>> 13) | (a << 19)) ^
+             ((a >>> 22) | (a << 10));
+    var maj = ((a & b) ^ (a & c) ^ (b & c));
+    var t2 = (S0 + maj) | 0;
+    var S1 = ((e >>> 6) | (e << 26)) ^
+             ((e >>> 11) | (e << 21)) ^
+             ((e >>> 25) | (e << 7));
+    var ch = ((e & f) ^ ((~ e) & g));
+
+    // As a performance optimization, construct the sum a pair at a time
+    // with casting to integer (bitwise OR) to eliminate unnecessary
+    // double<->integer conversions.
+    var partialSum1 = (h + S1) | 0;
+    var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
+    var partialSum3 = (partialSum2 + (w[i] | 0)) | 0;
+    var t1 = (partialSum1 + partialSum3) | 0;
+
+    h = g;
+    g = f;
+    f = e;
+    e = (d + t1) | 0;
+    d = c;
+    c = b;
+    b = a;
+    a = (t1 + t2) | 0;
+  }
+  this.total_ += this.blockSize;
+
+  this.hash_[0] = (this.hash_[0] + a) | 0;
+  this.hash_[1] = (this.hash_[1] + b) | 0;
+  this.hash_[2] = (this.hash_[2] + c) | 0;
+  this.hash_[3] = (this.hash_[3] + d) | 0;
+  this.hash_[4] = (this.hash_[4] + e) | 0;
+  this.hash_[5] = (this.hash_[5] + f) | 0;
+  this.hash_[6] = (this.hash_[6] + g) | 0;
+  this.hash_[7] = (this.hash_[7] + h) | 0;
+};
 
 /**
  * Helper function to compute the hashes for a given 512-bit message chunk.
