@@ -187,6 +187,9 @@ goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
     var partialSum2 = ((w[i - 7] | 0) + s1) | 0;
     w[i] = (partialSum1 + partialSum2) | 0;
   }
+  for (var i = 0; i < rounds; i++) {
+    w[i] = (w[i] + (goog.crypt.Sha2.Kx_[i] | 0) | 0);
+  }
   return w;
 };
 
@@ -219,8 +222,8 @@ goog.crypt.Sha2.prototype.scheduledUpdate = function(w) {
     // with casting to integer (bitwise OR) to eliminate unnecessary
     // double<->integer conversions.
     var partialSum1 = (h + S1) | 0;
-    var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
-    var partialSum3 = (partialSum2 + (w[i] | 0)) | 0;
+    //var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
+    var partialSum3 = (ch + (w[i] | 0)) | 0;
     var t1 = (partialSum1 + partialSum3) | 0;
 
     h = g;
