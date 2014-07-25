@@ -186,7 +186,7 @@ goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
     var partialSum2 = ((w[i - 7] | 0) + s1) | 0;
     w[i] = (partialSum1 + partialSum2) | 0;
   }
-  for (var i = 0; i < rounds; i++) {
+  for (var i = 0; i < 64; i++) {
     w[i] = (w[i] + (goog.crypt.Sha2.Kx_[i] | 0) | 0);
   }
   return w;
