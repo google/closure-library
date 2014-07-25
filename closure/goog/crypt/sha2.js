@@ -133,13 +133,20 @@ goog.crypt.Sha2.prototype.reset = function() {
       goog.array.clone(this.initHashBlocks_);
 };
 
+
 /** Helper function to precompute a message schedule.
+ *
+ * TODO(dlg): This is essentially static...
+ *
+ * @param {Array|Uint8Array|string} buf Data used for the update.
+ * @param {number} opt_offset Optional offset into the data.
+ * @return {Array|Int32Array} w A 64-element array of uint32s, representing the
+ * prescheduled message, with round constants already added.
  */
 goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
   if (!opt_offset) {
     opt_offset = 0;
   }
-  var rounds = 64;
 
   // Divide the chunk into 16 32-bit-words.
   var w = goog.global['Int32Array'] ? new Int32Array(64) : new Array(64);
@@ -147,14 +154,6 @@ goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
   // get 16 big endian words
   if (goog.isString(buf)) {
     for (var i = 0; i < 16; i++) {
-      // TODO(user): [bug 8140122] Recent versions of Safari for Mac OS and iOS
-      // have a bug that turns the post-increment ++ operator into pre-increment
-      // during JIT compilation.  We have code that depends heavily on SHA-1 for
-      // correctness and which is affected by this bug, so I've removed all uses
-      // of post-increment ++ in which the result value is used.  We can revert
-      // this change once the Safari bug
-      // (https://bugs.webkit.org/show_bug.cgi?id=109036) has been fixed and
-      // most clients have been updated.
       w[i] = (buf.charCodeAt(opt_offset) << 24) |
              (buf.charCodeAt(opt_offset + 1) << 16) |
              (buf.charCodeAt(opt_offset + 2) << 8) |
@@ -170,7 +169,7 @@ goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
       opt_offset += 4;
     }
   }
-  for (var i = 16; i < rounds; i++) {
+  for (var i = 16; i < 64; i++) {
     var w_15 = w[i - 15] | 0;
     var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
              ((w_15 >>> 18) | (w_15 << 14)) ^
@@ -193,11 +192,16 @@ goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
   return w;
 };
 
-/** Helper function to update the digest using a schedule precomputed
- *  by preschedule. (It increments .total_ by one block.)
+
+/**
+ *  Update this goog.crypt.Sha2 instance's chaining value using a precomputed
+ *  schedule. Increment the total digested bytes by 64.
+ *
+ *  @param {Array.<Uint32Array[80]>} w An SHA2-32b schedule precomputed by
+ *  goog.crypt.Sha2.preschedule.
  */
-goog.crypt.Sha2.prototype.scheduledUpdate = function(w) {
-  var rounds = 64;
+goog.crypt.Sha2.prototype.scheduledUpdate = function(precomputed_schedule) {
+  var w = precomputed_schedule;
 
   var a = this.hash_[0] | 0;
   var b = this.hash_[1] | 0;
@@ -207,7 +211,7 @@ goog.crypt.Sha2.prototype.scheduledUpdate = function(w) {
   var f = this.hash_[5] | 0;
   var g = this.hash_[6] | 0;
   var h = this.hash_[7] | 0;
-  for (var i = 0; i < rounds; i++) {
+  for (var i = 0; i < 64; i++) {
     var S0 = ((a >>> 2) | (a << 30)) ^
              ((a >>> 13) | (a << 19)) ^
              ((a >>> 22) | (a << 10));
@@ -218,11 +222,7 @@ goog.crypt.Sha2.prototype.scheduledUpdate = function(w) {
              ((e >>> 25) | (e << 7));
     var ch = ((e & f) ^ ((~ e) & g));
 
-    // As a performance optimization, construct the sum a pair at a time
-    // with casting to integer (bitwise OR) to eliminate unnecessary
-    // double<->integer conversions.
     var partialSum1 = (h + S1) | 0;
-    //var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
     var partialSum3 = (ch + (w[i] | 0)) | 0;
     var t1 = (partialSum1 + partialSum3) | 0;
 
@@ -247,31 +247,36 @@ goog.crypt.Sha2.prototype.scheduledUpdate = function(w) {
   this.hash_[7] = (this.hash_[7] + h) | 0;
 };
 
+
 /**
  * Helper function to compute the hashes for a given 512-bit message chunk.
  * @private
  */
 goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
-  //goog.asserts.assert(chunk.length == this.blockSize);
+  // Performance notes:
+  // - Sum numbers pairwise and cast to integer using | after to avoid
+  //   unnecessary double<->integer conversions.
+  // - The message schedule is updated "in-place" to reduce the amount
+  //   of garbage that has to be collected.
+
   if (!opt_offset) {
     opt_offset = 0;
   }
-  var rounds = 64;
 
-  // Divide the chunk into 16 32-bit-words.
+  // The message schedule.
   var w = this.w_;
+  // Divide the chunk into 16 32-bit-words.
   var offset = 0;
-  // get 16 big endian words
   if (goog.isString(buf)) {
     for (var i = 0; i < 16; i++) {
       // TODO(user): [bug 8140122] Recent versions of Safari for Mac OS and iOS
       // have a bug that turns the post-increment ++ operator into pre-increment
-      // during JIT compilation.  We have code that depends heavily on SHA-1 for
-      // correctness and which is affected by this bug, so I've removed all uses
-      // of post-increment ++ in which the result value is used.  We can revert
-      // this change once the Safari bug
-      // (https://bugs.webkit.org/show_bug.cgi?id=109036) has been fixed and
-      // most clients have been updated.
+      // during JIT compilation.
+      // TODO(someone): Bug resolved 2013-02-27 at:
+      //   https://bugs.webkit.org/show_bug.cgi?id=109036,
+      //   https://bugs.webkit.org/show_bug.cgi?id=110991
+      // (Is this still needed? If there's no significant performance advantage,
+      // current code is clearer.)
       w[i] = (buf.charCodeAt(opt_offset) << 24) |
              (buf.charCodeAt(opt_offset + 1) << 16) |
              (buf.charCodeAt(opt_offset + 2) << 8) |
@@ -296,6 +301,7 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
   var f = this.hash_[5] | 0;
   var g = this.hash_[6] | 0;
   var h = this.hash_[7] | 0;
+  // Do steps 0-16.
   for (var i = 0; i < 16; i++) {
     var S0 = ((a >>> 2) | (a << 30)) ^
              ((a >>> 13) | (a << 19)) ^
@@ -307,9 +313,6 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
              ((e >>> 25) | (e << 7));
     var ch = ((e & f) ^ ((~ e) & g));
 
-    // As a performance optimization, construct the sum a pair at a time
-    // with casting to integer (bitwise OR) to eliminate unnecessary
-    // double<->integer conversions.
     var partialSum1 = (h + S1) | 0;
     var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
     var partialSum3 = (partialSum2 + (w[i] | 0)) | 0;
@@ -324,7 +327,9 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
     b = a;
     a = (t1 + t2) | 0;
   }
-  for (var i = 16; i < rounds; i++) {
+
+  // Do steps 16-64.
+  for (var i = 16; i < 64; i++) {
     var w_15 = w[(i - 15)&15] | 0;
     var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
              ((w_15 >>> 18) | (w_15 << 14)) ^
@@ -334,9 +339,6 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
              ((w_2 >>> 19) | (w_2 << 13)) ^
              (w_2 >>> 10);
 
-    // As a performance optimization, construct the sum a pair at a time
-    // with casting to integer (bitwise OR) to eliminate unnecessary
-    // double<->integer conversions.
     var partialSum1 = ((w[(i - 16)&15] | 0) + s0) | 0;
     var partialSum2 = ((w[(i - 7)&15] | 0) + s1) | 0;
     w[i&15] = (partialSum1 + partialSum2) | 0;
@@ -351,9 +353,6 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
              ((e >>> 25) | (e << 7));
     var ch = ((e & f) ^ ((~ e) & g));
 
-    // As a performance optimization, construct the sum a pair at a time
-    // with casting to integer (bitwise OR) to eliminate unnecessary
-    // double<->integer conversions.
     var partialSum1 = (h + S1) | 0;
     var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
     var partialSum3 = (partialSum2 + (w[i&15] | 0)) | 0;
@@ -388,10 +387,9 @@ goog.crypt.Sha2.prototype.update = function(bytes, opt_length) {
   opt_length = (bytes.length < opt_length) ? bytes.length : opt_length;
   // Process the message from left to right up to |opt_length| bytes.
   // When we get a 512-bit chunk, compute the hash of it and reset
-  // this.chunk_. The message might not be multiple of 512 bits so we
-  // might end up with a chunk that is less than 512 bits. We store
-  // such partial chunk in this.chunk_ and it will be filled up later
-  // in digest().
+  // this.chunk_. If the message isn't a multiple of 64 bytes (512 bits)
+  // we store the partial chunk in this.chunk_, and the index of the end
+  // of the partial chunk into this.inChunk_.
   var n = 0;
   var inbuf = this.inChunk_;
   var buf = this.chunk_;
@@ -436,10 +434,10 @@ goog.crypt.Sha2.prototype.update = function(bytes, opt_length) {
     }
   }
 
-   // Record the current bytes in chunk to support partial update.
+  // Save the current position in this.chunk_ to support partial updates.
   this.inChunk_ = inbuf;
 
-  // Record total message bytes we have processed so far.
+  // Update the total message bytes processed.
   this.total_ += opt_length;
 };
 
@@ -457,14 +455,14 @@ goog.crypt.Sha2.prototype.digest = function() {
         this.blockSize - (this.inChunk_ - 56));
   }
 
-  // Append # bits in the 64-bit big-endian format.
+  // Append number of bits as a big-endian 64-bit uint.
   for (var i = 63; i >= 56; i--) {
     this.chunk_[i] = totalBits & 255;
     totalBits /= 256; // Don't use bit-shifting here!
   }
   this.computeChunk_(this.chunk_);
 
-  // Finally, output the result digest.
+  // Finally, output the result's digest.
   var n = 0;
   for (var i = 0; i < this.numHashBlocks_; i++) {
     for (var j = 24; j >= 0; j -= 8) {
@@ -506,7 +504,7 @@ goog.crypt.Sha2.K_ = [
  *
  * The compiler cannot remove an Int32Array, even if it is not needed
  * (There are certain cases where creating an Int32Array is not
- * side-effect free).  Instead, the first time we construct a Sha2
+ * side-effect free). Instead, the first time we construct a Sha2
  * instance, we convert or assign Sha2.K as appropriate.
  * @private {!undefined|Array.<number>|Int32Array}
  */
