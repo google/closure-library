@@ -147,6 +147,7 @@ goog.crypt.Sha2_64bit.prototype.reset = function() {
 /** @override */
 goog.crypt.Sha2_64bit.prototype.update = function(message, opt_length) {
   var length = goog.isDef(opt_length) ? opt_length : message.length;
+  length = (message.length < length) ? message.length : length;
 
   // Make sure this hasher is usable.
   if (this.needsReset_) {
