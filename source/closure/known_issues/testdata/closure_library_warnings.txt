@@ -1,0 +1,38 @@
+# This is a list of legacy warnings that have yet to be fixed.
+
+# Warning JSC_BAD_PRIVATE_PROPERTY_ACCESS: Access to private property {0} of {1} not allowed here.
+javascript/closure/proto/serializer.js:65  Access to private property serialize_ of goog.json.Serializer not allowed here.
+
+javascript/closure/testing/editor/testhelper.js:106  Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
+
+javascript/closure/testing/editor/testhelper.js:107  Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
+
+javascript/closure/testing/editor/testhelper.js:110  Access to private property bubbleMap_ of goog.editor.plugins.AbstractBubblePlugin not allowed here.
+
+javascript/closure/tweak/testhelpers.js:57  Access to private property registry_ of goog.tweak not allowed here.
+
+javascript/closure/ui/hsvapalette.js:168  Access to private property setColor_ of goog.ui.HsvPalette not allowed here.
+
+javascript/closure/ui/hsvapalette.js:188  Access to private property element_ of goog.ui.Component not allowed here.
+
+javascript/closure/ui/hsvapalette.js:189  Access to private property element_ of goog.ui.Component not allowed here.
+
+javascript/closure/ui/hsvapalette.js:190  Access to private property element_ of goog.ui.Component not allowed here.
+
+javascript/closure/ui/hsvapalette.js:235  Access to private property mouseMoveListener_ of goog.ui.HsvPalette not allowed here.
+
+javascript/closure/ui/hsvapalette.js:238  Access to private property mouseUpListener_ of goog.ui.HsvPalette not allowed here.
+
+
+# Warning JSC_BAD_PROTECTED_PROPERTY_ACCESS: Access to protected property {0} of {1} not allowed here.
+javascript/closure/graphics/ext/ellipse.js:38  Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+
+javascript/closure/graphics/ext/image.js:39  Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+
+javascript/closure/graphics/ext/rectangle.js:38  Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+
+javascript/closure/graphics/ext/shape.js:45  Access to protected property getWrapper of goog.graphics.ext.Group not allowed here.
+
+
+# Warning JSC_PRIVATE_OVERRIDE: Overriding private property of {0}.
+javascript/closure/ui/hsvapalette.js:75  Overriding private property of goog.ui.HsvPalette.
