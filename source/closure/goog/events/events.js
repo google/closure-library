@@ -82,8 +82,7 @@ goog.events.ListenableType;
 /**
  * Property name on a native event target for the listener map
  * associated with the event target.
- * @const
- * @private
+ * @private @const {string}
  */
 goog.events.LISTENER_MAP_PROP_ = 'closure_lm_' + ((Math.random() * 1e6) | 0);
 
@@ -951,8 +950,7 @@ goog.events.getListenerMap_ = function(src) {
 /**
  * Expando property for listener function wrapper for Object with
  * handleEvent.
- * @const
- * @private
+ * @private @const {string}
  */
 goog.events.LISTENER_WRAPPER_PROP_ = '__closure_events_fn_' +
     ((Math.random() * 1e9) >>> 0);
