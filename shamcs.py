@@ -11,7 +11,8 @@ MC_START = ''.join(C.encrypt(('MC' * 15) + '\x00' + chr(i)) for i in range(16))
 
 TEST_TEMPLATE = '''\
 function test{shatitle}() {{
-  var inital_state = '{initial_state}';
+  var sha = new goog.crypt.{shatitle}();
+  var initial_state = '{initial_state}';
   var count = {count};
   var state = goog.crypt.stringToByteArray(initial_state);
   var digest;
@@ -24,28 +25,39 @@ function test{shatitle}() {{
   assertEquals({lenfinal}, state.length);
   assertEquals('{expected}',
     goog.crypt.byteArrayToHex(digest));
+  sha.reset();
+  for (var i = 0; i < ({lenfinal} + 10); i++) {{
+    sha.update(state, i);
+  }}
+  assertEquals('{expected2}',
+    goog.crypt.byteArrayToHex(sha.digest()));
 }}
 '''
 
-
 def genmc(sha, name, blocklen, digestlen):
-    count = (2 ** 17) // digestlen
-    print('count = {}'.format(count))
-    state = MC_START
+    """Generate a Monte Carlo test for each SHA instance."""
+    count = (2 ** 15) // digestlen
+    state = name
     for i in range(count):
         digest = sha(state).digest()
         state = digest + state
     final_state = state
+    lenfinal = len(final_state)
+    h = sha()
+    for i in range(len(final_state) + 10):
+        h.update(final_state[:i])
+    print(TEST_TEMPLATE.format(initial_state=name, count=count,
+                               lenfinal=len(final_state),
+                               expected=hexlify(digest),
+                               shatitle=name,
+                               expected2=hexlify(h.digest())))
 
-    print(len(final_state))
-    print('final_state = {}'.format(hexlify(digest)))
 
-
-SHAS = [(sha1, 'sha1', 64, 160//8),
-        (sha224, 'sha224', 64, 224//8),
-        (sha256, 'sha256', 64, 256//8),
-        (sha384, 'sha384', 128, 384//8),
-        (sha512, 'sha512', 128, 512//8)]
+SHAS = [(sha1, 'Sha1', 64, 160//8),
+        (sha224, 'Sha224', 64, 224//8),
+        (sha256, 'Sha256', 64, 256//8),
+        (sha384, 'Sha384', 128, 384//8),
+        (sha512, 'Sha512', 128, 512//8)]
 
 for s in SHAS:
     genmc(*s)
