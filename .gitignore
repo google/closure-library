@@ -10,3 +10,7 @@
 
 # python
 *.pyc
+
+# OSX
+.DS_Store
+
