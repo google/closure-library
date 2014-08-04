@@ -163,7 +163,7 @@ goog.crypt.Sha1.prototype.compress_ = function(buf, opt_offset) {
     f = d ^ (b & (c ^ d));
     k = 0x5a827999;
 
-    t = (((a << 5) | (a >>> 27)) + f + e + k + W[i]) | 0; 
+    t = (((a << 5) | (a >>> 27)) + f + e + k + W[i]) | 0;
     e = d;
     d = c;
     c = ((b << 30) | (b >>> 2)) | 0;
@@ -175,8 +175,8 @@ goog.crypt.Sha1.prototype.compress_ = function(buf, opt_offset) {
   // so we compute W on the fly and keep only the last 16 values. This improves
   // performance by about 10% on Chrome 35.
   for (var i = 16; i < 80; i++) {
-    t = W[(i-3)&15] ^ W[(i-8)&15] ^ W[(i-14)&15] ^ W[i&15];
-    W[i&15] = ((t << 1) | (t >>> 31)) | 0;
+    t = W[(i - 3) & 15] ^ W[(i - 8) & 15] ^ W[(i - 14) & 15] ^ W[i & 15];
+    W[i & 15] = ((t << 1) | (t >>> 31)) | 0;
     if (i < 40) {
       if (i < 20) {
         f = d ^ (b & (c ^ d));
@@ -195,7 +195,7 @@ goog.crypt.Sha1.prototype.compress_ = function(buf, opt_offset) {
       }
     }
 
-    t = (((a << 5) | (a >>> 27)) + f + e + k + W[i&15]) | 0;
+    t = (((a << 5) | (a >>> 27)) + f + e + k + W[i & 15]) | 0;
     e = d;
     d = c;
     c = ((b << 30) | (b >>> 2)) | 0;

@@ -111,7 +111,7 @@ goog.inherits(goog.crypt.Sha2, goog.crypt.Hash);
 
 /**
  * The block size
- * @private <number>
+ * @private {<number>}
  */
 goog.crypt.Sha2.BLOCKSIZE_ = 512 / 8;
 
@@ -138,9 +138,10 @@ goog.crypt.Sha2.prototype.reset = function() {
  *
  * TODO(dlg): This is essentially static...
  *
- * @param {Array|Uint8Array|string} buf Data used for the update.
- * @param {number} opt_offset Optional offset into the data.
- * @return {Array|Int32Array} w A 64-element array of uint32s, representing the
+ * @param {!Array|Uint8Array|string} buf Data used for the update.
+ * @param {number=} opt_offset Optional offset into the data.
+ *
+ * @return {!Array|Int32Array} w A 64-element array of uint32s, representing the
  * prescheduled message, with round constants already added.
  */
 goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
@@ -150,7 +151,6 @@ goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
 
   // Divide the chunk into 16 32-bit-words.
   var w = goog.global['Int32Array'] ? new Int32Array(64) : new Array(64);
-  var offset = 0;
   // get 16 big endian words
   if (goog.isString(buf)) {
     for (var i = 0; i < 16; i++) {
@@ -197,8 +197,8 @@ goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
  *  Update this goog.crypt.Sha2 instance's chaining value using a precomputed
  *  schedule. Increment the total digested bytes by 64.
  *
- *  @param {Array.<Uint32Array[80]>} w An SHA2-32b schedule precomputed by
- *  goog.crypt.Sha2.preschedule.
+ *  @param {Array.<Uint32Array[80]>} precomputed_schedule An SHA2-32b schedule
+ *  precomputed by goog.crypt.Sha2.preschedule.
  */
 goog.crypt.Sha2.prototype.scheduledUpdate = function(precomputed_schedule) {
   var w = precomputed_schedule;
@@ -250,6 +250,9 @@ goog.crypt.Sha2.prototype.scheduledUpdate = function(precomputed_schedule) {
 
 /**
  * Helper function to compute the hashes for a given 512-bit message chunk.
+ * @param {!Array|Uint8Array|string} buf Data used for the update.
+ * @param {number=} opt_offset Optional offset into the data.
+ *
  * @private
  */
 goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
@@ -266,7 +269,6 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
   // The message schedule.
   var w = this.w_;
   // Divide the chunk into 16 32-bit-words.
-  var offset = 0;
   if (goog.isString(buf)) {
     for (var i = 0; i < 16; i++) {
       // TODO(user): [bug 8140122] Recent versions of Safari for Mac OS and iOS
@@ -330,18 +332,18 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
 
   // Do steps 16-64.
   for (var i = 16; i < 64; i++) {
-    var w_15 = w[(i - 15)&15] | 0;
+    var w_15 = w[(i - 15) & 15] | 0;
     var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
              ((w_15 >>> 18) | (w_15 << 14)) ^
              (w_15 >>> 3);
-    var w_2 = w[(i - 2)&15] | 0;
+    var w_2 = w[(i - 2) & 15] | 0;
     var s1 = ((w_2 >>> 17) | (w_2 << 15)) ^
              ((w_2 >>> 19) | (w_2 << 13)) ^
              (w_2 >>> 10);
 
-    var partialSum1 = ((w[(i - 16)&15] | 0) + s0) | 0;
-    var partialSum2 = ((w[(i - 7)&15] | 0) + s1) | 0;
-    w[i&15] = (partialSum1 + partialSum2) | 0;
+    var partialSum1 = ((w[(i - 16) & 15] | 0) + s0) | 0;
+    var partialSum2 = ((w[(i - 7) & 15] | 0) + s1) | 0;
+    w[i & 15] = (partialSum1 + partialSum2) | 0;
 
     var S0 = ((a >>> 2) | (a << 30)) ^
              ((a >>> 13) | (a << 19)) ^
@@ -355,7 +357,7 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
 
     var partialSum1 = (h + S1) | 0;
     var partialSum2 = (ch + (goog.crypt.Sha2.Kx_[i] | 0)) | 0;
-    var partialSum3 = (partialSum2 + (w[i&15] | 0)) | 0;
+    var partialSum3 = (partialSum2 + (w[i & 15] | 0)) | 0;
     var t1 = (partialSum1 + partialSum3) | 0;
 
     h = g;

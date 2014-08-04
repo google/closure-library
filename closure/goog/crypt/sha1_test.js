@@ -86,7 +86,8 @@ function testLength() {
   // Test that truncating a message works.
   sha.reset();
   sha.update('abc');
-  var abc = sha.digest();
+  assertEquals('a9993e364706816aba3e25717850c26c9cd0d89d',
+               goog.crypt.byteArrayToHex(sha.digest()));
   sha.reset();
   sha.update('abcde', 3);
   assertEquals('a9993e364706816aba3e25717850c26c9cd0d89d',
@@ -94,23 +95,24 @@ function testLength() {
 
   // Test that lengths work correctly.
   var message = goog.crypt.hexToByteArray(
-    'd9b28b643d16efc8a17a532c05deb79069421bf4cda67f58310ae3bc956e4720f9d2ab845d360fe8c19a734c25fed7b089623b14edc69f78512a03dcb58e6740');
+      'd9b28b643d16efc8a17a532c05deb79069421bf4cda67f58310ae3bc956e4720' +
+      'f9d2ab845d360fe8c19a734c25fed7b089623b14edc69f78512a03dcb58e6740');
 
   // Lengths from 0 to 64.
   sha.reset();
   for (var i = 0; i < 64; i++) {
-     sha.update(message, i);
+    sha.update(message, i);
   }
   assertElementsEquals(goog.crypt.hexToByteArray(
-    '04df2fcf7b12b7735e0a3d05d9723702aa70de30'),
-    sha.digest());
+      '04df2fcf7b12b7735e0a3d05d9723702aa70de30'),
+      sha.digest());
 
   // Lengths from 0 to 71 to include message overrun cases.
   sha.reset();
   for (var i = 0; i < 71; i++) {
-     sha.update(message, i);
-   }
+    sha.update(message, i);
+  }
   assertElementsEquals(goog.crypt.hexToByteArray(
-    'f62df7546b7f70351a5c25bfd9e77ba90ca697f4'),
-    sha.digest());
+      'f62df7546b7f70351a5c25bfd9e77ba90ca697f4'),
+      sha.digest());
 }
