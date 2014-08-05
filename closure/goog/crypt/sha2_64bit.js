@@ -96,9 +96,6 @@ goog.crypt.Sha2_64bit = function(numHashBlocks, initHashBlocks) {
    * @private
    */
   this.w_ = [];
-  for (var i = 0; i < 16; i++) {
-    this.w_[i] = new goog.math.Long(i, i);
-  }
 
   /**
    * The value to which {@code this.hash_} should be reset when this
@@ -150,7 +147,6 @@ goog.crypt.Sha2_64bit.prototype.reset = function() {
 /** @override */
 goog.crypt.Sha2_64bit.prototype.update = function(message, opt_length) {
   var length = goog.isDef(opt_length) ? opt_length : message.length;
-  length = (message.length < length) ? message.length : length;
 
   // Make sure this hasher is usable.
   if (this.needsReset_) {
@@ -260,10 +256,19 @@ goog.crypt.Sha2_64bit.prototype.computeChunk_ = function() {
   var w = this.w_;
   for (var i = 0; i < 16; i++) {
     var offset = i * 8;
-    w[i].low_  = 0|((chunk[offset + 4] << 24) | (chunk[offset + 5] << 16) |
-                    (chunk[offset + 6] <<  8) | (chunk[offset + 7]));
-    w[i].high_ = 0|((chunk[offset]     << 24) | (chunk[offset + 1] << 16) |
-                    (chunk[offset + 2] <<  8) | (chunk[offset + 3]));
+    w[i] = new goog.math.Long(
+        (chunk[offset + 4] << 24) | (chunk[offset + 5] << 16) |
+            (chunk[offset + 6] << 8) | (chunk[offset + 7]),
+        (chunk[offset] << 24) | (chunk[offset + 1] << 16) |
+            (chunk[offset + 2] << 8) | (chunk[offset + 3]));
+
+  }
+
+  // Extend the w[] array to be the number of rounds.
+  for (var i = 16; i < 80; i++) {
+    var s0 = this.sigma0_(w[i - 15]);
+    var s1 = this.sigma1_(w[i - 2]);
+    w[i] = this.sum_(w[i - 16], w[i - 7], s0, s1);
   }
 
   var a = this.hash_[0];
@@ -274,23 +279,13 @@ goog.crypt.Sha2_64bit.prototype.computeChunk_ = function() {
   var f = this.hash_[5];
   var g = this.hash_[6];
   var h = this.hash_[7];
-
-  var s0 = new goog.math.Long();
-  var s1 = new goog.math.Long();
-  var S0 = new goog.math.Long();
-  var S1 = new goog.math.Long();
-  var ch = new goog.math.Long();
-  var maj = new goog.math.Long();
-  var t1 = new goog.math.Long();
-  for (var i = 0; i < 16; i++) {
-    this.Sigma0_(S0, a);
-    this.majority_(maj, a, b, c);
+  for (var i = 0; i < 80; i++) {
+    var S0 = this.Sigma0_(a);
+    var maj = this.majority_(a, b, c);
     var t2 = S0.add(maj);
-    this.Sigma1_(S1, e);
-    this.choose_(ch, e, f, g);
-    t1.low_ = 0;
-    t1.high_ = 0;
-    this.sum_(t1, h, S1, ch, K_[i], w[i]);
+    var S1 = this.Sigma1_(e);
+    var ch = this.choose_(e, f, g);
+    var t1 = this.sum_(h, S1, ch, K_[i], w[i]);
     h = g;
     g = f;
     f = e;
@@ -300,28 +295,7 @@ goog.crypt.Sha2_64bit.prototype.computeChunk_ = function() {
     b = a;
     a = t1.add(t2);
   }
-  for (var i = 16; i < 80; i++) {
-    this.sigma0_(s0, w[(i - 15)&15]);
-    this.sigma1_(s1, w[(i - 2)&15]);
-    this.sum_(w[i&15], w[(i - 7)&15], s0, s1);
 
-    this.Sigma0_(S0, a);
-    this.majority_(maj, a, b, c);
-    var t2 = S0.add(maj);
-    this.Sigma1_(S1, e);
-    this.choose_(ch, e, f, g);
-    t1.low_ = 0;
-    t1.high_ = 0;
-    this.sum_(t1, h, S1, ch, K_[i], w[i&15]);
-    h = g;
-    g = f;
-    f = e;
-    e = d.add(t1);
-    d = c;
-    c = b;
-    b = a;
-    a = t1.add(t2);
-  }
   this.hash_[0] = this.hash_[0].add(a);
   this.hash_[1] = this.hash_[1].add(b);
   this.hash_[2] = this.hash_[2].add(c);
@@ -335,14 +309,13 @@ goog.crypt.Sha2_64bit.prototype.computeChunk_ = function() {
 
 /**
  * Calculates the SHA2 64-bit sigma0 function.
- * dst = rotateRight(value, 1) ^ rotateRight(value, 8) ^ (value >>> 7)
+ * rotateRight(value, 1) ^ rotateRight(value, 8) ^ (value >>> 7)
  *
  * @private
- * @param {!goog.math.Long} dst
  * @param {!goog.math.Long} value
  * @return {!goog.math.Long}
  */
-goog.crypt.Sha2_64bit.prototype.sigma0_ = function(dst, value) {
+goog.crypt.Sha2_64bit.prototype.sigma0_ = function(value) {
   var valueLow = value.getLowBits();
   var valueHigh = value.getHighBits();
   // Implementation note: We purposely do not use the shift operations defined
@@ -354,45 +327,41 @@ goog.crypt.Sha2_64bit.prototype.sigma0_ = function(dst, value) {
   var high = (valueHigh >>> 1) ^ (valueLow << 31) ^
              (valueHigh >>> 8) ^ (valueLow << 24) ^
              (valueHigh >>> 7);
-  dst.low_ = low|0;
-  dst.high_ = high|0;
+  return new goog.math.Long(low, high);
 };
 
 
 /**
  * Calculates the SHA2 64-bit sigma1 function.
- * dst = rotateRight(value, 19) ^ rotateRight(value, 61) ^ (value >>> 6)
+ * rotateRight(value, 19) ^ rotateRight(value, 61) ^ (value >>> 6)
  *
  * @private
- * @param {!goog.math.Long} dst
  * @param {!goog.math.Long} value
  * @return {!goog.math.Long}
  */
-goog.crypt.Sha2_64bit.prototype.sigma1_ = function(dst, value) {
+goog.crypt.Sha2_64bit.prototype.sigma1_ = function(value) {
   var valueLow = value.getLowBits();
   var valueHigh = value.getHighBits();
   // Implementation note:  See _sigma0() above
-  var low  = (valueLow  >>> 19) ^ (valueHigh << 13) ^
-             (valueHigh >>> 29) ^ (valueLow  <<  3) ^
-             (valueLow  >>>  6) ^ (valueHigh << 26);
-  var high = (valueHigh >>> 19) ^ (valueLow  << 13) ^
-             (valueLow  >>> 29) ^ (valueHigh << 3)  ^
+  var low = (valueLow >>> 19) ^ (valueHigh << 13) ^
+            (valueHigh >>> 29) ^ (valueLow << 3) ^
+            (valueLow >>> 6) ^ (valueHigh << 26);
+  var high = (valueHigh >>> 19) ^ (valueLow << 13) ^
+             (valueLow >>> 29) ^ (valueHigh << 3) ^
              (valueHigh >>> 6);
-  dst.low_ = low|0;
-  dst.high_ = high|0;
+  return new goog.math.Long(low, high);
 };
 
 
 /**
  * Calculates the SHA2 64-bit Sigma0 function.
- * dst = rotateRight(value, 28) ^ rotateRight(value, 34) ^ rotateRight(value, 39)
+ * rotateRight(value, 28) ^ rotateRight(value, 34) ^ rotateRight(value, 39)
  *
  * @private
- * @param {!goog.math.Long} dst
  * @param {!goog.math.Long} value
  * @return {!goog.math.Long}
  */
-goog.crypt.Sha2_64bit.prototype.Sigma0_ = function(dst, value) {
+goog.crypt.Sha2_64bit.prototype.Sigma0_ = function(value) {
   var valueLow = value.getLowBits();
   var valueHigh = value.getHighBits();
   // Implementation note:  See _sigma0() above
@@ -402,32 +371,29 @@ goog.crypt.Sha2_64bit.prototype.Sigma0_ = function(dst, value) {
   var high = (valueHigh >>> 28) ^ (valueLow << 4) ^
              (valueLow >>> 2) ^ (valueHigh << 30) ^
              (valueLow >>> 7) ^ (valueHigh << 25);
-  dst.low_ = low|0;
-  dst.high_ = high|0;
+  return new goog.math.Long(low, high);
 };
 
 
 /**
  * Calculates the SHA2 64-bit Sigma1 function.
- * dst = rotateRight(value, 14) ^ rotateRight(value, 18) ^ rotateRight(value, 41)
+ * rotateRight(value, 14) ^ rotateRight(value, 18) ^ rotateRight(value, 41)
  *
  * @private
- * @param {!goog.math.Long} dst
  * @param {!goog.math.Long} value
  * @return {!goog.math.Long}
  */
-goog.crypt.Sha2_64bit.prototype.Sigma1_ = function(dst, value) {
+goog.crypt.Sha2_64bit.prototype.Sigma1_ = function(value) {
   var valueLow = value.getLowBits();
   var valueHigh = value.getHighBits();
   // Implementation note:  See _sigma0() above
-  var low  = (valueLow  >>> 14) ^ (valueHigh << 18) ^
-             (valueLow  >>> 18) ^ (valueHigh << 14) ^
-             (valueHigh >>>  9) ^ (valueLow  << 23);
-  var high = (valueHigh >>> 14) ^ (valueLow  << 18) ^
-             (valueHigh >>> 18) ^ (valueLow  << 14) ^
-             (valueLow  >>>  9) ^ (valueHigh << 23);
-  dst.low_ = low|0;
-  dst.high_ = high|0;
+  var low = (valueLow >>> 14) ^ (valueHigh << 18) ^
+            (valueLow >>> 18) ^ (valueHigh << 14) ^
+            (valueHigh >>> 9) ^ (valueLow << 23);
+  var high = (valueHigh >>> 14) ^ (valueLow << 18) ^
+             (valueHigh >>> 18) ^ (valueLow << 14) ^
+             (valueLow >>> 9) ^ (valueHigh << 23);
+  return new goog.math.Long(low, high);
 };
 
 
@@ -438,39 +404,39 @@ goog.crypt.Sha2_64bit.prototype.Sigma1_ = function(dst, value) {
  * {@code one} if the bit is set or {@code two} if the bit is not set.
  *
  * @private
- * @param {!goog.math.Long} dst
  * @param {!goog.math.Long} value
  * @param {!goog.math.Long} one
  * @param {!goog.math.Long} two
  * @return {!goog.math.Long}
  */
-goog.crypt.Sha2_64bit.prototype.choose_ = function(dst, value, one, two) {
+goog.crypt.Sha2_64bit.prototype.choose_ = function(value, one, two) {
   var valueLow = value.getLowBits();
   var valueHigh = value.getHighBits();
-  dst.low_  = 0|((valueLow  & one.getLowBits())
-                 | (~valueLow  & two.getLowBits()));
-  dst.high_ = 0|((valueHigh & one.getHighBits())
-                 | (~valueHigh & two.getHighBits()));
+  return new goog.math.Long(
+      (valueLow & one.getLowBits()) | (~valueLow & two.getLowBits()),
+      (valueHigh & one.getHighBits()) | (~valueHigh & two.getHighBits()));
 };
 
 
 /**
- * dst = (one & two) | (one & three) | (two & three);
+ * Calculates the SHA-2 64-bit majority function.
+ * This function returns, for each bit position, the bit held by the majority
+ * of its three arguments.
  *
  * @private
- * @param {!goog.math.Long} dst
  * @param {!goog.math.Long} one
  * @param {!goog.math.Long} two
  * @param {!goog.math.Long} three
  * @return {!goog.math.Long}
  */
-goog.crypt.Sha2_64bit.prototype.majority_ = function(dst, one, two, three) {
-  dst.low_ = 0|((one.getLowBits() & two.getLowBits())   |
-                (two.getLowBits() & three.getLowBits()) |
-                (one.getLowBits() & three.getLowBits()));
-  dst.high_ = 0|((one.getHighBits() & two.getHighBits())   |
-                 (two.getHighBits() & three.getHighBits()) |
-                 (one.getHighBits() & three.getHighBits()));
+goog.crypt.Sha2_64bit.prototype.majority_ = function(one, two, three) {
+  return new goog.math.Long(
+      (one.getLowBits() & two.getLowBits()) |
+          (two.getLowBits() & three.getLowBits()) |
+          (one.getLowBits() & three.getLowBits()),
+      (one.getHighBits() & two.getHighBits()) |
+          (two.getHighBits() & three.getHighBits()) |
+          (one.getHighBits() & three.getHighBits()));
 };
 
 
@@ -508,8 +474,7 @@ goog.crypt.Sha2_64bit.prototype.sum_ = function(one, two, var_args) {
   // should be added to high.  We don't actually need to modify low or
   // normalize high because the goog.math.Long constructor already does that.
   high += Math.floor(low / 0x100000000);
-  one.low_ = 0|low;
-  one.high_ = 0|high;
+  return new goog.math.Long(low, high);
 };
 
 
