@@ -72,13 +72,19 @@ function testHashing() {
       goog.crypt.byteArrayToHex(sha256.digest()));
 
   // (Near-)boundary values:
-  // 55B + ubint64 == 63 < 64
+  // 54B + 1B(0x80) + ubint64 == 63 < 64
+  sha256.reset();
+  sha256.update(goog.string.repeat('a', 54));
+  assertEquals(
+      'a3f01b6939256127582ac8ae9fb47a382a244680806a3f613a118851c1ca1d47',
+      goog.crypt.byteArrayToHex(sha256.digest()));  
+  // 55B + 1B(0x80) + ubint64 == 64
   sha256.reset();
   sha256.update(goog.string.repeat('a', 55));
   assertEquals(
       '9f4390f8d30c2dd92ec9f095b65e2b9ae9b0a925a5258e241c9f1e910f734318',
       goog.crypt.byteArrayToHex(sha256.digest()));
-  // 56B + ubint64 == 64
+  // 56B + 1B(0x80) + ubint64 == 65
   sha256.reset();
   sha256.update(goog.string.repeat('a', 56));
   assertEquals(
