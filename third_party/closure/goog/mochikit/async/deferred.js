@@ -434,6 +434,25 @@ goog.async.Deferred.prototype.addBoth = function(f, opt_scope) {
 
 
 /**
+ * Like addBoth, but propagates uncaught exceptions in the errback.
+ *
+ * @param {!function(this:T,?):?} f The function to be called on any result.
+ * @param {T=} opt_scope An optional scope to call the function in.
+ * @return {!goog.async.Deferred.<VALUE>} This Deferred.
+ * @template T
+ */
+goog.async.Deferred.prototype.addFinally = function (f, opt_scope) {
+  return this.addCallbacks(f, function (err) {
+    var result = f.call(this, err)
+    if (!goog.isDef(result)) {
+      throw err
+    }
+    return result
+  }, opt_scope)
+};
+
+
+/**
  * Registers a callback function and an errback function at the same position
  * in the execution sequence. Only one of these functions will execute,
  * depending on the error state during the execution sequence.
