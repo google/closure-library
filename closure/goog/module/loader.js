@@ -26,6 +26,8 @@ goog.provide('goog.module.Loader');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.dom');
+/** @suppress {extraRequire} */
+goog.require('goog.module');
 goog.require('goog.object');
 
 

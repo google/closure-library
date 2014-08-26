@@ -23,76 +23,11 @@
 
 goog.provide('goog.module');
 
-goog.require('goog.module.Loader');
-
-
-/**
- * Wrapper of goog.module.Loader.require() for use in modules.
- * See method goog.module.Loader.require() for
- * explanation of params.
- *
- * @param {string} module The name of the module. Usually, the value
- *     is defined as a constant whose name starts with MOD_.
- * @param {number|string} symbol The ID of the symbol. Usually, the value is
- *     defined as a constant whose name starts with SYM_.
- * @param {Function} callback This function will be called with the
- *     resolved symbol as the argument once the module is loaded.
- */
-goog.module.require = function(module, symbol, callback) {
-  goog.module.Loader.getInstance().require(module, symbol, callback);
-};
-
-
-/**
- * Wrapper of goog.module.Loader.provide() for use in modules
- * See method goog.module.Loader.provide() for explanation of params.
- *
- * @param {string} module The name of the module. Cf. parameter module
- *     of method require().
- * @param {number|string=} opt_symbol The symbol being defined, or nothing
- *     when all symbols of the module are defined. Cf. parameter symbol of
- *     method require().
- * @param {Object=} opt_object The object bound to the symbol, or nothing when
- *     all symbols of the module are defined.
- */
-goog.module.provide = function(module, opt_symbol, opt_object) {
-  goog.module.Loader.getInstance().provide(
-      module, opt_symbol, opt_object);
-};
-
-
-/**
- * Wrapper of init() so that we only need to export this single
- * identifier instead of three. See method goog.module.Loader.init() for
- * explanation of param.
- *
- * @param {string} urlBase The URL of the base library.
- * @param {Function=} opt_urlFunction Function that creates the URL for the
- *     module file. It will be passed the base URL for module files and the
- *     module name and should return the fully-formed URL to the module file to
- *     load.
- */
-goog.module.initLoader = function(urlBase, opt_urlFunction) {
-  goog.module.Loader.getInstance().init(urlBase, opt_urlFunction);
-};
-
-
-/**
- * Produces a function that delegates all its arguments to a
- * dynamically loaded function. This is used to export dynamically
- * loaded functions.
- *
- * @param {string} module The module to load from.
- * @param {number|string} symbol The ID of the symbol to load from the module.
- *     This symbol must resolve to a function.
- * @return {!Function} A function that forwards all its arguments to
- *     the dynamically loaded function specified by module and symbol.
- */
-goog.module.loaderCall = function(module, symbol) {
-  return function() {
-    var args = arguments;
-    goog.module.require(module, symbol, function(f) {
-      f.apply(null, args);
-    });
-  };
-};
+// TODO(johnlenz): Here we explicitly initialize the namespace to avoid
+// problems with the goog.module method in base.js.  Once the goog.module has
+// landed and compiler updated and released and everyone is on that release
+// we can remove this file.
+//
+// Alternately, we can move everthing out of the goog.module namespace.
+//
+goog.module = goog.module || {};
