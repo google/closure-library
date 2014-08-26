@@ -424,6 +424,20 @@ function testGetClientPositionTouchEvent() {
   assertEquals(200, pos.y);
 }
 
+function testGetClientPositionEmptyTouchList() {
+  var mockTouchEvent = {};
+
+  mockTouchEvent.clientX = 100;
+  mockTouchEvent.clientY = 200;
+
+  mockTouchEvent.targetTouches = [];
+  mockTouchEvent.touches = [];
+
+  var pos = goog.style.getClientPosition(mockTouchEvent);
+  assertEquals(100, pos.x);
+  assertEquals(200, pos.y);
+}
+
 function testGetClientPositionAbstractedTouchEvent() {
   var e = new goog.events.BrowserEvent();
   e.event_ = {};

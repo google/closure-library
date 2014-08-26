@@ -915,9 +915,10 @@ goog.style.getClientPosition = function(el) {
     var be = /** @type {!goog.events.BrowserEvent} */ (el);
     var targetEvent = el;
 
-    if (el.targetTouches) {
+    if (el.targetTouches && el.targetTouches.length) {
       targetEvent = el.targetTouches[0];
-    } else if (isAbstractedEvent && be.getBrowserEvent().targetTouches) {
+    } else if (isAbstractedEvent && be.getBrowserEvent().targetTouches &&
+        be.getBrowserEvent().targetTouches.length) {
       targetEvent = be.getBrowserEvent().targetTouches[0];
     }
 
