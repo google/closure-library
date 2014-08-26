@@ -21,7 +21,6 @@
 
 goog.provide('goog.Timer');
 
-goog.require('goog.Promise');
 goog.require('goog.events.EventTarget');
 
 
@@ -290,31 +289,4 @@ goog.Timer.callOnce = function(listener, opt_delay, opt_handler) {
  */
 goog.Timer.clear = function(timerId) {
   goog.Timer.defaultTimerObject.clearTimeout(timerId);
-};
-
-
-/**
- * Returns the Promise object that will yield after the specified
- * delay.
- *
- * @param {number} delay Milliseconds to wait.
- * @param {RESULT=} opt_result The optional result object.
- * @return {!goog.Promise.<RESULT>}
- * @template RESULT
- */
-goog.Timer.promise = function(delay, opt_result) {
-  var timerKey;
-  return new goog.Promise(function(resolve, reject) {
-    timerKey = goog.Timer.callOnce(function() {
-      resolve(opt_result);
-    }, delay);
-    if (timerKey == -1) {
-      reject(new Error('Failed to schedule timer.'));
-    }
-  }).thenCatch(function() {
-    // Clear the timer. The most likely reason is "cancel" signal.
-    if (timerKey) {
-      goog.Timer.clear(timerKey);
-    }
-  });
 };

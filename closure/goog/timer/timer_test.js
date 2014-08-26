@@ -15,7 +15,6 @@
 goog.provide('goog.TimerTest');
 goog.setTestOnly('goog.TimerTest');
 
-goog.require('goog.Promise');
 goog.require('goog.Timer');
 goog.require('goog.events');
 goog.require('goog.testing.MockClock');
@@ -111,27 +110,4 @@ function testCallOnceIgnoresTimeoutsTooLarge() {
       -1, goog.Timer.callOnce(failCallback, 2147483648));
   assertEquals('Infinite timeouts should yield a timer ID of -1',
       -1, goog.Timer.callOnce(failCallback, Infinity));
-}
-
-function testPromise() {
-  var c = 0;
-  goog.Timer.promise(1, 'A').then(function(result) {
-    c++;
-    assertEquals('promise should return resolved value', 'A', result);
-  });
-  mockClock.tick(10);
-  assertEquals('promise must be yielded once and only once', 1, c);
-}
-
-function testPromise_cancel() {
-  var c = 0;
-  goog.Timer.promise(1, 'A').then(function(result) {
-    fail('promise must not be resolved');
-  }, function(reason) {
-    c++;
-    assertTrue('promise must fail due to cancel signal',
-        reason instanceof goog.Promise.CancellationError);
-  }).cancel();
-  mockClock.tick(10);
-  assertEquals('promise must be canceled once and only once', 1, c);
 }
