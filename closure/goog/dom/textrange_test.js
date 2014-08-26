@@ -216,7 +216,7 @@ function testGetStartPositionRightToLeft() {
 
   try {
     var result = assertNotThrows(goog.bind(range.getStartPosition, range));
-    assertObjectEquals(topLeft, result);
+    assertObjectRoughlyEquals(topLeft, result, 0.1);
   } catch (e) {
     expectedFailures.handleException(e);
   }

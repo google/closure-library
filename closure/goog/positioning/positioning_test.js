@@ -40,8 +40,9 @@ goog.require('goog.userAgent.product');
 goog.setTestOnly('goog.positioningTest');
 
 // Allow positions to be off by one in gecko as it reports scrolling
-// offsets in steps of 2.
-var ALLOWED_OFFSET = goog.userAgent.GECKO ? 1 : 0;
+// offsets in steps of 2.  Otherwise, allow for subpixel difference
+// as seen in IE10+
+var ALLOWED_OFFSET = goog.userAgent.GECKO ? 1 : 0.1;
 // Error bar for positions since some browsers are not super accurate
 // in reporting them.
 var EPSILON = 2;
