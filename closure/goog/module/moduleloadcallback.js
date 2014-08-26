@@ -22,8 +22,6 @@ goog.provide('goog.module.ModuleLoadCallback');
 
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.debug.errorHandlerWeakDep');
-/** @suppress {extraRequire} */
-goog.require('goog.module');
 
 
 
