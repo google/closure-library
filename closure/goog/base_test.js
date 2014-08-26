@@ -335,6 +335,15 @@ function testIsArray() {
 }
 
 function testTypeOfAcrossWindow() {
+  if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10') &&
+      !goog.userAgent.isVersionOrHigher('11')) {
+    // TODO(johnlenz): This test is flaky on IE10 (passing 90+% of the time).
+    // When it flakes the values are undefined which appears to indicate the
+    // script did not run in the opened window and not a failure of the logic
+    // we are trying to test.
+    return;
+  }
+
   var w = window.open('', 'blank');
   if (w) {
     try {
