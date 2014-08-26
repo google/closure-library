@@ -165,7 +165,8 @@ goog.testing.stacktrace.CHROME_URL_PATTERN_ = ' (?:' +
     '\\(unknown source\\)' + '|' +
     '\\(native\\)' + '|' +
     '\\((?:eval at )?' + goog.testing.stacktrace.URL_PATTERN_ + '\\)' + '|' +
-    goog.testing.stacktrace.URL_PATTERN_ + ')';
+    goog.testing.stacktrace.URL_PATTERN_ + '|' +
+    '\\(([^\\)]+)\\)' + ')';
 
 
 /**
@@ -341,7 +342,7 @@ goog.testing.stacktrace.parseStackFrame_ = function(frameStr) {
   var m = frameStr.match(goog.testing.stacktrace.CHROME_STACK_FRAME_REGEXP_);
   if (m) {
     return new goog.testing.stacktrace.Frame(m[1] || '', m[2] || '', m[3] || '',
-        '', m[4] || m[5] || '');
+        '', m[4] || m[5] || m[6] || '');
   }
 
   if (frameStr.length >

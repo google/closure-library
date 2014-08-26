@@ -88,6 +88,12 @@ function testParseStackFrameInChrome() {
   frame = goog.testing.stacktrace.parseStackFrame_(frameString);
   expected = new goog.testing.stacktrace.Frame('', 'foo', '', '', 'file://bar');
   assertObjectEquals('eval', expected, frame);
+
+  frameString = '    at foo.bar (closure/goog/foo.js:11:99)';
+  frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  expected = new goog.testing.stacktrace.Frame('foo', 'bar', '', '',
+      'closure/goog/foo.js:11:99');
+  assertObjectEquals('Path without schema', expected, frame);
 }
 
 function testParseStackFrameInOpera() {
