@@ -682,20 +682,6 @@ goog.ui.SplitPane.prototype.setFirstComponentSize = function(opt_size) {
 
 
 /**
- * Dummy object to work around compiler warning.
- * TODO(arv): Fix compiler or refactor to not depend on resize()
- * @private
- * @type {Object}
- */
-goog.ui.SplitPane.resizeWarningWorkaround_ = {
-  /**
-   * @param {goog.math.Size} size The new size.
-   */
-  resize: function(size) {}
-};
-
-
-/**
   * Set the size of the splitpane.  This is usually called by the controlling
   * application.  This will set the SplitPane BorderBoxSize.
   * @param {goog.math.Size} size The size to set the splitpane.
