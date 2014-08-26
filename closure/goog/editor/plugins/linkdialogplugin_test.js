@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.ui.editor.LinkDialogTest');
-goog.setTestOnly('goog.ui.editor.LinkDialogTest');
+goog.provide('goog.ui.editor.plugins.LinkDialogTest');
+goog.setTestOnly('goog.ui.editor.plugins.LinkDialogTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
