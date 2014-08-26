@@ -514,11 +514,9 @@ goog.dom.getDocumentHeight_ = function(win) {
     // But there are patterns.  It just takes a lot of time and persistence
     // to figure out.
 
-    // If the window has no contents, it has no height. (In IE10,
-    // document.body & document.documentElement are null in an empty iFrame.)
     var body = doc.body;
     var docEl = doc.documentElement;
-    if (!body && !docEl) {
+    if (!(docEl && body)) {
       return 0;
     }
 
