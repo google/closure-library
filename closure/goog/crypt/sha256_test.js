@@ -27,68 +27,58 @@ function testBasicOperations() {
 }
 
 function testHashing() {
-  // Test vectors from:
+  // Some test vectors from:
   // csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf
 
   var sha256 = new goog.crypt.Sha256();
 
   // Empty message.
   sha256.update([]);
-  assertElementsEquals(
-      goog.crypt.hexToByteArray(
-          'e3b0c44298fc1c149afbf4c8996fb924' +
-          '27ae41e4649b934ca495991b7852b855'),
-      sha256.digest());
+  assertEquals(
+      'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      goog.crypt.byteArrayToHex(sha256.digest()));
 
-  // One block message.
+  // NIST one block test vector.
   sha256.reset();
   sha256.update(goog.crypt.stringToByteArray('abc'));
-  assertElementsEquals(
-      goog.crypt.hexToByteArray(
-          'ba7816bf8f01cfea414140de5dae2223' +
-          'b00361a396177a9cb410ff61f20015ad'),
-      sha256.digest());
+  assertEquals(
+      'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
+      goog.crypt.byteArrayToHex(sha256.digest()));
 
-  // Multi-block message.
+  // NIST multi-block test vector.
   sha256.reset();
   sha256.update(
       goog.crypt.stringToByteArray(
           'abcdbcdecdefdefgefghfghighij' +
           'hijkijkljklmklmnlmnomnopnopq'));
-  assertElementsEquals(
-      goog.crypt.hexToByteArray(
-          '248d6a61d20638b8e5c026930c3e6039' +
-          'a33ce45964ff2167f6ecedd419db06c1'),
-      sha256.digest());
-
-
-  // Some additional tests.
-
-  // A longer message KAT.
-  sha256.reset();
-  sha256.update(goog.string.repeat('a', 1024));
   assertEquals(
-      '2edc986847e209b4016e141a6dc8716d3207350f416969382d431539bf292e4a',
+      '248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1',
       goog.crypt.byteArrayToHex(sha256.digest()));
 
-  // (Near-)boundary values:
-  // 54B + 1B(0x80) + ubint64 == 63 < 64
+  // Message larger than one block (but less than two).
   sha256.reset();
-  sha256.update(goog.string.repeat('a', 54));
+  var biggerThanOneBlock = 'abcdbcdecdefdefgefghfghighij' +
+      'hijkijkljklmklmnlmnomnopnopq' +
+      'asdfljhr78yasdfljh45opa78sdf' +
+      '120839414104897aavnasdfafasd';
+  assertTrue(biggerThanOneBlock.length > goog.crypt.Sha2.BLOCKSIZE_ &&
+      biggerThanOneBlock.length < 2 * goog.crypt.Sha2.BLOCKSIZE_);
+  sha256.update(goog.crypt.stringToByteArray(biggerThanOneBlock));
   assertEquals(
-      'a3f01b6939256127582ac8ae9fb47a382a244680806a3f613a118851c1ca1d47',
-      goog.crypt.byteArrayToHex(sha256.digest()));  
-  // 55B + 1B(0x80) + ubint64 == 64
-  sha256.reset();
-  sha256.update(goog.string.repeat('a', 55));
-  assertEquals(
-      '9f4390f8d30c2dd92ec9f095b65e2b9ae9b0a925a5258e241c9f1e910f734318',
+      '390a5035433e46b740600f3117d11ece3c64706dc889106666ac04fe4f458abc',
       goog.crypt.byteArrayToHex(sha256.digest()));
-  // 56B + 1B(0x80) + ubint64 == 65
+
+  // Message larger than two blocks.
   sha256.reset();
-  sha256.update(goog.string.repeat('a', 56));
+  var biggerThanTwoBlocks = 'abcdbcdecdefdefgefghfghighij' +
+      'hijkijkljklmklmnlmnomnopnopq' +
+      'asdfljhr78yasdfljh45opa78sdf' +
+      '120839414104897aavnasdfafasd' +
+      'laasdouvhalacbnalalseryalcla';
+  assertTrue(biggerThanTwoBlocks.length > 2 * goog.crypt.Sha2.BLOCKSIZE_);
+  sha256.update(goog.crypt.stringToByteArray(biggerThanTwoBlocks));
   assertEquals(
-      'b35439a4ac6f0948b6d6f9e3c6af0f5f590ce20f1bde7090ef7970686ec6738a',
+      'd655c513fd347e9be372d891f8bb42895ca310fabf6ead6681ebc66a04e84db5',
       goog.crypt.byteArrayToHex(sha256.digest()));
 }
 
@@ -104,7 +94,7 @@ function testLength() {
   sha.reset();
   for (var i = 0; i < 64; i++) {
     sha.update(message, i);
-  }
+}
   assertElementsEquals(goog.crypt.hexToByteArray(
       '6011bfb853f860ae65e32d2ad16323a2c34cac39404415cc946820526055060f'),
       sha.digest());
