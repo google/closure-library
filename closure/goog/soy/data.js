@@ -138,6 +138,15 @@ goog.soy.data.SanitizedContent.prototype.contentDir = null;
 goog.soy.data.SanitizedContent.prototype.content;
 
 
+/**
+ * Gets the already-safe content.
+ * @return {string}
+ */
+goog.soy.data.SanitizedContent.prototype.getContent = function() {
+  return this.content;
+};
+
+
 /** @override */
 goog.soy.data.SanitizedContent.prototype.toString = function() {
   return this.content;
