@@ -366,6 +366,21 @@ function testDeserializationOfZeroFalseAndEmptyString() {
   assertEquals('', message.getOptionalString());
 }
 
+function testDeserializationOfConcatenatedString() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 123\n' +
+      'optional_string:\n' +
+      '    "FirstLine"\n' +
+      '    "SecondLine"\n' +
+      'optional_float: 456.7';
+
+  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+
+  assertEquals(123, message.getOptionalInt32());
+  assertEquals('FirstLineSecondLine', message.getOptionalString());
+  assertEquals(456.7, message.getOptionalFloat());
+}
+
 function testDeserializationSkipComment() {
   var message = new proto2.TestAllTypes();
   var value = 'optional_int32: 101\n' +

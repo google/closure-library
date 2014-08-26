@@ -1006,7 +1006,8 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeNumber_ =
 
 
 /**
- * Consumes a STRING token.
+ * Consumes a STRING token. Strings may come in multiple adjacent tokens which
+ * are automatically concatenated, like in C or Python.
  * @return {?string} The *deescaped* string value or null on error.
  * @private
  */
@@ -1018,7 +1019,13 @@ goog.proto2.TextFormatSerializer.Parser.prototype.consumeString_ =
     return null;
   }
 
-  return goog.json.parse(value).toString();
+  var stringValue = goog.json.parse(value).toString();
+  while (this.lookingAtType_(types.STRING)) {
+    value = this.consumeToken_(types.STRING);
+    stringValue += goog.json.parse(value).toString();
+  }
+
+  return stringValue;
 };
 
 
