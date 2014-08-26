@@ -175,6 +175,54 @@ function testGetDate() {
   assertNull('no date is selected', picker.getDate());
 }
 
+function testGetDateAt() {
+  picker = new goog.ui.DatePicker();
+  picker.create(sandbox);
+  picker.setDate(new Date(2000, 5, 5));
+  var date = picker.getDateAt(0, 0);
+  assertTrue(date.equals(picker.grid_[0][0]));
+
+  date.setMonth(1);
+  assertFalse(date.equals(picker.grid_[0][0]));
+}
+
+function testGetDateAt_NotInGrid() {
+  picker = new goog.ui.DatePicker();
+  picker.create(sandbox);
+  picker.setDate(new Date(2000, 5, 5));
+  var date = picker.getDateAt(-1, 0);
+  assertNull(date);
+
+  date = picker.getDateAt(0, -1);
+  assertNull(date);
+}
+
+function testGetDateElementAt() {
+  picker = new goog.ui.DatePicker();
+  picker.create(sandbox);
+  picker.setDate(new Date(2000, 5, 5));
+  var element = picker.getDateElementAt(0, 0);
+  assertEquals('td', element.tagName.toLowerCase());
+  assertObjectEquals(element, picker.elTable_[1][1]);
+}
+
+function testGetDateElementAt_NotInTable() {
+  picker = new goog.ui.DatePicker();
+  picker.create(sandbox);
+  picker.setDate(new Date(2000, 5, 5));
+  var element = picker.getDateElementAt(-1, 0);
+  assertNull(element);
+
+  element = picker.getDateElementAt(0, -1);
+  assertNull(element);
+
+  element = picker.getDateElementAt(picker.elTable_.length - 1, 0);
+  assertNull(element);
+
+  element = picker.getDateElementAt(0, picker.elTable_[0].length - 1);
+  assertNull(element);
+}
+
 function testSetDate() {
   picker = new goog.ui.DatePicker();
   picker.createDom();

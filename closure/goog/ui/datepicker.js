@@ -133,6 +133,13 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols, opt_domHelper,
    * @private
    */
   this.keyHandlers_ = {};
+
+  /**
+   * Collection of dates that make up the date picker.
+   * @type {!Array.<!Array.<!goog.date.Date>>}
+   * @private
+   */
+  this.grid_ = [];
 };
 goog.inherits(goog.ui.DatePicker, goog.ui.Component);
 goog.tagUnsealableClass(goog.ui.DatePicker);
@@ -667,6 +674,37 @@ goog.ui.DatePicker.prototype.getActiveMonth = function() {
  */
 goog.ui.DatePicker.prototype.getDate = function() {
   return this.date_ && this.date_.clone();
+};
+
+
+/**
+ * @param {number} row The row in the grid.
+ * @param {number} col The column in the grid.
+ * @return {goog.date.Date} The date in the grid or null if there is none.
+ */
+goog.ui.DatePicker.prototype.getDateAt = function(row, col) {
+  return this.grid_[row] ?
+      this.grid_[row][col] ? this.grid_[row][col].clone() : null : null;
+};
+
+
+/**
+ * Returns a date element given a row and column. In elTable_, the elements that
+ * represent dates are 1 indexed because of other elements such as headers.
+ * This corrects for the offset and makes the API 0 indexed.
+ *
+ * @param {number} row The row in the element table.
+ * @param {number} col The column in the element table.
+ * @return {Element} The element in the grid or null if there is none.
+ * @protected
+ */
+goog.ui.DatePicker.prototype.getDateElementAt = function(row, col) {
+  if (row < 0 || col < 0) {
+    return null;
+  }
+  var adjustedRow = row + 1;
+  return this.elTable_[adjustedRow] ?
+      this.elTable_[adjustedRow][col + 1] || null : null;
 };
 
 
