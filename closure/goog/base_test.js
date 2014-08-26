@@ -278,7 +278,7 @@ function testIsDef() {
   var notDefined;
 
   assertTrue('defined should be defined', goog.isDef(defined));
-  assertTrue('null should be defined', goog.isDef(defined));
+  assertTrue('null should be defined', goog.isDef(nullVar));
   assertFalse('undefined should not be defined', goog.isDef(notDefined));
 }
 
