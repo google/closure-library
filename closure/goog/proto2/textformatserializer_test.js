@@ -366,6 +366,39 @@ function testDeserializationOfZeroFalseAndEmptyString() {
   assertEquals('', message.getOptionalString());
 }
 
+function testDeserializationSkipComment() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 101\n' +
+      'repeated_int32: 201\n' +
+      '# Some comment.\n' +
+      'repeated_int32: 202\n' +
+      'optional_float: 123.4';
+
+  var parser = new goog.proto2.TextFormatSerializer.Parser();
+  assertTrue(parser.parse(message, value));
+
+  assertEquals(101, message.getOptionalInt32());
+  assertEquals(201, message.getRepeatedInt32(0));
+  assertEquals(202, message.getRepeatedInt32(1));
+  assertEquals(123.4, message.getOptionalFloat());
+}
+
+function testDeserializationSkipTrailingComment() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 101\n' +
+      'repeated_int32: 201\n' +
+      'repeated_int32: 202  # Some trailing comment.\n' +
+      'optional_float: 123.4';
+
+  var parser = new goog.proto2.TextFormatSerializer.Parser();
+  assertTrue(parser.parse(message, value));
+
+  assertEquals(101, message.getOptionalInt32());
+  assertEquals(201, message.getRepeatedInt32(0));
+  assertEquals(202, message.getRepeatedInt32(1));
+  assertEquals(123.4, message.getOptionalFloat());
+}
+
 function testDeserializationSkipUnknown() {
   var message = new proto2.TestAllTypes();
   var value = 'optional_int32: 101\n' +
