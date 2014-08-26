@@ -76,6 +76,14 @@ goog.tagUnsealableClass(goog.ui.HsvPalette);
 
 
 /**
+ * @desc Label for an input field where a user can enter a hexadecimal color
+ * specification, such as #ff0000 for red.
+ * @private
+ */
+goog.ui.HsvPalette.MSG_HSV_PALETTE_HEX_COLOR_ = goog.getMsg('Hex color');
+
+
+/**
  * DOM element representing the hue/saturation background image.
  * @type {Element}
  * @private
@@ -297,6 +305,7 @@ goog.ui.HsvPalette.prototype.createDom = function() {
 
   this.inputElement = dom.createDom('input', {
     'class': goog.getCssName(this.className, 'input'),
+    'aria-label': goog.ui.HsvPalette.MSG_HSV_PALETTE_HEX_COLOR_,
     'type': 'text', 'dir': 'ltr'
   });
 
