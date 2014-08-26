@@ -43,7 +43,7 @@ function tearDown() {
   expectedFailures.handleTearDown();
 }
 
-function testParseStackFrameInChrome() {
+function testParseStackFrameInV8() {
   var frameString = '    at Error (unknown source)';
   var frame = goog.testing.stacktrace.parseStackFrame_(frameString);
   var expected = new goog.testing.stacktrace.Frame('', 'Error', '', '', '');
@@ -54,6 +54,13 @@ function testParseStackFrameInChrome() {
   expected = new goog.testing.stacktrace.Frame('Object', 'assert', '', '',
       'file:///.../asserts.js:29:10');
   assertObjectEquals('context object + function name + url', expected, frame);
+
+  frameString = '    at Object.x.y.z (/Users/bob/file.js:564:9)';
+  frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  expected = new goog.testing.stacktrace.Frame('Object.x.y', 'z', '', '',
+      '/Users/bob/file.js:564:9');
+  assertObjectEquals('nested context object + function name + url',
+      expected, frame);
 
   frameString = '    at http://www.example.com/jsunit.js:117:13';
   frame = goog.testing.stacktrace.parseStackFrame_(frameString);
@@ -86,7 +93,8 @@ function testParseStackFrameInChrome() {
 
   frameString = '    at foo (eval at file://bar)';
   frame = goog.testing.stacktrace.parseStackFrame_(frameString);
-  expected = new goog.testing.stacktrace.Frame('', 'foo', '', '', 'file://bar');
+  expected = new goog.testing.stacktrace.Frame('', 'foo', '', '',
+      'eval at file://bar');
   assertObjectEquals('eval', expected, frame);
 
   frameString = '    at foo.bar (closure/goog/foo.js:11:99)';
@@ -94,6 +102,14 @@ function testParseStackFrameInChrome() {
   expected = new goog.testing.stacktrace.Frame('foo', 'bar', '', '',
       'closure/goog/foo.js:11:99');
   assertObjectEquals('Path without schema', expected, frame);
+
+  // In the Chrome console, execute: console.log(eval('Error().stack')).
+  frameString =
+      '    at eval (eval at <anonymous> (unknown source), <anonymous>:1:1)';
+  frame = goog.testing.stacktrace.parseStackFrame_(frameString);
+  expected = new goog.testing.stacktrace.Frame('', 'eval', '', '',
+      'eval at <anonymous> (unknown source), <anonymous>:1:1');
+  assertObjectEquals('nested eval', expected, frame);
 }
 
 function testParseStackFrameInOpera() {
@@ -356,3 +372,4 @@ function testGetStackFrameWithV8CallSites() {
   assertEquals(frames[1], '> fn2 at file2:3:4');
   assertEquals(frames[2], '> fn3 at file3:5:6');
 }
+
