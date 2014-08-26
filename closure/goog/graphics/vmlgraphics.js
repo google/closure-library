@@ -405,9 +405,10 @@ goog.graphics.VmlGraphics.prototype.setElementAffineTransform = function(
   skewNode.origin =
       (-vmlElement.style.pixelLeft / vmlElement.style.pixelWidth - 0.5) + ',' +
       (-vmlElement.style.pixelTop / vmlElement.style.pixelHeight - 0.5);
-  skewNode.offset = t.getTranslateX() + 'px,' +
-                    t.getTranslateY() + 'px';
-  skewNode.matrix = [t.getScaleX(), t.getShearX(), t.getShearY(), t.getScaleY(),
+  skewNode.offset = t.getTranslateX().toFixed(1) + 'px,' +
+                    t.getTranslateY().toFixed(1) + 'px';
+  skewNode.matrix = [t.getScaleX().toFixed(6), t.getShearX().toFixed(6),
+                     t.getShearY().toFixed(6), t.getScaleY().toFixed(6),
                      0, 0].join(',');
   vmlElement.appendChild(skewNode);
   this.updateGraphics_();
