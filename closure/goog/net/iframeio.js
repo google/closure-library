@@ -460,15 +460,6 @@ goog.net.IframeIo.prototype.lastErrorCode_ = goog.net.ErrorCode.NO_ERROR;
 
 
 /**
- * Number of milliseconds after which an incomplete request will be aborted and
- * a {@link goog.net.EventType.TIMEOUT} event raised; 0 means no timeout is set.
- * @type {number}
- * @private
- */
-goog.net.IframeIo.prototype.timeoutInterval_ = 0;
-
-
-/**
  * Window timeout ID used to cancel the timeout event handler if the request
  * completes successfully.
  * @type {?number}
