@@ -696,7 +696,15 @@ function testPositionAtAnchorWithResizeHeight() {
       viewport.toBox());
   assertEquals('Status should be HEIGHT_ADJUSTED.',
                goog.positioning.OverflowStatus.HEIGHT_ADJUSTED, status);
-  assertTrue('Popup is within viewport',
+
+  var TOLERANCE = 0.1;
+  // Adjust the viewport to allow some tolerance for subpixel positioning,
+  // this is required for this test to pass on IE10,11
+  viewport.top -= TOLERANCE;
+  viewport.left -= TOLERANCE;
+
+  assertTrue('Popup ' + goog.style.getBounds(popup) +
+             ' not is within viewport' + viewport,
              viewport.contains(goog.style.getBounds(popup)));
 }
 
