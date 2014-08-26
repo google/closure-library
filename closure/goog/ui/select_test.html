@@ -22,6 +22,7 @@ See the COPYING file for details.
     goog.require('goog.ui.Component.EventType');
     goog.require('goog.ui.MenuItem');
     goog.require('goog.ui.Select');
+    goog.require('goog.ui.Separator');
   </script>
 </head>
 <body>
@@ -80,6 +81,10 @@ function testAriaRoles() {
   select.render(sandbox);
   var item1 = new goog.ui.MenuItem("item 1");
   select.addItem(item1);
+  // Added a separator to make sure that the SETSIZE ignores the separator
+  // items.
+  var separator = new goog.ui.Separator();
+  select.addItem(separator);
   var item2 = new goog.ui.MenuItem("item 2");
   select.addItem(item2);
   assertNotNull(select.getElement());

@@ -26,6 +26,7 @@ goog.provide('goog.ui.Select');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.a11y.aria.State');
+goog.require('goog.array');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.IdGenerator');
@@ -470,8 +471,14 @@ goog.ui.Select.prototype.updateAriaActiveDescendant_ = function() {
       goog.a11y.aria.setState(buttonElement,
           goog.a11y.aria.State.ACTIVEDESCENDANT, contentElement.id);
       if (this.selectionModel_) {
+        // We can't use selectionmodel's getItemCount here because we need to
+        // skip separators.
+        var items = this.selectionModel_.getItems();
+        var menuItemCount = goog.array.count(items, function(item) {
+          return item instanceof goog.ui.MenuItem;
+        });
         goog.a11y.aria.setState(contentElement, goog.a11y.aria.State.SETSIZE,
-            this.selectionModel_.getItemCount());
+            menuItemCount);
         // Set a human-readable selection index.
         goog.a11y.aria.setState(contentElement, goog.a11y.aria.State.POSINSET,
             1 + this.selectionModel_.getSelectedIndex());
