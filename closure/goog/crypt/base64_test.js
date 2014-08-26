@@ -44,6 +44,25 @@ function testByteArrayEncoding() {
     var dec = goog.crypt.byteArrayToString(
         goog.crypt.base64.decodeStringToByteArray(enc));
     assertEquals(tests[i], dec);
+
+    // Check that websafe decoding accepts non-websafe codes.
+    dec = goog.crypt.byteArrayToString(
+        goog.crypt.base64.decodeStringToByteArray(enc, true /* websafe */));
+    assertEquals(tests[i], dec);
+
+    // Re-encode as websafe.
+    enc = goog.crypt.base64.encodeByteArray(
+        goog.crypt.stringToByteArray(tests[i], true /* websafe */));
+
+    // Check that non-websafe decoding accepts websafe codes.
+    dec = goog.crypt.byteArrayToString(
+        goog.crypt.base64.decodeStringToByteArray(enc));
+    assertEquals(tests[i], dec);
+
+    // Check that websafe decoding accepts websafe codes.
+    dec = goog.crypt.byteArrayToString(
+        goog.crypt.base64.decodeStringToByteArray(enc, true /* websafe */));
+    assertEquals(tests[i], dec);
   }
 }
 
@@ -132,6 +151,6 @@ function testWebSafeEncoding() {
 
   // Test parsing malformed characters
   assertThrows('Didn\'t throw on malformed input', function() {
-    goog.crypt.base64.decodeStringToByteArray('foooooo+oooo', true /*websafe*/);
+    goog.crypt.base64.decodeStringToByteArray('foooooo)oooo', true /*websafe*/);
   });
 }
