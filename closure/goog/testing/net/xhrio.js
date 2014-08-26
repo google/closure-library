@@ -113,10 +113,14 @@ goog.testing.net.XhrIo.cleanup = function() {
  *     request.
  * @param {number=} opt_timeoutInterval Number of milliseconds after which an
  *     incomplete request will be aborted; 0 means no timeout is set.
+ * @param {boolean=} opt_withCredentials Whether to send credentials with the
+ *     request. Default to false. See {@link goog.net.XhrIo#setWithCredentials}.
+ * @return {!goog.testing.net.XhrIo} The mocked sent XhrIo.
  */
 goog.testing.net.XhrIo.send = function(url, opt_callback, opt_method,
                                        opt_content, opt_headers,
-                                       opt_timeoutInterval) {
+                                       opt_timeoutInterval,
+                                       opt_withCredentials) {
   var x = new goog.testing.net.XhrIo();
   goog.testing.net.XhrIo.sendInstances_.push(x);
   if (opt_callback) {
@@ -128,7 +132,10 @@ goog.testing.net.XhrIo.send = function(url, opt_callback, opt_method,
   if (opt_timeoutInterval) {
     x.setTimeoutInterval(opt_timeoutInterval);
   }
+  x.setWithCredentials(Boolean(opt_withCredentials));
   x.send(url, opt_method, opt_content, opt_headers);
+
+  return x;
 };
 
 
