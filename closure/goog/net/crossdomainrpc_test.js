@@ -19,6 +19,8 @@ goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.net.CrossDomainRpc');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
+goog.require('goog.userAgent.product');
 
 // TODO(user): These tests are in fact async since the send command makes a
 // request for a file, the reason they do not fail is that the JsUnit test
@@ -47,7 +49,17 @@ function print(o) {
 }
 
 
+function isChromeLinux() {
+  return goog.userAgent.product.CHROME && goog.userAgent.LINUX;
+}
+
 function testNormalRequest() {
+  // Test is currently hanging the new chrome-linux image
+  // See b/16707498
+  if (isChromeLinux()) {
+    return;
+  }
+
   var start = new Date();
   goog.net.CrossDomainRpc.send(
       'crossdomainrpc_test_response.html',
@@ -76,6 +88,12 @@ function testNormalRequest() {
 
 
 function testErrorRequest() {
+  // Test is currently hanging the new chrome-linux image
+  // See b/16707498
+  if (isChromeLinux()) {
+    return;
+  }
+
   goog.net.CrossDomainRpc.send(
       'http://hoodjimcwaadji.google.com/index.html',
       function(e) {
