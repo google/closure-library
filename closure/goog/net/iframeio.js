@@ -794,28 +794,6 @@ goog.net.IframeIo.prototype.getErrorChecker = function() {
 
 
 /**
- * Returns the number of milliseconds after which an incomplete request will be
- * aborted, or 0 if no timeout is set.
- * @return {number} Timeout interval in milliseconds.
- */
-goog.net.IframeIo.prototype.getTimeoutInterval = function() {
-  return this.timeoutInterval_;
-};
-
-
-/**
- * Sets the number of milliseconds after which an incomplete request will be
- * aborted and a {@link goog.net.EventType.TIMEOUT} event raised; 0 means no
- * timeout is set.
- * @param {number} ms Timeout interval in milliseconds; 0 means none.
- */
-goog.net.IframeIo.prototype.setTimeoutInterval = function(ms) {
-  // TODO (pupius) - never used - doesn't look like timeouts were implemented
-  this.timeoutInterval_ = Math.max(0, ms);
-};
-
-
-/**
  * @return {boolean} Whether the server response is being ignored.
  */
 goog.net.IframeIo.prototype.isIgnoringResponse = function() {
