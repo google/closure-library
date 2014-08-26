@@ -474,3 +474,19 @@ function testImmutableViewStrict() {
     y.propB = 4;
   });
 }
+
+function testEmptyObjectsAreEqual() {
+  assertTrue(goog.object.equals({}, {}));
+}
+
+function testObjectsWithDifferentKeysAreUnequal() {
+  assertFalse(goog.object.equals({'a': 1}, {'b': 1}));
+}
+
+function testObjectsWithDifferentValuesAreUnequal() {
+  assertFalse(goog.object.equals({'a': 1}, {'a': 2}));
+}
+
+function testObjectsWithSameKeysAndValuesAreEqual() {
+  assertTrue(goog.object.equals({'a': 1}, {'a': 1}));
+}
