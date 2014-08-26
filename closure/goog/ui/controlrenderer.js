@@ -321,6 +321,10 @@ goog.ui.ControlRenderer.prototype.decorate = function(control, element) {
     } else {
       state |= this.getStateFromClass(className);
     }
+    if (this.getStateFromClass(className) == goog.ui.Component.State.
+        DISABLED && goog.dom.isFocusableTabIndex(contentElem)) {
+      goog.dom.setFocusableTabIndex(contentElem, false);
+    }
   }, this);
   control.setStateInternal(state);
 

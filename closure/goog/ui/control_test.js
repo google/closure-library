@@ -15,6 +15,8 @@
 goog.provide('goog.ui.ControlTest');
 goog.setTestOnly('goog.ui.ControlTest');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
@@ -22,6 +24,7 @@ goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.object');
+goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.testing.ExpectedFailures');
 goog.require('goog.testing.events');
@@ -42,6 +45,8 @@ var ALL_EVENTS = goog.object.getValues(goog.ui.Component.EventType);
 var events = {};
 var expectedFailures;
 var sandbox;
+var aria = goog.a11y.aria;
+var State = goog.a11y.aria.State;
 
 function setUpPage() {
   expectedFailures = new goog.testing.ExpectedFailures();
@@ -1065,6 +1070,11 @@ function testSetEnabled() {
   assertTrue('Control must be enabled', control.isEnabled());
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
+  var elem = control.getElementStrict();
+  assertTrue('Control element must not have aria-disabled',
+      goog.string.isEmpty(aria.getState(elem, State.DISABLED)));
+  assertEquals('Control element must have a tabIndex of 0', 0,
+      goog.string.toNumber(elem.getAttribute('tabIndex') || ''));
 
   if (testFocus) {
     // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
@@ -1084,9 +1094,100 @@ function testSetEnabled() {
   assertEquals('One DISABLE event must have been dispatched', 1,
       getEventCount(control, goog.ui.Component.EventType.DISABLE));
   assertFalse('Control must be disabled', control.isEnabled());
-  assertFalse('Control must not be highlighed', control.isHighlighted());
+  assertFalse('Control must not be highlighted', control.isHighlighted());
   assertFalse('Control must not be active', control.isActive());
   assertFalse('Control must not be focused', control.isFocused());
+  assertEquals('Control element must have aria-disabled true', 'true',
+      aria.getState(control.getElementStrict(), State.DISABLED));
+  assertNull('Control element must not have a tabIndex',
+      control.getElement().getAttribute('tabIndex'));
+
+  control.setEnabled(true);
+  control.exitDocument();
+  var cssClass = goog.getCssName(goog.ui.ControlRenderer.CSS_CLASS, 'disabled');
+  var element = goog.dom.createDom('div', {tabIndex: 0});
+  element.className = cssClass;
+  goog.dom.appendChild(sandbox, element);
+  control.decorate(element);
+  assertEquals('Control element must have aria-disabled true', 'true',
+      aria.getState(control.getElementStrict(), State.DISABLED));
+  assertNull('Control element must not have a tabIndex',
+      control.getElement().getAttribute('tabIndex'));
+  control.setEnabled(true);
+  elem = control.getElementStrict();
+  assertEquals('Control element must have aria-disabled false', 'false',
+      aria.getState(elem, State.DISABLED));
+  assertEquals('Control element must have tabIndex 0', 0,
+      goog.string.toNumber(elem.getAttribute('tabIndex') || ''));
+}
+
+
+/**
+ * Tests {@link goog.ui.Control#setState} when using
+ * goog.ui.Component.State.DISABLED.
+ */
+function testSetStateWithDisabled() {
+  control.render(sandbox);
+  control.setHighlighted(true);
+  control.setActive(true);
+  control.getKeyEventTarget().focus();
+
+  resetEventCount();
+
+  control.setState(goog.ui.Component.State.DISABLED, false);
+  assertTrue('No events must have been dispatched', noEventsDispatched());
+  assertTrue('Control must be enabled', control.isEnabled());
+  assertTrue('Control must be highlighted', control.isHighlighted());
+  assertTrue('Control must be active', control.isActive());
+  assertTrue('Control element must not have aria-disabled', goog.string.isEmpty(
+      aria.getState(control.getElementStrict(), State.DISABLED)));
+  assertEquals('Control element must have a tabIndex of 0', 0,
+      goog.string.toNumber(
+          control.getElement().getAttribute('tabIndex') || ''));
+
+  if (testFocus) {
+    // Expected to fail on IE and Mac Safari 3.  IE calls focus handlers
+    // asynchronously, and Mac Safari 3 doesn't support keyboard focus.
+    expectedFailures.expectFailureFor(goog.userAgent.IE);
+    expectedFailures.expectFailureFor(isMacSafari3());
+    try {
+      assertTrue('Control must be focused', control.isFocused());
+    } catch (e) {
+      expectedFailures.handleException(e);
+    }
+  }
+
+  resetEventCount();
+
+  control.setState(goog.ui.Component.State.DISABLED, true);
+  assertEquals('One DISABLE event must have been dispatched', 1,
+      getEventCount(control, goog.ui.Component.EventType.DISABLE));
+  assertFalse('Control must be disabled', control.isEnabled());
+  assertFalse('Control must not be highlighted', control.isHighlighted());
+  assertFalse('Control must not be active', control.isActive());
+  assertFalse('Control must not be focused', control.isFocused());
+  assertEquals('Control element must have aria-disabled true', 'true',
+      aria.getState(control.getElementStrict(), State.DISABLED));
+  assertNull('Control element must not have a tabIndex',
+      control.getElement().getAttribute('tabIndex'));
+
+  control.setState(goog.ui.Component.State.DISABLED, false);
+  control.exitDocument();
+  var cssClass = goog.getCssName(goog.ui.ControlRenderer.CSS_CLASS, 'disabled');
+  var element = goog.dom.createDom('div', {tabIndex: 0});
+  element.className = cssClass;
+  goog.dom.appendChild(sandbox, element);
+  control.decorate(element);
+  assertEquals('Control element must have aria-disabled true', 'true',
+      aria.getState(control.getElementStrict(), State.DISABLED));
+  assertNull('Control element must not have a tabIndex',
+      control.getElement().getAttribute('tabIndex'));
+  control.setState(goog.ui.Component.State.DISABLED, false);
+  elem = control.getElementStrict();
+  assertEquals('Control element must have aria-disabled false', 'false',
+      aria.getState(elem, State.DISABLED));
+  assertEquals('Control element must have tabIndex 0', 0,
+      goog.string.toNumber(elem.getAttribute('tabIndex') || ''));
 }
 
 
