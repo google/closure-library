@@ -121,6 +121,11 @@ function testRelativePathResolution() {
   var uri4 = new goog.Uri('foo');
   assertEquals('bar',
                uri4.resolve(new goog.Uri('bar')).toString());
+
+  var uri5 = new goog.Uri('http://www.google.com:8080/search/');
+  assertEquals('http://www.google.com:8080/search/..%2ffoo/bar',
+               uri3.resolve(new goog.Uri('..%2ffoo/bar')).toString());
+
 }
 
 function testDomainResolution() {
@@ -210,6 +215,7 @@ function testPathConcatenationDontRemoveForEmptyUri() {
   assertResolvedEquals('/search/../foo', '/search/../foo', '');
   assertResolvedEquals('/search/./foo', '/search/./foo', '');
 }
+
 
 function testParameterGetters() {
   function assertArraysEqual(l1, l2) {
@@ -439,11 +445,11 @@ function testSetPath() {
       'http://www.google.com:80/search%20path/?q=query#fragmento',
       uri.toString());
 
-  uri.setPath(encodeURIComponent('/search path 2/'), true);
+  uri.setPath(encodeURIComponent('search path 2/'), true);
   assertTrue(uri.hasPath());
-  assertEquals('/search path 2/', uri.getPath());
+  assertEquals('search path 2%2F', uri.getPath());
   assertEquals(
-      'http://www.google.com:80/search%20path%202/?q=query#fragmento',
+      'http://www.google.com:80/search%20path%202%2F?q=query#fragmento',
       uri.toString());
 
   uri.setPath('');
@@ -932,6 +938,14 @@ function testFragmentEncoding() {
 
 }
 
+function testStrictDoubleEncodingRemoval() {
+  var url = goog.Uri.parse('dummy/a%25invalid');
+  assertEquals('dummy/a%25invalid', url.toString());
+  url = goog.Uri.parse('dummy/a%252fdouble-encoded-slash');
+  assertEquals('dummy/a%2fdouble-encoded-slash', url.toString());
+}
+
+
 // Tests, that creating URI from components and then
 // getting the components back yields equal results.
 // The special attention is payed to test proper encoding
@@ -1025,19 +1039,32 @@ function testQueryNotModified() {
   assertEquals('?&=&=&', new goog.Uri('?&=&=&').toString());
 }
 
-function testRelativePathNotUnescapedWithColon() {
+
+function testRelativePathEscapesColon() {
   assertEquals('javascript%3aalert(1)',
-               new goog.Uri('javascript%3aalert(1)').toString());
+               new goog.Uri().setPath('javascript:alert(1)').toString());
 }
 
-function testAbsolutePathUnescapedWithColon() {
+
+function testAbsolutePathDoesNotEscapeColon() {
   assertEquals('/javascript:alert(1)',
+               new goog.Uri('/javascript:alert(1)').toString());
+}
+
+
+function testColonInPathNotUnescaped() {
+  assertEquals('/javascript%3aalert(1)',
                new goog.Uri('/javascript%3aalert(1)').toString());
+  assertEquals('javascript%3aalert(1)',
+               new goog.Uri('javascript%3aalert(1)').toString());
+  assertEquals('javascript:alert(1)',
+               new goog.Uri('javascript:alert(1)').toString());
   assertEquals('http://www.foo.bar/path:with:colon/x',
                new goog.Uri('http://www.foo.bar/path:with:colon/x').toString());
   assertEquals('//www.foo.bar/path:with:colon/x',
                new goog.Uri('//www.foo.bar/path:with:colon/x').toString());
 }
+
 
 // verifies bug http://b/9821952
 function testGetQueryForEmptyString() {
@@ -1047,6 +1074,17 @@ function testGetQueryForEmptyString() {
 
   queryData = new goog.Uri.QueryData('a=b&c=d&=e');
   assertArrayEquals(['e'], queryData.getValues(''));
+}
+
+
+function testRestrictedCharactersArePreserved() {
+  var uri = new goog.Uri(
+      'ht%74p://hos%74.example.%2f.com/pa%74h%2f-with-embedded-slash/');
+  assertEquals('http', uri.getScheme());
+  assertEquals('host.example.%2f.com', uri.getDomain());
+  assertEquals('/path%2f-with-embedded-slash/', uri.getPath());
+  assertEquals('http://host.example.%2f.com/path%2f-with-embedded-slash/',
+      uri.toString());
 }
 
 function assertDotRemovedEquals(expected, path) {
