@@ -292,8 +292,9 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
 
   // TODO(user): Make this work with multiple test cases (b/8603638).
   var runAgainLink = document.createElement('a');
-  runAgainLink.style.display = 'block';
+  runAgainLink.style.display = 'inline-block';
   runAgainLink.style.fontSize = 'small';
+  runAgainLink.style.marginBottom = '16px';
   runAgainLink.href = '';
   runAgainLink.onclick = goog.bind(function() {
     this.execute();
