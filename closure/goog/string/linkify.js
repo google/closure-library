@@ -29,8 +29,8 @@ goog.require('goog.string');
  * created by linkify will not be of interest to search engines.
  * @param {string} text Plain text.
  * @param {Object.<string, string>=} opt_attributes Attributes to add to all
- *      links created. Default are rel=nofollow and target=blank. To clear those
- *      default attributes set rel='' and target='_blank'.
+ *      links created. Default are rel=nofollow and target=_blank. To clear
+ *      those default attributes set rel='' and target=''.
  * @return {string} HTML Linkified HTML text.
  */
 goog.string.linkify.linkifyPlainText = function(text, opt_attributes) {
