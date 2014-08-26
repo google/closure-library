@@ -96,6 +96,18 @@ goog.net.MockIFrameIo.prototype.lastCustomError_ = null;
 goog.net.MockIFrameIo.prototype.lastUri_ = null;
 
 
+/** @private {Function} */
+goog.net.MockIFrameIo.prototype.errorChecker_;
+
+
+/** @private {boolean} */
+goog.net.MockIFrameIo.prototype.success_;
+
+
+/** @private {boolean} */
+goog.net.MockIFrameIo.prototype.complete_;
+
+
 /**
  * Simulates the iframe send.
  *

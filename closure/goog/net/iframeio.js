@@ -502,6 +502,18 @@ goog.net.IframeIo.prototype.errorHandled_;
 goog.net.IframeIo.prototype.ignoreResponse_ = false;
 
 
+/** @private {Function} */
+goog.net.IframeIo.prototype.errorChecker_;
+
+
+/** @private {Object} */
+goog.net.IframeIo.prototype.lastCustomError_;
+
+
+/** @private {?string} */
+goog.net.IframeIo.prototype.lastContentHtml_;
+
+
 /**
  * Sends a request via an iframe.
  *
@@ -1099,6 +1111,7 @@ goog.net.IframeIo.prototype.handleError_ = function(errorCode,
     this.complete_ = true;
     this.lastErrorCode_ = errorCode;
     if (errorCode == goog.net.ErrorCode.CUSTOM_ERROR) {
+      goog.asserts.assert(goog.isDef(opt_customError));
       this.lastCustomError_ = opt_customError;
     }
     this.dispatchEvent(goog.net.EventType.COMPLETE);
