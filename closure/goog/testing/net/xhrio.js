@@ -72,7 +72,7 @@ goog.testing.net.XhrIo.ResponseType = goog.net.XhrIo.ResponseType;
  * All non-disposed instances of goog.testing.net.XhrIo created
  * by {@link goog.testing.net.XhrIo.send} are in this Array.
  * @see goog.testing.net.XhrIo.cleanup
- * @type {Array.<goog.testing.net.XhrIo>}
+ * @type {!Array.<!goog.testing.net.XhrIo>}
  * @private
  */
 goog.testing.net.XhrIo.sendInstances_ = [];
@@ -81,7 +81,8 @@ goog.testing.net.XhrIo.sendInstances_ = [];
 /**
  * Returns an Array containing all non-disposed instances of
  * goog.testing.net.XhrIo created by {@link goog.testing.net.XhrIo.send}.
- * @return {Array} Array of goog.testing.net.XhrIo instances.
+ * @return {!Array.<!goog.testing.net.XhrIo>} Array of goog.testing.net.XhrIo
+ *     instances.
  */
 goog.testing.net.XhrIo.getSendInstances = function() {
   return goog.testing.net.XhrIo.sendInstances_;
@@ -135,7 +136,7 @@ goog.testing.net.XhrIo.send = function(url, opt_callback, opt_method,
  * Disposes of the specified goog.testing.net.XhrIo created by
  * {@link goog.testing.net.XhrIo.send} and removes it from
  * {@link goog.testing.net.XhrIo.pendingStaticSendInstances_}.
- * @param {goog.testing.net.XhrIo} XhrIo An XhrIo created by
+ * @param {!goog.testing.net.XhrIo} XhrIo An XhrIo created by
  *     {@link goog.testing.net.XhrIo.send}.
  * @private
  */
