@@ -335,30 +335,19 @@ function testIsArray() {
 }
 
 function testTypeOfAcrossWindow() {
-  if (goog.userAgent.WEBKIT && goog.userAgent.MAC) {
-    // The server farm has issues with new windows on Safari Mac.
-    return;
-  }
-
   var w = window.open('', 'blank');
   if (w) {
     try {
-      try {
-        var d = w.document;
-        d.open();
-        d.write('<script>function fun(){};' +
-                'var arr = [];' +
-                'var x = 42;' +
-                'var s = "";' +
-                'var b = true;' +
-                'var obj = {length: 0, splice: {}, call: {}};' +
-                '</' + 'script>');
-        d.close();
-      } catch (ex) {
-        // In Firefox Linux on the server farm we don't have access to
-        // w.document.
-        return;
-      }
+      var d = w.document;
+      d.open();
+      d.write('<script>function fun(){};' +
+              'var arr = [];' +
+              'var x = 42;' +
+              'var s = "";' +
+              'var b = true;' +
+              'var obj = {length: 0, splice: {}, call: {}};' +
+              '</' + 'script>');
+      d.close();
 
       assertEquals('function', goog.typeOf(w.fun));
       assertEquals('array', goog.typeOf(w.arr));
