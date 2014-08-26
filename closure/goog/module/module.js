@@ -23,7 +23,6 @@
 
 goog.provide('goog.module');
 
-goog.require('goog.array');
 goog.require('goog.module.Loader');
 
 
@@ -96,71 +95,4 @@ goog.module.loaderCall = function(module, symbol) {
       f.apply(null, args);
     });
   };
-};
-
-
-/**
- * Requires symbols for multiple modules, and invokes a final callback
- * on the condition that all of them are loaded. I.e. a barrier for
- * loading of multiple symbols. If no symbols are required, the
- * final callback is called immediately.
- *
- * @param {Array.<Object>} symbolRequests A
- *     list of tuples of module, symbol, callback (analog to the arguments
- *     to require(), above). These will each be require()d
- *     individually. NOTE: This argument will be modified during execution
- *     of the function.
- * @param {Function} finalCb A function that is called when all
- *     required symbols are loaded.
- */
-goog.module.requireMultipleSymbols = function(symbolRequests, finalCb) {
-  var I = symbolRequests.length;
-  if (I == 0) {
-    finalCb();
-  } else {
-    for (var i = 0; i < I; ++i) {
-      goog.module.requireMultipleSymbolsHelper_(symbolRequests, i, finalCb);
-    }
-  }
-};
-
-
-/**
- * Used by requireMultipleSymbols() to load each required symbol and
- * keep track how many are loaded, and finally invoke the barrier
- * callback when they are all done.
- *
- * @param {Array.<Object>} symbolRequests Same as in
- *     requireMultipleSymbols().
- * @param {number} i The single module that is required in this invocation.
- * @param {Function} finalCb Same as in requireMultipleSymbols().
- * @private
- */
-goog.module.requireMultipleSymbolsHelper_ = function(symbolRequests, i,
-                                                     finalCb) {
-  var r = symbolRequests[i];
-  var module = r[0];
-  var symbol = r[1];
-  var symbolCb = r[2];
-  goog.module.require(module, symbol, function() {
-    symbolCb.apply(this, arguments);
-    symbolRequests[i] = null;
-    if (goog.array.every(symbolRequests, goog.module.isNull_)) {
-      finalCb();
-    }
-  });
-};
-
-
-/**
- * Checks if the given element is null.
- *
- * @param {Object} el The element to check if null.
- * @param {number} i The index of the element.
- * @param {Array.<Object>} arr The array that contains the element.
- * @return {boolean} TRUE iff the element is null.
- * @private
- */
-goog.module.isNull_ = function(el, i, arr) {
-  return el == null;
 };
