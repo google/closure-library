@@ -517,10 +517,32 @@ goog.ui.ModalPopup.prototype.hide_ = function() {
   } else {
     this.onHide();
   }
+
+  this.returnFocus_();
+};
+
+
+/**
+ * Attempts to return the focus back to the element that had it before the popup
+ * was opened.
+ * @private
+ */
+goog.ui.ModalPopup.prototype.returnFocus_ = function() {
   try {
-    var body = this.getDomHelper().getDocument().body;
-    var active = this.getDomHelper().getDocument().activeElement || body;
-    if (this.lastFocus_ && active == body && this.lastFocus_ != body) {
+    var dom = this.getDomHelper();
+    var body = dom.getDocument().body;
+    var active = dom.getDocument().activeElement || body;
+    if (!this.lastFocus_ || this.lastFocus_ == body) {
+      this.lastFocus_ = null;
+      return;
+    }
+    // We only want to move the focus if we actually have it, i.e.:
+    //  - if we immediately hid the popup the focus should have moved to the
+    // body element
+    //  - if there is a hiding transition in progress the focus would still be
+    // within the dialog and it is safe to move it if the current focused
+    // element is a child of the dialog
+    if (active == body || dom.contains(this.getElement(), active)) {
       this.lastFocus_.focus();
     }
   } catch (e) {
