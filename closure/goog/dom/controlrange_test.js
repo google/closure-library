@@ -51,7 +51,7 @@ function testCreateFromRange() {
 }
 
 function testSelect() {
-  if (!goog.userAgent.IE) {
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('11')) {
     return;
   }
 
