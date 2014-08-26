@@ -159,6 +159,9 @@ _.postJson = function(url, data, opt_options) {
  * Sends a request, returning a promise that will be resolved
  * with the XHR object once the request completes.
  *
+ * If content type hasn't been set in opt_options headers, and hasn't been
+ * explicitly set to null, default to form-urlencoded/UTF8 for POSTs.
+ *
  * @param {string} method The HTTP method for the request.
  * @param {string} url The URL to request.
  * @param {_.PostData} data The body of the post request.
@@ -199,18 +202,21 @@ _.send = function(method, url, data, opt_options) {
     };
 
     // Set the headers.
-    var contentTypeIsSet = false;
+    var contentType;
     if (options.headers) {
       for (var key in options.headers) {
-        xhr.setRequestHeader(key, options.headers[key]);
+        var value = options.headers[key];
+        if (goog.isDefAndNotNull(value)) {
+          xhr.setRequestHeader(key, value);
+        }
       }
-      contentTypeIsSet = _.CONTENT_TYPE_HEADER in options.headers;
+      contentType = options.headers[_.CONTENT_TYPE_HEADER];
     }
 
-    // If a content type hasn't been set, default to form-urlencoded/UTF8 for
-    // POSTs.  This is because some proxies have been known to reject posts
-    // without a content-type.
-    if (method == 'POST' && !contentTypeIsSet) {
+    // If a content type hasn't been set, and hasn't been explicitly set to
+    // null, default to form-urlencoded/UTF8 for POSTs.  This is because some
+    // proxies have been known to reject posts without a content-type.
+    if (method == 'POST' && contentType === undefined) {
       xhr.setRequestHeader(_.CONTENT_TYPE_HEADER, _.FORM_CONTENT_TYPE);
     }
 
