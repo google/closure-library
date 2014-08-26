@@ -56,16 +56,18 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
 
   /** Runs immediately after the tearDownPage phase of JsUnit tests. */
-  tearDownPage: goog.nullFunction,
+  tearDownPage: function() {
+    // If we created the mockControl, we'll also tear it down.
+    if (this.shouldMakeMockControl_) {
+      this.mockControl.$tearDown();
+    }
+  },
 
 
   /** Runs immediately before the setUp phase of JsUnit tests. */
   setUp: function() {
     if (this.shouldMakeMockClock_) {
       this.mockClock = new goog.testing.MockClock(true);
-    }
-    if (this.shouldMakeMockControl_) {
-      this.mockControl = new goog.testing.MockControl();
     }
   },
 
@@ -87,10 +89,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
     // This is a noop if they did.
     if (this.mockControl) {
       this.mockControl.$verifyAll();
-      // If we created the mockControl, we'll also tear it down.
-      if (this.shouldMakeMockControl_) {
-        this.mockControl.$tearDown();
-      }
+      this.mockControl.$resetAll();
     }
     // Verifying the mockControl may throw, so if cleanup needs to happen,
     // add it further up in the function.
@@ -105,6 +104,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    */
   withMockControl: function() {
     this.shouldMakeMockControl_ = true;
+    this.mockControl = new goog.testing.MockControl();
     return this;
   },
 
@@ -119,6 +119,22 @@ goog.labs.testing.Environment = goog.defineClass(null, {
   withMockClock: function() {
     this.shouldMakeMockClock_ = true;
     return this;
+  },
+
+
+  /**
+   * Creates a basic strict mock of a {@code toMock}. For more advanced mocking,
+   * please use the MockControl directly.
+   * @param {Function} toMock
+   * @return {!goog.testing.StrictMock}
+   */
+  mock: function(toMock) {
+    if (!this.shouldMakeMockControl_) {
+      throw new Error('MockControl not available on this environment. ' +
+                      'Call withMockControl if this environment is expected ' +
+                      'to contain a MockControl.');
+    }
+    return this.mockControl.createStrictMock(toMock);
   }
 });
 

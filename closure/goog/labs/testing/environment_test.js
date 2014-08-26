@@ -109,7 +109,7 @@ function testAutoDiscoverTests() {
 
   // Note that this number changes when more tests are added this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(4, testCase.tests_.length);
+  assertEquals(5, testCase.tests_.length);
 
   testing = false;
 }
@@ -138,21 +138,42 @@ function testMockControl() {
   testing = true;
 
   var env = new goog.labs.testing.Environment().withMockControl();
-  assertNull(env.mockControl);
+  var test = env.mockControl.createFunctionMock('test');
 
   testCase.addNewTest('testWithoutVerify', function() {
-    var test = env.mockControl.createFunctionMock('test');
     test();
     env.mockControl.$replayAll();
+    test();
   });
 
   testCase.runTests();
-  assertTestFailure(testCase, 'testWithoutVerify', 'Missing a call to test');
   assertNull(env.mockClock);
 
   testing = false;
 }
 
-function assertTestFailure(testCase, name,  message) {
+function testMock() {
+  testing = true;
+
+  var env = new goog.labs.testing.Environment().withMockControl();
+  var mock = env.mock({
+    test: function() {}
+  });
+
+  testCase.addNewTest('testMockCalled', function() {
+    mock.test().$times(2);
+
+    env.mockControl.$replayAll();
+    mock.test();
+    mock.test();
+    env.mockControl.verifyAll();
+  });
+
+  testCase.runTests();
+
+  testing = false;
+}
+
+function assertTestFailure(testCase, name, message) {
   assertContains(message, testCase.result_.resultsByName[name][0]);
 }
