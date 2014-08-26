@@ -37,7 +37,6 @@ goog.require('goog.testing.asserts');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
-goog.require('goog.userAgent.product.isVersion');
 goog.require('goog.userAgentTestUtil');
 goog.require('goog.userAgentTestUtil.UserAgents');
 
@@ -134,8 +133,9 @@ function testGetStyleMsFilter() {
   // Element with -ms-filter style set.
   var e = goog.dom.getElement('msFilter');
 
-  if (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(8)) {
-    // Only IE8 supports -ms-filter and returns it as value for the "filter"
+  if (goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(8) &&
+      !goog.userAgent.isDocumentModeOrHigher(10)) {
+    // Only IE8/9 supports -ms-filter and returns it as value for the "filter"
     // property. When in compatibility mode, -ms-filter is not supported
     // and IE8 behaves as IE7 so the other case will apply.
     assertEquals('alpha(opacity=0)', goog.style.getStyle(e, 'filter'));
@@ -149,7 +149,7 @@ function testGetStyleFilter() {
   // Element with filter style set.
   var e = goog.dom.getElement('filter');
 
-  if (goog.userAgent.IE) {
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
     // Filter supported.
     assertEquals('alpha(opacity=0)', goog.style.getStyle(e, 'filter'));
   } else {
@@ -161,9 +161,15 @@ function testGetComputedStyleMsFilter() {
   // Element with -ms-filter style set.
   var e = goog.dom.getElement('msFilter');
 
-  if (goog.userAgent.IE) {
-    // IE always returns empty string for computed styles.
-    assertEquals('', goog.style.getComputedStyle(e, 'filter'));
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
+    if (goog.userAgent.isDocumentModeOrHigher(9)) {
+      // IE 9 returns the value.
+      assertEquals('alpha(opacity=0)',
+          goog.style.getComputedStyle(e, 'filter'));
+    } else {
+      // Older IE always returns empty string for computed styles.
+      assertEquals('', goog.style.getComputedStyle(e, 'filter'));
+    }
   } else {
     // Non IE returns 'none' for filter as it is an SVG property
     assertEquals('none', goog.style.getComputedStyle(e, 'filter'));
@@ -174,9 +180,15 @@ function testGetComputedStyleFilter() {
   // Element with filter style set.
   var e = goog.dom.getElement('filter');
 
-  if (goog.userAgent.IE) {
-    // IE always returns empty string for computed styles.
-    assertEquals('', goog.style.getComputedStyle(e, 'filter'));
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
+    if (goog.userAgent.isDocumentModeOrHigher(9)) {
+      // IE 9 returns the value.
+      assertEquals('alpha(opacity=0)',
+          goog.style.getComputedStyle(e, 'filter'));
+    } else {
+      // Older IE always returns empty string for computed styles.
+      assertEquals('', goog.style.getComputedStyle(e, 'filter'));
+    }
   } else {
     // Non IE returns 'none' for filter as it is an SVG property
     assertEquals('none', goog.style.getComputedStyle(e, 'filter'));
@@ -204,7 +216,8 @@ function testGetComputedPosition() {
                goog.style.getComputedPosition($('position-unset')));
   assertEquals('position:relative in style attribute', 'relative',
                goog.style.getComputedPosition($('style-position-relative')));
-  if (goog.userAgent.IE && !goog.dom.isCss1CompatMode()) {
+  if (goog.userAgent.IE && !goog.dom.isCss1CompatMode() &&
+      !goog.userAgent.isVersionOrHigher(10)) {
     assertEquals('position:fixed in style attribute', 'static',
         goog.style.getComputedPosition($('style-position-fixed')));
   } else {
@@ -762,34 +775,38 @@ function testGetSizeSvgElements() {
 
   svgEl.appendChild(el);
 
+  // The bounding size in 1 larger than the SVG element in IE.
+  var expectedWidth = (goog.userAgent.IE) ? 33 : 32;
+  var expectedHeight = (goog.userAgent.IE) ? 22 : 21;
+
   var dims = goog.style.getSize(el);
-  assertEquals(32, dims.width);
-  assertRoughlyEquals(21, dims.height, 0.01);
+  assertEquals(expectedWidth, dims.width);
+  assertRoughlyEquals(expectedHeight, dims.height, 0.01);
 
   dims = goog.style.getSize(svgEl);
-  if (goog.userAgent.WEBKIT) {
+  if (goog.userAgent.WEBKIT || goog.userAgent.IE) {
     // The size of the <svg> will be the viewport size on WebKit browsers.
-    assertTrue(dims.width >= 32);
-    assertTrue(dims.height >= 21);
+    assertTrue(dims.width >= expectedWidth);
+    assertTrue(dims.height >= expectedHeight);
   } else {
-    assertEquals(32, dims.width);
-    assertRoughlyEquals(21, dims.height, 0.01);
+    assertEquals(expectedWidth, dims.width);
+    assertRoughlyEquals(expectedHeight, dims.height, 0.01);
   }
 
   el.style.visibility = 'none';
 
   dims = goog.style.getSize(el);
-  assertEquals(32, dims.width);
-  assertRoughlyEquals(21, dims.height, 0.01);
+  assertEquals(expectedWidth, dims.width);
+  assertRoughlyEquals(expectedHeight, dims.height, 0.01);
 
   dims = goog.style.getSize(svgEl);
-  if (goog.userAgent.WEBKIT) {
+  if (goog.userAgent.WEBKIT || goog.userAgent.IE) {
     // The size of the <svg> will be the viewport size on WebKit browsers.
-    assertTrue(dims.width >= 32);
-    assertTrue(dims.height >= 21);
+    assertTrue(dims.width >= expectedWidth);
+    assertTrue(dims.height >= expectedHeight);
   } else {
-    assertEquals(32, dims.width);
-    assertRoughlyEquals(21, dims.height, 0.01);
+    assertEquals(expectedWidth, dims.width);
+    assertRoughlyEquals(expectedHeight, dims.height, 0.01);
   }
 }
 
@@ -807,8 +824,13 @@ function testGetSizeSvgDocument() {
   var doc = goog.dom.getFrameContentDocument(frame);
   var rect = doc.getElementById('rect');
   var dims = goog.style.getSize(rect);
-  assertEquals(50, dims.width);
-  assertEquals(50, dims.height);
+  if (!goog.userAgent.IE) {
+    assertEquals(50, dims.width);
+    assertEquals(50, dims.height);
+  } else {
+    assertEquals(51, dims.width);
+    assertEquals(51, dims.height);
+  }
 }
 
 function testGetSizeInlineBlock() {
@@ -2127,9 +2149,15 @@ function testGetViewportPageOffset() {
 function testGetsTranslation() {
   var element = document.getElementById('translation');
 
-  expectedFailures.expectFailureFor(
-      goog.userAgent.IE && !goog.userAgent.product.isVersion(9),
-      'CSS transforms were only introduced in IE9');
+  if (goog.userAgent.IE) {
+    if (!goog.userAgent.isDocumentModeOrHigher(9) ||
+        (!goog.dom.isCss1CompatMode() &&
+            !goog.userAgent.isDocumentModeOrHigher(10))) {
+      // 'CSS transforms were introduced in IE9, but only in standards mode
+      // later browsers support the translations in quirks mode.
+      return;
+    }
+  }
 
   // First check the element is actually translated, and we haven't missed
   // one of the vendor-specific transform properties
@@ -2137,11 +2165,9 @@ function testGetsTranslation() {
   var translation = goog.style.getCssTranslation(element);
   var expectedTranslation = new goog.math.Coordinate(20, 30);
 
-  expectedFailures.run(function() {
-    assertEquals(30, position.x);
-    assertRoughlyEquals(40, position.y, .1);
-    assertObjectEquals(expectedTranslation, translation);
-  });
+  assertEquals(30, position.x);
+  assertRoughlyEquals(40, position.y, .1);
+  assertObjectEquals(expectedTranslation, translation);
 }
 
 
