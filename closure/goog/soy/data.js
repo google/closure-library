@@ -133,7 +133,7 @@ goog.soy.data.SanitizedContent.prototype.contentDir = null;
 
 /**
  * The already-safe content.
- * @type {string}
+ * @protected {string}
  */
 goog.soy.data.SanitizedContent.prototype.content;
 
