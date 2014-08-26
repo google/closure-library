@@ -41,6 +41,7 @@ goog.require('goog.ui.Component');
 goog.require('goog.ui.IdGenerator');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButtonRenderer');
+goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
@@ -855,6 +856,8 @@ goog.ui.MenuButton.prototype.attachMenuEventListeners_ = function(menu,
   // Handle events dispatched by menu items.
   method.call(handler, menu, goog.ui.Component.EventType.ACTION,
       this.handleMenuAction);
+  method.call(handler, menu, goog.ui.Component.EventType.CLOSE,
+      this.handleCloseItem);
   method.call(handler, menu, goog.ui.Component.EventType.HIGHLIGHT,
       this.handleHighlightItem);
   method.call(handler, menu, goog.ui.Component.EventType.UNHIGHLIGHT,
@@ -883,27 +886,9 @@ goog.ui.MenuButton.prototype.attachKeyDownEventListener_ = function(attach) {
  * @param {goog.events.Event} e Highlight event to handle.
  */
 goog.ui.MenuButton.prototype.handleHighlightItem = function(e) {
-  var element = this.getElement();
-  goog.asserts.assert(element, 'The menu button DOM element cannot be null.');
-
   var targetEl = e.target.getElement();
   if (targetEl) {
-    // If target element has an activedescendant, then set this control's
-    // activedescendant to that, otherwise set it to the target element. This is
-    // a workaround for some screen readers which do not handle
-    // aria-activedescendant redirection properly.
-    var targetActiveDescendant = goog.a11y.aria.getActiveDescendant(targetEl);
-    var activeDescendant = targetActiveDescendant || targetEl;
-
-    if (!activeDescendant.id) {
-      // Create an id if there isn't one already.
-      var idGenerator = goog.ui.IdGenerator.getInstance();
-      activeDescendant.id = idGenerator.getNextUniqueId();
-    }
-
-    goog.a11y.aria.setActiveDescendant(element, activeDescendant);
-    goog.a11y.aria.setState(
-        element, goog.a11y.aria.State.OWNS, activeDescendant.id);
+    this.setAriaActiveDescendant_(targetEl);
   }
 };
 
@@ -936,6 +921,53 @@ goog.ui.MenuButton.prototype.handleUnHighlightItem = function(e) {
     goog.a11y.aria.setState(element,
         goog.a11y.aria.State.OWNS, '');
   }
+};
+
+
+/**
+ * Handles {@code CLOSE} events dispatched by the associated menu.
+ * @param {goog.events.Event} e Close event to handle.
+ */
+goog.ui.MenuButton.prototype.handleCloseItem = function(e) {
+  // When a submenu is closed by pressing left arrow, no highlight event is
+  // dispatched because the newly focused item was already highlighted, so this
+  // scenario is handled by listening for the submenu close event instead.
+  if (this.isOpen() && e.target instanceof goog.ui.MenuItem) {
+    var menuItem = /** @type {!goog.ui.MenuItem} */ (e.target);
+    var menuItemEl = menuItem.getElement();
+    if (menuItem.isVisible() && menuItem.isHighlighted() &&
+        menuItemEl != null) {
+      this.setAriaActiveDescendant_(menuItemEl);
+    }
+  }
+};
+
+
+/**
+ * Updates the aria-activedescendant attribute to the given target element.
+ * @param {!Element} targetEl The target element.
+ * @private
+ */
+goog.ui.MenuButton.prototype.setAriaActiveDescendant_ = function(targetEl) {
+  var element = this.getElement();
+  goog.asserts.assert(element, 'The menu button DOM element cannot be null.');
+
+  // If target element has an activedescendant, then set this control's
+  // activedescendant to that, otherwise set it to the target element. This is
+  // a workaround for some screen readers which do not handle
+  // aria-activedescendant redirection properly.
+  var targetActiveDescendant = goog.a11y.aria.getActiveDescendant(targetEl);
+  var activeDescendant = targetActiveDescendant || targetEl;
+
+  if (!activeDescendant.id) {
+    // Create an id if there isn't one already.
+    var idGenerator = goog.ui.IdGenerator.getInstance();
+    activeDescendant.id = idGenerator.getNextUniqueId();
+  }
+
+  goog.a11y.aria.setActiveDescendant(element, activeDescendant);
+  goog.a11y.aria.setState(
+      element, goog.a11y.aria.State.OWNS, activeDescendant.id);
 };
 
 

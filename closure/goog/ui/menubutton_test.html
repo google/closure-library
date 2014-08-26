@@ -41,6 +41,7 @@ See the COPYING file for details.
   goog.require('goog.ui.Menu');
   goog.require('goog.ui.MenuButton');
   goog.require('goog.ui.MenuItem');
+  goog.require('goog.ui.SubMenu');
   goog.require('goog.userAgent');
   goog.require('goog.userAgent.product');
   goog.require('goog.userAgent.product.isVersion');
@@ -179,6 +180,42 @@ function testHighlightItemBehavior() {
     assertEquals('Second menuitem must be the aria-activedescendant',
         'menuItem2', goog.a11y.aria.getState(menuButton.getElement(),
             goog.a11y.aria.State.ACTIVEDESCENDANT));
+}
+
+/**
+ * Open the menu, enter a submenu and then back out of it.
+ * Check if the aria-activedescendant property is set correctly.
+ */
+function testCloseSubMenuBehavior() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  var menu = menuButton.getMenu();
+  var subMenu = new goog.ui.SubMenu('Submenu');
+  menu.addItem(subMenu);
+  subMenu.getElement().id = 'subMenu';
+  var subMenuMenu = new goog.ui.Menu();
+  subMenu.setMenu(subMenuMenu);
+  var subMenuItem = new goog.ui.MenuItem('Submenu item 1');
+  subMenuMenu.addItem(subMenuItem);
+  subMenuItem.getElement().id = 'subMenuItem1';
+  menuButton.setOpen(true);
+
+  for (var i = 0; i < 4; i++) {
+    menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
+  }
+  assertEquals('Submenu must be the aria-activedescendant',
+      'subMenu', goog.a11y.aria.getState(menuButton.getElement(),
+          goog.a11y.aria.State.ACTIVEDESCENDANT));
+
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.RIGHT));
+  assertEquals('Submenu item 1 must be the aria-activedescendant',
+      'subMenuItem1', goog.a11y.aria.getState(menuButton.getElement(),
+          goog.a11y.aria.State.ACTIVEDESCENDANT));
+
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.LEFT));
+  assertEquals('Submenu must be the aria-activedescendant',
+      'subMenu', goog.a11y.aria.getState(menuButton.getElement(),
+          goog.a11y.aria.State.ACTIVEDESCENDANT));
 }
 
 /**
