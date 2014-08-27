@@ -23,22 +23,24 @@ goog.require('goog.events');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.CustomButtonRenderer');
+goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.Select');
 goog.require('goog.ui.Separator');
 
 var defaultCaption = 'initial caption';
-var sandbox;
+var sandboxEl;
 var select;
 
 function setUp() {
-  sandbox = goog.dom.getElement('sandbox');
+  sandboxEl = goog.dom.getElement('sandbox');
   select = new goog.ui.Select(defaultCaption);
 }
 
 function tearDown() {
   select.dispose();
-  goog.dom.removeChildren(sandbox);
+  goog.dom.removeChildren(sandboxEl);
 }
 
 
@@ -48,7 +50,7 @@ function tearDown() {
  * shown as a caption when no items are selected.
  */
 function testDefaultCaption() {
-  select.render(sandbox);
+  select.render(sandboxEl);
   var item1 = new goog.ui.MenuItem('item 1');
   select.addItem(item1);
   select.addItem(new goog.ui.MenuItem('item 2'));
@@ -77,7 +79,7 @@ function testNoDefaultCaption() {
 // Basically the select should have a role of LISTBOX and all the items should
 // have a role of OPTION.
 function testAriaRoles() {
-  select.render(sandbox);
+  select.render(sandboxEl);
   var item1 = new goog.ui.MenuItem('item 1');
   select.addItem(item1);
   // Added a separator to make sure that the SETSIZE ignores the separator
@@ -110,7 +112,7 @@ function testAriaRoles() {
  * Checks that the select control handles ACTION events from its items.
  */
 function testHandlesItemActions() {
-  select.render(sandbox);
+  select.render(sandboxEl);
   var item1 = new goog.ui.MenuItem('item 1');
   var item2 = new goog.ui.MenuItem('item 2');
   select.addItem(item1);
@@ -130,7 +132,7 @@ function testHandlesItemActions() {
  * Tests goog.ui.Select.prototype.setValue.
  */
 function testSetValue() {
-  select.render(sandbox);
+  select.render(sandboxEl);
   var item1 = new goog.ui.MenuItem('item 1', 1);
   var item2 = new goog.ui.MenuItem('item 2', 2);
   select.addItem(item1);
@@ -152,7 +154,7 @@ function testSetValue() {
  * removed.
  */
 function testSelectionIsClearedWhenSelectedItemIsRemoved() {
-  select.render(sandbox);
+  select.render(sandboxEl);
   var item1 = new goog.ui.MenuItem('item 1');
   select.addItem(item1);
   select.addItem(new goog.ui.MenuItem('item 2'));
@@ -169,7 +171,7 @@ function testSelectionIsClearedWhenSelectedItemIsRemoved() {
  */
 function testExitAndEnterDocument() {
   var component = new goog.ui.Component();
-  component.render(sandbox);
+  component.render(sandboxEl);
 
   var item1 = new goog.ui.MenuItem('item 1');
   var item2 = new goog.ui.MenuItem('item 2');
@@ -259,7 +261,7 @@ function testSetSelectedItemBeforeRender() {
   select.setSelectedItem(item3);
   assertEquals(2, select.getSelectedIndex());
 
-  select.decorate(sandbox);
+  select.decorate(sandboxEl);
   assertEquals(2, select.getSelectedIndex());
 }
 
@@ -274,13 +276,13 @@ function testSetValueBeforeRender() {
   select.setValue(2);
   assertEquals(2, select.getValue());
 
-  select.decorate(sandbox);
+  select.decorate(sandboxEl);
   assertEquals(2, select.getValue());
 }
 
 
 function testUpdateCaption_aria() {
-  select.render(this.sandbox);
+  select.render(sandboxEl);
 
   // Verify default state.
   assertEquals(defaultCaption, select.getCaption());
@@ -305,4 +307,23 @@ function testUpdateCaption_aria() {
   assertFalse(
       !!goog.a11y.aria.getLabel(
           select.getRenderer().getContentElement(select.getElement())));
+}
+
+function testDisposeWhenInnerHTMLHasBeenClearedInIE10() {
+  assertNotThrows(function() {
+    var customSelect = new goog.ui.Select(null /* label */, new goog.ui.Menu(),
+        new goog.ui.CustomButtonRenderer());
+    customSelect.render(sandboxEl);
+
+    // In IE10 setting the innerHTML of a node invalidates the parent child
+    // relation of all its child nodes (unlike removeNode).
+    sandboxEl.innerHTML = '';
+
+    // goog.ui.Select's disposeInternal trigger's goog.ui.Component's
+    // disposeInternal, which triggers goog.ui.MenuButton's exitDocument,
+    // which closes the associated menu and updates the activeDescendent.
+    // In the case of a CustomMenuButton the contentElement is referenced by
+    // element.firstChild.firstChild, an invalid relation in IE 10.
+    customSelect.dispose();
+  });
 }
