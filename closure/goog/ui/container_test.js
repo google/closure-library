@@ -475,3 +475,118 @@ function testRemoveHighlightedDisposedChild() {
   container.removeChild(a);
   container.dispose();
 }
+
+
+/**
+ * Checks that getHighlighted() returns the expected value and checks
+ * that the child at this index is highlighted and other children are not.
+ * @param {string} explanation Message indicating what is expected.
+ * @param {number} index Expected return value of getHighlightedIndex().
+ */
+function assertHighlightedIndex(explanation, index) {
+  assertEquals(explanation, index, container.getHighlightedIndex());
+  for (var i = 0; i < container.getChildCount(); i++) {
+    if (i == index) {
+      assertTrue('Child at highlighted index should be highlighted',
+          container.getChildAt(i).isHighlighted());
+    } else {
+      assertFalse('Only child at highlighted index should be highlighted',
+          container.getChildAt(i).isHighlighted());
+    }
+  }
+}
+
+function testUpdateHighlightedIndex_updatesWhenChildrenAreAdded() {
+  goog.dom.removeChildren(containerElement);
+  container.decorate(containerElement);
+
+  var a = new goog.ui.Control('A');
+  var b = new goog.ui.Control('B');
+  var c = new goog.ui.Control('C');
+
+  container.addChild(a);
+  container.setHighlightedIndex(0);
+  assertHighlightedIndex('Highlighted index should match set value', 0);
+
+  // Add child before the highlighted one.
+  container.addChildAt(b, 0);
+  assertHighlightedIndex('Highlighted index should be increased', 1);
+
+  // Add child after the highlighted one.
+  container.addChildAt(c, 2);
+  assertHighlightedIndex('Highlighted index should not change', 1);
+
+  container.dispose();
+}
+
+function testUpdateHighlightedIndex_updatesWhenChildrenAreMoved() {
+  goog.dom.removeChildren(containerElement);
+  container.decorate(containerElement);
+
+  var a = new goog.ui.Control('A');
+  var b = new goog.ui.Control('B');
+  var c = new goog.ui.Control('C');
+
+  container.addChild(a);
+  container.addChild(b);
+  container.addChild(c);
+
+  // Highlight 'c' and swap 'a' and 'b'
+  // [a, b, c] -> [a, b, *c] -> [b, a, *c] (* indicates the highlighted child)
+  container.setHighlightedIndex(2);
+  container.addChildAt(a, 1, false);
+  assertHighlightedIndex('Highlighted index should not change', 2);
+
+  // Move the highlighted child 'c' from index 2 to index 1.
+  // [b, a, *c] -> [b, *c, a]
+  container.addChildAt(c, 1, false);
+  assertHighlightedIndex('Highlighted index must follow the moved child', 1);
+
+  // Take the element in front of the highlighted index and move it behind it.
+  // [b, *c, a] -> [*c, a, b]
+  container.addChildAt(b, 2, false);
+  assertHighlightedIndex('Highlighted index must be decreased', 0);
+
+  // And move the element back to the front.
+  // [*c, a, b] -> [b, *c, a]
+  container.addChildAt(b, 0, false);
+  assertHighlightedIndex('Highlighted index must be increased', 1);
+
+  container.dispose();
+}
+
+function testUpdateHighlightedIndex_notChangedOnNoOp() {
+  goog.dom.removeChildren(containerElement);
+  container.decorate(containerElement);
+
+  container.addChild(new goog.ui.Control('A'));
+  container.addChild(new goog.ui.Control('B'));
+  container.setHighlightedIndex(1);
+
+  // Re-add a child to its current position.
+  container.addChildAt(container.getChildAt(0), 0, false);
+  assertHighlightedIndex('Highlighted index must not change', 1);
+
+  container.dispose();
+}
+
+function testUpdateHighlightedIndex_notChangedWhenNoChildSelected() {
+  goog.dom.removeChildren(containerElement);
+  container.decorate(containerElement);
+
+  var a = new goog.ui.Control('A');
+  var b = new goog.ui.Control('B');
+  var c = new goog.ui.Control('C');
+  container.addChild(a);
+  container.addChild(b);
+  container.addChild(c);
+
+  // Move children around.
+  container.addChildAt(a, 2, false);
+  container.addChildAt(b, 1, false);
+  container.addChildAt(c, 2, false);
+
+  assertHighlightedIndex('Highlighted index must not change', -1);
+
+  container.dispose();
+}

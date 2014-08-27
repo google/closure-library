@@ -895,6 +895,9 @@ goog.ui.Container.prototype.addChildAt = function(control, index, opt_render) {
   // Disable mouse event handling by child controls.
   control.setHandleMouseEvents(false);
 
+  var srcIndex = (control.getParent() == this) ?
+      this.indexOfChild(control) : -1;
+
   // Let the superclass implementation do the work.
   goog.ui.Container.superClass_.addChildAt.call(this, control, index,
       opt_render);
@@ -903,9 +906,33 @@ goog.ui.Container.prototype.addChildAt = function(control, index, opt_render) {
     this.registerChildId_(control);
   }
 
-  // Update the highlight index, if needed.
-  if (index <= this.highlightedIndex_) {
+  this.updateHighlightedIndex_(srcIndex, index);
+};
+
+
+/**
+ * Updates the highlighted index when children are added or moved.
+ * @param {number} fromIndex Index of the child before it was moved, or -1 if
+ *     the child was added.
+ * @param {number} toIndex Index of the child after it was moved or added.
+ * @private
+ */
+goog.ui.Container.prototype.updateHighlightedIndex_ = function(
+    fromIndex, toIndex) {
+  if (fromIndex == -1) {
+    fromIndex = this.getChildCount();
+  }
+  if (fromIndex == this.highlightedIndex_) {
+    // The highlighted element itself was moved.
+    this.highlightedIndex_ = toIndex;
+  } else if (fromIndex > this.highlightedIndex_ &&
+      toIndex <= this.highlightedIndex_) {
+    // The control was added or moved behind the highlighted index.
     this.highlightedIndex_++;
+  } else if (fromIndex < this.highlightedIndex_ &&
+      toIndex > this.highlightedIndex_) {
+    // The control was moved from before to behind the highlighted index.
+    this.highlightedIndex_--;
   }
 };
 
