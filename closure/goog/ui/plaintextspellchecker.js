@@ -135,6 +135,18 @@ goog.ui.PlainTextSpellChecker.prototype.eventHandler_;
 goog.ui.PlainTextSpellChecker.prototype.keyHandler_;
 
 
+/** @private {number} */
+goog.ui.PlainTextSpellChecker.prototype.textArrayIndex_;
+
+
+/** @private {!Array.<string>} */
+goog.ui.PlainTextSpellChecker.prototype.textArray_;
+
+
+/** @private {!Array.<boolean>} */
+goog.ui.PlainTextSpellChecker.prototype.textArrayProcess_;
+
+
 /**
  * Creates the initial DOM representation for the component.
  * @override

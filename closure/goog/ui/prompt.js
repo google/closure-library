@@ -405,6 +405,5 @@ goog.ui.Prompt.prototype.disposeInternal = function() {
 
   goog.ui.Prompt.superClass_.disposeInternal.call(this);
 
-  this.defaulValue_ = null;
   this.userInputEl_ = null;
 };

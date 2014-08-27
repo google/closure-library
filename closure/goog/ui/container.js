@@ -882,6 +882,8 @@ goog.ui.Container.prototype.getChildAt;
  * @override
  */
 goog.ui.Container.prototype.addChildAt = function(control, index, opt_render) {
+  goog.asserts.assertInstanceof(control, goog.ui.Control);
+
   // Make sure the child control dispatches HIGHLIGHT, UNHIGHLIGHT, OPEN, and
   // CLOSE events, and that it doesn't steal keyboard focus.
   control.setDispatchTransitionEvents(goog.ui.Component.State.HOVER, true);
@@ -922,6 +924,7 @@ goog.ui.Container.prototype.addChildAt = function(control, index, opt_render) {
  */
 goog.ui.Container.prototype.removeChild = function(control, opt_unrender) {
   control = goog.isString(control) ? this.getChild(control) : control;
+  goog.asserts.assertInstanceof(control, goog.ui.Control);
 
   if (control) {
     var index = this.indexOfChild(control);

@@ -824,7 +824,7 @@ goog.ui.SplitPane.prototype.getRelativeTop_ = function(top) {
 
 /**
  * Handle the drag event. Move the containers.
- * @param {goog.events.Event} e The event.
+ * @param {!goog.fx.DragEvent} e The event.
  * @private
  */
 goog.ui.SplitPane.prototype.handleDrag_ = function(e) {
@@ -845,7 +845,7 @@ goog.ui.SplitPane.prototype.handleDrag_ = function(e) {
  * Handle the drag end event. If we're not doing continuous resize,
  * resize the component.  If we're doing continuous resize, the component
  * is already the correct size.
- * @param {goog.events.Event} e The event.
+ * @param {!goog.fx.DragEvent} e The event.
  * @private
  */
 goog.ui.SplitPane.prototype.handleDragEnd_ = function(e) {
