@@ -874,7 +874,7 @@ if (goog.DEPENDENCIES_ENABLED) {
       goog.moduleLoaderState_ = {
           moduleName: undefined, exportTestMethods: false};
       var exports = {};
-      exports = moduleFn(exports);
+      exports = moduleFn.call(goog.global, exports);
       if (Object.seal) {
         Object.seal(exports);
       }

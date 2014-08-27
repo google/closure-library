@@ -106,3 +106,7 @@ exports = {
     assertTrue('module failed: testModule', goog.isFunction(testModule));
   }
 };
+
+exports.testThisInModule = (function() {
+  assertEquals(this, goog.global);
+}).bind(this);
