@@ -60,25 +60,15 @@ goog.require('goog.math.Size');
 goog.dom.ViewportSizeMonitor = function(opt_window) {
   goog.events.EventTarget.call(this);
 
-  /**
-   * The window to monitor. Defaults to the window in which the code is running.
-   * @private {!Window}
-   */
+  // Default the window to the current window if unspecified.
   this.window_ = opt_window || window;
 
-  /**
-   * Event listener key for window the window resize handler, as returned by
-   * {@link goog.events.listen}.
-   * @private {goog.events.Key}
-   */
+  // Listen for window resize events.
   this.listenerKey_ = goog.events.listen(this.window_,
       goog.events.EventType.RESIZE, this.handleResize_, false, this);
 
-  /**
-   * The most recently recorded size of the viewport, in pixels.
-   * @private {goog.math.Size}
-   */
-  this.size_ = null;
+  // Set the initial size.
+  this.size_ = goog.dom.getViewportSize(this.window_);
 };
 goog.inherits(goog.dom.ViewportSizeMonitor, goog.events.EventTarget);
 
@@ -118,23 +108,45 @@ goog.dom.ViewportSizeMonitor.removeInstanceForWindow = function(opt_window) {
 /**
  * Map of window hash code to viewport size monitor for that window, if
  * created.
- * @private {!Object.<number, !goog.dom.ViewportSizeMonitor>}
+ * @type {Object.<number,goog.dom.ViewportSizeMonitor>}
+ * @private
  */
 goog.dom.ViewportSizeMonitor.windowInstanceMap_ = {};
 
 
 /**
- * Returns the size of the viewport, in pixels. Note that if this is the first
- * time the viewport size is queried, i.e. it has not been resized yet, this
- * will force the browser to perform a synchronous layout.
- * @return {!goog.math.Size} The viewport dimensions, in pixels.
+ * Event listener key for window the window resize handler, as returned by
+ * {@link goog.events.listen}.
+ * @type {goog.events.Key}
+ * @private
+ */
+goog.dom.ViewportSizeMonitor.prototype.listenerKey_ = null;
+
+
+/**
+ * The window to monitor.  Defaults to the window in which the code is running.
+ * @type {Window}
+ * @private
+ */
+goog.dom.ViewportSizeMonitor.prototype.window_ = null;
+
+
+/**
+ * The most recently recorded size of the viewport, in pixels.
+ * @type {goog.math.Size?}
+ * @private
+ */
+goog.dom.ViewportSizeMonitor.prototype.size_ = null;
+
+
+/**
+ * Returns the most recently recorded size of the viewport, in pixels.  May
+ * return null if no window resize event has been handled yet.
+ * @return {goog.math.Size} The viewport dimensions, in pixels.
  */
 goog.dom.ViewportSizeMonitor.prototype.getSize = function() {
-  if (!this.size_) {
-    this.size_ = goog.dom.getViewportSize(this.window_);
-  }
-
-  return this.size_.clone();
+  // Return a clone instead of the original to preserve encapsulation.
+  return this.size_ ? this.size_.clone() : null;
 };
 
 
@@ -146,6 +158,9 @@ goog.dom.ViewportSizeMonitor.prototype.disposeInternal = function() {
     goog.events.unlistenByKey(this.listenerKey_);
     this.listenerKey_ = null;
   }
+
+  this.window_ = null;
+  this.size_ = null;
 };
 
 
@@ -153,7 +168,7 @@ goog.dom.ViewportSizeMonitor.prototype.disposeInternal = function() {
  * Handles window resize events by measuring the dimensions of the
  * viewport and dispatching a {@link goog.events.EventType.RESIZE} event if the
  * current dimensions are different from the previous ones.
- * @param {!goog.events.Event} event The window resize event to handle.
+ * @param {goog.events.Event} event The window resize event to handle.
  * @private
  */
 goog.dom.ViewportSizeMonitor.prototype.handleResize_ = function(event) {

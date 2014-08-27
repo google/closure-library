@@ -29,7 +29,7 @@ var propertyReplacer, fakeWindow, viewportSizeMonitor, mockClock;
 
 
 function FakeWindow() {
-  FakeWindow.base(this, 'constructor');
+  goog.base(this);
 }
 goog.inherits(FakeWindow, goog.events.EventTarget);
 
@@ -89,7 +89,6 @@ function tearDown() {
 
 
 function testResizeEvent() {
-  setViewportSize(300, 300, true);
   goog.events.listen(viewportSizeMonitor, goog.events.EventType.RESIZE,
       getListenerFn(1));
   assertFalse('Listener should not be called if window was not resized',
