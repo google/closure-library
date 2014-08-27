@@ -15,6 +15,7 @@
 goog.provide('goog.labs.testing.Environment');
 
 goog.require('goog.array');
+goog.require('goog.debug.Console');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.TestCase');
@@ -48,6 +49,9 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
     /** @private {boolean} */
     this.shouldMakeMockClock_ = false;
+
+    /** @const {!goog.debug.Console} */
+    this.console = goog.labs.testing.Environment.console_;
   },
 
 
@@ -145,6 +149,14 @@ goog.labs.testing.Environment = goog.defineClass(null, {
     return this.mockControl.createStrictMock(toMock);
   }
 });
+
+
+/** @private @const {!goog.debug.Console} */
+goog.labs.testing.Environment.console_ = new goog.debug.Console();
+
+
+// Activate logging to the browser's console by default.
+goog.labs.testing.Environment.console_.setCapturing(true);
 
 
 
