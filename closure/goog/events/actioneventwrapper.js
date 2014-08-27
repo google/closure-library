@@ -83,7 +83,6 @@ goog.events.ActionEventWrapper_.prototype.listen = function(target, listener,
     opt_capt, opt_scope, opt_eventHandler) {
   var callback = function(e) {
     var listenerFn = goog.events.wrapListener(listener);
-    var role = goog.a11y.aria.getRole(/** @type {!Element} */ (e.target));
     if (e.type == goog.events.EventType.CLICK && e.isMouseActionButton()) {
       listenerFn.call(opt_scope, e);
     } else if ((e.keyCode == goog.events.KeyCodes.ENTER ||
@@ -94,8 +93,8 @@ goog.events.ActionEventWrapper_.prototype.listen = function(target, listener,
       listenerFn.call(opt_scope, e);
     } else if (e.keyCode == goog.events.KeyCodes.SPACE &&
         e.type == goog.events.EventType.KEYUP &&
-        (role == goog.a11y.aria.Role.BUTTON ||
-            role == goog.a11y.aria.Role.TAB)) {
+        goog.a11y.aria.getRole(/** @type {!Element} */ (e.target)) ==
+            goog.a11y.aria.Role.BUTTON) {
       listenerFn.call(opt_scope, e);
       e.preventDefault();
     }
