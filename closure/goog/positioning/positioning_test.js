@@ -25,7 +25,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
-goog.require('goog.math.Rect');
 goog.require('goog.math.Size');
 goog.require('goog.positioning');
 goog.require('goog.positioning.Corner');
@@ -726,6 +725,27 @@ function testPositionAtCoordinateResizeHeight() {
   var bounds = goog.style.getSize(popup);
   assertEquals('Height should be resized to the size of the viewport.',
                50, bounds.height);
+}
+
+
+function testGetPositionAtCoordinateResizeHeight() {
+  var f = goog.positioning.getPositionAtCoordinate;
+  var viewport = new goog.math.Box(0, 50, 50, 0);
+  var overflow = goog.positioning.Overflow.RESIZE_HEIGHT |
+      goog.positioning.Overflow.ADJUST_Y;
+  var popup = document.getElementById('popup1');
+  var corner = goog.positioning.Corner.BOTTOM_LEFT;
+
+  var pos = newCoord(100, 100);
+  var size = goog.style.getSize(popup);
+
+  var result = f(pos, size, corner, undefined, viewport, overflow);
+  assertEquals('Viewport height should be resized.',
+               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED |
+               goog.positioning.OverflowStatus.ADJUSTED_Y,
+               result.status);
+  assertEquals('Height should be resized to the size of the viewport.',
+               50, result.rect.height);
 }
 
 
