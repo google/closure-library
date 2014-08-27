@@ -483,3 +483,35 @@ function testDefaultValueNumbersOrStrings() {
   assertEquals('1000000000000000001',
                message.getOptionalInt64StringOrDefault());
 }
+
+function testBooleanAsNumberFalse() {
+  // Some libraries, such as GWT, can serialize boolean values as 0/1
+
+  var simplified = {
+    13: 0
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var message = serializer.deserialize(
+      proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  assertFalse(message.getOptionalBool());
+}
+
+function testBooleanAsNumberTrue() {
+  var simplified = {
+    13: 1
+  };
+
+  var serializer = new goog.proto2.ObjectSerializer();
+
+  var message = serializer.deserialize(
+      proto2.TestAllTypes.getDescriptor(), simplified);
+
+  assertNotNull(message);
+
+  assertTrue(message.getOptionalBool());
+}
