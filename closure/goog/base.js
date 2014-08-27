@@ -672,6 +672,16 @@ goog.instantiatedSingletons_ = [];
 
 
 /**
+ * @define {boolean} Whether to load goog.modules using {@code eval} when using
+ * the debug loader.  This provides a better debugging experience as the
+ * source is unmodified and can be edited using Chrome Workspaces or
+ * similiar.  However in some environments the use of {@code eval} is banned
+ * so we provide an alternative.
+ */
+goog.define('goog.LOAD_MODULE_USING_EVAL', true);
+
+
+/**
  * The registry of initialized modules:
  * the module identifier to module exports map.
  * @private @const {Object.<string, ?>}
@@ -838,14 +848,22 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.wrapModule_ = function(srcUrl, scriptText) {
-    return '' +
-        'goog.loadModule(function(exports) {' +
-        '"use strict";' +
-        scriptText +
-        '\n' + // terminate any trailing single line comment.
-        ';return exports' +
-        '});' +
-        '\n//# sourceURL=' + srcUrl + '\n';
+    if (!goog.LOAD_MODULE_USING_EVAL || !goog.isDef(goog.global.JSON)) {
+      return '' +
+          'goog.loadModule(function(exports) {' +
+          '"use strict";' +
+          scriptText +
+          '\n' + // terminate any trailing single line comment.
+          ';return exports' +
+          '});' +
+          '\n//# sourceURL=' + srcUrl + '\n';
+    } else {
+      return '' +
+          'goog.loadModule(' +
+          goog.global.JSON.stringify(
+              scriptText + '\n//# sourceURL=' + srcUrl + '\n') +
+          ');';
+    }
   };
 
 
@@ -867,14 +885,26 @@ if (goog.DEPENDENCIES_ENABLED) {
 
 
   /**
-   * @param {Function} moduleFn The module creation method.
+   * @param {function(?):?|string} moduleDef The module definition.
    */
-  goog.loadModule = function(moduleFn) {
+  goog.loadModule = function(moduleDef) {
+    // NOTE: we allow function definitions to be either in the from
+    // of a string to eval (which keeps the original source intact) or
+    // in a eval forbidden environment (CSP) we allow a function definition
+    // which in its body must call {@code goog.module}, and return the exports
+    // of the module.
     try {
       goog.moduleLoaderState_ = {
           moduleName: undefined, exportTestMethods: false};
-      var exports = {};
-      exports = moduleFn.call(goog.global, exports);
+      var exports;
+      if (goog.isFunction(moduleDef)) {
+        exports = moduleDef.call(goog.global, {});
+      } else if (goog.isString(moduleDef)) {
+        exports = goog.loadModuleFromSource_.call(goog.global, moduleDef);
+      } else {
+        throw Error('Invalid module definition');
+      }
+
       if (Object.seal) {
         Object.seal(exports);
       }
@@ -896,6 +926,19 @@ if (goog.DEPENDENCIES_ENABLED) {
     } finally {
       goog.moduleLoaderState_ = null;
     }
+  };
+
+
+  /**
+   * @private @const {function(string):?}
+   */
+  goog.loadModuleFromSource_ = function() {
+    // NOTE: we avoid declaring parameters or local variables here to avoid
+    // masking globals or leaking values into the module definition.
+    'use strict';
+    var exports = {};
+    eval(arguments[0]);
+    return exports;
   };
 
 
