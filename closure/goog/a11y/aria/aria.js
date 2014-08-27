@@ -31,6 +31,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.object');
+goog.require('goog.string');
 
 
 /**
@@ -154,6 +155,27 @@ goog.a11y.aria.setState = function(element, stateName, value) {
   } else {
     element.setAttribute(attrStateName, value);
   }
+};
+
+
+/**
+ * Toggles the ARIA attribute of an element.
+ * Meant for attributes with a true/false value, but works with any attribute.
+ * If the attribute does not have a true/false value, the following rules apply:
+ * A not empty attribute will be removed.
+ * An empty attribute will be set to true.
+ * @param {!Element} el DOM node for which to set attribute.
+ * @param {!(goog.a11y.aria.State|string)} attr ARIA attribute being set.
+ *     Automatically adds prefix 'aria-' to the attribute name if the attribute
+ *     is not an extra attribute.
+ */
+goog.a11y.aria.toggleState = function(el, attr) {
+  var val = goog.a11y.aria.getState(el, attr);
+  if (!goog.string.isEmptySafe(val) && !(val == 'true' || val == 'false')) {
+    goog.a11y.aria.removeState(el, /** @type {!goog.a11y.aria.State} */ (attr));
+    return;
+  }
+  goog.a11y.aria.setState(el, attr, val == 'true' ? 'false' : 'true');
 };
 
 
