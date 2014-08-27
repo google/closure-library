@@ -835,9 +835,10 @@ if (goog.DEPENDENCIES_ENABLED) {
 
 
   /**
-   *
+   * Load any deferred goog.module loads.
+   * @private
    */
-  goog.loadQueuedModules = function() {
+  goog.loadQueuedModules_ = function() {
     var count = goog.queuedModules_.length;
     if (count > 0) {
       var queue = goog.queuedModules_;
@@ -953,7 +954,7 @@ if (goog.DEPENDENCIES_ENABLED) {
     // later allow more inter-mingling.
     if (script.readyState == 'complete' &&
         goog.lastNonModuleScriptIndex_ == scriptIndex) {
-      goog.loadQueuedModules();
+      goog.loadQueuedModules_();
     }
     return true;
   };
