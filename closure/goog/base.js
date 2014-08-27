@@ -239,11 +239,8 @@ goog.define('goog.STRICT_MODE_COMPATIBLE', false);
  */
 goog.provide = function(name) {
   if (!COMPILED) {
-    // Ensure that the same namespace isn't provided twice. This is intended
-    // to teach new developers that 'goog.provide' is effectively a variable
-    // declaration. And when JSCompiler transforms goog.provide into a real
-    // variable declaration, the compiled JS should work the same as the raw
-    // JS--even when the raw JS uses goog.provide incorrectly.
+    // Ensure that the same namespace isn't provided twice.
+    // A goog.module/goog.provide maps a goog.require to a specific file
     if (goog.isProvided_(name)) {
       throw Error('Namespace "' + name + '" already declared.');
     }
@@ -259,6 +256,56 @@ goog.provide = function(name) {
   }
 
   goog.exportPath_(name);
+};
+
+
+/**
+ * goog.module serves two purposes:
+ * - marks a file that must be loaded as a module
+ * - reserves a namespace (it can not also be goog.provided)
+ * and has three requirements:
+ * - goog.module may not be used in the same file as goog.provide.
+ * - goog.module must be the first statement in the file.
+ * - only one goog.module is allowed per file.
+ * When a goog.module annotated file is loaded, it is loaded enclosed in
+ * a strict function closure. This means that:
+ * - any variable declared in a goog.module file are private to the file,
+ * not global. Although the compiler is expected to inline the module.
+ * - The code must obey all the rules of "strict" JavaScript.
+ * - the file will be marked as "use strict"
+ *
+ * NOTE: unlike goog.provide, goog.module does not declare any symbols by
+ * itself.
+ *
+ * @param {string} name Namespace provided by this file in the form
+ *     "goog.package.part", is expected but not required.
+ */
+goog.module = function(name) {
+  if (!goog.inModuleLoader_) {
+    throw Error('Module ' + name + ' has been loaded incorrectly.');
+  }
+  if (!COMPILED) {
+    // Ensure that the same namespace isn't provided twice.
+    // A goog.module/goog.provide maps a goog.require to a specific file
+    if (goog.isProvided_(name)) {
+      throw Error('Namespace "' + name + '" already declared.');
+    }
+    delete goog.implicitNamespaces_[name];
+  }
+};
+
+
+/**
+ * Indicate that a module's exports that are known test methods should
+ * be copied to the global object.  This makes the test methods visible to
+ * test runners that inspect the global object.
+ *
+ * TODO(johnlenz): Make the test framework aware of goog.module so
+ * that this isn't necessary. Alternately combine this with goog.setTestOnly
+ * to minimize boiler plate.
+ */
+goog.module.exportTestMethods = function() {
+  goog.exportModuleTestMethods_ = true;
 };
 
 
@@ -311,8 +358,9 @@ if (!COMPILED) {
    * @private
    */
   goog.isProvided_ = function(name) {
-    return !goog.implicitNamespaces_[name] &&
-        goog.isDefAndNotNull(goog.getObjectByName(name));
+    return (name in goog.loadedModules_) ||
+        (!goog.implicitNamespaces_[name] &&
+            goog.isDefAndNotNull(goog.getObjectByName(name)));
   };
 
   /**
@@ -320,10 +368,15 @@ if (!COMPILED) {
    * goog.provide('goog.events.Event') implicitly declares that 'goog' and
    * 'goog.events' must be namespaces.
    *
-   * @type {Object}
+   * @type {Object.<string, (boolean|undefined)>}
    * @private
    */
-  goog.implicitNamespaces_ = {};
+  goog.implicitNamespaces_ = {'goog.module': true};
+
+  // NOTE: We add goog.module as an implicit namespace as goog.module is defined
+  // here and because the existing module package has not been moved yet out of
+  // the goog.module namespace. This satisifies both the debug loader and
+  // ahead-of-time dependency management.
 }
 
 
@@ -375,8 +428,8 @@ goog.globalize = function(obj, opt_global) {
  *                         this file provides.
  * @param {Array} requires An array of strings with the names of the objects
  *                         this file requires.
- * @param {boolean=} opt_isModule Whether this name is a module (to be used in
- *     in the future).
+ * @param {boolean=} opt_isModule Whether this dependency must be loaded as
+ *     a module as declared by goog.module.
  */
 goog.addDependency = function(relPath, provides, requires, opt_isModule) {
   if (goog.DEPENDENCIES_ENABLED) {
@@ -389,6 +442,7 @@ goog.addDependency = function(relPath, provides, requires, opt_isModule) {
         deps.pathToNames[path] = {};
       }
       deps.pathToNames[path][provide] = true;
+      deps.pathIsModule[path] = !!opt_isModule;
     }
     for (var j = 0; require = requires[j]; j++) {
       if (!(path in deps.requires)) {
@@ -434,12 +488,25 @@ goog.define('goog.ENABLE_DEBUG_LOADER', true);
 
 
 /**
+ * @param {string} msg
+ * @private
+ */
+goog.logToConsole_ = function(msg) {
+  if (goog.global.console) {
+    goog.global.console['error'](msg);
+  }
+};
+
+
+/**
  * Implements a system for the dynamic resolution of dependencies that works in
  * parallel with the BUILD system. Note that all calls to goog.require will be
  * stripped by the JSCompiler when the --closure_pass option is used.
  * @see goog.provide
  * @param {string} name Namespace to include (as was given in goog.provide()) in
  *     the form "goog.package.part".
+ * @return {?} If called within a goog.module file, the associated namespace or
+ *     module otherwise null.
  */
 goog.require = function(name) {
 
@@ -451,7 +518,14 @@ goog.require = function(name) {
   //            not remove this code for the compiled output.
   if (!COMPILED) {
     if (goog.isProvided_(name)) {
-      return;
+      if (goog.inModuleLoader_) {
+        // goog.require only return a value with-in goog.module files.
+        return name in goog.loadedModules_ ?
+            goog.loadedModules_[name] :
+            goog.getObjectByName(name);
+      } else {
+        return null;
+      }
     }
 
     if (goog.ENABLE_DEBUG_LOADER) {
@@ -459,18 +533,17 @@ goog.require = function(name) {
       if (path) {
         goog.included_[path] = true;
         goog.writeScripts_();
-        return;
+        return null;
       }
     }
 
     var errorMessage = 'goog.require could not find: ' + name;
-    if (goog.global.console) {
-      goog.global.console['error'](errorMessage);
-    }
+    goog.logToConsole_(errorMessage);
 
 
       throw Error(errorMessage);
 
+    return null;
   }
 };
 
@@ -579,6 +652,14 @@ goog.instantiatedSingletons_ = [];
 
 
 /**
+ * The registry of initialized modules:
+ * the module identifier to module exports map.
+ * @private @const {Object.<string, ?>}
+ */
+goog.loadedModules_ = {};
+
+
+/**
  * True if goog.dependencies_ is available.
  * @const {boolean}
  */
@@ -603,7 +684,8 @@ if (goog.DEPENDENCIES_ENABLED) {
    */
   goog.dependencies_ = {
     pathToNames: {}, // 1 to many
-    nameToPath: {}, // 1 to 1
+    pathIsModule: {}, // 1 to 1
+    nameToPath: {}, // many to 1
     requires: {}, // 1 to many
     // Used when resolving dependencies to prevent us from visiting file twice.
     visited: {},
@@ -654,13 +736,147 @@ if (goog.DEPENDENCIES_ENABLED) {
    * Imports a script if, and only if, that script hasn't already been imported.
    * (Must be called at execution time)
    * @param {string} src Script source.
+   * @param {string=} opt_sourceText The optionally source text to evaluate
    * @private
    */
-  goog.importScript_ = function(src) {
+  goog.importScript_ = function(src, opt_sourceText) {
     var importScript = goog.global.CLOSURE_IMPORT_SCRIPT ||
         goog.writeScriptTag_;
-    if (!goog.dependencies_.written[src] && importScript(src)) {
+    if (importScript(src, opt_sourceText)) {
       goog.dependencies_.written[src] = true;
+    }
+  };
+
+
+  /** @const @private {boolean} */
+  goog.IS_OLD_IE_ = goog.global.document &&
+      goog.global.document.all && !goog.global.atob;
+
+
+  /**
+   * Given a URL and moduleName, initiate retrieval and execution of the module.
+   * @param {string} moduleName The module identifier.
+   * @param {string} src Script source URL.
+   * @private
+   */
+  goog.importModule_ = function(moduleName, src) {
+    // In an attempt to keep browsers from timing out loading scripts using
+    // synchronous XHRs, put each load in its own script block.
+    var bootstrap = 'goog.retrieveAndExecModule_(' +
+        '"' + moduleName + '","' + src + '");';
+
+    if (goog.importScript_('', bootstrap)) {
+      goog.dependencies_.written[src] = true;
+    }
+  };
+
+
+  /** @private {Array.<string>} */
+  goog.queuedModules_ = [];
+
+
+  /**
+   * Retrieve and execute a module.
+   * @param {string} moduleName The module identifier.
+   * @param {string} src Script source URL.
+   * @private
+   */
+  goog.retrieveAndExecModule_ = function(moduleName, src) {
+    var importScript = goog.global.CLOSURE_IMPORT_SCRIPT ||
+        goog.writeScriptTag_;
+
+    var scriptText = null;
+
+    var xhr = new goog.global['XMLHttpRequest']();
+
+    /** @this {Object} */
+    xhr.onload = function() {
+      scriptText = this.responseText;
+    };
+    xhr.open('get', src, false);
+    xhr.send();
+
+    scriptText = xhr.responseText;
+
+    if (scriptText != null) {
+      var execModuleScript = goog.wrapModule_(moduleName, src, scriptText);
+      var isOldIE = goog.IS_OLD_IE_;
+      if (isOldIE) {
+        goog.queuedModules_.push(execModuleScript);
+      } else {
+        importScript(src, execModuleScript);
+      }
+      goog.dependencies_.written[src] = true;
+    } else {
+      throw new Error('load of ' + src + 'failed');
+    }
+  };
+
+
+  /**
+   * Return an appropriate module text. Suitable to insert into
+   * a script tag (that is unescaped).
+   * @param {string} moduleName
+   * @param {string} srcUrl
+   * @param {string} scriptText
+   * @return {string}
+   * @private
+   */
+  goog.wrapModule_ = function(moduleName, srcUrl, scriptText) {
+    return '' +
+        'goog.loadModule("' + moduleName + '", function(exports) {' +
+        '"use strict";' +
+        scriptText +
+        '\n' + // terminate any trailing single line comment.
+        ';return exports' +
+        '});' +
+        '\n//# sourceURL=' + srcUrl + '\n';
+  };
+
+
+  /**
+   *
+   */
+  goog.loadQueuedModules = function() {
+    var count = goog.queuedModules_.length;
+    if (count > 0) {
+      var queue = goog.queuedModules_;
+      goog.queuedModules_ = [];
+      for (var i = 0; i < count; i++) {
+        var entry = queue[i];
+        goog.globalEval(entry);
+      }
+    }
+  };
+
+
+  /**
+   * @param {string} moduleName The module identifier.
+   * @param {Function} moduleFn The module creation method.
+   */
+  goog.loadModule = function(moduleName, moduleFn) {
+    var deps = goog.dependencies_;
+    var path = deps.nameToPath[moduleName];
+    try {
+      goog.inModuleLoader_ = true;
+      var exports = {};
+      exports = moduleFn(exports);
+      if (Object.seal) {
+        Object.seal(exports);
+      }
+      goog.loadedModules_[moduleName] = exports;
+      if (goog.exportModuleTestMethods_) {
+        for (var entry in exports) {
+          if (entry.indexOf('test', 0) === 0 ||
+              entry == 'tearDown' ||
+              entry == 'setup') {
+            goog.global[entry] = exports[entry];
+          }
+        }
+      }
+    } finally {
+      goog.inModuleLoader_ = false;
+      goog.exportModuleTestMethods_ = false;
     }
   };
 
@@ -669,11 +885,12 @@ if (goog.DEPENDENCIES_ENABLED) {
    * The default implementation of the import function. Writes a script tag to
    * import the script.
    *
-   * @param {string} src The script source.
+   * @param {string} src The script url.
+   * @param {string=} opt_sourceText The optionally source text to evaluate
    * @return {boolean} True if the script was imported, false otherwise.
    * @private
    */
-  goog.writeScriptTag_ = function(src) {
+  goog.writeScriptTag_ = function(src, opt_sourceText) {
     if (goog.inHtmlDocument_()) {
       var doc = goog.global.document;
 
@@ -693,14 +910,53 @@ if (goog.DEPENDENCIES_ENABLED) {
         }
       }
 
-      doc.write(
-          '<script type="text/javascript" src="' + src + '"></' + 'script>');
+      var isOldIE = goog.IS_OLD_IE_;
+
+      if (opt_sourceText === undefined) {
+        if (!isOldIE) {
+          doc.write(
+              '<script type="text/javascript" src="' +
+                  src + '"></' + 'script>');
+        } else {
+          var state = " onreadystatechange='goog.onScriptLoad_(this, " +
+              ++goog.lastNonModuleScriptIndex_ + ")' ";
+          doc.write(
+              '<script type="text/javascript" src="' +
+                  src + '"' + state + '></' + 'script>');
+        }
+      } else {
+        doc.write(
+            '<script type="text/javascript">' +
+            opt_sourceText +
+            '</' + 'script>');
+      }
       return true;
     } else {
       return false;
     }
   };
 
+
+  /** @private {number} */
+  goog.lastNonModuleScriptIndex_ = 0;
+
+
+  /**
+   * A readystatechange handler for legacy IE
+   * @param {HTMLScriptElement} script
+   * @param {number} scriptIndex
+   * @return {boolean}
+   * @private
+   */
+  goog.onScriptLoad_ = function(script, scriptIndex) {
+    // for now load the modules when we reach the last script,
+    // later allow more inter-mingling.
+    if (script.readyState == 'complete' &&
+        goog.lastNonModuleScriptIndex_ == scriptIndex) {
+      goog.loadQueuedModules();
+    }
+    return true;
+  };
 
   /**
    * Resolves dependencies based on the dependencies added using addDependency
@@ -756,13 +1012,53 @@ if (goog.DEPENDENCIES_ENABLED) {
       }
     }
 
+    // record that we are going to load all these scripts.
     for (var i = 0; i < scripts.length; i++) {
-      if (scripts[i]) {
-        goog.importScript_(goog.basePath + scripts[i]);
+      var path = scripts[i];
+      goog.dependencies_.written[path] = true;
+    }
+
+    // If a module is loaded synchronously then we need to
+    // clear the current inModuleLoader value, and restore it when we are
+    // done loading the current "requires".
+    var moduleState = goog.inModuleLoader_;
+    goog.inModuleLoader_ = false;
+
+    var loadingModule = false;
+    for (var i = 0; i < scripts.length; i++) {
+      var path = scripts[i];
+      if (path) {
+        if (!deps.pathIsModule[path]) {
+          goog.importScript_(goog.basePath + path);
+        } else {
+          loadingModule = true;
+          goog.importModule_(goog.depsPathToName_(path), goog.basePath + path);
+        }
       } else {
+        goog.inModuleLoader_ = moduleState;
         throw Error('Undefined script input');
       }
     }
+
+    // restore the current "module loading state"
+    goog.inModuleLoader_ = moduleState;
+  };
+
+
+  /**
+   * @param {string} path
+   * @return {string} The Module Name associated with this path.
+   * @private
+   */
+  goog.depsPathToName_ = function(path) {
+    var names = goog.dependencies_.pathToNames[path];
+
+    for (var name in names) {
+      if (Object.prototype.hasOwnProperty.call(names, name)) {
+        return name;
+      }
+    }
+    throw new Error('missing module namespace');
   };
 
 
