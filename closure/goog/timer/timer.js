@@ -92,6 +92,17 @@ goog.Timer.MAX_TIMEOUT_ = 2147483647;
 
 
 /**
+ * A timer ID that cannot be returned by any known implmentation of
+ * Window.setTimeout.  Passing this value to window.clearTimeout should
+ * therefore be a no-op.
+ *
+ * @const {number}
+ * @private
+ */
+goog.Timer.INVALID_TIMEOUT_ID_ = -1;
+
+
+/**
  * Whether this timer is enabled
  * @type {boolean}
  */
@@ -276,7 +287,7 @@ goog.Timer.callOnce = function(listener, opt_delay, opt_handler) {
     // Timeouts greater than MAX_INT return immediately due to integer
     // overflow in many browsers.  Since MAX_INT is 24.8 days, just don't
     // schedule anything at all.
-    return -1;
+    return goog.Timer.INVALID_TIMEOUT_ID_;
   } else {
     return goog.Timer.defaultTimerObject.setTimeout(
         listener, opt_delay || 0);
@@ -294,27 +305,25 @@ goog.Timer.clear = function(timerId) {
 
 
 /**
- * Returns the Promise object that will yield after the specified
- * delay.
- *
  * @param {number} delay Milliseconds to wait.
- * @param {RESULT=} opt_result The optional result object.
- * @return {!goog.Promise.<RESULT>}
+ * @param {(RESULT|goog.Thenable.<RESULT>|Thenable)=} opt_result The value
+ *     with which the promise will be resolved.
+ * @return {!goog.Promise.<RESULT>} A promise that will be resolved after
+ *     the specified delay, unless it is canceled first.
  * @template RESULT
  */
 goog.Timer.promise = function(delay, opt_result) {
-  var timerKey;
+  var timerKey = null;
   return new goog.Promise(function(resolve, reject) {
     timerKey = goog.Timer.callOnce(function() {
       resolve(opt_result);
     }, delay);
-    if (timerKey == -1) {
+    if (timerKey == goog.Timer.INVALID_TIMEOUT_ID_) {
       reject(new Error('Failed to schedule timer.'));
     }
-  }).thenCatch(function() {
+  }).thenCatch(function(error) {
     // Clear the timer. The most likely reason is "cancel" signal.
-    if (timerKey) {
-      goog.Timer.clear(timerKey);
-    }
+    goog.Timer.clear(timerKey);
+    throw error;
   });
 };

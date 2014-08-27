@@ -135,3 +135,15 @@ function testPromise_cancel() {
   mockClock.tick(10);
   assertEquals('promise must be canceled once and only once', 1, c);
 }
+
+function testPromise_timeoutTooLarge() {
+  var c = 0;
+  goog.Timer.promise(2147483648, 'A').then(function(result) {
+    fail('promise must not be resolved');
+  }, function(reason) {
+    c++;
+    assertTrue('promise must be rejected', reason instanceof Error);
+  });
+  mockClock.tick(10);
+  assertEquals('promise must be rejected once and only once', 1, c);
+}
