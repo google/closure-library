@@ -44,6 +44,9 @@ goog.Disposable = function() {
     }
     goog.Disposable.instances_[goog.getUid(this)] = this;
   }
+  // Support sealing
+  this.disposed_ = this.disposed_;
+  this.onDisposeCallbacks_ = this.onDisposeCallbacks_;
 };
 
 
@@ -139,7 +142,7 @@ goog.Disposable.prototype.onDisposeCallbacks_;
 /**
  * If monitoring the goog.Disposable instances is enabled, stores the creation
  * stack trace of the Disposable instance.
- * @type {string}
+ * @const {string}
  */
 goog.Disposable.prototype.creationStack;
 
