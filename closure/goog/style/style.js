@@ -64,7 +64,9 @@ goog.style.setStyle = function(element, style, opt_value) {
   if (goog.isString(style)) {
     goog.style.setStyle_(element, opt_value, style);
   } else {
-    goog.object.forEach(style, goog.partial(goog.style.setStyle_, element));
+    for (var key in style) {
+      goog.style.setStyle_(element, style[key], key);
+    }
   }
 };
 
