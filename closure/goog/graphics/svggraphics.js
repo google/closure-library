@@ -261,6 +261,7 @@ goog.graphics.SvgGraphics.prototype.setElementStroke = function(element,
   var svgElement = element.getElement();
   if (stroke) {
     svgElement.setAttribute('stroke', stroke.getColor());
+    svgElement.setAttribute('stroke-opacity', stroke.getOpacity());
 
     var width = stroke.getWidth();
     if (goog.isString(width) && width.indexOf('px') != -1) {

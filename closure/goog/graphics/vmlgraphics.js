@@ -339,19 +339,13 @@ goog.graphics.VmlGraphics.prototype.setElementStroke = function(element,
     }
 
     var strokeElement = vmlElement.getElementsByTagName('stroke')[0];
-    if (width < 1) {
+    if (!strokeElement) {
       strokeElement = strokeElement || this.createVmlElement('stroke');
-      strokeElement.opacity = width;
-      strokeElement.weight = '1px';
-      strokeElement.color = stroke.getColor();
       vmlElement.appendChild(strokeElement);
-    } else {
-      if (strokeElement) {
-        vmlElement.removeChild(strokeElement);
-      }
-      vmlElement.strokecolor = stroke.getColor();
-      vmlElement.strokeweight = width + 'px';
     }
+    strokeElement.opacity = stroke.getOpacity();
+    strokeElement.weight = width + 'px';
+    strokeElement.color = stroke.getColor();
   } else {
     vmlElement.stroked = false;
   }
