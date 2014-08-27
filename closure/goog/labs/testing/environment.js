@@ -85,9 +85,17 @@ goog.labs.testing.Environment = goog.defineClass(null, {
         this.mockClock.dispose();
       }
     }
-    // Make sure the user did not forget to call $verifyAll in their test.
-    // This is a noop if they did.
+    // Make sure the user did not forget to call $replayAll & $verifyAll in
+    // their test. This is a noop if they did.
+    // This is important because:
+    // - Engineers thinks that not all their tests need to replay and verify.
+    //   That lets tests sneak in that call mocks but never replay those calls.
+    // - Then some well meaning maintenance engineer wants to update the test
+    //   with some new mock, adds a replayAll and BOOM the test fails
+    //   because completely unrelated mocks now get replayed.
     if (this.mockControl) {
+      this.mockControl.$verifyAll();
+      this.mockControl.$replayAll();
       this.mockControl.$verifyAll();
       this.mockControl.$resetAll();
     }
