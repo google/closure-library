@@ -536,11 +536,6 @@ goog.logToConsole_ = function(msg) {
 goog.require = function(name) {
 
   // If the object already exists we do not need do do anything.
-  // TODO(arv): If we start to support require based on file name this has to
-  //            change.
-  // TODO(arv): If we allow goog.foo.* this has to change.
-  // TODO(arv): If we implement dynamic load after page load we should probably
-  //            not remove this code for the compiled output.
   if (!COMPILED) {
     if (goog.isProvided_(name)) {
       if (goog.isInModuleLoader_()) {
