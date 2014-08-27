@@ -118,7 +118,6 @@ function testMockClock() {
   testing = true;
 
   var env = new goog.labs.testing.Environment().withMockClock();
-  assertNull(env.mockClock); // Not created before test runs.
 
   testCase.addNewTest('testThatThrowsEventually', function() {
     setTimeout(function() {
@@ -128,8 +127,6 @@ function testMockClock() {
 
   testCase.runTests();
   assertTestFailure(testCase, 'testThatThrowsEventually', 'LateErrorMessage');
-  assertTrue(env.mockClock.isDisposed());
-  assertNull(env.mockControl);
 
   testing = false;
 }

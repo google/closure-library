@@ -65,16 +65,13 @@ goog.labs.testing.Environment = goog.defineClass(null, {
     if (this.shouldMakeMockControl_) {
       this.mockControl.$tearDown();
     }
-  },
-
-
-  /** Runs immediately before the setUp phase of JsUnit tests. */
-  setUp: function() {
     if (this.shouldMakeMockClock_) {
-      this.mockClock = new goog.testing.MockClock(true);
+      this.mockClock.dispose();
     }
   },
 
+  /** Runs immediately before the setUp phase of JsUnit tests. */
+  setUp: goog.nullFunction,
 
   /** Runs immediately after the tearDown phase of JsUnit tests. */
   tearDown: function() {
@@ -86,7 +83,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
       }
       // If we created the mockClock, we'll also dispose it.
       if (this.shouldMakeMockClock_) {
-        this.mockClock.dispose();
+        this.mockClock.reset();
       }
     }
     // Make sure the user did not forget to call $replayAll & $verifyAll in
@@ -115,8 +112,10 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    * @return {goog.labs.testing.Environment} For chaining.
    */
   withMockControl: function() {
-    this.shouldMakeMockControl_ = true;
-    this.mockControl = new goog.testing.MockControl();
+    if (!this.shouldMakeMockControl_) {
+      this.shouldMakeMockControl_ = true;
+      this.mockControl = new goog.testing.MockControl();
+    }
     return this;
   },
 
@@ -129,7 +128,10 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    * @return {goog.labs.testing.Environment} For chaining.
    */
   withMockClock: function() {
-    this.shouldMakeMockClock_ = true;
+    if (!this.shouldMakeMockClock_) {
+      this.shouldMakeMockClock_ = true;
+      this.mockClock = new goog.testing.MockClock(true);
+    }
     return this;
   },
 
