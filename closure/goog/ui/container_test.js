@@ -590,3 +590,23 @@ function testUpdateHighlightedIndex_notChangedWhenNoChildSelected() {
 
   container.dispose();
 }
+
+function testUpdateHighlightedIndex_indexStaysInBoundsWhenMovedToMaxIndex() {
+  goog.dom.removeChildren(containerElement);
+  container.decorate(containerElement);
+
+  var a = new goog.ui.Control('A');
+  var b = new goog.ui.Control('B');
+  container.addChild(a);
+  container.addChild(b);
+
+  // Move higlighted child to an index one behind last child.
+  container.setHighlightedIndex(0);
+  container.addChildAt(a, 2);
+
+  assertEquals('Child should be moved to index 1', a, container.getChildAt(1));
+  assertEquals('Child count should not change', 2, container.getChildCount());
+  assertHighlightedIndex('Highlighted index must point to new index', 1);
+
+  container.dispose();
+}

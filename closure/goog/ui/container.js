@@ -924,7 +924,7 @@ goog.ui.Container.prototype.updateHighlightedIndex_ = function(
   }
   if (fromIndex == this.highlightedIndex_) {
     // The highlighted element itself was moved.
-    this.highlightedIndex_ = toIndex;
+    this.highlightedIndex_ = Math.min(this.getChildCount() - 1, toIndex);
   } else if (fromIndex > this.highlightedIndex_ &&
       toIndex <= this.highlightedIndex_) {
     // The control was added or moved behind the highlighted index.
