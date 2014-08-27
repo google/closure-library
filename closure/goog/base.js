@@ -281,9 +281,18 @@ goog.provide = function(name) {
  *     "goog.package.part", is expected but not required.
  */
 goog.module = function(name) {
-  if (!goog.inModuleLoader_) {
+  if (!goog.isString(name) || !name) {
+    throw Error('Invalid module identifier');
+  }
+  if (!goog.isInModuleLoader_()) {
     throw Error('Module ' + name + ' has been loaded incorrectly.');
   }
+  if (goog.moduleLoaderState_.moduleName) {
+    throw Error('goog.module may only be called once per module.');
+  }
+
+  // Store the module name for the loader.
+  goog.moduleLoaderState_.moduleName = name;
   if (!COMPILED) {
     // Ensure that the same namespace isn't provided twice.
     // A goog.module/goog.provide maps a goog.require to a specific file
@@ -292,6 +301,22 @@ goog.module = function(name) {
     }
     delete goog.implicitNamespaces_[name];
   }
+};
+
+
+/** @private {{
+ *     moduleName:(string|undefined),
+ *     exportTestMethods:boolean}|null}}
+ */
+goog.moduleLoaderState_ = null;
+
+
+/**
+ * @private
+ * @return {boolean} Whether a goog.module is currently being initialized.
+ */
+goog.isInModuleLoader_ = function() {
+  return goog.moduleLoaderState_ != null;
 };
 
 
@@ -305,7 +330,11 @@ goog.module = function(name) {
  * to minimize boiler plate.
  */
 goog.module.exportTestMethods = function() {
-  goog.exportModuleTestMethods_ = true;
+  if (!goog.isInModuleLoader_()) {
+    throw new Error('goog.module.exportTestMethods must be called from ' +
+        'within a goog.module');
+  }
+  goog.moduleLoaderState_.exportTestMethods = true;
 };
 
 
@@ -438,10 +467,6 @@ goog.addDependency = function(relPath, provides, requires, opt_isModule) {
     var deps = goog.dependencies_;
     for (var i = 0; provide = provides[i]; i++) {
       deps.nameToPath[provide] = path;
-      if (!(path in deps.pathToNames)) {
-        deps.pathToNames[path] = {};
-      }
-      deps.pathToNames[path][provide] = true;
       deps.pathIsModule[path] = !!opt_isModule;
     }
     for (var j = 0; require = requires[j]; j++) {
@@ -518,7 +543,7 @@ goog.require = function(name) {
   //            not remove this code for the compiled output.
   if (!COMPILED) {
     if (goog.isProvided_(name)) {
-      if (goog.inModuleLoader_) {
+      if (goog.isInModuleLoader_()) {
         // goog.require only return a value with-in goog.module files.
         return name in goog.loadedModules_ ?
             goog.loadedModules_[name] :
@@ -683,7 +708,6 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @type {Object}
    */
   goog.dependencies_ = {
-    pathToNames: {}, // 1 to many
     pathIsModule: {}, // 1 to 1
     nameToPath: {}, // many to 1
     requires: {}, // 1 to many
@@ -754,16 +778,14 @@ if (goog.DEPENDENCIES_ENABLED) {
 
 
   /**
-   * Given a URL and moduleName, initiate retrieval and execution of the module.
-   * @param {string} moduleName The module identifier.
+   * Given a URL initiate retrieval and execution of the module.
    * @param {string} src Script source URL.
    * @private
    */
-  goog.importModule_ = function(moduleName, src) {
+  goog.importModule_ = function(src) {
     // In an attempt to keep browsers from timing out loading scripts using
     // synchronous XHRs, put each load in its own script block.
-    var bootstrap = 'goog.retrieveAndExecModule_(' +
-        '"' + moduleName + '","' + src + '");';
+    var bootstrap = 'goog.retrieveAndExecModule_("' + src + '");';
 
     if (goog.importScript_('', bootstrap)) {
       goog.dependencies_.written[src] = true;
@@ -777,11 +799,10 @@ if (goog.DEPENDENCIES_ENABLED) {
 
   /**
    * Retrieve and execute a module.
-   * @param {string} moduleName The module identifier.
    * @param {string} src Script source URL.
    * @private
    */
-  goog.retrieveAndExecModule_ = function(moduleName, src) {
+  goog.retrieveAndExecModule_ = function(src) {
     var importScript = goog.global.CLOSURE_IMPORT_SCRIPT ||
         goog.writeScriptTag_;
 
@@ -799,7 +820,7 @@ if (goog.DEPENDENCIES_ENABLED) {
     scriptText = xhr.responseText;
 
     if (scriptText != null) {
-      var execModuleScript = goog.wrapModule_(moduleName, src, scriptText);
+      var execModuleScript = goog.wrapModule_(src, scriptText);
       var isOldIE = goog.IS_OLD_IE_;
       if (isOldIE) {
         goog.queuedModules_.push(execModuleScript);
@@ -816,15 +837,14 @@ if (goog.DEPENDENCIES_ENABLED) {
   /**
    * Return an appropriate module text. Suitable to insert into
    * a script tag (that is unescaped).
-   * @param {string} moduleName
    * @param {string} srcUrl
    * @param {string} scriptText
    * @return {string}
    * @private
    */
-  goog.wrapModule_ = function(moduleName, srcUrl, scriptText) {
+  goog.wrapModule_ = function(srcUrl, scriptText) {
     return '' +
-        'goog.loadModule("' + moduleName + '", function(exports) {' +
+        'goog.loadModule(function(exports) {' +
         '"use strict";' +
         scriptText +
         '\n' + // terminate any trailing single line comment.
@@ -852,21 +872,24 @@ if (goog.DEPENDENCIES_ENABLED) {
 
 
   /**
-   * @param {string} moduleName The module identifier.
    * @param {Function} moduleFn The module creation method.
    */
-  goog.loadModule = function(moduleName, moduleFn) {
-    var deps = goog.dependencies_;
-    var path = deps.nameToPath[moduleName];
+  goog.loadModule = function(moduleFn) {
     try {
-      goog.inModuleLoader_ = true;
+      goog.moduleLoaderState_ = {
+          moduleName: undefined, exportTestMethods: false};
       var exports = {};
       exports = moduleFn(exports);
       if (Object.seal) {
         Object.seal(exports);
       }
+      var moduleName = goog.moduleLoaderState_.moduleName;
+      if (!goog.isString(moduleName) || !moduleName) {
+        throw Error('Invalid module name \"' + moduleName + '\"');
+      }
+
       goog.loadedModules_[moduleName] = exports;
-      if (goog.exportModuleTestMethods_) {
+      if (goog.moduleLoaderState_.exportTestMethods) {
         for (var entry in exports) {
           if (entry.indexOf('test', 0) === 0 ||
               entry == 'tearDown' ||
@@ -876,8 +899,7 @@ if (goog.DEPENDENCIES_ENABLED) {
         }
       }
     } finally {
-      goog.inModuleLoader_ = false;
-      goog.exportModuleTestMethods_ = false;
+      goog.moduleLoaderState_ = null;
     }
   };
 
@@ -1022,8 +1044,8 @@ if (goog.DEPENDENCIES_ENABLED) {
     // If a module is loaded synchronously then we need to
     // clear the current inModuleLoader value, and restore it when we are
     // done loading the current "requires".
-    var moduleState = goog.inModuleLoader_;
-    goog.inModuleLoader_ = false;
+    var moduleState = goog.moduleLoaderState_;
+    goog.moduleLoaderState_ = null;
 
     var loadingModule = false;
     for (var i = 0; i < scripts.length; i++) {
@@ -1033,33 +1055,16 @@ if (goog.DEPENDENCIES_ENABLED) {
           goog.importScript_(goog.basePath + path);
         } else {
           loadingModule = true;
-          goog.importModule_(goog.depsPathToName_(path), goog.basePath + path);
+          goog.importModule_(goog.basePath + path);
         }
       } else {
-        goog.inModuleLoader_ = moduleState;
+        goog.moduleLoaderState_ = moduleState;
         throw Error('Undefined script input');
       }
     }
 
     // restore the current "module loading state"
-    goog.inModuleLoader_ = moduleState;
-  };
-
-
-  /**
-   * @param {string} path
-   * @return {string} The Module Name associated with this path.
-   * @private
-   */
-  goog.depsPathToName_ = function(path) {
-    var names = goog.dependencies_.pathToNames[path];
-
-    for (var name in names) {
-      if (Object.prototype.hasOwnProperty.call(names, name)) {
-        return name;
-      }
-    }
-    throw new Error('missing module namespace');
+    goog.moduleLoaderState_ = moduleState;
   };
 
 
