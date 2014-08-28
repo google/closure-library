@@ -459,7 +459,7 @@ goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes = {
   END: /---end---/,
   // Leading "-" to identify "-infinity"."
   IDENTIFIER: /^-?[a-zA-Z][a-zA-Z0-9_]*/,
-  NUMBER: /^(0x[0-9a-f]+)|(([-])?[0-9][0-9]*(\.?[0-9]+)?([f])?)/,
+  NUMBER: /^(0x[0-9a-f]+)|(([-])?[0-9][0-9]*(\.?[0-9]+)?(e-?[0-9]+|[f])?)/,
   COMMENT: /^#.*/,
   OPEN_BRACE: /^{/,
   CLOSE_BRACE: /^}/,

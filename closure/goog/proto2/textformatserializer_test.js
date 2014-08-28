@@ -535,6 +535,19 @@ function testDeserializationVariedNumbers() {
   assertEquals(-35.5, message.getRepeatedFloat(2));
 }
 
+function testDeserializationScientificNotation() {
+  var message = new proto2.TestAllTypes();
+  var value = 'repeated_float: 1.1e5\n' +
+      'repeated_float: 1.1e-5\n' +
+      'repeated_double: 1.1e5\n' +
+      'repeated_double: 1.1e-5\n';
+  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+  assertEquals(1.1e5, message.getRepeatedFloat(0));
+  assertEquals(1.1e-5, message.getRepeatedFloat(1));
+  assertEquals(1.1e5, message.getRepeatedDouble(0));
+  assertEquals(1.1e-5, message.getRepeatedDouble(1));
+}
+
 function testParseNumericalConstant() {
   var parseNumericalConstant =
       goog.proto2.TextFormatSerializer.Parser.parseNumericalConstant_;
