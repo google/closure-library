@@ -2136,6 +2136,7 @@ goog.defineClass.createSealingConstructor_ = function(ctr, superClass) {
       // Don't seal an instance of a subclass when it calls the constructor of
       // its super class as there is most likely still setup to do.
       var instance = ctr.apply(this, arguments) || this;
+      instance[goog.UID_PROPERTY_] = instance[goog.UID_PROPERTY_];
       if (this.constructor === wrappedCtr) {
         Object.seal(instance);
       }
