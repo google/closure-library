@@ -917,11 +917,10 @@ goog.style.getClientPosition = function(el) {
     var be = /** @type {!goog.events.BrowserEvent} */ (el);
     var targetEvent = el;
 
-    if (el.targetTouches && el.targetTouches.length) {
-      targetEvent = el.targetTouches[0];
-    } else if (isAbstractedEvent && be.getBrowserEvent().targetTouches &&
-        be.getBrowserEvent().targetTouches.length) {
-      targetEvent = be.getBrowserEvent().targetTouches[0];
+    if (el.changedTouches) {
+      targetEvent = el.changedTouches[0];
+    } else if (isAbstractedEvent && be.getBrowserEvent().changedTouches) {
+      targetEvent = be.getBrowserEvent().changedTouches[0];
     }
 
     return new goog.math.Coordinate(
