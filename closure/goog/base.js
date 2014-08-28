@@ -560,10 +560,7 @@ goog.require = function(name) {
     var errorMessage = 'goog.require could not find: ' + name;
     goog.logToConsole_(errorMessage);
 
-
-      throw Error(errorMessage);
-
-    return null;
+    throw Error(errorMessage);
   }
 };
 
