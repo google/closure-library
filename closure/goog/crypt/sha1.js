@@ -26,6 +26,8 @@
  *   Chrome 23:   ~400 Mbit/s
  *   Firefox 16:  ~250 Mbit/s
  *
+ * Note: The idiom expr|0 is used to provide a type-hint to the VM, in order
+ * to avoid unnecessary uint32-double-uint32 roundtripping.
  */
 
 goog.provide('goog.crypt.Sha1');
