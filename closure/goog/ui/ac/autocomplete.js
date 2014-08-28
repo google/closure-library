@@ -60,7 +60,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
   /**
    * A data-source which provides autocomplete suggestions.
    *
-   * TODO(user): Tighten the type to !goog.ui.ac.AutoComplete.Matcher.
+   * TODO(chrishenry): Tighten the type to !goog.ui.ac.AutoComplete.Matcher.
    *
    * @type {Object}
    * @protected
@@ -72,7 +72,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    * A handler which interacts with the input DOM element (textfield, textarea,
    * or richedit).
    *
-   * TODO(user): Tighten the type to !Object.
+   * TODO(chrishenry): Tighten the type to !Object.
    *
    * @type {Object}
    * @protected
@@ -125,7 +125,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    * Id of the first row in autocomplete menu. Note that new ids are assigned
    * everytime new suggestions are fetched.
    *
-   * TODO(user): Figure out what subclass does with this value
+   * TODO(chrishenry): Figure out what subclass does with this value
    * and whether we should expose a more proper API.
    *
    * @type {number}
@@ -323,7 +323,7 @@ goog.ui.ac.AutoComplete.prototype.getToken = function() {
 /**
  * Sets the current token (without changing the rendered autocompletion).
  *
- * NOTE(user): This method will likely go away when we figure
+ * NOTE(chrishenry): This method will likely go away when we figure
  * out a better API.
  *
  * @param {?string} token The new token.
@@ -373,7 +373,7 @@ goog.ui.ac.AutoComplete.prototype.getHighlightedId = function() {
  * Sets the current highlighted row to the given id (not index). Note
  * that this does not change any rendering.
  *
- * NOTE(user): This method will likely go away when we figure
+ * NOTE(chrishenry): This method will likely go away when we figure
  * out a better API.
  *
  * @param {number} id The new highlighted row id.

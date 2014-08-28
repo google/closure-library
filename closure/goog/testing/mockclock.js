@@ -518,7 +518,7 @@ goog.testing.MockClock.prototype.clearTimeout_ = function(timeoutKey) {
   // key before we've allocated it.
   // Ideally, we should throw an exception if we see this happening.
   //
-  // TODO(user): We might also try allocating timeout ids from a global
+  // TODO(chrishenry): We might also try allocating timeout ids from a global
   // pool rather than a local pool.
   if (this.isTimeoutSet(timeoutKey)) {
     this.deletedKeys_[timeoutKey] = true;

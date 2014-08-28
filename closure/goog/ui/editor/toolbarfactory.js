@@ -17,7 +17,6 @@
  * an editor toolbar.
  *
  * @author attila@google.com (Attila Bodis)
- * @author jparent@google.com (Julie Parent)
  */
 
 goog.provide('goog.ui.editor.ToolbarFactory');

@@ -17,7 +17,6 @@
  * subclasses.
  *
  * @author attila@google.com (Attila Bodis)
- * @author gveen@google.com (Greg Veen)
  */
 
 goog.provide('goog.ui.style.app.MenuButtonRenderer');

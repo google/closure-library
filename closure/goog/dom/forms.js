@@ -16,8 +16,6 @@
  * @fileoverview Utilities for manipulating a form and elements.
  *
  * @author arv@google.com (Erik Arvidsson)
- * @author jonp@google.com (Jon Perlow)
- * @author elsigh@google.com (Lindsey Simon)
  */
 
 goog.provide('goog.dom.forms');

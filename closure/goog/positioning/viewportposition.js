@@ -15,6 +15,7 @@
 /**
  * @fileoverview Client positioning class.
  *
+ * @author eae@google.com (Emil A Eklund)
  */
 
 goog.provide('goog.positioning.ViewportPosition');

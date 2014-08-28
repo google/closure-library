@@ -16,7 +16,6 @@
 /**
  * @fileoverview Objects representing shapes drawn on a canvas.
  * @author robbyw@google.com (Robby Walker)
- * @author wcrosby@google.com (Wayne Crosby)
  */
 
 goog.provide('goog.graphics.CanvasEllipseElement');

@@ -16,7 +16,6 @@
 /**
  * @fileoverview VmlGraphics sub class that uses VML to draw the graphics.
  * @author arv@google.com (Erik Arvidsson)
- * @author yoah@google.com (Yoah Bar-David)
  */
 
 

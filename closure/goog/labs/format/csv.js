@@ -20,6 +20,7 @@
  *
  * This parser uses http://tools.ietf.org/html/rfc4180 as the definition of CSV.
  *
+ * @author nnaze@google.com (Nathan Naze) Ported to Closure
  */
 goog.provide('goog.labs.format.csv');
 goog.provide('goog.labs.format.csv.ParseError');

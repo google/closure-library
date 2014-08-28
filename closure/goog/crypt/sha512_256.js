@@ -26,6 +26,7 @@
  *   sha512_256.update(bytes);
  *   var hash = sha512_256.digest();
  *
+ * @author fy@google.com (Frank Yellin)
  */
 
 goog.provide('goog.crypt.Sha512_256');

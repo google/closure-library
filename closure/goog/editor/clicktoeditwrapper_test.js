@@ -110,7 +110,7 @@ function testClickToEditWithAnchor(opt_isBlended) {
   var dom = FIELD.getEditableDomHelper();
   var selection = goog.dom.Range.createFromWindow(dom.getWindow());
 
-  // TODO(user): the location of the cursor is not yet specified by the W3C
+  // TODO(brndn): the location of the cursor is not yet specified by the W3C
   // Editing APIs (https://dvcs.w3.org/hg/editing/raw-file/tip/editing.html).
   // See b/15678403.
   var body = FIELD.getElement();

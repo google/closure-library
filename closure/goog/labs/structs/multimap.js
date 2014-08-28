@@ -19,6 +19,7 @@
  *
  * This implementation ensures that you can use any string keys.
  *
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.labs.structs.Multimap');

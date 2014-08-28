@@ -16,7 +16,6 @@
  * @fileoverview Factory functions for creating a default editing toolbar.
  *
  * @author attila@google.com (Attila Bodis)
- * @author jparent@google.com (Julie Parent)
  * @see ../../demos/editor/editor.html
  */
 

@@ -16,7 +16,6 @@
  * @fileoverview Datastructure: Hash Map.
  *
  * @author arv@google.com (Erik Arvidsson)
- * @author jonp@google.com (Jon Perlow) Optimized for IE6
  *
  * This file contains an implementation of a Map structure. It implements a lot
  * of the methods used in goog.structs so those functions work on hashes. This

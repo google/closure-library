@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview goog.events.EventTarget tester.
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.events.eventTargetTester');

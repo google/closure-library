@@ -17,7 +17,6 @@
  *     resize options for the popup.
  *
  * @author eae@google.com (Emil A Eklund)
- * @author tildahl@google.com (Michael Tildahl)
  */
 
 goog.provide('goog.positioning.MenuAnchoredPosition');

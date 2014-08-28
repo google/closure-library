@@ -20,7 +20,6 @@
  * be used directly.
  *
  * @author robbyw@google.com (Robby Walker)
- * @author tildahl@google.com (Michael Tildahl)
  */
 
 goog.provide('goog.ui.editor.Bubble');

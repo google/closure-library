@@ -16,7 +16,6 @@
 /**
  * @fileoverview Represents a path used with a Graphics implementation.
  * @author arv@google.com (Erik Arvidsson)
- * @author glenning@google.com (Anthony Glenning)
  */
 
 goog.provide('goog.graphics.Path');

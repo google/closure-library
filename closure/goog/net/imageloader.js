@@ -17,8 +17,6 @@
  * to preload multiple images, for example so they can be sized.
  *
  * @author attila@google.com (Attila Bodis)
- * @author zachlloyd@google.com (Zachary Lloyd)
- * @author jonemerson@google.com (Jon Emerson)
  */
 
 goog.provide('goog.net.ImageLoader');

@@ -15,6 +15,7 @@
 /**
  * @fileoverview  Topic-based publish/subscribe channel implementation.
  *
+ * @author attila@google.com (Attila Bodis)
  */
 
 goog.provide('goog.pubsub.PubSub');

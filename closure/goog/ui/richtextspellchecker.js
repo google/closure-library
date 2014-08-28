@@ -16,7 +16,6 @@
  * @fileoverview Rich text spell checker implementation.
  *
  * @author eae@google.com (Emil A Eklund)
- * @author sergeys@google.com (Sergey Solyanik)
  * @see ../demos/richtextspellchecker.html
  */
 

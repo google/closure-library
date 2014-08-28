@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview Utilities for string manipulation.
+ * @author arv@google.com (Erik Arvidsson)
  */
 
 

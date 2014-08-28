@@ -290,7 +290,7 @@ goog.testing.TestRunner.prototype.onComplete_ = function() {
   // Highlight the page to indicate the overall outcome.
   this.writeLog(log);
 
-  // TODO(user): Make this work with multiple test cases (b/8603638).
+  // TODO(chrishenry): Make this work with multiple test cases (b/8603638).
   var runAgainLink = document.createElement('a');
   runAgainLink.style.display = 'inline-block';
   runAgainLink.style.fontSize = 'small';

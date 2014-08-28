@@ -20,6 +20,7 @@
  * not be usable using a normal object literal {}. Some examples
  * include __proto__ (all newer browsers), toString/hasOwnProperty (IE
  * <= 8).
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.labs.structs.Map');
@@ -334,7 +335,7 @@ goog.labs.structs.Map.prototype.assertKeyIsString_ = function(key) {
  * @enum {boolean}
  */
 goog.labs.structs.Map.BrowserFeature = {
-  // TODO(user): Replace with goog.userAgent detection.
+  // TODO(chrishenry): Replace with goog.userAgent detection.
   /**
    * Whether Object.create method is supported.
    */

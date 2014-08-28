@@ -32,7 +32,6 @@
  * different stack (for example by calling setInterval(0)).
  *
  * @author eae@google.com (Emil A Eklund)
- * @author sergeys@google.com (Sergey Solyanik)
  */
 
 goog.provide('goog.ui.AbstractSpellChecker');

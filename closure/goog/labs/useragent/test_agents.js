@@ -17,6 +17,7 @@
  * See http://go/useragentexamples and http://www.useragentstring.com/ for
  * examples.
  *
+ * @author martone@google.com (Andy Martone)
  */
 
 goog.provide('goog.labs.userAgent.testAgents');

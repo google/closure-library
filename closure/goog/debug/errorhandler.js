@@ -222,7 +222,7 @@ goog.debug.ErrorHandler.prototype.getProtectedFunction = function(fn) {
 };
 
 
-// TODO(user): Allow these functions to take in the window to protect.
+// TODO(mknichel): Allow these functions to take in the window to protect.
 /**
  * Installs exception protection for window.setTimeout to handle exceptions.
  */

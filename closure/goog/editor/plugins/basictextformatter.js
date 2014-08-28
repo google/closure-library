@@ -15,6 +15,7 @@
 /**
  * @fileoverview Functions to style text.
  *
+ * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.editor.plugins.BasicTextFormatter');

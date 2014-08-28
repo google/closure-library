@@ -26,7 +26,7 @@ goog.provide('goog.json.Serializer');
 
 /**
  * @define {boolean} If true, use the native JSON parsing API.
- * NOTE(user): EXPERIMENTAL, handle with care.  Setting this to true might
+ * NOTE(ruilopes): EXPERIMENTAL, handle with care.  Setting this to true might
  * break your code.  The default {@code goog.json.parse} implementation is able
  * to handle invalid JSON, such as JSPB.
  */

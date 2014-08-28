@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview Utilities for manipulating objects/maps/hashes.
+ * @author arv@google.com (Erik Arvidsson)
  */
 
 goog.provide('goog.object');

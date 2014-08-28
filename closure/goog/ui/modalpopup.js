@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview Class for showing simple modal popup.
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.ui.ModalPopup');
@@ -653,7 +654,7 @@ goog.ui.ModalPopup.prototype.resizeBackground_ = function() {
  * Centers the modal popup in the viewport, taking scrolling into account.
  */
 goog.ui.ModalPopup.prototype.reposition = function() {
-  // TODO(user): Make this use goog.positioning as in goog.ui.PopupBase?
+  // TODO(chrishenry): Make this use goog.positioning as in goog.ui.PopupBase?
 
   // Get the current viewport to obtain the scroll offset.
   var doc = this.getDomHelper().getDocument();

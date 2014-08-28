@@ -14,6 +14,7 @@
 
 /**
  * @fileoverview An interface for a listenable JavaScript object.
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.events.Listenable');
@@ -192,7 +193,7 @@ goog.events.Listenable.prototype.removeAllListeners;
  * Returns the parent of this event target to use for capture/bubble
  * mechanism.
  *
- * NOTE(user): The name reflects the original implementation of
+ * NOTE(chrishenry): The name reflects the original implementation of
  * custom event target ({@code goog.events.EventTarget}). We decided
  * that changing the name is not worth it.
  *

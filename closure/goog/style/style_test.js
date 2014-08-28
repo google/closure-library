@@ -1822,7 +1822,7 @@ function testGetVisibleRectForElement() {
   visible = goog.style.getVisibleRectForElement(el);
 
   var iframeViewportSize = goog.dom.getDomHelper(el).getViewportSize();
-  // NOTE(user): For iframe, the clipping viewport is always the iframe
+  // NOTE(chrishenry): For iframe, the clipping viewport is always the iframe
   // viewport, and not the actual browser viewport.
   assertNotNull(visible);
   assertEquals(0, visible.top);

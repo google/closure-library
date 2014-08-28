@@ -14,6 +14,7 @@
 
 /**
  * Tests for {@code goog.positioning.ClientPosition}
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.positioning.clientPositionTest');

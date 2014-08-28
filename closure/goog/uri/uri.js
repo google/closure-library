@@ -1341,7 +1341,7 @@ goog.Uri.QueryData.prototype.set = function(key, value) {
   this.ensureKeyMapInitialized_();
   this.invalidateCache_();
 
-  // TODO(user): This could be better written as
+  // TODO(chrishenry): This could be better written as
   // this.remove(key), this.add(key, value), but that would reorder
   // the key (since the key is first removed and then added at the
   // end) and we would have to fix unit tests that depend on key

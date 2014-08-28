@@ -37,7 +37,6 @@
  * - getCssClass
  *
  * @author arv@google.com (Erik Arvidsson)
- * @author reto@google.com (Reto Strobl)
  */
 
 goog.provide('goog.ui.SliderBase');

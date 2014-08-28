@@ -15,6 +15,7 @@
 /**
  * @fileoverview Basic animation controls.
  *
+ * @author arv@google.com (Erik Arvidsson)
  */
 goog.provide('goog.fx.anim');
 goog.provide('goog.fx.anim.Animated');

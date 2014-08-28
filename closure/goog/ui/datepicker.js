@@ -145,7 +145,7 @@ goog.ui.DatePicker = function(opt_date, opt_dateTimeSymbols, opt_domHelper,
   this.elTable_;
 
   /**
-   * TODO(user): Remove external references to this field,
+   * TODO(tbreisacher): Remove external references to this field,
    * and make it private.
    * @type {Element}
    */

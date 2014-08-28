@@ -16,7 +16,6 @@
 /**
  * @fileoverview SvgGraphics sub class that uses SVG to draw the graphics.
  * @author arv@google.com (Erik Arvidsson)
- * @author yoah@google.com (Yoah Bar-David)
  */
 
 goog.provide('goog.graphics.SvgGraphics');

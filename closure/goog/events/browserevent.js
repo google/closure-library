@@ -40,6 +40,7 @@
  * key and character code use {@link goog.events.KeyHandler}.
  * </pre>
  *
+ * @author arv@google.com (Erik Arvidsson)
  */
 
 goog.provide('goog.events.BrowserEvent');

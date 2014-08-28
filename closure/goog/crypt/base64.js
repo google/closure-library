@@ -18,7 +18,6 @@
  * in [0, 255].
  *
  * @author doughtie@google.com (Gavin Doughtie)
- * @author fschneider@google.com (Fritz Schneider)
  */
 
 goog.provide('goog.crypt.base64');

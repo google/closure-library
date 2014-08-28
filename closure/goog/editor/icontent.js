@@ -19,6 +19,7 @@
  * strings and document.write instead of DOM manipulation, because
  * iframe-loading is a performance bottleneck.
  *
+ * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.editor.icontent');

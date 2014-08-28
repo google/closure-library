@@ -17,6 +17,8 @@
  *
  * Based on the Dojo code which in turn is based on the MochiKit code.
  *
+ * @author arv@google.com (Erik Arvidsson)
+ * @author brenneman@google.com (Shawn Brenneman)
  */
 
 goog.provide('goog.async.Deferred');
