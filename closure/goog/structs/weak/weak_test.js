@@ -13,29 +13,29 @@
 // limitations under the License.
 
 /**
- * @fileoverview Tests for {@code goog.labs.structs.weak}. set, has, and remove
- * are exercised in {@code goog.labs.structs.weak.MapTest} and
- * {@code goog.labs.structs.weak.SetTest}.
+ * @fileoverview Tests for {@code goog.structs.weak}. set, has, and remove are
+ * exercised in {@code goog.structs.weak.MapTest} and
+ * {@code goog.structs.weak.SetTest}.
  *
  */
 
 
-goog.provide('goog.labs.structs.weakTest');
-goog.setTestOnly('goog.labs.structs.weakTest');
+goog.provide('goog.structs.weakTest');
+goog.setTestOnly('goog.structs.weakTest');
 
 goog.require('goog.array');
-goog.require('goog.labs.structs.weak');
+goog.require('goog.structs.weak');
 goog.require('goog.testing.jsunit');
 
 
 function shouldRunTests() {
-  return goog.labs.structs.weak.SUPPORTED_BROWSER;
+  return goog.structs.weak.SUPPORTED_BROWSER;
 }
 
 
 function testGenerateId() {
-  assertNotEquals(goog.labs.structs.weak.generateId(),
-                  goog.labs.structs.weak.generateId());
+  assertNotEquals(goog.structs.weak.generateId(),
+                  goog.structs.weak.generateId());
 }
 
 
@@ -43,7 +43,7 @@ function testCheckKeyTypeValidObject() {
   var validKeys = [{}, [], document.body, /RegExp/, goog.nullFunction];
   goog.array.forEach(validKeys, function(key) {
     // no error
-    goog.labs.structs.weak.checkKeyType(key);
+    goog.structs.weak.checkKeyType(key);
   });
 }
 
@@ -52,7 +52,7 @@ function testCheckKeyTypePrimitive() {
   var primitiveKeys = ['test', 1, true, null, undefined];
   goog.array.forEach(primitiveKeys, function(key) {
     assertThrows(function() {
-      goog.labs.structs.weak.checkKeyType(key);
+      goog.structs.weak.checkKeyType(key);
     });
   });
 }
@@ -64,12 +64,12 @@ function testCheckKeyTypeNonExtensibleObject() {
   Object.freeze(frozenObj);
   Object.preventExtensions(preventExtensionsObj);
   assertThrows(function() {
-    goog.labs.structs.weak.checkKeyType(sealedObj);
+    goog.structs.weak.checkKeyType(sealedObj);
   });
   assertThrows(function() {
-    goog.labs.structs.weak.checkKeyType(frozenObj);
+    goog.structs.weak.checkKeyType(frozenObj);
   });
   assertThrows(function() {
-    goog.labs.structs.weak.checkKeyType(preventExtensionsObj);
+    goog.structs.weak.checkKeyType(preventExtensionsObj);
   });
 }

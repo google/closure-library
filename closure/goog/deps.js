@@ -599,11 +599,6 @@ goog.addDependency('labs/structs/map_perf.js', ['goog.labs.structs.mapPerf'], ['
 goog.addDependency('labs/structs/map_test.js', ['goog.labs.structs.MapTest'], ['goog.labs.structs.Map', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], false);
 goog.addDependency('labs/structs/multimap.js', ['goog.labs.structs.Multimap'], ['goog.array', 'goog.labs.object', 'goog.labs.structs.Map'], false);
 goog.addDependency('labs/structs/multimap_test.js', ['goog.labs.structs.MultimapTest'], ['goog.labs.structs.Map', 'goog.labs.structs.Multimap', 'goog.testing.jsunit'], false);
-goog.addDependency('labs/structs/weak/unsupported_browser_test.js', ['goog.labs.structs.weak.unsupportedBrowserTest'], ['goog.asserts.AssertionError', 'goog.labs.structs.WeakMap', 'goog.labs.structs.weak', 'goog.testing.jsunit'], false);
-goog.addDependency('labs/structs/weak/weak.js', ['goog.labs.structs.weak'], ['goog.userAgent'], false);
-goog.addDependency('labs/structs/weak/weak_test.js', ['goog.labs.structs.weakTest'], ['goog.array', 'goog.labs.structs.weak', 'goog.testing.jsunit'], false);
-goog.addDependency('labs/structs/weak/weakmap.js', ['goog.labs.structs.WeakMap'], ['goog.asserts', 'goog.labs.structs.weak'], false);
-goog.addDependency('labs/structs/weak/weakmap_test.js', ['goog.labs.structs.WeakMapTest'], ['goog.labs.structs.WeakMap', 'goog.labs.structs.weak', 'goog.testing.jsunit'], false);
 goog.addDependency('labs/style/pixeldensitymonitor.js', ['goog.labs.style.PixelDensityMonitor', 'goog.labs.style.PixelDensityMonitor.Density', 'goog.labs.style.PixelDensityMonitor.EventType'], ['goog.events', 'goog.events.EventTarget'], false);
 goog.addDependency('labs/style/pixeldensitymonitor_test.js', ['goog.labs.style.PixelDensityMonitorTest'], ['goog.array', 'goog.dom.DomHelper', 'goog.events', 'goog.labs.style.PixelDensityMonitor', 'goog.testing.MockControl', 'goog.testing.jsunit', 'goog.testing.recordFunction'], false);
 goog.addDependency('labs/testing/assertthat.js', ['goog.labs.testing.MatcherError', 'goog.labs.testing.assertThat'], ['goog.asserts', 'goog.debug.Error', 'goog.labs.testing.Matcher'], false);
@@ -963,6 +958,8 @@ goog.addDependency('structs/treenode.js', ['goog.structs.TreeNode'], ['goog.arra
 goog.addDependency('structs/treenode_test.js', ['goog.structs.TreeNodeTest'], ['goog.structs.TreeNode', 'goog.testing.jsunit'], false);
 goog.addDependency('structs/trie.js', ['goog.structs.Trie'], ['goog.object', 'goog.structs'], false);
 goog.addDependency('structs/trie_test.js', ['goog.structs.TrieTest'], ['goog.object', 'goog.structs', 'goog.structs.Trie', 'goog.testing.jsunit'], false);
+goog.addDependency('structs/weak/weak.js', ['goog.structs.weak'], ['goog.userAgent'], false);
+goog.addDependency('structs/weak/weak_test.js', ['goog.structs.weakTest'], ['goog.array', 'goog.structs.weak', 'goog.testing.jsunit'], false);
 goog.addDependency('style/bidi.js', ['goog.style.bidi'], ['goog.dom', 'goog.style', 'goog.userAgent'], false);
 goog.addDependency('style/bidi_test.js', ['goog.style.bidiTest'], ['goog.dom', 'goog.style', 'goog.style.bidi', 'goog.testing.jsunit', 'goog.userAgent'], false);
 goog.addDependency('style/cursor.js', ['goog.style.cursor'], ['goog.userAgent'], false);
