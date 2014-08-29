@@ -20,6 +20,7 @@
 goog.provide('goog.fx.css3.Transition');
 
 goog.require('goog.Timer');
+goog.require('goog.asserts');
 goog.require('goog.fx.TransitionBase');
 goog.require('goog.style');
 goog.require('goog.style.transition');
@@ -139,6 +140,9 @@ goog.fx.css3.Transition.prototype.play = function() {
  * @private
  */
 goog.fx.css3.Transition.prototype.play_ = function() {
+  // This measurement of the DOM element causes the browser to recalculate its
+  // initial state before the transition starts.
+  goog.style.getSize(this.element_);
   goog.style.transition.set(this.element_, this.transitions_);
   goog.style.setStyle(this.element_, this.finalStyle_);
   this.timerId_ = goog.Timer.callOnce(
