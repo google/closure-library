@@ -306,7 +306,7 @@ goog.module = function(name) {
 
 /** @private {{
  *     moduleName:(string|undefined),
- *     exportTestMethods:boolean}|null}}
+ *     declareTestMethods:boolean}|null}}
  */
 goog.moduleLoaderState_ = null;
 
@@ -329,12 +329,12 @@ goog.isInModuleLoader_ = function() {
  * that this isn't necessary. Alternately combine this with goog.setTestOnly
  * to minimize boiler plate.
  */
-goog.module.exportTestMethods = function() {
+goog.module.declareTestMethods = function() {
   if (!goog.isInModuleLoader_()) {
-    throw new Error('goog.module.exportTestMethods must be called from ' +
+    throw new Error('goog.module.declareTestMethods must be called from ' +
         'within a goog.module');
   }
-  goog.moduleLoaderState_.exportTestMethods = true;
+  goog.moduleLoaderState_.declareTestMethods = true;
 };
 
 
@@ -892,7 +892,7 @@ if (goog.DEPENDENCIES_ENABLED) {
     // of the module.
     try {
       goog.moduleLoaderState_ = {
-          moduleName: undefined, exportTestMethods: false};
+          moduleName: undefined, declareTestMethods: false};
       var exports;
       if (goog.isFunction(moduleDef)) {
         exports = moduleDef.call(goog.global, {});
@@ -911,7 +911,7 @@ if (goog.DEPENDENCIES_ENABLED) {
       }
 
       goog.loadedModules_[moduleName] = exports;
-      if (goog.moduleLoaderState_.exportTestMethods) {
+      if (goog.moduleLoaderState_.declareTestMethods) {
         for (var entry in exports) {
           if (entry.indexOf('test', 0) === 0 ||
               entry == 'tearDown' ||
