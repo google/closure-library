@@ -1176,6 +1176,42 @@ goog.array.stableSort = function(arr, opt_compareFn) {
 
 
 /**
+ * Sorts an array using a generated sorting key for each element. The keys are
+ * compared using an optional comparison function, which defaults to
+ * <code>goog.array.defaultCompare</code>.
+ *
+ * The key function is called only once for each element, in contrast to
+ * comparison functions which may be called more times during sorting.
+ *
+ * For example, to sort strings case-insensitively, the .toLowerCase() function
+ * can be called only once per string.
+ * <code>
+ * goog.array.sortBy(['foo', 'bar', 'FooBar'], function(str) {
+ *   return str.toLowerCase();
+ * });
+ * </code>
+ *
+ * @param {Array.<T>} arr An array of objects to sort.
+ * @param {function(T):*} key The function to calculate the sorting key.
+ * @param {Function=} opt_compareFn The function to use to compare key values.
+ * @template T
+ */
+goog.array.sortBy = function(arr, keyFn, opt_compareFn) {
+  var objects = goog.array.map(arr, function(elem, i) {
+    // could use Arrays instead, but they aren't faster
+    // http://jsperf.com/sort-container/3
+    return {'a':keyFn(elem), 'b':i};
+  });
+  goog.array.sortObjectsByKey(objects, 'a', opt_compareFn);
+
+  var copy = goog.array.clone(arr);
+  goog.array.forEach(objects, function(obj, i) {
+    arr[i] = copy[obj['b']];
+  });
+};
+
+
+/**
  * Sorts an array of objects by the specified object key and compare
  * function. If no compare function is provided, the key values are
  * compared in ascending order using <code>goog.array.defaultCompare</code>.
