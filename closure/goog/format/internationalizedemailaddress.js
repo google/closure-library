@@ -179,7 +179,8 @@ goog.format.InternationalizedEmailAddress.isValidAddrSpec = function(str) {
  */
 goog.format.InternationalizedEmailAddress.parseList = function(str) {
   return goog.format.EmailAddress.parseListInternal(
-      str, goog.format.InternationalizedEmailAddress.parse);
+      str, goog.format.InternationalizedEmailAddress.parse,
+      goog.format.InternationalizedEmailAddress.isAddressSeparator);
 };
 
 
@@ -192,4 +193,26 @@ goog.format.InternationalizedEmailAddress.parseList = function(str) {
 goog.format.InternationalizedEmailAddress.parse = function(addr) {
   return goog.format.EmailAddress.parseInternal(
       addr, goog.format.InternationalizedEmailAddress);
+};
+
+
+/**
+ * @param {string} ch The character to test.
+ * @return {boolean} Whether the provided character is an address separator.
+ */
+goog.format.InternationalizedEmailAddress.isAddressSeparator = function(ch) {
+  return ch == ',' || // U+002C ( , ) COMMA
+      ch == ';' || // U+003B ( ; ) SEMICOLON
+      ch == '\u055D' || // ( ՝ ) ARMENIAN COMMA
+      ch == '\u060C' || // ( ، ) ARABIC COMMA
+      ch == '\u1363' || // ( ፣ ) ETHIOPIC COMMA
+      ch == '\u1802' || // ( ᠂ ) MONGOLIAN COMMA
+      ch == '\u1808' || // ( ᠈ ) MONGOLIAN MANCHU COMMA
+      ch == '\u2E41' || // ( ⹁ ) REVERSED COMMA
+      ch == '\u3001' || // ( 、 ) IDEOGRAPHIC COMMA
+      ch == '\uFF0C' || // ( ， ) FULLWIDTH COMMA
+      ch == '\u061B' || // ( ‎؛‎ ) ARABIC SEMICOLON
+      ch == '\u1364' || // ( ፤ ) ETHIOPIC SEMICOLON
+      ch == '\uFF1B' || // ( ； ) FULLWIDTH SEMICOLON
+      ch == '\uFF64'; // ( ､ ) HALFWIDTH IDEOGRAPHIC COMMA
 };

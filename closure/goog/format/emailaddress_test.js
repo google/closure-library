@@ -41,17 +41,9 @@ function testparseList() {
       ['foo@gmail.com', 'bar@gmail.com'],
       'Failed to parse 2 email addresses');
 
-  assertParsedList('<foo@gmail.com>、 <bar@gmail.com>',
-      ['foo@gmail.com', 'bar@gmail.com'],
-      'Failed to parse 2 email addresses with Chinese comma');
-
   assertParsedList('<foo@gmail.com>, <bar@gmail.com>,',
       ['foo@gmail.com', 'bar@gmail.com'],
       'Failed to parse 2 email addresses and trailing comma');
-
-  assertParsedList('<foo@gmail.com>、 <bar@gmail.com>、',
-      ['foo@gmail.com', 'bar@gmail.com'],
-      'Failed to parse 2 email addresses with trailing Chinese comma');
 
   assertParsedList('<foo@gmail.com>, <bar@gmail.com>, ',
       ['foo@gmail.com', 'bar@gmail.com'],
