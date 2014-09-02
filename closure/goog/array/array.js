@@ -1215,10 +1215,9 @@ goog.array.sortByKey = function(arr, keyFn, opt_compareFn) {
  *     values.
  */
 goog.array.sortObjectsByKey = function(arr, key, opt_compareFn) {
-  var compare = opt_compareFn || goog.array.defaultCompare;
-  goog.array.sort(arr, function(a, b) {
-    return compare(a[key], b[key]);
-  });
+  goog.array.sortByKey(arr,
+      function(obj) { return obj[key]; },
+      opt_compareFn);
 };
 
 
