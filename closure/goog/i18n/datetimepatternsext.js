@@ -306,7 +306,6 @@ goog.provide('goog.i18n.DateTimePatterns_fr_TN');
 goog.provide('goog.i18n.DateTimePatterns_fr_VU');
 goog.provide('goog.i18n.DateTimePatterns_fr_WF');
 goog.provide('goog.i18n.DateTimePatterns_fr_YT');
-goog.provide('goog.i18n.DateTimePatterns_ga');
 goog.provide('goog.i18n.DateTimePatterns_ga_IE');
 goog.provide('goog.i18n.DateTimePatterns_gl_ES');
 goog.provide('goog.i18n.DateTimePatterns_gsw_CH');
@@ -5661,25 +5660,6 @@ goog.i18n.DateTimePatterns_fr_YT = {
   MONTH_DAY_ABBR: 'd MMM',
   MONTH_DAY_FULL: 'dd MMMM',
   MONTH_DAY_SHORT: 'd/M',
-  MONTH_DAY_MEDIUM: 'd MMMM',
-  MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
-  WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
-  WEEKDAY_MONTH_DAY_YEAR_MEDIUM: 'EEE d MMM y',
-  DAY_ABBR: 'd'
-};
-
-
-/**
- * Extended set of localized date/time patterns for locale ga.
- */
-goog.i18n.DateTimePatterns_ga = {
-  YEAR_FULL: 'y',
-  YEAR_FULL_WITH_ERA: 'y G',
-  YEAR_MONTH_ABBR: 'MMM y',
-  YEAR_MONTH_FULL: 'MMMM y',
-  MONTH_DAY_ABBR: 'd MMM',
-  MONTH_DAY_FULL: 'dd MMMM',
-  MONTH_DAY_SHORT: 'dd/MM',
   MONTH_DAY_MEDIUM: 'd MMMM',
   MONTH_DAY_YEAR_MEDIUM: 'd MMM y',
   WEEKDAY_MONTH_DAY_MEDIUM: 'EEE d MMM',
@@ -12172,10 +12152,6 @@ if (goog.LOCALE == 'fr_WF' || goog.LOCALE == 'fr-WF') {
 
 if (goog.LOCALE == 'fr_YT' || goog.LOCALE == 'fr-YT') {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_fr_YT;
-}
-
-if (goog.LOCALE == 'ga') {
-  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_ga;
 }
 
 if (goog.LOCALE == 'ga_IE' || goog.LOCALE == 'ga-IE') {
