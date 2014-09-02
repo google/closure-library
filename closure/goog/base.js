@@ -710,6 +710,13 @@ goog.define('goog.LOAD_MODULE_USING_EVAL', true);
 
 
 /**
+ * @define {boolean} Whether the exports of goog.modules should be sealed when
+ * possible.
+ */
+goog.define('goog.SEAL_MODULE_EXPORTS', goog.DEBUG);
+
+
+/**
  * The registry of initialized modules:
  * the module identifier to module exports map.
  * @private @const {Object.<string, ?>}
@@ -933,7 +940,7 @@ if (goog.DEPENDENCIES_ENABLED) {
         throw Error('Invalid module definition');
       }
 
-      if (Object.seal) {
+      if (goog.SEAL_MODULE_EXPORTS && Object.seal) {
         Object.seal(exports);
       }
       var moduleName = goog.moduleLoaderState_.moduleName;
