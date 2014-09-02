@@ -47,7 +47,7 @@ goog.require('goog.ui.registry');
  *     decorate the menu button; defaults to {@link goog.ui.MenuButtonRenderer}.
  * @param {goog.ui.MenuItemRenderer=} opt_itemRenderer Optional menu item
  *     renderer.
- * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.MenuButton}

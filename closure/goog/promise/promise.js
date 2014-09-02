@@ -154,6 +154,21 @@ goog.Promise = function(resolver, opt_context) {
           self.resolve_(goog.Promise.State_.FULFILLED, value);
         },
         function(reason) {
+          if (goog.DEBUG &&
+              !(reason instanceof goog.Promise.CancellationError)) {
+            try {
+              // Promise was rejected. Step up one call frame to see why.
+              if (reason instanceof Error) {
+                throw reason;
+              } else {
+                throw new Error('Promise rejected.');
+              }
+            } catch (e) {
+              // Only thrown so browser dev tools can catch rejections of
+              // promises when the option to break on caught exceptions is
+              // activated.
+            }
+          }
           self.resolve_(goog.Promise.State_.REJECTED, reason);
         });
   } catch (e) {

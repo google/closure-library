@@ -151,3 +151,26 @@ function testNextTickProtectEntryPoint() {
   goog.async.nextTick(thrower);
   window.setImmediate = origSetImmediate;
 }
+
+
+function testNextTick_notStarvedBySetTimeout() {
+  // This test will timeout when affected by
+  // http://codeforhire.com/2013/09/21/setimmediate-and-messagechannel-broken-on-internet-explorer-10/
+  // This test would fail without the fix introduced in cl/72472221
+  // It keeps scheduling 0 timeouts and a single nextTick. If the nextTick
+  // ever fires, the IE specific problem does not occur.
+  var timeout;
+  function busy() {
+    timeout = setTimeout(function() {
+      busy();
+    }, 0);
+  }
+  busy();
+  goog.async.nextTick(function() {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    asyncTestCase.continueTesting();
+  });
+  asyncTestCase.waitForAsync('Waiting not to starve');
+}

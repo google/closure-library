@@ -151,6 +151,12 @@ goog.ui.FilteredMenu.prototype.filterStr_;
 
 
 /**
+ * @private {Element}
+ */
+goog.ui.FilteredMenu.prototype.contentElement_;
+
+
+/**
  * Map of child nodes that shouldn't be affected by filtering.
  * @type {Object|undefined}
  * @private

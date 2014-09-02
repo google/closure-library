@@ -15,6 +15,7 @@
 goog.provide('goog.labs.testing.Environment');
 
 goog.require('goog.array');
+goog.require('goog.debug.Console');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.MockControl');
 goog.require('goog.testing.TestCase');
@@ -48,6 +49,9 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
     /** @private {boolean} */
     this.shouldMakeMockClock_ = false;
+
+    /** @const {!goog.debug.Console} */
+    this.console = goog.labs.testing.Environment.console_;
   },
 
 
@@ -56,19 +60,18 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
 
   /** Runs immediately after the tearDownPage phase of JsUnit tests. */
-  tearDownPage: goog.nullFunction,
-
-
-  /** Runs immediately before the setUp phase of JsUnit tests. */
-  setUp: function() {
-    if (this.shouldMakeMockClock_) {
-      this.mockClock = new goog.testing.MockClock(true);
-    }
+  tearDownPage: function() {
+    // If we created the mockControl, we'll also tear it down.
     if (this.shouldMakeMockControl_) {
-      this.mockControl = new goog.testing.MockControl();
+      this.mockControl.$tearDown();
+    }
+    if (this.shouldMakeMockClock_) {
+      this.mockClock.dispose();
     }
   },
 
+  /** Runs immediately before the setUp phase of JsUnit tests. */
+  setUp: goog.nullFunction,
 
   /** Runs immediately after the tearDown phase of JsUnit tests. */
   tearDown: function() {
@@ -80,17 +83,22 @@ goog.labs.testing.Environment = goog.defineClass(null, {
       }
       // If we created the mockClock, we'll also dispose it.
       if (this.shouldMakeMockClock_) {
-        this.mockClock.dispose();
+        this.mockClock.reset();
       }
     }
-    // Make sure the user did not forget to call $verifyAll in their test.
-    // This is a noop if they did.
+    // Make sure the user did not forget to call $replayAll & $verifyAll in
+    // their test. This is a noop if they did.
+    // This is important because:
+    // - Engineers thinks that not all their tests need to replay and verify.
+    //   That lets tests sneak in that call mocks but never replay those calls.
+    // - Then some well meaning maintenance engineer wants to update the test
+    //   with some new mock, adds a replayAll and BOOM the test fails
+    //   because completely unrelated mocks now get replayed.
     if (this.mockControl) {
       this.mockControl.$verifyAll();
-      // If we created the mockControl, we'll also tear it down.
-      if (this.shouldMakeMockControl_) {
-        this.mockControl.$tearDown();
-      }
+      this.mockControl.$replayAll();
+      this.mockControl.$verifyAll();
+      this.mockControl.$resetAll();
     }
     // Verifying the mockControl may throw, so if cleanup needs to happen,
     // add it further up in the function.
@@ -104,7 +112,10 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    * @return {goog.labs.testing.Environment} For chaining.
    */
   withMockControl: function() {
-    this.shouldMakeMockControl_ = true;
+    if (!this.shouldMakeMockControl_) {
+      this.shouldMakeMockControl_ = true;
+      this.mockControl = new goog.testing.MockControl();
+    }
     return this;
   },
 
@@ -117,10 +128,37 @@ goog.labs.testing.Environment = goog.defineClass(null, {
    * @return {goog.labs.testing.Environment} For chaining.
    */
   withMockClock: function() {
-    this.shouldMakeMockClock_ = true;
+    if (!this.shouldMakeMockClock_) {
+      this.shouldMakeMockClock_ = true;
+      this.mockClock = new goog.testing.MockClock(true);
+    }
     return this;
+  },
+
+
+  /**
+   * Creates a basic strict mock of a {@code toMock}. For more advanced mocking,
+   * please use the MockControl directly.
+   * @param {Function} toMock
+   * @return {!goog.testing.StrictMock}
+   */
+  mock: function(toMock) {
+    if (!this.shouldMakeMockControl_) {
+      throw new Error('MockControl not available on this environment. ' +
+                      'Call withMockControl if this environment is expected ' +
+                      'to contain a MockControl.');
+    }
+    return this.mockControl.createStrictMock(toMock);
   }
 });
+
+
+/** @private @const {!goog.debug.Console} */
+goog.labs.testing.Environment.console_ = new goog.debug.Console();
+
+
+// Activate logging to the browser's console by default.
+goog.labs.testing.Environment.console_.setCapturing(true);
 
 
 

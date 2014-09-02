@@ -1537,8 +1537,11 @@ function testParentElement() {
   var detachedHasNoParent = goog.dom.getParentElement(detachedEl);
   assertNull(detachedHasNoParent);
 
-  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) {
-    // svg is not supported in IE8 and below.
+  // svg is not supported in IE8 and below or in IE9 quirks mode
+  var supported = !goog.userAgent.IE ||
+      goog.userAgent.isDocumentModeOrHigher(10) ||
+      (goog.dom.isCss1CompatMode() && goog.userAgent.isDocumentModeOrHigher(9));
+  if (!supported) {
     return;
   }
 

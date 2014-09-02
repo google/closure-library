@@ -326,7 +326,6 @@ goog.testing.TestCase.prototype.setTests = function(tests) {
 /**
  * Gets the tests.
  * @return {!Array.<goog.testing.TestCase.Test>} The test array.
- * @protected
  */
 goog.testing.TestCase.prototype.getTests = function() {
   return this.tests_;

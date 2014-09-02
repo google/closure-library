@@ -421,7 +421,7 @@ function checkConnectMismatchedNames(innerProtocolVersion,
   driver.connect(false /* fullLifeCycleTest */,
       false /* outerFrameReconnectSupported */,
       false /* innerFrameMigrationSupported */,
-      false /* reverse */);
+      reverse /* reverse */);
 }
 
 
@@ -500,7 +500,6 @@ function testDisposeBeforeConnect() {
       true /* opt_randomChannelNames */);
   driver.connectOuterAndDispose();
 }
-
 
 
 /**
@@ -592,7 +591,7 @@ Driver.prototype.disposeInternal = function() {
   this.innerFrameResponseReceived_ = null;
   this.outerFrameResponseReceived_.cancel();
   this.outerFrameResponseReceived_ = null;
-  goog.base(this, 'disposeInternal');
+  Driver.base(this, 'disposeInternal');
 };
 
 
@@ -938,6 +937,20 @@ Driver.prototype.performInnerFrameReconnect_ = function() {
  */
 Driver.prototype.performOuterFrameReconnect_ = function(
     innerFrameMigrationSupported) {
+  G_testRunner.log('Closing channel');
+  this.channel_.close();
+
+  // If there is another channel still open, the native transport's global
+  // postMessage listener will still be active.  This will mean that messages
+  // being sent to the now-closed channel will still be received and delivered,
+  // such as transport service traffic from its previous correspondent in the
+  // other frame.  Ensure these messages don't cause exceptions.
+  try {
+    this.channel_.xpcDeliver(goog.net.xpc.TRANSPORT_SERVICE_, 'payload');
+  } catch (e) {
+    fail('Should not throw exception');
+  }
+
   G_testRunner.log('Reconnecting outer frame');
   this.reinitializeDeferreds_();
   this.innerFrameResponseReceived_.addCallback(
@@ -949,7 +962,6 @@ Driver.prototype.performOuterFrameReconnect_ = function(
     this.outerFrameResponseReceived_.addCallback(
         goog.bind(asyncTestCase.continueTesting, asyncTestCase));
   }
-  this.createChannel_();
   this.channel_.connect(goog.bind(this.outerFrameConnected_, this));
 };
 

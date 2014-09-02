@@ -1694,3 +1694,27 @@ function testShuffle() {
   // order).
   assertSameElements(testArrayCopy, testArray);
 }
+
+function testRemoveAllIf() {
+  var testArray = [9, 1, 9, 2, 9, 3, 4, 9, 9, 9, 5];
+  var expectedArray = [1, 2, 3, 4, 5];
+
+  var actualOutput = goog.array.removeAllIf(testArray, function(el) {
+    return el == 9;
+  });
+
+  assertEquals(6, actualOutput);
+  assertArrayEquals(expectedArray, testArray);
+}
+
+function testRemoveAllIf_noMatches() {
+  var testArray = [1];
+  var expectedArray = [1];
+
+  var actualOutput = goog.array.removeAllIf(testArray, function(el) {
+    return false;
+  });
+
+  assertEquals(0, actualOutput);
+  assertArrayEquals(expectedArray, testArray);
+}

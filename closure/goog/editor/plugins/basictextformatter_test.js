@@ -148,17 +148,20 @@ function testIEList() {
 
     FIELDMOCK.$replay();
     var ul = goog.dom.getElement('outerUL');
-    goog.dom.Range.createFromNodeContents(ul.firstChild.firstChild).select();
+    goog.dom.Range.createFromNodeContents(
+        goog.dom.getFirstElementChild(ul).firstChild).select();
     FORMATTER.fixIELists_();
     assertFalse('Unordered list must not have ordered type', ul.type == '1');
     var ol = goog.dom.getElement('ol');
     ol.type = 'disc';
-    goog.dom.Range.createFromNodeContents(ol.firstChild.firstChild).select();
+    goog.dom.Range.createFromNodeContents(
+        goog.dom.getFirstElementChild(ul).firstChild).select();
     FORMATTER.fixIELists_();
     assertFalse('Ordered list must not have unordered type',
         ol.type == 'disc');
     ol.type = '1';
-    goog.dom.Range.createFromNodeContents(ol.firstChild.firstChild).select();
+    goog.dom.Range.createFromNodeContents(
+        goog.dom.getFirstElementChild(ul).firstChild).select();
     FORMATTER.fixIELists_();
     assertTrue('Ordered list must retain ordered list type',
         ol.type == '1');
@@ -1149,9 +1152,15 @@ function testIEExecCommandFixes() {
   goog.dom.Range.createFromNodeContents(REAL_FIELD.getElement()).select();
 
   var nodes = REAL_PLUGIN.applyExecCommandIEFixes_('insertOrderedList');
-  assertHTMLEquals(
-      '<blockquote>hi <div style="height:0px"></div></blockquote>',
-      REAL_FIELD.getCleanContents());
+  if (goog.userAgent.isVersionOrHigher('9')) {
+    assertHTMLEquals(
+        '<blockquote>hi<div style="height:0px"></div></blockquote>',
+        REAL_FIELD.getCleanContents());
+  } else {
+    assertHTMLEquals(
+        '<blockquote>hi <div style="height:0px"></div></blockquote>',
+        REAL_FIELD.getCleanContents());
+  }
 }
 
 

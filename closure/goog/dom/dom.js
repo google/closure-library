@@ -37,7 +37,6 @@ goog.require('goog.asserts');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-goog.require('goog.functions');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.object');
@@ -514,11 +513,9 @@ goog.dom.getDocumentHeight_ = function(win) {
     // But there are patterns.  It just takes a lot of time and persistence
     // to figure out.
 
-    // If the window has no contents, it has no height. (In IE10,
-    // document.body & document.documentElement are null in an empty iFrame.)
     var body = doc.body;
     var docEl = doc.documentElement;
-    if (!body && !docEl) {
+    if (!(docEl && body)) {
       return 0;
     }
 
@@ -2100,24 +2097,20 @@ goog.dom.getActiveElement = function(doc) {
 
 
 /**
- * @private {number} Cached version of the devicePixelRatio.
- */
-goog.dom.devicePixelRatio_;
-
-
-/**
- * Gives the devicePixelRatio, or attempts to determine if not present.
+ * Gives the current devicePixelRatio.
  *
- * By default, this is the same value given by window.devicePixelRatio. If
- * devicePixelRatio is not defined, the ratio is calculated with
+ * By default, this is the value of window.devicePixelRatio (which should be
+ * preferred if present).
+ *
+ * If window.devicePixelRatio is not present, the ratio is calculated with
  * window.matchMedia, if present. Otherwise, gives 1.0.
  *
- * This function is cached so that the pixel ratio is calculated only once
- * and only calculated when first requested.
+ * Some browsers (including Chrome) consider the browser zoom level in the pixel
+ * ratio, so the value may change across multiple calls.
  *
  * @return {number} The number of actual pixels per virtual pixel.
  */
-goog.dom.getPixelRatio = goog.functions.cacheReturnValue(function() {
+goog.dom.getPixelRatio = function() {
   var win = goog.dom.getWindow();
 
   // devicePixelRatio does not work on Mobile firefox.
@@ -2134,7 +2127,7 @@ goog.dom.getPixelRatio = goog.functions.cacheReturnValue(function() {
            goog.dom.matchesPixelRatio_(3) || 1;
   }
   return 1;
-});
+};
 
 
 /**

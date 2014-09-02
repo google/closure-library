@@ -202,7 +202,6 @@ goog.ui.SubMenu.prototype.showSubMenu = function() {
   if (parent && parent.getHighlighted() == this) {
     this.setSubMenuVisible_(true);
     this.dismissSiblings_();
-    this.keyboardSetFocus_ = false;
   }
 };
 

@@ -85,7 +85,8 @@ function testSavedCaretRange() {
   assertHTMLEquals('jkl', jkl.innerHTML);
 
   // def and jkl now contain fragmented text nodes.
-  if (goog.userAgent.WEBKIT || goog.userAgent.IE) {
+  if (goog.userAgent.WEBKIT ||
+      (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9'))) {
     goog.testing.dom.assertRangeEquals(
         def.childNodes[1], 0, jkl.childNodes[0], 2, selection);
   } else if (goog.userAgent.OPERA) {

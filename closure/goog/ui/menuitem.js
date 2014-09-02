@@ -65,7 +65,7 @@ goog.tagUnsealableClass(goog.ui.MenuItem);
  * @type {goog.events.KeyCodes}
  * @private
  */
-goog.ui.MenuItem.mnemonicKey_;
+goog.ui.MenuItem.prototype.mnemonicKey_;
 
 
 /**
@@ -298,4 +298,24 @@ goog.ui.MenuItem.prototype.getPreferredAriaRole = function() {
     return goog.a11y.aria.Role.MENU_ITEM_RADIO;
   }
   return goog.ui.MenuItem.base(this, 'getPreferredAriaRole');
+};
+
+
+/**
+ * @override
+ * @return {goog.ui.Menu}
+ */
+goog.ui.MenuItem.prototype.getParent = function() {
+  return /** @type {goog.ui.Menu} */ (
+      goog.ui.Control.prototype.getParent.call(this));
+};
+
+
+/**
+ * @override
+ * @return {goog.ui.Menu}
+ */
+goog.ui.MenuItem.prototype.getParentEventTarget = function() {
+  return /** @type {goog.ui.Menu} */ (
+      goog.ui.Control.prototype.getParentEventTarget.call(this));
 };

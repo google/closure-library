@@ -112,6 +112,15 @@ function testRelativeUrisHaveNoPath() {
 }
 
 
+function testReservedCharacters() {
+  var o = '%6F';
+  var uri = 'http://www.g' + o + 'ogle.com%40/xxx%2feee/ccc';
+  assertEquals('Should not decode reserved characters in path',
+      '/xxx%2feee/ccc', goog.uri.utils.getPath(uri));
+  assertEquals('Should not decode reserved characters in domain',
+      'www.google.com%40', goog.uri.utils.getDomain(uri));
+}
+
 function testSetFragmentEncoded() {
   var expected = 'http://www.google.com/path#bar';
   assertEquals(expected,

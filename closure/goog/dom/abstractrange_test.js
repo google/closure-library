@@ -39,12 +39,12 @@ function testCorrectDocument() {
   // in the same browser window. That's fine, as long as the selection object
   // requested from the window object is correctly associated with that
   // window's document.
-  if (selection) {
+  if (selection != null && selection.rangeCount != 0) {
     range = goog.dom.Range.createFromBrowserSelection(selection);
     assertEquals('getBrowserSelectionForWindow must return selection in ' +
         'the correct document', a.document, range.getDocument());
   } else {
-    assertNull(selection);
+    assertTrue(selection == null || selection.rangeCount == 0);
   }
 }
 

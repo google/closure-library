@@ -159,6 +159,22 @@ goog.ui.SliderBase.prototype.orientation_ =
     goog.ui.SliderBase.Orientation.HORIZONTAL;
 
 
+/** @private {goog.fx.AnimationParallelQueue} */
+goog.ui.SliderBase.prototype.currentAnimation_;
+
+
+/** @private {!goog.Timer} */
+goog.ui.SliderBase.prototype.incTimer_;
+
+
+/** @private {boolean} */
+goog.ui.SliderBase.prototype.incrementing_;
+
+
+/** @private {number} */
+goog.ui.SliderBase.prototype.lastMousePosition_;
+
+
 /**
  * When the user holds down the mouse on the slider background, the closest
  * thumb will move in "lock-step" towards the mouse. This number indicates how

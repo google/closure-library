@@ -278,7 +278,7 @@ function testIsDef() {
   var notDefined;
 
   assertTrue('defined should be defined', goog.isDef(defined));
-  assertTrue('null should be defined', goog.isDef(defined));
+  assertTrue('null should be defined', goog.isDef(nullVar));
   assertFalse('undefined should not be defined', goog.isDef(notDefined));
 }
 
@@ -335,30 +335,28 @@ function testIsArray() {
 }
 
 function testTypeOfAcrossWindow() {
-  if (goog.userAgent.WEBKIT && goog.userAgent.MAC) {
-    // The server farm has issues with new windows on Safari Mac.
+  if (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('10') &&
+      !goog.userAgent.isVersionOrHigher('11')) {
+    // TODO(johnlenz): This test is flaky on IE10 (passing 90+% of the time).
+    // When it flakes the values are undefined which appears to indicate the
+    // script did not run in the opened window and not a failure of the logic
+    // we are trying to test.
     return;
   }
 
   var w = window.open('', 'blank');
   if (w) {
     try {
-      try {
-        var d = w.document;
-        d.open();
-        d.write('<script>function fun(){};' +
-                'var arr = [];' +
-                'var x = 42;' +
-                'var s = "";' +
-                'var b = true;' +
-                'var obj = {length: 0, splice: {}, call: {}};' +
-                '</' + 'script>');
-        d.close();
-      } catch (ex) {
-        // In Firefox Linux on the server farm we don't have access to
-        // w.document.
-        return;
-      }
+      var d = w.document;
+      d.open();
+      d.write('<script>function fun(){};' +
+              'var arr = [];' +
+              'var x = 42;' +
+              'var s = "";' +
+              'var b = true;' +
+              'var obj = {length: 0, splice: {}, call: {}};' +
+              '</' + 'script>');
+      d.close();
 
       assertEquals('function', goog.typeOf(w.fun));
       assertEquals('array', goog.typeOf(w.arr));

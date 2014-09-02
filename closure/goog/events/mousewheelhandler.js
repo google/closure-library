@@ -36,6 +36,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.BrowserEvent');
 goog.require('goog.events.EventTarget');
+goog.require('goog.events.EventType');
 goog.require('goog.math');
 goog.require('goog.style');
 goog.require('goog.userAgent');
@@ -73,7 +74,7 @@ goog.events.MouseWheelHandler = function(element, opt_capture) {
    */
   this.isRtl_ = !!rtlElement && goog.style.isRightToLeft(rtlElement);
 
-  var type = goog.userAgent.GECKO ? 'DOMMouseScroll' : 'mousewheel';
+  var type = goog.events.EventType.MOUSEWHEEL;
 
   /**
    * The key returned from the goog.events.listen.

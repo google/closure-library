@@ -103,6 +103,10 @@ goog.ui.PopupColorPicker.prototype.popupCorner_ =
 goog.ui.PopupColorPicker.prototype.lastTarget_ = null;
 
 
+/** @private {boolean} */
+goog.ui.PopupColorPicker.prototype.rememberSelection_;
+
+
 /**
  * Whether the color picker can move the focus to its key event target when it
  * is shown.  The default is true.  Setting to false can break keyboard

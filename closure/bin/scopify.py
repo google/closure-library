@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #
 # Copyright 2010 The Closure Library Authors. All Rights Reserved.
 #

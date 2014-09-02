@@ -138,6 +138,10 @@ goog.net.WebSocket.prototype.closeExpected_ = false;
 goog.net.WebSocket.prototype.reconnectAttempt_ = 0;
 
 
+/** @private {?number} */
+goog.net.WebSocket.prototype.reconnectTimer_ = null;
+
+
 /**
  * The logger for this class.
  * @type {goog.log.Logger}

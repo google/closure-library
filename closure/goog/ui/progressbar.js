@@ -44,6 +44,9 @@ goog.require('goog.userAgent');
 goog.ui.ProgressBar = function(opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
+  /** @type {?HTMLDivElement} */
+  this.thumbElement_;
+
   /**
    * The underlying data model for the progress bar.
    * @type {goog.ui.RangeModel}

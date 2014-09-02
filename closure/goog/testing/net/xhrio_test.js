@@ -36,11 +36,12 @@ function setUp() {
 
 function testStaticSend() {
   sendInstances = goog.testing.net.XhrIo.getSendInstances();
-  goog.testing.net.XhrIo.send('url');
+  var returnedXhr = goog.testing.net.XhrIo.send('url');
   assertEquals('sendInstances_ after send',
                1, sendInstances.length);
   xhr = sendInstances[sendInstances.length - 1];
   assertTrue('isActive after request', xhr.isActive());
+  assertEquals(returnedXhr, xhr);
   assertEquals('readyState after request',
                goog.net.XmlHttp.ReadyState.LOADING,
                xhr.getReadyState());

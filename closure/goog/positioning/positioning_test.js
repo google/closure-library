@@ -25,7 +25,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
-goog.require('goog.math.Rect');
 goog.require('goog.math.Size');
 goog.require('goog.positioning');
 goog.require('goog.positioning.Corner');
@@ -40,8 +39,9 @@ goog.require('goog.userAgent.product');
 goog.setTestOnly('goog.positioningTest');
 
 // Allow positions to be off by one in gecko as it reports scrolling
-// offsets in steps of 2.
-var ALLOWED_OFFSET = goog.userAgent.GECKO ? 1 : 0;
+// offsets in steps of 2.  Otherwise, allow for subpixel difference
+// as seen in IE10+
+var ALLOWED_OFFSET = goog.userAgent.GECKO ? 1 : 0.1;
 // Error bar for positions since some browsers are not super accurate
 // in reporting them.
 var EPSILON = 2;
@@ -695,7 +695,15 @@ function testPositionAtAnchorWithResizeHeight() {
       viewport.toBox());
   assertEquals('Status should be HEIGHT_ADJUSTED.',
                goog.positioning.OverflowStatus.HEIGHT_ADJUSTED, status);
-  assertTrue('Popup is within viewport',
+
+  var TOLERANCE = 0.1;
+  // Adjust the viewport to allow some tolerance for subpixel positioning,
+  // this is required for this test to pass on IE10,11
+  viewport.top -= TOLERANCE;
+  viewport.left -= TOLERANCE;
+
+  assertTrue('Popup ' + goog.style.getBounds(popup) +
+             ' not is within viewport' + viewport,
              viewport.contains(goog.style.getBounds(popup)));
 }
 
@@ -717,6 +725,27 @@ function testPositionAtCoordinateResizeHeight() {
   var bounds = goog.style.getSize(popup);
   assertEquals('Height should be resized to the size of the viewport.',
                50, bounds.height);
+}
+
+
+function testGetPositionAtCoordinateResizeHeight() {
+  var f = goog.positioning.getPositionAtCoordinate;
+  var viewport = new goog.math.Box(0, 50, 50, 0);
+  var overflow = goog.positioning.Overflow.RESIZE_HEIGHT |
+      goog.positioning.Overflow.ADJUST_Y;
+  var popup = document.getElementById('popup1');
+  var corner = goog.positioning.Corner.BOTTOM_LEFT;
+
+  var pos = newCoord(100, 100);
+  var size = goog.style.getSize(popup);
+
+  var result = f(pos, size, corner, undefined, viewport, overflow);
+  assertEquals('Viewport height should be resized.',
+               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED |
+               goog.positioning.OverflowStatus.ADJUSTED_Y,
+               result.status);
+  assertEquals('Height should be resized to the size of the viewport.',
+               50, result.rect.height);
 }
 
 

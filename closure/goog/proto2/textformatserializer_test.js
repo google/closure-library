@@ -366,6 +366,54 @@ function testDeserializationOfZeroFalseAndEmptyString() {
   assertEquals('', message.getOptionalString());
 }
 
+function testDeserializationOfConcatenatedString() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 123\n' +
+      'optional_string:\n' +
+      '    "FirstLine"\n' +
+      '    "SecondLine"\n' +
+      'optional_float: 456.7';
+
+  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+
+  assertEquals(123, message.getOptionalInt32());
+  assertEquals('FirstLineSecondLine', message.getOptionalString());
+  assertEquals(456.7, message.getOptionalFloat());
+}
+
+function testDeserializationSkipComment() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 101\n' +
+      'repeated_int32: 201\n' +
+      '# Some comment.\n' +
+      'repeated_int32: 202\n' +
+      'optional_float: 123.4';
+
+  var parser = new goog.proto2.TextFormatSerializer.Parser();
+  assertTrue(parser.parse(message, value));
+
+  assertEquals(101, message.getOptionalInt32());
+  assertEquals(201, message.getRepeatedInt32(0));
+  assertEquals(202, message.getRepeatedInt32(1));
+  assertEquals(123.4, message.getOptionalFloat());
+}
+
+function testDeserializationSkipTrailingComment() {
+  var message = new proto2.TestAllTypes();
+  var value = 'optional_int32: 101\n' +
+      'repeated_int32: 201\n' +
+      'repeated_int32: 202  # Some trailing comment.\n' +
+      'optional_float: 123.4';
+
+  var parser = new goog.proto2.TextFormatSerializer.Parser();
+  assertTrue(parser.parse(message, value));
+
+  assertEquals(101, message.getOptionalInt32());
+  assertEquals(201, message.getRepeatedInt32(0));
+  assertEquals(202, message.getRepeatedInt32(1));
+  assertEquals(123.4, message.getOptionalFloat());
+}
+
 function testDeserializationSkipUnknown() {
   var message = new proto2.TestAllTypes();
   var value = 'optional_int32: 101\n' +
@@ -485,6 +533,19 @@ function testDeserializationVariedNumbers() {
   assertEquals(123.0, message.getRepeatedFloat(0));
   assertEquals(-3.27, message.getRepeatedFloat(1));
   assertEquals(-35.5, message.getRepeatedFloat(2));
+}
+
+function testDeserializationScientificNotation() {
+  var message = new proto2.TestAllTypes();
+  var value = 'repeated_float: 1.1e5\n' +
+      'repeated_float: 1.1e-5\n' +
+      'repeated_double: 1.1e5\n' +
+      'repeated_double: 1.1e-5\n';
+  new goog.proto2.TextFormatSerializer().deserializeTo(message, value);
+  assertEquals(1.1e5, message.getRepeatedFloat(0));
+  assertEquals(1.1e-5, message.getRepeatedFloat(1));
+  assertEquals(1.1e5, message.getRepeatedDouble(0));
+  assertEquals(1.1e-5, message.getRepeatedDouble(1));
 }
 
 function testParseNumericalConstant() {

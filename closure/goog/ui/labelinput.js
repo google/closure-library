@@ -85,6 +85,14 @@ goog.ui.LabelInput.prototype.ffKeyRestoreValue_ = null;
 goog.ui.LabelInput.prototype.labelRestoreDelayMs = 10;
 
 
+/** @private {boolean} */
+goog.ui.LabelInput.prototype.inFocusAndSelect_;
+
+
+/** @private {boolean} */
+goog.ui.LabelInput.prototype.formAttached_;
+
+
 /**
  * Indicates whether the browser supports the placeholder attribute, new in
  * HTML5.
