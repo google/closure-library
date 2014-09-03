@@ -16,15 +16,15 @@
  * @fileoverview Common code for weak collections.
  *
  * The helpers in this file are used for the shim implementations of
- * {@code goog.structs.weak.Map} and {@code goog.structs.weak.Set}, for browsers
- * that do not support ECMAScript 6 native WeakMap and WeakSet.
+ * {@code goog.labs.structs.WeakMap} and {@code goog.labs.structs.WeakSet},
+ * for browsers that do not support ECMAScript 6 native WeakMap and WeakSet.
  *
  * IMPORTANT CAVEAT: On browsers that do not provide native WeakMap and WeakSet
  * implementations, these data structure are only partially weak, and CAN LEAK
  * MEMORY. Specifically, if a key is no longer held, the key-value pair (in the
- * case of Map) and some internal metadata (in the case of Set), can be garbage
- * collected; however, if a key is still held when a Map or Set is no longer
- * held, the value and metadata will not be collected.
+ * case of WeakMap) and some internal metadata (in the case of WeakSet), can be
+ * garbage collected; however, if a key is still held when a WeakMap or WeakSet
+ * is no longer held, the value and metadata will not be collected.
  *
  * RECOMMENDATIONS: If the lifetime of the weak collection is expected to be
  * shorter than that of its keys, the keys should be explicitly removed from the
@@ -34,13 +34,13 @@
  * BROWSER COMPATIBILITY: This library is compatible with browsers with a
  * correct implementation of Object.defineProperty (IE9+, FF4+, SF5.1+, CH5+,
  * OP12+, etc).
- * @see goog.structs.weak.SUPPORTED_BROWSER
+ * @see goog.labs.structs.weak.SUPPORTED_BROWSER
  * @see http://kangax.github.io/compat-table/es5/#Object.defineProperty
  *
  */
 
 
-goog.provide('goog.structs.weak');
+goog.provide('goog.labs.structs.weak');
 
 goog.require('goog.userAgent');
 
@@ -51,7 +51,7 @@ goog.require('goog.userAgent');
  * @const
  */
 // Only test for shim, since ES6 native WeakMap/Set imply ES5 shim dependencies
-goog.structs.weak.SUPPORTED_BROWSER = Object.defineProperty &&
+goog.labs.structs.weak.SUPPORTED_BROWSER = Object.defineProperty &&
     // IE<9 and Safari<5.1 cannot defineProperty on some objects
     !(goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')) &&
     !(goog.userAgent.SAFARI && !goog.userAgent.isVersionOrHigher('534.48.3'));
@@ -61,7 +61,7 @@ goog.structs.weak.SUPPORTED_BROWSER = Object.defineProperty &&
  * Whether to use the browser's native WeakMap.
  * @const
  */
-goog.structs.weak.USE_NATIVE_WEAKMAP = 'WeakMap' in goog.global &&
+goog.labs.structs.weak.USE_NATIVE_WEAKMAP = 'WeakMap' in goog.global &&
     // Firefox<24 WeakMap disallows some objects as keys
     // See https://github.com/Polymer/WeakMap/issues/3
     !(goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('24'));
@@ -71,20 +71,20 @@ goog.structs.weak.USE_NATIVE_WEAKMAP = 'WeakMap' in goog.global &&
  * Whether to use the browser's native WeakSet.
  * @const
  */
-goog.structs.weak.USE_NATIVE_WEAKSET = 'WeakSet' in goog.global;
+goog.labs.structs.weak.USE_NATIVE_WEAKSET = 'WeakSet' in goog.global;
 
 
 /**
  * @package @const
  */
-goog.structs.weak.WEAKREFS_PROPERTY_NAME = '__shimWeakrefs__';
+goog.labs.structs.weak.WEAKREFS_PROPERTY_NAME = '__shimWeakrefs__';
 
 
 /**
  * Counter used to generate unique ID for shim.
  * @private
  */
-goog.structs.weak.counter_ = 0;
+goog.labs.structs.weak.counter_ = 0;
 
 
 /**
@@ -92,9 +92,9 @@ goog.structs.weak.counter_ = 0;
  * @return {string}
  * @package
  */
-goog.structs.weak.generateId = function() {
+goog.labs.structs.weak.generateId = function() {
   return (Math.random() * 1e9 >>> 0) + '' +
-      (goog.structs.weak.counter_++ % 1e9);
+      (goog.labs.structs.weak.counter_++ % 1e9);
 };
 
 
@@ -103,7 +103,7 @@ goog.structs.weak.generateId = function() {
  * @param {*} key The key.
  * @package
  */
-goog.structs.weak.checkKeyType = function(key) {
+goog.labs.structs.weak.checkKeyType = function(key) {
   if (!goog.isObject(key)) {
     throw TypeError('Invalid value used in weak collection');
   }
@@ -121,14 +121,14 @@ goog.structs.weak.checkKeyType = function(key) {
  * @param {*} value value to add.
  * @package
  */
-goog.structs.weak.set = function(id, key, value) {
-  goog.structs.weak.checkKeyType(key);
-  if (!key.hasOwnProperty(goog.structs.weak.WEAKREFS_PROPERTY_NAME)) {
+goog.labs.structs.weak.set = function(id, key, value) {
+  goog.labs.structs.weak.checkKeyType(key);
+  if (!key.hasOwnProperty(goog.labs.structs.weak.WEAKREFS_PROPERTY_NAME)) {
     // Use defineProperty to make property non-enumerable
     Object.defineProperty(/** @type {!Object} */(key),
-        goog.structs.weak.WEAKREFS_PROPERTY_NAME, {value: {}});
+        goog.labs.structs.weak.WEAKREFS_PROPERTY_NAME, {value: {}});
   }
-  key[goog.structs.weak.WEAKREFS_PROPERTY_NAME][id] = value;
+  key[goog.labs.structs.weak.WEAKREFS_PROPERTY_NAME][id] = value;
 };
 
 
@@ -140,10 +140,10 @@ goog.structs.weak.set = function(id, key, value) {
  * @return {boolean}
  * @package
  */
-goog.structs.weak.has = function(id, key) {
-  goog.structs.weak.checkKeyType(key);
-  return key.hasOwnProperty(goog.structs.weak.WEAKREFS_PROPERTY_NAME) ?
-      id in key[goog.structs.weak.WEAKREFS_PROPERTY_NAME] :
+goog.labs.structs.weak.has = function(id, key) {
+  goog.labs.structs.weak.checkKeyType(key);
+  return key.hasOwnProperty(goog.labs.structs.weak.WEAKREFS_PROPERTY_NAME) ?
+      id in key[goog.labs.structs.weak.WEAKREFS_PROPERTY_NAME] :
       false;
 };
 
@@ -156,9 +156,9 @@ goog.structs.weak.has = function(id, key) {
  * @return {boolean} Whether object was removed.
  * @package
  */
-goog.structs.weak.remove = function(id, key) {
-  if (goog.structs.weak.has(id, key)) {
-    delete key[goog.structs.weak.WEAKREFS_PROPERTY_NAME][id];
+goog.labs.structs.weak.remove = function(id, key) {
+  if (goog.labs.structs.weak.has(id, key)) {
+    delete key[goog.labs.structs.weak.WEAKREFS_PROPERTY_NAME][id];
     return true;
   }
   return false;

@@ -406,7 +406,7 @@ goog.addDependency('fx/animation_test.js', ['goog.fx.AnimationTest'], ['goog.eve
 goog.addDependency('fx/animationqueue.js', ['goog.fx.AnimationParallelQueue', 'goog.fx.AnimationQueue', 'goog.fx.AnimationSerialQueue'], ['goog.array', 'goog.asserts', 'goog.events.EventHandler', 'goog.fx.Transition.EventType', 'goog.fx.TransitionBase', 'goog.fx.TransitionBase.State'], false);
 goog.addDependency('fx/animationqueue_test.js', ['goog.fx.AnimationQueueTest'], ['goog.events', 'goog.fx.Animation', 'goog.fx.AnimationParallelQueue', 'goog.fx.AnimationSerialQueue', 'goog.fx.Transition', 'goog.fx.anim', 'goog.testing.MockClock', 'goog.testing.jsunit'], false);
 goog.addDependency('fx/css3/fx.js', ['goog.fx.css3'], ['goog.fx.css3.Transition'], false);
-goog.addDependency('fx/css3/transition.js', ['goog.fx.css3.Transition'], ['goog.Timer', 'goog.fx.TransitionBase', 'goog.style', 'goog.style.transition'], false);
+goog.addDependency('fx/css3/transition.js', ['goog.fx.css3.Transition'], ['goog.Timer', 'goog.asserts', 'goog.fx.TransitionBase', 'goog.style', 'goog.style.transition'], false);
 goog.addDependency('fx/css3/transition_test.js', ['goog.fx.css3.TransitionTest'], ['goog.dispose', 'goog.dom', 'goog.events', 'goog.fx.Transition', 'goog.fx.css3.Transition', 'goog.style.transition', 'goog.testing.MockClock', 'goog.testing.jsunit', 'goog.testing.recordFunction'], false);
 goog.addDependency('fx/cssspriteanimation.js', ['goog.fx.CssSpriteAnimation'], ['goog.fx.Animation'], false);
 goog.addDependency('fx/cssspriteanimation_test.js', ['goog.fx.CssSpriteAnimationTest'], ['goog.fx.CssSpriteAnimation', 'goog.math.Box', 'goog.math.Size', 'goog.testing.MockClock', 'goog.testing.jsunit'], false);
@@ -599,6 +599,11 @@ goog.addDependency('labs/structs/map_perf.js', ['goog.labs.structs.mapPerf'], ['
 goog.addDependency('labs/structs/map_test.js', ['goog.labs.structs.MapTest'], ['goog.labs.structs.Map', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], false);
 goog.addDependency('labs/structs/multimap.js', ['goog.labs.structs.Multimap'], ['goog.array', 'goog.labs.object', 'goog.labs.structs.Map'], false);
 goog.addDependency('labs/structs/multimap_test.js', ['goog.labs.structs.MultimapTest'], ['goog.labs.structs.Map', 'goog.labs.structs.Multimap', 'goog.testing.jsunit'], false);
+goog.addDependency('labs/structs/weak/unsupported_browser_test.js', ['goog.labs.structs.weak.unsupportedBrowserTest'], ['goog.asserts.AssertionError', 'goog.labs.structs.WeakMap', 'goog.labs.structs.weak', 'goog.testing.jsunit'], false);
+goog.addDependency('labs/structs/weak/weak.js', ['goog.labs.structs.weak'], ['goog.userAgent'], false);
+goog.addDependency('labs/structs/weak/weak_test.js', ['goog.labs.structs.weakTest'], ['goog.array', 'goog.labs.structs.weak', 'goog.testing.jsunit'], false);
+goog.addDependency('labs/structs/weak/weakmap.js', ['goog.labs.structs.WeakMap'], ['goog.asserts', 'goog.labs.structs.weak'], false);
+goog.addDependency('labs/structs/weak/weakmap_test.js', ['goog.labs.structs.WeakMapTest'], ['goog.labs.structs.WeakMap', 'goog.labs.structs.weak', 'goog.testing.jsunit'], false);
 goog.addDependency('labs/style/pixeldensitymonitor.js', ['goog.labs.style.PixelDensityMonitor', 'goog.labs.style.PixelDensityMonitor.Density', 'goog.labs.style.PixelDensityMonitor.EventType'], ['goog.events', 'goog.events.EventTarget'], false);
 goog.addDependency('labs/style/pixeldensitymonitor_test.js', ['goog.labs.style.PixelDensityMonitorTest'], ['goog.array', 'goog.dom.DomHelper', 'goog.events', 'goog.labs.style.PixelDensityMonitor', 'goog.testing.MockControl', 'goog.testing.jsunit', 'goog.testing.recordFunction'], false);
 goog.addDependency('labs/testing/assertthat.js', ['goog.labs.testing.MatcherError', 'goog.labs.testing.assertThat'], ['goog.asserts', 'goog.debug.Error', 'goog.labs.testing.Matcher'], false);
@@ -958,8 +963,6 @@ goog.addDependency('structs/treenode.js', ['goog.structs.TreeNode'], ['goog.arra
 goog.addDependency('structs/treenode_test.js', ['goog.structs.TreeNodeTest'], ['goog.structs.TreeNode', 'goog.testing.jsunit'], false);
 goog.addDependency('structs/trie.js', ['goog.structs.Trie'], ['goog.object', 'goog.structs'], false);
 goog.addDependency('structs/trie_test.js', ['goog.structs.TrieTest'], ['goog.object', 'goog.structs', 'goog.structs.Trie', 'goog.testing.jsunit'], false);
-goog.addDependency('structs/weak/weak.js', ['goog.structs.weak'], ['goog.userAgent'], false);
-goog.addDependency('structs/weak/weak_test.js', ['goog.structs.weakTest'], ['goog.array', 'goog.structs.weak', 'goog.testing.jsunit'], false);
 goog.addDependency('style/bidi.js', ['goog.style.bidi'], ['goog.dom', 'goog.style', 'goog.userAgent'], false);
 goog.addDependency('style/bidi_test.js', ['goog.style.bidiTest'], ['goog.dom', 'goog.style', 'goog.style.bidi', 'goog.testing.jsunit', 'goog.userAgent'], false);
 goog.addDependency('style/cursor.js', ['goog.style.cursor'], ['goog.userAgent'], false);
