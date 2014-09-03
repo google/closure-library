@@ -18,7 +18,7 @@
  */
 
 goog.module('goog.baseModuleTest');
-goog.module.exportTestMethods();
+goog.module.declareTestMethods();
 goog.setTestOnly('goog.baseModuleTest');
 
 
