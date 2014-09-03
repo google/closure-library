@@ -124,6 +124,8 @@ goog.provide('goog.i18n.CompactNumberFormatSymbols_fr_MQ');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_fr_PM');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_fr_RE');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_fr_YT');
+goog.provide('goog.i18n.CompactNumberFormatSymbols_ga');
+goog.provide('goog.i18n.CompactNumberFormatSymbols_ga_IE');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_gl');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_gl_ES');
 goog.provide('goog.i18n.CompactNumberFormatSymbols_gsw');
@@ -3220,6 +3222,58 @@ goog.i18n.CompactNumberFormatSymbols_fr_RE =
  */
 goog.i18n.CompactNumberFormatSymbols_fr_YT =
     goog.i18n.CompactNumberFormatSymbols_fr;
+
+
+/**
+ * Compact number formatting symbols for locale ga.
+ */
+goog.i18n.CompactNumberFormatSymbols_ga = {
+  COMPACT_DECIMAL_SHORT_PATTERN: {
+    '1000': {
+      'other': '0K'
+    },
+    '10000': {
+      'other': '00K'
+    },
+    '100000': {
+      'other': '000K'
+    },
+    '1000000': {
+      'other': '0M'
+    },
+    '10000000': {
+      'other': '00M'
+    },
+    '100000000': {
+      'other': '000M'
+    },
+    '1000000000': {
+      'other': '0G'
+    },
+    '10000000000': {
+      'other': '00G'
+    },
+    '100000000000': {
+      'other': '000G'
+    },
+    '1000000000000': {
+      'other': '0T'
+    },
+    '10000000000000': {
+      'other': '00T'
+    },
+    '100000000000000': {
+      'other': '000T'
+    }
+  }
+};
+
+
+/**
+ * Compact number formatting symbols for locale ga_IE.
+ */
+goog.i18n.CompactNumberFormatSymbols_ga_IE =
+    goog.i18n.CompactNumberFormatSymbols_ga;
 
 
 /**
@@ -9005,6 +9059,14 @@ if (goog.LOCALE == 'fr_RE' || goog.LOCALE == 'fr-RE') {
 
 if (goog.LOCALE == 'fr_YT' || goog.LOCALE == 'fr-YT') {
   goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_fr;
+}
+
+if (goog.LOCALE == 'ga') {
+  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_ga;
+}
+
+if (goog.LOCALE == 'ga_IE' || goog.LOCALE == 'ga-IE') {
+  goog.i18n.CompactNumberFormatSymbols = goog.i18n.CompactNumberFormatSymbols_ga;
 }
 
 if (goog.LOCALE == 'gl') {

@@ -527,6 +527,9 @@ if (goog.LOCALE == 'fr') {
 if (goog.LOCALE == 'fr_CA' || goog.LOCALE == 'fr-CA') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.frSelect_;
 }
+if (goog.LOCALE == 'ga') {
+  goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
+}
 if (goog.LOCALE == 'gl') {
   goog.i18n.ordinalRules.select = goog.i18n.ordinalRules.defaultSelect_;
 }

@@ -67,6 +67,7 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_fi');
 goog.provide('goog.labs.i18n.ListFormatSymbols_fil');
 goog.provide('goog.labs.i18n.ListFormatSymbols_fr');
 goog.provide('goog.labs.i18n.ListFormatSymbols_fr_CA');
+goog.provide('goog.labs.i18n.ListFormatSymbols_ga');
 goog.provide('goog.labs.i18n.ListFormatSymbols_gl');
 goog.provide('goog.labs.i18n.ListFormatSymbols_gsw');
 goog.provide('goog.labs.i18n.ListFormatSymbols_gu');
@@ -554,6 +555,18 @@ goog.labs.i18n.ListFormatSymbols_fr_CA = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0} et {1}'
+};
+
+
+/**
+ * List formatting symbols for locale ga.
+ */
+goog.labs.i18n.ListFormatSymbols_ga = {
+  GENDER_STYLE: 0,
+  LIST_TWO: '{0}, {1}',
+  LIST_START: '{0}, {1}',
+  LIST_MIDDLE: '{0}, {1}',
+  LIST_END: '{0}, {1}'
 };
 
 
@@ -1520,6 +1533,10 @@ if (goog.LOCALE == 'fr') {
 
 if (goog.LOCALE == 'fr_CA' || goog.LOCALE == 'fr-CA') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_fr_CA;
+}
+
+if (goog.LOCALE == 'ga') {
+  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ga;
 }
 
 if (goog.LOCALE == 'gl') {

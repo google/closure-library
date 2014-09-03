@@ -299,7 +299,6 @@ goog.provide('goog.labs.i18n.ListFormatSymbols_fr_TN');
 goog.provide('goog.labs.i18n.ListFormatSymbols_fr_VU');
 goog.provide('goog.labs.i18n.ListFormatSymbols_fr_WF');
 goog.provide('goog.labs.i18n.ListFormatSymbols_fr_YT');
-goog.provide('goog.labs.i18n.ListFormatSymbols_ga');
 goog.provide('goog.labs.i18n.ListFormatSymbols_ga_IE');
 goog.provide('goog.labs.i18n.ListFormatSymbols_gl_ES');
 goog.provide('goog.labs.i18n.ListFormatSymbols_gsw_CH');
@@ -3790,18 +3789,6 @@ goog.labs.i18n.ListFormatSymbols_fr_YT = {
   LIST_START: '{0}, {1}',
   LIST_MIDDLE: '{0}, {1}',
   LIST_END: '{0} et {1}'
-};
-
-
-/**
- * List formatting symbols for locale ga.
- */
-goog.labs.i18n.ListFormatSymbols_ga = {
-  GENDER_STYLE: 0,
-  LIST_TWO: '{0}, {1}',
-  LIST_START: '{0}, {1}',
-  LIST_MIDDLE: '{0}, {1}',
-  LIST_END: '{0}, {1}'
 };
 
 
@@ -8294,10 +8281,6 @@ if (goog.LOCALE == 'fr_WF' || goog.LOCALE == 'fr-WF') {
 
 if (goog.LOCALE == 'fr_YT' || goog.LOCALE == 'fr-YT') {
   goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_fr_YT;
-}
-
-if (goog.LOCALE == 'ga') {
-  goog.labs.i18n.ListFormatSymbols = goog.labs.i18n.ListFormatSymbols_ga;
 }
 
 if (goog.LOCALE == 'ga_IE' || goog.LOCALE == 'ga-IE') {
