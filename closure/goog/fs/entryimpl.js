@@ -265,6 +265,10 @@ goog.fs.DirectoryEntryImpl.prototype.createPath = function(path) {
   var parts = goog.array.filter(path.split('/'), goog.functions.identity);
   var existed = [];
 
+  /**
+   * @param {goog.fs.DirectoryEntryImpl} dir
+   * @return {!goog.async.Deferred}
+   */
   function getNextDirectory(dir) {
     if (!parts.length) {
       return goog.async.Deferred.succeed(dir);
