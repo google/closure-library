@@ -304,7 +304,41 @@ goog.module = function(name) {
 };
 
 
-/** @private {{
+/**
+ * @param {string} name The module identifier.
+ * @return {?} The module exports for an already loaded module or null.
+ *
+ * Note: This is not an alternative to goog.require, it does not
+ * indicate a hard dependency, instead it is used to indicate
+ * an optional dependency or to access the exports of a module
+ * that has already been loaded.
+ */
+goog.module.get = function(name) {
+  return goog.module.getInternal_(name);
+};
+
+
+/**
+ * @param {string} name The module identifier.
+ * @return {?} The module exports for an already loaded module or null.
+ * @private
+ */
+goog.module.getInternal_ = function(name) {
+  if (!COMPILED) {
+    if (goog.isProvided_(name)) {
+      // goog.require only return a value with-in goog.module files.
+      return name in goog.loadedModules_ ?
+          goog.loadedModules_[name] :
+          goog.getObjectByName(name);
+    } else {
+      return null;
+    }
+  }
+};
+
+
+/**
+ * @private {{
  *     moduleName:(string|undefined),
  *     declareTestMethods:boolean}|null}}
  */
@@ -539,10 +573,7 @@ goog.require = function(name) {
   if (!COMPILED) {
     if (goog.isProvided_(name)) {
       if (goog.isInModuleLoader_()) {
-        // goog.require only return a value with-in goog.module files.
-        return name in goog.loadedModules_ ?
-            goog.loadedModules_[name] :
-            goog.getObjectByName(name);
+        return goog.module.getInternal_(name);
       } else {
         return null;
       }

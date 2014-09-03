@@ -31,6 +31,8 @@ goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 goog.require('goog.userAgent');
 
+goog.require('goog.test_module');
+
 function getFramedVars(name) {
   var w = window.frames[name];
   var doc = w.document;
@@ -1399,3 +1401,10 @@ function testDefineClass_unsealable() {
   der.setFoo('bar');
   assertEquals('bar', der.foo);
 }
+
+function testGoogModuleGet() {
+  assertEquals(null, goog.module.get('unrequired.module.id'));
+  var testModuleExports = goog.module.get('goog.test_module');
+  assertTrue(goog.isFunction(testModuleExports));
+}
+

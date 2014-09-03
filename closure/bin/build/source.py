@@ -24,6 +24,7 @@ __author__ = 'nnaze@google.com'
 import re
 
 _BASE_REGEX_STRING = '^\s*goog\.%s\(\s*[\'"](.+)[\'"]\s*\)'
+_MODULE_REGEX = re.compile(_BASE_REGEX_STRING % 'module')
 _PROVIDE_REGEX = re.compile(_BASE_REGEX_STRING % 'provide')
 _REQUIRES_REGEX = re.compile(_BASE_REGEX_STRING % 'require')
 
@@ -52,6 +53,7 @@ class Source(object):
 
     self.provides = set()
     self.requires = set()
+    self.is_goog_module = False
 
     self._source = source
     self._ScanSource()
@@ -83,6 +85,10 @@ class Source(object):
       match = _PROVIDE_REGEX.match(line)
       if match:
         self.provides.add(match.group(1))
+      match = _MODULE_REGEX.match(line)
+      if match:
+        self.provides.add(match.group(1))
+        self.is_goog_module = True
       match = _REQUIRES_REGEX.match(line)
       if match:
         self.requires.add(match.group(1))
