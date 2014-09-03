@@ -328,10 +328,13 @@ goog.format.EmailAddress.parse = function(addr) {
  * "name" &lt;address&gt; into an array of email addresses.
  * @param {string} str The address list.
  * @param {function(string)} parser The parser to employ.
+ * @param {function(string):boolean} separatorChecker Accepts a character and
+ *    returns whether it should be considered an address separator.
  * @return {!Array.<!goog.format.EmailAddress>} The parsed emails.
  * @protected
  */
-goog.format.EmailAddress.parseListInternal = function(str, parser) {
+goog.format.EmailAddress.parseListInternal = function(
+    str, parser, separatorChecker) {
   var result = [];
   var email = '';
   var token;
@@ -343,7 +346,7 @@ goog.format.EmailAddress.parseListInternal = function(str, parser) {
 
   for (var i = 0; i < str.length; ) {
     token = goog.format.EmailAddress.getToken_(str, i);
-    if (token == ',' || token == ';' || token == '\u3001' ||
+    if (separatorChecker(token) ||
         (token == ' ' && parser(email).isValid())) {
       if (!goog.string.isEmpty(email)) {
         result.push(parser(email));
@@ -372,7 +375,8 @@ goog.format.EmailAddress.parseListInternal = function(str, parser) {
  */
 goog.format.EmailAddress.parseList = function(str) {
   return goog.format.EmailAddress.parseListInternal(
-      str, goog.format.EmailAddress.parse);
+      str, goog.format.EmailAddress.parse,
+      goog.format.EmailAddress.isAddressSeparator);
 };
 
 
@@ -426,4 +430,13 @@ goog.format.EmailAddress.isEscapedDlQuote_ = function(str, pos) {
     slashCount++;
   }
   return ((slashCount % 2) != 0);
+};
+
+
+/**
+ * @param {string} ch The character to test.
+ * @return {boolean} Whether the provided character is an address separator.
+ */
+goog.format.EmailAddress.isAddressSeparator = function(ch) {
+  return ch == ',' || ch == ';';
 };

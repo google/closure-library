@@ -156,3 +156,90 @@ function testIsValidDomainPart() {
   doIsValidTest(goog.format.InternationalizedEmailAddress.isValidDomainPartSpec,
       valid, invalid);
 }
+
+
+function testparseListWithAdditionalSeparators() {
+  assertParsedList('<foo@gmail.com>\u055D <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+055D');
+  assertParsedList('<foo@gmail.com>\u055D <bar@gmail.com>\u055D',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+055D');
+
+  assertParsedList('<foo@gmail.com>\u060C <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+060C');
+  assertParsedList('<foo@gmail.com>\u060C <bar@gmail.com>\u060C',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+060C');
+
+  assertParsedList('<foo@gmail.com>\u1363 <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+1363');
+  assertParsedList('<foo@gmail.com>\u1363 <bar@gmail.com>\u1363',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+1363');
+
+  assertParsedList('<foo@gmail.com>\u1802 <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+1802');
+  assertParsedList('<foo@gmail.com>\u1802 <bar@gmail.com>\u1802',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+1802');
+
+  assertParsedList('<foo@gmail.com>\u1808 <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+1808');
+  assertParsedList('<foo@gmail.com>\u1808 <bar@gmail.com>\u1808',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+1808');
+
+  assertParsedList('<foo@gmail.com>\u2E41 <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+2E41');
+  assertParsedList('<foo@gmail.com>\u2E41 <bar@gmail.com>\u2E41',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+2E41');
+
+  assertParsedList('<foo@gmail.com>\u3001 <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+3001');
+  assertParsedList('<foo@gmail.com>\u3001 <bar@gmail.com>\u3001',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+3001');
+
+  assertParsedList('<foo@gmail.com>\uFF0C <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+FF0C');
+  assertParsedList('<foo@gmail.com>\uFF0C <bar@gmail.com>\uFF0C',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+FF0C');
+
+  assertParsedList('<foo@gmail.com>\u0613 <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+0613');
+  assertParsedList('<foo@gmail.com>\u0613 <bar@gmail.com>\u0613',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+0613');
+
+  assertParsedList('<foo@gmail.com>\u1364 <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+1364');
+  assertParsedList('<foo@gmail.com>\u1364 <bar@gmail.com>\u1364',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+1364');
+
+  assertParsedList('<foo@gmail.com>\uFF1B <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+FF1B');
+  assertParsedList('<foo@gmail.com>\uFF1B <bar@gmail.com>\uFF1B',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+FF1B');
+
+  assertParsedList('<foo@gmail.com>\uFF64 <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+FF64');
+  assertParsedList('<foo@gmail.com>\uFF64 <bar@gmail.com>\uFF64',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+FF64');
+}
