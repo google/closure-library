@@ -1387,6 +1387,36 @@ function testStableSort() {
   assertArrayEquals(wantedSortedValues, sortedValues2);
 }
 
+function testSortByKey() {
+  function Item(value) {
+    this.getValue = function() {
+      return value;
+    };
+  }
+  var keyFn = function(item) {
+    return item.getValue();
+  };
+
+  // Test without custom key comparison function
+  var arr1 = [new Item(3), new Item(2), new Item(1), new Item(5), new Item(4)];
+  goog.array.sortByKey(arr1, keyFn);
+  var wantedSortedValues1 = [1, 2, 3, 4, 5];
+  for (var i = 0; i < arr1.length; i++) {
+    assertEquals(wantedSortedValues1[i], arr1[i].getValue());
+  }
+
+  // Test with custom key comparison function
+  var arr2 = [new Item(3), new Item(2), new Item(1), new Item(5), new Item(4)];
+  function comparisonFn(key1, key2) {
+    return -(key1 - key2);
+  }
+  goog.array.sortByKey(arr2, keyFn, comparisonFn);
+  var wantedSortedValues2 = [5, 4, 3, 2, 1];
+  for (var i = 0; i < arr2.length; i++) {
+    assertEquals(wantedSortedValues2[i], arr2[i].getValue());
+  }
+}
+
 function testArrayBucketModulus() {
   // bucket things by modulus
   var a = {};
