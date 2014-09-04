@@ -26,12 +26,14 @@ goog.provide('goog.fx.DragEvent');
 goog.provide('goog.fx.Dragger');
 goog.provide('goog.fx.Dragger.EventType');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+goog.require('goog.labs.events.touch');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Rect');
 goog.require('goog.style');
@@ -435,7 +437,6 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
 
   if (this.enabled_ && !this.dragging_ &&
       (!isMouseDown || e.isMouseActionButton())) {
-    this.maybeReinitTouchEvent_(e);
     if (this.hysteresisDistanceSquared_ == 0) {
       if (this.fireDragStart_(e)) {
         this.dragging_ = true;
@@ -450,10 +451,13 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
     }
     this.setupDragHandlers();
 
-    this.clientX = this.startX = e.clientX;
-    this.clientY = this.startY = e.clientY;
-    this.screenX = e.screenX;
-    this.screenY = e.screenY;
+    var geomData = goog.labs.events.touch.getTouchData(e);
+
+    this.clientX = this.startX = geomData.clientX;
+    this.clientY = this.startY = geomData.clientY;
+    this.screenX = geomData.screenX;
+    this.screenY = geomData.screenY;
+
     this.computeInitialPosition();
     this.pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
 
@@ -512,13 +516,15 @@ goog.fx.Dragger.prototype.setupDragHandlers = function() {
 
 /**
  * Fires a goog.fx.Dragger.EventType.START event.
- * @param {goog.events.BrowserEvent} e Browser event that triggered the drag.
+ * @param {!goog.events.BrowserEvent} e Browser event that triggered the drag.
  * @return {boolean} False iff preventDefault was called on the DragEvent.
  * @private
  */
 goog.fx.Dragger.prototype.fireDragStart_ = function(e) {
+  var geomData = goog.labs.events.touch.getTouchData(e);
   return this.dispatchEvent(new goog.fx.DragEvent(
-      goog.fx.Dragger.EventType.START, this, e.clientX, e.clientY, e));
+      goog.fx.Dragger.EventType.START, this,
+      geomData.clientX, geomData.clientY, e));
 };
 
 
@@ -537,14 +543,23 @@ goog.fx.Dragger.prototype.cleanUpAfterDragging_ = function() {
 
 /**
  * Event handler that is used to end the drag.
- * @param {goog.events.BrowserEvent} e Event object.
+ * @param {!goog.events.BrowserEvent} e Event object.
  * @param {boolean=} opt_dragCanceled Whether the drag has been canceled.
  */
 goog.fx.Dragger.prototype.endDrag = function(e, opt_dragCanceled) {
   this.cleanUpAfterDragging_();
 
   if (this.dragging_) {
-    this.maybeReinitTouchEvent_(e);
+
+    var clientX = 0;
+    var clientY = 0;
+    if (e.type != goog.events.EventType.BLUR) {
+      var geomData = goog.labs.events.touch.getTouchData(e);
+      clientX = geomData.clientX;
+      clientY = geomData.clientY;
+    }
+
+
     this.dragging_ = false;
 
     var x = this.limitX(this.deltaX);
@@ -552,7 +567,9 @@ goog.fx.Dragger.prototype.endDrag = function(e, opt_dragCanceled) {
     var dragCanceled = opt_dragCanceled ||
         e.type == goog.events.EventType.TOUCHCANCEL;
     this.dispatchEvent(new goog.fx.DragEvent(
-        goog.fx.Dragger.EventType.END, this, e.clientX, e.clientY, e, x, y,
+        goog.fx.Dragger.EventType.END, this,
+        clientX, clientY,
+        e, x, y,
         dragCanceled));
   } else {
     this.dispatchEvent(goog.fx.Dragger.EventType.EARLY_CANCEL);
@@ -562,7 +579,7 @@ goog.fx.Dragger.prototype.endDrag = function(e, opt_dragCanceled) {
 
 /**
  * Event handler that is used to end the drag by cancelling it.
- * @param {goog.events.BrowserEvent} e Event object.
+ * @param {!goog.events.BrowserEvent} e Event object.
  */
 goog.fx.Dragger.prototype.endDragCancel = function(e) {
   this.endDrag(e, true);
@@ -570,41 +587,28 @@ goog.fx.Dragger.prototype.endDragCancel = function(e) {
 
 
 /**
- * Re-initializes the event with the first target touch event or, in the case
- * of a stop event, the last changed touch.
- * @param {goog.events.BrowserEvent} e A TOUCH... event.
- * @private
- */
-goog.fx.Dragger.prototype.maybeReinitTouchEvent_ = function(e) {
-  var type = e.type;
-
-  if (type == goog.events.EventType.TOUCHSTART ||
-      type == goog.events.EventType.TOUCHMOVE) {
-    e.init(e.getBrowserEvent().targetTouches[0], e.currentTarget);
-  } else if (type == goog.events.EventType.TOUCHEND ||
-             type == goog.events.EventType.TOUCHCANCEL) {
-    e.init(e.getBrowserEvent().changedTouches[0], e.currentTarget);
-  }
-};
-
-
-/**
- * Event handler that is used on mouse / touch move to update the drag
+ * Event handler that is used on mouse / touch move to update the drag.
+ *
+ * TODO(nnaze): Lock down as non-nullable. Must fix other call sites
+ * in google codebase (namely go/nazhc).
  * @param {goog.events.BrowserEvent} e Event object.
  * @private
  */
 goog.fx.Dragger.prototype.handleMove_ = function(e) {
+  goog.asserts.assert(e, 'e should be defined');
+  var geomData;
   if (this.enabled_) {
-    this.maybeReinitTouchEvent_(e);
+    geomData = goog.labs.events.touch.getTouchData(e);
+
     // dx in right-to-left cases is relative to the right.
     var sign = this.useRightPositioningForRtl_ &&
         this.isRightToLeft_() ? -1 : 1;
-    var dx = sign * (e.clientX - this.clientX);
-    var dy = e.clientY - this.clientY;
-    this.clientX = e.clientX;
-    this.clientY = e.clientY;
-    this.screenX = e.screenX;
-    this.screenY = e.screenY;
+    var dx = sign * (geomData.clientX - this.clientX);
+    var dy = geomData.clientY - this.clientY;
+    this.clientX = geomData.clientX;
+    this.clientY = geomData.clientY;
+    this.screenX = geomData.screenX;
+    this.screenY = geomData.screenY;
 
     if (!this.dragging_) {
       var diffX = this.startX - this.clientX;
@@ -629,9 +633,10 @@ goog.fx.Dragger.prototype.handleMove_ = function(e) {
     var y = pos.y;
 
     if (this.dragging_) {
-
+      geomData = goog.labs.events.touch.getTouchData(e);
       var rv = this.dispatchEvent(new goog.fx.DragEvent(
-          goog.fx.Dragger.EventType.BEFOREDRAG, this, e.clientX, e.clientY,
+          goog.fx.Dragger.EventType.BEFOREDRAG, this,
+          geomData.clientX, geomData.clientY,
           e, x, y));
 
       // Only do the defaultAction and dispatch drag event if predrag didn't
@@ -671,7 +676,7 @@ goog.fx.Dragger.prototype.calculatePosition_ = function(dx, dy) {
 
 /**
  * Event handler for scroll target scrolling.
- * @param {goog.events.BrowserEvent} e The event.
+ * @param {!goog.events.BrowserEvent} e The event.
  * @private
  */
 goog.fx.Dragger.prototype.onScroll_ = function(e) {
