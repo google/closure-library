@@ -290,12 +290,17 @@ goog.string.collapseBreakingSpaces = function(str) {
  * @param {string} str The string to trim.
  * @return {string} A trimmed copy of {@code str}.
  */
-goog.string.trim = function(str) {
-  // Since IE doesn't include non-breaking-space (0xa0) in their \s character
-  // class (as required by section 7.2 of the ECMAScript spec), we explicitly
-  // include it in the regexp to enforce consistent cross-browser behavior.
-  return str.replace(/^[\s\xa0]+|[\s\xa0]+$/g, '');
-};
+goog.string.trim = (goog.TRUSTED_SITE && String.prototype.trim) ?
+    function(str) {
+      return str.trim();
+    } :
+    function(str) {
+      // Since IE doesn't include non-breaking-space (0xa0) in their \s
+      // character class (as required by section 7.2 of the ECMAScript spec),
+      // we explicitly include it in the regexp to enforce consistent
+      // cross-browser behavior.
+      return str.replace(/^[\s\xa0]+|[\s\xa0]+$/g, '');
+    };
 
 
 /**
