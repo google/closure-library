@@ -184,6 +184,16 @@ goog.ui.MenuButton.prototype.renderMenuAsSibling_ = false;
 
 
 /**
+ * Whether to select the first item in the menu when it is opened using
+ * enter or space. By default, the first item is selected only when
+ * opened by a key up or down event. When this is on, the first item will
+ * be selected due to any of the four events.
+ * @private
+ */
+goog.ui.MenuButton.prototype.selectFirstOnEnterOrSpace_ = false;
+
+
+/**
  * Sets up event handlers specific to menu buttons.
  * @override
  */
@@ -488,6 +498,18 @@ goog.ui.MenuButton.prototype.setMenuMargin = function(margin) {
 
 
 /**
+ * Sets whether to select the first item in the menu when it is opened using
+ * enter or space. By default, the first item is selected only when
+ * opened by a key up or down event. When this is on, the first item will
+ * be selected due to any of the four events.
+ * @param {boolean} select
+ */
+goog.ui.MenuButton.prototype.setSelectFirstOnEnterOrSpace = function(select) {
+  this.selectFirstOnEnterOrSpace_ = select;
+};
+
+
+/**
  * Adds a new menu item at the end of the menu.
  * @param {goog.ui.MenuItem|goog.ui.MenuSeparator|goog.ui.Control} item Menu
  *     item to add to the menu.
@@ -739,11 +761,21 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
 
       // As per aria spec, highlight the first element in the menu when
       // keyboarding up or down. Thus, the first menu item will be announced
-      // for screen reader users.
-      var focus = !!opt_e && (opt_e.keyCode == goog.events.KeyCodes.DOWN ||
-          opt_e.keyCode == goog.events.KeyCodes.UP);
+      // for screen reader users. If selectFirstOnEnterOrSpace is set, do this
+      // for enter or space as well.
+      var isEnterOrSpace = !!opt_e &&
+          (opt_e.keyCode == goog.events.KeyCodes.ENTER ||
+           opt_e.keyCode == goog.events.KeyCodes.SPACE);
+      var isUpOrDown = !!opt_e &&
+          (opt_e.keyCode == goog.events.KeyCodes.DOWN ||
+           opt_e.keyCode == goog.events.KeyCodes.UP);
+      var focus = isUpOrDown ||
+          (isEnterOrSpace && this.selectFirstOnEnterOrSpace_);
       this.menu_.setHighlightedIndex(focus ? 0 : -1);
     } else {
+      // Clear the highlighted item so that when opened again, the selected
+      // first item will announce again.
+      this.menu_.setHighlightedIndex(-1);
       this.setActive(false);
       this.menu_.setMouseButtonPressed(false);
 

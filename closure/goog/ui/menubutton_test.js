@@ -179,6 +179,40 @@ function testHighlightItemBehavior() {
 
 
 /**
+ * Check that the appropriate items are selected due to various types
+ * of keyboard opens.
+ */
+function testHighlightFirstOnOpen() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
+  assertTrue('Menu must open after down key', menuButton.isOpen());
+  assertEquals('First menuitem must be the aria-activedescendant',
+      'menuItem1', goog.a11y.aria.getState(menuButton.getElement(),
+      goog.a11y.aria.State.ACTIVEDESCENDANT));
+
+  menuButton.setOpen(false);
+  assertEquals('No items should be highlighted when the menu is closed',
+      '', goog.a11y.aria.getState(menuButton.getElement(),
+      goog.a11y.aria.State.ACTIVEDESCENDANT));
+
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertEquals(
+      'By default no items should be highlighted when opened with enter.',
+      '', goog.a11y.aria.getState(menuButton.getElement(),
+      goog.a11y.aria.State.ACTIVEDESCENDANT));
+
+  menuButton.setOpen(false);
+  menuButton.setSelectFirstOnEnterOrSpace(true);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertEquals('The first item should be highlighted when opened with enter ' +
+      'after setting selectFirstOnKeyboardOpen',
+      'menuItem1', goog.a11y.aria.getState(menuButton.getElement(),
+      goog.a11y.aria.State.ACTIVEDESCENDANT));
+}
+
+
+/**
  * Open the menu, enter a submenu and then back out of it.
  * Check if the aria-activedescendant property is set correctly.
  */
