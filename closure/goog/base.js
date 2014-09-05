@@ -148,8 +148,8 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
  * Defines a named value. In uncompiled mode, the value is retreived from
  * CLOSURE_DEFINES or CLOSURE_UNCOMPILED_DEFINES if the object is defined and
  * has the property specified, and otherwise used the defined defaultValue.
- * When compiled, the default can be overridden using compiler command-line
- * options.
+ * When compiled the default can be overridden using the compiler
+ * options or the value set in the CLOSURE_DEFINES object.
  *
  * @param {string} name The distinguished name to provide.
  * @param {string|number|boolean} defaultValue
