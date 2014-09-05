@@ -246,7 +246,7 @@ is prefererred over using this script for performing JavaScript compilation.
 Please migrate your codebase.
 
 See:
-https://code.google.com/p/closure-compiler/wiki/ManageClosureDependencies
+https://github.com/google/closure-compiler/wiki/Manage-Closure-Dependencies
 """)
 
     # Make sure a .jar is specified.
