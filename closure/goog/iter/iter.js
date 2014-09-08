@@ -425,7 +425,22 @@ goog.iter.every = function(iterable, f, opt_obj) {
  * @template VALUE
  */
 goog.iter.chain = function(var_args) {
-  var iterator = goog.iter.toIterator(arguments);
+  return goog.iter.chainFromIterable(arguments);
+};
+
+
+/**
+ * Takes a single iterable containing zero or more iterables and returns one
+ * iterator that will iterate over each one in the order given.
+ * @see http://docs.python.org/2/library/itertools.html#itertools.chain.from_iterable
+ * @param {goog.iter.Iterable} iterable The iterable of iterables to chain.
+ * @return {!goog.iter.Iterator.<VALUE>} Returns a new iterator that will
+ *     iterate over all the contents of the iterables contained within
+ *     {@code iterable}.
+ * @template VALUE
+ */
+goog.iter.chainFromIterable = function(iterable) {
+  var iterator = goog.iter.toIterator(iterable);
   var iter = new goog.iter.Iterator();
   var current = null;
 
@@ -447,21 +462,6 @@ goog.iter.chain = function(var_args) {
   };
 
   return iter;
-};
-
-
-/**
- * Takes a single iterable containing zero or more iterables and returns one
- * iterator that will iterate over each one in the order given.
- * @see http://docs.python.org/2/library/itertools.html#itertools.chain.from_iterable
- * @param {goog.iter.Iterable} iterable The iterable of iterables to chain.
- * @return {!goog.iter.Iterator.<VALUE>} Returns a new iterator that will
- *     iterate over all the contents of the iterables contained within
- *     {@code iterable}.
- * @template VALUE
- */
-goog.iter.chainFromIterable = function(iterable) {
-  return goog.iter.chain.apply(undefined, iterable);
 };
 
 
