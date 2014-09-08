@@ -398,7 +398,7 @@ function testCalculateTargetBox() {
     testGroup.calculateTargetBox_(target.box_);
   });
   assertTrue(goog.math.Box.equals(testGroup.targetBox_,
-                                  new goog.math.Box(0, 9, 10, 1)));
+      new goog.math.Box(0, 9, 10, 1)));
 
   testGroup = new goog.fx.AbstractDragDrop();
   testGroup.targetList_ = [];
@@ -407,7 +407,7 @@ function testCalculateTargetBox() {
     testGroup.calculateTargetBox_(target.box_);
   });
   assertTrue(goog.math.Box.equals(testGroup.targetBox_,
-                                  new goog.math.Box(10, 50, 80, 10)));
+      new goog.math.Box(10, 50, 80, 10)));
 
   testGroup = new goog.fx.AbstractDragDrop();
   testGroup.targetList_ = [];
@@ -416,7 +416,7 @@ function testCalculateTargetBox() {
     testGroup.calculateTargetBox_(target.box_);
   });
   assertTrue(goog.math.Box.equals(testGroup.targetBox_,
-                                  new goog.math.Box(0, 6, 6, 0)));
+      new goog.math.Box(0, 6, 6, 0)));
 }
 
 
@@ -547,9 +547,6 @@ function testScrollBeforeMoveDrag() {
   var moveEvent = {
     'clientX': 8,
     'clientY': 10,
-    'screenX': 12,
-    'screenY': 12,
-    'target': {},
     'type': goog.events.EventType.MOUSEMOVE,
     'relatedTarget': childEl,
     'preventDefault': function() {}
@@ -584,22 +581,14 @@ function testMouseMove_mouseOutBeforeThreshold() {
     draggedItem = item;
   };
 
-  var event = {
-    'clientX': 8,
-    'clientY': 10, // Drag distance is only 2
-    'type': goog.events.EventType.MOUSEOUT,
-    'target': childEl
-  };
+  var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
+    'type': goog.events.EventType.MOUSEOUT, 'target': childEl};
   item.mouseMove_(event);
   assertEquals('DragStart should not be fired for mouseout on child element.',
       null, draggedItem);
 
-  var event = {
-    'clientX': 8,
-    'clientY': 10, // Drag distance is only 2
-    'type': goog.events.EventType.MOUSEOUT,
-    'target': itemEl
-  };
+  var event = {'clientX': 8, 'clientY': 10, // Drag distance is only 2
+    'type': goog.events.EventType.MOUSEOUT, 'target': itemEl};
   item.mouseMove_(event);
   assertEquals('DragStart should be fired for mouseout on main element.',
       item, draggedItem);

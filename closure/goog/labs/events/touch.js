@@ -25,8 +25,6 @@ goog.require('goog.asserts');
 goog.require('goog.events.EventType');
 goog.require('goog.string');
 
-goog.forwardDeclare('goog.events.BrowserEvent');
-
 
 /**
  * Description the geometry and target of an event.
@@ -43,14 +41,18 @@ goog.labs.events.touch.TouchData;
 
 
 /**
- * Takes a mouse, touch, or other similar UI event and returns the relevent
- * geometry and target data.
- * @param {!Event|!goog.events.BrowserEvent} e A UI event.
+ * Takes a mouse or touch event and returns the relevent geometry and target
+ * data.
+ * @param {!Event} e A mouse or touch event.
  * @return {!goog.labs.events.touch.TouchData}
  */
 goog.labs.events.touch.getTouchData = function(e) {
 
   var source = e;
+  goog.asserts.assert(
+      goog.string.startsWith(e.type, 'touch') ||
+      goog.string.startsWith(e.type, 'mouse'),
+      'Event must be mouse or touch event.');
 
   if (goog.string.startsWith(e.type, 'touch')) {
     goog.asserts.assert(
@@ -69,18 +71,6 @@ goog.labs.events.touch.getTouchData = function(e) {
              e.changedTouches[0] : e.targetTouches[0];
   }
 
-  // Duck typing -- we expect the event to be a UI or touch event that
-  // exports the following properties.
-  if (goog.DEBUG) {
-    goog.array.forEach(
-        ['clientX', 'clientY', 'screenX', 'screenY', 'target'],
-        function(prop) {
-          goog.asserts.assert(
-              goog.isDef(source[prop]),
-              'Property should be defined in source object: ' + prop);
-        });
-  }
-
   return {
     clientX: source['clientX'],
     clientY: source['clientY'],
@@ -89,3 +79,4 @@ goog.labs.events.touch.getTouchData = function(e) {
     target: source['target']
   };
 };
+
