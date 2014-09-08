@@ -1037,7 +1037,7 @@ goog.addDependency('testing/mock_test.js', ['goog.testing.MockTest'], ['goog.arr
 goog.addDependency('testing/mockclassfactory.js', ['goog.testing.MockClassFactory', 'goog.testing.MockClassRecord'], ['goog.array', 'goog.object', 'goog.testing.LooseMock', 'goog.testing.StrictMock', 'goog.testing.TestCase', 'goog.testing.mockmatchers'], false);
 goog.addDependency('testing/mockclassfactory_test.js', ['fake.BaseClass', 'fake.ChildClass', 'goog.testing.MockClassFactoryTest'], ['goog.testing', 'goog.testing.MockClassFactory', 'goog.testing.jsunit'], false);
 goog.addDependency('testing/mockclock.js', ['goog.testing.MockClock'], ['goog.Disposable', 'goog.async.run', 'goog.testing.PropertyReplacer', 'goog.testing.events', 'goog.testing.events.Event', 'goog.testing.watchers'], false);
-goog.addDependency('testing/mockclock_test.js', ['goog.testing.MockClockTest'], ['goog.events', 'goog.functions', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction'], false);
+goog.addDependency('testing/mockclock_test.js', ['goog.testing.MockClockTest'], ['goog.Promise', 'goog.Timer', 'goog.events', 'goog.functions', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction'], false);
 goog.addDependency('testing/mockcontrol.js', ['goog.testing.MockControl'], ['goog.array', 'goog.testing', 'goog.testing.LooseMock', 'goog.testing.StrictMock'], false);
 goog.addDependency('testing/mockcontrol_test.js', ['goog.testing.MockControlTest'], ['goog.testing.Mock', 'goog.testing.MockControl', 'goog.testing.jsunit'], false);
 goog.addDependency('testing/mockinterface.js', ['goog.testing.MockInterface'], [], false);

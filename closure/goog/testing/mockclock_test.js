@@ -15,6 +15,8 @@
 goog.provide('goog.testing.MockClockTest');
 goog.setTestOnly('goog.testing.MockClockTest');
 
+goog.require('goog.Promise');
+goog.require('goog.Timer');
 goog.require('goog.events');
 goog.require('goog.functions');
 goog.require('goog.testing.MockClock');
@@ -519,6 +521,30 @@ function testNonFunctionArguments() {
         window.setTimeout('throw new Error("setTimeout string eval!");', 0);
       });
   clock.tick(1);
+
+  clock.dispose();
+}
+
+
+function testTickPromise() {
+  var clock = new goog.testing.MockClock(true);
+
+  var p = goog.Promise.resolve('foo');
+  assertEquals('foo', clock.tickPromise(p));
+
+  var rejected = goog.Promise.reject(new Error('failed'));
+  var e = assertThrows(function() {
+    clock.tickPromise(rejected);
+  });
+  assertEquals('failed', e.message);
+
+  var delayed = goog.Timer.promise(500, 'delayed');
+  e = assertThrows(function() {
+    clock.tickPromise(delayed);
+  });
+  assertEquals('Promise was expected to be resolved after mock clock tick.',
+      e.message);
+  assertEquals('delayed', clock.tickPromise(delayed, 500));
 
   clock.dispose();
 }

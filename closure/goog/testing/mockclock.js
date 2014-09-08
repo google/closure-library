@@ -296,6 +296,43 @@ goog.testing.MockClock.prototype.tick = function(opt_millis) {
 
 
 /**
+ * Takes a promise and then ticks the mock clock. If the promise successfully
+ * resolves, returns the value produced by the promise. If the promise is
+ * rejected, it throws the rejection as an exception. If the promise is not
+ * resolved at all, throws an exception.
+ * Also ticks the general clock by the specified amount.
+ *
+ * @param {!goog.Thenable.<T>} promise A promise that should be resolved after
+ *     the mockClock is ticked for the given opt_millis.
+ * @param {number=} opt_millis Number of milliseconds to increment the counter.
+ *     If not specified, clock ticks 1 millisecond.
+ * @return {T}
+ * @template T
+ */
+goog.testing.MockClock.prototype.tickPromise = function(promise, opt_millis) {
+  var value;
+  var error;
+  var resolved = false;
+  promise.then(function(v) {
+    value = v;
+    resolved = true;
+  }, function(e) {
+    error = e;
+    resolved = true;
+  });
+  this.tick(opt_millis);
+  if (!resolved) {
+    throw new Error(
+        'Promise was expected to be resolved after mock clock tick.');
+  }
+  if (error) {
+    throw error;
+  }
+  return value;
+};
+
+
+/**
  * @return {number} The number of timeouts that have been scheduled.
  */
 goog.testing.MockClock.prototype.getTimeoutsMade = function() {
