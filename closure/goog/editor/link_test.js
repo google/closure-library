@@ -50,6 +50,23 @@ function testCreateNotNew() {
   assertEquals('Should be empty', '', link.getCurrentText());
 }
 
+function testCreateNewLinkFromText() {
+  var url = 'http://www.google.com/';
+  anchor.innerHTML = url;
+  var link = goog.editor.Link.createNewLinkFromText(anchor);
+  assertNotNull('Should have created object', link);
+  assertEquals('Should have url in anchor', url, anchor.href);
+}
+
+function testCreateNewLinkFromTextWithAnchor() {
+  var url = 'https://www.google.com/';
+  anchor.innerHTML = url;
+  var link = goog.editor.Link.createNewLinkFromText(anchor, '_blank');
+  assertNotNull('Should have created object', link);
+  assertEquals('Should have url in anchor', url, anchor.href);
+  assertEquals('Should have _blank target', '_blank', anchor.target);
+}
+
 function testInitialize() {
   var link = goog.editor.Link.createNewLink(anchor, 'http://www.google.com');
   assertNotNull('Should have created object', link);

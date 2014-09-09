@@ -286,6 +286,24 @@ goog.editor.Link.createNewLink = function(anchor, url, opt_target,
 
 
 /**
+ * Initialize a new link using text in anchor, or empty string if there is no
+ * likely url in the anchor.
+ * @param {HTMLAnchorElement} anchor The anchor element with likely url content.
+ * @param {string=} opt_target The target.
+ * @return {!goog.editor.Link} The link.
+ */
+goog.editor.Link.createNewLinkFromText = function(anchor, opt_target) {
+  var link = new goog.editor.Link(anchor, true);
+  var text = link.getValidLinkFromText();
+  link.initializeUrl(text ? text : '');
+  if (opt_target) {
+    anchor.target = opt_target;
+  }
+  return link;
+};
+
+
+/**
  * Returns true if str could be a URL, false otherwise
  *
  * Ex: TR_Util.isLikelyUrl_("http://www.google.com") == true

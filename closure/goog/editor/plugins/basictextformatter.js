@@ -1013,6 +1013,15 @@ goog.editor.plugins.BasicTextFormatter.prototype.createLink_ = function(range,
     if (anchors.length) {
       anchor = anchors.pop();
     }
+    var isLikelyUrl = function(a, i, anchors) {
+      return goog.editor.Link.isLikelyUrl(goog.dom.getRawTextContent(a));
+    };
+    if (anchors.length && goog.array.every(anchors, isLikelyUrl)) {
+      for (var i = 0, a; a = anchors[i]; i++) {
+        goog.editor.Link.createNewLinkFromText(a, opt_target);
+      }
+      anchors = null;
+    }
   }
 
   return goog.editor.Link.createNewLink(
