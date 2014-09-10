@@ -293,17 +293,17 @@ goog.define('goog.functions.CACHE_RETURN_VALUE', true);
  * @template T
  */
 goog.functions.cacheReturnValue = function(fn) {
-  var fn2 = fn; // prevents a type error later when we set it to undefined
+  var called = false;
   var value;
 
   return function() {
     if (!goog.functions.CACHE_RETURN_VALUE) {
-      return fn2();
+      return fn();
     }
 
-    if (fn2) {
-      value = fn2();
-      fn2 = undefined; // free memory
+    if (!called) {
+      value = fn();
+      called = true;
     }
 
     return value;
