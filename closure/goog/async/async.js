@@ -13,7 +13,6 @@
 // limitations under the License.
 
 goog.provide('goog.async');
-goog.provide('goog.async.run');
 
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.functions');
