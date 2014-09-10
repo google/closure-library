@@ -369,7 +369,6 @@ goog.ui.ModalPopup.prototype.exitDocument = function() {
 
 /**
  * Sets the visibility of the modal popup box and focus to the popup.
- * Lazily renders the component if needed.
  * @param {boolean} visible Whether the modal popup should be visible.
  */
 goog.ui.ModalPopup.prototype.setVisible = function(visible) {
