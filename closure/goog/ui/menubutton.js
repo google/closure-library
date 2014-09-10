@@ -773,9 +773,6 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
           (isEnterOrSpace && this.selectFirstOnEnterOrSpace_);
       this.menu_.setHighlightedIndex(focus ? 0 : -1);
     } else {
-      // Clear the highlighted item so that when opened again, the selected
-      // first item will announce again.
-      this.menu_.setHighlightedIndex(-1);
       this.setActive(false);
       this.menu_.setMouseButtonPressed(false);
 

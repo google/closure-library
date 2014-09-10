@@ -179,36 +179,37 @@ function testHighlightItemBehavior() {
 
 
 /**
- * Check that the appropriate items are selected due to various types
- * of keyboard opens.
+ * Check that the appropriate items are selected when menus are opened with the
+ * keyboard and setSelectFirstOnEnterOrSpace is not set.
  */
 function testHighlightFirstOnOpen() {
   var node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
-  assertTrue('Menu must open after down key', menuButton.isOpen());
-  assertEquals('First menuitem must be the aria-activedescendant',
-      'menuItem1', goog.a11y.aria.getState(menuButton.getElement(),
-      goog.a11y.aria.State.ACTIVEDESCENDANT));
-
-  menuButton.setOpen(false);
-  assertEquals('No items should be highlighted when the menu is closed',
-      '', goog.a11y.aria.getState(menuButton.getElement(),
-      goog.a11y.aria.State.ACTIVEDESCENDANT));
-
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
   assertEquals(
       'By default no items should be highlighted when opened with enter.',
-      '', goog.a11y.aria.getState(menuButton.getElement(),
-      goog.a11y.aria.State.ACTIVEDESCENDANT));
+      null, menuButton.getMenu().getHighlighted());
 
   menuButton.setOpen(false);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.DOWN));
+  assertTrue('Menu must open after down key', menuButton.isOpen());
+  assertEquals('First menuitem must be highlighted',
+      'menuItem1', menuButton.getMenu().getHighlighted().getElement().id);
+}
+
+
+/**
+ * Check that the appropriate items are selected when menus are opened with the
+ * keyboard and setSelectFirstOnEnterOrSpace is set.
+ */
+function testHighlightFirstOnOpen_withEnterOrSpaceSet() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
   menuButton.setSelectFirstOnEnterOrSpace(true);
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
   assertEquals('The first item should be highlighted when opened with enter ' +
-      'after setting selectFirstOnKeyboardOpen',
-      'menuItem1', goog.a11y.aria.getState(menuButton.getElement(),
-      goog.a11y.aria.State.ACTIVEDESCENDANT));
+      'after setting selectFirstOnEnterOrSpace',
+      'menuItem1', menuButton.getMenu().getHighlighted().getElement().id);
 }
 
 
