@@ -844,6 +844,8 @@ goog.graphics.SvgGraphics.prototype.disposeInternal = function() {
   delete this.defs_;
   delete this.defsElement_;
   delete this.canvasElement;
+  this.handler_.dispose();
+  delete this.handler_;
   goog.graphics.SvgGraphics.superClass_.disposeInternal.call(this);
 };
 
