@@ -4371,8 +4371,8 @@ goog.i18n.NumberFormatSymbols_es_SV = {
  * @enum {string}
  */
 goog.i18n.NumberFormatSymbols_es_US = {
-  DECIMAL_SEP: ',',
-  GROUP_SEP: '.',
+  DECIMAL_SEP: '.',
+  GROUP_SEP: ',',
   PERCENT: '%',
   ZERO_DIGIT: '0',
   PLUS_SIGN: '+',
