@@ -153,7 +153,8 @@ goog.userAgent.WEBKIT = goog.userAgent.BROWSER_KNOWN_ ?
  */
 goog.userAgent.isMobile_ = function() {
   return goog.userAgent.WEBKIT &&
-         goog.labs.userAgent.util.matchUserAgent('Mobile');
+         (goog.labs.userAgent.util.matchUserAgent('Mobile') ||
+          goog.labs.userAgent.util.matchUserAgent('Android'));
 };
 
 

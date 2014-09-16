@@ -108,6 +108,64 @@ function testOperaInit() {
   assertUndefined(goog.userAgent.VERSION);
 }
 
+
+/**
+ * Test mobile browser detection.
+ */
+function testMobile() {
+  var mobileUaStringList =
+      ['Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X; en-us)' +
+       ' AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0' +
+       ' Mobile/11A465 Safari/9537.53',
+       'Mozilla/5.0 (iPad; CPU OS 4_3_5 like Mac OS X; en-us)' +
+       ' AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2' +
+       ' Mobile/8L1 Safari/6533.18.5',
+       'Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D)' +
+       ' AppleWebKit/535.19 (KHTML, like Gecko)' +
+       ' Chrome/18.0.1025.166 Mobile Safari/535.19',
+       'Mozilla/5.0 (Linux; Android 4.3; Nexus 7 Build/JSS15Q)' +
+       ' AppleWebKit/537.36 (KHTML, like Gecko)' +
+       ' Chrome/29.0.1547.72 Safari/537.36'
+      ];
+  var noneMobileUaStringList =
+      ['Mozilla/5.0 (X11; Linux x86_64)' +
+       ' AppleWebKit/537.36 (KHTML, like Gecko)' +
+       ' Chrome/38.0.2125.44 Safari/537.36',
+       'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:32.0)' +
+       ' Gecko/20100101 Firefox/32.0'
+      ];
+  for (var i = 0; i < mobileUaStringList.length; i++) {
+    var mockGlobal = {
+      'navigator': {
+        'userAgent': mobileUaStringList[i]
+      }
+    };
+    propertyReplacer.set(goog, 'global', mockGlobal);
+    propertyReplacer.set(goog.userAgent, 'getUserAgentString', function() {
+      return mobileUaStringList[i];
+    });
+    goog.labs.userAgent.util.setUserAgent(null);
+    goog.userAgentTestUtil.reinitializeUserAgent();
+    assertEquals(true, goog.userAgent.MOBILE);
+  }
+
+  for (var i = 0; i < noneMobileUaStringList.length; i++) {
+    var mockGlobal = {
+      'navigator': {
+        'userAgent': noneMobileUaStringList[i]
+      }
+    };
+    propertyReplacer.set(goog, 'global', mockGlobal);
+    propertyReplacer.set(goog.userAgent, 'getUserAgentString', function() {
+      return noneMobileUaStringList[i];
+    });
+    goog.labs.userAgent.util.setUserAgent(null);
+    goog.userAgentTestUtil.reinitializeUserAgent();
+    assertEquals(false, goog.userAgent.MOBILE);
+  }
+}
+
+
 function testCompare() {
   assertTrue('exact equality broken',
              goog.userAgent.compare('1.0', '1.0') == 0);
