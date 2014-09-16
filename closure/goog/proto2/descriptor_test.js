@@ -16,10 +16,12 @@ goog.provide('goog.proto2.DescriptorTest');
 goog.setTestOnly('goog.proto2.DescriptorTest');
 
 goog.require('goog.proto2.Descriptor');
+goog.require('goog.proto2.Message');
 goog.require('goog.testing.jsunit');
+goog.require('goog.testing.recordFunction');
 
 function testDescriptorConstruction() {
-  var messageType = {};
+  var messageType = function() {};
   var descriptor = new goog.proto2.Descriptor(messageType, {
     name: 'test',
     fullName: 'this.is.a.test'
@@ -31,8 +33,8 @@ function testDescriptorConstruction() {
 }
 
 function testParentDescriptor() {
-  var parentType = {};
-  var messageType = {};
+  var parentType = function() {};
+  var messageType = function() {};
 
   var parentDescriptor = new goog.proto2.Descriptor(parentType, {
     name: 'parent',
@@ -50,4 +52,30 @@ function testParentDescriptor() {
   }, []);
 
   assertEquals(parentDescriptor, descriptor.getContainingType());
+}
+
+function testStaticGetDescriptorCachesResults() {
+  var messageType = goog.testing.recordFunction();
+
+  // This method would be provided by proto_library() BUILD rule.
+  messageType.prototype.getDescriptor = function() {
+    if (!messageType.descriptor_) {
+      // The descriptor is created lazily when we instantiate a new instance.
+      var descriptorObj_ = {
+        0: {
+          name: 'test',
+          fullName: 'this.is.a.test'
+        }
+      };
+      messageType.descriptor_ = goog.proto2.Message.createDescriptor_(
+          messageType, descriptorObj_);
+    }
+    return messageType.descriptor_;
+  };
+
+  var descriptor = goog.proto2.Descriptor.getDescriptor(messageType);
+
+  assertEquals(descriptor,
+      goog.proto2.Descriptor.getDescriptor(messageType));
+  assertEquals(1, messageType.getCallCount());
 }

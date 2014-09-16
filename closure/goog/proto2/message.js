@@ -105,6 +105,8 @@ goog.proto2.Message.FieldType = {
  * This declaration is just here for documentation purposes.
  * goog.proto2.Message does not have its own descriptor.
  *
+ * TODO(user): Delete after components update for cl/74316494.
+ *
  * @type {undefined}
  * @private
  */
@@ -185,6 +187,9 @@ goog.proto2.Message.prototype.forEachUnknown = function(callback, opt_scope) {
  * Returns the descriptor which describes the current message.
  *
  * This only works if we assume people never subclass protobufs.
+ *
+ * TODO(user): Replace with goog.abstractMethod after components update
+ *     with cl/74316494.
  *
  * @return {!goog.proto2.Descriptor} The descriptor.
  */
@@ -749,6 +754,8 @@ goog.proto2.Message.createDescriptor_ = function(messageType, metadataObj) {
  * Sets the metadata that represents the definition of this message.
  *
  * GENERATED CODE USE ONLY. Called when constructing message classes.
+ *
+ * TODO(user): Delete after components update with cl/74316494.
  *
  * @param {!Function} messageType Constructor for the
  *     message type to which this metadata applies.

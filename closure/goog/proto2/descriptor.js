@@ -88,6 +88,23 @@ goog.proto2.Descriptor = function(messageType, metadata, fields) {
 
 
 /**
+ * Returns the metadata descriptor representing the definition of a message.
+ *
+ * @param {function(new:goog.proto2.Message)} messageType Constructor for the
+ *     message type to which this metadata applies.
+ * @return {!goog.proto2.Descriptor} The new descriptor.
+ */
+goog.proto2.Descriptor.getDescriptor = function(messageType) {
+  // Descriptors are lazy-created and cached on the constructor.
+  // Imitate private property convention to encourage use of public getters.
+  return messageType['descriptor_'] ||
+      // Create an instance of messageType to reach the "getDescriptor" method.
+      // At most one instance will ever be created in this way.
+      (messageType['descriptor_'] = (new messageType()).getDescriptor());
+};
+
+
+/**
  * Returns the name of the message, if any.
  *
  * @return {?string} The name.
