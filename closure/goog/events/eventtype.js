@@ -59,6 +59,10 @@ goog.events.EventType = {
   // See http://msdn.microsoft.com/en-us/library/ie/ms536969(v=vs.85).aspx.
   SELECTSTART: 'selectstart', // IE, Safari, Chrome
 
+  // Wheel events
+  // http://www.w3.org/TR/DOM-Level-3-Events/#events-wheelevents
+  WHEEL: 'wheel',
+
   // Key events
   KEYPRESS: 'keypress',
   KEYDOWN: 'keydown',
