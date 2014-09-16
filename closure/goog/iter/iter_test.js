@@ -365,6 +365,14 @@ function testEquals() {
 
   iter = goog.iter.range(4);
   assertFalse('Same iterator', goog.iter.equals(iter, iter));
+
+  // equality function
+  iter = goog.iter.toIterator(['A', 'B', 'C']);
+  iter2 = goog.iter.toIterator(['a', 'b', 'c']);
+  var equalsFn = function(a, b) {
+    return a.toLowerCase() == b.toLowerCase();
+  };
+  assertTrue('Case-insensitive equal', goog.iter.equals(iter, iter2, equalsFn));
 }
 
 

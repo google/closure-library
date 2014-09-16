@@ -563,15 +563,21 @@ goog.iter.toArray = function(iterable) {
  *     iterable object.
  * @param {!goog.iter.Iterator.<VALUE>|!goog.iter.Iterable} iterable2 The second
  *     iterable object.
+ * @param {function(VALUE,VALUE):boolean=} opt_equalsFn Optional comparison
+ *     function.
+ *     Should take two arguments to compare, and return true if the arguments
+ *     are equal. Defaults to {@link goog.array.defaultCompareEquality} which
+ *     compares the elements using the built-in '===' operator.
  * @return {boolean} true if the iterables contain the same sequence of elements
  *     and have the same length.
  * @template VALUE
  */
-goog.iter.equals = function(iterable1, iterable2) {
+goog.iter.equals = function(iterable1, iterable2, opt_equalsFn) {
   var fillValue = {};
   var pairs = goog.iter.zipLongest(fillValue, iterable1, iterable2);
+  var equalsFn = opt_equalsFn || goog.array.defaultCompareEquality;
   return goog.iter.every(pairs, function(pair) {
-    return pair[0] == pair[1];
+    return equalsFn(pair[0], pair[1]);
   });
 };
 
