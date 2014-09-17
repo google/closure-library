@@ -99,7 +99,9 @@ goog.events.EventType = {
   DROP: 'drop',
   DRAGEND: 'dragend',
 
-  // WebKit touch events.
+  // Touch events
+  // Note that other touch events exist, but we should follow the W3C list here.
+  // http://www.w3.org/TR/touch-events/#list-of-touchevent-types
   TOUCHSTART: 'touchstart',
   TOUCHMOVE: 'touchmove',
   TOUCHEND: 'touchend',
