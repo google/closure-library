@@ -46,3 +46,10 @@ function testBlobToString() {
       addCallback(goog.bind(asyncTestCase.continueTesting, asyncTestCase));
   asyncTestCase.waitForAsync('testBlobToString');
 }
+
+function testGetBlobWithProperties() {
+  assertEquals(
+      'data:spam/eggs;base64,Zm9vYmFy',
+      new goog.testing.fs.getBlobWithProperties(
+          ['foo', new goog.testing.fs.Blob('bar')], 'spam/eggs').toDataUrl());
+}
