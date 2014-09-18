@@ -184,6 +184,15 @@ class _PathSource(source.Source):
     return self._path
 
 
+def _WrapGoogModuleSource(src):
+  return ('goog.loadModule(function(exports) {'
+          '"use strict";'
+          '{0}'
+          '\n'  # terminate any trailing single line comment.
+          ';return exports'
+          '});\n').format(src)
+
+
 def main():
   logging.basicConfig(format=(sys.argv[0] + ': %(message)s'),
                       level=logging.INFO)
@@ -237,7 +246,11 @@ def main():
   if output_mode == 'list':
     out.writelines([js_source.GetPath() + '\n' for js_source in deps])
   elif output_mode == 'script':
-    out.writelines([js_source.GetSource() for js_source in deps])
+    for js_source in deps:
+      src = js_source.GetSource()
+      if js_source.is_goog_module:
+        src = _WrapGoogModuleSource(src)
+      out.write(src + '\n')
   elif output_mode == 'compiled':
     logging.warning("""\
 Closure Compiler now natively understands and orders Closure dependencies and
