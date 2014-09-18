@@ -23,10 +23,13 @@ __author__ = 'nnaze@google.com'
 
 import re
 
-_BASE_REGEX_STRING = '^\s*goog\.%s\(\s*[\'"](.+)[\'"]\s*\)'
+_BASE_REGEX_STRING = r'^\s*goog\.%s\(\s*[\'"](.+)[\'"]\s*\)'
 _MODULE_REGEX = re.compile(_BASE_REGEX_STRING % 'module')
 _PROVIDE_REGEX = re.compile(_BASE_REGEX_STRING % 'provide')
-_REQUIRES_REGEX = re.compile(_BASE_REGEX_STRING % 'require')
+
+_REQUIRE_REGEX_STRING = (r'^\s*(?:(?:var|let|const)\s+[a-zA-Z_$][a-zA-Z0-9$_]*'
+                         r'\s*=\s*)?goog\.require\(\s*[\'"](.+)[\'"]\s*\)')
+_REQUIRES_REGEX = re.compile(_REQUIRE_REGEX_STRING)
 
 
 class Source(object):
