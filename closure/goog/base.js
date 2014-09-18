@@ -245,6 +245,19 @@ goog.provide = function(name) {
     if (goog.isProvided_(name)) {
       throw Error('Namespace "' + name + '" already declared.');
     }
+  }
+
+  goog.constructNamespace_(name);
+};
+
+
+/**
+ * @param {string} name Namespace provided by this file in the form
+ *     "goog.package.part".
+ * @param {Object=} opt_obj The object to embed in the namespace.
+ */
+goog.constructNamespace_ = function(name, opt_obj) {
+  if (!COMPILED) {
     delete goog.implicitNamespaces_[name];
 
     var namespace = name;
@@ -256,7 +269,7 @@ goog.provide = function(name) {
     }
   }
 
-  goog.exportPath_(name);
+  goog.exportPath_(name, opt_obj);
 };
 
 
@@ -371,6 +384,28 @@ goog.module.declareTestMethods = function() {
   }
   goog.moduleLoaderState_.declareTestMethods = true;
 };
+
+
+/**
+ * Indicate that a module's exports that are known test methods should
+ * be copied to the global object.  This makes the test methods visible to
+ * test runners that inspect the global object.
+ *
+ * TODO(johnlenz): Make the test framework aware of goog.module so
+ * that this isn't necessary. Alternately combine this with goog.setTestOnly
+ * to minimize boiler plate.
+ */
+goog.module.declareLegacyNamespace = function() {
+  if (!COMPILED && !goog.isInModuleLoader_()) {
+    throw new Error('goog.module.declareLegacyNamespace must be called from ' +
+        'within a goog.module');
+  }
+  if (!COMPILED && !goog.moduleLoaderState_.moduleName) {
+    throw Error('goog.module must be called prior to ' + 
+        'goog.module.declareLegacyNamespace.');
+  }
+  goog.moduleLoaderState_.declareLegacyNamespace = true;
+}
 
 
 /**
@@ -941,12 +976,17 @@ if (goog.DEPENDENCIES_ENABLED) {
         throw Error('Invalid module definition');
       }
 
-      if (goog.SEAL_MODULE_EXPORTS && Object.seal) {
-        Object.seal(exports);
-      }
       var moduleName = goog.moduleLoaderState_.moduleName;
       if (!goog.isString(moduleName) || !moduleName) {
         throw Error('Invalid module name \"' + moduleName + '\"');
+      }
+
+      // Don't seal legacy namespaces as they may be uses as a parent of
+      // another namespace
+      if (goog.moduleLoaderState_.declareLegacyNamespace) {
+        goog.constructNamespace_(moduleName, exports);
+      } else if (goog.SEAL_MODULE_EXPORTS && Object.seal) {
+        Object.seal(exports);
       }
 
       goog.loadedModules_[moduleName] = exports;

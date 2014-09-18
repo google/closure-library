@@ -87,7 +87,8 @@ exports = {
     assertNotUndefined('goog.Timer should be available', goog.Timer);
 
     // Verify that a legacy module can be aliases with goog.require
-    assertTrue('Timer should be the goog.Timer namespace object', goog.Timer === Timer);
+    assertTrue('Timer should be the goog.Timer namespace object',
+        goog.Timer === Timer);
 
     // and its dependencies
     assertNotUndefined(
@@ -96,8 +97,8 @@ exports = {
   },
 
   testRequireModule: function() {
-    assertUndefined('module failed to protect global namespace: ' +
-        'goog.test_module', goog.test_module);
+    assertEquals('module failed to export legacy namespace: ' +
+        'goog.test_module', testModule, goog.test_module);
     assertUndefined('module failed to protect global namespace: ' +
         'goog.test_module_dep', goog.test_module_dep);
 
