@@ -348,7 +348,7 @@ goog.spell.SpellCheck.prototype.processPending_ = function() {
 /**
  * Callback for lookup function.
  *
- * @param {Array.<Array>} data Data array. Each word is represented by an
+ * @param {Array.<Array.<?>>} data Data array. Each word is represented by an
  *     array containing the word, the status and optionally an array of
  *     suggestions. Passing null indicates that the operation failed.
  * @private

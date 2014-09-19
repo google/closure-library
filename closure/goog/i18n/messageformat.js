@@ -768,7 +768,7 @@ goog.i18n.MessageFormat.prototype.parseOrdinalBlock_ = function(pattern) {
 
 /**
  * Builds a placeholder from the last index of the array.
- * @param {!Array} literals All literals encountered during parse.
+ * @param {!Array.<string>} literals All literals encountered during parse.
  * @return {string} \uFDDF_ + last index + _.
  * @private
  */

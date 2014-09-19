@@ -61,7 +61,7 @@ goog.inherits(goog.pubsub.PubSub, goog.Disposable);
  * of a JavaScript array to (2^32 - 1) / 3 = 1,431,655,765 subscriptions, which
  * should suffice for most applications.
  *
- * @type {!Array}
+ * @type {!Array.<?>}
  * @private
  */
 goog.pubsub.PubSub.prototype.subscriptions_;

@@ -37,7 +37,7 @@ goog.require('goog.ui.emoji.EmojiPaletteRenderer');
 /**
  * A page of emoji to be displayed in an EmojiPicker.
  *
- * @param {Array.<Array>} emoji List of emoji for this page.
+ * @param {Array.<Array.<?>>} emoji List of emoji for this page.
   * @param {?string=} opt_urlPrefix Prefix that should be prepended to all URL.
  * @param {goog.ui.PaletteRenderer=} opt_renderer Renderer used to render or
  *     decorate the palette; defaults to {@link goog.ui.PaletteRenderer}.

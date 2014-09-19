@@ -134,7 +134,7 @@ goog.dom.forms.addFormDataToMap_ = function(map, name, value) {
 
 /**
  * Adds a name/value pair to an string buffer array in the form 'name=value'.
- * @param {Array} sb The string buffer array for storing data.
+ * @param {Array.<string>} sb The string buffer array for storing data.
  * @param {string} name The name.
  * @param {string} value The value.
  * @private
@@ -342,7 +342,7 @@ goog.dom.forms.setValue = function(el, opt_value) {
         break;
       case 'select-multiple':
         goog.dom.forms.setSelectMultiple_(el,
-            /** @type {Array} */ (opt_value));
+            /** @type {Array.<string>} */ (opt_value));
         break;
       default:
         el.value = goog.isDefAndNotNull(opt_value) ? opt_value : '';

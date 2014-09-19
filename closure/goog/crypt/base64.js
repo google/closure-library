@@ -203,7 +203,7 @@ goog.crypt.base64.decodeString = function(input, opt_webSafe) {
  *
  * @param {string} input Input to decode.
  * @param {boolean=} opt_webSafe True if we should use the web-safe alphabet.
- * @return {!Array} bytes representing the decoded value.
+ * @return {!Array.<number>} bytes representing the decoded value.
  */
 goog.crypt.base64.decodeStringToByteArray = function(input, opt_webSafe) {
   goog.crypt.base64.init_();

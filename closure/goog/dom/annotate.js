@@ -44,7 +44,8 @@ goog.dom.annotate.AnnotateFn;
  * under {@code node}. Returns the number of hits.
  *
  * @param {Node} node  A DOM node.
- * @param {Array} terms  An array of [searchTerm, matchWholeWordOnly] tuples.
+ * @param {Array.<!Array.<string|boolean>>} terms
+ *   An array of [searchTerm, matchWholeWordOnly] tuples.
  *   The matchWholeWordOnly value is a per-term attribute because some terms
  *   may be CJK, while others are not. (For correctness, matchWholeWordOnly
  *   should always be false for CJK terms.).
@@ -84,8 +85,7 @@ goog.dom.annotate.MAX_RECURSION_ = 200;
 
 /**
  * The node types whose descendants should not be affected by annotation.
- * @type {Array}
- * @private
+ * @private {Array.<string>}
  */
 goog.dom.annotate.NODES_TO_SKIP_ = ['SCRIPT', 'STYLE', 'TEXTAREA'];
 
@@ -94,7 +94,8 @@ goog.dom.annotate.NODES_TO_SKIP_ = ['SCRIPT', 'STYLE', 'TEXTAREA'];
  * Recursive helper function.
  *
  * @param {Node} node  A DOM node.
- * @param {Array} terms  An array of [searchTerm, matchWholeWordOnly] tuples.
+ * @param {Array.<!Array.<string|boolean>>} terms
+ *     An array of [searchTerm, matchWholeWordOnly] tuples.
  *     The matchWholeWordOnly value is a per-term attribute because some terms
  *     may be CJK, while others are not. (For correctness, matchWholeWordOnly
  *     should always be false for CJK terms.).
@@ -191,7 +192,7 @@ goog.dom.annotate.NONWORD_RE_ = /\W/;
  * HTML-escaping all the text.
  *
  * @param {string} text  The plain text to be searched.
- * @param {Array} terms  An array of
+ * @param {Array.<Array.<?>>} terms  An array of
  *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
  *   The matchWholeWordOnly value is a per-term attribute because some terms
  *   may be CJK, while others are not. (For correctness, matchWholeWordOnly
@@ -219,7 +220,7 @@ goog.dom.annotate.annotateText = function(text, terms, annotateFn,
  * HTML-escaping all the text.
  *
  * @param {string} text  The plain text to be searched.
- * @param {Array} terms  An array of
+ * @param {Array.<Array.<?>>} terms  An array of
  *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
  *   If {@code ignoreCase} is true, each search term must already be lowercase.
  *   The matchWholeWordOnly value is a per-term attribute because some terms
@@ -339,9 +340,9 @@ goog.dom.annotate.helpAnnotateText_ = function(text, terms, annotateFn,
 /**
  * Converts terms to lowercase.
  *
- * @param {Array} terms  An array of
+ * @param {Array.<Array.<?>>} terms  An array of
  *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
- * @return {!Array}  An array of
+ * @return {!Array.<Array.<?>>}  An array of
  *   [{string} searchTerm, {boolean} matchWholeWordOnly] tuples.
  * @private
  */

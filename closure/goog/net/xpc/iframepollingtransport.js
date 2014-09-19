@@ -78,7 +78,7 @@ goog.net.xpc.IframePollingTransport = function(channel, opt_domHelper) {
 
   /**
    * The queue to hold messages which can't be sent immediately.
-   * @type {Array}
+   * @type {Array.<string>}
    * @private
    */
   this.sendQueue_ = [];

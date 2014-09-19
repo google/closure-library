@@ -228,7 +228,7 @@ goog.proto2.Message.prototype.has = function(field) {
  * @param {goog.proto2.FieldDescriptor} field The field for which to
  *     return the values.
  *
- * @return {!Array} The values found.
+ * @return {!Array.<?>} The values found.
  */
 goog.proto2.Message.prototype.arrayOf = function(field) {
   goog.asserts.assert(
@@ -615,12 +615,12 @@ goog.proto2.Message.prototype.get$ValueOrDefault = function(tag, opt_index) {
  *
  * @param {number} tag The field's tag index.
  *
- * @return {!Array} The values found. If none, returns an empty array.
+ * @return {!Array.<*>} The values found. If none, returns an empty array.
  * @protected
  */
 goog.proto2.Message.prototype.array$Values = function(tag) {
   var value = this.getValueForTag_(tag);
-  return /** @type {Array} */ (value) || [];
+  return /** @type {Array.<*>} */ (value) || [];
 };
 
 

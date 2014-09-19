@@ -1807,7 +1807,7 @@ goog.net.BrowserChannel.prototype.onRequestData =
         response = null;
       }
       if (goog.isArray(response) && response.length == 3) {
-        this.handlePostResponse_(/** @type {Array} */ (response));
+        this.handlePostResponse_(response);
       } else {
         this.channelDebug_.debug('Bad POST response data returned');
         this.signalError_(goog.net.BrowserChannel.Error.BAD_RESPONSE);
@@ -1824,7 +1824,7 @@ goog.net.BrowserChannel.prototype.onRequestData =
     if (!goog.string.isEmpty(responseText)) {
       var response = this.parser_.parse(responseText);
       goog.asserts.assert(goog.isArray(response));
-      this.onInput_(/** @type {!Array} */ (response));
+      this.onInput_(/** @type {!Array.<?>} */ (response));
     }
   }
 };
@@ -1832,7 +1832,8 @@ goog.net.BrowserChannel.prototype.onRequestData =
 
 /**
  * Handles a POST response from the server.
- * @param {Array} responseValues The key value pairs in the POST response.
+ * @param {Array.<number>} responseValues The key value pairs in the POST
+ *     response.
  * @private
  */
 goog.net.BrowserChannel.prototype.handlePostResponse_ = function(
@@ -2103,7 +2104,8 @@ goog.net.BrowserChannel.prototype.setRetryDelay = function(baseDelayMs,
 
 /**
  * Processes the data returned by the server.
- * @param {!Array.<!Array>} respArray The response array returned by the server.
+ * @param {!Array.<!Array.<?>>} respArray The response array returned
+ *     by the server.
  * @private
  */
 goog.net.BrowserChannel.prototype.onInput_ = function(respArray) {
@@ -2621,7 +2623,7 @@ goog.net.BrowserChannel.Handler = function() {
 /**
  * Callback handler for when a batch of response arrays is received from the
  * server.
- * @type {?function(!goog.net.BrowserChannel, !Array.<!Array>)}
+ * @type {?function(!goog.net.BrowserChannel, !Array.<!Array.<?>>)}
  */
 goog.net.BrowserChannel.Handler.prototype.channelHandleMultipleArrays = null;
 
@@ -2655,7 +2657,7 @@ goog.net.BrowserChannel.Handler.prototype.channelOpened =
  * New input is available for the application to process.
  *
  * @param {goog.net.BrowserChannel} browserChannel The browser channel.
- * @param {Array} array The data array.
+ * @param {Array.<?>} array The data array.
  */
 goog.net.BrowserChannel.Handler.prototype.channelHandleArray =
     function(browserChannel, array) {

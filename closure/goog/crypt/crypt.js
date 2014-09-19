@@ -46,7 +46,7 @@ goog.crypt.stringToByteArray = function(str) {
 /**
  * Turns an array of numbers into the string given by the concatenation of the
  * characters to which the numbers correspond.
- * @param {Array} bytes Array of numbers representing characters.
+ * @param {Array.<number>} bytes Array of numbers representing characters.
  * @return {string} Stringification of the array.
  */
 goog.crypt.byteArrayToString = function(bytes) {

@@ -182,7 +182,7 @@ goog.testing.FunctionCall.prototype.getThis = function() {
 
 
 /**
- * @return {!Array} Arguments of the called function.
+ * @return {!Array.<?>} Arguments of the called function.
  */
 goog.testing.FunctionCall.prototype.getArguments = function() {
   return this.arguments_;

@@ -45,7 +45,7 @@ goog.dom.classes.set = function(element, className) {
 /**
  * Gets an array of class names on an element
  * @param {Node} element DOM node to get class of.
- * @return {!Array} Class names on {@code element}. Some browsers add extra
+ * @return {!Array.<?>} Class names on {@code element}. Some browsers add extra
  *     properties to the array. Do not depend on any of these!
  * @deprecated Use goog.dom.classlist.get instead.
  */

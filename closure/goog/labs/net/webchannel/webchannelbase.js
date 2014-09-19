@@ -1307,7 +1307,7 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
       response = null;
     }
     if (goog.isArray(response) && response.length == 3) {
-      this.handlePostResponse_(/** @type {!Array} */ (response), request);
+      this.handlePostResponse_(/** @type {!Array.<?>} */ (response), request);
     } else {
       this.channelDebug_.debug('Bad POST response data returned');
       this.signalError_(WebChannelBase.Error.BAD_RESPONSE);
@@ -1318,7 +1318,7 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
     }
     if (!goog.string.isEmpty(responseText)) {
       var response = this.wireCodec_.decodeMessage(responseText);
-      this.onInput_(/** @type {!Array} */ (response));
+      this.onInput_(/** @type {!Array.<?>} */ (response));
     }
   }
 };
@@ -1326,7 +1326,8 @@ WebChannelBase.prototype.onRequestData = function(request, responseText) {
 
 /**
  * Handles a POST response from the server.
- * @param {Array} responseValues The key value pairs in the POST response.
+ * @param {Array.<number>} responseValues The key value pairs in
+ *     the POST response.
  * @param {!ChannelRequest} forwardReq The forward channel request that
  * triggers this function call.
  * @private
@@ -1591,7 +1592,8 @@ WebChannelBase.prototype.setRetryDelay = function(baseDelayMs, delaySeedMs) {
 
 /**
  * Processes the data returned by the server.
- * @param {!Array.<!Array>} respArray The response array returned by the server.
+ * @param {!Array.<!Array.<?>>} respArray The response array returned
+ *     by the server.
  * @private
  */
 WebChannelBase.prototype.onInput_ = function(respArray) {
@@ -1961,7 +1963,7 @@ WebChannelBase.Handler = function() {};
 /**
  * Callback handler for when a batch of response arrays is received from the
  * server. When null, batched dispatching is disabled.
- * @type {?function(!WebChannelBase, !Array.<!Array>)}
+ * @type {?function(!WebChannelBase, !Array.<!Array.<?>>)}
  */
 WebChannelBase.Handler.prototype.channelHandleMultipleArrays = null;
 
@@ -1993,7 +1995,7 @@ WebChannelBase.Handler.prototype.channelOpened = function(channel) {
  * New input is available for the application to process.
  *
  * @param {WebChannelBase} channel The channel.
- * @param {Array} array The data array.
+ * @param {Array.<?>} array The data array.
  */
 WebChannelBase.Handler.prototype.channelHandleArray = function(channel, array) {
 };

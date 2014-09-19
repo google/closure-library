@@ -82,7 +82,7 @@ goog.locale.getTimeZoneSelectedLongNames = function(opt_regionOrLang) {
  */
 goog.locale.getTimeZoneAllLongNames = function() {
   var locale = goog.locale.getLocale();
-  return /** @type {Array} */ (
+  return /** @type {Array.<Object>} */ (
       goog.locale.getResource('TimeZoneAllLongNames', locale));
 };
 

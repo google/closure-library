@@ -1539,8 +1539,8 @@ goog.ui.ServerChart.prototype.clearDataSets = function() {
  * the set number is not given.
  *
  * @param {number=} opt_setNumber Optional data set number to get.
- * @return {Array} The given data set or all of them in a two-dimensional array
- *     if the set number is not given.
+ * @return {Array.<?>} The given data set or all of them in a two-dimensional
+ *     array if the set number is not given.
  */
 goog.ui.ServerChart.prototype.getData = function(opt_setNumber) {
   if (goog.isDef(opt_setNumber)) {

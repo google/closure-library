@@ -132,7 +132,8 @@ goog.color.alpha.normalizeAlphaHex_ = function(hexColor) {
 /**
  * Converts an 8-hex representation of a color to RGBA.
  * @param {string} hexColor Color to convert.
- * @return {!Array} array containing [r, g, b, a]. r, g, b are ints between 0
+ * @return {!Array.<number>} array containing [r, g, b, a].
+ *     r, g, b are ints between 0
  *     and 255, and a is a value between 0 and 1.
  */
 goog.color.alpha.hexToRgba = function(hexColor) {
@@ -462,7 +463,7 @@ goog.color.alpha.hsvaToHex = function(h, s, v, a) {
 
 /**
  * Converts from an HSVA array to a hex string
- * @param {Array} hsva Array of [h, s, v, a] in
+ * @param {Array.<number>} hsva Array of [h, s, v, a] in
  *     [[0, 1], [0, 1], [0, 255], [0, 1]].
  * @return {string} hex representation of the color.
  */

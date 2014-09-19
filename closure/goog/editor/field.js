@@ -118,7 +118,7 @@ goog.editor.Field = function(id, opt_doc) {
   /**
    * Plugins registered on this field, indexed by the goog.editor.Plugin.Op
    * that they support.
-   * @type {Object.<Array>}
+   * @type {Object.<Array.<goog.editor.Plugin>>}
    * @private
    */
   this.indexedPlugins_ = {};

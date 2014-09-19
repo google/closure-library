@@ -523,10 +523,10 @@ goog.globalize = function(obj, opt_global) {
 /**
  * Adds a dependency from a file to the files it requires.
  * @param {string} relPath The path to the js file.
- * @param {Array} provides An array of strings with the names of the objects
- *                         this file provides.
- * @param {Array} requires An array of strings with the names of the objects
- *                         this file requires.
+ * @param {Array.<string>} provides An array of strings with
+ *     the names of the objects this file provides.
+ * @param {Array.<string>} requires An array of strings with
+ *     the names of the objects this file requires.
  * @param {boolean=} opt_isModule Whether this dependency must be loaded as
  *     a module as declared by goog.module.
  */

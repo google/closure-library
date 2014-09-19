@@ -201,7 +201,7 @@ goog.net.xpc.CfgFields = {
 
 /**
  * Config properties that need to be URL sanitized.
- * @type {Array}.<string>
+ * @type {Array.<string>}
  */
 goog.net.xpc.UriCfgFields = [
   goog.net.xpc.CfgFields.PEER_URI,

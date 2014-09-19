@@ -1872,7 +1872,7 @@ goog.dom.getRawTextContent = function(node) {
  * Recursive support function for text content retrieval.
  *
  * @param {Node} node The node from which we are getting content.
- * @param {Array} buf string buffer.
+ * @param {Array.<string>} buf string buffer.
  * @param {boolean} normalizeWhitespace Whether to normalize whitespace.
  * @private
  */

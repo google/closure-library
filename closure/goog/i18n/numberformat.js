@@ -564,7 +564,8 @@ goog.i18n.NumberFormat.prototype.roundNumber_ = function(number) {
  *
  * @param {number} number
  * @param {number} minIntDigits Minimum integer digits.
- * @param {Array} parts This array holds the pieces of formatted string.
+ * @param {Array.<string>} parts
+ *     This array holds the pieces of formatted string.
  *     This function will add its formatted pieces to the array.
  * @private
  */

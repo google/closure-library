@@ -52,7 +52,7 @@ mapPerf.perfTable;
  * This is filled once in setUpPage and then remain unchanged for the
  * rest of the test case.
  *
- * @type {Array}
+ * @type {!Array.<string>}
  */
 mapPerf.keyList = [];
 

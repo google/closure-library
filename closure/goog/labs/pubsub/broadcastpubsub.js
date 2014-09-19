@@ -426,7 +426,7 @@ goog.labs.pubsub.BroadcastPubSub.validateIe8Event_ = function(obj) {
 
 /**
  * Returns an array of valid IE8 events.
- * @param {!Array} events Possible IE8 events.
+ * @param {!Array.<!Object>} events Possible IE8 events.
  * @return {!Array.<!goog.labs.pubsub.BroadcastPubSub.Ie8Event_>}
  *     Valid IE8 events.
  * @private
@@ -459,7 +459,7 @@ goog.labs.pubsub.BroadcastPubSub.filterNewIe8Events_ =
 /**
  * Processes the events array for key if all elements are valid IE8 events.
  * @param {string} key The key in localStorage where the event queue is stored.
- * @param {!Array} events Array of possible events stored at key.
+ * @param {!Array.<!Object>} events Array of possible events stored at key.
  * @return {boolean} Return true if all elements in the array are valid
  *     events, false otherwise.
  * @private

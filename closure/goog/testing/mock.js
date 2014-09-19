@@ -61,7 +61,7 @@ goog.testing.MockExpectation = function(name) {
 
   /**
    * An array of error messages for expectations not met.
-   * @type {Array}
+   * @type {Array.<string>}
    */
   this.errorMessages = [];
 };
@@ -362,7 +362,7 @@ goog.testing.Mock.prototype.$recordExpectation = function() {};
  * subclass. The subclass must find the pending expectation and return the
  * correct value.
  * @param {string} name The name of the method being called.
- * @param {Array} args The arguments to the method.
+ * @param {Array.<?>} args The arguments to the method.
  * @return {*} The return expected by the mock.
  * @protected
  */
@@ -388,7 +388,7 @@ goog.testing.Mock.prototype.$maybeThrow = function(expectation) {
  * Otherwise, if the expectation expects to throw, it will throw.
  * Otherwise, this method will return defined value.
  * @param {goog.testing.MockExpectation} expectation The expectation.
- * @param {Array} args The arguments to the method.
+ * @param {Array.<?>} args The arguments to the method.
  * @return {*} The return value expected by the mock.
  */
 goog.testing.Mock.prototype.$do = function(expectation, args) {

@@ -795,7 +795,7 @@ goog.array.removeAllIf = function(arr, f, opt_obj) {
  *
  * @param {...*} var_args Items to concatenate.  Arrays will have each item
  *     added, while primitives and objects will be added as is.
- * @return {!Array} The new resultant array.
+ * @return {!Array.<?>} The new resultant array.
  */
 goog.array.concat = function(var_args) {
   return goog.array.ARRAY_PROTOTYPE_.concat.apply(
@@ -1496,7 +1496,7 @@ goog.array.repeat = function(value, n) {
  * expanded in-place recursively.
  *
  * @param {...*} var_args The values to flatten.
- * @return {!Array} An array containing the flattened values.
+ * @return {!Array.<?>} An array containing the flattened values.
  */
 goog.array.flatten = function(var_args) {
   var result = [];
@@ -1573,7 +1573,8 @@ goog.array.moveItem = function(arr, fromIndex, toIndex) {
  * http://docs.python.org/library/functions.html#zip}
  *
  * @param {...!goog.array.ArrayLike} var_args Arrays to be combined.
- * @return {!Array.<!Array>} A new array of arrays created from provided arrays.
+ * @return {!Array.<!Array.<?>>} A new array of arrays created from
+ *     provided arrays.
  */
 goog.array.zip = function(var_args) {
   if (!arguments.length) {
@@ -1603,7 +1604,7 @@ goog.array.zip = function(var_args) {
  *
  * Runtime: O(n)
  *
- * @param {!Array} arr The array to be shuffled.
+ * @param {!Array.<?>} arr The array to be shuffled.
  * @param {function():number=} opt_randFn Optional random function to use for
  *     shuffling.
  *     Takes no arguments, and returns a random number on the interval [0, 1).

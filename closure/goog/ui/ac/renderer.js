@@ -103,7 +103,7 @@ goog.ui.ac.Renderer = function(opt_parentNode, opt_customRenderer,
 
   /**
    * Array used to store the current set of rows being displayed
-   * @type {Array}
+   * @type {Array.<!Object>}
    * @private
    */
   this.rows_ = [];
@@ -409,7 +409,7 @@ goog.ui.ac.Renderer.prototype.getAnchorElement = function() {
 /**
  * Render the autocomplete UI
  *
- * @param {Array} rows Matching UI rows.
+ * @param {Array.<!Object>} rows Matching UI rows.
  * @param {string} token Token we are currently matching against.
  * @param {Element=} opt_target Current HTML node, will position popup beneath
  *     this node.

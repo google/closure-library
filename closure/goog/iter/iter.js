@@ -909,7 +909,7 @@ goog.iter.compress = function(iterable, selectors) {
  *     determining the key value for each group in the {@code iterable}. Default
  *     is the identity function.
  * @constructor
- * @extends {goog.iter.Iterator.<!Array>}
+ * @extends {goog.iter.Iterator.<!Array.<?>>}
  * @template KEY, VALUE
  * @private
  */
@@ -998,8 +998,8 @@ goog.iter.GroupByIterator_.prototype.groupItems_ = function(targetKey) {
  * @param {function(...[VALUE]): KEY=} opt_keyFunc  Optional function for
  *     determining the key value for each group in the {@code iterable}. Default
  *     is the identity function.
- * @return {!goog.iter.Iterator.<!Array>} A new iterator that returns arrays of
- *     consecutive key and groups.
+ * @return {!goog.iter.Iterator.<!Array.<?>>} A new iterator that returns
+ *     arrays of consecutive key and groups.
  * @template KEY, VALUE
  */
 goog.iter.groupBy = function(iterable, opt_keyFunc) {
@@ -1096,8 +1096,8 @@ goog.iter.tee = function(iterable, opt_num) {
  * @param {!goog.iter.Iterator.<VALUE>|!goog.iter.Iterable} iterable The
  *     iterable to enumerate.
  * @param {number=} opt_start  Optional starting value. Default is 0.
- * @return {!goog.iter.Iterator.<!Array>} A new iterator containing count/item
- *     pairs.
+ * @return {!goog.iter.Iterator.<!Array.<?>>} A new iterator containing
+ *     count/item pairs.
  * @template VALUE
  */
 goog.iter.enumerate = function(iterable, opt_start) {

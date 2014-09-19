@@ -633,8 +633,7 @@ goog.Uri.prototype.setParameterValues = function(key, values) {
     values = [String(values)];
   }
 
-  // TODO(nicksantos): This cast shouldn't be necessary.
-  this.queryData_.setValues(key, /** @type {Array} */ (values));
+  this.queryData_.setValues(key, values);
 
   return this;
 };
@@ -644,7 +643,7 @@ goog.Uri.prototype.setParameterValues = function(key, values) {
  * Returns the value<b>s</b> for a given cgi parameter as a list of decoded
  * query parameter values.
  * @param {string} name The parameter to get values for.
- * @return {!Array} The values for a given cgi parameter as a list of
+ * @return {!Array.<?>} The values for a given cgi parameter as a list of
  *     decoded query parameter values.
  */
 goog.Uri.prototype.getParameterValues = function(name) {
@@ -1148,7 +1147,7 @@ goog.Uri.QueryData.createFromMap = function(map, opt_uri, opt_ignoreCase) {
  * lengths of the arrays differ.
  *
  * @param {Array.<string>} keys Parameter names.
- * @param {Array} values Parameter values.
+ * @param {Array.<?>} values Parameter values.
  * @param {goog.Uri=} opt_uri URI object that should have its cache
  *     invalidated when this object updates.
  * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
@@ -1175,7 +1174,7 @@ goog.Uri.QueryData.createFromKeysValues = function(
  * We need to use a Map because we cannot guarantee that the key names will
  * not be problematic for IE.
  *
- * @type {goog.structs.Map.<string, Array>}
+ * @type {goog.structs.Map.<string, Array.<*>>}
  * @private
  */
 goog.Uri.QueryData.prototype.keyMap_ = null;
@@ -1292,7 +1291,7 @@ goog.Uri.QueryData.prototype.containsValue = function(value) {
 goog.Uri.QueryData.prototype.getKeys = function() {
   this.ensureKeyMapInitialized_();
   // We need to get the values to know how many keys to add.
-  var vals = /** @type {Array.<Array|*>} */ (this.keyMap_.getValues());
+  var vals = /** @type {Array.<*>} */ (this.keyMap_.getValues());
   var keys = this.keyMap_.getKeys();
   var rv = [];
   for (var i = 0; i < keys.length; i++) {
@@ -1310,7 +1309,7 @@ goog.Uri.QueryData.prototype.getKeys = function() {
  * data has no such key this will return an empty array. If no key is given
  * all values wil be returned.
  * @param {string=} opt_key The name of the parameter to get the values for.
- * @return {!Array} All the values of the parameters with the given name.
+ * @return {!Array.<?>} All the values of the parameters with the given name.
  */
 goog.Uri.QueryData.prototype.getValues = function(opt_key) {
   this.ensureKeyMapInitialized_();
@@ -1321,7 +1320,7 @@ goog.Uri.QueryData.prototype.getValues = function(opt_key) {
     }
   } else {
     // Return all values.
-    var values = /** @type {Array.<Array|*>} */ (this.keyMap_.getValues());
+    var values = this.keyMap_.getValues();
     for (var i = 0; i < values.length; i++) {
       rv = goog.array.concat(rv, values[i]);
     }
@@ -1379,7 +1378,7 @@ goog.Uri.QueryData.prototype.get = function(key, opt_default) {
  * Sets the values for a key. If the key already exists, this will
  * override all of the existing values that correspond to the key.
  * @param {string} key The key to set values for.
- * @param {Array} values The values to set.
+ * @param {Array.<?>} values The values to set.
  */
 goog.Uri.QueryData.prototype.setValues = function(key, values) {
   this.remove(key);

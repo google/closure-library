@@ -260,7 +260,7 @@ goog.labs.structs.Map.prototype.getValues = function() {
 
 
 /**
- * @return {!Array.<Array>} An array of entries. Each entry is of the
+ * @return {!Array.<Array.<?>>} An array of entries. Each entry is of the
  *     form [key, value]. Do not rely on consistent ordering of entries.
  */
 goog.labs.structs.Map.prototype.getEntries = function() {
