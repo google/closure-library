@@ -879,6 +879,18 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.retrieveAndExecModule_ = function(src) {
+    // Canonicalize the path, removing any /./ or /../ since Chrome's debugging
+    // console doesn't auto-canonicalize XHR loads as it does <script> srcs.
+    var separator;
+    while ((separator = src.indexOf('/./')) != -1) {
+      src = src.substr(0, separator) + src.substr(separator + '/.'.length);
+    }
+    while ((separator = src.indexOf('/../')) != -1) {
+      var previousComponent = src.lastIndexOf('/', separator - 1);
+      src = src.substr(0, previousComponent) +
+          src.substr(separator + '/..'.length);
+    }
+
     var importScript = goog.global.CLOSURE_IMPORT_SCRIPT ||
         goog.writeScriptTag_;
 
