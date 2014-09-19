@@ -19,6 +19,7 @@ goog.require('goog.testing.MockUserAgent');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.platform');
+goog.require('goog.userAgentTestUtil');
 
 var mockAgent;
 
@@ -33,23 +34,7 @@ function tearDown() {
 }
 
 function updateUserAgentUtils() {
-  goog.userAgent.PLATFORM = goog.userAgent.determinePlatform_();
-  goog.userAgent.initPlatform_();
-
-  // Unfortunately we can't isolate the useragent setting in a function
-  // we can call, because things rely on it compiling to nothing when
-  // one of the ASSUME flags is set, and the compiler isn't smart enough
-  // to do that when the setting is done inside a function that's inlined.
-  goog.userAgent.MAC = goog.userAgent.detectedMac_;
-  goog.userAgent.WINDOWS = goog.userAgent.detectedWindows_;
-  goog.userAgent.LINUX = goog.userAgent.detectedLinux_;
-  goog.userAgent.X11 = goog.userAgent.detectedX11_;
-  goog.userAgent.ANDROID = goog.userAgent.detectedAndroid_;
-  goog.userAgent.IPHONE = goog.userAgent.detectedIPhone_;
-  goog.userAgent.IPAD = goog.userAgent.detectedIPad_;
-
-  goog.userAgent.platform.VERSION =
-      goog.userAgent.platform.determineVersion_();
+  goog.userAgentTestUtil.reinitializeUserAgent();
 }
 
 function testWindows() {

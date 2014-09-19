@@ -1409,7 +1409,7 @@ goog.addDependency('useragent/keyboard.js', ['goog.userAgent.keyboard'], ['goog.
 goog.addDependency('useragent/keyboard_test.js', ['goog.userAgent.keyboardTest'], ['goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.MockUserAgent', 'goog.testing.jsunit', 'goog.userAgent.keyboard', 'goog.userAgentTestUtil'], false);
 goog.addDependency('useragent/picasa.js', ['goog.userAgent.picasa'], ['goog.string', 'goog.userAgent'], false);
 goog.addDependency('useragent/platform.js', ['goog.userAgent.platform'], ['goog.userAgent'], false);
-goog.addDependency('useragent/platform_test.js', ['goog.userAgent.platformTest'], ['goog.testing.MockUserAgent', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.platform'], false);
+goog.addDependency('useragent/platform_test.js', ['goog.userAgent.platformTest'], ['goog.testing.MockUserAgent', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.platform', 'goog.userAgentTestUtil'], false);
 goog.addDependency('useragent/product.js', ['goog.userAgent.product'], ['goog.userAgent'], false);
 goog.addDependency('useragent/product_isversion.js', ['goog.userAgent.product.isVersion'], ['goog.userAgent.product'], false);
 goog.addDependency('useragent/product_test.js', ['goog.userAgent.productTest'], ['goog.array', 'goog.labs.userAgent.util', 'goog.testing.MockUserAgent', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product', 'goog.userAgent.product.isVersion', 'goog.userAgentTestUtil'], false);

@@ -60,6 +60,19 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.IPHONE = goog.userAgent.detectedIPhone_;
   goog.userAgent.VERSION = goog.userAgent.determineVersion_();
 
+  // Product.
+  goog.userAgent.product.init_();
+  goog.userAgent.product.OPERA = goog.userAgent.OPERA;
+  goog.userAgent.product.IE = goog.userAgent.IE;
+  goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
+  goog.userAgent.product.CAMINO = goog.userAgent.product.detectedCamino_;
+  goog.userAgent.product.IPHONE = goog.userAgent.product.detectedIphone_;
+  goog.userAgent.product.IPAD = goog.userAgent.product.detectedIpad_;
+  goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
+  goog.userAgent.product.CHROME = goog.userAgent.product.detectedChrome_;
+  goog.userAgent.product.SAFARI = goog.userAgent.product.detectedSafari_;
+  goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
+
   // Platform in goog.userAgent.platform.
   goog.userAgent.platform.VERSION = goog.userAgent.platform.determineVersion_();
 
