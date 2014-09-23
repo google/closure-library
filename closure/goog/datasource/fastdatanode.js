@@ -177,7 +177,7 @@ goog.ds.FastDataNode.emptyList_ = new goog.ds.EmptyNodeList();
  * @override
  */
 goog.ds.FastDataNode.prototype.set = function(value) {
-  throw 'Not implemented yet';
+  throw new Error('Not implemented yet');
 };
 
 
