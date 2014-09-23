@@ -115,7 +115,7 @@ goog.testing.TestCase = function(opt_name) {
 
   /**
    * Object used to encapsulate the test results.
-   * @type {goog.testing.TestCase.Result}
+   * @type {!goog.testing.TestCase.Result}
    * @protected
    * @suppress {underscore|visibility}
    */
@@ -550,6 +550,16 @@ goog.testing.TestCase.prototype.getReport = function(opt_verbose) {
   rv.push(' ');
 
   return rv.join('\n');
+};
+
+
+/**
+ * Returns the test results.
+ * @return {!goog.testing.TestCase.Result}
+ * @package
+ */
+goog.testing.TestCase.prototype.getResult = function() {
+  return this.result_;
 };
 
 
