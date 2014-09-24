@@ -203,6 +203,38 @@ function testTokenizer() {
     { type: types.WHITESPACE, value: ' '},
     { type: types.CLOSE_BRACE }
   ]);
+  // The c++ proto serializer might represent a float in exponential
+  // notation:
+  assertTokens('{ 1.2345e+3 }', [
+    { type: types.OPEN_BRACE },
+    { type: types.WHITESPACE, value: ' ' },
+    { type: types.NUMBER, value: '1.2345e+3' },
+    { type: types.WHITESPACE, value: ' '},
+    { type: types.CLOSE_BRACE }
+  ]);
+}
+
+function testTokenizerExponentialFloatProblem() {
+  var input = 'merchant: {              # blah blah\n' +
+      '    total_price: 3.2186e+06      # 3_218_600; 3.07Mi\n' +
+      '    taxes      : 2.17199e+06\n' +
+      '}';
+  var types = goog.proto2.TextFormatSerializer.Tokenizer_.TokenTypes;
+  assertTokens(input, [
+    { type: types.IDENTIFIER, value: 'merchant' },
+    { type: types.COLON, value: ':' },
+    { type: types.OPEN_BRACE, value: '{' },
+    { type: types.COMMENT, value: '# blah blah' },
+    { type: types.IDENTIFIER, value: 'total_price' },
+    { type: types.COLON, value: ':' },
+    { type: types.NUMBER, value: '3.2186e+06' },
+    { type: types.COMMENT, value: '# 3_218_600; 3.07Mi' },
+    { type: types.IDENTIFIER, value: 'taxes' },
+    { type: types.COLON, value: ':' },
+    { type: types.NUMBER, value: '2.17199e+06' },
+    { type: types.CLOSE_BRACE, value: '}' }
+  ],
+  true);
 }
 
 function testTokenizerNoWhitespace() {
@@ -273,6 +305,11 @@ function testTokenizerSingleTokens() {
   assertNumber('0x1234');
   assertNumber('0x12ac34');
   assertNumber('0x49e281db686fb');
+  // Floating point numbers might be serialized in exponential
+  // notation:
+  assertNumber('1.2345e+3');
+  assertNumber('1.2345e3');
+  assertNumber('1.2345e-2');
 
   assertString('""');
   assertString('"hello world"');
@@ -604,6 +641,31 @@ function testDeserializationOfNumericalConstants() {
   assertEquals(-Infinity, message.getRepeatedFloat(1));
   assertTrue(isNaN(message.getRepeatedFloat(2)));
   assertEquals(300.2, message.getRepeatedFloat(3));
+}
+
+var floatFormatCases = [{given: '1.69e+06', expect: 1.69e+06},
+                        {given: '1.69e6', expect: 1.69e+06},
+                        {given: '2.468e-2', expect: 0.02468}
+                       ];
+
+function testGetNumberFromStringExponentialNotation() {
+  for (var i = 0; i < floatFormatCases.length; ++i) {
+    var thistest = floatFormatCases[i];
+    var result = goog.proto2.TextFormatSerializer.Parser.
+        getNumberFromString_(thistest.given);
+    assertEquals(thistest.expect, result);
+  }
+}
+
+function testDeserializationExponentialFloat() {
+  var parser = new goog.proto2.TextFormatSerializer.Parser();
+  for (var i = 0; i < floatFormatCases.length; ++i) {
+    var thistest = floatFormatCases[i];
+    var message = new proto2.TestAllTypes();
+    var value = 'optional_float: ' + thistest.given;
+    assertTrue(parser.parse(message, value, true));
+    assertEquals(thistest.expect, message.getOptionalFloat());
+  }
 }
 
 function testGetNumberFromString() {
