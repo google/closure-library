@@ -140,13 +140,13 @@ goog.iter.toIterator = function(iterable) {
  * @param {goog.iter.Iterator.<VALUE>|goog.iter.Iterable} iterable  The iterator
  *     to iterate over. If the iterable is an object {@code toIterator} will be
  *     called on it.
- * @param {function(this:THIS,VALUE,undefined,goog.iter.Iterator.<VALUE>)|
- *         function(this:THIS,number,undefined,goog.iter.Iterator.<VALUE>)} f
+ * @param {function(this:THIS,VALUE,?,!goog.iter.Iterator.<VALUE>)} f
  *     The function to call for every element.  This function takes 3 arguments
  *     (the element, undefined, and the iterator) and the return value is
  *     irrelevant.  The reason for passing undefined as the second argument is
  *     so that the same function can be used in {@see goog.array#forEach} as
- *     well as others.
+ *     well as others.  The third parameter is of type "number" for
+ *     arraylike objects, undefined, otherwise.
  * @param {THIS=} opt_obj  The object to be used as the value of 'this' within
  *     {@code f}.
  * @template THIS, VALUE
@@ -187,7 +187,7 @@ goog.iter.forEach = function(iterable, f, opt_obj) {
  * @param {goog.iter.Iterator.<VALUE>|goog.iter.Iterable} iterable The iterator
  *     to iterate over.
  * @param {
- *     function(this:THIS,VALUE,undefined,goog.iter.Iterator.<VALUE>):boolean} f
+ *     function(this:THIS,VALUE,undefined,!goog.iter.Iterator.<VALUE>):boolean} f
  *     The function to call for every element. This function takes 3 arguments
  *     (the element, undefined, and the iterator) and should return a boolean.
  *     If the return value is true the element will be included in the returned
@@ -220,7 +220,7 @@ goog.iter.filter = function(iterable, f, opt_obj) {
  * @param {goog.iter.Iterator.<VALUE>|goog.iter.Iterable} iterable The iterator
  *     to iterate over.
  * @param {
- *     function(this:THIS,VALUE,undefined,goog.iter.Iterator.<VALUE>):boolean} f
+ *     function(this:THIS,VALUE,undefined,!goog.iter.Iterator.<VALUE>):boolean} f
  *     The function to call for every element. This function takes 3 arguments
  *     (the element, undefined, and the iterator) and should return a boolean.
  *     If the return value is false the element will be included in the returned
@@ -355,7 +355,7 @@ goog.iter.reduce = function(iterable, f, val, opt_obj) {
  * @param {goog.iter.Iterator.<VALUE>|goog.iter.Iterable} iterable The iterator
  *     object.
  * @param {
- *     function(this:THIS,VALUE,undefined,goog.iter.Iterator.<VALUE>):boolean} f
+ *     function(this:THIS,VALUE,undefined,!goog.iter.Iterator.<VALUE>):boolean} f
  *     The function to call for every value. This function takes 3 arguments
  *     (the value, undefined, and the iterator) and should return a boolean.
  * @param {THIS=} opt_obj The object to be used as the value of 'this' within
@@ -389,7 +389,7 @@ goog.iter.some = function(iterable, f, opt_obj) {
  * @param {goog.iter.Iterator.<VALUE>|goog.iter.Iterable} iterable The iterator
  *     object.
  * @param {
- *     function(this:THIS,VALUE,undefined,goog.iter.Iterator.<VALUE>):boolean} f
+ *     function(this:THIS,VALUE,undefined,!goog.iter.Iterator.<VALUE>):boolean} f
  *     The function to call for every value. This function takes 3 arguments
  *     (the value, undefined, and the iterator) and should return a boolean.
  * @param {THIS=} opt_obj The object to be used as the value of 'this' within
@@ -471,7 +471,7 @@ goog.iter.chainFromIterable = function(iterable) {
  * @param {goog.iter.Iterator.<VALUE>|goog.iter.Iterable} iterable The iterator
  *     object.
  * @param {
- *     function(this:THIS,VALUE,undefined,goog.iter.Iterator.<VALUE>):boolean} f
+ *     function(this:THIS,VALUE,undefined,!goog.iter.Iterator.<VALUE>):boolean} f
  *     The function to call for every value. This function takes 3 arguments
  *     (the value, undefined, and the iterator) and should return a boolean.
  * @param {THIS=} opt_obj The object to be used as the value of 'this' within
@@ -505,7 +505,7 @@ goog.iter.dropWhile = function(iterable, f, opt_obj) {
  * @param {goog.iter.Iterator.<VALUE>|goog.iter.Iterable} iterable The iterator
  *     object.
  * @param {
- *     function(this:THIS,VALUE,undefined,goog.iter.Iterator.<VALUE>):boolean} f
+ *     function(this:THIS,VALUE,undefined,!goog.iter.Iterator.<VALUE>):boolean} f
  *     The function to call for every value. This function takes 3 arguments
  *     (the value, undefined, and the iterator) and should return a boolean.
  * @param {THIS=} opt_obj This is used as the 'this' object in f when called.
