@@ -96,8 +96,8 @@ goog.proto2.FieldDescriptor = function(messageType, tag, metadata) {
 
   /**
    * Is it permissible on deserialization to convert between numbers and
-   * well-formed strings?  Is true for 64-bit integral field types, false for
-   * all other field types.
+   * well-formed strings?  Is true for 64-bit integral field types and float and
+   * double types, false for all other field types.
    * @private {boolean}
    */
   this.deserializationConversionPermitted_ = false;
@@ -108,6 +108,8 @@ goog.proto2.FieldDescriptor = function(messageType, tag, metadata) {
     case goog.proto2.FieldDescriptor.FieldType.FIXED64:
     case goog.proto2.FieldDescriptor.FieldType.SFIXED64:
     case goog.proto2.FieldDescriptor.FieldType.SINT64:
+    case goog.proto2.FieldDescriptor.FieldType.FLOAT:
+    case goog.proto2.FieldDescriptor.FieldType.DOUBLE:
       this.deserializationConversionPermitted_ = true;
       break;
   }
