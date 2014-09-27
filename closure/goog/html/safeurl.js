@@ -51,9 +51,9 @@ goog.require('goog.string.TypedString');
  * trusted code, e.g., as the src of a script tag.
  *
  * Instances of this type must be created via the factory methods
- * ({@code goog.html.SafeUrl.from}, {@code goog.html.SafeUrl.sanitize}), etc and
- * not by invoking its constructor.  The constructor intentionally takes no
- * parameters and the type is immutable; hence only a default instance
+ * ({@code goog.html.SafeUrl.fromConstant}, {@code goog.html.SafeUrl.sanitize}),
+ * etc and not by invoking its constructor.  The constructor intentionally
+ * takes no parameters and the type is immutable; hence only a default instance
  * corresponding to the empty string can be obtained via constructor invocation.
  *
  * @see goog.html.SafeUrl#fromConstant
