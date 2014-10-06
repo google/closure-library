@@ -143,9 +143,9 @@ goog.string.collapseWhitespace = function(str) {
 /**
  * Checks if a string is empty or contains only whitespaces.
  * @param {string} str The string to check.
- * @return {boolean} True if {@code str} is empty or whitespace only.
+ * @return {boolean} Whether {@code str} is empty or whitespace only.
  */
-goog.string.isEmpty = function(str) {
+goog.string.isEmptyOrWhitespace = function(str) {
   // testing length == 0 first is actually slower in all browsers (about the
   // same in Opera).
   // Since IE doesn't include non-breaking-space (0xa0) in their \s character
@@ -156,14 +156,49 @@ goog.string.isEmpty = function(str) {
 
 
 /**
+ * Checks if a string is empty.
+ * @param {string} str The string to check.
+ * @return {boolean} Whether {@code str} is empty.
+ */
+goog.string.isEmptyString = function(str) {
+  return str.length == 0;
+};
+
+
+/**
+ * Checks if a string is empty or contains only whitespaces.
+ *
+ * TODO(user): Deprecate this when clients have been switched over to
+ * goog.string.isEmptyOrWhitespace.
+ *
+ * @param {string} str The string to check.
+ * @return {boolean} Whether {@code str} is empty or whitespace only.
+ */
+goog.string.isEmpty = goog.string.isEmptyOrWhitespace;
+
+
+/**
  * Checks if a string is null, undefined, empty or contains only whitespaces.
  * @param {*} str The string to check.
- * @return {boolean} True if{@code str} is null, undefined, empty, or
+ * @return {boolean} Whether {@code str} is null, undefined, empty, or
  *     whitespace only.
  */
-goog.string.isEmptySafe = function(str) {
-  return goog.string.isEmpty(goog.string.makeSafe(str));
+goog.string.isEmptyOrWhitespaceSafe = function(str) {
+  return goog.string.isEmptyOrWhitespace(goog.string.makeSafe(str));
 };
+
+
+/**
+ * Checks if a string is null, undefined, empty or contains only whitespaces.
+ *
+ * TODO(user): Deprecate this when clients have been switched over to
+ * goog.string.isEmptyOrWhitespaceSafe.
+ *
+ * @param {*} str The string to check.
+ * @return {boolean} Whether {@code str} is null, undefined, empty, or
+ *     whitespace only.
+ */
+goog.string.isEmptySafe = goog.string.isEmptyOrWhitespaceSafe;
 
 
 /**

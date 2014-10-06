@@ -262,6 +262,48 @@ function testEnterOpensMenu() {
 
 
 /**
+ * Tests the behavior of the enter and space keys when the menu is open and
+ * setCloseOnEnterOrSpace was not called, or called with true as its argument.
+ */
+function testSpaceOrEnterClosesMenu() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  menuButton.setCloseOnEnterOrSpace(true);
+
+  menuButton.setOpen(true);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertFalse('Menu should close after pressing Enter when ' +
+      'setCloseOnEnterOrSpace is set', menuButton.isOpen());
+
+  menuButton.setOpen(true);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.SPACE,
+      goog.events.EventType.KEYUP));
+  assertFalse('Menu should close after pressing Space when ' +
+      'setCloseOnEnterOrSpace is set', menuButton.isOpen());
+}
+
+
+/**
+ * Tests the behavior of the enter and space keys when the menu is open and
+ * setCloseOnEnterOrSpace was called with false as its argument.
+ */
+function testSpaceOrEnterLeavesMenuOpen_withCloseOnEnterOrSpaceDisabled() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  menuButton.setCloseOnEnterOrSpace(false);
+
+  menuButton.setOpen(true);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertTrue('Menu should remain open after pressing Enter',
+      menuButton.isOpen());
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.SPACE,
+      goog.events.EventType.KEYUP));
+  assertTrue('Menu should remain open after pressing Space',
+      menuButton.isOpen());
+}
+
+
+/**
  * Tests that a keydown event of the escape key propagates normally when the
  * menu is closed.
  */
@@ -764,4 +806,19 @@ function testScrollOnOverflowSetter() {
 
   menuButton.setScrollOnOverflow(false);
   assertFalse(menuButton.isScrollOnOverflow());
+}
+
+
+/**
+ * Tests that the attached menu has been set to aria-hidden=false explicitly
+ * when the menu is opened.
+ */
+function testSetOpenUnsetsAriaHidden() {
+  var node = goog.dom.getElement('demoMenuButton');
+  menuButton.decorate(node);
+  var menuElem = menuButton.getMenu().getElementStrict();
+  goog.a11y.aria.setState(menuElem, goog.a11y.aria.State.HIDDEN, true);
+  menuButton.setOpen(true);
+  assertEquals(
+      '', goog.a11y.aria.getState(menuElem, goog.a11y.aria.State.HIDDEN));
 }

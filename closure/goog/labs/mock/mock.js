@@ -397,17 +397,31 @@ goog.labs.mock.MockManager_.prototype.addBinding =
 
 /**
  * Returns a stub, if defined, for the method name and arguments passed in.
+ * If there are multiple stubs for this method name and arguments, then
+ * the first one is returned and removed from the list.
  *
  * @param {string} methodName The name of the stubbed method.
  * @param {!Array.<?>} args The arguments passed to the method.
  * @return {Function} The stub function or undefined.
  * @protected
  */
-goog.labs.mock.MockManager_.prototype.findBinding =
+goog.labs.mock.MockManager_.prototype.getNextBinding =
     function(methodName, args) {
-  var stub = goog.array.find(this.methodBindings, function(binding) {
-    return binding.matches(methodName, args, false /* isVerification */);
+  var first = -1;
+  var count = 0;
+  var stub = null;
+  goog.array.forEach(this.methodBindings, function(binding, i) {
+    if (binding.matches(methodName, args, false /* isVerification */)) {
+      count++;
+      if (goog.isNull(stub)) {
+        first = i;
+        stub = binding;
+      }
+    }
   });
+  if (count > 1) {
+    goog.array.removeAt(this.methodBindings, first);
+  }
   return stub && stub.getStub();
 };
 
@@ -422,7 +436,7 @@ goog.labs.mock.MockManager_.prototype.findBinding =
  * @protected
  */
 goog.labs.mock.MockManager_.prototype.getExecutor = function(methodName, args) {
-  return this.findBinding(methodName, args);
+  return this.getNextBinding(methodName, args);
 };
 
 
@@ -605,10 +619,10 @@ goog.inherits(goog.labs.mock.MockSpyManager_,
  * @return {!Function} The stub or the invocation logger, if defined.
  * @override
  */
-goog.labs.mock.MockSpyManager_.prototype.findBinding =
+goog.labs.mock.MockSpyManager_.prototype.getNextBinding =
     function(methodName, args) {
   var stub = goog.labs.mock.MockSpyManager_.base(
-      this, 'findBinding', methodName, args);
+      this, 'getNextBinding', methodName, args);
 
   if (!stub) {
     stub = goog.bind(this.mockee[methodName], this.mockee);

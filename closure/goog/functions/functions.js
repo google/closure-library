@@ -244,11 +244,14 @@ goog.functions.not = function(f) {
  * Generic factory function to construct an object given the constructor
  * and the arguments. Intended to be bound to create object factories.
  *
- * Callers should cast the result to the appropriate type for proper type
- * checking by the compiler.
- * @param {!Function} constructor The constructor for the Object.
+ * Example:
+ *
+ * var factory = goog.partial(goog.functions.create, Class);
+ *
+ * @param {function(new:T, ...)} constructor The constructor for the Object.
  * @param {...*} var_args The arguments to be passed to the constructor.
- * @return {!Object} A new instance of the class given in {@code constructor}.
+ * @return {!T} A new instance of the class given in {@code constructor}.
+ * @template T
  */
 goog.functions.create = function(constructor, var_args) {
   /**

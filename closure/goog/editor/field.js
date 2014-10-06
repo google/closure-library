@@ -1117,8 +1117,7 @@ goog.editor.Field.prototype.handleBeforeChangeKeyEvent_ = function(e) {
 
 /**
  * Keycodes that result in a selectionchange event (e.g. the cursor moving).
- * @enum {number}
- * @private
+ * @private {!Object.<number, number>}
  */
 goog.editor.Field.SELECTION_CHANGE_KEYCODES_ = {
   8: 1,  // backspace

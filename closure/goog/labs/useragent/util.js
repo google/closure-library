@@ -16,12 +16,6 @@
  * @fileoverview Utilities used by goog.labs.userAgent tools. These functions
  * should not be used outside of goog.labs.userAgent.*.
  *
- * @visibility {//closure/goog/bin/sizetests:__pkg__}
- * @visibility {//closure/goog/dom:__subpackages__}
- * @visibility {//closure/goog/style:__pkg__}
- * @visibility {//closure/goog/testing:__pkg__}
- * @visibility {//closure/goog/useragent:__subpackages__}
- * @visibility {//testing/puppet/modules:__pkg__} *
  *
  * @author nnaze@google.com (Nathan Naze)
  */

@@ -354,7 +354,7 @@ goog.module.getInternal_ = function(name) {
 /**
  * @private {{
  *     moduleName:(string|undefined),
- *     declareTestMethods:boolean}|null}}
+ *     declareTestMethods:boolean}|null}
  */
 goog.moduleLoaderState_ = null;
 
@@ -401,7 +401,7 @@ goog.module.declareLegacyNamespace = function() {
         'within a goog.module');
   }
   if (!COMPILED && !goog.moduleLoaderState_.moduleName) {
-    throw Error('goog.module must be called prior to ' + 
+    throw Error('goog.module must be called prior to ' +
         'goog.module.declareLegacyNamespace.');
   }
   goog.moduleLoaderState_.declareLegacyNamespace = true;

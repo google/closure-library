@@ -374,8 +374,8 @@ goog.dom.setProperties = function(element, properties) {
  * element.setAttribute(key, val) instead of element[key] = val.  Used
  * by goog.dom.setProperties.
  *
- * @type {Object}
- * @private
+ * @private {!Object.<string, string>}
+ * @const
  */
 goog.dom.DIRECT_ATTRIBUTE_MAP_ = {
   'cellpadding': 'cellPadding',
@@ -494,7 +494,7 @@ goog.dom.getDocumentHeight = function() {
  *   gadgets.window.adjustHeight(opt_height)
  *
  * @private
- * @param {Window} win The window whose document height to retrieve.
+ * @param {!Window} win The window whose document height to retrieve.
  * @return {number} The height of the document of the given window.
  */
 goog.dom.getDocumentHeight_ = function(win) {
@@ -908,7 +908,7 @@ goog.dom.isCss1CompatMode = function() {
 /**
  * Returns true if the browser is in "CSS1-compatible" (standards-compliant)
  * mode, false otherwise.
- * @param {Document} doc The document to check.
+ * @param {!Document} doc The document to check.
  * @return {boolean} True if in CSS1-compatible mode.
  * @private
  */
@@ -1424,7 +1424,7 @@ goog.dom.compareNodeOrder = function(node1, node2) {
  * Utility function to compare the position of two nodes, when
  * {@code textNode}'s parent is an ancestor of {@code node}.  If this entry
  * condition is not met, this function will attempt to reference a null object.
- * @param {Node} textNode The textNode to compare.
+ * @param {!Node} textNode The textNode to compare.
  * @param {Node} node The node to compare.
  * @return {number} -1 if node is before textNode, +1 otherwise.
  * @private
@@ -1447,7 +1447,7 @@ goog.dom.compareParentsDescendantNodeIe_ = function(textNode, node) {
  * Utility function to compare the position of two nodes known to be non-equal
  * siblings.
  * @param {Node} node1 The first node to compare.
- * @param {Node} node2 The second node to compare.
+ * @param {!Node} node2 The second node to compare.
  * @return {number} -1 if node1 is before node2, +1 otherwise.
  * @private
  */
@@ -1665,8 +1665,8 @@ goog.dom.findNodes_ = function(root, p, rv, findOne) {
 
 /**
  * Map of tags whose content to ignore when calculating text length.
- * @type {Object}
- * @private
+ * @private {!Object.<string, number>}
+ * @const
  */
 goog.dom.TAGS_TO_IGNORE_ = {
   'SCRIPT': 1,
@@ -1679,8 +1679,8 @@ goog.dom.TAGS_TO_IGNORE_ = {
 
 /**
  * Map of tags which have predefined values with regard to whitespace.
- * @type {Object}
- * @private
+ * @private {!Object.<string, string>}
+ * @const
  */
 goog.dom.PREDEFINED_TAG_VALUES_ = {'IMG': ' ', 'BR': '\n'};
 

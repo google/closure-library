@@ -67,7 +67,7 @@ function testStaticGetDescriptorCachesResults() {
           fullName: 'this.is.a.test'
         }
       };
-      messageType.descriptor_ = goog.proto2.Message.createDescriptor_(
+      messageType.descriptor_ = goog.proto2.Message.createDescriptor(
           messageType, descriptorObj_);
     }
     return messageType.descriptor_;

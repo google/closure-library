@@ -105,7 +105,7 @@ goog.proto2.Message.FieldType = {
  * This declaration is just here for documentation purposes.
  * goog.proto2.Message does not have its own descriptor.
  *
- * TODO(user): Delete after components update for cl/74316494.
+ * TODO(user): Delete after components update for cl/76695317.
  *
  * @type {undefined}
  * @private
@@ -189,7 +189,7 @@ goog.proto2.Message.prototype.forEachUnknown = function(callback, opt_scope) {
  * This only works if we assume people never subclass protobufs.
  *
  * TODO(user): Replace with goog.abstractMethod after components update
- *     with cl/74316494.
+ *     with cl/76695317.
  *
  * @return {!goog.proto2.Descriptor} The descriptor.
  */
@@ -199,7 +199,7 @@ goog.proto2.Message.prototype.getDescriptor = function() {
   // in set$Metadata for more info.
   var Ctor = this.constructor;
   return Ctor.descriptor_ ||
-      (Ctor.descriptor_ = goog.proto2.Message.createDescriptor_(
+      (Ctor.descriptor_ = goog.proto2.Message.createDescriptor(
           Ctor, Ctor.descriptorObj_));
 };
 
@@ -730,11 +730,10 @@ goog.proto2.Message.prototype.clear$Field = function(tag) {
  *
  * @param {function(new:goog.proto2.Message)} messageType Constructor for the
  *     message type to which this metadata applies.
- * @param {Object} metadataObj The object containing the metadata.
+ * @param {!Object} metadataObj The object containing the metadata.
  * @return {!goog.proto2.Descriptor} The new descriptor.
- * @private
  */
-goog.proto2.Message.createDescriptor_ = function(messageType, metadataObj) {
+goog.proto2.Message.createDescriptor = function(messageType, metadataObj) {
   var fields = [];
   var descriptorInfo = metadataObj[0];
 
@@ -755,7 +754,7 @@ goog.proto2.Message.createDescriptor_ = function(messageType, metadataObj) {
  *
  * GENERATED CODE USE ONLY. Called when constructing message classes.
  *
- * TODO(user): Delete after components update with cl/74316494.
+ * TODO(user): Delete after components update with cl/76695317.
  *
  * @param {!Function} messageType Constructor for the
  *     message type to which this metadata applies.

@@ -426,6 +426,12 @@ function testInitDefaultsThenClone() {
   assertObjectEquals('message is cloned properly', message, message.clone());
 }
 
+function testClassGetDescriptorEqualToInstanceGetDescriptor() {
+  var classDescriptor = proto2.TestAllTypes.getDescriptor();
+  var instanceDescriptor = new proto2.TestAllTypes().getDescriptor();
+  assertEquals(classDescriptor, instanceDescriptor);
+}
+
 function testGetAfterSetWithLazyDeserializer() {
   // Test makes sure that the lazy deserializer for a field is not
   // erroneously called when get$Value is called after set$Value.

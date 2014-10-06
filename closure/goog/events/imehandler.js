@@ -87,14 +87,17 @@ goog.events.ImeHandler = function(el) {
 
   if (goog.events.ImeHandler.USES_COMPOSITION_EVENTS) {
     this.handler_.
-        listen(el, 'compositionstart', this.handleCompositionStart_).
-        listen(el, 'compositionend', this.handleCompositionEnd_).
-        listen(el, 'compositionupdate', this.handleTextModifyingInput_);
+        listen(el, goog.events.EventType.COMPOSITIONSTART,
+            this.handleCompositionStart_).
+        listen(el, goog.events.EventType.COMPOSITIONEND,
+            this.handleCompositionEnd_).
+        listen(el, goog.events.EventType.COMPOSITIONUPDATE,
+            this.handleTextModifyingInput_);
   }
 
   this.handler_.
-      listen(el, 'textInput', this.handleTextInput_).
-      listen(el, 'text', this.handleTextModifyingInput_).
+      listen(el, goog.events.EventType.TEXTINPUT, this.handleTextInput_).
+      listen(el, goog.events.EventType.TEXT, this.handleTextModifyingInput_).
       listen(el, goog.events.EventType.KEYDOWN, this.handleKeyDown_);
 };
 goog.inherits(goog.events.ImeHandler, goog.events.EventTarget);
