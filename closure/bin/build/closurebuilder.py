@@ -122,11 +122,11 @@ def _GetInputByPath(path, sources):
 
   Returns:
     The source from sources identified by path, if found.  Converts to
-    absolute paths for comparison.
+    real paths for comparison.
   """
   for js_source in sources:
-    # Convert both to absolute paths for comparison.
-    if os.path.abspath(path) == os.path.abspath(js_source.GetPath()):
+    # Convert both to real paths for comparison.
+    if os.path.realpath(path) == os.path.realpath(js_source.GetPath()):
       return js_source
 
 
