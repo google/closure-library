@@ -832,8 +832,8 @@ goog.addDependency('proto/proto.js', ['goog.proto'], ['goog.proto.Serializer'], 
 goog.addDependency('proto/serializer.js', ['goog.proto.Serializer'], ['goog.json.Serializer', 'goog.string'], false);
 goog.addDependency('proto/serializer_test.js', ['goog.protoTest'], ['goog.proto', 'goog.testing.jsunit'], false);
 goog.addDependency('proto2/descriptor.js', ['goog.proto2.Descriptor', 'goog.proto2.Metadata'], ['goog.array', 'goog.asserts', 'goog.object', 'goog.string'], false);
-goog.addDependency('proto2/descriptor_test.js', ['goog.proto2.DescriptorTest'], ['goog.proto2.Descriptor', 'goog.proto2.Message', 'goog.testing.jsunit', 'goog.testing.recordFunction'], false);
-goog.addDependency('proto2/fielddescriptor.js', ['goog.proto2.FieldDescriptor'], ['goog.asserts', 'goog.proto2.Descriptor', 'goog.string'], false);
+goog.addDependency('proto2/descriptor_test.js', ['goog.proto2.DescriptorTest'], ['goog.proto2.Descriptor', 'goog.proto2.Message', 'goog.testing.jsunit'], false);
+goog.addDependency('proto2/fielddescriptor.js', ['goog.proto2.FieldDescriptor'], ['goog.asserts', 'goog.string'], false);
 goog.addDependency('proto2/fielddescriptor_test.js', ['goog.proto2.FieldDescriptorTest'], ['goog.proto2.FieldDescriptor', 'goog.proto2.Message', 'goog.testing.jsunit'], false);
 goog.addDependency('proto2/lazydeserializer.js', ['goog.proto2.LazyDeserializer'], ['goog.asserts', 'goog.proto2.Message', 'goog.proto2.Serializer'], false);
 goog.addDependency('proto2/message.js', ['goog.proto2.Message'], ['goog.asserts', 'goog.proto2.Descriptor', 'goog.proto2.FieldDescriptor'], false);
