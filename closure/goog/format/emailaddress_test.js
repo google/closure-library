@@ -127,9 +127,21 @@ function testToString() {
   // No address.
   assertEquals('JOHN Doe', f('JOHN Doe <>'));
 
-  // Special char in the name.
+  // Special chars in the name.
   assertEquals('"JOHN, Doe" <john@gmail.com>',
                f('JOHN, Doe <john@gmail.com>'));
+  assertEquals('"JOHN(Johnny) Doe" <john@gmail.com>',
+               f('JOHN(Johnny) Doe <john@gmail.com>'));
+  assertEquals('"JOHN[Johnny] Doe" <john@gmail.com>',
+               f('JOHN[Johnny] Doe <john@gmail.com>'));
+  assertEquals('"JOHN@work Doe" <john@gmail.com>',
+               f('JOHN@work Doe <john@gmail.com>'));
+  assertEquals('"JOHN:theking Doe" <john@gmail.com>',
+               f('JOHN:theking Doe <john@gmail.com>'));
+  assertEquals('"JOHN\\\\ Doe" <john@gmail.com>',
+               f('JOHN\\ Doe <john@gmail.com>'));
+  assertEquals('"JOHN.com Doe" <john@gmail.com>',
+               f('JOHN.com Doe <john@gmail.com>'));
 
   // Already quoted.
   assertEquals('"JOHN, Doe" <john@gmail.com>',
