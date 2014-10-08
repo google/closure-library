@@ -220,6 +220,24 @@ testAgents.SAFARI_WINDOWS =
 
 
 /** @const {string} */
+testAgents.COAST =
+    'Mozilla/5.0 (iPad; CPU OS 7_0_2 like Mac OS X) AppleWebKit/537.51.1' +
+    ' (KHTML like Gecko) Coast/1.1.2.64598 Mobile/11B511 Safari/7534.48.3';
+
+
+/** @const {string} */
+testAgents.WEBVIEW_IPHONE =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26' +
+    ' (KHTML, like Gecko) Mobile/10A403';
+
+
+/** @const {string} */
+testAgents.WEBVIEW_IPAD =
+    'Mozilla/5.0 (iPad; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26' +
+    ' (KHTML, like Gecko) Mobile/10A403';
+
+
+/** @const {string} */
 testAgents.OPERA_10 =
     'Opera/9.80 (S60; SymbOS; Opera Mobi/447; U; en) ' +
     'Presto/2.4.18 Version/10.00';
