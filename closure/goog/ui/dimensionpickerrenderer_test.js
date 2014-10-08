@@ -16,10 +16,12 @@ goog.provide('goog.ui.DimensionPickerRendererTest');
 goog.setTestOnly('goog.ui.DimensionPickerRendererTest');
 
 goog.require('goog.a11y.aria.LivePriority');
-goog.require('goog.dom');
+goog.require('goog.array');
 goog.require('goog.testing.jsunit');
+goog.require('goog.testing.recordFunction');
 goog.require('goog.ui.DimensionPicker');
 goog.require('goog.ui.DimensionPickerRenderer');
+
 
 var renderer;
 var picker;
@@ -40,8 +42,14 @@ function tearDown() {
  */
 function testSetHighlightedSizeUpdatesLiveRegion() {
   picker.render();
+
+  var sayFunction = goog.testing.recordFunction();
+  renderer.announcer_.say = sayFunction;
   renderer.setHighlightedSize(picker, 3, 7);
-  var liveRegion = renderer.announcer_.getLiveRegion_(
-      goog.a11y.aria.LivePriority.ASSERTIVE);
-  assertEquals('3 by 7', goog.dom.getTextContent(liveRegion));
+
+  assertEquals(1, sayFunction.getCallCount());
+
+  assertTrue(goog.array.equals(
+      ['3 by 7', goog.a11y.aria.LivePriority.ASSERTIVE],
+      sayFunction.getLastCall().getArguments()));
 }
