@@ -1499,16 +1499,21 @@ goog.array.repeat = function(value, n) {
  * @return {!Array.<?>} An array containing the flattened values.
  */
 goog.array.flatten = function(var_args) {
-  var result = [];
-  for (var i = 0; i < arguments.length; i++) {
-    var element = arguments[i];
-    if (goog.isArray(element)) {
-      result.push.apply(result, goog.array.flatten.apply(null, element));
-    } else {
-      result.push(element);
+  return (function flatten_(args) {
+    var result = [];
+    var index = 0;
+    for (var i = 0, length = args.length; i < length; i++) {
+      var element = args[i];
+      if (goog.isArray(element)) {
+        goog.array.forEach(flatten_(element), function(value) {
+          result[index++] = value;
+        });
+      } else {
+        result[index++] = element;
+      }
     }
-  }
-  return result;
+    return result;
+  })(arguments);
 };
 
 
