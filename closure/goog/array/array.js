@@ -1499,11 +1499,19 @@ goog.array.repeat = function(value, n) {
  * @return {!Array.<?>} An array containing the flattened values.
  */
 goog.array.flatten = function(var_args) {
+  var CHUNK_SIZE = 8192;
+
   var result = [];
   for (var i = 0; i < arguments.length; i++) {
     var element = arguments[i];
     if (goog.isArray(element)) {
-      result.push.apply(result, goog.array.flatten.apply(null, element));
+      for (var c = 0; c < element.length; c += CHUNK_SIZE) {
+        var chunk = goog.array.slice(element, c, c + CHUNK_SIZE);
+        var recurseResult = goog.array.flatten.apply(null, chunk);
+        for (var r = 0; r < recurseResult.length; r++) {
+          result.push(recurseResult[r]);
+        }
+      }
     } else {
       result.push(element);
     }
