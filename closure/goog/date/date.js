@@ -742,9 +742,9 @@ goog.date.Interval.prototype.add = function(interval) {
  * expecting Date objects this class is marked as extending the built in Date
  * object even though that's not strictly true.
  *
- * @param {number|Object=} opt_year Four digit year or a date-like object. If
- *     not set, the created object will contain the date determined by
- *     goog.now().
+ * @param {number|goog.date.DateLike=} opt_year Four digit year or a date-like
+ *     object. If not set, the created object will contain the date
+ *     determined by goog.now().
  * @param {number=} opt_month Month, 0 = Jan, 11 = Dec.
  * @param {number=} opt_date Date of month, 1 - 31.
  * @constructor

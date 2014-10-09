@@ -85,6 +85,9 @@ goog.i18n.NumberFormat = function(pattern, opt_currency, opt_currencyStyle) {
    */
   this.baseFormattingNumber_ = null;
 
+  /** @private {string} */
+  this.pattern_;
+
   if (typeof pattern == 'number') {
     this.applyStandardPattern_(pattern);
   } else {

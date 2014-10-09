@@ -331,7 +331,7 @@ goog.array.map = goog.NATIVE_ARRAY_PROTOTYPES &&
  *
  * @param {Array.<T>|goog.array.ArrayLike} arr Array or array
  *     like object over which to iterate.
- * @param {?function(this:S, R, T, number, ?) : R} f The function to call for
+ * @param {function(this:S, R, T, number, ?) : R} f The function to call for
  *     every element. This function
  *     takes 4 arguments (the function's previous result or the initial value,
  *     the value of the current array element, the current array index, and the

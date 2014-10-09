@@ -525,9 +525,9 @@ goog.globalize = function(obj, opt_global) {
 /**
  * Adds a dependency from a file to the files it requires.
  * @param {string} relPath The path to the js file.
- * @param {Array.<string>} provides An array of strings with
+ * @param {!Array.<string>} provides An array of strings with
  *     the names of the objects this file provides.
- * @param {Array.<string>} requires An array of strings with
+ * @param {!Array.<string>} requires An array of strings with
  *     the names of the objects this file requires.
  * @param {boolean=} opt_isModule Whether this dependency must be loaded as
  *     a module as declared by goog.module.
@@ -773,8 +773,7 @@ if (goog.DEPENDENCIES_ENABLED) {
   /**
    * Object used to keep track of urls that have already been added. This record
    * allows the prevention of circular dependencies.
-   * @type {Object}
-   * @private
+   * @private {!Object.<string, boolean>}
    */
   goog.included_ = {};
 
@@ -783,14 +782,24 @@ if (goog.DEPENDENCIES_ENABLED) {
    * This object is used to keep track of dependencies and other data that is
    * used for loading scripts.
    * @private
-   * @type {Object}
+   * @type {{
+   *   pathIsModule: !Object.<string, boolean>,
+   *   nameToPath: !Object.<string, string>,
+   *   requires: !Object.<string, !Object.<string, boolean>>,
+   *   visited: !Object.<string, boolean>,
+   *   written: !Object.<string, boolean>
+   * }}
    */
   goog.dependencies_ = {
     pathIsModule: {}, // 1 to 1
-    nameToPath: {}, // many to 1
+
+    nameToPath: {}, // 1 to 1
+
     requires: {}, // 1 to many
+
     // Used when resolving dependencies to prevent us from visiting file twice.
     visited: {},
+
     written: {} // Used to keep track of script files we have written.
   };
 
@@ -823,7 +832,8 @@ if (goog.DEPENDENCIES_ENABLED) {
     // Search backwards since the current script is in almost all cases the one
     // that has base.js.
     for (var i = scripts.length - 1; i >= 0; --i) {
-      var src = scripts[i].src;
+      var script = /** @type {!HTMLScriptElement} */ (scripts[i]);
+      var src = script.src;
       var qmark = src.lastIndexOf('?');
       var l = qmark == -1 ? src.length : qmark;
       if (src.substr(l - 7, 7) == 'base.js') {
@@ -980,7 +990,7 @@ if (goog.DEPENDENCIES_ENABLED) {
     // of the module.
     try {
       goog.moduleLoaderState_ = {
-          moduleName: undefined, declareTestMethods: false};
+        moduleName: undefined, declareTestMethods: false};
       var exports;
       if (goog.isFunction(moduleDef)) {
         exports = moduleDef.call(goog.global, {});
@@ -1115,11 +1125,12 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.writeScripts_ = function() {
-    // The scripts we need to write this time.
+    /** @type {!Array.<string>} The scripts we need to write this time. */
     var scripts = [];
     var seenScript = {};
     var deps = goog.dependencies_;
 
+    /** @param {string} path */
     function visitNode(path) {
       if (path in deps.written) {
         return;
@@ -1762,8 +1773,7 @@ goog.evalWorksForGlobals_ = null;
 /**
  * Optional map of CSS class names to obfuscated names used with
  * goog.getCssName().
- * @type {Object|undefined}
- * @private
+ * @private {!Object.<string, string>|undefined}
  * @see goog.setCssNameMapping
  */
 goog.cssNameMapping_;
@@ -1882,7 +1892,7 @@ goog.setCssNameMapping = function(mapping, opt_style) {
  * are made in uncompiled mode.
  *
  * A hook for overriding the CSS name mapping.
- * @type {Object|undefined}
+ * @type {!Object.<string, string>|undefined}
  */
 goog.global.CLOSURE_CSS_NAME_MAPPING;
 
@@ -1907,7 +1917,7 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
  * </code>
  *
  * @param {string} str Translatable string, places holders in the form {$foo}.
- * @param {Object=} opt_values Map of place holder name to value.
+ * @param {Object.<string, string>=} opt_values Maps place holder name to value.
  * @return {string} message with placeholders filled.
  */
 goog.getMsg = function(str, opt_values) {
@@ -2132,6 +2142,7 @@ if (!COMPILED) {
 //==============================================================================
 // goog.defineClass implementation
 //==============================================================================
+
 
 /**
  * Creates a restricted form of a Closure "class":

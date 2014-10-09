@@ -44,7 +44,7 @@ goog.require('goog.string');
  *   [  .      .      .            .          .   ]
  *   [ am,0   am,1   am,2   ...   am,j  ...  am,n ]
  *
- * @param {goog.math.Matrix|Array.<Array.<number>>|goog.math.Size|number} m
+ * @param {!goog.math.Matrix|!Array.<!Array.<number>>|!goog.math.Size|number} m
  *     A matrix to copy, a 2D-array to take as a template, a size object for
  *     dimensions, or the number of rows.
  * @param {number=} opt_n Number of columns of the matrix (only applicable if
@@ -57,7 +57,7 @@ goog.math.Matrix = function(m, opt_n) {
     this.array_ = m.toArray();
   } else if (goog.isArrayLike(m) &&
              goog.math.Matrix.isValidArray(
-                 /** @type {Array.<!Array.<number>>} */ (m))) {
+                 /** @type {!Array.<!Array.<number>>} */ (m))) {
     this.array_ = goog.array.clone(/** @type {!Array.<!Array.<number>>} */ (m));
   } else if (m instanceof goog.math.Size) {
     this.array_ = goog.math.Matrix.createZeroPaddedArray_(m.height, m.width);
@@ -97,11 +97,13 @@ goog.math.Matrix.createIdentityMatrix = function(n) {
 /**
  * Calls a function for each cell in a matrix.
  * @param {goog.math.Matrix} matrix The matrix to iterate over.
- * @param {Function} fn The function to call for every element. This function
+ * @param {function(this:T, number, number, number, !goog.math.Matrix)} fn
+ *     The function to call for every element. This function
  *     takes 4 arguments (value, i, j, and the matrix)
  *     and the return value is irrelevant.
- * @param {Object=} opt_obj The object to be used as the value of 'this'
+ * @param {T=} opt_obj The object to be used as the value of 'this'
  *     within {@code fn}.
+ * @template T
  */
 goog.math.Matrix.forEach = function(matrix, fn, opt_obj) {
   for (var i = 0; i < matrix.getSize().height; i++) {
@@ -115,7 +117,7 @@ goog.math.Matrix.forEach = function(matrix, fn, opt_obj) {
 /**
  * Tests whether an array is a valid matrix.  A valid array is an array of
  * arrays where all arrays are of the same length and all elements are numbers.
- * @param {Array.<!Array.<number>>} arr An array to test.
+ * @param {!Array.<!Array.<number>>} arr An array to test.
  * @return {boolean} Whether the array is a valid matrix.
  */
 goog.math.Matrix.isValidArray = function(arr) {
@@ -140,14 +142,15 @@ goog.math.Matrix.isValidArray = function(arr) {
 /**
  * Calls a function for every cell in a matrix and inserts the result into a
  * new matrix of equal dimensions.
- * @param {goog.math.Matrix} matrix The matrix to iterate over.
- * @param {Function} fn The function to call for every element. This function
- *                     takes 4 arguments (value, i, j and the matrix)
- *                     and should return something. The result will be inserted
- *                     into a new matrix.
- * @param {Object=} opt_obj The object to be used as the value of 'this'
+ * @param {!goog.math.Matrix} matrix The matrix to iterate over.
+ * @param {function(this:T, number, number, number, !goog.math.Matrix): number}
+ *     fn The function to call for every element. This function
+ *     takes 4 arguments (value, i, j and the matrix)
+ *     and should return a number, which will be inserted into a new matrix.
+ * @param {T=} opt_obj The object to be used as the value of 'this'
  *     within {@code fn}.
  * @return {!goog.math.Matrix} A new matrix with the results from {@code fn}.
+ * @template T
  */
 goog.math.Matrix.map = function(matrix, fn, opt_obj) {
   var m = new goog.math.Matrix(matrix.getSize());

@@ -40,8 +40,7 @@ goog.require('goog.math');
 goog.math.Path = function() {
   /**
    * The segment types that constitute this path.
-   * @type {!Array.<number>}
-   * @private
+   * @private {!Array.<goog.math.Path.Segment>}
    */
   this.segments_ = [];
 
@@ -466,8 +465,8 @@ goog.math.Path.prototype.arcToAsCurves = function(
  * As a convenience the {@code ARCTO} segment also includes the end point as the
  * last two arguments: {@code rx, ry, fromAngle, extent, x, y}.
  *
- * @param {function(number, Array)} callback The function to call with each
- *     path segment.
+ * @param {function(!goog.math.Path.Segment, !Array.<number>)} callback
+ *     The function to call with each path segment.
  */
 goog.math.Path.prototype.forEachSegment = function(callback) {
   var points = this.arguments_;
@@ -496,7 +495,7 @@ goog.math.Path.prototype.getCurrentPoint = function() {
  * @return {!goog.math.Path} A copy of this path.
  */
 goog.math.Path.prototype.clone = function() {
-  var path = new this.constructor();
+  var path = new goog.math.Path();
   path.segments_ = this.segments_.concat();
   path.count_ = this.count_.concat();
   path.arguments_ = this.arguments_.concat();
@@ -520,8 +519,7 @@ goog.math.Path.prototype.isSimple = function() {
 
 /**
  * A map from segment type to the path function to call to simplify a path.
- * @type {!Object}
- * @private
+ * @private {!Object.<goog.math.Path.Segment, function(this: goog.math.Path)>}
  */
 goog.math.Path.simplifySegmentMap_ = (function() {
   var map = {};
