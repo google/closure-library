@@ -924,10 +924,9 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
   else if (node) {
     this.lastKeys_.strokes.push(stroke);
     this.lastKeys_.time = now;
-    // Prevent default action so find-as-you-type doesn't steal keyboard focus.
-    if (goog.userAgent.GECKO) {
-      event.preventDefault();
-    }
+    // Prevent default action so that the rest of the keystroke sequence can be
+    // completed.
+    event.preventDefault();
   }
 
   // No strokes for sequence, clear stored strokes.

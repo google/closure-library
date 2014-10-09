@@ -272,20 +272,7 @@ function testAllowsMultiKeySequenceSpecifiedAsArray() {
   handler.registerShortcut('quitemacs',
       [KeyCodes.X, Modifiers.CTRL,
        KeyCodes.C]);
-  fire(KeyCodes.X, {ctrlKey: true});
-  fire(KeyCodes.C);
-
-  listener.$verify();
-}
-
-function testAllowsMultiKeySequenceSpecifiedAsArray() {
-  listener.shortcutFired('quitemacs');
-  listener.$replay();
-
-  handler.registerShortcut('quitemacs',
-      [KeyCodes.X, Modifiers.CTRL,
-       KeyCodes.C]);
-  fire(KeyCodes.X, {ctrlKey: true});
+  assertFalse(fire(KeyCodes.X, {ctrlKey: true}));
   fire(KeyCodes.C);
 
   listener.$verify();
@@ -300,8 +287,8 @@ function testAllowsMultiKeySequenceSpecifiedAsArguments() {
       KeyCodes.Q, Modifiers.NONE,
       KeyCodes.NUM_ONE, Modifiers.SHIFT);
   var shiftProperties = { shiftKey: true };
-  fire(KeyCodes.SEMICOLON, shiftProperties);
-  fire(KeyCodes.Q);
+  assertFalse(fire(KeyCodes.SEMICOLON, shiftProperties));
+  assertFalse(fire(KeyCodes.Q));
   fire(KeyCodes.NUM_ONE, shiftProperties);
 
   listener.$verify();
