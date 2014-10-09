@@ -255,6 +255,7 @@ goog.provide = function(name) {
  * @param {string} name Namespace provided by this file in the form
  *     "goog.package.part".
  * @param {Object=} opt_obj The object to embed in the namespace.
+ * @private
  */
 goog.constructNamespace_ = function(name, opt_obj) {
   if (!COMPILED) {
@@ -352,9 +353,10 @@ goog.module.getInternal_ = function(name) {
 
 
 /**
- * @private {{
- *     moduleName:(string|undefined),
- *     declareTestMethods:boolean}|null}
+ * @private {?{
+ *   moduleName: (string|undefined),
+ *   declareTestMethods: boolean
+ * }}
  */
 goog.moduleLoaderState_ = null;
 
@@ -405,7 +407,7 @@ goog.module.declareLegacyNamespace = function() {
         'goog.module.declareLegacyNamespace.');
   }
   goog.moduleLoaderState_.declareLegacyNamespace = true;
-}
+};
 
 
 /**
