@@ -37,12 +37,13 @@ goog.iter.Iterable;
 
 /**
  * Singleton Error object that is used to terminate iterations.
- * @type {Error}
+ * @const {!Error}
  */
 goog.iter.StopIteration = ('StopIteration' in goog.global) ?
     // For script engines that support legacy iterators.
     goog.global['StopIteration'] :
     Error('StopIteration');
+
 
 
 /**
