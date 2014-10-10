@@ -515,23 +515,15 @@ goog.iter.dropWhile = function(iterable, f, opt_obj) {
  */
 goog.iter.takeWhile = function(iterable, f, opt_obj) {
   var iterator = goog.iter.toIterator(iterable);
-  var newIter = new goog.iter.Iterator;
-  var taking = true;
-  newIter.next = function() {
-    while (true) {
-      if (taking) {
-        var val = iterator.next();
-        if (f.call(opt_obj, val, undefined, iterator)) {
-          return val;
-        } else {
-          taking = false;
-        }
-      } else {
-        throw goog.iter.StopIteration;
-      }
+  var iter = new goog.iter.Iterator();
+  iter.next = function() {
+    var val = iterator.next();
+    if (f.call(opt_obj, val, undefined, iterator)) {
+      return val;
     }
+    throw goog.iter.StopIteration;
   };
-  return newIter;
+  return iter;
 };
 
 
