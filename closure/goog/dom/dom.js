@@ -1689,7 +1689,7 @@ goog.dom.PREDEFINED_TAG_VALUES_ = {'IMG': ' ', 'BR': '\n'};
  * Returns true if the element has a tab index that allows it to receive
  * keyboard focus (tabIndex >= 0), false otherwise.  Note that some elements
  * natively support keyboard focus, even if they have no tab index.
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element has a tab index that allows keyboard
  *     focus.
  * @see http://fluidproject.org/blog/2008/01/09/getting-setting-and-removing-tabindex-values-with-javascript/
@@ -1727,7 +1727,7 @@ goog.dom.setFocusableTabIndex = function(element, enable) {
  * Returns true if the element can be focused, i.e. it has a tab index that
  * allows it to receive keyboard focus (tabIndex >= 0), or it is an element
  * that natively supports keyboard focus.
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element allows keyboard focus.
  */
 goog.dom.isFocusable = function(element) {
@@ -1751,7 +1751,7 @@ goog.dom.isFocusable = function(element) {
 
 /**
  * Returns true if the element has a specified tab index.
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element has a specified tab index.
  * @private
  */
@@ -1766,7 +1766,7 @@ goog.dom.hasSpecifiedTabIndex_ = function(element) {
 
 /**
  * Returns true if the element's tab index allows the element to be focused.
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element's tab index allows focus.
  * @private
  */
@@ -1779,7 +1779,7 @@ goog.dom.isTabIndexFocusable_ = function(element) {
 
 /**
  * Returns true if the element is focusable even when tabIndex is not set.
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element natively supports focus.
  * @private
  */
@@ -1795,7 +1795,7 @@ goog.dom.nativelySupportsFocus_ = function(element) {
 /**
  * Returns true if the element has a bounding rectangle that would be visible
  * (i.e. its width and height are greater than zero).
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element has a non-zero bounding rectangle.
  * @private
  */
@@ -2773,7 +2773,7 @@ goog.dom.DomHelper.prototype.findNodes = goog.dom.findNodes;
  * Returns true if the element has a tab index that allows it to receive
  * keyboard focus (tabIndex >= 0), false otherwise.  Note that some elements
  * natively support keyboard focus, even if they have no tab index.
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element has a tab index that allows keyboard
  *     focus.
  */
@@ -2797,7 +2797,7 @@ goog.dom.DomHelper.prototype.setFocusableTabIndex =
  * Returns true if the element can be focused, i.e. it has a tab index that
  * allows it to receive keyboard focus (tabIndex >= 0), or it is an element
  * that natively supports keyboard focus.
- * @param {Element} element Element to check.
+ * @param {!Element} element Element to check.
  * @return {boolean} Whether the element allows keyboard focus.
  */
 goog.dom.DomHelper.prototype.isFocusable = goog.dom.isFocusable;
