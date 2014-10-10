@@ -35,22 +35,14 @@ goog.require('goog.math');
 goog.iter.Iterable;
 
 
-// For script engines that already support iterators.
-if ('StopIteration' in goog.global) {
-  /**
-   * Singleton Error object that is used to terminate iterations.
-   * @type {Error}
-   */
-  goog.iter.StopIteration = goog.global['StopIteration'];
-} else {
-  /**
-   * Singleton Error object that is used to terminate iterations.
-   * @type {Error}
-   * @suppress {duplicate}
-   */
-  goog.iter.StopIteration = Error('StopIteration');
-}
-
+/**
+ * Singleton Error object that is used to terminate iterations.
+ * @type {Error}
+ */
+goog.iter.StopIteration = ('StopIteration' in goog.global) ?
+    // For script engines that support legacy iterators.
+    goog.global['StopIteration'] :
+    Error('StopIteration');
 
 
 /**
