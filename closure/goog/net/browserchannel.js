@@ -2219,7 +2219,7 @@ goog.net.BrowserChannel.prototype.testGoogleComCallback_ = function(networkUp) {
     this.channelDebug_.info('Failed to ping google.com');
     goog.net.BrowserChannel.notifyStatEvent(
         goog.net.BrowserChannel.Stat.ERROR_NETWORK);
-    // We cann onError_ here instead of signalError_ because the latter just
+    // We call onError_ here instead of signalError_ because the latter just
     // calls notifyStatEvent, and we don't want to have another stat event.
     this.onError_(goog.net.BrowserChannel.Error.NETWORK);
   }
