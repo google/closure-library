@@ -19,8 +19,6 @@
 
 goog.provide('goog.object');
 
-goog.require('goog.array');
-
 
 /**
  * Calls a function for each element in an object/map/hash.
@@ -445,11 +443,13 @@ goog.object.setIfUndefined = function(obj, key, value) {
  * @template K,V
  */
 goog.object.equals = function(a, b) {
-  if (!goog.array.equals(goog.object.getKeys(a), goog.object.getKeys(b))) {
-    return false;
-  }
   for (var k in a) {
-    if (a[k] !== b[k]) {
+    if (!(k in b) || a[k] !== b[k]) {
+      return false;
+    }
+  }
+  for (var k in b) {
+    if (!(k in a)) {
       return false;
     }
   }
