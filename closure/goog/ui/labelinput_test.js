@@ -136,7 +136,7 @@ function testDecorateElementWithFocus() {
 
   assertEquals('label for pre-focused input should not have LABEL_CLASS_NAME',
       -1,
-      labelInput.getElement().className.indexOf(labelInput.LABEL_CLASS_NAME));
+      labelInput.getElement().className.indexOf(labelInput.labelCssClassName));
 
   if (!isPlaceholderSupported()) {
     assertEquals('label rendered for pre-focused element',
@@ -207,17 +207,17 @@ function testClassName() {
 
   var el = labelInput.getElement();
   assertTrue('label before focus should have LABEL_CLASS_NAME',
-      goog.dom.classlist.contains(el, labelInput.LABEL_CLASS_NAME));
+      goog.dom.classlist.contains(el, labelInput.labelCssClassName));
 
   labelInput.getElement().focus();
 
   assertFalse('label after focus should not have LABEL_CLASS_NAME',
-      goog.dom.classlist.contains(el, labelInput.LABEL_CLASS_NAME));
+      goog.dom.classlist.contains(el, labelInput.labelCssClassName));
 
   labelInput.getElement().blur();
 
   assertTrue('label after blur should have LABEL_CLASS_NAME',
-      goog.dom.classlist.contains(el, labelInput.LABEL_CLASS_NAME));
+      goog.dom.classlist.contains(el, labelInput.labelCssClassName));
 }
 
 function isPlaceholderSupported() {
@@ -232,7 +232,7 @@ function testEnable() {
   labelInput.enterDocument();
 
   var labelElement = labelInput.getElement();
-  var disabledClass = goog.getCssName(labelInput.LABEL_CLASS_NAME, 'disabled');
+  var disabledClass = goog.getCssName(labelInput.labelCssClassName, 'disabled');
 
   assertTrue('label should be enabled', labelInput.isEnabled());
   assertFalse('label should not have the disabled class',
