@@ -321,7 +321,10 @@ goog.fx.Dragger.prototype.enableRightPositioningForRtl =
  * @template T
  */
 goog.fx.Dragger.prototype.getHandler = function() {
-  return this.eventHandler_;
+  // TODO(user): templated "this" values currently result in "this" being
+  // "unknown" in the body of the function.
+  var self = /** @type {goog.fx.Dragger} */ (this);
+  return self.eventHandler_;
 };
 
 
