@@ -132,7 +132,7 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
       var onmessage = goog.bind(function(e) {
         // Validate origin and message to make sure that this message was
         // intended for us.
-        if (e.origin != origin && e.data != message) {
+        if (e.origin != origin || e.data != message) {
           return;
         }
         this['port1'].onmessage();
@@ -158,10 +158,12 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
     var head = {};
     var tail = head;
     channel['port1'].onmessage = function() {
-      head = head.next;
-      var cb = head.cb;
-      head.cb = null;
-      cb();
+      if (goog.isDef(head.next)) {
+        head = head.next;
+        var cb = head.cb;
+        head.cb = null;
+        cb();
+      }
     };
     return function(cb) {
       tail.next = {

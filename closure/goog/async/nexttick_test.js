@@ -17,14 +17,18 @@ goog.setTestOnly('goog.async.nextTickTest');
 goog.require('goog.async.nextTick');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.debug.entryPointRegistry');
+goog.require('goog.dom');
+goog.require('goog.labs.userAgent.browser');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.MockClock');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall(
     'asyncNextTickTest');
 
 var clock;
+var propertyReplacer = new goog.testing.PropertyReplacer();
 
 function setUp() {
   clock = null;
@@ -35,6 +39,7 @@ function tearDown() {
     clock.uninstall();
   }
   goog.async.nextTick.setImmediate_ = undefined;
+  propertyReplacer.reset();
 }
 
 
@@ -174,3 +179,45 @@ function testNextTick_notStarvedBySetTimeout() {
   });
   asyncTestCase.waitForAsync('Waiting not to starve');
 }
+
+
+/**
+ * Test a scenario in which the iframe used by the postMessage polyfill gets a
+ * message that does not have match what is expected. In this case, the polyfill
+ * should not try to invoke a callback (which would result in an error because
+ * there would be no callbacks in the linked list).
+ */
+function testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
+  // IE does not use the postMessage polyfill.
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
+  // Force postMessage pollyfill for setImmediate.
+  propertyReplacer.set(window, 'setImmediate', undefined);
+  propertyReplacer.set(window, 'MessageChannel', undefined);
+
+  var callbackCalled = false;
+  goog.async.nextTick(function() {
+    callbackCalled = true;
+  });
+
+  var frame = document.getElementsByTagName('iframe')[0];
+  frame.contentWindow.postMessage('bogus message',
+      window.location.protocol + '//' + window.location.host);
+
+  var error = null;
+  frame.contentWindow.onerror = function(e) {
+    error = e;
+  };
+
+  setTimeout(function() {
+    assert('Callback should have been called.', callbackCalled);
+    assertNull('An unexpected error was thrown.', error);
+    goog.dom.removeNode(frame);
+    asyncTestCase.continueTesting();
+  }, 0);
+
+  asyncTestCase.waitForAsync('Waiting for callbacks to be invoked.');
+}
+
