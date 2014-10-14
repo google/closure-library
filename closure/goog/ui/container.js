@@ -816,7 +816,7 @@ goog.ui.Container.prototype.handleKeyEventInternal = function(e) {
 /**
  * Creates a DOM ID for the child control and registers it to an internal
  * hash table to be able to find it fast by id.
- * @param {goog.ui.Component} child The child control. Its root element has
+ * @param {goog.ui.Control} child The child control. Its root element has
  *     to be created yet.
  * @private
  */
@@ -838,7 +838,7 @@ goog.ui.Container.prototype.registerChildId_ = function(child) {
 /**
  * Adds the specified control as the last child of this container.  See
  * {@link goog.ui.Container#addChildAt} for detailed semantics.
- * @param {goog.ui.Component} child The new child control.
+ * @param {goog.ui.Control} child The new child control.
  * @param {boolean=} opt_render Whether the new child should be rendered
  *     immediately after being added (defaults to false).
  * @override
@@ -875,7 +875,7 @@ goog.ui.Container.prototype.getChildAt;
  * Overrides {@link goog.ui.Component#addChildAt} by also updating the
  * container's highlight index.  Since {@link goog.ui.Component#addChild} uses
  * {@link #addChildAt} internally, we only need to override this method.
- * @param {goog.ui.Component} control New child.
+ * @param {goog.ui.Control} control New child.
  * @param {number} index Index at which the new child is to be added.
  * @param {boolean=} opt_render Whether the new child should be rendered
  *     immediately after being added (defaults to false).
@@ -941,7 +941,7 @@ goog.ui.Container.prototype.updateHighlightedIndex_ = function(
  * Removes a child control.  Overrides {@link goog.ui.Component#removeChild} by
  * updating the highlight index.  Since {@link goog.ui.Component#removeChildAt}
  * uses {@link #removeChild} internally, we only need to override this method.
- * @param {string|goog.ui.Component} control The ID of the child to remove, or
+ * @param {string|goog.ui.Control} control The ID of the child to remove, or
  *     the control itself.
  * @param {boolean=} opt_unrender Whether to call {@code exitDocument} on the
  *     removed control, and detach its DOM from the document (defaults to
