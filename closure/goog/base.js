@@ -1018,7 +1018,9 @@ if (goog.DEPENDENCIES_ENABLED) {
         for (var entry in exports) {
           if (entry.indexOf('test', 0) === 0 ||
               entry == 'tearDown' ||
-              entry == 'setup') {
+              entry == 'setUp' ||
+              entry == 'setUpPage' ||
+              entry == 'tearDownPage') {
             goog.global[entry] = exports[entry];
           }
         }
