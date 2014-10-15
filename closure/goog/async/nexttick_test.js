@@ -11,10 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-goog.provide('goog.async.nextTickTest');
-goog.setTestOnly('goog.async.nextTickTest');
+goog.provide('goog.async.NextTickTest');
+goog.setTestOnly('goog.async.NextTickTest');
 
-goog.require('goog.async.nextTick');
+goog.require('goog.async');
 goog.require('goog.debug.ErrorHandler');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.testing.AsyncTestCase');

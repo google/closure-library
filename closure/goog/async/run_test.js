@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-goog.provide('goog.async.runTest');
+goog.provide('goog.async.RunTest');
 
-goog.require('goog.async.run');
+goog.require('goog.async');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 goog.require('goog.testing.recordFunction');
 
-goog.setTestOnly('goog.async.runTest');
+goog.setTestOnly('goog.async.RunTest');
 
 
 var mockClock;
