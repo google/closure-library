@@ -549,10 +549,13 @@ goog.ui.Component.prototype.getRequiredElementByClass = function(className) {
  * @template T
  */
 goog.ui.Component.prototype.getHandler = function() {
-  if (!this.googUiComponentHandler_) {
-    this.googUiComponentHandler_ = new goog.events.EventHandler(this);
+  // TODO(user): templated "this" values currently result in "this" being
+  // "unknown" in the body of the function.
+  var self = /** @type {goog.ui.Component} */ (this);
+  if (!self.googUiComponentHandler_) {
+    self.googUiComponentHandler_ = new goog.events.EventHandler(self);
   }
-  return this.googUiComponentHandler_;
+  return self.googUiComponentHandler_;
 };
 
 
