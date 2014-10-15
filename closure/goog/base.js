@@ -1372,12 +1372,14 @@ goog.isArray = function(val) {
 /**
  * Returns true if the object looks like an array. To qualify as array like
  * the value needs to be either a NodeList or an object with a Number length
- * property.
+ * property. As a special case, a function value is not array like, because its
+ * length property is fixed to correspond to the number of expected arguments.
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is an array.
  */
 goog.isArrayLike = function(val) {
   var type = goog.typeOf(val);
+  // We do not use goog.isObject here in order to exclude function values.
   return type == 'array' || type == 'object' && typeof val.length == 'number';
 };
 
