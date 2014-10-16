@@ -1323,7 +1323,7 @@ goog.date.Date.compare = function(date1, date2) {
  *     goog.now().
  * @param {number=} opt_month Month, 0 = Jan, 11 = Dec.
  * @param {number=} opt_date Date of month, 1 - 31.
- * @param {number=} opt_hours Hours, 0 - 24.
+ * @param {number=} opt_hours Hours, 0 - 23.
  * @param {number=} opt_minutes Minutes, 0 - 59.
  * @param {number=} opt_seconds Seconds, 0 - 61.
  * @param {number=} opt_milliseconds Milliseconds, 0 - 999.
