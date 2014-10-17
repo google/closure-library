@@ -131,8 +131,10 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
           '*' : win.location.protocol + '//' + win.location.host;
       var onmessage = goog.bind(function(e) {
         // Validate origin and message to make sure that this message was
-        // intended for us.
-        if (e.origin != origin || e.data != message) {
+        // intended for us. If the origin is set to '*' (see above) only the
+        // message needs to match since, for example, '*' != 'file://'. Allowing
+        // the wildcard is ok, as we are not concerned with security here.
+        if ((origin != '*' && e.origin != origin) || e.data != message) {
           return;
         }
         this['port1'].onmessage();
