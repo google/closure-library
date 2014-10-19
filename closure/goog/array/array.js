@@ -871,7 +871,7 @@ goog.array.clone = goog.array.toArray;
 goog.array.extend = function(arr1, var_args) {
   for (var i = 1; i < arguments.length; i++) {
     var arr2 = arguments[i];
-    if (goog.isArray(arr2) || goog.isArrayLike(arr2)) {
+    if (goog.isArrayLike(arr2)) {
       var len1 = arr1.length || 0;
       var len2 = arr2.length || 0;
       arr1.length = len1 + len2;
