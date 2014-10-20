@@ -584,7 +584,7 @@ goog.addDependency('labs/net/webchannel/webchannelbasetransport.js', ['goog.labs
 goog.addDependency('labs/net/webchannel/webchannelbasetransport_test.js', ['goog.labs.net.webChannel.webChannelBaseTransportTest'], ['goog.events', 'goog.labs.net.webChannel.WebChannelBaseTransport', 'goog.net.WebChannel', 'goog.testing.jsunit'], false);
 goog.addDependency('labs/net/webchannel/webchanneldebug.js', ['goog.labs.net.webChannel.WebChannelDebug'], ['goog.json', 'goog.log'], false);
 goog.addDependency('labs/net/webchannel/wire.js', ['goog.labs.net.webChannel.Wire'], [], false);
-goog.addDependency('labs/net/webchannel/wirev8.js', ['goog.labs.net.webChannel.WireV8'], ['goog.asserts', 'goog.json', 'goog.json.EvalJsonProcessor', 'goog.structs'], false);
+goog.addDependency('labs/net/webchannel/wirev8.js', ['goog.labs.net.webChannel.WireV8'], ['goog.asserts', 'goog.json', 'goog.json.NativeJsonProcessor', 'goog.structs'], false);
 goog.addDependency('labs/net/webchannel/wirev8_test.js', ['goog.labs.net.webChannel.WireV8Test'], ['goog.labs.net.webChannel.WireV8', 'goog.testing.jsunit'], false);
 goog.addDependency('labs/net/webchanneltransport.js', ['goog.net.WebChannelTransport'], [], false);
 goog.addDependency('labs/net/webchanneltransportfactory.js', ['goog.net.createWebChannelTransport'], ['goog.functions', 'goog.labs.net.webChannel.WebChannelBaseTransport'], false);

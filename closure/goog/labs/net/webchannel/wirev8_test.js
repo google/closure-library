@@ -90,7 +90,7 @@ function testEncodeMessageQueue() {
 
 
 function testDecodeMessage() {
-  var message = wireCodec.decodeMessage('[{a:\'a\', x:1}, {b:\'b\'}]');
+  var message = wireCodec.decodeMessage('[{"a":"a", "x":1}, {"b":"b"}]');
   assertTrue(goog.isArray(message));
   assertEquals(2, message.length);
   assertEquals('a', message[0].a);
