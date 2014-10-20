@@ -390,22 +390,48 @@ function testCanRemoveTwoHandlers() {
   listener.$verify();
 }
 
-function testCheckRegisteredShortcuts() {
+function testIsShortcutRegistered_single() {
   assertFalse(handler.isShortcutRegistered('x'));
   handler.registerShortcut('letterex', 'x');
   assertTrue(handler.isShortcutRegistered('x'));
-
-  handler.registerShortcut('qe', [KeyCodes.X, Modifiers.CTRL, KeyCodes.C]);
-  assertTrue(handler.isShortcutRegistered('x'));
-  assertTrue(handler.isShortcutRegistered([KeyCodes.X,
-                                           Modifiers.CTRL, KeyCodes.C]));
   handler.unregisterShortcut('x');
   assertFalse(handler.isShortcutRegistered('x'));
-  assertTrue(handler.isShortcutRegistered([KeyCodes.X,
-                                           Modifiers.CTRL, KeyCodes.C]));
-  handler.unregisterShortcut([KeyCodes.X, Modifiers.CTRL, KeyCodes.C]);
-  assertFalse(handler.isShortcutRegistered([KeyCodes.X,
-                                            Modifiers.CTRL, KeyCodes.C]));
+}
+
+function testIsShortcutRegistered_multi() {
+  assertFalse(handler.isShortcutRegistered('a'));
+  assertFalse(handler.isShortcutRegistered('a b'));
+  assertFalse(handler.isShortcutRegistered('a b c'));
+
+  handler.registerShortcut('ab', 'a b');
+
+  assertFalse(handler.isShortcutRegistered('a'));
+  assertTrue(handler.isShortcutRegistered('a b'));
+  assertFalse(handler.isShortcutRegistered('a b c'));
+
+  handler.unregisterShortcut('a b');
+
+  assertFalse(handler.isShortcutRegistered('a'));
+  assertFalse(handler.isShortcutRegistered('a b'));
+  assertFalse(handler.isShortcutRegistered('a b c'));
+}
+
+
+/** TODO (joshgiles): This test exercises bugs in the unregistration logic. */
+function testUnregister_bugs() {
+  // Unregistering a partial sequence orphans shortcuts further in the sequence.
+  handler.registerShortcut(
+      'quitemacs', [KeyCodes.X, Modifiers.CTRL, KeyCodes.C]);
+  handler.unregisterShortcut([KeyCodes.X, Modifiers.CTRL]);
+  // TODO (joshgiles): This should return true, not false.
+  assertFalse(
+      handler.isShortcutRegistered([KeyCodes.X, Modifiers.CTRL, KeyCodes.C]));
+
+  // Unregistering a sequence leaves dead sequence branches in place.
+  handler.registerShortcut('abc', 'a b c');
+  handler.unregisterShortcut('a b c');
+  // TODO (joshgiles): This should return true (default should not be prevented)
+  assertFalse(fire(KeyCodes.A));
 }
 
 
