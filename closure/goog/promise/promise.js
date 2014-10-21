@@ -415,6 +415,8 @@ goog.Thenable.addImplementation(goog.Promise);
  * not prevented by adding callbacks with {@code thenAlways}. A Promise that has
  * a cleanup handler added with {@code thenAlways} will be canceled if all of
  * its children created by {@code then} (or {@code thenCatch}) are canceled.
+ * Additionally, since any rejections are not passed to the callback, it does
+ * not stop the unhandled rejection handler from running.
  *
  * @param {function(this:THIS): void} onResolved A function that will be invoked
  *     when the Promise is resolved.
@@ -823,7 +825,9 @@ goog.Promise.prototype.executeCallback_ = function(
   if (state == goog.Promise.State_.FULFILLED) {
     callbackEntry.onFulfilled(result);
   } else {
-    this.removeUnhandledRejection_();
+    if (callbackEntry.child) {
+      this.removeUnhandledRejection_();
+    }
     callbackEntry.onRejected(result);
   }
 };
