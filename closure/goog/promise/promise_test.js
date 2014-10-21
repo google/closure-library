@@ -1341,20 +1341,6 @@ function testUnhandledBlockingRejection() {
 }
 
 
-function testUnhandledRejectionAfterThenAlways() {
-  mockClock.install();
-  var resolver = goog.Promise.withResolver();
-  resolver.promise.thenAlways(function() {});
-  resolver.reject(sentinel);
-
-  mockClock.tick();
-  assertEquals(1, unhandledRejections.getCallCount());
-  var rejectionCall = unhandledRejections.popLastCall();
-  assertArrayEquals([sentinel], rejectionCall.getArguments());
-  assertEquals(goog.global, rejectionCall.getThis());
-}
-
-
 function testHandledBlockingRejection() {
   mockClock.install();
   var blocker = goog.Promise.reject(sentinel);
