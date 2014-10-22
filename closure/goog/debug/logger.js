@@ -579,8 +579,7 @@ goog.debug.Logger.prototype.getLogRecord = function(
 
     logRecord.setException(opt_exception);
     logRecord.setExceptionText(
-        goog.debug.exposeException(opt_exception,
-            opt_fnStackContext || goog.debug.Logger.prototype.getLogRecord));
+        goog.debug.exposeException(opt_exception, context));
   }
   return logRecord;
 };
