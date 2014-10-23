@@ -110,7 +110,7 @@ goog.ui.PaletteRenderer.prototype.createDom = function(palette) {
  * @param {goog.math.Size} size Palette size (columns x rows); both dimensions
  *     must be specified as numbers.
  * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
- * @return {Element} Palette table element.
+ * @return {!Element} Palette table element.
  */
 goog.ui.PaletteRenderer.prototype.createGrid = function(items, size, dom) {
   var rows = [];
