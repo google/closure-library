@@ -528,9 +528,9 @@ goog.ui.KeyboardShortcutHandler.prototype.registerShortcut = function(
  */
 goog.ui.KeyboardShortcutHandler.prototype.unregisterShortcut = function(
     var_args) {
-  // Remove shortcut from tree
-  goog.ui.KeyboardShortcutHandler.setShortcut_(
-      this.shortcuts_, this.interpretStrokes_(0, arguments), null);
+  // Remove shortcut from tree.
+  goog.ui.KeyboardShortcutHandler.unsetShortcut_(
+      this.shortcuts_, this.interpretStrokes_(0, arguments));
 };
 
 
@@ -837,20 +837,18 @@ goog.ui.KeyboardShortcutHandler.prototype.clearKeyListener = function() {
 
 
 /**
- * Adds a shortcut stroke sequence to the given sequence tree, or removes an
- * existing shortcut stroke sequence. Recursive.
+ * Adds a shortcut stroke sequence to the given sequence tree. Recursive.
  * @param {!goog.ui.KeyboardShortcutHandler.SequenceTree_} tree The stroke
- *     sequence tree to add to or remove from.
+ *     sequence tree to add to.
  * @param {Array.<number>} strokes Array of strokes for shortcut.
- * @param {?string} identifier Identifier for the task performed by shortcut or
- *     null to clear.
+ * @param {string} identifier Identifier for the task performed by shortcut.
  * @private
  */
 goog.ui.KeyboardShortcutHandler.setShortcut_ = function(
     tree, strokes, identifier) {
   var stroke = strokes.shift();
   var node = tree[stroke];
-  if (node && identifier && (strokes.length == 0 || node.shortcut)) {
+  if (node && (strokes.length == 0 || node.shortcut)) {
     // This new shortcut would override an existing shortcut or shortcut prefix
     // (since the new strokes end at an existing node), or an existing shortcut
     // would be triggered by the prefix to this new shortcut (since there is
@@ -864,13 +862,50 @@ goog.ui.KeyboardShortcutHandler.setShortcut_ = function(
     goog.ui.KeyboardShortcutHandler.setShortcut_(
         goog.asserts.assert(node.next, 'An internal node must have a next map'),
         strokes, identifier);
-  } else if (identifier) {
+  } else {
     // Add a terminal node.
     tree[stroke] =
         goog.ui.KeyboardShortcutHandler.createTerminalNode_(identifier);
+  }
+};
+
+
+/**
+ * Removes a shortcut stroke sequence from the given sequence tree, pruning any
+ * dead branches of the tree. Recursive.
+ * @param {!goog.ui.KeyboardShortcutHandler.SequenceTree_} tree The stroke
+ *     sequence tree to remove from.
+ * @param {Array.<number>} strokes Array of strokes for shortcut to remove.
+ * @private
+ */
+goog.ui.KeyboardShortcutHandler.unsetShortcut_ = function(tree, strokes) {
+  var stroke = strokes.shift();
+  var node = tree[stroke];
+
+  if (!node) {
+    // The given stroke sequence is not in the tree.
+    return;
+  }
+  if (strokes.length == 0) {
+    // Base case - the end of the stroke sequence.
+    if (!node.shortcut) {
+      // The given stroke sequence does not end at a terminal node.
+      return;
+    }
+    delete tree[stroke];
   } else {
-    // A null identifier means unregister the shortcut.
-    tree[stroke] = null;
+    if (!node.next) {
+      // The given stroke sequence is not in the tree.
+      return;
+    }
+    // Recursively remove the rest of the shortcut sequence from the node.next
+    // subtree.
+    goog.ui.KeyboardShortcutHandler.unsetShortcut_(node.next, strokes);
+    if (goog.object.isEmpty(node.next)) {
+      // The node.next subtree is now empty (the last stroke in it was just
+      // removed), so prune this dead branch of the tree.
+      delete tree[stroke];
+    }
   }
 };
 

@@ -416,22 +416,37 @@ function testIsShortcutRegistered_multi() {
   assertFalse(handler.isShortcutRegistered('a b c'));
 }
 
+function testUnregister_subsequence() {
+  // Unregistering a partial sequence should not orphan shortcuts further in the
+  // sequence.
+  handler.registerShortcut('abc', 'a b c');
+  handler.unregisterShortcut('a b');
+  assertTrue(handler.isShortcutRegistered('a b c'));
+}
 
-/** TODO (joshgiles): This test exercises bugs in the unregistration logic. */
-function testUnregister_bugs() {
-  // Unregistering a partial sequence orphans shortcuts further in the sequence.
-  handler.registerShortcut(
-      'quitemacs', [KeyCodes.X, Modifiers.CTRL, KeyCodes.C]);
-  handler.unregisterShortcut([KeyCodes.X, Modifiers.CTRL]);
-  // TODO (joshgiles): This should return true, not false.
-  assertFalse(
-      handler.isShortcutRegistered([KeyCodes.X, Modifiers.CTRL, KeyCodes.C]));
+function testUnregister_supersequence() {
+  // Unregistering a sequence that extends beyond a registered sequence should
+  // do nothing.
+  handler.registerShortcut('ab', 'a b');
+  handler.unregisterShortcut('a b c');
+  assertTrue(handler.isShortcutRegistered('a b'));
+}
 
-  // Unregistering a sequence leaves dead sequence branches in place.
+function testUnregister_partialMatchSequence() {
+  // Unregistering a sequence that partially matches a registered sequence
+  // should do nothing.
+  handler.registerShortcut('abc', 'a b c');
+  handler.unregisterShortcut('a b x');
+  assertTrue(handler.isShortcutRegistered('a b c'));
+}
+
+function testUnregister_deadBranch() {
+  // Unregistering a sequence should prune any dead branches in the tree.
   handler.registerShortcut('abc', 'a b c');
   handler.unregisterShortcut('a b c');
-  // TODO (joshgiles): This should return true (default should not be prevented)
-  assertFalse(fire(KeyCodes.A));
+  // Default is not should not be prevented in the A key stroke because the A
+  // branch has been removed from the tree.
+  assertTrue(fire(KeyCodes.A));
 }
 
 
