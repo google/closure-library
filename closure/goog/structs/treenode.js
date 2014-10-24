@@ -244,6 +244,7 @@ goog.structs.TreeNode.prototype.contains = function(node) {
  * @template KEY, VALUE
  */
 goog.structs.TreeNode.findCommonAncestor = function(var_args) {
+  /** @type {goog.structs.TreeNode} */
   var ret = arguments[0];
   if (!ret) {
     return null;
@@ -251,6 +252,7 @@ goog.structs.TreeNode.findCommonAncestor = function(var_args) {
 
   var retDepth = ret.getDepth();
   for (var i = 1; i < arguments.length; i++) {
+    /** @type {goog.structs.TreeNode} */
     var node = arguments[i];
     var depth = node.getDepth();
     while (node != ret) {

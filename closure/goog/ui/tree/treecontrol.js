@@ -361,8 +361,12 @@ goog.ui.tree.TreeControl.prototype.updateLinesAndExpandIcons_ = function() {
   var tree = this;
   var showLines = tree.getShowLines();
   var showRootLines = tree.getShowRootLines();
-  // Recursively walk through all nodes and update the class names of the
-  // expand icon and the children element.
+
+  /**
+   * Recursively walk through all nodes and update the class names of the
+   * expand icon and the children element.
+   * @param {!goog.ui.tree.BaseNode} node
+   */
   function updateShowLines(node) {
     var childrenEl = node.getChildrenElement();
     if (childrenEl) {

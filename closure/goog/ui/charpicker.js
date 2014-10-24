@@ -624,17 +624,18 @@ goog.ui.CharPicker.prototype.handleScroll_ = function(e) {
  * @private
  */
 goog.ui.CharPicker.prototype.handleSelectedItem_ = function(e) {
-  if (e.target.getParent() == this.menu_) {
+  var parent = /** @type {goog.ui.Component} */ (e.target).getParent();
+  if (parent == this.menu_) {
     this.menu_.setVisible(false);
     this.setSelectedCategory_(e.target.getValue());
-  } else if (e.target.getParent() == this.submenu_) {
+  } else if (parent == this.submenu_) {
     this.submenu_.setVisible(false);
     this.setSelectedSubcategory_(e.target.getValue());
-  } else if (e.target.getParent() == this.grid_) {
+  } else if (parent == this.grid_) {
     var button = e.target.getElement();
     this.selectedChar_ = this.getChar_(button);
     this.updateRecents_(this.selectedChar_);
-  } else if (e.target.getParent() == this.recentgrid_) {
+  } else if (parent == this.recentgrid_) {
     this.selectedChar_ = this.getChar_(e.target.getElement());
   }
 };
