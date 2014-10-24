@@ -289,8 +289,8 @@ goog.net.XhrIo.sendInstances_ = [];
  * request.
  * @see goog.net.XhrIo.cleanup
  * @param {string|goog.Uri} url Uri to make request to.
- * @param {Function=} opt_callback Callback function for when request is
- *     complete.
+ * @param {?function(this:goog.net.XhrIo, ?)=} opt_callback Callback function
+ *     for when request is complete.
  * @param {string=} opt_method Send method, default: GET.
  * @param {ArrayBuffer|ArrayBufferView|Blob|Document|FormData|string=}
  *     opt_content Body data.
