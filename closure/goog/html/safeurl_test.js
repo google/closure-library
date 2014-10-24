@@ -32,7 +32,7 @@ function testSafeUrl() {
       goog.string.Const.from('javascript:trusted();'));
   var extracted = goog.html.SafeUrl.unwrap(safeUrl);
   assertEquals('javascript:trusted();', extracted);
-  assertEquals('javascript:trusted();', safeUrl.getTypedStringValue());
+  assertEquals('javascript:trusted();', goog.html.SafeUrl.unwrap(safeUrl));
   assertEquals('SafeUrl{javascript:trusted();}', String(safeUrl));
 
   // URLs are always LTR.
