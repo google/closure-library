@@ -62,7 +62,10 @@ function testFromConstant_allowsEmptyString() {
 
 function testFromConstant_throwsOnForbiddenCharacters() {
   assertThrows(function() {
-    goog.html.SafeStyle.fromConstant(goog.string.Const.from('<'));
+    goog.html.SafeStyle.fromConstant(goog.string.Const.from('width: x<;'));
+  });
+  assertThrows(function() {
+    goog.html.SafeStyle.fromConstant(goog.string.Const.from('width: x>;'));
   });
 }
 

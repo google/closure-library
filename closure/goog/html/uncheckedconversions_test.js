@@ -20,6 +20,7 @@ goog.provide('goog.html.uncheckedconversionsTest');
 
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeScript');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
@@ -68,6 +69,27 @@ function testSafeScriptFromStringKnownToSatisfyTypeContract_error() {
   assertThrows(function() {
     goog.html.uncheckedconversions.
         safeScriptFromStringKnownToSatisfyTypeContract(
+            goog.string.Const.from(''),
+            'irrelevant');
+  });
+}
+
+
+function testSafeStyleFromStringKnownToSatisfyTypeContract_ok() {
+  var style = 'P.special { color:red ; }';
+  var safeStyle = goog.html.uncheckedconversions.
+      safeStyleFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Safe because value is constant. Security review: b/7685625.'),
+          style);
+  assertEquals(style, goog.html.SafeStyle.unwrap(safeStyle));
+}
+
+
+function testSafeStyleFromStringKnownToSatisfyTypeContract_error() {
+  assertThrows(function() {
+    goog.html.uncheckedconversions.
+        safeStyleFromStringKnownToSatisfyTypeContract(
             goog.string.Const.from(''),
             'irrelevant');
   });
