@@ -16,9 +16,12 @@
  * @fileoverview Common test functions for tweak unit tests.
  *
  * @author agrieve@google.com (Andrew Grieve)
+ * @package
  */
 
 goog.provide('goog.tweak.testhelpers');
+
+goog.setTestOnly();
 
 goog.require('goog.tweak');
 goog.require('goog.tweak.BooleanGroup');
