@@ -139,19 +139,29 @@ goog.editor.plugins.LinkBubble.LINK_DIV_ID_ = 'tr_link-div';
  * @desc Text label for link that lets the user click it to see where the link
  *     this bubble is for point to.
  */
-var MSG_LINK_BUBBLE_TEST_LINK = goog.getMsg('Go to link: ');
+goog.editor.plugins.LinkBubble.MSG_LINK_BUBBLE_TEST_LINK = goog.getMsg(
+    'Go to link: ');
 
 
 /**
  * @desc Label that pops up a dialog to change the link.
  */
-var MSG_LINK_BUBBLE_CHANGE = goog.getMsg('Change');
+goog.editor.plugins.LinkBubble.MSG_LINK_BUBBLE_CHANGE = goog.getMsg(
+    'Change');
 
 
 /**
  * @desc Label that allow the user to remove this link.
  */
-var MSG_LINK_BUBBLE_REMOVE = goog.getMsg('Remove');
+goog.editor.plugins.LinkBubble.MSG_LINK_BUBBLE_REMOVE = goog.getMsg(
+    'Remove');
+
+
+/**
+ * @desc Message shown in a link bubble when the link is not a valid url.
+ */
+goog.editor.plugins.LinkBubble.MSG_INVALID_URL_LINK_BUBBLE = goog.getMsg(
+    'invalid url');
 
 
 /**
@@ -323,7 +333,7 @@ goog.editor.plugins.LinkBubble.prototype.getBubbleTitle = function() {
  * @protected
  */
 goog.editor.plugins.LinkBubble.prototype.getTestLinkMessage = function() {
-  return MSG_LINK_BUBBLE_TEST_LINK;
+  return goog.editor.plugins.LinkBubble.MSG_LINK_BUBBLE_TEST_LINK;
 };
 
 
@@ -367,7 +377,8 @@ goog.editor.plugins.LinkBubble.prototype.createBubbleContents = function(
   var changeLinkSpan = this.createLinkOption(
       goog.editor.plugins.LinkBubble.CHANGE_LINK_SPAN_ID_);
   this.createLink(goog.editor.plugins.LinkBubble.CHANGE_LINK_ID_,
-      MSG_LINK_BUBBLE_CHANGE, this.showLinkDialog_, changeLinkSpan);
+      goog.editor.plugins.LinkBubble.MSG_LINK_BUBBLE_CHANGE,
+      this.showLinkDialog_, changeLinkSpan);
 
   // This function is called multiple times - we have to reset the array.
   this.actionSpans_ = [];
@@ -385,7 +396,8 @@ goog.editor.plugins.LinkBubble.prototype.createBubbleContents = function(
   var removeLinkSpan = this.createLinkOption(
       goog.editor.plugins.LinkBubble.DELETE_LINK_SPAN_ID_);
   this.createLink(goog.editor.plugins.LinkBubble.DELETE_LINK_ID_,
-      MSG_LINK_BUBBLE_REMOVE, this.deleteLink_, removeLinkSpan);
+      goog.editor.plugins.LinkBubble.MSG_LINK_BUBBLE_REMOVE,
+      this.deleteLink_, removeLinkSpan);
 
   this.onShow();
 
@@ -437,11 +449,8 @@ goog.editor.plugins.LinkBubble.prototype.getLinkToTextObj_ = function() {
   var targetUrl = this.getTargetUrl();
 
   if (this.isInvalidUrl(targetUrl)) {
-    /**
-     * @desc Message shown in a link bubble when the link is not a valid url.
-     */
-    var MSG_INVALID_URL_LINK_BUBBLE = goog.getMsg('invalid url');
-    targetUrl = MSG_INVALID_URL_LINK_BUBBLE;
+
+    targetUrl = goog.editor.plugins.LinkBubble.MSG_INVALID_URL_LINK_BUBBLE;
     isError = true;
   } else if (goog.editor.Link.isMailto(targetUrl)) {
     targetUrl = targetUrl.substring(7); // 7 == "mailto:".length
