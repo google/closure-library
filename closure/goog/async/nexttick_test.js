@@ -63,6 +63,26 @@ function testNextTick() {
 }
 
 
+function testNextTickSetImmediate() {
+  var c = 0;
+  var max = 100;
+  var async = true;
+  var counterStep = function(i) {
+    async = false;
+    assertEquals('Order correct', i, c);
+    c++;
+    if (c === max) {
+      asyncTestCase.continueTesting();
+    }
+  };
+  for (var i = 0; i < max; i++) {
+    goog.async.nextTick(goog.partial(counterStep, i), undefined,
+        /* opt_useSetImmediate */ true);
+  }
+  assertTrue(async);
+  asyncTestCase.waitForAsync('Wait for callback');
+}
+
 function testNextTickContext() {
   var context = {};
   var c = 0;
