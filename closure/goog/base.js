@@ -80,7 +80,7 @@ goog.global.CLOSURE_UNCOMPILED_DEFINES;
  *
  * Example:
  * <pre>
- *   var CLOSURE_DEFINES = {'goog.DEBUG': false};
+ *   var CLOSURE_DEFINES = {'goog.DEBUG': false} ;
  * </pre>
  *
  * @type {Object.<string, (string|number|boolean)>|undefined}
@@ -877,7 +877,7 @@ if (goog.DEPENDENCIES_ENABLED) {
   };
 
 
-  /** @private {Array.<string>} */
+  /** @private {!Array.<string>} */
   goog.queuedModules_ = [];
 
 
@@ -1102,7 +1102,7 @@ if (goog.DEPENDENCIES_ENABLED) {
 
   /**
    * A readystatechange handler for legacy IE
-   * @param {HTMLScriptElement} script
+   * @param {!HTMLScriptElement} script
    * @param {number} scriptIndex
    * @return {boolean}
    * @private
