@@ -327,7 +327,8 @@ goog.asserts.assertElement = function(value, opt_message, var_args) {
  */
 goog.asserts.assertInstanceof = function(value, type, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !(value instanceof type)) {
-    goog.asserts.doAssertFailure_('instanceof check failed.', null,
+    goog.asserts.doAssertFailure_('Expected instanceof %s but got %s.',
+        [goog.asserts.getType_(type), goog.asserts.getType_(value)],
         opt_message, Array.prototype.slice.call(arguments, 3));
   }
   return value;
@@ -341,5 +342,24 @@ goog.asserts.assertInstanceof = function(value, type, opt_message, var_args) {
 goog.asserts.assertObjectPrototypeIsIntact = function() {
   for (var key in Object.prototype) {
     goog.asserts.fail(key + ' should not be enumerable in Object.prototype.');
+  }
+};
+
+
+/**
+ * Returns the type of a value. If a constructor is passed, and a suitable
+ * string cannot be found, 'unknown type name' will be returned.
+ * @param {*} value A constructor, object, or primitive.
+ * @return {string} The best display name for the value, or 'unknown type name'.
+ * @private
+ */
+goog.asserts.getType_ = function(value) {
+  if (value instanceof Function) {
+    return value.displayName || value.name || 'unknown type name';
+  } else if (value instanceof Object) {
+    return value.constructor.displayName || value.constructor.name ||
+        Object.prototype.toString.call(value);
+  } else {
+    return value === null ? 'null' : typeof value;
   }
 };
