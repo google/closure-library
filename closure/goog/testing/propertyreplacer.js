@@ -77,8 +77,7 @@ goog.testing.PropertyReplacer = function() {
 
 /**
  * Indicates that a key didn't exist before having been set by the set() method.
- * @type {Object}
- * @private
+ * @private @const
  */
 goog.testing.PropertyReplacer.NO_SUCH_KEY_ = {};
 

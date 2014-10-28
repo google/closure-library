@@ -585,7 +585,7 @@ goog.net.BrowserChannel.statEventTarget_ = new goog.events.EventTarget();
 
 /**
  * Events fired by BrowserChannel and associated objects
- * @type {Object}
+ * @const
  */
 goog.net.BrowserChannel.Event = {};
 
@@ -2527,6 +2527,7 @@ goog.net.BrowserChannel.prototype.shouldUseSecondaryDomains = function() {
  * A LogSaver that can be used to accumulate all the debug logs for
  * BrowserChannels so they can be sent to the server when a problem is
  * detected.
+ * @const
  */
 goog.net.BrowserChannel.LogSaver = {};
 

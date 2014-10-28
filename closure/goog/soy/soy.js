@@ -213,7 +213,6 @@ goog.soy.INVALID_TAG_TO_RENDER_ =
 /**
  * Immutable object that is passed into templates that are rendered
  * without any data.
- * @type {Object}
- * @private
+ * @private @const
  */
 goog.soy.defaultTemplateData_ = {};
