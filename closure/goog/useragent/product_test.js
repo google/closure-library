@@ -345,6 +345,14 @@ function testIpad() {
         {num: '4.1.7B334b', truth: false},
         {num: '4.0.4.7B320c', truth: true},
         {num: '4.0.4.8B334b', truth: false}
+      ]},
+    // Webview in the Facebook iOS app
+    {ua: 'Mozilla/5.0 (iPad; CPU OS 8_1 like Mac OS X) AppleWebKit/600.1.4' +
+          '(KHTML, like Gecko) Mobile/12B410 [FBAN/FBIOS;FBAV/16.0.0.13.22;' +
+          'FBBV/4697910;FBDV/iPad3,4;FBMD/iPad;FBSN/iPhone OS;FBSV/8.1;' +
+          'FBSS/2; FBCR/;FBID/tablet;FBLC/ja_JP;FBOP/1]',
+      versions: [
+        {num: '', truth: true}
       ]}
   ];
   checkEachUserAgentDetected(userAgents, 'IPAD');
