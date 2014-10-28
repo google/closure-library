@@ -1492,8 +1492,8 @@ goog.array.repeat = function(value, n) {
 
 
 /**
- * Returns an array consisting of every argument with all arrays and array-like
- * objects expanded in-place recursively.
+ * Returns an array consisting of every argument with all arrays
+ * expanded in-place recursively.
  *
  * @param {...*} var_args The values to flatten.
  * @return {!Array.<?>} An array containing the flattened values.
@@ -1504,7 +1504,7 @@ goog.array.flatten = function(var_args) {
   var result = [];
   for (var i = 0; i < arguments.length; i++) {
     var element = arguments[i];
-    if (goog.isArrayLike(element)) {
+    if (goog.isArray(element)) {
       for (var c = 0; c < element.length; c += CHUNK_SIZE) {
         var chunk = goog.array.slice(element, c, c + CHUNK_SIZE);
         var recurseResult = goog.array.flatten.apply(null, chunk);

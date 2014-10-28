@@ -1540,17 +1540,6 @@ function testArrayFlatten() {
       goog.array.flatten(3, goog.array.repeat(3, 180000), 3));
   assertArrayEquals(goog.array.repeat(3, 180000),
       goog.array.flatten([goog.array.repeat(3, 180000)]));
-
-  // Recognize array-like objects.
-  var arrayLike = new Object();
-  arrayLike.length = 2;
-  arrayLike[0] = 13;
-  arrayLike[1] = 42;
-  assertArrayEquals([13, 42, 13, 42],
-      goog.array.flatten([arrayLike, arrayLike]));
-
-  // Verify that strings are not considered array-like objects.
-  assertArrayEquals(['foo', 'bar'], goog.array.flatten(['foo', 'bar']));
 }
 
 function testSortObjectsByKey() {
