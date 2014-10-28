@@ -60,7 +60,7 @@ goog.testing.dom.END_TAG_MARKER_ = goog.testing.dom.createEndTagMarker_();
  * Tests if the given iterator over nodes matches the given Array of node
  * descriptors.  Throws an error if any match fails.
  * @param {goog.iter.Iterator} it  An iterator over nodes.
- * @param {Array.<Node|number|string>} array Array of node descriptors to match
+ * @param {Array<Node|number|string>} array Array of node descriptors to match
  *     against.  Node descriptors can be any of the following:
  *         Node: Test if the two nodes are equal.
  *         number: Test node.nodeType == number.

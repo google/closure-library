@@ -524,7 +524,7 @@ goog.iter.takeWhile = function(iterable, f, opt_obj) {
  * Converts the iterator to an array
  * @param {goog.iter.Iterator.<VALUE>|goog.iter.Iterable} iterable The iterator
  *     to convert to an array.
- * @return {!Array.<VALUE>} An array of the elements the iterator iterates over.
+ * @return {!Array<VALUE>} An array of the elements the iterator iterates over.
  * @template VALUE
  */
 goog.iter.toArray = function(iterable) {
@@ -596,7 +596,7 @@ goog.iter.nextOrValue = function(iterable, defaultValue) {
  * @see http://docs.python.org/library/itertools.html#itertools.product
  * @param {...!goog.array.ArrayLike.<VALUE>} var_args Zero or more sets, as
  *     arrays.
- * @return {!goog.iter.Iterator.<!Array.<VALUE>>} An iterator that gives each
+ * @return {!goog.iter.Iterator.<!Array<VALUE>>} An iterator that gives each
  *     n-tuple (as an array).
  * @template VALUE
  */
@@ -785,7 +785,7 @@ goog.iter.accumulate = function(iterable) {
  * @see http://docs.python.org/2/library/itertools.html#itertools.izip
  * @param {...!goog.iter.Iterator.<VALUE>|!goog.iter.Iterable} var_args Any
  *     number of iterable objects.
- * @return {!goog.iter.Iterator.<!Array.<VALUE>>} A new iterator that returns
+ * @return {!goog.iter.Iterator.<!Array<VALUE>>} A new iterator that returns
  *     arrays of elements from the provided iterables.
  * @template VALUE
  */
@@ -817,7 +817,7 @@ goog.iter.zip = function(var_args) {
  * @param {VALUE} fillValue The object or value used to fill shorter iterables.
  * @param {...!goog.iter.Iterator.<VALUE>|!goog.iter.Iterable} var_args Any
  *     number of iterable objects.
- * @return {!goog.iter.Iterator.<!Array.<VALUE>>} A new iterator that returns
+ * @return {!goog.iter.Iterator.<!Array<VALUE>>} A new iterator that returns
  *     arrays of elements from the provided iterables.
  * @template VALUE
  */
@@ -894,7 +894,7 @@ goog.iter.compress = function(iterable, selectors) {
  *     determining the key value for each group in the {@code iterable}. Default
  *     is the identity function.
  * @constructor
- * @extends {goog.iter.Iterator.<!Array.<?>>}
+ * @extends {goog.iter.Iterator.<!Array<?>>}
  * @template KEY, VALUE
  * @private
  */
@@ -949,7 +949,7 @@ goog.iter.GroupByIterator_.prototype.next = function() {
 /**
  * Performs the grouping of objects using the given key.
  * @param {KEY} targetKey  The target key object for the group.
- * @return {!Array.<VALUE>} An array of grouped objects.
+ * @return {!Array<VALUE>} An array of grouped objects.
  * @private
  */
 goog.iter.GroupByIterator_.prototype.groupItems_ = function(targetKey) {
@@ -983,7 +983,7 @@ goog.iter.GroupByIterator_.prototype.groupItems_ = function(targetKey) {
  * @param {function(...[VALUE]): KEY=} opt_keyFunc  Optional function for
  *     determining the key value for each group in the {@code iterable}. Default
  *     is the identity function.
- * @return {!goog.iter.Iterator.<!Array.<?>>} A new iterator that returns
+ * @return {!goog.iter.Iterator.<!Array<?>>} A new iterator that returns
  *     arrays of consecutive key and groups.
  * @template KEY, VALUE
  */
@@ -1034,7 +1034,7 @@ goog.iter.starMap = function(iterable, f, opt_obj) {
  * @param {!goog.iter.Iterator.<VALUE>|!goog.iter.Iterable} iterable The
  *     iterable to tee.
  * @param {number=} opt_num  The number of iterators to create. Default is 2.
- * @return {!Array.<goog.iter.Iterator.<VALUE>>} An array of iterators.
+ * @return {!Array<goog.iter.Iterator.<VALUE>>} An array of iterators.
  * @template VALUE
  */
 goog.iter.tee = function(iterable, opt_num) {
@@ -1081,7 +1081,7 @@ goog.iter.tee = function(iterable, opt_num) {
  * @param {!goog.iter.Iterator.<VALUE>|!goog.iter.Iterable} iterable The
  *     iterable to enumerate.
  * @param {number=} opt_start  Optional starting value. Default is 0.
- * @return {!goog.iter.Iterator.<!Array.<?>>} A new iterator containing
+ * @return {!goog.iter.Iterator.<!Array<?>>} A new iterator containing
  *     count/item pairs.
  * @template VALUE
  */
@@ -1175,7 +1175,7 @@ goog.iter.slice = function(iterable, start, opt_end) {
 
 /**
  * Checks an array for duplicate elements.
- * @param {Array.<VALUE>|goog.array.ArrayLike} arr The array to check for
+ * @param {Array<VALUE>|goog.array.ArrayLike} arr The array to check for
  *     duplicates.
  * @return {boolean} True, if the array contains duplicates, false otherwise.
  * @private
@@ -1202,7 +1202,7 @@ goog.iter.hasDuplicates_ = function(arr) {
  *     iterable from which to generate permutations.
  * @param {number=} opt_length Length of each permutation. If omitted, defaults
  *     to the length of {@code iterable}.
- * @return {!goog.iter.Iterator.<!Array.<VALUE>>} A new iterator containing the
+ * @return {!goog.iter.Iterator.<!Array<VALUE>>} A new iterator containing the
  *     permutations of {@code iterable}.
  * @template VALUE
  */
@@ -1231,7 +1231,7 @@ goog.iter.permutations = function(iterable, opt_length) {
  * @param {!goog.iter.Iterator.<VALUE>|!goog.iter.Iterable} iterable The
  *     iterable from which to generate combinations.
  * @param {number} length The length of each combination.
- * @return {!goog.iter.Iterator.<!Array.<VALUE>>} A new iterator containing
+ * @return {!goog.iter.Iterator.<!Array<VALUE>>} A new iterator containing
  *     combinations from the {@code iterable}.
  * @template VALUE
  */
@@ -1253,7 +1253,7 @@ goog.iter.combinations = function(iterable, length) {
 
   iter.next = function() {
     return goog.array.map(
-        /** @type {!Array.<number>} */
+        /** @type {!Array<number>} */
         (sortedIndexIterator.next()), getIndexFromElements);
   };
 
@@ -1274,7 +1274,7 @@ goog.iter.combinations = function(iterable, length) {
  * @param {!goog.iter.Iterator.<VALUE>|!goog.iter.Iterable} iterable The
  *     iterable to combine.
  * @param {number} length The length of each combination.
- * @return {!goog.iter.Iterator.<!Array.<VALUE>>} A new iterator containing
+ * @return {!goog.iter.Iterator.<!Array<VALUE>>} A new iterator containing
  *     combinations from the {@code iterable}.
  * @template VALUE
  */
@@ -1297,7 +1297,7 @@ goog.iter.combinationsWithReplacement = function(iterable, length) {
 
   iter.next = function() {
     return goog.array.map(
-        /** @type {!Array.<number>} */
+        /** @type {!Array<number>} */
         (sortedIndexIterator.next()), getIndexFromElements);
   };
 

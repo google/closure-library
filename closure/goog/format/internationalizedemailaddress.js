@@ -211,7 +211,7 @@ goog.format.InternationalizedEmailAddress.isValidAddrSpec = function(str) {
  * Parses a string containing email addresses of the form
  * "name" &lt;address&gt; into an array of email addresses.
  * @param {string} str The address list.
- * @return {!Array.<!goog.format.EmailAddress>} The parsed emails.
+ * @return {!Array<!goog.format.EmailAddress>} The parsed emails.
  */
 goog.format.InternationalizedEmailAddress.parseList = function(str) {
   return goog.format.EmailAddress.parseListInternal(

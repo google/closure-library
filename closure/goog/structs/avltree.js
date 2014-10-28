@@ -371,7 +371,7 @@ goog.structs.AvlTree.prototype.getHeight = function() {
 /**
  * Inserts the values stored in the tree into a new Array and returns the Array.
  *
- * @return {!Array.<T>} An array containing all of the trees values in sorted
+ * @return {!Array<T>} An array containing all of the trees values in sorted
  *     order.
  */
 goog.structs.AvlTree.prototype.getValues = function() {

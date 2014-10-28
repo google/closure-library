@@ -237,7 +237,7 @@ goog.labs.html.scrubber.ATTRS_RE_ = new RegExp(
  * include nested elements, are returned as single tokens.
  *
  * @param {string} html a string of HTML
- * @return {!Array.<string>}
+ * @return {!Array<string>}
  * @private
  */
 goog.labs.html.scrubber.lex_ = function(html) {
@@ -263,9 +263,9 @@ goog.labs.html.scrubber.lex_ = function(html) {
  *    If {@code attrWhitelist['*']['id']} is defined, and
  *    {@code attrWhitelist['div']['id']} is not, then the former is used to
  *    sanitize any {@code id} attribute on a {@code <div>} element.
- * @param {!Array.<string>} htmlTokens an array of HTML tokens as returned by
+ * @param {!Array<string>} htmlTokens an array of HTML tokens as returned by
  *    {@link goog.labs.html.scrubber.lex_}.
- * @return {!Array.<string>} the input array modified in place to have some
+ * @return {!Array<string>} the input array modified in place to have some
  *    tokens removed.
  * @private
  */
@@ -413,9 +413,9 @@ goog.labs.html.scrubber.BALANCE_NESTING_LIMIT_ = 256;
 
 /**
  * Ensures that there are end-tags for all and only for non-void start tags.
- * @param {Array.<string>} htmlTokens an array of HTML tokens as returned by
+ * @param {Array<string>} htmlTokens an array of HTML tokens as returned by
  *    {@link goog.labs.html.scrubber.lex}.
- * @return {!Array.<string>} the input array modified in place to have some
+ * @return {!Array<string>} the input array modified in place to have some
  *    tokens removed.
  * @private
  */
@@ -530,7 +530,7 @@ goog.labs.html.scrubber.balance_ = function(htmlTokens) {
 
 /**
  * Normalizes HTML tokens and concatenates them into a string.
- * @param {Array.<string>} htmlTokens an array of HTML tokens as returned by
+ * @param {Array<string>} htmlTokens an array of HTML tokens as returned by
  *    {@link goog.labs.html.scrubber.lex}.
  * @return {string} a string of HTML.
  * @private
@@ -616,7 +616,7 @@ goog.labs.html.scrubber.ALL_SCOPES_ =
  *
  * @param {string}         lowerCaseTagName The name of the tag.
  * @param {boolean}        isCloseTag       True for a {@code </tagname>} tag.
- * @param {Array.<string>} openElementStack The names of elements that have been
+ * @param {Array<string>} openElementStack The names of elements that have been
  *                                          opened and not subsequently closed.
  * @return {number} the length of openElementStack after closing any tags that
  *               need to be closed.

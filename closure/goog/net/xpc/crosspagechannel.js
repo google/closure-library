@@ -95,7 +95,7 @@ goog.net.xpc.CrossPageChannel = function(cfg, opt_domHelper) {
   /**
    * Collects deferred function calls which will be made once the connection
    * has been fully set up.
-   * @type {!Array.<function()>}
+   * @type {!Array<function()>}
    * @private
    */
   this.deferredDeliveries_ = [];

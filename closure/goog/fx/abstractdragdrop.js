@@ -62,7 +62,7 @@ goog.fx.AbstractDragDrop = function() {
 
   /**
    * List of items that makes up the drag source or drop target.
-   * @type {Array.<goog.fx.DragDropItem>}
+   * @type {Array<goog.fx.DragDropItem>}
    * @protected
    * @suppress {underscore|visibility}
    */
@@ -70,14 +70,14 @@ goog.fx.AbstractDragDrop = function() {
 
   /**
    * List of associated drop targets.
-   * @type {Array.<goog.fx.AbstractDragDrop>}
+   * @type {Array<goog.fx.AbstractDragDrop>}
    * @private
    */
   this.targets_ = [];
 
   /**
    * Scrollable containers to account for during drag
-   * @type {Array.<goog.fx.ScrollableContainer_>}
+   * @type {Array<goog.fx.ScrollableContainer_>}
    * @private
    */
   this.scrollableContainers_ = [];
@@ -1341,7 +1341,7 @@ goog.fx.DragDropItem.prototype.getCurrentDragElement = function() {
 /**
  * Gets all the elements of this item that are potentially draggable/
  *
- * @return {!Array.<Element>} The draggable elements.
+ * @return {!Array<Element>} The draggable elements.
  */
 goog.fx.DragDropItem.prototype.getDraggableElements = function() {
   return [this.element];
@@ -1510,7 +1510,7 @@ goog.fx.ScrollableContainer_ = function(element) {
 
   /**
    * The targets that lie within this container.
-   * @type {Array.<goog.fx.ActiveDropTarget_>}
+   * @type {Array<goog.fx.ActiveDropTarget_>}
    * @private
    */
   this.containedTargets_ = [];

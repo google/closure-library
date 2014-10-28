@@ -76,7 +76,7 @@ goog.ui.TabPane = function(el, opt_tabLocation, opt_domHelper,
 
   /**
    * Collection of tab panes.
-   * @type {Array.<goog.ui.TabPane.TabPage>}
+   * @type {Array<goog.ui.TabPane.TabPage>}
    * @private
    */
   this.pages_ = [];
@@ -240,7 +240,7 @@ goog.ui.TabPane.prototype.disposeInternal = function() {
 
 
 /**
- * @return {!Array.<Element>} The element child nodes of tab pane container.
+ * @return {!Array<Element>} The element child nodes of tab pane container.
  * @private
  */
 goog.ui.TabPane.prototype.getChildNodes_ = function() {
@@ -259,7 +259,7 @@ goog.ui.TabPane.prototype.getChildNodes_ = function() {
 /**
  * Creates pages out of a collection of elements.
  *
- * @param {Array.<Element>} nodes Array of elements to create pages out of.
+ * @param {Array<Element>} nodes Array of elements to create pages out of.
  * @private
  */
 goog.ui.TabPane.prototype.createPages_ = function(nodes) {

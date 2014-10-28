@@ -255,7 +255,7 @@ goog.db.IndexedDb.prototype.setVersion = function(version) {
 /**
  * Creates a new transaction.
  *
- * @param {!Array.<string>} storeNames A list of strings that contains the
+ * @param {!Array<string>} storeNames A list of strings that contains the
  *     transaction's scope, the object stores that this transaction can operate
  *     on.
  * @param {goog.db.Transaction.TransactionMode=} opt_mode The mode of the

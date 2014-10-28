@@ -312,7 +312,7 @@ goog.proto2.TextFormatSerializer.Printer_ = function() {
 
   /**
    * The buffer of string pieces.
-   * @type {Array.<string>}
+   * @type {Array<string>}
    * @private
    */
   this.buffer_ = [];

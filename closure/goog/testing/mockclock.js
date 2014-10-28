@@ -66,7 +66,7 @@ goog.testing.MockClock = function(opt_autoInstall) {
    * right.  For example, the expiration times for each element of the queue
    * might be in the order 300, 200, 200.
    *
-   * @type {Array.<Object>}
+   * @type {Array<Object>}
    * @private
    */
   this.queue_ = [];
@@ -429,7 +429,7 @@ goog.testing.MockClock.prototype.scheduleFunction_ = function(
  *
  * @param {Object} timeout The timeout to insert, with numerical runAtMillis
  *     property.
- * @param {Array.<Object>} queue The queue to insert into, with each element
+ * @param {Array<Object>} queue The queue to insert into, with each element
  *     having a numerical runAtMillis property.
  * @private
  */

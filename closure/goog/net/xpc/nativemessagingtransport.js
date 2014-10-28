@@ -635,13 +635,13 @@ goog.net.xpc.NativeMessagingTransport.prototype.disposeInternal = function() {
  * 'SETUP_NTPV2,abc123', where the second part is the endpoint id.  The v2 setup
  * ack message is simply 'SETUP_ACK_NTPV2'.
  * @param {string} payload The payload.
- * @return {!Array.<?string>} An array with the message type as the first member
+ * @return {!Array<?string>} An array with the message type as the first member
  *     and the endpoint id as the second, if one was sent, or null otherwise.
  * @private
  */
 goog.net.xpc.NativeMessagingTransport.parseTransportPayload_ =
     function(payload) {
-  var transportParts = /** @type {!Array.<?string>} */ (payload.split(
+  var transportParts = /** @type {!Array<?string>} */ (payload.split(
       goog.net.xpc.NativeMessagingTransport.MESSAGE_DELIMITER_));
   transportParts[1] = transportParts[1] || null;
   return transportParts;

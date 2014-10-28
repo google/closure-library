@@ -348,7 +348,7 @@ goog.i18n.NumberFormat.prototype.applyCompactStyle_ = function(style) {
  * parsing stops after the call. If an error occurs, opt_pos won't be updated.
  *
  * @param {string} text The string to be parsed.
- * @param {Array.<number>=} opt_pos Position to pass in and get back.
+ * @param {Array<number>=} opt_pos Position to pass in and get back.
  * @return {number} Parsed number. This throws an error if the text cannot be
  *     parsed.
  */
@@ -413,7 +413,7 @@ goog.i18n.NumberFormat.prototype.parse = function(text, opt_pos) {
  * handle locale specific decimal, grouping, exponent and digits.
  *
  * @param {string} text The text that need to be parsed.
- * @param {Array.<number>} pos  In/out parsing position. In case of failure,
+ * @param {Array<number>} pos  In/out parsing position. In case of failure,
  *    pos value won't be changed.
  * @return {number} Number value, or NaN if nothing can be parsed.
  * @private
@@ -567,7 +567,7 @@ goog.i18n.NumberFormat.prototype.roundNumber_ = function(number) {
  *
  * @param {number} number
  * @param {number} minIntDigits Minimum integer digits.
- * @param {Array.<string>} parts
+ * @param {Array<string>} parts
  *     This array holds the pieces of formatted string.
  *     This function will add its formatted pieces to the array.
  * @private
@@ -652,7 +652,7 @@ goog.i18n.NumberFormat.prototype.subformatFixed_ =
  * Formats exponent part of a Number.
  *
  * @param {number} exponent Exponential value.
- * @param {Array.<string>} parts The array that holds the pieces of formatted
+ * @param {Array<string>} parts The array that holds the pieces of formatted
  *     string. This function will append more formatted pieces to the array.
  * @private
  */
@@ -680,7 +680,7 @@ goog.i18n.NumberFormat.prototype.addExponentPart_ = function(exponent, parts) {
  * Formats Number in exponential format.
  *
  * @param {number} number Value need to be formated.
- * @param {Array.<string>} parts The array that holds the pieces of formatted
+ * @param {Array<string>} parts The array that holds the pieces of formatted
  *     string. This function will append more formatted pieces to the array.
  * @private
  */
@@ -847,7 +847,7 @@ goog.i18n.NumberFormat.QUOTE_ = '\'';
  * Parses affix part of pattern.
  *
  * @param {string} pattern Pattern string that need to be parsed.
- * @param {Array.<number>} pos One element position array to set and receive
+ * @param {Array<number>} pos One element position array to set and receive
  *     parsing position.
  *
  * @return {string} Affix received from parsing.
@@ -934,7 +934,7 @@ goog.i18n.NumberFormat.prototype.parseAffix_ = function(pattern, pos) {
  * Parses the trunk part of a pattern.
  *
  * @param {string} pattern Pattern string that need to be parsed.
- * @param {Array.<number>} pos One element position array to set and receive
+ * @param {Array<number>} pos One element position array to set and receive
  *     parsing position.
  * @private
  */

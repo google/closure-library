@@ -31,7 +31,7 @@ goog.require('goog.net.XhrIo');
 
 /**
  * Class used to load multiple URIs.
- * @param {Array.<string|goog.Uri>} uris The URIs to load.
+ * @param {Array<string|goog.Uri>} uris The URIs to load.
  * @constructor
  * @extends {goog.events.EventTarget}
  * @final
@@ -67,7 +67,7 @@ goog.net.BulkLoader.prototype.logger_ =
 
 /**
  * Gets the response texts, in order.
- * @return {Array.<string>} The response texts.
+ * @return {Array<string>} The response texts.
  */
 goog.net.BulkLoader.prototype.getResponseTexts = function() {
   return this.helper_.getResponseTexts();
@@ -76,7 +76,7 @@ goog.net.BulkLoader.prototype.getResponseTexts = function() {
 
 /**
  * Gets the request Uris.
- * @return {Array.<string>} The request URIs, in order.
+ * @return {Array<string>} The request URIs, in order.
  */
 goog.net.BulkLoader.prototype.getRequestUris = function() {
   return this.helper_.getUris();

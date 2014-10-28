@@ -265,7 +265,7 @@ goog.ui.HsvaPalette.prototype.handleInput = function(e) {
 /**
  * Parses an #rrggbb or #rrggbbaa color string.
  * @param {string} value User-entered color value.
- * @return {Array.<?>} A two element array [color, alpha], where color is
+ * @return {Array<?>} A two element array [color, alpha], where color is
  *     #rrggbb and alpha is in [0, 1]. Null if the argument was invalid.
  * @private
  */
@@ -282,7 +282,7 @@ goog.ui.HsvaPalette.parseUserInput_ = function(value) {
 /**
  * Parses a #rrggbbaa color string.
  * @param {string} color The color and alpha in #rrggbbaa format.
- * @return {!Array.<?>} A two element array [color, alpha], where color is
+ * @return {!Array<?>} A two element array [color, alpha], where color is
  *     #rrggbb and alpha is in [0, 1].
  * @private
  */

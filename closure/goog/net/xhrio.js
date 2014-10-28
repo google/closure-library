@@ -279,7 +279,7 @@ goog.net.XhrIo.XHR2_ON_TIMEOUT_ = 'ontimeout';
  * All non-disposed instances of goog.net.XhrIo created
  * by {@link goog.net.XhrIo.send} are in this Array.
  * @see goog.net.XhrIo.cleanup
- * @private {!Array.<!goog.net.XhrIo>}
+ * @private {!Array<!goog.net.XhrIo>}
  */
 goog.net.XhrIo.sendInstances_ = [];
 

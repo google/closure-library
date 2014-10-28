@@ -229,7 +229,7 @@ goog.ui.KeyboardShortcutHandler.Modifiers = {
 
 /**
  * Keys marked as global by default.
- * @type {Array.<goog.events.KeyCodes>}
+ * @type {Array<goog.events.KeyCodes>}
  * @private
  */
 goog.ui.KeyboardShortcutHandler.DEFAULT_GLOBAL_KEYS_ = [
@@ -253,7 +253,7 @@ goog.ui.KeyboardShortcutHandler.DEFAULT_GLOBAL_KEYS_ = [
 /**
  * Text input types to allow only ENTER shortcuts.
  * Web Forms 2.0 for HTML5: Section 4.10.7 from 29 May 2012.
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @private
  */
 goog.ui.KeyboardShortcutHandler.DEFAULT_TEXT_INPUTS_ = [
@@ -467,7 +467,7 @@ goog.ui.KeyboardShortcutHandler.prototype.setAllowSpaceKeyOnButtons = function(
  * @param {string} identifier Identifier for the task performed by the keyboard
  *                 combination. Multiple shortcuts can be provided for the same
  *                 task by specifying the same identifier.
- * @param {...(number|string|Array.<number>)} var_args See below.
+ * @param {...(number|string|Array<number>)} var_args See below.
  *
  * param {number} keyCode Numeric code for key
  * param {number=} opt_modifiers Bitmap indicating required modifier keys.
@@ -523,7 +523,7 @@ goog.ui.KeyboardShortcutHandler.prototype.registerShortcut = function(
  * {@link #registerShortcut} for syntax. In that case the method only takes one
  * argument.
  *
- * @param {...(number|string|Array.<number>)} var_args String representation, or
+ * @param {...(number|string|Array<number>)} var_args String representation, or
  *     array or list of alternating key codes and modifiers.
  */
 goog.ui.KeyboardShortcutHandler.prototype.unregisterShortcut = function(
@@ -550,7 +550,7 @@ goog.ui.KeyboardShortcutHandler.prototype.unregisterShortcut = function(
  * {@link #registerShortcut} for syntax. In that case the method only takes one
  * argument.
  *
- * @param {...(number|string|Array.<number>)} var_args String representation, or
+ * @param {...(number|string|Array<number>)} var_args String representation, or
  *     array or list of alternating key codes and modifiers.
  * @return {boolean} Whether the specified keyboard shortcut is registered.
  */
@@ -567,7 +567,7 @@ goog.ui.KeyboardShortcutHandler.prototype.isShortcutRegistered = function(
  * @param {Object} args The "arguments" array passed
  *     to registerShortcut or unregisterShortcut.  Please see the comments in
  *     registerShortcut for list of allowed forms.
- * @return {!Array.<number>} The sequence of strokes, represented as numbers.
+ * @return {!Array<number>} The sequence of strokes, represented as numbers.
  * @private
  */
 goog.ui.KeyboardShortcutHandler.prototype.interpretStrokes_ = function(
@@ -613,7 +613,7 @@ goog.ui.KeyboardShortcutHandler.prototype.unregisterAll = function() {
 /**
  * Sets the global keys; keys that are safe to always regarded as shortcuts,
  * even if entered in a textarea or input field.
- * @param {Array.<number>} keys List of keys.
+ * @param {Array<number>} keys List of keys.
  */
 goog.ui.KeyboardShortcutHandler.prototype.setGlobalKeys = function(keys) {
   this.globalKeys_ = goog.object.createSet(keys);
@@ -621,7 +621,7 @@ goog.ui.KeyboardShortcutHandler.prototype.setGlobalKeys = function(keys) {
 
 
 /**
- * @return {!Array.<string>} The global keys, i.e. keys that are safe to always
+ * @return {!Array<string>} The global keys, i.e. keys that are safe to always
  *     regard as shortcuts, even if entered in a textarea or input field.
  */
 goog.ui.KeyboardShortcutHandler.prototype.getGlobalKeys = function() {
@@ -652,7 +652,7 @@ goog.ui.KeyboardShortcutHandler.prototype.getEventType =
 /**
  * Builds stroke array from string representation of shortcut.
  * @param {string} s String representation of shortcut.
- * @return {!Array.<!{keyCode: number, modifiers: number}>} The stroke array.
+ * @return {!Array<!{keyCode: number, modifiers: number}>} The stroke array.
  */
 goog.ui.KeyboardShortcutHandler.parseStringShortcut = function(s) {
   // Normalize whitespace and force to lower case.
@@ -840,7 +840,7 @@ goog.ui.KeyboardShortcutHandler.prototype.clearKeyListener = function() {
  * Adds a shortcut stroke sequence to the given sequence tree. Recursive.
  * @param {!goog.ui.KeyboardShortcutHandler.SequenceTree_} tree The stroke
  *     sequence tree to add to.
- * @param {Array.<number>} strokes Array of strokes for shortcut.
+ * @param {Array<number>} strokes Array of strokes for shortcut.
  * @param {string} identifier Identifier for the task performed by shortcut.
  * @private
  */
@@ -875,7 +875,7 @@ goog.ui.KeyboardShortcutHandler.setShortcut_ = function(
  * dead branches of the tree. Recursive.
  * @param {!goog.ui.KeyboardShortcutHandler.SequenceTree_} tree The stroke
  *     sequence tree to remove from.
- * @param {Array.<number>} strokes Array of strokes for shortcut to remove.
+ * @param {Array<number>} strokes Array of strokes for shortcut to remove.
  * @private
  */
 goog.ui.KeyboardShortcutHandler.unsetShortcut_ = function(tree, strokes) {
@@ -912,7 +912,7 @@ goog.ui.KeyboardShortcutHandler.unsetShortcut_ = function(tree, strokes) {
 
 /**
  * Checks if a particular keyboard shortcut is registered.
- * @param {Array.<number>} strokes Strokes array.
+ * @param {Array<number>} strokes Strokes array.
  * @return {boolean} True iff the keyboard is registred.
  * @private
  */

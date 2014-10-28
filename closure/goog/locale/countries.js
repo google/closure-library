@@ -32,7 +32,7 @@ goog.provide('goog.locale.countries');
 
 /**
  * List of codes for countries valid today.
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  */
 
 /* ~!@# Countries #@!~ (special comment meaningful to generation script) */

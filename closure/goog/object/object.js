@@ -203,7 +203,7 @@ goog.object.contains = function(obj, val) {
  * Returns the values of the object/map/hash.
  *
  * @param {Object.<K,V>} obj The object from which to get the values.
- * @return {!Array.<V>} The values in the object/map/hash.
+ * @return {!Array<V>} The values in the object/map/hash.
  * @template K,V
  */
 goog.object.getValues = function(obj) {
@@ -220,7 +220,7 @@ goog.object.getValues = function(obj) {
  * Returns the keys of the object/map/hash.
  *
  * @param {Object} obj The object from which to get the keys.
- * @return {!Array.<string>} Array of property keys.
+ * @return {!Array<string>} Array of property keys.
  */
 goog.object.getKeys = function(obj) {
   var res = [];
@@ -238,7 +238,7 @@ goog.object.getKeys = function(obj) {
  * Example usage: getValueByKeys(jsonObj, 'foo', 'entries', 3)
  *
  * @param {!Object} obj An object to get the value from.  Can be array-like.
- * @param {...(string|number|!Array.<number|string>)} var_args A number of keys
+ * @param {...(string|number|!Array<number|string>)} var_args A number of keys
  *     (as strings, or numbers, for array-like objects).  Can also be
  *     specified as a single array of keys.
  * @return {*} The resulting value.  If, at any point, the value for a key
@@ -527,7 +527,7 @@ goog.object.transpose = function(obj) {
 
 /**
  * The names of the fields that are defined on Object.prototype.
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @private
  */
 goog.object.PROTOTYPE_FIELDS_ = [

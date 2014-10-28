@@ -163,7 +163,7 @@ goog.string.linkify.ACCEPTABLE_URL_CHARS_ = '\\w~#-@!\\[\\]';
 /**
  * List of all protocols patterns recognized in urls (mailto is handled in email
  * matching).
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  * @const
  * @private
  */

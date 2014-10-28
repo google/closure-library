@@ -213,7 +213,7 @@ function testIsValidDomainPart() {
  * Asserts that parsing the inputString produces a list of email addresses
  * containing the specified address strings, irrespective of their order.
  * @param {string} inputString A raw address list.
- * @param {Array.<string>} expectedList The expected results.
+ * @param {Array<string>} expectedList The expected results.
  * @param {string=} opt_message An assertion message.
  * @return {string} the resulting email address objects.
  */

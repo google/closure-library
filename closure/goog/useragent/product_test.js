@@ -103,9 +103,9 @@ function assertBrowserAndVersion(userAgent, browser, version) {
 
 
 /**
- * @param {Array.<{
+ * @param {Array<{
  *           ua: string,
- *           versions: Array.<{
+ *           versions: Array<{
  *             num: {string|number}, truth: boolean}>}>} userAgents
  * @param {string} browser
  */

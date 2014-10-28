@@ -248,7 +248,7 @@ goog.testing.PerformanceTimer.prototype.runAsyncTask = function(task) {
  *     function that will be called once after the test function completed.
  * @param {!goog.async.Deferred} result The deferred result, eventually an
  *     object containing performance stats.
- * @param {!Array.<number>} samples The time samples from all runs of the test
+ * @param {!Array<number>} samples The time samples from all runs of the test
  *     function so far.
  * @param {number} testStart The timestamp when the first sample was started.
  * @private
@@ -300,7 +300,7 @@ goog.testing.PerformanceTimer.prototype.handleOptionalDeferred_ = function(
 /**
  * Creates a performance timer results object by analyzing a given array of
  * sample timings.
- * @param {Array.<number>} samples The samples to analyze.
+ * @param {Array<number>} samples The samples to analyze.
  * @return {!Object} Object containing performance stats.
  */
 goog.testing.PerformanceTimer.createResults = function(samples) {

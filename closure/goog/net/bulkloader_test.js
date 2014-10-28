@@ -61,7 +61,7 @@ function setUp() {
  *   <li> The send function of the XhrManager used by the bulkloader
  *        calls the onSuccess function after a specified time interval.
  * </ul>
- * @param {Array.<string>} uris The URIs.
+ * @param {Array<string>} uris The URIs.
  */
 function getSuccessfulBulkLoader(uris) {
   var bulkLoader = new goog.net.BulkLoader(uris);
@@ -110,7 +110,7 @@ function getSuccessfulBulkLoader(uris) {
  *        calls the onSuccess or onError function after a specified time
  *        interval.
  * </ul>
- * @param {Array.<string>} uris The URIs.
+ * @param {Array<string>} uris The URIs.
  */
 function getNonSuccessfulBulkLoader(uris) {
   var bulkLoader = new goog.net.BulkLoader(uris);

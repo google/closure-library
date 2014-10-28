@@ -145,7 +145,7 @@ goog.ui.DragDropDetector.MSG_DRAG_DROP_PROTECTED_FILE_ERROR = goog.getMsg(
  * entry is of the form:
  *     regex: url regex
  *     message: user visible message about this special case
- * @type {Array.<{regex: RegExp, message: string}>}
+ * @type {Array<{regex: RegExp, message: string}>}
  * @private
  */
 goog.ui.DragDropDetector.SPECIAL_CASE_URLS_ = [

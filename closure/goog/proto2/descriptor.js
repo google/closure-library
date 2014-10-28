@@ -41,7 +41,7 @@ goog.proto2.Metadata;
  *      the message class that this descriptor describes.
  * @param {!goog.proto2.Metadata} metadata The metadata about the message that
  *      will be used to construct this descriptor.
- * @param {Array.<!goog.proto2.FieldDescriptor>} fields The fields of the
+ * @param {Array<!goog.proto2.FieldDescriptor>} fields The fields of the
  *      message described by this descriptor.
  *
  * @constructor
@@ -125,7 +125,7 @@ goog.proto2.Descriptor.prototype.getContainingType = function() {
  * Returns the fields in the message described by this descriptor ordered by
  * tag.
  *
- * @return {!Array.<!goog.proto2.FieldDescriptor>} The array of field
+ * @return {!Array<!goog.proto2.FieldDescriptor>} The array of field
  *     descriptors.
  */
 goog.proto2.Descriptor.prototype.getFields = function() {

@@ -103,7 +103,7 @@ TwoThumbSlider.prototype.getCssClass = function(orientation) {
 
 /**
  * Basic class that implements the AnimationFactory interface for testing.
- * @param {!goog.fx.Animation|!Array.<!goog.fx.Animation>} testAnimations The
+ * @param {!goog.fx.Animation|!Array<!goog.fx.Animation>} testAnimations The
  *     test animations to use.
  * @constructor
  * @implements {goog.ui.SliderBase.AnimationFactory}

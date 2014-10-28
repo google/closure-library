@@ -483,21 +483,21 @@ goog.testing.ContinuationTestCase.Test = function(setUp, test, tearDown) {
 
   /**
    * The list of test steps to run during setUp.
-   * @type {Array.<goog.testing.TestCase.Test>}
+   * @type {Array<goog.testing.TestCase.Test>}
    * @private
    */
   this.setUp_ = [setUp];
 
   /**
    * The list of test steps to run for the actual test.
-   * @type {Array.<goog.testing.TestCase.Test>}
+   * @type {Array<goog.testing.TestCase.Test>}
    * @private
    */
   this.test_ = [test];
 
   /**
    * The list of test steps to run during the tearDown phase.
-   * @type {Array.<goog.testing.TestCase.Test>}
+   * @type {Array<goog.testing.TestCase.Test>}
    * @private
    */
   this.tearDown_ = [tearDown];
@@ -535,7 +535,7 @@ goog.testing.ContinuationTestCase.Test.prototype.setError = function(e) {
 
 
 /**
- * @return {Array.<goog.testing.TestCase.Test>} The current phase of steps
+ * @return {Array<goog.testing.TestCase.Test>} The current phase of steps
  *    being processed. Returns null if all steps have been completed.
  */
 goog.testing.ContinuationTestCase.Test.prototype.getCurrentPhase = function() {
@@ -592,7 +592,7 @@ goog.testing.ContinuationTestCase.Test.prototype.cancelTestPhase = function() {
 
 /**
  * Clears a test phase and cancels any pending steps found.
- * @param {Array.<goog.testing.TestCase.Test>} phase A list of test steps.
+ * @param {Array<goog.testing.TestCase.Test>} phase A list of test steps.
  * @private
  */
 goog.testing.ContinuationTestCase.Test.prototype.cancelPhase_ =

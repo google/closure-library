@@ -29,7 +29,7 @@ goog.require('goog.dom.pattern.MatchType');
 /**
  * Pattern object that matches a sequence of other patterns.
  *
- * @param {Array.<goog.dom.pattern.AbstractPattern>} patterns Ordered array of
+ * @param {Array<goog.dom.pattern.AbstractPattern>} patterns Ordered array of
  *     patterns to match.
  * @param {boolean=} opt_ignoreWhitespace Optional flag to ignore text nodes
  *     consisting entirely of whitespace.  The default is to not ignore them.
@@ -47,7 +47,7 @@ goog.inherits(goog.dom.pattern.Sequence, goog.dom.pattern.AbstractPattern);
 /**
  * Ordered array of patterns to match.
  *
- * @type {Array.<goog.dom.pattern.AbstractPattern>}
+ * @type {Array<goog.dom.pattern.AbstractPattern>}
  */
 goog.dom.pattern.Sequence.prototype.patterns;
 

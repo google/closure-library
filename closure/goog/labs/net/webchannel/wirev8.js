@@ -58,7 +58,7 @@ var Wire = goog.labs.net.webChannel.Wire;
  *
  * @param {!Object|!goog.structs.Map} message The message data.
  *     V8 only support JS objects (or Map).
- * @param {!Array.<string>} buffer The text buffer to write the message to.
+ * @param {!Array<string>} buffer The text buffer to write the message to.
  * @param {string=} opt_prefix The prefix for each field of the object.
  */
 WireV8.prototype.encodeMessage = function(message, buffer, opt_prefix) {
@@ -83,7 +83,7 @@ WireV8.prototype.encodeMessage = function(message, buffer, opt_prefix) {
 /**
  * Encodes all the buffered messages of the forward channel.
  *
- * @param {!Array.<Wire.QueuedMap>} messageQueue The message data.
+ * @param {!Array<Wire.QueuedMap>} messageQueue The message data.
  *     V8 only support JS objects.
  * @param {number} count The number of messages to be encoded.
  * @param {?function(!Object)} badMapHandler Callback for bad messages.

@@ -61,7 +61,7 @@ goog.require('goog.style.transition');
  * @param {Object} finalStyle Final style properties of the element after
  *     animating. Set using {@code goog.style.setStyle}.
  * @param {goog.style.transition.Css3Property|
- *     Array.<goog.style.transition.Css3Property>} transitions A single CSS3
+ *     Array<goog.style.transition.Css3Property>} transitions A single CSS3
  *     transition property or an array of it.
  * @extends {goog.fx.TransitionBase}
  * @constructor
@@ -95,7 +95,7 @@ goog.fx.css3.Transition = function(
   this.finalStyle_ = finalStyle;
 
   /**
-   * @type {Array.<goog.style.transition.Css3Property>}
+   * @type {Array<goog.style.transition.Css3Property>}
    * @private
    */
   this.transitions_ = goog.isArray(transitions) ? transitions : [transitions];

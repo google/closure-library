@@ -80,7 +80,7 @@ goog.crypt.hash32.encodeInteger = function(value) {
 
 /**
  * Hashes a "byte" array to a 32-bit value using the supplied seed.
- * @param {Array.<number>} bytes Array of bytes.
+ * @param {Array<number>} bytes Array of bytes.
  * @param {number=} opt_offset The starting position to use for hash
  * computation.
  * @param {number=} opt_length Number of bytes that are used for hashing.
@@ -158,7 +158,7 @@ goog.crypt.hash32.mix32_ = function(mix) {
 /**
  * Returns the word at a given offset.  Treating an array of bytes a word at a
  * time is far more efficient than byte-by-byte.
- * @param {Array.<number>} bytes Array of bytes.
+ * @param {Array<number>} bytes Array of bytes.
  * @param {number} offset Offset in the byte array.
  * @return {number} Integer value for the word.
  * @private

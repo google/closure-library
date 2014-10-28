@@ -58,7 +58,7 @@ goog.tweak.Registry = function(queryParams, compilerOverrides) {
 
   /**
    * List of callbacks to call when a new entry is registered.
-   * @type {!Array.<!Function>}
+   * @type {!Array<!Function>}
    * @private
    */
   this.onRegisterListeners_ = [];
@@ -232,7 +232,7 @@ goog.tweak.Registry.prototype.getNumericSetting = function(id) {
  * @param {boolean} excludeChildEntries Exclude BooleanInGroupSettings.
  * @param {boolean} excludeNonSettings Exclude entries that are not subclasses
  *     of BaseSetting.
- * @return {!Array.<!goog.tweak.BaseSetting>} The settings.
+ * @return {!Array<!goog.tweak.BaseSetting>} The settings.
  */
 goog.tweak.Registry.prototype.extractEntries =
     function(excludeChildEntries, excludeNonSettings) {

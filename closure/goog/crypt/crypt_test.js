@@ -62,7 +62,7 @@ function testUtf8ByteArrayToString() {
 
 /**
  * Same as testUtf8ByteArrayToString but with Uint8Array instead of
- * Array.<number>.
+ * Array<number>.
  */
 function testUint8ArrayToString() {
   if (!goog.global.Uint8Array) {
@@ -113,7 +113,7 @@ function testByteArrayToHex() {
 }
 
 
-/** Same as testByteArrayToHex but with Uint8Array instead of Array.<number>. */
+/** Same as testByteArrayToHex but with Uint8Array instead of Array<number>. */
 function testUint8ArrayToHex() {
   if (!goog.isDef(goog.global.Uint8Array)) {
     // Uint8Array not supported.
@@ -138,7 +138,7 @@ function testXorByteArray() {
 }
 
 
-/** Same as testXorByteArray but with Uint8Array instead of Array.<number>. */
+/** Same as testXorByteArray but with Uint8Array instead of Array<number>. */
 function testXorUint8Array() {
   if (!goog.isDef(goog.global.Uint8Array)) {
     // Uint8Array not supported.

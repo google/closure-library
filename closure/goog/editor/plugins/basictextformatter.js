@@ -1144,7 +1144,7 @@ goog.editor.plugins.BasicTextFormatter.prototype.removeFontSizeFromStyleAttrs_ =
 /**
  * Apply pre-execCommand fixes for IE.
  * @param {string} command The command to execute.
- * @return {!Array.<Node>} Array of nodes to be removed after the execCommand.
+ * @return {!Array<Node>} Array of nodes to be removed after the execCommand.
  *     Will never be longer than 2 elements.
  * @private
  */

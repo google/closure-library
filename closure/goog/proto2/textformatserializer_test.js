@@ -163,7 +163,7 @@ function testSerializationOfUnknownParsedFromObject() {
 /**
  * Asserts that the given string value parses into the given set of tokens.
  * @param {string} value The string value to parse.
- * @param {Array.<Object> | Object} tokens The tokens to check against. If not
+ * @param {Array<Object> | Object} tokens The tokens to check against. If not
  *     an array, a single token is expected.
  * @param {boolean=} opt_ignoreWhitespace Whether whitespace tokens should be
  *     skipped by the tokenizer.

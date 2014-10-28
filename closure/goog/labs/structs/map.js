@@ -71,7 +71,7 @@ goog.labs.structs.Map.prototype.map_;
 /**
  * Secondary backing store for keys. The index corresponds to the
  * index for secondaryStoreValues_.
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  * @private
  */
 goog.labs.structs.Map.prototype.secondaryStoreKeys_;
@@ -80,7 +80,7 @@ goog.labs.structs.Map.prototype.secondaryStoreKeys_;
 /**
  * Secondary backing store for keys. The index corresponds to the
  * index for secondaryStoreValues_.
- * @type {!Array.<*>}
+ * @type {!Array<*>}
  * @private
  */
 goog.labs.structs.Map.prototype.secondaryStoreValues_;
@@ -225,7 +225,7 @@ goog.labs.structs.Map.prototype.containsValue = function(value) {
 
 
 /**
- * @return {!Array.<string>} An array of all the keys contained in this map.
+ * @return {!Array<string>} An array of all the keys contained in this map.
  */
 goog.labs.structs.Map.prototype.getKeys = function() {
   var keys;
@@ -246,7 +246,7 @@ goog.labs.structs.Map.prototype.getKeys = function() {
 
 
 /**
- * @return {!Array.<*>} An array of all the values contained in this map.
+ * @return {!Array<*>} An array of all the values contained in this map.
  *     There may be duplicates.
  */
 goog.labs.structs.Map.prototype.getValues = function() {
@@ -260,7 +260,7 @@ goog.labs.structs.Map.prototype.getValues = function() {
 
 
 /**
- * @return {!Array.<Array.<?>>} An array of entries. Each entry is of the
+ * @return {!Array<Array<?>>} An array of entries. Each entry is of the
  *     form [key, value]. Do not rely on consistent ordering of entries.
  */
 goog.labs.structs.Map.prototype.getEntries = function() {

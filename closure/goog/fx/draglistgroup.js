@@ -61,14 +61,14 @@ goog.fx.DragListGroup = function() {
 
   /**
    * The drag lists.
-   * @type {Array.<Element>}
+   * @type {Array<Element>}
    * @private
    */
   this.dragLists_ = [];
 
   /**
    * All the drag items. Set by init().
-   * @type {Array.<Element>}
+   * @type {Array<Element>}
    * @private
    */
   this.dragItems_ = [];
@@ -177,7 +177,7 @@ goog.fx.DragListGroup.prototype.currDragItemClasses_;
 /**
  * The user-supplied CSS classes to add to the clone of the current drag item
  * that's actually being dragged around (during a drag action).
- * @type {Array.<string>|undefined}
+ * @type {Array<string>|undefined}
  * @private
  */
 goog.fx.DragListGroup.prototype.draggerElClasses_;

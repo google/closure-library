@@ -506,8 +506,8 @@ function testIgnoreNonGlobalShortcutsInTextArea() {
 
 /**
  * Checks that the shortcuts are fired on each target.
- * @param {Array.<string>} shortcuts A list of shortcut identifiers.
- * @param {Array.<string>} targets A list of element IDs.
+ * @param {Array<string>} shortcuts A list of shortcut identifiers.
+ * @param {Array<string>} targets A list of element IDs.
  * @param {function(Element)} fireEvents Function that fires events.
  */
 function expectShortcutsOnTargets(shortcuts, targets, fireEvents) {

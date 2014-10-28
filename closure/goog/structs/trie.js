@@ -197,7 +197,7 @@ goog.structs.Trie.prototype.getKeyAndPrefixes = function(key,
 /**
  * Gets the values of the trie.  Not returned in any reliable order.  O(N) where
  * N is the number of nodes in the trie.  Calls getValuesInternal_.
- * @return {!Array.<VALUE>} The values in the trie.
+ * @return {!Array<VALUE>} The values in the trie.
  */
 goog.structs.Trie.prototype.getValues = function() {
   var allValues = [];
@@ -209,7 +209,7 @@ goog.structs.Trie.prototype.getValues = function() {
 /**
  * Gets the values of the trie.  Not returned in any reliable order.  O(N) where
  * N is the number of nodes in the trie.  Builds the values as it goes.
- * @param {!Array.<VALUE>} allValues Array to place values into.
+ * @param {!Array<VALUE>} allValues Array to place values into.
  * @private
  */
 goog.structs.Trie.prototype.getValuesInternal_ = function(allValues) {
@@ -226,7 +226,7 @@ goog.structs.Trie.prototype.getValuesInternal_ = function(allValues) {
  * Gets the keys of the trie.  Not returned in any reliable order.  O(N) where
  * N is the number of nodes in the trie (or prefix subtree).
  * @param {string=} opt_prefix Find only keys with this optional prefix.
- * @return {!Array.<string>} The keys in the trie.
+ * @return {!Array<string>} The keys in the trie.
  */
 goog.structs.Trie.prototype.getKeys = function(opt_prefix) {
   var allKeys = [];
@@ -253,7 +253,7 @@ goog.structs.Trie.prototype.getKeys = function(opt_prefix) {
 /**
  * Private method to get keys from the trie.  Builds the keys as it goes.
  * @param {string} keySoFar The partial key (prefix) traversed so far.
- * @param {!Array.<string>} allKeys The partially built array of keys seen so
+ * @param {!Array<string>} allKeys The partially built array of keys seen so
  *     far.
  * @private
  */

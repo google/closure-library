@@ -93,7 +93,7 @@ goog.ui.PopupBase.prototype.autoHide_ = true;
 
 /**
  * Mouse events without auto hide partner elements will not dismiss the popup.
- * @type {Array.<Element>}
+ * @type {Array<Element>}
  * @private
  */
 goog.ui.PopupBase.prototype.autoHidePartners_ = null;

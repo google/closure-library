@@ -327,7 +327,7 @@ goog.html.SafeHtml.AttributeValue_;
  *     passed to goog.html.SafeStyle.create. Value of null or undefined causes
  *     the attribute to be omitted. Values are HTML-escaped before usage.
  * @param {!goog.html.SafeHtml.TextOrHtml_|
- *     !Array.<!goog.html.SafeHtml.TextOrHtml_>=} opt_content Content to put
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>=} opt_content Content to put
  *     inside the tag. This must be empty for void tags like <br>. Array
  *     elements are concatenated.
  * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
@@ -439,7 +439,7 @@ goog.html.SafeHtml.getStyleValue_ = function(value) {
  * @param {string} tagName
  * @param {!Object.<string, goog.html.SafeHtml.AttributeValue_>=} opt_attributes
  * @param {!goog.html.SafeHtml.TextOrHtml_|
- *     !Array.<!goog.html.SafeHtml.TextOrHtml_>=} opt_content
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>=} opt_content
  * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.
  */
 goog.html.SafeHtml.createWithDir = function(dir, tagName, opt_attributes,
@@ -453,7 +453,7 @@ goog.html.SafeHtml.createWithDir = function(dir, tagName, opt_attributes,
 /**
  * Creates a new SafeHtml object by concatenating the values.
  * @param {...!goog.html.SafeHtml.TextOrHtml_|
- *     !Array.<!goog.html.SafeHtml.TextOrHtml_>} var_args Elements of array
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>} var_args Elements of array
  *     arguments would be processed recursively.
  * @return {!goog.html.SafeHtml}
  */
@@ -463,7 +463,7 @@ goog.html.SafeHtml.concat = function(var_args) {
 
   /**
    * @param {!goog.html.SafeHtml.TextOrHtml_|
-   *     !Array.<!goog.html.SafeHtml.TextOrHtml_>} argument
+   *     !Array<!goog.html.SafeHtml.TextOrHtml_>} argument
    */
   var addArgument = function(argument) {
     if (goog.isArray(argument)) {
@@ -491,7 +491,7 @@ goog.html.SafeHtml.concat = function(var_args) {
  * values.
  * @param {!goog.i18n.bidi.Dir} dir Directionality.
  * @param {...!goog.html.SafeHtml.TextOrHtml_|
- *     !Array.<!goog.html.SafeHtml.TextOrHtml_>} var_args Elements of array
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>} var_args Elements of array
  *     arguments would be processed recursively.
  * @return {!goog.html.SafeHtml}
  */

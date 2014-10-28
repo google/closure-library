@@ -49,7 +49,7 @@ goog.structs.TreeNode = function(key, value) {
 
   /**
    * Child nodes or null in case of leaf node.
-   * @private {Array.<!goog.structs.TreeNode.<KEY, VALUE>>}
+   * @private {Array<!goog.structs.TreeNode.<KEY, VALUE>>}
    */
   this.children_ = null;
 };
@@ -125,7 +125,7 @@ goog.structs.TreeNode.prototype.isLastChild = function() {
 
 
 /**
- * @return {!Array.<!goog.structs.TreeNode.<KEY, VALUE>>} Immutable child nodes.
+ * @return {!Array<!goog.structs.TreeNode.<KEY, VALUE>>} Immutable child nodes.
  */
 goog.structs.TreeNode.prototype.getChildren = function() {
   return this.children_ || goog.structs.TreeNode.EMPTY_ARRAY_;
@@ -166,7 +166,7 @@ goog.structs.TreeNode.prototype.getDepth = function() {
 
 
 /**
- * @return {!Array.<!goog.structs.TreeNode.<KEY, VALUE>>} All ancestor nodes in
+ * @return {!Array<!goog.structs.TreeNode.<KEY, VALUE>>} All ancestor nodes in
  *     bottom-up order.
  */
 goog.structs.TreeNode.prototype.getAncestors = function() {
@@ -197,7 +197,7 @@ goog.structs.TreeNode.prototype.getRoot = function() {
 /**
  * Builds a nested array structure from the node keys in this node's subtree to
  * facilitate testing tree operations that change the hierarchy.
- * @return {!Array.<KEY>} The structure of this node's descendants as nested
+ * @return {!Array<KEY>} The structure of this node's descendants as nested
  *     array of node keys. The number of unclosed opening brackets up to a
  *     particular node is proportional to the indentation of that node in the
  *     graphical representation of the tree. Example:
@@ -296,7 +296,7 @@ goog.structs.TreeNode.prototype.getNodeByKey = function(key) {
 /**
  * Traverses all child nodes.
  * @param {function(this:THIS, !goog.structs.TreeNode.<KEY, VALUE>, number,
- *     !Array.<!goog.structs.TreeNode.<KEY, VALUE>>)} f Callback function. It
+ *     !Array<!goog.structs.TreeNode.<KEY, VALUE>>)} f Callback function. It
  *     takes the node, its index and the array of all child nodes as arguments.
  * @param {THIS=} opt_this The object to be used as the value of {@code this}
  *     within {@code f}.

@@ -387,7 +387,7 @@ goog.format.EmailAddress.parse = function(addr) {
  * @param {function(string)} parser The parser to employ.
  * @param {function(string):boolean} separatorChecker Accepts a character and
  *    returns whether it should be considered an address separator.
- * @return {!Array.<!goog.format.EmailAddress>} The parsed emails.
+ * @return {!Array<!goog.format.EmailAddress>} The parsed emails.
  * @protected
  */
 goog.format.EmailAddress.parseListInternal = function(
@@ -428,7 +428,7 @@ goog.format.EmailAddress.parseListInternal = function(
  * Parses a string containing email addresses of the form
  * "name" &lt;address&gt; into an array of email addresses.
  * @param {string} str The address list.
- * @return {!Array.<!goog.format.EmailAddress>} The parsed emails.
+ * @return {!Array<!goog.format.EmailAddress>} The parsed emails.
  */
 goog.format.EmailAddress.parseList = function(str) {
   return goog.format.EmailAddress.parseListInternal(

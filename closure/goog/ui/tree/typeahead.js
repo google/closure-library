@@ -39,7 +39,7 @@ goog.ui.tree.TypeAhead = function() {
 
 /**
  * Map of tree nodes to allow for quick access by characters in the label text.
- * @type {goog.structs.Trie.<Array.<goog.ui.tree.BaseNode>>}
+ * @type {goog.structs.Trie.<Array<goog.ui.tree.BaseNode>>}
  * @private
  */
 goog.ui.tree.TypeAhead.prototype.nodeMap_;
@@ -55,7 +55,7 @@ goog.ui.tree.TypeAhead.prototype.buffer_ = '';
 
 /**
  * Matching labels from the latest typeahead search.
- * @type {?Array.<string>}
+ * @type {?Array<string>}
  * @private
  */
 goog.ui.tree.TypeAhead.prototype.matchingLabels_ = null;
@@ -64,7 +64,7 @@ goog.ui.tree.TypeAhead.prototype.matchingLabels_ = null;
 /**
  * Matching nodes from the latest typeahead search. Used when more than
  * one node is present with the same label text.
- * @type {?Array.<goog.ui.tree.BaseNode>}
+ * @type {?Array<goog.ui.tree.BaseNode>}
  * @private
  */
 goog.ui.tree.TypeAhead.prototype.matchingNodes_ = null;
@@ -299,7 +299,7 @@ goog.ui.tree.TypeAhead.prototype.jumpTo_ = function(offset) {
 
 /**
  * Given a nodes array reveals and selects the node while using node index.
- * @param {Array.<goog.ui.tree.BaseNode>|undefined} nodes Nodes array to select
+ * @param {Array<goog.ui.tree.BaseNode>|undefined} nodes Nodes array to select
  *     the node from.
  * @return {boolean} Whether a matching node was found.
  * @private

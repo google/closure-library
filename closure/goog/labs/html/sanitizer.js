@@ -156,7 +156,7 @@ goog.labs.html.Sanitizer.prototype.allowElements = function(var_args) {
  * attribute by returning {@code null} or substitute a new value
  * by returning a string with the new value.
  *
- * @param {!Array.<string>|string} elementNames names (or name) on which the
+ * @param {!Array<string>|string} elementNames names (or name) on which the
  *     attributes are allowed.
  *
  *     Element names should be allowed via {@code allowElements(...)} prior
@@ -171,7 +171,7 @@ goog.labs.html.Sanitizer.prototype.allowElements = function(var_args) {
  *     differs based on the element on which it appears:
  *     e.g. {@code <input type=text>} vs {@code <style type=text/css>}.
  *
- * @param {!Array.<string>|string} attrNames names (or name) of the attribute
+ * @param {!Array<string>|string} attrNames names (or name) of the attribute
  *     that should be allowed.
  *
  * @param {goog.labs.html.AttributeRewriter=} opt_rewriteValue A function

@@ -330,7 +330,7 @@ goog.messaging.PortChannel.prototype.validateMessage_ = function(data) {
  * The message ports are replaced by placeholder objects that will be replaced
  * with the ports again on the other side of the channel.
  *
- * @param {Array.<MessagePort>} ports The array that will contain ports
+ * @param {Array<MessagePort>} ports The array that will contain ports
  *     extracted from the message. Will be destructively modified. Should be
  *     empty initially.
  * @param {string|!Object} message The message from which ports will be
@@ -363,7 +363,7 @@ goog.messaging.PortChannel.prototype.extractPorts_ = function(ports, message) {
 /**
  * Injects MessagePorts back into a message received from across the channel.
  *
- * @param {Array.<MessagePort>} ports The array of ports to be injected into the
+ * @param {Array<MessagePort>} ports The array of ports to be injected into the
  *     message.
  * @param {string|!Object} message The message into which the ports will be
  *     injected.

@@ -71,7 +71,7 @@ goog.ui.TableSorter = function(opt_domHelper) {
 
   /**
    * Array of custom sorting functions per colun.
-   * @type {Array.<function(*, *) : number>}
+   * @type {Array<function(*, *) : number>}
    * @private
    */
   this.sortFunctions_ = [];

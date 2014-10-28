@@ -184,7 +184,7 @@ goog.ui.ac.RemoteArrayMatcher.prototype.shouldRequestMatches =
  * Parses and retrieves the array of suggestions from XHR response.
  * <b>Override this if the response is not a simple JSON array.</b>
  * @param {string} responseText The XHR response text.
- * @return {Array.<string>} The array of suggestions.
+ * @return {Array<string>} The array of suggestions.
  * @protected
  */
 goog.ui.ac.RemoteArrayMatcher.prototype.parseResponseText = function(
@@ -199,7 +199,7 @@ goog.ui.ac.RemoteArrayMatcher.prototype.parseResponseText = function(
     } catch (exception) {
     }
   }
-  return /** @type {Array.<string>} */ (matches);
+  return /** @type {Array<string>} */ (matches);
 };
 
 

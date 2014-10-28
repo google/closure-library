@@ -25,8 +25,8 @@ goog.require('goog.testing.jsunit');
  * a set of expected valid and a second set of expected invalid addresses.
  * containing the specified address strings, irrespective of their order.
  * @param {function(string):boolean} testFunc Validation function to be tested.
- * @param {!Array.<string>} valid List of addresses that should be valid.
- * @param {!Array.<string>} invalid List of addresses that should be invalid.
+ * @param {!Array<string>} valid List of addresses that should be valid.
+ * @param {!Array<string>} invalid List of addresses that should be invalid.
  * @private
  */
 function doIsValidTest(testFunc, valid, invalid) {
@@ -43,7 +43,7 @@ function doIsValidTest(testFunc, valid, invalid) {
  * Asserts that parsing the inputString produces a list of email addresses
  * containing the specified address strings, irrespective of their order.
  * @param {string} inputString A raw address list.
- * @param {!Array.<string>} expectedList The expected results.
+ * @param {!Array<string>} expectedList The expected results.
  * @param {string=} opt_message An assertion message.
  * @return {string} the resulting email address objects.
  */

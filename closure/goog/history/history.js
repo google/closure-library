@@ -924,7 +924,7 @@ goog.History.prototype.operaDefibrillator_ = function() {
 /**
  * List of user input event types registered in Opera to restart the history
  * timer (@see goog.History#operaDefibrillator_).
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @private
  */
 goog.History.INPUT_EVENTS_ = [

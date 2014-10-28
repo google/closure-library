@@ -192,7 +192,7 @@ WebChannelBaseTransport.Channel.prototype.disposeInternal = function() {
 /**
  * The message event.
  *
- * @param {!Array.<?>} array The data array from the underlying channel.
+ * @param {!Array<?>} array The data array from the underlying channel.
  * @constructor
  * @extends {goog.net.WebChannel.MessageEvent}
  * @final

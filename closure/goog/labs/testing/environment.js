@@ -171,7 +171,7 @@ goog.labs.testing.Environment.console_.setCapturing(true);
 goog.labs.testing.EnvironmentTestCase_ = function() {
   goog.labs.testing.EnvironmentTestCase_.base(this, 'constructor');
 
-  /** @private {!Array.<!goog.labs.testing.Environment>}> */
+  /** @private {!Array<!goog.labs.testing.Environment>}> */
   this.environments_ = [];
 
   // Automatically install this TestCase when any environment is used in a test.

@@ -107,7 +107,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
 
   /**
    * Autocomplete suggestion items.
-   * @type {Array.<?>}
+   * @type {Array<?>}
    * @protected
    * @suppress {underscore|visibility}
    */
@@ -346,7 +346,7 @@ goog.ui.ac.AutoComplete.prototype.getSuggestion = function(index) {
 
 
 /**
- * @return {!Array.<?>} The current autocomplete suggestion items.
+ * @return {!Array<?>} The current autocomplete suggestion items.
  */
 goog.ui.ac.AutoComplete.prototype.getAllSuggestions = function() {
   return goog.asserts.assert(this.rows_);
@@ -777,7 +777,7 @@ goog.ui.ac.AutoComplete.prototype.disposeInternal = function() {
  * </pre>
  *
  * @param {string} matchedToken Token that corresponds with the rows.
- * @param {!Array.<?>} rows Set of data that match the given token.
+ * @param {!Array<?>} rows Set of data that match the given token.
  * @param {(boolean|goog.ui.ac.RenderOptions)=} opt_options If true,
  *     keeps the currently hilited (by index) element hilited. If false not.
  *     Otherwise a RenderOptions object.
@@ -798,7 +798,7 @@ goog.ui.ac.AutoComplete.prototype.matchListener_ =
 
 /**
  * Renders the rows and adds highlighting.
- * @param {!Array.<?>} rows Set of data that match the given token.
+ * @param {!Array<?>} rows Set of data that match the given token.
  * @param {(boolean|goog.ui.ac.RenderOptions)=} opt_options If true,
  *     keeps the currently hilited (by index) element hilited. If false not.
  *     Otherwise a RenderOptions object.

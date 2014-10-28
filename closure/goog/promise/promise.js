@@ -95,7 +95,7 @@ goog.Promise = function(resolver, opt_context) {
   /**
    * The list of {@code onFulfilled} and {@code onRejected} callbacks added to
    * this Promise by calls to {@code then()}.
-   * @private {Array.<goog.Promise.CallbackEntry_>}
+   * @private {Array<goog.Promise.CallbackEntry_>}
    */
   this.callbackEntries_ = null;
 
@@ -134,7 +134,7 @@ goog.Promise = function(resolver, opt_context) {
      * A list of stack trace frames pointing to the locations where this Promise
      * was created or had callbacks added to it. Saved to add additional context
      * to stack traces when an exception is thrown.
-     * @private {!Array.<string>}
+     * @private {!Array<string>}
      */
     this.stack_ = [];
     this.addStackTrace_(new Error('created'));
@@ -258,7 +258,7 @@ goog.Promise.reject = function(opt_reason) {
 
 
 /**
- * @param {!Array.<!(goog.Thenable.<TYPE>|Thenable)>} promises
+ * @param {!Array<!(goog.Thenable.<TYPE>|Thenable)>} promises
  * @return {!goog.Promise.<TYPE>} A Promise that receives the result of the
  *     first Promise (or Promise-like) input to complete.
  * @template TYPE
@@ -276,8 +276,8 @@ goog.Promise.race = function(promises) {
 
 
 /**
- * @param {!Array.<!(goog.Thenable.<TYPE>|Thenable)>} promises
- * @return {!goog.Promise.<!Array.<TYPE>>} A Promise that receives a list of
+ * @param {!Array<!(goog.Thenable.<TYPE>|Thenable)>} promises
+ * @return {!goog.Promise.<!Array<TYPE>>} A Promise that receives a list of
  *     every fulfilled value once every input Promise (or Promise-like) is
  *     successfully fulfilled, or is rejected by the first rejection result.
  * @template TYPE
@@ -312,7 +312,7 @@ goog.Promise.all = function(promises) {
 
 
 /**
- * @param {!Array.<!(goog.Thenable.<TYPE>|Thenable)>} promises
+ * @param {!Array<!(goog.Thenable.<TYPE>|Thenable)>} promises
  * @return {!goog.Promise.<TYPE>} A Promise that receives the value of the first
  *     input to be fulfilled, or is rejected with a list of every rejection
  *     reason if all inputs are rejected.

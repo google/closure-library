@@ -79,7 +79,7 @@ goog.soy.Renderer = function(opt_injectedDataSupplier, opt_domHelper) {
 
 
 /**
- * @typedef {Array.<{template: string, data: Object, ijData: Object}>}
+ * @typedef {Array<{template: string, data: Object, ijData: Object}>}
  */
 goog.soy.Renderer.SavedTemplateRender;
 

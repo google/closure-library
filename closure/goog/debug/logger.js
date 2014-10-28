@@ -91,7 +91,7 @@ goog.debug.Logger = function(name) {
 
   /**
    * Handlers that are listening to this logger.
-   * @private {Array.<Function>}
+   * @private {Array<Function>}
    */
   this.handlers_ = null;
 };
@@ -111,7 +111,7 @@ goog.define('goog.debug.Logger.ENABLE_HIERARCHY', true);
 
 if (!goog.debug.Logger.ENABLE_HIERARCHY) {
   /**
-   * @type {!Array.<Function>}
+   * @type {!Array<Function>}
    * @private
    */
   goog.debug.Logger.rootHandlers_ = [];
@@ -261,7 +261,7 @@ goog.debug.Logger.Level.ALL = new goog.debug.Logger.Level('ALL', 0);
 
 /**
  * The predefined levels.
- * @type {!Array.<!goog.debug.Logger.Level>}
+ * @type {!Array<!goog.debug.Logger.Level>}
  * @final
  */
 goog.debug.Logger.Level.PREDEFINED_LEVELS = [

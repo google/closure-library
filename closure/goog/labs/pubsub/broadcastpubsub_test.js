@@ -71,7 +71,7 @@ var isIe8 = goog.userAgent.IE && goog.userAgent.DOCUMENT_MODE == 8;
  * behaviour by the mockHtml5LocalStorage instanciated when using IE8 an event
  * is automatically generated in the local browser context. For other browsers
  * this simply creates a new browser event.
- * @param {{'args': !Array.<string>, 'timestamp': number}} data Value stored
+ * @param {{'args': !Array<string>, 'timestamp': number}} data Value stored
  *     in localStorage which generated the remote event.
  */
 function remoteStorageEvent(data) {

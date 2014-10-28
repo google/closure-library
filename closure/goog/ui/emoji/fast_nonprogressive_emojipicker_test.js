@@ -121,7 +121,7 @@ function checkPathsEndWithSameFile(path1, path2) {
  * after the animated emoji have loaded.
  *
  * @param {goog.ui.emoji.EmojiPalette} palette Emoji palette to check.
- * @param {Array.<Array.<string>>} emoji Emoji that should be in the palette.
+ * @param {Array<Array<string>>} emoji Emoji that should be in the palette.
  * @param {Object} images Map of id -> Image for the images loaded in this
  *     picker.
  */

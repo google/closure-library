@@ -247,7 +247,7 @@ goog.structs.LinkedMap.prototype.setMaxCount = function(maxCount) {
 
 
 /**
- * @return {!Array.<string>} The list of the keys in the appropriate order for
+ * @return {!Array<string>} The list of the keys in the appropriate order for
  *     this LinkedMap.
  */
 goog.structs.LinkedMap.prototype.getKeys = function() {
@@ -258,7 +258,7 @@ goog.structs.LinkedMap.prototype.getKeys = function() {
 
 
 /**
- * @return {!Array.<VALUE>} The list of the values in the appropriate order for
+ * @return {!Array<VALUE>} The list of the values in the appropriate order for
  *     this LinkedMap.
  */
 goog.structs.LinkedMap.prototype.getValues = function() {
@@ -326,7 +326,7 @@ goog.structs.LinkedMap.prototype.forEach = function(f, opt_obj) {
  *     three arguments: the value, the key, and the LinkedMap.
  * @param {T=} opt_obj The object context to use as "this" for the
  *     function.
- * @return {!Array.<RESULT>} The results of the function calls for each item in
+ * @return {!Array<RESULT>} The results of the function calls for each item in
  *     the LinkedMap.
  * @template T,RESULT
  */

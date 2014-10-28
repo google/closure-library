@@ -48,7 +48,7 @@ goog.result.SimpleResult = function() {
 
   /**
    * The list of handlers to call when this Result is resolved.
-   * @type {!Array.<!goog.result.SimpleResult.HandlerEntry_>}
+   * @type {!Array<!goog.result.SimpleResult.HandlerEntry_>}
    * @private
    */
   this.handlers_ = [];

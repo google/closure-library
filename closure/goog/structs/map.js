@@ -60,7 +60,7 @@ goog.structs.Map = function(opt_map, var_args) {
    * This array can contain deleted keys so it's necessary to check the map
    * as well to see if the key is still in the map (this doesn't require a
    * memory allocation in IE).
-   * @private {!Array.<string>}
+   * @private {!Array<string>}
    */
   this.keys_ = [];
 
@@ -101,7 +101,7 @@ goog.structs.Map.prototype.getCount = function() {
 
 /**
  * Returns the values of the map.
- * @return {!Array.<V>} The values in the map.
+ * @return {!Array<V>} The values in the map.
  */
 goog.structs.Map.prototype.getValues = function() {
   this.cleanupKeysArray_();
@@ -117,11 +117,11 @@ goog.structs.Map.prototype.getValues = function() {
 
 /**
  * Returns the keys of the map.
- * @return {!Array.<string>} Array of string values.
+ * @return {!Array<string>} Array of string values.
  */
 goog.structs.Map.prototype.getKeys = function() {
   this.cleanupKeysArray_();
-  return /** @type {!Array.<string>} */ (this.keys_.concat());
+  return /** @type {!Array<string>} */ (this.keys_.concat());
 };
 
 

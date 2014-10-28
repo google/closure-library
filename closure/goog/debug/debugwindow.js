@@ -50,7 +50,7 @@ goog.debug.DebugWindow = function(opt_identifier, opt_prefix) {
 
   /**
    * Array used to buffer log output
-   * @protected {!Array.<string>}
+   * @protected {!Array<string>}
    */
   this.outputBuffer = [];
 

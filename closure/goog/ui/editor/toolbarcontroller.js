@@ -72,7 +72,7 @@ goog.ui.editor.ToolbarController = function(field, toolbar) {
 
   /**
    * Editing commands whose state is to be queried when updating the toolbar.
-   * @type {!Array.<string>}
+   * @type {!Array<string>}
    * @private
    */
   this.queryCommands_ = [];
@@ -247,7 +247,7 @@ goog.ui.editor.ToolbarController.prototype.updateToolbar = function(e) {
 
   /** @preserveTry */
   try {
-    /** @type {Array.<string>} */
+    /** @type {Array<string>} */
     e.commands; // Added by dispatchEvent.
 
     // If the COMMAND_VALUE_CHANGE event specifies which commands changed

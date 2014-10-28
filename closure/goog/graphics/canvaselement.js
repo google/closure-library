@@ -61,7 +61,7 @@ goog.graphics.CanvasGroupElement = function(graphics) {
 
   /**
    * Children contained by this group.
-   * @type {Array.<goog.graphics.Element>}
+   * @type {Array<goog.graphics.Element>}
    * @private
    */
   this.children_ = [];

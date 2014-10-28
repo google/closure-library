@@ -101,7 +101,7 @@ goog.Disposable.instances_ = {};
 
 
 /**
- * @return {!Array.<!goog.Disposable>} All {@code goog.Disposable} objects that
+ * @return {!Array<!goog.Disposable>} All {@code goog.Disposable} objects that
  *     haven't been disposed of.
  */
 goog.Disposable.getUndisposedObjects = function() {
@@ -133,7 +133,7 @@ goog.Disposable.prototype.disposed_ = false;
 
 /**
  * Callbacks to invoke when this object is disposed.
- * @type {Array.<!Function>}
+ * @type {Array<!Function>}
  * @private
  */
 goog.Disposable.prototype.onDisposeCallbacks_;

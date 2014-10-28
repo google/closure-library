@@ -169,7 +169,7 @@ goog.ui.ModalPopup.prototype.bgHideTransition_;
 
 /**
  * The elements set to aria-hidden when the popup was made visible.
- * @type {Array.<!Element>}
+ * @type {Array<!Element>}
  * @private
  */
 goog.ui.ModalPopup.prototype.hiddenElements_;

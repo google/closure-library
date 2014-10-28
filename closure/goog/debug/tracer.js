@@ -39,7 +39,7 @@ goog.debug.Trace_ = function() {
 
   /**
    * Events in order.
-   * @type {Array.<goog.debug.Trace_.Event_>}
+   * @type {Array<goog.debug.Trace_.Event_>}
    * @private
    */
   this.events_ = [];

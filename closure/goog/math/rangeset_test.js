@@ -27,9 +27,9 @@ goog.require('goog.testing.jsunit');
  * two ranges are not equal, the error message will be in the format:
  * "Expected <[1, 2]> (Object) but was <[3, 4]> (Object)"
  *
- * @param {!goog.math.Range|!Array.<number>|string} a A descriptive string or
+ * @param {!goog.math.Range|!Array<number>|string} a A descriptive string or
  *     the expected range.
- * @param {!goog.math.Range|!Array.<number>} b The expected range when a
+ * @param {!goog.math.Range|!Array<number>} b The expected range when a
  *     descriptive string is present, or the range to compare.
  * @param {goog.math.Range=} opt_c The range to compare when a descriptive
  *     string is present.
@@ -64,12 +64,12 @@ function assertRangesEqual(a, b, opt_c) {
  * lists may be specified as a list of goog.math.Ranges, or as a list of
  * two-element arrays of numbers.
  *
- * @param {Array.<goog.math.Range|Array.<number>>|string} a A help
+ * @param {Array<goog.math.Range|Array<number>>|string} a A help
  *     string or the list of expected ranges.
- * @param {Array.<goog.math.Range|Array.<number>>} b The list of
+ * @param {Array<goog.math.Range|Array<number>>} b The list of
  *     expected ranges when a descriptive string is present, or the list of
  *     ranges to compare.
- * @param {Array.<goog.math.Range>=} opt_c The list of ranges to compare when a
+ * @param {Array<goog.math.Range>=} opt_c The list of ranges to compare when a
  *     descriptive string is present.
  */
 function assertRangeListsEqual(a, b, opt_c) {

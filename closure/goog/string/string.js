@@ -1474,7 +1474,7 @@ goog.string.parseInt = function(value) {
  * @param {number} limit The limit to the number of splits. The resulting array
  *     will have a maximum length of limit+1.  Negative numbers are the same
  *     as zero.
- * @return {!Array.<string>} The string, split.
+ * @return {!Array<string>} The string, split.
  */
 
 goog.string.splitLimit = function(str, separator, limit) {

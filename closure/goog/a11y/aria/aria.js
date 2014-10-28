@@ -127,7 +127,7 @@ goog.a11y.aria.removeRole = function(element) {
  * @param {!(goog.a11y.aria.State|string)} stateName State attribute being set.
  *     Automatically adds prefix 'aria-' to the state name if the attribute is
  *     not an extra attribute.
- * @param {string|boolean|number|!Array.<string>} value Value
+ * @param {string|boolean|number|!Array<string>} value Value
  * for the state attribute.
  */
 goog.a11y.aria.setState = function(element, stateName, value) {

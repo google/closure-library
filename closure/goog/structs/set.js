@@ -42,7 +42,7 @@ goog.require('goog.structs.Map');
  * are two different objects.  WARNING: Any object that is added to a
  * goog.structs.Set will be modified!  Because goog.getUid() is used to
  * identify objects, every object in the set will be mutated.
- * @param {Array.<T>|Object.<?,T>=} opt_values Initial values to start with.
+ * @param {Array<T>|Object.<?,T>=} opt_values Initial values to start with.
  * @constructor
  * @implements {goog.structs.Collection.<T>}
  * @final
@@ -95,7 +95,7 @@ goog.structs.Set.prototype.add = function(element) {
 
 /**
  * Adds all the values in the given collection to this set.
- * @param {Array.<T>|goog.structs.Collection.<T>|Object.<?,T>} col A collection
+ * @param {Array<T>|goog.structs.Collection.<T>|Object.<?,T>} col A collection
  *     containing the elements to add.
  */
 goog.structs.Set.prototype.addAll = function(col) {
@@ -109,7 +109,7 @@ goog.structs.Set.prototype.addAll = function(col) {
 
 /**
  * Removes all values in the given collection from this set.
- * @param {Array.<T>|goog.structs.Collection.<T>|Object.<?,T>} col A collection
+ * @param {Array<T>|goog.structs.Collection.<T>|Object.<?,T>} col A collection
  *     containing the elements to remove.
  */
 goog.structs.Set.prototype.removeAll = function(col) {
@@ -174,7 +174,7 @@ goog.structs.Set.prototype.containsAll = function(col) {
 
 /**
  * Finds all values that are present in both this set and the given collection.
- * @param {Array.<S>|Object.<?,S>} col A collection.
+ * @param {Array<S>|Object.<?,S>} col A collection.
  * @return {!goog.structs.Set.<T|S>} A new set containing all the values
  *     (primitives or objects) present in both this set and the given
  *     collection.
@@ -198,7 +198,7 @@ goog.structs.Set.prototype.intersection = function(col) {
 /**
  * Finds all values that are present in this set and not in the given
  * collection.
- * @param {Array.<T>|goog.structs.Collection.<T>|Object.<?,T>} col A collection.
+ * @param {Array<T>|goog.structs.Collection.<T>|Object.<?,T>} col A collection.
  * @return {!goog.structs.Set} A new set containing all the values
  *     (primitives or objects) present in this set but not in the given
  *     collection.
@@ -212,7 +212,7 @@ goog.structs.Set.prototype.difference = function(col) {
 
 /**
  * Returns an array containing all the elements in this set.
- * @return {!Array.<T>} An array containing all the elements in this set.
+ * @return {!Array<T>} An array containing all the elements in this set.
  */
 goog.structs.Set.prototype.getValues = function() {
   return this.map_.getValues();

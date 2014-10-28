@@ -521,9 +521,9 @@ goog.globalize = function(obj, opt_global) {
 /**
  * Adds a dependency from a file to the files it requires.
  * @param {string} relPath The path to the js file.
- * @param {!Array.<string>} provides An array of strings with
+ * @param {!Array<string>} provides An array of strings with
  *     the names of the objects this file provides.
- * @param {!Array.<string>} requires An array of strings with
+ * @param {!Array<string>} requires An array of strings with
  *     the names of the objects this file requires.
  * @param {boolean=} opt_isModule Whether this dependency must be loaded as
  *     a module as declared by goog.module.
@@ -727,7 +727,7 @@ goog.addSingletonGetter = function(ctor) {
  * All singleton classes that have been instantiated, for testing. Don't read
  * it directly, use the {@code goog.testing.singleton} module. The compiler
  * removes this variable if unused.
- * @type {!Array.<!Function>}
+ * @type {!Array<!Function>}
  * @private
  */
 goog.instantiatedSingletons_ = [];
@@ -877,7 +877,7 @@ if (goog.DEPENDENCIES_ENABLED) {
   };
 
 
-  /** @private {!Array.<string>} */
+  /** @private {!Array<string>} */
   goog.queuedModules_ = [];
 
 
@@ -1123,7 +1123,7 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.writeScripts_ = function() {
-    /** @type {!Array.<string>} The scripts we need to write this time. */
+    /** @type {!Array<string>} The scripts we need to write this time. */
     var scripts = [];
     var seenScript = {};
     var deps = goog.dependencies_;
@@ -2252,7 +2252,7 @@ goog.defineClass.createSealingConstructor_ = function(ctr, superClass) {
 // TODO(johnlenz): share these values with the goog.object
 /**
  * The names of the fields that are defined on Object.prototype.
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  * @private
  * @const
  */

@@ -143,7 +143,7 @@ goog.ui.ControlRenderer.CSS_CLASS = goog.getCssName('goog-control');
  * Members of each class name combination will be joined with underscores in the
  * order that they're defined in the array. You should alphabetize them (for
  * compatibility with the CSS compiler) unless you are doing something special.
- * @type {Array.<Array.<string>>}
+ * @type {Array<Array<string>>}
  */
 goog.ui.ControlRenderer.IE6_CLASS_COMBINATIONS = [];
 
@@ -706,7 +706,7 @@ goog.ui.ControlRenderer.prototype.getCssClass = function() {
  * method doesn't reference {@link IE6_CLASS_COMBINATIONS} so that it can be
  * compiled out, but subclasses should return their IE6_CLASS_COMBINATIONS
  * static constant instead.
- * @return {Array.<Array.<string>>} Array of class name combinations.
+ * @return {Array<Array<string>>} Array of class name combinations.
  */
 goog.ui.ControlRenderer.prototype.getIe6ClassCombinations = function() {
   return [];
@@ -750,7 +750,7 @@ goog.ui.ControlRenderer.prototype.getStructuralCssClass = function() {
  * method is guaranteed to return an array of at least one element.
  * @param {goog.ui.Control} control Control whose CSS classes are to be
  *     returned.
- * @return {!Array.<string>} Array of CSS class names applicable to the control.
+ * @return {!Array<string>} Array of CSS class names applicable to the control.
  * @protected
  */
 goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
@@ -799,7 +799,7 @@ goog.ui.ControlRenderer.prototype.getClassNames = function(control) {
  *     return matching combined classes for.
  * @param {?string=} opt_includedClass If provided, get only the combined
  *     classes that include this one.
- * @return {!Array.<string>} Array of combined class names that should be
+ * @return {!Array<string>} Array of combined class names that should be
  *     applied.
  * @private
  */
@@ -827,7 +827,7 @@ goog.ui.ControlRenderer.prototype.getAppliedCombinedClassNames_ = function(
  * implementation uses the renderer's {@link getClassForState} method to
  * generate each state-specific class.
  * @param {number} state Bit mask of component states.
- * @return {!Array.<string>} Array of CSS class names representing the given
+ * @return {!Array<string>} Array of CSS class names representing the given
  *     state.
  * @protected
  */

@@ -48,21 +48,21 @@ goog.editor.plugins.LinkBubble = function(var_args) {
 
   /**
    * List of extra actions supported by the bubble.
-   * @type {Array.<!goog.editor.plugins.LinkBubble.Action>}
+   * @type {Array<!goog.editor.plugins.LinkBubble.Action>}
    * @private
    */
   this.extraActions_ = goog.array.toArray(arguments);
 
   /**
    * List of spans corresponding to the extra actions.
-   * @type {Array.<!Element>}
+   * @type {Array<!Element>}
    * @private
    */
   this.actionSpans_ = [];
 
   /**
    * A list of whitelisted URL schemes which are safe to open.
-   * @type {Array.<string>}
+   * @type {Array<string>}
    * @private
    */
   this.safeToOpenSchemes_ = ['http', 'https', 'ftp'];
@@ -219,7 +219,7 @@ goog.editor.plugins.LinkBubble.prototype.setBlockOpeningUnsafeSchemes =
  * Schemes should all be in lowercase. If the plugin is set to block opening
  * unsafe schemes, user-entered URLs will be converted to lowercase and checked
  * against this list. The whitelist has no effect if blocking is not enabled.
- * @param {Array.<string>} schemes String array of URL schemes to allow (http,
+ * @param {Array<string>} schemes String array of URL schemes to allow (http,
  *     https, etc.).
  */
 goog.editor.plugins.LinkBubble.prototype.setSafeToOpenSchemes =

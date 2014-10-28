@@ -62,7 +62,7 @@ goog.editor.Link = function(anchor, isNew) {
   /**
    * Any extra anchors created by the browser from a selection in the same
    * operation that created the primary link
-   * @type {!Array.<HTMLAnchorElement>}
+   * @type {!Array<HTMLAnchorElement>}
    * @private
    */
   this.extraAnchors_ = [];
@@ -78,7 +78,7 @@ goog.editor.Link.prototype.getAnchor = function() {
 
 
 /**
- * @return {!Array.<HTMLAnchorElement>} The extra anchor elements, if any,
+ * @return {!Array<HTMLAnchorElement>} The extra anchor elements, if any,
  *     created by the browser from a selection.
  */
 goog.editor.Link.prototype.getExtraAnchors = function() {
@@ -265,7 +265,7 @@ goog.editor.Link.prototype.finishLinkCreation = function(field) {
  * @param {HTMLAnchorElement} anchor The anchor element.
  * @param {string} url The initial URL.
  * @param {string=} opt_target The target.
- * @param {Array.<HTMLAnchorElement>=} opt_extraAnchors Extra anchors created
+ * @param {Array<HTMLAnchorElement>=} opt_extraAnchors Extra anchors created
  *     by the browser when parsing a selection.
  * @return {!goog.editor.Link} The link.
  */

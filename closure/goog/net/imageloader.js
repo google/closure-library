@@ -142,7 +142,7 @@ goog.net.ImageLoader.ImageRequest_;
  * http://msdn.microsoft.com/en-us/library/ie/ms536957(v=vs.85).aspx
  * http://msdn.microsoft.com/en-us/library/ie/bg182625(v=vs.85).aspx
  *
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  * @private
  */
 goog.net.ImageLoader.IMAGE_LOAD_EVENTS_ = [
