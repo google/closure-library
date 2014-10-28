@@ -82,7 +82,7 @@ goog.events.EventHandler = function(opt_scope) {
 
   /**
    * Keys for events that are being listened to.
-   * @type {!Object.<!goog.events.Key>}
+   * @type {!Object<!goog.events.Key>}
    * @private
    */
   this.keys_ = {};

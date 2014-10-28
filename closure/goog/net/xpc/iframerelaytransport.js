@@ -185,7 +185,7 @@ goog.net.xpc.IframeRelayTransport.FragmentInfo;
  * incoming fragments from several channels at a time, even if data is
  * out-of-order or interleaved.
  *
- * @type {!Object.<string, !goog.net.xpc.IframeRelayTransport.FragmentInfo>}
+ * @type {!Object<string, !goog.net.xpc.IframeRelayTransport.FragmentInfo>}
  * @private
  */
 goog.net.xpc.IframeRelayTransport.fragmentMap_ = {};

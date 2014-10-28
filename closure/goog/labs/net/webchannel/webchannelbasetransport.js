@@ -109,7 +109,7 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
 
 
   /**
-   * @private {Object.<string, string>} messageUrlParams_ Extra URL parameters
+   * @private {Object<string, string>} messageUrlParams_ Extra URL parameters
    * to be added to each HTTP request.
    */
   this.messageUrlParams_ =

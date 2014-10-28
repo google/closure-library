@@ -374,7 +374,7 @@ goog.dom.setProperties = function(element, properties) {
  * element.setAttribute(key, val) instead of element[key] = val.  Used
  * by goog.dom.setProperties.
  *
- * @private {!Object.<string, string>}
+ * @private {!Object<string, string>}
  * @const
  */
 goog.dom.DIRECT_ATTRIBUTE_MAP_ = {
@@ -1665,7 +1665,7 @@ goog.dom.findNodes_ = function(root, p, rv, findOne) {
 
 /**
  * Map of tags whose content to ignore when calculating text length.
- * @private {!Object.<string, number>}
+ * @private {!Object<string, number>}
  * @const
  */
 goog.dom.TAGS_TO_IGNORE_ = {
@@ -1679,7 +1679,7 @@ goog.dom.TAGS_TO_IGNORE_ = {
 
 /**
  * Map of tags which have predefined values with regard to whitespace.
- * @private {!Object.<string, string>}
+ * @private {!Object<string, string>}
  * @const
  */
 goog.dom.PREDEFINED_TAG_VALUES_ = {'IMG': ' ', 'BR': '\n'};

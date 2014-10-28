@@ -50,7 +50,7 @@ goog.a11y.aria.Announcer = function(opt_domHelper) {
   /**
    * Map of priority to live region elements to use for communicating updates.
    * Elements are created on demand.
-   * @type {Object.<goog.a11y.aria.LivePriority, !Element>}
+   * @type {Object<goog.a11y.aria.LivePriority, !Element>}
    * @private
    */
   this.liveRegions_ = {};

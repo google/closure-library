@@ -83,7 +83,7 @@ goog.ui.editor.Bubble = function(parent, zIndex) {
 
   /**
    * Maps panel ids to panels.
-   * @type {Object.<goog.ui.editor.Bubble.Panel_>}
+   * @type {Object<goog.ui.editor.Bubble.Panel_>}
    * @private
    */
   this.panels_ = {};

@@ -883,7 +883,7 @@ goog.tweak.BooleanGroup = function(id, description) {
 
   /**
    * A map of token->child entry.
-   * @type {!Object.<!goog.tweak.BooleanSetting>}
+   * @type {!Object<!goog.tweak.BooleanSetting>}
    * @private
    */
   this.entriesByToken_ = {};
@@ -892,7 +892,7 @@ goog.tweak.BooleanGroup = function(id, description) {
   /**
    * A map of token->true/false for all tokens that appeared in the query
    * parameter.
-   * @type {!Object.<boolean>}
+   * @type {!Object<boolean>}
    * @private
    */
   this.queryParamValues_ = {};
@@ -913,7 +913,7 @@ goog.tweak.BooleanGroup.prototype.logger =
 
 /**
  * Returns the map of token->boolean settings.
- * @return {!Object.<!goog.tweak.BooleanSetting>} The child settings.
+ * @return {!Object<!goog.tweak.BooleanSetting>} The child settings.
  */
 goog.tweak.BooleanGroup.prototype.getChildEntries = function() {
   return this.entriesByToken_;

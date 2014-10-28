@@ -714,7 +714,7 @@ goog.uri.utils.buildQueryData = function(keysAndValues, opt_startIndex) {
  *
  * @param {!Array<string|undefined>} buffer A string buffer to append to.  The
  *     first element appended will be an '&', and may be replaced by the caller.
- * @param {Object.<goog.uri.utils.QueryValue>} map An object where keys are
+ * @param {Object<goog.uri.utils.QueryValue>} map An object where keys are
  *     URI-encoded parameter keys, and the values conform to the contract
  *     specified in the goog.uri.utils.QueryValue typedef.
  * @return {!Array<string|undefined>} The buffer argument.

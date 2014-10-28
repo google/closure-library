@@ -427,7 +427,7 @@ goog.tweak.EntriesPanel = function(entries, opt_domHelper) {
 
   /**
    * Map of tweak ID -> EntriesPanel for child panels (BooleanGroups).
-   * @type {!Object.<!goog.tweak.EntriesPanel>}
+   * @type {!Object<!goog.tweak.EntriesPanel>}
    */
   this.childPanels = {};
 };

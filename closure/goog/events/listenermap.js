@@ -44,7 +44,7 @@ goog.events.ListenerMap = function(src) {
 
   /**
    * Maps of event type to an array of listeners.
-   * @type {Object.<string, !Array<!goog.events.Listener>>}
+   * @type {Object<string, !Array<!goog.events.Listener>>}
    */
   this.listeners = {};
 

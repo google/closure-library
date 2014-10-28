@@ -85,7 +85,7 @@ goog.labs.pubsub.BroadcastPubSub = function() {
   /** @private {goog.storage.Storage} */
   this.storage_ = null;
 
-  /** @private {Object.<string, number>} */
+  /** @private {Object<string, number>} */
   this.ie8LastEventTimes_ = null;
 
   /** @private {number} */

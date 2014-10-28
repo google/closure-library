@@ -230,7 +230,7 @@ goog.testing.fs.Entry.prototype.checkNotDeleted = function(action) {
  *     containing this entry. If this is null, that means this is the root
  *     directory and so is its own parent.
  * @param {string} name The name of this entry.
- * @param {!Object.<!goog.testing.fs.Entry>} children The map of child names to
+ * @param {!Object<!goog.testing.fs.Entry>} children The map of child names to
  *     entry objects.
  * @constructor
  * @extends {goog.testing.fs.Entry}
@@ -243,7 +243,7 @@ goog.testing.fs.DirectoryEntry = function(fs, parent, name, children) {
 
   /**
    * The map of child names to entry objects.
-   * @type {!Object.<!goog.testing.fs.Entry>}
+   * @type {!Object<!goog.testing.fs.Entry>}
    */
   this.children = children;
 

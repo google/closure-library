@@ -200,7 +200,7 @@ goog.ui.KeyboardShortcutHandler.createInternalNode_ = function() {
 /**
  * A map of strokes (represented as numbers) to the nodes reached by those
  * strokes.
- * @typedef {Object.<number, goog.ui.KeyboardShortcutHandler.SequenceNode_>}
+ * @typedef {Object<number, goog.ui.KeyboardShortcutHandler.SequenceNode_>}
  * @private
  */
 goog.ui.KeyboardShortcutHandler.SequenceTree_;

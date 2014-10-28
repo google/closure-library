@@ -40,7 +40,7 @@ goog.proto2.Message = function() {
 
   /**
    * Stores the field information (i.e. metadata) about this message.
-   * @type {Object.<number, !goog.proto2.FieldDescriptor>}
+   * @type {Object<number, !goog.proto2.FieldDescriptor>}
    * @private
    */
   this.fields_ = this.getDescriptor().getFieldsMap();

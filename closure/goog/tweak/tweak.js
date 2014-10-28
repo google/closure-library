@@ -37,7 +37,7 @@ goog.require('goog.tweak.StringSetting');
  * Calls to this function are overridden by the compiler by the processTweaks
  * pass. It returns the overrides to default values for tweaks set by compiler
  * options.
- * @return {!Object.<number|string|boolean>} A map of tweakId -> defaultValue.
+ * @return {!Object<number|string|boolean>} A map of tweakId -> defaultValue.
  * @private
  */
 goog.tweak.getCompilerOverrides_ = function() {

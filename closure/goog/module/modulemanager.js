@@ -298,7 +298,7 @@ goog.module.ModuleManager.prototype.setConcurrentLoadingEnabled = function(
 /**
  * Sets the module info for all modules. Should only be called once.
  *
- * @param {Object.<Array<string>>} infoMap An object that contains a mapping
+ * @param {Object<Array<string>>} infoMap An object that contains a mapping
  *    from module id (String) to list of required module ids (Array).
  */
 goog.module.ModuleManager.prototype.setAllModuleInfo = function(infoMap) {
@@ -553,7 +553,7 @@ goog.module.ModuleManager.prototype.addLoadModule_ = function(id, d) {
  *
  * @param {Array<string>} ids The id of the module to load.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
- * @return {!Object.<string, !goog.async.Deferred>} A mapping from id (String)
+ * @return {!Object<string, !goog.async.Deferred>} A mapping from id (String)
  *     to deferred objects that will callback or errback when the load for that
  *     id is finished.
  * @private
@@ -981,7 +981,7 @@ goog.module.ModuleManager.prototype.load = function(
  *
  * @param {Array<string>} moduleIds A list of module ids.
  * @param {boolean=} opt_userInitiated If the load is a result of a user action.
- * @return {!Object.<string, !goog.async.Deferred>} A mapping from id (String)
+ * @return {!Object<string, !goog.async.Deferred>} A mapping from id (String)
  *     to deferred objects that will callback or errback when the load for that
  *     id is finished.
  */

@@ -118,7 +118,7 @@ goog.editor.Field = function(id, opt_doc) {
   /**
    * Plugins registered on this field, indexed by the goog.editor.Plugin.Op
    * that they support.
-   * @type {Object.<Array<goog.editor.Plugin>>}
+   * @type {Object<Array<goog.editor.Plugin>>}
    * @private
    */
   this.indexedPlugins_ = {};
@@ -1117,7 +1117,7 @@ goog.editor.Field.prototype.handleBeforeChangeKeyEvent_ = function(e) {
 
 /**
  * Keycodes that result in a selectionchange event (e.g. the cursor moving).
- * @private {!Object.<number, number>}
+ * @private {!Object<number, number>}
  */
 goog.editor.Field.SELECTION_CHANGE_KEYCODES_ = {
   8: 1,  // backspace

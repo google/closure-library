@@ -96,8 +96,8 @@ goog.net.WebChannel = function() {};
  *
  *
  * @typedef {{
- *   messageHeaders: (!Object.<string, string>|undefined),
- *   messageUrlParams: (!Object.<string, string>|undefined),
+ *   messageHeaders: (!Object<string, string>|undefined),
+ *   messageUrlParams: (!Object<string, string>|undefined),
  *   concurrentRequestLimit: (number|undefined),
  *   supportsCrossDomainXhr: (boolean|undefined),
  *   testUrl: (string|undefined)
@@ -109,7 +109,7 @@ goog.net.WebChannel.Options;
 /**
  * Types that are allowed as message data.
  *
- * @typedef {(ArrayBuffer|Blob|Object.<string, string>|Array)}
+ * @typedef {(ArrayBuffer|Blob|Object<string, string>|Array)}
  */
 goog.net.WebChannel.MessageData;
 

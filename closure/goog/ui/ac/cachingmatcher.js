@@ -53,7 +53,7 @@ goog.ui.ac.CachingMatcher = function(baseMatcher) {
    * Set of stringified rows, for fast deduping. Each element of this.rows_
    * is stored in rowStrings_ as (' ' + row) to ensure we avoid builtin
    * properties like 'toString'.
-   * @private {Object.<string, boolean>}
+   * @private {Object<string, boolean>}
    */
   this.rowStrings_ = {};
 

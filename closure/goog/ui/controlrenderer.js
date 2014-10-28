@@ -153,7 +153,7 @@ goog.ui.ControlRenderer.IE6_CLASS_COMBINATIONS = [];
  * of component states to ARIA attributes is neither component- nor
  * renderer-specific, this is a static property of the renderer class, and is
  * initialized on first use.
- * @type {Object.<goog.ui.Component.State, goog.a11y.aria.State>}
+ * @type {Object<goog.ui.Component.State, goog.a11y.aria.State>}
  * @private
  * @const
  */
@@ -164,7 +164,7 @@ goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_;
  * Map of certain ARIA states to ARIA roles that support them. Used for checked
  * and selected Component states because they are used on Components with ARIA
  * roles that do not support the corresponding ARIA state.
- * @private {!Object.<goog.a11y.aria.Role, goog.a11y.aria.State>}
+ * @private {!Object<goog.a11y.aria.Role, goog.a11y.aria.State>}
  * @const
  */
 goog.ui.ControlRenderer.TOGGLE_ARIA_STATE_MAP_ = goog.object.create(

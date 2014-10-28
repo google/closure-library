@@ -1414,7 +1414,7 @@ goog.array.bucket = function(array, sorter, opt_obj) {
  *     implementation-defined.
  * @param {S=} opt_obj The object to be used as the value of 'this'
  *     within keyFunc.
- * @return {!Object.<T>} The new object.
+ * @return {!Object<T>} The new object.
  * @template T,S
  */
 goog.array.toObject = function(arr, keyFunc, opt_obj) {

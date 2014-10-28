@@ -33,9 +33,9 @@ goog.require('goog.string');
  * Replaces tags not on the white-list with empty text nodes, dropping all
  * attributes, and drops other non-text nodes such as comments.
  *
- * @param {!Object.<string, boolean>} tagWhitelist a set of lower-case tag names
+ * @param {!Object<string, boolean>} tagWhitelist a set of lower-case tag names
  *    following the convention established by {@link goog.object.createSet}.
- * @param {!Object.<string, Object.<string, goog.labs.html.AttributeRewriter>>}
+ * @param {!Object<string, Object<string, goog.labs.html.AttributeRewriter>>}
  *        attrWhitelist
  *    maps lower-case tag names and the special string {@code "*"} to functions
  *    from decoded attribute values to sanitized values or {@code null} to
@@ -249,9 +249,9 @@ goog.labs.html.scrubber.lex_ = function(html) {
  * Replaces tags not on the white-list with empty text nodes, dropping all
  * attributes, and drops other non-text nodes such as comments.
  *
- * @param {!Object.<string, boolean>} tagWhitelist a set of lower-case tag names
+ * @param {!Object<string, boolean>} tagWhitelist a set of lower-case tag names
  *    following the convention established by {@link goog.object.createSet}.
- * @param {!Object.<string, Object.<string, goog.labs.html.AttributeRewriter>>
+ * @param {!Object<string, Object<string, goog.labs.html.AttributeRewriter>>
  *        } attrWhitelist
  *    maps lower-case tag names and the special string {@code "*"} to functions
  *    from decoded attribute values to sanitized values or {@code null} to
@@ -287,7 +287,7 @@ goog.labs.html.scrubber.filter_ = function(
       var attrs = '';
       if (!isCloseTag && tag[2]) {
         var tagSpecificAttrWhitelist =
-            /** @type {Object.<string, goog.labs.html.AttributeRewriter>} */ (
+            /** @type {Object<string, goog.labs.html.AttributeRewriter>} */ (
             goog.labs.html.scrubber.readOwnProperty_(
                 attrWhitelist, lowerCaseTagName));
         if (genericAttrWhitelist || tagSpecificAttrWhitelist) {
@@ -328,11 +328,11 @@ goog.labs.html.scrubber.filter_ = function(
  * @param {string} attrsText the text of a tag between the end of the tag name
  *   and the beginning of the tag end marker, so {@code " foo bar='baz'"} for
  *   the tag {@code <tag foo bar='baz'/>}.
- * @param {Object.<string, goog.labs.html.AttributeRewriter>}
+ * @param {Object<string, goog.labs.html.AttributeRewriter>}
  *   genericAttrWhitelist
  *   a whitelist of attribute transformations for attributes that are allowed
  *   on any element.
- * @param {Object.<string, goog.labs.html.AttributeRewriter>}
+ * @param {Object<string, goog.labs.html.AttributeRewriter>}
  *   tagSpecificAttrWhitelist
  *   a whitelist of attribute transformations for attributes that are allowed
  *   on the element started by the tag whose body is {@code tagBody}.

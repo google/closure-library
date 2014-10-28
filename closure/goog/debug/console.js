@@ -51,7 +51,7 @@ goog.debug.Console = function() {
 
   /**
    * Loggers that we shouldn't output.
-   * @type {!Object.<boolean>}
+   * @type {!Object<boolean>}
    * @private
    */
   this.filteredLoggers_ = {};

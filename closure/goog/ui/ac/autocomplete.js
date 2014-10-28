@@ -153,7 +153,7 @@ goog.ui.ac.AutoComplete = function(matcher, renderer, selectionHandler) {
    * Mapping from text input element to the anchor element. If the
    * mapping does not exist, the input element will act as the anchor
    * element.
-   * @type {Object.<Element>}
+   * @type {Object<Element>}
    * @private
    */
   this.inputToAnchorMap_ = {};

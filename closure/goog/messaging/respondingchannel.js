@@ -54,7 +54,7 @@ goog.messaging.RespondingChannel = function(messageChannel) {
    * Map of invocation signatures to function callbacks. These are used to keep
    * track of the asyncronous service invocations so the result of a service
    * call can be passed back to a callback in the calling frame.
-   * @type {Object.<number, function(Object)>}
+   * @type {Object<number, function(Object)>}
    * @private
    */
   this.sigCallbackMap_ = {};

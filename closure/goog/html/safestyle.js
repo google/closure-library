@@ -305,7 +305,7 @@ goog.html.SafeStyle.INNOCUOUS_STRING = 'zClosurez';
 
 /**
  * Mapping of property names to their values.
- * @typedef {!Object.<string, goog.string.Const|string>}
+ * @typedef {!Object<string, goog.string.Const|string>}
  */
 goog.html.SafeStyle.PropertyMap;
 

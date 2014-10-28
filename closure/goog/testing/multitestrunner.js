@@ -115,7 +115,7 @@ goog.testing.MultiTestRunner.prototype.basePath_ = '';
 
 /**
  * A set of tests that have finished.  All extant keys map to true.
- * @type {Object.<boolean>}
+ * @type {Object<boolean>}
  * @private
  */
 goog.testing.MultiTestRunner.prototype.finished_ = null;

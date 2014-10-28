@@ -271,7 +271,7 @@ goog.html.SafeHtml.VALID_NAMES_IN_TAG_ = /^[a-zA-Z0-9-]+$/;
 /**
  * Set of attributes containing URL as defined at
  * http://www.w3.org/TR/html5/index.html#attributes-1.
- * @private @const {Object.<string,boolean>}
+ * @private @const {Object<string,boolean>}
  */
 goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet('action', 'cite',
     'data', 'formaction', 'href', 'manifest', 'poster', 'src');
@@ -280,7 +280,7 @@ goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet('action', 'cite',
 // TODO(jakubvrana): Perhaps add <template> used by Polymer?
 /**
  * Set of tag names that are too dangerous.
- * @private @const {Object.<string,boolean>}
+ * @private @const {Object<string,boolean>}
  */
 goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet('link',
     'script', 'style');
@@ -318,7 +318,7 @@ goog.html.SafeHtml.AttributeValue_;
  * @param {string} tagName The name of the tag. Only tag names consisting of
  *     [a-zA-Z0-9-] are allowed. <link>, <script> and <style> tags are not
  *     supported.
- * @param {!Object.<string, goog.html.SafeHtml.AttributeValue_>=}
+ * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
  *     opt_attributes Mapping from attribute names to their values. Only
  *     attribute names consisting of [a-zA-Z0-9-] are allowed. Attributes with
  *     a special meaning (e.g. on*) require goog.string.Const value, attributes
@@ -437,7 +437,7 @@ goog.html.SafeHtml.getStyleValue_ = function(value) {
  * optional attributes and optional content.
  * @param {!goog.i18n.bidi.Dir} dir Directionality.
  * @param {string} tagName
- * @param {!Object.<string, goog.html.SafeHtml.AttributeValue_>=} opt_attributes
+ * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=} opt_attributes
  * @param {!goog.html.SafeHtml.TextOrHtml_|
  *     !Array<!goog.html.SafeHtml.TextOrHtml_>=} opt_content
  * @return {!goog.html.SafeHtml} The SafeHtml content with the tag.

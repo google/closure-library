@@ -62,7 +62,7 @@ goog.module.ModuleLoader = function() {
 
   /**
    * A map from module IDs to goog.module.ModuleLoader.LoadStatus.
-   * @type {!Object.<Array<string>, goog.module.ModuleLoader.LoadStatus>}
+   * @type {!Object<Array<string>, goog.module.ModuleLoader.LoadStatus>}
    * @private
    */
   this.loadingModulesStatus_ = {};

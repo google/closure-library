@@ -50,7 +50,7 @@ var buttonEntry;
  * Creates a registry with some entries in it.
  * @param {string} queryParams The query parameter string to use for the
  *     registry.
- * @param {!Object.<string|number|boolean>=} opt_compilerOverrides Compiler
+ * @param {!Object<string|number|boolean>=} opt_compilerOverrides Compiler
  *     overrides.
  * @suppress {accessControls} Private state is accessed for test purposes.
  */

@@ -237,7 +237,7 @@ goog.net.xpc.IframePollingTransport.prototype.isChannelAvailable = function() {
 /**
  * Safely retrieves the frames from the peer window. If an error is thrown
  * (e.g. the window is closing) an empty frame object is returned.
- * @return {!Object.<!Window>} The frames from the peer window.
+ * @return {!Object<!Window>} The frames from the peer window.
  * @private
  */
 goog.net.xpc.IframePollingTransport.prototype.getPeerFrames_ = function() {

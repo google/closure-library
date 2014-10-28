@@ -152,7 +152,7 @@ goog.editor.plugins.AbstractBubblePlugin.setBubbleFactory = function(
 
 /**
  * Map from field id to shared bubble object.
- * @type {!Object.<goog.ui.editor.Bubble>}
+ * @type {!Object<goog.ui.editor.Bubble>}
  * @private
  */
 goog.editor.plugins.AbstractBubblePlugin.bubbleMap_ = {};
@@ -225,7 +225,7 @@ goog.editor.plugins.AbstractBubblePlugin.prototype.setBubbleParent = function(
 
 /**
  * Returns the bubble map.  Subclasses may override to use a separate map.
- * @return {!Object.<goog.ui.editor.Bubble>}
+ * @return {!Object<goog.ui.editor.Bubble>}
  * @protected
  */
 goog.editor.plugins.AbstractBubblePlugin.prototype.getBubbleMap = function() {

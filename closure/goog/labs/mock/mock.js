@@ -529,7 +529,7 @@ goog.labs.mock.MockObjectManager_ = function(objOrClass) {
   /**
    * The call verifier is used to verify the calls. It maps property names to
    * the method that does call verification.
-   * @type {!Object.<string, function(string, ...)>}
+   * @type {!Object<string, function(string, ...)>}
    * @private
    */
   this.objectCallVerifier_ = {};

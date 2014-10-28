@@ -61,7 +61,7 @@ goog.testing.asserts.numberRoughEqualityPredicate_ = function(
 
 
 /**
- * @type {Object.<string, function(*, *, number): boolean>}
+ * @type {Object<string, function(*, *, number): boolean>}
  * @private
  */
 goog.testing.asserts.primitiveRoughEqualityPredicates_ = {

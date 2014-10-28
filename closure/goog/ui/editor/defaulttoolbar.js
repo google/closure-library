@@ -74,7 +74,7 @@ goog.ui.editor.DefaultToolbar.FONTS_ = [
 /**
  * Locale-specific font descriptors.  The object is a map of locale strings to
  * arrays of font descriptors.
- * @type {!Object.<!Array<{caption:string, value:string}>>}
+ * @type {!Object<!Array<{caption:string, value:string}>>}
  * @private
  */
 goog.ui.editor.DefaultToolbar.I18N_FONTS_ = {
@@ -865,7 +865,7 @@ goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION = goog.getMsg('Edit HTML');
  * Note that this object is only used for creating toolbar buttons for
  * built-in editor commands; custom buttons aren't listed here.  Please don't
  * try to hack this!
- * @type {Object.<!goog.ui.editor.ButtonDescriptor>}.
+ * @type {Object<!goog.ui.editor.ButtonDescriptor>}.
  * @private
  */
 goog.ui.editor.DefaultToolbar.buttons_ = {};

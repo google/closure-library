@@ -62,7 +62,7 @@ goog.global = this;
  *   var CLOSURE_UNCOMPILED_DEFINES = {'goog.DEBUG': false};
  * </pre>
  *
- * @type {Object.<string, (string|number|boolean)>|undefined}
+ * @type {Object<string, (string|number|boolean)>|undefined}
  */
 goog.global.CLOSURE_UNCOMPILED_DEFINES;
 
@@ -83,7 +83,7 @@ goog.global.CLOSURE_UNCOMPILED_DEFINES;
  *   var CLOSURE_DEFINES = {'goog.DEBUG': false} ;
  * </pre>
  *
- * @type {Object.<string, (string|number|boolean)>|undefined}
+ * @type {Object<string, (string|number|boolean)>|undefined}
  */
 goog.global.CLOSURE_DEFINES;
 
@@ -465,7 +465,7 @@ if (!COMPILED) {
    * goog.provide('goog.events.Event') implicitly declares that 'goog' and
    * 'goog.events' must be namespaces.
    *
-   * @type {Object.<string, (boolean|undefined)>}
+   * @type {Object<string, (boolean|undefined)>}
    * @private
    */
   goog.implicitNamespaces_ = {'goog.module': true};
@@ -753,7 +753,7 @@ goog.define('goog.SEAL_MODULE_EXPORTS', goog.DEBUG);
 /**
  * The registry of initialized modules:
  * the module identifier to module exports map.
- * @private @const {Object.<string, ?>}
+ * @private @const {Object<string, ?>}
  */
 goog.loadedModules_ = {};
 
@@ -769,7 +769,7 @@ if (goog.DEPENDENCIES_ENABLED) {
   /**
    * Object used to keep track of urls that have already been added. This record
    * allows the prevention of circular dependencies.
-   * @private {!Object.<string, boolean>}
+   * @private {!Object<string, boolean>}
    */
   goog.included_ = {};
 
@@ -779,11 +779,11 @@ if (goog.DEPENDENCIES_ENABLED) {
    * used for loading scripts.
    * @private
    * @type {{
-   *   pathIsModule: !Object.<string, boolean>,
-   *   nameToPath: !Object.<string, string>,
-   *   requires: !Object.<string, !Object.<string, boolean>>,
-   *   visited: !Object.<string, boolean>,
-   *   written: !Object.<string, boolean>
+   *   pathIsModule: !Object<string, boolean>,
+   *   nameToPath: !Object<string, string>,
+   *   requires: !Object<string, !Object<string, boolean>>,
+   *   visited: !Object<string, boolean>,
+   *   written: !Object<string, boolean>
    * }}
    */
   goog.dependencies_ = {
@@ -1773,7 +1773,7 @@ goog.evalWorksForGlobals_ = null;
 /**
  * Optional map of CSS class names to obfuscated names used with
  * goog.getCssName().
- * @private {!Object.<string, string>|undefined}
+ * @private {!Object<string, string>|undefined}
  * @see goog.setCssNameMapping
  */
 goog.cssNameMapping_;
@@ -1892,7 +1892,7 @@ goog.setCssNameMapping = function(mapping, opt_style) {
  * are made in uncompiled mode.
  *
  * A hook for overriding the CSS name mapping.
- * @type {!Object.<string, string>|undefined}
+ * @type {!Object<string, string>|undefined}
  */
 goog.global.CLOSURE_CSS_NAME_MAPPING;
 
@@ -1917,7 +1917,7 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
  * </code>
  *
  * @param {string} str Translatable string, places holders in the form {$foo}.
- * @param {Object.<string, string>=} opt_values Maps place holder name to value.
+ * @param {Object<string, string>=} opt_values Maps place holder name to value.
  * @return {string} message with placeholders filled.
  */
 goog.getMsg = function(str, opt_values) {

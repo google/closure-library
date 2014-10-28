@@ -80,7 +80,7 @@ goog.pubsub.PubSub.prototype.key_ = 1;
 /**
  * Map of topics to arrays of subscription keys.
  *
- * @type {!Object.<!Array<number>>}
+ * @type {!Object<!Array<number>>}
  * @private
  */
 goog.pubsub.PubSub.prototype.topics_;

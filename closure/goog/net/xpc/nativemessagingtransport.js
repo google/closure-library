@@ -226,7 +226,7 @@ goog.net.xpc.NativeMessagingTransport.MESSAGE_DELIMITER_ = ',';
  * initialized but not disposed yet in a map keyed by the UID of the window
  * object.  This allows for multiple windows to be initiallized and listening
  * for messages.
- * @type {Object.<number>}
+ * @type {Object<number>}
  * @private
  */
 goog.net.xpc.NativeMessagingTransport.activeCount_ = {};

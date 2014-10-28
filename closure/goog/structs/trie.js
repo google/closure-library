@@ -33,7 +33,7 @@ goog.require('goog.structs');
  * Class for a Trie datastructure.  Trie data structures are made out of trees
  * of Trie classes.
  *
- * @param {goog.structs.Trie.<VALUE>|Object.<string, VALUE>=} opt_trie Optional
+ * @param {goog.structs.Trie.<VALUE>|Object<string, VALUE>=} opt_trie Optional
  *     goog.structs.Trie or Object to initialize trie with.
  * @constructor
  * @template VALUE
@@ -48,7 +48,7 @@ goog.structs.Trie = function(opt_trie) {
 
   /**
    * This trie's child nodes.
-   * @private {!Object.<!goog.structs.Trie.<VALUE>>}
+   * @private {!Object<!goog.structs.Trie.<VALUE>>}
    */
   this.childNodes_ = {};
 
@@ -111,7 +111,7 @@ goog.structs.Trie.prototype.setOrAdd_ = function(key, value, opt_add) {
 /**
  * Adds multiple key/value pairs from another goog.structs.Trie or Object.
  * O(N) where N is the number of nodes in the trie.
- * @param {!Object.<string, VALUE>|!goog.structs.Trie.<VALUE>} trie Object
+ * @param {!Object<string, VALUE>|!goog.structs.Trie.<VALUE>} trie Object
  *     containing the data to add.
  */
 goog.structs.Trie.prototype.setAll = function(trie) {
@@ -166,7 +166,7 @@ goog.structs.Trie.prototype.get = function(key) {
  *     prefixes of the key are retrieved.
  * @param {?number=} opt_keyStartIndex Optional position in key to start lookup
  *     from. Defaults to 0 if not specified.
- * @return {!Object.<string, VALUE>} Map of end index of matching prefixes and
+ * @return {!Object<string, VALUE>} Map of end index of matching prefixes and
  *     corresponding values. Empty if no match found.
  */
 goog.structs.Trie.prototype.getKeyAndPrefixes = function(key,

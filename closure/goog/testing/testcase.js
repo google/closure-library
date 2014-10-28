@@ -584,7 +584,7 @@ goog.testing.TestCase.prototype.getNumFilesLoaded = function() {
 /**
  * Returns the test results object: a map from test names to a list of test
  * failures (if any exist).
- * @return {!Object.<string, !Array<string>>} Tests results object.
+ * @return {!Object<string, !Array<string>>} Tests results object.
  */
 goog.testing.TestCase.prototype.getTestResults = function() {
   return this.result_.resultsByName;
@@ -1169,7 +1169,7 @@ goog.testing.TestCase.Result = function(testCase) {
    * as the key in the map, and the array of strings is an optional list
    * of failure messages. If the array is empty, the test passed. Otherwise,
    * the test failed.
-   * @type {!Object.<string, !Array<string>>}
+   * @type {!Object<string, !Array<string>>}
    */
   this.resultsByName = {};
 

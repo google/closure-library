@@ -47,7 +47,7 @@ goog.define('goog.soy.REQUIRE_STRICT_AUTOESCAPE', false);
  * will be easier to audit the code for cross-site scripting vulnerabilities.
  *
  * @param {Element} element The element whose content we are rendering into.
- * @param {null|function(ARG_TYPES, null=, Object.<string, *>=):*} template
+ * @param {null|function(ARG_TYPES, null=, Object<string, *>=):*} template
  *     The Soy template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
@@ -70,7 +70,7 @@ goog.soy.renderElement = function(element, template, opt_templateData,
  * the method). Otherwise a document fragment is returned containing the
  * rendered nodes.
  *
- * @param {null|function(ARG_TYPES, null=, Object.<string, *>=):*} template
+ * @param {null|function(ARG_TYPES, null=, Object<string, *>=):*} template
  *     The Soy template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.
@@ -97,7 +97,7 @@ goog.soy.renderAsFragment = function(template, opt_templateData,
  * HTML string represents a single node, then that node is returned. Otherwise,
  * a DIV element is returned containing the rendered nodes.
  *
- * @param {null|function(ARG_TYPES, null=, Object.<string, *>=):*} template
+ * @param {null|function(ARG_TYPES, null=, Object<string, *>=):*} template
  *     The Soy template defining the element's content.
  * @param {ARG_TYPES=} opt_templateData The data for the template.
  * @param {Object=} opt_injectedData The injected data for the template.

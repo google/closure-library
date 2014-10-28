@@ -205,7 +205,7 @@ DirectTransport.isSupported = function(peerWindow) {
  * initialized but not disposed yet in a map keyed by the UID of the window
  * object.  This allows for multiple windows to be initiallized and listening
  * for messages.
- * @private {!Object.<number>}
+ * @private {!Object<number>}
  */
 DirectTransport.activeCount_ = {};
 

@@ -519,7 +519,7 @@ goog.math.Path.prototype.isSimple = function() {
 
 /**
  * A map from segment type to the path function to call to simplify a path.
- * @private {!Object.<goog.math.Path.Segment, function(this: goog.math.Path)>}
+ * @private {!Object<goog.math.Path.Segment, function(this: goog.math.Path)>}
  */
 goog.math.Path.simplifySegmentMap_ = (function() {
   var map = {};

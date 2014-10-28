@@ -86,7 +86,7 @@ goog.net.FileDownloader = function(dir, opt_pool) {
 
   /**
    * A map from URLs to active downloads running for those URLs.
-   * @type {!Object.<!goog.net.FileDownloader.Download_>}
+   * @type {!Object<!goog.net.FileDownloader.Download_>}
    * @private
    */
   this.downloads_ = {};

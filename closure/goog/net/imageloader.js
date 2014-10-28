@@ -67,7 +67,7 @@ goog.net.ImageLoader = function(opt_parent) {
    * Map of image IDs to their request including their image src, used to keep
    * track of the images to load.  Once images have started loading, they're
    * removed from this map.
-   * @type {!Object.<!goog.net.ImageLoader.ImageRequest_>}
+   * @type {!Object<!goog.net.ImageLoader.ImageRequest_>}
    * @private
    */
   this.imageIdToRequestMap_ = {};
@@ -76,7 +76,7 @@ goog.net.ImageLoader = function(opt_parent) {
    * Map of image IDs to their image element, used only for images that are in
    * the process of loading.  Used to clean-up event listeners and to know
    * when we've completed loading images.
-   * @type {!Object.<string, !Element>}
+   * @type {!Object<string, !Element>}
    * @private
    */
   this.imageIdToImageMap_ = {};

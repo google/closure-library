@@ -43,7 +43,7 @@ goog.messaging.AbstractChannel = function() {
 
   /**
    * The services registered for this channel.
-   * @type {Object.<string, {callback: function((string|!Object)),
+   * @type {Object<string, {callback: function((string|!Object)),
                              objectPayload: boolean}>}
    * @private
    */

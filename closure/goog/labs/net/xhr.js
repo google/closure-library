@@ -58,7 +58,7 @@ var HttpStatus = goog.net.HttpStatus;
  *      be removed before parsing the response as JSON.
  *
  * @typedef {{
- *   headers: (Object.<string>|undefined),
+ *   headers: (Object<string>|undefined),
  *   timeoutMs: (number|undefined),
  *   withCredentials: (boolean|undefined),
  *   mimeType: (string|undefined),

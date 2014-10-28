@@ -778,7 +778,7 @@ goog.debug.LogManager = {};
 /**
  * Map of logger names to logger objects.
  *
- * @type {!Object.<string, !goog.debug.Logger>}
+ * @type {!Object<string, !goog.debug.Logger>}
  * @private
  */
 goog.debug.LogManager.loggers_ = {};
@@ -808,7 +808,7 @@ goog.debug.LogManager.initialize = function() {
 
 /**
  * Returns all the loggers.
- * @return {!Object.<string, !goog.debug.Logger>} Map of logger names to logger
+ * @return {!Object<string, !goog.debug.Logger>} Map of logger names to logger
  *     objects.
  */
 goog.debug.LogManager.getLoggers = function() {

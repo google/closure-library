@@ -94,7 +94,7 @@ goog.define('goog.Disposable.INCLUDE_STACK_ON_CREATION', true);
 /**
  * Maps the unique ID of every undisposed {@code goog.Disposable} object to
  * the object itself.
- * @type {!Object.<number, !goog.Disposable>}
+ * @type {!Object<number, !goog.Disposable>}
  * @private
  */
 goog.Disposable.instances_ = {};

@@ -61,7 +61,7 @@ goog.testing.fs.getPersistent = function(size) {
 
 /**
  * Which object URLs have been granted for fake blobs.
- * @type {!Object.<boolean>}
+ * @type {!Object<boolean>}
  * @private
  */
 goog.testing.fs.objectUrls_ = {};

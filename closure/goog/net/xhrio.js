@@ -1158,7 +1158,7 @@ goog.net.XhrIo.prototype.getAllResponseHeaders = function() {
  * include any case normalization logic, it will just return a key-value
  * representation of the headers.
  * See: http://www.w3.org/TR/XMLHttpRequest/#the-getresponseheader()-method
- * @return {!Object.<string, string>} An object with the header keys as keys
+ * @return {!Object<string, string>} An object with the header keys as keys
  *     and header values as values.
  */
 goog.net.XhrIo.prototype.getResponseHeaders = function() {

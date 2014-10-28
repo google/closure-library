@@ -701,7 +701,7 @@ goog.string.unescapeEntitiesWithDocument = function(str, document) {
  * @return {string} The unescaped {@code str} string.
  */
 goog.string.unescapeEntitiesUsingDom_ = function(str, opt_document) {
-  /** @type {!Object.<string, string>} */
+  /** @type {!Object<string, string>} */
   var seen = {'&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"'};
   var div;
   if (opt_document) {
@@ -904,7 +904,7 @@ goog.string.truncateMiddle = function(str, chars,
 
 /**
  * Special chars that need to be escaped for goog.string.quote.
- * @private {!Object.<string, string>}
+ * @private {!Object<string, string>}
  */
 goog.string.specialEscapeChars_ = {
   '\0': '\\0',
@@ -921,7 +921,7 @@ goog.string.specialEscapeChars_ = {
 
 /**
  * Character mappings used internally for goog.string.escapeChar.
- * @private {!Object.<string, string>}
+ * @private {!Object<string, string>}
  */
 goog.string.jsEscapeCache_ = {
   '\'': '\\\''

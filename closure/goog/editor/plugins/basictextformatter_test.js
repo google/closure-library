@@ -539,7 +539,7 @@ function tearDownFontSizeTests() {
  * Asserts that the text nodes set up by setUpFontSizeTests() have had their
  * font sizes changed as described by sizeChangesMap.
  * @param {string} msg Assertion error message.
- * @param {Object.<string, number|null>} sizeChangesMap Maps the text content
+ * @param {Object<string, number|null>} sizeChangesMap Maps the text content
  *     of a text node to be measured to its expected font size in pixels, or
  *     null if that text node should not be present in the document (i.e.
  *     because it was split into two). Only the text nodes that have changed
