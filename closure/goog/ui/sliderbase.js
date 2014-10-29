@@ -41,6 +41,7 @@
 
 goog.provide('goog.ui.SliderBase');
 goog.provide('goog.ui.SliderBase.AnimationFactory');
+goog.provide('goog.ui.SliderBase.EventType');
 goog.provide('goog.ui.SliderBase.Orientation');
 
 goog.require('goog.Timer');
