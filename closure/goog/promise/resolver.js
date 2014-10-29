@@ -29,14 +29,14 @@ goog.promise.Resolver = function() {};
 
 /**
  * The promise that created this resolver.
- * @type {!goog.Promise.<TYPE>}
+ * @type {!goog.Promise<TYPE>}
  */
 goog.promise.Resolver.prototype.promise;
 
 
 /**
  * Resolves this resolver with the specified value.
- * @type {function((TYPE|goog.Promise.<TYPE>|Thenable)=)}
+ * @type {function((TYPE|goog.Promise<TYPE>|Thenable)=)}
  */
 goog.promise.Resolver.prototype.resolve;
 

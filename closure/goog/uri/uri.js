@@ -1174,7 +1174,7 @@ goog.Uri.QueryData.createFromKeysValues = function(
  * We need to use a Map because we cannot guarantee that the key names will
  * not be problematic for IE.
  *
- * @type {goog.structs.Map.<string, Array<*>>}
+ * @type {goog.structs.Map<string, Array<*>>}
  * @private
  */
 goog.Uri.QueryData.prototype.keyMap_ = null;

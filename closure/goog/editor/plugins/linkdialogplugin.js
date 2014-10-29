@@ -46,7 +46,7 @@ goog.editor.plugins.LinkDialogPlugin = function() {
 
   /**
    * Event handler for this object.
-   * @type {goog.events.EventHandler.<!goog.editor.plugins.LinkDialogPlugin>}
+   * @type {goog.events.EventHandler<!goog.editor.plugins.LinkDialogPlugin>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
@@ -251,7 +251,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleAfterHide = function(e) {
 
 
 /**
- * @return {goog.events.EventHandler.<T>} The event handler.
+ * @return {goog.events.EventHandler<T>} The event handler.
  * @protected
  * @this T
  * @template T

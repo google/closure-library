@@ -76,7 +76,7 @@ goog.structs.LinkedMap = function(opt_maxCount, opt_cache) {
   this.cache_ = !!opt_cache;
 
   /**
-   * @private {!goog.structs.Map.<string,
+   * @private {!goog.structs.Map<string,
    *     goog.structs.LinkedMap.Node_.<string, VALUE>>}
    */
   this.map_ = new goog.structs.Map();
@@ -304,7 +304,7 @@ goog.structs.LinkedMap.prototype.clear = function() {
  * Calls a function on each item in the LinkedMap.
  *
  * @see goog.structs.forEach
- * @param {function(this:T, VALUE, KEY, goog.structs.LinkedMap.<KEY,VALUE>)} f
+ * @param {function(this:T, VALUE, KEY, goog.structs.LinkedMap<KEY,VALUE>)} f
  * @param {T=} opt_obj The value of "this" inside f.
  * @template T
  */

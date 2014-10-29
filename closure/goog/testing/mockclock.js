@@ -302,7 +302,7 @@ goog.testing.MockClock.prototype.tick = function(opt_millis) {
  * resolved at all, throws an exception.
  * Also ticks the general clock by the specified amount.
  *
- * @param {!goog.Thenable.<T>} promise A promise that should be resolved after
+ * @param {!goog.Thenable<T>} promise A promise that should be resolved after
  *     the mockClock is ticked for the given opt_millis.
  * @param {number=} opt_millis Number of milliseconds to increment the counter.
  *     If not specified, clock ticks 1 millisecond.

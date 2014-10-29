@@ -86,7 +86,7 @@ goog.net.xpc.NativeMessagingTransport = function(channel, peerHostname,
 
   /**
    * The event handler.
-   * @type {!goog.events.EventHandler.<!goog.net.xpc.NativeMessagingTransport>}
+   * @type {!goog.events.EventHandler<!goog.net.xpc.NativeMessagingTransport>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

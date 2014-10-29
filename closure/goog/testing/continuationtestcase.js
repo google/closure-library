@@ -105,7 +105,7 @@ goog.testing.ContinuationTestCase = function(opt_name) {
 
   /**
    * An event handler for waiting on Closure or browser events during tests.
-   * @type {goog.events.EventHandler.<!goog.testing.ContinuationTestCase>}
+   * @type {goog.events.EventHandler<!goog.testing.ContinuationTestCase>}
    * @private
    */
   this.handler_ = new goog.events.EventHandler(this);

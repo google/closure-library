@@ -1282,7 +1282,7 @@ goog.fx.DragDropItem = function(element, opt_data) {
 
   /**
    * Event handler for listeners on events that can initiate a drag.
-   * @type {!goog.events.EventHandler.<!goog.fx.DragDropItem>}
+   * @type {!goog.events.EventHandler<!goog.fx.DragDropItem>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

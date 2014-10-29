@@ -543,7 +543,7 @@ goog.ui.Component.prototype.getRequiredElementByClass = function(className) {
 /**
  * Returns the event handler for this component, lazily created the first time
  * this method is called.
- * @return {!goog.events.EventHandler.<T>} Event handler for this component.
+ * @return {!goog.events.EventHandler<T>} Event handler for this component.
  * @protected
  * @this T
  * @template T

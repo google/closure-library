@@ -91,14 +91,14 @@ goog.net.XhrManager = function(
 
   /**
    * Map of ID's to requests.
-   * @type {goog.structs.Map.<string, !goog.net.XhrManager.Request>}
+   * @type {goog.structs.Map<string, !goog.net.XhrManager.Request>}
    * @private
    */
   this.requests_ = new goog.structs.Map();
 
   /**
    * The event handler.
-   * @type {goog.events.EventHandler.<!goog.net.XhrManager>}
+   * @type {goog.events.EventHandler<!goog.net.XhrManager>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

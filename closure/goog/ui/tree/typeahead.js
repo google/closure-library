@@ -39,7 +39,7 @@ goog.ui.tree.TypeAhead = function() {
 
 /**
  * Map of tree nodes to allow for quick access by characters in the label text.
- * @type {goog.structs.Trie.<Array<goog.ui.tree.BaseNode>>}
+ * @type {goog.structs.Trie<Array<goog.ui.tree.BaseNode>>}
  * @private
  */
 goog.ui.tree.TypeAhead.prototype.nodeMap_;

@@ -155,7 +155,7 @@ goog.editor.Field = function(id, opt_doc) {
   }
 
   /**
-   * @type {goog.events.EventHandler.<!goog.editor.Field>}
+   * @type {goog.events.EventHandler<!goog.editor.Field>}
    * @protected
    */
   this.eventRegister = new goog.events.EventHandler(this);

@@ -68,7 +68,7 @@ goog.require('goog.promise.Resolver');
  * @constructor
  * @struct
  * @final
- * @implements {goog.Thenable.<TYPE>}
+ * @implements {goog.Thenable<TYPE>}
  * @template TYPE,RESOLVER_CONTEXT
  */
 goog.Promise = function(resolver, opt_context) {
@@ -233,8 +233,8 @@ goog.Promise.CallbackEntry_;
 
 
 /**
- * @param {(TYPE|goog.Thenable.<TYPE>|Thenable)=} opt_value
- * @return {!goog.Promise.<TYPE>} A new Promise that is immediately resolved
+ * @param {(TYPE|goog.Thenable<TYPE>|Thenable)=} opt_value
+ * @return {!goog.Promise<TYPE>} A new Promise that is immediately resolved
  *     with the given value.
  * @template TYPE
  */
@@ -258,8 +258,8 @@ goog.Promise.reject = function(opt_reason) {
 
 
 /**
- * @param {!Array<!(goog.Thenable.<TYPE>|Thenable)>} promises
- * @return {!goog.Promise.<TYPE>} A Promise that receives the result of the
+ * @param {!Array<!(goog.Thenable<TYPE>|Thenable)>} promises
+ * @return {!goog.Promise<TYPE>} A Promise that receives the result of the
  *     first Promise (or Promise-like) input to complete.
  * @template TYPE
  */
@@ -276,8 +276,8 @@ goog.Promise.race = function(promises) {
 
 
 /**
- * @param {!Array<!(goog.Thenable.<TYPE>|Thenable)>} promises
- * @return {!goog.Promise.<!Array<TYPE>>} A Promise that receives a list of
+ * @param {!Array<!(goog.Thenable<TYPE>|Thenable)>} promises
+ * @return {!goog.Promise<!Array<TYPE>>} A Promise that receives a list of
  *     every fulfilled value once every input Promise (or Promise-like) is
  *     successfully fulfilled, or is rejected by the first rejection result.
  * @template TYPE
@@ -312,8 +312,8 @@ goog.Promise.all = function(promises) {
 
 
 /**
- * @param {!Array<!(goog.Thenable.<TYPE>|Thenable)>} promises
- * @return {!goog.Promise.<TYPE>} A Promise that receives the value of the first
+ * @param {!Array<!(goog.Thenable<TYPE>|Thenable)>} promises
+ * @return {!goog.Promise<TYPE>} A Promise that receives the value of the first
  *     input to be fulfilled, or is rejected with a list of every rejection
  *     reason if all inputs are rejected.
  * @template TYPE
@@ -348,7 +348,7 @@ goog.Promise.firstFulfilled = function(promises) {
 
 
 /**
- * @return {!goog.promise.Resolver.<TYPE>} Resolver wrapping the promise and its
+ * @return {!goog.promise.Resolver<TYPE>} Resolver wrapping the promise and its
  *     resolve / reject functions. Resolving or rejecting the resolver
  *     resolves or rejects the promise.
  * @template TYPE
@@ -423,7 +423,7 @@ goog.Thenable.addImplementation(goog.Promise);
  * @param {THIS=} opt_context An optional context object that will be the
  *     execution context for the callbacks. By default, functions are executed
  *     in the global scope.
- * @return {!goog.Promise.<TYPE>} This Promise, for chaining additional calls.
+ * @return {!goog.Promise<TYPE>} This Promise, for chaining additional calls.
  * @template THIS
  */
 goog.Promise.prototype.thenAlways = function(onResolved, opt_context) {
@@ -983,10 +983,10 @@ goog.Promise.CancellationError.prototype.name = 'cancel';
 /**
  * Internal implementation of the resolver interface.
  *
- * @param {!goog.Promise.<TYPE>} promise
- * @param {function((TYPE|goog.Promise.<TYPE>|Thenable)=)} resolve
+ * @param {!goog.Promise<TYPE>} promise
+ * @param {function((TYPE|goog.Promise<TYPE>|Thenable)=)} resolve
  * @param {function(*): void} reject
- * @implements {goog.promise.Resolver.<TYPE>}
+ * @implements {goog.promise.Resolver<TYPE>}
  * @final @struct
  * @constructor
  * @private

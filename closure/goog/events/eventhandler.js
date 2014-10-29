@@ -112,7 +112,7 @@ goog.events.EventHandler.typeArray_ = [];
  *     opt_fn Optional callback function to be used as the listener or an object
  *     with handleEvent function.
  * @param {boolean=} opt_capture Optional whether to use capture phase.
- * @return {!goog.events.EventHandler.<SCOPE>} This object, allowing for
+ * @return {!goog.events.EventHandler<SCOPE>} This object, allowing for
  *     chaining of calls.
  * @template EVENTOBJ
  */
@@ -134,7 +134,7 @@ goog.events.EventHandler.prototype.listen = function(
  *     listener or an object with handleEvent function.
  * @param {boolean|undefined} capture Optional whether to use capture phase.
  * @param {T} scope Object in whose scope to call the listener.
- * @return {!goog.events.EventHandler.<SCOPE>} This object, allowing for
+ * @return {!goog.events.EventHandler<SCOPE>} This object, allowing for
  *     chaining of calls.
  * @template T,EVENTOBJ
  */
@@ -157,7 +157,7 @@ goog.events.EventHandler.prototype.listenWithScope = function(
  *     handleEvent function.
  * @param {boolean=} opt_capture Optional whether to use capture phase.
  * @param {Object=} opt_scope Object in whose scope to call the listener.
- * @return {!goog.events.EventHandler.<SCOPE>} This object, allowing for
+ * @return {!goog.events.EventHandler<SCOPE>} This object, allowing for
  *     chaining of calls.
  * @template EVENTOBJ
  * @private
@@ -205,7 +205,7 @@ goog.events.EventHandler.prototype.listen_ = function(src, type, opt_fn,
  *    Optional callback function to be used as the listener or an object with
  *    handleEvent function.
  * @param {boolean=} opt_capture Optional whether to use capture phase.
- * @return {!goog.events.EventHandler.<SCOPE>} This object, allowing for
+ * @return {!goog.events.EventHandler<SCOPE>} This object, allowing for
  *     chaining of calls.
  * @template EVENTOBJ
  */
@@ -231,7 +231,7 @@ goog.events.EventHandler.prototype.listenOnce = function(
  *     listener or an object with handleEvent function.
  * @param {boolean|undefined} capture Optional whether to use capture phase.
  * @param {T} scope Object in whose scope to call the listener.
- * @return {!goog.events.EventHandler.<SCOPE>} This object, allowing for
+ * @return {!goog.events.EventHandler<SCOPE>} This object, allowing for
  *     chaining of calls.
  * @template T,EVENTOBJ
  */
@@ -256,7 +256,7 @@ goog.events.EventHandler.prototype.listenOnceWithScope = function(
  *    handleEvent function.
  * @param {boolean=} opt_capture Optional whether to use capture phase.
  * @param {Object=} opt_scope Object in whose scope to call the listener.
- * @return {!goog.events.EventHandler.<SCOPE>} This object, allowing for
+ * @return {!goog.events.EventHandler<SCOPE>} This object, allowing for
  *     chaining of calls.
  * @template EVENTOBJ
  * @private
@@ -298,7 +298,7 @@ goog.events.EventHandler.prototype.listenOnce_ = function(
  *     Callback method, or an object with a handleEvent function.
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
- * @return {!goog.events.EventHandler.<SCOPE>} This object, allowing for
+ * @return {!goog.events.EventHandler<SCOPE>} This object, allowing for
  *     chaining of calls.
  */
 goog.events.EventHandler.prototype.listenWithWrapper = function(
@@ -322,7 +322,7 @@ goog.events.EventHandler.prototype.listenWithWrapper = function(
  *     listener or an object with handleEvent function.
  * @param {boolean|undefined} capture Optional whether to use capture phase.
  * @param {T} scope Object in whose scope to call the listener.
- * @return {!goog.events.EventHandler.<SCOPE>} This object, allowing for
+ * @return {!goog.events.EventHandler<SCOPE>} This object, allowing for
  *     chaining of calls.
  * @template T
  */
@@ -346,7 +346,7 @@ goog.events.EventHandler.prototype.listenWithWrapperAndScope = function(
  * @param {boolean=} opt_capt Whether to fire in capture phase (defaults to
  *     false).
  * @param {Object=} opt_scope Element in whose scope to call the listener.
- * @return {!goog.events.EventHandler.<SCOPE>} This object, allowing for
+ * @return {!goog.events.EventHandler<SCOPE>} This object, allowing for
  *     chaining of calls.
  * @private
  */

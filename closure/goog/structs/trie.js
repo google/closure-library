@@ -33,7 +33,7 @@ goog.require('goog.structs');
  * Class for a Trie datastructure.  Trie data structures are made out of trees
  * of Trie classes.
  *
- * @param {goog.structs.Trie.<VALUE>|Object<string, VALUE>=} opt_trie Optional
+ * @param {goog.structs.Trie<VALUE>|Object<string, VALUE>=} opt_trie Optional
  *     goog.structs.Trie or Object to initialize trie with.
  * @constructor
  * @template VALUE
@@ -48,7 +48,7 @@ goog.structs.Trie = function(opt_trie) {
 
   /**
    * This trie's child nodes.
-   * @private {!Object<!goog.structs.Trie.<VALUE>>}
+   * @private {!Object<!goog.structs.Trie<VALUE>>}
    */
   this.childNodes_ = {};
 
@@ -111,7 +111,7 @@ goog.structs.Trie.prototype.setOrAdd_ = function(key, value, opt_add) {
 /**
  * Adds multiple key/value pairs from another goog.structs.Trie or Object.
  * O(N) where N is the number of nodes in the trie.
- * @param {!Object<string, VALUE>|!goog.structs.Trie.<VALUE>} trie Object
+ * @param {!Object<string, VALUE>|!goog.structs.Trie<VALUE>} trie Object
  *     containing the data to add.
  */
 goog.structs.Trie.prototype.setAll = function(trie) {
@@ -128,7 +128,7 @@ goog.structs.Trie.prototype.setAll = function(trie) {
  * Traverse along the given path, returns the child node at ending.
  * Returns undefined if node for the path doesn't exist.
  * @param {string} path The path to traverse.
- * @return {!goog.structs.Trie.<VALUE>|undefined}
+ * @return {!goog.structs.Trie<VALUE>|undefined}
  * @private
  */
 goog.structs.Trie.prototype.getChildNode_ = function(path) {
@@ -366,7 +366,7 @@ goog.structs.Trie.prototype.remove = function(key) {
 /**
  * Clones a trie and returns a new trie.  O(N), where N is the number of nodes
  * in the trie.
- * @return {!goog.structs.Trie.<VALUE>} A new goog.structs.Trie with the same
+ * @return {!goog.structs.Trie<VALUE>} A new goog.structs.Trie with the same
  *     key value pairs.
  */
 goog.structs.Trie.prototype.clone = function() {

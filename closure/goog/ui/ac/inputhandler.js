@@ -175,14 +175,14 @@ goog.ui.ac.InputHandler = function(opt_separators, opt_literals,
 
   /**
    * Event handler used by the input handler to manage events.
-   * @type {goog.events.EventHandler.<!goog.ui.ac.InputHandler>}
+   * @type {goog.events.EventHandler<!goog.ui.ac.InputHandler>}
    * @private
    */
   this.eh_ = new goog.events.EventHandler(this);
 
   /**
    * Event handler to help us find an input element that already has the focus.
-   * @type {goog.events.EventHandler.<!goog.ui.ac.InputHandler>}
+   * @type {goog.events.EventHandler<!goog.ui.ac.InputHandler>}
    * @private
    */
   this.activateHandler_ = new goog.events.EventHandler(this);

@@ -172,7 +172,7 @@ goog.testing.dom.checkUserAgents_ = function(userAgents) {
  * Map function that converts end tags to a specific object.
  * @param {Node} node The node to map.
  * @param {undefined} ignore Always undefined.
- * @param {!goog.iter.Iterator.<Node>} iterator The iterator.
+ * @param {!goog.iter.Iterator<Node>} iterator The iterator.
  * @return {Node} The resulting iteration item.
  * @private
  */

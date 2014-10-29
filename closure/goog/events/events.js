@@ -578,7 +578,7 @@ goog.events.getListeners = function(obj, type, capture) {
  *
  * @param {EventTarget|goog.events.Listenable} src The target from
  *     which to get listeners.
- * @param {?string|!goog.events.EventId.<EVENTOBJ>} type The type of the event.
+ * @param {?string|!goog.events.EventId<EVENTOBJ>} type The type of the event.
  * @param {function(EVENTOBJ):?|{handleEvent:function(?):?}|null} listener The
  *     listener function to get.
  * @param {boolean=} opt_capt In DOM-compliant browsers, this determines

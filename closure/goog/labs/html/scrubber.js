@@ -233,7 +233,7 @@ goog.labs.html.scrubber.ATTRS_RE_ = new RegExp(
 
 /**
  * Returns an array of HTML tokens including tags, text nodes and comments.
- * "Special" elements, like {@code <script>...</script>} whose bodies cannot
+ * "Special" elements, like {@code <script>..</script>} whose bodies cannot
  * include nested elements, are returned as single tokens.
  *
  * @param {string} html a string of HTML
@@ -402,7 +402,7 @@ goog.labs.html.scrubber.readOwnProperty_ = function(o, k) {
  * This mitigates the HTML parsing equivalent of stack smashing attacks.
  * <br>
  * Otherwise, crafted inputs like
- * {@code <p><p><p><p>...Ad nauseam...</p></p></p></p>} could exploit
+ * {@code <p><p><p><p>...Ad nauseam..</p></p></p></p>} could exploit
  * browser bugs, and/or undocumented nesting limit recovery code to misnest
  * tags.
  * @private

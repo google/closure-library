@@ -73,14 +73,14 @@ goog.events.ImeHandler = function(el) {
   /**
    * Tracks the keyup event only, because it has a different life-cycle from
    * other events.
-   * @type {goog.events.EventHandler.<!goog.events.ImeHandler>}
+   * @type {goog.events.EventHandler<!goog.events.ImeHandler>}
    * @private
    */
   this.keyUpHandler_ = new goog.events.EventHandler(this);
 
   /**
    * Tracks all the browser events.
-   * @type {goog.events.EventHandler.<!goog.events.ImeHandler>}
+   * @type {goog.events.EventHandler<!goog.events.ImeHandler>}
    * @private
    */
   this.handler_ = new goog.events.EventHandler(this);

@@ -334,7 +334,7 @@ goog.structs.Map.prototype.addAll = function(map) {
 
 /**
  * Calls the given function on each entry in the map.
- * @param {function(this:T, V, K, goog.structs.Map.<K,V>)} f
+ * @param {function(this:T, V, K, goog.structs.Map<K,V>)} f
  * @param {T=} opt_obj The value of "this" inside f.
  * @template T
  */

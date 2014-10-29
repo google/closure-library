@@ -250,7 +250,7 @@ goog.result.SimpleResult.prototype.then = function(
 /**
  * Creates a SimpleResult that fires when the given promise resolves.
  * Use only during migration to Promises.
- * @param {!goog.Promise.<?>} promise
+ * @param {!goog.Promise<?>} promise
  * @return {!goog.result.Result}
  */
 goog.result.SimpleResult.fromPromise = function(promise) {
