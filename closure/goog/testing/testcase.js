@@ -174,7 +174,7 @@ goog.testing.TestCase.prototype.order = goog.testing.TestCase.Order.SORTED;
 /**
  * Save a reference to {@code window.setTimeout}, so any code that overrides the
  * default behavior (the MockClock, for example) doesn't affect our runner.
- * @type {function((Function|string), number, *=): number}
+ * @type {function((Function|string), number=, *=): number}
  * @private
  */
 goog.testing.TestCase.protectedSetTimeout_ = goog.global.setTimeout;
