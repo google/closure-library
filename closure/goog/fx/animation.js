@@ -28,8 +28,7 @@ goog.provide('goog.fx.AnimationEvent');
 goog.require('goog.array');
 goog.require('goog.events.Event');
 goog.require('goog.fx.Transition');  // Unreferenced: interface
-goog.require('goog.fx.Transition.EventType');
-goog.require('goog.fx.TransitionBase.State');
+goog.require('goog.fx.TransitionBase');
 goog.require('goog.fx.anim');
 goog.require('goog.fx.anim.Animated');  // Unreferenced: interface
 

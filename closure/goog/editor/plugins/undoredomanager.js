@@ -23,6 +23,7 @@ goog.provide('goog.editor.plugins.UndoRedoManager');
 goog.provide('goog.editor.plugins.UndoRedoManager.EventType');
 
 goog.require('goog.editor.plugins.UndoRedoState');
+goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 
 

@@ -20,7 +20,6 @@
 
 goog.provide('goog.labs.testing.ContainsStringMatcher');
 goog.provide('goog.labs.testing.EndsWithMatcher');
-goog.provide('goog.labs.testing.EqualToIgnoringCaseMatcher');
 goog.provide('goog.labs.testing.EqualToIgnoringWhitespaceMatcher');
 goog.provide('goog.labs.testing.EqualsMatcher');
 goog.provide('goog.labs.testing.RegexMatcher');

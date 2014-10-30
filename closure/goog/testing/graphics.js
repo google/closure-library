@@ -20,7 +20,7 @@
 
 goog.provide('goog.testing.graphics');
 
-goog.require('goog.graphics.Path.Segment');
+goog.require('goog.graphics.Path');
 goog.require('goog.testing.asserts');
 
 

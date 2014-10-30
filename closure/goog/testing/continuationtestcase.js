@@ -85,7 +85,6 @@ goog.provide('goog.testing.ContinuationTestCase.Test');
 goog.require('goog.array');
 goog.require('goog.events.EventHandler');
 goog.require('goog.testing.TestCase');
-goog.require('goog.testing.TestCase.Test');
 goog.require('goog.testing.asserts');
 
 

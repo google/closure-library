@@ -22,6 +22,7 @@ goog.setTestOnly('goog.positioning.clientPositionTest');
 
 goog.require('goog.dom');
 goog.require('goog.positioning.ClientPosition');
+goog.require('goog.positioning.Corner');
 goog.require('goog.style');
 goog.require('goog.testing.jsunit');
 

@@ -111,7 +111,7 @@ goog.inherits(goog.crypt.Sha2, goog.crypt.Hash);
 
 /**
  * The block size
- * @private <number>
+ * @private {number}
  */
 goog.crypt.Sha2.BLOCKSIZE_ = 512 / 8;
 

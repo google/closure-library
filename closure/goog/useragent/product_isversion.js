@@ -26,6 +26,8 @@
 goog.provide('goog.userAgent.product.isVersion');
 
 
+goog.require('goog.string');
+goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
 

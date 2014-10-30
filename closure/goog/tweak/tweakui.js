@@ -23,10 +23,17 @@ goog.provide('goog.tweak.TweakUi');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
-goog.require('goog.dom.DomHelper');
+goog.require('goog.dom');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.tweak');
+goog.require('goog.tweak.BaseEntry');
+goog.require('goog.tweak.BooleanGroup');
+goog.require('goog.tweak.BooleanInGroupSetting');
+goog.require('goog.tweak.BooleanSetting');
+goog.require('goog.tweak.ButtonAction');
+goog.require('goog.tweak.NumericSetting');
+goog.require('goog.tweak.StringSetting');
 goog.require('goog.ui.Zippy');
 goog.require('goog.userAgent');
 

@@ -21,6 +21,7 @@ goog.provide('goog.crypt.hashTester');
 
 goog.require('goog.array');
 goog.require('goog.crypt');
+goog.require('goog.dom');
 goog.require('goog.testing.PerformanceTable');
 goog.require('goog.testing.PseudoRandom');
 goog.require('goog.testing.asserts');

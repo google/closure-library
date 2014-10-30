@@ -21,6 +21,7 @@
 goog.provide('goog.dom.pattern.Sequence');
 
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.pattern');
 goog.require('goog.dom.pattern.AbstractPattern');
 goog.require('goog.dom.pattern.MatchType');
 

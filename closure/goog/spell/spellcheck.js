@@ -22,6 +22,7 @@ goog.provide('goog.spell.SpellCheck');
 goog.provide('goog.spell.SpellCheck.WordChangedEvent');
 
 goog.require('goog.Timer');
+goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.structs.Set');
 

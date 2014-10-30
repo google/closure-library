@@ -20,7 +20,6 @@
 
 goog.provide('goog.positioning.AnchoredPosition');
 
-goog.require('goog.math.Box');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AbstractPosition');
 

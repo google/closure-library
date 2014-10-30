@@ -20,7 +20,6 @@
 
 goog.provide('goog.editor.plugins.SpacesTabHandler');
 
-goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.plugins.AbstractTabHandler');
 goog.require('goog.editor.range');

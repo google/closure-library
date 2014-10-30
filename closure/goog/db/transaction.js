@@ -24,6 +24,7 @@ goog.provide('goog.db.Transaction.TransactionMode');
 goog.require('goog.async.Deferred');
 goog.require('goog.db.Error');
 goog.require('goog.db.ObjectStore');
+goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 

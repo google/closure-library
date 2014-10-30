@@ -20,6 +20,7 @@
 goog.provide('goog.math.interpolator.Linear1');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.math');
 goog.require('goog.math.interpolator.Interpolator1');
 

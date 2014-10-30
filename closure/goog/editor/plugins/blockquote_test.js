@@ -18,11 +18,11 @@ goog.setTestOnly('goog.editor.plugins.BlockquoteTest');
 goog.require('goog.dom');
 goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
+goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.plugins.Blockquote');
 goog.require('goog.testing.editor.FieldMock');
 goog.require('goog.testing.editor.TestHelper');
 goog.require('goog.testing.jsunit');
-goog.require('goog.userAgent');
 
 var SPLIT = '<span id="split-point"></span>';
 var root, helper, field, plugin;

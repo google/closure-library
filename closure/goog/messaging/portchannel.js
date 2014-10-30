@@ -30,8 +30,6 @@ goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.debug');
-goog.require('goog.dom');
-goog.require('goog.dom.DomHelper');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.json');

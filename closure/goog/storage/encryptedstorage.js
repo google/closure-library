@@ -38,8 +38,6 @@ goog.require('goog.json.Serializer');
 goog.require('goog.storage.CollectableStorage');
 goog.require('goog.storage.ErrorCode');
 goog.require('goog.storage.RichStorage');
-goog.require('goog.storage.RichStorage.Wrapper');
-goog.require('goog.storage.mechanism.IterableMechanism');
 
 
 
@@ -177,7 +175,7 @@ goog.storage.EncryptedStorage.prototype.set = function(
 goog.storage.EncryptedStorage.prototype.getWrapper = function(
     key, opt_expired) {
   var wrapper = goog.storage.EncryptedStorage.base(this, 'getWrapper',
-                          this.hashKeyWithSecret_(key), opt_expired);
+      this.hashKeyWithSecret_(key), opt_expired);
   if (!wrapper) {
     return undefined;
   }
