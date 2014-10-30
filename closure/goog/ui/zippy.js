@@ -142,7 +142,7 @@ goog.tagUnsealableClass(goog.ui.Zippy);
 /**
  * Constants for event names
  *
- * @type {Object}
+ * @const
  */
 goog.ui.Zippy.Events = {
   // Zippy will dispatch an ACTION event for user interaction. Mimics
