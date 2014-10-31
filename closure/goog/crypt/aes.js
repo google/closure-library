@@ -72,14 +72,14 @@ goog.crypt.Aes = function(key) {
 
   /**
    * 4x4 byte array containing the current state.
-   * @type {!Array<Array<number>>}
+   * @type {!Array<!Array<number>>}
    * @private
    */
   this.state_ = [[], [], [], []];
 
   /**
    * Scratch temporary array for calculation.
-   * @type {!Array<Array<number>>}
+   * @type {!Array<!Array<number>>}
    * @private
    */
   this.temp_ = [[], [], [], []];
