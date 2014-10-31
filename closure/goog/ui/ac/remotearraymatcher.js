@@ -36,10 +36,12 @@ goog.require('goog.net.XhrIo');
  *     similarity matches for the input token against the dictionary.
  *     The value is sent to the server as the 'use_similar' query param which is
  *     either "1" (opt_noSimilar==false) or "0" (opt_noSimilar==true).
+ * @param {goog.net.XmlHttpFactory=} opt_xmlHttpFactory Specify the
+ *     XmlHttpFactory used to retrieve the matches.
  * @constructor
  * @extends {goog.Disposable}
  */
-goog.ui.ac.RemoteArrayMatcher = function(url, opt_noSimilar) {
+goog.ui.ac.RemoteArrayMatcher = function(url, opt_noSimilar, opt_xmlHttpFactory) {
   goog.Disposable.call(this);
 
   /**
@@ -64,7 +66,7 @@ goog.ui.ac.RemoteArrayMatcher = function(url, opt_noSimilar) {
    * @type {goog.net.XhrIo}
    * @private
    */
-  this.xhr_ = new goog.net.XhrIo();
+  this.xhr_ = new goog.net.XhrIo(opt_xmlHttpFactory);
 };
 goog.inherits(goog.ui.ac.RemoteArrayMatcher, goog.Disposable);
 
