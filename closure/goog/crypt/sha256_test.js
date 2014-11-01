@@ -15,6 +15,7 @@
 goog.provide('goog.crypt.Sha256Test');
 goog.setTestOnly('goog.crypt.Sha256Test');
 
+goog.require('goog.array');
 goog.require('goog.crypt');
 goog.require('goog.crypt.Sha256');
 goog.require('goog.crypt.hashTester');
@@ -81,19 +82,21 @@ function testHashing() {
       goog.crypt.byteArrayToHex(sha256.digest()));
 }
 
+function testPreschedule() {
+  // Test using prescheduled messages.
+  var sha = new goog.crypt.Sha256();
+  var message = goog.crypt.hexToByteArray(
+      'd9b28b643d16efc8a17a532c05deb79069421bf4cda67f58310ae3bc956e4720' +
+      'f9d2ab845d360fe8c19a734c25fed7b089623b14edc69f78512a03dcb58e6740');
 
-/** Check that the code checks for bad input */
-function testBadInput() {
-  assertThrows('Bad input', function() {
-    new goog.crypt.Sha256().update({});
-  });
-  assertThrows('Floating point not allows', function() {
-    new goog.crypt.Sha256().update([1, 2, 3, 4, 4.5]);
-  });
-  assertThrows('Negative not allowed', function() {
-    new goog.crypt.Sha256().update([1, 2, 3, 4, -10]);
-  });
-  assertThrows('Must be byte array', function() {
-    new goog.crypt.Sha256().update([1, 2, 3, 4, {}]);
-  });
+  var scheduled = sha.preschedule(message);
+  sha.scheduledUpdate(scheduled);
+  var w_scheduled = goog.array.toArray(sha.hash_);
+  var digest_scheduled = sha.digest();
+
+  sha.reset();
+  sha.update(message);
+  var w_afterupdate = goog.array.toArray(sha.hash_);
+  assertElementsEquals(w_scheduled, w_afterupdate);
+  assertElementsEquals(sha.digest(), digest_scheduled);
 }

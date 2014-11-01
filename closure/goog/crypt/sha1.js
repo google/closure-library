@@ -26,6 +26,8 @@
  *   Chrome 23:   ~400 Mbit/s
  *   Firefox 16:  ~250 Mbit/s
  *
+ * Note: The idiom expr|0 is used to provide a type-hint to the VM, in order
+ * to avoid unnecessary uint32-double-uint32 roundtripping.
  */
 
 goog.provide('goog.crypt.Sha1');
@@ -135,26 +137,20 @@ goog.crypt.Sha1.prototype.compress_ = function(buf, opt_offset) {
       // this change once the Safari bug
       // (https://bugs.webkit.org/show_bug.cgi?id=109036) has been fixed and
       // most clients have been updated.
-      W[i] = (buf.charCodeAt(opt_offset) << 24) |
-             (buf.charCodeAt(opt_offset + 1) << 16) |
-             (buf.charCodeAt(opt_offset + 2) << 8) |
-             (buf.charCodeAt(opt_offset + 3));
+      W[i] = ((buf.charCodeAt(opt_offset) << 24) |
+              (buf.charCodeAt(opt_offset + 1) << 16) |
+              (buf.charCodeAt(opt_offset + 2) << 8) |
+              (buf.charCodeAt(opt_offset + 3))) | 0;
       opt_offset += 4;
     }
   } else {
     for (var i = 0; i < 16; i++) {
-      W[i] = (buf[opt_offset] << 24) |
-             (buf[opt_offset + 1] << 16) |
-             (buf[opt_offset + 2] << 8) |
-             (buf[opt_offset + 3]);
+      W[i] = ((buf[opt_offset] << 24) |
+              (buf[opt_offset + 1] << 16) |
+              (buf[opt_offset + 2] << 8) |
+              (buf[opt_offset + 3])) | 0;
       opt_offset += 4;
     }
-  }
-
-  // expand to 80 words
-  for (var i = 16; i < 80; i++) {
-    var t = W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16];
-    W[i] = ((t << 1) | (t >>> 31)) & 0xffffffff;
   }
 
   var a = this.chain_[0];
@@ -162,10 +158,27 @@ goog.crypt.Sha1.prototype.compress_ = function(buf, opt_offset) {
   var c = this.chain_[2];
   var d = this.chain_[3];
   var e = this.chain_[4];
-  var f, k;
+  var f, k, t;
 
-  // TODO(user): Try to unroll this loop to speed up the computation.
-  for (var i = 0; i < 80; i++) {
+  // Steps 0-16.
+  for (var i = 0; i < 16; i++) {
+    f = d ^ (b & (c ^ d));
+    k = 0x5a827999;
+
+    t = (((a << 5) | (a >>> 27)) + f + e + k + W[i]) | 0;
+    e = d;
+    d = c;
+    c = ((b << 30) | (b >>> 2)) | 0;
+    b = a;
+    a = t;
+  }
+  // Steps 16-80. W is formally described as an 80-word array, and usually
+  // computed that way. However, only 16 elements are needed for any iteration
+  // so we compute W on the fly and keep only the last 16 values. This improves
+  // performance by about 10% on Chrome 35.
+  for (var i = 16; i < 80; i++) {
+    t = W[(i - 3) & 15] ^ W[(i - 8) & 15] ^ W[(i - 14) & 15] ^ W[i & 15];
+    W[i & 15] = ((t << 1) | (t >>> 31)) | 0;
     if (i < 40) {
       if (i < 20) {
         f = d ^ (b & (c ^ d));
@@ -184,19 +197,19 @@ goog.crypt.Sha1.prototype.compress_ = function(buf, opt_offset) {
       }
     }
 
-    var t = (((a << 5) | (a >>> 27)) + f + e + k + W[i]) & 0xffffffff;
+    t = (((a << 5) | (a >>> 27)) + f + e + k + W[i & 15]) | 0;
     e = d;
     d = c;
-    c = ((b << 30) | (b >>> 2)) & 0xffffffff;
+    c = ((b << 30) | (b >>> 2)) | 0;
     b = a;
     a = t;
   }
 
-  this.chain_[0] = (this.chain_[0] + a) & 0xffffffff;
-  this.chain_[1] = (this.chain_[1] + b) & 0xffffffff;
-  this.chain_[2] = (this.chain_[2] + c) & 0xffffffff;
-  this.chain_[3] = (this.chain_[3] + d) & 0xffffffff;
-  this.chain_[4] = (this.chain_[4] + e) & 0xffffffff;
+  this.chain_[0] = (this.chain_[0] + a) | 0;
+  this.chain_[1] = (this.chain_[1] + b) | 0;
+  this.chain_[2] = (this.chain_[2] + c) | 0;
+  this.chain_[3] = (this.chain_[3] + d) | 0;
+  this.chain_[4] = (this.chain_[4] + e) | 0;
 };
 
 
@@ -205,6 +218,7 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
   if (!goog.isDef(opt_length)) {
     opt_length = bytes.length;
   }
+  opt_length = (bytes.length < opt_length) ? bytes.length : opt_length;
 
   var lengthMinusBlock = opt_length - this.blockSize;
   var n = 0;
@@ -218,7 +232,7 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
     // input buffer (assuming it contains sufficient data). This gives ~25%
     // speedup on Chrome 23 and ~15% speedup on Firefox 16, but requires that
     // the data is provided in large chunks (or in multiples of 64 bytes).
-    if (inbuf == 0) {
+    if (inbuf === 0) {
       while (n <= lengthMinusBlock) {
         this.compress_(bytes, n);
         n += this.blockSize;
