@@ -239,6 +239,29 @@ function testHtmlEscapePreservingNewlines() {
 }
 
 
+function testHtmlEscapePreservingNewlinesAndSpaces() {
+  // goog.html.SafeHtml passes through unchanged.
+  var safeHtmlIn = goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
+      '<b>in</b>');
+  assertTrue(safeHtmlIn ===
+      goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(safeHtmlIn));
+
+  assertSameHtml('a<br>c',
+      goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces('a\nc'));
+  assertSameHtml('&lt;<br>',
+      goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces('<\n'));
+  assertSameHtml(
+      '<br>', goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces('\r\n'));
+  assertSameHtml(
+      '<br>', goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces('\r'));
+  assertSameHtml(
+      '', goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(''));
+
+  assertSameHtml('a &#160;b',
+      goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces('a  b'));
+}
+
+
 function testSafeHtmlConcatWithDir() {
   var ltr = goog.i18n.bidi.Dir.LTR;
   var rtl = goog.i18n.bidi.Dir.RTL;

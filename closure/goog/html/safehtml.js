@@ -245,6 +245,27 @@ goog.html.SafeHtml.htmlEscapePreservingNewlines = function(textOrHtml) {
 
 
 /**
+ * Returns HTML-escaped text as a SafeHtml object, with newlines changed to
+ * &lt;br&gt; and escaping whitespace to preserve spatial formatting. Character
+ * entity #160 is used to make it safer for XML.
+ * @param {!goog.html.SafeHtml.TextOrHtml_} textOrHtml The text to escape. If
+ *     the parameter is of type SafeHtml it is returned directly (no escaping
+ *     is done).
+ * @return {!goog.html.SafeHtml} The escaped text, wrapped as a SafeHtml.
+ */
+goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces = function(
+    textOrHtml) {
+  if (textOrHtml instanceof goog.html.SafeHtml) {
+    return textOrHtml;
+  }
+  var html = goog.html.SafeHtml.htmlEscape(textOrHtml);
+  return goog.html.SafeHtml.createSafeHtmlSecurityPrivateDoNotAccessOrElse(
+      goog.string.whitespaceEscape(goog.html.SafeHtml.unwrap(html)),
+      html.getDirection());
+};
+
+
+/**
  * Coerces an arbitrary object into a SafeHtml object.
  *
  * If {@code textOrHtml} is already of type {@code goog.html.SafeHtml}, the same
