@@ -41,14 +41,14 @@ goog.dom.NodeOffset = function(node, baseNode) {
 
   /**
    * A stack of childNode offsets.
-   * @type {Array.<number>}
+   * @type {Array<number>}
    * @private
    */
   this.offsetStack_ = [];
 
   /**
    * A stack of childNode names.
-   * @type {Array.<string>}
+   * @type {Array<string>}
    * @private
    */
   this.nameStack_ = [];

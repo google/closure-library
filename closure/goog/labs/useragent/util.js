@@ -108,7 +108,7 @@ goog.labs.userAgent.util.matchUserAgentIgnoreCase = function(str) {
 /**
  * Parses the user agent into tuples for each section.
  * @param {string} userAgent
- * @return {!Array.<!Array.<string>>} Tuples of key, version, and the contents
+ * @return {!Array<!Array<string>>} Tuples of key, version, and the contents
  *     of the parenthetical.
  */
 goog.labs.userAgent.util.extractVersionTuples = function(userAgent) {

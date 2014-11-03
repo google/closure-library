@@ -211,7 +211,7 @@ function testBoxOverlaps() {
  * Checks whether a given box overlaps any of given DnD target boxes.
  *
  * @param {goog.math.Box} box The box to check.
- * @param {Array.<Object>} targets The array of targets with boxes to check
+ * @param {Array<Object>} targets The array of targets with boxes to check
  *     if they overlap with the given box.
  * @return {boolean} Whether the box overlaps any of the target boxes.
  */

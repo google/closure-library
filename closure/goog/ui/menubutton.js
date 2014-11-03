@@ -793,7 +793,11 @@ goog.ui.MenuButton.prototype.setOpen = function(open, opt_e) {
            opt_e.keyCode == goog.events.KeyCodes.UP);
       var focus = isUpOrDown ||
           (isEnterOrSpace && this.selectFirstOnEnterOrSpace_);
-      this.menu_.setHighlightedIndex(focus ? 0 : -1);
+      if (focus) {
+        this.menu_.highlightFirst();
+      } else {
+        this.menu_.setHighlightedIndex(-1);
+      }
     } else {
       this.setActive(false);
       this.menu_.setMouseButtonPressed(false);

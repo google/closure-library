@@ -25,8 +25,8 @@ goog.require('goog.testing.jsunit');
  * a set of expected valid and a second set of expected invalid addresses.
  * containing the specified address strings, irrespective of their order.
  * @param {function(string):boolean} testFunc Validation function to be tested.
- * @param {!Array.<string>} valid List of addresses that should be valid.
- * @param {!Array.<string>} invalid List of addresses that should be invalid.
+ * @param {!Array<string>} valid List of addresses that should be valid.
+ * @param {!Array<string>} invalid List of addresses that should be invalid.
  * @private
  */
 function doIsValidTest(testFunc, valid, invalid) {
@@ -43,7 +43,7 @@ function doIsValidTest(testFunc, valid, invalid) {
  * Asserts that parsing the inputString produces a list of email addresses
  * containing the specified address strings, irrespective of their order.
  * @param {string} inputString A raw address list.
- * @param {!Array.<string>} expectedList The expected results.
+ * @param {!Array<string>} expectedList The expected results.
  * @param {string=} opt_message An assertion message.
  * @return {string} the resulting email address objects.
  */
@@ -243,3 +243,86 @@ function testparseListWithAdditionalSeparators() {
       ['foo@gmail.com', 'bar@gmail.com'],
       'Failed to parse 2 email addresses with trailing U+FF64');
 }
+
+function testToString() {
+  var f = function(str) {
+    return goog.format.InternationalizedEmailAddress.parse(str).toString();
+  };
+
+  // No modification.
+  assertEquals('JOHN Doe <john@gmail.com>',
+               f('JOHN Doe <john@gmail.com>'));
+
+  // Extra spaces.
+  assertEquals('JOHN Doe <john@gmail.com>',
+               f(' JOHN  Doe  <john@gmail.com> '));
+
+  // No name.
+  assertEquals('john@gmail.com', f('<john@gmail.com>'));
+  assertEquals('john@gmail.com', f('john@gmail.com'));
+
+  // No address.
+  assertEquals('JOHN Doe', f('JOHN Doe <>'));
+
+  // Already quoted.
+  assertEquals('"JOHN, Doe" <john@gmail.com>',
+               f('"JOHN, Doe" <john@gmail.com>'));
+
+  // Needless quotes.
+  assertEquals('JOHN Doe <john@gmail.com>',
+               f('"JOHN Doe" <john@gmail.com>'));
+  // Not quoted-string, but has double quotes.
+  assertEquals('"JOHN, Doe" <john@gmail.com>',
+               f('JOHN, "Doe" <john@gmail.com>'));
+
+  // No special characters other than quotes.
+  assertEquals('JOHN Doe <john@gmail.com>',
+               f('JOHN "Doe" <john@gmail.com>'));
+
+  // Escaped quotes are also removed.
+  assertEquals('"JOHN, Doe" <john@gmail.com>',
+               f('JOHN, \\"Doe\\" <john@gmail.com>'));
+
+  // Characters that require quoting for the display name.
+  assertEquals('"JOHN, Doe" <john@gmail.com>',
+               f('JOHN, Doe <john@gmail.com>'));
+  assertEquals('"JOHN; Doe" <john@gmail.com>',
+               f('JOHN; Doe <john@gmail.com>'));
+  assertEquals('"JOHN\u055D Doe" <john@gmail.com>',
+               f('JOHN\u055D Doe <john@gmail.com>'));
+  assertEquals('"JOHN\u060C Doe" <john@gmail.com>',
+               f('JOHN\u060C Doe <john@gmail.com>'));
+  assertEquals('"JOHN\u1363 Doe" <john@gmail.com>',
+               f('JOHN\u1363 Doe <john@gmail.com>'));
+  assertEquals('"JOHN\u1802 Doe" <john@gmail.com>',
+               f('JOHN\u1802 Doe <john@gmail.com>'));
+  assertEquals('"JOHN\u1808 Doe" <john@gmail.com>',
+               f('JOHN\u1808 Doe <john@gmail.com>'));
+  assertEquals('"JOHN\u2E41 Doe" <john@gmail.com>',
+               f('JOHN\u2E41 Doe <john@gmail.com>'));
+  assertEquals('"JOHN\u3001 Doe" <john@gmail.com>',
+               f('JOHN\u3001 Doe <john@gmail.com>'));
+  assertEquals('"JOHN\uFF0C Doe" <john@gmail.com>',
+               f('JOHN\uFF0C Doe <john@gmail.com>'));
+  assertEquals('"JOHN\u061B Doe" <john@gmail.com>',
+               f('JOHN\u061B Doe <john@gmail.com>'));
+  assertEquals('"JOHN\u1364 Doe" <john@gmail.com>',
+               f('JOHN\u1364 Doe <john@gmail.com>'));
+  assertEquals('"JOHN\uFF1B Doe" <john@gmail.com>',
+               f('JOHN\uFF1B Doe <john@gmail.com>'));
+  assertEquals('"JOHN\uFF64 Doe" <john@gmail.com>',
+               f('JOHN\uFF64 Doe <john@gmail.com>'));
+  assertEquals('"JOHN(Johnny) Doe" <john@gmail.com>',
+               f('JOHN(Johnny) Doe <john@gmail.com>'));
+  assertEquals('"JOHN[Johnny] Doe" <john@gmail.com>',
+               f('JOHN[Johnny] Doe <john@gmail.com>'));
+  assertEquals('"JOHN@work Doe" <john@gmail.com>',
+               f('JOHN@work Doe <john@gmail.com>'));
+  assertEquals('"JOHN:theking Doe" <john@gmail.com>',
+               f('JOHN:theking Doe <john@gmail.com>'));
+  assertEquals('"JOHN\\\\ Doe" <john@gmail.com>',
+               f('JOHN\\ Doe <john@gmail.com>'));
+  assertEquals('"JOHN.com Doe" <john@gmail.com>',
+               f('JOHN.com Doe <john@gmail.com>'));
+}
+

@@ -1667,6 +1667,6 @@ goog.ui.SliderBase.AnimationFactory = function() {};
  * @param {number} previousValue The previous value (before animation).
  * @param {number} newValue The new value (after animation).
  * @param {number} interval The animation interval.
- * @return {!Array.<!goog.fx.TransitionBase>} The additional animations to play.
+ * @return {!Array<!goog.fx.TransitionBase>} The additional animations to play.
  */
 goog.ui.SliderBase.AnimationFactory.prototype.createAnimations;

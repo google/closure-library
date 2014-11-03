@@ -64,7 +64,7 @@ goog.ui.editor.LinkDialog = function(domHelper, link) {
 
   /**
    * The event handler for this dialog.
-   * @type {goog.events.EventHandler.<!goog.ui.editor.LinkDialog>}
+   * @type {goog.events.EventHandler<!goog.ui.editor.LinkDialog>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

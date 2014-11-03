@@ -65,7 +65,7 @@ goog.ui.MenuSeparatorRenderer.prototype.createDom = function(separator) {
  * @param {goog.ui.Control} separator goog.ui.MenuSeparator to decorate the
  *     element.
  * @param {Element} element Element to decorate.
- * @return {Element} Decorated element.
+ * @return {!Element} Decorated element.
  * @override
  */
 goog.ui.MenuSeparatorRenderer.prototype.decorate = function(separator,

@@ -37,7 +37,7 @@ goog.require('goog.math.tdma');
 goog.math.interpolator.Spline1 = function() {
   /**
    * The abscissa of the data points.
-   * @type {!Array.<number>}
+   * @type {!Array<number>}
    * @private
    */
   this.x_ = [];
@@ -45,7 +45,7 @@ goog.math.interpolator.Spline1 = function() {
   /**
    * The spline interval coefficients.
    * Note that, in general, the length of coeffs and x is not the same.
-   * @type {!Array.<!Array.<number>>}
+   * @type {!Array<!Array<number>>}
    * @private
    */
   this.coeffs_ = [[0, 0, 0, Number.NaN]];
@@ -85,9 +85,9 @@ goog.math.interpolator.Spline1.prototype.interpolate = function(x) {
 /**
  * Solve for the spline coefficients such that the spline precisely interpolates
  * the data points.
- * @param {Array.<number>} x The abscissa of the spline data points.
- * @param {Array.<number>} y The ordinate of the spline data points.
- * @return {!Array.<!Array.<number>>} The spline interval coefficients.
+ * @param {Array<number>} x The abscissa of the spline data points.
+ * @param {Array<number>} y The ordinate of the spline data points.
+ * @return {!Array<!Array<number>>} The spline interval coefficients.
  * @private
  */
 goog.math.interpolator.Spline1.prototype.computeSplineCoeffs_ = function(x, y) {
@@ -133,9 +133,9 @@ goog.math.interpolator.Spline1.prototype.computeSplineCoeffs_ = function(x, y) {
 /**
  * Computes the derivative at each point of the spline such that
  * the curve is C2. It uses not-a-knot boundary conditions.
- * @param {Array.<number>} dx The spacing between consecutive data points.
- * @param {Array.<number>} slope The slopes between consecutive data points.
- * @return {!Array.<number>} The Spline derivative at each data point.
+ * @param {Array<number>} dx The spacing between consecutive data points.
+ * @param {Array<number>} slope The slopes between consecutive data points.
+ * @return {!Array<number>} The Spline derivative at each data point.
  * @protected
  */
 goog.math.interpolator.Spline1.prototype.computeDerivatives = function(

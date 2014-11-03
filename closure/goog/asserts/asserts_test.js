@@ -20,6 +20,7 @@ goog.require('goog.asserts.AssertionError');
 goog.require('goog.dom');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
 
 function doTestMessage(failFunc, expectedMsg) {
   var error = assertThrows('failFunc should throw.', failFunc);
@@ -155,12 +156,32 @@ function testInstanceof() {
   goog.asserts.assertInstanceof(new F(), F);
   assertThrows('assertInstanceof({}, F)',
       goog.partial(goog.asserts.assertInstanceof, {}, F));
+  // IE lacks support for function.name and will fallback to toString().
+  var object = goog.userAgent.IE ? '[object Object]' : 'Object';
+
   // Test error messages.
   doTestMessage(goog.partial(goog.asserts.assertInstanceof, {}, F),
-                'Assertion failed: instanceof check failed.');
+      'Assertion failed: Expected instanceof unknown type name but got ' +
+          object + '.');
   doTestMessage(goog.partial(goog.asserts.assertInstanceof, {}, F, 'a %s', 1),
-                'Assertion failed: a 1');
+      'Assertion failed: a 1');
+  doTestMessage(goog.partial(goog.asserts.assertInstanceof, null, F),
+      'Assertion failed: Expected instanceof unknown type name but got null.');
+  doTestMessage(goog.partial(goog.asserts.assertInstanceof, 5, F),
+      'Assertion failed: ' +
+          'Expected instanceof unknown type name but got number.');
 
+  // Test a constructor a with a name (IE does not support function.name).
+  if (!goog.userAgent.IE) {
+    F = function foo() {};
+    doTestMessage(goog.partial(goog.asserts.assertInstanceof, {}, F),
+        'Assertion failed: Expected instanceof foo but got ' + object + '.');
+  }
+
+  // Test a constructor with a displayName.
+  F.displayName = 'bar';
+  doTestMessage(goog.partial(goog.asserts.assertInstanceof, {}, F),
+      'Assertion failed: Expected instanceof bar but got ' + object + '.');
 }
 
 function testObjectPrototypeIsIntact() {

@@ -138,11 +138,11 @@ goog.ui.PlainTextSpellChecker.prototype.keyHandler_;
 goog.ui.PlainTextSpellChecker.prototype.textArrayIndex_;
 
 
-/** @private {!Array.<string>} */
+/** @private {!Array<string>} */
 goog.ui.PlainTextSpellChecker.prototype.textArray_;
 
 
-/** @private {!Array.<boolean>} */
+/** @private {!Array<boolean>} */
 goog.ui.PlainTextSpellChecker.prototype.textArrayProcess_;
 
 

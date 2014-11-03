@@ -149,7 +149,7 @@ function testSafariWndows() {
   mockAgent.setNavigator({platform: 'Macintosh'});
   setUserAgent(
       goog.labs.userAgent.testAgents.SAFARI_WINDOWS);
-  assertTrue(goog.userAgent.keyboard.MAC_KEYBOARD);
+  assertFalse(goog.userAgent.keyboard.MAC_KEYBOARD);
 }
 
 function testOperaMac() {

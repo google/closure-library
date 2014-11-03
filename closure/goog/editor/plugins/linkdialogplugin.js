@@ -46,7 +46,7 @@ goog.editor.plugins.LinkDialogPlugin = function() {
 
   /**
    * Event handler for this object.
-   * @type {goog.events.EventHandler.<!goog.editor.plugins.LinkDialogPlugin>}
+   * @type {goog.events.EventHandler<!goog.editor.plugins.LinkDialogPlugin>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
@@ -54,7 +54,7 @@ goog.editor.plugins.LinkDialogPlugin = function() {
 
   /**
    * A list of whitelisted URL schemes which are safe to open.
-   * @type {Array.<string>}
+   * @type {Array<string>}
    * @private
    */
   this.safeToOpenSchemes_ = ['http', 'https', 'ftp'];
@@ -150,7 +150,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.setBlockOpeningUnsafeSchemes =
  * Schemes should all be in lowercase. If the plugin is set to block opening
  * unsafe schemes, user-entered URLs will be converted to lowercase and checked
  * against this list. The whitelist has no effect if blocking is not enabled.
- * @param {Array.<string>} schemes String array of URL schemes to allow (http,
+ * @param {Array<string>} schemes String array of URL schemes to allow (http,
  *     https, etc.).
  */
 goog.editor.plugins.LinkDialogPlugin.prototype.setSafeToOpenSchemes =
@@ -251,7 +251,7 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleAfterHide = function(e) {
 
 
 /**
- * @return {goog.events.EventHandler.<T>} The event handler.
+ * @return {goog.events.EventHandler<T>} The event handler.
  * @protected
  * @this T
  * @template T

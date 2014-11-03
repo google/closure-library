@@ -55,7 +55,7 @@ var initialListenerCount;
 
 /**
  * Type of events fired by the DragListGroup.
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  */
 var firedEventTypes;
 

@@ -289,15 +289,6 @@ goog.userAgent.initPlatform_ = function() {
   goog.userAgent.detectedLinux_ = goog.string.contains(goog.userAgent.PLATFORM,
       'Linux');
 
-  /**
-   * Whether the user agent is running on a X11 windowing system.
-   * @type {boolean}
-   * @private
-   */
-  goog.userAgent.detectedX11_ = !!goog.userAgent.getNavigator() &&
-      goog.string.contains(goog.userAgent.getNavigator()['appVersion'] || '',
-          'X11');
-
   // Need user agent string for Android/IOS detection
   var ua = goog.userAgent.getUserAgentString();
 
@@ -355,11 +346,22 @@ goog.userAgent.LINUX = goog.userAgent.PLATFORM_KNOWN_ ?
 
 
 /**
+ * @return {boolean} Whether the user agent is an X11 windowing system.
+ * @private
+ */
+goog.userAgent.isX11_ = function() {
+  var navigator = goog.userAgent.getNavigator();
+  return !!navigator &&
+      goog.string.contains(navigator['appVersion'] || '', 'X11');
+};
+
+
+/**
  * Whether the user agent is running on a X11 windowing system.
  * @type {boolean}
  */
 goog.userAgent.X11 = goog.userAgent.PLATFORM_KNOWN_ ?
-    goog.userAgent.ASSUME_X11 : goog.userAgent.detectedX11_;
+    goog.userAgent.ASSUME_X11 : goog.userAgent.isX11_();
 
 
 /**

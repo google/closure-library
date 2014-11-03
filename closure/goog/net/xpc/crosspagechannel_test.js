@@ -715,7 +715,7 @@ Driver.prototype.getInnerFrameConfiguration = function() {
  *     version used in the outer iframe.
  * @param {boolean=} opt_randomChannelNames Whether the ends of the channel
  *     should be allowed to pick differing, random names.
- * @return {!Array.<string>} The id of the created iframe and the name of the
+ * @return {!Array<string>} The id of the created iframe and the name of the
  *     created channel.
  */
 Driver.prototype.createPeerIframe = function(opt_iframeId,

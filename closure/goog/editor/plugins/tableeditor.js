@@ -43,7 +43,7 @@ goog.editor.plugins.TableEditor = function() {
   /**
    * The array of functions that decide whether a table element could be
    * editable by the user or not.
-   * @type {Array.<function(Element):boolean>}
+   * @type {Array<function(Element):boolean>}
    * @private
    */
   this.isTableEditableFunctions_ = [];
@@ -429,7 +429,7 @@ goog.editor.plugins.TableEditor.CellSelection_.prototype.getLastColumnIndex =
 
 /**
  * Returns the cells in this selection.
- * @return {!Array.<Element>} Cells in this selection.
+ * @return {!Array<Element>} Cells in this selection.
  */
 goog.editor.plugins.TableEditor.CellSelection_.prototype.getCells = function() {
   return this.cells_;

@@ -109,7 +109,7 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
 
 
   /**
-   * @private {Object.<string, string>} messageUrlParams_ Extra URL parameters
+   * @private {Object<string, string>} messageUrlParams_ Extra URL parameters
    * to be added to each HTTP request.
    */
   this.messageUrlParams_ =
@@ -192,7 +192,7 @@ WebChannelBaseTransport.Channel.prototype.disposeInternal = function() {
 /**
  * The message event.
  *
- * @param {!Array.<?>} array The data array from the underlying channel.
+ * @param {!Array<?>} array The data array from the underlying channel.
  * @constructor
  * @extends {goog.net.WebChannel.MessageEvent}
  * @final

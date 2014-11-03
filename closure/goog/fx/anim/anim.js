@@ -56,7 +56,7 @@ goog.fx.anim.TIMEOUT = goog.async.AnimationDelay.TIMEOUT;
 /**
  * A map of animations which should be cycled on the global timer.
  *
- * @type {Object.<number, goog.fx.anim.Animated>}
+ * @type {Object<number, goog.fx.anim.Animated>}
  * @private
  */
 goog.fx.anim.activeAnimations_ = {};

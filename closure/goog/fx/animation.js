@@ -37,8 +37,8 @@ goog.require('goog.fx.anim.Animated');  // Unreferenced: interface
 
 /**
  * Constructor for an animation object.
- * @param {Array.<number>} start Array for start coordinates.
- * @param {Array.<number>} end Array for end coordinates.
+ * @param {Array<number>} start Array for start coordinates.
+ * @param {Array<number>} end Array for end coordinates.
  * @param {number} duration Length of animation in milliseconds.
  * @param {Function=} opt_acc Acceleration function, returns 0-1 for inputs 0-1.
  * @constructor
@@ -59,14 +59,14 @@ goog.fx.Animation = function(start, end, duration, opt_acc) {
 
   /**
    * Start point.
-   * @type {Array.<number>}
+   * @type {Array<number>}
    * @protected
    */
   this.startPoint = start;
 
   /**
    * End point.
-   * @type {Array.<number>}
+   * @type {Array<number>}
    * @protected
    */
   this.endPoint = end;
@@ -88,7 +88,7 @@ goog.fx.Animation = function(start, end, duration, opt_acc) {
 
   /**
    * Current coordinate for animation.
-   * @type {Array.<number>}
+   * @type {Array<number>}
    * @protected
    */
   this.coords = [];
@@ -466,7 +466,7 @@ goog.fx.AnimationEvent = function(type, anim) {
 
   /**
    * The current coordinates.
-   * @type {Array.<number>}
+   * @type {Array<number>}
    */
   this.coords = anim.coords;
 
@@ -523,7 +523,7 @@ goog.inherits(goog.fx.AnimationEvent, goog.events.Event);
 
 /**
  * Returns the coordinates as integers (rounded to nearest integer).
- * @return {!Array.<number>} An array of the coordinates rounded to
+ * @return {!Array<number>} An array of the coordinates rounded to
  *     the nearest integer.
  */
 goog.fx.AnimationEvent.prototype.coordsAsInts = function() {

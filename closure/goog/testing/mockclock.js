@@ -66,7 +66,7 @@ goog.testing.MockClock = function(opt_autoInstall) {
    * right.  For example, the expiration times for each element of the queue
    * might be in the order 300, 200, 200.
    *
-   * @type {Array.<Object>}
+   * @type {Array<Object>}
    * @private
    */
   this.queue_ = [];
@@ -302,7 +302,7 @@ goog.testing.MockClock.prototype.tick = function(opt_millis) {
  * resolved at all, throws an exception.
  * Also ticks the general clock by the specified amount.
  *
- * @param {!goog.Thenable.<T>} promise A promise that should be resolved after
+ * @param {!goog.Thenable<T>} promise A promise that should be resolved after
  *     the mockClock is ticked for the given opt_millis.
  * @param {number=} opt_millis Number of milliseconds to increment the counter.
  *     If not specified, clock ticks 1 millisecond.
@@ -429,7 +429,7 @@ goog.testing.MockClock.prototype.scheduleFunction_ = function(
  *
  * @param {Object} timeout The timeout to insert, with numerical runAtMillis
  *     property.
- * @param {Array.<Object>} queue The queue to insert into, with each element
+ * @param {Array<Object>} queue The queue to insert into, with each element
  *     having a numerical runAtMillis property.
  * @private
  */

@@ -217,6 +217,21 @@ function testSafariIphone() {
   assertVersionBetween('5.0', '7.0');
 }
 
+function testCoast() {
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.COAST);
+  assertTrue(goog.labs.userAgent.browser.isCoast());
+}
+
+function testWebviewIOS() {
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.WEBVIEW_IPHONE);
+  assertTrue(goog.labs.userAgent.browser.isIosWebview());
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.WEBVIEW_IPAD);
+  assertTrue(goog.labs.userAgent.browser.isIosWebview());
+}
+
 function testAndroidBrowser235() {
   goog.labs.userAgent.util.setUserAgent(
       goog.labs.userAgent.testAgents.ANDROID_BROWSER_235);

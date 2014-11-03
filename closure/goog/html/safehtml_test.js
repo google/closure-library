@@ -35,14 +35,14 @@ function testSafeHtml() {
   // when available.
   var safeHtml = goog.html.testing.newSafeHtmlForTest('Hello <em>World</em>');
   assertSameHtml('Hello <em>World</em>', safeHtml);
-  assertEquals('Hello <em>World</em>', safeHtml.getTypedStringValue());
+  assertEquals('Hello <em>World</em>', goog.html.SafeHtml.unwrap(safeHtml));
   assertEquals('SafeHtml{Hello <em>World</em>}', String(safeHtml));
   assertNull(safeHtml.getDirection());
 
   safeHtml = goog.html.testing.newSafeHtmlForTest(
       'World <em>Hello</em>', goog.i18n.bidi.Dir.RTL);
   assertSameHtml('World <em>Hello</em>', safeHtml);
-  assertEquals('World <em>Hello</em>', safeHtml.getTypedStringValue());
+  assertEquals('World <em>Hello</em>', goog.html.SafeHtml.unwrap(safeHtml));
   assertEquals('SafeHtml{World <em>Hello</em>}', String(safeHtml));
   assertEquals(goog.i18n.bidi.Dir.RTL, safeHtml.getDirection());
 

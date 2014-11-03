@@ -1536,6 +1536,10 @@ function testArrayFlatten() {
   assertArrayEquals([1], goog.array.flatten([[1]]));
   assertArrayEquals([], goog.array.flatten());
   assertArrayEquals([], goog.array.flatten([]));
+  assertArrayEquals(goog.array.repeat(3, 180002),
+      goog.array.flatten(3, goog.array.repeat(3, 180000), 3));
+  assertArrayEquals(goog.array.repeat(3, 180000),
+      goog.array.flatten([goog.array.repeat(3, 180000)]));
 }
 
 function testSortObjectsByKey() {

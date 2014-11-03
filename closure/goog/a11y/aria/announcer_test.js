@@ -60,6 +60,18 @@ function testAnnouncerTwice() {
   goog.dispose(announcer);
 }
 
+function testAnnouncerTwiceSameMessage() {
+  var text = 'test content';
+  var announcer = new goog.a11y.aria.Announcer(goog.dom.getDomHelper());
+  announcer.say(text);
+  var firstLiveRegion = getLiveRegion('polite');
+  announcer.say(text);
+  var secondLiveRegion = getLiveRegion('polite');
+  assertNotEquals(firstLiveRegion, secondLiveRegion);
+  checkLiveRegionContains(text, 'polite');
+  goog.dispose(announcer);
+}
+
 function testAnnouncerAssertive() {
   var text = 'test content';
   var announcer = new goog.a11y.aria.Announcer(goog.dom.getDomHelper());
@@ -92,6 +104,7 @@ function testAnnouncerWithAriaHidden() {
   // Announce a new message and make sure that the aria-hidden was removed.
   announcer.say(text2);
   checkLiveRegionContains(text2, 'polite');
+  liveRegion = getLiveRegion('polite');
   assertEquals('',
       goog.a11y.aria.getState(liveRegion, goog.a11y.aria.State.HIDDEN));
   goog.dispose(announcer);

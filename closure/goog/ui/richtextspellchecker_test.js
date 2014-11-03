@@ -81,7 +81,7 @@ function waitForSpellCheckToFinish() {
 
 
 /**
- * @typedef {!Array.<string><string>>}
+ * @typedef {!Array<string><string>>}
  * @suppress {missingProvide}
  */
 var lookupWordEntry;
@@ -90,7 +90,7 @@ var lookupWordEntry;
 /**
  * Function to use for word lookup by the spell check handler. This function is
  * supplied as a constructor parameter for the spell check handler.
- * @param {!Array.<string>} words Unknown words that need to be looked up.
+ * @param {!Array<string>} words Unknown words that need to be looked up.
  * @param {!goog.spell.SpellCheck} spellChecker The spell check handler.
  * @param {function(!Array.)} callback The lookup callback
  *     function.

@@ -36,7 +36,7 @@ goog.require('goog.testing.recordFunction');
 function MockXmlHttp() {
   /**
    * The headers for this XmlHttpRequest.
-   * @type {!Object.<string>}
+   * @type {!Object<string>}
    */
   this.headers = {};
 }

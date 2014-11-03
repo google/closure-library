@@ -58,7 +58,7 @@ var HttpStatus = goog.net.HttpStatus;
  *      be removed before parsing the response as JSON.
  *
  * @typedef {{
- *   headers: (Object.<string>|undefined),
+ *   headers: (Object<string>|undefined),
  *   timeoutMs: (number|undefined),
  *   withCredentials: (boolean|undefined),
  *   mimeType: (string|undefined),
@@ -95,7 +95,7 @@ _.FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded;charset=utf-8';
  *
  * @param {string} url The URL to request.
  * @param {_.Options=} opt_options Configuration options for the request.
- * @return {!goog.Promise.<string>} A promise that will be resolved with the
+ * @return {!goog.Promise<string>} A promise that will be resolved with the
  *     response text once the request completes.
  */
 _.get = function(url, opt_options) {
@@ -112,7 +112,7 @@ _.get = function(url, opt_options) {
  * @param {string} url The URL to request.
  * @param {_.PostData} data The body of the post request.
  * @param {_.Options=} opt_options Configuration options for the request.
- * @return {!goog.Promise.<string>} A promise that will be resolved with the
+ * @return {!goog.Promise<string>} A promise that will be resolved with the
  *     response text once the request completes.
  */
 _.post = function(url, data, opt_options) {
@@ -128,7 +128,7 @@ _.post = function(url, data, opt_options) {
  *
  * @param {string} url The URL to request.
  * @param {_.Options=} opt_options Configuration options for the request.
- * @return {!goog.Promise.<Object>} A promise that will be resolved with the
+ * @return {!goog.Promise<Object>} A promise that will be resolved with the
  *     response JSON once the request completes.
  */
 _.getJson = function(url, opt_options) {
@@ -145,7 +145,7 @@ _.getJson = function(url, opt_options) {
  * @param {string} url The URL to request.
  * @param {_.PostData} data The body of the post request.
  * @param {_.Options=} opt_options Configuration options for the request.
- * @return {!goog.Promise.<Object>} A promise that will be resolved with the
+ * @return {!goog.Promise<Object>} A promise that will be resolved with the
  *     response JSON once the request completes.
  */
 _.postJson = function(url, data, opt_options) {
@@ -166,7 +166,7 @@ _.postJson = function(url, data, opt_options) {
  * @param {string} url The URL to request.
  * @param {_.PostData} data The body of the post request.
  * @param {_.Options=} opt_options Configuration options for the request.
- * @return {!goog.Promise.<!goog.net.XhrLike.OrNative>} A promise that will be
+ * @return {!goog.Promise<!goog.net.XhrLike.OrNative>} A promise that will be
  *     resolved with the XHR object once the request completes.
  */
 _.send = function(method, url, data, opt_options) {

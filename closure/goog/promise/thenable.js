@@ -21,7 +21,7 @@ goog.provide('goog.Thenable');
  * http://promisesaplus.com for interop with {@see goog.Promise}.
  *
  * @interface
- * @extends {IThenable.<TYPE>}
+ * @extends {IThenable<TYPE>}
  * @template TYPE
  */
 goog.Thenable = function() {};
@@ -50,7 +50,7 @@ goog.Thenable = function() {};
  * @param {THIS=} opt_context An optional context object that will be the
  *     execution context for the callbacks. By default, functions are executed
  *     with the default this.
- * @return {!goog.Promise.<RESULT>} A new Promise that will receive the result
+ * @return {!goog.Promise<RESULT>} A new Promise that will receive the result
  *     of the fulfillment or rejection callback.
  * @template RESULT,THIS
  */

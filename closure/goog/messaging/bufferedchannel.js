@@ -51,7 +51,7 @@ goog.messaging.BufferedChannel = function(messageChannel, opt_interval) {
   /**
    * Buffer of messages to be sent when the channel's peer is ready.
    *
-   * @type {Array.<Object>}
+   * @type {Array<Object>}
    * @private
    */
   this.buffer_ = [];

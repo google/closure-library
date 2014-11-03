@@ -594,7 +594,7 @@ function testSwapModalForOpenDialog() {
 /**
  * Assert that the dialog has buttons with the given keys in the correct
  * order.
- * @param {Array.<string>} keys An array of button keys.
+ * @param {Array<string>} keys An array of button keys.
  */
 function assertButtons(keys) {
   var buttons = dialog.getElement().getElementsByTagName(

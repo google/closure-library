@@ -44,7 +44,7 @@ goog.fx.AnimationQueue = function() {
 
   /**
    * An array holding all animations in the queue.
-   * @type {Array.<goog.fx.TransitionBase>}
+   * @type {Array<goog.fx.TransitionBase>}
    * @protected
    */
   this.queue = [];

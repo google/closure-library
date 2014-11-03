@@ -701,6 +701,7 @@ goog.string.unescapeEntitiesWithDocument = function(str, document) {
  * @return {string} The unescaped {@code str} string.
  */
 goog.string.unescapeEntitiesUsingDom_ = function(str, opt_document) {
+  /** @type {!Object<string, string>} */
   var seen = {'&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"'};
   var div;
   if (opt_document) {
@@ -903,8 +904,7 @@ goog.string.truncateMiddle = function(str, chars,
 
 /**
  * Special chars that need to be escaped for goog.string.quote.
- * @private
- * @type {Object}
+ * @private {!Object<string, string>}
  */
 goog.string.specialEscapeChars_ = {
   '\0': '\\0',
@@ -921,8 +921,7 @@ goog.string.specialEscapeChars_ = {
 
 /**
  * Character mappings used internally for goog.string.escapeChar.
- * @private
- * @type {Object}
+ * @private {!Object<string, string>}
  */
 goog.string.jsEscapeCache_ = {
   '\'': '\\\''
@@ -1475,7 +1474,7 @@ goog.string.parseInt = function(value) {
  * @param {number} limit The limit to the number of splits. The resulting array
  *     will have a maximum length of limit+1.  Negative numbers are the same
  *     as zero.
- * @return {!Array.<string>} The string, split.
+ * @return {!Array<string>} The string, split.
  */
 
 goog.string.splitLimit = function(str, separator, limit) {

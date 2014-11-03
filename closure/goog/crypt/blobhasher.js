@@ -67,7 +67,7 @@ goog.crypt.BlobHasher = function(hashFn, opt_blockSize) {
 
   /**
    * Computed hash value.
-   * @type {Array.<number>}
+   * @type {Array<number>}
    * @private
    */
   this.hashVal_ = null;
@@ -188,7 +188,7 @@ goog.crypt.BlobHasher.prototype.getBytesProcessed = function() {
 
 
 /**
- * @return {Array.<number>} The computed hash value or null if not ready.
+ * @return {Array<number>} The computed hash value or null if not ready.
  */
 goog.crypt.BlobHasher.prototype.getHash = function() {
   return this.hashVal_;

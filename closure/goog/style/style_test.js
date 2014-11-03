@@ -798,14 +798,11 @@ function testGetSizeSvgElements() {
   assertRoughlyEquals(expectedHeight, dims.height, 0.01);
 
   dims = goog.style.getSize(svgEl);
-  if (goog.userAgent.WEBKIT || goog.userAgent.IE) {
-    // The size of the <svg> will be the viewport size on WebKit browsers.
-    assertTrue(dims.width >= expectedWidth);
-    assertTrue(dims.height >= expectedHeight);
-  } else {
-    assertEquals(expectedWidth, dims.width);
-    assertRoughlyEquals(expectedHeight, dims.height, 0.01);
-  }
+  // The size of the <svg> will be the viewport size on all browsers. This used
+  // to not be true for Firefox, but they fixed the glitch in Firefox 33.
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=530985
+  assertTrue(dims.width >= expectedWidth);
+  assertTrue(dims.height >= expectedHeight);
 
   el.style.visibility = 'none';
 
@@ -814,14 +811,8 @@ function testGetSizeSvgElements() {
   assertRoughlyEquals(expectedHeight, dims.height, 0.01);
 
   dims = goog.style.getSize(svgEl);
-  if (goog.userAgent.WEBKIT || goog.userAgent.IE) {
-    // The size of the <svg> will be the viewport size on WebKit browsers.
-    assertTrue(dims.width >= expectedWidth);
-    assertTrue(dims.height >= expectedHeight);
-  } else {
-    assertEquals(expectedWidth, dims.width);
-    assertRoughlyEquals(expectedHeight, dims.height, 0.01);
-  }
+  assertTrue(dims.width >= expectedWidth);
+  assertTrue(dims.height >= expectedHeight);
 }
 
 function testGetSizeSvgDocument() {
@@ -2187,7 +2178,7 @@ function testGetsTranslation() {
 
 /**
  * Test browser detection for a user agent configuration.
- * @param {Array.<number>} expectedAgents Array of expected userAgents.
+ * @param {Array<number>} expectedAgents Array of expected userAgents.
  * @param {string} uaString User agent string.
  * @param {string=} opt_product Navigator product string.
  * @param {string=} opt_vendor Navigator vendor string.

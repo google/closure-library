@@ -58,7 +58,7 @@ goog.messaging.MultiChannel = function(underlyingChannel) {
   /**
    * All the virtual channels that are registered for this MultiChannel.
    * These are null if they've been disposed.
-   * @type {Object.<?goog.messaging.MultiChannel.VirtualChannel>}
+   * @type {Object<?goog.messaging.MultiChannel.VirtualChannel>}
    * @private
    */
   this.virtualChannels_ = {};

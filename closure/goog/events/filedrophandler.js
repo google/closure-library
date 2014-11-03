@@ -50,7 +50,7 @@ goog.events.FileDropHandler = function(element, opt_preventDropOutside) {
 
   /**
    * Handler for drag/drop events.
-   * @type {!goog.events.EventHandler.<!goog.events.FileDropHandler>}
+   * @type {!goog.events.EventHandler<!goog.events.FileDropHandler>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);

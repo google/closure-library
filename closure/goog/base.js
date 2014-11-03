@@ -62,7 +62,7 @@ goog.global = this;
  *   var CLOSURE_UNCOMPILED_DEFINES = {'goog.DEBUG': false};
  * </pre>
  *
- * @type {Object.<string, (string|number|boolean)>|undefined}
+ * @type {Object<string, (string|number|boolean)>|undefined}
  */
 goog.global.CLOSURE_UNCOMPILED_DEFINES;
 
@@ -80,10 +80,10 @@ goog.global.CLOSURE_UNCOMPILED_DEFINES;
  *
  * Example:
  * <pre>
- *   var CLOSURE_DEFINES = {'goog.DEBUG': false};
+ *   var CLOSURE_DEFINES = {'goog.DEBUG': false} ;
  * </pre>
  *
- * @type {Object.<string, (string|number|boolean)>|undefined}
+ * @type {Object<string, (string|number|boolean)>|undefined}
  */
 goog.global.CLOSURE_DEFINES;
 
@@ -255,6 +255,7 @@ goog.provide = function(name) {
  * @param {string} name Namespace provided by this file in the form
  *     "goog.package.part".
  * @param {Object=} opt_obj The object to embed in the namespace.
+ * @private
  */
 goog.constructNamespace_ = function(name, opt_obj) {
   if (!COMPILED) {
@@ -352,9 +353,10 @@ goog.module.getInternal_ = function(name) {
 
 
 /**
- * @private {{
- *     moduleName:(string|undefined),
- *     declareTestMethods:boolean}|null}
+ * @private {?{
+ *   moduleName: (string|undefined),
+ *   declareTestMethods: boolean
+ * }}
  */
 goog.moduleLoaderState_ = null;
 
@@ -387,13 +389,9 @@ goog.module.declareTestMethods = function() {
 
 
 /**
- * Indicate that a module's exports that are known test methods should
- * be copied to the global object.  This makes the test methods visible to
- * test runners that inspect the global object.
- *
- * TODO(johnlenz): Make the test framework aware of goog.module so
- * that this isn't necessary. Alternately combine this with goog.setTestOnly
- * to minimize boiler plate.
+ * Provide the module's exports as a globally accessible object under the
+ * module's declared name.  This is intended to ease migration to goog.module
+ * for files that have existing usages.
  */
 goog.module.declareLegacyNamespace = function() {
   if (!COMPILED && !goog.isInModuleLoader_()) {
@@ -405,7 +403,7 @@ goog.module.declareLegacyNamespace = function() {
         'goog.module.declareLegacyNamespace.');
   }
   goog.moduleLoaderState_.declareLegacyNamespace = true;
-}
+};
 
 
 /**
@@ -467,7 +465,7 @@ if (!COMPILED) {
    * goog.provide('goog.events.Event') implicitly declares that 'goog' and
    * 'goog.events' must be namespaces.
    *
-   * @type {Object.<string, (boolean|undefined)>}
+   * @type {Object<string, (boolean|undefined)>}
    * @private
    */
   goog.implicitNamespaces_ = {'goog.module': true};
@@ -523,9 +521,9 @@ goog.globalize = function(obj, opt_global) {
 /**
  * Adds a dependency from a file to the files it requires.
  * @param {string} relPath The path to the js file.
- * @param {Array.<string>} provides An array of strings with
+ * @param {!Array<string>} provides An array of strings with
  *     the names of the objects this file provides.
- * @param {Array.<string>} requires An array of strings with
+ * @param {!Array<string>} requires An array of strings with
  *     the names of the objects this file requires.
  * @param {boolean=} opt_isModule Whether this dependency must be loaded as
  *     a module as declared by goog.module.
@@ -729,7 +727,7 @@ goog.addSingletonGetter = function(ctor) {
  * All singleton classes that have been instantiated, for testing. Don't read
  * it directly, use the {@code goog.testing.singleton} module. The compiler
  * removes this variable if unused.
- * @type {!Array.<!Function>}
+ * @type {!Array<!Function>}
  * @private
  */
 goog.instantiatedSingletons_ = [];
@@ -755,7 +753,7 @@ goog.define('goog.SEAL_MODULE_EXPORTS', goog.DEBUG);
 /**
  * The registry of initialized modules:
  * the module identifier to module exports map.
- * @private @const {Object.<string, ?>}
+ * @private @const {Object<string, ?>}
  */
 goog.loadedModules_ = {};
 
@@ -771,8 +769,7 @@ if (goog.DEPENDENCIES_ENABLED) {
   /**
    * Object used to keep track of urls that have already been added. This record
    * allows the prevention of circular dependencies.
-   * @type {Object}
-   * @private
+   * @private {!Object<string, boolean>}
    */
   goog.included_ = {};
 
@@ -781,14 +778,24 @@ if (goog.DEPENDENCIES_ENABLED) {
    * This object is used to keep track of dependencies and other data that is
    * used for loading scripts.
    * @private
-   * @type {Object}
+   * @type {{
+   *   pathIsModule: !Object<string, boolean>,
+   *   nameToPath: !Object<string, string>,
+   *   requires: !Object<string, !Object<string, boolean>>,
+   *   visited: !Object<string, boolean>,
+   *   written: !Object<string, boolean>
+   * }}
    */
   goog.dependencies_ = {
     pathIsModule: {}, // 1 to 1
-    nameToPath: {}, // many to 1
+
+    nameToPath: {}, // 1 to 1
+
     requires: {}, // 1 to many
+
     // Used when resolving dependencies to prevent us from visiting file twice.
     visited: {},
+
     written: {} // Used to keep track of script files we have written.
   };
 
@@ -821,7 +828,8 @@ if (goog.DEPENDENCIES_ENABLED) {
     // Search backwards since the current script is in almost all cases the one
     // that has base.js.
     for (var i = scripts.length - 1; i >= 0; --i) {
-      var src = scripts[i].src;
+      var script = /** @type {!HTMLScriptElement} */ (scripts[i]);
+      var src = script.src;
       var qmark = src.lastIndexOf('?');
       var l = qmark == -1 ? src.length : qmark;
       if (src.substr(l - 7, 7) == 'base.js') {
@@ -869,7 +877,7 @@ if (goog.DEPENDENCIES_ENABLED) {
   };
 
 
-  /** @private {Array.<string>} */
+  /** @private {!Array<string>} */
   goog.queuedModules_ = [];
 
 
@@ -978,7 +986,7 @@ if (goog.DEPENDENCIES_ENABLED) {
     // of the module.
     try {
       goog.moduleLoaderState_ = {
-          moduleName: undefined, declareTestMethods: false};
+        moduleName: undefined, declareTestMethods: false};
       var exports;
       if (goog.isFunction(moduleDef)) {
         exports = moduleDef.call(goog.global, {});
@@ -1006,7 +1014,9 @@ if (goog.DEPENDENCIES_ENABLED) {
         for (var entry in exports) {
           if (entry.indexOf('test', 0) === 0 ||
               entry == 'tearDown' ||
-              entry == 'setup') {
+              entry == 'setUp' ||
+              entry == 'setUpPage' ||
+              entry == 'tearDownPage') {
             goog.global[entry] = exports[entry];
           }
         }
@@ -1092,7 +1102,7 @@ if (goog.DEPENDENCIES_ENABLED) {
 
   /**
    * A readystatechange handler for legacy IE
-   * @param {HTMLScriptElement} script
+   * @param {!HTMLScriptElement} script
    * @param {number} scriptIndex
    * @return {boolean}
    * @private
@@ -1113,11 +1123,12 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.writeScripts_ = function() {
-    // The scripts we need to write this time.
+    /** @type {!Array<string>} The scripts we need to write this time. */
     var scripts = [];
     var seenScript = {};
     var deps = goog.dependencies_;
 
+    /** @param {string} path */
     function visitNode(path) {
       if (path in deps.written) {
         return;
@@ -1357,12 +1368,14 @@ goog.isArray = function(val) {
 /**
  * Returns true if the object looks like an array. To qualify as array like
  * the value needs to be either a NodeList or an object with a Number length
- * property.
+ * property. As a special case, a function value is not array like, because its
+ * length property is fixed to correspond to the number of expected arguments.
  * @param {?} val Variable to test.
  * @return {boolean} Whether variable is an array.
  */
 goog.isArrayLike = function(val) {
   var type = goog.typeOf(val);
+  // We do not use goog.isObject here in order to exclude function values.
   return type == 'array' || type == 'object' && typeof val.length == 'number';
 };
 
@@ -1760,8 +1773,7 @@ goog.evalWorksForGlobals_ = null;
 /**
  * Optional map of CSS class names to obfuscated names used with
  * goog.getCssName().
- * @type {Object|undefined}
- * @private
+ * @private {!Object<string, string>|undefined}
  * @see goog.setCssNameMapping
  */
 goog.cssNameMapping_;
@@ -1880,7 +1892,7 @@ goog.setCssNameMapping = function(mapping, opt_style) {
  * are made in uncompiled mode.
  *
  * A hook for overriding the CSS name mapping.
- * @type {Object|undefined}
+ * @type {!Object<string, string>|undefined}
  */
 goog.global.CLOSURE_CSS_NAME_MAPPING;
 
@@ -1905,7 +1917,7 @@ if (!COMPILED && goog.global.CLOSURE_CSS_NAME_MAPPING) {
  * </code>
  *
  * @param {string} str Translatable string, places holders in the form {$foo}.
- * @param {Object=} opt_values Map of place holder name to value.
+ * @param {Object<string, string>=} opt_values Maps place holder name to value.
  * @return {string} message with placeholders filled.
  */
 goog.getMsg = function(str, opt_values) {
@@ -2131,6 +2143,7 @@ if (!COMPILED) {
 // goog.defineClass implementation
 //==============================================================================
 
+
 /**
  * Creates a restricted form of a Closure "class":
  *   - from the compiler's perspective, the instance returned from the
@@ -2239,7 +2252,7 @@ goog.defineClass.createSealingConstructor_ = function(ctr, superClass) {
 // TODO(johnlenz): share these values with the goog.object
 /**
  * The names of the fields that are defined on Object.prototype.
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  * @private
  * @const
  */
