@@ -182,6 +182,8 @@ goog.string.isEmpty = goog.string.isEmptyOrWhitespace;
  * @param {*} str The string to check.
  * @return {boolean} Whether {@code str} is null, undefined, empty, or
  *     whitespace only.
+ * @deprecated Use goog.string.isEmptyOrWhitespace(goog.string.makeSafe(str))
+ *     instead.
  */
 goog.string.isEmptyOrWhitespaceSafe = function(str) {
   return goog.string.isEmptyOrWhitespace(goog.string.makeSafe(str));
