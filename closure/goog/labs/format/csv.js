@@ -365,7 +365,7 @@ goog.labs.format.csv.parse = function(text, opt_ignoreErrors) {
 
 /**
  * Sentinel tracking objects.
- * @enum {Object}
+ * @enum {!Object}
  * @private
  */
 goog.labs.format.csv.Sentinels_ = {
