@@ -26,6 +26,7 @@ goog.provide('goog.labs.net.xhr.Error');
 goog.provide('goog.labs.net.xhr.HttpError');
 goog.provide('goog.labs.net.xhr.Options');
 goog.provide('goog.labs.net.xhr.PostData');
+goog.provide('goog.labs.net.xhr.ResponseType');
 goog.provide('goog.labs.net.xhr.TimeoutError');
 
 goog.require('goog.Promise');
@@ -35,6 +36,7 @@ goog.require('goog.net.HttpStatus');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.string');
 goog.require('goog.uri.utils');
+goog.require('goog.userAgent');
 
 
 
@@ -49,19 +51,23 @@ var HttpStatus = goog.net.HttpStatus;
  * - timeoutMs: number of milliseconds after which the request will be timed
  *      out by the client. Default is to allow the browser to handle timeouts.
  * - withCredentials: whether user credentials are to be included in a
- *      cross-origin request.  See:
- *      http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#the-withcredentials-attribute
+ *      cross-origin request. See:
+ *      http://www.w3.org/TR/XMLHttpRequest/#the-withcredentials-attribute
  * - mimeType: allows the caller to override the content-type and charset for
- *      the request, which is useful when requesting binary data.  See:
- *      http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#dom-xmlhttprequest-overridemimetype
+ *      the request. See:
+ *      http://www.w3.org/TR/XMLHttpRequest/#dom-xmlhttprequest-overridemimetype
+ * - responseType: may be set to change the response type to an arraybuffer or
+ *      blob for downloading binary data. See:
+ *      http://www.w3.org/TR/XMLHttpRequest/#dom-xmlhttprequest-responsetype
  * - xssiPrefix: Prefix used for protecting against XSSI attacks, which should
  *      be removed before parsing the response as JSON.
  *
  * @typedef {{
  *   headers: (Object<string>|undefined),
+ *   mimeType: (string|undefined),
+ *   responseType: (_.ResponseType|undefined),
  *   timeoutMs: (number|undefined),
  *   withCredentials: (boolean|undefined),
- *   mimeType: (string|undefined),
  *   xssiPrefix: (string|undefined)
  * }}
  */
@@ -87,6 +93,20 @@ _.CONTENT_TYPE_HEADER = 'Content-Type';
  * @type {string}
  */
 _.FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded;charset=utf-8';
+
+
+/**
+ * Supported data types for the responseType field.
+ * See: http://www.w3.org/TR/XMLHttpRequest/#dom-xmlhttprequest-response
+ * @enum {string}
+ */
+_.ResponseType = {
+  ARRAYBUFFER: 'arraybuffer',
+  BLOB: 'blob',
+  DOCUMENT: 'document',
+  JSON: 'json',
+  TEXT: 'text'
+};
 
 
 /**
@@ -134,6 +154,52 @@ _.post = function(url, data, opt_options) {
 _.getJson = function(url, opt_options) {
   return _.send('GET', url, null, opt_options).then(function(xhr) {
     return _.parseJson_(xhr.responseText, opt_options);
+  });
+};
+
+
+/**
+ * Sends a get request, returning a promise that will be resolved with the
+ * response as an array of bytes.
+ *
+ * Supported in all XMLHttpRequest level 2 browsers, as well as IE9. IE8 and
+ * earlier are not supported.
+ *
+ * @param {string} url The URL to request.
+ * @param {_.Options=} opt_options Configuration options for the request. The
+ *     responseType will be overwritten to 'arraybuffer' if it was set.
+ * @return {!goog.Promise.<!Uint8Array|!Array.<number>>} A promise that will be
+ *     resolved with an array of bytes once the request completes.
+ */
+_.getBytes = function(url, opt_options) {
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
+    throw new Error('getBytes is not supported in this browser.');
+  }
+
+  var options = opt_options || {};
+  options.responseType = _.ResponseType.ARRAYBUFFER;
+
+  return _.send('GET', url, null, options).then(function(xhr) {
+    // Use the ArrayBuffer response in browsers that support XMLHttpRequest2.
+    // This covers nearly all modern browsers: http://caniuse.com/xhr2
+    if (xhr.response) {
+      return new Uint8Array(/** @type {!ArrayBuffer} */ (xhr.response));
+    }
+
+    // Fallback for IE9: the response may be accessed as an array of bytes with
+    // the non-standard responseBody property, which can only be accessed as a
+    // VBArray. IE7 and IE8 require significant amounts of VBScript to extract
+    // the bytes.
+    // See: http://stackoverflow.com/questions/1919972/
+    if (goog.global['VBArray']) {
+      return new goog.global['VBArray'](xhr['responseBody']).toArray();
+    }
+
+    // Nearly all common browsers are covered by the cases above. If downloading
+    // binary files in older browsers is necessary, the MDN article "Sending and
+    // Receiving Binary Data" provides techniques that may work with
+    // XMLHttpRequest level 1 browsers: http://goo.gl/7lEuGN
+    throw new _.Error('getBytes is not supported in this browser.', url, xhr);
   });
 };
 
@@ -220,15 +286,20 @@ _.send = function(method, url, data, opt_options) {
       xhr.setRequestHeader(_.CONTENT_TYPE_HEADER, _.FORM_CONTENT_TYPE);
     }
 
-    // Set whether to pass cookies on cross-domain requests (if applicable).
-    // @see http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#the-withcredentials-attribute
+    // Set whether to include cookies with cross-domain requests. See:
+    // http://www.w3.org/TR/XMLHttpRequest/#the-withcredentials-attribute
     if (options.withCredentials) {
       xhr.withCredentials = options.withCredentials;
     }
 
-    // Allow the request to override the mime type, useful for getting binary
-    // data from the server.  e.g. 'text/plain; charset=x-user-defined'.
-    // @see http://dev.w3.org/2006/webapi/XMLHttpRequest-2/#dom-xmlhttprequest-overridemimetype
+    // Allows setting an alternative response type, such as an ArrayBuffer. See:
+    // http://www.w3.org/TR/XMLHttpRequest/#dom-xmlhttprequest-responsetype
+    if (options.responseType) {
+      xhr.responseType = options.responseType;
+    }
+
+    // Allow the request to override the MIME type of the response. See:
+    // http://www.w3.org/TR/XMLHttpRequest/#dom-xmlhttprequest-overridemimetype
     if (options.mimeType) {
       xhr.overrideMimeType(options.mimeType);
     }
