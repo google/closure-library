@@ -346,7 +346,7 @@ goog.ui.editor.DefaultToolbar.makeBuiltInToolbarButton = function(command,
   if (descriptor) {
     // Default the factory method to makeToggleButton, since most built-in
     // toolbar buttons are toggle buttons. See also
-    // goog.ui.editor.DefaultToolbar.BUTTONS_.
+    // goog.ui.editor.DefaultToolbar.button_list_.
     var factory = descriptor.factory ||
         goog.ui.editor.ToolbarFactory.makeToggleButton;
     var id = descriptor.command;
@@ -865,8 +865,7 @@ goog.ui.editor.DefaultToolbar.MSG_EDIT_HTML_CAPTION = goog.getMsg('Edit HTML');
  * Note that this object is only used for creating toolbar buttons for
  * built-in editor commands; custom buttons aren't listed here.  Please don't
  * try to hack this!
- * @type {Object<!goog.ui.editor.ButtonDescriptor>}.
- * @private
+ * @private {!Object<!goog.ui.editor.ButtonDescriptor>}.
  */
 goog.ui.editor.DefaultToolbar.buttons_ = {};
 
@@ -887,10 +886,9 @@ goog.ui.editor.ButtonDescriptor;
  * descriptor objects.  This array is processed at JS parse time; each item is
  * inserted into {@link goog.ui.editor.DefaultToolbar.buttons_}, and the array
  * itself is deleted and (hopefully) garbage-collected.
- * @type {Array<!goog.ui.editor.ButtonDescriptor>}.
- * @private
+ * @private {Array<!goog.ui.editor.ButtonDescriptor>}
  */
-goog.ui.editor.DefaultToolbar.BUTTONS_ = [{
+goog.ui.editor.DefaultToolbar.button_list_ = [{
   command: goog.editor.Command.UNDO,
   tooltip: goog.ui.editor.DefaultToolbar.MSG_UNDO_TITLE,
   classes: goog.getCssName('tr-icon') + ' ' + goog.getCssName('tr-undo'),
@@ -1056,14 +1054,13 @@ goog.ui.editor.DefaultToolbar.BUTTONS_ = [{
 
 (function() {
   // Create the goog.ui.editor.DefaultToolbar.buttons_ map from
-  // goog.ui.editor.DefaultToolbar.BUTTONS_.
+  // goog.ui.editor.DefaultToolbar.button_list_.
   for (var i = 0, button;
-      button = goog.ui.editor.DefaultToolbar.BUTTONS_[i]; i++) {
+      button = goog.ui.editor.DefaultToolbar.button_list_[i]; i++) {
     goog.ui.editor.DefaultToolbar.buttons_[button.command] = button;
   }
 
-  // goog.ui.editor.DefaultToolbar.BUTTONS_ is no longer needed
+  // goog.ui.editor.DefaultToolbar.button_list_ is no longer needed
   // once the map is ready.
-  delete goog.ui.editor.DefaultToolbar.BUTTONS_;
-
+  goog.ui.editor.DefaultToolbar.button_list_ = null;
 })();
