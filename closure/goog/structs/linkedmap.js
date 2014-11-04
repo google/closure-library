@@ -321,7 +321,7 @@ goog.structs.LinkedMap.prototype.forEach = function(f, opt_obj) {
  *
  * @see goog.structs.map
  * @param {function(this:T, VALUE, KEY,
- *         goog.structs.LinkedMap.<KEY,VALUE>): RESULT} f
+ *         goog.structs.LinkedMap<KEY,VALUE>): RESULT} f
  *     The function to call for each item. The function takes
  *     three arguments: the value, the key, and the LinkedMap.
  * @param {T=} opt_obj The object context to use as "this" for the
@@ -345,7 +345,7 @@ goog.structs.LinkedMap.prototype.map = function(f, opt_obj) {
  *
  * @see goog.structs.some
  * @param {function(this:T, VALUE, KEY,
- *         goog.structs.LinkedMap.<KEY,VALUE>):boolean} f
+ *         goog.structs.LinkedMap<KEY,VALUE>):boolean} f
  *     The function to call for each item. The function takes
  *     three arguments: the value, the key, and the LinkedMap, and returns a
  *     boolean.
@@ -371,7 +371,7 @@ goog.structs.LinkedMap.prototype.some = function(f, opt_obj) {
  *
  * @see goog.structs.some
  * @param {function(this:T, VALUE, KEY,
- *         goog.structs.LinkedMap.<KEY,VALUE>):boolean} f
+ *         goog.structs.LinkedMap<KEY,VALUE>):boolean} f
  *     The function to call for each item. The function takes
  *     three arguments: the value, the key, and the Cache, and returns a
  *     boolean.

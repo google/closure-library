@@ -296,7 +296,7 @@ goog.structs.TreeNode.prototype.getNodeByKey = function(key) {
 /**
  * Traverses all child nodes.
  * @param {function(this:THIS, !goog.structs.TreeNode<KEY, VALUE>, number,
- *     !Array<!goog.structs.TreeNode.<KEY, VALUE>>)} f Callback function. It
+ *     !Array<!goog.structs.TreeNode<KEY, VALUE>>)} f Callback function. It
  *     takes the node, its index and the array of all child nodes as arguments.
  * @param {THIS=} opt_this The object to be used as the value of {@code this}
  *     within {@code f}.
