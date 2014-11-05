@@ -402,13 +402,34 @@ goog.fx.dom.Fade = function(element, start, end, time, opt_acc) {
   if (goog.isNumber(start)) start = [start];
   if (goog.isNumber(end)) end = [end];
 
-  goog.fx.dom.PredefinedEffect.call(this, element, start, end, time, opt_acc);
+  goog.fx.dom.Fade.base(this, 'constructor',
+      element, start, end, time, opt_acc);
 
   if (start.length != 1 || end.length != 1) {
     throw Error('Start and end points must be 1D');
   }
+
+  /**
+   * The last opacity we set, or -1 for not set.
+   * @private {number}
+   */
+  this.lastOpacityUpdate_ = goog.fx.dom.Fade.OPACITY_UNSET_;
 };
 goog.inherits(goog.fx.dom.Fade, goog.fx.dom.PredefinedEffect);
+
+
+/**
+ * The quantization of opacity values to use.
+ * @private {number}
+ */
+goog.fx.dom.Fade.TOLERANCE_ = 1.0 / 0x400;  // 10-bit color
+
+
+/**
+ * Value indicating that the opacity must be set on next update.
+ * @private {number}
+ */
+goog.fx.dom.Fade.OPACITY_UNSET_ = -1;
 
 
 /**
@@ -417,7 +438,28 @@ goog.inherits(goog.fx.dom.Fade, goog.fx.dom.PredefinedEffect);
  * @override
  */
 goog.fx.dom.Fade.prototype.updateStyle = function() {
-  goog.style.setOpacity(this.element, this.coords[0]);
+  var opacity = this.coords[0];
+  var delta = Math.abs(opacity - this.lastOpacityUpdate_);
+  // In order to keep eager browsers from over-rendering, only update
+  // on a potentially visible change in opacity.
+  if (delta >= goog.fx.dom.Fade.TOLERANCE_) {
+    goog.style.setOpacity(this.element, opacity);
+    this.lastOpacityUpdate_ = opacity;
+  }
+};
+
+
+/** @override */
+goog.fx.dom.Fade.prototype.onBegin = function() {
+  this.lastOpacityUpdate_ = goog.fx.dom.Fade.OPACITY_UNSET_;
+  goog.fx.dom.Fade.base(this, 'onBegin');
+};
+
+
+/** @override */
+goog.fx.dom.Fade.prototype.onEnd = function() {
+  this.lastOpacityUpdate_ = goog.fx.dom.Fade.OPACITY_UNSET_;
+  goog.fx.dom.Fade.base(this, 'onEnd');
 };
 
 
