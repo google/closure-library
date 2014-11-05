@@ -56,7 +56,7 @@ goog.require('goog.debug.Error');
  * Deferreds may be templated to a specific type they produce using generics
  * with syntax such as:
  * <code>
- *   /** @type {goog.async.Deferred.<string>} *&#47;
+ *   /** @type {goog.async.Deferred<string>} *&#47;
  *   var d = new goog.async.Deferred();
  *   // Compiler can infer that foo is a string.
  *   d.addCallback(function(foo) {...});
@@ -72,14 +72,14 @@ goog.require('goog.debug.Error');
  * @param {Object=} opt_defaultScope The default object context to call
  *     callbacks and errbacks in.
  * @constructor
- * @implements {goog.Thenable.<VALUE>}
+ * @implements {goog.Thenable<VALUE>}
  * @template VALUE
  */
 goog.async.Deferred = function(opt_onCancelFunction, opt_defaultScope) {
   /**
    * Entries in the sequence are arrays containing a callback, an errback, and
    * an optional scope. The callback or errback in an entry may be null.
-   * @type {!Array.<!Array>}
+   * @type {!Array<!Array>}
    * @private
    */
   this.sequence_ = [];
@@ -414,7 +414,7 @@ goog.async.Deferred.prototype.addCallback = function(cb, opt_scope) {
  * @param {!function(this:T,?):?} eb The function to be called on an
  *     unsuccessful result.
  * @param {T=} opt_scope An optional scope to call the errback in.
- * @return {!goog.async.Deferred.<VALUE>} This Deferred.
+ * @return {!goog.async.Deferred<VALUE>} This Deferred.
  * @template T
  */
 goog.async.Deferred.prototype.addErrback = function(eb, opt_scope) {
@@ -543,7 +543,7 @@ goog.async.Deferred.prototype.awaitDeferred = function(otherDeferred) {
  * @param {boolean=} opt_propagateCancel If cancel() is called on every child
  *     branch created with opt_propagateCancel, the parent will be canceled as
  *     well.
- * @return {!goog.async.Deferred.<VALUE>} A Deferred that will be started with
+ * @return {!goog.async.Deferred<VALUE>} A Deferred that will be started with
  *     the computed result from this stage in the execution sequence.
  */
 goog.async.Deferred.prototype.branch = function(opt_propagateCancel) {
@@ -699,8 +699,8 @@ goog.async.Deferred.succeed = function(opt_result) {
  * Creates a Deferred that fires when the given promise resolves.
  * Use only during migration to Promises.
  *
- * @param {!goog.Promise.<T>} promise
- * @return {!goog.async.Deferred.<T>} The new Deferred.
+ * @param {!goog.Promise<T>} promise
+ * @return {!goog.async.Deferred<T>} The new Deferred.
  * @template T
  */
 goog.async.Deferred.fromPromise = function(promise) {
@@ -878,7 +878,7 @@ goog.async.Deferred.Error_.prototype.resetTimer = function() {
 
 /**
  * Map of unhandled errors scheduled to be rethrown in a future timestep.
- * @private {!Object.<number|string, goog.async.Deferred.Error_>}
+ * @private {!Object<number|string, goog.async.Deferred.Error_>}
  */
 goog.async.Deferred.errorMap_ = {};
 

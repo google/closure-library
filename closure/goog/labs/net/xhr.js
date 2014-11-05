@@ -168,7 +168,7 @@ _.getJson = function(url, opt_options) {
  * @param {string} url The URL to request.
  * @param {_.Options=} opt_options Configuration options for the request. The
  *     responseType will be overwritten to 'arraybuffer' if it was set.
- * @return {!goog.Promise.<!Uint8Array|!Array.<number>>} A promise that will be
+ * @return {!goog.Promise<!Uint8Array|!Array<number>>} A promise that will be
  *     resolved with an array of bytes once the request completes.
  */
 _.getBytes = function(url, opt_options) {

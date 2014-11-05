@@ -30,7 +30,7 @@ goog.text.LoremIpsum = function() {
 
 /**
  * Delimiters that end sentences.
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @private
  */
 goog.text.LoremIpsum.DELIMITERS_SENTENCES_ = ['.', '?', '!'];
@@ -46,7 +46,7 @@ goog.text.LoremIpsum.SENTENCE_SPLIT_REGEX_ = /[\.\?\!]/;
 
 /**
  * Delimiters that end words.
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @private
  */
 goog.text.LoremIpsum.DELIMITERS_WORDS_ = [',', '.', '?', '!'];
@@ -237,7 +237,7 @@ goog.text.LoremIpsum.prototype.initializeDictionary_ = function(dictionary) {
 
 /**
  * Picks a random starting chain.
- * @return {Array.<string>} The starting key.
+ * @return {Array<string>} The starting key.
  * @private
  */
 goog.text.LoremIpsum.prototype.chooseRandomStart_ = function() {
@@ -367,7 +367,7 @@ goog.text.LoremIpsum.prototype.generateParagraph = function(
 /**
  * Splits a piece of text into paragraphs.
  * @param {string} text The text to split.
- * @return {Array.<string>} An array of paragraphs.
+ * @return {Array<string>} An array of paragraphs.
  * @private
  */
 goog.text.LoremIpsum.splitParagraphs_ = function(text) {
@@ -378,7 +378,7 @@ goog.text.LoremIpsum.splitParagraphs_ = function(text) {
 /**
  * Splits a piece of text into sentences.
  * @param {string} text The text to split.
- * @return {Array.<string>} An array of sentences.
+ * @return {Array<string>} An array of sentences.
  * @private
  */
 goog.text.LoremIpsum.splitSentences_ = function(text) {
@@ -391,7 +391,7 @@ goog.text.LoremIpsum.splitSentences_ = function(text) {
 /**
  * Splits a piece of text into words..
  * @param {string} text The text to split.
- * @return {Array.<string>} An array of words.
+ * @return {Array<string>} An array of words.
  * @private
  */
 goog.text.LoremIpsum.splitWords_ = function(text) {
@@ -425,7 +425,7 @@ goog.text.LoremIpsum.arrayLength_ = function(array) {
 
 /**
  * Find the number in the list of values that is closest to the target.
- * @param {Array.<number>} values The values.
+ * @param {Array<number>} values The values.
  * @param {number} target The target value.
  * @return {number} The closest value.
  */
