@@ -42,7 +42,7 @@ goog.require('goog.string.TypedString');
  * is immutable; hence only a default instance corresponding to the empty string
  * can be obtained via constructor invocation.
  *
- * A SafeStyle's string representation ({@link #getSafeStyleString()}) can
+ * A SafeStyle's string representation ({@link #getTypedStringValue()}) can
  * safely:
  * <ul>
  *   <li>Be interpolated as the entire content of a *quoted* HTML style
@@ -72,10 +72,10 @@ goog.require('goog.string.TypedString');
  *
  * Values of this type must be composable, i.e. for any two values
  * {@code style1} and {@code style2} of this type,
- * {@code style1.getSafeStyleString() + style2.getSafeStyleString()} must
+ * {@code style1.getTypedStringValue() + style2.getTypedStringValue()} must
  * itself be a value that satisfies the SafeStyle type constraint. This
  * requirement implies that for any value {@code style} of this type,
- * {@code style.getSafeStyleString()} must not end in a "property value" or
+ * {@code style.getTypedStringValue()} must not end in a "property value" or
  * "property name" context. For example, a value of {@code background:url("}
  * or {@code font-} would not satisfy the SafeStyle contract. This is because
  * concatenating such strings with a second value that itself does not contain
