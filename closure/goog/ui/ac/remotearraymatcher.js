@@ -41,7 +41,8 @@ goog.require('goog.net.XhrIo');
  * @constructor
  * @extends {goog.Disposable}
  */
-goog.ui.ac.RemoteArrayMatcher = function(url, opt_noSimilar, opt_xmlHttpFactory) {
+goog.ui.ac.RemoteArrayMatcher =
+    function(url, opt_noSimilar, opt_xmlHttpFactory) {
   goog.Disposable.call(this);
 
   /**
