@@ -578,7 +578,7 @@ goog.array.findRight = function(arr, f, opt_obj) {
  *     for every element. This function
  *     takes 3 arguments (the element, the index and the array) and should
  *     return a boolean.
- * @param {Object=} opt_obj An optional "this" context for the function.
+ * @param {S=} opt_obj An optional "this" context for the function.
  * @return {number} The index of the last array element that passes the test,
  *     or -1 if no element is found.
  * @template T,S
