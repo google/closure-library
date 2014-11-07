@@ -531,19 +531,27 @@ function testSetAllButtonsEnabled() {
 }
 
 function testIframeMask() {
+  var prevNumFrames =
+      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME).length;
   // generate a new dialog
   dialog.dispose();
   dialog = new goog.ui.Dialog(null, true /* iframe mask */);
   dialog.setVisible(true);
 
-  var iframes =
-      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME);
-  // NOTE: one iframe already exists in the document, so we check for 1 extra
-  // iframe.
-  assertEquals('No iframe mask created', 2, iframes.length);
+  // Test that the dialog added one iframe to the document.
+  // The absolute number of iframes should not be tested because,
+  // in certain cases, the test runner itself can can add an iframe
+  // to the document as part of a strategy not to block the UI for too long.
+  // See goog.async.nextTick.getSetImmediateEmulator_.
+  var curNumFrames =
+      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME).length;
+  assertEquals(
+      'No iframe mask created', prevNumFrames + 1, curNumFrames);
 }
 
 function testNonModalDialog() {
+  var prevNumFrames =
+      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME).length;
   // generate a new dialog
   dialog.dispose();
   dialog = new goog.ui.Dialog(null, true /* iframe mask */);
@@ -552,11 +560,15 @@ function testNonModalDialog() {
   dialog.setVisible(true);
   assertAriaHidden(true);
 
-  var iframes =
-      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME);
-  // NOTE: one iframe already exists in the document, so we check there are
-  // no extra iframes in the document.
-  assertEquals('Iframe mask created for modal dialog', 1, iframes.length);
+  // Test that the dialog did not change the number of iframes in the document.
+  // The absolute number of iframes should not be tested because,
+  // in certain cases, the test runner itself can can add an iframe
+  // to the document as part of a strategy not to block the UI for too long.
+  // See goog.async.nextTick.getSetImmediateEmulator_.
+  var curNumFrames =
+      goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.IFRAME).length;
+  assertEquals(
+      'Iframe mask created for modal dialog', prevNumFrames, curNumFrames);
 }
 
 function testSwapModalForOpenDialog() {
