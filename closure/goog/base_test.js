@@ -136,9 +136,6 @@ function testIsProvided() {
 }
 
 function testGlobalize() {
-  goog.globalize(goog);
-  assertNotUndefined('Globalize goog', provide);
-
   var a = {a: 1, b: 2, c: 3};
   var b = {};
   goog.globalize(a, b);
