@@ -73,8 +73,8 @@ goog.crypt.byteArrayToString = function(bytes) {
 /**
  * Turns an array of numbers into the hex string given by the concatenation of
  * the hex values to which the numbers correspond.
- * @param {Uint8Array|Int8Array|Array<number>} array Array of numbers
- *     representing characters.
+ * @param {Uint8Array|Array<number>} array Array of numbers representing
+ *     characters.
  * @return {string} Hex string.
  */
 goog.crypt.byteArrayToHex = function(array) {
@@ -130,7 +130,7 @@ goog.crypt.stringToUtf8ByteArray = function(str) {
 
 /**
  * Converts a UTF-8 byte array to JavaScript's 16-bit Unicode.
- * @param {Uint8Array|Int8Array|Array<number>} bytes UTF-8 byte array.
+ * @param {Uint8Array|Array<number>} bytes UTF-8 byte array.
  * @return {string} 16-bit Unicode string.
  */
 goog.crypt.utf8ByteArrayToString = function(bytes) {
