@@ -465,7 +465,7 @@ if (!COMPILED) {
    * goog.provide('goog.events.Event') implicitly declares that 'goog' and
    * 'goog.events' must be namespaces.
    *
-   * @type {Object<string, (boolean|undefined)>}
+   * @type {!Object<string, (boolean|undefined)>}
    * @private
    */
   goog.implicitNamespaces_ = {'goog.module': true};
@@ -505,7 +505,7 @@ goog.getObjectByName = function(name, opt_obj) {
 /**
  * Globalizes a whole namespace, such as goog or goog.lang.
  *
- * @param {Object} obj The namespace to globalize.
+ * @param {!Object} obj The namespace to globalize.
  * @param {Object=} opt_global The object to add the properties to.
  * @deprecated Properties may be explicitly exported to the global scope, but
  *     this should no longer be done in bulk.
@@ -753,7 +753,7 @@ goog.define('goog.SEAL_MODULE_EXPORTS', goog.DEBUG);
 /**
  * The registry of initialized modules:
  * the module identifier to module exports map.
- * @private @const {Object<string, ?>}
+ * @private @const {!Object<string, ?>}
  */
 goog.loadedModules_ = {};
 
@@ -1472,7 +1472,7 @@ goog.getUid = function(obj) {
  *
  * This does not modify the object.
  *
- * @param {Object} obj The object to check.
+ * @param {!Object} obj The object to check.
  * @return {boolean} Whether there an assigned unique id for the object.
  */
 goog.hasUid = function(obj) {
