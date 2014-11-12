@@ -1148,6 +1148,18 @@ function testToTitleCase() {
       goog.string.toTitleCase('one.  two.  three', delimiters));
 }
 
+function testCapitalize() {
+  assertEquals('Reptar', goog.string.capitalize('reptar'));
+  assertEquals('Reptar reptar', goog.string.capitalize('reptar reptar'));
+  assertEquals('Reptar', goog.string.capitalize('REPTAR'));
+  assertEquals('Reptar', goog.string.capitalize('Reptar'));
+  assertEquals('1234', goog.string.capitalize('1234'));
+  assertEquals('$#@!', goog.string.capitalize('$#@!'));
+  assertEquals('', goog.string.capitalize(''));
+  assertEquals('R', goog.string.capitalize('r'));
+  assertEquals('R', goog.string.capitalize('R'));
+}
+
 function testParseInt() {
   // Many example values borrowed from
   // http://trac.webkit.org/browser/trunk/LayoutTests/fast/js/kde/

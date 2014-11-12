@@ -1428,6 +1428,25 @@ goog.string.toTitleCase = function(str, opt_delimiters) {
 
 
 /**
+ * Capitalizes a string, i.e. converts the first letter to uppercase
+ * and all other letters to lowercase, e.g.:
+ *
+ * goog.string.capitalize('one')     => 'One'
+ * goog.string.capitalize('ONE')     => 'One'
+ * goog.string.capitalize('one two') => 'One two'
+ *
+ * Note that this function does not trim initial whitespace.
+ *
+ * @param {string} str String value to capitalize.
+ * @return {string} String value with first letter in uppercase.
+ */
+goog.string.capitalize = function(str) {
+  return String(str.charAt(0)).toUpperCase() +
+      String(str.substr(1)).toLowerCase();
+};
+
+
+/**
  * Parse a string in decimal or hexidecimal ('0xFFFF') form.
  *
  * To parse a particular radix, please use parseInt(string, radix) directly. See
