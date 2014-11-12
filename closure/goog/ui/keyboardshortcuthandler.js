@@ -337,8 +337,9 @@ goog.ui.KeyboardShortcutHandler.getKeyCode = function(name) {
   if (!goog.ui.KeyboardShortcutHandler.nameToKeyCodeCache_) {
     var map = {};
     for (var key in goog.events.KeyNames) {
-      // Explicitly convert the stringified map keys to numbers.
-      map[goog.events.KeyNames[key]] = parseInt(key, 10);
+      // Explicitly convert the stringified map keys to numbers and normalize.
+      map[goog.events.KeyNames[key]] =
+          goog.events.KeyCodes.normalizeKeyCode(parseInt(key, 10));
     }
     goog.ui.KeyboardShortcutHandler.nameToKeyCodeCache_ = map;
   }
@@ -978,9 +979,7 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
     return;
   }
 
-  var keyCode = goog.userAgent.GECKO ?
-      goog.events.KeyCodes.normalizeGeckoKeyCode(event.keyCode) :
-      event.keyCode;
+  var keyCode = goog.events.KeyCodes.normalizeKeyCode(event.keyCode);
 
   var modifiers =
       (event.shiftKey ? goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT : 0) |
