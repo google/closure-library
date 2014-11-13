@@ -168,8 +168,8 @@ function testIsLoadedForIE() {
 
   var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
   flash.render();
-  assertNotThrows('isLoaded() should not throw exception', function(){
-  	flash.isLoaded();
+  assertNotThrows('isLoaded() should not throw exception', function() {
+    flash.isLoaded();
   })
   flash.dispose();
 }
