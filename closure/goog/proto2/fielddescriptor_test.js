@@ -24,6 +24,7 @@ function testFieldDescriptorConstruction() {
   var fieldDescriptor = new goog.proto2.FieldDescriptor(messageType, 10, {
     name: 'test',
     repeated: true,
+    packed: true,
     fieldType: goog.proto2.FieldDescriptor.FieldType.INT32,
     type: Number
   });
@@ -32,6 +33,8 @@ function testFieldDescriptorConstruction() {
   assertEquals('test', fieldDescriptor.getName());
 
   assertEquals(true, fieldDescriptor.isRepeated());
+
+  assertEquals(true, fieldDescriptor.isPacked());
 
   assertEquals(goog.proto2.FieldDescriptor.FieldType.INT32,
       fieldDescriptor.getFieldType());
