@@ -199,6 +199,23 @@ function testTwoBodies() {
   }
 }
 
+function testNaNs() {
+  var table = goog.dom.getElement('sortable-4');
+  var header = goog.dom.getElement('sortable-4-col');
+  var sorter = new goog.ui.TableSorter();
+  try {
+    // All non-numbers compare equal, i.e. Bar == Foo, so order of those
+    // elements should not change (since we are using stable sort).
+    sorter.decorate(table);
+    goog.testing.events.fireClickEvent(header);
+    assertOrder(['2', '3', '11', 'Bar', 'Foo'], table);
+    goog.testing.events.fireClickEvent(header);
+    assertOrder(['Bar', 'Foo', '11', '3', '2'], table);
+  } finally {
+    sorter.dispose();
+  }
+}
+
 function assertOrder(arr, opt_table) {
   var tbl = opt_table || table;
   var actual = [];
