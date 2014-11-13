@@ -163,6 +163,17 @@ function testThrowsRequiredVersionOfFlashNotAvailable() {
   flash.dispose();
 }
 
+function testIsLoadedForIE() {
+  control.$replayAll();
+
+  var flash = new goog.ui.media.FlashObject(FLASH_URL, domHelper);
+  flash.render();
+  assertNotThrows('isLoaded() should not throw exception', function(){
+  	flash.isLoaded();
+  })
+  flash.dispose();
+}
+
 function testIsLoadedAfterDispose() {
   control.$replayAll();
 
