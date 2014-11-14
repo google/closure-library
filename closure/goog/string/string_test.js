@@ -1288,3 +1288,28 @@ function testCaseInsensitiveContains() {
   assertTrue(goog.string.caseInsensitiveContains('Moot', 'moo'));
   assertTrue(goog.string.caseInsensitiveContains('moo', 'moo'));
 }
+
+function testEditDistance() {
+  assertEquals('Empty string should match to length of other string', 4,
+      goog.string.editDistance('goat', ''));
+  assertEquals('Empty string should match to length of other string', 4,
+      goog.string.editDistance('', 'moat'));
+
+  assertEquals('Equal strings should have zero edit distance', 0,
+      goog.string.editDistance('abcd', 'abcd'));
+  assertEquals('Equal strings should have zero edit distance', 0,
+      goog.string.editDistance('', ''));
+
+  assertEquals('Edit distance for adding characters incorrect', 4,
+      goog.string.editDistance('bdf', 'abcdefg'));
+  assertEquals('Edit distance for removing characters incorrect', 4,
+      goog.string.editDistance('abcdefg', 'bdf'));
+
+  assertEquals('Edit distance for substituting characters incorrect', 4,
+      goog.string.editDistance('adef', 'ghij'));
+  assertEquals('Edit distance for substituting characters incorrect', 1,
+      goog.string.editDistance('goat', 'boat'));
+
+  assertEquals('Substitution should be preferred over insert/delete', 4,
+      goog.string.editDistance('abcd', 'defg'));
+}
