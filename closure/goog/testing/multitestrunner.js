@@ -1017,7 +1017,7 @@ goog.testing.MultiTestRunner.prototype.drawProgressSegment_ =
  */
 goog.testing.MultiTestRunner.prototype.drawTestResult_ = function(
     test, success, report) {
-  var text = goog.string.isEmpty(report) ?
+  var text = goog.string.isEmptyOrWhitespace(report) ?
       'No report for ' + test + '\n' : report;
   var el = this.dom_.createDom('div');
   text = goog.string.htmlEscape(text).replace(/\n/g, '<br>');

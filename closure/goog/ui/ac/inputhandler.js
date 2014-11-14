@@ -557,7 +557,7 @@ goog.ui.ac.InputHandler.prototype.setTokenText =
     // Ensure there's whitespace wrapping the entries, if whitespaceWrapEntries_
     // has been set to true.
     if (this.whitespaceWrapEntries_) {
-      if (index != 0 && !goog.string.isEmpty(entries[index - 1])) {
+      if (index != 0 && !goog.string.isEmptyOrWhitespace(entries[index - 1])) {
         replaceValue = ' ' + replaceValue;
       }
       // Add a space only if it's the last token; otherwise, we assume the

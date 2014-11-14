@@ -1072,7 +1072,7 @@ function testSetEnabled() {
   assertTrue('Control must be active', control.isActive());
   var elem = control.getElementStrict();
   assertTrue('Control element must not have aria-disabled',
-      goog.string.isEmpty(aria.getState(elem, State.DISABLED)));
+      goog.string.isEmptyOrWhitespace(aria.getState(elem, State.DISABLED)));
   assertEquals('Control element must have a tabIndex of 0', 0,
       goog.string.toNumber(elem.getAttribute('tabIndex') || ''));
 
@@ -1139,7 +1139,7 @@ function testSetStateWithDisabled() {
   assertTrue('Control must be enabled', control.isEnabled());
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
-  assertTrue('Control element must not have aria-disabled', goog.string.isEmpty(
+  assertTrue('Control element must not have aria-disabled', goog.string.isEmptyOrWhitespace(
       aria.getState(control.getElementStrict(), State.DISABLED)));
   assertEquals('Control element must have a tabIndex of 0', 0,
       goog.string.toNumber(

@@ -916,7 +916,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
   if (goog.isArray(tokenOrArray)) {
     // Remove invalid tokens from the array, which may leave us with nothing.
     tokenOrArray = goog.array.filter(tokenOrArray, function(str) {
-      return !goog.string.isEmptySafe(str);
+      return !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(str));
     });
   }
 
@@ -947,7 +947,7 @@ goog.ui.ac.Renderer.prototype.getTokenRegExp_ = function(tokenOrArray) {
       // For the single-match string token, we refuse to match anything if
       // the string begins with a non-word character, as matches by definition
       // can only occur at the start of a word. (This also handles the
-      // goog.string.isEmptySafe(tokenOrArray) case.)
+      // goog.string.isEmptyOrWhitespace(goog.string.makeSafe(tokenOrArray)) case.)
       if (!/^\W/.test(tokenOrArray)) {
         token = goog.string.regExpEscape(tokenOrArray);
       }

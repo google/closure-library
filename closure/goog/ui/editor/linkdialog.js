@@ -801,7 +801,7 @@ goog.ui.editor.LinkDialog.prototype.syncOkButton_ = function() {
   } else {
     return;
   }
-  this.getOkButtonElement().disabled = goog.string.isEmpty(inputValue);
+  this.getOkButtonElement().disabled = goog.string.isEmptyOrWhitespace(inputValue);
 };
 
 

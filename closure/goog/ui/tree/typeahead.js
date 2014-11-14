@@ -178,7 +178,7 @@ goog.ui.tree.TypeAhead.prototype.handleTypeAheadChar = function(e) {
  */
 goog.ui.tree.TypeAhead.prototype.setNodeInMap = function(node) {
   var labelText = node.getText();
-  if (labelText && !goog.string.isEmptySafe(labelText)) {
+  if (labelText && !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(labelText))) {
     // Typeahead is case insensitive, convert to lowercase.
     labelText = labelText.toLowerCase();
 
@@ -201,7 +201,7 @@ goog.ui.tree.TypeAhead.prototype.setNodeInMap = function(node) {
  */
 goog.ui.tree.TypeAhead.prototype.removeNodeFromMap = function(node) {
   var labelText = node.getText();
-  if (labelText && !goog.string.isEmptySafe(labelText)) {
+  if (labelText && !goog.string.isEmptyOrWhitespace(goog.string.makeSafe(labelText))) {
     labelText = labelText.toLowerCase();
 
     var nodeList = this.nodeMap_.get(labelText);
