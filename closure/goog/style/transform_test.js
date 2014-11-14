@@ -51,6 +51,34 @@ var setAndAssertTranslation = function(x, y) {
   }
 };
 
+
+/**
+ * Sets a transform translation and asserts the translation was applied.
+ * @param {number} x The horizontal scale
+ * @param {number} y The vertical scale
+ * @param {number} z The depth scale
+ */
+var setAndAssertScale = function(x, y, z) {
+  if (goog.userAgent.GECKO ||
+      goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
+    // Mozilla and <IE10 do not support CSSMatrix.
+    return;
+  }
+  var success = goog.style.transform.setScale(element, x, y, z);
+  if (!goog.style.transform.isSupported()) {
+    assertFalse(success);
+  } else {
+    assertTrue(success);
+    var scale = goog.style.transform.getScale(element);
+    assertEquals(x, scale.x);
+    assertEquals(y, scale.y);
+    if (goog.style.transform.is3dSupported()) {
+      assertEquals(z, scale.z);
+    }
+  }
+};
+
+
 function setUp() {
   element = goog.dom.createElement('div');
   goog.dom.appendChild(goog.dom.getDocument().body, element);
@@ -89,4 +117,20 @@ function testTranslateY() {
 
 function testTranslateXY() {
   setAndAssertTranslation(10, 20);
+}
+
+function testScaleX() {
+  setAndAssertScale(5, 1, 1);
+}
+
+function testScaleY() {
+  setAndAssertScale(1, 3, 1);
+}
+
+function testScaleZ() {
+  setAndAssertScale(1, 1, 8);
+}
+
+function testScale() {
+  setAndAssertScale(2, 2, 2);
 }
