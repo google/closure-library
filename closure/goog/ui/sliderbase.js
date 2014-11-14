@@ -402,6 +402,14 @@ goog.ui.SliderBase.SLIDER_DRAGGING_CSS_CLASS_ =
 goog.ui.SliderBase.THUMB_DRAGGING_CSS_CLASS_ =
     goog.getCssName('goog-slider-thumb-dragging');
 
+/**
+ * CSS class name applied to a thumb while it's being on top.
+ * @type {string}
+ * @private
+ */
+goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_ =
+    goog.getCssName('goog-slider-thumb-on-top');
+
 
 /**
  * CSS class name applied when the slider is disabled.
@@ -934,14 +942,38 @@ goog.ui.SliderBase.prototype.setValueAndExtent = function(value, extent) {
     // first so these adjustements don't kick in.
     this.rangeModel.setMute(true);
     this.rangeModel.setExtent(0);
+
+    var oldValue = this.rangeModel.getValue();
     this.rangeModel.setValue(value);
+    var newValue = this.rangeModel.getValue();
+    this.adjustValueThumbPosition_(newValue > oldValue);
+
     this.rangeModel.setExtent(extent);
     this.rangeModel.setMute(false);
     this.handleRangeModelChange(null);
   }
 };
 
+/**
+ * @param {boolean} moveTowardsEnd 'true' if value thumb move to extent thumb
+ */
+goog.ui.SliderBase.prototype.adjustValueThumbPosition_ = function(moveTowardsEnd) {
+  if (this.valueThumb == this.extentThumb) {
+    return;
+  }
 
+  if (moveTowardsEnd && !goog.dom.classlist.contains(this.valueThumb,
+      goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_)) {
+    goog.style.setStyle(this.valueThumb, 'zIndex', 1);
+    goog.style.setStyle(this.extentThumb, 'zIndex', 0);
+    goog.dom.classlist.add(this.valueThumb, goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_);
+  } else if (!moveTowardsEnd && goog.dom.classlist.contains(this.valueThumb,
+      goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_)) {
+    goog.style.setStyle(this.valueThumb, 'zIndex', 0);
+    goog.style.setStyle(this.extentThumb, 'zIndex', 1);
+    goog.dom.classlist.remove(this.valueThumb, goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_);
+  }
+};
 /**
  * @return {number} The minimum value.
  */
