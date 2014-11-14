@@ -216,6 +216,7 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
     case 'boolean':
       sb.push(object);
       break;
+    case 'function':
     case 'undefined':
       sb.push('null');
       break;
@@ -232,10 +233,6 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
       // as string, number and boolean? Most implementations do not and the
       // need is not very big
       this.serializeObject_(/** @type {Object} */ (object), sb);
-      break;
-    case 'function':
-      // Skip functions.
-      // TODO(user) Should we return something here?
       break;
     default:
       throw Error('Unknown type: ' + typeof object);
@@ -350,8 +347,6 @@ goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
   for (var key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       var value = obj[key];
-      // Skip functions.
-      // TODO(ptucker) Should we return something for function properties?
       if (typeof value != 'function') {
         sb.push(sep);
         this.serializeString_(key, sb);
