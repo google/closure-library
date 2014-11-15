@@ -128,13 +128,6 @@ function testRender() {
   }
 }
 
-function testNoLeftOverListenersAfterDispose() {
-  var initialListenerCount = goog.events.getTotalListenerCount();
-  samplePalette.render(document.getElementById('sandbox'));
-  samplePalette.dispose();
-  assertEquals(initialListenerCount, goog.events.getTotalListenerCount());
-}
-
 function testSwatchTextIsReadable() {
   samplePalette.render(document.getElementById('sandbox'));
 
