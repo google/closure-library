@@ -672,7 +672,7 @@ goog.uri.utils.appendKeyValuePairs_ = function(key, value, pairs) {
  *
  * @param {!Array<string|undefined>} buffer A string buffer to append to.  The
  *     first element appended will be an '&', and may be replaced by the caller.
- * @param {goog.uri.utils.QueryArray|Arguments} keysAndValues An array with
+ * @param {!goog.uri.utils.QueryArray|!Arguments} keysAndValues An array with
  *     alternating keys and values -- see the typedef.
  * @param {number=} opt_startIndex A start offset into the arary, defaults to 0.
  * @return {!Array<string|undefined>} The buffer argument.
@@ -714,8 +714,8 @@ goog.uri.utils.buildQueryData = function(keysAndValues, opt_startIndex) {
  *
  * @param {!Array<string|undefined>} buffer A string buffer to append to.  The
  *     first element appended will be an '&', and may be replaced by the caller.
- * @param {Object<goog.uri.utils.QueryValue>} map An object where keys are
- *     URI-encoded parameter keys, and the values conform to the contract
+ * @param {!Object<string, goog.uri.utils.QueryValue>} map An object where keys
+ *     are URI-encoded parameter keys, and the values conform to the contract
  *     specified in the goog.uri.utils.QueryValue typedef.
  * @return {!Array<string|undefined>} The buffer argument.
  * @private
@@ -733,9 +733,9 @@ goog.uri.utils.buildQueryDataBufferFromMap_ = function(buffer, map) {
  * Builds a query data string from a map.
  * Currently generates "&key&" for empty args.
  *
- * @param {Object} map An object where keys are URI-encoded parameter keys,
- *     and the values are arbitrary types or arrays.  Keys with a null value
- *     are dropped.
+ * @param {!Object<string, goog.uri.utils.QueryValue>} map An object where keys
+ *     are URI-encoded parameter keys, and the values are arbitrary types
+ *     or arrays. Keys with a null value are dropped.
  * @return {string} The encoded query string, in the form 'a=1&b=2'.
  */
 goog.uri.utils.buildQueryDataFromMap = function(map) {
@@ -784,9 +784,9 @@ goog.uri.utils.appendParams = function(uri, var_args) {
  * Appends query parameters from a map.
  *
  * @param {string} uri The original URI, which may already have query data.
- * @param {Object} map An object where keys are URI-encoded parameter keys,
- *     and the values are arbitrary types or arrays.  Keys with a null value
- *     are dropped.
+ * @param {!Object<goog.uri.utils.QueryValue>} map An object where keys are
+ *     URI-encoded parameter keys, and the values are arbitrary types or arrays.
+ *     Keys with a null value are dropped.
  * @return {string} The new parameters.
  */
 goog.uri.utils.appendParamsFromMap = function(uri, map) {
