@@ -937,43 +937,64 @@ goog.ui.SliderBase.prototype.setValueAndExtent = function(value, extent) {
     if (value == this.getValue() && extent == this.getExtent()) {
       return;
     }
+
+    var equalValueOfThumbHeight = this.valueThumb.offsetHeight *
+      (this.getMaximum() - this.getMinimum()) /
+      (this.getElement().clientHeight - this.valueThumb.offsetHeight);
+
+    var thumbsOverlapped = (extent - value) < equalValueOfThumbHeight;
+
     // because the underlying range model applies adjustements of value
     // and extent to fit within bounds, we need to reset the extent
     // first so these adjustements don't kick in.
     this.rangeModel.setMute(true);
+    var oldExtent = this.rangeModel.getExtent();
     this.rangeModel.setExtent(0);
 
     var oldValue = this.rangeModel.getValue();
     this.rangeModel.setValue(value);
     var newValue = this.rangeModel.getValue();
-    this.adjustValueThumbPosition_(newValue > oldValue);
+    var valueThumbMoveTowardsExtentThumb = this.valueThumb != this.extentThumb
+      && newValue > oldValue;
 
     this.rangeModel.setExtent(extent);
+    var newExtent = this.rangeModel.getExtent();
+    var extentThumbMoveTowardsValueThumb = this.valueThumb != this.extentThumb
+      && newExtent < oldExtent;
+
+    if (valueThumbMoveTowardsExtentThumb && thumbsOverlapped) {
+      this.moveValueThumbOnTop_();
+    } else if (extentThumbMoveTowardsValueThumb && thumbsOverlapped) {
+      this.moveExtentThumbOnTop_();
+    }
+
     this.rangeModel.setMute(false);
     this.handleRangeModelChange(null);
   }
 };
 
 /**
- * @param {boolean} moveTowardsEnd 'true' if value thumb move to extent thumb
+ * @private
  */
-goog.ui.SliderBase.prototype.adjustValueThumbPosition_ = function(moveTowardsEnd) {
-  if (this.valueThumb == this.extentThumb) {
-    return;
-  }
-
-  if (moveTowardsEnd && !goog.dom.classlist.contains(this.valueThumb,
-      goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_)) {
+goog.ui.SliderBase.prototype.moveValueThumbOnTop_ = function() {
+  if (!goog.dom.classlist.contains(this.valueThumb, goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_)) {
     goog.style.setStyle(this.valueThumb, 'zIndex', 1);
     goog.style.setStyle(this.extentThumb, 'zIndex', 0);
     goog.dom.classlist.add(this.valueThumb, goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_);
-  } else if (!moveTowardsEnd && goog.dom.classlist.contains(this.valueThumb,
-      goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_)) {
-    goog.style.setStyle(this.valueThumb, 'zIndex', 0);
-    goog.style.setStyle(this.extentThumb, 'zIndex', 1);
+  }
+};
+
+/**
+ * @private
+ */
+goog.ui.SliderBase.prototype.moveExtentThumbOnTop_ = function() {
+  if (goog.dom.classlist.contains(this.valueThumb, goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_)) {
+    goog.style.setStyle(this.valueThumb, 'zIndex', '');
+    goog.style.setStyle(this.extentThumb, 'zIndex', '');
     goog.dom.classlist.remove(this.valueThumb, goog.ui.SliderBase.THUMB_ON_TOP_CSS_CLASS_);
   }
 };
+
 /**
  * @return {number} The minimum value.
  */
