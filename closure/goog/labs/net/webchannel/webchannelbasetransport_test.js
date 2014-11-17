@@ -81,6 +81,46 @@ function testOpenWithCustomHeaders() {
 
   var extraHeaders_ = webChannel.channel_.extraHeaders_;
   assertNotNullNorUndefined(extraHeaders_);
+  assertEquals('foo-value', extraHeaders_['foo-key']);
+  assertEquals(undefined, extraHeaders_['X-Client-Protocol']);
+}
+
+function testClientProtocolHeaderRequired() {
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {'clientProtocolHeaderRequired': true};
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  var extraHeaders_ = webChannel.channel_.extraHeaders_;
+  assertNotNullNorUndefined(extraHeaders_);
+  assertEquals('webchannel', extraHeaders_['X-Client-Protocol']);
+}
+
+function testClientProtocolHeaderNotRequiredByDefault() {
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  webChannel = webChannelTransport.createWebChannel(channelUrl);
+  webChannel.open();
+
+  var extraHeaders_ = webChannel.channel_.extraHeaders_;
+  assertNull(extraHeaders_);
+}
+
+function testClientProtocolHeaderRequiredWithCustomHeader() {
+  var webChannelTransport =
+      new goog.labs.net.webChannel.WebChannelBaseTransport();
+  var options = {
+    'clientProtocolHeaderRequired': true,
+    'messageHeaders': {'foo-key': 'foo-value'}
+  };
+  webChannel = webChannelTransport.createWebChannel(channelUrl, options);
+  webChannel.open();
+
+  var extraHeaders_ = webChannel.channel_.extraHeaders_;
+  assertNotNullNorUndefined(extraHeaders_);
+  assertEquals('foo-value', extraHeaders_['foo-key']);
+  assertEquals('webchannel', extraHeaders_['X-Client-Protocol']);
 }
 
 function testOpenWithCustomParams() {
