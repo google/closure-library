@@ -33,6 +33,12 @@ goog.define('goog.string.DETECT_DOUBLE_ESCAPING', false);
 
 
 /**
+ * @define {boolean} Whether to force non-dom html unescaping.
+ */
+goog.define('goog.string.FORCE_NON_DOM_HTML_UNESCAPING', false);
+
+
+/**
  * Common Unicode string characters.
  * @enum {string}
  */
@@ -663,10 +669,10 @@ goog.string.ALL_RE_ = (goog.string.DETECT_DOUBLE_ESCAPING ?
  */
 goog.string.unescapeEntities = function(str) {
   if (goog.string.contains(str, '&')) {
-    // We are careful not to use a DOM if we do not have one. We use the []
-    // notation so that the JSCompiler will not complain about these objects and
-    // fields in the case where we have no DOM.
-    if ('document' in goog.global) {
+    // We are careful not to use a DOM if we do not have one or we explicitly
+    // requested non-DOM html unescaping.
+    if (!goog.string.FORCE_NON_DOM_HTML_UNESCAPING &&
+        'document' in goog.global) {
       return goog.string.unescapeEntitiesUsingDom_(str);
     } else {
       // Fall back on pure XML entities

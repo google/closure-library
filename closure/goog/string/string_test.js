@@ -572,6 +572,18 @@ function testHtmlEscapeAndUnescapePureXmlEntities_() {
                    goog.string.unescapePureXmlEntities_(html)), html);
 }
 
+
+function testForceNonDomHtmlUnescaping() {
+  stubs.set(goog.string, 'FORCE_NON_DOM_HTML_UNESCAPING', true);
+  // Set document.createElement to empty object so that the call to
+  // unescapeEntities will blow up if html unescaping is carried out with DOM.
+  // Notice that we can't directly set document to empty object since IE8 won't
+  // let us do so.
+  stubs.set(goog.global.document, 'createElement', {});
+  goog.string.unescapeEntities('&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;');
+}
+
+
 function testHtmlEscapeDetectDoubleEscaping() {
   stubs.set(goog.string, 'DETECT_DOUBLE_ESCAPING', true);
   assertEquals('&#101; &lt; pi', goog.string.htmlEscape('e < pi'));
