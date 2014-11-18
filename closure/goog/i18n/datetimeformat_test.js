@@ -309,10 +309,10 @@ function testPatternDayOfWeekMonthDayYearMedium() {
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_sv;
   var fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimePatterns.WEEKDAY_MONTH_DAY_YEAR_MEDIUM);
-  assertEquals('tors 28 jun 2012', fmt.format(date));
+  assertEquals('tors 28 juni 2012', fmt.format(date));
   var fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimePatterns.MONTH_DAY_YEAR_MEDIUM);
-  assertEquals('28 jun 2012', fmt.format(date));
+  assertEquals('28 juni 2012', fmt.format(date));
 }
 
 function testQuote() {
@@ -370,18 +370,18 @@ function testPredefinedFormatter() {
   assertEquals('13:49', fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.FULL_DATETIME);
-  assertEquals('Freitag, 4. August 2006 13:49:24 ' + timezoneString(date),
+  assertEquals('Freitag, 4. August 2006 um 13:49:24 ' + timezoneString(date),
       fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.LONG_DATETIME);
-  assertEquals('4. August 2006 13:49:24 ' + timezoneString(date),
+  assertEquals('4. August 2006 um 13:49:24 ' + timezoneString(date),
       fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.MEDIUM_DATETIME);
-  assertEquals('04.08.2006 13:49:24', fmt.format(date));
+  assertEquals('04.08.2006, 13:49:24', fmt.format(date));
   fmt = new goog.i18n.DateTimeFormat(
       goog.i18n.DateTimeFormat.Format.SHORT_DATETIME);
-  assertEquals('04.08.06 13:49', fmt.format(date));
+  assertEquals('04.08.06, 13:49', fmt.format(date));
 }
 
 function testMMddyyyyHHmmssZSimpleTimeZone() {
