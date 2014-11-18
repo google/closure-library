@@ -299,8 +299,7 @@ goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet('action', 'cite',
     'data', 'formaction', 'href', 'manifest', 'poster', 'src');
 
 
-// TODO(user): Disallow embed, iframe, object and template too. Update
-// create() docs to point to tag-specific create methods.
+// TODO(user): Disallow object, already in use in a few places.
 /**
  * Tags which are unsupported via create(). They might be supported via a
  * tag-specific create method. These are tags which might require a
@@ -308,8 +307,8 @@ goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet('action', 'cite',
  * their content.
  * @private @const {!Object<string,boolean>}
  */
-goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet('link',
-    'script', 'style');
+goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet(
+    'embed', 'iframe', 'link', 'script', 'style', 'template');
 
 
 /**
@@ -342,7 +341,7 @@ goog.html.SafeHtml.AttributeValue_;
  * });
  *
  * To guarantee SafeHtml's type contract is upheld there are restrictions on
- * attribute values. These restrictions depend on tag name.
+ * attribute values and tag names.
  *
  * - For attributes which contain script code (on*), a goog.string.Const is
  *   required.
@@ -350,10 +349,12 @@ goog.html.SafeHtml.AttributeValue_;
  *   goog.html.SafeStyle.PropertyMap is required.
  * - For attributes which are interpreted as URLs (e.g. src, href) a
  *   goog.html.SafeUrl or goog.string.Const is required.
+ * - For tags which can load code, more specific goog.html.SafeHtml.create*()
+ *   functions must be used. Tags which can load code and are not supported by
+ *   this function are embed, iframe, link, object, script, style, and template.
  *
  * @param {string} tagName The name of the tag. Only tag names consisting of
- *     [a-zA-Z0-9-] are allowed. <link>, <script> and <style> tags are not
- *     supported.
+ *     [a-zA-Z0-9-] are allowed. Tag names documented above are disallowed.
  * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
  *     opt_attributes Mapping from attribute names to their values. Only
  *     attribute names consisting of [a-zA-Z0-9-] are allowed. Value of null or
