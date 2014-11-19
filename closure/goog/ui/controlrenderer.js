@@ -200,7 +200,6 @@ goog.ui.ControlRenderer.prototype.createDom = function(control) {
   var element = control.getDomHelper().createDom(
       'div', this.getClassNames(control).join(' '), control.getContent());
 
-  this.setAriaStates(control, element);
   return element;
 };
 
@@ -363,7 +362,6 @@ goog.ui.ControlRenderer.prototype.decorate = function(control, element) {
     goog.dom.classlist.set(element, classNames.join(' '));
   }
 
-  this.setAriaStates(control, element);
   return element;
 };
 

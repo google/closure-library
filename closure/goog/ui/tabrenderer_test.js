@@ -57,7 +57,7 @@ function testCreateDom() {
   var element = renderer.createDom(tab);
   assertNotNull('Element must not be null', element);
   goog.testing.dom.assertHtmlMatches(
-      '<div class="goog-tab" aria-selected="false">Hello</div>',
+      '<div class="goog-tab">Hello</div>',
       goog.dom.getOuterHtml(element));
 }
 
@@ -67,6 +67,15 @@ function testCreateDomWithTooltip() {
   assertNotNull('Element must not be null', element);
   assertEquals('Element must have expected tooltip', 'Hello, world!',
       renderer.getTooltip(element));
+}
+
+function testRender() {
+  tab.setRenderer(renderer);
+  tab.render();
+  var element = tab.getElementStrict();
+  assertNotNull('Element must not be null', element);
+  assertEquals('aria-selected should be false',
+      'false', element.getAttribute('aria-selected'));
 }
 
 function testDecorate() {
