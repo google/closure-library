@@ -321,7 +321,8 @@ goog.ui.ComboBox.prototype.dismiss = function() {
 
 /**
  * Adds a new menu item at the end of the menu.
- * @param {goog.ui.MenuItem} item Menu item to add to the menu.
+ * @param {goog.ui.MenuHeader|goog.ui.MenuItem|goog.ui.MenuSeparator} item Menu
+ *     item to add to the menu.
  */
 goog.ui.ComboBox.prototype.addItem = function(item) {
   this.menu_.addChild(item, true);
