@@ -1427,3 +1427,31 @@ function testGoogModuleGet() {
   assertEquals(earlyTestModuleGet, testModuleExports);
 }
 
+function testNormalizePath() {
+  assertEquals('foo/path.js', goog.normalizePath_('./foo/./path.js'));
+  assertEquals('foo/path.js', goog.normalizePath_('bar/../foo/path.js'));
+  assertEquals('bar/path.js', goog.normalizePath_('bar/foo/../path.js'));
+  assertEquals('path.js', goog.normalizePath_('bar/foo/../../path.js'));
+
+  assertEquals('../foo/path.js', goog.normalizePath_('../foo/path.js'));
+  assertEquals('../../foo/path.js', goog.normalizePath_('../../foo/path.js'));
+  assertEquals('../path.js', goog.normalizePath_('../foo/../path.js'));
+  assertEquals('../../path.js', goog.normalizePath_('../foo/../../path.js'));
+
+  assertEquals('/../foo/path.js', goog.normalizePath_('/../foo/path.js'));
+  assertEquals('/path.js', goog.normalizePath_('/foo/../path.js'));
+  assertEquals('/foo/path.js', goog.normalizePath_('/./foo/path.js'));
+
+  assertEquals('//../foo/path.js', goog.normalizePath_('//../foo/path.js'));
+  assertEquals('//path.js', goog.normalizePath_('//foo/../path.js'));
+  assertEquals('//foo/path.js', goog.normalizePath_('//./foo/path.js'));
+
+  assertEquals('http://../x/y.js', goog.normalizePath_('http://../x/y.js'));
+  assertEquals('http://path.js', goog.normalizePath_('http://foo/../path.js'));
+  assertEquals('http://x/path.js', goog.normalizePath_('http://./x/path.js'));
+
+  var expected = '../../../../../../../javascript/apps/xid/xid.js';
+  var original = '../testing/../../../../../../../' +
+      'closure/goog/../apps/xid/xid.js';
+  assertEquals(expected, goog.normalizePath_(original));
+}
