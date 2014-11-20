@@ -210,24 +210,6 @@ function testSafeHtmlCreate_urlAttributes() {
 }
 
 
-function testSafeHtmlCreateEmbed() {
-  var trustedResourceUrl = goog.html.TrustedResourceUrl.fromConstant(
-      goog.string.Const.from('https://google.com/trusted&'));
-  var type = goog.string.Const.from('application/x-shockwave-flash&');
-  assertSameHtml(
-      '<embed src="https://google.com/trusted&amp;" ' +
-          'type="application/x-shockwave-flash&amp;" class="test">',
-      goog.html.SafeHtml.createEmbed(
-          trustedResourceUrl, type, {'class': 'test'}));
-
-  // Cannot override attribute, case-insensitive.
-  assertThrows(function() {
-    goog.html.SafeHtml.createEmbed(
-        trustedResourceUrl, type, {'Src': trustedResourceUrl});
-  });
-}
-
-
 function testSafeHtmlCreateWithDir() {
   var ltr = goog.i18n.bidi.Dir.LTR;
 

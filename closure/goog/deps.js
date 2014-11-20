@@ -471,6 +471,8 @@ goog.addDependency('history/history.js', ['goog.History', 'goog.History.Event', 
 goog.addDependency('history/history_test.js', ['goog.HistoryTest'], ['goog.History', 'goog.dispose', 'goog.dom', 'goog.testing.jsunit', 'goog.userAgent'], false);
 goog.addDependency('history/html5history.js', ['goog.history.Html5History', 'goog.history.Html5History.TokenTransformer'], ['goog.asserts', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.history.Event'], false);
 goog.addDependency('history/html5history_test.js', ['goog.history.Html5HistoryTest'], ['goog.history.Html5History', 'goog.testing.MockControl', 'goog.testing.jsunit', 'goog.testing.mockmatchers'], false);
+goog.addDependency('html/flash.js', ['goog.html.flash'], ['goog.html.SafeHtml'], false);
+goog.addDependency('html/flash_test.js', ['goog.html.flashTest'], ['goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.html.flash', 'goog.string.Const', 'goog.testing.jsunit'], false);
 goog.addDependency('html/legacyconversions.js', ['goog.html.legacyconversions'], ['goog.html.SafeHtml', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl'], false);
 goog.addDependency('html/legacyconversions_test.js', ['goog.html.legacyconversionsTest'], ['goog.html.SafeHtml', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.legacyconversions', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], false);
 goog.addDependency('html/safehtml.js', ['goog.html.SafeHtml'], ['goog.array', 'goog.asserts', 'goog.dom.tags', 'goog.html.SafeStyle', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], false);
