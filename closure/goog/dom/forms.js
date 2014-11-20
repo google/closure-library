@@ -247,6 +247,7 @@ goog.dom.forms.getValue = function(el) {
  * Alias for goog.dom.form.element.getValue
  * @type {Function}
  * @deprecated Use {@link goog.dom.forms.getValue} instead.
+ * @suppress {missingProvide}
  */
 goog.dom.$F = goog.dom.forms.getValue;
 
