@@ -234,7 +234,10 @@ goog.History = function(opt_invisible, opt_blankPageUrl, opt_input,
     input = opt_input;
   } else {
     var inputId = 'history_state' + goog.History.historyCount_;
-    input = goog.dom.createDom('input', { 'type': 'text', 'name': inputId, 'id': inputId, 'style': 'display:none'})
+    input = goog.dom.createDom('input', { 'type': 'text', 
+                                          'name': inputId, 
+                                          'id': inputId, 
+                                          'style': 'display:none'});
     document.body.appendChild(input);
   }
 
