@@ -1455,3 +1455,41 @@ function testNormalizePath() {
       'closure/goog/../apps/xid/xid.js';
   assertEquals(expected, goog.normalizePath_(original));
 }
+
+
+function testGoogModuleNames() {
+  // avoid usage checks
+  var module = goog.module;
+
+  function assertInvalidId(id) {
+    var err = assertThrows(function() {
+      module(id);
+    });
+    assertEquals('Invalid module identifier', err.message);
+  }
+
+  function assertValidId(id) {
+    // This is a cheesy check, but we validate that we don't get an invalid
+    // namespace warning, but instead get a module isn't loaded correctly
+    // error.
+    var err = assertThrows(function() {
+      module(id);
+    });
+    assertTrue(err.message.indexOf('has been loaded incorrectly') != -1);
+  }
+
+  assertInvalidId('/somepath/module.js');
+  assertInvalidId('./module.js');
+  assertInvalidId('1');
+
+  assertValidId('a');
+  assertValidId('a.b');
+  assertValidId('a.b.c');
+  assertValidId('aB.Cd.eF');
+  assertValidId('a1.0E.Fg');
+
+  assertValidId('_');
+  assertValidId('$');
+  assertValidId('_$');
+  assertValidId('$_');
+}

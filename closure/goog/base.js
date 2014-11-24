@@ -275,6 +275,17 @@ goog.constructNamespace_ = function(name, opt_obj) {
 
 
 /**
+ * Module identifier validation regexp.
+ * Note: This is a conservative check, it is very possible to be more lienent,
+ *   the primary exclusion here is "/" and "\" and a leading ".", these
+ *   restrictions are intended to leave the door open for using goog.require
+ *   with relative file paths rather than module identifiers.
+ * @private
+ */
+goog.VALID_MODULE_RE_ = /^[a-zA-Z_$][a-zA-Z0-9._$]*$/;
+
+
+/**
  * goog.module serves two purposes:
  * - marks a file that must be loaded as a module
  * - reserves a namespace (it can not also be goog.provided)
@@ -296,7 +307,9 @@ goog.constructNamespace_ = function(name, opt_obj) {
  *     "goog.package.part", is expected but not required.
  */
 goog.module = function(name) {
-  if (!goog.isString(name) || !name) {
+  if (!goog.isString(name) ||
+      !name ||
+      name.search(goog.VALID_MODULE_RE_) == -1) {
     throw Error('Invalid module identifier');
   }
   if (!goog.isInModuleLoader_()) {
