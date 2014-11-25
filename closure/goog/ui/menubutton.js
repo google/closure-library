@@ -1051,7 +1051,7 @@ goog.ui.MenuButton.prototype.attachPopupListeners_ = function(attach) {
 
   // Only listen for blur events dispatched by the menu if it is focusable.
   if (this.isFocusablePopupMenu()) {
-    method.call(handler, /** @type {goog.events.EventTarget} */ (this.menu_),
+    method.call(handler, /** @type {!goog.events.EventTarget} */ (this.menu_),
         goog.ui.Component.EventType.BLUR, this.handleMenuBlur);
   }
 

@@ -658,7 +658,8 @@ goog.ui.ControlRenderer.prototype.setContent = function(element, content) {
           // NodeList. The second condition filters out TextNode which also has
           // length attribute but is not array like. The nodes have to be cloned
           // because childHandler removes them from the list during iteration.
-          goog.array.forEach(goog.array.clone(/** @type {NodeList} */(content)),
+          goog.array.forEach(
+              goog.array.clone(/** @type {!NodeList} */(content)),
               childHandler);
         } else {
           // Node or string.
