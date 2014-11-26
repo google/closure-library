@@ -305,44 +305,20 @@ function testEnterOpensMenu() {
 
 
 /**
- * Tests the behavior of the enter and space keys when the menu is open and
- * setCloseOnEnterOrSpace was not called, or called with true as its argument.
+ * Tests the behavior of the enter and space keys when the menu is open.
  */
 function testSpaceOrEnterClosesMenu() {
   var node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-  menuButton.setCloseOnEnterOrSpace(true);
 
   menuButton.setOpen(true);
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
-  assertFalse('Menu should close after pressing Enter when ' +
-      'setCloseOnEnterOrSpace is set', menuButton.isOpen());
+  assertFalse('Menu should close after pressing Enter', menuButton.isOpen());
 
   menuButton.setOpen(true);
   menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.SPACE,
       goog.events.EventType.KEYUP));
-  assertFalse('Menu should close after pressing Space when ' +
-      'setCloseOnEnterOrSpace is set', menuButton.isOpen());
-}
-
-
-/**
- * Tests the behavior of the enter and space keys when the menu is open and
- * setCloseOnEnterOrSpace was called with false as its argument.
- */
-function testSpaceOrEnterLeavesMenuOpen_withCloseOnEnterOrSpaceDisabled() {
-  var node = goog.dom.getElement('demoMenuButton');
-  menuButton.decorate(node);
-  menuButton.setCloseOnEnterOrSpace(false);
-
-  menuButton.setOpen(true);
-  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
-  assertTrue('Menu should remain open after pressing Enter',
-      menuButton.isOpen());
-  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.SPACE,
-      goog.events.EventType.KEYUP));
-  assertTrue('Menu should remain open after pressing Space',
-      menuButton.isOpen());
+  assertFalse('Menu should close after pressing Space', menuButton.isOpen());
 }
 
 
