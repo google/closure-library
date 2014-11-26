@@ -813,7 +813,7 @@ function testExtend() {
   while (i--) {
     bigArray[i] = i;
   }
-  goog.array.extend(result, bigArray)
+  goog.array.extend(result, bigArray);
   assertArrayEquals(bigArray, result);
 }
 
