@@ -49,11 +49,10 @@ goog.html.flash.createEmbed = function(src, opt_attributes) {
     'pluginspage': 'https://www.macromedia.com/go/getflashplayer'
   };
   var defaultAttributes = {
-    'allowfullscreen': 'false',
     'allownetworking': 'none',
     'allowscriptaccess': 'never'
   };
-  var attributes = goog.html.flash.combineAttributes(
+  var attributes = goog.html.flash.combineAttributes_(
       fixedAttributes, defaultAttributes, opt_attributes);
   return goog.html.SafeHtml.
       createSafeHtmlTagSecurityPrivateDoNotAccessOrElse('embed', attributes);
@@ -69,17 +68,16 @@ goog.html.flash.createObject = function(
 
   var paramTags = goog.html.flash.combineParams_(
       {
-        'allowfullscreen': 'false',
         'allownetworking': 'none',
-        'allowscriptaccess': 'never',
-        'data': data
+        'allowscriptaccess': 'never'
       },
       opt_params);
   var fixedAttributes = {
+    'data': data,
     'type': 'application/x-shockwave-flash',
     'typemustmatch': ''
   };
-  var attributes = goog.html.flash.combineAttributes(
+  var attributes = goog.html.flash.combineAttributes_(
       fixedAttributes, {}, opt_attributes);
 
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
@@ -96,7 +94,6 @@ goog.html.flash.createObjectForOldIe = function(
 
   var paramTags = goog.html.flash.combineParams_(
       {
-        'allowfullscreen': 'false',
         'allownetworking': 'none',
         'allowscriptaccess': 'never',
         'movie': movie
@@ -104,7 +101,7 @@ goog.html.flash.createObjectForOldIe = function(
       opt_params);
   var fixedAttributes =
       {'classid': 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'};
-  var attributes = goog.html.flash.combineAttributes(
+  var attributes = goog.html.flash.combineAttributes_(
       fixedAttributes, {}, opt_attributes);
 
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
@@ -120,9 +117,9 @@ goog.html.flash.createObjectForOldIe = function(
  * @return {!Object<string, goog.html.SafeHtml.AttributeValue_>}
  * @throws {Error} If opt_attributes contains an attribute with the same name
  *     as an attribute in fixedAttributes.
- * @package
+ * @private
  */
-goog.html.flash.combineAttributes = function(
+goog.html.flash.combineAttributes_ = function(
     fixedAttributes, defaultAttributes, opt_attributes) {
   var combinedAttributes = {};
   var name;

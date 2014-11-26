@@ -35,7 +35,6 @@ function testCreateEmbed() {
           'src="https://google.com/trusted&amp;" ' +
           'type="application/x-shockwave-flash" ' +
           'pluginspage="https://www.macromedia.com/go/getflashplayer" ' +
-          'allowfullscreen="false" ' +
           'allownetworking="none" ' +
           'allowScriptAccess="always&lt;" ' +
           'class="test&lt;">',
@@ -55,11 +54,10 @@ function testCreateObject() {
   var trustedResourceUrl = goog.html.TrustedResourceUrl.fromConstant(
       goog.string.Const.from('https://google.com/trusted&'));
   assertSameHtml(
-      '<object type="application/x-shockwave-flash" typemustmatch="" ' +
+      '<object data="https://google.com/trusted&amp;" ' +
+          'type="application/x-shockwave-flash" typemustmatch="" ' +
           'class="test&lt;">' +
-          '<param name="allowfullscreen" value="false">' +
           '<param name="allownetworking" value="none">' +
-          '<param name="data" value="https://google.com/trusted&amp;">' +
           '<param name="allowScriptAccess" value="always&lt;">' +
           '</object>',
       goog.html.flash.createObject(
@@ -86,7 +84,6 @@ function testCreateObjectForOldIe() {
   assertSameHtml(
       '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" ' +
           'class="test&lt;">' +
-          '<param name="allowfullscreen" value="false">' +
           '<param name="allownetworking" value="none">' +
           '<param name="movie" value="https://google.com/trusted&amp;">' +
           '<param name="allowScriptAccess" value="always&lt;">' +
