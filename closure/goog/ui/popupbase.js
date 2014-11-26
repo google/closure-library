@@ -424,7 +424,10 @@ goog.ui.PopupBase.prototype.getLastHideTime = function() {
  * @template T
  */
 goog.ui.PopupBase.prototype.getHandler = function() {
-  return this.handler_;
+  // As the template type is unbounded, narrow the "this" type
+  var self = /** @type {!goog.ui.PopupBase} */ (this);
+
+  return self.handler_;
 };
 
 
