@@ -272,6 +272,23 @@ function testSendPostSetsDefaultHeader() {
       stubXhr.headers['Content-Type']);
 }
 
+function testSendPostDoesntSetHeaderWithFormData() {
+  if (!goog.global['FormData']) { return; }
+  var formData = new goog.global['FormData']();
+  formData.append('name', 'value');
+
+  var stubXhr = setupStubXMLHttpRequest();
+  xhr.send('POST', 'test-url', formData).
+      then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
+
+  stubXhr.load(200);
+  mockClock.tick();
+
+  assertEquals('POST', stubXhr.method);
+  assertEquals('test-url', stubXhr.url);
+  assertEquals(undefined, stubXhr.headers['Content-Type']);
+}
+
 function testSendPostHeaders() {
   var stubXhr = setupStubXMLHttpRequest();
   xhr.send('POST', 'test-url', null, {
@@ -287,9 +304,52 @@ function testSendPostHeaders() {
   assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
 }
 
+function testSendPostHeadersWithFormData() {
+  if (!goog.global['FormData']) { return; }
+  var formData = new goog.global['FormData']();
+  formData.append('name', 'value');
+
+  var stubXhr = setupStubXMLHttpRequest();
+  xhr.send('POST', 'test-url', formData, {
+    headers: {'Content-Type': 'text/plain', 'X-Made-Up': 'FooBar'}
+  }).then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
+
+  stubXhr.load(200);
+  mockClock.tick();
+
+  assertEquals('POST', stubXhr.method);
+  assertEquals('test-url', stubXhr.url);
+  assertEquals('text/plain', stubXhr.headers['Content-Type']);
+  assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
+}
+
 function testSendNullPostHeaders() {
   var stubXhr = setupStubXMLHttpRequest();
   xhr.send('POST', 'test-url', null, {
+    headers: {
+      'Content-Type': null,
+      'X-Made-Up': 'FooBar',
+      'Y-Made-Up': null
+    }
+  }).then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
+
+  stubXhr.load(200);
+  mockClock.tick();
+
+  assertEquals('POST', stubXhr.method);
+  assertEquals('test-url', stubXhr.url);
+  assertEquals(undefined, stubXhr.headers['Content-Type']);
+  assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
+  assertEquals(undefined, stubXhr.headers['Y-Made-Up']);
+}
+
+function testSendNullPostHeadersWithFormData() {
+  if (!goog.global['FormData']) { return; }
+  var formData = new goog.global['FormData']();
+  formData.append('name', 'value');
+
+  var stubXhr = setupStubXMLHttpRequest();
+  xhr.send('POST', 'test-url', formData, {
     headers: {
       'Content-Type': null,
       'X-Made-Up': 'FooBar',
