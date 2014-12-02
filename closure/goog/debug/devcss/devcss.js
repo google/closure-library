@@ -81,8 +81,7 @@ goog.debug.DevCss = function(opt_userAgent, opt_userAgentVersion) {
   this.userAgent_ = opt_userAgent;
 
   /**
-   * @type {Object}
-   * @private
+   * @const @private
    */
   this.userAgentTokens_ = {};
 
