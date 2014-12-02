@@ -229,6 +229,13 @@ goog.define('goog.STRICT_MODE_COMPATIBLE', false);
 
 
 /**
+ * @define {boolean} Whether code that calls {@link goog.setTestOnly} should
+ *     be disallowed in the compilation unit.
+ */
+goog.define('goog.DISALLOW_TEST_ONLY_CODE', COMPILED && !goog.DEBUG);
+
+
+/**
  * Creates object stubs for a namespace.  The presence of one or more
  * goog.provide() calls indicate that the file defines the given
  * objects/namespaces.  Provided objects must not be null or undefined.
@@ -431,7 +438,7 @@ goog.module.declareLegacyNamespace = function() {
  *     raised when used in production code.
  */
 goog.setTestOnly = function(opt_message) {
-  if (COMPILED && !goog.DEBUG) {
+  if (goog.DISALLOW_TEST_ONLY_CODE) {
     opt_message = opt_message || '';
     throw Error('Importing test-only code into non-debug environment' +
                 (opt_message ? ': ' + opt_message : '.'));
