@@ -2160,7 +2160,12 @@ goog.inherits = function(childCtor, parentCtor) {
    * @return {*} The return value of the superclass method/constructor.
    */
   childCtor.base = function(me, methodName, var_args) {
-    var args = Array.prototype.slice.call(arguments, 2);
+    // Copying using loop to avoid deop due to passing arguments object to
+    // function. This is faster in many JS engines as of late 2014.
+    var args = new Array(arguments.length - 2);
+    for (var i = 2; i < arguments.length; i++) {
+      args[i - 2] = arguments[i];
+    }
     return parentCtor.prototype[methodName].apply(me, args);
   };
 };
@@ -2201,12 +2206,22 @@ goog.base = function(me, opt_methodName, var_args) {
   }
 
   if (caller.superClass_) {
+    // Copying using loop to avoid deop due to passing arguments object to
+    // function. This is faster in many JS engines as of late 2014.
+    var ctorArgs = new Array(arguments.length - 1);
+    for (var i = 1; i < arguments.length; i++) {
+      ctorArgs[i - 1] = arguments[i];
+    }
     // This is a constructor. Call the superclass constructor.
-    return caller.superClass_.constructor.apply(
-        me, Array.prototype.slice.call(arguments, 1));
+    return caller.superClass_.constructor.apply(me, ctorArgs);
   }
 
-  var args = Array.prototype.slice.call(arguments, 2);
+  // Copying using loop to avoid deop due to passing arguments object to
+  // function. This is faster in many JS engines as of late 2014.
+  var args = new Array(arguments.length - 2);
+  for (var i = 2; i < arguments.length; i++) {
+    args[i - 2] = arguments[i];
+  }
   var foundCaller = false;
   for (var ctor = me.constructor;
        ctor; ctor = ctor.superClass_ && ctor.superClass_.constructor) {
