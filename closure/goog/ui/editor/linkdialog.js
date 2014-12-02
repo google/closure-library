@@ -23,6 +23,8 @@ goog.provide('goog.ui.editor.LinkDialog.BeforeTestLinkEvent');
 goog.provide('goog.ui.editor.LinkDialog.EventType');
 goog.provide('goog.ui.editor.LinkDialog.OkEvent');
 
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.safe');
@@ -535,7 +537,8 @@ goog.ui.editor.LinkDialog.prototype.buildTextToDisplayDiv_ = function() {
       'bottom': '2px',
       'padding-right': '1px',
       'white-space': 'nowrap'
-    }
+    },
+    id: goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY_LABEL
   }, [goog.ui.editor.messages.MSG_TEXT_TO_DISPLAY, goog.string.Unicode.NBSP]);
   goog.dom.safe.setInnerHtml(table.rows[0].cells[0], html);
   this.textToDisplayInput_ = /** @type {!HTMLInputElement} */(
@@ -548,6 +551,9 @@ goog.ui.editor.LinkDialog.prototype.buildTextToDisplayDiv_ = function() {
   goog.style.setStyle(table.rows[0].cells[1], 'width', '100%');
   goog.dom.appendChild(table.rows[0].cells[1], textInput);
 
+  goog.a11y.aria.setState(/** @type {!Element} */ (textInput),
+      goog.a11y.aria.State.LABELLEDBY,
+      goog.ui.editor.LinkDialog.Id_.TEXT_TO_DISPLAY_LABEL);
   textInput.value = this.targetLink_.getCurrentText();
   this.eventHandler_.listen(textInput,
                             goog.events.EventType.KEYUP,
@@ -614,6 +620,9 @@ goog.ui.editor.LinkDialog.prototype.buildTabOnTheWeb_ = function() {
         id: goog.ui.editor.LinkDialog.Id_.ON_WEB_INPUT,
         className: goog.ui.editor.LinkDialog.TARGET_INPUT_CLASSNAME_
       });
+  goog.a11y.aria.setState(urlInput,
+      goog.a11y.aria.State.LABELLEDBY,
+      goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB);
   // IE throws on unknown values for type.
   if (!goog.userAgent.IE) {
     // On browsers that support Web Forms 2.0, allow autocompletion of URLs.
@@ -672,6 +681,9 @@ goog.ui.editor.LinkDialog.prototype.buildTabEmailAddress_ = function() {
         id: goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_INPUT,
         className: goog.ui.editor.LinkDialog.TARGET_INPUT_CLASSNAME_
       });
+  goog.a11y.aria.setState(emailInput,
+      goog.a11y.aria.State.LABELLEDBY,
+      goog.ui.editor.LinkDialog.Id_.EMAIL_ADDRESS_TAB);
 
   if (goog.editor.BrowserFeature.NEEDS_99_WIDTH_IN_STANDARDS_MODE &&
       goog.editor.node.isStandardsMode(emailInput)) {
@@ -1035,6 +1047,7 @@ goog.ui.editor.LinkDialog.prototype.isNewLink_ = function() {
  */
 goog.ui.editor.LinkDialog.Id_ = {
   TEXT_TO_DISPLAY: 'linkdialog-text',
+  TEXT_TO_DISPLAY_LABEL: 'linkdialog-text-label',
   ON_WEB_TAB: 'linkdialog-onweb',
   ON_WEB_INPUT: 'linkdialog-onweb-tab-input',
   EMAIL_ADDRESS_TAB: 'linkdialog-email',
