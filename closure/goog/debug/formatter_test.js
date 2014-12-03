@@ -34,8 +34,7 @@ function setUp() {
       goog.debug.Logger.Level.CONFIG, 'mess\n  age', 'loggerName', 1, 100);
   // Exception needs to be present for exception text to get printed
   // by HtmlFormatter.
-  logRecord.setException(new Error());
-  logRecord.setExceptionText('exc\n  eption');
+  logRecord.setException(new Error('exc\n  eption'));
 }
 
 

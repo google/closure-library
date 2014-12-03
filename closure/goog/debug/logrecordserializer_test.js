@@ -35,7 +35,6 @@ function testBasic() {
   assertEquals(NOW, thawed.getMillis());
   assertEquals(SEQ, thawed.getSequenceNumber());
   assertNull(thawed.getException());
-  assertNull(thawed.getExceptionText());
 }
 
 function testUnsafeParse() {
@@ -50,7 +49,6 @@ function testUnsafeParse() {
   assertEquals(NOW, thawed.getMillis());
   assertEquals(SEQ, thawed.getSequenceNumber());
   assertNull(thawed.getException());
-  assertNull(thawed.getExceptionText());
 }
 
 function testWithException() {
@@ -58,11 +56,9 @@ function testWithException() {
   var rec = new goog.debug.LogRecord(goog.debug.Logger.Level.FINE,
       'An awesome message', 'logger.name', NOW, SEQ);
   rec.setException(err);
-  rec.setExceptionText('message: it broke!');
   var thawed = goog.debug.logRecordSerializer.unsafeParse(
       goog.debug.logRecordSerializer.serialize(rec));
-
-  assertEquals('message: it broke!', thawed.getExceptionText());
+  assertEquals(err.message, thawed.getException().message);
 }
 
 function testCustomLogLevel() {
