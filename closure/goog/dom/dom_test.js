@@ -25,6 +25,7 @@ goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.functions');
+goog.require('goog.html.testing');
 goog.require('goog.object');
 goog.require('goog.string.Unicode');
 goog.require('goog.testing.PropertyReplacer');
@@ -1411,6 +1412,30 @@ function testCreateTable() {
   assertEquals(6, table.getElementsByTagName(goog.dom.TagName.TD).length);
   assertEquals(0,
       table.getElementsByTagName(goog.dom.TagName.TD)[0].childNodes.length);
+}
+
+function testSafeHtmlToNode() {
+  var docFragment = goog.dom.safeHtmlToNode(
+      goog.html.testing.newSafeHtmlForTest('<a>1</a><b>2</b>'));
+  assertNull(docFragment.parentNode);
+  assertEquals(2, docFragment.childNodes.length);
+
+  var div = goog.dom.safeHtmlToNode(
+      goog.html.testing.newSafeHtmlForTest('<div>3</div>'));
+  assertEquals('DIV', div.tagName);
+
+  var script = goog.dom.safeHtmlToNode(
+      goog.html.testing.newSafeHtmlForTest('<script></script>'));
+  assertEquals('SCRIPT', script.tagName);
+
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
+    // Removing an Element from a DOM tree in IE sets its parentNode to a new
+    // DocumentFragment. Bizarre!
+    assertEquals(goog.dom.NodeType.DOCUMENT_FRAGMENT,
+                 goog.dom.removeNode(div).parentNode.nodeType);
+  } else {
+    assertNull(div.parentNode);
+  }
 }
 
 function testHtmlToDocumentFragment() {

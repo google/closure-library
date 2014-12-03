@@ -38,6 +38,8 @@ goog.require('goog.asserts');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.object');
@@ -853,6 +855,36 @@ goog.dom.createTable_ = function(doc, rows, columns, fillWithNbsp) {
 
 
 /**
+ * Converts HTML markup into a node.
+ * @param {!goog.html.SafeHtml} html The HTML markup to convert.
+ * @return {!Node} The resulting node.
+ */
+goog.dom.safeHtmlToNode = function(html) {
+  return goog.dom.safeHtmlToNode_(document, html);
+};
+
+
+/**
+ * Helper for {@code safeHtmlToNode}.
+ * @param {!Document} doc The document.
+ * @param {!goog.html.SafeHtml} html The HTML markup to convert.
+ * @return {!Node} The resulting node.
+ * @private
+ */
+goog.dom.safeHtmlToNode_ = function(doc, html) {
+  var tempDiv = doc.createElement('div');
+  if (goog.dom.BrowserFeature.INNER_HTML_NEEDS_SCOPED_ELEMENT) {
+    goog.dom.safe.setInnerHtml(tempDiv,
+        goog.html.SafeHtml.concat(goog.html.SafeHtml.create('br'), html));
+    tempDiv.removeChild(tempDiv.firstChild);
+  } else {
+    goog.dom.safe.setInnerHtml(tempDiv, html);
+  }
+  return goog.dom.childrenToNode_(doc, tempDiv);
+};
+
+
+/**
  * Converts an HTML string into a document fragment. The string must be
  * sanitized in order to avoid cross-site scripting. For example
  * {@code goog.dom.htmlToDocumentFragment('&lt;img src=x onerror=alert(0)&gt;')}
@@ -867,6 +899,7 @@ goog.dom.htmlToDocumentFragment = function(htmlString) {
 };
 
 
+// TODO(jakubvrana): Merge with {@code safeHtmlToNode_}.
 /**
  * Helper for {@code htmlToDocumentFragment}.
  *
@@ -883,6 +916,18 @@ goog.dom.htmlToDocumentFragment_ = function(doc, htmlString) {
   } else {
     tempDiv.innerHTML = htmlString;
   }
+  return goog.dom.childrenToNode_(doc, tempDiv);
+};
+
+
+/**
+ * Helper for {@code htmlToDocumentFragment_}.
+ * @param {!Document} doc The document.
+ * @param {!Node} tempDiv The input node.
+ * @return {!Node} The resulting node.
+ * @private
+ */
+goog.dom.childrenToNode_ = function(doc, tempDiv) {
   if (tempDiv.childNodes.length == 1) {
     return /** @type {!Node} */ (tempDiv.removeChild(tempDiv.firstChild));
   } else {
@@ -2425,6 +2470,18 @@ goog.dom.DomHelper.prototype.createTable = function(rows, columns,
     opt_fillWithNbsp) {
   return goog.dom.createTable_(this.document_, rows, columns,
       !!opt_fillWithNbsp);
+};
+
+
+/**
+ * Converts an HTML into a node or a document fragment. A single Node is used if
+ * {@code html} only generates a single node. If {@code html} generates multiple
+ * nodes then these are put inside a {@code DocumentFragment}.
+ * @param {!goog.html.SafeHtml} html The HTML markup to convert.
+ * @return {!Node} The resulting node.
+ */
+goog.dom.DomHelper.prototype.safeHtmlToNode = function(html) {
+  return goog.dom.safeHtmlToNode_(this.document_, html);
 };
 
 
