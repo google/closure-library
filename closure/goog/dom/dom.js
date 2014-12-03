@@ -38,10 +38,13 @@ goog.require('goog.asserts');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
+goog.require('goog.dom.safe');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.math.Coordinate');
 goog.require('goog.math.Size');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.string.Unicode');
 goog.require('goog.userAgent');
 
 
@@ -816,7 +819,8 @@ goog.dom.createTextNode = function(content) {
  * Create a table.
  * @param {number} rows The number of rows in the table.  Must be >= 1.
  * @param {number} columns The number of columns in the table.  Must be >= 1.
- * @param {boolean=} opt_fillWithNbsp If true, fills table entries with nsbps.
+ * @param {boolean=} opt_fillWithNbsp If true, fills table entries with
+ *     {@code goog.string.Unicode.NBSP} characters.
  * @return {!Element} The created table.
  */
 goog.dom.createTable = function(rows, columns, opt_fillWithNbsp) {
@@ -829,25 +833,26 @@ goog.dom.createTable = function(rows, columns, opt_fillWithNbsp) {
  * @param {!Document} doc Document object to use to create the table.
  * @param {number} rows The number of rows in the table.  Must be >= 1.
  * @param {number} columns The number of columns in the table.  Must be >= 1.
- * @param {boolean} fillWithNbsp If true, fills table entries with nsbps.
+ * @param {boolean} fillWithNbsp If true, fills table entries with
+ *     {@code goog.string.Unicode.NBSP} characters.
  * @return {!Element} The created table.
  * @private
  */
 goog.dom.createTable_ = function(doc, rows, columns, fillWithNbsp) {
-  var rowHtml = ['<tr>'];
+  var td = goog.html.SafeHtml.create(
+      'td', {}, fillWithNbsp ? goog.string.Unicode.NBSP : '');
+  var tds = [];
   for (var i = 0; i < columns; i++) {
-    rowHtml.push(fillWithNbsp ? '<td>&nbsp;</td>' : '<td></td>');
+    tds.push(td);
   }
-  rowHtml.push('</tr>');
-  rowHtml = rowHtml.join('');
-  var totalHtml = ['<table>'];
+  var tr = goog.html.SafeHtml.create('tr', {}, tds);
+  var trs = [];
   for (i = 0; i < rows; i++) {
-    totalHtml.push(rowHtml);
+    trs.push(tr);
   }
-  totalHtml.push('</table>');
-
+  var table = goog.html.SafeHtml.create('table', {}, trs);
   var elem = doc.createElement(goog.dom.TagName.DIV);
-  elem.innerHTML = totalHtml.join('');
+  goog.dom.safe.setInnerHtml(elem, table);
   return /** @type {!Element} */ (elem.removeChild(elem.firstChild));
 };
 
@@ -2418,7 +2423,8 @@ goog.dom.DomHelper.prototype.createTextNode = function(content) {
  * Create a table.
  * @param {number} rows The number of rows in the table.  Must be >= 1.
  * @param {number} columns The number of columns in the table.  Must be >= 1.
- * @param {boolean=} opt_fillWithNbsp If true, fills table entries with nsbps.
+ * @param {boolean=} opt_fillWithNbsp If true, fills table entries with
+ *     {@code goog.string.Unicode.NBSP} characters.
  * @return {!Element} The created table.
  */
 goog.dom.DomHelper.prototype.createTable = function(rows, columns,
