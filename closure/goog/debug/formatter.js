@@ -281,14 +281,10 @@ goog.debug.HtmlFormatter.prototype.formatRecordAsHtml = function(logRecord) {
   // HTML for exception text and log record.
   var exceptionHtml = goog.html.SafeHtml.EMPTY;
   if (this.showExceptionText && logRecord.getException()) {
-    var exception = logRecord.getException();
-    var exceptionText = exception instanceof Error ?
-        exception.message :
-        ((exception && exception.toString()) || '');
     exceptionHtml = goog.html.SafeHtml.concat(
         goog.html.SafeHtml.create('br'),
         goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
-            exceptionText));
+            logRecord.getExceptionText() || ''));
   }
   var logRecordHtml = goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
       logRecord.getMessage());
@@ -350,14 +346,8 @@ goog.debug.TextFormatter.prototype.formatRecord = function(logRecord) {
     sb.push('[', logRecord.getLevel().name, '] ');
   }
   sb.push(logRecord.getMessage());
-  if (this.showExceptionText) {
-    var exception = logRecord.getException();
-    if (exception) {
-      var exceptionText = exception instanceof Error ?
-          exception.message :
-          exception.toString();
-      sb.push('\n', exceptionText);
-    }
+  if (this.showExceptionText && logRecord.getException()) {
+    sb.push('\n', logRecord.getExceptionText());
   }
   if (this.appendNewline) {
     sb.push('\n');

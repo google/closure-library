@@ -104,7 +104,8 @@ function testException() {
   assertEquals(goog.debug.Logger.Level.SEVERE, handler.logRecord.getLevel());
   assertEquals('hello', handler.logRecord.getMessage());
   assertEquals(ex, handler.logRecord.getException());
-  assertEquals('boo!', handler.logRecord.getException().message);
+  assertEquals('Message: boo!',
+      handler.logRecord.getExceptionText().substring(0, 13));
 }
 
 function testMessageCallbacks() {
