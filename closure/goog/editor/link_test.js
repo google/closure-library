@@ -58,6 +58,18 @@ function testCreateNewLinkFromText() {
   assertEquals('Should have url in anchor', url, anchor.href);
 }
 
+function testCreateNewLinkFromTextLeadingTrailingWhitespace() {
+  var url = 'http://www.google.com/';
+  var urlWithSpaces = ' ' + url + ' ';
+  anchor.innerHTML = urlWithSpaces;
+  var urlWithSpacesUpdatedByBrowser = anchor.innerHTML;
+  var link = goog.editor.Link.createNewLinkFromText(anchor);
+  assertNotNull('Should have created object', link);
+  assertEquals('Should have url in anchor', url, anchor.href);
+  assertEquals('The text should still have spaces',
+      urlWithSpacesUpdatedByBrowser, link.getCurrentText());
+}
+
 function testCreateNewLinkFromTextWithAnchor() {
   var url = 'https://www.google.com/';
   anchor.innerHTML = url;
