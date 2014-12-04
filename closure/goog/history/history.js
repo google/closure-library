@@ -234,9 +234,11 @@ goog.History = function(opt_invisible, opt_blankPageUrl, opt_input,
     input = opt_input;
   } else {
     var inputId = 'history_state' + goog.History.historyCount_;
-    document.write(goog.string.subs(goog.History.INPUT_TEMPLATE_,
-                                    inputId, inputId));
-    input = goog.dom.getElement(inputId);
+    input = goog.dom.createDom('input', { 'type': 'text', 
+                                          'name': inputId, 
+                                          'id': inputId, 
+                                          'style': 'display:none'});
+    document.body.appendChild(input);
   }
 
   /**
@@ -951,15 +953,6 @@ goog.History.IFRAME_SOURCE_TEMPLATE_ = '<title>%s</title><body>%s</body>';
  */
 goog.History.IFRAME_TEMPLATE_ =
     '<iframe id="%s" style="display:none" %s></iframe>';
-
-
-/**
- * HTML template for an invisible named input element.
- * @type {string}
- * @private
- */
-goog.History.INPUT_TEMPLATE_ =
-    '<input type="text" name="%s" id="%s" style="display:none">';
 
 
 /**
