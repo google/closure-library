@@ -229,9 +229,7 @@ goog.ui.tree.BaseNode.prototype.initAccessibility = function() {
 
 /** @override */
 goog.ui.tree.BaseNode.prototype.createDom = function() {
-  // TODO(jakubvrana): Use safeHtmlToDocumentFragment() once it is ready.
-  var element = this.getDomHelper().htmlToDocumentFragment(
-      goog.html.SafeHtml.unwrap(this.toSafeHtml()));
+  var element = this.getDomHelper().safeHtmlToNode(this.toSafeHtml());
   this.setElementInternal(/** @type {!Element} */ (element));
 };
 
