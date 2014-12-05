@@ -23,11 +23,14 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.testing.events');
+goog.require('goog.testing.events.EventObserver');
 goog.require('goog.testing.jsunit');
+goog.require('goog.testing.recordFunction');
 goog.require('goog.ui.Button');
 goog.require('goog.ui.ButtonRenderer');
 goog.require('goog.ui.ButtonSide');
 goog.require('goog.ui.Component');
+goog.require('goog.ui.Container');
 goog.require('goog.ui.NativeButtonRenderer');
 
 var sandbox;
@@ -138,117 +141,109 @@ function testDispose() {
 }
 
 function testBasicButtonBehavior() {
-  var dispatchedActionCount = 0;
-  var handleAction = function() {
-    dispatchedActionCount++;
-  };
-  goog.events.listen(button, goog.ui.Component.EventType.ACTION,
-      handleAction);
-
+  button.performActionInternal =
+      goog.testing.recordFunction(button.performActionInternal);
+  var observer = new goog.testing.events.EventObserver();
+  goog.events.listen(button, goog.ui.Component.EventType.ACTION, observer);
   button.decorate(demoButtonElement);
-  goog.testing.events.fireClickSequence(demoButtonElement);
-  assertEquals('Button must have dispatched ACTION on click', 1,
-      dispatchedActionCount);
 
-  dispatchedActionCount = 0;
+  goog.testing.events.fireClickSequence(demoButtonElement);
+  assertEquals('performActionInternal must have been called on click',
+      1, button.performActionInternal.getCallCount());
+  assertEquals('Enabled button must have dispatched ACTION on click',
+      1, observer.getEvents(goog.ui.Component.EventType.ACTION).length);
+
   var e = new goog.events.Event(goog.events.KeyHandler.EventType.KEY,
       button);
   e.keyCode = goog.events.KeyCodes.ENTER;
   button.handleKeyEvent(e);
-  assertEquals('Enabled button must have dispatched ACTION on Enter key', 1,
-      dispatchedActionCount);
+  assertEquals('performActionInternal must have been called on Enter key',
+      2, button.performActionInternal.getCallCount());
+  assertEquals('Enabled button must have dispatched ACTION on Enter key',
+      2, observer.getEvents(goog.ui.Component.EventType.ACTION).length);
 
-  dispatchedActionCount = 0;
-  e = new goog.events.Event(goog.events.EventType.KEYUP, button);
+  var e = new goog.events.Event(goog.events.KeyHandler.EventType.KEY,
+      button);
   e.keyCode = goog.events.KeyCodes.SPACE;
   button.handleKeyEvent(e);
-  assertEquals('Enabled button must have dispatched ACTION on Space key', 1,
-      dispatchedActionCount);
-
-  goog.events.unlisten(button, goog.ui.Component.EventType.ACTION,
-      handleAction);
+  assertEquals('performActionInternal must have been called on Space key',
+      3, button.performActionInternal.getCallCount());
+  assertEquals('Enabled button must have dispatched ACTION on Space key',
+      3, observer.getEvents(goog.ui.Component.EventType.ACTION).length);
 }
 
 function testDisabledButtonBehavior() {
-  var dispatchedActionCount = 0;
-  var handleAction = function() {
-    dispatchedActionCount++;
-  };
-  goog.events.listen(button, goog.ui.Component.EventType.ACTION,
-      handleAction);
-
+  button.performActionInternal =
+      goog.testing.recordFunction(button.performActionInternal);
+  var observer = new goog.testing.events.EventObserver();
+  goog.events.listen(button, goog.ui.Component.EventType.ACTION, observer);
   button.setEnabled(false);
 
-  dispatchedActionCount = 0;
   button.handleKeyEvent({keyCode: goog.events.KeyCodes.ENTER});
-  assertEquals('Disabled button must not dispatch ACTION on Enter key',
-      0, dispatchedActionCount);
+  assertEquals('performActionInternal must not have been called on Enter',
+      0, button.performActionInternal.getCallCount());
+  assertEquals('Disabled button must not have dispatched ACTION on Enter',
+      0, observer.getEvents(goog.ui.Component.EventType.ACTION).length);
 
-  dispatchedActionCount = 0;
   button.handleKeyEvent({
     keyCode: goog.events.KeyCodes.SPACE,
     type: goog.events.EventType.KEYUP
   });
+  assertEquals('performActionInternal must not have been called on Space',
+      0, button.performActionInternal.getCallCount());
   assertEquals('Disabled button must not have dispatched ACTION on Space',
-      0, dispatchedActionCount);
-
-  goog.events.unlisten(button, goog.ui.Component.EventType.ACTION,
-      handleAction);
+      0, observer.getEvents(goog.ui.Component.EventType.ACTION).length);
 }
 
-function testSpaceFireActionOnKeyUp() {
-  var dispatchedActionCount = 0;
-  var handleAction = function() {
-    dispatchedActionCount++;
-  };
-  goog.events.listen(button, goog.ui.Component.EventType.ACTION,
-      handleAction);
+function testPreventScrollingOnSpace() {
+  button.performActionInternal =
+      goog.testing.recordFunction(button.performActionInternal);
+  var observer = new goog.testing.events.EventObserver();
+  goog.events.listen(button, goog.ui.Component.EventType.ACTION, observer);
 
-  dispatchedActionCount = 0;
   e = new goog.events.Event(goog.events.KeyHandler.EventType.KEY, button);
+  e.preventDefault = goog.testing.recordFunction();
   e.keyCode = goog.events.KeyCodes.SPACE;
   button.handleKeyEvent(e);
-  assertEquals('Button must not have dispatched ACTION on Space keypress',
-      0, dispatchedActionCount);
-  assertEquals('The default action (scrolling) must have been prevented ' +
-               'for Space keypress',
-               false,
-               e.returnValue_);
-
-
-  dispatchedActionCount = 0;
-  e = new goog.events.Event(goog.events.EventType.KEYUP, button);
-  e.keyCode = goog.events.KeyCodes.SPACE;
-  button.handleKeyEvent(e);
-  assertEquals('Button must have dispatched ACTION on Space keyup',
-      1, dispatchedActionCount);
-
-  goog.events.unlisten(button, goog.ui.Component.EventType.ACTION,
-      handleAction);
+  assertEquals('performActionInternal must have been called on Space keypress',
+      1, button.performActionInternal.getCallCount());
+  assertEquals('Button must have dispatched ACTION on Space keypress',
+      1, observer.getEvents(goog.ui.Component.EventType.ACTION).length);
+  assertNotNull('Page scrolling is prevented', e.preventDefault.getLastCall());
 }
 
-function testEnterFireActionOnKeyPress() {
-  var dispatchedActionCount = 0;
-  var handleAction = function() {
-    dispatchedActionCount++;
-  };
-  goog.events.listen(button, goog.ui.Component.EventType.ACTION,
-      handleAction);
+function testSpaceAndEnterFireActionInContainer() {
+  button.performActionInternal =
+      goog.testing.recordFunction(button.performActionInternal);
+  var observer = new goog.testing.events.EventObserver();
+  goog.events.listen(button, goog.ui.Component.EventType.ACTION, observer);
 
-  dispatchedActionCount = 0;
-  e = new goog.events.Event(goog.events.KeyHandler.EventType.KEY, button);
-  e.keyCode = goog.events.KeyCodes.ENTER;
-  button.handleKeyEvent(e);
+  // Create a container, add a button to it, and highlight the button.
+  var container = new goog.ui.Container();
+  var containerElem = goog.dom.createElement('div');
+  sandbox.appendChild(containerElem);
+  container.decorate(containerElem);
+  button.render(containerElem);
+  container.addChild(button);
+  container.setHighlightedIndex(0);
+  assertTrue(button.isHighlighted());
+  goog.testing.events.fireFocusEvent(containerElem);
+
+  // Verify that SPACE keypress events on the container activate the highlighted
+  // item.
+  goog.testing.events.fireKeySequence(
+      containerElem, goog.events.KeyCodes.SPACE);
+  assertEquals('performActionInternal must have been called on Space keypress',
+      1, button.performActionInternal.getCallCount());
+  assertEquals('Button must have dispatched ACTION on Space keypress',
+      1, observer.getEvents(goog.ui.Component.EventType.ACTION).length);
+
+  // Verify that ENTER keypress events on the container activate the highlighted
+  // item.
+  goog.testing.events.fireKeySequence(
+      containerElem, goog.events.KeyCodes.ENTER);
+  assertEquals('performActionInternal must have been called on Enter keypress',
+      2, button.performActionInternal.getCallCount());
   assertEquals('Button must have dispatched ACTION on Enter keypress',
-      1, dispatchedActionCount);
-
-  dispatchedActionCount = 0;
-  e = new goog.events.Event(goog.events.EventType.KEYUP, button);
-  e.keyCode = goog.events.KeyCodes.ENTER;
-  button.handleKeyEvent(e);
-  assertEquals('Button must not have dispatched ACTION on Enter keyup',
-      0, dispatchedActionCount);
-
-  goog.events.unlisten(button, goog.ui.Component.EventType.ACTION,
-      handleAction);
+      2, observer.getEvents(goog.ui.Component.EventType.ACTION).length);
 }
