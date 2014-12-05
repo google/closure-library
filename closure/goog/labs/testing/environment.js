@@ -61,10 +61,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
   /** Runs immediately after the tearDownPage phase of JsUnit tests. */
   tearDownPage: function() {
-    // If we created the mockControl, we'll also tear it down.
-    if (this.shouldMakeMockControl_) {
-      this.mockControl.$tearDown();
-    }
+    // If we created the mockClock, we'll also dispose it.
     if (this.shouldMakeMockClock_) {
       this.mockClock.dispose();
     }
@@ -81,7 +78,7 @@ goog.labs.testing.Environment = goog.defineClass(null, {
       for (var i = 0; i < 100; i++) {
         this.mockClock.tick(1000);
       }
-      // If we created the mockClock, we'll also dispose it.
+      // If we created the mockClock, we'll also reset it.
       if (this.shouldMakeMockClock_) {
         this.mockClock.reset();
       }
@@ -101,6 +98,10 @@ goog.labs.testing.Environment = goog.defineClass(null, {
         this.mockControl.$verifyAll();
       } finally {
         this.mockControl.$resetAll();
+      }
+      if (this.shouldMakeMockControl_) {
+        // If we created the mockControl, we'll also tear it down.
+        this.mockControl.$tearDown();
       }
     }
     // Verifying the mockControl may throw, so if cleanup needs to happen,

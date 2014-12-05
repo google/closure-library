@@ -50,6 +50,7 @@ function tearDown() {
     return;
   }
 
+  mockControl.$resetAll();
   mockControl.$tearDown();
 }
 
@@ -92,6 +93,39 @@ function testLifecycle() {
   testing = false;
 }
 
+function testTearDownWithMockControl() {
+  testing = true;
+
+  var envWith = new goog.labs.testing.Environment();
+  var envWithout = new goog.labs.testing.Environment();
+
+  var mockControlMock = mockControl.createStrictMock(goog.testing.MockControl);
+  var mockControlCtorMock = mockControl.createMethodMock(goog.testing,
+      'MockControl');
+  mockControlCtorMock().$times(1).$returns(mockControlMock);
+  // Expecting verify / reset calls twice since two environments use the same
+  // mockControl, but only one created it and is allowed to tear it down.
+  mockControlMock.$verifyAll();
+  mockControlMock.$replayAll();
+  mockControlMock.$verifyAll();
+  mockControlMock.$resetAll();
+  mockControlMock.$tearDown().$times(1);
+  mockControlMock.$verifyAll();
+  mockControlMock.$replayAll();
+  mockControlMock.$verifyAll();
+  mockControlMock.$resetAll();
+
+  mockControl.$replayAll();
+  envWith.withMockControl();
+  envWithout.mockControl = mockControlMock;
+  envWith.tearDown();
+  envWithout.tearDown();
+  mockControl.$verifyAll();
+  mockControl.$resetAll();
+
+  testing = false;
+}
+
 function testAutoDiscoverTests() {
   testing = true;
 
@@ -107,9 +141,9 @@ function testAutoDiscoverTests() {
   assertEquals(tearDownFn, testCase.tearDownFn);
   assertEquals(tearDownPageFn, testCase.tearDownPageFn);
 
-  // Note that this number changes when more tests are added this file as
+  // Note that this number changes when more tests are added to this file as
   // the environment reflects on the window global scope for JsUnit.
-  assertEquals(5, testCase.tests_.length);
+  assertEquals(6, testCase.tests_.length);
 
   testing = false;
 }
