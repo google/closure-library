@@ -23,9 +23,12 @@
 goog.provide('goog.ui.Button');
 goog.provide('goog.ui.Button.Side');
 
+goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.events.KeyHandler');
 goog.require('goog.ui.ButtonRenderer');
 goog.require('goog.ui.ButtonSide');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.Control');
 goog.require('goog.ui.NativeButtonRenderer');
 goog.require('goog.ui.registry');
@@ -167,6 +170,19 @@ goog.ui.Button.prototype.disposeInternal = function() {
 };
 
 
+/** @override */
+goog.ui.Button.prototype.enterDocument = function() {
+  goog.ui.Button.superClass_.enterDocument.call(this);
+  if (this.isSupportedState(goog.ui.Component.State.FOCUSED)) {
+    var keyTarget = this.getKeyEventTarget();
+    if (keyTarget) {
+      this.getHandler().listen(keyTarget, goog.events.EventType.KEYUP,
+          this.handleKeyEventInternal);
+    }
+  }
+};
+
+
 /**
  * Attempts to handle a keyboard event; returns true if the event was handled,
  * false otherwise.  If the button is enabled and the Enter/Space key was
@@ -178,16 +194,16 @@ goog.ui.Button.prototype.disposeInternal = function() {
  * @override
  */
 goog.ui.Button.prototype.handleKeyEventInternal = function(e) {
-  switch (e.keyCode) {
-    case goog.events.KeyCodes.SPACE:
-      // preventDefault to prevent page scrolling.
-      // This falls through to the ENTER handler.
-      e.preventDefault();
-    case goog.events.KeyCodes.ENTER:
-      return this.performActionInternal(e);
-    default:
-      return false;
+  if (e.keyCode == goog.events.KeyCodes.ENTER &&
+      e.type == goog.events.KeyHandler.EventType.KEY ||
+      e.keyCode == goog.events.KeyCodes.SPACE &&
+      e.type == goog.events.EventType.KEYUP) {
+    return this.performActionInternal(e);
   }
+  // Return true for space keypress (even though the event is handled on keyup)
+  // as preventDefault needs to be called up keypress to take effect in IE and
+  // WebKit.
+  return e.keyCode == goog.events.KeyCodes.SPACE;
 };
 
 

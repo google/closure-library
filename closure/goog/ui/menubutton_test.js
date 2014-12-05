@@ -294,18 +294,13 @@ function testCloseSubMenuBehavior() {
 
 
 /**
- * Make sure the menu opens when enter or space is pressed.
+ * Make sure the menu opens when enter is pressed.
  */
-function testSpaceOrEnterOpensMenu() {
+function testEnterOpensMenu() {
   var node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
-
-  goog.testing.events.fireKeySequence(node, goog.events.KeyCodes.ENTER);
-  assertTrue('Menu must open after Enter', menuButton.isOpen());
-
-  menuButton.setOpen(false);
-  goog.testing.events.fireKeySequence(node, goog.events.KeyCodes.SPACE);
-  assertTrue('Menu must open after Space', menuButton.isOpen());
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
+  assertTrue('Menu must open after enter', menuButton.isOpen());
 }
 
 
@@ -317,11 +312,12 @@ function testSpaceOrEnterClosesMenu() {
   menuButton.decorate(node);
 
   menuButton.setOpen(true);
-  goog.testing.events.fireKeySequence(node, goog.events.KeyCodes.ENTER);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.ENTER));
   assertFalse('Menu should close after pressing Enter', menuButton.isOpen());
 
   menuButton.setOpen(true);
-  goog.testing.events.fireKeySequence(node, goog.events.KeyCodes.SPACE);
+  menuButton.handleKeyEvent(new MyFakeEvent(goog.events.KeyCodes.SPACE,
+      goog.events.EventType.KEYUP));
   assertFalse('Menu should close after pressing Space', menuButton.isOpen());
 }
 
@@ -592,9 +588,9 @@ function isWinSafariBefore5() {
 
 
 /**
- * Tests that preventDefault is called on a space key press.
+ * Tests that space, and only space, fire on key up.
  */
-function testPreventScrollingOnSpace() {
+function testSpaceFireOnKeyUp() {
   var node = goog.dom.getElement('demoMenuButton');
   menuButton.decorate(node);
 
@@ -602,7 +598,30 @@ function testPreventScrollingOnSpace() {
   e.preventDefault = goog.testing.recordFunction();
   e.keyCode = goog.events.KeyCodes.SPACE;
   menuButton.handleKeyEvent(e);
+  assertFalse('Menu must not have been triggered by Space keypress',
+      menuButton.isOpen());
   assertNotNull('Page scrolling is prevented', e.preventDefault.getLastCall());
+
+  e = new goog.events.Event(goog.events.EventType.KEYUP, menuButton);
+  e.keyCode = goog.events.KeyCodes.SPACE;
+  menuButton.handleKeyEvent(e);
+  assertTrue('Menu must have been triggered by Space keyup',
+      menuButton.isOpen());
+  menuButton.getMenu().setHighlightedIndex(0);
+  e = new goog.events.Event(goog.events.KeyHandler.EventType.KEY, menuButton);
+  e.keyCode = goog.events.KeyCodes.DOWN;
+  menuButton.handleKeyEvent(e);
+  assertEquals('Highlighted menu item must have hanged by Down keypress',
+      1,
+      menuButton.getMenu().getHighlightedIndex());
+
+  menuButton.getMenu().setHighlightedIndex(0);
+  e = new goog.events.Event(goog.events.EventType.KEYUP, menuButton);
+  e.keyCode = goog.events.KeyCodes.DOWN;
+  menuButton.handleKeyEvent(e);
+  assertEquals('Highlighted menu item must not have changed by Down keyup',
+      0,
+      menuButton.getMenu().getHighlightedIndex());
 }
 
 
