@@ -28,6 +28,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.events.KeyHandler');
 goog.require('goog.math.Box');
 goog.require('goog.math.Rect');
 goog.require('goog.positioning');
@@ -325,9 +326,16 @@ goog.ui.MenuButton.prototype.containsElement = function(element) {
 
 /** @override */
 goog.ui.MenuButton.prototype.handleKeyEventInternal = function(e) {
+  // Handle SPACE on keyup and all other keys on keypress.
   if (e.keyCode == goog.events.KeyCodes.SPACE) {
     // Prevent page scrolling in Chrome.
     e.preventDefault();
+    if (e.type != goog.events.EventType.KEYUP) {
+      // Ignore events because KeyCodes.SPACE is handled further down.
+      return true;
+    }
+  } else if (e.type != goog.events.KeyHandler.EventType.KEY) {
+    return false;
   }
 
   if (this.menu_ && this.menu_.isVisible()) {
@@ -335,8 +343,7 @@ goog.ui.MenuButton.prototype.handleKeyEventInternal = function(e) {
     var isEnterOrSpace = e.keyCode == goog.events.KeyCodes.ENTER ||
         e.keyCode == goog.events.KeyCodes.SPACE;
     var handledByMenu = this.menu_.handleKeyEvent(e);
-    if (e.keyCode == goog.events.KeyCodes.ESC ||
-        isEnterOrSpace && !this.menu_.getHighlighted()) {
+    if (e.keyCode == goog.events.KeyCodes.ESC || isEnterOrSpace) {
       // Dismiss the menu.
       this.setOpen(false);
       return true;
@@ -1024,7 +1031,7 @@ goog.ui.MenuButton.prototype.attachPopupListeners_ = function(attach) {
 
   // Only listen for blur events dispatched by the menu if it is focusable.
   if (this.isFocusablePopupMenu()) {
-    method.call(handler, /** @type {goog.events.EventTarget} */ (this.menu_),
+    method.call(handler, /** @type {!goog.events.EventTarget} */ (this.menu_),
         goog.ui.Component.EventType.BLUR, this.handleMenuBlur);
   }
 
