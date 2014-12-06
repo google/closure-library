@@ -20,6 +20,8 @@ goog.require('goog.storage.mechanism.IEUserData');
 goog.require('goog.storage.mechanism.mechanismSeparationTester');
 /** @suppress {extraRequire} */
 goog.require('goog.storage.mechanism.mechanismSharingTester');
+/** @suppress {extraRequire} */
+goog.require('goog.storage.mechanism.mechanismTestDefinition');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
