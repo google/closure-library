@@ -806,6 +806,15 @@ function testExtend() {
   goog.array.extend(f, length3ArrayLikeObject, length3ArrayLikeObject);
   var f2 = [0, 1, 2, 4, 8, 2, 4, 8];
   assertArrayEquals('extend, should be equal', f2, f);
+
+  var result = [];
+  var i = 1000000;
+  var bigArray = Array(i);
+  while (i--) {
+    bigArray[i] = i;
+  }
+  goog.array.extend(result, bigArray)
+  assertArrayEquals(bigArray, result);
 }
 
 function testExtendWithArguments() {

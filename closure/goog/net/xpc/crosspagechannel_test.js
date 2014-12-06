@@ -502,6 +502,7 @@ function testDisposeBeforeConnect() {
 }
 
 
+
 /**
  * Driver for the tests for CrossPageChannel.
  *

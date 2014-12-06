@@ -520,9 +520,9 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.nextInternal_ =
 
   // Loop through each token type and try to match the beginning of the string
   // with the token's regular expression.
-  goog.object.forEach(types, function(type, id) {
+  goog.object.some(types, function(type, id) {
     if (next || type == types.END) {
-      return;
+      return false;
     }
 
     // Note: This regular expression check is at, minimum, O(n).
@@ -533,6 +533,8 @@ goog.proto2.TextFormatSerializer.Tokenizer_.prototype.nextInternal_ =
         value: info[0]
       };
     }
+
+    return !!next;
   });
 
   // Advance the index by the length of the token.

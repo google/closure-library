@@ -19,7 +19,6 @@
  */
 goog.provide('goog.locale.timeZoneDetection');
 
-goog.require('goog.locale');
 goog.require('goog.locale.TimeZoneFingerprint');
 
 

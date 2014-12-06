@@ -106,7 +106,7 @@ goog.events.EventHandler.typeArray_ = [];
  * EventHandler's handleEvent method will be used.
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array<string>|
- *     !goog.events.EventId.<EVENTOBJ>|!Array<!goog.events.EventId.<EVENTOBJ>>}
+ *     !goog.events.EventId<EVENTOBJ>|!Array<!goog.events.EventId<EVENTOBJ>>}
  *     type Event type to listen for or array of event types.
  * @param {function(this:SCOPE, EVENTOBJ):?|{handleEvent:function(?):?}|null=}
  *     opt_fn Optional callback function to be used as the listener or an object
@@ -127,7 +127,7 @@ goog.events.EventHandler.prototype.listen = function(
  * EventHandler's handleEvent method will be used.
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array<string>|
- *     !goog.events.EventId.<EVENTOBJ>|!Array<!goog.events.EventId.<EVENTOBJ>>}
+ *     !goog.events.EventId<EVENTOBJ>|!Array<!goog.events.EventId<EVENTOBJ>>}
  *     type Event type to listen for or array of event types.
  * @param {function(this:T, EVENTOBJ):?|{handleEvent:function(this:T, ?):?}|
  *     null|undefined} fn Optional callback function to be used as the
@@ -150,7 +150,7 @@ goog.events.EventHandler.prototype.listenWithScope = function(
  * EventHandler's handleEvent method will be used.
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array<string>|
- *     !goog.events.EventId.<EVENTOBJ>|!Array<!goog.events.EventId.<EVENTOBJ>>}
+ *     !goog.events.EventId<EVENTOBJ>|!Array<!goog.events.EventId<EVENTOBJ>>}
  *     type Event type to listen for or array of event types.
  * @param {function(EVENTOBJ):?|{handleEvent:function(?):?}|null=} opt_fn
  *     Optional callback function to be used as the listener or an object with
@@ -199,7 +199,7 @@ goog.events.EventHandler.prototype.listen_ = function(src, type, opt_fn,
  * provided, each event type will be listened to once.
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array<string>|
- *     !goog.events.EventId.<EVENTOBJ>|!Array<!goog.events.EventId.<EVENTOBJ>>}
+ *     !goog.events.EventId<EVENTOBJ>|!Array<!goog.events.EventId<EVENTOBJ>>}
  *     type Event type to listen for or array of event types.
  * @param {function(this:SCOPE, EVENTOBJ):?|{handleEvent:function(?):?}|null=} opt_fn
  *    Optional callback function to be used as the listener or an object with
@@ -211,8 +211,6 @@ goog.events.EventHandler.prototype.listen_ = function(src, type, opt_fn,
  */
 goog.events.EventHandler.prototype.listenOnce = function(
     src, type, opt_fn, opt_capture) {
-  // TODO(mknichel): Remove the opt_scope from this function and then
-  // templatize it.
   return this.listenOnce_(src, type, opt_fn, opt_capture);
 };
 
@@ -224,7 +222,7 @@ goog.events.EventHandler.prototype.listenOnce = function(
  * provided, each event type will be listened to once.
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array<string>|
- *     !goog.events.EventId.<EVENTOBJ>|!Array<!goog.events.EventId.<EVENTOBJ>>}
+ *     !goog.events.EventId<EVENTOBJ>|!Array<!goog.events.EventId<EVENTOBJ>>}
  *     type Event type to listen for or array of event types.
  * @param {function(this:T, EVENTOBJ):?|{handleEvent:function(this:T, ?):?}|
  *     null|undefined} fn Optional callback function to be used as the
@@ -249,7 +247,7 @@ goog.events.EventHandler.prototype.listenOnceWithScope = function(
  * provided, each event type will be listened to once.
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array<string>|
- *     !goog.events.EventId.<EVENTOBJ>|!Array<!goog.events.EventId.<EVENTOBJ>>}
+ *     !goog.events.EventId<EVENTOBJ>|!Array<!goog.events.EventId<EVENTOBJ>>}
  *     type Event type to listen for or array of event types.
  * @param {function(EVENTOBJ):?|{handleEvent:function(?):?}|null=} opt_fn
  *    Optional callback function to be used as the listener or an object with
@@ -376,7 +374,7 @@ goog.events.EventHandler.prototype.getListenerCount = function() {
  * Unlistens on an event.
  * @param {goog.events.ListenableType} src Event source.
  * @param {string|Array<string>|
- *     !goog.events.EventId.<EVENTOBJ>|!Array<!goog.events.EventId.<EVENTOBJ>>}
+ *     !goog.events.EventId<EVENTOBJ>|!Array<!goog.events.EventId<EVENTOBJ>>}
  *     type Event type or array of event types to unlisten to.
  * @param {function(EVENTOBJ):?|{handleEvent:function(?):?}|null=} opt_fn
  *     Optional callback function to be used as the listener or an object with

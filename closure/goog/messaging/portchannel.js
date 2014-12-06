@@ -30,8 +30,6 @@ goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.async.Deferred');
 goog.require('goog.debug');
-goog.require('goog.dom');
-goog.require('goog.dom.DomHelper');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.json');
@@ -350,7 +348,7 @@ goog.messaging.PortChannel.prototype.extractPorts_ = function(ports, message) {
   // We want to compare the exact constructor here because we only want to
   // recurse into object literals, not native objects like Date.
   } else if (message && message.constructor == Object) {
-    return goog.object.map(/** @type {Object} */ (message), function(val, key) {
+    return goog.object.map(/** @type {!Object} */(message), function(val, key) {
       val = this.extractPorts_(ports, val);
       return key == '_port' ? {'type': 'escaped', 'val': val} : val;
     }, this);

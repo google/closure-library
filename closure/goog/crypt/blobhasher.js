@@ -31,8 +31,6 @@ goog.provide('goog.crypt.BlobHasher');
 goog.provide('goog.crypt.BlobHasher.EventType');
 
 goog.require('goog.asserts');
-goog.require('goog.crypt');
-goog.require('goog.crypt.Hash');
 goog.require('goog.events.EventTarget');
 goog.require('goog.fs');
 goog.require('goog.log');

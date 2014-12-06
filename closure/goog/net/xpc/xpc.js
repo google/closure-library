@@ -67,7 +67,7 @@ goog.net.xpc.TransportTypes = {
 /**
  * Enum containing transport names. These need to correspond to the
  * transport class names for createTransport_() to work.
- * @type {Object}
+ * @const {!Object<string,string>}
  */
 goog.net.xpc.TransportNames = {
   '1': 'NativeMessagingTransport',
@@ -85,7 +85,7 @@ goog.net.xpc.TransportNames = {
 
 /**
  * Field names used on configuration object.
- * @type {Object}
+ * @const
  */
 goog.net.xpc.CfgFields = {
   /**

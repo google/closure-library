@@ -21,17 +21,18 @@ goog.provide('goog.module.ModuleLoaderTest');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.events');
 goog.require('goog.functions');
 goog.require('goog.module.ModuleLoader');
 goog.require('goog.module.ModuleManager');
-goog.require('goog.module.ModuleManager.CallbackType');
+goog.require('goog.net.BulkLoader');
+goog.require('goog.net.XmlHttp');
 goog.require('goog.object');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.events.EventObserver');
 goog.require('goog.testing.jsunit');
-goog.require('goog.testing.recordFunction');
-goog.require('goog.userAgent.product');
+goog.require('goog.userAgent');
 
 goog.setTestOnly('goog.module.ModuleLoaderTest');
 
@@ -67,12 +68,12 @@ testCase.setUp = function() {
 
   moduleManager.setLoader(moduleLoader);
   moduleManager.setAllModuleInfo({
-      'modA': [],
-      'modB': ['modA']
+    'modA': [],
+    'modB': ['modA']
   });
   moduleManager.setModuleUris({
-      'modA': ['testdata/modA_1.js', 'testdata/modA_2.js'],
-      'modB': ['testdata/modB_1.js']
+    'modA': ['testdata/modA_1.js', 'testdata/modA_2.js'],
+    'modB': ['testdata/modB_1.js']
   });
 
   assertNotLoaded('modA');
@@ -155,8 +156,8 @@ function testLoadDebugModuleAThenB() {
   // Swap the script tags of module A, to introduce a race condition.
   // See the comments on this in ModuleLoader's debug loader.
   moduleManager.setModuleUris({
-      'modA': ['testdata/modA_2.js', 'testdata/modA_1.js'],
-      'modB': ['testdata/modB_1.js']
+    'modA': ['testdata/modA_2.js', 'testdata/modA_1.js'],
+    'modB': ['testdata/modB_1.js']
   });
   testCase.waitForAsync('wait for module B load');
   moduleLoader.setDebugMode(true);
@@ -246,8 +247,8 @@ function testModuleLoaderRecursesTooDeep(opt_numModules) {
   var oldXmlHttp = goog.net.XmlHttp;
   stubs.set(goog.net, 'XmlHttp', function() {
     return {
-       open: goog.functions.error('mock error'),
-       abort: goog.nullFunction
+      open: goog.functions.error('mock error'),
+      abort: goog.nullFunction
     };
   });
   goog.object.extend(goog.net.XmlHttp, oldXmlHttp);
@@ -314,7 +315,7 @@ function testErrback() {
 function testPrefetchThenLoadModuleA() {
   moduleManager.prefetchModule('modA');
   stubs.set(goog.net.BulkLoader.prototype, 'load', function() {
-    fail('modA should not be reloaded')
+    fail('modA should not be reloaded');
   });
 
   testCase.waitForAsync('wait for module A load');
@@ -333,7 +334,7 @@ function testPrefetchThenLoadModuleA() {
 function testPrefetchThenLoadModuleB() {
   moduleManager.prefetchModule('modB');
   stubs.set(goog.net.BulkLoader.prototype, 'load', function() {
-    fail('modA and modB should not be reloaded')
+    fail('modA and modB should not be reloaded');
   });
 
   testCase.waitForAsync('wait for module B load');
@@ -387,7 +388,7 @@ function testLoadModuleBThenPrefetchModuleA() {
         0, observer.getEvents(EventType.REQUEST_ERROR).length);
     assertThrows('Module load already requested: modB',
         function() {
-          moduleManager.prefetchModule('modA')
+          moduleManager.prefetchModule('modA');
         });
   });
 }
@@ -406,8 +407,8 @@ function testLoadErrorCallbackExecutedWhenPrefetchFails() {
   var oldXmlHttp = goog.net.XmlHttp;
   stubs.set(goog.net, 'XmlHttp', function() {
     return {
-       open: goog.functions.error('mock error'),
-       abort: goog.nullFunction
+      open: goog.functions.error('mock error'),
+      abort: goog.nullFunction
     };
   });
   goog.object.extend(goog.net.XmlHttp, oldXmlHttp);
@@ -422,9 +423,9 @@ function testLoadErrorCallbackExecutedWhenPrefetchFails() {
 
   moduleLoader.prefetchModule('modA', moduleManager.moduleInfoMap_['modA']);
   moduleLoader.loadModules(['modA'], moduleManager.moduleInfoMap_,
-    function() {
-      fail('modA should not load successfully')
-    }, errorHandler);
+      function() {
+        fail('modA should not load successfully');
+      }, errorHandler);
 
   assertEquals(1, errorCount);
 }

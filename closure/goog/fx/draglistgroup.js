@@ -132,7 +132,7 @@ goog.fx.DragListDirection = {
 
 /**
  * Events dispatched by this class.
- * @type {Object}
+ * @const
  */
 goog.fx.DragListGroup.EventType = {
   BEFOREDRAGSTART: 'beforedragstart',

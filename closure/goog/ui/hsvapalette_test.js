@@ -18,7 +18,6 @@ goog.setTestOnly('goog.ui.HsvaPaletteTest');
 goog.require('goog.color.alpha');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.classlist');
-goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.math.Coordinate');
 goog.require('goog.style');
@@ -90,13 +89,6 @@ function testRender() {
     assertEquals('The noalpha class must not be present',
         'goog-hsva-palette', elem.className);
   }
-}
-
-function testNoLeftOverListenersAfterDispose() {
-  var initialListenerCount = goog.events.getTotalListenerCount();
-  samplePalette.render(document.getElementById('sandbox'));
-  samplePalette.dispose();
-  assertEquals(initialListenerCount, goog.events.getTotalListenerCount());
 }
 
 function testInputColor() {

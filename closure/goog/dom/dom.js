@@ -1142,7 +1142,7 @@ goog.dom.getChildren = function(element) {
  */
 goog.dom.getFirstElementChild = function(node) {
   if (node.firstElementChild != undefined) {
-    return /** @type {Element} */(node).firstElementChild;
+    return /** @type {!Element} */(node).firstElementChild;
   }
   return goog.dom.getNextElementNode_(node.firstChild, true);
 };
@@ -1155,7 +1155,7 @@ goog.dom.getFirstElementChild = function(node) {
  */
 goog.dom.getLastElementChild = function(node) {
   if (node.lastElementChild != undefined) {
-    return /** @type {Element} */(node).lastElementChild;
+    return /** @type {!Element} */(node).lastElementChild;
   }
   return goog.dom.getNextElementNode_(node.lastChild, false);
 };
@@ -1168,7 +1168,7 @@ goog.dom.getLastElementChild = function(node) {
  */
 goog.dom.getNextElementSibling = function(node) {
   if (node.nextElementSibling != undefined) {
-    return /** @type {Element} */(node).nextElementSibling;
+    return /** @type {!Element} */(node).nextElementSibling;
   }
   return goog.dom.getNextElementNode_(node.nextSibling, true);
 };
@@ -1182,7 +1182,7 @@ goog.dom.getNextElementSibling = function(node) {
  */
 goog.dom.getPreviousElementSibling = function(node) {
   if (node.previousElementSibling != undefined) {
-    return /** @type {Element} */(node).previousElementSibling;
+    return /** @type {!Element} */(node).previousElementSibling;
   }
   return goog.dom.getNextElementNode_(node.previousSibling, false);
 };
@@ -2011,10 +2011,13 @@ goog.dom.isNodeList = function(val) {
  *     null/undefined to match only based on class name).
  * @param {?string=} opt_class The class name to match (or null/undefined to
  *     match only based on tag name).
+ * @param {number=} opt_maxSearchSteps Maximum number of levels to search up the
+ *     dom.
  * @return {Element} The first ancestor that matches the passed criteria, or
  *     null if no match is found.
  */
-goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
+goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class,
+    opt_maxSearchSteps) {
   if (!opt_tag && !opt_class) {
     return null;
   }
@@ -2024,7 +2027,7 @@ goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
         return (!tagName || node.nodeName == tagName) &&
                (!opt_class || goog.isString(node.className) &&
                    goog.array.contains(node.className.split(/\s+/), opt_class));
-      }, true));
+      }, true, opt_maxSearchSteps));
 };
 
 
@@ -2034,11 +2037,14 @@ goog.dom.getAncestorByTagNameAndClass = function(element, opt_tag, opt_class) {
  * element itself is returned.
  * @param {Node} element The DOM node to start with.
  * @param {string} className The class name to match.
+ * @param {number=} opt_maxSearchSteps Maximum number of levels to search up the
+ *     dom.
  * @return {Element} The first ancestor that matches the passed criteria, or
  *     null if none match.
  */
-goog.dom.getAncestorByClass = function(element, className) {
-  return goog.dom.getAncestorByTagNameAndClass(element, null, className);
+goog.dom.getAncestorByClass = function(element, className, opt_maxSearchSteps) {
+  return goog.dom.getAncestorByTagNameAndClass(element, null, className,
+      opt_maxSearchSteps);
 };
 
 
@@ -2874,6 +2880,8 @@ goog.dom.DomHelper.prototype.isNodeList = goog.dom.isNodeList;
  *     null/undefined to match only based on class name).
  * @param {?string=} opt_class The class name to match (or null/undefined to
  *     match only based on tag name).
+ * @param {number=} opt_maxSearchSteps Maximum number of levels to search up the
+ *     dom.
  * @return {Element} The first ancestor that matches the passed criteria, or
  *     null if no match is found.
  */
@@ -2887,6 +2895,8 @@ goog.dom.DomHelper.prototype.getAncestorByTagNameAndClass =
  * element itself is returned.
  * @param {Node} element The DOM node to start with.
  * @param {string} class The class name to match.
+ * @param {number=} opt_maxSearchSteps Maximum number of levels to search up the
+ *     dom.
  * @return {Element} The first ancestor that matches the passed criteria, or
  *     null if none match.
  */

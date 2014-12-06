@@ -179,7 +179,7 @@ goog.fx.AbstractDragDrop.prototype.initialized_ = false;
 
 /**
  * Constants for event names
- * @type {Object}
+ * @const
  */
 goog.fx.AbstractDragDrop.EventType = {
   DRAGOVER: 'dragover',

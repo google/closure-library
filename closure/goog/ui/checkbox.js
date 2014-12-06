@@ -205,7 +205,7 @@ goog.ui.Checkbox.prototype.enterDocument = function() {
   // Set aria label.
   var checkboxElement = this.getElementStrict();
   if (this.label_ && checkboxElement != this.label_ &&
-      goog.string.isEmpty(goog.a11y.aria.getLabel(checkboxElement))) {
+      goog.string.isEmptyOrWhitespace(goog.a11y.aria.getLabel(checkboxElement))) {
     if (!this.label_.id) {
       this.label_.id = this.makeId('lbl');
     }

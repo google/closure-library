@@ -286,7 +286,7 @@ goog.ui.KeyboardShortcutHandler.EventType = {
 
 /**
  * Cache for name to key code lookup.
- * @type {Object}
+ * @type {Object.<number>}
  * @private
  */
 goog.ui.KeyboardShortcutHandler.nameToKeyCodeCache_;
@@ -337,7 +337,9 @@ goog.ui.KeyboardShortcutHandler.getKeyCode = function(name) {
   if (!goog.ui.KeyboardShortcutHandler.nameToKeyCodeCache_) {
     var map = {};
     for (var key in goog.events.KeyNames) {
-      map[goog.events.KeyNames[key]] = key;
+      // Explicitly convert the stringified map keys to numbers and normalize.
+      map[goog.events.KeyNames[key]] =
+          goog.events.KeyCodes.normalizeKeyCode(parseInt(key, 10));
     }
     goog.ui.KeyboardShortcutHandler.nameToKeyCodeCache_ = map;
   }
@@ -579,6 +581,8 @@ goog.ui.KeyboardShortcutHandler.prototype.interpretStrokes_ = function(
     strokes = goog.array.map(
         goog.ui.KeyboardShortcutHandler.parseStringShortcut(args[initialIndex]),
         function(stroke) {
+          goog.asserts.assertNumber(
+              stroke.keyCode, 'A non-modifier key is needed in each stroke.');
           return goog.ui.KeyboardShortcutHandler.makeStroke_(
               stroke.keyCode, stroke.modifiers);
         });
@@ -652,7 +656,8 @@ goog.ui.KeyboardShortcutHandler.prototype.getEventType =
 /**
  * Builds stroke array from string representation of shortcut.
  * @param {string} s String representation of shortcut.
- * @return {!Array<!{keyCode: number, modifiers: number}>} The stroke array.
+ * @return {!Array<!{keyCode: ?number, modifiers: number}>} The stroke array.  A
+ *     null keyCode means no non-modifier key was part of the stroke.
  */
 goog.ui.KeyboardShortcutHandler.parseStringShortcut = function(s) {
   // Normalize whitespace and force to lower case.
@@ -664,7 +669,8 @@ goog.ui.KeyboardShortcutHandler.parseStringShortcut = function(s) {
   var strokes = [];
   for (var group, i = 0; group = groups[i]; i++) {
     var keys = group.split('+');
-    var keyCode = 0;
+    // Explicitly re-initialize key data (JS does not have block scoping).
+    var keyCode = null;
     var modifiers = goog.ui.KeyboardShortcutHandler.Modifiers.NONE;
     for (var key, j = 0; key = keys[j]; j++) {
       switch (key) {
@@ -681,7 +687,12 @@ goog.ui.KeyboardShortcutHandler.parseStringShortcut = function(s) {
           modifiers |= goog.ui.KeyboardShortcutHandler.Modifiers.META;
           continue;
       }
+      if (!goog.isNull(keyCode)) {
+        goog.asserts.fail('At most one non-modifier key can be in a stroke.');
+      }
       keyCode = goog.ui.KeyboardShortcutHandler.getKeyCode(key);
+      goog.asserts.assertNumber(
+          keyCode, 'Key name not found in goog.events.KeyNames: ' + key);
       break;
     }
     strokes.push({keyCode: keyCode, modifiers: modifiers});
@@ -968,9 +979,7 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
     return;
   }
 
-  var keyCode = goog.userAgent.GECKO ?
-      goog.events.KeyCodes.normalizeGeckoKeyCode(event.keyCode) :
-      event.keyCode;
+  var keyCode = goog.events.KeyCodes.normalizeKeyCode(event.keyCode);
 
   var modifiers =
       (event.shiftKey ? goog.ui.KeyboardShortcutHandler.Modifiers.SHIFT : 0) |

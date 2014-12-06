@@ -514,7 +514,7 @@ goog.structs.AvlTree.prototype.reverseOrderTraverse =
  * traversalFunc is passed the root or the optionally specified startNode.
  *
  * @param {function(
- *     this:goog.structs.AvlTree.<T>,
+ *     this:goog.structs.AvlTree<T>,
  *     !goog.structs.AvlTree.Node):?goog.structs.AvlTree.Node} traversalFunc
  * Function used to traverse the tree.
  * @param {goog.structs.AvlTree.Node<T>=} opt_startNode The node at which the

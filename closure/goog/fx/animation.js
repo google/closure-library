@@ -28,8 +28,7 @@ goog.provide('goog.fx.AnimationEvent');
 goog.require('goog.array');
 goog.require('goog.events.Event');
 goog.require('goog.fx.Transition');  // Unreferenced: interface
-goog.require('goog.fx.Transition.EventType');
-goog.require('goog.fx.TransitionBase.State');
+goog.require('goog.fx.TransitionBase');
 goog.require('goog.fx.anim');
 goog.require('goog.fx.anim.Animated');  // Unreferenced: interface
 
@@ -102,6 +101,24 @@ goog.fx.Animation = function(start, end, duration, opt_acc) {
    * @private
    */
   this.useRightPositioningForRtl_ = false;
+
+  /**
+   * Current frame rate.
+   * @private {number}
+   */
+  this.fps_ = 0;
+
+  /**
+   * Percent of the way through the animation.
+   * @protected {number}
+   */
+  this.progress = 0;
+
+  /**
+   * Timestamp for when last frame was run.
+   * @protected {?number}
+   */
+  this.lastFrame = null;
 };
 goog.inherits(goog.fx.Animation, goog.fx.TransitionBase);
 
@@ -215,30 +232,6 @@ goog.fx.Animation.State = goog.fx.TransitionBase.State;
 goog.fx.Animation.setAnimationWindow = function(animationWindow) {
   goog.fx.anim.setAnimationWindow(animationWindow);
 };
-
-
-/**
- * Current frame rate.
- * @type {number}
- * @private
- */
-goog.fx.Animation.prototype.fps_ = 0;
-
-
-/**
- * Percent of the way through the animation.
- * @type {number}
- * @protected
- */
-goog.fx.Animation.prototype.progress = 0;
-
-
-/**
- * Timestamp for when last frame was run.
- * @type {?number}
- * @protected
- */
-goog.fx.Animation.prototype.lastFrame = null;
 
 
 /**

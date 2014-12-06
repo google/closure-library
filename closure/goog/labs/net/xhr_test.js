@@ -18,7 +18,6 @@ goog.setTestOnly('goog.labs.net.xhrTest');
 goog.require('goog.Promise');
 goog.require('goog.labs.net.xhr');
 goog.require('goog.net.XmlHttp');
-goog.require('goog.string');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
@@ -69,34 +68,44 @@ function setupStubXMLHttpRequest() {
   return stubXhr;
 }
 
-
 var xhr = goog.labs.net.xhr;
 var originalXmlHttp = goog.net.XmlHttp;
 var mockClock;
 
-var testCase = new goog.testing.AsyncTestCase(document.title);
-testCase.stepTimeout = 5 * 1000;
+var testCase = goog.testing.AsyncTestCase.createAndInstall(document.title);
 
-testCase.autoDiscoverTests();
+function setUpPage() {
+  testCase.stepTimeout = 5 * 1000;
+}
 
-testCase.tearDown = function() {
+function tearDown() {
   if (mockClock) {
     mockClock.dispose();
     mockClock = null;
   }
   goog.net.XmlHttp = originalXmlHttp;
-};
+}
 
-G_testRunner.initialize(testCase);
 
-// Many tests don't work on the local file system due to cross-origin
-// restrictions in Chrome without --allow-file-access-from-files.
-// They will run on the farm or on a Closure Test server.
-var shouldRunLocally = goog.userAgent.IE || goog.userAgent.GECKO ||
-    goog.string.startsWith(document.location.href, 'file://');
+/**
+ * Tests whether the test was loaded from a file: protocol. Tests that use a
+ * real network request cannot be run from the local file system due to
+ * cross-origin restrictions, but will run if the tests are hosted on a server.
+ * A log message is added to the test case to warn users that the a test was
+ * skipped.
+ *
+ * @return {boolean} Whether the test is running on a local file system.
+ */
+function isRunningLocally() {
+  if (window.location.protocol == 'file:') {
+    testCase.saveMessage('Test skipped while running on local file system.');
+    return true;
+  }
+  return false;
+}
 
 function testSimpleRequest() {
-  if (shouldRunLocally) return;
+  if (isRunningLocally()) return;
 
   testCase.waitForAsync('simpleRequest');
   xhr.send('GET', 'testdata/xhr_test_text.data').then(function(xhr) {
@@ -107,7 +116,7 @@ function testSimpleRequest() {
 }
 
 function testGetText() {
-  if (shouldRunLocally) return;
+  if (isRunningLocally()) return;
 
   testCase.waitForAsync('getText');
   xhr.get('testdata/xhr_test_text.data').then(function(responseText) {
@@ -117,7 +126,7 @@ function testGetText() {
 }
 
 function testGetTextWithJson() {
-  if (shouldRunLocally) return;
+  if (isRunningLocally()) return;
 
   testCase.waitForAsync('getTextWithJson');
   xhr.get('testdata/xhr_test_json.data').then(function(responseText) {
@@ -127,7 +136,7 @@ function testGetTextWithJson() {
 }
 
 function testPostText() {
-  if (shouldRunLocally) return;
+  if (isRunningLocally()) return;
 
   testCase.waitForAsync('postText');
   xhr.post('testdata/xhr_test_text.data', 'post-data').then(
@@ -139,7 +148,7 @@ function testPostText() {
 }
 
 function testGetJson() {
-  if (shouldRunLocally) return;
+  if (isRunningLocally()) return;
 
   testCase.waitForAsync('getJson');
   xhr.getJson('testdata/xhr_test_json.data', {xssiPrefix: 'while(1);\n'}).then(
@@ -150,8 +159,28 @@ function testGetJson() {
       }, fail /* opt_onRejected */);
 }
 
+function testGetBytes() {
+  if (isRunningLocally()) return;
+
+  // IE8 requires a VBScript fallback to read the bytes from the response.
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(9)) {
+    return;
+  }
+
+  testCase.waitForAsync('getBytes');
+  xhr.getBytes('testdata/cleardot.gif').then(function(bytes) {
+    assertElementsEquals([
+      0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00, 0x01, 0x00, 0x80, 0xFF,
+      0x00, 0xC0, 0xC0, 0xC0, 0x00, 0x00, 0x00, 0x21, 0xF9, 0x04, 0x01, 0x00,
+      0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00,
+      0x00, 0x02, 0x02, 0x44, 0x01, 0x00, 0x3B
+    ], bytes);
+    testCase.continueTesting();
+  });
+}
+
 function testSerialRequests() {
-  if (shouldRunLocally) return;
+  if (isRunningLocally()) return;
 
   xhr.get('testdata/xhr_test_text.data').
       then(function(response) {
@@ -166,7 +195,7 @@ function testSerialRequests() {
 }
 
 function testBadUrlDetectedAsError() {
-  if (shouldRunLocally) return;
+  if (isRunningLocally()) return;
 
   testCase.waitForAsync('badUrl');
   xhr.getJson('unknown-file.dat').then(
@@ -194,7 +223,7 @@ function testBadOriginTriggersOnErrorHandler() {
 }
 
 function testAbortRequest() {
-  if (shouldRunLocally) return;
+  if (isRunningLocally()) return;
 
   testCase.waitForAsync('abortRequest');
   var promise = xhr.send('GET', 'test-url', null).then(
@@ -243,6 +272,23 @@ function testSendPostSetsDefaultHeader() {
       stubXhr.headers['Content-Type']);
 }
 
+function testSendPostDoesntSetHeaderWithFormData() {
+  if (!goog.global['FormData']) { return; }
+  var formData = new goog.global['FormData']();
+  formData.append('name', 'value');
+
+  var stubXhr = setupStubXMLHttpRequest();
+  xhr.send('POST', 'test-url', formData).
+      then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
+
+  stubXhr.load(200);
+  mockClock.tick();
+
+  assertEquals('POST', stubXhr.method);
+  assertEquals('test-url', stubXhr.url);
+  assertEquals(undefined, stubXhr.headers['Content-Type']);
+}
+
 function testSendPostHeaders() {
   var stubXhr = setupStubXMLHttpRequest();
   xhr.send('POST', 'test-url', null, {
@@ -258,9 +304,52 @@ function testSendPostHeaders() {
   assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
 }
 
+function testSendPostHeadersWithFormData() {
+  if (!goog.global['FormData']) { return; }
+  var formData = new goog.global['FormData']();
+  formData.append('name', 'value');
+
+  var stubXhr = setupStubXMLHttpRequest();
+  xhr.send('POST', 'test-url', formData, {
+    headers: {'Content-Type': 'text/plain', 'X-Made-Up': 'FooBar'}
+  }).then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
+
+  stubXhr.load(200);
+  mockClock.tick();
+
+  assertEquals('POST', stubXhr.method);
+  assertEquals('test-url', stubXhr.url);
+  assertEquals('text/plain', stubXhr.headers['Content-Type']);
+  assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
+}
+
 function testSendNullPostHeaders() {
   var stubXhr = setupStubXMLHttpRequest();
   xhr.send('POST', 'test-url', null, {
+    headers: {
+      'Content-Type': null,
+      'X-Made-Up': 'FooBar',
+      'Y-Made-Up': null
+    }
+  }).then(undefined /* opt_onResolved */, fail /* opt_onRejected */);
+
+  stubXhr.load(200);
+  mockClock.tick();
+
+  assertEquals('POST', stubXhr.method);
+  assertEquals('test-url', stubXhr.url);
+  assertEquals(undefined, stubXhr.headers['Content-Type']);
+  assertEquals('FooBar', stubXhr.headers['X-Made-Up']);
+  assertEquals(undefined, stubXhr.headers['Y-Made-Up']);
+}
+
+function testSendNullPostHeadersWithFormData() {
+  if (!goog.global['FormData']) { return; }
+  var formData = new goog.global['FormData']();
+  formData.append('name', 'value');
+
+  var stubXhr = setupStubXMLHttpRequest();
+  xhr.send('POST', 'test-url', formData, {
     headers: {
       'Content-Type': null,
       'X-Made-Up': 'FooBar',

@@ -20,9 +20,11 @@
 goog.provide('goog.debug.ErrorHandler');
 goog.provide('goog.debug.ErrorHandler.ProtectedFunctionError');
 
+goog.require('goog.Disposable');
 goog.require('goog.asserts');
 goog.require('goog.debug');
 goog.require('goog.debug.EntryPointMonitor');
+goog.require('goog.debug.Error');
 goog.require('goog.debug.Trace');
 
 

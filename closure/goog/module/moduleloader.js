@@ -40,6 +40,7 @@ goog.require('goog.module.AbstractModuleLoader');
 goog.require('goog.net.BulkLoader');
 goog.require('goog.net.EventType');
 goog.require('goog.net.jsloader');
+goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
 
 

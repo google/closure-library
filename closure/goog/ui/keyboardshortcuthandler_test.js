@@ -719,3 +719,19 @@ function testGeckoShortcuts() {
 
   listener.$verify();
 }
+
+function testRegisterShortcut_modifierOnly() {
+  assertThrows('Registering a shortcut with just modifiers should fail.',
+      goog.bind(handler.registerShortcut, handler, 'name', 'Shift'));
+}
+
+function testParseStringShortcut_unknownKey() {
+  assertThrows('Unknown keys should fail.', goog.bind(
+      goog.ui.KeyboardShortcutHandler.parseStringShortcut, null, 'NotAKey'));
+}
+
+// Regression test for failure to reset keyCode between strokes.
+function testParseStringShortcut_resetKeyCode() {
+  var strokes = goog.ui.KeyboardShortcutHandler.parseStringShortcut('A Shift');
+  assertNull('The second stroke only has a modifier key.', strokes[1].keyCode);
+}

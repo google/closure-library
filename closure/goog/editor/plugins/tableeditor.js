@@ -22,12 +22,14 @@ goog.provide('goog.editor.plugins.TableEditor');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.Table');
 goog.require('goog.editor.node');
 goog.require('goog.editor.range');
 goog.require('goog.object');
+goog.require('goog.userAgent');
 
 
 

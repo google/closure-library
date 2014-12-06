@@ -26,6 +26,7 @@ goog.provide('goog.editor.icontent');
 goog.provide('goog.editor.icontent.FieldFormatInfo');
 goog.provide('goog.editor.icontent.FieldStyleInfo');
 
+goog.require('goog.dom');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.style');
 goog.require('goog.userAgent');

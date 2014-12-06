@@ -578,7 +578,7 @@ goog.array.findRight = function(arr, f, opt_obj) {
  *     for every element. This function
  *     takes 3 arguments (the element, the index and the array) and should
  *     return a boolean.
- * @param {Object=} opt_obj An optional "this" context for the function.
+ * @param {S=} opt_obj An optional "this" context for the function.
  * @return {number} The index of the last array element that passes the test,
  *     or -1 if no element is found.
  * @template T,S
@@ -871,22 +871,10 @@ goog.array.clone = goog.array.toArray;
 goog.array.extend = function(arr1, var_args) {
   for (var i = 1; i < arguments.length; i++) {
     var arr2 = arguments[i];
-    // If we have an Array or an Arguments object we can just call push
-    // directly.
-    var isArrayLike;
-    if (goog.isArray(arr2) ||
-        // Detect Arguments. ES5 says that the [[Class]] of an Arguments object
-        // is "Arguments" but only V8 and JSC/Safari gets this right. We instead
-        // detect Arguments by checking for array like and presence of "callee".
-        (isArrayLike = goog.isArrayLike(arr2)) &&
-            // The getter for callee throws an exception in strict mode
-            // according to section 10.6 in ES5 so check for presence instead.
-            Object.prototype.hasOwnProperty.call(arr2, 'callee')) {
-      arr1.push.apply(arr1, arr2);
-    } else if (isArrayLike) {
-      // Otherwise loop over arr2 to prevent copying the object.
-      var len1 = arr1.length;
-      var len2 = arr2.length;
+    if (goog.isArrayLike(arr2)) {
+      var len1 = arr1.length || 0;
+      var len2 = arr2.length || 0;
+      arr1.length = len1 + len2;
       for (var j = 0; j < len2; j++) {
         arr1[len1 + j] = arr2[j];
       }

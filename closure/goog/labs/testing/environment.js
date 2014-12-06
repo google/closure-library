@@ -95,10 +95,13 @@ goog.labs.testing.Environment = goog.defineClass(null, {
     //   with some new mock, adds a replayAll and BOOM the test fails
     //   because completely unrelated mocks now get replayed.
     if (this.mockControl) {
-      this.mockControl.$verifyAll();
-      this.mockControl.$replayAll();
-      this.mockControl.$verifyAll();
-      this.mockControl.$resetAll();
+      try {
+        this.mockControl.$verifyAll();
+        this.mockControl.$replayAll();
+        this.mockControl.$verifyAll();
+      } finally {
+        this.mockControl.$resetAll();
+      }
     }
     // Verifying the mockControl may throw, so if cleanup needs to happen,
     // add it further up in the function.

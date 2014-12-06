@@ -21,7 +21,6 @@ goog.require('goog.net.CrossDomainRpc');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
-goog.require('goog.userAgent.product');
 
 
 var asyncTestCase = goog.testing.AsyncTestCase.createAndInstall();
@@ -46,17 +45,7 @@ function print(o) {
 }
 
 
-function isChromeLinux() {
-  return goog.userAgent.product.CHROME && goog.userAgent.LINUX;
-}
-
 function testNormalRequest() {
-  // Test is currently hanging the new chrome-linux image
-  // See b/16707498
-  if (isChromeLinux()) {
-    return;
-  }
-
   var start = new Date();
   goog.net.CrossDomainRpc.send(
       'crossdomainrpc_test_response.html',
@@ -89,12 +78,6 @@ function continueTestNormalRequest(start, e) {
 
 
 function testErrorRequest() {
-  // Test is currently hanging the new chrome-linux image
-  // See b/16707498
-  if (isChromeLinux()) {
-    return;
-  }
-
   // Firefox does not give a valid error event.
   if (goog.userAgent.GECKO) {
     return;

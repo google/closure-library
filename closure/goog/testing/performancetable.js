@@ -24,6 +24,7 @@
 goog.provide('goog.testing.PerformanceTable');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.testing.PerformanceTimer');
 
 

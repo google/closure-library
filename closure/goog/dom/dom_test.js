@@ -1341,6 +1341,14 @@ function testGetAncestorWithMaxSearchStepsNoMatch() {
   assertNull(matched);
 }
 
+function testGetAncestorByTagWithMaxSearchStepsNoMatch() {
+  var elem = goog.dom.getElement('nestedElement');
+  var searchEl = elem.parentNode.parentNode;
+  var matched = goog.dom.getAncestorByTagNameAndClass(
+      elem, goog.dom.TagName.DIV, /* class */ undefined, 0);
+  assertNull(matched);
+}
+
 function testGetAncestorByTagNameNoMatch() {
   var elem = goog.dom.getElement('nestedElement');
   assertNull(
@@ -1354,6 +1362,13 @@ function testGetAncestorByTagNameOnly() {
       goog.dom.getAncestorByTagNameAndClass(elem, goog.dom.TagName.DIV));
   assertEquals(expected,
       goog.dom.getAncestorByTagNameAndClass(elem, 'div'));
+}
+
+function testGetAncestorByClassWithMaxSearchStepsNoMatch() {
+  var elem = goog.dom.getElement('nestedElement');
+  var searchEl = elem.parentNode.parentNode;
+  var matched = goog.dom.getAncestorByClass(elem, 'testAncestor', 0);
+  assertNull(matched);
 }
 
 function testGetAncestorByClassNameNoMatch() {

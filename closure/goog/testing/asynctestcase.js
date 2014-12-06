@@ -111,7 +111,6 @@ goog.provide('goog.testing.AsyncTestCase');
 goog.provide('goog.testing.AsyncTestCase.ControlBreakingException');
 
 goog.require('goog.testing.TestCase');
-goog.require('goog.testing.TestCase.Test');
 goog.require('goog.testing.asserts');
 
 

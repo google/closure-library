@@ -21,6 +21,7 @@ goog.provide('goog.html.safeHtmlTest');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeUrl');
+goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.testing');
 goog.require('goog.i18n.bidi.Dir');
 goog.require('goog.string.Const');
@@ -152,11 +153,11 @@ function testSafeHtmlCreate() {
   });
 
   assertThrows(function() {
-    goog.html.SafeHtml.create('a', {'href': 'javascript:alert(1)'});
+    goog.html.SafeHtml.create('img', {'OnError': ''});
   });
 
   assertThrows(function() {
-    goog.html.SafeHtml.create('hr', {'class': style});
+    goog.html.SafeHtml.create('a', {'href': 'javascript:alert(1)'});
   });
 
   assertThrows(function() {
@@ -169,7 +170,7 @@ function testSafeHtmlCreate() {
 }
 
 
-function testSafeHtmlCreate_supportsStyle() {
+function testSafeHtmlCreate_styleAttribute() {
   var style = 'color:red;';
   var expected = '<hr style="' + style + '">';
   assertThrows(function() {
@@ -181,6 +182,31 @@ function testSafeHtmlCreate_supportsStyle() {
   assertSameHtml(expected, goog.html.SafeHtml.create('hr', {
     'style': {'color': 'red'}
   }));
+}
+
+
+function testSafeHtmlCreate_urlAttributes() {
+  // TrustedResourceUrl is allowed.
+  var trustedResourceUrl = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('https://google.com/trusted'));
+  assertSameHtml(
+      '<img src="https://google.com/trusted">',
+      goog.html.SafeHtml.create('img', {'src': trustedResourceUrl}));
+  // SafeUrl is allowed.
+  var safeUrl = goog.html.SafeUrl.sanitize('https://google.com/safe');
+  assertSameHtml(
+      '<imG src="https://google.com/safe">',
+      goog.html.SafeHtml.create('imG', {'src': safeUrl}));
+  // Const is allowed.
+  var constUrl = goog.string.Const.from('https://google.com/const');
+  assertSameHtml(
+      '<a href="https://google.com/const"></a>',
+      goog.html.SafeHtml.create('a', {'href': constUrl}));
+
+  // string is not allowed.
+  assertThrows(function() {
+    goog.html.SafeHtml.create('imG', {'src': 'https://google.com'});
+  });
 }
 
 
@@ -236,6 +262,29 @@ function testHtmlEscapePreservingNewlines() {
       goog.html.SafeHtml.htmlEscapePreservingNewlines('\r\n'));
   assertSameHtml('<br>', goog.html.SafeHtml.htmlEscapePreservingNewlines('\r'));
   assertSameHtml('', goog.html.SafeHtml.htmlEscapePreservingNewlines(''));
+}
+
+
+function testHtmlEscapePreservingNewlinesAndSpaces() {
+  // goog.html.SafeHtml passes through unchanged.
+  var safeHtmlIn = goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
+      '<b>in</b>');
+  assertTrue(safeHtmlIn ===
+      goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(safeHtmlIn));
+
+  assertSameHtml('a<br>c',
+      goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces('a\nc'));
+  assertSameHtml('&lt;<br>',
+      goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces('<\n'));
+  assertSameHtml(
+      '<br>', goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces('\r\n'));
+  assertSameHtml(
+      '<br>', goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces('\r'));
+  assertSameHtml(
+      '', goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(''));
+
+  assertSameHtml('a &#160;b',
+      goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces('a  b'));
 }
 
 

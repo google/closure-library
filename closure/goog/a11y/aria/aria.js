@@ -104,7 +104,7 @@ goog.a11y.aria.setRole = function(element, roleName) {
 /**
  * Gets role of an element.
  * @param {!Element} element DOM element to get role of.
- * @return {!goog.a11y.aria.Role} ARIA Role name.
+ * @return {goog.a11y.aria.Role} ARIA Role name.
  */
 goog.a11y.aria.getRole = function(element) {
   var role = element.getAttribute(goog.a11y.aria.ROLE_ATTRIBUTE_);
@@ -171,7 +171,8 @@ goog.a11y.aria.setState = function(element, stateName, value) {
  */
 goog.a11y.aria.toggleState = function(el, attr) {
   var val = goog.a11y.aria.getState(el, attr);
-  if (!goog.string.isEmptySafe(val) && !(val == 'true' || val == 'false')) {
+  if (!goog.string.isEmptyOrWhitespace(goog.string.makeSafe(val)) &&
+      !(val == 'true' || val == 'false')) {
     goog.a11y.aria.removeState(el, /** @type {!goog.a11y.aria.State} */ (attr));
     return;
   }

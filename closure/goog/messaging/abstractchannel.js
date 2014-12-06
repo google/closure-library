@@ -24,7 +24,6 @@
 goog.provide('goog.messaging.AbstractChannel');
 
 goog.require('goog.Disposable');
-goog.require('goog.debug');
 goog.require('goog.json');
 goog.require('goog.log');
 goog.require('goog.messaging.MessageChannel'); // interface

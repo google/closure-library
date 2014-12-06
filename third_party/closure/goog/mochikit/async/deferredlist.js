@@ -45,7 +45,7 @@ goog.require('goog.async.Deferred');
  * independent, and may have additional callbacks and errbacks added to their
  * execution sequences after they are passed as inputs to the list.
  *
- * @param {!Array.<!goog.async.Deferred>} list An array of deferred results to
+ * @param {!Array<!goog.async.Deferred>} list An array of deferred results to
  *     wait for.
  * @param {boolean=} opt_fireOnOneCallback Whether to stop waiting as soon as
  *     one input completes successfully. In this case, the
@@ -77,7 +77,7 @@ goog.async.DeferredList = function(
 
   /**
    * The list of Deferred objects to wait for.
-   * @const {!Array.<!goog.async.Deferred>}
+   * @const {!Array<!goog.async.Deferred>}
    * @private
    */
   this.list_ = list;
@@ -189,7 +189,7 @@ goog.async.DeferredList.prototype.errback = function(res) {
  * errback is fired immediately with the offending error, and all other pending
  * inputs are canceled.
  *
- * @param {!Array.<!goog.async.Deferred>} list The list of <code>Deferred</code>
+ * @param {!Array<!goog.async.Deferred>} list The list of <code>Deferred</code>
  *     inputs to wait for.
  * @return {!goog.async.Deferred} The deferred list of results from the inputs
  *     if they all succeed, or the error result of the first input to fail.

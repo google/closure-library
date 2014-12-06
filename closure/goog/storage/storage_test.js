@@ -19,7 +19,6 @@
 
 goog.provide('goog.storage.storage_test');
 
-goog.require('goog.storage.Storage');
 goog.require('goog.structs.Map');
 goog.require('goog.testing.asserts');
 goog.setTestOnly('storage_test');

@@ -52,14 +52,14 @@ goog.crypt.Md5 = function() {
 
   /**
    * Holds the current values of accumulated A-D variables (MD buffer).
-   * @type {Array<number>}
+   * @type {!Array<number>}
    * @private
    */
   this.chain_ = new Array(4);
 
   /**
    * A buffer holding the data until the whole block can be processed.
-   * @type {Array<number>}
+   * @type {!Array<number>}
    * @private
    */
   this.block_ = new Array(this.blockSize);

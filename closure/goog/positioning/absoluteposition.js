@@ -20,9 +20,7 @@
 
 goog.provide('goog.positioning.AbsolutePosition');
 
-goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
-goog.require('goog.math.Size');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AbstractPosition');
 

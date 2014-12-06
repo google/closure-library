@@ -22,7 +22,6 @@ goog.provide('goog.ui.MenuSeparatorRenderer');
 
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
-goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.ControlRenderer');
 
 

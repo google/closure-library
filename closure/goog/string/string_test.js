@@ -572,6 +572,18 @@ function testHtmlEscapeAndUnescapePureXmlEntities_() {
                    goog.string.unescapePureXmlEntities_(html)), html);
 }
 
+
+function testForceNonDomHtmlUnescaping() {
+  stubs.set(goog.string, 'FORCE_NON_DOM_HTML_UNESCAPING', true);
+  // Set document.createElement to empty object so that the call to
+  // unescapeEntities will blow up if html unescaping is carried out with DOM.
+  // Notice that we can't directly set document to empty object since IE8 won't
+  // let us do so.
+  stubs.set(goog.global.document, 'createElement', {});
+  goog.string.unescapeEntities('&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;');
+}
+
+
 function testHtmlEscapeDetectDoubleEscaping() {
   stubs.set(goog.string, 'DETECT_DOUBLE_ESCAPING', true);
   assertEquals('&#101; &lt; pi', goog.string.htmlEscape('e < pi'));
@@ -1148,6 +1160,18 @@ function testToTitleCase() {
       goog.string.toTitleCase('one.  two.  three', delimiters));
 }
 
+function testCapitalize() {
+  assertEquals('Reptar', goog.string.capitalize('reptar'));
+  assertEquals('Reptar reptar', goog.string.capitalize('reptar reptar'));
+  assertEquals('Reptar', goog.string.capitalize('REPTAR'));
+  assertEquals('Reptar', goog.string.capitalize('Reptar'));
+  assertEquals('1234', goog.string.capitalize('1234'));
+  assertEquals('$#@!', goog.string.capitalize('$#@!'));
+  assertEquals('', goog.string.capitalize(''));
+  assertEquals('R', goog.string.capitalize('r'));
+  assertEquals('R', goog.string.capitalize('R'));
+}
+
 function testParseInt() {
   // Many example values borrowed from
   // http://trac.webkit.org/browser/trunk/LayoutTests/fast/js/kde/
@@ -1275,4 +1299,29 @@ function testCaseInsensitiveContains() {
   assertFalse(goog.string.caseInsensitiveContains('moo', 'moot'));
   assertTrue(goog.string.caseInsensitiveContains('Moot', 'moo'));
   assertTrue(goog.string.caseInsensitiveContains('moo', 'moo'));
+}
+
+function testEditDistance() {
+  assertEquals('Empty string should match to length of other string', 4,
+      goog.string.editDistance('goat', ''));
+  assertEquals('Empty string should match to length of other string', 4,
+      goog.string.editDistance('', 'moat'));
+
+  assertEquals('Equal strings should have zero edit distance', 0,
+      goog.string.editDistance('abcd', 'abcd'));
+  assertEquals('Equal strings should have zero edit distance', 0,
+      goog.string.editDistance('', ''));
+
+  assertEquals('Edit distance for adding characters incorrect', 4,
+      goog.string.editDistance('bdf', 'abcdefg'));
+  assertEquals('Edit distance for removing characters incorrect', 4,
+      goog.string.editDistance('abcdefg', 'bdf'));
+
+  assertEquals('Edit distance for substituting characters incorrect', 4,
+      goog.string.editDistance('adef', 'ghij'));
+  assertEquals('Edit distance for substituting characters incorrect', 1,
+      goog.string.editDistance('goat', 'boat'));
+
+  assertEquals('Substitution should be preferred over insert/delete', 4,
+      goog.string.editDistance('abcd', 'defg'));
 }

@@ -33,6 +33,12 @@ goog.define('goog.string.DETECT_DOUBLE_ESCAPING', false);
 
 
 /**
+ * @define {boolean} Whether to force non-dom html unescaping.
+ */
+goog.define('goog.string.FORCE_NON_DOM_HTML_UNESCAPING', false);
+
+
+/**
  * Common Unicode string characters.
  * @enum {string}
  */
@@ -182,6 +188,8 @@ goog.string.isEmpty = goog.string.isEmptyOrWhitespace;
  * @param {*} str The string to check.
  * @return {boolean} Whether {@code str} is null, undefined, empty, or
  *     whitespace only.
+ * @deprecated Use goog.string.isEmptyOrWhitespace(goog.string.makeSafe(str))
+ *     instead.
  */
 goog.string.isEmptyOrWhitespaceSafe = function(str) {
   return goog.string.isEmptyOrWhitespace(goog.string.makeSafe(str));
@@ -661,10 +669,10 @@ goog.string.ALL_RE_ = (goog.string.DETECT_DOUBLE_ESCAPING ?
  */
 goog.string.unescapeEntities = function(str) {
   if (goog.string.contains(str, '&')) {
-    // We are careful not to use a DOM if we do not have one. We use the []
-    // notation so that the JSCompiler will not complain about these objects and
-    // fields in the case where we have no DOM.
-    if ('document' in goog.global) {
+    // We are careful not to use a DOM if we do not have one or we explicitly
+    // requested non-DOM html unescaping.
+    if (!goog.string.FORCE_NON_DOM_HTML_UNESCAPING &&
+        'document' in goog.global) {
       return goog.string.unescapeEntitiesUsingDom_(str);
     } else {
       // Fall back on pure XML entities
@@ -1318,7 +1326,7 @@ goog.string.createUniqueString = function() {
  */
 goog.string.toNumber = function(str) {
   var num = Number(str);
-  if (num == 0 && goog.string.isEmpty(str)) {
+  if (num == 0 && goog.string.isEmptyOrWhitespace(str)) {
     return NaN;
   }
   return num;
@@ -1426,6 +1434,25 @@ goog.string.toTitleCase = function(str, opt_delimiters) {
 
 
 /**
+ * Capitalizes a string, i.e. converts the first letter to uppercase
+ * and all other letters to lowercase, e.g.:
+ *
+ * goog.string.capitalize('one')     => 'One'
+ * goog.string.capitalize('ONE')     => 'One'
+ * goog.string.capitalize('one two') => 'One two'
+ *
+ * Note that this function does not trim initial whitespace.
+ *
+ * @param {string} str String value to capitalize.
+ * @return {string} String value with first letter in uppercase.
+ */
+goog.string.capitalize = function(str) {
+  return String(str.charAt(0)).toUpperCase() +
+      String(str.substr(1)).toLowerCase();
+};
+
+
+/**
  * Parse a string in decimal or hexidecimal ('0xFFFF') form.
  *
  * To parse a particular radix, please use parseInt(string, radix) directly. See
@@ -1494,4 +1521,45 @@ goog.string.splitLimit = function(str, separator, limit) {
   }
 
   return returnVal;
+};
+
+
+/**
+ * Computes the Levenshtein edit distance between two strings.
+ * @param {string} a
+ * @param {string} b
+ * @return {number} The edit distance between the two strings.
+ */
+goog.string.editDistance = function(a, b) {
+  var v0 = [];
+  var v1 = [];
+
+  if (a == b) {
+    return 0;
+  }
+
+  if (!a.length || !b.length) {
+    return Math.max(a.length, b.length);
+  }
+
+  for (var i = 0; i < b.length + 1; i++) {
+    v0[i] = i;
+  }
+
+  for (var i = 0; i < a.length; i++) {
+    v1[0] = i + 1;
+
+    for (var j = 0; j < b.length; j++) {
+      var cost = a[i] != b[j];
+      // Cost for the substring is the minimum of adding one character, removing
+      // one character, or a swap.
+      v1[j + 1] = Math.min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost);
+    }
+
+    for (var j = 0; j < v0.length; j++) {
+      v0[j] = v1[j];
+    }
+  }
+
+  return v1[b.length];
 };

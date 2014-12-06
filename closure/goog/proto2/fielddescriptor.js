@@ -67,6 +67,15 @@ goog.proto2.FieldDescriptor = function(messageType, tag, metadata) {
   /** @type {*} */
   metadata.required;
 
+  /** @type {*} */
+  metadata.packed;
+
+  /**
+   * If true, this field is a packed field.
+   * @private {boolean}
+   */
+  this.isPacked_ = !!metadata.packed;
+
   /**
    * If true, this field is a repeating field.
    * @private {boolean}
@@ -258,6 +267,15 @@ goog.proto2.FieldDescriptor.prototype.getFieldMessageType = function() {
 goog.proto2.FieldDescriptor.prototype.isCompositeType = function() {
   return this.fieldType_ == goog.proto2.FieldDescriptor.FieldType.MESSAGE ||
       this.fieldType_ == goog.proto2.FieldDescriptor.FieldType.GROUP;
+};
+
+
+/**
+ * Returns whether the field described by this descriptor is packed.
+ * @return {boolean} Whether the field is packed.
+ */
+goog.proto2.FieldDescriptor.prototype.isPacked = function() {
+  return this.isPacked_;
 };
 
 

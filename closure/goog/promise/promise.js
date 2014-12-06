@@ -57,7 +57,7 @@ goog.require('goog.promise.Resolver');
  *
  * @param {function(
  *             this:RESOLVER_CONTEXT,
- *             function((TYPE|IThenable.<TYPE>|Thenable)=),
+ *             function((TYPE|IThenable<TYPE>|Thenable)=),
  *             function(*)): void} resolver
  *     Initialization function that is invoked immediately with {@code resolve}
  *     and {@code reject} functions as arguments. The Promise is resolved or
@@ -587,7 +587,7 @@ goog.Promise.prototype.addCallbackEntry_ = function(callbackEntry) {
  * @see http://promisesaplus.com/#the__method
  *
  * @param {?function(this:THIS, TYPE):
- *          (RESULT|goog.Promise.<RESULT>|Thenable)} onFulfilled A callback that
+ *          (RESULT|goog.Promise<RESULT>|Thenable)} onFulfilled A callback that
  *     will be invoked if the Promise is fullfilled, or null.
  * @param {?function(this:THIS, *): *} onRejected A callback that will be
  *     invoked if the Promise is rejected, or null.

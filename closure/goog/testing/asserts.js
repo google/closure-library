@@ -13,6 +13,7 @@
 // limitations under the License.
 goog.provide('goog.testing.JsUnitException');
 goog.provide('goog.testing.asserts');
+goog.provide('goog.testing.asserts.ArrayLike');
 
 goog.require('goog.testing.stacktrace');
 

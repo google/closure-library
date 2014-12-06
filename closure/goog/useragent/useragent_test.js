@@ -16,6 +16,7 @@ goog.provide('goog.userAgentTest');
 goog.setTestOnly('goog.userAgentTest');
 
 goog.require('goog.array');
+goog.require('goog.labs.userAgent.platform');
 goog.require('goog.labs.userAgent.testAgents');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.PropertyReplacer');
@@ -41,6 +42,7 @@ var UserAgents = {
 
 
 function tearDown() {
+  goog.labs.userAgent.util.setUserAgent(null);
   documentMode = undefined;
   propertyReplacer.reset();
 }
@@ -254,6 +256,17 @@ function testNoNavigator() {
       goog.userAgent.PLATFORM);
   assertEquals('Version should be the empty string', '',
       goog.userAgent.VERSION);
+}
+
+function testLegacyChromeOsAndLinux() {
+  // As a legacy behavior, goog.userAgent.LINUX considers
+  // ChromeOS to be Linux.
+  // goog.labs.userAgent.platform.isLinux() does not.
+  goog.labs.userAgent.util.setUserAgent(
+      goog.labs.userAgent.testAgents.CHROME_OS);
+  goog.userAgentTestUtil.reinitializeUserAgent();
+  assertTrue(goog.userAgent.LINUX);
+  assertFalse(goog.labs.userAgent.platform.isLinux());
 }
 
 function assertIe(uaString, expectedVersion) {

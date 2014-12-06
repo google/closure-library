@@ -23,11 +23,15 @@
 
 goog.provide('goog.tweak.Registry');
 
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.log');
-goog.require('goog.object');
 goog.require('goog.string');
-goog.require('goog.tweak.BaseEntry');
+goog.require('goog.tweak.BasePrimitiveSetting');
+goog.require('goog.tweak.BaseSetting');
+goog.require('goog.tweak.BooleanSetting');
+goog.require('goog.tweak.NumericSetting');
+goog.require('goog.tweak.StringSetting');
 goog.require('goog.uri.utils');
 
 

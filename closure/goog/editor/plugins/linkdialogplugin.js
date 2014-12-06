@@ -27,10 +27,8 @@ goog.require('goog.editor.Command');
 goog.require('goog.editor.plugins.AbstractDialogPlugin');
 goog.require('goog.events.EventHandler');
 goog.require('goog.functions');
-goog.require('goog.ui.editor.AbstractDialog.EventType');
+goog.require('goog.ui.editor.AbstractDialog');
 goog.require('goog.ui.editor.LinkDialog');
-goog.require('goog.ui.editor.LinkDialog.EventType');
-goog.require('goog.ui.editor.LinkDialog.OkEvent');
 goog.require('goog.uri.utils');
 
 

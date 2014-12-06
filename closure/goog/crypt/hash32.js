@@ -112,7 +112,7 @@ goog.crypt.hash32.encodeByteArray = function(
     case 11: mix.c += (bytes[offset + 10]) << 24;
     case 10: mix.c += (bytes[offset + 9] & 0xff) << 16;
     case 9 : mix.c += (bytes[offset + 8] & 0xff) << 8;
-      // the first byte of c is reserved for the length
+    // the first byte of c is reserved for the length
     case 8 :
       mix.b += goog.crypt.hash32.wordAt_(bytes, offset + 4);
       mix.a += goog.crypt.hash32.wordAt_(bytes, offset);
@@ -126,7 +126,7 @@ goog.crypt.hash32.encodeByteArray = function(
     case 3 : mix.a += (bytes[offset + 2] & 0xff) << 16;
     case 2 : mix.a += (bytes[offset + 1] & 0xff) << 8;
     case 1 : mix.a += (bytes[offset + 0] & 0xff);
-      // case 0 : nothing left to add
+    // case 0 : nothing left to add
   }
   return goog.crypt.hash32.mix32_(mix);
 };

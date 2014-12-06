@@ -35,7 +35,7 @@ goog.require('goog.crypt.Hash');
  * This constructor should not be used directly to create the object. Rather,
  * one should use the constructor of the sub-classes.
  * @param {number} numHashBlocks The size of output in 16-byte blocks.
- * @param {Array<number>} initHashBlocks The hash-specific initialization
+ * @param {!Array<number>} initHashBlocks The hash-specific initialization
  * @constructor
  * @extends {goog.crypt.Hash}
  * @struct
@@ -48,7 +48,7 @@ goog.crypt.Sha2 = function(numHashBlocks, initHashBlocks) {
   /**
    * A chunk holding the currently processed message bytes. Once the chunk has
    * 64 bytes, we feed it into computeChunk_ function and reset this.chunk_.
-   * @private {!Array<number>|Uint8Array}
+   * @private {!Array<number>|!Uint8Array}
    */
   this.chunk_ = goog.global['Uint8Array'] ?
       new Uint8Array(this.blockSize) : new Array(this.blockSize);
@@ -69,7 +69,7 @@ goog.crypt.Sha2 = function(numHashBlocks, initHashBlocks) {
   /**
    * Holds the previous values of accumulated hash a-h in the computeChunk_
    * function.
-   * @private {!Array<number>|Int32Array}
+   * @private {!Array<number>|!Int32Array}
    */
   this.hash_ = [];
 
@@ -80,7 +80,7 @@ goog.crypt.Sha2 = function(numHashBlocks, initHashBlocks) {
   this.numHashBlocks_ = numHashBlocks;
 
   /**
-   * @private {Array<number>} initHashBlocks
+   * @private {!Array<number>} initHashBlocks
    */
   this.initHashBlocks_ = initHashBlocks;
 
@@ -111,7 +111,7 @@ goog.inherits(goog.crypt.Sha2, goog.crypt.Hash);
 
 /**
  * The block size
- * @private <number>
+ * @private {number}
  */
 goog.crypt.Sha2.BLOCKSIZE_ = 512 / 8;
 
@@ -333,6 +333,6 @@ goog.crypt.Sha2.K_ = [
  * (There are certain cases where creating an Int32Array is not
  * side-effect free).  Instead, the first time we construct a Sha2
  * instance, we convert or assign Sha2.K as appropriate.
- * @private {!undefined|Array<number>|Int32Array}
+ * @private {undefined|!Array<number>|!Int32Array}
  */
 goog.crypt.Sha2.Kx_;

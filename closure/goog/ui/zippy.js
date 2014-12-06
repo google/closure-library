@@ -96,7 +96,7 @@ goog.ui.Zippy = function(header, opt_content, opt_expanded,
    * @private
    */
   this.elContent_ = this.lazyCreateFunc_ || !opt_content ? null :
-      this.dom_.getElement(/** @type {Element} */ (opt_content));
+      this.dom_.getElement(/** @type {!Element} */ (opt_content));
 
   /**
    * Expanded state.
@@ -142,7 +142,7 @@ goog.tagUnsealableClass(goog.ui.Zippy);
 /**
  * Constants for event names
  *
- * @type {Object}
+ * @const
  */
 goog.ui.Zippy.Events = {
   // Zippy will dispatch an ACTION event for user interaction. Mimics

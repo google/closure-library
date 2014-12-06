@@ -1017,7 +1017,7 @@ goog.testing.MultiTestRunner.prototype.drawProgressSegment_ =
  */
 goog.testing.MultiTestRunner.prototype.drawTestResult_ = function(
     test, success, report) {
-  var text = goog.string.isEmpty(report) ?
+  var text = goog.string.isEmptyOrWhitespace(report) ?
       'No report for ' + test + '\n' : report;
   var el = this.dom_.createDom('div');
   text = goog.string.htmlEscape(text).replace(/\n/g, '<br>');
@@ -1387,7 +1387,7 @@ goog.testing.MultiTestRunner.TestFrame.prototype.finish_ = function() {
  */
 goog.testing.MultiTestRunner.TestFrame.prototype.createIframe_ = function() {
   this.iframeEl_ =
-      /** @type {HTMLIFrameElement} */ (this.dom_.createDom('iframe'));
+      /** @type {!HTMLIFrameElement} */ (this.dom_.createDom('iframe'));
   this.getElement().appendChild(this.iframeEl_);
   this.eh_.listen(this.iframeEl_, 'load', this.onIframeLoaded_);
 };

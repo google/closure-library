@@ -32,6 +32,7 @@ goog.require('goog.testing.recordFunction');
 goog.require('goog.userAgent');
 
 goog.require('goog.test_module');
+var earlyTestModuleGet = goog.module.get('goog.test_module');
 
 function getFramedVars(name) {
   var w = window.frames[name];
@@ -136,9 +137,6 @@ function testIsProvided() {
 }
 
 function testGlobalize() {
-  goog.globalize(goog);
-  assertNotUndefined('Globalize goog', provide);
-
   var a = {a: 1, b: 2, c: 3};
   var b = {};
   goog.globalize(a, b);
@@ -1402,9 +1400,96 @@ function testDefineClass_unsealable() {
   assertEquals('bar', der.foo);
 }
 
+// Validate the behavior of goog.module when used from traditional files.
 function testGoogModuleGet() {
+  // assert that goog.module doesn't modify the global namespace
+  assertUndefined('module failed to protect global namespace: ' +
+      'goog.test_module_dep', goog.test_module_dep);
+
+  // assert that goog.module with goog.module.declareLegacyNamespace is present.
+  assertNotUndefined('module failed to declare global namespace: ' +
+      'goog.test_module', goog.test_module);
+
+  // assert that a require'd goog.module is available immediately after the
+  // goog.require call.
+  assertNotUndefined('module failed to protect global namespace: ' +
+      'goog.test_module_dep', earlyTestModuleGet);
+
+
+  // assert that an non-existent module request doesn't throw and returns null.
   assertEquals(null, goog.module.get('unrequired.module.id'));
+
+  // Validate the module exports
   var testModuleExports = goog.module.get('goog.test_module');
   assertTrue(goog.isFunction(testModuleExports));
+
+  // Validate that the module exports object has not changed
+  assertEquals(earlyTestModuleGet, testModuleExports);
 }
 
+function testNormalizePath() {
+  assertEquals('foo/path.js', goog.normalizePath_('./foo/./path.js'));
+  assertEquals('foo/path.js', goog.normalizePath_('bar/../foo/path.js'));
+  assertEquals('bar/path.js', goog.normalizePath_('bar/foo/../path.js'));
+  assertEquals('path.js', goog.normalizePath_('bar/foo/../../path.js'));
+
+  assertEquals('../foo/path.js', goog.normalizePath_('../foo/path.js'));
+  assertEquals('../../foo/path.js', goog.normalizePath_('../../foo/path.js'));
+  assertEquals('../path.js', goog.normalizePath_('../foo/../path.js'));
+  assertEquals('../../path.js', goog.normalizePath_('../foo/../../path.js'));
+
+  assertEquals('/../foo/path.js', goog.normalizePath_('/../foo/path.js'));
+  assertEquals('/path.js', goog.normalizePath_('/foo/../path.js'));
+  assertEquals('/foo/path.js', goog.normalizePath_('/./foo/path.js'));
+
+  assertEquals('//../foo/path.js', goog.normalizePath_('//../foo/path.js'));
+  assertEquals('//path.js', goog.normalizePath_('//foo/../path.js'));
+  assertEquals('//foo/path.js', goog.normalizePath_('//./foo/path.js'));
+
+  assertEquals('http://../x/y.js', goog.normalizePath_('http://../x/y.js'));
+  assertEquals('http://path.js', goog.normalizePath_('http://foo/../path.js'));
+  assertEquals('http://x/path.js', goog.normalizePath_('http://./x/path.js'));
+
+  var expected = '../../../../../../../javascript/apps/xid/xid.js';
+  var original = '../testing/../../../../../../../' +
+      'closure/goog/../apps/xid/xid.js';
+  assertEquals(expected, goog.normalizePath_(original));
+}
+
+
+function testGoogModuleNames() {
+  // avoid usage checks
+  var module = goog.module;
+
+  function assertInvalidId(id) {
+    var err = assertThrows(function() {
+      module(id);
+    });
+    assertEquals('Invalid module identifier', err.message);
+  }
+
+  function assertValidId(id) {
+    // This is a cheesy check, but we validate that we don't get an invalid
+    // namespace warning, but instead get a module isn't loaded correctly
+    // error.
+    var err = assertThrows(function() {
+      module(id);
+    });
+    assertTrue(err.message.indexOf('has been loaded incorrectly') != -1);
+  }
+
+  assertInvalidId('/somepath/module.js');
+  assertInvalidId('./module.js');
+  assertInvalidId('1');
+
+  assertValidId('a');
+  assertValidId('a.b');
+  assertValidId('a.b.c');
+  assertValidId('aB.Cd.eF');
+  assertValidId('a1.0E.Fg');
+
+  assertValidId('_');
+  assertValidId('$');
+  assertValidId('_$');
+  assertValidId('$_');
+}
