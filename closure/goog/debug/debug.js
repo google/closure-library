@@ -545,7 +545,7 @@ goog.debug.getFunctionName = function(fn) {
   // Heuristically determine function name based on code.
   var functionSource = String(fn);
   if (!goog.debug.fnNameCache_[functionSource]) {
-    var matches = /function ([^\(]+)/.exec(functionSource);
+    var matches = /function(?:\s*)([^\(\s]+)/.exec(functionSource);
     if (matches) {
       var method = matches[1];
       goog.debug.fnNameCache_[functionSource] = method;
