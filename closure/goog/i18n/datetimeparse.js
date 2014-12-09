@@ -615,6 +615,8 @@ goog.i18n.DateTimeParse.prototype.subParseYear_ =
   // only if 2 digit was actually parsed, and pattern say it has 2 digit.
   if (!ch && pos[0] - start == 2 && part.count == 2) {
     cal.setTwoDigitYear_(value);
+  } else if(part.count!=value.toString().length){
+    return false;
   } else {
     cal.year = value;
   }
