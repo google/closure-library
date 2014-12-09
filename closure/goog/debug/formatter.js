@@ -23,6 +23,7 @@ goog.provide('goog.debug.Formatter');
 goog.provide('goog.debug.HtmlFormatter');
 goog.provide('goog.debug.TextFormatter');
 
+goog.require('goog.debug');
 goog.require('goog.debug.Logger');
 goog.require('goog.debug.RelativeTimeProvider');
 goog.require('goog.html.SafeHtml');
@@ -281,14 +282,9 @@ goog.debug.HtmlFormatter.prototype.formatRecordAsHtml = function(logRecord) {
   // HTML for exception text and log record.
   var exceptionHtml = goog.html.SafeHtml.EMPTY;
   if (this.showExceptionText && logRecord.getException()) {
-    var exception = logRecord.getException();
-    var exceptionText = exception instanceof Error ?
-        exception.message :
-        ((exception && exception.toString()) || '');
     exceptionHtml = goog.html.SafeHtml.concat(
         goog.html.SafeHtml.create('br'),
-        goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
-            exceptionText));
+        goog.debug.exposeExceptionAsHtml(logRecord.getException()));
   }
   var logRecordHtml = goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
       logRecord.getMessage());

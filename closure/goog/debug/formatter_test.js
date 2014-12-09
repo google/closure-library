@@ -24,8 +24,7 @@ goog.require('goog.testing.jsunit');
 
 var EXPECTED_RECORD_HTML_RE =
     '^prefix \\[.*?\\] \\[ &#160;.*?s\\] \\[loggerName\\] ' +
-        '<span class="dbg-f">mess<br> &#160;age<br>exc<br> &#160;eption' +
-        '</span><br>$';
+        '<span class="dbg-f">mess<br> &#160;age<br>Message:';
 var logRecord;
 
 
