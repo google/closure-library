@@ -310,6 +310,7 @@ goog.VALID_MODULE_RE_ = /^[a-zA-Z_$][a-zA-Z0-9._$]*$/;
  * NOTE: unlike goog.provide, goog.module does not declare any symbols by
  * itself.
  *
+ *
  * @param {string} name Namespace provided by this file in the form
  *     "goog.package.part", is expected but not required.
  */
