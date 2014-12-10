@@ -815,7 +815,7 @@ goog.addDependency('net/xpc/relay.js', ['goog.net.xpc.relay'], [], false);
 goog.addDependency('net/xpc/transport.js', ['goog.net.xpc.Transport'], ['goog.Disposable', 'goog.dom', 'goog.net.xpc.TransportNames'], false);
 goog.addDependency('net/xpc/xpc.js', ['goog.net.xpc', 'goog.net.xpc.CfgFields', 'goog.net.xpc.ChannelStates', 'goog.net.xpc.TransportNames', 'goog.net.xpc.TransportTypes', 'goog.net.xpc.UriCfgFields'], ['goog.log'], false);
 goog.addDependency('object/object.js', ['goog.object'], [], false);
-goog.addDependency('object/object_test.js', ['goog.objectTest'], ['goog.functions', 'goog.object', 'goog.testing.jsunit'], false);
+goog.addDependency('object/object_test.js', ['goog.objectTest'], ['goog.functions', 'goog.object', 'goog.testing.jsunit', 'goog.testing.recordFunction'], false);
 goog.addDependency('positioning/absoluteposition.js', ['goog.positioning.AbsolutePosition'], ['goog.math.Coordinate', 'goog.positioning', 'goog.positioning.AbstractPosition'], false);
 goog.addDependency('positioning/abstractposition.js', ['goog.positioning.AbstractPosition'], [], false);
 goog.addDependency('positioning/anchoredposition.js', ['goog.positioning.AnchoredPosition'], ['goog.positioning', 'goog.positioning.AbstractPosition'], false);
