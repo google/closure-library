@@ -299,7 +299,6 @@ goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet('action', 'cite',
     'data', 'formaction', 'href', 'manifest', 'poster', 'src');
 
 
-// TODO(user): Disallow object, already in use in a few places.
 /**
  * Tags which are unsupported via create(). They might be supported via a
  * tag-specific create method. These are tags which might require a
@@ -308,7 +307,7 @@ goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet('action', 'cite',
  * @private @const {!Object<string,boolean>}
  */
 goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet(
-    'embed', 'iframe', 'link', 'script', 'style', 'template');
+    'embed', 'iframe', 'link', 'object', 'script', 'style', 'template');
 
 
 /**
