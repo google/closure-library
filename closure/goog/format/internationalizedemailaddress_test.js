@@ -242,6 +242,13 @@ function testparseListWithAdditionalSeparators() {
   assertParsedList('<foo@gmail.com>\uFF64 <bar@gmail.com>\uFF64',
       ['foo@gmail.com', 'bar@gmail.com'],
       'Failed to parse 2 email addresses with trailing U+FF64');
+
+  assertParsedList('<foo@gmail.com>\u104A <bar@gmail.com>',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with U+104A');
+  assertParsedList('<foo@gmail.com>\u104A <bar@gmail.com>\u104A',
+      ['foo@gmail.com', 'bar@gmail.com'],
+      'Failed to parse 2 email addresses with trailing U+104A');
 }
 
 function testToString() {
