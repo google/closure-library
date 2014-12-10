@@ -81,6 +81,9 @@ function tearDown() {
   testViewport.setAttribute('style', '');
   testViewport.innerHTML = '';
   goog.dispose(mockUserAgent);
+
+  // Prevent multiple vendor prefixed mock elements from poisoning the cache.
+  goog.style.styleNameCache_ = {};
 }
 
 function testSetStyle() {
