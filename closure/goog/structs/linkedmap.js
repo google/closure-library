@@ -135,9 +135,8 @@ goog.structs.LinkedMap.prototype.peekValue = function(key, opt_val) {
 /**
  * Sets a value for a given key. If this is a caching LinkedMap, this entry
  * will become the most recently used.
- * @param {string} key The key to retrieve the value for.
- * @param {VALUE} value A default value that will be returned if the key is
- *     not found.
+ * @param {string} key Key with which the specified value is to be associated.
+ * @param {VALUE} value Value to be associated with the specified key.
  */
 goog.structs.LinkedMap.prototype.set = function(key, value) {
   var node = this.findAndMoveToTop_(key);
