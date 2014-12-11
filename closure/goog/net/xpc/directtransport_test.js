@@ -19,6 +19,7 @@
 goog.provide('goog.net.xpc.DirectTransportTest');
 
 goog.require('goog.dom');
+goog.require('goog.labs.userAgent.browser');
 goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.net.xpc');
@@ -127,6 +128,13 @@ function createIframe() {
  * Tests 2 same domain frames using direct transport.
  */
 function testDirectTransport() {
+  // This test has been flaky on IE 8-11 on Win7.
+  // For now, disable.
+  // Flakiness is tracked in http://b/18595666
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   createIframe();
   channelName = goog.net.xpc.getRandomString(10);
   outerXpc = new CrossPageChannel(
