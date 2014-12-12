@@ -237,12 +237,24 @@ goog.define('goog.DISALLOW_TEST_ONLY_CODE', COMPILED && !goog.DEBUG);
 
 
 /**
- * Creates object stubs for a namespace.  The presence of one or more
- * goog.provide() calls indicate that the file defines the given
- * objects/namespaces.  Provided objects must not be null or undefined.
- * Build tools also scan for provide/require statements
+ * Defines a namespace in Closure.
+ *
+ * A namespace may only be defined once in a codebase. It may be defined using
+ * goog.provide() or goog.module().
+ *
+ * The presence of one or more goog.provide() calls in a file indicates
+ * that the file defines the given objects/namespaces.
+ * Provided symbols must not be null or undefined.
+ *
+ * In addition, goog.provide() creates the object stubs for a namespace
+ * (for example, goog.provide("goog.foo.bar") will create the object
+ * goog.foo.bar if it does not already exist).
+ *
+ * Build tools also scan for provide/require/module statements
  * to discern dependencies, build dependency files (see deps.js), etc.
+ *
  * @see goog.require
+ * @see goog.module
  * @param {string} name Namespace provided by this file in the form
  *     "goog.package.part".
  */
@@ -294,22 +306,28 @@ goog.VALID_MODULE_RE_ = /^[a-zA-Z_$][a-zA-Z0-9._$]*$/;
 
 
 /**
- * goog.module serves two purposes:
- * - marks a file that must be loaded as a module
- * - reserves a namespace (it can not also be goog.provided)
- * and has three requirements:
+ * Defines a module in Closure.
+ *
+ * Marks that this file must be loaded as a module and claims the namespace.
+ *
+ * A namespace may only be defined once in a codebase. It may be defined using
+ * goog.provide() or goog.module().
+ *
+ * goog.module() has three requirements:
  * - goog.module may not be used in the same file as goog.provide.
  * - goog.module must be the first statement in the file.
  * - only one goog.module is allowed per file.
- * When a goog.module annotated file is loaded, it is loaded enclosed in
+ *
+ * When a goog.module annotated file is loaded, it is enclosed in
  * a strict function closure. This means that:
- * - any variable declared in a goog.module file are private to the file,
- * not global. Although the compiler is expected to inline the module.
+ * - any variables declared in a goog.module file are private to the file
+ * (not global), though the compiler is expected to inline the module.
  * - The code must obey all the rules of "strict" JavaScript.
  * - the file will be marked as "use strict"
  *
  * NOTE: unlike goog.provide, goog.module does not declare any symbols by
- * itself.
+ * itself. If declared symbols are desired, use
+ * goog.module.declareLegacyNamespace().
  *
  *
  * See the public goog.module proposal: http://goo.gl/Va1hin
