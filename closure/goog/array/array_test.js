@@ -330,6 +330,12 @@ function testArrayReduceRightOmitsDeleted() {
   assertEquals('_cac', goog.array.reduceRight(a, scope.testFn, '_', scope));
 }
 
+function testArrayReducePreviousValuePatch(){
+  assertEquals(3, goog.array.reduce([1,2], function(p, c){
+    return p + c;
+  }));
+}
+
 function testArrayFind() {
   var a = [0, 1, 2, 3];
   var b = goog.array.find(a, function(val, index, a2) {
