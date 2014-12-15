@@ -129,11 +129,27 @@ function testIsButtonGecko() {
       false);
 }
 
+function testOffsets() {
+  var e = createBrowserEvent('mousedown', 0);
+  assertEquals(10, e.offsetX);
+  assertEquals(10, e.offsetY);
+  e.offsetX = 20;
+  e.offsetY = 20;
+  assertEquals(20, e.offsetX);
+  assertEquals(20, e.offsetY);
+  e.offsetX = 30;
+  e.offsetY = 30;
+  assertEquals(30, e.offsetX);
+  assertEquals(30, e.offsetY);
+}
+
 function createBrowserEvent(type, button, opt_ctrlKey) {
   return new goog.events.BrowserEvent({
     type: type,
     button: button,
-    ctrlKey: !!opt_ctrlKey
+    ctrlKey: !!opt_ctrlKey,
+    offsetX: 10,
+    offsetY: 10
   });
 }
 
