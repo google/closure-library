@@ -773,14 +773,30 @@ goog.testing.TestCase.prototype.invokeTestFunction_ = function(
         goog.isFunction(retval && retval['then'])) {
       var self = this;
       retval.then(
-          function() { onSuccess.call(self); },
-          function(e) { onFailure.call(self, e); });
+          function() {
+            self.resetBatchTimeAfterPromise_();
+            onSuccess.call(self);
+          },
+          function(e) {
+            self.resetBatchTimeAfterPromise_();
+            onFailure.call(self, e);
+          });
     } else {
       onSuccess.call(this);
     }
   } catch (e) {
     onFailure.call(this, e);
   }
+};
+
+
+/**
+ * Resets the batch run timer. This should only be called after resolving a
+ * promise since Promise.then() has an implicit yield.
+ * @private
+ */
+goog.testing.TestCase.prototype.resetBatchTimeAfterPromise_ = function() {
+  this.batchTime_ = this.now();
 };
 
 
