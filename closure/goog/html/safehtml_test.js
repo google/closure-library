@@ -210,6 +210,42 @@ function testSafeHtmlCreate_urlAttributes() {
 }
 
 
+function testSafeHtmlCreateIframe() {
+  // Setting src and srcdoc.
+  var url = goog.html.TrustedResourceUrl.fromConstant(
+      goog.string.Const.from('https://google.com/trusted<'));
+  assertSameHtml(
+      '<iframe src="https://google.com/trusted&lt;"></iframe>',
+      goog.html.SafeHtml.createIframe(url, null, {'sandbox': null}));
+  var srcdoc = goog.html.SafeHtml.create('br');
+  assertSameHtml(
+      '<iframe srcdoc="&lt;br&gt;"></iframe>',
+      goog.html.SafeHtml.createIframe(null, srcdoc, {'sandbox': null}));
+
+  // sandbox default and overriding it.
+  assertSameHtml(
+      '<iframe sandbox=""></iframe>',
+      goog.html.SafeHtml.createIframe());
+  assertSameHtml(
+      '<iframe Sandbox="allow-same-origin allow-top-navigation"></iframe>',
+      goog.html.SafeHtml.createIframe(
+          null, null, {'Sandbox': 'allow-same-origin allow-top-navigation'}));
+
+  // Cannot override src and srddoc.
+  assertThrows(function() {
+    goog.html.SafeHtml.createIframe(null, null, {'Src': url});
+  });
+  assertThrows(function() {
+    goog.html.SafeHtml.createIframe(null, null, {'Srcdoc': url});
+  });
+
+  // Can set content.
+  assertSameHtml(
+      '<iframe>&lt;</iframe>',
+      goog.html.SafeHtml.createIframe(null, null, {'sandbox': null}, '<'));
+}
+
+
 function testSafeHtmlCreateWithDir() {
   var ltr = goog.i18n.bidi.Dir.LTR;
 

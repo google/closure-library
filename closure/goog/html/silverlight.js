@@ -84,7 +84,7 @@ goog.html.silverlight.createObject = function(
     'type': 'application/x-silverlight-2',
     'typemustmatch': ''
   };
-  var attributes = goog.html.flash.combineAttributes(
+  var attributes = goog.html.SafeHtml.combineAttributes(
       fixedAttributes, {}, opt_attributes);
 
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(

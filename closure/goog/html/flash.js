@@ -52,7 +52,7 @@ goog.html.flash.createEmbed = function(src, opt_attributes) {
     'allownetworking': 'none',
     'allowscriptaccess': 'never'
   };
-  var attributes = goog.html.flash.combineAttributes(
+  var attributes = goog.html.SafeHtml.combineAttributes(
       fixedAttributes, defaultAttributes, opt_attributes);
   return goog.html.SafeHtml.
       createSafeHtmlTagSecurityPrivateDoNotAccessOrElse('embed', attributes);
@@ -77,7 +77,7 @@ goog.html.flash.createObject = function(
     'type': 'application/x-shockwave-flash',
     'typemustmatch': ''
   };
-  var attributes = goog.html.flash.combineAttributes(
+  var attributes = goog.html.SafeHtml.combineAttributes(
       fixedAttributes, {}, opt_attributes);
 
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
@@ -101,51 +101,11 @@ goog.html.flash.createObjectForOldIe = function(
       opt_params);
   var fixedAttributes =
       {'classid': 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'};
-  var attributes = goog.html.flash.combineAttributes(
+  var attributes = goog.html.SafeHtml.combineAttributes(
       fixedAttributes, {}, opt_attributes);
 
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(
       'object', attributes, paramTags);
-};
-
-
-/**
- * @param {!Object<string, string>} fixedAttributes
- * @param {!Object<string, string>} defaultAttributes
- * @param {!Object<string, goog.html.SafeHtml.AttributeValue_>=}
- *     opt_attributes Optional attributes passed to create*().
- * @return {!Object<string, goog.html.SafeHtml.AttributeValue_>}
- * @throws {Error} If opt_attributes contains an attribute with the same name
- *     as an attribute in fixedAttributes.
- * @package
- */
-goog.html.flash.combineAttributes = function(
-    fixedAttributes, defaultAttributes, opt_attributes) {
-  var combinedAttributes = {};
-  var name;
-
-  for (name in fixedAttributes) {
-    goog.asserts.assert(name.toLowerCase() == name, 'Must be lower case');
-    combinedAttributes[name] = fixedAttributes[name];
-  }
-  for (name in defaultAttributes) {
-    goog.asserts.assert(name.toLowerCase() == name, 'Must be lower case');
-    combinedAttributes[name] = defaultAttributes[name];
-  }
-
-  for (name in opt_attributes) {
-    var nameLower = name.toLowerCase();
-    if (nameLower in fixedAttributes) {
-      throw Error('Cannot override "' + nameLower + '" attribute, got "' +
-          name + '" with value "' + opt_attributes[name] + '"');
-    }
-    if (nameLower in defaultAttributes) {
-      delete combinedAttributes[nameLower];
-    }
-    combinedAttributes[name] = opt_attributes[name];
-  }
-
-  return combinedAttributes;
 };
 
 
