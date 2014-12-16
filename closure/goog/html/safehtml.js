@@ -467,10 +467,9 @@ goog.html.SafeHtml.createWithDir = function(dir, tagName, opt_attributes,
 
 
 /**
- * Creates a new SafeHtml object by concatenating the values.
- * @param {...!goog.html.SafeHtml.TextOrHtml_|
- *     !Array<!goog.html.SafeHtml.TextOrHtml_>} var_args Elements of array
- *     arguments would be processed recursively.
+ * Creates a new SafeHtml object by concatenating values.
+ * @param {...(!goog.html.SafeHtml.TextOrHtml_|
+ *     !Array<!goog.html.SafeHtml.TextOrHtml_>)} var_args Values to concatenate.
  * @return {!goog.html.SafeHtml}
  */
 goog.html.SafeHtml.concat = function(var_args) {

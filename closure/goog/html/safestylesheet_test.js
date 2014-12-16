@@ -70,6 +70,27 @@ function testFromConstant_throwsOnLessThanCharacter() {
 }
 
 
+function testConcat() {
+  var styleSheet1 = goog.html.SafeStyleSheet.fromConstant(
+      goog.string.Const.from('P.special { color:red ; }'));
+  var styleSheet2 = goog.html.SafeStyleSheet.fromConstant(
+      goog.string.Const.from('P.regular { color:blue ; }'));
+  var expected = 'P.special { color:red ; }P.special { color:red ; }' +
+      'P.regular { color:blue ; }P.regular { color:blue ; }';
+
+  var concatStyleSheet = goog.html.SafeStyleSheet.concat(
+      styleSheet1, [styleSheet1, styleSheet2], styleSheet2);
+  assertEquals(
+      expected, goog.html.SafeStyleSheet.unwrap(concatStyleSheet));
+
+  // Empty.
+  concatStyleSheet = goog.html.SafeStyleSheet.concat();
+  assertEquals('', goog.html.SafeStyleSheet.unwrap(concatStyleSheet));
+  concatStyleSheet = goog.html.SafeStyleSheet.concat([]);
+  assertEquals('', goog.html.SafeStyleSheet.unwrap(concatStyleSheet));
+}
+
+
 function testEmpty() {
   assertEquals(
       '', goog.html.SafeStyleSheet.unwrap(goog.html.SafeStyleSheet.EMPTY));
