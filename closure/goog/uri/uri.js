@@ -68,6 +68,7 @@ goog.require('goog.uri.utils.StandardQueryParam');
  * the case of the parameter name.
  *
  * @constructor
+ * @struct
  */
 goog.Uri = function(opt_uri, opt_ignoreCase) {
   // Parse in the uri string
@@ -1057,6 +1058,7 @@ goog.Uri.haveSameDomain = function(uri1String, uri2String) {
  * @param {boolean=} opt_ignoreCase If true, ignore the case of the parameter
  *     name in #get.
  * @constructor
+ * @struct
  * @final
  */
 goog.Uri.QueryData = function(opt_query, opt_uri, opt_ignoreCase) {
