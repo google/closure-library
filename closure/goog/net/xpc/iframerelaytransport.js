@@ -338,9 +338,13 @@ goog.net.xpc.IframeRelayTransport.prototype.send_ =
   // handler is not triggered
   if (goog.userAgent.IE) {
     var div = this.getWindow().document.createElement('div');
-    goog.dom.safe.setInnerHtml(div, goog.html.SafeHtml.create('iframe', {
-      'onload': goog.string.Const.from('this.xpcOnload()')
-    }));
+    // TODO(user): It might be possible to set the sandbox attribute
+    // to restrict the privileges of the created iframe.
+    goog.dom.safe.setInnerHtml(div,
+        goog.html.SafeHtml.createIframe(null, null, {
+          'onload': goog.string.Const.from('this.xpcOnload()'),
+          'sandbox': null
+        }));
     var ifr = div.childNodes[0];
     div = null;
     ifr['xpcOnload'] = goog.net.xpc.IframeRelayTransport.iframeLoadHandler_;
