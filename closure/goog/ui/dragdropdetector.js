@@ -488,7 +488,7 @@ goog.ui.DragDropDetector.prototype.clearContents_ = function() {
     // clear, calling this right away crashes some versions of WebKit.  Wait
     // until the events are finished.
     goog.global.setTimeout(goog.bind(function() {
-      this.innerHTML = '';
+      goog.dom.setTextContent(this, '');
     }, this.body_), 0);
   } else {
     this.document_.execCommand('selectAll', false, null);
