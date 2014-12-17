@@ -273,9 +273,9 @@ goog.date.getWeekNumber = function(year, month, date, opt_weekDay,
 
 
 /**
- * @param {!T} date1 A datelike object.
- * @param {!S} date2 Another datelike object.
- * @return {!(T|S)} The earlier of them in time.
+ * @param {T} date1 A datelike object.
+ * @param {S} date2 Another datelike object.
+ * @return {T|S} The earlier of them in time.
  * @template T,S
  */
 goog.date.min = function(date1, date2) {
@@ -284,9 +284,9 @@ goog.date.min = function(date1, date2) {
 
 
 /**
- * @param {!T} date1 A datelike object.
- * @param {!S} date2 Another datelike object.
- * @return {!(T|S)} The later of them in time.
+ * @param {T} date1 A datelike object.
+ * @param {S} date2 Another datelike object.
+ * @return {T|S} The later of them in time.
  * @template T,S
  */
 goog.date.max = function(date1, date2) {
