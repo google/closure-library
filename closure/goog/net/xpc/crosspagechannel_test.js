@@ -19,6 +19,7 @@ goog.require('goog.Disposable');
 goog.require('goog.Uri');
 goog.require('goog.async.Deferred');
 goog.require('goog.dom');
+goog.require('goog.labs.userAgent.browser');
 goog.require('goog.log');
 goog.require('goog.log.Level');
 goog.require('goog.net.xpc');
@@ -348,8 +349,15 @@ function checkLifeCycle(oneSidedHandshake, innerProtocolVersion,
       innerFrameMigrationSupported, reverse);
 }
 
+// testConnectMismatchedNames have been flaky on IEs.
+// Flakiness is tracked in http://b/18595666
+// For now, not running these tests on IE.
 
 function testConnectMismatchedNames_v1_v1() {
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   checkConnectMismatchedNames(
       1 /* innerProtocolVersion */,
       1 /* outerProtocolVersion */,
@@ -358,6 +366,10 @@ function testConnectMismatchedNames_v1_v1() {
 
 
 function testConnectMismatchedNames_v1_v1_rev() {
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   checkConnectMismatchedNames(
       1 /* innerProtocolVersion */,
       1 /* outerProtocolVersion */,
@@ -366,6 +378,10 @@ function testConnectMismatchedNames_v1_v1_rev() {
 
 
 function testConnectMismatchedNames_v1_v2() {
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   checkConnectMismatchedNames(
       1 /* innerProtocolVersion */,
       2 /* outerProtocolVersion */,
@@ -374,6 +390,10 @@ function testConnectMismatchedNames_v1_v2() {
 
 
 function testConnectMismatchedNames_v1_v2_rev() {
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   checkConnectMismatchedNames(
       1 /* innerProtocolVersion */,
       2 /* outerProtocolVersion */,
@@ -382,6 +402,10 @@ function testConnectMismatchedNames_v1_v2_rev() {
 
 
 function testConnectMismatchedNames_v2_v1() {
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   checkConnectMismatchedNames(
       2 /* innerProtocolVersion */,
       1 /* outerProtocolVersion */,
@@ -390,6 +414,10 @@ function testConnectMismatchedNames_v2_v1() {
 
 
 function testConnectMismatchedNames_v2_v1_rev() {
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   checkConnectMismatchedNames(
       2 /* innerProtocolVersion */,
       1 /* outerProtocolVersion */,
@@ -398,6 +426,10 @@ function testConnectMismatchedNames_v2_v1_rev() {
 
 
 function testConnectMismatchedNames_v2_v2() {
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   checkConnectMismatchedNames(
       2 /* innerProtocolVersion */,
       2 /* outerProtocolVersion */,
@@ -406,6 +438,10 @@ function testConnectMismatchedNames_v2_v2() {
 
 
 function testConnectMismatchedNames_v2_v2_rev() {
+  if (goog.labs.userAgent.browser.isIE()) {
+    return;
+  }
+
   checkConnectMismatchedNames(
       2 /* innerProtocolVersion */,
       2 /* outerProtocolVersion */,
