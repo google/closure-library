@@ -30,6 +30,7 @@ goog.require('goog.math.Size');
  * @param {number} y Top.
  * @param {number} w Width.
  * @param {number} h Height.
+ * @struct
  * @constructor
  */
 goog.math.Rect = function(x, y, w, h) {

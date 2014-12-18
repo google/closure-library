@@ -27,6 +27,7 @@ goog.provide('goog.math.Size');
  * width and height support is deprecated and results in compiler warning.
  * @param {number} width Width.
  * @param {number} height Height.
+ * @struct
  * @constructor
  */
 goog.math.Size = function(width, height) {
