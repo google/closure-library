@@ -137,11 +137,6 @@ goog.testing.TestCase = function(opt_name) {
    * @suppress {underscore|visibility}
    */
   this.result_ = new goog.testing.TestCase.Result(this);
-
-  // This silences a compiler warning from the legacy property check, which
-  // is deprecated. It idly writes to testRunner properties that are used
-  // in this file.
-  var testRunnerMethods = {isFinished: true, hasErrors: true};
 };
 
 
