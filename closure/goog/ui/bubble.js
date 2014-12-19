@@ -324,11 +324,11 @@ goog.ui.Bubble.prototype.hideBubble_ = function() {
  * given the position of the anchor element and the size of the viewport.
  *
  * @param {Element} anchorElement The element to which the bubble is attached.
- * @return {!goog.ui.Popup.AnchoredPosition} The AnchoredPosition to give to
- *     {@link #setPosition}.
+ * @return {!goog.positioning.AnchoredPosition} The AnchoredPosition
+ *     to give to {@link #setPosition}.
  */
 goog.ui.Bubble.prototype.getComputedAnchoredPosition = function(anchorElement) {
-  return new goog.ui.Popup.AnchoredPosition(
+  return new goog.positioning.AnchoredPosition(
       anchorElement, this.computePinnedCorner_(anchorElement));
 };
 
