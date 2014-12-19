@@ -14,9 +14,15 @@
 
 /**
  * @fileoverview Utilities for working with ES6 iterables.
+ * Note that this file is written ES5-only.
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/The_Iterator_protocol
  */
 
 goog.module('goog.labs.iterable');
+
+
+// TODO(nnaze): Move to goog.labs.iterator.
+// TODO(nnaze): Modify methods to take Iterables, not Iterators.
 
 
 /**
@@ -37,4 +43,57 @@ exports.forEach = function(f, iterable) {
     }
     f(next.value);
   }
+};
+
+
+/**
+ * Maps the values of one iterable to create another iterable.
+ *
+ * When next() is called on the returned iterable, it will call the given
+ * function {@code f} with the next value of the given iterable
+ * {@code iterable} until the given iterable is exhausted.
+ *
+ * @param {!function(this: THIS, VALUE): RESULT} f
+ * @param {!Iterator<VALUE>} iterable
+ * @return {!Iterator<RESULT>} The created iterable that gives the mapped
+ *     values.
+ * @template THIS, VALUE, RESULT
+ */
+exports.map = function(f, iterable) {
+  return new MapIterator(f, iterable);
+};
+
+
+
+/**
+ * Helper class for {@code map}.
+ * @param {!function(VALUE): RESULT} f
+ * @param {!Iterator<VALUE>} iterator
+ * @constructor
+ * @implements {Iterator<RESULT>}
+ * @template VALUE, RESULT
+ */
+var MapIterator = function(f, iterator) {
+  /** @private */
+  this.func_ = f;
+  /** @private */
+  this.iterator_ = iterator;
+};
+
+
+/**
+ * @override
+ */
+MapIterator.prototype.next = function() {
+  var nextObj = this.iterator_.next();
+
+  if (nextObj.done) {
+    return {done: true, value: undefined};
+  }
+
+  var mappedValue = this.func_(nextObj.value);
+  return {
+    done: false,
+    value: mappedValue
+  };
 };

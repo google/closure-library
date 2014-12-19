@@ -84,3 +84,32 @@ exports.testForEach = function() {
     assertArrayEquals([i], call.getArguments());
   }
 };
+
+exports.testMap = function() {
+  var range = createRangeIterable(0, 3);
+
+  function addTwo(i) {
+    return i + 2;
+  }
+
+  var newIterable = iterable.map(addTwo, range);
+
+  var nextObj = newIterable.next();
+  assertEquals(2, nextObj.value);
+  assertFalse(nextObj.done);
+
+  nextObj = newIterable.next();
+  assertEquals(3, nextObj.value);
+  assertFalse(nextObj.done);
+
+  nextObj = newIterable.next();
+  assertEquals(4, nextObj.value);
+  assertFalse(nextObj.done);
+
+  // Check that the iterator repeatedly signals done.
+  for (var i = 0; i < 3; i++) {
+    nextObj = newIterable.next();
+    assertUndefined(nextObj.value);
+    assertTrue(nextObj.done);
+  }
+};
