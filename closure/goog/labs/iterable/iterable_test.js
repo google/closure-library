@@ -73,7 +73,6 @@ exports.testCreateRangeIterable = function() {
 exports.testForEach = function() {
   var range = createRangeIterable(0, 3);
 
-  var self = {};
   var callback = recordFunction();
   iterable.forEach(callback, range, self);
 
@@ -83,6 +82,5 @@ exports.testForEach = function() {
   for (var i = 0; i < calls.length; i++) {
     var call = calls[i];
     assertArrayEquals([i], call.getArguments());
-    assertEquals(self, call.getThis());
   }
 };

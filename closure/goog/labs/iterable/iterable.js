@@ -25,17 +25,16 @@ goog.module('goog.labs.iterable');
  * Warning: this function will never halt if given an iterable that
  * is never exhausted.
  *
- * @param {!function(this: THIS, VALUE): void} f
+ * @param {!function(VALUE): void} f
  * @param {!Iterable<VALUE>} iterable
- * @param {THIS=} opt_obj The object to be used as the value of 'this' within f.
- * @template THIS,VALUE
+ * @template VALUE
  */
-exports.forEach = function(f, iterable, opt_obj) {
+exports.forEach = function(f, iterable) {
   while (true) {
     var next = iterable.next();
     if (next.done) {
       return;
     }
-    f.call(opt_obj, next.value);
+    f(next.value);
   }
 };
