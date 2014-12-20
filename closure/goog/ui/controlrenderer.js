@@ -155,9 +155,8 @@ goog.ui.ControlRenderer.IE6_CLASS_COMBINATIONS = [];
  * initialized on first use.
  * @type {Object<goog.ui.Component.State, goog.a11y.aria.State>}
  * @private
- * @const
  */
-goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_;
+goog.ui.ControlRenderer.ariaAttributeMap_;
 
 
 /**
@@ -575,8 +574,8 @@ goog.ui.ControlRenderer.prototype.setState = function(control, state, enable) {
 goog.ui.ControlRenderer.prototype.updateAriaState = function(element, state,
     enable) {
   // Ensure the ARIA attribute map exists.
-  if (!goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_) {
-    goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_ = goog.object.create(
+  if (!goog.ui.ControlRenderer.ariaAttributeMap_) {
+    goog.ui.ControlRenderer.ariaAttributeMap_ = goog.object.create(
         goog.ui.Component.State.DISABLED, goog.a11y.aria.State.DISABLED,
         goog.ui.Component.State.SELECTED, goog.a11y.aria.State.SELECTED,
         goog.ui.Component.State.CHECKED, goog.a11y.aria.State.CHECKED,
@@ -585,7 +584,7 @@ goog.ui.ControlRenderer.prototype.updateAriaState = function(element, state,
   goog.asserts.assert(element,
       'The element passed as a first parameter cannot be null.');
   var ariaAttr = goog.ui.ControlRenderer.getAriaStateForAriaRole_(
-      element, goog.ui.ControlRenderer.ARIA_ATTRIBUTE_MAP_[state]);
+      element, goog.ui.ControlRenderer.ariaAttributeMap_[state]);
   if (ariaAttr) {
     goog.a11y.aria.setState(element, ariaAttr, enable);
   }
