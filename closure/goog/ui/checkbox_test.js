@@ -100,9 +100,12 @@ function testEvents() {
 
   var events = [];
   goog.events.listen(checkbox,
-      [goog.ui.Component.EventType.CHECK,
-       goog.ui.Component.EventType.UNCHECK,
-       goog.ui.Component.EventType.CHANGE],
+      [
+        goog.ui.Component.EventType.ACTION,
+        goog.ui.Component.EventType.CHECK,
+        goog.ui.Component.EventType.UNCHECK,
+        goog.ui.Component.EventType.CHANGE
+      ],
       function(e) {
         events.push(e.type);
       });
@@ -115,12 +118,24 @@ function testEvents() {
 
   checkbox.setEnabled(true);
   goog.testing.events.fireClickSequence(checkbox.getElement());
-  assertArrayEquals('CHECK+CHANGE fired', ['check', 'change'], events);
+  assertArrayEquals('ACTION+CHECK+CHANGE fired',
+      [
+        goog.ui.Component.EventType.ACTION,
+        goog.ui.Component.EventType.CHECK,
+        goog.ui.Component.EventType.CHANGE
+      ],
+      events);
   assertTrue('checkbox became checked', checkbox.getChecked());
   events = [];
 
   goog.testing.events.fireClickSequence(checkbox.getElement());
-  assertArrayEquals('UNCHECK+CHANGE fired', ['uncheck', 'change'], events);
+  assertArrayEquals('ACTION+UNCHECK+CHANGE fired',
+      [
+        goog.ui.Component.EventType.ACTION,
+        goog.ui.Component.EventType.UNCHECK,
+        goog.ui.Component.EventType.CHANGE
+      ],
+      events);
   assertFalse('checkbox became unchecked', checkbox.getChecked());
   events = [];
 
@@ -129,7 +144,12 @@ function testEvents() {
         e.preventDefault();
       });
   goog.testing.events.fireClickSequence(checkbox.getElement());
-  assertArrayEquals('CHECK event fired', ['check'], events);
+  assertArrayEquals('ACTION+CHECK fired',
+      [
+        goog.ui.Component.EventType.ACTION,
+        goog.ui.Component.EventType.CHECK
+      ],
+      events);
   assertFalse('toggling has been prevented', checkbox.getChecked());
 }
 
@@ -326,6 +346,64 @@ function testSpaceKey() {
   // Enter for example doesn't work
   goog.testing.events.fireKeySequence(normalSpan, goog.events.KeyCodes.ENTER);
   assertEquals('Enter leaves checkbox unchecked',
+      goog.ui.Checkbox.State.UNCHECKED, checkbox.getChecked());
+}
+
+function testSpaceKeyFiresEvents() {
+  var normalSpan = goog.dom.getElement('normal');
+
+  checkbox.decorate(normalSpan);
+  var events = [];
+  goog.events.listen(checkbox,
+      [
+        goog.ui.Component.EventType.ACTION,
+        goog.ui.Component.EventType.CHECK,
+        goog.ui.Component.EventType.UNCHECK,
+        goog.ui.Component.EventType.CHANGE
+      ],
+      function(e) {
+        events.push(e.type);
+      });
+
+  assertEquals('Unexpected default state.',
+      goog.ui.Checkbox.State.UNCHECKED, checkbox.getChecked());
+  goog.testing.events.fireKeySequence(normalSpan, goog.events.KeyCodes.SPACE);
+  assertArrayEquals('Unexpected events fired when checking with spacebar.',
+      [
+        goog.ui.Component.EventType.ACTION,
+        goog.ui.Component.EventType.CHECK,
+        goog.ui.Component.EventType.CHANGE
+      ],
+      events);
+  assertEquals('Unexpected state after checking.',
+      goog.ui.Checkbox.State.CHECKED, checkbox.getChecked());
+
+  events = [];
+  goog.testing.events.fireKeySequence(normalSpan, goog.events.KeyCodes.SPACE);
+  assertArrayEquals('Unexpected events fired when unchecking with spacebar.',
+      [
+        goog.ui.Component.EventType.ACTION,
+        goog.ui.Component.EventType.UNCHECK,
+        goog.ui.Component.EventType.CHANGE
+      ],
+      events);
+  assertEquals('Unexpected state after unchecking.',
+      goog.ui.Checkbox.State.UNCHECKED, checkbox.getChecked());
+
+  events = [];
+  goog.events.listenOnce(checkbox, goog.ui.Component.EventType.CHECK,
+      function(e) {
+        e.preventDefault();
+      });
+  goog.testing.events.fireKeySequence(normalSpan, goog.events.KeyCodes.SPACE);
+  assertArrayEquals('Unexpected events fired when checking with spacebar and ' +
+      'the check event is cancelled.',
+      [
+        goog.ui.Component.EventType.ACTION,
+        goog.ui.Component.EventType.CHECK
+      ],
+      events);
+  assertEquals('Unexpected state after check event is cancelled.',
       goog.ui.Checkbox.State.UNCHECKED, checkbox.getChecked());
 }
 

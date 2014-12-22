@@ -252,6 +252,7 @@ goog.ui.Checkbox.prototype.handleClickOrSpace_ = function(e) {
 /** @override */
 goog.ui.Checkbox.prototype.handleKeyEventInternal = function(e) {
   if (e.keyCode == goog.events.KeyCodes.SPACE) {
+    this.performActionInternal(e);
     this.handleClickOrSpace_(e);
   }
   return false;
