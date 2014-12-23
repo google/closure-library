@@ -56,7 +56,11 @@ goog.labs.testing.Environment = goog.defineClass(null, {
 
 
   /** Runs immediately before the setUpPage phase of JsUnit tests. */
-  setUpPage: goog.nullFunction,
+  setUpPage: function() {
+    if (this.mockClock && this.mockClock.isDisposed()) {
+      this.mockClock = new goog.testing.MockClock(true);
+    }
+  },
 
 
   /** Runs immediately after the tearDownPage phase of JsUnit tests. */
