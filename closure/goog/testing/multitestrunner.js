@@ -846,7 +846,7 @@ goog.testing.MultiTestRunner.prototype.drawTimeHistogram_ = function() {
  * Draws a stats histogram.
  * @param {string} statsField Field of the stats object to graph.
  * @param {number} bucketSize The size for the histogram's buckets.
- * @param {function(number, ...[*]): *} valueTransformFn Function for
+ * @param {function(number, ...*): *} valueTransformFn Function for
  *     transforming the x-labels value for display.
  * @param {number} width The width in pixels of the graph.
  * @param {string} title The graph's title.
