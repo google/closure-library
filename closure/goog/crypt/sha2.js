@@ -151,42 +151,43 @@ goog.crypt.Sha2.prototype.preschedule = function(buf, opt_offset) {
 
   // Divide the chunk into 16 32-bit-words.
   var w = goog.global['Int32Array'] ? new Int32Array(64) : new Array(64);
+  var i;
   // get 16 big endian words
   if (goog.isString(buf)) {
-    for (var i = 0; i < 16; i++) {
-      w[i] = (buf.charCodeAt(opt_offset) << 24) |
-             (buf.charCodeAt(opt_offset + 1) << 16) |
-             (buf.charCodeAt(opt_offset + 2) << 8) |
-             (buf.charCodeAt(opt_offset + 3));
+    for (i = 0; i < 16; i++) {
+      w[i] = (((buf.charCodeAt(opt_offset) << 24) |
+               (buf.charCodeAt(opt_offset + 1) << 16) |
+               (buf.charCodeAt(opt_offset + 2) << 8) |
+               (buf.charCodeAt(opt_offset + 3))) & 0xffffffff) | 0;
       opt_offset += 4;
     }
   } else {
-    for (var i = 0; i < 16; i++) {
-      w[i] = (buf[opt_offset] << 24) |
-             (buf[opt_offset + 1] << 16) |
-             (buf[opt_offset + 2] << 8) |
-             (buf[opt_offset + 3]);
+    for (i = 0; i < 16; i++) {
+      w[i] = (((buf[opt_offset] << 24) |
+               (buf[opt_offset + 1] << 16) |
+               (buf[opt_offset + 2] << 8) |
+               (buf[opt_offset + 3])) & 0xffffffff) | 0;
       opt_offset += 4;
     }
   }
-  for (var i = 16; i < 64; i++) {
+  for (i = 16; i < 64; i++) {
     var w_15 = w[i - 15] | 0;
-    var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
-             ((w_15 >>> 18) | (w_15 << 14)) ^
-             (w_15 >>> 3);
+    var s0 = ((((w_15 >>> 7) | (w_15 << 25)) ^
+               ((w_15 >>> 18) | (w_15 << 14)) ^
+               (w_15 >>> 3)) & 0xffffffff) | 0;
     var w_2 = w[i - 2] | 0;
-    var s1 = ((w_2 >>> 17) | (w_2 << 15)) ^
-             ((w_2 >>> 19) | (w_2 << 13)) ^
-             (w_2 >>> 10);
+    var s1 = ((((w_2 >>> 17) | (w_2 << 15)) ^
+               ((w_2 >>> 19) | (w_2 << 13)) ^
+               (w_2 >>> 10)) & 0xffffffff) | 0;
 
     // As a performance optimization, construct the sum a pair at a time
     // with casting to integer (bitwise OR) to eliminate unnecessary
     // double<->integer conversions.
-    var partialSum1 = ((w[i - 16] | 0) + s0) | 0;
-    var partialSum2 = ((w[i - 7] | 0) + s1) | 0;
+    var partialSum1 = (((w[i - 16] | 0) + s0) & 0xffffffff) | 0;
+    var partialSum2 = (((w[i - 7] | 0) + s1) & 0xffffffff) | 0;
     w[i] = (partialSum1 + partialSum2) | 0;
   }
-  for (var i = 0; i < 64; i++) {
+  for (i = 0; i < 64; i++) {
     w[i] = (w[i] + (goog.crypt.Sha2.Kx_[i] | 0) | 0);
   }
   return w;
@@ -268,9 +269,10 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
 
   // The message schedule.
   var w = this.w_;
+  var i;
   // Divide the chunk into 16 32-bit-words.
   if (goog.isString(buf)) {
-    for (var i = 0; i < 16; i++) {
+    for (i = 0; i < 16; i++) {
       // TODO(user): [bug 8140122] Recent versions of Safari for Mac OS and iOS
       // have a bug that turns the post-increment ++ operator into pre-increment
       // during JIT compilation.
@@ -286,7 +288,7 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
       opt_offset += 4;
     }
   } else {
-    for (var i = 0; i < 16; i++) {
+    for (i = 0; i < 16; i++) {
       w[i] = (buf[opt_offset] << 24) |
              (buf[opt_offset + 1] << 16) |
              (buf[opt_offset + 2] << 8) |
@@ -304,7 +306,7 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
   var g = this.hash_[6] | 0;
   var h = this.hash_[7] | 0;
   // Do steps 0-16.
-  for (var i = 0; i < 16; i++) {
+  for (i = 0; i < 16; i++) {
     var S0 = ((a >>> 2) | (a << 30)) ^
              ((a >>> 13) | (a << 19)) ^
              ((a >>> 22) | (a << 10));
@@ -331,7 +333,7 @@ goog.crypt.Sha2.prototype.computeChunk_ = function(buf, opt_offset) {
   }
 
   // Do steps 16-64.
-  for (var i = 16; i < 64; i++) {
+  for (i = 16; i < 64; i++) {
     var w_15 = w[(i - 15) & 15] | 0;
     var s0 = ((w_15 >>> 7) | (w_15 << 25)) ^
              ((w_15 >>> 18) | (w_15 << 14)) ^
