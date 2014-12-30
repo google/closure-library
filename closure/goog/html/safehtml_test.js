@@ -20,6 +20,7 @@ goog.provide('goog.html.safeHtmlTest');
 
 goog.require('goog.html.SafeHtml');
 goog.require('goog.html.SafeStyle');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.html.SafeUrl');
 goog.require('goog.html.TrustedResourceUrl');
 goog.require('goog.html.testing');
@@ -243,6 +244,50 @@ function testSafeHtmlCreateIframe() {
   assertSameHtml(
       '<iframe>&lt;</iframe>',
       goog.html.SafeHtml.createIframe(null, null, {'sandbox': null}, '<'));
+}
+
+
+function testSafeHtmlCreateStyle() {
+  var styleSheet = goog.html.SafeStyleSheet.fromConstant(
+      goog.string.Const.from('P.special { color:"red" ; }'));
+  var styleHtml = goog.html.SafeHtml.createStyle(styleSheet);
+  assertSameHtml(
+      '<style type="text/css">P.special { color:"red" ; }</style>', styleHtml);
+
+  // Two stylesheets.
+  var otherStyleSheet = goog.html.SafeStyleSheet.fromConstant(
+      goog.string.Const.from('P.regular { color:blue ; }'));
+  styleHtml = goog.html.SafeHtml.createStyle([styleSheet, otherStyleSheet]);
+  assertSameHtml(
+      '<style type="text/css">P.special { color:"red" ; }' +
+          'P.regular { color:blue ; }</style>',
+      styleHtml);
+
+  // Set attribute.
+  styleHtml = goog.html.SafeHtml.createStyle(styleSheet, {'id': 'test'});
+  var styleHtmlString = goog.html.SafeHtml.unwrap(styleHtml);
+  assertTrue(styleHtmlString, styleHtmlString.indexOf('id="test"') != -1);
+  assertTrue(styleHtmlString, styleHtmlString.indexOf('type="text/css"') != -1);
+
+  // Set attribute to null.
+  styleHtml = goog.html.SafeHtml.createStyle(
+      goog.html.SafeStyleSheet.EMPTY, {'id': null});
+  assertSameHtml('<style type="text/css"></style>', styleHtml);
+
+  // Set attribute to invalid value.
+  assertThrows(function() {
+    styleHtml = goog.html.SafeHtml.createStyle(
+        goog.html.SafeStyleSheet.EMPTY, {'invalid.': 'cantdothis'});
+  });
+
+  // Cannot override type attribute.
+  assertThrows(function() {
+    styleHtml = goog.html.SafeHtml.createStyle(
+        goog.html.SafeStyleSheet.EMPTY, {'Type': 'cantdothis'});
+  });
+
+  // Directionality.
+  assertEquals(goog.i18n.bidi.Dir.NEUTRAL, styleHtml.getDirection());
 }
 
 
