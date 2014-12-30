@@ -1101,7 +1101,6 @@ goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
           name = pairs[i];
         }
         name = goog.string.urlDecode(name);
-        name = this.getKeyName_(name);
         this.add(name, value ? goog.string.urlDecode(value) : '');
       }
     }
