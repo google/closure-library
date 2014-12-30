@@ -125,7 +125,7 @@ goog.asserts.doAssertFailure_ =
  * Sets a custom error handler that can be used to customize the behavior of
  * assertion failures, for example by turning all assertion failures into log
  * messages.
- * @param {function(goog.asserts.AssertionError)} errorHandler
+ * @param {function(!goog.asserts.AssertionError)} errorHandler
  */
 goog.asserts.setErrorHandler = function(errorHandler) {
   if (goog.asserts.ENABLE_ASSERTS) {
