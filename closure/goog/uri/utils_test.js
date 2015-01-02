@@ -573,3 +573,20 @@ function testMakeUnique() {
       goog.uri.utils.makeUnique('http://www.google.com?zx=9&a=1&b=2#blob'));
 }
 
+
+function testParseQuery() {
+  var result = [];
+  goog.uri.utils.parseQueryData(
+      'foo=bar&no&empty=&tricky%3D%26=%3D%26&=nothing&=&',
+      function(name, value) { result.push([name, value]); });
+  assertArrayEquals([['foo', 'bar'],
+                     ['no', ''],
+                     ['empty', ''],
+                     ['tricky=&', '=&'],
+                     ['', 'nothing'],
+                     ['', ''],
+                     ['', '']],
+                    result);
+}
+
+
