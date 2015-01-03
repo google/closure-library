@@ -607,6 +607,21 @@ goog.style.getContainerOffsetToScrollInto =
 
   var scrollLeft = container.scrollLeft;
   var scrollTop = container.scrollTop;
+  if (container == goog.dom.getDocument().body ||
+      container == goog.dom.getDocument().documentElement) {
+    // If the container is the document scroll element (usually <body>),
+    // getPageOffset(element) is already relative to it and there is no need to
+    // consider the current scroll.
+    scrollLeft = containerPos.x + containerBorder.left;
+    scrollTop = containerPos.y + containerBorder.top;
+
+    if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(10)) {
+      // In older versions of IE getPageOffset(element) does not include the
+      // continaer border so it has to be added to accomodate.
+      scrollLeft += containerBorder.left;
+      scrollTop += containerBorder.top;
+    }
+  }
   if (opt_center) {
     // All browsers round non-integer scroll positions down.
     scrollLeft += relX - spaceX / 2;
