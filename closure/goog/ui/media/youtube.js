@@ -177,7 +177,7 @@ goog.ui.media.Youtube.prototype.setState = function(c, state, enable) {
       return;
     }
     var youtubeFlash = new goog.ui.media.FlashObject(
-        dataModel.getPlayer().getUrl() || '',
+        dataModel.getPlayer().getTrustedResourceUrl(),
         domHelper);
     control.addChild(youtubeFlash, true);
   }

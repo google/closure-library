@@ -16,6 +16,7 @@ goog.provide('goog.ui.media.FlickrSetTest');
 goog.setTestOnly('goog.ui.media.FlickrSetTest');
 
 goog.require('goog.dom');
+goog.require('goog.html.testing');
 goog.require('goog.testing.jsunit');
 goog.require('goog.ui.media.FlashObject');
 goog.require('goog.ui.media.FlickrSet');
@@ -79,8 +80,10 @@ function testCreatingModel() {
 }
 
 function testSettingWhichFlashUrlToUse() {
-  goog.ui.media.FlickrSet.setFlashUrl('http://foo');
-  assertEquals(goog.ui.media.FlickrSet.flashUrl_, 'http://foo');
+  goog.ui.media.FlickrSet.setFlashUrl(
+      goog.html.testing.newTrustedResourceUrlForTest('http://foo'));
+  assertEquals('http://foo',
+      goog.ui.media.FlickrSet.flashUrl_.getTypedStringValue());
 }
 
 function testCreatingDomOnInitialState() {
