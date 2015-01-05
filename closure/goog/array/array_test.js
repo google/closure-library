@@ -1761,3 +1761,13 @@ function testRemoveAllIf_noMatches() {
   assertEquals(0, actualOutput);
   assertArrayEquals(expectedArray, testArray);
 }
+
+function testCopyByIndex() {
+  var testArray = [1, 2, 'a', 'b', 'c', 'd'];
+  var copyIndexes = [1, 3, 0, 0, 2];
+  var expectedArray = [2, 'b', 1, 1, 'a'];
+
+  var actualOutput = goog.array.copyByIndex(testArray, copyIndexes);
+
+  assertArrayEquals(expectedArray, actualOutput);
+}
