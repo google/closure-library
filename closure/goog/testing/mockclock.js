@@ -471,11 +471,13 @@ goog.testing.MockClock.MAX_INT_ = 2147483647;
  * Schedules a function to be called after {@code millis} milliseconds.
  * Mock implementation for setTimeout.
  * @param {Function} funcToCall The function to call.
- * @param {number} millis The number of milliseconds to call it after.
+ * @param {number=} opt_millis The number of milliseconds to call it after.
  * @return {number} The number of timeouts created.
  * @private
  */
-goog.testing.MockClock.prototype.setTimeout_ = function(funcToCall, millis) {
+goog.testing.MockClock.prototype.setTimeout_ = function(
+    funcToCall, opt_millis) {
+  var millis = opt_millis || 0;
   if (millis > goog.testing.MockClock.MAX_INT_) {
     throw Error(
         'Bad timeout value: ' + millis + '.  Timeouts over MAX_INT ' +
@@ -492,11 +494,13 @@ goog.testing.MockClock.prototype.setTimeout_ = function(funcToCall, millis) {
  * Schedules a function to be called every {@code millis} milliseconds.
  * Mock implementation for setInterval.
  * @param {Function} funcToCall The function to call.
- * @param {number} millis The number of milliseconds between calls.
+ * @param {number=} opt_millis The number of milliseconds between calls.
  * @return {number} The number of timeouts created.
  * @private
  */
-goog.testing.MockClock.prototype.setInterval_ = function(funcToCall, millis) {
+goog.testing.MockClock.prototype.setInterval_ =
+    function(funcToCall, opt_millis) {
+  var millis = opt_millis || 0;
   this.timeoutsMade_ = this.timeoutsMade_ + 1;
   this.scheduleFunction_(this.timeoutsMade_, funcToCall, millis, true);
   return this.timeoutsMade_;
