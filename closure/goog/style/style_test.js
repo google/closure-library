@@ -1700,6 +1700,16 @@ function testFramedPageOffset() {
       goog.style.getFramedPageOffset(testElement3, iframeWindow));
   assertCoordinateApprox(500, 500, 2,
       goog.style.getFramedPageOffset(testElement3, iframeWindow2));
+
+  // In IE, if the element is in a frame that's been removed from the DOM and
+  // relativeWin is not that frame's contentWindow, the contentWindow's parent
+  // reference points to itself. We want to guarantee that we don't fall into
+  // an infinite loop.
+  var iframeParent = iframe.parentElement;
+  iframeParent.removeChild(iframe);
+  // We don't check the value returned as it differs by browser. 0,0 for Chrome
+  // and FF. IE returns 30000 or 30198 for x in IE8-9 and 300 in IE10-11
+  goog.style.getFramedPageOffset(testElement2, window);
 }
 
 

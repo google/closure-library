@@ -848,6 +848,7 @@ goog.style.getFramedPageOffset = function(el, relativeWin) {
     position.x += offset.x;
     position.y += offset.y;
   } while (currentWin && currentWin != relativeWin &&
+      currentWin != currentWin.parent &&
       (currentEl = currentWin.frameElement) &&
       (currentWin = currentWin.parent));
 
