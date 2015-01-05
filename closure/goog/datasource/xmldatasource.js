@@ -26,6 +26,7 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.xml');
 goog.require('goog.ds.BasicNodeList');
 goog.require('goog.ds.DataManager');
+goog.require('goog.ds.DataNode');
 goog.require('goog.ds.LoadState');
 goog.require('goog.ds.logger');
 goog.require('goog.net.XhrIo');
