@@ -153,7 +153,7 @@ goog.dom.animationFrame.running_ = false;
  *   mutate: (function(this:THIS, !goog.dom.animationFrame.State)|undefined)
  * }} spec
  * @param {THIS=} opt_context Context in which to run the function.
- * @return {function(...[?])}
+ * @return {function(...?)}
  * @template THIS
  */
 goog.dom.animationFrame.createTask = function(spec, opt_context) {
