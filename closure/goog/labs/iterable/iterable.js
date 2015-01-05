@@ -21,8 +21,15 @@
 goog.module('goog.labs.iterable');
 
 
-// TODO(nnaze): Move to goog.labs.iterator.
-// TODO(nnaze): Modify methods to take Iterables, not Iterators.
+/**
+ * Get the iterator for an iterable.
+ * @param {!Iterable<VALUE>} iterable
+ * @return {!Iterator<VALUE>}
+ * @template VALUE
+ */
+exports.getIterator = function(iterable) {
+  return iterable[goog.global.Symbol.iterator]();
+};
 
 
 /**
@@ -36,8 +43,9 @@ goog.module('goog.labs.iterable');
  * @template VALUE
  */
 exports.forEach = function(f, iterable) {
+  var iterator = exports.getIterator(iterable);
   while (true) {
-    var next = iterable.next();
+    var next = iterator.next();
     if (next.done) {
       return;
     }
@@ -54,46 +62,78 @@ exports.forEach = function(f, iterable) {
  * {@code iterable} until the given iterable is exhausted.
  *
  * @param {!function(this: THIS, VALUE): RESULT} f
- * @param {!Iterator<VALUE>} iterable
- * @return {!Iterator<RESULT>} The created iterable that gives the mapped
+ * @param {!Iterable<VALUE>} iterable
+ * @return {!Iterable<RESULT>} The created iterable that gives the mapped
  *     values.
  * @template THIS, VALUE, RESULT
  */
 exports.map = function(f, iterable) {
-  return new MapIterator(f, iterable);
+  return new FactoryIterable(function() {
+    var iterator = exports.getIterator(iterable);
+    return new MapIterator(f, iterator);
+  });
 };
 
 
+// TODO(nnaze): For now, this section is not run if Symbol is not defined,
+// since goog.global.Symbol.iterator will not be defined below.
+// Determine best course of action if "Symbol" is not available.
+if (goog.global.Symbol) {
 
-/**
- * Helper class for {@code map}.
- * @param {!function(VALUE): RESULT} f
- * @param {!Iterator<VALUE>} iterator
- * @constructor
- * @implements {Iterator<RESULT>}
- * @template VALUE, RESULT
- */
-var MapIterator = function(f, iterator) {
-  /** @private */
-  this.func_ = f;
-  /** @private */
-  this.iterator_ = iterator;
-};
-
-
-/**
- * @override
- */
-MapIterator.prototype.next = function() {
-  var nextObj = this.iterator_.next();
-
-  if (nextObj.done) {
-    return {done: true, value: undefined};
-  }
-
-  var mappedValue = this.func_(nextObj.value);
-  return {
-    done: false,
-    value: mappedValue
+  /**
+   * Helper class for {@code map}.
+   * @param {!function(VALUE): RESULT} f
+   * @param {!Iterator<VALUE>} iterator
+   * @constructor
+   * @implements {Iterator<RESULT>}
+   * @template VALUE, RESULT
+   */
+  var MapIterator = function(f, iterator) {
+    /** @private */
+    this.func_ = f;
+    /** @private */
+    this.iterator_ = iterator;
   };
-};
+
+
+  /**
+   * @override
+   */
+  MapIterator.prototype.next = function() {
+    var nextObj = this.iterator_.next();
+
+    if (nextObj.done) {
+      return {done: true, value: undefined};
+    }
+
+    var mappedValue = this.func_(nextObj.value);
+    return {
+      done: false,
+      value: mappedValue
+    };
+  };
+
+
+  /**
+   * Helper class to create an iterable with a given iterator factory.
+   * @param {function():!Iterator<VALUE>} iteratorFactory
+   * @constructor
+   * @implements {Iterable<VALUE>}
+   * @template VALUE
+   */
+  var FactoryIterable = function(iteratorFactory) {
+    /**
+     * @private
+     */
+    this.iteratorFactory_ = iteratorFactory;
+  };
+
+
+  /**
+   * @return {!Iterator<VALUE>}
+   */
+  FactoryIterable.prototype[goog.global.Symbol.iterator] = function() {
+    return this.iteratorFactory_();
+  };
+
+}

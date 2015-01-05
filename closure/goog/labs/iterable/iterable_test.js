@@ -28,10 +28,10 @@ var recordFunction = goog.require('goog.testing.recordFunction');
 
 
 /**
- * Create an iterable starting at "start" and increments up to
+ * Create an iterator starting at "start" and increments up to
  * (but not including) "stop".
  */
-function createRangeIterable(start, stop) {
+function createRangeIterator(start, stop) {
   var value = start;
   var next = function() {
     if (value < stop) {
@@ -52,25 +52,50 @@ function createRangeIterable(start, stop) {
   };
 }
 
+function createRangeIterable(start, stop) {
+  var obj = {};
+
+  // Refer to goog.global['Symbol'] because otherwise this
+  // is a parse error in earlier IEs.
+  obj[goog.global['Symbol'].iterator] = function() {
+    return createRangeIterator(start, stop);
+  };
+  return obj;
+}
+
+function isSymbolDefined() {
+  return !!goog.global['Symbol'];
+}
+
 exports.testCreateRangeIterable = function() {
-  var range = createRangeIterable(0, 3);
+  // Do not run if Symbol does not exist in this browser.
+  if (!isSymbolDefined()) {
+    return;
+  }
+
+  var rangeIterator = createRangeIterator(0, 3);
 
   for (var i = 0; i < 3; i++) {
     assertObjectEquals({
       value: i,
       done: false
-    }, range.next());
+    }, rangeIterator.next());
   }
 
   for (var i = 0; i < 3; i++) {
     assertObjectEquals({
       value: undefined,
       done: true
-    }, range.next());
+    }, rangeIterator.next());
   }
 };
 
 exports.testForEach = function() {
+  // Do not run if Symbol does not exist in this browser.
+  if (!isSymbolDefined()) {
+    return;
+  }
+
   var range = createRangeIterable(0, 3);
 
   var callback = recordFunction();
@@ -86,6 +111,11 @@ exports.testForEach = function() {
 };
 
 exports.testMap = function() {
+  // Do not run if Symbol does not exist in this browser.
+  if (!isSymbolDefined()) {
+    return;
+  }
+
   var range = createRangeIterable(0, 3);
 
   function addTwo(i) {
@@ -93,22 +123,23 @@ exports.testMap = function() {
   }
 
   var newIterable = iterable.map(addTwo, range);
+  var newIterator = iterable.getIterator(newIterable);
 
-  var nextObj = newIterable.next();
+  var nextObj = newIterator.next();
   assertEquals(2, nextObj.value);
   assertFalse(nextObj.done);
 
-  nextObj = newIterable.next();
+  nextObj = newIterator.next();
   assertEquals(3, nextObj.value);
   assertFalse(nextObj.done);
 
-  nextObj = newIterable.next();
+  nextObj = newIterator.next();
   assertEquals(4, nextObj.value);
   assertFalse(nextObj.done);
 
   // Check that the iterator repeatedly signals done.
   for (var i = 0; i < 3; i++) {
-    nextObj = newIterable.next();
+    nextObj = newIterator.next();
     assertUndefined(nextObj.value);
     assertTrue(nextObj.done);
   }
