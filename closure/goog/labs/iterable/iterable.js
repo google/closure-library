@@ -75,65 +75,65 @@ exports.map = function(f, iterable) {
 };
 
 
+
+/**
+ * Helper class for {@code map}.
+ * @param {!function(VALUE): RESULT} f
+ * @param {!Iterator<VALUE>} iterator
+ * @constructor
+ * @implements {Iterator<RESULT>}
+ * @template VALUE, RESULT
+ */
+var MapIterator = function(f, iterator) {
+  /** @private */
+  this.func_ = f;
+  /** @private */
+  this.iterator_ = iterator;
+};
+
+
+/**
+ * @override
+ */
+MapIterator.prototype.next = function() {
+  var nextObj = this.iterator_.next();
+
+  if (nextObj.done) {
+    return {done: true, value: undefined};
+  }
+
+  var mappedValue = this.func_(nextObj.value);
+  return {
+    done: false,
+    value: mappedValue
+  };
+};
+
+
+
+/**
+ * Helper class to create an iterable with a given iterator factory.
+ * @param {function():!Iterator<VALUE>} iteratorFactory
+ * @constructor
+ * @implements {Iterable<VALUE>}
+ * @template VALUE
+ */
+var FactoryIterable = function(iteratorFactory) {
+  /**
+   * @private
+   */
+  this.iteratorFactory_ = iteratorFactory;
+};
+
+
 // TODO(nnaze): For now, this section is not run if Symbol is not defined,
 // since goog.global.Symbol.iterator will not be defined below.
 // Determine best course of action if "Symbol" is not available.
 if (goog.global.Symbol) {
-
-  /**
-   * Helper class for {@code map}.
-   * @param {!function(VALUE): RESULT} f
-   * @param {!Iterator<VALUE>} iterator
-   * @constructor
-   * @implements {Iterator<RESULT>}
-   * @template VALUE, RESULT
-   */
-  var MapIterator = function(f, iterator) {
-    /** @private */
-    this.func_ = f;
-    /** @private */
-    this.iterator_ = iterator;
-  };
-
-
-  /**
-   * @override
-   */
-  MapIterator.prototype.next = function() {
-    var nextObj = this.iterator_.next();
-
-    if (nextObj.done) {
-      return {done: true, value: undefined};
-    }
-
-    var mappedValue = this.func_(nextObj.value);
-    return {
-      done: false,
-      value: mappedValue
-    };
-  };
-
-
-  /**
-   * Helper class to create an iterable with a given iterator factory.
-   * @param {function():!Iterator<VALUE>} iteratorFactory
-   * @constructor
-   * @implements {Iterable<VALUE>}
-   * @template VALUE
-   */
-  var FactoryIterable = function(iteratorFactory) {
-    /**
-     * @private
-     */
-    this.iteratorFactory_ = iteratorFactory;
-  };
-
-
   /**
    * @return {!Iterator<VALUE>}
    */
   FactoryIterable.prototype[goog.global.Symbol.iterator] = function() {
     return this.iteratorFactory_();
   };
-
 }
