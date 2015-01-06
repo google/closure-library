@@ -187,7 +187,8 @@ goog.testing.MockClock.prototype.replaceRequestAnimationFrame_ = function() {
                       'oRequestAnimationFrame',
                       'msRequestAnimationFrame'];
 
-  var cancelFuncs = ['cancelRequestAnimationFrame',
+  var cancelFuncs = ['cancelAnimationFrame',
+                     'cancelRequestAnimationFrame',
                      'webkitCancelRequestAnimationFrame',
                      'mozCancelRequestAnimationFrame',
                      'oCancelRequestAnimationFrame',

@@ -263,7 +263,8 @@ goog.async.AnimationDelay.prototype.getRaf_ = function() {
  */
 goog.async.AnimationDelay.prototype.getCancelRaf_ = function() {
   var win = this.win_;
-  return win.cancelRequestAnimationFrame ||
+  return win.cancelAnimationFrame ||
+      win.cancelRequestAnimationFrame ||
       win.webkitCancelRequestAnimationFrame ||
       win.mozCancelRequestAnimationFrame ||
       win.oCancelRequestAnimationFrame ||
