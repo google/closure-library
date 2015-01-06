@@ -1771,3 +1771,16 @@ function testCopyByIndex() {
 
   assertArrayEquals(expectedArray, actualOutput);
 }
+
+function testComparators() {
+  var greater = 42;
+  var smaller = 13;
+
+  assertTrue(goog.array.defaultCompare(smaller, greater) < 0);
+  assertEquals(0, goog.array.defaultCompare(smaller, smaller));
+  assertTrue(goog.array.defaultCompare(greater, smaller) > 0);
+
+  assertTrue(goog.array.inverseDefaultCompare(greater, smaller) < 0);
+  assertEquals(0, goog.array.inverseDefaultCompare(greater, greater));
+  assertTrue(goog.array.inverseDefaultCompare(smaller, greater) > 0);
+}
