@@ -29,6 +29,7 @@ function setUp() {
 
 function tearDown() {
   target.dispose();
+  e.dispose();
 }
 
 function testConstructor() {

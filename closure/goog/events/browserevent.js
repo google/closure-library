@@ -402,6 +402,11 @@ goog.events.BrowserEvent.prototype.getBrowserEvent = function() {
 };
 
 
+/** @override */
+goog.events.BrowserEvent.prototype.disposeInternal = function() {
+};
+
+
 /** @private @return {number} */
 goog.events.BrowserEvent.prototype.getOffsetX_ = function() {
   // Webkit emits a lame warning whenever layerX/layerY is accessed.
