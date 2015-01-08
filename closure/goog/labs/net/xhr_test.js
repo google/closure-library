@@ -17,6 +17,7 @@ goog.setTestOnly('goog.labs.net.xhrTest');
 
 goog.require('goog.Promise');
 goog.require('goog.labs.net.xhr');
+goog.require('goog.net.WrapperXmlHttpFactory');
 goog.require('goog.net.XmlHttp');
 goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
@@ -70,7 +71,11 @@ function stubXhrToReturn(status, opt_responseText, opt_latency) {
 }
 
 function stubXhrToThrow(err) {
-  var stubXhr = {
+  stubXmlHttpWith(buildThrowingStubXhr(err));
+}
+
+function buildThrowingStubXhr(err) {
+  return {
     sent: false,
     aborted: false,
     status: 0,
@@ -90,8 +95,6 @@ function stubXhrToThrow(err) {
       throw err;
     }
   };
-
-  stubXmlHttpWith(stubXhr);
 }
 
 function stubXmlHttpWith(stubXhr) {
@@ -441,5 +444,19 @@ function testSendWithClientException() {
         assertTrue(err instanceof Error);
         assertTrue(
             /CORS XHR with file:\/\/ schemas not allowed./.test(err.message));
+      });
+}
+
+function testSendWithFactory() {
+  stubXhrToReturn(200);
+  var options = {
+    xmlHttpFactory: new goog.net.WrapperXmlHttpFactory(
+        goog.partial(buildThrowingStubXhr, new Error('Bad factory')),
+        goog.net.XmlHttp.getOptions)
+  };
+  return xhr.send('POST', 'file://test-url', null, options).then(
+      fail /* opt_onResolved */,
+      function(err) {
+        assertTrue(err instanceof Error);
       });
 }
