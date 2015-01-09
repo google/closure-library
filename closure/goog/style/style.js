@@ -363,9 +363,6 @@ goog.style.getComputedTransform = function(element) {
  */
 goog.style.setPosition = function(el, arg1, opt_arg2) {
   var x, y;
-  var buggyGeckoSubPixelPos = goog.userAgent.GECKO &&
-      (goog.userAgent.MAC || goog.userAgent.X11) &&
-      goog.userAgent.isVersionOrHigher('1.9');
 
   if (arg1 instanceof goog.math.Coordinate) {
     x = arg1.x;
@@ -375,11 +372,10 @@ goog.style.setPosition = function(el, arg1, opt_arg2) {
     y = opt_arg2;
   }
 
-  // Round to the nearest pixel for buggy sub-pixel support.
   el.style.left = goog.style.getPixelStyleValue_(
-      /** @type {number|string} */ (x), buggyGeckoSubPixelPos);
+      /** @type {number|string} */ (x), false);
   el.style.top = goog.style.getPixelStyleValue_(
-      /** @type {number|string} */ (y), buggyGeckoSubPixelPos);
+      /** @type {number|string} */ (y), false);
 };
 
 
@@ -668,19 +664,6 @@ goog.style.scrollIntoContainerView = function(element, container, opt_center) {
  * @return {!goog.math.Coordinate} Client left and top.
  */
 goog.style.getClientLeftTop = function(el) {
-  // NOTE(eae): Gecko prior to 1.9 doesn't support clientTop/Left, see
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=111207
-  if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher('1.9')) {
-    var left = parseFloat(goog.style.getComputedStyle(el, 'borderLeftWidth'));
-    if (goog.style.isRightToLeft(el)) {
-      var scrollbarWidth = el.offsetWidth - el.clientWidth - left -
-          parseFloat(goog.style.getComputedStyle(el, 'borderRightWidth'));
-      left += scrollbarWidth;
-    }
-    return new goog.math.Coordinate(left,
-        parseFloat(goog.style.getComputedStyle(el, 'borderTopWidth')));
-  }
-
   return new goog.math.Coordinate(el.clientLeft, el.clientTop);
 };
 
@@ -701,16 +684,6 @@ goog.style.getPageOffset = function(el) {
   // TODO(gboyer): Update the jsdoc in a way that doesn't break the universe.
   goog.asserts.assertObject(el, 'Parameter is required');
 
-  // NOTE(eae): Gecko pre 1.9 normally use getBoxObjectFor to calculate the
-  // position. When invoked for an element with position absolute and a negative
-  // position though it can be off by one. Therefor the recursive implementation
-  // is used in those (relatively rare) cases.
-  var BUGGY_GECKO_BOX_OBJECT =
-      !goog.style.GET_BOUNDING_CLIENT_RECT_ALWAYS_EXISTS &&
-      goog.userAgent.GECKO && doc.getBoxObjectFor &&
-      !el.getBoundingClientRect && positionStyle == 'absolute' &&
-      (box = doc.getBoxObjectFor(el)) && (box.screenX < 0 || box.screenY < 0);
-
   // NOTE(arv): If element is hidden (display none or disconnected or any the
   // ancestors are hidden) we get (0,0) by default but we still do the
   // accumulation of scroll position.
@@ -726,6 +699,10 @@ goog.style.getPageOffset = function(el) {
     return pos;
   }
 
+  // TODO(nnaze): Drop the else case. getBoundingClientRect
+  // always exists on modern browsers.
+  // https://developer.mozilla.org/en-US/docs/Web/API/element.getBoundingClientRect
+
   // IE, Gecko 1.9+, and most modern WebKit.
   if (goog.style.GET_BOUNDING_CLIENT_RECT_ALWAYS_EXISTS ||
       el.getBoundingClientRect) {
@@ -736,21 +713,6 @@ goog.style.getPageOffset = function(el) {
     var scrollCoord = goog.dom.getDomHelper(doc).getDocumentScroll();
     pos.x = box.left + scrollCoord.x;
     pos.y = box.top + scrollCoord.y;
-
-  // Gecko prior to 1.9.
-  } else if (doc.getBoxObjectFor && !BUGGY_GECKO_BOX_OBJECT) {
-    // Gecko ignores the scroll values for ancestors, up to 1.9.  See:
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=328881 and
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=330619
-
-    box = doc.getBoxObjectFor(el);
-    // TODO(user): Fix the off-by-one error when window is scrolled down
-    // or right more than 1 pixel. The viewport offset does not move in lock
-    // step with the window scroll; it moves in increments of 2px and at
-    // somewhat random intervals.
-    var vpBox = doc.getBoxObjectFor(viewportElement);
-    pos.x = box.screenX - vpBox.screenX;
-    pos.y = box.screenY - vpBox.screenY;
 
   // Safari, Opera and Camino up to 1.0.4.
   } else {
@@ -1486,11 +1448,6 @@ goog.style.setInlineBlock = function(el) {
     // Zoom:1 forces hasLayout, display:inline gives inline behavior.
     style.zoom = '1';
     style.display = 'inline';
-  } else if (goog.userAgent.GECKO) {
-    // Pre-Firefox 3, Gecko doesn't support inline-block, but -moz-inline-box
-    // is close enough.
-    style.display = goog.userAgent.isVersionOrHigher('1.9a') ? 'inline-block' :
-        '-moz-inline-box';
   } else {
     // Opera, Webkit, and Safari seem to do OK with the standard inline-block
     // style.

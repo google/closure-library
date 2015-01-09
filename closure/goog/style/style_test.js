@@ -2035,20 +2035,6 @@ function testGetVisibleRectForElementInsideNestedScrollableArea() {
   assertNull(goog.style.getVisibleRectForElement(el));
 }
 
-function testGeckoMacOrX11RoundPosition() {
-  if ((goog.userAgent.MAC || goog.userAgent.X11) && goog.userAgent.GECKO &&
-      goog.userAgent.isVersionOrHigher('1.9')) {
-
-    var pos = new goog.math.Coordinate(1.5, 1.4);
-    var el = document.createElement('div');
-    goog.style.setPosition(el, pos);
-    assertEquals('The left position should have been rounded',
-                 '2px', el.style.left);
-    assertEquals('The top position should have been rounded',
-                 '1px', el.style.top);
-  }
-}
-
 function testScrollIntoContainerViewQuirks() {
   if (goog.dom.isCss1CompatMode()) return;
 
