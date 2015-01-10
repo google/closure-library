@@ -273,9 +273,9 @@ goog.functions.not = function(f) {
  */
 goog.functions.create = function(constructor, var_args) {
   /**
- * @constructor
- * @final
- */
+   * @constructor
+   * @final
+   */
   var temp = function() {};
   temp.prototype = constructor.prototype;
 
