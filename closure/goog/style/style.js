@@ -40,7 +40,6 @@ goog.require('goog.userAgent');
 
 
 /**
- * TODO(nnaze): Remove this flag and its uses in a standalone CL.
  * @define {boolean} Whether we know at compile time that
  *     getBoundingClientRect() is present and bug-free on the browser.
  */
@@ -680,7 +679,7 @@ goog.style.getClientLeftTop = function(el) {
  * @return {!goog.math.Coordinate} The page offset.
  */
 goog.style.getPageOffset = function(el) {
-  var doc = goog.dom.getOwnerDocument(el);
+  var box, doc = goog.dom.getOwnerDocument(el);
   var positionStyle = goog.style.getStyle_(el, 'position');
   // TODO(gboyer): Update the jsdoc in a way that doesn't break the universe.
   goog.asserts.assertObject(el, 'Parameter is required');
@@ -700,13 +699,61 @@ goog.style.getPageOffset = function(el) {
     return pos;
   }
 
-  var box = goog.style.getBoundingClientRect_(el);
-  // Must add the scroll coordinates in to get the absolute page offset
-  // of element since getBoundingClientRect returns relative coordinates to
-  // the viewport.
-  var scrollCoord = goog.dom.getDomHelper(doc).getDocumentScroll();
-  pos.x = box.left + scrollCoord.x;
-  pos.y = box.top + scrollCoord.y;
+  // TODO(nnaze): Drop the else case. getBoundingClientRect
+  // always exists on modern browsers.
+  // https://developer.mozilla.org/en-US/docs/Web/API/element.getBoundingClientRect
+
+  // IE, Gecko 1.9+, and most modern WebKit.
+  if (goog.style.GET_BOUNDING_CLIENT_RECT_ALWAYS_EXISTS ||
+      el.getBoundingClientRect) {
+    box = goog.style.getBoundingClientRect_(el);
+    // Must add the scroll coordinates in to get the absolute page offset
+    // of element since getBoundingClientRect returns relative coordinates to
+    // the viewport.
+    var scrollCoord = goog.dom.getDomHelper(doc).getDocumentScroll();
+    pos.x = box.left + scrollCoord.x;
+    pos.y = box.top + scrollCoord.y;
+
+  // Safari, Opera and Camino up to 1.0.4.
+  } else {
+    var parent = el;
+    do {
+      pos.x += parent.offsetLeft;
+      pos.y += parent.offsetTop;
+      // For safari/chrome, we need to add parent's clientLeft/Top as well.
+      if (parent != el) {
+        pos.x += parent.clientLeft || 0;
+        pos.y += parent.clientTop || 0;
+      }
+      // In Safari when hit a position fixed element the rest of the offsets
+      // are not correct.
+      if (goog.userAgent.WEBKIT &&
+          goog.style.getComputedPosition(parent) == 'fixed') {
+        pos.x += doc.body.scrollLeft;
+        pos.y += doc.body.scrollTop;
+        break;
+      }
+      parent = parent.offsetParent;
+    } while (parent && parent != el);
+
+    // Opera & (safari absolute) incorrectly account for body offsetTop.
+    if (goog.userAgent.OPERA || (goog.userAgent.WEBKIT &&
+        positionStyle == 'absolute')) {
+      pos.y -= doc.body.offsetTop;
+    }
+
+    for (parent = el; (parent = goog.style.getOffsetParent(parent)) &&
+        parent != doc.body && parent != viewportElement; ) {
+      pos.x -= parent.scrollLeft;
+      // Workaround for a bug in Opera 9.2 (and earlier) where table rows may
+      // report an invalid scroll top value. The bug was fixed in Opera 9.5
+      // however as that version supports getBoundingClientRect it won't
+      // trigger this code path. https://bugs.opera.com/show_bug.cgi?id=249965
+      if (!goog.userAgent.OPERA || parent.tagName != 'TR') {
+        pos.y -= parent.scrollTop;
+      }
+    }
+  }
 
   return pos;
 };
@@ -825,8 +872,28 @@ goog.style.getRelativePosition = function(a, b) {
  * @private
  */
 goog.style.getClientPositionForElement_ = function(el) {
-  var box = goog.style.getBoundingClientRect_(el);
-  return new goog.math.Coordinate(box.left, box.top);
+  var pos;
+  if (goog.style.GET_BOUNDING_CLIENT_RECT_ALWAYS_EXISTS ||
+      el.getBoundingClientRect) {
+    // IE, Gecko 1.9+, and most modern WebKit
+    var box = goog.style.getBoundingClientRect_(el);
+    pos = new goog.math.Coordinate(box.left, box.top);
+  } else {
+    var scrollCoord = goog.dom.getDomHelper(el).getDocumentScroll();
+    var pageCoord = goog.style.getPageOffset(el);
+    pos = new goog.math.Coordinate(
+        pageCoord.x - scrollCoord.x,
+        pageCoord.y - scrollCoord.y);
+  }
+
+  // Gecko below version 12 doesn't add CSS translation to the client position
+  // (using either getBoundingClientRect or getBoxOffsetFor) so we need to do
+  // so manually.
+  if (goog.userAgent.GECKO && !goog.userAgent.isVersionOrHigher(12)) {
+    return goog.math.Coordinate.sum(pos, goog.style.getCssTranslation(el));
+  } else {
+    return pos;
+  }
 };
 
 
