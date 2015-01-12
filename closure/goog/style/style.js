@@ -40,14 +40,6 @@ goog.require('goog.userAgent');
 
 
 /**
- * TODO(nnaze): Remove this flag and its uses in a standalone CL.
- * @define {boolean} Whether we know at compile time that
- *     getBoundingClientRect() is present and bug-free on the browser.
- */
-goog.define('goog.style.GET_BOUNDING_CLIENT_RECT_ALWAYS_EXISTS', false);
-
-
-/**
  * Sets a style value on an element.
  *
  * This function is not indended to patch issues in the browser's style
