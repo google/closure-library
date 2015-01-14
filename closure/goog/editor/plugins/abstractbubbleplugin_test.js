@@ -383,6 +383,13 @@ function testSetTabbableSetsTabIndex() {
   assertEquals('0', element2.getAttribute('tabIndex'));
 }
 
+function testDisable() {
+  testCreateBubble();
+  fieldMock.setUneditable(true);
+  bubblePlugin.disable(fieldMock);
+  bubblePlugin.closeBubble();
+}
+
 
 /**
  * Sends a tab key event to the bubble.
