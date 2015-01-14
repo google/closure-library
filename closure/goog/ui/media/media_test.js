@@ -103,3 +103,28 @@ function testDoesntCreatesCaptionIfUnavailable() {
   assertNotNull(description);
   incompleteMedia.dispose();
 }
+
+function testSetAriaLabel() {
+  var model = new goog.ui.media.MediaModel(
+      'http://url.com', 'a caption', 'a description');
+  var thumb1 = new goog.ui.media.MediaModel.Thumbnail(
+      'http://thumb.com/small.jpg', new goog.math.Size(320, 288));
+  var thumb2 = new goog.ui.media.MediaModel.Thumbnail(
+      'http://thumb.com/big.jpg', new goog.math.Size(800, 600));
+  model.setThumbnails([thumb1, thumb2]);
+  model.setPlayer(new goog.ui.media.MediaModel.Player(
+      'http://media/player.swf'));
+  var control = new goog.ui.media.Media(model, renderer);
+  assertNull('Media must not have aria label by default',
+      control.getAriaLabel());
+  control.setAriaLabel('My media');
+  control.render();
+  var element = control.getElementStrict();
+  assertNotNull('Element must not be null', element);
+  assertEquals('Media element must have expected aria-label', 'My media',
+      element.getAttribute('aria-label'));
+  assertTrue(goog.dom.isFocusableTabIndex(element));
+  control.setAriaLabel('My new media');
+  assertEquals('Media element must have updated aria-label', 'My new media',
+      element.getAttribute('aria-label'));
+}

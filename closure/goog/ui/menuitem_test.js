@@ -565,3 +565,19 @@ function testHandleMouseUp() {
       item.getElement(), undefined, COORDS_2);
   assertFalse('Action should not be performed on mouseup', actionPerformed);
 }
+
+function testSetAriaLabel() {
+  assertNull('Item must not have aria label by default', item.getAriaLabel());
+  item.setAriaLabel('Item 1');
+  item.render(sandbox);
+  var el = item.getElementStrict();
+  assertEquals('Item element must have expected aria-label', 'Item 1',
+      el.getAttribute('aria-label'));
+  assertEquals('Item element must have expected aria-role', 'menuitem',
+      el.getAttribute('role'));
+  item.setAriaLabel('Item 2');
+  assertEquals('Item element must have updated aria-label', 'Item 2',
+      el.getAttribute('aria-label'));
+  assertEquals('Item element must have expected aria-role', 'menuitem',
+      el.getAttribute('role'));
+}

@@ -432,3 +432,20 @@ function validateCheckBox(span, state, opt_disabled) {
       !opt_disabled, testCheckbox.isEnabled());
   testCheckbox.dispose();
 }
+
+function testSetAriaLabel() {
+  assertNull('Checkbox must not have aria label by default',
+      checkbox.getAriaLabel());
+  checkbox.setAriaLabel('Checkbox 1');
+  checkbox.render();
+  var el = checkbox.getElementStrict();
+  assertEquals('Checkbox element must have expected aria-label', 'Checkbox 1',
+      el.getAttribute('aria-label'));
+  assertEquals('Checkbox element must have expected aria-role', 'checkbox',
+      el.getAttribute('role'));
+  checkbox.setAriaLabel('Checkbox 2');
+  assertEquals('Checkbox element must have updated aria-label', 'Checkbox 2',
+      el.getAttribute('aria-label'));
+  assertEquals('Checkbox element must have expected aria-role', 'checkbox',
+      el.getAttribute('role'));
+}

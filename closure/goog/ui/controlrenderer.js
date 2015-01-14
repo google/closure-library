@@ -422,6 +422,11 @@ goog.ui.ControlRenderer.prototype.setAriaStates = function(control, element) {
   goog.asserts.assert(control);
   goog.asserts.assert(element);
 
+  var ariaLabel = control.getAriaLabel();
+  if (goog.isDefAndNotNull(ariaLabel)) {
+    this.setAriaLabel(element, ariaLabel);
+  }
+
   if (!control.isVisible()) {
     goog.a11y.aria.setState(
         element, goog.a11y.aria.State.HIDDEN, !control.isVisible());
@@ -442,6 +447,17 @@ goog.ui.ControlRenderer.prototype.setAriaStates = function(control, element) {
     this.updateAriaState(
         element, goog.ui.Component.State.OPENED, control.isOpen());
   }
+};
+
+
+/**
+ * Sets the element's ARIA label. This should be overriden by subclasses that
+ * don't apply the role directly on control.element_.
+ * @param {!Element} element Element whose ARIA label is to be updated.
+ * @param {string} ariaLabel Label to add to the element.
+ */
+goog.ui.ControlRenderer.prototype.setAriaLabel = function(element, ariaLabel) {
+  goog.a11y.aria.setLabel(element, ariaLabel);
 };
 
 

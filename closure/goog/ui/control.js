@@ -77,6 +77,9 @@ goog.ui.Control = function(opt_content, opt_renderer, opt_domHelper) {
   this.renderer_ = opt_renderer ||
       goog.ui.registry.getDefaultRenderer(this.constructor);
   this.setContentInternal(goog.isDef(opt_content) ? opt_content : null);
+
+  /** @private {?string} The control's aria-label. */
+  this.ariaLabel_ = null;
 };
 goog.inherits(goog.ui.Control, goog.ui.Component);
 goog.tagUnsealableClass(goog.ui.Control);
@@ -454,6 +457,30 @@ goog.ui.Control.prototype.getPreferredAriaRole = function() {
  */
 goog.ui.Control.prototype.setPreferredAriaRole = function(role) {
   this.preferredAriaRole_ = role;
+};
+
+
+/**
+ * Gets the control's aria label.
+ * @return {?string} This control's aria label.
+ */
+goog.ui.Control.prototype.getAriaLabel = function() {
+  return this.ariaLabel_;
+};
+
+
+/**
+ * Sets the control's aria label. This can be used to assign aria label to the
+ * element after it is rendered.
+ * @param {string} label The string to set as the aria label for this control.
+ *     No escaping is done on this value.
+ */
+goog.ui.Control.prototype.setAriaLabel = function(label) {
+  this.ariaLabel_ = label;
+  var element = this.getElement();
+  if (element) {
+    this.renderer_.setAriaLabel(element, label);
+  }
 };
 
 

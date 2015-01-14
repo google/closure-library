@@ -704,6 +704,62 @@ function testGetContentForDecoratedControl() {
 
 
 /**
+ * Tests {@link goog.ui.Control#setAriaLabel}.
+ */
+function testSetAriaLabel_render() {
+  assertNull('Controls must not have any aria label by default',
+      control.getAriaLabel());
+
+  control.setAriaLabel('label');
+  assertEquals('Control must have aria label', 'label', control.getAriaLabel());
+
+  control.render(sandbox);
+
+  var elem = control.getElementStrict();
+  assertEquals(
+      'Element must have control\'s aria label after rendering',
+      'label',
+      goog.a11y.aria.getLabel(elem));
+
+  control.setAriaLabel('new label');
+  assertEquals('Element must have the new aria label',
+      'new label',
+      goog.a11y.aria.getLabel(elem));
+}
+
+
+/**
+ * Tests {@link goog.ui.Control#setAriaLabel}.
+ */
+function testSetAriaLabel_decorate() {
+  assertNull('Controls must not have any aria label by default',
+      control.getAriaLabel());
+
+  control.setAriaLabel('label');
+  assertEquals('Control must have aria label', 'label', control.getAriaLabel());
+
+  sandbox.innerHTML = '<div id="nodelist" role="button">' +
+      'Hello, <b>world</b>!</div>';
+  control.decorate(goog.dom.getElement('nodelist'));
+
+  var elem = control.getElementStrict();
+  assertEquals(
+      'Element must have control\'s aria label after rendering',
+      'label',
+      goog.a11y.aria.getLabel(elem));
+  assertEquals(
+      'Element must have the correct role',
+      'button',
+      elem.getAttribute('role'));
+
+  control.setAriaLabel('new label');
+  assertEquals('Element must have the new aria label',
+      'new label',
+      goog.a11y.aria.getLabel(elem));
+}
+
+
+/**
  * Tests {@link goog.ui.Control#setContent}.
  */
 function testSetContent() {
