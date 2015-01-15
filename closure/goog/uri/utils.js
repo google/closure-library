@@ -607,8 +607,10 @@ goog.uri.utils.QueryArray;
  * @param {string} encodedQuery Encoded query string excluding question mark at
  *     the beginning.
  * @param {function(string, string)} callback Function called for every
- *     parameter found in query string.  If the parameter has no value (i.e. “=”
- *     was not present) the second argument (value) will be null.
+ *     parameter found in query string.  The first argument (name) will not be
+ *     urldecoded (so the function is consistent with buildQueryData), but the
+ *     second will.  If the parameter has no value (i.e. “=” was not present)
+ *     the second argument (value) will be an empty string.
  */
 goog.uri.utils.parseQueryData = function(encodedQuery, callback) {
   var pairs = encodedQuery.split('&');
@@ -622,8 +624,7 @@ goog.uri.utils.parseQueryData = function(encodedQuery, callback) {
     } else {
       name = pairs[i];
     }
-    callback(goog.string.urlDecode(name),
-             value ? goog.string.urlDecode(value) : '');
+    callback(name, value ? goog.string.urlDecode(value) : '');
   }
 };
 

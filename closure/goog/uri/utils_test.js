@@ -578,15 +578,24 @@ function testParseQuery() {
   var result = [];
   goog.uri.utils.parseQueryData(
       'foo=bar&no&empty=&tricky%3D%26=%3D%26&=nothing&=&',
-      function(name, value) { result.push([name, value]); });
-  assertArrayEquals([['foo', 'bar'],
-                     ['no', ''],
-                     ['empty', ''],
-                     ['tricky=&', '=&'],
-                     ['', 'nothing'],
-                     ['', ''],
-                     ['', '']],
-                    result);
+      function(name, value) { result.push(name, value); });
+  assertArrayEquals(
+      ['foo', 'bar',
+       'no', '',
+       'empty', '',
+       'tricky%3D%26', '=&',
+       '', 'nothing',
+       '', '',
+       '', ''],
+      result);
+
+  // Go thought buildQueryData and parseQueryData and see if we get the same
+  // result.
+  var result2 = [];
+  goog.uri.utils.parseQueryData(
+      goog.uri.utils.buildQueryData(result),
+      function(name, value) { result2.push(name, value); });
+  assertArrayEquals(result, result2);
 }
 
 

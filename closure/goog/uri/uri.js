@@ -1088,8 +1088,10 @@ goog.Uri.QueryData.prototype.ensureKeyMapInitialized_ = function() {
     this.keyMap_ = new goog.structs.Map();
     this.count_ = 0;
     if (this.encodedQuery_) {
-      goog.uri.utils.parseQueryData(this.encodedQuery_,
-                                    goog.bind(this.add, this));
+      var self = this;
+      goog.uri.utils.parseQueryData(this.encodedQuery_, function(name, value) {
+        self.add(goog.string.urlDecode(name), value);
+      });
     }
   }
 };
