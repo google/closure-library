@@ -363,7 +363,7 @@ goog.dom.forms.setValue = function(el, opt_value) {
  * @private
  */
 goog.dom.forms.setInputChecked_ = function(el, opt_value) {
-  el.checked = opt_value ? 'checked' : null;
+  el.checked = opt_value;
 };
 
 
