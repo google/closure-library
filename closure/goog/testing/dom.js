@@ -205,7 +205,7 @@ goog.testing.dom.nodeFilter_ = function(node) {
     if (match) {
       return goog.testing.dom.checkUserAgents_(match[1]);
     }
-  } else if (node.className) {
+  } else if (node.className && goog.isString(node.className)) {
     return goog.testing.dom.checkUserAgents_(node.className);
   }
   return true;
