@@ -228,10 +228,10 @@ goog.net.WebChannel.prototype.getRuntimeProperties = goog.abstractMethod;
 
 
 /**
- * The readonly runtime properties of the WebChannel instance.
+ * The runtime properties of the WebChannel instance.
  *
- * This class is defined for debugging and monitoring purposes, and for
- * optimization functions that the application may choose to manage by itself.
+ * This class is defined for debugging and monitoring purposes, as well as for
+ * runtime functions that the application may choose to manage by itself.
  *
  * @interface
  */
