@@ -101,6 +101,14 @@ goog.debug.Formatter.prototype.formatRecord = goog.abstractMethod;
 
 
 /**
+ * Formats a record as SafeHtml.
+ * @param {goog.debug.LogRecord} logRecord the logRecord to format.
+ * @return {!goog.html.SafeHtml} The formatted string as SafeHtml.
+ */
+goog.debug.Formatter.prototype.formatRecordAsHtml = goog.abstractMethod;
+
+
+/**
  * Sets the start time provider. By default, this is the default instance
  * but can be changed.
  * @param {goog.debug.RelativeTimeProvider} provider The provider to use.
@@ -234,10 +242,15 @@ goog.debug.HtmlFormatter.prototype.formatRecord = function(logRecord) {
 
 /**
  * Formats a record.
- * @param {!goog.debug.LogRecord} logRecord the logRecord to format.
+ * @param {goog.debug.LogRecord} logRecord the logRecord to format.
  * @return {!goog.html.SafeHtml} The formatted string as SafeHtml.
+ * @override
  */
 goog.debug.HtmlFormatter.prototype.formatRecordAsHtml = function(logRecord) {
+  if (!logRecord) {
+    return goog.html.SafeHtml.EMPTY;
+  }
+
   var className;
   switch (logRecord.getLevel().value) {
     case goog.debug.Logger.Level.SHOUT.value:
@@ -328,7 +341,6 @@ goog.inherits(goog.debug.TextFormatter, goog.debug.Formatter);
  * @override
  */
 goog.debug.TextFormatter.prototype.formatRecord = function(logRecord) {
-  // Build message html
   var sb = [];
   sb.push(this.prefix_, ' ');
   if (this.showAbsoluteTime) {
@@ -359,4 +371,17 @@ goog.debug.TextFormatter.prototype.formatRecord = function(logRecord) {
     sb.push('\n');
   }
   return sb.join('');
+};
+
+
+/**
+ * Formats a record as text
+ * @param {goog.debug.LogRecord} logRecord the logRecord to format.
+ * @return {!goog.html.SafeHtml} The formatted string as SafeHtml. This is
+ *     just an HTML-escaped version of the text obtained from formatRecord().
+ * @override
+ */
+goog.debug.TextFormatter.prototype.formatRecordAsHtml = function(logRecord) {
+  return goog.html.SafeHtml.htmlEscapePreservingNewlinesAndSpaces(
+      goog.debug.TextFormatter.prototype.formatRecord(logRecord));
 };
