@@ -52,7 +52,6 @@ function updateUserAgentUtils() {
   goog.userAgent.product.OPERA = goog.userAgent.OPERA;
   goog.userAgent.product.IE = goog.userAgent.IE;
   goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
-  goog.userAgent.product.CAMINO = goog.userAgent.product.detectedCamino_;
   goog.userAgent.product.IPHONE = goog.userAgent.product.detectedIphone_;
   goog.userAgent.product.IPAD = goog.userAgent.product.detectedIpad_;
   goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
@@ -64,13 +63,12 @@ function updateUserAgentUtils() {
 // The set of products whose corresponding goog.userAgent.product value is set
 // in goog.userAgent.product.init_().
 var DETECTED_BROWSER_KEYS =
-    ['FIREFOX', 'CAMINO', 'IPHONE', 'IPAD', 'ANDROID', 'CHROME', 'SAFARI'];
+    ['FIREFOX', 'IPHONE', 'IPAD', 'ANDROID', 'CHROME', 'SAFARI'];
 
 function assertIsBrowser(browser) {
   function createDetectedBrowserKey(browser) {
     switch (browser) {
       case 'FIREFOX': return 'detectedFirefox_';
-      case 'CAMINO': return 'detectedCamino_';
       case 'IPHONE': return 'detectedIphone_';
       case 'IPAD': return 'detectedIpad_';
       case 'ANDROID': return 'detectedAndroid_';
@@ -213,27 +211,6 @@ function testFirefox() {
   assertBrowserAndVersion(
       'Mozilla/5.0 (X11; Linux i686; rv:6.0) Gecko/6.0 Firefox/6.0',
       'FIREFOX', '6.0');
-}
-
-function testCamino() {
-  var userAgents = [
-    {ua: 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en; rv:1.8.1.11) ' +
-          'Gecko/20071128 Camino/1.5.4',
-      versions: [
-        {num: '1.5.4', truth: true},
-        {num: 1, truth: true},
-        {num: '2.0', truth: false}
-      ]},
-    {ua: 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.0.10) ' +
-          'Gecko/20070228 Camino/1.0.4',
-      versions: [
-        {num: '1.5.4', truth: false},
-        {num: 1, truth: true},
-        {num: '2.0', truth: false}
-      ]}
-  ];
-  mockAgent.setNavigator({vendor: 'Camino', product: 'Gecko'});
-  checkEachUserAgentDetected(userAgents, 'CAMINO');
 }
 
 function testChrome() {

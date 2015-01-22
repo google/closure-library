@@ -67,7 +67,6 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   // Update goog.userAgent.product
   goog.userAgent.product.init_();
   goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
-  goog.userAgent.product.CAMINO = goog.userAgent.product.detectedCamino_;
   goog.userAgent.product.CHROME = goog.userAgent.product.detectedChrome_;
   goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
   goog.userAgent.product.IE = goog.userAgent.IE;

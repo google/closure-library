@@ -80,10 +80,6 @@ function testMac() {
   var ff = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US;' +
       'rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7 GTB6';
 
-  // An old camino version that doesn't report a Mac version.
-  var camino = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en; rv:1.8.1.11)' +
-      'Gecko/20071128 Camino/1.5.4';
-
   mockAgent.setNavigator({platform: 'IntelMac'});
 
   mockAgent.setUserAgentString(chrome);
@@ -93,10 +89,6 @@ function testMac() {
   mockAgent.setUserAgentString(ff);
   updateUserAgentUtils();
   assertEquals('10.5', goog.userAgent.platform.VERSION);
-
-  mockAgent.setUserAgentString(camino);
-  updateUserAgentUtils();
-  assertEquals('10', goog.userAgent.platform.VERSION);
 }
 
 function testChromeOnAndroid() {

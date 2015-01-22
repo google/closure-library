@@ -29,12 +29,6 @@ goog.define('goog.userAgent.product.ASSUME_FIREFOX', false);
 
 
 /**
- * @define {boolean} Whether the code is running on the Camino web browser.
- */
-goog.define('goog.userAgent.product.ASSUME_CAMINO', false);
-
-
-/**
  * @define {boolean} Whether we know at compile-time that the product is an
  *     iPhone.
  */
@@ -76,7 +70,6 @@ goog.userAgent.product.PRODUCT_KNOWN_ =
     goog.userAgent.ASSUME_IE ||
     goog.userAgent.ASSUME_OPERA ||
     goog.userAgent.product.ASSUME_FIREFOX ||
-    goog.userAgent.product.ASSUME_CAMINO ||
     goog.userAgent.product.ASSUME_IPHONE ||
     goog.userAgent.product.ASSUME_IPAD ||
     goog.userAgent.product.ASSUME_ANDROID ||
@@ -100,13 +93,6 @@ goog.userAgent.product.init_ = function() {
    * @private
    */
   goog.userAgent.product.detectedFirefox_ = false;
-
-  /**
-   * Whether the code is running on the Camino web browser.
-   * @type {boolean}
-   * @private
-   */
-  goog.userAgent.product.detectedCamino_ = false;
 
   /**
    * Whether the code is running on an iPhone or iPod touch.
@@ -156,8 +142,6 @@ goog.userAgent.product.init_ = function() {
 
   if (ua.indexOf('Firefox') != -1) {
     goog.userAgent.product.detectedFirefox_ = true;
-  } else if (ua.indexOf('Camino') != -1) {
-    goog.userAgent.product.detectedCamino_ = true;
   } else if (ua.indexOf('iPad') != -1) {
     goog.userAgent.product.detectedIpad_ = true;
   } else if (ua.indexOf('iPhone') != -1 || ua.indexOf('iPod') != -1) {
@@ -197,15 +181,6 @@ goog.userAgent.product.IE = goog.userAgent.IE;
 goog.userAgent.product.FIREFOX = goog.userAgent.product.PRODUCT_KNOWN_ ?
     goog.userAgent.product.ASSUME_FIREFOX :
     goog.userAgent.product.detectedFirefox_;
-
-
-/**
- * Whether the code is running on the Camino web browser.
- * @type {boolean}
- */
-goog.userAgent.product.CAMINO = goog.userAgent.product.PRODUCT_KNOWN_ ?
-    goog.userAgent.product.ASSUME_CAMINO :
-    goog.userAgent.product.detectedCamino_;
 
 
 /**
