@@ -83,7 +83,8 @@ function assertIsBrowser(browser) {
   }
 
   var productKey = createDetectedBrowserKey(browser);
-  assertTrue(goog.userAgent.product[productKey]);
+  assertTrue('Expected goog.userAgent.product.' + productKey + '=true',
+             goog.userAgent.product[productKey]);
   // Make sure we don't have any false positives for other browsers.
   goog.array.forEach(DETECTED_BROWSER_KEYS, function(el) {
     if (el != browser) {
@@ -179,6 +180,20 @@ function testOpera() {
 
 function testFirefox() {
   var userAgents = [
+    {ua: 'Mozilla/5.0 (Android; Mobile; rv:35.0) Gecko/35.0 Firefox/35.0',
+      versions: [
+        {num: '34.01', truth: true},
+        {num: 35, truth: true},
+        {num: '35.01', truth: false},
+        {num: '36.0', truth: false}
+      ]},
+    {ua: 'Mozilla/5.0 (Android; Tablet; rv:35.0) Gecko/35.0 Firefox/35.0',
+      versions: [
+        {num: '34.01', truth: true},
+        {num: '35', truth: true},
+        {num: '35.01', truth: false},
+        {num: '36.0', truth: false}
+      ]},
     {ua: 'Mozilla/6.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; ' +
           'rv:2.0.0.0) Gecko/20061028 Firefox/3.0',
       versions: [
@@ -238,6 +253,38 @@ function testCamino() {
 
 function testChrome() {
   var userAgents = [
+    // Chrome 39 on Android tablet (or some non-phone, there's not 'Mobile').
+    {ua: 'Mozilla/5.0 (Linux; Android 4.4.4; Nexus 7 Build/KTU84P) ' +
+          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.93 ' +
+          'Safari/537.36',
+      versions: [
+        {num: 39, truth: true},
+        {num: '39.0.1000.0', truth: true},
+        {num: '39.0.3000.0', truth: false},
+        {num: 40, truth: false}
+      ]},
+    // Chrome 39 on Android phone (there's 'Mobile').
+    {ua: 'Mozilla/5.0 (Linux; Android 4.4.2; S8 Build/KOT49H) ' +
+          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.93 ' +
+          'Mobile Safari/537.36',
+      versions: [
+        {num: 39, truth: true},
+        {num: '39.0.1000.0', truth: true},
+        {num: '39.0.3000.0', truth: false},
+        {num: 40, truth: false}
+      ]},
+    // Chromium based AOSP browser and Chromium based WebView (both KitKat+).
+    // None of those are 'Chrome' although functuonally close enough.
+    // Could be distinguished by 'Version/4.0' (not found in Chrome).
+    {ua: 'Mozilla/5.0 (Linux; Android 4.4.2; S8 Build/KOT49H) ' +
+          'AppleWebKit/537.36 (KHTML, like Gecko) ' +
+          'Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36',
+      versions: [
+        {num: 29, truth: true},
+        {num: 30, truth: true},
+        {num: '30.0.0.1', truth: false},
+        {num: 31, truth: false}
+      ]},
     {ua: 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) ' +
           'AppleWebKit/525.19 (KHTML, like Gecko) Chrome/0.2.153.0 ' +
           'Safari/525.19',
@@ -360,6 +407,14 @@ function testIpad() {
 
 function testAndroid() {
   var userAgents = [
+    // Pre KitKat Android WebView.
+    {ua: 'Mozilla/5.0 (Linux; U; Android 4.1.1; en-gb; Build/KLP) ' +
+          'AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30',
+      versions: [
+        {num: 4, truth: true},
+        {num: '4.1', truth: true},
+        {num: '4.2', truth: false}
+      ]},
     {ua: 'Mozilla/5.0 (Linux; U; Android 0.5; en-us) AppleWebKit/522+ ' +
           '(KHTML, like Gecko) Safari/419.3',
       versions: [

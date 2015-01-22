@@ -50,13 +50,14 @@ goog.define('goog.userAgent.product.ASSUME_IPAD', false);
 
 /**
  * @define {boolean} Whether we know at compile-time that the product is an
- *     Android phone.
+ *     AOSP browser or WebView inside a pre KitKat Android phone or tablet.
  */
 goog.define('goog.userAgent.product.ASSUME_ANDROID', false);
 
 
 /**
- * @define {boolean} Whether the code is running on the Chrome web browser.
+ * @define {boolean} Whether the code is running on the Chrome web browser on
+ * any platform or AOSP browser or WebView in a KitKat+ Android phone or tablet.
  */
 goog.define('goog.userAgent.product.ASSUME_CHROME', false);
 
@@ -123,14 +124,16 @@ goog.userAgent.product.init_ = function() {
   goog.userAgent.product.detectedIpad_ = false;
 
   /**
-   * Whether the code is running on the default browser on an Android phone.
+   * Whether the code is running on AOSP browser or WebView inside
+   * a pre KitKat Android phone or tablet.
    * @type {boolean}
    * @private
    */
   goog.userAgent.product.detectedAndroid_ = false;
 
   /**
-   * Whether the code is running on the Chrome web browser.
+   * Whether the code is running on the Chrome web browser on any platform
+   * or AOSP browser or WebView in a KitKat+ Android phone or tablet.
    * @type {boolean}
    * @private
    */
@@ -227,7 +230,8 @@ goog.userAgent.product.IPAD = goog.userAgent.product.PRODUCT_KNOWN_ ?
 
 
 /**
- * Whether the code is running on the default browser on an Android phone.
+ * Whether the code is running on AOSP browser or WebView inside
+ * a pre KitKat Android phone or tablet.
  * @type {boolean}
  */
 goog.userAgent.product.ANDROID = goog.userAgent.product.PRODUCT_KNOWN_ ?
@@ -236,7 +240,8 @@ goog.userAgent.product.ANDROID = goog.userAgent.product.PRODUCT_KNOWN_ ?
 
 
 /**
- * Whether the code is running on the Chrome web browser.
+ * Whether the code is running on the Chrome web browser on any platform
+ * or AOSP browser or WebView in a KitKat+ Android phone or tablet.
  * @type {boolean}
  */
 goog.userAgent.product.CHROME = goog.userAgent.product.PRODUCT_KNOWN_ ?
