@@ -1439,18 +1439,6 @@ goog.ui.tree.BaseNode.prototype.onKeyDown = function(e) {
 };
 
 
-/**
- * Handles a key down event.
- * @param {!goog.events.BrowserEvent} e The browser event.
- * @private
- */
-goog.ui.tree.BaseNode.prototype.onKeyPress_ = function(e) {
-  if (!e.altKey && e.keyCode >= goog.events.KeyCodes.LEFT &&
-      e.keyCode <= goog.events.KeyCodes.DOWN) {
-    e.preventDefault();
-  }
-};
-
 
 /**
  * @return {goog.ui.tree.BaseNode} The last shown descendant.

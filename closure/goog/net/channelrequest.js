@@ -838,32 +838,6 @@ goog.net.ChannelRequest.prototype.startPolling_ = function() {
 };
 
 
-/**
- * Called when the browser declares itself offline at the start of a request or
- * during its lifetime.  Abandons that request.
- * @private
- */
-goog.net.ChannelRequest.prototype.cancelRequestAsBrowserIsOffline_ =
-    function() {
-  if (this.successful_) {
-    // Should never happen.
-    this.channelDebug_.severe(
-        'Received browser offline event even though request completed ' +
-        'successfully');
-  }
-
-  this.channelDebug_.browserOfflineResponse(this.requestUri_);
-  this.cleanup_();
-
-  // set error and dispatch failure
-  this.lastError_ = goog.net.ChannelRequest.Error.BROWSER_OFFLINE;
-  /** @suppress {missingRequire} */
-  goog.net.BrowserChannel.notifyStatEvent(
-      /** @suppress {missingRequire} */
-      goog.net.BrowserChannel.Stat.BROWSER_OFFLINE);
-  this.dispatchFailure_();
-};
-
 
 /**
  * Returns the next chunk of a chunk-encoded response. This is not standard

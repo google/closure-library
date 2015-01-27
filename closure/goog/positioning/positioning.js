@@ -354,7 +354,6 @@ goog.positioning.positionAtCoordinate = function(absolutePos,
                                                  opt_overflow,
                                                  opt_preferredSize) {
   absolutePos = absolutePos.clone();
-  var status = goog.positioning.OverflowStatus.NONE;
 
   // Offset based on attached corner and desired margin.
   var corner = goog.positioning.getEffectiveCorner(movableElement,

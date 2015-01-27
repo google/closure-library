@@ -651,13 +651,6 @@ goog.net.xpc.CrossPageChannel.prototype.notifyConnected = function(opt_delay) {
 };
 
 
-/**
- * Alias for notifyConected, for backward compatibility reasons.
- * @private
- */
-goog.net.xpc.CrossPageChannel.prototype.notifyConnected_ =
-    goog.net.xpc.CrossPageChannel.prototype.notifyConnected;
-
 
 /**
  * Called by the transport in case of an unrecoverable failure.

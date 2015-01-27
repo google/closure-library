@@ -459,14 +459,6 @@ goog.net.IframeIo.prototype.lastContent_ = null;
 goog.net.IframeIo.prototype.lastErrorCode_ = goog.net.ErrorCode.NO_ERROR;
 
 
-/**
- * Window timeout ID used to cancel the timeout event handler if the request
- * completes successfully.
- * @type {?number}
- * @private
- */
-goog.net.IframeIo.prototype.timeoutId_ = null;
-
 
 /**
  * Window timeout ID used to detect when firefox silently fails.
@@ -1142,7 +1134,6 @@ goog.net.IframeIo.prototype.handleIncrementalData_ = function(data) {
  */
 goog.net.IframeIo.prototype.makeReady_ = function() {
   goog.log.info(this.logger_, 'Ready for new requests');
-  var iframe = this.iframe_;
   this.scheduleIframeDisposal_();
   this.disposeForm_();
   this.dispatchEvent(goog.net.EventType.READY);

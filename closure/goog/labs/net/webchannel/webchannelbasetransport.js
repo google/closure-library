@@ -333,13 +333,6 @@ WebChannelBaseTransport.ChannelProperties = function(channel) {
    */
   this.channel_ = channel;
 
-  /**
-   * The flag to turn on/off server-side flow control.
-   *
-   * @private {boolean}
-   */
-  this.serverFlowControlEnabled_ = false;
-
 };
 
 

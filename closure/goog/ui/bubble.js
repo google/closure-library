@@ -138,13 +138,6 @@ goog.ui.Bubble.prototype.timerId_ = 0;
 goog.ui.Bubble.prototype.listener_ = null;
 
 
-/**
- * Key returned by the listen function for the close button.
- * @type {Element}
- * @private
- */
-goog.ui.Bubble.prototype.anchor_ = null;
-
 
 /** @override */
 goog.ui.Bubble.prototype.createDom = function() {

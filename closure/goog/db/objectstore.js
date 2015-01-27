@@ -101,7 +101,6 @@ goog.db.ObjectStore.prototype.insert_ = function(fn, msg, value, opt_key) {
   request.onsuccess = function(ev) {
     d.callback();
   };
-  var self = this;
   request.onerror = function(ev) {
     msg += goog.debug.deepExpose(value);
     if (opt_key) {
