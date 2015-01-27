@@ -77,10 +77,12 @@ goog.net.WebChannel = function() {};
  * when a new instance of WebChannel is created via {@link WebChannelTransport}.
  *
  * messageHeaders: custom headers to be added to every message sent to the
- * server.
+ * server. This object is mutable, and custom headers may be changed, removed,
+ * or added during the runtime after a channel has been opened.
  *
  * messageUrlParams: custom url query parameters to be added to every message
- * sent to the server.
+ * sent to the server. This object is mutable, and custom parameters may be
+ * changed, removed or added during the runtime after a channel has been opened.
  *
  * clientProtocolHeaderRequired: whether a special header should be added to
  * each message so that the server can dispatch webchannel messages without
