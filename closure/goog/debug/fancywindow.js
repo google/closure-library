@@ -33,8 +33,10 @@ goog.require('goog.debug.Logger');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.userAgent');
 
 
@@ -87,7 +89,7 @@ goog.debug.FancyWindow.prototype.writeBufferToLog = function() {
 
     for (var i = 0; i < this.outputBuffer.length; i++) {
       var div = this.dh_.createDom('div', 'logmsg');
-      div.innerHTML = this.outputBuffer[i];
+      goog.dom.safe.setInnerHtml(div, this.outputBuffer[i]);
       logel.appendChild(div);
     }
     this.outputBuffer.length = 0;
@@ -235,7 +237,8 @@ goog.debug.FancyWindow.prototype.exit_ = function(e) {
 
 /** @override */
 goog.debug.FancyWindow.prototype.getStyleRules = function() {
-  return goog.debug.FancyWindow.base(this, 'getStyleRules') +
+  var baseRules = goog.debug.FancyWindow.base(this, 'getStyleRules');
+  var extraRules = goog.html.SafeStyleSheet.fromConstant(goog.string.Const.from(
       'html,body{height:100%;width:100%;margin:0px;padding:0px;' +
       'background-color:#FFF;overflow:hidden}' +
       '*{}' +
@@ -254,7 +257,8 @@ goog.debug.FancyWindow.prototype.getStyleRules = function() {
       '#exitbutton{text-decoration:underline;color:#00F;cursor:' +
       'pointer;position:absolute;top:0px;right:50px;font:x-small arial;}' +
       'select{font:x-small arial;margin-right:10px;}' +
-      'hr{border:0;height:5px;background-color:#8c8;color:#8c8;}';
+      'hr{border:0;height:5px;background-color:#8c8;color:#8c8;}'));
+  return goog.html.SafeStyleSheet.concat(baseRules, extraRules);
 };
 
 
@@ -268,7 +272,8 @@ goog.debug.FancyWindow.prototype.getHtml_ = function() {
       '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"' +
       '"http://www.w3.org/TR/html4/loose.dtd">' +
       '<html><head><title>Logging: ' + this.identifier + '</title>' +
-      '<style>' + this.getStyleRules() + '</style>' +
+      '<style>' + goog.html.SafeStyleSheet.unwrap(this.getStyleRules()) +
+      '</style>' +
       '</head><body>' +
       '<div id="log" style="overflow:auto"></div>' +
       '<div id="head">' +
