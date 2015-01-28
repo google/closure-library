@@ -212,7 +212,7 @@ goog.dom.getElementsByTagNameAndClass = function(opt_tag, opt_class, opt_el) {
  */
 goog.dom.getElementsByClass = function(className, opt_el) {
   var parent = opt_el || document;
-  if (parent.querySelectorAll) {
+  if (goog.dom.canUseQuerySelector_(parent)) {
     return parent.querySelectorAll('.' + className);
   }
   return goog.dom.getElementsByTagNameAndClass_(
@@ -230,7 +230,7 @@ goog.dom.getElementsByClass = function(className, opt_el) {
 goog.dom.getElementByClass = function(className, opt_el) {
   var parent = opt_el || document;
   var retVal = null;
-  if (parent.querySelector) {
+  if (goog.dom.canUseQuerySelector_(parent)) {
     retVal = parent.querySelector('.' + className);
   } else {
     retVal = goog.dom.getElementsByTagNameAndClass_(
@@ -258,6 +258,18 @@ goog.dom.getRequiredElementByClass = function(className, opt_root) {
 
 
 /**
+ * Prefer the standardized (http://www.w3.org/TR/selectors-api/), native and
+ * fast W3C Selectors API.
+ * @param {!(Element|Document)} parent The parent document object.
+ * @return {boolean} whether or not we can use parent.querySelector* APIs.
+ * @private
+ */
+goog.dom.canUseQuerySelector_ = function(parent) {
+  return !!(parent.querySelectorAll && parent.querySelector);
+};
+
+
+/**
  * Helper for {@code getElementsByTagNameAndClass}.
  * @param {!Document} doc The document to get the elements in.
  * @param {?string=} opt_tag Element tag name.
@@ -272,7 +284,8 @@ goog.dom.getElementsByTagNameAndClass_ = function(doc, opt_tag, opt_class,
   var parent = opt_el || doc;
   var tagName = (opt_tag && opt_tag != '*') ? opt_tag.toUpperCase() : '';
 
-  if (parent.querySelectorAll && (tagName || opt_class)) {
+  if (goog.dom.canUseQuerySelector_(parent) &&
+      (tagName || opt_class)) {
     var query = tagName + (opt_class ? '.' + opt_class : '');
     return parent.querySelectorAll(query);
   }
