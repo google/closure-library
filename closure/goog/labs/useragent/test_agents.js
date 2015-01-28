@@ -60,6 +60,16 @@ testAgents.ANDROID_BROWSER_403_ALT =
     ' AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30';
 
 
+// Chromium for Android. Found in Android 4.4+ devices based on AOSP, but never
+// in the 'Google' devices (where only Google Chrome is shipped).
+// UA string matches Chromium based WebView exactly, see ANDROID_WEB_VIEW_4_4.
+/** @const {string} */
+testAgents.ANDROID_BROWSER_4_4 =
+    'Mozilla/5.0 (Linux; Android 4.4.2; S8 Build/KOT49H) ' +
+    'AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 ' +
+    'Chrome/30.0.0.0 Mobile Safari/537.36';
+
+
 // See https://developer.chrome.com/multidevice/user-agent
 /** @const {string} */
 testAgents.ANDROID_WEB_VIEW_4_1_1 =
@@ -295,9 +305,22 @@ testAgents.CHROME_ANDROID =
 
 
 /** @const {string} */
+testAgents.CHROME_ANDROID_PHONE_4_4 =
+    'Mozilla/5.0 (Linux; Android 4.4.2; S8 Build/KOT49H) ' +
+    'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.93 Mobile ' +
+    'Safari/537.36';
+
+
+/** @const {string} */
 testAgents.CHROME_ANDROID_TABLET =
     'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) ' +
     'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Safari/535.19';
+
+
+/** @const {string} */
+testAgents.CHROME_ANDROID_TABLET_4_4 =
+    'Mozilla/5.0 (Linux; Android 4.4.4; Nexus 7 Build/KTU84P) ' +
+    'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.93 Safari/537.36';
 
 
 /** @const {string} */
