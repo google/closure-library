@@ -2127,6 +2127,23 @@ function testOverflowOffsetParent() {
   assertEquals(parent, goog.style.getOffsetParent(child));
 }
 
+function testShadowDomOffsetParent() {
+  // Ignore browsers that don't support shadowDOM.
+  if (!document.createShadowRoot) {
+    return;
+  }
+
+  var parent = goog.dom.createDom('DIV');
+  parent.style.position = 'relative';
+  var host = goog.dom.createDom('DIV');
+  goog.dom.appendChild(parent, host);
+  var root = host.createShadowRoot();
+  var child = goog.dom.createDom('DIV');
+  goog.dom.appendChild(root, child);
+
+  assertEquals(parent, goog.style.getOffsetParent(child));
+}
+
 function testGetViewportPageOffset() {
   expectedFailures.expectFailureFor(
       goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9),
