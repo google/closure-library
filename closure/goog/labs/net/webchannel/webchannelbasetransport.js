@@ -26,6 +26,7 @@ goog.provide('goog.labs.net.webChannel.WebChannelBaseTransport');
 
 goog.require('goog.asserts');
 goog.require('goog.events.EventTarget');
+goog.require('goog.labs.net.webChannel.ChannelRequest');
 goog.require('goog.labs.net.webChannel.WebChannelBase');
 goog.require('goog.log');
 goog.require('goog.net.WebChannel');
@@ -45,7 +46,11 @@ goog.require('goog.string.path');
  * @implements {goog.net.WebChannelTransport}
  * @final
  */
-goog.labs.net.webChannel.WebChannelBaseTransport = function() {};
+goog.labs.net.webChannel.WebChannelBaseTransport = function() {
+  if (!goog.labs.net.webChannel.ChannelRequest.supportsXhrStreaming()) {
+    throw new Error('Environmental error: no available transport.');
+  }
+};
 
 
 goog.scope(function() {

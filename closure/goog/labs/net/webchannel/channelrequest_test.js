@@ -61,6 +61,11 @@ var THROTTLE_TIME = 500;
 var ALL_DAY_MS = 1000 * 60 * 60 * 24;
 
 
+function shouldRunTests() {
+  return goog.labs.net.webChannel.ChannelRequest.supportsXhrStreaming();
+}
+
+
 function setUp() {
   mockClock = new goog.testing.MockClock();
   mockClock.install();
@@ -266,21 +271,6 @@ function testRequestTimeoutWithUnexpectedException() {
   assertEquals(1, channelRequest.channel_.completedRequests.length);
 
   checkReachabilityEvents(0, 0, 1, 0);
-}
-
-
-function testActiveXBlocked() {
-  createChannelRequest();
-  stubs.set(goog.global, 'ActiveXObject',
-      goog.functions.error('Active X blocked'));
-
-  channelRequest.tridentGet(new goog.Uri('some_uri'), false);
-  assertFalse(channelRequest.getSuccess());
-  assertEquals(
-      goog.labs.net.webChannel.ChannelRequest.Error.ACTIVE_X_BLOCKED,
-      channelRequest.getLastError());
-
-  checkReachabilityEvents(0, 0, 0, 0);
 }
 
 
