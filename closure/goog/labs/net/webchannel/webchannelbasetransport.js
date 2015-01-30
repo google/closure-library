@@ -142,17 +142,16 @@ WebChannelBaseTransport.Channel = function(url, opt_options) {
    */
   this.supportsCrossDomainXhr_ =
       (opt_options && opt_options.supportsCrossDomainXhr) || false;
+
+  /**
+   * The channel handler.
+   *
+   * @type {WebChannelBaseTransport.Channel.Handler_}
+   * @private
+   */
+  this.channelHandler_ = new WebChannelBaseTransport.Channel.Handler_(this);
 };
 goog.inherits(WebChannelBaseTransport.Channel, goog.events.EventTarget);
-
-
-/**
- * The channel handler.
- *
- * @type {WebChannelBase.Handler}
- * @private
- */
-WebChannelBaseTransport.Channel.prototype.channelHandler_ = null;
 
 
 /**
@@ -161,11 +160,10 @@ WebChannelBaseTransport.Channel.prototype.channelHandler_ = null;
  * @override
  */
 WebChannelBaseTransport.Channel.prototype.open = function() {
-  this.channel_.connect(this.testUrl_, this.url_,
-                        (this.messageUrlParams_ || undefined));
-
-  this.channelHandler_ = new WebChannelBaseTransport.Channel.Handler_(this);
   this.channel_.setHandler(this.channelHandler_);
+  this.channel_.connect(this.testUrl_, this.url_,
+      (this.messageUrlParams_ || undefined));
+
   if (this.supportsCrossDomainXhr_) {
     this.channel_.setSupportsCrossDomainXhrs(true);
   }
@@ -371,4 +369,11 @@ WebChannelBaseTransport.ChannelProperties.prototype.setServerFlowControl =
  */
 WebChannelBaseTransport.ChannelProperties.prototype.getNonAckedMessageCount =
     goog.abstractMethod;
+
+
+/** @override */
+WebChannelBaseTransport.ChannelProperties.prototype.getLastStatusCode =
+    function() {
+  return this.channel_.getLastStatusCode();
+};
 });  // goog.scope

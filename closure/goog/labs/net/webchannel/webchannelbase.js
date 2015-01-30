@@ -1795,7 +1795,7 @@ WebChannelBase.prototype.createDataUri =
 
     uri.setPort(opt_overridePort || uri.getPort());
   } else {
-    var locationPage = window.location;
+    var locationPage = goog.global.location;
     var hostName;
     if (hostPrefix) {
       hostName = hostPrefix + '.' + locationPage.hostname;
@@ -2033,8 +2033,7 @@ WebChannelBase.Handler.prototype.channelClosed =
  * Gets any parameters that should be added at the time another connection is
  * made to the server.
  * @param {WebChannelBase} channel The channel.
- * @return {!Object} Extra parameter keys and values to add to the
- *                  requests.
+ * @return {!Object} Extra parameter keys and values to add to the requests.
  */
 WebChannelBase.Handler.prototype.getAdditionalParams = function(channel) {
   return {};

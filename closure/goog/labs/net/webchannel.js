@@ -288,6 +288,13 @@ goog.net.WebChannel.RuntimeProperties.prototype.getNonAckedMessageCount =
 
 
 /**
+ * @return {number} The last HTTP status code received by the channel.
+ */
+goog.net.WebChannel.RuntimeProperties.prototype.getLastStatusCode =
+    goog.abstractMethod;
+
+
+/**
  * A special header to indicate to the server what messaging protocol
  * each HTTP message is speaking.
  *
