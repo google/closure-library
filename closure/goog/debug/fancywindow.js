@@ -40,6 +40,11 @@ goog.require('goog.string.Const');
 goog.require('goog.userAgent');
 
 
+goog.scope(function() {
+var SafeHtml = goog.html.SafeHtml;
+var SafeStyleSheet = goog.html.SafeStyleSheet;
+
+
 
 /**
  * Provides a Fancy extension to the DebugWindow class.  Allows filtering based
@@ -110,7 +115,7 @@ goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
 
   var doc = this.win.document;
   doc.open();
-  doc.write(this.getHtml_());
+  goog.dom.safe.documentWrite(doc, this.getHtml_());
   doc.close();
 
   (goog.userAgent.IE ? doc.body : this.win).onresize =
@@ -140,7 +145,7 @@ goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
  */
 goog.debug.FancyWindow.prototype.openOptions_ = function() {
   var el = this.dh_.getElement('optionsarea');
-  goog.dom.safe.setInnerHtml(el, goog.html.SafeHtml.EMPTY);
+  goog.dom.safe.setInnerHtml(el, SafeHtml.EMPTY);
 
   var loggers = goog.debug.FancyWindow.getLoggers_();
   var dh = this.dh_;
@@ -264,31 +269,31 @@ goog.debug.FancyWindow.prototype.getStyleRules = function() {
 
 /**
  * Return the default HTML for the debug window
- * @return {string} Html.
+ * @return {!goog.html.SafeHtml} Html.
  * @private
  */
 goog.debug.FancyWindow.prototype.getHtml_ = function() {
-  return '' +
-      '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"' +
-      '"http://www.w3.org/TR/html4/loose.dtd">' +
-      '<html><head><title>Logging: ' + this.identifier + '</title>' +
-      '<style>' + goog.html.SafeStyleSheet.unwrap(this.getStyleRules()) +
-      '</style>' +
-      '</head><body>' +
-      '<div id="log" style="overflow:auto"></div>' +
-      '<div id="head">' +
-      '<p><b>Logging: ' + this.identifier + '</b></p><p>' +
-      this.welcomeMessage + '</p>' +
-      '<span id="clearbutton">clear</span>' +
-      '<span id="exitbutton">exit</span>' +
-      '<span id="openbutton">options</span>' +
-      '</div>' +
-      '<div id="options">' +
-      '<big><b>Options:</b></big>' +
-      '<div id="optionsarea"></div>' +
-      '<span id="closebutton">save and close</span>' +
-      '</div>' +
-      '</body></html>';
+  var head = SafeHtml.create('head', {}, SafeHtml.concat(
+      SafeHtml.create('title', {}, 'Logging: ' + this.identifier),
+      SafeHtml.createStyle(this.getStyleRules())));
+
+  var body = SafeHtml.create('body', {}, SafeHtml.concat(
+      SafeHtml.create('div',
+          {'id': 'log', 'style': goog.string.Const.from('overflow:auto')}),
+      SafeHtml.create('div', {'id': 'head'}, SafeHtml.concat(
+          SafeHtml.create('p', {},
+              SafeHtml.create('b', {}, 'Logging: ' + this.identifier)),
+          SafeHtml.create('p', {}, this.welcomeMessage),
+          SafeHtml.create('span', {'id': 'clearbutton'}, 'clear'),
+          SafeHtml.create('span', {'id': 'exitbutton'}, 'exit'),
+          SafeHtml.create('span', {'id': 'openbutton'}, 'options'))),
+      SafeHtml.create('div', {'id': 'options'}, SafeHtml.concat(
+          SafeHtml.create('big', {},
+              goog.html.SafeHtml.create('b', {}, 'Options:')),
+          SafeHtml.create('div', {'id': 'optionsarea'}),
+          SafeHtml.create('span', {'id': 'closebutton'}, 'save and close')))));
+
+  return SafeHtml.create('html', {}, SafeHtml.concat(head, body));
 };
 
 
@@ -377,3 +382,4 @@ goog.debug.FancyWindow.getLoggers_ = function() {
   goog.array.sort(loggers, loggerSort);
   return loggers;
 };
+});  // goog.scope
