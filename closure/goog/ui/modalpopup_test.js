@@ -75,16 +75,17 @@ function testRenderWithoutIframeMask() {
 
   assertTrue(goog.dom.compareNodeOrder(bg[0], content) < 0);
   assertTrue(goog.dom.compareNodeOrder(content, tabCatcher[0]) < 0);
-  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN))));
+  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
+      goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
   popup.setVisible(true);
-  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(goog.a11y.aria.getState(
-      popup.getElementStrict(), goog.a11y.aria.State.HIDDEN))));
-  assertEquals('true', goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN));
+  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
+      goog.a11y.aria.getState(
+          popup.getElementStrict(), goog.a11y.aria.State.HIDDEN))));
+  assertEquals('true',
+      goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
   popup.setVisible(false);
-  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN))));
+  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
+      goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
 }
 
 
@@ -105,16 +106,18 @@ function testRenderWithIframeMask() {
   assertTrue(goog.dom.compareNodeOrder(iframe[0], bg[0]) < 0);
   assertTrue(goog.dom.compareNodeOrder(bg[0], content) < 0);
   assertTrue(goog.dom.compareNodeOrder(content, tabCatcher[0]) < 0);
-  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN))));
+  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
+      goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
   popup.setVisible(true);
-  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(goog.a11y.aria.getState(
-      popup.getElementStrict(), goog.a11y.aria.State.HIDDEN))));
-  assertEquals('true', goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN));
+  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(
+      goog.a11y.aria.getState(
+          popup.getElementStrict(), goog.a11y.aria.State.HIDDEN))));
+  assertEquals('true',
+      goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN));
   popup.setVisible(false);
-  assertTrue(goog.string.isEmptyOrWhitespace(goog.string.makeSafe(goog.a11y.aria.getState(
-      main, goog.a11y.aria.State.HIDDEN))));
+  assertTrue(goog.string.isEmptyOrWhitespace(
+      goog.string.makeSafe(
+          goog.a11y.aria.getState(main, goog.a11y.aria.State.HIDDEN))));
 }
 
 
@@ -415,6 +418,27 @@ function testSetupBackwardTabWrapResetsFlagAfterTimeout() {
   mockClock.tick(1);
   assertFalse('Backward tab wrap flag should be reset after delay',
       popup.backwardTabWrapInProgress_);
+}
+
+
+function testPopupGetsFocus() {
+  popup = new goog.ui.ModalPopup();
+  popup.render();
+  popup.setVisible(true);
+  assertTrue('Dialog must receive initial focus',
+      goog.dom.getActiveElement(document) == popup.getElement());
+}
+
+
+function testDecoratedPopupGetsFocus() {
+  var dialogElem = goog.dom.createElement('div');
+  document.body.appendChild(dialogElem);
+  popup = new goog.ui.ModalPopup();
+  popup.decorate(dialogElem);
+  popup.setVisible(true);
+  assertTrue('Dialog must receive initial focus',
+      goog.dom.getActiveElement(document) == popup.getElement());
+  goog.dom.removeNode(dialogElem);
 }
 
 
