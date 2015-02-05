@@ -399,6 +399,9 @@ function testTimeZone() {
 
   assertTrue(parser.parse('07/21/2003, 11:22:33 GMT0800', date) > 0);
   assertEquals(hourGmt08, date.getHours());
+
+  // 'foo' is not a timezone
+  assertFalse(parser.parse('07/21/2003, 11:22:33 foo', date) > 0);
 }
 
 function testWeekDay() {
