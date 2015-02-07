@@ -22,11 +22,13 @@ goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.dom.iframe');
+goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
 
 var sandbox;
 var someDiv;
 var someSpan;
+var mockClock;
 
 function setUp() {
   sandbox = goog.dom.getElement('sandbox');
@@ -34,12 +36,16 @@ function setUp() {
   someSpan = goog.dom.createDom('span', {id: 'someSpan'}, 'SPAN');
   sandbox.appendChild(someDiv);
   someDiv.appendChild(someSpan);
+
+  mockClock = new goog.testing.MockClock(true);
 }
 
 function tearDown() {
   sandbox.innerHTML = '';
   someDiv = null;
   someSpan = null;
+
+  goog.dispose(mockClock);
 }
 
 function testAnnouncerAndDispose() {
@@ -65,9 +71,9 @@ function testAnnouncerTwiceSameMessage() {
   var announcer = new goog.a11y.aria.Announcer(goog.dom.getDomHelper());
   announcer.say(text);
   var firstLiveRegion = getLiveRegion('polite');
-  announcer.say(text);
+  announcer.say(text, undefined);
   var secondLiveRegion = getLiveRegion('polite');
-  assertNotEquals(firstLiveRegion, secondLiveRegion);
+  assertEquals(firstLiveRegion, secondLiveRegion);
   checkLiveRegionContains(text, 'polite');
   goog.dispose(announcer);
 }
@@ -104,7 +110,6 @@ function testAnnouncerWithAriaHidden() {
   // Announce a new message and make sure that the aria-hidden was removed.
   announcer.say(text2);
   checkLiveRegionContains(text2, 'polite');
-  liveRegion = getLiveRegion('polite');
   assertEquals('',
       goog.a11y.aria.getState(liveRegion, goog.a11y.aria.State.HIDDEN));
   goog.dispose(announcer);
@@ -125,5 +130,6 @@ function getLiveRegion(priority, opt_domHelper) {
 
 function checkLiveRegionContains(text, priority, opt_domHelper) {
   var liveRegion = getLiveRegion(priority, opt_domHelper);
+  mockClock.tick(1);
   assertEquals(text, goog.dom.getTextContent(liveRegion));
 }
