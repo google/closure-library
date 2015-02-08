@@ -1065,6 +1065,38 @@ function testThenableInterface() {
   var d = new Deferred();
   assertTrue(goog.Thenable.isImplementedBy(d));
 }
+
+function testAddBothPropagatesToErrback() {
+  var log = [];
+  var deferred = new goog.async.Deferred();
+  deferred.addBoth(goog.nullFunction);
+  deferred.addErrback(function () {
+    log.push('errback');
+  });
+  deferred.errback(new Error('my error'));
+
+  mockClock.tick(1);
+  assertArrayEquals(['errback'], log);
+}
+
+function testAddBothDoesNotPropagateUncaughtExceptions() {
+  var deferred = new goog.async.Deferred();
+  deferred.addBoth(goog.nullFunction);
+  deferred.errback(new Error('my error'));
+  mockClock.tick(1);
+}
+
+function testAddFinally() {
+  var deferred = new goog.async.Deferred();
+  deferred.addFinally(goog.nullFunction);
+  deferred.errback(new Error('my error'));
+
+  try {
+    mockClock.tick(1);
+  } catch (e) {
+    assertEquals('my error', e.message);
+  }
+}
 </script>
 </body>
 </html>
