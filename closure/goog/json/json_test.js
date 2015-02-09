@@ -107,6 +107,10 @@ function testArraySerialize() {
   assertNotEquals('{length:0}', goog.json.serialize({length: 0}), '[]');
 }
 
+function testFunctionSerialize() {
+  assertSerialize('null', function() {});
+}
+
 function testObjectSerialize_emptyObject() {
   assertSerialize('{}', {});
 }
@@ -125,6 +129,10 @@ function testObjectSerialize_whitespace() {
   assertSerialize('{" ":" "}', {' ': ' '});
 }
 
+function testUndefinedSerialize() {
+  assertSerialize('null', undefined);
+}
+
 function testSerializeSkipFunction() {
   var object = {
     s: 'string value',
@@ -132,7 +140,7 @@ function testSerializeSkipFunction() {
     i: 100,
     f: function() { var x = 'x'; }
   };
-  assertSerialize('', object.f);
+  assertSerialize('null', object.f);
   assertSerialize('{"s":"string value","b":true,"i":100}', object);
 }
 
