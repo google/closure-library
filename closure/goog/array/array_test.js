@@ -280,6 +280,12 @@ function testArrayReduceOmitDeleted() {
   assertEquals(2, goog.array.reduce(a, scope.testFn, 0, scope));
 }
 
+function testArrayReducePreviousValuePatch(){
+  assertEquals(3, goog.array.reduce([1,2], function(p, c){
+    return p + c;
+  }));
+}
+
 function testArrayReduceRight() {
   var a = [0, 1, 2, 3, 4];
   assertEquals('43210', goog.array.reduceRight(a, function(rval, val, i, arr) {
