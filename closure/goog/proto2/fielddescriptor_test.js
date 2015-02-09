@@ -138,6 +138,7 @@ function testContaingType() {
     }
     return MessageType.descriptor_;
   };
+  MessageType.prototype.getDescriptor = MessageType.getDescriptor;
 
   var descriptor = MessageType.getDescriptor();
   var fieldDescriptor = descriptor.getFields()[0];
