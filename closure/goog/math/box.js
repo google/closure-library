@@ -74,11 +74,7 @@ goog.math.Box.boundingBox = function(var_args) {
   var box = new goog.math.Box(arguments[0].y, arguments[0].x,
                               arguments[0].y, arguments[0].x);
   for (var i = 1; i < arguments.length; i++) {
-    var coord = arguments[i];
-    box.top = Math.min(box.top, coord.y);
-    box.right = Math.max(box.right, coord.x);
-    box.bottom = Math.max(box.bottom, coord.y);
-    box.left = Math.min(box.left, coord.x);
+    box.expandToIncludeCoordinate(arguments[i]);
   }
   return box;
 };
