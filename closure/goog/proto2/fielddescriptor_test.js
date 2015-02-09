@@ -119,18 +119,25 @@ function testContaingType() {
   };
   goog.inherits(MessageType, goog.proto2.Message);
 
-  var descriptorObj = {
-    0: {
-      name: 'test_message',
-      fullName: 'this.is.a.test_message'
-    },
-    10: {
-      name: 'test',
-      fieldType: 7,
-      type: Number
+  MessageType.getDescriptor = function() {
+    if (!MessageType.descriptor_) {
+      // The descriptor is created lazily when we instantiate a new instance.
+      var descriptorObj = {
+        0: {
+          name: 'test_message',
+          fullName: 'this.is.a.test_message'
+        },
+        10: {
+          name: 'test',
+          fieldType: 7,
+          type: Number
+        }
+      };
+      MessageType.descriptor_ = goog.proto2.Message.createDescriptor(
+          MessageType, descriptorObj);
     }
+    return MessageType.descriptor_;
   };
-  goog.proto2.Message.set$Metadata(MessageType, descriptorObj);
 
   var descriptor = MessageType.getDescriptor();
   var fieldDescriptor = descriptor.getFields()[0];

@@ -24,7 +24,10 @@ goog.provide('goog.tweak.TweakUi');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.safe');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.object');
+goog.require('goog.string.Const');
 goog.require('goog.style');
 goog.require('goog.tweak');
 goog.require('goog.tweak.BaseEntry');
@@ -569,15 +572,22 @@ goog.tweak.EntriesPanel.prototype.createHelpElem_ = function(entry) {
   // The markup looks like:
   // <span onclick=...><b>?</b><span>{description}</span></span>
   var ret = this.domHelper_.createElement('span');
-  ret.innerHTML = '<b style="padding:0 1em 0 .5em">?</b>' +
-      '<span style="display:none;color:#666"></span>';
+  goog.dom.safe.setInnerHtml(ret, goog.html.SafeHtml.concat(
+      goog.html.SafeHtml.create('b',
+          {'style': goog.string.Const.from('padding:0 1em 0 .5em')}, '?'),
+      goog.html.SafeHtml.create('span',
+          {'style': goog.string.Const.from('display:none;color:#666')})));
   ret.onclick = this.boundHelpOnClickHandler_;
-  var descriptionElem = ret.lastChild;
-  goog.dom.setTextContent(/** @type {Element} */ (descriptionElem),
-      entry.description);
-  if (!entry.isRestartRequired()) {
-    descriptionElem.innerHTML +=
-        ' <span style="color:blue">(no restart required)</span>';
+  // IE<9 doesn't support lastElementChild.
+  var descriptionElem = /** @type {!Element} */ (ret.lastChild);
+  if (entry.isRestartRequired()) {
+    goog.dom.setTextContent(descriptionElem, entry.description);
+  } else {
+    goog.dom.safe.setInnerHtml(descriptionElem, goog.html.SafeHtml.concat(
+        goog.html.SafeHtml.htmlEscape(entry.description),
+        goog.html.SafeHtml.create('span',
+            {'style': goog.string.Const.from('color: blue')},
+            '(no restart required)')));
   }
   return ret;
 };

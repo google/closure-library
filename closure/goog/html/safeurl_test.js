@@ -90,6 +90,9 @@ function testSafeUrlSanitize_validatesUrl() {
   assertGoodUrl('http://example.com/');
   assertGoodUrl('https://example.com');
   assertGoodUrl('mailto:foo@example.com');
+  assertGoodUrl('ftp://example.com');
+  assertGoodUrl('ftp://username@example.com');
+  assertGoodUrl('ftp://username:password@example.com');
   // Scheme is case-insensitive
   assertGoodUrl('HTtp://example.com/');
   // Different URL components go through.

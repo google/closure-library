@@ -29,12 +29,6 @@ goog.define('goog.userAgent.product.ASSUME_FIREFOX', false);
 
 
 /**
- * @define {boolean} Whether the code is running on the Camino web browser.
- */
-goog.define('goog.userAgent.product.ASSUME_CAMINO', false);
-
-
-/**
  * @define {boolean} Whether we know at compile-time that the product is an
  *     iPhone.
  */
@@ -50,13 +44,14 @@ goog.define('goog.userAgent.product.ASSUME_IPAD', false);
 
 /**
  * @define {boolean} Whether we know at compile-time that the product is an
- *     Android phone.
+ *     AOSP browser or WebView inside a pre KitKat Android phone or tablet.
  */
 goog.define('goog.userAgent.product.ASSUME_ANDROID', false);
 
 
 /**
- * @define {boolean} Whether the code is running on the Chrome web browser.
+ * @define {boolean} Whether the code is running on the Chrome web browser on
+ * any platform or AOSP browser or WebView in a KitKat+ Android phone or tablet.
  */
 goog.define('goog.userAgent.product.ASSUME_CHROME', false);
 
@@ -76,7 +71,6 @@ goog.userAgent.product.PRODUCT_KNOWN_ =
     goog.userAgent.ASSUME_IE ||
     goog.userAgent.ASSUME_OPERA ||
     goog.userAgent.product.ASSUME_FIREFOX ||
-    goog.userAgent.product.ASSUME_CAMINO ||
     goog.userAgent.product.ASSUME_IPHONE ||
     goog.userAgent.product.ASSUME_IPAD ||
     goog.userAgent.product.ASSUME_ANDROID ||
@@ -102,13 +96,6 @@ goog.userAgent.product.init_ = function() {
   goog.userAgent.product.detectedFirefox_ = false;
 
   /**
-   * Whether the code is running on the Camino web browser.
-   * @type {boolean}
-   * @private
-   */
-  goog.userAgent.product.detectedCamino_ = false;
-
-  /**
    * Whether the code is running on an iPhone or iPod touch.
    * @type {boolean}
    * @private
@@ -123,14 +110,16 @@ goog.userAgent.product.init_ = function() {
   goog.userAgent.product.detectedIpad_ = false;
 
   /**
-   * Whether the code is running on the default browser on an Android phone.
+   * Whether the code is running on AOSP browser or WebView inside
+   * a pre KitKat Android phone or tablet.
    * @type {boolean}
    * @private
    */
   goog.userAgent.product.detectedAndroid_ = false;
 
   /**
-   * Whether the code is running on the Chrome web browser.
+   * Whether the code is running on the Chrome web browser on any platform
+   * or AOSP browser or WebView in a KitKat+ Android phone or tablet.
    * @type {boolean}
    * @private
    */
@@ -156,8 +145,6 @@ goog.userAgent.product.init_ = function() {
 
   if (ua.indexOf('Firefox') != -1) {
     goog.userAgent.product.detectedFirefox_ = true;
-  } else if (ua.indexOf('Camino') != -1) {
-    goog.userAgent.product.detectedCamino_ = true;
   } else if (ua.indexOf('iPad') != -1) {
     goog.userAgent.product.detectedIpad_ = true;
   } else if (ua.indexOf('iPhone') != -1 || ua.indexOf('iPod') != -1) {
@@ -200,15 +187,6 @@ goog.userAgent.product.FIREFOX = goog.userAgent.product.PRODUCT_KNOWN_ ?
 
 
 /**
- * Whether the code is running on the Camino web browser.
- * @type {boolean}
- */
-goog.userAgent.product.CAMINO = goog.userAgent.product.PRODUCT_KNOWN_ ?
-    goog.userAgent.product.ASSUME_CAMINO :
-    goog.userAgent.product.detectedCamino_;
-
-
-/**
  * Whether the code is running on an iPhone or iPod touch.
  * @type {boolean}
  */
@@ -227,7 +205,8 @@ goog.userAgent.product.IPAD = goog.userAgent.product.PRODUCT_KNOWN_ ?
 
 
 /**
- * Whether the code is running on the default browser on an Android phone.
+ * Whether the code is running on AOSP browser or WebView inside
+ * a pre KitKat Android phone or tablet.
  * @type {boolean}
  */
 goog.userAgent.product.ANDROID = goog.userAgent.product.PRODUCT_KNOWN_ ?
@@ -236,7 +215,8 @@ goog.userAgent.product.ANDROID = goog.userAgent.product.PRODUCT_KNOWN_ ?
 
 
 /**
- * Whether the code is running on the Chrome web browser.
+ * Whether the code is running on the Chrome web browser on any platform
+ * or AOSP browser or WebView in a KitKat+ Android phone or tablet.
  * @type {boolean}
  */
 goog.userAgent.product.CHROME = goog.userAgent.product.PRODUCT_KNOWN_ ?

@@ -33,12 +33,16 @@ goog.require('goog.debug.Logger');
 goog.require('goog.dom.DomHelper');
 goog.require('goog.dom.safe');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyleSheet');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.userAgent');
 
 
 
+// TODO(user): Introduce goog.scope for goog.html.SafeHtml once b/12014412
+// is fixed.
 /**
  * Provides a Fancy extension to the DebugWindow class.  Allows filtering based
  * on loggers and levels.
@@ -87,7 +91,7 @@ goog.debug.FancyWindow.prototype.writeBufferToLog = function() {
 
     for (var i = 0; i < this.outputBuffer.length; i++) {
       var div = this.dh_.createDom('div', 'logmsg');
-      div.innerHTML = this.outputBuffer[i];
+      goog.dom.safe.setInnerHtml(div, this.outputBuffer[i]);
       logel.appendChild(div);
     }
     this.outputBuffer.length = 0;
@@ -108,7 +112,7 @@ goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
 
   var doc = this.win.document;
   doc.open();
-  doc.write(this.getHtml_());
+  goog.dom.safe.documentWrite(doc, this.getHtml_());
   doc.close();
 
   (goog.userAgent.IE ? doc.body : this.win).onresize =
@@ -235,7 +239,8 @@ goog.debug.FancyWindow.prototype.exit_ = function(e) {
 
 /** @override */
 goog.debug.FancyWindow.prototype.getStyleRules = function() {
-  return goog.debug.FancyWindow.base(this, 'getStyleRules') +
+  var baseRules = goog.debug.FancyWindow.base(this, 'getStyleRules');
+  var extraRules = goog.html.SafeStyleSheet.fromConstant(goog.string.Const.from(
       'html,body{height:100%;width:100%;margin:0px;padding:0px;' +
       'background-color:#FFF;overflow:hidden}' +
       '*{}' +
@@ -254,36 +259,39 @@ goog.debug.FancyWindow.prototype.getStyleRules = function() {
       '#exitbutton{text-decoration:underline;color:#00F;cursor:' +
       'pointer;position:absolute;top:0px;right:50px;font:x-small arial;}' +
       'select{font:x-small arial;margin-right:10px;}' +
-      'hr{border:0;height:5px;background-color:#8c8;color:#8c8;}';
+      'hr{border:0;height:5px;background-color:#8c8;color:#8c8;}'));
+  return goog.html.SafeStyleSheet.concat(baseRules, extraRules);
 };
 
 
 /**
  * Return the default HTML for the debug window
- * @return {string} Html.
+ * @return {!goog.html.SafeHtml} Html.
  * @private
  */
 goog.debug.FancyWindow.prototype.getHtml_ = function() {
-  return '' +
-      '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"' +
-      '"http://www.w3.org/TR/html4/loose.dtd">' +
-      '<html><head><title>Logging: ' + this.identifier + '</title>' +
-      '<style>' + this.getStyleRules() + '</style>' +
-      '</head><body>' +
-      '<div id="log" style="overflow:auto"></div>' +
-      '<div id="head">' +
-      '<p><b>Logging: ' + this.identifier + '</b></p><p>' +
-      this.welcomeMessage + '</p>' +
-      '<span id="clearbutton">clear</span>' +
-      '<span id="exitbutton">exit</span>' +
-      '<span id="openbutton">options</span>' +
-      '</div>' +
-      '<div id="options">' +
-      '<big><b>Options:</b></big>' +
-      '<div id="optionsarea"></div>' +
-      '<span id="closebutton">save and close</span>' +
-      '</div>' +
-      '</body></html>';
+  var SafeHtml = goog.html.SafeHtml;
+  var head = SafeHtml.create('head', {}, SafeHtml.concat(
+      SafeHtml.create('title', {}, 'Logging: ' + this.identifier),
+      SafeHtml.createStyle(this.getStyleRules())));
+
+  var body = SafeHtml.create('body', {}, SafeHtml.concat(
+      SafeHtml.create('div',
+          {'id': 'log', 'style': goog.string.Const.from('overflow:auto')}),
+      SafeHtml.create('div', {'id': 'head'}, SafeHtml.concat(
+          SafeHtml.create('p', {},
+              SafeHtml.create('b', {}, 'Logging: ' + this.identifier)),
+          SafeHtml.create('p', {}, this.welcomeMessage),
+          SafeHtml.create('span', {'id': 'clearbutton'}, 'clear'),
+          SafeHtml.create('span', {'id': 'exitbutton'}, 'exit'),
+          SafeHtml.create('span', {'id': 'openbutton'}, 'options'))),
+      SafeHtml.create('div', {'id': 'options'}, SafeHtml.concat(
+          SafeHtml.create('big', {},
+              SafeHtml.create('b', {}, 'Options:')),
+          SafeHtml.create('div', {'id': 'optionsarea'}),
+          SafeHtml.create('span', {'id': 'closebutton'}, 'save and close')))));
+
+  return SafeHtml.create('html', {}, SafeHtml.concat(head, body));
 };
 
 

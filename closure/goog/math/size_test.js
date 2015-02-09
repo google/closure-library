@@ -95,6 +95,23 @@ function testSizeFitsInside() {
   assertFalse(c.fitsInside(target));
 }
 
+function testSizeScaleToCover() {
+  var target = new goog.math.Size(512, 640);
+
+  var a = new goog.math.Size(1000, 1600);
+  var b = new goog.math.Size(1600, 1000);
+  var c = new goog.math.Size(500, 800);
+  var d = new goog.math.Size(undefined, undefined);
+
+  assertEquals('(512 x 819.2)', a.scaleToCover(target).toString());
+  assertEquals('(1024 x 640)', b.scaleToCover(target).toString());
+  assertEquals('(512 x 819.2)', c.scaleToCover(target).toString());
+  assertEquals('(512 x 640)', target.scaleToCover(target).toString());
+
+  assertEquals('(NaN x NaN)', d.scaleToCover(target).toString());
+  assertEquals('(NaN x NaN)', a.scaleToCover(d).toString());
+}
+
 function testSizeScaleToFit() {
   var target = new goog.math.Size(512, 640);
 

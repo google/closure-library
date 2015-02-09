@@ -55,7 +55,6 @@ See the COPYING file for details.
     goog.require('goog.userAgent.flash');
     goog.require('goog.userAgent.iphoto');
     goog.require('goog.userAgent.jscript');
-    goog.require('goog.userAgent.picasa');
     goog.require('goog.userAgent.product');
     goog.require('goog.userAgent.product.isVersion');
   </script>
@@ -99,7 +98,6 @@ See the COPYING file for details.
 
   var productFields = [
     'ANDROID',
-    'CAMINO',
     'CHROME',
     'FIREFOX',
     'IE',
@@ -113,12 +111,6 @@ See the COPYING file for details.
   // Public members in goog.userAgent.flash
   var flashFields = [
     'HAS_FLASH',
-    'VERSION'
-  ];
-
-  // Public members in goog.userAgent.picasa
-  var picasaFields = [
-    'HAS_PICASA',
     'VERSION'
   ];
 
@@ -206,7 +198,6 @@ See the COPYING file for details.
   addSection(features, 'iPhoto Detection', goog.userAgent.iphoto, iphotoFields);
   addSection(features, 'Microsoft JScript', goog.userAgent.jscript,
       jscriptFields);
-  addSection(features, 'Picasa Detection', goog.userAgent.picasa, picasaFields);
 
   </script>
 

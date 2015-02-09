@@ -25,6 +25,7 @@ goog.provide('goog.async.throwException');
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.functions');
 goog.require('goog.labs.userAgent.browser');
+goog.require('goog.labs.userAgent.engine');
 
 
 /**
@@ -115,7 +116,10 @@ goog.async.nextTick.getSetImmediateEmulator_ = function() {
   // document.addEventListener. The latter excludes IE8 because it has a
   // synchronous postMessage implementation.
   if (typeof Channel === 'undefined' && typeof window !== 'undefined' &&
-      window.postMessage && window.addEventListener) {
+      window.postMessage && window.addEventListener &&
+      // Presto (The old pre-blink Opera engine) has problems with iframes
+      // and contentWindow.
+      !goog.labs.userAgent.engine.isPresto()) {
     /** @constructor */
     Channel = function() {
       // Make an empty, invisible iframe.

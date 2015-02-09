@@ -413,15 +413,6 @@ goog.ui.emoji.EmojiPicker.prototype.setProgressiveRender =
 };
 
 
-/**
- * Logger for the emoji picker.
- *
- * @type {goog.log.Logger}
- * @private
- */
-goog.ui.emoji.EmojiPicker.prototype.logger_ =
-    goog.log.getLogger('goog.ui.emoji.EmojiPicker');
-
 
 /**
  * Adjusts the number of rows to be the maximum row count out of all the emoji

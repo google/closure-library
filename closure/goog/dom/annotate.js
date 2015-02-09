@@ -153,7 +153,6 @@ goog.dom.annotate.annotateTermsInNode_ =
     if (!skip) {
       ++recursionLevel;
       var curNode = node.firstChild;
-      var numTermsAnnotated = 0;
       while (curNode) {
         var nextNode = curNode.nextSibling;
         var curNodeAnnotated = goog.dom.annotate.annotateTermsInNode_(
@@ -236,7 +235,6 @@ goog.dom.annotate.annotateText = function(text, terms, annotateFn,
 goog.dom.annotate.helpAnnotateText_ = function(text, terms, annotateFn,
                                                ignoreCase) {
   var hit = false;
-  var resultHtml = null;
   var textToSearch = ignoreCase ? text.toLowerCase() : text;
   var textLen = textToSearch.length;
   var numTerms = terms.length;

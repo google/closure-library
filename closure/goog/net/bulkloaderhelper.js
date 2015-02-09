@@ -53,14 +53,6 @@ goog.net.BulkLoaderHelper = function(uris) {
 goog.inherits(goog.net.BulkLoaderHelper, goog.Disposable);
 
 
-/**
- * A logger.
- * @type {goog.log.Logger}
- * @private
- */
-goog.net.BulkLoaderHelper.prototype.logger_ =
-    goog.log.getLogger('goog.net.BulkLoaderHelper');
-
 
 /**
  * Gets the URI by id.

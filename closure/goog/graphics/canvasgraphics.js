@@ -420,19 +420,6 @@ goog.graphics.CanvasGraphics.prototype.drawElement = function(element) {
 };
 
 
-/**
- * Append an element.
- *
- * @param {goog.graphics.Element} element The element to draw.
- * @param {goog.graphics.CanvasGroupElement|undefined} group The group to draw
- *     it in. If null or undefined, defaults to the root group.
- * @private
- * @deprecated Use append instead.
- */
-goog.graphics.CanvasGraphics.prototype.append_ = function(element, group) {
-  this.append(element, group);
-};
-
 
 /**
  * Append an element.

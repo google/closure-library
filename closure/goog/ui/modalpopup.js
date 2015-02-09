@@ -328,7 +328,8 @@ goog.ui.ModalPopup.prototype.decorateInternal = function(element) {
   this.manageBackgroundDom_();
   this.createTabCatcher_();
 
-  // Make sure the decorated modal popup is hidden.
+  // Make sure the decorated modal popup is focusable and hidden.
+  goog.dom.setFocusableTabIndex(this.getElement(), true);
   goog.style.setElementShown(this.getElement(), false);
 };
 

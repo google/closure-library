@@ -35,6 +35,11 @@ var propertyReplacer = new goog.testing.PropertyReplacer();
 var req = new goog.labs.net.webChannel.ChannelRequest(null, null);
 
 
+function shouldRunTests() {
+  return goog.labs.net.webChannel.ChannelRequest.supportsXhrStreaming();
+}
+
+
 function setUp() {
 }
 

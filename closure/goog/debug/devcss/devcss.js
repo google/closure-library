@@ -416,7 +416,6 @@ goog.debug.DevCss.prototype.addIe6CombinedClassNames_ = function() {
     return;
   }
   var allEls = document.getElementsByTagName('*');
-  var matches = [];
   // Match nodes for all classNames.
   for (var i = 0, classNameEntry; classNameEntry =
       this.ie6CombinedMatches_[i]; i++) {

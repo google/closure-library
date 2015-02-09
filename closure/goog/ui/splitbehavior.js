@@ -84,12 +84,6 @@ goog.ui.SplitBehavior = function(first, second, opt_behaviorHandler,
   this.eventType_ = opt_eventType || goog.ui.Component.EventType.ACTION;
 
   /**
-   * @type {goog.dom.DomHelper}
-   * @private
-   */
-  this.dom_ = opt_domHelper || goog.dom.getDomHelper();
-
-  /**
    * True iff the behavior is active.
    * @type {boolean}
    * @private

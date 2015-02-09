@@ -359,7 +359,6 @@ goog.i18n.NumberFormat.prototype.parse = function(text, opt_pos) {
     throw Error('Parsing of compact numbers is unimplemented');
   }
 
-  var start = pos[0];
   var ret = NaN;
 
   // we don't want to handle 2 kind of space in parsing, normalize it to nbsp

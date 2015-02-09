@@ -36,10 +36,12 @@ goog.require('goog.Timer');
  * each time the delay is started. Calling start on an active delay will reset
  * the timer.
  *
- * @param {Function} listener Function to call when the delay completes.
+ * @param {function(this:THIS)} listener Function to call when the
+ *     delay completes.
  * @param {number=} opt_interval The default length of the invocation delay (in
  *     milliseconds).
- * @param {Object=} opt_handler The object scope to invoke the function in.
+ * @param {THIS=} opt_handler The object scope to invoke the function in.
+ * @template THIS
  * @constructor
  * @extends {goog.Disposable}
  * @final
@@ -49,8 +51,7 @@ goog.async.Delay = function(listener, opt_interval, opt_handler) {
 
   /**
    * The function that will be invoked after a delay.
-   * @type {Function}
-   * @private
+   * @private {function(this:THIS)}
    */
   this.listener_ = listener;
 

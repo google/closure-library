@@ -89,8 +89,6 @@ goog.userAgent.product.determineVersion_ = function() {
     }
 
     return goog.userAgent.product.getFirstRegExpGroup_(/Version\/([0-9.]+)/);
-  } else if (goog.userAgent.product.CAMINO) {
-    return goog.userAgent.product.getFirstRegExpGroup_(/Camino\/([0-9.]+)/);
   }
 
   return '';

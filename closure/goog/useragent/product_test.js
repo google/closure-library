@@ -16,6 +16,7 @@ goog.provide('goog.userAgent.productTest');
 goog.setTestOnly('goog.userAgent.productTest');
 
 goog.require('goog.array');
+goog.require('goog.labs.userAgent.testAgents');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.MockUserAgent');
 goog.require('goog.testing.PropertyReplacer');
@@ -52,7 +53,6 @@ function updateUserAgentUtils() {
   goog.userAgent.product.OPERA = goog.userAgent.OPERA;
   goog.userAgent.product.IE = goog.userAgent.IE;
   goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
-  goog.userAgent.product.CAMINO = goog.userAgent.product.detectedCamino_;
   goog.userAgent.product.IPHONE = goog.userAgent.product.detectedIphone_;
   goog.userAgent.product.IPAD = goog.userAgent.product.detectedIpad_;
   goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
@@ -64,13 +64,12 @@ function updateUserAgentUtils() {
 // The set of products whose corresponding goog.userAgent.product value is set
 // in goog.userAgent.product.init_().
 var DETECTED_BROWSER_KEYS =
-    ['FIREFOX', 'CAMINO', 'IPHONE', 'IPAD', 'ANDROID', 'CHROME', 'SAFARI'];
+    ['FIREFOX', 'IPHONE', 'IPAD', 'ANDROID', 'CHROME', 'SAFARI'];
 
 function assertIsBrowser(browser) {
   function createDetectedBrowserKey(browser) {
     switch (browser) {
       case 'FIREFOX': return 'detectedFirefox_';
-      case 'CAMINO': return 'detectedCamino_';
       case 'IPHONE': return 'detectedIphone_';
       case 'IPAD': return 'detectedIpad_';
       case 'ANDROID': return 'detectedAndroid_';
@@ -83,7 +82,8 @@ function assertIsBrowser(browser) {
   }
 
   var productKey = createDetectedBrowserKey(browser);
-  assertTrue(goog.userAgent.product[productKey]);
+  assertTrue('Expected goog.userAgent.product.' + productKey + '=true',
+             goog.userAgent.product[productKey]);
   // Make sure we don't have any false positives for other browsers.
   goog.array.forEach(DETECTED_BROWSER_KEYS, function(el) {
     if (el != browser) {
@@ -179,6 +179,20 @@ function testOpera() {
 
 function testFirefox() {
   var userAgents = [
+    {ua: 'Mozilla/5.0 (Android; Mobile; rv:35.0) Gecko/35.0 Firefox/35.0',
+      versions: [
+        {num: '34.01', truth: true},
+        {num: 35, truth: true},
+        {num: '35.01', truth: false},
+        {num: '36.0', truth: false}
+      ]},
+    {ua: 'Mozilla/5.0 (Android; Tablet; rv:35.0) Gecko/35.0 Firefox/35.0',
+      versions: [
+        {num: '34.01', truth: true},
+        {num: '35', truth: true},
+        {num: '35.01', truth: false},
+        {num: '36.0', truth: false}
+      ]},
     {ua: 'Mozilla/6.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; ' +
           'rv:2.0.0.0) Gecko/20061028 Firefox/3.0',
       versions: [
@@ -215,29 +229,29 @@ function testFirefox() {
       'FIREFOX', '6.0');
 }
 
-function testCamino() {
-  var userAgents = [
-    {ua: 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en; rv:1.8.1.11) ' +
-          'Gecko/20071128 Camino/1.5.4',
-      versions: [
-        {num: '1.5.4', truth: true},
-        {num: 1, truth: true},
-        {num: '2.0', truth: false}
-      ]},
-    {ua: 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.0.10) ' +
-          'Gecko/20070228 Camino/1.0.4',
-      versions: [
-        {num: '1.5.4', truth: false},
-        {num: 1, truth: true},
-        {num: '2.0', truth: false}
-      ]}
-  ];
-  mockAgent.setNavigator({vendor: 'Camino', product: 'Gecko'});
-  checkEachUserAgentDetected(userAgents, 'CAMINO');
-}
-
 function testChrome() {
   var userAgents = [
+    {ua: goog.labs.userAgent.testAgents.CHROME_ANDROID_TABLET_4_4,
+      versions: [
+        {num: 39, truth: true},
+        {num: '39.0.1000.0', truth: true},
+        {num: '39.0.3000.0', truth: false},
+        {num: 40, truth: false}
+      ]},
+    {ua: goog.labs.userAgent.testAgents.CHROME_ANDROID_PHONE_4_4,
+      versions: [
+        {num: 39, truth: true},
+        {num: '39.0.1000.0', truth: true},
+        {num: '39.0.3000.0', truth: false},
+        {num: 40, truth: false}
+      ]},
+    {ua: goog.labs.userAgent.testAgents.ANDROID_BROWSER_4_4,
+      versions: [
+        {num: 29, truth: true},
+        {num: 30, truth: true},
+        {num: '30.0.0.1', truth: false},
+        {num: 31, truth: false}
+      ]},
     {ua: 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) ' +
           'AppleWebKit/525.19 (KHTML, like Gecko) Chrome/0.2.153.0 ' +
           'Safari/525.19',
@@ -360,6 +374,13 @@ function testIpad() {
 
 function testAndroid() {
   var userAgents = [
+    // Pre KitKat Android WebView.
+    {ua: goog.labs.userAgent.testAgents.ANDROID_WEB_VIEW_4_1_1,
+      versions: [
+        {num: 4, truth: true},
+        {num: '4.1', truth: true},
+        {num: '4.2', truth: false}
+      ]},
     {ua: 'Mozilla/5.0 (Linux; U; Android 0.5; en-us) AppleWebKit/522+ ' +
           '(KHTML, like Gecko) Safari/419.3',
       versions: [

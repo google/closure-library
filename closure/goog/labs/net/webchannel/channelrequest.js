@@ -16,9 +16,9 @@
  * @fileoverview Definition of the ChannelRequest class. The request
  * object encapsulates the logic for making a single request, either for the
  * forward channel, back channel, or test channel, to the server. It contains
- * the logic for the three types of transports we use:
- * XMLHTTP, Trident ActiveX (ie only), and Image request. It provides timeout
- * detection.
+ * the logic for the two types of transports we use:
+ * XMLHTTP and Image request. It provides timeout detection. More transports
+ * to be added in future, such as Fetch, WebSocket.
  *
  * @visibility {:internal}
  */
@@ -145,7 +145,7 @@ goog.labs.net.webChannel.ChannelRequest = function(channel, channelDebug,
   this.requestStartTime_ = null;
 
   /**
-   * The type of request (XMLHTTP, IMG, Trident)
+   * The type of request (XMLHTTP, IMG)
    * @private {?number}
    */
   this.type_ = null;
@@ -181,12 +181,6 @@ goog.labs.net.webChannel.ChannelRequest = function(channel, channelDebug,
    * @private {number}
    */
   this.xmlHttpChunkStart_ = 0;
-
-  /**
-   * The Trident instance if the request is using Trident.
-   * @private {ActiveXObject}
-   */
-  this.trident_ = null;
 
   /**
    * The verb (Get or Post) for the request.
@@ -283,12 +277,7 @@ ChannelRequest.Type_ = {
   /**
    * IMG requests.
    */
-  IMG: 2,
-
-  /**
-   * Requests that use the MSHTML ActiveX control.
-   */
-  TRIDENT: 3
+  IMG: 2
 };
 
 
@@ -330,12 +319,7 @@ ChannelRequest.Error = {
   /**
    * The browser declared itself offline during the request.
    */
-  BROWSER_OFFLINE: 6,
-
-  /**
-   * IE is blocking ActiveX streaming.
-   */
-  ACTIVE_X_BLOCKED: 7
+  BROWSER_OFFLINE: 6
 };
 
 
@@ -377,9 +361,6 @@ ChannelRequest.INCOMPLETE_CHUNK_ = {};
 
 /**
  * Returns whether XHR streaming is supported on this browser.
- *
- * If XHR streaming is not supported, we will try to use an ActiveXObject
- * to create a Forever IFrame.
  *
  * @return {boolean} Whether XHR streaming is supported.
  * @see http://code.google.com/p/closure-library/issues/detail?id=346
@@ -591,22 +572,16 @@ ChannelRequest.prototype.onXmlHttpReadyStateChanged_ = function() {
   var readyState = this.xmlHttp_.getReadyState();
   var errorCode = this.xmlHttp_.getLastErrorCode();
   var statusCode = this.xmlHttp_.getStatus();
-  if (!ChannelRequest.supportsXhrStreaming()) {
-    if (readyState < goog.net.XmlHttp.ReadyState.COMPLETE) {
-      // not yet ready
-      return;
-    }
-  } else {
-    // we get partial results in browsers that support ready state interactive.
-    // We also make sure that getResponseText is not null in interactive mode
-    // before we continue.  However, we don't do it in Opera because it only
-    // fire readyState == INTERACTIVE once.  We need the following code to poll
-    if (readyState < goog.net.XmlHttp.ReadyState.INTERACTIVE ||
-        readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE &&
-        !goog.userAgent.OPERA && !this.xmlHttp_.getResponseText()) {
-      // not yet ready
-      return;
-    }
+
+  // we get partial results in browsers that support ready state interactive.
+  // We also make sure that getResponseText is not null in interactive mode
+  // before we continue.  However, we don't do it in Opera because it only
+  // fire readyState == INTERACTIVE once.  We need the following code to poll
+  if (readyState < goog.net.XmlHttp.ReadyState.INTERACTIVE ||
+      readyState == goog.net.XmlHttp.ReadyState.INTERACTIVE &&
+      !goog.userAgent.OPERA && !this.xmlHttp_.getResponseText()) {
+    // not yet ready
+    return;
   }
 
   // Dispatch any appropriate network events.
@@ -785,29 +760,6 @@ ChannelRequest.prototype.startPolling_ = function() {
 
 
 /**
- * Called when the browser declares itself offline at the start of a request or
- * during its lifetime.  Abandons that request.
- * @private
- */
-ChannelRequest.prototype.cancelRequestAsBrowserIsOffline_ = function() {
-  if (this.successful_) {
-    // Should never happen.
-    this.channelDebug_.severe(
-        'Received browser offline event even though request completed ' +
-        'successfully');
-  }
-
-  this.channelDebug_.browserOfflineResponse(this.requestUri_);
-  this.cleanup_();
-
-  // set error and dispatch failure
-  this.lastError_ = ChannelRequest.Error.BROWSER_OFFLINE;
-  requestStats.notifyStatEvent(requestStats.Stat.BROWSER_OFFLINE);
-  this.dispatchFailure_();
-};
-
-
-/**
  * Returns the next chunk of a chunk-encoded response. This is not standard
  * HTTP chunked encoding because browsers don't expose the chunk boundaries to
  * the application through XMLHTTP. So we have an additional chunk encoding at
@@ -843,138 +795,6 @@ ChannelRequest.prototype.getNextChunk_ = function(responseText) {
   var chunkText = responseText.substr(chunkStartIndex, size);
   this.xmlHttpChunkStart_ = chunkStartIndex + size;
   return chunkText;
-};
-
-
-/**
- * Uses the Trident htmlfile ActiveX control to send a GET request in IE. This
- * is the innovation discovered that lets us get intermediate results in
- * Internet Explorer.  Thanks to http://go/kev
- * @param {goog.Uri} uri The uri to request from.
- * @param {boolean} usingSecondaryDomain Whether to use a secondary domain.
- */
-ChannelRequest.prototype.tridentGet = function(uri, usingSecondaryDomain) {
-  this.type_ = ChannelRequest.Type_.TRIDENT;
-  this.baseUri_ = uri.clone().makeUnique();
-  this.tridentGet_(usingSecondaryDomain);
-};
-
-
-/**
- * Starts the Trident request.
- * @param {boolean} usingSecondaryDomain Whether to use a secondary domain.
- * @private
- */
-ChannelRequest.prototype.tridentGet_ = function(usingSecondaryDomain) {
-  this.requestStartTime_ = goog.now();
-  this.ensureWatchDogTimer_();
-
-  var hostname = usingSecondaryDomain ? window.location.hostname : '';
-  this.requestUri_ = this.baseUri_.clone();
-  this.requestUri_.setParameterValue('DOMAIN', hostname);
-  this.requestUri_.setParameterValue('t', this.retryId_);
-
-  try {
-    this.trident_ = new ActiveXObject('htmlfile');
-  } catch (e) {
-    this.channelDebug_.severe('ActiveX blocked');
-    this.cleanup_();
-
-    this.lastError_ = ChannelRequest.Error.ACTIVE_X_BLOCKED;
-    requestStats.notifyStatEvent(requestStats.Stat.ACTIVE_X_BLOCKED);
-    this.dispatchFailure_();
-    return;
-  }
-
-  var body = '<html><body>';
-  if (usingSecondaryDomain) {
-    body += '<script>document.domain="' + hostname + '"</scr' + 'ipt>';
-  }
-  body += '</body></html>';
-
-  this.trident_.open();
-  this.trident_.write(body);
-  this.trident_.close();
-
-  this.trident_.parentWindow['m'] = goog.bind(this.onTridentRpcMessage_, this);
-  this.trident_.parentWindow['d'] = goog.bind(this.onTridentDone_, this, true);
-  this.trident_.parentWindow['rpcClose'] =
-      goog.bind(this.onTridentDone_, this, false);
-
-  var div = this.trident_.createElement('div');
-  this.trident_.parentWindow.document.body.appendChild(div);
-  div.innerHTML = '<iframe src="' + this.requestUri_ + '"></iframe>';
-  this.channelDebug_.tridentChannelRequest('GET',
-      this.requestUri_, this.rid_, this.retryId_);
-  requestStats.notifyServerReachabilityEvent(
-      requestStats.ServerReachability.REQUEST_MADE);
-};
-
-
-/**
- * Callback from the Trident htmlfile ActiveX control for when a new message
- * is received.
- *
- * @param {string} msg The data payload.
- * @private
- */
-ChannelRequest.prototype.onTridentRpcMessage_ = function(msg) {
-  // need to do async b/c this gets called off of the context of the ActiveX
-  requestStats.setTimeout(
-      goog.bind(this.onTridentRpcMessageAsync_, this, msg), 0);
-};
-
-
-/**
- * Callback from the Trident htmlfile ActiveX control for when a new message
- * is received.
- *
- * @param {string} msg  The data payload.
- * @private
- */
-ChannelRequest.prototype.onTridentRpcMessageAsync_ = function(msg) {
-  if (this.cancelled_) {
-    return;
-  }
-  this.channelDebug_.tridentChannelResponseText(this.rid_, msg);
-  this.cancelWatchDogTimer_();
-  this.safeOnRequestData_(msg);
-  this.ensureWatchDogTimer_();
-};
-
-
-/**
- * Callback from the Trident htmlfile ActiveX control for when the request
- * is complete
- *
- * @param {boolean} successful Whether the request successfully completed.
- * @private
- */
-ChannelRequest.prototype.onTridentDone_ = function(successful) {
-  // need to do async b/c this gets called off of the context of the ActiveX
-  requestStats.setTimeout(
-      goog.bind(this.onTridentDoneAsync_, this, successful), 0);
-};
-
-
-/**
- * Callback from the Trident htmlfile ActiveX control for when the request
- * is complete
- *
- * @param {boolean} successful Whether the request successfully completed.
- * @private
- */
-ChannelRequest.prototype.onTridentDoneAsync_ = function(successful) {
-  if (this.cancelled_) {
-    return;
-  }
-  this.channelDebug_.tridentChannelResponseDone(
-      this.rid_, successful);
-  this.cleanup_();
-  this.successful_ = successful;
-  this.channel_.onRequestComplete(this);
-  requestStats.notifyServerReachabilityEvent(
-      requestStats.ServerReachability.BACK_CHANNEL_ACTIVITY);
 };
 
 
@@ -1141,10 +961,6 @@ ChannelRequest.prototype.cleanup_ = function() {
     this.xmlHttp_ = null;
     xmlhttp.abort();
     xmlhttp.dispose();
-  }
-
-  if (this.trident_) {
-    this.trident_ = null;
   }
 };
 

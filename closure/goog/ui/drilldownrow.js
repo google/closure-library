@@ -109,16 +109,6 @@ goog.ui.DrilldownRow = function(opt_properties, opt_domHelper) {
       properties.expanded : true;
 
   /**
-   * Is this component loaded? States are true, false, and null for
-   * 'loading in progress'.  For in-memory
-   * trees of components, this is always true.
-   * @type {boolean}
-   * @private
-   */
-  this.loaded_ = typeof properties.loaded != 'undefined' ?
-      properties.loaded : true;
-
-  /**
    * If this component's DOM element is created from a string of
    * HTML, this is the function to call when it is entered into the DOM tree.
    * @type {Function} args are DrilldownRow and goog.events.EventHandler
