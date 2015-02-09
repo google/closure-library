@@ -136,7 +136,11 @@ function testCreate_values() {
     '.1em',
     'red',
     '#f00',
-    'red !important'
+    'red !important',
+    '"Times New Roman"',
+    "'Times New Roman'",
+    '"Bold \'nuff"',
+    '"O\'Connor\'s Revenge"'
   ];
   for (var i = 0; i < valids.length; i++) {
     var value = valids[i];
@@ -148,6 +152,8 @@ function testCreate_values() {
     '',
     'expression(alert(1))',
     'url(i.png)',
+    '"',
+    '"\'"\'',
     goog.string.Const.from('red;')
   ];
   for (var i = 0; i < invalids.length; i++) {
