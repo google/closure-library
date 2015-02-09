@@ -174,6 +174,16 @@ goog.math.Box.prototype.expandToInclude = function(box) {
   this.bottom = Math.max(this.bottom, box.bottom);
 };
 
+/**
+ * Expand this box to include the coordinate.
+ * @param {goog.math.Coordinate} coord The coordinate to be included inside the box.
+ */
+goog.math.Box.prototype.expandToIncludeCoordinate = function(coord) {
+    this.top = Math.min(this.top, coord.y);
+    this.right = Math.max(this.right, coord.x);
+    this.bottom = Math.max(this.bottom, coord.y);
+    this.left = Math.min(this.left, coord.x);
+};
 
 /**
  * Compares boxes for equality.
