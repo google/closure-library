@@ -275,7 +275,7 @@ goog.math.Vec2.dot = function(a, b) {
  * @param {!goog.math.Vec2} b The second vector.
  * @return {number} The determinant of the two vectors.
  */
-goog.math.Vec2.det = function(a, b) {
+goog.math.Vec2.determinant = function(a, b) {
     return a.x * b.y - a.y * b.x;
 };
 
