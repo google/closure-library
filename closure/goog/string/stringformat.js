@@ -147,7 +147,7 @@ goog.string.format.demuxes_['s'] = function(value,
 
 /**
  * Processes %f conversion specifier.
- * @param {number} value Contains the formatRe matched string.
+ * @param {string} value Contains the formatRe matched string.
  * @param {string} flags Formatting flags.
  * @param {string} width Replacement string minimum width.
  * @param {string} dotp Matched precision including a dot.
@@ -248,4 +248,3 @@ goog.string.format.demuxes_['d'] = function(value,
 // These are additional aliases, for integer conversion.
 goog.string.format.demuxes_['i'] = goog.string.format.demuxes_['d'];
 goog.string.format.demuxes_['u'] = goog.string.format.demuxes_['d'];
-
