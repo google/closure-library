@@ -16,7 +16,6 @@ goog.provide('goog.userAgent.productTest');
 goog.setTestOnly('goog.userAgent.productTest');
 
 goog.require('goog.array');
-goog.require('goog.labs.userAgent.testAgents');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.MockUserAgent');
 goog.require('goog.testing.PropertyReplacer');
@@ -44,21 +43,6 @@ function tearDown() {
 function updateUserAgentUtils() {
   goog.labs.userAgent.util.setUserAgent(null);
   goog.userAgentTestUtil.reinitializeUserAgent();
-
-  goog.userAgent.product.init_();
-  // In an ideal world, this assignment would be just a function in
-  // product.js that we could call, but putting it into a function causes
-  // the compiler to fail to compile product.js to nothing when one of
-  // the ASSUME flags is set.
-  goog.userAgent.product.OPERA = goog.userAgent.OPERA;
-  goog.userAgent.product.IE = goog.userAgent.IE;
-  goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
-  goog.userAgent.product.IPHONE = goog.userAgent.product.detectedIphone_;
-  goog.userAgent.product.IPAD = goog.userAgent.product.detectedIpad_;
-  goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
-  goog.userAgent.product.CHROME = goog.userAgent.product.detectedChrome_;
-  goog.userAgent.product.SAFARI = goog.userAgent.product.detectedSafari_;
-  goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
 }
 
 // The set of products whose corresponding goog.userAgent.product value is set
@@ -66,29 +50,32 @@ function updateUserAgentUtils() {
 var DETECTED_BROWSER_KEYS =
     ['FIREFOX', 'IPHONE', 'IPAD', 'ANDROID', 'CHROME', 'SAFARI'];
 
-function assertIsBrowser(browser) {
-  function createDetectedBrowserKey(browser) {
-    switch (browser) {
-      case 'FIREFOX': return 'detectedFirefox_';
-      case 'IPHONE': return 'detectedIphone_';
-      case 'IPAD': return 'detectedIpad_';
-      case 'ANDROID': return 'detectedAndroid_';
-      case 'CHROME': return 'detectedChrome_';
-      case 'SAFARI': return 'detectedSafari_';
-      case 'IE': return 'IE';
-      case 'OPERA': return 'OPERA';
-    }
-    throw Error('Unknown browser: ' + browser);
-  }
 
-  var productKey = createDetectedBrowserKey(browser);
-  assertTrue('Expected goog.userAgent.product.' + productKey + '=true',
-             goog.userAgent.product[productKey]);
+// browserKey should be the constant name, as a string
+// 'FIREFOX', 'CHROME', 'ANDROID', etc.
+function assertIsBrowser(currentBrowser) {
+  assertTrue('Current browser key into goog.userAgent.product' +
+      'should be true',
+      goog.userAgent.product[currentBrowser]);
+
   // Make sure we don't have any false positives for other browsers.
-  goog.array.forEach(DETECTED_BROWSER_KEYS, function(el) {
-    if (el != browser) {
-      assertFalse('useragent should not match: ' + el,
-          goog.userAgent.product[createDetectedBrowserKey(el)]);
+  goog.array.forEach(DETECTED_BROWSER_KEYS, function(browserKey) {
+    // Ignore the iPad/Safari case, as the new code correctly
+    // identifies the test useragent as both iPad and Safari.
+    if (currentBrowser == 'IPAD' && browserKey == 'SAFARI') {
+      return;
+    }
+
+    if (currentBrowser == 'IPHONE' && browserKey == 'SAFARI') {
+      return;
+    }
+
+    if (currentBrowser != browserKey) {
+      assertFalse(
+          'Current browser key is ' + currentBrowser +
+          ' but different key into goog.userAgent.product is true: ' +
+          browserKey,
+          goog.userAgent.product[browserKey]);
     }
   });
 }
@@ -113,8 +100,13 @@ function checkEachUserAgentDetected(userAgents, browser) {
   goog.array.forEach(userAgents, function(ua) {
     mockAgent.setUserAgentString(ua.ua);
     updateUserAgentUtils();
+
     assertIsBrowser(browser);
+
+    // Check versions
     goog.array.forEach(ua.versions, function(v) {
+      mockAgent.setUserAgentString(ua.ua);
+      updateUserAgentUtils();
       assertEquals(
           'Expected version ' + v.num + ' from ' + ua.ua + ' but got ' +
               goog.userAgent.product.VERSION,
@@ -179,20 +171,6 @@ function testOpera() {
 
 function testFirefox() {
   var userAgents = [
-    {ua: 'Mozilla/5.0 (Android; Mobile; rv:35.0) Gecko/35.0 Firefox/35.0',
-      versions: [
-        {num: '34.01', truth: true},
-        {num: 35, truth: true},
-        {num: '35.01', truth: false},
-        {num: '36.0', truth: false}
-      ]},
-    {ua: 'Mozilla/5.0 (Android; Tablet; rv:35.0) Gecko/35.0 Firefox/35.0',
-      versions: [
-        {num: '34.01', truth: true},
-        {num: '35', truth: true},
-        {num: '35.01', truth: false},
-        {num: '36.0', truth: false}
-      ]},
     {ua: 'Mozilla/6.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; ' +
           'rv:2.0.0.0) Gecko/20061028 Firefox/3.0',
       versions: [
@@ -231,27 +209,6 @@ function testFirefox() {
 
 function testChrome() {
   var userAgents = [
-    {ua: goog.labs.userAgent.testAgents.CHROME_ANDROID_TABLET_4_4,
-      versions: [
-        {num: 39, truth: true},
-        {num: '39.0.1000.0', truth: true},
-        {num: '39.0.3000.0', truth: false},
-        {num: 40, truth: false}
-      ]},
-    {ua: goog.labs.userAgent.testAgents.CHROME_ANDROID_PHONE_4_4,
-      versions: [
-        {num: 39, truth: true},
-        {num: '39.0.1000.0', truth: true},
-        {num: '39.0.3000.0', truth: false},
-        {num: 40, truth: false}
-      ]},
-    {ua: goog.labs.userAgent.testAgents.ANDROID_BROWSER_4_4,
-      versions: [
-        {num: 29, truth: true},
-        {num: 30, truth: true},
-        {num: '30.0.0.1', truth: false},
-        {num: 31, truth: false}
-      ]},
     {ua: 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) ' +
           'AppleWebKit/525.19 (KHTML, like Gecko) Chrome/0.2.153.0 ' +
           'Safari/525.19',
@@ -374,13 +331,6 @@ function testIpad() {
 
 function testAndroid() {
   var userAgents = [
-    // Pre KitKat Android WebView.
-    {ua: goog.labs.userAgent.testAgents.ANDROID_WEB_VIEW_4_1_1,
-      versions: [
-        {num: 4, truth: true},
-        {num: '4.1', truth: true},
-        {num: '4.2', truth: false}
-      ]},
     {ua: 'Mozilla/5.0 (Linux; U; Android 0.5; en-us) AppleWebKit/522+ ' +
           '(KHTML, like Gecko) Safari/419.3',
       versions: [

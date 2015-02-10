@@ -65,15 +65,20 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.platform.VERSION = goog.userAgent.platform.determineVersion_();
 
   // Update goog.userAgent.product
-  goog.userAgent.product.init_();
-  goog.userAgent.product.ANDROID = goog.userAgent.product.detectedAndroid_;
-  goog.userAgent.product.CHROME = goog.userAgent.product.detectedChrome_;
-  goog.userAgent.product.FIREFOX = goog.userAgent.product.detectedFirefox_;
-  goog.userAgent.product.IE = goog.userAgent.IE;
-  goog.userAgent.product.IPAD = goog.userAgent.product.detectedIpad_;
-  goog.userAgent.product.IPHONE = goog.userAgent.product.detectedIphone_;
-  goog.userAgent.product.OPERA = goog.userAgent.OPERA;
-  goog.userAgent.product.SAFARI = goog.userAgent.product.detectedSafari_;
+  goog.userAgent.product.ANDROID =
+      goog.labs.userAgent.browser.isAndroidBrowser();
+  goog.userAgent.product.CHROME =
+      goog.labs.userAgent.browser.isChrome();
+  goog.userAgent.product.FIREFOX =
+      goog.labs.userAgent.browser.isFirefox();
+  goog.userAgent.product.IE =
+      goog.labs.userAgent.browser.isIE();
+  goog.userAgent.product.IPAD = goog.labs.userAgent.platform.isIpad();
+  goog.userAgent.product.IPHONE = goog.userAgent.product.isIphoneOrIpod_();
+  goog.userAgent.product.OPERA = goog.labs.userAgent.browser.isOpera();
+  goog.userAgent.product.SAFARI = goog.labs.userAgent.browser.isSafari();
+
+  // Still uses its own implementation.
   goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
 
   // goog.userAgent.keyboard
