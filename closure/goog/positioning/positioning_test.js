@@ -657,6 +657,17 @@ function testAdjustForViewportResizeHeight() {
              viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
                                                  pos.y + size.height, pos.x)));
 
+  var pos = newCoord(0, -50);
+  var size = newSize(50, 300);
+  assertEquals('Viewport height should be resized.',
+               goog.positioning.OverflowStatus.HEIGHT_ADJUSTED,
+               f(pos, size, viewport, overflow));
+  assertEquals('Height should be resized to 200.',
+               200, size.height);
+  assertTrue('Output box is within viewport',
+             viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
+                                                 pos.y + size.height, pos.x)));
+
   pos = newCoord(150, 150);
   size = newSize(50, 50);
   assertEquals('No Viewport overflow.',
@@ -674,6 +685,81 @@ function testAdjustForViewportResizeHeight() {
                f(pos, size, offsetViewport, overflow));
   assertEquals('Height should be resized to 190.',
                190, size.height);
+  assertTrue('Output box is within viewport',
+             offsetViewport.contains(new goog.math.Box(pos.y,
+                                                       pos.x + size.width,
+                                                       pos.y + size.height,
+                                                       pos.x)));
+}
+
+
+
+function testAdjustForViewportResizeWidth() {
+  var f = goog.positioning.adjustForViewport_;
+  var viewport = new goog.math.Box(0, 200, 200, 0);
+  var overflow = goog.positioning.Overflow.RESIZE_WIDTH;
+
+  var pos = newCoord(150, 150);
+  var size = newSize(100, 25);
+  assertEquals('Viewport width should be resized.',
+               goog.positioning.OverflowStatus.WIDTH_ADJUSTED,
+               f(pos, size, viewport, overflow));
+  assertEquals('Width should be resized to 50.',
+               50, size.width);
+  assertTrue('Output box is within viewport',
+             viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
+                                                 pos.y + size.height, pos.x)));
+
+  var pos = newCoord(0, 0);
+  var size = newSize(250, 50);
+  assertEquals('Viewport width should be resized.',
+               goog.positioning.OverflowStatus.WIDTH_ADJUSTED,
+               f(pos, size, viewport, overflow));
+  assertEquals('Width should be resized to 200.',
+               200, size.width);
+  assertTrue('Output box is within viewport',
+             viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
+                                                 pos.y + size.height, pos.x)));
+
+  var pos = newCoord(-50, 0);
+  var size = newSize(240, 50);
+  assertEquals('Viewport width should be resized.',
+               goog.positioning.OverflowStatus.WIDTH_ADJUSTED,
+               f(pos, size, viewport, overflow));
+  assertEquals('Width should be resized to 190.',
+               190, size.width);
+  assertTrue('Output box is within viewport',
+             viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
+                                                 pos.y + size.height, pos.x)));
+
+  var pos = newCoord(-50, 0);
+  var size = newSize(300, 50);
+  assertEquals('Viewport width should be resized.',
+               goog.positioning.OverflowStatus.WIDTH_ADJUSTED,
+               f(pos, size, viewport, overflow));
+  assertEquals('Width should be resized to 200.',
+               200, size.width);
+  assertTrue('Output box is within viewport',
+             viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
+                                                 pos.y + size.height, pos.x)));
+
+  pos = newCoord(150, 150);
+  size = newSize(50, 50);
+  assertEquals('No Viewport overflow.',
+               goog.positioning.OverflowStatus.NONE,
+               f(pos, size, viewport, overflow));
+  assertTrue('Output box is within viewport',
+             viewport.contains(new goog.math.Box(pos.y, pos.x + size.width,
+                                                 pos.y + size.height, pos.x)));
+
+  var offsetViewport = new goog.math.Box(0, 300, 200, 100);
+  var pos = newCoord(50, 0);
+  var size = newSize(240, 50);
+  assertEquals('Viewport width should be resized.',
+               goog.positioning.OverflowStatus.WIDTH_ADJUSTED,
+               f(pos, size, offsetViewport, overflow));
+  assertEquals('Width should be resized to 190.',
+               190, size.width);
   assertTrue('Output box is within viewport',
              offsetViewport.contains(new goog.math.Box(pos.y,
                                                        pos.x + size.width,
