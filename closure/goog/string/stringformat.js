@@ -172,7 +172,7 @@ goog.string.format.demuxes_['f'] = function(value,
   // empty string instead of undefined for non-participating capture groups,
   // and isNaN('') == false.
   if (!(isNaN(precision) || precision == '')) {
-    replacement = value.toFixed(precision);
+    replacement = parseFloat(value).toFixed(precision);
   }
 
   // Generates sign string that will be attached to the replacement.
