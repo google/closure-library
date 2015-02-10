@@ -270,7 +270,7 @@ goog.math.Vec2.dot = function(a, b) {
 };
 
 /**
- * Returns the detminant of the two vectors.
+ * Returns the determinant of the two vectors.
  * @param {!goog.math.Vec2} a The first vector.
  * @param {!goog.math.Vec2} b The second vector.
  * @return {number} The determinant of the two vectors.
