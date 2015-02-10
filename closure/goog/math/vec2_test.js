@@ -202,18 +202,18 @@ function testDot() {
   assertEquals(-35, goog.math.Vec2.dot(c, d));
 }
 
-function testDet() {
+function testDeterminant() {
   var a = new goog.math.Vec2(0, 5);
   var b = new goog.math.Vec2(0, 10);
-  assertEquals(0, goog.math.Vec2.det(a, b));
+  assertEquals(0, goog.math.Vec2.determinant(a, b));
 
   var c = new goog.math.Vec2(0, 5);
   var d = new goog.math.Vec2(10, 0);
-  assertEquals(-50, goog.math.Vec2.det(c, d));
+  assertEquals(-50, goog.math.Vec2.determinant(c, d));
 
   var e = new goog.math.Vec2(-5, -5);
   var f = new goog.math.Vec2(0, 7);
-  assertEquals(-35, goog.math.Vec2.det(e, f));
+  assertEquals(-35, goog.math.Vec2.determinant(e, f));
 }
 
 function testLerp() {
