@@ -368,4 +368,10 @@ testAgents.KINDLE_FIRE =
     'Mozilla/5.0 (Linux; U; Android 4.0.3; en-us; KFTT Build/IML74K)' +
     ' AppleWebKit/535.19 (KHTML, like Gecko) Silk/2.1 Mobile Safari/535.19' +
     ' Silk-Accelerated=true';
+
+
+/** @const {string} */
+testAgents.FIREFOX_ANDROID_TABLET =
+    'Mozilla/5.0 (Android; Tablet; rv:28.0) Gecko/28.0 Firefox/28.0';
+
 });  // goog.scope

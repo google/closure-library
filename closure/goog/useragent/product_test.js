@@ -16,6 +16,7 @@ goog.provide('goog.userAgent.productTest');
 goog.setTestOnly('goog.userAgent.productTest');
 
 goog.require('goog.array');
+goog.require('goog.labs.userAgent.testAgents');
 goog.require('goog.labs.userAgent.util');
 goog.require('goog.testing.MockUserAgent');
 goog.require('goog.testing.PropertyReplacer');
@@ -348,4 +349,14 @@ function testAndroid() {
       ]}
   ];
   checkEachUserAgentDetected(userAgents, 'ANDROID');
+}
+
+function testAndroidLegacyBehavior() {
+  mockAgent.setUserAgentString(
+      goog.labs.userAgent.testAgents.FIREFOX_ANDROID_TABLET);
+  updateUserAgentUtils();
+  // Historically, goog.userAgent.product.ANDROID has referred to the
+  // Android browser, not the platform. Firefox on Android should
+  // be false.
+  assertFalse(goog.userAgent.product.ANDROID);
 }
