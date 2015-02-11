@@ -241,3 +241,10 @@ function testPostMessagePolyfillDoesNotPumpCallbackQueueIfMessageIsIncorrect() {
   asyncTestCase.waitForAsync('Waiting for callbacks to be invoked.');
 }
 
+
+function testBehaviorOnPagesWithOverriddenWindowConstructor() {
+  propertyReplacer.set(goog.global, 'Window', {});
+  testNextTick();
+  testNextTickSetImmediate();
+  testNextTickMockClock();
+}
