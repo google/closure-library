@@ -78,8 +78,13 @@ goog.async.nextTick = function(callback, opt_context, opt_useSetImmediate) {
   // to accept the possible tradeoffs of incorrectness in exchange for speed.
   // The IE fallback of readystate change is much slower.
   if (goog.isFunction(goog.global.setImmediate) &&
-      (opt_useSetImmediate || !goog.global.Window ||
-       goog.global.Window.prototype.setImmediate != goog.global.setImmediate)) {
+      // Opt in.
+      (opt_useSetImmediate ||
+      // or it isn't a browser or the environment is weird
+      !goog.global.Window || !goog.global.Window.prototype ||
+      // or something redefined setImmediate in which case we (YOLO) decide
+      // to use it (This is so that we use the mockClock setImmediate. sigh).
+      goog.global.Window.prototype.setImmediate != goog.global.setImmediate)) {
     goog.global.setImmediate(cb);
     return;
   }
