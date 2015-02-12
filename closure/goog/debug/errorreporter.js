@@ -323,7 +323,9 @@ goog.debug.ErrorReporter.prototype.handleException = function(e,
     }
   }
   // Truncate message to a reasonable length, since it will be sent in the URL.
-  var message = error.message.substring(0, 2000);
+  // The entire URL length historically needed to be 2,083 or less, so leave
+  // some room for the rest of the URL.
+  var message = error.message.substring(0, 1900);
   this.sendErrorReport(message, error.fileName, error.lineNumber, error.stack,
       context);
 
