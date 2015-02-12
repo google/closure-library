@@ -360,3 +360,12 @@ function testAndroidLegacyBehavior() {
   // be false.
   assertFalse(goog.userAgent.product.ANDROID);
 }
+
+function testSafariIosLegacyBehavior() {
+  mockAgent.setUserAgentString(
+      goog.labs.userAgent.testAgents.SAFARI_IPHONE_6);
+  updateUserAgentUtils();
+  // Historically, goog.userAgent.product.SAFARI has referred to the
+  // Safari desktop browser, not the mobile browser.
+  assertFalse(goog.userAgent.product.SAFARI);
+}
