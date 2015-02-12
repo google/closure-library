@@ -17,6 +17,9 @@ goog.setTestOnly('goog.dom.iframeTest');
 
 goog.require('goog.dom');
 goog.require('goog.dom.iframe');
+goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyle');
+goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
 
 var domHelper;
@@ -43,6 +46,21 @@ function testCreateWithContent() {
   assertEquals('absolute', iframe.style.position);
 }
 
+function testCreateWithContent_safeTypes() {
+  var head = goog.html.SafeHtml.create('title', {}, 'Foo Title');
+  var body = goog.html.SafeHtml.create('div', {id: 'blah'}, 'Test');
+  var style = goog.html.SafeStyle.fromConstant(goog.string.Const.from(
+      'position: absolute;'));
+  var iframe = goog.dom.iframe.createWithContent(sandbox,
+      head, body, style,
+      false /* opt_quirks */);
+
+  var doc = goog.dom.getFrameContentDocument(iframe);
+  assertNotNull(doc.getElementById('blah'));
+  assertEquals('Foo Title', doc.title);
+  assertEquals('absolute', iframe.style.position);
+}
+
 function testCreateBlankYieldsIframeWithNoBorderOrPadding() {
   var iframe = goog.dom.iframe.createBlank(domHelper);
   iframe.style.width = '350px';
@@ -58,7 +76,16 @@ function testCreateBlankYieldsIframeWithNoBorderOrPadding() {
 }
 
 function testCreateBlankWithStyles() {
-  var iframe = goog.dom.iframe.createBlank(domHelper, 'position:absolute');
+  var iframe = goog.dom.iframe.createBlank(domHelper, 'position:absolute;');
+  assertEquals('absolute', iframe.style.position);
+  assertEquals('bottom', iframe.style.verticalAlign);
+}
+
+function testCreateBlankWithSafeStyles() {
+  var iframe = goog.dom.iframe.createBlank(
+      domHelper,
+      goog.html.SafeStyle.fromConstant(goog.string.Const.from(
+          'position:absolute;')));
   assertEquals('absolute', iframe.style.position);
   assertEquals('bottom', iframe.style.verticalAlign);
 }
