@@ -155,9 +155,21 @@ goog.userAgent.product.CHROME = goog.userAgent.product.PRODUCT_KNOWN_ ?
 
 
 /**
- * Whether the code is running on the Safari web browser.
+ * @return {boolean} Whether the browser is Safari on desktop.
+ * @private
+ */
+goog.userAgent.product.isSafariDesktop_ = function() {
+  return goog.labs.userAgent.browser.isSafari() &&
+      !goog.labs.userAgent.platform.isIos();
+};
+
+
+/**
+ * Whether the code is running on the desktop Safari web browser.
+ * Note: the legacy behavior here is only true for Safari not running
+ * on iOS.
  * @type {boolean}
  */
 goog.userAgent.product.SAFARI = goog.userAgent.product.PRODUCT_KNOWN_ ?
     goog.userAgent.product.ASSUME_SAFARI :
-    goog.labs.userAgent.browser.isSafari();
+    goog.userAgent.product.isSafariDesktop_();

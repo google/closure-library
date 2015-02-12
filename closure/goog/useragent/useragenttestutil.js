@@ -76,7 +76,7 @@ goog.userAgentTestUtil.reinitializeUserAgent = function() {
   goog.userAgent.product.IPAD = goog.labs.userAgent.platform.isIpad();
   goog.userAgent.product.IPHONE = goog.userAgent.product.isIphoneOrIpod_();
   goog.userAgent.product.OPERA = goog.labs.userAgent.browser.isOpera();
-  goog.userAgent.product.SAFARI = goog.labs.userAgent.browser.isSafari();
+  goog.userAgent.product.SAFARI = goog.userAgent.product.isSafariDesktop_();
 
   // Still uses its own implementation.
   goog.userAgent.product.VERSION = goog.userAgent.product.determineVersion_();
