@@ -18,6 +18,7 @@ goog.setTestOnly('goog.crypt.Sha1Test');
 goog.require('goog.crypt');
 goog.require('goog.crypt.Sha1');
 goog.require('goog.crypt.hashTester');
+goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
