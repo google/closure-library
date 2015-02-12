@@ -22,6 +22,9 @@
 goog.provide('goog.dom.iframe');
 
 goog.require('goog.dom');
+goog.require('goog.dom.safe');
+goog.require('goog.html.SafeHtml');
+goog.require('goog.html.SafeStyle');
 goog.require('goog.userAgent');
 
 
@@ -77,6 +80,10 @@ goog.dom.iframe.BLANK_SOURCE_NEW_FRAME = goog.userAgent.IE ?
 goog.dom.iframe.STYLES_ = 'border:0;vertical-align:bottom;';
 
 
+// TODO(user): Introduce legacyconversion in createBlank, writeContent
+// and createWithContent; update their docs. Create legacyconversions
+// Conformance rules for these functions and remove iframe.js from Conformance
+// document.write() whitelist.
 /**
  * Creates a completely blank iframe element.
  *
@@ -89,10 +96,15 @@ goog.dom.iframe.STYLES_ = 'border:0;vertical-align:bottom;';
  * in quirks mode.
  *
  * @param {goog.dom.DomHelper} domHelper The dom helper to use.
- * @param {string=} opt_styles CSS styles for the iframe.
+ * @param {!goog.html.SafeStyle|string=} opt_styles CSS styles for the
+ *     iframe. If possible pass a SafeStyle; string is supported for
+ *     backwards-compatibility only.
  * @return {!HTMLIFrameElement} A completely blank iframe.
  */
 goog.dom.iframe.createBlank = function(domHelper, opt_styles) {
+  if (opt_styles instanceof goog.html.SafeStyle) {
+    opt_styles = goog.html.SafeStyle.unwrap(opt_styles);
+  }
   return /** @type {!HTMLIFrameElement} */ (domHelper.createDom('iframe', {
     'frameborder': 0,
     // Since iframes are inline elements, we must align to bottom to
@@ -105,7 +117,8 @@ goog.dom.iframe.createBlank = function(domHelper, opt_styles) {
 
 /**
  * Writes the contents of a blank iframe that has already been inserted
- * into the document.
+ * into the document. If possible use {@link #writeSafeContent},
+ * this function exists for backwards-compatibility only.
  * @param {!HTMLIFrameElement} iframe An iframe with no contents, such as
  *     one created by goog.dom.iframe.createBlank, but already appended to
  *     a parent document.
@@ -116,6 +129,23 @@ goog.dom.iframe.writeContent = function(iframe, content) {
   var doc = goog.dom.getFrameContentDocument(iframe);
   doc.open();
   doc.write(content);
+  doc.close();
+};
+
+
+/**
+ * Writes the contents of a blank iframe that has already been inserted
+ * into the document.
+ * @param {!HTMLIFrameElement} iframe An iframe with no contents, such as
+ *     one created by {@link #createBlank}, but already appended to
+ *     a parent document.
+ * @param {!goog.html.SafeHtml} content Content to write to the iframe,
+ *     from doctype to the HTML close tag.
+ */
+goog.dom.iframe.writeSafeContent = function(iframe, content) {
+  var doc = goog.dom.getFrameContentDocument(iframe);
+  doc.open();
+  goog.dom.safe.documentWrite(doc, content);
   doc.close();
 };
 
@@ -134,16 +164,32 @@ goog.dom.iframe.writeContent = function(iframe, content) {
  *
  * @param {!Element} parentElement The parent element in which to append the
  *     iframe.
- * @param {string=} opt_headContents Contents to go into the iframe's head.
- * @param {string=} opt_bodyContents Contents to go into the iframe's body.
- * @param {string=} opt_styles CSS styles for the iframe itself, before adding
- *     to the parent element.
+ * @param {!goog.html.SafeHtml|string=} opt_headContents Contents to go into
+ *     the iframe's head. If possible pass a SafeHtml; string is supported for
+ *     backwards-compatibility only.
+ * @param {!goog.html.SafeHtml|string=} opt_bodyContents Contents to go into
+ *     the iframe's body. If possible pass a SafeHtml; string is supported for
+ *     backwards-compatibility only.
+ * @param {!goog.html.SafeStyle|string=} opt_styles CSS styles for the iframe
+ *     itself, before adding to the parent element. If possible pass a
+ *     SafeStyle; string is supported for backwards-compatibility only.
  * @param {boolean=} opt_quirks Whether to use quirks mode (false by default).
  * @return {!HTMLIFrameElement} An iframe that has the specified contents.
  */
 goog.dom.iframe.createWithContent = function(
     parentElement, opt_headContents, opt_bodyContents, opt_styles, opt_quirks) {
   var domHelper = goog.dom.getDomHelper(parentElement);
+
+  if (opt_headContents instanceof goog.html.SafeHtml) {
+    opt_headContents = goog.html.SafeHtml.unwrap(opt_headContents);
+  }
+  if (opt_bodyContents instanceof goog.html.SafeHtml) {
+    opt_bodyContents = goog.html.SafeHtml.unwrap(opt_bodyContents);
+  }
+  if (opt_styles instanceof goog.html.SafeStyle) {
+    opt_styles = goog.html.SafeStyle.unwrap(opt_styles);
+  }
+
   // Generate the HTML content.
   var contentBuf = [];
 
