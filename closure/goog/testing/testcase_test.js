@@ -16,6 +16,7 @@ goog.provide('goog.testing.TestCaseTest');
 goog.setTestOnly('goog.testing.TestCaseTest');
 
 goog.require('goog.Promise');
+goog.require('goog.testing.MockRandom');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.jsunit');
 
@@ -272,5 +273,139 @@ function testTestCaseNeverRun() {
   assertEquals(0, result.totalCount);
   assertEquals(0, result.runCount);
   assertEquals(0, result.successCount);
+  assertEquals(0, result.errors.length);
+}
+
+function testParseOrder() {
+  assertNull(goog.testing.TestCase.parseOrder_(''));
+  assertNull(goog.testing.TestCase.parseOrder_('?order=invalid'));
+  assertEquals('natural', goog.testing.TestCase.parseOrder_('?order=natural'));
+  assertEquals('sorted', goog.testing.TestCase.parseOrder_('?a&order=sorted'));
+  assertEquals('random', goog.testing.TestCase.parseOrder_('?b&order=random'));
+  assertEquals('random', goog.testing.TestCase.parseOrder_('?ORDER=RANDOM'));
+}
+
+function testParseRunTests() {
+  assertNull(goog.testing.TestCase.parseRunTests_(''));
+  assertNull(goog.testing.TestCase.parseRunTests_('?runTests='));
+  assertObjectEquals({
+    'testOne': true
+  }, goog.testing.TestCase.parseRunTests_('?runTests=testOne'));
+  assertObjectEquals({
+    'testOne': true,
+    'testTwo': true
+  }, goog.testing.TestCase.parseRunTests_('?foo=bar&runTests=testOne,testTwo'));
+  assertObjectEquals({
+    '1': true,
+    '2': true,
+    '3': true,
+    'testShouting': true,
+    'TESTSHOUTING': true
+  }, goog.testing.TestCase.parseRunTests_(
+      '?RUNTESTS=testShouting,TESTSHOUTING,1,2,3'));
+}
+
+function testSortOrder_natural() {
+  var testCase = new goog.testing.TestCase();
+  testCase.setOrder('natural');
+
+  var testIndex = 0;
+  testCase.addNewTest('test_c', function() { assertEquals(0, testIndex++); });
+  testCase.addNewTest('test_a', function() { assertEquals(1, testIndex++); });
+  testCase.addNewTest('test_b', function() { assertEquals(2, testIndex++); });
+  testCase.runTests();
+
+  assertTrue(testCase.isSuccess());
+  var result = testCase.getResult();
+  assertEquals(3, result.totalCount);
+  assertEquals(3, result.runCount);
+  assertEquals(3, result.successCount);
+  assertEquals(0, result.errors.length);
+}
+
+function testSortOrder_random() {
+  var testCase = new goog.testing.TestCase();
+  testCase.setOrder('random');
+
+  var testIndex = 0;
+  testCase.addNewTest('test_c', function() { assertEquals(0, testIndex++); });
+  testCase.addNewTest('test_a', function() { assertEquals(2, testIndex++); });
+  testCase.addNewTest('test_b', function() { assertEquals(1, testIndex++); });
+
+  var mockRandom = new goog.testing.MockRandom([0.5, 0.5]);
+  mockRandom.install();
+  try {
+    testCase.runTests();
+  } finally {
+    // Avoid using a global tearDown() for cleanup, since all TestCase instances
+    // auto-detect and share the global life cycle functions.
+    mockRandom.uninstall();
+  }
+
+  assertTrue(testCase.isSuccess());
+  var result = testCase.getResult();
+  assertEquals(3, result.totalCount);
+  assertEquals(3, result.runCount);
+  assertEquals(3, result.successCount);
+  assertEquals(0, result.errors.length);
+}
+
+function testSortOrder_sorted() {
+  var testCase = new goog.testing.TestCase();
+  testCase.setOrder('sorted');
+
+  var testIndex = 0;
+  testCase.addNewTest('test_c', function() { assertEquals(2, testIndex++); });
+  testCase.addNewTest('test_a', function() { assertEquals(0, testIndex++); });
+  testCase.addNewTest('test_b', function() { assertEquals(1, testIndex++); });
+  testCase.runTests();
+
+  assertTrue(testCase.isSuccess());
+  var result = testCase.getResult();
+  assertEquals(3, result.totalCount);
+  assertEquals(3, result.runCount);
+  assertEquals(3, result.successCount);
+  assertEquals(0, result.errors.length);
+}
+
+function testRunTests() {
+  var testCase = new goog.testing.TestCase();
+  testCase.setTestsToRun({
+    'test_a': true,
+    'test_c': true
+  });
+
+  var testIndex = 0;
+  testCase.addNewTest('test_c', function() { assertEquals(1, testIndex++); });
+  testCase.addNewTest('test_a', function() { assertEquals(0, testIndex++);});
+  testCase.addNewTest('test_b', fail);
+  testCase.runTests();
+
+  assertTrue(testCase.isSuccess());
+  var result = testCase.getResult();
+  assertEquals(3, result.totalCount);
+  assertEquals(2, result.runCount);
+  assertEquals(2, result.successCount);
+  assertEquals(0, result.errors.length);
+}
+
+function testRunTests_byIndex() {
+  var testCase = new goog.testing.TestCase();
+  testCase.setTestsToRun({
+    '0': true,
+    '2': true
+  });
+
+  var testIndex = 0;
+  testCase.addNewTest('test_c', function() { assertEquals(1, testIndex++); });
+  testCase.addNewTest('test_a', function() { assertEquals(0, testIndex++); });
+  testCase.addNewTest('test_b', fail);
+  testCase.runTests();
+
+  assertTrue(testCase.isSuccess());
+  var result = testCase.getResult();
+  assertEquals(3, result.totalCount);
+  assertEquals(2, result.runCount);
+  assertEquals(2, result.successCount);
   assertEquals(0, result.errors.length);
 }
