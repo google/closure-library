@@ -144,8 +144,9 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
         // Wait so that we don't interfere with WebDriver.
         realTimeout(function() {
           if (!tr.initialized) {
-            var testCase = new goog.testing.TestCase(document.title);
-            goog.testing.TestCase.initializeTestRunner(testCase);
+            var test = new goog.testing.TestCase(document.title);
+            test.autoDiscoverTests();
+            tr.initialize(test);
           }
           tr.execute();
         }, goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS);
