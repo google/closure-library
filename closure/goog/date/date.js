@@ -834,7 +834,7 @@ goog.date.Date.prototype.getFullYear = function() {
  * Alias for getFullYear.
  *
  * @return {number} The four digit year of date.
- * @see #getFullYear
+ * @see #getFullyear
  */
 goog.date.Date.prototype.getYear = function() {
   return this.getFullYear();
