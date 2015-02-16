@@ -1130,7 +1130,7 @@ goog.addDependency('ui/ac/renderer_test.js', ['goog.ui.ac.RendererTest'], ['goog
 goog.addDependency('ui/ac/renderoptions.js', ['goog.ui.ac.RenderOptions'], [], false);
 goog.addDependency('ui/ac/richinputhandler.js', ['goog.ui.ac.RichInputHandler'], ['goog.ui.ac.InputHandler'], false);
 goog.addDependency('ui/ac/richremote.js', ['goog.ui.ac.RichRemote'], ['goog.ui.ac.AutoComplete', 'goog.ui.ac.Remote', 'goog.ui.ac.Renderer', 'goog.ui.ac.RichInputHandler', 'goog.ui.ac.RichRemoteArrayMatcher'], false);
-goog.addDependency('ui/ac/richremotearraymatcher.js', ['goog.ui.ac.RichRemoteArrayMatcher'], ['goog.json', 'goog.ui.ac.RemoteArrayMatcher'], false);
+goog.addDependency('ui/ac/richremotearraymatcher.js', ['goog.ui.ac.RichRemoteArrayMatcher'], ['goog.dom.safe', 'goog.html.legacyconversions', 'goog.json', 'goog.ui.ac.RemoteArrayMatcher'], false);
 goog.addDependency('ui/activitymonitor.js', ['goog.ui.ActivityMonitor'], ['goog.array', 'goog.asserts', 'goog.dom', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.events.EventType'], false);
 goog.addDependency('ui/activitymonitor_test.js', ['goog.ui.ActivityMonitorTest'], ['goog.dom', 'goog.events', 'goog.events.Event', 'goog.events.EventType', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.events', 'goog.testing.jsunit', 'goog.testing.recordFunction', 'goog.ui.ActivityMonitor'], false);
 goog.addDependency('ui/advancedtooltip.js', ['goog.ui.AdvancedTooltip'], ['goog.events', 'goog.events.EventType', 'goog.math.Box', 'goog.math.Coordinate', 'goog.style', 'goog.ui.Tooltip', 'goog.userAgent'], false);
