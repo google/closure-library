@@ -503,6 +503,7 @@ goog.Promise.prototype.cancelInternal_ = function(err) {
     if (this.parent_) {
       // Cancel the Promise and remove it from the parent's child list.
       this.parent_.cancelChild_(this, err);
+      this.parent_ = null;
     } else {
       this.resolve_(goog.Promise.State_.REJECTED, err);
     }
@@ -714,6 +715,9 @@ goog.Promise.prototype.resolve_ = function(state, x) {
 
   this.result_ = x;
   this.state_ = state;
+  // Since we can no longer be cancelled, remove link to parent, so that the
+  // child promise does not keep the parent promise alive.
+  this.parent_ = null;
   this.scheduleCallbacks_();
 
   if (state == goog.Promise.State_.REJECTED &&
