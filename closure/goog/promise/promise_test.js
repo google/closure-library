@@ -1486,3 +1486,35 @@ function testCreateWithResolver_Rejected() {
 
   assertEquals('onFulfilled must be called exactly once.', 1, timesCalled);
 }
+
+
+function testLinksBetweenParentsAndChildrenAreCutOnResolve() {
+  mockClock.install();
+  var parentResolver = goog.Promise.withResolver();
+  var parent = parentResolver.promise;
+  var child = parent.then(function() {});
+  assertNotNull(child.parent_);
+  assertEquals(1, parent.callbackEntries_.length);
+  parentResolver.resolve();
+  mockClock.tick();
+  assertNull(child.parent_);
+  assertEquals(0, parent.callbackEntries_.length);
+}
+
+
+function testLinksBetweenParentsAndChildrenAreCutOnCancel() {
+  mockClock.install();
+  var parent = new goog.Promise(function() {});
+  var child = parent.then(function() {});
+  var grandChild = child.then(function() {});
+  assertEquals(1, child.callbackEntries_.length);
+  assertNotNull(child.parent_);
+  assertEquals(1, parent.callbackEntries_.length);
+  parent.cancel();
+  mockClock.tick();
+  assertNull(child.parent_);
+  assertNull(grandChild.parent_);
+  assertEquals(0, parent.callbackEntries_.length);
+  assertEquals(0, child.callbackEntries_.length);
+}
+
