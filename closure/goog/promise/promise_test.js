@@ -1498,7 +1498,7 @@ function testLinksBetweenParentsAndChildrenAreCutOnResolve() {
   parentResolver.resolve();
   mockClock.tick();
   assertNull(child.parent_);
-  assertEquals(0, parent.callbackEntries_.length);
+  assertEquals(null, parent.callbackEntries_);
 }
 
 
@@ -1514,7 +1514,7 @@ function testLinksBetweenParentsAndChildrenAreCutOnCancel() {
   mockClock.tick();
   assertNull(child.parent_);
   assertNull(grandChild.parent_);
-  assertEquals(0, parent.callbackEntries_.length);
-  assertEquals(0, child.callbackEntries_.length);
+  assertEquals(null, parent.callbackEntries_);
+  assertEquals(null, child.callbackEntries_);
 }
 

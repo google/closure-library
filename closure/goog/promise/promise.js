@@ -800,7 +800,7 @@ goog.Promise.prototype.scheduleCallbacks_ = function() {
 goog.Promise.prototype.executeCallbacks_ = function() {
   while (this.callbackEntries_ && this.callbackEntries_.length) {
     var entries = this.callbackEntries_;
-    this.callbackEntries_ = [];
+    this.callbackEntries_ = null;
 
     for (var i = 0; i < entries.length; i++) {
       if (goog.Promise.LONG_STACK_TRACES) {
