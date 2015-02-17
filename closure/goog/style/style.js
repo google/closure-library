@@ -678,7 +678,6 @@ goog.style.getClientLeftTop = function(el) {
  */
 goog.style.getPageOffset = function(el) {
   var doc = goog.dom.getOwnerDocument(el);
-  var positionStyle = goog.style.getStyle_(el, 'position');
   // TODO(gboyer): Update the jsdoc in a way that doesn't break the universe.
   goog.asserts.assertObject(el, 'Parameter is required');
 
