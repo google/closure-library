@@ -202,13 +202,17 @@ function assertSourceInjection() {
       throwErrorInModuleB();
     });
 
+    if (!ex.stack) {
+      return;
+    }
+
     var stackTrace = ex.stack.toString();
     var expectedString = 'testdata/modB_1.js';
 
     if (goog.module.ModuleLoader.supportsSourceUrlStackTraces()) {
       // Source URL should be added in eval or in jsloader.
       assertContains(expectedString, stackTrace);
-    } else if (moduleLoader.isDebugMode()) {
+    } else if (moduleLoader.getDebugMode()) {
       // Browsers used jsloader, thus URLs are present.
       assertContains(expectedString, stackTrace);
     } else {

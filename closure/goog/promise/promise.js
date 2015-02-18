@@ -146,33 +146,40 @@ goog.Promise = function(resolver, opt_context) {
     this.currentStep_ = 0;
   }
 
-  try {
-    var self = this;
-    resolver.call(
-        opt_context,
-        function(value) {
-          self.resolve_(goog.Promise.State_.FULFILLED, value);
-        },
-        function(reason) {
-          if (goog.DEBUG &&
-              !(reason instanceof goog.Promise.CancellationError)) {
-            try {
-              // Promise was rejected. Step up one call frame to see why.
-              if (reason instanceof Error) {
-                throw reason;
-              } else {
-                throw new Error('Promise rejected.');
+  if (resolver == goog.Promise.RESOLVE_FAST_PATH_) {
+    // If the special sentinel resolver value is passed (from
+    // goog.Promise.resolve) we short cut to immediately resolve the promise
+    // using the value passed as opt_context. Don't try this at home.
+    this.resolve_(goog.Promise.State_.FULFILLED, opt_context);
+  } else {
+    try {
+      var self = this;
+      resolver.call(
+          opt_context,
+          function(value) {
+            self.resolve_(goog.Promise.State_.FULFILLED, value);
+          },
+          function(reason) {
+            if (goog.DEBUG &&
+                !(reason instanceof goog.Promise.CancellationError)) {
+              try {
+                // Promise was rejected. Step up one call frame to see why.
+                if (reason instanceof Error) {
+                  throw reason;
+                } else {
+                  throw new Error('Promise rejected.');
+                }
+              } catch (e) {
+                // Only thrown so browser dev tools can catch rejections of
+                // promises when the option to break on caught exceptions is
+                // activated.
               }
-            } catch (e) {
-              // Only thrown so browser dev tools can catch rejections of
-              // promises when the option to break on caught exceptions is
-              // activated.
             }
-          }
-          self.resolve_(goog.Promise.State_.REJECTED, reason);
-        });
-  } catch (e) {
-    this.resolve_(goog.Promise.State_.REJECTED, e);
+            self.resolve_(goog.Promise.State_.REJECTED, reason);
+          });
+    } catch (e) {
+      this.resolve_(goog.Promise.State_.REJECTED, e);
+    }
   }
 };
 
@@ -233,15 +240,25 @@ goog.Promise.CallbackEntry_;
 
 
 /**
+ * If this passed as the first argument to the {@link goog.Promise} constructor
+ * the the opt_context is (against its primary use) used to immediately resolve
+ * the promise. This is used from  {@link goog.Promise.resolve} as an
+ * optimization to avoid allocating 3 closures that are never really needed.
+ * @private @const {!Function}
+ */
+goog.Promise.RESOLVE_FAST_PATH_ = function() {};
+
+
+/**
  * @param {(TYPE|goog.Thenable<TYPE>|Thenable)=} opt_value
  * @return {!goog.Promise<TYPE>} A new Promise that is immediately resolved
  *     with the given value.
  * @template TYPE
  */
 goog.Promise.resolve = function(opt_value) {
-  return new goog.Promise(function(resolve, reject) {
-    resolve(opt_value);
-  });
+  // Passes the value as the context, which is a special fast pass when
+  // goog.Promise.RESOLVE_FAST_PATH_ is passed as the first argument.
+  return new goog.Promise(goog.Promise.RESOLVE_FAST_PATH_, opt_value);
 };
 
 
@@ -503,6 +520,7 @@ goog.Promise.prototype.cancelInternal_ = function(err) {
     if (this.parent_) {
       // Cancel the Promise and remove it from the parent's child list.
       this.parent_.cancelChild_(this, err);
+      this.parent_ = null;
     } else {
       this.resolve_(goog.Promise.State_.REJECTED, err);
     }
@@ -714,6 +732,9 @@ goog.Promise.prototype.resolve_ = function(state, x) {
 
   this.result_ = x;
   this.state_ = state;
+  // Since we can no longer be cancelled, remove link to parent, so that the
+  // child promise does not keep the parent promise alive.
+  this.parent_ = null;
   this.scheduleCallbacks_();
 
   if (state == goog.Promise.State_.REJECTED &&
@@ -796,7 +817,7 @@ goog.Promise.prototype.scheduleCallbacks_ = function() {
 goog.Promise.prototype.executeCallbacks_ = function() {
   while (this.callbackEntries_ && this.callbackEntries_.length) {
     var entries = this.callbackEntries_;
-    this.callbackEntries_ = [];
+    this.callbackEntries_ = null;
 
     for (var i = 0; i < entries.length; i++) {
       if (goog.Promise.LONG_STACK_TRACES) {

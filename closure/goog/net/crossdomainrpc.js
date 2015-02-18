@@ -68,9 +68,11 @@ goog.provide('goog.net.CrossDomainRpc');
 
 goog.require('goog.Uri');
 goog.require('goog.dom');
+goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.json');
 goog.require('goog.log');
 goog.require('goog.net.EventType');
@@ -81,7 +83,13 @@ goog.require('goog.userAgent');
 
 
 /**
- * Creates a new instance of cross domain RPC
+ * Creates a new instance of cross domain RPC.
+ *
+ * This class makes use of goog.html.legacyconversions and provides no
+ * HTML-type-safe alternative. As such, it is not compatible with
+ * code that sets goog.html.legacyconversions.ALLOW_LEGACY_CONVERSIONS to
+ * false.
+ *
  * @extends {goog.events.EventTarget}
  * @constructor
  * @final
@@ -453,9 +461,11 @@ goog.net.CrossDomainRpc.prototype.sendRequest =
   var requestFrameContent = '<body><form method="' +
       (opt_method == 'GET' ? 'GET' : 'POST') + '" action="' +
       uri + '">' + inputs.join('') + '</form></body>';
+  var requestFrameContentHtml = goog.html.legacyconversions.safeHtmlFromString(
+      requestFrameContent);
   var requestFrameDoc = goog.dom.getFrameContentDocument(requestFrame);
   requestFrameDoc.open();
-  requestFrameDoc.write(requestFrameContent);
+  goog.dom.safe.documentWrite(requestFrameDoc, requestFrameContentHtml);
   requestFrameDoc.close();
 
   requestFrameDoc.forms[0].submit();

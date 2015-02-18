@@ -230,7 +230,9 @@ goog.dom.getElementsByClass = function(className, opt_el) {
 goog.dom.getElementByClass = function(className, opt_el) {
   var parent = opt_el || document;
   var retVal = null;
-  if (goog.dom.canUseQuerySelector_(parent)) {
+  if (parent.getElementsByClassName) {
+    retVal = parent.getElementsByClassName(className)[0];
+  } else if (goog.dom.canUseQuerySelector_(parent)) {
     retVal = parent.querySelector('.' + className);
   } else {
     retVal = goog.dom.getElementsByTagNameAndClass_(
@@ -937,7 +939,7 @@ goog.dom.htmlToDocumentFragment_ = function(doc, htmlString) {
  */
 goog.dom.childrenToNode_ = function(doc, tempDiv) {
   if (tempDiv.childNodes.length == 1) {
-    return /** @type {!Node} */ (tempDiv.removeChild(tempDiv.firstChild));
+    return tempDiv.removeChild(tempDiv.firstChild);
   } else {
     var fragment = doc.createDocumentFragment();
     while (tempDiv.firstChild) {

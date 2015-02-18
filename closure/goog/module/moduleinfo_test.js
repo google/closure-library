@@ -17,7 +17,22 @@ goog.setTestOnly('goog.module.ModuleInfoTest');
 
 goog.require('goog.module.BaseModule');
 goog.require('goog.module.ModuleInfo');
+goog.require('goog.testing.MockClock');
 goog.require('goog.testing.jsunit');
+
+
+
+var mockClock;
+
+
+function setUp() {
+  mockClock = new goog.testing.MockClock(true);
+}
+
+
+function tearDown() {
+  mockClock.uninstall();
+}
 
 
 /**
@@ -78,6 +93,22 @@ function testCallbacks() {
   assertEquals('ordering of callbacks was wrong', 0, d);
   assertEquals('ordering of callbacks was wrong', 1, a);
   assertEquals('ordering of callbacks was wrong', 2, c);
+}
+
+
+function testErrorsInCallbacks() {
+  var m = new goog.module.ModuleInfo();
+  m.setModuleConstructor(TestModule);
+  m.registerCallback(function() { throw new Error('boom1'); });
+  m.registerCallback(function() { throw new Error('boom2'); });
+  var hadError = m.onLoad(goog.nullFunction);
+  assertTrue(hadError);
+
+  var e = assertThrows(function() {
+    mockClock.tick();
+  });
+
+  assertEquals('boom1', e.message);
 }
 
 
