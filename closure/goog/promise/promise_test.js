@@ -1502,6 +1502,23 @@ function testLinksBetweenParentsAndChildrenAreCutOnResolve() {
 }
 
 
+function testLinksBetweenParentsAndChildrenAreCutWithUnresolvedChild() {
+  mockClock.install();
+  var parentResolver = goog.Promise.withResolver();
+  var parent = parentResolver.promise;
+  var child = parent.then(function() {
+    // Will never resolve.
+    return new goog.Promise(function() {});
+  });
+  assertNotNull(child.parent_);
+  assertEquals(1, parent.callbackEntries_.length);
+  parentResolver.resolve();
+  mockClock.tick();
+  assertNull(child.parent_);
+  assertEquals(null, parent.callbackEntries_);
+}
+
+
 function testLinksBetweenParentsAndChildrenAreCutOnCancel() {
   mockClock.install();
   var parent = new goog.Promise(function() {});

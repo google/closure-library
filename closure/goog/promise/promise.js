@@ -843,6 +843,11 @@ goog.Promise.prototype.executeCallbacks_ = function() {
  */
 goog.Promise.prototype.executeCallback_ = function(
     callbackEntry, state, result) {
+  // When the parent is resolved/rejected, the child no longer needs to hold
+  // on to it, as the parent can no longer be cancelled.
+  if (callbackEntry.child) {
+    callbackEntry.child.parent_ = null;
+  }
   if (state == goog.Promise.State_.FULFILLED) {
     callbackEntry.onFulfilled(result);
   } else {
