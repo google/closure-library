@@ -63,6 +63,8 @@ goog.provide('goog.ui.DrilldownRow');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.classlist');
+goog.require('goog.html.SafeHtml');
+goog.require('goog.html.legacyconversions');
 goog.require('goog.ui.Component');
 
 
@@ -71,16 +73,8 @@ goog.require('goog.ui.Component');
  * Builds a DrilldownRow component, which can overlay a tree
  * structure onto sections of an HTML table.
  *
- * @param {Object=} opt_properties This parameter can contain:
- *   contents:  if present, user data identifying
- *     the information loaded into the row and its children.
- *   loaded: initializes the isLoaded property, defaults to true.
- *   expanded: DrilldownRow expanded or not, default is true.
- *   html: String of HTML, relevant and required for DrilldownRows to be
- *     added as children.  Ignored when decorating an existing table row.
- *   decorator: Function that accepts one DrilldownRow argument, and
- *     should customize and style the row.  The default is to call
- *     goog.ui.DrilldownRow.decorator.
+ * @param {!goog.ui.DrilldownRow.DrilldownRowProperties=} opt_properties
+ *   Optional properties.
  * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.Component}
@@ -92,13 +86,21 @@ goog.ui.DrilldownRow = function(opt_properties, opt_domHelper) {
 
   // Initialize instance variables.
 
+  var html;
+  if (opt_properties.html instanceof goog.html.SafeHtml) {
+    html = goog.html.SafeHtml.unwrap(opt_properties.html);
+  } else if (!opt_properties.html) {
+    html = '';
+  } else {
+    html = opt_properties.html;
+  }
   /**
    * String of HTML to initialize the DOM structure for the table row.
    * Should have the form '<tr attr="etc">Row contents here</tr>'.
    * @type {string}
    * @private
    */
-  this.html_ = properties.html;
+  this.html_ = html;
 
   /**
    * Controls whether this component's children will show when it shows.
@@ -126,6 +128,66 @@ goog.ui.DrilldownRow = function(opt_properties, opt_domHelper) {
   this.displayed_ = true;
 };
 goog.inherits(goog.ui.DrilldownRow, goog.ui.Component);
+
+
+// TODO(user): Change DrilldownRowProperties to not accept html as string
+// once users are moved over to unsafeCreate(). Then remove from file from
+// Conformance innerHTML whitelist.
+/**
+ * Used to define properties for a new DrilldownRow. Properties can contain:
+ *   loaded: initializes the isLoaded property, defaults to true.
+ *   expanded: DrilldownRow expanded or not, default is true.
+ *   html: Relevant and required for DrilldownRows to be added as
+ *     children.  Ignored when decorating an existing table row.
+ *   decorator: Function that accepts one DrilldownRow argument, and
+ *     should customize and style the row.  The default is to call
+ *     goog.ui.DrilldownRow.decorator.
+ * @typedef {{
+ *   loaded: (boolean|undefined),
+ *   expanded: (boolean|undefined),
+ *   html: (string|!goog.html.SafeHtml|undefined),
+ *   decorator: (Function|undefined)
+ * }}
+ */
+goog.ui.DrilldownRow.DrilldownRowProperties;
+
+
+/**
+ * See documentation for fields in goog.ui.DrilldownRow.DrilldownRowProperties.
+ * @typedef {{
+ *   loaded: (boolean|undefined),
+ *   expanded: (boolean|undefined),
+ *   html: (string|undefined),
+ *   decorator: (Function|undefined)
+ * }}
+ */
+goog.ui.DrilldownRow.DrilldownRowPropertiesUnsafe;
+
+
+/**
+ * Builds a DrilldownRow component.  This function exists for
+ * backwards-compatibility only and uses goog.html.legacyconversions.  For all
+ * new code use the goog.ui.DrilldownRow() constructor.
+ * @param {goog.ui.DrilldownRow.DrilldownRowPropertiesUnsafe=} opt_properties
+ *   Optional properties.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @return {!goog.ui.DrilldownRow}
+ * @deprecated Use goog.ui.DrilldownRow constructor instead.
+ *
+ */
+goog.ui.DrilldownRow.unsafeCreate = function(opt_properties, opt_domHelper) {
+  var properties = {};
+  if (opt_properties) {
+    properties.loaded = opt_properties.loaded;
+    properties.expanded = opt_properties.expanded;
+    if (goog.isString(opt_properties.html)) {
+      properties.html = goog.html.legacyconversions.safeHtmlFromString(
+          opt_properties.html);
+    }
+    properties.decorator = opt_properties.decorator;
+  }
+  return new goog.ui.DrilldownRow(properties, opt_domHelper);
+};
 
 
 /**
