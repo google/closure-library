@@ -400,9 +400,11 @@ goog.addDependency('fs/filesaver.js', ['goog.fs.FileSaver', 'goog.fs.FileSaver.E
 goog.addDependency('fs/filesystem.js', ['goog.fs.FileSystem'], [], false);
 goog.addDependency('fs/filesystemimpl.js', ['goog.fs.FileSystemImpl'], ['goog.fs.DirectoryEntryImpl', 'goog.fs.FileSystem'], false);
 goog.addDependency('fs/filewriter.js', ['goog.fs.FileWriter'], ['goog.fs.Error', 'goog.fs.FileSaver'], false);
-goog.addDependency('fs/fs.js', ['goog.fs'], ['goog.array', 'goog.async.Deferred', 'goog.fs.Error', 'goog.fs.FileReader', 'goog.fs.FileSystemImpl', 'goog.userAgent'], false);
+goog.addDependency('fs/fs.js', ['goog.fs'], ['goog.array', 'goog.async.Deferred', 'goog.fs.Error', 'goog.fs.FileReader', 'goog.fs.FileSystemImpl', 'goog.fs.url', 'goog.userAgent'], false);
 goog.addDependency('fs/fs_test.js', ['goog.fsTest'], ['goog.Promise', 'goog.array', 'goog.dom', 'goog.events', 'goog.fs', 'goog.fs.DirectoryEntry', 'goog.fs.Error', 'goog.fs.FileReader', 'goog.fs.FileSaver', 'goog.string', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], false);
 goog.addDependency('fs/progressevent.js', ['goog.fs.ProgressEvent'], ['goog.events.Event'], false);
+goog.addDependency('fs/url.js', ['goog.fs.url'], [], false);
+goog.addDependency('fs/url_test.js', ['goog.urlTest'], ['goog.fs.url', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit'], false);
 goog.addDependency('functions/functions.js', ['goog.functions'], [], false);
 goog.addDependency('functions/functions_test.js', ['goog.functionsTest'], ['goog.functions', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction'], false);
 goog.addDependency('fx/abstractdragdrop.js', ['goog.fx.AbstractDragDrop', 'goog.fx.AbstractDragDrop.EventType', 'goog.fx.DragDropEvent', 'goog.fx.DragDropItem'], ['goog.asserts', 'goog.dom', 'goog.dom.classlist', 'goog.events', 'goog.events.Event', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.fx.Dragger', 'goog.math.Box', 'goog.math.Coordinate', 'goog.style'], false);
@@ -487,8 +489,8 @@ goog.addDependency('html/safestyle.js', ['goog.html.SafeStyle'], ['goog.array', 
 goog.addDependency('html/safestyle_test.js', ['goog.html.safeStyleTest'], ['goog.html.SafeStyle', 'goog.string.Const', 'goog.testing.jsunit'], false);
 goog.addDependency('html/safestylesheet.js', ['goog.html.SafeStyleSheet'], ['goog.array', 'goog.asserts', 'goog.string', 'goog.string.Const', 'goog.string.TypedString'], false);
 goog.addDependency('html/safestylesheet_test.js', ['goog.html.safeStyleSheetTest'], ['goog.html.SafeStyleSheet', 'goog.string', 'goog.string.Const', 'goog.testing.jsunit'], false);
-goog.addDependency('html/safeurl.js', ['goog.html.SafeUrl'], ['goog.asserts', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.string.Const', 'goog.string.TypedString'], false);
-goog.addDependency('html/safeurl_test.js', ['goog.html.safeUrlTest'], ['goog.html.SafeUrl', 'goog.i18n.bidi.Dir', 'goog.string.Const', 'goog.testing.jsunit'], false);
+goog.addDependency('html/safeurl.js', ['goog.html.SafeUrl'], ['goog.asserts', 'goog.fs.url', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.string.Const', 'goog.string.TypedString'], false);
+goog.addDependency('html/safeurl_test.js', ['goog.html.safeUrlTest'], ['goog.html.SafeUrl', 'goog.i18n.bidi.Dir', 'goog.string.Const', 'goog.testing.jsunit', 'goog.userAgent'], false);
 goog.addDependency('html/silverlight.js', ['goog.html.silverlight'], ['goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.html.flash', 'goog.string.Const'], false);
 goog.addDependency('html/silverlight_test.js', ['goog.html.silverlightTest'], ['goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.html.silverlight', 'goog.string.Const', 'goog.testing.jsunit'], false);
 goog.addDependency('html/testing.js', ['goog.html.testing'], ['goog.html.SafeHtml', 'goog.html.SafeScript', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl'], false);
