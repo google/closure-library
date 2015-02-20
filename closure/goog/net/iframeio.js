@@ -140,10 +140,12 @@ goog.require('goog.Uri');
 goog.require('goog.asserts');
 goog.require('goog.debug');
 goog.require('goog.dom');
+goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+goog.require('goog.html.uncheckedconversions');
 goog.require('goog.json');
 goog.require('goog.log');
 goog.require('goog.log.Level');
@@ -151,6 +153,7 @@ goog.require('goog.net.ErrorCode');
 goog.require('goog.net.EventType');
 goog.require('goog.reflect');
 goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.structs');
 goog.require('goog.userAgent');
 
@@ -457,7 +460,6 @@ goog.net.IframeIo.prototype.lastContent_ = null;
  * @private
  */
 goog.net.IframeIo.prototype.lastErrorCode_ = goog.net.ErrorCode.NO_ERROR;
-
 
 
 /**
@@ -871,19 +873,19 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
 
     // Open and document.write another iframe into the iframe
     var doc = goog.dom.getFrameContentDocument(this.iframe_);
-    var html = '<body><iframe id=' + innerFrameName +
-               ' name=' + innerFrameName + '></iframe>';
+    var html;
     if (document.baseURI) {
       // On Safari 4 and 5 the new iframe doesn't inherit the current baseURI.
-      html = '<head><base href="' + goog.string.htmlEscape(document.baseURI) +
-             '"></head>' + html;
+      html = goog.net.IframeIo.createIframeHtmlWithBaseUri_(innerFrameName);
+    } else {
+      html = goog.net.IframeIo.createIframeHtml_(innerFrameName);
     }
     if (goog.userAgent.OPERA) {
       // Opera adds a history entry when document.write is used.
       // Change the innerHTML of the page instead.
-      doc.documentElement.innerHTML = html;
+      goog.dom.safe.setInnerHtml(doc.documentElement, html);
     } else {
-      doc.write(html);
+      goog.dom.safe.documentWrite(doc, html);
     }
 
     // Listen for the iframe's load
@@ -976,6 +978,41 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
       this.handleError_(goog.net.ErrorCode.FILE_NOT_FOUND);
     }
   }
+};
+
+
+/**
+ * @param {string} innerFrameName
+ * @return {!goog.html.SafeHtml}
+ * @private
+ */
+goog.net.IframeIo.createIframeHtml_ = function(innerFrameName) {
+  var innerFrameNameEscaped = goog.string.htmlEscape(innerFrameName);
+  return goog.html.uncheckedconversions
+      .safeHtmlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Short HTML snippet, input escaped, for performance'),
+          '<body><iframe id="' + innerFrameNameEscaped +
+          '" name="' + innerFrameNameEscaped + '"></iframe>');
+};
+
+
+/**
+ * @param {string} innerFrameName
+ * @return {!goog.html.SafeHtml}
+ * @private
+ */
+goog.net.IframeIo.createIframeHtmlWithBaseUri_ = function(innerFrameName) {
+  var innerFrameNameEscaped = goog.string.htmlEscape(innerFrameName);
+  return goog.html.uncheckedconversions
+      .safeHtmlFromStringKnownToSatisfyTypeContract(
+          goog.string.Const.from(
+              'Short HTML snippet, input escaped, safe URL, for performance'),
+          '<head><base href="' +
+          goog.string.htmlEscape(/** @type {string} */ (document.baseURI)) +
+          '"></head>' +
+          '<body><iframe id="' + innerFrameNameEscaped +
+          '" name="' + innerFrameNameEscaped + '"></iframe>');
 };
 
 
