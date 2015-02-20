@@ -654,21 +654,32 @@ goog.testing.TestCase.prototype.runTests = function() {
  * @package
  */
 goog.testing.TestCase.prototype.runTestsReturningPromise = function() {
+  if (!this.prepareForRun_()) {
+    return goog.Promise.resolve(this.result_);
+  }
+
+  // Create the test running Promise before calling setUpPage, which may modify
+  // Promise or clock behavior for test purposes.
+  var runTests = new goog.Promise(function(resolve) {
+    this.runNextTestCallback_ = resolve;
+
+    // Run all tests, including the first one, from inside a Promise callback
+    // chain. This avoids an issue in IE where some tests may produce different
+    // results if they are run with or without the Promise scheduler.
+    goog.Promise.resolve().then(this.runNextTest_, null, this);
+  }, this);
+
   try {
     this.setUpPage();
   } catch (e) {
     this.exceptionBeforeTest = e;
   }
-  if (!this.prepareForRun_()) {
-    return goog.Promise.resolve(this.result_);
-  }
+
   this.log('Starting tests: ' + this.name_);
   this.saveMessage('Start');
   this.batchTime_ = this.now();
-  return new goog.Promise(function(resolve) {
-    this.runNextTestCallback_ = resolve;
-    this.runNextTest_();
-  }, this);
+
+  return runTests;
 };
 
 
