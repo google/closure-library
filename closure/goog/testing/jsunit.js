@@ -59,6 +59,11 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
 
 
 (function() {
+  // Only allow one global test runner to be created on a page.
+  if (goog.global['G_testRunner']) {
+    return;
+  }
+
   // Increases the maximum number of stack frames in Google Chrome from the
   // default 10 to 50 to get more useful stack traces.
   Error.stackTraceLimit = 50;
@@ -144,9 +149,8 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
         // Wait so that we don't interfere with WebDriver.
         realTimeout(function() {
           if (!tr.initialized) {
-            var test = new goog.testing.TestCase(document.title);
-            test.autoDiscoverTests();
-            tr.initialize(test);
+            var testCase = new goog.testing.TestCase(document.title);
+            goog.testing.TestCase.initializeTestRunner(testCase);
           }
           tr.execute();
         }, goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS);

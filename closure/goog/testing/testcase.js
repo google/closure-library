@@ -93,6 +93,12 @@ goog.testing.TestCase = function(opt_name) {
    */
   this.testsToRun_ = null;
 
+  /**
+   * The order to run the auto-discovered tests in.
+   * @type {string}
+   */
+  this.order = goog.testing.TestCase.Order.SORTED;
+
   /** @private {function(!goog.testing.TestCase.Result)} */
   this.runNextTestCallback_ = goog.nullFunction;
 
@@ -107,28 +113,6 @@ goog.testing.TestCase = function(opt_name) {
 
   /** @private {goog.testing.TestCase.Test} */
   this.curTest_ = null;
-
-  var search = '';
-  if (goog.global.location) {
-    search = goog.global.location.search;
-  }
-
-  // Parse the 'runTests' query parameter into a set of test names and/or
-  // test indices.
-  var runTestsMatch = search.match(/(?:\?|&)runTests=([^?&]+)/i);
-  if (runTestsMatch) {
-    this.testsToRun_ = {};
-    var arr = runTestsMatch[1].split(',');
-    for (var i = 0, len = arr.length; i < len; i++) {
-      this.testsToRun_[arr[i]] = 1;
-    }
-  }
-
-  // Checks the URL for a valid order param.
-  var orderMatch = search.match(/(?:\?|&)order=(natural|random|sorted)/i);
-  if (orderMatch) {
-    this.order = orderMatch[1];
-  }
 
   /**
    * Object used to encapsulate the test results.
@@ -185,13 +169,6 @@ goog.testing.TestCase.maxRunTime = 200;
  * @private @const
  */
 goog.testing.TestCase.MAX_STACK_DEPTH_ = 100;
-
-
-/**
- * The order to run the auto-discovered tests in.
- * @type {string}
- */
-goog.testing.TestCase.prototype.order = goog.testing.TestCase.Order.SORTED;
 
 
 /**
@@ -406,6 +383,24 @@ goog.testing.TestCase.prototype.reset = function() {
  */
 goog.testing.TestCase.prototype.setCompletedCallback = function(fn) {
   this.onCompleteCallback_ = fn;
+};
+
+
+/**
+ * @param {goog.testing.TestCase.Order} order The sort order for running tests.
+ */
+goog.testing.TestCase.prototype.setOrder = function(order) {
+  this.order = order;
+};
+
+
+/**
+ * @param {Object<string, boolean>} testsToRun Set of tests to run. Entries in
+ *     the set may be test names, like "testFoo", or numeric indicies. Only
+ *     tests identified by name or by index will be executed.
+ */
+goog.testing.TestCase.prototype.setTestsToRun = function(testsToRun) {
+  this.testsToRun_ = testsToRun;
 };
 
 
@@ -831,27 +826,25 @@ goog.testing.TestCase.prototype.finishTestInvocation_ = function(opt_error) {
 
 /**
  * Reorders the tests depending on the {@code order} field.
- * @param {Array<goog.testing.TestCase.Test>} tests An array of tests to
- *     reorder.
  * @private
  */
-goog.testing.TestCase.prototype.orderTests_ = function(tests) {
+goog.testing.TestCase.prototype.orderTests_ = function() {
   switch (this.order) {
     case goog.testing.TestCase.Order.RANDOM:
       // Fisher-Yates shuffle
-      var i = tests.length;
+      var i = this.tests_.length;
       while (i > 1) {
         // goog.math.randomInt is inlined to reduce dependencies.
         var j = Math.floor(Math.random() * i); // exclusive
         i--;
-        var tmp = tests[i];
-        tests[i] = tests[j];
-        tests[j] = tmp;
+        var tmp = this.tests_[i];
+        this.tests_[i] = this.tests_[j];
+        this.tests_[j] = tmp;
       }
       break;
 
     case goog.testing.TestCase.Order.SORTED:
-      tests.sort(function(t1, t2) {
+      this.tests_.sort(function(t1, t2) {
         if (t1.name == t2.name) {
           return 0;
         }
@@ -1034,11 +1027,10 @@ goog.testing.TestCase.prototype.autoDiscoverTests = function() {
     }
   }
 
-  this.orderTests_(foundTests);
-
   for (var i = 0; i < foundTests.length; i++) {
     this.add(foundTests[i]);
   }
+  this.orderTests_();
 
   this.log(this.getCount() + ' tests auto-discovered');
 
@@ -1425,6 +1417,14 @@ goog.testing.TestCase.Result.prototype.getSummary = function() {
  */
 goog.testing.TestCase.initializeTestRunner = function(testCase) {
   testCase.autoDiscoverTests();
+
+  if (goog.global.location) {
+    var search = goog.global.location.search;
+    testCase.setOrder(goog.testing.TestCase.parseOrder_(search) ||
+        goog.testing.TestCase.Order.SORTED);
+    testCase.setTestsToRun(goog.testing.TestCase.parseRunTests_(search));
+  }
+
   var gTestRunner = goog.global['G_testRunner'];
   if (gTestRunner) {
     gTestRunner['initialize'](testCase);
@@ -1432,6 +1432,45 @@ goog.testing.TestCase.initializeTestRunner = function(testCase) {
     throw Error('G_testRunner is undefined. Please ensure goog.testing.jsunit' +
         ' is included.');
   }
+};
+
+
+/**
+ * Parses URL query parameters for the 'order' parameter.
+ * @param {string} search The URL query string.
+ * @return {?goog.testing.TestCase.Order} The sort order for running tests.
+ * @private
+ */
+goog.testing.TestCase.parseOrder_ = function(search) {
+  var order = null;
+  var orderMatch = search.match(
+      /(?:\?|&)order=(natural|random|sorted)/i);
+  if (orderMatch) {
+    order = /** @type {goog.testing.TestCase.Order} */ (
+        orderMatch[1].toLowerCase());
+  }
+  return order;
+};
+
+
+/**
+ * Parses URL query parameters for the 'runTests' parameter.
+ * @param {string} search The URL query string.
+ * @return {Object<string, boolean>} A set of test names or test indices to be
+ *     run by the test runner.
+ * @private
+ */
+goog.testing.TestCase.parseRunTests_ = function(search) {
+  var testsToRun = null;
+  var runTestsMatch = search.match(/(?:\?|&)runTests=([^?&]+)/i);
+  if (runTestsMatch) {
+    testsToRun = {};
+    var arr = runTestsMatch[1].split(',');
+    for (var i = 0, len = arr.length; i < len; i++) {
+      testsToRun[arr[i]] = true;
+    }
+  }
+  return testsToRun;
 };
 
 
