@@ -413,3 +413,34 @@ function testRunTests_byIndex() {
   assertEquals(2, result.successCount);
   assertEquals(0, result.errors.length);
 }
+
+function testAsyncTests() {
+  var testCase = new goog.testing.TestCase();
+
+  // Run the same test twice. Both should fail in exactly the same way, but
+  // IE11 may yield control to the browser inconsistently based on whether a
+  // test is scheduled using goog.async.run or not.
+  var asyncFail = function() {
+    var browserHadControl = false;
+    return new goog.Promise(function(resolve, reject) {
+      testCase.timeout(function() {
+        browserHadControl = true;
+      });
+      resolve();
+    }).then(function() {
+      assertTrue(
+          'This assertTrue should fail: the Promise test scheduler should ' +
+          'always execute faster than the timeout above.', browserHadControl);
+    });
+  };
+
+  testCase.addNewTest('fail_one', asyncFail);
+  testCase.addNewTest('fail_two', asyncFail);
+
+  return testCase.runTestsReturningPromise().then(function(result) {
+    assertEquals(2, result.totalCount);
+    assertEquals(2, result.runCount);
+    assertEquals(0, result.successCount);
+    assertEquals(2, result.errors.length);
+  });
+}
