@@ -181,6 +181,13 @@ function testIE11CompatibilityMSIE9() {
   assertVersion('11.0');
 }
 
+function testIEEdge() {
+  goog.labs.userAgent.util.setUserAgent(goog.labs.userAgent.testAgents.IE_EDGE);
+  assertBrowser(Browser.IE);
+  assertVersion('12.0');
+  assertVersionBetween('11.0', '13.0');
+}
+
 function testFirefox19() {
   goog.labs.userAgent.util.setUserAgent(
       goog.labs.userAgent.testAgents.FIREFOX_19);

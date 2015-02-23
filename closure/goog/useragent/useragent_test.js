@@ -195,6 +195,8 @@ function testIe() {
       'Arcor 5.005; .NET CLR 1.0.3705; .NET CLR 1.1.4322)', '7.0');
   assertIe(
       'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko', '11.0');
+  var testAgents = goog.labs.userAgent.testAgents;
+  assertIe(testAgents.IE_EDGE, '12.0');
 }
 
 function testIeDocumentModeOverride() {
