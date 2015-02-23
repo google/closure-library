@@ -152,6 +152,15 @@ testAgents.IE_11_COMPATIBILITY_MSIE_9 =
     'rv:11.0) like Gecko';
 
 
+/**
+ * https://msdn.microsoft.com/en-us/library/hh869301%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396#edge
+ * @const {string}
+ */
+testAgents.IE_EDGE =
+    'Mozilla/5.0 (Windows NT 6.4; WOW64) AppleWebKit/537.36 ' +
+    '(KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36 Edge/12.0';
+
+
 /** @const {string} */
 testAgents.FIREFOX_19 =
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:19.0) ' +
