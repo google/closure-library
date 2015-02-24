@@ -22,6 +22,8 @@ goog.provide('goog.HistoryTest');
 goog.require('goog.History');
 goog.require('goog.dispose');
 goog.require('goog.dom');
+goog.require('goog.html.TrustedResourceUrl');
+goog.require('goog.string.Const');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
 
@@ -35,6 +37,29 @@ function testCreation() {
 
   try {
     var history = new goog.History(undefined, undefined, input, iframe);
+  } finally {
+    goog.dispose(history);
+  }
+
+  // Test that SafeHtml.create() calls in constructor succeed.
+  try {
+    // Undefined opt_input and opt_iframe will result in use document.write(),
+    // which in some browsers overrides the current page and causes the
+    // test to fail.
+    var history = new goog.History(
+        true,
+        goog.html.TrustedResourceUrl.fromConstant(
+            goog.string.Const.from('blank_test_helper.html')),
+        input,
+        iframe);
+  } finally {
+    goog.dispose(history);
+  }
+
+  // Test that SafeHtml.create() works with legacy conversion from string.
+  try {
+    var history = new goog.History(
+        true, 'blank_test_helper.html', input, iframe);
   } finally {
     goog.dispose(history);
   }
