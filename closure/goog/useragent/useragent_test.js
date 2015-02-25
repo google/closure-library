@@ -218,6 +218,13 @@ function testDocumentModeInStandardsMode() {
   assertEquals(expectedMode, goog.userAgent.DOCUMENT_MODE);
 }
 
+function testDocumentModeEdge() {
+  goog.labs.userAgent.util.setUserAgent(goog.labs.userAgent.testAgents.IE_EDGE);
+  goog.userAgentTestUtil.reinitializeUserAgent();
+  assertTrue(goog.userAgent.isDocumentModeOrHigher(11));
+  assertTrue(goog.userAgent.isDocumentModeOrHigher(10));
+}
+
 function testOpera() {
   var assertOpera = function(uaString) {
     assertUserAgent([UserAgents.OPERA], uaString);
