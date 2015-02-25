@@ -869,7 +869,7 @@ if (goog.DEPENDENCIES_ENABLED) {
    * @private
    */
   goog.findBasePath_ = function() {
-    if (goog.global.CLOSURE_BASE_PATH) {
+    if (goog.isDef(goog.global.CLOSURE_BASE_PATH)) {
       goog.basePath = goog.global.CLOSURE_BASE_PATH;
       return;
     } else if (!goog.inHtmlDocument_()) {
