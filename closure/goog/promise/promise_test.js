@@ -1050,6 +1050,15 @@ function testCancel() {
 }
 
 
+function testThenAlwaysOnCancel() {
+  asyncTestCase.waitForAsync();
+
+  var promise = new goog.Promise(function() {});
+  promise.thenAlways(continueTesting);
+  promise.cancel();
+}
+
+
 function testCancelAfterResolve() {
   asyncTestCase.waitForAsync();
   var p = goog.Promise.resolve();
