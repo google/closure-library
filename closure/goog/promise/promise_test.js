@@ -1503,7 +1503,7 @@ function testLinksBetweenParentsAndChildrenAreCutOnResolve() {
   var parent = parentResolver.promise;
   var child = parent.then(function() {});
   assertNotNull(child.parent_);
-  assertEquals(1, parent.callbackEntries_.length);
+  assertNull(parent.callbackEntries_.next);   // 1 entry
   parentResolver.resolve();
   mockClock.tick();
   assertNull(child.parent_);
@@ -1520,7 +1520,7 @@ function testLinksBetweenParentsAndChildrenAreCutWithUnresolvedChild() {
     return new goog.Promise(function() {});
   });
   assertNotNull(child.parent_);
-  assertEquals(1, parent.callbackEntries_.length);
+  assertNull(parent.callbackEntries_.next);   // 1 entry
   parentResolver.resolve();
   mockClock.tick();
   assertNull(child.parent_);
@@ -1533,9 +1533,9 @@ function testLinksBetweenParentsAndChildrenAreCutOnCancel() {
   var parent = new goog.Promise(function() {});
   var child = parent.then(function() {});
   var grandChild = child.then(function() {});
-  assertEquals(1, child.callbackEntries_.length);
+  assertNull(child.callbackEntries_.next);   // 1 entry
   assertNotNull(child.parent_);
-  assertEquals(1, parent.callbackEntries_.length);
+  assertNull(parent.callbackEntries_.next);  // 1 entry
   parent.cancel();
   mockClock.tick();
   assertNull(child.parent_);

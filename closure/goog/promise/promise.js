@@ -16,6 +16,7 @@ goog.provide('goog.Promise');
 
 goog.require('goog.Thenable');
 goog.require('goog.asserts');
+goog.require('goog.async.FreeList');
 goog.require('goog.async.run');
 goog.require('goog.async.throwException');
 goog.require('goog.debug.Error');
@@ -93,11 +94,18 @@ goog.Promise = function(resolver, opt_context) {
   this.parent_ = null;
 
   /**
-   * The list of {@code onFulfilled} and {@code onRejected} callbacks added to
-   * this Promise by calls to {@code then()}.
-   * @private {Array<goog.Promise.CallbackEntry_>}
+   * The linked list of {@code onFulfilled} and {@code onRejected} callbacks
+   * added to this Promise by calls to {@code then()}.
+   * @private {?goog.Promise.CallbackEntry_}
    */
   this.callbackEntries_ = null;
+
+  /**
+   * The tail of the linked list of {@code onFulfilled} and {@code onRejected}
+   * callbacks added to this Promise by calls to {@code then()}.
+   * @private {?goog.Promise.CallbackEntry_}
+   */
+  this.callbackEntriesTail_ = null;
 
   /**
    * Whether the Promise is in the queue of Promises to execute.
@@ -224,19 +232,79 @@ goog.Promise.State_ = {
 };
 
 
+
 /**
- * Typedef for entries in the callback chain. Each call to {@code then},
+ * Entries in the callback chain. Each call to {@code then},
  * {@code thenCatch}, or {@code thenAlways} creates an entry containing the
  * functions that may be invoked once the Promise is resolved.
  *
- * @typedef {{
- *   child: goog.Promise,
- *   onFulfilled: function(*),
- *   onRejected: function(*)
- * }}
+ * @private @final @struct @constructor
+ */
+goog.Promise.CallbackEntry_ = function() {
+  /** @type {?goog.Promise} */
+  this.child = null;
+  /** @type {Function} */
+  this.onFulfilled = null;
+  /** @type {Function} */
+  this.onRejected = null;
+  /** @type {?} */
+  this.context = null;
+  /** @type {?goog.Promise.CallbackEntry_} */
+  this.next = null;
+};
+
+
+/** clear the object prior to reuse */
+goog.Promise.CallbackEntry_.prototype.reset = function() {
+  this.child = null;
+  this.onFulfilled = null;
+  this.onRejected = null;
+  this.context = null;
+};
+
+
+/**
+ * @define {number} The number of currently unused objects to keep around for
+ *    reuse.
+ */
+goog.define('goog.Promise.DEFAULT_MAX_UNUSED', 100);
+
+
+/** @const @private {goog.async.FreeList<!goog.Promise.CallbackEntry_>} */
+goog.Promise.freelist_ = new goog.async.FreeList(
+    function() {
+      return new goog.Promise.CallbackEntry_();
+    },
+    function(item) {
+      item.reset();
+    },
+    goog.Promise.DEFAULT_MAX_UNUSED);
+
+
+
+/**
+ * @param {Function} onFulfilled
+ * @param {Function} onRejected
+ * @param {?} context
+ * @return {!goog.Promise.CallbackEntry_}
  * @private
  */
-goog.Promise.CallbackEntry_;
+goog.Promise.getCallbackEntry_ = function(onFulfilled, onRejected, context) {
+  var entry = goog.Promise.freelist_.get();
+  entry.onFulfilled = onFulfilled;
+  entry.onRejected = onRejected;
+  entry.context = context;
+  return entry;
+};
+
+
+/**
+ * @param {!goog.Promise.CallbackEntry_} entry
+ * @private
+ */
+goog.Promise.returnEntry_ = function(entry) {
+  goog.Promise.freelist_.put(entry);
+};
 
 
 /**
@@ -457,11 +525,8 @@ goog.Promise.prototype.thenAlways = function(onResolved, opt_context) {
     }
   };
 
-  this.addCallbackEntry_({
-    child: null,
-    onRejected: callback,
-    onFulfilled: callback
-  });
+  this.addCallbackEntry_(goog.Promise.getCallbackEntry_(
+      callback, callback, null));
   return this;
 };
 
@@ -543,32 +608,43 @@ goog.Promise.prototype.cancelChild_ = function(childPromise, err) {
     return;
   }
   var childCount = 0;
-  var childIndex = -1;
+  var childEntry = null;
+  var beforeChildEntry = null;
 
   // Find the callback entry for the childPromise, and count whether there are
   // additional child Promises.
-  for (var i = 0, entry; entry = this.callbackEntries_[i]; i++) {
+  for (var entry = this.callbackEntries_; entry; entry = entry.next) {
     var child = entry.child;
     if (child) {
       childCount++;
       if (child == childPromise) {
-        childIndex = i;
+        childEntry = entry;
       }
-      if (childIndex >= 0 && childCount > 1) {
+      if (childEntry && childCount > 1) {
         break;
       }
     }
+    if (!childEntry) {
+      beforeChildEntry = entry;
+    }
   }
+
+  // Can a child entry be missing?
 
   // If the child Promise was the only child, cancel this Promise as well.
   // Otherwise, reject only the child Promise with the cancel error.
-  if (childIndex >= 0) {
+  if (childEntry) {
     if (this.state_ == goog.Promise.State_.PENDING && childCount == 1) {
       this.cancelInternal_(err);
     } else {
-      var callbackEntry = this.callbackEntries_.splice(childIndex, 1)[0];
+      if (beforeChildEntry) {
+        this.removeEntryAfter_(beforeChildEntry);
+      } else {
+        this.popEntry_();
+      }
+
       this.executeCallback_(
-          callbackEntry, goog.Promise.State_.REJECTED, err);
+          childEntry, goog.Promise.State_.REJECTED, err);
     }
   }
 };
@@ -584,15 +660,12 @@ goog.Promise.prototype.cancelChild_ = function(childPromise, err) {
  * @private
  */
 goog.Promise.prototype.addCallbackEntry_ = function(callbackEntry) {
-  if ((!this.callbackEntries_ || !this.callbackEntries_.length) &&
+  if (!this.hasEntry_() &&
       (this.state_ == goog.Promise.State_.FULFILLED ||
        this.state_ == goog.Promise.State_.REJECTED)) {
     this.scheduleCallbacks_();
   }
-  if (!this.callbackEntries_) {
-    this.callbackEntries_ = [];
-  }
-  this.callbackEntries_.push(callbackEntry);
+  this.queueEntry_(callbackEntry);
 };
 
 
@@ -618,11 +691,8 @@ goog.Promise.prototype.addCallbackEntry_ = function(callbackEntry) {
 goog.Promise.prototype.addChildPromise_ = function(
     onFulfilled, onRejected, opt_context) {
 
-  var callbackEntry = {
-    child: null,
-    onFulfilled: null,
-    onRejected: null
-  };
+  /** @type {goog.Promise.CallbackEntry_} */
+  var callbackEntry = goog.Promise.getCallbackEntry_(null, null, null);
 
   callbackEntry.child = new goog.Promise(function(resolve, reject) {
     // Invoke onFulfilled, or resolve with the parent's value if absent.
@@ -653,8 +723,7 @@ goog.Promise.prototype.addChildPromise_ = function(
   });
 
   callbackEntry.child.parent_ = this;
-  this.addCallbackEntry_(
-      /** @type {goog.Promise.CallbackEntry_} */ (callbackEntry));
+  this.addCallbackEntry_(callbackEntry);
   return callbackEntry.child;
 };
 
@@ -810,21 +879,85 @@ goog.Promise.prototype.scheduleCallbacks_ = function() {
 
 
 /**
+ * @return {boolean} Whether there are any pending callbacks queued.
+ * @private
+ */
+goog.Promise.prototype.hasEntry_ = function() {
+  return !!this.callbackEntries_;
+};
+
+
+/**
+ * @param {goog.Promise.CallbackEntry_} entry
+ * @private
+ */
+goog.Promise.prototype.queueEntry_ = function(entry) {
+  goog.asserts.assert(entry.onFulfilled != null);
+  goog.asserts.assert(entry.onRejected != null);
+
+  if (this.callbackEntriesTail_) {
+    this.callbackEntriesTail_.next = entry;
+    this.callbackEntriesTail_ = entry;
+  } else {
+    // It the work queue was empty set the head too.
+    this.callbackEntries_ = entry;
+    this.callbackEntriesTail_ = entry;
+  }
+};
+
+
+/**
+ * @return {goog.Promise.CallbackEntry_} entry
+ * @private
+ */
+goog.Promise.prototype.popEntry_ = function() {
+  var entry = null;
+  if (this.callbackEntries_) {
+    entry = this.callbackEntries_;
+    this.callbackEntries_ = entry.next;
+    entry.next = null;
+  }
+  // It the work queue is empty clear the tail too.
+  if (!this.callbackEntries_) {
+    this.callbackEntriesTail_ = null;
+  }
+
+  if (entry != null) {
+    goog.asserts.assert(entry.onFulfilled != null);
+    goog.asserts.assert(entry.onRejected != null);
+  }
+  return entry;
+};
+
+
+/**
+ * @param {goog.Promise.CallbackEntry_} previous
+ * @private
+ */
+goog.Promise.prototype.removeEntryAfter_ = function(previous) {
+  goog.asserts.assert(this.callbackEntries_);
+  goog.asserts.assert(previous != null);
+  // If the last entry is being removed, update the tail
+  if (previous.next == this.callbackEntriesTail_) {
+    this.callbackEntriesTail_ = previous;
+  }
+
+  previous.next = previous.next.next;
+};
+
+
+/**
  * Executes all pending callbacks for this Promise.
  *
  * @private
  */
 goog.Promise.prototype.executeCallbacks_ = function() {
-  while (this.callbackEntries_ && this.callbackEntries_.length) {
-    var entries = this.callbackEntries_;
-    this.callbackEntries_ = null;
-
-    for (var i = 0; i < entries.length; i++) {
-      if (goog.Promise.LONG_STACK_TRACES) {
-        this.currentStep_++;
-      }
-      this.executeCallback_(entries[i], this.state_, this.result_);
+  var entry = null;
+  while (entry = this.popEntry_()) {
+    if (goog.Promise.LONG_STACK_TRACES) {
+      this.currentStep_++;
     }
+    this.executeCallback_(entry, this.state_, this.result_);
   }
   this.executing_ = false;
 };
@@ -849,13 +982,14 @@ goog.Promise.prototype.executeCallback_ = function(
     callbackEntry.child.parent_ = null;
   }
   if (state == goog.Promise.State_.FULFILLED) {
-    callbackEntry.onFulfilled(result);
+    callbackEntry.onFulfilled.call(callbackEntry.context, result);
   } else {
     if (callbackEntry.child) {
       this.removeUnhandledRejection_();
     }
-    callbackEntry.onRejected(result);
+    callbackEntry.onRejected.call(callbackEntry.context, result);
   }
+  goog.Promise.returnEntry_(callbackEntry);
 };
 
 
