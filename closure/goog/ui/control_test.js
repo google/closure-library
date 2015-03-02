@@ -1195,8 +1195,9 @@ function testSetStateWithDisabled() {
   assertTrue('Control must be enabled', control.isEnabled());
   assertTrue('Control must be highlighted', control.isHighlighted());
   assertTrue('Control must be active', control.isActive());
-  assertTrue('Control element must not have aria-disabled', goog.string.isEmptyOrWhitespace(
-      aria.getState(control.getElementStrict(), State.DISABLED)));
+  assertTrue('Control element must not have aria-disabled',
+      goog.string.isEmptyOrWhitespace(
+          aria.getState(control.getElementStrict(), State.DISABLED)));
   assertEquals('Control element must have a tabIndex of 0', 0,
       goog.string.toNumber(
           control.getElement().getAttribute('tabIndex') || ''));
@@ -2380,4 +2381,64 @@ function testHandleMouseUp() {
 function testDefaultConstructor() {
   var control = new goog.ui.Control();
   assertNull(control.getContent());
+}
+
+
+function assertClickSequenceFires(msg) {
+  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  goog.testing.events.fireClickSequence(control.getKeyEventTarget());
+  assertEquals(msg, actionCount + 1,
+      getEventCount(control, goog.ui.Component.EventType.ACTION));
+}
+
+
+function assertIsolatedClickFires(msg) {
+  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  goog.testing.events.fireClickEvent(control.getKeyEventTarget());
+  assertEquals(msg, actionCount + 1,
+      getEventCount(control, goog.ui.Component.EventType.ACTION));
+}
+
+
+function assertIsolatedClickDoesNotFire(msg) {
+  var actionCount = getEventCount(control, goog.ui.Component.EventType.ACTION);
+  goog.testing.events.fireClickEvent(control.getKeyEventTarget());
+  assertEquals(msg, actionCount,
+      getEventCount(control, goog.ui.Component.EventType.ACTION));
+}
+
+
+function testIeMouseEventSequenceSimulator() {
+  control.render(sandbox);
+
+  // Click sequences and isolated clicks must be handled correctly in any order.
+  assertClickSequenceFires(
+      'ACTION event expected after a click sequence');
+  assertClickSequenceFires(
+      'ACTION event expected after a second consecutive click sequence');
+  if (goog.userAgent.IE) {
+    // For some reason in IE8 and perhaps earlier, isolated clicks do not result
+    // a detectable dispatch of an ACTION event, so we'll only assert the
+    // desired handling of isolated clicks in IE9 and higher.
+    if (goog.userAgent.isVersionOrHigher(9)) {
+      assertIsolatedClickFires(
+          'ACTION event expected after an isolated click immediately ' +
+          'following a click sequence');
+      assertIsolatedClickFires(
+          'ACTION event expected after second consecutive isolated click');
+    } else {
+      // For IE8-and-lower, fire an isolated click event in preparation for our
+      // final assertion.
+      goog.testing.events.fireClickEvent(control.getKeyEventTarget());
+    }
+  } else {
+    assertIsolatedClickDoesNotFire(
+        'No ACTION event expected after an isolated click immediately ' +
+        'following a click sequence');
+    assertIsolatedClickDoesNotFire(
+        'No ACTION event expected after second consecutive isolated click');
+  }
+  assertClickSequenceFires(
+      'ACTION event expected after click sequence immediately following ' +
+      'an isolated click ');
 }
