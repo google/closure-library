@@ -21,6 +21,14 @@ goog.provide('goog.object');
 
 
 /**
+ * @define {boolean} If true, JSCompiler will use the native implementation
+ * of object functions where appropriate and remove the unused
+ * pure JS implementation.
+ */
+goog.define('goog.object.ASSUME_NATIVE_FUNCTIONS', false);
+
+
+/**
  * Calls a function for each element in an object/map/hash.
  *
  * @param {Object<K,V>} obj The object over which to iterate.
@@ -222,14 +230,18 @@ goog.object.getValues = function(obj) {
  * @param {Object} obj The object from which to get the keys.
  * @return {!Array<string>} Array of property keys.
  */
-goog.object.getKeys = function(obj) {
-  var res = [];
-  var i = 0;
-  for (var key in obj) {
-    res[i++] = key;
-  }
-  return res;
-};
+goog.object.getKeys = goog.object.ASSUME_NATIVE_FUNCTIONS ?
+    function(obj) {
+      return Object.keys(/** @type {!Object} */ (obj));
+    } :
+    function(obj) {
+      var res = [];
+      var i = 0;
+      for (var key in obj) {
+        res[i++] = key;
+      }
+      return res;
+    };
 
 
 /**
