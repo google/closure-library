@@ -541,7 +541,7 @@ goog.ui.SliderBase.prototype.handleBeforeDrag_ = function(e) {
 
 
 /**
- * Handler for the start/end drag event on the thumgs. Adds/removes
+ * Handler for the start/end drag event on the thumbs. Adds/removes
  * the "-dragging" CSS classes on the slider and thumb.
  * @param {goog.fx.DragEvent} e The drag event used to drag the thumb.
  * @private
@@ -818,7 +818,6 @@ goog.ui.SliderBase.prototype.getValueFromMousePosition = function(e) {
     return (max - min) * x / availW + min;
   }
 };
-
 
 
 /**
@@ -1105,7 +1104,6 @@ goog.ui.SliderBase.prototype.getThumbCoordinateForValue = function(val) {
   }
   return coord;
 };
-
 
 
 /**
