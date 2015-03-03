@@ -251,6 +251,15 @@ goog.Promise.CallbackEntry_ = function() {
   this.context = null;
   /** @type {?goog.Promise.CallbackEntry_} */
   this.next = null;
+
+  /**
+   * A boolean value to indicate this is a "thenAlways" callback entry.
+   * Unlike a normal "then/thenVoid" a "thenAlways doesn't particapate
+   * in "cancel" considerations but is simply an observer and requires
+   * special handling.
+   * @type {boolean}
+   */
+  this.always = false;
 };
 
 
@@ -260,6 +269,7 @@ goog.Promise.CallbackEntry_.prototype.reset = function() {
   this.onFulfilled = null;
   this.onRejected = null;
   this.context = null;
+  this.always = false;
 };
 
 
@@ -279,7 +289,6 @@ goog.Promise.freelist_ = new goog.async.FreeList(
       item.reset();
     },
     goog.Promise.DEFAULT_MAX_UNUSED);
-
 
 
 /**
@@ -354,7 +363,7 @@ goog.Promise.race = function(promises) {
       resolve(undefined);
     }
     for (var i = 0, promise; promise = promises[i]; i++) {
-      promise.then(resolve, reject);
+      goog.Promise.maybeThenVoid_(promise, resolve, reject);
     }
   });
 };
@@ -390,7 +399,8 @@ goog.Promise.all = function(promises) {
     };
 
     for (var i = 0, promise; promise = promises[i]; i++) {
-      promise.then(goog.partial(onFulfill, i), onReject);
+      goog.Promise.maybeThenVoid_(
+          promise, goog.partial(onFulfill, i), onReject);
     }
   });
 };
@@ -426,7 +436,8 @@ goog.Promise.firstFulfilled = function(promises) {
     };
 
     for (var i = 0, promise; promise = promises[i]; i++) {
-      promise.then(onFulfill, goog.partial(onReject, i));
+      goog.Promise.maybeThenVoid_(
+          promise, onFulfill, goog.partial(onReject, i));
     }
   });
 };
@@ -489,6 +500,74 @@ goog.Thenable.addImplementation(goog.Promise);
 
 
 /**
+ * Adds callbacks that will operate on the result of the Promise without
+ * returning a child Promise (unlike "then").
+ *
+ * If the Promise is fulfilled, the {@code onFulfilled} callback will be invoked
+ * with the fulfillment value as argument.
+ *
+ * If the Promise is rejected, the {@code onRejected} callback will be invoked
+ * with the rejection reason as argument.
+ *
+ * @param {?(function(this:THIS, TYPE):
+ *             (RESULT|IThenable<RESULT>|Thenable))=} opt_onFulfilled A
+ *     function that will be invoked with the fulfillment value if the Promise
+ *     is fullfilled.
+ * @param {?(function(this:THIS, *): *)=} opt_onRejected A function that will
+ *     be invoked with the rejection reason if the Promise is rejected.
+ * @param {THIS=} opt_context An optional context object that will be the
+ *     execution context for the callbacks. By default, functions are executed
+ *     with the default this.
+ * @package
+ * @template RESULT,THIS
+ */
+goog.Promise.prototype.thenVoid = function(
+    opt_onFulfilled, opt_onRejected, opt_context) {
+
+  if (opt_onFulfilled != null) {
+    goog.asserts.assertFunction(opt_onFulfilled,
+        'opt_onFulfilled should be a function.');
+  }
+  if (opt_onRejected != null) {
+    goog.asserts.assertFunction(opt_onRejected,
+        'opt_onRejected should be a function. Did you pass opt_context ' +
+        'as the second argument instead of the third?');
+  }
+
+  if (goog.Promise.LONG_STACK_TRACES) {
+    this.addStackTrace_(new Error('then'));
+  }
+
+  // Note: no default rejection handler is provided here as we need to
+  // distinguish unhandled rejections.
+  this.addCallbackEntry_(goog.Promise.getCallbackEntry_(
+      opt_onFulfilled || goog.nullFunction,
+      opt_onRejected || null,
+      opt_context));
+};
+
+
+/**
+ * Calls "thenVoid" if possible to avoid allocating memory. Otherwise calls
+ * "then".
+ * @param {(goog.Thenable<TYPE>|Thenable)} promise
+ * @param {function(this:THIS, TYPE): ?} onFulfilled
+ * @param {function(this:THIS, *): *} onRejected
+ * @param {THIS=} opt_context
+ * @template THIS,TYPE
+ * @private
+ */
+goog.Promise.maybeThenVoid_ = function(
+    promise, onFulfilled, onRejected, opt_context) {
+  if (promise instanceof goog.Promise) {
+    promise.thenVoid(onFulfilled, onRejected, opt_context);
+  } else {
+    promise.then(onFulfilled, onRejected, opt_context);
+  }
+};
+
+
+/**
  * Adds a callback that will be invoked whether the Promise is fulfilled or
  * rejected. The callback receives no argument, and no new child Promise is
  * created. This is useful for ensuring that cleanup takes place after certain
@@ -525,8 +604,9 @@ goog.Promise.prototype.thenAlways = function(onResolved, opt_context) {
     }
   };
 
-  this.addCallbackEntry_(goog.Promise.getCallbackEntry_(
-      callback, callback, null));
+  var entry = goog.Promise.getCallbackEntry_(callback, callback, null);
+  entry.always = true;
+  this.addCallbackEntry_(entry);
   return this;
 };
 
@@ -614,10 +694,9 @@ goog.Promise.prototype.cancelChild_ = function(childPromise, err) {
   // Find the callback entry for the childPromise, and count whether there are
   // additional child Promises.
   for (var entry = this.callbackEntries_; entry; entry = entry.next) {
-    var child = entry.child;
-    if (child) {
+    if (!entry.always) {
       childCount++;
-      if (child == childPromise) {
+      if (entry.child == childPromise) {
         childEntry = entry;
       }
       if (childEntry && childCount > 1) {
@@ -783,9 +862,9 @@ goog.Promise.prototype.resolve_ = function(state, x) {
   } else if (goog.Thenable.isImplementedBy(x)) {
     x = /** @type {!goog.Thenable} */ (x);
     this.state_ = goog.Promise.State_.BLOCKED;
-    x.then(this.unblockAndFulfill_, this.unblockAndReject_, this);
+    goog.Promise.maybeThenVoid_(
+        x, this.unblockAndFulfill_, this.unblockAndReject_, this);
     return;
-
   } else if (goog.isObject(x)) {
     try {
       var then = x['then'];
@@ -893,7 +972,6 @@ goog.Promise.prototype.hasEntry_ = function() {
  */
 goog.Promise.prototype.queueEntry_ = function(entry) {
   goog.asserts.assert(entry.onFulfilled != null);
-  goog.asserts.assert(entry.onRejected != null);
 
   if (this.callbackEntriesTail_) {
     this.callbackEntriesTail_.next = entry;
@@ -924,7 +1002,6 @@ goog.Promise.prototype.popEntry_ = function() {
 
   if (entry != null) {
     goog.asserts.assert(entry.onFulfilled != null);
-    goog.asserts.assert(entry.onRejected != null);
   }
   return entry;
 };
@@ -983,8 +1060,8 @@ goog.Promise.prototype.executeCallback_ = function(
   }
   if (state == goog.Promise.State_.FULFILLED) {
     callbackEntry.onFulfilled.call(callbackEntry.context, result);
-  } else {
-    if (callbackEntry.child) {
+  } else if (callbackEntry.onRejected != null) {
+    if (!callbackEntry.always) {
       this.removeUnhandledRejection_();
     }
     callbackEntry.onRejected.call(callbackEntry.context, result);
