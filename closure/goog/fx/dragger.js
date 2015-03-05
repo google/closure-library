@@ -464,7 +464,8 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
 
     this.mouseDownTime_ = goog.now();
   } else {
-    this.dispatchEvent(goog.fx.Dragger.EventType.EARLY_CANCEL);
+    this.dragging_ = false;
+    this.endDrag(e);
   }
 };
 
