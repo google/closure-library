@@ -51,7 +51,7 @@ goog.require('goog.structs.Map');
  * @param {number=} opt_maxRetries Max. number of retries (Default: 1).
  * @param {goog.structs.Map=} opt_headers Map of default headers to add to every
  *     request.
- * @param {number=} opt_minCount Min. number of objects (Default: 1).
+ * @param {number=} opt_minCount Min. number of objects (Default: 0).
  * @param {number=} opt_maxCount Max. number of objects (Default: 10).
  * @param {number=} opt_timeoutInterval Timeout (in ms) before aborting an
  *     attempt (Default: 0ms).
