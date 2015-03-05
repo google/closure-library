@@ -60,7 +60,7 @@ goog.define('goog.testing.jsunit.AUTO_RUN_DELAY_IN_MS', 500);
 
 (function() {
   // Only allow one global test runner to be created on a page.
-  if (goog.global['G_testRunner']) {
+  if (goog.global['G_testRunner'] instanceof goog.testing.TestRunner) {
     return;
   }
 
