@@ -38,6 +38,9 @@ goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
+goog.forwardDeclare('goog.events.BrowserEvent');
+goog.forwardDeclare('goog.events.Event');
+
 
 /**
  * Sets a style value on an element.
