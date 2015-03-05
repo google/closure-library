@@ -223,19 +223,16 @@ goog.events.BrowserEvent.IEButtonMap = [
 goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   var type = this.type = e.type;
 
-  /** @type {Touch} */
-  var relevantTouch = null;
-  if (type == goog.events.EventType.TOUCHSTART ||
-      type == goog.events.EventType.TOUCHMOVE) {
-    relevantTouch = e.targetTouches[0];
-  } else if (type == goog.events.EventType.TOUCHEND ||
-             type == goog.events.EventType.TOUCHCANCEL) {
-    relevantTouch = e.changedTouches[0];
-  }
+  /**
+   * On touch devices use the first "changed touch" as the relevant touch.
+   * @type {Touch}
+   */
+  var relevantTouch = e.changedTouches ? e.changedTouches[0] : null;
 
   // TODO(nicksantos): Change this.target to type EventTarget.
   this.target = goog.isNull(relevantTouch) ?
-      /** @type {Node} */ (e.target) || e.srcElement : relevantTouch.target;
+      /** @type {Node} */ (e.target) || e.srcElement :
+      /** @type {Node} */ (relevantTouch.target);
 
   // TODO(nicksantos): Change this.currentTarget to type EventTarget.
   this.currentTarget = /** @type {Node} */ (opt_currentTarget);

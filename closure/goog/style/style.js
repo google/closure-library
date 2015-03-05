@@ -836,7 +836,8 @@ goog.style.getClientPositionForElement_ = function(el) {
 
 /**
  * Returns the position of the event or the element's border box relative to
- * the client viewport.
+ * the client viewport. If an event is passed, and if this event is a "touch"
+ * event, then the position of the first changedTouches will be returned.
  * @param {Element|Event|goog.events.Event} el Element or a mouse / touch event.
  * @return {!goog.math.Coordinate} The position.
  */
@@ -846,17 +847,7 @@ goog.style.getClientPosition = function(el) {
     return goog.style.getClientPositionForElement_(
         /** @type {!Element} */ (el));
   } else {
-    var isAbstractedEvent = goog.isFunction(el.getBrowserEvent);
-    var be = /** @type {!goog.events.BrowserEvent} */ (el);
-    var targetEvent = el;
-
-    if (el.targetTouches && el.targetTouches.length) {
-      targetEvent = el.targetTouches[0];
-    } else if (isAbstractedEvent && be.getBrowserEvent().targetTouches &&
-        be.getBrowserEvent().targetTouches.length) {
-      targetEvent = be.getBrowserEvent().targetTouches[0];
-    }
-
+    var targetEvent = el.changedTouches ? el.changedTouches[0] : el;
     return new goog.math.Coordinate(
         targetEvent.clientX,
         targetEvent.clientY);
