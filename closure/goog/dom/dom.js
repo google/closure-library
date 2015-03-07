@@ -607,7 +607,8 @@ goog.dom.getDocumentScroll_ = function(doc) {
     // The keyboard on IE10 touch devices shifts the page using the pageYOffset
     // without modifying scrollTop. For this case, we want the body scroll
     // offsets.
-    return new goog.math.Coordinate(el.scrollLeft, el.scrollTop);
+    return new goog.math.Coordinate(el.scrollLeft, goog.userAgent.MOBILE &&
+        doc.documentElement && doc.documentElement.scrollTop || el.scrollTop);
   }
   return new goog.math.Coordinate(win.pageXOffset || el.scrollLeft,
       win.pageYOffset || el.scrollTop);
