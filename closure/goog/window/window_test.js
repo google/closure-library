@@ -17,9 +17,13 @@ goog.setTestOnly('goog.windowTest');
 
 goog.require('goog.dom');
 goog.require('goog.events');
+goog.require('goog.functions');
+goog.require('goog.labs.userAgent.platform');
 goog.require('goog.string');
 goog.require('goog.testing.AsyncTestCase');
+goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
+goog.require('goog.userAgent');
 goog.require('goog.window');
 
 var newWin;
@@ -31,6 +35,8 @@ asyncTestCase.stepTimeout = 5000;
 var WIN_LOAD_TRY_TIMEOUT = 100;
 var MAX_WIN_LOAD_TRIES = 50; // 50x100ms = 5s waiting for window to load.
 var winLoadCounter;
+
+var stubs = new goog.testing.PropertyReplacer();
 
 function setUpPage() {
   var anchors = goog.dom.getElementsByTagNameAndClass(
@@ -74,6 +80,7 @@ function tearDown() {
   if (newWin) {
     newWin.close();
   }
+  stubs.reset();
 }
 
 
@@ -208,6 +215,93 @@ function testOpenBlank() {
         goog.partial(continueTestOpenWindow, false, urlParam));
   };
   setTimeout(continueFn, 100);
+}
+
+
+function testOpenIosBlank() {
+  if (!goog.userAgent.WEBKIT || !window.navigator) {
+    // Don't even try this on IE8!
+    return;
+  }
+  var attrs = {};
+  var dispatchedEvent = null;
+  var element = {
+    setAttribute: function(name, value) {
+      attrs[name] = value;
+    },
+    dispatchEvent: function(event) {
+      dispatchedEvent = event;
+    }
+  };
+  stubs.replace(window.document, 'createElement', function(name) {
+    if (name == 'a') {
+      return element;
+    }
+    return null;
+  });
+  stubs.set(window.navigator, 'standalone', true);
+  stubs.replace(goog.labs.userAgent.platform, 'isIos', goog.functions.TRUE);
+
+  var newWin = goog.window.open('http://google.com', {
+    target: '_blank'
+  });
+
+  // This mode cannot return a new window.
+  assertNotNull(newWin);
+  assertUndefined(newWin.document);
+
+  // Attributes.
+  assertEquals('http://google.com', attrs['href']);
+  assertEquals('_blank', attrs['target']);
+  assertEquals('', attrs['rel'] || '');
+
+  // Click event.
+  assertNotNull(dispatchedEvent);
+  assertEquals('click', dispatchedEvent.type);
+}
+
+
+function testOpenIosBlankNoreferrer() {
+  if (!goog.userAgent.WEBKIT || !window.navigator) {
+    // Don't even try this on IE8!
+    return;
+  }
+  var attrs = {};
+  var dispatchedEvent = null;
+  var element = {
+    setAttribute: function(name, value) {
+      attrs[name] = value;
+    },
+    dispatchEvent: function(event) {
+      dispatchedEvent = event;
+    }
+  };
+  stubs.replace(window.document, 'createElement', function(name) {
+    if (name == 'a') {
+      return element;
+    }
+    return null;
+  });
+  stubs.set(window.navigator, 'standalone', true);
+  stubs.replace(goog.labs.userAgent.platform, 'isIos', goog.functions.TRUE);
+
+  var newWin = goog.window.open('http://google.com', {
+    target: '_blank',
+    noreferrer: true
+  });
+
+  // This mode cannot return a new window.
+  assertNotNull(newWin);
+  assertUndefined(newWin.document);
+
+  // Attributes.
+  assertEquals('http://google.com', attrs['href']);
+  assertEquals('_blank', attrs['target']);
+  assertEquals('noreferrer', attrs['rel']);
+
+  // Click event.
+  assertNotNull(dispatchedEvent);
+  assertEquals('click', dispatchedEvent.type);
 }
 
 
