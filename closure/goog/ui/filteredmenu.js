@@ -27,6 +27,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.AutoCompleteValues');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
@@ -172,7 +173,8 @@ goog.ui.FilteredMenu.prototype.createDom = function() {
   var el = dom.createDom('div',
       goog.getCssName(this.getRenderer().getCssClass(), 'filter'),
       this.labelEl_ = dom.createDom('div', null, this.label_),
-      this.filterInput_ = dom.createDom('input', {'type': 'text'}));
+      this.filterInput_ = dom.createDom(
+          'input', {'type': goog.dom.InputType.TEXT}));
   var element = this.getElement();
   dom.appendChild(element, el);
   var contentElementId = this.makeId(goog.ui.FilteredMenu.Id_.CONTENT_ELEMENT);

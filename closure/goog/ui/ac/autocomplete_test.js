@@ -18,6 +18,7 @@ goog.setTestOnly('goog.ui.ac.AutoCompleteTest');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.string');
@@ -126,7 +127,7 @@ var inputElement;
 var mockControl;
 
 function setUp() {
-  inputElement = goog.dom.createDom('input', {type: 'text'});
+  inputElement = goog.dom.createDom('input', {type: goog.dom.InputType.TEXT});
   handler = new goog.events.EventHandler();
   mockControl = new goog.testing.MockControl();
 }
@@ -1661,7 +1662,8 @@ function testDetachInputWithAnchor() {
   var mockInputHandler = mockControl.createLooseMock(
       goog.ui.ac.InputHandler, true);
   var anchorElement = goog.dom.createDom('div', null, inputElement);
-  var inputElement2 = goog.dom.createDom('input', {type: 'text'});
+  var inputElement2 = goog.dom.createDom('input',
+                                         {type: goog.dom.InputType.TEXT});
   var anchorElement2 = goog.dom.createDom('div', null, inputElement2);
 
   mockControl.$replayAll();

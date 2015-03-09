@@ -17,6 +17,7 @@ goog.setTestOnly('goog.testing.eventsTest');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
@@ -125,7 +126,7 @@ function tearDownPage() {
     goog.dom.appendChild(input,
         goog.dom.createDom('label', null,
             goog.dom.createDom('input',
-                {'id': type, 'type': 'checkbox'}),
+                {'id': type, 'type': goog.dom.InputType.CHECKBOX}),
             type,
             goog.dom.createDom('br')));
     goog.events.listen(testButton, type, function(e) {

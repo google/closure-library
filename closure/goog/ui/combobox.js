@@ -25,6 +25,7 @@ goog.provide('goog.ui.ComboBoxItem');
 goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.events.InputHandler');
@@ -206,8 +207,11 @@ goog.ui.ComboBox.prototype.useDropdownArrow_ = false;
  * @override
  */
 goog.ui.ComboBox.prototype.createDom = function() {
-  this.input_ = this.getDomHelper().createDom(
-      'input', {name: this.fieldName_, type: 'text', autocomplete: 'off'});
+  this.input_ = this.getDomHelper().createDom('input', {
+    name: this.fieldName_,
+    type: goog.dom.InputType.TEXT,
+    autocomplete: 'off'
+  });
   this.button_ = this.getDomHelper().createDom('span',
       goog.getCssName('goog-combobox-button'));
   this.setElementInternal(this.getDomHelper().createDom('span',

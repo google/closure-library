@@ -27,6 +27,7 @@
 goog.provide('goog.ui.HsvPalette');
 
 goog.require('goog.color');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -315,7 +316,8 @@ goog.ui.HsvPalette.prototype.createDom = function() {
   this.inputElement = dom.createDom('input', {
     'class': goog.getCssName(this.className, 'input'),
     'aria-label': goog.ui.HsvPalette.MSG_HSV_PALETTE_HEX_COLOR_,
-    'type': 'text', 'dir': 'ltr'
+    'type': goog.dom.InputType.TEXT,
+    'dir': 'ltr'
   });
 
   var labelElement = dom.createDom('label', null, this.inputElement);

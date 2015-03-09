@@ -26,6 +26,7 @@
 goog.provide('goog.ui.SelectionMenuButton');
 goog.provide('goog.ui.SelectionMenuButton.SelectionState');
 
+goog.require('goog.dom.InputType');
 goog.require('goog.events.EventType');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
@@ -239,7 +240,7 @@ goog.ui.SelectionMenuButton.prototype.createDom = function() {
  */
 goog.ui.SelectionMenuButton.prototype.createCheckbox = function() {
   var checkbox = this.getDomHelper().createElement('input');
-  checkbox.type = 'checkbox';
+  checkbox.type = goog.dom.InputType.CHECKBOX;
   checkbox.className = goog.getCssName('goog-selectionmenubutton-checkbox');
   this.setContent(checkbox);
 };

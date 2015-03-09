@@ -165,6 +165,7 @@ goog.provide('goog.History.EventType');
 goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.safe');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -243,7 +244,7 @@ goog.History = function(opt_invisible, opt_blankPageUrl, opt_input,
   } else {
     var inputId = 'history_state' + goog.History.historyCount_;
     var inputHtml = goog.html.SafeHtml.create('input',
-        {type: 'text', name: inputId, id: inputId,
+        {type: goog.dom.InputType.TEXT, name: inputId, id: inputId,
           style: goog.string.Const.from('display:none')});
     goog.dom.safe.documentWrite(document, inputHtml);
     input = goog.dom.getElement(inputId);
