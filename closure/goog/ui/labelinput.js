@@ -39,6 +39,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.State');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
@@ -135,8 +136,8 @@ goog.ui.LabelInput.prototype.hasFocus_ = false;
  * @override
  */
 goog.ui.LabelInput.prototype.createDom = function() {
-  this.setElementInternal(
-      this.getDomHelper().createDom('input', {'type': 'text'}));
+  this.setElementInternal(this.getDomHelper().createDom(
+      'input', {'type': goog.dom.InputType.TEXT}));
 };
 
 

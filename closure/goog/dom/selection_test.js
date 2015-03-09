@@ -16,6 +16,7 @@ goog.provide('goog.dom.selectionTest');
 goog.setTestOnly('goog.dom.selectionTest');
 
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.selection');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
@@ -26,10 +27,10 @@ var textarea;
 var hiddenTextarea;
 
 function setUp() {
-  input = goog.dom.createDom('input', {type: 'text'});
+  input = goog.dom.createDom('input', {type: goog.dom.InputType.TEXT});
   textarea = goog.dom.createDom('textarea');
   hiddenInput = goog.dom.createDom(
-      'input', {type: 'text', style: 'display: none'});
+      'input', {type: goog.dom.InputType.TEXT, style: 'display: none'});
   hiddenTextarea = goog.dom.createDom(
       'textarea', {style: 'display: none'});
 

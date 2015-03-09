@@ -140,6 +140,7 @@ goog.require('goog.Uri');
 goog.require('goog.asserts');
 goog.require('goog.debug');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.safe');
 goog.require('goog.events');
 goog.require('goog.events.Event');
@@ -355,7 +356,7 @@ goog.net.IframeIo.addFormInputs_ = function(form, data) {
   var helper = goog.dom.getDomHelper(form);
   goog.structs.forEach(data, function(value, key) {
     var inp = helper.createDom('input',
-        {'type': 'hidden', 'name': key, 'value': value});
+        {'type': goog.dom.InputType.HIDDEN, 'name': key, 'value': value});
     form.appendChild(inp);
   });
 };
@@ -932,7 +933,7 @@ goog.net.IframeIo.prototype.sendFormInternal_ = function() {
     var inputs = this.form_.getElementsByTagName('input');
     var inputClones = clone.getElementsByTagName('input');
     for (var i = 0, n = inputs.length; i < n; i++) {
-      if (inputs[i].type == 'file') {
+      if (inputs[i].type == goog.dom.InputType.FILE) {
         if (inputs[i].value != inputClones[i].value) {
           goog.log.fine(this.logger_,
               'File input value not cloned properly.  Will ' +

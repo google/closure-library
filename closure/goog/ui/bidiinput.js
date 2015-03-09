@@ -25,6 +25,7 @@ goog.provide('goog.ui.BidiInput');
 
 
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.events');
 goog.require('goog.events.InputHandler');
 goog.require('goog.i18n.bidi');
@@ -76,7 +77,8 @@ goog.ui.BidiInput.prototype.decorateInternal = function(element) {
  */
 goog.ui.BidiInput.prototype.createDom = function() {
   this.setElementInternal(
-      this.getDomHelper().createDom('input', {'type': 'text'}));
+      this.getDomHelper().createDom('input',
+                                    {'type': goog.dom.InputType.TEXT}));
   this.init_();
 };
 

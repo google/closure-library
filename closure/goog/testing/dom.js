@@ -23,6 +23,7 @@ goog.provide('goog.testing.dom');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.NodeIterator');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagIterator');
@@ -459,7 +460,7 @@ goog.testing.dom.getAttributeValue_ = function(node, name) {
   // WebKit: Two radio buttons with the same name can't be checked at the same
   //      time, even if only one of them is in the document.
   if (goog.userAgent.WEBKIT && node.tagName == 'INPUT' &&
-      node['type'] == 'radio' && name == 'checked') {
+      node['type'] == goog.dom.InputType.RADIO && name == 'checked') {
     return false;
   }
   return goog.isDef(node[name]) &&

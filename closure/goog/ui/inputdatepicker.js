@@ -24,6 +24,7 @@ goog.provide('goog.ui.InputDatePicker');
 
 goog.require('goog.date.DateTime');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.string');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.DatePicker');
@@ -228,8 +229,8 @@ goog.ui.InputDatePicker.prototype.getInputValueAsDate_ = function() {
  * @override
  */
 goog.ui.InputDatePicker.prototype.createDom = function() {
-  this.setElementInternal(
-      this.getDomHelper().createDom('input', {'type': 'text'}));
+  this.setElementInternal(this.getDomHelper().createDom(
+      'input', {'type': goog.dom.InputType.TEXT}));
   this.popupDatePicker_.createDom();
 };
 

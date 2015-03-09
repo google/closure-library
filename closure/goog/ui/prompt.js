@@ -23,6 +23,7 @@ goog.provide('goog.ui.Prompt');
 
 goog.require('goog.Timer');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.functions');
@@ -285,7 +286,7 @@ goog.ui.Prompt.prototype.createDom = function() {
     // If rows == 1 then use an input element.
     this.userInputEl_ = /** @type {!HTMLInputElement} */
         (this.getDomHelper().createDom('input', attrs));
-    this.userInputEl_.type = 'text';
+    this.userInputEl_.type = goog.dom.InputType.TEXT;
     if (this.cols_) {
       this.userInputEl_.size = this.cols_;
     }

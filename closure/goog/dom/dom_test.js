@@ -22,6 +22,7 @@ goog.provide('goog.dom.dom_test');
 goog.require('goog.dom');
 goog.require('goog.dom.BrowserFeature');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.functions');
@@ -385,10 +386,12 @@ function testCreateDomNodeListArg() {
 }
 
 function testCreateDomWithTypeAttribute() {
-  var el = goog.dom.createDom('button', {'type': 'reset', 'id': 'cool-button'},
-      'Cool button');
+  var el = goog.dom.createDom('button', {
+    'type': goog.dom.InputType.RESET, 'id': 'cool-button'
+  }, 'Cool button');
   assertNotNull('Button with type attribute was created successfully', el);
-  assertEquals('Button has correct type attribute', 'reset', el.type);
+  assertEquals('Button has correct type attribute',
+               goog.dom.InputType.RESET, el.type);
   assertEquals('Button has correct id', 'cool-button', el.id);
 }
 
@@ -1638,4 +1641,3 @@ function testDevicePixelRatio() {
   goog.dom.devicePixelRatio_ = null;
   assertEquals(goog.dom.getPixelRatio(), 1);
 }
-

@@ -21,6 +21,7 @@
 goog.provide('goog.ui.NativeButtonRenderer');
 
 goog.require('goog.asserts');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.classlist');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.ButtonRenderer');
@@ -77,8 +78,10 @@ goog.ui.NativeButtonRenderer.prototype.createDom = function(button) {
  */
 goog.ui.NativeButtonRenderer.prototype.canDecorate = function(element) {
   return element.tagName == 'BUTTON' ||
-      (element.tagName == 'INPUT' && (element.type == 'button' ||
-          element.type == 'submit' || element.type == 'reset'));
+      (element.tagName == 'INPUT' && (
+          element.type == goog.dom.InputType.BUTTON ||
+          element.type == goog.dom.InputType.SUBMIT ||
+          element.type == goog.dom.InputType.RESET));
 };
 
 

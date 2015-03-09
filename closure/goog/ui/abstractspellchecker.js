@@ -41,6 +41,7 @@ goog.require('goog.a11y.aria');
 goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.InputType');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.classlist');
 goog.require('goog.dom.selection');
@@ -471,7 +472,7 @@ goog.ui.AbstractSpellChecker.prototype.ignoreWord = function(word) {
  */
 goog.ui.AbstractSpellChecker.prototype.editWord_ = function(el, old) {
   var input = this.getDomHelper().createDom(
-      'input', {'type': 'text', 'value': old});
+      'input', {'type': goog.dom.InputType.TEXT, 'value': old});
   var w = goog.style.getSize(el).width;
 
   // Minimum width to ensure there's always enough room to type.
