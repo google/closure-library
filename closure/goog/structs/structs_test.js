@@ -66,14 +66,14 @@ function removeNode() {
 function nodeNames(nl) {
   var sb = [];
   for (var i = 0, n; n = nl[i]; i++) {
-    sb.push(n.nodeName.toLowerCase());
+    sb.push(n.nodeName);
   }
   return sb.join(',');
 }
 
 
-var allTagNames1 = 'hr,p,p,p,p,p,p,p,p,h1';
-var allTagNames2 = allTagNames1 + ',span';
+var allTagNames1 = 'HR,P,P,P,P,P,P,P,P,H1';
+var allTagNames2 = allTagNames1 + ',SPAN';
 
 
 function testGetCount() {
@@ -508,7 +508,7 @@ function testFilterNodeList() {
     assertEquals('number', typeof i);
     return v.tagName == 'P';
   }
-  assertEquals('p,p,p,p,p,p,p,p',
+  assertEquals('P,P,P,P,P,P,P,P',
                nodeNames(goog.structs.filter(col, f)));
 }
 
@@ -521,7 +521,7 @@ function testFilterNodeList2() {
     assertEquals(THIS_OBJ, this);
     return v.tagName == 'P';
   }
-  assertEquals('p,p,p,p,p,p,p,p',
+  assertEquals('P,P,P,P,P,P,P,P',
                nodeNames(goog.structs.filter(col, f, THIS_OBJ)));
 }
 
