@@ -558,6 +558,24 @@ function test_timeDisplayOnDaylighTimeTransition() {
   assertEquals('10/29/2006 01:30:00 +0000', fmt.format(date, timeZone));
 }
 
+function testTimeDisplayOnDaylightTimeTransitionDayChange() {
+  // NOTE: this test is a regression test only if the test browser has an OS
+  // timezone of PST. While the test should still work in other timezones, it
+  // does not serve as a regression test in them.
+  goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_de;
+  goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_de;
+
+  // Time is 2015/11/01 3:00:01am after US PDT -> PST. 11:00:01am UTC.
+  var date = new Date(Date.UTC(2015, 11 - 1, 01, 11, 0, 1));
+  // Convert to GMT-12, across DST transition.
+  // The date should also change, but does not change when subtracting 4 hours
+  // from PST/PDT due to the extra hour from switching DST.
+  var timeZone = goog.i18n.TimeZone.createTimeZone(12 * 60);
+  var fmt = new goog.i18n.DateTimeFormat('yyyy/MM/dd HH:mm:ss Z');
+  // Regression test: this once returned 2015/11/01 instead.
+  assertEquals('2015/10/31 23:00:01 -1200', fmt.format(date, timeZone));
+}
+
 function test_nativeDigits() {
   goog.i18n.DateTimePatterns = goog.i18n.DateTimePatterns_fa;
   goog.i18n.DateTimeSymbols = goog.i18n.DateTimeSymbols_fa;
