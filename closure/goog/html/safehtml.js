@@ -23,6 +23,7 @@ goog.provide('goog.html.SafeHtml');
 
 goog.require('goog.array');
 goog.require('goog.asserts');
+goog.require('goog.dom.TagName');
 goog.require('goog.dom.tags');
 goog.require('goog.html.SafeStyle');
 goog.require('goog.html.SafeStyleSheet');
@@ -308,7 +309,9 @@ goog.html.SafeHtml.URL_ATTRIBUTES_ = goog.object.createSet('action', 'cite',
  * @private @const {!Object<string,boolean>}
  */
 goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_ = goog.object.createSet(
-    'embed', 'iframe', 'link', 'object', 'script', 'style', 'template');
+    goog.dom.TagName.EMBED, goog.dom.TagName.IFRAME, goog.dom.TagName.LINK,
+    goog.dom.TagName.OBJECT, goog.dom.TagName.SCRIPT, goog.dom.TagName.STYLE,
+    goog.dom.TagName.TEMPLATE);
 
 
 /**
@@ -372,7 +375,7 @@ goog.html.SafeHtml.create = function(tagName, opt_attributes, opt_content) {
   if (!goog.html.SafeHtml.VALID_NAMES_IN_TAG_.test(tagName)) {
     throw Error('Invalid tag name <' + tagName + '>.');
   }
-  if (tagName.toLowerCase() in goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_) {
+  if (tagName.toUpperCase() in goog.html.SafeHtml.NOT_ALLOWED_TAG_NAMES_) {
     throw Error('Tag name <' + tagName + '> is not allowed for SafeHtml.');
   }
   return goog.html.SafeHtml.createSafeHtmlTagSecurityPrivateDoNotAccessOrElse(

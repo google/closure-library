@@ -27,6 +27,7 @@ goog.provide('goog.fx.Dragger');
 goog.provide('goog.fx.Dragger.EventType');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
@@ -103,16 +104,16 @@ goog.fx.Dragger.cloneNode = function(sourceEl) {
   for (var i = 0; i < origTexts.length; i++) {
     dragTexts[i].value = origTexts[i].value;
   }
-  switch (sourceEl.tagName.toLowerCase()) {
-    case 'tr':
+  switch (sourceEl.tagName) {
+    case goog.dom.TagName.TR:
       return goog.dom.createDom(
           'table', null, goog.dom.createDom('tbody', null, clonedEl));
-    case 'td':
-    case 'th':
+    case goog.dom.TagName.TD:
+    case goog.dom.TagName.TH:
       return goog.dom.createDom(
           'table', null, goog.dom.createDom('tbody', null, goog.dom.createDom(
           'tr', null, clonedEl)));
-    case 'textarea':
+    case goog.dom.TagName.TEXTAREA:
       clonedEl.value = sourceEl.value;
     default:
       return clonedEl;

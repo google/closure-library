@@ -24,6 +24,7 @@ goog.provide('goog.ui.Prompt');
 goog.require('goog.Timer');
 goog.require('goog.dom');
 goog.require('goog.dom.InputType');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.functions');
@@ -222,7 +223,7 @@ goog.ui.Prompt.prototype.setInputDecoratorFn = function(inputDecoratorFn) {
  */
 goog.ui.Prompt.prototype.setRows = function(rows) {
   if (this.isInDocument()) {
-    if (this.userInputEl_.tagName.toLowerCase() == 'input') {
+    if (this.userInputEl_.tagName == goog.dom.TagName.INPUT) {
       if (rows > 1) {
         throw Error(goog.ui.Component.Error.ALREADY_RENDERED);
       }
@@ -252,7 +253,7 @@ goog.ui.Prompt.prototype.getRows = function() {
 goog.ui.Prompt.prototype.setCols = function(cols) {
   this.cols_ = cols;
   if (this.userInputEl_) {
-    if (this.userInputEl_.tagName.toLowerCase() == 'input') {
+    if (this.userInputEl_.tagName == goog.dom.TagName.INPUT) {
       this.userInputEl_.size = cols;
     } else {
       this.userInputEl_.cols = cols;

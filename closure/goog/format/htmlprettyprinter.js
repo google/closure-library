@@ -20,6 +20,7 @@
 goog.provide('goog.format.HtmlPrettyPrinter');
 goog.provide('goog.format.HtmlPrettyPrinter.Buffer');
 
+goog.require('goog.dom.TagName');
 goog.require('goog.object');
 goog.require('goog.string.StringBuffer');
 
@@ -94,10 +95,10 @@ goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ =
  * @private
  */
 goog.format.HtmlPrettyPrinter.NON_PRETTY_PRINTED_TAGS_ = goog.object.createSet(
-    'script',
-    'style',
-    'pre',
-    'xmp');
+    goog.dom.TagName.SCRIPT,
+    goog.dom.TagName.STYLE,
+    goog.dom.TagName.PRE,
+    'XMP');
 
 
 /**
@@ -110,55 +111,55 @@ goog.format.HtmlPrettyPrinter.NON_PRETTY_PRINTED_TAGS_ = goog.object.createSet(
  * @private
  */
 goog.format.HtmlPrettyPrinter.BLOCK_TAGS_ = goog.object.createSet(
-    'address',
-    'applet',
-    'area',
-    'base',
-    'basefont',
-    'blockquote',
-    'body',
-    'caption',
-    'center',
-    'col',
-    'colgroup',
-    'dir',
-    'div',
-    'dl',
-    'fieldset',
-    'form',
-    'frame',
-    'frameset',
-    'h1',
-    'h2',
-    'h3',
-    'h4',
-    'h5',
-    'h6',
-    'head',
-    'hr',
-    'html',
-    'iframe',
-    'isindex',
-    'legend',
-    'link',
-    'menu',
-    'meta',
-    'noframes',
-    'noscript',
-    'ol',
-    'optgroup',
-    'option',
-    'p',
-    'param',
-    'table',
-    'tbody',
-    'td',
-    'tfoot',
-    'th',
-    'thead',
-    'title',
-    'tr',
-    'ul');
+    goog.dom.TagName.ADDRESS,
+    goog.dom.TagName.APPLET,
+    goog.dom.TagName.AREA,
+    goog.dom.TagName.BASE,
+    goog.dom.TagName.BASEFONT,
+    goog.dom.TagName.BLOCKQUOTE,
+    goog.dom.TagName.BODY,
+    goog.dom.TagName.CAPTION,
+    goog.dom.TagName.CENTER,
+    goog.dom.TagName.COL,
+    goog.dom.TagName.COLGROUP,
+    goog.dom.TagName.DIR,
+    goog.dom.TagName.DIV,
+    goog.dom.TagName.DL,
+    goog.dom.TagName.FIELDSET,
+    goog.dom.TagName.FORM,
+    goog.dom.TagName.FRAME,
+    goog.dom.TagName.FRAMESET,
+    goog.dom.TagName.H1,
+    goog.dom.TagName.H2,
+    goog.dom.TagName.H3,
+    goog.dom.TagName.H4,
+    goog.dom.TagName.H5,
+    goog.dom.TagName.H6,
+    goog.dom.TagName.HEAD,
+    goog.dom.TagName.HR,
+    goog.dom.TagName.HTML,
+    goog.dom.TagName.IFRAME,
+    goog.dom.TagName.ISINDEX,
+    goog.dom.TagName.LEGEND,
+    goog.dom.TagName.LINK,
+    goog.dom.TagName.MENU,
+    goog.dom.TagName.META,
+    goog.dom.TagName.NOFRAMES,
+    goog.dom.TagName.NOSCRIPT,
+    goog.dom.TagName.OL,
+    goog.dom.TagName.OPTGROUP,
+    goog.dom.TagName.OPTION,
+    goog.dom.TagName.P,
+    goog.dom.TagName.PARAM,
+    goog.dom.TagName.TABLE,
+    goog.dom.TagName.TBODY,
+    goog.dom.TagName.TD,
+    goog.dom.TagName.TFOOT,
+    goog.dom.TagName.TH,
+    goog.dom.TagName.THEAD,
+    goog.dom.TagName.TITLE,
+    goog.dom.TagName.TR,
+    goog.dom.TagName.UL);
 
 
 /**
@@ -168,12 +169,12 @@ goog.format.HtmlPrettyPrinter.BLOCK_TAGS_ = goog.object.createSet(
  * @private
  */
 goog.format.HtmlPrettyPrinter.BREAKS_FLOW_TAGS_ = goog.object.createSet(
-    'br',
-    'dd',
-    'dt',
-    'br',
-    'li',
-    'noframes');
+    goog.dom.TagName.BR,
+    goog.dom.TagName.DD,
+    goog.dom.TagName.DT,
+    goog.dom.TagName.BR,
+    goog.dom.TagName.LI,
+    goog.dom.TagName.NOFRAMES);
 
 
 /**
@@ -182,9 +183,9 @@ goog.format.HtmlPrettyPrinter.BREAKS_FLOW_TAGS_ = goog.object.createSet(
  * @private
  */
 goog.format.HtmlPrettyPrinter.EMPTY_TAGS_ = goog.object.createSet(
-    'br',
-    'hr',
-    'isindex');
+    goog.dom.TagName.BR,
+    goog.dom.TagName.HR,
+    goog.dom.TagName.ISINDEX);
 
 
 /**
@@ -234,7 +235,7 @@ goog.format.HtmlPrettyPrinter.prototype.format = function(html) {
     if (match.length == 3) {
       var tagName = match[2];
       if (tagName) {
-        tagName = tagName.toLowerCase();
+        tagName = tagName.toUpperCase();
       }
 
       // Non-pretty-printed tags?

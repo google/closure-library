@@ -21,6 +21,7 @@
 goog.provide('goog.dom.forms');
 
 goog.require('goog.dom.InputType');
+goog.require('goog.dom.TagName');
 goog.require('goog.structs.Map');
 
 
@@ -74,7 +75,7 @@ goog.dom.forms.getFormDataHelper_ = function(form, result, fnAppend) {
         (el.form != form) ||
         el.disabled ||
         // HTMLFieldSetElement has a form property but no value.
-        el.tagName.toLowerCase() == 'fieldset') {
+        el.tagName == goog.dom.TagName.FIELDSET) {
       continue;
     }
 
