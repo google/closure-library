@@ -595,8 +595,8 @@ goog.ui.editor.LinkDialog.prototype.buildTabOnTheWeb_ = function() {
   goog.a11y.aria.setState(urlInput,
       goog.a11y.aria.State.LABELLEDBY,
       goog.ui.editor.LinkDialog.Id_.ON_WEB_TAB);
-  // IE throws on unknown values for type.
-  if (!goog.userAgent.IE) {
+  // IE throws on unknown values for type, but IE10+ supports type=url
+  if (!goog.userAgent.IE || goog.userAgent.isVersionOrHigher('10')) {
     // On browsers that support Web Forms 2.0, allow autocompletion of URLs.
     urlInput.type = goog.dom.InputType.URL;
   }
