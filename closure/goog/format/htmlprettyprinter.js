@@ -48,8 +48,7 @@ goog.format.HtmlPrettyPrinter = function(opt_timeOutMillis) {
 
 /**
  * Singleton.
- * @type {goog.format.HtmlPrettyPrinter?}
- * @private
+ * @private {goog.format.HtmlPrettyPrinter?}
  */
 goog.format.HtmlPrettyPrinter.instance_ = null;
 
@@ -82,8 +81,8 @@ goog.format.HtmlPrettyPrinter.format = function(html) {
  * List of patterns used to tokenize HTML for pretty printing. Cache
  * subexpression for tag name.
  * comment|meta-tag|tag|text|other-less-than-characters
- * @type {RegExp}
- * @private
+ * @private {!RegExp}
+ * @const
  */
 goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ =
     /(?:<!--.*?-->|<!.*?>|<(\/?)(\w+)[^>]*>|[^<]+|<)/g;
@@ -91,8 +90,8 @@ goog.format.HtmlPrettyPrinter.TOKEN_REGEX_ =
 
 /**
  * Tags whose contents we don't want pretty printed.
- * @type {Object}
- * @private
+ * @private {!Object}
+ * @const
  */
 goog.format.HtmlPrettyPrinter.NON_PRETTY_PRINTED_TAGS_ = goog.object.createSet(
     goog.dom.TagName.SCRIPT,
@@ -106,9 +105,8 @@ goog.format.HtmlPrettyPrinter.NON_PRETTY_PRINTED_TAGS_ = goog.object.createSet(
  * pretty printing. Tags drawn mostly from HTML4 definitions for block and other
  * non-online tags, excepting the ones in
  * #goog.format.HtmlPrettyPrinter.NON_PRETTY_PRINTED_TAGS_.
- *
- * @type {Object}
- * @private
+ * @private {!Object}
+ * @const
  */
 goog.format.HtmlPrettyPrinter.BLOCK_TAGS_ = goog.object.createSet(
     goog.dom.TagName.ADDRESS,
@@ -165,8 +163,8 @@ goog.format.HtmlPrettyPrinter.BLOCK_TAGS_ = goog.object.createSet(
 /**
  * Non-block tags that break flow. We insert a line break after, but not before
  * these. Tags drawn from HTML4 definitions.
- * @type {Object}
- * @private
+ * @private {!Object}
+ * @const
  */
 goog.format.HtmlPrettyPrinter.BREAKS_FLOW_TAGS_ = goog.object.createSet(
     goog.dom.TagName.BR,
@@ -179,8 +177,8 @@ goog.format.HtmlPrettyPrinter.BREAKS_FLOW_TAGS_ = goog.object.createSet(
 
 /**
  * Empty tags. These are treated as both start and end tags.
- * @type {Object}
- * @private
+ * @private {!Object}
+ * @const
  */
 goog.format.HtmlPrettyPrinter.EMPTY_TAGS_ = goog.object.createSet(
     goog.dom.TagName.BR,
