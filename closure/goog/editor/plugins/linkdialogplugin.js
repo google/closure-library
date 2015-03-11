@@ -332,14 +332,13 @@ goog.editor.plugins.LinkDialogPlugin.prototype.handleOk = function(e) {
     this.touchUpAnchorOnOk_(extraAnchors[i], e);
   }
 
-  // Place cursor to the right of the modified link, and immediately dispatch a
-  // selectionChange event.
+  // Place cursor to the right of the modified link.
   this.currentLink_.placeCursorRightOf();
-  this.getFieldObject().dispatchSelectionChangeEvent();
-
-  this.getFieldObject().dispatchChange();
 
   this.getFieldObject().focus();
+
+  this.getFieldObject().dispatchSelectionChangeEvent();
+  this.getFieldObject().dispatchChange();
 
   this.eventHandler_.removeAll();
 };
