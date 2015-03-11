@@ -29,7 +29,7 @@ var propertyReplacer, fakeWindow, viewportSizeMonitor, mockClock;
 
 
 function FakeWindow() {
-  goog.base(this);
+  FakeWindow.base(this, 'constructor');
 }
 goog.inherits(FakeWindow, goog.events.EventTarget);
 
