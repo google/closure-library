@@ -139,10 +139,11 @@ function testCreateDialog() {
  * Tests that when the OK event fires the link is properly updated.
  */
 function testOk() {
+  mockField.getElement().$returns(fieldElem);
+  mockField.focus();
   mockLink.placeCursorRightOf();
   mockField.dispatchSelectionChangeEvent();
   mockField.dispatchChange();
-  mockField.focus();
   mockCtrl.$replayAll();
 
   setUpAnchor(OLD_LINK_TEXT, OLD_LINK_URL);
@@ -300,10 +301,11 @@ function testCancelNewMultiple() {
  * Tests that when the Cancel event fires for a new link it gets removed.
  */
 function testOkNewMultiple() {
+  mockField.getElement().$returns(fieldElem);
+  mockField.focus();
   mockLink.placeCursorRightOf();
   mockField.dispatchSelectionChangeEvent();
   mockField.dispatchChange();
-  mockField.focus();
   mockCtrl.$replayAll();
 
   var anchorElem1 = anchorElem;
@@ -355,6 +357,7 @@ function testOkNewMultiple() {
  * window" feature on.
  */
 function testOkOpenInNewWindow() {
+  mockField.getElement().$returns(fieldElem).$anyTimes();
   mockLink.placeCursorRightOf().$anyTimes();
   mockField.dispatchSelectionChangeEvent().$anyTimes();
   mockField.dispatchChange().$anyTimes();
@@ -440,6 +443,7 @@ function testOkNoFollowInUppercaseWithMoreValues() {
 }
 
 function verifyRelNoFollow(noFollow, originalRel, expectedRel) {
+  mockField.getElement().$returns(fieldElem);
   mockLink.placeCursorRightOf();
   mockField.dispatchSelectionChangeEvent();
   mockField.dispatchChange();
